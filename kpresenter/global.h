@@ -71,7 +71,8 @@ enum ObjType {
 enum SelectionMode {
     SM_NONE = 0,
     SM_MOVERESIZE = 1,
-    SM_ROTATE = 2
+    SM_ROTATE = 2,
+    SM_HEADERFOOTER = 3
 };
 enum LineType {
     LT_HORZ = 0,

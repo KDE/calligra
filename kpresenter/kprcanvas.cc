@@ -317,14 +317,18 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 
 // Draw all object in page : draw object in current page and sticky objects
 void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
-				  SelectionMode selectionMode, bool doSpecificEffects,
+				  SelectionMode selectMode, bool doSpecificEffects,
 				  const QPtrList<KPObject> & obj)
 {
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current() ; ++it )
     {
-        if ( objectIsAHeaderFooterHidden(it.current()) )
+        SelectionMode selectionMode=selectMode;
+        if ( objectIsAHeaderFooterHidden(it.current()))
             continue;
+        //don't draw rotate indicator when we are a header or footer
+        if( m_view->kPresenterDoc()->isHeaderFooter(it.current()))
+            selectionMode=SM_HEADERFOOTER;
 
 	if ( it.current()->isSticky() || editMode ||
 	     ( rect2.intersects( it.current()->getBoundingRect(m_view->zoomHandler() ) ) && editMode ) ||

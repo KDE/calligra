@@ -559,6 +559,30 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
 	_painter->drawRect( x + w / 2, y,zX6, zY6 );
 	_painter->drawRect( x + w / 2, y + h, zX6, zY6 );
     }
+    else if ( mode == SM_HEADERFOOTER) {
+	_painter->drawRect( x, y,  zX6, zY6 );
+	_painter->drawRect( x, y + h / 2, zX6, zY6 );
+	_painter->drawRect( x, y + h, zX6, zY6 );
+	_painter->drawRect( x + w, y, zX6, zY6 );
+	_painter->drawRect( x + w, y + h / 2, zX6, zY6 );
+	_painter->drawRect( x + w, y + h, zX6, zY6 );
+	_painter->drawRect( x + w / 2, y,zX6, zY6 );
+	_painter->drawRect( x + w / 2, y + h, zX6, zY6 );
+
+        x= x + 1;
+        y= y + 1;
+        zX6=zX6-2;
+        zY6=zY6-2;
+        QBrush brush=kapp->palette().color( QPalette::Active,QColorGroup::Base );
+        _painter->fillRect( x, y,  zX6, zY6, brush );
+        _painter->fillRect( x, y + h / 2, zX6, zY6, brush);
+        _painter->fillRect( x, y + h, zX6, zY6, brush );
+        _painter->fillRect( x + w, y, zX6, zY6, brush );
+        _painter->fillRect( x + w, y + h / 2, zX6, zY6, brush );
+        _painter->fillRect( x + w  , y + h , zX6 , zY6 , brush );
+        _painter->fillRect( x + w / 2 , y ,zX6 , zY6 , brush );
+        _painter->fillRect( x + w / 2, y + h , zX6 , zY6 , brush );
+    }
     else if ( mode == SM_ROTATE ) {
 	_painter->drawEllipse( x, y,  zX6, zY6 );
 	_painter->drawEllipse( x, y + h, zX6, zY6 );
