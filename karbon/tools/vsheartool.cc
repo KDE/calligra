@@ -125,8 +125,6 @@ VShearTool::mouseDrag( )
 void
 VShearTool::mouseDragRelease()
 {
-	// Get center:
-	KoPoint m_center = view()->part()->document().selection()->boundingBox().center();
 	view()->part()->addCommand(
 		new VShearCmd( &view()->part()->document(), m_center, m_s1, m_s2 ),
 		true );
@@ -171,7 +169,7 @@ VShearTool::recalc()
 	}
 
 	// Get center:
-	KoPoint m_center = view()->part()->document().selection()->boundingBox().center();
+	m_center = view()->part()->document().selection()->boundingBox().center();
 
 	// Build affine matrix:
 	QWMatrix mat;

@@ -44,6 +44,7 @@ protected:
 private:
 	void recalc();
 
+	KoPoint m_center;
 	double m_s1, m_s2;
 
 	VHandleNode m_activeNode;
