@@ -1680,6 +1680,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       break;
     case Key_Tab:
       {
+	if (fc->getParag()->getParagLayout()->getTabList()->isEmpty()) break;
 	if (has_to_copy) copyBuffer(); 
 	    
 	draw_buffer = false;

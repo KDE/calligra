@@ -467,3 +467,7 @@ Reggie, 6.12.1998:
 ------------------
 - More work on tabulators (left aligned tabs work already somehow)
 - Fixed a bug with loading/saving docs (now it doesn't crash anymore when loading special objs like pictures)
+
+Reggie, 7.12.1998:
+------------------
+- More work on left aligned tabs, but there is still a bug 

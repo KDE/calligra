@@ -526,7 +526,8 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     if (_textpos > parag->getKWString()->size())
       _textpos =  parag->getKWString()->size();
 
-    while ( pos < _textpos )
+    bool _break = false;
+    while ( pos < _textpos && !_break)
     {
         if ( text[ pos ].c == 0 )
 	{
@@ -560,6 +561,7 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 		    // next tab is in the next line
 		    else
 		      {
+			_break = true;
 		      }
 		  }
 		pos++;
@@ -703,6 +705,8 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 		// next tab is in the next line
 		else
 		  {
+		    pos++;
+		    return -2;
 		  }
 	      }
 	    pos++;
@@ -898,9 +902,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
       }
 	
     bool _broken = false;
+    bool _break = false;
 
     // Loop until we reach the end of line
-    while ((ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right || !_broken) && 
+    while (!_break && (ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right || !_broken) && 
 	   textPos < parag->getTextLen())
     {
 	char c = text[ textPos ].c;
@@ -936,14 +941,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    lineEndPos = textPos + 1;
 	    // If we break here, then the line has the following width ...
 	    ptTextLen = tmpPTWidth;
-// 	    ptAscender = tmpPTAscender;
-// 	    ptDescender = tmpPTDescender;
-// 	    if ( ptAscender > ptMaxAscender )
-// 		ptMaxAscender = ptAscender;
-// 	    if ( ptDescender > ptMaxDescender )
-// 		ptMaxDescender = ptDescender;
-	    // The amount of spaces in the line if
-	    // we do a line break here ...
 	    spaces = tmpSpaces;
 	    // ... or one more space if we dont break the line here.
 	    tmpSpaces++;
@@ -983,6 +980,12 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		    // next tab is in the next line
 		    else
 		      {
+			lineEndPos = textPos;
+			ptTextLen = tmpPTWidth;
+			spaces = tmpSpaces;
+			tmpSpaces++;
+			_broken = true;
+			_break = true;
 		      }
 		  }
 		textPos++;
