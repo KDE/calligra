@@ -82,31 +82,10 @@ noinst_HEADERS =  kchart_global.h \
 		table.h
 
 
-libkchart_la_METASOURCES = kchart_shell.moc kchart_part.moc \
-			       kchart_view.moc kchart_factory.moc \
-		kchartBarConfigDialog.moc	\
-		kchartBarConfigPage.moc	\
-		kchartColorConfigPage.moc \
-		kchartParameterConfigPage.moc \
-		kchartParameterPieConfigPage.moc \
-		kchartFontConfigPage.moc \
-		kchartPieConfigPage.moc \
-		kchartConfigDialog.moc \
-		kchartGeometryConfigPage.moc \
-		kchartWizard.moc \
-		kchartWizardLabelsLegendPage.moc \
-		kchartWizardSelectChartSubTypePage.moc \
-		kchartWizardSelectChartTypePage.moc\
-		kchartWizardSetupAxesPage.moc \
-	        kchartWizardSetupDataPage.moc \
-		kchartDataEditor.moc \
-		sheet.moc \
-		sheetdlg.moc \
-		table.moc
+METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/kchart
-rc_DATA = kchart.rc kchart_shell.rc
-
+rc_DATA = kchart.rc
 
 
 
