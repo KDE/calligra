@@ -62,14 +62,6 @@ VCanvas::focusInEvent( QFocusEvent * )
 {
 }
 
-void
-VCanvas::toContents( int vx, int vy, int x, int y ) const
-{
-	x = vx + int( contentsX() * m_view->zoom() );
-	y = vy + contentsY();// - ( contentsHeight() / m_view->zoom() ) + y;
-	//QScrollView::viewportToContents( vx, vy, x, y );
-}
-
 KoPoint
 VCanvas::toContents( const KoPoint &p ) const
 {

@@ -38,7 +38,6 @@ public:
 
 	void repaintAll( const KoRect & );
 	void repaintAll( bool drawVObjects = true );
-	void toContents( int vx, int vy, int x, int y ) const;
 	KoPoint toContents( const KoPoint & ) const;
 
 	void setYMirroring( bool edit );
