@@ -5,3 +5,8 @@ ole-excel: WARNING: invokeHandler: unsupported opcode: 0xef operands: 6
 ole-excel: WARNING: invokeHandler: unsupported opcode: 0xc0 operands: 0
 ole-excel: WARNING: invokeHandler: unsupported opcode: 0x34 operands: 0
 ole-excel: WARNING: invokeHandler: unsupported opcode: 0x64 operands: 8
+ole-excel: WARNING: invokeHandler: unsupported opcode: 0x65 operands: 2
+ole-excel: WARNING: invokeHandler: unsupported opcode: 0x4f operands: 20
+ole-excel: WARNING: invokeHandler: unsupported opcode: 0x62 operands: 18
+ole-excel: WARNING: invokeHandler: unsupported opcode: 0x46 operands: 2
+
