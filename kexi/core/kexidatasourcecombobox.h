@@ -24,7 +24,6 @@
 #include <qstringlist.h>
 #include <qstring.h>
 #include <qpixmap.h>
-#include <kdebug.h>
 
 class KexiProject;
 

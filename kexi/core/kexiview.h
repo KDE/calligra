@@ -66,7 +66,7 @@ public:
 	KexiTabBrowser* browser()const { return m_browser; };
 	KexiWindowMode windowMode()const { return m_windowMode;};
 
-	KexiContextHelp	*help() { return m_help; }
+	KexiContextHelp	*help()const { return m_help; }
 
 	KexiProject *project()const ;
 

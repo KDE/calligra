@@ -78,12 +78,12 @@ class KexiProjectHandler : public QObject
 
 		virtual KexiEventHandler	*eventHandler() { return 0; }
 
-		KexiProject *kexiProject();
+		KexiProject *kexiProject()const;
 
 		static QString localIdentifier(const QString &globalIdentifier);
 		static QString handlerNameFromGlobalIdentifier(const QString &globalIdentifier);
 		QString globalIdentifier(const QString &localIdentifier);
-	
+
 	signals:
 		void itemListChanged(KexiProjectHandler*);
 
@@ -91,9 +91,9 @@ class KexiProjectHandler : public QObject
 		void insertIntoViewProxyMap(KexiView*,KexiProjectHandlerProxy*);
 		void deleteFromViewProxyMap(KexiView*);
 	private:
-		typedef QMap<KexiView*,KexiProjectHandlerProxy*> ViewProxyMap; 
+		typedef QMap<KexiView*,KexiProjectHandlerProxy*> ViewProxyMap;
 		ViewProxyMap m_viewProxyMap;
-		QGuardedPtr<KexiProject> m_project;					
+		QGuardedPtr<KexiProject> m_project;
 		ItemList* m_items;
 };
 

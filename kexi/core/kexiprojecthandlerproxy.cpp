@@ -28,12 +28,12 @@ KexiProjectHandlerProxy::KexiProjectHandlerProxy(KexiProjectHandler *part,KexiVi
 	m_view=view;
 }
 
-KexiProjectHandler *KexiProjectHandlerProxy::part()
+KexiProjectHandler *KexiProjectHandlerProxy::part()const
 {
 	return m_part;
 }
 
-KexiView *KexiProjectHandlerProxy::kexiView()
+KexiView *KexiProjectHandlerProxy::kexiView()const
 {
 	return m_view;
 }

@@ -39,15 +39,15 @@ class KexiProjectHandlerProxy : public QObject
 		virtual KexiPartPopupMenu	*groupContext() = 0;
 		virtual KexiPartPopupMenu	*itemContext(const QString &identifier) = 0;
 
-		KexiView *kexiView();
-		KexiProjectHandler *part();
+		KexiView *kexiView()const;
+		KexiProjectHandler *part()const;
 
 	public slots:
 		virtual void executeItem(const QString& identifier)=0;
 	protected:
 		QGuardedPtr<KexiView> m_view;
 		KexiProjectHandler *m_part;
-		
+
 };
 
 #endif

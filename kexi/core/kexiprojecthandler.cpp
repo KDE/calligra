@@ -29,7 +29,7 @@ KexiProjectHandler::KexiProjectHandler(KexiProject *project)
 {
 	m_project=project;
 	m_items = new ItemList();
-	m_items->setAutoDelete(true);	
+	m_items->setAutoDelete(true);
 
 	if(project)
 		project->registerProjectHandler(this);
@@ -61,7 +61,7 @@ void KexiProjectHandler::deleteFromViewProxyMap(KexiView* view)
 	}
 }
 
-KexiProject *KexiProjectHandler::kexiProject()
+KexiProject *KexiProjectHandler::kexiProject()const
 {
 	if (m_project.isNull()) return 0;
 	return m_project;

@@ -47,7 +47,9 @@
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_handlersLoaded(false),m_db(0)
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+      m_db(0),
+      m_handlersLoaded(false)
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
@@ -293,7 +295,7 @@ bool
 KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 {
 	if(!connection)
-		return;
+		return false;
 
 	m_dbconnection = connection;
 	m_db = connection->connectDB(m_dbInterfaceManager, store);
