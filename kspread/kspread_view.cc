@@ -500,7 +500,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcSum, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcSum->setExclusiveGroup( "Calc" );
-  m_menuCalcSum->setToolTip(i18n("Calculate using sum"));
+  m_menuCalcSum->setToolTip(i18n("Calculate using sum."));
 
   /*******************************/
   m_menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(),
@@ -508,7 +508,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcMin, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcMin->setExclusiveGroup( "Calc" );
-  m_menuCalcMin->setToolTip(i18n("Calculate using minimum"));
+  m_menuCalcMin->setToolTip(i18n("Calculate using minimum."));
 
   /*******************************/
   m_menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(),
@@ -516,7 +516,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcMax, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcMax->setExclusiveGroup( "Calc" );
-  m_menuCalcMax->setToolTip(i18n("Calculate using maximum"));
+  m_menuCalcMax->setToolTip(i18n("Calculate using maximum."));
 
   /*******************************/
   m_menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(),
@@ -524,7 +524,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcAverage, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcAverage->setExclusiveGroup( "Calc" );
-  m_menuCalcAverage->setToolTip(i18n("Calculate using average"));
+  m_menuCalcAverage->setToolTip(i18n("Calculate using average."));
 
   /*******************************/
   m_menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(),
@@ -532,7 +532,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcCount, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcCount->setExclusiveGroup( "Calc" );
-  m_menuCalcCount->setToolTip(i18n("Calculate using the count"));
+  m_menuCalcCount->setToolTip(i18n("Calculate using the count."));
 
 
   /*******************************/
@@ -583,17 +583,17 @@ void KSpreadView::initializeInsertActions()
   m_insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
                                       SLOT( insertFromDatabase() ),
                                       actionCollection(), "insertFromDatabase");
-  m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
+  m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database."));
 #endif
 
   m_insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
                                       SLOT( insertFromTextfile() ),
                                       actionCollection(), "insertFromTextfile");
-  m_insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
+  m_insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection."));
   m_insertFromClipboard = new KAction( i18n("From &Clipboard..."), 0, this,
                                       SLOT( insertFromClipboard() ),
                                       actionCollection(), "insertFromClipboard");
-  m_insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection"));
+  m_insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
 
 }
 
@@ -605,7 +605,7 @@ void KSpreadView::initializeEditActions()
 
   m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(),
                                "paste" );
-  m_paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor"));
+  m_paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor."));
 
   m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(),
                            "cut" );
@@ -652,17 +652,17 @@ void KSpreadView::initializeAreaOperationActions()
   m_areaName = new KAction( i18n("Area Name..."), 0, this,
                             SLOT( setAreaName() ), actionCollection(),
                             "areaname" );
-  m_areaName->setToolTip(i18n("Set a name for a region of the spreadsheet"));
+  m_areaName->setToolTip(i18n("Set a name for a region of the spreadsheet."));
 
   m_showArea = new KAction( i18n("Show Area..."), 0, this,
                             SLOT( showAreaName() ), actionCollection(),
                             "showArea" );
-  m_showArea->setToolTip(i18n("Display a named area"));
+  m_showArea->setToolTip(i18n("Display a named area."));
 
   m_sortList = new KAction( i18n("Custom Lists..."), 0, this,
                             SLOT( sortList() ), actionCollection(),
                             "sortlist" );
-  m_sortList->setToolTip(i18n("Create custom lists for sorting or autofill"));
+  m_sortList->setToolTip(i18n("Create custom lists for sorting or autofill."));
 
   m_sort = new KAction( i18n("&Sort..."), 0, this, SLOT( sort() ),
                         actionCollection(), "sort" );
@@ -682,7 +682,7 @@ void KSpreadView::initializeAreaOperationActions()
 
   m_goalSeek = new KAction( i18n("&Goal Seek..."), 0, this,
                             SLOT( goalSeek() ), actionCollection(), "goalSeek" );
-  m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
+  m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value.") );
 
   m_multipleOperations = new KAction( i18n("&Multiple Operations..."), 0, this,
                             SLOT( multipleOperations() ), actionCollection(), "multipleOperations" );
@@ -694,7 +694,7 @@ void KSpreadView::initializeAreaOperationActions()
 
   m_textToColumns = new KAction( i18n("&Text to Columns..."), 0, this,
                             SLOT( textToColumns() ), actionCollection(), "textToColumns" );
-  m_textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns") );
+  m_textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns.") );
 
   m_consolidate = new KAction( i18n("&Consolidate..."), 0, this,
                                SLOT( consolidate() ), actionCollection(),
@@ -742,26 +742,26 @@ void KSpreadView::initializeGlobalOperationActions()
 
   m_protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
                                       actionCollection(), "protectSheet" );
-  m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
+  m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified." ) );
   connect( m_protectSheet, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectSheet( bool ) ) );
 
   m_protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
                                       actionCollection(), "protectDoc" );
-  m_protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
+  m_protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
   connect( m_protectDoc, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectDoc( bool ) ) );
 
   m_recordChanges = new KToggleAction( i18n( "&Record Changes" ), 0,
                                        actionCollection(), "recordChanges" );
-  m_recordChanges->setToolTip( i18n( "Record changes made to this document" ) );
+  m_recordChanges->setToolTip( i18n( "Record changes made to this document." ) );
   connect( m_recordChanges, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleRecordChanges( bool ) ) );
 
 
   m_protectChanges = new KToggleAction( i18n( "&Protect Changes..." ), 0,
                                         actionCollection(), "protectRecords" );
-  m_protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected" ) );
+  m_protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected." ) );
   m_protectChanges->setEnabled( false );
   connect( m_protectChanges, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectChanges( bool ) ) );
@@ -769,25 +769,25 @@ void KSpreadView::initializeGlobalOperationActions()
   m_filterChanges = new KAction( i18n( "&Filter Changes..." ), 0, this,
                                  SLOT( filterChanges() ), actionCollection(),
                                  "filterChanges" );
-  m_filterChanges->setToolTip( i18n( "Change display settings for changes" ) );
+  m_filterChanges->setToolTip( i18n( "Change display settings for changes." ) );
   m_filterChanges->setEnabled( false );
 
   m_acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ), 0, this,
                                        SLOT( acceptRejectChanges() ), actionCollection(),
                                        "acceptRejectChanges" );
-  m_acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document" ) );
+  m_acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document." ) );
   m_acceptRejectChanges->setEnabled( false );
 
   m_commentChanges = new KAction( i18n( "&Comment Changes..." ), 0, this,
                                   SLOT( commentChanges() ), actionCollection(),
                                   "commentChanges" );
-  m_commentChanges->setToolTip( i18n( "Add comments to changes you made" ) );
+  m_commentChanges->setToolTip( i18n( "Add comments to changes you made." ) );
   m_commentChanges->setEnabled( false );
 
   m_mergeDocument = new KAction( i18n( "&Merge Document..." ), 0, this,
                                  SLOT( mergeDocument() ), actionCollection(),
                                  "mergeDocument" );
-  m_mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes" ) );
+  m_mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes." ) );
 
   m_viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                   actionCollection(), "view_zoom" );
@@ -864,11 +864,11 @@ void KSpreadView::initializeGlobalOperationActions()
 
   m_styleDialog = new KAction( i18n( "Style Manager..." ), 0, this, SLOT( styleDialog() ),
                                actionCollection(), "styles" );
-  m_styleDialog->setToolTip( i18n( "Edit and organize cell styles" ) );
+  m_styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
 
   m_selectStyle = new KSelectAction( i18n( "St&yle" ), 0,
                                      actionCollection(), "stylemenu" );
-  m_selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
+  m_selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells." ) );
   connect( m_selectStyle, SIGNAL( activated( const QString & ) ), this, SLOT( styleSelected( const QString & ) ) );
 
   m_createStyle = new KAction( i18n( "Create Style From Cell..." ), 0,
@@ -1164,7 +1164,7 @@ void KSpreadView::initializeTableActions()
   m_insertTable = new KAction( i18n("Insert Sheet"),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "insertTable" );
-  m_insertTable->setToolTip(i18n("Insert a new sheet"));
+  m_insertTable->setToolTip(i18n("Insert a new sheet."));
 
   /* basically the same action here, but it's in the insert menu so we don't
      want to also have 'insert' in the caption

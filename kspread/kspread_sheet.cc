@@ -6341,7 +6341,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     m_strName = table.attribute( "name" );
     if ( m_strName.isEmpty() )
     {
-        m_pDoc->setErrorMessage( i18n("Invalid document. Table name is empty") );
+        m_pDoc->setErrorMessage( i18n("Invalid document. Table name is empty.") );
         return false;
     }
 
@@ -6950,7 +6950,7 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
 
     if ( isProtected() )
     {
-      KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) );
+      KMessageBox::error( 0, i18n ( "You cannot change a protected sheet." ) );
       return false;
     }
 

@@ -1462,10 +1462,10 @@ void CellFormatPageFloat::slotChangeState()
             listFormat->setEnabled(true);
             list+=i18n("Halves 1/2");
             list+=i18n("Quarters 1/4");
-            list+=i18n("Eighth's 1/8");
-            list+=i18n("Sixteenth's 1/16");
-            list+=i18n("Tenth's 1/10");
-            list+=i18n("Hundredth's 1/100");
+            list+=i18n("Eighths 1/8");
+            list+=i18n("Sixteenths 1/16");
+            list+=i18n("Tenths 1/10");
+            list+=i18n("Hundredths 1/100");
             list+=i18n("One digit 5/9");
             list+=i18n("Two digits 15/22");
             list+=i18n("Three digits 153/652");

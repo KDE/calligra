@@ -560,9 +560,9 @@ bool KSpreadConditionalDlg::checkInputData( KLineEdit const * const edit1,
   if ( b1 != b2 )
   {
     if ( b1 )
-      KMessageBox::sorry( 0, i18n( "If the first value is a number the second value has to be a number, too." ) );
+      KMessageBox::sorry( 0, i18n( "If the first value is a number, the second value also has to be a number." ) );
     else
-      KMessageBox::sorry( 0, i18n( "If the first value is a string the second value has to be a string, too." ) );
+      KMessageBox::sorry( 0, i18n( "If the first value is a string, the second value also has to be a string." ) );
     return false;
   }
 
