@@ -55,6 +55,7 @@
 #include "vfillcmd.h"
 #include "vflattencmd.h"
 #include "vgroupcmd.h"
+#include "vungroupcmd.h"
 #include "vzordercmd.h"
 #include "vinsertknotscmd.h"
 #include "vroundcornerscmd.h"
@@ -401,18 +402,7 @@ KarbonView::groupSelection()
 void
 KarbonView::ungroupSelection()
 {
-/*
-	if( m_part->document().selection()->objects().count() == 1 )
-	{
-		VGroup *grp = dynamic_cast<VGroup *>( m_part->document().selection().objects().getFirst() );
-		if( grp )
-		{
-			grp->ungroup();
-			delete grp;
-			m_part->document().deselect();
-		}
-	}
-*/
+	m_part->addCommand( new VUnGroupCmd( &m_part->document() ), true );
 	selectionChanged();
 }
 
