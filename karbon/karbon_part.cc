@@ -13,7 +13,7 @@
 #include "karbon_view.h"
 
 // only for test-object:
-#include "vccmd_ellipse.h"
+#include "vccmd_spiral.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -25,8 +25,10 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_layers.append( new VLayer() );
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	VCCmdEllipse* cmd = new VCCmdEllipse( this, 100, 200, 300, 100 );
+	VCCmdSpiral* cmd = new VCCmdSpiral( this, 150, 150, 100, 8, 0.6, true );
 	cmd->execute();
+	VCCmdSpiral* cmd2 = new VCCmdSpiral( this, 400, 300, 200, 15, 0.8, false );
+	cmd2->execute();
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
