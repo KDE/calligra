@@ -39,7 +39,11 @@ what the system might be and is a work in progress
 //Constructor
 pqxxMigrate::pqxxMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, bool keep_data)
 		:KexiMigrate(externalConnectionData, dbname, kexiConnection, keep_data)
-{}
+{
+m_res=0;
+m_trans=0;
+m_conn=0;
+}
 
 //==================================================================================
 //Destructor
@@ -191,7 +195,9 @@ bool pqxxMigrate::drv_connect()
 		kdDebug() << "pqxxImport::drv_connect:exception - " << e.what() << endl;
 	}
 	catch(...)
-	{}
+	{
+		kdDebug() << "pqxxMigrate::drv_connect:exception(...)??" << endl;
+	}
 	return false;
 }
 
@@ -220,13 +226,10 @@ bool pqxxMigrate::query (const QString& statement)
 	{
 		//Create a transaction
 		m_trans = new pqxx::nontransaction(*m_conn);
-
 		//Create a result opject through the transaction
 		m_res = new pqxx::result(m_trans->exec(statement.latin1()));
-
 		//Commit the transaction
 		m_trans->commit();
-
 		//If all went well then return true, errors picked up by the catch block
 		return true;
 	}
@@ -235,6 +238,10 @@ bool pqxxMigrate::query (const QString& statement)
 		//If an error ocurred then put the error description into _dbError
 		kdDebug() << "pqxxImport::query:exception - " << e.what() << endl;
 		return false;
+	}
+	catch(...)
+	{
+		kdDebug() << "pqxxMigrate::query:exception(...)??" << endl;
 	}
 }
 
@@ -301,6 +308,10 @@ pqxx::oid pqxxMigrate::tableOid(const QString& table)
 		kdDebug() << "pqxxSqlDB::tableOid:exception - " << e.what() << endl;
 		kdDebug() << "pqxxSqlDB::tableOid:failed statement - " << statement << endl;
 		toid = 0;
+	}
+	catch(...)
+	{
+		kdDebug() << "pqxxMigrate::tableOid:exception(...)??" << endl;
 	}
 	if (tmpres)
 		delete tmpres;

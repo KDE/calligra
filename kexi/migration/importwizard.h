@@ -17,9 +17,11 @@
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class QHBox;
+class QVBox;
 class KComboBox;
 class KListView;
 class KLineEdit;
+class QLabel;
 
 namespace KexiMigration {
 
@@ -30,11 +32,13 @@ class importWizard : public KWizard
 {
 Q_OBJECT
 private:
-    QHBox *intro, *srcType, *srcconn, *srcdb, *dstType, *dst, *finish;
+    QHBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *finishPage;
+    QVBox *srcdbControls;
     KComboBox *srcTypeCombo, *dstTypeCombo;
     KexiConnSelectorWidget *srcConn, *dstConn;
     KLineEdit *dstNewDBName;
     KexiProjectSelectorWidget *srcdbname;
+    QLabel *lblfinishTxt;
     
     void setupintro();
     void setupsrcType();
@@ -44,10 +48,10 @@ private:
     void setupdst();
     void setupfinish();
     void createBlankPages();
+    bool checkUserInput();
 private slots:
-    void populateSrcDBList(const QString& driverName);
     void nextClicked(const QString &);
-    void doImport();
+    virtual void accept();
 public:
     importWizard(QWidget *parent = 0, const char *name = 0);
 
