@@ -288,22 +288,21 @@ VComposite::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
-		// clear:
-		m_boundingBox = KoRect();
-
 		VPathListIterator itr( m_paths );
-		for( itr.toFirst(); itr.current(); ++itr )
+		itr.toFirst();
+		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
+        for( ++itr; itr.current(); ++itr )
+            m_boundingBox |= itr.current()->boundingBox();
+
+		if( !m_boundingBox.isNull() )
 		{
-			m_boundingBox |= itr.current()->boundingBox();
+			// take line width into account:
+			m_boundingBox.setCoords(
+				m_boundingBox.left()   - 0.5 * stroke()->lineWidth(),
+				m_boundingBox.top()    - 0.5 * stroke()->lineWidth(),
+				m_boundingBox.right()  + 0.5 * stroke()->lineWidth(),
+				m_boundingBox.bottom() + 0.5 * stroke()->lineWidth() );
 		}
-
-		// take line width into account:
-		m_boundingBox.setCoords(
-			m_boundingBox.left()   - 0.5 * stroke()->lineWidth(),
-			m_boundingBox.top()    - 0.5 * stroke()->lineWidth(),
-			m_boundingBox.right()  + 0.5 * stroke()->lineWidth(),
-			m_boundingBox.bottom() + 0.5 * stroke()->lineWidth() );
-
 		m_boundingBoxIsInvalid = false;
 	}
 

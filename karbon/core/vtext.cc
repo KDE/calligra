@@ -81,8 +81,8 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composi
 
 	//QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
 	//kdDebug() << add.latin1() << endl;
-//path->curveTo( x1, y1, x1, y1, x2, y2 );
-	composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
+	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
+	//composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
 	
 	return 0;
 };
@@ -216,14 +216,13 @@ VText::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
-		// clear:
-		m_boundingBox = KoRect(); 
-
 		VCompositeListIterator itr( m_glyphs );
-		for( itr.toFirst(); itr.current(); ++itr )
-		{
-			m_boundingBox |= itr.current()->boundingBox();
-		}
+		itr.toFirst();
+		// clear:
+		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect(); 
+		for( ++itr; itr.current(); ++itr )
+			if( !itr.current()->boundingBox().isEmpty() )
+				m_boundingBox |= itr.current()->boundingBox();
 
 		// take line width into account:
 		m_boundingBox.setCoords(
