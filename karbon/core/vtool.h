@@ -7,8 +7,7 @@
 
 // The abstract base class for all VObject-manipulating classes.
 
-class KCommand;
-
+class VCommand;
 class VObject;
 
 class VTool
@@ -16,7 +15,7 @@ class VTool
 public:
 	virtual ~VTool() = 0;
 
-	virtual KCommand* manipulate( VObject* object );
+	virtual VCommand* manipulate( VObject* object );
 };
 
 #endif

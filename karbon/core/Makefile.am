@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libkarboncore.la
 noinst_HEADERS = \
 	vaffinemap.h \
 	vcanvas.h \
+	vcommand.h \
 	vglobal.h \
 	vlayer.h \
 	vobject.h \
@@ -17,7 +18,6 @@ libkarboncore_la_SOURCES = \
 	vaffinemap.cc \
 	vcanvas.cc \
 	vlayer.cc \
-	vobject.cc \
 	vpath.cc \
 	vpoint.cc \
 	vrect.cc \

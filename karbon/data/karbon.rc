@@ -1,9 +1,16 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Karbon" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="Karbon" version="1">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
   <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_selectall"/>
  </Menu>
- <Menu name="edit"><text>&amp;View</text>
+ <Menu name="view"><text>&amp;View</text>
   <Action name="view_zoom"/>
  </Menu>
 </MenuBar>

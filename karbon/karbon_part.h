@@ -10,6 +10,9 @@
 
 #include "vlayer.h"
 
+class VCommand;
+class VCommandHistory;
+
 class KarbonPart : public KoDocument
 {
 	Q_OBJECT
@@ -26,13 +29,17 @@ public:
 	virtual bool loadXML( QIODevice*, const QDomDocument& );
 	virtual QDomDocument saveXML();
 
+	void addCommand( VCommand* cmd );
+
 	const QList<VLayer>& layers() { return m_layers; }
-		
+
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 private:
 	QList<VLayer> m_layers;
+
+	VCommandHistory * m_commandHistory;
 };
 
 #endif

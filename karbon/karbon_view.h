@@ -28,7 +28,10 @@ public:
 	virtual QWidget* canvas() { return m_canvas; }
 
 protected slots:
-	void cut();
+	void editCut();
+	void editCopy();
+	void editPaste();
+	void editSelectAll();
 
 protected:
 	virtual void updateReadWrite( bool rw );

@@ -43,14 +43,36 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ ) {
 }
 
 void
-KarbonView::cut()
+KarbonView::editCut()
+{
+}
+
+void
+KarbonView::editCopy()
+{
+}
+
+void
+KarbonView::editPaste()
+{
+}
+
+void
+KarbonView::editSelectAll()
 {
 }
 
 void
 KarbonView::initActions()
 {
-	KStdAction::cut(this, SLOT( cut() ), actionCollection(), "edit_cut" );
+	KStdAction::cut( this,
+		SLOT( editCut() ), actionCollection(), "edit_cut" );
+	KStdAction::copy( this,
+		SLOT( editCopy() ), actionCollection(), "edit_copy");
+	KStdAction::paste( this,
+		SLOT( editPaste() ), actionCollection(), "edit_paste" );
+ 	KStdAction::selectAll( this,
+		SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
 
 	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(),
 		"view_zoom" );

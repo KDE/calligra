@@ -16,7 +16,7 @@ extern "C"
 {
 	void* init_libkarbonpart()
 	{
-		return new KarbonFactory;
+		return new KarbonFactory();
 	}
 };
 
@@ -84,10 +84,7 @@ KarbonFactory::aboutData()
 			I18N_NOOP( "Idea, current maintainer" ),
 			"kudling@kde.org",
 			"http://www.kudling.de/kde/" );
-
-		s_aboutData->addCredit( "Simon Hausmann, Frerich Raabe, Werner Trobin, "
-			"Nikolas Zimmermann",
-			"interesting discussions" );
+// TODO: add the names of some helpfull souls
 	}
 	return s_aboutData;
 }

@@ -5,18 +5,22 @@
 #include <qpainter.h>
 #include <kdebug.h>
 
-#include "vpoint.h"
+#include "vcommand.h"
 #include "vpath.h"
+#include "vpoint.h"
 
 #include "karbon_part.h"
 #include "karbon_view.h"
 
+// only for test-object:
 #include "vaffinemap.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+	m_commandHistory = new VCommandHistory( this );
+
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 
@@ -40,11 +44,15 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 KarbonPart::~KarbonPart()
 {
+	// delete all layers:
 	QListIterator<VLayer> i( m_layers );
 	for ( ; i.current() ; ++i )
 	{
 		delete( i.current() );
 	}
+
+	// delete the command-history:
+	delete m_commandHistory;
 }
 
 bool
@@ -74,6 +82,13 @@ KarbonPart::saveXML()
 	return QDomDocument();
 }
 
+void
+KarbonPart::addCommand( VCommand* cmd )
+{
+	kdDebug() << "KarbonPart::addCommand " << cmd->name() << endl;
+	m_commandHistory->addCommand( cmd, false );
+	setModified( true );
+}
 
 void
 KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,

@@ -4,7 +4,7 @@
 
 #include "vtool.h"
 
-KCommand*
+VCommand*
 VTool::manipulate( VObject* object )
 {
 }

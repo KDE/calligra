@@ -343,9 +343,11 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 		prev_seg = i.current();	// remember previous segment
 	}
 
+// TODO: remove hardcoded values:
 	painter.setPen( Qt::black );
 	painter.setBrush( QColor( 205, 201, 165 ) );
 
+// TODO: filling not-closed shapes?
 	// draw open or closed path ?
 	if ( isClosed() )
 		painter.drawPolygon( qpa );
@@ -429,7 +431,7 @@ VPath::currentPoint() const
 VPath&
 VPath::moveTo( const double x, const double y )
 {
-// TODO: what is the exact postscript-beaviour?
+// TODO: what is the exact postscript-behaviour?
 	if ( isClosed() ) return *this;
 
 	m_segments.getLast()->movePointTo(
@@ -503,7 +505,7 @@ VPath::arcTo( const double x1, const double y1,
 	double num   = dx10*dy12 - dy10*dx12;
 	double denom = sqrt( dsq10*dsq12 ) - dx10*dx12 + dy10*dy12;
 
-	if ( denom==0 )			// points are co-linear
+	if ( denom == 0 )			// points are co-linear
 		lineTo( x1, y1 );	// just add a line to first point
     else
     {

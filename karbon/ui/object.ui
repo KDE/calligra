@@ -11,14 +11,38 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>296</width>
-            <height>162</height>
+            <width>253</width>
+            <height>159</height>
         </rect>
     </property>
     <property stdset="1">
         <name>caption</name>
         <string>Form3</string>
     </property>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>PixmapLabel6_2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>160</x>
+                <y>25</y>
+                <width>12</width>
+                <height>12</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>pixmap</name>
+            <pixmap>image0</pixmap>
+        </property>
+        <property stdset="1">
+            <name>scaledContents</name>
+            <bool>true</bool>
+        </property>
+    </widget>
     <widget>
         <class>QTabWidget</class>
         <property stdset="1">
@@ -30,7 +54,7 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>290</width>
+                <width>252</width>
                 <height>160</height>
             </rect>
         </property>
@@ -48,16 +72,40 @@
                 <class>QLineEdit</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>height</cstring>
+                    <cstring>xpos</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>170</x>
-                        <y>40</y>
-                        <width>110</width>
+                        <x>24</x>
+                        <y>4</y>
+                        <width>90</width>
                         <height>22</height>
                     </rect>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>xpospix</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>6</x>
+                        <y>11</y>
+                        <width>12</width>
+                        <height>12</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>pixmap</name>
+                    <pixmap>image1</pixmap>
+                </property>
+                <property stdset="1">
+                    <name>scaledContents</name>
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget>
@@ -69,137 +117,204 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>170</x>
-                        <y>10</y>
-                        <width>110</width>
+                        <x>148</x>
+                        <y>4</y>
+                        <width>90</width>
                         <height>22</height>
                     </rect>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>widthpix</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>131</x>
+                        <y>9</y>
+                        <width>12</width>
+                        <height>12</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>pixmap</name>
+                    <pixmap>image2</pixmap>
+                </property>
+                <property stdset="1">
+                    <name>scaledContents</name>
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>heightpix</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>130</x>
+                        <y>37</y>
+                        <width>12</width>
+                        <height>12</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>pixmap</name>
+                    <pixmap>image3</pixmap>
+                </property>
+                <property stdset="1">
+                    <name>scaledContents</name>
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget>
                 <class>QLineEdit</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>x</cstring>
+                    <cstring>ypos</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>30</x>
-                        <y>10</y>
-                        <width>110</width>
+                        <x>24</x>
+                        <y>32</y>
+                        <width>90</width>
                         <height>22</height>
                     </rect>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>ypospix</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>6</x>
+                        <y>37</y>
+                        <width>12</width>
+                        <height>12</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>pixmap</name>
+                    <pixmap>image4</pixmap>
+                </property>
+                <property stdset="1">
+                    <name>scaledContents</name>
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget>
                 <class>QLineEdit</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>y</cstring>
+                    <cstring>height</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>30</x>
-                        <y>40</y>
-                        <width>110</width>
+                        <x>148</x>
+                        <y>32</y>
+                        <width>90</width>
                         <height>22</height>
                     </rect>
                 </property>
             </widget>
             <widget>
-                <class>QLabel</class>
+                <class>Line</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>xtext_2</cstring>
+                    <cstring>Line1</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>10</x>
-                        <y>40</y>
-                        <width>16</width>
-                        <height>20</height>
+                        <x>6</x>
+                        <y>62</y>
+                        <width>235</width>
+                        <height>2</height>
                     </rect>
                 </property>
                 <property stdset="1">
-                    <name>text</name>
-                    <string>Y:</string>
+                    <name>orientation</name>
+                    <enum>Horizontal</enum>
                 </property>
             </widget>
             <widget>
                 <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>xtext</cstring>
+                    <cstring>rotatepix</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>16</width>
-                        <height>20</height>
+                        <x>6</x>
+                        <y>75</y>
+                        <width>12</width>
+                        <height>12</height>
                     </rect>
                 </property>
                 <property stdset="1">
-                    <name>text</name>
-                    <string>X:</string>
+                    <name>pixmap</name>
+                    <pixmap>image5</pixmap>
+                </property>
+                <property stdset="1">
+                    <name>scaledContents</name>
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget>
                 <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>xtext_3</cstring>
+                    <cstring>skewpix</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>150</x>
-                        <y>10</y>
-                        <width>16</width>
-                        <height>20</height>
+                        <x>6</x>
+                        <y>103</y>
+                        <width>12</width>
+                        <height>12</height>
                     </rect>
                 </property>
                 <property stdset="1">
-                    <name>text</name>
-                    <string>W:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>xtext_4</cstring>
+                    <name>pixmap</name>
+                    <pixmap>image6</pixmap>
                 </property>
                 <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>150</x>
-                        <y>40</y>
-                        <width>16</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>H:</string>
+                    <name>scaledContents</name>
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget>
                 <class>QComboBox</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>ComboBox1</cstring>
+                    <cstring>rotatecombo</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>170</x>
+                        <x>24</x>
                         <y>70</y>
-                        <width>110</width>
+                        <width>90</width>
                         <height>22</height>
                     </rect>
                 </property>
@@ -208,14 +323,14 @@
                 <class>QComboBox</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>ComboBox3</cstring>
+                    <cstring>skewcombo</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>170</x>
-                        <y>100</y>
-                        <width>110</width>
+                        <x>24</x>
+                        <y>99</y>
+                        <width>90</width>
                         <height>22</height>
                     </rect>
                 </property>
@@ -245,4 +360,34 @@
         </widget>
     </widget>
 </widget>
+<images>
+    <image>
+        <name>image0</name>
+        <data format="XPM.GZ" length="266">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652323452002220a1a4c3a5a4a790ace0979f970a622b03d9ca066000964202d8f8ca08ae32517c2480954fa27978dd576bcd0500849f3021</data>
+    </image>
+    <image>
+        <name>image1</name>
+        <data format="XPM.GZ" length="266">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652323452002220a1a4c3a5a4a790ace0979f970a622b03d9ca06600096d2d3535686603d281fc80173e17c882c6e3e9a7a0cf3600026af0725c07ca85e1005761e12c0268fa2bfd69a0b006bf52f9d</data>
+    </image>
+    <image>
+        <name>image2</name>
+        <data format="XPM.GZ" length="278">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234520022630543251d2e253d856405bffcbc54103b1189ad0c642b1b8001581912c0c6574e840365a2f848002b9f44f3f0baafd69a0b0063cb3f24</data>
+    </image>
+    <image>
+        <name>image3</name>
+        <data format="XPM.GZ" length="278">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234520022630543251d2e253d856405bffcbc54103b1189ad0c642b1b800158999e3214e8e941f8898989caca4062b0f291dc5b6bcd050063cb3f24</data>
+    </image>
+    <image>
+        <name>image4</name>
+        <data format="XPM.GZ" length="266">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652323452002220a1a4c3a5a4a790ace0979f970a622b03d9ca06600096d253d68301305f5959190b1f8cc1da95c10240acac8ca41f9d0fd6868faf07e543cd037151ec43e323dc83ecde5a6b2e0041292f7c</data>
+    </image>
+    <image>
+        <name>image5</name>
+        <data format="XPM.GZ" length="266">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652323452002220a1a4c3a5a4a790ace0979f970a622b03d9ca066000960202652000d1606920172206e543a4402230be323a1f2680aa1ecad7d343e1ebe1e443ccc3e42ba3b807c5bdb5d65c005e8d2ff5</data>
+    </image>
+    <image>
+        <name>image6</name>
+        <data format="XPM.GZ" length="281">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234520022630543251d2e253d856405bffcbc54105b19c856360003103711c44d0303b04a10508600043f1104e07c28570f071fc6c5c18773b1f3115cac7c242e840f01107ead35170093123e33</data>
+    </image>
+</images>
 </UI>
