@@ -169,6 +169,7 @@ void ConfPieDia::slotReset()
     eAngle->setValue( oldAngle );
     eLen->setValue( oldLen );
     cType->setCurrentItem( oldType );
+    type = static_cast<PieType>( oldType );
     piePreview->setLength( oldLen );
     piePreview->setAngle( oldAngle );
     piePreview->setLength( oldLen );
