@@ -41,14 +41,10 @@ Format::Format()
 
 Format::~Format()
 {
-	if(_bottomBorder != NULL)
-		delete _bottomBorder;
-	if(_topBorder != NULL)
-		delete _topBorder;
-	if(_leftBorder != NULL)
-		delete _leftBorder;
-	if(_rightBorder != NULL)
-		delete _rightBorder;
+    delete _bottomBorder;
+    delete _topBorder;
+    delete _leftBorder;
+    delete _rightBorder;
 }
 
 bool Format::hasTopBorder() const
