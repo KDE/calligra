@@ -40,4 +40,11 @@ services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhand
 magicdir = $(kde_confdir)/magic
 magic_DATA = kexi.magic
 
+
+mimetypedir = $(kde_mimedir)/application
+mimetype_DATA = x-kexiproject-sqlite.desktop x-kexiproject-shortcut.desktop
+#TODO: add x-sqlite.desktop x-kexi-conndata x-kexi-conndataset x-kexi-shortcut-table etc.
+
+
 include $(top_srcdir)/kexi/Makefile.global
+

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-kexiproject-sqlite
+Icon=kexiproject_sqlite
+Patterns=*.kexi;*.KEXI
+Comment=Kexi Database File-based Project
