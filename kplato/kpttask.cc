@@ -865,10 +865,32 @@ void KPTTask::addChildProxyRelation(KPTNode *node, const KPTRelation *rel) {
 }
 
 bool KPTTask::isEndNode() const {
-    return m_childProxyRelations.isEmpty() && m_dependChildNodes.isEmpty();
+    QPtrListIterator<KPTRelation> it = m_dependChildNodes;
+    for (; it.current(); ++it) {
+        if (it.current()->timingRelation() == FINISH_START)
+            return false;
+    }
+    QPtrListIterator<KPTRelation> pit = m_childProxyRelations;
+    for (; pit.current(); ++pit) {
+        if (pit.current()->timingRelation() == FINISH_START)
+            return false;
+    }
+    return true;
 }
 bool KPTTask::isStartNode() const {
-    return m_parentProxyRelations.isEmpty() && m_dependParentNodes.isEmpty();
+    QPtrListIterator<KPTRelation> it = m_dependParentNodes;
+    for (; it.current(); ++it) {
+        if (it.current()->timingRelation() == FINISH_START ||
+            it.current()->timingRelation() == START_START)
+            return false;
+    }
+    QPtrListIterator<KPTRelation> pit = m_parentProxyRelations;
+    for (; pit.current(); ++pit) {
+        if (pit.current()->timingRelation() == FINISH_START ||
+            pit.current()->timingRelation() == START_START)
+            return false;
+    }
+    return true;
 }
 
 #ifndef NDEBUG
