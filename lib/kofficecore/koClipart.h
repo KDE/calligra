@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef koClipart_h
+#define koClipart_h
+
 #include <koImage.h>
 
 /**
@@ -83,3 +86,5 @@ public:
 private:
     KoClipartPrivate *d;
 };
+
+#endif
