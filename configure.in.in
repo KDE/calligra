@@ -19,7 +19,7 @@ KDE_FIND_PATH(Magick-config, MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /u
 ])
 
 if test -n "$MAGICK_CONFIG"; then
-  vers=`$MAGICK_CONFIG --version 2>/dev/null | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  vers=`$MAGICK_CONFIG --version 2>/dev/null | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 5005002
   then
      LIBMAGICK_LIBS="`$MAGICK_CONFIG --libs`"
@@ -32,7 +32,7 @@ if test -n "$MAGICK_CONFIG"; then
  	       ;;
           esac
      done
-     LIBMAGICK_RPATH=`echo $LIBMAGICK_RPATH | sed -e "s/-L/-R/g"`
+     LIBMAGICK_RPATH=`echo $LIBMAGICK_RPATH | $PERL -pe "s/-L/-R/g"`
      LIBMAGICK_CPPFLAGS="`$MAGICK_CONFIG --cppflags`"
      AC_DEFINE(HAVE_MAGICK,1, [ImageMagick is available])
   else
