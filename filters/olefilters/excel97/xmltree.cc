@@ -946,15 +946,20 @@ bool XMLTree::_codepage(Q_UINT16, QDataStream&)
 
 bool XMLTree::_colinfo(Q_UINT16, QDataStream& body)
 {
-    Q_UINT16 first, last, width;
+    Q_UINT16 first, last, width, xf, options;
 
-    body >> first >> last >> width;
+    body >> first >> last >> width >>xf>>options;
+
+    bool hidden = (options & 0x0001) ? true : false;
 
     for (Q_UINT16 i = first; i <= last; ++i)
     {
         QDomElement col = root->createElement("column");
         col.setAttribute("column", (int) i+1);
         col.setAttribute("width", (int) width / 120);
+	if(hidden)
+	  col.setAttribute("hide", hidden);
+	col.appendChild(getFormat(xf));
         table->appendChild(col);
     }
 
@@ -1457,13 +1462,17 @@ bool XMLTree::_rk(Q_UINT16, QDataStream& body)
 
 bool XMLTree::_row(Q_UINT16, QDataStream& body)
 {
-  Q_UINT16 rowNr, skip, height;
+  Q_UINT16 rowNr, skip, height,flags,flags2,xf;
 
-  body >> rowNr >> skip >> skip >> height;
+  body >> rowNr >> skip >> skip >> height >>flags>>flags>>flags>>flags2;
 
+  xf = flags2 & 0xffff;
   QDomElement row = root->createElement("row");
   row.setAttribute("row", (int) rowNr + 1);
   row.setAttribute("height", (int) height / 40);
+  if (flags & 0x30)
+    row.setAttribute("hide",true);
+  
   table->appendChild(row);
 
   return true;
