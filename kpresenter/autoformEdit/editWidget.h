@@ -27,7 +27,7 @@
 #include <ktreelist.h>
 #include <kapp.h>
 #include <ktoolbar.h>
-#include <kbutton.h>
+#include <qtoolbutton.h>
 
 #include "atfinterpreter.h"
 

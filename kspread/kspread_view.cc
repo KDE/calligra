@@ -29,7 +29,7 @@
 #include <qobjcoll.h>
 #include <qkeycode.h>
 
-#include <kbutton.h>
+#include <qtoolbutton.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
