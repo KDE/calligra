@@ -437,6 +437,11 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
         flags |= KoTextFormat::ShadowText;
         newFormat->setShadowText( (bool)(m_replaceContext->m_options & KoSearchContext::Shadow) );
     }
+    if (m_replaceContext->m_optionsMask & KoSearchContext::WordByWord)
+    {
+        flags |= KoTextFormat::WordByWord;
+        newFormat->setShadowText( (bool)(m_replaceContext->m_options & KoSearchContext::WordByWord) );
+    }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
 
@@ -534,7 +539,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
     connect( this, SIGNAL( user2Clicked() ), this, SLOT(slotClear()));
 
-    QGridLayout *m_grid = new QGridLayout( page, 12, 2, 0, 6 );
+    QGridLayout *m_grid = new QGridLayout( page, 13, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family:" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size:" ), page );
     m_checkColor = new QCheckBox( i18n( "Color:" ), page );
@@ -542,6 +547,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_checkBold = new QCheckBox( i18n( "Bold:" ), page );
     m_checkItalic = new QCheckBox( i18n( "Italic:" ),page );
     m_checkShadow = new QCheckBox( i18n( "Shadow:" ), page );
+    m_checkWordByWord = new QCheckBox( i18n( "WordByWord:" ), page );
 
     m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
     m_underlineItem = new QComboBox( page );
@@ -595,6 +601,12 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_shadowYes=new QRadioButton( i18n("Yes"), grpShadow );
     m_shadowNo=new QRadioButton( i18n("No"), grpShadow );
 
+    QButtonGroup *grpWordByWord = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpWordByWord->setRadioButtonExclusive( TRUE );
+    grpWordByWord->layout();
+    m_wordByWordYes=new QRadioButton( i18n("Yes"), grpWordByWord );
+    m_wordByWordNo=new QRadioButton( i18n("No"), grpWordByWord );
+
 
     m_vertAlignItem = new QComboBox( false, page );
     m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
@@ -612,6 +624,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_grid->addWidget( m_checkUnderline, 8, 0 );
     m_grid->addWidget( m_checkVertAlign, 9, 0 );
     m_grid->addWidget( m_checkShadow, 10, 0 );
+    m_grid->addWidget( m_checkWordByWord, 11, 0 );
 
 
     m_grid->addWidget( m_familyItem, 1, 1 );
@@ -626,9 +639,10 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
     m_grid->addWidget( m_vertAlignItem, 9, 1 );
     m_grid->addWidget( grpShadow, 10, 1 );
+    m_grid->addWidget( grpWordByWord, 11, 1 );
 
     KSeparator *tmpSep = new KSeparator( page );
-    m_grid->addMultiCellWidget( tmpSep, 11, 11, 0, 1 );
+    m_grid->addMultiCellWidget( tmpSep, 12, 12, 0, 1 );
 
     // signals and slots connections
     QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
@@ -640,12 +654,14 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkShadow, SIGNAL( toggled( bool ) ), m_shadowYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkWordByWord, SIGNAL( toggled( bool ) ), m_wordByWordYes, SLOT( setEnabled( bool ) ) );
 
 
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldNo, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicNo, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkShadow, SIGNAL( toggled( bool ) ), m_shadowNo, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkWordByWord, SIGNAL( toggled( bool ) ), m_wordByWordNo, SLOT( setEnabled( bool ) ) );
 
 
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
@@ -685,6 +701,10 @@ void KoFormatDia::slotReset()
     m_shadowYes->setEnabled(m_checkShadow->isChecked());
     m_shadowNo->setEnabled(m_checkShadow->isChecked());
 
+    m_checkWordByWord->setChecked( m_ctx->m_optionsMask & KoSearchContext::WordByWord );
+    m_wordByWordYes->setEnabled(m_checkWordByWord->isChecked());
+    m_wordByWordNo->setEnabled(m_checkWordByWord->isChecked());
+
 
     m_checkStrikeOut->setChecked( m_ctx->m_optionsMask & KoSearchContext::StrikeOut );
     m_strikeOutItem->setEnabled( m_checkStrikeOut->isChecked());
@@ -715,6 +735,11 @@ void KoFormatDia::slotReset()
     else
         m_shadowNo->setChecked( true );
 
+    if (m_ctx->m_options & KoSearchContext::WordByWord)
+        m_wordByWordYes->setChecked( true );
+    else
+        m_wordByWordNo->setChecked( true );
+
 }
 
 void KoFormatDia::ctxOptions( )
@@ -741,6 +766,8 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::StrikeOut;
     if ( m_checkShadow->isChecked() )
         optionsMask |= KoSearchContext::Shadow;
+    if ( m_checkWordByWord->isChecked() )
+        optionsMask |= KoSearchContext::WordByWord;
 
 
     if ( m_boldYes->isChecked() )
@@ -749,6 +776,8 @@ void KoFormatDia::ctxOptions( )
         options |= KoSearchContext::Italic;
     if ( m_shadowYes->isChecked() )
         options |= KoSearchContext::Shadow;
+    if ( m_wordByWordYes->isChecked() )
+        options |= KoSearchContext::WordByWord;
 
 
     m_ctx->m_optionsMask = optionsMask;
@@ -782,6 +811,12 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         if (searchContext->m_optionsMask & KoSearchContext::Shadow)
         {
             if ( (!format->shadowText() && (searchContext->m_options & KoSearchContext::Shadow)) || (format->shadowText() && ((searchContext->m_options & KoSearchContext::Shadow)==0)))
+                return false;
+        }
+
+        if (searchContext->m_optionsMask & KoSearchContext::WordByWord)
+        {
+            if ( (!format->wordByWord() && (searchContext->m_options & KoSearchContext::WordByWord)) || (format->wordByWord() && ((searchContext->m_options & KoSearchContext::WordByWord)==0)))
                 return false;
         }
 
