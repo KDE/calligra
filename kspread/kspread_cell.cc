@@ -4335,6 +4335,13 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
       if ( !makeFormula() )
         kdError(36001) << "ERROR: Syntax ERROR" << endl;
   }
+  else if (t[0] == '!' )
+  {
+      kdDebug()<<" text :"<<t<<endl;
+      m_pQML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
+      m_strText = t;
+
+  }
   else
   {
     bool newStyleLoading = true;
