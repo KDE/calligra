@@ -3492,6 +3492,15 @@ void KTextEditDocument::unzoom()
     invalidate();
 }
 
+void KTextEditDocument::setAlignmentToAll( int a )
+{
+    KTextEditParag *p = fParag;
+    while ( p ) {
+	p->setAlignment( a );
+	p = p->next();
+    }
+}
+
 void KTextEditDocument::setFontToAll( const QFont &fn )
 {
     KTextEditParag *p = fParag;

@@ -1632,8 +1632,19 @@ void Page::setTextPointSize( int s )
 /*===================== set text alignment =======================*/
 void Page::setTextAlign( int align )
 {
-    ( (KPTextObject*)objectList()->at( editNum ) )->getKTextObject()->setAlignment( align );
-    repaint( FALSE );
+    if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
+	( (KPTextObject*)objectList()->at( editNum ) )->getKTextObject()->setAlignment( align );
+	repaint( FALSE );
+    } else {
+	KPObject *kpobject = 0;
+
+	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
+	    kpobject = objectList()->at( i );
+	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
+		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setAlignmentToAll( align );
+	}
+	repaint( FALSE );
+    }
 }
 
 /*================================================================*/
