@@ -1048,14 +1048,7 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableSplitCellsVerticaly->setEnabled( FALSE );
     actionTableSplitCellsHorizontaly->setEnabled( FALSE );
     actionFormatFrameSet->setEnabled(FALSE);
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
 
-    actionTableInsertRow->setEnabled( table );
-    actionTableInsertCol->setEnabled( table );
-    actionTableDelRow->setEnabled( table );
-    actionTableDelCol->setEnabled( table );
-    actionTableDelete->setEnabled( table );
-    actionTableUngroup->setEnabled( table );
     frameSelectedChanged();
 }
 
@@ -1908,45 +1901,31 @@ void KWView::toolsPart()
 void KWView::tableInsertRow()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
-    if ( !table )
-    {
-        KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
-                                  "before inserting a new row." ),
-                            i18n( "Insert Row" ) );
-    } else {
-        KWInsertDia dia( this, "", table, doc, KWInsertDia::ROW, gui->canvasWidget() );
-        dia.setCaption( i18n( "Insert Row" ) );
-        dia.show();
-    }
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    ASSERT(table);
+    KWInsertDia dia( this, "", table, doc, KWInsertDia::ROW, gui->canvasWidget() );
+    dia.setCaption( i18n( "Insert Row" ) );
+    dia.show();
 }
 
 void KWView::tableInsertCol()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
-    if ( !table )
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    ASSERT(table);
+    // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
+    if ( table->boundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
     {
         KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
-                                  "before inserting a new column." ),
-                            i18n( "Insert Column" ) );
-    } else {
-        // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
-        if ( table->boundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
-        {
-            KMessageBox::sorry( this,
                             i18n( "There is not enough space at the right of the table\n"
                                   "to insert a new column." ),
                             i18n( "Insert Column" ) );
-        }
-        else
-        {
-            KWInsertDia dia( this, "", table, doc, KWInsertDia::COL, gui->canvasWidget() );
-            dia.setCaption( i18n( "Insert Column" ) );
-            dia.show();
-        }
+    }
+    else
+    {
+        KWInsertDia dia( this, "", table, doc, KWInsertDia::COL, gui->canvasWidget() );
+        dia.setCaption( i18n( "Insert Column" ) );
+        dia.show();
     }
 }
 
@@ -1954,36 +1933,27 @@ void KWView::tableDeleteRow()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
-    if ( !table )
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    ASSERT(table);
+    if ( table->getRows() == 1 )
     {
-        KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
-                                  "before deleting a row." ),
-                            i18n( "Delete Row" ) );
+        int result;
+        result = KMessageBox::warningContinueCancel(this,
+                                                    i18n("The table has only one row.\n"
+                                                         "Deleting this row will delete the table.\n\n"
+                                                         "Do you want to delete the table?"),
+                                                    i18n("Delete Row"),
+                                                    i18n("&Delete"));
+        if (result == KMessageBox::Continue)
+        {
+            doc->deleteTable( table );
+        }
     }
     else
     {
-        if ( table->getRows() == 1 )
-        {
-            int result;
-            result = KMessageBox::warningContinueCancel(this,
-                                                        i18n("The table has only one row.\n"
-                                                             "Deleting this row will delete the table.\n\n"
-                                                             "Do you want to delete the table?"),
-                                                        i18n("Delete Row"),
-                                                        i18n("&Delete"));
-            if (result == KMessageBox::Continue)
-            {
-                doc->deleteTable( table );
-            }
-        }
-        else
-        {
-            KWDeleteDia dia( this, "", table, doc, KWDeleteDia::ROW, gui->canvasWidget() );
-            dia.setCaption( i18n( "Delete Row" ) );
-            dia.show();
-        }
+        KWDeleteDia dia( this, "", table, doc, KWDeleteDia::ROW, gui->canvasWidget() );
+        dia.setCaption( i18n( "Delete Row" ) );
+        dia.show();
     }
 
 }
@@ -1992,36 +1962,27 @@ void KWView::tableDeleteCol()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
-    if ( !table )
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    ASSERT(table);
+    if ( table->getCols() == 1 )
     {
-        KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
-                                  "before deleting a column." ),
-                            i18n( "Delete Column" ) );
+        int result;
+        result = KMessageBox::warningContinueCancel(this,
+                                                    i18n("The table has only one column.\n"
+                                                         "Deleting this column will delete the table.\n\n"
+                                                         "Do you want to delete the table?"),
+                                                    i18n("Delete Column"),
+                                                    i18n("&Delete"));
+        if (result == KMessageBox::Continue)
+        {
+            doc->deleteTable( table );
+        }
     }
     else
     {
-        if ( table->getCols() == 1 )
-        {
-            int result;
-            result = KMessageBox::warningContinueCancel(this,
-                                                        i18n("The table has only one column.\n"
-                                                             "Deleting this column will delete the table.\n\n"
-                                                             "Do you want to delete the table?"),
-                                                        i18n("Delete Column"),
-                                                        i18n("&Delete"));
-            if (result == KMessageBox::Continue)
-            {
-                doc->deleteTable( table );
-            }
-        }
-        else
-        {
-            KWDeleteDia dia( this, "", table, doc, KWDeleteDia::COL, gui->canvasWidget() );
-            dia.setCaption( i18n( "Delete Column" ) );
-            dia.show();
-        }
+        KWDeleteDia dia( this, "", table, doc, KWDeleteDia::COL, gui->canvasWidget() );
+        dia.setCaption( i18n( "Delete Column" ) );
+        dia.show();
     }
 }
 
@@ -2030,25 +1991,18 @@ void KWView::tableJoinCells()
     //gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
-    if ( !table )
+    ASSERT(table);
+    if ( !table->joinCells() )
     {
         KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
-                                  "before joining cells." ),
+                            i18n( "You have to select some cells which are next to each other\n"
+                                  "and are not already joined." ),
                             i18n( "Join Cells" ) );
-    } else {
-        if ( !table->joinCells() )
-        {
-            KMessageBox::sorry( this,
-                                i18n( "You have to select some cells which are next to each other\n"
-                                      "and are not already joined." ),
-                                i18n( "Join Cells" ) );
-        }
-        //KoRect r = doc->zoomRect( table->boundingRect() );
-        //gui->canvasWidget()->repaintScreen( r, TRUE );
-        gui->canvasWidget()->repaintAll();
-        doc->layout();
     }
+    //KoRect r = doc->zoomRect( table->boundingRect() );
+    //gui->canvasWidget()->repaintScreen( r, TRUE );
+    gui->canvasWidget()->repaintAll();
+    doc->layout();
 }
 
 void KWView::tableSplitCellsVerticaly()
@@ -2097,37 +2051,19 @@ void KWView::tableUngroupTable()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
-    if ( !table )
-    {
-        KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
-                                  "before ungrouping a table." ),
-                            i18n( "Ungroup Table" ) );
-    }
-    else
-    {
-        KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
-        doc->addCommand( cmd );
-        cmd->execute();
-        gui->canvasWidget()->repaintAll();
-    }
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    ASSERT(table);
+    KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
+    doc->addCommand( cmd );
+    cmd->execute();
+    gui->canvasWidget()->repaintAll();
 }
 
 void KWView::tableDelete()
 {
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
-    if ( !table )
-    {
-        KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table \n"
-                                  "or select it to delete it!" ),
-                            i18n( "Delete Table" ) );
-    }
-    else
-    {
-        doc->deleteTable( table );
-    }
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    ASSERT(table);
+    doc->deleteTable( table );
 }
 
 void KWView::textStyleSelected( int index )
@@ -2774,13 +2710,6 @@ void KWView::updateButtons()
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
 
-    bool table = ( gui->canvasWidget()->getTable() != 0 ) && rw;
-    actionTableInsertRow->setEnabled( table );
-    actionTableInsertCol->setEnabled( table );
-    actionTableDelRow->setEnabled( table );
-    actionTableDelCol->setEnabled( table );
-    actionTableDelete->setEnabled( table );
-    actionTableUngroup->setEnabled( table );
     frameSelectedChanged();
 
 }
@@ -2795,6 +2724,13 @@ void KWView::frameSelectedChanged()
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
     actionEditDelFrame->setEnabled( !currentTextEdit() && (nbFrame==1));
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
+
+    actionTableInsertRow->setEnabled( table );
+    actionTableInsertCol->setEnabled( table );
+    actionTableDelRow->setEnabled( table );
+    actionTableDelCol->setEnabled( table );
+    actionTableDelete->setEnabled( table );
+    actionTableUngroup->setEnabled( table );
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)

@@ -225,6 +225,13 @@
  <Action name="table_joincells"/>
  <Action name="table_splitcells_vertical"/>
  <Action name="table_splitcells_horizontal"/>
+ <Separator/>
+ <Action name="table_insrow"/>
+ <Action name="table_inscol"/>
+ <Action name="table_delrow"/>
+ <Action name="table_delcol"/>
+ <Separator/>
+ <Action name="table_ungroup"/>
 </Menu>
 </kpartgui>
 
