@@ -37,7 +37,7 @@ KexiWorkspaceTabbedMDI::KexiWorkspaceTabbedMDI(QWidget *parent, const char *name
 	: KTabWidget(parent, name),KexiWorkspace(),no(0),m_activeDialog(0),m_mainwindow(mw)
 {
 
-#if KDE_IS_VERSION(1,9,0)
+#if KDE_IS_VERSION(3,1,9)
 	setHoverCloseButton(true);	
 #endif
 

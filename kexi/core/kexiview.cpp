@@ -72,7 +72,7 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, c
 	//IMPORTANT !!!!!!!!!! This has to be in the same order as the WindowMode enum
 	m_modeDescriptions<<i18n("Child frames");
 	m_modeDescriptions<<i18n("Tabbed");
-	m_modeDescriptions<<i18n("Single document");
+//	m_modeDescriptions<<i18n("Single document");
 	m_possibleModes=m_modeDescriptions;
 #if !KDE_IS_VERSION(3,1,9)
 	m_possibleModes.remove(m_possibleModes.at(1);
