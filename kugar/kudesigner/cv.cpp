@@ -167,7 +167,7 @@ void ReportCanvas::selectItemFromList(QCanvasItemList &l)
     //display editor for report items or sections
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
-        if ((*it)->rtti() > 2001) //for report items but not bands
+        if ((*it)->rtti() >= 1800 ) //include bands and the template itself
         {
             CanvasBox *b = (CanvasBox*)(*it);
             if (!selected.containsRef(b))
@@ -585,6 +585,8 @@ void ReportCanvas::updateProperty(QString name, QString value)
         b->props[name]->setValue(value);
         b->hide();
         b->show();
+        if ((b->rtti()>=1800) && (b->rtti()<2000))
+           ((MyCanvas*)(canvas()))->templ->arrangeSections();
     }
 }
 
