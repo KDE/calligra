@@ -91,7 +91,7 @@ struct KSpreadRange
     bottomFixed = lr.rowFixed;
   }
 
-  bool isValid() const { return ( range.left() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
+  bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
   bool isTableKnown() const { return ( !tableName.isEmpty() || table != 0 ); }
 
   KSpreadTable* table;
