@@ -38,6 +38,7 @@ class KexiTabBrowser;
 class KexiDoc;
 class KexiFormBase;
 class KexiProject;
+class DCOPObject;
 
 class KexiView : public KoView  {
    Q_OBJECT
@@ -47,7 +48,7 @@ public:
 
 	KexiView(KexiWindowMode winmode, KexiProject* part,QWidget *parent=0, const char *name=0);
 	~KexiView();
-
+    virtual DCOPObject* dcopObject();
 
 	void			solveDeps();
 
@@ -59,7 +60,8 @@ public:
 
     virtual void updateReadWrite( bool readwrite );
 
-
+public slots:
+    void slotShowRelations();
 protected:
 	//various init-functions
 	void			initActions();
@@ -94,14 +96,12 @@ protected slots:
 	void			slotKeyBindings();
 	void			slotConfigToolbars();
 
-	void			slotShowRelations();
-
 	void			slotProjectModified();
 	void			slotDBAvaible();
 
 private:
 	KexiProject *m_project;
-
+    DCOPObject *dcop;
 };
 
 #endif

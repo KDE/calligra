@@ -8,7 +8,7 @@ libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp \
 	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationview.cpp kexiformbase.cpp \
-	kexicomboboxtableedit.cpp kexitableedit.cpp
+	kexicomboboxtableedit.cpp kexitableedit.cpp KexiViewIface.skel KexiViewIface.cpp
 
 libkexipart_la_LDFLAGS = $(KDE_PLUGIN)
 libkexipart_la_LIBADD = -lkofficecore -lkofficeui $(LIB_KPARTS) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
@@ -41,7 +41,7 @@ install-data-local:
 #	$(INSTALL_DATA) $(srcdir)/interfaces/mysqlinterface.desktop $(kde_servicesdir)/mysqlinterface.desktop
 	$(mkinstalldirs) $(kde_mimedir)/application/
 	$(INSTALL_DATA) $(srcdir)/x-kexi.desktop $(kde_mimedir)/application/x-kexi.desktop
-	
+
 uninstall-local:
 	rm -f $(kde_appsdir)/Office/kexi.desktop
 	rm -f $(kde_mimedir)/application/x-kexi.desktop

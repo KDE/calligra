@@ -51,12 +51,15 @@
 #include "kexiprojectproperties.h"
 #include "kexiproject.h"
 #include "kexirelation.h"
+#include "KexiViewIface.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)
 {
 	m_project=part;
 	m_windowMode=winmode;
 	initActions();
+        dcop = 0;
+        dcopObject(); // build it
 //	createGUI("kexiui.rc",false);
 	setXMLFile("kexiui.rc");
 
@@ -67,7 +70,18 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, co
 	QTimer::singleShot(0,this,SLOT(finalizeInit()));
 }
 
-KexiProject *KexiView::project(){return m_project;}
+DCOPObject* KexiView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KexiViewIface( this );
+    return dcop;
+}
+
+
+KexiProject *KexiView::project()
+{
+    return m_project;
+}
 
 void KexiView::solveDeps()
 {
@@ -109,7 +123,7 @@ void KexiView::initMainDock()
 {
 	(new QVBoxLayout (this))->setAutoAdd(true);
 	m_workspace = new KexiWorkspaceMDI(this,"kexiworkspace",this);
-	
+
 #if 0
 	m_mainDock = createDockWidget(i18n("no document"), 0, 0L, "");
 
@@ -235,6 +249,7 @@ KexiView::slotShowProjectProps()
 
 KexiView::~KexiView(){
     delete m_formActionList;
+    delete dcop;
 }
 
 bool

@@ -3,12 +3,12 @@
 #include "widgetcontainer.h"
 
 #include <qlayout.h>
-
+#include <qtabbar.h>
 namespace KFormEditor {
 
 	container_TabWidget::container_TabWidget(QWidget *parent, const char* name):QTabWidget(parent,name),containerIface() {
-		m_container1=new WidgetContainer(this);		
-		m_container2=new WidgetContainer(this);		
+		m_container1=new WidgetContainer(this);
+		m_container2=new WidgetContainer(this);
 		addTab(m_container1,"Tab1");
 		addTab(m_container2,"Tab2");
 	}
@@ -23,7 +23,7 @@ namespace KFormEditor {
 
         containerIface::Action container_TabWidget::allowMousePress(QObject* o,QEvent*)
 	{
-		if (o==tabBar()) return (Activate | Move);
+		if (o==tabBar()) return (containerIface::Action)(Activate | Move);
 		else return (AllEat);
 	}
 
