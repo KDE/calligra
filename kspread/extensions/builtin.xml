@@ -1668,6 +1668,43 @@
     </Function>
 
     <Function>
+      <Name>SUMPRODUCT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMPRODUCT() function returns the sum of product of these value. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
+	<Syntax>SUMPRODUCT(array1;array2)</Syntax>
+	<Example>SUMPRODUCT(A1:A2;B1;B2) with A1=2 A2=5 and B1=3 B2=5 returns 31</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUMX2PY2</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMX2PY2() function returns the sum of square of these value. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
+	<Syntax>SUMX2PY2(array1;array2)</Syntax>
+	<Example>SUMX2PY2(A1:A2;B1;B2) with A1=2 A2=5 and B1=3 B2=5 returns 63</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>INVBINO</Name>
       <Type>Float</Type>
       <Parameter>

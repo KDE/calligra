@@ -2888,6 +2888,105 @@ static bool kspreadfunc_cary( KSContext& context )
 }
 
 
+static bool kspreadfunc_sumproduct_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = list.begin();
+  QValueList<KSValue::Ptr>::Iterator end = list.end();
+  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
+  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
+
+  for( ; it != end,it2!=end2; ++it,++it2 )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_sumproduct_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
+      {
+      result +=( (*it)->doubleValue()*(*it2)->doubleValue());
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_sumproduct( KSContext& context )
+{
+  double result = 0.0;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context, 2, "SUMPRODUCT", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
+      return false;
+    if(args[0]->listValue().count() !=args[1]->listValue() .count())
+        {
+        context.setValue( new KSValue( i18n("Err") ) );
+        return true;
+        }
+  bool b = kspreadfunc_sumproduct_helper( context,args[0]->listValue(),args[1]->listValue() , result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+static bool kspreadfunc_sumx2py2_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = list.begin();
+  QValueList<KSValue::Ptr>::Iterator end = list.end();
+  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
+  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
+
+  for( ; it != end,it2!=end2; ++it,++it2 )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_sumx2py2_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
+      {
+      result +=( pow((*it)->doubleValue(),2)+pow((*it2)->doubleValue(),2));
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_sumx2py2( KSContext& context )
+{
+  double result = 0.0;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context, 2, "SUMX2PY2", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
+      return false;
+    if(args[0]->listValue().count() !=args[1]->listValue() .count())
+        {
+        context.setValue( new KSValue( i18n("Err") ) );
+        return true;
+        }
+  bool b = kspreadfunc_sumx2py2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+
 static bool kspreadfunc_cell( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -3103,7 +3202,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "IMCONJUGATE", new KSValue( new KSBuiltinFunction( module, "IMCONJUGATE", kspreadfunc_imconjugate ) ) );
   module->addObject( "IMARGUMENT", new KSValue( new KSBuiltinFunction( module, "IMARGUMENT", kspreadfunc_imargument ) ) );
   module->addObject( "IMABS", new KSValue( new KSBuiltinFunction( module, "IMABS", kspreadfunc_imabs ) ) );
-
+  module->addObject( "SUMPRODUCT", new KSValue( new KSBuiltinFunction( module, "SUMPRODUCT", kspreadfunc_sumproduct ) ) );
+  module->addObject( "SUMX2PY2", new KSValue( new KSBuiltinFunction( module, "SUMX2PY2", kspreadfunc_sumx2py2 ) ) );
   return module;
 }
 
