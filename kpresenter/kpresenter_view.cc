@@ -1313,7 +1313,7 @@ void KPresenterView::extraLayout()
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS, unit ) ) {
         PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
-                                                    pgLayout, oldLayout, unit, oldUnit,kPresenterDoc() );
+                                                    pgLayout, oldLayout, oldUnit, unit,kPresenterDoc() );
         pgLayoutCmd->execute();
         kPresenterDoc()->addCommand( pgLayoutCmd );
         updateRuler();
@@ -1506,7 +1506,7 @@ void KPresenterView::screenAssignEffect()
 /*========================== screen start =======================*/
 void KPresenterView::screenStart()
 {
-    startScreenPres( getCurrPgNum() ); 
+    startScreenPres( getCurrPgNum() );
 }
 
 void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
@@ -3840,7 +3840,7 @@ void KPresenterView::pgConfOk()
     QValueList<bool> selectedSlides;
     for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ )
         selectedSlides.append( kPresenterDoc()->pageList().at( i )->isSlideSelected() );
-        
+
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
                         pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
                         pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
