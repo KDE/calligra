@@ -39,7 +39,7 @@ class KoStore;
 class View;
 class QDomDocument;
 class DCOPObject;
-
+class KCommandHistory;
 
 #include <koDocument.h>
 #include <koMainWindow.h>
@@ -50,6 +50,7 @@ class DCOPObject;
 
 class QPainter;
 class KPrinter;
+class KCommand;
 
 #define MIME_TYPE "application/x-kivio"
 
@@ -129,6 +130,11 @@ public:
   void initConfig();
   void saveConfig();
     void updateButton();
+    void addCommand( KCommand * cmd );
+
+    int undoRedoLimit() const;
+    void setUndoRedoLimit(int val);
+    KCommandHistory * commandHistory() { return m_commandHistory; }
 
 public slots:
   void updateView(KivioPage*, bool modified=true);
@@ -139,6 +145,11 @@ public slots:
 
   void aboutKivio();
   void aboutGetStencilSets();
+
+protected slots:
+    void slotDocumentRestored();
+    void slotCommandExecuted();
+
 
 signals:
   void sig_selectionChanged();
@@ -216,6 +227,7 @@ protected:
 
   KivioOptions* m_options;
   DCOPObject *dcop;
+    KCommandHistory * m_commandHistory;
 };
 
 #endif

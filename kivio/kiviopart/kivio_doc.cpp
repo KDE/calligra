@@ -75,7 +75,7 @@
 #include <koFilterManager.h>
 #include <koStoreDevice.h>
 #include <KIvioDocIface.h>
-
+#include <kcommand.h>
 
 //using namespace std;
 
@@ -132,6 +132,12 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   m_units = (int)UnitPoint;
 
   viewItemList = new ViewItemList(this);
+
+  m_commandHistory = new KCommandHistory( actionCollection(),  false ) ;
+  connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
+  connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+
+
   if ( name )
       dcopObject();
 }
@@ -562,7 +568,7 @@ KivioDoc::~KivioDoc()
     // is called or the program will slit it's throat.
     delete m_pMap;
     delete dcop;
-
+    delete m_commandHistory;
     if( m_pClipboard )
     {
         delete m_pClipboard;
@@ -831,5 +837,34 @@ void KivioDoc::updateButton()
     for (; it.current(); ++it )
 	((KivioView*)it.current())->updateButton();
 }
+
+void KivioDoc::addCommand( KCommand * cmd )
+{
+    kdDebug() << "KivioDoc::addCommand " << cmd->name() << endl;
+    m_commandHistory->addCommand( cmd, false );
+    setModified( true );
+}
+
+int KivioDoc::undoRedoLimit() const
+{
+    return m_commandHistory->undoLimit();
+}
+
+void KivioDoc::setUndoRedoLimit(int val)
+{
+    m_commandHistory->setUndoLimit(val);
+    m_commandHistory->setRedoLimit(val);
+}
+
+void KivioDoc::slotDocumentRestored()
+{
+    setModified( false );
+}
+
+void KivioDoc::slotCommandExecuted()
+{
+    setModified( true );
+}
+
 
 #include "kivio_doc.moc"
