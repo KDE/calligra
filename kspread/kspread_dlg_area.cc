@@ -31,6 +31,9 @@
 #include <qlayout.h>
 #include <kbuttonbox.h>
 
+#include <qlineedit.h>
+#include <qlabel.h>
+
 #include <kmessagebox.h>
 
 KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker )

@@ -29,6 +29,7 @@
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
+#include <qlistbox.h>
 
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )

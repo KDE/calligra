@@ -32,7 +32,7 @@
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
-
+#include <qlistbox.h>
 
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )

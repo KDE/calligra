@@ -32,6 +32,7 @@
 #include <qrangecontrol.h>
 #include <kmessagebox.h>
 
+
 KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
 	: QDialog( parent, name, TRUE )
 {

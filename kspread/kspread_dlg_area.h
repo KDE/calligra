@@ -21,12 +21,11 @@
 #define __kspread_dlg_area__
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
 
 class KSpreadView;
+class QPushButton;
+class QLineEdit;
+class QLabel;
 
 class KSpreadarea: public QDialog
 {

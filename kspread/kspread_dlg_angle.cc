@@ -24,6 +24,8 @@
 
 #include <kbuttonbox.h>
 #include <kdebug.h>
+#include <knuminput.h>
+#include <qcheckbox.h>
 
 KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )

@@ -22,18 +22,14 @@
 #define __kspread_dlg_tabname__
 
 #include <qdialog.h>
-#include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qstringlist.h>
-#include <qlistbox.h>
-#include <qrect.h>
-#include <qcheckbox.h>
 
 class QApplication;
 class KSpreadView;
 class KSpreadTable;
+class QPushButton;
 
 class KSpreadTableName : public QDialog
 {

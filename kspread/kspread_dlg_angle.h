@@ -22,14 +22,18 @@
 #define __kspread_dlg_angle__
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qrect.h>
-#include <knuminput.h>
-#include <qcheckbox.h>
+//#include <qpushbutton.h>
+//#include <qrect.h>
+//#include <knuminput.h>
+//#include <qcheckbox.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class QPushButton;
+class QCheckBox;
+class KIntNumInput;
+
 class KSpreadAngle : public QDialog
 {
   Q_OBJECT
