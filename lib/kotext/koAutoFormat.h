@@ -248,6 +248,9 @@ public:
 	buildMaxLen();
     }
 
+    void addAutoFormatEntry( const QString &key, const QString &replace );
+
+
     void removeAutoFormatEntry( const QString &key ) {
         m_entries.setAutoDelete(true);
         m_entries.remove( key );

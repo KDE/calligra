@@ -736,6 +736,14 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
     return data;
 }
 
+void KoAutoFormat::addAutoFormatEntry( const QString &key, const QString &replace )
+{
+    KoAutoFormatEntry *tmp = new KoAutoFormatEntry( replace );
+    m_entries.insert( key, tmp );
+    saveConfig();
+    buildMaxLen();
+}
+
 QString KoAutoFormat::getLastWord(KoTextParag *parag, int index)
 {
     QString lastWord;
