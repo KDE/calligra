@@ -590,6 +590,7 @@ void GroupObjCmd::execute()
     grpObj->addToObjList();
     grpObj->setUpdateObjects( true );
     grpObj->setSelected( true );
+    doc->refreshGroupButton();
 
     doc->repaint( false );
 }
@@ -609,6 +610,7 @@ void GroupObjCmd::unexecute()
 
     m_page->takeObject( grpObj );
     grpObj->removeFromObjList();
+    doc->refreshGroupButton();
 
     doc->repaint( false );
 }
@@ -657,6 +659,7 @@ void UnGroupObjCmd::execute()
 
     m_page->takeObject(grpObj);
     grpObj->removeFromObjList();
+    doc->refreshGroupButton();
 
     doc->repaint( false );
 }
@@ -696,6 +699,7 @@ void UnGroupObjCmd::unexecute()
     grpObj->addToObjList();
     grpObj->setUpdateObjects( true );
     grpObj->setSelected( true );
+    doc->refreshGroupButton();
 
     doc->repaint( false );
 }

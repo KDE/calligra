@@ -3296,5 +3296,11 @@ void KPresenterDoc::updatePresentationButton()
         static_cast<KPresenterView*>(it.current())->updatePresentationButton((selectedSlides().count()>0));
 }
 
+void KPresenterDoc::refreshGroupButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->refreshGroupButton();
+}
 
 #include <kpresenter_doc.moc>

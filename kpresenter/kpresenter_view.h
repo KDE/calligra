@@ -414,6 +414,7 @@ public slots:
     void backgroundPicture();
     void updateBgSpellCheckingState();
     void updatePresentationButton(bool);
+    void refreshGroupButton();
 
 public:
     // create GUI

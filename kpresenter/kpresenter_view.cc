@@ -7225,5 +7225,12 @@ void KPresenterView::updatePresentationButton(bool b)
     actionScreenStart->setEnabled( b );
 }
 
+void KPresenterView::refreshGroupButton()
+{
+    bool state=m_canvas->isOneObjectSelected();
+    actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
+    actionExtraUnGroup->setEnabled(state && m_canvas->haveASelectedGroupObj());
+}
+
 
 #include <kpresenter_view.moc>
