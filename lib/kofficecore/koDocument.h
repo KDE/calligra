@@ -489,6 +489,10 @@ public:
 
     void removeAutoSaveFiles();
 
+    void setBackupFile( bool _b );
+
+    bool backupFile()const;
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes

@@ -620,7 +620,6 @@ bool KoMainWindow::saveDocument( bool saveas )
                 if (res == KMessageBox::Cancel )
                     return false;
             }
-
             ret = pDoc->saveAs( newURL );
 
             pDoc->setTitleModified();

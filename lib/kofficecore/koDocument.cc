@@ -86,7 +86,8 @@ public:
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
-        m_shouldCheckAutoSaveFile( true )
+        m_shouldCheckAutoSaveFile( true ),
+        m_backupFile( true )
         {}
 
     QPtrList<KoView> m_views;
@@ -110,6 +111,7 @@ public:
     bool m_bSingleViewMode;
     bool m_autosaving;
     bool m_shouldCheckAutoSaveFile; // usually true
+    bool m_backupFile;
 };
 
 // Used in singleViewMode
@@ -278,11 +280,11 @@ bool KoDocument::saveFile()
     QApplication::setOverrideCursor( waitCursor );
 
     if ( KIO::NetAccess::exists( url() ) ) { // this file exists => backup
-        // TODO : make this configurable ?
         KURL backup( url() );
         backup.setPath( backup.path() + QString::fromLatin1("~") );
         (void) KIO::NetAccess::del( backup );
-        (void) KIO::NetAccess::copy( url(), backup );
+        if ( backupFile() )
+            (void) KIO::NetAccess::copy( url(), backup );
 
         // This is noticeably faster, but not network transparent, and more importantly
         // it fails with '(' and other special chars in the filename.
@@ -1451,6 +1453,17 @@ void KoDocument::removeAutoSaveFiles()
         if ( QFile::exists( asf ) )
             unlink( QFile::encodeName( asf ) );
 }
+
+void KoDocument::setBackupFile( bool _b )
+{
+    d->m_backupFile = _b;
+}
+
+bool KoDocument::backupFile()const
+{
+    return d->m_backupFile;
+}
+
 
 #include <koDocument.moc>
 #include <koDocument_p.moc>
