@@ -45,7 +45,7 @@ QString HtmlDocStructWorker::getStartOfListOpeningTag(const CounterData::Style t
     case CounterData::STYLE_SQUAREBULLET:
     case CounterData::STYLE_DISCBULLET:
         {
-            m_orderedList=false;
+            ordered=false;
             strResult="<ul>\n";
             break;
         }
@@ -56,7 +56,7 @@ QString HtmlDocStructWorker::getStartOfListOpeningTag(const CounterData::Style t
     case CounterData::STYLE_ROM_NUM_U:
     case CounterData::STYLE_CUSTOM:
         {
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol>\n";
             break;
         }

@@ -153,6 +153,7 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
         return false;
     }
 
+    // TODO: if we have alreasy SVG, do *not* go through QPicture!
     if (picture.load(io))
     {
 
@@ -199,14 +200,14 @@ void HtmlWorker::formatTextParagraph(const QString& strText,
         // Opening elements
         openSpan(formatOrigin,format);
     }
-        
+
     // TODO: first and last characters of partialText should not be a space (white space problems!)
     // TODO: replace multiples spaces by non-breaking spaces!
 
     if (strText==" ")
     {//Just a space as text. Therefore we must use a non-breaking space.
         *m_streamOut << "&nbsp;";
-        // FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
+        // TODO/FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
     }
     else
     {
@@ -301,16 +302,28 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
         strParaText=QChar(160);
     }
 
-    // As KWord has only one depth of lists, we can process lists very simply.
+    // As KWord has only one depth of lists (FIXME/TODO: that's wrong!), we can process lists very simply.
     if ( layout.counter.numbering == CounterData::NUM_LIST )
     {
-        if (m_inList)
+        const uint layoutDepth=layout.counter.depth+1; // Word's depth starts at 0!
+        const uint listDepth=m_listStack.size();
+        // We are in a list, but has it the right depth?
+        if (layoutDepth>listDepth)
         {
-            // We are in a list but does it have the right type?
-            if ( layout.counter.style!=m_typeList)
+            ListInfo newList;
+            newList.m_typeList=layout.counter.style;
+            for (uint i=listDepth; i<layoutDepth; i++)
             {
-                // No, then close the previous list
-                if (m_orderedList)
+                *m_streamOut << getStartOfListOpeningTag(layout.counter.style,newList.m_orderedList);
+                m_listStack.push(newList);
+            }
+        }
+        else if (layoutDepth<listDepth)
+        {
+            for (uint i=listDepth; i>layoutDepth; i--)
+            {
+                ListInfo oldList=m_listStack.pop();
+                if (oldList.m_orderedList)
                 {
                     *m_streamOut << "</ol>\n";
                 }
@@ -318,27 +331,15 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
                 {
                     *m_streamOut << "</ul>\n";
                 }
-                m_inList=false; // We are not in a list anymore
             }
         }
 
-        // Are we still in a list?
-        if (!m_inList)
+        // We have a list but does it have the right type?
+        if ( layout.counter.style!=m_listStack.top().m_typeList)
         {
-            // We are not yet part of a list
-            m_inList=true;
-            *m_streamOut << getStartOfListOpeningTag(layout.counter.style,m_orderedList);
-            m_typeList=layout.counter.style;
-        }
-        // TODO: with Cascaded Style Sheet, we could add the exact counter type that we want
-        strTag="li";
-    }
-    else
-    {
-        if (m_inList)
-        {
-            // The previous paragraphs were in a list, so we have to close the list
-            if (m_orderedList)
+            // No, then close the previous list
+            ListInfo oldList=m_listStack.pop();
+            if (oldList.m_orderedList)
             {
                 *m_streamOut << "</ol>\n";
             }
@@ -346,7 +347,32 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
             {
                 *m_streamOut << "</ul>\n";
             }
-            m_inList=false;
+            ListInfo newList;
+            *m_streamOut << getStartOfListOpeningTag(layout.counter.style,newList.m_orderedList);
+            newList.m_typeList=layout.counter.style;
+            m_listStack.push(newList);
+        }
+
+        // TODO: with Cascaded Style Sheet, we could add the exact counter type that we want
+        strTag="li";
+    }
+    else
+    {
+        // Close all open lists first
+        if (!m_listStack.isEmpty())
+        {
+            for (uint i=m_listStack.size(); i>0; i--)
+            {
+                ListInfo oldList=m_listStack.pop();
+                if (oldList.m_orderedList)
+                {
+                    *m_streamOut << "</ol>\n";
+                }
+                else
+                {
+                    *m_streamOut << "</ul>\n";
+                }
+            }
         }
         if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
             && (layout.counter.depth<6) )
@@ -534,19 +560,20 @@ bool HtmlWorker::doOpenTextFrameSet(void)
 
 bool HtmlWorker::doCloseTextFrameSet(void)
 {
-    // Are we still in a list?
-    if (m_inList)
+    if (!m_listStack.isEmpty())
     {
-        // We are in a list, so close it!
-        if (m_orderedList)
+        for (uint i=m_listStack.size(); i>0; i--)
         {
-            *m_streamOut << "</ol>\n";
+            ListInfo oldList=m_listStack.pop();
+            if (oldList.m_orderedList)
+            {
+                *m_streamOut << "</ol>\n";
+            }
+            else
+            {
+                *m_streamOut << "</ul>\n";
+            }
         }
-        else
-        {
-            *m_streamOut << "</ul>\n";
-        }
-        m_inList=false;
     }
     return true;
 }

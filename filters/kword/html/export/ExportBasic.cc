@@ -73,68 +73,68 @@ QString HtmlBasicWorker::getStartOfListOpeningTag(const CounterData::Style typeL
     case CounterData::STYLE_CUSTOMBULLET: // We cannot keep the custom type/style
     default:
         {
-            m_orderedList=false;
+            ordered=false;
             strResult="<ul>\n";
             break;
         }
     case CounterData::STYLE_NONE: // We cannot specify "no bullet"
         {
-            m_orderedList=false;
+            ordered=false;
             strResult="<ul>\n";
             break;
         }
     case CounterData::STYLE_CIRCLEBULLET:
         {
-            m_orderedList=false;
+            ordered=false;
             strResult="<ul type=\"circle\">\n";
             break;
         }
     case CounterData::STYLE_SQUAREBULLET:
         {
-            m_orderedList=false;
+            ordered=false;
             strResult="<ul type=\"square\">\n";
             break;
         }
     case CounterData::STYLE_DISCBULLET:
         {
-            m_orderedList=false;
+            ordered=false;
             strResult="<ul type=\"disc\">\n";
             break;
         }
     case CounterData::STYLE_NUM:
         {
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol type=\"1\">\n";
             break;
         }
     case CounterData::STYLE_ALPHAB_L:
         {
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol type=\"a\">\n";
             break;
         }
     case CounterData::STYLE_ALPHAB_U:
         {
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol type=\"A\">\n";
             break;
         }
     case CounterData::STYLE_ROM_NUM_L:
         {
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol type=\"i\">\n";
             break;
         }
     case CounterData::STYLE_ROM_NUM_U:
         {
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol type=\"I\">\n";
             break;
         }
     case CounterData::STYLE_CUSTOM:
         {
             // We cannot keep the custom type/style
-            m_orderedList=true;
+            ordered=true;
             strResult="<ol>\n";
             break;
         }

@@ -23,12 +23,21 @@
 #ifndef EXPORTFILTERFULLPOWER_H
 #define EXPORTFILTERFULLPOWER_H
 
+#include <qvaluestack.h>
+
 #include <KWEFBaseWorker.h>
+
+class ListInfo
+{
+public:
+    CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
+    bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+};
 
 class HtmlWorker : public KWEFBaseWorker
 {
 public:
-    HtmlWorker(void) : m_ioDevice(NULL), m_streamOut(NULL), m_inList(false) { }
+    HtmlWorker(void) : m_ioDevice(NULL), m_streamOut(NULL) { }
     virtual ~HtmlWorker(void) { }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -74,9 +83,7 @@ protected:
     QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_strTitle;
     QString m_fileName; // Name of the output file
-    CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
-    bool m_inList; // Are we currently in a list?
-    bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+    QValueStack<ListInfo> m_listStack; // Stack for list information
     bool m_xml;
 };
 
