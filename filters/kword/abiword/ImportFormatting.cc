@@ -210,25 +210,30 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
 
     int kwordDepth;
     int kwordNumberingType;
+    int kwordType;
+    QString kwordRightText;
     // level is 1 based like AbiWord, any value lower than 1 means no level!
     if ((level<=0) || (level>=15))
     {
         kwordDepth=0;
         kwordNumberingType=2;
+        kwordType=0;
     }
     else
     {
-        kwordDepth=level+1;
+        kwordDepth=level-1;
         kwordNumberingType=1;
+        kwordType=1; // PROVISORY
+        kwordRightText=".";
     }
 
     element=mainDocument.createElement("COUNTER");
-    element.setAttribute("type",0);
+    element.setAttribute("type",kwordType);
     element.setAttribute("depth",kwordDepth);
     element.setAttribute("start",1);
     element.setAttribute("numberingtype",kwordNumberingType);
     element.setAttribute("lefttext","");
-    element.setAttribute("righttext","");
+    element.setAttribute("righttext",kwordRightText);
     element.setAttribute("bullet",64);
     element.setAttribute("bulletfont","Symbol");
     element.setAttribute("customdef","");

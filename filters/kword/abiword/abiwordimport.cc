@@ -190,7 +190,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement layoutElement=mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
-    AddLayout("Standard",layoutElement, stackItem, mainDocument, abiPropsMap, level);
+    AddLayout(strStyle,layoutElement, stackItem, mainDocument, abiPropsMap, level);
 
     return true;
 }
@@ -968,7 +968,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     if (!reader.parse( source ))
     {
-        kdError(30506) << "Import (COMPRESSED): Parsing unsuccessful. Aborting!" << endl;
+        kdError(30506) << "Import: Parsing unsuccessful. Aborting!" << endl;
         // TODO: try to give line and column number like the QDom parser does.
         delete in;
         return KoFilter::StupidError;
@@ -987,7 +987,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
 
-#if 1
+#if 0
     kdDebug(30506) << qDomDocumentOut.toString();
 #endif
 
