@@ -54,11 +54,14 @@ k_dcop:
     void setTextBackgroundColor(const QColor & col);
     void setTextFamilyFont(const QString &font);
     void changeCaseOfText( const QString & caseType);
+    void setDoubleUnderlineText(bool on);
+    void setUnderlineColor( const QColor & color );
 
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
+    QColor textUnderlineColor() const;
 
     bool textItalic() const;
     bool textBold() const;
@@ -71,6 +74,7 @@ k_dcop:
     void extendTextObjectToContents();
     void setProtectContent ( bool _protect );
     bool isProtectContent() const;
+    bool textDoubleUnderline()const;
 
     double ptMarginLeft()const;
     double ptMarginRight()const;

@@ -1592,7 +1592,7 @@ void KPresenterView::textBold()
 void KPresenterView::textStrikeOut()
 {
     bool b=actionFormatStrikeOut->isChecked();
-    tbFont.setUnderline( b );
+    tbFont.setStrikeOut( b );
     m_canvas->setTextStrikeOut( b );
 }
 
@@ -4622,7 +4622,7 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
     actionTextFontSize->setFontSize( currentFormat.font().pointSize() );
     actionTextBold->setChecked( currentFormat.font().bold());
     actionTextItalic->setChecked( currentFormat.font().italic() );
-    actionTextUnderline->setChecked( currentFormat.font().underline());
+    actionTextUnderline->setChecked( currentFormat.underline());
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
 
     QColor col=currentFormat.textBackgroundColor();
