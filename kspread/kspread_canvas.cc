@@ -115,6 +115,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   installEventFilter( this );
   (void)new KSpreadToolTip( this );
   setAcceptDrops( true );
+  setInputMethodEnabled( true ); // ensure using the InputMethod
 }
 
 KSpreadCanvas::~KSpreadCanvas()

@@ -152,6 +152,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     setFocusPolicy( QWidget::StrongFocus );
     setFocus();
     setKeyCompression( true );
+    setInputMethodEnabled( true ); // ensure using the InputMethod
     installEventFilter( this );
     KCursor::setAutoHideCursor( this, true, true );
     m_zoomBeforePresentation=100;
