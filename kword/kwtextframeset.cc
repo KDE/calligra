@@ -2781,15 +2781,28 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 {
     // Removed previous stuff
     view->unplugActionList( "datatools" );
+    view->unplugActionList( "variable_action" );
     view->unplugActionList( "datatools_link" );
     QPtrList<KAction> &actionList = view->dataToolActionList();
+    QPtrList<KAction> &variableList = view->variableActionList();
+
     actionList.clear();
+    variableList.clear();
+
     KWDocument * doc = frameSet()->kWordDocument();
     actionList = dataToolActionList(doc->instance());
+
+    doc->getVariableCollection()->setVariableSelected(variable());
+    if ( variable() )
+    {
+        variableList = doc->getVariableCollection()->variableActionList();
+    }
+
     kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
     if(refLink().isNull())
     {
         view->plugActionList( "datatools", actionList );
+        view->plugActionList( "variable_action", variableList );
         QPopupMenu * popup = view->popupMenu("text_popup");
         Q_ASSERT(popup);
         if (popup)
@@ -2798,6 +2811,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     else
     {
         view->plugActionList( "datatools_link", actionList );
+        view->plugActionList( "variable_action", variableList );
         QPopupMenu * popup = view->popupMenu("text_popup_link");
         Q_ASSERT(popup);
         if (popup)

@@ -157,6 +157,7 @@ public:
     QPopupMenu * popupMenu( const QString& name );
 
     QPtrList<KAction> &dataToolActionList() { return m_actionList; }
+    QPtrList<KAction> &variableActionList() { return m_variableActionList; }
 
     static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord, bool &providesFormula );
 
@@ -493,6 +494,7 @@ private:
     KWFindReplace *m_findReplace;
 
     QPtrList<KAction> m_actionList; // for the kodatatools
+    QPtrList<KAction> m_variableActionList;
 
     int m_currentPage; // 0-based current page number
 

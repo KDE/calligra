@@ -113,6 +113,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_replaceEntry = 0L;
     m_findReplace = 0L;
     m_actionList.setAutoDelete( true );
+    m_variableActionList.setAutoDelete( true );
     // Default values.
     m_zoomViewModeNormal = m_doc->zoom();
     m_zoomViewModePreview = 33;
