@@ -15,7 +15,6 @@ Variables/fields
 === Abiword's rtftest.rtf test file ===
 word by word underline
 double strikeout
-dotted underline (RTF import problem)
 shadow (RTF import problem)
 mixed underline/strikeout
 ...
