@@ -57,7 +57,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_util.h kspread_canvas.h \
         kspread_dlg_reference.h kspread_locale.h \
 	kspread_editors.h kspread_dlg_tabname.h kspread_dlg_formula.h \
-	kspread_dlg_reference.h kspread_dlg_area.h kspread_dlg_resize.h\
+	kspread_dlg_reference.h kspread_dlg_area.h kspread_dlg_resize2.h\
 	kspread_dlg_special.h kspread_dlg_replace.h kspread_dlg_goto.h \
 	kspread_dlg_sort.h kspread_dlg_anchor.h kspread_dlg_series.h \
 	kspread_dlg_preference.h kspread_dlg_angle.h \
