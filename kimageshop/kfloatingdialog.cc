@@ -63,21 +63,18 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
   m_pCloseButton = new QPushButton(this);
   QPixmap close_pm(locate("appdata", "pics/close.png"));
   m_pCloseButton->setPixmap(close_pm);
-  m_pCloseButton->setStyle(new QWindowsStyle);
   m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
   connect(m_pCloseButton, SIGNAL(clicked()), this, SLOT(slotClose()));
   
   m_pMinButton = new QPushButton(this);
   QPixmap min_pm(locate("appdata", "pics/minimize.png"));
   m_pMinButton->setPixmap(min_pm);
-  m_pMinButton->setStyle(new QWindowsStyle);
   m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
   connect(m_pMinButton, SIGNAL(clicked()), this, SLOT(slotMinimize()));
   
   m_pDockButton = new QPushButton(this);
   QPixmap dock_pm(locate("appdata", "pics/dock.png"));
   m_pDockButton->setPixmap(dock_pm);
-  m_pDockButton->setStyle(new QWindowsStyle);
   m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
   connect(m_pDockButton, SIGNAL(clicked()), this, SLOT(slotDock()));
   
