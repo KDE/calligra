@@ -631,38 +631,6 @@ KarbonView::slotFillChanged( const VFill &f )
 }
 
 void
-KarbonView::slotJoinStyleClicked()
-{
-	VObjectListIterator itr( part()->document().selection()->objects() );
-
-	for( ; itr.current() ; ++itr )
-	{
-		VStroke stroke( *( itr.current()->stroke() ) );
-		stroke.setParent( itr.current() );
-		stroke.setLineJoin( ( VStroke::VLineJoin ) m_joinStyle->getState() );
-		itr.current()->setStroke( stroke );
-	}
-
-	part()->repaintAllViews();
-}
-
-void
-KarbonView::slotCapStyleClicked()
-{
-	VObjectListIterator itr( part()->document().selection()->objects() );
-
-	for( ; itr.current() ; ++itr )
-	{
-		VStroke stroke( *( itr.current()->stroke() ) );
-		stroke.setParent( itr.current() );
-		stroke.setLineCap( ( VStroke::VLineCap ) m_capStyle->getState() );
-		itr.current()->setStroke( stroke );
-	}
-
-	part()->repaintAllViews();
-}
-
-void
 KarbonView::setLineWidth()
 {
 	setLineWidth( m_setLineWidth->value() );
@@ -808,28 +776,6 @@ KarbonView::initActions()
 	m_setLineWidth->insertItem( 10.0 );
 	m_setLineWidth->insertItem( 20.0 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
-
-	// set up join style widget
-	m_joinStyle = new VStateButton( this );
-	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_bevel" ) ) );
-	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_miter" ) ) );
-	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_round" ) ) );
-	m_joinStyle->setState( 0 );
-
-	new KWidgetAction( m_joinStyle, i18n( "Set Join Style" ), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
-
-	connect( m_joinStyle, SIGNAL( clicked() ), this, SLOT( slotJoinStyleClicked() ) );
-
-	// set up cap style widget
-	m_capStyle = new VStateButton( this );
-	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_butt" ) ) );
-	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_square" ) ) );
-	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_round" ) ) );
-	m_capStyle->setState( 0 );
-
-	new KWidgetAction( m_capStyle, i18n( "Set Cap Style" ), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
-
-	connect( m_capStyle, SIGNAL( clicked() ), this, SLOT( slotCapStyleClicked() ) );
 
 	m_configureAction = new KAction(
 							i18n( "Configure Karbon..." ), "configure", 0, this,

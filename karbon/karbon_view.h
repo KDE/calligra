@@ -154,8 +154,6 @@ protected slots:
 	// Toolbox dialogs.
 	void slotStrokeChanged( const VStroke& );
 	void slotFillChanged( const VFill & );
-	void slotJoinStyleClicked();
-	void slotCapStyleClicked();
 
 signals:
 	void zoomChanged( double );
@@ -200,10 +198,6 @@ private:
 	VStrokeDocker			*m_strokeDocker;
 	VToolOptionsDocker		*m_toolOptionsDocker;
 	VTransformDocker		*m_TransformDocker;
-
-	// line join style
-	VStateButton 			*m_joinStyle;
-	VStateButton 			*m_capStyle;
 
 	VSelectToolBar			*m_selectToolBar;
 	QLabel					*m_status;
