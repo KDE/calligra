@@ -1,13 +1,17 @@
 -------------------------------------------------------------------------------
 -                                                                             -
--   KOffice Storage Format Specification - Version 2.0                        -
+-   KOffice Storage Format Specification - Version 2.2                        -
 -                                                                             -
--   by Werner, last changed: 20001011 by Chris Lee                            -
+-   by Werner, last changed: 20001107 by Shaheed Haque                        -
 -                                                                             -
 - History :                                                                   -
 -  Version 1.0 : binary store                                                 -
 -  Version 2.0 : tar.gz store                                                 -
 -  Version 2.1 : cleaned up                                                   -
+-  version 2.2 : shaheed    Put each part into its own directory to allow     -
+-                           one filter to easily embed the results of another -
+-                           and also to have its own documentinfo etc.        -
+-                           Added description of
 -                                                                             -
 -------------------------------------------------------------------------------
 
@@ -17,27 +21,31 @@ and binary data (e.g. pictures, movies, sounds) via a simple tar.gz-structure.
 The support class for the tar format is kdelibs/kio/ktar.*, written by Torben
 and finished by David.
 
-The obvious benefits of this type of storage are: 
- - It's 100% non- proprietary as it uses only the already available formats 
+The obvious benefits of this type of storage are:
+ - It's 100% non- proprietary as it uses only the already available formats
    (XML, pictures, tar.gz, ...) and tools (tar, gzip).
  - It enables anybody to edit the document directly; for instance, to update
    an image (faster than launching the application), or to write scripts
    that generate KOffice documents ! :)
  - It is also easy to write an import filter for any other office-suite
    application out there by reading the tar.gz file and extracting the XML out
-   of it (at the worst, the user can extract the XML file by himself, but then 
+   of it (at the worst, the user can extract the XML file by himself, but then
    the import loses embedded Parts and pictures).
 
-The tar.gz format also generates much smaller files than the old binary 
+The tar.gz format also generates much smaller files than the old binary
 store, since everything's gzipped.
 
-1) Name of the KOffice Files:
+Name of the KOffice Files
+-------------------------
+
 As some people suggested, using a "tgz"-ending is confusing; it's been dropped.
 Instead, we use the "normal" endings like ".kwd", ".ksp", ".kpr", etc.
 
-2) Internal Structure:
+External Structure
+------------------
+
 Here is a simple example to demonstrate the structure of a KOffice document.
-Assume you have to write a lab-report. You surely will have some text, the 
+Assume you have to write a lab-report. You surely will have some text, the
 readings, some formulas and a few pictures (e.g. circuit diagram,...).
 The main document will be a KWord-file. In this file you embed some KSpread-
 tables, some KChart-diagramms, the KFormulas, and some picture-frames. You save
@@ -45,24 +53,45 @@ the document as "lab-report.kwd". Here is what the contents of the
 tar.gz file will look like :
 
 lab-report.kwd:
-maindoc.xml  -- The main XML file containing the KWord document
-part0.xml        -- for instance a KSpread embedded table
-part1.xml        -- say a KChart diagramm
-part2.xml        -- why not a KIllustrator drawing
-part2/pictures/      -- Pictures embedded in the KIllustrator document
-part2/pictures/picture0.jpg
-part2/pictures/picture1.bmp
-part2/cliparts/      -- Cliparts embedded in the KIllustrator document
-part2/cliparts/clipart0.wmf
-pictures/        -- Pictures embedded in the main KWord document
+maindoc.xml                 -- The main XML file containing the KWord document.
+documentinfo.xml            -- Author and other "metadata" for KWord document.
+pictures/                   -- Pictures embedded in the main KWord document.
 pictures/picture0.jpg
 pictures/picture1.bmp
-cliparts/        -- Cliparts embedded in the main KWord document
+cliparts/                   -- Cliparts embedded in the main KWord document.
 cliparts/clipart0.wmf
+part0/maindoc.xml           -- for instance a KSpread embedded table.
+part0/documentinfo.xml      -- Author and other "metadata" for KSpread table.
+part0/part1/maindoc.xml     -- say a KChart diagram within the KSpread table.
+part1/maindoc.xml           -- say a KChart diagram.
+part2/maindoc.xml           -- why not a KIllustrator drawing.
+part2/pictures/             -- Pictures embedded in the KIllustrator document.
+part2/pictures/picture0.jpg
+part2/pictures/picture1.bmp
+part2/cliparts/             -- Cliparts embedded in the KIllustrator document.
+part2/cliparts/clipart0.wmf
 ...
 
-If the document does not contain any other Parts or pictures, then the 
-maindoc.xml file is tarred and gzipped alone, and saved with the proper 
+Internal Name
+-------------
+
+The API provided by this specification does not require application writers or
+filter writers to know the details of the external structure:
+
+root                    is saved as maindoc.xml
+documentinfo.xml        is saved as documentinfo.xml
+tar:/0                  is saved as part0/maindoc.xml
+tar:/0/documentinfo.xml is saved as part0/documentinfo.xml
+tar:/0/1                is saved as part0/part1/maindoc.xml
+tar:/0/1/pictures/picture0.png
+                        is saved as part0/part1/pictures/picture0.png
+
+Note that this is the structure as of version 2.2 of this specification. The only
+other format shipped with KDE2.0 is converted (on reading) to look like this
+through the services of the "Internal Name".
+
+If the document does not contain any other Parts or pictures, then the
+maindoc.xml file is tarred and gzipped alone, and saved with the proper
 extension (.kwd for KWord, .ksp for KSpread, etc.).
 
 Thank you for your attention,
