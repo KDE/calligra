@@ -19,7 +19,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpimage.h>
 
 KPImage KPImageCollection::findOrLoad( const QString & fileName, const QDateTime & dateTime )
 {

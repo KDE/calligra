@@ -33,7 +33,6 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qcombobox.h>
-#include <qlabel.h>
 
 #include "kwconfig.h"
 #include "kwview.h"

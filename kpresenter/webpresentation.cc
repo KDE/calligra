@@ -63,7 +63,6 @@
 #include <kcharsets.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
-#include <kfiledialog.h>
 
 #include "koDocumentInfo.h"
 

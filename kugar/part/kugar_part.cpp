@@ -7,7 +7,6 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kinstance.h>
-#include <klocale.h>
 #include <kaboutdata.h>
 #include <kaction.h>
 #include <kstdaction.h>

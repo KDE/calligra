@@ -34,7 +34,6 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <kurl.h>
 #include <kapp.h>
 #include <klocale.h>

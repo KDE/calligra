@@ -24,7 +24,6 @@
 #include <assert.h>
 #include <unistd.h>
 
-#include <koDocument.h>
 #include <koDocument_p.h>
 #include <KoDocumentIface.h>
 #include <koDocumentChild.h>

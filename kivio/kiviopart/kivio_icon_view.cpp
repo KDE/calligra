@@ -23,7 +23,6 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_spawner_drag.h"
-#include "kivio_icon_view.h"
 #include "kivio_common.h"
 
 #include <qbrush.h>

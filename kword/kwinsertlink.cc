@@ -26,7 +26,6 @@
 #include <kdebug.h>
 #include <kstddirs.h>
 #include <qlabel.h>
-#include <qvbox.h>
 
 #include <klineedit.h>
 #include <kurlrequester.h>

@@ -23,7 +23,6 @@
 
 #include <qlayout.h>
 #include <qvbox.h>
-#include <kapp.h>
 #include <kbuttonbox.h>
 
 #include <qbuttongroup.h>

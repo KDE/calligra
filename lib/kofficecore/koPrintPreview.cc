@@ -33,7 +33,6 @@
 #include <kapp.h>
 #include <ktrader.h>
 #include <krun.h>
-#include <kparts/mainwindow.h>
 
 #include <unistd.h>
 

@@ -40,7 +40,6 @@
 #include <qvgroupbox.h>
 #include <qradiobutton.h>
 #include <qslider.h>
-#include <qlayout.h>
 #include <qhbox.h>
 #include <qspinbox.h>
 

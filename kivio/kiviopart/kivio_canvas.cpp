@@ -32,7 +32,6 @@
 #include "kivio_stackbar.h"
 #include "kivio_screen_painter.h"
 #include "kivio_grid_data.h"
-#include "kivio_guidelines.h"
 
 #include "tool_controller.h"
 #include "tool.h"

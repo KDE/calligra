@@ -58,7 +58,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qtextstream.h>
 #include <qpixmap.h>
 
 #include <qpainter.h>
@@ -71,7 +70,6 @@
 #include <kiconloader.h>
 #include <khelpmenu.h>
 #include <kconfig.h>
-#include <kmessagebox.h>
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
 #include <koStoreDevice.h>

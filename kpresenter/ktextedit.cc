@@ -35,8 +35,6 @@
 #include <klocale.h>
 
 #include <qregexp.h>
-#include <qapplication.h>
-#include <qclipboard.h>
 #ifdef __DECCXX
 #include <alloca.h>
 #endif

@@ -35,7 +35,6 @@
 #include "kivio_layer.h"
 #include "kivio_point.h"
 #include "kivio_stencil.h"
-#include "kivio_custom_drag_data.h"
 #include "straight_connector.h"
 
 ConnectorTool::ConnectorTool( KivioView* view )

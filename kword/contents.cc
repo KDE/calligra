@@ -26,7 +26,6 @@
 #include "contents.h"
 #include "kwdoc.h"
 #include "kwframe.h"
-#include "kwstyle.h"
 #include "kwcommand.h"
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"

@@ -40,7 +40,6 @@
 #include "kis_util.h"
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_util.h"
 #include "kis_timer.h"
 #include "kis_image.h"
 

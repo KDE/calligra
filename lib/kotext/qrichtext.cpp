@@ -45,7 +45,6 @@
 #include "qfileinfo.h"
 #include "qstylesheet.h"
 #include "qmime.h"
-#include "qregexp.h"
 #include "qimage.h"
 #include "qdragobject.h"
 #include "qpaintdevicemetrics.h"

@@ -31,7 +31,6 @@
 #include <klocale.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kiconloader.h>
 
 #include "kwdoc.h"

@@ -23,7 +23,6 @@
 #include "kivio_line_style.h"
 #include "kivio_fill_style.h"
 #include "kivio_point.h"
-#include "kivio_ps_printer.h"
 
 #include <kdebug.h>
 
