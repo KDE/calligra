@@ -738,8 +738,8 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
     }
   }
   if (dx == 0 && dy == 0)  return;
-//  kdDebug(0) << "snap=" << snap << endl;
-//kdDebug(0) << "DX=" << dx << " DY=" << dy << endl;
+//  kdDebug(38000) << "snap=" << snap << endl;
+//kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
   if (permanent) {
       QListIterator<GObject> it(doc->activePage()->getSelection());
       for( ; it.current(); ++it)
@@ -798,12 +798,12 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   */
   // proposed by Stefan Eickeler <eickeler@fb9-ti.uni-duisburg.de>
   angle=atan2 ((float)rotCenter.y()-yp,(float)rotCenter.x()-xp);
-  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
+  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
   angle-=atan2 ((float)(rotCenter.y()-firstpos.y()),(float)(rotCenter.x()-firstpos.x()));
-  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
+  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
 
-  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
-  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
+  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
+  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
 
 
 

@@ -67,10 +67,10 @@ void ZoomTool::activate (GDocument *_doc, Canvas *_canvas)
 
 void ZoomTool::processMouseMoveEvent (QMouseEvent* e)
 {
-   //kdDebug()<<"processMouseMoveEvent()"<<endl;
+   //kdDebug(38000)<<"processMouseMoveEvent()"<<endl;
    if ((state == S_Init) && ((e->state () == Qt::LeftButton) ||(e->state()==Qt::MidButton)))
    {
-      //kdDebug()<<"processMouseMoveEvent() entering rubberband mode"<<endl;
+      //kdDebug(38000)<<"processMouseMoveEvent() entering rubberband mode"<<endl;
       selPoint[0].x(e->x());
       selPoint[0].y(e->y());
       selPoint[1].x(e->x());
@@ -79,7 +79,7 @@ void ZoomTool::processMouseMoveEvent (QMouseEvent* e)
    }
    else if (state == S_Rubberband)
    {
-      //kdDebug(1) << "S_Rubberband\n";
+      //kdDebug(38000) << "S_Rubberband\n";
       selPoint[1].x(e->x());
       selPoint[1].y(e->y());
       canvas->repaint();
@@ -104,7 +104,7 @@ void ZoomTool::processButtonReleaseEvent (QMouseEvent* e)
 {
    if (state == S_Rubberband)
    {
-      kdDebug()<<"processButtonReleaseEvent() rubberband" <<endl;
+      kdDebug(38000)<<"processButtonReleaseEvent() rubberband" <<endl;
       if (e->state()==Qt::MidButton)
           zoomOutRegion(qRound (selPoint[0].x()), qRound (selPoint[0].y()),
                         qRound (selPoint[1].x()), qRound (selPoint[1].y()));
@@ -191,7 +191,7 @@ void ZoomTool::zoomInRegion(int x1, int y1, int x2, int y2)
    else if(zoom < KILLU_ZOOM_MIN)
       zoom = KILLU_ZOOM_MIN;
 
-   kdDebug()<<"ZoomTool::zoomInRegion() area ( "<<x1<<" | "<<y1<<" ) to ( "<<x2<<" | "<< y2<<" )"<<endl;
+   kdDebug(38000)<<"ZoomTool::zoomInRegion() area ( "<<x1<<" | "<<y1<<" ) to ( "<<x2<<" | "<< y2<<" )"<<endl;
 
    canvas->setZoomFactor(zoom,(x2+x1)/2,(y2+y1)/2);
 }

@@ -108,7 +108,7 @@ Canvas::~Canvas()
 void Canvas::resizeEvent(QResizeEvent */*e*/)
 {
    if (!guiActive) return;
-   //kdDebug()<<"Canvas::resizeEvent() width() "<<width()<<"  height(): "<<height()<<endl;
+   //kdDebug(38000)<<"Canvas::resizeEvent() width() "<<width()<<"  height(): "<<height()<<endl;
    //this happens exactly once on app start, so doing nothing in this case saves some time, aleXXX
    if ((width()==10) && (height()==10)) return;
    buffer->resize(size());
@@ -131,9 +131,9 @@ void Canvas::resizeEvent(QResizeEvent */*e*/)
    vBar->blockSignals(false);
 
    emit visibleAreaChanged(m_visibleArea);
-   //kdDebug()<<"Canvas::resizeEvent() paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::resizeEvent() visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::resizeEvent() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::resizeEvent() paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::resizeEvent() visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::resizeEvent() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
 }
 
 //return the rectangle covered by the paper in points
@@ -167,8 +167,8 @@ void Canvas::adjustScrollBarRanges2()
 
    hBar->setValue(hBar->value());
    vBar->setValue(vBar->value());
-   //kdDebug()<<"Canvas::adjustScrollBarRanges(): hBar min: "<<hBar->minValue()<<" max: "<<hBar->maxValue()<<" value: "<<hBar->value()<<endl;
-   //kdDebug()<<"Canvas::adjustScrollBarRanges(): vBar min: "<<vBar->minValue()<<" max: "<<vBar->maxValue()<<" value: "<<vBar->value()<<endl;
+   //kdDebug(38000)<<"Canvas::adjustScrollBarRanges(): hBar min: "<<hBar->minValue()<<" max: "<<hBar->maxValue()<<" value: "<<hBar->value()<<endl;
+   //kdDebug(38000)<<"Canvas::adjustScrollBarRanges(): vBar min: "<<vBar->minValue()<<" max: "<<vBar->maxValue()<<" value: "<<vBar->value()<<endl;
 
 }
 
@@ -179,7 +179,7 @@ void Canvas::adjustScrollBarPositions3(int x, int y)
    if (hBar->minValue()!=hBar->maxValue())
    {
       hBar->setValue(x-m_paperArea.right()/2);
-      //kdDebug()<<"Canvas::adjustScrollBarPositions() new x pos: "<<hBar->value()<<endl;
+      //kdDebug(38000)<<"Canvas::adjustScrollBarPositions() new x pos: "<<hBar->value()<<endl;
    };
    if (vBar->minValue()!=vBar->maxValue())
       vBar->setValue(y-m_paperArea.bottom()/2);
@@ -188,7 +188,7 @@ void Canvas::adjustScrollBarPositions3(int x, int y)
 
 void Canvas::adjustVisibleArea4()
 {
-   //kdDebug()<<"Canvas::adjustVisibleArea() hBar: "<<hBar->value()<<" vBar: "<<vBar->value()<<endl;
+   //kdDebug(38000)<<"Canvas::adjustVisibleArea() hBar: "<<hBar->value()<<" vBar: "<<vBar->value()<<endl;
 
    QRect tmpRect=paperArea();
    int w=tmpRect.width();
@@ -224,10 +224,10 @@ void Canvas::scroll()
    adjustVisibleArea4();
    adjustRelativePaperArea5();
 
-   //kdDebug()<<"Canvas::scroll() width() "<<width()<<"  height "<<height()<<endl;
-   //kdDebug()<<"Canvas::scroll() paperArea:         ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::scroll() visibleArea:       ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::scroll() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::scroll() width() "<<width()<<"  height "<<height()<<endl;
+   //kdDebug(38000)<<"Canvas::scroll() paperArea:         ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::scroll() visibleArea:       ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::scroll() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
    repaint();
    emit visibleAreaChanged(m_visibleArea);
 }
@@ -243,12 +243,12 @@ void Canvas::center(int x, int y)
 void Canvas::setZoomFactor (float factor, int centerX, int centerY)
 {
    if (!guiActive) return;
-   //kdDebug()<<"Canvas::setZoomFactor() new factor: "<<factor<<" old zoomFactor: "<<zoomFactor<<" centerX: "<<centerX<<" centerY: "<<centerY<<endl;
-   //kdDebug()<<"Canvas::setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor() new factor: "<<factor<<" old zoomFactor: "<<zoomFactor<<" centerX: "<<centerX<<" centerY: "<<centerY<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
    //respect zoom factor
    centerX=int(centerX*factor/zoomFactor);
    centerY=int(centerY*factor/zoomFactor);
-   //kdDebug()<<"Canvas::setZoomFactor() adjusted centerX: "<<centerX<<" centerY: "<<centerY<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor() adjusted centerX: "<<centerX<<" centerY: "<<centerY<<endl;
 
    zoomFactor = factor;
 
@@ -262,10 +262,10 @@ void Canvas::setZoomFactor (float factor, int centerX, int centerY)
    adjustVisibleArea4();
    adjustRelativePaperArea5();
 
-   //kdDebug()<<"Canvas::setZoomFactor() width(): "<<width()<<"  height(): "<<height()<<endl;
-   //kdDebug()<<"Canvas::setZoomFactor(): paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::setZoomFactor(): relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor() width(): "<<width()<<"  height(): "<<height()<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor(): paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor(): relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
    // recompute pixmaps of fill areas
    document->activePage()->invalidateClipRegions ();
 
@@ -284,13 +284,13 @@ void Canvas::setZoomFactor (float factor)
    //the old center should also become the new center
    int centerX((m_visibleArea.right()+m_visibleArea.left())/2);
    int centerY((m_visibleArea.bottom()+m_visibleArea.top())/2);
-   //kdDebug()<<"Canvas::setZoomFactor("<<factor<<"): centerX: "<<centerX<<" centerY: "<<centerY<<endl;
+   //kdDebug(38000)<<"Canvas::setZoomFactor("<<factor<<"): centerX: "<<centerX<<" centerY: "<<centerY<<endl;
    setZoomFactor(factor,centerX, centerY);
 }
 
 void Canvas::docSizeChanged()
 {
-   //kdDebug()<<"Canvas::docSizeChanged()"<<endl;
+   //kdDebug(38000)<<"Canvas::docSizeChanged()"<<endl;
    guiActive=true;
    blockSignals(true);
    hBar->blockSignals(true);
@@ -301,7 +301,7 @@ void Canvas::docSizeChanged()
    adjustScrollBarPositions3(0,0);
    adjustVisibleArea4();
    adjustRelativePaperArea5();
-   //kdDebug()<<"Canvas::calcSize(): width: "<<width()<<" height: "<<height()<<endl;
+   //kdDebug(38000)<<"Canvas::calcSize(): width: "<<width()<<" height: "<<height()<<endl;
    buffer->resize(size());
    repaint();
 
@@ -317,11 +317,11 @@ void Canvas::docSizeChanged()
 void Canvas::paintEvent (QPaintEvent* e)
 {
    if (!guiActive) return;
-      
+
    QTime time;
    time.start();
-   const QRect& rect = e->rect (); 
-   //kdDebug()<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
+   const QRect& rect = e->rect ();
+   //kdDebug(38000)<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
    pendingRedraws = 0;
 
    QPainter p;
@@ -343,7 +343,7 @@ void Canvas::paintEvent (QPaintEvent* e)
    // draw the grid
    if(document->showGrid())
      drawGrid (p);
-   
+
    p.save();
    p.translate(m_relativePaperArea.left(),m_relativePaperArea.top());
    p.setPen(Qt::black);
@@ -363,7 +363,7 @@ void Canvas::paintEvent (QPaintEvent* e)
   if (! document->activePage()->selectionIsEmpty ())
    document->activePage()->handle ().draw (p);
 
-  
+
   p.restore();
   // draw the help lines
   if (document->showHelplines())
@@ -478,7 +478,7 @@ bool Canvas::eventFilter (QObject *o, QEvent *e)
 
 void Canvas::moveEvent(QMoveEvent */*e*/)
 {
-   //kdDebug()<<"Canvas::moveEvent() ****************"<<endl;
+   //kdDebug(38000)<<"Canvas::moveEvent() ****************"<<endl;
    emit visibleAreaChanged(m_visibleArea);
    //emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
 }
@@ -542,7 +542,7 @@ void Canvas::updateRegion (const Rect& reg)
   QRect clip = m.map (QRect (int (r.left()*zoomFactor + m_relativePaperArea.left()), int (r.top()*zoomFactor + m_relativePaperArea.top()),
                              int (r.width()*zoomFactor), int (r.height()*zoomFactor)));
 
-  //kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
+  //kdDebug(38000) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
 
 
 
@@ -828,13 +828,13 @@ void Canvas::drawHelplines (QPainter& p)
   p.save ();
   p.setPen (pen);
   QValueList<float>::Iterator i;
-  
+
   for (i=document->horizHelplines().begin(); i!=document->horizHelplines().end(); ++i)
   {
     int hi = qRound (*i * zoomFactor) + m_relativePaperArea.top();
     p.drawLine (0, hi, width(), hi);
   }
-  
+
   for (i = document->vertHelplines().begin(); i != document->vertHelplines().end(); ++i)
   {
     int vi = qRound (*i * zoomFactor) + m_relativePaperArea.left();
@@ -852,7 +852,7 @@ void Canvas::drawHelplines (QPainter& p)
     int vi = qRound (tmpVertHelpline * zoomFactor) + m_relativePaperArea.left();
     p.drawLine (vi, 0, vi, height());
   }
-  
+
   p.restore ();
 }
 

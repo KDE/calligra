@@ -105,7 +105,7 @@ void Ruler::initMarker (int w, int h) {
 }
 
 void Ruler::recalculateSize (QResizeEvent *) {
-   kdDebug()<<"recalcSize() 1"<<endl;
+   kdDebug(38000)<<"recalcSize() 1"<<endl;
   delete buffer;
   buffer = 0L;
 
@@ -118,7 +118,7 @@ void Ruler::recalculateSize (QResizeEvent *) {
 
   int maxsize = (int)(1000.0 * zoom);
 
-  kdDebug()<<"recalcSize() max: "<<maxsize<<endl;
+  kdDebug(38000)<<"recalcSize() max: "<<maxsize<<endl;
   if (orientation == Horizontal) {
     w = QMAX(width (), maxsize);
     h = RULER_SIZE;
@@ -128,11 +128,11 @@ void Ruler::recalculateSize (QResizeEvent *) {
     h = QMAX(height (), maxsize);
   }
   buffer = new QPixmap (w, h);
-   kdDebug()<<"recalcSize() new buffer created2"<<endl;
+   kdDebug(38000)<<"recalcSize() new buffer created2"<<endl;
   drawRuler ();
-   kdDebug()<<"recalcSize() after drawRuler"<<endl;
+   kdDebug(38000)<<"recalcSize() after drawRuler"<<endl;
   updatePointer (currentPosition, currentPosition);
-   kdDebug()<<"recalcSize() after updatePointer"<<endl;
+   kdDebug(38000)<<"recalcSize() after updatePointer"<<endl;
 }
 
 MeasurementUnit Ruler::measurementUnit () const {
@@ -169,14 +169,14 @@ void Ruler::updatePointer (int x, int y)
 
    if (orientation == Horizontal)
    {
-      //kdDebug()<<"Ruler::updatePointer ( "<<x<<" | "<<y<<" ) zoom is "<<zoom<<endl;
+      //kdDebug(38000)<<"Ruler::updatePointer ( "<<x<<" | "<<y<<" ) zoom is "<<zoom<<endl;
       if (currentPosition != -1)
       {
          pos=currentPosition-MARKER_WIDTH/2-2;
 
          r1=QRect(pos,1,MARKER_WIDTH, MARKER_HEIGHT);
          bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
-         //kdDebug()<<"Ruler::updatePointer() old pos: "<<pos<<endl;
+         //kdDebug(38000)<<"Ruler::updatePointer() old pos: "<<pos<<endl;
       }
       if (x != -1)
       {
@@ -186,7 +186,7 @@ void Ruler::updatePointer (int x, int y)
          bitBlt (bg, 0, 0, buffer, pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
          bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
          currentPosition = x;
-         //kdDebug()<<"Ruler::updatePointer() new pos x: "<<pos<<" currentPos: "<<x<<endl;
+         //kdDebug(38000)<<"Ruler::updatePointer() new pos x: "<<pos<<" currentPos: "<<x<<endl;
       }
    }
    else
@@ -566,7 +566,7 @@ void Ruler::drawRuler ()
    p.end ();
    //killu draws its rulers 6 (!!!!) times on startup..., aleXXX
 /*   static int blah(0);
-   kdDebug()<<"Ruler::drawing ruler "<<blah<<endl;
+   kdDebug(38000)<<"Ruler::drawing ruler "<<blah<<endl;
    blah++;*/
 }
 
