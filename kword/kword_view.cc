@@ -65,6 +65,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   m_bShowGUI = true;
   m_vMenuTools = 0L;
   m_vToolBarTools = 0L;
+  m_vToolBarText = 0L;
   m_lstFrames.setAutoDelete(true);  
   gui = 0;
   flow = KWParagLayout::LEFT;
@@ -296,7 +297,7 @@ CORBA::Boolean KWordView::printDlg()
 /*================================================================*/
 void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page = true,bool _redraw = true)
 {
-  if (_check && _format == format) return;
+  if (_check && _format == format || !m_vToolBarText) return;
 
   format = _format;
 
@@ -399,10 +400,20 @@ void KWordView::setFlow(KWParagLayout::Flow _flow)
 }
 
 /*================================================================*/
+void KWordView::setLineSpacing(int _spc)
+{
+  if (_spc != spc && m_vToolBarText)
+    {
+      spc = _spc;
+      m_vToolBarText->setCurrentComboItem(ID_LINE_SPC,_spc);
+    }
+}
+
+/*================================================================*/
 void KWordView::setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
 				KWParagLayout::Border _top,KWParagLayout::Border _bottom)
 {
-  if (left != _left || right != _right || top != _top || bottom != _bottom)
+  if ((left != _left || right != _right || top != _top || bottom != _bottom) && m_vToolBarText)
     {
       m_vToolBarText->setButton(ID_BRD_LEFT,false);  
       m_vToolBarText->setButton(ID_BRD_RIGHT,false);  
@@ -826,6 +837,15 @@ void KWordView::formatStyle()
 }
 
 /*===============================================================*/
+void KWordView::formatFrameSet()
+{
+  if (m_pKWordDoc->getFirstSelectedFrame())
+    gui->getPaperWidget()->femProps();
+  else
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to select at least one frame!"),i18n("OK"));
+}
+
+/*===============================================================*/
 void KWordView::extraSpelling()
 {
   currParag = 0L;
@@ -1191,6 +1211,12 @@ void KWordView::textAlignBlock()
   gui->getPaperWidget()->setFlow(KWParagLayout::BLOCK);
 }
 
+/*===============================================================*/
+void KWordView::textLineSpacing(const char *spc)
+{
+  gui->getPaperWidget()->setLineSpacing(atoi(spc));
+}
+
 /*====================== enumerated list ========================*/
 void KWordView::textEnumList()
 {
@@ -1529,6 +1555,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuFormat_Font = m_vMenuFormat->insertItem4( i18n("&Font..."), this, "formatFont", ALT + Key_F, -1, -1 );
   m_idMenuFormat_Color = m_vMenuFormat->insertItem4( i18n("&Color..."), this, "formatColor", ALT + Key_C, -1, -1 );
   m_idMenuFormat_Paragraph = m_vMenuFormat->insertItem4( i18n("Paragraph..."), this, "formatParagraph", ALT + Key_Q, -1, -1 );
+  m_idMenuFormat_FrameSet = m_vMenuFormat->insertItem4( i18n("Frame/Frameset..."), this, "formatFrameSet",0, -1, -1 );
   m_idMenuFormat_Page = m_vMenuFormat->insertItem4( i18n("Page..."), this, "formatPage", ALT + Key_P, -1, -1 );
 
   m_vMenuFormat->insertSeparator( -1 );
@@ -1848,6 +1875,19 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarText->setToggle(ID_ABLOCK,true);
   m_vToolBarText->setButton(ID_ABLOCK,false);
   
+  // line spacing
+  OpenPartsUI::StrList spclist;
+  spclist.length(11);
+  for(unsigned int i = 0;i <= 10;i++)
+    {
+      char buffer[10];
+      sprintf(buffer,"%i",i);
+      spclist[i] = CORBA::string_dup(buffer);
+    }
+  m_idComboText_LineSpacing = m_vToolBarText->insertCombo(spclist,ID_LINE_SPC,true,SIGNAL(activated(const char*)),
+							  this,"textLineSpacing",true,i18n("Line Spacing (in pt)"),
+							  60,-1,OpenPartsUI::AtBottom);
+  spc = 0;
   m_vToolBarText->insertSeparator( -1 );
 
   // enum list
@@ -2183,6 +2223,8 @@ void KWordView::getFonts()
 /*================================================================*/
 void KWordView::setParagBorderValues()
 {
+  if (!m_vToolBarText) return;
+
   m_vToolBarText->setCurrentComboItem(ID_BRD_WIDTH,tmpBrd.ptWidth - 1);
   m_vToolBarText->setCurrentComboItem(ID_BRD_STYLE,static_cast<int>(tmpBrd.style));
 
@@ -2281,6 +2323,7 @@ void KWordView::paragDiaOk()
   gui->getPaperWidget()->setParagBottomBorder(paragDia->getBottomBorder());
   gui->getPaperWidget()->setCounter(paragDia->getCounter());
   setFlow(paragDia->getFlow());
+  setLineSpacing(paragDia->getLineSpacing());
 }
 
 /*================================================================*/

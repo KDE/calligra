@@ -745,3 +745,12 @@ Reggie, 27.1.1999:
 - Added tab in the frame/frameset settings dialog for geometry (fram coordinates + frame margins)
 - It's possible to set and modify frame coordinates and margins using the dialog now
 - Tables have a default margin of 2 pts.
+
+Reggie, 28.1.1999:
+------------------
+- Fixes when loading documents
+- It's possible to set the linespacing using the toolbar now
+- Fixed drawing paragraph borders
+- Some other small fixes
+- Frame/Frameset dialog can be opened using the menu now too
+- Some speed imporvements when ptWidth < rastX because of overlapping frames

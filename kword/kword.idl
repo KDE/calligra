@@ -35,6 +35,7 @@ module KWord
       slot void formatPage();
       slot void formatNumbering();
       slot void formatStyle();
+      slot void formatFrameSet();
       
       slot void extraSpelling();
       slot void extraStylist();
@@ -73,6 +74,7 @@ module KWord
       slot void textAlignCenter();
       slot void textAlignRight();
       slot void textAlignBlock();
+      slot void textLineSpacing(in string spc);
       slot void textEnumList();
       slot void textUnsortList();
       slot void textSuperScript();

@@ -33,7 +33,6 @@
 #include <qspinbox.h>
 
 #include <kapp.h>
-#include <krestrictedline.h>
 
 class KWFrame;
 class KWordDocument;
@@ -75,7 +74,7 @@ protected:
   QSpinBox *sx,*sy,*sw,*sh,*sml,*smr,*smt,*smb;
 
   KWFrame *frame;
-  KRestrictedLine *eRGap;
+  QSpinBox *eRGap;
   int flags;
   KWordDocument *doc;
   KWPage *page;

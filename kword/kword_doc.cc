@@ -1544,49 +1544,39 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 
   if (_fc.isCursorInFirstLine() && _fc.getParag()->getParagLayout()->getTopBorder().ptWidth > 0)
     {
-      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset -
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
-      unsigned int _y = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
-      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() +
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
-	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
-	 _fc.getParag()->getParagLayout()->getRightBorder().ptWidth ? 1 : 0) ;
-      
+      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset;
+      unsigned int _y = _fc.getPTY() - yOffset + _fc.getParag()->getParagLayout()->getTopBorder().ptWidth / 2;
+      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width();
+
       _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getTopBorder()));
       _painter.drawLine(_x1,_y,_x2,_y);
     }
   if (_fc.isCursorInLastLine() && _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth > 0)
     {
-      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset -
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
-      unsigned int _y = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth - 1;
-      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() +
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
-	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
-	 _fc.getParag()->getParagLayout()->getRightBorder().ptWidth ? 1 : 0) ;
+      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset;
+      unsigned int _y = _fc.getPTY() - yOffset + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth / 2 - 1;
+      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width();
       
       _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getBottomBorder()));
       _painter.drawLine(_x1,_y,_x2,_y);
     }
   if (_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth > 0)
     {
-      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset - 
-	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth;
-      unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
-      unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
-      
+      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset + 
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
+      unsigned int _y1 = _fc.getPTY() - yOffset;
+      unsigned int _y2 = _fc.getPTY() - yOffset + _fc.getLineHeight();
+
       _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getLeftBorder()));
       _painter.drawLine(_x,_y1,_x,_y2);
     }
   if (_fc.getParag()->getParagLayout()->getRightBorder().ptWidth > 0)
     {
-      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset + 
-	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() - 1;
-      unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
-      unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
-      
+      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->right() - xOffset - 
+	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2;
+      unsigned int _y1 = _fc.getPTY() - yOffset;
+      unsigned int _y2 = _fc.getPTY() - yOffset + _fc.getLineHeight();
+
       _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getRightBorder()));
       _painter.drawLine(_x,_y1,_x,_y2);
     }

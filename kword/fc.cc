@@ -908,12 +908,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     
     if (static_cast<int>(ptWidth) < document->getRastX())
       {
-	// ***** TODO dont go step by step to the end, but find the f****** frame and go to its bottom => much faster 
-	while (static_cast<int>(ptWidth) < document->getRastX())
-	  {
-	    if (!makeNextLineLayout(_painter)) 
-	      break;
-	  }
+	ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getNextFreeYPos(ptY,getLineHeight()) + 2;
 	return makeLineLayout(_painter);
       }
 	

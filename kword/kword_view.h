@@ -132,6 +132,7 @@ public:
   virtual void formatPage();
   virtual void formatNumbering();
   virtual void formatStyle();
+  virtual void formatFrameSet();
 
   virtual void extraSpelling();
   virtual void extraStylist();
@@ -170,6 +171,7 @@ public:
   virtual void textAlignCenter();
   virtual void textAlignRight();
   virtual void textAlignBlock();
+  virtual void textLineSpacing(const char *spc);
   virtual void textEnumList();
   virtual void textUnsortList();
   virtual void textSuperScript();
@@ -198,6 +200,7 @@ public:
 
   virtual void setFormat(KWFormat &_format,bool _check = true,bool _update_page = true,bool _redraw = true);
   virtual void setFlow(KWParagLayout::Flow _flow);
+  virtual void setLineSpacing(int _spc);
   virtual void setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
 			       KWParagLayout::Border _top,KWParagLayout::Border _bottom);
 
@@ -293,6 +296,7 @@ protected:
   CORBA::Long m_idMenuFormat_Page;
   CORBA::Long m_idMenuFormat_Numbering;
   CORBA::Long m_idMenuFormat_Style;
+  CORBA::Long m_idMenuFormat_FrameSet;
 
   // extra menu
   OpenPartsUI::Menu_var m_vMenuExtra;
@@ -346,6 +350,7 @@ protected:
   CORBA::Long m_idComboText_Style;
   CORBA::Long m_idComboText_FontSize;
   CORBA::Long m_idComboText_FontList;
+  CORBA::Long m_idComboText_LineSpacing;
   CORBA::Long m_idButtonText_Bold;
   CORBA::Long m_idButtonText_Italic;
   CORBA::Long m_idButtonText_Underline;
@@ -413,6 +418,7 @@ protected:
   KWParagLayout::Border left,right,top,bottom,tmpBrd,frmBrd;
   KWSearchDia::KWSearchEntry *searchEntry,*replaceEntry;
   QBrush backColor;
+  int spc;
 
   KWParagDia *paragDia;
   KWStyleManager *styleManager;
@@ -465,6 +471,7 @@ protected:
   static const int ID_FBRD_TOP = 40;
   static const int ID_FBRD_BOTTOM = 41;
   static const int ID_FBACK_COLOR = 42;
+  static const int ID_LINE_SPC = 43;
 
 };
 

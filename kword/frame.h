@@ -16,6 +16,8 @@
 #ifndef frame_h
 #define frame_h
 
+#include <limits.h>
+
 #include <krect.h>
 #include <kpoint.h>
 #include <qlist.h>

@@ -173,11 +173,8 @@ void KWFrameDia::setupTab2TextFrame()
   lRGap->setAlignment(AlignRight | AlignVCenter);
   grid2->addWidget(lRGap,1,0);
 
-  eRGap = new KRestrictedLine(tab2,"","1234567890");
-  eRGap->setText("0");
-  eRGap->setMaxLength(5);
-  eRGap->setEchoMode(QLineEdit::Normal);
-  eRGap->setFrame(true);
+  eRGap = new QSpinBox(1,20,1,tab2);
+  eRGap->setValue(0);
   eRGap->resize(eRGap->sizeHint());
   grid2->addWidget(eRGap,1,1);
 
@@ -204,9 +201,8 @@ void KWFrameDia::setupTab2TextFrame()
     case RA_CONTUR: rRunContur->setChecked(true);
       break;
     }
-  QString str;
-  str.sprintf("%d",frame ? frame->getRunAroundGap() : doc->getRunAroundGap());
-  eRGap->setText(str.data());
+
+  eRGap->setValue(frame ? frame->getRunAroundGap() : doc->getRunAroundGap());
 }
 
 /*================================================================*/
@@ -328,7 +324,7 @@ void KWFrameDia::setupTab4Geometry()
   lml->resize(lml->sizeHint());
   mGrid->addWidget(lml,1,0);
 
-  sml = new QSpinBox(0,10,1,grp2);
+  sml = new QSpinBox(0,20,1,grp2);
   sml->resize(sml->sizeHint());
   mGrid->addWidget(sml,2,0);
 
@@ -336,7 +332,7 @@ void KWFrameDia::setupTab4Geometry()
   lmr->resize(lmr->sizeHint());
   mGrid->addWidget(lmr,1,1);
 
-  smr = new QSpinBox(0,10,1,grp2);
+  smr = new QSpinBox(0,20,1,grp2);
   smr->resize(smr->sizeHint());
   mGrid->addWidget(smr,2,1);
 
@@ -344,7 +340,7 @@ void KWFrameDia::setupTab4Geometry()
   lmt->resize(lmt->sizeHint());
   mGrid->addWidget(lmt,3,0);
 
-  smt = new QSpinBox(0,10,1,grp2);
+  smt = new QSpinBox(0,20,1,grp2);
   smt->resize(smt->sizeHint());
   mGrid->addWidget(smt,4,0);
 
@@ -352,7 +348,7 @@ void KWFrameDia::setupTab4Geometry()
   lmb->resize(lmb->sizeHint());
   mGrid->addWidget(lmb,3,1);
 
-  smb = new QSpinBox(0,10,1,grp2);
+  smb = new QSpinBox(0,20,1,grp2);
   smb->resize(smb->sizeHint());
   mGrid->addWidget(smb,4,1);
 
@@ -407,7 +403,9 @@ void KWFrameDia::setupTab4Geometry()
   smt->setValue(t);
   smb->setValue(b);
 
-  if (doc->isOnlyOneFrameSelected())
+  if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP || 
+					(doc->getProcessingType() == KWordDocument::WP && 
+					 doc->getFrameSetNum(doc->getFirstSelectedFrameSet()) > 0)))
     {
       unsigned int x,y,w,h;
       doc->getFrameCoords(x,y,w,h);
@@ -470,7 +468,7 @@ void KWFrameDia::applyChanges()
 	    frame->setRunAround(RA_BOUNDINGRECT);
 	  else if (rRunContur->isChecked())
 	    frame->setRunAround(RA_CONTUR);
-	  frame->setRunAroundGap(atoi(eRGap->text()));
+	  frame->setRunAroundGap(eRGap->value());
 	}
       else
 	{
@@ -480,7 +478,7 @@ void KWFrameDia::applyChanges()
 	    doc->setRunAround(RA_BOUNDINGRECT);
 	  else if (rRunContur->isChecked())
 	    doc->setRunAround(RA_CONTUR);
-	  doc->setRunAroundGap(atoi(eRGap->text()));
+	  doc->setRunAroundGap(eRGap->value());
 	}
     }
 
@@ -499,12 +497,16 @@ void KWFrameDia::applyChanges()
 	}
     }
 
-  if (flags && FD_GEOMETRY && doc)
+  if (flags & FD_GEOMETRY && doc)
     {
-      if (doc->isOnlyOneFrameSelected())
+      if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP || 
+					    (doc->getProcessingType() == KWordDocument::WP && 
+					     doc->getFrameSetNum(doc->getFirstSelectedFrameSet()) > 0)))
 	doc->setFrameCoords(sx->value(),sy->value(),sw->value(),sh->value());
       doc->setFrameMargins(sml->value(),smr->value(),smt->value(),smb->value());
     }
+
+  page->repaint(false);
 }
 
 /*================================================================*/

@@ -273,8 +273,18 @@ int KWFrame::getRightIndent(int _y,int _h)
 /*================================================================*/
 unsigned int KWFrame::getNextFreeYPos(unsigned int _y,unsigned int _h)
 {
-  // *** TODO
-  return 0;
+  KRect rect;
+  unsigned int __y = _y;
+
+  for (unsigned int i = 0;i < intersections.count();i++)
+    {
+      rect = *intersections.at(i);
+
+      if (rect.intersects(KRect(0,_y,INT_MAX,_h)))
+	__y = __y == _y ? rect.bottom() : min(__y,rect.bottom());
+    }
+
+  return __y;
 }
 
 /*================================================================*/

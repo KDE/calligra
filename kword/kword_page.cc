@@ -108,6 +108,7 @@ void KWPage::init()
       gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
       gui->getView()->setFormat(*((KWFormat*)fc),true,false);
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
@@ -654,6 +655,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
 		      gui->getView()->setFormat(*((KWFormat*)fc),true,false);
 		      gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+		      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 		      gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -803,6 +805,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
 	gui->getView()->setFormat(*((KWFormat*)fc),true,false);
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1130,6 +1133,8 @@ void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
 {
   if (recalcingText) return;
 
+  setCursor(waitCursor);
+
   recalcingText = true;
   QPainter painter;
   painter.begin(this);
@@ -1149,6 +1154,8 @@ void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
   painter.end();
   if (_cursor) recalcCursor();
   recalcingText = false;
+
+  setCursor(ibeamCursor);
 }
 
 /*================================================================*/
@@ -1166,6 +1173,7 @@ void KWPage::footerHeaderDisappeared()
       gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
       gui->getView()->setFormat(*((KWFormat*)fc),true,false);
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1474,6 +1482,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
       gui->getView()->setFormat(*((KWFormat*)fc));
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1555,6 +1564,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLineStart(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1565,6 +1575,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLineEnd(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1582,6 +1593,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoRight(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1623,6 +1635,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLeft(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1664,6 +1677,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoUp(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1705,6 +1719,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoDown(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1806,6 +1821,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 	    gui->getView()->setFormat(*((KWFormat*)fc));
 	    gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	    gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 	    gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					    fc->getParag()->getParagLayout()->getRightBorder(),
 					    fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1969,6 +1985,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		gui->getView()->setFormat(*((KWFormat*)fc));
 		gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+		gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
 		gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 						fc->getParag()->getParagLayout()->getRightBorder(),
 						fc->getParag()->getParagLayout()->getTopBorder(),
@@ -2306,6 +2323,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
       gui->getView()->setFormat(*((KWFormat*)fc));
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
@@ -2983,6 +3001,7 @@ void KWPage::setEnumList()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
   gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
@@ -3001,6 +3020,7 @@ void KWPage::setBulletList()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
   gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
@@ -3019,6 +3039,7 @@ void KWPage::setNormalText()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
   gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
@@ -3031,6 +3052,7 @@ void KWPage::forceFullUpdate()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
   gui->getView()->setFormat(*((KWFormat*)fc),true,false);
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
