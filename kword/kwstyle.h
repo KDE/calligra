@@ -36,6 +36,7 @@ public:
     KWStyle( QDomElement & styleElem, const QFont & defaultFont );
 
     // Copy another style
+    KWStyle( const KWStyle & rhs ) { *this = rhs; }
     void operator=( const KWStyle & );
 
     QString name() const { return m_name; }

@@ -55,8 +55,8 @@
 /* keep 2 qlists with the styles.
    1 of the origs, another with the changed ones (in order of the stylesList)
    When an orig entry is empty and the other is not, a new one has to be made,
-   when the orig is present and the other is not, the orig has be be deleted.
-   Otherwise all changes are copied from the changed ones to the origs on OK
+   when the orig is present and the other is not, the orig has to be deleted.
+   Otherwise all changes are copied from the changed ones to the origs on OK.
    OK also frees all the changed ones and updates the doc if styles are deleted.
 */
 
@@ -195,7 +195,7 @@ void KWStyleManager::switchStyle() {
     m_currentStyle = 0L;
     int num = m_stylesList->currentItem();
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
-        m_currentStyle = copyStyle(m_origStyles.at(num));
+        m_currentStyle = new KWStyle( *m_origStyles.at(num) );
         m_changedStyles.take(num);
         m_changedStyles.insert(num, m_currentStyle);
     } else {
@@ -214,17 +214,6 @@ kdDebug() << " style " << i << ": " << m_changedStyles.at(i)->name() << " (" << 
             return i;
     }
     return 0;
-}
-
-KWStyle * KWStyleManager::copyStyle(KWStyle *orig) {
-kdDebug() << "creating new style: " << orig->name() << endl;
-    KWStyle *style = new KWStyle("a");
-
-    style->format() = orig->format();
-    style->setFollowingStyle( orig->followingStyle() );
-    style->paragLayout() = orig->paragLayout();
-    style->setName( orig->name() );
-    return style;
 }
 
 void KWStyleManager::updateGUI() {
@@ -265,14 +254,14 @@ kdDebug() << "following style4: " << m_changedStyles.at(getStyleByName(m_styleCo
 void KWStyleManager::addStyle() {
     save();
 
-    QString str=i18n( "New Style Template ( %1 )" ).arg(numStyles++);
-    KWStyle *oldStyle=m_currentStyle;
-    m_currentStyle =new KWStyle(str);
-
-    m_currentStyle->format() = oldStyle->format();
-    m_currentStyle->paragLayout() = oldStyle->paragLayout();
-    m_currentStyle->setFollowingStyle( oldStyle->followingStyle() );
-    m_currentStyle->setName( str );
+    QString str = i18n( "New Style Template ( %1 )" ).arg(numStyles++);
+    if ( m_currentStyle )
+    {
+        m_currentStyle = new KWStyle( *m_currentStyle ); // Create a new style, initializing from the current one
+        m_currentStyle->setName( str );
+    }
+    else
+        m_currentStyle = new KWStyle( str );
 
     noSignals=true;
     m_origStyles.append(0L);
@@ -328,12 +317,11 @@ kdDebug() << "deleting orig " <<  m_origStyles.at(i)->name() << " (" << i << ")"
         } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
 kdDebug() << "update style " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
                                                 // simply updated style
-            KWStyle *orig=m_origStyles.at(i);
+            KWStyle *orig = m_origStyles.at(i);
             KWStyle *changed = m_changedStyles.at(i);
-            //orig->format()=changed->format();
-            orig->setFollowingStyle(changed->followingStyle());
-            orig->paragLayout() = changed->paragLayout();
-            orig->setName( changed->name() );
+
+            // Copy everything from changed to orig
+            *orig = *changed;
         } else {
 kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
         }
