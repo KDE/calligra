@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Kexi/TableFilter
+Comment=Kexi Table Import/Export Filter
+
+[PropertyDef::X-Kexi-Direction]
+Type=QString
+
