@@ -235,7 +235,7 @@ QDomElement KWFootNoteManager::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-bool KWFootNoteManager::load( QDomElement &e )
+bool KWFootNoteManager::load( const QDomElement &e )
 {
     bool ok;
 

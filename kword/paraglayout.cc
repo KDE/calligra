@@ -192,7 +192,7 @@ return layout;
 }
 
 /*================================================================*/
-bool KWParagLayout::load( QDomElement& layout )
+bool KWParagLayout::load( const QDomElement& layout )
 {
     name = layout.attribute( "name" );
     followingParagLayout = layout.attribute( "following-parag-layout" );
@@ -208,7 +208,7 @@ bool KWParagLayout::load( QDomElement& layout )
 				   layout.attribute( "foot-offset-mm" ).toInt(),
 				   layout.attribute( "foot-offset-inch" ).toInt() )
 
-    
+
     QDomElement c = layout.namedItem( "COUNTER" );
     if ( c.isNull() )
       return false;

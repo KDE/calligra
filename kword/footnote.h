@@ -55,7 +55,7 @@ public:
     void setNoteType( NoteType nt ) { noteType = nt; }
 
     QDomElement save( QDomDocument& );
-    bool load( QDomElement& );
+    bool load( const QDomElement& );
 
 protected:
     void addFootNoteText( KWFootNote *fn );

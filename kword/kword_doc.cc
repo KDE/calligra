@@ -780,7 +780,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     QDomElement attribs = doc.namedItem( "ATTRIBUTES" ).toElement();
     if ( attribs.isNull() )
 	return false;
-    processingType = attribs.attribute( "processing" ).toInt();
+    processingType = (ProcessingType)attribs.attribute( "processing" ).toInt();
     _header = (bool)attribs.attribute( "hasHeader" ).toInt();
     _footer = (bool)attribs.attribute( "hasFooter" ).toInt();
     unit = attribs.attribute( "unit" );
@@ -955,7 +955,7 @@ bool KWordDocument::loadStyleTemplates( const QDomElement& element )
 }
 
 /*================================================================*/
-void KWordDocument::loadFrameSets( const QDomElement &framesets )
+bool KWordDocument::loadFrameSets( const QDomElement &framesets )
 {
     string tag;
     string name;
@@ -1062,7 +1062,7 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 	    {
 		// #### todo
 		//istorestream in( _store );
-		in >> img;
+		//in >> img;
 	    }
 	    _store->close();
 
@@ -1104,45 +1104,45 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     QDomElement paper = doc.createElement( "PAPER" );
     word.appendChild( paper );
     paper.setAttribute( "format", (int)pageLayout.format );
-    paper.setAttribute( "ptWidth", pageLayout.ptWidth );
-    paper.setAttribute( "ptHeight", pageLayout.ptHeight );
-    paper.setAttribute( "mmWidth", pageLayout.mmWidth );
-    paper.setAttribute( "mmHeight", pageLayout.mmHeight );
-    paper.setAttribute( "inchWidth", pageLayout.inchWidth );
-    paper.setAttribute( "inchHeight", pageLayout.inchHeight );
-    paper.setAttribute( "inchHeight", pageLayout.inchHeight );
-    paper.setAttribute( "columns", pageColumns.columns );
-    paper.setAttribute( "ptColumnspc", pageColumns.ptColumnSpacing );
-    paper.setAttribute( "mmColumnspc", pageColumns.mmColumnSpacing );
-    paper.setAttribute( "inchColumnspc", pageColumns.inchColumnSpacing );
+    paper.setAttribute( "ptWidth", (int)pageLayout.ptWidth );
+    paper.setAttribute( "ptHeight", (int)pageLayout.ptHeight );
+    paper.setAttribute( "mmWidth", (int)pageLayout.mmWidth );
+    paper.setAttribute( "mmHeight", (int)pageLayout.mmHeight );
+    paper.setAttribute( "inchWidth", (int)pageLayout.inchWidth );
+    paper.setAttribute( "inchHeight", (int)pageLayout.inchHeight );
+    paper.setAttribute( "inchHeight", (int)pageLayout.inchHeight );
+    paper.setAttribute( "columns", (int)pageColumns.columns );
+    paper.setAttribute( "ptColumnspc", (int)pageColumns.ptColumnSpacing );
+    paper.setAttribute( "mmColumnspc", (int)pageColumns.mmColumnSpacing );
+    paper.setAttribute( "inchColumnspc", (int)pageColumns.inchColumnSpacing );
     paper.setAttribute( "hType", (int)pageHeaderFooter.header );
     paper.setAttribute( "fType", (int)pageHeaderFooter.footer );
-    paper.setAttribute( "ptHeadBody", pageHeaderFooter.ptHeaderBodySpacing );
-    paper.setAttribute( "mmHeadBody", pageHeaderFooter.mmHeaderBodySpacing );
-    paper.setAttribute( "inchHeadBody", pageHeaderFooter.inchHeaderBodySpacing );
-    paper.setAttribute( "ptFootBody", pageHeaderFooter.ptFooterBodySpacing );
-    paper.setAttribute( "mmFootBody", pageHeaderFooter.mmFooterBodySpacing );
-    paper.setAttribute( "inchFootBody", pageHeaderFooter.inchFooterBodySpacing );
+    paper.setAttribute( "ptHeadBody", (int)pageHeaderFooter.ptHeaderBodySpacing );
+    paper.setAttribute( "mmHeadBody", (int)pageHeaderFooter.mmHeaderBodySpacing );
+    paper.setAttribute( "inchHeadBody", (int)pageHeaderFooter.inchHeaderBodySpacing );
+    paper.setAttribute( "ptFootBody", (int)pageHeaderFooter.ptFooterBodySpacing );
+    paper.setAttribute( "mmFootBody", (int)pageHeaderFooter.mmFooterBodySpacing );
+    paper.setAttribute( "inchFootBody", (int)pageHeaderFooter.inchFooterBodySpacing );
 
-    QDomElement e = formatCollection->save( doc );
+    QDomElement e = formatCollection.save( doc );
     if ( e.isNull() )
 	return FALSE;
-    word.append( e );
+    word.appendChild( e );
 
     QDomElement border = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( border );
-    border.setAttribute( "mmLeft", pageLayout.mmLeft );
-    border.setAttribute( "mmTop", pageLayout.mmTop );
-    border.setAttribute( "mmRight", pageLayout.mmRight );
-    border.setAttribute( "mmBottom", pageLayout.mmBottom );
-    border.setAttribute( "ptLeft", pageLayout.ptLeft );
-    border.setAttribute( "ptTop", pageLayout.ptTop );
-    border.setAttribute( "ptRight", pageLayout.ptRight );
-    border.setAttribute( "ptBottom", pageLayout.ptBottom );
-    border.setAttribute( "inchLeft", pageLayout.inchLeft );
-    border.setAttribute( "inchTop", pageLayout.inchTop );
-    border.setAttribute( "inchRight", pageLayout.inchRight );
-    border.setAttribute( "inchBottom", pageLayout.inchBottom );
+    border.setAttribute( "mmLeft", (int)pageLayout.mmLeft );
+    border.setAttribute( "mmTop", (int)pageLayout.mmTop );
+    border.setAttribute( "mmRight", (int)pageLayout.mmRight );
+    border.setAttribute( "mmBottom", (int)pageLayout.mmBottom );
+    border.setAttribute( "ptLeft", (int)pageLayout.ptLeft );
+    border.setAttribute( "ptTop", (int)pageLayout.ptTop );
+    border.setAttribute( "ptRight", (int)pageLayout.ptRight );
+    border.setAttribute( "ptBottom", (int)pageLayout.ptBottom );
+    border.setAttribute( "inchLeft", (int)pageLayout.inchLeft );
+    border.setAttribute( "inchTop", (int)pageLayout.inchTop );
+    border.setAttribute( "inchRight", (int)pageLayout.inchRight );
+    border.setAttribute( "inchBottom", (int)pageLayout.inchBottom );
 
     QDomElement attr = doc.createElement( "ATTRIBUTES" );
     word.appendChild( attr );
@@ -1168,7 +1168,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	    QDomElement e = frameSet->save( doc );
 	    if ( e.isNull() )
 		return false;
-	    fs.append( e );
+	    fs.appendChild( e );
 	}
     }
 
@@ -1180,7 +1180,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	QDomElement e = paragLayoutList.at( j )->save( doc );
 	if ( e.isNull() )
 	    return false;
-	styles.append( e );
+	styles.appendChild( e );
     }
 
     QDomElement pix = doc.createElement( "PIXMAPS" );
@@ -1188,13 +1188,12 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 
     QDictIterator<KWImage> it = imageCollection.iterator();
     QStringList keys, images;
-    for ( ; it.current(); ++it )
-    {
+    for ( ; it.current(); ++it ) {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
 	QDomElement e = doc.createElement( "KEY" );
 	e.setAttribute( "key", it.current()->getFilename() );
-	keys.appendChild( e );
+	pix.appendChild( e );
 	    keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }
@@ -2461,222 +2460,223 @@ void KWordDocument::setFormat( KWFormat &_format )
 /*================================================================*/
 void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format, const QString &_mime )
 {
-    QStrList strList;
-    KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
-    int index;
+// #### todo
+//     QStrList strList;
+//     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
+//     int index;
 
-    if ( _string.isEmpty() ) return;
+//     if ( _string.isEmpty() ) return;
 
-    if ( _mime == "text/plain" ) {     // ----------------- MIME type text/plain
-	while ( true ) {
-	    index = _string.find( '\n', 0 );
-	    if ( index == -1 ) break;
+//     if ( _mime == "text/plain" ) {     // ----------------- MIME type text/plain
+// 	while ( true ) {
+// 	    index = _string.find( '\n', 0 );
+// 	    if ( index == -1 ) break;
 
-	    if ( index > 0 && !_string.left( index ).simplifyWhiteSpace().isEmpty() )
-		strList.append( QString( _string.left( index ) ) );
-	    _string.remove( 0, index + 1 );
-	}
+// 	    if ( index > 0 && !_string.left( index ).simplifyWhiteSpace().isEmpty() )
+// 		strList.append( QString( _string.left( index ) ) );
+// 	    _string.remove( 0, index + 1 );
+// 	}
 
-	if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
-	    strList.append( QString( _string ) );
-    } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
-	istrstream in( _string.ascii() );
-	if ( !in )
-	    return;
+// 	if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
+// 	    strList.append( QString( _string ) );
+//     } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
+// 	istrstream in( _string.ascii() );
+// 	if ( !in )
+// 	    return;
 
-	KOMLStreamFeed feed( in );
-	KOMLParser parser( &feed );
+// 	KOMLStreamFeed feed( in );
+// 	KOMLParser parser( &feed );
 
-	string tag;
-	vector<KOMLAttrib> lst;
-	string name;
+// 	string tag;
+// 	vector<KOMLAttrib> lst;
+// 	string name;
 
-	if ( !parser.open( "PARAGRAPHS", tag ) ) {
-	    cerr << "Missing PARAGRAPHS" << endl;
-	    return;
-	}
+// 	if ( !parser.open( "PARAGRAPHS", tag ) ) {
+// 	    cerr << "Missing PARAGRAPHS" << endl;
+// 	    return;
+// 	}
 
-	while ( parser.open( 0L, tag ) ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	while ( parser.open( 0L, tag ) ) {
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	    if ( name == "PARAGRAPH" ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
-		vector<KOMLAttrib>::const_iterator it = lst.begin();
-		for( ; it != lst.end(); it++ ) {
-		}
+// 	    if ( name == "PARAGRAPH" ) {
+// 		KOMLParser::parseTag( tag.c_str(), name, lst );
+// 		vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 		for( ; it != lst.end(); it++ ) {
+// 		}
 
-		parag2 = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
-				      this, 0L, 0L, defaultParagLayout, false );
-		parag2->load( parser, lst );
+// 		parag2 = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
+// 				      this, 0L, 0L, defaultParagLayout, false );
+// 		parag2->load( parser, lst );
 		
-		KWParag::correctFormat( _fc->getParag(), parag2 );
+// 		KWParag::correctFormat( _fc->getParag(), parag2 );
 		
-		if ( !firstParag )
-		    firstParag = parag2;
-		parag2->setPrev( parag );
-		if ( parag ) parag->setNext( parag2 );
-		parag = parag2;
-	    } else ;
+// 		if ( !firstParag )
+// 		    firstParag = parag2;
+// 		parag2->setPrev( parag );
+// 		if ( parag ) parag->setNext( parag2 );
+// 		parag = parag2;
+// 	    } else ;
 
-	    if ( !parser.close( tag ) )
-		return;
+// 	    if ( !parser.close( tag ) )
+// 		return;
 
-	}
-    }
+// 	}
+//     }
 
-    if ( ( _mime == "text/plain" && !strList.isEmpty() ) || ( _mime == MIME_TYPE && firstParag ) ) {
-	if ( ( _mime == "text/plain" && strList.count() == 1 ) || ( _mime == MIME_TYPE && !firstParag->getNext() ) ) {
-	    // --------------- MIME: text/plain
-	    if ( _mime == "text/plain" ) {
-		QString str;
-		unsigned int len;
-		KWFormat *format = _format;
-		if ( !format ) {
-		    format = new KWFormat( this );
-		    *format = *( (KWFormat*)_fc );
-		}
-		str = QString( strList.at( 0 ) );
-		len = str.length();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
-		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+//     if ( ( _mime == "text/plain" && !strList.isEmpty() ) || ( _mime == MIME_TYPE && firstParag ) ) {
+// 	if ( ( _mime == "text/plain" && strList.count() == 1 ) || ( _mime == MIME_TYPE && !firstParag->getNext() ) ) {
+// 	    // --------------- MIME: text/plain
+// 	    if ( _mime == "text/plain" ) {
+// 		QString str;
+// 		unsigned int len;
+// 		KWFormat *format = _format;
+// 		if ( !format ) {
+// 		    format = new KWFormat( this );
+// 		    *format = *( (KWFormat*)_fc );
+// 		}
+// 		str = QString( strList.at( 0 ) );
+// 		len = str.length();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-		for ( unsigned int j = 0; j < len; j++ )
-		    _fc->cursorGotoRight();
-		delete format;
-	    } else  { // ---------------- MIME: application/x-kword
-		KWString *str = new KWString( this );
-		*str = *firstParag->getKWString();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		for ( unsigned int j = 0; j < len; j++ )
+// 		    _fc->cursorGotoRight();
+// 		delete format;
+// 	    } else  { // ---------------- MIME: application/x-kword
+// 		KWString *str = new KWString( this );
+// 		*str = *firstParag->getKWString();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
 
-		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-		    _fc->cursorGotoRight();
+// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+// 		    _fc->cursorGotoRight();
 
-		delete firstParag;
-	    }
-	} else if ( ( _mime == "text/plain" && strList.count() == 2 ) ||
-		    ( _mime == "application/x-kword" && !firstParag->getNext()->getNext() ) ) {
-	    if ( _mime == "text/plain" ) {
-		QString str;
-		unsigned int len;
-		KWFormat *format = _format;
-		if ( !format ) {
-		    format = new KWFormat( this );
-		    *format = *( (KWFormat*)_fc );
-		}
-		str = QString( strList.at( 0 ) );
-		len = str.length();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
-		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+// 		delete firstParag;
+// 	    }
+// 	} else if ( ( _mime == "text/plain" && strList.count() == 2 ) ||
+// 		    ( _mime == "application/x-kword" && !firstParag->getNext()->getNext() ) ) {
+// 	    if ( _mime == "text/plain" ) {
+// 		QString str;
+// 		unsigned int len;
+// 		KWFormat *format = _format;
+// 		if ( !format ) {
+// 		    format = new KWFormat( this );
+// 		    *format = *( (KWFormat*)_fc );
+// 		}
+// 		str = QString( strList.at( 0 ) );
+// 		len = str.length();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-		for ( unsigned int j = 0; j <= len; j++ )
-		    _fc->cursorGotoRight();
+// 		for ( unsigned int j = 0; j <= len; j++ )
+// 		    _fc->cursorGotoRight();
 
-		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-		_page->keyPressEvent( &ev );
+// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+// 		_page->keyPressEvent( &ev );
 
-		str = QString( strList.at( 1 ) );
-		len = str.length();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
-		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+// 		str = QString( strList.at( 1 ) );
+// 		len = str.length();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-		for ( unsigned int j = 0; j < len; j++ )
-		    _fc->cursorGotoRight();
-		delete format;
-	    } else {
-		KWString *str = new KWString( this );
-		*str = *firstParag->getKWString();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		for ( unsigned int j = 0; j < len; j++ )
+// 		    _fc->cursorGotoRight();
+// 		delete format;
+// 	    } else {
+// 		KWString *str = new KWString( this );
+// 		*str = *firstParag->getKWString();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
 
-		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-		    _fc->cursorGotoRight();
+// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+// 		    _fc->cursorGotoRight();
 
-		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-		_page->keyPressEvent( &ev );
+// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+// 		_page->keyPressEvent( &ev );
 
-		KWString *str2 = new KWString( this );
-		*str2 = *firstParag->getNext()->getKWString();
-		_fc->getParag()->insertText( _fc->getTextPos(), str2 );
+// 		KWString *str2 = new KWString( this );
+// 		*str2 = *firstParag->getNext()->getKWString();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str2 );
 
-		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-		    _fc->cursorGotoRight();
+// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+// 		    _fc->cursorGotoRight();
 
-		delete firstParag->getNext();
-		delete firstParag;
-	    }
-	} else {
-	    if ( _mime == "text/plain" ) {
-		QString str;
-		unsigned int len;
-		KWFormat *format = _format;
-		if ( !format ) {
-		    format = new KWFormat( this );
-		    *format = *( (KWFormat*)_fc );
-		}
-		str = QString( strList.at( 0 ) );
-		len = str.length();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
-		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+// 		delete firstParag->getNext();
+// 		delete firstParag;
+// 	    }
+// 	} else {
+// 	    if ( _mime == "text/plain" ) {
+// 		QString str;
+// 		unsigned int len;
+// 		KWFormat *format = _format;
+// 		if ( !format ) {
+// 		    format = new KWFormat( this );
+// 		    *format = *( (KWFormat*)_fc );
+// 		}
+// 		str = QString( strList.at( 0 ) );
+// 		len = str.length();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-		for ( unsigned int j = 0; j < len; j++ )
-		    _fc->cursorGotoRight();
+// 		for ( unsigned int j = 0; j < len; j++ )
+// 		    _fc->cursorGotoRight();
 
-		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
-		_page->keyPressEvent( &ev );
+// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
+// 		_page->keyPressEvent( &ev );
 
-		_fc->cursorGotoLeft();
-		_fc->cursorGotoLeft();
-		KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
+// 		_fc->cursorGotoLeft();
+// 		_fc->cursorGotoLeft();
+// 		KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
 
-		for ( unsigned int i = 1; i < strList.count(); i++ ) {
-		    str = QString( strList.at( i ) );
-		    len = str.length();
-		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), this,
-				     p, 0L, defaultParagLayout );
-		    if ( !calcParag )
-			calcParag = p;
-		    p->insertText( 0, str );
-		    p->setFormat( 0, len, *format );
-		}
-		p->setNext( next );
-		if ( next ) next->setPrev( p );
-		delete format;
-	    } else {
-		KWString *str = new KWString( this );
-		*str = *firstParag->getKWString();
-		_fc->getParag()->insertText( _fc->getTextPos(), str );
+// 		for ( unsigned int i = 1; i < strList.count(); i++ ) {
+// 		    str = QString( strList.at( i ) );
+// 		    len = str.length();
+// 		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), this,
+// 				     p, 0L, defaultParagLayout );
+// 		    if ( !calcParag )
+// 			calcParag = p;
+// 		    p->insertText( 0, str );
+// 		    p->setFormat( 0, len, *format );
+// 		}
+// 		p->setNext( next );
+// 		if ( next ) next->setPrev( p );
+// 		delete format;
+// 	    } else {
+// 		KWString *str = new KWString( this );
+// 		*str = *firstParag->getKWString();
+// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
 
-		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-		    _fc->cursorGotoRight();
-		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-		_page->keyPressEvent( &ev );
+// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+// 		    _fc->cursorGotoRight();
+// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+// 		_page->keyPressEvent( &ev );
 
-		_fc->cursorGotoLeft();
-		_fc->cursorGotoLeft();
+// 		_fc->cursorGotoLeft();
+// 		_fc->cursorGotoLeft();
 
-		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
+// 		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
 
-		while ( parag ) {
-		    p = new KWParag( *parag );
-		    if ( !calcParag )
-			calcParag = p;
-		    p->setPrev( prev );
-		    prev->setNext( p );
-		    p->setNext( 0L );
-		    prev = p;
-		    parag = parag->getNext();
-		}
-		p->setNext( next );
-		if ( next ) next->setPrev( p );
-	    }
-	}
-    }
+// 		while ( parag ) {
+// 		    p = new KWParag( *parag );
+// 		    if ( !calcParag )
+// 			calcParag = p;
+// 		    p->setPrev( prev );
+// 		    prev->setNext( p );
+// 		    p->setNext( 0L );
+// 		    prev = p;
+// 		    parag = parag->getNext();
+// 		}
+// 		p->setNext( next );
+// 		if ( next ) next->setPrev( p );
+// 	    }
+// 	}
+//     }
 
-    if ( !calcParag )
-	calcParag = _fc->getParag();
-    if ( calcParag->getPrev() )
-	calcParag = calcParag->getPrev();
+//     if ( !calcParag )
+// 	calcParag = _fc->getParag();
+//     if ( calcParag->getPrev() )
+// 	calcParag = calcParag->getPrev();
 
-    recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
+//     recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
 }
 
 /*================================================================*/

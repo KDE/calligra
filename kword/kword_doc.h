@@ -105,7 +105,7 @@ public:
     virtual CORBA::Boolean initDoc();
 
     // C++
-    virtual bool loadXML( QDomDocument&, KOStore::Store_ptr _store );
+    virtual bool loadXML( const QDomDocument&, KOStore::Store_ptr _store );
     virtual bool loadChildren( KOStore::Store_ptr _store );
     virtual bool save( QIODevice* dev, KOStore::Store_ptr, const char* format );
     virtual bool completeSaving( KOStore::Store_ptr _store );
@@ -373,8 +373,8 @@ protected:
     virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
 		       CORBA::Float _scale );
 
-    bool loadFrameSets( QDomElement &frameset );
-    bool loadStyleTemplates( QDomElement &style );
+    bool loadFrameSets( const QDomElement &frameset );
+    bool loadStyleTemplates( const QDomElement &style );
 
     void addStyleTemplate( KWParagLayout *pl );
 
