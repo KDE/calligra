@@ -1,3 +1,10 @@
+2004-10-07  Inge Wallin  <inge@lysator.liu.se>
+
+	* Cleanup of the following files.  Made the code more readable,
+	fixed indentation, added some comments:
+	- sheet.h
+	- sheet.cc
+
 2004-10-06  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 55603: Pressing Enter in Data Editor doesn't update any

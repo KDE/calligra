@@ -10,8 +10,11 @@
  * modified by Reginald Stadlbauer <reggie@kde.org> *
  ****************************************************/
 
+
 #ifndef SHEET_H
 #define SHEET_H
+
+
 #include "table.h"
 #include "parser.h"
 
@@ -19,50 +22,51 @@
 class Sheet : public QWidget
 {
   Q_OBJECT
+
 public:
   Sheet( QWidget *parent=0, const char *name=0, int tableSize = 16);
   ~Sheet();
-  int tWidth() { return tableView->tWidth() + extraW; }
-  int tHeight() { return tableView->tHeight() + extraH; }
 
-  int cols();
-  int rows();
+  int      tWidth()    { return tableView->tWidth()  + extraW; }
+  int      tHeight()   { return tableView->tHeight() + extraH; }
 
-  QString getX(int);
-  QString getY(int);
-  double getCell(int,int);
+  int      cols();
+  int      rows();
+
+  QString  getX(int);
+  QString  getY(int);
+  double   getCell(int,int);
 
 public slots:
-  void exportText( int row, int col );
-  void importText( int row, int col, QString );
-  void exportTextHead( int row, int col );
-  void importTextHead( int row, int col, QString );
-  void exportTextSide( int row, int col );
-  void importTextSide( int row, int col, QString );
-  void setHorzBar(int);
-  void setVertBar(int);
-  void ok() {tableView->nextInput(); head->nextInput();}
+  void     exportText( int row, int col );
+  void     importText( int row, int col, QString );
+  void     exportTextHead( int row, int col );
+  void     importTextHead( int row, int col, QString );
+  void     exportTextSide( int row, int col );
+  void     importTextSide( int row, int col, QString );
+  void     setHorzBar(int);
+  void     setVertBar(int);
+  void     ok() {tableView->nextInput(); head->nextInput();}
 
 protected:
-  virtual void resizeEvent( QResizeEvent *);
+  virtual void  resizeEvent( QResizeEvent *);
   
 private:
-  SheetTable * tableView;
-  SheetTable * head;
-  SheetTable * side;
+  SheetTable   *tableView;
+  SheetTable   *head;
+  SheetTable   *side;
 
-  QScrollBar * horz;
-  QScrollBar * vert;
+  QScrollBar   *horz;
+  QScrollBar   *vert;
   
-  int extraW;
-  int extraH;
-  ParsedArray *table;
-  ParsedArray *_head;
-  ParsedArray *_side;
+  int           extraW;
+  int           extraH;
+  ParsedArray  *table;
+  ParsedArray  *_head;
+  ParsedArray  *_side;
 
-  int tableSize;
+  int           tableSize;
 };
-
 
 
 #endif
