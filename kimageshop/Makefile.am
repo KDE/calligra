@@ -16,7 +16,8 @@ lib_LTLIBRARIES = libkimageshop.la
 
 libkimageshop_la_SOURCES = kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
 	kimageshop_factory.cc kimageshop_config.cc kimageshop_undo.cc brush.cc \
-	channeldata.cc misc.cc layer.cc tool.cc  vec.cc color.cc kimageshop_canvas.cc
+	channeldata.cc misc.cc layer.cc tool.cc  vec.cc color.cc kimageshop_canvas.cc \
+	kimageshop_image.cc
 
 kimageshop_SOURCES = main.cc
 
@@ -24,11 +25,11 @@ kimageshop_SOURCES = main.cc
 noinst_HEADERS =  kimageshop_global.h  kimageshop_shell.h kimageshop_doc.h \
 	kimageshop_view.h kimageshop_factory.h kimageshop_config.h \
 	kimageshop_undo.h vec.h color.h channeldata.h misc.h layer.h tool.h \
-	kimageshop_canvas.h
+	kimageshop_canvas.h kimageshop_image.h
 
 libkimageshop_la_METASOURCES = kimageshop_shell.moc kimageshop_doc.moc \
 	kimageshop_view.moc kimageshop_factory.moc kimageshop_config.moc layer.moc \
-	tool.moc kimageshop_canvas.moc
+	tool.moc kimageshop_canvas.moc kimageshop_image.moc
 
 kdelnk_DATA = kimageshop.desktop
 kdelnkdir = $(kde_appsdir)/Applications/KOffice
@@ -38,6 +39,11 @@ kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/kimageshop
 rc_DATA = kimageshop.rc kimageshop_shell.rc
+
+check_PROGRAMS = linktest
+linktest_SOURCES = $(libkimageshop_la_SOURCES)
+linktest_LDADD = $(lib_LTLIBRARIES)
+linktest_LDFLAGS = $(libkimageshop_LDFLAGS) 
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimageshop.pot

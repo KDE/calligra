@@ -63,12 +63,13 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   m_fg = KColor::black();
   m_bg = KColor::white();
 
-  setupActions();
   setupCanvas();
   setupScrollBars();
   setupRulers();
+  setupActions();
   setupDialogs();
   setupTools();
+ 
 }
 
 void KImageShopView::setupCanvas()
@@ -140,6 +141,7 @@ void KImageShopView::setupTools()
   // zoom tool
   m_pZoomTool = new ZoomTool(this);
   
+  m_tool_move->setChecked( true );
   activateTool(m_pMoveTool);
 }
 
@@ -240,8 +242,6 @@ void KImageShopView::setupActions()
   m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KImageShopBarIcon("gradient"), 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
   m_tool_gradient->setExclusiveGroup( "tools" );
-
-  m_tool_move->setChecked( true );
 
   // layer actions
 

@@ -37,7 +37,7 @@ KImageShopFactory::~KImageShopFactory()
   delete s_global;
 }
 
-QObject* KImageShopFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
+QObject* KImageShopFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {
@@ -45,7 +45,7 @@ QObject* KImageShopFactory::create( QObject* parent, const char* name, const cha
 	return 0;
     }
     
-    KImageShopDoc *doc = new KImageShopDoc( 512, 512, (KoDocument*)parent, name );
+    KImageShopDoc *doc = new KImageShopDoc( (KoDocument*)parent, name );
     emit objectCreated(doc);
     return doc;
 }

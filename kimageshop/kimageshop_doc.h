@@ -25,26 +25,19 @@
 #include <koDocument.h>
 #include <koUndo.h>
 
-#include <qimage.h>
 #include <qlist.h>
 
-#include <stdlib.h>
-#include <X11/Xlib.h>
-
 #include "layer.h"
+#include "kimageshop_image.h"
 
 class Brush;
-
-struct canvasTileDescriptor
-{
-  QPixmap pix;
-};
 
 class KImageShopDoc : public KoDocument
 {
     Q_OBJECT
+
 public:
-    KImageShopDoc( int w = 510, int h = 510, KoDocument* parent = 0, const char* name = 0 );
+    KImageShopDoc( KoDocument* parent = 0, const char* name = 0 );
     ~KImageShopDoc();
 
     virtual bool loadFromURL( const QString& );
@@ -58,15 +51,16 @@ public:
     KoCommandHistory* commandHistory() { return &m_commands; };
 
     void paintPixmap( QPainter *painter, QRect area );
-    int height() { return h; }
-    int width() { return w; }
 
-    Layer* getCurrentLayer() { return currentLayer; }
-    int getCurrentLayerIndex() { return layers.find( currentLayer ); }
+    int height();
+    int width();
+    QRect imageExtents();
+    QSize size();
+
+    Layer* getCurrentLayer();
+    int getCurrentLayerIndex();
     void setCurrentLayer( int _layer );
 
-    QRect imageExtents();
-    
     void upperLayer( unsigned int _layer );
     void lowerLayer( unsigned int _layer );
     void setFrontLayer( unsigned int _layer );
@@ -85,7 +79,7 @@ public:
     void moveLayerTo( int x, int y, Layer *lay = 0 );
     void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay,
 			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
-    LayerList layerList() { return layers; };
+    LayerList layerList();
     
     void rotateLayer180(Layer *_layer);
     void rotateLayerLeft90(Layer *_layer);
@@ -103,42 +97,22 @@ public slots:
   void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
   void setCurrentLayerOpacity( double opacity )
     {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
+  void slotImageUpdated();
+  void slotImageUpdated( const QRect& rect );
+  void slotLayersUpdated();
+
+signals:
+  void docUpdated();
+  void docUpdated( const QRect& rect );
+  void layersUpdated();
     
 protected:
   virtual QString configFile() const;
   KoCommandHistory m_commands;
-  
-  void compositeTile( int x, int y, Layer *dstLay = 0, int dstTile = -1 );
-  void convertTileToPixmap( Layer *lay, int tileNo, QPixmap *pix );
-
-signals:
-  void docUpdated();
-  void docUpdated( const QRect& rect);
-  void layersUpdated();
 
 private:
-
-  void setUpVisual();
-  void convertImageToPixmap( QImage *img, QPixmap *pix );
-
-  enum dispVisual { unknown, rgb565, rgb888x } visual;
-
-  int       w;
-  int       h;
-  int       channels;
-  QRect     viewportRect;
-  int       xTiles;
-  int       yTiles;
-  LayerList layers;
-  Layer     *compose;
-  QImage    img;
-  Layer     *currentLayer;
-  QPixmap   **tiles;
-  bool      dragging;
-  QPoint    dragStart;
-  uchar     *background;
-  char      *imageData;
-  XImage    *xi;
+  QList <KImageShopImage> m_Images;
+  KImageShopImage *m_pCurrent;
 };
 
 #endif
