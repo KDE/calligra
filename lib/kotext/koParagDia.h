@@ -110,7 +110,7 @@ public:
     double spaceAfterParag() const;
     double lineSpacing() const;
     int pageBreaking() const;
-
+    KoParagLayout::spacingType lineSpacingType() const;
 private slots:
     void leftChanged( double );
     void rightChanged( double );
@@ -513,6 +513,7 @@ public:
     double spaceBeforeParag() const { return m_indentSpacingWidget->spaceBeforeParag(); }
     double spaceAfterParag() const { return m_indentSpacingWidget->spaceAfterParag(); }
     double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
+    KoParagLayout::spacingType lineSpacingType() const{ return m_indentSpacingWidget->lineSpacingType(); }
     int pageBreaking() const { return m_indentSpacingWidget->pageBreaking(); }
 
     // tab 2
@@ -538,7 +539,7 @@ public:
 
     // Support for "what has changed?"
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
-    bool isLineSpacingChanged() const {return oldLayout.lineSpacing!=lineSpacing();}
+    bool isLineSpacingChanged() const {return (oldLayout.lineSpacingValue() !=lineSpacing() || oldLayout.lineSpacingType != lineSpacingType());}
     bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent(); }
     bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight]!=rightIndent();}
     bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();}

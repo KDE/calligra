@@ -925,9 +925,9 @@ KCommand * KoTextView::setAlignCommand( int align )
 {
      return textObject()->setAlignCommand( m_cursor, align );
 }
-KCommand * KoTextView::setLineSpacingCommand( double spacing )
+KCommand * KoTextView::setLineSpacingCommand( double spacing, KoParagLayout::spacingType _type)
 {
-     return textObject()->setLineSpacingCommand( m_cursor, spacing );
+     return textObject()->setLineSpacingCommand( m_cursor, spacing, _type);
 }
 KCommand * KoTextView::setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder )
 {

@@ -44,6 +44,7 @@ void KoParagLayout::operator=( const KoParagLayout &layout )
     else
         counter = 0L;
     lineSpacing = layout.lineSpacing;
+    lineSpacingType = layout.lineSpacingType;
     style = layout.style;
     shadowDistance = layout.shadowDistance;
     shadowColor = layout.shadowColor;
@@ -85,7 +86,8 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
         if ( counter && counter->numbering() != KoParagCounter::NUM_NONE )
             flags |= BulletNumber;
 
-    if ( lineSpacing != layout.lineSpacing )
+    if ( lineSpacing != layout.lineSpacing
+        || lineSpacingType != layout.lineSpacingType )
         flags |= LineSpacing;
     //if ( style != layout.style )
     //    flags |= Style;
@@ -106,6 +108,7 @@ void KoParagLayout::initialise()
     alignment = Qt::AlignAuto;
     for ( int i = 0 ; i < 5 ; ++i ) // use memset ?
         margins[i] = 0;
+    lineSpacingType = LS_SINGLE;
     lineSpacing = 0;
     counter = 0L;
     leftBorder.setPenWidth( 0);

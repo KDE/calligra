@@ -791,6 +791,10 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     cSpacing->insertItem( i18n( "Line spacing value", "1.5 lines" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
     cSpacing->insertItem( i18n( "Custom (%1)" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "At least (%1)" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "Exactly (%1)" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "Multiply") );
+
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
@@ -869,20 +873,32 @@ double KoIndentSpacingWidget::spaceAfterParag() const
     return QMAX(0,KoUnit::ptFromUnit( eAfter->value(), m_unit ));
 }
 
-double KoIndentSpacingWidget::lineSpacing() const
+KoParagLayout::spacingType KoIndentSpacingWidget::lineSpacingType() const
 {
     int index = cSpacing->currentItem();
     switch ( index ) {
     case 0: // single
-        return 0;
+        return KoParagLayout::LS_SINGLE;
     case 1: // one-and-half
         return KoParagLayout::LS_ONEANDHALF;
     case 2:
         return KoParagLayout::LS_DOUBLE;
     case 3:
+        return KoParagLayout::LS_CUSTOM;
+    case 4:
+        return KoParagLayout::LS_AT_LEAST;
+    case 5:
+        return KoParagLayout::LS_EXACTLY;
+    case 6:
+        return KoParagLayout::LS_MULTIPLE;
     default:
-        return QMAX(0,KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
+        return KoParagLayout::LS_SINGLE;
     }
+}
+
+double KoIndentSpacingWidget::lineSpacing() const
+{
+    return QMAX(0,KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
 }
 
 int KoIndentSpacingWidget::pageBreaking() const
@@ -921,19 +937,39 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     eAfter->setValue( KoUnit::ptToUnit( _after, m_unit ) );
     prev1->setAfter( _after );
 
-    double _spacing = lay.lineSpacing;
-    eSpacing->setEnabled(false);
-    if ( _spacing == 0 )
+    double _spacing = lay.lineSpacingValue();
+    KoParagLayout::spacingType _type = lay.lineSpacingType;
+    switch ( _type ) {
+    case KoParagLayout::LS_SINGLE: // single
         cSpacing->setCurrentItem( 0 );
-    else if ( _spacing == KoParagLayout::LS_ONEANDHALF )
+        break;
+    case KoParagLayout::LS_ONEANDHALF:
         cSpacing->setCurrentItem( 1 );
-    else if ( _spacing == KoParagLayout::LS_DOUBLE )
+        break;
+    case KoParagLayout::LS_DOUBLE:
         cSpacing->setCurrentItem( 2 );
-    else
-    {
+        break;
+    case KoParagLayout::LS_CUSTOM:
         cSpacing->setCurrentItem( 3 );
-        eSpacing->setEnabled(true);
+        break;
+    case KoParagLayout::LS_AT_LEAST:
+        cSpacing->setCurrentItem( 4 );
+        break;
+    case KoParagLayout::LS_EXACTLY:
+        cSpacing->setCurrentItem( 5 );
+        break;
+    case KoParagLayout::LS_MULTIPLE:
+        cSpacing->setCurrentItem( 6 );
+        break;
+    default:
+        cSpacing->setCurrentItem( 0 );
+        break;
     }
+
+    eSpacing->setEnabled( (_type != KoParagLayout::LS_SINGLE &&
+                              _type != KoParagLayout::LS_ONEANDHALF &&
+                              _type != KoParagLayout::LS_DOUBLE));
+    //TODO fix me value !!!!
     eSpacing->setValue( KoUnit::ptToUnit( _spacing, m_unit ) );
     prev1->setSpacing( _spacing );
 
@@ -945,7 +981,8 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
 
 void KoIndentSpacingWidget::save( KoParagLayout & lay )
 {
-    lay.lineSpacing = lineSpacing();
+    lay.setLineSpacingValue(lineSpacing());
+    lay.lineSpacingType = lineSpacingType();
     lay.margins[QStyleSheetItem::MarginLeft] = leftIndent();
     lay.margins[QStyleSheetItem::MarginRight] = rightIndent();
     lay.margins[QStyleSheetItem::MarginFirstLine] = firstLineIndent();
@@ -978,6 +1015,7 @@ void KoIndentSpacingWidget::firstChanged( double _val )
 
 void KoIndentSpacingWidget::spacingActivated( int _index )
 {
+    //FIXME !!!!!!!!!!!!!!!!!!!!!
     if ( _index == cSpacing->count()-1 /* last item */ ) {
         eSpacing->setEnabled( true );
         eSpacing->setFocus();

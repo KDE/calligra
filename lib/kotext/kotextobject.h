@@ -271,7 +271,7 @@ public:
     // -- Paragraph settings --
     KCommand * setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, int selectionId = KoTextDocument::Standard );
     KCommand * setAlignCommand( KoTextCursor * cursor, int align , int selectionId = KoTextDocument::Standard);
-    KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, int selectionId = KoTextDocument::Standard );
+    KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::spacingType _type,int selectionId = KoTextDocument::Standard );
     KCommand * setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = KoTextDocument::Standard );
     KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
     KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );

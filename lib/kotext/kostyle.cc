@@ -246,7 +246,10 @@ void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )
     if ( !(paragLayoutFlag & KoParagLayout::Margins) )
         m_paragLayout.margins = m_parentStyle->paragLayout().margins;
     if ( !(paragLayoutFlag & KoParagLayout::LineSpacing) )
-        m_paragLayout.lineSpacing = m_parentStyle->paragLayout().lineSpacing;
+    {
+        m_paragLayout.setLineSpacingValue(m_parentStyle->paragLayout().lineSpacingValue());
+        m_paragLayout.lineSpacingType = m_parentStyle->paragLayout().lineSpacingType;
+    }
     if ( !(paragLayoutFlag & KoParagLayout::Borders) )
     {
         m_paragLayout.leftBorder = m_parentStyle->paragLayout().leftBorder;

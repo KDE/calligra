@@ -57,9 +57,14 @@ public:
     void setMargins( const double * _i );
 
     /** Line spacing in pt if >=0, can also be LS_ONEANDHALF or LS_DOUBLE */
-    double kwLineSpacing() const { return m_layout.lineSpacing; }
+    double kwLineSpacing() const { return m_layout.lineSpacingValue(); }
 
     void setLineSpacing( double _i );
+
+    KoParagLayout::spacingType kwLineSpacingType() const { return m_layout.lineSpacingType; }
+
+    void setLineSpacingType( KoParagLayout::spacingType _type );
+
 
     /** Use this to change the paragraph alignment, not KoTextParag::setAlignment ! */
     void setAlign( int align );

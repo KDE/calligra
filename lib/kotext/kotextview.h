@@ -98,7 +98,7 @@ public:
     KCommand * setCounterCommand( const KoParagCounter & counter );
     KCommand * setAlignCommand( int align );
     KCommand * setPageBreakingCommand( int pageBreaking );
-    KCommand * setLineSpacingCommand( double spacing );
+    KCommand * setLineSpacingCommand( double spacing, KoParagLayout::spacingType _type );
     KCommand * setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder );
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );

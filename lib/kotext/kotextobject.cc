@@ -1128,7 +1128,7 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
     return  new KoTextCommand( this, /*cmd, */name );
 }
 
-KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, int selectionId )
+KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::spacingType _type, int selectionId )
 {
     if ( protectContent() )
         return 0L;
@@ -1138,13 +1138,15 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
     //kdDebug(32500) << "Comparison says " << ( cursor->parag()->kwLineSpacing() == spacing ) << endl;
     //kdDebug(32500) << "hasSelection " << textdoc->hasSelection( selectionId ) << endl;
     if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
-         cursor->parag()->kwLineSpacing() == spacing )
+         cursor->parag()->kwLineSpacing() == spacing
+        && cursor->parag()->kwLineSpacingType() == _type)
         return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
         cursor->parag()->setLineSpacing(spacing);
+        cursor->parag()->setLineSpacingType( _type);
         setLastFormattedParag( cursor->parag() );
     }
     else
@@ -1153,11 +1155,15 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
         KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
+        {
             start->setLineSpacing(spacing);
+            start->setLineSpacingType( _type);
+        }
     }
     formatMore( 2 );
     emit repaintChanged( this );
-    undoRedoInfo.newParagLayout.lineSpacing = spacing;
+    undoRedoInfo.newParagLayout.setLineSpacingValue( spacing );
+    undoRedoInfo.newParagLayout.lineSpacingType = _type;
     KoTextParagCommand *cmd = new KoTextParagCommand(
         textdoc, undoRedoInfo.id, undoRedoInfo.eid,
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,

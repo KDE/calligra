@@ -72,7 +72,13 @@ int KoTextParag::resolveAlignment() const
 
 void KoTextParag::setLineSpacing( double _i )
 {
-    m_layout.lineSpacing = _i;
+    m_layout.setLineSpacingValue(_i);
+    invalidate(0);
+}
+
+void KoTextParag::setLineSpacingType( KoParagLayout::spacingType _type )
+{
+    m_layout.lineSpacingType = _type;
     invalidate(0);
 }
 
@@ -339,8 +345,8 @@ int KoTextParag::lineSpacing( int line ) const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     int shadow = QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
-    if ( m_layout.lineSpacing >= 0 )
-        return zh->ptToLayoutUnitPixY( m_layout.lineSpacing ) + shadow;
+    if ( m_layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
+        return zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() ) + shadow;
     else {
         KoTextParag * that = const_cast<KoTextParag *>(this);
         if( line >= (int)that->lineStartList().count() )
@@ -354,18 +360,18 @@ int KoTextParag::lineSpacing( int line ) const
         int height = ( *it )->h;
         //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
 
-        if ( m_layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
+        if ( m_layout.lineSpacingType == KoParagLayout::LS_ONEANDHALF )
         {
             // Tricky. During formatting height doesn't include the linespacing,
             // but afterwards (e.g. when drawing the cursor), it does !
             return shadow + (isValid() ? height / 3 : height / 2);
         }
-        else if ( m_layout.lineSpacing == KoParagLayout::LS_DOUBLE )
+        else if ( m_layout.lineSpacingType == KoParagLayout::LS_DOUBLE )
         {
             return shadow + (isValid() ? height / 2 : height);
         }
     }
-    kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacing << endl;
+    kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacingValue() << endl;
     return 0+shadow;
 }
 
@@ -969,7 +975,10 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
     if ( flags & KoParagLayout::Margins )
         setMargins( layout.margins );
     if ( flags & KoParagLayout::LineSpacing )
-        setLineSpacing( layout.lineSpacing );
+    {
+        setLineSpacing( layout.lineSpacingValue() );
+        setLineSpacingType( m_layout.lineSpacingType );
+    }
     if ( flags & KoParagLayout::Borders )
     {
         setLeftBorder( layout.leftBorder );

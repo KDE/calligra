@@ -66,8 +66,10 @@ public:
     int alignment;
     /** left, right, top, bottom, firstLineSpacing - in pt */
     double margins[5];
-    enum { LS_ONEANDHALF = -1, LS_DOUBLE = -2 };
-    double lineSpacing;
+    enum spacingType { LS_SINGLE = 0, LS_ONEANDHALF = -1, LS_DOUBLE = -2, LS_CUSTOM = -3, LS_AT_LEAST = -4, LS_EXACTLY = -5, LS_MULTIPLE = -6};
+    spacingType lineSpacingType;
+    double lineSpacingValue() const { return lineSpacing;}
+    void setLineSpacingValue(double _value)  { lineSpacing = _value;}
     double shadowDistance;
     QColor shadowColor;
     enum {
@@ -115,7 +117,7 @@ public:
 
 private:
     KoTabulatorList m_tabList;
-
+    double lineSpacing;
     class Private;
     Private *d;
 
