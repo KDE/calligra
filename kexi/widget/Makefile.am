@@ -4,8 +4,8 @@ lib_LTLIBRARIES = libkexiextendedwidgets.la
 libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp \
 	kexiquerydesignersqleditor.cpp kexidatasourcecombo.cpp \
 	kexidatasourcewizard.cpp kexidswelcome.cpp kexidssource.cpp \
-	kexidatasourcefields.cpp
-# kexirecordnavigator.cpp kexifilterdlg.cpp kexiquerydesignersqleditor.cpp
+	kexidatasourcefields.cpp kexisectionheader.cpp
+
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ../tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
 

@@ -434,13 +434,19 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 
 	bool hasPKeys = true; //t->hasPrimaryKeys();
 	KListViewItem *item = 0;
-	for(uint i=0; i < t->fieldCount(); i++)
+	for(int i=-1; i < (int)t->fieldCount(); i++)
 	{
-		KexiDB::Field *f = t->field(i);
-		item = new KexiRelationViewTableItem(this, item, QString::number(order), f->name());
+		KexiDB::Field *f = 0;
+		if (i==-1) {
+			item = new KexiRelationViewTableItem(this, item, QString::number(order), "*");
+		}
+		else {
+			f = t->field(i);
+			item = new KexiRelationViewTableItem(this, item, QString::number(order), f->name());
+		}
 //		item = item ? new KexiRelationViewTableItem(this, item, QString::number(order), f.name())
 //			: new KexiRelationViewTableItem(this, QString::number(order), f.name());
-		if(f->isPrimaryKey() || f->isUniqueKey())
+		if(f && (f->isPrimaryKey() || f->isUniqueKey()))
 			item->setPixmap(1, m_keyIcon);
 		else if (hasPKeys) {
 			item->setPixmap(1, m_noIcon);
@@ -480,8 +486,11 @@ KexiRelationViewTable::dragObject()
 {
 	if(selectedItem())
 	{
-		KexiFieldDrag *drag = new KexiFieldDrag("kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
-		return drag;
+//		QString f = selectedItem()->text(1).stripWhiteSpace();
+//		if (f!="*") {
+			KexiFieldDrag *drag = new KexiFieldDrag("kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
+			return drag;
+//		}
 	}
 
 	return 0;
@@ -491,7 +500,15 @@ bool
 KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
 //	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
-	if(ev->provides("kexi/field") && ev->source() != (QWidget*)this)
+	QListViewItem *receiver = itemAt(ev->pos());
+	if (!receiver)
+		return false;
+	QString srcTable;
+	QString dummy;
+	QString srcField;
+	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
+	QString f = receiver->text(1).stripWhiteSpace();
+	if (srcField.stripWhiteSpace()!="*" && f!="*" && ev->provides("kexi/field") && ev->source() != (QWidget*)this)
 		return true;
 
 	return false;

@@ -21,8 +21,9 @@
 #ifndef KEXIRELATIONWIDGET_H
 #define KEXIRELATIONWIDGET_H
 
-#include <qwidget.h>
-#include "kexiactionproxy.h"
+//#include <qwidget.h>
+//#include "kexiactionproxy.h"
+#include "kexiviewbase.h"
 
 class QComboBox;
 class QPushButton;
@@ -39,7 +40,7 @@ namespace KexiDB
 	class Reference;
 }
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public QWidget, public KexiActionProxy
+class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidget, public KexiActionProxy
 {
 	Q_OBJECT
 
@@ -52,6 +53,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public QWidget, public KexiA
 
 //	signals:
 //		void openTable(KexiDB::TableSchema* table, bool designMode);
+
+		virtual QSize sizeHint() const;
 
 	public slots:
 		void slotAddTable();

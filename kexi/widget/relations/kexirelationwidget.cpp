@@ -42,8 +42,9 @@
 
 KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent, 
 	const char *name)
-	: QWidget(parent, name)
-	, KexiActionProxy(this)
+	: KexiViewBase(win, parent, name)
+//	: QWidget(parent, name)
+//	, KexiActionProxy(this)
 	, m_win(win)
 {
 	m_conn = m_win->project()->dbConnection();
@@ -64,6 +65,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	connect(m_btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
 	m_relationView = new KexiRelationView(this, m_conn);
+	setViewWidget(m_relationView);
 	g->addWidget(m_relationView, 1, 0);
 	m_relationView->setFocus();
 
@@ -253,6 +255,11 @@ void KexiRelationWidget::designSelectedTable()
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->table())
 		return;
 	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), Kexi::DesignViewMode);
+}
+
+QSize KexiRelationWidget::sizeHint() const
+{
+	return m_relationView->sizeHint();
 }
 
 #include "kexirelationwidget.moc"

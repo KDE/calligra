@@ -66,7 +66,6 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 		virtual QSize minimumSizeHint() const;
 		virtual QSize sizeHint() const;
 
-
 	protected slots:
 		void filter();
 		void slotCellSelected(int col, int row);

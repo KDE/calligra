@@ -21,6 +21,7 @@
 #ifndef KEXIRELATIONVIEW_H
 #define KEXIRELATIONVIEW_H
 
+#include <qguardedptr.h>
 #include <qscrollview.h>
 #include <qptrlist.h>
 #include <qdict.h>
@@ -82,6 +83,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		inline KexiRelationViewConnection* selectedConnection() const { return m_selectedConnection; }
 		inline KexiRelationViewTableContainer* focusedTableView() const { return m_focusedTableView; }
 
+		virtual QSize sizeHint() const;
+
 	signals:
 		void tableContextMenuRequest( const QPoint& pos );
 		void connectionContextMenuRequest( const QPoint& pos );
@@ -126,14 +129,15 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 //		void clearTableSelection();
 //		void clearConnSelection();
 
-	private:
+		void removeConnection(KexiRelationViewConnection *conn);
+
 		TableList		m_tables;
 //		RelationList		m_connections;
 		bool			m_readOnly;
 //		KexiRelation    	*m_relation;
 		ConnectionList		m_connectionViews;
-		KexiRelationViewConnection *m_selectedConnection;
-		KexiRelationViewTableContainer *m_focusedTableView;
+		KexiRelationViewConnection* m_selectedConnection;
+		QGuardedPtr<KexiRelationViewTableContainer> m_focusedTableView;
 	/*
 		KPopupMenu *m_tableQueryPopup //over table/query
 			, *m_connectionPopup //over connection

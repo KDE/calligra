@@ -94,6 +94,8 @@ KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, co
 
 	invalidateActions();
 #endif
+
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, true);
 }
 
 KexiRelationView::~KexiRelationView()
@@ -330,6 +332,8 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 	else {
 		emit emptyAreaGotFocus();
 	}
+	setFocus();
+//	QScrollView::contentsMousePressEvent(ev);
 }
 
 void KexiRelationView::clearSelection()
@@ -408,10 +412,7 @@ void
 KexiRelationView::removeSelectedObject()
 {
 	if (m_selectedConnection) {
-		m_connectionViews.remove(m_selectedConnection);
-		updateContents(m_selectedConnection->connectionRect());
-
-		kdDebug() << "KexiRelationView::removeSelectedConnection()" << endl;
+		removeConnection(m_selectedConnection);
 
 #if 0
 	RelationList l = m_relation->projectRelations();
@@ -441,9 +442,31 @@ KexiRelationView::removeSelectedObject()
 //		invalidateActions();
 	}
 	else if (m_focusedTableView) {
-		//TODO
-		KEXI_UNFINISHED(i18n("Hide table"));
+		//for all connections: find and remove all connected with this table
+		QPtrListIterator<KexiRelationViewConnection> it(m_connectionViews);
+		for (;it.current();) {
+			if (it.current()->srcTable() == m_focusedTableView 
+				|| it.current()->rcvTable() == m_focusedTableView)
+			{
+				//remove this
+				removeConnection(it.current());
+			}
+			else {
+				++it;
+			}
+		}
+		delete m_focusedTableView;
+		m_focusedTableView = 0;
+//		KEXI_UNFINISHED(i18n("Hide table"));
 	}
+}
+
+void
+KexiRelationView::removeConnection(KexiRelationViewConnection *conn)
+{
+	m_connectionViews.remove(conn);
+	updateContents(conn->connectionRect());
+	kdDebug() << "KexiRelationView::removeConnection()" << endl;
 }
 
 void KexiRelationView::slotTableViewGotFocus()
@@ -458,6 +481,12 @@ void KexiRelationView::slotTableViewGotFocus()
 //	invalidateActions();
 	emit tableViewGotFocus();
 }
+
+QSize KexiRelationView::sizeHint() const
+{
+	return QSize(QScrollView::sizeHint());//.width(), 600);
+}
+
 
 /*
 

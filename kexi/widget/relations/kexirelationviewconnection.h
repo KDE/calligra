@@ -21,7 +21,7 @@
 #define KEXIRELATIONVIEWCONNECTION_H
 
 #include <qstring.h>
-
+#include <qguardedptr.h>
 
 class QPainter;
 class KexiRelationViewTableContainer;
@@ -57,8 +57,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 //		SourceConnection	connection() { return m_conn; }
 
 	private:
-		KexiRelationViewTableContainer	*m_srcTable;
-		KexiRelationViewTableContainer	*m_rcvTable;
+		QGuardedPtr<KexiRelationViewTableContainer> m_srcTable;
+		QGuardedPtr<KexiRelationViewTableContainer> m_rcvTable;
 		QString				m_srcField;
 		QString				m_rcvField;
 
@@ -66,7 +66,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 
 		bool				m_selected;
 
-		KexiRelationView		*m_parent;
+		QGuardedPtr<KexiRelationView> m_parent;
 };
 
 #endif

@@ -40,9 +40,10 @@ KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent,
  , m_view(0)
 {
 	if (dbAware)
-		m_view = new KexiDataTableView(this, "view");
+		m_view = new KexiDataTableView(this, QString("%1_datatableview").arg(name ? name : "KexiDataTableView").latin1());
 	else
-		m_view = new KexiTableView(0, this, "view");
+		m_view = new KexiTableView(0, this, QString("%1_tableview").arg(name ? name : "KexiTableView").latin1());
+	setViewWidget(m_view);
 	init();
 }
 
@@ -85,8 +86,8 @@ void KexiDataTable::init()
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
 	resize( preferredSizeHint( m_view->sizeHint() ) );
 //js	m_view->show();
-//	setFocusProxy(m_view);
-	m_view->setFocus();
+	setFocusProxy(m_view);
+//	m_view->setFocus();
 //not needed	setIcon(SmallIcon("table"));
 	
 	initActions();
@@ -178,6 +179,7 @@ void KexiDataTable::slotCellSelected(int col, int row)
 
 void KexiDataTable::slotUpdateRowActions(int row)
 {
+	setAvailable("edit_delete",true);
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 	setAvailable("edit_insert_empty_row", m_view->isEmptyRowInsertingEnabled());
 	setAvailable("data_save_row", m_view->rowEditing());
