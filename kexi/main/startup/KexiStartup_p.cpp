@@ -140,3 +140,5 @@ void SQLite2ToSQLite3Migration::cancelClicked()
 	m_process->kill();
 }
 
+#include "KexiStartup_p.moc"
+

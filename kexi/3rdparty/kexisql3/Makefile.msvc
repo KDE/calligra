@@ -13,7 +13,6 @@ CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MDd -Z7 -GX -GR  -DUNICODE
 LEXFLAGS	=
 YACCFLAGS	=-d
 INCPATH	=	 -Isrc -I$(QTDIR)\include 
-#-I$(KDELIBS)\win
 LINK	=	link
 LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /DEBUG /SUBSYSTEM:console /DEF:sqlite3.def /DLL
 VERSION=3.0.7
@@ -182,7 +181,7 @@ TARGET	=	$(KDEDIR)/lib/kexisql3.dll
 
 ####### Build rules
 
-all: $(TARGET)
+all: $(TARGET) sqlite
 
 $(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC) 
 	$(LINK) $(LFLAGS) /OUT:$(TARGET) @<< 

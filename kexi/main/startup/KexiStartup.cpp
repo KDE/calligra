@@ -517,5 +517,3 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, QWidget *parent
 	return projectData;
 }
 
-#include "KexiStartup_p.moc"
-
