@@ -27,6 +27,7 @@ class QStringList;
 class QDomDocument;
 class QDomElement;
 class QDomNode;
+class KoStore;
 class KoDocumentInfoPage;
 
 class KoDocumentInfo : public QObject
@@ -40,6 +41,7 @@ public:
     bool loadOasis( const QDomDocument& metaDoc );
 
     QDomDocument save();
+    bool saveOasis( KoStore* store );
 
     /**
      * This info has an accessor because it's the most commonly used.

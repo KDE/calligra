@@ -24,6 +24,8 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <koApplication.h>
+#include <koStoreDevice.h>
+#include <koxmlwriter.h>
 
 /*****************************************
  *
@@ -97,6 +99,18 @@ QDomDocument KoDocumentInfo::save()
     }
 
     return doc;
+}
+
+bool KoDocumentInfo::saveOasis( KoStore* store )
+{
+    KoStoreDevice dev( store );
+    KoXmlWriter xmlWriter( &dev, "office:document-meta" );
+    xmlWriter.startElement( "office:meta" );
+    // TODO implement
+    xmlWriter.endElement();
+    xmlWriter.endElement(); // root element
+    xmlWriter.endDocument();
+    return true;
 }
 
 KoDocumentInfoPage* KoDocumentInfo::page( const QString& name ) const

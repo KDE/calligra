@@ -35,6 +35,7 @@
 #include <koFilterManager.h>
 #include <koDocumentInfo.h>
 #include <koOasisStyles.h>
+#include <koxmlwriter.h>
 
 #include <kprinter.h>
 #include <kio/netaccess.h>
@@ -90,7 +91,7 @@ public:
     Private() :
         m_dcopObject( 0L ),
         filterManager( 0L ),
-        m_specialOutputFlag( 0 ),
+        m_specialOutputFlag( KoDocument::SaveAsKOffice1dot3 ), // change to OASIS later
         m_isImporting( false ), m_isExporting( false ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
@@ -926,6 +927,8 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     }
 
     kdDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
+    // TODO: create store on stack, to remove all the 'delete store' in all the branches
+    // TODO: fix nativeFormatMimeType() for OASIS
     KoStore* store = KoStore::createStore( file, KoStore::Write, nativeFormatMimeType(), backend );
     if ( store->bad() )
     {
@@ -943,49 +946,126 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         return false;
     }
 
-    kdDebug(30003) << "Saving root" << endl;
-    if ( store->open( "root" ) )
+    if ( d->m_specialOutputFlag == SaveAsOASIS )
     {
-        KoStoreDevice dev( store );
-        if ( !saveToStream( &dev ) )
+        kdDebug(30003) << "Saving to OASIS format" << endl;
+        // Prepare manifest file - in memory
+        QByteArray manifestData;
+        QBuffer manifestBuffer( manifestData );
+        manifestBuffer.open( IO_WriteOnly );
+        KoXmlWriter* manifestWriter = new KoXmlWriter( &manifestBuffer );
+        manifestWriter->startDocument( "manifest:manifest" );
+        manifestWriter->startElement( "manifest:manifest" );
+        manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
+        // TODO add element for "/" itself (with the oasis mimetype)
+
+        if ( !saveOasis( store, manifestWriter ) )
         {
-            kdDebug(30003) << "saveToStream failed" << endl;
+            kdDebug(30003) << "saveOasis failed" << endl;
             delete store;
             return false;
         }
-        if ( !store->close() )
+
+        if ( store->open( "meta.xml" ) )
+        {
+            if ( !d->m_docInfo->saveOasis( store ) || !store->close() ) {
+                delete store;
+                return false;
+            }
+            manifestWriter->startElement( "manifest:file-entry" );
+            manifestWriter->addAttribute( "manifest:media-type", "text/xml" );
+            manifestWriter->addAttribute( "manifest:full-path", "meta.xml" );
+            manifestWriter->endElement();
+        }
+        else
+        {
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "meta.xml" );
+            delete store;
             return false;
+        }
+
+
+        if ( store->open( "preview.png" ) )
+        {
+            if ( !savePreview( store ) || !store->close() ) {
+                delete store;
+                return false;
+            }
+            manifestWriter->startElement( "manifest:file-entry" );
+            manifestWriter->addAttribute( "manifest:media-type", "image/png" );
+            manifestWriter->addAttribute( "manifest:full-path", "preview.png" );
+            manifestWriter->endElement();
+        }
+        else
+        {
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "preview.png" );
+            delete store;
+            return false;
+        }
+
+
+        // Write out manifest file
+        manifestWriter->endElement();
+        manifestWriter->endDocument();
+        delete manifestWriter;
+        if ( store->open( "META-INF/manifest.xml" ) )
+        {
+            Q_LONG ret = store->write( manifestData );
+            if ( ret != (Q_LONG)manifestData.size() || !store->close() ) {
+                delete store;
+                return false;
+            }
+        }
+        delete store;
     }
     else
     {
-        d->lastErrorMessage = i18n( "Not able to write 'maindoc.xml'. Partition full?" );
+        kdDebug(30003) << "Saving root" << endl;
+        if ( store->open( "root" ) )
+        {
+            KoStoreDevice dev( store );
+            if ( !saveToStream( &dev ) || !store->close() )
+            {
+                kdDebug(30003) << "saveToStream failed" << endl;
+                delete store;
+                return false;
+            }
+        }
+        else
+        {
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "maindoc.xml" );
+            delete store;
+            return false;
+        }
+        if ( store->open( "documentinfo.xml" ) )
+        {
+            QDomDocument doc = d->m_docInfo->save();
+            KoStoreDevice dev( store );
+
+            QCString s = doc.toCString(); // this is already Utf8!
+            (void)dev.writeBlock( s.data(), s.size()-1 );
+            (void)store->close();
+        }
+
+        if ( store->open( "preview.png" ) )
+        {
+            savePreview( store );
+            (void)store->close();
+        }
+
+        if ( !completeSaving( store ) )
+        {
+            delete store;
+            return false;
+        }
+        kdDebug(30003) << "Saving done of url: " << url().url() << endl;
         delete store;
-        return false;
     }
-    if ( store->open( "documentinfo.xml" ) )
-    {
-        QDomDocument doc = d->m_docInfo->save();
-        KoStoreDevice dev( store );
-
-        QCString s = doc.toCString(); // this is already Utf8!
-        (void)dev.writeBlock( s.data(), s.size()-1 );
-        (void)store->close();
-    }
-    if ( store->open( "preview.png" ) )
-    {
-        savePreview( store );
-        (void)store->close();
-    }
-
-    bool ret = completeSaving( store );
-    kdDebug(30003) << "Saving done of url: " << url().url() << endl;
-    delete store;
-
     if ( !saveExternalChildren() )
     {
         return false;
     }
-    return ret;
+    return true;
 }
 
 bool KoDocument::saveToStream( QIODevice * dev )
@@ -1043,7 +1123,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
     return true;
 }
 
-void KoDocument::savePreview( KoStore* store )
+bool KoDocument::savePreview( KoStore* store )
 {
     QPixmap pix = generatePreview(QSize(256, 256));
     // Reducing to 8bpp reduces file sizes quite a lot.
@@ -1059,7 +1139,7 @@ void KoDocument::savePreview( KoStore* store )
     imageIO.write();
     buffer.close();
 
-    store->write( imageData );
+    return store->write( imageData ) == (Q_LONG)imageData.size();
 }
 
 QPixmap KoDocument::generatePreview( const QSize& size )
@@ -1522,6 +1602,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     // OASIS/OOo file format?
     if ( store->hasFile( "content.xml" ) )
     {
+        d->m_specialOutputFlag = SaveAsOASIS;
         store->disallowNameExpansion();
 
         // TODO check mimetype file?
@@ -2080,6 +2161,14 @@ void KoDocument::slotStarted( KIO::Job* job )
     {
         job->setWindow( d->m_shells.current() );
     }
+}
+
+//// FOR TESTING ONLY, remove when making saveOasis pure virtual
+bool KoDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    kdError(30003) << "KoDocument::saveOasis not implemented" << endl;
+    d->lastErrorMessage = i18n( "Internal error: saveOasis not implemented" );
+    return true; // for testing
 }
 
 #include "koDocument_p.moc"

@@ -92,9 +92,11 @@ public:
         Q_ASSERT( !mimeFilter.isEmpty() );
         Q_ASSERT( mimeFilter[0] == nativeFormat );
 
+        int numSpecialEntries = 4;
+
         // Insert two entries with native mimetypes, for the special entries.
         QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
-        mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, 2, nativeFormat );
+        mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, numSpecialEntries, nativeFormat );
 
         // Fill in filter combo
         // Note: if currentFormat doesn't exist in mimeFilter, filterWidget
@@ -105,6 +107,9 @@ public:
         KMimeType::Ptr type = KMimeType::mimeType( nativeFormat );
         filterWidget->changeItem( i18n("%1 (KOffice-1.1 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot1 );
         filterWidget->changeItem( i18n("%1 (Uncompressed XML Files)").arg( type->comment() ), KoDocument::SaveAsDirectoryStore );
+        filterWidget->changeItem( i18n("%1 (KOffice-1.3 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot3 );
+        filterWidget->changeItem( i18n("%1 (OASIS Format - experimental)").arg( type->comment() ), KoDocument::SaveAsOASIS );
+        // if you add an entry here, update numSpecialEntries above and specialEntrySelected() below
 
         // For native format...
         if (currentFormat == nativeFormat || currentFormat.isEmpty())
@@ -126,7 +131,10 @@ public:
     {
         int i = filterWidget->currentItem();
         // This enum is the position of the special items in the filter combo.
-        if ( i == KoDocument::SaveAsKOffice1dot1 || i == KoDocument::SaveAsDirectoryStore )
+        if ( i == KoDocument::SaveAsKOffice1dot1
+             || i == KoDocument::SaveAsDirectoryStore
+             || i == KoDocument::SaveAsKOffice1dot3
+             || i == KoDocument::SaveAsOASIS )
             return i;
         return 0;
     }
@@ -795,25 +803,9 @@ bool KoMainWindow::saveDocument( bool saveas )
                 break;
             }
 
-// ###### To be _completely_ removed after KDE 3.1 support is dropped !
-// ###### KFileDialog provides configurable extension handling in 3.2.
-#if (!KDE_IS_VERSION (3, 1, 90))
-                if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
-                    // No more extensions in filters. We need to get it from the mimetype.
-                    KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
-                    QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
-                    kdDebug(30003) << "KoMainWindow::saveDocument outputFormat=" << outputFormat << " extension=" << extension << endl;
-                    newURL.setPath( newURL.path() + extension );
-                }
-#endif
-
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
-#if KDE_IS_VERSION(3,1,90)
             if ( KIO::NetAccess::exists( newURL, false /*will write*/, this ) && !justChangingFilterOptions )
-#else
-            if ( KIO::NetAccess::exists( newURL, this ) && !justChangingFilterOptions )
-#endif
             {
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\

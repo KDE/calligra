@@ -43,6 +43,7 @@ class KoView;
 class KoDocumentInfo;
 class DCOPObject;
 class KoOasisStyles;
+class KoXmlWriter;
 
 /**
  *  The KOffice document class
@@ -190,13 +191,15 @@ public:
 
     KService::Ptr nativeService();
 
-    enum { SaveAsKOffice1dot1 = 1, SaveAsDirectoryStore = 2 };
+    /// Enum values used by specialOutputFlag
+    enum { SaveAsKOffice1dot1 = 1, SaveAsDirectoryStore = 2,
+           SaveAsKOffice1dot3 = 3, SaveAsOASIS = 4 };
 
     /**
      * Returns the actual mimetype of the document
      */
     QCString mimeType() const;
-    
+
     /**
      * Sets the mime type for the document.
      * When choosing "save as" this is also the mime type
@@ -434,6 +437,12 @@ public:
     virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles, KoStore* store ) = 0;
 
     /**
+     *  Reimplement this method to save the contents of your KOffice document,
+     *  using the OASIS format.
+     */
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter ) /*= 0 TODO */;
+
+    /**
      *  Reimplement this to save the contents of the KOffice document into
      *  a QDomDocument. The framework takes care of saving it to the store.
      */
@@ -444,11 +453,12 @@ public:
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  @param tagName the name of the tag for the root element
      *  @param version the DTD version (usually the application's version).
+     *  @deprecated use the KoXmlWriter::createOasisXmlWriter instead
      */
     QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
 
     /**
-     *  Return a correctly created QDomDocument for a KOffice document,
+     *  Return a correctly created QDomDocument for an old (1.3-style) KOffice document,
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  This static method can be used e.g. by filters.
      *  @param appName the app's instance name, e.g. kword, kspread, kpresenter etc.
@@ -855,7 +865,7 @@ private slots:
 private:
     bool loadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );
-    void savePreview( KoStore* store );
+    bool savePreview( KoStore* store );
 
     class Private;
     Private *d;
