@@ -99,20 +99,20 @@ public:
 class KWTextParagCommand : public QTextCommand
 {
 public:
-    enum Flags { All, Alignment, Counter, Margin, LineSpacing, Borders, Tabulator, PageBreaking };
     KWTextParagCommand( QTextDocument *d, int fParag, int lParag,
                         const QValueList<KWParagLayout> &oldParagLayouts,
                         KWParagLayout newParagLayout,
-                        Flags flags,
-                        QStyleSheetItem::Margin margin = QStyleSheetItem::MarginLeft ); // Only meaningful if flags==Margin
+                        int /*KWParagLayout::Flags*/ flags,
+                        QStyleSheetItem::Margin margin = (QStyleSheetItem::Margin)-1 );
+                        // margin is only meaningful if flags==Margins only. -1 means all.
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 protected:
     int firstParag, lastParag;
     QValueList<KWParagLayout> m_oldParagLayouts;
     KWParagLayout m_newParagLayout;
-    int m_flags:4;
-    int m_margin:3;
+    int m_flags;
+    int m_margin;
 };
 
 /**

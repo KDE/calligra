@@ -251,13 +251,18 @@ public:
 
     int gridX() { return m_gridX; }
     int gridY() { return m_gridY; }
-    void setGridX(int _gridx) {m_gridX=_gridx;}
-    void setGridY(int _gridy) {m_gridY=_gridy;}
+    void setGridX(int _gridx) { m_gridX = _gridx; }
+    void setGridY(int _gridy) { m_gridY = _gridy; }
 
+    // Currently unused. Not sure we want to go that way, now that we have
+    // paragLayoutChanged and formatChanged in applyStyleChange.
     int applyStyleChangeMask() { return styleMask; }
     void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
 
-    void applyStyleChange( KWStyle * changedStyle );
+    // paragLayoutChanged is a set of flags for the parag layout - see the enum in KWParagLayout
+    // formatChanged is a set of flags from QTextFormat
+    // If both are -1, it means the style has been deleted.
+    void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     void updateAllStyleLists();
 
     bool isHeaderVisible() const { return m_headerVisible; }

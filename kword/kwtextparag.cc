@@ -523,7 +523,7 @@ int KWTextParag::nextTab( int chnum, int x )
 }
 
 //static
-QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len )
+QDomElement KWTextParag::saveFormat( QDomDocument & doc, KWTextFormat * curFormat, KWTextFormat * refFormat, int pos, int len )
 {
     QDomElement formatElem = doc.createElement( "FORMAT" );
     formatElem.setAttribute( "id", 1 ); // text format
@@ -603,14 +603,15 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     QDomElement formatsElem = doc.createElement( "FORMATS" );
     int startPos = -1;
     int index = 0; // Usually same as 'i' but if from>0, 'i' indexes the parag's text and this one indexes the output
-    QTextFormat *curFormat = paragFormat();
+    KWTextFormat *curFormat = paragraphFormat();
     for ( int i = from; i <= to; ++i, ++index )
     {
         QTextStringChar & ch = string()->at(i);
         if ( ch.isCustom() )
         {
             if ( startPos > -1 && curFormat) { // Save former format
-                QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
+                QDomElement formatElem = saveFormat( doc, curFormat,
+                                                     paragraphFormat(), startPos, index-startPos );
                 if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                     formatsElem.appendChild( formatElem );
             }
@@ -624,12 +625,12 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
         }
         else
         {
-            QTextFormat * newFormat = ch.format();
+            KWTextFormat * newFormat = static_cast<KWTextFormat *>( ch.format() );
             if ( newFormat != curFormat )
             {
                 // Format changed.
                 if ( startPos > -1 && curFormat) { // Save former format
-                    QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
+                    QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), startPos, index-startPos );
                     if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                         formatsElem.appendChild( formatElem );
                 }
@@ -643,13 +644,13 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
                 else
                 {
                     startPos = -1;
-                    curFormat = paragFormat();
+                    curFormat = paragraphFormat();
                 }
             }
         }
     }
     if ( startPos > -1 && index > startPos && curFormat) { // Save last format
-        QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
+        QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), startPos, index-startPos );
         if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
             formatsElem.appendChild( formatElem );
     }
@@ -666,14 +667,14 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     // Paragraph's format
     // ## Maybe we should have a "default format" somewhere and
     // pass it instead of 0L, to only save the non-default attributes
-    QDomElement paragFormatElement = saveFormat( doc, paragFormat(), 0L, 0, to - from + 1 );
+    QDomElement paragFormatElement = saveFormat( doc, paragraphFormat(), 0L, 0, to - from + 1 );
     layoutElem.appendChild( paragFormatElement );
 }
 
 //static
-QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refFormat, const QFont & defaultFont )
+KWTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KWTextFormat * refFormat, const QFont & defaultFont )
 {
-    QTextFormat format;
+    KWTextFormat format;
     if ( refFormat )
         format = *refFormat;
     QFont font = format.font();
@@ -730,12 +731,12 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         setParagLayout( paragLayout );
 
         // Load default format from style.
-        QTextFormat *defaultFormat = style() ? &style()->format() : 0L;
+        KWTextFormat *defaultFormat = style() ? &style()->format() : 0L;
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
         {
             // Load paragraph format
-            QTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont() );
+            KWTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont() );
             setFormat( document()->formatCollection()->format( &f ) );
         }
         else // No paragraph format
@@ -789,7 +790,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 switch( id ) {
                 case 1: // Normal text
                 {
-                    QTextFormat f = loadFormat( formatElem, paragFormat(), doc->defaultFont() );
+                    KWTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                     //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
@@ -826,7 +827,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << endl;
                         KWVariable * var = KWVariable::createVariable( type, -1, textDocument()->textFrameSet() );
                         var->load( varElem );
-                        QTextFormat f = loadFormat( formatElem, paragFormat(), doc->defaultFont() );
+                        KWTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );
                         var->recalc();
                     }
@@ -863,19 +864,29 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     }
 }
 
-void KWTextParag::setParagLayout( const KWParagLayout & layout )
+void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
 {
-    setAlign( layout.alignment );
-    setMargins( layout.margins );
-    setLinesTogether( layout.linesTogether );
-    setLineSpacing( layout.lineSpacing );
-    setLeftBorder( layout.leftBorder );
-    setRightBorder( layout.rightBorder );
-    setTopBorder( layout.topBorder );
-    setBottomBorder( layout.bottomBorder );
-    setCounter( layout.counter );
+    kdDebug() << "KWTextParag::setParagLayout flags=" << flags << endl;
+    if ( flags & KWParagLayout::Alignment )
+        setAlign( layout.alignment );
+    if ( flags & KWParagLayout::Margins )
+         setMargins( layout.margins );
+    if ( flags & KWParagLayout::PageBreaking )
+        setLinesTogether( layout.linesTogether );
+    if ( flags & KWParagLayout::LineSpacing )
+        setLineSpacing( layout.lineSpacing );
+    if ( flags & KWParagLayout::Borders )
+    {
+        setLeftBorder( layout.leftBorder );
+        setRightBorder( layout.rightBorder );
+        setTopBorder( layout.topBorder );
+        setBottomBorder( layout.bottomBorder );
+    }
+    if ( flags & KWParagLayout::BulletNumber )
+        setCounter( layout.counter );
+    if ( flags & KWParagLayout::Tabulator )
+        setTabList( layout.tabList() );
 
-    setTabList( layout.tabList() );
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
     setStyle( layout.style );
 }
@@ -969,6 +980,48 @@ void KWParagLayout::operator=( const KWParagLayout &layout )
     lineSpacing = layout.lineSpacing;
     style = layout.style;
     setTabList( layout.tabList() );
+}
+
+int KWParagLayout::compare( const KWParagLayout & layout ) const
+{
+    int flags = 0;
+    if ( alignment != layout.alignment )
+        flags |= Alignment;
+    for ( int i = 0 ; i < 5 ; ++i )
+        if ( margins[i] != layout.margins[i] )
+        {
+            flags |= Margins;
+            break;
+        }
+    if ( linesTogether != layout.linesTogether )
+        flags |= PageBreaking;
+    if ( leftBorder != layout.leftBorder
+         || rightBorder != layout.rightBorder
+         || topBorder != layout.topBorder
+         || bottomBorder != layout.bottomBorder )
+        flags |= Borders;
+
+    if ( layout.counter )
+    {
+        if ( counter )
+        {
+            if ( ! ( *layout.counter == *counter ) )
+                flags |= BulletNumber;
+        } else
+            if ( layout.counter->numbering() != Counter::NUM_NONE )
+                flags |= BulletNumber;
+    }
+    else
+        if ( counter && counter->numbering() != Counter::NUM_NONE )
+            flags |= BulletNumber;
+
+    if ( lineSpacing != layout.lineSpacing )
+        flags |= LineSpacing;
+    //if ( style != layout.style )
+    //    flags |= Style;
+    if ( m_tabList != m_tabList )
+        flags |= Tabulator;
+    return flags;
 }
 
 // Create a KWParagLayout from XML.

@@ -104,3 +104,28 @@ void KWTextFormat::generateKey()
     setKey( k );
     //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 }
+
+int KWTextFormat::compare( const KWTextFormat & format ) const
+{
+    int flags = 0;
+    if ( fn.weight() != format.fn.weight() )
+        flags |= QTextFormat::Bold;
+    if ( fn.italic() != format.fn.italic() )
+        flags |= QTextFormat::Italic;
+    if ( fn.underline() != format.fn.underline() )
+        flags |= QTextFormat::Underline;
+    if ( fn.family() != format.fn.family() )
+        flags |= QTextFormat::Family;
+    if ( fn.pointSize() != format.fn.pointSize() )
+        flags |= QTextFormat::Size;
+    if ( color() != format.color() )
+        flags |= QTextFormat::Color;
+    // todo misspelled
+    if ( vAlign() != format.vAlign() )
+        flags |= QTextFormat::VAlign;
+
+    if ( fn.strikeOut() != format.fn.strikeOut() )
+        flags |= KWTextFormat::StrikeOut;
+
+    return flags;
+}

@@ -117,7 +117,7 @@ QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
 KWTextParagCommand::KWTextParagCommand( QTextDocument *d, int fParag, int lParag,
                                         const QValueList<KWParagLayout> &oldParagLayouts,
                                         KWParagLayout newParagLayout,
-                                        Flags flags,
+                                        int flags,
                                         QStyleSheetItem::Margin margin )
     : QTextCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldParagLayouts( oldParagLayouts ),
       m_newParagLayout( newParagLayout ), m_flags( flags ), m_margin( margin )
@@ -134,37 +134,11 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
         return c;
     }
     while ( p ) {
-        switch ( m_flags ) {
-            case All:
-                p->setParagLayout( m_newParagLayout );
-                break;
-            case Alignment:
-                p->setAlign( m_newParagLayout.alignment );
-                break;
-            case Counter:
-                p->setCounter( m_newParagLayout.counter );
-                break;
-            case Margin:
-                p->setMargin( static_cast<QStyleSheetItem::Margin>(m_margin), m_newParagLayout.margins[m_margin] );
-                break;
-	    case LineSpacing:
-	        p->setLineSpacing( m_newParagLayout.lineSpacing );
-                break;
-	    case Borders:
-          	p->setLeftBorder(m_newParagLayout.leftBorder);
-	        p->setRightBorder(m_newParagLayout.rightBorder);
-	        p->setBottomBorder(m_newParagLayout.bottomBorder);
-	        p->setTopBorder(m_newParagLayout.topBorder);
-	        break;
-            case Tabulator:
-                p->setTabList( m_newParagLayout.tabList() );
-                break;
-            case PageBreaking:
-                p->setLinesTogether( m_newParagLayout.linesTogether );
-                break;
-            default:
-                kdWarning() << "Houston we have a problem" << endl;
-                break;
+        if ( ( m_flags & KWParagLayout::Margins ) && m_margin != (QStyleSheetItem::Margin)-1 ) // all
+            p->setMargin( static_cast<QStyleSheetItem::Margin>(m_margin), m_newParagLayout.margins[m_margin] );
+        else
+        {
+            p->setParagLayout( m_newParagLayout, m_flags );
         }
         if ( p->paragId() == lastParag )
             break;
@@ -192,37 +166,11 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
             kdDebug() << "KWTextParagCommand::unexecute m_oldParagLayouts not big enough!" << endl;
             break;
         }
-        switch ( m_flags ) {
-            case All:
-                p->setParagLayout( *lit );
-                break;
-            case Alignment:
-                p->setAlign( (*lit).alignment );
-                break;
-            case Counter:
-                //kdDebug() << "KWTextParagCommand::unexecute restoring counter " << (*lit).counter.counterType << endl;
-                p->setCounter( (*lit).counter );
-                break;
-            case Margin:
-                p->setMargin( static_cast<QStyleSheetItem::Margin>(m_margin), (*lit).margins[m_margin] );
-                break;
-            case LineSpacing:
-                p->setLineSpacing( (*lit).lineSpacing );
-                break;
-	    case Borders:
-          	p->setLeftBorder((*lit).leftBorder);
-	        p->setRightBorder((*lit).rightBorder);
-	        p->setBottomBorder((*lit).bottomBorder);
-	        p->setTopBorder((*lit).topBorder);
-	        break;
-            case Tabulator:
-                p->setTabList( (*lit).tabList() );
-                break;
-            case PageBreaking:
-                p->setLinesTogether( (*lit).linesTogether );
-                break;
-            default:
-                kdDebug() << "KWTextParagCommand::unexecute unhandled flag " << m_flags << endl;
+        if ( m_flags & KWParagLayout::Margins && m_margin != (QStyleSheetItem::Margin)-1 ) // just one
+            p->setMargin( static_cast<QStyleSheetItem::Margin>(m_margin), (*lit).margins[m_margin] );
+        else
+        {
+            p->setParagLayout( *lit, m_flags );
         }
         if ( p->paragId() == lastParag )
             break;

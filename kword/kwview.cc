@@ -28,7 +28,6 @@
 #include <qclipboard.h>
 #include <qsplitter.h>
 #include <kaction.h>
-//#include <qfiledialog.h>
 #include <qregexp.h>
 #include <qobjectlist.h>
 #include <qpaintdevicemetrics.h>
@@ -97,7 +96,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     doc = 0L;
     gui = 0;
     kspell = 0;
-    //vertAlign = KWFormat::VA_NORMAL;
     m_border.left.color = white;
     m_border.left.style = Border::SOLID;
     m_border.left.ptWidth = 0;
@@ -169,7 +167,7 @@ void KWView::initConfig()
   KConfig *config = KWFactory::global()->config();
   KSpellConfig ksconfig;
   if( config->hasGroup("KSpell kword" ) )
-    {
+  {
       config->setGroup( "KSpell kword" );
       ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
       ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
@@ -178,9 +176,9 @@ void KWView::initConfig()
       ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
       ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
       getGUI()->getDocument()->setKSpellConfig(ksconfig);
-    }
+  }
   if(config->hasGroup("Interface" ) )
-    {
+  {
       config->setGroup( "Interface" );
       getGUI()->getDocument()->setGridY(config->readNumEntry("GridY",10));
       getGUI()->getDocument()->setGridX(config->readNumEntry("GridX",10));
@@ -191,7 +189,7 @@ void KWView::initConfig()
 
       doc->setShowRuler(config->readBoolEntry("Rulers",true));
       doc->setAutoSave((config->readNumEntry("AutoSave",1))*60);
-    }
+  }
 }
 
 void KWView::changeNbOfRecentFiles(int _nb)
@@ -1626,9 +1624,14 @@ void KWView::extraAutoFormat()
 
 void KWView::extraStylist()
 {
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->hideCursor();
     KWStyleManager * styleManager = new KWStyleManager( this, doc );
     styleManager->show();
     delete styleManager;
+    if ( edit )
+        edit->showCursor();
 }
 
 void KWView::extraCreateTemplate()
@@ -1929,7 +1932,6 @@ void KWView::tableSplitCells()
     if(selectedFrames.count() >1 || table == 0) {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
-                            //i18n( "You have to select one table cell\n"
                                   "before splitting cells." ),
                             i18n( "Split Cells" ) );
         return;
@@ -2143,7 +2145,7 @@ void KWView::textIncreaseIndent()
         double indent = doc->getIndentValue();
         double newVal = leftMargin + indent;
         // Test commented out. This breaks with the DTP case... The user can put
-        // a frame anywhere, even closed to the edges than left/right border allows (DF).
+        // a frame anywhere, even closer to the edges than left/right border allows (DF).
         //if( newVal <= (doc->ptPaperWidth()-doc->ptRightBorder()-doc->ptLeftBorder()))
         {
             edit->setMargin( QStyleSheetItem::MarginLeft, newVal );

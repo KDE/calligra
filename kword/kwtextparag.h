@@ -26,6 +26,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <kwformat.h>
 #include <koRuler.h>
 
 using namespace Qt3;
@@ -56,6 +57,19 @@ public:
     // Save to XML.
     void save( QDomElement & parentElem );
 
+    // This enum is used to mark parts of a KWParagLayout as changed
+    // (i.e. when changing them in the dialog/stylist)
+    enum { Alignment = 1,
+           BulletNumber = 2, // Can't use Counter : )
+           Margins = 4,
+           LineSpacing = 8,
+           Borders = 16,
+           Tabulator = 32,
+           PageBreaking = 64,
+           /* Style is maybe missing */
+           All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking
+    } Flags;
+
     // This class is used as a struct, which explains the public vars :)
     int alignment;
     double margins[5]; // left, right, top, bottom, firstLineSpacing - in pt
@@ -70,6 +84,10 @@ public:
     KoTabulatorList tabList() const { return m_tabList; }
 
     void operator=( const KWParagLayout & );
+
+    // Return a set of flags showing the differences between this and 'layout'
+    int compare( const KWParagLayout & layout ) const;
+
 private:
     KoTabulatorList m_tabList;
 
@@ -88,8 +106,11 @@ public:
 
     KWTextDocument * textDocument() const;
 
+    KWTextFormat * paragraphFormat() const
+    { return static_cast<KWTextFormat *>( paragFormat() ); }
+
     // Sets all the parameters from a paraglayout struct
-    void setParagLayout( const KWParagLayout &layout );
+    void setParagLayout( const KWParagLayout &layout, int flags = KWParagLayout::All );
     const KWParagLayout & paragLayout() { return m_layout; }
 
     // Margins
@@ -141,8 +162,8 @@ public:
     void setTabList( const KoTabulatorList &tabList );
 
     // Public for KWStyle
-    static QDomElement saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len );
-    static QTextFormat loadFormat( QDomElement &formatElem, QTextFormat * refFormat, const QFont & defaultFont );
+    static QDomElement saveFormat( QDomDocument & doc, KWTextFormat * curFormat, KWTextFormat * refFormat, int pos, int len );
+    static KWTextFormat loadFormat( QDomElement &formatElem, KWTextFormat * refFormat, const QFont & defaultFont );
 
     void save( QDomElement &parentElem, int from = 0, int to = -1 );
     void load( QDomElement &attributes );

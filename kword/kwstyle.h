@@ -21,6 +21,7 @@
 #define kwstyle_h
 
 #include "kwtextparag.h"
+#include "kwformat.h"
 
 /**
  * A style is a combination of formatting attributes (font, color, etc.)
@@ -47,8 +48,8 @@ public:
 
     // Return a format. Don't forget to use the format collection
     // of your QTextDocument from the result of that method.
-    const QTextFormat & format() const { return m_format; }
-    QTextFormat & format() { return m_format; }
+    const KWTextFormat & format() const { return m_format; }
+    KWTextFormat & format() { return m_format; }
 
     KWStyle *followingStyle() { return m_followingStyle; }
     void setFollowingStyle( KWStyle *fst ) { m_followingStyle = fst; }
@@ -58,7 +59,7 @@ public:
 private:
     KWParagLayout m_paragLayout;
     QString m_name;
-    QTextFormat m_format;
+    KWTextFormat m_format;
     KWStyle *m_followingStyle;
 };
 

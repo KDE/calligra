@@ -329,24 +329,34 @@ void KWStyleManager::slotOk() {
 void KWStyleManager::apply() {
     noSignals=true;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
-kdDebug() << "i: " << i << endl;
         if(m_origStyles.at(i) == 0) {           // newly added style
 kdDebug() << "adding new " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
             m_doc->addStyleTemplate(m_changedStyles.at(i));
         } else if(m_changedStyles.at(i) == 0) { // deleted style
 kdDebug() << "deleting orig " <<  m_origStyles.at(i)->name() << " (" << i << ")" <<  endl;
-            m_doc->removeStyleTemplate(m_origStyles.at(i));
+
+            KWStyle *orig = m_origStyles.at(i);
+            m_doc->applyStyleChange( orig, -1, -1 );
+            m_doc->removeStyleTemplate( orig );
+            // Note that the style is never deleted (we'll need it for undo/redo purposes)
+
         } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
 kdDebug() << "update style " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
                                                 // simply updated style
             KWStyle *orig = m_origStyles.at(i);
             KWStyle *changed = m_changedStyles.at(i);
 
+            int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
+            int formatChanged = orig->format().compare( changed->format() );
+
             // Copy everything from changed to orig
             *orig = *changed;
-        } else {
-kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
-        }
+
+            // Apply the change selectively - i.e. only what changed
+            m_doc->applyStyleChange( orig, paragLayoutChanged, formatChanged );
+
+        }// else
+         //     kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
     }
 
     m_doc->updateAllStyleLists();
@@ -375,8 +385,6 @@ void KWStyleManager::renameStyle(const QString &theText) {
 /******************************************************************/
 /* Class: KWStylePreview                                          */
 /******************************************************************/
-
-/*================================================================*/
 void KWStylePreview::drawContents( QPainter *painter ) {
     QRect r = contentsRect();
     QFontMetrics fm( font() );
@@ -401,44 +409,7 @@ void KWStylePreview::drawContents( QPainter *painter ) {
                        fm.height(), 0, i18n( "KWord, KOffice's Wordprocessor" ) );
 }
 
-
-#if 0
-bool KWStyleEditor::apply() {
-/*
-    *ostyle = *style;
-
-    // Apply name change
-    if ( eName->text() != style->name() )
-    {
-        bool same = false;
-	QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
-        for ( unsigned int i = 0; i < styles.count() && !same; i++ ) {
-            if ( styles.at( i )->name() == eName->text() )
-                same = true;
-        }
-
-        if ( !same ) {
-            ostyle->setName( eName->text() );
-            emit updateStyleList();
-        }
-    }
-
-    // Apply "following style" change
-    ostyle->setFollowingStyle( cFollowing->currentText() );
-
-    // ### TODO a dirty flag for this !
-    doc->applyStyleChange( ostyle );
-*/
-    return true;
-}
-
-void KWStyleEditor::slotOk() {
-   if (apply())
-   {
-      KDialogBase::slotOk();
-   }
-}
-#endif
+/////////////
 
 void KWStyleParagTab::setWidget( KWParagLayoutWidget * widget )
 {

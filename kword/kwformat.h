@@ -40,6 +40,9 @@ public:
 
     virtual void copyFormat( const QTextFormat & nf, int flags );
 
+    // Return a set of flags showing the differences between this and 'format'
+    int compare( const KWTextFormat & format ) const;
+
     // Extending QTextFormat's enum
     enum { StrikeOut = 256 };
 

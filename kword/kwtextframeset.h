@@ -152,8 +152,9 @@ public:
     void setPageBreaking( QTextCursor * cursor, bool linesTogether );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
-    void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
-    void applyStyleChange( KWStyle * changedStyle );
+    void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard,
+                     int paragLayoutFlags = KWParagLayout::All , int formatFlags = QTextFormat::Format );
+    void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
     void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );
 
@@ -349,6 +350,9 @@ public:
 public slots:
     void updateUI();
     void ensureCursorVisible();
+    // This allows KWTextFrameSet to hide/show all the cursors before modifying anything
+    void hideCursor() { drawCursor( false ); }
+    void showCursor() { drawCursor( true ); }
 
 protected:
     void placeCursor( const QPoint &pos /* in internal coordinates */ );
@@ -358,9 +362,6 @@ protected:
 private slots:
     void blinkCursor();
     void startDrag();
-    // This allows KWTextFrameSet to hide/show all the cursors before modifying anything
-    void hideCursor() { drawCursor( false ); }
-    void showCursor() { drawCursor( true ); }
     void setCursor( QTextCursor * _cursor ) { *cursor = *_cursor; }
     void showCurrentFormat();
 
