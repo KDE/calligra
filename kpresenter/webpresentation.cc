@@ -54,6 +54,7 @@
 #include <qwmatrix.h>
 #include <qfiledialog.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kcolorbtn.h>
 #include <kfiledialog.h>
@@ -92,7 +93,7 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_do
 /*================================================================*/
 KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
-      slideTitles( webPres.slideTitles ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
+      slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
       textColor( webPres.textColor ), path( webPres.path ), imgFormat( webPres.imgFormat ), zoom( webPres.zoom )
 {
     doc = webPres.doc;
@@ -111,11 +112,20 @@ void KPWebPresentation::loadConfig()
     author = cfg.readEntry( "Author", author );
     title = cfg.readEntry( "Title", title );
     email = cfg.readEntry( "EMail", email );
-    unsigned int num = cfg.readNumEntry( "Slides", doc->getPageNums() );
+    unsigned int num = cfg.readNumEntry( "Slides", slideInfos.count() );
+    //kdDebug() << "KPWebPresentation::loadConfig num=" << num << endl;
 
-    if ( num <= doc->getPageNums() ) {
+    if ( num <= slideInfos.count() ) {
         for ( unsigned int i = 0; i < num; i++ )
-            slideTitles[ i ] = cfg.readEntry( QString( "SlideTitle[%1]" ).arg( i ), slideTitles[ i ] );
+        {
+            QString key = QString::fromLatin1( "SlideTitle%1" ).arg( i );
+            if ( cfg.hasKey( key ) )
+            {
+                // We'll assume that the selected pages haven't changed... Hmm.
+                slideInfos[ i ].slideTitle = cfg.readEntry( key );
+                kdDebug() << "KPWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
+            } else kdDebug() << " key not found " << key << endl;
+        }
     }
 
     backColor = cfg.readColorEntry( "BackColor", &backColor );
@@ -135,10 +145,10 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "Author", author );
     cfg.writeEntry( "Title", title );
     cfg.writeEntry( "EMail", email );
-    cfg.writeEntry( "Slides", doc->getPageNums() );
+    cfg.writeEntry( "Slides", slideInfos.count() );
 
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
-        cfg.writeEntry( QString( "SlideTitle[ %1 ]" ).arg( i ), slideTitles[ i ] );
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ )
+        cfg.writeEntry( QString::fromLatin1( "SlideTitle%1" ).arg( i ), slideInfos[ i ].slideTitle );
 
     cfg.writeEntry( "BackColor", backColor );
     cfg.writeEntry( "TitleColor", titleColor );
@@ -194,16 +204,16 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
     QString format = imageFormat( imgFormat );
     int p;
 
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-        pix.resize( QSize( doc->getPageRect( 0, 0, 0, 1.0, false ).width(),
-                           doc->getPageRect( 0, 0, 0, 1.0, false ).height() ) );
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
+        pix.resize( doc->getPageRect( 0, 0, 0, 1.0, false ).size() );
         pix.fill( Qt::white );
-        view->getPage()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0, 1.0, false ).height(), i );
+        int pgNum = slideInfos[i].pageNumber;
+        view->getPage()->drawPageInPix2( pix, pgNum * doc->getPageRect( 0, 0, 0, 1.0, false ).height(), pgNum );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {
             QWMatrix m;
             m.scale( ( (float)zoom ) / 100.0, ( (float)zoom ) / 100.0 );
-            pix = pix.xForm( m );
+            pix = pix.xForm( m ); // maybe we should use smoothScale ?
         }
         pix.save( filename, QFile::encodeName(format.upper()) );
 
@@ -221,9 +231,9 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     QString format = imageFormat( imgFormat );
 
     QString html;
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         pgNum = i + 1;
-        html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE></HEAD>\n" ).arg( title ).arg( slideTitles[ i ] );
+        html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE></HEAD>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
         html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
 
@@ -244,18 +254,18 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         else
             html += "\n";
 
-        if ( i < doc->getPageNums() - 1 )
+        if ( i < slideInfos.count() - 1 )
             html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( pgNum + 1 );
         html += QString( "<IMG src=\"../pics/next.%1\" border=\"0\">" ).arg( format );
-        if ( i < doc->getPageNums() - 1 )
+        if ( i < slideInfos.count() - 1 )
             html += "</A>\n";
         else
             html += "\n";
 
-        if ( i < doc->getPageNums() - 1 )
-            html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( doc->getPageNums() );
+        if ( i < slideInfos.count() - 1 )
+            html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( slideInfos.count() );
         html += QString( "<IMG src=\"../pics/last.%1\" border=\"0\">" ).arg( format );
-        if ( i < doc->getPageNums() - 1 )
+        if ( i < slideInfos.count() - 1 )
             html += "</A>\n";
         else
             html += "\n";
@@ -269,7 +279,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         html += "  </CENTER><BR><HR noshade>\n";
 
         html += QString( "  <FONT color=\"%1\">\n" ).arg( titleColor.name() );
-        html += QString( "  <CENTER><B>%1</B> - <I>%2</I></CENTER>\n" ).arg( title ).arg( slideTitles[ i ] );
+        html += QString( "  <CENTER><B>%1</B> - <I>%2</I></CENTER>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
         html += "  </FONT><HR noshade><BR>\n";
 
@@ -325,8 +335,8 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     html += "<B>Table of Contents</B><BR>\n";
     html += "<OL>\n";
 
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
-        html += QString( "  <LI><A HREF=\"html/slide_%1.html\">%2</A><BR>\n" ).arg( i + 1 ).arg( slideTitles[ i ] );
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ )
+        html += QString( "  <LI><A HREF=\"html/slide_%1.html\">%2</A><BR>\n" ).arg( i + 1 ).arg( slideInfos[ i ].slideTitle );
 
     html += "</OL></BODY></HTML>\n";
 
@@ -362,7 +372,15 @@ void KPWebPresentation::init()
     title = i18n("Slideshow");
 
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
-        slideTitles.append( doc->getPageTitle( i, QString( "Slide %1" ).arg( i ) ) );
+    {
+        if ( doc->isSlideSelected( i ) )
+        {
+            SlideInfo info;
+            info.pageNumber = i;
+            info.slideTitle = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i+1 ) );
+            slideInfos.append( info );
+        }
+    }
 
     backColor = Qt::white;
     textColor = Qt::black;
@@ -591,11 +609,12 @@ void KPWebPresentationWizard::setupPage3()
     slideTitles->setSorting( -1 );
     slideTitles->header()->setMovingEnabled( false );
 
-    for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
+    QValueList<KPWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
+    for ( int i = infos.count() - 1; i >= 0; --i ) {
         QListViewItem *item = new QListViewItem( slideTitles );
-        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, (int)webPres.getSlideTitles().count() > i ?
-                       QString( webPres.getSlideTitles()[ i ] ) : QString( "No Title" ) );
+        item->setText( 0, QString::number( i + 1 ) );
+        //kdDebug() << "KPWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
+        item->setText( 1, infos[ i ].slideTitle );
     }
 
     addPage( page3, i18n( "Slide Titles" ) );
@@ -610,11 +629,9 @@ void KPWebPresentationWizard::finish()
     webPres.setEMail( email->text() );
     webPres.setTitle( title->text() );
 
-    QStringList slides = webPres.getSlideTitles();
     QListViewItemIterator it( slideTitles );
     for ( ; it.current(); ++it )
-        slides[ it.current()->text( 0 ).toInt() - 1 ] = QString( it.current()->text( 1 ) );
-    webPres.setSlideTitles( slides );
+        webPres.setSlideTitle( it.current()->text( 0 ).toInt() - 1, it.current()->text( 1 ) );
 
     webPres.setBackColor( backColor->color() );
     webPres.setTitleColor( titleColor->color() );

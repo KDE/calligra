@@ -69,8 +69,6 @@ public:
     { email = _email; }
     void setTitle( const QString &_title )
     { title = _title; }
-    void setSlideTitles( const QStringList &_slideTitles )
-    { slideTitles = _slideTitles; }
     void setBackColor( const QColor &_backColor )
     { backColor = _backColor; }
     void setTitleColor( const QColor &_titleColor )
@@ -90,8 +88,6 @@ public:
     { return email; }
     QString getTitle()
     { return title; }
-    QStringList &getSlideTitles()
-    { return slideTitles; }
     QColor getBackColor()
     { return backColor; }
     QColor getTitleColor()
@@ -105,6 +101,17 @@ public:
     int getZoom()
     { return zoom; }
 
+    struct SlideInfo {
+        int pageNumber; /* 0-based */
+        QString slideTitle;
+    };
+    // Each entry in this list is a page (number+title).
+    // This allows to skip pages.
+    QValueList<SlideInfo> getSlideInfos() { return slideInfos; }
+
+    void setSlideTitle( int i, const QString &slideTitle )
+    { slideInfos[i].slideTitle = slideTitle; }
+
     void setConfig( const QString &_config )
     { config = _config; }
     QString getConfig()
@@ -114,8 +121,8 @@ public:
     void saveConfig();
 
     int initSteps() { return 7; }
-    int slides1Steps() { return slideTitles.count(); }
-    int slides2Steps() { return slideTitles.count(); }
+    int slides1Steps() { return slideInfos.count(); }
+    int slides2Steps() { return slideInfos.count(); }
     int mainSteps() { return 1; }
 
     void initCreation( KProgress *progressBar );
@@ -131,7 +138,7 @@ protected:
     QString config;
 
     QString author, title, email;
-    QStringList slideTitles;
+    QValueList<SlideInfo> slideInfos;
     QColor backColor, titleColor, textColor;
     QString path;
     ImageFormat imgFormat;
