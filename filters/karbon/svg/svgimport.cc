@@ -136,7 +136,17 @@ SvgImport::parseUnit( const QString &unit )
 	if( !ok )
 	{
 		if( unit.right( 2 ) == "pt" )
-			value = (value / 72.0) * DPI;
+			value = ( value / 72.0 ) * DPI;
+		else if( unit.right( 2 ) == "cm" )
+			value = ( value / 2.54 ) * DPI;
+		else if( unit.right( 2 ) == "pc" )
+			value = ( value / 6.0 ) * DPI;
+		else if( unit.right( 2 ) == "mm" )
+			value = ( value / 25.4 ) * DPI;
+		else if( unit.right( 2 ) == "in" )
+			value = value * DPI;
+		else if( unit.right( 2 ) == "pt" )
+			value = ( value / 72.0 ) * DPI;
 	}
 	return value;
 }
@@ -451,10 +461,10 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "rect" )
 		{
-			int x = b.attribute( "x" ).toInt();
-			int y = b.attribute( "y" ).toInt();
-			int width = b.attribute( "width" ).toInt();
-			int height = b.attribute( "height" ).toInt();
+			double x		= parseUnit( b.attribute( "x" ) );
+			double y		= parseUnit( b.attribute( "y" ) );
+			double width	= parseUnit( b.attribute( "width" ) );
+			double height	= parseUnit( b.attribute( "height" ) );
 			obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 		}
 		else if( b.tagName() == "ellipse" )
