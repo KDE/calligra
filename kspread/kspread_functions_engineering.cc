@@ -38,6 +38,10 @@
 
 // prototypes (sort alphabetically)
 bool kspreadfunc_base( KSContext& context );
+bool kspreadfunc_besseli( KSContext& context );
+bool kspreadfunc_besselj( KSContext& context );
+bool kspreadfunc_besselk( KSContext& context );
+bool kspreadfunc_bessely( KSContext& context );
 bool kspreadfunc_bin2dec( KSContext& context );
 bool kspreadfunc_bin2oct( KSContext& context );
 bool kspreadfunc_bin2hex( KSContext& context );
@@ -75,6 +79,10 @@ void KSpreadRegisterEngineeringFunctions()
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
   repo->registerFunction( "BASE",        kspreadfunc_base );    // KSpread-specific, like in Quattro-Pro
+  repo->registerFunction( "BESSELI",     kspreadfunc_besseli );
+  repo->registerFunction( "BESSELJ",     kspreadfunc_besselj );
+  repo->registerFunction( "BESSELK",     kspreadfunc_besselk );
+  repo->registerFunction( "BESSELY",     kspreadfunc_bessely );
   repo->registerFunction( "BIN2DEC",     kspreadfunc_bin2dec );
   repo->registerFunction( "BIN2OCT",     kspreadfunc_bin2oct );
   repo->registerFunction( "BIN2HEX",     kspreadfunc_bin2hex );
@@ -158,6 +166,235 @@ kdDebug() << "value " << value << "  ix " << ix << endl;
   }
 
   context.setValue( new KSValue( result.upper() ) );
+
+  return true;
+}
+
+/*
+ *
+ * The code for calculating Bessel functions is taken
+ * from CCMATH, a mathematics library source.code.
+ *
+ * Original copyright follows:
+ *
+ *  Copyright (C)  2000   Daniel A. Atkinson    All rights reserved.
+ *  This code may be redistributed under the terms of the GNU library
+ *  public license (LGPL).
+ */
+
+static double ccmath_gaml(double x)
+{ double g,h;
+  for(g=1.; x<30. ;g*=x,x+=1.); h=x*x;
+  g=(x-.5)*log(x)-x+.918938533204672-log(g);
+  g+=(1.-(1./6.-(1./3.-1./(4.*h))/(7.*h))/(5.*h))/(12.*x);
+  return g;
+}
+
+static double ccmath_psi(int m)
+{ double s= -.577215664901533; int k;
+  for(k=1; k<m ;++k) s+=1./k;
+  return s;
+}
+
+static double ccmath_ibes(double v,double x)
+{ double y,s,t,tp; int p,m;
+  y=x-9.; if(y>0.) y*=y; tp=v*v*.2+25.;
+  if(y<tp){ x/=2.; m=x;
+    if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
+    else{ if(v>0.) return 0.; else if(v==0.) return 1.;}
+    for(p=1,x*=x;;++p){ t*=x/(p*(v+=1.)); s+=t;
+      if(p>m && t<1.e-13*s) break;
+     }
+   }
+  else{ double u,a0=1.57079632679490;
+    s=t=1./sqrt(x*a0); x*=2.; u=0.;
+    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
+      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>=tp) break;
+      if(!(p&1)) s+=t; else u-=t;
+     }
+    x/=2.; s=cosh(x)*s+sinh(x)*u;
+   }
+  return s;
+}
+
+static double ccmath_kbes(double v,double x)
+{ double y,s,t,tp,f,a0=1.57079632679490;
+  int p,k,m;
+  if(x==0.) return HUGE_VAL;
+  y=x-10.5; if(y>0.) y*=y; tp=25.+.185*v*v;
+  if(y<tp && modf(v+.5,&t)!=0.){ y=1.5+.5*v;
+    if(x<y){ x/=2.; m=x; tp=t=exp(v*log(x)-ccmath_gaml(v+1.));
+      if(modf(v,&y)==0.){ k=y; tp*=v;
+        f=2.*log(x)-ccmath_psi(1)-ccmath_psi(k+1);
+        t/=2.; if(!(k&1)) t= -t; s=f*t;
+        for(p=1,x*=x;;++p){ f-=1./p+1./(v+=1.);
+          t*=x/(p*v); s+=(y=t*f);
+          if(p>m && fabs(y)<1.e-14) break; }
+        if(k>0){ x= -x; s+=(t=1./(tp*2.));
+          for(p=1,--k; k>0 ;++p,--k) s+=(t*=x/(p*k)); }
+       }
+      else{ f=1./(t*v*2.); t*=a0/sin(2.*a0*v); s=f-t;
+        for(p=1,x*=x,tp=v;;++p){
+          t*=x/(p*(v+=1.)); f*= -x/(p*(tp-=1.));
+          s+=(y=f-t); if(p>m && fabs(y)<1.e-14) break; }
+       }
+     }
+    else{ double tq,h,w,z,r;
+      t=12./pow(x,.333); k=t*t; y=2.*(x+k);
+      m=v; v-=m; tp=v*v-.25; v+=1.; tq=v*v-.25;
+      for(s=h=1.,r=f=z=w=0.; k>0 ;--k,y-=2.){
+        t=(y*h-(k+1)*z)/(k-1-tp/k); z=h; f+=(h=t);
+        t=(y*s-(k+1)*w)/(k-1-tq/k); w=s; r+=(s=t);  }
+      t=sqrt(a0/x)*exp(-x); s*=t/r; h*=t/f; x/=2.; if(m==0) s=h;
+      for(k=1; k<m ;++k){ t=v*s/x+h; h=s; s=t; v+=1.;}
+     }
+   }
+  else{ s=t=sqrt(a0/x); x*=2.;
+    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
+      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>=tp) break; s+=t; }
+    s*=exp(-x/2.);
+   }
+  return s;
+}
+
+static double ccmath_jbes(double v,double x)
+{ double y,s,t,tp; int p,m;
+  y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
+  if(y<tp){ x/=2.; m=x;
+    if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
+    else{ if(v>0.) return 0.; else if(v==0.) return 1.;}
+    for(p=1,x*= -x;;++p){ t*=x/(p*(v+=1.)); s+=t;
+      if(p>m && fabs(t)<1.e-13) break;
+     }
+   }
+  else{ double u,a0=1.57079632679490;
+    s=t=1./sqrt(x*a0); x*=2.; u=0.;
+    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
+      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>=tp) break;
+      if(!(p&1)){ t= -t; s+=t;} else u-=t;
+     }
+    y=x/2.-(v+.5)*a0; s=cos(y)*s+sin(y)*u;
+   }
+  return s;
+}
+
+static double ccmath_nbes(double v,double x)
+{ double y,s,t,tp,u,f,a0=3.14159265358979;
+  int p,k,m;
+  y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
+  if(y<tp){ if(x==0.) return HUGE_VAL;
+    x/=2.; m=x; u=t=exp(v*log(x)-ccmath_gaml(v+1.));
+    if(modf(v,&y)==0.){ k=y; u*=v;
+      f=2.*log(x)-ccmath_psi(1)-ccmath_psi(k+1);
+      t/=a0; x*= -x; s=f*t;
+      for(p=1;;++p){ f-=1./p+1./(v+=1.);
+        t*=x/(p*v); s+=(y=t*f); if(p>m && fabs(y)<1.e-13) break; }
+      if(k>0){ x= -x; s-=(t=1./(u*a0));
+        for(p=1,--k; k>0 ;++p,--k) s-=(t*=x/(p*k)); }
+     }
+    else{ f=1./(t*v*a0); t/=tan(a0*v); s=t-f;
+      for(p=1,x*=x,u=v;;++p){
+        t*= -x/(p*(v+=1.)); f*=x/(p*(u-=1.));
+        s+=(y=t-f); if(p>m && fabs(y)<1.e-13) break; }
+     }
+   }
+  else{ x*=2.; s=t=2./sqrt(x*a0); u=0.;
+    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
+      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>tp) break;
+      if(!(p&1)){ t= -t; s+=t;} else u+=t;
+     }
+    y=(x-(v+.5)*a0)/2.; s=sin(y)*s+cos(y)*u;
+   }
+  return s;
+}
+
+
+/* ---------- end of CCMATH code ---------- */
+
+// Function: BESSELI
+bool kspreadfunc_besseli( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELI",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double y = args[1]->doubleValue();
+
+  context.setValue( new KSValue( ccmath_ibes( y, x ) ) );
+
+  return true;
+}
+
+// Function: BESSELJ
+bool kspreadfunc_besselj( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELJ",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double y = args[1]->doubleValue();
+
+  context.setValue( new KSValue( ccmath_jbes( y, x ) ) );
+
+  return true;
+}
+
+// Function: BESSELK
+bool kspreadfunc_besselk( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELK",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double y = args[1]->doubleValue();
+
+  context.setValue( new KSValue( ccmath_kbes( y, x ) ) );
+
+  return true;
+}
+
+// Function: BESSELY
+bool kspreadfunc_bessely( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELY",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double y = args[1]->doubleValue();
+
+  context.setValue( new KSValue( ccmath_nbes( y, x ) ) );
 
   return true;
 }
