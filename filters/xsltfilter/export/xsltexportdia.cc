@@ -45,8 +45,8 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* parent,  const char* name, bool modal, WFlags fl )
-    : XSLTDialog( parent, name, modal, fl )
+XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* parent,  const char* name_, bool modal, WFlags fl )
+    : XSLTDialog( parent, name_, modal, fl )
 {
 	int i = 0;
 	_in = in;
