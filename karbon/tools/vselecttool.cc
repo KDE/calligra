@@ -52,12 +52,12 @@ VSelectTool::draw()
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	KoPoint current = view()->canvasWidget()->toContents( QPoint( m_current.x(), m_current.y() ) );
+	//KoPoint current = view()->canvasWidget()->toContents( QPoint( m_current.x(), m_current.y() ) );
 	//current.setY( -current.y() + view()->canvasWidget()->contentsHeight() );
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( m_state != normal || rect.contains( current ) )
+	if( m_state != normal || rect.contains( last() ) )
 	{
 		if( m_state == normal )
 			m_state = moving;
@@ -75,9 +75,9 @@ VSelectTool::draw()
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
 		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( last().x(), first().y() ) );
-		painter->lineTo( KoPoint( last().x(), last().y() ) );
-		painter->lineTo( KoPoint( first().x(), last().y() ) );
+		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
+		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
+		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
 		painter->lineTo( KoPoint( first().x(), first().y() ) );
 		painter->strokePath();
 
@@ -224,7 +224,7 @@ VSelectTool::setCursor( const KoPoint& current ) const
 void
 VSelectTool::mouseButtonPress( const KoPoint& current )
 {
-	m_current = first( true );
+	m_current = first();
 /*
 	m_fp.setX( mouse_event->pos().x() );
 	m_fp.setY( mouse_event->pos().y() );
@@ -364,17 +364,13 @@ VSelectTool::recalc()
 {
 	if( m_state == normal )
 	{
-		m_current = last( true );
+		m_current = last();
 	}
 	else
 	{
 		// Build affine matrix:
 		QWMatrix mat;
-		// Y mirroring
-		//mat.scale( 1, -1 );
-		//mat.translate( 0, -view()->canvasWidget()->contentsHeight() );
 		mat.translate( last().x() - first().x(), last().y() - first().y() );
-
 
 		// Copy selected objects and transform:
 		m_objects.clear();
