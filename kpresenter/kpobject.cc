@@ -195,6 +195,28 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    if( element.hasAttribute( "draw:transform" ))
+        {
+            kdDebug()<<" object transform \n";
+            //todo parse it
+            QString transform = element.attribute( "draw:transform" );
+            if( transform.contains("rotate ("))
+                {
+                    kdDebug()<<" rotate object \n";
+                    transform = transform.remove("rotate (" );
+                    transform = transform.left(transform.find(")"));
+                    kdDebug()<<" transform :"<<transform<<endl;
+                    bool ok;
+                    double radian = transform.toDouble(&ok);
+                    if( ok )
+                        {
+                            angle = (-1 * ((radian*180)/M_PI));
+                        }
+                    else
+                        angle = 0.0;
+                }
+        }
+
     if( animation)
     {
         kdDebug()<<" load animation style **************************************\n";
