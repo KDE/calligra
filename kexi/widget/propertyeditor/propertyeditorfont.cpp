@@ -40,7 +40,7 @@ PropertyEditorFont::PropertyEditorFont(QWidget *parent, KexiProperty *property, 
 	m_label = new QLabel(this);
 	m_label->resize(width(), height()-1);
 
-	m_button = new KPushButton(i18n(" ... "), this);
+	m_button = new KPushButton(" ... ", this);
 	m_button->resize(height(), height()-8);
 	m_button->move(width() - m_button->width(), 0);
 	

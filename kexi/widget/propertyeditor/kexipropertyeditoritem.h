@@ -45,6 +45,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 
 		void		setValue(QVariant value);
 		QVariant	getComposedValue();
+		void		updateChildValue();
 
 		static QString	format(const QVariant &s);
 		

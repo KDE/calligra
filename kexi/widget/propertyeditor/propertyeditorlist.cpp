@@ -29,6 +29,7 @@
 PropComboBox::PropComboBox(QWidget *parent, bool multi)
    : KComboBox(parent)
 {
+	m_listbox = 0;
 	if(multi)
 	{
 	m_listbox = new KListBox(this);
@@ -57,6 +58,14 @@ PropComboBox::eventFilter(QObject *o, QEvent *e)
 		}
 	}
 	}
+	if(o==m_listbox)
+	{
+	if(e->type() == QEvent::Show)
+	{
+		QString s = lineEdit()->text();
+		setSelected(QStringList::split("|",s));
+	}
+	}
 	
 	return KComboBox::eventFilter(o, e);
 }
@@ -65,14 +74,16 @@ void
 PropComboBox::setSelected(const QStringList &list)
 {
 	QStringList strlist(list);
-	setEditText(list.join("|"));
 	m_listbox->clearSelection();
 	for(QStringList::iterator it = strlist.begin(); it != strlist.end(); ++it)
 	{
 		QListBoxItem *item = m_listbox->findItem(*it, Qt::ExactMatch);
 		if(item)
+		{
 			m_listbox->setSelected(item,true);
+		}
 	}
+	setEditText(list.join("|"));
 }
 
 QStringList
@@ -107,7 +118,6 @@ PropComboBox::hideList()
 	m_listbox->hide();
 	lineEdit()->setFocus();
 }
-
 
 //EDITOR
 
@@ -163,7 +173,6 @@ PropertyEditorList::valueChanged()
 PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	kdDebug() << "creation multi editor " << endl;
 	m_combo = new PropComboBox(this, true);
 
 	m_combo->setGeometry(frameGeometry());

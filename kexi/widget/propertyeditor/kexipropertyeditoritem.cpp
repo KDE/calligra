@@ -509,6 +509,23 @@ KexiPropertyEditorItem::getComposedValue()
 	}
 }
 
+void
+KexiPropertyEditorItem::updateChildValue()
+{
+	if(m_property->type() == QVariant::Rect)
+	{
+		QRect r = m_value.toRect();
+		(*m_children)["x"]->property()->setValue(r.x());
+		(*m_children)["x"]->setValue(r.x());
+		(*m_children)["y"]->property()->setValue(r.y());
+		(*m_children)["y"]->setValue(r.y());
+		(*m_children)["width"]->property()->setValue(r.width());
+		(*m_children)["width"]->setValue(r.width());
+		(*m_children)["height"]->property()->setValue(r.height());
+		(*m_children)["height"]->setValue(r.height());
+	}
+}
+
 KexiPropertyEditorItem::~KexiPropertyEditorItem()
 {
 	switch(m_property->type())
