@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=SVG Export Filter for Killustrator
+Name=SVG Export Filter for Kontour
 Name[af]=SVG VOER UIT FILTER VIR KILLUSTRATOR
 Name[az]=Killustrator üçün SVG İdxal Süzgəci
 Name[bg]=Филтър на KSpread за експорт в CSV
@@ -33,6 +33,7 @@ Name[ta]=Killustrator ­ü¸¡É SVG ²üÚÁ¾¢ ÅÊ¸ðÊ
 Name[tr]=Killustrator için SVG verme süzgeci
 Name[uk]=Фільтр експорту SVG для Killustrator
 Name[vi]=Trình lọc xuất ra SVG cho Killustrator 
+Name[xh]=Icebo lokucoca ulwelo lweSVG yomcacisi we K
 Name[zh_CN.GB2312]=Killustrator 的 SVG 导出过滤程序
 Export=image/x-svg
 Import=application/x-kontour

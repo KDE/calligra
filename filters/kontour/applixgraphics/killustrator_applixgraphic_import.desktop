@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=KIllustrator Applixgraphics Import Filter
+Name=Kontour Applixgraphics Import Filter
 Name[af]=KILLUSTRATOR APPLIXGRAFIKA IN VOER FILTER
 Name[az]=KIllustrator Applixgraphics Alma Süzgəci
 Name[bg]=Филтри за импорт на файлове на Applixgraphics в KIllustrator
@@ -33,6 +33,7 @@ Name[ta]=KIllustrator Applixgraphics ­ÈìÌÁ¾¢ ÅÊ¸ðÊ
 Name[tr]=KIllustrator Applixgraphics Alma Süzgeci
 Name[uk]=Фільтр імпорту KIllustrator Applixgraphics
 Name[vi]=Trình lọc nhập vào các file đồ hoạ KIllustrator Applix 
+Name[xh]=Umcacisi we K Icebo lokucoca ulwelo olurhwetyiweyo ngaphkathi lwemizobo ye applix
 Name[zh_CN.GB2312]=KIllustrator Applix 图形导入过滤程序
 Name[zh_TW.Big5]=KIllustrator Applix 圖檔匯入過濾器
 Export=application/x-kontour

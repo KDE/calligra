@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=KIllustrator WMF Import Filter
+Name=Kontour WMF Import Filter
 Name[af]=KILLUSTRATOR WMF IN VOER FILTER
 Name[az]=KIllustrator WMF Alma Süzgəci
 Name[bg]=Филър за импорт на файлове на WMF в KIllustrator
@@ -36,6 +36,7 @@ Name[ta]=KIllustrator WMF ­ÈìÌÁ¾¢ ÅÊ¸ðÊ
 Name[tr]=KIllustrator WMF Alma Süzgeci
 Name[uk]=Фільтр імпорту WMF для KIllustrator
 Name[vi]=Trình lọc nhập vào cho KIllustrator WMF 
+Name[xh]=Umcacisi we K Icebo lokucocaulwelo olurhwetyiweyo ngaphakathi lwe WMF
 Name[zh_CN.GB2312]=KIllustrator WMF 导入过滤程序
 Name[zh_TW.Big5]=KIllustrator WMF 匯入過濾器
 Export=application/x-kontour
