@@ -1270,8 +1270,15 @@ void Page::deSelectObj( KPObject *kpobject )
 /*====================== select all objects ======================*/
 void Page::selectAllObj()
 {
-    for ( int i = 0; i <= static_cast<int>( objectList()->count() ); i++ )
+    QProgressDialog progress( i18n( "Selecting..." ), 0,
+                              objectList()->count(), this );
+
+    for ( uint i = 0; i <= objectList()->count(); i++ ) {
         selectObj( i );
+
+        progress.setProgress( i );
+        kapp->processEvents();
+    }
 
     mouseSelectedObject = true;
     emit objectSelectedChanged();
