@@ -34,6 +34,7 @@ public:
 
 private slots:
     void slotAddAuthorName();
+    void slotTextChanged( );
 
 protected:
     QMultiLineEdit *m_multiLine;
