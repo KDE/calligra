@@ -456,6 +456,7 @@ protected:
     unsigned int m_rowBegin; 
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
+    QList<KWFrameSet> m_ListFrameSet;
 };
 
 /**
