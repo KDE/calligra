@@ -16,7 +16,7 @@ win32 {
 
 # test specific:
  LIBS += \
-	$$QKWLIB/kexi_db$$KEXILIB_SUFFIX
+	$$QKWLIB/kexidb$$KEXILIB_SUFFIX
 
 #allow to select target independently from debug information
  CONFIG += console

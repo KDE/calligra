@@ -7,7 +7,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-int main(int /*argc*/, char */*argv[]*/)
+int main(int /*argc*/, char * /*argv[]*/)
 {
 	KInstance instance("newapi");
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();

@@ -4,8 +4,8 @@ begin;
 drop table kexi__tables;
 drop table kexi__fields;
 
-CREATE TABLE kexi__tables (t_id Integer(1), t_name Text(200));
-CREATE TABLE kexi__fields (t_id Integer(1), f_type Byte(1), f_name Text(200), 
+CREATE TABLE kexi__tables (t_id Integer, t_name Text(200));
+CREATE TABLE kexi__fields (t_id Integer, f_type Byte, f_name Text(200), 
 f_length Integer, f_precision Integer, 
 f_constraints Integer, f_options Integer, f_order Integer, 
 f_caption Text(200), f_help Text);
