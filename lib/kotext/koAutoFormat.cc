@@ -1194,6 +1194,10 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         customItemsMap.insert( 0, var );
         KoTextFormat * lastFormat = parag->at( start )->format();
         txtObj->insert( textEditCursor, lastFormat, KoTextObject::customItemChar(), false, true, i18n("Insert Variable"), customItemsMap,KoTextObject::HighlightSelection );
+        var->recalc();
+        parag->invalidate(0);
+        parag->setChanged( true );
+
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
