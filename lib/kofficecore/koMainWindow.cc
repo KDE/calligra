@@ -179,7 +179,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
     d->m_manager->setAllowNestedParts( true );
     d->m_manager->setIgnoreScrollBars( true );
-#ifdef KDE_VERSION > 305
+#if KDE_VERSION > 305
     d->m_manager->setActivationButtonMask( Qt::LeftButton | Qt::MidButton );
 #endif
 
