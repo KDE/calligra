@@ -8,12 +8,12 @@
 #include <qobject.h>
 #include <koFilter.h>
 
-#include "aidocument.h"
+#include "karbonaiparserbase.h"
 
 class QDomElement;
 class QTextStream;
 
-class AiImport : public KoFilter
+class AiImport : public KoFilter, KarbonAIParserBase
 {
 	Q_OBJECT
 
@@ -22,10 +22,19 @@ public:
 	virtual ~AiImport();
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
-
 private:
-	AiDocument m_aiDocument;
+   QString m_buffer;
+
+protected:
+  void gotStartTag (const char *tagName, Parameters& params);
+  void gotEndTag (const char *tagName);
+
+  void parsingStarted();
+  void parsingFinished();
+  void parsingAborted();
+
 };
 
 #endif
+
 

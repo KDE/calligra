@@ -49,7 +49,6 @@ AiImport::convert( const QCString& from, const QCString& to )
 	{
 		return KoFilter::NotImplemented;
 	}
-
 	QFile fileIn( m_chain->inputFile() );
 	if( !fileIn.open( IO_ReadOnly ) )
 	{
@@ -57,6 +56,13 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::FileNotFound;
 	}
 
+        if (!parse (fileIn))
+        {
+		fileIn.close();
+		return KoFilter::CreationError;
+        }  
+
+        kdDebug() << m_buffer << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{
@@ -64,21 +70,46 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::StorageCreationError;
 	}
 
-	QByteArray byteArrayIn( fileIn.size() );
-	fileIn.readBlock( byteArrayIn.data(), fileIn.size() );
-	fileIn.close();
-
-	QString outStr;
-	QTextStream s( &outStr, IO_WriteOnly );
-
-	m_aiDocument.parse( s, byteArrayIn.data() );
-kdDebug() << outStr << endl;
-
-	QCString cStr = outStr.latin1();
+	QCString cStr = m_buffer.latin1();
 	storeOut->writeBlock( cStr, cStr.length() );
 
 	return KoFilter::OK;
 }
 
+
+void AiImport::gotStartTag (const char *tagName, Parameters& params) {
+  QString data;
+  data += "<";
+  data += tagName;
+  data += " ";
+  data += getParamList (params);
+  data += ">\n";
+
+  m_buffer += data;
+}
+
+void AiImport::gotEndTag (const char *tagName){
+  QString data;
+  data += "</";
+  data += tagName;
+  data += ">\n";
+
+  m_buffer += data;
+}
+
+void AiImport::parsingStarted(){
+  m_buffer += getHeader();
+}
+
+void AiImport::parsingFinished(){
+  m_buffer += getFooter();
+}
+
+void AiImport::parsingAborted(){
+  m_buffer = "";
+}
+
 #include "aiimport.moc"
+
+
 
