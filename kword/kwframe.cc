@@ -811,6 +811,11 @@ void KWFrameSet::setFixed()
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = 0L;
+    // make sure the frames are on top
+    // (their z-order didn't matter when they were inline)
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+        frameIt.current()->setZOrder( m_doc->maxZOrder( frameIt.current()->pageNum(m_doc) ) + 1 );
 }
 
 KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
@@ -861,7 +866,7 @@ void KWFrameSet::deleteAnchors()
     Q_ASSERT( textfs );
     if ( !textfs )
         return;
-    QPtrListIterator<KWFrame> frameIt = frameIterator();
+    //QPtrListIterator<KWFrame> frameIt = frameIterator();
     int frameNum = 0;
     // At the moment there's only one anchor per frameset
     // With tables the loop below will be wrong anyway...
