@@ -524,6 +524,9 @@ QDomDocument KPresenterDoc::saveXML()
     paper.appendChild(paperBorders);
     presenter.appendChild(paper);
 
+    getVariableCollection()->variableSetting()->setCreateFile(QDate::currentDate());
+    getVariableCollection()->variableSetting()->setModifyFile(QDate::currentDate());
+
     getVariableCollection()->variableSetting()->save(presenter );
 
     presenter.appendChild(saveAttribute( doc ));
@@ -662,6 +665,9 @@ QDomDocument KPresenterDoc::saveXML()
     makeUsedSoundFileList();
     QDomElement soundFiles = saveUsedSoundFileToXML( doc, usedSoundFile );
     presenter.appendChild( soundFiles );
+
+    //necessary to recalcvariable date because new we are MODIFY/CREATE FILE date
+    recalcVariables(  VT_DATE );
 
     setModified( false );
     return doc;

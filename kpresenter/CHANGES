@@ -128,6 +128,6 @@ Changes after KPresenter 1.2
 - Now "create backup file" is configurable
 - Add support to insert cursor directly
 - Add support to "word by word" underline/strikeout attribute
-- Backupfile extension is configurable
 - Add new variable : Next page number, previous page number
 - Add time/date variable offset
+- Fix #24242 add variable : created/modified/printed document date

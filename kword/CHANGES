@@ -281,6 +281,6 @@ Changes after KWord-1.2
 - Now koinsertlink use "Recent document".
 - Add support to insert directly cursor
 - Add support for "word by word" format attribute.
-- Backupfile extension is configurable
 - Add new variable : Next page number, previous page number
 - Add time/date variable offset
+- Fix #24242 add variable : created/modified/printed document date

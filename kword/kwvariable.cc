@@ -102,7 +102,7 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
     case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         if ( !varFormat )
         {
-            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING)
+            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING || subtype ==KoDateVariable::VST_DATE_CREATE_FILE || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE )
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {

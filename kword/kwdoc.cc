@@ -2300,7 +2300,8 @@ QDomDocument KWDocument::saveXML()
             }
         }
     }
-
+    getVariableCollection()->variableSetting()->setCreateFile(QDate::currentDate());
+    getVariableCollection()->variableSetting()->setModifyFile(QDate::currentDate());
     getVariableCollection()->variableSetting()->save(kwdoc );
 
     QDomElement framesets = doc.createElement( "FRAMESETS" );
@@ -2428,7 +2429,8 @@ QDomDocument KWDocument::saveXML()
 #endif
         }
     }
-
+    //necessary to recalcvariable date because new we are MODIFY/CREATE FILE date
+    recalcVariables(  VT_DATE );
     return doc;
 }
 
