@@ -31,7 +31,7 @@ class KtablesMain : public KoApplication  {
 	Q_OBJECT
 	
 public: 
-	KtablesMain(int&, char **);
+	KtablesMain();
 	~KtablesMain();
 	
 	virtual KoMainWindow *createNewShell();

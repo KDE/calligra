@@ -19,8 +19,7 @@
 #include "ktables_main.h"
 #include "ktables_shell.h"
 
-KtablesMain::KtablesMain(int& argc, char **argv)
- : KoApplication(argc,argv,"KTables")
+KtablesMain::KtablesMain()
 {
 }
 
