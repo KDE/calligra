@@ -4178,6 +4178,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
   int ry;
   QPixmap pix;
   QPainter *p = 0;
+  QFontMetrics fm(font());
 
   // get pointer to the paragraph, which should be drwan
   paragraphPtr = paragraphList.at(row);
@@ -4210,13 +4211,14 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	      sprintf(chr,"%s%c%s",objEnumListType.before.data(),getParagNum(paragraphPtr) + objEnumListType.start,
 		      objEnumListType.after.data());	      
 	    p->setFont(objEnumListType.font);
+	    fm = QFontMetrics(p->font());
 	    if (!allInOneColor)
 	      p->setPen(objEnumListType.color);
 	    else
 	      p->setPen(allColor);
 	    if (!paragraphPtr->isEmpty())
-	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - p->fontMetrics().ascent(),
-			  xstart + getLeftIndent(row),p->fontMetrics().height() + paragraphPtr->getLineSpacing(),
+	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - fm.ascent(),
+			  xstart + getLeftIndent(row),fm.height() + paragraphPtr->getLineSpacing(),
 			  AlignRight,chr);	    
 
 	    if (!drawPic)
@@ -4235,14 +4237,15 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	      }
 
 	    p->setFont(*objUnsortListType.font->at(paragraphPtr->getDepth()));
+	    fm = QFontMetrics(p->font());
 	    if (!allInOneColor)
 	      p->setPen(*objUnsortListType.color->at(paragraphPtr->getDepth()));
 	    else
 	      p->setPen(allColor);
 	    sprintf(chr,"%c",*objUnsortListType.chr->at(paragraphPtr->getDepth()));
 	    if (!paragraphPtr->isEmpty())
-	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr)-p->fontMetrics().ascent(),
-			  xstart + getLeftIndent(row),p->fontMetrics().height() + paragraphPtr->getLineSpacing(),AlignRight,chr);
+	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - fm.ascent(),
+			  xstart + getLeftIndent(row),fm.height() + paragraphPtr->getLineSpacing(),AlignRight,chr);
 	    
 	    if (!drawPic)
 	      {
@@ -4290,13 +4293,14 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		  objPtr = linePtr->itemAt(j);
 		  len = objPtr->textLength();
 		  p->setFont(objPtr->font());
+		  fm = QFontMetrics(p->font());
 
 		  // check, if cursor should be drawn - if yes calculate it
 		  if (drawCursor = !drawPic && !cursorDrawn && showCursor() && static_cast<int>(txtCursor->positionParagraph()) == row && 
 		      txtCursor->positionLine() == i && txtCursor->positionInLine() >= chars && 
 		      txtCursor->positionInLine() <= chars+len)
 		    {
-		      c1.setX(x + p->fontMetrics().width(objPtr->text().left(txtCursor->positionInLine()-chars)));
+		      c1.setX(x + fm.width(objPtr->text().left(txtCursor->positionInLine() - chars)));
 		      c1.setY(!drawPic ? 0 : y);
 		      c2.setX(c1.x());
 		      c2.setY((!drawPic ? 0 : y) + linePtr->height(paragraphPtr));

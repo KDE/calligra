@@ -958,12 +958,9 @@ void Page::keyPressEvent(QKeyEvent *e)
 	case Key_Left:
 	  view->getHScrollBar()->subtractLine(); break;
 	case Key_Tab:
-	  {
-	    if ((e->state() & ShiftButton))
-	      selectPrev();
-	    else
-	      selectNext();
-	  } break;
+	  selectNext(); break;
+	case Key_Backtab:
+	  selectPrev(); break;
 	case Key_Home:
 	  view->getVScrollBar()->setValue(0); break;
 	case Key_End:
@@ -2810,14 +2807,19 @@ void Page::selectNext()
   else
     {
       int i = objectList()->findRef(view->kPresenterDoc()->getSelectedObj());
-      if (i < objectList()->count() - 1)
+      if (i < static_cast<int>(objectList()->count()) - 1)
 	{
 	  view->kPresenterDoc()->deSelectAllObj();
-	  objectList()->at(++i)->setSelected(false);
-	  objectList()->at(i)->setSelected(true);
+	  objectList()->at(++i)->setSelected(true);
+	}
+      else
+	{
+	  view->kPresenterDoc()->deSelectAllObj();
+	   objectList()->at(0)->setSelected(true);
 	}
     }
-  view->makeRectVisible(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0));
+  if (!KRect(diffx(),diffy(),width(),height()).contains(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0)))
+    view->makeRectVisible(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0));
   _repaint(false);
 }
 
@@ -2834,8 +2836,12 @@ void Page::selectPrev()
       if (i > 0)
 	{
 	  view->kPresenterDoc()->deSelectAllObj();
-	  objectList()->at(--i)->setSelected(false);
-	  objectList()->at(i)->setSelected(true);
+	  objectList()->at(--i)->setSelected(true);
+	}
+      else
+	{
+	  view->kPresenterDoc()->deSelectAllObj();
+	  objectList()->at(objectList()->count() - 1)->setSelected(true);
 	}
     }
   view->makeRectVisible(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0));
