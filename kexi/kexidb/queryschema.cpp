@@ -425,7 +425,7 @@ QString QuerySchema::debugString()
 		}
 	}
 	dbg += QString("-TABLE ALIASES:\n" + aliases);
-	QString where = d->whereExpr->debugString();
+	QString where = d->whereExpr ? d->whereExpr->debugString() : QString::null;
 	if (!where.isEmpty())
 		dbg += QString("\n-WHERE EXPRESSION:\n" + where);
 	return dbg;
