@@ -22,7 +22,7 @@
 
 #include <global.h>
 #include <koPointArray.h>
-
+#include <qcursor.h>
 class QPoint;
 class QColor;
 class QPainter;
@@ -35,7 +35,12 @@ KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
-static QCursor penCursor(); // pen tool cursor
-static QCursor rotateCursor(); // rotate tool cursor
+
+class KPresenterUtils
+{
+public:
+    static QCursor penCursor(); // pen tool cursors
+    static QCursor rotateCursor(); // rotate tool cursor
+};
 
 #endif

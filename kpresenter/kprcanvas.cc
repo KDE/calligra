@@ -1076,7 +1076,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 setCursor( blankCursor );
             } else {
                 if ( drawMode ) {
-                    setCursor( penCursor() );
+                    setCursor( KPresenterUtils::penCursor() );
                     drawLineInDrawMode = true;
                 }
                 else
@@ -4603,9 +4603,9 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
         }
     }
     else if ( toolEditMode == INS_FREEHAND || toolEditMode == INS_CLOSED_FREEHAND )
-        setCursor( penCursor() );
+        setCursor( KPresenterUtils::penCursor() );
     else if ( toolEditMode == TEM_ROTATE )
-        setCursor( rotateCursor() );
+        setCursor( KPresenterUtils::rotateCursor() );
     else
         setCursor( crossCursor );
 
@@ -4852,7 +4852,7 @@ void KPrCanvas::slotGotoPage()
         m_view->setPresentationDuration( pg - 1 );
 
     if ( presMenu->isItemChecked ( PM_DM ) )
-        setCursor( penCursor() );
+        setCursor( KPresenterUtils::penCursor() );
 }
 
 /*================================================================*/
@@ -5054,13 +5054,13 @@ void KPrCanvas::slotExitPres()
 /*================================================================*/
 void KPrCanvas::drawingMode()
 {
-    setCursor( penCursor() );
+    setCursor( KPresenterUtils::penCursor() );
     if(!presMenu->isItemChecked ( PM_DM ))
     {
         presMenu->setItemChecked( PM_DM, true );
         presMenu->setItemChecked( PM_SM, false );
         drawMode = true;
-        //setCursor( penCursor() );
+        //setCursor( KPresenterUtils::penCursor() );
     }
 }
 

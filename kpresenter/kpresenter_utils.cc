@@ -238,7 +238,7 @@ KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed )
 /*
  * Custom cursors. Use the X utility "bitmap" to create new cursors.
  */
-static QCursor penCursor()
+QCursor KPresenterUtils::penCursor()
 {
     static unsigned char pen_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x3a, 0x00, 0x00, 0x7d,
@@ -257,7 +257,7 @@ static QCursor penCursor()
     return QCursor( pix, 1, 22 );
 }
 
-static QCursor rotateCursor()
+QCursor KPresenterUtils::rotateCursor()
 {
     static unsigned char rotate_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x0c, 0x00, 0xc0, 0xf3, 0x00, 0xe0, 0xff, 0x01,
