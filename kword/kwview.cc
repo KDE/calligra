@@ -7621,14 +7621,10 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool u
     resultLabel[5]->setText( locale->formatNumber( lines, 0 ) );
     // add flesch
     double f = calcFlesch( sentences, words, syllables );
-    QString flesch;
-    QString flesch_score_string;
-    flesch_score_string = locale->formatNumber( f , 1 );
+    QString flesch = locale->formatNumber( f , 1 );
     if( words < 200 ) {
         // a kind of warning if too few words:
-        flesch = i18n("approximately %1").arg( flesch_score_string );
-    } else {
-        flesch = flesch_score_string;
+        flesch = i18n("approximately %1").arg( flesch );
     }
     resultLabel[6]->setText( flesch );
     return true;
