@@ -28,8 +28,9 @@ MLabelObject::MLabelObject() : MReportObject(), xMargin(0), yMargin(0){
 }
 
 /** Copy constructor */
-MLabelObject::MLabelObject(const MLabelObject& mLabelObject): MReportObject((MReportObject &) mLabelObject){
-  copy(&mLabelObject);	
+MLabelObject::MLabelObject(const MLabelObject& mLabelObject) :
+  MReportObject((MReportObject &) mLabelObject), xMargin(0), yMargin(0) {
+  copy(&mLabelObject);
 }
 
 /** Assignment operator */
