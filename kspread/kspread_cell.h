@@ -663,6 +663,75 @@ public:
     QString dataTypeToString( DataType dt ) const;
     DataType stringToDataType( const QString& str ) const;
 
+  /* descriptions of the flags are just below */
+    enum CellFlags{
+    /* this uses the same flags variable as KSpreadLayout.  The least significant
+       16 bits are reserved for the base class, and the most significant 16
+       have been left for this subclass to use. */
+      Flag_Error =          0x00010000,
+      Flag_LayoutDirty =    0x00020000,
+      Flag_CalcDirty =      0x00040000,
+      Flag_Progress =       0x00080000,
+      Flag_UpdatingDeps =   0x00100000,
+      Flag_DisplayDirty =   0x00200000,
+      Flag_ForceExtra =     0x00400000,
+      Flag_CellTooShort =   0x00800000
+    };
+
+    void clearFlag( CellFlags flag );
+    void setFlag( CellFlags flag );
+    bool testFlag( CellFlags flag ) const;
+
+  /* descriptions of the flags are as follows: */
+
+  /*
+   * Error
+   * True if the cell is calculated and there was an error during calculation
+   * In that case the cell usually displays "#####"
+   *
+   * LayoutDirty
+   * Flag showing whether the current layout is OK.
+   * If you change for example the fonts point size, set this flag. When the
+   * cell must draw itself on the screen it will first recalculate its layout.
+   *
+   * CalcDirty
+   * Shows whether recalculation is necessary.
+   * If this cell must be recalculated for some reason, for example the user
+   * entered a new formula, then this flag is set. If @ref #bFormula is FALSE
+   * nothing will happen at all.
+   *
+   * Progress
+   * Tells whether this cell it currently under calculation.
+   * If a cell thats 'progressFlag' is set is told to calculate we
+   * have detected a circular reference and we must stop calulating.
+   *
+   * UpdatingDeps
+   * Tells whether we've already calculated the reverse dependancies for this
+   * cell.  Similar to the Progress flag but it's for when we are calculating
+   * in the reverse direction.
+   * @see updateDependancies()
+   *
+   * DisplayDirty
+   * If this flag is set, then it is known that this cell has to be updated
+   * on the display. This means that somewhere in the calling stack there is a
+   * function which will call @ref KSpreadTable::updateCell once it retains
+   * the control. If a function changes the contents/layout of this cell and this
+   * flag is not set, then the function must set it at once. After the changes
+   * are done the function must call <tt>m_pTable->updateCell(...).
+   * The flag is cleared by the function m_pTable->updateCell.
+   *
+   * ForceExtra
+   * Tells whether the cell is forced to exceed its size.
+   * Cells may occupy other cells space on demand. But you may force
+   * a cell to do so by setting this flag. Forcing the cell to have
+   * no extra size will disable this flag!
+   *
+   * CellTooShort
+   * When it's True displays **
+   * it's true when text size is bigger that cell size
+   * and when Align is center or left
+   */
+
 protected:
     /**
      * @reimp
@@ -771,12 +840,6 @@ private:
      * used in offsetAlign.
      */
     int m_fmAscent;
-
-
-    /* a bit-mask variable for various boolean flags used in the cell
-       See the description of flags near the top of kspread_cell.cc
-    */
-    Q_INT8 m_flagsMask;
 
   /**
      * The amount of additional cells horizontal

@@ -40,77 +40,6 @@
 
 QChar KSpreadCell::decimal_point = '\0';
 
-
-/* define the bit-masks for cell flags */
-/* NOTE: We're at the limit for an 8 bit mask right now but nothing
-   stops us from changing m_flagsMask to a 16/32/64 bit int if we need to */
-
-#define TEST_FLAG(x) (m_flagsMask & (x))
-#define SET_FLAG(x) m_flagsMask |= (x)
-#define CLEAR_FLAG(x) if TEST_FLAG(x) m_flagsMask -= (x);
-
-#define CELL_ERROR            0x01
-#define CELL_LAYOUT_DIRTY     0x02
-#define CELL_CALC_DIRTY       0x04
-#define CELL_PROGRESS         0x08
-#define CELL_UPDATING_DEPS    0x10
-#define CELL_DISPLAY_DIRTY    0x20
-#define CELL_FORCE_EXTRA      0x40
-#define CELL_TOO_SHORT        0x80
-
-/** CELL_ERROR
- * True if the cell is calculated and there was an error during calculation
- * In that case the cell usually displays "#####"
- */
-
-    /** CELL_LAYOUT_DIRTY
-     * Flag showing whether the current layout is OK.
-     * If you change for example the fonts point size, set this flag. When the cell
-     * must draw itself on the screen it will first recalculate its layout.
-     */
-
-    /** CELL_CAlC_DIRTY
-     * Shows whether recalculation is necessary.
-     * If this cell must be recalculated for some reason, for example the user entered
-     * a new formula, then this flag is set. If @ref #bFormula is FALSE nothing will happen
-     * at all.
-     */
-
-    /** CELL_PROGRESS
-     * Tells whether this cell it currently under calculation.
-     * If a cell thats 'progressFlag' is set is told to calculate we
-     * have detected a circular reference and we must stop calulating.
-     */
-
-    /** CELL_UPDATING_DEPS
-     * Tells whether we've already calculated the reverse dependancies for this cell.  Similar to
-     * @ref m_bProgressFlag but it's for when we are calculating in the reverse direction.
-     * @see updateDependancies()
-     */
-    /**  CELL_DISPLY_DIRTY
-     * If this flag is set, then it is known that this cell has to be updated
-     * on the display. This means that somewhere in the calling stack there is a
-     * function which will call @ref KSpreadTable::updateCell once it retains
-     * the control. If a function changes the contents/layout of this cell and this
-     * flag is not set, then the function must set it at once. After the changes are
-     * done the function must call <tt>m_pTable->updateCell(...).
-     * The flag is cleared by the function m_pTable->updateCell.
-     */
-
-    /** CELL_FORCE_EXTRA
-     * Tells whether the cell is forced to exceed its size.
-     * Cells may occupy other cells space on demand. But you may force
-     * a cell to do so by setting this flag. Forcing the cell to have
-     * no extra size will disable this flag!
-     */
-
-    /** CELL_TOO_SHORT
-     * When it's True displays **
-     * it's true when text size is bigger that cell size
-     * and when Align is center or left
-     */
-
-
 /*****************************************************************************
  *
  * KSpreadCell
@@ -131,19 +60,13 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_lstDepends.setAutoDelete( TRUE );
   m_lstDependingOnMe.setAutoDelete( TRUE );
 
-  CLEAR_FLAG(CELL_LAYOUT_DIRTY);
   m_content = Text;
   m_dataType = StringData; // we use this for empty cells
 
   m_iRow = _row;
   m_iColumn = _column;
 
-  CLEAR_FLAG(CELL_CALC_DIRTY);
-  CLEAR_FLAG(CELL_PROGRESS);
-  CLEAR_FLAG(CELL_DISPLAY_DIRTY);
-  CLEAR_FLAG(CELL_UPDATING_DEPS);
   m_style = ST_Normal;
-  CLEAR_FLAG(CELL_FORCE_EXTRA);
   m_iExtraXCells = 0;
   m_iExtraYCells = 0;
   m_iExtraWidth = 0;
@@ -154,7 +77,6 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_iOutTextHeight = 0;
 
   m_nbLines=0;
-  CLEAR_FLAG(CELL_TOO_SHORT);
   m_Validity=0;
 }
 
@@ -235,7 +157,7 @@ void KSpreadCell::defaultStyle()
 
 void KSpreadCell::layoutChanged()
 {
-  SET_FLAG(CELL_LAYOUT_DIRTY);
+  setFlag(Flag_LayoutDirty);
 }
 
 KSpreadLayout* KSpreadCell::fallbackLayout( int, int row )
@@ -262,7 +184,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
   // disable forcing ?
   if ( _x == 0 && _y == 0 )
   {
-      CLEAR_FLAG(CELL_FORCE_EXTRA);
+      clearFlag(Flag_ForceExtra);
       m_iExtraXCells = 0;
       m_iExtraYCells = 0;
       m_iExtraWidth = 0;
@@ -270,7 +192,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
       return;
   }
 
-    SET_FLAG(CELL_FORCE_EXTRA);
+    setFlag(Flag_ForceExtra);
     m_iExtraXCells = _x;
     m_iExtraYCells = _y;
 
@@ -287,7 +209,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
     // QPainter painter;
     // painter.begin( m_pTable->gui()->canvasWidget() );
 
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
     makeLayout( m_pTable->painter(), _col, _row );
 }
 
@@ -322,7 +244,7 @@ void KSpreadCell::move( int col, int row )
 
 void KSpreadCell::setLayoutDirtyFlag()
 {
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
 
     if ( m_pObscuringCell )
         m_pObscuringCell->setLayoutDirtyFlag();
@@ -366,7 +288,7 @@ void KSpreadCell::obscure( KSpreadCell *_cell )
 void KSpreadCell::unobscure()
 {
   m_pObscuringCell = 0L;
-  SET_FLAG(CELL_LAYOUT_DIRTY);
+  setFlag(Flag_LayoutDirty);
 }
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
@@ -634,7 +556,7 @@ void KSpreadCell::freeAllObscuredCells()
     // Free all obscured cells.
     //
 
-    if ( !TEST_FLAG(CELL_FORCE_EXTRA) )
+    if ( !testFlag(Flag_ForceExtra) )
     {
         for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
             for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
@@ -670,7 +592,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );*/
 
     m_nbLines = 0;
-    CLEAR_FLAG(CELL_TOO_SHORT);
+    clearFlag(Flag_CellTooShort);
 
     freeAllObscuredCells();
     ColumnLayout *cl1 = m_pTable->columnLayout( column() );
@@ -765,7 +687,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
         m_iExtraYCells = r - _row - 1;
         m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-        CLEAR_FLAG(CELL_LAYOUT_DIRTY);
+        clearFlag(Flag_LayoutDirty);
         return;
     }
 
@@ -948,7 +870,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = rl->height();
 
     // Calculate the extraWidth and extraHeight if we are forced to.
-    if ( TEST_FLAG(CELL_FORCE_EXTRA) )
+    if ( testFlag(Flag_ForceExtra) )
     {
         for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
         {
@@ -1058,7 +980,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
        if(m_iOutTextHeight>=rl->height())
        {
-         SET_FLAG(CELL_TOO_SHORT);
+         setFlag(Flag_CellTooShort);
        }
     }
 
@@ -1067,11 +989,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
          rightBorderWidth( _col, _row ) )
     {
         // No chance. We can not obscure more/less cells.
-        if ( TEST_FLAG(CELL_FORCE_EXTRA) )
+        if ( testFlag(Flag_ForceExtra) )
         {
           // The text does not fit in the cell
           //m_strOutText = "**";
-          SET_FLAG(CELL_TOO_SHORT);
+          setFlag(Flag_CellTooShort);
         }
         else
         {
@@ -1111,16 +1033,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 //Not enough space
                 if(end==-1)
                 {
-                  SET_FLAG(CELL_TOO_SHORT);
+                  setFlag(Flag_CellTooShort);
                 }
             }
             else
             {
-              SET_FLAG(CELL_TOO_SHORT);
+              setFlag(Flag_CellTooShort);
             }
         }
     }
-    CLEAR_FLAG(CELL_LAYOUT_DIRTY);
+    clearFlag(Flag_LayoutDirty);
 }
 
 QString KSpreadCell::createFormat( double value, int _col, int _row )
@@ -1426,11 +1348,11 @@ bool KSpreadCell::makeFormula()
   {
     clearFormula();
 
-    SET_FLAG(CELL_ERROR);
+    setFlag(Flag_Error);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
     m_dValue = 0.0;
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
     DO_UPDATE;
     if(m_pTable->doc()->getShowMessageError())
         {
@@ -1463,13 +1385,13 @@ void KSpreadCell::clearFormula()
 
 bool KSpreadCell::calc()
 {
-  if ( TEST_FLAG(CELL_PROGRESS) )
+  if ( testFlag(Flag_Progress) )
   {
     kdError(36002) << "ERROR: Circle" << endl;
-    SET_FLAG(CELL_ERROR);
+    setFlag(Flag_Error);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
     if ( m_style == ST_Select )
     {
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
@@ -1482,7 +1404,7 @@ bool KSpreadCell::calc()
   if ( !isFormula() )
     return true;
 
-  if ( !TEST_FLAG(CELL_CALC_DIRTY) )
+  if ( !testFlag(Flag_CalcDirty) )
     return true;
 
   if ( m_pTable->doc()->delayCalculation() )
@@ -1490,9 +1412,9 @@ bool KSpreadCell::calc()
     return true;
   }
 
-  SET_FLAG(CELL_LAYOUT_DIRTY);
-  SET_FLAG(CELL_PROGRESS);
-  CLEAR_FLAG(CELL_CALC_DIRTY);
+  setFlag(Flag_LayoutDirty);
+  setFlag(Flag_Progress);
+  clearFlag(Flag_CalcDirty);
 
   if (m_pCode == NULL)
   {
@@ -1515,15 +1437,15 @@ bool KSpreadCell::calc()
 	if ( !cell->calc() )
         {
 	  m_strFormulaOut = "####";
-	  SET_FLAG(CELL_ERROR);
+	  setFlag(Flag_Error);
 	  m_dataType = StringData; //correct?
-          CLEAR_FLAG(CELL_PROGRESS);
+          clearFlag(Flag_Progress);
 	  if ( m_style == ST_Select )
           {
 	    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
 	    s->parse( m_strFormulaOut );
 	  }
-	  SET_FLAG(CELL_LAYOUT_DIRTY);
+	  setFlag(Flag_LayoutDirty);
 	  DO_UPDATE;
 	  return false;
 	}
@@ -1537,10 +1459,10 @@ bool KSpreadCell::calc()
     // If we got an error during evaluation ...
     if ( m_pCode )
       {
-      SET_FLAG(CELL_ERROR);
+      setFlag(Flag_Error);
       m_strFormulaOut = "####";
       m_dataType = StringData; //correct?
-      SET_FLAG(CELL_LAYOUT_DIRTY);
+      setFlag(Flag_LayoutDirty);
       DO_UPDATE;
       // Print out exception if any
       if ( context.exception() && m_pTable->doc()->getShowMessageError())
@@ -1552,8 +1474,8 @@ bool KSpreadCell::calc()
       }
 
     }
-    // SET_FLAG(CELL_LAYOUT_DIRTY);
-    CLEAR_FLAG(CELL_PROGRESS);
+    // setFlag(Flag_LayoutDirty);
+    clearFlag(Flag_Progress);
 
     if ( m_style == ST_Select )
     {
@@ -1566,7 +1488,7 @@ bool KSpreadCell::calc()
   else if ( context.value()->type() == KSValue::DoubleType )
   {
     m_dValue = context.value()->doubleValue();
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = NumericData;
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -1575,7 +1497,7 @@ bool KSpreadCell::calc()
   else if ( context.value()->type() == KSValue::IntType )
   {
     m_dValue = (double)context.value()->intValue();
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = NumericData;
 
     checkNumberFormat(); // auto-chooses number or scientific
@@ -1584,7 +1506,7 @@ bool KSpreadCell::calc()
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = BoolData;
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     m_strFormulaOut = context.value()->boolValue() ? i18n("True") : i18n("False");
@@ -1592,7 +1514,7 @@ bool KSpreadCell::calc()
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = TimeData;
     m_Time = context.value()->timeValue();
 
@@ -1611,7 +1533,7 @@ bool KSpreadCell::calc()
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = DateData;
     m_Date = context.value()->dateValue();
     FormatType tmpFormat = formatType();
@@ -1629,7 +1551,7 @@ bool KSpreadCell::calc()
   else if ( context.value()->type() == KSValue::Empty )
   {
     m_dValue = 0.0;
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = StringData;
     // Format the result appropriately
     setFormatType(Number);
@@ -1640,7 +1562,7 @@ bool KSpreadCell::calc()
     if ( m_pQML )
         delete m_pQML;
     m_pQML = 0;
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = StringData;
     m_strFormulaOut = context.value()->toString( context );
     if ( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0] == '!' )
@@ -1660,9 +1582,9 @@ bool KSpreadCell::calc()
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       s->parse( m_strFormulaOut );
   }
-  CLEAR_FLAG(CELL_CALC_DIRTY);
-  SET_FLAG(CELL_LAYOUT_DIRTY);
-  CLEAR_FLAG(CELL_PROGRESS);
+  clearFlag(Flag_CalcDirty);
+  setFlag(Flag_LayoutDirty);
+  clearFlag(Flag_Progress);
 
   DO_UPDATE;
 
@@ -1789,7 +1711,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   calc();
 
   // Need to make a new layout ?
-  if ( TEST_FLAG(CELL_LAYOUT_DIRTY) )
+  if ( testFlag(Flag_LayoutDirty) )
     makeLayout( painter, cellRef.x(), cellRef.y() );
 
   QRect r2( corner.x(), corner.y(), width, height );
@@ -2077,7 +1999,7 @@ void KSpreadCell::paintMoreTextIndicator(QPainter& painter, QPoint corner,
   //show  a red triangle when it's not possible to write all text in cell
   //don't print the red triangle if we're printing
 
-  if(TEST_FLAG(CELL_TOO_SHORT) && !painter.device()->isExtDev() &&
+  if(testFlag(Flag_CellTooShort) && !painter.device()->isExtDev() &&
      rowLayout->height() > 2  && colLayout->width() > 4)
   {
     QPointArray point( 3 );
@@ -2156,7 +2078,7 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
   QString tmpText = m_strOutText;
   int tmpHeight = m_iOutTextHeight;
   int tmpWidth = m_iOutTextWidth;
-  if( TEST_FLAG(CELL_TOO_SHORT) )
+  if( testFlag(Flag_CellTooShort) )
   {
     m_strOutText=textDisplaying( painter );
   }
@@ -2187,7 +2109,7 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
   }
 
   //made an offset, otherwise ### is under red triangle
-  if( a == KSpreadCell::Right && !isEmpty() && TEST_FLAG(CELL_TOO_SHORT) )
+  if( a == KSpreadCell::Right && !isEmpty() && testFlag(Flag_CellTooShort) )
   {
     offsetCellTooShort=4;
   }
@@ -2291,7 +2213,7 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
     while ( j != i );
   }
 
-  if(TEST_FLAG(CELL_TOO_SHORT))
+  if(testFlag(Flag_CellTooShort))
   {
     m_strOutText = tmpText;
     m_iOutTextHeight = tmpHeight;
@@ -2880,14 +2802,14 @@ int KSpreadCell::width( int _col, KSpreadCanvas *_canvas )
 
   if ( _canvas )
   {
-    if ( TEST_FLAG(CELL_FORCE_EXTRA) )
+    if ( testFlag(Flag_ForceExtra) )
       return (int)( m_iExtraWidth );
 
     ColumnLayout *cl = m_pTable->columnLayout( _col );
     return cl->width( _canvas );
   }
 
-  if ( TEST_FLAG(CELL_FORCE_EXTRA) )
+  if ( testFlag(Flag_ForceExtra) )
     return m_iExtraWidth;
 
   ColumnLayout *cl = m_pTable->columnLayout( _col );
@@ -2901,14 +2823,14 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 
   if ( _canvas )
   {
-    if ( TEST_FLAG(CELL_FORCE_EXTRA) )
+    if ( testFlag(Flag_ForceExtra) )
       return (int)( m_iExtraHeight );
 
     RowLayout *rl = m_pTable->rowLayout( _row );
     return rl->height( _canvas );
   }
 
-  if ( TEST_FLAG(CELL_FORCE_EXTRA) )
+  if ( testFlag(Flag_ForceExtra) )
     return m_iExtraHeight;
 
   RowLayout *rl = m_pTable->rowLayout( _row );
@@ -3089,7 +3011,7 @@ void KSpreadCell::incPrecision()
   {
     setPrecision(++tmpPreci);
   }
-  SET_FLAG(CELL_LAYOUT_DIRTY);
+  setFlag(Flag_LayoutDirty);
 }
 
 void KSpreadCell::decPrecision()
@@ -3114,12 +3036,12 @@ void KSpreadCell::decPrecision()
     setPrecision(m_strOutText.length() - pos - 2-start);
     if ( preciTmp < 0 )
       setPrecision(preciTmp );
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
   }
   else if ( preciTmp > 0 )
   {
     setPrecision(--preciTmp);
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
   }
 }
 
@@ -3140,7 +3062,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
 void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 {
-  CLEAR_FLAG(CELL_ERROR);
+  clearFlag(Flag_Error);
   m_strText = _text;
 
   // Free all content data
@@ -3157,7 +3079,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
    */
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
     m_content = Formula;
 
     if ( !m_pTable->isLoading() )
@@ -3174,7 +3096,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
     m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
     m_content = RichText;
     m_dataType = OtherData;
   }
@@ -3188,7 +3110,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     // Find out what data type it is
     checkTextInput();
 
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
   }
 
   /**
@@ -3196,7 +3118,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
    */
   if ( m_style == ST_Select && !m_pTable->isLoading() )
   {
-      if ( TEST_FLAG(CELL_CALC_DIRTY) )
+      if ( testFlag(Flag_CalcDirty) )
           calc();
 
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
@@ -3206,7 +3128,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
           s->parse( m_strText );
       kdDebug(36001) << "SELECT " << s->text() << endl;
       checkTextInput(); // is this necessary?
-      // SET_FLAG(CELL_LAYOUT_DIRTY);
+      // setFlag(Flag_LayoutDirty);
   }
   setCalcDirtyFlag();
 
@@ -3394,7 +3316,7 @@ bool KSpreadCell::testValidity()
 
 void KSpreadCell::setValue( double _d )
 {
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_strText = QString::number( _d );
 
     // Free all content data
@@ -3403,10 +3325,10 @@ void KSpreadCell::setValue( double _d )
 
     clearFormula();
 
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dataType = NumericData;
     m_dValue = _d;
-    SET_FLAG(CELL_LAYOUT_DIRTY);
+    setFlag(Flag_LayoutDirty);
     m_content = Text;
 
     // Do not update formulas and stuff here
@@ -3424,17 +3346,17 @@ void KSpreadCell::update()
         m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
     }
 
-    SET_FLAG(CELL_DISPLAY_DIRTY);
+    setFlag(Flag_DisplayDirty);
 
     updateDepending();
 
-    if ( TEST_FLAG(CELL_DISPLAY_DIRTY) )
+    if ( testFlag(Flag_DisplayDirty) )
         m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()
 {
-  if ( TEST_FLAG(CELL_UPDATING_DEPS) )
+  if ( testFlag(Flag_UpdatingDeps) )
   {
     return;
   }
@@ -3443,8 +3365,8 @@ void KSpreadCell::updateDepending()
 
   KSpreadDependency* d = NULL;
 
-  SET_FLAG(CELL_UPDATING_DEPS);
-  SET_FLAG(CELL_CALC_DIRTY);
+  setFlag(Flag_UpdatingDeps);
+  setFlag(Flag_CalcDirty);
 
   // Every cell that references us must calculate with this new value
   for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
@@ -3462,7 +3384,7 @@ void KSpreadCell::updateDepending()
 
   kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
 
-  CLEAR_FLAG(CELL_UPDATING_DEPS);
+  clearFlag(Flag_UpdatingDeps);
   updateChart();
 }
 
@@ -3470,13 +3392,13 @@ void KSpreadCell::setCalcDirtyFlag()
 {
   KSpreadDependency* d = NULL;
 
-  if ( TEST_FLAG(CELL_CALC_DIRTY) )
+  if ( testFlag(Flag_CalcDirty) )
   {
     /* we need to avoid recursion */
     return;
   }
 
-  SET_FLAG(CELL_CALC_DIRTY);
+  setFlag(Flag_CalcDirty);
 
   /* if this cell is dirty, every cell that references this one is dirty */
   for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
@@ -3495,7 +3417,7 @@ void KSpreadCell::setCalcDirtyFlag()
     /* we set it temporarily to true to handle recursion (although that shouldn't happen if it's not a
        formula - we might as well be safe).
     */
-    CLEAR_FLAG(CELL_CALC_DIRTY);
+    clearFlag(Flag_CalcDirty);
   }
 
 }
@@ -3526,7 +3448,7 @@ bool KSpreadCell::updateChart(bool refresh)
 void KSpreadCell::checkTextInput()
 {
     // Goal of this method: determine m_dataType, and the value of the cell
-    CLEAR_FLAG(CELL_ERROR);
+    clearFlag(Flag_Error);
     m_dValue = 0;
 
     Q_ASSERT( m_content == Text );
@@ -3994,7 +3916,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             m_iExtraXCells = i;
             if ( i > 0 )
             {
-              SET_FLAG(CELL_FORCE_EXTRA);
+              setFlag(Flag_ForceExtra);
             }
         }
 
@@ -4011,11 +3933,11 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             m_iExtraYCells = i;
             if ( i > 0 )
             {
-              SET_FLAG(CELL_FORCE_EXTRA);
+              setFlag(Flag_ForceExtra);
             }
         }
 
-        if(TEST_FLAG(CELL_FORCE_EXTRA))
+        if(testFlag(Flag_ForceExtra))
         {
             forceExtraCells(m_iColumn,m_iRow,m_iExtraXCells,m_iExtraYCells);
         }
@@ -4127,8 +4049,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
 	    clearFormula();
             t = decodeFormula( t, m_iColumn, m_iRow );
-            SET_FLAG(CELL_LAYOUT_DIRTY);
-            CLEAR_FLAG(CELL_ERROR);
+            setFlag(Flag_LayoutDirty);
+            clearFlag(Flag_Error);
             m_content = Formula;
             m_strText = pasteOperation( t, m_strText, op );
 	    if ( !m_pTable->isLoading() ) // i.e. when pasting
@@ -4170,7 +4092,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             if ( newStyleLoading )
             {
                 m_dValue = 0.0;
-                CLEAR_FLAG(CELL_ERROR);
+                clearFlag(Flag_Error);
                 switch ( m_dataType ) {
                 case BoolData:
                 {
@@ -4247,7 +4169,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                     // Set the cell's text
                     m_strText = pasteOperation( t, m_strText, op );
                 }
-                SET_FLAG(CELL_LAYOUT_DIRTY);
+                setFlag(Flag_LayoutDirty);
             }
         }
     }
@@ -4395,7 +4317,7 @@ void KSpreadCell::setStyle( Style _s )
     return;
 
   m_style = _s;
-  SET_FLAG(CELL_LAYOUT_DIRTY);
+  setFlag(Flag_LayoutDirty);
 
   if ( m_pPrivate )
     delete m_pPrivate;
@@ -4412,7 +4334,7 @@ void KSpreadCell::setStyle( Style _s )
   else
       s->parse( m_strText );
   checkTextInput(); // is this necessary?
-  SET_FLAG(CELL_LAYOUT_DIRTY);
+  setFlag(Flag_LayoutDirty);
 
   if ( !m_pTable->isLoading() )
       update();
@@ -4604,32 +4526,47 @@ void KSpreadCell::SetConditionList(QValueList<KSpreadConditional> newList)
 
 bool KSpreadCell::hasError() const
 {
-  return TEST_FLAG(CELL_ERROR);
+  return testFlag(Flag_Error);
 }
 
 bool KSpreadCell::calcDirtyFlag()
 {
-  return (m_content == Formula ? false : TEST_FLAG(CELL_CALC_DIRTY));
+  return (m_content == Formula ? false : testFlag(Flag_CalcDirty));
 }
 
 bool KSpreadCell::layoutDirtyFlag() const
 {
-  return TEST_FLAG(CELL_LAYOUT_DIRTY);
+  return testFlag(Flag_LayoutDirty);
 }
 
 void KSpreadCell::clearDisplayDirtyFlag()
 {
-  CLEAR_FLAG(CELL_DISPLAY_DIRTY);
+  clearFlag(Flag_DisplayDirty);
 }
 
 void KSpreadCell::setDisplayDirtyFlag()
 {
-  SET_FLAG(CELL_DISPLAY_DIRTY);
+  setFlag(Flag_DisplayDirty);
 }
 
 bool KSpreadCell::isForceExtraCells() const
 {
-  return TEST_FLAG(CELL_FORCE_EXTRA);
+  return testFlag(Flag_ForceExtra);
+}
+
+void KSpreadCell::clearFlag( CellFlags flag )
+{
+  m_flagsMask &= ~(Q_UINT32)flag;
+}
+
+void KSpreadCell::setFlag( CellFlags flag )
+{
+  m_flagsMask |= (Q_UINT32)flag;
+}
+
+bool KSpreadCell::testFlag( CellFlags flag ) const
+{
+  return ( m_flagsMask & (Q_UINT32)flag );
 }
 
 /***************************************************

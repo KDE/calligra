@@ -47,6 +47,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     QBrush brush( Qt::red,Qt::NoBrush);
     m_pTable = _table;
     m_mask = 0;
+    m_flagsMask = 0;
     m_bNoFallBack = 0;
     m_eFloatColor = KSpreadLayout::AllBlack;
     m_eFloatFormat = KSpreadLayout::OnlyNegSigned;
@@ -62,14 +63,11 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_goUpDiagonalPen=pen;
     m_backGroundBrush=brush;
     m_dFactor = 1.0;
-    m_bMultiRow = FALSE;
-    m_bVerticalText = FALSE;
     m_textPen.setColor( QColor()/*QApplication::palette().active().text()*/ );
     m_eFormatType=KSpreadLayout::Number;
     m_rotateAngle=0;
     m_strComment="";
     m_indent=0;
-    m_bDontPrintText=false;
 
     QFont font = KoGlobal::defaultFont();
     // ######## Not needed anymore in 3.0?
@@ -110,6 +108,7 @@ void KSpreadLayout::defaultStyleLayout()
 void KSpreadLayout::copy( KSpreadLayout &_l )
 {
     m_mask = _l.m_mask;
+    m_flagsMask = _l.m_flagsMask;
     m_bNoFallBack=_l.m_bNoFallBack;
     m_eFloatColor = _l.m_eFloatColor;
     m_eFloatFormat = _l.m_eFloatFormat;
@@ -125,17 +124,29 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
     m_goUpDiagonalPen = _l.m_goUpDiagonalPen;
     m_backGroundBrush = _l.m_backGroundBrush;
     m_dFactor = _l.m_dFactor;
-    m_bMultiRow = _l.m_bMultiRow;
     m_textPen = _l.m_textPen;
     m_textFont = _l.m_textFont;
     m_strPrefix = _l.m_strPrefix;
     m_strPostfix = _l.m_strPostfix;
-    m_bVerticalText = _l.m_bVerticalText;
     m_eFormatType = _l.m_eFormatType;
     m_rotateAngle = _l.m_rotateAngle;
     m_strComment = _l.m_strComment;
     m_indent=_l.m_indent;
-    m_bDontPrintText=_l.m_bDontPrintText;
+}
+
+void KSpreadLayout::clearFlag( LayoutFlags flag )
+{
+  m_flagsMask &= ~(Q_UINT32)flag;
+}
+
+void KSpreadLayout::setFlag( LayoutFlags flag )
+{
+  m_flagsMask |= (Q_UINT32)flag;
+}
+
+bool KSpreadLayout::testFlag( LayoutFlags flag ) const
+{
+  return ( m_flagsMask & (Q_UINT32)flag );
 }
 
 void KSpreadLayout::clearProperties()
@@ -282,9 +293,10 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
 	format.setAttribute( "alignY", (int)m_eAlignY );
     if ( ( hasProperty( PBackgroundColor ) || force ) && m_bgColor.isValid() )
 	format.setAttribute( "bgcolor", m_bgColor.name() );
-    if ( ( hasProperty( PMultiRow ) || force ) && m_bMultiRow )
+    if ( ( hasProperty( PMultiRow ) || force ) && testFlag(Flag_MultiRow) )
 	format.setAttribute( "multirow", "yes" );
-    if ( ( hasProperty( PVerticalText ) || force ) && m_bVerticalText )
+    if ( ( hasProperty( PVerticalText ) || force ) &&
+         testFlag( Flag_VerticalText) )
 	format.setAttribute( "verticaltext", "yes" );
     if ( hasProperty( PPrecision ) || force )
 	format.setAttribute( "precision", m_iPrecision );
@@ -304,7 +316,8 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
 	format.setAttribute( "angle", m_rotateAngle );
     if ( hasProperty( PIndent ) || force )
 	format.setAttribute( "indent", m_indent );
-    if( ( hasProperty( PDontPrintText ) || force ) && m_bDontPrintText)
+    if( ( hasProperty( PDontPrintText ) || force ) &&
+        testFlag( Flag_DontPrintText))
 	format.setAttribute( "dontprinttext", "yes" );
     if ( hasProperty( PFont ) || force )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
@@ -1036,35 +1049,35 @@ void KSpreadLayout::setFloatColor( FloatColor _c )
 void KSpreadLayout::setMultiRow( bool _b )
 {
    if ( _b == false )
-        {
-        clearProperty( PMultiRow );
-        setNoFallBackProperties( PMultiRow );
-        }
-    else
-        {
-        setProperty( PMultiRow );
-        clearNoFallBackProperties( PMultiRow );
-        }
-
-    m_bMultiRow = _b;
+   {
+     clearFlag( Flag_MultiRow );
+     clearProperty( PMultiRow );
+     setNoFallBackProperties( PMultiRow );
+   }
+   else
+   {
+     setFlag( Flag_MultiRow );
+     setProperty( PMultiRow );
+     clearNoFallBackProperties( PMultiRow );
+   }
     layoutChanged();
 }
 
 void KSpreadLayout::setVerticalText( bool _b )
 {
-    if ( _b == false )
-        {
-        clearProperty( PVerticalText );
-        setNoFallBackProperties( PVerticalText);
-        }
-    else
-        {
-        setProperty( PVerticalText );
-        clearNoFallBackProperties( PVerticalText);
-        }
-
-    m_bVerticalText = _b;
-    layoutChanged();
+  if ( _b == false )
+  {
+    clearProperty( PVerticalText );
+    setNoFallBackProperties( PVerticalText);
+    clearFlag( Flag_VerticalText );
+  }
+  else
+  {
+    setProperty( PVerticalText );
+    clearNoFallBackProperties( PVerticalText);
+    setFlag( Flag_VerticalText );
+  }
+  layoutChanged();
 }
 
 void KSpreadLayout::setFormatType(FormatType _format)
@@ -1138,19 +1151,19 @@ void KSpreadLayout::setComment( const QString& _comment )
 
 void KSpreadLayout::setDontPrintText( bool _b )
 {
-    if ( _b == false )
-        {
-        clearProperty( PDontPrintText );
-        setNoFallBackProperties(PDontPrintText);
-        }
-    else
-        {
-        setProperty(  PDontPrintText);
-        clearNoFallBackProperties( PDontPrintText);
-        }
-
-    m_bDontPrintText = _b;
-    layoutChanged();
+  if ( _b == false )
+  {
+    clearProperty( PDontPrintText );
+    setNoFallBackProperties(PDontPrintText);
+    clearFlag( Flag_DontPrintText );
+  }
+  else
+  {
+    setProperty(  PDontPrintText);
+    clearNoFallBackProperties( PDontPrintText);
+    setFlag( Flag_DontPrintText );
+  }
+  layoutChanged();
 }
 
 
@@ -1515,7 +1528,7 @@ bool KSpreadLayout::multiRow( int col, int row ) const
 	    return l->multiRow( col, row );
     }
 
-    return m_bMultiRow;
+    return testFlag( Flag_MultiRow );
 }
 
 bool KSpreadLayout::verticalText( int col, int row ) const
@@ -1527,7 +1540,7 @@ bool KSpreadLayout::verticalText( int col, int row ) const
 	    return l->verticalText( col, row );
     }
 
-    return m_bVerticalText;
+    return testFlag( Flag_VerticalText );
 }
 
 KSpreadLayout::FormatType KSpreadLayout::getFormatType( int col, int row ) const
@@ -1587,7 +1600,7 @@ bool KSpreadLayout::getDontprintText( int col, int row ) const
 	    return l->getDontprintText( col, row );
     }
 
-    return m_bDontPrintText;
+    return testFlag(Flag_DontPrintText);
 }
 
 

@@ -105,8 +105,6 @@ public:
     // Properties
     //
     ////////////////////////////////
-
-
     void clearProperties();
     void clearProperty( Properties p );
 
@@ -114,6 +112,21 @@ public:
     void clearNoFallBackProperties( Properties p ) ;
     void setNoFallBackProperties(Properties p);
     bool hasNoFallBackProperties( Properties p ) const ;
+
+    ///////////////////////////////
+    //
+    // Flags
+    //
+    ///////////////////////////////
+    enum LayoutFlags{ Flag_MultiRow      = 0x00000001,
+                      Flag_VerticalText  = 0x00000002,
+                      Flag_DontPrintText = 0x00000004
+                      /* reserve the bits 0xFFFF0000 for subclasses to use */
+                    };
+    void clearFlag( LayoutFlags flag );
+    void setFlag( LayoutFlags flag );
+    bool testFlag( LayoutFlags flag ) const;
+
 
     ////////////////////////////////
     //
@@ -331,10 +344,6 @@ protected:
     QFont toFont(QDomElement &element) const;
     QPen toPen(QDomElement &element) const;
 
-    /**
-     * Tells whether text may be broken into multiple lines.
-     */
-    bool m_bMultiRow;
 
     /**
      * Alignment of the text
@@ -421,7 +430,6 @@ protected:
      */
     double m_dFactor;
 
-    bool m_bVerticalText;
 
     KSpreadTable *m_pTable;
 
@@ -432,6 +440,8 @@ protected:
     * not used column/row parameters
     */
     uint m_bNoFallBack;
+
+    Q_UINT32 m_flagsMask;
 
     FormatType m_eFormatType;
 
@@ -450,10 +460,6 @@ protected:
     * Give indent
     */
     int m_indent;
-    /**
-     * Don't print text
-     */
-    bool m_bDontPrintText;
 
 private:
     void setProperty( Properties p );
