@@ -354,11 +354,20 @@ void GOval::updateGradientShape (QPainter& p) {
 	      qRound (ePoint.y () - sPoint.y ()));
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::DefaultShape:
-    gShape.setRegion (QRegion (matrix.map (rect), QRegion::Ellipse));
-    break;
+      {
+	  QPointArray pnts;
+	  pnts.makeEllipse (rect.x (), rect.y (), 
+			    rect.width (), rect.height ());
+	  gShape.setRegion (QRegion (matrix.map (pnts)));
+	  break;
+      }
   case GObject::OutlineInfo::PieShape:
     {
-      QRegion region (QRegion (matrix.map (rect), QRegion::Ellipse));
+	QPointArray epnts;
+	epnts.makeEllipse (rect.x (), rect.y (), 
+			   rect.width (), rect.height ());
+	QRegion region (matrix.map (epnts));
+
       float a = fabs (sAngle - eAngle);
       
       // polygon for clipping
