@@ -312,7 +312,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
 void AddStyle(QDomElement& styleElement, const QString& strStyleName,
     const StyleData& styleData, QDomDocument& mainDocument)
 {
-    // NOTE; styleElement is <STYLE> (singular, not <STYLES> (plural)
+    // NOTE; styleElement is <STYLE> (singular), not <STYLES> (plural)
 
     StackItem stackItem;
     QXmlAttributes attributes; // This is just a dummy for reusing already existing functions (TODO)

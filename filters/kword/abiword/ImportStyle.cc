@@ -19,7 +19,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qfont.h>
+#include <qfontinfo.h>
 
 #include <koGlobal.h>
 
@@ -35,22 +35,15 @@ StyleDataMap::StyleDataMap(void)
 
 QString StyleDataMap::getDefaultStyle(void)
 {
-    QFont font=KoGlobal::defaultFont();
-    int size=font.pointSize();
-    if (-1==size)
-    {
-        // I am sick of this problem: QFont::pointSize() == -1
-        //   So I am lazy and do not do any conversion (TODO)
-        size=font.pixelSize();
-    }
-
+    // We use QFontInfo, as it does not return -1 as point size
+    QFontInfo fontInfo(KoGlobal::defaultFont());
     QString strReturn;
 
     // As something is upsetting KWord's style manager, we must define everything!
     strReturn += "font-family:";
-    strReturn += font.family();
+    strReturn += fontInfo.family();
     strReturn += "; font-size:";
-    strReturn += QString::number(size);
+    strReturn += QString::number(fontInfo.pointSize());
     strReturn += "pt;";
 
     //strReturn += "font-style:normal; font-weight:normal; text-decoration:none; color:000000; bgcolor: FFFFFF;";
