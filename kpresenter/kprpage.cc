@@ -255,6 +255,9 @@ bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter ) const
 {
     if ( m_noteText.isEmpty() )
         return true;
+
+    //todo : add size for draw:text-box otherwise we can't import into oo
+    //<draw:text-box presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="14.5cm" svg:height="11.408cm" svg:x="3.247cm" svg:y="14.126cm" presentation:class="notes">
     xmlWriter.startElement( "presentation:notes" );
     xmlWriter.startElement( "draw:text-box" );
     QStringList text = QStringList::split( "\n", m_noteText );
@@ -2083,15 +2086,15 @@ QString KPrPage::pageTitle( const QString &_title ) const
     {
         // MASTERPAGE
         if ( m_masterPage )
-            title = i18n( "Slide %1" ).arg( m_doc->pageList().findRef( this ) + 1 ); 
-        else 
+            title = i18n( "Slide %1" ).arg( m_doc->pageList().findRef( this ) + 1 );
+        else
             title = i18n( "Master Slide" );
     }
     else
     {
         title = _title;
     }
-    
+
     if ( objs.isEmpty() )
         return title;
 
