@@ -278,7 +278,7 @@ QString WinWordDoc::generateFormats(
         if (typeid(Format) == typeid(*run))
         {
             const MsWordGenerated::CHP *chp = static_cast<Format *>(run)->values->getChp();
-
+    
 kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             if (run->end > run->start)
             {
@@ -650,7 +650,7 @@ void WinWordDoc::gotTableEnd(
         unsigned x;
         MsWordGenerated::TAP row = m_table[y]->m_row;
         QString xml_friendly;
-
+	
         // Create the XML for each cell in the row.
 
         for (x = 0; x < row.itcMac; x++)
@@ -705,7 +705,7 @@ void WinWordDoc::gotTableEnd(
             QColor brcRight = colorForNumber(QString::number(row.rgtc[x].brcRight.ico), -1);
             QColor brcTop = colorForNumber(QString::number(row.rgtc[x].brcTop.ico), -1);
             QColor brcBottom = colorForNumber(QString::number(row.rgtc[x].brcBottom.ico), -1);
-            QColor icoBack = colorForNumber(QString::number(row.rgshd[x].icoBack), 8);
+            QColor backGround = colorForNumber(QString::number(row.rgshd[x].icoBack), 8);
 
             cell.append(
                 QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\"") +
@@ -717,14 +717,17 @@ void WinWordDoc::gotTableEnd(
                 QString::fromLatin1("tRed=\"%1\" tGreen=\"%2\" tBlue=\"%3\" ").arg(brcTop.red()).arg(brcTop.green()).arg(brcTop.blue()) +
                 QString::fromLatin1("bWidth=\"1\" bStyle=\"0\" ") +
                 QString::fromLatin1("bRed=\"%1\" bGreen=\"%2\" bBlue=\"%3\" ").arg(brcBottom.red()).arg(brcBottom.green()).arg(brcBottom.blue()) +
-                QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(icoBack.red()).arg(icoBack.green()).arg(icoBack.blue()) +
+                QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(backGround.red()).arg(backGround.green()).arg(backGround.blue()) +
                 QString::fromLatin1("bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\""));
             cell.append(" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = m_table[y]->m_texts[x];
             encode(xml_friendly);
-            cell.append(xml_friendly);
-            cell.append("</TEXT>\n </PARAGRAPH>\n");
+            cell.append(xml_friendly);    
+            cell.append("</TEXT>\n");
+	    // CRASH!!!! (Niko)
+	    //cell.append(generateFormats(m_table[y]->m_styles[x]));
+	    cell.append("</PARAGRAPH>\n");
             cell.append("</FRAMESET>\n");
             m_tables.append(cell);
         }
