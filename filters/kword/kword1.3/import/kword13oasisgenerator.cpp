@@ -55,6 +55,20 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         declareLayout( (*it).m_layout );
+#if 0
+        for ( KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next() )
+        {
+            KWord13FormatOneData* data = format->getFormatOneData();
+            if ( data )
+            {
+                // Inspired from KoTextParag::saveOasis, macro WRITESPAN
+                KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", (*it).m_layout.m_autoStyleName );
+                fillGenStyleWithFormatOne( *data , gs, false );
+                data->m_autoStyleName = m_oasisGenStyles.lookup( gs, "T" );
+                kdDebug(30520) << "Format: Parent " << (*it).m_layout.m_autoStyleName << " => " << data->m_autoStyleName << endl;
+            }
+        }
+#endif
     }
 }
 
@@ -107,8 +121,8 @@ void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
             gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() + 1 );
     }
 #endif
-    fillGenStyleWithLayout( layout, gs, true );
-    fillGenStyleWithFormatOne( layout.m_format , gs, true );
+    fillGenStyleWithLayout( layout, gs, false );
+    fillGenStyleWithFormatOne( layout.m_format , gs, false );
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, "P", true );
     
