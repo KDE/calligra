@@ -1235,6 +1235,9 @@ void KPresenterView::screenFirst()
 /*========================== screen previous =====================*/
 void KPresenterView::screenPrev()
 {
+    if ( page->currentTextObjectView() )
+        return;
+
     if ( presStarted ) {
         if ( !kPresenterDoc()->spManualSwitch() ) {
             setCurrentTimer( 1 );
@@ -1260,6 +1263,8 @@ void KPresenterView::screenPrev()
 /*========================== screen next ========================*/
 void KPresenterView::screenNext()
 {
+    if ( page->currentTextObjectView() )
+        return;
     if ( presStarted ) {
 	if ( page->pNext( true ) ) {
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
