@@ -96,6 +96,7 @@ class VLayerListViewItem : public QCheckListItem
 {
 public:
 	VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc );
+	virtual ~VLayerListViewItem() {}
 
 	VLayer* layer() { return m_layer; }
 	int pos();
@@ -113,6 +114,7 @@ class VObjectListViewItem : public QListViewItem
 {
 public:
 	VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key );
+	virtual ~VObjectListViewItem() {}
 
 	VObject* object() { return m_object; }
 	void update();

@@ -95,11 +95,14 @@ VZOrderCmd::execute()
 
 		VObjectList objects;
 
+		// TODO : this doesnt work for objects inside groups!
 		VLayerListIterator litr( document()->layers() );
-		while( !selection.objects().isEmpty() )
+		while( !selection.objects().isEmpty() && litr.current() )
 		{
 			for ( ; litr.current(); ++litr )
 			{
+				if( litr.current()->state() == VObject::deleted )
+					continue;
 				VObjectList todo;
 				VObjectListIterator itr( selection.objects() );
 				for ( ; itr.current() ; ++itr )

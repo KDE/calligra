@@ -744,6 +744,8 @@ VLayersTab::updateObjects( VObject *object, QListViewItem *item )
 			if( dynamic_cast<VGroup *>( itr.current() ) )
 				updateObjects( itr.current(), m_objects[ itr.current() ] );
 		}
+
+	item->sort();
 }
 
 /*************************************************************************
