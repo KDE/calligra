@@ -174,7 +174,7 @@ void KWEditPersonnalExpression::slotOk()
 void KWEditPersonnalExpression::slotAddExpression()
 {
     bool ok;
-    QString expr=KLineEditDlg::getText(i18n("New expression:"), "",
+    QString expr=KLineEditDlg::getText(i18n("Add Expression:"),i18n("New expression:"), "",
                                        &ok, this);
     if(ok && !expr.isEmpty())
     {
@@ -210,7 +210,7 @@ void KWEditPersonnalExpression::slotDelExpression()
 void KWEditPersonnalExpression::slotAddGroup()
 {
     bool ok;
-    QString expr=KLineEditDlg::getText(i18n("New group:"), "",
+    QString expr=KLineEditDlg::getText(i18n("Add Group:"),i18n("New group:"), "",
                                        &ok, this);
     if(ok && !expr.isEmpty())
     {
