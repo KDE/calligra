@@ -1,9 +1,60 @@
 <chapter id="q-and-a">
 <title>Questions and Answers</title>
 
-<para>
-Some commonly (and maybe not so commonly) asked questions and their
-answers should be in this chapter.
-</para>
+<subtitle>Kpresenter 1.1.1</subtitle>
+
+<para>Things you might like but &kpresenter; does not yet do (and what
+to do about it)</para>
+
+<para>Bezier curves. This allows vector drawing with curves that you
+can adjust. Vector drawings still look good up close. This is being
+developed for the next major release. Use &kontour; or a similar
+package, import the artwork as a picture.</para>
+
+<para>Movies or video. You can not run video within &kpresenter;. If
+you really need to show a movie, make a link to it on your desktop,
+move &kpresenter; out of the way, click the link to the movie file and
+use <application>Xmovie</application> (or similar) to view it.</para>
+
+<para><application>Powerpoint</application> Files. &kpresenter; does
+attempt to import &Microsoft; <application>Powerpoint</application>
+files but it does not always work. It depends on the
+<application>Powerpoint</application> file version and what is in the
+file. You can always import pictures for the background image and
+re-type any text. It's not the ideal solution, re-doing the entire
+presentation. However, just bear in mind that
+<application>Powerpoint</application> does not even attempt to read
+&kpresenter; files.</para>
+
+<para>Sounds.  Some software allows you to assign noises to
+events. &kpresenter; does not yet support audio. I suspect that this
+is deliberate. You should be making the noise; gimmicky presentation
+tricks do not help you to get your message over. They should be used
+with caution and unless you are absolutely sure that they are going to
+work as intended, should be avoided. A work-around is to but a link on
+your desktop to the sound file.</para>
+
+<para>Spelling. The next version will have the word processing engine
+from &kword;, so it ought to have much better text handling
+tools.</para>
+
+<para>Taking notes or minutes. One piece of software allows you to
+make notes during the meeting and puts them into a word
+processor. Let's get something sorted out. If you are speaking,
+someone else should be taking notes. If you really must do this sort
+of thing, take a note pad and pencil. I think it looks ill-mannered if
+someone is talking and you are typing. If you need to take notes, have
+all the titles of your slides (or your major subject areas) in a
+&kword; document or a text editor. If you need to make a note, just
+insert whatever you need to remember under the appropriate
+heading.</para>
+
+<para>Timing. Some software includes a stopwatch function to allow you
+to rehearse your presentation and see how long it takes. Buy a clock
+with a second hand, note your start and end times. The clock will also
+be useful for telling the time.</para>
+
+<para>Zoom. At present, &kpresenter; does not let you zoom in to your
+drawing. This is to be introduced in the next version.</para>
 
 </chapter>

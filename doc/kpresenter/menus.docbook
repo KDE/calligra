@@ -1,6 +1,7 @@
-<!-- <?xml version="1.0" ?>
+<!-- 
+<?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
-     
+ 
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
@@ -1029,8 +1030,8 @@ A4, US legal.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem>Page Bac<accel>k</accel>ground...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Page Background...</guimenuitem>
 </menuchoice></term>
 <listitem>
 
@@ -1344,6 +1345,7 @@ have typed or pasted into it.
 <sect1 id="screenpresmenu">
 <title><guimenu>Screen Presentations</guimenu> Menu</title>
 
+
 <screenshot>
 <screeninfo>The <guimenu>Screen Presentations</guimenu>
 Menu</screeninfo>
@@ -1526,11 +1528,24 @@ Editor</guimenuitem>
 <screeninfo>The <guimenu>Tools</guimenu> Menu</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="menutools.png" format="PNG"/></imageobject>
+<imagedata fileref="toolsmenu01.png" format="PNG"/></imageobject>
 <textobject><phrase>The <guimenu>Tools</guimenu>
 Menu</phrase></textobject>
 </mediaobject>
 </screenshot>
+
+<para>The <guimenu>Tools</guimenu> menu contains details of keyboard
+shortcut keys. (Note that the Insert menu has three other shortcut
+keys: <guimenuitem>Insert Page</guimenuitem> with <keycap>F2</keycap>,
+<guimenuitem>Insert Picture</guimenuitem> with <keycap>F3</keycap>,
+and <guimenuitem>Insert Clipart</guimenuitem> with
+<keycap>F4</keycap>).</para>
+
+<para>If you prefer to use both hands, you can draw with the mouse and
+change what you are doing without having to move the pointer to click
+on the <guiicon>Toolbar</guiicon> Icon. For example, draw a rectangle
+(F7 key) and when you have finished, the <keycap>F5</keycap> key will
+put the mouse back into the <quote>select</quote> mode.</para>
 
 <variablelist>
 <varlistentry>
@@ -1543,7 +1558,7 @@ Menu</phrase></textobject>
 </term>
 <listitem>
 <para>
-
+Use the mouse to draw with.
 </para>
 </listitem>
 </varlistentry>
@@ -1558,8 +1573,66 @@ Menu</phrase></textobject>
 </term>
 <listitem>
 <para>
-
+Draw a straight line. Click with the <mousebutton>left</mousebutton>
+mouse button where you want the line to start, and drag to where you
+want the line to end.  You can select the line later and drag the node
+handles to resize or scale it.
 </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Freehand</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+Draw a freehand shape.  Click with the &LMB; to begin, and draw with
+your mouse.  Release the mouse button to stop drawing.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Polyline</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>A polyline is a shape made up of straight lines.  Click with the
+&LMB; to begin. Click again where the first line segment should stop,
+and click again to draw a second line segment connected to the
+first.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Quadric Bezier Curve</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><!-- FIXME: What's Quadric? --> Click with the &LMB; to begin
+drawing.  Click again to set the endpoint of the curve.  Drag the
+mouse to change the shape of the curve.  Click with the &RMB; to
+finish drawing.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Cubic Bezier Curve</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><!-- FIXME: What's Cubic? Why should a user care? --> Click with
+the &LMB; to begin drawing.  Click again to set the endpoint of the
+curve.  Drag the mouse to change the shape of the curve.  Click with
+the &RMB; to finish drawing.</para>
 </listitem>
 </varlistentry>
 
@@ -1572,9 +1645,14 @@ Menu</phrase></textobject>
 </menuchoice>
 </term>
 <listitem>
-<para>
+<para>Draw a rectangle.  Click with the &LMB; to begin the rectangle,
+move the mouse to where you want the opposite corner to be, and click
+again.</para>
 
-</para>
+<para>Click with the &RMB; on the rectangle and choose
+<guimenuitem>Configure Rectangle</guimenuitem> to change the sharpness
+of the corners, and to fill in the rectangle with color or not.</para>
+
 </listitem>
 </varlistentry>
 
@@ -1588,7 +1666,9 @@ Menu</phrase></textobject>
 </term>
 <listitem>
 <para>
-
+Draw a circle or ellipse.  Click with the &LMB; to begin the circle,
+move the mouse to where you want the opposite side to be, and click
+again.
 </para>
 </listitem>
 </varlistentry>
@@ -1603,7 +1683,10 @@ Menu</phrase></textobject>
 </term>
 <listitem>
 <para>
-
+Draw a shape shaped like a piece of pie.  Click with the &LMB; to
+begin the shape, move the mouse to where you want the opposite side to
+be, and click again.
+<!-- FIXME: Lame description. -->
 </para>
 </listitem>
 </varlistentry>
@@ -1618,7 +1701,7 @@ Menu</phrase></textobject>
 </term>
 <listitem>
 <para>
-
+<!-- FIXME: Explain this -->
 </para>
 </listitem>
 </varlistentry>
@@ -1632,9 +1715,9 @@ Menu</phrase></textobject>
 </menuchoice>
 </term>
 <listitem>
-<para>
-
-</para>
+<para> Choose from a variety of predefined shapes.  At present, these
+are arrows, in various directions, and connectors that you can use to
+construct flow charts.</para>
 </listitem>
 </varlistentry>
 
@@ -1648,7 +1731,7 @@ Menu</phrase></textobject>
 </term>
 <listitem>
 <para>
-
+<!-- FIXME: This doesn't *do* anything except make a rectangle. -->
 </para>
 </listitem>
 </varlistentry>
@@ -1664,9 +1747,15 @@ Menu</phrase></textobject>
 </menuchoice>
 </term>
 <listitem>
-<para>
-
-</para>
+<para>The <guimenu>Table</guimenu> menu option requires you to first
+draw a square or rectangle with the left mouse button held down. It
+will then give you a menu. You use it when you want to put a
+spreadsheet into your presentation. The import options are: &kspread;,
+<application>Gnumeric</application>, &Microsoft;
+<application>Excel</application>, <application>Quattro
+Pro</application>, <application>Applix</application>, Text with comma
+separated values or plain text. You also have options to either insert
+a recently used document or to start with an empty document.</para>
 </listitem>
 </varlistentry>
 
@@ -1681,14 +1770,152 @@ Menu</phrase></textobject>
 </menuchoice>
 </term>
 <listitem>
-<para>
-
-</para>
+<para>The menu entry <guimenuitem>Object</guimenuitem> has a
+sub-menu. You can choose to import an object created in one of the
+other &koffice; tools. Again, you must first draw a square or rectangle
+before it gives you a menu where you can choose a file to import.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
 </sect1>
+
+<sect1 id="settingsmenu">
+<title>The <guimenu>Settings</guimenu> Menu</title>
+
+<para>The <guimenu>Settings</guimenu> menu allows us to customize &kpresenter;. </para>
+
+<screenshot>
+<screeninfo>Settings menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings01.png" format="PNG" width="206"/>
+</imageobject>
+<textobject><phrase>The <guimenu>Settings</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The top seven menu entries control what toolbars are
+displayed. Clicking on the tick on the left removes it (or restores
+it). It's useful if you want a little more working area and do not
+intend to use one of the toolbars.</para>
+
+<!-- FIXME: Add the menu entries, and a screenshot as to which one they are -->
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Key Bindings</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para><guimenuitem>Configure Key Bindings</guimenuitem> allows you to
+assign a keyboard shortcut to actions that &kpresenter; menus or icons
+contain.</para>
+
+<screenshot>
+<screeninfo>Customize Keybindings</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings03.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Customizing the key bindings</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>If you try to assign a shortcut that is already used, it will
+give you a warning message. Highlight what you want to do (in the
+picture, I have chosen to make a keyboard shortcut to <guilabel>About
+KDE</guilabel>).</para>
+
+<para>Click the radio button to the Custom Key setting and type the
+key you want to use. I assigned <keycap>Control</keycap> key and
+<keycap>Y</keycap> to bring up the <quote>About KDE</quote> dialog
+box.</para>
+
+<para>The button shows what has been assigned. Click
+<guibutton>OK</guibutton> to make the changes, click
+<guibutton>Default</guibutton> to restore whatever was assigned as
+default, click <guibutton>Cancel</guibutton> to do nothing and leave
+the dialog.</para>
+
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Configure Toolbars allows you to add or delete icons on each of
+the toolbars.</para>
+
+<screenshot>
+<screeninfo>Configuring &kpresenter;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings04.png" format="PNG" width="588"/>
+</imageobject>
+<textobject><phrase>Configuring &kpresenter;</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+
+<para>At the top is a Drop Down box to enable you to choose which
+toolbar you want to modify. In the picture Koffice Shell is
+selected. If I want to add the <guiicon>About KDE</guiicon> icon to
+that toolbar, I click the entry in the left window. The arrow pointing
+right becomes available, if I click the arrow the <guiicon>About
+KDE</guiicon> entry is added to the selected toolbar. the left arrow
+is available when you click in the right side window. It allows you to
+remove an icon from a toolbar.  The up and down arrows become active
+when items on both sides are selected. You can move the highlight in
+the right side window up and down with the keyboard arrow keys or by
+clicking on the arrows with the mouse.  The Configure Kpresenter menu
+entry gives two menu boxes.</para>
+
+<screenshot>
+<screeninfo>Configuring &kpresenter;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings05.png" format="PNG" width="338"/>
+</imageobject>
+<textobject><phrase>Configuring &kpresenter;</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The <guiicon>Interface</guiicon> icon on the left allows us to
+adjust the time settings on the autosave feature. The bottom two
+sliders allow the Raster settings to be adjusted. This still needs a
+little more work. They control the minimum size of objects (such as
+boxes) drawn on screen. You may find that you can not make a box
+smaller than a certain size. </para>
+
+<para>The second icon is labelled Color </para>
+
+<screenshot>
+<screeninfo>Configuring &kpresenter;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings06.png" format="PNG" width="338"/>
+</imageobject>
+<textobject><phrase>Configuring &kpresenter;</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>It changes the background color of the text box as you type text
+in (in the picture, I have made it green. There is a color choice
+dialog box). The Text boxes are white by default. If you had a dark
+background color and you wanted to put some white text over it, you
+could color the text box so that you could see what you were
+typing. When you have finished, the area around the text would revert
+to whatever the background color was. The
+<guibutton>Default</guibutton> button restores the original
+settings. </para>
+
+</sect1>
+
 
 <sect1 id="helpmenu">
 <title><guimenu>Help</guimenu> Menu</title>
