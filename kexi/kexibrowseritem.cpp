@@ -24,3 +24,4 @@ Content KexiBrowserItem::content()
 	return m_content;
 }
 */
+#include "kexibrowseritem.moc"
