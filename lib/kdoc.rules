@@ -1,0 +1,24 @@
+# These are the rules used by makekdedoc to generate the kdelibs
+# documentation with KDOC. Please update them if I forget any
+# dependencies.
+#
+# -Taj (Apr 1999)
+
+kde_MODULES = koml store kofficecore kofficeui
+
+#koml_FILES = *.idl *.h
+koml_FILES = *.h
+koml_LIBS = -lkom -lpartsui -lparts -lqt
+
+#store_FILES = *.idl *.h
+store_FILES = *.h
+store_LIBS = -lkom -lpartsui -lparts -lqt
+
+#kofficecore_FILES = *.idl *.h
+kofficecore_FILES = *.h
+kofficecore_LIBS = -lkom -lpartsui -lparts -lqt
+
+#kofficeui_FILES = *.idl *.h
+kofficeui_FILES = *.h
+kofficeui_LIBS = -lkom -lpartsui -lparts -lqt
+
