@@ -562,13 +562,14 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
 void ReportCanvas::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
-    CanvasReportItem *item = 0L
+    CanvasReportItem *item = 0L;
     if ( e->button() == Qt::LeftButton && m_canvas->selected.count() == 1 )
-        item = dynamic_cast<CanvasReportItem *>( m_canvas->selected.first() )
+        item = dynamic_cast<CanvasReportItem *>( m_canvas->selected.first() );
     if ( item )
-        item->fastProperty()
-        item->hide()
-        item->show()
+    {
+        item->fastProperty();
+        item->hide();
+        item->show();
     }
 }
 
