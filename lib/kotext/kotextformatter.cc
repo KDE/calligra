@@ -206,7 +206,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
-	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
+	       parag->isNewLinesAllowed() && lastChr == '\n' && lastBreak > -1 ) {
 #ifdef DEBUG_FORMATTER
 	    qDebug( "BREAKING" );
 #endif

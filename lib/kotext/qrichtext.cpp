@@ -4192,8 +4192,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	    lastFormat = chr->format();
 	    lastY = cy;
 	    startX = chr->x;
-	    if ( !chr->isCustom() && chr->c != '\n' )
-		paintEnd = i;
+	    paintEnd = i;
 	    bw = cw;
 	    if ( !chr->isCustom() )
 		continue;
@@ -4225,13 +4224,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 				 lastFormat, i, selectionStarts, selectionEnds, cg, lastDirection );
 	    }
 	    if ( !chr->isCustom() ) {
-		if ( chr->c != '\n' ) {
-		    paintStart = i;
-		    paintEnd = i;
-		} else {
-		    paintStart = i+1;
-		    paintEnd = -1;
-		}
+		paintStart = i;
+		paintEnd = i;
 		lastFormat = chr->format();
 		lastY = cy;
 		startX = chr->x;
@@ -4257,12 +4251,10 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		}
 	    }
 	} else {
-	    if ( chr->c != '\n' ) {
-		if( chr->rightToLeft ) {
-		    startX = chr->x;
-		}
-		paintEnd = i;
+	    if( chr->rightToLeft ) {
+		startX = chr->x;
 	    }
+	    paintEnd = i;
 	    bw += cw;
 	}
 	lastBaseLine = baseLine;

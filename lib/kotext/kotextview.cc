@@ -927,9 +927,9 @@ void KoTextView::openLink()
 {
     if(m_refLink.find("http://")!=-1 || m_refLink.find("mailto:")!=-1
        || m_refLink.find("ftp://")!=-1 || m_refLink.find("file:")!=-1)
-        (void) new KRun(m_refLink  );
+        (void) new KRun( m_refLink );
     else
-        KMessageBox::sorry(0L,i18n("%1 is not a valid link.").arg(m_refLink));//TODO FIX english
+        KMessageBox::sorry(0L,i18n("%1 is not a valid link.").arg(m_refLink));
 }
 
 
@@ -937,6 +937,12 @@ void KoTextView::insertSoftHyphen()
 {
     textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
                           false /* no newline */, true, i18n("Insert Soft Hyphen") );
+}
+
+void KoTextView::insertLineBreak()
+{
+    textObject()->insert( cursor(), currentFormat(), QChar('\n'),
+                          false /* no newline */, true, i18n("Insert Line Break") );
 }
 
 void KoTextView::insertNonbreakingSpace()

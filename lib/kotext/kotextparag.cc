@@ -34,6 +34,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 {
     //kdDebug() << "KoTextParag::KoTextParag " << this << endl;
     m_item = 0L;
+    setNewLinesAllowed(TRUE);
 }
 
 KoTextParag::~KoTextParag()
@@ -440,9 +441,17 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     if ( lastFormat->textBackgroundColor().isValid() )
         painter.fillRect( startX_pix, lastY_pix, bw, h_pix, lastFormat->textBackgroundColor() );
 
-    drawParagStringInternal( painter, s, start, len, startX_pix,
+    // don't want to draw line breaks but want them when drawing formatting chars
+    int draw_len = len;
+    int draw_bw = bw;
+    if ( at( start + len - 1 )->c == '\n' ) {
+        draw_len--;
+        draw_bw -= at( start + len - 1 )->pixelwidth;
+    }
+
+    drawParagStringInternal( painter, s, start, draw_len, startX_pix,
                              lastY_pix, baseLine_pix,
-                             bw, // Note that bw is already in pixels (see QTextParag::paint)
+                             draw_bw, // Note that bw is already in pixels (see QTextParag::paint)
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
                              selectionEnds, cg, rightToLeft, zh );
 
@@ -672,8 +681,7 @@ int KoTextParag::nextTab( int chnum, int x )
                     // Look for the next tab (or EOL)
                     int c = chnum + 1;
                     int w = 0;
-                    // We include the trailing space in the calculation because QRT actually formats it
-                    while ( c < string()->length() - 1 && string()->at( c ).c != '\t' )
+                    while ( c < string()->length() - 1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
                     {
                         KoTextStringChar & ch = string()->at( c );
                         // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
@@ -696,7 +704,7 @@ int KoTextParag::nextTab( int chnum, int x )
                     int w = 0;
                     int decimalPoint = KGlobal::locale()->decimalSymbol()[0].unicode();
                     bool digitFound = false;
-                    while ( c < string()->length()-1 && string()->at( c ).c != '\t' )
+                    while ( c < string()->length()-1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
                     {
                         KoTextStringChar & ch = string()->at( c );
                         if ( ch.c.isDigit() )

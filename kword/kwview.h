@@ -312,6 +312,7 @@ public slots:
     void showDocStructure();
 
     void slotSoftHyphen();
+    void slotLineBreak();
     void slotNonbreakingSpace();
 
     void refreshAllVariable();

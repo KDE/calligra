@@ -815,11 +815,14 @@ void KWView::setupActions()
                         this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
     KAction* actSoftHyphen = new KAction( i18n( "Insert soft hyphen" ), CTRL+Key_Minus,
                         this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
+    KAction* actLineBreak = new KAction( i18n( "Line break" ), SHIFT+Key_Return,
+                        this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
     // Necessary for the actions that are not plugged anywhere
     KAccel * accel = new KAccel( this );
     actNbsp ->plugAccel( accel );
     accel = new KAccel( this ); // needed ?
     actSoftHyphen->plugAccel( accel );
+    actLineBreak->plugAccel( accel );
 }
 
 void KWView::refreshMenuExpression()
@@ -4190,6 +4193,13 @@ void KWView::showDocStructure()
     m_doc->reorganizeGUI();
 }
 
+void KWView::slotSoftHyphen()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertSoftHyphen();
+}
+
 void KWView::slotNonbreakingSpace()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -4197,11 +4207,11 @@ void KWView::slotNonbreakingSpace()
         edit->insertNonbreakingSpace();
 }
 
-void KWView::slotSoftHyphen()
+void KWView::slotLineBreak()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->insertSoftHyphen();
+        edit->insertLineBreak();
 }
 
 void KWView::refreshAllVariable()

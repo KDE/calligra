@@ -120,6 +120,7 @@ public:
 
 
     void insertSoftHyphen();
+    void insertLineBreak();
     void insertNonbreakingSpace();
     void insertSpecialChar(QChar _c);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
