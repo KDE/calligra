@@ -80,4 +80,7 @@
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 	</ToolBar>
+	<ToolBar name="toolbox" position="left">
+		<Text>Toolbox</Text>
+	</ToolBar>
 </kpartgui>

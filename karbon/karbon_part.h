@@ -32,7 +32,6 @@ class DCOPObject;
 class QRect;
 class VCommand;
 class VCommandHistory;
-class VToolDocker;
 
 /**
  * Keeps track of visual per document properties.
@@ -88,9 +87,6 @@ public:
     void setUnit(KoUnit::Unit _unit);
     void initUnit();
 
-	VToolDocker *toolContainer();
-	void setToolContainer( VToolDocker * );
-
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
@@ -110,7 +106,6 @@ private:
 	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
 	KoUnit::Unit m_unit;
-	VToolDocker* m_toolContainer;
 };
 
 #endif

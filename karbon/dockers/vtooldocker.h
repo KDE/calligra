@@ -25,16 +25,15 @@
 
 class QWidget;
 class KoMainWindow;
-class KarbonView;
 class KarbonPart;
 class VStrokeFillPreview;
 
-class VToolDocker : public VDocker
+class VToolDocker : public QWidget
 {
 	Q_OBJECT
 
 public:
-	VToolDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	VToolDocker( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 	VStrokeFillPreview *strokeFillPreview();
   

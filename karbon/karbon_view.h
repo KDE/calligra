@@ -24,6 +24,7 @@
 
 #include <koView.h>
 #include <ksharedptr.h>
+#include <kxmlguibuilder.h>
 #include <koUnit.h>
 #include "vcanvas.h"
 
@@ -70,12 +71,13 @@ class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
 class VTool;
+class VToolDocker;
 class VToolOptionsDocker;
 class VTransformDlg;
 class VWhirlPinchDlg;
 
 
-class KarbonView : public KoView
+class KarbonView : public KoView, public KXMLGUIBuilder
 {
 	Q_OBJECT
 
@@ -188,11 +190,16 @@ protected slots:
 	void slotJoinStyleClicked();
 	void slotCapStyleClicked();
 
+
 protected:
 	virtual void updateReadWrite( bool rw );
 	virtual void resizeEvent( QResizeEvent* event );
 	void dragEnterEvent( QDragEnterEvent *e );
 	void dropEvent ( QDropEvent *e );
+
+	//KXMLGUIBuilder
+	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
+	virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
 
 private:
 	void initActions();
@@ -260,6 +267,8 @@ private:
 	//toolbox
 	DCOPObject* m_dcop;
 
+	VToolDocker *m_toolbox;
+
 	//status bar message
 	QLabel* m_status;
 
@@ -267,4 +276,3 @@ private:
 };
 
 #endif
-

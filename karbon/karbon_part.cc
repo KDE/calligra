@@ -38,12 +38,9 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
-#include "vtooldocker.h"
-
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
  static const char * CURRENT_DTD_VERSION = "1.2";
-
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -55,7 +52,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_bShowStatusBar = true;
 	m_maxRecentFiles = VGlobal::maxRecentFiles;
 	dcop = 0L;
-	m_toolContainer = 0L;
 
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
@@ -129,11 +125,6 @@ KarbonPart::removeView( KoView *view )
 {
 	kdDebug() << "KarbonPart::removeView" << endl;
 	KoDocument::removeView( view );
-	if( views().count() == 0 )
-	{
-		delete m_toolContainer;
-		m_toolContainer = 0L;
-	}
 }
 
 bool
@@ -308,18 +299,6 @@ KarbonPart::setUnit(KoUnit::Unit _unit)
     {
         static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
     }
-}
-
-void
-KarbonPart::setToolContainer( VToolDocker *toolContainer )
-{
-	m_toolContainer = toolContainer;
-}
-
-VToolDocker*
-KarbonPart::toolContainer()
-{
-	return m_toolContainer;
 }
 
 #include "karbon_part.moc"

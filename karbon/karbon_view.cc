@@ -108,12 +108,13 @@
 #include "vsegment.h"
 #include "vpath.h"
 
-
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
-	: KoView( p, parent, name ), m_part( p )
+	: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
 {
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
+
+	setClientBuilder( this );
 
 	if( !p->isReadWrite() )
 		setXMLFile( QString::fromLatin1( "karbon_readonly.rc" ) );
@@ -122,6 +123,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	m_dcop = 0;
 	dcopObject(); // build it
+
+	m_toolbox = 0L;
 
 	// dialogs:
 	m_insertKnotsDlg = new VInsertKnotsDlg();
@@ -138,9 +141,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setRadius( 100.0 );
 
 	m_layersDocker = new VLayersDocker( this );
-	mainWindow()->addDockWindow( m_layersDocker, DockRight );
+	if( shell() )
+		mainWindow()->addDockWindow( m_layersDocker, DockRight );
 	m_contextHelpDocker = new VContextHelpDocker( this );
-	mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
+	if( shell() )
+		mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
 	m_toolOptionsDocker = new VToolOptionsDocker( this );
 	m_toolOptionsDocker->show();
 	
@@ -171,39 +176,14 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
 
-	VToolDocker* toolContainer = part()->toolContainer();
+	//VToolDocker* toolContainer = part()->toolContainer();
 
+	kdDebug() << "done" << endl;
 	if( shell() )
 	{
-		if( !toolContainer )
-		{
-			toolContainer = new VToolDocker( part(), this );
-			mainWindow()->addDockWindow( toolContainer, DockLeft );
-			part()->setToolContainer( toolContainer );
-		}
-		connect( toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
-		connect( toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
-		connect( toolContainer, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
-		connect( toolContainer, SIGNAL( shearToolActivated() ),		this, SLOT( shearTool() ) );
-		connect( toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
-		connect( toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
-		connect( toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
-		connect( toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
-		connect( toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
-		connect( toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
-		connect( toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
-		connect( toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
-		connect( toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
-		part()->toolContainer()->show();
-		m_strokeFillPreview = toolContainer->strokeFillPreview();
-		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
-		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
-
 		//Create Dockers
 		m_ColorManager = new VColorDocker( part(), this );
 		m_strokeDocker = new VStrokeDocker( part(), this );
-		connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 	}
 
 	m_TransformDlg = new VTransformDlg( part(), this );
@@ -226,7 +206,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	selectTool();
 	zoomChanged();
-	if( shell() ) selectionChanged();
 }
 
 KarbonView::~KarbonView()
@@ -242,7 +221,7 @@ KarbonView::~KarbonView()
 	delete( m_contextHelpDocker );
 	delete( m_toolOptionsDocker );
 	delete( m_strokeDocker );
-	
+
 	// tools:
 	delete( m_ellipseTool );
 	delete( m_gradTool );
@@ -264,14 +243,69 @@ KarbonView::~KarbonView()
 	delete( m_dcop );
 }
 
-DCOPObject* KarbonView::dcopObject()
+QWidget *
+KarbonView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
+{
+	if( element.attribute( "name" ) == "toolbox" )
+	{
+		QWidget *toolbar = KXMLGUIBuilder::createContainer( parent, index, element, id );
+		//if( !m_toolbox )
+		//{
+		kdDebug() << "GOT IT! toolbar :" << toolbar << endl;
+			m_toolbox = new VToolDocker( m_part, toolbar );
+			connect( m_toolbox, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
+			connect( m_toolbox, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
+			connect( m_toolbox, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
+			connect( m_toolbox, SIGNAL( shearToolActivated() ),			this, SLOT( shearTool() ) );
+			connect( m_toolbox, SIGNAL( rectangleToolActivated() ),		this, SLOT( rectangleTool() ) );
+			connect( m_toolbox, SIGNAL( roundRectToolActivated() ),		this, SLOT( roundRectTool() ) );
+			connect( m_toolbox, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
+			connect( m_toolbox, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
+			connect( m_toolbox, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
+			connect( m_toolbox, SIGNAL( sinusToolActivated() ),			this, SLOT( sinusTool() ) );
+			connect( m_toolbox, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
+			connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
+			connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
+			if( shell() )
+			{
+				m_strokeFillPreview = m_toolbox->strokeFillPreview();
+				connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
+				connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
+
+				connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+				connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+				selectionChanged();
+			}
+		//}
+		return toolbar;
+	}
+
+	return KXMLGUIBuilder::createContainer( parent, index, element, id );
+}
+
+void
+KarbonView::removeContainer( QWidget *container, QWidget *parent,
+			                QDomElement &element, int id )
+{
+	if( m_toolbox )
+	{
+		kdDebug() << "GOT IT! parent :" << parent << endl;
+		delete m_toolbox;
+		m_toolbox = 0L;
+		return;
+	}
+	KXMLGUIBuilder::removeContainer( container, parent, element, id );
+}
+
+
+DCOPObject *
+KarbonView::dcopObject()
 {
 	if( !m_dcop )
 		m_dcop = new KarbonViewIface( this );
 
 	return m_dcop;
 }
-
 
 void
 KarbonView::updateReadWrite( bool /*rw*/ )
