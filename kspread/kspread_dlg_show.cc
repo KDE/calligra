@@ -40,6 +40,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   list=new QListBox(page);
   lay1->addWidget( list );
 
+  list->setSelectionMode(QListBox::Multi);
   QString text;
   QStringList::Iterator it;
   QStringList tabsList=m_pView->tabBar()->listhide();
@@ -66,11 +67,15 @@ void KSpreadshow::slotDoubleClicked(QListBoxItem *)
 void KSpreadshow::slotOk()
 {
   QString text;
-  if(list->currentItem()!=-1)
-	{
-	text=list->text(list->currentItem());
-        m_pView->tabBar()->showTable(text);
-        }
+
+  for (int i=0; i < list->numRows(); i++)
+  {
+    if (list->isSelected(i))
+    {
+      text=list->text(i);
+      m_pView->tabBar()->showTable(text);
+    }
+  }
   accept();
 }
 
