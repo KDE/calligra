@@ -577,11 +577,11 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						path->curveTo( KoPoint( 2 * cury - contrly, 2 * cury - contrly ),
+						path->curveTo( KoPoint( 2 * curx - contrlx, 2 * cury - contrly ),
 									   KoPoint( curx + x2, cury + y2 ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curveTo( KoPoint( 2 * cury - contrly, 2 * cury - contrly ),
+						path->curveTo( KoPoint( 2 * curx - contrlx, 2 * cury - contrly ),
 									   KoPoint( x2, y2 ), KoPoint( tox, toy ) );
 					contrlx = relative ? curx + x2 : x2;
 					contrly = relative ? cury + y2 : y2;
