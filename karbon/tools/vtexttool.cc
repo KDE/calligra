@@ -80,7 +80,7 @@ ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
 	int dx = e->x() - width() / 2;
 	int dy = e->y() - height() / 2;
 
-	float fd = sqrt( dx * dx + dy * dy );
+	float fd = sqrt( double( dx * dx + dy * dy ) );
 	int a;
 
 	if( fd == 0 )
