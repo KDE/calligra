@@ -55,14 +55,21 @@ class KSpreadComboboxLocationEditWidget;
 class ViewPrivate;
 
 /**
+ * \brief
+ * The KSpreadView class displays a KSpread document.
+ *
+ *
  * KSpreadView is used to display a spreadsheet document and provide
  * the interface for the user to perform editing and data analysis.
  *
- * A view consists of several parts: canvas to display cells in a sheet,
- * column header to show columns, row header to show rows, horizontal
- * and vertical scrollbars for navigation, location editor to show
- * marker and/or selection, tab bar to select active worksheet and line
- * editor to display and edit cell contents.
+ * A view consists of several parts: 
+ *  \li canvas to display cells in a sheet
+ *  \li line editor to display and edit cell contents
+ *  \li location editor to show marker and/or selection
+ *  \li column header to show columns
+ *  \li row header to show rows
+ *  \li horizontal and vertical scrollbars for navigation
+ *  \li tab bar to select active worksheet
  *
  */
 class KSpreadView : public KoView
@@ -78,7 +85,7 @@ public:
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
 
     /**
-     * Destroy the view.
+     * Destroys the view.
      */
     ~KSpreadView();
 
