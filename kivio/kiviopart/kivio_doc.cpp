@@ -129,20 +129,21 @@ bool KivioDoc::initDoc()
   KoTemplateChooseDia::ReturnType ret;
 
   ret = KoTemplateChooseDia::choose(  KivioFactory::global(), f,
-                                      "application/x-kivio", "*.flw", "Kivio",
+                                      "application/x-kivio", "*.flw", i18n("Kivio"),
                                       KoTemplateChooseDia::NoTemplates );
 
   if ( ret == KoTemplateChooseDia::File ) {
     KURL url;
     url.setPath(f);
     return openURL( url );
-  } else
-    if ( ret == KoTemplateChooseDia::Empty ) {
+  }
+  else if ( ret == KoTemplateChooseDia::Empty ) {
       KivioPage *t = createPage(true);
       m_pMap->addPage( t );
       resetURL();
       return true;
-  } else
+  }
+  else
     return false;
 }
 
