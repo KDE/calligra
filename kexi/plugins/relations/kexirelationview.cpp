@@ -61,7 +61,7 @@ KexiRelationView::KexiRelationView(KexiRelationDialog *parent, const char *name,
 void
 KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 {
-	kdDebug() << "KexiRelationView::addTable(): " << table << endl;
+	kdDebug() << "KexiRelationView::addTable(): " << table << ", " << viewport() << endl;
 
 /*	if(m_tables.contains(table))
 	{
@@ -74,6 +74,7 @@ KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 	addChild(c, 100,100);
 	c->show();
 	c->setFixedSize(110, 160);
+	int x, y;
 
 	if(m_tables.count() > 0)
 	{
@@ -86,12 +87,16 @@ KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 				place = right;
 		}
 
-		moveChild(c, place + 15, 5);
+		x = place + 15;
 	}
 	else
-		moveChild(c, 5, 5);
+	{
+		x = 5;
+	}
 
-	recalculateSize();
+	y = 5;
+	recalculateSize(x + c->width(), y + c->height());
+	moveChild(c, x, y);
 
 	m_tables.insert(table, c);
 
@@ -183,7 +188,7 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 //	QRect w(c->x() - 5, c->y() - 5, c->width() + 5, c->height() + 5);
 //	updateContents(w);
 
-	recalculateSize();
+	recalculateSize(c->x() + c->width(), c->y() + c->height());
 }
 
 void
@@ -260,27 +265,17 @@ KexiRelationView::keyPressEvent(QKeyEvent *ev)
 }
 
 void
-KexiRelationView::recalculateSize()
+KexiRelationView::recalculateSize(int width, int height)
 {
-	kdDebug() << "KexiRelationView::recalculateSize()" << endl;
+	int newW = contentsWidth(), newH = contentsHeight();
 
-	int width=0;
-	int height=0;
+	if(newW < width)
+		newW = width;
 
-	QDictIterator<KexiRelationViewTableContainer> it(m_tables);
-	for(; it.current(); ++it)
-	{
-		int cwidth = (*it)->x() + (*it)->width();
-		int cheight = (*it)->y() + (*it)->height();
+	if(newH < height)
+		newH = height;
 
-		if(cwidth > width)
-			width = cwidth;
-
-		if(cheight > height)
-			height = cheight;
-	}
-
-	resizeContents(width, height);
+	resizeContents(newW, newH);
 }
 
 void

@@ -66,7 +66,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 		void		contentsMousePressEvent(QMouseEvent *ev);
 		virtual void	keyPressEvent(QKeyEvent *ev);
 
-		void		recalculateSize();
+		void		recalculateSize(int width, int height);
 
 	private:
 		int			m_tableCount;

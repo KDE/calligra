@@ -47,12 +47,11 @@ QRgb qt_colorref2qrgb(COLORREF col)
 #endif
 
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t)
- : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised), m_mousePressed(false)
+ : QFrame(parent,"tv", QFrame::WinPanel | QFrame::Raised), m_mousePressed(false)
 {
 //	setFixedSize(100, 150);
 //js:	resize(100, 150);
 	//setMouseTracking(true);
-	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
 	QVBoxLayout *lyr = new QVBoxLayout(this,2,1); //js: using Q*BoxLayout is a good idea
 	lyr->setMargin(3);
