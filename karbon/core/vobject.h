@@ -47,7 +47,4 @@ private:
 	VState m_state;
 };
 
-typedef QPtrList<VObject> VObjectList;
-typedef QPtrListIterator<VObject> VObjectListIterator;
-
 #endif

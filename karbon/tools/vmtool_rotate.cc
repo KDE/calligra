@@ -45,7 +45,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
-		&& ( part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( m_fp ) ) )
+		&& ( part()->selection().boundingBox( view->zoomFactor() ).contains( m_fp ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		// rotate operation

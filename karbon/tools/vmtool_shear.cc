@@ -42,7 +42,7 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = VPainterFactory::editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	QRect rect =  part()->selection().getFirst()->boundingBox( view->zoomFactor() );
+	QRect rect =  part()->selection().boundingBox( view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
 		&& ( rect.contains( m_fp ) ) )

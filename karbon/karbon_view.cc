@@ -97,7 +97,7 @@ void
 KarbonView::editSelectAll()
 {
 	m_part->selectAllObjects();
-	handleTool();
+	//handleTool();
 	if( m_part->selection().count() > 0 )
 		m_part->repaintAllViews();
 }

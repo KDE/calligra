@@ -10,6 +10,7 @@
 #include <qstring.h>
 
 #include "vobject.h"
+#include "vobjectlist.h"
 
 class QDomElement;
 
