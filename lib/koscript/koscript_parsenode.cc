@@ -3,6 +3,7 @@
 #include "koscript_context.h"
 
 #include <iostream>
+using namespace std;
 
 extern QString idl_lexFile;
 extern QString toplevelFile;

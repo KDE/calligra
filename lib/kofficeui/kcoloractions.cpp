@@ -244,10 +244,10 @@ void KSelectColorAction::initPopup()
 
 void KSelectColorAction::changeColor()
 {
-  QColor color(color());
-  if ( KColorDialog::getColor( color ) )
+  QColor col(color());
+  if ( KColorDialog::getColor( col ) )
   {
-    setColor( color );
+    setColor( col );
     emit activated();
   }
 }

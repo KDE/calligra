@@ -32,6 +32,7 @@
 #include <koQueryTrader.h>
 #include <koFilterManager.h>
 #include <koDocumentInfo.h>
+#include <cassert>
 
 #include <koStore.h>
 #include <kio/netaccess.h>
