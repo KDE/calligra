@@ -70,5 +70,12 @@ class KPTMilestone : public KPTNode {
          */
         KPTDuration *getFloat();
 
+        /**
+         * TODO: Load and save
+        */
+        virtual bool load(QDomElement &element);
+        virtual void save(QDomElement &element) const;
+
+
 };
 #endif

@@ -21,9 +21,12 @@
 #include "kptfactory.h"
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kptprojectdialog.h"
 #include "kptnodeitem.h"
 #include "kpttask.h"
 #include "kpttaskdialog.h"
+#include "kptmilestone.h"
+#include "kptmilestonedialog.h"
 
 #include <qpainter.h>
 #include <qiconset.h>
@@ -89,7 +92,6 @@ void KPTView::displayProject() {
     KPTNodeItem *i = new KPTNodeItem(m_listview, project);
     i->setOpen(true);
     m_listview->setSelected(i, true);
-
     // Now recursively add all subitems
     displayChildren(project, i);
 }
@@ -116,6 +118,19 @@ void KPTView::slotEditProject() {
 
 
 void KPTView::slotAddSubProject() {
+    KPTProject *proj = new KPTProject();
+    KPTProjectDialog *dialog = new KPTProjectDialog(*proj, this);
+
+    if (dialog->exec()) {
+        KPTNode &node = ((KPTNodeItem *)m_listview->currentItem())->getNode();
+        kdDebug(42000) << "Adding '" << proj->name() << "' to '" << node.name().latin1() << "'"<< endl;
+        node.addChildNode(proj);
+
+        displayProject();
+    } else
+        delete proj;
+
+    delete dialog;
 }
 
 
@@ -125,7 +140,7 @@ void KPTView::slotAddTask() {
 
     // Execute the dialog
     if (dialog->exec()) {
-        KPTNode &node = ((KPTNodeItem *)m_listview->selectedItem())->getNode();
+        KPTNode &node = ((KPTNodeItem *)m_listview->currentItem())->getNode();
         kdDebug(42000) << "Adding child to " << node.name().latin1() << endl;
         node.addChildNode(task);
 
@@ -138,15 +153,29 @@ void KPTView::slotAddTask() {
 
 
 void KPTView::slotAddMilestone() {
-    KPTTask *task = 0;
-    task->addChildNode(0);
+    KPTMilestone *ms = new KPTMilestone();
+    ms->setName(i18n("Milestone"));
+    KPTMilestoneDialog *dialog = new KPTMilestoneDialog(*ms, this);
+
+    if (dialog->exec()) {
+        kdDebug()<<k_funcinfo<<" m_listview="<<m_listview<<" item="<<m_listview->currentItem()<<endl;
+        KPTNode &node = ((KPTNodeItem *)m_listview->currentItem())->getNode();
+        kdDebug(42000) << "Adding '" << ms->name() << "' to '" << node.name().latin1() << "'"<< endl;
+        node.addChildNode(ms);
+
+        displayProject();
+    } else
+        delete ms;
+
+    delete dialog;
 }
 
 
 void KPTView::slotSelectionChanged() {
     // TODO: Set available menu items according to the type of selected item
+    KPTNodeItem *item = static_cast<KPTNodeItem *>(m_listview->currentItem());
+    kdDebug()<<k_funcinfo<<"Current item="<<item->getNode().name()<<endl;
 }
-
 
 void KPTView::updateReadWrite(bool /*readwrite*/) {
 }

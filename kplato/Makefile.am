@@ -5,12 +5,14 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
 	kptrelation.cc kptresource.cc kpttask.cc \
 	kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
-	kptprojectdialog.cc kpttaskdialog.cc kptnodeitem.cc
+	kptprojectdialog.cc kpttaskdialog.cc kptnodeitem.cc \
+    kptmilestonedialog.cc
 
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
 	kptmilestone.h kptnode.h kptpart.h kptproject.h kptrelation.h \
 	kptresource.h kpttask.h kptterminalnode.h kptview.h \
-	kptprojectdialog.h kpttaskdialog.h kptnodeitem.h
+	kptprojectdialog.h kpttaskdialog.h kptnodeitem.h \
+    kptmilestonedialog.h
 
 ## The part
 kde_module_LTLIBRARIES = libkplatopart.la

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Thomas zander <zander@kde.org>
+   Copyright (C) 2002 koffice project koffice@kde.org
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,26 +17,29 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kptmilestone.h"
+#ifndef KPTMILESTONEDIALOG_H
+#define KPTMILESTONEDIALOG_H
 
-KPTMilestone::KPTMilestone() : KPTNode() {
-}
+#include <kdialogbase.h>
 
-KPTMilestone::~KPTMilestone() {
-}
+class KPTMilestone;
+class KLineEdit;
+class QTextEdit;
 
-bool KPTMilestone::load(QDomElement &element) {
-    return false;
-}
 
-void KPTMilestone::save(QDomElement &element) const {
-    return;
-}
+class KPTMilestoneDialog : public KDialogBase {
+    Q_OBJECT
+public:
+    KPTMilestoneDialog(KPTMilestone &ms, QWidget *parent=0, const char *name=0);
 
-KPTDuration *KPTMilestone::getStartTime() {
-    return 0L;
-}
+protected slots:
+    void slotOk();
 
-KPTDuration *KPTMilestone::getFloat() {
-    return 0L;
-}
+private:
+    KPTMilestone &m_ms;
+    KLineEdit *m_namefield;
+    QTextEdit *m_descriptionfield;
+};
+
+
+#endif // KPTMILESTONEDIALOG_H
