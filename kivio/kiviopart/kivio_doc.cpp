@@ -659,17 +659,15 @@ void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
     return;
   }
 
-  // Queue set for loading stencils
-  m_stencilSetLoadQueue.append(set);
+  QStringList::iterator it;
+  QStringList files = set->files();
   
-  if(!m_loadTimer) {
-    m_loadTimer = new QTimer(this);
-    connect(m_loadTimer, SIGNAL(timeout()), this, SLOT(loadStencil()));
+  for(it = files.begin(); it != files.end(); ++it) {
+    QString fileName = set->dir() + "/" + (*it);
+    set->loadFile(fileName);
   }
   
-  if(!m_loadTimer->isActive()) {
-    m_loadTimer->start(0, false);
-  }
+  m_pLstSpawnerSets->append(set);
 }
 
 KivioDoc::~KivioDoc()
