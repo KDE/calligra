@@ -1129,9 +1129,9 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 			case 0x1f:  // ptgNum
 				rgce >> number;
 				if(((int) number) == number)
-					parsedFormula.append(QString().setNum((int)number));
+					parsedFormula.append(QString().setNum((int) number));
 				else
-					parsedFormula.append(m_locale.formatNumber(number));
+					parsedFormula.append(m_locale.formatNumber(number, 5));
 				break;
 			case 0x20:  // ptgArray
 				parsedFormula.append("ConstArray");

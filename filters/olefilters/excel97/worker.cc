@@ -1309,7 +1309,7 @@ bool Worker::op_mulrk(Q_UINT32 size, QDataStream &body)
 				s = "'0" + QString::number((int) value);
 				break;
 			default: // Number
-				s = m_helper->locale().formatNumber(value);
+				s = m_helper->locale().formatNumber(value, 5);
 				break;
 		}
 
@@ -1367,7 +1367,7 @@ bool Worker::op_number(Q_UINT32, QDataStream &body)
 			s.sprintf("%d:%d:%d", hour, min, second);
 			break;
 		default: // Number
-			s = m_helper->locale().formatNumber(value);
+			s = m_helper->locale().formatNumber(value, 5);
 			break;
 	}
 
@@ -1443,7 +1443,7 @@ bool Worker::op_rk(Q_UINT32, QDataStream &body)
 			s.sprintf("%d/%d/%d", year, month, day);
 			break;
 		default: // Number
-			s = m_helper->locale().formatNumber(value);
+			s = m_helper->locale().formatNumber(value, 5);
 			break;
 	}
 
