@@ -1070,22 +1070,28 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
 
 
         KoParagCounter c;
-        if( m_bulletStyle.isNull() && ch == '*' )
+        if( m_bulletStyle.isNull() && (ch == '*' || ch == '+' || ch == '-'))
         {
-            c.setNumbering( KoParagCounter::NUM_LIST );
-            c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+            if ( ch =='*')
+            {
+                c.setNumbering( KoParagCounter::NUM_LIST );
+                c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+            }
+            else if ( ch =='+' || ch=='-')
+            {
+                c.setNumbering( KoParagCounter::NUM_LIST );
+                c.setStyle( KoParagCounter::STYLE_CUSTOMBULLET );
+                if ( ch =='-' )
+                    c.setCustomBulletCharacter( '-' );
+                else if ( ch=='+')
+                    c.setCustomBulletCharacter( '+' );
+            }
         }
         else
         {
             c.setNumbering( KoParagCounter::NUM_LIST );
             c.setStyle( KoParagCounter::STYLE_CUSTOMBULLET );
-            if( ch == '*')
-                c.setCustomBulletCharacter( m_bulletStyle );
-            else if ( ch == '+')
-                c.setCustomBulletCharacter( '+' );
-            else if ( ch == '-' )
-                c.setCustomBulletCharacter( '-' );
-
+            c.setCustomBulletCharacter( m_bulletStyle );
         }
         c.setSuffix(QString::null);
         cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
