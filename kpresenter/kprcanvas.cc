@@ -3697,11 +3697,12 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
-        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
+        double tmpX = point.x() - ox ;
+        double tmpY = point.y() - oy ;
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
+    rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     m_activePage->insertFreehand( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
                                            m_view->getLineEnd() );
 
@@ -3723,11 +3724,12 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
-        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
+        double tmpX = point.x() - ox ;
+        double tmpY = point.y() - oy ;
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
+    rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     m_activePage->insertPolyline( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
                                            m_view->getLineEnd() );
 
@@ -3805,8 +3807,8 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox +  m_view->zoomHandler()->unzoomItX(diffx());
-        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
+        double tmpX = point.x() - ox;
+        double tmpY = point.y() - oy;
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3815,13 +3817,12 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
     KoPointArray tmpAllPoints;
     for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
-        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
+        double tmpX = point.x() - ox ;
+        double tmpY = point.y() - oy;
         tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-    //KoRect rect=m_view->zoomHandler()->unzoomRect(_rect);
-    _rect.moveBy(diffx(),diffy());
+    _rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     if ( toolEditMode == INS_CUBICBEZIERCURVE ) {
         m_activePage->insertCubicBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
                                                        m_view->getLineBegin(), m_view->getLineEnd() );
@@ -3848,11 +3849,12 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
-        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
+        double tmpX = point.x() - ox;
+        double tmpY = point.y() - oy;
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
+    rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     m_activePage->insertPolygon( tmpPoints, rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                           m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
                                           m_view->getGXFactor(), m_view->getGYFactor(),
