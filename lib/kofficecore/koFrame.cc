@@ -24,6 +24,7 @@
 #include <qbrush.h>
 
 #include <kdebug.h>
+#include <X11/Xlib.h>
 
 KoFrame::KoFrame( QWidget *_parent, const char *_name ) :
   OPFrame( _parent, _name ), KOffice::Frame_skel()
