@@ -226,7 +226,7 @@ void KprKword::convert()
             QDomElement outFormatsElem = outdoc.createElement( "FORMATS" );
 
             QString text;
-            // For each text element in the paragrah...
+            // For each text element in the paragraph...
             QDomElement textElem = p.firstChild().toElement();
             for ( ; !textElem.isNull() ; textElem = textElem.nextSibling().toElement() )
             {
@@ -267,6 +267,10 @@ void KprKword::convert()
                 }
 
             }
+            // KPresenter seems to save a trailing space (bug!)
+            int len = text.length();
+            if ( len > 0 && text[ len - 1 ] == ' ' )
+                text.truncate( len - 1 );
 
             QDomElement outTextElem = outdoc.createElement( "TEXT" );
             parag.appendChild( outTextElem );
