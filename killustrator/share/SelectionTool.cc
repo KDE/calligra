@@ -852,12 +852,11 @@ void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
 }
 
 void SelectionTool::activate (GDocument* doc, Canvas*canvas) {
-    kdDebug() << "SelectionTool::activate" << endl;
+ 
     dragHorizHelpline = dragVertHelpline = -1;
 
     doc->handle ().show (true);
     if (doc->lastObject ()) {
-        kdDebug() << "there is an object..." << endl;
         if (doc->selectionIsEmpty ())
             doc->selectObject (doc->lastObject ());
         else

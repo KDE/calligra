@@ -551,7 +551,7 @@ void PropertyEditor::readProperties () {
         }
     }
     else {
-        // more objects ar no objects - use default values
+        // more objects or no objects - use default values
         // Info tab
         Rect boundingBox = document->boundingBoxForSelection ();
         if (! haveObjects)
@@ -583,8 +583,36 @@ void PropertyEditor::readProperties () {
         GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
         fillSolidColor->setColor(fInfo.color);
         fillPatternColor->setColor(fInfo.color);
-        fillColorBtn1->setColor(fInfo.color);
-        fillColorBtn2->setColor(fInfo.color);
+        fillColorBtn1->setColor(fInfo.gradient.getColor1());
+        fillColorBtn2->setColor(fInfo.gradient.getColor2());
+        switch(fInfo.fstyle) {
+            case GObject::FillInfo::NoFill:
+                fillStyleBttn[NOFILL_BOX]->setChecked (true);
+                wstack->raiseWidget (NOFILL_BOX);
+                break;
+            case GObject::FillInfo::SolidFill:
+                fillStyleBttn[SOLID_BOX]->setChecked (true);
+                wstack->raiseWidget (SOLID_BOX);
+                break;
+            case GObject::FillInfo::GradientFill:
+            {
+                fillStyleBttn[GRADIENT_BOX]->setChecked (true);
+                gradStyleCombo->setCurrentItem ((int)fInfo.gradient.getStyle ());
+                gradientAngle->setEnabled(((int)fInfo.gradient.getStyle ()== 0)?true:false);
+                gradientAngle->setValue(fInfo.gradient.getAngle());
+                updateGradient();
+                wstack->raiseWidget (GRADIENT_BOX);
+            }
+            break;
+            case GObject::FillInfo::PatternFill:
+                fillStyleBttn[PATTERN_BOX]->setChecked (true);
+                brushCells->setColor(fInfo.color);
+                brushCells->selectBrush (fInfo.pattern);
+                wstack->raiseWidget (PATTERN_BOX);
+                break;
+            default:
+                break;
+        }
 
         // Font tab
         if (!haveObjects || haveTextObjects) {

@@ -81,7 +81,9 @@ void PStateManager::readDefaultSettings () {
     GObject::OutlineInfo oInfo;
     oInfo.color = config->readColorEntry ("OutlineColor", &black);
     oInfo.style = (PenStyle) config->readNumEntry ("OutlineStyle", SolidLine);
-    oInfo.width = (BrushStyle) config->readDoubleNumEntry ("OutlineWidth", 1.0);
+    QString test=config->readEntry("OutlineWidth", "hiho");
+    oInfo.width = config->readDoubleNumEntry ("OutlineWidth", 1.0);
+    kdDebug() << "++++++++++++++++++oInfo.width: " << oInfo.width << endl;
     oInfo.startArrowId=config->readNumEntry("StartArrowID", 0);
     oInfo.endArrowId=config->readNumEntry("EndArrowID", 0);
     oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |
@@ -90,8 +92,13 @@ void PStateManager::readDefaultSettings () {
 
     GObject::FillInfo fInfo;
     fInfo.color = config->readColorEntry ("FillColor", &white);
-    fInfo.fstyle = GObject::FillInfo::NoFill;
-    fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
+    fInfo.pattern = (Qt::BrushStyle)config->readNumEntry("FillPattern", 0);
+    fInfo.fstyle = (GObject::FillInfo::Style)config->readNumEntry("FillStyle", 0);
+    fInfo.gradient.setColor1(config->readColorEntry("GradientColor1", &black));
+    fInfo.gradient.setColor2(config->readColorEntry("GradientColor2", &white));
+    fInfo.gradient.setStyle((Gradient::Style)config->readNumEntry("GradientStyle", 0));
+    fInfo.gradient.setAngle(config->readNumEntry("GradientAngle", 0));
+    fInfo.mask = GObject::FillInfo::All;
     GObject::setDefaultFillInfo(fInfo);
 
     GText::TextInfo tInfo;
@@ -187,12 +194,18 @@ void PStateManager::saveDefaultSettings () {
     GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
     config->writeEntry ("OutlineColor", oInfo.color);
     config->writeEntry ("OutlineStyle", (int) oInfo.style);
-    config->writeEntry ("OutlineWidth", (double) oInfo.width);
+    config->writeEntry ("OutlineWidth", QString::number(oInfo.width));
     config->writeEntry("StartArrowID", oInfo.startArrowId);
     config->writeEntry("EndArrowID", oInfo.endArrowId);
 
     GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
-    config->writeEntry ("FillColor", fInfo.color);
+    config->writeEntry("FillColor", fInfo.color);
+    config->writeEntry("FillPattern", (int)fInfo.pattern);
+    config->writeEntry("FillStyle", (int)fInfo.fstyle);
+    config->writeEntry("GradientColor1", fInfo.gradient.getColor1());
+    config->writeEntry("GradientColor2", fInfo.gradient.getColor2());
+    config->writeEntry("GradientStyle", (int)fInfo.gradient.getStyle());
+    config->writeEntry("GradientAngle", fInfo.gradient.getAngle());
 
     GText::TextInfo tInfo = GText::getDefaultTextInfo ();
     config->writeEntry ("Font", tInfo.font);

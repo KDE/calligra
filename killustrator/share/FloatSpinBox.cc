@@ -55,7 +55,7 @@ void FloatSpinBox::setFormatString (const char* fmt) {
 void FloatSpinBox::setValue (float value) {
     if (minval <= value && value <= maxval) {
         value_ = value;
-        QSpinBox::setValue (int (value * 100.0));
+        QSpinBox::setValue((int)(value*100.0));
     }
 }
 
@@ -100,10 +100,8 @@ int FloatSpinBox::mapTextToValue (bool *ok) {
 }
 
 QString FloatSpinBox::mapValueToText (int v) {
-    float f = float (v) / 100.0;
-    QString buf;
-    buf.sprintf(format.latin1(), f);
-    return buf;
+    value_ = float (v) / 100.0;
+    return QString().sprintf(format.latin1(), value_);
 }
 
 #include <FloatSpinBox.moc>
