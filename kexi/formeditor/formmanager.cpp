@@ -186,7 +186,7 @@ FormManager::updateTreeView(QWidget *w)
 void
 FormManager::createBlankForm()
 {
-	createBlankForm(QString::null,0);
+	createBlankForm("QWidget",0);
 }
 
 void
@@ -196,13 +196,11 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 
 	QWidget *w=0;
 	QString n;
-	if((classname.isNull()) || (classname == "QWidget"))
-	{
-		n = "Form" + QString::number(m_count + 1);
-		w = new QWidget(m_parent, n.latin1());
-	}
 
-	form->createToplevel(w);
+	n = "Form" + QString::number(m_count + 1);
+	w = new QWidget(m_parent, n.latin1());
+
+	form->createToplevel(w, classname);
 	w->setCaption(n);
 	w->setIcon(SmallIcon("kexi"));
 	w->resize(350, 300);
@@ -253,6 +251,19 @@ FormManager::saveForm()
 {
 	m_buffer->checkModifiedProp();
 	if (activeForm())
+	{
+		if(!activeForm()->filename().isNull())
+			FormIO::saveForm(activeForm(), activeForm()->filename());
+		else
+			FormIO::saveForm(activeForm());
+	}
+}
+
+void
+FormManager::saveFormAs()
+{
+	m_buffer->checkModifiedProp();
+	if (activeForm())
 		FormIO::saveForm(activeForm());
 }
 
@@ -260,11 +271,7 @@ bool
 FormManager::isTopLevel(QWidget *w)
 {
 	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
-	if(item)
-		return (!item->parent());
-	else
-		kdDebug() << "THE IREL GHSGHSGHSGSHJGSHJSGKKJS" << endl;
-	return false;
+	return (!item->parent());
 }
 
 void

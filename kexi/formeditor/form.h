@@ -56,7 +56,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 * /code QWidget *toplevel = new QWidget(this);
 		 *  form->createToplevel(toplevel); /endcode
 		 */
-		void	createToplevel(QWidget *container);
+		void	createToplevel(QWidget *container, const QString &classname="QWidget");
 
 		/*
 		 * creates a toplevel widget using the library
@@ -122,6 +122,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! This function is used by ObjectTree to emit childRemoved() signal (as it is not a QObject). */
 		void			emitChildRemoved(ObjectTreeItem *item);
 
+		//! \return The filename of the UI file this Form was saved to, or QString::null if the Form hasn't be saved yet.
+		QString			filename() { return m_filename; }
+		//! Sets the filename of this Form to \a filename.
+		void			setFilename(const QString &file) { m_filename = file; }
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem 
@@ -179,6 +183,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ResizeHandleSet		*m_resizeHandles;
 
 		bool			m_inter;
+		QString			m_filename;
 };
 
 }

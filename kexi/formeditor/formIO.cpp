@@ -59,6 +59,7 @@ FormIO::saveForm(Form *form, const QString &filename)
 	}
 	else
 		m_filename = filename;
+	form->setFilename(m_filename);
 
 	QDomDocument domDoc("UI");
         QDomElement uiElement = domDoc.createElement("UI");
@@ -76,9 +77,9 @@ FormIO::saveForm(Form *form, const QString &filename)
 	QFile file(m_filename);
 	if(file.open(IO_WriteOnly))
 	{
-	QTextStream stream(&file);
-	stream << domDoc.toString() << endl;
-	file.close();
+		QTextStream stream(&file);
+		stream << domDoc.toString() << endl;
+		file.close();
 	}
 	
 	kdDebug() << domDoc.toString() << endl;
@@ -498,7 +499,7 @@ void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc)
 {
 	QDomElement tclass = domDoc.createElement("widget");
-	tclass.setAttribute("class", item->widget()->className());
+	tclass.setAttribute("class", item->className());
 	tclass.appendChild(prop(domDoc, "name", item->widget()->property("name"), item->widget()));
 	tclass.appendChild(prop(domDoc, "geometry", item->widget()->property("geometry"), item->widget()));
 

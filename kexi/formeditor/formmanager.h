@@ -115,10 +115,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		   the active Form.
 		  */
 		void loadForm();
-		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, and the former name
-		  is used if there is one (not yet).
+		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, but the former name
+		  is used if there is one (using Form::filename()).
 		 */
 		void saveForm();
+		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, even if the Form has 
+		    already been saved.
+		 */
+		void saveFormAs();
 
 		/*! Deletes the selected widget in active Form and all of its children. */
 		void deleteWidget();

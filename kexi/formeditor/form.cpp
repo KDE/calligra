@@ -47,18 +47,18 @@ Form::Form(FormManager *manager, const char *name)
 }
 
 void
-Form::createToplevel(QWidget *container)
+Form::createToplevel(QWidget *container, const QString &classname)
 {
 	kdDebug() << "Form::createToplevel()" << endl;
 
 	m_toplevel = new Container(0, container, this, "form1");
-	m_topTree = new ObjectTree(container->className(), container->name(), container, m_toplevel);
+	m_topTree = new ObjectTree(classname, container->name(), container, m_toplevel);
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
 	
 	m_topTree->setWidget(container);
 	m_topTree->addModProperty("caption");
-	m_topTree->addModProperty("icon");
+	//m_topTree->addModProperty("icon");
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 

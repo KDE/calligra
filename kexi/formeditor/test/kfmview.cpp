@@ -38,6 +38,7 @@ KFMView::KFMView()
 
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
 	KStdAction::save(manager, SLOT(saveForm()), actionCollection());
+	KStdAction::saveAs(manager, SLOT(saveFormAs()), actionCollection());
 	KStdAction::open(manager, SLOT(loadForm()), actionCollection());
 	KStdAction::openNew(manager, SLOT(createBlankForm()), actionCollection());
 	KStdAction::cut(manager, SLOT(cutWidget()), actionCollection());
