@@ -212,11 +212,13 @@ void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 		if( currentPoint % 2 == 1 )
 		{
 			VColorDlg* d = new VColorDlg( ( *m_lpgradient )->m_colorStops.at( currentPoint / 2 )->color, this->topLevelWidget() );
-			d->exec();
-			( *m_lpgradient )->m_colorStops.at( currentPoint / 2 )->color = d->color();
+			if( d->exec() == QDialog::Accepted )
+			{
+				( *m_lpgradient )->m_colorStops.at( currentPoint / 2 )->color = d->color();
+				update();
+				emit changed();
+			}
 			delete d;
-			update();
-			emit changed();
 		}
 		else if( currentPoint == 0 )
 		{
