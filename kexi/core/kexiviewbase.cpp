@@ -33,11 +33,11 @@ KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char 
  : QWidget(parent, name)
  , KexiActionProxy(this, mainWin)
  , m_mainWin(mainWin)
- , m_dirty(false)
  , m_viewWidget(0)
  , m_parentView(0)
- , m_viewMode(0) //unknown!
  , m_newlyAssignedID(-1)
+ , m_viewMode(0) //unknown!
+ , m_dirty(false)
 {
 	QWidget *wi=this;
 	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
