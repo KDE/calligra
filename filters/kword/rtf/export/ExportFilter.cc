@@ -738,11 +738,11 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
         QChar QCh ( text.at( i ) );  // get out one unicode char from the string
         const ushort ch = QCh.unicode();  // take unicode value of the char
 
-        if ( ch >= 32 && ch <= 126) // ASCII character
-            escapedText += QCh;
-        else if ( QCh == '\\' )  escapedText += "\\\\"; // back-slash
+        if ( QCh == '\\' )  escapedText += "\\\\"; // back-slash
         else if ( QCh == '{' )   escapedText += "\\{";
         else if ( QCh == '}' )   escapedText += "\\}";
+        else if ( ch >= 32 && ch <= 126) // ASCII character
+            escapedText += QCh;
         else if ( ch == 0x0009 ) escapedText += "\\tab "; // tabulator
         else if ( ch == 0x00a0 ) escapedText += "\\~"; // Non-breaking space
         else if ( ch == 0x00ad ) escapedText += "\\-"; // Soft hyphen
