@@ -580,7 +580,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         else if ( context.styleStack().hasAttribute("fo:break-after") ) { // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
             if ( context.styleStack().attribute( "fo:break-after" ) != "auto" )
-                pageBreaking |= KoParagLayout::HardFrameBreakBefore;
+                pageBreaking |= KoParagLayout::HardFrameBreakAfter;
         }
 
         if ( context.styleStack().hasAttribute( "style:break-inside" ) ) { // 3.11.7
@@ -588,9 +588,12 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                  pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
         // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
-        if ( context.styleStack().hasAttribute( "fo:keep-with-next" ) )
-            if ( context.styleStack().attribute( "fo:keep-with-next" ) == "true" )
+        if ( context.styleStack().hasAttribute( "fo:keep-with-next" ) ) {
+            // OASIS spec says it's "auto"/"always", not a boolean. Not sure which one OO uses.
+            QString val = context.styleStack().attribute( "fo:keep-with-next" );
+            if ( val == "true" || val == "always" )
                 pageBreaking |= KoParagLayout::KeepWithNext;
+        }
     }
     layout.pageBreaking = pageBreaking;
 
