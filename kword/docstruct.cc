@@ -173,7 +173,7 @@ void KWDocStructTableItem::selectFrameSet()
 
 void KWDocStructTableItem::editFrameSet()
 {
-    //active the first cell
+    //activate the first cell
     gui->canvasWidget()->editTextFrameSet( table->getCell(0,0), 0L, 0 );
 }
 

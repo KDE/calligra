@@ -571,8 +571,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             if ( fs )
             {
                 // Clicked inside a frame - start editing it
-                KWTableFrameSet *table = fs->getGroupManager();
-                emitChanged = checkCurrentEdit( table ? table : fs );
+                emitChanged = checkCurrentEdit( fs );
             }
 
             if ( m_currentFrameSetEdit )
@@ -2080,9 +2079,7 @@ void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText /*=false*/ )
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
 
-    bool emitChanged = false;
-    KWTableFrameSet *table = frameSet->getGroupManager();
-    emitChanged = checkCurrentEdit( table ? table : frameSet, onlyText );
+    bool emitChanged = checkCurrentEdit( frameSet, onlyText );
 
     if ( emitChanged ) // emitted after mousePressEvent [for tables]
         emit currentFrameSetEditChanged();
@@ -2103,8 +2100,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     if ( !fs->isVisible( viewMode() ) )
         return;
     setMouseMode( MM_EDIT );
-    KWTableFrameSet *table = fs->getGroupManager();
-    bool emitChanged = checkCurrentEdit( table ? table : fs );
+    bool emitChanged = checkCurrentEdit( fs );
 
     if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
         if ( !parag )
@@ -2165,14 +2161,21 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
         KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
         if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
             return false;
-        //just text frameset
+        // test for "text frameset only" if requested
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT || !onlyText)
         {
             if ( fs->type() == FT_TABLE )
                 curTable = static_cast<KWTableFrameSet *>(fs);
+            else if ( fs->type() == FT_TEXT )
+                curTable = static_cast<KWTextFrameSet *>(fs)->getGroupManager();
             else
                 curTable = 0L;
-            m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+            if ( curTable ) {
+                m_currentFrameSetEdit = curTable->createFrameSetEdit( this );
+                static_cast<KWTableFrameSetEdit *>( m_currentFrameSetEdit )->setCurrentCell( fs );
+            }
+            else
+                m_currentFrameSetEdit = fs->createFrameSetEdit( this );
         }
         emitChanged = true;
     }
@@ -2283,9 +2286,8 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
         bool emitChanged = false;
         if ( fs )
         {
-            KWTableFrameSet *table = fs->getGroupManager();
             //kdDebug()<<"table :"<<table<<endl;
-            emitChanged = checkCurrentEdit( table ? table : fs,true );
+            emitChanged = checkCurrentEdit( fs, true );
         }
         if ( m_currentFrameSetEdit )
         {
