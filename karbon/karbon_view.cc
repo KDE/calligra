@@ -37,7 +37,7 @@
 #include <koMainWindow.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
-#include "kocontexthelpaction.h"
+#include "kocontexthelp.h"
 
 #include "vtoolbox.h"
 

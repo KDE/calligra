@@ -25,7 +25,7 @@
 
 #include "karbon_view.h"
 #include "karbon_part.h"
-#include "kocontexthelpaction.h"
+#include "kocontexthelp.h"
 #include "vtool.h"
 #include "vtooloptionsdocker.h"
 

@@ -23,6 +23,7 @@
 
 #include <qwidget.h>
 #include <qbitmap.h>
+#include <qdockwindow.h>
 
 #include <kaction.h>
 
@@ -138,5 +139,22 @@ class KoContextHelpAction : public KAction
 	private:
 		KoContextHelpPopup* m_popup;
 }; // KoContextHelpAction
+
+class KoContextHelpDocker : public QDockWindow
+{
+	Q_OBJECT
+	
+	public:
+		KoContextHelpDocker( QWidget* parent = 0, const char* name = 0 );
+		~KoContextHelpDocker();
+		
+	public slots:
+		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
+		
+	private:
+		KoHelpWidget*    m_helpViewer;
+		KoVerticalLabel* m_helpTitle;
+		QLabel*          m_helpIcon;
+}; // KoContextHelpDocker
 
 #endif /* __KOCONTEXTHELPACTION_H__ */

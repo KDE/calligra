@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kocontexthelpaction.h"
+#include "kocontexthelp.h"
 
 #include <qpainter.h>
 #include <qregion.h>
@@ -249,4 +249,27 @@ void KoContextHelpAction::updateHelp( const QString& title, const QString& text,
 	m_popup->setContextHelp( title, text, icon );
 } // KoContextHelpAction::updateHelp
 
-#include "kocontexthelpaction.moc"
+KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
+		: QDockWindow( parent, name )
+{
+	QGridLayout* layout = new QGridLayout( this );
+	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
+	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
+	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 1, 1 );
+	layout->setMargin( 2 );
+	layout->setSpacing( 1 );
+	layout->setRowStretch( 1, 1 );
+} // KoContextHelpDocker::KoContextHelpDocker
+
+KoContextHelpDocker::~KoContextHelpDocker()
+{
+} // KoContextHelpDocker::~KoContextHelpDocker
+
+void KoContextHelpDocker::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
+{
+	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help" ) );
+	m_helpTitle->setText( title );
+	m_helpViewer->setText( text );
+} // KoContextHelpDocker::updateHelp
+
+#include "kocontexthelp.moc"

@@ -21,7 +21,7 @@ noinst_HEADERS = \
 	vselecttoolbar.h \
 	vstatebutton.h \
 	vtoolbox.h \
-	kocontexthelpaction.h
+	kocontexthelp.h
 
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
@@ -35,7 +35,7 @@ libkarbonwidgets_la_SOURCES = \
 	vselecttoolbar.cc \
 	vstatebutton.cc \
 	vtoolbox.cc \
-	kocontexthelpaction.cc
+	kocontexthelp.cc
 
 libkarbonwidgets_la_METASOURCES = \
 	AUTO
