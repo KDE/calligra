@@ -23,6 +23,7 @@
 #include <qdict.h>
 #include <qfile.h>
 #include <qbuffer.h>
+#include <qcolor.h>
 #include <qimage.h>
 
 #include <kdebug.h>
@@ -232,9 +233,19 @@ void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOneDat
     QString str; // helper string
 
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-#if 0
-    gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
-#endif
+    bool redok = false, greenok = false, blueok = false, ok = false;
+    const QColor color(
+        one.getProperty( "COLOR:red" ).toInt( &redok ),
+        one.getProperty( "COLOR:green" ).toInt( &greenok ),
+        one.getProperty( "COLOR:blue" ).toInt( &blueok ) );
+    if ( color.isValid() && redok && greenok && blueok )
+    {
+        gs.addProperty( "fo:color", color.name(), tt );
+    }
+    else if ( style )
+    {
+        gs.addProperty( "fo:color", "#000000", tt );
+    }
     // TODO declare svg font faces stuff according to the OASIS format;
     str = one.getProperty( "FONT:name" );
     if ( !str.isEmpty() )
@@ -250,10 +261,42 @@ void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOneDat
     }
     // ### TODO If not, same question as with font name.
 
+    ok = false;
+    const int weight = one.getProperty( "WEIGHT:value" ).toInt( &ok );
+    if ( ok && weight >=0 )
+    {
+        if ( weight == 50 )
+        {
+            gs.addProperty( "fo:font-weight", "normal", tt );
+        }
+        else if (weight == 75 )
+        {
+            gs.addProperty( "fo:font-weight", "bold", tt );
+        }
+        else
+        {
+            gs.addProperty( "fo:font-weight", QString::number( weight * 10 ), tt );
+        }
+    }
+    else if ( style )
+    {
+        gs.addProperty( "fo:font-weight", "normal", tt );
+    }
+
+    ok = false;
+    const int italic = one.getProperty( "ITALIC:value" ).toInt( &ok );
+    if ( ok && ( italic == 1 ) )
+    {
+        gs.addProperty( "fo:font-style", "italic", tt );
+    }
+    else if ( ( ok && ! italic ) || style )
+    {
+        gs.addProperty( "fo:font-style", "normal", tt );
+    }
+
+    // ### TODO
 #if 0
-    int w = fn.weight();
-    gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( w * 10 ), tt );
-    gs.addProperty( "fo:font-style", fn.italic() ? "italic" : "normal", tt );
+    
     gs.addProperty( "style:text-underline-mode", d->m_bWordByWord ? "skip-white-space" : "continuous", tt );
     gs.addProperty( "style:text-underline-type", m_underlineType == U_NONE ? "none" :
                     m_underlineType == U_DOUBLE ? "double" : "single", tt );
