@@ -5162,7 +5162,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
       if ((pm == ::Result) && (txt[0] == '='))
           // paste text of the element, if we want to paste result
           // and the source cell contains a formula
-          d->strText = result.text();
+          m_strText = result.text();
       else
           //otherwise copy everything
           loadCellData(text, op);
