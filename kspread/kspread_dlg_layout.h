@@ -234,6 +234,7 @@ public:
     KSpreadBord( QWidget *parent,const char *_name  );
 signals:
     void redraw();
+    void choosearea(QMouseEvent * _ev);
 protected:
     virtual void paintEvent( QPaintEvent *_ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -272,7 +273,7 @@ public:
     CellLayoutPageBorder( QWidget *parent, CellLayoutDlg *_dlg );
 
     void applyOutline( int _left, int _top, int _right, int _bottom );
-
+    void invertState(KSpreadBorderButton *_button);
 public slots:
     void changeState(KSpreadBorderButton *_this);
     void preselect( KSpreadBorderButton *_this);
@@ -280,6 +281,7 @@ public slots:
     void slotSetColorButton( const QColor &_color );
     void slotUnselect2( KSpreadPatternSelect *_select );
     void loadIcon( QString pix,KSpreadBorderButton *_button);
+    void slotPressEvent(QMouseEvent *_ev);
 protected:
     KSpreadPatternSelect *selectedPattern;
     KSpreadBorderButton *top;

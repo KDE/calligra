@@ -252,3 +252,4 @@ in a QPushButton (use color of theme).
 -----------------------------------------------------
 -Now you can put a pattern in a cell
 -bug fix in choose border
+-Now you can choose border directly with the mouse in the area.

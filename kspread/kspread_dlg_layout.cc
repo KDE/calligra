@@ -1244,6 +1244,7 @@ void KSpreadBord::paintEvent( QPaintEvent *_ev )
 void KSpreadBord::mousePressEvent( QMouseEvent* _ev )
 {
 //todo
+emit choosearea(_ev);
 }
 
 CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
@@ -1655,6 +1656,8 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 	   this, SLOT( preselect(KSpreadBorderButton *) ) );
 
   connect( area ,SIGNAL( redraw()),this,SLOT(draw()));
+  connect( area ,SIGNAL( choosearea(QMouseEvent * )),
+           this,SLOT( slotPressEvent(QMouseEvent *)));
   pattern1->slotSelect();
   selectedPattern=pattern1;
   this->resize( 400, 400 );
@@ -2012,7 +2015,79 @@ void CellLayoutPageBorder::draw()
   painter.end();
 }
 
-//test
+void CellLayoutPageBorder::invertState(KSpreadBorderButton *_p)
+{
+if(_p->isOn())
+        {
+        _p->unselect();
+        }
+else
+        {
+        _p->setOn(!_p->isOn());
+        _p->setPenWidth(selectedPattern->getPenWidth());
+        _p->setPenStyle(selectedPattern->getPenStyle());
+        _p->setColor( currentColor );
+        _p->setChanged(true);
+        }
+}
+
+void CellLayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
+{
+QRect rect(OFFSETX,OFFSETY-8,XLEN-OFFSETX,OFFSETY+8);
+if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+         invertState(top);
+        }
+rect.setCoords(OFFSETX,YHEI-OFFSETY-8,XLEN-OFFSETX,YHEI-OFFSETY+8);
+if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+         invertState(bottom);
+        }
+
+rect.setCoords(OFFSETX-8,OFFSETY,OFFSETX+8,YHEI-OFFSETY);
+if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+         invertState(left);
+        }
+rect.setCoords(XLEN-OFFSETX-8,OFFSETY,XLEN-OFFSETX+8,YHEI-OFFSETY);
+if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+         invertState(right);
+        }
+
+//don't work because I don't know how create a rectangle
+//for diagonal
+/*rect.setCoords(OFFSETX,OFFSETY,XLEN-OFFSETX,YHEI-OFFSETY);
+if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+         invertState(fallDiagonal);
+        }
+rect.setCoords(OFFSETX,YHEI-OFFSETY,XLEN-OFFSETX,OFFSETY);
+if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+         invertState(goUpDiagonal);
+        } */
+
+if(dlg->oneCol==false)
+        {
+         rect.setCoords(XLEN/2-8,OFFSETY,XLEN/2+8,YHEI-OFFSETY);
+
+        if(rect.contains(QPoint(_ev->x(),_ev->y())))
+                {
+                invertState(vertical);
+                }
+        }
+if(dlg->oneRow==false)
+        {
+        rect.setCoords(OFFSETX,YHEI/2-8,XLEN-OFFSETX,YHEI/2+8);
+        if(rect.contains(QPoint(_ev->x(),_ev->y())))
+                {
+                invertState(horizontal);
+                }
+        }
+
+area->repaint();
+}
 
 KSpreadBrushSelect::KSpreadBrushSelect( QWidget *parent, const char * ) : QFrame( parent )
 {
