@@ -28,6 +28,7 @@
 
 class GStyle;
 class KoColor;
+class KoColorChooser;
 class QCheckBox;
 class QSpinBox;
 class QButtonGroup;
@@ -41,12 +42,14 @@ public slots:
   void slotStyleChanged(const GStyle &);
 
 signals:
+  void colorChanged(const KoColor &);
   void changePaintColor(const KoColor &);
   void changeFilled(bool);
   void changeBrushStyle(Qt::BrushStyle);
 
 private:
   QCheckBox *mFilled;
+  KoColorChooser *mPaintPanel;
 };
 
 class OutlinePanel : public QTabWidget
@@ -75,6 +78,7 @@ private:
   QSpinBox *mlwidthBox;
   QButtonGroup *mJoinBox;
   QButtonGroup *mCapBox;
+  KoColorChooser *mOutlinePanel;
 };
 
 #endif

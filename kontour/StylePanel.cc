@@ -54,6 +54,7 @@ QTabWidget(parent, name)
   box->addWidget(mFilled);
   KoColorChooser *mPaintPanel = new KoColorChooser(paintColor);
   connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changePaintColor(const KoColor &)));
+  connect(this, SIGNAL(colorChanged(const KoColor &)), mPaintPanel, SLOT(slotChangeColor(const KoColor &)));
   box->addWidget(mPaintPanel);
   insertTab(paintColor, "Color");
   // TODO : add some content here :)
@@ -71,6 +72,8 @@ QTabWidget(parent, name)
 void PaintPanel::slotStyleChanged(const GStyle &style)
 {
   mFilled->setChecked(style.filled());
+  emit colorChanged(style.fillColor());
+  //mPaintPanel->slotChangeColor(style.fillColor());
 }
 
 OutlinePanel::OutlinePanel(QWidget *parent, const char *name):
@@ -80,7 +83,7 @@ QTabWidget(parent, name)
   QGroupBox *outlineColor = new QGroupBox(2, Qt::Vertical, this);
   mStroked = new QCheckBox(i18n("stroked"), outlineColor);
   connect(mStroked, SIGNAL(toggled(bool)), this, SIGNAL(changeStroked(bool)));
-  KoColorChooser *mOutlinePanel = new KoColorChooser(outlineColor);
+  mOutlinePanel = new KoColorChooser(outlineColor);
   connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changeOutlineColor(const KoColor &)));
 
   /* Style tab */
