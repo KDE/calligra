@@ -20,7 +20,9 @@
 #define __koffice_filter_h__
 
 #include <qobject.h>
+#include <qmap.h>
 
+class QIODevice;
 class KoFilterChain;
 
 /**
@@ -74,10 +76,6 @@ public:
      */
     virtual ConversionStatus convert( const QCString& from, const QCString& to ) = 0;
 
-    // Returns the current embedded file(name), QString::null if
-    // invalid (i.e. no current embedded file).
-    virtual QString currentEmbeddedFile();
-
 signals:
     /**
      * Emit this signal with a value in the range of 1...100 to have some
@@ -102,7 +100,47 @@ protected:
 
 private:
     KoFilter( const KoFilter& rhs );
-    KoFilter &operator=( const KoFilter& rhs );
+    KoFilter& operator=( const KoFilter& rhs );
+};
+
+
+// Note: Template method pattern
+// For all *import* filters embedding parts or images.
+class KoEmbeddingFilter : public KoFilter
+{
+    Q_OBJECT
+
+public:
+    virtual ~KoEmbeddingFilter();
+
+    // The index of the currently processed part
+    int currentPart() const;
+
+    struct PartEntry
+    {
+        QString link;
+        QString mimetype;
+    };
+
+protected:
+    KoEmbeddingFilter();
+
+    // returns the key for the part entry
+    // to.isEmpty() -> nearest part, like for exp0rt
+    int embedPart( const QCString& from, QCString& to,
+                   KoFilter::ConversionStatus& status );
+
+private:
+    KoEmbeddingFilter( const KoEmbeddingFilter& rhs );
+    KoEmbeddingFilter& operator=( const KoEmbeddingFilter& rhs );
+
+    // method related to embedPart()
+    // Save the contents to this (already opened) file
+    virtual void savePartContents( QIODevice* file );
+
+    // maps keys to part entries
+    QMap<int, PartEntry> m_partMap;
+    int m_currentPart;
 };
 
 #endif

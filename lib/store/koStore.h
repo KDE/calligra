@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 David Faure <faure@kde.org>
 
@@ -26,6 +27,7 @@
 
 class QBuffer;
 class KTar;
+class KArchiveDirectory;
 
 /**
  * Saves and loads koffice documents using a tar file called "the tar store".
@@ -59,9 +61,15 @@ public:
 
   /**
    * Open a new file inside the store
-   * @param name the filename, internal representation ("root", "tar:0"... )
+   * @param name The filename, internal representation ("root", "tar:/0"... ).
+   *        If the tar:/ prefix is missing it's assumed to be a relative URI.
    */
   bool open( const QString & name );
+
+  /**
+   * Allows to check for an open storage.
+   */
+  bool isOpen() const;
 
   /**
    * Close the file inside the store
@@ -88,12 +96,6 @@ public:
   Q_LONG write( const QByteArray& _data );
 
   /**
-   * Write data into the currently opened file. You can also use the streams
-   * for this.
-   */
-  Q_LONG write( const char* _data, Q_ULONG _len );
-
-  /**
    * Read data from the currently opened file. You can also use the streams
    * for this.
    * @return size of data read, -1 on error
@@ -101,6 +103,13 @@ public:
   Q_LONG read( char *_buffer, Q_ULONG _len );
 
   /**
+   * Write data into the currently opened file. You can also use the streams
+   * for this.
+   */
+  Q_LONG write( const char* _data, Q_ULONG _len );
+
+  /**
+   * DO NOT USE! WILL BE REMOVED SOON
    * Embed a part contained in one store inside the current one, as the part
    * indicated. The store to be embedded must not be open.
    *
@@ -128,12 +137,37 @@ public:
    */
   Mode mode() const { return m_mode; }
 
+  /**
+   * Enters a directory. In Read mode this actually checks whether the
+   * specified directory exists and returns false if it doesn't. In
+   * Write mode we don't create the directory, we just use the "current
+   * directory" to generate the absolute path if you pass a relative
+   * path (one not starting with tar:/) when opening a stream.
+   */
+  bool enterDirectory( const QString& directory );
+
+  /**
+   * Leaves a directory. Equivalent to "cd .."
+   * @return true on success, false if we were at the root already to
+   * make it possible to "loop to the root"
+   */
+  bool leaveDirectory();
+
+  /**
+   * Returns the current path (including "tar:/") including a
+   * trailing slash.
+   */
+  QString currentPath() const;
+
   // See QIODevice
   bool at( QIODevice::Offset pos );
   QIODevice::Offset at() const;
   bool atEnd() const;
 
-protected:
+private:
+  KoStore( const KoStore& store );  // don't copy
+  KoStore& operator=( const KoStore& store );  // don't assign
+
   /**
    * Conversion routine
    * @param _internalNaming name used internally : "root", "tar:/0", ...
@@ -145,7 +179,7 @@ protected:
    * tar:/0/1 is saved as part0/part1/maindoc.xml
    * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
    *
-   * see specification for details.
+   * see specification (koffice/lib/store/SPEC) for details.
    */
   QString toExternalNaming( const QString & _internalNaming );
   enum
@@ -160,6 +194,12 @@ protected:
 
   // Store the filenames (with full path inside the archive) when writing, to avoid duplicates
   QStringList m_strFiles;
+
+  // The "current directory" (path)
+  QStringList m_currentPath;
+  // In "Read" mode this pointer is pointing to the
+  // current directory in the archive to speed up the verification process
+  const KArchiveDirectory* m_currentDir;
 
   // Current filename (between an open() and a close())
   QString m_sName;
@@ -177,10 +217,9 @@ protected:
   bool m_bIsOpen;
   bool m_bGood;
 
-  class KoStorePrivate;
-  KoStorePrivate * d;
+  class Private;
+  Private * d;
 
-private:
   static const int s_area = 30002;
 };
 

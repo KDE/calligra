@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
@@ -26,10 +27,14 @@
 #include <qbuffer.h>
 #include <kdebug.h>
 #include <ktar.h>
+
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 
 #define ROOTPART "root"
 #define MAINNAME "maindoc.xml"
+
 
 KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
@@ -42,7 +47,6 @@ KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIde
 
   if ( m_bGood && _mode == Write )
       m_pTar->setOrigFileName( appIdentification );
-
 }
 
 KoStore::KoStore( QIODevice *dev, Mode mode )
@@ -51,77 +55,11 @@ KoStore::KoStore( QIODevice *dev, Mode mode )
   init( mode );
 }
 
-void KoStore::init( Mode _mode )
-{
-  m_bIsOpen = false;
-  m_mode = _mode;
-  m_stream = 0L;
-
-  m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
-
-  if ( m_bGood && _mode == Read )
-      m_bGood = m_pTar->directory() != 0;
-
-  // Assume new style names.
-  m_namingVersion = NAMING_VERSION_2_2;
-}
-
 KoStore::~KoStore()
 {
   m_pTar->close();
   delete m_pTar;
   delete m_stream;
-}
-
-// See the specification for details of what this function does.
-QString KoStore::toExternalNaming( const QString & _internalNaming )
-{
-  // "root" is the main document, let's save it as "maindoc.xml"
-  if (_internalNaming == ROOTPART)
-    return MAINNAME;
-
-  if ( _internalNaming.startsWith( "tar:/" ) )
-  {
-    QString intern( _internalNaming.mid( 5 ) ); // remove protocol
-    QString result( "" );
-    int pos;
-    while ( ( pos = intern.find( '/' ) ) != -1 ) {
-      if ( QChar(intern.at(0)).isDigit() )
-        result += "part";
-      result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
-      intern = intern.mid( pos + 1 ); // remove the dir we just processed
-    }
-
-    // Now process the filename. If the first character is numeric, we have
-    // a main document.
-    if ( QChar(intern.at(0)).isDigit() )
-    {
-        // If this is the first part name, check if we have a store with
-        // old-style names.
-        if ( ( m_namingVersion == NAMING_VERSION_2_2 ) &&
-             ( m_mode == Read ) &&
-             ( m_pTar->directory()->entry( result + "part" + intern + ".xml" ) ) )
-        {
-          m_namingVersion = NAMING_VERSION_2_1;
-        }
-        if ( m_namingVersion == NAMING_VERSION_2_1)
-        {
-          result = result + "part" + intern + ".xml";
-        }
-        else
-        {
-          result = result + "part" + intern + "/" + MAINNAME;
-        }
-    }
-    else
-    {
-      result += intern;
-    }
-
-    return result;
-  }
-
-  return _internalNaming;
 }
 
 bool KoStore::open( const QString & _name )
@@ -184,6 +122,11 @@ bool KoStore::open( const QString & _name )
   return true;
 }
 
+bool KoStore::isOpen() const
+{
+  return m_bIsOpen;
+}
+
 void KoStore::close()
 {
   kdDebug(s_area) << "KoStore: Closing" << endl;
@@ -199,15 +142,24 @@ void KoStore::close()
     // write the whole bytearray at once into the tar file
 
     kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
-		   << m_iSize << endl;
+                    << m_iSize << endl;
     if ( !m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
-        kdWarning( s_area ) << "Failed to write " << m_sName << endl;
+      kdWarning( s_area ) << "Failed to write " << m_sName << endl;
     m_byteArray.resize( 0 ); // save memory
   }
 
   delete m_stream;
   m_stream = 0L;
   m_bIsOpen = false;
+}
+
+QIODevice* KoStore::device() const
+{
+  if ( !m_bIsOpen )
+    kdWarning(s_area) << "KoStore: You must open before asking for a device" << endl;
+  if ( m_mode != Read )
+    kdWarning(s_area) << "KoStore: Can not get device from store that is opened for writing" << endl;
+  return m_stream;
 }
 
 QByteArray KoStore::read( unsigned long int max )
@@ -248,6 +200,11 @@ QByteArray KoStore::read( unsigned long int max )
   return data;
 }
 
+Q_LONG KoStore::write( const QByteArray& data )
+{
+  return write( data.data(), data.size() ); // see below
+}
+
 Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
 {
   if ( !m_bIsOpen )
@@ -270,6 +227,28 @@ Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
     return 0;
 
   return m_stream->readBlock( _buffer, _len );
+}
+
+Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
+{
+  if ( _len == 0L ) return 0;
+
+  if ( !m_bIsOpen )
+  {
+    kdError(s_area) << "KoStore: You must open before writing" << endl;
+    return 0L;
+  }
+  if ( m_mode != Write  )
+  {
+    kdError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
+    return 0L;
+  }
+
+  int nwritten = m_stream->writeBlock( _data, _len );
+  Q_ASSERT( nwritten == (int)_len );
+  m_iSize += nwritten;
+
+  return nwritten;
 }
 
 bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
@@ -377,31 +356,45 @@ QIODevice::Offset KoStore::size() const
   return m_iSize;
 }
 
-Q_LONG KoStore::write( const QByteArray& data )
+bool KoStore::enterDirectory( const QString& directory )
 {
-  return write( data.data(), data.size() ); // see below
+  if ( m_mode == Read ) {
+    if ( !m_currentDir ) {
+      m_currentDir = m_pTar->directory(); // initialize
+      Q_ASSERT( m_currentPath.isEmpty() );
+    }
+    const KArchiveEntry *entry = m_currentDir->entry( directory );
+    if ( entry && entry->isDirectory() ) {
+      m_currentPath.append( directory );
+      m_currentDir = dynamic_cast<const KArchiveDirectory*>( entry );
+      return m_currentDir != 0;
+    }
+    return false;
+  }
+  else { // Write, no checking here
+    m_currentPath.append( directory );
+    return true;
+  }
 }
 
-Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
+bool KoStore::leaveDirectory()
 {
-  if ( _len == 0L ) return 0;
+  if ( m_currentPath.isEmpty() )
+    return false;
+  m_currentPath.pop_back();
+  return true;
+}
 
-  if ( !m_bIsOpen )
-  {
-    kdError(s_area) << "KoStore: You must open before writing" << endl;
-    return 0L;
+QString KoStore::currentPath() const
+{
+  QString path;
+  QStringList::ConstIterator it = m_currentPath.begin();
+  QStringList::ConstIterator end = m_currentPath.end();
+  for ( ; it != end; ++it ) {
+    path += *it;
+    path += '/';
   }
-  if ( m_mode != Write  )
-  {
-    kdError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
-    return 0L;
-  }
-
-  int nwritten = m_stream->writeBlock( _data, _len );
-  Q_ASSERT( nwritten == (int)_len );
-  m_iSize += nwritten;
-
-  return nwritten;
+  return path;
 }
 
 bool KoStore::at( QIODevice::Offset pos )
@@ -419,11 +412,74 @@ bool KoStore::atEnd() const
   return m_stream->atEnd();
 }
 
-QIODevice* KoStore::device() const
+// See the specification for details of what this function does.
+QString KoStore::toExternalNaming( const QString & _internalNaming )
 {
-  if ( !m_bIsOpen )
-    kdWarning(s_area) << "KoStore: You must open before asking for a device" << endl;
-  if ( m_mode != Read )
-    kdWarning(s_area) << "KoStore: Can not get device from store that is opened for writing" << endl;
-  return m_stream;
+  if ( _internalNaming.startsWith( "tar:/" ) ) // absolute reference
+  {
+    QString intern( _internalNaming.mid( 5 ) ); // remove protocol
+    QString result( "" );
+    int pos;
+    while ( ( pos = intern.find( '/' ) ) != -1 ) {
+      if ( QChar(intern.at(0)).isDigit() )
+        result += "part";
+      result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
+      intern = intern.mid( pos + 1 ); // remove the dir we just processed
+    }
+
+    // Now process the filename. If the first character is numeric, we have
+    // a main document.
+    if ( QChar(intern.at(0)).isDigit() )
+    {
+      // If this is the first part name, check if we have a store with
+      // old-style names.
+      if ( ( m_namingVersion == NAMING_VERSION_2_2 ) &&
+           ( m_mode == Read ) &&
+           ( m_pTar->directory()->entry( result + "part" + intern + ".xml" ) ) )
+      {
+        m_namingVersion = NAMING_VERSION_2_1;
+      }
+      if ( m_namingVersion == NAMING_VERSION_2_1)
+      {
+        result = result + "part" + intern + ".xml";
+      }
+      else
+      {
+        result = result + "part" + intern + "/" + MAINNAME;
+      }
+    }
+    else
+    {
+      result += intern;
+    }
+
+    return result;
+  }
+  else // relative reference
+  {
+    kdDebug() << "++++++ internal name for '" << _internalNaming << "' is '"
+              << currentPath() + _internalNaming << "'" << endl;
+    // "root" is the main document, let's save it as current path + "maindoc.xml"
+    if (_internalNaming == ROOTPART)
+      return currentPath() + MAINNAME;
+    // else just prepend the path and be done with it
+    return currentPath() + _internalNaming;
+  }
+}
+
+void KoStore::init( Mode _mode )
+{
+  d = 0;
+  m_bIsOpen = false;
+  m_mode = _mode;
+  m_stream = 0;
+  m_currentDir = 0;
+
+  m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
+
+  if ( m_bGood && _mode == Read )
+      m_bGood = m_pTar->directory() != 0;
+
+  // Assume new style names.
+  m_namingVersion = NAMING_VERSION_2_2;
 }

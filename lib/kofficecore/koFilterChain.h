@@ -31,6 +31,7 @@
 class KTempFile;
 class KoFilterManager;
 class KoDocument;
+class QStrList;
 
 namespace KOffice {
     class Graph;
@@ -133,6 +134,7 @@ private:
     QString filterManagerExportFile() const;
     KoDocument* filterManagerKoDocument() const;
     int filterManagerDirection() const;
+    KoFilterChain* const filterManagerParentChain() const;
 
 
     // Helper methods which keep track of all the temp files, documents,
@@ -148,6 +150,9 @@ private:
     KoStoreDevice* storageNewStreamHelper( KoStore** storage, KoStoreDevice** device, const QString& name );
     KoStoreDevice* storageHelper( const QString& file, const QString& streamName,
                                   KoStore::Mode mode, KoStore** storage, KoStoreDevice** device );
+    void storageInit( const QString& file, KoStore::Mode mode, KoStore** storage );
+    KoStoreDevice* storageInitEmbedding( const QString& name );
+    KoStoreDevice* storageCreateFirstStream( const QString& streamName, KoStore** storage, KoStoreDevice** device );
     KoStoreDevice* storageCleanupHelper( KoStore** storage );
 
     KoDocument* createDocument( const QString& file );
@@ -162,7 +167,7 @@ private:
         ChainLink( KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
                    const QCString& from, const QCString& to );
 
-        KoFilter::ConversionStatus invokeFilter();
+        KoFilter::ConversionStatus invokeFilter( const ChainLink* const parentChainLink );
 
         QCString from() const { return m_from; }
         QCString to() const { return m_to; }
@@ -170,10 +175,25 @@ private:
         // debugging
         void dump() const;
 
+        // This hack is only needed due to crappy Microsoft design and
+        // circular dependencies in their embedded files :}
+        int currentPart() const;
+
     private:
+        ChainLink( const ChainLink& rhs );
+        ChainLink& operator=( const ChainLink& rhs );
+
+        void setupCommunication( const KoFilter* const parentFilter ) const;
+        void setupConnections( const KoFilter* sender, const QStrList& sigs,
+                               const KoFilter* receiver, const QStrList& sl0ts ) const;
+
         KoFilterChain* m_chain;
         KoFilterEntry::Ptr m_filterEntry;
         QCString m_from, m_to;
+
+        // This hack is only needed due to crappy Microsoft design and
+        // circular dependencies in their embedded files :}
+        KoFilter* m_filter;
 
         class Private;
         Private* d;

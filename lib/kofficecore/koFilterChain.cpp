@@ -16,6 +16,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qmetaobject.h>
 #include <ktempfile.h>
 #include <kmimetype.h>
 #include <koFilterChain.h>
@@ -28,38 +29,98 @@
 
 #include <limits.h> // UINT_MAX
 
+// Those "defines" are needed in the setupConnections method below.
+// Please always keep the strings and the length in sync!
+namespace {
+    const char* const SIGNAL_PREFIX = "commSignal";
+    const int SIGNAL_PREFIX_LEN = 10;
+    const char* const SLOT_PREFIX = "commSlot";
+    const int SLOT_PREFIX_LEN = 8;
+}
+
 
 KoFilterChain::ChainLink::ChainLink( KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
                                      const QCString& from, const QCString& to ) :
-    m_chain( chain ), m_filterEntry( filterEntry ),  m_from( from ),  m_to( to ),  d( 0 )
+    m_chain( chain ), m_filterEntry( filterEntry ), m_from( from ), m_to( to ),
+    m_filter( 0 ), d( 0 )
 {
 }
 
-KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter()
+KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter( const ChainLink* const parentChainLink )
 {
     if ( !m_filterEntry ) {
         kdError( 30500 ) << "This filter entry is null. Strange stuff going on." << endl;
         return KoFilter::CreationError;
     }
 
-    KoFilter* filter = m_filterEntry->createFilter( m_chain, 0, 0 );
+    m_filter = m_filterEntry->createFilter( m_chain, 0, 0 );
 
-    if ( !filter ) {
+    if ( !m_filter ) {
         kdError( 30500 ) << "Couldn't create the filter." << endl;
         return KoFilter::CreationError;
     }
 
-    QObject::connect( filter, SIGNAL( sigProgress( int ) ),
-                      m_chain->manager(), SIGNAL( sigProgress( int ) ) );
+    if ( parentChainLink )
+        setupCommunication( parentChainLink->m_filter );
 
-    KoFilter::ConversionStatus status = filter->convert( m_from, m_to );
-    delete filter;
+    KoFilter::ConversionStatus status = m_filter->convert( m_from, m_to );
+    delete m_filter;
+    m_filter=0;
     return status;
 }
 
 void KoFilterChain::ChainLink::dump() const
 {
     kdDebug( 30500 ) << "   Link: " << m_filterEntry->service()->name() << endl;
+}
+
+int KoFilterChain::ChainLink::currentPart() const
+{
+    if ( m_filter && m_filter->inherits( "KoEmbeddingFilter" ) )
+        return static_cast<KoEmbeddingFilter*>( m_filter )->currentPart();
+    return -1;
+}
+
+void KoFilterChain::ChainLink::setupCommunication( const KoFilter* const parentFilter ) const
+{
+    // progress information
+    QObject::connect( m_filter, SIGNAL( sigProgress( int ) ),
+                      m_chain->manager(), SIGNAL( sigProgress( int ) ) );
+
+    if ( !parentFilter )
+        return;
+
+    const QMetaObject* const parent = parentFilter->metaObject();
+    const QMetaObject* const child = m_filter->metaObject();
+    if ( !parent || !child )
+        return;
+
+    setupConnections( parentFilter, parent->signalNames(), m_filter, child->slotNames() );
+    setupConnections( m_filter, child->signalNames(), parentFilter, parent->slotNames() );
+}
+
+void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const QStrList& sigs,
+                                                 const KoFilter* receiver, const QStrList& sl0ts ) const
+{
+    QStrListIterator signalIt( sigs );
+    for ( ; signalIt.current(); ++signalIt ) {
+        if ( strncmp( signalIt.current(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN ) == 0 ) {
+            QStrListIterator slotIt( sl0ts );
+            for ( ; slotIt.current(); ++slotIt ) {
+                if ( strncmp( slotIt.current(), SLOT_PREFIX, SLOT_PREFIX_LEN ) == 0 ) {
+                    if ( strcmp( signalIt.current() + SIGNAL_PREFIX_LEN, slotIt.current() + SLOT_PREFIX_LEN ) == 0 ) {
+                        QCString signalString;
+                        signalString.setNum( QSIGNAL_CODE );
+                        signalString += signalIt.current();
+                        QCString slotString;
+                        slotString.setNum( QSLOT_CODE );
+                        slotString += slotIt.current();
+                        QObject::connect( sender, signalString, receiver, slotString );
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -75,6 +136,8 @@ KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
 
 KoFilterChain::~KoFilterChain()
 {
+    if ( filterManagerParentChain() && filterManagerParentChain()->m_outputStorage )
+        filterManagerParentChain()->m_outputStorage->leaveDirectory();
     manageIO(); // Called for the 2nd time in a row -> clean up
 }
 
@@ -95,11 +158,16 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     m_state = Beginning;
     int count = m_chainLinks.count();
 
+    // This is needed due to nasty Microsoft design
+    const ChainLink* parentChainLink = 0;
+    if ( filterManagerParentChain() )
+        parentChainLink = filterManagerParentChain()->m_chainLinks.current();
+
     // No iterator here, as we need m_chainLinks.current() in outputDocument()
     m_chainLinks.first();
     for ( ; count > 1 && m_chainLinks.current() && status == KoFilter::OK;
           m_chainLinks.next(), --count ) {
-        status = m_chainLinks.current()->invokeFilter();
+        status = m_chainLinks.current()->invokeFilter( parentChainLink );
         m_state = Middle;
         manageIO();
     }
@@ -114,7 +182,7 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
             m_state |= End;
         else
             m_state = End;
-        status = m_chainLinks.current()->invokeFilter();
+        status = m_chainLinks.current()->invokeFilter( parentChainLink );
         manageIO();
     }
 
@@ -156,6 +224,11 @@ QString KoFilterChain::inputFile()
 
 QString KoFilterChain::outputFile()
 {
+    // sanity check: No embedded filter should ask for a plain file
+    // ###### CHECK
+    if ( filterManagerParentChain() )
+        kdWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
+
     if ( m_outputQueried == File )
         return m_outputFile;
     else if ( m_outputQueried != Nil ) {
@@ -179,6 +252,12 @@ QString KoFilterChain::outputFile()
 
 KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mode )
 {
+    // ###### CHECK: This works only for import filters. Do we want something like
+    // that for export filters too?
+    if ( m_outputQueried == Nil && mode == KoStore::Write && filterManagerParentChain() )
+        return storageInitEmbedding( name );
+
+    // Plain normal use case
     if ( m_inputQueried == Storage && mode == KoStore::Read &&
          m_inputStorage && m_inputStorage->mode() == KoStore::Read )
         return storageNewStreamHelper( &m_inputStorage, &m_inputStorageDevice, name );
@@ -220,6 +299,13 @@ KoDocument* KoFilterChain::inputDocument()
 
 KoDocument* KoFilterChain::outputDocument()
 {
+    // sanity check: No embedded filter should ask for a document
+    // ###### CHECK
+    if ( filterManagerParentChain() ) {
+        kdWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
+        return 0;
+    }
+
     if ( m_outputQueried == Document )
         return m_outputDocument;
     else if ( m_outputQueried != Nil ) {
@@ -267,6 +353,11 @@ int KoFilterChain::filterManagerDirection() const
     return m_manager->direction();
 }
 
+KoFilterChain* const KoFilterChain::filterManagerParentChain() const
+{
+    return m_manager->parentChain();
+}
+
 void KoFilterChain::manageIO()
 {
     m_inputQueried = Nil;
@@ -296,7 +387,10 @@ void KoFilterChain::manageIO()
         m_outputStorageDevice = 0;
         if ( m_outputStorage ) {
             m_outputStorage->close();
-            delete m_outputStorage;
+            // Don't delete the storage if we're just pointing to the
+            // storage of the parent filter chain
+            if ( !filterManagerParentChain() || m_outputStorage->mode() != KoStore::Write )
+                delete m_outputStorage;
             m_outputStorage = 0;
         }
     }
@@ -369,8 +463,8 @@ KoStoreDevice* KoFilterChain::storageNewStreamHelper( KoStore** storage, KoStore
 {
     delete *device;
     *device = 0;
-    ( *storage )->close();
-
+    if ( ( *storage )->isOpen() )
+        ( *storage )->close();
     if ( ( *storage )->bad() )
         return storageCleanupHelper( storage );
     if ( !( *storage )->open( name ) )
@@ -391,6 +485,24 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
         return 0;
     }
 
+    storageInit( file, mode, storage );
+
+    if ( ( *storage )->bad() )
+        return storageCleanupHelper( storage );
+
+    // Seems that we got a valid storage, at least. Even if we can't open
+    // the stream the "user" asked us to open, we nontheless change the
+    // IOState from File to Storage, as it might be possible to open other streams
+    if ( mode == KoStore::Read )
+        m_inputQueried = Storage;
+    else // KoStore::Write
+        m_outputQueried = Storage;
+
+    return storageCreateFirstStream( streamName, storage, device );
+}
+
+void KoFilterChain::storageInit( const QString& file, KoStore::Mode mode, KoStore** storage )
+{
     QCString appIdentification( "" );
     if ( mode == KoStore::Write ) {
         // To create valid storages we also have to add the mimetype
@@ -405,18 +517,51 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
         appIdentification += '\006'; // more reliable (DF)
     }
     *storage = new KoStore( file, mode, appIdentification );
+}
 
-    if ( ( *storage )->bad() )
-        return storageCleanupHelper( storage );
+KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
+{
+    if ( m_outputStorage ) {
+        kdWarning( 30500 ) << "Ooops! Something's really screwed here." << endl;
+        return 0;
+    }
 
-    // Seems that we got a valid storage, at least. Even if we can't open
-    // the stream the "user" asked us to open, we nontheless change the
-    // IOState from File to Storage, as it might be possible to open other streams
-    if ( mode == KoStore::Read )
-        m_inputQueried = Storage;
-    else // KoStore::Write
-        m_outputQueried = Storage;
+    m_outputStorage = filterManagerParentChain()->m_outputStorage;
 
+    if ( !m_outputStorage ) {
+        // If the storage of the parent hasn't been initialized yet,
+        // we have to do that here. Quite nasty...
+        storageInit( filterManagerParentChain()->outputFile(), KoStore::Write, &m_outputStorage );
+
+        // transfer the ownership
+        filterManagerParentChain()->m_outputStorage = m_outputStorage;
+        filterManagerParentChain()->m_outputQueried = Storage;
+    }
+
+    if ( m_outputStorage->isOpen() )
+        m_outputStorage->close();  // to be on the safe side, should never happen
+    if ( m_outputStorage->bad() )
+        return storageCleanupHelper( &m_outputStorage );
+
+    m_outputQueried = Storage;
+
+    // Now that we have a storage we have to change the directory
+    // and remember it for later!
+    const int currentPart = filterManagerParentChain()->m_chainLinks.current()->currentPart();
+    if ( currentPart == -1 ) {
+        kdError( 30500 ) << "Huh! You want to use embedding features w/o inheriting KoEmbeddingFilter?" << endl;
+        return storageCleanupHelper( &m_outputStorage );
+    }
+
+    if ( !m_outputStorage->enterDirectory( QString( "part%1" ).arg( currentPart ) ) )
+        return storageCleanupHelper( &m_outputStorage );
+
+    return storageCreateFirstStream( name, &m_outputStorage, &m_outputStorageDevice );
+}
+
+KoStoreDevice* KoFilterChain::storageCreateFirstStream( const QString& streamName, KoStore** storage,
+                                                        KoStoreDevice** device )
+{
     if ( !( *storage )->open( streamName ) )
         return storageCleanupHelper( storage );
 
@@ -431,7 +576,10 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
 
 KoStoreDevice* KoFilterChain::storageCleanupHelper( KoStore** storage )
 {
-    delete *storage;
+    // Take care not to delete the storage of the parent chain
+    if ( *storage != m_outputStorage || !filterManagerParentChain() ||
+         ( *storage )->mode() != KoStore::Write )
+        delete *storage;
     *storage = 0;
     return 0;
 }
@@ -458,7 +606,7 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
 
 KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
 {
-    QString constraint( QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimeType ) );
+    const QString constraint( QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimeType ) );
     QValueList<KoDocumentEntry> entries = KoDocumentEntry::query( constraint );
     if ( entries.isEmpty() ) {
         kdError( 30500 ) << "Couldn't find a KOffice document entry for " << mimeType << endl;
@@ -558,7 +706,7 @@ namespace KOffice {
     void Vertex::dump( const QCString& indent ) const
     {
         kdDebug( 30500 ) << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
-        QCString i( indent + "   " );
+        const QCString i( indent + "   " );
         QPtrListIterator<Edge> it( m_edges );
         for ( ; it.current(); ++it )
             it.current()->dump( i );
@@ -609,7 +757,7 @@ namespace KOffice {
         // Fill the filter chain with all filters on the path
         const Vertex* tmp = vertex->predecessor();
         while ( tmp ) {
-            const Edge* edge = tmp->findEdge( vertex );
+            const Edge* const edge = tmp->findEdge( vertex );
             Q_ASSERT( edge );
             ret->prependChainLink( edge->filterEntry(), tmp->mimeType(), vertex->mimeType() );
             vertex = tmp;
@@ -638,7 +786,7 @@ namespace KOffice {
         QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         while ( partIt != partEnd ) {
-            QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
+            const QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
             if ( !key.isEmpty() )
                 m_vertices.insert( key, new Vertex( key ) );
             ++partIt;
@@ -653,7 +801,7 @@ namespace KOffice {
             QStringList::ConstIterator importIt = ( *it )->import.begin();
             QStringList::ConstIterator importEnd = ( *it )->import.end();
             for ( ; importIt != importEnd; ++importIt ) {
-                QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                const QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !m_vertices[ key ] )
                     m_vertices.insert( key, new Vertex( key ) );
@@ -666,7 +814,7 @@ namespace KOffice {
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
-                    QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    const QCString key = ( *exportIt ).latin1();  // latin1 is okay here
                     Vertex* exp = m_vertices[ key ];
                     if ( !exp ) {
                         exp = new Vertex( key );
@@ -721,7 +869,7 @@ namespace KOffice {
         QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
         QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
-        Vertex *v = 0;
+        const Vertex *v = 0;
 
         // Be sure that v gets initialized correctly
         while ( !v && partIt != partEnd ) {

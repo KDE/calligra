@@ -58,8 +58,16 @@ public:
      * The url it passes is the file to convert, obviously. You can't use
      * the @ref import() method -- use @ref exp0rt() to convert the file to
      * the destination mimetype you prefer.
+     * @param url The file you want to export
+     * @param mimetypeHint The mimetype of the file you want to export. You have
+     *        to specify this information only if the automatic detection will
+     *        fail because e.g. you saved an embedded stream to a *.tmp file.
+     *        Most likely you don't have to care about that.
+     * @param parentChain The parent filter chain of this filter manager. Used
+     *        to allow embedding for filters. Most likely you don't have to care.
      */
-    KoFilterManager( const QString& url );
+    KoFilterManager( const QString& url, const QCString& mimetypeHint = "",
+                     KoFilterChain* const parentChain = 0 );
 
     virtual ~KoFilterManager();
 
@@ -72,7 +80,9 @@ public:
      */
     QString import( const QString& url, KoFilter::ConversionStatus& status );
     /**
-     * Exports the given file/document *to* the specified URL/mimetype.
+     * Exports the given file/document to the specified URL/mimetype.
+     * If mimetype.isEmpty() then the closest matching KOffice part is searched
+     * and when the method returns "mimetype" contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
     KoFilter::ConversionStatus exp0rt( const QString& url, QCString& mimeType );
@@ -117,6 +127,8 @@ private:
     KoDocument* document() const { return m_document; }
     friend int KoFilterChain::filterManagerDirection() const;
     int direction() const { return static_cast<int>( m_direction ); }
+    friend KoFilterChain* const KoFilterChain::filterManagerParentChain() const;
+    KoFilterChain* const parentChain() const { return m_parentChain; }
 
     // Private API
     KoFilterManager( const KoFilterManager& rhs );
@@ -127,7 +139,9 @@ private:
     static const int s_area = 30500;
 
     KoDocument* m_document;
+    KoFilterChain* const m_parentChain;
     QString m_importUrl, m_exportUrl;
+    QCString m_importUrlMimetypeHint;  // suggested mimetype
     KOffice::Graph m_graph;
     Direction m_direction;
 

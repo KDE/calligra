@@ -42,7 +42,7 @@ QMap<QString, bool> KoFilterManager::m_filterAvailable;
 
 
 KoFilterManager::KoFilterManager( KoDocument* document ) :
-    m_document( document ), m_graph( "" ), d( 0 )
+    m_document( document ), m_parentChain( 0 ), m_graph( "" ), d( 0 )
 {
     if ( document )
         QObject::connect( this, SIGNAL( sigProgress( int ) ),
@@ -50,8 +50,10 @@ KoFilterManager::KoFilterManager( KoDocument* document ) :
 }
 
 
-KoFilterManager::KoFilterManager( const QString& url ) :
-    m_document( 0 ), m_importUrl( url ), m_graph( "" ), d( 0 )
+KoFilterManager::KoFilterManager( const QString& url, const QCString& mimetypeHint,
+                                  KoFilterChain* const parentChain ) :
+    m_document( 0 ), m_parentChain( parentChain ), m_importUrl( url ), m_importUrlMimetypeHint( mimetypeHint ),
+    m_graph( "" ), d( 0 )
 {
 }
 
@@ -122,6 +124,10 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
 
     if ( m_document )
         m_graph.setSourceMimeType( m_document->nativeFormatMimeType() );
+    else if ( !m_importUrlMimetypeHint.isEmpty() ) {
+        kdDebug(s_area) << "Using the mimetype hint: '" << m_importUrlMimetypeHint << "'" << endl;
+        m_graph.setSourceMimeType( m_importUrlMimetypeHint );
+    }
     else {
         KURL u;
         u.setPath( m_importUrl );
