@@ -301,9 +301,6 @@ VStar::save( QDomElement& element ) const
 void
 VStar::load( const QDomElement& element )
 {
-	if( document()->saveAsPath() )
-		return VComposite::load( element );
-
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

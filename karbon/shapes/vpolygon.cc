@@ -107,9 +107,6 @@ VPolygon::save( QDomElement& element ) const
 void
 VPolygon::load( const QDomElement& element )
 {
-	if( document()->saveAsPath() )
-		return VComposite::load( element );
-
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();
