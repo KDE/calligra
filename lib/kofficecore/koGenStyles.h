@@ -142,7 +142,8 @@ public:
            STYLE_NUMERIC_FRACTION = 7,
            STYLE_NUMERIC_PERCENTAGE =8,
            STYLE_NUMERIC_SCIENTIFIC = 9,
-           STYLE_NUMERIC_CURRENCY = 10};
+           STYLE_NUMERIC_CURRENCY = 10,
+	   STYLE_NUMERIC_TEXT = 11};
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

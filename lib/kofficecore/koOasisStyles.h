@@ -70,10 +70,11 @@ public:
 
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
     static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
-    static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format );
-    static QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format );
-    static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format );
-    static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format );
+    static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
 
 protected:
     /// Add styles to styles map
