@@ -1,7 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(all_includes)
 
-lib_LTLIBRARIES = libkchartpart.la kchart.la
 ## The part
+kde_module_LTLIBRARIES = libkchartpart.la
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	engine.cc \
@@ -33,10 +33,10 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	kchartEngine_ComputeSize.cc \
 	kchartWizardLabelsLegendPage.cc \
 	kchartWizardSelectChartSubTypePage.cc \
-        kchartWizardSelectChartTypePage.cc \
-        kchartWizardSelectDataPage.cc \
-        kchartWizardSetupAxesPage.cc \
-        kchartWizardSetupDataPage.cc \
+	kchartWizardSelectChartTypePage.cc \
+	kchartWizardSelectDataPage.cc \
+	kchartWizardSetupAxesPage.cc \
+	kchartWizardSetupDataPage.cc \
 	kchartDataEditor.cc \
 	parser.cc \
 	sheet.cc \
@@ -47,9 +47,10 @@ libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
                           $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 ## The kdeinit loadable module
+lib_LTLIBRARIES = kchart.la
 kchart_la_SOURCES = main.cc
 kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kchart_la_LIBADD = libkchartpart.la
+kchart_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = kchart
@@ -61,8 +62,8 @@ dummy.cc:
 	echo > dummy.cc
 
 noinst_HEADERS =  kchart_part.h \
-		  kchart_view.h kchart_factory.h	\
-	          engine.h \
+		kchart_view.h kchart_factory.h \
+		engine.h \
 		kchartBarConfigDialog.h \
 		kchartBarConfigPage.h \
 		kchartColorConfigPage.h \
@@ -83,15 +84,15 @@ noinst_HEADERS =  kchart_part.h \
 		kchartWizardLabelsLegendPage.h \
 		kchartWizardSelectChartSubTypePage.h \
 		kchartWizardSelectChartTypePage.h \
-	        kchartWizardSelectDataPage.h \
+		kchartWizardSelectDataPage.h \
 		kchartWizardSetupAxesPage.h \
-	        kchartWizardSetupDataPage.h \
+		kchartWizardSetupDataPage.h \
 		kchartDataEditor.h \
 		parser.h \
 		sheet.h \
 		sheetdlg.h \
-		table.h
-
+		table.h \
+		kchart_aboutdata.h
 
 METASOURCES = AUTO
 
@@ -115,4 +116,4 @@ linktest_LDFLAGS = $(libkchartpart_la_LDFLAGS)
 SUBDIRS =  . toolbar pics
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kchart.pot
+	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h -o $(podir)/kchart.pot

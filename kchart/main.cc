@@ -19,10 +19,8 @@
 
 #include <koApplication.h>
 #include <kcmdlineargs.h>
-#include <kaboutdata.h>
 #include <klocale.h>
-#include "kchart_factory.h"
-
+#include "kchart_aboutdata.h"
 
 static const KCmdLineOptions options[]=
 {
@@ -32,9 +30,9 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, KChartFactory::aboutData());
+    KCmdLineArgs::init( argc, argv, newKChartAboutData());
     KCmdLineArgs::addCmdLineOptions( options );
-    
+
     KoApplication app;
     if (!app.start())
 	return 1;
