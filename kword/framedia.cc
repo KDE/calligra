@@ -648,7 +648,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
-    grid4->addWidget( grp2, ++row, 0 );
+    /// ##### grid4->addWidget( grp2, ++row, 0 );
 
     double l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
@@ -744,6 +744,8 @@ void KWFrameDia::runConturClicked()
 }
 
 void KWFrameDia::setFrameBehaviourInputOn() {
+    if ( tab4 && floating->isChecked() )
+        return;
     if(rResizeFrame && !rResizeFrame->isEnabled()) {
         if(frameBehaviour== KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
@@ -759,6 +761,8 @@ void KWFrameDia::setFrameBehaviourInputOn() {
 }
 
 void KWFrameDia::setFrameBehaviourInputOff() {
+    if ( tab4 && floating->isChecked() )
+        return;
     if(rResizeFrame && rResizeFrame->isEnabled()) {
         if(rResizeFrame->isChecked()) {
             frameBehaviour=KWFrame::AutoExtendFrame;
@@ -777,7 +781,20 @@ void KWFrameDia::setFrameBehaviourInputOff() {
 void KWFrameDia::slotFloatingToggled(bool b)
 {
     grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
-    if(tab1) tab1->setEnabled( !b ); // frame setting are irrelevant for floating frames.
+    if (tab1) {
+        cbCopy->setEnabled( !b ); // 'copy' irrelevant for floating frames.
+        rAppendFrame->setEnabled( !b ); // 'create new page' irrelevant for floating frames.
+        if ( b && rAppendFrame->isChecked() )
+            rNoShow->setChecked( true );
+        // 'what happens on new page' is irrelevant for floating frames
+        reconnect->setEnabled( !b );
+        noFollowup->setEnabled( !b );
+        copyRadio->setEnabled( !b );
+        if ( b ) {
+            noFollowup->setChecked( true );
+            cbCopy->setChecked( false );
+        }
+    }
     // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas)
     // well margins are not implemented yet, anyway
 

@@ -125,11 +125,7 @@ public:
 
     virtual void drawContents( QPainter *p, const QRect &r,
                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit* edit, KWViewMode *viewMode, KWCanvas *canvas )
-    {
-        m_currentViewMode = viewMode;
-        KWFrameSet::drawContents( p, r, cg, onlyChanged, resetChanged, edit, viewMode, canvas );
-    }
+                               KWFrameSetEdit* edit, KWViewMode *viewMode, KWCanvas *canvas );
 
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );

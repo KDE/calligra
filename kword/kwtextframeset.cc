@@ -291,6 +291,14 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
     }
 }
 
+void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
+                               bool onlyChanged, bool resetChanged,
+                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas )
+{
+    m_currentViewMode = viewMode;
+    KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode, canvas );
+}
+
 void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &r,
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )

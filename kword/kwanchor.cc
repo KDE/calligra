@@ -40,17 +40,20 @@ KWAnchor::~KWAnchor()
 
 void KWAnchor::move( int x, int y )
 {
-    kdDebug() << this << " KWAnchor::move " << x << "," << y << endl;
-    int paragy = paragraph()->rect().y();
-    xpos = x;
-    ypos = y;
-    KWTextFrameSet * fs = textDocument()->textFrameSet();
-    QPoint nPoint;
-    if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
+    if ( x != xpos || y != ypos )
     {
-        //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
-        // Move the frame to position nPoint.
-        m_frameset->moveFloatingFrame( m_frameNum, nPoint );
+        kdDebug() << this << " KWAnchor::move " << x << "," << y << endl;
+        int paragy = paragraph()->rect().y();
+        xpos = x;
+        ypos = y;
+        KWTextFrameSet * fs = textDocument()->textFrameSet();
+        QPoint nPoint;
+        if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
+        {
+            //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
+            // Move the frame to position nPoint.
+            m_frameset->moveFloatingFrame( m_frameNum, nPoint );
+        }
     }
 }
 

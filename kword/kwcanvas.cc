@@ -217,7 +217,9 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
                              const QRect & crect, bool onlyChanged, bool resetChanged )
 {
-    if ( !frameset->isVisible() || frameset->isFloating() )
+    if ( !frameset->isVisible() )
+        return;
+    if ( !onlyChanged && frameset->isFloating() )
         return;
 
     bool focus = hasFocus() || viewport()->hasFocus();

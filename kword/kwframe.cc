@@ -1215,6 +1215,7 @@ void KWFrameSetEdit::drawContents( QPainter *p, const QRect &crect,
                                    QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                    KWViewMode *viewMode, KWCanvas *canvas )
 {
+    //kdDebug() << "KWFrameSetEdit::drawContents " << frameSet()->getName() << endl;
     frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode, canvas );
 }
 
