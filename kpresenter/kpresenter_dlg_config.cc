@@ -157,7 +157,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     double val = KoUnit::userValue( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(0.1, 50, 0.1);
-    indent->setFormat( "%.1f" );
+    indent->setPrecision(1);
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Paragraph indent by toolbar buttons"));
 
