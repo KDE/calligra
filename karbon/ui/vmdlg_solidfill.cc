@@ -9,6 +9,7 @@
 #include <kcolordlg.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <kselect.h>
 
 #include "vmdlg_solidfill.h"
 
@@ -19,10 +20,10 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	QGridLayout *mainLayout;
 
 	mRGBWidget = new QWidget( this );
-	mainLayout = new QGridLayout(mRGBWidget, 6, 2);
+	mainLayout = new QGridLayout(mRGBWidget, 7, 2);
 	mColorSelector = new KHSSelector( mRGBWidget );
-	mColorSelector->setMinimumHeight(255);
-	mainLayout->addMultiCellWidget (mColorSelector, 0, 0, 0, 5);
+	mColorSelector->setMinimumHeight(165);
+	mainLayout->addMultiCellWidget (mColorSelector, 0, 0, 0, 4);
 
 	//RGB
 	QLabel *mRedText = new QLabel(i18n("R:"), mRGBWidget);
@@ -57,7 +58,24 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	mainLayout->addWidget(mBrText, 2, 4);
 	mBrightness = new QSpinBox( 0, 255, 1, mRGBWidget);
 	mainLayout->addWidget(mBrightness, 2, 5);
+	
+	//Selector
+	mSelector = new KGradientSelector( KSelector::Vertical, mRGBWidget );
+	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
+	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
+	mainLayout->addWidget( mSelector, 0, 5);
 
+	//Palette
+	mColorTable = new KPaletteTable(mRGBWidget);
+	mainLayout->addWidget(mColorTable, 0, 6);
+	mColorPreview = new KColorPatch(mRGBWidget);
+	mColorPreview->setColor(QColor( "black" ) );
+	mColorPreview->setMaximumHeight(40);
+	mColorPreview->setMaximumWidth(40);
+	mainLayout->addMultiCellWidget(mColorPreview, 1, 2, 6, 6);
+
+	mainLayout->setSpacing(2);
+	mainLayout->setMargin(5);
 	mainLayout->activate();
 
 	addTab(mRGBWidget, i18n("RGB"));
