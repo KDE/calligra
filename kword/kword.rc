@@ -46,6 +46,7 @@
   <Action name="insert_contents"/>
   <Action name="insert_variable"/> <!-- menu -->
   <Action name="insert_expression"/> <!-- menu -->
+  <Action name="insert_link"/>
   <Separator/>
   <!-- Frames - the order matches the order of the keybindings -->
   <Action name="tools_createtext"/>

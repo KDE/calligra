@@ -66,6 +66,7 @@
 #include "tabledia.h"
 #include "variable.h"
 #include "variabledlgs.h"
+#include "kwinsertlink.h"
 #include <kotextformat.h>
 
 #include <koMainWindow.h>
@@ -371,6 +372,10 @@ void KWView::setupActions()
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
+
+     actionInsertLink = new KAction( i18n( "Insert link" ), 0,
+                                        this, SLOT( insertLink() ),
+                                        actionCollection(), "insert_link" );
 
     // TODO
     /*actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
@@ -1960,6 +1965,19 @@ void KWView::insertFrameBreak()
     edit->insertFrameBreak();
 }
 
+void KWView::insertLink()
+{
+    KWTextFrameSetEdit *edit=currentTextEdit();
+    if ( !edit )
+        return;
+    QString link;
+    QString ref;
+    if(KWInsertLinkDia::createLinkDia(link, ref))
+    {
+        edit->insertLink(link, ref);
+    }
+}
+
 void KWView::insertVariable()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -3355,6 +3373,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignBlock->setEnabled(state);
     actionFormatIncreaseIndent->setEnabled(state);
     actionChangeCase->setEnabled( hasSelection && state);
+    actionInsertLink->setEnabled(state);
 
     bool goodleftMargin=false;
     if(state)

@@ -179,6 +179,7 @@ public slots:
     void insertVariable();
     void insertFootNoteEndNote();
     void insertContents();
+    void insertLink();
 
     void formatFont();
     void formatParagraph();
@@ -341,6 +342,8 @@ private:
     KAction *actionInsertFrameBreak;
     KAction *actionInsertFootEndNote;
     KAction *actionInsertContents;
+    KAction *actionInsertLink;
+
     KActionMenu *actionInsertVariable;
     struct VariableDef {
         int type;

@@ -288,6 +288,9 @@ public:
     void insertVariable( KWVariable *var);
 
     void insertSpecialChar(QChar _c);
+
+    void insertLink(const QString &_linkName, const QString & hrefName); 
+
     void insertExpression(const QString &_c);
     void insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName );
     void insertTOC() { textFrameSet()->insertTOC( cursor() ); }
