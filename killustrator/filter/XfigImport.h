@@ -26,7 +26,7 @@
 #define XfigImport_h_
 
 #include <qintdict.h>
-#include <qmap.h>
+#include <qvaluelist.h>
 #include <ImportFilter.h>
 
 class GDocument;
@@ -61,7 +61,29 @@ private:
   int coordinate_system;
   int version;
   QIntDict<QColor> colorTable;
-  QMap<int, GObject*> objList;
+
+  // An object and the depth. Used for sorting objects
+  // in the object list
+  struct GObjectListItem
+  {
+      GObjectListItem() : object(0L) {} // for QValueList
+
+      GObjectListItem( int d, GObject * obj ) :
+          object(obj), depth(d) {}
+
+      GObject * object;
+      int depth;
+      bool operator < (const GObjectListItem & item ) const
+      {
+          // We want to sort by decreasing depths
+          return depth > item.depth;
+      }
+      bool operator == (const GObjectListItem & item ) const
+      {
+          return depth == item.depth;
+      }
+  };
+  QValueList<GObjectListItem> objList;
 };
 
 #endif

@@ -35,6 +35,9 @@
 #include <GText.h>
 #include <XfigImport.h>
 
+#include <qtl.h>
+#include <kdebug.h>
+
 using namespace std;
 
 #define RAD_FACTOR 180.0 / M_PI
@@ -386,7 +389,7 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
 
   // now set the properties
   setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
-  objList.insert(depth, obj);
+  objList.append( GObjectListItem( depth, obj ) );
 }
 
 void XfigImport::parseEllipse (istream& fin, GDocument* ) {
@@ -413,7 +416,7 @@ void XfigImport::parseEllipse (istream& fin, GDocument* ) {
 
   // now set the properties
   setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
-  objList.insert(depth, obj);
+  objList.append( GObjectListItem( depth, obj ) );
 }
 
 void XfigImport::parsePolyline (istream& fin, GDocument* ) {
@@ -499,7 +502,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* ) {
   setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);
 
   // and insert the object
-  objList.insert(depth, obj);
+  objList.append( GObjectListItem( depth, obj ) );
 }
 
 void XfigImport::parseSpline (istream& fin, GDocument* ) {
@@ -570,7 +573,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
   setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);
 
   // and insert the object
-  objList.insert(depth, obj);
+  objList.append( GObjectListItem( depth, obj ) );
 }
 
 void XfigImport::parseText (istream& fin, GDocument* ) {
@@ -674,7 +677,7 @@ void XfigImport::parseText (istream& fin, GDocument* ) {
     obj->transform (m3, true);
   }
 
-  objList.insert(depth, obj);
+  objList.append( GObjectListItem( depth, obj ) );
 }
 
 void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
@@ -690,14 +693,20 @@ void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
  */
 void XfigImport::buildDocument (GDocument *doc) {
   doc->setAutoUpdate (false);
-  QMapIterator<int, GObject*> it=objList.end();
-  do {
-      --it;
-      GObject* obj = it.data();
+  // This will sort all object, by decreasing depth
+  qBubbleSort(objList);
+
+  // Now all we need to do is insert them in the document, in that order
+  QValueList<GObjectListItem>::Iterator it=objList.begin();
+  for ( ; it != objList.end() ; ++it )
+  {
+      //kdDebug() << "Inserting object with depth=" << (*it).depth << endl;
+      GObject* obj = (*it).object;
       obj->ref ();
       doc->insertObject (obj);
-  } while(it!=objList.begin());
+  }
   doc->setAutoUpdate (true);
+  objList.clear(); // save memory
 }
 
 void XfigImport::setProperties (GObject* obj, int pen_color, int style,
