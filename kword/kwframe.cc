@@ -2046,6 +2046,14 @@ void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
     KWFrameSet::load( attributes, loadFrames );
 }
 
+bool KWPartFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
+{
+    // For parts, just like for pictures, there is nothing to do when clicking
+    // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
+    // A second click will edit it.
+    return KWFrameSet::isFrameAtPos( frame, nPoint, false );
+}
+
 void KWPartFrameSet::startEditing()
 {
     kdDebug() << k_funcinfo << endl;

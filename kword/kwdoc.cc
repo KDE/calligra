@@ -56,6 +56,7 @@
 #include "kwframelayout.h"
 #include "kwtablestyle.h"
 #include "kwtabletemplate.h"
+#include <X11/Xlib.h>
 
 //#define DEBUG_PAGES
 
@@ -83,8 +84,22 @@ KWChild::~KWChild()
 KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
 {
     Q_ASSERT( m_partFrameSet );
-    if ( m_partFrameSet && m_partFrameSet->isDeleted() )
+    if ( !m_partFrameSet || m_partFrameSet->isDeleted() )
         return 0L;
+    // Only activate when it's already selected.
+    if ( !m_partFrameSet->frame(0)->isSelected() )
+        return 0L;
+    // And only if CTRL isn't pressed.
+
+    Window root;
+    Window child;
+    int root_x, root_y, win_x, win_y;
+    uint keybstate;
+    XQueryPointer( qt_xdisplay(), qt_xrootwin(), &root, &child,
+                   &root_x, &root_y, &win_x, &win_y, &keybstate );
+    if ( keybstate & ControlMask )
+        return 0L;
+
     return KoDocumentChild::hitTest( p, _matrix );
 }
 
