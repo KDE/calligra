@@ -79,27 +79,19 @@ main
 	println( 5.toFloat() + 0.3 );
 	println( "100".toInt() + 8 );
 	println( "100.2".toFloat() + 0.2 );
-	if ( TRUE | FALSE )
+	if ( TRUE || FALSE )
 	{
 		println("Ok");
 	}
-	if ( FALSE | FALSE )
+	if ( FALSE || FALSE )
 	{
 		println("Not ok");
 	}
-	if ( TRUE & TRUE )
+	if ( TRUE && TRUE )
 	{
 		println("Ok");
 	}
-	if ( FALSE & TRUE )
-	{
-		println("Not ok");
-	}
-	if ( TRUE ^ FALSE )
-	{
-		println("Ok");
-	}
-	if ( TRUE ^ TRUE )
+	if ( FALSE && TRUE )
 	{
 		println("Not ok");
 	}
@@ -121,9 +113,9 @@ main
 	println( a++ );
 	println( a );
 	x = a++;
-	println( a,x);
+	println( a, x );
 	println("--------");
-	println( a, ++a, a, a++, a );
+	println( a, ++a, a, a++, a );  // Not sure how to "fix" that
 	a--;
 	println( a );
 	println( !FALSE, !TRUE );

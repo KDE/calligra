@@ -221,7 +221,7 @@ KScript_Identifier      [_a-zA-Z][a-zA-Z0-9_]*
                                                   yylval._str->truncate( yylval._str->length() - 1 );
                                                   return T_MATCH;
                                                 }
-"/"(\\.|[^\\/])*"/"/" "*[^ A-Za-z0-9_.(]        {
+"/"(\\.|[^\\/\n])*"/"/" "*[^ A-Za-z0-9_.(]        {
                                                   yylval._str = new QString( yytext + 1 );
                                                   yylval._str->truncate( yylval._str->length() - 1 );
                                                   return T_MATCH_LINE;

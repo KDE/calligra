@@ -1239,7 +1239,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
   KSSubScope* scope = context.scope()->popLocalScope();
   KSModule* module = context.scope()->popModule();
 
-  bool b = FALSE;;
+  bool b = FALSE;
   if ( l.value()->cast( KSValue::FunctionType ) )
   {
     context.scope()->pushModule( l.value()->functionValue()->module() );
