@@ -1,4 +1,22 @@
+Wed Apr 22 01:45:47 1998  Torben Weis  <weis@localhost>
+
+	* (resizeEvent): Embedded tables do no longer display
+	  scrollbars and additional widgets. They are only shown
+	  
+	* kspread_view.cc (KSpreadChildFrame): One can now
+	  embed child objects in the table.
+
 Tue Apr 21 00:17:41 1998  Torben Weis  <weis@localhost>
+
+	* kspread_view.cc (enableRedo): Undo/Redo works now
+
+	* kspread_dlg_scripts.cc (updateList): Fixed path for
+	  global scripts.
+	  
+	* (slotRename): Bug fixes.
+
+	* kspread_table.cc (deleteColumn): Deleting rows and
+	  columns does work now.
 
 	* kspread_view.cc (insertRow): Inserting rows and columns
 	  works now.

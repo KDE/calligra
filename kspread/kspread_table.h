@@ -15,6 +15,8 @@ class KSpreadDoc;
 class QWidget;
 class QPainter;
 
+#include <document_impl.h>
+
 #include <qpen.h>
 #include <qlist.h>
 #include <qintdict.h>
@@ -61,6 +63,27 @@ protected:
     QRect m_rctRect;
     KSpreadTable *m_pTable;
     bool m_bIgnoreChanges;
+};
+
+/**
+ * Holds an embedded object.
+ */
+class KSpreadChild
+{
+public:
+  KSpreadChild( KSpreadDoc *_spread, const QRect& _rect, OPParts::Document_ptr _doc );
+  ~KSpreadChild();
+  
+  const QRect& geometry() { return m_geometry; }
+  OPParts::Document_ptr document() { return OPParts::Document::_duplicate( m_rDoc ); }
+  KSpreadDoc* parent() { return m_pDoc; }
+
+  void setGeometry( const QRect& _rect ) { m_geometry = _rect; }
+  
+protected:
+  KSpreadDoc *m_pDoc;
+  Document_ref m_rDoc;
+  QRect m_geometry;
 };
 
 /**
@@ -293,6 +316,10 @@ public:
 
     void print( QPainter &painter, bool _asChild, QPrinter *_printer );
 
+    void insertChild( const QRect& _geometry, const char *_arg );
+    void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
+    QListIterator<KSpreadChild> childIterator();
+
     /**
      * Emits the signal @ref #sig_updateCell and sets the cells @ref KSpreadCell::m_bDisplayDirtyFlag to false.
      */
@@ -308,6 +335,9 @@ signals:
     void sig_updateHBorder( KSpreadTable *_table );
     void sig_updateVBorder( KSpreadTable *_table );
     void sig_changeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
+    void sig_insertChild( KSpreadChild *_child );
+    void sig_updateChildGeometry( KSpreadChild *_child );
+    void sig_removeChild( KSpreadChild *_child );
 
 protected:
     /**
@@ -388,6 +418,11 @@ protected:
      * Used for @ref #m_pPainter
      */
     QWidget *m_pWidget; 
+
+    /**
+     * List of all embedded objects.
+     */
+    QList<KSpreadChild> m_lstChildren;
 };
 
 #endif

@@ -165,12 +165,11 @@ OPParts::View_ptr ImageDocument_impl::createView()
 
 void ImageDocument_impl::insertObject( const QRect& _rect )
 {
-  ImageChild *p = 0L;
   OPParts::Document_var doc = new ImageDocument_impl;
   ImageChild* ch = new ImageChild( this, _rect, doc );
   m_lstChildren.append( ch );
   
-  emit sig_insertObject( p );
+  emit sig_insertObject( ch );
 }
 
 void ImageDocument_impl::changeChildGeometry( ImageChild *_child, const QRect& _rect )

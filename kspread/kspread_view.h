@@ -31,6 +31,23 @@ class KSpreadDoc;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 14
 
+class KSpreadChildFrame : public PartFrame_impl
+{
+  Q_OBJECT
+public:
+  KSpreadChildFrame( KSpreadView*, KSpreadChild* );
+  
+  KSpreadChild* child() { return m_pChild; }
+  /**
+   * @return the view owning this frame.
+   */
+  KSpreadView* view() { return m_pView; }
+  
+protected:
+  KSpreadChild *m_pChild;
+  KSpreadView *m_pView;
+};
+
 /**
  */
 class KSpreadEditWidget : public QLineEdit
@@ -61,18 +78,24 @@ class KSpreadCanvas : public QWidget
   
     Q_OBJECT
 public:
-    enum MouseActions { Mark = 1, ResizeCell = 2, NoAction = 0, AutoFill = 3, ChartGeometry = 4 };
+    enum MouseActions { Mark = 1, ResizeCell = 2, NoAction = 0, AutoFill = 3, ChildGeometry = 4 };
     /**
      * The possible actions that we expect the user to do.
      * Usually this is 'Default' and tells us that the user may edit
-     * the table. If @ref #action is 'Chart' then the user must draw
-     * a rectangle in order of telling us where to insert the chart.
+     * the table. If @ref #action is 'InsertChild' then the user must draw
+     * a rectangle in order of telling us where to insert the new child.
      */
-    enum Actions { DefaultAction, Chart };
+    enum Actions { DefaultAction, InsertChild, InsertChart };
 
     KSpreadCanvas( QWidget *_parent, KSpreadView *_gui );
 
     void setAction( Actions _act );
+    /**
+     * This is usually called with '_act' equal KSpreadCanvas::InsertChild.
+     * The '_arg' does then hold information about the object that is going
+     * to be inserted. Usually this is the mime type.
+     */
+    void setAction( Actions _act, const char* arg );
   
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );    
@@ -100,7 +123,12 @@ protected:
      * The default value is 'Default'.
      */
     Actions m_eAction;
-
+    /**
+     * This holds some information about the action and is not
+     * interpreted by this class.
+     */
+    QString m_strActionArgument;
+  
     /**
      * Used to indicate wether the user started drawing a rubber band rectangle.
      */
@@ -263,8 +291,8 @@ public:
      */
     void setText( const char *_text );
 
-    void enableUndo( bool _b ) {} // { editMenu->setItemEnabled( editMenu->idAt( 0 ), _b ); bUndo = _b; }    
-    void enableRedo( bool _b ) {} // { editMenu->setItemEnabled( editMenu->idAt( 1 ), _b ); bRedo = _b; }    
+    void enableUndo( bool _b );
+    void enableRedo( bool _b );
 
     // Drawing Engine
     /**
@@ -286,7 +314,25 @@ public:
      */
     void drawVisibleCells();
     void drawMarker( QPainter * _painter = 0L );
-    
+
+    /**
+     * Called by @ref KSpreadCanvas if its action is @ref KSpreadCanvas::InsertChart.
+     *
+     * @param _geometry is the zoomed geometry of the new child.
+     */
+    void insertChart( const QRect& _geometry );
+    /**
+     * Called by @ref KSpreadCanvas if its action is @ref KSpreadCanvas::InsertObject.
+     *
+     * @param _geometry is the zoomed geometry of the new child.
+     * @param _arg is the string passed to @ref KSpreadCanvas::setAction.
+     */
+    void insertChild( const QRect& _geometry, const char *_arg );
+
+    // IDL
+    virtual void setMode( OPParts::Part::Mode _mode );
+    virtual void setFocus( CORBA::Boolean mode );
+
     // IDL Slots
     /**
      * Menu Edit->Copy
@@ -316,7 +362,19 @@ public:
      * Menu Edit->Page Layout
      */
     void paperLayoutDlg();
-  
+    /**
+     * Menu Edit->Insert->Table
+     */
+    void insertTable();
+    /**
+     * Menu Edit->Insert->Object
+     */
+    void insertObject();
+    /**
+     * Menu Edit->Insert->Image
+     */
+    void insertImage();
+
     /**
      * Menu Scripts->Edit Global Scripts
      */
@@ -509,7 +567,14 @@ public slots:
     void slotUpdateVBorder( KSpreadTable *_table );
     void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotAddTable( KSpreadTable *_table );
-  
+    void slotInsertChild( KSpreadChild *_child );
+    void slotRemoveChild( KSpreadChild *_child );
+    void slotUpdateChildGeometry( KSpreadChild *_child );
+
+    // KSpreadChildFrame signals
+    void slotChildGeometryEnd( PartFrame_impl* );
+    void slotChildMoveEnd( PartFrame_impl* );
+
 protected:
     // C++
     virtual void keyPressEvent ( QKeyEvent * _ev );
@@ -590,6 +655,8 @@ protected:
     CORBA::Long m_idMenuEdit_Paste;
     CORBA::Long m_idMenuEdit_Cell;
     CORBA::Long m_idMenuEdit_Layout;
+    CORBA::Long m_idMenuEdit_Insert;
+    CORBA::Long m_idMenuEdit_Insert_Table;
     CORBA::Long m_idMenuView;
     CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_ShowPageBorders;
@@ -668,6 +735,8 @@ protected:
 
     int m_iXOffset;
     int m_iYOffset;
+
+    QList<KSpreadChildFrame> m_lstFrames;
 };
 
 #endif

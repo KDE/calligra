@@ -7,11 +7,11 @@ module KImage
 {
 	interface ImageView : OPParts::View
 	{
-		oneway void toggleFitToWindow();
-		oneway void newView();
-		oneway void insertImage();
-		oneway void exportImage();
-		oneway void importImage();
+		slot void toggleFitToWindow();
+		slot void newView();
+		slot void insertImage();
+		slot void exportImage();
+		slot void importImage();
 	};
 
 	interface ImageDocument : OPParts::Document

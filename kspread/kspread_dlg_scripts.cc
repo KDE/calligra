@@ -31,7 +31,10 @@ void KSpreadScripts::updateList()
     list->clear();
     nameList.clear();
     
-    QDir d;
+    QString path( kapp->kde_datadir().copy() );
+    path += "/kspread/scripts/";
+
+    QDir d( path );
     d.setFilter( QDir::Files );
     d.setSorting( QDir::Name );
     const QFileInfoList *flist = d.entryInfoList();
@@ -66,7 +69,7 @@ void KSpreadScripts::slotAdd()
     QString t = add2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::message( "Kxcl Error", "You must enter a name" );
+	QMessageBox::message( "KSpread Error", "You must enter a name" );
 	return;
     }
     
@@ -74,7 +77,7 @@ void KSpreadScripts::slotAdd()
     t2 += ".py";
     if ( nameList.find( t2 ) != -1 )
     {
-	QMessageBox::message( "Kxcl Error", "The file already exists" );
+	QMessageBox::message( "KSpread Error", "The file already exists" );
 	return;
     }
 
@@ -84,14 +87,15 @@ void KSpreadScripts::slotAdd()
     FILE *f = fopen( d.data(), "w" );
     if ( f == 0L )
     {
-	QMessageBox::message( "Kxcl Error", "Could not open file.\nPerhaps access denied" );
+	QMessageBox::message( "KSpread Error", "Could not open file.\nPerhaps access denied" );
 	return;
     }
     fclose( f );
     
-    nameList.append( t2 );
-    list->inSort( t.data() );	
-
+    /* nameList.append( t2 );
+    list->inSort( t.data() );	 */
+    updateList();
+    
     add2->setText( "" );
 }
  
@@ -103,23 +107,26 @@ void KSpreadScripts::slotDelete()
     QString t;
     t.sprintf( "Do you really want to delete the script\n%s", list->text( list->currentItem() ) );
     
-    if ( !QMessageBox::query( "Kxcl Question", t.data() ) )
+    if ( !QMessageBox::query( "KSpread Question", t.data() ) )
 	return;
     
     QString t2( list->text( list->currentItem() ) );
     t2 += ".py";
 
-    nameList.remove( t2.data() );
-    list->removeItem( list->currentItem() );
+    /* nameList.remove( t2.data() );
+    list->removeItem( list->currentItem() ); */
 
     QString dir( kapp->kde_datadir().copy() );
     dir += "/kspread/scripts/";
     dir += t2.data();
-    //unlink( t2.data() );
+    // HACK
+    unlink( t2.data() );
     
-    QString t3;
+    /* QString t3;
     t3.sprintf("kfmclient move '%s' trash:/", dir.data() );
-    system( t3.data() );
+    system( t3.data() ); */
+
+    updateList();
 }
 
 void KSpreadScripts::slotRename()
@@ -130,7 +137,7 @@ void KSpreadScripts::slotRename()
     QString t = rename2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::message( "Kxcl Error", "You must enter a name" );
+	QMessageBox::message( "KSpread Error", "You must enter a name" );
 	return;
     }
 
@@ -138,17 +145,17 @@ void KSpreadScripts::slotRename()
     t2 += ".py";
     if ( nameList.find( t2 ) != -1 )
     {
-	QMessageBox::message( "Kxcl Error", "The file already exists" );
+	QMessageBox::message( "KSpread Error", "The file already exists" );
 	return;
     }
  
     QString t3( list->text( list->currentItem() ) );
     t3 += ".py";
-    nameList.remove( t3.data() );
+    /* nameList.remove( t3.data() );
     list->removeItem( list->currentItem() );
 
     nameList.append( t2 );
-    list->inSort( t.data() );
+    list->inSort( t.data() ); */
 
     QString dir( kapp->kde_datadir().copy() );
     dir += "/kspread/scripts/";
@@ -159,6 +166,8 @@ void KSpreadScripts::slotRename()
     t5 += t2.data();
     
     ::rename( t4.data(), t5.data() );
+
+    updateList();
 }
 
 void KSpreadScripts::slotEdit()

@@ -86,6 +86,9 @@ class View :
     virtual void precisionMinus() = 0;
     virtual void precisionPlus() = 0;
     virtual void insertChart() = 0;
+    virtual void insertTable() = 0;
+    virtual void insertImage() = 0;
+    virtual void insertObject() = 0;
     virtual void fontSizeSelected( const char* size ) = 0;
     virtual void fontSelected( const char* font ) = 0;
   protected:
@@ -134,6 +137,9 @@ class View_stub : virtual public View,
     void precisionMinus();
     void precisionPlus();
     void insertChart();
+    void insertTable();
+    void insertImage();
+    void insertObject();
     void fontSizeSelected( const char* size );
     void fontSelected( const char* font );
   private:

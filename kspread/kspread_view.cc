@@ -33,18 +33,20 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
 {
   setWidget( this );
 
+  Control_impl::setFocusPolicy( OPControls::Control::ClickFocus ); 
+
+  m_lstFrames.setAutoDelete( true );  
+
   m_pDoc = _doc;
 
-  // We assume that we are not active =>
-  // We dont show scrollbars & rulers and stuff
   m_bShowGUI = true;
   m_bMarkerVisible = false;
 
   m_iXOffset = 0;
   m_iYOffset = 0;
 
-  m_bUndo = FALSE;
-  m_bRedo = FALSE;
+  m_bUndo = false;
+  m_bRedo = false;
     
   m_pTable = 0L;
   m_fZoom = 1.0;
@@ -317,21 +319,29 @@ void KSpreadView::createGUI()
     QString path = kapp->kde_toolbardir().copy();
     path += "/editcut.xpm";
     QString pix = loadPixmap( path );
-    m_idMenuEdit_Cut = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), "C&ut", m_idMenuEdit, this,
+    m_idMenuEdit_Cut = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), i18n( "C&ut" ), m_idMenuEdit, this,
 						CORBA::string_dup( "cutSelection" ) );
 
     path = kapp->kde_toolbardir().copy();
     path += "/editcopy.xpm";
     pix = loadPixmap( path );
-    m_idMenuEdit_Copy = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), "&Copy", m_idMenuEdit, this,
+    m_idMenuEdit_Copy = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), i18n( "&Copy" ), m_idMenuEdit, this,
 						 CORBA::string_dup( "copySelection" ) );
 
     path = kapp->kde_toolbardir().copy();
     path += "/editpaste.xpm";
     pix = loadPixmap( path );
-    m_idMenuEdit_Paste = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), "&Paste", m_idMenuEdit, this,
+    m_idMenuEdit_Paste = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), i18n( "&Paste" ), m_idMenuEdit, this,
 						  CORBA::string_dup( "paste" ) );
 
+    m_rMenuBar->insertSeparator( m_idMenuEdit );
+
+    m_idMenuEdit_Insert = m_rMenuBar->insertSubMenu( i18n( "&Insert" ), m_idMenuEdit );
+    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Table" ), m_idMenuEdit_Insert, this, "insertTable" );
+    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Image" ), m_idMenuEdit_Insert, this, "insertImage" );
+    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Chart" ), m_idMenuEdit_Insert, this, "insertChart" );
+    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Object ..." ), m_idMenuEdit_Insert, this, "insertObject" );
+    
     m_rMenuBar->insertSeparator( m_idMenuEdit );
 
     m_idMenuEdit_Cell = m_rMenuBar->insertItem( "C&ell", m_idMenuEdit, this, CORBA::string_dup( "editCell" ) );
@@ -404,6 +414,32 @@ void KSpreadView::createGUI()
 
 KSpreadView::~KSpreadView()
 {
+  m_pDoc->removeView( this );
+}
+
+void KSpreadView::setMode( OPParts::Part::Mode _mode )
+{
+  Part_impl::setMode( _mode );
+  
+  if ( mode() == OPParts::Part::ChildMode && !m_bFocus )
+    m_bShowGUI = false;
+  else
+    m_bShowGUI = true;
+}
+
+void KSpreadView::setFocus( CORBA::Boolean _mode )
+{
+  Part_impl::setFocus( _mode );
+
+  bool old = m_bShowGUI;
+  
+  if ( mode() == OPParts::Part::ChildMode && !m_bFocus )
+    m_bShowGUI = false;
+  else
+    m_bShowGUI = true;
+
+  if ( old != m_bShowGUI )
+    resizeEvent( 0L );
 }
 
 void KSpreadView::helpAbout()
@@ -437,6 +473,18 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
     pb->setPixmap( *pixmap );
   
   return pb;
+}
+
+void KSpreadView::enableUndo( bool _b )
+{
+  m_rMenuBar->setItemEnabled( m_idMenuEdit_Undo, _b );
+  m_bUndo = _b;
+}
+
+void KSpreadView::enableRedo( bool _b )
+{
+  m_rMenuBar->setItemEnabled( m_idMenuEdit_Redo, _b );
+  m_bRedo = _b;
 }
 
 void KSpreadView::undo()
@@ -545,6 +593,11 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		    SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
   QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
 		    SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
+  QObject::connect( _t, SIGNAL( sig_insertChild( KSpreadChild* ) ), SLOT( slotInsertChild( KSpreadChild* ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
+		    SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
+  QObject::connect( _t, SIGNAL( sig_removeChild( KSpreadChild* ) ), SLOT( slotRemoveChild( KSpreadChild* ) ) );
+
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )
@@ -574,6 +627,12 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
      return;
    
    m_pTabBar->setActiveTab( _t->name() );
+
+   m_lstFrames.clear();
+   QListIterator<KSpreadChild> it = m_pTable->childIterator();
+   for( ; it.current(); ++it )
+     slotInsertChild( it.current() );
+
    m_pVBorderWidget->repaint();
    m_pHBorderWidget->repaint();
    m_pCanvasWidget->repaint();
@@ -666,6 +725,101 @@ void KSpreadView::newView()
   CORBA::release( shell );
 }
 
+void KSpreadView::insertChart( const QRect& _geometry )
+{
+}
+
+void KSpreadView::insertChild( const QRect& _geometry, const char *_arg )
+{
+  if ( strcmp( _arg, "application/x-kspread" ) != 0L )
+  {
+    QMessageBox::critical( this, "KSpread Error", "Not implemented yet" );
+    return;
+  }
+  
+  m_pTable->insertChild( _geometry, _arg );
+}
+
+void KSpreadView::slotRemoveChild( KSpreadChild *_child )
+{
+  // TODO
+}
+
+void KSpreadView::slotInsertChild( KSpreadChild *_child )
+{ 
+  OPParts::Document_var doc = _child->document();
+  OPParts::View_var v;
+
+  try
+  { 
+    v = doc->createView();
+  }
+  catch ( OPParts::Document::MultipleViewsNotSupported &_ex )
+  {
+    // HACK
+    printf("void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("Could not create view\n");
+    exit(1);
+  }
+
+  if ( CORBA::is_nil( v ) )
+  {
+    printf("void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("return value is 0L\n");
+    exit(1);
+  }
+
+  v->setMode( OPParts::Part::ChildMode );
+  v->setPartShell( partShell() );
+
+  KSpreadChildFrame *p = new KSpreadChildFrame( this, _child );
+  p->attach( v );
+  p->setGeometry( _child->geometry() );
+  p->show();
+  m_lstFrames.append( p );
+  CORBA::release( p );
+  
+  QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
+		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
+  QObject::connect( p, SIGNAL( sig_moveEnd( PartFrame_impl* ) ),
+		    this, SLOT( slotChildMoveEnd( PartFrame_impl* ) ) );  
+} 
+
+void KSpreadView::slotChildGeometryEnd( PartFrame_impl* _frame )
+{
+  // ATTENTION: This is an upcast
+  KSpreadChildFrame *f = (KSpreadChildFrame*)_frame;
+  // TODO zooming
+  m_pTable->changeChildGeometry( f->child(), _frame->partGeometry() );
+}
+
+void KSpreadView::slotChildMoveEnd( PartFrame_impl* _frame )
+{
+  // ATTENTION: This is an upcast
+  KSpreadChildFrame *f = (KSpreadChildFrame*)_frame;
+  // TODO zooming
+  m_pTable->changeChildGeometry( f->child(), _frame->partGeometry() );
+}
+
+void KSpreadView::slotUpdateChildGeometry( KSpreadChild *_child )
+{
+  // Find frame for child
+  KSpreadChildFrame *f = 0L;
+  QListIterator<KSpreadChildFrame> it( m_lstFrames );
+  for ( ; it.current() && !f; ++it )
+    if ( it.current()->child() == _child )
+      f = it.current();
+  
+  assert( f != 0L );
+  
+  // Are we already up to date ?
+  if ( _child->geometry() == f->partGeometry() )
+    return;
+  
+  // TODO zooming
+  f->setPartGeometry( _child->geometry() );
+}
+
 void KSpreadView::togglePageBorders()
 {
    if ( !m_pTable )
@@ -688,7 +842,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
   if ( m_bShowGUI )
-  {
+  { 
     m_pToolWidget->show();
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
@@ -720,13 +874,25 @@ void KSpreadView::resizeEvent( QResizeEvent * )
 				  m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
 
     m_pHBorderWidget->setGeometry( YBORDER_WIDTH, 0, m_pFrame->width() - YBORDER_WIDTH, XBORDER_HEIGHT );
-      
+    m_pHBorderWidget->show();
+    
     m_pVBorderWidget->setGeometry( 0, XBORDER_HEIGHT, YBORDER_WIDTH,
 				   m_pFrame->height() - XBORDER_HEIGHT );   
+    m_pVBorderWidget->show();
   }
   else
   {
     m_pToolWidget->hide();
+    m_pToolWidget->hide();
+    m_pTabBarFirst->hide();
+    m_pTabBarLeft->hide();
+    m_pTabBarRight->hide();
+    m_pTabBarLast->hide();
+    m_pHorzScrollBar->hide();
+    m_pVertScrollBar->hide();
+    m_pHBorderWidget->hide();
+    m_pVBorderWidget->hide();
+
     m_pFrame->setGeometry( 0, 0, width(), height() );
     m_pFrame->show();
     m_pCanvasWidget->raise();
@@ -1046,9 +1212,25 @@ void KSpreadView::percent()
     m_pTable->setSelectionPercent( QPoint( m_iMarkerColumn, m_iMarkerRow ) ); 
 }
 
+void KSpreadView::insertTable()
+{
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "application/x-kspread" );
+}
+
+void KSpreadView::insertImage()
+{
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "application/x-kimage" );
+}
+
+void KSpreadView::insertObject()
+{
+  // m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "application/x-kchart" );
+}
+
 void KSpreadView::insertChart()
 {
-  m_pCanvasWidget->setAction( KSpreadCanvas::Chart );
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChart );
+  // m_pCanvasWidget->setAction( KSpreadCanvas::Chart );
 }
 
 void KSpreadView::autoFill()
@@ -1551,7 +1733,7 @@ void KSpreadCanvas::setAction( Actions _act )
 {
   QRect selection( m_pView->activeTable()->selection() );
   
-  if ( _act == Chart )
+  if ( _act == InsertChart )
   {    
     // Something must be selected
     if ( selection.right() == 0x7fff || selection.bottom() == 0x7fff || selection.left() == 0 )
@@ -1565,6 +1747,12 @@ void KSpreadCanvas::setAction( Actions _act )
   m_eAction = _act;
 }
 
+void KSpreadCanvas::setAction( Actions _act, const char *_arg )
+{
+  m_strActionArgument = _arg;
+  setAction( _act );
+}
+
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pView->activeTable();
@@ -1573,7 +1761,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   QRect selection( table->selection() );
   
-  if ( m_eMouseAction == ChartGeometry )
+  if ( m_eMouseAction == ChildGeometry )
   {
     QPainter painter;
     painter.begin( this );
@@ -1737,7 +1925,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
   if ( !table )
     return;
 
-  if ( m_eMouseAction == ChartGeometry )
+  if ( m_eMouseAction == ChildGeometry )
   {
     if ( !m_bGeometryStarted )
       return;
@@ -1774,8 +1962,15 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
       PartFrame *_frame = pKSpread->createPart( "IDL:KChartFactory:1.0", r, m_pView->canvasWidget() );
       QRect r2;
       KSpreadTable::createChartCellBinding( _frame, r2 ); */
-    m_eMouseAction = NoAction;
 
+    QRect r( x, y, w, h );
+    if ( m_eAction == InsertChart )
+      m_pView->insertChart( r );
+    else if ( m_eAction == InsertChild )
+      m_pView->insertChild( r, m_strActionArgument );
+	      
+    m_eMouseAction = NoAction;
+    m_eAction = DefaultAction;
     return;
   }
   
@@ -1842,13 +2037,13 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
 
   // Do we have to create a new chart at this position ?
-  if ( m_eAction == Chart )
+  if ( m_eAction == InsertChart || m_eAction == InsertChild )
   {
     m_ptGeometryStart = _ev->pos();
     m_ptGeometryEnd = _ev->pos();
     m_bGeometryStarted = FALSE;
-    m_eAction = DefaultAction;
-    m_eMouseAction = ChartGeometry;
+    // m_eAction = DefaultAction;
+    m_eMouseAction = ChildGeometry;
       
       /* KPart *bp = pKSpread->shell()->newPart( "kchart", m_pView->canvasWidget() );
 
@@ -2967,6 +3162,19 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   }
 
   painter.end();
+}
+
+/**********************************************************
+ *
+ * KSpreadChildFrame
+ *
+ **********************************************************/
+
+KSpreadChildFrame::KSpreadChildFrame( KSpreadView* _view, KSpreadChild* _child ) :
+  PartFrame_impl( _view->canvasWidget() )
+{
+  m_pView = _view;
+  m_pChild = _child;
 }
 
 #include "kspread_view.moc"

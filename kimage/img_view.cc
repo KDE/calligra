@@ -225,16 +225,16 @@ void ImageView_impl::createGUI()
   {
     m_rToolBarFile = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( "File" ) );
     m_rToolBarFile->setFileToolBar( true );
-    QString tmp = opapp->kdedir().copy();
-    tmp += "/share/icons/mini/mini-doc.xpm";
+    QString tmp = opapp->kde_icondir().copy();
+    tmp += "/mini/mini-doc.xpm";
     QString pix = loadPixmap( tmp );
-    m_idButtonFile_Open = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Open" ) );
+    m_idButtonFile_Open = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), "Open", 0L, 0L );
 
-    m_rToolBarEdit = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( "Edit" ) );
-    tmp = opapp->kdedir().copy();
-    tmp += "/share/icons/mini/mini-eyes.xpm";
+    m_rToolBarEdit = m_vToolBarFactory->createToolBar( this, "Edit" );
+    tmp = opapp->kde_icondir().copy();
+    tmp += "/mini/mini-eyes.xpm";
     pix = loadPixmap( tmp );
-    m_idButtonEdit_Darker = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Darker" ) );
+    m_idButtonEdit_Darker = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), "Darker", 0L, 0L );
   }
 
   edeb("...void ImageView_impl::createGUI() %i | %i\n",refCount(),_refcnt());

@@ -85,9 +85,15 @@ void KSpreadDoc::cleanUp()
   Document_impl::cleanUp();
 }
 
+void KSpreadDoc::removeView( KSpreadView* _view )
+{
+  m_lstViews.removeRef( _view );
+}
+
 OPParts::View_ptr KSpreadDoc::createView()
 {
   KSpreadView *p = new KSpreadView( 0L, 0L, this );
+  m_lstViews.append( p );
   
   return OPParts::View::_duplicate( p );
 }
@@ -566,6 +572,20 @@ void KSpreadDoc::printMap( QPainter &_painter )
   {
     t->print( _painter, false );
   } */
+}
+
+void KSpreadDoc::enableUndo( bool _b )
+{
+  KSpreadView *v;
+  for( v = m_lstViews.first(); v != 0L; v = m_lstViews.next() )
+    v->enableUndo( _b );
+}
+
+void KSpreadDoc::enableRedo( bool _b )
+{
+  KSpreadView *v;
+  for( v = m_lstViews.first(); v != 0L; v = m_lstViews.next() )
+    v->enableRedo( _b );
 }
 
 KSpreadDoc::~KSpreadDoc()

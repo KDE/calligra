@@ -724,15 +724,7 @@ void KSpreadTable::insertRow( int _row )
 
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
-    emit sig_updateVBorder( this );
-    
-    /*
-    if ( pGui )
-    {
-	drawVisibleCells( TRUE );
-	pGui->hBorderWidget()->repaint();
-	pGui->vBorderWidget()->repaint();    
-    } */
+    emit sig_updateVBorder( this );    
 }
 
 void KSpreadTable::deleteRow( int _row )
@@ -746,10 +738,8 @@ void KSpreadTable::deleteRow( int _row )
     
     m_dctCells.setAutoDelete( FALSE );
     m_dctRows.setAutoDelete( FALSE );
-    
-    // QStack<KSpreadCell> st;
-    // st.setAutoDelete( FALSE );
-    
+
+    // Remove row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it ) 
     {
@@ -759,7 +749,6 @@ void KSpreadTable::deleteRow( int _row )
 	{
 	    KSpreadCell *cell = it.current();
 	    m_dctCells.remove( key );
-	    // st.push( cell );
 	    if ( undo )
 	      undo->appendCell( cell );
 	    else
@@ -767,32 +756,38 @@ void KSpreadTable::deleteRow( int _row )
 	}
     }
 
+    KSpreadCell* (list[ m_dctCells.count() ]);
+    int count = 0;
+    // Find last row
     it.toFirst();    
     int max_row = 1;
     for ( ; it.current(); ++it ) 
-	if ( it.current()->row() > max_row )
-	    max_row = it.current()->row();
-    for ( int i = _row + 1; i <= max_row; i++ )
     {
-	it.toFirst();
-	for ( ; it.current(); ++it ) 
-	{
-	    if ( it.current()->row() == i && !it.current()->isDefault() )
-	    {
-		int key = it.current()->row() + ( it.current()->column() * 0x10000 );
-		m_dctCells.remove( key );
-		
-		it.current()->setRow( it.current()->row() - 1 );
-		
-		key = it.current()->row() + ( it.current()->column() * 0x10000 );
-		m_dctCells.insert( key, it.current() );
-	    }
-	}
+      list[ count++ ] = it.current();
+      if ( it.current()->row() > max_row )
+	max_row = it.current()->row();
     }
     
-    QStack<RowLayout> st2;
-    st2.setAutoDelete( FALSE );
+    // Move rows below the deleted one upwards
+    for ( int i = _row + 1; i <= max_row; i++ )
+    {
+      for ( int k = 0; k < count; k++ )
+      {
+	if ( list[ k ]->row() == i && !list[ k ]->isDefault() )
+	{
+	  int key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.remove( key );
+		
+	  list[ k ]->setRow( list[ k ]->row() - 1 );
+		
+	  key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.insert( key, list[ k ] );
+	}
+      }
+    }
     
+    
+    // Delete RowLayout
     QIntDictIterator<RowLayout> it2( m_dctRows );
     for ( ; it2.current(); ++it2 ) 
     {
@@ -801,7 +796,6 @@ void KSpreadTable::deleteRow( int _row )
 	{
 	    RowLayout *l = it2.current();
 	    m_dctRows.remove( key );
-	    // st2.push( l );
 	    if ( undo )
 	      undo->setRowLayout( l );
 	    else
@@ -809,64 +803,41 @@ void KSpreadTable::deleteRow( int _row )
 	}
     }
 
+    RowLayout* (list2[ m_dctRows.count() ]);
+    count = 0;
+    // Find last RowLayout
     it2.toFirst();
     max_row = 1;
     for ( ; it2.current(); ++it2 ) 
-	if ( it2.current()->row() > max_row )
-	    max_row = it2.current()->row();
+    {
+      list2[ count++ ] = it2.current();
+      if ( it2.current()->row() > max_row )
+	max_row = it2.current()->row();
+    }
+    
     for ( int i = _row + 1; i <= max_row; i++ )
     {
-	it2.toFirst();
-	for ( ; it2.current(); ++it2 ) 
+      for ( int k = 0; k < count; k++ )
+      {
+	if ( list2[ k ]->row() == i && !list2[ k ]->isDefault() )
 	{
-	    if ( it2.current()->row() == i && !it2.current()->isDefault() )
-	    {
-		int key = it2.current()->row();
-		m_dctRows.remove( key );
+	  int key = list2[ k ]->row();
+	  m_dctRows.remove( key );
 		
-		it2.current()->setRow( it2.current()->row() - 1 );
+	  list2[ k ]->setRow( list2[ k ]->row() - 1 );
 		
-		key = it2.current()->row();
-		m_dctRows.insert( key, it2.current() );
-	    }
+	  key = list2[ k ]->row();
+	  m_dctRows.insert( key, list2[ k ] );
 	}
+      }
     }
 
     m_dctCells.setAutoDelete( true );
     m_dctRows.setAutoDelete( true );
     
-    /* while ( !st.isEmpty() )
-    {
-	if ( undo )
-	    objectList.removeRef( st.pop() );
-	else
-	{
-	    objectList.removeRef( st.top() );
-	    delete st.pop();
-	}
-    }
-    while ( !st2.isEmpty() )
-    {
-	if ( undo )
-	    rowList.removeRef( st2.pop() );
-	else
-	{
-	    rowList.removeRef( st2.top() );
-	    delete st2.pop();
-	}
-    } */
-
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
-
-    /*
-    if ( pGui )
-    {
-	drawVisibleCells( TRUE );
-	pGui->hBorderWidget()->repaint();
-	pGui->vBorderWidget()->repaint();    
-    } */
 }
 
 void KSpreadTable::insertColumn( int _column )
@@ -946,13 +917,6 @@ void KSpreadTable::insertColumn( int _column )
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
-    /*
-    if ( pGui )
-    {
-	drawVisibleCells( TRUE );
-	pGui->hBorderWidget()->repaint();
-	pGui->vBorderWidget()->repaint();    
-    } */
 }
 
 void KSpreadTable::deleteColumn( int _column )
@@ -966,10 +930,8 @@ void KSpreadTable::deleteColumn( int _column )
     
     m_dctCells.setAutoDelete( FALSE );
     m_dctColumns.setAutoDelete( FALSE );
-    
-    // QStack<KSpreadCell> st;
-    // st.setAutoDelete( FALSE );
-    
+
+    // Delete column
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it ) 
     {
@@ -979,7 +941,6 @@ void KSpreadTable::deleteColumn( int _column )
 	{
 	    KSpreadCell *cell = it.current();
 	    m_dctCells.remove( key );
-	    // st.push( cell );
 	    if ( undo )
 	      undo->appendCell( cell );
 	    else
@@ -987,32 +948,37 @@ void KSpreadTable::deleteColumn( int _column )
 	}
     }
 
+    KSpreadCell* (list[ m_dctCells.count() ]);
+    int count = 0;
+    // Find right most cell
     it.toFirst();    
     int max_column = 1;
     for ( ; it.current(); ++it ) 
-	if ( it.current()->column() > max_column )
-	    max_column = it.current()->column();
+    {
+      list[ count++ ] = it.current();
+      if ( it.current()->column() > max_column )
+	max_column = it.current()->column();
+    }
+
+    // Move cells
     for ( int i = _column + 1; i <= max_column; i++ )
     {
-	it.toFirst();
-	for ( ; it.current(); ++it ) 
+      for ( int k = 0; k < count; k++ )
+      {
+	if ( list[ k ]->column() == i && !list[ k ]->isDefault() )
 	{
-	    if ( it.current()->column() == i && !it.current()->isDefault() )
-	    {
-		int key = it.current()->row() + ( it.current()->column() * 0x10000 );
-		m_dctCells.remove( key );
+	  int key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.remove( key );
+	  
+	  list[ k ]->setColumn( list[ k ]->column() - 1 );
 		
-		it.current()->setColumn( it.current()->column() - 1 );
-		
-		key = it.current()->row() + ( it.current()->column() * 0x10000 );
-		m_dctCells.insert( key, it.current() );
-	    }
+	  key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.insert( key, list[ k ] );
 	}
+      }
     }
     
-    // QStack<ColumnLayout> st2;
-    // st2.setAutoDelete( FALSE );
-    
+    // Delete ColumnLayout
     QIntDictIterator<ColumnLayout> it2( m_dctColumns );
     for ( ; it2.current(); ++it2 ) 
     {
@@ -1021,7 +987,6 @@ void KSpreadTable::deleteColumn( int _column )
 	{
 	    ColumnLayout *l = it2.current();
 	    m_dctColumns.remove( key );
-	    // st2.push( l );
 	    if ( undo )
 	      undo->setColumnLayout( l );
 	    else
@@ -1029,63 +994,41 @@ void KSpreadTable::deleteColumn( int _column )
 	}
     }
 
+    ColumnLayout* (list2[ m_dctColumns.count() ]);
+    count = 0;
+    // Move ColumnLayouts
     it2.toFirst();
     max_column = 1;
     for ( ; it2.current(); ++it2 ) 
-	if ( it2.current()->column() > max_column )
-	    max_column = it2.current()->column();
+    {
+      list2[ count++ ] = it2.current();	
+      if ( it2.current()->column() > max_column )
+	max_column = it2.current()->column();
+    }
+    
     for ( int i = _column + 1; i <= max_column; i++ )
     {
-	it2.toFirst();
-	for ( ; it2.current(); ++it2 ) 
+      for ( int k = 0; k < count; k++ )
+      {
+	if ( list2[ k ]->column() == i && !list2[ k ]->isDefault() )
 	{
-	    if ( it2.current()->column() == i && !it2.current()->isDefault() )
-	    {
-		int key = it2.current()->column();
-		m_dctColumns.remove( key );
+	  int key = list2[ k ]->column();
+	  m_dctColumns.remove( key );
 		
-		it2.current()->setColumn( it2.current()->column() - 1 );
+	  list2[ k ]->setColumn( list2[ k ]->column() - 1 );
 		
-		key = it2.current()->column();
-		m_dctColumns.insert( key, it2.current() );
-	    }
+	  key = list2[ k ]->column();
+	  m_dctColumns.insert( key, list2[ k ] );
 	}
+      }
     }
 
     m_dctCells.setAutoDelete( TRUE );
     m_dctColumns.setAutoDelete( TRUE );
     
-    /* while ( !st.isEmpty() )
-    {
-	if ( undo )
-	    objectList.removeRef( st.pop() );
-	else
-	{
-	    objectList.removeRef( st.top() );
-	    delete st.pop();
-	}
-    }
-    while ( !st2.isEmpty() )
-    {
-	if ( undo )
-	    columnList.removeRef( st2.pop() );
-	else
-	{
-	    columnList.removeRef( st2.top() );
-	    delete st2.pop();
-	}
-    } */
-
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
-    /*
-    if ( pGui )
-    {
-	drawVisibleCells( TRUE );
-	pGui->hBorderWidget()->repaint();
-	pGui->vBorderWidget()->repaint();    
-    } */
 }
 
 void KSpreadTable::copySelection( const QPoint &_marker )
@@ -2267,11 +2210,50 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int )
   _layout->clearDisplayDirtyFlag();
 }
 
+void KSpreadTable::insertChild( const QRect& _rect, const char *_arg )
+{
+  OPParts::Document_var doc = new KSpreadDoc;
+  KSpreadChild* ch = new KSpreadChild( m_pDoc, _rect, doc );
+  m_lstChildren.append( ch );
+  
+  emit sig_insertChild( ch );
+}
+
+void KSpreadTable::changeChildGeometry( KSpreadChild *_child, const QRect& _rect )
+{
+  _child->setGeometry( _rect );
+
+  emit sig_updateChildGeometry( _child );
+}
+
+QListIterator<KSpreadChild> KSpreadTable::childIterator()
+{
+  return QListIterator<KSpreadChild> ( m_lstChildren );
+}
+
 KSpreadTable::~KSpreadTable()
 {
   m_pPainter->end();
   delete m_pPainter;
   delete m_pWidget;
+}
+
+/**********************************************************
+ *
+ * KSpreadChild
+ *
+ **********************************************************/
+
+KSpreadChild::KSpreadChild( KSpreadDoc *_spread, const QRect& _rect, OPParts::Document_ptr _doc )
+{
+  m_pDoc = _spread;
+  m_rDoc = OPParts::Document::_duplicate( _doc );
+  m_geometry = _rect;
+}
+
+KSpreadChild::~KSpreadChild()
+{
+  m_rDoc = 0L;
 }
 
 #include "kspread_table.moc"

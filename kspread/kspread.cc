@@ -534,6 +534,51 @@ void KSpread::View_stub::insertChart()
 }
 
 
+void KSpread::View_stub::insertTable()
+{
+  CORBA::Request_var _req = this->_request( "insertTable" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
+void KSpread::View_stub::insertImage()
+{
+  CORBA::Request_var _req = this->_request( "insertImage" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
+void KSpread::View_stub::insertObject()
+{
+  CORBA::Request_var _req = this->_request( "insertObject" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
 void KSpread::View_stub::fontSizeSelected( const char* size )
 {
   CORBA::Request_var _req = this->_request( "fontSizeSelected" );
@@ -1010,6 +1055,33 @@ bool KSpread::View_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environ
     _req->params( _args );
 
     insertChart();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "insertTable" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    insertTable();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "insertImage" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    insertImage();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "insertObject" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    insertObject();
     return true;
   }
   if( strcmp( _req->op_name(), "fontSizeSelected" ) == 0 ) {

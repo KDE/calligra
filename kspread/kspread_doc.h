@@ -43,6 +43,8 @@ public:
   
     virtual void cleanUp();
 
+    void removeView( KSpreadView* _view );
+  
     // IDL
     virtual CORBA::Boolean open( const char *_filename );
     virtual CORBA::Boolean saveAs( const char *_filename, const char *_format );
@@ -176,12 +178,11 @@ public:
 
     virtual void printMap( QPainter &_painter );
 
-  // HACK
-    void enableUndo( bool _b ) {}
-  // HACK
-    void enableRedo( bool _b ) {}
-
+    void enableUndo( bool _b );
+    void enableRedo( bool _b );
+  
 signals:
+    // Document signals
     void sig_addTable( KSpreadTable *_table );
   
 protected:
