@@ -30,14 +30,46 @@ bool kspreadfunc_info( KSContext& context )
 
   QString result;
 
-  if( type == "directory" )
+  if ( type == "directory" )
     result = QDir::currentDirPath();
-
-  if( type == "release" )
+  else
+  if ( type == "release" )
     result = VERSION;
-
-  if( type == "numfile" )
+  else
+  if ( type == "numfile" )
     result = QString::number( KSpreadDoc::documents().count() );
+  else
+  if ( type == "recalc" )
+  {
+    if ( ( (KSpreadInterpreter *) context.interpreter() )->document()->delayCalculation() )
+      result = i18n( "Manual" );
+    else
+      result = i18n( "Automatic" );
+  }
+  else
+  if (type == "memavail")
+  {
+  }
+  else
+  if (type == "memused")
+  {
+  }
+  else
+  if (type == "origin")
+  {
+  }
+  else
+  if (type == "system")
+  {
+  }
+  else
+  if (type == "totmem")
+  {
+  }
+  else
+  if (type == "osversion")
+  {
+  }
 
   context.setValue( new KSValue( result) );
   return true;
@@ -236,3 +268,109 @@ bool kspreadfunc_iseven( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_countblank_helper( KSContext & context, 
+                                           QValueList<KSValue::Ptr> & args, 
+                                           int & result)
+{
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+
+      if ( !kspreadfunc_countblank_helper( context, (*it)->listValue(), result) )
+        return false;
+    }
+    else
+    if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) ) 
+    {
+      ++result;
+    }
+    else
+    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) 
+    {
+      KScript::Double d = args[0]->doubleValue();
+      if (d == 0.0)
+        ++result;
+    }
+    else
+    if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) ) 
+    {
+      QString s = args[0]->stringValue();
+      if ( s.isEmpty() || s.stripWhiteSpace().isEmpty() )
+        ++result;
+    }
+  }
+
+  return true;
+}
+
+bool kspreadfunc_countblank( KSContext & context )
+{
+  int result = 0;
+
+  bool b = kspreadfunc_countblank_helper( context, context.value()->listValue(), result);
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+// Function: TYPE
+bool kspreadfunc_type( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "TYPE", true ) )
+    return false;
+
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  {
+    context.setValue( new KSValue( 1 ) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) 
+       || KSUtil::checkType( context, args[0], KSValue::IntType, true )
+       || KSUtil::checkType( context, args[0], KSValue::DateType, true )
+       || KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
+  {
+    context.setValue( new KSValue( 2 ) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+  {
+    context.setValue( new KSValue( 4 ) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+  {
+    context.setValue( new KSValue( 64 ) );
+    return true;
+  }
+
+  // TODO: for errors we need direct access to the cell
+  //  if ( cell->hasError() )
+  //    context.setValue( new KSValue( 16 ) );
+  
+  return true;
+}
+
+bool kspreadfunc_filename( KSContext & context )
+{
+  context.setValue( new KSValue( ( (KSpreadInterpreter *) context.interpreter() )->document()->url().prettyURL() ) );
+
+  return true;
+}
+
+bool kspreadfunc_version( KSContext & context )
+{
+  context.setValue( new KSValue( QString( VERSION ) ) );
+
+  return true;
+}

@@ -147,6 +147,10 @@ bool kspreadfunc_istime( KSContext& context );
 bool kspreadfunc_isdate( KSContext& context );
 bool kspreadfunc_isodd( KSContext& context );
 bool kspreadfunc_iseven( KSContext& context );
+bool kspreadfunc_version( KSContext & context );
+bool kspreadfunc_filename( KSContext & context );
+bool kspreadfunc_type( KSContext & context );
+bool kspreadfunc_countblank( KSContext & context );
 
 // defined in kspread_functions_text.cc
 bool kspreadfunc_char( KSContext& context );
@@ -589,6 +593,10 @@ static const functionEntry funcTab[] = {
   { "ISEVEN", kspreadfunc_iseven },
   { "ISDATE", kspreadfunc_isdate },
   { "ISTIME", kspreadfunc_istime },
+  { "VERSION", kspreadfunc_version },
+  { "FILENAME", kspreadfunc_filename },
+  { "TYPE", kspreadfunc_type },
+  { "COUNTBLANK", kspreadfunc_countblank },
 
   // statistical
   { "AVERAGE", kspreadfunc_average },

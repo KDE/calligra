@@ -22,8 +22,6 @@ Until beta2:
 - support for inserting data from SQL databases
 - implemented "Goal Seek"
 - implemented new shortcuts for cell formating 
-    (Excel like): Ctrl+!, $, %, #, ^, @, &, F4 (I will put a description of
-    them in the KSpread handbook later)
 - implemented "Insert from text file" and "Insert formated clipboard data"
 - Added "Text to Column"
 - improved Data Consolidate, with more choices: Sum, Average, Count,
@@ -32,7 +30,7 @@ Until beta2:
 
 new functions added:
  ISEMPTY, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
- SEARCH, INFO
+ SEARCH, INFO, VERSION, FILENAME, TYPE, COUNTBLANK
 
 Until beta1:
 ------------

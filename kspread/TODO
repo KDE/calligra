@@ -16,6 +16,7 @@ Others bugs not in BT system (Report by - taken by):
             "merge" the data.  Currently, the top-left corner cell's data will
             become the large merged cell's data.  Maybe that isn't ideal but 
             what is a better solution?
+-- (Norbert): it's fixed anyway :-)
 
 
 Other things: (please add the things you are working on!)
@@ -50,6 +51,16 @@ Other things: (please add the things you are working on!)
 - other bug fixes                               (everybody, every time)
 
 
+BEGGING: Please: can somebody enhance koScript so that a formula not only gets the values but also
+         the references? (e.g.: =DATAAVG(A1:C12, "weight", A1:C12) 
+         puts a list of values to KSContext (as usual) but also A1:C12 (in something like getRef() which 
+         returns 0L if there are no references (for the second parameter in the example)
+        I designed the database formulas available in Excel and MultipleOperations which both depend
+        on this, but I have no idea how to add it.
+        
+
+
+
 *********
 * Taken:
 *********
@@ -76,7 +87,8 @@ Philipp
 Norbert
 =======
 
-- Functions that belongs in Excel to "Information"
+- vacation for two weeks - maybe I have time to play with zooming - but anyone else
+  could take this, too.
 
 Ariya
 =====

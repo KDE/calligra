@@ -12,7 +12,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "numfile" returns number of active documents, "release" returns version of KSpread as text.</Text>
+	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "numfile" returns number of active documents, "release" returns version of KSpread as text, "recalc" returns the current recalculation mode: returns "Automatic" or "Manual".</Text>
 	<Syntax>INFO(type)</Syntax>
       </Help>
     </Function>
@@ -167,6 +167,55 @@
       </Help>
     </Function>
 
+   <Function>
+      <Name>TYPE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The TYPE() function returns 1 if the value is a number, 2 if it is text, 4 if the value is a logical value, 16 if it is an error value or 64 if the value is an array.
+ If the cell the value represents contains a formula you get its return type.</Text>
+	<Syntax>TYPE(x)</Syntax>
+	<Example>TYPE(A1) returns 2, if A1 contains "Text"</Example>
+	<Example>TYPE(-7) returns 1</Example>
+	<Example>TYPE(A2) returns 1, if A2 contains "=CURRENTDATE()</Example>
+      </Help>
+    </Function>
+    
+    <Function>
+      <Name>VERSION</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>Returns the KSpread version as a string</Text>
+	<Syntax>VERSION()</Syntax>
+	</Help>
+    </Function>
+    
+    <Function>
+      <Name>FILENAME</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>Returns the current filename. If the current document is not saved an empty string is returned.</Text>
+	<Syntax>FILENAME()</Syntax>
+	</Help>
+    </Function>
+
+    <Function>
+      <Name>COUNTBLANK</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The COUNTBLANK function returns the number of blank cells in the given parameter list.</Text>
+	<Syntax>COUNTBLANK(x)</Syntax>
+	<Example>COUNTBLANK(A1:A4) returns 4 if nothing is in the cells</Example>
+      </Help>
+    </Function>
+    
   </Group>
 
 </KSpreadFunctions>
