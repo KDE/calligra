@@ -47,63 +47,70 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
         KoZoomHandler * zh = kwTextDocument()->paintingZoomHandler();
         if ( doc && doc->viewFormattingChars() && !forPrint )
         {
+            bool drawFormattingSpace = doc->viewFormattingSpace();
+            bool drawFormattingBreak = doc->viewFormattingBreak();
+            bool drawFormattingEndParag = doc->viewFormattingEndParag();
+            bool drawFormattingTabs = doc->viewFormattingTabs();
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) );
             painter.setPen( pen );
             //kdDebug() << "KWTextParag::drawFormattingChars start=" << start << " len=" << len << " length=" << length() << endl;
             if ( start + len == length() )
             {
-                if ( hardFrameBreakAfter() )
+                if ( drawFormattingBreak)
                 {
-                    // keep in sync with KWTextFrameSet::formatVertically
-                    QString str = i18n( "--- Frame Break ---" );
-                    int width = 0;
-                    //for ( int i = 0 ; i < (int)str.length() ; ++i )
+                    if ( hardFrameBreakAfter() )
+                    {
+                        // keep in sync with KWTextFrameSet::formatVertically
+                        QString str = i18n( "--- Frame Break ---" );
+                        int width = 0;
+                        //for ( int i = 0 ; i < (int)str.length() ; ++i )
                         // width += ...
-                    width = lastFormat->screenFontMetrics(zh).width(str);
-                    QColorGroup cg2( cg );
-                    //cg2.setColor( QColorGroup::Base, Qt::green ); // for debug
-                    int last = length() - 1;
-                    KoTextStringChar &ch = string()->at( last );
-                    int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
+                        width = lastFormat->screenFontMetrics(zh).width(str);
+                        QColorGroup cg2( cg );
+                        //cg2.setColor( QColorGroup::Base, Qt::green ); // for debug
+                        int last = length() - 1;
+                        KoTextStringChar &ch = string()->at( last );
+                        int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
 
-                    KoTextFormat format( *lastFormat );
-                    format.setColor( pen.color() ); // ### A bit slow, maybe pass the color to drawParagStringInternal ?
-                    KoTextParag::drawParagStringInternal(
-                        painter, str, 0, str.length(),
-                        x, lastY_pix, // startX and lastY
-                        zh->layoutUnitToPixelY( ch.ascent() ), // baseline
-                        width, zh->layoutUnitToPixelY( ch.height() ), // bw and h
-                        drawSelections, &format, last, selectionStarts,
-                        selectionEnds, cg2, rightToLeft, zh );
-                }
-                else
-                {
-                    // drawing the end of the parag
-                    KoTextStringChar &ch = string()->at( length() - 1 );
-                    KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
-                    int w = format->screenFontMetrics(zh).width('X');
-                    int size = QMIN( w, h_pix * 3 / 4 );
-                    // x,y is the bottom right corner of the ¶
-                    //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
-                    int x;
-                    if ( rightToLeft )
-                        x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + ch.pixelwidth - 1;
+                        KoTextFormat format( *lastFormat );
+                        format.setColor( pen.color() ); // ### A bit slow, maybe pass the color to drawParagStringInternal ?
+                        KoTextParag::drawParagStringInternal(
+                            painter, str, 0, str.length(),
+                            x, lastY_pix, // startX and lastY
+                            zh->layoutUnitToPixelY( ch.ascent() ), // baseline
+                            width, zh->layoutUnitToPixelY( ch.height() ), // bw and h
+                            drawSelections, &format, last, selectionStarts,
+                            selectionEnds, cg2, rightToLeft, zh );
+                    }
                     else
-                        x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + w;
-                    int y = lastY_pix + baseLine_pix;
-                    //kdDebug() << "KWTextParag::drawFormattingChars drawing CR at " << x << "," << y << endl;
-                    painter.drawLine( (int)(x - size * 0.2), y - size, (int)(x - size * 0.2), y );
-                    painter.drawLine( (int)(x - size * 0.5), y - size, (int)(x - size * 0.5), y );
-                    painter.drawLine( x, y, (int)(x - size * 0.7), y );
-                    painter.drawLine( x, y - size, (int)(x - size * 0.5), y - size);
-                    painter.drawArc( x - size, y - size, size, (int)(size / 2), -90*16, -180*16 );
+                    {
+                        // drawing the end of the parag
+                        KoTextStringChar &ch = string()->at( length() - 1 );
+                        KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
+                        int w = format->screenFontMetrics(zh).width('X');
+                        int size = QMIN( w, h_pix * 3 / 4 );
+                        // x,y is the bottom right corner of the ¶
+                        //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
+                        int x;
+                        if ( rightToLeft )
+                            x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + ch.pixelwidth - 1;
+                        else
+                            x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + w;
+                        int y = lastY_pix + baseLine_pix;
+                        //kdDebug() << "KWTextParag::drawFormattingChars drawing CR at " << x << "," << y << endl;
+                        painter.drawLine( (int)(x - size * 0.2), y - size, (int)(x - size * 0.2), y );
+                        painter.drawLine( (int)(x - size * 0.5), y - size, (int)(x - size * 0.5), y );
+                        painter.drawLine( x, y, (int)(x - size * 0.7), y );
+                        painter.drawLine( x, y - size, (int)(x - size * 0.5), y - size);
+                        painter.drawArc( x - size, y - size, size, (int)(size / 2), -90*16, -180*16 );
 #ifdef DEBUG_FORMATTING
-                    painter.setPen( Qt::blue );
-                    painter.drawRect( zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj - 1, lastY_pix, ch.pixelwidth, baseLine_pix );
-                    QPen pen( cg.color( QColorGroup::Highlight ) );
-                    painter.setPen( pen );
+                        painter.setPen( Qt::blue );
+                        painter.drawRect( zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj - 1, lastY_pix, ch.pixelwidth, baseLine_pix );
+                        QPen pen( cg.color( QColorGroup::Highlight ) );
+                        painter.setPen( pen );
 #endif
+                    }
                 }
             }
 
@@ -120,7 +127,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
 #endif
                 if ( ch.isCustom() )
                     continue;
-                if ( ch.c == ' ' )
+                if ( ch.c == ' ' && drawFormattingSpace)
                 {
                     // Don't use ch.pixelwidth here. We want a square with
                     // the same size for all spaces, even the justified ones
@@ -131,14 +138,14 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
                     painter.drawRect( x + (ch.pixelwidth - size) / 2, lastY_pix + baseLine_pix - (height - size) / 2, size, size );
                 }
-                else if ( ch.c == '\t' )
+                else if ( ch.c == '\t' && drawFormattingTabs)
                 {
                     /*KoTextStringChar &nextch = string()->at(i+1);
-                    int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
-                    //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
-                    //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
-                    int availWidth = nextx - ch.x - 1;
-                    availWidth=zh->layoutUnitToPixelX(availWidth);*/
+                      int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
+                      //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
+                      //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
+                      int availWidth = nextx - ch.x - 1;
+                      availWidth=zh->layoutUnitToPixelX(availWidth);*/
 
                     int availWidth = ch.pixelwidth;
 
@@ -159,7 +166,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                         painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
                     }
                 }
-                else if ( ch.c == '\n' )
+                else if ( ch.c == '\n' && drawFormattingEndParag)
                 {
                     // draw line break
                     KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );

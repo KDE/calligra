@@ -174,6 +174,12 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bShowRuler = true;
 
     m_viewFormattingChars = false;
+
+    m_viewFormattingEndParag = true;
+    m_viewFormattingSpace = true;
+    m_viewFormattingTabs = true;
+    m_viewFormattingBreak = true;
+
     m_viewFrameBorders = true;
     m_repaintAllViewsPending = false;
     m_bShowDocStruct = true;
@@ -327,6 +333,11 @@ void KWDocument::initConfig()
       m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
 
       m_viewFormattingChars = config->readBoolEntry( "ViewFormattingChars", false );
+      m_viewFormattingBreak = config->readBoolEntry( "ViewFormattingBreaks", true );
+      m_viewFormattingSpace = config->readBoolEntry( "ViewFormattingSpace", true );
+      m_viewFormattingEndParag = config->readBoolEntry( "ViewFormattingEndParag", true );
+      m_viewFormattingTabs = config->readBoolEntry( "ViewFormattingTabs", true );
+
       m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
@@ -361,6 +372,10 @@ void KWDocument::saveConfig()
     KConfig *config = KWFactory::global()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
+    config->writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
+    config->writeEntry( "ViewFormattingEndParag", m_viewFormattingEndParag );
+    config->writeEntry( "ViewFormattingTabs", m_viewFormattingTabs );
+    config->writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
     config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
     config->writeEntry( "Zoom", m_zoom );
     config->writeEntry( "showDocStruct", m_bShowDocStruct);

@@ -131,19 +131,19 @@ void KWConfig::slotDefault()
     switch(activePageIndex())
     {
         case 0:
-            m_spellPage->slotDefault();
-            break;
-        case 1:
             m_interfacePage->slotDefault();
             break;
-        case 2:
-            m_miscPage->slotDefault();
-            break;
-        case 3:
+        case 1:
             m_defaultDocPage->slotDefault();
             break;
-        case 4:
+        case 2:
+            m_spellPage->slotDefault();
+            break;
+        case 3:
             m_formulaPage->slotDefault();
+            break;
+        case 4:
+            m_miscPage->slotDefault();
             break;
         default:
             break;
@@ -475,6 +475,27 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
 
+    QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
+    gbViewFormatting->setMargin( 10 );
+    gbViewFormatting->setInsideSpacing( KDialog::spacingHint() );
+
+    m_oldFormattingEndParag = doc->viewFormattingEndParag();
+    m_oldFormattingSpace = doc->viewFormattingSpace();
+    m_oldFormattingTabs = doc->viewFormattingTabs();
+    m_oldFormattingBreak = doc->viewFormattingBreak();
+
+    m_cbViewFormattingEndParag = new QCheckBox( i18n("View Formatting End Parag"), gbViewFormatting);
+    m_cbViewFormattingEndParag->setChecked(m_oldFormattingEndParag);
+
+    m_cbViewFormattingSpace = new QCheckBox( i18n("View Formatting Space"), gbViewFormatting);
+    m_cbViewFormattingSpace->setChecked(m_oldFormattingSpace);
+
+    m_cbViewFormattingTabs = new QCheckBox( i18n("View Formatting Tabs"), gbViewFormatting);
+    m_cbViewFormattingTabs->setChecked(m_oldFormattingTabs);
+
+    m_cbViewFormattingBreak = new QCheckBox( i18n("View Formatting Break"), gbViewFormatting);
+    m_cbViewFormattingBreak->setChecked(m_oldFormattingBreak);
+
 }
 
 ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
@@ -547,6 +568,40 @@ KCommand *ConfigureMiscPage::apply()
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
+    bool state =m_cbViewFormattingEndParag->isChecked();
+    bool needRepaint = false;
+    if ( state != m_oldFormattingEndParag )
+    {
+        doc->setViewFormattingEndParag(state);
+        needRepaint = true;
+        m_oldFormattingEndParag = state;
+    }
+    state = m_cbViewFormattingSpace->isChecked();
+    if ( state != m_oldFormattingSpace)
+    {
+        doc->setViewFormattingSpace(state);
+        needRepaint = true;
+        m_oldFormattingSpace = state;
+    }
+    state = m_cbViewFormattingBreak->isChecked();
+    if ( state != m_oldFormattingBreak)
+    {
+        doc->setViewFormattingBreak(state);
+        needRepaint = true;
+        m_oldFormattingBreak = state;
+    }
+    state = m_cbViewFormattingTabs->isChecked();
+    if ( state != m_oldFormattingTabs )
+    {
+        doc->setViewFormattingTabs(state);
+        needRepaint = true;
+        m_oldFormattingTabs= state;
+    }
+    if ( needRepaint )
+    {
+        doc->layout();
+        doc->repaintAllViews();
+    }
     return macroCmd;
 }
 
@@ -556,6 +611,11 @@ void ConfigureMiscPage::slotDefault()
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
    m_underlineLink->setChecked(true);
+   m_cbViewFormattingEndParag->setChecked(true);
+   m_cbViewFormattingSpace->setChecked(true);
+   m_cbViewFormattingTabs->setChecked(true);
+   m_cbViewFormattingBreak->setChecked(true);
+
 }
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )

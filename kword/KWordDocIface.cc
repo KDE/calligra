@@ -637,3 +637,43 @@ void KWordDocIface::setCursorInProtectedArea( bool b )
     doc->setCursorInProtectedArea(b);
 }
 
+
+bool KWordDocIface::viewFormattingEndParag() const
+{
+    return doc->viewFormattingEndParag();
+}
+
+void KWordDocIface::setViewFormattingEndParag(bool _b)
+{
+    doc->setViewFormattingEndParag(_b);
+}
+
+bool KWordDocIface::viewFormattingSpace() const
+{
+    return doc->viewFormattingSpace();
+}
+
+void KWordDocIface::setViewFormattingSpace(bool _b)
+{
+    doc->setViewFormattingSpace(_b);
+}
+
+bool KWordDocIface::viewFormattingTabs() const
+{
+    return doc->viewFormattingTabs();
+}
+
+void KWordDocIface::setViewFormattingTabs(bool _b)
+{
+    doc->setViewFormattingTabs( _b );
+}
+
+bool KWordDocIface::viewFormattingBreak() const
+{
+    return doc->viewFormattingBreak();
+}
+
+void KWordDocIface::setViewFormattingBreak(bool _b)
+{
+    doc->setViewFormattingBreak( _b );
+}

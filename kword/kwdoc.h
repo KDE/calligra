@@ -455,6 +455,18 @@ public:
     bool viewFormattingChars() const { return m_viewFormattingChars; }
     void setViewFormattingChars(bool _b) { m_viewFormattingChars=_b; }
 
+    bool viewFormattingEndParag() const { return m_viewFormattingEndParag; }
+    void setViewFormattingEndParag(bool _b) { m_viewFormattingEndParag=_b; }
+
+    bool viewFormattingSpace() const { return m_viewFormattingSpace; }
+    void setViewFormattingSpace(bool _b) { m_viewFormattingSpace=_b; }
+
+    bool viewFormattingTabs() const { return m_viewFormattingTabs; }
+    void setViewFormattingTabs(bool _b) { m_viewFormattingTabs=_b; }
+
+    bool viewFormattingBreak() const { return m_viewFormattingBreak; }
+    void setViewFormattingBreak(bool _b) { m_viewFormattingBreak=_b; }
+
     // Also view properties, but stored, loaded and saved here (lacking a more global object).
     bool viewFrameBorders() const { return m_viewFrameBorders; }
     void setViewFrameBorders( bool b ) { m_viewFrameBorders = b; }
@@ -712,7 +724,6 @@ private:
 
     QFont m_defaultFont;
     bool m_headerVisible, m_footerVisible;
-    bool m_viewFormattingChars;
     bool m_viewFrameBorders;
     bool m_bShowRuler;
     bool m_bDontCheckUpperWord;
@@ -725,7 +736,14 @@ private:
     bool m_bAllowAutoFormat;
     bool m_bShowScrollBar;
     bool m_cursorInProtectectedArea;
-    /// The document that is used by all formulas
+
+    bool m_viewFormattingChars;
+    bool m_viewFormattingEndParag;
+    bool m_viewFormattingSpace;
+    bool m_viewFormattingTabs;
+    bool m_viewFormattingBreak;
+
+/// The document that is used by all formulas
     KFormula::Document* m_formulaDocument;
 
     double m_indent; // in pt

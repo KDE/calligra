@@ -87,7 +87,10 @@ private:
     int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
+    bool m_oldFormattingEndParag, m_oldFormattingSpace, m_oldFormattingTabs, m_oldFormattingBreak;
     QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink;
+    QCheckBox* m_cbViewFormattingEndParag, *m_cbViewFormattingSpace;
+    QCheckBox* m_cbViewFormattingTabs, *m_cbViewFormattingBreak;
 };
 
 class ConfigureDefaultDocPage : public QObject

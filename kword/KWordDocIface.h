@@ -188,6 +188,18 @@ k_dcop:
     bool cursorInProtectedArea()const;
     void setCursorInProtectedArea( bool b );
 
+    bool viewFormattingEndParag() const;
+    void setViewFormattingEndParag(bool _b);
+
+    bool viewFormattingSpace() const;
+    void setViewFormattingSpace(bool _b);
+
+    bool viewFormattingTabs() const;
+    void setViewFormattingTabs(bool _b);
+
+    bool viewFormattingBreak() const;
+    void setViewFormattingBreak(bool _b);
+
 private:
     KWDocument *doc;
 

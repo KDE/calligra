@@ -164,3 +164,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Cursor position is saved into the file, to restore it when reopening the document
 - The "text" view mode is finally operational.
 - Add option "Enable cursor in protected text object"
+- Now we can configure which type of formatting char we want to display
