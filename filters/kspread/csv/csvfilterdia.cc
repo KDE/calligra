@@ -27,5 +27,6 @@ CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
     QString tmp("Hallo CVS");
     QLabel *l=new QLabel(tmp, this, "l1");
     l->setMinimumSize(l->sizeHint());
+    l->move(10,5);
 }
 #endif
