@@ -107,7 +107,7 @@ public:
     void setNumberingType( Numbering _type );
     Numbering numberingType() const { return m_numberingType;}
 
-    void setManualString( const QString & _str ) { setValue(_str);}
+    void setManualString( const QString & _str ) { m_varValue=QVariant(_str);}
     QString manualString() const { return m_varValue.toString();}
 
     virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
@@ -126,13 +126,18 @@ public:
     // Important: we need a sequence number, to order footnotes.
     // Don't remove this when implementing the QVariant-based solution ;)
     void setNum( int _num ) { m_num = _num; }
-    int num() const { return m_varValue.toInt(); }
-    void setValue( const QVariant & value ) { m_varValue = value;}
+    int num() const { return m_num; }
+    void setNumDisplay( int val );
+    int numDisplay() const { return m_numDisplay; }
 
     // Called whenever this item is being moved by the text formatter
     virtual void move( int x, int y );
 
     virtual void setDeleted( bool del );
+
+    void formatedNote();
+protected:
+    QString applyStyle(  );
 
 private:
     KWDocument *m_doc;
@@ -140,6 +145,7 @@ private:
     KWFootNoteFrameSet* m_frameset;
     Numbering m_numberingType;
     int m_num;
+    int m_numDisplay;
 };
 
 #endif

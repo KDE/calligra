@@ -140,15 +140,14 @@ KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, KoVariableForma
       m_frameset( 0L ),
       m_numberingType( Auto )
 {
-    m_varValue = QVariant( 0 );
+    m_varValue = QVariant( QString("") );
 }
 
 void KWFootNoteVariable::setNumberingType( Numbering _type )
 {
     m_numberingType = _type;
     //delete m_varFormat;
-    setVariableFormat((_type == Manual) ? m_doc->variableFormatCollection()->format("STRING") : m_doc->variableFormatCollection()->format("NUMBER"));
-
+    setVariableFormat(m_doc->variableFormatCollection()->format("STRING"));
 }
 
 
@@ -197,18 +196,57 @@ void KWFootNoteVariable::load( QDomElement &elem )
     }
 }
 
-QString KWFootNoteVariable::text()
+void KWFootNoteVariable::formatedNote()
 {
     if ( m_numberingType == Auto )
     {
-        if (m_noteType == FootNote )
-            return m_varFormat->convert( QVariant( m_varValue.toInt()+ static_cast<KWVariableSettings*>(m_varColl->variableSetting())->footNoteCounter().startNumber()-1) );
-        else
-            return m_varFormat->convert( QVariant( m_varValue.toInt()+ static_cast<KWVariableSettings*>(m_varColl->variableSetting())->endNoteCounter().startNumber()-1) );
+        m_varValue = QVariant(applyStyle( ));
     }
-    else
-        return m_varFormat->convert( m_varValue );
 }
+
+QString KWFootNoteVariable::applyStyle(  )
+{
+    KoParagCounter tmpCounter = (m_noteType == FootNote ) ?  static_cast<KWVariableSettings*>(m_varColl->variableSetting())->footNoteCounter() : static_cast<KWVariableSettings*>(m_varColl->variableSetting())->endNoteCounter();
+
+    QString tmp;
+    int val = m_numDisplay;
+    kdDebug()<<" int :"<<m_numDisplay<<endl;
+    switch ( tmpCounter.style() )
+    {
+    case KoParagCounter::STYLE_NUM:
+        tmp.setNum( val );
+        break;
+    case KoParagCounter::STYLE_ALPHAB_L:
+        tmp=KoParagCounter::makeAlphaLowerNumber( val );
+        break;
+    case KoParagCounter::STYLE_ALPHAB_U:
+        tmp=KoParagCounter::makeAlphaUpperNumber( val );
+        break;
+    case KoParagCounter::STYLE_ROM_NUM_L:
+        tmp = KoParagCounter::makeRomanNumber( val ).lower();
+        break;
+    case KoParagCounter::STYLE_ROM_NUM_U:
+        tmp = KoParagCounter::makeRomanNumber( val ).upper();
+        break;
+    }
+
+    tmp.prepend( tmpCounter.prefix() );
+    tmp.append( tmpCounter.suffix() );
+    kdDebug()<<" tmp :"<<tmp <<endl;
+    return tmp;
+}
+
+QString KWFootNoteVariable::text()
+{
+    return m_varFormat->convert( m_varValue );
+}
+
+void KWFootNoteVariable::setNumDisplay( int val )
+{
+    m_numDisplay = val;
+    formatedNote();
+}
+
 
 void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/
 {

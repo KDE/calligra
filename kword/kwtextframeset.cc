@@ -2205,10 +2205,10 @@ void KWTextFrameSet::renumberFootNotes()
         }
         if ( var->numberingType()==KWFootNoteVariable::Auto )
         {
-            if ( varNb != var->varValue().toInt() )
+            if ( varNb != var->numDisplay() )
             {
                 changed = true;
-                var->setValue( varNb );
+                var->setNumDisplay(varNb );
             }
             varNb++;
         }
