@@ -1051,21 +1051,20 @@ public:
 						return true;
 					}
 
+					// get raw dimensions
 					QRect dimen = wmf.boundingRect ();
-					// TODO: if you look in the QWmf code, it actually reads the
-					// width/height from the PlaceableHeader (if possible),
-					// then parses the records for the width/height again.
-					// The trouble is that the PlaceableHeader contains
-					// measurements in twips and the records are in points...
-					// TODO: what about the inch/dpi field? Or is it irrelevant
-					// because of above (records like setWindowExt store 72dpi
-					// points)
-					imageActualWidth = Point2Twip (abs (dimen.width ()));
-					imageActualHeight = Point2Twip (abs (dimen.height ()));
-
+					int width = abs (dimen.width ());
+					int height = abs (dimen.height ());
+					kdDebug (30509) << "\tRaw WMF dimensions: " << width << "x" << height << endl;
+					
 					if (wmf.isPlaceable ())
 					{
 						kdDebug (30509) << "\tConverting Placeable WMF" << endl;
+					
+						// convert twip measurements that aren't in 72dpi
+						int defaultDpi = wmf.defaultDpi ();
+						imageActualWidth = width * 1440 / defaultDpi;
+						imageActualHeight = height * 1440 / defaultDpi;
 
 						// Remove Aldus Placeable WMF Header
 						for (int i = 0; i < int (imageSize) - 22; i++)
@@ -1084,6 +1083,10 @@ public:
 					else
 					{
 						kdDebug (30509) << "\tStandard WMF - no conversion required" << endl;
+						
+						// assume width & height were in 72dpi points
+						imageActualWidth = Point2Twip (width);
+						imageActualHeight = Point2Twip (height);
 					}
 				}
 
