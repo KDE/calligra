@@ -649,6 +649,9 @@ public:
 
     KWBookMark * bookMarkByName( const QString & name );
     QStringList listOfBookmarkName()const;
+
+    void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 

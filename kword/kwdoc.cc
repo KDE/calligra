@@ -3960,4 +3960,21 @@ QStringList KWDocument::listOfBookmarkName()const
     return list;
 }
 
+void KWDocument::paragraphDeleted( KoTextParag *_parag,  KWFrameSet *frm)
+{
+    if (m_bookmarkList.count()==0)
+        return;
+    QPtrListIterator<KWBookMark> book(m_bookmarkList);
+    for ( ; book.current() ; ++book )
+    {
+        if ( book.current()->parag()==_parag &&
+             book.current()->frameSet()==frm)
+        {
+            book.current()->setParag(0L);
+            return;
+        }
+    }
+    return;
+}
+
 #include "kwdoc.moc"

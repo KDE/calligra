@@ -118,6 +118,13 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
              SLOT( slotRepaintChanged() ) );
+    connect( m_textobj, SIGNAL( paragraphDeleted( KoTextParag*) ),
+             SLOT( slotParagraphDeleted(KoTextParag*) ));
+}
+
+void KWTextFrameSet::slotParagraphDeleted(KoTextParag*_parag)
+{
+    kWordDocument()->paragraphDeleted( _parag, this);
 }
 
 KWordFrameSetIface* KWTextFrameSet::dcopObject()

@@ -265,6 +265,7 @@ protected slots:
     void slotAfterFormatting( int bottom, KoTextParag *lastFormatted, bool* abort );
     void slotNewCommand( KCommand *cmd );
     void slotRepaintChanged();
+    void slotParagraphDeleted(KoTextParag*_parag);
 
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
@@ -273,7 +274,6 @@ protected:
     void frameResized( KWFrame *theFrame, bool invalidateLayout );
     double footerHeaderSizeMax( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
-
 private:
     /** The contained text object */
     KoTextObject * m_textobj;
