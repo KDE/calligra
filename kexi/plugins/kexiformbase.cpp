@@ -152,7 +152,7 @@ KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
 KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
-KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const QString &s, const char *name, QString identifier)
+KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const QString &s, const char *name, QString identifier, KFormEditor::WidgetContainer *content)
 	: KexiDialogBase(view,parent,identifier.latin1())
 {
 	setMinimumWidth(50);
@@ -164,7 +164,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	m_project = view->project();
 	m_item = item;
 
-	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
+	setCaption(i18n("%1").arg(identifier));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));
@@ -173,7 +173,15 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);
-	topLevelEditor=new KexiDBWidgetContainer(this,"foo","bar");
+	if(!content)
+	{
+		topLevelEditor=new KexiDBWidgetContainer(this,"foo","bar");
+	}
+	else
+	{
+		topLevelEditor = static_cast<KexiDBWidgetContainer *>(content);
+		content->reparent(this, QPoint(0, 0));
+	}
 //	topLevelEditor->setWidgetList(item->widgetList());
 	topLevelEditor->setPropertyBuffer(item->propertyBuffer());
 	topLevelEditor->setDataSource(s);
@@ -188,6 +196,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	formProperties->show();
 
 	PropertyEditor *peditor = new PropertyEditor(formProperties);
+	peditor->setBuffer(item->propertyBuffer());
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
 	connect(topLevelEditor, SIGNAL(widgetInserted(QObject *)), this, SLOT(slotWidgetInserted(QObject *)));
 
@@ -208,6 +217,8 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 			ev->provideObject(this);
 		}
 	}
+
+	m_item->setContainer(topLevelEditor);
 //	peditor->show();
 //	eeditor->show();
 
@@ -218,6 +229,11 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
+	if(content)
+	{
+		slotToggleFormMode(false);
+	}
+
 	registerAs(DocumentWindow);
 }
 

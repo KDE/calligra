@@ -54,6 +54,7 @@ class KexiQSAEventHandler : public KexiEventHandler
 		virtual FakeHandler *formHandler() { return m_fake; }
 
 		virtual void provideObject(QObject *);
+		virtual void resetObject(QObject *o);
 
 		void callConnect(QObject *sender, const char *signal, QString function);
 

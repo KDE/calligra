@@ -24,7 +24,9 @@
 
 PropertyBufferItem::PropertyBufferItem(QObject *o, const QString &name, QVariant value)
 {
-
+	m_object = o;
+	m_name = name;
+	m_value = value;
 }
 
 PropertyBufferItem::~PropertyBufferItem()

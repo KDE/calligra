@@ -42,6 +42,7 @@ KexiRelationView::KexiRelationView(KexiRelationDialog *parent, const char *name,
 	m_parent=parent;
 	m_relation=relation;
 	m_relation->incUsageCount();
+	m_selected = 0;
 	m_readOnly=false;
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
@@ -193,6 +194,29 @@ KexiRelationView::slotListUpdate(QObject *s)
 			{
 				addConnection((*it), true);
 			}
+		}
+	}
+}
+
+void
+KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
+{
+	if(m_selected)
+	{
+		m_selected->setSelected(false);
+		updateContents(m_selected->connectionRect());
+		m_selected = 0;
+	}
+
+	KexiRelationViewConnection *cview;
+	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
+	{
+		if(cview->matchesPoint(ev->pos(), 3))
+		{
+			cview->setSelected(true);
+			updateContents(cview->connectionRect());
+			m_selected = cview;
+			return;
 		}
 	}
 }

@@ -17,8 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include "propertybuffer.h"
-#include "propertybufferitem.h"
+//#include "propertybufferitem.h"
 
 PropertyBuffer::PropertyBuffer(QObject *parent, const char *name)
  : QObject(parent, name),
@@ -29,7 +31,27 @@ PropertyBuffer::PropertyBuffer(QObject *parent, const char *name)
 void
 PropertyBuffer::changeProperty(QObject *o, const char *property, const QVariant &value)
 {
+	kdDebug() << "PropertyBuffer::changeProperty(): changing: " << property << endl;
+	PropertyBufferItem *i;
+	for(i = first(); i; i = next())
+	{
+		if(i->object() == o && i->name() == property)
+		{
+			if(i->name() == "name")
+			{
+				emit nameChanged(o, value.toString().latin1());
+			}
+			i->setValue(value);
+			emit propertyChanged(o, property, value);
+			return;
+		}
+	}
 
+	i = new PropertyBufferItem(o, QString(property), value);
+	append(i);
+	emit propertyChanged(o, property, value);
+	if(i->name() == "name")
+		emit nameChanged(i->object(), value.toString().latin1());
 }
 
 PropertyBuffer::~PropertyBuffer()

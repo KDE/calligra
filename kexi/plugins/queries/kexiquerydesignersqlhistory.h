@@ -37,6 +37,8 @@ class HistoryEntry
 		void	setSelected(bool selected) { m_selected = selected; }
 		bool	isSelected() { return m_selected; }
 
+		QString	statement() { return m_statement; }
+
 	private:
 		bool	m_succeed;
 		QTime	m_execTime;
@@ -61,6 +63,8 @@ class KexiQueryDesignerSQLHistory : public QScrollView
 
 	public slots:
 		void		addEvent(QString q, bool s);
+
+		void		slotToClipboard();
 
 //		HistoryItem	itemAt(int y);
 

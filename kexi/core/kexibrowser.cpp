@@ -122,6 +122,7 @@ KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 	//KexiProjectHandlerItem *item = plist->first(); item; item = plist->next())
 	{
 		kdDebug() << "KexiBrowser::slotItemListChanged() adding " << it.current()->mime() << endl;
+		kdDebug() << "KexiBrowser::slotItemListChanged()  named " << it.current()->identifier() << endl;
 		addItem(it.current());
 	}
 }

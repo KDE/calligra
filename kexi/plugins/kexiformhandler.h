@@ -37,8 +37,8 @@ class KexiFormHandler : public KexiProjectHandler
 
 		virtual void		hookIntoView(KexiView *view);
 
-		virtual void		store(KoStore *) {;}
-		virtual void		load(KoStore *) {; }
+		virtual void		store(KoStore *);
+		virtual void		load(KoStore *);
 
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();

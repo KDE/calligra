@@ -67,7 +67,7 @@ class KexiDB : public QObject
 		virtual bool connect(QString host, QString user, QString password, QString socket, QString port,
 			QString db, bool create = false);
 		/*! connect method for file-based databases*/
-		virtual bool load(QString file);
+		virtual bool load(QString file, bool persistant=false);
 
 		/*! hope thats ansi-compatilbe too */
 		virtual QStringList databases();

@@ -22,26 +22,43 @@
 
 #include <qmap.h>
 #include <qobject.h>
+#include <qvariant.h>
 
 class QWidget;
+class PropertyBuffer;
+class QDomDocument;
 
 typedef QMap<QString, int> NameCounter;
 
 namespace KFormEditor
 {
+	class WidgetProvider;
+	class WidgetContainer;
+
 	class WidgetWatcher : public QObject, public QMap<char *, QObject *>
 	{
 		Q_OBJECT
 
 		public:
-			WidgetWatcher(QObject *parent, const char *name=0);
+			WidgetWatcher(QObject *parent, PropertyBuffer *b, const char *name=0);
 			~WidgetWatcher();
 
 			QString	genName(const QString &base);
 			QString genName(QObject *);
 
+			QByteArray	store(WidgetContainer *parent);
+			void		load(WidgetContainer *p, WidgetProvider *w, const QByteArray &data);
+
+		protected:
+			QDomElement property(QDomDocument *parent, const QString &name, const QVariant &value);
+			void		setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElement &d);
+
+		public slots:
+			void	slotNameChanged(QObject *, const char *);
+
 		private:
 			NameCounter	m_nameCounter;
+			PropertyBuffer	*m_buffer;
 	};
 };
 

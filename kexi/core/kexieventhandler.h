@@ -38,6 +38,7 @@ class KexiEventHandler : public QObject
 		virtual FakeHandler	*formHandler() = 0;
 
 		virtual void		provideObject(QObject *) = 0;
+		virtual void		resetObject(QObject *) = 0;
 
 		/**
 		 * you will need a public slot

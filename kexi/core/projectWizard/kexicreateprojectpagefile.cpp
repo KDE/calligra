@@ -22,10 +22,16 @@ Boston, MA 02111-1307, USA.
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qframe.h>
+#include <qcheckbox.h>
+#include <qdatetime.h>
 
+#include <kinstance.h>
+#include <kglobal.h>
+#include <koApplication.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kdialog.h>
+#include <kstandarddirs.h>
 
 #include "kexicreateprojectpagefile.h"
 
@@ -41,36 +47,59 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 	//widgets
 	QButtonGroup *buttonBase = new QButtonGroup(this);
 	buttonBase->hide();
-	m_btnEmbedd = new QRadioButton(i18n("Embed new file into project"), this);
+//	QCheckBox *bpers = new QCheckBox(i18n(), this);
+	m_btnEmbedd = new QRadioButton(i18n("Embed Database into Projectfile\nWARNING: You will lose transactional and\nintegrity protection."), this);
 	m_btnEmbedd->toggle();
-	m_btnExtern = new QRadioButton(i18n("Use external file reference"), this);
+	m_btnExtern = new QRadioButton(i18n("Database is persistent"), this);
 	connect(m_btnExtern, SIGNAL(toggled(bool)), this, SLOT(slotExternToggle(bool)));
 	buttonBase->insert(m_btnEmbedd);
 	buttonBase->insert(m_btnExtern);
 
 	m_externURL = new KURLRequester(this);
+	m_externURL->setEnabled(false);
+	getFile();
 
 	//layout
 	QGridLayout *g = new QGridLayout(this);
 	g->addMultiCellWidget(lPic,	0,	4,	0,	0);
 //	g->addWidget(buttonBase,	0,	1);
-	g->addWidget(m_btnEmbedd,	1,	1);
-	g->addWidget(m_btnExtern,	2,	1);
-	g->addWidget(m_externURL,	3,	1);
+//	g->addWidget(bpers,		0,	1);
+	g->addWidget(m_btnEmbedd,	0,	1);
+	g->addWidget(m_btnExtern,	1,	1);
+	g->addWidget(m_externURL,	2,	1);
 	g->setSpacing(KDialog::spacingHint());
 
 	setProperty("caption", QVariant(i18n("File")));
 	setProperty("section", QVariant("LocalDB"));
+	setProperty("persistant", QVariant(false));
 	setProperty("finish", QVariant(true));
+}
+
+void
+KexiCreateProjectPageFile::getFile()
+{
+	QDate d = QDate::currentDate();
+	QString date = d.toString(ISODate);
+//	QString dir = kapp->dirs()->saveLocation("data","kexi/" + date, false);
+	QString relative = "kexi/" + date;
+	kapp->dirs()->saveLocation("data", "kexi/", true);
+	QString dir = kapp->dirs()->saveLocation("data", relative);
+
+	m_externURL->setURL(kapp->dirs()->saveLocation("data",relative, false));
+	setProperty("ref", QVariant(dir));
 }
 
 void
 KexiCreateProjectPageFile::slotExternToggle(bool checked)
 {
-//	if(checked)
-//	{
-		m_externURL->setEnabled(checked);
-//	}
+	m_externURL->setEnabled(checked);
+	setProperty("persistant", QVariant(checked));
+}
+
+void
+KexiCreateProjectPageFile::urlSelected(const QString &url)
+{
+	setProperty("ref", QVariant(url));
 }
 
 void

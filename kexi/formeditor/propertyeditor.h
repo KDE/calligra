@@ -27,6 +27,7 @@
 #include "propertyeditoreditor.h"
 //PropertyEditorEditor;
 class PropertyEditorItem;
+class PropertyBuffer;
 
 class PropertyEditor : public KListView
 {
@@ -37,6 +38,7 @@ class PropertyEditor : public KListView
 		~PropertyEditor();
 
 		void	reset();
+		void	setBuffer(PropertyBuffer *b) { m_buffer = b; }
 
 	public slots:
 		void	setObject(QObject *o);
@@ -55,6 +57,7 @@ class PropertyEditor : public KListView
 	private:
 		PropertyEditorEditor	*m_currentEditor;
 		PropertyEditorItem	*m_editItem;
+		PropertyBuffer		*m_buffer;
 };
 
 #endif

@@ -38,6 +38,7 @@ class PropertyEditorItem : public KListViewItem
 		QVariant::Type	type() { return m_type; }
 		QVariant	value() { return m_value; }
 		QStringList	list() { return m_list; }
+		QObject		*object() { return m_object; }
 
 		void		setValue(QVariant value, bool sync=false);
 

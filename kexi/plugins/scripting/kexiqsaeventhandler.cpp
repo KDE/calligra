@@ -80,6 +80,13 @@ KexiQSAEventHandler::provideObject(QObject *o)
 	m_host->interpreter()->addObject(o);
 }
 
+void
+KexiQSAEventHandler::resetObject(QObject *o)
+{
+	m_host->interpreter()->removeObject(o);
+	m_host->interpreter()->addObject(o);
+}
+
 KexiQSAEventHandler::~KexiQSAEventHandler()
 {
 }

@@ -19,9 +19,12 @@
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
+#include <qclipboard.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
+
+#include <koApplication.h>
 
 #include "kexiquerydesignersqlhistory.h"
 
@@ -102,12 +105,21 @@ void
 KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *e)
 {
 	QPopupMenu p(this);
-	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"));
+	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 	p.insertSeparator();
 	p.insertItem(SmallIcon("edit"), i18n("Edit"));
 	p.insertItem(SmallIcon("reload"), i18n("Requery"));
 
 	p.exec(pos);
+}
+
+void
+KexiQueryDesignerSQLHistory::slotToClipboard()
+{
+	if(!m_selected)
+		return;
+
+	QApplication::clipboard()->setText(m_selected->statement(), QClipboard::Clipboard);
 }
 
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()

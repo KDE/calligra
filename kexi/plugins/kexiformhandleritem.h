@@ -25,10 +25,12 @@
 
 class KexiFormHanlder;
 class KexiPrjeectHandler;
+class KoStore;
 
 namespace KFormEditor
 {
 	class WidgetWatcher;
+	class WidgetContainer;
 }
 
 class KexiFormHandlerItem : public KexiProjectHandlerItem
@@ -40,12 +42,17 @@ class KexiFormHandlerItem : public KexiProjectHandlerItem
 		~KexiFormHandlerItem();
 
 		PropertyBuffer	*propertyBuffer() { return m_propertyBuffer; }
-//		WidgetList	*widgetList() { return m_widgetList; }
 		KFormEditor::WidgetWatcher	*widgetWatcher() { return m_widgetWatcher; }
+		KFormEditor::WidgetContainer	*container() { return m_container; }
+
+		void	load(KoStore *store);
+		void	store(KoStore *store);
+
+		void	setContainer(KFormEditor::WidgetContainer *c) { m_container = c; }
 
 	private:
-		PropertyBuffer	*m_propertyBuffer;
-//		WidgetList	*m_widgetList;
+		PropertyBuffer			*m_propertyBuffer;
 		KFormEditor::WidgetWatcher	*m_widgetWatcher;
+		KFormEditor::WidgetContainer	*m_container;
 };
 #endif

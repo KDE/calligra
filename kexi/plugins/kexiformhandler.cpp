@@ -29,6 +29,7 @@ Boston, MA 02111-1307, USA.
 
 #include "kexiformhandler.h"
 #include "kexiformhandlerproxy.h"
+#include "kexiformhandleritem.h"
 
 KexiFormHandler::KexiFormHandler(QObject *project,const char *,const QStringList &)
  : KexiProjectHandler(KEXIPROJECT(project))
@@ -71,6 +72,35 @@ KexiFormHandler::hookIntoView(KexiView *view)
 {
 	KexiFormHandlerProxy *prx=new KexiFormHandlerProxy(this, view);
 	insertIntoViewProxyMap(view, prx);
+}
+
+void
+KexiFormHandler::store(KoStore *store)
+{
+        for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
+        {
+		KexiFormHandlerItem *fhi=static_cast<KexiFormHandlerItem*>(it.current());
+		fhi->store(store);
+	}
+}
+
+
+void
+KexiFormHandler::load(KoStore *store)
+{
+	References fileRefs = kexiProject()->fileReferences("Forms");
+	ItemList *list=items();
+	list->clear();
+
+	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
+	{
+		KexiFormHandlerItem *fhi = new KexiFormHandlerItem(this, (*it).name, (*it).name + ".ui");
+		list->insert("kexi/form/" + (*it).name + ".ui", fhi);
+		fhi->load(store);
+	}
+
+	emit itemListChanged(this);
+
 }
 
 K_EXPORT_COMPONENT_FACTORY(kexihandler_form, KGenericFactory<KexiFormHandler>)

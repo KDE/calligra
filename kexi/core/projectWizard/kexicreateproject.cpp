@@ -141,8 +141,18 @@ KexiCreateProject::accept()
 	{
 		kdDebug() << "KexiCreateProject::accept(): local engine..." << endl;
 		//FIXME: care if user selects an existing location :)
-		KexiDBConnection *c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
-		 QString::null);
+		KexiDBConnection *c;
+		if(m_pageFile->data("persistant").toBool())
+		{
+			c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
+			 m_pageFile->data("ref").toString(), true);
+		}
+		else
+		{
+			c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
+			 QString::null);
+		}
+		
 		project()->initDBConnection(c);
 	}
 	else

@@ -50,7 +50,7 @@ CqlDB::dbType()
 }
 
 bool
-CqlDB::load(QString file)
+CqlDB::load(QString file, bool)
 {
 	char *dir = file.latin1();
 	kdDebug() << "CqlDB::load()" << endl;

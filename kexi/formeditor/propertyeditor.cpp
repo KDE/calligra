@@ -27,6 +27,7 @@
 
 #include "propertyeditor.h"
 #include "propertyeditoritem.h"
+#include "propertybuffer.h"
 
 #include "propertyeditoreditor.h"
 #include "propertyeditorlist.h"
@@ -43,6 +44,8 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
+
+	m_buffer = 0;
 }
 
 void
@@ -100,6 +103,7 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 			break;
 
 		case QVariant::String:
+		case QVariant::CString:
 			editor = new PropertyEditorInput(viewport(), i->type(), i->value());
 			break;
 
@@ -141,8 +145,12 @@ PropertyEditor::slotValueChanged(PropertyEditorEditor *editor)
 {
 	if(m_currentEditor) {
 		m_editItem->setValue(m_currentEditor->getValue(), true);
-		emit itemRenamed(m_editItem);
+		if(m_buffer)
+		{
+			m_buffer->changeProperty(m_editItem->object(), m_editItem->name().latin1(), editor->getValue());
+		}
 	}
+		emit itemRenamed(m_editItem);
 }
 
 void

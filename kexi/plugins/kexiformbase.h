@@ -45,7 +45,9 @@ class KexiFormBase : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0, const QString &data=QString::null, const char *name=0, QString identifier=QString::null);
+		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0,
+		 const QString &data=QString::null, const char *name=0, QString identifier=QString::null,
+		 KFormEditor::WidgetContainer *content=0);
 		~KexiFormBase();
 
                 virtual KXMLGUIClient *guiClient();

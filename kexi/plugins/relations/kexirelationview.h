@@ -61,6 +61,7 @@ class KexiRelationView : public QScrollView
 
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		void		contentsMousePressEvent(QMouseEvent *ev);
 
 	private:
 		int			m_tableCount;
@@ -71,6 +72,7 @@ class KexiRelationView : public QScrollView
 		bool			m_readOnly;
 		KexiRelation    	*m_relation;
 		ConnectionList		m_connectionViews;
+		KexiRelationViewConnection *m_selected;
 };
 
 #endif

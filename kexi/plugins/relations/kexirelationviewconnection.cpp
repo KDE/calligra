@@ -44,6 +44,8 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 	m_rcvTable = rcvTbl;
 	m_srcField = srcFld;
 	m_rcvField = rcvFld;
+
+	m_selected = false;
 }
 
 void
@@ -59,9 +61,6 @@ KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 
 	if(m_srcTable->x() < m_rcvTable->x())
 	{
-
-		p->drawLine(sx + 6, sy, rx - 8, ry);
-
 		p->drawLine(rx - 8, ry, rx, ry);
 		p->drawPoint(rx - 2, ry - 1);
 		p->drawPoint(rx - 2, ry + 1);
@@ -76,13 +75,29 @@ KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 
 		sideN.setX(rx - 10);
 		sideN.setY(ry - 6);
+
+		if(m_selected)
+		{
+			QPen pen(p->pen());
+			pen.setWidth(2);
+			p->setPen(pen);
+		}
+
+		p->drawLine(sx + 6, sy, rx - 8, ry);
+
+		if(m_selected)
+		{
+			QPen pen(p->pen());
+			pen.setWidth(1);
+			p->setPen(pen);
+		}
+
 	}
 	else
 	{
 		int lx = rx + m_rcvTable->width();
 		int rx = sx - m_srcTable->width();
 
-		p->drawLine(lx + 8, ry, rx - 8, sy);
 
 		p->drawLine(lx, ry, lx + 8, ry);
 		p->drawPoint(lx + 1, ry - 1);
@@ -98,6 +113,24 @@ KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 
 		sideN.setX(lx + 3);
 		sideN.setY(ry - 6);
+
+		if(m_selected)
+		{
+			QPen pen(p->pen());
+			pen.setWidth(2);
+			p->setPen(pen);
+		}
+
+		p->drawLine(lx + 8, ry, rx - 8, sy);
+
+		if(m_selected)
+		{
+			QPen pen(p->pen());
+			pen.setWidth(1);
+			p->setPen(pen);
+		}
+
+
 	}
 
 	p->drawPixmap(side1, QPixmap(r1_xpm));
@@ -131,7 +164,7 @@ KexiRelationViewConnection::connectionRect()
 
 	int dx = QABS((leftX + width) - rightX);
 	int dy = QABS(sy - ry) + 2;
-	
+
 	int top = QMIN(sy, ry);
 	int left = leftX + width;
 
@@ -139,8 +172,62 @@ KexiRelationViewConnection::connectionRect()
 //	return QRect(sx - 1, sy - 1, (rx + m_rcvTable->width()) - sx + 1, ry - sy + 1);
 	QRect rect(left - 3, top - 7, dx + 3, dy + 7);
 	m_oldRect = rect;
-	
+
 	return rect;
+}
+
+bool
+KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
+{
+	QRect we = connectionRect();
+
+	if(!we.contains(p))
+		return false;
+
+	int sx = m_srcTable->x() + m_srcTable->width();
+	int sy = m_srcTable->globalY(m_srcField);
+	int rx = m_rcvTable->x();
+	int ry = m_rcvTable->globalY(m_rcvField);
+
+	int x1 = sx + 8;
+	int y1 = sy;
+	int x2 = rx - 8;
+	int y2 = ry;
+
+	if(sx > rx)
+	{
+//		y2 = y1;
+//		y1 = ry;
+		x2 = x1;
+		x1 = rx - 8;
+	}
+
+	float mx = x2-x1;
+	float my = y2-y1;
+	float mag = sqrt(mx * mx + my * my);
+	float u = (((p.x() - x1)*(x2 - x1))+((p.y() - y1)*(y2 - y1)))/(mag * mag);
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): u: " << u << endl;
+
+	float iX = x1 + u * (x2 - x1);
+	float iY = y1 + u * (y2 - y1);
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): px: " << p.x() << endl;
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): py: " << p.y() << endl;
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): ix: " << iX << endl;
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): iy: " << iY << endl;
+
+	float dX = iX - p.x();
+	float dY = iY - p.y();
+
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): dx: " << dX << endl;
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): dy: " << dY << endl;
+
+	float distance = sqrt(dX * dX + dY * dY);
+	kdDebug() << "KexiRelationViewConnection::matchesPoint(): distance: " << distance << endl;
+
+	if(distance <= tolerance)
+		return true;
+
+	return false;
 }
 
 KexiRelationViewConnection::~KexiRelationViewConnection()

@@ -33,6 +33,7 @@ class KexiCreateProjectPageFile : public KexiCreateProjectPage
 		KexiCreateProjectPageFile(KexiCreateProject *parent, QPixmap *wpic, const char *name);
 		~KexiCreateProjectPageFile();
 
+		void		getFile();
 	protected:
 		QRadioButton	*m_btnEmbedd;
 		QRadioButton	*m_btnExtern;
@@ -41,6 +42,8 @@ class KexiCreateProjectPageFile : public KexiCreateProjectPage
 	protected slots:
 		void slotExternToggle(bool);
 		void slotEmbeddToggle(bool);
+
+		void urlSelected(const QString &);
 };
 
 #endif

@@ -41,16 +41,21 @@ class KexiRelationViewConnection
 		/*
 		   C++PROGRAMMIERER bestehen darauf, daﬂ der Elefant eine Klasse sei,
 		   und somit schlieﬂlich seine Fang-Methoden selbst mitzubringen habe.
-		   
+
 		   http://www.c-plusplus.de ;)
 		*/
 		void		drawConnection(QPainter *p, QWidget *parent);
-		const QRect	connectionRect();
 
+		bool		selected() { return m_selected; }
+		void		setSelected(bool s) { m_selected = s; }
+
+		const QRect	connectionRect();
 		const QRect	oldRect() { return m_oldRect; }
 
 		KexiRelationViewTableContainer	*srcTable() { return m_srcTable; }
 		KexiRelationViewTableContainer	*rcvTable() { return m_rcvTable; }
+
+		bool matchesPoint(const QPoint &p, int tolerance=3);
 
 	private:
 		KexiRelationViewTableContainer	*m_srcTable;
@@ -59,6 +64,8 @@ class KexiRelationViewConnection
 		QString				m_rcvField;
 
 		QRect				m_oldRect;
+
+		bool				m_selected;
 };
 
 #endif

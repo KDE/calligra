@@ -50,7 +50,7 @@ class KexiDBConnection
 		/**
 		 * file/dir engine connection
 		 */
-		KexiDBConnection(const QString &engine, const QString &file);
+		KexiDBConnection(const QString &engine, const QString &file, bool persistant=false);
 		~KexiDBConnection();
 
 
@@ -101,6 +101,8 @@ class KexiDBConnection
 		QString		m_pass;
 		QString		m_socket;
 		QString		m_port;
+		QString		m_file;
+		bool		m_persistant;
 
 		QString		m_tmpname;
 		QStringList	m_tmpindex;

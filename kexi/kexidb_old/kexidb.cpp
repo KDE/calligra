@@ -98,7 +98,7 @@ KexiDB::connect(QString, QString, QString, QString, QString, QString, bool)
 }
 
 bool
-KexiDB::load(QString)
+KexiDB::load(QString, bool persistant)
 {
 	return false;
 }

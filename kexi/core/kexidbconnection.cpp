@@ -55,15 +55,19 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, c
 	m_pass = pass;
 	m_socket = socket;
 	m_port = port;
+
+	m_persistant = false;
 }
 
-KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file)
+KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file, bool persistant)
 {
 	m_connected = false;
 	//FIXME: don't use directory db only :)
 	//even if we only got cql by now, or who knows?
 	m_type = KexiDB::LocalDirectoryDB;
 	m_engine = engine;
+	m_file = file;
+	m_persistant = persistant;
 }
 
 KexiDB*
@@ -103,16 +107,30 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 		}
 		case KexiDB::LocalDirectoryDB:
 		{
-			QString tmpfile(KGlobal::dirs()->resourceDirs("tmp").first() + "kexi-" + QString::number(getpid()));
-			QDir tempdir(tmpfile);
-			tempdir.mkdir(tmpfile);
-			m_tmpname = tmpfile;
+			QString tmpfile;
+			if(!m_persistant)
+			{
+				kdDebug() << "KexiDBConnection::connectDB(): using tmp-method" << endl;
+				tmpfile = (KGlobal::dirs()->resourceDirs("tmp").first() + "kexi-" + QString::number(getpid()));
+				QDir tempdir(tmpfile);
+				tempdir.mkdir(tmpfile);
+				m_tmpname = tmpfile;
+			}
+			else
+			{
+				kdDebug() << "KexiDBConnection::connectDB(): persistant-connect" << endl;
+				kdDebug() << "KexiDBConnection::connectDB(): pfile"<<m_file << endl;
+				tmpfile = m_file;
+				QDir dir(tmpfile);
+				if(!dir.exists())
+					dir.mkdir(tmpfile);
+			}
 
 //			if(store)
 			provide(store);
 			try
 			{
-				addDB->load(tmpfile);
+				addDB->load(tmpfile, m_persistant);
 			}
 			catch(KexiDBError err)
 			{
@@ -140,6 +158,7 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 	QDomElement nameElement = rootElement.namedItem("name").toElement();
 	QDomElement userElement = rootElement.namedItem("user").toElement();
 	QDomElement passElement = rootElement.namedItem("password").toElement();
+	QDomElement persElement = rootElement.namedItem("persistant").toElement();
 //	QDomElement
 //	QDomElement savePassElement = rootElement.namedItem("savePassword").toElement();
 
@@ -172,7 +191,15 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 		}
 		case KexiDB::LocalDirectoryDB:
 		{
-			KexiDBConnection *conn = new KexiDBConnection(engineElement.text(), 0);
+			KexiDBConnection *conn;
+			if(persElement.attributeNode("enabled").value() == "1")
+			{
+				conn = new KexiDBConnection(engineElement.text(), persElement.text(), true);
+			}
+			else
+			{
+				conn = new KexiDBConnection(engineElement.text(), 0);
+			}
 			return conn;
 		}
 		default:
@@ -232,6 +259,16 @@ KexiDBConnection::writeInfo(QDomDocument &domDoc)
 	QDomText tEngine = domDoc.createTextNode(m_engine);
 	engineElement.appendChild(tEngine);
 
+//PERSISTANT
+	QDomElement persistantElement = domDoc.createElement("persistant");
+	persistantElement.setAttribute("enabled", m_persistant?1:0);
+	connectionElement.appendChild(persistantElement);
+
+	if(m_persistant)
+	{
+		QDomText tPers = domDoc.createTextNode(m_file);
+		persistantElement.appendChild(tPers);
+	}
 //HOST
 	QDomElement hostElement = domDoc.createElement("host");
 	connectionElement.appendChild(hostElement);
@@ -275,7 +312,7 @@ void
 KexiDBConnection::flush(KoStore *store)
 {
 	kdDebug() << "KexiDBConnection::flush()" << endl;
-	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && store)
+	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && store && !m_persistant)
 	{
 		QStringList index = store->addLocalDirectory(m_tmpname, "/db");
 		QString dindex = index.join("\n");
@@ -295,7 +332,7 @@ KexiDBConnection::provide(KoStore *store)
 	if(!store)
 	 return;
 //
-	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB)
+	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && !m_persistant)
 	{
 		kdDebug() << "KexiDBConnection::provide(): right env" << endl;
 		if(!store->open("/db-index"))
@@ -328,7 +365,7 @@ void
 KexiDBConnection::clean()
 {
 	kdDebug() << "KexiDBConnection::clean()" << endl;
-	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB)
+	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && !m_persistant)
 	{
 		KIO::NetAccess::del(KURL(m_tmpname));
 		kdDebug() << "KexiDBConnection::clean(): cleaned" << endl;

@@ -22,8 +22,9 @@
 
 #include <qptrlist.h>
 #include <qobject.h>
+#include "propertybufferitem.h"
 
-class PropertyBufferItem;
+//class PropertyBufferItem;
 
 //typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
 
@@ -39,6 +40,7 @@ class PropertyBuffer : public QObject, public QPtrList<PropertyBufferItem>
 
 	signals:
 		void	propertyChanged(QObject *o, const char *property, const QVariant &value);
+		void	nameChanged(QObject *o, const char *newName);
 };
 
 #endif

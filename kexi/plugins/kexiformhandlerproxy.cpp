@@ -83,12 +83,20 @@ KexiFormHandlerProxy::slotCreate()
                 emit m_formHandler->itemListChanged(part());
 		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, d->source(), "nform", name);
 		nform->show();
+		kexiView()->project()->addFileReference(FileReference("Forms",name,"/form/" + name + ".ui"));
 	}
 }
 
 void
 KexiFormHandlerProxy::slotOpen(const QString &identifier)
 {
+	KexiFormHandlerItem *i = static_cast<KexiFormHandlerItem *>(part()->items()->find(identifier));
+	kdDebug() << "KexiFormHandlerProxy::slotOpen() i: " << identifier << " " << i << endl;
+	if(i)
+	{
+		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, "aa", "nform", i->name(), i->container());
+		nform->show();
+	}
 }
 
 void

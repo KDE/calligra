@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,31 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYBUFFERITEM_H
-#define PROPERTYBUFFERITEM_H
+#ifndef KEXIWIDGETPROVIDER_H
+#define KEXIWIDGETPROVIDER_H
 
-#include <qvariant.h>
+#include "formeditor/widgetprovider.h"
 
-class QObject;
-class QString;
-
-class PropertyBufferItem
+class KexiWidgetProvider : public KFormEditor::WidgetProvider
 {
 	public:
-		PropertyBufferItem(QObject *o, const QString &name, QVariant value);
-//		PropertyBufferItem();
-		~PropertyBufferItem();
+		KexiWidgetProvider();
+		virtual ~KexiWidgetProvider() {; }
 
-		QObject		*object() { return m_object; }
-		QString		name() { return m_name; }
-		QVariant	value() { return m_value; }
+		virtual QWidget *create(QString key, KFormEditor::WidgetContainer *parent, const char *name);
+		virtual QStringList widgets();
 
-		void setValue(const QVariant &v) { m_value = v; }
-
-	private:
-		QObject		*m_object;
-		QString		m_name;
-		QVariant	m_value;
 };
 
 #endif
