@@ -414,7 +414,7 @@ void KPresenterView::insertPicture()
 
   QString file = KFileDialog::getOpenFileName(0,
 					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
+					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
 					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
 					      "*.gif *.GIF|GIF-Pictures\n"
 					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
@@ -2352,7 +2352,7 @@ void KPresenterView::changePicture(unsigned int,const char* filename)
 
   QString file = KFileDialog::getOpenFileName(0,
 					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
+					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
 					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
 					      "*.gif *.GIF|GIF-Pictures\n"
 					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
