@@ -1,0 +1,12 @@
+[Desktop Entry]
+Icon=image
+Type=MimeType
+MimeType=image/x-msod
+Patterns=*.msod;*.MSOD;
+Comment=MS Office Drawing
+Comment[cs]=Metasoubor Windows
+Comment[eo]=Vindoza Meta-grafiko-dosiero
+Comment[he]=Windows לש ץבוק-אטמ
+Comment[hu]=Windows metafájl
+Comment[ro]=Fişier Windows MetaFile
+Comment[zh_TW.Big5]=Windows MetaFile 影像

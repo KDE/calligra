@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+Name=KIllustrator MS Office Drawing Import Filter
+Name[cs]=Importní filtr MS Office Drawing pro KIllustrator
+Name[eo]=MS Office Drawing-importfiltrilo por Ilustrilo
+Name[he]=KIllustrator לש MS Office Drawing אוביי ןנסמ
+Name[hu]=KIllustrator MS Office Drawing importszűrő
+Name[ro]=Filtru de import MS Office Drawing KIllustrator
+Name[zh_TW.Big5]=KIllustrator MS Office Drawing 匯入過濾器
+Export=application/x-killustrator
+ExportDescription=KIllustrator
+Import=image/x-msod
+ImportDescription=MS Office Drawing
+Implemented=file
+X-KDE-Library=libmsodimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
