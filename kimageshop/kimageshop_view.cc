@@ -252,12 +252,12 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   menubar->insertMenu( text , m_vMenuEdit, -1, -1 );
 
   text = Q2C( i18n( "&Undo" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "undo.xpm" ) );
+  pix = OPICON( "undo.xpm" );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo", stdAccel.undo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   text = Q2C( i18n( "&Redo" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "redo.xpm" ) );
+  pix = OPICON( "redo.xpm" );
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
@@ -756,22 +756,21 @@ void KImageShopView::slotEditPaste()
 
 void KImageShopView::viewLayerDialog()
 {
-  if(m_pLayerDialog)
-    {
-      if(m_pLayerDialog->isVisible())
-	  m_pLayerDialog->hide();
-      else
-	  m_pLayerDialog->show();
+  if( m_pLayerDialog )
+  {
+    if( m_pLayerDialog->isVisible() )
+      m_pLayerDialog->hide();
+    else
+       m_pLayerDialog->show();
       
-      m_vMenuView->setItemChecked(m_idMenuView_LayerDialog, true);
-    }
+    // TODO: make this working
+    m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
+  }
 }
 
 void KImageShopView::changeUndo( QString _text, bool _enable )
 {
   CORBA::WString_var text;
- 
-  cout << "Michael : changeUndo" << endl;
  
   if( _enable )
   {
@@ -781,6 +780,8 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     text = Q2C( str );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, true );
+
+    cout << "Michael : UNDO enabled" << endl;
   }
   else
   {
@@ -788,14 +789,14 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
+
+    cout << "Michael : UNDO not enabled" << endl;
   }
 }
 
 void KImageShopView::changeRedo( QString _text, bool _enable )
 {
   CORBA::WString_var text;
- 
-  cout << "Michael : changeRedo" << endl;
  
   if( _enable )
   {
@@ -805,6 +806,8 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     text = Q2C( str );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, true );
+
+    cout << "Michael : REDO enabled" << endl;
   }
   else
   {
@@ -812,6 +815,8 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
+
+    cout << "Michael : REDO not enabled" << endl;
   }
 }
 

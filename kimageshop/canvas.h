@@ -71,6 +71,9 @@ public:
   void frontLayer( int _layer );
   void backgroundLayer( int _layer );
 
+  void setFrontLayer( int _layer );
+  void setBackgroundLayer( int _layer );
+
   // return size
   int height();
   int width();

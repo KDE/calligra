@@ -85,7 +85,7 @@ void LayerView::init( KImageShopDoc* doc )
   m_contextmenu->setCheckable(TRUE);
 
   m_contextmenu->insertItem( i18n( "Visible" ), VISIBLE );
-  m_contextmenu->insertItem( i18n( "Select"), SELECT );
+  m_contextmenu->insertItem( i18n( "Selection"), SELECTION );
   m_contextmenu->insertItem( i18n( "Level" ), submenu );
   m_contextmenu->insertItem( i18n( "Linked"), LINKING );
   m_contextmenu->insertItem( i18n( "Opacity"), OPACITY );
@@ -316,12 +316,42 @@ void LayerView::slotLowerLayer()
 
 void LayerView::slotFrontLayer()
 {
-  cout << "Michael : make front layer" << endl; 
+  cout << "LayerView::slotFrontLayer" << endl;
+
+  if( m_selected != ( m_doc->layerList().count() - 1 ) )
+  { 
+    m_doc->setFrontLayer( m_selected );
+    m_selected = m_doc->layerList().count() - 1;
+
+    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
+    m_doc->compositeImage( updateRect );
+    m_doc->slotUpdateViews( updateRect );
+
+    updateAllCells();
+  }
 }
 
 void LayerView::slotBackgroundLayer()
 {
-  cout << "Michael : make background layer" << endl;
+  cout << "LayerView::slotBackgroundLayer" << endl;
+
+  if( m_selected != 0 )
+  {
+    m_doc->setBackgroundLayer( m_selected );
+    m_selected = 0;
+
+    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
+    m_doc->compositeImage( updateRect );
+    m_doc->slotUpdateViews( updateRect );
+
+    updateAllCells(); 
+  }
+}
+
+void LayerView::updateAllCells()
+{
+  for( int i = 0; i < m_doc->layerList().count(); i++ )
+    updateCell( i, 0 );
 }
 
 #include "layerview.moc"

@@ -10,7 +10,7 @@
 #ifndef __layerdlg_h__
 #define __layerdlg_h__
 
-#include <qtabdialog.h>
+#include <ktabctl.h>
 
 class KImageShopDoc;
 
@@ -32,7 +32,7 @@ public:
   ChannelTab( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 };
 
-class LayerDialog : public QTabDialog
+class LayerDialog : public KTabCtl
 {
   Q_OBJECT
 

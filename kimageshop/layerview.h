@@ -22,13 +22,13 @@ class LayerView : public QTableView
 
 public:
 
-  enum action { VISIBLE, SELECT, LINKING, OPACITY, RENAME, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
+  enum action { VISIBLE, SELECTION, LINKING, OPACITY, RENAME, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
 
   LayerView(QWidget* _parent = 0, const char* _name = 0 );
   LayerView(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
 
   void updateTable();
-  void updateList();
+  void updateAllCells();
   void update_contextmenu( int _index );
 
   void swapLayers( int a, int b );

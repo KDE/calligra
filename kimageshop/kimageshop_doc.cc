@@ -534,10 +534,12 @@ void KImageShopDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 {
   if( !m_lstViews.isEmpty() )
   {
-    for( KImageShopView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+    KImageShopView *pView;
+
+    for( pView = m_lstViews.first(); pView != 0; pView = m_lstViews.next() )
     {
-      viewPtr->changeUndo( _undo, !_undo.isEmpty() );
-      viewPtr->changeRedo( _redo, !_redo.isEmpty() );
+      pView->changeUndo( _undo, !_undo.isEmpty() );
+      pView->changeRedo( _redo, !_redo.isEmpty() );
     }
   }
 }

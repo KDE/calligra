@@ -23,44 +23,42 @@
 LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
 {
-  QGridLayout* layout = new QGridLayout( this, 4, 2 );
- 
+  QVBoxLayout *layout = new QVBoxLayout( this );
+
   LayerView* layerview = new LayerView( _doc, this, "layerlist" );
-  layout->addMultiCellWidget( layerview, 0, 0, 0, 1 );
+  layout->addWidget( layerview );
+
+  QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
  
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
   pbAddLayer->setPixmap( ICON( "newlayer.xpm" ) );
-  layout->addWidget( pbAddLayer, 2, 0 );
+  buttonlayout->addWidget( pbAddLayer );
  
   QPushButton* pbRemoveLayer = new QPushButton( this, "removelayer" );
   pbRemoveLayer->setPixmap( ICON( "deletelayer.xpm" ) );
-  layout->addWidget( pbRemoveLayer, 2, 1 );
+  buttonlayout->addWidget( pbRemoveLayer );
 
 /* 
   QPushButton* pbAddMask = new QPushButton( this, "addmask" );
   pbAddMask->setPixmap( ICON( "newlayer.xpm" ) );
-  layout->addWidget( pbAddMask, 2, 0 );
+  buttonlayout->addWidget( pbAddMask );
  
   QPushButton* pbRemoveMask = new QPushButton( this, "removemask" );
   pbRemoveMask->setPixmap( ICON( "removelayer.xpm" ) );
-  layout->addWidget( pbRemoveMask, 2, 1 );
+  buttonlayout->addWidget( pbRemoveMask );
 */
  
   QPushButton* pbUp = new QPushButton( this, "up" );
   pbUp->setPixmap( ICON( "raiselayer.xpm" ) );
-  layout->addWidget( pbUp, 3, 0 );
+  buttonlayout->addWidget( pbUp );
   connect( pbUp, SIGNAL( clicked() ), layerview, SLOT( slotUpperLayer() ) );
 
   QPushButton* pbDown = new QPushButton( this, "down" );
   pbDown->setPixmap( ICON( "lowerlayer.xpm" ) );
-  layout->addWidget( pbDown, 3, 1 );
+  buttonlayout->addWidget( pbDown );
   connect( pbDown, SIGNAL( clicked() ), layerview, SLOT( slotLowerLayer() ) );
 
-  layout->setRowStretch( 0, 1 );
-//layout->setColStretch( 0, 1 );
-
-//layout->addColSpacing( 0, layerview->sizeHint().width() );
-  layout->addRowSpacing( 0, layerview->sizeHint().height() );
+  setMinimumSize( sizeHint() );
 }
 
 ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
@@ -69,12 +67,15 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
 }
 
 LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags _flags )
-  : QTabDialog( _parent, _name, _flags )
+  : KTabCtl( _parent, _name )
 {
-  addTab( new LayerTab( _doc, _parent, _name ), i18n( "Layers" ) );
-  addTab( new ChannelTab( _doc, _parent, _name ), i18n( "Channels" ) );
+  LayerTab *layerTab = new LayerTab( _doc, this, _name );
+  ChannelTab *channelTab =  new ChannelTab( _doc, this, _name );
 
-  setOkButton( i18n( "Close" ) );
+  addTab( layerTab, i18n( "Layers" ) );
+  addTab( channelTab, i18n( "Channels" ) );
+
+  setMinimumSize( layerTab->sizeHint() );
 }
 
 #include "layerdlg.moc"

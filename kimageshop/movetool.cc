@@ -33,20 +33,24 @@ MoveCommand::MoveCommand( KImageShopDoc *doc, int layer, QPoint oldpos, QPoint n
 
 void MoveCommand::execute()
 {
-   m_pDoc->setCurrentLayer( m_layer );
-   QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
-   m_pDoc->moveLayer( m_oldPos.x(), m_oldPos.y() );
-   updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
-   m_pDoc->compositeImage( updateRect );
+  cout << "Michael : execute command" << endl;
+
+  m_pDoc->setCurrentLayer( m_layer );
+  QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
+  m_pDoc->moveLayer( m_oldPos.x(), m_oldPos.y() );
+  updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
+  m_pDoc->compositeImage( updateRect );
 }
 
 void MoveCommand::unexecute()
 {
-   m_pDoc->setCurrentLayer( m_layer );
-   QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
-   m_pDoc->moveLayer( m_newPos.x(), m_newPos.y() );
-   updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
-   m_pDoc->compositeImage( updateRect );
+  cout << "Michael : unexecute command" << endl;
+
+  m_pDoc->setCurrentLayer( m_layer );
+  QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
+  m_pDoc->moveLayer( m_newPos.x(), m_newPos.y() );
+  updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
+  m_pDoc->compositeImage( updateRect );
 }
 
 MoveTool::MoveTool( KImageShopDoc *doc )
