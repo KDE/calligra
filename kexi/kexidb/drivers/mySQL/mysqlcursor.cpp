@@ -47,7 +47,7 @@ bool MySqlCursor::drv_open() {
                 if(mysql_errno(conn->m_mysql) == 0) {
 			m_res= mysql_store_result(conn->m_mysql);
 			m_fieldCount=mysql_num_fields(m_res);
-			m_readAhead=m_numRows=mysql_num_rows(m_res);
+			m_readAhead=(m_numRows=mysql_num_rows(m_res));
 			m_at=0;
 /*
                         MYSQL_RES *res;

@@ -93,11 +93,11 @@ DriverManagerInternal::DriverManagerInternal() /* protected */
 
 DriverManagerInternal::~DriverManagerInternal()
 {
-	kdDebug() << "DriverManagerInternal::~DriverManagerInternal()" << endl;
+	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal()" << endl;
 	m_drivers.clear();
 	if ( s_self == this )
 		s_self = 0;
-	kdDebug() << "DriverManagerInternal::~DriverManagerInternal() ok" << endl;
+	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal() ok" << endl;
 }
 
 DriverManagerInternal *DriverManagerInternal::self()
@@ -120,7 +120,7 @@ void DriverManagerInternal::lookupDrivers()
 		if (!m_services_lcase.contains(srv_name.lower())) {
 			m_services.insert(srv_name, ptr);
 			m_services_lcase.insert(srv_name.lower(), ptr);
-			kdDebug() << "KexiDB::DriverManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
+			KexiDBDbg << "KexiDB::DriverManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
 		}
 	}
 
@@ -133,7 +133,7 @@ void DriverManagerInternal::lookupDrivers()
 Driver* DriverManagerInternal::driver(const QCString& name)
 {
 	clearError();
-	kdDebug() << "DriverManager::driver(): loading " << name << endl;
+	KexiDBDbg << "DriverManager::driver(): loading " << name << endl;
 
 	Driver *drv = m_drivers.find(name.lower());
 	if (drv)
@@ -147,7 +147,7 @@ Driver* DriverManagerInternal::driver(const QCString& name)
 //	KLibLoader *libLoader = KLibLoader::self();
 	KService::Ptr ptr= *(m_services_lcase.find(name.lower()));
 
-	kdDebug() << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
+	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
 		this, "db", QStringList());
 
@@ -155,7 +155,7 @@ Driver* DriverManagerInternal::driver(const QCString& name)
 		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver '%1'.").arg(name) );
 		return 0;
 	}
-	kdDebug() << "KexiDBInterfaceManager::load(): loading succeed: " << name << endl;
+	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name << endl;
 
 	drv->m_service = ptr; //store info
 	m_drivers.insert(name.lower(), drv); //cache it
@@ -171,7 +171,7 @@ void DriverManagerInternal::decRefCount()
 {
 	m_refCount--;
 //	if (m_refCount<1) {
-//		kdDebug()<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
+//		KexiDBDbg<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
 //		s_self=0;
 //		deleteLater();
 //	}
@@ -198,7 +198,7 @@ DriverManager::DriverManager()
 
 DriverManager::~DriverManager()
 {
-	kdDebug() << "DriverManager::~DriverManager()" << endl;
+	KexiDBDbg << "DriverManager::~DriverManager()" << endl;
 /*	Connection *conn;
 	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
 		conn->disconnect();
@@ -214,7 +214,7 @@ DriverManager::~DriverManager()
 	}
 //	if ( s_self == this )
 		//s_self = 0;
-	kdDebug() << "DriverManager::~DriverManager() ok" << endl;
+	KexiDBDbg << "DriverManager::~DriverManager() ok" << endl;
 }
 
 const QStringList DriverManager::driverNames()

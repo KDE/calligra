@@ -22,6 +22,9 @@
 
 #include <qstring.h>
 
+#define KexiDBDbg  kdDebug(4000)
+#define KexiDBDrvDbg kdDebug(44001)
+
 namespace KexiDB {
 
 /*!

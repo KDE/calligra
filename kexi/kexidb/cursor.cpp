@@ -102,7 +102,7 @@ bool Cursor::close()
 	m_fieldCount = 0;
 	m_at = -1;
 
-	kdDebug()<<"Cursor::close() == "<<ret<<endl;
+	KexiDBDbg<<"Cursor::close() == "<<ret<<endl;
 	return ret;
 }
 

@@ -95,7 +95,7 @@ Connection* Query::connection()
 
 void Query::debug()
 {
-	kdDebug() << "QUERY " << m_name << endl;
+	KexiDBDbg << "QUERY " << m_name << endl;
 	FieldList::debug();
 }
 

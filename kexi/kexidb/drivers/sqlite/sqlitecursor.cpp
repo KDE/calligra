@@ -167,7 +167,7 @@ bool SQLiteCursor::drv_getNextRecord()
 
 //			for (int i=0;i<m_data->curr_cols;i++) {
 			for (int i=0;i<m_fieldCount;i++) {
-				kdDebug()<<"column "<< i<<","<< m_data->curr_colname[i]<<","<< m_data->curr_colname[m_fieldCount+i]<<endl;
+				KexiDBDrvDbg<<"column "<< i<<","<< m_data->curr_colname[i]<<","<< m_data->curr_colname[m_fieldCount+i]<<endl;
 			}
 
 			if (res==SQLITE_ROW) {//we have the record
@@ -186,7 +186,7 @@ bool SQLiteCursor::drv_getNextRecord()
 					m_data->records.insert(m_data->records_in_buf++,record);
 				}
 			} else {//there is no record
-				kdDebug()<<"res!=SQLITE_ROW ********"<<endl;
+				KexiDBDrvDbg<<"res!=SQLITE_ROW ********"<<endl;
 				m_validRecord = false;
 				m_afterLast = true;
 				m_at = -1;
@@ -206,9 +206,9 @@ bool SQLiteCursor::drv_getNextRecord()
 	
 //	if (m_data->curr_colname && m_data->curr_coldata)
 //		for (int i=0;i<m_data->curr_cols;i++) {
-//			kdDebug()<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
+//			KexiDBDrvDbg<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
 //		}
-	kdDebug()<<"m_at == "<<(long)m_at<<endl;
+	KexiDBDrvDbg<<"m_at == "<<(long)m_at<<endl;
 
 	
 	m_validRecord = true;
@@ -254,7 +254,7 @@ void SQLiteCursor::drv_storeCurrentRecord()
 	m_data->rec_stored = true;
 	m_data->next_cols = m_data->curr_cols;
 	for (int i=0;i<m_data->curr_cols;i++) {
-		kdDebug()<<"[COPY] "<<i<<": "<< m_data->curr_coldata[i]<<endl;
+		KexiDBDrvDbg<<"[COPY] "<<i<<": "<< m_data->curr_coldata[i]<<endl;
 		if (m_data->curr_coldata[i])
 			m_data->next_coldata[i] = strdup( m_data->curr_coldata[i] );
 		else

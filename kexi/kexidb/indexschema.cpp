@@ -112,6 +112,6 @@ void Index::setPrimary(bool set)
 		if (f.m_constraints & Field::NotNull)
 			dbg += " NOTNULL";
 	}
-	kdDebug() << dbg << endl;
+	KexiDBDbg << dbg << endl;
 
 }*/

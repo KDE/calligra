@@ -280,7 +280,7 @@ bool Connection::closeDatabase()
 		return false;
 
 	m_usedDatabase = "";
-	kdDebug() << "Connection::closeDatabase() ok" << endl;
+	KexiDBDbg << "Connection::closeDatabase() ok" << endl;
 	return true;
 }
 
@@ -394,7 +394,7 @@ QString Connection::createTableStatement( const KexiDB::Table& table )
 bool Connection::drv_createTable( const KexiDB::Table& table )
 {
 	QString sql = createTableStatement(table);
-	kdDebug()<<"******** "<<sql<<endl;
+	KexiDBDbg<<"******** "<<sql<<endl;
 	return drv_executeSQL(sql);
 }
 
@@ -511,7 +511,7 @@ Table* Connection::tableSchema( const QString& tableName )
 	}
 	t = new Table( tableName, this );
 	t->m_id = t_id;
-	kdDebug()<<"@@@ t_id=="<<t->m_id<<" t_name="<<cursor->value(1).asCString()<<endl;
+	KexiDBDbg<<"@@@ t_id=="<<t->m_id<<" t_name="<<cursor->value(1).asCString()<<endl;
 
 	deleteCursor(cursor);
 
@@ -522,7 +522,7 @@ Table* Connection::tableSchema( const QString& tableName )
 		return 0;
 	}
 	while (!cursor->eof()) {
-		kdDebug()<<"@@@ t_name=="<<cursor->value(2).asCString()<<endl;
+		KexiDBDbg<<"@@@ t_name=="<<cursor->value(2).asCString()<<endl;
 
 		int f_type = cursor->value(1).toInt(&ok);
 		if (!ok) { 

@@ -44,7 +44,7 @@ using namespace KexiDB;
 
 MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &list) : Driver(parent, name,list)
 {
-	kdDebug() << "MySqlDB::MySqlDB()" << endl;
+	KexiDBDrvDbg << "MySqlDB::MySqlDB()" << endl;
 
 	m_driverName = "mySQL";
 	m_isFileDriver=false;

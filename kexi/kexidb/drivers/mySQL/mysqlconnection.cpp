@@ -58,7 +58,7 @@ bool MySqlConnection::drv_connect()
 	}
 	m_mysql = mysql_init(m_mysql);
 
-        kdDebug() << "MySqlConnection::connect()" << endl;
+        KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
 	QString socket;
 	if (m_data.hostName.isEmpty() || (m_data.hostName=="localhost")) {
 		if (m_data.fileName().isEmpty()) {
@@ -102,7 +102,7 @@ bool MySqlConnection::drv_disconnect()
 	}
 	m_mysql = 0;
 
-        kdDebug() << "MySqlConnection::disconnect()" << endl;
+        KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
         return true;
 }
 
@@ -124,7 +124,7 @@ void MySqlConnection::escapeString( const QString& str, char *target ) {
 
 
 bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
-        kdDebug() << "MySqlConnection::drv_getDatabasesList()" << endl;
+        KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
 
 	list.clear();
 
@@ -207,7 +207,7 @@ bool MySqlConnection::drv_executeSQL( const QString& statement ) {
 #if 0
 MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiDB(parent, name)
 {
-	kdDebug() << "MySqlDB::MySqlDB()" << endl;
+	KexiDBDrvDbg << "MySqlDB::MySqlDB()" << endl;
 
 	m_driverName = "mySQL"
 	m_isFileDriver=false;
@@ -243,7 +243,7 @@ KexiDBRecordSet*
 MySqlDB::queryRecord(const QString& querystatement, bool buffer)
 {
 	m_error.setup(0);
-	kdDebug() << "MySqlDB::queryRecord()" << endl;
+	KexiDBDrvDbg << "MySqlDB::queryRecord()" << endl;
 	if (query(querystatement)) {
 		MYSQL_RES *res;
 		if(!buffer)
@@ -259,8 +259,8 @@ MySqlDB::queryRecord(const QString& querystatement, bool buffer)
 	}
 	else
 	{
-		kdDebug() << "MySqlDB::queryRecord(): error..." << endl;
-		kdDebug() << "MySqlDB::queryRecord(): cause:"<<m_error.message() <<endl;
+		KexiDBDrvDbg << "MySqlDB::queryRecord(): error..." << endl;
+		KexiDBDrvDbg << "MySqlDB::queryRecord(): cause:"<<m_error.message() <<endl;
 	}
 
 	return 0;
@@ -270,7 +270,7 @@ bool
 MySqlDB::connect(const QString& host, const QString& user, const QString& password,
 								 const QString& socket, const QString& port)
 {
-	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
+	KexiDBDrvDbg << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
 
 	QString msocket = socket;
 	if(msocket.isEmpty())
@@ -304,7 +304,7 @@ MySqlDB::connect(const QString& host, const QString& user, const QString& passwo
 		m_error=KexiDBError(1, mysql_error(m_mysql));
 	}
 
-	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
+	KexiDBDrvDbg << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
 	return false;
 }
 
@@ -312,11 +312,11 @@ bool
 MySqlDB::connect(const QString& host, const QString& user, const QString& password,
 								 const QString& socket, const QString& port, const QString& db, bool create)
 {
-	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
+	KexiDBDrvDbg << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
 	if(m_connected && host == m_host && user == m_user && password == m_password && socket == m_socket
 		&& port.toUInt() == m_port)
 	{
-		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
+		KexiDBDrvDbg << "MySqlDB::connect(db): already connected" << endl;
 
 		//create new database if needed
 		if(create)
@@ -325,7 +325,7 @@ MySqlDB::connect(const QString& host, const QString& user, const QString& passwo
 		}
 		//simple change to db:
 		query("use "+db);
-		kdDebug() << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
+		KexiDBDrvDbg << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
 		if(mysql_errno(m_mysql) != 0)
 			return false;
 		m_connectedDB = true;
@@ -333,7 +333,7 @@ MySqlDB::connect(const QString& host, const QString& user, const QString& passwo
 	}
 	else
 	{
-		kdDebug() << "MySqlDB::connect(db): retrying..." << endl;
+		KexiDBDrvDbg << "MySqlDB::connect(db): retrying..." << endl;
 			if(connect(host, user, password, socket, port))
 			{
 				//create new database if needed
@@ -356,7 +356,7 @@ MySqlDB::connect(const QString& host, const QString& user, const QString& passwo
 QStringList
 MySqlDB::databases()
 {
-	kdDebug() << "MySqlDB::databases()" << endl;
+	KexiDBDrvDbg << "MySqlDB::databases()" << endl;
 	QStringList s;
 
 	const_cast<MySqlDB*>(this)->query("show databases");
@@ -365,7 +365,7 @@ MySqlDB::databases()
 	if(!result)
 		return s;
 
-	kdDebug() << "field name: " << result->fieldInfo(0)->name() << endl;
+	KexiDBDrvDbg << "field name: " << result->fieldInfo(0)->name() << endl;
 	while(result->next())
 	{
 		s.append(result->value(0).toString());
@@ -397,7 +397,7 @@ MySqlDB::tableNames()
 	while(result->next())
 	{
 		s.append(result->value(0).toString());
-//    kdDebug() << "* tableNames():" << result->value(0).toString() << endl;
+//    KexiDBDrvDbg << "* tableNames():" << result->value(0).toString() << endl;
 	}
 
 	delete result;
@@ -417,14 +417,14 @@ const KexiDBTable * const MySqlDB::table(const QString& name) {
 
 KexiDBTable * MySqlDB::createTableDef(const QString& name)
 {
-	kdDebug()<<"MySQLDB::createTableDef: entered"<<endl;
+	KexiDBDrvDbg<<"MySQLDB::createTableDef: entered"<<endl;
 
 	if(!m_connectedDB)
 		return 0;
 
-	kdDebug()<<"MySQLDB::createTableDef: connection exists"<<endl;
+	KexiDBDrvDbg<<"MySQLDB::createTableDef: connection exists"<<endl;
 
-	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from "+escapeName(name)+" limit 0")<<endl;
+	KexiDBDrvDbg<<"MySQLDB::createTableDef: querying"<< ("select * from "+escapeName(name)+" limit 0")<<endl;
 
 	query("select * from "+escapeName(name)+" limit 0");
 	MySqlResult *result = storeResult();
@@ -432,7 +432,7 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name)
 	if(!result)
 		return 0;
 
-	kdDebug()<<"MySQLDB::createTableDef: there is a result"<<endl;
+	KexiDBDrvDbg<<"MySQLDB::createTableDef: there is a result"<<endl;
 
 	KexiDBTable *t=new KexiDBTable(name);
 
@@ -443,7 +443,7 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name)
 		t->addField(*f);
 		//should we support other unique keys here too ?
 		if (f->primary_key()) t->addPrimaryKey(f->name());
-		kdDebug()<<"MySQLDB::createTableDef: addField:"<<f->name()<<endl;
+		KexiDBDrvDbg<<"MySQLDB::createTableDef: addField:"<<f->name()<<endl;
 	}
 
 	delete result;
@@ -460,7 +460,7 @@ MySqlDB::query(const QString& statement)
 	if(!uhQuery(statement))
 	{
 		m_error.setup(1, mysql_error(m_mysql));
-		kdDebug()<<m_error.message();
+		KexiDBDrvDbg<<m_error.message();
 		return false;
 	}
 	return true;
@@ -489,11 +489,11 @@ MySqlDB::getResult()
 MySqlResult*
 MySqlDB::storeResult()
 {
-	kdDebug() << "MySqlDB::storeResult(): error: " << mysql_error(m_mysql) << endl;
+	KexiDBDrvDbg << "MySqlDB::storeResult(): error: " << mysql_error(m_mysql) << endl;
 	MYSQL_RES *res = mysql_store_result(m_mysql);
 	if(res)
 	{
-		kdDebug() << "MySqlDB::storeResult(): wow, got a result!!!" << endl;
+		KexiDBDrvDbg << "MySqlDB::storeResult(): wow, got a result!!!" << endl;
 		return new MySqlResult(res, this);
 	}
 	else
@@ -505,20 +505,20 @@ MySqlDB::storeResult()
 MySqlResult*
 MySqlDB::useResult()
 {
-	kdDebug() << "MySqlDB::useResult(): error: " << mysql_error(m_mysql) << endl;
-	kdDebug() << "MySqlDB::useResult(): info: " << mysql_info(m_mysql) << endl;
+	KexiDBDrvDbg << "MySqlDB::useResult(): error: " << mysql_error(m_mysql) << endl;
+	KexiDBDrvDbg << "MySqlDB::useResult(): info: " << mysql_info(m_mysql) << endl;
 	MYSQL_RES *res = mysql_use_result(m_mysql);
-	kdDebug() << "MySqlDB::useResult(): d1" << endl;
+	KexiDBDrvDbg << "MySqlDB::useResult(): d1" << endl;
 	if(res)
 	{
-		kdDebug() << "MySqlDB::useResult(): d2" << endl;
+		KexiDBDrvDbg << "MySqlDB::useResult(): d2" << endl;
 		MySqlResult *result = new MySqlResult(res, this);
-		kdDebug() << "MySqlDB::useResulg(): d3" << endl;
+		KexiDBDrvDbg << "MySqlDB::useResulg(): d3" << endl;
 		return result;
 	}
 	else
 	{
-		kdDebug() << "MySqlDB::useResult(): not enough data" << endl;
+		KexiDBDrvDbg << "MySqlDB::useResult(): not enough data" << endl;
 		return 0;
 	}
 }
@@ -579,7 +579,7 @@ MySqlDB::structure(const QString& table) const
 {
 	KexiDBTableStruct dbStruct;
 	MYSQL_RES* result= mysql_list_fields(m_mysql, table.local8Bit().data(), 0);
-	kdDebug() << "MySqlDB::structure: Get fields..." << endl;
+	KexiDBDrvDbg << "MySqlDB::structure: Get fields..." << endl;
 
 	if(result)
 	{
@@ -707,13 +707,13 @@ bool
 MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 	KexiDBTableStruct fields)
 {
-	kdDebug() << "MySqlDB::alterField: Table: " << changedField.table() << " Field: " << fields.at(index)->name() << endl;
-	kdDebug() << "MySqlDB::alterField: DataType: " << nativeDataType(
+	KexiDBDrvDbg << "MySqlDB::alterField: Table: " << changedField.table() << " Field: " << fields.at(index)->name() << endl;
+	KexiDBDrvDbg << "MySqlDB::alterField: DataType: " << nativeDataType(
 		changedField.sqlType()) << "ColumnType: " << changedField.sqlType() << endl;
 	QString qstr = "ALTER TABLE `" + changedField.table() + "` CHANGE `" +
 		fields.at(index)->name() + "` `" + changedField.name();
 	qstr += "` " + createDefinition(changedField, index, fields);
-	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
+	KexiDBDrvDbg << "MySqlDB::alterField: Query: " << qstr << endl;
 	bool ok = uhQuery(qstr);
 
 	if(ok)
@@ -728,8 +728,8 @@ bool
 MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 										 bool createTable)
 {
-	kdDebug() << "MySqlDB::createField: Table: " << newField.table() << " Field: " << newField.name() << endl;
-	kdDebug() << "MySqlDB::createField: DataType: " << nativeDataType(
+	KexiDBDrvDbg << "MySqlDB::createField: Table: " << newField.table() << " Field: " << newField.name() << endl;
+	KexiDBDrvDbg << "MySqlDB::createField: DataType: " << nativeDataType(
 		newField.sqlType()) << "ColumnType: " << newField.sqlType() << endl;
 	QString qstr;
 
@@ -745,7 +745,7 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 		qstr += ")";
 	}
 
-	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
+	KexiDBDrvDbg << "MySqlDB::createField: Query: " << qstr << endl;
 	bool ok = uhQuery(qstr);
 
 	if(ok)
@@ -892,7 +892,7 @@ MySqlDB::changeKeys(const KexiDBField& field, int index,
 
 	if(!noPrimary)
 	{
-		kdDebug() << "MySqlDB::changeKeys: Query: " << qstr << endl;
+		KexiDBDrvDbg << "MySqlDB::changeKeys: Query: " << qstr << endl;
 		return uhQuery(qstr);
 	}
 

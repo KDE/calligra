@@ -129,7 +129,7 @@ Connection* Table::connection()
 
 void Table::debug()
 {
-	kdDebug() << "TABLE " << m_name << endl;
+	KexiDBDbg << "TABLE " << m_name << endl;
 	FieldList::debug();
 
 /*	QString dbg = "TABLE " + m_name + "\n";
@@ -144,7 +144,7 @@ void Table::debug()
 		dbg += "  ";
 		dbg += field->debugString();
 	}
-	kdDebug() << dbg << endl;*/
+	KexiDBDbg << dbg << endl;*/
 }
 
 //----------------------------------------------------
