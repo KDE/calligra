@@ -1071,7 +1071,15 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
 
     QDomElement settings = doc.createElement( "PICTURESETTINGS" );
     settings.setAttribute( "grayscal", 0 );
-    settings.setAttribute( "bright", 0 );
+    if ( m_styleStack.hasAttribute( "draw:luminance" ) )
+    {
+        QString str( m_styleStack.attribute( "draw:luminance" ) );
+        str = str.remove( "%" );
+        settings.setAttribute( "bright", str );
+    }
+    else
+        settings.setAttribute( "bright", 0 );
+
     settings.setAttribute( "mirrorType", 0 );
     settings.setAttribute( "swapRGB", 0 );
     settings.setAttribute( "depth", 0 );
