@@ -389,7 +389,7 @@ Done:
 -> save/load page master layout
 -> save/load header/footer
 -> save/load print range
--> save/load conditional cell attribute
+-> save/load conditional cell attribute (save in style:map)
 -> save/load style
 -> save/load cell border attribute
 -> save/load settings (cursor position, active table, view options)
@@ -403,4 +403,4 @@ Fixe todo:
 -> Save/load col-width/row-height into settings.xml
 -> Save/load numeric-style
 -> Fix cell validation (list )
--> Fix save conditional cell attributes
+-> Fix load conditional attribute, for the moment it load just one style
