@@ -9,9 +9,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>484</width>
-            <height>259</height>
+            <width>492</width>
+            <height>382</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KPTTaskProgressPanelBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -43,10 +46,16 @@
                             <property name="name">
                                 <cstring>finishTime</cstring>
                             </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
                         </widget>
                         <widget class="KDateTimeWidget" row="0" column="1">
                             <property name="name">
                                 <cstring>startTime</cstring>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
                             </property>
                         </widget>
                         <widget class="QCheckBox" row="0" column="0">
@@ -54,7 +63,7 @@
                                 <cstring>started</cstring>
                             </property>
                             <property name="text">
-                                <string>Started:</string>
+                                <string>Started</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -65,7 +74,7 @@
                                 <cstring>finished</cstring>
                             </property>
                             <property name="text">
-                                <string>Finished:</string>
+                                <string>Finished</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -110,7 +119,7 @@
                                         <cstring>textLabel1</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Percent finished:</string>
+                                        <string>Percent completed</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>percentFinished</cstring>
@@ -121,7 +130,7 @@
                                         <cstring>textLabel1_3</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Effort performed:</string>
+                                        <string>Effort performed</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>totalPerformed</cstring>
@@ -132,7 +141,7 @@
                                         <cstring>textLabel1_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Effort remaining:</string>
+                                        <string>Effort remaining</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>remainingEffort</cstring>
@@ -196,10 +205,101 @@
                                     <property name="enabled">
                                         <bool>true</bool>
                                     </property>
+                                    <property name="focusPolicy">
+                                        <enum>TabFocus</enum>
+                                    </property>
                                 </widget>
                                 <widget class="KPlato::KPTDurationWidget">
                                     <property name="name">
                                         <cstring>remainingEffort</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>TabFocus</enum>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Scheduled</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout8</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_4</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Start</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_4_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Finish</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_4_3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Effort</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout9</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="KDateTimeWidget">
+                                    <property name="name">
+                                        <cstring>scheduledStart</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDateTimeWidget">
+                                    <property name="name">
+                                        <cstring>scheduledFinish</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KPlato::KPTDurationWidget">
+                                    <property name="name">
+                                        <cstring>scheduledEffort</cstring>
                                     </property>
                                     <property name="enabled">
                                         <bool>true</bool>
@@ -209,7 +309,7 @@
                         </widget>
                     </hbox>
                 </widget>
-            </vbox>
+            </hbox>
         </widget>
         <spacer>
             <property name="name">
@@ -304,8 +404,12 @@
 </connections>
 <tabstops>
     <tabstop>started</tabstop>
+    <tabstop>startTime</tabstop>
     <tabstop>finished</tabstop>
+    <tabstop>finishTime</tabstop>
     <tabstop>percentFinished</tabstop>
+    <tabstop>totalPerformed</tabstop>
+    <tabstop>remainingEffort</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">kpttaskprogresspanelbase.ui.h</include>
@@ -333,6 +437,13 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>kplato::kptdurationwidget.h</includehint>
+    <includehint>kplato::kptdurationwidget.h</includehint>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
     <includehint>kplato::kptdurationwidget.h</includehint>
 </includehints>
 </UI>

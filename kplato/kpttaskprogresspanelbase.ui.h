@@ -67,7 +67,12 @@ void KPTTaskProgressPanelBase::enableWidgets()
     finished->setEnabled(started->isChecked());
     finishTime->setEnabled(started->isChecked());
     startTime->setEnabled(started->isChecked() && !finished->isChecked());
-    performedGroup->setEnabled(started->isChecked() && !finished->isChecked());}
+    performedGroup->setEnabled(started->isChecked() && !finished->isChecked());
+    
+    scheduledStart->setEnabled(false);
+    scheduledFinish->setEnabled(false);
+    scheduledEffort->setEnabled(false);
+}
 
 
 void KPTTaskProgressPanelBase::slotPercentFinishedChanged( int value )

@@ -730,22 +730,25 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         switch (m_constraint) {
         case KPTNode::ASAP:
             // m_startTime calculated above
+            m_workStartTime = workStartAfter(m_startTime);
+            setStartTime(m_workStartTime);
             m_duration = duration(m_startTime, use, false);
             setEndTime(m_startTime + m_duration);
-            m_workStartTime = workStartAfter(m_startTime);
             m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::ALAP:
             // m_startTime calculated above
-            setEndTime(latestFinish);
+            m_workEndTime = workFinishBefore(latestFinish);
+            setEndTime(m_workEndTime);
             m_duration = duration(m_endTime, use, true);
             setStartTime(m_endTime - m_duration);
             m_workStartTime = workStartAfter(m_startTime);
-            m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::StartNotEarlier:
             // m_startTime calculated above
             //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;            
+            m_workStartTime = workStartAfter(m_startTime);
+            setStartTime(m_workStartTime);
             if (m_startTime < m_constraintStartTime) {
                 setStartTime(m_constraintStartTime);
             }
@@ -760,6 +763,8 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         case KPTNode::FinishNotLater:
             // m_startTime calculated above
             //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
+            m_workStartTime = workStartAfter(m_startTime);
+            setStartTime(m_startTime);
             m_duration = duration(m_startTime, use, false);            
             setEndTime(m_startTime + m_duration);
             if ( m_endTime > m_constraintEndTime) {
@@ -768,7 +773,6 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
                 m_duration = duration(m_endTime, use, true);
                 setStartTime(m_endTime - m_duration);
             }
-            m_workStartTime = workStartAfter(m_startTime);
             m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::MustStartOn:
@@ -927,21 +931,25 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
         switch (m_constraint) {
         case KPTNode::ASAP:
             // m_endTime calculated above
+            m_workEndTime = workFinishBefore(m_endTime);
+            setEndTime(m_workEndTime);
             m_duration = duration(m_endTime, use, true);
             setStartTime(m_endTime - m_duration);
             m_workStartTime = workStartAfter(m_startTime);
-            m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::ALAP:
             // m_endTime calculated above
+            m_workEndTime = workFinishBefore(m_endTime);
+            setEndTime(m_workEndTime);
             m_duration = duration(m_endTime, use, true);
             setStartTime(m_endTime - m_duration);
             m_workStartTime = workStartAfter(m_startTime);
-            m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::StartNotEarlier:
             // m_endTime calculated above
             //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<m_endTime.toString()<<endl;
+            m_workEndTime = workFinishBefore(m_endTime);
+            setEndTime(m_workEndTime);
             m_duration = duration(m_endTime, use, true);
             setStartTime(m_endTime - m_duration);
             if (m_startTime < m_constraintStartTime) {
@@ -949,13 +957,15 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
                 setStartTime(m_constraintStartTime);
                 m_duration = duration(m_startTime, use, false);
                 setEndTime(m_startTime + m_duration);
+                m_workEndTime = workFinishBefore(m_endTime);
             }
             m_workStartTime = workStartAfter(m_startTime);
-            m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::FinishNotLater:
             // m_endTime calculated above
             //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;            
+            m_workEndTime = workFinishBefore(m_endTime);
+            setEndTime(m_workEndTime);
             if (m_endTime > m_constraintEndTime) {
                 m_schedulingError = true;
                 setEndTime(m_constraintEndTime);
@@ -963,7 +973,6 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             m_duration = duration(m_endTime, use, true);
             setStartTime(m_endTime - m_duration);
             m_workStartTime = workStartAfter(m_startTime);
-            m_workEndTime = workFinishBefore(m_endTime);
             break;
         case KPTNode::MustStartOn:
             // m_endTime calculated above

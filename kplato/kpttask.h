@@ -186,7 +186,7 @@ public:
     virtual const KPTDateTime &workEndTime() const;
     
     /**
-     * Return the the duration that an activity's start can be delayed 
+     * Return the duration that an activity's start can be delayed 
      * without affecting the project completion date. 
      * An activity with positive float is not on the critical path.
      */

@@ -23,6 +23,7 @@
 #include <koKoolBar.h>
 #include <koRect.h>
 
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qiconset.h>
 #include <qlayout.h>
@@ -390,7 +391,9 @@ void KPTView::slotProjectCalculate() {
 }
 
 void KPTView::projectCalculate() {
+    QApplication::setOverrideCursor(Qt::waitCursor);
     getPart()->getProject().calculate();
+    QApplication::restoreOverrideCursor();
 }
 
 void KPTView::slotReportDesign() {

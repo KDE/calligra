@@ -176,19 +176,13 @@ public:
     KPTRelation *findRelation(KPTNode *node);
 
     void setStartTime(KPTDateTime startTime);
-    /// Return the (previously) calculated start time
+    /// Return the scheduled start time
     const KPTDateTime &startTime() const { return m_startTime; }
     const QDate &startDate() const { return m_dateOnlyStartDate; }
     void setEndTime(KPTDateTime endTime);
-    /// Return the (previously) calculated end time
+    /// Return the scheduled end time
     const KPTDateTime &endTime() const { return m_endTime; }
     const QDate &endDate() const { return m_dateOnlyEndDate; }
-
-    // These are entered by the project man. during the project
-    void setActualStartTime(KPTDateTime startTime) { m_actualStartTime=startTime; }
-    const KPTDateTime &actualStartTime() const { return m_actualStartTime; }
-    void setActualEndTime(KPTDateTime endTime) { m_actualEndTime=endTime; }
-    const KPTDateTime &actualEndTime() const { return m_actualEndTime; }
 
     void setEffort(KPTEffort* e) { m_effort = e; }
     KPTEffort* effort() const { return m_effort; }
@@ -206,8 +200,8 @@ public:
     virtual KPTDuration *getRandomDuration() = 0;
 
     /**
-     * Calculate the delay of this node. Use the calculated startTime and the
-     * setted startTime.
+     * Calculate the delay of this node. 
+     * It is the difference between the actual startTime and scheduled startTime.
      */
     KPTDuration *getDelay();
 
@@ -392,8 +386,19 @@ public:
     KPTDateTime &earliestStartForward() { return m_earliestStartForward; }
     KPTDateTime &latestFinishBackward() { return m_latestFinishBackward; }
     
+    /**
+     * This is when work can start on this node in accordance with 
+     * the calendar of allocated resources. Normally this is the same
+     * as @ref startTime(), but may differ if timing constraints are set.
+     */
     virtual const KPTDateTime &workStartTime() const { return m_workStartTime; }
     void setWorkStartTime(const KPTDateTime &dt) { m_workStartTime = dt; }
+    
+    /**
+     * This is when work can finish on this node in accordance with 
+     * the calendar of allocated resources. Normally this is the same
+     * as @ref endTime(), but may differ if timing constraints are set.
+     */
     virtual const KPTDateTime &workEndTime() const { return m_workEndTime; }
     void setWorkEndTime(const KPTDateTime &dt) { m_workEndTime = dt; }
 
@@ -415,13 +420,13 @@ protected:
     KPTEffort* m_effort;
     
     /** earliestStart is calculated by PERT/CPM.
-      * A task may be scheduled to start later because other tasks
-      * scehduled in parallell takes more time to complete
+      * A task may be scheduled to start later because of constraints
+      * or resource availability etc.
       */
     KPTDateTime earliestStart;
     /** latestFinish is calculated by PERT/CPM.
-      * A task may be scheduled to finish earlier because other tasks
-      * scehduled in parallell takes more time to complete
+      * A task may be scheduled to finish earlier because of constraints
+      * or resource availability etc.
       */
     KPTDateTime latestFinish;
 
@@ -429,40 +434,43 @@ protected:
 
     /**
       * @m_constraintTime is used if any of the constraints
-      * FixedInterval, StartNotEarlier or MustStartOn is selected
+      * FixedInterval, StartNotEarlier, MustStartOn or FixedInterval is selected
       */
     KPTDateTime m_constraintStartTime;
     /**
       * @m_constraintEndTime is used if any of the constraints
-      * FixedInterval, FinishNotLater or MustFinishOn is selected
+      * FixedInterval, FinishNotLater, MustFinishOn or FixedInterval is selected
       */
     KPTDateTime m_constraintEndTime;
 
-    /**  m_startTime is the calculated start time.
-      *  It depends on constraints (i.e. ASAP/ALAP)
+    /**  m_startTime is the scheduled start time.
+      *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
       *  It will always be later or equal to @ref earliestStart
       */
     KPTDateTime m_startTime;
 
-    /**  m_endTime is the calculated finish time.
-      *  It depends on constraints (i.e. ASAP/ALAP)
+    /**  
+      *  m_endTime is the scheduled finish time.
+      *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
       *  It will always be earlier or equal to @ref latestFinish
       */
     KPTDateTime m_endTime;
-    /**  m_duration is the calculated duration which depends on
+    
+    /**  
+      *  m_duration is the scheduled duration which depends on
       *  e.g. estimated effort, allocated resources and risk
       */
     KPTDuration m_duration;
 
-    /// EffortType == Effort, but no resource is requested
+    /// Set if EffortType == Effort, but no resource is requested
     bool m_resourceError;
-    /// The assigned resource is overbooked
+    /// Set if the assigned resource is overbooked
     bool m_resourceOverbooked;
-    /// The requested resource is not available
+    /// Set if the requested resource is not available
     bool m_resourceNotAvailable;
-    /// The task cannot be scheduled to fullfill all the constraints
+    /// Set if the task cannot be scheduled to fullfill all the constraints
     bool m_schedulingError;
-    /// The node has not been scheduled
+    /// Set if the node has not been scheduled
     bool m_notScheduled;
     
     bool m_visitedForward;

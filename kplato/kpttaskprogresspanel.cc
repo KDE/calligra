@@ -55,15 +55,23 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, QWidget *parent, const
     
     remainingEffort->setValue(m_progress.remainingEffort);
     remainingEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
-    remainingEffort->setFieldUnit(0, i18n("d"));
-    remainingEffort->setFieldUnit(1, i18n("h"));
-    remainingEffort->setFieldUnit(2, i18n("m"));
+    remainingEffort->setFieldUnit(0, i18n("day", "d"));
+    remainingEffort->setFieldUnit(1, i18n("hour", "h"));
+    remainingEffort->setFieldUnit(2, i18n("minute", "m"));
 
     totalPerformed->setValue(m_progress.totalPerformed);
     totalPerformed->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
-    totalPerformed->setFieldUnit(0, i18n("d"));
-    totalPerformed->setFieldUnit(1, i18n("h"));
-    totalPerformed->setFieldUnit(2, i18n("m"));
+    totalPerformed->setFieldUnit(0, i18n("day", "d"));
+    totalPerformed->setFieldUnit(1, i18n("hour", "h"));
+    totalPerformed->setFieldUnit(2, i18n("minute", "m"));
+    
+    scheduledStart->setDateTime(task.startTime());
+    scheduledFinish->setDateTime(task.endTime());
+    scheduledEffort->setValue(task.effort()->expected());
+    scheduledEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
+    scheduledEffort->setFieldUnit(0, i18n("day", "d"));
+    scheduledEffort->setFieldUnit(1, i18n("hour", "h"));
+    scheduledEffort->setFieldUnit(2, i18n("minute", "m"));
     
     enableWidgets();
     started->setFocus();

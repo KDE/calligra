@@ -398,8 +398,8 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setStartTime(QDateTime(task->startDate(), QTime()));
         item->setEndTime(QDateTime(task->endDate().addDays(1), QTime())); // hmmm
     } else {
-        item->setStartTime(task->workStartTime());
-        item->setEndTime(task->workEndTime());
+        item->setStartTime(task->startTime());
+        item->setEndTime(task->endTime());
     }
     //item->setOpen(true);
     item->setText(task->name());
@@ -409,7 +409,7 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setProgress(0);
     }
     if (m_showPositiveFloat) {
-        QDateTime t = task->workEndTime() + task->positiveFloat();
+        QDateTime t = task->endTime() + task->positiveFloat();
         if (t.isValid() && t > task->endTime()) {
             item->setFloatEndTime(t);
         } else {
