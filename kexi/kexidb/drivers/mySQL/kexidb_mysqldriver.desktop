@@ -23,4 +23,5 @@ X-KDE-Library=kexidb_mysqldriver
 ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
+X-Kexi-DriverName=mySQL
 X-Kexi-DriverType=Network

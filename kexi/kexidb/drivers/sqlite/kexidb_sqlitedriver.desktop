@@ -25,6 +25,6 @@ X-KDE-Library=kexidb_sqlitedriver
 ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
-MimeType=text/plain
+X-Kexi-DriverName=SQLite
 X-Kexi-DriverType=File
 X-Kexi-FileDBDriverMime=application/x-sqlite

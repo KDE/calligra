@@ -6,4 +6,5 @@ X-KDE-Library=kexidb_pqxxsqldriver
 ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
+X-Kexi-DriverName=PostgreSQL
 X-Kexi-DriverType=Network
