@@ -125,8 +125,8 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 
 	// We then save the layoutdefaults element
 	QDomElement layoutDefaults = domDoc.createElement("layoutDefaults");
-	layoutDefaults.setAttribute("spacing", QString::number(Form::defaultSpacing()));
-	layoutDefaults.setAttribute("margin", QString::number(Form::defaultMargin()));
+	layoutDefaults.setAttribute("spacing", QString::number(form->defaultSpacing()));
+	layoutDefaults.setAttribute("margin", QString::number(form->defaultMargin()));
 	uiElement.appendChild(layoutDefaults);
 
 	/// Save tab Stops

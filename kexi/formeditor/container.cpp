@@ -123,7 +123,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_move = false;
 	m_inlineEditing = false;
 	m_tree = 0;
-	m_form = 0;
+	m_form = m_toplevel ? m_toplevel->form() : 0;
 	m_layout = 0;
 	m_layType = NoLayout;
 	m_toplevel = toplevel;
@@ -132,14 +132,12 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
 		m_margin = 2;
 	else
-		m_margin = Form::defaultMargin();
-	m_spacing = Form::defaultSpacing();
+		m_margin = m_form ? m_form->defaultMargin() : 0;
+	m_spacing = m_form ? m_form->defaultSpacing() : 0;
 
 	if(toplevel)
 	{
 		Container *pc = static_cast<Container *>(parent);
-
-		m_form = toplevel->form();
 
 		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), widget()->name(), widget(), this, this);
 		setObjectTree(it);
@@ -160,6 +158,14 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	connect(toplevel, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
 	connect(container, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
+}
+
+void
+Container::setForm(Form *form)
+{
+	m_form = form;
+	m_margin = m_form ? m_form->defaultMargin() : 0;
+	m_spacing = m_form ? m_form->defaultSpacing() : 0;
 }
 
 bool
@@ -247,12 +253,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if((/*s == m_container &&*/ m_form->manager()->inserting()) || ((s == m_container) && !m_toplevel))
 			{
 				int tmpx,tmpy;
-				int gridX = Form::gridX();
-				int gridY = Form::gridY();
-				tmpx = int((float)mev->x()/((float)gridX)+0.5); // snap to grid
-				tmpx*=gridX;
-				tmpy = int((float)mev->y()/((float)gridY)+0.5);
-				tmpy*=gridX;
+				int gridX = m_form->gridX();
+				int gridY = m_form->gridY();
+				tmpx = int( (float)mev->x() / ((float)gridX) + 0.5 ); // snap to grid
+				tmpx *= gridX;
+				tmpy = int( (float)mev->y() / ((float)gridY) + 0.5 );
+				tmpy *= gridX;
 
 				m_insertBegin = QPoint(tmpx, tmpy);
 				if(m_form->formWidget())
@@ -358,12 +364,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 			 || (mev->state() == (LeftButton|ShiftButton)) ) ) // draw the insert rect
 			{
 				int tmpx,tmpy;
-				int gridX = Form::gridX();
-				int gridY = Form::gridY();
-				tmpx = int((float)mev->x()/((float)gridX)+0.5);
-				tmpx*=gridX;
-				tmpy = int((float)mev->y()/((float)gridY)+0.5);
-				tmpy*=gridX;
+				int gridX = m_form->gridX();
+				int gridY = m_form->gridY();
+				tmpx = int( (float) mev->x() / ((float)gridX) + 0.5);
+				tmpx *= gridX;
+				tmpy = int( (float)mev->y() / ((float)gridY) + 0.5);
+				tmpy *= gridX;
 
 				int topx = (m_insertBegin.x() < tmpx) ? m_insertBegin.x() : tmpx;
 				int topy = (m_insertBegin.y() < tmpy) ? m_insertBegin.y() : tmpy;
@@ -426,8 +432,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return false;
 				if((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
 					return true;
-				int gridX = Form::gridX();
-				int gridY = Form::gridY();
+				int gridX = m_form->gridX();
+				int gridY = m_form->gridY();
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
@@ -440,7 +446,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 					int tmpx = ( ( w->x() + mev->x() - m_grab.x()) / gridX ) * gridX;
 					int tmpy = ( ( w->y() + mev->y() - m_grab.y()) / gridY ) * gridY;
-					if((tmpx != w->x()) ||(tmpy != w->y()))
+					if((tmpx != w->x()) || (tmpy != w->y()))
 						w->move(tmpx,tmpy);
 				}
 				/*int tmpx = (((m_moving->x()+mev->x()-m_grab.x()))/gridX)*gridX;
@@ -455,8 +461,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 		{
 			if(s != m_container)
 				return false;
-			int gridX = Form::gridX();
-			int gridY = Form::gridY();
+			int gridX = m_form->gridX();
+			int gridY = m_form->gridY();
 
 			QPainter p(m_container);
 //			p.setPen( QPen(m_container->paletteForegroundColor(), 1) );

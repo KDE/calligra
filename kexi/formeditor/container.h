@@ -150,7 +150,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QWidget		*widget() { return m_container; }
 
 		//! Sets the Form which this Container belongs to.
-		void		setForm(Form *form) { m_form = form; }
+		void		setForm(Form *form);
 
 		//! \return The form this Container belongs to.
 		Form		*form() const { return m_form; }

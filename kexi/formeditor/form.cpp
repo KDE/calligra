@@ -186,7 +186,7 @@ Form::setSelectedWidget(QWidget *w, bool add)
 	}
 
 	if(m_toplevel && w != m_toplevel->widget() && w)
-		m_resizeHandles.insert(w->name(), new ResizeHandleSet(w));
+		m_resizeHandles.insert(w->name(), new ResizeHandleSet(w, this));
 }
 
 void

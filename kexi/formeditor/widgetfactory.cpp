@@ -81,7 +81,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, Container *containe
 	connect(w, SIGNAL(destroyed()), this, SLOT(resetEditor()));
 	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
-	m_handles = new ResizeHandleSet(w, true);
+	m_handles = new ResizeHandleSet(w, container->form(), true);
 
 	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
 	if(!tree)
@@ -106,7 +106,7 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 	tree->eventEater()->setContainer(this);
 
 	w->setFocus();
-	m_handles = new ResizeHandleSet(w, true);
+	m_handles = new ResizeHandleSet(w, container->form(), true);
 	m_widget = w;
 	m_container = container;
 	m_editor = 0;

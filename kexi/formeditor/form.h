@@ -146,13 +146,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		bool			designMode() { return m_design; }
 
 		//! \return the x distance between two dots in the background.
-		static int		gridX() { return 10;}
+		int		gridX() { return 10;}
 		//! \return the y distance between two dots in the background.
-		static int		gridY() { return 10;}
+		int		gridY() { return 10;}
 		//! \return the default margin for all the layout inside this Form.
-		static int		defaultMargin() { return 11;}
+		int		defaultMargin() { return 11;}
 		//! \return the default spacing for all the layout inside this Form.
-		static int		defaultSpacing() { return 6;}
+		int		defaultSpacing() { return 6;}
 
 		/*! Pastes the widget represented by the QDomElement \a widg in the Form. \a widg is created by FormManager::saveWidget().\n
 		    If \a pos is null or not given, then the widget will be pasted in the actual Container, at the same position as
