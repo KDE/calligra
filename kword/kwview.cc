@@ -3930,7 +3930,7 @@ void KWView::textStyleSelected( int index )
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
         QPtrListIterator<KWFrame> it( selectedFrames );
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") : i18n("Apply Style to Frames"));
+        KMacroCommand *globalCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KWFrame *curFrame = it.current();
@@ -3942,10 +3942,15 @@ void KWView::textStyleSelected( int index )
                 KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
                 textObject->textDocument()->removeSelection( KoTextDocument::Temp );
                 if (cmd)
+                {
+                    if ( !globalCmd )
+                        globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") : i18n("Apply Style to Frames"));
                     globalCmd->addCommand( cmd );
+                }
             }
         }
-        m_doc->addCommand( globalCmd );
+        if ( globalCmd )
+            m_doc->addCommand( globalCmd );
     }
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
 }
