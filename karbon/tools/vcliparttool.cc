@@ -107,7 +107,7 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 	
 	m_clipartChooser->setAutoDelete( false );
 	VClipartIconItem* item = 0L;
-	for ( item = clipartItems->first(); item; item = clipartItems->next() )
+	for( item = clipartItems->first(); item; item = clipartItems->next() )
 		m_clipartChooser->addItem( item );
 	m_clipartItem = clipartItems->first();
 } // VClipartWidget::VClipartWidget
@@ -142,7 +142,7 @@ void VClipartWidget::addClipart()
 		QPtrVector<VObject> objects;
 		selection->objects().toVector( &objects );
 		VGroup* group = new VGroup( 0L );
-		for ( int i = 0; i < objects.count(); i++ )
+		for( unsigned int i = 0; i < objects.count(); i++ )
 			group->append( objects[i]->clone() );
 		clipart = group;
 	}

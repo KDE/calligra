@@ -40,7 +40,7 @@
 #include "vselection.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
- static const char * CURRENT_DTD_VERSION = "1.2";
+// static const char * CURRENT_DTD_VERSION = "1.2";
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )

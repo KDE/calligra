@@ -42,7 +42,7 @@ VStateButton::mouseReleaseEvent( QMouseEvent *e )
 }
 
 void
-VStateButton::setState( unsigned int index )
+VStateButton::setState( unsigned int /*index*/ )
 {
 	if( m_pixmaps.count() > 0 )
 		setPixmap( *( m_pixmaps.at( m_index ) ) );

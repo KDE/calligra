@@ -199,7 +199,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 
     m_oldUndoRedo = 30;
 
-    QString unitType=KoUnit::unitName(unit);
+    QString unitType = KoUnit::unitName( unit );
     //#################"laurent
     //don't load unitType from config file because unit is
     //depend from kword file => unit can be different from config file
@@ -216,9 +216,9 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     grid->addWidget( m_undoRedo, 0, 0 );
 
 
-    QHBox *lay = new QHBox(box);
-    lay->setSpacing(KDialog::spacingHint());
-    QLabel *unitLabel= new QLabel(i18n("Units:"),lay);
+    QHBox *lay = new QHBox( box );
+    lay->setSpacing( KDialog::spacingHint() );
+    /*QLabel *unitLabel =*/ new QLabel( i18n( "Units:" ), lay );
 
     QStringList listUnit;
     listUnit << KoUnit::unitDescription( KoUnit::U_MM );
@@ -226,20 +226,20 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     listUnit << KoUnit::unitDescription( KoUnit::U_PT );
     m_unit = new QComboBox( lay );
     m_unit->insertStringList(listUnit);
-    m_oldUnit=0;
-    switch (KoUnit::unit( unitType ) )
+    m_oldUnit = 0;
+    switch( KoUnit::unit( unitType ) )
     {
     case KoUnit::U_MM:
-        m_oldUnit=0;
+        m_oldUnit = 0;
         break;
     case KoUnit::U_INCH:
-        m_oldUnit=1;
+        m_oldUnit = 1;
         break;
     case KoUnit::U_PT:
     default:
-        m_oldUnit=2;
+        m_oldUnit = 2;
     }
-    m_unit->setCurrentItem(m_oldUnit);
+    m_unit->setCurrentItem( m_oldUnit );
 
 }
 
@@ -248,27 +248,27 @@ void VConfigMiscPage::apply()
     KarbonPart* part = m_view->part();
 
     m_config->setGroup( "Misc" );
-    if(m_oldUnit!=m_unit->currentItem())
+    if( m_oldUnit != m_unit->currentItem() )
     {
         QString unitName;
-        m_oldUnit=m_unit->currentItem();
-        switch (m_oldUnit)
+        m_oldUnit = m_unit->currentItem();
+        switch( m_oldUnit )
         {
         case 0:
-            unitName=KoUnit::unitName(KoUnit::U_MM  );
-            part->setUnit(KoUnit::U_MM);
+            unitName = KoUnit::unitName( KoUnit::U_MM );
+            part->setUnit( KoUnit::U_MM );
             break;
         case 1:
-            unitName=KoUnit::unitName(KoUnit::U_INCH  );
-            part->setUnit(KoUnit::U_INCH);
+            unitName = KoUnit::unitName( KoUnit::U_INCH );
+            part->setUnit( KoUnit::U_INCH );
             break;
         case 2:
         default:
-            part->setUnit(KoUnit::U_PT);
-            unitName=KoUnit::unitName(KoUnit::U_PT );
+            unitName = KoUnit::unitName( KoUnit::U_PT );
+            part->setUnit( KoUnit::U_PT );
         }
 
-        m_config->writeEntry("Units",unitName);
+        m_config->writeEntry( "Units", unitName );
     }
 
     int newUndo = m_undoRedo->value();
@@ -284,10 +284,9 @@ void VConfigMiscPage::apply()
 void VConfigMiscPage::slotDefault()
 {
 	m_undoRedo->setValue( 30 );
-        m_unit->setCurrentItem(0);
+        m_unit->setCurrentItem( 0 );
 
 }
-
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	QVBox* box, char* name )
@@ -302,14 +301,14 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	gbDocumentSettings->setMargin( 10 );
 	gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
-	m_oldAutoSave =  m_view->part()->defaultAutoSave() / 60;
+	m_oldAutoSave = m_view->part()->defaultAutoSave() / 60;
 
-        m_oldBackupFile = true;
+	m_oldBackupFile = true;
 	if( m_config->hasGroup( "Interface" ) )
 	{
 		m_config->setGroup( "Interface" );
 		m_oldAutoSave = m_config->readNumEntry( "AutoSave", m_oldAutoSave );
-                m_oldBackupFile=m_config->readBoolEntry("BackupFile",m_oldBackupFile);
+		m_oldBackupFile = m_config->readBoolEntry( "BackupFile", m_oldBackupFile );
 	}
 
 	m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );
@@ -318,8 +317,8 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	m_autoSave->setSpecialValueText( i18n( "No auto save" ) );
 	m_autoSave->setSuffix( i18n( "min" ) );
 
-        m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
-        m_createBackupFile->setChecked(m_oldBackupFile);
+	m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings );
+	m_createBackupFile->setChecked( m_oldBackupFile );
 }
 
 void VConfigDefaultPage::apply()
@@ -337,19 +336,19 @@ void VConfigDefaultPage::apply()
 		m_oldAutoSave = autoSave;
 	}
 
-        bool state =m_createBackupFile->isChecked();
-        if(state!=m_oldBackupFile)
-        {
-            m_config->writeEntry( "BackupFile", state );
-            m_view->part()->setBackupFile( state);
-            m_oldBackupFile=state;
-        }
+	bool state = m_createBackupFile->isChecked();
+	if( state != m_oldBackupFile )
+	{
+		m_config->writeEntry( "BackupFile", state );
+		m_view->part()->setBackupFile( state );
+		m_oldBackupFile = state;
+	}
 }
 
 void VConfigDefaultPage::slotDefault()
 {
 	m_autoSave->setValue( m_view->part()->defaultAutoSave() / 60 );
-        m_createBackupFile->setChecked( true );
+	m_createBackupFile->setChecked( true );
 }
 
 #include "vconfiguredlg.moc"
