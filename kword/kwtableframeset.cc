@@ -206,6 +206,10 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
     /// Sllloooowwww
     // Suggested solution: implement comparison operators in Cell,
     // and use a binary search.
+    // Other solution: use QPtrVector<QPtrVector<Cell> >
+    // This would also allow to define a Row object, as QPtrVector<Cell>.
+    // The Cell pointer would be 0 for cells that don't exist anymore
+    // after merging.
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
     {
         Cell *cell = m_cells.at( i );
@@ -1466,7 +1470,7 @@ void KWTableFrameSet::validate()
 
     for(unsigned int row=0; row < getRows(); row++) {
         for(unsigned int col=0; col <getCols(); col++) {
-            bool found=false;
+            int found = -1;
             for ( unsigned int i = 0; i < m_cells.count(); i++ )
             {
                 if ( m_cells.at( i )->m_row <= row &&
@@ -1474,15 +1478,17 @@ void KWTableFrameSet::validate()
                      m_cells.at( i )->m_row+m_cells.at( i )->m_rows > row &&
                      m_cells.at( i )->m_col+m_cells.at( i )->m_cols > col )
                 {
-                    if(found==true)
+                    if(found != -1)
                     {
-                        kdWarning() << "Found duplicate cell, (" << m_cells.at(i)->m_row << ", " << m_cells.at(i)->m_col << ") moving one out of the way" << endl;
+                        kdWarning() << getName() << ": found duplicate cells when looking at row=" << row << " col=" << col << ":" << endl;
+                        kdWarning() << "     " << found << " (" << m_cells.at(found)->m_row << ", " << m_cells.at(found)->m_col << ") and " << i << " (" << m_cells.at(i)->m_row << ", " << m_cells.at(i)->m_col << ") moving one out of the way" << endl;
+                        kdWarning() << "names: " << m_cells.at(found)->getName() << "  ,   " << m_cells.at(i)->getName() << endl;
                         misplacedCells.append(m_cells.take(i--));
                     }
-                    found=true;
+                    found = i;
                 }
             }
-            if(! found) {
+            if(found == -1) {
                 kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
                 QString name = m_doc->generateFramesetName( i18n( "1 is table name, 2 is a number", "%1 Auto Added Cell %2" ).arg( getName() ) );
                 Cell *cell = new Cell( this, row, col, name );
@@ -1573,7 +1579,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     /*  Draw the borders on top of the lines stores in the m_rowPositions and m_colPositions arrays.
      *  check the relevant cells for borders and thus line thickness.
      *  We move the outer lines (on row==0 and col==0 plus on col=getCols() etc) a bit so they will stay
-     *  inside the boundry of the table!
+     *  inside the boundary of the table!
      */
     painter.save();
     QPen previewLinePen( lightGray ); // TODO use qcolorgroup
@@ -1587,7 +1593,8 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
     for (unsigned int i=0 ; i < m_rowPositions.count() ; i++) {
         bool bottom=false;
-        if(pageBound!=m_pageBoundaries.end() && (*pageBound) == row || i == m_rowPositions.count()-1)
+        if( (pageBound!=m_pageBoundaries.end() && (*pageBound) == row)
+            || i == m_rowPositions.count()-1)
             bottom=true;  // at end of page or end of table draw bottom border of cell.
 
         const KoBorder *border=0;
@@ -1665,35 +1672,42 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     // *** draw vertical lines *** //
     for (unsigned int col=0 ; col < m_colPositions.count(); col++) {
         //kdDebug(32004) << "col: " << col << endl;
-        bool right=false; // draw right border of cell.
+        bool right = false;
         if(col == m_colPositions.count()-1)
-            right=true;
+            right = true; // draw right border of cell.
         int cellColumn = right?col-1:col; // the column we'll be looking for in the loop below
         Q_ASSERT( cellColumn >= 0 );
 
-        const KoBorder *border=0;
-        int startRow =-1;
-        int row = -1;
-        // Faster than the previous "for each row, call getCell(row,cellColumn)"
-        // iterate over all cells, and only process
-        // the current cell if the row number is the right one.
-        // Yes, this is faster than calling getCell() - which iterates over all cells itself!
-        for(QPtrListIterator<Cell> cellIter(m_cells); cellIter.current(); ++cellIter) {
+        const KoBorder *border = 0;
+        int startRow = -1;
+        for(unsigned int row=0; row <= getRows();) {
+            Cell *cell = getCell(row, cellColumn);
 
-            Cell *cell = cellIter.current();
-            // we're looking for the cell (row+1, cellColumn)
-            if ( ! ( cell->m_row <= (uint)(row+1) &&
-                 cell->m_col <= (uint)cellColumn &&
-                 cell->m_row + cell->m_rows > (uint)(row+1) &&
-                 cell->m_col + cell->m_cols > (uint)cellColumn ) )
-                continue;
-            row++; // found the cell -> 'row' is now the current row
-
-            //kdDebug(32004) << "row: " << row << endl;
+            //kdDebug(32004) << "Drawing vert. Line for cell row: " << row << " col: " << cellColumn << endl;
             if(cell && cell->m_col != (uint)cellColumn)
                 cell=0;
 
-            if(startRow!=-1 && (!cell || cell->frame(0)->leftBorder()!=*border || row == (int)getRows())) {
+#if 0
+            kdDebug() << "Condition: startRow:" << (startRow!=-1) << endl;
+            if ( startRow != -1 )  {
+                Q_ASSERT( border );
+                kdDebug() << "Other conditions: cell:" << !cell << endl;
+                kdDebug() << " or last row:" << ( row == ( int )getRows() ) << endl;
+                if ( cell )
+                    kdDebug() << "Different border:" <<
+                ( ( right && cell->frame(0)->rightBorder() != *border) ||
+                ( !right && cell->frame(0)->leftBorder() != *border) )
+			    << endl;
+            }
+#endif
+            // Draw when something changed (different kind of border) or we're at the end
+            // This code could be rewritten in a more QRT-like way
+            // (iterate and compare with next, instead of the startRow/cell/border hack...)
+            if(startRow != -1 &&
+               (!cell || row == (int)getRows() ||
+                ( right && cell->frame(0)->rightBorder() != *border) ||
+                ( !right && cell->frame(0)->leftBorder() != *border) )
+                ) {
                 if(border->width() > 0 || drawPreviewLines) {
                     double x = m_colPositions[col];
                     if(col==0) {
@@ -1704,13 +1718,16 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     int xpix = m_doc->zoomItX(x);
                     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
                     unsigned int topRow=startRow;
+                    //kdDebug() << "Drawing from topRow=" << topRow << endl;
                     do { // draw minimum of one line per page.
-                        while(pageBound!=m_pageBoundaries.end() && *(pageBound) < topRow )
+                        while( pageBound != m_pageBoundaries.end() && *(pageBound) < topRow )
                             pageBound++;
 
                         unsigned int bottomRow;
-                        if(pageBound==m_pageBoundaries.end()) bottomRow=m_rowPositions.count()-1;
-                        else bottomRow=*(pageBound++);
+                        if(pageBound == m_pageBoundaries.end())
+                            bottomRow = m_rowPositions.count()-1;
+                        else
+                            bottomRow = *(pageBound++);
 
                         //kdDebug(32004) << "from: " << topRow << " to: " << QMIN(row, bottomRow) << endl;
                         //kdDebug(32004) << "from: " << m_rowPositions[topRow] << " to: " << m_rowPositions[QMIN(row, bottomRow)] << endl;
@@ -1737,7 +1754,6 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         QPoint bottomRight = viewMode->normalToView(QPoint(xpix, m_doc->zoomItY(bottom)));
                         QRect line = QRect(topLeft, bottomRight);
                         if(crect.intersects( line )) {
-                            //if(border->width() <= 0) kdDebug(32004) << "preview line" << endl;
                             if(border->width() <= 0)
                                 painter.setPen( previewLinePen );
                             else {
@@ -1750,18 +1766,22 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 
                         topRow=bottomRow+1;
                     } while(topRow < (uint)row && topRow != m_rowPositions.count());
-                }
+                } // end "if border to be drawn"
+
                 // reset startRow
                 startRow = -1;
             }
-            if(cell && startRow==-1) {
+
+            if(cell && startRow == -1) {
                 startRow = row;
                 if(right)
-                    border=&(cell->frame(0)->rightBorder());
+                    border = &(cell->frame(0)->rightBorder());
                 else
-                    border=&(cell->frame(0)->leftBorder());
+                    border = &(cell->frame(0)->leftBorder());
+                //kdDebug(32004) << "startRow set to " << row << endl;
             }
-            row+=cell?cell->m_rows:1;
+            row += cell ? cell->m_rows : 1;
+            //kdDebug(32004) << "End of loop, row=" << row << endl;
         }
     }
 
