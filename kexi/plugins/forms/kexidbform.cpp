@@ -29,6 +29,7 @@
 
 KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *conn*/)
  : QWidget(parent, name)
+ , KexiDataItemInterface()
 {
 	//m_conn = conn;
 	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;

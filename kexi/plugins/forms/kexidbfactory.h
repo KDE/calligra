@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define KEXIDBFACTORY_H
 
 #include <widgetfactory.h>
+#include <kexidataiteminterface.h>
 
 #include <klineedit.h>
 
@@ -41,18 +43,20 @@ class KexiSubForm : public QScrollView
 		KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
 		~KexiSubForm() {}
 
-		//! \return the name of the subform inside the db
+		//! \return the name of the subform to display inside this widget
 		QString formName() const { return m_formName; }
+
+		//! Sets the name of the subform to display inside this widget
 		void setFormName(const QString &name);
 
 	private:
 		KFormDesigner::FormManager *m_manager;
-		Form   *m_form;
-		QWidget  *m_widget;
-		QString   m_formName;
+		Form *m_form;
+		QWidget *m_widget;
+		QString m_formName;
 };
 
-class KexiDBLineEdit : public KLineEdit
+class KexiDBLineEdit : public KLineEdit, public KexiDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true);
@@ -61,12 +65,11 @@ class KexiDBLineEdit : public KLineEdit
 		KexiDBLineEdit(QWidget *parent, const char *name=0);
 		virtual ~KexiDBLineEdit();
 
-		//! \return the name of the data source for this widget
-		QString dataSource() const { return m_dataSource; }
-		void setDataSource(const QString &ds) { m_dataSource = ds; }
+		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
+		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
+		virtual void setValue(const QVariant& value);
 
 	protected:
-		QString m_dataSource;
 };
 
 //! Kexi Factory (DB widgets + subform)

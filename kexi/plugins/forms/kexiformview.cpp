@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,6 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
+#include <qobjectlist.h>
+
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
@@ -28,55 +31,74 @@
 #include <kexidatasourcewizard.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
+#include <kexidb/cursor.h>
+#include <tableview/kexitableitem.h>
+#include <tableview/kexitableviewdata.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
 
 #define NO_DSWIZARD
-/*
-// @todo warning: not reentrant!
-static KStaticDeleter<QPixmap> KexiFormScrollView_bufferPm_deleter;
-QPixmap* KexiFormScrollView_bufferPm = 0;
 
-KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
- : QScrollView(parent, "formpart_kexiformview", WStaticContents)
- , m_widget(0)
- , m_form(0)
- , m_helpFont(font())
- , m_preview(preview)
- , m_navPanel(0)
+KexiDataProvider::KexiDataProvider()
+ : m_mainWidget(0)
 {
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-	viewport()->setPaletteBackgroundColor(colorGroup().mid());
-	QColor fc = palette().active().foreground(),
-		bc = viewport()->paletteBackgroundColor();
-	m_helpColor	= QColor((fc.red()+bc.red()*2)/3, (fc.green()+bc.green()*2)/3, 
-		(fc.blue()+bc.blue()*2)/3);
-	m_helpFont.setPointSize( m_helpFont.pointSize() * 3 );
+}
 
-	setFocusPolicy(WheelFocus);
+KexiDataProvider::~KexiDataProvider()
+{
+}
 
-	//initial resize mode is always manual;
-	//will be changed on show(), if needed
-	setResizePolicy(Manual);
+void KexiDataProvider::setMainWidget(QWidget* mainWidget)
+{
+	m_mainWidget = mainWidget;
+	m_dataItems.clear();
+	m_usedDataSources.clear();
+	m_fieldNumbersForDataItems.clear();
+	if (!m_mainWidget)
+		return;
 
-	viewport()->setMouseTracking(true);
-	m_resizing = false;
-	m_enableResizing = true;
-	m_snapToGrid = false;
-	m_gridX = 0;
-	m_gridY = 0;
-
-	connect(&m_delayedResize, SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
-	m_smodeSet = false;
-	if (m_preview) {
-		refreshContentsSizeLater(true, true);
-//! @todo allow to hide navigator
-		updateScrollBars();
-		m_navPanel = new KexiRecordNavigator(this, leftMargin(), "nav");
-		m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+	//find widgets whose will work as data items
+	QObjectList *l = m_mainWidget->queryList( "QWidget" );
+	QObjectListIt it( *l );
+	QObject *obj;
+	QDict<char> tmpSources;
+	for ( ; (obj = it.current()) != 0; ++it ) {
+		if (dynamic_cast<KexiDataItemInterface*>(obj)) {
+			QString dataSource( dynamic_cast<KexiDataItemInterface*>(obj)->dataSource().lower() );
+			if (!dataSource.isEmpty()) {
+				kexipluginsdbg << obj->name() << endl;
+				m_dataItems.append( dynamic_cast<KexiDataItemInterface*>(obj) );
+				tmpSources.replace( dataSource, (char*)1 );
+			}
+		}
 	}
-}*/
+	delete l;
+	//we've got now a set (unique list) of field names in tmpSources
+	//remember it in m_usedDataSources
+	for (QDictIterator<char> it(tmpSources); it.current(); ++it) {
+		m_usedDataSources += it.currentKey();
+	}
+	//fill m_fieldNumbersForDataItems mapping from data item to field number
+	//(needed for fillDataItems)
+	for (QPtrListIterator<KexiDataItemInterface> it(m_dataItems); it.current(); ++it) {
+		m_fieldNumbersForDataItems.insert( it.current(), 
+			m_usedDataSources.findIndex(it.current()->dataSource().lower()) );
+	}
+}
+
+void KexiDataProvider::fillDataItems(KexiTableItem& row)//KexiDB::Cursor& cursor)
+{
+	for (QMapConstIterator<KexiDataItemInterface*,uint> it = m_fieldNumbersForDataItems.constBegin(); 
+		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
+	{
+		it.key()->setValue( row.at(it.data()) );
+//		it.key()->setValue( cursor.value(it.data()) );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -113,232 +135,6 @@ KexiFormScrollView::slotResizingStarted()
 		setSnapToGrid(false);
 }
 
-/*
-void
-KexiFormScrollView::setFormWidget(KexiDBForm *w)
-{
-	addChild(w);
-	m_widget = w;
-}
-
-void KexiFormScrollView::refreshContentsSizeLater(bool horizontal, bool vertical)
-{
-	if (!m_smodeSet) {
-		m_smodeSet = true;
-		m_vsmode = vScrollBarMode();
-		m_hsmode = hScrollBarMode();
-	}
-//	if (vertical)
-		setVScrollBarMode(QScrollView::AlwaysOff);
-	//if (horizontal)
-		setHScrollBarMode(QScrollView::AlwaysOff);
-	updateScrollBars();
-	m_delayedResize.start( 100, true );
-}
-
-void
-KexiFormScrollView::refreshContentsSize()
-{
-	if(!m_widget)
-		return;
-	if (m_preview) {
-		resizeContents(m_widget->width(), m_widget->height());
-		setVScrollBarMode(m_vsmode);
-		setHScrollBarMode(m_hsmode);
-		m_smodeSet = false;
-		updateScrollBars();
-	}
-	else {
-		// Ensure there is always space to resize Form
-		if(m_widget->width() + 200 > contentsWidth())
-			resizeContents(m_widget->width() + 300, contentsHeight());
-		if(m_widget->height() + 200 > contentsHeight())
-			resizeContents(contentsWidth(), m_widget->height() + 300);
-	}
-}
-
-void
-KexiFormScrollView::updateNavPanelGeometry()
-{
-	if (m_navPanel)
-		m_navPanel->updateGeometry(leftMargin());
-}
-
-void
-KexiFormScrollView::contentsMousePressEvent(QMouseEvent *ev)
-{
-	if(!m_widget)
-		return;
-
-	QRect r3(0, 0, m_widget->width() + 4, m_widget->height() + 4);
-	if(!r3.contains(ev->pos())) // clicked outside form
-		m_form->resetSelection();
-
-	if(!m_enableResizing)
-		return;
-
-	QRect r(m_widget->width(),  0, 4, m_widget->height() + 4); // right limit
-	QRect r2(0, m_widget->height(), m_widget->width() + 4, 4); // bottom limit
-	if(r.contains(ev->pos()) || r2.contains(ev->pos()))
-	{
-		m_resizing = true;
-		m_snapToGrid = m_form->manager()->snapWidgetsToGrid();
-		m_gridX = m_form->gridY();
-		m_gridY = m_form->gridY();
-	}
-}
-
-void
-KexiFormScrollView::contentsMouseReleaseEvent(QMouseEvent *)
-{
-	if(m_resizing)
-		m_resizing = false;
-	unsetCursor();
-}
-
-void
-KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
-{
-	if(!m_widget || !m_enableResizing)
-		return;
-
-	if(m_resizing) // resize widget
-	{
-		int tmpx = ev->x(), tmpy = ev->y();
-		const int exceeds_x = (tmpx - contentsX() + 5) - clipper()->width();
-		const int exceeds_y = (tmpy - contentsY() + 5) - clipper()->height();
-		if (exceeds_x > 0)
-			tmpx -= exceeds_x;
-		if (exceeds_y > 0)
-			tmpy -= exceeds_y;
-		if ((tmpx - contentsX()) < 0)
-			tmpx = contentsX();
-		if ((tmpy - contentsY()) < 0)
-			tmpy = contentsY();
-
-		// we look for the max widget right() (or bottom()), which would be the limit for form resizing (not to hide widgets)
-		QObjectList *list = m_widget->queryList("QWidget", 0, true, false  not recursive);
-		for(QObject *o = list->first(); o; o = list->next())
-		{
-			QWidget *w = (QWidget*)o;
-			tmpx = QMAX(tmpx, (w->geometry().right() + 10));
-			tmpy = QMAX(tmpy, (w->geometry().bottom() + 10));
-		}
-		delete list;
-
-		int neww = -1, newh;
-		if(cursor().shape() == QCursor::SizeHorCursor)
-		{
-			if(m_snapToGrid)
-				neww = int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX;
-			else
-				neww = tmpx;
-			newh = m_widget->height();
-		}
-		else if(cursor().shape() == QCursor::SizeVerCursor)
-		{
-			neww = m_widget->width();
-			if(m_snapToGrid)
-				newh = int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY;
-			else
-				newh = tmpy;
-		}
-		else if(cursor().shape() == QCursor::SizeFDiagCursor)
-		{
-			if(m_snapToGrid) {
-				neww = int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX;
-				newh = int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY;
-			} else {
-				neww = tmpx;
-				newh = tmpy;
-			}
-		}
-		//needs update?
-		if (neww!=-1 && m_widget->size() != QSize(neww, newh)) {
-			m_widget->resize( neww, newh );
-			refreshContentsSize();
-			updateContents();
-		}
-	}
-	else // update mouse cursor
-	{
-		QPoint p = ev->pos();
-		QRect r(m_widget->width(),  0, 4, m_widget->height()); // right
-		QRect r2(0, m_widget->height(), m_widget->width(), 4); // bottom
-		QRect r3(m_widget->width(), m_widget->height(), 4, 4); // bottom-right corner
-
-		if(r.contains(p))
-			setCursor(QCursor::SizeHorCursor);
-		else if(r2.contains(p))
-			setCursor(QCursor::SizeVerCursor);
-		else if(r3.contains(p))
-			setCursor(QCursor::SizeFDiagCursor);
-		else
-			unsetCursor();
-	}
-}
-
-void
-KexiFormScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph ) 
-{
-	QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
-	if (m_widget) {
-		if (m_preview)
-			return;
-
-		//draw right and bottom borders
-		const int wx = childX(m_widget);
-		const int wy = childY(m_widget);
-		p->setPen(palette().active().foreground());
-		p->drawLine(wx+m_widget->width(), wy, wx+m_widget->width(), wy+m_widget->height());
-		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
-
-
-		if (!KexiFormScrollView_bufferPm) {
-			//create flicker-less buffer
-			QString txt(i18n("Outer area"));
-			QFontMetrics fm(m_helpFont);
-			const int txtw = fm.width(txt), txth = fm.height();
-			KexiFormScrollView_bufferPm_deleter.setObject( KexiFormScrollView_bufferPm, 
-				new QPixmap(txtw, txth) );
-			if (!KexiFormScrollView_bufferPm->isNull()) {
-				//create pixmap once
-				KexiFormScrollView_bufferPm->fill( viewport()->paletteBackgroundColor() );
-				QPainter *pb = new QPainter(KexiFormScrollView_bufferPm, this);
-				pb->setPen(m_helpColor);
-				pb->setFont(m_helpFont);
-				pb->drawText(0, 0, txtw, txth, Qt::AlignLeft|Qt::AlignTop, txt);
-				delete pb;
-			}
-		}
-		if (!KexiFormScrollView_bufferPm->isNull()) {
-			p->drawPixmap((contentsWidth() + m_widget->width() - KexiFormScrollView_bufferPm->width())/2,
-				(m_widget->height()-KexiFormScrollView_bufferPm->height())/2, 
-				*KexiFormScrollView_bufferPm);
-			p->drawPixmap((m_widget->width() - KexiFormScrollView_bufferPm->width())/2,
-				(contentsHeight() + m_widget->height() - KexiFormScrollView_bufferPm->height())/2, 
-				*KexiFormScrollView_bufferPm);
-		}
-	}
-}
-
-void KexiFormScrollView::leaveEvent( QEvent *e )
-{
-	QWidget::leaveEvent(e);
-	m_widget->update(); //update form elements on too fast mouse move
-}
-
-void KexiFormScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
-{
-	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
-	if (m_navPanel && m_navPanel->isVisible()) {
-		m_navPanel->setHBarGeometry( hbar, x, y, w, h );
-	}
-	else {
-		hbar.setGeometry( x, y, w, h );
-	}
-}*/
-
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
@@ -346,6 +142,12 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 	KexiDB::Connection *conn)
  : KexiViewBase(win, parent, name), m_buffer(0), m_conn(conn)
  , m_resizeMode(KexiFormView::ResizeDefault)
+ , m_provider(0)
+// , m_cursor(0)
+ , m_query(0)
+ , m_data(0)
+ , m_currentRow(0)
+ , m_currentRowNumber(-1)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
@@ -362,6 +164,7 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 //	initForm();
 
 	if (viewMode()==Kexi::DataViewMode) {
+		m_scrollView->recordNavigator()->setRecordHandler( this );
 		m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
 		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 	}
@@ -424,6 +227,11 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 
 KexiFormView::~KexiFormView()
 {
+//	if (m_cursor)
+//		m_conn->deleteCursor(m_cursor);
+	delete m_provider;
+	delete m_query;
+	delete m_data;
 }
 
 KFormDesigner::Form*
@@ -555,6 +363,79 @@ KexiFormView::afterSwitchFrom(int mode)
 		//reset position
 		m_scrollView->setContentsPos(0,0);
 		m_dbform->move(0,0);
+
+//TMP!!
+		//init data source
+		QString dataSourceString = m_dbform->dataSource();
+		if (!dataSourceString.isEmpty()) {
+/*			if (m_previousDataSourceString.lower()==dataSourceString.lower() && !m_cursor) {
+				//data source changed: delete previous cursor
+				m_conn->deleteCursor(m_cursor);
+				m_cursor = 0;
+			}*/
+			m_previousDataSourceString = dataSourceString;
+			bool ok = true;
+			//collect all data-aware widgets and create query schema
+			if (!m_provider)
+				m_provider = new KexiDataProvider();
+			m_provider->setMainWidget(m_dbform);
+//			if (m_cursor)
+//				m_conn->deleteCursor(m_cursor);
+			KexiDB::Cursor *cursor;
+			delete m_query;
+			m_query = new KexiDB::QuerySchema();
+			QStringList sources( m_provider->usedDataSources() );
+			KexiDB::TableSchema *tableSchema = m_conn->tableSchema( dataSourceString );
+			ok = tableSchema != 0;
+			if (ok) {
+				for (QStringList::ConstIterator it = sources.constBegin(); it!=sources.constEnd(); ++it) {
+/*! @todo add expression support */
+					KexiDB::Field *f = tableSchema->field(*it);
+					if (!f) {
+/*! @todo show error, remove this widget from the set of data widgets in provider */
+						continue;
+					}
+					m_query->addField( f );
+				}
+				cursor = m_conn->executeQuery( *m_query );//, KexiDB::Cursor::Buffered );
+				ok = cursor!=0;
+			}
+			delete m_data;
+//! @todo PRIMITIVE!! data setting:
+//! @todo KexiTableViewData is not great name for data class here... rename/move?
+			m_data = new KexiTableViewData(cursor);
+			m_data->preloadAllRows();
+
+///*! @todo few backends return result count for free! - no need to reopen() */
+//			int resultCount = -1;
+//			if (ok) {
+//				resultCount = m_conn->resultCount(m_conn->selectStatement(*m_query));
+//				ok = m_cursor->reopen();
+//			}
+//			if (ok)
+//				ok = ! (!m_cursor->moveFirst() && m_cursor->error());
+			if (ok) {
+				m_scrollView->recordNavigator()->setRecordCount(m_data->count());
+				m_currentRow = m_data->first();
+				if (m_currentRow) {
+					m_currentRowNumber = 0;
+					m_provider->fillDataItems(*m_currentRow);
+					m_scrollView->recordNavigator()->setCurrentRecordNumber(1);
+				}
+//				m_provider->fillDataItems(*m_cursor);
+//				m_cursor->moveNext();
+			}
+			m_conn->deleteCursor(cursor);
+			if (!ok) {
+				//! @todo err message: error opening cursor
+//				m_conn->deleteCursor(m_cursor);
+//				m_cursor = 0;
+				delete m_data;
+				m_data = 0;
+				delete m_query;
+				m_query = 0;
+			}
+		}
 	}
 	return true;
 }
@@ -750,6 +631,57 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	}
 	KexiViewBase::resizeEvent(e);
 	m_scrollView->updateNavPanelGeometry();
+}
+
+void KexiFormView::moveToRecordRequested(uint r)
+{
+	if (r < 0 || r >= m_data->count())
+		return;
+	m_currentRowNumber = r;
+	m_currentRow = m_data->at(r);
+	m_provider->fillDataItems(*m_currentRow);
+	m_scrollView->recordNavigator()->setCurrentRecordNumber(m_currentRowNumber+1);
+}
+
+void KexiFormView::moveToLastRecordRequested()
+{
+	moveToRecordRequested( m_data->count()-1 );
+/*	m_cursor->moveLast();
+	if (!m_cursor->eof() && !m_cursor->error()) {
+		m_provider->fillDataItems(*m_cursor);
+	}*/
+}
+
+void KexiFormView::moveToPreviousRecordRequested()
+{
+	moveToRecordRequested( QMAX(0, m_currentRowNumber-1) );
+/*	m_cursor->movePrev();
+	if (!m_cursor->bof() && !m_cursor->error()) {
+		m_provider->fillDataItems(*m_cursor);
+	}*/
+}
+
+void KexiFormView::moveToNextRecordRequested()
+{
+	moveToRecordRequested( QMIN(int(m_data->count())-1, m_currentRowNumber+1) );
+/*	m_cursor->moveNext();
+	if (!m_cursor->eof() && !m_cursor->error()) {
+		m_provider->fillDataItems(*m_cursor);
+	}*/
+}
+
+void KexiFormView::moveToFirstRecordRequested()
+{
+	moveToRecordRequested( 0 );
+/*	m_cursor->moveFirst();
+	if (!m_cursor->eof() && !m_cursor->error()) {
+		m_provider->fillDataItems(*m_cursor);
+	}*/
+}
+
+void KexiFormView::addNewRecordRequested()
+{
+	//! @todo
 }
 
 #include "kexiformview.moc"

@@ -681,5 +681,22 @@ int KexiTableViewData::autoIncrementedColumn()
 	return m_autoIncrementedColumn;
 }
 
+void KexiTableViewData::preloadAllRows()
+{
+	if (!m_cursor)
+		return;
+
+	const uint fcount = m_cursor->fieldCount();
+	m_cursor->moveFirst();
+	for (int i=0;!m_cursor->eof();i++) {
+		KexiTableItem *item = new KexiTableItem(fcount);
+		m_cursor->storeCurrentRow(*item);
+		append( item );
+		m_cursor->moveNext();
+		if ((i % 100) == 0)
+			qApp->processEvents( 1 );
+	}
+}
+
 #include "kexitableviewdata.moc"
 

@@ -221,6 +221,9 @@ public:
 	~KexiTableViewData();
 //js	void setSorting(int key, bool order=true, short type=1);
 
+	/*! Preloads all rows provided by cursor (only for db-aware version). */
+	void preloadAllRows();
+
 	/*! Sets sorting for \a column. If \a column is -1, sorting is disabled. */
 	void setSorting(int column, bool ascending=true);
 
@@ -299,7 +302,6 @@ public:
 		QVariant newv(newval);
 		return updateRowEditBufferRef(item, colnum, newv, allowSignals);
 	}
-
 
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
 

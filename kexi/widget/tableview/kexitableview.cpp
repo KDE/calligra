@@ -222,7 +222,8 @@ void KexiTableView::initCellEditorFactories()
 
 
 KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
-:QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
+: QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
+, KexiRecordNavigatorHandler()
 {
 	KexiTableView::initCellEditorFactories();
 
@@ -365,12 +366,12 @@ KexiTableView::~KexiTableView()
 	emit reloadActions(ac);
 }*/
 
-//! Setup navigator widget
 void KexiTableView::setupNavigator()
 {
 	updateScrollBars();
 	
 	d->navPanel = new KexiRecordNavigator(this, leftMargin(), "navPanel");
+	d->navPanel->setRecordHandler(this);
 	d->navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 /*
 	QHBoxLayout *navPanelLyr = new QHBoxLayout(d->navPanel,0,0,"nav_lyr");
@@ -455,6 +456,9 @@ void KexiTableView::setupNavigator()
 	navPanelLyr->addSpacing( 6 );
 	navPanelLyr->addStretch(10);
 */
+
+/* moved to rec nav. handler
+
 	connect(d->navPanel, SIGNAL(recordNumberEntered(uint)), 
 		this, SLOT(slotNavRecordNumberEntered(uint)));
 
@@ -465,7 +469,7 @@ void KexiTableView::setupNavigator()
 	connect(d->navPanel,SIGNAL(newButtonClicked()),this,SLOT(navBtnNewClicked()));
 	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
 		this,SLOT(vScrollBarValueChanged(int)));
-
+*/
 //	d->navPanel->updateGeometry(leftMargin());
 }
 
@@ -4005,7 +4009,7 @@ int KexiTableView::validRowNumber(const QString& text)
 	return r-1;
 }
 
-void KexiTableView::slotNavRecordNumberEntered( uint r )
+void KexiTableView::moveToRecordRequested( uint r )
 {
 	r--;
 	if (r > uint(rows()+(isInsertingEnabled()?1:0)))
@@ -4014,31 +4018,31 @@ void KexiTableView::slotNavRecordNumberEntered( uint r )
 	selectRow( r );
 }
 
-void KexiTableView::navBtnLastClicked()
+void KexiTableView::moveToLastRecordRequested()
 {
 	setFocus();
 	selectRow(rows()>0 ? (rows()-1) : 0);
 }
 
-void KexiTableView::navBtnPrevClicked()
+void KexiTableView::moveToPreviousRecordRequested()
 {
 	setFocus();
 	selectPrevRow();
 }
 
-void KexiTableView::navBtnNextClicked()
+void KexiTableView::moveToNextRecordRequested()
 {
 	setFocus();
 	selectNextRow();
 }
 
-void KexiTableView::navBtnFirstClicked()
+void KexiTableView::moveToFirstRecordRequested()
 {
 	setFocus();
 	selectFirstRow();
 }
 
-void KexiTableView::navBtnNewClicked()
+void KexiTableView::addNewRecordRequested()
 {
 	if (!isInsertingEnabled())
 		return;

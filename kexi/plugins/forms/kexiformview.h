@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 #include <qtimer.h>
 
 #include <kexiviewbase.h>
+#include <kexidataiteminterface.h>
+#include <widget/utils/kexirecordnavigator.h>
 
 #include "kexiscrollview.h"
 #include "kexiformpart.h"
@@ -32,62 +34,45 @@
 class KexiFormPart;
 class KexiMainWindow;
 class KexiDBForm;
-/*class QColor;
-class QFont;
-class KexiRecordNavigator;*/
-/*
-//! The scrollview which inlcudes KexiDBForm
-/*! It allows to resize its m_widget, following snapToGrid setting. 
- Its contents is resized so the widget can always be resized. 
-class KexiFormScrollView : public QScrollView
+class KexiTableItem;
+class KexiTableViewData;
+
+//! The KexiDataProvider class is a data provider for Kexi Forms
+/*! This provider collects data-aware widgets using setMainWidget().
+ Then, usedDataSources() unique list of required field names is available.
+ On every call of fillDataItems() method, thew provider will fill data items 
+ with appropriate data from a database cursor.
+
+ Field names are collected effectively, so eg. having widgets using data sources:
+ ("name", "surname", "surname", "name") - "name" and "surname" repeated - will only 
+ return ("name", "surname") list, so the cursor's query can be simplified 
+ and thus more effective.
+*/
+class KexiDataProvider
 {
-	Q_OBJECT
-
 	public:
-		KexiFormScrollView(QWidget *parent, bool preview);
-		virtual ~KexiFormScrollView();
+		KexiDataProvider();
+		~KexiDataProvider();
 
-		void setFormWidget(KexiDBForm *w);
-		void setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
+		/*! sets \a mainWidget to be a main widget for this data provider.
+		 Also find widgets whose will work as data items 
+		 (all of them must implement KexiDataItemInterface), so these could be 
+		 filled with data on demand. */
+		void setMainWidget(QWidget* mainWidget);
 
-		void setForm(KFormDesigner::Form *form) { m_form = form; }
+		QStringList usedDataSources() const { return m_usedDataSources; }
 
-		void refreshContentsSizeLater(bool horizontal, bool vertical);
+		const QPtrList<KexiDataItemInterface>& dataItems() const { return m_dataItems; }
 
-		void updateNavPanelGeometry();
-
-	public slots:
-		/*! Make sure there is a 300px margin around the form contents to allow resizing. 
-		void refreshContentsSize();
-
-		/*! Reimplemented to update resize policy. 
-		virtual void show();
+		/*! Fills data items with appropriate data fetched from \a cursor. */
+		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
 
 	protected:
-		virtual void contentsMousePressEvent(QMouseEvent * ev);
-		virtual void contentsMouseReleaseEvent(QMouseEvent * ev);
-		virtual void contentsMouseMoveEvent(QMouseEvent * ev);
-		virtual void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
-		virtual void leaveEvent( QEvent *e );
-		virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
-
-		bool m_resizing;
-		bool m_enableResizing;
-		QWidget *m_widget;
-
-		KFormDesigner::Form *m_form;
-		int m_gridX, m_gridY;
-		QFont m_helpFont;
-		QColor m_helpColor;
-		QTimer m_delayedResize;
-		//! for refreshContentsSizeLater()
-		QScrollView::ScrollBarMode m_vsmode, m_hsmode;
-		bool m_snapToGrid : 1;
-		bool m_preview : 1;
-		bool m_smodeSet : 1;
-		KexiRecordNavigator* m_navPanel;
+		QWidget *m_mainWidget;
+		QPtrList<KexiDataItemInterface> m_dataItems;
+		QStringList m_usedDataSources;
+		QMap<KexiDataItemInterface*,uint> m_fieldNumbersForDataItems;
 };
-*/
 
 class KexiFormScrollView : public KexiScrollView
 {
@@ -106,18 +91,20 @@ class KexiFormScrollView : public KexiScrollView
 	protected slots:
 		void slotResizingStarted();
 
-	private:
+	protected:
+
 		KFormDesigner::Form *m_form;
 };
 
 
 //! The FormPart's view
-/*! This class presents a siungle view used inside KexiDialogBase.
+/*! This class provides a single view used inside KexiDialogBase.
  It takes care of saving/loading form, of enabling actions when needed. 
  One KexiFormView object is instantiated for data view mode (preview == true in constructor),
  and second KexiFormView object is instantiated for design view mode 
- (preview == false in constructor). */
-class KexiFormView : public KexiViewBase
+ (preview == false in constructor).
+*/
+class KexiFormView : public KexiViewBase, public KexiRecordNavigatorHandler
 {
 	Q_OBJECT
 
@@ -171,12 +158,34 @@ class KexiFormView : public KexiViewBase
 		void loadForm();
 
 		virtual void resizeEvent ( QResizeEvent * );
-	private:
+
+		// for navigator
+		virtual void moveToRecordRequested(uint r);
+		virtual void moveToLastRecordRequested();
+		virtual void moveToPreviousRecordRequested();
+		virtual void moveToNextRecordRequested();
+		virtual void moveToFirstRecordRequested();
+		virtual void addNewRecordRequested();
+
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;
 		KexiPropertyBuffer *m_buffer;
 		KexiDB::Connection *m_conn;
+
+		/*! Database cursor used for data retrieving. 
+		 It is shared between subsequent Data view sessions (just reopened on switch), 
+		 but deleted and recreated from scratch when form's "dataSource" property changed
+		 since last form viewing (m_previousDataSourceString is used for that).
+		*/
+		QString m_previousDataSourceString;
 		int m_resizeMode;
+
+		KexiDataProvider* m_provider;
+//		KexiDB::Cursor *m_cursor;
+		KexiDB::QuerySchema* m_query;
+		KexiTableViewData *m_data;
+		KexiTableItem *m_currentRow;
+		int m_currentRowNumber;
 };
 
 #endif

@@ -31,7 +31,6 @@
 #include "kexitableheader.h"
 
 #include <kexidb/roweditbuffer.h>
-#include <widget/utils/kexirecordnavigator.h>
 
 #include <qevent.h>
 #include <qtimer.h>

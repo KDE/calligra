@@ -42,6 +42,7 @@
 #include "kexitableviewdata.h"
 #include "kexitableedit.h"
 #include "tristate.h"
+#include <widget/utils/kexirecordnavigator.h>
 
 class KPopupMenu;
 class KPrinter;
@@ -66,7 +67,7 @@ namespace KexiDB {
 
 /*! @short KexiTableView class provides a table view widget.
 */
-class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
+class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView, public KexiRecordNavigatorHandler
 {
 Q_OBJECT
 public:
@@ -617,14 +618,6 @@ protected slots:
 
 	void slotAutoScroll();
 
-	//! for navigator
-	void slotNavRecordNumberEntered(uint r);
-	void navBtnLastClicked();
-	void navBtnPrevClicked();
-	void navBtnNextClicked();
-	void navBtnFirstClicked();
-	void navBtnNewClicked();
-
 	//! internal, used after vscrollbar's value has been changed
 	void vScrollBarValueChanged(int v);
 	void vScrollBarSliderReleased();
@@ -736,6 +729,7 @@ protected:
 
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
+	//! Setups navigator widget
 	void setupNavigator();
 //	void setNavRowNumber(int newrow);
 //	void setNavRowCount(int newrows);
@@ -755,6 +749,20 @@ protected:
 	/*! @internal Changes bottom margin settings, in pixels. 
 	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
 	void setBottomMarginInternal(int pixels);
+
+	//! for navigator
+//	void slotNavRecordNumberEntered(uint r);
+//	void navBtnLastClicked();
+//	void navBtnPrevClicked();
+//	void navBtnNextClicked();
+//	void navBtnFirstClicked();
+//	void navBtnNewClicked();
+	virtual void moveToRecordRequested(uint r);
+	virtual void moveToLastRecordRequested();
+	virtual void moveToPreviousRecordRequested();
+	virtual void moveToNextRecordRequested();
+	virtual void moveToFirstRecordRequested();
+	virtual void addNewRecordRequested();
 
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();

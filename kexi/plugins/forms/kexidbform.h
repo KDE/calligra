@@ -24,23 +24,24 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
+#include <kexidataiteminterface.h>
 #include "form.h"
 
 //! A DB-aware form widget
-class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
+class KexiDBForm : public QWidget, public KFormDesigner::FormWidget, public KexiDataItemInterface
 {
 	Q_OBJECT
-	//Q_PROPERTY(QString DataSource READ datasource WRITE setDatasource DESIGNABLE true)
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true);
 	//Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
 
 	public:
 		KexiDBForm(QWidget *parent, const char *name="kexi_dbform");
 		virtual ~KexiDBForm();
 
-		/*QString datasource() const { return m_ds; }
-		bool navigatorShown() const { return m_nav; }
-		void setDatasource(const QString &s) { m_ds = s; }
-		void showRecordNavigator(bool s) { m_nav = s; }*/
+		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
+		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
+		//! no effect
+		virtual void setValue(const QVariant&) {};
 
 		virtual void drawRect(const QRect& r, int type);
 		virtual void drawRects(const QValueList<QRect> &list, int type);
@@ -50,8 +51,8 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 
 		virtual QSize sizeHint() const;
 
-	private:
-		/*QString m_ds;
+	protected:
+		/*
 		bool m_nav;
 		KexiDB::Connection *m_conn;*/
 

@@ -106,13 +106,6 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 //	uint i = 0;
 //	KexiDB::QueryColumnInfo::Vector vector = m_cursor->query()->fieldsExpanded();
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
-/* moved to KexiTableViewData ctor
-	KexiTableViewColumn* col;
-	for (i=0;i<vector.count();i++) {
-		KexiDB::Field *f = vector[i];// = list->first();
-		col=new KexiTableViewColumn(*m_cursor->query(), *f);
-		tv_data->addColumn( col );
-	}*/
 
 	QString caption = m_cursor->query()->caption();
 	if (caption.isEmpty()) {
@@ -121,23 +114,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	setCaption( caption );
 
 	//PRIMITIVE!! data setting:
-//	const char **cd = m_cursor->recordData();
-
-	const uint fcount = m_cursor->fieldCount();
-	m_cursor->moveFirst();
-	for (int i=0;!m_cursor->eof();i++) {
-		KexiTableItem *item = new KexiTableItem(fcount);
-		m_cursor->storeCurrentRow(*item);
-/*		for (uint f=0; f<fcount; f++) {
-			item->at(f) = m_cursor->value(f);
-		}*/
-		tv_data->append( item );
-		m_cursor->moveNext();
-		if ((i % 100) == 0)
-			qApp->processEvents( 1 );
-	}
-//	if (m_cursor->moveFirst() && m_cursor->moveLast()) {
-//	}
+	tv_data->preloadAllRows();
 
 	KexiTableView::setData(tv_data);
 	return true;

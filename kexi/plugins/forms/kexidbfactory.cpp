@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -89,12 +90,18 @@ KexiSubForm::setFormName(const QString &name)
 //////////////////////////////////////////
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
- : KLineEdit("bleble", parent, name)
+ : KLineEdit(parent, name)
+ , KexiDataItemInterface()
 {
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
+}
+
+void KexiDBLineEdit::setValue(const QVariant& value)
+{
+	setText( value.toString() );
 }
 
 //////////////////////////////////////////
@@ -131,6 +138,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_classes.append(wLineEdit);
 
 	m_propDesc["dataSource"] = i18n("Data source");
+	m_propDesc["formName"] = i18n("Form name");
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -200,8 +208,8 @@ KexiDBFactory::autoSaveProperties(const QString &classname)
 {
 	if(classname == "KexiSubForm")
 		return QStringList("formName");
-	if(classname == "KexiDBLineEdit")
-		return QStringList("dataSource");
+//	if(classname == "KexiDBLineEdit")
+//		return QStringList("dataSource");
 	return QStringList();
 }
 
