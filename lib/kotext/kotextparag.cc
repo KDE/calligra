@@ -482,6 +482,9 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         //r.setRight( rect().width() - rightMargin() - 1 );
 
         // New solution: occupy the full width
+        // Note that this is what OpenOffice does too.
+        // For something closer to the text, we need a border feature in KoTextFormat, I guess.
+
         // drawBorders paints outside the give rect, so we need to 'subtract' the border
         // width on all sides.
         r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.width(), zh, 0 ) );
@@ -1670,7 +1673,7 @@ void KoTextParag::fixParagWidth( bool viewFormattingChars )
     if ( viewFormattingChars && lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
     {
         KoTextFormat * lastFormat = at( length() - 1 )->format();
-        setWidth( rect().width() + lastFormat->width('x') );
+        setWidth( QMIN( rect().width() + lastFormat->width('x'), doc->width() ) );
     }
     // Warning, if adding anything else here, adjust KWTextFrameSet::fixParagWidth
 }

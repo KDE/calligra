@@ -181,7 +181,7 @@ bool KoTextFormatterCore::format()
     int maxY = doc ? doc->flow()->availableHeight() : -1;
 
     availableWidth = dw - initialRMargin; // 'w' in QRT
-#ifdef DEBUG_FORMATTER
+#if defined(DEBUG_FORMATTER) || defined(DEBUG_FORMATTER_WIDTH)
     kdDebug(32500) << "KoTextFormatter::format formatting parag " << parag->paragId()
                    << " text:" << parag->string()->toString() << "\n"
                    << " left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << " maxY=" << maxY << endl;
@@ -728,6 +728,9 @@ bool KoTextFormatterCore::format()
         lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
         lineStart->h = lineStart->baseLine + belowBaseLine;
         lineStart->w = dw;
+#ifdef DEBUG_FORMATTER_WIDTH
+        kdDebug(32500) << "Last line: w = dw = " << dw << endl;
+#endif
 #ifdef DEBUG_FORMATTER_VERT
         kdDebug(32500) << " -> lineStart->baseLine/lineStart->h : " << lineStart->baseLine << "/" << lineStart->h << endl;
 #endif
