@@ -24,6 +24,7 @@
 #include <qstyle.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qtooltip.h>
 #include <kdebug.h>
 #include "qdrawutil.h"
 
@@ -93,6 +94,8 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
   "xxxxxxxx"
   };
   m_pClosePix = new QPixmap(close_xpm);
+  
+  QToolTip::add(this, text);
 }
 
 DragBarButton::~DragBarButton()
