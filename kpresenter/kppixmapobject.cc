@@ -141,7 +141,15 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
     case IE_DESATURATE:
         break;
     case IE_CONTRAST:
-        break;
+    {
+        //kpresenter use value between -255 and 255
+        //oo impress between -100% and 100%
+        int val =  m_ie_par1.toInt();
+        val = ( int )( ( double )val*100.0/255.0 );
+        QString str = QString::number( val )+"%";
+        styleobjectauto.addProperty( "draw:contrast", str );
+    }
+    break;
     case IE_NORMALIZE:
         break;
     case IE_EQUALIZE:
@@ -192,8 +200,6 @@ bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context
     xmlWriter.addAttribute( "xlink:href", "#"+ imageCollection->getOasisFileName(image) );
 //xlink:href="#Pictures/100000000000030E00000203A35860EF.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad
 
-    //we don't have a simple object
-    //modify imageCollection to save oasis format
     xmlWriter.endElement();
     return true;
 }
@@ -265,7 +271,17 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 
 void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
 {
-    //TODO
+    KoStyleStack &styleStack = context.styleStack();
+    styleStack.setTypeProperties( "graphic" );
+    if ( styleStack.hasAttribute( "draw:contrast" ) )
+    {
+        QString str( styleStack.attribute( "draw:contrast" ) );
+        str = str.remove( "%" );
+        int val = str.toInt();
+        m_effect = IE_CONTRAST;
+        val = ( int )( 255.0 *val/100.0 );
+        m_ie_par1 = QVariant(val);
+    }
 }
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
