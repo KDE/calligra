@@ -691,16 +691,12 @@ QCString KoDocument::nativeFormatMimeType( KInstance *instance )
   QString instname = kapp->instanceName();
   if ( instance )
     instname = instance->instanceName();
-
-  qDebug( "instance name is %s", instname.ascii() );  
-
+  
   KService::Ptr service = KService::service( instname );
   
   if ( !service )
     return QCString();
-
-  qDebug( "desktop entry path is %s", service->desktopEntryPath().ascii() );  
-
+  
   KDesktopFile deFile( service->desktopEntryPath(), true );
   
   return deFile.readEntry( "MimeType" ).utf8(); // ??????????
