@@ -2308,7 +2308,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     _clean = false;
 
     if ( _insPos == IP_AFTER )
-	_page++;
+        _page++;
 
     objStartY=-1;
 

@@ -669,6 +669,10 @@ void KPresenterView::insertPage()
     }
     if ( dia.exec() != QDialog::Accepted )
         return;
+
+    if (dia.radioCurrentDefault->isChecked())
+        extraDefaultTemplate();
+
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
     int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
                                               dia.radioDifferent->isChecked(), QString::null );
