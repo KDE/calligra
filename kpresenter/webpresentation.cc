@@ -57,7 +57,6 @@
 #include <kimageio.h>
 #include <kapplication.h>
 #include <kprogress.h>
-#include <kstddirs.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcharsets.h>
