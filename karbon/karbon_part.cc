@@ -57,8 +57,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 
 	if(
 		doc.attribute( "mime" ) != "application/x-karbon" ||
-		( !doc.attribute("syntaxVersion" ).isEmpty() &&
-		doc.attribute( "syntaxVersion" ) != "0.1" ) )
+		doc.attribute( "syntaxVersion" ) != "0.1" )
 	{
 		return false;
 	}
