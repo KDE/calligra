@@ -768,6 +768,8 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
             key = "STRING";
             type = VT_CUSTOM;
         }
+        else
+            return 0L;
     }
     else if ( tag.namespaceURI() == KoXmlNS::office && localName == "annotation" )
     {
