@@ -809,7 +809,6 @@ KWCreateTableCommand::KWCreateTableCommand( const QString &name, KWDocument *_do
 
 void KWCreateTableCommand::execute()
 {
-    m_pDoc->deSelectAllFrames();
     m_pDoc->deleteFrameSetEditTable( m_pTable );
     m_pDoc->addFrameSet(m_pTable);
     m_pDoc->refreshDocStructure(FT_TABLE);
@@ -821,6 +820,7 @@ void KWCreateTableCommand::execute()
 void KWCreateTableCommand::unexecute()
 {
     ASSERT(m_pTable);
+    m_pDoc->deSelectAllFrames();
     m_pDoc->delFrameSet(m_pTable,false);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->deleteFrameSetEditTable( m_pTable );
