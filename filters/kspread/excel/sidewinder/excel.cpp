@@ -3648,18 +3648,23 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   Pen pen;
   
   pen = convertBorderStyle( xf.leftBorderStyle() );
+  pen.color = convertColor( xf.leftBorderColor() );
   format.borders().setLeftBorder( pen );
+  
   pen = convertBorderStyle( xf.rightBorderStyle() );
+  pen.color = convertColor( xf.rightBorderColor() );
   format.borders().setRightBorder( pen );
+  
   pen = convertBorderStyle( xf.topBorderStyle() );
+  pen.color = convertColor( xf.topBorderColor() );
   format.borders().setTopBorder( pen );
+  
   pen = convertBorderStyle( xf.bottomBorderStyle() );
+  pen.color = convertColor( xf.bottomBorderColor() );
   format.borders().setBottomBorder( pen );
 
   return format;
 }
-
-
 
 void ExcelReader::handleXF( XFRecord* record )
 {
