@@ -912,12 +912,12 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
     static const opcodeEntry funcTab[] =
     {
         { "1904",           0x0022, &XMLTree::_1904 },
-        { "ARRAY",          0x0221, &XMLTree::_array },
+        { "ARRAY",          0x0021, &XMLTree::_array },
         { "BACKUP",         0x0040, &XMLTree::_backup },
-        { "BLANK",          0x0201, &XMLTree::_blank },
-        { "BOF",            0x0809, &XMLTree::_bof },
+        { "BLANK",          0x0001, &XMLTree::_blank },
+        { "BOF",            0x0009, &XMLTree::_bof },
         { "BOOKBOOL",       0x00da, &XMLTree::_bookbool },
-        { "BOOLERR",        0x0205, &XMLTree::_boolerr },
+        { "BOOLERR",        0x0005, &XMLTree::_boolerr },
         { "BOTTOMMARGIN",   0x0029, &XMLTree::_bottommargin },
         { "BOUNDSHEET",     0x0085, &XMLTree::_boundsheet },
 	{ "CALCCOUNT",	    0x000c, 0 /* &XMLTree::_calccount */ },
@@ -930,24 +930,25 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
         { "COUNTRY",        0x008c, &XMLTree::_country },
         { "CRN",            0x005a, &XMLTree::_crn },
 	{ "DBCELL",         0x00d7, &XMLTree::_dbcell },
-        { "DEFAULTROWHEIGHT", 0x0225, &XMLTree::_defaultrowheight },
+        { "DEFAULTROWHEIGHT", 0x0025, &XMLTree::_defaultrowheight },
         { "DEFCOLWIDTH",    0x0055, &XMLTree::_defcolwidth },
         { "DELTA",          0x0010, 0 /* &XMLTree::_delta */ },
-        { "COLWIDTH",       0x0224, 0 /* &XMLTree::_colwidth */ },
-        { "DIMENSIONS",     0x0200, &XMLTree::_dimensions },
+        { "COLWIDTH",       0x0024, 0 /* &XMLTree::_colwidth */ },
+	{ "COLUMNDEFAULT",  0x0020, 0 /* &XMLTree::_coldefault */ },
+        { "DIMENSIONS",     0x0000, &XMLTree::_dimensions },
         { "EOF",            0x000a, &XMLTree::_eof },
         { "EXTERNCOUNT",    0x0016, &XMLTree::_externcount },
-        { "EXTERNNAME",     0x0223, &XMLTree::_externname },
+        { "EXTERNNAME",     0x0023, &XMLTree::_externname },
         { "EXTERNSHEET",    0x0017, &XMLTree::_externsheet },
         { "EXTSST",         0x00ff, &XMLTree::_extsst },
         { "FILEPASS",       0x002f, &XMLTree::_filepass },
         { "FILESHARING",    0x005b, &XMLTree::_filesharing },
-        { "FILESHARING2",   0x01a5, &XMLTree::_filesharing2 },
+        { "FILESHARING2",   0x00a5, &XMLTree::_filesharing2 },
         { "FONT",           0x0031, &XMLTree::_font },
         { "FONT2",          0x0032, 0 /* &XMLTree::_font2 */ },
         { "FOOTER",         0x0015, &XMLTree::_footer },
-        { "FORMAT",         0x041e, &XMLTree::_format },
-        { "FORMATCOUNT",    0x041f, 0 /* &XMLTree::_formatcount */ },
+        { "FORMAT",         0x001e, &XMLTree::_format },
+        { "FORMATCOUNT",    0x001f, 0 /* &XMLTree::_formatcount */ },
         { "FORMULA",        0x0006, &XMLTree::_formula },
         { "GCW",            0x00ab, &XMLTree::_gcw },
         { "GUTS",           0x0080, &XMLTree::_guts },
@@ -957,52 +958,54 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
         { "HORIZONTALPAGEBREAKS", 0x001b, &XMLTree::_horizontalpagebreaks },
         { "IMDATA",         0x007f, &XMLTree::_imdata },
 	{ "INDEX",	    0x000b, 0 /* &XMLTree::_index */ },
-        { "INTEGER",        0x0202, 0 /* &XMLTree::_integer */ },
+        { "INTEGER",        0x0002, 0 /* &XMLTree::_integer */ },
 	{ "ITERATION",      0x0011, 0 /* &XMLTree::_iteration */ },
         { "LABELSST",       0x00fd, &XMLTree::_labelsst },
-        { "LABEL",          0x0204, &XMLTree::_label },
+        { "LABEL",          0x0004, &XMLTree::_label },
         { "LEFTMARGIN",     0x0026, &XMLTree::_leftmargin },
-        { "MULBLANK",       0x00be, &XMLTree::_mulblank },
+        { "MERGECELL",      0x00e5, 0 /* XMLTree::_mergecell */ },
+	{ "MULBLANK",       0x00be, &XMLTree::_mulblank },
         { "MULRK",          0x00bd, &XMLTree::_mulrk },
-        { "NAME",           0x0218, &XMLTree::_name },
+        { "NAME",           0x0018, &XMLTree::_name },
         { "NOTE",           0x001c, &XMLTree::_note },
-        { "NUMBER",         0x0203, &XMLTree::_number },
-        { "PANE",           0x0041, &XMLTree::_pane },
+        { "NUMBER",         0x0003, &XMLTree::_number },
+        { "PALETTEINFO",    0x0092, 0 /* XMLTree::_paletteinfo */ },
+	{ "PANE",           0x0041, &XMLTree::_pane },
         { "PARAMQRY",       0x00dc, &XMLTree::_paramqry },
         { "PASSWORD",       0x0013, &XMLTree::_password },
 	{ "PRECISION",	    0x000e, 0 /* &XMLTree::_precision */ },
         { "PRINTROWHEADERS", 0x002a, 0 /* &XMLTree::_printrowheaders */ },
         { "PRINTGRIDLINES", 0x002b, 0 /* &XMLTree::_printgridlines */ },
         { "PROTECT",        0x0012, &XMLTree::_protect },
-        { "QSI",            0x01ad, &XMLTree::_qsi },
+        { "QSI",            0x00ad, &XMLTree::_qsi },
         { "RECIPNAME",      0x00b9, &XMLTree::_recipname },
 	{ "REFMODE",	    0x000f, 0 /* &XMLTree::_refomde */ },
         { "RIGHTMARGIN",    0x0027, &XMLTree::_rightmargin },
-        { "RK",             0x027e, &XMLTree::_rk },
-        { "ROW",            0x0208, &XMLTree::_row },
-        { "SCL",            0x00a0, &XMLTree::_scl },
+        { "RK",             0x007e, &XMLTree::_rk },
+        { "ROW",            0x0008, &XMLTree::_row },
+        { "RSTRING",        0x00d6, 0 /* &XMLTree::_rstring */ },
+	{ "SCL",            0x00a0, &XMLTree::_scl },
         { "SELECTION",      0x001d, 0 /* &XMLTree::_selection */ },
         { "SETUP",          0x00a1, &XMLTree::_setup },
         { "SHRFMLA",        0x00bc, &XMLTree::_shrfmla },
         { "SORT",           0x0090, &XMLTree::_sort },
         { "SST",            0x00fc, &XMLTree::_sst },
         { "STANDARDWIDTH",  0x0099, &XMLTree::_standardwidth },
-        { "STRING",         0x0207, &XMLTree::_string },
-        { "TABID",          0x013d, &XMLTree::_tabid },
+        { "STRING",         0x0007, &XMLTree::_string },
+        { "TABID",          0x003d, &XMLTree::_tabid },
         { "TABIDCONF",      0x00ea, &XMLTree::_tabidconf },
-        { "TABLE",          0x0236, &XMLTree::_table },
-	{ "TABLE2",         0x0237, 0 /* &XMLTree::_table2 */ },
+        { "TABLE",          0x0036, &XMLTree::_table },
+	{ "TABLE2",         0x0037, 0 /* &XMLTree::_table2 */ },
         { "TOPMARGIN",      0x0028, &XMLTree::_topmargin },
         { "VCENTER",        0x0084, &XMLTree::_vcenter },
         { "VERTICALPAGEBREAKS", 0x001a, &XMLTree::_verticalpagebreaks },
         { "WINDOW1",        0x003d, &XMLTree::_window1 },
-        { "WINDOW2",        0x023e, &XMLTree::_window2 },
-	{ "WINDOWPROT",     0x0219, 0 /* &XMLTree::_windowprot */ },
+        { "WINDOW2",        0x003e, &XMLTree::_window2 },
+	{ "WINDOWPROT",     0x0019, 0 /* &XMLTree::_windowprot */ },
         { "WRITEACCESS",    0x005C, &XMLTree::_writeaccess },
         { "WRITEPROT",      0x0086, &XMLTree::_writeprot },
         { "WSBOOL",         0x0081, &XMLTree::_wsbool },
         { "XF",             0x00e0, &XMLTree::_xf },
-        { 0, 0x0000, 0 }
     };
     unsigned int i;
     method result;
@@ -1011,7 +1014,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 
     for (i = 0; funcTab[i].name; i++)
     {
-        if (funcTab[i].opcode == opcode)
+        if (funcTab[i].opcode == (opcode & 0x00FF))
         {
             break;
         }
@@ -1028,7 +1031,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
                 " operands: " << bytes << endl;
         else
             kdWarning(s_area) << "invokeHandler: unsupported opcode: 0x" <<
-                QString::number(opcode, 16) <<
+                QString::number((opcode & 0x00FF), 16) <<
                 " operands: " << bytes << endl;
 
         // Skip data we cannot use.
@@ -1392,7 +1395,7 @@ bool XMLTree::_formula(Q_UINT32 size, QDataStream &body)
   text.appendChild(root->createTextNode(getFormula(row, column, fbody)));
   e.appendChild(text);
   table->appendChild(e);
-
+  
   a.resetRawData(store, size-22);
   delete []store;
 
