@@ -22,10 +22,7 @@
 #include "kpresenter_shell.h"
 #include <koIMR.h>
 #include <koQueryTypes.h>
-
-#ifdef HAVE_QIMGIO
-#include <qimageio.h>
-#endif
+#include <kimgio.h>
 
 KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory, KPresenter::DocumentFactory_skel )
 typedef OPAutoLoader<KPresenterFactory> KPresenterAutoLoader;
@@ -52,10 +49,8 @@ int main( int argc, char **argv )
 
     KPresenterApp app( argc, argv );
 
-#ifdef HAVE_QIMGIO
-    qInitImageIO();
-#endif
-    
+    kimgioRegister();
+
     app.exec();
 
     return 0;

@@ -26,12 +26,9 @@
 #include <koDocument.h>
 #include <opAutoLoader.h>
 #include <koApplication.h>
+#include <kimgio.h>
 
 #include <list>
-
-#ifdef HAVE_QIMGIO
-#include <qimageio.h>
-#endif
 
 KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory, KWord::DocumentFactory_skel )
 typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
@@ -59,11 +56,8 @@ int main( int argc, char **argv )
 
     // Lets rock
     KWordApp app( argc, argv );
-
-#ifdef HAVE_QIMGIO
-    qInitImageIO();
-#endif
-
+    kimgioRegister();
+    
     app.exec();
 
     return 0;

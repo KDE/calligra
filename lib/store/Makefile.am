@@ -6,7 +6,7 @@ IDL_FLAGS = --relative-paths --query-server-for-narrow
 
 ####### Files
 
-libkstore_la_LIBADD = $(LIB_QT) $(LIBMICO)
+libkstore_la_LIBADD = $(LIB_KDECORE) $(LIBMICO)
 libkstore_la_SOURCES = koStoreIf.idl koStore.cc
 include_HEADERS = koStore.h
 

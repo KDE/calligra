@@ -52,6 +52,7 @@
 #include <kfiledialog.h>
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
+#include <kimgio.h>
 
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
@@ -382,11 +383,10 @@ void KPWebPresentation::init()
     backColor = Qt::white;
     textColor = Qt::black;
     titleColor = Qt::red;
-#ifdef HAVE_QIMGIO
-    imgFormat = JPEG;
-#else
-    imgFormat = PNG;
-#endif
+    if (KImageIO::canWrite("JPEG"))
+      imgFormat = JPEG;
+    else
+      imgFormat = PNG;
 
     path = getenv( "HOME" );
     path += "/www";
@@ -485,25 +485,26 @@ void KPWebPresentationWizard::setupPage2()
 
     QLabel *helptext = new QLabel( page2 );
     helptext->setBackgroundColor( QColor( 57, 63, 180 ) );
-    helptext->setText( i18n( "  Here you can configure the style  \n"
-                             "  of the webpages ( colors ). You also  \n"
-                             "  need to specify the picture format  \n"
-                             "  which should be used for the slides.  \n"
-                             "  PNG is a very optimized and well  \n"
-                             "  compressed format, but may not be  \n"
-                             "  supported by some old Web-Browsers.  \n"
-                             "  BMP is a picture format with a bad \n"
-                             "  compression, but is supported also by  \n"
-                             "  old Web-Browsers.  \n"
-#ifdef HAVE_QIMGIO
-                             "  JPEG is a picture format with a quite good  \n"
-                             "  compression and which is also supported by  \n"
-                             "  all Web-Browsers.  \n\n"
-#else
-                             "\n"
-#endif
-                             "  Finally you also can specify the zoom  \n"
-                             "  for the slides." ) );
+    QString help = i18n("  Here you can configure the style  \n"
+			"  of the webpages ( colors ). You also  \n"
+			"  need to specify the picture format  \n"
+			"  which should be used for the slides.  \n"
+			"  PNG is a very optimized and well  \n"
+			"  compressed format, but may not be  \n"
+			"  supported by some old Web-Browsers.  \n"
+			"  BMP is a picture format with a bad \n"
+			"  compression, but is supported also by  \n"
+			"  old Web-Browsers.  \n");
+
+    if (KImageIO::canWrite("JPEG")) 
+      help += i18n("  JPEG is a picture format with a quite good  \n"
+		   "  compression and which is also supported by  \n"
+		   "  all Web-Browsers.  \n");
+
+    help += i18n( "\n"
+		  "  Finally you also can specify the zoom  \n"
+		  "  for the slides." );
+    helptext->setText(help);
     helptext->setMaximumWidth( helptext->sizeHint().width() );
 
     QVBox *canvas = new QVBox( page2 );
@@ -542,9 +543,8 @@ void KPWebPresentationWizard::setupPage2()
     format = new QComboBox( false, row4 );
     format->insertItem( "BMP", -1 );
     format->insertItem( "PNG", -1 );
-#ifdef HAVE_QIMGIO
-    format->insertItem( "JPEG", -1 );
-#endif
+    if (KImageIO::canWrite("JPEG"))
+      format->insertItem( "JPEG", -1 );
     format->setCurrentItem( static_cast<int>( webPres.getImageFormat() ) );
     zoom = new QSpinBox( 100, 1000, 1, row5 );
     zoom->setSuffix( " %" );

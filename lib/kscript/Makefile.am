@@ -15,7 +15,7 @@ libkscript_la_METASOURCES = kscript_ext_qt.moc
 
 libkscript_la_LDFLAGS = -version-info 1:0:0
 
-libkscript_la_LIBADD = $(LIBMICO) $(LIB_QT)
+libkscript_la_LIBADD = $(LIB_QT) $(LIBMICO)
 
 bin_PROGRAMS = kscript
 

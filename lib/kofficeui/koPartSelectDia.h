@@ -38,7 +38,7 @@ protected:
   virtual void paint( QPainter * );
   virtual int height( const QListBox * ) const;
   virtual int width( const QListBox * ) const;
-  virtual const QPixmap *pixmap() { return &pm; }
+  virtual const QPixmap *pixmap() const { return &pm; }
 private:
   QPixmap pm;
 };
