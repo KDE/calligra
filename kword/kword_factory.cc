@@ -67,7 +67,7 @@ KWordFactory::KWordFactory( QObject* parent, const char* name )
 
 KWordFactory::~KWordFactory()
 {
-    if ( s_global ) 
+    if ( s_global )
       delete s_global;
 }
 
@@ -86,7 +86,7 @@ QObject* KWordFactory::create( QObject* parent, const char* name, const char* cl
 
     if ( !bWantKoDocument )
     {
-      doc->initEmpty();
+    //      doc->initEmpty();
       doc->setReadWrite( false );
     }
 
