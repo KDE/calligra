@@ -965,8 +965,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     {
         m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
     }
-
-    m_masterPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
+    if ( !_duplicatePage )
+        m_masterPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
     saveOasisHeaderFooter( stickyTmpWriter , savingContext );
 
 
@@ -3254,6 +3254,17 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     return _page;
 }
 
+void KPresenterDoc::saveOasisPage( const QString &file, int pgnum, bool ignore )
+{
+    saveOnlyPage = pgnum;
+    _duplicatePage=ignore;
+    //save in oasis format
+    saveNativeFormat( file );
+    _duplicatePage=false;
+    saveOnlyPage = -1;
+}
+
+
 void KPresenterDoc::savePage( const QString &file, int pgnum, bool ignore )
 {
     saveOnlyPage = pgnum;
@@ -3510,7 +3521,18 @@ void KPresenterDoc::copyPage( int from )
 
 void KPresenterDoc::copyOasisPageToClipboard( int pgnum )
 {
-    //todo
+    // We save the page to a temp file and set the URL of the file in the clipboard
+    // Yes it's a hack but at least we don't hit the clipboard size limit :)
+    // (and we don't have to implement copy-tar-structure-to-clipboard)
+    // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
+    kdDebug(33001) << "KPresenterDoc::copyPageToClipboard pgnum=" << pgnum << endl;
+    KTempFile tempFile( QString::null, ".oop" );
+    saveOasisPage( tempFile.name(), pgnum );
+    KURL url; url.setPath( tempFile.name() );
+    KURL::List lst;
+    lst.append( url );
+    QApplication::clipboard()->setData( new KURLDrag( lst ) );
+    m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
 }
 
 void KPresenterDoc::copyPageToClipboard( int pgnum )

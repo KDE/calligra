@@ -210,6 +210,8 @@ class KPresenterDoc : public KoDocument
     void insertObject(KPresenterChild* ch ){ insertChild(ch);}
 
     void savePage( const QString &file, int pgnum, bool ignore = false );
+    void saveOasisPage( const QString &file, int pgnum, bool ignore = false );
+
     void pastePage( const QMimeSource * data, int pgnum );
 
     QString templateFileName(bool chooseTemplate, const QString &theFile );
