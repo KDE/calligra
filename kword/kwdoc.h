@@ -832,6 +832,7 @@ protected:
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context );
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
+    void loadOasisSettings( const QDomDocument&settingsDoc );
 
     QValueList<KoPictureKey> savePictureList();
 

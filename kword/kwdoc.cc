@@ -60,6 +60,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
+#include <koOasisSettings.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -1215,10 +1216,29 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // so it must be done last.
     setPageLayout( m_pageLayout, __columns, __hf, false );
 
+    loadOasisSettings( settings );
+
     //printDebug();
 
     return true;
 }
+
+void KWDocument::loadOasisSettings( const QDomDocument&settingsDoc )
+{
+    if ( settingsDoc.isNull() )
+        return ; //not a error some file doesn't have settings.xml
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.selectItemSet( "view-settings" );
+    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
+
+    if ( tmp )
+    {
+        tmp = settings.selectItemMap( "Views" );
+        setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
+        //put other loading settings here
+    }
+}
+
 
 static QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
 {
@@ -2619,10 +2639,11 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     settingsWriter.addAttribute("config:name", "view-settings");
 
+    settingsWriter.startElement("config:config-item-map-entry" );
     KoUnit::saveOasis(&settingsWriter, m_unit);
 
-    settingsWriter.startElement("config:config-item-map-entry" );
     saveOasisSettings( settingsWriter );
+
     settingsWriter.endElement();
 
     settingsWriter.endElement(); // config:config-item-set
@@ -2638,7 +2659,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-void KWDocument::saveOasisSettings( KoXmlWriter &settingsWriter )
+void KWDocument::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ )
 {
     //todo implement it.
 }
