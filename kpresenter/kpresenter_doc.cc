@@ -678,7 +678,6 @@ QDomDocument KPresenterDoc::saveXML()
 
     if ( saveOnlyPage == -1 )
         emit sigProgress( 70 );
-
     makeUsedPixmapList();
 
     if (specialOutputFlag()==SaveAsKOffice1dot1)
@@ -1020,9 +1019,11 @@ void KPresenterDoc::createHeaderFooter()
     m_stickyPage->appendObject(_footer);
 }
 
-void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, double offset )
+void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, KPrPage *page )
 {
-    while(!elem.isNull()) {
+    QDomElement elem = topElem.firstChild().toElement();
+    for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
+    {
         kdDebug(33001) << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
             KPresenterChild *ch = new KPresenterChild( this );
@@ -1033,14 +1034,11 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement elem, KMacroComm
             if(!object.isNull()) {
                 ch->load(object, true);  // true == uppercase
                 r = ch->geometry();
+                ch->loadDocument( store );
                 insertChild( ch );
                 kppartobject = new KPPartObject( ch );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
-            int tmp=0;
-            if(settings.hasAttribute("sticky"))
-                tmp=settings.attribute("sticky").toInt();
-            bool sticky=static_cast<bool>(tmp);
             double offset = 0.0;
             if(!settings.isNull() && kppartobject!=0)
                 offset=kppartobject->load(settings);
@@ -1048,19 +1046,19 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement elem, KMacroComm
             {
                 delete kppartobject;
                 kppartobject = 0L;
+                return;
             }
-            if ( sticky && !ignoreSticky && kppartobject )
-            {
-                m_stickyPage->appendObject(kppartobject );
-                kppartobject->setOrig(r.x(), offset);
-                kppartobject->setSize( r.width(), r.height() );
-                kppartobject->setSticky(sticky);
-            }
-            else if ( kppartobject ) {
-                kppartobject->setOrig( r.x(), 0 );
-                kppartobject->setSize( r.width(), r.height() );
-                insertObjectInPage(offset, kppartobject);
-            }
+            int index = m_pageList.find(page);
+            int pageIndex = (int)(offset/__pgLayout.ptHeight)+index;
+            int newPos=(int)((offset+index*__pgLayout.ptHeight)-pageIndex*__pgLayout.ptHeight);
+            kppartobject->setOrig(kppartobject->getOrig().x(),newPos);
+
+            InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Part Object" ), kppartobject, this,page );
+            kdDebug()<<" InsertCmd *insertCmd*********************\n";
+            insertCmd->execute();
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Insert Part Object"));
+            macroCmd->addCommand( insertCmd );
         }
     }
 }
@@ -2948,7 +2946,6 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
     }
 
     Q_ASSERT( followingStyles.count() == m_styleList.count() );
-
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KoStyle * style = m_styleColl->findStyle(*it);

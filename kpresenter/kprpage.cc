@@ -224,7 +224,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
             m_doc->loadPictureMap( topElem );
             store->close();
             m_doc->loadImagesFromStore( store );
-            //m_doc->insertEmbedded( store, topElem, macroCmd, 20.0 );
+            m_doc->insertEmbedded( store, topElem, macro, this );
             //m_doc->completePasting();
         }
     }

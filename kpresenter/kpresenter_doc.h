@@ -476,7 +476,8 @@ public:
 
     void loadImagesFromStore( KoStore *_store );
     void saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
-    void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
+    void insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, KPrPage *page );
+
 
 public slots:
     void movePage( int from, int to );
