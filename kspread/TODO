@@ -1,4 +1,5 @@
 Please put your name in "(...)" to the bug/feature you work on or you want to work on.
+For bugs: look into the KBugBuster if somebody else is working on it.d
 
 Grave bugs:
 
@@ -110,8 +111,9 @@ Others bugs not in BT system (Report by - taken by):
 - Clicking into canvas causes to much flickering if many items 
         (especially multirow cells) are in visible rect
 - MultiRow cells will only be drawn if obscuring is forced!
-- Far too much flickering: merge about 20 cells. Click in merged
+- Far too much flickering: merge about 20 cells. Click in merged        (Norbert)
   area, click somewhere else and see what happens
+- Merge cells are always obscured by others even if something is in there
 
 
 
@@ -119,6 +121,7 @@ Other things: (please add the things you are working on!)
 
 - Zoom
 - inserting data from text files
+- inserting formated data (csv) from clipboard
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
 - AutoFormat (already exists in a very limited way: Format -> table style)
