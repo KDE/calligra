@@ -60,6 +60,22 @@ KTextEdit::~KTextEdit()
     if ( painter.isActive() )
         painter.end();
     delete buf_pixmap;
+    buf_pixmap=0L;
+    delete formatTimer;
+    formatTimer=0L;
+    delete changeIntervalTimer;
+    changeIntervalTimer=0L;
+    delete blinkTimer;
+    blinkTimer=0L;
+    delete dragStartTimer;
+    dragStartTimer=0L;
+    delete cursor;
+    cursor=0L;
+    delete doc->formatter();
+    doc->setFormatter(0L);
+    delete doc;
+    doc=0L;
+    undoRedoInfo.doc=0L;
 }
 
 void KTextEdit::init()
