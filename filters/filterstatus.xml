@@ -223,7 +223,7 @@
             <filter id="kspread_gnumeric" webcvspath="koffice/filters/kspread/gnumeric">
                 <title xml:lang="en_us">Gnumeric</title>
                 <note xml:lang="en_us">Part of GNOME Office</note>
-                <stat import="twostars" export="twostars"/>
+                <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="kspread_html" webcvspath="koffice/filters/kspread/html">
                 <title xml:lang="en_us">HTML</title>
