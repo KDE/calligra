@@ -1270,7 +1270,7 @@ QPixmap Kivio::lockPixmap()
 
 QString Kivio::systemDefaultUnit()
 {
-  QString defMS = "mm";
+  QString defMS = "cm";
 
   if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
     defMS = "in";
