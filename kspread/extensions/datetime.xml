@@ -39,7 +39,7 @@
 	<Type>Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The DAYS360() function returns the number of days from date1 to date2 using a 360-day calendar in which all months are assumed to have 30 days. If method is false (default) the US method will be used, the european otherwise.</Text>
+	<Text>The DAYS360() function returns the number of days from date1 to date2 using a 360-day calendar in which all months are assumed to have 30 days. If method is false (default) the US method will be used, the European otherwise.</Text>
 	<Syntax>DAYS360(date1; date2; method)</Syntax>
 	<Example>DAYS360("2/22/2002", "4/21/2002", FALSE) returns 59</Example>
         <Related>DAYS</Related>
