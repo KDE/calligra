@@ -50,7 +50,7 @@ void
 VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 {
 	// Erase old object:
-	draw();
+	//draw();
 
 	recalc();
 
