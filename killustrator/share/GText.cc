@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -33,13 +33,13 @@
 #include <kapp.h>
 
 float seg_length (const Coord& c1, const Coord& c2) {
-  float dx = c2.x () - c1.x (); 
+  float dx = c2.x () - c1.x ();
   float dy = c2.y () - c1.y ();
   return sqrt (dx * dx + dy * dy);
 }
 
 float seg_angle (const Coord& c1, const Coord& c2) {
-  float dx = c2.x () - c1.x (); 
+  float dx = c2.x () - c1.x ();
   float dy = c2.y () - c1.y ();
   if (dx != 0)
     return atan (dy / dx) * RAD_FACTOR;
@@ -47,7 +47,7 @@ float seg_angle (const Coord& c1, const Coord& c2) {
     return 0.0;
 }
 
-GText::TextInfo GText::defaultTextInfo; 
+GText::TextInfo GText::defaultTextInfo;
 
 void GText::setDefaultTextInfo (const TextInfo& ti) {
   if (ti.mask & TextInfo::Font)
@@ -140,7 +140,7 @@ const char* GText::typeName () {
 }
 
 void GText::draw (Painter& p, bool, bool) {
-  QPen pen (outlineInfo.color, (uint) outlineInfo.width, 
+  QPen pen (outlineInfo.color, (uint) outlineInfo.width,
             outlineInfo.style);
   p.save ();
   p.setPen (pen);
@@ -177,7 +177,7 @@ void GText::drawSimpleText (Painter& p) {
     const char* s = text[cursy];
     int ws = fm->width (s);
     x1 = 0;
-    for (int i = 0; i < cursx; i++) 
+    for (int i = 0; i < cursx; i++)
       x1 += fm->width (s[i]);
     if (textInfo.align == TextInfo::AlignCenter)
       x1 += (-ws / 2);
@@ -207,7 +207,7 @@ void GText::drawPathText (Painter& p) {
   if (cursorActive) {
     idx = 0;
     int line = 0;
-    vector<QString>::iterator it = text.begin (); 
+    vector<QString>::iterator it = text.begin ();
     while (line < cursy) {
       idx += it->length ();
       it++;
@@ -225,7 +225,7 @@ void GText::drawPathText (Painter& p) {
 void GText::setCursor (int x, int y) {
   if (y >= 0 && y < (int) text.size ())
     cursy = y;
-  else 
+  else
     cursy = text.size () - 1;
 
   if (x >= 0 && x <= (int) text[y].length ())
@@ -236,7 +236,7 @@ void GText::setCursor (int x, int y) {
 }
 
 void GText::setOrigin (const Coord& p) {
-  tMatrix.translate (p.x () - tMatrix.dx (), 
+  tMatrix.translate (p.x () - tMatrix.dx (),
 		     p.y () - tMatrix.dy ());
   iMatrix = tMatrix.invert ();
   initTmpMatrix ();
@@ -269,7 +269,7 @@ void GText::setText (const QString& s) {
 QString GText::getText () const {
   QString s;
   int line = 1;
-  for (vector<QString>::const_iterator it = text.begin (); it != text.end (); 
+  for (vector<QString>::const_iterator it = text.begin (); it != text.end ();
        it++, line++) {
     s += *it;
     if (line < lines ())
@@ -286,7 +286,7 @@ void GText::deleteChar () {
       s.append (text[cursy + 1]);
       vector<QString>::iterator it = text.begin ();
       advance (it, cursy + 1);
-      text.erase (it); 
+      text.erase (it);
     }
   }
   else
@@ -312,7 +312,7 @@ void GText::deleteBackward () {
     prev.append (s);
     vector<QString>::iterator it = text.begin ();
     advance (it, cursy);
-    text.erase (it); 
+    text.erase (it);
     cursy--;
     cursx = oldpos;
   }
@@ -330,7 +330,7 @@ void GText::insertChar (char c) {
     advance (it, ++cursy);
     text.insert (it, rest);
     cursx = 0;
-  } 
+  }
   else {
     s.insert (cursx, c);
     cursx++;
@@ -351,7 +351,7 @@ void GText::updateCursor (const Coord& p) {
     }
     else {
       QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
-      
+
       cursy = (int) (pp.y () / fm->height ());
       int x = (int) pp.x ();
       const char *s = (const char *)line (cursy);
@@ -395,12 +395,12 @@ void GText::calcBoundingBox () {
 	r = tmpMatrix.map (r);
 	if (idx == 0)
 	  rect = r;
-	else 
+	else
 	  rect = rect.unite (r);
 	idx++;
       }
     }
-    updateBoundingBox (Rect (rect.left () - 1, rect.top () - 1, 
+    updateBoundingBox (Rect (rect.left () - 1, rect.top () - 1,
 			     rect.width () + 2, rect.height () + 2));
   }
   else {
@@ -422,9 +422,9 @@ void GText::calcBoundingBox () {
     else if (textInfo.align == TextInfo::AlignRight)
       xp = -max_width;
     width += xp;
-    calcUntransformedBoundingBox (Coord (xp, 0), 
+    calcUntransformedBoundingBox (Coord (xp, 0),
 				  Coord (width, cursorActive ? -1 : 0),
-				  Coord (width, 
+				  Coord (width,
 					 height + (cursorActive ? 2 : 0)),
 				  Coord (xp, height + (cursorActive ? 2 : 0)));
   }
@@ -461,7 +461,7 @@ void GText::initState (GOState* state) {
   s->info.align = textInfo.align;
   s->tstring = getText ();
 }
-  
+
 GObject* GText::copy () {
   return new GText (*this);
 }
@@ -479,7 +479,7 @@ void GText::writeToXml (XmlWriter& xml) {
   xml.closeTag (false);
 
   xml.startTag ("font", false);
-  xml.addAttribute ("face", textInfo.font.family ());
+  xml.addAttribute ("face", textInfo.font.family ().latin1());
   xml.addAttribute ("point-size", textInfo.font.pointSize ());
   xml.addAttribute ("weight", textInfo.font.weight ());
   if (textInfo.font.italic ())
@@ -487,7 +487,7 @@ void GText::writeToXml (XmlWriter& xml) {
   xml.closeTag (false);
 
   int i = 0;
-  for (vector<QString>::iterator it = text.begin (); it != text.end (); 
+  for (vector<QString>::iterator it = text.begin (); it != text.end ();
        it++, i++) {
     xml.writeText ((const char *) *it);
     if (i < lines () - 1)
@@ -505,7 +505,7 @@ void GText::updateMatricesForPath () {
     int num_chars = 0;
 
     // initialize transformation matrices for characters
-    for (it = text.begin (); it != text.end (); it++) 
+    for (it = text.begin (); it != text.end (); it++)
       num_chars += it->length ();
     cmatrices.clear ();
     cmatrices.resize (num_chars);
@@ -540,7 +540,7 @@ void GText::updateMatricesForPath () {
 	    e_pos += 1;
 	    float nlen = seg_length (path[e_pos - 1], path[e_pos]);
 	    angle = seg_angle (path[s_pos], path[e_pos]);
-	    if (path[e_pos].x () - path[s_pos].x () < 0) 
+	    if (path[e_pos].x () - path[s_pos].x () < 0)
 	      angle += 180;
 	    len += nlen;
 	  }
@@ -554,7 +554,7 @@ void GText::updateMatricesForPath () {
 	      s_pos = e_pos - 1;
 	      len = seg_length (path[s_pos], path[e_pos]);
 	      angle = seg_angle (path[s_pos], path[e_pos]);
-	      if (path[e_pos].x () - path[s_pos].x () < 0) 
+	      if (path[e_pos].x () - path[s_pos].x () < 0)
 		angle += 180;
 	    }
 	    else {
@@ -565,7 +565,7 @@ void GText::updateMatricesForPath () {
 	    }
 	    i++;
 	  }
-	} 
+	}
       }
     }
     updateRegion ();
@@ -578,9 +578,9 @@ void GText::deletePathObject () {
 
 void GText::setPathObject (GObject* obj) {
   if (pathObj != 0L) {
-    disconnect (pathObj, SIGNAL(changed(const Rect&)), 
+    disconnect (pathObj, SIGNAL(changed(const Rect&)),
 		this, SLOT(updateMatricesForPath ()));
-    disconnect (pathObj, SIGNAL(deleted ()), 
+    disconnect (pathObj, SIGNAL(deleted ()),
 		this, SLOT(deletePathObject ()));
     pathObj->unref ();
   }
@@ -590,9 +590,9 @@ void GText::setPathObject (GObject* obj) {
     // force generation of id for refering in XML
     (void) pathObj->getId ();
 
-    connect (obj, SIGNAL(changed (const Rect&)), 
+    connect (obj, SIGNAL(changed (const Rect&)),
 	     this, SLOT(updateMatricesForPath ()));
-    connect (obj, SIGNAL(deleted ()), 
+    connect (obj, SIGNAL(deleted ()),
 	     this, SLOT(deletePathObject ()));
     updateMatricesForPath ();
   }
