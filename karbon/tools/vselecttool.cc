@@ -76,7 +76,10 @@ VSelectTool::draw()
 	if( m_state != normal || rect.contains( first() ) )
 	{
 		if( m_state == normal )
-			m_state = moving;
+		{
+			m_activeNode = view()->part()->document().selection()->handleNode( last() );
+			m_state = ( m_activeNode == node_none ) ? moving : scaling;
+		}
 
 		VObjectListIterator itr = m_objects;
 		for( ; itr.current(); ++itr )
@@ -207,40 +210,35 @@ VSelectTool::draw()
 void
 VSelectTool::setCursor() const
 {
-/*
-	switch( view()->part()->document().selection()->handleNode( p ) )
+	switch( view()->part()->document().selection()->handleNode( last() ) )
 	{
 		case node_lt:
 		case node_rb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
 			break;
 		case node_rt:
 		case node_lb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeBDiagCursor ) );
 			break;
 		case node_lm:
 		case node_rm:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeHorCursor ) );
+			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeHorCursor ) );
 			break;
 		case node_mt:
 		case node_mb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeVerCursor ) );
+			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::arrowCursor ) );
+			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 	}
-*/
 }
 
 void
 VSelectTool::mouseButtonPress()
 {
 	m_current = first();
+
+	recalc();
 /*
 	m_fp.setX( mouse_event->pos().x() );
 	m_fp.setY( mouse_event->pos().y() );
@@ -300,6 +298,8 @@ VSelectTool::mouseButtonRelease()
 void
 VSelectTool::mouseDragRelease()
 {
+	draw();
+
 	if( m_state == normal )
 	{
 		// Y mirroring
@@ -324,17 +324,6 @@ VSelectTool::mouseDragRelease()
 				qRound( last().y() - first().y() ) ),
 			true );
 	}
-
-/*
-	view()->part()->document().selection()->setState( VObject::selected );
-
-	if( m_state == moving )
-	{
-		if( m_lock == lockx )
-			lp.setX( fp.x() );
-
-//			view()->part()->repaintAllViews();
-	}
 	else if( m_state == scaling )
 	{
 		m_state = normal;
@@ -342,25 +331,6 @@ VSelectTool::mouseDragRelease()
 			new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
 			true );
 	}
-	else
-	{
-		fp.setX( fp.x() / view()->zoom() );
-		fp.setY( fp.y() / view()->zoom() );
-		lp.setX( lp.x() / view()->zoom() );
-		lp.setY( lp.y() / view()->zoom() );
-
-		if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
-		{
-			// AK - should take the middle point here
-			fp = lp - KoPoint(8.0, 8.0);
-			lp = lp + KoPoint(8.0, 8.0);
-		}
-
-		// erase old object:
-		drawTemporaryObject();
-
-	}
-*/
 }
 
 void
@@ -382,11 +352,69 @@ VSelectTool::recalc()
 	{
 		m_current = last();
 	}
-	else
+	else 
 	{
 		// Build affine matrix:
 		QWMatrix mat;
-		mat.translate( last().x() - first().x(), last().y() - first().y() );
+		if( m_state == moving )
+			mat.translate( last().x() - first().x(), last().y() - first().y() );
+		else
+		{
+			KoRect rect = view()->part()->document().selection()->boundingBox();
+
+			if( m_activeNode == node_lb )
+			{
+				m_sp = KoPoint( rect.right(), rect.bottom() );
+				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
+				m_s2 = ( rect.bottom() - last().y() ) / double( rect.height() );
+			}
+			else if( m_activeNode == node_mb )
+			{
+				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
+				m_s1 = 1;
+				m_s2 = ( rect.bottom() - last().y() ) / double( rect.height() );
+			}
+			else if( m_activeNode == node_rb )
+			{
+				m_sp = KoPoint( rect.x(), rect.bottom() );
+				m_s1 = ( last().x() - rect.x() ) / double( rect.width() );
+				m_s2 = ( rect.bottom() - last().y() ) / double( rect.height() );
+			}
+			else if( m_activeNode == node_rm)
+			{
+				m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
+				m_s1 = ( last().x() - rect.x() ) / double( rect.width() );
+				m_s2 = 1;
+			}
+			else if( m_activeNode == node_rt )
+			{
+				m_sp = KoPoint( rect.x(), rect.y() );
+				m_s1 = ( last().x() - rect.x() ) / double( rect.width() );
+				m_s2 = ( last().y() - rect.y() ) / double( rect.height() );
+			}
+			else if( m_activeNode == node_mt )
+			{
+				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
+				m_s1 = 1;
+				m_s2 = ( last().y() - rect.y() ) / double( rect.height() );
+			}
+			else if( m_activeNode == node_lt )
+			{
+				m_sp = KoPoint( rect.right(), rect.y() );
+				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
+				m_s2 = ( last().y() - rect.y() ) / double( rect.height() );
+			}
+			else if( m_activeNode == node_lm )
+			{
+				m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
+				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
+				m_s2 = 1;
+			}
+			KoPoint sp = KoPoint( m_sp.x(), m_sp.y() );
+			mat.translate( sp.x(), sp.y() );
+			mat.scale( m_s1, m_s2 );
+			mat.translate(-sp.x(), -sp.y() );
+		}
 
 		// Copy selected objects and transform:
 		m_objects.clear();

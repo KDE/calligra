@@ -31,6 +31,7 @@
 class QObject;
 class QPainter;
 class QPoint;
+class KoPoint;
 class QRect;
 
 typedef QPtrList<VObject> VObjectList;
@@ -117,7 +118,7 @@ public:
 	/**
 	 * Returns the handle node id, the QPoint is inside.
 	 */
-	VHandleNode handleNode( const QPoint& point ) const;
+	VHandleNode handleNode( const KoPoint &point ) const;
 
 private:
 	/**

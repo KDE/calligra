@@ -149,15 +149,15 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 	QPoint center = m_qrect[0].center();
 
 	// calculate displaycoords of nodes:
-	m_qrect[node_lt].setRect(
+	m_qrect[node_lb].setRect(
 		m_qrect[0].left() - m_handleNodeSize,
 		m_qrect[0].top() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_qrect[node_mt].setRect(
+	m_qrect[node_mb].setRect(
 		center.x() - m_handleNodeSize,
 		m_qrect[0].top() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_qrect[node_rt].setRect(
+	m_qrect[node_rb].setRect(
 		m_qrect[0].right() - m_handleNodeSize,
 		m_qrect[0].top() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
@@ -165,15 +165,15 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 		m_qrect[0].right() - m_handleNodeSize,
 		center.y() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_qrect[node_rb].setRect(
+	m_qrect[node_rt].setRect(
 		m_qrect[0].right() - m_handleNodeSize,
 		m_qrect[0].bottom() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_qrect[node_mb].setRect(
+	m_qrect[node_mt].setRect(
 		center.x() - m_handleNodeSize,
 		m_qrect[0].bottom() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_qrect[node_lb].setRect(
+	m_qrect[node_lt].setRect(
 		m_qrect[0].left() - m_handleNodeSize,
 		m_qrect[0].bottom() - m_handleNodeSize,
 		2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
@@ -226,11 +226,12 @@ VSelection::boundingBox() const
 
 
 VHandleNode
-VSelection::handleNode( const QPoint& point ) const
+VSelection::handleNode( const KoPoint &point ) const
 {
+	QPoint qpoint( point.x(), point.y() );
 	for( uint i = node_lt; i <= node_rb; ++i )
 	{
-		if( m_qrect[i].contains( point ) )
+		if( m_qrect[i].contains( qpoint ) )
 			return static_cast<VHandleNode>( i );
 	}
 
