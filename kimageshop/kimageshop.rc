@@ -1,0 +1,57 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>
+  <Action name="copy"/>
+  <Action name="cut"/>
+  <Action name="paste"/>
+ </Menu>
+ <Menu name="View"><text>View</text>
+  <Action name="dialog_layer"/>
+  <Action name="dialog_color"/>
+  <Action name="dialog_brush"/>
+  <Action name="dialog_gradient"/>
+  <Action name="dialog_gradienteditor"/>
+  <Separator/>
+  <Action name="preferences"/>
+ </Menu>
+ <Menu name="Image"><text>Image</text>
+  <Action name="merge_all_layers"/>
+  <Action name="merge_visible_layers"/>
+  <Action name="merge_linked_layers"/>
+ </Menu>
+ <Menu name="Layer"><text>Layer</text>
+  <Action name="layer_rotateright90"/>
+  <Action name="layer_rotate180"/>
+  <Action name="layer_rotateleft90"/>
+  <Separator/>
+  <Action name="layer_mirrorX"/>
+  <Action name="layer_mirrorY"/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar position="top">
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>
+  <Action name="copy"/>
+  <Action name="cut"/>
+  <Action name="paste"/>
+ </ToolBar>
+ <ToolBar position="top">
+  <Action name="dialog_layer"/>
+  <Action name="dialog_color"/>
+  <Action name="dialog_brush"/>
+  <Action name="dialog_gradient"/>
+  <Action name="dialog_gradienteditor"/>
+ </ToolBar>
+ <ToolBar position="left">
+  <Action name="tool_move"/>
+  <Action name="tool_zoom"/>
+  <Action name="tool_brush"/>
+  <Action name="tool_gradient"/>
+ </ToolBar>
+</ToolBars>
+</QConfig>
