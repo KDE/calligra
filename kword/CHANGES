@@ -106,3 +106,6 @@ Improved handling of tabulators in ruler.
 "Change picture" feature.
 SVG support (for cliparts).
 Module for SVG and WMF previews in Konqueror.
+
+Add triple click (select a line)
+
