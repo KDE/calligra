@@ -56,9 +56,7 @@ enum {
 };
 
 
-//TODO
-//Parse stderr output
-//e.g. -- invalid dictionary name
+// TODO: Parse stderr output e.g. -- invalid dictionary name (bug #40403)
 
 /*
   Things to put in KSpellConfigDlg:
@@ -127,7 +125,7 @@ void KOISpell::startIspell()
         case HTML:
             //Debian uses an ispell version that has the -h option instead.
             //Not sure what they did, but the prefered spell checker
-            //on that platform is aspell anyway, so use -H untill I'll come
+            //on that platform is aspell anyway, so use -H until I'll come
             //up with something better.
             *proc << "-H";
             break;
