@@ -1979,7 +1979,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 QRegExp searcher(searchString);
                 do {
                     newName=oldName;
-                    newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
+                    newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):QString::null).arg(""));
                     count++;
                 } while ( frameSetByName( newName ) );
             }
@@ -4109,7 +4109,7 @@ void KWDocument::changeBgSpellCheckingState( bool b )
 
 QString KWDocument::initialFrameSet() const
 {
-    return m_initialEditing ? m_initialEditing->m_initialFrameSet : 0L;
+    return m_initialEditing ? m_initialEditing->m_initialFrameSet : QString::null;
 }
 
 int KWDocument::initialCursorParag() const
