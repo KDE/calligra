@@ -566,7 +566,6 @@ void GText::setPathObject (GObject* obj) {
   }
   pathObj = obj;
   if (pathObj != 0L) {
-    cout << "set path object ..." << endl;
     pathObj->ref ();
     // force generation of id for refering in XML
     (void) pathObj->getId ();
