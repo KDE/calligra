@@ -30,6 +30,8 @@
 #include "kugar_view.h"
 #include "kugar_factory.h"
 
+#include <koFilterManager.h>
+
 KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, QObject* parent ,
                 const char* name , bool singleViewMode):KoDocument(parentWidget,widgetName,parent,name,singleViewMode),
 		m_templateOk(false)
@@ -100,8 +102,21 @@ bool KugarPart::initDoc()
 {
         QString filename;
 	bool ok=false;
-	KURL url=KFileDialog::getOpenURL(QString::null,
-                           "*.kud|Kugar Data File");
+
+	KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+	dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
+                                                        KoFilterManager::Import ) );
+	if(dialog->exec()!=QDialog::Accepted) {
+        	delete dialog;
+	        return false;
+    	}
+
+	KURL url( dialog->selectedURL() );
+    	delete dialog;
+
+    	if ( url.isEmpty() )
+        return false;
+
 	if (url.isValid())
 	{
 		ok=openURL(url);
