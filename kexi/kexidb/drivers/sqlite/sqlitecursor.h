@@ -32,7 +32,7 @@ class SQLiteCursorData;
 /*! 
 
 */
-class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
+class SQLiteCursor : public Cursor
 {
 	public:
 		virtual ~SQLiteCursor();

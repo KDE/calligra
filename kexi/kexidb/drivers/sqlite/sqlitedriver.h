@@ -32,7 +32,7 @@ class DriverManager;
 class SQLiteDriverPrivate;
 
 //! SQLite database driver.
-class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
+class SQLiteDriver : public Driver
 {
 	Q_OBJECT
 	KEXIDB_DRIVER

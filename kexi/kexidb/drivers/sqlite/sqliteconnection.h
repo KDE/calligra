@@ -34,7 +34,7 @@ class SQLiteConnectionInternal;
 class Driver;
 
 //! sqlite-specific connection
-class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
+class SQLiteConnection : public Connection
 {
 	Q_OBJECT
 

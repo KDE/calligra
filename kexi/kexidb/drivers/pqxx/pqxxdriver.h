@@ -31,7 +31,7 @@ class Connection;
 class DriverManager;
 
 //! PostgreSQL database driver.
-class KEXI_DB_EXPORT pqxxSqlDriver : public Driver
+class pqxxSqlDriver : public Driver
 {
 	Q_OBJECT
 	KEXIDB_DRIVER

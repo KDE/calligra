@@ -22,7 +22,7 @@
 
 #include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
 
-/* workaround for KDElibs < 3.4 on !win32*/
+/* workaround for KDElibs < 3.4 on !win32 */
 #ifndef KDE_EXPORT
 # define KDE_EXPORT
 #endif
@@ -43,14 +43,6 @@
 # define KEXIMAIN_EXPORT KDE_IMPORT
 #else
 # define KEXIMAIN_EXPORT 
-#endif
-
-#ifdef MAKE_KEXIDB_LIB
-# define KEXIDB_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIDB_EXPORT KDE_IMPORT
-#else
-# define KEXIDB_EXPORT 
 #endif
 
 #ifdef MAKE_KEXI_DB_LIB
@@ -97,38 +89,6 @@
 # define KFORMEDITOR_EXPORT //for apps
 #endif
 
-#ifdef MAKE_KEXI_HAND_TBL_LIB
-# define KEXI_HAND_TBL_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXI_HAND_TBL_EXPORT  KDE_IMPORT
-#else
-# define KEXI_HAND_TBL_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXI_HAND_QUERY_LIB
-# define KEXI_HAND_QUERY_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXI_HAND_QUERY_EXPORT  KDE_IMPORT
-#else
-# define KEXI_HAND_QUERY_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXI_HAND_RELAT_LIB
-# define KEXI_HAND_RELAT_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXI_HAND_RELAT_EXPORT  KDE_IMPORT
-#else
-# define KEXI_HAND_RELAT_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXI_HAND_FORM_LIB
-# define KEXI_HAND_FORM_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXI_HAND_FORM_EXPORT  KDE_IMPORT
-#else
-# define KEXI_HAND_FORM_EXPORT //for apps
-#endif
-
 #ifdef MAKE_KEXIPRJWIZARD_LIB
 # define KEXIPRJWIZARD_EXPORT  KDE_EXPORT
 #elif defined(KDE_MAKE_LIB)
@@ -144,23 +104,6 @@
 #else
 # define KEXIFILTER_EXPORT //for apps
 #endif
-
-#ifdef MAKE_KEXIDB_SQLITE_DRIVER_LIB
-# define KEXIDB_SQLITE_DRIVER_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIDB_SQLITE_DRIVER_EXPORT  KDE_IMPORT
-#else
-# define KEXIDB_SQLITE_DRIVER_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIDB_MYSQL_DRIVER_LIB
-# define KEXIDB_MYSQL_DRIVER_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIDB_MYSQL_DRIVER_EXPORT  KDE_IMPORT
-#else
-# define KEXIDB_MYSQL_DRIVER_EXPORT //for apps
-#endif
-
 
 #ifdef MAKE_KEXIWIDGETS_LIB
 # define KEXIWIDGETS_EXPORT  KDE_EXPORT

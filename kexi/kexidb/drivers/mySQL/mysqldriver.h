@@ -27,7 +27,7 @@ Boston, MA 02111-1307, USA.
 namespace KexiDB {
 
 //! MySQL database driver.
-class KDE_EXPORT MySqlDriver : public Driver
+class MySqlDriver : public Driver
 {
 	Q_OBJECT
 	KEXIDB_DRIVER

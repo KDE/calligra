@@ -37,7 +37,7 @@ class MySqlConnectionInternal;
  * all other members are done by the
  * base class.
  */
-class KDE_EXPORT MySqlConnection : public Connection
+class MySqlConnection : public Connection
 {
 	Q_OBJECT
 
