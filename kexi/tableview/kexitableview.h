@@ -161,7 +161,8 @@ public:
 
 	/*! \return true if inserting empty rows are enabled (false by default).
 	 Mostly usable for not db-aware table views (e.g. used in Kexi Alter Table). 
-	 Note, that if inserting is disabled, this flag is ignored. */
+	 Note, that if inserting is disabled, or the table is read-only, 
+	 this flag is ignored. */
 	bool isEmptyRowInsertingEnabled() const;
 
 	/*! Sets emptyRowInserting flag. 

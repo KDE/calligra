@@ -179,7 +179,7 @@ void KexiDataTable::slotCellSelected(int col, int row)
 
 void KexiDataTable::slotUpdateRowActions(int row)
 {
-	setAvailable("edit_delete",true);
+	setAvailable("edit_delete", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()));
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 	setAvailable("edit_insert_empty_row", m_view->isEmptyRowInsertingEnabled());
 	setAvailable("data_save_row", m_view->rowEditing());
