@@ -107,10 +107,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! Info about the driver as a service. */
 		const KService* service() const { return m_service; }
 
-		/*! \return <tt>true</tt> if this driver is file-based */
+		/*! \return true if this driver is file-based */
 		bool isFileDriver() const { return m_isFileDriver; }
 
-		/*! \return <tt>true</tt> if \a n is a system object's name, 
+		/*! \return true if \a n is a system object's name, 
 		 eg. name of build-in system table that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
 		 a given driver implementation. 
@@ -121,12 +121,12 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual bool isSystemObjectName( const QString& n ) const;
 
-		/*! \return <tt>true</tt> if \a n is a kexibd-related 'system' object's
+		/*! \return true if \a n is a kexibd-related 'system' object's
 		 name, i.e. when \a n starts with "kexi__" prefix.
 		*/
 		static bool isKexiDBSystemObjectName( const QString& n );
 
-		/*! \return <tt>true</tt> if \a n is a system database's name, 
+		/*! \return true if \a n is a system database's name, 
 		 eg. name of build-in, system database that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
 		 a given driver implementation. For implemenation.
@@ -134,7 +134,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual bool isSystemDatabaseName( const QString& n ) const = 0;
 
-		/*! \return <tt>true</tt> if \a n is a system field's name, build-in system 
+		/*! \return true if \a n is a system field's name, build-in system 
 		 field that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
 		 a given driver implementation. For implemenation.
@@ -146,7 +146,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		enum. */
 		int features() const { return m_features; }
 
-		/*! \return <tt>true</tt> if transaction are supported (single or 
+		/*! \return true if transaction are supported (single or 
 		 multiple). */
 		bool transactionsSupported() const { return m_features & (SingleTransactions | MultipleTransactions); }
 		
@@ -156,7 +156,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);
 		
-		/*! \return <tt>true</tt> if this driver's implementation is valid.
+		/*! \return true if this driver's implementation is valid.
 		 Just few constriants are checked to ensure that driver 
 		 developer didn't forget about something. 
 		 This method is called automatically on createConnection(),

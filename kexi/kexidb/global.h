@@ -57,12 +57,12 @@ Data representation
 \section Drivers
 
 Drivers are loaded using DriverManager::driver(const QString& name).  The names
-of drivers are given in their drivers <tt>.desktop</tt> file in the
+of drivers are given in their drivers .desktop file in the
 X-Kexi-DriverName field.
 
 KexiDB supports two kinds of databases: file-based and network-based databases.
 The type of a driver is available from several places. The X-Kexi-DriverType
-field in the driver's <tt>.desktop</tt> file, is read by the DriverManager and
+field in the driver's .desktop file, is read by the DriverManager and
 available by calling DriverManager::driverInfo(const QString &name) and using
 the Driver::Info#fileBased member from the result. Given a reference to a
 Driver, its type can also be found directly using Driver::isFileDriver() const.
