@@ -124,7 +124,7 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
     }
 }
 
-void OLEFilter::convert(const QString &) { //dirname) { not needed at the moment...
+void OLEFilter::convert(const QString &dirname) {
 
     QList<OLENode> list=docfile->parseCurrentDir();
     OLENode *node;
@@ -148,11 +148,11 @@ void OLEFilter::convert(const QString &) { //dirname) { not needed at the moment
         do {
             if(node->name=="WordDocument" || node->name=="1Table" ||
                node->name=="0Table" || node->name=="ObjectPool") {
-                // Word
-                kdebug(KDEBUG_INFO, 31000, "WinWord");
 
                 myFile main, table0, table1, data;
                 QArray<long> tmp;
+
+                kdebug(KDEBUG_INFO, 31000, "WinWord");
 
                 main.data=0L;
                 table0.data=0L;
@@ -202,21 +202,30 @@ void OLEFilter::convert(const QString &) { //dirname) { not needed at the moment
 
             // some more will be here, soon
             // I'll have to read some additional OLE-Streams
-            // as the names are not unique!
+            // and look for information in them as the names
+            // are not unique!
 
             node=list.next();
         } while(myFilter==0L && node!=0);
 
         if(myFilter==0L) {
             // unknown
-            kdebug(KDEBUG_INFO, 31000, "unknown");
+            kdebug(KDEBUG_INFO, 31000, "superunknown :)");
+            myFilter=new FilterBase();
+            // connect SIGNALs&SLOTs
+            connectCommon(&myFilter);
         }
 
-        // do the real work! (call filter-Method :) and save
-        // the part (correct name!)
-
+        success=myFilter->filter();      // do we really need that flag?
+        QString file=myFilter->part();
+        char *tmp=0L;
+        slotPart(dirname, myFilter->extension(), &tmp);
+        fileOut->writeFile(tmp, "", "", file.length(), (const char*)file.utf8());
+        delete [] tmp;
+        kdebug(KDEBUG_INFO, 31000, "tmp tot");
         delete myFilter;
-        success=false;  // only at the moment!
+
+        kdebug(KDEBUG_INFO, 31000, "nachher");
     }
 }
 

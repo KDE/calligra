@@ -3,6 +3,7 @@
 
 #include <qobject.h>
 #include "myfile.h"
+#include <kdebug.h>
 
 // Attention: The nameOUT Strings are allocated with new[] in the
 // slots!!! Therefore you have to delete [] them!
@@ -11,8 +12,8 @@ class FilterBase : public QObject {
     Q_OBJECT
 
 public:
-    FilterBase() : QObject() {};
-    virtual ~FilterBase() {};
+    FilterBase() : QObject() {}
+    virtual ~FilterBase() { kdebug(KDEBUG_INFO, 31000, "FilterBase - DTOR"); }
 
     virtual const bool filter() { return false; }
     virtual const QString part();

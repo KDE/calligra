@@ -33,6 +33,9 @@ public:
     virtual ~WordFilter();
 
 private:
+    WordFilter(const WordFilter &);
+    const WordFilter &operator=(const WordFilter &);
+
     WinWordDoc *myDoc;
     KWordDoc *myKwd;
 };

@@ -3,6 +3,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
+#include <kdebug.h>
 
 class KWordDoc : public QObject {
 
@@ -11,7 +12,7 @@ class KWordDoc : public QObject {
 public:
     KWordDoc();
     ~KWordDoc();
-    QString kwdFile();
+    const QString kwdFile();
 
 signals:
     void signalFilterError();

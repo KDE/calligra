@@ -6,9 +6,10 @@ KWordDoc::KWordDoc() : QObject() {
 }
 
 KWordDoc::~KWordDoc() {
+    kdebug(KDEBUG_INFO, 31000, "KWordDoc - DTOR");
 }
 
-QString KWordDoc::kwdFile() {
+const QString KWordDoc::kwdFile() {
     return kwd;
 }
 
