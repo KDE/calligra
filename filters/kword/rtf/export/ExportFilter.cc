@@ -127,7 +127,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     else if ( (strExt==".jpeg") || (strExt==".jpg") )
         strTag="\\jpegblip";
     else if (strExt==".wmf")
-        strTag="\\wmetafile";
+        strTag="\\wmetafile8";
     else
     {
         // either without extension or format is unknown
@@ -176,6 +176,21 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         origWidth =  long(img.width() * 2834.65 * 20 / resx);
         origHeight = long(img.height() * 2834.65 * 20 / resy);
     }
+    else if( strExt == ".wmf" )
+    {
+        // throw away WMF metaheader (22 bytes)
+        Q_UINT8* data = (Q_UINT8*) image.data();
+        if( ( data[0] == 0xd7 ) && ( data[1] == 0xcd ) &&
+            ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) && 
+            ( image.size() > 22 ) )
+        {
+            QByteArray tmp;
+            for( unsigned i=0; i<image.size()-22; i++)
+                image[i] = image[i+22];
+            image.resize( image.size()-22 );
+        }
+    } 
+
 
     // calculate scaling factor (in percentage)
     int scaleX = width * 100 / origWidth;
