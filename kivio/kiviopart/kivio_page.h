@@ -36,6 +36,7 @@ class KivioGuideLines;
 
 #include <koDocument.h>
 
+#include <kprinter.h>
 #include <qpen.h>
 #include <qlist.h>
 #include <qintdict.h>
@@ -98,7 +99,7 @@ public:
   KivioPage *findPage( const QString & _name );
 
   void print( KivioPSPrinter * );
-  void print( QPainter &painter, QPrinter *_printer );
+  void print( QPainter &painter, KPrinter *_printer );
   void update();
   int id() { return m_id; }
   static KivioPage* find( int _id );

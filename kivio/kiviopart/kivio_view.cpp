@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qprinter.h> // has to be first
+#include <kprinter.h> // has to be first
 
 #include <iostream>
 #include <cstdlib>
@@ -654,7 +654,7 @@ int KivioView::canvasYOffset() const
   return canvasWidget()->yOffset();
 }
 
-void KivioView::print(QPrinter& ptr)
+void KivioView::print(KPrinter& ptr)
 {
 /***********
  * The old way of printing
@@ -1369,7 +1369,7 @@ void KivioView::toggleBirdEyePanel(bool b)
     TOGGLE_ACTION("birdEye")->setChecked(b);
 }
 
-void KivioView::setupPrinter(QPrinter &p)
+void KivioView::setupPrinter(KPrinter &p)
 {
     p.setMinMax(1, m_pDoc->map()->pageList().count());
     p.setFromTo(1, m_pDoc->map()->pageList().count());

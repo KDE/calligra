@@ -410,7 +410,7 @@ void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool tran
   page->paintContent(painter,rect,transparent,p0,zoom, drawHandles);
 }
 
-void KivioDoc::printContent( QPrinter &prn )
+void KivioDoc::printContent( KPrinter &prn )
 {
     KivioScreenPainter p;
     int from = prn.fromPage();

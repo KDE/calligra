@@ -97,8 +97,8 @@ public:
   KivioTabBar* tabBar() { return  m_pTabBar;}
   ToolDockManager* toolDockManager() { return m_pToolDock; }
 
-  virtual void setupPrinter(QPrinter&);
-  virtual void print(QPrinter&);
+  virtual void setupPrinter(KPrinter&);
+  virtual void print(KPrinter&);
 
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent );
 

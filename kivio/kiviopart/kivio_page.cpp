@@ -26,7 +26,7 @@
 #include <qkeycode.h>
 #include <qregexp.h>
 #include <qpoint.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qcursor.h>
 #include <qstack.h>
 #include <qbuffer.h>
@@ -125,7 +125,7 @@ void KivioPage::print( KivioPSPrinter *printer )
     }
 }
 
-void KivioPage::print( QPainter &/*painter*/, QPrinter */*_printer*/ )
+void KivioPage::print( QPainter &/*painter*/, KPrinter */*_printer*/ )
 {
 }
 

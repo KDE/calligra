@@ -51,7 +51,7 @@ class QDomDocument;
 #include <qpainter.h>
 #include <qpen.h>
 #include <qlist.h>
-#include <qprinter.h>
+#include <kprinter.h>
 
 
 #define MIME_TYPE "application/x-kivio"
@@ -112,7 +112,7 @@ public:
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent );
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
 
-  void printContent( QPrinter& prn );
+  void printContent( KPrinter& prn );
   bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
 
   static QList<KivioDoc>& documents();
