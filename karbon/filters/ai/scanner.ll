@@ -1,4 +1,3 @@
 %%
-.		 printf( "An integer: %s\n", yytext );
-
+"%%Creator[^\n]+\n"		ECHO;
 

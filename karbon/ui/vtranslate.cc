@@ -1,12 +1,17 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
 /* vtranslate.cpp */
+#include <qcheckbox.h>
+#include <qlabel.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
+#include <qstring.h>
 #include <klocale.h>
+#include <knuminput.h>
+
 #include "vtranslate.h"
 
 VTranslate::VTranslate(QWidget *parent,const char *name)
@@ -50,10 +55,12 @@ VTranslate::VTranslate(QWidget *parent,const char *name)
     setFixedSize(baseSize()); //Set the size tp fixed values
 }
 
-void VTranslate::setUnits(QString units)
+void VTranslate::setUnits( const QString& units )
 {
     unit1->setText(units);
     unit2->setText(units);
 }
 
 VTranslate::~VTranslate() { }
+
+#include "vtranslate.moc"

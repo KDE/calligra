@@ -30,5 +30,6 @@ exp:      NUM             { $$ = $1;         }
 
 void parseAI( const char* in )
 {
+qDebug("inside");
 	yyparse();
 }

@@ -16,19 +16,19 @@ VPathIntersect::VPathIntersect()
 VSegmentList*
 VPathIntersect::intersect( const VSegmentList& list1, const VSegmentList& list2 )
 {
-	m_list2 = const_cast<VSegmentList*>( &list2 );
+/*	m_list2 = const_cast<VSegmentList*>( &list2 );
 
-	m_isList1 = true;
+	m_currentListisList1 = true;
 	traverse( list1 );
 
 	return 0L;
+*/
 }
 
 bool
-VPathIntersect::begin( const KoPoint& p,
-	const VSegment& segment )
+VPathIntersect::begin( const KoPoint& p )
 {
-	if( m_isList1 )
+/*	if( m_currentListisList1 )
 	{
 		m_segment1 = 0L;
 		setPreviousPoint( p );
@@ -40,18 +40,19 @@ VPathIntersect::begin( const KoPoint& p,
 	}
 
 	return true;
+*/
 }
 
 bool
-VPathIntersect::currentSegment( const VSegment& segment )
+VPathIntersect::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
-	if( m_isList1 )
+/*	if( m_currentListisList1 )
 	{
 		m_segment1 = &segment;
 
-		m_isList1 = false;
+		m_currentListisList1 = false;
 		traverse( *m_list2 );
-		m_isList1 = true;
+		m_currentListisList1 = true;
 
 		setPreviousPoint( segment.point( 3 ) );
 	}
@@ -66,5 +67,114 @@ VPathIntersect::currentSegment( const VSegment& segment )
 	}
 
 	return true;
+*/
+}
+
+bool
+VPathIntersect::curve1To( const KoPoint& p2, const KoPoint& p3 )
+{
+/*	if( m_currentListisList1 )
+	{
+		m_segment1 = &segment;
+
+		m_currentListisList1 = false;
+		traverse( *m_list2 );
+		m_currentListisList1 = true;
+
+		setPreviousPoint( segment.point( 3 ) );
+	}
+	else
+	{
+		m_segment2 = &segment;
+
+		if( m_segment1 )
+			{}
+
+		setPreviousPoint2( segment.point( 3 ) );
+	}
+
+	return true;
+*/
+}
+
+bool
+VPathIntersect::curve2To( const KoPoint& p1, const KoPoint& p3 )
+{
+/*	if( m_currentListisList1 )
+	{
+		m_segment1 = &segment;
+
+		m_currentListisList1 = false;
+		traverse( *m_list2 );
+		m_currentListisList1 = true;
+
+		setPreviousPoint( segment.point( 3 ) );
+	}
+	else
+	{
+		m_segment2 = &segment;
+
+		if( m_segment1 )
+			{}
+
+		setPreviousPoint2( segment.point( 3 ) );
+	}
+
+	return true;
+*/
+}
+
+bool
+VPathIntersect::lineTo( const KoPoint& p )
+{
+/*	if( m_currentListisList1 )
+	{
+		m_segment1 = &segment;
+
+		m_currentListisList1 = false;
+		traverse( *m_list2 );
+		m_currentListisList1 = true;
+
+		setPreviousPoint( segment.point( 3 ) );
+	}
+	else
+	{
+		m_segment2 = &segment;
+
+		if( m_segment1 )
+			{}
+
+		setPreviousPoint2( segment.point( 3 ) );
+	}
+
+	return true;
+*/
+}
+
+bool
+VPathIntersect::end( const KoPoint& p )
+{
+/*	if( m_currentListisList1 )
+	{
+		m_segment1 = &segment;
+
+		m_currentListisList1 = false;
+		traverse( *m_list2 );
+		m_currentListisList1 = true;
+
+		setPreviousPoint( segment.point( 3 ) );
+	}
+	else
+	{
+		m_segment2 = &segment;
+
+		if( m_segment1 )
+			{}
+
+		setPreviousPoint2( segment.point( 3 ) );
+	}
+
+	return true;
+*/
 }
 

@@ -6,13 +6,20 @@
 #ifndef __VFILL_H__
 #define __VFILL_H__
 
+class QDomElement;
+
+
 class VFill
 {
 public:
 	VFill();
+
+	void save( QDomElement& element ) const;
+	void load( const QDomElement& element );
 
 private:
 
 };
 
 #endif
+

@@ -12,20 +12,26 @@ class VColor
 {
 public:
 	enum VColorSpace{
-		gray,
 		rgb,
+		cmyk,
 		hsb,
-		cmyk };
+		gray };
 
 	VColor();
 
-	void values( const VColorSpace colorSpace,
-		int* v1 = 0L, int* v2 = 0L, int* v3 = 0L, int* v4 = 0L ) const;
+	void pseudoValues( int& v1, int& v2, int& v3 ) const;
+	void values(
+		double* v1 = 0L, double* v2 = 0L,
+		double* v3 = 0L, double* v4 = 0L ) const;
 
 	VColorSpace colorSpace() const { return m_colorSpace; }
 	void setColorSpace( const VColorSpace colorSpace );
 
 private:
+	bool convertToColorSpace( const VColorSpace colorSpace,
+		double* v1 = 0L, double* v2 = 0L,
+		double* v3 = 0L, double* v4 = 0L ) const;
+
 	VColorSpace m_colorSpace;
 	double m_value[4];
 

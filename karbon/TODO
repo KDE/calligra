@@ -1,3 +1,6 @@
+-	fix tool-bar
+-	reintroduce handler
+-	fix selection
 -	mirror coordinate-system so origin is bottom-left
 -	add validators to all tool-dialog input-fields
 

@@ -29,7 +29,7 @@ VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentLis
 		int g;
 		int b;
 		
-		color().values( VColor::rgb, &r, &g, &b );
+		color().pseudoValues( r, g, b );
 
 		QPen pen(
 			QColor( r, g, b ),
@@ -56,8 +56,7 @@ VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentLis
 }
 
 bool
-VPathStroke::begin( const KoPoint& p,
-	const VSegment& segment )
+VPathStroke::begin( const KoPoint& p )
 {
 	m_pa.resize( 1 );
 	m_pa.setPoint(
@@ -71,8 +70,7 @@ VPathStroke::begin( const KoPoint& p,
 }
 
 bool
-VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
-	const VSegment& segment )
+VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	QPointArray pa( 4 );
 	pa.setPoint(
@@ -103,8 +101,7 @@ VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
 }
 
 bool
-VPathStroke::lineTo( const KoPoint& p,
-	const VSegment& segment )
+VPathStroke::lineTo( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,
@@ -115,3 +112,4 @@ VPathStroke::lineTo( const KoPoint& p,
 
 	return true;
 }
+

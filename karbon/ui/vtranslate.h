@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
@@ -9,20 +8,21 @@
 #define VTRANSLATE_H
 
 #include <qwidget.h>
-#include <qstring.h>
-#include <qlabel.h>
-#include <knuminput.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
 
-class VTranslate: public QWidget
+class QCheckBox;
+class QLabel;
+class QPushButton;
+class QString;
+class KDoubleNumInput;
+
+class VTranslate : public QWidget
 {
     Q_OBJECT
 public:
     VTranslate(QWidget *parent=0,const char *name=0);
     ~VTranslate();
 public slots:
-    void setUnits(QString units); //sets the unit labels do display correct text (mm, cm, pixels etc);
+    void setUnits( const QString& units ); //sets the unit labels do display correct text (mm, cm, pixels etc);
 private:
     QLabel *labelx;
     KDoubleNumInput *inputx; //X coordinate

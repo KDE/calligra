@@ -66,6 +66,7 @@ AiImport::convert( const QCString& from, const QCString& to )
 	QByteArray byteArrayIn = koStoreIn.read( koStoreIn.size() );
 	koStoreIn.close();
 
+kdDebug() << "parsing now" << endl;
 	parseAI( byteArrayIn.data() );
 
 	fileOut.close();
