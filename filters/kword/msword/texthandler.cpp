@@ -229,6 +229,7 @@ void KWordTextHandler::paragraphEnd()
     if ( m_currentTable )
     {
         emit tableFound( *m_currentTable );
+        delete m_currentTable;
         m_currentTable = 0L;
     }
     if ( m_currentStyle ) {
