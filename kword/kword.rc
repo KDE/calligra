@@ -197,6 +197,7 @@
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>
 </ToolBar>
+<StatusBar/>
 <Menu name="text_popup">
  <Action name="format_paragraph"/>
  <Separator/>
