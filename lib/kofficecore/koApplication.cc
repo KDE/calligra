@@ -76,17 +76,19 @@ void KoApplication::start()
 
     // No argument -> create an empty document
     if (!argsCount) {
-        KoDocument* doc = entry.createDoc( 0, "Document" );
-        if ( !doc )
-            ::exit(1);
-        KoMainWindow* shell = doc->createShell();
-        shell->show();
-        if ( doc->initDoc() )
-        {
-          shell->setRootDocument( doc );
-        }
-        else
-          ::exit(1);
+	KoDocument* doc = entry.createDoc( 0, "Document" );
+	if ( !doc )
+	    ::exit(1);
+	KoMainWindow* shell = doc->createShell();
+	shell->show();
+	QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+	if ( doc->initDoc() )
+	    {
+		shell->setRootDocument( doc );
+	    }
+	else
+	    ::exit(1);
+	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
         // Loop through arguments
 
