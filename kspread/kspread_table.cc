@@ -1462,7 +1462,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
     {
         for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
         {
-	  cell = cellAt( _marker.x(), y );
+	  cell = cellAt( _marker.x(), y, true );
 
 	  if ( cell->isObscuringForced() )
 	  {
@@ -1470,7 +1470,8 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
 	    undoRegion.setLeft(QMIN(undoRegion.left(),
 				    cell->obscuringCellsColumn()));
 	    cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow() );
+			   cell->obscuringCellsRow(),
+                           true);
 	  }
 	  /* case 1.  Add the extra space to numberOfCells and then skip
 	     over the region.  Note that because of the above if block 'cell'
@@ -1489,14 +1490,15 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         {
 	  /* see the code above for a column series for a description of
 	     what is going on here. */
-	  cell = cellAt( x,_marker.y() );
+	  cell = cellAt( x,_marker.y(), true );
 
 	  if ( cell->isObscuringForced() )
 	  {
 	    undoRegion.setTop(QMIN(undoRegion.top(),
 				   cell->obscuringCellsRow()));
 	    cell = cellAt( cell->obscuringCellsColumn(),
-				    cell->obscuringCellsRow() );
+                           cell->obscuringCellsRow(), 
+                           true );
 	  }
 	  numberOfCells += cell->extraXCells();
 	  x += cell->extraXCells();
@@ -1524,7 +1526,8 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         if(cell->isObscuringForced())
         {
             cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow());
+			   cell->obscuringCellsRow(),
+                           true);
         }
 
         cell->setCellText(cellText.setNum(incr));
