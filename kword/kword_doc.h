@@ -127,8 +127,11 @@ public:
     { return m_bModified; }
 
     // C++
+    // no need for this: it is the same in koDocument!!!
+    /*
     virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
     virtual bool isEmpty() { return m_bEmpty; }
+    */
 
     unsigned int viewCount() { return m_lstViews.count(); }
 
@@ -434,7 +437,8 @@ protected:
     ProcessingType processingType;
     int rastX, rastY;
 
-    bool m_bEmpty;
+    //    bool m_bEmpty;
+    // This overwrites the one in koDocument!!! Lotzi Boloni
 
     int applyStyleTemplate;
 

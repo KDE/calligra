@@ -105,7 +105,12 @@ KWordDocument::KWordDocument(KoDocument* parent, const char* name )
 
     rastX = rastY = 10;
 
-    m_bEmpty = TRUE;
+    // m_bEmpty = TRUE;
+    //    m_bEmpty = FALSE; // sorry, this leads to trouble at load    
+    // change it back when setModified() is called at every keyboard 
+    // input. Lotzi Boloni
+    setModified(TRUE);
+    
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
 			 U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
