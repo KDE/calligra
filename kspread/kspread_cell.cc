@@ -2947,20 +2947,24 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     const KoRect &cellRect,
                                     const QPoint &cellRef,
-                                    bool paintBorderRight,
-                                    bool paintBorderBottom,
-                                    bool paintBorderLeft, bool paintBorderTop,
+                                    bool paintRight,
+                                    bool paintBottom,
+                                    bool paintLeft, bool paintTop,
                                     QPen & rightPen, QPen & bottomPen,
                                     QPen & leftPen, QPen & topPen )
 {
   KSpreadDoc * doc = table()->doc();
 
   /* we might not paint some borders if this cell is merged with another in
-     that direction */
+     that direction 
   bool paintLeft   = paintBorderLeft;
   bool paintRight  = paintBorderRight;
   bool paintTop    = paintBorderTop;
   bool paintBottom = paintBorderBottom;
+  */
+
+  // paintRight  = paintRight  && ( extraXCells() == 0 );
+  // paintBottom = paintBottom && ( extraYCells() == 0 );
 
   QValueList<KSpreadCell*>::const_iterator it  = m_ObscuringCells.begin();
   QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
@@ -2974,16 +2978,6 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
     paintRight  = paintRight  && cell->extraXCells() == xDiff;
     paintBottom = paintBottom && cell->extraYCells() == yDiff;
-  }
-
-  paintRight  = paintRight  && ( extraXCells() == 0 );
-  paintBottom = paintBottom && ( extraYCells() == 0 );
-
-  if ( isObscuringForced() )
-  {
-    kdDebug() << "Right: " << paintRight << ", Bottom: " << paintBottom 
-              << ", Left: " << paintLeft << ", Top: " << paintTop
-              << endl;
   }
 
   //
@@ -3043,9 +3037,11 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
     else
     {
-      painter.drawLine( doc->zoomItX( cellRect.right() ),
+      double r = cellRect.right();
+
+      painter.drawLine( doc->zoomItX( r ),
                         doc->zoomItY( cellRect.y() ) - top,
-                        doc->zoomItX( cellRect.right() ),
+                        doc->zoomItX( r ),
                         doc->zoomItY( cellRect.bottom() ) + bottom );
     }
   }
