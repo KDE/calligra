@@ -29,16 +29,16 @@
 class GStylePrivate
 {
 public:
+  bool             stroked;
   KoColor          ocolor;
   int              oopacity;
   unsigned int     lwidth;
-  KoColor          fcolor;
-  int              fopacity;
   Qt::PenCapStyle  cap;
   Qt::PenJoinStyle join;
-  Qt::BrushStyle   brushStyle;
-  bool stroked;
-  int filled;
+  int              ftype;
+  KoColor          fcolor;
+  int              fopacity;
+  Qt::BrushStyle   pattern;
 };
 
 GStyle::GStyle() : d(new GStylePrivate)
@@ -49,10 +49,10 @@ GStyle::GStyle() : d(new GStylePrivate)
   d->oopacity = 100;
   d->join = Qt::RoundJoin;
   d->cap = Qt::RoundCap;
-  d->filled = NoFill;
+  d->ftype = NoFill;
   d->fcolor = KoColor::white();
   d->fopacity = 100;
-  d->brushStyle = Qt::SolidPattern;
+  d->pattern = Qt::SolidPattern;
 }
 
 GStyle::GStyle(const QDomElement &style)
@@ -67,10 +67,10 @@ GStyle::GStyle(GStyle &obj)
   d->oopacity = obj.d->oopacity;
   d->join = obj.d->join;
   d->cap = obj.d->cap;
-  d->filled = obj.d->filled;
+  d->ftype = obj.d->ftype;
   d->fcolor = obj.d->fcolor;
   d->fopacity = obj.d->fopacity;
-  d->brushStyle = obj.d->brushStyle;
+  d->pattern = obj.d->pattern;
 }
 
 GStyle::~GStyle()
@@ -81,7 +81,15 @@ GStyle::~GStyle()
 QDomElement GStyle::writeToXml(QDomDocument &document)
 {
   QDomElement style = document.createElement("style");
-  
+  style.setAttribute("stroked", d->stroked);
+  style.setAttribute("ocolor", d->ocolor.name());
+  style.setAttribute("width", d->lwidth);
+  style.setAttribute("oopacity", d->oopacity);
+  style.setAttribute("join", d->join);
+  style.setAttribute("cap", d->cap);
+  style.setAttribute("ftype", d->ftype);
+  style.setAttribute("fcolor", d->fcolor.name());
+  style.setAttribute("pattern", d->pattern);
   return style;
 }
   
@@ -147,12 +155,12 @@ void GStyle::capStyle(Qt::PenCapStyle cap)
 
 Qt::BrushStyle GStyle::brushStyle() const
 {
-  return d->brushStyle;
+  return d->pattern;
 }
 
 void GStyle::brushStyle(Qt::BrushStyle brushStyle)
 {
-  d->brushStyle = brushStyle;
+  d->pattern = brushStyle;
 }
 
 bool GStyle::stroked() const
@@ -167,12 +175,12 @@ void GStyle::stroked(bool stroked)
 
 int GStyle::filled() const
 {
-  return d->filled;
+  return d->ftype;
 }
 
 void GStyle::filled(int filled)
 {
-  d->filled = filled;
+  d->ftype = filled;
 }
 
 GStyle &GStyle::operator=(const GStyle &s)
@@ -183,9 +191,9 @@ GStyle &GStyle::operator=(const GStyle &s)
   d->oopacity = s.d->oopacity;
   d->join = s.d->join;
   d->cap = s.d->cap;
-  d->filled = s.d->filled;
+  d->ftype = s.d->ftype;
   d->fcolor = s.d->fcolor;
   d->fopacity = s.d->fopacity;
-  d->brushStyle = s.d->brushStyle;
+  d->pattern = s.d->pattern;
   return *this;
 }

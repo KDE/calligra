@@ -71,12 +71,42 @@ GObject(obj)
 
 GGroup::~GGroup()
 {
-  for(GObject *o=members.first(); o!=0L; o=members.next())
-        o->unref();
+  for(GObject *o = members.first(); o != 0L; o = members.next())
+    o->unref();
 }
 
-QString GGroup::typeName () const {
+GObject *GGroup::copy() const
+{
+  return new GGroup(*this);
+}
+
+void GGroup::addObject(GObject *obj)
+{
+  obj->ref();
+  members.append(obj);
+}
+
+QString GGroup::typeName() const
+{
   return i18n("Group");
+}
+
+QDomElement GGroup::writeToXml(QDomDocument &document)
+{
+  QDomElement group = document.createElement("group");
+  group.appendChild(GObject::writeToXml(document));
+  for(GObject *o = members.first(); o != 0L; o = members.next())
+    group.appendChild(o->writeToXml(document));
+  return group;
+}
+
+void GGroup::draw(QPainter &p, bool, bool outline, bool)
+{
+  p.save();
+  p.setWorldMatrix(tmpMatrix, true);
+  for(GObject *o = members.first(); o != 0L; o = members.next())
+    o->draw(p, false, outline);
+  p.restore();
 }
 
 bool GGroup::contains (const Coord& p) {
@@ -88,28 +118,6 @@ bool GGroup::contains (const Coord& p) {
     }
     return false;
 }
-
-void GGroup::addObject (GObject* obj) {
-    obj->ref ();
-    members.append(obj);
-    updateRegion ();
-}
-
-void GGroup::draw (QPainter& p, bool /*withBasePoints*/, bool outline, bool) {
-    p.save ();
-    p.setWorldMatrix (tmpMatrix, true);
-    for (GObject *o=members.first(); o!=0L; o=members.next())
-        o->draw (p, false, outline);
-    p.restore ();
-}
-
-GObject* GGroup::copy () {
-  return new GGroup (*this);
-}
-
-/*GObject* GGroup::clone (const QDomElement &element) {
-  return new GGroup (element);
-}*/
 
 void GGroup::calcBoundingBox () {
   if (members.isEmpty ())
@@ -160,14 +168,6 @@ void GGroup::updateProperties (GObject::Property prop, int mask)
     }
 }
 
-QDomElement GGroup::writeToXml (QDomDocument &document) {
-
-    QDomElement element=document.createElement("group");
-    element.appendChild(GObject::writeToXml(document));
-    for (GObject *o=members.first(); o!=0L; o=members.next())
-        element.appendChild(o->writeToXml (document));
-    return element;
-}
 void GGroup::restoreState (GOState* state) {
   tMatrix = state->matrix;
   iMatrix = tMatrix.invert ();

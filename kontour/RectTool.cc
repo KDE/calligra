@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -75,6 +76,7 @@ void RectTool::activate()
 {
   state = S_Init;
   toolController()->view()->canvas()->setCursor(Qt::crossCursor);
+  toolController()->view()->setStatus(i18n("Rectangle Mode"));
 }
 
 void RectTool::deactivate()
@@ -161,21 +163,28 @@ void RectTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
-      GRect *rect = new GRect();
-      kdDebug(38000) << "r.left() : " << r.left() << endl;
-      kdDebug(38000) << "r.bottom() : " << r.bottom() << endl;
-      kdDebug(38000) << "canvas.xOffset() : " << canvas->xOffset() << endl;
-      kdDebug(38000) << "canvas.yOffset() : " << canvas->yOffset() << endl;
-      float zoom = toolController()->view()->activeDocument()->zoomFactor();
-      kdDebug(38000) << "RectTool zoom : " << zoom << endl;
-      rect->startPoint(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom));
-      rect->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
-      CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
-      KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
-      rect->style(*(doc->document()->styles()->current()));	// copy current style
-      doc->history()->addCommand(cmd);
-      canvas->updateBuf(r);
-      canvas->repaint(r);
+      if(r.width() == 0 && r.height() == 0)
+      {
+        //TODO Insert rect dialog
+      }
+      else
+      {
+        GRect *rect = new GRect();
+        kdDebug(38000) << "r.left() : " << r.left() << endl;
+        kdDebug(38000) << "r.bottom() : " << r.bottom() << endl;
+        kdDebug(38000) << "canvas.xOffset() : " << canvas->xOffset() << endl;
+        kdDebug(38000) << "canvas.yOffset() : " << canvas->yOffset() << endl;
+        double zoom = toolController()->view()->activeDocument()->zoomFactor();
+        kdDebug(38000) << "RectTool zoom : " << zoom << endl;
+        rect->startPoint(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom));
+        rect->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
+        CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
+        KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+        rect->style(*(doc->document()->styles()->current()));  // copy current style
+        doc->history()->addCommand(cmd);
+        canvas->updateBuf(r);
+        canvas->repaint(r);
+      }
       state = S_Init;
     }
 /*      if (rect == 0L)

@@ -108,6 +108,7 @@ QDomElement GObject::writeToXml(QDomDocument &document)
   QDomElement go = document.createElement("go");
   go.setAttribute("id", mId);
   go.appendChild(createMatrixElement(tMatrix, document));
+  go.appendChild(st.writeToXml(document));
   return go;
 }
 

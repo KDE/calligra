@@ -503,7 +503,7 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
   }
   else if(state == S_Pick)
   {
-    if(ctype == C_Size)
+    if(ctype == C_Move)
     {
       page->handle().mode(Handle::HMode_Rotate);
       page->updateSelection();

@@ -52,13 +52,12 @@ GDocument::GDocument(KontourDocument *aDoc)
 
   mShowHelplines = true;
   mSnapToHelplines = false;
+  mCurPageNum = 1;
 
   pages.setAutoDelete(true);
   pages.clear();
 
   mActivePage = addPage();
-  mActivePage->name(i18n("Page %1").arg(1));
-  mCurPageNum = 2;
 
   mUpdateCanvas = true;
 
