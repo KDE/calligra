@@ -330,3 +330,13 @@ void KWordDocIface::initUnit()
 {
     doc->initUnit();
 }
+
+bool KWordDocIface::isHeaderVisible() const
+{
+    doc->isHeaderVisible();
+}
+
+bool KWordDocIface::isFooterVisible() const
+{
+    doc->isFooterVisible();
+}

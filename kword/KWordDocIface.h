@@ -80,6 +80,10 @@ k_dcop:
 
     virtual void setHeaderVisible( bool );
     virtual void setFooterVisible( bool );
+
+    virtual bool isHeaderVisible() const;
+    virtual bool isFooterVisible() const;
+
     virtual void setViewFrameBorders( bool b );
     virtual void setShowRuler(bool b);
     virtual void setShowDocStruct(bool _b);
@@ -100,7 +104,6 @@ k_dcop:
     virtual void initConfig();
     virtual void saveConfig();
     virtual void initUnit();
-
 
 private:
     KWDocument *doc;
