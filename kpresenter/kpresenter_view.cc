@@ -148,13 +148,6 @@
 #include <koStore.h>
 #include <koStoreDrag.h>
 
-#ifdef HAVE_LIBKSPELL2
-#include <kspell2/dialog.h>
-#include <kspell2/broker.h>
-#include <kspell2/defaultdictionary.h>
-#include "kospell.h"
-using namespace KSpell2;
-#endif
 
 #define DEBUG
 
@@ -260,6 +253,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_spell.kospell = 0;
     m_spell.textIterator = 0L;
     m_spell.macroCmdSpellCheck = 0L;
+#ifdef HAVE_LIBKSPELL2
+    m_spell.dlg = 0;
+#endif
 
     m_autoPresTimerConnected = false;
     m_actionList.setAutoDelete( true );
@@ -4834,14 +4830,15 @@ void KPresenterView::startKSpell()
         m_spell.kospell = new KoSpell( Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) ), this  );
     m_spell.kospell->check( m_spell.textIterator, true );
 
-   KSpell2::Dialog *dlg = new KSpell2::Dialog( m_spell.kospell, this );
-    QObject::connect( dlg, SIGNAL(misspelling(const QString&, int)),
+    delete m_spell.dlg;
+    m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
+    QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
                       this, SLOT(spellCheckerMisspelling(const QString&, int)) );
-    QObject::connect( dlg, SIGNAL(replace(const QString&, int, const QString&)),
+    QObject::connect( m_spell.dlg, SIGNAL(replace(const QString&, int, const QString&)),
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
-    QObject::connect( dlg, SIGNAL(done(const QString&) ),
+    QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
-    dlg->show();
+    m_spell.dlg->show();
     //clearSpellChecker();
 #endif
 }
@@ -4909,12 +4906,14 @@ void KPresenterView::spellCheckerReady()
 
 void KPresenterView::clearSpellChecker()
 {
+#ifdef HAVE_LIBKSPELL2
     kdDebug() << "KPresenterView::clearSpellChecker()" << endl;
     delete m_spell.kospell;
     m_spell.kospell = 0;
     m_initSwitchPage = -1;
     m_switchPage = -1;
-
+    delete m_spell.dlg;
+    m_spell.dlg = 0L;
 
     if(m_spell.macroCmdSpellCheck)
         m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
@@ -4924,7 +4923,7 @@ void KPresenterView::clearSpellChecker()
 
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
-
+#endif
 }
 
 void KPresenterView::spellCheckerMisspelling( const QString &old, int pos )

@@ -89,14 +89,6 @@
 #include <kotextobject.h>
 #include <tkcoloractions.h>
 
-#ifdef HAVE_LIBKSPELL2
-#include <kspell2/dialog.h>
-#include <kspell2/broker.h>
-#include <kspell2/defaultdictionary.h>
-#include "kospell.h"
-using namespace KSpell2;
-#endif
-
 #include <kaccel.h>
 #include <kaccelgen.h>
 #include <kdebug.h>
@@ -135,6 +127,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     dcopObject(); // build it
     fsInline=0L;
     m_spell.kospell = 0;
+#ifdef HAVE_LIBKSPELL2
+    m_spell.dlg = 0;
+#endif
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
     m_border.left.color = white;
@@ -5311,14 +5306,15 @@ void KWView::startKSpell()
 
     m_spell.kospell->check( m_spell.textIterator, true );
 
-    KSpell2::Dialog *dlg = new KSpell2::Dialog( m_spell.kospell, this );
-    QObject::connect( dlg, SIGNAL(misspelling(const QString&, int)),
+    delete m_spell.dlg;
+    m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
+    QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
                       this, SLOT(spellCheckerMisspelling(const QString&, int)) );
-    QObject::connect( dlg, SIGNAL(replace(const QString&, int, const QString&)),
+    QObject::connect( m_spell.dlg, SIGNAL(replace(const QString&, int, const QString&)),
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
-    QObject::connect( dlg, SIGNAL(done(const QString&) ),
+    QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
-    dlg->show();
+    m_spell.dlg->show();
 #endif
     //clearSpellChecker();
 }
@@ -5385,8 +5381,10 @@ void KWView::clearSpellChecker()
 {
  #ifdef HAVE_LIBKSPELL2
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
-        delete m_spell.kospell;
+    delete m_spell.kospell;
     m_spell.kospell=0;
+    delete m_spell.dlg;
+    m_spell.dlg = 0L;
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
     if(m_spell.macroCmdSpellCheck)
