@@ -4,6 +4,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <config.h>
+#include <kofficeversion.h>
 
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.
@@ -12,7 +13,7 @@ KAboutData * newKarbonAboutData()
 	KAboutData * aboutData = new KAboutData(
 		"karbon",
 		I18N_NOOP( "Karbon14" ),
-		"0.1",
+		KOFFICE_VERSION_STRING,
 		I18N_NOOP( "Yet another vector graphics application." ),
 		KAboutData::License_GPL,
 		I18N_NOOP( "(c) 2001-2004, The Karbon Developers" ),
