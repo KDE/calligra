@@ -348,8 +348,19 @@ bool kspreadfunc_db( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 4, "DB", true ) )
-    return false;
+  double month = 12;
+
+  if( KSUtil::checkArgumentsCount( context, 5, "DB", false ) )
+  {
+    if( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
+      return false;
+    month = args[4]->doubleValue();
+  }
+  else
+  {
+    if ( !KSUtil::checkArgumentsCount( context, 4, "DB", true ) )
+      return false;
+  }
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
@@ -364,7 +375,6 @@ bool kspreadfunc_db( KSContext& context )
   double salvage = args[1]->doubleValue();
   double life = args[2]->doubleValue();
   double period = args[3]->doubleValue();
-  double month = 12;
 
   // sentinel check
   if( cost == 0 || life <= 0.0 ) return false;

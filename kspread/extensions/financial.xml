@@ -298,10 +298,15 @@ divides the cost evenly over the life of an asset.</Text>
 	<Comment>Period</Comment>
 	<Type>Float</Type>
       </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Float</Type>
+      </Parameter>
       <Help>
-	<Text>The DB() function will calculate the depreciation of an asset for a given period using the fixed-declining balance method.</Text>
-	<Syntax>DB(cost; salvage value; life; period)</Syntax>
+	<Text>The DB() function will calculate the depreciation of an asset for a given period using the fixed-declining balance method. Month is optional, if omitted it is assumed to be 12.</Text>
+	<Syntax>DB(cost; salvage value; life; period [;month])</Syntax>
 	<Example>DB(8000;400;6;3) equals 1158.40</Example>
+	<Example>DB(8000;400;6;3;2) equals 1783.41</Example>
       </Help>
     </Function>
 
