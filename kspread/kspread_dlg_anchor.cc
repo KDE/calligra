@@ -114,10 +114,10 @@ internetAnchor::internetAnchor( KSpreadView* _view,QWidget *parent , char *name 
 {
   m_pView=_view;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
-  lay2->setSpacing( 5 );
+  lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this);
@@ -190,10 +190,10 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
 {
   m_pView=_view;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
-  lay2->setSpacing( 5 );
+  lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this);
@@ -267,10 +267,10 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
 {
   m_pView=_view;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint()  );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
-  lay2->setSpacing( 5 );
+  lay2->setSpacing( KDialog::marginHint()  );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this);
@@ -348,10 +348,10 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
 {
   m_pView=_view;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint()  );
+  lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
-  lay2->setSpacing( 5 );
+  lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this);
