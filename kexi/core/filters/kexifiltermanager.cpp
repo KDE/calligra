@@ -52,7 +52,9 @@ bool KexiFilterManager::import(unsigned long importType)
 
 	if (it==filters.end()) {
 		kdDebug()<<"KexiFilterManager::import: NOTING FOUND !!!!!"<<endl;
+#ifdef __GNUC_
 #warning tell the user that there are no filters
+#endif
 		return false;
 	}
 
@@ -93,7 +95,9 @@ bool KexiFilterManager::import(unsigned long importType)
 	KMimeType::Ptr im=KMimeType::findByURL(url);
 	if (!mapping.contains(im->name()))  {
 		kdDebug()<<"Unsupported mimetype"<<endl;
+#ifdef __GNUC__
 #warning display an error
+#endif
 		return false;
 	}
 
@@ -108,7 +112,9 @@ bool KexiFilterManager::doImport(const QString& lib, const KURL &url, unsigned l
 	l<<"IMPORT";;
 	KexiFilter *f=KParts::ComponentFactory::createInstanceFromLibrary<KexiFilter> (lib.utf8(),this,"import filter",l,&err);
 	if (err!=0) {
+#ifdef __GNUC__
 #warning display some error dialog here
+#endif
 		kdDebug()<<"Import filter instance couldn't be created:"<<err<<endl;
 		return false;
 	}
@@ -126,3 +132,5 @@ KexiProject *KexiFilterManager::project()
 KexiFilterManager::~KexiFilterManager()
 {
 }
+
+#include "kexifiltermanager.moc"

@@ -28,7 +28,7 @@ class KexiFilterManager;
 
 #define KEXIFILTERMANAGER(obj) (static_cast<KexiFilterManager*>(obj->qt_cast("KexiFilterManager")))
 
-class KexiFilter: public QObject {
+class KEXIFILTER_EXPORT KexiFilter: public QObject {
 
 	Q_OBJECT
 

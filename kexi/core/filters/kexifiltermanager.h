@@ -25,7 +25,7 @@
 
 class KexiProject;
 
-class KexiFilterManager:public QObject {
+class KEXIFILTER_EXPORT KexiFilterManager:public QObject {
 
 	Q_OBJECT
 

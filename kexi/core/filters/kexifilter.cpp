@@ -39,3 +39,5 @@ KexiFilterManager *KexiFilter::filterManager()
 {
 	return m_filterManager;
 }
+
+#include "kexifilter.moc"
