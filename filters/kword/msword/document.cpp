@@ -123,7 +123,7 @@ void Document::processStyles()
                 styleElem.appendChild( element );
             }
 
-            writeLayout( styleElem, style->paragraphProperties().pap() );
+            writeLayout( styleElem, style->paragraphProperties() );
 
             writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0 );
         }
@@ -153,12 +153,19 @@ void Document::sectionStart()
         QDomElement elementDoc = m_mainDocument.documentElement();
 
         QDomElement elementPaper = m_mainDocument.createElement("PAPER");
-        elementPaper.setAttribute("width", (double)sep->xaPage / 20.0);
-        elementPaper.setAttribute("height", (double)sep->yaPage / 20.0);
-        // TODO: guess paper formats from the size :}
-        KoFormat paperFormat = PG_DIN_A4;
+        bool landscape = (sep->dmOrientPage == 2);
+        double width = (double)sep->xaPage / 20.0;
+        double height = (double)sep->yaPage / 20.0;
+        elementPaper.setAttribute("width", width);
+        elementPaper.setAttribute("height", height);
+
+        // guessFormat takes millimeters
+        width = POINT_TO_MM( width );
+        height = POINT_TO_MM( height );
+        KoFormat paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
         elementPaper.setAttribute("format",paperFormat);
-        elementPaper.setAttribute("orientation", sep->dmOrientPage == 2 ? PG_LANDSCAPE : PG_PORTRAIT );
+
+        elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
         elementPaper.setAttribute("columns",1); // TODO
         elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
         elementPaper.setAttribute("hType",0); // TODO
@@ -448,7 +455,7 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
     if ( m_paragraphProperties )
     {
         // Write out the properties of the paragraph
-        writeLayout( layoutElement, m_paragraphProperties->pap() );
+        writeLayout( layoutElement, *m_paragraphProperties );
     }
 
     textElement.appendChild(m_mainDocument.createTextNode(text));
@@ -458,8 +465,9 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
     m_oldLayout = layoutElement; // Keep a reference to the old layout for some hacks
 }
 
-void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP& pap )
+void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties )
 {
+    const wvWare::Word97::PAP& pap = paragraphProperties.pap();
     // Always write out the alignment, it's required
     QDomElement flowElement = m_mainDocument.createElement("FLOW");
     QString alignment = Conversion::alignment( pap.jc );
@@ -566,7 +574,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
 
     if ( pap.ilfo > 0 )
     {
-        const wvWare::ListInfo* listInfo = m_paragraphProperties->listInfo();
+        const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
         Q_ASSERT( listInfo );
         if ( listInfo )
         {

@@ -67,8 +67,8 @@ private:
     void writeOutParagraph( const QString& styleName, const QString& text );
     // Write a <FORMAT> tag from the given CHP
     void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len );
-    // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given PAP
-    void writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP& pap );
+    // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
+    void writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties );
 
     QString m_paragraph;
     QDomDocument& m_mainDocument;
