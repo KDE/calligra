@@ -42,19 +42,18 @@ private:
     KoFilter::ConversionStatus openFile();
 
     void exportBody( QDomDocument & doccontent, QDomElement & body );
-    void exportPaperSettings( QDomDocument & doccontent );
     void createDocumentMeta( QDomDocument & docmeta );
     void createDocumentStyles( QDomDocument & docstyles );
     void createDocumentContent( QDomDocument & doccontent );
     void createDocumentManifest( QDomDocument & docmanifest );
     void appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target );
+    void appendParagraph( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendText( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendLine( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendRectangle( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void set2DGeometry( QDomElement & source, QDomElement & target );
     void setLineGeometry( QDomElement & source, QDomElement & target );
-    void setGraphicStyle( QDomElement & source,  QDomElement & target );
 
     int m_currentPage;
     float m_pageHeight;

@@ -98,7 +98,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     }
 
     QCString contentString = content.toCString();
-    kdDebug() << "content :" << contentString << endl;
+    //kdDebug() << "content :" << contentString << endl;
     store->write( contentString , contentString.length() );
     store->close();
 
@@ -301,7 +301,6 @@ void OoImpressExport::createDocumentContent( QDomDocument & doccontent )
     content.appendChild( script );
 
     m_styles = doccontent.createElement( "office:automatic-styles" );
-    exportPaperSettings( doccontent );
     content.appendChild( m_styles );
 
     QDomElement body = doccontent.createElement( "office:body" );
@@ -343,37 +342,13 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     entry.setAttribute( "manifest:full-path", "meta.xml" );
     manifest.appendChild( entry );
 
-//     entry = docmanifest.createElement( "manifest:file-entry" );
-//     entry.setAttribute( "manifest:media-type", "text/xml" );
-//     entry.setAttribute( "manifest:full-path", "settings.xml" );
-//     manifest.appendChild( entry );
-
     docmanifest.appendChild( manifest );
-}
-
-void OoImpressExport::exportPaperSettings( QDomDocument & doccontent )
-{
-    // store the paper settings
-    QDomElement style = doccontent.createElement( "style:style" );
-    style.setAttribute( "style:name", "dp1" );
-    style.setAttribute( "style:family", "drawing-page" );
-    QDomElement properties = doccontent.createElement( "style:properties" );
-    properties.setAttribute( "presentation:background-visible", "true" );
-    properties.setAttribute( "presentation:background-objects-visible", "true" );
-    style.appendChild( properties );
-    m_styles.appendChild( style );
-
-    QDomNode doc = m_maindoc.namedItem( "DOC" );
-    QDomNode paper = doc.namedItem( "PAPER" );
-
-    QDomElement p = paper.toElement();
-    m_masterPageStyle = m_styleFactory.createPageMasterStyle( p );
-    m_pageHeight = p.attribute( "ptHeight" ).toFloat();
 }
 
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
 {
     QDomNode doc = m_maindoc.namedItem( "DOC" );
+    QDomNode paper = doc.namedItem( "PAPER" );
     QDomNode background = doc.namedItem( "BACKGROUND" );
     QDomNode header = doc.namedItem( "HEADER" );
     QDomNode footer = doc.namedItem( "FOOTER" );
@@ -382,6 +357,12 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode objects = doc.namedItem( "OBJECTS" );
     QDomNode pictures = doc.namedItem( "PICTURES" );
     QDomNode sounds = doc.namedItem( "SOUNDS" );
+    QDomNode bgpage = background.firstChild();
+
+    // store the paper settings
+    QDomElement p = paper.toElement();
+    m_masterPageStyle = m_styleFactory.createPageMasterStyle( p );
+    m_pageHeight = p.attribute( "ptHeight" ).toFloat();
 
     m_currentPage = 1;
 
@@ -389,10 +370,16 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     for ( QDomNode title = titles.firstChild(); !title.isNull();
           title = title.nextSibling() )
     {
+        // create the page style and ignore the fact that there may
+        // be less backgrounds than pages
+        QDomElement bg = bgpage.toElement();
+        QString ps = m_styleFactory.createPageStyle( bg );
+        bgpage = bgpage.nextSibling();
+
         QDomElement t = title.toElement();
         QDomElement drawPage = doccontent.createElement( "draw:page" );
         drawPage.setAttribute( "draw:name", t.attribute( "title" ) );
-        drawPage.setAttribute( "draw:style-name", "dp1" );
+        drawPage.setAttribute( "draw:style-name", ps );
         drawPage.setAttribute( "draw:id", m_currentPage );
         drawPage.setAttribute( "draw:master-page-name", m_masterPageStyle );
 
@@ -435,9 +422,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             }
         }
 
-
         body.appendChild( drawPage );
-
         m_currentPage++;
     }
 }
@@ -445,28 +430,69 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
 void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QDomElement textbox = doc.createElement( "draw:text-box" );
-    setGraphicStyle( source, textbox );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    textbox.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
     set2DGeometry( source, textbox );
-    appendText( doc, source, textbox );
+
+    // parse every paragraph
+    QDomNode textobject = source.namedItem( "TEXTOBJ" );
+    for ( QDomNode paragraph = textobject.firstChild(); !paragraph.isNull();
+          paragraph = paragraph.nextSibling() )
+    {
+        QDomElement p = paragraph.toElement();
+        appendParagraph( doc, p, textbox );
+    }
 
     target.appendChild( textbox );
 }
 
+void OoImpressExport::appendParagraph( QDomDocument & doc, QDomElement & source, QDomElement & target )
+{
+    QDomElement paragraph = doc.createElement( "text:p" );
+
+    // create the paragraph style
+    QString ps = m_styleFactory.createParagraphStyle( source );
+    paragraph.setAttribute( "text:style-name", ps );
+
+    // parse every text element
+    for ( QDomNode text = source.firstChild(); !text.isNull();
+          text = text.nextSibling() )
+    {
+        if ( text.nodeName() == "TEXT" )
+        {
+            QDomElement t = text.toElement();
+            appendText( doc, t, paragraph );
+        }
+    }
+
+    target.appendChild( paragraph );
+}
+
 void OoImpressExport::appendText( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
-    QDomElement textobj = source.namedItem( "TEXTOBJ" ).toElement();
-    QDomElement paragraph = textobj.namedItem( "P" ).toElement();
-    QDomElement text = paragraph.namedItem( "TEXT" ).toElement();
+    QDomElement textspan = doc.createElement( "text:span" );
 
-    QDomElement t = doc.createElement( "text:p" );
-    t.appendChild( doc.createTextNode( text.text() ) );
+    // create the text style
+    QString ts = m_styleFactory.createTextStyle( source );
+    textspan.setAttribute( "text:style-name", ts );
 
-    target.appendChild( t );
+    textspan.appendChild( doc.createTextNode( source.text() ) );
+    target.appendChild( textspan );
 }
 
 void OoImpressExport::appendLine( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QDomElement line = doc.createElement( "draw:line" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    line.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
     setLineGeometry( source, line );
 
     target.appendChild( line );
@@ -475,6 +501,12 @@ void OoImpressExport::appendLine( QDomDocument & doc, QDomElement & source, QDom
 void OoImpressExport::appendRectangle( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QDomElement rectangle = doc.createElement( "draw:rect" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    rectangle.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
     set2DGeometry( source, rectangle );
 
     target.appendChild( rectangle );
@@ -483,6 +515,12 @@ void OoImpressExport::appendRectangle( QDomDocument & doc, QDomElement & source,
 void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QDomElement ellipse = doc.createElement( "draw:ellipse" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    ellipse.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
     set2DGeometry( source, ellipse );
 
     target.appendChild( ellipse );
@@ -529,12 +567,6 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
     }
-}
-
-void OoImpressExport::setGraphicStyle( QDomElement & source, QDomElement & target )
-{
-    QString gs = m_styleFactory.createGraphicStyle( source );
-    target.setAttribute( "draw:style-name", gs );
 }
 
 #include "ooimpressexport.moc"
