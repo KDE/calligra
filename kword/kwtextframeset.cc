@@ -1576,8 +1576,11 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 // There's no point in resizing a copy, so go back to the last non-copy frame
                 KWFrame *theFrame = settingsFrame( frames.last() );
 
-                if ( theFrame->frameSet()->isAFooter() )
+                // Footers and footnotes go up
+                if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
                 {
+                    // Actually this code doesn't matter much, recalcFrames will reposition the frame
+                    // But the point of this code is to call it only if the frame really needs to be resized...
                     double maxFooterSize = footerHeaderSizeMax(  theFrame );
                     wantedPosition = theFrame->top() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
                     if ( wantedPosition != theFrame->top() && QMAX(theFrame->bottom()-maxFooterSize,wantedPosition)==wantedPosition )
@@ -1690,7 +1693,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     }
     // Handle the case where the last frame is empty, so we may want to
     // remove the last page.
-    else if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
+    else if ( frames.count() > 1 && !lastFormatted && frameSetInfo() == KWFrameSet::FI_BODY
               && bottom < availHeight - m_doc->ptToLayoutUnitPixY( frames.last()->innerHeight() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
@@ -1722,7 +1725,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 #endif
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
-        if ( theFrame->frameSet()->isAFooter() )
+        if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
         {
             double wantedPosition = theFrame->top() + m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
             if ( wantedPosition != theFrame->top() )
@@ -1872,7 +1875,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
 #ifdef DEBUG_VIEWAREA
     kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name()
                      << " nPointBottom=" << nPointBottom.x() << "," << nPointBottom.y()
-                     << " availHeight=" << availHeight << " textDocument()->height()=" << textDocument()->height() << endl;
+                     << " availHeight=" << ah << " textDocument()->height()=" << textDocument()->height() << endl;
 #endif
 
     // Find last page that is visible
