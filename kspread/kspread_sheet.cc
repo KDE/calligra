@@ -6937,10 +6937,7 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
         return FALSE;
 
     if ( isProtected() )
-    {
-      KMessageBox::error( 0, i18n ( "You cannot change a protected sheet." ) );
       return false;
-    }
 
     if ( m_strName == name )
         return TRUE;
@@ -6954,14 +6951,6 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for ( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
-    if ( makeUndo )
-    {
-        if ( !m_pDoc->undoLocked() )
-        {
-                KSpreadUndoAction* undo = new KSpreadUndoSetTableName( doc(), this, old_name );
-                m_pDoc->addCommand( undo );
-        }
-    }
 
     m_pDoc->changeAreaTableName( old_name, name );
     emit sig_nameChanged( this, old_name );

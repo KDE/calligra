@@ -246,13 +246,13 @@ public:
      * @see #setTableName
      */
     QString tableName()const { return m_strName; }
+    
     /**
      * Renames a table. This will automatically adapt all formulas
      * in all tables and all cells to reflect the new name.
      *
      * If the name really changed then @ref #sig_nameChanged is emitted
-     * and the GUI will reflect the change. In addition a @ref KSpreadUndoSetTableName
-     * object will be created to implement undo.
+     * and the GUI will reflect the change.
      *
      * @param init If set to TRUE then no formula will be changed and no signal
      *             will be emitted and no undo action created. Usually you dont

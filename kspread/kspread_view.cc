@@ -70,6 +70,7 @@
 
 #include <kparts/partmanager.h>
 
+#include "commands.h"
 #include "kspread_sheetprint.h"
 #include "kspread_map.h"
 #include "kspread_dlg_csv.h"
@@ -6006,6 +6007,12 @@ void KSpreadView::slotRename()
 {
 
   KSpreadSheet * table = activeTable();
+  
+  if( table->isProtected() )
+  {
+      KMessageBox::error( 0, i18n ( "You cannot change a protected sheet." ) );
+      return;
+  }
 
   bool ok;
   QString activeName = table->tableName();
@@ -6042,7 +6049,7 @@ void KSpreadView::slotRename()
   else if ( newName != activeName ) // Table name changed.
   {
     // Is the name already used
-    if ( !table->setTableName( newName ) )
+    if ( d->workbook->findTable( newName ) )
     {
       KNotifyClient::beep();
       KMessageBox::information( this, i18n("This name is already used."), i18n("Change Sheet Name") );
@@ -6050,6 +6057,12 @@ void KSpreadView::slotRename()
       slotRename();
       return;
     }
+    
+    KCommand* command = new RenameSheetCommand( table, newName );
+    d->doc->addCommand( command );
+    command->execute();
+    
+    //table->setTableName( newName );    
 
     d->doc->emitBeginOperation(false);
     updateEditWidget();
