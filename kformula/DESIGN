@@ -53,9 +53,8 @@ children. These are before, between and after the children.
 
 May contain any (type of) element as child 
 
-I propose:
-[except SequenceElement if they contains a SequenceElement they merge 
-it in the list] -- I agree.
+except SequenceElements if they contains a SequenceElement they merge 
+it in the list
 
 They can handle splitting of the sequence to allow "select an put selected item
 between parenthesis" i.e. as content child of a delimiterelement) 
@@ -91,12 +90,9 @@ TextElement from BasicElement
 contains one char and no children at all.
 
 
-//Remove this, all element must have font to permit font to be inherited
-// I think there is a better way to pass fonts around.
-// see "Fonts and font size" below
 Might have its own font and size. But preferes to use a reasonalbe
 font and size that are calculated from its parents font and a given
-scheme.
+scheme (see below).
 
 
 DelimiterElement from BasicElement
@@ -137,19 +133,20 @@ One child.
 Draw it at a fixed position relative to parent or absolute.
 This is to do dirty things.
 
-(For some strange reason I don't like this ideal at all. Maybe because
-is breakes our tree structure. We should try to avoid it as long as
-possible.)
+This element must not be used, kformula will provide you everything
+without the use of this kind of element, any way for strange reasons
+you want to do things that are not usually allowed and that are not
+typical of a math formula.
+[We will decide if implement this element or not]
 
 
 MatrixElement from BasicElement
 -------------
 
 A matrix of children.
-With all align stuff, internal borders etc, dots handling etc..
-
-(Those dots being yet other elements. Maybe special TextElements?)
-
+With all align stuff, internal borders etc, matrix dots handling (i.e.
+those dots or lines that complete the matrix, not well handled in TeX),
+etc..
 
 SpaceElement from BasicElement
 ------------
@@ -165,11 +162,11 @@ The element to be used for all kinds of operators. It needed because
 operators require some space before and after and are therefore no
 simple text.
 
-They can you pixamps inestead of fonts
-
-(Pixmaps are not such a good thing as each element needs to be drawn
-in different sizes.)
-
+They can you pixamps inestead of fonts, the use of pixmaps is needed only 
+to give the user the possibilty of introduce its strange operator that we 
+do not provide as a font. There problems with the scalability but we will
+include as fonts (or vectorial images) in kformula all TeX operators so we
+hope there is no need to use pixamps for a standard use of KFormula
 
 Navigation
 ##########
@@ -241,7 +238,7 @@ Your only need to choose one of them to get a reasonable good look.
 
 
 
-Interface templates (can be merged in "look" ? -- I don'd think so.)
+Interface templates 
 ###################
 
 Decide what KAction have to be toolbars,
@@ -270,9 +267,10 @@ turns this on.)
 
 
 
-Fonts and font size
+Fonts and font size (2 ideas)
 ###################
 
+1)
 Each element know its font family (also if it is not a text element) so that it 
 can give this font to its children.
 
@@ -281,8 +279,7 @@ a local size modifier (like HTML -2, -1,+3,etc..), this also calculate the
 QPen width for vector drawn stuff (like root symbol etc) and it gives a scale
 factor for pixmap.
 
-I think of another solution:
-
+2)
 When it comes to drawing we pass a StyleContext to the
 FormulaElement. The StyleContext contains the font family to use, the
 normal font size, the spaces to include between certain elements and
