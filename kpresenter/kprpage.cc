@@ -3521,10 +3521,7 @@ KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bo
     if ( (int)m_objectList.count() - 1 >= 0 ) {
         for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
             kpobject = m_objectList.at( i );
-            KoSize s = kpobject->getSize();
-            KoPoint pnt = kpobject->getOrig();
-            KoRect rect( pnt.x() , pnt.y() , s.width(), s.height() );
-            if ( rect.contains( pos ) ) {
+            if ( kpobject->contains( pos,m_doc->zoomHandler() ) ) {
                 _over = true;
                 if ( kpobject->isSelected() && modType == MT_MOVE )
                     desel = false;
