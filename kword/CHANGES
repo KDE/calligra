@@ -1,13 +1,17 @@
+Changes after KWord 1.3 beta4
+=============================
+- fix for frames extending beyond the page getting the wrong size in 'preview mode'
+- Fixed wrong layouting of inline frames (e.g. pictures)
+- Don't select inline frame after pasting text containing it (only select non-inline frames)
+- Improved "create style from selection": use format at cursor if no selection,
+  allow to type the name of an existing style to update it, and select the style
+  for the current paragraph after creating it.
+
 Changes after KWord-1.3-beta3
 =============================
 - Fixed handling of part frames (clicking didn't select it anymore, #63041)
 - Fixed cursor shape when pressing Ctrl.
 - Unbreak text view mode (cursor disappeared, #57554)
-- Improved "create style from selection": use format at cursor if no selection,
-allow to type the name of an existing style to update it, and select the style
-for the current paragraph after creating it.
-- Fixed wrong layouting of inline frames (e.g. pictures)
-- Don't select inline frame after pasting text containing it (only select non-inline frames)
 
 Changes after KWord-1.3-beta2
 =============================
