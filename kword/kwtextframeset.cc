@@ -61,7 +61,7 @@
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
@@ -1898,7 +1898,6 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
         return;
     }
 
-    double wantedPosition = 0;
     KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
     if ( frmBehavior == KWFrame::AutoExtendFrame && isProtectSize())
         frmBehavior = KWFrame::Ignore;
@@ -1928,6 +1927,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
         if(difference > 0) {
             // There's no point in resizing a copy, so go back to the last non-copy frame
             KWFrame *theFrame = settingsFrame( frames.last() );
+            double wantedPosition = 0;
 
             // Footers and footnotes go up
             if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootNote() )
@@ -1969,6 +1969,8 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
             pageBottom -= m_doc->ptBottomBorder();
             double newPosition = QMIN( wantedPosition, pageBottom );
+            kdDebug(32002) << "wantedPosition=" << wantedPosition << " pageBottom=" << pageBottom
+                           << " -> newPosition=" << newPosition << endl;
 
             if ( theFrame->frameSet()->isAHeader() )
             {
@@ -1977,6 +1979,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             }
 
             newPosition = QMAX( newPosition, theFrame->top() ); // avoid negative heights
+            kdDebug(32002) << "newPosition=" << newPosition << endl;
 
             bool resized = false;
             if(theFrame->frameSet()->getGroupManager()) {
@@ -2018,6 +2021,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug(32002) << "Not enough room in this page -> creating new one, with a reconnect frame" << endl;
+                kdDebug(32002) << "new wantedPosition=" << wantedPosition << endl;
 #endif
 
                 // fall through to AutoCreateNewFrame
@@ -2037,9 +2041,11 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     }
 
     case KWFrame::AutoCreateNewFrame:
+    {
         // We need a new frame in this frameset.
-        createNewPageAndNewFrame( lastFormatted, difference, wantedPosition, abort );
+        createNewPageAndNewFrame( lastFormatted, difference, abort );
         break;
+    }
 
     case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
@@ -2172,7 +2178,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 // This is called when a text frame with behaviour AutoCreateNewFrame
 // has more text than available frame height, so we need to create a new page
 // so that a followup frame is created for this one
-void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, double wantedPosition, bool* abort )
+void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, bool* abort )
 {
     KWFrame* lastFrame = frames.last();
     // This is only going to help us if the new frame is reconnected. Otherwise bail out.
@@ -2218,7 +2224,8 @@ void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int d
         kdDebug(32002) << "now frames count=" << frames.count() << endl;
     }
 
-    // Maybe this created the frame, then we're done
+    // Maybe creating the new page created the frame in this frameset, then we're done
+    // Otherwise let's create it ourselves:
     if ( frames.count() == oldCount )
     {
         Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
@@ -2229,9 +2236,6 @@ void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int d
         //frm->setPageNum( lastFrame->pageNum()+1 );
         addFrame( frm );
     }
-
-    if (wantedPosition > 0 && !lastFrame->frameSet()->isEndNote())
-        lastFrame->setBottom( wantedPosition );
 
     updateFrames();
     m_doc->updateFramesOnTopOrBelow( lastFrame->pageNum() );

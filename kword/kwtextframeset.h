@@ -312,7 +312,7 @@ protected:
     double footerHeaderSizeMax( KWFrame *theFrame );
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
-    void createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, double wantedPosition, bool* abort );
+    void createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, bool* abort );
 
 private:
     /** The contained text object */
