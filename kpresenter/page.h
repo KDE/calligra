@@ -250,39 +250,43 @@ private slots:
   void objConfigRect() {view->extraConfigRect();}
   void assignEffect() {view->screenAssignEffect();}
   void drawingMode()
-    {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}
+  { presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor); }
   void switchingMode()
-    {presMenu->setItemChecked(PM_DM,false);presMenu->setItemChecked(PM_SM,true);drawMode = false;setCursor(blankCursor);}
+  { presMenu->setItemChecked(PM_DM,false);presMenu->setItemChecked(PM_SM,true);drawMode = false;setCursor(blankCursor); }
   void alignObjLeft()
-    {view->extraAlignObjLeftidl();}
+  { view->extraAlignObjLeftidl(); }
   void alignObjCenterH()
-    {view->extraAlignObjCenterHidl();}
+  { view->extraAlignObjCenterHidl(); }
   void alignObjRight()
-    {view->extraAlignObjRightidl();}
+  { view->extraAlignObjRightidl(); }
   void alignObjTop()
-    {view->extraAlignObjTopidl();}
+  { view->extraAlignObjTopidl(); }
   void alignObjCenterV()
-    {view->extraAlignObjCenterVidl();}
+  { view->extraAlignObjCenterVidl(); }
   void alignObjBottom()
-    {view->extraAlignObjBottomidl();}
+  { view->extraAlignObjBottomidl(); }
   void pageLayout()
-    {view->extraLayout();}
+  { view->extraLayout(); }
   void pageBackground()
-    {view->extraBackground();}
+  { view->extraBackground(); }
   void pageInsert()
-    {view->insertPage();}
+  { view->insertPage(); }
   void pageDelete()
-    {view->editDelPage();}
+  { view->editDelPage(); }
   void pagePaste()
-    {view->editPaste();}
+  { view->editPaste(); }
   void configPages()
-    {view->screenConfigPages();}
+  { view->screenConfigPages(); }
   void presStructView()
-    {view->screenPresStructView();}
+  { view->screenPresStructView(); }
   void slotGotoPage();
   void slotExitPres()
-    {view->screenStop();}
-
+  { view->screenStop(); }
+  void slotEditHF()
+  { view->editHeaderFooter(); }
+  void slotTextContents2Height()
+  { view->textContentsToHeight(); }
+  
 signals:
 
   // signals to notify of changes

@@ -1416,6 +1416,8 @@ void Page::setupMenus()
   txtMenu->insertItem(ICON("effect.xpm"),i18n("&Assign effect..."),this,SLOT(assignEffect()));
   txtMenu->insertSeparator();
   txtMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu4);
+  txtMenu->insertSeparator();
+  txtMenu->insertItem(i18n("&Extend Contents to Object Height"),this,SLOT(slotTextContents2Height()));
   txtMenu->setMouseTracking(true);
 
   // create right button presentation menu
@@ -1443,6 +1445,8 @@ void Page::setupMenus()
   pageMenu->insertSeparator();
   pageMenu->insertItem(ICON("filenew.xpm"),i18n("&Insert Page..."),this,SLOT(pageInsert()));
   pageMenu->insertItem(i18n("&Delete Page..."),this,SLOT(pageDelete()));
+  pageMenu->insertSeparator();
+  pageMenu->insertItem(i18n("Edit &Header/Footer..."),this,SLOT(slotEditHF()));
   pageMenu->insertSeparator();
   pageMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(pagePaste()));
   pageMenu->setMouseTracking(true);
@@ -1661,7 +1665,7 @@ void Page::startScreenPresentation(bool zoom)
     view->kPresenterDoc()->header()->zoom(_presFakt);
   if (view->kPresenterDoc()->hasFooter() && view->kPresenterDoc()->footer())
     view->kPresenterDoc()->footer()->zoom(_presFakt);
-  
+
   currPresPage = 1;
   editMode = false;
   drawMode = false;

@@ -20,7 +20,7 @@ module KPresenter
       slot void editFind();
       slot void editFindReplace();
       slot void editHeaderFooter();
-      
+
       slot void newView();
 
       slot void insertPage();
@@ -107,7 +107,8 @@ module KPresenter
       slot void textDepthPlus();
       slot void textDepthMinus();
       slot void textSpacing();
-
+      slot void textContentsToHeight();
+      
       slot void setPenColor(in long id);
       slot void setFillColor(in long id);
     };

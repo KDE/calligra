@@ -2661,7 +2661,7 @@ void KTextObject::cutRegion()
       redrawSelection(startCursor,stopCursor);
       startCursor.setPositionAbs(0);
       stopCursor.setPositionAbs(0);
-      
+
       _modified = true;
     }
 }
@@ -3731,7 +3731,7 @@ void KTextObject::replaceRegion(QString text,TxtCursor *_startCursor,TxtCursor *
 void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color)
 {
   _modified = true;
-  
+
   enum CurPos {C_IN,C_BEFORE,C_AFTER};
   int start_pos = 0,start_cpos = C_IN,i;
   int stop_pos = 0,stop_cpos = C_IN,objnum;
@@ -3829,7 +3829,7 @@ void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCu
 void KTextObject::changeRegionAlign(TxtCursor *_startCursor,TxtCursor *_stopCursor,TxtParagraph::HorzAlign _align)
 {
   _modified = true;
-  
+
   int start_para = _startCursor->positionParagraph();
   int stop_para = _stopCursor->positionParagraph(),i;
 
@@ -4192,7 +4192,7 @@ bool KTextObject::replaceFirst(QString search,QString replace,TxtCursor *from,Tx
 bool KTextObject::replaceNext(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
   _modified = true;
-  
+
   bool found = searchNext(search,from,to,caseSensitive);
 
   if (found)
@@ -4223,7 +4223,7 @@ bool KTextObject::replaceNext(QString search,QString replace,TxtCursor *from,Txt
 bool KTextObject::replaceFirstRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
   _modified = true;
-  
+
   searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
   searchIndexTo.setPositionAbs(txtCursor->positionAbs());
 
@@ -6191,9 +6191,8 @@ void KTextObject::setAllDistBefore(int d)
   _modified = true;
 
   for (unsigned int i = 0;i < paragraphList.count();i++)
-    {
-      paragraphList.at(i)->setDistBefore(d);
-    }
+    paragraphList.at(i)->setDistBefore(d);
+    
   recalc();
 }
 
@@ -6203,8 +6202,52 @@ void KTextObject::setAllDistAfter(int d)
   _modified = true;
 
   for (unsigned int i = 0;i < paragraphList.count();i++)
-    {
-      paragraphList.at(i)->setDistAfter(d);
-    }
+    paragraphList.at(i)->setDistAfter(d);
+    
   recalc();
 }
+
+/*================================================================*/
+void KTextObject::extendContents2Height()
+{
+  _modified = true;
+  
+  if (paragraphList.count() == 1)
+    {
+      if (lines() < 2)
+	return;
+      
+      setAllDistBefore(0);
+      setAllDistAfter(0);
+      setAllLineSpacing(0);
+      
+      int h = paragraphList.at(0)->height();
+      int dh = height() - h;
+      int ah = dh / lines();
+      if (ah < 0) ah = 0;
+      
+      paragraphList.at(0)->setLineSpacing(ah);
+    }
+  else
+    {
+      setAllDistBefore(0);
+      setAllDistAfter(0);
+      setAllLineSpacing(0);
+
+      unsigned int i = 0;
+      int h = 0;
+      for (i = 0;i < paragraphList.count();i++)
+	h += paragraphList.at(i)->height();
+      
+      int dh = height() - h;
+      int ah = dh / (paragraphList.count() - 1);
+      ah /= 2;
+      if (ah < 0) ah = 0;
+      
+      for (i = 0;i < paragraphList.count() - 1;i++)
+	paragraphList.at(i)->setDistAfter(ah);
+    }
+  
+  recalc();
+}
+

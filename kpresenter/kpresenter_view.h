@@ -159,7 +159,7 @@ public:
   virtual void editFind();
   virtual void editFindReplace();
   virtual void editHeaderFooter();
-  
+
   // view menu
   virtual void newView();
 
@@ -253,7 +253,8 @@ public:
   virtual void textDepthPlus();
   virtual void textDepthMinus();
   virtual void textSpacing();
-
+  virtual void textContentsToHeight();
+  
   // color bar
   virtual void setPenColor(CORBA::Long id);
   virtual void setFillColor(CORBA::Long id);
@@ -487,7 +488,7 @@ protected:
   CORBA::Long m_idMenuEdit_Find;
   CORBA::Long m_idMenuEdit_FindReplace;
   CORBA::Long m_idMenuEdit_HeaderFooter;
-  
+
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_NewView;
@@ -527,6 +528,7 @@ protected:
   CORBA::Long m_idMenuText_TDepthPlus;
   CORBA::Long m_idMenuText_TDepthMinus;
   CORBA::Long m_idMenuText_TSpacing;
+  CORBA::Long m_idMenuText_TExtentCont2Height;
 
   // extra menu
   OpenPartsUI::Menu_var m_vMenuExtra;

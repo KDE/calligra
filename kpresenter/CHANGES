@@ -149,7 +149,7 @@ Reggie, 4.5.1999:
 
 Reggie, 5.5.1999:
 -----------------
-- Started implementing footers and headers 
+- Started implementing footers and headers
 - Fixed a mem leak
 
 Reggie, 6.5.1999:
@@ -169,3 +169,10 @@ Reggie, 9.5.1999:
 -----------------
 - Implemented loading/saving headers and footers
 - Headers/Footers are correctly drawn in screen presentations now
+
+Reggie, 10.5.1999:
+------------------
+- More work on editing headers/footers
+- Implemented "Extend contents to object height" feature for textobjects
+  (this means the linespacing/paragraphspacing is set to values then,
+   so that the text fills the whole object rectangle)

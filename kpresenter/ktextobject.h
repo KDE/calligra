@@ -1901,6 +1901,8 @@ public:
    */
   void setAllDistAfter(int d);
 
+  void extendContents2Height();
+  
 signals:
 
   /**

@@ -105,7 +105,7 @@ KPresenterView::KPresenterView(QWidget *_parent,const char *_name,KPresenterDoc*
   rndY = 0;
   m_vColorBar = 0;
   allowWebPres = true;
- 
+
   m_pKPresenterDoc = _doc;
   m_bKPresenterModified = true;
 
@@ -1287,7 +1287,7 @@ void KPresenterView::helpContents()
 //   KoAboutDia::about(KoAboutDia::KDE);
 // }
 
-/*======================= text size selected  ===================*/
+/*===============================================================*/
 void KPresenterView::sizeSelected(const char *size)
 {
   tbFont.setPointSize(atoi(size));
@@ -1296,7 +1296,7 @@ void KPresenterView::sizeSelected(const char *size)
   sendFocusEvent();
 }
 
-/*======================= text font selected  ===================*/
+/*===============================================================*/
 void KPresenterView::fontSelected(const char *font)
 {
   tbFont.setFamily(qstrdup(font));
@@ -1305,7 +1305,7 @@ void KPresenterView::fontSelected(const char *font)
   sendFocusEvent();
 }
 
-/*========================= text bold ===========================*/
+/*===============================================================*/
 void KPresenterView::textBold()
 {
   tbFont.setBold(!tbFont.bold());
@@ -1314,7 +1314,7 @@ void KPresenterView::textBold()
   sendFocusEvent();
 }
 
-/*========================== text italic ========================*/
+/*===============================================================*/
 void KPresenterView::textItalic()
 {
   tbFont.setItalic(!tbFont.italic());
@@ -1323,7 +1323,7 @@ void KPresenterView::textItalic()
   sendFocusEvent();
 }
 
-/*======================== text underline =======================*/
+/*===============================================================*/
 void KPresenterView::textUnderline()
 {
   tbFont.setUnderline(!tbFont.underline());
@@ -1332,7 +1332,7 @@ void KPresenterView::textUnderline()
   sendFocusEvent();
 }
 
-/*=========================== text color ========================*/
+/*===============================================================*/
 void KPresenterView::textColor()
 {
   if (KColorDialog::getColor(tbColor))
@@ -1346,7 +1346,7 @@ void KPresenterView::textColor()
   sendFocusEvent();
 }
 
-/*======================= text align left =======================*/
+/*===============================================================*/
 void KPresenterView::textAlignLeft()
 {
   tbAlign = TxtParagraph::LEFT;
@@ -1362,7 +1362,7 @@ void KPresenterView::textAlignLeft()
   sendFocusEvent();
 }
 
-/*======================= text align center =====================*/
+/*===============================================================*/
 void KPresenterView::textAlignCenter()
 {
   tbAlign = TxtParagraph::CENTER;
@@ -1378,7 +1378,7 @@ void KPresenterView::textAlignCenter()
   sendFocusEvent();
 }
 
-/*======================= text align right ======================*/
+/*===============================================================*/
 void KPresenterView::textAlignRight()
 {
   tbAlign = TxtParagraph::RIGHT;
@@ -1394,7 +1394,7 @@ void KPresenterView::textAlignRight()
   sendFocusEvent();
 }
 
-/*======================= text align left =======================*/
+/*===============================================================*/
 void KPresenterView::mtextAlignLeft()
 {
   tbAlign = TxtParagraph::LEFT;
@@ -1410,7 +1410,7 @@ void KPresenterView::mtextAlignLeft()
   sendFocusEvent();
 }
 
-/*======================= text align center =====================*/
+/*===============================================================*/
 void KPresenterView::mtextAlignCenter()
 {
   tbAlign = TxtParagraph::CENTER;
@@ -1426,7 +1426,7 @@ void KPresenterView::mtextAlignCenter()
   sendFocusEvent();
 }
 
-/*======================= text align right ======================*/
+/*===============================================================*/
 void KPresenterView::mtextAlignRight()
 {
   tbAlign = TxtParagraph::RIGHT;
@@ -1442,7 +1442,7 @@ void KPresenterView::mtextAlignRight()
   sendFocusEvent();
 }
 
-/*====================== font selected ==========================*/
+/*===============================================================*/
 void KPresenterView::mtextFont()
 {
   QFont tmpFont = tbFont;
@@ -1457,7 +1457,7 @@ void KPresenterView::mtextFont()
   sendFocusEvent();
 }
 
-/*====================== enumerated list ========================*/
+/*===============================================================*/
 void KPresenterView::textEnumList()
 {
   if (page->kTxtObj())
@@ -1487,7 +1487,7 @@ void KPresenterView::textEnumList()
   sendFocusEvent();
 }
 
-/*====================== unsorted list ==========================*/
+/*===============================================================*/
 void KPresenterView::textUnsortList()
 {
   if (page->kTxtObj())
@@ -1511,7 +1511,7 @@ void KPresenterView::textUnsortList()
   sendFocusEvent();
 }
 
-/*====================== normal text ============================*/
+/*===============================================================*/
 void KPresenterView::textNormalText()
 {
   if (page->kTxtObj()) page->kTxtObj()->setObjType(KTextObject::PLAIN);
@@ -1561,6 +1561,25 @@ void KPresenterView::textSpacing()
       spacingDia->show();
     }
 
+  sendFocusEvent();
+}
+
+/*===============================================================*/
+void KPresenterView::textContentsToHeight()
+{
+  KTextObject *txtObj = 0L;
+  
+  if (page->kTxtObj())
+    txtObj = page->kTxtObj();
+  else if (page->haveASelectedTextObj())
+    txtObj = page->haveASelectedTextObj();
+  
+  if (txtObj)
+    txtObj->extendContents2Height();
+
+  if (page->haveASelectedTextObj())
+    m_pKPresenterDoc->repaint(false);
+    
   sendFocusEvent();
 }
 
@@ -2985,7 +3004,7 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
 
   pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
   text = Q2C( i18n("&Delete") );
-  m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix,text,this,"editDelete",Key_Delete,-1,-1);
+  m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix,text,this,"editDelete",CTRL + Key_Delete,-1,-1);
 
   m_vMenuEdit->insertSeparator(-1);
 
@@ -3143,7 +3162,10 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   text = Q2C( i18n("Paragraph &Spacing...") );
   m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix,text,this,"textSpacing",0,-1,-1);
 
+  text = Q2C( i18n("&Extend Contents to Object Height") );
+  m_idMenuText_TExtentCont2Height = m_vMenuText->insertItem(text,this,"textContentsToHeight",0);
 
+  
   // MENU Extra
   text = Q2C( i18n("&Extra") );
   _menubar->insertMenu(text,m_vMenuExtra,-1,-1);
