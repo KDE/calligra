@@ -31,7 +31,7 @@
 #include <kbuttonbox.h>
 #include <qstrlist.h>
 #include <qlist.h>
-
+#include <qtl.h>
 
 KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type )
 	: QDialog( parent, name,TRUE )
@@ -63,12 +63,17 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
 
         QString text;
         QStringList listCol;
+        QValueList<int> listColInt;
         for( ; col; col = col->next() )
                 {
                 if(col->isHide())
-                        listCol+=text.setNum(col->column());
+                        listColInt.append(col->column());
                 }
-        listCol.sort();
+        qHeapSort(listColInt);
+        QValueList<int>::Iterator it;
+        for( it = listColInt.begin(); it != listColInt.end(); ++it )
+                listCol+=text.setNum((*it));
+
         list->insertStringList(listCol);
         }
   else if(_type==Row)
@@ -77,12 +82,17 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
 
         QString text;
         QStringList listRow;
+        QValueList<int> listRowInt;
         for( ; row; row = row->next() )
                 {
                 if(row->isHide())
-                         listRow+=text.setNum(row->row());
+                        listRowInt.append(row->row());
                 }
-        listRow.sort();
+        qHeapSort(listRowInt);
+        QValueList<int>::Iterator it;
+        for( it = listRowInt.begin(); it != listRowInt.end(); ++it )
+                listRow+=text.setNum((*it));
+
         list->insertStringList(listRow);
         }
 
