@@ -358,11 +358,7 @@ void KPTGanttView::modifyProject(KDGanttViewItem *item, KPTNode *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(node->name());
-    KPTDateTime time = node->startTime();
-    KPTDuration dur = node->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    item->setStartTime(time);
+    item->setStartTime(node->startTime());
     item->setEndTime(node->endTime());
     //item->setOpen(true);
     setDrawn(item, true);
@@ -373,11 +369,8 @@ void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
-    KPTDateTime time = task->startTime();
     KPTDuration dur = task->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    item->setStartTime(time);
+    item->setStartTime(task->startTime());
     item->setEndTime(task->endTime());
     //item->setOpen(true);
     setDrawn(item, true);
@@ -466,6 +459,10 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         w+= "0h";
 
     bool ok = true;
+    if (task->notScheduled()) {
+        w += "\n"; w += "Not scheduled";
+        ok = false;
+    }
     if (task->schedulingError()) {
         w += "\n"; w += "Scheduling conflict";
         ok = false;
