@@ -24,6 +24,7 @@
 #include "kivio_connector_point.h"
 #include "kivio_custom_drag_data.h"
 #include "kivio_intra_stencil_data.h"
+#include "kiviostencilfactory.h"
 #include "kivio_point.h"
 #include "kivio_stencil.h"
 
@@ -78,6 +79,16 @@ public:
 
 };
 
+class KivioConnectorFactory : public KivioStencilFactory
+{
+	Q_OBJECT
+    public:
+    	KivioConnectorFactory(QObject *parent=0, const char* name=0, const QStringList& args = QStringList());
+	KivioStencil *NewStencil(const QString& name);
+	KivioStencil *NewStencil();
+    	QPixmap *GetIcon();
+    	KivioStencilSpawnerInfo *GetSpawnerInfo();
+};
 
 #endif
 

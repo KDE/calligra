@@ -45,20 +45,27 @@ static QPixmap *pIcon = NULL;
 
 static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo("Dave Marotti", "Straight Connector", "Dave Marotti - Straight Connector", "Basic Straight Connector", "0.1", "http://localhost/", "", "off");
 
-extern "C" {
-    KivioStencil *NewStencil();
-    QPixmap *GetIcon();
-    KivioStencilSpawnerInfo *GetSpawnerInfo();
+#include <kgenericfactory.h>
+K_EXPORT_COMPONENT_FACTORY( libstraight_connector, KGenericFactory<KivioConnectorFactory>( "KivioConnectorFactory" ) );
+
+KivioConnectorFactory::KivioConnectorFactory(QObject *parent, const char* name, const QStringList& args) :
+	KivioStencilFactory(parent, name, args)
+{
+	kdDebug() << "new straight line connector factory: " << endl;
 }
 
-KivioStencil *NewStencil()
+KivioStencil *KivioConnectorFactory::NewStencil()
 {
     return new KivioStraightConnector();
 }
 
+KivioStencil *KivioConnectorFactory::NewStencil(const QString&)
+{
+    return new KivioStraightConnector();
+}
 
 //FIXME: Is this a memory leak?
-QPixmap *GetIcon()
+QPixmap *KivioConnectorFactory::GetIcon()
 {
     if( pIcon )
         return pIcon;
@@ -67,7 +74,7 @@ QPixmap *GetIcon()
     return pIcon;
 }
 
-KivioStencilSpawnerInfo *GetSpawnerInfo()
+KivioStencilSpawnerInfo *KivioConnectorFactory::GetSpawnerInfo()
 {
     return &sinfo;
 }
@@ -310,3 +317,5 @@ bool KivioStraightConnector::loadArrowHeads( const QDomElement &e )
 
     return true;
 }
+
+#include "straight_connector.moc"
