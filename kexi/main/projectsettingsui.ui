@@ -652,13 +652,13 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>MDI Mode:</string>
+                        <string>MDI mode:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
-                            <string>Use user settings</string>
+                            <string>Use User Settings</string>
                         </property>
                     </item>
                     <item>
@@ -706,7 +706,7 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Show Taskbar</string>
+                        <string>Show taskbar</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -722,7 +722,7 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Show Menubar</string>
+                        <string>Show menubar</string>
                     </property>
                 </widget>
             </widget>
@@ -748,7 +748,7 @@
                 <cstring>ok</cstring>
             </property>
             <property name="text">
-                <string>&amp;Ok</string>
+                <string>&amp;OK</string>
             </property>
         </widget>
         <spacer row="1" column="0">

@@ -975,7 +975,7 @@ tristate KexiTableView::deleteAllRows(bool ask, bool repaint)
 		}
 		if (KMessageBox::No == KMessageBox::questionYesNo(this, 
 				i18n("Do you want to clear the contents of table %1?").arg(tableName),
-				0, KGuiItem(i18n("&Clear contents")), KStdGuiItem::no()))
+				0, KGuiItem(i18n("&Clear Contents")), KStdGuiItem::no()))
 			return cancelled;
 	}
 

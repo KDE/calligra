@@ -203,7 +203,7 @@ PropertyEditorPixmap::selectFile()
 	else
 	{
 		m_url = KFileDialog::getOpenFileName(QString::null, i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"),
-			this, i18n("Choose a file"));
+			this, i18n("Choose File"));
 		if(!m_url.isEmpty())
 			m_label->setPixmap(QPixmap(m_url.path()));
 		emit changed(this);

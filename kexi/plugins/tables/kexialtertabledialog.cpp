@@ -680,7 +680,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 			kdDebug() << "INVALID " << property.value().toString() << endl;
 //			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg, 
 //				i18n("This field has promary key assigned. Setting autonumber field"),
-//				KGuiItem(i18n("Create &primary key"), "key"), KStdGuiItem::cancel() ))
+//				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 
 		}
 	}
@@ -697,7 +697,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 
 				if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg, 
 					i18n("Setting autonumber field"),
-					KGuiItem(i18n("Create &primary key"), "key"), KStdGuiItem::cancel() ))
+					KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 				{
 					setPrimaryKey(buf, true);
 				}
@@ -731,7 +731,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 			"Do you want to add primary key automatically now?</p>"
 			"<p>If you want to add a primary key by hand, press \"Cancel\" "
 			"to cancel saving table design.</p>").arg(schema.name()),
-			QString::null, KGuiItem(i18n("&Add a primary key"), "key"), KStdGuiItem::no(), 
+			QString::null, KGuiItem(i18n("&Add Primary Key"), "key"), KStdGuiItem::no(), 
 				"autogeneratePrimaryKeysOnTableDesignSaving");
 		if (questionRes==KMessageBox::Cancel) {
 			return cancelled;

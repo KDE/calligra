@@ -54,7 +54,7 @@
                                 <cstring>started</cstring>
                             </property>
                             <property name="text">
-                                <string>Started</string>
+                                <string>Started:</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -65,7 +65,7 @@
                                 <cstring>finished</cstring>
                             </property>
                             <property name="text">
-                                <string>Finished</string>
+                                <string>Finished:</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -110,7 +110,7 @@
                                         <cstring>textLabel1</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Percent finished</string>
+                                        <string>Percent finished:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>percentFinished</cstring>
@@ -121,7 +121,7 @@
                                         <cstring>textLabel1_3</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Effort performed</string>
+                                        <string>Effort performed:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>totalPerformed</cstring>
@@ -132,7 +132,7 @@
                                         <cstring>textLabel1_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Effort remaining</string>
+                                        <string>Effort remaining:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>remainingEffort</cstring>

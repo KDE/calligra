@@ -173,7 +173,7 @@
                         <cstring>relationType</cstring>
                     </property>
                     <property name="title">
-                        <string>Relationship type</string>
+                        <string>Relationship Type</string>
                     </property>
                     <vbox>
                         <property name="name">

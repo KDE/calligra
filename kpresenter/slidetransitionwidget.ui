@@ -158,7 +158,7 @@
                                 <cstring>soundCheckBox</cstring>
                             </property>
                             <property name="text">
-                                <string>So&amp;und Effect</string>
+                                <string>So&amp;und effect</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester" row="1" column="1">

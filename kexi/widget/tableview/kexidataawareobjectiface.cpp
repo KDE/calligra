@@ -1021,7 +1021,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
 	case AskDelete:
 		if (KMessageBox::No == KMessageBox::questionYesNo(dynamic_cast<QWidget*>(this), 
 			i18n("Do you want to delete selected row?"), 0, 
-			KGuiItem(i18n("&Delete row")), KStdGuiItem::no(), 
+			KGuiItem(i18n("&Delete Row")), KStdGuiItem::no(), 
 			"dontAskBeforeDeleteRow"/*config entry*/))
 			return;
 		break;
@@ -1106,7 +1106,7 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
 		}
 		if (KMessageBox::No == KMessageBox::questionYesNo(dynamic_cast<QWidget*>(this),
 				i18n("Do you want to clear the contents of table %1?").arg(tableName),
-				0, KGuiItem(i18n("&Clear contents")), KStdGuiItem::no()))
+				0, KGuiItem(i18n("&Clear Contents")), KStdGuiItem::no()))
 			return cancelled;
 	}
 

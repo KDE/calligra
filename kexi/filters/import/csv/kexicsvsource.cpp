@@ -33,7 +33,7 @@ KexiCSVSource::parseFile(const QString &file)
 	QFile f(file);
 	if(!f.exists() || !f.open(IO_ReadOnly))
 	{
-		KMessageBox::sorry(0, i18n("Could not open file"), i18n("CSV import"));
+		KMessageBox::sorry(0, i18n("Could not open file"), i18n("CSV Import"));
 		return false;
 	}
 

@@ -38,7 +38,7 @@
                         <cstring>localhostRBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>Localhost</string>
+                        <string>Local host</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -299,7 +299,7 @@
                         <cstring>savePasswordCBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Save password in the projectfile</string>
+                        <string>Save password in the project file</string>
                     </property>
                 </widget>
                 <widget class="KLineEdit" row="1" column="1">

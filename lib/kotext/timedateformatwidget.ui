@@ -124,7 +124,7 @@
                                 <cstring>label_correction</cstring>
                             </property>
                             <property name="text">
-                                <string>TextLabel1</string>
+                                <string>TextLabel1:</string>
                             </property>
                         </widget>
                         <spacer>

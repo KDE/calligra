@@ -59,7 +59,7 @@
                             </column>
                             <column>
                                 <property name="text">
-                                    <string>Max. units</string>
+                                    <string>Max. Units</string>
                                 </property>
                                 <property name="clickable">
                                     <bool>true</bool>

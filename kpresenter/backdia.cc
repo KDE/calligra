@@ -98,7 +98,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     QVBoxLayout *vbox = new QVBoxLayout( hbox );
     vbox->setSpacing( KDialog::spacingHint() );
 
-    m_useMasterBackground = new QCheckBox( i18n( "Use Slide Master Background" ), page );
+    m_useMasterBackground = new QCheckBox( i18n( "Use slide master background" ), page );
     connect( m_useMasterBackground, SIGNAL( clicked() ),
              this, SLOT( updateConfiguration() ) );
     m_useMasterBackground->setChecked( m_page->useMasterBackground() );

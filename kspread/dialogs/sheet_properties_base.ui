@@ -14,8 +14,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public
-License along with this library; see the file COPYING.LIB.  If not, 
-write to the Free Software Foundation, Inc., 59 Temple Place - 
+License along with this library; see the file COPYING.LIB.  If not,
+write to the Free Software Foundation, Inc., 59 Temple Place -
 Suite 330, Boston, MA 02111-1307, USA.</comment>
 <author>Ariya Hidayat &lt;ariya@kde.org&gt;</author>
 <widget class="QWidget">
@@ -55,18 +55,18 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Layout Direction:</string>
+                        <string>Layout direction:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox">
                     <item>
                         <property name="text">
-                            <string>Left To Right</string>
+                            <string>Left to Right</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Right To Left</string>
+                            <string>Right to Left</string>
                         </property>
                     </item>
                     <property name="name">
@@ -80,7 +80,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>autoCalcCheckBox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Automatic Recalculation</string>
+                <string>&amp;Automatic recalculation</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -88,7 +88,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>showGridCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Show &amp;Grid</string>
+                <string>Show &amp;grid</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -96,7 +96,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>showPageBordersCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Show Page &amp;Borders</string>
+                <string>Show page &amp;borders</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -104,7 +104,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>showFormulaCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Show &amp;Formula</string>
+                <string>Show &amp;formula</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -112,7 +112,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>hideZeroCheckBox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Hide Zero</string>
+                <string>&amp;Hide zero</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -120,7 +120,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>showFormulaIndicatorCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Show Formula &amp;Indicator</string>
+                <string>Show formula &amp;indicator</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -128,7 +128,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>showColumnAsNumbersCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Show Column As &amp;Numbers</string>
+                <string>Show column as &amp;numbers</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -136,7 +136,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>useLCModeCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Use &amp;LC Mode</string>
+                <string>Use &amp;LC mode</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -144,7 +144,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <cstring>capitalizeFirstLetterCheckBox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Convert First Letter to Uppercase</string>
+                <string>&amp;Convert first letter to uppercase</string>
             </property>
         </widget>
     </vbox>

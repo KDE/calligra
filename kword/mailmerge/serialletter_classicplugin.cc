@@ -465,7 +465,7 @@ void KWClassicMailMergeEditor::changeRecord( int i )
 void KWClassicMailMergeEditor::addEntry()
 {
     bool ok;
-    QString value=KInputDialog::getText( i18n("Add entry"),
+    QString value=KInputDialog::getText( i18n("Add Entry"),
 					 i18n("Enter entry name:"),
 					 QString::null,
 					 &ok,

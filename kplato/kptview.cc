@@ -146,7 +146,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
-    actionViewGanttTaskLinks = new KToggleAction(i18n("Task links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
+    actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
     actionViewGanttProgress = new KToggleAction(i18n("Progress"), 0, 0, this, SLOT(slotViewGanttProgress()), actionCollection(), "view_gantt_showProgress");
     actionViewGanttFloat = new KToggleAction(i18n("Float"), 0, 0, this, SLOT(slotViewGanttFloat()), actionCollection(), "view_gantt_showFloat");
     
@@ -154,7 +154,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
 
-    actionViewResourceUse = new KAction(i18n("Resource use"), "resourceuse", 0, this, SLOT(slotViewResourceUse()), actionCollection(), "view_resourceuse");
+    actionViewResourceUse = new KAction(i18n("Resource Use"), "resourceuse", 0, this, SLOT(slotViewResourceUse()), actionCollection(), "view_resourceuse");
 
     // ------ Insert
     actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,

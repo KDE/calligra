@@ -121,7 +121,7 @@ void KexiQueryPart::initPartActions()
 
 void KexiQueryPart::initInstanceActions()
 {
-//	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
+//	new KAction(i18n("Check Query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
 
 	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check Query"), "test_it", 

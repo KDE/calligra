@@ -12,9 +12,6 @@
             <height>171</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KexiDBConnectionWidgetDetailsBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -40,9 +37,6 @@
                     <property name="text">
                         <string>Use socket &amp;file instead of TCP/IP port:</string>
                         <comment>socket: default</comment>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+F</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
@@ -89,7 +83,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>default</string>
+                                <string>Default</string>
                                 <comment>socket: default</comment>
                             </property>
                             <property name="accel">

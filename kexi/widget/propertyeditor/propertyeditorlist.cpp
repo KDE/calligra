@@ -294,7 +294,7 @@ PropertyEditorCursor::PropertyEditorCursor(QWidget *parent, KexiProperty *proper
 	m_combo->insertItem(i18n("Split Horizontal"), Qt::SplitHCursor);
 	m_combo->insertItem(i18n("Pointing Hand"), Qt::PointingHandCursor);
 	m_combo->insertItem(i18n("Forbidden"), Qt::ForbiddenCursor);
-	m_combo->insertItem(i18n("What's this"), Qt::WhatsThisCursor);
+	m_combo->insertItem(i18n("What's This"), Qt::WhatsThisCursor);
 
 	m_combo->setCurrentItem(property->value().toCursor().shape());
 }

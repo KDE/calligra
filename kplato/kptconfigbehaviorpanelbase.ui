@@ -22,7 +22,7 @@
                 <cstring>useDateTimeGroup</cstring>
             </property>
             <property name="title">
-                <string>DateTime Usage</string>
+                <string>Date/Time Usage</string>
             </property>
             <vbox>
                 <property name="name">

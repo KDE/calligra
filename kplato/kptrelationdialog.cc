@@ -66,7 +66,7 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
 }
 
 KCommand *KPTAddRelationDialog::buildCommand(KPTPart *part) {
-    return new KPTAddRelationCmd(part, m_relation, i18n("Add relation"));
+    return new KPTAddRelationCmd(part, m_relation, i18n("Add Relation"));
 }
 
 void KPTAddRelationDialog::slotOk() {
@@ -106,12 +106,12 @@ KCommand *KPTModifyRelationDialog::buildCommand(KPTPart *part) {
     KMacroCommand *cmd=0;
     if (m_panel->relationType->selectedId() != m_relation->type()) {
         if (cmd == 0)
-            cmd = new KMacroCommand(i18n("Modify relation"));
+            cmd = new KMacroCommand(i18n("Modify Relation"));
         cmd->addCommand(new KPTModifyRelationTypeCmd(part, m_relation, (KPTRelation::Type)m_panel->relationType->selectedId()));
     }
     if (m_relation->lag() != m_panel->lag->value()) {
         if (cmd == 0)
-            cmd = new KMacroCommand(i18n("Modify relation"));
+            cmd = new KMacroCommand(i18n("Modify Relation"));
         cmd->addCommand(new KPTModifyRelationLagCmd(part, m_relation, m_panel->lag->value()));
     }
     return cmd;

@@ -47,8 +47,8 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
   QGridLayout *grid1 = new QGridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
   list=new KListView(page,  "versionlist");
-  list->addColumn(i18n("Date and time"));
-  list->addColumn(i18n("Saved by"));
+  list->addColumn(i18n("Date & Time"));
+  list->addColumn(i18n("Saved By"));
   list->addColumn(i18n("Comment"));
 
   grid1->addMultiCellWidget(list,0,8,0,0);

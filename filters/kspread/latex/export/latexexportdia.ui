@@ -244,12 +244,12 @@
                 <widget class="KComboBox">
                     <item>
                         <property name="text">
-                            <string>final</string>
+                            <string>Final</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>draft</string>
+                            <string>Draft</string>
                         </property>
                     </item>
                     <property name="name">

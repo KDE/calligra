@@ -97,7 +97,7 @@
                 <cstring>locationBGrp</cstring>
             </property>
             <property name="title">
-                <string>Database location</string>
+                <string>Database Location</string>
             </property>
             <grid>
                 <property name="name">

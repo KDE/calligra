@@ -47,7 +47,7 @@
                                 <cstring>namelabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Name</string>
+                                <string>Name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>namefield</cstring>
@@ -58,7 +58,7 @@
                                 <cstring>idlabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Task id</string>
+                                <string>Task id:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>idfield</cstring>
@@ -97,7 +97,7 @@
                                         <cstring>leaderlabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Responsible</string>
+                                        <string>Responsible:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>leaderfield</cstring>
@@ -180,37 +180,37 @@
                 <widget class="KComboBox" row="0" column="1">
                     <item>
                         <property name="text">
-                            <string>As soon as possible</string>
+                            <string>As Soon as Possible</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>As late as possible</string>
+                            <string>As Late as Possible</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Must start on</string>
+                            <string>Must Start On</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Must finish on</string>
+                            <string>Must Finish On</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Start not earlier than</string>
+                            <string>Start Not Earlier Than</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Finish not later than</string>
+                            <string>Finish Not Later Than</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Fixed interval</string>
+                            <string>Fixed Interval</string>
                         </property>
                     </item>
                     <property name="name">
@@ -222,7 +222,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Schedule</string>
+                        <string>Schedule:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>scheduleType</cstring>
@@ -233,7 +233,7 @@
                         <cstring>textLabel3_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Estimate</string>
+                        <string>Estimate:</string>
                     </property>
                 </widget>
                 <spacer row="1" column="0">
@@ -353,7 +353,7 @@
                                         <cstring>textLabel1_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Optimistic</string>
+                                        <string>Optimistic:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>optimisticValueoptimisticValue</cstring>
@@ -388,7 +388,7 @@
                                         <cstring>textLabel2_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Pessimistic</string>
+                                        <string>Pessimistic:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>pessimisticValue</cstring>

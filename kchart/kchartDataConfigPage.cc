@@ -57,7 +57,7 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
     QGridLayout *grid1 = new QGridLayout(this, 2, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 
-    QButtonGroup* gb = new QVButtonGroup( i18n( "Data format" ), this );
+    QButtonGroup* gb = new QVButtonGroup( i18n( "Data Format" ), this );
     QGridLayout *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 

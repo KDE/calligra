@@ -106,7 +106,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <cstring>m_addToDocBtn</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Add to document</string>
+                            <string>&amp;Add to Document</string>
                         </property>
                     </widget>
                 </grid>

@@ -39,7 +39,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Project n&amp;ame</string>
+                        <string>Project n&amp;ame:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>namefield</cstring>
@@ -50,7 +50,7 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Project &amp;id</string>
+                        <string>Project &amp;id:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>namefield</cstring>
@@ -61,7 +61,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Project &amp;leader</string>
+                        <string>Project &amp;leader:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>
@@ -161,7 +161,7 @@
                                         <cstring>bStartDate</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Start date</string>
+                                        <string>Start date:</string>
                                     </property>
                                 </widget>
                                 <widget class="QTimeEdit" row="0" column="2">
@@ -179,7 +179,7 @@
                                         <cstring>bEndDate</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>End date</string>
+                                        <string>End date:</string>
                                     </property>
                                 </widget>
                                 <widget class="KDateWidget" row="0" column="1">

@@ -964,7 +964,7 @@ void KPWebPresentationWizard::pageChanged()
                 if( !ok )
                 {
                     KMessageBox::sorry( this,
-                                        i18n( "Can't create directory!" ) );
+                                        i18n( "Can not create directory!" ) );
                     // go back to first step
                     showPage( page1 );
                     path->setFocus();

@@ -454,7 +454,7 @@ void KPMSPresentationSetup::finish()
                 if( !ok ) {
                     // then directory couldn't be created
                     KMessageBox::sorry( this,
-                                        i18n( "Can't create directory!" ) );
+                                        i18n( "Can not create directory!" ) );
                     path->setFocus();
                     return;
                 }
