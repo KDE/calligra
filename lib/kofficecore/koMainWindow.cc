@@ -68,6 +68,7 @@ public:
     m_rootDoc = 0L;
     m_manager = 0L;
     bMainWindowGUIBuilt = false;
+    m_splitted=false;
     m_activePart = 0L;
     m_activeView = 0L;
     m_splitter=0L;
@@ -97,6 +98,7 @@ public:
   QList <KAction> m_toolbarList;
 
   bool bMainWindowGUIBuilt;
+  bool m_splitted;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -194,7 +196,7 @@ KoMainWindow::~KoMainWindow()
 	 !d->m_rootDoc->isEmbedded())
     {
         kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
-        delete d->m_rootDoc;
+        d->m_rootDoc->delayedDestruction();
     }
 
     // Save list of recent files
@@ -207,6 +209,7 @@ KoMainWindow::~KoMainWindow()
     delete d->m_splitter;
     d->m_splitter=0L;
     delete d;
+    kdDebug(30003) << "leaving KoMainWindow::~KoMainWindow()" << endl;
 }
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
@@ -563,6 +566,7 @@ void KoMainWindow::slotHelpAbout()
 void KoMainWindow::slotSplitView() {
 
     kdDebug(30003) << "KoMainWindow::slotSplitView() called" << endl;
+    d->m_splitted=true;
     d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
     d->m_rootViews.current()->show();
     d->m_rootViews.current()->setPartManager( d->m_manager );
@@ -598,6 +602,9 @@ void KoMainWindow::slotRemoveView() {
     view=0L;
     d->m_rootViews.first()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.first() );
+
+    if(d->m_rootViews.count()==1)
+	d->m_splitted=false;
 }
 
 void KoMainWindow::slotSetOrientation() {
@@ -641,7 +648,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     newPart << endl;
   kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
 
-  if ( d->m_activePart && d->m_activePart == newPart )
+  if ( d->m_activePart && d->m_activePart == newPart && !d->m_splitted )
   {
     kdDebug(30003) << "no need to change the GUI" << endl;
     return;

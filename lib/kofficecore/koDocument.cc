@@ -59,6 +59,8 @@
 #define STORE_PROTOCOL_LENGTH 4
 // Warning, keep it sync in koTarStore.cc
 
+QList<KoDocument> *KoDocument::m_documentList=0L;
+
 using namespace std;
 
 /**********************************************************
@@ -117,6 +119,10 @@ public:
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KParts::ReadWritePart( parent, name )
 {
+  if(m_documentList==0L)
+    m_documentList=new QList<KoDocument>;
+  m_documentList->append(this);
+
   d = new KoDocumentPrivate;
   m_bEmpty = TRUE;
   d->m_changed=false;
@@ -149,10 +155,12 @@ KoDocument::~KoDocument()
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
+  // just to avoid mem leaks
   while(! d->m_views.isEmpty())
     d->m_views.remove();
 
   delete d;
+  m_documentList->removeRef(this);
 }
 
 void KoDocument::delayedDestruction()
@@ -305,6 +313,8 @@ void KoDocument::slotChildChanged( KoChild *c )
 void KoDocument::slotDestruct()
 {
   delete this;
+  if(m_documentList->isEmpty())
+    kapp->quit();
 }
 
 QList<KoDocumentChild> &KoDocument::children() const

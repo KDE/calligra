@@ -547,6 +547,7 @@ private:
     QCString m_nativeFormatMimeType;
     KURL m_strURL;
     bool m_bEmpty;
+    static QList<KoDocument> *m_documentList;
 };
 
 #endif

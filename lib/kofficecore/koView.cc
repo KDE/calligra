@@ -87,6 +87,7 @@ KoView::~KoView()
 
   d->m_doc->removeView(this);
   delete d;
+  kdDebug(30003) << "leaving KoView::~KoView()" << endl;
 }
 
 KoDocument *KoView::koDocument() const
