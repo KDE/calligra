@@ -82,7 +82,6 @@ KInstance* KWFactory::global()
       s_global->dirs()->addResourceType( "kword_template",
 				         KStandardDirs::kde_default("data") + "kword/templates/");
       s_global->dirs()->addResourceType( "expression", KStandardDirs::kde_default("data") + "kword/expression/");
-      s_global->dirs()->addResourceType( "autocorrect", KStandardDirs::kde_default("data") + "kword/autocorrect/");
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType( "toolbar",
