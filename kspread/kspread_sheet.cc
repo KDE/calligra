@@ -239,10 +239,12 @@ KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const ch
   m_emptyPen.setStyle( Qt::NoPen );
 
   m_dcop = 0;
+
+  m_strName = tableName;
+
   dcopObject();
   m_lstCellBindings.setAutoDelete( FALSE );
 
-  m_strName = tableName;
 
   // m_lstChildren.setAutoDelete( true );
 
@@ -6377,6 +6379,10 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       testName = baseName + '_' + QString::number(nameSuffix);
     }
     m_strName = testName;
+
+    kdDebug(36001)<<"KSpreadSheet::loadXML: table name="<<m_strName;
+    setName(m_strName.utf8());
+    (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->tableNameHasChanged();
 
     if( table.hasAttribute( "grid" ) )
     {
