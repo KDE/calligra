@@ -2829,7 +2829,7 @@ KexiDB::Field* KexiTableView::field(int colNum) const
 
 void KexiTableView::adjustColumnWidthToContents(int colNum)
 {
-	if (columns()<=colNum)
+	if (columns()<=colNum || colNum<0)
 		return;
 
 	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(colNum) );
@@ -2844,6 +2844,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 //js TODO: this is NOT EFFECTIVE for big data sets!!!!
 
 	KexiTableEdit *ed = editor( colNum );
+	KexiDB::Field *f = m_data->column( colNum )->field;
 	if (ed) {
 //		KexiDB::Field *f = m_data->column(colNum)->field;
 		for (QPtrListIterator<KexiTableItem> it( *m_data ); it.current(); ++it) {
@@ -2855,6 +2856,11 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 	if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH )
 		maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
 	d->pTopHeader->resizeSection( colNum, maxw );
+}
+
+void KexiTableView::setColumnWidth(int colNum, int width)
+{
+	d->pTopHeader->resizeSection( colNum, width );
 }
 
 void KexiTableView::setColumnStretchEnabled( bool set, int colNum )

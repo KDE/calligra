@@ -103,15 +103,6 @@ public:
 	 \return field object that define column \a colNum or NULL if there is no such column */
 	KexiDB::Field* KexiTableView::field(int colNum) const;
 
-	/*! Adjusts column's width to its (current) contents. */
-	void adjustColumnWidthToContents(int colNum);
-	
-	/*! If \a set is true, \a colNum column is resized to take full possible width.
-	 If \a set is false, no automatic resize will be performed. 
-	 If \a colNum is -1, all columns are equally resized, when needed, to take full possible width.
-	 This method behaves like QHeader::setStretchEnabled ( bool b, int section ). */
-	void setColumnStretchEnabled( bool set, int colNum );
-
 	bool isSortingEnabled() const;
 
 	/*! \return sorted column number or -1 if no column is sorted */
@@ -331,6 +322,18 @@ public slots:
 
 	//! Sorts all rows by column selected with setSorting()
 	void sort();
+
+	/*! Adjusts column's width to its (current) contents. */
+	void adjustColumnWidthToContents(int colNum);
+
+	//! Sets width of column width to \a width.
+	void setColumnWidth(int col, int width);
+
+	/*! If \a set is true, \a colNum column is resized to take full possible width.
+	 If \a set is false, no automatic resize will be performed. 
+	 If \a colNum is -1, all columns are equally resized, when needed, to take full possible width.
+	 This method behaves like QHeader::setStretchEnabled ( bool b, int section ). */
+	void setColumnStretchEnabled( bool set, int colNum );
 
 	/*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
 	 If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
