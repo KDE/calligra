@@ -624,11 +624,7 @@ void KSpreadView::formulaProduct()
 void KSpreadView::tableFormat()
 {
     QRect r( activeTable()-> selectionRect() );
-    if( r.right() ==0x7FFF)
-    {
-        KMessageBox::error( this, i18n("Area too large!"));
-    }
-    else if(r.bottom()==0x7FFF)
+    if( r.right() ==0x7FFF ||r.bottom()==0x7FFF)
     {
         KMessageBox::error( this, i18n("Area too large!"));
     }
@@ -1484,9 +1480,17 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     QWMatrix m = matrix().invert();
     QPoint tl = m.map( _geometry.topLeft() );
     QPoint br = m.map( _geometry.bottomRight() );
-
+    QRect r( activeTable()-> selectionRect() );
+    if( r.right() ==0x7FFF ||r.bottom()==0x7FFF)
+    {
+        KMessageBox::error( this, i18n("Area too large!"));
+        m_pTable->insertChart( QRect( tl, br ), _e, QRect( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),1,1) );
+    }
+    else
+    {
     // Insert the new child in the active table.
     m_pTable->insertChart( QRect( tl, br ), _e, m_pTable->selectionRect() );
+    }
 }
 
 void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
@@ -1917,11 +1921,7 @@ void KSpreadView::deleteSelection()
 void KSpreadView::adjust()
 {
     QRect r( activeTable()-> selectionRect() );
-    if( r.right() ==0x7FFF)
-    {
-        KMessageBox::error( this, i18n("Area too large!"));
-    }
-    else if(r.bottom()==0x7FFF)
+    if( r.right() ==0x7FFF || r.bottom()==0x7FFF)
     {
         KMessageBox::error( this, i18n("Area too large!"));
     }
@@ -2177,6 +2177,12 @@ void KSpreadView::insertObject()
 
 void KSpreadView::insertChart()
 {
+    QRect r( activeTable()-> selectionRect() );
+    if( r.right() ==0x7FFF ||r.bottom()==0x7FFF)
+    {
+        KMessageBox::error( this, i18n("Area too large!"));
+        return;
+    }
     QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KChart' in ServiceTypes" );
     if ( vec.isEmpty() )
     {
