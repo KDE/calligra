@@ -16,20 +16,16 @@
 #ifndef spacingdia_h
 #define spacingdia_h
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
-#include <qstring.h>
-
-#include <krestrictedline.h>
-#include <kapp.h>
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
+
+class QLabel;
+class KRestrictedLine;
+class QPushButton;
+class QWidget;
 
 /******************************************************************/
 /* class SpacingDia                                               */
@@ -37,21 +33,21 @@
 
 class SpacingDia : public QDialog
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  SpacingDia(QWidget* parent,int _lineSpacing,int _distBefore,int _distAfter);
+	SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int _distAfter );
 
 protected:
-  QLabel *lLineSpacing,*lDistBefore,*lDistAfter;
-  KRestrictedLine *eLineSpacing,*eDistBefore,*eDistAfter;
-  QPushButton *cancelBut,*okBut;
+	QLabel *lLineSpacing, *lDistBefore, *lDistAfter;
+	KRestrictedLine *eLineSpacing, *eDistBefore, *eDistAfter;
+	QPushButton *cancelBut, *okBut;
 
 public slots:
-  void slotSpacingDiaOk();
+	void slotSpacingDiaOk();
 
 signals:
-  void spacingDiaOk(int,int,int);
+	void spacingDiaOk( int, int, int );
 
 };
 

@@ -14,48 +14,48 @@
 /******************************************************************/
 
 #include "effectcmd.h"
-#include "effectcmd.moc"
+#include "kpobject.h"
 
 /******************************************************************/
 /* Class: EffectCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-EffectCmd::EffectCmd(QString _name,int _presNum,Effect _effect,Effect2 _effect2,
-	    int _oldPresNum,Effect _oldEffect,Effect2 _oldEffect2,
-	    KPObject *_object)
-  : Command(_name)
+EffectCmd::EffectCmd( QString _name, int _presNum, Effect _effect, Effect2 _effect2,
+					  int _oldPresNum, Effect _oldEffect, Effect2 _oldEffect2,
+					  KPObject *_object )
+	: Command( _name )
 {
-  presNum = _presNum;
-  oldPresNum = _oldPresNum;
-  effect = _effect;
-  oldEffect = _oldEffect;
-  effect2 = _effect2;
-  oldEffect2 = _oldEffect2;
-  object = _object;
+	presNum = _presNum;
+	oldPresNum = _oldPresNum;
+	effect = _effect;
+	oldEffect = _oldEffect;
+	effect2 = _effect2;
+	oldEffect2 = _oldEffect2;
+	object = _object;
 
-  object->incCmdRef();
+	object->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 EffectCmd::~EffectCmd()
 {
-  object->decCmdRef();
+	object->decCmdRef();
 }
 
 /*====================== execute =================================*/
 void EffectCmd::execute()
 {
-  object->setPresNum(presNum);
-  object->setEffect(effect);
-  object->setEffect2(effect2);
+	object->setPresNum( presNum );
+	object->setEffect( effect );
+	object->setEffect2( effect2 );
 }
 
 /*====================== unexecute ===============================*/
 void EffectCmd::unexecute()
 {
-  object->setPresNum(oldPresNum);
-  object->setEffect(oldEffect);
-  object->setEffect2(oldEffect2);
+	object->setPresNum( oldPresNum );
+	object->setEffect( oldEffect );
+	object->setEffect2( oldEffect2 );
 }
 

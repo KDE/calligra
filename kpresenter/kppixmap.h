@@ -16,16 +16,9 @@
 #ifndef kppixmap_h
 #define kppixmap_h
 
-#include <qobject.h>
 #include <qpixmap.h>
 #include <qstring.h>
-#include <qregexp.h>
-#include <qfileinf.h>
 #include <ksize.h>
-#include <qwmatrix.h>
-
-#include <stdio.h>
-#include <stdlib.h>
 
 #include "global.h"
 
@@ -33,49 +26,49 @@
 /* Class: KPPixmap                                                */
 /******************************************************************/
 
-class KPPixmap : public QObject
+class KPPixmap
 {
-  Q_OBJECT
-
 public:
-  KPPixmap(QString _filename,KSize _size);
-  KPPixmap(QString _filename,QString _data,KSize _size);
-  KPPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size);
-
-  virtual QString getFilename()
-    { return filename;}
-  virtual QString getPixData()
+	KPPixmap( QString _filename, KSize _size );
+	KPPixmap( QString _filename, QString _data, KSize _size );
+	KPPixmap( QString _filename, QString _data, QPixmap *_pixmap, KSize _size );
+	virtual ~KPPixmap()
+	{}
+	
+	virtual QString getFilename()
+    { return filename; }
+	virtual QString getPixData()
     { return data; }
-  virtual QString getPixDataNative()
-    { return string_to_native_string(data); }
-  virtual QPixmap* getPixmap()
+	virtual QString getPixDataNative()
+    { return string_to_native_string( data ); }
+	virtual QPixmap* getPixmap()
     { return &pixmap; }
-  virtual KSize getSize()
+	virtual KSize getSize()
     { return pixmap.size(); }
 
-  virtual QPixmap* getOrigPixmap()
+	virtual QPixmap* getOrigPixmap()
     { return &orig_pixmap; }
-  virtual KSize getOrigSize()
+	virtual KSize getOrigSize()
     { return orig_pixmap.size(); }
 
-  virtual void addRef();
-  virtual bool removeRef();
+	virtual void addRef();
+	virtual bool removeRef();
 
-  static QString string_to_native_string(const char* _pixmap);
+	static QString string_to_native_string( const char* _pixmap );
 
 protected:
-  KPPixmap()
-    {;}
+	KPPixmap()
+    {; }
 
-  QString load_pixmap_native_format(const char *_file);
-  QPixmap native_string_to_pixmap(const char *_pixmap);
+	QString load_pixmap_native_format( const char *_file );
+	QPixmap native_string_to_pixmap( const char *_pixmap );
 
-  QString filename;
-  QPixmap pixmap;
-  QPixmap orig_pixmap;
-  QString data;
+	QString filename;
+	QPixmap pixmap;
+	QPixmap orig_pixmap;
+	QString data;
 
-  int refCount;
+	int refCount;
 
 };
 

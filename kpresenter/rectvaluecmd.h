@@ -17,11 +17,10 @@
 #define rectvaluecmd_h
 
 #include <qlist.h>
-#include <qcolor.h>
 
 #include "command.h"
 #include "kpobject.h"
-#include "kppieobject.h"
+#include "kprectobject.h"
 
 class KPresenterDoc;
 
@@ -31,29 +30,27 @@ class KPresenterDoc;
 
 class RectValueCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  struct RectValues
-  {
-    int xRnd,yRnd;
-  };
+	struct RectValues
+	{
+		int xRnd, yRnd;
+	};
 
-  RectValueCmd(QString _name,QList<RectValues> &_oldValues,RectValues _newValues,
-	       QList<KPObject> &_objects,KPresenterDoc *_doc);
-  ~RectValueCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	RectValueCmd( QString _name, QList<RectValues> &_oldValues, RectValues _newValues,
+				  QList<KPObject> &_objects, KPresenterDoc *_doc );
+	~RectValueCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  RectValueCmd()
-    {;}
+	RectValueCmd()
+    {; }
 
-  KPresenterDoc *doc;
-  QList<RectValues> oldValues;
-  QList<KPObject> objects;
-  RectValues newValues;
+	KPresenterDoc *doc;
+	QList<RectValues> oldValues;
+	QList<KPObject> objects;
+	RectValues newValues;
 
 };
 

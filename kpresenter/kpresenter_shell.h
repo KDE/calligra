@@ -21,7 +21,6 @@ class KPresenterDoc;
 class KPresenterView;
 
 #include <qlist.h>
-#include <qtimer.h>
 #include <qstring.h>
 
 /*****************************************************************/
@@ -30,51 +29,51 @@ class KPresenterView;
 
 class KPresenterShell : public KoMainWindow
 {
-  Q_OBJECT
+	Q_OBJECT
 public:
-  // C++
-  KPresenterShell();
-  ~KPresenterShell();
+	// C++
+	KPresenterShell();
+	~KPresenterShell();
 
-  // C++
-  virtual void cleanUp();
-  void setDocument(KPresenterDoc *_doc);
+	// C++
+	virtual void cleanUp();
+	void setDocument( KPresenterDoc *_doc );
 
-  // C++
-  virtual bool newDocument();
-  virtual bool openDocument(const char *_filename,const char* _format);
-  virtual bool saveDocument(const char *_file,const char *_format);
-  virtual bool closeDocument();
-  virtual bool closeAllDocuments();
+	// C++
+	virtual bool newDocument();
+	virtual bool openDocument( const char *_filename, const char* _format );
+	virtual bool saveDocument( const char *_file, const char *_format );
+	virtual bool closeDocument();
+	virtual bool closeAllDocuments();
 
 protected slots:
-  void slotFileNew();
-  void slotFileOpen();
-  void slotFileSave();
-  void slotFileSaveAs();
-  void slotFilePrint();
-  void slotFileClose();
-  void slotFileQuit();
+	void slotFileNew();
+	void slotFileOpen();
+	void slotFileSave();
+	void slotFileSaveAs();
+	void slotFilePrint();
+	void slotFileClose();
+	void slotFileQuit();
 
 protected:
-  // C++
-  virtual KOffice::Document_ptr document();
-  virtual KOffice::View_ptr view();
+	// C++
+	virtual KOffice::Document_ptr document();
+	virtual KOffice::View_ptr view();
 
-  virtual bool printDlg();
-  virtual void helpAbout();
-  virtual int documentCount();
+	virtual bool printDlg();
+	virtual void helpAbout();
+	virtual int documentCount();
 
-  bool isModified();
-  bool requestClose();
+	bool isModified();
+	bool requestClose();
 
-  void releaseDocument();
+	void releaseDocument();
 
-  KPresenterDoc* m_pDoc;
-  KPresenterView* m_pView;
+	KPresenterDoc* m_pDoc;
+	KPresenterView* m_pView;
 
-  static QList<KPresenterShell>* s_lstShells;
-  static bool previewHandlerRegistered;
+	static QList<KPresenterShell>* s_lstShells;
+	static bool previewHandlerRegistered;
 
 };
 

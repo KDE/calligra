@@ -19,9 +19,9 @@
 #include <qlist.h>
 
 #include "command.h"
-#include "kpobject.h"
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: LowerRaiseCmd                                           */
@@ -29,21 +29,19 @@ class KPresenterDoc;
 
 class LowerRaiseCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  LowerRaiseCmd(QString _name,QList<KPObject> *_old,QList<KPObject> *__new,KPresenterDoc *_doc);
-  ~LowerRaiseCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	LowerRaiseCmd( QString _name, QList<KPObject> *_old, QList<KPObject> *__new, KPresenterDoc *_doc );
+	~LowerRaiseCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  LowerRaiseCmd()
-    {;}
+	LowerRaiseCmd()
+    {; }
 
-  QList<KPObject> *old,*_new;
-  KPresenterDoc *doc;
+	QList<KPObject> *old, *_new;
+	KPresenterDoc *doc;
 
 };
 

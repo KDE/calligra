@@ -16,27 +16,18 @@
 #ifndef EFFECTDIA_H
 #define EFFECTDIA_H
 
-class KPresenterView;
-
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
-#include <qbttngrp.h>
-#include <qcombo.h>
-#include <qlabel.h>
-
-#include <krestrictedline.h>
-#include <kapp.h>
-
-#include "effectcmd.h"
-#include "kpobject.h"
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
+
+class KPresenterView;
+class QWidget;
+class QComboBox;
+class QLabel;
+class KRestrictedLine;
+class QPushButton;
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -44,28 +35,28 @@ class KPresenterView;
 
 class EffectDia : public QDialog
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  EffectDia(QWidget* parent,const char*,int,int,KPresenterView*);
-  ~EffectDia();                                             
+	// constructor - destructor
+	EffectDia( QWidget* parent, const char*, int, int, KPresenterView* );
+	~EffectDia();
 
 protected:
-  QComboBox *cEffect,*cEffect2;
-  QLabel *lEffect,*lEffect2,*lNum;
-  KRestrictedLine *eNum;
-  QPushButton *cancelBut,*okBut;
+	QComboBox *cEffect, *cEffect2;
+	QLabel *lEffect, *lEffect2, *lNum;
+	KRestrictedLine *eNum;
+	QPushButton *cancelBut, *okBut;
 
-  int objNum,pageNum;
-  KPresenterView *view;
+	int objNum, pageNum;
+	KPresenterView *view;
 
 public slots:
-  void slotEffectDiaOk();
+	void slotEffectDiaOk();
 
 signals:
-  void effectDiaOk();
+	void effectDiaOk();
 
 };
 

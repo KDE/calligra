@@ -29,26 +29,26 @@
 
 class CommandHistory : public QObject
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  CommandHistory();
-  virtual ~CommandHistory();
+	CommandHistory();
+	virtual ~CommandHistory();
 
-  virtual void addCommand(Command *_command);
+	virtual void addCommand( Command *_command );
 
-  virtual void undo();
-  virtual void redo();
+	virtual void undo();
+	virtual void redo();
 
-  virtual QString getUndoName();
-  virtual QString getRedoName();
+	virtual QString getUndoName();
+	virtual QString getRedoName();
 
 signals:
-  void undoRedoChanged(QString,QString);
+	void undoRedoChanged( QString, QString );
 
 protected:
-  QList<Command> commands;
-  int present;
+	QList<Command> commands;
+	int present;
 
 };
 

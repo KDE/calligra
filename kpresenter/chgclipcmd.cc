@@ -15,38 +15,38 @@
 
 #include "kpresenter_doc.h"
 #include "chgclipcmd.h"
-#include "chgclipcmd.moc"
+#include "kpclipartobject.h"
 
 /******************************************************************/
 /* Class: ChgClipCmd                                              */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgClipCmd::ChgClipCmd(QString _name,KPClipartObject *_object,QString _oldName,QString _newName,KPresenterDoc *_doc)
-  : Command(_name), oldName(_oldName), newName(_newName)
+ChgClipCmd::ChgClipCmd( QString _name, KPClipartObject *_object, QString _oldName, QString _newName, KPresenterDoc *_doc )
+	: Command( _name ), oldName( _oldName ), newName( _newName )
 {
-  object = _object;
-  doc = _doc;
-  object->incCmdRef();
+	object = _object;
+	doc = _doc;
+	object->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 ChgClipCmd::~ChgClipCmd()
 {
-  object->decCmdRef();
+	object->decCmdRef();
 }
 
 /*======================== execute ===============================*/
 void ChgClipCmd::execute()
 {
-  object->setFileName(newName);
-  doc->repaint(object);
+	object->setFileName( newName );
+	doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void ChgClipCmd::unexecute()
 {
-  object->setFileName(oldName);
-  doc->repaint(object);
+	object->setFileName( oldName );
+	doc->repaint( object );
 }
 

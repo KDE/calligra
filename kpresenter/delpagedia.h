@@ -17,20 +17,20 @@
 #define delpagedia_h
 
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
-#include <qradiobutton.h>
-
-#include <kapp.h>
-#include <qspinbox.h>
 
 #include "global.h"
-
-class KPresenterDoc;
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
+
+class KPresenterDoc;
+class QWidget;
+class QGridLayout;
+class QLabel;
+class QSpinBox;
+class QRadioButton;
+class QPushButton;
 
 /******************************************************************/
 /* class DelPageDia                                               */
@@ -38,31 +38,31 @@ class KPresenterDoc;
 
 class DelPageDia : public QDialog
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  DelPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int currPageNum);  
+	DelPageDia( QWidget* parent, const char* name, KPresenterDoc *_doc, int currPageNum );
 
 protected:
-  void uncheckAll();
+	void uncheckAll();
 
-  KPresenterDoc *doc;
-  
-  QGridLayout *grid;
-  QLabel *label;
-  QSpinBox *spinBox;
-  QRadioButton *leave,*_move,*del,*move_del;
-  QPushButton *ok,*cancel;
-  
+	KPresenterDoc *doc;
+
+	QGridLayout *grid;
+	QLabel *label;
+	QSpinBox *spinBox;
+	QRadioButton *leave, *_move, *del, *move_del;
+	QPushButton *ok, *cancel;
+
 protected slots:
-  void leaveClicked();
-  void moveClicked();
-  void delClicked();
-  void moveDelClicked();
-  void okClicked();
+	void leaveClicked();
+	void moveClicked();
+	void delClicked();
+	void moveDelClicked();
+	void okClicked();
 
 signals:
-  void deletePage(int,DelPageMode);
+	void deletePage( int, DelPageMode );
 
 };
 

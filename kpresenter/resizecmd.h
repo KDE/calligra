@@ -17,13 +17,12 @@
 #define resizecmd_h
 
 #include <kpoint.h>
-#include <krect.h>
 #include <ksize.h>
 
 #include "command.h"
-#include "kpobject.h"
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: ResizeCmd                                               */
@@ -31,24 +30,22 @@ class KPresenterDoc;
 
 class ResizeCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  ResizeCmd(QString _name,KPoint _m_diff,KSize _r_diff,KPObject *_object,KPresenterDoc *_doc);
-  ~ResizeCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
-  virtual void unexecute(bool _repaint);
+	ResizeCmd( QString _name, KPoint _m_diff, KSize _r_diff, KPObject *_object, KPresenterDoc *_doc );
+	~ResizeCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+	virtual void unexecute( bool _repaint );
 
 protected:
-  ResizeCmd()
-    {;}
+	ResizeCmd()
+    {; }
 
-  KPoint m_diff;
-  KSize r_diff;
-  KPObject *object;
-  KPresenterDoc *doc;
+	KPoint m_diff;
+	KSize r_diff;
+	KPObject *object;
+	KPresenterDoc *doc;
 
 };
 

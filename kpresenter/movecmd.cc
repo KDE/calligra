@@ -15,54 +15,55 @@
 
 #include "kpresenter_doc.h"
 #include "movecmd.h"
-#include "movecmd.moc"
+
+#include <krect.h>
 
 /******************************************************************/
 /* Class: MoveByCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd(QString _name,KPoint _diff,QList<KPObject> &_objects,KPresenterDoc *_doc)
-  : Command(_name), diff(_diff), objects(_objects)
+MoveByCmd::MoveByCmd( QString _name, KPoint _diff, QList<KPObject> &_objects, KPresenterDoc *_doc )
+	: Command( _name ), diff( _diff ), objects( _objects )
 {
-  objects.setAutoDelete(false);
-  doc = _doc;
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->incCmdRef();
+	objects.setAutoDelete( false );
+	doc = _doc;
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 MoveByCmd::~MoveByCmd()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->decCmdRef();
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->decCmdRef();
 }
 
 /*====================== execute =================================*/
 void MoveByCmd::execute()
 {
-  KRect oldRect;
+	KRect oldRect;
 
-  for (unsigned int i = 0;i < objects.count();i++)
+	for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      oldRect = objects.at(i)->getBoundingRect(0,0);
-      objects.at(i)->moveBy(diff);
-      doc->repaint(oldRect);
-      doc->repaint(objects.at(i));
+		oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+		objects.at( i )->moveBy( diff );
+		doc->repaint( oldRect );
+		doc->repaint( objects.at( i ) );
     }
 }
 
 /*====================== unexecute ===============================*/
 void MoveByCmd::unexecute()
 {
-  KRect oldRect;
+	KRect oldRect;
 
-  for (unsigned int i = 0;i < objects.count();i++)
+	for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      oldRect = objects.at(i)->getBoundingRect(0,0);
-      objects.at(i)->moveBy(-diff.x(),-diff.y());
-      doc->repaint(oldRect);
-      doc->repaint(objects.at(i));
+		oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+		objects.at( i )->moveBy( -diff.x(), -diff.y() );
+		doc->repaint( oldRect );
+		doc->repaint( objects.at( i ) );
     }
 }
 
@@ -71,49 +72,49 @@ void MoveByCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2(QString _name,QList<KPoint> &_diffs,QList<KPObject> &_objects,KPresenterDoc *_doc)
-  : Command(_name), diffs(_diffs), objects(_objects)
+MoveByCmd2::MoveByCmd2( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects, KPresenterDoc *_doc )
+	: Command( _name ), diffs( _diffs ), objects( _objects )
 {
-  objects.setAutoDelete(false);
-  diffs.setAutoDelete(true);
-  doc = _doc;
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->incCmdRef();
+	objects.setAutoDelete( false );
+	diffs.setAutoDelete( true );
+	doc = _doc;
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 MoveByCmd2::~MoveByCmd2()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->decCmdRef();
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->decCmdRef();
 
-  diffs.clear();
+	diffs.clear();
 }
 
 /*====================== execute =================================*/
 void MoveByCmd2::execute()
 {
-  KRect oldRect;
+	KRect oldRect;
 
-  for (unsigned int i = 0;i < objects.count();i++)
+	for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      oldRect = objects.at(i)->getBoundingRect(0,0);
-      objects.at(i)->moveBy(*diffs.at(i));
-      doc->repaint(oldRect);
-      doc->repaint(objects.at(i));
+		oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+		objects.at( i )->moveBy( *diffs.at( i ) );
+		doc->repaint( oldRect );
+		doc->repaint( objects.at( i ) );
     }
 }
 
 /*====================== unexecute ===============================*/
 void MoveByCmd2::unexecute()
 {
-  KRect oldRect;
+	KRect oldRect;
 
-  for (unsigned int i = 0;i < objects.count();i++)
+	for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      oldRect = objects.at(i)->getBoundingRect(0,0);
-      objects.at(i)->moveBy(-diffs.at(i)->x(),-diffs.at(i)->y());
-      doc->repaint(oldRect);
-      doc->repaint(objects.at(i));
+		oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+		objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
+		doc->repaint( oldRect );
+		doc->repaint( objects.at( i ) );
     }
 }

@@ -17,7 +17,6 @@
 #define pievaluecmd_h
 
 #include <qlist.h>
-#include <qcolor.h>
 
 #include "command.h"
 #include "kpobject.h"
@@ -31,30 +30,28 @@ class KPresenterDoc;
 
 class PieValueCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  struct PieValues
-  {
-    PieType pieType;
-    int pieAngle,pieLength;
-  };
+	struct PieValues
+	{
+		PieType pieType;
+		int pieAngle, pieLength;
+	};
 
-  PieValueCmd(QString _name,QList<PieValues> &_oldValues,PieValues _newValues,
-	    QList<KPObject> &_objects,KPresenterDoc *_doc);
-  ~PieValueCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	PieValueCmd( QString _name, QList<PieValues> &_oldValues, PieValues _newValues,
+				 QList<KPObject> &_objects, KPresenterDoc *_doc );
+	~PieValueCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  PieValueCmd()
-    {;}
+	PieValueCmd()
+    {; }
 
-  KPresenterDoc *doc;
-  QList<PieValues> oldValues;
-  QList<KPObject> objects;
-  PieValues newValues;
+	KPresenterDoc *doc;
+	QList<PieValues> oldValues;
+	QList<KPObject> objects;
+	PieValues newValues;
 
 };
 

@@ -15,50 +15,49 @@
 
 #include "kpresenter_doc.h"
 #include "rotatecmd.h"
-#include "rotatecmd.moc"
 
 /******************************************************************/
 /* Class: RotateCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-RotateCmd::RotateCmd(QString _name,QList<RotateValues> &_oldRotate,float _newAngle,
-		     QList<KPObject> &_objects,KPresenterDoc *_doc)
-  : Command(_name), oldRotate(_oldRotate), objects(_objects)
+RotateCmd::RotateCmd( QString _name, QList<RotateValues> &_oldRotate, float _newAngle,
+					  QList<KPObject> &_objects, KPresenterDoc *_doc )
+	: Command( _name ), oldRotate( _oldRotate ), objects( _objects )
 {
-  objects.setAutoDelete(false);
-  oldRotate.setAutoDelete(false);
-  doc = _doc;
-  newAngle = _newAngle;
+	objects.setAutoDelete( false );
+	oldRotate.setAutoDelete( false );
+	doc = _doc;
+	newAngle = _newAngle;
 
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->incCmdRef();
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 RotateCmd::~RotateCmd()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->decCmdRef();
-  oldRotate.setAutoDelete(true);
-  oldRotate.clear();
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->decCmdRef();
+	oldRotate.setAutoDelete( true );
+	oldRotate.clear();
 }
 
 /*====================== execute =================================*/
 void RotateCmd::execute()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->rotate(newAngle);
-  
-  doc->repaint(false);
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->rotate( newAngle );
+
+	doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void RotateCmd::unexecute()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->rotate(oldRotate.at(i)->angle);
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->rotate( oldRotate.at( i )->angle );
 
-  doc->repaint(false);
+	doc->repaint( false );
 }
 

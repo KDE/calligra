@@ -29,29 +29,27 @@ class KPresenterDoc;
 
 class RotateCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  struct RotateValues
-  {
-    float angle;
-  };
+	struct RotateValues
+	{
+		float angle;
+	};
 
-  RotateCmd(QString _name,QList<RotateValues> &_oldRotate,float _newAngle,
-	    QList<KPObject> &_objects,KPresenterDoc *_doc);
-  ~RotateCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	RotateCmd( QString _name, QList<RotateValues> &_oldRotate, float _newAngle,
+			   QList<KPObject> &_objects, KPresenterDoc *_doc );
+	~RotateCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  RotateCmd()
-    {;}
+	RotateCmd()
+    {; }
 
-  KPresenterDoc *doc;
-  QList<RotateValues> oldRotate;
-  QList<KPObject> objects;
-  float newAngle;
+	KPresenterDoc *doc;
+	QList<RotateValues> oldRotate;
+	QList<KPObject> objects;
+	float newAngle;
 
 };
 

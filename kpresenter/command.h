@@ -16,33 +16,30 @@
 #ifndef command_h
 #define command_h
 
-#include <qobject.h>
 #include <qstring.h>
 
 /******************************************************************/
 /* Class: Command                                                 */
 /******************************************************************/
 
-class Command : public QObject
+class Command
 {
-  Q_OBJECT
-
 public:
-  Command(QString _name);
-  virtual ~Command()
-    {;}
+	Command( QString _name );
+	virtual ~Command()
+    {; }
 
-  virtual void execute() = 0;
-  virtual void unexecute() = 0;
+	virtual void execute() = 0;
+	virtual void unexecute() = 0;
 
-  virtual QString getName()
+	virtual QString getName()
     { return name; }
 
 protected:
-  Command() : name()
-    {;}
+	Command() : name()
+    {; }
 
-  QString name;
+	QString name;
 
 };
 

@@ -16,37 +16,39 @@
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
 #include "pglayoutcmd.h"
-#include "pglayoutcmd.moc"
+#include "kpbackground.h"
+
+#include <koRuler.h>
 
 /******************************************************************/
 /* Class: PgLayoutCmd                                             */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-PgLayoutCmd::PgLayoutCmd(QString _name,KoPageLayout _layout,KoPageLayout _oldLayout,
-			 KPresenterView *_view)
-  : Command(_name)
+PgLayoutCmd::PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
+						  KPresenterView *_view )
+	: Command( _name )
 {
-  layout = _layout;
-  oldLayout = _oldLayout;
-  view = _view;
+	layout = _layout;
+	oldLayout = _oldLayout;
+	view = _view;
 }
 
 /*====================== execute =================================*/
 void PgLayoutCmd::execute()
 {
-  view->kPresenterDoc()->setPageLayout(layout,view->getDiffX(),view->getDiffY());
-  view->getHRuler()->setPageLayout(layout);
-  view->getVRuler()->setPageLayout(layout);
-  view->setRanges();
+	view->kPresenterDoc()->setPageLayout( layout, view->getDiffX(), view->getDiffY() );
+	view->getHRuler()->setPageLayout( layout );
+	view->getVRuler()->setPageLayout( layout );
+	view->setRanges();
 }
 
 /*====================== unexecute ===============================*/
 void PgLayoutCmd::unexecute()
 {
-  view->kPresenterDoc()->setPageLayout(oldLayout,view->getDiffX(),view->getDiffY());
-  view->getHRuler()->setPageLayout(oldLayout);
-  view->getVRuler()->setPageLayout(oldLayout);
-  view->setRanges();
+	view->kPresenterDoc()->setPageLayout( oldLayout, view->getDiffX(), view->getDiffY() );
+	view->getHRuler()->setPageLayout( oldLayout );
+	view->getVRuler()->setPageLayout( oldLayout );
+	view->setRanges();
 }
 

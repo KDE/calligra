@@ -31,63 +31,61 @@ class KPresenterDoc;
 
 class PenBrushCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  struct Pen
-  {
-    QPen pen;
-    LineEnd lineBegin,lineEnd;
-    
-    Pen &operator=(Pen &_pen) {
-      pen  = _pen.pen;
-      lineBegin = _pen.lineBegin;
-      lineEnd = _pen.lineEnd;
-      return *this;
-    }
-  };
+	struct Pen
+	{
+		QPen pen;
+		LineEnd lineBegin, lineEnd;
 
-  struct Brush
-  {
-    QBrush brush;
-    QColor gColor1;
-    QColor gColor2;
-    BCType gType;
-    FillType fillType;
+		Pen &operator=( Pen &_pen ) {
+			pen  = _pen.pen;
+			lineBegin = _pen.lineBegin;
+			lineEnd = _pen.lineEnd;
+			return *this;
+		}
+	};
 
-    Brush &operator=(Brush &_brush) {
-      brush = _brush.brush;
-      gColor1 = _brush.gColor1;
-      gColor2 = _brush.gColor2;
-      gType = _brush.gType;
-      fillType = _brush.fillType;
-      return *this;
-    }
-  };
+	struct Brush
+	{
+		QBrush brush;
+		QColor gColor1;
+		QColor gColor2;
+		BCType gType;
+		FillType fillType;
 
-  static const int LB_ONLY = 1;
-  static const int LE_ONLY = 2;
-  static const int PEN_ONLY = 4;
-  static const int BRUSH_ONLY = 8;
+		Brush &operator=( Brush &_brush ) {
+			brush = _brush.brush;
+			gColor1 = _brush.gColor1;
+			gColor2 = _brush.gColor2;
+			gType = _brush.gType;
+			fillType = _brush.fillType;
+			return *this;
+		}
+	};
 
-  PenBrushCmd(QString _name,QList<Pen> &_oldPen,QList<Brush> &_oldBrush,
-	      Pen _newPen,Brush _newBrush,QList<KPObject> &_objects,KPresenterDoc *_doc,int _flags = 0);
-  ~PenBrushCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	static const int LB_ONLY = 1;
+	static const int LE_ONLY = 2;
+	static const int PEN_ONLY = 4;
+	static const int BRUSH_ONLY = 8;
+
+	PenBrushCmd( QString _name, QList<Pen> &_oldPen, QList<Brush> &_oldBrush,
+				 Pen _newPen, Brush _newBrush, QList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );
+	~PenBrushCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  PenBrushCmd()
-    {;}
+	PenBrushCmd()
+    {; }
 
-  KPresenterDoc *doc;
-  QList<Pen> oldPen;
-  QList<Brush> oldBrush;
-  QList<KPObject> objects;
-  Pen newPen;
-  Brush newBrush;
-  int flags;
+	KPresenterDoc *doc;
+	QList<Pen> oldPen;
+	QList<Brush> oldBrush;
+	QList<KPObject> objects;
+	Pen newPen;
+	Brush newBrush;
+	int flags;
 
 };
 

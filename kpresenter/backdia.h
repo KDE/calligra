@@ -16,32 +16,14 @@
 #ifndef BACKDIA_H
 #define BACKDIA_H
 
-#include <stdlib.h>
-
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qgrpbox.h>
-#include <qradiobt.h>
-#include <qpushbt.h>
 #include <qcolor.h>
-#include <qbttngrp.h>
-#include <qpixmap.h>
-#include <qwmatrix.h>
 #include <qstring.h>
-#include <qapp.h>
-#include <qwidget.h>
-#include <qevent.h>
-#include <qpicture.h>
-#include <qpainter.h>
-#include <qcombo.h>
-#include <ksize.h>
-
-#include <kcolorbtn.h>
 
 #include "qwmf.h"
 #include "global.h"
 
-#include "kpgradient.h"
+#include <kcolorbtn.h>
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -50,35 +32,43 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
+class QLabel;
+class QGroupBox;
+class QRadioButton;
+class QComboBox;
+class QPushButton;
+class KColorButton;
+class QButtonGroup;
+
 /******************************************************************/
 /* class ClipPreview                                              */
 /******************************************************************/
 
 class ClipPreview : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  ClipPreview(QWidget* parent=0,const char* name=0);
-  ~ClipPreview();
+	// constructor - destructor
+	ClipPreview( QWidget* parent = 0, const char* name = 0 );
+	~ClipPreview();
 
-  // get - set clipart
-  void setClipart(QString);
-  QString getClipart() {return fileName;}
+	// get - set clipart
+	void setClipart( QString );
+	QString getClipart() { return fileName; }
 
 protected:
 
-  // paint
-  void paintEvent(QPaintEvent*);
+	// paint
+	void paintEvent( QPaintEvent* );
 
 private:
 
-  // internal
-  QPicture *pic;
-  QString fileName;
-  QWinMetaFile wmf;
+	// internal
+	QPicture *pic;
+	QString fileName;
+	QWinMetaFile wmf;
 
 };
 
@@ -88,62 +78,62 @@ private:
 
 class BackDia : public QDialog
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  BackDia(QWidget* parent=0,const char* name=0,
-	  BackType backType=BT_COLOR,QColor backColor1=white,
-	  QColor backColor2=white,BCType _bcType=BCT_PLAIN,
-	  QString backPic=0,QString backClip=0,
-	  BackView backPicView=BV_TILED);
-  ~BackDia();
+	// constructor - destructor
+	BackDia( QWidget* parent = 0, const char* name = 0,
+			 BackType backType = BT_COLOR, QColor backColor1 = white,
+			 QColor backColor2 = white, BCType _bcType = BCT_PLAIN,
+			 QString backPic = QString::null, QString backClip = QString::null,
+			 BackView backPicView = BV_TILED );
+	~BackDia();
 
-  // get values
-  QColor getBackColor1() {return color1Choose->color();}
-  QColor getBackColor2() {return color2Choose->color();}
-  BCType getBackColorType() {return bcType;}
-  BackType getBackType();
-  QString getBackPixFilename() {return chosenPic;}
-  QString getBackClipFilename() {return chosenClip;}
-  BackView getBackView();
+	// get values
+	QColor getBackColor1() { return color1Choose->color(); }
+	QColor getBackColor2() { return color2Choose->color(); }
+	BCType getBackColorType() { return bcType; }
+	BackType getBackType();
+	QString getBackPixFilename() { return chosenPic; }
+	QString getBackClipFilename() { return chosenClip; }
+	BackView getBackView();
 
 private:
 
-  // dialog objects
-  QLabel *lPicName,*picPreview,*lClipName,*colorPreview;
-  QGroupBox *grp1,*grp2,*grp3;
-  QRadioButton *radioColor,*radioPic,*vTiled,*vCenter,*vZoom,*radioClip;
-  QComboBox *cType;
-  QPushButton *okBut,*applyBut,*applyGlobalBut,*cancelBut;
-  QPushButton *picChoose,*clipChoose;
-  QButtonGroup *buttGrp,*buttGrp2,*buttGrp3;
-  KColorButton *color1Choose,*color2Choose;
+	// dialog objects
+	QLabel *lPicName, *picPreview, *lClipName, *colorPreview;
+	QGroupBox *grp1, *grp2, *grp3;
+	QRadioButton *radioColor, *radioPic, *vTiled, *vCenter, *vZoom, *radioClip;
+	QComboBox *cType;
+	QPushButton *okBut, *applyBut, *applyGlobalBut, *cancelBut;
+	QPushButton *picChoose, *clipChoose;
+	QButtonGroup *buttGrp, *buttGrp2, *buttGrp3;
+	KColorButton *color1Choose, *color2Choose;
 
-  // values
-  QString chosenPic;
-  QString chosenClip;
-  ClipPreview *clipPreview;
-  BCType bcType;
+	// values
+	QString chosenPic;
+	QString chosenClip;
+	ClipPreview *clipPreview;
+	BCType bcType;
 
 private slots:
 
-  // dialog slots
-  void selectCType(int);
-  void selectPic();
-  void selectClip();
-  void openPic(const QString &);
-  void openClip(const QString &);
-  void colChanged(const QColor&) {selectCType(bcType);}
-  void Ok() {emit backOk(false);}
-  void Apply() {emit backOk(false);}
-  void ApplyGlobal() {emit backOk(true);}
+	// dialog slots
+	void selectCType( int );
+	void selectPic();
+	void selectClip();
+	void openPic( const QString & );
+	void openClip( const QString & );
+	void colChanged( const QColor& ) { selectCType( bcType ); }
+	void Ok() { emit backOk( false ); }
+	void Apply() { emit backOk( false ); }
+	void ApplyGlobal() { emit backOk( true ); }
 
 signals:
 
-  // ok
-  void backOk(bool);
+	// ok
+	void backOk( bool );
 
 };
 #endif //BACKDIA_H

@@ -16,9 +16,6 @@
 #ifndef deletecmd_h
 #define deletecmd_h
 
-#include <krect.h>
-#include <kpoint.h>
-#include <ksize.h>
 #include <qlist.h>
 
 #include "command.h"
@@ -32,21 +29,19 @@ class KPresenterDoc;
 
 class DeleteCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDoc *_doc);
-  ~DeleteCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	DeleteCmd( QString _name, QList<KPObject> &_objects, KPresenterDoc *_doc );
+	~DeleteCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  DeleteCmd()
-    {;}
+	DeleteCmd()
+    {; }
 
-  QList<KPObject> objects;
-  KPresenterDoc *doc;
+	QList<KPObject> objects;
+	KPresenterDoc *doc;
 
 };
 

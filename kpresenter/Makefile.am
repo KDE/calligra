@@ -55,15 +55,6 @@ METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
 		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc \
 		spacingdia.moc confrectdia.moc \
-		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
-		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
-		kppixmapobject.moc kppieobject.moc kppartobject.moc \
-		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
-		kppixmapcollection.moc kpgradientcollection.moc \
-		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
-		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
-		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc shadowcmd.moc \
-		rotatecmd.moc lowraicmd.moc pievaluecmd.moc rectvaluecmd.moc penbrushcmd.moc \
 		commandhistory.moc gotopage.moc webpresentation.moc \
 		footer_header.moc
 

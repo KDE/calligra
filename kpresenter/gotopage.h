@@ -17,12 +17,13 @@
 #define gotopage_h
 
 #include <qframe.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qvalidator.h>
-#include <qevent.h>
 
-#include <kapp.h>
+class QWidget;
+class QObject;
+class QEvent;
+class QResizeEvent;
+class QSpinBox;
+class QLabel;
 
 /******************************************************************/
 /* class KPGotoPage                                               */
@@ -30,26 +31,26 @@
 
 class KPGotoPage : public QFrame
 {
-  Q_OBJECT
-  
+	Q_OBJECT
+
 public:
-  KPGotoPage(int minValue,int maxValue,int start,
-	     QWidget *parent = 0L,const char *name = 0L,WFlags f = 0);
-  
-  bool eventFilter(QObject *obj,QEvent *e);
+	KPGotoPage( int minValue, int maxValue, int start,
+				QWidget *parent = 0L, const char *name = 0L, WFlags f = 0 );
 
-  int getPage() { return page; }
-  
-  static int gotoPage(int minValue,int maxValue,int start,QWidget *parent = 0L);
-  
+	bool eventFilter( QObject *obj, QEvent *e );
+
+	int getPage() { return page; }
+
+	static int gotoPage( int minValue, int maxValue, int start, QWidget *parent = 0L );
+
 protected:
-  void resizeEvent(QResizeEvent *e);
-  
-  QSpinBox *spinbox;
-  QLabel *label;
+	void resizeEvent( QResizeEvent *e );
 
-  int _default,page;
-  
+	QSpinBox *spinbox;
+	QLabel *label;
+
+	int _default, page;
+
 };
 
 

@@ -19,9 +19,9 @@
 #include <qstring.h>
 
 #include "command.h"
-#include "kppixmapobject.h"
 
 class KPresenterDoc;
+class KPPixmapObject;
 
 /******************************************************************/
 /* Class: ChgPixCmd                                               */
@@ -29,22 +29,20 @@ class KPresenterDoc;
 
 class ChgPixCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  ChgPixCmd(QString _name,KPPixmapObject *_oldObject,KPPixmapObject *_newObject,
-	    KPresenterDoc *_doc);
-  ~ChgPixCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
+			   KPresenterDoc *_doc );
+	~ChgPixCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  ChgPixCmd()
-    {;}
+	ChgPixCmd()
+    {; }
 
-  KPPixmapObject *oldObject,*newObject;
-  KPresenterDoc *doc;
+	KPPixmapObject *oldObject, *newObject;
+	KPresenterDoc *doc;
 
 };
 

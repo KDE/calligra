@@ -185,3 +185,15 @@ Reggie, 12.5.1999:
 Reggie, 13.5.1999:
 ------------------
 - Implemented font/paragraph configuration in the footer/header editor
+
+Reggie, 15.5.1999:
+------------------
+- Big code cleanups:
+  - Using a better readable coding style
+  - Lots of classes were derived from QObject but didn't
+    make any use of that => these classes aren't derived from
+    QObject anymore and no moc files are creaded for these
+    classes anymore => faster compilation
+  - Fixed includes (Only really neccessary headers are included in the .h files)
+- Fixes for Unicode
+- Some focus handling fixes

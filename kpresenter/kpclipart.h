@@ -12,11 +12,10 @@
 /******************************************************************/
 /* Module: Clipart (header)                                       */
 /******************************************************************/
- 
+
 #ifndef kpclipart_h
 #define kpclipart_h
 
-#include <qobject.h>
 #include <qstring.h>
 
 #include "qwmf.h"
@@ -26,23 +25,21 @@
 /* class KPClipart                                                */
 /******************************************************************/
 
-class KPClipart : public QObject
+class KPClipart
 {
-  Q_OBJECT
-
 public:
-  KPClipart();
-  KPClipart(QString _filename);
-  ~KPClipart();
+	KPClipart();
+	KPClipart( QString _filename );
+	~KPClipart();
 
-  void setClipartName(QString);
-  QString getClipartName() {return filename;}
-  QPicture* getPic();
+	void setClipartName( QString );
+	QString getClipartName() {return filename; }
+	QPicture* getPic();
 
 protected:
-  QPicture *pic;
-  QString filename;
-  QWinMetaFile wmf;
+	QPicture *pic;
+	QString filename;
+	QWinMetaFile wmf;
 
 };
 

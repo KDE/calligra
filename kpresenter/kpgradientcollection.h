@@ -15,38 +15,35 @@
 #ifndef kpgradientcollection_h
 #define kpgradientcollection_h
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qpixmap.h>
 #include <qlist.h>
 #include <qcolor.h>
 
 #include "kpgradient.h"
 #include "global.h"
 
+class QPixmap;
+
 /******************************************************************/
 /* Class: KPGradientCollection                                    */
 /******************************************************************/
 
-class KPGradientCollection : public QObject
+class KPGradientCollection
 {
-  Q_OBJECT
-
 public:
-  KPGradientCollection()
-    { gradientList.setAutoDelete(true); }
+	KPGradientCollection()
+    { gradientList.setAutoDelete( true ); }
 
-  ~KPGradientCollection()
+	virtual ~KPGradientCollection()
     { gradientList.clear(); }
 
-  virtual QPixmap* getGradient(QColor _color1,QColor _color2,BCType _bcType,KSize _size,bool addref = true);
+	virtual QPixmap* getGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size, bool addref = true );
 
-  virtual void removeRef(QColor _color1,QColor _color2,BCType _bcType,KSize _size);
+	virtual void removeRef( QColor _color1, QColor _color2, BCType _bcType, KSize _size );
 
 protected:
-  virtual int inGradientList(QColor _color1,QColor _color2,BCType _bcType,KSize _size);
+	virtual int inGradientList( QColor _color1, QColor _color2, BCType _bcType, KSize _size );
 
-  QList<KPGradient> gradientList;
+	QList<KPGradient> gradientList;
 
 };
 

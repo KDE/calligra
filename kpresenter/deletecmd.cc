@@ -15,55 +15,58 @@
 
 #include "kpresenter_doc.h"
 #include "deletecmd.h"
-#include "deletecmd.moc"
+
+#include <krect.h>
+#include <kpoint.h>
+#include <ksize.h>
 
 /******************************************************************/
 /* Class: DeleteCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-DeleteCmd::DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDoc *_doc)
-  : Command(_name), objects(_objects)
+DeleteCmd::DeleteCmd( QString _name, QList<KPObject> &_objects, KPresenterDoc *_doc )
+	: Command( _name ), objects( _objects )
 {
-  objects.setAutoDelete(false);
-  doc = _doc;
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->incCmdRef();
+	objects.setAutoDelete( false );
+	doc = _doc;
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 DeleteCmd::~DeleteCmd()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->decCmdRef();
+	for ( unsigned int i = 0; i < objects.count(); i++ )
+		objects.at( i )->decCmdRef();
 }
 
 /*======================== execute ===============================*/
 void DeleteCmd::execute()
 {
-  KRect oldRect;
+	KRect oldRect;
 
-  for (unsigned int i = 0;i < objects.count();i++)
+	for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      oldRect = objects.at(i)->getBoundingRect(0,0);
-      if (doc->objectList()->findRef(objects.at(i)) != -1)
-	{
-	  doc->objectList()->take(doc->objectList()->findRef(objects.at(i)));
-	  objects.at(i)->removeFromObjList();
-	}
-      doc->repaint(oldRect);
-      doc->repaint(objects.at(i));
+		oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+		if ( doc->objectList()->findRef( objects.at( i ) ) != -1 )
+		{
+			doc->objectList()->take( doc->objectList()->findRef( objects.at( i ) ) );
+			objects.at( i )->removeFromObjList();
+		}
+		doc->repaint( oldRect );
+		doc->repaint( objects.at( i ) );
     }
 }
 
 /*====================== unexecute ===============================*/
 void DeleteCmd::unexecute()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
+	for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      doc->objectList()->append(objects.at(i));
-      objects.at(i)->addToObjList();
-      doc->repaint(objects.at(i));
+		doc->objectList()->append( objects.at( i ) );
+		objects.at( i )->addToObjList();
+		doc->repaint( objects.at( i ) );
     }
 }
 

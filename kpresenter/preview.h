@@ -23,9 +23,9 @@
 #include <qstring.h>
 
 // WMF preview
-bool wmfPreviewHandler (const KFileInfo*,const QString fileName,QString&,QPixmap& pixmap);
+bool wmfPreviewHandler ( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap ); 
 
 // Pixmap preview
-bool pixmapPreviewHandler(const KFileInfo*,const QString fileName,QString&,QPixmap& pixmap);
+bool pixmapPreviewHandler( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap ); 
 
 #endif

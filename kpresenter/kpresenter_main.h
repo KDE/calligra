@@ -22,16 +22,16 @@
 /******************************************************************/
 class KPresenterApp : public KoApplication
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  KPresenterApp(int &argc,char** argv);
-  ~KPresenterApp();
-  
-  // start application
-  virtual void start();
-};
+	// constructor - destructor
+	KPresenterApp( int &argc, char** argv ); 
+	~KPresenterApp(); 
+
+	// start application
+	virtual void start(); 
+}; 
 
 #endif

@@ -16,14 +16,10 @@
 #ifndef insertcmd_h
 #define insertcmd_h
 
-#include <kpoint.h>
-#include <krect.h>
-#include <ksize.h>
-
 #include "command.h"
-#include "kpobject.h"
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: InsertCmd                                               */
@@ -31,21 +27,19 @@ class KPresenterDoc;
 
 class InsertCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  InsertCmd(QString _name,KPObject *_object,KPresenterDoc *_doc);
-  ~InsertCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc );
+	~InsertCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  InsertCmd()
-    {;}
+	InsertCmd()
+    {; }
 
-  KPObject *object;
-  KPresenterDoc *doc;
+	KPObject *object;
+	KPresenterDoc *doc;
 
 };
 

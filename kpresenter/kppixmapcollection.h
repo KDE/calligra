@@ -15,40 +15,37 @@
 #ifndef kppixmapcollection_h
 #define kppixmapcollection_h
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qpixmap.h>
 #include <qlist.h>
 
 #include "kppixmap.h"
+
+class QPixmap;
 
 /******************************************************************/
 /* Class: KPPixmapCollection                                      */
 /******************************************************************/
 
-class KPPixmapCollection : public QObject
+class KPPixmapCollection
 {
-  Q_OBJECT
-
 public:
-  KPPixmapCollection()
-    { pixmapList.setAutoDelete(true); }
+	KPPixmapCollection()
+    { pixmapList.setAutoDelete( true ); }
 
-  ~KPPixmapCollection()
+	virtual ~KPPixmapCollection()
     { pixmapList.clear(); }
 
-  virtual QPixmap* getPixmap(QString _filename,KSize _size,QString &_data,bool orig = false,bool addref = true);
-  virtual QPixmap* getPixmap(QString _filename,QString _data,KSize _size,bool orig = false,bool addref = true);
-  virtual QPixmap* getPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size,bool orig = false,bool addref = true);
+	virtual QPixmap* getPixmap( QString _filename, KSize _size, QString &_data, bool orig = false, bool addref = true );
+	virtual QPixmap* getPixmap( QString _filename, QString _data, KSize _size, bool orig = false, bool addref = true );
+	virtual QPixmap* getPixmap( QString _filename, QString _data, QPixmap *_pixmap, KSize _size, bool orig = false, bool addref = true );
 
-  virtual void removeRef(QString _filename,KSize _size);
-  virtual void removeRef(QString _filename,QString _data,KSize _size);
+	virtual void removeRef( QString _filename, KSize _size );
+	virtual void removeRef( QString _filename, QString _data, KSize _size );
 
 protected:
-  virtual int inPixmapList(QString _filename,KSize _size);
-  virtual int inPixmapList(QString _filename,QString _data,KSize _size);
+	virtual int inPixmapList( QString _filename, KSize _size );
+	virtual int inPixmapList( QString _filename, QString _data, KSize _size );
 
-  QList<KPPixmap> pixmapList;
+	QList<KPPixmap> pixmapList;
 
 };
 

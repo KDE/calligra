@@ -14,8 +14,21 @@
 /******************************************************************/
 
 #include "kpobject.h"
-#include "kpobject.moc"
 #include "kptextobject.h"
+
+#include <qpainter.h>
+#include <qwmatrix.h>
+
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
+#include <kapp.h>
+
+#include <fstream.h>
+#include <math.h>
+
+#include <string.h>
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -23,294 +36,294 @@
 
 /*======================== constructor ===========================*/
 KPObject::KPObject()
-  : QObject(), orig(), ext(), shadowColor(gray)
+	: orig(), ext(), shadowColor( Qt::gray )
 {
-  presNum = 0;
-  effect = EF_NONE;
-  effect2 = EF2_NONE;
-  angle = 0.0;
-  shadowDirection = SD_RIGHT_BOTTOM;
-  shadowDistance = 0;
-  dSelection = true;
-  selected = false;
-  presFakt = 0.0;
-  zoomed = false;
-  ownClipping = true;
-  subPresStep = 0;
-  specEffects = false;
-  onlyCurrStep = true;
-  inObjList = true;
-  cmds = 0;
-  move = false;
+	presNum = 0;
+	effect = EF_NONE;
+	effect2 = EF2_NONE;
+	angle = 0.0;
+	shadowDirection = SD_RIGHT_BOTTOM;
+	shadowDistance = 0;
+	dSelection = true;
+	selected = false;
+	presFakt = 0.0;
+	zoomed = false;
+	ownClipping = true;
+	subPresStep = 0;
+	specEffects = false;
+	onlyCurrStep = true;
+	inObjList = true;
+	cmds = 0;
+	move = false;
 }
 
 /*======================= get bounding rect ======================*/
-KRect KPObject::getBoundingRect(int _diffx,int _diffy)
+KRect KPObject::getBoundingRect( int _diffx, int _diffy )
 {
-  KRect r(orig.x() - _diffx,orig.y() - _diffy,
-	  ext.width(),ext.height());
+	KRect r( orig.x() - _diffx, orig.y() - _diffy,
+			 ext.width(), ext.height() );
 
-  if (shadowDistance > 0)
+	if ( shadowDistance > 0 )
     {
-      int sx = r.x(),sy = r.y();
-      getShadowCoords(sx,sy,shadowDirection,shadowDistance);
-      KRect r2(sx,sy,r.width(),r.height());
-      r = r.unite(r2);
+		int sx = r.x(), sy = r.y();
+		getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+		KRect r2( sx, sy, r.width(), r.height() );
+		r = r.unite( r2 );
     }
 
-  if (angle == 0.0)
-    return r;
-  else
+	if ( angle == 0.0 )
+		return r;
+	else
     {
-      QWMatrix mtx;
-      mtx.rotate(angle);
-      KRect rr = mtx.map(r);
+		QWMatrix mtx;
+		mtx.rotate( angle );
+		KRect rr = mtx.map( r );
 
-      int diffw = abs(rr.width() - r.width());
-      int diffh = abs(rr.height() - r.height());
+		int diffw = abs( rr.width() - r.width() );
+		int diffh = abs( rr.height() - r.height() );
 
-      return KRect(r.x() - diffw,r.y() - diffh,
-		   r.width() + diffw * 2,r.height() + diffh * 2);
+		return KRect( r.x() - diffw, r.y() - diffh,
+					  r.width() + diffw * 2, r.height() + diffh * 2 );
     }
 
-  return r;
+	return r;
 }
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains(KPoint _point,int _diffx,int _diffy)
+bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
 {
-  KRect r(orig.x() - _diffx,orig.y() - _diffy,
-	  ext.width(),ext.height());
+	KRect r( orig.x() - _diffx, orig.y() - _diffy,
+			 ext.width(), ext.height() );
 
-  return r.contains(_point);
+	return r.contains( _point );
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor(KPoint _point,int _diffx,int _diffy,ModifyType &_modType)
+QCursor KPObject::getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &_modType )
 {
-  int px = _point.x();
-  int py = _point.y();
+	int px = _point.x();
+	int py = _point.y();
 
-  int ox = orig.x() - _diffx;
-  int oy = orig.y() - _diffy;
-  int ow = ext.width();
-  int oh = ext.height();
+	int ox = orig.x() - _diffx;
+	int oy = orig.y() - _diffy;
+	int ow = ext.width();
+	int oh = ext.height();
 
-  KRect r(ox,oy,ow,oh);
+	KRect r( ox, oy, ow, oh );
 
-  if (!r.contains(_point))
-    return arrowCursor;
+	if ( !r.contains( _point ) )
+		return Qt::arrowCursor;
 
-  if (px >= ox && py >= oy && px <= ox + 6 && py <= oy + 6)
+	if ( px >= ox && py >= oy && px <= ox + 6 && py <= oy + 6 )
     {
-      _modType = MT_RESIZE_LU;
-      return sizeFDiagCursor;
+		_modType = MT_RESIZE_LU;
+		return Qt::sizeFDiagCursor;
     }
 
-  if (px >= ox && py >= oy + oh / 2 - 3 && px <= ox + 6 && py <= oy + oh / 2 + 3)
+	if ( px >= ox && py >= oy + oh / 2 - 3 && px <= ox + 6 && py <= oy + oh / 2 + 3 )
     {
-      _modType = MT_RESIZE_LF;
-      return sizeHorCursor;
+		_modType = MT_RESIZE_LF;
+		return Qt::sizeHorCursor;
     }
 
-  if (px >= ox && py >= oy + oh - 6 && px <= ox + 6 && py <= oy + oh)
+	if ( px >= ox && py >= oy + oh - 6 && px <= ox + 6 && py <= oy + oh )
     {
-      _modType = MT_RESIZE_LD;
-      return sizeBDiagCursor;
+		_modType = MT_RESIZE_LD;
+		return Qt::sizeBDiagCursor;
     }
 
-  if (px >= ox + ow / 2 - 3 && py >= oy && px <= ox + ow / 2 + 3 && py <= oy + 6)
+	if ( px >= ox + ow / 2 - 3 && py >= oy && px <= ox + ow / 2 + 3 && py <= oy + 6 )
     {
-      _modType = MT_RESIZE_UP;
-      return sizeVerCursor;
+		_modType = MT_RESIZE_UP;
+		return Qt::sizeVerCursor;
     }
 
-  if (px >= ox + ow / 2 - 3 && py >= oy + oh - 6 && px <= ox + ow / 2 + 3 && py <= oy + oh)
+	if ( px >= ox + ow / 2 - 3 && py >= oy + oh - 6 && px <= ox + ow / 2 + 3 && py <= oy + oh )
     {
-      _modType = MT_RESIZE_DN;
-      return sizeVerCursor;
+		_modType = MT_RESIZE_DN;
+		return Qt::sizeVerCursor;
     }
 
-  if (px >= ox + ow - 6 && py >= oy && px <= ox + ow && py <= oy + 6)
+	if ( px >= ox + ow - 6 && py >= oy && px <= ox + ow && py <= oy + 6 )
     {
-      _modType = MT_RESIZE_RU;
-      return sizeBDiagCursor;
+		_modType = MT_RESIZE_RU;
+		return Qt::sizeBDiagCursor;
     }
 
-  if (px >= ox + ow - 6 && py >= oy + oh / 2 - 3 && px <= ox + ow && py <= oy + oh / 2 + 3)
+	if ( px >= ox + ow - 6 && py >= oy + oh / 2 - 3 && px <= ox + ow && py <= oy + oh / 2 + 3 )
     {
-      _modType = MT_RESIZE_RT;
-      return sizeHorCursor;
+		_modType = MT_RESIZE_RT;
+		return Qt::sizeHorCursor;
     }
 
-  if (px >= ox + ow - 6 && py >= oy + oh - 6 && px <= ox + ow && py <= oy + oh)
+	if ( px >= ox + ow - 6 && py >= oy + oh - 6 && px <= ox + ow && py <= oy + oh )
     {
-      _modType = MT_RESIZE_RD;
-      return sizeFDiagCursor;
+		_modType = MT_RESIZE_RD;
+		return Qt::sizeFDiagCursor;
     }
 
-  _modType = MT_MOVE;
-  return sizeAllCursor;
+	_modType = MT_MOVE;
+	return Qt::sizeAllCursor;
 }
 
 /*========================= zoom =================================*/
-void KPObject::zoom(float _fakt)
+void KPObject::zoom( float _fakt )
 {
-  presFakt = _fakt;
+	presFakt = _fakt;
 
-  zoomed = true;
+	zoomed = true;
 
-  oldOrig = orig;
-  oldExt = ext;
+	oldOrig = orig;
+	oldExt = ext;
 
-  orig.setX(static_cast<int>(static_cast<float>(orig.x()) * presFakt));
-  orig.setY(static_cast<int>(static_cast<float>(orig.y()) * presFakt));
-  ext.setWidth(static_cast<int>(static_cast<float>(ext.width()) * presFakt));
-  ext.setHeight(static_cast<int>(static_cast<float>(ext.height()) * presFakt));
+	orig.setX( static_cast<int>( static_cast<float>( orig.x() ) * presFakt ) );
+	orig.setY( static_cast<int>( static_cast<float>( orig.y() ) * presFakt ) );
+	ext.setWidth( static_cast<int>( static_cast<float>( ext.width() ) * presFakt ) );
+	ext.setHeight( static_cast<int>( static_cast<float>( ext.height() ) * presFakt ) );
 
-  setSize(ext);
-  setOrig(orig);
+	setSize( ext );
+	setOrig( orig );
 }
 
 /*==================== zoom orig =================================*/
 void KPObject::zoomOrig()
 {
-  zoomed = false;
+	zoomed = false;
 
-  orig = oldOrig;
-  ext = oldExt;
+	orig = oldOrig;
+	ext = oldExt;
 
-  setSize(ext);
-  setOrig(orig);
+	setSize( ext );
+	setOrig( orig );
 }
 
 /*======================== draw ==================================*/
-void KPObject::draw(QPainter *_painter,int _diffx,int _diffy)
+void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
-  if (dSelection && selected || dSelection && getType() == OT_TEXT)
+	if ( dSelection && selected || dSelection && getType() == OT_TEXT )
     {
-      _painter->save();
-      KRect r = _painter->viewport();
+		_painter->save();
+		KRect r = _painter->viewport();
 
-      _painter->setViewport(orig.x() - _diffx,orig.y() - _diffy,r.width(),r.height());
-      paintSelection(_painter);
+		_painter->setViewport( orig.x() - _diffx, orig.y() - _diffy, r.width(), r.height() );
+		paintSelection( _painter );
 
-      _painter->setViewport(r);
-      _painter->restore();
+		_painter->setViewport( r );
+		_painter->restore();
     }
 }
 
 /*====================== get shadow coordinates ==================*/
-void KPObject::getShadowCoords(int& _x,int& _y,ShadowDirection _direction,int _distance)
+void KPObject::getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance )
 {
-  int sx = 0,sy = 0;
+	int sx = 0, sy = 0;
 
-  switch (shadowDirection)
+	switch ( shadowDirection )
     {
     case SD_LEFT_UP:
-      {
-	sx = _x - shadowDistance;
-	sy = _y - shadowDistance;
-      } break;
+	{
+		sx = _x - shadowDistance;
+		sy = _y - shadowDistance;
+	} break;
     case SD_UP:
-      {
-	sx = _x;
-	sy = _y - shadowDistance;
-      } break;
+	{
+		sx = _x;
+		sy = _y - shadowDistance;
+	} break;
     case SD_RIGHT_UP:
-      {
-	sx = _x + shadowDistance;
-	sy = _y - shadowDistance;
-      } break;
+	{
+		sx = _x + shadowDistance;
+		sy = _y - shadowDistance;
+	} break;
     case SD_RIGHT:
-      {
-	sx = _x + shadowDistance;
-	sy = _y;
-      } break;
+	{
+		sx = _x + shadowDistance;
+		sy = _y;
+	} break;
     case SD_RIGHT_BOTTOM:
-      {
-	sx = _x + shadowDistance;
-	sy = _y + shadowDistance;
-      } break;
+	{
+		sx = _x + shadowDistance;
+		sy = _y + shadowDistance;
+	} break;
     case SD_BOTTOM:
-      {
-	sx = _x;
-	sy = _y + shadowDistance;
-      } break;
+	{
+		sx = _x;
+		sy = _y + shadowDistance;
+	} break;
     case SD_LEFT_BOTTOM:
-      {
-	sx = _x - shadowDistance;
-	sy = _y + shadowDistance;
-      } break;
+	{
+		sx = _x - shadowDistance;
+		sy = _y + shadowDistance;
+	} break;
     case SD_LEFT:
-      {
-	sx = _x - shadowDistance;
-	sy = _y;
-      } break;
+	{
+		sx = _x - shadowDistance;
+		sy = _y;
+	} break;
     }
 
-  _x = sx; _y = sy;
+	_x = sx; _y = sy;
 }
 
 /*======================== paint selection =======================*/
-void KPObject::paintSelection(QPainter *_painter)
+void KPObject::paintSelection( QPainter *_painter )
 {
-  _painter->save();
-  RasterOp rop = _painter->rasterOp();
+	_painter->save();
+	Qt::RasterOp rop = _painter->rasterOp();
 
-  _painter->setRasterOp(NotROP);
+	_painter->setRasterOp( Qt::NotROP );
 
-  if (getType() == OT_TEXT && dynamic_cast<KPTextObject*>(this)->getDrawEditRect())
+	if ( getType() == OT_TEXT && dynamic_cast<KPTextObject*>( this )->getDrawEditRect() )
     {
-      _painter->save();
+		_painter->save();
 
-      if (angle != 0)
-	{
-	  KRect br = KRect(0,0,ext.width(),ext.height());
-	  int pw = br.width();
-	  int ph = br.height();
-	  KRect rr = br;
-	  int yPos = -rr.y();
-	  int xPos = -rr.x();
-	  rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
+		if ( angle != 0 )
+		{
+			KRect br = KRect( 0, 0, ext.width(), ext.height() );
+			int pw = br.width();
+			int ph = br.height();
+			KRect rr = br;
+			int yPos = -rr.y();
+			int xPos = -rr.x();
+			rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	  QWMatrix m,mtx,m2;
-	  mtx.rotate(angle);
-	  m.translate(pw / 2,ph / 2);
-	  m2.translate(rr.left() + xPos,rr.top() + yPos);
-	  m = m2 * mtx * m;
+			QWMatrix m, mtx, m2;
+			mtx.rotate( angle );
+			m.translate( pw / 2, ph / 2 );
+			m2.translate( rr.left() + xPos, rr.top() + yPos );
+			m = m2 * mtx * m;
 
-	  _painter->setWorldMatrix(m);
-	}
+			_painter->setWorldMatrix( m );
+		}
 
-      _painter->setPen(QPen(black,1,DotLine));
-      _painter->setBrush(NoBrush);
-      _painter->drawRect(0,0,ext.width(),ext.height());
+		_painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+		_painter->setBrush( Qt::NoBrush );
+		_painter->drawRect( 0, 0, ext.width(), ext.height() );
 
-      _painter->restore();
+		_painter->restore();
     }
 
-  _painter->setPen(QPen(black,1,SolidLine));
-  _painter->setBrush(black);
+	_painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+	_painter->setBrush( Qt::black );
 
-  if (selected)
+	if ( selected )
     {
-      _painter->fillRect(0,0,6,6,black);
-      _painter->fillRect(0,ext.height() / 2 - 3,6,6,black);
-      _painter->fillRect(0,ext.height() - 6,6,6,black);
-      _painter->fillRect(ext.width() - 6,0,6,6,black);
-      _painter->fillRect(ext.width() - 6,ext.height() / 2 - 3,6,6,black);
-      _painter->fillRect(ext.width() - 6,ext.height() - 6,6,6,black);
-      _painter->fillRect(ext.width() / 2 - 3,0,6,6,black);
-      _painter->fillRect(ext.width() / 2 - 3,ext.height() - 6,6,6,black);
+		_painter->fillRect( 0, 0, 6, 6, Qt::black );
+		_painter->fillRect( 0, ext.height() / 2 - 3, 6, 6, Qt::black );
+		_painter->fillRect( 0, ext.height() - 6, 6, 6, Qt::black );
+		_painter->fillRect( ext.width() - 6, 0, 6, 6, Qt::black );
+		_painter->fillRect( ext.width() - 6, ext.height() / 2 - 3, 6, 6, Qt::black );
+		_painter->fillRect( ext.width() - 6, ext.height() - 6, 6, 6, Qt::black );
+		_painter->fillRect( ext.width() / 2 - 3, 0, 6, 6, Qt::black );
+		_painter->fillRect( ext.width() / 2 - 3, ext.height() - 6, 6, 6, Qt::black );
     }
 
-  _painter->setRasterOp(rop);
-  _painter->restore();
+	_painter->setRasterOp( rop );
+	_painter->restore();
 }
 
 /*======================== do delete =============================*/
 void KPObject::doDelete()
 {
-  if (cmds == 0 && !inObjList) delete this;
+	if ( cmds == 0 && !inObjList ) delete this;
 }

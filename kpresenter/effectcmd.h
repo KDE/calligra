@@ -17,9 +17,9 @@
 #define effectcmd_h
 
 #include "command.h"
-#include "kpobject.h"
-
 #include "global.h"
+
+class KPObject;
 
 /******************************************************************/
 /* Class: EffectCmd                                               */
@@ -27,25 +27,23 @@
 
 class EffectCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  EffectCmd(QString _name,int _presNum,Effect _effect,Effect2 _effect2,
-	    int _oldPresNum,Effect _oldEffect,Effect2 _oldEffect2,
-	    KPObject *_object);
-  ~EffectCmd();
-  
-  virtual void execute();
-  virtual void unexecute();
+	EffectCmd( QString _name, int _presNum, Effect _effect, Effect2 _effect2,
+			   int _oldPresNum, Effect _oldEffect, Effect2 _oldEffect2,
+			   KPObject *_object );
+	~EffectCmd();
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  EffectCmd()
-    {;}
+	EffectCmd()
+    {; }
 
-  int presNum,oldPresNum;
-  Effect effect,oldEffect;
-  Effect2 effect2,oldEffect2;
-  KPObject *object;
+	int presNum, oldPresNum;
+	Effect effect, oldEffect;
+	Effect2 effect2, oldEffect2;
+	KPObject *object;
 
 };
 

@@ -13,92 +13,94 @@
 /******************************************************************/
 
 #include "kpgradientcollection.h"
-#include "kpgradientcollection.moc"
+
+#include <qstring.h>
+#include <qpixmap.h>
 
 /******************************************************************/
 /* Class: KPGradientCollection                                    */
 /******************************************************************/
 
 /*======================= get Gradient ===========================*/
-QPixmap* KPGradientCollection::getGradient(QColor _color1,QColor _color2,BCType _bcType,KSize _size,bool addref = true)
+QPixmap* KPGradientCollection::getGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size, bool addref = true )
 {
-  int num = inGradientList(_color1,_color2,_bcType,_size);
+	int num = inGradientList( _color1, _color2, _bcType, _size );
 
-  if (num == -1)
+	if ( num == -1 )
     {
-      KPGradient *kpgradient = new KPGradient(_color1,_color2,_bcType,_size);
-      gradientList.append(kpgradient);
+		KPGradient *kpgradient = new KPGradient( _color1, _color2, _bcType, _size );
+		gradientList.append( kpgradient );
 
 #ifdef SHOW_INFO
-      debug("-------------");
-      debug("add Gradient");
-      debug("GradientCollection count: %d",gradientList.count());
-      debug("%d: ",gradientList.count() - 1);
+		debug( "-------------" );
+		debug( "add Gradient" );
+		debug( "GradientCollection count: %d", gradientList.count() );
+		debug( "%d: ", gradientList.count() - 1 );
 #endif
 
-      if (addref)
-	kpgradient->addRef();
+		if ( addref )
+			kpgradient->addRef();
 
 #ifdef SHOW_INFO
-      debug("-------------");
+		debug( "-------------" );
 #endif
 
-      return kpgradient->getGradient();
+		return kpgradient->getGradient();
     }
-  else 
+	else
     {
 
 #ifdef SHOW_INFO
-      debug("-------------");
-      debug("%d: ",num);
+		debug( "-------------" );
+		debug( "%d: ", num );
 #endif
 
-      if (addref)
-	gradientList.at(num)->addRef();
+		if ( addref )
+			gradientList.at( num )->addRef();
 
 #ifdef SHOW_INFO
-      debug("-------------");
+		debug( "-------------" );
 #endif
 
-      return gradientList.at(num)->getGradient();
+		return gradientList.at( num )->getGradient();
     }
 }
 
 /*====================== remove ref =============================*/
-void KPGradientCollection::removeRef(QColor _color1,QColor _color2,BCType _bcType,KSize _size)
+void KPGradientCollection::removeRef( QColor _color1, QColor _color2, BCType _bcType, KSize _size )
 {
-  int num = inGradientList(_color1,_color2,_bcType,_size);
+	int num = inGradientList( _color1, _color2, _bcType, _size );
 
-  if (num != -1)
+	if ( num != -1 )
     {
-      if (gradientList.at(num)->removeRef())
-	{
-	  gradientList.remove(num);
+		if ( gradientList.at( num )->removeRef() )
+		{
+			gradientList.remove( num );
 
 #ifdef SHOW_INFO
-	  debug("remove Gradient");
-	  debug("GradientCollection count: %d\n",gradientList.count());
+			debug( "remove Gradient" );
+			debug( "GradientCollection count: %d\n", gradientList.count() );
 #endif
 
-	}
+		}
     }
 }
 
 /*========================== in gradient list? ====================*/
-int KPGradientCollection::inGradientList(QColor _color1,QColor _color2,BCType _bcType,KSize _size)
+int KPGradientCollection::inGradientList( QColor _color1, QColor _color2, BCType _bcType, KSize _size )
 {
-  if (!gradientList.isEmpty())
+	if ( !gradientList.isEmpty() )
     {
-      KPGradient *kpgradient = 0;
-      for (int i = 0;i < static_cast<int>(gradientList.count());i++)
-	{
-	  kpgradient = gradientList.at(i);
-	  if (kpgradient->getColor1() == _color1 && kpgradient->getColor2() == _color2 &&
-	      kpgradient->getBackColorType() == _bcType && kpgradient->getSize() == _size) 
-	    return i;
-	}
-      return -1;
+		KPGradient *kpgradient = 0;
+		for ( int i = 0; i < static_cast<int>( gradientList.count() ); i++ )
+		{
+			kpgradient = gradientList.at( i );
+			if ( kpgradient->getColor1() == _color1 && kpgradient->getColor2() == _color2 &&
+				 kpgradient->getBackColorType() == _bcType && kpgradient->getSize() == _size )
+				return i;
+		}
+		return -1;
     }
-  else return -1;
+	else return -1;
 }
 

@@ -17,9 +17,16 @@
 #define kplineobject_h
 
 #include "kpobject.h"
-#include "kpresenter_utils.h"
+#include "global.h"
+
+#include <qpen.h>
+
+#include <koStream.h>
+#include <iostream.h>
 
 #define RAD_FACTOR 180.0 / M_PI
+
+class QPainter;
 
 /******************************************************************/
 /* Class: KPLineObject                                            */
@@ -27,44 +34,44 @@
 
 class KPLineObject : public KPObject
 {
-  Q_OBJECT
-
 public:
-  KPLineObject();
-  KPLineObject(QPen _pen,LineEnd _lineBegin,LineEnd _lineEnd,LineType _lineType);
-
-  virtual void setPen(QPen _pen)
+	KPLineObject();
+	KPLineObject( QPen _pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType );
+	virtual ~KPLineObject()
+	{}
+	
+	virtual void setPen( QPen _pen )
     { pen = _pen; }
-  virtual void setLineBegin(LineEnd _lineBegin)
+	virtual void setLineBegin( LineEnd _lineBegin )
     { lineBegin = _lineBegin; }
-  virtual void setLineEnd(LineEnd _lineEnd)
+	virtual void setLineEnd( LineEnd _lineEnd )
     { lineEnd = _lineEnd; }
-  virtual void setLineType(LineType _lineType)
+	virtual void setLineType( LineType _lineType )
     { lineType = _lineType; }
 
-  virtual ObjType getType()
+	virtual ObjType getType()
     { return OT_LINE; }
-  virtual QPen getPen()
-    { return pen; } 
-  virtual LineEnd getLineBegin()
+	virtual QPen getPen()
+    { return pen; }
+	virtual LineEnd getLineBegin()
     { return lineBegin; }
-  virtual LineEnd getLineEnd()
+	virtual LineEnd getLineEnd()
     { return lineEnd; }
-  virtual LineType getLineType()
+	virtual LineType getLineType()
     { return lineType; }
 
-  virtual void save(ostream& out);
-  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst);
+	virtual void save( ostream& out );
+	virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
-  virtual void draw(QPainter *_painter,int _diffx,int _diffy);
+	virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
 protected:
-  float getAngle(KPoint p1,QPoint p2);
-  void paint(QPainter *_painter);
+	float getAngle( KPoint p1, QPoint p2 );
+	void paint( QPainter *_painter );
 
-  QPen pen;
-  LineEnd lineBegin,lineEnd;
-  LineType lineType;
+	QPen pen;
+	LineEnd lineBegin, lineEnd;
+	LineType lineType;
 
 };
 

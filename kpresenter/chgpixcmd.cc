@@ -15,48 +15,48 @@
 
 #include "kpresenter_doc.h"
 #include "chgpixcmd.h"
-#include "chgpixcmd.moc"
+#include "kppixmapobject.h"
 
 /******************************************************************/
 /* Class: ChgPixCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgPixCmd::ChgPixCmd(QString _name,KPPixmapObject *_oldObject,KPPixmapObject *_newObject,
-		     KPresenterDoc *_doc)
-  : Command(_name)
+ChgPixCmd::ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
+					  KPresenterDoc *_doc )
+	: Command( _name )
 {
-  oldObject = _oldObject;
-  newObject = _newObject;
-  doc = _doc;
-  oldObject->incCmdRef();
-  newObject->incCmdRef();
-  newObject->setSize(oldObject->getSize());
-  newObject->setOrig(oldObject->getOrig());
+	oldObject = _oldObject;
+	newObject = _newObject;
+	doc = _doc;
+	oldObject->incCmdRef();
+	newObject->incCmdRef();
+	newObject->setSize( oldObject->getSize() );
+	newObject->setOrig( oldObject->getOrig() );
 }
 
 /*======================== destructor ============================*/
 ChgPixCmd::~ChgPixCmd()
 {
-  oldObject->decCmdRef();
-  newObject->decCmdRef();
+	oldObject->decCmdRef();
+	newObject->decCmdRef();
 }
 
 /*======================== execute ===============================*/
 void ChgPixCmd::execute()
 {
-  unsigned int pos = doc->objectList()->findRef(oldObject);
-  doc->objectList()->take(pos);
-  doc->objectList()->insert(pos,newObject);
-  doc->repaint(newObject);
+	unsigned int pos = doc->objectList()->findRef( oldObject );
+	doc->objectList()->take( pos );
+	doc->objectList()->insert( pos, newObject );
+	doc->repaint( newObject );
 }
 
 /*====================== unexecute ===============================*/
 void ChgPixCmd::unexecute()
 {
-  unsigned int pos = doc->objectList()->findRef(newObject);
-  doc->objectList()->take(pos);
-  doc->objectList()->insert(pos,oldObject);
-  doc->repaint(oldObject);
+	unsigned int pos = doc->objectList()->findRef( newObject );
+	doc->objectList()->take( pos );
+	doc->objectList()->insert( pos, oldObject );
+	doc->repaint( oldObject );
 }
 

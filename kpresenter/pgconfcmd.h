@@ -17,8 +17,6 @@
 #define pgconfcmd_h
 
 #include "command.h"
-#include "kpbackground.h"
-
 #include "global.h"
 
 class KPresenterDoc;
@@ -29,28 +27,26 @@ class KPresenterDoc;
 
 class PgConfCmd : public Command
 {
-  Q_OBJECT
-
 public:
-  PgConfCmd(QString _name,bool _manualSwitch,bool _infinitLoop,
-	    PageEffect _pageEffect,PresSpeed _presSpeed,
-	    bool _oldManualSwitch,bool _oldInfinitLoop,
-	    PageEffect _oldPageEffect,PresSpeed _oldPresSpeed,
-	    KPresenterDoc *_doc,int _pgNum);
-  
-  virtual void execute();
-  virtual void unexecute();
+	PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
+			   PageEffect _pageEffect, PresSpeed _presSpeed,
+			   bool _oldManualSwitch, bool _oldInfinitLoop,
+			   PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
+			   KPresenterDoc *_doc, int _pgNum );
+
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-  PgConfCmd()
-    {;}
+	PgConfCmd()
+    {; }
 
-  bool manualSwitch,oldManualSwitch;
-  bool infinitLoop,oldInfinitLoop;
-  PageEffect pageEffect,oldPageEffect;
-  PresSpeed presSpeed,oldPresSpeed;
-  int pgNum;
-  KPresenterDoc *doc;
+	bool manualSwitch, oldManualSwitch;
+	bool infinitLoop, oldInfinitLoop;
+	PageEffect pageEffect, oldPageEffect;
+	PresSpeed presSpeed, oldPresSpeed;
+	int pgNum;
+	KPresenterDoc *doc;
 
 };
 

@@ -13,28 +13,21 @@
 #ifndef KCHARSELECTDIA_H
 #define KCHARSELECTDIA_H
 
-#include <stdio.h>
-
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
-#include <qlayout.h>
 #include <qfont.h>
 #include <qcolor.h>
-#include <qcombo.h>
-#include <qstrlist.h>
-#include <qwidget.h>
-#include <qframe.h>
-#include <qchkbox.h>
-#include <qpalette.h>
 #include <qlist.h>
-#include <qfont.h>
 
-#include <kbuttonbox.h>
-#include <kapp.h>
-#include <kcolorbtn.h>
-
-#include <kcharselect.h>
+class QWidget;
+class QGridLayout;
+class QComboBox;
+class KButtonBox;
+class QPushButton;
+class KCharSelect;
+class QLabel;
+class KColorButton;
+class QComboBox;
+class QCheckBox;
 
 /******************************************************************/
 /* class KCharSelectDia                                           */
@@ -42,47 +35,47 @@
 
 class KCharSelectDia : public QDialog
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  // constructor - destructor
-  KCharSelectDia(QWidget *parent,const char *name,QList<QFont> *_font,QList<QColor>* _color,QList<QChar>* _chr);
+	// constructor - destructor
+	KCharSelectDia( QWidget *parent, const char *name, QList<QFont> *_font, QList<QColor>* _color, QList<QChar>* _chr );
 
-  // select char dialog
-  static bool selectChar(QList<QFont> *_font,QList<QColor> *_color,QList<QChar> *_chr);
+	// select char dialog
+	static bool selectChar( QList<QFont> *_font, QList<QColor> *_color, QList<QChar> *_chr );
 
-  // internal
-  QList<QFont> *font() { return vFont; }
-  QList<QColor> *color() { return vColor; }
-  QList<QChar> *chr() { return vChr; }
+	// internal
+	QList<QFont> *font() { return vFont; }
+	QList<QColor> *color() { return vColor; }
+	QList<QChar> *chr() { return vChr; }
 
 protected:
-  // dialog objects
-  QGridLayout *grid,*grid2;
-  QComboBox *sizeCombo,*depthCombo;
-  KButtonBox *bbox;
-  QPushButton *bOk,*bCancel;
-  KCharSelect *charSelect;
-  QWidget *wid;
-  QLabel *lSize,*lColor,*lPreview,*lAttrib,*lDepth;
-  KColorButton *colorButton;
-  QCheckBox *bold,*italic,*underl;
+	// dialog objects
+	QGridLayout *grid, *grid2;
+	QComboBox *sizeCombo, *depthCombo;
+	KButtonBox *bbox;
+	QPushButton *bOk, *bCancel;
+	KCharSelect *charSelect;
+	QWidget *wid;
+	QLabel *lSize, *lColor, *lPreview, *lAttrib, *lDepth;
+	KColorButton *colorButton;
+	QCheckBox *bold, *italic, *underl;
 
-  // values
-  QList<QFont> *vFont;
-  QList<QColor> *vColor;
-  QList<QChar> *vChr;
-  int _depth;
+	// values
+	QList<QFont> *vFont;
+	QList<QColor> *vColor;
+	QList<QChar> *vChr;
+	int _depth;
 
 protected slots:
-  void fontSelected(const QString &);
-  void sizeSelected(int);
-  void depthSelected(int);
-  void colorChanged(const QColor&);
-  void boldChanged();
-  void italicChanged();
-  void underlChanged();
-  void charChanged(const QChar &);
+	void fontSelected( const QString & );
+	void sizeSelected( int );
+	void depthSelected( int );
+	void colorChanged( const QColor& );
+	void boldChanged();
+	void italicChanged();
+	void underlChanged();
+	void charChanged( const QChar & );
 
 };
 #endif //KCHARSELECTDIA_H
