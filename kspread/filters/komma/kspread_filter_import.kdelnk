@@ -1,10 +1,12 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KSpreadFilter
+Name[sv]=Kalkyl-filter
 Exec=kspread_filter --server
 Comment=Torben's KSpread Filter
 Comment[pt_BR]=Filtro do KSpread
 Comment[sk]=Torbenov KSpread Filter
+Comment[sv]=Torbens kalkyl-filter
 Export=application/x-kspread
 ExportDescription=KSpread
 Import=text/plain

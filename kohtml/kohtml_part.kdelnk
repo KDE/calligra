@@ -5,6 +5,7 @@ Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
 Comment[pt_BR]=Visualizador HTML do KOffice
 Comment[sk]=Prehliadaè HTML z balíka KOffice
+Comment[sv]=KOffice HTML-visare
 MimeTypes=application/x-kohtml,
 RepoID=IDL:KoHTML/DocumentFactory:1.0,
 ActivationMode=shared
