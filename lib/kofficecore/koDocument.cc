@@ -470,6 +470,9 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
     }
     store.close();
 
+    if ( store.bad() )
+	return FALSE;
+    
     kdebug( KDEBUG_INFO, 30003, "Saving children" );
 
     // Lets write all direct and indirect children
