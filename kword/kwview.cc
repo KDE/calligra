@@ -5910,7 +5910,8 @@ void KWView::changePicture()
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     KoPictureKey oldKey ( frameset->picture().getKey() );
     QString oldFile ( oldKey.filename() );
-    KURL url(oldFile);
+    KURL url;
+    url.setPath( oldFile );
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
@@ -5935,7 +5936,8 @@ void KWView::savePicture()
     {
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
         QString oldFile=frameset->picture().getKey().filename();
-        KURL url(oldFile);
+        KURL url;
+        url.setPath( oldFile );
         if (!QDir(url.directory()).exists())
             oldFile = url.fileName();
 
