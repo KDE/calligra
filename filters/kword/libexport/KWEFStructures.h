@@ -242,6 +242,9 @@ public:
     bool getFootnoteAuto(void) const;
     QString getFootnoteValue(void) const;
     QValueList<ParaData>* getFootnotePara(void) const;
+    
+    /// \todo
+    bool getFootnoteType( void ) const { return true; }
 
     /**
      * Set generic variable data
