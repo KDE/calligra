@@ -5998,6 +5998,8 @@ void KWView::selectBookmark()
         KWBookMark * book = m_doc->bookMarkByName( bookName );
         if ( book )
         {
+            if ( !book->startParag() || !book->endParag() )
+                return;
             m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->startParag(), book->bookmarkStartIndex(),true );
             KWTextFrameSetEdit * edit = currentTextEdit();
             if ( edit )

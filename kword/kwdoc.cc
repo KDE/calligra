@@ -4231,8 +4231,8 @@ void KWDocument::paragraphDeleted( KoTextParag *_parag,  KWFrameSet *frm)
     QPtrListIterator<KWBookMark> book(m_bookmarkList);
     for ( ; book.current() ; ++book )
     {
-        if ( book.current()->startParag()==_parag &&
-             book.current()->endParag()==_parag &&
+        if ( (book.current()->startParag()==_parag ||
+             book.current()->endParag()==_parag) &&
              book.current()->frameSet()==frm)
         {
             book.current()->setStartParag(0L);
