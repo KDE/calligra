@@ -53,6 +53,15 @@ struct SourceConnection
 
 };
 
+/*! KexiRelationView class provides a view for displaying relations between database tables.
+ It is currently used for two purposes:
+ - displaying global database relations
+ - displaying relations defined for a database query
+
+ The class is for displaying only - retrieving data and updating data on the backend side is implemented 
+ in KexiRelationWidget, and more specifically in: Kexi Relation Part and Kexi Query Part.
+*/
+
 class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 {
 	Q_OBJECT
@@ -61,7 +70,10 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name=0);
 		~KexiRelationView();
 
+		//! Adds a table \a t to the area. This changes only visual representation.
 		void		addTable(KexiDB::TableSchema *t);
+
+		//! Adds a connection \a con to the area. This changes only visual representation.
 		void		addConnection(SourceConnection con, bool interactive=true);
 
 //		RelationList	getConnections()const { return m_connections; };
@@ -75,6 +87,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		void connectionContextMenuRequest( const QPoint& pos );
 		void emptyAreaContextMenuRequest( const QPoint& pos );
 		void tableViewGotFocus();
+		void connectionViewGotFocus();
+		void emptyAreaGotFocus();
 
 	public slots:
 		//! Clears current selection - table/query or connection

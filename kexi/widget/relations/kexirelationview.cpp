@@ -195,8 +195,7 @@ KexiRelationView::addConnection(SourceConnection conn, bool)
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
-/*luc
-TODO
+/*js: will be moved up to relation/query part as this is only visual class
 	KexiDB::TableSchema *mtable = m_conn->tableSchema(conn.srcTable);
 	KexiDB::TableSchema *ftable = m_conn->tableSchema(conn.rcvTable);
 	KexiDB::IndexSchema *forign = new KexiDB::IndexSchema(ftable);
@@ -262,6 +261,7 @@ void
 KexiRelationView::setReadOnly(bool b)
 {
 	m_readOnly=b;
+//TODO
 //	invalidateActions();
 /*	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
 	{
@@ -305,6 +305,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 		cview->setSelected(true);
 		updateContents(cview->connectionRect());
 		m_selectedConnection = cview;
+		emit connectionViewGotFocus();
 //		invalidateActions();
 
 		if(ev->button() == RightButton) {//show popup
@@ -325,6 +326,9 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 //			m_removeSelectedConnectionAction->plug( &m );
 		emit emptyAreaContextMenuRequest( ev->globalPos() );
 //		executePopup(ev->globalPos());
+	}
+	else {
+		emit emptyAreaGotFocus();
 	}
 }
 

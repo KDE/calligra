@@ -57,6 +57,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public QWidget, public KexiA
 
 	protected slots:
 		void tableViewGotFocus();
+		void connectionViewGotFocus();
+		void emptyAreaGotFocus();
 		void tableContextMenuRequest(const QPoint& pos);
 		void connectionContextMenuRequest(const QPoint& pos);
 		void emptyAreaContextMenuRequest( const QPoint& pos );

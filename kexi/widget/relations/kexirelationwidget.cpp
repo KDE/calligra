@@ -90,6 +90,10 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 
 	connect(m_relationView, SIGNAL(tableViewGotFocus()),
 		this, SLOT(tableViewGotFocus()));
+	connect(m_relationView, SIGNAL(connectionViewGotFocus()),
+		this, SLOT(connectionViewGotFocus()));
+	connect(m_relationView, SIGNAL(emptyAreaGotFocus()),
+		this, SLOT(emptyAreaGotFocus()));
 	connect(m_relationView, SIGNAL(tableContextMenuRequest( const QPoint& )),
 		this, SLOT(tableContextMenuRequest( const QPoint& )));
 	connect(m_relationView, SIGNAL(connectionContextMenuRequest( const QPoint& )),
@@ -172,6 +176,16 @@ void KexiRelationWidget::tableViewGotFocus()
 //	if (m_focusedTableView)
 //		m_focusedTableView->unsetFocus();
 //	m_focusedTableView = (KexiRelationViewTableContainer*)sender();
+	invalidateActions();
+}
+
+void KexiRelationWidget::connectionViewGotFocus()
+{
+	invalidateActions();
+}
+
+void KexiRelationWidget::emptyAreaGotFocus()
+{
 	invalidateActions();
 }
 
