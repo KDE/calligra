@@ -404,7 +404,7 @@ void KexiTableView::setupNavigator()
 	d->navRowNumber->setAlignment(AlignRight | AlignVCenter);
 	d->navRowNumber->setFocusPolicy(ClickFocus);
 //	d->navRowNumber->setFixedWidth(fw);
-	d->navRowNumberValidator = new QIntValidator(1, 1, this);
+	d->navRowNumberValidator = new QIntValidator(1, INT_MAX, this);
 	d->navRowNumber->setValidator(d->navRowNumberValidator);
 	d->navRowNumber->installEventFilter(this);
 	QToolTip::add(d->navRowNumber, i18n("Current row number"));
@@ -482,11 +482,11 @@ void KexiTableView::setNavRowNumber(int newrow)
 		n = QString::number(newrow+1);
 	else
 		n = " ";
-	if (d->navRowNumber->text().length() != n.length()) {//resize
-		d->navRowNumber->setFixedWidth(
-			d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowCount->text().length()+1)+6 
-		);
-	}
+//	if (d->navRowNumber->text().length() != n.length()) {//resize
+//		d->navRowNumber->setFixedWidth(
+//			d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowCount->text().length()+1)+6 
+//		);
+//	}
 	d->navRowNumber->setText(n);
 	d->navRowCount->deselect();
 	d->navBtnPrev->setEnabled(newrow>0);
@@ -509,6 +509,10 @@ void KexiTableView::setNavRowCount(int newrows)
 //			horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
 		}
 	}
+	//update row number widget's width
+	const int w = d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowNumber->text().length()+1)+6;
+	if (d->navRowNumber->width()!=w) //resize
+		d->navRowNumber->setFixedWidth(w);
 
 	d->navRowCount->setText(n);
 	d->navRowCount->deselect();
@@ -821,12 +825,18 @@ void KexiTableView::slotRowDeleted()
 
 		d->pVerticalHeader->removeLabel();
 		//get last visible row
-		int r = rowAt(clipper()->height());
+		int r = rowAt(clipper()->height()+contentsY());
 		if (r==-1) {
 			r = rows()+1+(isInsertingEnabled()?1:0);
 		}
 		//update all visible rows below 
-		updateContents( contentsX(), rowPos(d->curRow), clipper()->width(), d->rowHeight*(r - d->curRow));
+//		updateContents( contentsX(), rowPos(d->curRow)-contentsY(), 
+	//		clipper()->width(), d->rowHeight*(r - d->curRow));
+
+		int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+		int row = d->curRow;
+		updateContents( columnPos( leftcol ), rowPos(row), 
+			clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 
 		//update navigator's data
 		setNavRowCount(rows());
@@ -4012,14 +4022,14 @@ void KexiTableView::navRowNumber_lostFocus()
 {
 	int r = validRowNumber(d->navRowNumber->text());
 	setNavRowNumber(r);
-//	d->navRowNumber->setText( QString::number( r+1 ) );
 	selectRow( r );
+	//setFocus();
 }
 
 void KexiTableView::updateRowCountInfo()
 {
-	d->navRowNumberValidator->setRange(1,rows()+(isInsertingEnabled()?1:0));
-	kdDebug() << QString("updateRowCountInfo(): d->navRowNumberValidator: bottom=%1 top=%2").arg(d->navRowNumberValidator->bottom()).arg(d->navRowNumberValidator->top()) << endl;
+//	d->navRowNumberValidator->setRange(1,rows()+(isInsertingEnabled()?1:0));
+//	kdDebug() << QString("updateRowCountInfo(): d->navRowNumberValidator: bottom=%1 top=%2").arg(d->navRowNumberValidator->bottom()).arg(d->navRowNumberValidator->top()) << endl;
 	setNavRowCount(rows());
 //	d->navRowCount->setText(QString::number(rows()));
 }
@@ -4097,6 +4107,12 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				keyPressEvent(ke);
 				if (ke->isAccepted())
 					return true;
+			}
+			else if ((k==Key_Tab || k==(SHIFT|Key_Tab)) && o==d->navRowNumber) {
+				//tab key focuses tv
+				ke->accept();
+				setFocus();
+				return true;
 			}
 		}
 	}
