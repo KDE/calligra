@@ -16,6 +16,8 @@
 #include "pythonkexidbcursor.h"
 #include "pythonkexidbfield.h"
 
+#include <string>
+
 using namespace Kross;
 
 PythonKexiDB::PythonKexiDB()
@@ -67,13 +69,13 @@ void PythonKexiDB::checkObject(KexiDB::Object* obj)
     if(! obj)
         throw Py::RuntimeError("KexiDB::Object is NULL.");
     if(obj->error())
-        throw Py::RuntimeError("KexiDB::Object error: " + obj->errorMsg());
+        throw Py::RuntimeError( QString("KexiDB::Object error: " + obj->errorMsg()).latin1() );
 }
 
 KexiDB::DriverManager& PythonKexiDB::driverManager()
 {
     if(m_drivermanager.error())
-        throw Py::RuntimeError("KexiDB::DriverManager error: " + m_drivermanager.errorMsg());
+        throw Py::RuntimeError( QString("KexiDB::DriverManager error: " + m_drivermanager.errorMsg()).latin1() );
     return m_drivermanager;
 }
 
@@ -86,19 +88,19 @@ Py::Object PythonKexiDB::driverNames(const Py::Tuple& args)
 Py::Object PythonKexiDB::driver(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
-    std::string drivername = args[0].as_string();
+    QString drivername = args[0].as_string().c_str();
     QGuardedPtr<KexiDB::Driver> driver = driverManager().driver(drivername); // caching is done by the DriverManager
     if(! driver)
-        throw Py::TypeError("KexiDB.driver(drivername) Unsupported driver '" + drivername + "'");
+        throw Py::TypeError(QString("KexiDB.driver(drivername) Unsupported driver '" + drivername + "'").latin1());
     if(driver->error())
-        throw Py::RuntimeError("KexiDB::Driver error: " + driver->errorMsg());
+        throw Py::RuntimeError(QString("KexiDB::Driver error: " + driver->errorMsg()).latin1());
     return Py::asObject( new PythonKexiDBDriver(this, driver) );
 }
 
 Py::Object PythonKexiDB::lookupByMime(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
-    std::string mimetype = args[0].as_string();
+    QString mimetype = args[0].as_string().c_str();
     return PythonUtils::toPyObject(driverManager().lookupByMime(mimetype));
 }
 

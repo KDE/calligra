@@ -83,7 +83,7 @@ Py::Object PythonKexiDBDriver::createConnection(const Py::Tuple& args)
     if(! connection)
         throw Py::RuntimeError("KexiDBDriver.createConnection(connectiondict) Failed to create connection.");
     if(connection->error())
-        throw Py::RuntimeError("KexiDBDriver.createConnection(connectiondict) KexiDB::Connection error: " + connection->errorMsg());
+        throw Py::RuntimeError(QString("KexiDBDriver.createConnection(connectiondict) KexiDB::Connection error: " + connection->errorMsg()).latin1());
 
     return Py::asObject( new PythonKexiDBConnection(this, connectiondata, connection) );
 }

@@ -7,9 +7,8 @@
 #define __CXX_Objects__h
 
 #include "Python.h"
-#include "CXX/Config.hxx"
-#include "CXX/Exception.hxx"
-
+#include "Config.hxx"
+#include "Exception.hxx"
 
 #include <iostream>
 #include STR_STREAM

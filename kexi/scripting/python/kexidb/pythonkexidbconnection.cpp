@@ -139,7 +139,7 @@ Py::Object PythonKexiDBConnection::isDatabase(const Py::Tuple& args)
     PythonUtils::checkArgs(args, 1, 1);
     PythonKexiDB::checkObject(d->connection);
     Py::String dbname = args[0];
-    return Py::Int( d->connection->databaseExists(dbname.as_string()) );
+    return Py::Int( d->connection->databaseExists(dbname.as_string().c_str()) );
 }
 
 Py::Object PythonKexiDBConnection::currentDatabase(const Py::Tuple& args)
@@ -167,9 +167,9 @@ Py::Object PythonKexiDBConnection::useDatabase(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
     PythonKexiDB::checkObject(d->connection);
-    std::string dbname = args[0].as_string();
+    QString dbname = args[0].as_string().c_str();
     if(! d->connection->databaseExists(dbname))
-        throw Py::TypeError("KexiDBConnection.useDatabase(databasename) The database '" + dbname + "' doesn't exists.");
+        throw Py::TypeError(QString("KexiDBConnection.useDatabase(databasename) The database '" + dbname + "' doesn't exists.").latin1());
     return Py::Int( d->connection->useDatabase(dbname) );
 }
 
@@ -191,7 +191,7 @@ Py::Object PythonKexiDBConnection::executeQuery(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
     PythonKexiDB::checkObject(d->connection);
-    std::string query = args[0].as_string();
+    QString query = args[0].as_string().c_str();
 
     //TODO: move this check to KexiDB::Connection?!
     if(d->connection->currentDatabase().isNull())
@@ -203,7 +203,7 @@ Py::Object PythonKexiDBConnection::executeQuery(const Py::Tuple& args)
     if(! cursor)
         throw Py::RuntimeError("KexiDBConnection.executeQuery(sqlstatement) executeQuery() returned with errors.");
     if(cursor->error())
-        throw Py::TypeError("KexiDBConnection.executeQuery(sqlstatement) executeQuery() error: " + cursor->errorMsg());
+        throw Py::TypeError(QString("KexiDBConnection.executeQuery(sqlstatement) executeQuery() error: " + cursor->errorMsg()).latin1());
 
     return Py::asObject( new PythonKexiDBCursor(this, cursor) );
 }

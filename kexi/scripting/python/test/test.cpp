@@ -27,10 +27,10 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 
-#include "kexidb/pythonkexidb.h"
-#include "kexidb/pythonkexidbdriver.h"
+#include "../kexidb/pythonkexidb.h"
+#include "../kexidb/pythonkexidbdriver.h"
 
-#include "CXX/Objects.hxx"
+#include "../CXX/Objects.hxx"
 
 KApplication *app = 0;
 KInstance *instance = 0;
@@ -54,7 +54,8 @@ bool test_simple(int argc, char **argv)
     QString data = f.readAll();
     f.close();
 
-    PyRun_SimpleString(data);
+    if(! data.isEmpty())
+        PyRun_SimpleString(data.latin1());
 
     delete database;
 

@@ -81,11 +81,11 @@ int PythonKexiDBConnectionData::setattr(const char* n, const Py::Object& value)
     std::string name(n);
 
     if(name == "connName")
-        m_connectiondata->connName = value.as_string();
+        m_connectiondata->connName = value.as_string().c_str();
     //else if(name == "driverName") // guess it doesn't make sense to be able to alter the driverName...
     //    m_connectiondata->driverName = value.as_string();
     else if(name == "hostName")
-        m_connectiondata->hostName = value.as_string();
+        m_connectiondata->hostName = value.as_string().c_str();
     else if(name == "port") {
         if(! value.isNumeric())
             throw Py::AttributeError("Attribute 'port' needs to be numeric.");
@@ -95,11 +95,11 @@ int PythonKexiDBConnectionData::setattr(const char* n, const Py::Object& value)
         m_connectiondata->port = (uint)port;
     }
     else if(name == "password")
-        m_connectiondata->password = value.as_string();
+        m_connectiondata->password = value.as_string().c_str();
     else if(name == "userName")
-        m_connectiondata->userName = value.as_string();
+        m_connectiondata->userName = value.as_string().c_str();
     else if(name == "fileName")
-        m_connectiondata->setFileName(value.as_string());
+        m_connectiondata->setFileName(value.as_string().c_str());
     else
         throw Py::AttributeError("Unknown attribute: " + name);
 

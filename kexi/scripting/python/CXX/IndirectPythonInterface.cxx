@@ -1,7 +1,7 @@
 //
 //	IndirectPythonInterface.cxx
 //
-#include "CXX/IndirectPythonInterface.hxx"
+#include "IndirectPythonInterface.hxx"
 
 namespace Py
 {

@@ -16,6 +16,7 @@
 #include "../CXX/Objects.hxx"
 #include "../CXX/Extensions.hxx"
 
+#include <qstring.h>
 #include <qguardedptr.h>
 //#include <qmap.h>
 //#include <kdebug.h>

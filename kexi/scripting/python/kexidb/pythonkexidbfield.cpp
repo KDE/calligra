@@ -54,7 +54,7 @@ void PythonKexiDBField::init_type(void)
 
 Py::Object PythonKexiDBField::getattr(const char* n)
 {
-    std::string name(n);
+    QString name(n);
 
     if(name == "__members__") {
         Py::List members;
@@ -124,12 +124,12 @@ Py::Object PythonKexiDBField::getattr(const char* n)
     if(name == "precision")
         return Py::Long((unsigned long)d->field->precision());
 
-    throw Py::AttributeError("Unknown attribute: " + name);
+    throw Py::AttributeError(QString("Unknown attribute: " + name).latin1());
 }
 
 int PythonKexiDBField::setattr(const char* n, const Py::Object& value)
 {
-    std::string name(n);
+    QString name(n);
 
     // Type
     KexiDB::Field::Type type = KexiDB::Field::typeForString(name);
@@ -154,17 +154,17 @@ int PythonKexiDBField::setattr(const char* n, const Py::Object& value)
 
     // Some more members...
     else if(name == "name")
-        d->field->setName(value.as_string());
+        d->field->setName(value.as_string().c_str());
     else if(name == "caption")
-        d->field->setCaption(value.as_string());
+        d->field->setCaption(value.as_string().c_str());
     else if(name == "description")
-        d->field->setDescription(value.as_string());
+        d->field->setDescription(value.as_string().c_str());
     else if(name == "length")
         d->field->setLength( PythonUtils::toUInt(value) );
     else if(name == "precision")
         d->field->setPrecision( PythonUtils::toUInt(value) );
     else
-        throw Py::AttributeError("Unknown attribute: " + name);
+        throw Py::AttributeError(QString("Unknown attribute: " + name).latin1());
 
     return 0;
 }
