@@ -312,7 +312,35 @@ public:
     void saveConfig();
   void refreshLocale();
 
-  void emitBeginOperation(bool waitCursor = true);
+  /**
+   * Functions to begin a kspread 'operation'.  Calls to emitBeginOperation
+   * and emitEndOperation should surround each logical user operation.
+   * During the operation, the following should hold true:
+   * - No painting will be done to the screen
+   * - No cell calculation will be done (maybe there are exceptions, such
+   *   as the goalseek operation needs to calculate values)
+   * During an operation, calls to KSpreadSheet::setRegionPaintDirty mark
+   * regions as needing repainted.  Once the emitEndOperation function is
+   * called, those regions will be painted all at once, values being calculated
+   * as necessary.
+   * Calls to begin/endOperation may be nested.  Calcualation/painting will
+   * be delayed until the outer begin/end pair has finished.
+   *
+   * The waitCursor parameter specifies whether to put the hourglass
+   * up during the operation.
+   *
+   */
+  void emitBeginOperation(bool waitCursor);
+
+  /** default override of koDocument version.  Changes the cursor to an
+   * hourglass
+   */
+  virtual void emitBeginOperation();
+
+  /**
+   * Mark the end of an operation and triggers repaints/calculations.
+   * See above comment to emitBeginOperation(bool).
+   */
   void emitEndOperation();
 
   bool delayCalculation();

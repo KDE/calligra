@@ -491,7 +491,7 @@ public:
     void emitProgress( int value ) { emit sigProgress( value ); }
 
     bool isInOperation();
-    virtual void emitBeginOperation(bool waitCursor = true);
+    virtual void emitBeginOperation();
     virtual void emitEndOperation();
 
     /**
@@ -561,15 +561,15 @@ public:
      */
     void setStoreInternal( bool i );
     bool storeInternal() const;
-    
+
     bool hasExternURL();
-    
+
     /**
      * Sets the document URL to @p url
      * KParts doesn't really allow this, but it is needed for undo of setStoreInternal()
      */
     void setURL( const KURL& url ) { m_url = url; }
-    
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes

@@ -27,6 +27,7 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qpair.h>
+#include <qapplication.h>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -1216,10 +1217,26 @@ void KSpreadDoc::refreshLocale()
 
 void KSpreadDoc::emitBeginOperation(bool waitCursor)
 {
-   KoDocument::emitBeginOperation(waitCursor);
-   m_bDelayCalculation = true;
-   m_numOperations++;
+    if (waitCursor)
+    {
+        QApplication::setOverrideCursor(Qt::waitCursor);
+    }
+    /* just duplicate the current cursor on the stack, then */
+    else if (QApplication::overrideCursor() != NULL)
+    {
+        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
+    }
+
+    KoDocument::emitBeginOperation();
+    m_bDelayCalculation = true;
+    m_numOperations++;
 }
+
+void KSpreadDoc::emitBeginOperation(void)
+{
+  emitBeginOperation(true);
+}
+
 
 void KSpreadDoc::emitEndOperation()
 {
@@ -1244,6 +1261,7 @@ void KSpreadDoc::emitEndOperation()
    }
 
    KoDocument::emitEndOperation();
+   QApplication::restoreOverrideCursor();
 
    if (m_numOperations == 0)
    {

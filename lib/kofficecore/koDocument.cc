@@ -1396,17 +1396,8 @@ bool KoDocument::isInOperation()
     return d->m_numOperations > 0;
 }
 
-void KoDocument::emitBeginOperation(bool waitCursor)
+void KoDocument::emitBeginOperation()
 {
-    if (waitCursor)
-    {
-        QApplication::setOverrideCursor(Qt::waitCursor);
-    }
-    /* just duplicate the current cursor on the stack, then */
-    else if (QApplication::overrideCursor() != NULL)
-    {
-        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
-    }
 
     /* if we're already in an operation, don't send the signal again */
     if (!isInOperation())
@@ -1424,7 +1415,6 @@ void KoDocument::emitEndOperation()
     else if (d->m_numOperations < 0)
         /* ignore 'end' calls with no matching 'begin' call */
         d->m_numOperations = 0;
-    QApplication::restoreOverrideCursor();
 }
 
 
