@@ -22,7 +22,6 @@
 
 #include <math.h>
 
-#include <klocale.h>
 #include <kspread_value.h>
 
 #define CHECK(x,y)  check(#x,x,y)
@@ -35,7 +34,7 @@ ValueTester::ValueTester(): Tester()
 
 QString ValueTester::name()
 {
-  return i18n("Value");
+  return QString("Value");
 }
 
 template<typename T>
@@ -46,10 +45,10 @@ void ValueTester::check( const char* msg, const T& result, const T& expected )
   {
     QString msg;
     QTextStream ts( &msg, IO_WriteOnly );
-    ts << i18n("Result:" );
+    ts << "Result:";
     ts << result;
     ts << ", ";
-    ts << i18n("Expected:" );
+    ts << "Expected:";
     ts << expected;
     fail( __FILE__, __LINE__, msg );
   }
@@ -62,11 +61,11 @@ void ValueTester::check( const char* msg, bool result, bool expected )
   {
     QString msg;
     QTextStream ts( &msg, IO_WriteOnly );
-    ts << i18n("Result:" );
-    if( result ) ts << i18n("True"); else  i18n("False");
+    ts << "Result: ";
+    if( result ) ts << "True"; else "False";
     ts << ", ";
-    ts << i18n("Expected:" );
-    if( expected ) ts << i18n("True"); else  i18n("False");
+    ts << "Expected: ";
+    if( expected ) ts << "True"; else "False";
     fail( __FILE__, __LINE__, msg );
   }
 }

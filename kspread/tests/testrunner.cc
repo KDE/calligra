@@ -26,7 +26,6 @@
 
 #include <kcombobox.h>
 #include <kdialogbase.h>
-#include <klocale.h>
 #include <kpushbutton.h>
 
 #include "tester.h"
@@ -50,7 +49,7 @@ using namespace KSpread;
 
 
 TestRunner::TestRunner():
-  KDialogBase( KDialogBase::Plain, i18n( "Internal Tests"), KDialogBase::Close, 
+  KDialogBase( KDialogBase::Plain, "Internal Tests", KDialogBase::Close, 
   KDialogBase::Close )
 {
   d = new Private;
@@ -59,7 +58,7 @@ TestRunner::TestRunner():
   QGridLayout* layout = new QGridLayout( mainWidget, 3, 4, marginHint(), spacingHint() );
   setMinimumSize( 360, 230 );
   
-  QLabel* typeLabel = new QLabel( i18n("Type of Test:"), mainWidget );
+  QLabel* typeLabel = new QLabel( "Type of Test:", mainWidget );
   layout->addWidget( typeLabel, 0, 0 );
   
   d->testType = new KComboBox( mainWidget );
@@ -68,7 +67,7 @@ TestRunner::TestRunner():
   QSpacerItem* spacerItem = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout->addItem( spacerItem, 0, 2 );
   
-  d->runButton = new KPushButton( i18n("Run"), mainWidget );
+  d->runButton = new KPushButton( "Run", mainWidget );
   layout->addWidget( d->runButton, 0, 3 );
   
   d->logView = new QTextEdit( mainWidget );
@@ -102,19 +101,21 @@ void TestRunner::runTest()
   if( tester )
   {
     d->logView->clear();
-    d->logView->append( i18n("Test: %1").arg( testName ) );
+    d->logView->append( QString("Test: %1").arg( testName ) );
     tester->run();
     QStringList errorList = tester->errors();
     if( tester->failed() )
     {
-      d->logView->append( i18n( "1 test, <b>%1 failed.</b>", "%n tests, <b>%1 failed.</b>", tester->count() ).
+      d->logView->append( QString( "%1 tests, <b>%2 failed.</b>").arg( tester->count() ).
         arg(  tester->failed() ) );
       for( unsigned k = 0; k < errorList.count(); k++ )
         d->logView->append( errorList[k] );
     }
     else
-      d->logView->append( i18n( "1 test, everything is OK.", "%n tests, everything is OK.", tester->count() ) );
-    d->logView->append( i18n("Test finished.") );
+      d->logView->append( QString( "%1 tests, everything is OK." ).arg( tester->count() ) );
+      
+    d->logView->append( "Test finished." );
   }
 }
+
 #include "testrunner.moc"
