@@ -26,6 +26,7 @@ public:
 	KarbonView* view() const { return m_view; }
 
 protected:
+	virtual void setCursor( const QPoint & ) const {}
 	virtual void mousePressed( QMouseEvent * ) {}
 	virtual void mouseMoved( QMouseEvent * );
 	virtual void dragShiftPressed() {}

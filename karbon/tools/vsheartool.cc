@@ -169,10 +169,3 @@ VShearTool::drawTemporaryObject()
 		m_isDragging = false;
 }
 
-bool
-VShearTool::eventFilter( QEvent* event )
-{
-	setCursor( static_cast<QMouseEvent*> ( event )->pos() );
-	return VTool::eventFilter( event );
-}
-

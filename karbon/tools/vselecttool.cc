@@ -270,11 +270,3 @@ VSelectTool::mouseReleased( QMouseEvent *mouse_event )
 	m_isDragging = false;
 }
 
-bool
-VSelectTool::eventFilter( QEvent* event )
-{
-	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	setCursor( view()->canvasWidget()->viewportToContents( mouse_event->pos() ) );
-	return VTool::eventFilter( event );
-}
-

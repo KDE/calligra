@@ -16,13 +16,11 @@ public:
 
 	virtual void activate();
 
-	virtual bool eventFilter( QEvent* event );
-
 	// draw the object while it is edited:
 	void drawTemporaryObject();
 
 protected:
-	void setCursor( const KoPoint & ) const;
+	virtual void setCursor( const KoPoint & ) const;
 	virtual void mousePressed( QMouseEvent * );
 	virtual void mouseReleased( QMouseEvent * );
 

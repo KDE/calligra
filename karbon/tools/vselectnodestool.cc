@@ -118,12 +118,15 @@ VSelectNodesTool::activate()
 void
 VSelectNodesTool::setCursor( const KoPoint &p ) const
 {
+	if( !m_isDragging ) return;
+
+	KoPoint lpp = KoPoint( p.x() / view()->zoom(), p.y() / view()->zoom() );
 	double tolerance = 1.0 / view()->zoom();
 
 	if( view()->part()->document().selection()->pathNode(
 		KoRect(
-			p.x() - tolerance,
-			p.y() - tolerance,
+			lpp.x() - tolerance,
+			lpp.y() - tolerance,
 			2 * tolerance + 1,
 			2 * tolerance * 1 ) ) )
 	{
@@ -209,20 +212,5 @@ VSelectNodesTool::drawTemporaryObject()
 
 		m_state = dragging;
 	}
-}
-
-
-bool
-VSelectNodesTool::eventFilter( QEvent* event )
-{
-	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
-	if( !m_isDragging )
-	{
-		KoPoint lpp = KoPoint( lp.x() / view()->zoom(), lp.y() / view()->zoom() );
-		setCursor( lpp );
-	}
-
-	return VTool::eventFilter( event );
 }
 

@@ -171,11 +171,3 @@ VRotateTool::drawTemporaryObject()
 		m_isDragging = false;
 }
 
-bool
-VRotateTool::eventFilter( QEvent* event )
-{
-	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	setCursor( mouse_event->pos() );
-	return VTool::eventFilter( event );;
-}
-

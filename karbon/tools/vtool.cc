@@ -4,6 +4,7 @@
 */
 
 #include "vtool.h"
+#include "karbon_view.h"
 
 #include <qevent.h>
 
@@ -40,6 +41,8 @@ VTool::cancel()
 bool
 VTool::eventFilter( QEvent* event )
 {
+	QMouseEvent* mouse_event = static_cast<QMouseEvent *>( event );
+	setCursor( view()->canvasWidget()->viewportToContents( mouse_event->pos() ) );
 	if( event->type() == QEvent::MouseMove )
 	{
 		mouseMoved( static_cast<QMouseEvent *> ( event ) );
