@@ -71,17 +71,17 @@ public:
      */
     QString lookup( const KoGenStyle& style, const QString& name = QString::null, bool forceNumbering = true );
 
+    typedef QMap<KoGenStyle, QString> StyleMap;
     /**
      * Return the entire collection of styles
      * Use this for saving the styles
      */
-    const QMap<KoGenStyle, QString>& styles() const { return m_styles; }
+    const StyleMap& styles() const { return m_styles; }
 
 private:
     QString makeUniqueName( const QString& base, bool forceNumbering ) const;
 
     /// style definition -> name
-    typedef QMap<KoGenStyle, QString> StyleMap;
     StyleMap m_styles;
 
     /// name -> style   (only used to check for name uniqueness)

@@ -47,7 +47,7 @@ int main( int, char** ) {
     //assert( first == second ); // check that operator== works :)
 
     KoGenStyle third( secondName ); // inherited style
-    // Hmmmm, better set the family even in derived styles I guess.
+    // We *have* to set the family even in derived styles.
     // But that means we can't implement "diff with parent" in koGenStyles...
     // Hmm, well we'll see. Either it will have an exception, or this needs
     // to be done at the level above.
