@@ -34,7 +34,7 @@
 #include "kpresenter_doc.h"
 
 /******************************************************************/
-/* Class: KPTextObject						  */
+/* Class: KPTextObject                                            */
 /******************************************************************/
 
 /*================ default constructor ===========================*/
@@ -66,16 +66,16 @@ KPTextObject &KPTextObject::operator=( const KPTextObject & )
 void KPTextObject::setSize( int _width, int _height )
 {
 //     if ( QSize( _width, _height ) == ext )
-// 	return;
+//      return;
 
     KPObject::setSize( _width, _height );
     if ( move )
-	return;
+        return;
     ktextobject.resize( ext ); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
     qApp->processEvents();
 
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================= set size ===============================*/
@@ -83,12 +83,12 @@ void KPTextObject::resizeBy( int _dx, int _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move )
-	return;
+        return;
     ktextobject.resize( ext );
     qApp->processEvents(); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
 
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 }
 
 /*================================================================*/
@@ -98,11 +98,11 @@ void KPTextObject::setFillType( FillType _fillType )
 
     if ( fillType == FT_BRUSH && gradient )
     {
-	delete gradient;
-	gradient = 0;
+        delete gradient;
+        gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-	gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
 }
 
 /*========================= save =================================*/
@@ -111,25 +111,25 @@ void KPTextObject::save( QTextStream& out )
     out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
     out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
     out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-	<< static_cast<int>( shadowDirection ) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
-	<< "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
+        << static_cast<int>( shadowDirection ) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
+        << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
     out << indent << "<EFFECTS effect=\"" << static_cast<int>( effect ) << "\" effect2=\""
-	<< static_cast<int>( effect2 ) << "\"/>" << endl;
+        << static_cast<int>( effect2 ) << "\"/>" << endl;
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
-	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
-	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-	<< static_cast<int>( gType ) << "\" unbalanced=\"" << (uint)unbalanced << "\" xfactor=\"" << xfactor
-	<< "\" yfactor=\"" << yfactor << "\"/>" << endl;
+        << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
+        << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
+        << static_cast<int>( gType ) << "\" unbalanced=\"" << (uint)unbalanced << "\" xfactor=\"" << xfactor
+        << "\" yfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
-	<< "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-	<< "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
+        << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
+        << "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
     out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
-	<< "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
+        << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
     out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
-	<< "\" num=\"" << disappearNum << "\"/>" << endl;
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
     saveKTextObject( out );
 }
 
@@ -140,215 +140,215 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag.c_str(), name, lst );
 
-	// orig
-	if ( name == "ORIG" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "x" )
-		    orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "y" )
-		    orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+        // orig
+        if ( name == "ORIG" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "x" )
+                    orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "y" )
+                    orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
 
-	// disappear
-	else if ( name == "DISAPPEAR" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "effect" )
-		    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "doit" )
-		    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "num" )
-		    disappearNum = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // disappear
+        else if ( name == "DISAPPEAR" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// size
-	else if ( name == "SIZE" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "width" )
-		    ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "height" )
-		    ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+        // size
+        else if ( name == "SIZE" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "width" )
+                    ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "height" )
+                    ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
 
-	// shadow
-	else if ( name == "SHADOW" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "distance" )
-		    shadowDistance = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "direction" )
-		    shadowDirection = ( ShadowDirection )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "red" )
-		    shadowColor.setRgb( atoi( ( *it ).m_strValue.c_str() ),
-					shadowColor.green(), shadowColor.blue() );
-		if ( ( *it ).m_strName == "green" )
-		    shadowColor.setRgb( shadowColor.red(), atoi( ( *it ).m_strValue.c_str() ),
-					shadowColor.blue() );
-		if ( ( *it ).m_strName == "blue" )
-		    shadowColor.setRgb( shadowColor.red(), shadowColor.green(),
-					atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+        // shadow
+        else if ( name == "SHADOW" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "distance" )
+                    shadowDistance = atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "direction" )
+                    shadowDirection = ( ShadowDirection )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "red" )
+                    shadowColor.setRgb( atoi( ( *it ).m_strValue.c_str() ),
+                                        shadowColor.green(), shadowColor.blue() );
+                if ( ( *it ).m_strName == "green" )
+                    shadowColor.setRgb( shadowColor.red(), atoi( ( *it ).m_strValue.c_str() ),
+                                        shadowColor.blue() );
+                if ( ( *it ).m_strName == "blue" )
+                    shadowColor.setRgb( shadowColor.red(), shadowColor.green(),
+                                        atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
 
-	// effects
-	else if ( name == "EFFECTS" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "effect" )
-		    effect = ( Effect )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "effect2" )
-		    effect2 = ( Effect2 )atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // effects
+        else if ( name == "EFFECTS" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "effect" )
+                    effect = ( Effect )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "effect2" )
+                    effect2 = ( Effect2 )atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// angle
-	else if ( name == "ANGLE" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "value" )
-		    angle = atof( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // angle
+        else if ( name == "ANGLE" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "value" )
+                    angle = atof( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// presNum
-	else if ( name == "PRESNUM" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "value" )
-		    presNum = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // presNum
+        else if ( name == "PRESNUM" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "value" )
+                    presNum = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// KTextObject
-	else if ( name == "TEXTOBJ" ) {
-	    QDomElement e = parser.currentElement();
- 	    ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
- 	    ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );
- 	    ktextobject.document()->setMargin( e.attribute( "margin" ).toInt() );
-	    KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
-	    settings.bulletColor[0] = QColor( e.attribute( "bulletColor1", Qt::black.name() ) );
-	    settings.bulletColor[1] = QColor( e.attribute( "bulletColor2", Qt::black.name() ) );
-	    settings.bulletColor[2] = QColor( e.attribute( "bulletColor3", Qt::black.name() ) );
-	    settings.bulletColor[3] = QColor( e.attribute( "bulletColor4", Qt::black.name() ) );
-	    settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( "bulletType1", 0 ).toInt();
-	    settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( "bulletType2", 0 ).toInt();
-	    settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( "bulletType3", 0 ).toInt();
-	    settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( "bulletType4", 0 ).toInt();
-	    ktextobject.document()->setTextSettings( settings );
-	    QString type = e.attribute( "objType" );
-	    int t = -1;
-	    if ( !type.isEmpty() ) {
-		if ( type == "1" )
-		    t = KTextEdit::EnumList;
-		if ( type == "2" )
-		    t = KTextEdit::BulletList;
-	    }
-	
-	    loadKTextObject( e, t );
-	}
+        // KTextObject
+        else if ( name == "TEXTOBJ" ) {
+            QDomElement e = parser.currentElement();
+            ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
+            ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );
+            ktextobject.document()->setMargin( e.attribute( "margin" ).toInt() );
+            KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
+            settings.bulletColor[0] = QColor( e.attribute( "bulletColor1", Qt::black.name() ) );
+            settings.bulletColor[1] = QColor( e.attribute( "bulletColor2", Qt::black.name() ) );
+            settings.bulletColor[2] = QColor( e.attribute( "bulletColor3", Qt::black.name() ) );
+            settings.bulletColor[3] = QColor( e.attribute( "bulletColor4", Qt::black.name() ) );
+            settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( "bulletType1", 0 ).toInt();
+            settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( "bulletType2", 0 ).toInt();
+            settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( "bulletType3", 0 ).toInt();
+            settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( "bulletType4", 0 ).toInt();
+            ktextobject.document()->setTextSettings( settings );
+            QString type = e.attribute( "objType" );
+            int t = -1;
+            if ( !type.isEmpty() ) {
+                if ( type == "1" )
+                    t = KTextEdit::EnumList;
+                if ( type == "2" )
+                    t = KTextEdit::BulletList;
+            }
 
-	// pen
-	else if ( name == "PEN" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red" )
-		    pen.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), pen.color().green(), pen.color().blue() ) );
-		if ( ( *it ).m_strName == "green" )
-		    pen.setColor( QColor( pen.color().red(), atoi( ( *it ).m_strValue.c_str() ), pen.color().blue() ) );
-		if ( ( *it ).m_strName == "blue" )
-		    pen.setColor( QColor( pen.color().red(), pen.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
-		if ( ( *it ).m_strName == "width" )
-		    pen.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "style" )
-		    pen.setStyle( ( Qt::PenStyle )atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    setPen( pen );
-	}
+            loadKTextObject( e, t );
+        }
 
-	// brush
-	else if ( name == "BRUSH" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red" )
-		    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(), brush.color().blue() ) );
-		if ( ( *it ).m_strName == "green" )
-		    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ), brush.color().blue() ) );
-		if ( ( *it ).m_strName == "blue" )
-		    brush.setColor( QColor( brush.color().red(), brush.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
-		if ( ( *it ).m_strName == "style" )
-		    brush.setStyle( ( Qt::BrushStyle )atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    setBrush( brush );
-	}
+        // pen
+        else if ( name == "PEN" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red" )
+                    pen.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), pen.color().green(), pen.color().blue() ) );
+                if ( ( *it ).m_strName == "green" )
+                    pen.setColor( QColor( pen.color().red(), atoi( ( *it ).m_strValue.c_str() ), pen.color().blue() ) );
+                if ( ( *it ).m_strName == "blue" )
+                    pen.setColor( QColor( pen.color().red(), pen.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
+                if ( ( *it ).m_strName == "width" )
+                    pen.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "style" )
+                    pen.setStyle( ( Qt::PenStyle )atoi( ( *it ).m_strValue.c_str() ) );
+            }
+            setPen( pen );
+        }
 
-	// fillType
-	else if ( name == "FILLTYPE" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "value" )
-		    fillType = static_cast<FillType>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    setFillType( fillType );
-	}
+        // brush
+        else if ( name == "BRUSH" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red" )
+                    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(), brush.color().blue() ) );
+                if ( ( *it ).m_strName == "green" )
+                    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ), brush.color().blue() ) );
+                if ( ( *it ).m_strName == "blue" )
+                    brush.setColor( QColor( brush.color().red(), brush.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
+                if ( ( *it ).m_strName == "style" )
+                    brush.setStyle( ( Qt::BrushStyle )atoi( ( *it ).m_strValue.c_str() ) );
+            }
+            setBrush( brush );
+        }
 
-	// gradient
-	else if ( name == "GRADIENT" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red1" )
-		    gColor1 = QColor( atoi( ( *it ).m_strValue.c_str() ), gColor1.green(), gColor1.blue() );
-		if ( ( *it ).m_strName == "green1" )
-		    gColor1 = QColor( gColor1.red(), atoi( ( *it ).m_strValue.c_str() ), gColor1.blue() );
-		if ( ( *it ).m_strName == "blue1" )
-		    gColor1 = QColor( gColor1.red(), gColor1.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "red2" )
-		    gColor2 = QColor( atoi( ( *it ).m_strValue.c_str() ), gColor2.green(), gColor2.blue() );
-		if ( ( *it ).m_strName == "green2" )
-		    gColor2 = QColor( gColor2.red(), atoi( ( *it ).m_strValue.c_str() ), gColor2.blue() );
-		if ( ( *it ).m_strName == "blue2" )
-		    gColor2 = QColor( gColor2.red(), gColor2.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "type" )
-		    gType = static_cast<BCType>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "unbalanced" )
-		    unbalanced = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "xfactor" )
-		    xfactor = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "yfactor" )
-		    yfactor = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	    setGColor1( gColor1 );
-	    setGColor2( gColor2 );
-	    setGType( gType );
-	    setGUnbalanced( unbalanced );
-	    setGXFactor( xfactor );
-	    setGYFactor( yfactor );
-	}
+        // fillType
+        else if ( name == "FILLTYPE" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "value" )
+                    fillType = static_cast<FillType>( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+            setFillType( fillType );
+        }
 
-	else
-	    cerr << "Unknown tag '" << tag << "' in TEXT_OBJECT" << endl;
+        // gradient
+        else if ( name == "GRADIENT" ) {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red1" )
+                    gColor1 = QColor( atoi( ( *it ).m_strValue.c_str() ), gColor1.green(), gColor1.blue() );
+                if ( ( *it ).m_strName == "green1" )
+                    gColor1 = QColor( gColor1.red(), atoi( ( *it ).m_strValue.c_str() ), gColor1.blue() );
+                if ( ( *it ).m_strName == "blue1" )
+                    gColor1 = QColor( gColor1.red(), gColor1.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "red2" )
+                    gColor2 = QColor( atoi( ( *it ).m_strValue.c_str() ), gColor2.green(), gColor2.blue() );
+                if ( ( *it ).m_strName == "green2" )
+                    gColor2 = QColor( gColor2.red(), atoi( ( *it ).m_strValue.c_str() ), gColor2.blue() );
+                if ( ( *it ).m_strName == "blue2" )
+                    gColor2 = QColor( gColor2.red(), gColor2.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "type" )
+                    gType = static_cast<BCType>( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "unbalanced" )
+                    unbalanced = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "xfactor" )
+                    xfactor = atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "yfactor" )
+                    yfactor = atoi( ( *it ).m_strValue.c_str() );
+            }
+            setGColor1( gColor1 );
+            setGColor2( gColor2 );
+            setGType( gType );
+            setGUnbalanced( unbalanced );
+            setGXFactor( xfactor );
+            setGYFactor( yfactor );
+        }
 
-	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
+        else
+            cerr << "Unknown tag '" << tag << "' in TEXT_OBJECT" << endl;
+
+        if ( !parser.close( tag ) ) {
+            cerr << "ERR: Closing Child" << endl;
+            return;
+        }
     }
     setSize( ext.width(), ext.height() );
 }
@@ -357,8 +357,8 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
     if ( move ) {
-	KPObject::draw( _painter, _diffx, _diffy );
-	return;
+        KPObject::draw( _painter, _diffx, _diffy );
+        return;
     }
 
     int ox = orig.x() - _diffx;
@@ -376,136 +376,136 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int penw = pen.width() / 2;
 
     if ( shadowDistance > 0 ) {
-	_painter->save();
-	ktextobject.document()->enableDrawAllInOneColor( shadowColor );
+        _painter->save();
+        ktextobject.document()->enableDrawAllInOneColor( shadowColor );
 
-	if ( angle == 0 ) {
-	    int sx = ox;
-	    int sy = oy;
-	    getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+        if ( angle == 0 ) {
+            int sx = ox;
+            int sy = oy;
+            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
-	    _painter->setViewport( sx, sy, r.width(), r.height() );
+            _painter->setViewport( sx, sy, r.width(), r.height() );
 
-	    if ( specEffects ) {
-		switch ( effect2 ) {
-		case EF2T_PARA:
-		    drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
-		    break;
-		default:
-		    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-		}
-	    } else {
-		ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-	    }
+            if ( specEffects ) {
+                switch ( effect2 ) {
+                case EF2T_PARA:
+                    drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
+                    break;
+                default:
+                    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                }
+            } else {
+                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            }
 
-	    ktextobject.document()->disableDrawAllInOneColor();
-	} else {
-	    _painter->setViewport( ox, oy, r.width(), r.height() );
+            ktextobject.document()->disableDrawAllInOneColor();
+        } else {
+            _painter->setViewport( ox, oy, r.width(), r.height() );
 
-	    QRect br = QRect( 0, 0, ow, oh );
-	    int pw = br.width();
-	    int ph = br.height();
-	    QRect rr = br;
-	    int yPos = -rr.y();
-	    int xPos = -rr.x();
-	    br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
-	    rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            QRect br = QRect( 0, 0, ow, oh );
+            int pw = br.width();
+            int ph = br.height();
+            QRect rr = br;
+            int yPos = -rr.y();
+            int xPos = -rr.x();
+            br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	    QWMatrix m, mtx;
-	    mtx.rotate( angle );
-	    m.translate( pw / 2, ph / 2 );
-	    m = mtx * m;
+            QWMatrix m, mtx;
+            mtx.rotate( angle );
+            m.translate( pw / 2, ph / 2 );
+            m = mtx * m;
 
-	    _painter->setWorldMatrix( m );
+            _painter->setWorldMatrix( m );
 
-	    int sx = 0;
-	    int sy = 0;
-	    getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+            int sx = 0;
+            int sy = 0;
+            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
-	    _painter->translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
-	    if ( specEffects ) {
-		switch ( effect2 ) {
-		case EF2T_PARA:
-		    drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
-		    break;
-		default:
-		    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-		}
-	    } else {
-		ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-	    }
-	    ktextobject.document()->disableDrawAllInOneColor();
-	}
-	_painter->restore();
+            _painter->translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
+            if ( specEffects ) {
+                switch ( effect2 ) {
+                case EF2T_PARA:
+                    drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
+                    break;
+                default:
+                    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                }
+            } else {
+                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            }
+            ktextobject.document()->disableDrawAllInOneColor();
+        }
+        _painter->restore();
     }
 
     _painter->setViewport( ox, oy, r.width(), r.height() );
 
     if ( angle == 0 ) {
-	_painter->setPen( Qt::NoPen );
-	_painter->setBrush( brush );
-	if ( fillType == FT_BRUSH || !gradient )
-	    _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-	else
-	    _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-	_painter->setPen( pen );
-	_painter->setBrush( Qt::NoBrush );
-	_painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
 
-	if ( specEffects ) {
-	    switch ( effect2 ) {
-	    case EF2T_PARA:
-		drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
-		break;
-	    default:
-		ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-	    }
-	} else {
-	    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-	}
+        if ( specEffects ) {
+            switch ( effect2 ) {
+            case EF2T_PARA:
+                drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
+                break;
+            default:
+                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            }
+        } else {
+            ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+        }
     } else {
-	QRect br = QRect( 0, 0, ow, oh );
-	int pw = br.width();
-	int ph = br.height();
-	QRect rr = br;
-	int yPos = -rr.y();
-	int xPos = -rr.x();
-	br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
-	rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        QRect br = QRect( 0, 0, ow, oh );
+        int pw = br.width();
+        int ph = br.height();
+        QRect rr = br;
+        int yPos = -rr.y();
+        int xPos = -rr.x();
+        br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	QWMatrix m, mtx;
-	mtx.rotate( angle );
-	m.translate( pw / 2, ph / 2 );
-	m = mtx * m;
+        QWMatrix m, mtx;
+        mtx.rotate( angle );
+        m.translate( pw / 2, ph / 2 );
+        m = mtx * m;
 
-	_painter->setWorldMatrix( m );
+        _painter->setWorldMatrix( m );
 
-	_painter->setPen( Qt::NoPen );
-	_painter->setBrush( brush );
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
 
-	if ( fillType == FT_BRUSH || !gradient )
-	    _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-	else
-	    _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-	_painter->setPen( pen );
-	_painter->setBrush( Qt::NoBrush );
-	_painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ow - 2 * penw, oh - 2 * penw );
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ow - 2 * penw, oh - 2 * penw );
 
-	_painter->translate( rr.left() + xPos, rr.top() + yPos );
+        _painter->translate( rr.left() + xPos, rr.top() + yPos );
 
-	if ( specEffects ) {
-	    switch ( effect2 ) {
-	    case EF2T_PARA:
-		drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
-		break;
-	    default:
-		ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-	    }
-	} else {
-	    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
-	}
+        if ( specEffects ) {
+            switch ( effect2 ) {
+            case EF2T_PARA:
+                drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
+                break;
+            default:
+                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            }
+        } else {
+            ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+        }
     }
 
     _painter->setViewport( r );
@@ -517,7 +517,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 /*========================== activate ============================*/
 void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
 {
-    ktextobject.recreate( _widget, 0, QPoint( orig.x() - diffx, orig.y() - diffy ), false );
+    ktextobject.reparent( _widget, 0, QPoint( orig.x() - diffx, orig.y() - diffy ), false );
     ktextobject.resize( ext.width(), ext.height() );
     ktextobject.show();
     ktextobject.setCursor( Qt::ibeamCursor );
@@ -527,7 +527,7 @@ void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
 void KPTextObject::deactivate( KPresenterDoc *doc )
 {
     recalcPageNum( doc );
-    ktextobject.recreate( 0, 0, QPoint( 0, 0 ), false );
+    ktextobject.reparent( 0, 0, QPoint( 0, 0 ), false );
     ktextobject.hide();
     extendObject2Contents( 0 );
 }
@@ -559,55 +559,55 @@ void KPTextObject::saveKTextObject( QTextStream& out )
     KTextEditParag *parag = ktextobject.document()->firstParag();
     KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
     out << otag
-	<< "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing()
-	<< "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
-	<< "\" margin=\"" << ktextobject.document()->margin()
-	<< "\" bulletType1=\"" << (int)textSettings.bulletType[0]
-	<< "\" bulletType2=\"" << (int)textSettings.bulletType[1]
-	<< "\" bulletType3=\"" << (int)textSettings.bulletType[2]
-	<< "\" bulletType4=\"" << (int)textSettings.bulletType[3]
-	<< "\" bulletColor1=\"" << textSettings.bulletColor[0].name()
-	<< "\" bulletColor2=\"" << textSettings.bulletColor[1].name()
-	<< "\" bulletColor3=\"" << textSettings.bulletColor[2].name()
-	<< "\" bulletColor4=\"" << textSettings.bulletColor[3].name()
-	<< "\">" << endl;
+        << "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing()
+        << "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
+        << "\" margin=\"" << ktextobject.document()->margin()
+        << "\" bulletType1=\"" << (int)textSettings.bulletType[0]
+        << "\" bulletType2=\"" << (int)textSettings.bulletType[1]
+        << "\" bulletType3=\"" << (int)textSettings.bulletType[2]
+        << "\" bulletType4=\"" << (int)textSettings.bulletType[3]
+        << "\" bulletColor1=\"" << textSettings.bulletColor[0].name()
+        << "\" bulletColor2=\"" << textSettings.bulletColor[1].name()
+        << "\" bulletColor3=\"" << textSettings.bulletColor[2].name()
+        << "\" bulletColor4=\"" << textSettings.bulletColor[3].name()
+        << "\">" << endl;
     while ( parag ) {
-	out << otag << "<P align=\"" << parag->alignment()
-	    << "\" type=\"" << (int)parag->type()
-	    << "\" depth=\"" << parag->listDepth() << "\">" << endl;
-	out << indent;
-	KTextEditFormat *lastFormat = 0;
-	for ( int i = 0; i < parag->length(); ++i ) {
-	    KTextEditString::Char *c = parag->at( i );
-	    if ( !lastFormat || c->format->key() != lastFormat->key() ) {
-		if ( lastFormat )
-		    out << "</TEXT>";
-		lastFormat = c->format;
-		out << "<TEXT family=\"" <<  lastFormat->font().family()
-		    << "\" pointSize=\"" << lastFormat->font().pointSize()
-		    << "\" bold=\"" << (uint)lastFormat->font().bold()
-		    << "\" italic=\"" << (uint)lastFormat->font().italic()
-		    << "\" underline=\"" << (uint)lastFormat->font().underline()
-		    << "\" color=\"" << lastFormat->color().name()
-		    << "\">";
-	    }
-	    QChar chr = c->c;
-	    if ( chr == '&' )
-		out << "&amp;";
-	    else if ( chr == '<' )
-		out << "&lt;";
-	    else if ( chr == '>' )
-		out << "&gt;";
-	    else
-		out << QString( c->c ).utf8();
-	}
-	if ( lastFormat )
-	    out << "</TEXT>";
-	out << endl;
-	
-	out << etag << "</P>" << endl;
-	
-	parag = parag->next();
+        out << otag << "<P align=\"" << parag->alignment()
+            << "\" type=\"" << (int)parag->type()
+            << "\" depth=\"" << parag->listDepth() << "\">" << endl;
+        out << indent;
+        KTextEditFormat *lastFormat = 0;
+        for ( int i = 0; i < parag->length(); ++i ) {
+            KTextEditString::Char *c = parag->at( i );
+            if ( !lastFormat || c->format->key() != lastFormat->key() ) {
+                if ( lastFormat )
+                    out << "</TEXT>";
+                lastFormat = c->format;
+                out << "<TEXT family=\"" <<  lastFormat->font().family()
+                    << "\" pointSize=\"" << lastFormat->font().pointSize()
+                    << "\" bold=\"" << (uint)lastFormat->font().bold()
+                    << "\" italic=\"" << (uint)lastFormat->font().italic()
+                    << "\" underline=\"" << (uint)lastFormat->font().underline()
+                    << "\" color=\"" << lastFormat->color().name()
+                    << "\">";
+            }
+            QChar chr = c->c;
+            if ( chr == '&' )
+                out << "&amp;";
+            else if ( chr == '<' )
+                out << "&lt;";
+            else if ( chr == '>' )
+                out << "&gt;";
+            else
+                out << QString( c->c ).utf8();
+        }
+        if ( lastFormat )
+            out << "</TEXT>";
+        out << endl;
+
+        out << etag << "</P>" << endl;
+
+        parag = parag->next();
     }
     out << etag << "</TEXTOBJ>" << endl;
 }
@@ -624,54 +624,54 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
     int lineSpacing = 0, paragSpacing = 0;
     while ( !e.isNull() ) {
-	if ( e.tagName() == "P" ) {
-	    QDomElement n = e.firstChild().toElement();
-	    if ( type != -1 )
-		lastParag->setType( (KTextEditParag::Type)type );
-	    else
-		lastParag->setType( (KTextEditParag::Type)e.attribute( "type" ).toInt() );
-	    lastParag->setAlignment( e.attribute( "align" ).toInt() );
-	    lastParag->setListDepth( e.attribute( "depth" ).toInt() );
-	    lineSpacing = QMAX( e.attribute( "lineSpacing" ).toInt(), lineSpacing );
-	    paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
-	    while ( !n.isNull() ) {
-		if ( n.tagName() == "TEXT" ) {
-		    QString family = n.attribute( "family" );
-		    int size = n.attribute( "pointSize" ).toInt();
-		    bool bold = (bool)n.attribute( "bold" ).toInt();
-		    bool italic = (bool)n.attribute( "italic" ).toInt();
-		    bool underline = (bool)n.attribute( "underline" ).toInt();
-		    QString color = n.attribute( "color" );
-		    QFont fn( family );
-		    fn.setPointSize( size );
-		    fn.setBold( bold );
-		    fn.setItalic( italic );
-		    fn.setUnderline( underline );
-		    QColor col( color );
-		    fm = ktextobject.document()->formatCollection()->format( fn, col );
-		    QString txt = n.firstChild().toText().data();
-		    if ( txt.isEmpty() && lastParag->length() == 0 )
-			txt = ' ';
-		    if ( !txt.isEmpty() ) {
-			lastParag->append( txt );
-			lastParag->setFormat( i, txt.length(), fm, TRUE, KTextEditFormat::Format );
-			i += txt.length();
-		    }
-		}
-		n = n.nextSibling().toElement();
-	    }
-	} else if ( e.tagName() == "UNSORTEDLISTTYPE" ) {
-	    if ( listNum < 4 ) {
-		QColor c( e.attribute( "red" ).toInt(), e.attribute( "green" ).toInt(), e.attribute( "blue" ).toInt() );
-		settings.bulletColor[ listNum++ ] = c;
-	    }
-	}
-	e = e.nextSibling().toElement();
-	if ( e.isNull() )
-	    break;
-	i = 0;
-	if ( !lastParag->length() == 0 )
-	    lastParag = new KTextEditParag( ktextobject.document(), lastParag, 0 );
+        if ( e.tagName() == "P" ) {
+            QDomElement n = e.firstChild().toElement();
+            if ( type != -1 )
+                lastParag->setType( (KTextEditParag::Type)type );
+            else
+                lastParag->setType( (KTextEditParag::Type)e.attribute( "type" ).toInt() );
+            lastParag->setAlignment( e.attribute( "align" ).toInt() );
+            lastParag->setListDepth( e.attribute( "depth" ).toInt() );
+            lineSpacing = QMAX( e.attribute( "lineSpacing" ).toInt(), lineSpacing );
+            paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
+            while ( !n.isNull() ) {
+                if ( n.tagName() == "TEXT" ) {
+                    QString family = n.attribute( "family" );
+                    int size = n.attribute( "pointSize" ).toInt();
+                    bool bold = (bool)n.attribute( "bold" ).toInt();
+                    bool italic = (bool)n.attribute( "italic" ).toInt();
+                    bool underline = (bool)n.attribute( "underline" ).toInt();
+                    QString color = n.attribute( "color" );
+                    QFont fn( family );
+                    fn.setPointSize( size );
+                    fn.setBold( bold );
+                    fn.setItalic( italic );
+                    fn.setUnderline( underline );
+                    QColor col( color );
+                    fm = ktextobject.document()->formatCollection()->format( fn, col );
+                    QString txt = n.firstChild().toText().data();
+                    if ( txt.isEmpty() && lastParag->length() == 0 )
+                        txt = ' ';
+                    if ( !txt.isEmpty() ) {
+                        lastParag->append( txt );
+                        lastParag->setFormat( i, txt.length(), fm, TRUE, KTextEditFormat::Format );
+                        i += txt.length();
+                    }
+                }
+                n = n.nextSibling().toElement();
+            }
+        } else if ( e.tagName() == "UNSORTEDLISTTYPE" ) {
+            if ( listNum < 4 ) {
+                QColor c( e.attribute( "red" ).toInt(), e.attribute( "green" ).toInt(), e.attribute( "blue" ).toInt() );
+                settings.bulletColor[ listNum++ ] = c;
+            }
+        }
+        e = e.nextSibling().toElement();
+        if ( e.isNull() )
+            break;
+        i = 0;
+        if ( !lastParag->length() == 0 )
+            lastParag = new KTextEditParag( ktextobject.document(), lastParag, 0 );
     }
 
     settings.lineSpacing = lineSpacing;
@@ -685,14 +685,14 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
     int h = doc->getPageSize( 0, 0, 0 ).height();
     int pgnum = -1;
     for ( unsigned int i = 0; i < doc->getPageNums(); ++i ) {
-	if ( (int)orig.y() <= ( (int)i + 1 ) * h ) {
-	    pgnum = i + 1;
-	    break;
-	}
+        if ( (int)orig.y() <= ( (int)i + 1 ) * h ) {
+            pgnum = i + 1;
+            break;
+        }
     }
 
     if ( pgnum == -1 )
-	pgnum = doc->getPageNums();
+        pgnum = doc->getPageNums();
 
 #if 0
     ktextobject.setPageNum( pgnum );
@@ -704,17 +704,17 @@ void KPTextObject::drawParags( QPainter *p, int from, int to )
     int i = 0;
     KTextEditParag *parag = ktextobject.document()->firstParag();
     while ( parag ) {
-     	if ( !parag->isValid() )
-	    parag->format();
-	
-	p->translate( 0, parag->rect().y() );
-	if ( i >= from && i <= to )
-	    parag->paint( *p, ktextobject.colorGroup(), 0, FALSE );
-	p->translate( 0, -parag->rect().y() );
-	parag = parag->next();
+        if ( !parag->isValid() )
+            parag->format();
 
-	++i;
-	if ( i > to )
-	    return;
+        p->translate( 0, parag->rect().y() );
+        if ( i >= from && i <= to )
+            parag->paint( *p, ktextobject.colorGroup(), 0, FALSE );
+        p->translate( 0, -parag->rect().y() );
+        parag = parag->next();
+
+        ++i;
+        if ( i > to )
+            return;
     }
 }

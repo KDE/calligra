@@ -23,6 +23,7 @@
 #include <assert.h>
 #include <qcolor.h>
 #include <qapplication.h>
+#include <kdebug.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -122,13 +123,13 @@ bool QWinMetaFile::load( const QString &filename )
 
     if ( !file.exists() )
     {
-        debug( "File %s does not exist", filename.latin1() );
+        kdDebug() << "File " << QFile::encodeName(filename) << " does not exist" << endl;
         return false;
     }
 
     if ( !file.open( IO_ReadOnly ) )
     {
-        debug( "Cannot open file %s", filename.latin1() );
+        kdDebug() << "Cannot open file " << QFile::encodeName(filename) << endl;
         return false;
     }
 
@@ -178,14 +179,14 @@ bool QWinMetaFile::load( QBuffer &buffer )
 
         if ( mSingleStep )
         {
-            debug( "WMF Placeable Header ( %d ):", static_cast<int>( sizeof( pheader ) ) );
-            debug( "  key=%x", pheader.key );
-            debug( "  hmf=%x", pheader.hmf );
-            debug( "  bbox=( %d; %d; %d; %d )", pheader.bbox.left, pheader.bbox.top,
-                   pheader.bbox.right, pheader.bbox.bottom );
-            debug( "  inch=%d", pheader.inch );
-            debug( "  checksum=%x ( %s )", pheader.checksum,
-                   pheader.checksum==checksum?"ok":"wrong" );
+            kdDebug() << "WMF Placeable Header ( " << static_cast<int>(sizeof( pheader ) ) << "):" << endl;
+            kdDebug() << "  key=" << pheader.key << endl;
+            kdDebug() << "  hmf=" << pheader.hmf << endl;
+            kdDebug() << "  bbox=( " << pheader.bbox.left << "; " << pheader.bbox.top << "; " << pheader.bbox.right
+                      << "; " << pheader.bbox.bottom << ")" << endl;
+            kdDebug() << "  inch=" << pheader.inch << endl;
+            kdDebug() << "  checksum=" << pheader.checksum << "( "
+                      << (pheader.checksum==checksum?"ok":"wrong") << " )" << endl;
         }
 
         mBBox.setLeft( MIN( pheader.bbox.left, pheader.bbox.right ) );
@@ -224,19 +225,17 @@ bool QWinMetaFile::load( QBuffer &buffer )
 
         if ( mSingleStep )
         {
-            debug( "WMF Extended Header:" );
-            debug( "  iType=%d", eheader.iType );
-            debug( "  nSize=%d", eheader.nSize );
-            debug( "  rclBounds=( %d; %d; %d; %d )",
-                   eheader.rclBounds.left, eheader.rclBounds.top,
-                   eheader.rclBounds.right, eheader.rclBounds.bottom );
-            debug( "  rclFrame=( %d; %d; %d; %d )",
-                   eheader.rclFrame.left, eheader.rclFrame.top,
-                   eheader.rclFrame.right, eheader.rclFrame.bottom );
-            debug( "  dSignature=%d", eheader.dSignature );
-            debug( "  nVersion=%d", eheader.nVersion );
-            debug( "  nBytes=%d", eheader.nBytes );
-            debug( "\nNOT YET IMPLEMENTED, SORRY." );
+            kdDebug() << "WMF Extended Header:" << endl;
+            kdDebug() << "  iType=" << eheader.iType << endl;
+            kdDebug() << "  nSize=" << eheader.nSize << endl;
+            kdDebug() << "  rclBounds=( " << eheader.rclBounds.left << "; " << eheader.rclBounds.top << "; "
+                      << eheader.rclBounds.right << "; " << eheader.rclBounds.bottom << ")" << endl;
+            kdDebug() << "  rclFrame=( " << eheader.rclFrame.left << "; " << eheader.rclFrame.top << "; "
+                      << eheader.rclFrame.right << "; " << eheader.rclFrame.bottom << ")" << endl;
+            kdDebug() << "  dSignature=" << eheader.dSignature << endl;
+            kdDebug() << "  nVersion=" << eheader.nVersion << endl;
+            kdDebug() << "  nBytes=" << eheader.nBytes << endl;
+            kdDebug() << "\nNOT YET IMPLEMENTED, SORRY." << endl;
         }
     }
     else // no, not enhanced
@@ -252,11 +251,11 @@ bool QWinMetaFile::load( QBuffer &buffer )
         st >> header.mtNoParameters;
         if ( mSingleStep )
         {
-            debug( "WMF Header:" );
-            debug( "  mtType=%u", header.mtType );
-            debug( "  mtHeaderSize=%u", header.mtHeaderSize );
-            debug( "  mtVersion=%u", header.mtVersion );
-            debug( "  mtSize=%d", header.mtSize );
+            kdDebug() << "WMF Header:" << endl;
+            kdDebug() << "  mtType=" << header.mtType << endl;
+            kdDebug() <<  "  mtHeaderSize=" << header.mtHeaderSize  << endl;
+            kdDebug() <<  "  mtVersion=" << header.mtVersion  << endl;
+            kdDebug() <<  "  mtSize=" << header.mtSize << endl;
         }
     }
 
@@ -348,7 +347,7 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
         idx = cmd->funcIndex;
         if ( idx < 0 )
         {
-            debug( "invalid index %d", idx );
+            kdDebug() << "invalid index " << idx << endl;
             continue;
         }
 
@@ -383,7 +382,7 @@ int QWinMetaFile::handleIndex( void ) const
     for ( i=0; i<MAX_OBJHANDLE; i++ )
         if ( mObjHandleTab[ i ]==NULL ) return i;
 
-    debug( "QWinMetaFile error: handle table full !" );
+    kdDebug() << "QWinMetaFile error: handle table full !" << endl;
     return -1;
 }
 
@@ -559,7 +558,7 @@ void QWinMetaFile::escape( short, short* parm )
     {
         // simply ignore comments
     }
-    else debug( "QWinMetaFile: unimplemented ESCAPE command %d", parm[ 0 ] );
+    else kdDebug() << "QWinMetaFile: unimplemented ESCAPE command " << parm[ 0 ] << endl;
 }
 
 
@@ -631,7 +630,7 @@ void QWinMetaFile::createBrushIndirect( short, short* parm )
         if ( arg>=0 && arg<5 ) style = hatchedStyleTab[ arg ];
         else
         {
-            debug( "QWinMetaFile::createBrushIndirect: invalid hatched brush %d", arg );
+            kdDebug() << "QWinMetaFile::createBrushIndirect: invalid hatched brush " << arg << endl;
             style = Qt::SolidPattern;
         }
     }
@@ -639,7 +638,7 @@ void QWinMetaFile::createBrushIndirect( short, short* parm )
         style = styleTab[ arg ];
     else
     {
-        debug( "QWinMetaFile::createBrushIndirect: invalid brush %d", arg );
+        kdDebug() << "QWinMetaFile::createBrushIndirect: invalid brush " << arg << endl;
         style = Qt::SolidPattern;
     }
     handle->brush.setStyle( style );
@@ -659,7 +658,7 @@ void QWinMetaFile::createPenIndirect( short, short* parm )
     if ( parm[ 0 ]>=0 && parm[ 0 ]<6 ) style=styleTab[ parm[ 0 ] ];
     else
     {
-        debug( "QWinMetaFile::createPenIndirect: invalid pen %d", parm[ 0 ] );
+        kdDebug() << "QWinMetaFile::createPenIndirect: invalid pen " << parm[ 0 ] << endl;
         style = Qt::SolidLine;
     }
     // if ( parm[ 1 ]<=0 ) style=NoPen;

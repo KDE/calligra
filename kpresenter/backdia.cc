@@ -59,9 +59,9 @@ BackPreview::BackPreview( QWidget *parent, KPresenterDoc *doc )
 {
     setFrameStyle( WinPanel | Sunken );
     back = new KPBackGround( doc->getPixmapCollection(),
-			     doc->getGradientCollection(),
-			     doc->getClipartCollection(),
-			     doc );
+                             doc->getGradientCollection(),
+                             doc->getClipartCollection(),
+                             doc );
     setMinimumSize( 300, 200 );
 }
 
@@ -80,23 +80,23 @@ void BackPreview::resizeEvent( QResizeEvent *e )
 {
     QFrame::resizeEvent( e );
     back->setSize( QSize( contentsRect().width(),
-			  contentsRect().height() ) );
+                          contentsRect().height() ) );
     if ( isVisible() )
-	back->restore();
+        back->restore();
 }
 
 /******************************************************************/
-/* class BackDia						  */
+/* class BackDia                                                  */
 /******************************************************************/
 
 /*=============================================================*/
 BackDia::BackDia( QWidget* parent, const char* name,
-		  BackType backType, const QColor &backColor1,
-		  const QColor &backColor2, BCType _bcType,
-		  const QString &backPic, const QDateTime &picLM,
-		  const QString &backClip, const QDateTime &clipLM,
-		  BackView backPicView, bool _unbalanced,
-		  int _xfactor, int _yfactor, KPresenterDoc *doc )
+                  BackType backType, const QColor &backColor1,
+                  const QColor &backColor2, BCType _bcType,
+                  const QString &backPic, const QDateTime &picLM,
+                  const QString &backClip, const QDateTime &clipLM,
+                  BackView backPicView, bool _unbalanced,
+                  int _xfactor, int _yfactor, KPresenterDoc *doc )
     : QDialog( parent, name, true ), picLastModified( picLM ), clipLastModified( clipLM )
 {
     lockUpdate = true;
@@ -116,7 +116,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     backCombo->insertItem( i18n( "Clipart" ) );
     backCombo->setCurrentItem( (int)backType );
     connect( backCombo, SIGNAL( activated( int ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
 
     vbox->addWidget( backCombo );
 
@@ -131,11 +131,11 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     color1Choose = new KColorButton( backColor1, colorTab );
     connect( color1Choose, SIGNAL( changed( const QColor& ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
 
     color2Choose = new KColorButton( backColor2, colorTab );
     connect( color2Choose, SIGNAL( changed( const QColor& ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
 
     cType = new QComboBox( false, colorTab );
     cType->insertItem( i18n( "Plain" ), -1 );
@@ -149,25 +149,25 @@ BackDia::BackDia( QWidget* parent, const char* name,
     cType->insertItem( i18n( "Pyramid Gradient" ), -1 );
     cType->setCurrentItem( _bcType );
     connect( cType, SIGNAL( activated( int ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
 
     unbalanced = new QCheckBox( i18n( "Unbalanced" ), colorTab );
     connect( unbalanced, SIGNAL( clicked() ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
     unbalanced->setChecked( _unbalanced );
 
     (void)new QLabel( i18n( "X-Factor:" ), colorTab );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
     xfactor->setValue( _xfactor );
 
     (void)new QLabel( i18n( "Y-Factor:" ), colorTab );
 
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
     yfactor->setValue( _yfactor );
 
     tabWidget->addTab( colorTab, i18n( "&Color/Gradient" ) );
@@ -187,23 +187,23 @@ BackDia::BackDia( QWidget* parent, const char* name,
     picView->insertItem( i18n( "Tiled" ) );
     picView->setCurrentItem( (int)backPicView );
     connect( picView, SIGNAL( activated( int ) ),
-	     this, SLOT( updateConfiguration() ) );
+             this, SLOT( updateConfiguration() ) );
 
     picChoose = new QPushButton( i18n( "Choose Picture..." ), picTab, "picChoose" );
     connect( picChoose, SIGNAL( clicked() ),
-	     this, SLOT( selectPic() ) );
+             this, SLOT( selectPic() ) );
 
-    if ( backPic )
-	chosenPic = backPic;
+    if ( !backPic.isEmpty() )
+        chosenPic = backPic;
     else
-	chosenPic = QString::null;
+        chosenPic = QString::null;
 
     lPicName = new QLabel( picTab, "picname" );
     lPicName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     if ( !backPic.isEmpty() )
-	lPicName->setText( backPic );
+        lPicName->setText( backPic );
     else
-	lPicName->setText( i18n( "No Picture" ) );
+        lPicName->setText( i18n( "No Picture" ) );
     lPicName->setFixedHeight( lPicName->sizeHint().height() );
 
     (void)new QWidget( picTab );
@@ -218,17 +218,17 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     clipChoose = new QPushButton( i18n( "Choose Clipart..." ), clipTab, "clipChoose" );
     connect( clipChoose, SIGNAL( clicked() ),
-	     this, SLOT( selectClip() ) );
+             this, SLOT( selectClip() ) );
 
     if ( !backClip.isEmpty() )
-	chosenClip = backClip;
+        chosenClip = backClip;
 
     lClipName = new QLabel( clipTab, "clipname" );
     lClipName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     if ( !backClip.isEmpty() )
-	lClipName->setText( backClip );
+        lClipName->setText( backClip );
     else
-	lClipName->setText( i18n( "No Clipart" ) );
+        lClipName->setText( i18n( "No Clipart" ) );
     lClipName->setFixedHeight( lClipName->sizeHint().height() );
 
     (void)new QWidget( clipTab );
@@ -252,15 +252,15 @@ BackDia::BackDia( QWidget* parent, const char* name,
     okBut->setDefault( true );
 
     connect( okBut, SIGNAL( clicked() ),
-	     this, SLOT( Ok() ) );
+             this, SLOT( Ok() ) );
     connect( applyBut, SIGNAL( clicked() ),
-	     this, SLOT( Apply() ) );
+             this, SLOT( Apply() ) );
     connect( applyGlobalBut, SIGNAL( clicked() ),
-	     this, SLOT( ApplyGlobal() ) );
+             this, SLOT( ApplyGlobal() ) );
     connect( cancelBut, SIGNAL( clicked() ),
-	     this, SLOT( reject() ) );
+             this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ),
-	     this, SLOT( accept() ) );
+             this, SLOT( accept() ) );
     bb->layout();
 
     layout->addWidget( bb );
@@ -282,23 +282,23 @@ void BackDia::showEvent( QShowEvent *e )
 void BackDia::updateConfiguration()
 {
     if ( lockUpdate )
-	return;
+        return;
 
     if ( getBackColorType() == BCT_PLAIN ) {
-	unbalanced->setEnabled( false );
-	xfactor->setEnabled( false );
-	yfactor->setEnabled( false );
-	color2Choose->setEnabled( false );
+        unbalanced->setEnabled( false );
+        xfactor->setEnabled( false );
+        yfactor->setEnabled( false );
+        color2Choose->setEnabled( false );
     } else {
-	unbalanced->setEnabled( true );
-	if ( unbalanced->isChecked() ) {
-	    xfactor->setEnabled( true );
-	    yfactor->setEnabled( true );
-	} else {
-	    xfactor->setEnabled( false );
-	    yfactor->setEnabled( false );
-	}
-	color2Choose->setEnabled( true );
+        unbalanced->setEnabled( true );
+        if ( unbalanced->isChecked() ) {
+            xfactor->setEnabled( true );
+            yfactor->setEnabled( true );
+        } else {
+            xfactor->setEnabled( false );
+            yfactor->setEnabled( false );
+        }
+        color2Choose->setEnabled( true );
     }
 
     picChanged = getBackType() == BT_PICTURE;
@@ -312,13 +312,13 @@ void BackDia::updateConfiguration()
     preview->backGround()->setBackXFactor( getBackXFactor() );
     preview->backGround()->setBackYFactor( getBackYFactor() );
     if ( !chosenPic.isEmpty() && picChanged )
-	preview->backGround()->setBackPixmap( getBackPixFilename(), picLastModified );
+        preview->backGround()->setBackPixmap( getBackPixFilename(), picLastModified );
     if ( !chosenClip.isEmpty() && clipChanged )
-	preview->backGround()->setBackClipFilename( getBackClipFilename(), clipLastModified );
+        preview->backGround()->setBackClipFilename( getBackClipFilename(), clipLastModified );
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
-	preview->backGround()->restore();
-	preview->repaint( false );
+        preview->backGround()->restore();
+        preview->repaint( false );
     }
 
     picChanged = clipChanged = false;
@@ -389,7 +389,7 @@ int BackDia::getBackYFactor()
 void BackDia::selectPic()
 {
     KURL url;
-    KFileDialog fd( QString::null, 
+    KFileDialog fd( QString::null,
   //i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" )
     KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     //fd.setPreviewMode( false, true );
@@ -397,23 +397,23 @@ void BackDia::selectPic()
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
     {
-	url = fd.selectedURL();
+        url = fd.selectedURL();
 /*
         if (!url.isLocalFile())
         {
           KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
           return;
         }
-	chosenPic = url.path();
+        chosenPic = url.path();
 */
         chosenPic = QString::null;
         if (!KIO::NetAccess::download( url, chosenPic ))
           return;
-	lPicName->setText( url.prettyURL() );
-	backCombo->setCurrentItem( 1 );
-	picChanged = true;
-	picLastModified = QDateTime();
-	updateConfiguration();
+        lPicName->setText( url.prettyURL() );
+        backCombo->setCurrentItem( 1 );
+        picChanged = true;
+        picLastModified = QDateTime();
+        updateConfiguration();
         // Problem : when to remove the temp file ?
     }
 }
@@ -433,10 +433,10 @@ void BackDia::selectClip()
         if (!KIO::NetAccess::download( url, chosenClip ))
           return;
         lClipName->setText( url.prettyURL() );
-	backCombo->setCurrentItem( 2 );
-	clipChanged = true;
-	clipLastModified = QDateTime();
-	updateConfiguration();
+        backCombo->setCurrentItem( 2 );
+        clipChanged = true;
+        clipLastModified = QDateTime();
+        updateConfiguration();
         // Problem : when to remove the temp file ?
     }
 }

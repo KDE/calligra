@@ -47,7 +47,7 @@ class AFChoose : public QTabDialog
 public:
 
   // constructor - destructor
-  AFChoose(QWidget *parent=0,const char *name=0);
+  AFChoose(QWidget *parent=0, const QString &caption=QString::null, const char *name=0);
   ~AFChoose();
 
 protected:

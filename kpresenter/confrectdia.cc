@@ -143,14 +143,14 @@ ConfRectDia::~ConfRectDia()
 /*================================================================*/
 void ConfRectDia::rndXChanged( const QString & _rx )
 {
-    xRnd = atoi( _rx );
+    xRnd = _rx.toInt();
     rectPreview->setRnds( xRnd, yRnd );
 }
 
 /*================================================================*/
 void ConfRectDia::rndYChanged( const QString & _ry )
 {
-    yRnd = atoi( _ry );
+    yRnd = _ry.toInt();
     rectPreview->setRnds( xRnd, yRnd );
 }
 

@@ -173,14 +173,14 @@ ConfPieDia::~ConfPieDia()
 /*================================================================*/
 void ConfPieDia::lengthChanged( const QString & _len )
 {
-    len = atoi( _len );
+    len = _len.toInt();
     piePreview->setLength( len );
 }
 
 /*================================================================*/
 void ConfPieDia::angleChanged( const QString & _angle )
 {
-    angle = atoi( _angle );
+    angle = _angle.toInt();
     piePreview->setAngle( angle );
 }
 

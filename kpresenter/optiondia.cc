@@ -43,7 +43,7 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     int col1 = 20, dummy, w, h;
 
     /* Tab: General */
-    general = new QWidget( this, i18n( "General" ) );
+    general = new QWidget( this, "general" );
 
     lRastX = new QLabel( general, "lRastX" );
     lRastX->setText( i18n( "Horizontal Raster: " ) );

@@ -41,7 +41,7 @@
 #include <stdlib.h>
 
 /******************************************************************/
-/* class RotatePreview						  */
+/* class RotatePreview                                            */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
@@ -87,7 +87,7 @@ void RotatePreview::drawContents( QPainter* painter )
 }
 
 /******************************************************************/
-/* class RotateDia						  */
+/* class RotateDia                                                */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
@@ -154,7 +154,7 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
     okBut->setDefault( true );
 
     int butW = max(cancelBut->sizeHint().width(),
-		   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
+                   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
     int butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );
@@ -195,10 +195,10 @@ void RotateDia::setAngle( float __angle )
     else if ( _angle == 180.0 ) deg180->setChecked( true );
     else if ( _angle == 270.0 ) deg270->setChecked( true );
     else {
-	degCustom->setChecked( true );
-	custom->setEnabled( true );
-	QString str=QString::number( _angle );
-	custom->setText( str );
+        degCustom->setChecked( true );
+        custom->setEnabled( true );
+        QString str=QString::number( _angle );
+        custom->setText( str );
     }
 
     rPreview->setAngle( _angle );
@@ -267,15 +267,15 @@ void RotateDia::degCustomclicked()
     custom->setEnabled( true );
 
     QString str = custom->text();
-    rPreview->setAngle( atof( str.data() ) );
-    _angle = atof( str.data() );
+    rPreview->setAngle( str.toDouble() );
+    _angle = str.toDouble();
 }
 
 /*======================= deg custom changed =====================*/
 void RotateDia::degCustomChanged( const QString & t )
 {
-    rPreview->setAngle( atof( t ) );
-    _angle = atof( t );
+    _angle=t.toDouble();
+    rPreview->setAngle( _angle );
 }
 
 

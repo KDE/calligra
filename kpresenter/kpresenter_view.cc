@@ -215,12 +215,12 @@ bool KPresenterView::printDlg()
     case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
         break;
     case PG_SCREEN: {
-        warning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
+        kdWarning() << i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) << endl;
         prt.setPageSize( QPrinter::A4 );
         makeLandscape = true;
     }   break;
     default: {
-        warning( i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) );
+        kdWarning() << i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) << endl;
         prt.setPageSize( QPrinter::A4 );
     } break;
     }
@@ -428,7 +428,7 @@ void KPresenterView::insertPicture()
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
-    if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file.data(), xOffset, yOffset );
+    if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file, xOffset, yOffset );
     page->setCursor( c );
 }
 
@@ -468,7 +468,7 @@ void KPresenterView::insertClipart()
 #endif
 
     if ( !file.isEmpty() )
-        m_pKPresenterDoc->insertClipart( file.data(), xOffset, yOffset );
+        m_pKPresenterDoc->insertClipart( file, xOffset, yOffset );
 }
 
 /*==============================================================*/
@@ -972,7 +972,7 @@ void KPresenterView::screenStart()
         pidFile = getenv( "HOME" );
         pidFile += "/.kss.pid";
         FILE *fp;
-        if ( ( fp = fopen( pidFile, "r" ) ) != NULL ) {
+        if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
             fscanf( fp, "%d", &screensaver_pid );
             fclose( fp );
             kill( screensaver_pid, SIGSTOP );
@@ -1030,7 +1030,7 @@ void KPresenterView::screenStart()
                          kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
 
         if ( fullScreen ) {
-            page->recreate( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup,
+            page->reparent( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup,
                             QPoint( 0, 0 ), true );
             page->topLevelWidget()->move( 0, 0 );
             page->topLevelWidget()->resize( QApplication::desktop()->width(),
@@ -1063,7 +1063,7 @@ void KPresenterView::screenStop()
         exitPres = true;
         if ( true ) { //m_rToolBarScreen->isButtonOn( m_idButtonScreen_Full ) )
             page->close( false );
-            page->recreate( ( QWidget* )this, 0, QPoint( 0, 0 ), true );
+            page->reparent( ( QWidget* )this, 0, QPoint( 0, 0 ), true );
             page->lower();
         }
         xOffset = _xOffset;
@@ -1084,7 +1084,7 @@ void KPresenterView::screenStop()
         pidFile = getenv( "HOME" );
         pidFile += "/.kss.pid";
         FILE *fp;
-        if ( ( fp = fopen( pidFile, "r" ) ) != NULL ) {
+        if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
             fscanf( fp, "%d", &screensaver_pid );
             fclose( fp );
             kill( screensaver_pid, SIGCONT );

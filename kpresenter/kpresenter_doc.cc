@@ -302,9 +302,9 @@ KPresenterDoc::~KPresenterDoc()
 void KPresenterDoc::draw( QPaintDevice* /*_dev*/, long int /*_width*/, long int /*_height*/,
                           float /*_scale*/ )
 {
-    warning( "***********************************************" );
-    warning( i18n( "KPresenter doesn't support KoDocument::draw( ... ) now!" ) );
-    warning( "***********************************************" );
+    kdWarning() << "***********************************************"  << endl;
+    kdWarning() << "KPresenter doesn't support KoDocument::draw( ... ) now!" << endl;
+    kdWarning() <<  "***********************************************" << endl;
 }
 
 /*======================= make child list intern ================*/
@@ -413,7 +413,7 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
             QString format = QFileInfo( it.key().filename ).extension().upper();
             if ( format == "JPG" )
                 format = "JPEG";
-            if ( QImage::outputFormats().find( format ) == -1 )
+            if ( QImage::outputFormats().find( format.latin1() ) == -1 )
                 format = "BMP";
             QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
             if ( !isStoredExtern() )
@@ -518,7 +518,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
             QString format = QFileInfo( it.key().filename ).extension().upper();
             if ( format == "JPG" )
                 format = "JPEG";
-            if ( QImage::outputFormats().find( format ) == -1 )
+            if ( QImage::outputFormats().find( format.latin1() ) == -1 )
                 format = "BMP";
 
             QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
@@ -531,7 +531,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
               QImageIO io;
               io.setIODevice( &dev );
               io.setImage( it.data() );
-              io.setFormat( format );
+              io.setFormat( format.latin1() );
               io.write();
               _store->close();
             }
@@ -600,7 +600,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
             return false;
         }
         cmd += " ";
-        cmd += locate( "exe", "kprconverter.pl" ) + " ";
+        cmd += QFile::encodeName(locate( "exe", "kprconverter.pl" )) + " ";
         cmd += QFile::encodeName( tmpFileIn.name() ) + " ";
         cmd += QFile::encodeName( tmpFileOut.name() );
         system( cmd );
