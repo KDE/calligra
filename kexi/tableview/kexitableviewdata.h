@@ -157,6 +157,8 @@ public:
 	*/
 	bool sortingAscending() const { return m_order == 1; }
 
+	/*! Adds column \a col. 
+	 Warning: \a col will be owned by this object, and deleted on its destruction. */
 	void addColumn( KexiTableViewColumn* col );
 
 	virtual bool isDBAware();
