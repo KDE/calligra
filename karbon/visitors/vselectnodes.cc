@@ -25,7 +25,7 @@
 #include "vdocument.h"
 
 void
-VSelectNodes::visitVPath( VPath& path )
+VSelectNodes::visitVSubpath( VSubpath& path )
 {
 	path.first();
 
@@ -101,7 +101,7 @@ VSelectNodes::visitVLayer( VLayer& layer )
 }
 
 void
-VTestNodes::visitVPath( VPath& path )
+VTestNodes::visitVSubpath( VSubpath& path )
 {
 	path.first();
 

@@ -26,14 +26,14 @@
 #include <vdocument.h>
 #include <qdom.h>
 
-VEllipse::VEllipse( VObject* parent, VState state ) : VComposite( parent, state )
+VEllipse::VEllipse( VObject* parent, VState state ) : VPath( parent, state )
 {
 }
 
 VEllipse::VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height,
 		VEllipseType type, double startAngle, double endAngle )
-	: VComposite( parent ), m_type( type ), m_startAngle( startAngle ), m_endAngle( endAngle )
+	: VPath( parent ), m_type( type ), m_startAngle( startAngle ), m_endAngle( endAngle )
 {
 	setDrawCenterNode();
 
@@ -112,7 +112,7 @@ VEllipse::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

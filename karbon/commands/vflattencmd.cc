@@ -58,7 +58,7 @@ VFlattenCmd::VFlattenCmd( VDocument *doc, double flatness )
 }
 
 void
-VFlattenCmd::visitVPath( VPath& path )
+VFlattenCmd::visitVSubpath( VSubpath& path )
 {
 	path.first();
 

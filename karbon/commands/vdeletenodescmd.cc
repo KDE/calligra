@@ -37,7 +37,7 @@ VDeleteNodeCmd::~VDeleteNodeCmd()
 }
 
 void
-VDeleteNodeCmd::visitVPath( VPath& path )
+VDeleteNodeCmd::visitVSubpath( VSubpath& path )
 {
 	VSegment* segment = path.first();
 

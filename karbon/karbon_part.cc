@@ -100,10 +100,10 @@ KarbonPart::initDoc()
 	KoTemplateChooseDia::ReturnType result;
 
         KoTemplateChooseDia::DialogType dlgtype;
-        if (KoApplication::isStarting())
+        //if (KoApplication::isStarting())
             dlgtype = KoTemplateChooseDia::Everything;
-        else
-            dlgtype = KoTemplateChooseDia::OnlyTemplates;
+      //  else
+        //    dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
 										  "*.karbon", i18n( "Karbon14" ), dlgtype, "karbon_template" );

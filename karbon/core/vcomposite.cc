@@ -38,13 +38,13 @@
 #include <kdebug.h>
 
 
-VComposite::VComposite( VObject* parent, VState state )
+VPath::VPath( VObject* parent, VState state )
 	: VObject( parent, state ), m_fillRule( winding )
 {
 	m_paths.setAutoDelete( true );
 
 	// add an initial path:
-	m_paths.append( new VPath( this ) );
+	m_paths.append( new VSubpath( this ) );
 
 	// we need a stroke for boundingBox() at anytime:
 	m_stroke = new VStroke( this );
@@ -53,14 +53,14 @@ VComposite::VComposite( VObject* parent, VState state )
 	m_drawCenterNode = false;
 }
 
-VComposite::VComposite( const VComposite& composite )
+VPath::VPath( const VPath& composite )
 	: VObject( composite ), SVGPathParser()
 {
 	m_paths.setAutoDelete( true );
 
-	VPath* path;
+	VSubpath* path;
 
-	VPathListIterator itr( composite.m_paths );
+	VSubpathListIterator itr( composite.m_paths );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		path = itr.current()->clone();
@@ -78,21 +78,21 @@ VComposite::VComposite( const VComposite& composite )
 	m_fillRule = composite.m_fillRule;
 }
 
-VComposite::~VComposite()
+VPath::~VPath()
 {
 }
 
-DCOPObject* VComposite::dcopObject()
+DCOPObject* VPath::dcopObject()
 {
 	if ( !m_dcop )
-		m_dcop = new VCompositeIface( this );
+		m_dcop = new VPathIface( this );
 
 	return m_dcop;
 }
 
 
 void
-VComposite::draw( VPainter* painter, const KoRect *rect ) const
+VPath::draw( VPainter* painter, const KoRect *rect ) const
 {
 	if(
 		state() == deleted ||
@@ -107,7 +107,7 @@ VComposite::draw( VPainter* painter, const KoRect *rect ) const
 
 	painter->save();
 
-	VPathListIterator itr( m_paths );
+	VSubpathListIterator itr( m_paths );
 
 	// draw simplistic contour:
 	if( state() == edit )
@@ -119,7 +119,7 @@ VComposite::draw( VPainter* painter, const KoRect *rect ) const
 			painter->setPen( Qt::yellow );
 			painter->setBrush( Qt::NoBrush );
 
-			VPathIterator jtr( *( itr.current() ) );
+			VSubpathIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
 				jtr.current()->draw( painter );
@@ -136,7 +136,7 @@ VComposite::draw( VPainter* painter, const KoRect *rect ) const
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			VPathIterator jtr( *( itr.current() ) );
+			VSubpathIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
 				jtr.current()->draw( painter );
@@ -158,18 +158,18 @@ VComposite::draw( VPainter* painter, const KoRect *rect ) const
 }
 
 const KoPoint&
-VComposite::currentPoint() const
+VPath::currentPoint() const
 {
 	return m_paths.getLast()->currentPoint();
 }
 
 bool
-VComposite::moveTo( const KoPoint& p )
+VPath::moveTo( const KoPoint& p )
 {
 	// Append a new subpath if current subpath is not empty.
 	if( !m_paths.getLast()->isEmpty() )
 	{
-		VPath* path = new VPath( this );
+		VSubpath* path = new VSubpath( this );
 		m_paths.append( path );
 	}
 
@@ -177,51 +177,51 @@ VComposite::moveTo( const KoPoint& p )
 }
 
 bool
-VComposite::lineTo( const KoPoint& p )
+VPath::lineTo( const KoPoint& p )
 {
 	return m_paths.getLast()->lineTo( p );
 }
 
 bool
-VComposite::curveTo(
+VPath::curveTo(
 	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	return m_paths.getLast()->curveTo( p1, p2, p3 );
 }
 
 bool
-VComposite::curve1To( const KoPoint& p2, const KoPoint& p3 )
+VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 {
 	return m_paths.getLast()->curve1To( p2, p3 );
 }
 
 bool
-VComposite::curve2To( const KoPoint& p1, const KoPoint& p3 )
+VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 {
 	return m_paths.getLast()->curve2To( p1, p3 );
 }
 
 bool
-VComposite::arcTo( const KoPoint& p1, const KoPoint& p2, const double r )
+VPath::arcTo( const KoPoint& p1, const KoPoint& p2, const double r )
 {
 	return m_paths.getLast()->arcTo( p1, p2, r );
 }
 
 void
-VComposite::close()
+VPath::close()
 {
 	m_paths.getLast()->close();
 
 	// Append a new subpath.
-	VPath* path = new VPath( this );
+	VSubpath* path = new VSubpath( this );
 	path->moveTo( currentPoint() );
 	m_paths.append( path );
 }
 
 void
-VComposite::combine( const VComposite& composite )
+VPath::combine( const VPath& composite )
 {
-	VPathListIterator itr( composite.m_paths );
+	VSubpathListIterator itr( composite.m_paths );
 	for( ; itr.current(); ++itr )
 	{
 		combinePath( *( itr.current() ) );
@@ -229,9 +229,9 @@ VComposite::combine( const VComposite& composite )
 }
 
 void
-VComposite::combinePath( const VPath& path )
+VPath::combinePath( const VSubpath& path )
 {
-	VPath* p = path.clone();
+	VSubpath* p = path.clone();
 	p->setParent( this );
 
 	// TODO: do complex inside tests instead:
@@ -242,14 +242,14 @@ VComposite::combinePath( const VPath& path )
 }
 
 bool
-VComposite::pointIsInside( const KoPoint& p ) const
+VPath::pointIsInside( const KoPoint& p ) const
 {
 	// Check if point is inside boundingbox.
 	if( !boundingBox().contains( p, true ) )
 		return false;
 
 
-	VPathListIterator itr( m_paths );
+	VSubpathListIterator itr( m_paths );
 
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
@@ -261,14 +261,14 @@ VComposite::pointIsInside( const KoPoint& p ) const
 }
 
 bool
-VComposite::intersects( const VSegment& segment ) const
+VPath::intersects( const VSegment& segment ) const
 {
 	// Check if boundingboxes intersect.
 	if( !boundingBox().intersects( segment.boundingBox() ) )
 		return false;
 
 
-	VPathListIterator itr( m_paths );
+	VSubpathListIterator itr( m_paths );
 
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
@@ -281,17 +281,17 @@ VComposite::intersects( const VSegment& segment ) const
 
 
 VFillRule
-VComposite::fillMode() const
+VPath::fillMode() const
 {
 	return ( m_paths.count() > 1 ) ? evenOdd : winding;
 }
 
 const KoRect&
-VComposite::boundingBox() const
+VPath::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
-		VPathListIterator itr( m_paths );
+		VSubpathListIterator itr( m_paths );
 		itr.toFirst();
 
 		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
@@ -314,14 +314,14 @@ VComposite::boundingBox() const
 	return m_boundingBox;
 }
 
-VComposite*
-VComposite::clone() const
+VPath*
+VPath::clone() const
 {
-	return new VComposite( *this );
+	return new VPath( *this );
 }
 
 void
-VComposite::save( QDomElement& element ) const
+VPath::save( QDomElement& element ) const
 {
 	if( state() != deleted )
 	{
@@ -344,7 +344,7 @@ VComposite::save( QDomElement& element ) const
 
 
 void
-VComposite::load( const QDomElement& element )
+VPath::load( const QDomElement& element )
 {
 	setState( normal );
 
@@ -365,7 +365,7 @@ VComposite::load( const QDomElement& element )
 
 			if( child.tagName() == "PATH" )
 			{
-				VPath path( this );
+				VSubpath path( this );
 				path.load( child );
 
 				combinePath( path );
@@ -383,7 +383,7 @@ VComposite::load( const QDomElement& element )
 }
 
 void
-VComposite::loadSvgPath( const QString &d )
+VPath::loadSvgPath( const QString &d )
 {
 	//QTime s;s.start();
 	parseSVG( d, true );
@@ -391,10 +391,10 @@ VComposite::loadSvgPath( const QString &d )
 }
 
 void
-VComposite::saveSvgPath( QString &d ) const
+VPath::saveSvgPath( QString &d ) const
 {
 	// save paths to svg:
-	VPathListIterator itr( m_paths );
+	VSubpathListIterator itr( m_paths );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		if( !itr.current()->isEmpty() )
@@ -403,44 +403,44 @@ VComposite::saveSvgPath( QString &d ) const
 }
 
 void
-VComposite::svgMoveTo( double x1, double y1, bool )
+VPath::svgMoveTo( double x1, double y1, bool )
 {
 	moveTo( KoPoint( x1, y1 ) );
 }
 
 void
-VComposite::svgLineTo( double x1, double y1, bool )
+VPath::svgLineTo( double x1, double y1, bool )
 {
 	lineTo( KoPoint( x1, y1 ) );
 }
 
 void
-VComposite::svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool )
+VPath::svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool )
 {
 	curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x, y ) );
 }
 
 void
-VComposite::svgClosePath()
+VPath::svgClosePath()
 {
 	close();
 }
 
 void
-VComposite::accept( VVisitor& visitor )
+VPath::accept( VVisitor& visitor )
 {
-	visitor.visitVComposite( *this );
+	visitor.visitVPath( *this );
 }
 
 void
-VComposite::transform( const QString &transform )
+VPath::transform( const QString &transform )
 {
 	VTransformCmd cmd( 0L, parseTransform( transform ) );
-	cmd.visitVComposite( *this );
+	cmd.visitVPath( *this );
 }
 
 QWMatrix
-VComposite::parseTransform( const QString &transform )
+VPath::parseTransform( const QString &transform )
 {
 	QWMatrix result;
 
@@ -505,7 +505,7 @@ VComposite::parseTransform( const QString &transform )
 }
 
 void
-VComposite::writeTransform( QDomElement &me ) const
+VPath::writeTransform( QDomElement &me ) const
 {
 	if( !m_matrix.isIdentity() )
 	{

@@ -95,7 +95,7 @@ VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 }
 
 void
-VRoundCornersCmd::visitVPath( VPath& path )
+VRoundCornersCmd::visitVSubpath( VSubpath& path )
 {
 	// Optimize and avoid a crash.
 	if( path.isEmpty() )
@@ -104,7 +104,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	// Note: we modiy segments from path. that doesnt hurt, since we
 	// replace "path" with the temporary path "newPath" afterwards.
 
-	VPath newPath( 0L );
+	VSubpath newPath( 0L );
 
 	path.first();
 	// Skip "begin".

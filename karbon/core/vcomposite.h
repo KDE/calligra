@@ -34,22 +34,22 @@ class QDomElement;
 class VPainter;
 class VSegment;
 class VVisitor;
-class VPath;
+class VSubpath;
 
-typedef QPtrList<VPath> VPathList;
-typedef QPtrListIterator<VPath> VPathListIterator;
+typedef QPtrList<VSubpath> VSubpathList;
+typedef QPtrListIterator<VSubpath> VSubpathListIterator;
 
 
 /**
  * A composite path consists of one or many subpaths.
  */
 
-class VComposite : public VObject, SVGPathParser
+class VPath : public VObject, SVGPathParser
 {
 public:
-	VComposite( VObject* parent, VState state = normal );
-	VComposite( const VComposite& path );
-	virtual ~VComposite();
+	VPath( VObject* parent, VState state = normal );
+	VPath( const VPath& path );
+	virtual ~VPath();
 
 	virtual DCOPObject* dcopObject();
 
@@ -131,12 +131,12 @@ public:
 	 * Combines two composite paths. For example, the letter "O" is a combination
 	 * of a larger and a smaller ellipitical path.
 	 */
-	void combine( const VComposite& path );
+	void combine( const VPath& path );
 
 	/**
 	 * Adds a path to the composite path.
 	 */
-	void combinePath( const VPath& path );
+	void combinePath( const VSubpath& path );
 
 
 	/**
@@ -151,7 +151,7 @@ public:
 	bool intersects( const VSegment& segment ) const;
 
 
-	const VPathList& paths() const
+	const VSubpathList& paths() const
 	{
 		return m_paths;
 	}
@@ -189,7 +189,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	virtual VComposite* clone() const;
+	virtual VPath* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 
@@ -221,7 +221,7 @@ private:
 	/**
 	 * List of subpaths.
 	 */
-	VPathList m_paths;
+	VSubpathList m_paths;
 
 	/// Should a center node be drawn?
 	bool		m_drawCenterNode;

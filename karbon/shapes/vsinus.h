@@ -22,7 +22,7 @@
 
 #include "vcomposite.h"
 
-class VSinus : public VComposite
+class VSinus : public VPath
 {
 public:
 	VSinus( VObject* parent, VState state = edit );

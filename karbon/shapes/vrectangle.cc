@@ -27,13 +27,13 @@
 #include <vdocument.h>
 
 VRectangle::VRectangle( VObject* parent, VState state )
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }
 
 VRectangle::VRectangle( VObject* parent,
 		const KoPoint& topLeft, double width, double height, double rx, double ry )
-	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_rx( rx ), m_ry( ry )
+	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_rx( rx ), m_ry( ry )
 {
 	setDrawCenterNode();
 
@@ -101,7 +101,7 @@ VRectangle::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

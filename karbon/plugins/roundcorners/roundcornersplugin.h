@@ -57,7 +57,7 @@ private:
 	KDoubleNumInput* m_radius;
 };
 
-class VPath;
+class VSubpath;
 
 class VRoundCornersCmd : public VReplacingCmd
 {
@@ -65,7 +65,7 @@ public:
 	VRoundCornersCmd( VDocument* doc, double radius );
 	virtual ~VRoundCornersCmd() {}
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	double m_radius;

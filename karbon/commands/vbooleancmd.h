@@ -26,7 +26,7 @@
 
 #include "vcommand.h"
 
-class VPath;
+class VSubpath;
 class VSegment;
 class VSelection;
 
@@ -59,7 +59,7 @@ public:
 	bool visit( VObject& object1, VObject& object2 );
 
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	typedef QValueList<double> VParamList;
@@ -74,8 +74,8 @@ protected:
 
 	VBooleanType m_type;
 
-	VPath* m_path1;
-	VPath* m_path2;
+	VSubpath* m_path1;
+	VSubpath* m_path2;
 };
 
 #endif

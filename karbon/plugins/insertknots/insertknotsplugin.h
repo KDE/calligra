@@ -57,7 +57,7 @@ private:
 	KIntSpinBox* m_knots;
 };
 
-class VPath;
+class VSubpath;
 
 class VInsertKnotsCmd : public VReplacingCmd
 {
@@ -65,7 +65,7 @@ public:
 	VInsertKnotsCmd( VDocument* doc, uint knots );
 	virtual ~VInsertKnotsCmd() {}
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	uint m_knots;

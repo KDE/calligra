@@ -44,7 +44,7 @@
  * Inner angle    - extra radius amount for inner radius.
  * Roundness      - uses curves instead of lines for the star shape.
  */
-class VStar : public VComposite
+class VStar : public VPath
 {
 public:
 	enum VStarType

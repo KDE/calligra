@@ -129,7 +129,7 @@ void VRoundRectTool::refreshUnit()
 	m_optionsWidget->refreshUnit();
 }
 
-VComposite*
+VPath*
 VRoundRectTool::shape( bool interactive ) const
 {
 	if( interactive )

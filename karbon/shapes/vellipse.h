@@ -22,7 +22,7 @@
 
 #include "vcomposite.h"
 
-class VEllipse : public VComposite
+class VEllipse : public VPath
 {
 public:
 	enum VEllipseType

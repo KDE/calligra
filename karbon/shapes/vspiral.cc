@@ -31,14 +31,14 @@
 #include <vdocument.h>
 
 VSpiral::VSpiral( VObject* parent, VState state )
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }
 
 VSpiral::VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments, double fade,
 		bool clockwise, double angle, VSpiralType type )
-	: VComposite( parent ), m_center( center), m_radius( radius ), m_fade( fade ), m_segments( segments ), m_clockwise( clockwise ), m_angle( angle ), m_type( type )
+	: VPath( parent ), m_center( center), m_radius( radius ), m_fade( fade ), m_segments( segments ), m_clockwise( clockwise ), m_angle( angle ), m_type( type )
 {
 	init();
 }
@@ -112,7 +112,7 @@ VSpiral::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

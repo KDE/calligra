@@ -27,26 +27,26 @@
 
 class QDomElement;
 class QWMatrix;
-class VPathIteratorList;
+class VSubpathIteratorList;
 class VSegment;
 class VVisitor;
 
 
 /**
- * VPath provides a sophisticated list of VSegment. Noted: it also may contain
+ * VSubpath provides a sophisticated list of VSegment. Noted: it also may contain
  * segments which are marked "deleted". If you are not interested in those undo/redo
- * housholding data, please always use a VPathIterator to access segments.
+ * housholding data, please always use a VSubpathIterator to access segments.
  */
 
-class VPath : public VObject
+class VSubpath : public VObject
 {
-	friend class VPathIterator;
+	friend class VSubpathIterator;
 
 public:
-	VPath( VObject* parent );
-	VPath( const VPath& list );
-	VPath( const VSegment& segment );
-	virtual ~VPath();
+	VSubpath( VObject* parent );
+	VSubpath( const VSubpath& list );
+	VSubpath( const VSegment& segment );
+	virtual ~VSubpath();
 
 	const KoPoint& currentPoint() const;
 
@@ -106,7 +106,7 @@ public:
 
 
 	virtual void save( QDomElement& ) const
-		{}	// VPaths cant be saved.
+		{}	// VSubpaths cant be saved.
 
 	// TODO: remove this backward compatibility function after koffice 1.3.x
 	virtual void load( const QDomElement& element );
@@ -114,13 +114,13 @@ public:
 	void saveSvgPath( QString & ) const;
 
 
-	virtual VPath* clone() const;
+	virtual VSubpath* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 
 
 	// General list stuff.
-	VPath& operator=( const VPath& list );
+	VSubpath& operator=( const VSubpath& list );
 
 	bool insert( const VSegment* segment );
 	bool insert( uint i, const VSegment* segment );
@@ -165,26 +165,26 @@ private:
 
 	bool m_isClosed : 1;
 
-	VPathIteratorList* m_iteratorList;
+	VSubpathIteratorList* m_iteratorList;
 };
 
 
 /**
- * VPathIterator provides an iterator class for highlevel path access.
- * Use VPathIterator whenever you want to access segments but are not interested
+ * VSubpathIterator provides an iterator class for highlevel path access.
+ * Use VSubpathIterator whenever you want to access segments but are not interested
  * in undo/redo operations with (deleted) segments.
  */
 
-class VPathIterator
+class VSubpathIterator
 {
-	friend class VPathIteratorList;
+	friend class VSubpathIteratorList;
 
 public:
-	VPathIterator( const VPath& list );
-	VPathIterator( const VPathIterator& itr );
-	~VPathIterator();
+	VSubpathIterator( const VSubpath& list );
+	VSubpathIterator( const VSubpathIterator& itr );
+	~VSubpathIterator();
 
-	VPathIterator& operator=( const VPathIterator& itr );
+	VSubpathIterator& operator=( const VSubpathIterator& itr );
 
 	VSegment* current() const;
 	VSegment* operator()();
@@ -194,7 +194,7 @@ public:
 	VSegment* operator-=( uint i );
 
 private:
-	VPath* m_list;
+	VSubpath* m_list;
 	VSegment* m_current;
 };
 

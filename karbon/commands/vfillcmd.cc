@@ -58,7 +58,7 @@ VFillCmd::visitVGroup( VGroup& group )
 }
 
 void 
-VFillCmd::visitVComposite( VComposite& composite )
+VFillCmd::visitVPath( VPath& composite )
 {
 	m_oldfills.push_back( VFill( *( composite.fill() ) ) );
 	composite.setFill( m_fill );

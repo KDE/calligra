@@ -119,7 +119,7 @@ VSinusTool::refreshUnit()
     m_optionsWidget->refreshUnit();
 }
 
-VComposite*
+VPath*
 VSinusTool::shape( bool interactive ) const
 {
 	if( interactive )

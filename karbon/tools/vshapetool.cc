@@ -67,8 +67,8 @@ VShapeTool::draw()
 	VPainter* painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	VComposite* composite = shape();
-	composite->setState( VComposite::edit );
+	VPath* composite = shape();
+	composite->setState( VPath::edit );
 	composite->draw( painter, &composite->boundingBox() );
 	delete( composite );
 }
@@ -91,7 +91,7 @@ VShapeTool::mouseButtonRelease()
 
 	if( showDialog() )
 	{
-		VComposite* composite = shape( true );
+		VPath* composite = shape( true );
 
 		if( composite )
 		{

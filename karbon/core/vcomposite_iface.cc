@@ -21,49 +21,49 @@
 #include "vcomposite_iface.h"
 #include "vcomposite.h"
 
-VCompositeIface::VCompositeIface( VComposite *composite )
+VPathIface::VPathIface( VPath *composite )
 	: VObjectIface( composite ), m_composite( composite )
 {
 }
 
 bool
-VCompositeIface::moveTo( double x, double y )
+VPathIface::moveTo( double x, double y )
 {
 	return m_composite->moveTo( KoPoint( x, y ) );
 }
 
 bool 
-VCompositeIface::lineTo( double x, double y )
+VPathIface::lineTo( double x, double y )
 {
 	return m_composite->lineTo( KoPoint( x, y ) );
 }
 
 bool 
-VCompositeIface::curveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
+VPathIface::curveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
 {
 	return m_composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
 }
 
 bool 
-VCompositeIface::curve1To( double x2, double y2, double x3, double y3 )
+VPathIface::curve1To( double x2, double y2, double x3, double y3 )
 {
 	return m_composite->curve1To( KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
 }
 
 bool 
-VCompositeIface::curve2To( double x1, double y1, double x2, double y2 )
+VPathIface::curve2To( double x1, double y1, double x2, double y2 )
 {
 	return m_composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
 }
 
 bool 
-VCompositeIface::arcTo( double x1, double y1, double x2, double y2, double r )
+VPathIface::arcTo( double x1, double y1, double x2, double y2, double r )
 {
 	return m_composite->arcTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), r );
 }
 
 void 
-VCompositeIface::close()
+VPathIface::close()
 {
 	m_composite->close();
 }

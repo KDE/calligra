@@ -36,7 +36,7 @@ VSelectionDescription::visitVSelection( VSelection& selection )
 }
 
 void
-VSelectionDescription::visitVComposite( VComposite& composite )
+VSelectionDescription::visitVPath( VPath& composite )
 {
 	m_desc = m_shortdesc = !composite.name().isEmpty() ? composite.name() : i18n( "path" );
 }

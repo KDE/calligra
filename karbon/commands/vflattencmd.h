@@ -22,7 +22,7 @@
 
 #include <commands/vreplacingcmd.h>
 
-class VPath;
+class VSubpath;
 
 class VFlattenCmd : public VReplacingCmd
 {
@@ -30,7 +30,7 @@ public:
 	VFlattenCmd( VDocument *doc, double flatness );
 	virtual ~VFlattenCmd() {}
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	double m_flatness;

@@ -29,13 +29,13 @@
 #include <vdocument.h>
 
 VSinus::VSinus( VObject* parent, VState state )
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }
 
 VSinus::VSinus( VObject* parent,
 		const KoPoint& topLeft, double width, double height, uint periods )
-	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_periods( periods )
+	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_periods( periods )
 {
 	// We want at least 1 period:
 	if( m_periods < 1 )
@@ -141,7 +141,7 @@ VSinus::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

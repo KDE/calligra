@@ -29,13 +29,13 @@
 #include <vdocument.h>
 
 VPolygon::VPolygon( VObject* parent, VState state ) 
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }
 
 VPolygon::VPolygon( VObject* parent, const QString &points,
 		const KoPoint& topLeft, double width, double height )
-	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_points( points )
+	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_points( points )
 {
 	init();
 }
@@ -81,7 +81,7 @@ VPolygon::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

@@ -27,17 +27,17 @@
 #include <vdocument.h>
 
 VPolyline::VPolyline( VObject* parent, VState state )
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }
 
 /*VPolyline::VPolyline( VObject* parent, VState state ) 
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }*/
 
 /*VPolyline::VPolyline( VObject* parent, const QString &points ) 
-	: VComposite( parent ), m_points( points )
+	: VPath( parent ), m_points( points )
 {
 	init();
 }*/
@@ -77,7 +77,7 @@ VPolyline::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

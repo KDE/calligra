@@ -23,14 +23,14 @@
 
 #include "vobject_iface.h"
 
-class VComposite;
+class VPath;
 
-class VCompositeIface : public VObjectIface
+class VPathIface : public VObjectIface
 {
 	K_DCOP
 
 public:
-	VCompositeIface( VComposite *composite );
+	VPathIface( VPath *composite );
 
 k_dcop:
 	bool moveTo( double x, double y );
@@ -45,7 +45,7 @@ k_dcop:
 	//void setDrawCenterNode( bool drawCenterNode = true );
 
 private:
-	VComposite *m_composite;
+	VPath *m_composite;
 };
 
 #endif

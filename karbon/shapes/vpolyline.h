@@ -23,7 +23,7 @@
 #include "vcomposite.h"
 #include <qstring.h>
 
-class VPolyline : public VComposite
+class VPolyline : public VPath
 {
 public:
 	VPolyline( VObject* parent, VState state = edit );

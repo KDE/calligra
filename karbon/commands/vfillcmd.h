@@ -43,7 +43,7 @@ public:
 	virtual bool changesSelection() const { return true; }
 
 	virtual void visitVGroup( VGroup& group );
-	virtual void visitVComposite( VComposite& composite );
+	virtual void visitVPath( VPath& composite );
 	virtual void visitVText( VText& text );
 
 protected:

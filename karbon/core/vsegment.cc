@@ -211,9 +211,9 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 
 
 	// The De Casteljau algorithm.
-	for( unsigned short j = 1; j <= degree(); ++j )
+	for( unsigned short j = 1; j <= degree(); j++ )
 	{
-		for( unsigned short i = 0; i <= degree() - j; ++i )
+		for( unsigned short i = 0; i <= degree() - j; i++ )
 		{
 			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
 		}
@@ -313,7 +313,7 @@ VSegment::length( double t ) const
 	 */
 
 	// "Copy segment" splitted at t into a path.
-	VPath path( 0L );
+	VSubpath path( 0L );
 	path.moveTo( prev()->knot() );
 
 	// Optimize a bit: most of the time we'll need the
@@ -534,7 +534,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 
 	// Calculate the control points of the new 2n-1th degree curve.
-	VPath newCurve( 0L );
+	VSubpath newCurve( 0L );
 	newCurve.append( new VSegment( 2 * degree() - 1 ) );
 
 	// Set up control points in the ( u, f(u) )-plane.
@@ -660,7 +660,7 @@ kdDebug() << prev()->knot().x()  << " " << prev()->knot().y()
 	}
 
 	// Many solutions. Do recursive midpoint subdivision.
-	VPath path( *this );
+	VSubpath path( *this );
 	path.insert( path.current()->splitAt( 0.5 ) );
 
 	path.current()->rootParams( params );

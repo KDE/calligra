@@ -168,7 +168,7 @@ public:
 	virtual void editBasePath();
 	virtual void convertToShapes();
 
-	virtual void visitVComposite( VComposite& composite );
+	virtual void visitVPath( VPath& composite );
 	virtual void visitVDocument( VDocument& )
 	{}
 
@@ -178,7 +178,7 @@ public:
 	virtual void visitVLayer( VLayer& )
 	{}
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
 
 private:
@@ -187,7 +187,7 @@ private:
 	public:
 		VTextCmd( VDocument* doc, const QString& name, VText* text );
 		VTextCmd( VDocument* doc, const QString& name, VText* text,
-				  const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+				  const QFont &newFont, const VSubpath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
 				  bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
 		virtual ~VTextCmd();
 
@@ -207,8 +207,8 @@ private:
 
 			QFont oldFont;
 			QFont newFont;
-			VPath oldBasePath;
-			VPath newBasePath;
+			VSubpath oldBasePath;
+			VSubpath newBasePath;
 			VText::Position oldPosition;
 			VText::Position newPosition;
 			VText::Alignment oldAlignment;

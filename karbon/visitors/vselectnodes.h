@@ -42,7 +42,7 @@ public:
 		m_rect = rect;
 	}
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVLayer( VLayer& layer );
 
 private:
@@ -56,7 +56,7 @@ class VTestNodes : public VVisitor
 public:
 	VTestNodes( const KoRect& rect ) : m_rect( rect ) { m_segments.clear(); }
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVLayer( VLayer& layer );
 
 	QPtrList<VSegment> &result() { return m_segments; }

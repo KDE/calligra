@@ -37,7 +37,7 @@ public:
 	virtual QString name() { return i18n( "Polygon Tool" ); }
 	virtual bool showDialog() const;
 	
-	virtual VComposite *shape( bool interactive = false ) const;
+	virtual VPath *shape( bool interactive = false ) const;
 
 	void refreshUnit();
 

@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 void
-VSelectObjects::visitVComposite( VComposite& composite )
+VSelectObjects::visitVPath( VPath& composite )
 {
 	// Never select a deleted, locked or hidden object.
 	if( composite.state() > VObject::normal &&
@@ -67,7 +67,7 @@ VSelectObjects::visitVComposite( VComposite& composite )
 	if( !selected )
 	{
 		// Path for holding a helper segment.
-		VPath path( 0L );
+		VSubpath path( 0L );
 
 		path.moveTo( m_rect.topLeft() );
 		path.lineTo( m_rect.topRight() );

@@ -32,7 +32,7 @@
 
 class QLabel;
 class QWidget;
-class VComposite;
+class VPath;
 
 
 /**

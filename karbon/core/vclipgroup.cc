@@ -98,7 +98,7 @@ void VClipGroup::load( const QDomElement& element )
 
 			if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" ) // TODO : remove COMPOSITE later
 			{
-				VComposite* composite = new VComposite( this );
+				VPath* composite = new VPath( this );
 				composite->load( e );
 				append( composite );
 			}
@@ -133,7 +133,7 @@ PathRenderer::PathRenderer( VPainter *p_painter ) : VVisitor()
 
 PathRenderer::~PathRenderer() {}
 
-void PathRenderer::visitVPath( VPath& path )
+void PathRenderer::visitVSubpath( VSubpath& path )
 {
 	if(!m_painter) return;
 
@@ -175,7 +175,7 @@ void PathRenderer::visitVPath( VPath& path )
 		}
 	}
 
-	VVisitor::visitVPath(path);
+	VVisitor::visitVSubpath(path);
 
 //	if( path.isClosed() ) m_painter->closePath();
 }

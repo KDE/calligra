@@ -38,7 +38,7 @@ public:
 	virtual QString name() { return i18n( "Sinus Tool" ); }
 	virtual QString icon() { return "14_sinus"; }
 
-	virtual VComposite *shape( bool interactive = false ) const;
+	virtual VPath *shape( bool interactive = false ) const;
 
 	void refreshUnit();
 

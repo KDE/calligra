@@ -28,8 +28,8 @@
 
 
 class QWMatrix;
-class VComposite;
 class VPath;
+class VSubpath;
 class VSegment;
 class VSelection;
 
@@ -43,8 +43,8 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-	virtual void visitVComposite( VComposite& composite );
-	virtual void visitVPath( VPath& path );
+	virtual void visitVPath( VPath& composite );
+	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
 	virtual void visitVImage( VImage& img );
 

@@ -100,7 +100,7 @@ VRectangleTool::refreshUnit()
 	m_optionWidget->refreshUnit();
 }
 
-VComposite *
+VPath *
 VRectangleTool::shape( bool interactive ) const
 {
 	if( interactive )

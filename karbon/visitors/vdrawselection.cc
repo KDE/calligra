@@ -27,7 +27,7 @@
 #include "vpath.h"
 
 void
-VDrawSelection::visitVComposite( VComposite &composite )
+VDrawSelection::visitVPath( VPath &composite )
 {
 	if(
 		composite.state() == VObject::deleted ||
@@ -43,7 +43,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 	const bool editnodes = composite.state() == VObject::edit && m_nodeediting;
 
-	VPathListIterator itr( composite.paths() );
+	VSubpathListIterator itr( composite.paths() );
 
 	if(
 		composite.state() == VObject::selected ||
@@ -60,7 +60,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			VPathIterator jtr( *( itr.current() ) );
+			VSubpathIterator jtr( *( itr.current() ) );
 
 			for( ; jtr.current(); ++jtr )
 			{
@@ -81,7 +81,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 		for( ; itr.current(); ++itr )
 		{
-			VPathIterator jtr( *( itr.current() ) );
+			VSubpathIterator jtr( *( itr.current() ) );
 			//++jtr;
 
 			for( ; jtr.current(); ++jtr )

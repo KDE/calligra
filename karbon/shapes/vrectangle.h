@@ -22,7 +22,7 @@
 
 #include "vcomposite.h"
 
-class VRectangle : public VComposite
+class VRectangle : public VPath
 {
 public:
 	VRectangle( VObject* parent, VState state = edit );

@@ -33,8 +33,8 @@
 
 class VGroup;
 
-typedef QPtrList<VComposite> VCompositeList;
-typedef QPtrListIterator<VComposite> VCompositeListIterator;
+typedef QPtrList<VPath> VPathList;
+typedef QPtrListIterator<VPath> VPathListIterator;
 
 #ifdef Above
 #undef Above
@@ -56,7 +56,7 @@ public:
 	};
 
 	VText( VObject* parent, VState state = normal );
-	VText( const QFont &font, const VPath& basePath, Position position, Alignment alignment, const QString& text );
+	VText( const QFont &font, const VSubpath& basePath, Position position, Alignment alignment, const QString& text );
 	VText( const VText& text );
 	virtual ~VText();
 	virtual DCOPObject* dcopObject();
@@ -65,8 +65,8 @@ public:
 	virtual const QString& text() { return m_text; }
 	virtual void setFont( const QFont& font ) { m_font = font; }
 	virtual const QFont& font() { return m_font; }
-	virtual void setBasePath( const VPath& path ) { m_basePath = path; }
-	virtual VPath& basePath() { return m_basePath; }
+	virtual void setBasePath( const VSubpath& path ) { m_basePath = path; }
+	virtual VSubpath& basePath() { return m_basePath; }
 	virtual void setPosition( Position position ) { m_position = position; }
 	virtual Position position() { return m_position; }
 	virtual void setAlignment( Alignment alignment ) { m_alignment = alignment; }
@@ -82,7 +82,7 @@ public:
 	/**
 	 * Provides read only access to the glyphs.
 	 */
-	const VCompositeList& glyphs() const
+	const VPathList& glyphs() const
 	{
 		return m_glyphs;
 	}
@@ -112,7 +112,7 @@ private:
 		// The font to use to draw the text.
 	QFont       m_font;
 		// The base path. Doesn't belong to the document.
-	VPath       m_basePath;
+	VSubpath       m_basePath;
 		// The text position 
 	Position    m_position;
 		// The text alignment
@@ -125,7 +125,7 @@ private:
 	int         m_shadowDistance;
 	int         m_shadowAngle;
 		// The glyphs (allow to keep a font even if not present on the computer. works as long as you don't edit the text.)
-	VCompositeList   m_glyphs;
+	VPathList   m_glyphs;
 };
 
 #endif

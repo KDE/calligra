@@ -164,7 +164,7 @@ VSpiralTool::refreshUnit()
 	m_optionsWidget->refreshUnit();
 }
 
-VComposite*
+VPath*
 VSpiralTool::shape( bool interactive ) const
 {
 	if( interactive )

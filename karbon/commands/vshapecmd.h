@@ -23,18 +23,18 @@
 
 #include "vcommand.h"
 
-class VComposite;
+class VPath;
 
 /*
  * Provides a common base class for creation commands since they all have
- * a similar execute / unexecute behaviour and all build a VComposite. Upon
+ * a similar execute / unexecute behaviour and all build a VPath. Upon
  * execution() the shape will be added to the document and selected, upon undoing
  * it will be set to the deleted state.
  */
 class VShapeCmd : public VCommand
 {
 public:
-	VShapeCmd( VDocument* doc, const QString& name, VComposite* shape, const QString& icon = "14_polygon" );
+	VShapeCmd( VDocument* doc, const QString& name, VPath* shape, const QString& icon = "14_polygon" );
 	virtual ~VShapeCmd() {}
 
 	virtual void execute();
@@ -42,7 +42,7 @@ public:
 
 protected:
 	/// Pointer to the created shape.
-	VComposite *m_shape;
+	VPath *m_shape;
 };
 
 #endif

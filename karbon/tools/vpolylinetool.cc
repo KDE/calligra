@@ -77,10 +77,10 @@ VPolylineTool::deactivate()
 	m_bezierPoints.removeLast();
 	m_bezierPoints.removeLast();
 	
-	VComposite* polyline = 0L;
+	VPath* polyline = 0L;
 	if( m_bezierPoints.count() > 2 )
 	{
-		polyline = new VComposite( 0L );
+		polyline = new VPath( 0L );
 		KoPoint* p1 = m_bezierPoints.first();
 		KoPoint* p2;
 		KoPoint* p3;
@@ -133,7 +133,7 @@ VPolylineTool::draw()
 
 	if( m_bezierPoints.count() > 2 )
 	{
-		VComposite polyline( 0L );
+		VPath polyline( 0L );
 		polyline.moveTo( *m_bezierPoints.first() );
 
 		KoPoint* p2;

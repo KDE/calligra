@@ -46,7 +46,7 @@ public:
 
 	virtual void visitVGroup( VGroup& group )
 		{ visitVObject( group ); }
-	virtual void visitVComposite( VComposite& composite );
+	virtual void visitVPath( VPath& composite );
 	virtual void visitVText( VText& text )
 		{ visitVObject( text ); }
 	virtual void visitVImage( VImage& img )

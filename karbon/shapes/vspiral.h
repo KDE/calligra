@@ -22,7 +22,7 @@
 
 #include "vcomposite.h"
 
-class VSpiral : public VComposite
+class VSpiral : public VPath
 {
 public:
 	enum VSpiralType

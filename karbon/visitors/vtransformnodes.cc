@@ -29,7 +29,7 @@ VTransformNodes::VTransformNodes( const QWMatrix& m )
 }
 
 void
-VTransformNodes::visitVPath( VPath& path )
+VTransformNodes::visitVSubpath( VSubpath& path )
 {
 	path.first();
 	while( path.current() )

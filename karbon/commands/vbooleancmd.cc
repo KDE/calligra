@@ -72,7 +72,7 @@ VBooleanCmd::visit( VObject& object1, VObject& object2 )
 }
 
 void
-VBooleanCmd::visitVPath( VPath& path )
+VBooleanCmd::visitVSubpath( VSubpath& path )
 {
 	if( m_path1 == 0L )
 		m_path1 = &path;
@@ -183,7 +183,7 @@ VBooleanCmd::recursiveSubdivision(
 		else
 		{
 			// "copy segment" and split it at midpoint:
-			VPath path2( segment2 );
+			VSubpath path2( segment2 );
 			path2.insert( path2.current()->splitAt( 0.5 ) );
 
 			double mid2 = 0.5 * ( t0_2 + t1_2 );
@@ -199,7 +199,7 @@ VBooleanCmd::recursiveSubdivision(
 	else
 	{
 		// "copy segment" and split it at midpoint:
-		VPath path1( segment1 );
+		VSubpath path1( segment1 );
 		path1.insert( path1.current()->splitAt( 0.5 ) );
 
 		double mid1 = 0.5 * ( t0_1 + t1_1 );
@@ -216,7 +216,7 @@ VBooleanCmd::recursiveSubdivision(
 		else
 		{
 			// "copy segment" and split it at midpoint:
-			VPath path2( segment2 );
+			VSubpath path2( segment2 );
 			path2.insert( path2.current()->splitAt( 0.5 ) );
 
 			double mid2 = 0.5 * ( t0_2 + t1_2 );

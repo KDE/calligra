@@ -24,7 +24,7 @@
 #include "vcommand.h"
 
 class VSegment;
-class VPath;
+class VSubpath;
 
 class VDeleteNodeCmd : public VCommand
 {
@@ -35,7 +35,7 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	QPtrList<VSegment> m_segments;

@@ -47,9 +47,9 @@
 #define FT_FROMFLOAT(x) ((int) floor ((x) * 64.0 + 0.5))
 
 
-// Trace routines for ttf / ps font -> VPath
+// Trace routines for ttf / ps font -> VSubpath
 
-int traceMoveto( FT_Vector *to, VComposite *composite )
+int traceMoveto( FT_Vector *to, VPath *composite )
 {
 	double tox = ( to->x / 64.0 );
 	double toy = ( -to->y / 64.0 );
@@ -61,7 +61,7 @@ int traceMoveto( FT_Vector *to, VComposite *composite )
 	return 0;
 }
 
-int traceLineto( FT_Vector *to, VComposite *composite )
+int traceLineto( FT_Vector *to, VPath *composite )
 {
 	double tox = ( to->x / 64.0 );
 	double toy = ( -to->y / 64.0 );
@@ -74,7 +74,7 @@ int traceLineto( FT_Vector *to, VComposite *composite )
 	return 0;
 };
 
-int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composite )
+int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *composite )
 {
 	double x1 = ( control->x / 64.0 );
 	double y1 = ( -control->y / 64.0 );
@@ -89,7 +89,7 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composi
 	return 0;
 };
 
-int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VComposite *composite )
+int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *composite )
 {
 	double x1 = ( p->x / 64.0 );
 	double y1 = ( -p->y / 64.0 );
@@ -134,7 +134,7 @@ VText::VText( VObject* parent, VState state )
 }
 
 
-VText::VText( const QFont &font, const VPath& basePath, Position position, Alignment alignment, const QString& text )
+VText::VText( const QFont &font, const VSubpath& basePath, Position position, Alignment alignment, const QString& text )
 	: VObject( 0L ), m_font( font ), m_basePath( basePath ), m_position( position ), m_alignment( alignment ), m_text( text )
 {
 	m_glyphs.setAutoDelete( true );
@@ -151,10 +151,10 @@ VText::VText( const VText& text )
 	m_fill = new VFill( *text.m_fill );
 
 	// copy glyphs
-	VCompositeListIterator itr( text.m_glyphs );
+	VPathListIterator itr( text.m_glyphs );
 	for( ; itr.current() ; ++itr )
 	{
-		VComposite* c = itr.current()->clone();
+		VPath* c = itr.current()->clone();
 		c->setParent( this );
 		m_glyphs.append( c );
 	}
@@ -188,7 +188,7 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 
 	painter->save();
 
-	VCompositeListIterator itr( m_glyphs );
+	VPathListIterator itr( m_glyphs );
 
 	if( state() != edit )
 	{
@@ -254,7 +254,7 @@ VText::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
-		VCompositeListIterator itr( m_glyphs );
+		VPathListIterator itr( m_glyphs );
 		itr.toFirst();
 		// clear:
 		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
@@ -285,10 +285,10 @@ VGroup* VText::toVGroup() const
 {
 	VGroup* group = new VGroup( parent() );
 
-	VCompositeListIterator itr( m_glyphs );
+	VPathListIterator itr( m_glyphs );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		VComposite* c = itr.current()->clone();
+		VPath* c = itr.current()->clone();
 		c->setParent( group );
 		group->append( c );
 	}
@@ -326,7 +326,7 @@ VText::save( QDomElement& element ) const
 		m_basePath.save( me );
 
 		// save all glyphs / paths
-		VCompositeListIterator itr = m_glyphs;
+		VPathListIterator itr = m_glyphs;
 		for( itr.toFirst(); itr.current(); ++itr )
 			itr.current()->save( me );
 	}
@@ -360,7 +360,7 @@ VText::load( const QDomElement& element )
 			QDomElement e = list.item( i ).toElement();
 			if( e.tagName() == "COMPOSITE" )
 			{
-				VComposite *composite = new VComposite( this );
+				VPath *composite = new VPath( this );
 				composite->load( e );
 				m_glyphs.append( composite );
 			}
@@ -399,7 +399,7 @@ VText::setState( const VState state )
 {
 	VObject::setState( state );
 
-	VCompositeListIterator itr( m_glyphs );
+	VPathListIterator itr( m_glyphs );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		itr.current()->setState( state );
@@ -489,7 +489,7 @@ VText::traceText()
 		// decompose to vpaths
 		FT_OutlineGlyph g;
 		FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
-		VComposite *composite = new VComposite( this );
+		VPath *composite = new VPath( this );
 		//VFill *fill = composite->fill();
 		//fill->setFillRule( VFill::evenOdd );
 		//composite->setFill( *fill );
@@ -504,7 +504,7 @@ VText::traceText()
 
 	 // Placing the stored glyphs.
 	float pathLength = 0;
-	VPathIterator pIt( m_basePath );
+	VSubpathIterator pIt( m_basePath );
 	VSegment* seg;
 	while ( ( seg = ++pIt ) )
 		pathLength += seg->length();
@@ -521,7 +521,7 @@ VText::traceText()
 	KoPoint point;
 	KoPoint normal;
 	KoPoint tangent;
-	VPathIterator pathIt( m_basePath );
+	VSubpathIterator pathIt( m_basePath );
 	VSegment* oldSeg = pathIt.current();
 	seg = ++pathIt;
 	KoPoint extPoint;
@@ -531,7 +531,7 @@ VText::traceText()
 	kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
 	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
-		VComposite* composite = m_glyphs.at( i );
+		VPath* composite = m_glyphs.at( i );
 
 		// Step 1: place (0, 0) to the rotation center of the glyph.
 		dx = *glyphXAdvance.at( i ) / 2;

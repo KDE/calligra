@@ -33,7 +33,7 @@ class VTransformNodes : public VVisitor
 public:
 	VTransformNodes( const QWMatrix& m );
 
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 private:
 	QWMatrix m_matrix;

@@ -144,7 +144,7 @@ VTransformCmd::unexecute()
 }
 
 void
-VTransformCmd::visitVComposite( VComposite& composite )
+VTransformCmd::visitVPath( VPath& composite )
 {
 	if( composite.state() == VObject::hidden ||
 		composite.state() == VObject::normal_locked ||
@@ -160,11 +160,11 @@ VTransformCmd::visitVComposite( VComposite& composite )
 
 	composite.transform( m_mat );
 
-	VVisitor::visitVComposite( composite );
+	VVisitor::visitVPath( composite );
 }
 
 void
-VTransformCmd::visitVPath( VPath& path )
+VTransformCmd::visitVSubpath( VSubpath& path )
 {
 	if( path.state() == VObject::hidden ||
 		path.state() == VObject::normal_locked ||
@@ -197,7 +197,7 @@ VTransformCmd::visitVText( VText& text )
 
 	visit( text.basePath() );
 
-	VCompositeListIterator itr( text.glyphs() );
+	VPathListIterator itr( text.glyphs() );
 
 	for( ; itr.current() ; ++itr )
 	{

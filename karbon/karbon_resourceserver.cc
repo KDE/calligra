@@ -367,7 +367,7 @@ KarbonResourceServer::loadClipart( const QString& filename )
 						if( e.tagName() == "TEXT" )
 							clipart = new VText( 0L );
 						else if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" )
-							clipart = new VComposite( 0L );
+							clipart = new VPath( 0L );
 						else if( e.tagName() == "GROUP" )
 							clipart = new VGroup( 0L );
 

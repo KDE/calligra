@@ -197,7 +197,7 @@ VStarTool::arrowKeyReleased( Qt::Key key )
 	}
 }
 
-VComposite*
+VPath*
 VStarTool::shape( bool interactive ) const
 {
 	if( interactive )

@@ -640,7 +640,7 @@ VTextTool::mouseDragRelease()
 		m_editedText = 0L;
 	}
 
-	VPath path( 0L );
+	VSubpath path( 0L );
 	path.moveTo( first() );
 	path.lineTo( last() );
 	m_text = 0L;
@@ -766,7 +766,7 @@ VTextTool::convertToShapes()
 }
 
 void
-VTextTool::visitVComposite( VComposite& composite )
+VTextTool::visitVPath( VPath& composite )
 {
 	if( composite.paths().count() == 0 )
 		return;
@@ -787,7 +787,7 @@ VTextTool::visitVComposite( VComposite& composite )
 }
 
 void
-VTextTool::visitVPath( VPath& path )
+VTextTool::visitVSubpath( VSubpath& path )
 {
 	m_text = 0L;
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
@@ -825,7 +825,7 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text 
 }
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
-							   const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+							   const QFont &newFont, const VSubpath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
 							   bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow )
 		: VCommand( doc, name, "14_text" ), m_text( text )
 {

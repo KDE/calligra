@@ -22,7 +22,7 @@
 
 #include "vcomposite.h"
 
-class VPolygon : public VComposite
+class VPolygon : public VPath
 {
 public:
 	VPolygon( VObject* parent, VState state = edit );

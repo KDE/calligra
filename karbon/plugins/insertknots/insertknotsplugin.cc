@@ -89,7 +89,7 @@ VInsertKnotsCmd::VInsertKnotsCmd( VDocument* doc, uint knots )
 }
 
 void
-VInsertKnotsCmd::visitVPath( VPath& path )
+VInsertKnotsCmd::visitVSubpath( VSubpath& path )
 {
 	path.first();
 

@@ -38,7 +38,7 @@ public:
 
 	virtual void visitVSelection( VSelection& );
 	virtual void visitVGroup( VGroup& );
-	virtual void visitVComposite( VComposite& );
+	virtual void visitVPath( VPath& );
 	virtual void visitVText( VText& );
 	virtual void visitVImage( VImage& );
 

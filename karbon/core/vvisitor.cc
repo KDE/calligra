@@ -71,9 +71,9 @@ VVisitor::visitVLayer( VLayer& layer )
 }
 
 void
-VVisitor::visitVComposite( VComposite& composite )
+VVisitor::visitVPath( VPath& composite )
 {
-	VPathListIterator itr( composite.paths() );
+	VSubpathListIterator itr( composite.paths() );
 
 	for( ; itr.current(); ++itr )
 	{
@@ -82,7 +82,7 @@ VVisitor::visitVComposite( VComposite& composite )
 }
 
 void
-VVisitor::visitVPath( VPath& /*path*/ )
+VVisitor::visitVSubpath( VSubpath& /*path*/ )
 {
 }
 

@@ -31,20 +31,20 @@
 #include <kdebug.h>
 
 
-class VPathIteratorList
+class VSubpathIteratorList
 {
 public:
-	VPathIteratorList()
+	VSubpathIteratorList()
 			: m_list( 0L ), m_iterator( 0L )
 	{}
 
-	~VPathIteratorList()
+	~VSubpathIteratorList()
 	{
 		notifyClear( true );
 		delete m_list;
 	}
 
-	void add( VPathIterator* itr )
+	void add( VSubpathIterator* itr )
 	{
 		if( !m_iterator )
 			m_iterator = itr;
@@ -52,12 +52,12 @@ public:
 			m_list->push_front( itr );
 		else
 		{
-			m_list = new QValueList<VPathIterator*>;
+			m_list = new QValueList<VSubpathIterator*>;
 			m_list->push_front( itr );
 		}
 	}
 
-	void remove( VPathIterator* itr )
+	void remove( VSubpathIterator* itr )
 	{
 		if( m_iterator == itr )
 			m_iterator = 0L;
@@ -86,7 +86,7 @@ public:
 		if( m_list )
 		{
 			for(
-				QValueList<VPathIterator*>::Iterator itr = m_list->begin();
+				QValueList<VSubpathIterator*>::Iterator itr = m_list->begin();
 				itr != m_list->end();
 				++itr )
 			{
@@ -109,7 +109,7 @@ public:
 		if( m_list )
 		{
 			for(
-				QValueList<VPathIterator*>::Iterator itr = m_list->begin();
+				QValueList<VSubpathIterator*>::Iterator itr = m_list->begin();
 				itr != m_list->end();
 				++itr )
 			{
@@ -120,12 +120,12 @@ public:
 	}
 
 private:
-	QValueList<VPathIterator*>* m_list;
-	VPathIterator* m_iterator;
+	QValueList<VSubpathIterator*>* m_list;
+	VSubpathIterator* m_iterator;
 };
 
 
-VPath::VPath( VObject* parent )
+VSubpath::VSubpath( VObject* parent )
 		: VObject( parent )
 {
 	m_isClosed = false;
@@ -139,7 +139,7 @@ VPath::VPath( VObject* parent )
 	append( new VSegment( 1 ) );
 }
 
-VPath::VPath( const VPath& list )
+VSubpath::VSubpath( const VSubpath& list )
 		: VObject( list )
 {
 	m_isClosed = list.isClosed();
@@ -158,7 +158,7 @@ VPath::VPath( const VPath& list )
 	}
 }
 
-VPath::VPath( const VSegment& segment )
+VSubpath::VSubpath( const VSegment& segment )
 		: VObject( 0L )
 {
 	m_isClosed = false;
@@ -182,20 +182,20 @@ VPath::VPath( const VSegment& segment )
 	append( segment.clone() );
 }
 
-VPath::~VPath()
+VSubpath::~VSubpath()
 {
 	clear();
 	delete m_iteratorList;
 }
 
 const KoPoint&
-VPath::currentPoint() const
+VSubpath::currentPoint() const
 {
 	return getLast()->knot();
 }
 
 bool
-VPath::moveTo( const KoPoint& p )
+VSubpath::moveTo( const KoPoint& p )
 {
 	// Move "begin" segment if path is still empty.
 	if( isEmpty() )
@@ -208,7 +208,7 @@ VPath::moveTo( const KoPoint& p )
 }
 
 bool
-VPath::lineTo( const KoPoint& p )
+VSubpath::lineTo( const KoPoint& p )
 {
 	if( isClosed() )
 		return false;
@@ -224,7 +224,7 @@ VPath::lineTo( const KoPoint& p )
 }
 
 bool
-VPath::curveTo(
+VSubpath::curveTo(
 	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	if( isClosed() )
@@ -244,7 +244,7 @@ VPath::curveTo(
 }
 
 bool
-VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
+VSubpath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 {
 	if( isClosed() )
 		return false;
@@ -263,7 +263,7 @@ VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 }
 
 bool
-VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
+VSubpath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 {
 	if( isClosed() )
 		return false;
@@ -282,7 +282,7 @@ VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 }
 
 bool
-VPath::arcTo(
+VSubpath::arcTo(
 	const KoPoint& p1, const KoPoint& p2, const double r )
 {
 	/* This routine is inspired by code in GNU ghostscript.
@@ -380,7 +380,7 @@ VPath::arcTo(
 }
 
 void
-VPath::close()
+VSubpath::close()
 {
 	// In the case the list is 100% empty (which should actually never happen),
 	// append a "begin" first, to avoid a crash.
@@ -413,7 +413,7 @@ VPath::close()
 }
 
 bool
-VPath::pointIsInside( const KoPoint& p ) const
+VSubpath::pointIsInside( const KoPoint& p ) const
 {
 	// If the path is not closed, a point cannot be inside. If the point is
 	// not inside the boundingbox, it cannot be inside the path either.
@@ -484,7 +484,7 @@ VPath::pointIsInside( const KoPoint& p ) const
 }
 
 bool
-VPath::intersects( const VSegment& s ) const
+VSubpath::intersects( const VSegment& s ) const
 {
 	// Check if path is empty and if boundingboxes intersect.
 	if(
@@ -512,7 +512,7 @@ VPath::intersects( const VSegment& s ) const
 }
 
 bool
-VPath::counterClockwise() const
+VSubpath::counterClockwise() const
 {
 	/* This algorithm is taken from the FAQ of comp.graphics.algorithms:
 	 * "Find the lowest vertex (or, if there is more than one vertex with the
@@ -572,14 +572,14 @@ VPath::counterClockwise() const
 }
 
 void
-VPath::revert()
+VSubpath::revert()
 {
 	// Catch case where the list is "empty".
 	if( isEmpty() )
 		return;
 
 
-	VPath list( parent() );
+	VSubpath list( parent() );
 	list.moveTo( getLast()->knot() );
 
 	VSegment* segment = getLast();
@@ -596,7 +596,7 @@ VPath::revert()
 }
 
 const KoRect&
-VPath::boundingBox() const
+VSubpath::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
@@ -619,14 +619,14 @@ VPath::boundingBox() const
 	return m_boundingBox;
 }
 
-VPath*
-VPath::clone() const
+VSubpath*
+VSubpath::clone() const
 {
-	return new VPath( *this );
+	return new VSubpath( *this );
 }
 
 void
-VPath::saveSvgPath( QString &d ) const
+VSubpath::saveSvgPath( QString &d ) const
 {
 	// Save segments.
 	VSegment* segment = getFirst();
@@ -671,7 +671,7 @@ VPath::saveSvgPath( QString &d ) const
 
 // TODO: remove this backward compatibility function after koffice 1.3.x
 void
-VPath::load( const QDomElement& element )
+VSubpath::load( const QDomElement& element )
 {
 	// We might have a "begin" segment.
 	clear();
@@ -695,14 +695,14 @@ VPath::load( const QDomElement& element )
 }
 
 void
-VPath::accept( VVisitor& visitor )
+VSubpath::accept( VVisitor& visitor )
 {
-	visitor.visitVPath( *this );
+	visitor.visitVSubpath( *this );
 }
 
 
-VPath&
-VPath::operator=( const VPath& list )
+VSubpath&
+VSubpath::operator=( const VSubpath& list )
 {
 	if( this == &list )
 		return *this;
@@ -726,7 +726,7 @@ VPath::operator=( const VPath& list )
 }
 
 bool
-VPath::insert( const VSegment* segment )
+VSubpath::insert( const VSegment* segment )
 {
 	if( m_currentIndex == -1 )
 		return false;
@@ -749,7 +749,7 @@ VPath::insert( const VSegment* segment )
 }
 
 bool
-VPath::insert( uint index, const VSegment* segment )
+VSubpath::insert( uint index, const VSegment* segment )
 {
 	VSegment* s = const_cast<VSegment*>( segment );
 
@@ -785,7 +785,7 @@ VPath::insert( uint index, const VSegment* segment )
 }
 
 void
-VPath::prepend( const VSegment* segment )
+VSubpath::prepend( const VSegment* segment )
 {
 	VSegment* s = const_cast<VSegment*>( segment );
 
@@ -805,7 +805,7 @@ VPath::prepend( const VSegment* segment )
 }
 
 void
-VPath::append( const VSegment* segment )
+VSubpath::append( const VSegment* segment )
 {
 	VSegment* s = const_cast<VSegment*>( segment );
 
@@ -825,7 +825,7 @@ VPath::append( const VSegment* segment )
 }
 
 void
-VPath::clear()
+VSubpath::clear()
 {
 	VSegment* segment = m_first;
 
@@ -851,7 +851,7 @@ VPath::clear()
 }
 
 VSegment*
-VPath::first()
+VSubpath::first()
 {
 	if( m_first )
 	{
@@ -863,7 +863,7 @@ VPath::first()
 }
 
 VSegment*
-VPath::last()
+VSubpath::last()
 {
 	if( m_last )
 	{
@@ -875,7 +875,7 @@ VPath::last()
 }
 
 VSegment*
-VPath::prev()
+VSubpath::prev()
 {
 	if( m_current )
 	{
@@ -893,7 +893,7 @@ VPath::prev()
 }
 
 VSegment*
-VPath::next()
+VSubpath::next()
 {
 	if( m_current )
 	{
@@ -911,7 +911,7 @@ VPath::next()
 }
 
 VSegment*
-VPath::locate( uint index )
+VSubpath::locate( uint index )
 {
 	if( index == static_cast<uint>( m_currentIndex ) )
 		return m_current;
@@ -970,18 +970,18 @@ VPath::locate( uint index )
 }
 
 
-VPathIterator::VPathIterator( const VPath& list )
+VSubpathIterator::VSubpathIterator( const VSubpath& list )
 {
-	m_list = const_cast<VPath*>( &list );
+	m_list = const_cast<VSubpath*>( &list );
 	m_current = m_list->m_first;
 
 	if( !m_list->m_iteratorList )
-		m_list->m_iteratorList = new VPathIteratorList();
+		m_list->m_iteratorList = new VSubpathIteratorList();
 
 	m_list->m_iteratorList->add( this );
 }
 
-VPathIterator::VPathIterator( const VPathIterator& itr )
+VSubpathIterator::VSubpathIterator( const VSubpathIterator& itr )
 {
 	m_list = itr.m_list;
 	m_current = itr.m_current;
@@ -990,14 +990,14 @@ VPathIterator::VPathIterator( const VPathIterator& itr )
 		m_list->m_iteratorList->add( this );
 }
 
-VPathIterator::~VPathIterator()
+VSubpathIterator::~VSubpathIterator()
 {
 	if( m_list )
 		m_list->m_iteratorList->remove( this );
 }
 
-VPathIterator&
-VPathIterator::operator=( const VPathIterator& itr )
+VSubpathIterator&
+VSubpathIterator::operator=( const VSubpathIterator& itr )
 {
 	if( m_list )
 		m_list->m_iteratorList->remove( this );
@@ -1012,7 +1012,7 @@ VPathIterator::operator=( const VPathIterator& itr )
 }
 
 VSegment*
-VPathIterator::current() const
+VSubpathIterator::current() const
 {
 	// If m_current points to a deleted segment, find the next not
 	// deleted segment.
@@ -1027,7 +1027,7 @@ VPathIterator::current() const
 }
 
 VSegment*
-VPathIterator::operator()()
+VSubpathIterator::operator()()
 {
 	if( VSegment* const old = current() )
 	{
@@ -1039,7 +1039,7 @@ VPathIterator::operator()()
 }
 
 VSegment*
-VPathIterator::operator++()
+VSubpathIterator::operator++()
 {
 	if( current() )
 		return m_current = current()->next();
@@ -1048,7 +1048,7 @@ VPathIterator::operator++()
 }
 
 VSegment*
-VPathIterator::operator+=( uint i )
+VSubpathIterator::operator+=( uint i )
 {
 	while( current() && i-- )
 		m_current = current()->next();
@@ -1057,7 +1057,7 @@ VPathIterator::operator+=( uint i )
 }
 
 VSegment*
-VPathIterator::operator--()
+VSubpathIterator::operator--()
 {
 	if( current() )
 		return m_current = current()->prev();
@@ -1066,7 +1066,7 @@ VPathIterator::operator--()
 }
 
 VSegment*
-VPathIterator::operator-=( uint i )
+VSubpathIterator::operator-=( uint i )
 {
 	while( current() && i-- )
 		m_current = current()->prev();

@@ -151,7 +151,7 @@ VEllipseTool::refreshUnit()
     m_optionsWidget->refreshUnit();
 }
 
-VComposite*
+VPath*
 VEllipseTool::shape( bool interactive ) const
 {
 	if( interactive )

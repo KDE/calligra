@@ -31,14 +31,14 @@
 #include <vdocument.h>
 
 VStar::VStar( VObject* parent, VState state )
-	: VComposite( parent, state )
+	: VPath( parent, state )
 {
 }
 
 VStar::VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
 		uint edges, double angle, uint innerAngle, double roundness, VStarType type )
-	: VComposite( parent ), m_center( center), m_outerRadius( outerRadius ), m_innerRadius( innerRadius), m_edges( edges ), m_angle( angle ), m_innerAngle( innerAngle ), m_roundness( roundness ), m_type( type )
+	: VPath( parent ), m_center( center), m_outerRadius( outerRadius ), m_innerRadius( innerRadius), m_edges( edges ), m_angle( angle ), m_innerAngle( innerAngle ), m_roundness( roundness ), m_type( type )
 {
 	init();
 }
@@ -272,7 +272,7 @@ VStar::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
 	{
-		VComposite::save( element );
+		VPath::save( element );
 		return;
 	}
 

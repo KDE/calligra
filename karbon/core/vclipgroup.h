@@ -55,7 +55,7 @@ public:
 	virtual ~PathRenderer();
 
 protected:
-	virtual void visitVPath( VPath& path );
+	virtual void visitVSubpath( VSubpath& path );
 
 private:
 	VPainter *m_painter;

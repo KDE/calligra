@@ -118,7 +118,7 @@ VPolygonTool::arrowKeyReleased( Qt::Key key )
 	}
 }
 
-VComposite*
+VPath*
 VPolygonTool::shape( bool interactive ) const
 {
 	if( interactive )

@@ -147,17 +147,17 @@ VWhirlPinchCmd::unexecute()
 }
 
 void
-VWhirlPinchCmd::visitVComposite( VComposite& composite )
+VWhirlPinchCmd::visitVPath( VPath& composite )
 {
 	// first subdivide:
 //	VInsertKnots insertKnots( 2 );
 //	insertKnots.visit( composite );
 
-	VVisitor::visitVComposite( composite );
+	VVisitor::visitVPath( composite );
 }
 
 void
-VWhirlPinchCmd::visitVPath( VPath& path )
+VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 {
 	QWMatrix m;
 	KoPoint delta;

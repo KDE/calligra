@@ -63,8 +63,8 @@ private:
 	KDoubleNumInput* m_radius;
 };
 
-class VComposite;
 class VPath;
+class VSubpath;
 class VSelection;
 
 class VWhirlPinchCmd : public VCommand
@@ -77,8 +77,8 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-	virtual void visitVComposite( VComposite& composite );
-	virtual void visitVPath( VPath& path );
+	virtual void visitVPath( VPath& composite );
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	VSelection* m_selection;

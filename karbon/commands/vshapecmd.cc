@@ -25,7 +25,7 @@
 #include "vshapecmd.h"
 
 
-VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VComposite* shape, const QString& icon )
+VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VPath* shape, const QString& icon )
 	: VCommand( doc, name, icon ), m_shape( shape )
 {
 }
