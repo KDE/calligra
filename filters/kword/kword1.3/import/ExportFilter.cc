@@ -1162,7 +1162,7 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, 
 
     // If we are here, it can be:
     // - the table is either empty or there is not any row without horizontally spanned cells
-    // - we have needed the last row for a something usable
+    // - we have needed the last row for getting something usable
 
     return uniqueColumns ? currentColumn : 0;
 }
