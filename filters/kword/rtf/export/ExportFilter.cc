@@ -383,7 +383,7 @@ if (layout.counter.style)
         {
                 markup += "\\fs";
                 markup += QString::number((2 * layout.formatData.text.fontSize));
-                markup += lookupFont(layout.formatData.text.fontName);
+                markup += lookupFont("\\f",layout.formatData.text.fontName);
         }
         markup += " ";
         markup += layout.counter.text;
@@ -518,9 +518,9 @@ if (layout.counter.style)
         markup += QString::number((2 * layout.formatData.text.fontSize));
         }
 
-        if( layout.formatData.text.fontName != "" )
+        if( !layout.formatData.text.fontName.isEmpty() )
         {
-            markup += lookupFont(layout.formatData.text.fontName).insert( 1, "pn" );
+            markup += lookupFont("\\pnf", layout.formatData.text.fontName);
         }
         
         markup += "}";
@@ -1232,7 +1232,7 @@ bool RTFWorker::doFullDefineStyle(LayoutData& layout)
     m_styleList << layout;
 
     // Now we must register a few things (with help of the lookup methods.)
-    lookupFont(layout.formatData.text.fontName);
+    lookupFont("\\f", layout.formatData.text.fontName);
     lookupColor(QString::null, layout.formatData.text.fgColor);
     lookupColor(QString::null, layout.formatData.text.bgColor);
 
@@ -1290,7 +1290,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     if (!fontName.isEmpty()
         && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
-        strElement+=lookupFont(fontName);
+        strElement+=lookupFont("\\f", fontName);
     }
 
     if (force || (formatOrigin.fontSize!=formatData.fontSize))
@@ -1571,7 +1571,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
 }
 
 
-QString RTFWorker::lookupFont(const QString& fontName)
+QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
 {
     if (fontName.isEmpty())
         return QString::null;
@@ -1587,7 +1587,7 @@ QString RTFWorker::lookupFont(const QString& fontName)
     kdDebug(30515) << "RTFWorker::lookupFont " << fontName << " cooked: " << cookedFontName << endl;
 
     uint counter=0;  // counts position in font table (starts at 0)
-    QString strFont("\\f"); // markup for font selection
+    QString strFont(markup); // markup for font selection
     QStringList::ConstIterator it;
 
     // search font table for this font

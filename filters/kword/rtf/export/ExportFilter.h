@@ -78,7 +78,7 @@ private:
         const TextFormatting& formatData, const bool force);
     QString layoutToRtf(const LayoutData& layoutOrigin,
         const LayoutData& layout, const bool force);
-    QString lookupFont(const QString& fontName);
+    QString lookupFont(const QString& markup, const QString& fontName);
     QString lookupColor(const QString& markup, const QColor& color);
     QString lookupStyle(const QString& styleName, LayoutData& returnLayout);
     QString writeRow(const QString& textCellHeader, const QString& rowText, const FrameData& frame);
