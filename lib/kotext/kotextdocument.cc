@@ -394,8 +394,8 @@ void KoTextCustomItem::draw(QPainter* p, int x, int y, int cx, int cy, int cw, i
     x=zh->layoutUnitToPixelX(x);
     y=zh->layoutUnitToPixelY(y);
     cx=zh->layoutUnitToPixelX(cx);
-    cy=zh->layoutUnitToPixelY(cy);
-    ch=zh->layoutUnitToPixelY(ch);
+    cy=zh->layoutUnitToPixelY(y,cy);
+    ch=zh->layoutUnitToPixelY(y,ch);
     cw=zh->layoutUnitToPixelX(cw);
     kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
