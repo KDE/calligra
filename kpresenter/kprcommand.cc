@@ -1758,3 +1758,32 @@ void KPrDeletePageCmd::unexecute()
     doc->insertPage( m_page, position);
     doc->AddRemovePage();
 }
+
+KPrInsertPageCmd::KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *_page, KPresenterDoc *_doc ) :
+    KCommand(_name),
+    doc(_doc),
+    m_page(_page),
+    position(_pos)
+{
+    kdDebug()<<"page :"<<m_page<<endl;
+}
+
+KPrInsertPageCmd::~KPrInsertPageCmd()
+{
+    //todo
+    m_page->deletePage();
+}
+
+void KPrInsertPageCmd::execute()
+{
+    doc->deSelectAllObj();
+    doc->insertPage( m_page, position);
+    doc->AddRemovePage();
+}
+
+void KPrInsertPageCmd::unexecute()
+{
+    doc->deSelectAllObj();
+    doc->takePage(m_page);
+    doc->AddRemovePage();
+}

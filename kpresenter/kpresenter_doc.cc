@@ -1547,11 +1547,8 @@ void KPresenterDoc::AddRemovePage()
     emit sig_updateMenuBar();
 }
 
-/*================================================================*/
-int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
+QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theFile )
 {
-    kdDebug(33001) << "KPresenterDoc::insertPage " << _page << endl;
-
     QString _template, fileName;
     if ( !chooseTemplate ) {
 	_template = QString::fromLocal8Bit( getenv( "HOME" ) );
@@ -1563,12 +1560,56 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 	if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 					   "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
 					   "kpresenter_template") == KoTemplateChooseDia::Cancel )
-	    return -1;
+	    return QString("");
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
 	QString cmd = "cp " + fileName + " " + QString::fromLocal8Bit( getenv( "HOME" ) ) + "/.default.kpr";
 	system( QFile::encodeName(cmd) );
     }
+    return fileName;
+}
+
+int KPresenterDoc::insertNewPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
+{
+    kdDebug(33001) << "KPresenterDoc::insertNewPage " << _page << endl;
+
+    QString fileName=templateFileName(chooseTemplate, theFile );
+    if(fileName.isEmpty())
+        return -1;
+
+    _clean = false;
+
+    if ( _insPos == IP_AFTER )
+	_page++;
+
+    objStartY=-1;
+
+    //insert page.
+    KPrPage *newpage=new KPrPage(this);
+
+    m_pageWhereLoadObject=newpage;
+
+    loadNativeFormat( fileName );
+
+    objStartY = 0;
+
+    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Insert new page") ,_page, newpage, this );
+    cmd->execute();
+    addCommand(cmd);
+
+    _clean = true;
+    m_pageWhereLoadObject=0L;
+    return _page;
+}
+
+/*================================================================*/
+int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
+{
+    kdDebug(33001) << "KPresenterDoc::insertPage " << _page << endl;
+
+    QString fileName=templateFileName(chooseTemplate, theFile );
+    if(fileName.isEmpty())
+        return -1;
 
     _clean = false;
 
