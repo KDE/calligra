@@ -39,10 +39,12 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
     kapp->restoreOverrideCursor();
 
     QStringList encodings(KGlobal::charsets()->descriptiveEncodingNames());
+    
     // Add a few non-standard encodings
-    encodings << "Apple Roman"; // Apple 
-    encodings << "IBM 850" << "IBM 866"; // MS DOS
-    encodings << "CP 1258"; // Windows
+    const QString description(i18n("Descriptive encoding name","Other ( %1 )"));
+    encodings << description.arg("Apple Roman"); // Apple 
+    encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
+    encodings << description.arg("CP 1258"); // Windows
 
     m_dialog->comboBoxEncoding->insertStringList(encodings);
 
@@ -75,7 +77,7 @@ QTextCodec* AsciiImportDialog::getCodec(void) const
     }
     else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
     {
-        QString strCodec=m_dialog->comboBoxEncoding->currentText();
+        QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
         kdDebug(30503) << "Encoding: " << strCodec << endl;
         if (strCodec.isEmpty())
         {
