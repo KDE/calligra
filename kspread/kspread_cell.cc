@@ -1758,6 +1758,7 @@ bool KSpreadCell::calc(bool delay)
         {
             cell = d->Table()->cellAt( c, r );
             cell->clearAllErrors();
+            cell->setFlag( Flag_CalcDirty );
             cell->calc();
         }
       }
