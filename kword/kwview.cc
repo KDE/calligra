@@ -2388,8 +2388,10 @@ void KWView::borderSet()
     }
     if ( actionToolsEditFrames->isChecked() )
     {
-        if ( actionBorderLeft->isChecked() && actionBorderRight->isChecked()
+        if ( (actionBorderLeft->isChecked() && actionBorderRight->isChecked()
             && actionBorderBottom->isChecked() && actionBorderTop->isChecked())
+            || (!actionBorderLeft->isChecked() && !actionBorderRight->isChecked()
+            && !actionBorderBottom->isChecked() && !actionBorderTop->isChecked()))
         {
             gui->canvasWidget()->setOutlineFrameBorder( m_border.common, actionBorderLeft->isChecked() );
         }
