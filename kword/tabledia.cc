@@ -264,10 +264,17 @@ bool KWTableDia::insertTable()
 
 void KWTableDia::slotOk()
 {
-   if (insertTable())
-   {
-      KDialogBase::slotOk();
-   }
+    if (insertTable())
+    {
+        KDialogBase::slotOk();
+    }
+}
+
+/*================================================================*/
+void KWTableDia::slotCancel()
+{
+    canvas->setMouseMode( MM_EDIT );
+    KDialogBase::slotCancel();
 }
 
 /*================================================================*/
