@@ -265,9 +265,10 @@ public:
     void apply( RowLayout *_row );
     void applyLayout( KSpreadLayout *_obj );
 
-    int getSizeHeight();
-    int getSizeWidth();
+    double getSizeHeight();
+    double getSizeWidth();
     bool getMergedCellState();
+
 public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
@@ -275,6 +276,7 @@ public slots:
     void slotStateChanged(int);
     void slotChangeVerticalState();
     void slotChangeMultiState();
+
 protected:
     QRadioButton *bottom;
     QRadioButton *top;
@@ -285,8 +287,8 @@ protected:
     QRadioButton *standard;
     QCheckBox *multi;
     QCheckBox *vertical;
-    KIntNumInput *width;
-    KIntNumInput *height;
+    KDoubleNumInput *width;
+    KDoubleNumInput *height;
     CellLayoutDlg *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
@@ -555,8 +557,8 @@ public:
     bool bVerticalText;
     bool bDontprintText;
 
-    int heigthSize;
-    int widthSize;
+    double heigthSize;
+    double widthSize;
 
     int indent;
 

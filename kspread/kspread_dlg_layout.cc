@@ -284,15 +284,15 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
 
     RowLayout *rl;
     ColumnLayout *cl;
-    widthSize = 0;
-    heigthSize = 0;
+    widthSize = 0.0;
+    heigthSize = 0.0;
 
     if( !isRowSelected )
     {
       for ( int x = _left; x <= _right; x++ )
       {
         cl = m_pView->activeTable()->columnLayout( x );
-        widthSize = QMAX( cl->width( /* m_pView->canvasWidget() */ ), widthSize );
+        widthSize = QMAX( cl->dblWidth(), widthSize );
       }
     }
 
@@ -301,7 +301,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
       for ( int y = _top; y <= _bottom; y++ )
       {
         rl = m_pView->activeTable()->rowLayout(y);
-        heigthSize = QMAX( rl->height(), heigthSize );
+        heigthSize = QMAX( rl->dblHeight(), heigthSize );
       }
     }
 
@@ -703,21 +703,19 @@ void CellLayoutDlg::slotApply()
         }
 
         QString title=i18n("Change layout");
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect,title );
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect, title );
 //        table->doc()->undoBuffer()->appendUndo( undo );
         macroUndo->addCommand(undo);
 
 	if( miscPage->getStyle()!=eStyle)
         {
 	    //make undo for style of cell
-	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect);
+	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect );
 	    //table->doc()->undoBuffer()->appendUndo( undo3 );
-            macroUndo->addCommand(undo3);
+            macroUndo->addCommand( undo3 );
         }
     }
     borderPage->applyOutline();
-
-
 
     if( ( !isRowSelected ) && ( !isColumnSelected ) )
     {
@@ -725,7 +723,7 @@ void CellLayoutDlg::slotApply()
             for ( int y = top; y <= bottom; y++ )
             {
                 KSpreadCell *obj = table->nonDefaultCell( x, y );
-                if(!obj->isObscuringForced())
+                if( !obj->isObscuringForced() )
                 {
                     floatPage->apply( obj );
                     miscPage->apply( obj );
@@ -735,29 +733,29 @@ void CellLayoutDlg::slotApply()
                 }
             }
 
-
-        if(positionPage->getSizeHeight()!=heigthSize
-           || positionPage->getSizeWidth()!=widthSize)
+        // Check for a change in the height and width of the cells
+        if( int( positionPage->getSizeHeight() ) != int( heigthSize )
+            || int( positionPage->getSizeWidth() ) != int( widthSize ) )
         {
-            if ( !table->doc()->undoBuffer()->isLocked())
+            if ( !table->doc()->undoBuffer()->isLocked() )
             {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
-                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(), table , rect );
                 //table->doc()->undoBuffer()->appendUndo( undo2 );
-                macroUndo->addCommand(undo2);
+                macroUndo->addCommand( undo2 );
             }
         }
-        if(positionPage->getSizeHeight()!=heigthSize)
+        if( int( positionPage->getSizeHeight() ) != int( heigthSize ) )
         {
             for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-                m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
+                m_pView->vBorderWidget()->resizeRow( positionPage->getSizeHeight(), x, false );
 
         }
-        if(positionPage->getSizeWidth()!=widthSize) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+        if( int( positionPage->getSizeWidth() ) != int( widthSize ) ) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
         {
             for ( int x = left; x <= right; x++ )
-                m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
+                m_pView->hBorderWidget()->resizeColumn( positionPage->getSizeWidth(), x, false );
         }
 
     }
@@ -772,7 +770,7 @@ void CellLayoutDlg::slotApply()
             patternPage->apply(rw);
         }
         miscPage->applyRow( );
-        if(positionPage->getSizeHeight()!=heigthSize)
+        if( int( positionPage->getSizeHeight() ) != int( heigthSize ) )
         {
             if ( !table->doc()->undoBuffer()->isLocked())
             {
@@ -798,7 +796,7 @@ void CellLayoutDlg::slotApply()
         }
         miscPage->applyColumn( );
 
-        if( positionPage->getSizeWidth()!=widthSize)
+        if( int( positionPage->getSizeWidth() ) != int( widthSize ) )
         {
             if ( !table->doc()->undoBuffer()->isLocked())
             {
@@ -2358,10 +2356,15 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     tmpLabel->setText(i18n("Width:"));
     grid2->addWidget(tmpLabel,0,0);
 
-    width=new KIntNumInput((int)KoUnit::ptToUnit( dlg->widthSize, dlg->getTable()->doc()->getUnit() ), grp, 10);
+    width = new KDoubleNumInput( grp );
+    width->setRange( 2.0, 400.0, 1.0 );
+    width->setPrecision ( 2 );
+    width->setValue ( KoUnit::ptToUnit( dlg->widthSize, dlg->getTable()->doc()->getUnit() ) );
+    //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
+    dlg->widthSize = KoUnit::ptFromUnit( width->value(), dlg->getTable()->doc()->getUnit() ); 
+
     if( dlg->isRowSelected )
         width->setEnabled(false);
-    width->setRange(2, 400, 1);
 
     grid2->addWidget(width,0,1);
     defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::ptToUnit( 60, dlg->getTable()->doc()->getUnit())).arg(dlg->getTable()->doc()->getUnitName()),grp);
@@ -2374,11 +2377,16 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     tmpLabel->setText(i18n("Height:"));
     grid2->addWidget(tmpLabel,0,2);
 
-    height=new KIntNumInput((int)KoUnit::ptToUnit( dlg->heigthSize, dlg->getTable()->doc()->getUnit() ), grp, 10);
+    height=new KDoubleNumInput( grp );
+    height->setRange( 2.0, 400.0, 1.0 );
+    height->setPrecision( 2 );
+    height->setValue( KoUnit::ptToUnit( dlg->heigthSize, dlg->getTable()->doc()->getUnit() ) );
+    //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
+    dlg->heigthSize = KoUnit::ptFromUnit( height->value(), dlg->getTable()->doc()->getUnit() ); 
+    
     if( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    height->setRange(2, 400, 1);
     grid2->addWidget(height,0,3);
 
     defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::ptToUnit(  20 , dlg->getTable()->doc()->getUnit())).arg(dlg->getTable()->doc()->getUnitName()),grp);
@@ -2604,20 +2612,20 @@ void CellLayoutPagePosition::applyLayout( KSpreadLayout *_obj )
         _obj->setIndent(indent->value());
 }
 
-int CellLayoutPagePosition::getSizeHeight()
+double CellLayoutPagePosition::getSizeHeight()
 {
-  if(defaultHeight->isChecked())
-        return 20;
+  if( defaultHeight->isChecked() )
+      return 20.0;
   else
-      return (int)KoUnit::ptFromUnit( height->value(), dlg->getTable()->doc()->getUnit() );
+      return KoUnit::ptFromUnit( height->value(), dlg->getTable()->doc()->getUnit() );
 }
 
-int CellLayoutPagePosition::getSizeWidth()
+double CellLayoutPagePosition::getSizeWidth()
 {
-  if(defaultWidth->isChecked())
-        return 60;
+  if( defaultWidth->isChecked() )
+        return 60.0;
   else
-        return (int)KoUnit::ptFromUnit( width->value(), dlg->getTable()->doc()->getUnit() );
+        return KoUnit::ptFromUnit( width->value(), dlg->getTable()->doc()->getUnit() );
 }
 
 KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)
