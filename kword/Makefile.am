@@ -7,7 +7,7 @@ LDADD = ../lib/kofficeui/libkofficeui.la -lkspell $(LIBQIMGIO) $(LIB_KIMGIO)
 
 bin_PROGRAMS = kword
 
-kword_SOURCES = kword_doc.cc char.cc kword_main.cc kword_view.cc kword.cc kword_shell.cc \
+kword_SOURCES = kword.cc kword_doc.cc char.cc kword_main.cc kword_view.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
 		formats.cc frame.cc framedia.cc stylist.cc kcharselectdia.cc \
