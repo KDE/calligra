@@ -52,6 +52,7 @@ ContextStyle::ContextStyle()
     lineWidth = 1;
     linearMovement = false;
     centerSymbol = false;
+    m_syntaxHighlighting = true;
 }
 
 void ContextStyle::init( KConfig* config )

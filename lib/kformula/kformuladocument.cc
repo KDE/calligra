@@ -200,6 +200,7 @@ Document::Document( KConfig* config,
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
     //kdDebug( DEBUGID ) << "Document::Document" << endl;
+    // DF: the contextStyle hasn't been init()ed yet, isn't this call too early ?
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
     if (his == 0) {
