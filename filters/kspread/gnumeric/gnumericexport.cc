@@ -307,7 +307,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* This could be Made into a function */
 
-  gnumeric_doc.appendChild( gnumeric_doc.createProcessingInstruction( "xml", "version=\"1.0\"" ) );
+  gnumeric_doc.appendChild( gnumeric_doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
   QDomElement workbook = gnumeric_doc.createElement("gmr:Workbook");
   workbook.setAttribute("xmlns:gmr","http://www.gnome.org/gnumeric/v5");
@@ -588,10 +588,10 @@ Hidden="0"/>
     emit sigProgress(100);
 
     // Ok, now write to export file
-    QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?
+    const QCString cstr(str.utf8());
 
     gzFile gzfile;
-    gzfile = gzopen( QFile::encodeName(m_chain->inputFile()), "wb");
+    gzfile = gzopen( QFile::encodeName(m_chain->outputFile()), "wb");
 
     if (gzfile==NULL)
       {
