@@ -171,7 +171,7 @@ QVariant KexiComboBoxTableEdit::value(bool &ok)
 	return m_origValue; //unchanged
 }
 
-bool KexiComboBoxTableEdit::cursorAtStart()
+/*bool KexiComboBoxTableEdit::cursorAtStart()
 {
 	//TODO?
 	return false;
@@ -181,7 +181,7 @@ bool KexiComboBoxTableEdit::cursorAtEnd()
 {
 	//TODO?
 	return false;
-}
+}*/
 
 void KexiComboBoxTableEdit::clear()
 {

@@ -48,8 +48,8 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual QVariant value(bool &ok);
 
 		virtual void clear();
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
+//		virtual bool cursorAtStart();
+//		virtual bool cursorAtEnd();
 
 		virtual bool valueChanged();
 		virtual bool valueIsNull();

@@ -320,6 +320,11 @@ TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 CC_MAIL: dkite@shaw.ca
 
+2004-03-12
+Table View:
+	-Combo box editor: cursorAtEnd() and cursorAtStart() are just used from KexiInputTableEdit
+Some debug disabled.
+
 2004-03-11
 Main Window
 	-fix: object's name and caption entered by user is used to create this object

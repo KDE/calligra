@@ -178,8 +178,8 @@ void KexiProperty::init(QVariant value)
 	m_children_dict = 0;
 	m_children_list = 0;
 	m_parent = 0;
-	if (!m_desc.isEmpty())
-		kdDebug() << "KexiProperty::KexiProperty(): labeled property (" << m_desc << ")" << endl;
+//	if (!m_desc.isEmpty())
+//		kdDebug() << "KexiProperty::KexiProperty(): labeled property (" << m_desc << ")" << endl;
 
 
 	//automatically add children if necessary

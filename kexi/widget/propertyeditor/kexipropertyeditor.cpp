@@ -107,7 +107,7 @@ KexiPropertyEditor::slotCollapsed(QListViewItem *item)
 void
 KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geometry)
 {
-	kdDebug() << "KexiPropertyEditor::createEditor: Create editor for type " << i->type() << endl;
+//	kdDebug() << "KexiPropertyEditor::createEditor: Create editor for type " << i->type() << endl;
 	int y = viewportToContents(QPoint(0, itemRect(i).y())).y();
 	QRect geometry(columnWidth(0), y, columnWidth(1), i->height());
 
@@ -280,7 +280,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 void
 KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 {
-	kdDebug() << "KexiPropertyEditor::slotEditorAccept" << endl;
+//	kdDebug() << "KexiPropertyEditor::slotEditorAccept" << endl;
 
 	if(m_currentEditor)
 	{

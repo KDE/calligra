@@ -3153,8 +3153,8 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 		else if (d->pEditor && (o==d->pEditor || o==d->pEditor->view())) {
 			if (   (k==Key_Tab && (k==NoButton || k==ShiftButton))
 				|| (k==Key_Enter || k==Key_Return || k==Key_Up || k==Key_Down) 
-				|| (d->pEditor->cursorAtStart() && k==Key_Left)
-				|| (d->pEditor->cursorAtEnd() && k==Key_Right)
+				|| (k==Key_Left && d->pEditor->cursorAtStart())
+				|| (k==Key_Right && d->pEditor->cursorAtEnd())
 			   ) {
 				keyPressEvent(ke);
 				if (ke->isAccepted())
