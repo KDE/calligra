@@ -65,9 +65,7 @@ class QFont;
 class QStringList;
 class QRect;
 
-#ifdef HAVE_LIBASPELL
 class KOSpellConfig;
-#endif
 
 namespace KFormula {
     class Document;
@@ -598,13 +596,9 @@ public:
     /**
      * get custom kspell config
      */
-    void setKSpellConfig(KSpellConfig _kspell);
-    KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
-#ifdef HAVE_LIBASPELL
     void setKOSpellConfig(KOSpellConfig _kspell);
     KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
-#endif
 
 #ifndef NDEBUG
     void printStyleDebug();
@@ -1002,10 +996,7 @@ private:
     QString m_lastViewMode;
     KWVariableCollection *m_varColl;
     KWBgSpellCheck *m_bgSpellCheck;
-    KSpellConfig *m_pKSpellConfig;
-#ifdef HAVE_LIBASPELL
     KOSpellConfig *m_pKOSpellConfig;
-#endif
     KoStyleCollection *m_styleColl;
     KWFrameStyleCollection *m_frameStyleColl;
     KWTableStyleCollection *m_tableStyleColl;

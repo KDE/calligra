@@ -64,6 +64,7 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
     setIgnoreList (_ksc.ignoreList());
     setEncoding (_ksc.encoding());
     setSpellWordWithNumber( _ksc.spellWordWithNumber());
+    setClient (_ksc.client());
 }
 
 
@@ -76,6 +77,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
   , dictlist(0)
   , dictcombo(0)
   , encodingcombo(0)
+    ,clientcombo(0)
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
@@ -96,6 +98,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
         setEncoding (_ksc->encoding());
         setIgnoreCase ( _ksc->ignoreCase ());
         setIgnoreAccent( _ksc->ignoreAccent());
+        setClient (_ksc->client());
     }
 
     QGridLayout *glay = new QGridLayout (this, 8, 3, 0, KDialog::spacingHint() );
@@ -142,6 +145,15 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     QLabel *tmpQLabel = new QLabel( encodingcombo, i18n("Encoding:"), this);
     glay->addWidget( tmpQLabel, 3, 0 );
 
+  clientcombo = new QComboBox( this );
+  clientcombo->insertItem (i18n("International Ispell"));
+  clientcombo->insertItem (i18n("Aspell"));
+  connect (clientcombo, SIGNAL (activated(int)), this,
+	   SLOT (sChangeClient(int)));
+  glay->addMultiCellWidget( clientcombo, 4, 4, 1, 2 );
+
+  tmpQLabel = new QLabel( clientcombo, i18n("Client:"), this );
+  glay->addWidget( tmpQLabel, 4, 0 );
 
     if( addHelpButton == true )
     {
@@ -199,6 +211,7 @@ bool KOSpellConfig::readGlobalSettings ()
   setIgnoreCase( kc->readNumEntry( "KSpell_IgnoreCase", 0));
   setIgnoreAccent( kc->readNumEntry( "KSpell_IgnoreAccent", 0));
   setSpellWordWithNumber( kc->readNumEntry("KSpell_SpellWordWithNumber", false));
+    setClient (kc->readNumEntry ("KSpell_Client", KOS_CLIENT_ASPELL));
   return TRUE;
 }
 
@@ -214,6 +227,8 @@ bool KOSpellConfig::writeGlobalSettings ()
   kc->writeEntry ("KSpell_IgnoreCase",(int) ignoreCase(), TRUE, TRUE);
   kc->writeEntry( "KSpell_IgnoreAccent", (int)ignoreAccent(), TRUE, TRUE);
   kc->writeEntry( "KSpell_SpellWordWithNumber", (int)spellWordWithNumber(), TRUE, TRUE);
+    kc->writeEntry ("KSpell_Client", client(),
+		  TRUE, TRUE);
   kc->sync();
   return TRUE;
 }
@@ -235,6 +250,27 @@ void KOSpellConfig::slotIgnoreAccent(bool b)
     setIgnoreAccent ( b );
     emit configChanged();
 }
+
+void KOSpellConfig::sChangeClient (int i)
+{
+  setClient (i);
+
+  // read in new dict list
+  if (dictcombo) {
+    if (iclient == KOS_CLIENT_ISPELL)
+      getAvailDictsIspell();
+    else if( iclient == KOS_CLIENT_ASPELL)
+      getAvailDictsAspell();
+#if 0 //for the futur :)
+    else if( iclient == KOS_CLIENT_MYSPELL)
+      getAvailDictsMyspell();
+#endif
+  }
+  emit configChanged();
+}
+
+
+
 
 void KOSpellConfig::sChangeEncoding(int i)
 {
@@ -320,8 +356,7 @@ bool KOSpellConfig::interpret (QString &fname, QString &lname,
   }
   else if (dname=="slovak"){
       lname="sk"; hname=i18n("Slovak"); //sChangeEncoding(KOS_E_LATIN2);
-  }
-  else if (dname=="czech") {
+  }  else if (dname=="czech") {
       lname="cs"; hname=i18n("Czech"); //sChangeEncoding(KOS_E_LATIN2);
   }
   else if (dname=="svenska") {
@@ -365,51 +400,152 @@ bool KOSpellConfig::interpret (QString &fname, QString &lname,
 
 void KOSpellConfig::fillInDialog ()
 {
-  if (nodialog)
-    return;
+    if (nodialog)
+        return;
 
     kdDebug(750) << "KOSpellConfig::fillinDialog" << endl;
 
-  cb1->setChecked (noRootAffix());
-  cb2->setChecked (runTogether());
-  encodingcombo->setCurrentItem (encoding());
+    cb1->setChecked (noRootAffix());
+    cb2->setChecked (runTogether());
+    encodingcombo->setCurrentItem (encoding());
 
-  // get list of available dictionaries
-  getAvailDictsAspell();
+    // get list of available dictionaries
+    // get list of available dictionaries
+    if (iclient == KOS_CLIENT_ISPELL)
+        getAvailDictsIspell();
+    else
+        getAvailDictsAspell();
 
-  // select the used dictionary in the list
-  int whichelement=-1;
+    // select the used dictionary in the list
+    int whichelement=-1;
 
-  if (dictFromList())
-    for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
-      {
-	if (listOfLanguageFileName()[i] == dictionary())
-        {
-	  whichelement=i;
-          break;
-        }
-      }
-
-  dictcombo->setMinimumWidth (dictcombo->sizeHint().width());
-
-  if (dictionary().isEmpty() ||  whichelement!=-1)
+    if (dictFromList())
     {
-      setDictFromList (TRUE);
-      if (whichelement!=-1)
-	dictcombo->setCurrentItem(whichelement);
+        if (iclient == KOS_CLIENT_ISPELL)
+        {
+            for (unsigned int i=0; i<langfnames.count(); i++)
+            {
+                if (langfnames[i] == dictionary())
+                    whichelement=i;
+            }
+        }
+        else if(iclient == KOS_CLIENT_ASPELL)
+        {
+            for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
+            {
+                if (listOfLanguageFileName()[i] == dictionary())
+                {
+                    whichelement=i;
+                    break;
+                }
+            }
+        }
     }
-  else
-    setDictFromList (FALSE);
+    dictcombo->setMinimumWidth (dictcombo->sizeHint().width());
 
-  sDictionary (dictFromList());
-  sPathDictionary (!dictFromList());
+    if (dictionary().isEmpty() ||  whichelement!=-1)
+    {
+        setDictFromList (TRUE);
+        if (whichelement!=-1)
+            dictcombo->setCurrentItem(whichelement);
+    }
+    else
+    {
+        //don't use langname !!!!!!!!!
+        if (langfnames.count()>=1)
+        {
+            setDictFromList (TRUE);
+            dictcombo->setCurrentItem(0);
+        }
+        else
+            setDictFromList (FALSE);
+    }
+    sDictionary (dictFromList());
+    sPathDictionary (!dictFromList());
 
 }
 
+void KOSpellConfig::getAvailDictsIspell () {
 
+  langfnames.clear();
+  dictcombo->clear();
+  langfnames.append(""); // Default
+  dictcombo->insertItem (i18n("ISpell Default"));
+
+  // dictionary path
+  QFileInfo dir ("/usr/lib/ispell");
+  if (!dir.exists() || !dir.isDir())
+    dir.setFile ("/usr/local/lib/ispell");
+  if (!dir.exists() || !dir.isDir())
+    dir.setFile ("/usr/local/share/ispell");
+  if (!dir.exists() || !dir.isDir())
+    dir.setFile ("/usr/share/ispell");
+  /* TODO get them all instead of just one of them.
+   * If /usr/local/lib exists, it skips the rest
+  if (!dir.exists() || !dir.isDir())
+    dir.setFile ("/usr/local/lib");
+  */
+  if (!dir.exists() || !dir.isDir()) return;
+
+  kdDebug(750) << "KSpellConfig::getAvailDictsIspell "
+	       << dir.filePath() << " " << dir.dirPath() << endl;
+
+  QDir thedir (dir.filePath(),"*.hash");
+
+  kdDebug(750) << "KSpellConfig" << thedir.path() << "\n" << endl;
+  kdDebug(750) << "entryList().count()="
+	       << thedir.entryList().count() << endl;
+
+  for (unsigned int i=0;i<thedir.entryList().count();i++)
+    {
+      QString fname, lname, hname;
+      fname = thedir [i];
+
+      // remove .hash
+      if (fname.right(5) == ".hash") fname.remove (fname.length()-5,5);
+
+      if (interpret (fname, lname, hname) && langfnames[0].isEmpty())
+	{ // This one is the KDE default language
+	  // so place it first in the lists (overwrite "Default")
+
+   	  langfnames.remove ( langfnames.begin() );
+	  langfnames.prepend ( fname );
+
+	  hname=i18n("default spelling dictionary"
+		     ,"Default - %1 [%2]").arg(hname).arg(fname);
+
+	  dictcombo->changeItem (hname,0);
+	}
+      else
+	{
+	  langfnames.append (fname);
+	  hname=hname+" ["+fname+"]";
+
+	  dictcombo->insertItem (hname);
+	}
+    }
+}
+
+void KOSpellConfig::setClient (int c)
+{
+  iclient = c;
+  kdDebug()<<" c :"<<c<<endl;
+  //kdDebug()<<" clientcombo :"<<clientcombo<<endl;
+#if 0 //fixme !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  if (clientcombo)
+      clientcombo->setCurrentItem(c);
+#endif
+}
+
+int KOSpellConfig::client () const
+{
+  return iclient;
+}
 
 void KOSpellConfig::getAvailDictsAspell ()
 {
+    langfnames.clear();
+    dictcombo->clear();
     dictcombo->insertStringList( listOfAspellLanguages() );
 }
 

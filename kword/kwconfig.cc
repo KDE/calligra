@@ -43,6 +43,7 @@
 #include "kwcommand.h"
 #include "kwvariable.h"
 #include "koeditpath.h"
+#include <koSconfig.h>
 
 #include <koVariable.h>
 #include <kformulaconfigpage.h>
@@ -181,7 +182,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     m_pView=_view;
     config = KWFactory::global()->config();
 
-    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kWordDocument()->getKSpellConfig(), true);
+    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kWordDocument()->getKOSpellConfig(), true);
 
     if( config->hasGroup("KSpell kword") )
     {
@@ -197,7 +198,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
 
 void ConfigureSpellPage::apply()
 {
-    KSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
+    KOSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
     config->setGroup( "KSpell kword" );
   config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
   config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
@@ -207,7 +208,7 @@ void ConfigureSpellPage::apply()
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
   m_spellConfigWidget->saveDictionary();
   KWDocument* doc = m_pView->kWordDocument();
-  doc->setKSpellConfig(*_spellConfig);
+  doc->setKOSpellConfig(*_spellConfig);
 
 
   bool state=m_spellConfigWidget->dontCheckUpperWord();

@@ -32,7 +32,7 @@ class QCheckBox;
 class QComboBox;
 class QPushButton;
 class KColorButton;
-class KoSpellConfigWidget;
+//class KoSpellConfigWidget;
 
 class preference : public QObject
 {
@@ -167,7 +167,7 @@ public:
 protected:
   KSpreadView * m_pView;
   KConfig * config;
-    KoSpellConfigWidget *m_spellConfigWidget;
+    KSpellConfig *m_spellConfigWidget;
 } ;
 
 class KSpreadpreference : public KDialogBase

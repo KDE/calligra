@@ -24,14 +24,14 @@
 
 class QCheckBox;
 class KEditListBox;
-class KSpellConfig;
+class KOSpellConfig;
 class QPushButton;
 
 class KoSpellConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_config, bool backgroundSpellCheck = false);
+    KoSpellConfigWidget( QWidget *_parent, KOSpellConfig *_config, bool backgroundSpellCheck = false);
 
     bool backgroundSpellCheck();
     void setBackgroundSpellCheck( bool _b );
@@ -45,7 +45,7 @@ public:
     void addIgnoreList( const QStringList & );
     QStringList ignoreList();
 
-    KSpellConfig * spellConfig() const { return m_spellConfig; }
+    KOSpellConfig * spellConfig() const { return m_spellConfig; }
     void setDefault();
     void saveDictionary();
 public slots:
@@ -60,6 +60,6 @@ private:
     KEditListBox *m_dictionary;
     QPushButton *m_clearDictionary;
     QPushButton *m_clearIgnoreAllHistory;
-    KSpellConfig *m_spellConfig;
+    KOSpellConfig *m_spellConfig;
 };
 #endif

@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -63,6 +62,7 @@
 #include <kfiledialog.h>
 #include <koSpellConfig.h>
 #include <koeditpath.h>
+#include <koSconfig.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
     : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -373,7 +373,7 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
     m_pView=_view;
     config = KPresenterFactory::global()->config();
 
-    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kPresenterDoc()->getKSpellConfig(), true);
+    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kPresenterDoc()->getKOSpellConfig(), true);
 
     if( config->hasGroup("KSpell kpresenter") )
     {
@@ -389,7 +389,7 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
 void ConfigureSpellPage::apply()
 {
 
-    KSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
+    KOSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
     config->setGroup( "KSpell kpresenter" );
     config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
     config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
@@ -399,7 +399,7 @@ void ConfigureSpellPage::apply()
     config->writeEntry ("KSpell_Client",  _spellConfig->client());
     m_spellConfigWidget->saveDictionary();
     KPresenterDoc* doc = m_pView->kPresenterDoc();
-    doc->setKSpellConfig(*_spellConfig);
+    doc->setKOSpellConfig(*_spellConfig);
 
 
     bool state=m_spellConfigWidget->dontCheckUpperWord();

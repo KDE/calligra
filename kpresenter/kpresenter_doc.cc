@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -92,9 +91,8 @@
 #include <kglobalsettings.h>
 #include <kocommandhistory.h>
 
-#ifdef HAVE_LIBASPELL
+
 #include <koSconfig.h>
-#endif
 
 using namespace std;
 
@@ -197,10 +195,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _yRnd = 20;
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
-    m_pKSpellConfig=0;
-#ifdef HAVE_LIBASPELL
     m_pKOSpellConfig = 0;
-#endif
 
     m_bDontCheckUpperWord=false;
     m_bDontCheckTitleCase=false;
@@ -366,29 +361,18 @@ void KPresenterDoc::initConfig()
         setGridColor(config->readColorEntry( "GridColor", &oldGridColor ));
     }
 
-    KSpellConfig ksconfig;
-#ifdef HAVE_LIBASPELL
     KOSpellConfig kosconfig;
-#endif
 
     if( config->hasGroup("KSpell kpresenter" ) )
     {
         config->setGroup( "KSpell kpresenter" );
-        ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-        ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-        ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-        ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-        ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-        ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-        setKSpellConfig(ksconfig);
-#ifdef HAVE_LIBASPELL
         kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
         kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
         kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
         kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
         kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-        setKOSpellConfig( kosconfig );
-#endif
+        kosconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+        setKOSpellConfig(kosconfig);
 
         setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
@@ -445,10 +429,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_stickyPage;
     delete m_bgSpellCheck;
     delete m_styleColl;
-    delete m_pKSpellConfig;
-#ifdef HAVE_LIBASPELL
     delete m_pKOSpellConfig;
-#endif
 
     m_pageList.setAutoDelete( true );
     m_pageList.clear();
@@ -2671,20 +2652,6 @@ void KPresenterDoc::slotRepaintChanged( KPTextObject *kptextobj )
     repaint( kptextobj );
 }
 
-void KPresenterDoc::setKSpellConfig(KSpellConfig _kspell)
-{
-    if(m_pKSpellConfig==0)
-        m_pKSpellConfig=new KSpellConfig();
-
-    m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-    m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
-    m_pKSpellConfig->setDictionary(_kspell.dictionary ());
-    m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
-    m_pKSpellConfig->setEncoding(_kspell.encoding());
-    m_pKSpellConfig->setClient(_kspell.client());
-
-    m_bgSpellCheck->setKSpellConfig(_kspell);;
-}
 
 void KPresenterDoc::recalcVariables( int type )
 {
@@ -3373,7 +3340,6 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
         m_bgSpellCheck->addPersonalDictonary( word );
 }
 
-#ifdef HAVE_LIBASPELL
 void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
 {
     if(m_pKOSpellConfig==0)
@@ -3387,7 +3353,6 @@ void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
     //FIXME
     //m_bgSpellCheck->setKSpellConfig(_kspell);
 }
-#endif
 
 
 #include "kpresenter_doc.moc"

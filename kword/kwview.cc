@@ -134,11 +134,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     dcopObject(); // build it
     m_personalShortCut=0L;
     fsInline=0L;
-#ifdef HAVE_LIBASPELL
     m_spell.kospell = 0;
-#else
-    m_spell.kspell = 0;
-#endif
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
     m_border.left.color = white;
@@ -3715,11 +3711,7 @@ void KWView::formatFrameSet()
 
 void KWView::slotSpellCheck()
 {
-#ifdef HAVE_LIBASPELL
     if (m_spell.kospell) return; // Already in progress
-#else
-    if (m_spell.kspell) return; // Already in progress
-#endif
     //m_doc->setReadWrite(false); // prevent editing text - not anymore
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.replaceAll.clear();
@@ -5285,13 +5277,14 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 
 void KWView::startKSpell()
 {
-#ifdef HAVE_LIBASPELL
-    if(m_doc->getKSpellConfig())
+    if(m_doc->getKOSpellConfig())
     {
-        m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
-        m_doc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+        m_doc->getKOSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
+        m_doc->getKOSpellConfig()->setReplaceAllList(m_spell.replaceAll);
     }
-    m_spell.kospell = new KOSpell( this, i18n( "Spell Checking" ), /*m_doc->getKSpellConfig()*/0L,true,true );
+    m_spell.kospell = KOSpell::createKoSpell( this, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,m_doc->getKOSpellConfig(), true,true /*FIXME !!!!!!!!!*/ );
+    //new KOSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKOSpellConfig() );
+
 
     m_spell.kospell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
     m_spell.kospell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
@@ -5308,33 +5301,8 @@ void KWView::startKSpell()
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
     QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-    QObject::connect( m_spell.kospell, SIGNAL( addAutoCorrect (const QString &, const QString &)), this, SLOT( spellAddAutoCorrect( const QString &  ,  const QString & )));
-    spellCheckerReady();
-#else
-    if(m_doc->getKSpellConfig())
-    {
-        m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
-        m_doc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
-    }
-    m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
+    QObject::connect( m_spell.kospell, SIGNAL( spellCheckerReady()), this, SLOT( spellCheckerReady()));
 
-
-     m_spell.kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
-     m_spell.kspell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
-
-    QObject::connect( m_spell.kspell, SIGNAL( death() ),
-                      this, SLOT( spellCheckerFinished() ) );
-    QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
-                      this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
-    QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &, const QString &, unsigned int ) ),
-                      this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
-    QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
-                      this, SLOT( spellCheckerDone( const QString & ) ) );
-    QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
-                      this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
-
-    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-#endif
 }
 
 void KWView::spellCheckerReady()
@@ -5361,12 +5329,7 @@ void KWView::spellCheckerReady()
         {
             //kdDebug(32001) << "Checking " << text << endl;
             text += '\n'; // end of paragraph
-#ifdef HAVE_LIBASPELL
             m_spell.kospell->check( text);
-#else
-            text += '\n'; // empty line required by kspell
-            m_spell.kspell->check( text );
-#endif
             /// ??? textfs->textObject()->setNeedSpellCheck(true);
             return;
         }
@@ -5433,11 +5396,7 @@ void KWView::spellCheckerDone( const QString & )
     if ( textdoc )
         textdoc->textFrameSet()->removeHighlight();
 
-#ifdef HAVE_LIBASPELL
     int result = m_spell.kospell->dlgResult();
-#else
-    int result = m_spell.kspell->dlgResult();
-#endif
     if ( result != KS_CANCEL && result != KS_STOP )
     {
         // Move on to next paragraph
@@ -5453,10 +5412,9 @@ void KWView::spellCheckerDone( const QString & )
 void KWView::clearSpellChecker()
 {
     //kdDebug(32001) << "KWView::clearSpellChecker" << endl;
-#ifdef HAVE_LIBASPELL
     delete m_spell.kospell;
     m_spell.kospell=0;
-#else
+#if 0
     if ( m_spell.kspell ) {
         m_spell.kspell->cleanUp();
         delete m_spell.kspell;
@@ -5476,11 +5434,10 @@ void KWView::spellCheckerFinished() // connected to death()
 {
     //kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
     bool kspellNotConfigured=false;
-#ifdef HAVE_LIBASPELL
     delete m_spell.kospell;
     m_spell.kospell = 0;
     //FIXME
-#else
+#if 0
     KSpell::spellStatus status = m_spell.kspell->status();
     delete m_spell.kspell;
     m_spell.kspell = 0;
@@ -7225,7 +7182,7 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
-#ifdef HAVE_LIBASPELL
+#if 0 //FIXME !!!!!!!
     KOSpell *tmpSpell = new KOSpell( m_doc->getKOSpellConfig() );
     QStringList lst = tmpSpell->resultCheckWord(word );
     delete tmpSpell;

@@ -50,6 +50,12 @@ enum OEncoding {
   KOS_E_CP1251=14
 };
 
+enum KOSpellClients {
+  KOS_CLIENT_ISPELL=0,
+  KOS_CLIENT_ASPELL=1,
+  KOS_CLIENT_MYSPELL=2
+};
+
 /**
  * A configuration class/dialog for @ref KSpell.
  *
@@ -138,6 +144,7 @@ public:
     void setDictionary (const QString qs);
     void setDictFromList (bool dfl);
 
+    //Not present in old aspell/ispell lib
     void setIgnoreCase ( bool b );
     void setIgnoreAccent ( bool b );
     void setSpellWordWithNumber ( bool b );
@@ -146,7 +153,7 @@ public:
      *
      */
     void setEncoding (int enctype);
-
+    void setClient (int client);
     /**
      * Options reading routines.
      */
@@ -154,6 +161,7 @@ public:
     bool runTogether() const;
     const QString dictionary () const;
     bool dictFromList () const;
+    // not in old ispell/aspell
     bool ignoreCase () const;
     bool ignoreAccent () const;
     int encoding () const;
@@ -161,7 +169,7 @@ public:
     QStringList ignoreList () const;
     QStringList replaceAllList () const;
 
-
+    int client () const; //see enums at top of file
     /**
      * Call this method before this class is deleted  if you want
      * the settings you have (or the user has) chosen to become the
@@ -212,6 +220,8 @@ protected slots:
     void sPathDictionary(bool);
     void sSetDictionary (int);
     void sChangeEncoding (int);
+    void sChangeClient (int);
+    //not present in old api
     void slotIgnoreCase(bool );
     void slotIgnoreAccent(bool);
     void slotSpellWordWithNumber(bool b);
@@ -231,13 +241,17 @@ protected:
     QStringList ignorelist;
     enum {rdictlist=3, rencoding=4, rhelp=6};
     KConfig *kc;
-
+int iclient;            // defaults to ispell, may be aspell, too
     QCheckBox *cb1, *cb2;
     QLabel *dictlist;
-    QComboBox *dictcombo, *encodingcombo;
+    QComboBox *dictcombo, *encodingcombo, *clientcombo;
     QCheckBox *cbIgnoreCase;
     QCheckBox *cbIgnoreAccent;
     QCheckBox *cbSpellWordWithNumber;
+
+    //replace it !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    QStringList langfnames;
+
 signals:
     void configChanged();
 

@@ -956,16 +956,16 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   config = KSpreadFactory::global()->config();
 
 
-    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->doc()->getKSpellConfig(), false);
-
+  m_spellConfigWidget = new KSpellConfig( /*box,*/ m_pView->doc()->getKSpellConfig()/*, false*/);
+#if 0
     if( config->hasGroup("KSpell kspread") )
     {
         config->setGroup( "KSpell kspread" );
         m_spellConfigWidget->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         m_spellConfigWidget->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
-
-    m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
+#endif
+    //m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
 }
 
 
@@ -973,7 +973,7 @@ void configureSpellPage::apply()
 {
   m_pView->doc()->emitBeginOperation( false );
 
-  KSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
+  KSpellConfig *_spellConfig = m_spellConfigWidget;
   config->setGroup( "KSpell kspread" );
   config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
   config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
@@ -981,10 +981,10 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
-  m_spellConfigWidget->saveDictionary();
+//  m_spellConfigWidget->saveDictionary();
   KSpreadDoc* doc = m_pView->doc();
   doc->setKSpellConfig(*_spellConfig);
-
+#if 0
   bool state=m_spellConfigWidget->dontCheckUpperWord();
   config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
   doc->setDontCheckUpperWord(state);
@@ -992,6 +992,7 @@ void configureSpellPage::apply()
   state=m_spellConfigWidget->dontCheckTitleCase();
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
   doc->setDontCheckTitleCase(state);
+#endif
   m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
   m_pView->slotUpdateView( m_pView->activeTable() );
@@ -999,7 +1000,8 @@ void configureSpellPage::apply()
 
 void configureSpellPage::slotDefault()
 {
-    m_spellConfigWidget->setDefault();
+    //FIXME
+    //m_spellConfigWidget->setDefault();
 }
 
 #include "kspread_dlg_preference.moc"

@@ -78,9 +78,7 @@ class KWFrameStyle;
 class KWTableStyle;
 class KoTextIterator;
 
-#ifdef HAVE_LIBASPELL
 class KOSpell;
-#endif
 
 /******************************************************************/
 /* Class: KWView						  */
@@ -725,11 +723,7 @@ private:
 
     // Spell-checking
     struct {
-#ifdef HAVE_LIBASPELL
         KOSpell *kospell;
-#else
-	KSpell *kspell;
-#endif
 	KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         KoTextIterator * textIterator;

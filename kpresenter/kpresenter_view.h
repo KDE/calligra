@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -78,9 +77,7 @@ class KoFontDia;
 class KoParagDia;
 class KPPixmapObject;
 
-#ifdef HAVE_LIBASPELL
 class KOSpell;
-#endif
 
 class PageBase : public QWidget
 {
@@ -1094,10 +1091,7 @@ private:
 
     // Spell-checking
     struct {
-        KSpell *kspell;
-#ifdef HAVE_LIBASPELL
         KOSpell *kospell;
-#endif
         int spellCurrTextObjNum;
         QPtrList<KPTextObject> textObject;
         KMacroCommand * macroCmdSpellCheck;

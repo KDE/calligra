@@ -42,9 +42,7 @@ class KoStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
 
-#ifdef HAVE_LIBASPELL
 class KOSpellConfig;
-#endif
 
 #include "kprpage.h"
 
@@ -281,13 +279,8 @@ class KPresenterDoc : public KoDocument
     /**
      * get custom kspell config
      */
-    void setKSpellConfig(KSpellConfig _kspell);
-    KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
-
-#ifdef HAVE_LIBASPELL
     void setKOSpellConfig(KOSpellConfig _kspell);
     KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
-#endif
 
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
@@ -582,10 +575,7 @@ protected:
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;
-    KSpellConfig *m_pKSpellConfig;
-#ifdef HAVE_LIBASPELL
     KOSpellConfig *m_pKOSpellConfig;
-#endif
 
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;

@@ -65,9 +65,7 @@
 #include <kglobalsettings.h>
 #include "kocommandhistory.h"
 
-#ifdef HAVE_LIBASPELL
 #include <koSconfig.h>
-#endif
 
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
@@ -298,10 +296,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     slRecordNum = -1;
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
-    m_pKSpellConfig=0;
-#ifdef HAVE_LIBASPELL
+
     m_pKOSpellConfig = 0;
-#endif
+
     m_hasTOC=false;
 
     // It's important to call this to have the kformula actions
@@ -386,10 +383,7 @@ KWDocument::~KWDocument()
     delete m_frameStyleColl;
     delete m_tableStyleColl;
     delete m_tableTemplateColl;
-    delete m_pKSpellConfig;
-#ifdef HAVE_LIBASPELL
     delete m_pKOSpellConfig;
-#endif
     delete m_viewMode;
     delete m_bufPixmap;
 }
@@ -397,29 +391,22 @@ KWDocument::~KWDocument()
 void KWDocument::initConfig()
 {
   KConfig *config = KWFactory::global()->config();
-  KSpellConfig ksconfig;
-#ifdef HAVE_LIBASPELL
   KOSpellConfig kosconfig;
-#endif
   if( config->hasGroup("KSpell kword" ) )
   {
       config->setGroup( "KSpell kword" );
-      ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-      ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-      ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-      ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-      ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-      ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-#ifdef HAVE_LIBASPELL
       kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
       kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
       kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
       kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-      kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+      kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KOS_E_ASCII));
+      kosconfig.setClient(config->readNumEntry ("KSpell_Client", KOS_CLIENT_ISPELL));
+      kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+      kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+      kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+      kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
       setKOSpellConfig( kosconfig );
-#endif
 
-      setKSpellConfig(ksconfig);
       setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
       setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
       // Default is false for spellcheck, but the spell-check config dialog
@@ -3825,22 +3812,7 @@ void KWDocument::slotCommandExecuted()
     setModified( true );
 }
 
-void KWDocument::setKSpellConfig(KSpellConfig _kspell)
-{
-  if(m_pKSpellConfig==0)
-    m_pKSpellConfig=new KSpellConfig();
 
-  m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
-  m_pKSpellConfig->setDictionary(_kspell.dictionary ());
-  m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
-  m_pKSpellConfig->setEncoding(_kspell.encoding());
-  m_pKSpellConfig->setClient(_kspell.client());
-
-  m_bgSpellCheck->setKSpellConfig(_kspell);;
-}
-
-#ifdef HAVE_LIBASPELL
 void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
 {
   if(m_pKOSpellConfig==0)
@@ -3854,7 +3826,6 @@ void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
   //FIXME
   //m_bgSpellCheck->setKSpellConfig(_kspell);
 }
-#endif
 
 #ifndef NDEBUG
 void KWDocument::printStyleDebug()

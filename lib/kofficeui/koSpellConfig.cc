@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2002-2003 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,11 +22,10 @@
 #include "koSpellConfig.moc"
 #include "klocale.h"
 #include <kdialog.h>
-#include <kspell.h>
 #include <klineedit.h>
 #include <keditlistbox.h>
 #include <kio/netaccess.h>
-
+#include "koSconfig.h"
 
 #include <qcheckbox.h>
 #include <qlabel.h>
@@ -44,7 +43,7 @@
 #include <qtextstream.h>
 #include <qdir.h>
 
-KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_config, bool backgroundSpellCheck )
+KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KOSpellConfig *_config, bool backgroundSpellCheck )
     : QWidget( _parent)
 {
     QTabWidget *tab = new QTabWidget(_parent);
@@ -53,7 +52,7 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_confi
     QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 6, 1, KDialog::marginHint(), KDialog::spacingHint());
     grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
     grid1->setRowStretch( 5, 10 );
-    m_spellConfig = new KSpellConfig(tmpQGroupBox, 0L, _config, false );
+    m_spellConfig = new KOSpellConfig(tmpQGroupBox, 0L, _config, false );
     grid1->addWidget(m_spellConfig,1,0);
 
     m_dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
@@ -98,7 +97,7 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_confi
 
 void KoSpellConfigWidget::initDictionaryListWord()
 {
-    if ( m_spellConfig->client() == KS_CLIENT_ISPELL )
+    if ( m_spellConfig->client() == KOS_CLIENT_ISPELL )
     {
 
         QString directoryName = QDir::homeDirPath() + "/.ispell_"+m_spellConfig->dictionary();
@@ -177,8 +176,8 @@ void KoSpellConfigWidget::setDefault()
     m_spellConfig->setRunTogether(0);
     m_spellConfig->setDictionary( "");
     m_spellConfig->setDictFromList( FALSE);
-    m_spellConfig->setEncoding (KS_E_ASCII);
-    m_spellConfig->setClient (KS_CLIENT_ISPELL);
+    m_spellConfig->setEncoding (KOS_E_ASCII);
+    m_spellConfig->setClient (KOS_CLIENT_ISPELL);
     m_dontCheckUpperWord->setChecked(false);
     m_dontCheckTitleCase->setChecked(false);
     m_cbBackgroundSpellCheck->setChecked(false);
@@ -197,7 +196,7 @@ void KoSpellConfigWidget::saveDictionary()
     for (int i = 0; i< (int)m_dictionary->listBox()->count() ; i++)
         lst+= m_dictionary->listBox()->text( i ) +"\n";
 
-    if ( m_spellConfig->client() == KS_CLIENT_ISPELL )
+    if ( m_spellConfig->client() == KOS_CLIENT_ISPELL )
     {
         QString directoryName = QDir::homeDirPath() + "/.ispell_"+m_spellConfig->dictionary();
         QFile f( directoryName );
