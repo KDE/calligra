@@ -1011,7 +1011,6 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        //FIXME fourth element is not good :(
         (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name , "style:drawing-page-properties"  );
     }
     stylesWriter.endElement(); // office:automatic-styles
