@@ -390,6 +390,42 @@
    <Action name="extra_alignbottom"/>
   </Menu>
 </Menu>
+<Menu name="picmenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="change_picture"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+   <Menu name="Align Objects"><text>&amp;Scale to show the Picture 1:1 in</text>
+   <Action name="pic_640_480"/>
+   <Action name="pic_800_600"/>
+   <Action name="pic_1024_768"/>
+   <Action name="pic_1280_1024"/>
+   <Action name="pic_1600_1200"/>
+   </Menu>
+</Menu>
 <Menu name="sidebarmenu_popup">
   <Action name="insert_page"/>
   <Action name="extra_defaulttemplate"/>

@@ -2089,6 +2089,38 @@ void KPresenterView::setupActions()
     actionRenamePage=new KAction(i18n( "&Rename Page" ),0,this,
                      SLOT( renamePageTitle() ),
                      actionCollection(), "rename_page" );
+
+    actionPic640x480=new KAction(i18n( "640x480" ),0,this,
+                     SLOT( picViewOrig640x480() ),
+                     actionCollection(), "pic_640_480" );
+
+    actionPic800x600=new KAction(i18n( "800x600" ),0,this,
+                     SLOT( picViewOrig800x600() ),
+                     actionCollection(), "pic_800_600" );
+
+    actionPic1024x768=new KAction(i18n( "1024x768" ),0,this,
+                     SLOT( picViewOrig1024x768() ),
+                     actionCollection(), "pic_1024_768" );
+
+    actionPic1280x1024=new KAction(i18n( "1280x1024" ),0,this,
+                     SLOT( picViewOrig1280x1024() ),
+                     actionCollection(), "pic_1280_1024" );
+
+    actionPic1600x1200=new KAction(i18n( "1600x1200" ),0,this,
+                     SLOT( picViewOrig1600x1200() ),
+                     actionCollection(), "pic_1600_1200" );
+
+    actionChangePic=new KAction( i18n( "&Change Picture..." ),"frame_image"
+                                 ,0,this,SLOT( chPic() ),
+                     actionCollection(), "change_picture" );
+
+#if 0
+    //code from page.cc
+    //not implemented
+    picResizeMenu->insertSeparator();
+    picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
+#endif
+
 }
 
 
@@ -3072,35 +3104,35 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("menupage_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuTextObject( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("textobject_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("textobject_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuPartObject( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("partobject_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("partobject_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuRectangleObject( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("rectangleobject_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("rectangleobject_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuGraphMenu(const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("graphmenu_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("graphmenu_popup",this))->popup(_point);
 }
 
 
@@ -3108,14 +3140,14 @@ void KPresenterView::openPopupMenuPieObject( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("piemenu_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("piemenu_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuClipObject(const QPoint & _point)
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("clipmenu_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container("clipmenu_popup",this))->popup(_point);
 }
 
 
@@ -3123,14 +3155,54 @@ void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("sidebarmenu_popup",this))->popup(_point);
+    static_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup",this))->popup(_point);
 
 }
+
+void KPresenterView::openPopupMenuPicObject(const QPoint & _point)
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    static_cast<QPopupMenu*>(factory()->container("picmenu_popup",this))->popup(_point);
+
+}
+
 
 void KPresenterView::renamePageTitle()
 {
     if(sidebar)
         sidebar->renamePageTitle();
+}
+
+
+void KPresenterView::picViewOrig640x480()
+{
+    page->picViewOrig640x480();
+}
+
+void KPresenterView::picViewOrig800x600()
+{
+    page->picViewOrig800x600();
+}
+
+void KPresenterView::picViewOrig1024x768()
+{
+    page->picViewOrig1024x768();
+}
+
+void KPresenterView::picViewOrig1280x1024()
+{
+    page->picViewOrig1280x1024();
+}
+
+void KPresenterView::picViewOrig1600x1200()
+{
+    page->picViewOrig1600x1200();
+}
+
+void KPresenterView::chPic()
+{
+    page->chPic();
 }
 
 #include <kpresenter_view.moc>

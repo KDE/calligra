@@ -64,10 +64,6 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name ), buffer( size() )
 {
     setWFlags( WResizeNoErase );
-
-    alignMenu2 = 0;
-    picResizeMenu = 0;
-    picMenu = 0;
     presMenu = 0;
 
     if ( parent ) {
@@ -113,9 +109,6 @@ Page::~Page()
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
     exitEditMode();
 
-    delete alignMenu2;
-    delete picResizeMenu;
-    delete picMenu;
     delete presMenu;
 }
 
@@ -369,7 +362,7 @@ void Page::mousePressEvent( QMouseEvent *e )
                     mousePressed = false;
                     deSelectAllObj();
                     selectObj( kpobject );
-                    picMenu->popup( pnt );
+                    view->openPopupMenuPicObject(pnt);
                 } else if ( kpobject->getType() == OT_CLIPART ) {
                     mousePressed = false;
                     deSelectAllObj();
@@ -1298,56 +1291,6 @@ void Page::setMouseSelectedObject(bool b)
 /*======================== setup menus ===========================*/
 void Page::setupMenus()
 {
-    alignMenu2 = new QPopupMenu();
-    CHECK_PTR( alignMenu2 );
-    alignMenu2->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu2->insertSeparator();
-    alignMenu2->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu2->insertSeparator();
-    alignMenu2->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu2->insertSeparator();
-    alignMenu2->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu2->insertSeparator();
-    alignMenu2->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu2->insertSeparator();
-    alignMenu2->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu2->setMouseTracking( true );
-    alignMenu2->setCheckable( false );
-
-    // pic-resize menu
-    picResizeMenu = new QPopupMenu();
-    picResizeMenu->insertItem( i18n( "640x480" ), this, SLOT( picViewOrig640x480() ) );
-    picResizeMenu->insertItem( i18n( "800x600" ), this, SLOT( picViewOrig800x600() ) );
-    picResizeMenu->insertItem( i18n( "1024x768" ), this, SLOT( picViewOrig1024x768() ) );
-    picResizeMenu->insertItem( i18n( "1280x1024" ), this, SLOT( picViewOrig1280x1024() ) );
-    picResizeMenu->insertItem( i18n( "1600x1200" ), this, SLOT( picViewOrig1600x1200() ) );
-#if 0
-    picResizeMenu->insertSeparator();
-    picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
-#endif
-
-    // create right button picture menu
-    picMenu = new QPopupMenu();
-    CHECK_PTR( picMenu );
-    picMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    picMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    picMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    picMenu->insertSeparator();
-    picMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    picMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
-    picMenu->insertSeparator();
-    picMenu->insertItem( KPBarIcon( "frame_image" ), i18n( "&Change Picture..." ), this, SLOT( chPic() ) );
-    picMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    picMenu->insertSeparator();
-    picMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    picMenu->insertSeparator();
-    picMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu2 );
-    picMenu->insertSeparator();
-    picMenu->insertItem( i18n( "&Scale to show the Picture 1:1 in" ), picResizeMenu );
-    picMenu->setMouseTracking( true );
-
-
-
     // create right button presentation menu
     presMenu = new QPopupMenu();
     CHECK_PTR( presMenu );
@@ -1387,12 +1330,6 @@ void Page::clipPaste()
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT )
         dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->paste();
     view->editPaste();
-}
-
-/*======================= object properties  =====================*/
-void Page::objProperties()
-{
-    view->extraPenBrush();
 }
 
 /*======================= change picture  ========================*/
@@ -3728,94 +3665,6 @@ void Page::_repaint( KPObject *o )
     view->kPresenterDoc()->repaint( o );
 }
 
-/*================================================================*/
-void Page::alignObjLeft()
-{
-    view->extraAlignObjLeft();
-}
-
-/*================================================================*/
-void Page::alignObjCenterH()
-{
-    view->extraAlignObjCenterH();
-}
-
-/*================================================================*/
-void Page::alignObjRight()
-{
-    view->extraAlignObjRight();
-}
-
-/*================================================================*/
-void Page::alignObjTop()
-{
-    view->extraAlignObjTop();
-}
-
-/*================================================================*/
-void Page::alignObjCenterV()
-{
-    view->extraAlignObjCenterV();
-}
-
-/*================================================================*/
-void Page::alignObjBottom()
-{
-    view->extraAlignObjBottom();
-}
-
-/*================================================================*/
-void Page::pageLayout()
-{
-    view->extraLayout();
-}
-
-void Page::pageDefaultTemplate()
-{
-    view->extraDefaultTemplate();
-}
-
-/*================================================================*/
-void Page::pageBackground()
-{
-    view->extraBackground();
-}
-
-/*================================================================*/
-void Page::pageInsert()
-{
-    view->insertPage();
-}
-
-/*================================================================*/
-void Page::duplicateCopy()
-{
-    view->editDuplicatePage();
-}
-
-/*================================================================*/
-void Page::pageDelete()
-{
-    view->editDelPage();
-}
-
-/*================================================================*/
-void Page::pagePaste()
-{
-    view->editPaste();
-}
-
-/*================================================================*/
-void Page::configPages()
-{
-    view->screenConfigPages();
-}
-
-/*================================================================*/
-void Page::presStructView()
-{
-    view->screenPresStructView();
-}
 
 /*================================================================*/
 void Page::slotExitPres()
@@ -3823,17 +3672,6 @@ void Page::slotExitPres()
     view->screenStop();
 }
 
-/*================================================================*/
-void Page::slotEditHF()
-{
-    view->editHeaderFooter();
-}
-
-/*================================================================*/
-void Page::assignEffect()
-{
-    view->screenAssignEffect();
-}
 
 /*================================================================*/
 void Page::drawingMode()

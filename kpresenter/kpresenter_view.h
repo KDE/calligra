@@ -214,6 +214,14 @@ public slots:
     void extraChangeClip();
     void renamePageTitle();
 
+    void picViewOrig640x480();
+    void picViewOrig800x600();
+    void picViewOrig1024x768();
+    void picViewOrig1280x1024();
+    void picViewOrig1600x1200();
+
+    void chPic();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -317,7 +325,8 @@ public:
     void openPopupMenuPieObject( const QPoint & _point );
     void openPopupMenuClipObject(const QPoint & _point);
     void openPopupMenuSideBar(const QPoint & _point);
-    
+    void openPopupMenuPicObject(const QPoint & _point);
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -549,6 +558,13 @@ protected:
     KAction *actionChangeClipart;
 
     KAction *actionRenamePage;
+
+    KAction *actionPic640x480;
+    KAction *actionPic800x600;
+    KAction *actionPic1024x768;
+    KAction *actionPic1280x1024;
+    KAction *actionPic1600x1200;
+    KAction *actionChangePic;
 
     DCOPObject *dcop;
 

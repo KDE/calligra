@@ -230,10 +230,7 @@ protected:
     void setTextBackground( KPTextObject *obj );
 
     // variables
-    QPopupMenu  *clipMenu, *presMenu;
-    QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu5;
-    QPopupMenu *picMenu, *alignMenu6, *alignMenu7;
-    QPopupMenu *picResizeMenu;
+    QPopupMenu *presMenu;
     bool mousePressed;
     ModifyType modType;
     unsigned int oldMx, oldMy;
@@ -277,39 +274,21 @@ private:
 public slots:
     void chPic();
     void chClip();
-
-private slots:
-    void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
-    void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
-    void toAlignChanged( int a ) { emit alignChanged( a ); }
-    void objProperties();
-    void assignEffect();
-    void drawingMode();
-    void switchingMode();
-    void alignObjLeft();
-    void alignObjCenterH();
-    void alignObjRight();
-    void alignObjTop();
-    void alignObjCenterV();
-    void alignObjBottom();
-    void pageLayout();
-    void pageBackground();
-    void pageInsert();
-    void duplicateCopy();
-    void pageDelete();
-    void pagePaste();
-    void pageDefaultTemplate();
-    void configPages();
-    void presStructView();
-    void slotGotoPage();
-    void slotExitPres();
-    void slotEditHF();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();
     void picViewOrig1280x1024();
     void picViewOrig1600x1200();
     void picViewOrigFactor();
+
+private slots:
+    void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
+    void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
+    void toAlignChanged( int a ) { emit alignChanged( a ); }
+    void drawingMode();
+    void switchingMode();
+    void slotGotoPage();
+    void slotExitPres();
 
 signals:
 
