@@ -239,9 +239,9 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name)
 
 	kdDebug()<<"MySQLDB::createTableDef: connection exists"<<endl;
 
-	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from `"+name+"` limit 0")<<endl;
+	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from "+escapeName(name)+" limit 0")<<endl;
 
-	query("select * from `"+name+"` limit 0");
+	query("select * from "+escapeName(name)+" limit 0");
 	MySqlResult *result = storeResult();
 
 	if(!result)
@@ -727,4 +727,11 @@ MySqlDB::~MySqlDB()
 	m_mysql = 0;
 }
 
+QString MySqlDB::escapeName(const QString &tn)
+{
+	QString en;
+
+	en = "`" + tn + "`";
+	return en;
+}
 #include "mysqldb.moc"

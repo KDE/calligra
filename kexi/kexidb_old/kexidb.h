@@ -77,6 +77,9 @@ public:
 	//most current drivers make those a mutators
 	virtual QStringList       databases();
 	virtual QStringList       tableNames()=0;
+	//Returns an escaped version of a named object, eg table...mysql uses `, postgres uses "
+	virtual QString	          escapeName(const QString &table) = 0;
+
 	//! Returns true if database named by dbName is considered as system database
 	virtual bool isSystemDatabase(QString &dbName)=0;
 

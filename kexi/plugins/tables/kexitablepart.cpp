@@ -117,7 +117,7 @@ KexiDBRecordSet *KexiTablePart::records(QWidget*,const QString& identifier,Param
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
 
 	KexiDBRecordSet *m_record=0;
-	m_record = kexiProject()->db()->queryRecord("select * from `" + localIdentifier(identifier) + "`", true);
+	m_record = kexiProject()->db()->queryRecord("select * from " + kexiProject()->db()->escapeName(localIdentifier(identifier)) + ", true);
 
 	if(!m_record)
 	{

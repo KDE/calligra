@@ -139,7 +139,7 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 		if(m_record->isForignField(i))
 		{
 			QStringList fdata;
-			KexiDBRecordSet *ftr = m_db->queryRecord("SELECT * FROM `" + m_record->fieldInfo(i)->table() + "`");
+			KexiDBRecordSet *ftr = m_db->queryRecord("SELECT * FROM " + m_db->escapeName(m_record->fieldInfo(i)->table()));
 			if(ftr)
 			{
 				while(ftr->next())

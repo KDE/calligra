@@ -64,6 +64,8 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 		KexiDBTableStruct	structure(const QString& table) const;
 		QString	nativeDataType(const KexiDBField::ColumnType& t) const;
 
+		QString escapeName(const QString &tn);
+		
 	public slots:
 		KexiDBRecordSet	*queryRecord(const QString& querystatement, bool buffer=false);
 
