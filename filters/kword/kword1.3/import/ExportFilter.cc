@@ -1237,8 +1237,8 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     // ### TODO: add support of at least, multiple...
     if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+        && ( layoutOrigin.lineSpacingType == layout.lineSpacingType )
+        && ( layoutOrigin.lineSpacing == layout.lineSpacing ) )
     {
         // Do nothing!
     }

@@ -411,7 +411,7 @@ public:
 
 
     enum { LS_CUSTOM = 0, LS_SINGLE = 10, LS_ONEANDHALF = 15, LS_DOUBLE = 20,
-      LS_ATLEAST = 30, LS_MULTIPLE = 40 };
+      LS_ATLEAST = 30, LS_MULTIPLE = 40, LS_FIXED = 50 };
 
     QString     styleName;
     QString     styleFollowing;
@@ -424,7 +424,7 @@ public:
     double      marginTop;      // space before the paragraph  (a negative value means invalid)
     double      marginBottom;   // space after the paragraph (a negative value means invalid)
 
-    int         lineSpacingType;// 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
+    int         lineSpacingType;// 0=custom, 10=one line, 15=one and half lines, 20= 2 lines... (see enum)
     double      lineSpacing;    // Space between lines in pt, if lineSpacingType==0
 
     bool        pageBreakBefore;

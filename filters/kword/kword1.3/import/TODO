@@ -16,7 +16,7 @@ Variables/fields
 === Abiword's rtftest.rtf test file ===
 advanced mode of underlines
 subscript, superscript
-line-height (1, 1.5, 2)
+line-height (advanced modes)
 ...
 
 === Old OOWriter To-Do List ===
