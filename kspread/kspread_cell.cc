@@ -597,7 +597,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 }
 
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
-{
+{ 
   m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
   m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
   m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
@@ -2835,7 +2835,6 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bCalcDirtyFlag = true;
     m_bLayoutDirtyFlag= true;
     m_content = Formula;
-
     if ( !m_pTable->isLoading() )
 	if ( !makeFormular() )
 	    kdError(36002) << "ERROR: Syntax ERROR" << endl;
@@ -2875,11 +2874,12 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
    */
   else
   {
+    m_content = Text;
     // Find out what it is
     checkValue();
 
     m_bLayoutDirtyFlag = true;
-    m_content = Text;
+
   }
 
   /**
