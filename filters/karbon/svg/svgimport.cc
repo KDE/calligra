@@ -264,6 +264,14 @@ SvgImport::parseGradient( const QDomElement &e )
 	VGradient gradient;
 	gradient.clearStops();
 	gradient.setRepeatMethod( VGradient::none );
+
+	QString href = e.attribute( "xlink:href" );
+	if( !href.isEmpty() )
+	{
+		//kdDebug() << "Indexing with href : " << href.latin1() << endl;
+		gradient = m_gradients[ href ];
+	}
+
 	if( e.tagName() == "linearGradient" )
 	{
 		gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
@@ -334,6 +342,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
 			gc->stroke.gradient() = m_gradients[ key ];
+			gc->stroke.gradient().transform( m_gradientTransforms[ key ] );
 			gc->stroke.setType( VStroke::grad );
 		}
 		else
