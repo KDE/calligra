@@ -1648,78 +1648,89 @@ static bool kspreadfunc_pv( KSContext& context )
 
 static bool kspreadfunc_pv_annuity( KSContext& context )
 {
-/* Returns present value of an annuity or cash flow, given payment,
-interest rate,
-periods, initial amount and whether payments are made at the start (TRUE)
-or end of a period */
+    /* Returns present value of an annuity or cash flow, given payment,
+       interest rate,
+       periods, initial amount and whether payments are made at the start (TRUE)
+       or end of a period */
 
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 5, "PV_annuity", true ) )
-    return false;
+    if ( !KSUtil::checkArgumentsCount( context, 5, "PV_annuity", true ) )
+	return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
-    return false;
-  double amount= args[0]->doubleValue();
-  double interest = args[1]->doubleValue();
-  double periods = args[2]->doubleValue();
-  double initial = args[3]->doubleValue();
-  bool start = args[4]->boolValue();
+    if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
+	return false;
+    double amount = args[0]->doubleValue();
+    double interest = 1.0 + args[1]->doubleValue();
+    double periods = args[2]->doubleValue();
+    double future = args[3]->doubleValue();
+    bool start = args[4]->boolValue();
 
-  if (start) periods +=1;
-  double first_term = 1/interest;
-  double second_term = 1/(interest*pow(1+interest, periods)) ;
+    double result;
+    if ( !start )
+    {
+	result = ( future - amount * ( 1 - pow( interest, periods ) ) / ( 1 - interest ) ) / pow( interest, periods );
+    }
+    else
+    {
+	result = ( future - amount * ( interest - pow( interest, periods+1 ) ) / ( 1 - interest ) ) / pow( interest, periods );
+    }
+  
+  context.setValue( new KSValue( result ) );
 
-  context.setValue( new KSValue( initial + amount * (first_term -
-second_term)  ));
   return true;
 }
 
 
 static bool kspreadfunc_fv_annuity( KSContext& context )
 {
-/* Returns future value of an annuity or cash flow, given payment, interest
-rate,
-periods, initial amount and whether payments are made at the start (TRUE)
-or end of a period */
+    /* Returns future value of an annuity or cash flow, given payment, interest
+       rate,
+       periods, initial amount and whether payments are made at the start (TRUE)
+       or end of a period */
 
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    if ( !KSUtil::checkArgumentsCount( context, 5, "FV_annuity", true ) )
+	return false;
 
-  if ( !KSUtil::checkArgumentsCount( context, 5, "FV_annuity", true ) )
-    return false;
+    if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
+	return false;
+    double amount= args[0]->doubleValue();
+    double interest = 1.0 + args[1]->doubleValue();
+    double periods = args[2]->doubleValue();
+    double initial = args[3]->doubleValue();
+    bool start = args[4]->boolValue();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
-    return false;
-  double amount= args[0]->doubleValue();
-  double interest = args[1]->doubleValue();
-  double periods = args[2]->doubleValue();
-  double initial = args[3]->doubleValue();
-  bool start = args[4]->boolValue();
-
-  if (start) periods +=1;
-  double first_term = pow(1+interest, periods)/interest ;
-  double second_term = 1/interest;
-  initial =  initial * pow(1+interest, periods);
-  context.setValue( new KSValue( initial + amount * (first_term -
-second_term)  ));
-  return true;
+    double result;
+    if ( !start )
+    {
+	result = initial * pow( interest, periods ) + amount * ( 1 - pow( interest, periods ) ) / ( 1 - interest );
+    }
+    else
+    {
+	result = initial * pow( interest, periods ) + amount * ( interest - pow( interest, periods + 1 ) ) / ( 1 - interest );
+    }
+    
+    context.setValue( new KSValue( result ) );
+  
+    return true;
 }
 
 
