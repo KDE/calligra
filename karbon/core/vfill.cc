@@ -25,7 +25,7 @@ VFill::draw( QPainter& painter, const double zoomFactor, const VSegmentList& lis
 	painter.drawPolygon( m_pa, true );
 }
 
-void
+bool
 VFill::begin( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
@@ -34,9 +34,11 @@ VFill::begin( const KoPoint& p )
 		qRound( m_zoomFactor * p.y() ) );
 
 	setPreviousPoint( p );
+
+	return true;
 }
 
-void
+bool
 VFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	QPointArray pa( 4 );
@@ -59,9 +61,11 @@ VFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 	m_pa.putPoints( m_pa.size() - pa2.size(), pa2.size(), pa2 );
 
 	setPreviousPoint( p3 );
+
+	return true;
 }
 
-void
+bool
 VFill::lineTo( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
@@ -70,4 +74,6 @@ VFill::lineTo( const KoPoint& p )
 		qRound( m_zoomFactor * p.y() ) );
 
 	setPreviousPoint( p );
+
+	return true;
 }

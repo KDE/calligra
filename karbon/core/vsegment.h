@@ -16,12 +16,13 @@ class VSegmentListTraverser
 public:
 	VSegmentListTraverser();
 
-	virtual void begin( const KoPoint& p ) = 0;
-	virtual void curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 ) = 0;
-	virtual void curve1To( const KoPoint& p2, const KoPoint& p3 ) = 0;
-	virtual void curve2To( const KoPoint& p1, const KoPoint& p3 ) = 0;
-	virtual void lineTo( const KoPoint& p ) = 0;
-	virtual void end( const KoPoint& p ) = 0;
+	// if one of these operations should fail, it returns false:
+	virtual bool begin( const KoPoint& p ) = 0;
+	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 ) = 0;
+	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3 ) = 0;
+	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3 ) = 0;
+	virtual bool lineTo( const KoPoint& p ) = 0;
+	virtual bool end( const KoPoint& p ) = 0;
 
 	const KoPoint& previousPoint() const { return m_previousPoint; }
 	void setPreviousPoint( const KoPoint& p ) { m_previousPoint = p; }
@@ -71,7 +72,7 @@ public:
 	void setPoint( uint i, const KoPoint& p )
 		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
 
-	static void traverse( const VSegmentList& list, VSegmentListTraverser& traverser );
+	static bool traverse( const VSegmentList& list, VSegmentListTraverser& traverser );
 
 private:
 	VSegmentType m_type;

@@ -19,15 +19,17 @@ VBoundingBox::calculate( KoRect& rect, const VSegmentList& list  )
 	VSegment::traverse( list, *this );
 }
 
-void
+bool
 VBoundingBox::begin( const KoPoint& p )
 {
 	m_rect->setCoords( p.x(), p.y(), p.x(), p.y() );
 
 	setPreviousPoint( p );
+
+	return true;
 }
 
-void
+bool
 VBoundingBox::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	if( p1.x() < m_rect->left() )
@@ -58,9 +60,11 @@ VBoundingBox::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 
 		m_rect->setBottom( p3.y() );
 
 	setPreviousPoint( p3 );
+
+	return true;
 }
 
-void
+bool
 VBoundingBox::lineTo( const KoPoint& p )
 {
 	if( p.x() < m_rect->left() )
@@ -73,4 +77,6 @@ VBoundingBox::lineTo( const KoPoint& p )
 		m_rect->setBottom( p.y() );
 
 	setPreviousPoint( p );
+
+	return true;
 }

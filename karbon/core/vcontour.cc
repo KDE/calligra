@@ -47,7 +47,7 @@ VContour::draw( QPainter& painter, const double zoomFactor, const VSegmentList& 
 	painter.drawPolyline( m_pa );
 }
 
-void
+bool
 VContour::begin( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
@@ -56,9 +56,11 @@ VContour::begin( const KoPoint& p )
 		qRound( m_zoomFactor * p.y() ) );
 
 	setPreviousPoint( p );
+
+	return true;
 }
 
-void
+bool
 VContour::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	QPointArray pa( 4 );
@@ -81,9 +83,11 @@ VContour::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 	m_pa.putPoints( m_pa.size() - pa2.size(), pa2.size(), pa2 );
 
 	setPreviousPoint( p3 );
+
+	return true;
 }
 
-void
+bool
 VContour::lineTo( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
@@ -92,4 +96,6 @@ VContour::lineTo( const KoPoint& p )
 		qRound( m_zoomFactor * p.y() ) );
 
 	setPreviousPoint( p );
+
+	return true;
 }

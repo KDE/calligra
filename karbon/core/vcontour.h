@@ -35,15 +35,15 @@ public:
 	void draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
 		bool plain = false );	// "plain" is for drawing objects while editing them
 
-	virtual void begin( const KoPoint& p );
-	virtual void curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
-	virtual void curve1To( const KoPoint& p2, const KoPoint& p3 )
-		{ curveTo( p2, p2, p3 ); }
-	virtual void curve2To( const KoPoint& p1, const KoPoint& p3 )
-		{ curveTo( p1, p3, p3 ); }
-	virtual void lineTo( const KoPoint& p );
-	virtual void end( const KoPoint& p )
-		{ lineTo( p ); }
+	virtual bool begin( const KoPoint& p );
+	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
+	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3 )
+		{ return curveTo( p2, p2, p3 ); }
+	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3 )
+		{ return curveTo( p1, p3, p3 ); }
+	virtual bool lineTo( const KoPoint& p );
+	virtual bool end( const KoPoint& p )
+		{ return lineTo( p ); }
 
 private:
 	VColor m_color;
