@@ -87,7 +87,7 @@ public:
     { return format; }
     virtual void setFormat( KWFormat *_format )
     { format = _format; }
-    virtual bool operator==( const KWCharFormat &_attrib ) {
+    virtual bool operator==( const KWCharFormat &_attrib ) const {
         return ( classId == _attrib.classId &&
                  ( format ) && *format == *_attrib.format );
     }
