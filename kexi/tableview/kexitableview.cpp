@@ -89,6 +89,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	d->altColor = KGlobalSettings::alternateBackgroundColor();
 
 	setLineWidth(1);
+	horizontalScrollBar()->installEventFilter(this);
 	horizontalScrollBar()->raise();
 	verticalScrollBar()->raise();
 	
@@ -754,6 +755,12 @@ QSizePolicy KexiTableView::sizePolicy() const
 QSize KexiTableView::sizeHint() const
 {
 	const QSize &ts = tableSize();
+/*	kdDebug() << "KexiTableView::sizeHint()= " << 
+		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) )
+		<< ", " <<
+		QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
+			minimumSizeHint().height() ) << endl;*/
+
 	return QSize(
 		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) ),
 		//+ QMIN(d->pVerticalHeader->width(),d->rowHeight) + margin()*2,
@@ -2039,11 +2046,19 @@ QRect KexiTableView::cellGeometry(int row, int col) const
 
 QSize KexiTableView::tableSize() const
 {
-	if (rows() > 0 && cols() > 0)
+	if (rows() > 0 && cols() > 0) {
+/*		kdDebug() << "tableSize()= " << columnPos( cols() - 1 ) + columnWidth( cols() - 1 ) 
+			<< rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
+			+horizontalScrollBar()->sizeHint().height() + margin() << endl;*/
+
 		return QSize( 
 			columnPos( cols() - 1 ) + columnWidth( cols() - 1 ),
 			rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
-			+horizontalScrollBar()->sizeHint().height() + margin() );
+			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
+			+ margin() 
+		);
+//			+horizontalScrollBar()->sizeHint().height() + margin() );
+	}
 	return QSize(0,0);
 }
 
@@ -2060,9 +2075,18 @@ int KexiTableView::cols() const
 void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 {
 	//quite clever: ensure the cell is visible:
-	QPoint pcenter = QRect( 
-		columnPos(col==-1 ? d->curCol : col), rowPos(row), 
-		columnWidth(col==-1 ? d->curCol : col), rowHeight()).center();
+	QRect r( columnPos(col==-1 ? d->curCol : col), rowPos(row), 
+		columnWidth(col==-1 ? d->curCol : col), rowHeight());
+
+	if (d->navPanel && horizontalScrollBar()->isHidden()) {
+		//when cursor is moved down and navigator covers the cursor's area,
+		//area is scrolled up
+		if ((viewport()->height() - d->navPanel->height()) < r.bottom()) {
+			scrollBy(0,r.bottom() - (viewport()->height() - d->navPanel->height())+10);
+		}
+	}
+
+	QPoint pcenter = r.center();
 	ensureVisible(pcenter.x(), pcenter.y(), columnWidth(col==-1 ? d->curCol : col)/2, rowHeight()/2);
 }
 
