@@ -3,4 +3,7 @@ SVG export
 - text
 
 SVG import
-- everything
+- gradientTransform
+- stop-opacity
+- units (cm, mm)
+- trafo's
