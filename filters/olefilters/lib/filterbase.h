@@ -21,6 +21,7 @@ public:
 signals:
     void signalSavePic(const char *data, const char *type, const unsigned long size,
                                char **nameOUT);
+    void signalPart(const char *nameIN, char **nameOUT);
     void signalGetStream(const long &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
     // (searching only in current dir)
@@ -29,6 +30,7 @@ signals:
 protected slots:
     void slotSavePic(const char *data, const char *type, const unsigned long size,
                              char **nameOUT);
+    void slotPart(const char *nameIN, char **nameOUT);
     void slotFilterError();
 
 protected:
