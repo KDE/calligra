@@ -62,6 +62,7 @@ void CSVDialog::fillTable()
 
     row = column = 1;
     QTextStream inputStream(m_fileArray, IO_ReadOnly);
+    inputStream.setEncoding(QTextStream::Locale);
 
     while (!inputStream.atEnd())
     {
