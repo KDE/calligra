@@ -1484,25 +1484,50 @@ int KPresenterDoc::getBottomBorder()
 void KPresenterDoc::deletePage( int _page )
 {
     kdDebug(33001) << "KPresenterDoc::deletePage " << _page << endl;
+    //m_pageList.at(_page)->deletePage();
 
-    deSelectAllObj();
-    m_pageList.at(_page)->deletePage();
+    KPrDeletePageCmd *cmd=new KPrDeletePageCmd(i18n("Delete page"),_page,m_pageList.at(_page),this);
+    cmd->execute();
+    addCommand(cmd);
 
+    AddRemovePage();
+}
 
+void KPresenterDoc::insertPage( KPrPage *_page, int position)
+{
+    m_pageList.insert( position,_page);
+    //active this page
+    emit sig_changeActivePage(_page );
+
+    if ( position < (int)m_selectedSlides.count() )
+    {
+        kdDebug(33001) << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << position << endl;
+        m_selectedSlides.insert( m_selectedSlides.at(position), true );
+        kdDebug(33001) << "KPresenterDoc::insertPage count is now " << m_selectedSlides.count() << endl;
+    }
+    else
+        m_selectedSlides.append( true );
+
+}
+
+void KPresenterDoc::takePage(KPrPage *_page)
+{
+    int pos=m_pageList.findRef(_page);
+    m_pageList.take( pos);
+    //active previous page
+    emit sig_changeActivePage(_page );
+
+    repaint( false );
+    Q_ASSERT( pos < (int)m_selectedSlides.count() );
+    m_selectedSlides.remove( m_selectedSlides.at( pos ) );
+    emit sig_updateMenuBar();
+}
+
+void KPresenterDoc::AddRemovePage()
+{
     recalcPageNum();
 
     recalcVariables( VT_PGNUM );
-
-
-    //remove page.
-    m_pageList.remove( _page);
-    //set active page -1
-    emit sig_changeActivePage(m_pageList.at(_page-1) );
-
-    repaint( false );
-
-    Q_ASSERT( _page < (int)m_selectedSlides.count() );
-    m_selectedSlides.remove( m_selectedSlides.at( _page ) );
 
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
@@ -1511,6 +1536,7 @@ void KPresenterDoc::deletePage( int _page )
 
     //update statusbar
     emit pageNumChanged();
+    emit sig_updateMenuBar();
 }
 
 /*================================================================*/
@@ -1566,17 +1592,8 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     else
         m_selectedSlides.append( true );
 
-    recalcPageNum();
+    AddRemovePage();
 
-    recalcVariables( VT_PGNUM );
-
-    //update statusbar
-    emit pageNumChanged();
-
-    // Update the sidebars
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateSideBar();
     return _page;
 }
 

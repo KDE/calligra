@@ -252,6 +252,7 @@ public slots:
     void updatePageInfo();
     void updateObjectStatusBarItem();
     void pageNumChanged();
+    void updateSideBarMenu();
 
     void objectSelectedChanged();
 

@@ -637,6 +637,25 @@ protected:
 };
 
 /******************************************************************/
+/* Class: DeletePageCmd                                           */
+/******************************************************************/
+
+class KPrDeletePageCmd : public KCommand
+{
+public:
+    KPrDeletePageCmd( const QString &_name,int _pos, KPrPage *page, KPresenterDoc *_doc );
+    ~KPrDeletePageCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KPresenterDoc *doc;
+    KPrPage *m_page;
+    int position;
+};
+
+/******************************************************************/
 /* Class: KPrPasteTextCommand                                     */
 /******************************************************************/
 class KPrPasteTextCommand : public Qt3::QTextCommand

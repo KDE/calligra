@@ -1729,3 +1729,31 @@ void KPrChangeVariableSettingCommand::unexecute()
     m_doc->getVariableCollection()->variableSetting()->setNumberOffset(oldVarOffset);
     m_doc->recalcVariables( VT_PGNUM );
 }
+
+KPrDeletePageCmd::KPrDeletePageCmd( const QString &_name, int pos,KPrPage *_page, KPresenterDoc *_doc):
+    KCommand(_name),
+    doc(_doc),
+    position(pos),
+    m_page(_page)
+{
+}
+
+KPrDeletePageCmd::~KPrDeletePageCmd()
+{
+    //todo
+    m_page->deletePage();
+}
+
+void KPrDeletePageCmd::execute()
+{
+    doc->deSelectAllObj();
+    doc->takePage(m_page);
+    doc->AddRemovePage();
+}
+
+void KPrDeletePageCmd::unexecute()
+{
+    doc->deSelectAllObj();
+    doc->insertPage( m_page, position);
+    doc->AddRemovePage();
+}

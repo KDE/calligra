@@ -160,6 +160,8 @@ public:
     void savePage( const QString &file, int pgnum );
     void pastePage( const QMimeSource * data, int pgnum );
     int insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
+    void insertPage( KPrPage *_page, int position);
+    void takePage(KPrPage *_page);
     void deletePage( int _page );
     void copyPageToClipboard( int pgnum );
 
@@ -296,6 +298,8 @@ public:
     void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
     void newZoomAndResolution( bool updateViews, bool forPrint );
 
+    void AddRemovePage();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -313,6 +317,7 @@ signals:
     void sig_updateRuler();
     void sig_terminateEditing( KPTextObject * );
     void sig_changeActivePage( KPrPage* );
+    void sig_updateMenuBar();
 
 protected slots:
     void slotDocumentRestored();

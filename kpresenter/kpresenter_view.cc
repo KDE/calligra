@@ -286,6 +286,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect( m_canvas, SIGNAL( objectSelectedChanged() ), this, SLOT( updateObjectStatusBarItem() ));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
+    connect (m_pKPresenterDoc, SIGNAL(sig_updateMenuBar()),this, SLOT(updateSideBarMenu()));
 
     //change table active.
     connect( m_pKPresenterDoc, SIGNAL( sig_changeActivePage( KPrPage* ) ), m_canvas, SLOT( slotSetActivePage( KPrPage* ) ) );
@@ -491,6 +492,11 @@ void KPresenterView::editDuplicatePage()
     m_pKPresenterDoc->copyPage( currPg, currPg+1 );
     setRanges();
     skipToPage( currPg+1 ); // go to the new page
+    updateSideBarMenu();
+}
+
+void KPresenterView::updateSideBarMenu()
+{
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
 }
 
@@ -507,7 +513,7 @@ void KPresenterView::editDelPage()
     setRanges();
     currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
     skipToPage( currPg );
-    actionEditDelPage->setEnabled(  m_pKPresenterDoc->getPageNums() > 1 );
+    updateSideBarMenu();
 }
 
 /*===============================================================*/
@@ -534,7 +540,7 @@ void KPresenterView::insertPage()
     setRanges();
     if ( pg != -1 )
 	skipToPage( pg );
-    actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
+    updateSideBarMenu();
 }
 
 /*====================== insert a picture =======================*/
@@ -2102,7 +2108,7 @@ void KPresenterView::initGui()
     actionPenColor->setCurrentColor( Qt::black );
     actionScreenPenColor->setColor( Qt::red );
     actionScreenPenWidth->setCurrentItem( 2 );
-    actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
+    updateSideBarMenu();
     objectSelectedChanged();
     refreshPageButton();
 
