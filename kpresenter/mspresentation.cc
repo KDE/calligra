@@ -331,7 +331,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
                                             this , "colourBox" );
     QWhatsThis::add( colourGroup,
                      i18n( "This section allows you to set the colors for "
-                           "the preliminary slides. It doesn't affect the "
+                           "the preliminary slides; it does not affect the "
                            "presentation in any way, and it is normal to "
                            "leave these set to the default.") );
     QHBox *textColourLayout = new QHBox( colourGroup );

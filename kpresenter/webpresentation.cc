@@ -631,7 +631,7 @@ void KPWebPresentationWizard::setupPage1()
     QLabel *label1 = new QLabel( i18n("Author:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     QWhatsThis::add( label1, i18n("This is where you enter the name of the person or "
-                                  "organisation that should be named as the author of "
+                                  "organization that should be named as the author of "
                                   "the presentation.") );
     layout->addWidget( label1, 2, 0 );
 
@@ -644,7 +644,7 @@ void KPWebPresentationWizard::setupPage1()
     QLabel *label3 = new QLabel( i18n("Email address:"), canvas );
     label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     QWhatsThis::add( label3, i18n("This is where you enter the email address of the "
-                                  "person or organisation that is responsible for "
+                                  "person or organization that is responsible for "
                                   "the presentation.") );
     layout->addWidget( label3, 4, 0 );
 
@@ -658,7 +658,7 @@ void KPWebPresentationWizard::setupPage1()
 
     author = new KLineEdit( webPres.getAuthor(), canvas );
     QWhatsThis::add( author, i18n("This is where you enter the name of the person or "
-                                  "organisation that should be named as the author of "
+                                  "organization that should be named as the author of "
                                   "the presentation.") );
     layout->addWidget( author, 2, 1 );
 
@@ -669,7 +669,7 @@ void KPWebPresentationWizard::setupPage1()
 
     email = new KLineEdit( webPres.getEmail(), canvas );
     QWhatsThis::add( email, i18n("This is where you enter the email address of the "
-                                 "person or organisation that is responsible for "
+                                 "person or organization that is responsible for "
                                  "the presentation.") );
     layout->addWidget( email, 4, 1 );
 
@@ -831,7 +831,7 @@ void KPWebPresentationWizard::setupPage4()
 {
     page4 = new QHBox( this );
     QWhatsThis::add( page4, i18n("This page allows you to modify the titles of "
-                                 "each slide, if required. You normally don't need "
+                                 "each slide, if required. You normally do not need "
                                  "to do this, but it is available if required.") );
     page4->setSpacing( KDialog::spacingHint() );
     page4->setMargin( KDialog::marginHint() );
