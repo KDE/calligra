@@ -1047,6 +1047,9 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 						++stringPtr;
 						*stringPtr = "";
 						break;
+					case 247:  // DB
+						(*stringPtr).prepend("DB(");
+						break;
 					default:
 						kdDebug(s_area) << "Formula contains unhandled function " << integer << endl;
 						break;
