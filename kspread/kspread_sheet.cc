@@ -6484,18 +6484,19 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             {
                 QString masterPageStyleName = style->attribute( "style:master-page-name" );
                 kdDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
-                QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
+                QDomElement *masterStyle = oasisStyles.styles()[masterPageStyleName];
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
                     loadTableStyleFormat( masterStyle );
-                    if ( masterStyle->hasAttribute( "style:page-master-name" ) )
+                    if ( masterStyle->hasAttribute( "style:page-layout-name" ) )
                     {
-                        QString masterPageLayoutStyleName=masterStyle->attribute( "style:page-master-name" );
+                        QString masterPageLayoutStyleName=masterStyle->attribute( "style:page-layout-name" );
                         kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
                         QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
                         kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
                         KoStyleStack styleStack;
+                        styleStack.setTypeProperties( "page-layout" );
                         styleStack.push( *masterLayoutStyle );
                         loadOasisMasterLayoutPage( styleStack );
                     }
