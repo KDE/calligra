@@ -307,9 +307,17 @@ SvgImport::parseGradient( const QDomElement &e )
 	}
 	else
 	{
-		gradhelper.gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
-		gradhelper.gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(),
-									 e.attribute( "cy" ).toDouble() ) );
+		if( gradhelper.bbox )
+		{
+			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "cx", "50%" ) ), toPercentage( e.attribute( "cy", "50%" ) ) ) );
+			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "cx", "50%" ) ) + toPercentage( e.attribute( "r", "50%" ) ),
+													toPercentage( e.attribute( "cy", "50%" ) ) ) );
+		}
+		else
+		{
+			gradhelper.gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
+			gradhelper.gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
+		}
 		gradhelper.gradient.setType( VGradient::radial );
 	}
 	// handle spread method
@@ -348,7 +356,9 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 				// adjust to bbox
 				KoRect bbox = obj->boundingBox();
 				kdDebug() << "bbox x : " << bbox.x() << endl;
-				kdDebug() << "bbox y : " << bbox.y() << endl;
+				kdDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
+				kdDebug() << gc->fill.gradient().origin().x() << endl;
+				kdDebug() << gc->fill.gradient().vector().x() << endl;
 				double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 				double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 				gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
