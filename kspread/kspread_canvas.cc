@@ -1148,18 +1148,18 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     if ( _ev->size().width() > _ev->oldSize().width() )
     {
         if ( ( xOffset() + _ev->size().width() ) >
-               activeTable()->sizeMaxX() )
+               activeTable()->sizeMaxX() * zoom() )
         {
-            horzScrollBar()->setRange( 0, activeTable()->sizeMaxX() - _ev->size().width() );
+            horzScrollBar()->setRange( 0, int( activeTable()->sizeMaxX() * zoom() ) - _ev->size().width() );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
     else if ( _ev->size().width() < _ev->oldSize().width() )
     {
         if ( horzScrollBar()->maxValue() ==
-             ( activeTable()->sizeMaxX() - _ev->oldSize().width() ) )
+             ( int( activeTable()->sizeMaxX() * zoom() ) - _ev->oldSize().width() ) )
         {
-            horzScrollBar()->setRange( 0, activeTable()->sizeMaxX() - _ev->size().width() );
+            horzScrollBar()->setRange( 0, int( activeTable()->sizeMaxX() * zoom() ) - _ev->size().width() );
         }
     }
 
@@ -1167,18 +1167,18 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     if ( _ev->size().height() > _ev->oldSize().height() )
     {
         if ( ( yOffset() + _ev->size().height() ) >
-             activeTable()->sizeMaxY() )
+             activeTable()->sizeMaxY() * zoom() )
         {
-            vertScrollBar()->setRange( 0, int( activeTable()->sizeMaxY() ) - _ev->size().height() );
+            vertScrollBar()->setRange( 0, int( activeTable()->sizeMaxY() * zoom() ) - _ev->size().height() );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
     else if ( _ev->size().height() < _ev->oldSize().height() )
     {
         if ( vertScrollBar()->maxValue() ==
-             ( activeTable()->sizeMaxY() - _ev->oldSize().height() ) )
+             ( int( activeTable()->sizeMaxY() * zoom() ) - _ev->oldSize().height() ) )
         {
-            vertScrollBar()->setRange( 0, int( activeTable()->sizeMaxY() ) - _ev->size().height() );
+            vertScrollBar()->setRange( 0, int( activeTable()->sizeMaxY() * zoom() ) - _ev->size().height() );
         }
     }
 }
