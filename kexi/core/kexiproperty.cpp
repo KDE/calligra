@@ -54,14 +54,7 @@ class SPHelper
 QString
 SPHelper::valueToKey(int value)
 {
-	QStringList::iterator it = list.at(value);
-	if (it==list.end())
-		return QString::null;//err
-
-	return *it;
-}
-/*
-	switch(key)
+	switch(value)
 	{
 		case QSizePolicy::Fixed: return QString("Fixed");
 		case QSizePolicy::Minimum: return QString("Minimum");
@@ -70,27 +63,23 @@ SPHelper::valueToKey(int value)
 		case QSizePolicy::MinimumExpanding: return QString("MinimumExpanding");
 		case QSizePolicy::Expanding: return QString("Expanding");
 		case QSizePolicy::Ignored: return QString("Ignored");
-		default: return QString();
+		default: return QString::null;
 	}
-}*/
-
-QSizePolicy::SizeType
-SPHelper::keyToValue(const QString& key)
-{
-	int i = list.findIndex(key);
-	if (i<0 || i>QSizePolicy::Ignored)
-		i = QSizePolicy::Preferred;//deflt
-	return static_cast<QSizePolicy::SizeType>(i);
 }
 
-/*QStringList
-spHelper::list()
+QSizePolicy::SizeType
+SPHelper::keyToValue(const QString &key)
 {
-	QStringList list;
-	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding"
-		<< "MinimumExpanding" << "Ignored";
-	return list;
-}*/
+	if(key == "Fixed") return QSizePolicy::Fixed;
+	if(key == "Minimum") return QSizePolicy::Minimum;
+	if(key == "Maximum") return QSizePolicy::Maximum;
+	if(key == "Preferred") return QSizePolicy::Preferred;
+	if(key == "MinimumExpanding") return QSizePolicy::MinimumExpanding;
+	if(key == "Expanding") return QSizePolicy::Expanding;
+	if(key == "Ignored") return QSizePolicy::Ignored;
+
+	return QSizePolicy::Expanding;
+}
 
 //singleton
 
@@ -324,7 +313,7 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		ch = m_value.toString() != v.toString();
 	}
 	else if (m_value.type()==QVariant::String) {
-		//property is changed for string type, 
+		//property is changed for string type,
 		//if one of value is empty and other isn't..
 		ch = (m_value.toString().isEmpty() != v.toString().isEmpty()
 		//..or both are not empty and values differ
