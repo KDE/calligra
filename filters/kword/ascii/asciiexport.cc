@@ -20,31 +20,109 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <asciiexport.h>
-#include <asciiexport.moc>
-#include <kdebug.h>
+
+#include <qiodevice.h>
+#include <qtextstream.h>
 #include <qdom.h>
+
+#include <kdebug.h>
+
 
 #include <KWEFStructures.h>
 #include <TagProcessing.h>
 #include <KWEFBaseClass.h>
 #include <ProcessDocument.h>
+#include <KWEFBaseWorker.h>
+#include <KWEFKWordLeader.h>
 
-ASCIIExport::ASCIIExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
+#include <asciiexport.h>
+#include <asciiexport.moc>
+
+class ASCIIWorker : public KWEFBaseWorker
+{
+public:
+    ASCIIWorker(void) : m_ioDevice(NULL), m_streamOut(NULL) { }
+    virtual ~ASCIIWorker(void) { }
+public:
+    virtual bool doOpenFile(const QString& filenameOut, const QString& to);
+    virtual bool doCloseFile(void); // Close file in normal conditions
+    virtual bool doOpenDocument(void);
+    virtual bool doCloseDocument(void);
+    virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+private:
+    void ProcessParagraphData ( QString& paraText, ValueListFormatData& paraFormatDataList);
+private:
+    QIODevice* m_ioDevice;
+    QTextStream* m_streamOut;
+
+};
+
+bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
+{
+    kdDebug(30503) << "Entering ASCIIWorker::doOpenFile" << endl;
+    if ( to != "text/plain" )
+    {
+        kdError(30502) << "Unexpected mime type " << to <<" Aborting!" << endl;
+        return false;
+    }
+
+    m_ioDevice=new QFile(filenameOut);
+
+    if (!m_ioDevice)
+    {
+        kdError(30502) << "No output file! Aborting!" << endl;
+        return false;
+    }
+
+    if ( !m_ioDevice->open (IO_WriteOnly) )
+    {
+        kdError(30502) << "Unable to open output file!" << endl;
+        return false;
+    }
+
+    m_streamOut=new QTextStream(m_ioDevice);
+    if (!m_ioDevice)
+    {
+        kdError(30502) << "Could not create output stream! Aborting!" << endl;
+        m_ioDevice->close();
+        return false;
+    }
+
+    // TODO: ask the user for the encoding!
+    m_streamOut->setEncoding( QTextStream::Locale );
+    kdDebug(30503) << "Exiting ASCIIWorker::doOpenFile" << endl;
+    return true;
+}
+
+bool ASCIIWorker::doCloseFile(void)
+{
+    if (m_ioDevice)
+        m_ioDevice->close();
+    return (m_ioDevice);
+}
+
+bool ASCIIWorker::doOpenDocument(void)
+{
+    // We have nothing to do, but to give our OK to continue
+    return true;
+}
+
+bool ASCIIWorker::doCloseDocument(void)
+{
+    // We have nothing to do, but to give our OK to continue
+    return true;
 }
 
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-void ProcessParagraphData ( QString                 &paraText,
-                            ValueListFormatData     &paraFormatDataList,
-                            QString                 &outputText,
-                            KWEFBaseClass           * )
+void ASCIIWorker::ProcessParagraphData ( QString& paraText,
+    ValueListFormatData& paraFormatDataList)
 {
     if ( paraText.length () > 0 )
     {
+        // TODO: CreateMissingFormatData should be called in the Leader!
         CreateMissingFormatData(paraText,paraFormatDataList);
 
         ValueListFormatData::Iterator  paraFormatDataIt;
@@ -53,64 +131,49 @@ void ProcessParagraphData ( QString                 &paraText,
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
-            outputText += paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+            *m_streamOut << paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
         }
     }
 
-    outputText += "\n";
+    *m_streamOut << "\n";
 }
 
-
-void ProcessParagraphTag ( QDomNode      myNode,
-                           void          *,
-                           QString       &outputText,
-                           KWEFBaseClass *exportFilter )
+bool ASCIIWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
 {
-    AllowNoAttributes (myNode);
-
-    QString paraText;
-    ValueListFormatData paraFormatDataList;
-    LayoutData layout;
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraText           ) );
-    tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraFormatDataList ) );
-    tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &layout         ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-
+    kdDebug(30503) << "Entering ASCIIWorker::doFullParagraph" << endl;
     QString paraLayout=layout.styleName;
 
     if ( paraLayout == "Head 1" )
     {
-        outputText += "###################################\n";
-        outputText += "# ";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
-        outputText += "###################################\n";
+        *m_streamOut << "###################################\n";
+        *m_streamOut << "# ";
+        ProcessParagraphData ( paraText, paraFormatDataList);
+        *m_streamOut << "###################################\n";
     }
     else if ( paraLayout == "Head 2" )
     {
-        outputText += "#### ";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+        *m_streamOut << "#### ";
+        ProcessParagraphData ( paraText, paraFormatDataList);
     }
     else if ( paraLayout == "Head 3" )
     {
-        outputText += "## ";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+        *m_streamOut << "## ";
+        ProcessParagraphData ( paraText, paraFormatDataList);
     }
     else if ( paraLayout == "Bullet List" )
     {
-        outputText += "o ";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+        *m_streamOut << "o ";
+        ProcessParagraphData ( paraText, paraFormatDataList);
     }
     else if ( paraLayout == "Enumerated List" )
     {
-        outputText += "1. ";   // less than perfect
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+        *m_streamOut << "1. ";   // less than perfect
+        ProcessParagraphData ( paraText, paraFormatDataList);
     }
     else if ( paraLayout == "Alphabetical List" )
     {
-        outputText += "a) ";   // less than perfect
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+        *m_streamOut << "a) ";   // less than perfect
+        ProcessParagraphData ( paraText, paraFormatDataList);
     }
     else
     {
@@ -119,113 +182,50 @@ void ProcessParagraphTag ( QDomNode      myNode,
             kdError(30502) << "Unknown layout " + paraLayout + "!" << endl;
         }
 
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+        ProcessParagraphData ( paraText, paraFormatDataList);
     }
+    kdDebug(30503) << "Exiting ASCIIWorker::doFullParagraph" << endl;
+    return true;
 }
 
 
-void ProcessFramesetTag ( QDomNode      myNode,
-                          void          *,
-                          QString       &outputText,
-                          KWEFBaseClass *exportFilter )
+ASCIIExport::ASCIIExport(KoFilter *parent, const char *name) :
+                     KoFilter(parent, name)
 {
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "frameType", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "frameInfo", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "removable", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "visible",   "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "name",      "", NULL ) );
-    ProcessAttributes (myNode, attrProcessingList);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
-
-
-void ProcessFramesetsTag ( QDomNode      myNode,
-                           void          *,
-                           QString       &outputText,
-                           KWEFBaseClass *exportFilter )
-{
-    AllowNoAttributes (myNode);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "FRAMESET", ProcessFramesetTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-}
-
-
-void ProcessDocTag ( QDomNode       myNode,
-                     void           *,
-                     QString        &outputText,
-                     KWEFBaseClass  *exportFilter )
-{
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
-    ProcessAttributes (myNode, attrProcessingList);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-}
-
 
 bool ASCIIExport::filter(const QString  &filenameIn,
                          const QString  &filenameOut,
                          const QString  &from,
                          const QString  &to,
-                         const QString  &         )
+                         const QString  &param )
 {
     if ( to != "text/plain" || from != "application/x-kword" )
     {
         return false;
     }
 
-    KoStore koStoreIn (filenameIn, KoStore::Read);
+    ASCIIWorker* worker=new ASCIIWorker();
 
-    if ( !koStoreIn.open ( "root" ) )
+    if (!worker)
     {
-        koStoreIn.close ();
-
-        kdError(30502) << "Unable to open input file!" << endl;
+        kdError(30502) << "Cannot create Worker! Aborting!" << endl;
         return false;
     }
 
-    QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
-    koStoreIn.close ();
+    KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
 
-    QDomDocument qDomDocumentIn;
-    qDomDocumentIn.setContent (byteArrayIn);
-
-    QDomNode docNode = qDomDocumentIn.documentElement ();
-
-    QString stringBufOut;
-
-    ProcessDocTag (docNode, NULL, stringBufOut, NULL);
-
-    QFile fileOut (filenameOut);
-
-    if ( !fileOut.open (IO_WriteOnly) )
+    if (!leader)
     {
-        fileOut.close ();
-
-        kdError(30502) << "Unable to open output file!" << endl;
+        kdError(30502) << "Cannot create Worker! Aborting!" << endl;
+        delete worker;
         return false;
     }
 
-    fileOut.writeBlock ( (const char *) stringBufOut.local8Bit (), stringBufOut.length () );
-    fileOut.close ();
+    bool flag=leader->filter(filenameIn,filenameOut,from,to,param);
 
-    return true;
+    delete leader;
+    delete worker;
+
+    return flag;
 }
-
