@@ -277,7 +277,37 @@ static void importTextPosition( const QString& text_position, double fontSize, K
         value = KoTextFormat::AlignNormal;
 }
 
-// Helper for load
+// OASIS 14.2.29
+static void importOasisUnderline( const QString& type, const QString& style,
+                                  KoTextFormat::UnderlineType& underline,
+                                  KoTextFormat::UnderlineStyle& styleline )
+{
+  if ( type == "single" )
+      underline = KoTextFormat::U_SIMPLE;
+  else if ( type == "double" )
+      underline = KoTextFormat::U_DOUBLE;
+  else
+      underline = KoTextFormat::U_NONE;
+
+  styleline = KoTextFormat::U_SOLID;
+  if ( style == "solid" )
+      styleline = KoTextFormat::U_SOLID;
+  else if ( style == "dotted" )
+      styleline = KoTextFormat::U_DOT;
+  else if ( style == "dash"
+            || style == "long-dash" ) // not in kotext
+      styleline = KoTextFormat::U_DASH;
+  else if ( style == "dot-dash" )
+      styleline = KoTextFormat::U_DASH_DOT;
+  else if ( style == "dot-dot-dash" )
+      styleline = KoTextFormat::U_DASH_DOT_DOT;
+  else if ( style == "wave" )
+      underline = KoTextFormat::U_WAVE;
+  // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
+  // We should separate them in kotext...
+}
+
+// Helper for load. Legacy OO format.
 static void importUnderline( const QString& in,
                              KoTextFormat::UnderlineType& underline,
                              KoTextFormat::UnderlineStyle& styleline )
@@ -361,8 +391,7 @@ void KoTextFormat::load( KoOasisContext& context )
 
     d->m_bWordByWord = (styleStack.hasAttribute("fo:score-spaces")) // 3.10.25
                       && (styleStack.attribute("fo:score-spaces") == "false");
-    m_strikeOutType = S_NONE;
-    m_strikeOutStyle = S_SOLID;
+#if 0 // OO compat code, to move to OO import filter
     if( styleStack.hasAttribute("style:text-crossing-out" )) { // 3.10.6
         QString strikeOutType = styleStack.attribute( "style:text-crossing-out" );
         if( strikeOutType =="double-line")
@@ -374,20 +403,39 @@ void KoTextFormat::load( KoOasisContext& context )
         // not supported by KWord: "slash" and "X"
         // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
     }
+#endif
+    if ( styleStack.hasAttribute( "style:text-underline-type" ) ) { // OASIS 14.4.28
+        importOasisUnderline( styleStack.attribute( "style:text-underline-type" ),
+                              styleStack.attribute( "style:text-underline-style" ),
+                              m_underlineType, m_underlineStyle );
+    }
+    else if ( styleStack.hasAttribute( "style:text-underline" ) ) { // OO compat (3.10.22), to be moved out
+        importUnderline( styleStack.attribute( "style:text-underline" ),
+                         m_underlineType, m_underlineStyle );
+    }
+    QString underLineColor = styleStack.attribute( "style:text-underline-color" ); // OO 3.10.23, OASIS 14.4.31
+    if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
+        m_textUnderlineColor.setNamedColor( underLineColor );
+
+    if ( styleStack.hasAttribute( "style:text-line-through-type" ) ) { // OASIS 14.4.7
+        // Reuse code for loading underlines, and convert to strikeout enum (if not wave)
+        UnderlineType uType; UnderlineStyle uStyle;
+        importOasisUnderline( styleStack.attribute( "style:text-line-through-type" ),
+                              styleStack.attribute( "style:text-line-through-style" ),
+                              uType, uStyle );
+        m_strikeOutType = S_NONE;
+        if ( uType != U_WAVE )
+            m_strikeOutType = (StrikeOutType)uType;
+        m_strikeOutStyle = (StrikeOutStyle)uStyle;
+    }
+
+    // Text position
     va = AlignNormal;
     d->m_relativeTextSize = 0.58;
     d->m_offsetFromBaseLine = 0;
-    if( styleStack.hasAttribute("style:text-position")) { // 3.10.7
+    if( styleStack.hasAttribute("style:text-position")) { // OO 3.10.7
         importTextPosition( styleStack.attribute("style:text-position"), fn.pointSizeFloat(),
                             va, d->m_relativeTextSize, d->m_offsetFromBaseLine );
-    }
-    if ( styleStack.hasAttribute( "style:text-underline" ) ) { // 3.10.22
-        importUnderline( styleStack.attribute( "style:text-underline" ),
-                                  m_underlineType, m_underlineStyle );
-
-        QString underLineColor = styleStack.attribute( "style:text-underline-color" ); // 3.10.23
-        if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
-            m_textUnderlineColor.setNamedColor( underLineColor );
     }
     // Small caps, lowercase, uppercase
     m_attributeFont = ATT_NONE;
@@ -419,8 +467,9 @@ void KoTextFormat::load( KoOasisContext& context )
         parseShadowFromCss( styleStack.attribute("fo:text-shadow") );
     }
 
-    // ######### TODO - it seems OO has it as a paragraph property... (what about msword?)
     d->m_bHyphenation = true;
+    if ( styleStack.hasAttribute( "fo:hyphenate" ) ) // it's a character property in OASIS (but not in OO-1.1)
+        d->m_bHyphenation = styleStack.attribute( "fo:hyphenate" ) == "true";
 
     /*
       Missing properties:
@@ -446,7 +495,7 @@ void KoTextFormat::load( KoOasisContext& context )
     */
 
     d->m_underLineWidth = 1.0;
-    ////
+
     generateKey();
     addRef();
 
@@ -458,7 +507,6 @@ void KoTextFormat::update()
     m_key = QString::null; // invalidate key, recalc at the next key() call
     assert( d );
     d->clearCache(); // i.e. recalc at the next screenFont[Metrics]() call
-    ////
 }
 
 void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
