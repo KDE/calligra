@@ -94,8 +94,6 @@ AC_OUTPUT( \
 	killustrator/share/Makefile \
 	killustrator/standalone/Makefile \
 	killustrator/xmlutils/Makefile \
-	kohtml/Makefile \
-	kohtml/toolbar/Makefile \
 	kimage/Makefile \
 	kimage/pics/Makefile \
 	kimageshop/Makefile \
