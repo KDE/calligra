@@ -241,6 +241,12 @@ enum FillType
 
 typedef int PresSpeed;
 
+enum EffectSpeed {
+  ES_SLOW = 0,
+  ES_MEDIUM = 1,
+  ES_FAST = 2
+};
+
 enum InsertPos {
     IP_BEFORE = 0,
     IP_AFTER = 1

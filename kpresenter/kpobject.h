@@ -109,6 +109,10 @@ public:
         { disappearStep = num; }
     virtual void setEffect3( Effect3 _effect3)
         { effect3 = _effect3; }
+    virtual void setAppearSpeed( EffectSpeed _speed )
+        { m_appearSpeed = _speed; }
+    virtual void setDisappearSpeed( EffectSpeed _speed )
+        { m_disappearSpeed = _speed; }
     virtual void setAppearTimer( int _appearTimer )
         { appearTimer = _appearTimer; }
     virtual void setDisappearTimer( int _disappearTimer )
@@ -172,6 +176,10 @@ public:
         { return effect2; }
     virtual Effect3 getEffect3() const
         { return effect3; }
+    virtual EffectSpeed getAppearSpeed() const
+        { return m_appearSpeed; }
+    virtual EffectSpeed getDisappearSpeed() const
+        { return m_disappearSpeed; }
     virtual int getAppearTimer() const
         { return appearTimer; }
     virtual int getDisappearTimer() const
@@ -300,6 +308,8 @@ protected:
     Effect effect;
     Effect2 effect2;
     Effect3 effect3;
+    EffectSpeed m_appearSpeed;
+    EffectSpeed m_disappearSpeed;
     int appearTimer, disappearTimer;
     QString a_fileName, d_fileName;
     QString objectName;
