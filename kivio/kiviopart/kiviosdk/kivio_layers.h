@@ -23,6 +23,7 @@
   KivioLayer *nextLayer() { return page->nextLayer(); }
   KivioLayer *lastLayer() { return page->lastLayer(); }
   KivioLayer *prevLayer() { return page->prevLayer(); }
+  
   bool removeCurrentLayer() { return page->removeCurrentLayer(); }
   void addLayer( KivioLayer *l ) { page->addLayer(l); }
   void insertLayer( int i, KivioLayer *l ) { page->insertLayer(i,l); }

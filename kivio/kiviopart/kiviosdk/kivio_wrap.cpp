@@ -438,10 +438,9 @@ SWIG_InstallConstants(PyObject *d, _swig_const_info constants[]) {
 #define  SWIGTYPE_float_p _swig_types[1] 
 #define  SWIGTYPE_KivioFillStyle_p _swig_types[2] 
 #define  SWIGTYPE_KivioRect_p _swig_types[3] 
-#define  SWIGTYPE_QColor_p _swig_types[4] 
-#define  SWIGTYPE_KivioStencil_p _swig_types[5] 
-#define  SWIGTYPE_KivioLayer_p _swig_types[6] 
-static _swig_type_info *_swig_types[8];
+#define  SWIGTYPE_KivioStencil_p _swig_types[4] 
+#define  SWIGTYPE_KivioLayer_p _swig_types[5] 
+static _swig_type_info *_swig_types[7];
 /* ---- TYPES TABLE (END) ---- */
 
 #define SWIG_init    initkivioc
@@ -453,7 +452,6 @@ static _swig_type_info *_swig_types[8];
 #include "kivio_stencil.h"
 
 #include "kivio_layer.h"
-
 
 #include "kivio_layers.h"
 #ifdef __cplusplus
@@ -949,66 +947,6 @@ static PyObject *_wrap_KivioStencil_setDimensions(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define KivioStencil_fgColor(_swigobj)  (_swigobj->fgColor())
-static PyObject *_wrap_KivioStencil_fgColor(PyObject *self, PyObject *args) {
-    QColor  *_result;
-    PyObject  *_resultobj,*_argo0=0;
-    KivioStencil  *_arg0;
-    self = self;
-    if(!PyArg_ParseTuple(args,"O:KivioStencil_fgColor",&_argo0)) 
-        return NULL;
-    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
-    _result = new QColor (KivioStencil_fgColor(_arg0));
-    _resultobj = SWIG_NewPointerObj((void *)_result, SWIGTYPE_QColor_p);
-    return _resultobj;
-}
-
-#define KivioStencil_setFGColor(_swigobj,_swigarg0)  (_swigobj->setFGColor(_swigarg0))
-static PyObject *_wrap_KivioStencil_setFGColor(PyObject *self, PyObject *args) {
-    QColor  *_arg1;
-    PyObject  *_resultobj,*_argo0=0,*_argo1=0;
-    KivioStencil  *_arg0;
-    self = self;
-    if(!PyArg_ParseTuple(args,"OO:KivioStencil_setFGColor",&_argo0,&_argo1)) 
-        return NULL;
-    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
-    if ((SWIG_ConvertPtr(_argo1,(void **) &_arg1,SWIGTYPE_QColor_p,1)) == -1) return NULL;
-    KivioStencil_setFGColor(_arg0,*_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define KivioStencil_setBGColor(_swigobj,_swigarg0)  (_swigobj->setBGColor(_swigarg0))
-static PyObject *_wrap_KivioStencil_setBGColor(PyObject *self, PyObject *args) {
-    QColor  *_arg1;
-    PyObject  *_resultobj,*_argo0=0,*_argo1=0;
-    KivioStencil  *_arg0;
-    self = self;
-    if(!PyArg_ParseTuple(args,"OO:KivioStencil_setBGColor",&_argo0,&_argo1)) 
-        return NULL;
-    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
-    if ((SWIG_ConvertPtr(_argo1,(void **) &_arg1,SWIGTYPE_QColor_p,1)) == -1) return NULL;
-    KivioStencil_setBGColor(_arg0,*_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define KivioStencil_bgColor(_swigobj)  (_swigobj->bgColor())
-static PyObject *_wrap_KivioStencil_bgColor(PyObject *self, PyObject *args) {
-    QColor  *_result;
-    PyObject  *_resultobj,*_argo0=0;
-    KivioStencil  *_arg0;
-    self = self;
-    if(!PyArg_ParseTuple(args,"O:KivioStencil_bgColor",&_argo0)) 
-        return NULL;
-    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
-    _result = new QColor (KivioStencil_bgColor(_arg0));
-    _resultobj = SWIG_NewPointerObj((void *)_result, SWIGTYPE_QColor_p);
-    return _resultobj;
-}
-
 #define KivioStencil_fillStyle(_swigobj)  (_swigobj->fillStyle())
 static PyObject *_wrap_KivioStencil_fillStyle(PyObject *self, PyObject *args) {
     KivioFillStyle  *_result;
@@ -1139,6 +1077,93 @@ static PyObject *_wrap_KivioStencil_text(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static char * KivioStencil_textColor(KivioStencil *self) { return self->textColor().name().latin1(); }
+static PyObject *_wrap_KivioStencil_textColor(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0;
+    char  *_result;
+    KivioStencil  *_arg0;
+    self = self;
+    if(!PyArg_ParseTuple(args,"O:KivioStencil_textColor",&_argo0)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    _result = (char *)KivioStencil_textColor(_arg0);
+    _resultobj = Py_BuildValue("s", _result);
+    return _resultobj;
+}
+
+static void  KivioStencil_setTextColor(KivioStencil *self,char * color) {  self->setTextColor(QColor(color)); }
+static PyObject *_wrap_KivioStencil_setTextColor(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0;
+    KivioStencil  *_arg0;
+    char  *_arg1;
+    self = self;
+    if(!PyArg_ParseTuple(args,"Os:KivioStencil_setTextColor",&_argo0,&_arg1)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    KivioStencil_setTextColor(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static char * KivioStencil_fgColor(KivioStencil *self) { return self->fgColor().name().latin1(); }
+static PyObject *_wrap_KivioStencil_fgColor(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0;
+    char  *_result;
+    KivioStencil  *_arg0;
+    self = self;
+    if(!PyArg_ParseTuple(args,"O:KivioStencil_fgColor",&_argo0)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    _result = (char *)KivioStencil_fgColor(_arg0);
+    _resultobj = Py_BuildValue("s", _result);
+    return _resultobj;
+}
+
+static void  KivioStencil_setFGColor(KivioStencil *self,char * color) {  self->setFGColor(QColor(color)); }
+static PyObject *_wrap_KivioStencil_setFGColor(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0;
+    KivioStencil  *_arg0;
+    char  *_arg1;
+    self = self;
+    if(!PyArg_ParseTuple(args,"Os:KivioStencil_setFGColor",&_argo0,&_arg1)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    KivioStencil_setFGColor(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static char * KivioStencil_bgColor(KivioStencil *self) { return self->bgColor().name().latin1(); }
+static PyObject *_wrap_KivioStencil_bgColor(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0;
+    char  *_result;
+    KivioStencil  *_arg0;
+    self = self;
+    if(!PyArg_ParseTuple(args,"O:KivioStencil_bgColor",&_argo0)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    _result = (char *)KivioStencil_bgColor(_arg0);
+    _resultobj = Py_BuildValue("s", _result);
+    return _resultobj;
+}
+
+static void  KivioStencil_setBGColor(KivioStencil *self,char * color) {  self->setBGColor(QColor(color)); }
+static PyObject *_wrap_KivioStencil_setBGColor(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0;
+    KivioStencil  *_arg0;
+    char  *_arg1;
+    self = self;
+    if(!PyArg_ParseTuple(args,"Os:KivioStencil_setBGColor",&_argo0,&_arg1)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    KivioStencil_setBGColor(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define KivioStencil_isSelected(_swigobj)  (_swigobj->isSelected())
 static PyObject *_wrap_KivioStencil_isSelected(PyObject *self, PyObject *args) {
     PyObject  *_resultobj,*_argo0=0;
@@ -1193,6 +1218,21 @@ static PyObject *_wrap_KivioStencil_subSelect(PyObject *self, PyObject *args) {
     if ((SWIG_ConvertPtr(_argo1,(void **) &_arg1,SWIGTYPE_float_p,1)) == -1) return NULL;
     if ((SWIG_ConvertPtr(_argo2,(void **) &_arg2,SWIGTYPE_float_p,1)) == -1) return NULL;
     KivioStencil_subSelect(_arg0,*_arg1,*_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define KivioStencil_addToGroup(_swigobj,_swigarg0)  (_swigobj->addToGroup(_swigarg0))
+static PyObject *_wrap_KivioStencil_addToGroup(PyObject *self, PyObject *args) {
+    PyObject  *_resultobj,*_argo0=0,*_argo1=0;
+    KivioStencil  *_arg0,*_arg1;
+    self = self;
+    if(!PyArg_ParseTuple(args,"OO:KivioStencil_addToGroup",&_argo0,&_argo1)) 
+        return NULL;
+    if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    if ((SWIG_ConvertPtr(_argo1,(void **) &_arg1,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
+    KivioStencil_addToGroup(_arg0,_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1621,10 +1661,17 @@ static PyMethodDef kiviocMethods[] = {
 	 { "KivioStencil_setStartAHWidth", _wrap_KivioStencil_setStartAHWidth, METH_VARARGS },
 	 { "KivioStencil_setStartAHType", _wrap_KivioStencil_setStartAHType, METH_VARARGS },
 	 { "KivioStencil_updateGeometry", _wrap_KivioStencil_updateGeometry, METH_VARARGS },
+	 { "KivioStencil_addToGroup", _wrap_KivioStencil_addToGroup, METH_VARARGS },
 	 { "KivioStencil_subSelect", _wrap_KivioStencil_subSelect, METH_VARARGS },
 	 { "KivioStencil_unselect", _wrap_KivioStencil_unselect, METH_VARARGS },
 	 { "KivioStencil_select", _wrap_KivioStencil_select, METH_VARARGS },
 	 { "KivioStencil_isSelected", _wrap_KivioStencil_isSelected, METH_VARARGS },
+	 { "KivioStencil_setBGColor", _wrap_KivioStencil_setBGColor, METH_VARARGS },
+	 { "KivioStencil_bgColor", _wrap_KivioStencil_bgColor, METH_VARARGS },
+	 { "KivioStencil_setFGColor", _wrap_KivioStencil_setFGColor, METH_VARARGS },
+	 { "KivioStencil_fgColor", _wrap_KivioStencil_fgColor, METH_VARARGS },
+	 { "KivioStencil_setTextColor", _wrap_KivioStencil_setTextColor, METH_VARARGS },
+	 { "KivioStencil_textColor", _wrap_KivioStencil_textColor, METH_VARARGS },
 	 { "KivioStencil_text", _wrap_KivioStencil_text, METH_VARARGS },
 	 { "KivioStencil_setText", _wrap_KivioStencil_setText, METH_VARARGS },
 	 { "KivioStencil_setVTextAlign", _wrap_KivioStencil_setVTextAlign, METH_VARARGS },
@@ -1634,10 +1681,6 @@ static PyMethodDef kiviocMethods[] = {
 	 { "KivioStencil_lineWidth", _wrap_KivioStencil_lineWidth, METH_VARARGS },
 	 { "KivioStencil_setLineWidth", _wrap_KivioStencil_setLineWidth, METH_VARARGS },
 	 { "KivioStencil_fillStyle", _wrap_KivioStencil_fillStyle, METH_VARARGS },
-	 { "KivioStencil_bgColor", _wrap_KivioStencil_bgColor, METH_VARARGS },
-	 { "KivioStencil_setBGColor", _wrap_KivioStencil_setBGColor, METH_VARARGS },
-	 { "KivioStencil_setFGColor", _wrap_KivioStencil_setFGColor, METH_VARARGS },
-	 { "KivioStencil_fgColor", _wrap_KivioStencil_fgColor, METH_VARARGS },
 	 { "KivioStencil_setDimensions", _wrap_KivioStencil_setDimensions, METH_VARARGS },
 	 { "KivioStencil_setPosition", _wrap_KivioStencil_setPosition, METH_VARARGS },
 	 { "KivioStencil_rect", _wrap_KivioStencil_rect, METH_VARARGS },
@@ -1686,7 +1729,6 @@ static _swig_type_info _swigt__KivioPage_p[] = {{"_KivioPage_p",0},{"_KivioPage_
 static _swig_type_info _swigt__float_p[] = {{"_float_p",0},{"_float_p",0},{0}};
 static _swig_type_info _swigt__KivioFillStyle_p[] = {{"_KivioFillStyle_p",0},{"_KivioFillStyle_p",0},{0}};
 static _swig_type_info _swigt__KivioRect_p[] = {{"_KivioRect_p",0},{"_KivioRect_p",0},{0}};
-static _swig_type_info _swigt__QColor_p[] = {{"_QColor_p",0},{"_QColor_p",0},{0}};
 static _swig_type_info _swigt__KivioStencil_p[] = {{"_KivioStencil_p",0},{"_KivioStencil_p",0},{0}};
 static _swig_type_info _swigt__KivioLayer_p[] = {{"_KivioLayer_p",0},{"_KivioLayer_p",0},{0}};
 
@@ -1695,7 +1737,6 @@ _swigt__KivioPage_p,
 _swigt__float_p, 
 _swigt__KivioFillStyle_p, 
 _swigt__KivioRect_p, 
-_swigt__QColor_p, 
 _swigt__KivioStencil_p, 
 _swigt__KivioLayer_p, 
 0
