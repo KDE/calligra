@@ -9,7 +9,6 @@ REAL BUGS:
 	lenny: "i still dont see any vpainter:closePath() function are anything similar in vpath::draw().
 	closed shapes' end where they started, but they are never closed. how could libart
 	ever know it needs to paint a join here?"
--	use vflatten in vselectool for more precise selection (lenny)
 	maybe use libart instead ("art_drect_svp from art_rect_svp")
 -	revert() in vpath::combine() doesnt work
 
@@ -27,9 +26,11 @@ TODO:
 	removing nodes, inserting nodes...
 -	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
 	fills for nice special effects.
--	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
--	compare ghostscript's "flatten" with our's (lenny)
 -	use inside/intersection tests in vpath::combine() for changing winding.
+-	use vflatten in vselectool for more precise selection (lenny)
+
+WISHLIST:
+-	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
 
 OPTIMIZATION:
 -	make fill/stroke shared so copying for undo/redo is more efficient
@@ -41,3 +42,5 @@ MAKE IT NICE:
 -	introduce centerOfMass() for vsegmentlist. problem: CM for beziers?
 -	investigate whether we can use a KToolBar with an appropriate layout to replace
 	our current non-conforming solution.
+-	think about using ghostscript's flatten algo (see comments in vflatten.cc)
+
