@@ -96,38 +96,41 @@ void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader );
 class AttrProcessing
 {
 public:
+
+    enum AttrType
+        { AttrNull = 0, AttrInt, AttrDouble, AttrBool, AttrQString };
+
     /**
      * Default constructor
      */
-    AttrProcessing () : data(0) {}
+    AttrProcessing () : type( AttrNull ), data(0) {}
 
     /**
      * Old constructor (without type checking)
      * Deprecated, do not use for new code
      */
-    AttrProcessing ( const QString& n, const QString& t, void *d )
-        : name (n), type (t), data (d) {}
+    AttrProcessing ( const QString& n, const QString& t, void *d );
 
     /**
      * No-op constructor
      * This just avoids that a warning is triggered that an attribute is not known
      */
     AttrProcessing ( const QString& _name )
-        : name(_name), data(0) {}
+        : name( _name ), type( AttrNull ), data( 0 ) {}
 
     /**
      * Integer constructor
      * Get the attribute value as an integer
      */
     AttrProcessing ( const QString& _name, int& i )
-        : name(_name), type("int"), data(&i) {}
+        : name( _name ), type( AttrInt ), data( &i ) {}
 
     /**
      * Double constructor
      * Get the attribute value as a double
      */
     AttrProcessing ( const QString& _name, double& d )
-        : name(_name), type("double"), data(&d) {}
+        : name( _name ), type( AttrDouble ), data( &d ) {}
 
     /**
      * Boolean constructor
@@ -135,19 +138,19 @@ public:
      * (The values "yes,", "no", "true", "false", "0" and "1" are supported)
      */
     AttrProcessing ( const QString& _name, bool& flag )
-        : name(_name), type("bool"), data(&flag) {}
+        : name( _name ), type( AttrBool ), data( &flag ) {}
 
     /**
      * String constructor
      * Get the attribute value as a QString
      */
     AttrProcessing ( const QString& _name, QString& str )
-        : name(_name), type("QString"), data(&str) {}
+        : name( _name ), type( AttrQString ), data( &str ) {}
 
 
 public:
     QString   name;
-    QString   type;
+    AttrType  type;
     void     *data;
 };
 

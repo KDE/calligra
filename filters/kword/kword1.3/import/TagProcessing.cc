@@ -123,6 +123,27 @@ void AllowNoSubtags ( QDomNode, KWEFKWordLeader* )
 // it can find, retrieve the value in the datatype defined, and do all
 // the necessary error handling.
 
+AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
+    : name (n), data (d)
+{
+    if ( t == "int" )
+        type = AttrInt;
+    else if ( t == "QString" )
+        type = AttrQString;
+    else if ( t == "double" )
+        type = AttrDouble;
+    else if ( t == "bool" )
+        type = AttrBool;
+    else if ( t.isEmpty() )
+        type = AttrNull;
+    else
+    {
+        kdWarning(30520) << "Unkown type: " << t << " for element " << n << " assuming NULL" << endl;
+        type = AttrNull;
+    }
+}
+
+
 void ProcessAttributes ( QDomNode                     myNode,
                          QValueList<AttrProcessing>  &attrProcessingList )
 {
@@ -151,45 +172,55 @@ void ProcessAttributes ( QDomNode                     myNode,
 
                     if ( (*attrProcessingIt).data != NULL )
                     {
-                        if ( (*attrProcessingIt).type == "QString" )
+                        switch ( (*attrProcessingIt).type )
                         {
-                            *((QString *) (*attrProcessingIt).data) = myAttrib.value ();
-                        }
-                        else if ( (*attrProcessingIt).type == "int" )
-                        {
-                            *((int *) (*attrProcessingIt).data) = myAttrib.value ().toInt ();
-                        }
-                        else if ( (*attrProcessingIt).type == "double" )
-                        {
-                            *((double *) (*attrProcessingIt).data) = myAttrib.value ().toDouble ();
-                        }
-                        else if ( (*attrProcessingIt).type == "bool" )
-                        {
-                            QString strAttr=myAttrib.value().simplifyWhiteSpace();
-                            bool flag;
-                            if ((strAttr=="yes")||(strAttr=="1")||(strAttr=="true"))
+                        case AttrProcessing::AttrQString:
                             {
-                                flag=true;
+                                *((QString *) (*attrProcessingIt).data) = myAttrib.value ();
+                                break;
                             }
-                            else if ((strAttr=="no")||(strAttr=="0")||(strAttr=="false"))
+                        case AttrProcessing::AttrInt:
                             {
-                                flag=false;
+                                *((int *) (*attrProcessingIt).data) = myAttrib.value ().toInt ();
+                                break;
                             }
-                            else
+                        case AttrProcessing::AttrDouble:
                             {
-                                flag=false;
-                                kdWarning(30508) << "Unknown value for a boolean: " << strAttr
-                                    << " in tag " << myNode.nodeName () << ", attribute "
-                                    << myAttrib.name() << endl;
+                                *((double *) (*attrProcessingIt).data) = myAttrib.value ().toDouble ();
+                                break;
                             }
-                            *((bool *) (*attrProcessingIt).data) = flag;
-                        }
-                        else
-                        {
-                            kdWarning(30508) << "Unexpected data type " << (*attrProcessingIt).type
-                                << " in " << myNode.nodeName ()
-                                << " attribute " << (*attrProcessingIt).name
-                                << "!" << endl;
+                        case AttrProcessing::AttrBool:
+                            {
+                                const QString strAttr ( myAttrib.value().simplifyWhiteSpace() );
+                                bool flag;
+                                if ((strAttr=="yes")||(strAttr=="1")||(strAttr=="true"))
+                                {
+                                    flag=true;
+                                }
+                                else if ((strAttr=="no")||(strAttr=="0")||(strAttr=="false"))
+                                {
+                                    flag=false;
+                                }
+                                else
+                                {
+                                    flag=false;
+                                    kdWarning(30508) << "Unknown value for a boolean: " << strAttr
+                                        << " in tag " << myNode.nodeName () << ", attribute "
+                                        << myAttrib.name() << endl;
+                                }
+                                *((bool *) (*attrProcessingIt).data) = flag;
+                                break;
+                            }
+                        case AttrProcessing::AttrNull:
+                            break;
+                        default:
+                            {
+                                kdWarning(30520) << "Unexpected data type " << int( (*attrProcessingIt).type )
+                                    << " in " << myNode.nodeName ()
+                                    << " attribute " << (*attrProcessingIt).name
+                                    << endl;
+                                break;
+                            }
                         }
                     }
 #ifdef DEBUG_KWORD_TAGS
