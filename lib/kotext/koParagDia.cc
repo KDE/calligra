@@ -97,6 +97,11 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     customCharBox->addItem( spacer_2 );
 
     grid->addMultiCellLayout(customCharBox, 4, 4, 1, 4, Qt::AlignLeft);
+    if ( onlyStyleTypeLetter )
+    {
+        lCustom->hide();
+        bCustom->hide();
+    }
 
     spnStart = new KoSpinBox( gStyle );
     spnStart->setMinValue ( 1);
@@ -256,17 +261,17 @@ void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter
             ,  KoParagCounter::STYLE_ROM_NUM_U ));
     if ( !onlyStyleTypeLetter )
     {
-    stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
-            ,  KoParagCounter::STYLE_DISCBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
-            ,  KoParagCounter::STYLE_SQUAREBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
-            ,  KoParagCounter::STYLE_BOXBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
-            ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
+        stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
+                                                ,  KoParagCounter::STYLE_DISCBULLET , true));
+        stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
+                                                ,  KoParagCounter::STYLE_SQUAREBULLET , true));
+        stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
+                                                ,  KoParagCounter::STYLE_BOXBULLET , true));
+        stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
+                                                ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
+        stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
+                                                ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
     }
-    stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
-            ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "None" ), KoParagCounter::STYLE_NONE));
 }
 
