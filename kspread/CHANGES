@@ -165,3 +165,11 @@ thanks.
 see result in  example15.ks
 -Bug fix : when you insert a cell in bottom or right
 now text offset is recalcing.
+
+1999-11-18 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add pow function
+
+Summary 1999-11-12 ->1999-11-18
+Torben weis had installed : oszilloscope
+and fixes a lot of bug.

@@ -406,6 +406,28 @@ void KSpreadcreate::init()
    	edit[1]=type_double;
    	edit[2]=type_double;
    }
+   else if (m_funcName=="pow")
+   {
+       nb_param=2;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Double"));
+
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+  	
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Double"));
+       s_param=new QLineEdit( this );
+       lay1->addWidget(s_param);
+       exp_funct=m_funcName+"("+"Double,Double"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+       edit[1]=type_double;
+   }
    else
        ASSERT( 0 );
 

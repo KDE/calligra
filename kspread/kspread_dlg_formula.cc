@@ -147,6 +147,7 @@ list_anal+="min";
 list_anal+="multiply";
 list_anal+="ENT";
 list_anal+="PI";
+list_anal+="pow";
 
 QStringList list_trig;
 list_trig+="cos";
