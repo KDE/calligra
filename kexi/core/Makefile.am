@@ -21,6 +21,7 @@ libkexicore_la_LIBADD = $(LIB_KEXI_KMDI) \
 	$(LIB_KOFFICEUI)
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
+	-I$(top_srcdir)/lib/kofficeui \
 	-I$(top_srcdir)/kexi \
 	-I$(top_srcdir)/kexi/core/projectWizard \
 	-I./startup \
