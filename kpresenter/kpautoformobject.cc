@@ -277,7 +277,6 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
                     int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() );
 
                     QPointArray pntArray3 = pntArray2.copy();
-                    pntArray3.translate( ox, oy );
                     _painter->save();
 
                     QRegion clipregion( pntArray3 );

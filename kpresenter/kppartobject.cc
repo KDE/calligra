@@ -187,10 +187,8 @@ void KPPartObject::slot_changed(KoChild *child)
     QRect g = child->geometry();
     KPObject::setOrig( g.x(), g.y() );
     KPObject::setSize( g.width(), g.height() );
-#if 0 //FIXME
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( g.size() );
-#endif
+    if ( fillType == FT_GRADIENT && gradient )//FIXME
+        gradient->setSize( KoSize(g.size().width(),g.size().height()) );
 }
 
 /*================================================================*/
