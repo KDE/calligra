@@ -172,6 +172,31 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wv
     m_currentTable->rows.append( row );
 }
 
+void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
+                                     wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
+{
+    static unsigned int s_pictureNumber = 0;
+    QString frameName = i18n("Picture %1").arg( ++s_pictureNumber );
+    insertAnchor( frameName );
+    QString pictureName = "picture/picture";
+    pictureName += QString::number( s_pictureNumber );
+
+    switch ( picf->mfp.mm ) {
+        case 98:
+            pictureName += ".tif"; // not implemented!
+            break;
+        case 99:
+            pictureName += ".bmp";
+            break;
+        default:
+            pictureName += ".wmf";
+            break;
+    }
+
+    emit pictureFound( frameName, pictureName, picf );
+    picture();
+}
+
 QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 {
     m_paragraph += '#';

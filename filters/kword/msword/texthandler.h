@@ -73,6 +73,8 @@ public:
 
     virtual void tableRowFound( const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
 
+    virtual void pictureFound( const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
+                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
     ///////// Our own interface, also used by processStyles
 
     // Called at the beginning of a parag/style
@@ -90,6 +92,7 @@ signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void tableFound( const KWord::Table& table );
+    void pictureFound( const QString& frameName, const QString& pictureName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );

@@ -20,6 +20,7 @@
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
+#include "graphicshandler.h"
 
 #include <koRect.h>
 #include <koGlobal.h>
@@ -39,8 +40,8 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     : m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
       m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
-      m_textHandler( 0 ), m_parser( wvWare::ParserFactory::createParser( fileName ) ),
-      m_headerFooters( 0 ), m_bodyFound( false ),
+      m_graphicsHandler( new KWordGraphicsHandler ), m_textHandler( 0 ),
+      m_parser( wvWare::ParserFactory::createParser( fileName ) ), m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
@@ -53,6 +54,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
+        m_parser->setGraphicsHandler( m_graphicsHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
@@ -66,6 +68,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 Document::~Document()
 {
     delete m_textHandler;
+    delete m_graphicsHandler;
     delete m_tableHandler;
     delete m_replacementHandler;
 }
@@ -424,6 +427,11 @@ void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
 void Document::slotTableFound( const KWord::Table& table )
 {
     m_tableQueue.push( table );
+}
+
+void Document::slotPictureFound( const QString& frameName, const QString& pictureName,
+                                 wvWare::SharedPtr<const wvWare::Word97::PICF> picf )
+{
 }
 
 void Document::processSubDocQueue()

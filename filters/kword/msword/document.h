@@ -41,6 +41,7 @@ namespace wvWare {
 class KoRect;
 class KWordReplacementHandler;
 class KWordTableHandler;
+class KWordGraphicsHandler;
 class KWordTextHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
@@ -88,6 +89,9 @@ protected slots:
     // Add to our parsing queue, for tables
     void slotTableFound( const KWord::Table& table );
 
+    // Write out the frameset and add the key to the PICTURES tag
+    void slotPictureFound( const QString& frameName, const QString& pictureName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
     void slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
@@ -105,6 +109,7 @@ private:
     QDomElement& m_framesetsElement;
     KWordReplacementHandler* m_replacementHandler;
     KWordTableHandler* m_tableHandler;
+    KWordGraphicsHandler* m_graphicsHandler;
     KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
