@@ -1617,6 +1617,46 @@ void KSpreadView::print( QPrinter &prt )
 {
     prt.setFullPage( TRUE );
     QPainter painter;
+
+    //apply page layout parameters
+    prt.setOrientation((QPrinter::Orientation)m_pDoc->orientation());
+    switch(m_pDoc->paperFormat())
+      {
+      case  PG_DIN_A3:
+	prt.setPageSize(QPrinter::A3);
+	break;
+      case PG_DIN_A4:
+	prt.setPageSize(QPrinter::A4);
+	break;
+      case PG_DIN_A5:
+	prt.setPageSize(QPrinter::A5);
+	break;	
+      case PG_US_LETTER:
+	prt.setPageSize(QPrinter::Letter);
+	break;
+      case PG_US_LEGAL:
+	prt.setPageSize(QPrinter::Legal);
+	break;
+      case PG_SCREEN :
+	//prt.setPageSize(QPrinter::PG_SCREEN);
+	kdDebug(36001) <<"We can't define this size of page, so I used A4 format\n";
+	prt.setPageSize(QPrinter::A4);
+	break;
+      case PG_CUSTOM:
+	kdDebug(36001) <<"We can't define custom size of page, so I used A4 format \n";
+	//prt.setPageSize(QSize(m_pDoc->paperWidth(),m_pDoc->paperHeight()));
+	prt.setPageSize(QPrinter::A4);
+	break;
+      case PG_DIN_B5:
+	prt.setPageSize(QPrinter::B5);
+	break;
+      case PG_US_EXECUTIVE:
+	prt.setPageSize(QPrinter::Executive);
+	break;
+      default:
+	kdDebug(36001) <<"Error in m_pDoc->paperFormat() \n";
+	break;
+      }
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
