@@ -1341,7 +1341,7 @@ bool KWFrameDia::applyChanges()
         if ( frameType == FT_TEXT )
         {
             bool update=true;
-            KWFrame::FrameBehavior fb;
+            KWFrame::FrameBehavior fb=KWFrame::AutoCreateNewFrame;
             if(rResizeFrame->isChecked())
                 fb = KWFrame::AutoExtendFrame;
             else if ( rAppendFrame->isChecked())
@@ -1367,7 +1367,7 @@ bool KWFrameDia::applyChanges()
 
         // NewFrameBehavior
         bool update=true;
-        KWFrame::NewFrameBehavior nfb;
+        KWFrame::NewFrameBehavior nfb=KWFrame::Reconnect;
         if( reconnect && reconnect->isChecked() )
             nfb = KWFrame::Reconnect;
         else if ( noFollowup->isChecked() )
@@ -1417,7 +1417,7 @@ bool KWFrameDia::applyChanges()
 
     if ( tab2 ) {
         // Run around
-        KWFrame::RunAround ra;
+        KWFrame::RunAround ra=KWFrame::RA_BOUNDINGRECT;
         bool update=true;
         if ( rRunNo->isChecked() )
              ra = KWFrame::RA_NO;

@@ -61,7 +61,7 @@ void KWordTableFrameSetIface::deselectAll()
 
 DCOPRef KWordTableFrameSetIface::getCell( int pos )
 {
-    if( pos>=m_table->getNumCells())
+    if( pos>=(int)m_table->getNumCells())
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    m_table->getCell(pos)->dcopObject()->objId() );
