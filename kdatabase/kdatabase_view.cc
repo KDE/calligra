@@ -38,6 +38,7 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     KStdAction::paste(this, SLOT( paste() ), actionCollection(), "paste" );
     myMainDlg = new MainDlg(this,name);
+    myMainDlg->initStruct(part->getKDBFile());
     myMainDlg->show();
 
     // Note: Prefer KStdAction::* to any custom action if possible.
