@@ -99,66 +99,66 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
 
 KoFilter::ConversionStatus OoImpressImport::openFile()
 {
-  KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
+    KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
 
-  if ( !store )
-  {
-    kdWarning() << "Couldn't open the requested file." << endl;
-    return KoFilter::FileNotFound;
-  }
+    if ( !store )
+    {
+        kdWarning() << "Couldn't open the requested file." << endl;
+        return KoFilter::FileNotFound;
+    }
 
-  if ( !store->open( "content.xml" ) )
-  {
-    kdWarning() << "This file doesn't seem to be a valid OoImpress file" << endl;
+    if ( !store->open( "content.xml" ) )
+    {
+        kdWarning() << "This file doesn't seem to be a valid OoImpress file" << endl;
+        delete store;
+        return KoFilter::WrongFormat;
+    }
+
+    QDomDocument styles;
+
+    m_content.setContent( store->device() );
+    store->close();
+
+    //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
+    kdDebug() << "File containing content loaded " << endl;
+
+    if ( store->open( "styles.xml" ) )
+    {
+        styles.setContent( store->device() );
+        store->close();
+
+        //kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
+        kdDebug() << "File containing styles loaded" << endl;
+    }
+    else
+        kdWarning() << "Style definitions do not exist!" << endl;
+
+    if ( store->open( "meta.xml" ) )
+    {
+        m_meta.setContent( store->device() );
+        store->close();
+
+        kdDebug() << "File containing meta definitions loaded" << endl;
+    }
+    else
+        kdWarning() << "Meta definitions do not exist!" << endl;
+
+    if ( store->open( "settings.xml" ) )
+    {
+        m_settings.setContent( store->device() );
+        store->close();
+
+        kdDebug() << "File containing settings loaded" << endl;
+    }
+    else
+        kdWarning() << "Settings do not exist!" << endl;
+
     delete store;
-    return KoFilter::WrongFormat;
-  }
 
-  QDomDocument styles;
+    emit sigProgress( 10 );
+    createStyleMap( styles );
 
-  m_content.setContent( store->device() );
-  store->close();
-
-  //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
-  kdDebug() << "File containing content loaded " << endl;
-
-  if ( store->open( "styles.xml" ) )
-  {
-    styles.setContent( store->device() );
-    store->close();
-
-    //kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
-    kdDebug() << "File containing styles loaded" << endl;
-  }
-  else
-    kdWarning() << "Style definitions do not exist!" << endl;
-
-  if ( store->open( "meta.xml" ) )
-  {
-    m_meta.setContent( store->device() );
-    store->close();
-
-    kdDebug() << "File containing meta definitions loaded" << endl;
-  }
-  else
-    kdWarning() << "Meta definitions do not exist!" << endl;
-
-  if ( store->open( "settings.xml" ) )
-  {
-    m_settings.setContent( store->device() );
-    store->close();
-
-    kdDebug() << "File containing settings loaded" << endl;
-  }
-  else
-    kdWarning() << "Settings do not exist!" << endl;
-
-  delete store;
-
-  emit sigProgress( 10 );
-  createStyleMap( styles );
-
-  return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 void OoImpressImport::createDocumentInfo( QDomDocument &docinfo )
@@ -417,6 +417,14 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 pef=17;
             else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
                 pef=18;
+            else if (effect=="roll-from-left") // PEF_UNCOVER_RIGHT
+                pef=26;
+            else if (effect=="roll-from-right") // PEF_UNCOVER_LEFT
+                pef=24;
+            else if (effect=="roll-from-bottom") // PEF_UNCOVER_UP
+                pef=22;
+            else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
+                pef=20;
             else         // we choose a random transition instead of the unsupported ones ;)
                 pef=-1;
 
