@@ -52,9 +52,12 @@ public:
 	VComposite( const VComposite& path );
 	virtual ~VComposite();
 
+	/**
+	 * Returns the knot of the last segment of the last subpath.
+	 */
 	const KoPoint& currentPoint() const;
 
-	// postscript-like commands:
+
 	bool moveTo( const KoPoint& p );
 	bool lineTo( const KoPoint& p );
 
@@ -116,8 +119,7 @@ public:
 	      |
 	      x currP
 	 */
-	bool arcTo(
-		const KoPoint& p1, const KoPoint& p2, double r );
+	bool arcTo( const KoPoint& p1, const KoPoint& p2, double r );
 
 	/**
 	 * Closes the current subpath.
@@ -135,16 +137,47 @@ public:
 	 */
 	void combinePath( const VPath& path );
 
+
+	/**
+	 * Returns true if point p is located inside this composite.
+	 */
+	bool isInside( const KoPoint& p ) const;
+
+
+	const VPathList& paths() const
+	{
+		return m_paths;
+	}
+
+	virtual const KoRect& boundingBox() const;
+
+
 	VFillRule fillMode() const;
+
+	// TODO remove these functions.
+	VFillRule fillRule() const
+	{
+		return m_fillRule;
+	}
+
+	void setFillRule( VFillRule fillRule )
+	{
+		m_fillRule = fillRule;
+	}
+
 
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
-	const VSegment* lastSegment() const;
+	bool drawCenterNode() const
+	{
+		return m_drawCenterNode;
+	}
 
-	const VPathList& paths() const
-		{ return m_paths; }
+	void setDrawCenterNode( bool drawCenterNode = true )
+	{
+		m_drawCenterNode = drawCenterNode;
+	}
 
-	virtual const KoRect& boundingBox() const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
@@ -153,11 +186,8 @@ public:
 
 	virtual void accept( VVisitor& visitor );
 
-	bool drawCenterNode() const { return m_drawCenterNode; }
-	void setDrawCenterNode( bool drawCenterNode = true )
-		{ m_drawCenterNode = drawCenterNode; }
 
-	/// For svg path data parsing
+	/// For svg path data parsing.
 	virtual void svgMoveTo( double x1, double y1 );
 	virtual void svgLineTo( double x1, double y1 );
 	virtual void svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 );
@@ -166,11 +196,11 @@ public:
 	void loadSvgPath( const QString & );
 	void saveSvgPath( QString & ) const;
 
-	VFillRule fillRule() const { return m_fillRule; }
-	void setFillRule( VFillRule fillRule ) { m_fillRule = fillRule; }
-
 private:
-	VPathList m_paths;		// list of paths
+	/**
+	 * List of subpaths.
+	 */
+	VPathList m_paths;
 
 	/// Should a center node be drawn?
 	bool		m_drawCenterNode;

@@ -209,12 +209,6 @@ VComposite::close()
 	m_paths.append( path );
 }
 
-const VSegment*
-VComposite::lastSegment() const
-{
-	return m_paths.getLast()->getLast();
-}
-
 void
 VComposite::combine( const VComposite& composite )
 {
@@ -236,6 +230,25 @@ VComposite::combinePath( const VPath& path )
 
 	m_paths.append( p );
 	m_fillRule = fillMode();
+}
+
+bool
+VComposite::isInside( const KoPoint& p ) const
+{
+	// Check if point is inside boundingbox.
+	if( !boundingBox().contains( p, true ) )
+		return false;
+
+
+	VPathListIterator itr( m_paths );
+
+	for( itr.toFirst(); itr.current(); ++itr )
+	{
+		if( itr.current()->isInside( p ) )
+			return true;
+	}
+
+	return false;
 }
 
 VFillRule
