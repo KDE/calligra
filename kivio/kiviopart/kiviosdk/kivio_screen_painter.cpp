@@ -37,6 +37,14 @@ KivioScreenPainter::KivioScreenPainter()
    m_rotation = 0.0f;
 }
 
+KivioScreenPainter::KivioScreenPainter(QPainter* painter)
+    : m_pPainter(painter)
+{
+   m_transX = 0.0f;
+   m_transY = 0.0f;
+   m_rotation = 0.0f;
+}
+
 KivioScreenPainter::~KivioScreenPainter()
 {
     if( m_pPainter )

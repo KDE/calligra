@@ -37,13 +37,15 @@ protected:
 
 public:
     KivioScreenPainter();
+    KivioScreenPainter(QPainter* painter);
     virtual ~KivioScreenPainter();
-    
+
     virtual bool start( QPaintDevice * );
     virtual bool stop();
 
     QPainter *painter() { return m_pPainter; }
-    
+    void setPainter(QPainter* p) { m_pPainter = p; }
+
     /*\
     |*|
     |*| PRIMITIVE IMPLEMENTATIONS
@@ -54,7 +56,7 @@ public:
     void drawArc( float, float, float, float, float, float );
 
     void drawBezier( QPointArray & );
-    
+
     void drawRect( float, float, float, float );
     void fillRect( float, float, float, float );
 
@@ -63,23 +65,23 @@ public:
 
     void drawPie( float, float, float, float, float, float );
     void fillPie( float, float, float, float, float, float );
-    
+
     void drawChord( float, float, float, float, float, float );
     void fillChord( float, float, float, float, float, float );
 
     void drawEllipse( float, float, float, float );
     void fillEllipse( float, float, float, float );
-    
+
     void drawLineArray( QPtrList<KivioPoint> * );
-    
-    
+
+
     void drawPolyline( QPtrList<KivioPoint> * );
     void drawPolygon( QPtrList<KivioPoint> * );
-    
+
     void drawPolyline( QPointArray & );
     void drawPolygon( QPointArray & );
     void drawLineArray( QPointArray & );
-    
+
     void drawClosedPath( QPtrList<KivioPoint> * );
     void drawOpenPath( QPtrList<KivioPoint> * );
 
@@ -88,7 +90,7 @@ public:
                 const QString &str );
     virtual QRect boundingRect( int, int, int, int, int, const QString & );
 
-    void drawPixmap( float, float, const QPixmap & );    
+    void drawPixmap( float, float, const QPixmap & );
 
     void drawHandle( float, float, int );
 

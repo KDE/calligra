@@ -440,14 +440,27 @@ void KivioDoc::takePage( KivioPage * page )
 }
 
 
-void KivioDoc::paintContent( QPainter&, const QRect&, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
 {
-    // ## TODO - otherwise kivio isn't embeddable
-//  KivioPage* page = m_pMap->activePage();
-//  if ( !page )
-//    return;
+  // ## TODO - otherwise kivio isn't embeddable
+  KivioPage* page = m_pMap->firstPage();
+  if ( !page )
+    return;
 
-//  paintContent(painter,rect,transparent,page);
+  KoZoomHandler zoom;
+  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
+  KoPageLayout pl = page->paperLayout();
+
+  float zw = (float) rect.width() / (float)zoom.zoomItX(pl.ptWidth);
+  float zh = (float) rect.height() / (float)zoom.zoomItY(pl.ptHeight);
+  float z = QMIN(zw, zh);
+
+  zoom.setZoomAndResolution(qRound(z * 100), QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
+  KivioScreenPainter ksp(&painter);
+  paintContent(ksp,rect,transparent,page, QPoint(0, 0), &zoom, false);
+  ksp.setPainter(0L); // Important! Don't delete the QPainter!!!
 }
 
 void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
