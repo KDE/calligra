@@ -280,12 +280,12 @@ public:
     virtual int ascent() const { return m_ascent; } // for text, ascent != height!
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
-    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset);
+    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset);
     /**
      * Called by drawCustomItem. Some special variables can reimplement drawCustomItem
      * to change the parameters passed to drawCustomItemHelper
      */
-    void drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, const QColorGroup& cg, bool selected, const int offset, KoTextFormat* fmt, const QFont& font, QColor textColor );
+    void drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, const QColorGroup& cg, bool selected, int offset, KoTextFormat* fmt, const QFont& font, QColor textColor );
 
     void setVariableFormat( KoVariableFormat *_varFormat );
 
@@ -578,7 +578,7 @@ class KoLinkVariable : public KoVariable
 {
 public:
     KoLinkVariable( KoTextDocument *textdoc, const QString & _linkName, const QString & _ulr,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
-    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset );
 
     virtual VariableType type() const
     { return VT_LINK; }
@@ -610,7 +610,7 @@ class KoNoteVariable : public KoVariable
 {
 public:
     KoNoteVariable( KoTextDocument *textdoc, const QString & _note,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
-    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset );
 
     virtual VariableType type() const
     { return VT_NOTE; }

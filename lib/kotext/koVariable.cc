@@ -479,23 +479,20 @@ QString KoVariable::text(bool realValue)
         return m_varFormat->convert( m_varValue );
 }
 
-void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     QFont font( fmt->screenFont( zh ) );
-    drawCustomItemHelper( p, x, y, wpix, hpix, cg, selected, offset, fmt, font, fmt->color() );
+    drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, fmt->color() );
 }
 
-void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, const QColorGroup& cg, bool selected, const int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
+void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, const QColorGroup& cg, bool selected, int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
 {
-    int bl, _y;
-    KoTextParag * parag = paragraph();
+    // Important: the y value already includes the difference between the parag baseline
+    // and the char's own baseline (ascent) (see paintDefault in qrichtext.cpp)
+    // So we just draw the text there. But we need the baseline for drawFontEffects...
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    //kdDebug(32500) << "KoVariable::drawCustomItemHelper index=" << index() << " x=" << x << " y=" << y << endl;
-    (void)parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
-
-    bl = zh->layoutUnitToPixelY( /*yLU,*/ bl ); // small rounding error...
 
     p->save();
 
@@ -504,6 +501,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
 
     if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
     {
+        KoTextParag * parag = paragraph();
         textColor = parag->shadowColor();
         p->setPen( textColor );
     }
@@ -529,10 +527,9 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
     p->setFont( font ); // already done by KoTextCustomItem::draw but someone might
                         // change the font passed to drawCustomItemHelper (e.g. KoLinkVariable)
 
-    KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, bl, wpix, y, hpix );
+    KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, ascentpix, wpix, y, hpix );
 
-    //kdDebug(32500) << "KoVariable::draw bl=" << bl << << endl;
-    p->drawText( x, y + bl + offset, text() );
+    p->drawText( x, y + ascentpix + offset, text() );
     p->restore();
 }
 
@@ -1461,7 +1458,7 @@ QStringList KoLinkVariable::actionTexts()
 }
 
 
-void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
@@ -1472,7 +1469,7 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
         font.setUnderline( true );
     QColor textColor = displayLink ? cg.color( QColorGroup::Link ) : fmt->color();
 
-    drawCustomItemHelper( p, x, y, wpix, hpix, cg, selected, offset, fmt, font, textColor );
+    drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, textColor );
 }
 
 
@@ -1528,13 +1525,12 @@ QString KoNoteVariable::text(bool realValue)
 
 }
 
-void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset )
+void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset )
 {
     if ( !m_varColl->variableSetting()->displayComment())
         return;
 
     KoTextFormat * fmt = format();
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     //kdDebug(32500) << "KoNoteVariable::drawCustomItem index=" << index() << " x=" << x << " y=" << y << endl;
 
     p->save();
@@ -1554,7 +1550,7 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
         p->drawRect( x, y, wpix, hpix );
     }
     //call it for use drawCustomItemHelper just for draw font effect
-    KoVariable::drawCustomItem( p, x, y, wpix, hpix, cx, cy, cw, ch, cg, selected, offset );
+    KoVariable::drawCustomItem( p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset );
 
     p->restore();
 }

@@ -47,7 +47,7 @@ public:
     /**
      * All coordinates are in pixels.
      */
-    virtual void drawCustomItem(QPainter* p, int x, int y, int wpix, int hpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset) = 0;
+    virtual void drawCustomItem(QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset) = 0;
 
 protected:
     bool m_deleted;

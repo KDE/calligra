@@ -57,6 +57,7 @@ void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw,
     int wpix = zh->layoutUnitToPixelX(_x,width);
     int hpix = zh->layoutUnitToPixelX(_y,height);
     //kdDebug(32500)<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    int ascentpix = zh->layoutUnitToPixelY( _y, ascent() );
 
     KoTextFormat * fmt = stringChar->format();
 
@@ -65,12 +66,9 @@ void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw,
 
     int offset=0;
     if ( fmt->vAlign() == KoTextFormat::AlignSuperScript )
-    {
-        int h = zh->layoutUnitToPixelY( _y, height );
-        offset = -( h - p->fontMetrics().height() );
-    }
+        offset = -( hpix - p->fontMetrics().height() );
 
-    drawCustomItem(p, x, y, wpix, hpix, cx, cy, cw, ch, cg, selected, offset);
+    drawCustomItem(p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset);
 }
 
 ////////////////
