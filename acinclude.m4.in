@@ -45,7 +45,7 @@ done
 AC_DEFUN(AC_PATH_QT_MOC,
 [
 AC_PATH_PROG(MOC, moc, /usr/bin/moc,
- $QTDIR/bin:$PATH:/usr/bin:/usr/X11R6/bin:/usr/lib/qt/bin:/usr/local/qt/bin)
+ $ac_qt_bindir:$QTDIR/bin:$PATH:/usr/bin:/usr/X11R6/bin:/usr/lib/qt/bin:/usr/local/qt/bin)
 ])
 
 AC_DEFUN(KDE_REPLACE_ROOT,
@@ -431,13 +431,14 @@ AC_DEFUN(AC_PATH_QT_1_3,
 AC_REQUIRE([K_PATH_X])
 
 AC_MSG_CHECKING([for QT])
-ac_qt_includes=NO ac_qt_libraries=NO
+ac_qt_includes=NO ac_qt_libraries=NO ac_qt_bindir=NO
 qt_libraries=""
 qt_includes=""
 AC_ARG_WITH(qt-dir,
     [  --with-qt-dir           where the root of qt is installed ],
     [  ac_qt_includes="$withval"/include
        ac_qt_libraries="$withval"/lib
+       ac_qt_bindir="$withval"/bin
     ])
 
 AC_ARG_WITH(qt-includes,
@@ -478,6 +479,7 @@ for dir in $qt_libdirs; do
   if test=`eval $try 2> /dev/null`; then qt_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 
+dnl AC_FIND_FILE(libqt.so libqt.so.1.30 libqt.so.1.31 libqt.so.1 libqt.a libqt.sl, $qt_libdirs, qt_libdir)
 ac_qt_libraries="$qt_libdir"
 
 ac_cxxflags_safe="$CXXFLAGS"
@@ -1804,7 +1806,6 @@ if test "$kde_cv_libgpp_includes" != "no"; then
   all_includes="-I$kde_cv_libgpp_includes $all_includes"
 fi
 ])
-])
 
 
 AC_DEFUN(KDE_CHECK_MICO,
@@ -1912,8 +1913,6 @@ AC_MSG_RESULT($kde_cv_have_mini_stl)
 if test "$kde_cv_have_mini_stl" = "yes"; then
   AC_DEFINE_UNQUOTED(HAVE_MINI_STL)
 fi
-])
-
 ])
 
 
@@ -2084,29 +2083,25 @@ AC_DEFUN(KDE_CHECK_STL,
 ])
 
 AC_DEFUN(AC_FIND_QIMGIO,
-[
-AC_MSG_CHECKING([for qimgio])
+   [AC_MSG_CHECKING([for qimgio])
 AC_CACHE_VAL(ac_cv_lib_qimgio,
+[ac_save_LIBS="$LIBS"
+LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"
+AC_TRY_LINK(dnl
 [
-  ac_save_LIBS="$LIBS"
-  LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"
-  AC_TRY_LINK(dnl
-  [
-    void qInitImageIO ();
-  ],
-  [qInitImageIO();],
-   eval "ac_cv_lib_qimgio=yes",
-   eval "ac_cv_lib_qimgio=no")
-   LIBS="$ac_save_LIBS"
+void qInitImageIO ();
+],
+            [qInitImageIO();],
+            eval "ac_cv_lib_qimgio=yes",
+            eval "ac_cv_lib_qimgio=no")
+LIBS="$ac_save_LIBS"
 ])dnl
-
-if test "$ac_cv_lib_qimgio" = "yes"; then
+if eval "test \"`echo $ac_cv_lib_qimgio`\" = yes"; then
   LIBQIMGIO="-lqimgio -lpng -lz $LIBJPEG"
   AC_MSG_RESULT(yes)
   AC_DEFINE_UNQUOTED(HAVE_QIMGIO)
+  AC_SUBST(LIBQIMGIO)
 else
-  LIBQIMGIO=""
   AC_MSG_RESULT(not found)
 fi
-AC_SUBST(LIBQIMGIO)
 ])

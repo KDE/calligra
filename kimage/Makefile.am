@@ -39,7 +39,7 @@ messages:
 
 img.h: img.idl
 	@echo $(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
-	-rm -f img.h ;\
+	rm -f img.h ;\
 	olddir=$(idldir) ;\
 	$(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
 	sed -e "s,#include \"$$olddir/,#include <,;s,.h\",.h>," img.h > img.h.new && mv img.h.new img.h

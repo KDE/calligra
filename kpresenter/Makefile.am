@@ -58,7 +58,7 @@ messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc */*.cc  && mv messages.po ../po/kpresenter.pot
 
 kpresenter.h: kpresenter.idl
-	-rm -f kpresenter.h
+	rm -f kpresenter.h
 	$(IDL) --query-server-for-narrow -I$(idldir) kpresenter.idl
 
 kpresenter.cc: kpresenter.h

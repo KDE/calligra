@@ -2,7 +2,7 @@
 
 SUBDIRS = pics
 
-INCLUDES  =   -I./ui -I./core  -I../lib/koml -I../lib/kofficecore \
+INCLUDES  =  -I../lib/koml -I../lib/kofficecore \
 	-I../lib/kofficeui $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
@@ -30,9 +30,6 @@ idl_HEADERS = kformula.h
 
 kdelnk_DATA = kformula_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
-
-install-exec-local:
-	$(INSTALL_SCRIPT) kformula $(bindir)/kformula
 
 uninstall-local:
 	-rm $(bindir)/kformula
