@@ -1,6 +1,6 @@
 main
 {
-  konq = findApplication( "konqueror", "KonquerorIface" );
+  konq = findApplication( "konqueror" );
   win = konq.getWindows()[ 0 ];
   actionmap = win.actionMap();
 

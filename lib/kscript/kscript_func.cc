@@ -320,17 +320,34 @@ static bool ksfunc_println( KSContext& context )
 
 static bool ksfunc_application( KSContext& context )
 {
-    if ( !KSUtil::checkArgumentsCount( context, 2, "Application" ) )
-	return false;
-
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( args.count() < 1 )
+    {
+      KSUtil::tooFewArgumentsError( context, "Application" );
+      return false;
+    }
+
+    if ( args.count() > 2 )
+    {
+      KSUtil::tooManyArgumentsError( context, "Application" );
+      return false;
+    }
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType ) )
 	return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::StringType ) )
+
+    QCString objId;
+
+    if ( args.count() == 2 )
+    {
+      if ( !KSUtil::checkType( context, args[1], KSValue::StringType ) )
 	return false;
 
-    context.setValue( new KSValue( new KSProxy( args[0]->stringValue().latin1(), args[1]->stringValue().latin1() ) ) );
+      objId = args[1]->stringValue().latin1();
+    }
+
+    context.setValue( new KSValue( new KSProxy( args[0]->stringValue().latin1(), objId ) ) );
 
     return TRUE;
 }
