@@ -21,7 +21,6 @@
 #include <qwmf.h>
 #include <qcstring.h>
 #include <qstringlist.h>
-#include <qregexp.h>
 
 #include "rtfimport.h"
 #include "rtfimport.moc"
@@ -647,7 +646,7 @@ void RTFImport::setCodepage( RTFProperty * )
 void RTFImport::setMacCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("Apple Roman");
-    kdDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl; 
+    kdDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl;
 }
 
 /**
@@ -657,7 +656,7 @@ void RTFImport::setMacCodepage( RTFProperty * )
 void RTFImport::setAnsiCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("CP1252");
-    kdDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl; 
+    kdDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl;
 }
 
 /**
@@ -666,7 +665,7 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
 void RTFImport::setPcaCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("IBM 850"); // Qt writes the name with a space
-    kdDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl; 
+    kdDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl;
 }
 
 /**
@@ -1068,8 +1067,8 @@ void RTFImport::insertHexSymbol( RTFProperty * )
     {
         kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::insertHexSymbol)" << endl;
         textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-    }    
-    
+    }
+
     const char tmpch[2] = {token.value, '\0'};
 
     // TODO: Is it always a single character?
@@ -1420,8 +1419,8 @@ void RTFImport::parseField( RTFProperty * )
 		}
 		int i=list[j].find('"')+1;
 		QString format=list[j].mid(i, list[j].find('"', i)-i);
-		format.replace(QRegExp("am/pm"), "ap");
-		format.replace(QRegExp("AM/PM"), "AP");
+		format.replace("am/pm", "ap");
+		format.replace("AM/PM", "AP");
 		for(unsigned int k=0;k<format.length();k++)
 		{
 		    if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
@@ -1586,7 +1585,7 @@ void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fm
         node.setAttribute( "key", key );
         node.setAttribute( "text", 1 );
         node.closeNode("TYPE");
-	
+
 	node.appendNode(spec);
     node.closeNode( "VARIABLE" );
     kwFormat.xmldata = node.data();
