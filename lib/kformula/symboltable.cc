@@ -27,6 +27,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 #include "symboltable.h"
@@ -138,7 +139,11 @@ bool UnicodeReader::parseLine( QString line )
     if ( id != -1 ) {
         ( *table )[id] = CharTableEntry( name, cc );
         if ( name.length() > 0 ) {
-            ( *entries )[ name ] = id;
+            //( *entries )[ name ] = id;
+            QString i18nName = i18n( name.latin1() );
+            //if ( name != i18nName ) {
+                ( *entries )[ i18nName ] = id;
+                //}
         }
     }
     return true;

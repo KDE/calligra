@@ -33,6 +33,11 @@ check_PROGRAMS = kformulatest #unittest
 kformulatest_SOURCES = main.cc kformulawidget.cc
 kformulatest_LDADD = libkformula.la
 
+messages:
+	awk -F, '$$1 !~ "#" {if (split($$3,a," ")>0) print "i18n(\"" a[1] "\");"}' config/unicode.tbl > symbolnames.cc
+	$(XGETTEXT) *.cc *.h -o $(podir)/kformulalib.pot
+	-rm -f symbolnames.cc
+
 # needs the CppUnit from http://www.xProgramming.com/software.htm
 #unittest_SOURCES = testcommands.cc testformulacursor.cc testformulaelement.cc testindexelement.cc testmain.cc
 #unittest_LDADD = libkformula.la libCppUnit.so libCppUnitRunner.so

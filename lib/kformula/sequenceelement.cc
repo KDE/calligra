@@ -1401,7 +1401,15 @@ BasicElement* NameSequence::replaceElement( const SymbolTable& table )
 {
     QString name = buildName();
     QChar ch = table.unicode( name );
-    if ( !ch.isNull() ) return new TextElement( ch, true );
+    if ( !ch.isNull() ) {
+        return new TextElement( ch, true );
+    }
+    else {
+        ch = table.unicode( i18n( name.latin1() ) );
+        if ( !ch.isNull() ) {
+            return new TextElement( ch, true );
+        }
+    }
 
     if ( name == "," )    return new SpaceElement( THIN );
     if ( name == ">" )    return new SpaceElement( MEDIUM );
