@@ -51,7 +51,10 @@ VZOrderCmd::execute()
 				VObjectListIterator itr2( objects );
 				for ( ; itr2.current(); ++itr2 )
 					if( itr2.current() == itr.current() )
+					{
 						litr.current()->sendToBack( *itr2.current() );
+						itr2.current()->setState( VObject::selected );
+					}
 			}
 		}
 	}
@@ -70,7 +73,10 @@ VZOrderCmd::execute()
 				VObjectListIterator itr2( objects );
 				for ( ; itr2.current(); ++itr2 )
 					if( itr2.current() == itr.current() )
+					{
 						litr.current()->bringToFront( *itr2.current() );
+						itr2.current()->setState( VObject::selected );
+					}
 			}
 		}
 	}
