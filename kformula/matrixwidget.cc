@@ -9,6 +9,9 @@
  * Andrea Rizzi
  * bilibao@ouverture.it
  */
+
+#include <qlabel.h>
+#include <qspinbox.h>
 #include <kapp.h>
 #include <ktabctl.h>
 #include <stdlib.h>
@@ -39,23 +42,19 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     tmpQLabel = new QLabel( w, "Label_1" );
     tmpQLabel->setGeometry( 20, 25, 90, 30 );
     tmpQLabel->setText(i18n("Columns:" ));
-    spb[1] = new KNumericSpinBox( w, "SpinX" );
+    spb[1] = new QSpinBox( 1, 999, 1, w, "SpinX" );
     spb[1]->setGeometry( 110, 25, 60, 30 );
-    spb[1]->setRange(1,999);
     tmpQLabel = new QLabel( w, "Label_2" );
     tmpQLabel->setGeometry( 180, 25, 90, 30 );
     tmpQLabel->setText(i18n("Rows" ));
-    spb[2] = new KNumericSpinBox( w, "SpinY" );
+    spb[2] = new QSpinBox( 1, 999, 1, w, "SpinY" );
     spb[2]->setGeometry( 260, 25, 60, 30 );
-    spb[2]->setRange(1,999);
-    connect(spb[2],SIGNAL(valueIncreased()),this, SLOT(valueChanged()));
-    connect(spb[2],SIGNAL(valueDecreased()),this, SLOT(valueChanged()));
+    connect(spb[2],SIGNAL(valueChanged(int)),this, SLOT(valueChanged(int)));
     tmpQLabel = new QLabel( w, "Label_2" );
     tmpQLabel->setGeometry( 20, 70,100, 30 );
     tmpQLabel->setText(i18n("Space:" ));
-    spb[3] = new KNumericSpinBox( w, "SpinSpace" );
+    spb[3] = new QSpinBox( 1, 999, 1, w, "SpinSpace" );
     spb[3]->setGeometry( 110, 70, 60, 30 );
-    spb[3]->setRange(1,999);
     tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_2" );
     tmpQButtonGroup->setGeometry( 10, 110, 320, 150 );	
     tmpQButtonGroup->setFrameStyle( 49 );
@@ -126,7 +125,7 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     cb[0] = new QRadioButton( w, "RadioButton_1" );
     cb[0]->setGeometry( 15, 25, 120, 30 );
     cb[0]->setText( i18n("Fixed Row") );
-    spb[0] = new KNumericSpinBox( w, "FixRow" );
+    spb[0] = new QSpinBox( w, "FixRow" );
     spb[0]->setGeometry( 130, 25, 40, 30 );	
     cb[1] = new QRadioButton( w, "RadioButton_2" );
     cb[1]->setGeometry( 15, 120, 120, 30 );
@@ -203,7 +202,7 @@ if ( cb[0]->isChecked() )
       vch='D';
   }
 
-ret.sprintf("M%cC%03d%03d%03d%03dLLLLLL",vch,spb[2]->getValue(),spb[1]->getValue(),spb[0]->getValue()-1,spb[3]->getValue());
+ret.sprintf("M%cC%03d%03d%03d%03dLLLLLL",vch,spb[2]->value(),spb[1]->value(),spb[0]->value()-1,spb[3]->value());
 for (int k=0;k<6;k++)
  {
   char bch='N';
@@ -228,11 +227,11 @@ close();
 delete this;
 }
 
-void MatrixSetupWidget::valueChanged()
+void MatrixSetupWidget::valueChanged(int)
 {
-int x=spb[2]->getValue();
+int x=spb[2]->value();
 spb[0]->setRange(1,x);
-if(spb[0]->getValue()>x)
+if(spb[0]->value()>x)
   spb[0]->setValue(x);
 }
 
@@ -242,7 +241,7 @@ spb[2]->setValue(atoi(str.mid(3,3)));
 spb[1]->setValue(atoi(str.mid(6,3)));
 spb[0]->setValue(atoi(str.mid(9,3))+1);
 spb[3]->setValue(atoi(str.mid(12,3)));
-spb[0]->setRange(1,spb[2]->getValue());
+spb[0]->setRange(1,spb[2]->value());
 cb[0]->setChecked((str[1]=='M') || (str[1]=='D') || (str[1]=='U'));
 cb[1]->setChecked((str[1]=='C'));
 cb[2]->setChecked((str[1]=='M') ); //mid

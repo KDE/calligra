@@ -11,7 +11,6 @@
 #ifndef _matrix_widget_h
 #define _matrix_widget_h
 #include <klocale.h>
-#include <kspinbox.h>
 #include <kfontdialog.h>
 #include <qdialog.h>
 #include <qchkbox.h>
@@ -22,6 +21,7 @@
 #include <qwidget.h>
 #include <qpushbt.h>
 
+class QSpinBox;
 
 class MatrixSetupWidget  : public QDialog
 {
@@ -36,14 +36,14 @@ public:
     
 protected slots:
 
-    virtual void valueChanged();
+    virtual void valueChanged(int);
     virtual void CancelPressed();
     virtual void OkPressed();
 
 protected:
     QComboBox* co[7];
     QRadioButton* cb[6];
-    KNumericSpinBox* spb[5];
+    QSpinBox* spb[5];
 signals:	 
    void  returnString(QString);
 
