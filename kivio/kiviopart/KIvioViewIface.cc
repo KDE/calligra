@@ -69,3 +69,108 @@ void KIvioViewIface::optionsDialog()
 {
     view->optionsDialog();
 }
+
+bool KIvioViewIface::isSnapGuides()
+{
+    return view->isSnapGuides();
+}
+
+bool KIvioViewIface::isShowGuides()
+{
+    return view->isShowGuides();
+}
+
+bool KIvioViewIface::isShowRulers()
+{
+    return view->isShowRulers();
+}
+
+bool KIvioViewIface::isShowPageBorders()
+{
+    return view->isShowPageBorders();
+}
+
+bool KIvioViewIface::isShowPageMargins()
+{
+    return view->isShowPageMargins();
+}
+
+int KIvioViewIface::leftBorder() const
+{
+    return view->leftBorder();
+}
+
+int KIvioViewIface::rightBorder() const
+{
+    return view->rightBorder();
+}
+
+int KIvioViewIface::topBorder() const
+{
+    return view->topBorder();
+}
+
+int KIvioViewIface::bottomBorder() const
+{
+    return view->bottomBorder();
+}
+
+void KIvioViewIface::togglePageBorders(bool b)
+{
+    view->togglePageBorders(b);
+}
+
+void KIvioViewIface::togglePageMargins(bool b)
+{
+    view->togglePageMargins(b);
+}
+
+void KIvioViewIface::toggleShowRulers(bool b)
+{
+    view->toggleShowRulers(b);
+}
+
+void KIvioViewIface::toggleShowGrid(bool b)
+{
+    view->toggleShowGrid(b);
+}
+
+void KIvioViewIface::toggleSnapGrid(bool b)
+{
+    view->toggleSnapGrid(b);
+}
+
+void KIvioViewIface::toggleShowGuides(bool b)
+{
+    view->toggleShowGuides(b);
+}
+
+void KIvioViewIface::toggleSnapGuides(bool b)
+{
+    view->toggleSnapGuides(b);
+}
+
+void KIvioViewIface::toggleStencilGeometry(bool b)
+{
+    view->toggleStencilGeometry(b);
+}
+
+void KIvioViewIface::toggleViewManager(bool b)
+{
+    view->toggleViewManager(b);
+}
+
+void KIvioViewIface::toggleLayersPanel(bool b)
+{
+    view->toggleLayersPanel(b);
+}
+
+void KIvioViewIface::toggleBirdEyePanel(bool b)
+{
+    view->toggleBirdEyePanel(b);
+}
+
+void KIvioViewIface::toggleProtectionPanel(bool b)
+{
+    view->toggleProtectionPanel(b);
+}

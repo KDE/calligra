@@ -42,6 +42,32 @@ k_dcop:
     virtual void exportPage();
     virtual void optionsDialog();
 
+    virtual bool isSnapGuides();
+    virtual bool isShowGuides();
+    virtual bool isShowRulers();
+    virtual bool isShowPageBorders();
+    virtual bool isShowPageMargins();
+
+
+    virtual int leftBorder() const;
+    virtual int rightBorder() const;
+    virtual int topBorder() const;
+    virtual int bottomBorder() const;
+
+    virtual void togglePageBorders(bool);
+    virtual void togglePageMargins(bool);
+    virtual void toggleShowRulers(bool);
+    virtual void toggleShowGrid(bool);
+    virtual void toggleSnapGrid(bool);
+    virtual void toggleShowGuides(bool);
+    virtual void toggleSnapGuides(bool);
+
+    virtual void toggleStencilGeometry(bool);
+    virtual void toggleViewManager(bool);
+    virtual void toggleLayersPanel(bool);
+    virtual void toggleBirdEyePanel(bool);
+    virtual void toggleProtectionPanel(bool);
+
 private:
     KivioView *view;
 
