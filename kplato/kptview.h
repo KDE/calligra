@@ -93,6 +93,8 @@ protected slots:
 
     void slotEditResource();
 
+    void slotAboutToShow(QWidget *widget);
+
 #ifndef NDEBUG
     void slotPrintDebug();
 #endif

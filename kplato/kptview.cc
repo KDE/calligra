@@ -102,7 +102,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     m_reportview = new KPTReportView(this, m_tab);
     m_tab->addWidget(m_reportview);
 
-    connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
+    connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotAboutToShow(QWidget *)));
 
 	// The menu items
     // ------ Edit
@@ -611,6 +611,33 @@ void KPTView::setReportGenerateMenu() {
         }
     }
     actionReportGenerate->setItems(list);
+}
+
+void KPTView::slotAboutToShow(QWidget *widget) {
+	if (widget == m_ganttview)
+	{
+        //kdDebug()<<k_funcinfo<<"draw gantt"<<endl;
+	    //m_ganttview->hide();
+    	m_ganttview->draw(getPart()->getProject());
+	    m_ganttview->show();
+	}
+	else if (widget == m_pertview)
+	{
+        //kdDebug()<<k_funcinfo<<"draw pertview"<<endl;
+    	m_pertview->draw();
+	    m_pertview->show();
+	}
+	else if (widget == m_resourceview)
+	{
+        //kdDebug()<<k_funcinfo<<"draw resourceview"<<endl;
+    	m_resourceview->draw(getPart()->getProject());
+	    m_resourceview->show();
+	}
+	else if (widget == m_reportview)
+	{
+        //kdDebug()<<k_funcinfo<<"draw reportview"<<endl;
+	}
+
 }
 
 #ifndef NDEBUG
