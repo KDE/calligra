@@ -257,6 +257,11 @@ KSpreadSheet * KSpreadCell::sheet() const
   return m_pTable;
 }
 
+bool KSpreadCell::isDefault() const
+{
+    return ( d->column == 0 );
+}
+
 int KSpreadCell::row() const
 {
   /* Make sure this isn't called for the default cell.  This assert can save you
@@ -6003,11 +6008,6 @@ QRect KSpreadCell::cellRect()
 {
   Q_ASSERT(!isDefault());
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
-}
-
-bool KSpreadCell::isDefault() const
-{
-    return ( d->column == 0 );
 }
 
 void KSpreadCell::NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending )

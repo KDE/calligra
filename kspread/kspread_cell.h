@@ -104,6 +104,17 @@ public:
     KSpreadSheet* sheet() const;
     
     /**
+     * Returns true if this is a default cell (with row and column equal to zero).
+     * Normally, cell constructed within a sheet can't be a default cell.
+     */
+    bool isDefault() const;
+
+    /**
+     * Returns true if this cell has no content, i.e no text and no formula.
+     */
+    bool isEmpty() const;
+
+    /**
      * Returns the cell's column. This could be 0 if the cell is the default cell.
      */
     int column() const;
@@ -303,19 +314,6 @@ public:
      * @return a QRect for this cell (i.e., a 1x1 rect)
      */
     QRect cellRect();
-
-    /**
-     * @reimp
-     */
-    bool isDefault() const;
-
-    /**
-     * Tells whether this cell has any content.
-     * An cell has no content if is has no text and no formula.
-     *
-     * @return TRUE if there is no content.
-     */
-    bool isEmpty() const;
 
     /**
      * @return TRUE if the cell should be printed in a print out.
