@@ -5252,6 +5252,24 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             }
         }                    
     
+    // merged cells ?
+    int colSpan = 1;
+    int rowSpan = 1;
+    if ( element.hasAttribute( "table:number-columns-spanned" ) )
+    {
+        bool ok = false;
+        int span = element.attribute( "table:number-columns-spanned" ).toInt( &ok );
+        if( ok ) colSpan = span;
+    }
+    if ( element.hasAttribute( "table:number-rows-spanned" ) )
+    {
+        bool ok = false;
+        int span = element.attribute( "table:number-rows-spanned" ).toInt( &ok );
+        if( ok ) rowSpan = span;
+    }
+    if ( colSpan > 1 || rowSpan > 1 )
+        forceExtraCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
+        
     // cell comment/annotation
     QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
     if ( !annotationElement.isNull() )
