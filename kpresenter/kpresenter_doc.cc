@@ -618,6 +618,9 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
 
 bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
+    QTime dt;
+    dt.start();
+
     ignoreSticky = FALSE;
     bool b=false;
     QDomElement docelem = doc.documentElement();
@@ -666,12 +669,17 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     }
     initConfig();
     setModified(false);
+    
+    kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+
     return b;
 }
 
 /*========================== load ===============================*/
 bool KPresenterDoc::loadXML( const QDomDocument &doc )
 {
+    emit sigProgress( 0 );
+
     delete m_pixmapMap;
     m_pixmapMap = 0L;
     clipartCollectionKeys.clear();
@@ -701,6 +709,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         m_selectedSlides.clear();
     }
 
+    emit sigProgress( 5 );
+
     QDomElement document=doc.documentElement();
     // DOC
     if(document.tagName()!="DOC") {
@@ -717,8 +727,15 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if(document.hasAttribute("url"))
         urlIntern=KURL(document.attribute("url")).path();
 
+    emit sigProgress( 10 );
+
     QDomElement elem=document.firstChild().toElement();
+
+    uint childCount=document.childNodes().count();
+    
     while(!elem.isNull()) {
+        uint base = childCount;
+          
         if(elem.tagName()=="EMBEDDED") {
             KPresenterChild *ch = new KPresenterChild( this );
             KPPartObject *kppartobject = 0L;
@@ -921,6 +938,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             }
         }
         elem=elem.nextSibling().toElement();
+        
+        base-=1;
+        
+        emit sigProgress(::abs(100-base/childCount*100)+10);
     }
 
     // Initialization of manualTitleList
@@ -956,6 +977,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     }
 
     setModified(false);
+    emit sigProgress(-1);
     return true;
 }
 
