@@ -1334,9 +1334,9 @@ void Page::setupMenus()
   // create right button graph menu
     graphMenu = new QPopupMenu();
     CHECK_PTR( graphMenu );
-    graphMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    graphMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    graphMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    graphMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    graphMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    graphMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     graphMenu->insertSeparator();
     graphMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     graphMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
@@ -1351,9 +1351,9 @@ void Page::setupMenus()
     // create right button part menu
     partMenu = new QPopupMenu();
     CHECK_PTR( partMenu );
-    partMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    partMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    partMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    partMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    partMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    partMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     partMenu->insertSeparator();
     partMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     partMenu->insertSeparator();
@@ -1367,9 +1367,9 @@ void Page::setupMenus()
   // create right button rect menu
     rectMenu = new QPopupMenu();
     CHECK_PTR( rectMenu );
-    rectMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    rectMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    rectMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    rectMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    rectMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    rectMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     rectMenu->insertSeparator();
     rectMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     rectMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
@@ -1385,9 +1385,9 @@ void Page::setupMenus()
   // create right button pie menu
     pieMenu = new QPopupMenu();
     CHECK_PTR( pieMenu );
-    pieMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    pieMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    pieMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    pieMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    pieMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    pieMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     pieMenu->insertSeparator();
     pieMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     pieMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
@@ -1415,9 +1415,9 @@ void Page::setupMenus()
     // create right button picture menu
     picMenu = new QPopupMenu();
     CHECK_PTR( picMenu );
-    picMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    picMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    picMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    picMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    picMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    picMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     picMenu->insertSeparator();
     picMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     picMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
@@ -1435,9 +1435,9 @@ void Page::setupMenus()
   // create right button clipart menu
     clipMenu = new QPopupMenu();
     CHECK_PTR( clipMenu );
-    clipMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    clipMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    clipMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    clipMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    clipMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    clipMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     clipMenu->insertSeparator();
     clipMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     clipMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
@@ -1453,15 +1453,15 @@ void Page::setupMenus()
   // create right button text menu
     txtMenu = new QPopupMenu();
     CHECK_PTR( txtMenu );
-    txtMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    txtMenu->insertItem( BarIcon( "editcopy" ), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    txtMenu->insertItem( KPBarIcon( "delete" ), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
+    txtMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    txtMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    txtMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
     txtMenu->insertSeparator();
     txtMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     txtMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
     txtMenu->insertSeparator();
     txtMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    txtMenu->insertItem( KPBarIcon( "settings" ), i18n( "&Settings..." ), view, SLOT( textSettings() ) );
+    txtMenu->insertItem( SmallIcon( "configure" ), i18n( "&Settings..." ), view, SLOT( textSettings() ) );
     txtMenu->insertSeparator();
     txtMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
     txtMenu->insertSeparator();
@@ -1478,7 +1478,7 @@ void Page::setupMenus()
     PM_SM = presMenu->insertItem( i18n( "&Switching mode" ), this, SLOT( switchingMode() ) );
     PM_DM = presMenu->insertItem( i18n( "&Drawing mode" ), this, SLOT( drawingMode() ) );
     presMenu->insertSeparator();
-    presMenu->insertItem( i18n( "&Goto Page..." ), this, SLOT( slotGotoPage() ) );
+    presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Page..." ), this, SLOT( slotGotoPage() ) );
     presMenu->insertSeparator();
     presMenu->insertItem( i18n( "&Exit Presentation" ), this, SLOT( slotExitPres() ) );
     presMenu->setItemChecked( PM_SM, true );
@@ -1494,13 +1494,13 @@ void Page::setupMenus()
     pageMenu->insertItem( i18n( "&Configure pages..." ), this, SLOT( configPages() ) );
     pageMenu->insertItem( i18n( "&Open presentation structure viewer..." ), this, SLOT( presStructView() ) );
     pageMenu->insertSeparator();
-    pageMenu->insertItem( BarIcon( "filenew" ), i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
+    pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
     pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Copy Page to Clipboard" ), this, SLOT( pageCopy() ) );
-    pageMenu->insertItem( i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
+    pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
     pageMenu->insertSeparator();
     pageMenu->insertItem( i18n( "Edit &Header/Footer..." ), this, SLOT( slotEditHF() ) );
     pageMenu->insertSeparator();
-    pageMenu->insertItem( BarIcon( "editpaste" ), i18n( "&Paste" ), this, SLOT( pagePaste() ) );
+    pageMenu->insertItem( SmallIcon("editpaste"), i18n( "&Paste" ), this, SLOT( pagePaste() ) );
     pageMenu->setMouseTracking( true );
 }
 

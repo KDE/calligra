@@ -4026,7 +4026,7 @@ void KPresenterDoc::groupObjects()
         KMessageBox::information( 0,  // TODO: provide a parent widget
                                   i18n( "You have to select at least 2 objects\n"
                                         "which should be grouped together!"),
-                                  i18n( "KPresenter - Group Objects" ) );
+                                  i18n( "Group Objects" ) );
     else {
         GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, this );
         _commands.addCommand( groupObjCmd );

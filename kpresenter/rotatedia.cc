@@ -37,6 +37,7 @@
 #include <qrect.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kglobalsettings.h>
 
 #include <stdlib.h>
 
@@ -55,8 +56,7 @@ RotatePreview::RotatePreview( QWidget* parent, const char* name )
 /*====================== draw contents ===========================*/
 void RotatePreview::drawContents( QPainter* painter )
 {
-    QFont font( "utopia", 20 );
-    font.setBold( true );
+    QFont font(KGlobalSettings::generalFont().family(), 20, QFont::Bold);
     QFontMetrics fm( font );
 
     QRect br = fm.boundingRect( "KOffice" );

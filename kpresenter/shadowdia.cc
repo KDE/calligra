@@ -27,6 +27,7 @@
 #include <kcolorbtn.h>
 #include <qrect.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -55,8 +56,7 @@ ShadowPreview::ShadowPreview( QWidget* parent, const char* name )
 /*====================== draw contents ===========================*/
 void ShadowPreview::drawContents( QPainter* painter )
 {
-    QFont font( "utopia", 30 );
-    font.setBold( true );
+    QFont font(KGlobalSettings::generalFont().family(), 30, QFont::Bold);
     QFontMetrics fm( font );
 
     QRect br = fm.boundingRect( "KOffice" );
