@@ -3,6 +3,10 @@ KFormula (frameType==4)
 <COUNTER>
 <PAPER>, <PAPERBORDERS>
 <ATTRIBUTES>
+Generate Manifest file
+<meta:image-count>
+<style:text-underline> (verify that all modes are generated.)
+<style:wrap> with "none" for pictures?
 ...
 
 === Old OOWriter To-Do List ===
