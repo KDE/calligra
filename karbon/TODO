@@ -32,8 +32,6 @@ TODO:
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	select first/last segment's knot if one of each other's knot is selected
--	investigate whether we can use a KToolBar with an appropriate layout to replace
-	our current non-conforming solution.
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
