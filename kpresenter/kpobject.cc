@@ -327,6 +327,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
     }
 #endif
     //shadow
+#if 0
     if ( !element.hasAttribute( "type" ) ||
          ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
     {
@@ -341,10 +342,10 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
             shadowColor= QColor("#a0a0a0" );
         }
     }
-    else if ( styleStack.hasAttribute( "draw:shadow" ) &&
+#endif
+    if ( styleStack.hasAttribute( "draw:shadow" ) &&
               styleStack.attribute( "draw:shadow" ) == "visible" )
     {
-        kdDebug()<<"shadow object ****************************************\n";
         // use the shadow attribute to indicate an object-shadow
         double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x" ) );
         double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y" ) );
@@ -389,8 +390,8 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
             shadowDirection = SD_LEFT;
             shadowDistance = fabs ( x );
         }
-        if ( styleStack.hasAttribute ( "draw:shadow-color" ) )
-            shadowColor= QColor(styleStack.attribute( "draw:shadow-color" ) );
+        if ( element.hasAttribute ( "draw:shadow-color" ) )
+            shadowColor= QColor(element.attribute( "draw:shadow-color" ) );
         kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
 }
