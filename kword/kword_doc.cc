@@ -1192,9 +1192,6 @@ bool KWordDocument::loadStyleTemplates( const QDomElement& element )
 /*================================================================*/
 bool KWordDocument::loadFrameSets( const QDomElement &framesets )
 {
-    string tag;
-    string name;
-
     bool autoCreateNewFrame = true;
     FrameInfo frameInfo = FI_BODY;
     QString _name = "";
@@ -1210,9 +1207,9 @@ bool KWordDocument::loadFrameSets( const QDomElement &framesets )
 	bool removeable = false;
 	QString fsname;
 	
-	frameType = (FrameType)frameset.attribute( "frameType" ).toInt();
-	autoCreateNewFrame = frameset.attribute( "autoCreateNewFrame" ).toInt();
-	frameInfo = (FrameInfo)frameset.attribute( "frameInfo" ).toInt();
+	frameType = (FrameType)frameset.attribute( "frame-type" ).toInt();
+	autoCreateNewFrame = frameset.attribute( "auto-create-new-frame" ).toInt();
+	frameInfo = (FrameInfo)frameset.attribute( "frame-info" ).toInt();
 	_name = frameset.attribute( "grpMgr" );
 	_row = frameset.attribute( "row" ).toInt();
 	_col = frameset.attribute( "col" ).toInt();
