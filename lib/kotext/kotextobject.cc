@@ -47,7 +47,7 @@ KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
-    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont ) );
+    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor() ) );
     if ( _tabStopWidth != -1 )
         textdoc->setTabStops( _tabStopWidth );
     init();

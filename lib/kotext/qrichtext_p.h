@@ -1617,7 +1617,7 @@ class Q_EXPORT KoTextFormatCollection
 
 public:
     KoTextFormatCollection();
-    KoTextFormatCollection( const QFont& defaultFont ); //// kotext addition
+    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor ); //// kotext addition
     virtual ~KoTextFormatCollection();
 
     void setDefaultFormat( KoTextFormat *f );

@@ -5669,13 +5669,13 @@ KoTextFormatCollection::KoTextFormatCollection()
     cachedFormat = 0;
 }
 
-KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont )
+KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor )
     : cKey( 307 ), sheet( 0 )
 {
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( defaultFont, QColor() ); //// kotext: need to use default QColor here
+    defFormat = new KoTextFormat( defaultFont, defaultColor );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
