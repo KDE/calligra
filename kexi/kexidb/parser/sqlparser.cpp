@@ -1,5 +1,6 @@
 #ifndef lint
-static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
+/*static char yysccsid[] = "from: @(#)yaccpar	1.9 (Berkeley) 02/21/93";*/
+static char yyrcsid[] = "$Id$";
 #endif
 #define YYBYACC 1
 #define YYMAJOR 1
@@ -157,7 +158,7 @@ typedef union {
 	KexiDB::Field::Type coltype;
 	KexiDB::Field *field;
 } YYSTYPE;
-#line 161 "y.tab.c"
+#line 162 "y.tab.c"
 #define PERCENT 257
 #define SQL_TYPE 258
 #define SQL_ABS 259
@@ -1059,13 +1060,17 @@ YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
 #line 970 "sqlparser.y"
 
-#line 1063 "y.tab.c"
+#line 1064 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
 int
+#if defined(__STDC__)
+yyparse(void)
+#else
 yyparse()
+#endif
 {
     register int yym, yyn, yystate;
 #if YYDEBUG
@@ -1089,7 +1094,7 @@ yyparse()
     *yyssp = yystate = 0;
 
 yyloop:
-    if (yyn = yydefred[yystate]) goto yyreduce;
+    if ((yyn = yydefred[yystate]) != 0) goto yyreduce;
     if (yychar < 0)
     {
         if ((yychar = yylex()) < 0) yychar = 0;
@@ -1129,10 +1134,6 @@ yyloop:
         goto yyreduce;
     }
     if (yyerrflag) goto yyinrecovery;
-#ifdef lint
-    goto yynewerror;
-#endif
-yynewerror:
     yyerror("syntax error");
 #ifdef lint
     goto yyerrlab;
@@ -1729,7 +1730,7 @@ case 73:
 	requiresTable = true;
 }
 break;
-#line 1733 "y.tab.c"
+#line 1734 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
