@@ -644,6 +644,15 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
         {
             data.setAttribute("BOLD", static_cast<bool>(tmp->m_options & KoSearchContext::Bold));
         }
+        if ( tmp->m_optionsMask & KoSearchContext::Shadow )
+        {
+            data.setAttribute("SHADOWTEXT", static_cast<bool>(tmp->m_options & KoSearchContext::Shadow));
+        }
+        if ( tmp->m_optionsMask & KoSearchContext::WordByWord )
+        {
+            data.setAttribute("WORDBYWORD", static_cast<bool>(tmp->m_options & KoSearchContext::WordByWord));
+        }
+
         if ( tmp->m_optionsMask & KoSearchContext::Underline )
         {
             switch( tmp->m_underline )
@@ -1917,6 +1926,17 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
             format->setItalic( formatOptions->m_options & KoSearchContext::Italic);
             flags |=KoTextFormat::Italic;
         }
+        if ( formatOptions->m_optionsMask & KoSearchContext::WordByWord)
+        {
+            format->setWordByWord( formatOptions->m_options & KoSearchContext::WordByWord);
+            flags |=KoTextFormat::WordByWord;
+        }
+        if ( formatOptions->m_optionsMask & KoSearchContext::Shadow)
+        {
+            format->setShadowText( formatOptions->m_options & KoSearchContext::WordByWord);
+            flags |=KoTextFormat::ShadowText;
+        }
+
         if ( formatOptions->m_optionsMask & KoSearchContext::Underline)
         {
             format->setUnderlineLineType(formatOptions->m_underline);
