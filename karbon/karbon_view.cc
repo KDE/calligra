@@ -98,12 +98,15 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 {
 	m_toolbox = 0L;
 	m_currentTool = 0L;
-	m_toolFactory = new VToolFactory( this );
+	if( p->isReadWrite() )
+		m_toolFactory = new VToolFactory( this );
 
 	setInstance( KarbonFactory::instance() );
-	setAcceptDrops( true );
 
-	m_toolbox->setupTools();
+	if( p->isReadWrite() )
+		m_toolbox->setupTools();
+
+	setAcceptDrops( true );
 
 	setClientBuilder( this );
 
@@ -113,24 +116,18 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
 	m_dcop = 0L;
-
 	dcopObject(); // build it
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
-
 	m_status->setAlignment( AlignLeft | AlignVCenter );
-
 	m_status->setMinimumWidth( 300 );
-
 	addStatusBarItem( m_status, 0 );
 
 	initActions();
 
 	m_strokeFillPreview = 0L;
-
 	m_ColorManager = 0L;
-
 	m_strokeDocker = 0L;
 
 	if( shell() )
@@ -164,12 +161,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
-	delete m_toolFactory;
-	m_toolFactory = 0L;
-	// dialogs:
-
 	if( shell() )
 	{
+		delete m_toolFactory;
+		m_toolFactory = 0L;
 		delete( m_ColorManager );
 		delete( m_strokeDocker );
 		delete( m_TransformDocker );
@@ -188,6 +183,7 @@ KarbonView::~KarbonView()
 void
 KarbonView::registerTool( VTool *tool )
 {
+	if( !shell() ) return;
 	if( !m_toolbox )
 	{
 		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "toolbox" );
@@ -235,7 +231,7 @@ void
 KarbonView::removeContainer( QWidget *container, QWidget *parent,
 							 QDomElement &element, int id )
 {
-	if( m_toolbox )
+	if( shell() && m_toolbox )
 	{
 		delete m_toolbox;
 		delete m_toolOptionsDocker;
