@@ -143,6 +143,8 @@ AC_OUTPUT( \
 	lib/kofficeui/test/Makefile \
 	lib/koml/Makefile \
 	lib/store/Makefile \
+	filters/Makefile \
+	filters/winword97/Makefile \
 	tools/Makefile \
 	tools/spell/Makefile \
 	plugins/Makefile \
