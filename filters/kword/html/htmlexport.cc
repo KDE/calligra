@@ -358,6 +358,7 @@ class FormatData
 
         bool italic;
         bool underline;
+		bool strikeout;
 
         bool missing;
     private:
@@ -373,6 +374,7 @@ class FormatData
             verticalAlignment=0;
             italic=false;
             underline=false;
+			strikeout=false;
             fontName="times";
             missing=false;
         }
@@ -404,6 +406,19 @@ static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&
     ProcessAttributes (myNode, attrProcessingList);
 
     formatData->underline=(value!=0);
+}
+
+static void ProcessStrikeOutTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int value=0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&value) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->strikeout=(value!=0);
 }
 
 static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
@@ -514,6 +529,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassEx
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag,   (void*) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag,(void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "STRIKEOUT", ProcessStrikeOutTag,(void*) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "WEIGHT",    ProcessWeightTag,   (void*) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag,     (void*) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag,     (void*) &formatData ) );
@@ -708,6 +724,10 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
             {
                 outputText+="<u>";
             }
+            if ( (*paraFormatDataIt).strikeout )
+            {
+                outputText+="<s>";
+            }
             if ( 1==(*paraFormatDataIt).verticalAlignment )
             {
                 outputText+="<sub>"; //Subscript
@@ -736,6 +756,10 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
             if ( 1==(*paraFormatDataIt).verticalAlignment )
             {
                 outputText+="</sub>"; //Subscript
+            }
+            if ( (*paraFormatDataIt).strikeout )
+            {
+                outputText+="</s>";
             }
             if ( (*paraFormatDataIt).underline )
             {
@@ -894,6 +918,10 @@ static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData
             {
                 outputText+="underline";
             }
+			else if ( (*paraFormatDataIt).strikeout )
+			{
+                outputText+="line-through";
+			}
             else
             {
                 outputText+="none";
