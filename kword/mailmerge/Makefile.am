@@ -18,7 +18,8 @@ if include_sql
 SQLDIRECTORY=sql
 endif
 
-if ! compile_mimetypes_kde31
+if compile_mimetypes_kde31
+else
 KABCDIRECTORY=kabc
 endif
 
