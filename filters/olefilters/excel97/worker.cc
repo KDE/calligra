@@ -1595,7 +1595,7 @@ bool Worker::op_sst(Q_UINT32, QDataStream &body)
 	Q_UINT32 count, extsst, richSt;
 
 	body >> count >> extsst;
-	for(int i = 0; i < (int) count; ++i)
+	for(int i = 0; i < (int) extsst; ++i)
 	{
 		body >> cch >> grbit;
 		if(!(grbit & 0x01)) // compressed strings with 1 byte per character
