@@ -22,6 +22,8 @@
 #include <koDocumentChild.h>
 #include <koDocument.h>
 #include <koQueryTrader.h>
+#include <kmimetype.h>
+#include <klocale.h>
 
 #include <qapplication.h>
 
@@ -151,58 +153,102 @@ bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
     return true;
 }
 
-bool KoDocumentChild::loadDocument( KoStore* _store )
+bool KoDocumentChild::loadDocument( KoStore* store )
 {
-  assert( !m_tmpURL.isEmpty() );
+    assert( !m_tmpURL.isEmpty() );
 
-  kdDebug(30003) << "Trying to load " << m_tmpURL << endl;
+    kdDebug(30003) << "Trying to load " << m_tmpURL << endl;
 
-  if ( m_tmpMimeType == "application/x-killustrator" )
-      m_tmpMimeType = "application/x-kontour";
+    if ( m_tmpMimeType == "application/x-killustrator" )
+        m_tmpMimeType = "application/x-kontour";
 
-  KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
-  if ( e.isEmpty() )
-  {
-    kdWarning(30003) << "ERROR: Could not create child document with type " << m_tmpMimeType << endl;
-    return false;
-  }
+    KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
+    if ( e.isEmpty() )
+    {
+        kdWarning(30003) << "ERROR: Could not create child document with type " << m_tmpMimeType << endl;
+        bool res = createUnavailDocument( store, true );
+        if ( res )
+        {
+            // Try to turn the mimetype name into its comment
+            QString mimeName = m_tmpMimeType;
+            KMimeType::Ptr mime = KMimeType::mimeType( m_tmpMimeType );
+            if ( mime->name() != KMimeType::defaultMimeType() )
+                mimeName = mime->name();
+            d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1" ).arg( mimeName ) );
+        }
+        return res;
+    }
 
-  KoDocument * doc = e.createDoc( (KoDocument*)parent() );
-  if (!doc)
-      return false;
-  setDocument( doc, m_tmpGeometry );
+    return loadDocumentInternal( store, e );
+}
 
-  bool res;
-  if ( m_tmpURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
-      res = document()->loadFromStore( _store, m_tmpURL );
-  else
-  {
-      // Reference to an external document. Hmmm...
-      res = document()->openURL( m_tmpURL );
-      // Still waiting...
-      QApplication::setOverrideCursor( waitCursor );
-  }
+bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL )
+{
+    KoDocument * doc = e.createDoc( d->m_parent );
+    if (!doc)
+        return false;
+    setDocument( doc, m_tmpGeometry );
 
-  m_tmpURL = QString::null;
+    bool res = true;
+    if ( doOpenURL )
+    {
+        if ( m_tmpURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
+            res = document()->loadFromStore( _store, m_tmpURL );
+        else
+        {
+            // Reference to an external document. Hmmm...
+            res = document()->openURL( m_tmpURL );
+            if ( !res )
+            {
+                delete d->m_doc;
+                d->m_doc = 0;
+                QString tmpURL = m_tmpURL; // keep a copy, createUnavailDocument will erase it
+                // Not found -> use a kounavail instead
+                res = createUnavailDocument( _store, false /* the URL doesn't exist, don't try to open it */ );
+                if ( res )
+                    d->m_doc->setProperty( "unavailReason", i18n( "External document not found:\n%1" ).arg( tmpURL ) );
+                return res;
+            }
+            // Still waiting...
+            QApplication::setOverrideCursor( waitCursor );
+        }
+    }
 
-  // see KoDocument::insertChild for an exaplanation what's going on
-  // now :-)
-  if ( parentDocument() )
-  {
-      KoDocument *parent = parentDocument();
+    m_tmpURL = QString::null;
 
-      if ( parent->manager() && parent->manager()->parts() )
-      {
-          KParts::PartManager *manager = parent->manager();
+    // see KoDocument::insertChild for an explanation what's going on
+    // now :-)
+    if ( parentDocument() )
+    {
+        KoDocument *parent = parentDocument();
 
-          if ( !manager->parts()->containsRef( document() ) &&
-               !parent->isSingleViewMode() )
-              manager->addPart( document(), false );
-      }
+        if ( parent->manager() && parent->manager()->parts() )
+        {
+            KParts::PartManager *manager = parent->manager();
 
-  }
+            if ( !manager->parts()->containsRef( document() ) &&
+                 !parent->isSingleViewMode() )
+                manager->addPart( document(), false );
+        }
+    }
 
-  return res;
+    return res;
+}
+
+bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
+{
+    // We don't need a trader query here. We're looking for a very specific component.
+    KService::Ptr serv = KService::serviceByDesktopName( "kounavail" );
+    if ( serv == 0L )
+    {
+        kdWarning(30003) << "ERROR: service kounavail not found " << endl;
+        return false;
+    }
+    KoDocumentEntry e( serv );
+    if ( !loadDocumentInternal( store, e, doOpenURL ) )
+        return false;
+    d->m_doc->setProperty( "mimetype", m_tmpMimeType );
+    return true;
 }
 
 QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )

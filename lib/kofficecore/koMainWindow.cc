@@ -783,7 +783,7 @@ void KoMainWindow::slotFilePrint()
         return;
     }
 
-    KPrinter printer;
+    KPrinter printer( true, QPrinter::HighResolution );
 
     // ### TODO: apply global koffice settings here
 

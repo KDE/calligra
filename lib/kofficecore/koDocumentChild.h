@@ -27,6 +27,7 @@ class KURL;
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
+class KoDocumentEntry;
 
 /**
  * Holds an embedded object.
@@ -127,6 +128,10 @@ protected: // Should be private, but KWord needs access to the variables
    *  calling @ref #loadDocument.
    */
   QString m_tmpMimeType;
+
+private:
+  bool createUnavailDocument( KoStore* store, bool doOpenURL );
+  bool loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL = true );
 
 private:
   KoDocumentChildPrivate *d;

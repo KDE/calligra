@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2000, 2001 David Faure <david@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -805,6 +806,7 @@ bool KoDocument::openFile()
   //kdDebug(30003) << "KoDocument::openFile for " << m_file << endl;
   if ( ! QFile::exists(m_file) )
   {
+    QApplication::restoreOverrideCursor();
     // Maybe offer to create a new document with that name ?
     KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(m_file) );
     return false;
@@ -1070,9 +1072,9 @@ KService::Ptr KoDocument::nativeService()
   return m_nativeService;
 }
 
-QCString KoDocument::nativeFormatMimeType()
+QCString KoDocument::nativeFormatMimeType() const
 {
-    KService::Ptr service = nativeService();
+    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
         return QCString();
     return service->property( "X-KDE-NativeMimeType" ).toString().latin1();

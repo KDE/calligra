@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2000, 2001 David Faure <david@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -97,18 +98,14 @@ public:
    */
   bool isEmbedded() const;
 
-  // ######## Where and why is this needed ?
-  // Well, normally all the KOffice apps define the actions in the
-  // view (therefore there is an actionCollection in the KoView class).
-  // As Simon pointed out this is not correct. They should only define
-  // view-actions (like zooming and stuff) in the view. Every action
-  // which changes the document should be defined here. That's at least
-  // what I understood :) (Werner)
   /**
    * Returns the action described action object. In fact only the "name" attribute
    * of @ref #element is of interest here. The method searches first in the
    * @ref KActionCollection of the first view and then in the KActionCollection of this
    * document.
+   * This allows KOffice applications to define actions in both the view and the document.
+   * They should only define view-actions (like zooming and stuff) in the view.
+   * Every action which changes the document should be defined in the document.
    *
    * Please notice that KoDocument indirectly inherits KXMLGUIClient.
    *
@@ -118,7 +115,6 @@ public:
    */
   virtual KAction *action( const QDomElement &element ) const;
 
-  // ######## Where and why is this needed ?
   /**
    * Returns the DOM document which describes the GUI of the
    * first view.
@@ -162,8 +158,9 @@ public:
    * To be preferred when a document exists. It is fast when calling
    * it multiple times since it caches the result that @ref #readNativeFormatMimeType
    * delivers.
+   * You do NOT have to reimplement this (it is only virtual for kounavail).
    */
-  QCString nativeFormatMimeType();
+  virtual QCString nativeFormatMimeType() const;
 
   KService::Ptr nativeService();
 
@@ -403,6 +400,10 @@ public:
    */
   KoDocumentChild *child( KoDocument *doc );
 
+  /**
+   * @return the information concerning this document.
+   * @see KoDocumentInfo
+   */
   KoDocumentInfo *documentInfo() const;
 
   void setViewBuildDocument( KoView *view, const QDomDocument &doc );
@@ -560,10 +561,10 @@ protected:
    */
   virtual void insertChild( KoDocumentChild *child );
 
-  /// @internal
+  /** @internal */
   virtual void setModified() { KParts::ReadWritePart::setModified(); }
 
-  /// @internal
+  /** @internal */
   virtual void insertChild(QObject *o) { QObject::insertChild(o); }
 
 private slots:

@@ -47,7 +47,7 @@ KoDocumentEntry::KoDocumentEntry( KService::Ptr service )
 {
 }
 
-KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
+KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) const
 {
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
