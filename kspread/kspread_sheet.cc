@@ -6705,6 +6705,16 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         kdDebug() << "Repeated: " << number << endl;
     }
     KoStyleStack styleStack;
+    if ( column.hasAttribute( "table:default-cell-style-name" ) )
+    {
+        //todo load cell attribute default into this column
+        QString str = column.attribute( "table:default-cell-style-name" );
+        kdDebug()<<" default-cell-style-name :"<<str<<endl;
+        QDomElement *style = oasisStyles.styles()[str];
+        kdDebug()<<"default column style :"<<style<<endl;
+    }
+
+
     if ( column.hasAttribute( "table:style-name" ) )
     {
         QString str = column.attribute( "table:style-name" );
