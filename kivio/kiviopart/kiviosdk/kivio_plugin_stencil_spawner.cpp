@@ -50,7 +50,7 @@ KivioPluginStencilSpawner::~KivioPluginStencilSpawner()
 
 bool KivioPluginStencilSpawner::load( const QString &f )
 {
-    char *error;
+    const char *error;
 
     if( strstr( f.ascii(), ".ksp" )==NULL )
     {
