@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui ><kpartgui name="KSpread">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
