@@ -24,7 +24,7 @@
 #include "defs.h"
 #include "kwcommand.h"
 #include "kwtableframeset.h"
-//#include <kotextdocument.h>
+#include <knuminput.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -742,12 +742,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lx->resize( lx->sizeHint() );
     pGrid->addWidget( lx, 1, 0 );
 
-    sx = new QLineEdit( grp1 );
+    sx = new KDoubleNumInput( grp1 );
 
-    sx->setText( "0.00" );
-    sx->setMaxLength( 16 );
-    sx->setEchoMode( QLineEdit::Normal );
-    sx->setFrame( true );
+    sx->setValue( 0.0 );
     sx->resize( sx->sizeHint() );
     pGrid->addWidget( sx, 2, 0 );
 
@@ -755,12 +752,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     ly->resize( ly->sizeHint() );
     pGrid->addWidget( ly, 1, 1 );
 
-    sy = new QLineEdit( grp1 );
+    sy = new KDoubleNumInput( grp1 );
 
-    sy->setText( "0.00" );
-    sy->setMaxLength( 16 );
-    sy->setEchoMode( QLineEdit::Normal );
-    sy->setFrame( true );
+    sy->setValue( 0.0 );
     sy->resize( sy->sizeHint() );
     pGrid->addWidget( sy, 2, 1 );
 
@@ -768,12 +762,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lw->resize( lw->sizeHint() );
     pGrid->addWidget( lw, 3, 0 );
 
-    sw = new QLineEdit( grp1 );
+    sw = new KDoubleNumInput( grp1 );
 
-    sw->setText( "0.00" );
-    sw->setMaxLength( 16 );
-    sw->setEchoMode( QLineEdit::Normal );
-    sw->setFrame( true );
+    sw->setValue( 0.0 );
     sw->resize( sw->sizeHint() );
     pGrid->addWidget( sw, 4, 0 );
 
@@ -781,18 +772,15 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lh->resize( lh->sizeHint() );
     pGrid->addWidget( lh, 3, 1 );
 
-    sh = new QLineEdit( grp1 );
+    sh = new KDoubleNumInput( grp1 );
 
-    sh->setText( "0.00" );
-    sh->setMaxLength( 16 );
-    sh->setEchoMode( QLineEdit::Normal );
-    sh->setFrame( true );
+    sh->setValue( 0.0 );
     sh->resize( sh->sizeHint() );
     pGrid->addWidget( sh, 4, 1 );
 
     pGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
-    grid4->addWidget( grp1, ++row, 0 );
+    grid4->addMultiCellWidget( grp1, row, (++row), 0,1 );
 
     grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
     mGrid = new QGridLayout( grp2, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -868,14 +856,14 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         smt->setText( KoUnit::userValue( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
         smb->setText( KoUnit::userValue( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
     }
-    sx->setValidator( new KFloatValidator( 0,9999,true,sx ) );
-    sy->setValidator( new KFloatValidator( 0,9999,true,sy ) );
+    //sx->setValidator( new KFloatValidator( 0,9999,true,sx ) );
+    //sy->setValidator( new KFloatValidator( 0,9999,true,sy ) );
     smb->setValidator( new KFloatValidator( 0,9999,true,smb ) );
     sml->setValidator( new KFloatValidator( 0,9999,true,sml ) );
     smr->setValidator( new KFloatValidator( 0,9999,true,smr ) );
     smt->setValidator( new KFloatValidator( 0,9999,true,smt ) );
-    sh->setValidator( new KFloatValidator( 0,9999,true,sh ) );
-    sw->setValidator( new KFloatValidator( 0,9999,true,sw ) );
+    //sh->setValidator( new KFloatValidator( 0,9999,true,sh ) );
+    //sw->setValidator( new KFloatValidator( 0,9999,true,sw ) );
 
     bool disable = false;
     // Only one frame selected, or when creating a frame -> enable coordinates
@@ -884,17 +872,17 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 	// Can't use frame->pageNum() here since frameset might be 0
 	int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
 
-        sx->setText( KoUnit::userValue( frame->x(), doc->getUnit() ) );
-        sy->setText( KoUnit::userValue( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
-        sw->setText( KoUnit::userValue( frame->width(), doc->getUnit() ) );
-        sh->setText( KoUnit::userValue( frame->height(), doc->getUnit() ) );
+        sx->setValue( KoUnit::ptToUnit( frame->x(), doc->getUnit() ) );
+        sy->setValue( KoUnit::ptToUnit( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
+        sw->setValue( KoUnit::ptToUnit( frame->width(), doc->getUnit() ) );
+        sh->setValue( KoUnit::ptToUnit( frame->height(), doc->getUnit() ) );
 
         // userValue leads to some rounding -> store old values from the ones
         // displayed, so that the "change detection" in apply() works.
-        oldX = sx->text().toDouble();
-        oldY = sy->text().toDouble();
-        oldW = sw->text().toDouble();
-        oldH = sh->text().toDouble();
+        oldX = sx->value();
+        oldY = sy->value();
+        oldW = sw->value();
+        oldH = sh->value();
 
         KWFrameSet * fs = frame->frameSet();
         if ( fs && fs->getGroupManager() )
@@ -1487,11 +1475,11 @@ bool KWFrameDia::applyChanges()
     double pw=0.0;
     double ph=0.0;
     if(tab4) {
-        px = QMAX(0,KoUnit::fromUserValue( sx->text(), doc->getUnit() ));
+        px = QMAX(0,KoUnit::ptFromUnit( sx->value(), doc->getUnit() ));
         int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
-        py = QMAX(0, KoUnit::fromUserValue(sy->text(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
-        pw = QMAX(KoUnit::fromUserValue( sw->text(), doc->getUnit() ),0);
-        ph = QMAX(KoUnit::fromUserValue(sh->text(), doc->getUnit() ),0);
+        py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
+        pw = QMAX(KoUnit::ptFromUnit( sw->value(), doc->getUnit() ),0);
+        ph = QMAX(KoUnit::ptFromUnit(sh->value(), doc->getUnit() ),0);
     }
 
     KoRect rect( px, py, pw, ph );
@@ -1583,7 +1571,7 @@ bool KWFrameDia::applyChanges()
         if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                                 ( doc->processingType() == KWDocument::WP &&
                                                   doc->frameSetNum( frame->frameSet() ) > 0 ) ) ) {
-            if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
+            if ( oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() ) {
                 //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
                 //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;

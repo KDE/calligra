@@ -37,7 +37,7 @@ class QListView;
 class QListViewItem;
 class QLineEdit;
 class KColorButton;
-
+class KDoubleNumInput;
 
 /******************************************************************/
 /* Class: KWBrushStylePreview		                          */
@@ -117,7 +117,8 @@ protected:
     QGroupBox *grp1, *grp2;
     QGridLayout *grid4, *pGrid, *mGrid;
     QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
-    QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
+    KDoubleNumInput *sx, *sy, *sw, *sh;
+    QLineEdit*sml, *smr, *smt, *smb;
     QCheckBox *floating;
 
     // TAB 5:
