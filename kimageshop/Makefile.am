@@ -12,12 +12,12 @@ bin_PROGRAMS = kimageshop
 kimageshop_SOURCES = kimageshop.idl kimageshop_main.cc kimageshop_shell.cc \
 	kimageshop_doc.cc kimageshop_view.cc preferencesdlg.cc zoomfactordlg.cc \
 	canvas.cc canvasview.cc layer.cc layerlist.cc layerdlg.cc \
-	brush.cc channel.cc misc.cc tool.cc movetool.cc brushtool.cc
+	brush.cc channel.cc misc.cc tool.cc movetool.cc brushtool.cc kvector.cc
 
 noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
 	kimageshop_doc.h kimageshop_view.h preferencesdlg.h zoomfactordlg.h \
 	canvas.h canvasview.h layer.h layerlist.h layerdlg.h \
-	brush.h channel.h misc.h tool.h movetool.h brushtool.h
+	brush.h channel.h misc.h tool.h movetool.h brushtool.h kvector.h
 
 METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kimageshop_doc.moc kimageshop_view.moc preferencesdlg.moc zoomfactordlg.moc \
