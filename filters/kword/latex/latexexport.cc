@@ -20,28 +20,34 @@
 #include <latexexport.h>
 #include <latexexport.moc>
 #include <kdebug.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <qtextcodec.h>
 #include "latexexportdia.h"
 
-LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
+
+typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
+K_EXPORT_COMPONENT_FACTORY( liblatexexport, LATEXExportFactory( "latexexport" ) );
+
+
+LATEXExport::LATEXExport(KoFilter *, const char *, const QStringList&) :
+                     KoFilter() {
 }
 
-bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
-                         const QString& from, const QString& to,
-                         const QString &) {
+KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCString& to )
+{
     QString config;
 
     if(to != "text/x-tex" || from != "application/x-kword")
-        return false;
+        return KoFilter::NotImplemented;
 
-    KoStore in = KoStore(QString(fileIn), KoStore::Read);
+    KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
         in.close();
-        return false;
+        return KoFilter::FileNotFound;
     }
     /* input file Reading */
     //QByteArray array=in.read(in.size());
@@ -49,10 +55,10 @@ bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
 
     LATEXExportDia* dialog = new LATEXExportDia(in);
     //dialog->setInputData(array);
-    dialog->setOutputFile(fileOut);
+    dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();
     delete dialog;
 
-    return true;
+    return KoFilter::OK;
 }
