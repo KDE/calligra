@@ -28,7 +28,7 @@
                         email  CDATA #IMPLIED
                         editor CDATA #IMPLIED
                         syntaxVersion NMTOKEN #IMPLIED
-                        mime   CDATA "application/x-kspread">
+                        mime   CDATA #FIXED "application/x-kspread">
 
 <!--	Describes the page format. Can have no or one BORDERS child that
 		describes the margins.
@@ -140,7 +140,7 @@
         Attributes:
         any
 -->
-<ELEMENT reference (tabname,refname,rect)>
+<!ELEMENT reference (tabname,refname,rect)>
 
 <!ELEMENT tabname #PCDATA>
 
@@ -277,6 +277,7 @@
                         action  Action executes when it's not validate (Error, warning etc...)
 		
 -->
+<!ELEMENT param EMPTY>
 <!ATTLIST param         valmin           CDATA #REQUIRED
                         cond             CDATA #REQUIRED
                         valmax           CDATA #REQUIRED
