@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,114 +15,107 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include "PolygonPreview.h"
-#include "PolygonPreview.moc"
-#include "GObject.h"
+#include <PolygonPreview.h>
+
 #include <qpainter.h>
 #include <qpointarray.h>
+
+#include <GObject.h>
 #include <math.h>
 
-#define WIDTH 160
-#define HEIGHT 160
-
 PolygonPreview::PolygonPreview (QWidget* parent, const char* name) :
-  QWidget (parent, name) {
+  QFrame(parent, name) {
   nCorners = 3;
   sharpness = 0;
   isConcave = false;
-  resize (WIDTH, HEIGHT);
-  setFixedSize (WIDTH, HEIGHT);
+  setBackgroundMode(PaletteBase);
+  setFocusPolicy(QWidget::NoFocus);
+  setFrameStyle(QFrame::Panel | QFrame::Sunken);
 }
 
 void PolygonPreview::paintEvent (QPaintEvent *) {
-  QPainter p;
-  double a, angle = 2 * M_PI / nCorners;
-  double xp, yp;
 
-#define RADIUS 100
-  p.begin (this);
-  p.setBackgroundColor (white);
-  p.eraseRect (0, 0, WIDTH, HEIGHT);
+    QPainter p;
+    double angle = 2 * M_PI / nCorners;
+    double diameter=static_cast<double>(QMAX(width(), height()) - 10);
+    double radius=diameter * 0.5;
 
-  p.setWindow (-RADIUS, -RADIUS, 2 * RADIUS, 2 * RADIUS);
-  p.setViewport (5, 5, WIDTH - 10, HEIGHT - 10);
+    p.begin(this);
+    p.setWindow (-radius, -radius, diameter, diameter);
+    p.setViewport (5, 5, width() - 10, height() - 10);
+    p.setPen(colorGroup().text());
 
-  
-  p.setPen (black);
+    QPointArray points(isConcave ? nCorners * 2 : nCorners);
+    points.setPoint(0, 0, -radius);
 
-  QPointArray points (isConcave ? nCorners * 2 : nCorners);
-  points.setPoint (0, 0, -RADIUS);
-
-  if (isConcave) {
-    angle = angle / 2.0;
-    a = angle;
-    double r = RADIUS - (sharpness / 100.0 * RADIUS);
-    for (int i = 1; i < nCorners * 2; i++) {
-      if (i % 2) {
-	xp =  r * sin (a);
-	yp = -r * cos (a);
-      }
-      else {
-	xp = RADIUS * sin (a);
-	yp = - RADIUS * cos (a);
-      }
-      a += angle;
-      points.setPoint (i, (int) xp, (int) yp);
+    if (isConcave) {
+        angle = angle / 2.0;
+        double a = angle;
+        double r = radius - (sharpness / 100.0 * radius);
+        for (int i = 1; i < nCorners * 2; ++i) {
+            double xp, yp;
+            if (i % 2) {
+                xp =  r * std::sin(a);
+                yp = -r * std::cos(a);
+            }
+            else {
+                xp = radius * std::sin(a);
+                yp = -radius * std::cos(a);
+            }
+            a += angle;
+            points.setPoint (i, (int) xp, (int) yp);
+        }
     }
-  }
-  else {
-    a = angle;
-    for (int i = 1; i < nCorners; i++) {
-      xp = RADIUS * sin (a);
-      yp = - RADIUS * cos (a);
-      a += angle;
-      points.setPoint (i, (int) xp, (int) yp);
+    else {
+        double a = angle;
+        for (int i = 1; i < nCorners; i++) {
+            double xp = radius * std::sin(a);
+            double yp = -radius * std::cos(a);
+            a += angle;
+            points.setPoint (i, (int) xp, (int) yp);
+        }
     }
-  }
-  p.drawPolygon (points);
-  p.end ();
-}
-
-QSize PolygonPreview::sizeHint () const {
-  return QSize (WIDTH, HEIGHT);
+    p.drawPolygon(points);
+    p.end();
 }
 
 void PolygonPreview::slotSharpness (int value) {
-  sharpness = value;
-  repaint ();
+    sharpness = value;
+    repaint();
 }
 
 void PolygonPreview::slotConcavePolygon () {
-  isConcave = true;
-  repaint ();
+    isConcave = true;
+    repaint();
 }
 
 void PolygonPreview::slotConvexPolygon () {
-  isConcave = false;
-  repaint ();
+    isConcave = false;
+    repaint();
 }
 
 void PolygonPreview::increaseNumOfCorners () {
-  nCorners++;
-  repaint ();
+    nCorners++;
+    repaint();
 }
 
 void PolygonPreview::decreaseNumOfCorners () {
-  if (nCorners > 3) {
-    nCorners--;
-    repaint ();
-  }
+    if (nCorners > 3) {
+        nCorners--;
+        repaint();
+    }
 }
 
 void PolygonPreview::setNumOfCorners (int value) {
-  nCorners = value;
-  repaint ();
-};
+    nCorners = value;
+    repaint();
+}
 
+#include <PolygonPreview.moc>

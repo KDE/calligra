@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,42 +25,43 @@
 #ifndef PolygonConfigDialog_h
 #define PolygonConfigDialog_h
 
-#include <qdialog.h>
-#include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qslider.h>
+#include <kdialogbase.h>
 
-#include "PolygonTool.h"
-#include "PolygonPreview.h"
+class QSpinBox;
+class QSlider;
+class QRadioButton;
+class PolygonTool;
+class PolygonPreview;
 
-class PolygonConfigDialog : public QDialog {
-  Q_OBJECT
+class PolygonConfigDialog : public KDialogBase {
+
+    Q_OBJECT
+
 public:
-  PolygonConfigDialog (QWidget* parent = 0L, const char* name = 0L);
+    PolygonConfigDialog (QWidget* parent = 0L, const char* name = 0L);
 
-  unsigned int numCorners ();
-  unsigned int sharpness ();
-  bool concavePolygon ();
+    unsigned int numCorners ();
+    unsigned int sharpness ();
+    bool concavePolygon ();
 
-  void setNumCorners (unsigned int num);
-  void setSharpness (unsigned int value);
-  void setConcavePolygon (bool flag);
+    void setNumCorners (unsigned int num);
+    void setSharpness (unsigned int value);
+    void setConcavePolygon (bool flag);
 
-  static void setupTool (PolygonTool* tool);
+    static void setupTool (PolygonTool* tool);
 
 protected:
-  QWidget* createWidget (QWidget* parent);
+    void createWidget (QWidget* parent);
 
 private slots:
-  void helpPressed ();
-  void slotConcavePolygon ();
-  void slotConvexPolygon ();
+    void slotConcavePolygon ();
+    void slotConvexPolygon ();
 
 private:
-  QSpinBox *spinbox;
-  QSlider *slider;
-  QRadioButton *concaveButton, *convexButton;
-  PolygonPreview *preview;
+    QSpinBox *spinbox;
+    QSlider *slider;
+    QRadioButton *concaveButton, *convexButton;
+    PolygonPreview *preview;
 };
 
 #endif

@@ -33,7 +33,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h \
 		 MainView.h PStateManager.h OptionDialog.h \
-		 Preview.h units.h UnitBox.h \
+		 units.h UnitBox.h \
 		 GLayer.h LayerDialog.h LayerView.h \
 		 Gradient.h GradientShape.h \
 		 BrushCells.h PathTextTool.h \
@@ -73,7 +73,7 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc \
 			  PStateManager.cc OptionDialog.cc \
-			  Preview.cc units.cc UnitBox.cc \
+			  units.cc UnitBox.cc \
 			  GLayer.cc LayerDialog.cc LayerView.cc \
 			  Gradient.cc GradientShape.cc \
 			  BrushCells.cc  \

@@ -22,22 +22,21 @@
 
 */
 
-#include <iostream.h>
-#include <math.h>
-#include "PolylineTool.h"
-#include "PolylineTool.moc"
-#include "GDocument.h"
-#include "Canvas.h"
-#include "Coord.h"
-#include "GPolygon.h"
-#include "CreatePolylineCmd.h"
-#include "CreatePolygonCmd.h"
-#include "AddLineSegmentCmd.h"
-#include "CommandHistory.h"
+#include <PolylineTool.h>
+
 #include <qkeycode.h>
-#include <kapp.h>
 #include <klocale.h>
-#include "version.h"
+
+#include <GDocument.h>
+#include <Canvas.h>
+#include <Coord.h>
+#include <GPolygon.h>
+#include <CreatePolylineCmd.h>
+#include <CreatePolygonCmd.h>
+#include <AddLineSegmentCmd.h>
+#include <CommandHistory.h>
+
+#include <math.h>
 
 PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
   line = 0L;
@@ -47,13 +46,7 @@ PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
 }
 
 void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () ==
-#if QT_VERSION >= 199
-      QEvent::KeyPress
-#else
-      Event_KeyPress
-#endif
-      ) {
+  if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == QT_ESCAPE && line != 0L) {
       /*
@@ -75,13 +68,13 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       }
       else {
         // remove the first point: it's equal to the last point
-	// of the original line
-	points.removeFirst ();
+        // of the original line
+        points.removeFirst ();
         // we have to remove the last added point
         line->removePoint (last);
         if (points.count () > 0) {
-	  if (last != 0)
-	    last = last - points.count ();
+          if (last != 0)
+            last = last - points.count ();
           AddLineSegmentCmd *cmd =
             new AddLineSegmentCmd (doc, line, last, points);
           history->addCommand (cmd);
@@ -93,13 +86,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       emit operationDone ();
     }
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseButtonPress
-#else
-	   Event_MouseButtonPress
-#endif
-	   ) {
+  else if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () != LeftButton)
       return;
@@ -110,7 +97,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (line != 0L) {
       // continue creation: add a new segment
       if (last != 0)
-	last++;
+        last++;
     }
     else {
       newObj = true;
@@ -119,59 +106,53 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       GPolyline* obj = 0L;
 
       if (me->state () & ShiftButton) {
-	// magnetic mode
-	GObject *o = 0L;
-	int idx = -1;
-	if (doc->findNearestObject ("GPolyline", xpos, ypos,
-				    10, o, idx)) {
-	  line = (GPolyline *) o;
-	  last = (idx != 0 ? idx + 1 : idx);
-	  newObj = false;
-	}
+        // magnetic mode
+        GObject *o = 0L;
+        int idx = -1;
+        if (doc->findNearestObject ("GPolyline", xpos, ypos,
+                                    10, o, idx)) {
+          line = (GPolyline *) o;
+          last = (idx != 0 ? idx + 1 : idx);
+          newObj = false;
+        }
       }
       else {
-	// look for existing polylines with a point near the mouse pointer
-	QList<GObject> olist;
+        // look for existing polylines with a point near the mouse pointer
+        QList<GObject> olist;
 
-	if (doc->findContainingObjects (xpos, ypos, olist)) {
-	  QListIterator<GObject> it (olist);
-	  while (it.current ()) {
-	    if (it.current ()->isA ("GPolyline")) {
-	      obj = (GPolyline *) it.current ();
-	      break;
-	    }
-	    ++it;
-	  }
-	}
-	if (obj && (last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
-	    && (last == 0 || last == (int) obj->numOfPoints () - 1)) {
-	  line = obj;
-	  newObj = false;
-	  if (last != 0)
-	    // it's not the first point of the line, so update the
-	    // index
-	    last += 1;
-	}
+        if (doc->findContainingObjects (xpos, ypos, olist)) {
+          QListIterator<GObject> it (olist);
+          while (it.current ()) {
+            if (it.current ()->isA ("GPolyline")) {
+              obj = (GPolyline *) it.current ();
+              break;
+            }
+            ++it;
+          }
+        }
+        if (obj && (last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
+            && (last == 0 || last == (int) obj->numOfPoints () - 1)) {
+          line = obj;
+          newObj = false;
+          if (last != 0)
+            // it's not the first point of the line, so update the
+            // index
+            last += 1;
+        }
       }
 
       if (line == 0L) {
-	// no polyline found, create a new one
-	line = new GPolyline ();
-	line->addPoint (0, Coord (xpos, ypos));
-	last = 1;
-	newObj = true;
-	doc->insertObject (line);
+        // no polyline found, create a new one
+        line = new GPolyline ();
+        line->addPoint (0, Coord (xpos, ypos));
+        last = 1;
+        newObj = true;
+        doc->insertObject (line);
       }
     }
     line->addPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseMove
-#else
-	   Event_MouseMove
-#endif
-) {
+  else if (e->type () == QEvent::MouseMove) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
@@ -179,7 +160,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     if (me->state () & ControlButton) {
       Coord oldp = line->getPoint (last > 0 ? last - 1 : 0);
-      if (fabs (xpos - oldp.x ()) > fabs (ypos - oldp.y ()))
+      if (std::fabs (xpos - oldp.x ()) > std::fabs (ypos - oldp.y ()))
         ypos = oldp.y ();
       else
         xpos = oldp.x ();
@@ -189,13 +170,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     line->setPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseButtonRelease
-#else
-	   Event_MouseButtonRelease
-#endif
-	   ) {
+  else if (e->type () == QEvent::MouseButtonRelease) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
@@ -218,63 +193,63 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       doc->unselectAllObjects ();
 
       if ((last > 0 && line->numOfPoints () >= 3 &&
-	  line->getNeighbourPoint (Coord (xpos, ypos)) == 0) ||
-	  ((me->state () & ShiftButton) && line->numOfPoints () > 3)) {
-	if (me->state () & ShiftButton) {
-	  line->removePoint (line->numOfPoints () - 1, false);
-	  // the polyline is closed, so convert it into a polygon
-	  GPolygon* obj = new GPolygon (line->getPoints ());
-	  doc->deleteObject (line);
-	  if (obj->isValid ()) {
-	    doc->insertObject (obj);
-	    doc->setLastObject (obj);
-	    CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
-	    history->addCommand (cmd);
-	  }
-	}
+          line->getNeighbourPoint (Coord (xpos, ypos)) == 0) ||
+          ((me->state () & ShiftButton) && line->numOfPoints () > 3)) {
+        if (me->state () & ShiftButton) {
+          line->removePoint (line->numOfPoints () - 1, false);
+          // the polyline is closed, so convert it into a polygon
+          GPolygon* obj = new GPolygon (line->getPoints ());
+          doc->deleteObject (line);
+          if (obj->isValid ()) {
+            doc->insertObject (obj);
+            doc->setLastObject (obj);
+            CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
+            history->addCommand (cmd);
+          }
+        }
       }
       else {
-	doc->setLastObject (line);
+        doc->setLastObject (line);
 #if defined(not_yet)
-	// XXXX
-	// look for existing polylines with a point near the mouse pointer
-	QList<GObject> olist;
-	GPolyline *obj = 0L;
-	if (doc->findContainingObjects (xpos, ypos, olist)) {
-	  QListIterator<GObject> it (olist);
-	  while (it.current ()) {
-	    if (it.current () != line && it.current ()->isA ("GPolyline")) {
-	      obj = (GPolyline *) it.current ();
-	      break;
-	    }
-	    ++it;
-	  }
-	}
-	int olast = -1;
-	if (obj && (olast = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
-	    && (olast == 0 || olast == (int) obj->numOfPoints () - 1)) {
-	  // combine the current line with obj
-	  cout << "COMBINE" << endl;
-	}
+        // XXXX
+        // look for existing polylines with a point near the mouse pointer
+        QList<GObject> olist;
+        GPolyline *obj = 0L;
+        if (doc->findContainingObjects (xpos, ypos, olist)) {
+          QListIterator<GObject> it (olist);
+          while (it.current ()) {
+            if (it.current () != line && it.current ()->isA ("GPolyline")) {
+              obj = (GPolyline *) it.current ();
+              break;
+            }
+            ++it;
+          }
+        }
+        int olast = -1;
+        if (obj && (olast = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
+            && (olast == 0 || olast == (int) obj->numOfPoints () - 1)) {
+          // combine the current line with obj
+            //cout << "COMBINE" << endl;
+        }
 #endif
-	if (newObj) {
-	  if (! line->isValid ())
-	    doc->deleteObject (line);
-	  else {
-	    CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
-	    history->addCommand (cmd);
-	  }
-	}
-	else {
-	  // remove the first point: it's equal to the last point
-	  // of the original line
-	  points.removeFirst ();
-	  if (last != 0)
-	    last = last - points.count () + 1;
-	  AddLineSegmentCmd *cmd =
-	    new AddLineSegmentCmd (doc, line, last, points);
-	  history->addCommand (cmd);
-	}
+        if (newObj) {
+          if (! line->isValid ())
+            doc->deleteObject (line);
+          else {
+            CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
+            history->addCommand (cmd);
+          }
+        }
+        else {
+          // remove the first point: it's equal to the last point
+          // of the original line
+          points.removeFirst ();
+          if (last != 0)
+            last = last - points.count () + 1;
+          AddLineSegmentCmd *cmd =
+            new AddLineSegmentCmd (doc, line, last, points);
+          history->addCommand (cmd);
+        }
       }
       line = 0L; last = 0;
     }
@@ -290,3 +265,5 @@ void PolylineTool::deactivate (GDocument*, Canvas*) {
   line = 0L;
   last = 0;
 }
+
+#include <PolylineTool.moc>
