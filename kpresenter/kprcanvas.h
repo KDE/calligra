@@ -197,7 +197,7 @@ public:
     void insertRect( const QRect& );
     void insertEllipse( const QRect& );
     void insertPie( const QRect& );
-
+    KPTextObject* insertTextObject( const QRect& );
 
 public slots:
     void exitEditMode();
@@ -301,7 +301,6 @@ protected:
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
-    KPTextObject* insertTextObject( const QRect& );
     void insertObject( const QRect& );
     void insertAutoform( const QRect&, bool );
     void insertFreehand( const KoPointArray &_pointArray );

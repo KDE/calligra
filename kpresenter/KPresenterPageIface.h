@@ -98,14 +98,14 @@ k_dcop:
     virtual void changePicture( const QString & );
     virtual void changeClipart( const QString & );
 
-    DCOPRef insertRectangle(const QRect & rect);
-    DCOPRef insertEllipse( const QRect &rect );
-    DCOPRef insertPie( const QRect &rect );
-    DCOPRef insertLineH( const QRect& rect, bool rev );
-    DCOPRef insertLineV( const QRect &rect, bool rev );
-    DCOPRef insertLineD1( const QRect &rect, bool rev );
-    DCOPRef insertLineD2( const QRect &rect, bool rev );
-
+    DCOPRef insertRectangle(int x,int y, int h, int w);
+    DCOPRef insertEllipse(int x,int y, int h, int w );
+    DCOPRef insertPie( int x,int y, int h, int w );
+    DCOPRef insertLineH( int x,int y, int h, int w, bool rev );
+    DCOPRef insertLineV( int x,int y, int h, int w, bool rev );
+    DCOPRef insertLineD1( int x,int y, int h, int w, bool rev );
+    DCOPRef insertLineD2( int x,int y, int h, int w, bool rev );
+    DCOPRef insertTextObject( int x,int y, int h, int w );
 
 
 
