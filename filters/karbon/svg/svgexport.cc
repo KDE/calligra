@@ -256,33 +256,20 @@ SvgExport::getStroke( const VStroke& stroke )
 		*m_stream << " stroke-linejoin=\"round\"";
 	else if( stroke.lineJoin() == join_bevel )
 			*m_stream << " stroke-linejoin=\"bevel\"";
-/*
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+
+	// dash
+	if( stroke.dashPattern().array().count() > 0 )
 	{
-		if( list.item( i ).isElement() )
+		*m_stream << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
+		*m_stream << " stroke-dasharray=\" ";
+
+		QValueListConstIterator<float> itr;
+		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
 		{
-			QDomElement e = list.item( i ).toElement();
-
-			else if( e.tagName() == "DASHPATTERN" )
-			{
-				*m_stream << " stroke-dashoffset=\"" << e.attribute( "offset" ) << "\"";
-
-				QDomNodeList dashlist = e.childNodes();
-				*m_stream << " stroke-dasharray=\" ";
-				for( uint j = 0; j < dashlist.count(); ++j )
-				{
-					QDomElement e = dashlist.item( j ).toElement();
-					if( e.tagName() == "DASH" )
-					{
-						*m_stream << e.attribute( "l", "0.0" ).toFloat() << " ";
-					}
-				}
-				*m_stream << "\"";
-			}
+			*m_stream << *itr << " ";
 		}
+		*m_stream << "\"";
 	}
-*/
 }
 
 void
