@@ -73,131 +73,133 @@ struct DistributeData
 class KivioPSPrinter;
 
 class KivioPage : public QObject
-{ Q_OBJECT
-public:
-  KivioPage( KivioMap *_map, const QString &pageName,  const char *_name=0L );
-  ~KivioPage();
+{
+  Q_OBJECT
+  public:
+    KivioPage( KivioMap *_map, const QString &pageName,  const char *_name=0L );
+    ~KivioPage();
 
     virtual DCOPObject* dcopObject();
 
-  QString pageName()const { return m_strName; }
-  bool setPageName( const QString& name, bool init = FALSE );
+    QString pageName()const { return m_strName; }
+    bool setPageName( const QString& name, bool init = FALSE );
 
-  virtual QDomElement save( QDomDocument& );
-  virtual bool loadXML( const QDomElement& );
-  bool isLoading();
+    virtual QDomElement save( QDomDocument& );
+    virtual bool loadXML( const QDomElement& );
+    bool isLoading();
 
-  bool isHidden()const { return m_bPageHide; }
-  void setHidden(bool hidden) { m_bPageHide=hidden; }
+    bool isHidden()const { return m_bPageHide; }
+    void setHidden(bool hidden) { m_bPageHide=hidden; }
 
-  void setMap( KivioMap* _map ) { m_pMap = _map; }
+    void setMap( KivioMap* _map ) { m_pMap = _map; }
 
-  KivioDoc* doc()const { return m_pDoc; }
-  KivioMap* map()const { return m_pMap; }
+    KivioDoc* doc()const { return m_pDoc; }
+    KivioMap* map()const { return m_pMap; }
 
-  KivioPage *findPage( const QString & _name );
+    KivioPage *findPage( const QString & _name );
 
-  void print( KivioPSPrinter * );
-  void print( QPainter &painter, KPrinter *_printer );
-  void update();
-  int id()const { return m_id; }
-  static KivioPage* find( int _id );
+    void print( KivioPSPrinter * );
+    void print( QPainter &painter, KPrinter *_printer );
+    void update();
+    int id()const { return m_id; }
+    static KivioPage* find( int _id );
 
-  KoPageLayout paperLayout()const { return m_pPageLayout; }
-  void setPaperLayout(const KoPageLayout&);
+    KoPageLayout paperLayout()const { return m_pPageLayout; }
+    void setPaperLayout(const KoPageLayout&);
 
-  void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
-  void printContent( KivioPainter& painter );
-  void printSelected( KivioPainter& painter );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
+    void printContent( KivioPainter& painter );
+    void printSelected( KivioPainter& painter );
 
-  bool isStencilSelected( KivioStencil * );
-  void selectAllStencils();
-  void unselectAllStencils();
-  bool unselectStencil( KivioStencil * );
-  void selectStencil( KivioStencil * );
-  void selectStencils( float, float, float, float );
-  bool stencilInRect( float, float, float, float, KivioStencil * );
-  QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
+    bool isStencilSelected( KivioStencil * );
+    void selectAllStencils();
+    void unselectAllStencils();
+    bool unselectStencil( KivioStencil * );
+    void selectStencil( KivioStencil * );
+    void selectStencils( float, float, float, float );
+    bool stencilInRect( float, float, float, float, KivioStencil * );
+    QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
 
-  KivioRect getRectForAllSelectedStencils();
-  KivioRect getRectForAllStencils();
+    KivioRect getRectForAllSelectedStencils();
+    KivioRect getRectForAllStencils();
 
-  int generateStencilIds( int );
-
-
-  KivioStencil *checkForStencil( KivioPoint *, int *, float, bool);
+    int generateStencilIds( int );
 
 
-  KivioLayer *curLayer()const { return m_pCurLayer; }
-  void setCurLayer( KivioLayer *pLayer ) { m_pCurLayer=pLayer; }
+    KivioStencil *checkForStencil( KivioPoint *, int *, float, bool);
 
-  QPtrList<KivioLayer> *layers() { return &m_lstLayers; }
-  KivioLayer *firstLayer();
-  KivioLayer *nextLayer();
-  KivioLayer *lastLayer();
-  KivioLayer *prevLayer();
-  bool removeCurrentLayer();
-  void addLayer( KivioLayer * );
-  void insertLayer( int, KivioLayer * );
-  KivioLayer *layerAt( int );
-  void takeLayer( KivioLayer *pLayer );
-  KivioGuideLines* guideLines()const{ return gLines; }
 
-  /*
-   * Stencil routines
-   */
-  bool addStencil( KivioStencil * );
-  void alignStencils( AlignData );
-  void distributeStencils( DistributeData );
+    KivioLayer *curLayer()const { return m_pCurLayer; }
+    void setCurLayer( KivioLayer *pLayer ) { m_pCurLayer=pLayer; }
 
-  KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
-  void setHidePage(bool _hide);
-public slots:
-  void deleteSelectedStencils();
-  void groupSelectedStencils();
-  void ungroupSelectedStencils();
+    QPtrList<KivioLayer> *layers() { return &m_lstLayers; }
+    KivioLayer *firstLayer();
+    KivioLayer *nextLayer();
+    KivioLayer *lastLayer();
+    KivioLayer *prevLayer();
+    bool removeCurrentLayer();
+    void addLayer( KivioLayer * );
+    void insertLayer( int, KivioLayer * );
+    KivioLayer *layerAt( int );
+    void takeLayer( KivioLayer *pLayer );
+    KivioGuideLines* guideLines()const{ return gLines; }
 
-  void bringToFront();
-  void sendToBack();
+    /*
+    * Stencil routines
+    */
+    bool addStencil( KivioStencil * );
+    void alignStencils( AlignData );
+    void distributeStencils( DistributeData );
 
-  void copy();
-  void cut();
-  void paste();
+    KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
+    void setHidePage(bool _hide);
+  public slots:
+    void deleteSelectedStencils();
+    void groupSelectedStencils();
+    void ungroupSelectedStencils();
 
-signals:
-  void sig_updateView( KivioPage *_page );
-  void sig_updateView( KivioPage *_page, const QRect& );
-  void sig_nameChanged( KivioPage* page, const QString& old_name );
+    void bringToFront();
+    void sendToBack();
 
-  void sig_PageHidden(KivioPage *_page);
-  void sig_PageShown(KivioPage *_page);
+    void copy();
+    void cut();
+    void paste();
 
-protected:
-  void printPage( QPainter &_painter, const QRect& page_range, const QRect& view );
+  signals:
+    void sig_updateView( KivioPage *_page );
+    void sig_updateView( KivioPage *_page, const QRect& );
+    void sig_nameChanged( KivioPage* page, const QString& old_name );
 
-  QDomElement saveLayout( QDomDocument & );
-  bool loadLayout( const QDomElement & );
+    void sig_PageHidden(KivioPage *_page);
+    void sig_PageShown(KivioPage *_page);
+    
+    void sig_pageLayoutChanged(const KoPageLayout&);
 
-  QString m_strName;
+  protected:
+    void printPage( QPainter &_painter, const QRect& page_range, const QRect& view );
 
-  KivioMap *m_pMap;
-  KivioDoc *m_pDoc;
+    QDomElement saveLayout( QDomDocument & );
+    bool loadLayout( const QDomElement & );
 
-  QPtrList<KivioLayer> m_lstLayers;
-  KivioLayer *m_pCurLayer;
+    QString m_strName;
 
-  QPtrList<KivioStencil> m_lstSelection;
+    KivioMap *m_pMap;
+    KivioDoc *m_pDoc;
 
-  int m_id;
-  bool m_bPageHide;
-  static int s_id;
-  static QIntDict<KivioPage>* s_mapPages;
+    QPtrList<KivioLayer> m_lstLayers;
+    KivioLayer *m_pCurLayer;
 
-  KoPageLayout m_pPageLayout;
+    QPtrList<KivioStencil> m_lstSelection;
 
-  KivioGuideLines* gLines;
-  DCOPObject* m_dcop;
+    int m_id;
+    bool m_bPageHide;
+    static int s_id;
+    static QIntDict<KivioPage>* s_mapPages;
 
+    KoPageLayout m_pPageLayout;
+
+    KivioGuideLines* gLines;
+    DCOPObject* m_dcop;
 };
 
 #endif

@@ -23,7 +23,6 @@ class KivioView;
 class KivioCanvas;
 class KivioPage;
 class KivioDoc;
-class KivioRuler;
 class KivioPainter;
 class KivioPaperLayout;
 class KivioParagraphAction;
@@ -61,7 +60,7 @@ class KActionMenu;
 
 class LineEndsAction;
 
-class TKUFloatSpinBoxAction;
+//class TKUFloatSpinBoxAction;
 class TKSizeAction;
 class TKPositionAction;
 class TKUnitsAction;
@@ -70,7 +69,9 @@ class TKUnitsAction;
 class QStringList;
 class QButton;
 class DCOPObject;
-
+class KoRuler;
+class KoZoomHandler;
+class KoUnitDoubleSpinBox;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -83,225 +84,234 @@ using namespace Kivio;
 
 class KivioView : public KoView
 { Q_OBJECT
-  friend class KivioCanvas;
-public:
-  KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
-  ~KivioView();
+    friend class KivioCanvas;
+  public:
+    KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
+    ~KivioView();
 
-  virtual DCOPObject* dcopObject();
+    virtual DCOPObject* dcopObject();
 
-  ToolController* toolsController()const { return m_pTools; }
-  KivioCanvas* canvasWidget() const { return m_pCanvas; }
-  KivioDoc* doc()const { return m_pDoc; }
+    ToolController* toolsController()const { return m_pTools; }
+    KivioCanvas* canvasWidget() const { return m_pCanvas; }
+    KivioDoc* doc()const { return m_pDoc; }
 
-  void addPage( KivioPage* );
-  void removePage( KivioPage* );
-  void setActivePage( KivioPage* );
-  KivioPage* activePage();
+    void addPage( KivioPage* );
+    void removePage( KivioPage* );
+    void setActivePage( KivioPage* );
+    KivioPage* activePage();
 
-  void setActiveSpawnerSet( KivioStencilSpawnerSet* );
-  KivioStencilSpawnerSet *activeSpawnerSet();
+    void setActiveSpawnerSet( KivioStencilSpawnerSet* );
+    KivioStencilSpawnerSet *activeSpawnerSet();
 
-  KivioTabBar* tabBar()const { return  m_pTabBar;}
-  ToolDockManager* toolDockManager() { return m_pToolDock; }
-  void openPopupMenuMenuPage( const QPoint & _point );
-  void updateMenuPage( );
+    KivioTabBar* tabBar()const { return  m_pTabBar;}
+    ToolDockManager* toolDockManager() { return m_pToolDock; }
+    void openPopupMenuMenuPage( const QPoint & _point );
+    void updateMenuPage( );
 
-  virtual void setupPrinter(KPrinter&);
-  virtual void print(KPrinter&);
+    virtual void setupPrinter(KPrinter&);
+    virtual void print(KPrinter&);
 
-  void paintContent( KivioPainter& painter, const QRect& rect, bool transparent );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent );
 
-  virtual QWidget* canvas();
-  virtual int canvasXOffset() const;
-  virtual int canvasYOffset() const;
+    virtual QWidget* canvas();
+    virtual int canvasXOffset() const;
+    virtual int canvasYOffset() const;
 
-  bool isSnapGuides()const { return m_bSnapGuides; }
-  bool isShowGuides()const { return m_bShowGuides; }
-  bool isShowRulers()const { return m_bShowRulers; }
-  bool isShowPageBorders()const { return m_bShowPageBorders; }
-  bool isShowPageMargins()const { return m_bShowPageMargins; }
+    bool isSnapGuides()const { return m_bSnapGuides; }
+    bool isShowGuides()const { return m_bShowGuides; }
+    bool isShowRulers()const { return m_bShowRulers; }
+    bool isShowPageBorders()const { return m_bShowPageBorders; }
+    bool isShowPageMargins()const { return m_bShowPageMargins; }
 
-  virtual int leftBorder() const;
-  virtual int rightBorder() const;
-  virtual int topBorder() const;
-  virtual int bottomBorder() const;
+    virtual int leftBorder() const;
+    virtual int rightBorder() const;
+    virtual int topBorder() const;
+    virtual int bottomBorder() const;
 
 
-  // Returns the current interface color/lineWidth settings
-  QColor fgColor()const;
-  QColor bgColor()const;
-  int lineWidth()const;
+    // Returns the current interface color/lineWidth settings
+    QColor fgColor()const;
+    QColor bgColor()const;
+    int lineWidth()const;
     void updateButton();
     void insertPage( KivioPage* page );
     void resetLayerPanel();
     void updateProtectPanelCheckBox();
 
+    KoZoomHandler* zoomHandler();
 
-protected:
-  virtual void customEvent( QCustomEvent* );
+  protected:
+    virtual void customEvent( QCustomEvent* );
 
-  void createGeometryDock();
-  void createViewManagerDock();
-  void createLayerDock();
-  void createBirdEyeDock();
-  void createProtectionDock();
+    void createGeometryDock();
+    void createViewManagerDock();
+    void createLayerDock();
+    void createBirdEyeDock();
+    void createProtectionDock();
 
-public slots:
-  void paperLayoutDlg();
+  public slots:
+    void paperLayoutDlg();
 
-  void togglePageBorders(bool);
-  void togglePageMargins(bool);
-  void toggleShowRulers(bool);
-  void toggleShowGrid(bool);
-  void toggleSnapGrid(bool);
-  void toggleShowGuides(bool);
-  void toggleSnapGuides(bool);
+    void togglePageBorders(bool);
+    void togglePageMargins(bool);
+    void toggleShowRulers(bool);
+    void toggleShowGrid(bool);
+    void toggleSnapGrid(bool);
+    void toggleShowGuides(bool);
+    void toggleSnapGuides(bool);
 
-  void toggleStencilGeometry(bool);
-  void toggleViewManager(bool);
-  void toggleLayersPanel(bool);
-  void toggleBirdEyePanel(bool);
-  void toggleProtectionPanel(bool);
+    void toggleStencilGeometry(bool);
+    void toggleViewManager(bool);
+    void toggleLayersPanel(bool);
+    void toggleBirdEyePanel(bool);
+    void toggleProtectionPanel(bool);
 
-  void insertPage();
-  void removePage();
-  void renamePage();
-  void hidePage();
-  void showPage();
-  void exportPage();
-  void viewZoom(int);
+    void insertPage();
+    void removePage();
+    void renamePage();
+    void hidePage();
+    void showPage();
+    void exportPage();
+    void viewZoom(int);
 
-  void groupStencils();
-  void ungroupStencils();
+    void groupStencils();
+    void ungroupStencils();
 
-  void selectAllStencils();
-  void unselectAllStencils();
+    void selectAllStencils();
+    void unselectAllStencils();
 
-  void bringStencilToFront();
-  void sendStencilToBack();
+    void bringStencilToFront();
+    void sendStencilToBack();
 
-  void addStencilFromSpawner( KivioStencilSpawner * );
+    void addStencilFromSpawner( KivioStencilSpawner * );
 
-  void changePage( const QString& _name );
+    void changePage( const QString& _name );
 
-  void viewGUIActivated(bool);
+    void viewGUIActivated(bool);
 
-  void updateToolBars();
+    void updateToolBars();
 
-  void cutStencil();
-  void copyStencil();
-  void pasteStencil();
+    void cutStencil();
+    void copyStencil();
+    void pasteStencil();
 
-  void alignStencilsDlg();
-  void optionsDialog();
+    void alignStencilsDlg();
+    void optionsDialog();
 
     void slotPageHidden( KivioPage* page );
     void slotPageShown( KivioPage* page );
+    
+    void setRulerPageLayout(const KoPageLayout& l);
+
+  protected slots:
+    void slotAddPage( KivioPage *_page );
+    void slotPageRenamed( KivioPage* page, const QString& old_name );
+    void slotUpdateView( KivioPage *_page );
+    void slotUpdateGrid();
+
+    void setFGColor();
+    void setBGColor();
+    void setTextColor();
+
+    void setFontFamily( const QString & );
+    void setFontSize( int );
+
+    void setLineWidth();
+
+    void toggleFontBold(bool);
+    void toggleFontItalics(bool);
+    void toggleFontUnderline(bool);
+
+    void setHParaAlign( int );
+    void setVParaAlign( int );
+
+    void slotSetStartArrow( int );
+    void slotSetEndArrow( int );
+
+    void slotSetStartArrowSize();
+    void slotSetEndArrowSize();
+
+    void slotChangeStencilPosition(double, double);
+    void slotChangeStencilSize(double, double);
+
+    void canvasZoomChanged();
+
+    void addSpawnerToStackBar( KivioStencilSpawnerSet * );
+    void addStencilSet( const QString& );
+
+    void setRulerMousePos( int mx, int my );
+    void setRulerUnit(KoUnit::Unit);
+    void setRulerHOffset(int h);
+    void setRulerVOffset(int v);
+    void rulerChangedUnit(const QString& u);
+
+  protected:
+    void setupActions();
+    void initActions();
+
+    virtual void updateReadWrite( bool readwrite );
+
+    QButton* newIconButton( const char* file, bool kbutton = false, QWidget* parent = 0 );
+
+  private:
+    KivioCanvas *m_pCanvas;
+    QButton *m_pTabBarFirst;
+    QButton *m_pTabBarLeft;
+    QButton *m_pTabBarRight;
+    QButton *m_pTabBarLast;
+    KivioTabBar *m_pTabBar;
+
+    KAction* m_paperLayout;
+    KAction* m_insertPage;
+    KAction* m_removePage;
+    KAction* m_renamePage;
+    KAction* m_hidePage;
+    KAction* m_showPage;
+    KAction* m_exportPage;
+    ZoomAction* m_viewZoom;
+  //  TKUnitsAction* m_unitAct;
+
+    TKSelectColorAction *m_setFGColor;
+    TKSelectColorAction *m_setBGColor;
+
+    KFontAction *m_setFontFamily;
+    KFontSizeAction *m_setFontSize;
+    KToggleAction *m_setBold;
+    KToggleAction *m_setItalics;
+    KToggleAction *m_setUnderline;
+    TKSelectColorAction *m_setTextColor;
+    KivioParagraphAction *m_setHTextAlignment;
+    KivioParagraphAction *m_setVTextAlignment;
+
+    LineEndsAction *m_setStartArrow;
+    LineEndsAction *m_setEndArrow;
+
+    KoUnitDoubleSpinBox *m_setLineWidth;
+    //TKUFloatSpinBoxAction *m_setLineWidth;
+
+    TKSizeAction *m_setEndArrowSize;
+    TKSizeAction *m_setStartArrowSize;
 
 
-protected slots:
-  void slotAddPage( KivioPage *_page );
-  void slotPageRenamed( KivioPage* page, const QString& old_name );
-  void slotUpdateView( KivioPage *_page );
-  void slotUpdateGrid();
+    QStringList m_lineWidthList;
 
-  void setFGColor();
-  void setBGColor();
-  void setTextColor();
+    KivioDoc* m_pDoc;
+    KivioPage* m_pActivePage;
+    KivioStencilSpawnerSet* m_pActiveSpawnerSet;
 
-  void setFontFamily( const QString & );
-  void setFontSize( int );
+    ToolController* m_pTools;
 
-  void setLineWidth();
+    StencilBarDockManager* m_pDockManager;
+    ToolDockManager* m_pToolDock;
 
-  void toggleFontBold(bool);
-  void toggleFontItalics(bool);
-  void toggleFontUnderline(bool);
+    KoRuler* vRuler;
+    KoRuler* hRuler;
 
-  void setHParaAlign( int );
-  void setVParaAlign( int );
-
-  void slotSetStartArrow( int );
-  void slotSetEndArrow( int );
-
-  void slotSetStartArrowSize();
-  void slotSetEndArrowSize();
-
-  void slotChangeStencilPosition(float, float);
-  void slotChangeStencilSize(float, float);
-
-  void canvasZoomChanged(float);
-
-  void addSpawnerToStackBar( KivioStencilSpawnerSet * );
-  void addStencilSet( const QString& );
-
-protected:
-  void setupActions();
-  void initActions();
-
-  virtual void updateReadWrite( bool readwrite );
-
-  QButton* newIconButton( const char* file, bool kbutton = false, QWidget* parent = 0 );
-
-private:
-  KivioCanvas *m_pCanvas;
-  QButton *m_pTabBarFirst;
-  QButton *m_pTabBarLeft;
-  QButton *m_pTabBarRight;
-  QButton *m_pTabBarLast;
-  KivioTabBar *m_pTabBar;
-
-  KAction* m_paperLayout;
-  KAction* m_insertPage;
-  KAction* m_removePage;
-  KAction* m_renamePage;
-  KAction* m_hidePage;
-  KAction* m_showPage;
-  KAction* m_exportPage;
-  ZoomAction* m_viewZoom;
-  TKUnitsAction* m_unitAct;
-
-  TKSelectColorAction *m_setFGColor;
-  TKSelectColorAction *m_setBGColor;
-
-  KFontAction *m_setFontFamily;
-  KFontSizeAction *m_setFontSize;
-  KToggleAction *m_setBold;
-  KToggleAction *m_setItalics;
-  KToggleAction *m_setUnderline;
-  TKSelectColorAction *m_setTextColor;
-  KivioParagraphAction *m_setHTextAlignment;
-  KivioParagraphAction *m_setVTextAlignment;
-
-  LineEndsAction *m_setStartArrow;
-  LineEndsAction *m_setEndArrow;
-
-  TKUFloatSpinBoxAction *m_setLineWidth;
-
-  TKSizeAction *m_setEndArrowSize;
-  TKSizeAction *m_setStartArrowSize;
-
-
-  QStringList m_lineWidthList;
-
-  KivioDoc* m_pDoc;
-  KivioPage* m_pActivePage;
-  KivioStencilSpawnerSet* m_pActiveSpawnerSet;
-
-  ToolController* m_pTools;
-
-  StencilBarDockManager* m_pDockManager;
-  ToolDockManager* m_pToolDock;
-
-  KivioRuler* vRuler;
-  KivioRuler* hRuler;
-
-  KivioStencilGeometryPanel* m_pStencilGeometryPanel;
-  KivioViewManagerPanel* m_pViewManagerPanel;
-  KivioLayerPanel* m_pLayersPanel;
-  KivioBirdEyePanel* m_pBirdEyePanel;
-  KivioProtectionPanel* m_pProtectionPanel;
+    KivioStencilGeometryPanel* m_pStencilGeometryPanel;
+    KivioViewManagerPanel* m_pViewManagerPanel;
+    KivioLayerPanel* m_pLayersPanel;
+    KivioBirdEyePanel* m_pBirdEyePanel;
+    KivioProtectionPanel* m_pProtectionPanel;
     KToggleAction* showPageBorders;
     KToggleAction* showPageMargins;
     KToggleAction* showRulers;
@@ -310,14 +320,15 @@ private:
     KAction *m_selectAll;
     KAction *m_selectNone;
     KAction *m_editCopy;
-  bool m_bShowPageBorders;
-  bool m_bShowPageMargins;
-  bool m_bShowRulers;
-  bool m_bSnapGuides;
-  bool m_bShowGuides;
+    bool m_bShowPageBorders;
+    bool m_bShowPageMargins;
+    bool m_bShowRulers;
+    bool m_bSnapGuides;
+    bool m_bShowGuides;
 
-  DCOPObject *dcop;
+    DCOPObject *dcop;
 
+    KoZoomHandler* m_zoomHandler;
 };
 
 #endif

@@ -2,28 +2,29 @@
 #define KIVIO_STENCIL_GEOMETRY_PANEL_H
 
 #include <qwidget.h>
+#include <koUnit.h>
 
-class TKUFloatSpinBox;
+class KoUnitDoubleSpinBox;
 
 class KivioStencilGeometryPanel : public QWidget
 { Q_OBJECT
 protected:
-    TKUFloatSpinBox *m_pX, *m_pY, *m_pW, *m_pH;
+    KoUnitDoubleSpinBox *m_pX, *m_pY, *m_pW, *m_pH;
 
 public slots:
-    void setUnit(int);
-    void setPosition(float, float);
-    void setSize(float, float);
+    void setUnit(KoUnit::Unit);
+    void setPosition(double, double);
+    void setSize(double, double);
 
 protected slots:
-    void xChange(float);
-    void yChange(float);
-    void wChange(float);
-    void hChange(float);
+    void xChange(double);
+    void yChange(double);
+    void wChange(double);
+    void hChange(double);
 
 signals:
-    void positionChanged(float, float);
-    void sizeChanged(float, float);
+    void positionChanged(double, double);
+    void sizeChanged(double, double);
 
 public:
     KivioStencilGeometryPanel(QWidget* parent);

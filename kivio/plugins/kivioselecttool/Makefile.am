@@ -1,7 +1,3 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
 SUBDIRS = select_pics 
 lib_LTLIBRARIES =libkivioselecttool.la
 
@@ -10,7 +6,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
-	$(KOFFICE_INCLUDES) $(all_includes)
+	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkivioselecttool_la_METASOURCES = AUTO
 libkivioselecttool_la_SOURCES = \
 		plugin.cpp\
@@ -22,11 +18,8 @@ EXTRA_DIST = \
 		tool_select.cpp\
 		tool_select.h\
 		kivioselecttool.rc
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
 libkivioselecttool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkivioselecttool_la_LIBADD = $(LIB_KOTEXT) $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kivioselecttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

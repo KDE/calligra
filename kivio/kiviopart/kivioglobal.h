@@ -22,6 +22,7 @@
 
 #include <koUnit.h>
 #include <koGlobal.h>
+#include <koSize.h>
 
 class QDomElement;
 
@@ -48,6 +49,15 @@ namespace Kivio
    */
   KoOrientation orientationFromString(const QString& s);
   void setFormatOrientation(KoPageLayout& layout);
+  
+  /**
+   * Load a KoSize from a QDomElement
+   */
+  KoSize loadSize(const QDomElement& e, const QString& name, const KoSize& def);
+  /**
+   * Save a KoSize to a QDomElement
+   */
+  void saveSize(QDomElement& e, const QString& name, const KoSize& size);
 };
 
 #endif

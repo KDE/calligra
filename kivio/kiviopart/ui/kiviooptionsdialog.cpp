@@ -102,7 +102,7 @@ void KivioOptionsDialog::initPage()
   m_pageIndex = pageIndex(page);
 
   KivioView* view = static_cast<KivioView*>(parent());
-  KoUnit::Unit unit = convToKoUnit(view->doc()->units());
+  KoUnit::Unit unit = view->doc()->units();
   m_layout = view->doc()->config()->globalDefaultPageLayout();
 
   QLabel* unitLbl = new QLabel(i18n("Default &units:"), page);
@@ -183,14 +183,10 @@ void KivioOptionsDialog::initGrid()
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = KoUnit::ptToUnit(m_layout.ptWidth, unit);
   double pgh = KoUnit::ptToUnit(m_layout.ptHeight, unit);
-  double fw = KoUnit::ptToUnit(KoUnit::ptFromUnit(d.freq.w,
-    Kivio::convToKoUnit(d.freq.unit)), unit);
-  double fh = KoUnit::ptToUnit(KoUnit::ptFromUnit(d.freq.h,
-    Kivio::convToKoUnit(d.freq.unit)), unit);
-  double sw = KoUnit::ptToUnit(KoUnit::ptFromUnit(d.snap.w,
-    Kivio::convToKoUnit(d.freq.unit)), unit);
-  double sh = KoUnit::ptToUnit(KoUnit::ptFromUnit(d.snap.h,
-    Kivio::convToKoUnit(d.freq.unit)), unit);
+  double fw = KoUnit::ptToUnit(d.freq.width(), unit);
+  double fh = KoUnit::ptToUnit(d.freq.height(), unit);
+  double sw = KoUnit::ptToUnit(d.snap.width(), unit);
+  double sh = KoUnit::ptToUnit(d.snap.height(), unit);
 
   m_gridChBox = new QCheckBox(i18n("Show &grid"), page);
   m_gridChBox->setChecked(d.isShow);
@@ -350,11 +346,10 @@ void KivioOptionsDialog::applyGrid()
 {
   KivioGridData d;
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  d.freq.unit = 1; // Always use pt til we make it use KoUnit and friends...
-  d.freq.w = KoUnit::ptFromUnit(m_spaceHorizUSpin->value(), unit);
-  d.freq.h = KoUnit::ptFromUnit(m_spaceVertUSpin->value(), unit);
-  d.snap.w = KoUnit::ptFromUnit(m_snapHorizUSpin->value(), unit);
-  d.snap.h = KoUnit::ptFromUnit(m_snapVertUSpin->value(), unit);
+  d.freq.setWidth(KoUnit::ptFromUnit(m_spaceHorizUSpin->value(), unit));
+  d.freq.setHeight(KoUnit::ptFromUnit(m_spaceVertUSpin->value(), unit));
+  d.snap.setWidth(KoUnit::ptFromUnit(m_snapHorizUSpin->value(), unit));
+  d.snap.setHeight(KoUnit::ptFromUnit(m_snapVertUSpin->value(), unit));
   d.isShow = m_gridChBox->isChecked();
   d.isSnap = m_snapChBox->isChecked();
   d.color = m_gridColorBtn->color();

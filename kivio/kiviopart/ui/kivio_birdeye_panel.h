@@ -27,7 +27,7 @@ public slots:
 
 protected slots:
   void updateVisibleArea();
-  void canvasZoomChanged(float);
+  void canvasZoomChanged();
   void slotUpdateView(KivioPage*);
   void togglePageBorder(bool);
   void togglePageOnly(bool);

@@ -82,7 +82,7 @@ void KivioOptions::paperLayoutSetup(KivioView* view)
   KoPageLayout l = page->paperLayout();
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
-  KoUnit::Unit unit = convToKoUnit(view->doc()->units());
+  KoUnit::Unit unit = view->doc()->units();
   
   if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
   {

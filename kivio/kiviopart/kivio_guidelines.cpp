@@ -8,6 +8,7 @@
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <kdebug.h>
+#include <koPoint.h>
 
 QPixmap* KivioGuideLines::vGuideLines = 0;
 QPixmap* KivioGuideLines::hGuideLines = 0;
@@ -134,25 +135,21 @@ void KivioGuideLines::resize()
 
 void KivioGuideLines::erase(QPaintDevice* buffer, KivioCanvas* c)
 {
-  TKPoint p;
+  KoPoint p;
   for (KivioGuideLineData* g = lines.last(); g; g = lines.prev()) {
     if (g->hasBuffer){
       if (g->orientation() == Qt::Vertical) {
-
-        p.set(g->position(),0,UnitPoint);
+        p.setCoords(g->position(), 0);
         int x = c->mapToScreen(p).x();
         if (x >= 0 && x < c->width() ) {
-          bitBlt(buffer,x,0,&g->buffer);
+          bitBlt(buffer, x, 0, &g->buffer);
         }
-
       } else {
-
-        p.set(0,g->position(),UnitPoint);
+        p.setCoords(0, g->position());
         int y = c->mapToScreen(p).y();
         if (y >= 0 && y < c->height() ) {
-          bitBlt(buffer,0,y,&g->buffer);
+          bitBlt(buffer, 0, y, &g->buffer);
         }
-
       }
     }
     g->hasBuffer = false;
@@ -161,42 +158,43 @@ void KivioGuideLines::erase(QPaintDevice* buffer, KivioCanvas* c)
 
 void KivioGuideLines::paint(QPaintDevice* buffer, KivioCanvas* c)
 {
-  TKPoint p;
+  KoPoint p;
   int d = pattern->width();
 
   int dx = c->xOffset() % d;
   int dy = c->yOffset() % d;
 
-  if (c->xOffset() < 0 )
+  if (c->xOffset() < 0 ) {
     dx += d;
+  }
 
-  if (c->yOffset() < 0 )
+  if (c->yOffset() < 0 ) {
     dy += d;
+  }
 
   for (KivioGuideLineData* g = lines.first(); g; g = lines.next()) {
     if (g->orientation() == Qt::Vertical) {
-
-      p.set(g->position(),0,UnitPoint);
+      p.setCoords(g->position(), 0);
       int x = c->mapToScreen(p).x();
+      
       if (x >= 0 && x < c->width() ) {
         bitBlt(&g->buffer,0,0,buffer,x,0,1,g->buffer.height());
         bitBlt(buffer,x,0,g->isSelected() ? vGuideLinesSelected:vGuideLines,0,dy,1,c->height());
         g->hasBuffer = true;
-      } else
+      } else {
         g->hasBuffer = false;
-
+      }
     } else {
-
-      p.set(0,g->position(),UnitPoint);
+      p.setCoords(0, g->position());
       int y = c->mapToScreen(p).y();
       if (y >= 0 && y < c->height() ) {
-        bitBlt(&g->buffer,0,0,buffer,0,y,g->buffer.width(),1);
+        bitBlt(&g->buffer, 0, 0, buffer, 0, y, g->buffer.width(), 1);
         bitBlt(buffer,0,y,g->isSelected() ? hGuideLinesSelected:hGuideLines,dx,0,c->width(),1);
         g->hasBuffer = true;
-      } else
+      } else {
         g->hasBuffer = false;
+      }
     }
-
   }
 }
 

@@ -15,6 +15,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
+#include <kozoomhandler.h>
 
 using namespace Kivio;
 
@@ -185,7 +186,7 @@ bool KivioViewManagerPanel::eventFilter(QObject* o, QEvent* ev)
 void KivioViewManagerPanel::addItem()
 {
   ViewItemData* d = new ViewItemData;
-  d->name = QString("%1-%2%").arg(m_pView->activePage()->pageName()).arg((int)(m_pView->canvasWidget()->zoom()*100.1f));
+  d->name = QString("%1-%2%").arg(m_pView->activePage()->pageName()).arg((int)(m_pView->zoomHandler()->zoom()));
   d->pageId = m_pView->activePage()->id();
   d->rect = m_pView->canvasWidget()->visibleArea();
   d->isZoom = true;

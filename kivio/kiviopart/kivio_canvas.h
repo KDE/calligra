@@ -32,7 +32,6 @@
 #include "kivio_point.h"
 #include "kivio_rect.h"
 #include "kivio_intra_stencil_data.h"
-#include "tkunits.h"
 
 class KivioView;
 class KivioCanvas;
@@ -53,6 +52,9 @@ class QPixmap;
 class QScrollBar;
 class QTimer;
 
+class KoPoint;
+class KoSize;
+
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
@@ -60,165 +62,154 @@ using namespace Kivio;
 
 class KivioCanvas : public QWidget
 { Q_OBJECT
-  friend class KivioView;
-public:
-  KivioCanvas( QWidget*, KivioView*, KivioDoc*, ToolController*, QScrollBar*, QScrollBar*, KivioRuler*, KivioRuler* );
-  ~KivioCanvas();
-  /**
-   * Called from @ref KivioView to complete the construction. Has to
-   * be called before any other method on this object may be invoced.
-   */
-  int xOffset() { return m_iXOffset; }
-  int yOffset() { return m_iYOffset; }
+    friend class KivioView;
+  public:
+    KivioCanvas( QWidget*, KivioView*, KivioDoc*, ToolController*, QScrollBar*, QScrollBar*/*, KivioRuler*, KivioRuler**/ );
+    ~KivioCanvas();
+    /**
+    * Called from @ref KivioView to complete the construction. Has to
+    * be called before any other method on this object may be invoced.
+    */
+    int xOffset() { return m_iXOffset; }
+    int yOffset() { return m_iYOffset; }
 
-  QPoint actualPaperOrigin();
+    const KivioPage* activePage() const;
+    KivioPage* activePage();
+    KivioPage* findPage( const QString& _name );
 
-  const KivioPage* activePage() const;
-  KivioPage* activePage();
-  KivioPage* findPage( const QString& _name );
+    KivioView* view()const  { return m_pView; }
+    KivioDoc* doc()const { return m_pDoc; }
 
-  KivioView* view()const  { return m_pView; }
-  KivioDoc* doc()const { return m_pDoc; }
+    QSize actualSize();
 
-  float zoom() const;
+    virtual bool event(QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
 
-  QSize actualSize();
+    enum RectType { Insert, Rubber };
+    void startRectDraw( const QPoint &p, RectType t );
+    void continueRectDraw( const QPoint &p, RectType t );
+    void endRectDraw();
+    QRect rect()const { return currRect; }
 
-  virtual bool event(QEvent*);
-  virtual bool eventFilter(QObject*, QEvent*);
+    void startSpawnerDragDraw( const QPoint &p );
+    void continueSpawnerDragDraw( const QPoint &p );
+    void endSpawnerDragDraw();
 
-  enum RectType { Insert, Rubber };
-  void startRectDraw( const QPoint &p, RectType t );
-  void continueRectDraw( const QPoint &p, RectType t );
-  void endRectDraw();
-  QRect rect()const { return currRect; }
+    void drawSelectedStencilsXOR();
+    void drawStencilXOR( KivioStencil * );
 
-  void startSpawnerDragDraw( const QPoint &p );
-  void continueSpawnerDragDraw( const QPoint &p );
-  void endSpawnerDragDraw();
+    KoPoint snapToGrid(KoPoint);
+    KoPoint snapToGuides(KoPoint, bool &, bool &);
+    KoPoint snapToGridAndGuides(KoPoint);
+    double snapToGridX(double);
+    double snapToGridY(double);
 
-  void drawSelectedStencilsXOR();
-  void drawStencilXOR( KivioStencil * );
+    KoPoint mapFromScreen( const QPoint& );
+    QPoint mapToScreen( KoPoint );
 
-  TKPoint snapToGrid(TKPoint);
-  TKPoint snapToGuides(TKPoint, bool &, bool &);
-  TKPoint snapToGridAndGuides(TKPoint);
-  float snapToGridX(float);
-  float snapToGridY(float);
+    void beginUnclippedSpawnerPainter();
+    void endUnclippedSpawnerPainter();
 
-  TKPoint mapFromScreen( const QPoint& );
-  QPoint mapToScreen( TKPoint );
+    void eraseGuides();
+    void paintGuides(bool=true);
 
-  void beginUnclippedSpawnerPainter();
-  void endUnclippedSpawnerPainter();
+    void centerPage();
+    void setViewCenterPoint(KivioPoint);
 
-  void eraseGuides();
-  void paintGuides(bool=true);
+    KivioRect visibleArea();
+    void setVisibleArea(KivioRect, int margin = 0);
+    void setVisibleAreaByWidth(KivioRect, int margin = 0);
+    void setVisibleAreaByHeight(KivioRect, int margin = 0);
 
-  void centerPage();
-  void setViewCenterPoint(KivioPoint);
+  signals:
+    void zoomChanges();
+    void visibleAreaChanged();
 
-  KivioRect visibleArea();
-  void setVisibleArea(KivioRect, int margin = 0);
-  void setVisibleAreaByWidth(KivioRect, int margin = 0);
-  void setVisibleAreaByHeight(KivioRect, int margin = 0);
+  public slots:
+    virtual void setUpdatesEnabled(bool);
 
-signals:
-  void zoomChanges(float);
-  void visibleAreaChanged();
+    void zoomIn(const QPoint&);
+    void zoomOut(const QPoint&);
 
-public slots:
-  virtual void setUpdatesEnabled(bool);
+    void scrollDx(int dx);
+    void scrollDy(int dy);
 
-  void toggleShowRulers(bool);
-  void setZoom(float);
-  void zoomIn(const QPoint&);
-  void zoomOut(const QPoint&);
+    void scrollV(int value);
+    void scrollH(int value);
 
-  void scrollDx(int dx);
-  void scrollDy(int dy);
+    void updateGuides();
 
-  void scrollV(int value);
-  void scrollH(int value);
+    void updateScrollBars();
 
-  void updateGuides();
+    void setZoom(int);
+    
+  protected:
+    virtual void mousePressEvent( QMouseEvent* );
+    virtual void mouseReleaseEvent( QMouseEvent* );
+    virtual void mouseMoveEvent( QMouseEvent* );
 
-  void updateScrollBars();
+    virtual void enterEvent( QEvent* );
+    virtual void leaveEvent( QEvent* );
 
-protected:
-  virtual void mousePressEvent( QMouseEvent* );
-  virtual void mouseReleaseEvent( QMouseEvent* );
-  virtual void mouseMoveEvent( QMouseEvent* );
+    virtual void resizeEvent( QResizeEvent* );
+    virtual void paintEvent( QPaintEvent* );
+    virtual void wheelEvent( QWheelEvent* );
 
-  virtual void enterEvent( QEvent* );
-  virtual void leaveEvent( QEvent* );
+    virtual void dragEnterEvent( QDragEnterEvent * );
+    virtual void dragMoveEvent( QDragMoveEvent * );
+    virtual void dragLeaveEvent( QDragLeaveEvent * );
+    virtual void dropEvent( QDropEvent * );
 
-  virtual void resizeEvent( QResizeEvent* );
-  virtual void paintEvent( QPaintEvent* );
-  virtual void wheelEvent( QWheelEvent* );
+    virtual void keyReleaseEvent( QKeyEvent * );
 
-  virtual void dragEnterEvent( QDragEnterEvent * );
-  virtual void dragMoveEvent( QDragMoveEvent * );
-  virtual void dragLeaveEvent( QDragLeaveEvent * );
-  virtual void dropEvent( QDropEvent * );
+    KoSize actualGridFrequency();
 
-  virtual void keyReleaseEvent( QKeyEvent * );
+    void beginUnclippedPainter();
+    void endUnclippedPainter();
 
-  void updateRulers( bool horiz, bool vert );
-  TKSize actualPaperSizePt();
-  TKSize actualGridFrequency();
+    void paintSelectedXOR();
 
-  void beginUnclippedPainter();
-  void endUnclippedPainter();
+    void updateGuidesCursor();
 
-  void paintSelectedXOR();
+  protected slots:
+    void borderTimerTimeout();
+    void guideLinesTimerTimeout();
 
-  void updateGuidesCursor();
+  private:
+    KivioView* m_pView;
+    KivioDoc* m_pDoc;
 
-protected slots:
-  void borderTimerTimeout();
-  void guideLinesTimerTimeout();
+    ToolController* m_pToolsController;
 
-private:
-  KivioView* m_pView;
-  KivioDoc* m_pDoc;
+    QScrollBar* m_pVertScrollBar;
+    QScrollBar* m_pHorzScrollBar;
 
-  ToolController* m_pToolsController;
+    int m_iXOffset;
+    int m_iYOffset;
 
-  QScrollBar* m_pVertScrollBar;
-  QScrollBar* m_pHorzScrollBar;
+    QPixmap* m_buffer;
 
-  KivioRuler* m_pVRuler;
-  KivioRuler* m_pHRuler;
+    int m_pScrollX;
+    int m_pScrollY;
+    QPointArray gridLines;
 
-  int m_iXOffset;
-  int m_iYOffset;
+    bool oldRectValid;
+    QRect currRect;
+    QPoint rectAnchor;
+    QPainter* unclippedPainter;
+    QPoint sizePreviewPos;
 
-  QPixmap* m_buffer;
+    KivioScreenPainter* unclippedSpawnerPainter;
+    KivioIntraStencilData m_dragStencilData;
+    KivioStencil* m_pDragStencil;
 
-  int m_pScrollX;
-  int m_pScrollY;
-  QPointArray gridLines;
+    QTimer* m_borderTimer;
+    QTimer* m_guideLinesTimer;
 
-  float m_pZoom;
-
-  bool oldRectValid;
-  QRect currRect;
-  QPoint rectAnchor;
-  QPainter* unclippedPainter;
-  QPoint sizePreviewPos;
-
-  KivioScreenPainter* unclippedSpawnerPainter;
-  KivioIntraStencilData m_dragStencilData;
-  KivioStencil* m_pDragStencil;
-
-  QTimer* m_borderTimer;
-  QTimer* m_guideLinesTimer;
-
-  bool delegateThisEvent;
-  QCursor* storedCursor;
-  KivioGuideLineData* pressGuideline;
-  QPoint lastPoint;
+    bool delegateThisEvent;
+    QCursor* storedCursor;
+    KivioGuideLineData* pressGuideline;
+    QPoint lastPoint;
 };
 
 #endif

@@ -1517,6 +1517,7 @@ void KivioPage::setPaperLayout(const KoPageLayout &l)
 {
   m_pPageLayout = l;
   doc()->updateView(this);
+  emit sig_pageLayoutChanged(m_pPageLayout);
 }
 
 KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, float /*thresh*/)

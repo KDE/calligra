@@ -19,6 +19,15 @@
 #ifndef __kivio_doc_h__
 #define __kivio_doc_h__
 
+#include "kivio_grid_data.h"
+
+#include <qptrlist.h>
+#include <qobject.h>
+
+#include <koDocument.h>
+#include <koMainWindow.h>
+#include <koUnit.h>
+
 class KivioDoc;
 class KivioView;
 class KivioMap;
@@ -34,21 +43,14 @@ class KivioPainter;
 class KivioStencil;
 
 namespace Kivio {
-class DragBarButton;
-class ViewItemList;
+  class DragBarButton;
+  class ViewItemList;
 };
 
 class KoStore;
 class QDomDocument;
 class DCOPObject;
 class KCommandHistory;
-
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include "kivio_grid_data.h"
-#include <qptrlist.h>
-
-#include <qobject.h>
 
 class QPainter;
 class KPrinter;
@@ -123,7 +125,7 @@ class KivioDoc : public KoDocument
     KivioGroupStencil *clipboard();
     void setClipboard( KivioGroupStencil * );
 
-    int units()const { return m_units; }
+    KoUnit::Unit units()const { return m_units; }
 
     KivioGridData grid() { return gridData; }
     void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}
@@ -149,7 +151,7 @@ class KivioDoc : public KoDocument
 
     void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
     void slotSelectionChanged();
-    void setUnits(int);
+    void setUnits(KoUnit::Unit);
 
   protected slots:
     void slotDocumentRestored();
@@ -164,7 +166,7 @@ class KivioDoc : public KoDocument
     void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
     void sig_updateGrid();
 
-    void unitsChanged(int);
+    void unitsChanged(KoUnit::Unit);
 
   protected:
     bool checkStencilsForSpawner( KivioStencilSpawner * );
@@ -224,7 +226,7 @@ class KivioDoc : public KoDocument
 
     KivioStencilSpawnerSet* m_pInternalSet;
 
-    int m_units;
+    KoUnit::Unit m_units;
     KivioGridData gridData;
 
     ViewItemList* viewItemList;

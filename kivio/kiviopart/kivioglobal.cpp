@@ -160,3 +160,25 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
     }
   }
 }
+
+KoSize Kivio::loadSize(const QDomElement& e, const QString& name, const KoSize& def)
+{
+  KoSize size;
+  if(e.hasAttribute(name + "Unit")) {
+    // Compatability with Kivio <= 1.2.x
+    KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, name + "Unit", 0));
+    size.setWidth(KoUnit::ptFromUnit(XmlReadFloat(e, name + "Width", def.width()), unit));
+    size.setHeight(KoUnit::ptFromUnit(XmlReadFloat(e, name + "Height", def.height()), unit));
+  } else {
+    size.setWidth(XmlReadFloat(e, name + "Width", def.width()));
+    size.setHeight(XmlReadFloat(e, name + "Height", def.height()));
+  }
+  
+  return size;
+}
+
+void Kivio::saveSize(QDomElement& e, const QString& name, const KoSize& size)
+{
+  XmlWriteFloat(e, name + "Width", size.width());
+  XmlWriteFloat(e, name + "Height", size.height());
+}

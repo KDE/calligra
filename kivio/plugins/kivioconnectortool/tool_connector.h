@@ -20,7 +20,7 @@
 #define TOOL_CONNECTOR_H
 
 #include "tool.h"
-#include "tkunits.h"
+#include <koPoint.h>
 
 class QMouseEvent;
 class QCursor;
@@ -72,7 +72,7 @@ private:
   QCursor* m_pConnectorCursor1;
   QCursor* m_pConnectorCursor2;
   KivioStraightConnector* m_pStencil;
-  TKPoint startPoint;
+  KoPoint startPoint;
   KivioCustomDragData* m_pDragData;
 };
 

@@ -39,6 +39,7 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
 #include "kivio_command.h"
 
 SelectTool::SelectTool( KivioView* view )
@@ -130,24 +131,28 @@ void SelectTool::configure()
 void SelectTool::select(const QRect &r)
 {
     // Calculate the start and end clicks in terms of page coordinates
-    TKPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
-    TKPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
+    KoPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
+    KoPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
 
     float x, y, w, h;
 
     // Calculate the x,y position of the selection box
-    x = startPoint.x < releasePoint.x ? startPoint.x : releasePoint.x;
-    y = startPoint.y < releasePoint.y ? startPoint.y : releasePoint.y;
+    x = startPoint.x() < releasePoint.x() ? startPoint.x() : releasePoint.x();
+    y = startPoint.y() < releasePoint.y() ? startPoint.y() : releasePoint.y();
 
     // Calculate the w/h of the selection box
-    w = releasePoint.x - startPoint.x;
-    if( w < 0.0 )
+    w = releasePoint.x() - startPoint.x();
+    
+    if( w < 0.0 ) {
         w *= -1.0;
+    }
 
-    h = releasePoint.y - startPoint.y;
-    if( h < 0.0 )
+    h = releasePoint.y() - startPoint.y();
+    
+    if( h < 0.0 ) {
         h *= -1.0;
+    }
 
     // Tell the page to select all stencils in this box
     m_pView->activePage()->selectStencils( x, y, w, h );
@@ -238,11 +243,11 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
     int colType;
 
     // Figure out how big 4 pixels is in terms of points
-    float threshhold =  4.0*m_pCanvas->zoom();
+    float threshhold =  m_pView->zoomHandler()->unzoomItY(4);
 
-    TKPoint pagePoint = m_pCanvas->mapFromScreen( pos );
+    KoPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
-    kPoint.set( pagePoint.x, pagePoint.y );
+    kPoint.set( pagePoint.x(), pagePoint.y() );
 
     pStencil = pPage->checkForStencil( &kPoint, &colType, threshhold, onlySelected );
 
@@ -306,9 +311,9 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
     KivioStencil *pStencil;
     int colType;
 
-    TKPoint pagePoint = m_pCanvas->mapFromScreen( pos );
+    KoPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
-    kPoint.set( pagePoint.x, pagePoint.y );
+    kPoint.set( pagePoint.x(), pagePoint.y() );
 
     pStencil = pPage->checkForStencil( &kPoint, &colType, 0.0, selectedOnly );
 
@@ -358,11 +363,11 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
  */
 bool SelectTool::startResizing(const QPoint &pos)
 {
-    TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
+    KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioSelectDragData *pData;
 
-    float x = pagePoint.x;
-    float y = pagePoint.y;
+    float x = pagePoint.x();
+    float y = pagePoint.y();
 
     // Search selected stencils to see if we have a resizing point
     KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
@@ -374,35 +379,35 @@ bool SelectTool::startResizing(const QPoint &pos)
             switch( m_resizeHandle )
             {
                 case 1: // top left
-                    m_origPoint.set( pStencil->x(), pStencil->y(), UnitPoint );
+                    m_origPoint.setCoords(pStencil->x(), pStencil->y());
                     break;
 
                 case 2:
-                    m_origPoint.set( (pStencil->x() + pStencil->w())/2.0, pStencil->y(), UnitPoint );
+                    m_origPoint.setCoords((pStencil->x() + pStencil->w()) / 2.0, pStencil->y());
                     break;
 
                 case 3:
-                    m_origPoint.set( pStencil->x() + pStencil->w(), pStencil->y(), UnitPoint );
+                    m_origPoint.setCoords(pStencil->x() + pStencil->w(), pStencil->y());
                     break;
 
                 case 4:
-                    m_origPoint.set( pStencil->x() + pStencil->w(), (pStencil->y()+pStencil->h())/2.0, UnitPoint );
+                    m_origPoint.setCoords(pStencil->x() + pStencil->w(), (pStencil->y() + pStencil->h()) / 2.0);
                     break;
 
                 case 5:
-                    m_origPoint.set( pStencil->x()+pStencil->w(), pStencil->y()+pStencil->h(), UnitPoint );
+                    m_origPoint.setCoords(pStencil->x() + pStencil->w(), pStencil->y() + pStencil->h());
                     break;
 
                 case 6:
-                    m_origPoint.set( (pStencil->x()+pStencil->w())/2.0, pStencil->y()+pStencil->h(), UnitPoint );
+                    m_origPoint.setCoords((pStencil->x() + pStencil->w()) / 2.0, pStencil->y() + pStencil->h());
                     break;
 
                 case 7:
-                    m_origPoint.set( pStencil->x(), pStencil->y()+pStencil->h(), UnitPoint );
+                    m_origPoint.setCoords(pStencil->x(), pStencil->y() + pStencil->h());
                     break;
 
                 case 8:
-                    m_origPoint.set( pStencil->x(), (pStencil->y()+pStencil->h())/2.0, UnitPoint );
+                    m_origPoint.setCoords(pStencil->x(), (pStencil->y() + pStencil->h()) / 2.0);
                     break;
             }
 
@@ -472,10 +477,10 @@ void SelectTool::continueRubberBanding(const QPoint &pos)
  */
 void SelectTool::continueDragging(const QPoint &pos)
 {
-    TKPoint pagePoint = m_pCanvas->mapFromScreen( pos );
+    KoPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
-    float dx = pagePoint.x - m_origPoint.x;
-    float dy = pagePoint.y - m_origPoint.y;
+    float dx = pagePoint.x() - m_origPoint.x();
+    float dy = pagePoint.y() - m_origPoint.y();
 
     bool snappedX;
     bool snappedY;
@@ -493,40 +498,44 @@ void SelectTool::continueDragging(const QPoint &pos)
 
     while( pStencil && pData )
     {
-        TKPoint p, oldP;
+        KoPoint p;
 
-	// First attempt a snap-to-grid
-	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
-	p = m_pCanvas->snapToGrid(p);
+        // First attempt a snap-to-grid
+        p.setCoords(pData->rect.x() + dx, pData->rect.y() + dy);
+        p = m_pCanvas->snapToGrid(p);
 
-	newX = p.x;
-	newY = p.y;
+        newX = p.x();
+        newY = p.y();
 
-	// Now the guides override the grid so we attempt to snap to them
-	p.set( pData->rect.x() + dx + pStencil->w(), pData->rect.y() + dy + pStencil->h(), UnitPoint );
-	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
-	if( snappedX==true ) {
-	   newX = p.x - pStencil->w();
-	}
-	if( snappedY==true ) {
-	   newY = p.y - pStencil->h();
-	}
+        // Now the guides override the grid so we attempt to snap to them
+        p.setCoords(pData->rect.x() + dx + pStencil->w(), pData->rect.y() + dy + pStencil->h());
+        p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
+        
+        if(snappedX) {
+          newX = p.x() - pStencil->w();
+        }
+        
+        if(snappedY) {
+          newY = p.y() - pStencil->h();
+        }
 
-	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
-	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
-	if( snappedX==true ) {
-	   newX = p.x;
-	}
-	if( snappedY==true ) {
-	   newY = p.y;
-	}
+        p.setCoords(pData->rect.x() + dx, pData->rect.y() + dy);
+        p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
+        
+        if(snappedX) {
+          newX = p.x();
+        }
+        
+        if(snappedY) {
+          newY = p.y();
+        }
 
-	if( pStencil->protection()->at( kpX )==false ) {
-	   pStencil->setX(newX);
-	}
-	if( pStencil->protection()->at( kpY )==false ) {
-	   pStencil->setY(newY);
-	}
+        if( pStencil->protection()->at( kpX )==false ) {
+          pStencil->setX(newX);
+        }
+        if( pStencil->protection()->at( kpY )==false ) {
+          pStencil->setY(newY);
+        }
 
         pData = m_lstOldGeometry.next();
         pStencil = m_pCanvas->activePage()->selectedStencils()->next();
@@ -539,17 +548,17 @@ void SelectTool::continueDragging(const QPoint &pos)
 
 void SelectTool::continueCustomDragging(const QPoint &pos)
 {
-    TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
+    KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     pagePoint = m_pCanvas->snapToGrid(pagePoint);
 
     KivioCustomDragData data;
     data.page = m_pCanvas->activePage();
-    data.dx = pagePoint.x - m_lastPoint.x;
-    data.dy = pagePoint.y - m_lastPoint.y;
-    data.x = pagePoint.x;
-    data.y = pagePoint.y;
+    data.dx = pagePoint.x() - m_lastPoint.x();
+    data.dy = pagePoint.y() - m_lastPoint.y();
+    data.x = pagePoint.x();
+    data.y = pagePoint.y();
     data.id = m_customDragID;
-    data.scale = m_pCanvas->zoom();
+    data.scale = m_pView->zoomHandler()->zoomedResolutionY();
 
 
     // Undraw the old stencils
@@ -568,7 +577,7 @@ void SelectTool::continueCustomDragging(const QPoint &pos)
 
 void SelectTool::continueResizing(const QPoint &pos)
 {
-    TKPoint pagePoint = m_pCanvas->snapToGridAndGuides( m_pCanvas->mapFromScreen(pos) );
+    KoPoint pagePoint = m_pCanvas->snapToGridAndGuides( m_pCanvas->mapFromScreen(pos) );
     KivioSelectDragData *pData = m_lstOldGeometry.first();
 
     if( !pData )
@@ -577,33 +586,23 @@ void SelectTool::continueResizing(const QPoint &pos)
         return;
     }
 
-//    float dx = pagePoint.x - m_lastPoint.x;
-//    float dy = pagePoint.y - m_lastPoint.y;
-
-    float dx = pagePoint.x - m_origPoint.x;
-    float dy = pagePoint.y - m_origPoint.y;
+    float dx = pagePoint.x() - m_origPoint.x();
+    float dy = pagePoint.y() - m_origPoint.y();
 
 
     // Undraw the old outline
     m_pCanvas->drawStencilXOR( m_pResizingStencil );
 
-
-//    float sx = m_pResizingStencil->x();
-//    float sy = m_pResizingStencil->y();
-//    float sw = m_pResizingStencil->w();
-//    float sh = m_pResizingStencil->h();
     float sx = pData->rect.x();
     float sy = pData->rect.y();
     float sw = pData->rect.w();
     float sh = pData->rect.h();
 
-    float aspect = pData->rect.w() / pData->rect.h();
-
     switch( m_resizeHandle )
     {
         case 1: // top left
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
-		m_pResizingStencil->protection()->testBit( kpHeight )==false )
+              m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
                 m_pResizingStencil->setX( sx + dx );
                 m_pResizingStencil->setW( sw - dx );
@@ -623,14 +622,14 @@ void SelectTool::continueResizing(const QPoint &pos)
 
         case 3: // top right
             if( m_pResizingStencil->protection()->testBit( kpHeight )==false &&
-		m_pResizingStencil->protection()->testBit( kpWidth )==false )
-	    {
+              m_pResizingStencil->protection()->testBit( kpWidth )==false )
+            {
                m_pResizingStencil->setY( sy + dy );
                m_pResizingStencil->setH( sh - dy );
 
                m_pResizingStencil->setW( sw + dx );
-	    }
-           break;
+            }
+            break;
 
         case 4: // right
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
@@ -643,7 +642,7 @@ void SelectTool::continueResizing(const QPoint &pos)
 
         case 5: // bottom right
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
-		m_pResizingStencil->protection()->testBit( kpHeight )==false )
+              m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
                 m_pResizingStencil->setW( sw+dx );
                 m_pResizingStencil->setH( sh + dy );
@@ -659,12 +658,12 @@ void SelectTool::continueResizing(const QPoint &pos)
 
         case 7: // bottom left
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
-		m_pResizingStencil->protection()->testBit( kpHeight )==false )
+              m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
-	       m_pResizingStencil->setX( sx + dx );
-	       m_pResizingStencil->setW( sw - dx );
+              m_pResizingStencil->setX( sx + dx );
+              m_pResizingStencil->setW( sw - dx );
 
-	       m_pResizingStencil->setH( sh + dy );
+              m_pResizingStencil->setH( sh + dy );
             }
             break;
 
@@ -674,10 +673,10 @@ void SelectTool::continueResizing(const QPoint &pos)
                 m_pResizingStencil->setX( sx + dx );
                 m_pResizingStencil->setW( sw - dx );
             }
-             break;
+            break;
 
         default:
-	   kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
+            kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
             break;
     }
 
@@ -691,17 +690,16 @@ void SelectTool::continueResizing(const QPoint &pos)
  */
 void SelectTool::changeMouseCursor(const QPoint &pos)
 {
-    TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
+    KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioStencil *pStencil;
     KivioPoint col;
-    float threshhold = 4.0 / m_pCanvas->zoom();
+    float threshhold = m_pView->zoomHandler()->unzoomItY(4);
     int cursorType;
-    int colType;
 
-    float x = pagePoint.x;
-    float y = pagePoint.y;
+    float x = pagePoint.x();
+    float y = pagePoint.y();
 
-    col.set(x,y);
+    col.set(x, y);
 
     // Iterate through all the selected stencils
     pStencil = m_pCanvas->activePage()->selectedStencils()->first();
@@ -746,7 +744,7 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
                 KivioPoint col;
 
                 // Figure out how big 4 pixels is in terms of points
-                float threshhold =  4.0 / m_pCanvas->zoom();
+                float threshhold =  m_pView->zoomHandler()->unzoomItY(4);
 
                 col.set(x,y);
                 if( pStencil->checkForCollision( &col, threshhold )!= kctNone )
@@ -875,12 +873,11 @@ void SelectTool::endRubberBanding(const QPoint &pos)
    // End the rubber-band drawing
    m_pCanvas->endRectDraw();
 
-   TKPoint p = m_pCanvas->mapFromScreen(pos);
+   KoPoint p = m_pCanvas->mapFromScreen(pos);
 
     // We can't select if the start and end points are the same
 //    if( m_startPoint != m_releasePoint )
-    if( m_origPoint.x != p.x &&
-	m_origPoint.y != p.y )
+    if( m_origPoint.x() != p.x() && m_origPoint.y() != p.y() )
     {
         select(m_pCanvas->rect());
     }

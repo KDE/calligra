@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <koPoint.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -170,12 +171,12 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
     // Get drag info ready
     m_pDragData = new KivioCustomDragData();
     m_pDragData->page = pPage;
-    m_pDragData->x = startPoint.x;
-    m_pDragData->y = startPoint.y;
+    m_pDragData->x = startPoint.x();
+    m_pDragData->y = startPoint.y();
     m_pDragData->id = kctCustom + 2;
 
-    m_pStencil->setStartPoint(startPoint.x+10.0f,startPoint.y+10.0f);
-    m_pStencil->setEndPoint(startPoint.x,startPoint.y);
+    m_pStencil->setStartPoint(startPoint.x() + 10.0f, startPoint.y() + 10.0f);
+    m_pStencil->setEndPoint(startPoint.x(), startPoint.y());
     m_pStencil->customDrag(m_pDragData);
 
 
@@ -199,14 +200,14 @@ void ConnectorTool::mouseMove( QMouseEvent * e )
 
 void ConnectorTool::continueRubberBanding( QMouseEvent *e )
 {
-    TKPoint endPoint = m_pCanvas->mapFromScreen( e->pos() );
+    KoPoint endPoint = m_pCanvas->mapFromScreen( e->pos() );
     endPoint = m_pCanvas->snapToGrid(endPoint);
 
-    m_pStencil->setStartPoint(endPoint.x,endPoint.y);
+    m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
 
 
-    m_pDragData->x = endPoint.x;
-    m_pDragData->y = endPoint.y;
+    m_pDragData->x = endPoint.x();
+    m_pDragData->y = endPoint.y();
     m_pDragData->id = kctCustom + 1;
     m_pStencil->customDrag(m_pDragData);
 

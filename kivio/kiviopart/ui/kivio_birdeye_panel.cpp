@@ -14,6 +14,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <koGlobal.h>
+#include <kozoomhandler.h>
 
 #include <kiconloader.h>
 
@@ -33,7 +34,7 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   canvas->installEventFilter(this);
 
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*)), SLOT(slotUpdateView(KivioPage*)) );
-  connect( m_pCanvas, SIGNAL(zoomChanges(float)), SLOT(canvasZoomChanged(float)));
+  connect( m_pCanvas, SIGNAL(zoomChanges()), SLOT(canvasZoomChanged()));
   connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateVisibleArea()));
 
   zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
@@ -56,7 +57,7 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   togglePageBorder(true);
   togglePageOnly(false);
 
-  canvasZoomChanged(m_pCanvas->zoom());
+  canvasZoomChanged();
 }
 
 KivioBirdEyePanel::~KivioBirdEyePanel()
@@ -67,7 +68,7 @@ KivioBirdEyePanel::~KivioBirdEyePanel()
 void KivioBirdEyePanel::zoomChanged(int z)
 {
 //  debug(QString("zoomChanged %1 %2").arg(z).arg((float)(z/100.0)));
-  m_pCanvas->setZoom((float)(z/100.0));
+  m_pCanvas->setZoom(z);
 }
 
 void KivioBirdEyePanel::zoomMinus()
@@ -80,25 +81,9 @@ void KivioBirdEyePanel::zoomPlus()
   m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
 }
 
-void KivioBirdEyePanel::canvasZoomChanged(float z)
+void KivioBirdEyePanel::canvasZoomChanged()
 {
-  int iz = (int)(z*100.1f);
-/*
-<<<<<<< kivio_birdeye_panel.cpp
-  int iz = (int)(z*100.1f);
-
-=======
-  if(z<=5)
-        zoomOut->setEnabled(false);
-  else
-        zoomOut->setEnabled(true);
-  if(z>=10000)
-        zoomIn->setEnabled(false);
-  else
-        zoomIn->setEnabled(true);
-
->>>>>>> 1.3
-*/
+  int iz = m_pView->zoomHandler()->zoom();
   slider->blockSignals(true);
   zoomBox->blockSignals(true);
 
@@ -160,24 +145,23 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
 void KivioBirdEyePanel::updateView()
 {
-  float zc = m_pCanvas->zoom();
   QSize s1 = canvas->size();
   QSize s2;
   KoPageLayout pl = m_pView->activePage()->paperLayout();
   
   if (m_bPageOnly) {
-    int pw = (int)(pl.ptWidth*zc);
-    int ph = (int)(pl.ptHeight*zc);
+    int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
+    int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
     s2 = QSize(pw,ph);
   } else {
     s2 = m_pCanvas->actualSize();
   }
 
-  float zx = s1.width()/(float)s2.width();
-  float zy = s1.height()/(float)s2.height();
+  float zx = (float)s1.width()/(float)s2.width();
+  float zy = (float)s1.height()/(float)s2.height();
   float zxy = QMIN(zx,zy);
 
-  zoom = zc*zxy;
+  zoom = m_pView->zoomHandler()->zoomItY(zxy);
 
   int pw = (int)(pl.ptWidth*zoom);
   int ph = (int)(pl.ptHeight*zoom);
@@ -323,7 +307,7 @@ void KivioBirdEyePanel::handleMouseMoveAction(QPoint p)
   p -= lastPos;
 
   if (apos == AlignCenter) {
-    float z = m_pCanvas->zoom()/zoom;
+    float z = m_pView->zoomHandler()->zoomedResolutionY()/zoom;
     m_pCanvas->setUpdatesEnabled(false);
     m_pCanvas->scrollDx(-(int)(p.x()*z));
     m_pCanvas->scrollDy(-(int)(p.y()*z));

@@ -29,6 +29,8 @@
 #include <ktoolbar.h>
 #include <koMainWindow.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
+#include <koPoint.h>
 
 #include <qapplication.h>
 #include <qcursor.h>
@@ -221,7 +223,7 @@ void ZoomTool::zoomPlus()
 {
    setOverride();
    m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
-   if(m_pCanvas->zoom()>=10000)
+   if(m_pView->zoomHandler()->zoom() >= 1000000)
    {
       m_pPlus->setEnabled(false);
       m_pMinus->setEnabled(true);
@@ -238,7 +240,7 @@ void ZoomTool::zoomMinus()
 {
    setOverride();
    m_pCanvas->zoomOut(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
-   if(m_pCanvas->zoom()<=0.1f)
+   if(m_pView->zoomHandler()->zoom() <= 10)
    {
       m_pMinus->setEnabled(false);
       m_pPlus->setEnabled(true);
@@ -262,7 +264,7 @@ void ZoomTool::zoomWidth()
 
    m_pCanvas->setUpdatesEnabled(false);
    m_pCanvas->centerPage();
-   m_pCanvas->setZoom(z);
+   m_pCanvas->setZoom(qRound(z * 100));
    m_pCanvas->setUpdatesEnabled(true);
 
    removeOverride();
@@ -278,7 +280,7 @@ void ZoomTool::zoomHeight()
   float zh = ch/h;
 
   m_pCanvas->setUpdatesEnabled(false);
-  m_pCanvas->setZoom(zh);
+  m_pCanvas->setZoom(qRound(zh * 100));
   m_pCanvas->centerPage();
   m_pCanvas->setUpdatesEnabled(true);
 
@@ -300,7 +302,7 @@ void ZoomTool::zoomPage()
 
   m_pCanvas->setUpdatesEnabled(false);
   m_pCanvas->centerPage();
-  m_pCanvas->setZoom(z);
+  m_pCanvas->setZoom(qRound(z * 100));
   m_pCanvas->setUpdatesEnabled(true);
 
   removeOverride();
@@ -353,7 +355,8 @@ void ZoomTool::zoomRect(QRect r)
     return;
   }
 
-  TKPoint p0 = m_pCanvas->mapFromScreen(r.topLeft());
-  m_pCanvas->setVisibleArea(KivioRect(p0.x, p0.y, r.width()/m_pCanvas->zoom(), r.height()/m_pCanvas->zoom()));
+  KoPoint p0 = m_pCanvas->mapFromScreen(r.topLeft());
+  m_pCanvas->setVisibleArea(KivioRect(p0.x(), p0.y(), m_pView->zoomHandler()
+    ->unzoomItX(r.width()), m_pView->zoomHandler()->unzoomItY(r.height())));
 }
 #include "tool_zoom.moc"

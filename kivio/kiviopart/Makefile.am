@@ -6,7 +6,7 @@ libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/tklib/libtklib.la\
 		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
 		$(top_builddir)/kivio/kiviopart/ui/libui.la \
-		$(LIB_KOFFICEUI) $(LIBPYTHON) $(PYTHONLIB)
+		$(LIB_KOFFICEUI) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
 
 INCLUDES = -I$(srcdir)/ui\
 	-Iui\
@@ -14,6 +14,7 @@ INCLUDES = -I$(srcdir)/ui\
 	-I$(srcdir)/tklib\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
+	$(KOTEXT_INCLUDES)\
 	-I$(top_srcdir)/lib/kformula\
 	$(all_includes)
 

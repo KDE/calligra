@@ -1,7 +1,3 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
 SUBDIRS = zoom_pics 
 lib_LTLIBRARIES =libkiviozoomtool.la
 
@@ -9,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
-	$(KOFFICE_INCLUDES) $(all_includes)
+	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkiviozoomtool_la_METASOURCES = AUTO
 libkiviozoomtool_la_SOURCES = \
 		plugin.cpp\
@@ -21,11 +17,8 @@ EXTRA_DIST = \
 		kiviozoomtool.rc\
 		tool_zoom.cpp\
 		tool_zoom.h
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
 libkiviozoomtool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkiviozoomtool_la_LIBADD = $(LIB_KOTEXT) $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kiviozoomtool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

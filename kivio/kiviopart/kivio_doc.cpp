@@ -21,14 +21,11 @@
 #include <qbuffer.h>
 #include <qtabwidget.h>
 
-#include "tkunits.h"
 #include "kivio_doc.h"
 #include "kivio_page.h"
 #include "kivio_map.h"
 #include "kivio_view.h"
 #include "kivio_factory.h"
-#include "kivioabout.h"
-
 #include "export_page_dialog.h"
 #include "kivio_config.h"
 #include "kivio_common.h"
@@ -40,6 +37,7 @@
 #include "kivio_stencil.h"
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_viewmanager_panel.h"
+#include "kivioglobal.h"
 
 #include "stencilbarbutton.h"
 
@@ -129,7 +127,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
     m_pInternalSet->loadFile(*pIt);
   }
 
-  m_units = (int)UnitPoint;
+  m_units = KoUnit::U_PT;
 
   viewItemList = new ViewItemList(this);
 
@@ -198,7 +196,7 @@ QDomDocument KivioDoc::saveXML()
   kivio.setAttribute( "editor", "Kivio" );
   kivio.setAttribute( "mime", "application/x-kivio" );
 
-  kivio.setAttribute( "units", m_units );
+  kivio.setAttribute( "units", KoUnit::unitName(m_units) );
   gridData.save(kivio,"grid");
 
   QDomElement viewItemsElement = doc.createElement("ViewItems");
@@ -311,7 +309,15 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   //    return false;
   //  }
 
-  setUnits(kivio.attribute("units","0").toInt());
+  QString us = kivio.attribute("units","mm");
+  bool isInt = false;
+  int u = us.toInt(&isInt);
+  
+  if(!isInt) {
+    setUnits(KoUnit::unit(us));
+  } else {
+    setUnits(Kivio::convToKoUnit(u));
+  }
 
   gridData.load(kivio,"grid");
   return true;
@@ -797,7 +803,7 @@ KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stenci
     return m_pInternalSet->find(stencilId);
 }
 
-void KivioDoc::setUnits(int unit)
+void KivioDoc::setUnits(KoUnit::Unit unit)
 {
   if (m_units == unit)
     return;

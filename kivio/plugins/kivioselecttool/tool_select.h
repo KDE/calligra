@@ -20,8 +20,8 @@
 #define TOOL_SELECT_H
 
 #include <qptrlist.h>
+#include <koPoint.h>
 #include "tool.h"
-#include "tkunits.h"
 
 #include "kivio_rect.h"
 
@@ -92,8 +92,8 @@ protected:
     void changeMouseCursor(const QPoint&);
     int isOverResizeHandle( KivioStencil *pStencil, const float x, const float y );
     QPoint m_startPoint, m_releasePoint;
-    TKPoint m_lastPoint;
-    TKPoint m_origPoint;
+    KoPoint m_lastPoint;
+    KoPoint m_origPoint;
 
     // Select Tool Mode
     enum {

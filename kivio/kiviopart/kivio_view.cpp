@@ -62,6 +62,9 @@
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
 #include <koPageLayoutDia.h>
+#include <koRuler.h>
+#include <kozoomhandler.h>
+#include <koUnitWidgets.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -72,7 +75,6 @@
 #include "kivio_canvas.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_tabbar.h"
-#include "kivio_ruler.h"
 #include "kivio_zoomaction.h"
 #include "kivio_grid_data.h"
 #include "kivio_config.h"
@@ -129,6 +131,9 @@ using namespace Kivio;
 KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
+  m_zoomHandler = new KoZoomHandler();
+  zoomHandler()->setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
   m_pDoc = doc;
   m_pActivePage = 0;
   dcop = 0;
@@ -170,9 +175,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   // Scroll Bar
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
-  // Ruler's
-  vRuler = new KivioRuler(KivioRuler::Vertical,pRightSide);
-  hRuler = new KivioRuler(KivioRuler::Horizontal,pRightSide);
 
   // Tab Bar Button
   m_pTabBarFirst = newIconButton("tab_first", false, pRightSide);
@@ -208,26 +210,46 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // The widget on which we display the page
   QWidgetStack* canvasBase = new QWidgetStack(pRightSide);
-  m_pCanvas = new KivioCanvas(canvasBase,this,doc,m_pTools,vertScrollBar,horzScrollBar,vRuler,hRuler);
+  m_pCanvas = new KivioCanvas(canvasBase,this,doc,m_pTools,vertScrollBar,horzScrollBar/*,vRuler,hRuler*/);
   canvasBase->addWidget(m_pCanvas,0);
   canvasBase->raiseWidget(m_pCanvas);
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
-  connect(m_pCanvas, SIGNAL(zoomChanges(float)), SLOT(canvasZoomChanged(float)));
 
+  // Ruler's
+  vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, m_pDoc->config()
+    ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
+  vRuler->showMousePos(true);
+  vRuler->setMinimumWidth(20);
+  vRuler->setMaximumWidth(20);
+  vRuler->setZoom(zoomHandler()->zoomedResolutionY());
+  hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, m_pDoc->config()
+    ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
+  hRuler->showMousePos(true);
+  hRuler->setMinimumHeight(20);
+  hRuler->setMaximumHeight(20);
+  hRuler->setZoom(zoomHandler()->zoomedResolutionX());
+  connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
+  connect(horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
+  connect(vRuler, SIGNAL(unitChanged(QString)), SLOT(rulerChangedUnit(QString)));
+  connect(hRuler, SIGNAL(unitChanged(QString)), SLOT(rulerChangedUnit(QString)));
+  connect(vRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
+  connect(hRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
+  
   QGridLayout* layout = new QGridLayout(pRightSide);
-  layout->addWidget(hRuler,0,1);
-  layout->addWidget(vRuler,1,0);
-  layout->addWidget(canvasBase,1,1);
-  layout->addMultiCellLayout(tabLayout,2,2,0,1);
-  layout->addMultiCellWidget(vertScrollBar,0,1,2,2);
-
-  layout->setRowStretch(1,1);
+  layout->addWidget(hRuler, 0, 1);
+  layout->addWidget(vRuler, 1, 0);
+  layout->addWidget(canvasBase, 1, 1);
+  layout->addMultiCellLayout(tabLayout, 2, 2, 0, 1);
+  layout->addMultiCellWidget(vertScrollBar, 0, 1, 2, 2);
+  layout->setRowStretch(1, 10);
+  layout->setColStretch(1, 10);
 
   QWidget::setFocusPolicy( QWidget::StrongFocus );
   setFocusProxy( m_pCanvas );
 
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
   connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ), m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
+  connect(m_pCanvas, SIGNAL(zoomChanges()), SLOT(canvasZoomChanged()));
 
   m_pToolDock = new ToolDockManager(canvasBase);
 
@@ -268,15 +290,17 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 KivioView::~KivioView()
 {
-    delete dcop;
+  delete dcop;
+  delete m_zoomHandler;
 }
 
 DCOPObject* KivioView::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KIvioViewIface( this );
+  if ( !dcop ) {
+    dcop = new KIvioViewIface( this );
+  }
 
-    return dcop;
+  return dcop;
 }
 
 void KivioView::createGeometryDock()
@@ -285,9 +309,9 @@ void KivioView::createGeometryDock()
     ToolDockBase* stencilGeometryBase = toolDockManager()->createToolDock(m_pStencilGeometryPanel,i18n("Geometry"));
     stencilGeometryBase->move(0,0);
 
-    connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(float, float)), this, SLOT(slotChangeStencilPosition(float,float)) );
-    connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(float, float)), this, SLOT(slotChangeStencilSize(float,float)) );
-    connect( m_pDoc, SIGNAL(unitsChanged(int)), m_pStencilGeometryPanel, SLOT(setUnit(int)) );
+    connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
+    connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
+    connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
 
     KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), "stencil_geometry", 0, actionCollection(), "stencilGeometry" );
     connect( showStencilGeometry, SIGNAL(toggled(bool)), stencilGeometryBase, SLOT(makeVisible(bool)));
@@ -340,9 +364,10 @@ void KivioView::createProtectionDock()
 
 void KivioView::setupActions()
 {
-  m_unitAct = new TKUnitsAction(actionCollection(),"units");
+  //FixMe: Either remove this or port it to KoUnit
+/*  m_unitAct = new TKUnitsAction(actionCollection(),"units");
   connect( m_unitAct, SIGNAL(activated(int)), m_pDoc, SLOT(setUnits(int)) );
-  connect( m_pDoc, SIGNAL(unitsChanged(int)), m_unitAct, SLOT(setCurrentItem(int)) );
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_unitAct, SLOT(setCurrentItem(int)) );*/
 
 
   AddSpawnerSetAction* addSpSet =  new AddSpawnerSetAction( i18n("Add Stencil Set"), "open_stencilset", 0, actionCollection(), "addStencilSet" );
@@ -394,14 +419,17 @@ void KivioView::setupActions()
   m_setVTextAlignment = new KivioParagraphAction( true, actionCollection(), "setVTextAlignment" );
   connect( m_setHTextAlignment, SIGNAL(activated(int)), SLOT(setHParaAlign(int)) );
   connect( m_setVTextAlignment, SIGNAL(activated(int)), SLOT(setVParaAlign(int)) );
-
-  m_setLineWidth = new TKUFloatSpinBoxAction(  i18n("Set Line Width"), "linewidth", 0, actionCollection(), "setLineWidth" );
+  
+  m_setLineWidth = new KoUnitDoubleSpinBox(this, 0.0, 1000.0, 1.0, 1.0, m_pDoc->units(), 2);
+  new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+  connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
+  /*m_setLineWidth = new TKUFloatSpinBoxAction(  i18n("Set Line Width"), "linewidth", 0, actionCollection(), "setLineWidth" );
   m_setLineWidth->setIconMode(TK::IconOnly);
   m_setLineWidth->setDecimals(3);
   m_setLineWidth->setMinValue(0.0);
   m_setLineWidth->setLineStep(1.0);
-  connect( m_setLineWidth, SIGNAL(activated()), this, SLOT(setLineWidth()) );
-  connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setLineWidth, SLOT(setUnit(int)) );
+  connect( m_setLineWidth, SIGNAL(activated()), this, SLOT(setLineWidth()) );*/
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_setLineWidth, SLOT(setUnit(KoUnit::Unit)) );
 
   m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
@@ -446,7 +474,8 @@ void KivioView::setupActions()
 
   connect( m_setEndArrow, SIGNAL(activated(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setStartArrow, SIGNAL(activated(int)), SLOT(slotSetStartArrow(int)));
-
+  
+  //FixMe: Port to KOffice!
   m_setEndArrowSize = new TKSizeAction(actionCollection(), "endArrowSize");
   m_setStartArrowSize = new TKSizeAction(actionCollection(), "startArrowSize");
 
@@ -456,8 +485,7 @@ void KivioView::setupActions()
   connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setStartArrowSize, SLOT(setUnit(int)) );
   connect( m_setStartArrowSize, SIGNAL(activated()), SLOT(slotSetStartArrowSize()));
 
-  connect( m_pDoc, SIGNAL(unitsChanged(int)), vRuler, SLOT(setUnit(int)) );
-  connect( m_pDoc, SIGNAL(unitsChanged(int)), hRuler, SLOT(setUnit(int)) );
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
 }
@@ -470,9 +498,9 @@ void KivioView::initActions()
 
   updateButton();
 
-  viewZoom((int)(m_pCanvas->zoom()*100.1f));
-  m_unitAct->setCurrentItem(m_pDoc->units());
-  m_unitAct->activate(m_pDoc->units());
+  viewZoom(zoomHandler()->zoom());
+  //m_unitAct->setCurrentItem(m_pDoc->units());
+  //m_unitAct->activate(m_pDoc->units());
 }
 
 void KivioView::viewGUIActivated( bool active )
@@ -564,6 +592,7 @@ void KivioView::setActivePage( KivioPage* page )
   if ( page == m_pActivePage )
     return;
 
+  disconnect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)), this, 0);
   m_pActivePage = page;
 
   m_pTabBar->setActiveTab(page->pageName());
@@ -573,6 +602,9 @@ void KivioView::setActivePage( KivioPage* page )
   m_pLayersPanel->reset();
 
   m_pDoc->updateView(m_pActivePage);
+  setRulerPageLayout(m_pActivePage->paperLayout());
+  connect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)),
+    SLOT(setRulerPageLayout(const KoPageLayout&)));
 }
 
 void KivioView::setActiveSpawnerSet( KivioStencilSpawnerSet *set )
@@ -685,6 +717,9 @@ void KivioView::slotUpdateView( KivioPage* page )
   }
 
   m_pCanvas->update();
+  m_pCanvas->updateScrollBars();
+  vRuler->update();
+  hRuler->update();
 }
 
 void KivioView::paintContent( KivioPainter&, const QRect&, bool)
@@ -773,13 +808,22 @@ void KivioView::print(KPrinter& ptr)
 
 void KivioView::viewZoom(int zoom)
 {
-  m_pCanvas->setZoom(((float)zoom)/100.0f);
-  m_viewZoom->insertItem((int)(m_pCanvas->zoom()*100.1f));
+  zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
+  m_viewZoom->insertItem(zoomHandler()->zoom());
+  m_pCanvas->update();
+  vRuler->setZoom(zoomHandler()->zoomedResolutionY());
+  hRuler->setZoom(zoomHandler()->zoomedResolutionX());
+  KoPageLayout l = activePage()->paperLayout();
+  vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
+  hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
 }
 
-void KivioView::canvasZoomChanged(float zoom)
+void KivioView::canvasZoomChanged()
 {
-  m_viewZoom->setEditZoom((int)(zoom*100.1f));
+  m_viewZoom->setEditZoom(zoomHandler()->zoom());
+  vRuler->setZoom(zoomHandler()->zoomedResolutionY());
+  hRuler->setZoom(zoomHandler()->zoomedResolutionX());
 }
 
 KivioPage* KivioView::activePage()
@@ -808,7 +852,13 @@ void KivioView::toggleShowRulers(bool b)
   TOGGLE_ACTION("showRulers")->setChecked(b);
   m_bShowRulers = b;
 
-  m_pCanvas->toggleShowRulers(b);
+  if(b) {
+    hRuler->show();
+    vRuler->show();
+  } else {
+    hRuler->hide();
+    vRuler->hide();
+  }
 }
 
 void KivioView::toggleShowGuides(bool b)
@@ -970,16 +1020,18 @@ void KivioView::setLineWidth()
     bool createMacro = false ;
     while( pStencil )
     {
-        int newValue = m_setLineWidth->value();
+        int newValue = KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
+        
         if ( newValue != pStencil->lineWidth() )
         {
             KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"), m_pActivePage, pStencil, pStencil->lineWidth(), newValue );
 
             pStencil->setLineWidth( newValue );
-            pStencil = m_pActivePage->selectedStencils()->next();
             macro->addCommand( cmd );
             createMacro = true;
         }
+        
+        pStencil = m_pActivePage->selectedStencils()->next();
     }
     if ( createMacro )
         m_pDoc->addCommand( macro );
@@ -1434,7 +1486,7 @@ void KivioView::pasteStencil()
     m_pDoc->updateView(m_pActivePage);
 }
 
-void KivioView::slotChangeStencilSize(float newW, float newH)
+void KivioView::slotChangeStencilSize(double newW, double newH)
 {
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if ( pStencil )
@@ -1450,7 +1502,7 @@ void KivioView::slotChangeStencilSize(float newW, float newH)
     }
 }
 
-void KivioView::slotChangeStencilPosition(float newW, float newH)
+void KivioView::slotChangeStencilPosition(double newW, double newH)
 {
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if ( pStencil )
@@ -1600,7 +1652,7 @@ void KivioView::alignStencilsDlg()
 
 void KivioView::optionsDialog()
 {
-  doc()->config()->setup(this);
+    doc()->config()->setup(this);
 }
 
 void KivioView::toggleStencilGeometry(bool b)
@@ -1722,6 +1774,50 @@ void KivioView::updateProtectPanelCheckBox()
     {
         m_pProtectionPanel->updateCheckBoxes();
     }
+}
+
+void KivioView::setRulerMousePos( int mx, int my )
+{
+  vRuler->setMousePos(mx, my);
+  hRuler->setMousePos(mx, my);
+}
+
+void KivioView::setRulerUnit(KoUnit::Unit u)
+{
+  vRuler->setUnit(u);
+  hRuler->setUnit(u);
+}
+
+void KivioView::setRulerHOffset(int h)
+{
+  if(hRuler) {
+    hRuler->setOffset(h, 0);
+  }
+}
+
+void KivioView::setRulerVOffset(int v)
+{
+  if(vRuler) {
+    vRuler->setOffset(0, v);
+  }
+}
+
+void KivioView::rulerChangedUnit(const QString& u)
+{
+  m_pDoc->setUnits(KoUnit::unit(u));
+}
+
+KoZoomHandler* KivioView::zoomHandler()
+{
+  return m_zoomHandler;
+}
+
+void KivioView::setRulerPageLayout(const KoPageLayout& l)
+{
+  vRuler->setPageLayout(l);
+  hRuler->setPageLayout(l);
+  vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
+  hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
 }
 
 #include "kivio_view.moc"

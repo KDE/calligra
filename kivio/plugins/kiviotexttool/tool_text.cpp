@@ -22,6 +22,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <koPoint.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -151,28 +152,34 @@ void TextTool::configure()
 void TextTool::text(QRect r)
 {
     // Calculate the start and end clicks in terms of page coordinates
-    TKPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
-    TKPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
+    KoPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
+    KoPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
     // Calculate the x,y position of the textion box
-    float x = startPoint.x < releasePoint.x ? startPoint.x : releasePoint.x;
-    float y = startPoint.y < releasePoint.y ? startPoint.y : releasePoint.y;
+    float x = startPoint.x() < releasePoint.x() ? startPoint.x() : releasePoint.x();
+    float y = startPoint.y() < releasePoint.y() ? startPoint.y() : releasePoint.y();
 
     // Calculate the w/h of the textion box
-    float w = releasePoint.x - startPoint.x;
-    if( w < 0.0 )
+    float w = releasePoint.x() - startPoint.x();
+    
+    if( w < 0.0 ) {
         w *= -1.0;
+    }
 
-    float h = releasePoint.y - startPoint.y;
-    if( h < 0.0 )
+    float h = releasePoint.y() - startPoint.y();
+    
+    if( h < 0.0 ) {
         h *= -1.0;
+    }
 
     KivioDoc* doc = m_pView->doc();
     KivioPage* page = m_pCanvas->activePage();
 
     KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Text");
-    if (!ss)
+    
+    if (!ss) {
         return;
+    }
 
     KivioStencil* stencil = ss->newStencil();
     stencil->setPosition(x,y);

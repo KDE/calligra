@@ -31,7 +31,7 @@ KAboutData * newKivioAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kivio", I18N_NOOP("Kivio"),
                                            version, description, KAboutData::License_GPL,
-                                           "The Kompany.com", 0, "www.thekompany.com/projects/kivio/");
+                                           "(c)2000-2003, The Kivio Team");
     aboutData->addAuthor("Dave Marotti", I18N_NOOP("Initial idea, development and basic stencil sets."),"lndshark@speakeasy.net");
     aboutData->addAuthor("The Kompany.com - \"Where Open Source is at Home\"(TM)", I18N_NOOP("Development and additional stencil sets."), "info@thekompany.com");
     aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Development"), "psn@linux.se");

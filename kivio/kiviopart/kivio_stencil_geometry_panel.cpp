@@ -4,8 +4,7 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 
-#include "tkfloatspinbox.h"
-#include "tkunits.h"
+#include <koUnitWidgets.h>
 
 static const char* width_xpm[] = {
   "13 11 3 1",
@@ -93,34 +92,15 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
     lw->setPixmap( QPixmap((const char **)width_xpm) );
     lh->setPixmap( QPixmap((const char **)height_xpm) );
 
-    m_pX = new TKUFloatSpinBox( this );
-    m_pX->setMinValue(-1000.0);
-    m_pX->setMaxValue(1000.0);
-    m_pX->setLineStep(0.5);
-    m_pX->setValue(0.0);
+    m_pX = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+    m_pY = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+    m_pW = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+    m_pH = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
 
-    m_pY = new TKUFloatSpinBox( this );
-    m_pY->setMinValue(-1000.0);
-    m_pY->setMaxValue(1000.0);
-    m_pY->setLineStep(0.5);
-    m_pY->setValue(0.0);
-
-    m_pW = new TKUFloatSpinBox( this );
-    m_pW->setMinValue(-1000.0);
-    m_pW->setMaxValue(1000.0);
-    m_pW->setLineStep(0.5);
-    m_pW->setValue(0.0);
-
-    m_pH = new TKUFloatSpinBox( this );
-    m_pH->setMinValue(-1000.0);
-    m_pH->setMaxValue(1000.0);
-    m_pH->setLineStep(0.5);
-    m_pH->setValue(0.0);
-
-    QObject::connect( m_pX, SIGNAL(valueChanged(float)), this, SLOT(xChange(float)) );
-    QObject::connect( m_pY, SIGNAL(valueChanged(float)), this, SLOT(yChange(float)) );
-    QObject::connect( m_pW, SIGNAL(valueChanged(float)), this, SLOT(wChange(float)) );
-    QObject::connect( m_pH, SIGNAL(valueChanged(float)), this, SLOT(hChange(float)) );
+    QObject::connect( m_pX, SIGNAL(valueChanged(double)), this, SLOT(xChange(double)) );
+    QObject::connect( m_pY, SIGNAL(valueChanged(double)), this, SLOT(yChange(double)) );
+    QObject::connect( m_pW, SIGNAL(valueChanged(double)), this, SLOT(wChange(double)) );
+    QObject::connect( m_pH, SIGNAL(valueChanged(double)), this, SLOT(hChange(double)) );
 
     grid->addWidget( lx, 0, 0 );
     grid->addWidget( m_pX, 0, 1 );
@@ -139,7 +119,7 @@ KivioStencilGeometryPanel::~KivioStencilGeometryPanel()
 {
 }
 
-void KivioStencilGeometryPanel::setUnit( int m )
+void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
 {
     m_pX->setUnit(m);
     m_pY->setUnit(m);
@@ -147,33 +127,33 @@ void KivioStencilGeometryPanel::setUnit( int m )
     m_pH->setUnit(m);
 }
 
-void KivioStencilGeometryPanel::xChange( float d )
+void KivioStencilGeometryPanel::xChange( double d )
 {
     emit positionChanged( d, m_pY->value() );
 }
 
-void KivioStencilGeometryPanel::yChange( float d )
+void KivioStencilGeometryPanel::yChange( double d )
 {
     emit positionChanged( m_pX->value(), d );
 }
 
-void KivioStencilGeometryPanel::wChange( float d )
+void KivioStencilGeometryPanel::wChange( double d )
 {
     emit sizeChanged( d, m_pH->value() );
 }
 
-void KivioStencilGeometryPanel::hChange( float d )
+void KivioStencilGeometryPanel::hChange( double d )
 {
     emit sizeChanged( m_pW->value(), d );
 }
 
-void KivioStencilGeometryPanel::setPosition( float x, float y )
+void KivioStencilGeometryPanel::setPosition( double x, double y )
 {
     m_pX->setValue(x);
     m_pY->setValue(y);
 }
 
-void KivioStencilGeometryPanel::setSize( float w, float h )
+void KivioStencilGeometryPanel::setSize( double w, double h )
 {
     m_pW->setValue(w);
     m_pH->setValue(h);

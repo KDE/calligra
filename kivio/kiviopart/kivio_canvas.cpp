@@ -41,6 +41,9 @@
 #include <kmessagebox.h>
 #include <kcursor.h>
 #include <koGlobal.h>
+#include <kozoomhandler.h>
+#include <koSize.h>
+#include <koPoint.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -52,15 +55,13 @@
 
 using namespace Kivio;
 
-KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolController* tc, QScrollBar* vs, QScrollBar* hs, KivioRuler* vr, KivioRuler* hr )
+KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolController* tc, QScrollBar* vs, QScrollBar* hs)
 : QWidget(par, "KivioCanvas", WResizeNoErase | WRepaintNoErase),
   m_pView(view),
   m_pDoc(doc),
   m_pToolsController(tc),
   m_pVertScrollBar(vs),
-  m_pHorzScrollBar(hs),
-  m_pVRuler(vr),
-  m_pHRuler(hr)
+  m_pHorzScrollBar(hs)
 {
   setBackgroundMode(NoBackground);
   setAcceptDrops(true);
@@ -72,9 +73,6 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolCont
   storedCursor = 0;
   pressGuideline = 0;
 
-  m_pVRuler->installEventFilter(this);
-  m_pHRuler->installEventFilter(this);
-
   m_pVertScrollBar->setLineStep(1);
   m_pHorzScrollBar->setLineStep(1);
 
@@ -84,8 +82,6 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolCont
 
   connect(m_pVertScrollBar, SIGNAL(valueChanged(int)), SLOT(scrollV(int)));
   connect( m_pHorzScrollBar, SIGNAL(valueChanged(int)), SLOT(scrollH(int)));
-
-  m_pZoom = 0.5;
 
   m_iXOffset = 0;
   m_iYOffset = 0;
@@ -142,7 +138,6 @@ void KivioCanvas::scrollH( int value )
   bitBlt(m_buffer, dx, 0, m_buffer);
   scroll(dx, 0);
 
-  updateRulers(true,false);
   emit visibleAreaChanged();
 }
 
@@ -158,7 +153,6 @@ void KivioCanvas::scrollV( int value )
   bitBlt(m_buffer, 0, dy, m_buffer);
   scroll(0, dy);
 
-  updateRulers(false,true);
   emit visibleAreaChanged();
 }
 
@@ -180,31 +174,10 @@ void KivioCanvas::scrollDy( int dy )
   m_pVertScrollBar->setValue(value);
 }
 
-void KivioCanvas::updateRulers( bool horiz, bool vert )
-{
-  if (!isUpdatesEnabled())
-    return;
-
-  if (horiz) {
-    int pw = (int)actualPaperSizePt().w;
-    int x0 = (int)((width()-pw)/2) - xOffset();
-    m_pHRuler->setZoom(m_pZoom);
-    m_pHRuler->updateVisibleArea(-x0,0);
-  }
-
-  if (vert) {
-    int ph = (int)actualPaperSizePt().h;
-    int y0 = (int)((height()-ph)/2) - yOffset();
-    m_pVRuler->setZoom(m_pZoom);
-    m_pVRuler->updateVisibleArea(0,-y0);
-  }
-}
-
 void KivioCanvas::resizeEvent( QResizeEvent* )
 {
   KivioGuideLines::resize(size(),m_pDoc);
   m_buffer->resize(size());
-  updateRulers(true,true);
   updateScrollBars();
 
   emit visibleAreaChanged();
@@ -241,12 +214,11 @@ void KivioCanvas::setUpdatesEnabled( bool isUpdate )
     --i;
     if (i == 0) {
       update();
-      updateRulers(true,true);
       updateScrollBars();
 
       blockSignals(false);
 
-      emit zoomChanges(m_pZoom);
+      emit zoomChanges();
       emit visibleAreaChanged();
     }
   } else {
@@ -258,8 +230,8 @@ void KivioCanvas::setUpdatesEnabled( bool isUpdate )
 void KivioCanvas::zoomIn(const QPoint &p)
 {
   setUpdatesEnabled(false);
-  TKPoint p0 = mapFromScreen(p);
-  setZoom(m_pZoom*(100.0f+25.0f)/100.0f);
+  KoPoint p0 = mapFromScreen(p);
+  setZoom(m_pView->zoomHandler()->zoom() + 25);
   QPoint p1 = mapToScreen(p0);
   scrollDx(-p1.x()+p.x());
   scrollDy(-p1.y()+p.y());
@@ -269,8 +241,8 @@ void KivioCanvas::zoomIn(const QPoint &p)
 void KivioCanvas::zoomOut(const QPoint &p)
 {
   setUpdatesEnabled(false);
-  TKPoint p0 = mapFromScreen(p);
-  setZoom(m_pZoom/(100.0f+25.0f)*100.0f);
+  KoPoint p0 = mapFromScreen(p);
+  setZoom(m_pView->zoomHandler()->zoom() - 25);
   QPoint p1 = mapToScreen(p0);
   scrollDx(-p1.x()+p.x());
   scrollDy(-p1.y()+p.y());
@@ -298,101 +270,104 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     int w = x + rect.width();
     int h = y + rect.height();
 
-    TKSize dxy = actualGridFrequency();
-    dxy.convertToPt();
+    KoSize dxy = actualGridFrequency();
 
-    TKPoint p;
-    p.set(0,0,UnitPoint);
+    KoPoint p(0, 0);
 
     painter.setPen(m_pDoc->grid().color);
 
     QPoint p0 = mapToScreen(p);
-    while (p0.x()<x) {
-      p.x += dxy.w;
+    
+    while (p0.x() < x) {
+      p.rx() += dxy.width();
       p0 = mapToScreen(p);
     }
-    while (p0.x()<=w) {
+    
+    while (p0.x() <= w) {
       painter.drawLine(p0.x(),y,p0.x(),h);
 
-      p.x += dxy.w;
+      p.rx() += dxy.width();
       p0 = mapToScreen(p);
     }
 
-    p.set(0,0,UnitPoint);
+    p.setCoords(0, 0);
     p0 = mapToScreen(p);
-    while (p0.x()>w) {
-      p.x -= dxy.w;
+    
+    while (p0.x() > w) {
+      p.rx() -= dxy.width();
       p0 = mapToScreen(p);
     }
-    while (p0.x()>=x) {
+    
+    while (p0.x() >= x) {
       painter.drawLine(p0.x(),y,p0.x(),h);
 
-      p.x -= dxy.w;
+      p.rx() -= dxy.width();
       p0 = mapToScreen(p);
     }
 
-    p.set(0,0,UnitPoint);
+    p.setCoords(0, 0);
     p0 = mapToScreen(p);
-    while (p0.y()<y) {
-      p.y += dxy.h;
+    
+    while (p0.y() < y) {
+      p.ry() += dxy.height();
       p0 = mapToScreen(p);
     }
-    while (p0.y()<=h) {
+    
+    while (p0.y() <= h) {
       painter.drawLine(x,p0.y(),w,p0.y());
 
-      p.y += dxy.h;
+      p.ry() += dxy.height();
       p0 = mapToScreen(p);
     }
 
-    p.set(0,0,UnitPoint);
+    p.setCoords(0, 0);
     p0 = mapToScreen(p);
-    while (p0.y()>h) {
-      p.y -= dxy.h;
+    
+    while (p0.y() > h) {
+      p.ry() -= dxy.height();
       p0 = mapToScreen(p);
     }
-    while (p0.y()>=y) {
+    
+    while (p0.y() >= y) {
       painter.drawLine(x,p0.y(),w,p0.y());
 
-      p.y -= dxy.h;
+      p.ry() -= dxy.height();
       p0 = mapToScreen(p);
     }
   }
 
   painter.translate(-m_iXOffset,-m_iYOffset);
 
-  QPoint p0 = actualPaperOrigin();
-  int pw = (int)actualPaperSizePt().w;
-  int ph = (int)actualPaperSizePt().h;
-  int px0 = p0.x();
-  int py0 = p0.y();
+  KoPageLayout pl = page->paperLayout();
+  int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
+  int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
 
   if (m_pView->isShowPageMargins()) {
-    float zf = m_pZoom;
-    KoPageLayout pl = page->paperLayout();
-    int ml = (int)(pl.ptLeft*zf);
-    int mt = (int)(pl.ptTop*zf);
-    int mr = (int)(pl.ptRight*zf);
-    int mb = (int)(pl.ptBottom*zf);
+    int ml = m_pView->zoomHandler()->zoomItX(pl.ptLeft);
+    int mt = m_pView->zoomHandler()->zoomItY(pl.ptTop);
+    int mr = m_pView->zoomHandler()->zoomItX(pl.ptRight);
+    int mb = m_pView->zoomHandler()->zoomItY(pl.ptBottom);
 
     painter.save();
     painter.setPen(QPen(blue,1,DotLine));
-    painter.drawRect(px0+ml,py0+mt,pw-ml-mr,ph-mt-mb);
+    painter.drawRect(ml,mt,pw-ml-mr,ph-mt-mb);
     painter.restore();
   }
 
   if (m_pView->isShowPageBorders()) {
     painter.setPen(black);
-    painter.fillRect(px0+pw,py0+3,5,ph,gray);
-    painter.fillRect(px0+3,py0+ph,pw,3,gray);
-    painter.drawRect(px0,py0,pw,ph);
+    painter.fillRect(pw, 3, 5, ph, gray);
+    painter.fillRect(3, ph, pw, 3, gray);
+    painter.drawRect(0, 0, pw, ph);
   }
 
   // Draw content
   KivioScreenPainter kpainter;
   kpainter.start( m_buffer );
   kpainter.painter()->translate( -m_iXOffset, -m_iYOffset );
-  kpainter.painter()->translate( px0, py0 );
-  m_pDoc->paintContent(kpainter, rect, false, page, p0, m_pZoom, true);
+  kpainter.painter()->translate( 0, 0 );
+  m_pDoc->paintContent(kpainter, rect, false, page, QPoint(0, 0), m_pView->zoomHandler()
+    ->zoomedResolutionY(), true);
   kpainter.stop();
 
   paintGuides(false);
@@ -403,23 +378,24 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
 void KivioCanvas::centerPage()
 {
-  m_pHorzScrollBar->setValue(0);
-  m_pVertScrollBar->setValue(0);
+  m_pHorzScrollBar->setValue(m_pScrollX / 2);
+  m_pVertScrollBar->setValue(m_pScrollY / 2);
 }
 
 void KivioCanvas::updateScrollBars()
 {
-  m_pScrollX = (int)actualPaperSizePt().w/2;
-  m_pScrollY = (int)actualPaperSizePt().h/2;
+  KoPageLayout pl = activePage()->paperLayout();
+  m_pScrollX = m_pView->zoomHandler()->zoomItX(pl.ptWidth) - width();
+  m_pScrollY = m_pView->zoomHandler()->zoomItY(pl.ptHeight) - height();
 
-  m_pHorzScrollBar->setRange(-m_pScrollX,m_pScrollX);
+  m_pHorzScrollBar->setRange(0, m_pScrollX);
   if ( m_pHorzScrollBar->value() > m_pHorzScrollBar->maxValue() ||
        m_pHorzScrollBar->value() < m_pHorzScrollBar->minValue() )
   {
     m_pHorzScrollBar->setValue(0);
   }
 
-  m_pVertScrollBar->setRange(-m_pScrollY,m_pScrollY);
+  m_pVertScrollBar->setRange(0, m_pScrollY);
   if ( m_pVertScrollBar->value() > m_pVertScrollBar->maxValue() ||
        m_pVertScrollBar->value() < m_pVertScrollBar->minValue() )
   {
@@ -432,79 +408,29 @@ void KivioCanvas::updateScrollBars()
 
 QSize KivioCanvas::actualSize()
 {
-  return QSize(2*m_pScrollX + width(), 2*m_pScrollY + height());
+  return QSize(m_pScrollX, m_pScrollY);
 }
 
-QPoint KivioCanvas::actualPaperOrigin()
+void KivioCanvas::setZoom(int zoom)
 {
-  int pw = (int)actualPaperSizePt().w;
-  int ph = (int)actualPaperSizePt().h;
-  int px0 = (width()-pw)/2;
-  int py0 = (height()-ph)/2;
-
-  return QPoint(px0,py0);
-}
-
-float KivioCanvas::zoom() const
-{
-  return m_pZoom;
-}
-
-
-void KivioCanvas::setZoom(float zoom)
-{
-  m_pZoom = QMAX(0.05f,QMIN(100.0f,zoom));
+  m_pView->zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
 
   updateScrollBars();
-  updateRulers(true,true);
-
   erase();
   repaint();
 
-  emit zoomChanges(m_pZoom);
+  emit zoomChanges();
   emit visibleAreaChanged();
 }
 
-TKSize KivioCanvas::actualGridFrequency()
+KoSize KivioCanvas::actualGridFrequency()
 {
-  TKSize actual;
-  int f = 0;
-  do {
-    f++;
-    actual = m_pDoc->grid().freq;
-    actual.w *= f;
-    actual.h *= f;
-    actual.convertToPt(m_pZoom);
-  } while ( actual.w < 10 || actual.h < 10 );
-
-  actual = m_pDoc->grid().freq;
-  actual.w *= f;
-  actual.h *= f;
+  KoSize actual;
+  actual.setWidth(m_pView->zoomHandler()->zoomItX(m_pDoc->grid().freq.width()));
+  actual.setHeight(m_pView->zoomHandler()->zoomItY(m_pDoc->grid().freq.height()));
 
   return actual;
-}
-
-TKSize KivioCanvas::actualPaperSizePt()
-{
-  TKSize ps;
-  KoPageLayout pl = activePage()->paperLayout();
-
-  float w = pl.ptWidth*m_pZoom;
-  float h = pl.ptHeight*m_pZoom;
-  ps.set(w,h,UnitPoint);
-
-  return ps;
-}
-
-void KivioCanvas::toggleShowRulers( bool b )
-{
-  if (b) {
-    m_pHRuler->show();
-    m_pVRuler->show();
-  } else {
-    m_pHRuler->hide();
-    m_pVRuler->hide();
-  }
 }
 
 bool KivioCanvas::event( QEvent* e )
@@ -523,8 +449,7 @@ void KivioCanvas::enterEvent( QEvent* )
 
 void KivioCanvas::leaveEvent( QEvent* )
 {
-  m_pVRuler->updatePointer(-1,-1);
-  m_pHRuler->updatePointer(-1,-1);
+  m_pView->setRulerMousePos(-1, -1);
 }
 
 void KivioCanvas::mousePressEvent(QMouseEvent* e)
@@ -534,14 +459,14 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
     if(m_pView->isShowGuides())
     {
         lastPoint = e->pos();
-        TKPoint p = mapFromScreen(e->pos());
+        KoPoint p = mapFromScreen(e->pos());
         KivioGuideLines* gl = activePage()->guideLines();
 
         bool unselectAllGuideLines = true;
         pressGuideline = 0;
 
         if ((e->state() & ~ShiftButton) == NoButton) {
-            KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
+            KivioGuideLineData* gd = gl->find(p.x(),p.y(),2.0*m_pView->zoomHandler()->zoom());
             if (gd) {
                 pressGuideline = gd;
                 if ((e->button() == RightButton) || ((e->button() & ShiftButton) == ShiftButton)) {
@@ -575,9 +500,9 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
         return;
   if (pressGuideline) {
     m_guideLinesTimer->stop();
-    TKPoint p = mapFromScreen(e->pos());
+    KoPoint p = mapFromScreen(e->pos());
     KivioGuideLines* gl = activePage()->guideLines();
-    KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
+    KivioGuideLineData* gd = gl->find(p.x(),p.y(),2.0*m_pView->zoomHandler()->zoom());
     if (gd) {
       setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
     } else {
@@ -590,77 +515,72 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
 
 void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
 {
-    if(!m_pDoc->isReadWrite())
-        return;
-    if(m_pView->isShowGuides())
-    {
-        m_pVRuler->updatePointer(e->pos().x(),e->pos().y());
-        m_pHRuler->updatePointer(e->pos().x(),e->pos().y());
+  if(!m_pDoc->isReadWrite())
+    return;
+    
+  if(m_pView->isShowGuides())
+  {
+    m_pView->setRulerMousePos(e->pos().x(),e->pos().y());
 
-        TKPoint p = mapFromScreen(e->pos());
-        KivioGuideLines* gl = activePage()->guideLines();
+    KivioGuideLines* gl = activePage()->guideLines();
 
-        if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
-            if (m_guideLinesTimer->isActive()) {
-                m_guideLinesTimer->stop();
-                guideLinesTimerTimeout();
-            }
-            delegateThisEvent = false;
-            eraseGuides();
-            QPoint p = e->pos();
-            p -= lastPoint;
-            if (p.x() != 0)
-                gl->moveSelectedByX(p.x()/m_pZoom);
-            if (p.y() != 0)
-                gl->moveSelectedByY(p.y()/m_pZoom);
-            m_pDoc->setModified( true );
-            paintGuides();
+    if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
+      if (m_guideLinesTimer->isActive()) {
+        m_guideLinesTimer->stop();
+        guideLinesTimerTimeout();
+      }
+      delegateThisEvent = false;
+      eraseGuides();
+      QPoint p = e->pos();
+      p -= lastPoint;
+      if (p.x() != 0)
+        gl->moveSelectedByX(p.x()*m_pView->zoomHandler()->zoom());
+      if (p.y() != 0)
+        gl->moveSelectedByY(p.y()*m_pView->zoomHandler()->zoom());
+      m_pDoc->setModified( true );
+      paintGuides();
+    } else {
+      if ((e->state() & ~ShiftButton) == NoButton) {
+        KoPoint p = mapFromScreen(e->pos());
+        KivioGuideLineData* gd = gl->find(p.x(), p.y(), 2.0 * m_pView->zoomHandler()->zoom());
+        if (gd) {
+          delegateThisEvent = false;
+          if (!storedCursor)
+            storedCursor = new QCursor(cursor());
+          setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
         } else {
-            if ((e->state() & ~ShiftButton) == NoButton) {
-                KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
-                if (gd) {
-                    delegateThisEvent = false;
-                    if (!storedCursor)
-                        storedCursor = new QCursor(cursor());
-                    setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
-                } else {
-                    updateGuidesCursor();
-                }
-            }
+          updateGuidesCursor();
         }
+      }
     }
+  }
 //  float xf = p.xToUnit(UnitMillimeter);
 //  float yf = p.yToUnit(UnitMillimeter);
 
 //  debug("%s %s",(const char*)QString::number(xf,'f',2),(const char*)QString::number(yf,'f',2));
-    lastPoint = e->pos();
+  lastPoint = e->pos();
 }
 
-QPoint KivioCanvas::mapToScreen( TKPoint pos )
+QPoint KivioCanvas::mapToScreen( KoPoint pos )
 {
   QPoint p;
-  QPoint p0 = actualPaperOrigin();
-  int x = (int)(pos.x*m_pZoom);
-  int y = (int)(pos.y*m_pZoom);
+  int x = m_pView->zoomHandler()->zoomItX(pos.x());
+  int y = m_pView->zoomHandler()->zoomItY(pos.y());
 
-  p.setX( x + p0.x() - m_iXOffset );
-  p.setY( y + p0.y() - m_iYOffset );
+  p.setX( x - m_iXOffset );
+  p.setY( y - m_iYOffset );
 
   return p;
 }
 
-TKPoint KivioCanvas::mapFromScreen( const QPoint & pos )
+KoPoint KivioCanvas::mapFromScreen( const QPoint & pos )
 {
-  QPoint p0 = actualPaperOrigin();
-  int x = pos.x() + m_iXOffset - p0.x();
-  int y = pos.y() + m_iYOffset - p0.y();
+  int x = pos.x() + m_iXOffset;
+  int y = pos.y() + m_iYOffset;
+  double xf = m_pView->zoomHandler()->unzoomItX(x);
+  double yf = m_pView->zoomHandler()->unzoomItX(y);
 
-  float xf = x/m_pZoom;
-  float yf = y/m_pZoom;
-
-  TKPoint p;
-  p.set(xf,yf,UnitPoint);
-
+  KoPoint p(xf, yf);;
   return p;
 }
 
@@ -734,12 +654,12 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
     }
 
     // Map the point from screenspace to page space
-    TKPoint qp = mapFromScreen( p );
+    KoPoint qp = mapFromScreen( p );
     qp = snapToGrid(qp);
 
     // Allocate a new stencil for dragging around
     m_pDragStencil = pSpawner->newStencil();
-    m_pDragStencil->setPosition( qp.x, qp.y );
+    m_pDragStencil->setPosition( qp.x(), qp.y() );
 //    m_pDragStencil->setDimensions( pSpawner->defWidth(), pSpawner->defHeight() );
 
     // Invalidate the rectangle
@@ -748,18 +668,14 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
     // Create a new painter object
     beginUnclippedSpawnerPainter();
 
-    // Calculate the zoom value
-    float zf = m_pZoom;
-
     // Translate the painter so that 0,0 means where the page starts on the canvas
-    QPoint paperOrigin = actualPaperOrigin();
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( paperOrigin.x() - m_iXOffset, paperOrigin.y() - m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
 
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
     m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.scale = zf;
+    m_dragStencilData.scale = m_pView->zoomHandler()->zoomedResolutionY();
 
     // Draw the outline of the stencil
     m_pDragStencil->paintOutline( &m_dragStencilData );
@@ -779,9 +695,8 @@ void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
     QPoint p2 = pos;
 
     // Translate the painter so that 0,0 means where the page starts on the canvas
-    QPoint paperOrigin = actualPaperOrigin();
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( paperOrigin.x() - m_iXOffset, paperOrigin.y() - m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
 
     // Undraw the old outline
     if( oldRectValid )
@@ -790,30 +705,34 @@ void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
     }
 
     // Map the new point from screenspace to page space
-    TKPoint orig = mapFromScreen(p2);
-    TKPoint qp = snapToGrid( orig );
+    KoPoint orig = mapFromScreen(p2);
+    KoPoint qp = snapToGrid( orig );
 
     // First snap to screen
     qp = snapToGrid(qp);
-    m_pDragStencil->setPosition( qp.x, qp.y );
+    m_pDragStencil->setPosition( qp.x(), qp.y() );
 
     // Now snap to the guides
-    qp.set( orig.x + m_pDragStencil->w(), orig.y + m_pDragStencil->h(), UnitPoint );
+    qp.setCoords(orig.x() + m_pDragStencil->w(), orig.y() + m_pDragStencil->h());
     qp = snapToGuides(qp, snappedX, snappedY);
-    if( snappedX==true ) {
-       m_pDragStencil->setX(qp.x - m_pDragStencil->w());
+    
+    if(snappedX) {
+       m_pDragStencil->setX(qp.x() - m_pDragStencil->w());
     }
-    if( snappedY==true ) {
-       m_pDragStencil->setY(qp.y - m_pDragStencil->h());
+    
+    if(snappedY) {
+       m_pDragStencil->setY(qp.y() - m_pDragStencil->h());
     }
 
-    qp.set( orig.x, orig.y, UnitPoint );
+    qp.setCoords(orig.x(), orig.y());
     qp = snapToGuides(qp, snappedX, snappedY);
-    if( snappedX==true ) {
-       m_pDragStencil->setX(qp.x);
+    
+    if(snappedX) {
+       m_pDragStencil->setX(qp.x());
     }
-    if( snappedY==true ) {
-       m_pDragStencil->setY(qp.y);
+    
+    if(snappedY) {
+       m_pDragStencil->setY(qp.y());
     }
 
     // Redraw the new outline
@@ -836,9 +755,8 @@ void KivioCanvas::endSpawnerDragDraw()
     // If we have a valid old drawing spot, undraw it
     if ( oldRectValid )
     {
-        QPoint paperOrigin = actualPaperOrigin();
         unclippedSpawnerPainter->painter()->save();
-        unclippedSpawnerPainter->painter()->translate( paperOrigin.x() - m_iXOffset, paperOrigin.y() - m_iYOffset );
+        unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
         m_pDragStencil->paintOutline( &m_dragStencilData );
         unclippedSpawnerPainter->painter()->restore();
     }
@@ -1055,9 +973,9 @@ void KivioCanvas::dropEvent( QDropEvent *e )
 
     // Set the current stencil settings
     QPoint pos = e->pos();
-    TKPoint pagePoint = snapToGrid(mapFromScreen( pos ));
-    pNewStencil->setX( pagePoint.x );
-    pNewStencil->setY( pagePoint.y );
+    KoPoint pagePoint = snapToGrid(mapFromScreen( pos ));
+    pNewStencil->setX( pagePoint.x() );
+    pNewStencil->setY( pagePoint.y() );
     pNewStencil->setW( pSpawner->defWidth() );
     pNewStencil->setH( pSpawner->defHeight() );
 
@@ -1106,17 +1024,14 @@ void KivioCanvas::drawSelectedStencilsXOR()
     if ( !unclippedSpawnerPainter )
         return;
 
-    float zf = m_pZoom;
-
     // Translate the painter so that 0,0 means where the page starts on the canvas
-    QPoint paperOrigin = actualPaperOrigin();
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( paperOrigin.x() - m_iXOffset, paperOrigin.y() - m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
 
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
     m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.scale = zf;
+    m_dragStencilData.scale = m_pView->zoomHandler()->zoomedResolutionY();
 
     KivioStencil *pStencil = activePage()->selectedStencils()->first();
     while( pStencil )
@@ -1135,17 +1050,14 @@ void KivioCanvas::drawStencilXOR( KivioStencil *pStencil )
     if ( !unclippedSpawnerPainter )
         return;
 
-    float zf = m_pZoom;
-
     // Translate the painter so that 0,0 means where the page starts on the canvas
-    QPoint paperOrigin = actualPaperOrigin();
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( paperOrigin.x() - m_iXOffset, paperOrigin.y() - m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
 
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
     m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.scale = zf;
+    m_dragStencilData.scale = m_pView->zoomHandler()->zoomedResolutionY();
 
     pStencil->paintOutline( &m_dragStencilData );
 
@@ -1176,139 +1088,139 @@ void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
     }
 }
 
-TKPoint KivioCanvas::snapToGridAndGuides(TKPoint point)
+KoPoint KivioCanvas::snapToGridAndGuides(KoPoint point)
 {
-    TKPoint p = point;
+  KoPoint p = point;
 
-    TKSize dist = m_pDoc->grid().snap;
-    TKSize dxy = m_pDoc->grid().freq;
+  KoSize dist = m_pDoc->grid().snap;
+  KoSize dxy = m_pDoc->grid().freq;
 
-    dxy.convertToPt();
-    dist.convertToPt();
+  int dx = qRound(p.x()/dxy.width());
+  int dy = qRound(p.y()/dxy.height());
 
-    int dx = (int)(p.x/dxy.w);
-    int dy = (int)(p.y/dxy.h);
+  float distx = QMIN(QABS(p.x() - dxy.width() * dx), QABS(p.x() - dxy.width() * (dx + 1)));
+  float disty = QMIN(QABS(p.y() - dxy.height() * dy), QABS(p.y() - dxy.height()* (dy + 1)));
 
-    float distx = QMIN(QABS(p.x-dxy.w*dx),QABS(p.x-dxy.w*(dx+1)));
-    float disty = QMIN(QABS(p.y-dxy.h*dy),QABS(p.y-dxy.h*(dy+1)));
+  if( m_pDoc->grid().isSnap)
+  {
+    if ( distx < dist.width()) {
+      if (QABS(p.x() - dxy.width() * dx) < QABS(p.x() - dxy.width() * (dx + 1))) {
+        p.rx() = dxy.width() * dx;
+      } else {
+        p.rx() = dxy.width() * (dx + 1);
+      }
+    }
 
-    if( m_pDoc->grid().isSnap)
+    if ( disty < dist.height()) {
+      if (QABS(p.y() - dxy.height() * dy) < QABS(p.y() - dxy.height() * (dy + 1))) {
+        p.ry() = dxy.height() * dy;
+      } else {
+        p.ry() = dxy.height() * (dy + 1);
+      }
+    }
+  }
+
+  /*
+  * Now if the point is within 4 pixels of a gridline, snap
+  * to the grid line.
+  */
+  if (m_pView->isSnapGuides())
+  {
+    float four = m_pView->zoomHandler()->unzoomItX(4);
+    KivioGuideLines *pGuides = activePage()->guideLines();
+    KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
+
+    if( pData )
     {
-       if ( distx < dist.w) {
-	  if ( QABS(p.x-dxy.w*dx) < QABS(p.x-dxy.w*(dx+1)) )
-	     p.x = dxy.w*dx;
-	  else
-	     p.x = dxy.w*(dx+1);
-       }
-
-       if ( disty < dist.h) {
-	  if ( QABS(p.y-dxy.h*dy) < QABS(p.y-dxy.h*(dy+1)) )
-	     p.y = dxy.h*dy;
-	  else
-	     p.y = dxy.h*(dy+1);
-       }
+      p.ry() = (float)pData->position();
     }
 
-    /*
-     * Now if the point is within 4 pixels of a gridline, snap
-     * to the grid line.
-     */
-    if (m_pView->isSnapGuides())
+    pData = pGuides->findVertical( point.x(), four );
+
+    if( pData )
     {
-       float four = 4.0f / m_pZoom;
-       KivioGuideLines *pGuides = activePage()->guideLines();
-       KivioGuideLineData *pData = pGuides->findHorizontal( point.y, four );
-       if( pData )
-       {
-	  p.y = (float)pData->position();
-       }
-
-       pData = pGuides->findVertical( point.x, four );
-       if( pData )
-       {
-	  p.x = (float)pData->position();
-       }
+      p.rx() = (float)pData->position();
     }
+  }
 
-    return p;
+  return p;
 }
 
-TKPoint KivioCanvas::snapToGrid(TKPoint point)
+KoPoint KivioCanvas::snapToGrid(KoPoint point)
 {
-    if (!m_pDoc->grid().isSnap)
-      return point;
+  if (!m_pDoc->grid().isSnap)
+    return point;
 
-    TKPoint p = point;
+  KoPoint p = point;
 
-    TKSize dist = m_pDoc->grid().snap;
-    TKSize dxy = m_pDoc->grid().freq;
+  KoSize dist = m_pDoc->grid().snap;
+  KoSize dxy = m_pDoc->grid().freq;
 
-    dxy.convertToPt();
-    dist.convertToPt();
+  int dx = qRound(p.x() / dxy.width());
+  int dy = qRound(p.y() / dxy.height());
 
-    int dx = (int)(p.x/dxy.w);
-    int dy = (int)(p.y/dxy.h);
+  float distx = QMIN(QABS(p.x() - dxy.width() * dx), QABS(p.x() - dxy.width() * (dx + 1)));
+  float disty = QMIN(QABS(p.y() - dxy.height() * dy), QABS(p.y() - dxy.height() * (dy + 1)));
 
-    float distx = QMIN(QABS(p.x-dxy.w*dx),QABS(p.x-dxy.w*(dx+1)));
-    float disty = QMIN(QABS(p.y-dxy.h*dy),QABS(p.y-dxy.h*(dy+1)));
-
-    if ( distx < dist.w) {
-      if ( QABS(p.x-dxy.w*dx) < QABS(p.x-dxy.w*(dx+1)) )
-        p.x = dxy.w*dx;
-      else
-        p.x = dxy.w*(dx+1);
+  if(distx < dist.width()) {
+    if(QABS(p.x() - dxy.width() * dx) < QABS(p.x() - dxy.width() * (dx + 1))) {
+      p.rx() = dxy.width() * dx;
+    } else {
+      p.rx() = dxy.width() * (dx + 1);
     }
+  }
 
-    if ( disty < dist.h) {
-      if ( QABS(p.y-dxy.h*dy) < QABS(p.y-dxy.h*(dy+1)) )
-        p.y = dxy.h*dy;
-      else
-        p.y = dxy.h*(dy+1);
+  if(disty < dist.height()) {
+    if(QABS(p.y() - dxy.height() * dy) < QABS(p.y() - dxy.height() * (dy + 1))) {
+      p.ry() = dxy.height() * dy;
+    } else {
+      p.ry() = dxy.height() * (dy + 1);
     }
+  }
 
-    return p;
+  return p;
 }
 
-TKPoint KivioCanvas::snapToGuides(TKPoint point, bool &snappedX, bool &snappedY)
+KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
 {
-    snappedX = false;
-    snappedY = false;
-    TKPoint p = point;
+  snappedX = false;
+  snappedY = false;
+  KoPoint p = point;
 
-    if (m_pView->isSnapGuides())
+  if (m_pView->isSnapGuides())
+  {
+    float four = m_pView->zoomHandler()->unzoomItX(4);
+    KivioGuideLines *pGuides = activePage()->guideLines();
+    KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
+    
+    if(pData)
     {
-       float four = 4.0f / m_pZoom;
-       KivioGuideLines *pGuides = activePage()->guideLines();
-       KivioGuideLineData *pData = pGuides->findHorizontal( point.y, four );
-       if( pData )
-       {
-	  snappedY = true;
-	  p.y = (float)pData->position();
-       }
-
-       pData = pGuides->findVertical( point.x, four );
-       if( pData )
-       {
-	  snappedX = true;
-	  p.x = (float)pData->position();
-       }
+      snappedY = true;
+      p.ry() = pData->position();
     }
 
-    return p;
+    pData = pGuides->findVertical( point.x(), four );
+    
+    if(pData)
+    {
+      snappedX = true;
+      p.rx() = pData->position();
+    }
+  }
+
+  return p;
 }
 
-float KivioCanvas::snapToGridX(float z)
+double KivioCanvas::snapToGridX(double z)
 {
-  TKPoint p;
-  p.set(z,0,UnitPoint);
-  return snapToGrid(p).x;
+  KoPoint p(z, 0);
+  return snapToGrid(p).x();
 }
 
-float KivioCanvas::snapToGridY(float z)
+double KivioCanvas::snapToGridY(double z)
 {
-  TKPoint p;
-  p.set(0,z,UnitPoint);
-  return snapToGrid(p).y;
+  KoPoint p(0, z);
+  return snapToGrid(p).y();
 }
 
 void KivioCanvas::updateGuides()
@@ -1319,8 +1231,10 @@ void KivioCanvas::updateGuides()
 
 void KivioCanvas::guideLinesTimerTimeout()
 {
-  if (!storedCursor)
+  if (!storedCursor) {
     storedCursor = new QCursor(cursor());
+  }
+  
   setCursor(sizeAllCursor);
 }
 
@@ -1335,7 +1249,7 @@ void KivioCanvas::updateGuidesCursor()
 
 bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
 {
-  if ((o == m_pVRuler || o == m_pHRuler) && (e->type() == QEvent::MouseMove || e->type() == QEvent::MouseButtonRelease) && m_pView->isShowGuides()) {
+/*  if ((o == m_pVRuler || o == m_pHRuler) && (e->type() == QEvent::MouseMove || e->type() == QEvent::MouseButtonRelease) && m_pView->isShowGuides()) {
 
     QMouseEvent* me = (QMouseEvent*)e;
     QPoint p = mapFromGlobal(me->globalPos());
@@ -1411,7 +1325,7 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
       delete m;
       delegateThisEvent = true;
     }
-  }
+  }*/
 
   return QWidget::eventFilter(o,e);
 }
@@ -1446,18 +1360,18 @@ void KivioCanvas::setViewCenterPoint(KivioPoint p)
 
   centerPage();
 
-  scrollDx((int)(w*m_pZoom));
-  scrollDy((int)(h*m_pZoom));
+  scrollDx(m_pView->zoomHandler()->zoomItX(w));
+  scrollDy(m_pView->zoomHandler()->zoomItY(h));
 
   setUpdatesEnabled(true);
 }
 
 KivioRect KivioCanvas::visibleArea()
 {
-  TKPoint p0 = mapFromScreen(QPoint(0,0));
-  TKPoint p1 = mapFromScreen(QPoint(width()-1,height()-1));
+  KoPoint p0 = mapFromScreen(QPoint(0,0));
+  KoPoint p1 = mapFromScreen(QPoint(width()-1,height()-1));
 
-  return KivioRect(p0.x, p0.y, p1.x - p0.x, p1.y - p0.y);
+  return KivioRect(p0.x(), p0.y(), p1.x() - p0.x(), p1.y() - p0.y());
 }
 
 void KivioCanvas::setVisibleArea(KivioRect r, int margin)
@@ -1471,7 +1385,7 @@ void KivioCanvas::setVisibleArea(KivioRect r, int margin)
   float zh = ch/r.h();
   float z = QMIN(zw,zh);
 
-  setZoom(z);
+  setZoom(qRound(z * 100));
 
   KivioPoint c = r.center();
 
@@ -1486,7 +1400,7 @@ void KivioCanvas::setVisibleAreaByWidth(KivioRect r, int margin)
   int cw = width() - 2*margin;
   float z = cw/r.w();
 
-  setZoom(z);
+  setZoom(qRound(z * 100));
 
   KivioPoint c = r.center();
 
@@ -1501,7 +1415,7 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
   int ch = height() - 2*margin;
   float z = ch/r.h();
 
-  setZoom(z);
+  setZoom(qRound(z * 100));
 
   KivioPoint c = r.center();
 
