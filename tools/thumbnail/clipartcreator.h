@@ -20,7 +20,7 @@
 #ifndef CLIPARTCREATOR_H
 #define CLIPARTCREATOR_H
 
-#include "thumbcreator.h"
+#include <kio/thumbcreator.h>
 
 class ClipartCreator : public ThumbCreator
 {
