@@ -97,16 +97,17 @@ GText::GText (const GText& obj) : GObject (obj) {
   fm = new QFontMetrics (textInfo.font);
   cursx = cursy = 0;
   cursorActive = false;
-  setText(obj.getText());
   pathObj = 0L;
   if (obj.pathObj)
     setPathObject (obj.pathObj);
+  setText(obj.getText());
   calcBoundingBox ();
 }
 
 GText::~GText () {
   if (pathObj)
     pathObj->unref ();
+  delete fm;
 }
 
 void GText::setTextInfo (const TextInfo& tinfo) {
