@@ -443,15 +443,19 @@ void KoPageLayoutDia::setValuesTab1Helper()
 
     ebrLeft->setValue( KoUnit::ptToUnit( layout.ptLeft, m_unit ) );
     ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
+    ebrLeft->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
 
     ebrRight->setValue( KoUnit::ptToUnit( layout.ptRight, m_unit ) );
     ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
+    ebrRight->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
 
     ebrTop->setValue( KoUnit::ptToUnit( layout.ptTop, m_unit ) );
     ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
+    ebrTop->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
 
     ebrBottom->setValue( KoUnit::ptToUnit( layout.ptBottom, m_unit ) );
     ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
+    ebrBottom->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
 }
 
 /*================ setup header and footer tab ===================*/
