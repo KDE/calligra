@@ -22,7 +22,6 @@
 
 #include <qptrdict.h>
 #include "qrichtext_p.h"
-#include <qprogressdialog.h>
 #include "kwframe.h"
 #include "kwtextparag.h" // for KWParagLayout
 #include "kwtextdocument.h"
@@ -34,7 +33,7 @@ class KWViewMode;
 class KAction;
 class KoDataToolInfo;
 class KWVariable;
-
+class QProgressDialog;
 
 //#define TIMING_FORMAT
 //#include <qdatetime.h>
@@ -99,7 +98,7 @@ public:
 
     virtual void zoom( bool forPrint );
     void unzoom();
-    virtual void preparePrinting( QPainter *painter );
+    virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     // Return the user-visible (document) font size for this format
     // (since fonts are zoomed in the formats)

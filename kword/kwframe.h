@@ -27,7 +27,6 @@
 #include <koRect.h>
 #include <qbrush.h>
 #include <qlist.h>
-#include <qprogressdialog.h>
 
 #include "border.h"
 
@@ -55,6 +54,7 @@ class QPainter;
 class QPoint;
 class QRegion;
 class QSize;
+class QProgressDialog;
 
 /**
  * This class represents a single frame.
@@ -430,7 +430,7 @@ public:
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom( bool forPrint );
 
-    virtual void preparePrinting( QPainter * ) { }
+    virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
 
     /** Called once the frameset has been completely loaded or constructed.
      * The default implementation calls updateFrames() and zoom(). Call the parent :) */

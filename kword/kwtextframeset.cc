@@ -41,6 +41,7 @@
 #include <qclipboard.h>
 #include <qdragobject.h>
 #include <qtl.h>
+#include <qprogressdialog.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -1288,9 +1289,30 @@ void KWTextFrameSet::unzoom()
     m_origFontSizes.clear();
 }
 
-void KWTextFrameSet::preparePrinting( QPainter *painter )
+void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags )
 {
-    textdoc->doLayout( painter, textdoc->width() );
+    //textdoc->doLayout( painter, textdoc->width() );
+    textdoc->setWithoutDoubleBuffer( painter != 0 );
+    if ( painter )
+    {
+	textdoc->formatCollection()->setPainter( painter );
+        QTextParag *parag = textdoc->firstParag();
+        while ( parag ) {
+            parag->invalidate( 0 );
+            if ( painter )
+                parag->setPainter( painter );
+            parag->format();
+            parag = parag->next();
+            if ( progress )
+                progress->setProgress( ++processedParags );
+        }
+	textdoc->formatCollection()->setPainter( 0 );
+	parag = textdoc->firstParag();
+	while ( parag ) {
+	    parag->setPainter( 0 );
+	    parag = parag->next();
+	}
+    }
 }
 
 int KWTextFrameSet::docFontSize( QTextFormat * format ) const

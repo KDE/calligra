@@ -33,6 +33,7 @@
 #include <qobjectlist.h>
 #include <qpaintdevicemetrics.h>
 #include <qtl.h>
+#include <qprogressdialog.h>
 
 
 #include "autoformatdia.h"
@@ -1055,48 +1056,71 @@ void KWView::print( KPrinter &prt )
         m_doc->setPageLayout( pgLayout, cl, hf );
     }
 
-    if ( !serialLetter ) {
-        QPainter painter;
-        painter.begin( &prt );
+    QPainter painter;
+    painter.begin( &prt );
 
-        kdDebug(32001) << "KWView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
-                       << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
-        painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
-                       (double)metrics.logicalDpiY() / (double)dpiY );
+    kdDebug(32001) << "KWView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
+                   << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
+    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
+                   (double)metrics.logicalDpiY() / (double)dpiY );
 
 #define KW_PASS_PAINTER_TO_QRT
 #ifdef KW_PASS_PAINTER_TO_QRT
-        QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-        for ( ; fit.current() ; ++fit )
-            if ( fit.current()->isVisible() )
-                fit.current()->preparePrinting( &painter );
+    int paragraphs = 0;
+    fit.toFirst();
+    for ( ; fit.current() ; ++fit )
+        if ( fit.current()->isVisible() )
+            paragraphs += fit.current()->paragraphs();
+    kdDebug() << "KWView::print total paragraphs: " << paragraphs << endl;
+
+    // This can take a lot of time (reformatting everything), so a progress dialog is needed
+    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ), paragraphs, this );
+    progress.setProgress( 0 );
+    bool canceled = false;
+    int processedParags = 0;
+    fit.toFirst();
+    for ( ; fit.current() ; ++fit )
+        if ( fit.current()->isVisible() )
+        {
+            kapp->processEvents();
+            if ( progress.wasCancelled() ) {
+                canceled = true;
+                break;
+            }
+
+            kdDebug() << "KWView::print preparePrinting " << fit.current()->getName() << endl;
+            fit.current()->preparePrinting( &painter, &progress, processedParags );
+        }
 #endif
 
-        m_gui->canvasWidget()->print( &painter, &prt );
-        painter.end();
-    } else {
+    if ( !canceled )
+    {
+        if ( !serialLetter )
+            m_gui->canvasWidget()->print( &painter, &prt );
 #if 0
-        QPainter painter;
-        painter.begin( &prt );
-        for ( int i = 0; i < m_doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
-            m_doc->setSerialLetterRecord( i );
-            m_gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
-            if ( i < m_doc->getSerialLetterDataBase()->getNumRecords() - 1 )
-                prt.newPage();
+        else
+        {
+            for ( int i = 0; i < m_doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+                m_doc->setSerialLetterRecord( i );
+                m_gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
+                if ( i < m_doc->getSerialLetterDataBase()->getNumRecords() - 1 )
+                    prt.newPage();
+            }
+            m_doc->setSerialLetterRecord( -1 );
         }
-        m_doc->setSerialLetterRecord( -1 );
-        painter.end();
 #endif
     }
+
+    painter.end();
 
     if ( pgLayout.format == PG_SCREEN )
         m_doc->setPageLayout( oldPGLayout, cl, hf );
 
 #ifdef KW_PASS_PAINTER_TO_QRT
-    fit = m_doc->framesetsIterator();
+    fit.toFirst();
     for ( ; fit.current() ; ++fit )
         if ( fit.current()->isVisible() )
-            fit.current()->preparePrinting( 0L );
+            fit.current()->preparePrinting( 0L, 0L, processedParags );
 #endif
 
     m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );

@@ -1560,9 +1560,9 @@ void KWTableFrameSet::zoom( bool forPrint ) {
     }
 }
 
-void KWTableFrameSet::preparePrinting( QPainter *painter ) {
+void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags ) {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        m_cells.at(i)->preparePrinting( painter );
+        m_cells.at(i)->preparePrinting( painter, progress, processedParags );
     }
 }
 

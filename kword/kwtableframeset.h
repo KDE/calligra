@@ -218,7 +218,7 @@ public:
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
 
     virtual void zoom( bool forPrint );
-    virtual void preparePrinting( QPainter *painter );
+    virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     /** Contribute to the document statistics */
     virtual int paragraphs();
