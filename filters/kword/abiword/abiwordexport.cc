@@ -175,14 +175,22 @@ bool AbiWordWorker::doOpenDocument(void)
     // (AbiWord and QT handle UTF-8 well, so we stay with this encoding!)
     *m_streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
-    // TODO/FIXME: newest AbiWord versions have a new DOCTYPE!
-    *m_streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
+#if 1
+    // NOTE: AbiWord CVS 2002-02-?? has a new DOCTYPE
+    *m_streamOut << "<!DOCTYPE abiword PUBLIC \"-//ABISOURCE//DTD AWML 1.0 Strict//EN\"";
     *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
 
     // First magic: "<abiword"
-    // TODO/FIXME: newest AbiWord versions have a name space.
+    *m_streamOut << "<abiword";
+    *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
+    *m_streamOut << " version=\"\" fileformat=\"1.0\" styles=\"unlocked\">\n";
+#else
+    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
+    *m_streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
+    *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
+    // First magic: "<abiword"
     *m_streamOut << "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
+#endif
     // Second magic: "<!-- This file is an AbiWord document."
     // TODO/FIXME: write as much space as AbiWord does for the following line.
     *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
@@ -237,6 +245,11 @@ bool AbiWordWorker::doCloseDocument(void)
                 {
                     strMime="image/jpeg";
                 }
+                // TODO: verify BMP (and AbiWord's mime type)
+                else if (strExtension=="bmp")
+                {
+                    strMime="image/x-bmp";
+                }
                 // TODO: mathml and svg
                 else
                 {
@@ -246,8 +259,6 @@ bool AbiWordWorker::doCloseDocument(void)
 
                 kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
 
-                // WARNING: the attributes base64 and mime are only defined in AbiWord's source code
-                //   not in AbiWord's DTD!
                 *m_streamOut << "<d name=\"" << it.data() << "\""
                     << " base64=\"yes\"" // For now, we always encode (TODO: not for mathml and svg)
                     << " mime=\"" << strMime << "\">\n";
@@ -467,7 +478,20 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
             }
             else if (4==(*paraFormatDataIt).id)
             {
-                *m_streamOut << (*paraFormatDataIt).variable.m_text;
+                if (9==(*paraFormatDataIt).variable.m_type)
+                {
+                    // A link
+                    *m_streamOut << "<a xlink:href=\""
+                        << escapeAbiWordText((*paraFormatDataIt).variable.m_linkName)
+                        << "\"><c>" // In AbiWord, an anchor <a> has always a <c> child
+                        << escapeAbiWordText((*paraFormatDataIt).variable.m_hrefName)
+                        << "</c></a>";
+                }
+                else
+                {
+                    // Generic variable
+                    *m_streamOut << (*paraFormatDataIt).variable.m_text;
+                }
             }
             else if (6==(*paraFormatDataIt).id)
             {
@@ -493,18 +517,7 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
     QString props;
     QString style;
 
-#if 1
     style=layout.styleName;
-#else
-    if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
-    {
-        style = QString("Heading %1").arg(layout.counter.depth + 1);
-    }
-    else
-    {// We don't know the layout, so assume it's "Standard"
-        style = "Normal";
-    }
-#endif
 
     // Check if the current alignment is a valid one for AbiWord.
     if ( (layout.alignment == "left") || (layout.alignment == "right")
@@ -647,11 +660,47 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 bool AbiWordWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
 {
-    // TODO: do common code with HTML export
     QString outputText = "<pagesize ";
 
     switch (format)
     {
+#if 1
+        // ISO A formats
+        case PG_DIN_A0: // ISO A0
+        case PG_DIN_A1: // ISO A1
+        case PG_DIN_A2: // ISO A2
+        case PG_DIN_A3: // ISO A3
+        case PG_DIN_A4: // ISO A4
+        case PG_DIN_A5: // ISO A5
+        case PG_DIN_A6: // ISO A6
+        // ISO B formats
+        case PG_DIN_B0: // ISO B0
+        case PG_DIN_B1: // ISO B1
+        case PG_DIN_B2: // ISO B2
+        case PG_DIN_B3: // ISO B3
+        case PG_DIN_B4: // ISO B4
+        case PG_DIN_B5: // ISO B5
+        case PG_DIN_B6: // ISO B6
+        // American formats
+        case PG_US_LETTER: // US Letter
+        case PG_US_LEGAL:  // US Legal
+        {
+            QString pagetype=KoPageFormat::formatString(KoFormat(format));
+            outputText+="pagetype=\"";
+            outputText+=pagetype;
+
+            QString strWidth, strHeight, strUnits;
+            KWEFUtil::GetNativePaperFormat(format, strWidth, strHeight, strUnits);
+            outputText+="\" width\"";
+            outputText+=strWidth;
+            outputText+="\" height\"";
+            outputText+=strHeight;
+            outputText+="\" units\"";
+            outputText+=strUnits;
+            outputText+="\" ";
+            break;
+        }
+#else
         // ISO A formats
         case PG_DIN_A0: // ISO A0
         {
@@ -735,6 +784,7 @@ bool AbiWordWorker::doFullPaperFormat(const int format,
             outputText += "pagetype=\"Legal\" width=\"8.5\" height=\"14.0\" units=\"inch\" ";
             break;
         }
+#endif
         case PG_US_EXECUTIVE: // US Executive (does not exists in AbiWord!)
         {
             // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!
