@@ -129,6 +129,41 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   clearAllErrors();
 }
 
+KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row )
+  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
+    m_iRow( _row ),
+    m_iColumn( _column ),
+    m_dOutTextWidth( 0.0 ),
+    m_dOutTextHeight( 0.0 ),
+    m_dTextX( 0.0 ),
+    m_dTextY( 0.0 ),
+    m_iMergedXCells( 0 ),
+    m_iMergedYCells( 0 ),
+    m_iExtraXCells( 0 ),
+    m_iExtraYCells( 0 ),
+    m_dExtraWidth( 0.0 ),
+    m_dExtraHeight( 0.0 ),
+    m_style( ST_Normal ),
+    m_pPrivate( 0 ),
+    m_content( Text ),
+    m_value( KSpreadValue::empty() ),
+    m_pQML( 0 ),
+    m_pCode( 0 ),
+    m_conditions( 0 ),
+    m_nbLines( 0 ),
+    m_Validity( 0 ),
+    m_nextCell( 0 ),
+    m_previousCell( 0 )
+{
+  m_ObscuringCells.clear();
+
+  m_lstDepends.setAutoDelete( true );
+  m_lstDependingOnMe = _deponme ;
+  m_lstDependingOnMe.setAutoDelete( true );
+
+  clearAllErrors();
+}
+
 KSpreadSheet * KSpreadCell::sheet() const
 {
   return m_pTable;
@@ -5734,6 +5769,20 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
       }
     }
   }
+}
+
+QPtrList<KSpreadDependency> KSpreadCell::getDepending ()
+{
+  QPtrList<KSpreadDependency> retval ;
+  KSpreadDependency *d = NULL ;
+
+  for (d = m_lstDependingOnMe.first() ; d != NULL ; d = m_lstDependingOnMe.next())
+  {
+    KSpreadDependency *d_copy = new KSpreadDependency (*d) ;
+	retval.prepend (d_copy) ;
+  }
+
+  return retval ;
 }
 
 QValueList<KSpreadConditional> KSpreadCell::conditionList() const

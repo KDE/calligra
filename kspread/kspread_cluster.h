@@ -32,7 +32,7 @@ matrices of LEVEL2 that are necessary.
 LEVEL1 is defined as 128x128 matrix.
 LEVEL2 is defined as 256x256 matrices.
 Each direction then can have LEVEL1 * LEVEL2 = 128*256 = 2^15 different cells, which
-is in total 2^15^2 cells.
+is in total (2^15)^2 cells.
 
 It can be changed easily to different sizes, but it should be more senseful to have a small LEVEL1,
 as in most cases only one/two entries in LEVEL1 will be used.
@@ -43,7 +43,7 @@ Future enhancements:
 To reduce memory consumption, it should be possible to enhance the functionality by
 another LEVEL0, which then keeps the LEVEL1 size smaller.
 
-Maybe the LEVEL1 should only be generate when there is a need for more than 1 LEVEL2.
+Maybe the LEVEL1 should only be generated when there is a need for more than 1 LEVEL2.
 
 LEVEL1 maybe reallocated.
 
@@ -134,9 +134,11 @@ public:
 
     /**
      * Removes all elements from the column.
+     *
+     * @param presereDoM preserve the DependingOnMe lists of the cells if non-empty
      */
-    void clearColumn( int col );
-    void clearRow( int row );
+    void clearColumn( int col, bool preserveDoM = false );
+    void clearRow( int row, bool preserveDoM = false );
 
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction

@@ -572,7 +572,7 @@ void KSpreadCluster::removeRow( int row )
     }
 }
 
-void KSpreadCluster::clearColumn( int col )
+void KSpreadCluster::clearColumn( int col, bool preserveDoM )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
@@ -584,17 +584,34 @@ void KSpreadCluster::clearColumn( int col )
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    for( int y1 = 0; y1 < KSPREAD_CLUSTER_LEVEL1; ++y1 )
+    for( int cy = 0; cy < KSPREAD_CLUSTER_LEVEL1; ++cy )
     {
-	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL1 + cx ];
-	if ( cl )
-	    for( int y2 = 0; y2 < KSPREAD_CLUSTER_LEVEL2; ++y2 )
-		if ( cl[ y2 * KSPREAD_CLUSTER_LEVEL2 + dx ] )
-		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL1 + y2 );
+        KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
+        if ( cl ) {
+            for( int dy = 0; dy < KSPREAD_CLUSTER_LEVEL2; ++dy ) {
+                if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ) {
+                    int row = cy * KSPREAD_CLUSTER_LEVEL2 + dy ;
+                    if ( preserveDoM ) {
+                        KSpreadCell* c = cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ;
+                        QPtrList<KSpreadDependency> dep = c->getDepending() ;
+                        if ( dep.isEmpty() )
+                            remove( col, row );
+                        else {
+                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] = new KSpreadCell (c->table(), dep, col, row) ;
+                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ]->setCalcDirtyFlag() ;
+                        }
+                    }
+                    else {
+                        remove( col, row );
+                    }
+                }
+            }
+        }
     }
 }
 
-void KSpreadCluster::clearRow( int row )
+void KSpreadCluster::clearRow( int row, bool preserveDoM )
+//TODO: bei column genauso
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
@@ -606,13 +623,29 @@ void KSpreadCluster::clearRow( int row )
     int cy = row / KSPREAD_CLUSTER_LEVEL2;
     int dy = row % KSPREAD_CLUSTER_LEVEL2;
 
-    for( int x1 = 0; x1 < KSPREAD_CLUSTER_LEVEL1; ++x1 )
+    for( int cx = 0; cx < KSPREAD_CLUSTER_LEVEL1; ++cx )
     {
-	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + x1 ];
-	if ( cl )
-	    for( int x2 = 0; x2 < KSPREAD_CLUSTER_LEVEL2; ++x2 )
-		if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + x2 ] )
-		    remove( x1 * KSPREAD_CLUSTER_LEVEL2 + x2, row );
+        KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + cx ];
+        if ( cl ) {
+            for( int dx = 0; dx < KSPREAD_CLUSTER_LEVEL2; ++dx ) {
+                if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ) {
+                    int column = cx * KSPREAD_CLUSTER_LEVEL2 + dx ;
+                    if ( preserveDoM ) {
+                        KSpreadCell* c = cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ;
+                        QPtrList<KSpreadDependency> dep = c->getDepending() ;
+                        if ( dep.isEmpty() )
+                            remove( column, row );
+                        else {
+                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] = new KSpreadCell (c->table(), dep, column, row) ;
+                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ]->setCalcDirtyFlag() ;
+                        }
+                    }
+                    else {
+                        remove( column, row );
+                    }
+                }
+            }
+        }
     }
 }
 

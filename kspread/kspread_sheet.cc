@@ -5397,7 +5397,7 @@ void KSpreadSheet::cutSelection( KSpreadSelection* selectionInfo )
 
     QApplication::clipboard()->setData( kd );
 
-    deleteSelection( selectionInfo );
+    deleteSelection( selectionInfo, true, true );
 }
 
 void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
@@ -5575,7 +5575,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
         {
             if(!insert)
             {
-                m_cells.clearColumn( _xshift + i );
+                m_cells.clearColumn( _xshift + i, true );
                 m_columns.removeElement( _xshift + i );
             }
         }
@@ -5603,7 +5603,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
         // Clear the existing rows
         for( int i = 1; i <= pasteHeight; ++i )
         {
-            m_cells.clearRow( _yshift + i );
+            m_cells.clearRow( _yshift + i, true );
             m_rows.removeElement( _yshift + i );
         }
 
@@ -5790,7 +5790,7 @@ bool KSpreadSheet::testAreaPasteInsert()const
     return false;
 }
 
-void KSpreadSheet::deleteCells( const QRect& rect )
+void KSpreadSheet::deleteCells( const QRect& rect, bool preserveDoM )
 {
     // A list of all cells we want to delete.
     QPtrStack<KSpreadCell> cellStack;
@@ -5840,6 +5840,10 @@ void KSpreadSheet::deleteCells( const QRect& rect )
       KSpreadCell * cell = cellStack.pop();
 
       m_cells.remove( cell->column(), cell->row() );
+      if (preserveDoM) {
+        KSpreadCell * emptycell = new KSpreadCell (this, cell->getDepending(), cell->column(), cell->row()) ;
+        insertCell (emptycell) ;
+      }
       cell->setCalcDirtyFlag();
       setRegionPaintDirty(cell->cellRect());
 
@@ -5863,7 +5867,7 @@ void KSpreadSheet::deleteCells( const QRect& rect )
     m_pDoc->setModified( true );
 }
 
-void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
+void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo, bool preserveDoM )
 {
     QRect r( selectionInfo->selection() );
 
@@ -5878,7 +5882,7 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
     {
         for( int i = r.top(); i <= r.bottom(); ++i )
         {
-            m_cells.clearRow( i );
+            m_cells.clearRow( i, preserveDoM );
             m_rows.removeElement( i );
         }
 
@@ -5889,7 +5893,7 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
     {
         for( int i = r.left(); i <= r.right(); ++i )
         {
-            m_cells.clearColumn( i );
+            m_cells.clearColumn( i, preserveDoM );
             m_columns.removeElement( i );
         }
 
@@ -5898,7 +5902,7 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
     else
     {
 
-        deleteCells( r );
+        deleteCells( r, preserveDoM );
     }
     refreshMergedCell();
     emit sig_updateView( this );

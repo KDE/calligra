@@ -131,6 +131,7 @@ public:
 
     KSpreadCell( KSpreadSheet *_table, int _column, int _row );
     KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row );
+    KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row );
     /**
      * @see #tableDies
      */
@@ -517,6 +518,12 @@ public:
      *                    depending on it.
      */
     void NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending );
+
+    /**
+     * get the list of dependencies of this cell
+     * this is a deep copy of the m_lstDependingOnMe (the KSpreadDepenency objects are also copied)
+     **/
+    QPtrList<KSpreadDependency> getDepending (void) ;
 
     /**
      * Causes the format to be recalculated when the cell is drawn next time.
