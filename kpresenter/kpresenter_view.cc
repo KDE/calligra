@@ -3483,6 +3483,11 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vColorBar->setBarPos(OpenPartsUI::Right);
   m_vColorBar->enable(OpenPartsUI::Show);
 
+  m_vColorBar->enable(OpenPartsUI::Hide);
+  m_vColorBar->setBarPos(OpenPartsUI::Floating);
+  m_vColorBar->setBarPos(OpenPartsUI::Right);
+  m_vColorBar->enable(OpenPartsUI::Show);
+
   return true;
 }
 

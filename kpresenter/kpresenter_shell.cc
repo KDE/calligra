@@ -16,6 +16,7 @@
 #include "kpresenter_shell.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
+#include "page.h"
 
 #include <koAboutDia.h>
 #include <kfiledialog.h>
@@ -351,6 +352,8 @@ void KPresenterShell::slotFileOpen()
 void KPresenterShell::slotFileSave()
 {
   assert( m_pDoc != 0L );
+
+  m_pDoc->enableEmbeddedParts(false);
   
   CORBA::String_var url = m_pDoc->url();
   if ( strlen( url.in() ) == 0 )
@@ -365,10 +368,15 @@ void KPresenterShell::slotFileSave()
     tmp.sprintf( i18n( "Could not save\n%s" ), url.in() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
   }
+
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getPage()->repaint(false);
 }
 
 void KPresenterShell::slotFileSaveAs()
 {
+  m_pDoc->enableEmbeddedParts(false);
+
   QString _url = "";
   if (m_pDoc)
     {
@@ -383,6 +391,9 @@ void KPresenterShell::slotFileSaveAs()
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     if (m_pDoc) m_pDoc->setURL(_url);
   }
+
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getPage()->repaint(false);
 }
 
 void KPresenterShell::slotFileClose()

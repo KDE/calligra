@@ -181,6 +181,8 @@ void KPresenterDoc::makeChildListIntern(KOffice::Document_ptr _doc,const char *_
 /*========================== save ===============================*/
 bool KPresenterDoc::save( ostream& out, const char* /* format */ )
 {
+  KPObject *kpobject = 0L;
+
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
@@ -213,7 +215,6 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
       chl.current()->save(out);
 
       out << otag << "<SETTINGS>" << endl;
-      KPObject *kpobject = 0L;
       for (unsigned int i = 0;i < _objectList->count();i++)
 	{
 	  kpobject = _objectList->at(i);
@@ -227,8 +228,21 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
   out << etag << "</DOC>" << endl;
     
   setModified(false);
-    
+
   return true;
+}
+
+/*===============================================================*/
+void KPresenterDoc::enableEmbeddedParts(bool f)
+{
+  KPObject *kpobject = 0L;
+
+  for (unsigned int k = 0;k < _objectList->count();k++)
+    {
+      kpobject = _objectList->at(k);
+      if (kpobject->getType() == OT_PART)
+	dynamic_cast<KPPartObject*>(kpobject)->enableDrawing(f);
+    }
 }
 
 /*====================== export HTML ============================*/
@@ -2584,7 +2598,7 @@ void KPresenterDoc::deletePage(int _page,DelPageMode _delPageMode)
 	  if (getPageOfObj(i,0,0) - 1 == _page)
 	    kpobject->setSelected(true);
 	}
-      deleteObjs();
+      deleteObjs(false);
     }
 
   if (_delPageMode == DPM_MOVE_OBJS || _delPageMode == DPM_DEL_MOVE_OBJS)
@@ -2678,7 +2692,7 @@ KPObject* KPresenterDoc::getSelectedObj()
 }
 
 /*======================= delete objects =========================*/
-void KPresenterDoc::deleteObjs()
+void KPresenterDoc::deleteObjs(bool _add = true)
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2693,7 +2707,9 @@ void KPresenterDoc::deleteObjs()
  
   DeleteCmd *deleteCmd = new DeleteCmd(i18n("Delete object(s)"),_objects,this);
   deleteCmd->execute();
-  _commands.addCommand(deleteCmd);
+  
+  if (_add) _commands.addCommand(deleteCmd);
+
   m_bModified = true;
 }
 

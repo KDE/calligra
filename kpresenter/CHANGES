@@ -8,3 +8,8 @@ Reggie, 16.1.1999:
 ------------------
 - Fix for avoiding warnings with egcs1.1.1
 - Fix of a strangebug in KPresenterView::colorToPixString
+
+Reggie, 19.1.1999:
+------------------
+- Hack to avoid this problem with the last inserted toolbar => last toolbar is on the correct place now from the beginning on
+- Fixed (or worked around :-) the strange bug when saving embedded objects

@@ -88,6 +88,8 @@ public:
 
   KPresenterChild *getChild() { return child; }
 
+  void enableDrawing(bool f) { _enableDrawing = f; }
+
 protected:
   void paint(QPainter *_painter);
 
@@ -100,7 +102,8 @@ protected:
   KPGradient *gradient;
   QPixmap pix;
   bool redrawPix;
-
+  bool _enableDrawing;
+  
   KPresenterFrame *view;
   KPresenterChild *child;
   KOffice::MainWindow_var mainWindow;

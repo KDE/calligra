@@ -191,6 +191,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  kpobject->deactivate();
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
+	  return;
 	}
     }
 

@@ -36,6 +36,7 @@ KPPartObject::KPPartObject(KPresenterChild *_child)
   pen = QPen(black,1,NoPen);
   gColor1 = red;
   gColor2 = green;
+  _enableDrawing = true;
 }
 
 /*======================== draw ==================================*/
@@ -90,6 +91,8 @@ void KPPartObject::draw(QPainter *_painter,int _diffx,int _diffy)
 /*================================================================*/
 void KPPartObject::paint(QPainter *_painter)
 {
+  if (!_enableDrawing) return;
+
   QPicture* pic;
   pic = child->draw((zoomed ? presFakt : 1.0),true);
 

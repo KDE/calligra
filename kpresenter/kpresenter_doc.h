@@ -286,7 +286,7 @@ public:
   KRect getPageSize(unsigned int,int,int,float fakt=1.0,bool decBorders = true);
 
   // delete/reorder obejcts
-  void deleteObjs();
+  void deleteObjs(bool _add = true);
   void copyObjs(int,int);
   void pasteObjs(int,int);
 
@@ -345,6 +345,8 @@ public:
   void hideAllFrames();
 
   int getPenBrushFlags();
+
+  void enableEmbeddedParts(bool f);
 
 signals:
 
