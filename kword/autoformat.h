@@ -118,16 +118,17 @@ public:
     void readConfig();
     void saveConfig();
 
+    static bool isUpper( const QChar &c );
+    static bool isLower( const QChar &c );
+    static bool isMark( const QChar &c ); // End of sentence
+    static bool isSeparator( const QChar &c );
+
 protected:
     bool doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
     void doUpperCase( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
     void doSpellCheck( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
     void doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index );
     void buildMaxLen();
-    static bool isUpper( const QChar &c );
-    static bool isLower( const QChar &c );
-    static bool isMark( const QChar &c );
-    static bool isSeparator( const QChar &c );
 
 private:
     KWDocument *m_doc;

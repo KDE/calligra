@@ -375,7 +375,7 @@ void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpa
             {
                 if ( wordStarted )
                     ++words;
-                if ( ch == '.' )
+                if ( KWAutoFormat::isMark( ch ) )
                     ++sentences;
                 wordStarted = false;
             }
