@@ -35,6 +35,6 @@ namespace Conversion
     QString importAlignment( const QString& );
     QString exportAlignment( const QString& );
 
-};
+}
 
 #endif

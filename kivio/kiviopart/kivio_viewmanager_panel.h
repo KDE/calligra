@@ -51,7 +51,7 @@ private:
   int freeId;
 };
 
-};
+}
 
 using namespace Kivio;
 

@@ -45,7 +45,7 @@ class KivioStencil;
 namespace Kivio {
   class DragBarButton;
   class ViewItemList;
-};
+}
 
 class KoStore;
 class QDomDocument;

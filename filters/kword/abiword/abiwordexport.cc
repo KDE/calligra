@@ -67,7 +67,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libabiwordexport, ABIWORDExportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libabiwordexport, ABIWORDExportFactory() )
 
 class StyleMap : public QMap<QString,LayoutData>
 {

@@ -53,7 +53,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory() );
+K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory() )
 
 OLEFilter::OLEFilter(KoFilter *, const char *, const QStringList&) :
                      KoEmbeddingFilter(), numPic( 0 ),

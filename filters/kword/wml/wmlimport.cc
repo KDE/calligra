@@ -37,7 +37,7 @@
 #include <wmlparser.h>
 
 typedef KGenericFactory<WMLImport, KoFilter> WMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmlimport, WMLImportFactory( "wmlimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libwmlimport, WMLImportFactory( "wmlimport" ) )
 
 WMLImport::WMLImport( KoFilter *, const char *, const QStringList& ):
                      KoFilter()

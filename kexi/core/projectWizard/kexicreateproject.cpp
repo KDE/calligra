@@ -248,7 +248,7 @@ KexiCreateProject::~KexiCreateProject()
 	void * init_kexiprojectwizard() {return new KexiCreateProjectFactory();}
 }*/
 
-K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KexiCreateProjectFactory );
+K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KexiCreateProjectFactory )
 
 /*
 K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KGenericFactory<KexiCreateProject>)

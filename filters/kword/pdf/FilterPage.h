@@ -84,6 +84,6 @@ private:
     QValueVector<DRect> _rects;
 };
 
-}; // namespace
+} // namespace
 
 #endif

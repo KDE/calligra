@@ -244,6 +244,6 @@ private:
   hstatus hStatus;
 };
 
-};
+}
 
 #endif

@@ -431,4 +431,4 @@ QString Link::pageLinkName(uint i)
     return QString("page") + QString::number(i);
 }
 
-}; // namespace
+} // namespace

@@ -23,7 +23,7 @@
 #include <qdom.h>
 
 typedef KGenericFactory<KugarNOPImport, KoFilter> KugarNOPImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkugarnopimport, KugarNOPImportFactory( "kugarnopimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkugarnopimport, KugarNOPImportFactory( "kugarnopimport" ) )
 
 
 KugarNOPImport::KugarNOPImport( KoFilter *, const char *, const QStringList& )

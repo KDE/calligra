@@ -459,4 +459,4 @@ DPathVector Device::convertPath(GfxState *state)
     return vector;
 }
 
-}; // namespace
+} // namespace

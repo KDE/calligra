@@ -195,4 +195,4 @@ bool String::checkCombination(TextString *str)
     return true;
 }
 
-}; // namespace
+} // namespace

@@ -39,6 +39,6 @@ protected slots:
   void slotActivated( const QString& text );
 };
 
-};
+}
 
 #endif

@@ -64,6 +64,6 @@ namespace Kivio
    * Returns a pixmap with all arrowheads
    */
   QPixmap arrowHeadPixmap();
-};
+}
 
 #endif

@@ -33,7 +33,7 @@ extern "C"
   {
     return new KivioFactory;
   }
-};
+}
 
 KInstance* KivioFactory::s_global = 0;
 KAboutData* KivioFactory::s_aboutData = 0;

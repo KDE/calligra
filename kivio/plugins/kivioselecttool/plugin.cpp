@@ -33,7 +33,7 @@ extern "C"
   {
     return new SelectToolFactory;
   }
-};
+}
 
 KInstance* SelectToolFactory::s_global = 0;
 

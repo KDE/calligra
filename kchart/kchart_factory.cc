@@ -18,7 +18,7 @@ extern "C"
     {
 	return new KChartFactory;
     }
-};
+}
 
 KInstance* KChartFactory::s_global = 0;
 KAboutData* KChartFactory::s_aboutData = 0;

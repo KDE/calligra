@@ -61,7 +61,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY(libasciiexport, ASCIIExportFactory());
+K_EXPORT_COMPONENT_FACTORY(libasciiexport, ASCIIExportFactory())
 
 
 class ASCIIWorker : public KWEFBaseWorker

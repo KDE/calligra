@@ -48,7 +48,7 @@ class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY(libpdfimport, PdfImportFactory());
+K_EXPORT_COMPONENT_FACTORY(libpdfimport, PdfImportFactory())
 
 //-----------------------------------------------------------------------------
 PdfImport::PdfImport(KoFilter *, const char *, const QStringList&)

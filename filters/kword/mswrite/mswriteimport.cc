@@ -57,7 +57,7 @@ protected:
 	}
 };
 
-K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWriteImportFactory ());
+K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWriteImportFactory ())
 
 
 //

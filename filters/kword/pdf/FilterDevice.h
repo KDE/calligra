@@ -118,6 +118,6 @@ private:
     ImageList _images;
 };
 
-}; // namespace
+} // namespace
 
 #endif

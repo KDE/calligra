@@ -188,4 +188,4 @@ Options Dialog::options() const
     return o;
 }
 
-}; // namespace
+} // namespace

@@ -40,7 +40,7 @@
 #include "palmdoc.h"
 
 typedef KGenericFactory<PalmDocImport, KoFilter> PalmDocImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libpalmdocimport, PalmDocImportFactory( "palmdocimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libpalmdocimport, PalmDocImportFactory( "palmdocimport" ) )
 
 PalmDocImport::PalmDocImport( KoFilter *, const char *, const QStringList& ):
                      KoFilter()

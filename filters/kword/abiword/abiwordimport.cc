@@ -61,7 +61,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory() )
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.

@@ -49,7 +49,7 @@ private:
   QWidget* m_pView;
   QPtrList<ToolDockBase> tools;
 };
-};
+}
 
 #endif
 

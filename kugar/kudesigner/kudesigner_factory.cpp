@@ -32,7 +32,7 @@ extern "C"
     {
         return new KudesignerFactory;
     }
-};
+}
 
 KInstance* KudesignerFactory::s_global = 0L;
 KAboutData* KudesignerFactory::s_aboutData = 0L;

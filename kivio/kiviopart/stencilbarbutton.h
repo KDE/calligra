@@ -59,7 +59,7 @@ private:
   QPoint m_ppoint;
 };
 
-};
+}
 
 #endif
 

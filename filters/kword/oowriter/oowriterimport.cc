@@ -47,7 +47,7 @@
 #endif
 
 typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
-K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriterimport" ) );
+K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriterimport" ) )
 
 
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )

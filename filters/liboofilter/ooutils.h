@@ -58,6 +58,6 @@ namespace OoUtils
     // From style:text-position (for subscript/superscript)
     // to kword/kpresenter's value/relativetextsize
     void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
-};
+}
 
 #endif /* OOUTILS_H */

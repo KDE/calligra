@@ -31,7 +31,7 @@ extern "C"
     {
         return new KPresenterFactory;
     }
-};
+}
 
 
 KInstance* KPresenterFactory::s_global = 0;

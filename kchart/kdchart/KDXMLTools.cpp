@@ -629,4 +629,4 @@ Qt::BrushStyle stringToBrushStyle( const QString& style )
         return Qt::SolidPattern;
 }
 
-};
+}

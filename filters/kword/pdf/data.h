@@ -81,6 +81,6 @@ private:
     const Options &_options;
 };
 
-}; // namespace
+} // namespace
 
 #endif

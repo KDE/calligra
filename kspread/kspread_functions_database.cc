@@ -60,7 +60,7 @@ struct Condition
 };
 
 typedef QValueList<Condition> ConditionList;
-};
+}
 
 // prototypes
 bool kspreadfunc_daverage( KSContext & context );

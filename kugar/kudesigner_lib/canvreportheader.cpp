@@ -33,7 +33,7 @@ CanvasReportHeader::CanvasReportHeader(int x, int y, int width, int height, QCan
     CanvasBand(x, y, width, height, canvas)
 {
     props["Height"] = *(new PropPtr(new Property(IntegerValue, "Height", i18n("Report header's height"), "50")));
-};
+}
 
 void CanvasReportHeader::draw(QPainter &painter)
 {

@@ -18,7 +18,7 @@ extern "C"
     {
 	return new KFormulaFactory;
     }
-};
+}
 
 KInstance* KFormulaFactory::s_global = 0;
 KAboutData* KFormulaFactory::s_aboutData = 0;

@@ -62,7 +62,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() )
 
 #define STOPEXPORT \
   do \

@@ -368,7 +368,7 @@ template <class T1, class T2>
 MsWord::Fkp<T1, T2>::Fkp(MsWord *document) :
     m_document(document)
 {
-};
+}
 
 //
 // Get the next entry in an FKP.
@@ -1417,7 +1417,7 @@ template <class T, int word6Size, int word8Size>
 MsWord::Plex<T, word6Size, word8Size>::Plex(MsWord *document) :
     m_document(document)
 {
-};
+}
 
 template <class T, int word6Size, int word8Size>
 bool MsWord::Plex<T, word6Size, word8Size>::getNext(U32 *startFc, U32 *endFc, T *data)

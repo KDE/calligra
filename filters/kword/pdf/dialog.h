@@ -96,6 +96,6 @@ private:
     QCheckBox    *_images, *_smart;
 };
 
-}; // namespace
+} // namespace
 
 #endif

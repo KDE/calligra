@@ -76,6 +76,6 @@ namespace PDFImport
     // detect some letter/accent combinations
     // (latex layouts them separately)
     Unicode checkCombi(Unicode letter, Unicode accent);
-};
+}
 
 #endif

@@ -38,7 +38,7 @@ typedef void (*TextOutputFunc)(void *stream, char *text, int len);
 namespace PDFImport {
     class String;
     class Page;
-};
+}
 
 class TextString {
 public:

@@ -34,7 +34,7 @@
 #include "generic_filter.h"
 
 typedef KGenericFactory<GenericFilter, KoFilter> GenericFilterFactory;
-K_EXPORT_COMPONENT_FACTORY( libgenerickofilter, GenericFilterFactory );
+K_EXPORT_COMPONENT_FACTORY( libgenerickofilter, GenericFilterFactory )
 
 
 GenericFilter::GenericFilter(KoFilter *, const char *, const QStringList&) :

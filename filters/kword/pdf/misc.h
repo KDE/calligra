@@ -193,6 +193,6 @@ private:
     QString _href;
 };
 
-}; // namespace
+} // namespace
 
 #endif

@@ -123,6 +123,6 @@ private:
     uint _frameIndex;
 };
 
-}; // namespace
+} // namespace
 
 #endif

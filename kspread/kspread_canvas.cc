@@ -931,7 +931,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     return;
 
   KSpreadSelection* selectionInfo = m_pView->selectionInfo();
-  QRect selection( selection() );
+  QRect s( selection() );
 
   if ( selectionInfo->singleCellSelection() )
   {
@@ -945,10 +945,10 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     QPoint selectionAnchor = selectionInfo->selectionAnchor();
     int x = selectionAnchor.x();
     int y = selectionAnchor.y();
-    if ( x > selection.left())
-        x = selection.left();
-    if ( y > selection.top() )
-        y = selection.top();
+    if ( x > s.left())
+        x = s.left();
+    if ( y > s.top() )
+        y = s.top();
     KSpreadCell *cell = table->nonDefaultCell( x, y );
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
     {
@@ -957,15 +957,15 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
         m_pView->doc()->undoBuffer()->appendUndo( undo );
     }
     cell->forceExtraCells( x, y,
-                           abs( selection.right() - selection.left() ),
-                           abs( selection.bottom() - selection.top() ) );
+                           abs( s.right() - s.left() ),
+                           abs( s.bottom() - s.top() ) );
 
     m_pView->updateEditWidget();
     if ( table->getAutoCalc() ) table->recalc();
   }
   else if ( m_eMouseAction == AutoFill && !table->isProtected() )
   {
-    QRect dest = selection;
+    QRect dest = s;
     table->autofill( m_rctAutoFillSrc, dest );
 
     m_pView->updateEditWidget();
@@ -1093,7 +1093,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   m_scrollTimer->start( 50 );
 
   // Remember current values.
-  QRect selection( selection() );
+  QRect s( selection() );
 
   // Did we click in the lower right corner of the marker/marked-area ?
   if ( selectionInfo()->selectionHandleArea().contains( QPoint( doc()->zoomItX( ev_PosX ),
@@ -1154,8 +1154,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   // Extending an existing selection with the shift button ?
-  if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax &&
-       selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
+  if ( m_pView->koDocument()->isReadWrite() && s.right() != KS_colMax &&
+       s.bottom() != KS_rowMax && _ev->state() & ShiftButton )
   {
     gotoLocation( QPoint( col, row ), activeTable(), true );
     return;
@@ -1183,7 +1183,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     gotoLocation( QPoint( col, row ), activeTable(), false );
   }
   else if ( _ev->button() == RightButton &&
-            !selection.contains( QPoint( col, row ) ) )
+            !s.contains( QPoint( col, row ) ) )
   {
     // No selection or the mouse press was outside of an existing selection ?
     gotoLocation( QPoint( col, row ), activeTable(), false );
@@ -3255,30 +3255,30 @@ void KSpreadCanvas::updatePosWidget()
 
 void KSpreadCanvas::adjustArea(bool makeUndo)
 {
-  QRect selection( selection() );
-  if (activeTable()->areaIsEmpty(selection))
+  QRect s( selection() );
+  if (activeTable()->areaIsEmpty(s))
         return;
 
   if (makeUndo)
   {
         if ( !doc()->undoBuffer()->isLocked() )
         {
-                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( doc(),activeTable() , selection );
+                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( doc(),activeTable() , s );
                 doc()->undoBuffer()->appendUndo( undo );
         }
   }
   // Columns selected
-  if ( util_isColumnSelected(selection) )
+  if ( util_isColumnSelected(s) )
   {
-    for (int x=selection.left(); x <= selection.right(); x++ )
+    for (int x=s.left(); x <= s.right(); x++ )
     {
       hBorderWidget()->adjustColumn(x,false);
     }
   }
   // Rows selected
-  else if ( util_isRowSelected(selection) )
+  else if ( util_isRowSelected(s) )
   {
-    for(int y = selection.top(); y <= selection.bottom(); y++ )
+    for(int y = s.top(); y <= s.bottom(); y++ )
     {
       vBorderWidget()->adjustRow(y,false);
     }
@@ -3287,11 +3287,11 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
   // Selection of a rectangular area
   else
   {
-    for (int x=selection.left(); x <= selection.right(); x++ )
+    for (int x=s.left(); x <= s.right(); x++ )
     {
       hBorderWidget()->adjustColumn(x,false);
     }
-    for(int y = selection.top(); y <= selection.bottom(); y++ )
+    for(int y = s.top(); y <= s.bottom(); y++ )
     {
       vBorderWidget()->adjustRow(y,false);
     }
@@ -3300,12 +3300,12 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
 
 void KSpreadCanvas::equalizeRow()
 {
-  QRect selection( selection() );
-  RowFormat *rl = m_pView->activeTable()->rowFormat(selection.top());
+  QRect s( selection() );
+  RowFormat *rl = m_pView->activeTable()->rowFormat(s.top());
   int size=rl->height(this);
-  if ( selection.top() == selection.bottom() )
+  if ( s.top() == s.bottom() )
       return;
-  for(int i=selection.top()+1;i<=selection.bottom();i++)
+  for(int i=s.top()+1;i<=s.bottom();i++)
   {
       KSpreadSheet *table = activeTable();
       if ( !table )
@@ -3317,13 +3317,13 @@ void KSpreadCanvas::equalizeRow()
 
 void KSpreadCanvas::equalizeColumn()
 {
-  QRect selection( selection() );
-  ColumnFormat *cl = m_pView->activeTable()->columnFormat(selection.left());
+  QRect s( selection() );
+  ColumnFormat *cl = m_pView->activeTable()->columnFormat(s.left());
   int size=cl->width(this);
-  if ( selection.left() == selection.right() )
+  if ( s.left() == s.right() )
       return;
 
-  for(int i=selection.left()+1;i<=selection.right();i++)
+  for(int i=s.left()+1;i<=s.right();i++)
   {
     size=QMAX(m_pView->activeTable()->columnFormat(i)->width(this),size);
   }

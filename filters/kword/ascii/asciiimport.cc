@@ -60,7 +60,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory() )
 
 ASCIIImport::ASCIIImport(KoFilter *, const char *, const QStringList &) :
                      KoFilter() {

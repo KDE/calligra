@@ -30,7 +30,7 @@ extern "C"
     {
 	return new KSpreadFactory;
     }
-};
+}
 
 KInstance* KSpreadFactory::s_global = 0;
 DCOPObject* KSpreadFactory::s_dcopObject = 0;

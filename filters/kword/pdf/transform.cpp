@@ -477,4 +477,4 @@ Unicode checkCombi(Unicode letter, Unicode accent)
     return 0;
 }
 
-};
+}

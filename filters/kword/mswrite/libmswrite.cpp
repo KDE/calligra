@@ -1221,6 +1221,6 @@ namespace MSWrite
 		return m_pageTable->add (&pp);
 	}
 
-};	// namespace MSWrite	{
+}	// namespace MSWrite	{
 
 // end of libmswrite.cpp

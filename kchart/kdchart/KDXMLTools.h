@@ -81,5 +81,5 @@ namespace KDXML {
     bool readRectNode( const QDomElement& element, QRect& value );
     bool readFontNode( const QDomElement& element, QFont& font );
     bool readPenNode( const QDomElement& element, QPen& pen );
-};
+}
 #endif

@@ -38,7 +38,7 @@
 #include <zlib.h>
 
 typedef KGenericFactory<GNUMERICExport, KoFilter> GNUMERICExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "gnumericexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "gnumericexport" ) )
 
 class Cell {
  public:

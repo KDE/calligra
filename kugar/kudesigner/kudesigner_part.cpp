@@ -25,4 +25,4 @@ extern "C"
     {
         return new KudesignerFactory;
     }
-};
+}

@@ -25,7 +25,7 @@
 #include "rtfimport.moc"
 
 typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
-K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
+K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) )
 
 // defines a property
 #define PROP(a,b,c,d,e)		{ a, b, &RTFImport::c, d, e }

@@ -42,7 +42,7 @@ extern "C"
     {
         return new CalcFactory;
     }
-};
+}
 
 KInstance* CalcFactory::s_global = 0;
 

@@ -61,7 +61,7 @@ protected:
 	}
 };
 
-K_EXPORT_COMPONENT_FACTORY (libmswriteexport, MSWriteExportFactory ());
+K_EXPORT_COMPONENT_FACTORY (libmswriteexport, MSWriteExportFactory ())
 
 
 class WRIDevice : public MSWrite::Device

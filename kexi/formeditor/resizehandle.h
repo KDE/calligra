@@ -74,6 +74,6 @@ namespace KFormDesigner
 		QGuardedPtr<QWidget> m_widget;
 	};
 
-};
+}
 
 #endif

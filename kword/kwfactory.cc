@@ -31,7 +31,7 @@ extern "C"
     {
 	return new KWFactory;
     }
-};
+}
 
 
 KInstance* KWFactory::s_global = 0;

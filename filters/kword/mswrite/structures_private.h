@@ -363,7 +363,7 @@ namespace MSWrite
 		bool writeToDevice (void);
 	};
 
-};	// namespace MSWrite	{
+}	// namespace MSWrite	{
 
 #endif	//	__STRUCTURES_PRIVATE_H__
 

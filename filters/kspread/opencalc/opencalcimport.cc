@@ -60,7 +60,7 @@ protected:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libopencalcimport, OpenCalcImportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libopencalcimport, OpenCalcImportFactory() )
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
   : isRange( false )

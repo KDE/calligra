@@ -206,7 +206,7 @@ namespace WP
 
   };
 
-};
+}
 
 
 #endif

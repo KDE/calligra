@@ -196,4 +196,4 @@ void Document::dumpPage(uint i)
     _device->dumpPage(i);
 }
 
-}; // namespace
+} // namespace

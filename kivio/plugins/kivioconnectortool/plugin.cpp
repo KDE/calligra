@@ -33,7 +33,7 @@ extern "C"
   {
     return new ConnectorToolFactory;
   }
-};
+}
 
 KInstance* ConnectorToolFactory::s_global = 0;
 

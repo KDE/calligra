@@ -70,7 +70,7 @@ class KOSpellConfig;
 namespace KFormula {
     class Document;
     class DocumentWrapper;
-};
+}
 
 class KoTextParag;
 

@@ -118,7 +118,7 @@ extern "C"
     {
         return new KoUnavailFactory;
     }
-};
+}
 
 KInstance* KoUnavailFactory::s_global = 0L;
 KAboutData* KoUnavailFactory::s_aboutData = 0L;

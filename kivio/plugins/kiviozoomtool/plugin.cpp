@@ -33,7 +33,7 @@ extern "C"
   {
     return new ZoomToolFactory;
   }
-};
+}
 
 KInstance* ZoomToolFactory::s_global = 0;
 

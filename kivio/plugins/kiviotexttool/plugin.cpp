@@ -33,7 +33,7 @@ extern "C"
   {
     return new TextToolFactory;
   }
-};
+}
 
 KInstance* TextToolFactory::s_global = 0;
 

@@ -69,6 +69,6 @@ class Document
     Document &operator =(const Document &);
 };
 
-}; // namespace
+} // namespace
 
 #endif

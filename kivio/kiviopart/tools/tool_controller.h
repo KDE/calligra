@@ -99,6 +99,6 @@ private:
   KivioView* m_pActiveView;
   bool m_bInit;
 };
-};
+}
 using namespace Kivio;
 #endif

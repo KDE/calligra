@@ -42,7 +42,7 @@ class KivioDoc;
 class KivioRuler;
 namespace Kivio {
 class ToolController;
-};
+}
 class KivioGuideLineData;
 
 class KivioScreenPainter;
