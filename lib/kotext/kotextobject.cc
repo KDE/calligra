@@ -1605,12 +1605,6 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                  && parag->counter()->depth() == 0 )
                 emit chapterParagraphFormatted( parag );
 
-            if ( parag != m_lastFormatted )
-                kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
-            else if (!parag->isValid())
-                kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
-            m_lastFormatted = parag->next();
-
             if ( d->abortFormatting ) {
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug(32500) << "formatMore formatting aborted. " << endl;
@@ -1618,6 +1612,12 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                 d->abortFormatting = false;
                 return;
             }
+
+            if ( parag != m_lastFormatted )
+                kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
+            else if (!parag->isValid())
+                kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
+            m_lastFormatted = parag->next();
         }
     }
     else // formatting was done previously, but not emit afterFormatting
