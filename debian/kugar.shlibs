@@ -1,0 +1,4 @@
+kugar 0 kugar
+kudesigner 0 kugar
+libkugar 1 kugar (>= 1:1.2.95-0)
+libkudesignercore 0 kugar (>= 1:1.2.95-0)
