@@ -7,8 +7,8 @@
 
 #include <qwidget.h>
 
+class KarbonView;
 class QButtonGroup;
-class QPushButton;
 
 class VToolContainer : public QWidget
 {
