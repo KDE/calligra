@@ -4,7 +4,7 @@
     copyright            : (C) 2003 by lucijan busch, Joseph Wenninger
     email                : lucijan@gmx.at, jowenn@kde.org
    
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

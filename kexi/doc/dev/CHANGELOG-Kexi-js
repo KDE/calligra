@@ -259,15 +259,29 @@ jowenn	If I copy the path from the directory combo and enter "/path/to/something
 jowenn	fails here both, using the keyboard or the mouse
 ::FIXIT
 
-TODO: Put Conenction::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
+TODO: Put Connection::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
 
 TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - ODBC driver (hello mattr!)
 - Access -> Kexi migration tool
 - scripting
 
+Detailed TODO for Beta3:
+1. Finish Startup Framework (see above: MOST RECENT TODO)
+2. Make alter table GUI (and KexiDB layer) workable
+3. Make all 3 query views workable (@ GUI and KexiDB layer)
+4. Make database relations workable (@ GUI and KexiDB layer)
+
+
 
 2004-01-26
+- Table View:
+	-KexiCellEditorFactory and KexiCellEditorFactoryItem introduced for generalized cell 
+	 editor creation and cell painting
+	-now, we don't try to recreate cell editors but store one editor instance for every
+	 column and just show/hide/move it when needed
+	-column width is now adjustable with adjustColumnWidthToContents() and stretchable with
+	  setColumnStretchEnabled()
 
 
 ===================== Kexi 0.1 Beta 2 =====================
