@@ -1260,7 +1260,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     *m_streamOut << " style:name=\"" << escapeOOText( automaticFrameStyle ) << "\"";
     *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
-    // ### TODO: a height!
+    //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the KWord table frames)
     *m_streamOut << ">\n";
     
     *m_streamOut << "<table:table table:name=\""
@@ -1271,12 +1271,15 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
 
     // Now we have enough information to generate the style for the table and its frame
+    
     kdDebug(30520) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for frame
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"graphics\"";
+    m_contentAutomaticStyles += " style:parent-style-name=\"Frame\""; // ### TODO: parent style needs to be correctly defined
     m_contentAutomaticStyles += ">\n";
     m_contentAutomaticStyles += "   <style:properties "; // ### TODO
+    m_contentAutomaticStyles += " text:anchor-type=\"as-char\""; // ### TODO: needed?
     m_contentAutomaticStyles += " fo:padding=\"0pt\" fo:border=\"none\"";
     m_contentAutomaticStyles += " fo:margin-left=\"0pt\"";
     m_contentAutomaticStyles += " fo:margin-top=\"0pt\"";
@@ -1284,6 +1287,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     m_contentAutomaticStyles += " fo:margin-right=\"0pt\"";
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
+    
     kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for table
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
@@ -2031,6 +2035,9 @@ bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
     m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">\n"; // ### TODO: what if Graphics is a normal style
+    m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
+    m_styles += "  </style:style>\n";
+    m_styles += "  <style:style style:name=\"Frame\" style:family=\"graphics\">\n"; // ### TODO: what if Frame is a normal style
     m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
     m_styles += "  </style:style>\n";
     return true;
