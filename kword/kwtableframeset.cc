@@ -831,19 +831,12 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
     unsigned int _cols = m_cols++;
     QValueList<double>::iterator tmp = m_colPositions.at(newColNumber);
 
-for(unsigned int i=0; i < m_colPositions.count() ; i++) {
-   kdDebug()  << i << ": " << m_colPositions[i] << endl;
-}
-kdDebug() << "orig: " <<  *tmp << endl;
     tmp=m_colPositions.insert(tmp, *tmp);
     tmp++;
     while(tmp!=m_colPositions.end()) {
         (*tmp)= (*tmp)+width;
         tmp++;
     }
-for(unsigned int i=0; i < m_colPositions.count() ; i++) {
- kdDebug()  << i << ": " << m_colPositions[i] << endl;
-}
 
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
@@ -928,6 +921,15 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
         }
     }
 
+    QValueList<double>::iterator tmp = m_rowPositions.at(row);
+
+    tmp=m_rowPositions.erase(tmp);
+    tmp++;
+    while(tmp!=m_rowPositions.end()) {
+        (*tmp)= (*tmp)-height;
+        tmp++;
+    }
+
     // move/delete cells.
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
@@ -935,17 +937,18 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
             if(cell->m_rows == 1) { // lets remove it
                 frames.remove( cell->getFrame(0) );
                 cell->delFrame( cell->getFrame(0));
-                //m_cells.remove(  i);
                 m_cells.take(i);
                 i--;
             } else { // make cell span rowspan less rows
                 cell->m_rows -= rowspan;
-                cell->getFrame(0)->setHeight( cell->getFrame(0)->height() - height - (rowspan -1) * tableCellSpacing);
+                //cell->getFrame(0)->setHeight( cell->getFrame(0)->height() - height - (rowspan -1) * tableCellSpacing);
+                position(cell);
             }
         } else if ( cell->m_row > row ) {
             // move cells to the left
             cell->m_row -= rowspan;
-            cell->getFrame(0)->moveBy( 0, -height);
+            //cell->getFrame(0)->moveBy( 0, -height);
+            position(cell);
         }
     }
     m_rows -= rowspan;
@@ -1584,16 +1587,43 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
 {
     int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
     int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
+    int _rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
+    int _cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
+    while(m_rowPositions.count() <= _row + _rows) {
+        QValueList<double>::iterator tmp = m_rowPositions.end();
+        m_rowPositions.insert(tmp,0);
+    }
+    while(m_colPositions.count() <= _col + _cols) {
+        QValueList<double>::iterator tmp = m_colPositions.end();
+        m_colPositions.insert(tmp,0);
+    }
+
     Cell *cell = new Cell( this, _row, _col, QString::null /*unused*/ );
     QString autoName = cell->getName();
     kdDebug() << "KWTableFrameSet::loadCell autoName=" << autoName << endl;
     cell->load( framesetElem, loadFrames );
-    if(cell->getFrame(0))
+    cell->m_rows = _rows;
+    cell->m_cols = _cols;
+    if(cell->getFrame(0)) {
         cell->getFrame(0)->setMinFrameHeight(cell->getFrame(0)->height());
+        QValueList<double>::iterator tmp = m_colPositions.at(_col);
+        if(*tmp == 0) (*tmp) = cell->getFrame(0)->left();
+        else (*tmp) = (cell->getFrame(0)->left() + *tmp) / 2;
+
+        tmp = m_colPositions.at(_col+_cols);
+        if(*tmp == 0) (*tmp) = cell->getFrame(0)->right();
+        else (*tmp) = (cell->getFrame(0)->right() + *tmp) / 2;
+
+        tmp = m_rowPositions.at(_row);
+        if(*tmp == 0) (*tmp) = cell->getFrame(0)->top();
+        else (*tmp) = (cell->getFrame(0)->top() + *tmp) / 2;
+
+        tmp = m_rowPositions.at(_row+_rows);
+        if(*tmp == 0) (*tmp) = cell->getFrame(0)->bottom();
+        else (*tmp) = (cell->getFrame(0)->bottom() + *tmp) / 2;
+    }
     if ( !useNames )
         cell->setName( autoName );
-    cell->m_rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
-    cell->m_cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
     return cell;
 }
 
