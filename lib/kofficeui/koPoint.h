@@ -20,6 +20,8 @@
 #ifndef koPoint_h
 #define koPoint_h
 
+#include <qwmatrix.h>
+
 /**
  * A point whose coordinates are floating-point values ( "double"s ).
  * The API isn't documented, it's a perfect mirror of QPoint.
@@ -53,6 +55,12 @@ public:
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
+    KoPoint transform (const QWMatrix &m) const
+    {
+      double x, y;
+      m.map(m_x, m_y, &x, &y);
+      return KoPoint(x, y);
+    };
 
 private:
     double m_x, m_y;
