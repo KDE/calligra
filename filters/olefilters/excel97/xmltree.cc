@@ -688,16 +688,16 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 		switch (ptg)
 		{
 			case 0x01:  // ptgExpr
-				Q_UINT16 sfrow, sfcol;
-				rgce >> sfrow >> sfcol;
+				Q_UINT16 tlrow, tlcol;
+				rgce >> tlrow >> tlcol;
 				
 				kdDebug(s_area) << "WARNING: ptgExpr formula not supported, yet. Requested in Row " << row << " Col " << column << " !" << endl;
-				kdDebug(s_area) << "Taking formula from Row " << sfrow << " Col " << sfcol << " !" << endl;
+				kdDebug(s_area) << "HASH Table: top-Left-Row " << tlrow << ", top-Left-Col " << tlcol << endl;
 
 				SharedFormula *fmla;
 				for(fmla = shrfmlalist.first(); fmla != 0; fmla = shrfmlalist.next())
 				{
-					if(fmla->checkrow(sfrow) && fmla->checkcol(sfcol))
+					if(fmla->checkrow(tlrow) && fmla->checkcol(tlcol))
 					{
 						kdDebug(s_area) << "*********** Found a shared formula for this row/col!" << endl;
 					}
