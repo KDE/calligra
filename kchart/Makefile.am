@@ -7,6 +7,9 @@ libkchart_la_LDFLAGS = -avoid-version -module
 
 libkchart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
+
+
+
 ####### Files
 
 bin_PROGRAMS = kchart
@@ -23,6 +26,7 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchartWizard.cc \
 	kchartEngine.cc \
 	kchartEngine2.cc \
+	kchartEngine3.cc \
 	kchartWizardLabelsLegendPage.cc \
 	kchartWizardSelectChartSubTypePage.cc \
         kchartWizardSelectChartTypePage.cc \
@@ -42,6 +46,7 @@ noinst_HEADERS =  kchart_global.h \
 		  kchart_shell.h kchart_part.h \
 		  kchart_view.h kchart_factory.h	\
 	          engine.h \
+	   	kchartEngine.h \
 		kchartWizard.h \
 		kchartWizardLabelsLegendPage.h \
 		kchartWizardSelectChartSubTypePage.h \
@@ -75,6 +80,15 @@ kdelnkdir = $(kde_appsdir)/KOffice
 
 kdemime_DATA = x-kchart.desktop
 kdemimedir = $(kde_mimedir)/application
+
+# linktest - from dfaure 
+
+check_PROGRAMS = linktest
+linktest_SOURCES = $(libkchart_la_SOURCES)
+linktest_LDADD = $(lib_LTLIBRARIES)
+linktest_LDFLAGS = $(libkchart_LDFLAGS) 
+
+
 
 # SUBDIRS =  . plugins pics dtd toolbar
 

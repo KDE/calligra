@@ -25,13 +25,6 @@
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
 
-// retrieve the value of a cell
-//#define CELLVALUE( row, col ) data.cell( (row), (col) ).value.doubleValue()
-
-// check whether a cell has a value
-//#define CELLEXISTS( row, col ) data.cell( (row), (col) ).exists
-
-
 
 kchartEngine keng;
 
@@ -742,6 +735,8 @@ int kchartEngine::out_graph() {
 		   PX(params->annotation->point+(params->do_bar()?1:0)), PY(highest)-2 );
       setno = 0;
     }
+
+    cerr << "Plotting the data comes\n";
     
     /* ---------- start plotting the data ---------- */
     switch( params->type ) {
