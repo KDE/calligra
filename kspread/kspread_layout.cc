@@ -20,6 +20,7 @@
 #include "kspread_canvas.h"
 #include "kspread_layout.h"
 #include "kspread_table.h"
+#include "kspread_doc.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1388,6 +1389,11 @@ const KSpreadLayout* KSpreadLayout::fallbackLayout( int, int ) const
 bool KSpreadLayout::isDefault() const
 {
     return TRUE;
+}
+
+KLocale* KSpreadLayout::locale()
+{
+    return m_pTable->doc()->locale();
 }
 
 /*****************************************************************************

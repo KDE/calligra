@@ -935,7 +935,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         // First get some locale information
         if (!decimal_point)
         { // (decimal_point is static)
-            decimal_point = KGlobal::locale()->decimalSymbol()[0];
+            decimal_point = locale()->decimalSymbol()[0];
             kdDebug(36001) << "decimal_point is '" << decimal_point.latin1() << "'" << endl;
 
             if ( decimal_point.isNull() )
@@ -973,8 +973,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             int start=0;
             if(localizedNumber.find('%')!=-1)
                 start=2;
-            else if(localizedNumber.find(KGlobal::locale()->currencySymbol())==(localizedNumber.length()-KGlobal::locale()->currencySymbol().length()))
-                start=KGlobal::locale()->currencySymbol().length()+1;
+            else if(localizedNumber.find( locale()->currencySymbol())==(localizedNumber.length()-locale()->currencySymbol().length()))
+                start=locale()->currencySymbol().length()+1;
             else if((start=localizedNumber.find('E'))!=-1)
                 start=localizedNumber.length()-start;
             else
@@ -1252,32 +1252,32 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     // if precision is -1, ask for a huge number of decimals, we'll remove
     // the zeros later. Is 8 ok ?
     int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
-    QString localizedNumber= KGlobal::locale()->formatNumber( value, p );
+    QString localizedNumber= locale()->formatNumber( value, p );
     int pos = 0;
 
     switch( m_eFormatNumber)
     {
     case Number :
-        localizedNumber = KGlobal::locale()->formatNumber(value, p);
+        localizedNumber = locale()->formatNumber(value, p);
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-            if(KGlobal::locale()->positiveSign().isEmpty())
+            if(locale()->positiveSign().isEmpty())
                 localizedNumber='+'+localizedNumber;
         }
         break;
     case Percentage :
-        localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
+        localizedNumber = locale()->formatNumber(value, p)+ " %";
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-            if(KGlobal::locale()->positiveSign().isEmpty())
+            if(locale()->positiveSign().isEmpty())
                 localizedNumber='+'+localizedNumber;
         }
         break;
     case Money :
-        localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
+        localizedNumber = locale()->formatMoney(value,locale()->currencySymbol(),p );
         if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-            if(KGlobal::locale()->positiveSign().isNull())
+            if(locale()->positiveSign().isNull())
                 localizedNumber='+'+localizedNumber;
         }
         break;
@@ -1287,7 +1287,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
             localizedNumber=localizedNumber.replace(pos,1,decimal_point);
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-            if(KGlobal::locale()->positiveSign().isEmpty())
+            if(locale()->positiveSign().isEmpty())
                 localizedNumber='+'+localizedNumber;
         }
         break;
@@ -1322,7 +1322,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
         localizedNumber=createFractionFormat(value);
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-            if(KGlobal::locale()->positiveSign().isEmpty())
+            if(locale()->positiveSign().isEmpty())
                 localizedNumber='+'+localizedNumber;
         }
         break;
@@ -1450,25 +1450,25 @@ QString KSpreadCell::createDateFormat( )
 {
     QString tmp,tmp2;
     if(m_eFormatNumber==ShortDate)
-        tmp = KGlobal::locale()->formatDate(m_Date,true);
+        tmp = locale()->formatDate(m_Date,true);
     else if(m_eFormatNumber==TextDate)
-        tmp=KGlobal::locale()->formatDate(m_Date,false);
+        tmp=locale()->formatDate(m_Date,false);
     else if(m_eFormatNumber==date_format1)/*18-Feb-99*/
     {
         tmp=tmp2.setNum(m_Date.day());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+"-"+locale()->monthName(m_Date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
     }
     else if(m_eFormatNumber==date_format2) /*18-Feb-1999*/
     {
         tmp=tmp2.setNum(m_Date.day());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+"-"+locale()->monthName(m_Date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year());
     }
     else if(m_eFormatNumber==date_format3) /*18-Feb*/
     {
         tmp=tmp2.setNum(m_Date.day());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true);
+        tmp=tmp+"-"+locale()->monthName(m_Date.month(), true);
     }
     else if(m_eFormatNumber==date_format4) /*18-5*/
     {
@@ -1489,28 +1489,28 @@ QString KSpreadCell::createDateFormat( )
     }
     else if(m_eFormatNumber==date_format7) /*Feb-99*/
     {
-        tmp=KGlobal::locale()->monthName(m_Date.month(), true)+"-";
+        tmp=locale()->monthName(m_Date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
     }
     else if(m_eFormatNumber==date_format8) /*February-99*/
     {
-        tmp=KGlobal::locale()->monthName(m_Date.month())+"-";
+        tmp=locale()->monthName(m_Date.month())+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
     }
     else if(m_eFormatNumber==date_format9) /*February-1999*/
     {
-        tmp=KGlobal::locale()->monthName(m_Date.month())+"-";
+        tmp=locale()->monthName(m_Date.month())+"-";
         tmp=tmp+tmp2.setNum(m_Date.year());
     }
     else if(m_eFormatNumber==date_format10) /*F-99*/
     {
-        tmp=KGlobal::locale()->monthName(m_Date.month()).at(0)+"-";
+        tmp=locale()->monthName(m_Date.month()).at(0)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
     }
     else if(m_eFormatNumber==date_format11) /*18/Feb*/
     {
         tmp=tmp2.setNum(m_Date.day())+"/";
-        tmp+=KGlobal::locale()->monthName(m_Date.month(),true);
+        tmp+=locale()->monthName(m_Date.month(),true);
     }
     else if(m_eFormatNumber==date_format12) /*18/2*/
     {
@@ -1520,19 +1520,19 @@ QString KSpreadCell::createDateFormat( )
     else if(m_eFormatNumber==date_format13) /*18/Feb/1999*/
     {
         tmp=tmp2.setNum(m_Date.day());
-        tmp=tmp+"/"+KGlobal::locale()->monthName(m_Date.month(),true)+"/";
+        tmp=tmp+"/"+locale()->monthName(m_Date.month(),true)+"/";
         tmp=tmp+tmp2.setNum(m_Date.year());
     }
     else if(m_eFormatNumber==date_format14) /*2000/Feb/18*/
     {
         tmp=tmp2.setNum(m_Date.year());
-        tmp=tmp+"/"+KGlobal::locale()->monthName(m_Date.month(),true)+"/";
+        tmp=tmp+"/"+locale()->monthName(m_Date.month(),true)+"/";
         tmp=tmp+tmp2.setNum(m_Date.day());
     }
     else if(m_eFormatNumber==date_format15) /*2000-Feb-18*/
     {
         tmp=tmp2.setNum(m_Date.year());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(),true)+"-";
+        tmp=tmp+"-"+locale()->monthName(m_Date.month(),true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.day());
     }
     else if(m_eFormatNumber==date_format16) /*2000-2-18*/
@@ -1542,7 +1542,7 @@ QString KSpreadCell::createDateFormat( )
         tmp=tmp+tmp2.setNum(m_Date.day());
     }
     else
-        tmp = KGlobal::locale()->formatDate(m_Date,true);
+        tmp = locale()->formatDate(m_Date,true);
     return tmp;
 }
 
@@ -1550,9 +1550,9 @@ QString KSpreadCell::createTimeFormat( )
 {
     QString tmp;
     if( m_eFormatNumber == Time )
-        tmp = KGlobal::locale()->formatTime(m_Time,false);
+        tmp = locale()->formatTime(m_Time,false);
     else if(m_eFormatNumber == SecondeTime )
-        tmp = KGlobal::locale()->formatTime(m_Time,true);
+        tmp = locale()->formatTime(m_Time,true);
     return tmp;
 }
 
@@ -2053,7 +2053,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
-    //m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
+    //m_strFormularOut = locale()->formatNumber( m_dValue );
 
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -2067,7 +2067,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
-    //m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
+    //m_strFormularOut = locale()->formatNumber( m_dValue );
 
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -2097,12 +2097,12 @@ bool KSpreadCell::calc( bool _makedepend )
     //change format
     if( m_eFormatNumber != SecondeTime)
         {
-        m_strFormularOut = KGlobal::locale()->formatTime(m_Time,false);
+        m_strFormularOut = locale()->formatTime(m_Time,false);
         setFormatNumber(Time);
         }
     else
         {
-        m_strFormularOut = KGlobal::locale()->formatTime(m_Time,true);
+        m_strFormularOut = locale()->formatTime(m_Time,true);
         }
   }
   else if ( context.value()->type() == KSValue::DateType)
@@ -2117,7 +2117,7 @@ bool KSpreadCell::calc( bool _makedepend )
     && !(m_eFormatNumber>=200 &&m_eFormatNumber<=215))
         {
         setFormatNumber(ShortDate);
-        m_strFormularOut = KGlobal::locale()->formatDate(m_Date,true);
+        m_strFormularOut = locale()->formatDate(m_Date,true);
         }
     else
         {
@@ -3232,8 +3232,8 @@ void KSpreadCell::incPrecision()
       int start=0;
       if(m_strOutText.find('%')!=-1)
         start=2;
-      else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-KGlobal::locale()->currencySymbol().length()))
-        start=KGlobal::locale()->currencySymbol().length()+1;
+      else if(m_strOutText.find(locale()->currencySymbol())==(m_strOutText.length()-locale()->currencySymbol().length()))
+        start=locale()->currencySymbol().length()+1;
       else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
       else
@@ -3262,8 +3262,8 @@ void KSpreadCell::decPrecision()
     int start=0;
     if(m_strOutText.find('%')!=-1)
         start=2;
-    else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-KGlobal::locale()->currencySymbol().length()))
-        start=KGlobal::locale()->currencySymbol().length()+1;
+    else if(m_strOutText.find(locale()->currencySymbol())==(m_strOutText.length()-locale()->currencySymbol().length()))
+        start=locale()->currencySymbol().length()+1;
     else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
     else
@@ -3530,7 +3530,7 @@ void KSpreadCell::checkValue()
     m_bValue = TRUE;
 
     // First try to understand the number using the locale
-    double value = KGlobal::locale()->readNumber(p, &m_bValue);
+    double value = locale()->readNumber(p, &m_bValue);
     // If not, try with the '.' as decimal separator
     if (!m_bValue)
         value = p.toDouble(&m_bValue);
@@ -3552,7 +3552,7 @@ void KSpreadCell::checkValue()
     {
         str=str.left(str.length()-1);
         // First try to understand the number using the locale
-        double value = KGlobal::locale()->readNumber(str, &m_bValue);
+        double value = locale()->readNumber(str, &m_bValue);
         // If not, try with the '.' as decimal separator
         if (!m_bValue)
             value = str.toDouble(&m_bValue);
@@ -3569,7 +3569,7 @@ void KSpreadCell::checkValue()
 
 /*
     QString tmp;
-    QString tmpCurrency=KGlobal::locale()->currencySymbol();
+    QString tmpCurrency=locale()->currencySymbol();
     int pos=0;
     bool ok=false;
     double val=0;
@@ -3610,7 +3610,7 @@ void KSpreadCell::checkValue()
                 }
         }
         */
-    double money = KGlobal::locale()->readMoney(m_strText, &m_bValue);
+    double money = locale()->readMoney(m_strText, &m_bValue);
     if (m_bValue)
     {
         m_dValue=money;
@@ -3627,21 +3627,21 @@ void KSpreadCell::checkValue()
     QString stringAm=i18n("am");
     int pos=0;
     bool valid=false;
-    if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
+    if((tmpTime=locale()->readTime(m_strText)).isValid())
         {
         valid=true;
         }
-    else if(KGlobal::locale()->use12Clock())
+    else if(locale()->use12Clock())
     {
     if((pos=m_strText.find(stringPm))!=-1)
         {
          tmp=m_strText.mid(0,m_strText.length()-stringPm.length());
          tmp=tmp.simplifyWhiteSpace();
-         if((tmpTime=KGlobal::locale()->readTime(tmp+" "+stringPm)).isValid())
+         if((tmpTime=locale()->readTime(tmp+" "+stringPm)).isValid())
                 {
                 valid=true;
                 }
-         else if((tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringPm)).isValid())
+         else if((tmpTime=locale()->readTime(tmp+":00 "+stringPm)).isValid())
                 {
                 valid=true;
                 }
@@ -3650,11 +3650,11 @@ void KSpreadCell::checkValue()
         {
          tmp=m_strText.mid(0,m_strText.length()-stringAm.length());
          tmp=tmp.simplifyWhiteSpace();
-         if((tmpTime=KGlobal::locale()->readTime(tmp+" "+stringAm)).isValid())
+         if((tmpTime=locale()->readTime(tmp+" "+stringAm)).isValid())
                 {
                 valid=true;
                 }
-         else if((tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringAm)).isValid())
+         else if((tmpTime=locale()->readTime(tmp+":00 "+stringAm)).isValid())
                 {
                 valid=true;
                 }
@@ -3667,12 +3667,12 @@ void KSpreadCell::checkValue()
         if( m_eFormatNumber!=SecondeTime)
                 setFormatNumber(Time);
         m_Time=tmpTime;
-        m_strText=KGlobal::locale()->formatTime(m_Time,true);
+        m_strText=locale()->formatTime(m_Time,true);
         return;
     }
 
     QDate tmpDate;
-    if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
+    if((tmpDate=locale()->readDate(m_strText)).isValid())
     {
         m_bDate = true;
         m_dValue = 0;
@@ -3680,7 +3680,7 @@ void KSpreadCell::checkValue()
         !(m_eFormatNumber>=200&&m_eFormatNumber<=215))
                 setFormatNumber(ShortDate);
         m_Date=tmpDate;
-        m_strText=KGlobal::locale()->formatDate(m_Date,true); //short format date
+        m_strText=locale()->formatDate(m_Date,true); //short format date
         return;
     }
 
@@ -4080,7 +4080,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             day = t.right(t.length()-pos1-1).toInt();
             m_Date = QDate(year,month,day);
             if(m_Date.isValid() )
-                setCellText( KGlobal::locale()->formatDate( m_Date, true ), false );
+                setCellText( locale()->formatDate( m_Date, true ), false );
             else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
@@ -4098,7 +4098,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             second = t.right(t.length()-pos1-1).toInt();
             m_Time = QTime(hours,minutes,second);
             if(m_Time.isValid() )
-                setCellText(KGlobal::locale()->formatTime(m_Time,true),false);
+                setCellText(locale()->formatTime(m_Time,true),false);
             else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }

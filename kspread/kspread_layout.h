@@ -32,6 +32,8 @@ class QDomDocument;
 
 #include "kspread_global.h"
 
+class KLocale;
+
 /**
  */
 class KSpreadLayout
@@ -272,6 +274,8 @@ public:
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
 
+    KLocale* locale();
+    
     virtual bool hasProperty( Properties p ) const;
 
 protected:
