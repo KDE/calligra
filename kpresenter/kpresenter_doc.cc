@@ -1217,7 +1217,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     stylesWriter.endDocument();
 }
 
-bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, const QDomDocument&, KoStore*store )
+bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, const QDomDocument&settingsDoc, KoStore*store )
 {
     QTime dt;
     dt.start();
@@ -1387,6 +1387,38 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
 
+    // Load application settings
+    if(!settingsDoc.isNull()) {
+        QDomElement contents = settingsDoc.documentElement();
+        body = contents.namedItem("office:settings").toElement();
+
+        if(body.isNull()) {
+            kdDebug(43000) << "No office:settings found!" << endl;
+            setErrorMessage(i18n("Invalid OASIS document. No office:settings tag found."));
+            return false;
+        }
+
+        node = body.firstChild();
+
+        while(!node.isNull()) {
+            if(node.nodeName() == "config:config-item-set") {
+                QDomNode tmp = node.firstChild();
+
+                while(!tmp.isNull()) {
+                    if(tmp.nodeName() == "config:config-item") {
+
+                        if(tmp.toElement().attribute("config:name") == "unit") {
+                            setUnit(KoUnit::loadOasis(tmp.toElement()));
+                        }
+                    }
+
+                    tmp = tmp.nextSibling();
+                }
+            }
+
+            node = node.nextSibling();
+        }
+    }
     return true;
 }
 
