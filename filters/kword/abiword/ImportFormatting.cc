@@ -208,6 +208,19 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     }
     layoutElement.appendChild(element);
 
+    // PROVISORY
+    element=mainDocument.createElement("COUNTER");
+    element.setAttribute("type",0);
+    element.setAttribute("depth",0);
+    element.setAttribute("start",1);
+    element.setAttribute("numberingtype",2);
+    element.setAttribute("lefttext","");
+    element.setAttribute("righttext","");
+    element.setAttribute("bullet",64);
+    element.setAttribute("bulletfont","Symbol");
+    element.setAttribute("customdef","");
+    layoutElement.appendChild(element);
+
     QString strLeftMargin=abiPropsMap["margin-left"].getValue();
     QString strRightMargin=abiPropsMap["margin-right"].getValue();
     QString strTextIndent=abiPropsMap["text-indent"].getValue();
