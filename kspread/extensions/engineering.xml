@@ -5,6 +5,113 @@
     <GroupName>Engineering</GroupName>
 
     <Function>
+      <Name>BASE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Base</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Precision</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BASE() function converts a number from base-10 to a string value in a target base from 2 to 36.</Text>
+	<Syntax>BASE(number;base;prec)</Syntax>
+	<Example>BASE(128;8) returns "200"</Example>
+	<Example>BASE(123.47;16;6) returns "7B.7851EB"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELI</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELI() function returns the modified Bessel function In(x).</Text>
+        <Syntax>BESSELI(X;N)</Syntax>
+        <Example>BESSELI(0.7;3) returns 0.007367374</Example>
+        <Related>BESSELJ</Related>
+        <Related>BESSELK</Related>
+        <Related>BESSELY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELJ</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELJ() function returns the Bessel function.</Text>
+        <Syntax>BESSELJ(X;N)</Syntax>
+        <Example>BESSELJ(0.89;3) returns 0.013974004</Example>
+        <Related>BESSELI</Related>
+        <Related>BESSELK</Related>
+        <Related>BESSELY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELK</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELK() function returns the modified Bessel function, which is equivalent to the Bessel function evaluated for purely imaginary arguments.</Text>
+        <Syntax>BESSELK(X;N)</Syntax>
+        <Example>BESSELK(3;9) returns 397.95880</Example>
+        <Related>BESSELI</Related>
+        <Related>BESSELJ</Related>
+        <Related>BESSELY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELY</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELY() function returns the Bessel function, which is also called the Weber function or the Neumann function.</Text>
+        <Syntax>BESSELY(X;N)</Syntax>
+        <Example>BESSELY(4,2) equals 0.215903595</Example>
+        <Related>BESSELI</Related>
+        <Related>BESSELJ</Related>
+        <Related>BESSELK</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>DEC2BIN</Name>
       <Type>String</Type>
       <Parameter>
@@ -539,29 +646,6 @@
 	<Example>GESTEP(3; 3) returns 1</Example>
 	<Example>GESTEP(0.4; TRUE) returns 0</Example>
 	<Example>GESTEP(4; 3) returns 1</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>BASE</Name>
-      <Type>String</Type>
-      <Parameter>
-	<Comment>Number</Comment>
-	<Type>Float</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Base</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Precision</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The BASE() function converts a number from base-10 to a string value in a target base from 2 to 36.</Text>
-	<Syntax>BASE(number;base;prec)</Syntax>
-	<Example>BASE(128;8) returns "200"</Example>
-	<Example>BASE(123.47;16;6) returns "7B.7851EB"</Example>
       </Help>
     </Function>
 
