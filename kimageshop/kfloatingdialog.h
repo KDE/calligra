@@ -22,8 +22,13 @@
 #define __kfloatingdialog_h__
 
 #include <qpoint.h>
+#include <qcolor.h>
+#include <qpixmap.h>
 #include <qframe.h>
 #include <qpushbutton.h>
+
+#include <kpixmap.h>
+#include <kpixmapeffect.h>
 
 #define TITLE_HEIGHT 18
 #define MIN_HEIGHT 18
@@ -34,10 +39,12 @@
 class KFloatingDialog : public QFrame
 {
   Q_OBJECT
- 
+
  public:
   KFloatingDialog(QWidget *parent = 0, const char* _name = 0);
   ~KFloatingDialog();
+
+  enum TitleLook { plain, gradient, pixmap };
 
   // usable client space:
   int _left() { return FRAMEBORDER; }
@@ -45,10 +52,17 @@ class KFloatingDialog : public QFrame
   int _width() { return width() - 2*FRAMEBORDER; }
   int _height() { return height() - TITLE_HEIGHT - FRAMEBORDER; }
 
+  void setActive(bool);
+  void setShaded(bool);
+  void setDocked(bool);
+
  public slots:
   void slotClose();
   void slotMinimize();
   void slotDock();
+  
+ signals:
+  void sigActivated();
 
  protected:
   virtual void paintEvent(QPaintEvent *);
@@ -71,13 +85,22 @@ class KFloatingDialog : public QFrame
   bool     m_shaded;
   bool     m_cursor;
   bool     m_docked;
+  bool     m_active;
 
+  QColor   m_activeBlend, m_inactiveBlend;
+  KPixmap  m_activeShadePm, m_inactiveShadePm;
+  QPixmap  *m_pActivePm, *m_pInactivePm;
+
+  TitleLook                   m_titleLook;
+  KPixmapEffect::GradientType m_gradientType;
+
+  
   QPoint   m_start;
   QPoint   m_dockedPos;
   int      m_unshadedHeight;
   int      m_resizeMode;
 
-  QWidget     *m_pParent;
+  QWidget  *m_pParent;
   QPushButton *m_pCloseButton, *m_pDockButton, *m_pMinButton;
 };
 

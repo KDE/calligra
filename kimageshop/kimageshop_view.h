@@ -32,6 +32,7 @@
 #include <koFrame.h>
 #include <koView.h>
 
+#include "kfloatingdialogowner.h"
 #include "kimageshop.h"
 
 class CanvasView;
@@ -50,7 +51,8 @@ class BrushesWidget;
 
 class KImageShopView : public QWidget,
 		       virtual public KoViewIf,
-		       virtual public KImageShop::View_skel
+		       virtual public KImageShop::View_skel,
+		       virtual public KFloatingDialogOwner
 {
   Q_OBJECT
 

@@ -95,8 +95,8 @@ bool KFloatingTabDialog::isTabEnabled(const QString& name)
   unsigned int i;
   
   for(i = 0; i < pages.size(); i++)
-	if (pages[i]->name() == name)
-	  return tabs->isTabEnabled(i);
+    if (pages[i]->name() == name)
+      return tabs->isTabEnabled(i);
     return false;
 }
 

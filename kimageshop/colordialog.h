@@ -24,6 +24,11 @@
 #include "kfloatingdialog.h"
 
 class KDualColorButton;
+class QPushButton;
+class QFrame;
+class QSpinBox;
+class RGBWidget;
+class GradientFrame;
 
 class ColorDialog : public KFloatingDialog
 {
@@ -33,9 +38,38 @@ class ColorDialog : public KFloatingDialog
   ColorDialog(QWidget *parent = 0L);
   ~ColorDialog();
 
- private:
-  KDualColorButton * m_pColorButton;
+ protected:
+  virtual void resizeEvent(QResizeEvent *);
 
+ private:
+  QWidget          *m_pBase;
+  QPushButton      *m_pGrayButton, *m_pRGBButton, *m_pHSBButton, *m_pCMYKButton, *m_pLABButton;
+  GradientFrame    *m_pGradient;
+  RGBWidget        *m_pRGBWidget;
+  KDualColorButton *m_pColorButton;
+
+};
+
+class RGBWidget : public QWidget
+{
+  Q_OBJECT
+ 
+ public:
+  RGBWidget(QWidget *parent = 0L);
+  ~RGBWidget();
+
+};
+
+class GradientFrame : public QFrame
+{
+  Q_OBJECT
+ 
+ public:
+  GradientFrame(QWidget *parent = 0L);
+  ~GradientFrame();
+
+ protected:
+  virtual void drawContents (QPainter *);
 };
 
 #endif

@@ -341,10 +341,6 @@ void KImageShopView::createGUI()
   // create canvasview
   m_pCanvasView = new CanvasView(this);
 
-  // m_pColorDialog = new ColorDialog(m_pCanvasView);
-  // m_pColorDialog->move(100, 100);
-  // m_pColorDialog->show();
-  
   // setup GUI
   setupScrollbars();
   setupRulers();
@@ -364,6 +360,7 @@ void KImageShopView::createGUI()
   m_pBrushDialog->resize(205, 267);
   m_pBrushDialog->move(405, 20);
   m_pBrushDialog->show();
+  addDialog(m_pBrushDialog);
 
   m_pBrushChooser = m_pBrushDialog->brushChooser();
   m_pBrush = m_pBrushChooser->currentBrush();
@@ -375,11 +372,18 @@ void KImageShopView::createGUI()
   // create zoom tool
   m_pZoomTool = new ZoomTool(this);
 
-  // layerlist
+  // layer dialog
   m_pLayerDialog = new LayerDialog(m_pDoc, this);
   m_pLayerDialog->resize(205,267);
   m_pLayerDialog->move(200,20);
   m_pLayerDialog->show();
+  addDialog(m_pLayerDialog);
+
+  // color dialog
+  //m_pColorDialog = new ColorDialog(m_pCanvasView);
+  //m_pColorDialog->move(100, 20);
+  //m_pColorDialog->show();
+  //addDialog(m_pColorDialog);
 
   resizeEvent(0L);
 }
