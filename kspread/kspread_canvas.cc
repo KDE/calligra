@@ -203,7 +203,7 @@ void KSpreadEditWidget::setText( const QString& t )
  ****************************************************************/
 
 KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc )
-  : QWidget( _parent, "", WNorthWestGravity )
+  : QWidget( _parent, "", WNorthWestGravity | WResizeNoErase | WRepaintNoErase )
 {
   length_namecell = 0;
   m_chooseStartTable = 0;
@@ -233,8 +233,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   //m_pEditWidget = m_pView->editWidget();
   m_pPosWidget = m_pView->posWidget();
 
-  // let the color scheme set its color!
-  // setBackgroundColor( white );
   setBackgroundMode( PaletteBase );
 
   setMouseTracking( TRUE );
@@ -2141,13 +2139,13 @@ QPainter painter;
  ****************************************************************/
 
 KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view)
-  : QWidget( _parent, "", WNorthWestGravity )
+  : QWidget( _parent, "", WNorthWestGravity | WResizeNoErase | WRepaintNoErase )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0L;
 
-  setBackgroundMode( PaletteBackground );
+  setBackgroundMode( PaletteButton );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -2439,9 +2437,9 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
-  painter.setBackgroundColor( colorGroup().base() );
+  // painter.setBackgroundColor( colorGroup().base() );
 
-  painter.eraseRect( _ev->rect() );
+  // painter.eraseRect( _ev->rect() );
 
   //QFontMetrics fm = painter.fontMetrics();
   // Matthias Elter: This causes a SEGFAULT in ~QPainter!
@@ -2516,12 +2514,12 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
  ****************************************************************/
 
 KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpreadView *_view )
-  : QWidget( _parent, "", WNorthWestGravity )
+  : QWidget( _parent, "", WNorthWestGravity | WResizeNoErase | WRepaintNoErase )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0L;
-  setBackgroundMode( PaletteBackground );
+  setBackgroundMode( PaletteButton );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -2839,13 +2837,14 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   painter.setPen( pen );
   painter.setBackgroundColor( white );
 
-  painter.eraseRect( _ev->rect() );
+  // painter.eraseRect( _ev->rect() );
 
   //QFontMetrics fm = painter.fontMetrics();
   // Matthias Elter: This causes a SEGFAULT in ~QPainter!
   // Only god and the trolls know why ;-)
   // bah...took me quite some time to track this one down...
 
+  // Determine which columns need painting
   int xpos;
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pCanvas );
   int right_col = table->rightColumn( _ev->rect().right(), m_pCanvas );

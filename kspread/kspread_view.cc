@@ -2639,6 +2639,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 
     // ########## Torben: Why redraw? Should not we just invert ?
     m_pCanvas->updateCellRect( uni );
+    // ### Use smart update here
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 
@@ -2660,6 +2661,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
 	
     QRect r( _old.x(), _old.y(), _old.width() + 1, _old.height() + 1 );
     m_pCanvas->updateCellRect( r );
+    // ### Use smart update here
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 
