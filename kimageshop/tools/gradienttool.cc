@@ -44,7 +44,6 @@ void GradientTool::mousePress( const KImageShop::MouseEvent &_event )
   m_dragStart = QPoint( _event.posX, _event.posY );
   m_pointEnd = m_dragStart;
 
-/*
   if( !m_helpWidget )
   {
     m_helpWidget = new QWidget( m_pCanvasView );
@@ -52,7 +51,7 @@ void GradientTool::mousePress( const KImageShop::MouseEvent &_event )
     m_helpWidget->setBackgroundMode( QWidget::NoBackground );
     m_helpWidget->show();
   }
-*/
+
 //m_pCanvasView->getTransWidget()->show();
 }
 
@@ -61,10 +60,12 @@ void GradientTool::mouseMove( const KImageShop::MouseEvent &_event )
 
   if( m_dragging )
   {
+/*  line for gradient tool (drawn by XORing image)
+
+
     QPainter p;
     p.begin( m_pCanvasView );
     p.setRasterOp ( Qt::NotROP );
-//    p.eraseRect( m_pCanvasView->rect() );
     p.setPen( QPen( Qt::black, 1 ) );
     p.setBrush( Qt::NoBrush );
     p.drawLine( m_dragStart, m_pointEnd );
@@ -75,19 +76,22 @@ void GradientTool::mouseMove( const KImageShop::MouseEvent &_event )
 
     p.begin( m_pCanvasView );
     p.setRasterOp ( Qt::NotROP );
-//    p.eraseRect( m_pCanvasView->rect() );
     p.setPen( QPen( Qt::black, 1 ) );
     p.setBrush( Qt::NoBrush );
     p.drawLine( m_dragStart, m_pointEnd );
     p.setRasterOp ( Qt::CopyROP );
     p.end();
+*/
 
-/*
+    m_pointEnd = QPoint( _event.posX, _event.posY );
+    
     QPainter p( m_helpWidget );
+    p.eraseRect( m_pCanvasView->rect() );
+    p.drawLine( m_dragStart, m_pointEnd );
+
     m_helpWidget->show();
 
     p.flush();
-*/
   }
 }
 
@@ -95,15 +99,16 @@ void GradientTool::mouseRelease( const KImageShop::MouseEvent &_event )
 {
   m_dragging = false;
 
+/*
   QPainter p;
   p.begin( m_pCanvasView );
   p.setRasterOp ( Qt::NotROP );
-//  p.eraseRect( m_pCanvasView->rect() );
   p.setPen( QPen( Qt::black, 1 ) );
   p.setBrush( Qt::NoBrush );
   p.drawLine( m_dragStart, m_pointEnd );
   p.setRasterOp ( Qt::CopyROP );
   p.end();
+*/
 
   if ( m_helpWidget )
   { // destroy the transparent widget, used for showing the rectangle (zoom)
