@@ -278,7 +278,7 @@ void KexiStartupDialog::done(int r)
 			d->result = OpenExistingResult;
 			// return file or connection:
 			if (d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased) {
-				d->existingFileToOpen = d->openExistingFileDlg->selectedFile();
+				d->existingFileToOpen = d->openExistingFileDlg->currentURL().path();
 				d->selectedExistingConnection = 0;
 			} else {
 				d->existingFileToOpen = QString::null;
@@ -578,9 +578,11 @@ bool KexiStartupDialog::eventFilter( QObject *o, QEvent *e )
 // internal reimplementation
 int KexiStartupDialog::activePageIndex() const
 {
-	kdDebug() << "int KexiStartupDialog::activePageIndex() const" << endl;
-	if (!d->singlePage)
+	if (!d->singlePage) {
+		kdDebug() << "int KexiStartupDialog::activePageIndex()" << KDialogBase::activePageIndex() << endl;
 		return KDialogBase::activePageIndex();
+	}
+	kdDebug() << "int KexiStartupDialog::activePageIndex() == " << 0 << endl;
 	return 0; //there is always "plain page" #0 selected
 }
 
