@@ -224,7 +224,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! \return true if "auto commit" option is on. 
 
-		 When auto commit is on (the default on for any new Conenction object),
+		 When auto commit is on (the default on for any new Connection object),
 		 every sql functional statement (statement that changes 
 		 data in the database implicitly starts a new transaction. 
 		 This transaction is automatically commited 
@@ -494,7 +494,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			using connection. */
 		virtual bool drv_closeDatabase() = 0;
 		
-		/*! \return true if internal driver's structure is still in opened/conencted 
+		/*! \return true if internal driver's structure is still in opened/connected 
 		 state and database is used. 
 		 Note for driver developers: Put here every test that you can do using your 
 		 internal engine's database API, 

@@ -31,10 +31,20 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
+#if 0
+//! macro for storing last error message
+#define SQLiteConnection_STORE_ERROR \
+	if (d->errmsg_p) { \
+		d->errmsg = d->errmsg_p; \
+		sqlite_freemem(d->errmsg_p); \
+		d->errmsg_p = 0; \
+	}
+#endif
+
 using namespace KexiDB;
 
 SQLiteConnectionInternal::SQLiteConnectionInternal()
-	: data(0),errmsg(0),m_res(SQLITE_OK)
+	: data(0),errmsg_p(0),res(SQLITE_OK)
 {
 }
 
@@ -44,9 +54,18 @@ SQLiteConnectionInternal::~SQLiteConnectionInternal()
 		free( data ); 
 		data = 0;
 	}
-	if (errmsg) {
-		free( errmsg );
-		errmsg = 0;
+//sqlite_freemem does this	if (errmsg) {
+//		free( errmsg );
+//		errmsg = 0;
+//	}
+}
+
+void SQLiteConnectionInternal::storeResult()
+{
+	if (errmsg_p) {
+		errmsg = errmsg_p;
+		sqlite_freemem(errmsg_p);
+		errmsg_p = 0;
 	}
 }
 
@@ -88,20 +107,17 @@ bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 
 bool SQLiteConnection::drv_createDatabase( const QString &/*dbName*/ )
 {
-//	QFileInfo file( conn.data().fileName() );
-//	if (file.exists()) {
-//		setError( i18n("Database file already exists.") );
-//		return false;
-
 	d->data = sqlite_open( QFile::encodeName( m_data.fileName() ), 0/*mode: unused*/, 
-		&d->errmsg );
+		&d->errmsg_p );
+	d->storeResult();
 	return d->data != 0;
 }
 
 bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 {
 	d->data = sqlite_open( QFile::encodeName( m_data.fileName() ), 0/*mode: unused*/, 
-		&d->errmsg );
+		&d->errmsg_p );
+	d->storeResult();
 	return d->data != 0;
 }
 
@@ -211,14 +227,14 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 	QCString st(statement.length()*2);
 	st = escapeString( statement.local8Bit() ); //?
 
-	d->m_res = sqlite_exec( 
+	d->res = sqlite_exec( 
 		d->data, 
 		st.data(), 
 		0/*callback*/, 
 		0,
-		&d->errmsg );
-
-	return d->m_res==SQLITE_OK;
+		&d->errmsg_p );
+	d->storeResult();
+	return d->res==SQLITE_OK;
 }
 
 Q_ULLONG SQLiteConnection::drv_lastInsertRowID()
@@ -228,22 +244,23 @@ Q_ULLONG SQLiteConnection::drv_lastInsertRowID()
 
 int SQLiteConnection::serverResult()
 {
-	return d->m_res;
+	return d->res;
 }
 
 QString SQLiteConnection::serverResultName()
 {
-	return QString::fromLatin1( sqlite_error_string(d->m_res) );
+	return QString::fromLatin1( sqlite_error_string(d->res) );
 }
 
 void SQLiteConnection::drv_clearServerResult()
 {
-	d->m_res = SQLITE_OK;
+	d->res = SQLITE_OK;
+	d->errmsg_p = 0;
 }
 
 QString SQLiteConnection::serverErrorMsg()
 {
-	return QString::fromLatin1( d->errmsg );
+	return d->errmsg;
 }
 
 

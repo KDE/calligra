@@ -25,15 +25,20 @@
 namespace KexiDB
 {
 
+/*! Internad SQLite conenction data. Also used as inside SQLiteCursor. */
 class SQLiteConnectionInternal
 {
 	public:
 		SQLiteConnectionInternal();
 		~SQLiteConnectionInternal();
 
+		//! stores last result's message
+		void storeResult();
+
 		sqlite *data;
-		char *errmsg; //<! server-specific message of last operation
-		int m_res; //<! result code of last operation on server
+		QString errmsg; //<! server-specific message of last operation
+		char *errmsg_p; //<! temporary: server-specific message of last operation
+		int res; //<! result code of last operation on server
 };
 };
 

@@ -59,14 +59,12 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 		virtual const char ** recordData() const;
 
 		virtual void storeCurrentRecord(RecordData &data) const;
-
+		
 		virtual int serverResult() const;
 		
 		virtual QString serverResultName() const;
 
 		virtual QString serverErrorMsg() const;
-
-		virtual void drv_clearServerResult();
 
 	protected:
 		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
@@ -93,8 +91,10 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 		/*! Method called when cursor's buffer need to be cleared
 			(only for buffered cursor type), eg. in close(). */
 		virtual void drv_clearBuffer();
+		
+		virtual void drv_clearServerResult();
 
-		SQLiteCursorData *m_data;
+		SQLiteCursorData *d;
 
 	friend class SQLiteConnection;
 };

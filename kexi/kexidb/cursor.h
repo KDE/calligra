@@ -33,10 +33,10 @@ namespace KexiDB {
 
 	Cursor can be defined in two ways:
 
-	-# by passing QuerySchema object to Connection::executeQuery() or Connction::prepareQuery();
+	-# by passing QuerySchema object to Connection::executeQuery() or Connection::prepareQuery();
 	   then query is defined for in engine-independent way -- this is recommended usage
 
-	-# by passing raw query statement string to Connection::executeQuery() or Connction::prepareQuery();
+	-# by passing raw query statement string to Connection::executeQuery() or Connection::prepareQuery();
 	   then query may be defined for in engine-dependent way -- this is not recommended usage,
 	   but convenient when we can't or do not want to allocate QuerySchema object, while we
 	   know that the query statement is syntactically and logically ok in our context.
@@ -191,11 +191,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 Note for driver developers: Leave the default implementation (null 
 		 string is returned ) if your engine has no such capability. */
 		virtual QString serverErrorMsg() const { return QString::null; }
-
-		/*! Clears an internal member that is used to storing last result code, 
-		 the same that is returend by serverResult(). */
-		virtual void drv_clearServerResult() = 0;
-
+	
 		//! \return debug information.
 		QString debugString() const;
 		
@@ -264,6 +260,10 @@ class KEXI_DB_EXPORT Cursor: public Object
 
 		//! Internal: clears buffer with reimplemented drv_clearBuffer(). */
 		void clearBuffer();
+
+		/*! Clears an internal member that is used to storing last result code, 
+		 the same that is returend by serverResult(). */
+		virtual void drv_clearServerResult() = 0;
 
 		Connection *m_conn;
 		QuerySchema *m_query;
