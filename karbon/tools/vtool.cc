@@ -25,7 +25,7 @@ VTool::eventFilter( QEvent* event )
 	// Mouse events:
 	if( event->type() == QEvent::MouseButtonPress )
 	{
-		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
+		QPoint canvasCoordinate = view()->canvasWidget()->ViewportToContents(
 			mouseEvent->pos() );
 
 		m_firstPointRaw.setX( mouseEvent->pos().x() );
@@ -42,7 +42,7 @@ VTool::eventFilter( QEvent* event )
 
 	if( event->type() == QEvent::MouseMove )
 	{
-		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
+		QPoint canvasCoordinate = view()->canvasWidget()->ViewportToContents(
 			mouseEvent->pos() );
 
 		m_lastPointRaw.setX( mouseEvent->pos().x() );
@@ -64,7 +64,7 @@ VTool::eventFilter( QEvent* event )
 
 	if( event->type() == QEvent::MouseButtonRelease )
 	{
-		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
+		QPoint canvasCoordinate = view()->canvasWidget()->ViewportToContents(
 			mouseEvent->pos() );
 
 		m_lastPointRaw.setX( mouseEvent->pos().x() );

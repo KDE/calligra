@@ -171,7 +171,7 @@ VShapeTool::recalc()
 
 		const int m_sign1 = m_d1 < 0.0 ? -1 : +1;
 // TODO: revert when we introduce y-mirroring:
-		const int m_sign2 = m_d2 < 0.0 ? -1 : +1;
+		const int m_sign2 = m_d2 < 0.0 ? +1 : -1;
 
 		// Make unsigned:
 		if( m_d1 < 0.0 )

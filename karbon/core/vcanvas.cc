@@ -46,6 +46,22 @@ VCanvas::focusInEvent( QFocusEvent * )
 }
 
 void
+VCanvas::ViewportToContents( int vx, int vy, int &x, int &y ) const
+{
+	x = vx;
+	y = vy + contentsY();// - ( contentsHeight() / m_view->zoom() ) + y;
+	//QScrollView::viewportToContents( vx, vy, x, y );
+}
+
+QPoint
+VCanvas::ViewportToContents( const QPoint &p ) const
+{
+	QPoint p2 = p;
+	p2.setY( ( contentsHeight() / m_view->zoom() ) - ( p.y() + contentsY() ) );
+	return p2;
+}
+
+void
 VCanvas::setYMirroring( bool edit )
 {
 	VPainter *p;
