@@ -90,7 +90,12 @@ Q_ULLONG Variant::toULLONG(Object* object)
 bool Variant::toBool(Object* object)
 {
     QVariant variant = toVariant(object);
-    if(variant.type() != QVariant::Bool)
+    if(variant.type() != QVariant::Bool &&
+       variant.type() != QVariant::LongLong &&
+       variant.type() != QVariant::ULongLong &&
+       variant.type() != QVariant::Int &&
+       variant.type() != QVariant::UInt
+    )
         throw TypeException(QString("Kross::Api::Variant::Bool expected, but got %1.").arg(variant.typeName()).latin1());
     return variant.toBool();
 }

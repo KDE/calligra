@@ -160,7 +160,15 @@ namespace Kross { namespace KexiDB {
              * created for results of this query.
              * Wrapper for \a ::KexiDB::Connection::executeQuery
              */
-            Kross::Api::Object* executeQuery(Kross::Api::List*);
+            Kross::Api::Object* executeQueryString(Kross::Api::List*);
+
+            /**
+             * Executes query described by the as argument passed
+             * \a KexiDBQuerySchema object. Returns the opened cursor
+             * created for results of this query.
+             * Wrapper for \a ::KexiDB::Connection::executeQuery
+             */
+            Kross::Api::Object* executeQuerySchema(Kross::Api::List*);
 
             /**
              * Executes the as argument passed sqlquery-string and

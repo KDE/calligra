@@ -85,6 +85,14 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object* escapeString(Kross::Api::List*);
 
             /**
+             * Return the escaped and convert as second argument
+             * passed \a Kross::Api::Variant value to the as first
+             * argument passed \a KexiDBField::type.
+             * See \see ::KexiDB::Driver::valueToSQL
+             */
+            Kross::Api::Object* valueToSQL(Kross::Api::List*);
+
+            /**
              * Create a new KexiDBConnection object and return it.
              * See \see ::KexiDB::Driver::createConnection
              */

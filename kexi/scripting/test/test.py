@@ -111,14 +111,10 @@ class KexiDBClass:
         query = myfileconnection.queryStringList("SELECT * FROM table1", 0)
         print "queryStringList = %s" % query
 
-    # Execute the sql query statement and iterate through all returned
-    # cursor-elements and print there values.
-    def printQueryCursor(self, connection, sqlstatement):
-        # Execute the SQL query statement.
-        cursor = connection.executeQuery(sqlstatement)
+    def printQueryCursor(self, cursor):
         if cursor == None:
             raise("ERROR: executeQuery failed!")
-        print "printCursor() cursor = %s %s" % (str(cursor), dir(cursor))
+        #print "printCursor() cursor = %s %s" % (str(cursor), dir(cursor))
 
         # Go to the first item of the table.
         if not cursor.moveFirst():
@@ -132,21 +128,38 @@ class KexiDBClass:
             # Move to the next item
             cursor.moveNext()
 
-    def getTableSchema(self, tablename):
-        tableschema = self.drivermanager.tableSchema(tablename)
-        #print "tableschema.fieldlist().fieldCount() = %s" % tableschema.fieldlist().fieldCount()
-        return tableschema
+    def printQuerySchema(self, connection, queryschema):
+        return self.printQueryCursor(connection.executeQuerySchema(queryschema))
 
+    def printQueryString(self, connection, sqlstring):
+        return self.printQueryCursor(connection.executeQueryString(sqlstring))
+
+    # Add a field to the tableschema.
     def addField(self, tableschema, name):
         field = self.drivermanager.field()
         field.setType("Text")
         field.setName(name)
-
-        #TODO why tableschema.addField(field) doesn't throw an exception ???
         tableschema.fieldlist().addField(field)
-
         print "tableschema.fieldlist().fieldCount() = %s" % tableschema.fieldlist().fieldCount()
         return field
+
+    # Create a table.
+    def createTable(self, connection, tablename):
+        # First we need a new tableschema.
+        tableschema = self.drivermanager.tableSchema(tablename)
+        self.addField(tableschema, "myfield")
+        print "connection.createTable = %s" % connection.createTable(tableschema, True)
+        return tableschema
+
+    # Drop a table.
+    def dropTable(self, connection, tablename):
+        connection.dropTable(tablename)
+
+    # Alter the name of a table.
+    def alterTableName(self, connection, tablename, newtablename):
+        tableschema = connection.tableSchema(tablename)
+        print "alterTableName from=%s to=%s tableschema=%s" % (tablename, newtablename, tableschema)
+        connection.alterTableName(tableschema, newtablename)
 
 if __name__ == '__main__':
 
@@ -162,20 +175,35 @@ if __name__ == '__main__':
     #mykexidbclass.printConnection(myfileconnection)
     #mykexidbclass.testParser(myfileconnection, "SELECT * from table1")
 
-    mykexidbclass.printQuerySingleString(myfileconnection, "SELECT * FROM table1")
-    mykexidbclass.printQueryStringList(myfileconnection, "SELECT * FROM table1")
-    mykexidbclass.printQueryCursor(myfileconnection, "SELECT * FROM table1")
+    #mykexidbclass.printQuerySingleString(myfileconnection, "SELECT * FROM table1")
+    #mykexidbclass.printQueryStringList(myfileconnection, "SELECT * FROM table1")
 
-    mytableschema = mykexidbclass.getTableSchema("mytable")
-    mykexidbclass.addField(mytableschema, "myfield")
-    #myfileconnection.createTable(mytableschema)
-    #myfileconnection.dropTable(mytableschema)
+    mykexidbclass.printQueryString(myfileconnection, "SELECT * FROM table2")
 
-    #myfileconnection.alterTable(KexiDBTableSchema, NewKexiDBTableSchema)
-    #myfileconnection.alterTableName(KexiDBTableSchema, "MyNewTableName")
-    #myfileconnection.tableSchema()
-    #myfileconnection.isEmptyTable()
-    #myfileconnection.dropDatabase("mydatabase")
+    #mykexidbclass.createTable(myfileconnection, "mytable123")
+    #mykexidbclass.dropTable(myfileconnection, "mytable123")
+    #mykexidbclass.alterTableName(myfileconnection, "table1", "table111")
+
+    #############################################################
+    # TODO
+
+    #CRASH !!!
+    #myqueryschema = mykexidbclass.drivermanager.querySchema()
+    #myqueryschema.setName("myqueryname")
+    #myqueryschema.setCaption("myquerycaption")
+    #myqueryschema.setStatement("SELECT * FROM table2")
+    #print "myqueryschema = %s" % myqueryschema.statement()
+    #mykexidbclass.printQuerySchema(myfileconnection, myqueryschema)
+
+    #TODO: new table isn't usuable!!!
+    #ts1 = myfileconnection.tableSchema("table2")
+    #ts2 = mykexidbclass.drivermanager.tableSchema("table4")
+    #mykexidbclass.addField(ts2, "MyField 111111111")
+    #print "myfileconnection.alterTable = %s" % myfileconnection.alterTable(ts1, ts2)
+
+    # TEST
+    #bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values)
+    #myfileconnection.insertRecord(KexiDBField, ("field1", "field2"))
 
     #del(mycursor)
     #del(myfileconnection)

@@ -42,10 +42,20 @@ KexiDBDriver::KexiDBDriver(KexiDBDriverManager* drivermanager, ::KexiDB::Driver*
         Kross::Api::ArgumentList(),
         i18n("Return the minor version number of this driver.")
     );
+
     addFunction("escapeString", &KexiDBDriver::escapeString,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
         i18n("Return a driver-specific escaped SQL string.")
     );
+    addFunction("valueToSQL", &KexiDBDriver::valueToSQL,
+        Kross::Api::ArgumentList()
+            << Kross::Api::Argument("Kross::Api::Variant::String")
+            << Kross::Api::Argument("Kross::Api::Variant"),
+        i18n("Return the escaped and convert as second argument passed "
+             "Variant value to the as first argument passed "
+             "KexiDBField::type.")
+    );
+
     addFunction("createConnection", &KexiDBDriver::createConnection,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBConnectionData"),
         i18n("Create a new KexiDBConnection object and return it.")
@@ -118,5 +128,15 @@ Kross::Api::Object* KexiDBDriver::escapeString(Kross::Api::List* args)
     return Kross::Api::Variant::create(
            driver()->escapeString( Kross::Api::Variant::toString(args->item(0)) ),
            "Kross::KexiDB::DriverManager::escapeString::String");
+}
+
+Kross::Api::Object* KexiDBDriver::valueToSQL(Kross::Api::List* args)
+{
+    return Kross::Api::Variant::create(
+           driver()->valueToSQL(
+               (uint)::KexiDB::Field::typeForString(Kross::Api::Variant::toString(args->item(0))),
+               Kross::Api::Variant::toVariant(args->item(1))
+           ),
+           "Kross::KexiDB::DriverManager::valueToSQL::String");
 }
 
