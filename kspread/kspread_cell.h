@@ -698,7 +698,8 @@ public:
       Flag_CellTooShort          = 0x00400000,
       Flag_ParseError            = 0x00800000,
       Flag_CircularCalculation   = 0x01000000,
-      Flag_DependancyError       = 0x02000000
+      Flag_DependancyError       = 0x02000000,
+      Flag_PaintingCell          = 0x04000000
     };
 
     void clearFlag( CellFlags flag );
