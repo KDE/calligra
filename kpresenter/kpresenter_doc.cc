@@ -104,7 +104,6 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _pageLayout.bottom = 0;
   _pageLayout.unit = PG_MM;
   setPageLayout(_pageLayout,0,0);
-  insertNewPage(0,0);
 }
 
 /*====================== constructor =============================*/
@@ -210,11 +209,14 @@ bool KPresenterDocument_impl::save(ostream& out)
       << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
   
-  out << otag << "<BACKGROUND pages=" << _pageList.count() << ">" << endl;
+  out << otag << "<BACKGROUND pages=\"" << _pageList.count() << "\" rastX=\"" << _rastX << "\" rastY=\""
+      << _rastY << "\" xRnd=\"" << _xRnd << "\" yRnd=\"" << _yRnd << "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\""
+      << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\" sred=\"" << _txtSelCol.red() << "\" sgreen=\""
+      << _txtSelCol.green() << "\" sblue=\"" << _txtSelCol.blue() << "\">" << endl;
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
 
-  out << otag << "<OBJECTS objects=" << _objList.count() << ">" << endl;
+  out << otag << "<OBJECTS objects=\"" << _objList.count() << "\">" << endl;
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
 
@@ -231,16 +233,16 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
   for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
     {
       out << otag << "<PAGE>" << endl;
-      out << indent << "<BACKTYPE value=" << pagePtr->backType << "/>" << endl; 
-      out << indent << "<BACKVIEW value=" << pagePtr->backPicView << "/>" << endl; 
-      out << indent << "<BACKCOLOR1 red=" << pagePtr->backColor1.red() << " green=" 
-	  << pagePtr->backColor1.green() << " blue=" << pagePtr->backColor1.blue() << "/>" << endl; 
-      out << indent << "<BACKCOLOR2 red=" << pagePtr->backColor2.red() << " green=" 
-	  << pagePtr->backColor2.green() << " blue=" << pagePtr->backColor2.blue() << "/>" << endl; 
-      out << indent << "<BCTYPE value=" << pagePtr->bcType << "/>" << endl; 
-      if ( pagePtr->backPic )
+      out << indent << "<BACKTYPE value=\"" << pagePtr->backType << "\"/>" << endl; 
+      out << indent << "<BACKVIEW value=\"" << pagePtr->backPicView << "\"/>" << endl; 
+      out << indent << "<BACKCOLOR1 red=\"" << pagePtr->backColor1.red() << "\" green=\"" 
+	  << pagePtr->backColor1.green() << "\" blue=\"" << pagePtr->backColor1.blue() << "\"/>" << endl; 
+      out << indent << "<BACKCOLOR2 red=\"" << pagePtr->backColor2.red() << "\" green=\"" 
+	  << pagePtr->backColor2.green() << "\" blue=\"" << pagePtr->backColor2.blue() << "\"/>" << endl; 
+      out << indent << "<BCTYPE value=\"" << pagePtr->bcType << "\"/>" << endl; 
+      if (pagePtr->backPic)
 	out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl; 
-      if ( pagePtr->backClip )
+      if (pagePtr->backClip)
 	out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
       out << etag << "</PAGE>" << endl;
     }
@@ -479,8 +481,42 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	}
       
       else if (name == "BACKGROUND")
-	loadBackground(parser,lst);
-
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "rastX")
+		_rastX = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "rastY")
+		_rastY = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "xRnd")
+		_xRnd = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "yRnd")
+		_yRnd = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bred")
+		_txtBackCol.setRgb(atoi((*it).m_strValue.c_str()),
+				   _txtBackCol.green(),_txtBackCol.blue());
+	      else if ((*it).m_strName == "bgreen")
+		_txtBackCol.setRgb(_txtBackCol.red(),atoi((*it).m_strValue.c_str()),
+				   _txtBackCol.blue());
+	      else if ((*it).m_strName == "bblue")
+		_txtBackCol.setRgb(_txtBackCol.red(),_txtBackCol.green(),
+				   atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "sred")
+		_txtSelCol.setRgb(atoi((*it).m_strValue.c_str()),
+				   _txtSelCol.green(),_txtSelCol.blue());
+	      else if ((*it).m_strName == "sgreen")
+		_txtSelCol.setRgb(_txtSelCol.red(),atoi((*it).m_strValue.c_str()),
+				   _txtSelCol.blue());
+	      else if ((*it).m_strName == "sblue")
+		_txtSelCol.setRgb(_txtSelCol.red(),_txtSelCol.green(),
+				   atoi((*it).m_strValue.c_str()));
+	      else
+		cerr << "Unknown attrib BACKGROUND:'" << (*it).m_strName << "'" << endl;
+	    }
+	  loadBackground(parser,lst);
+	}
       else
 	cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;    
 	
@@ -720,6 +756,12 @@ void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _serv
   if (CORBA::is_nil(doc))
     return;
   
+  if (!doc->init())
+    {
+      QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("Could not init"),i18n("OK"));
+      return;
+    }
+
   KPresenterChild* ch = new KPresenterChild(this,_rect,doc);
   m_lstChildren.append(ch);
   

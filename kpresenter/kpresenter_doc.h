@@ -144,12 +144,12 @@ public:
 
   // ------ IDL ------
   // open - save document
-  virtual CORBA::Boolean open(const char *_filename);
-  virtual CORBA::Boolean saveAs(const char *_filename,const char *_format);
-  /** Torben: Added 3 new dummy functions **/
-  virtual CORBA::Boolean init() { return true; }
-  virtual CORBA::Boolean openMimePart(class OPParts::MimeMultipartDict *, const char *) { return true; }
-  virtual CORBA::Boolean saveAsMimePart(const char *, const char *, const char *) { return true; }
+  virtual CORBA::Boolean open(const char*);
+  virtual CORBA::Boolean saveAs(const char*,const char*);
+
+  virtual CORBA::Boolean init() {insertNewPage(0,0); return true;}
+  virtual CORBA::Boolean openMimePart(class OPParts::MimeMultipartDict*,const char*) {return true;}
+  virtual CORBA::Boolean saveAsMimePart(const char*, const char*, const char*) {return true;}
 
   // create a view
   virtual OPParts::View_ptr createView();
@@ -168,7 +168,7 @@ public:
   const char* url() {return m_strFileURL.data();}
 
   // ------ C++ ------
-  // get output- and unputformats
+  // get output- and inputformats
   virtual QStrList outputFormats();
   virtual QStrList inputFormats();
 
