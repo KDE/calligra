@@ -106,10 +106,10 @@ int rc;
     // write the data
     unsigned int previous_rand = rand() % 0x10000;
 
-    while ((previous_rand % 5120) < blocksize)
+    while ((previous_rand % 5120) < (unsigned int)blocksize)
        previous_rand = rand() % 0x10000;
 
-    for (char *t = p+2; t-p < (previous_rand % 5120)+2; t += sizeof(int)) {
+    for (char *t = p+2; t-p < (int)(previous_rand % 5120)+2; t += sizeof(int)) {
        *((int *)t) = rand();
     }
 
