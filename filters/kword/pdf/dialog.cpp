@@ -131,7 +131,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     _allButton->setChecked(true);
     _group->insert(_allButton);
     QHBox *hbox = new QHBox(gbox);
-    _rangeButton = new QRadioButton(i18n("Range"), hbox);
+    _rangeButton = new QRadioButton(i18n("Range:"), hbox);
     _group->insert(_rangeButton);
     _range = new KLineEdit(hbox);
     _range->setFocus();
@@ -156,10 +156,10 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     top->addWidget(gbox);
     QGrid *grid = new QGrid(2, gbox);
     grid->setSpacing(KDialogBase::spacingHint());
-    (void)new QLabel(i18n("Owner"), grid);
+    (void)new QLabel(i18n("Owner:"), grid);
     _owner = new KLineEdit(grid);
     _owner->setEchoMode(QLineEdit::Password);
-    (void)new QLabel(i18n("User"), grid);
+    (void)new QLabel(i18n("User:"), grid);
     _user = new KLineEdit(grid);
     _user->setEchoMode(QLineEdit::Password);
     grid->setEnabled(isEncrypted);
