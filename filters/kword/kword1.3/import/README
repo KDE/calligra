@@ -7,19 +7,6 @@ Note: the information in this file is meant for developers, not for end users.
 Following are a few points about some particularities when developing this filter.
 
 
-=== Old Libexport Code ===
-
-Be careful when programming on code coming from the old KWord export filter
-library (the files whose names start with KWEF.)
-
-Due to how the code was created, there are 2 typical traps:
-- uninitialized variables
-- type error while casting
-
-Unfortunately, also due to the design of the code the compiler cannot help much
-to keep developers out of these traps, as it does not get enough information to
-catch such errors.
-
 === Syntax Versions ===
 
 KWord has a few syntax variants, starting with the 3 official syntax versions
