@@ -132,16 +132,16 @@ double KPPolylineObject::load(const QDomElement &element)
 
 /*======================== paint =================================*/
 void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
-			      bool drawingShadow, bool drawContour )
+			      bool /*drawingShadow*/, bool drawContour )
 {
-    int _w = _zoomHandler->zoomItX(pen.width());
+    int _w = pen.width();
 
     QPen pen2;
     if ( drawContour )
 	pen2 = QPen( Qt::black, 1, Qt::DotLine );
     else {
 	pen2 = pen;
-	pen2.setWidth( _w );
+	pen2.setWidth( (int)_zoomHandler->zoomItX( pen.width() ) );
    }
     _painter->setPen( pen2 );
 
@@ -149,7 +149,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
     _painter->drawPolyline( pointArray );
 
-    if ( lineBegin != L_NORMAL ) {
+    if ( lineBegin != L_NORMAL && !drawContour ) {
         QPoint startPoint;
         bool first = true;
         QPointArray::ConstIterator it1;
@@ -169,7 +169,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
         }
     }
 
-    if ( lineEnd != L_NORMAL ) {
+    if ( lineEnd != L_NORMAL && !drawContour ) {
         QPoint endPoint;
         bool last = true;
         QPointArray::ConstIterator it2 = pointArray.end();

@@ -23,17 +23,18 @@
 #include <klocale.h>
 #include <kcolordialog.h>
 #include <kcolorbutton.h>
+#include <kcombobox.h>
+#include <knuminput.h>
 
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qpainter.h>
 #include <qwidgetstack.h>
 #include <qlabel.h>
-#include <qcombobox.h>
 #include <qbrush.h>
 #include <qslider.h>
-#include <qspinbox.h>
 #include <qcheckbox.h>
+
 #include <kozoomhandler.h>
 #include <kpresenter_utils.h>
 #include <kpgradient.h>
@@ -86,7 +87,7 @@ void PBPreview::drawContents( QPainter *painter )
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
 			   colorGroup().base() );
 	KoSize diff1( 0, 0 ), diff2( 0, 0 );
-        double _w = _zoomHandler->zoomItX( pen.width() );
+        int _w = pen.width();
 
 	if ( lineBegin != L_NORMAL )
 	    diff1 = getBoundingSize( lineBegin, _w, _zoomHandler );
@@ -99,12 +100,12 @@ void PBPreview::drawContents( QPainter *painter )
 
 	if ( lineBegin != L_NORMAL )
 	    drawFigure( lineBegin, painter, KoPoint( unzoom_diff1_width / 2, _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
-			pen.color(), (int)_w, 180.0, _zoomHandler );
+			pen.color(), _w, 180.0, _zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
 	    drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX( contentsRect().width() ) - unzoom_diff2_width / 2,
                                                    _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
-                        pen.color(), (int)_w, 0.0, _zoomHandler );
+                        pen.color(), _w, 0.0, _zoomHandler );
 
 	painter->setPen( pen );
 	painter->drawLine( (int)unzoom_diff1_width / 2,
@@ -179,7 +180,7 @@ void StyleDia::setupTab1()
     l = new QLabel( i18n( "Pen Style:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
-    choosePStyle = new QComboBox( false, left, "PStyle" );
+    choosePStyle = new KComboBox( false, left, "PStyle" );
     choosePStyle->insertItem( i18n( "Solid Line" ) );
     choosePStyle->insertItem( i18n( "Dash Line ( ---- )" ) );
     choosePStyle->insertItem( i18n( "Dot Line ( **** )" ) );
@@ -192,14 +193,15 @@ void StyleDia::setupTab1()
     l = new QLabel( i18n( "Pen Width:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
-    choosePWidth = new QSpinBox( 1, 10, 1, left );
+    choosePWidth = new KIntNumInput( 1, left );
+    choosePWidth->setRange( 1, 10, 1 );
     connect( choosePWidth, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
     l = new QLabel( i18n( "Line Begin:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
 
-    clineBegin = new QComboBox( false, right, "lineBegin" );
+    clineBegin = new KComboBox( false, right, "lineBegin" );
     clineBegin->insertItem( i18n("Normal") );
     clineBegin->insertItem( i18n("Arrow") );
     clineBegin->insertItem( i18n("Square") );
@@ -210,7 +212,7 @@ void StyleDia::setupTab1()
     l = new QLabel( i18n( "Line End:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
 
-    clineEnd = new QComboBox( false, right, "lineEnd" );
+    clineEnd = new KComboBox( false, right, "lineEnd" );
     clineEnd->insertItem( i18n("Normal") );
     clineEnd->insertItem( i18n("Arrow") );
     clineEnd->insertItem( i18n("Square") );
@@ -266,7 +268,7 @@ void StyleDia::setupTab2()
     QLabel *l = new QLabel( i18n( "Fill with:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
-    cFillType = new QComboBox( false, left );
+    cFillType = new KComboBox( false, left );
     cFillType->insertItem( i18n( "Brush" ) );
     if(flags & SdGradient)
         cFillType->insertItem( i18n( "Gradient" ) );
@@ -294,7 +296,7 @@ void StyleDia::setupTab2()
     l = new QLabel( i18n( "Brush Style:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
-    chooseBStyle = new QComboBox( false, brushConfig, "BStyle" );
+    chooseBStyle = new KComboBox( false, brushConfig, "BStyle" );
     // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "100% fill Pattern" ) );
     // xgettext:no-c-format
@@ -340,7 +342,7 @@ void StyleDia::setupTab2()
     l = new QLabel( i18n( "Gradient Style:" ), gradientConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
-    gradients = new QComboBox( false, gradientConfig );
+    gradients = new KComboBox( false, gradientConfig );
     gradients->insertItem( i18n( "Horizontal Gradient" ), -1 );
     gradients->insertItem( i18n( "Vertical Gradient" ), -1 );
     gradients->insertItem( i18n( "Diagonal Gradient 1" ), -1 );

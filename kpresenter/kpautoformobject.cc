@@ -192,14 +192,14 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
 	pen2 = QPen( Qt::black, 1, Qt::DotLine );
     else {
 	pen2 = pen;
-	pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
    }
 
     _painter->setPen( pen2 );
     pwOrig = pen2.width() + 3;
     _painter->setBrush( brush );
 
-    QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),_zoomHandler->zoomItY( ext.height()) );
+    QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),_zoomHandler->zoomItY( ext.height() ) );
     QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
     QPointArray pntArray2( pntArray.size() );
     for ( unsigned int i = 0; i < pntArray.size(); i++ )
@@ -278,17 +278,17 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
         else
         {
             KoSize diff1( 0, 0 ), diff2( 0, 0 );
-            double _w = pen2.width();
+            int _w = pen.width();
 
             if ( lineBegin != L_NORMAL )
-                diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
+                diff1 = getBoundingSize( lineBegin, _w, _zoomHandler );
 
             if ( lineEnd != L_NORMAL )
-                diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
+                diff2 = getBoundingSize( lineEnd, _w, _zoomHandler );
 
             if ( pntArray.size() > 1 )
             {
-                if ( lineBegin != L_NORMAL )
+                if ( lineBegin != L_NORMAL && !drawContour )
                 {
                     QPoint pnt1( pntArray2.at( 0 ) ), pnt2( pntArray2.at( 1 ) ), pnt3, pnt4( pntArray.at( 0 ) );
                     float _angle = KoPoint::getAngle( pnt1, pnt2 );
@@ -320,10 +320,10 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
                         break;
                     }
 
-                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), (int)_w, _angle, _zoomHandler );
+                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), _w, _angle, _zoomHandler );
                 }
 
-                if ( lineEnd != L_NORMAL )
+                if ( lineEnd != L_NORMAL && !drawContour )
                 {
                     QPoint pnt1( pntArray2.at( pntArray2.size() - 1 ) ), pnt2( pntArray2.at( pntArray2.size() - 2 ) );
                     QPoint  pnt3, pnt4( pntArray.at( pntArray.size() - 1 ) );
@@ -356,7 +356,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
                         break;
                     }
 
-                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), (int)_w, _angle,_zoomHandler );
+                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), _w, _angle,_zoomHandler );
                 }
             }
 

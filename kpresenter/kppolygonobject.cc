@@ -222,7 +222,7 @@ void KPPolygonObject::setFillType( FillType _fillType )
 void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 			     bool drawingShadow, bool drawContour )
 {
-    int _w = _zoomHandler->zoomItX( pen.width() );
+    int _w = pen.width();
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
 
     if ( drawContour ) {
@@ -232,8 +232,8 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 	return;
     }
 
-    QPen pen2(pen);
-    pen2.setWidth(_w);
+    QPen pen2( pen );
+    pen2.setWidth( (int)_zoomHandler->zoomItX( pen.width() ) );
 
     if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );
@@ -260,7 +260,8 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
         }
 
         QRect _rect = pointArray.boundingRect();
-        _painter->drawPixmap(_w/2, _w/2, pix, 0, 0, _rect.width(), _rect.height() );
+        _painter->drawPixmap( _zoomHandler->zoomItX( _w / 2 ), _zoomHandler->zoomItX( _w / 2 ),
+                              pix, 0, 0, _rect.width(), _rect.height() );
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );

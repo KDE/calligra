@@ -28,8 +28,8 @@
 
 class QPainter;
 class KColorButton;
-class QComboBox;
-class QSpinBox;
+class KComboBox;
+class KIntNumInput;
 class QCheckBox;
 class QSlider;
 class KPGradient;
@@ -124,11 +124,11 @@ private:
 
     QWidgetStack *stack;
     KColorButton *choosePCol, *chooseBCol;
-    QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
-    QSpinBox *choosePWidth;
+    KComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
+    KIntNumInput *choosePWidth;
     PBPreview *penPrev, *brushPrev;
     QCheckBox *unbalanced, *sticky;
-    QComboBox *gradients;
+    KComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QSlider *xfactor, *yfactor;
     QLabel *xfactorLabel, *yfactorLabel;

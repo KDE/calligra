@@ -30,6 +30,6 @@ class KoZoomHandler;
 class KoSize;
 class KoPoint;
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor & color, int _w, float angle, KoZoomHandler*_zoomHandler );
-KoSize getBoundingSize( LineEnd figure, double _w, KoZoomHandler*_zoomHandler );
+KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler );
 
 #endif

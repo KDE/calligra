@@ -111,25 +111,25 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
+    int _w = pen.width();
 
     QPen pen2;
     if ( drawContour )
 	pen2 = QPen( Qt::black, 1, Qt::DotLine );
     else {
 	pen2 = pen;
-	pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+	pen2.setWidth( (int)_zoomHandler->zoomItX( pen.width() ) );
    }
     _painter->setPen( pen2 );
 
 
     KoSize diff1( 0, 0 ), diff2( 0, 0 );
-    double _w = (double)pen2.width();
 
     if ( lineBegin != L_NORMAL )
-	diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
+	diff1 = getBoundingSize( lineBegin, _w, _zoomHandler );
 
     if ( lineEnd != L_NORMAL )
-	diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
+	diff2 = getBoundingSize( lineEnd, _w, _zoomHandler );
 
     double unzoom_diff1_width = _zoomHandler->unzoomItX( (int)diff1.width() );
     double unzoom_diff1_height = _zoomHandler->unzoomItX( (int)diff1.height() );
@@ -142,12 +142,12 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 	if ( lineBegin != L_NORMAL && !drawContour )
             drawFigure( lineBegin, _painter,
 			KoPoint( unzoom_diff1_width / 2.0, oh / 2.0 ),
-			pen2.color(), (int)_w, 180.0, _zoomHandler );
+			pen2.color(), _w, 180.0, _zoomHandler );
 
         if ( lineEnd != L_NORMAL && !drawContour )
 	    drawFigure( lineEnd, _painter,
 			KoPoint( ow - unzoom_diff2_width / 2.0, oh / 2.0 ),
-			pen2.color(), (int)_w, 0.0, _zoomHandler );
+			pen2.color(), _w, 0.0, _zoomHandler );
 
         _painter->drawLine( (int)diff1.width() / 2,
 			    _zoomHandler->zoomItY( oh / 2 ),
@@ -158,12 +158,12 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 	if ( lineBegin != L_NORMAL && !drawContour )
             drawFigure( lineBegin, _painter,
 			KoPoint( ow / 2.0, unzoom_diff1_width / 2.0 ),
-			pen2.color(), (int)_w, 270.0, _zoomHandler );
+			pen2.color(), _w, 270.0, _zoomHandler );
 
         if ( lineEnd != L_NORMAL && !drawContour )
             drawFigure( lineEnd, _painter,
 			KoPoint( ow / 2.0, oh - unzoom_diff2_width / 2.0 ),
-			pen2.color(), (int)_w, 90.0, _zoomHandler );
+			pen2.color(), _w, 90.0, _zoomHandler );
 
         _painter->drawLine( _zoomHandler->zoomItX( ow / 2 ),
 			    (int)diff1.width() / 2,
@@ -171,10 +171,9 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 			    _zoomHandler->zoomItY( oh - unzoom_diff2_width / 2 ) );
     } break;
     case LT_LU_RD: {
-	KoPoint pnt1( _zoomHandler->zoomItX( unzoom_diff1_height / 2 + _w / 2 ),
-                      _zoomHandler->zoomItY( unzoom_diff1_width / 2 + _w / 2 ) );
-        KoPoint pnt2( _zoomHandler->zoomItX( ow - unzoom_diff2_height / 2 - _w / 2 ),
-                      _zoomHandler->zoomItY( oh - unzoom_diff2_width / 2 - _w / 2 ) );
+        KoRect _rect = KoRect( orig, ext );
+        KoPoint pnt1 = _rect.topLeft();
+        KoPoint pnt2 = _rect.bottomRight();
 
         float _angle = KoPoint::getAngle( pnt1, pnt2 );
 
@@ -184,7 +183,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 				 _zoomHandler->zoomItY( unzoom_diff1_width / 2 ) );
             drawFigure( lineBegin, _painter,
 			KoPoint( 0, 0 ), pen2.color(),
-			(int)_w, _angle, _zoomHandler );
+			_w, _angle, _zoomHandler );
 	    _painter->restore();
         }
         if ( lineEnd != L_NORMAL && !drawContour ) {
@@ -193,7 +192,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
                                  _zoomHandler->zoomItY( oh - unzoom_diff2_width / 2 ) );
             drawFigure( lineEnd, _painter,
 			KoPoint( 0, 0 ), pen2.color(),
-			(int)_w, _angle - 180, _zoomHandler );
+			_w, _angle - 180, _zoomHandler );
 	    _painter->restore();
 
 	}
@@ -203,10 +202,9 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
                             _zoomHandler->zoomItY( oh - unzoom_diff2_width / 2 - _w / 2 ) );
     } break;
     case LT_LD_RU: {
-        KoPoint pnt1( _zoomHandler->zoomItX( unzoom_diff1_height / 2 + _w / 2 ),
-                      _zoomHandler->zoomItY( oh - unzoom_diff1_width / 2 - _w / 2 ) );
-        KoPoint pnt2( _zoomHandler->zoomItX( ow - unzoom_diff2_height / 2 - _w / 2 ),
-                      _zoomHandler->zoomItY( unzoom_diff2_width / 2 + _w / 2 ) );
+        KoRect _rect = KoRect( orig, ext );
+        KoPoint pnt1 = _rect.topRight();
+        KoPoint pnt2 = _rect.bottomLeft();
 
         float _angle = KoPoint::getAngle( pnt1, pnt2 );
 
@@ -216,7 +214,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 				 _zoomHandler->zoomItY( oh - unzoom_diff1_width / 2 ) );
             drawFigure( lineBegin, _painter,
 			KoPoint( 0, 0 ), pen2.color(),
-			(int)_w, _angle,_zoomHandler );
+			_w, _angle,_zoomHandler );
             _painter->restore();
         }
         if ( lineEnd != L_NORMAL && !drawContour ) {
@@ -225,7 +223,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 				 _zoomHandler->zoomItY( unzoom_diff2_width / 2) );
             drawFigure( lineEnd, _painter,
 			KoPoint( 0, 0 ), pen2.color(),
-			(int)_w, _angle - 180,_zoomHandler );
+			_w, _angle - 180,_zoomHandler );
             _painter->restore();
         }
         _painter->drawLine( _zoomHandler->zoomItX( unzoom_diff1_height / 2 + _w / 2 ),
