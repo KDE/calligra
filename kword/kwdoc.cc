@@ -699,185 +699,184 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
     KWFrameSet *frameset = m_lstFrameSet.getFirst();
 
-    KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
-    KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
-
-    // Lookup the various header / footer framesets into the variables above
-    // [Done in all cases, in order to hide unused framesets]
-
-    KWFootNoteFrameSetList footnotesList( true ); // Reversed, we want footnotes from bottom to top
-    KWFootNoteFrameSetList endnotesList( false ); // Endnotes are in top to bottom order
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * fs = fit.current();
-        switch ( fs->frameSetInfo() ) {
-        case KWFrameSet::FI_FIRST_HEADER:
-            if ( isHeaderVisible() ) {
-                firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
-            } else { fs->setVisible( false ); fs->deleteAllCopies(); }
-            break;
-        case KWFrameSet::FI_EVEN_HEADER:
-            if ( isHeaderVisible() ) {
-                evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
-            } else { fs->setVisible( false ); fs->deleteAllCopies(); }
-            break;
-        case KWFrameSet::FI_ODD_HEADER:
-            if ( isHeaderVisible() ) {
-                oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
-            } else { fs->setVisible( false ); fs->deleteAllCopies(); }
-            break;
-        case KWFrameSet::FI_FIRST_FOOTER:
-            if ( isFooterVisible() ) {
-                firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
-            } else { fs->setVisible( false ); fs->deleteAllCopies(); }
-            break;
-        case KWFrameSet::FI_EVEN_FOOTER:
-            if ( isFooterVisible() ) {
-                evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
-            } else { fs->setVisible( false ); fs->deleteAllCopies(); }
-            break;
-        case KWFrameSet::FI_ODD_FOOTER:
-            if ( isFooterVisible() ) {
-                oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
-            } else { fs->setVisible( false ); fs->deleteAllCopies(); }
-        case KWFrameSet::FI_FOOTNOTE: {
-            KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
-            if ( fnfs && fnfs->isVisible() ) // not visible is when the footnote has been deleted
-            {
-                if ( fnfs->isFootNote() )
-                    footnotesList.append( fnfs );
-                else if ( fnfs->isEndNote() ) {
-                    endnotesList.append( fnfs );
-                    m_bHasEndNotes = true;
-                }
-            }
-        }
-            break;
-        default: break;
-        }
-    }
-
-    // This allocation each time might slow things down a bit.
-    // TODO KWHeaderFooterFrameSet : public KWTextFrameSet, and store the HeaderFooterFrameset data into there.
-    // ... hmm, and then KWFootNoteFrameSet needs to inherit KWHeaderFooterFrameSet
-    QPtrList<KWFrameLayout::HeaderFooterFrameset> headerFooterList;
-    headerFooterList.setAutoDelete( true );
-
-    // Now hide & forget the unused header/footer framesets (e.g. 'odd pages' if we are in 'all the same' mode etc.)
-    if ( isHeaderVisible() ) {
-        Q_ASSERT( firstHeader );
-        Q_ASSERT( evenHeader );
-        Q_ASSERT( oddHeader );
-        switch ( getHeaderType() ) {
-        case HF_SAME:
-            evenHeader->setVisible( true );
-            oddHeader->setVisible( false );
-            oddHeader->deleteAllCopies();
-            firstHeader->setVisible( false );
-            firstHeader->deleteAllCopies();
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
-            break;
-        case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
-            firstHeader->setVisible( true );
-            evenHeader->setVisible( true );
-            oddHeader->setVisible( true );
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenHeader, 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Even ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Odd ) );
-            break;
-        case HF_FIRST_DIFF:
-            evenHeader->setVisible( true );
-            oddHeader->setVisible( false );
-            oddHeader->deleteAllCopies();
-            firstHeader->setVisible( true );
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
-            break;
-        case HF_EO_DIFF:
-            evenHeader->setVisible( true );
-            oddHeader->setVisible( true );
-            firstHeader->setVisible( false );
-            firstHeader->deleteAllCopies();
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Even ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Odd ) );
-            break;
-        }
-    }
-    if ( isFooterVisible() ) {
-        Q_ASSERT( firstFooter );
-        Q_ASSERT( evenFooter );
-        Q_ASSERT( oddFooter );
-        switch ( getFooterType() ) {
-        case HF_SAME:
-            evenFooter->setVisible( true );
-            oddFooter->setVisible( false );
-            oddFooter->deleteAllCopies();
-            firstFooter->setVisible( false );
-            firstFooter->deleteAllCopies();
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
-            break;
-        case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
-            firstFooter->setVisible( true );
-            evenFooter->setVisible( true );
-            oddFooter->setVisible( true );
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenFooter, 2, -1, m_pageHeaderFooter.ptFooterBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Even ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Odd ) );
-            break;
-        case HF_FIRST_DIFF:
-            evenFooter->setVisible( true );
-            oddFooter->setVisible( false );
-            oddFooter->deleteAllCopies();
-            firstFooter->setVisible( true );
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
-            break;
-        case HF_EO_DIFF:
-            evenFooter->setVisible( true );
-            oddFooter->setVisible( true );
-            firstFooter->setVisible( false );
-            firstFooter->deleteAllCopies();
-
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Even ) );
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
-                                         KWFrameLayout::HeaderFooterFrameset::Odd ) );
-            break;
-        }
-    }
-
     if ( m_processingType == WP ) { // In WP mode the pages are created automatically. In DTP not...
 
+        KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
+        KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
+
+        // Lookup the various header / footer framesets into the variables above
+        // [Done in all cases, in order to hide unused framesets]
+
+        KWFootNoteFrameSetList footnotesList( true ); // Reversed, we want footnotes from bottom to top
+        KWFootNoteFrameSetList endnotesList( false ); // Endnotes are in top to bottom order
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+        for ( ; fit.current() ; ++fit )
+        {
+            KWFrameSet * fs = fit.current();
+            switch ( fs->frameSetInfo() ) {
+            case KWFrameSet::FI_FIRST_HEADER:
+                if ( isHeaderVisible() ) {
+                    firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
+            case KWFrameSet::FI_EVEN_HEADER:
+                if ( isHeaderVisible() ) {
+                    evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
+            case KWFrameSet::FI_ODD_HEADER:
+                if ( isHeaderVisible() ) {
+                    oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
+            case KWFrameSet::FI_FIRST_FOOTER:
+                if ( isFooterVisible() ) {
+                    firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
+            case KWFrameSet::FI_EVEN_FOOTER:
+                if ( isFooterVisible() ) {
+                    evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
+            case KWFrameSet::FI_ODD_FOOTER:
+                if ( isFooterVisible() ) {
+                    oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+            case KWFrameSet::FI_FOOTNOTE: {
+                KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
+                if ( fnfs && fnfs->isVisible() ) // not visible is when the footnote has been deleted
+                {
+                    if ( fnfs->isFootNote() )
+                        footnotesList.append( fnfs );
+                    else if ( fnfs->isEndNote() ) {
+                        endnotesList.append( fnfs );
+                        m_bHasEndNotes = true;
+                    }
+                }
+            }
+                break;
+            default: break;
+            }
+        }
+
+        // This allocation each time might slow things down a bit.
+        // TODO KWHeaderFooterFrameSet : public KWTextFrameSet, and store the HeaderFooterFrameset data into there.
+        // ... hmm, and then KWFootNoteFrameSet needs to inherit KWHeaderFooterFrameSet
+        QPtrList<KWFrameLayout::HeaderFooterFrameset> headerFooterList;
+        headerFooterList.setAutoDelete( true );
+
+        // Now hide & forget the unused header/footer framesets (e.g. 'odd pages' if we are in 'all the same' mode etc.)
+        if ( isHeaderVisible() ) {
+            Q_ASSERT( firstHeader );
+            Q_ASSERT( evenHeader );
+            Q_ASSERT( oddHeader );
+            switch ( getHeaderType() ) {
+            case HF_SAME:
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( false );
+                oddHeader->deleteAllCopies();
+                firstHeader->setVisible( false );
+                firstHeader->deleteAllCopies();
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                break;
+            case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
+                firstHeader->setVisible( true );
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( true );
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                break;
+            case HF_FIRST_DIFF:
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( false );
+                oddHeader->deleteAllCopies();
+                firstHeader->setVisible( true );
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                break;
+            case HF_EO_DIFF:
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( true );
+                firstHeader->setVisible( false );
+                firstHeader->deleteAllCopies();
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                break;
+            }
+        }
+        if ( isFooterVisible() ) {
+            Q_ASSERT( firstFooter );
+            Q_ASSERT( evenFooter );
+            Q_ASSERT( oddFooter );
+            switch ( getFooterType() ) {
+            case HF_SAME:
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( false );
+                oddFooter->deleteAllCopies();
+                firstFooter->setVisible( false );
+                firstFooter->deleteAllCopies();
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                break;
+            case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
+                firstFooter->setVisible( true );
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( true );
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 2, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                break;
+            case HF_FIRST_DIFF:
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( false );
+                oddFooter->deleteAllCopies();
+                firstFooter->setVisible( true );
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                break;
+            case HF_EO_DIFF:
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( true );
+                firstFooter->setVisible( false );
+                firstFooter->deleteAllCopies();
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                break;
+            }
+        }
 
         // The frameset order _on screen_ is:
         // Header
