@@ -121,6 +121,8 @@ public:
         // Tell the iconloader about share/apps/koffice/icons
         KGlobal::iconLoader()->addAppDir("koffice");
         m_view = 0L;
+        // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
+        setFocusPolicy( ClickFocus );
     }
 
     virtual ~KoViewWrapperWidget() {}
@@ -138,7 +140,11 @@ public:
             resizeEvent( 0L );
     }
 
-    void setKoView( KoView * view ) { m_view = view; }
+    // Called by openFile()
+    void setKoView( KoView * view ) {
+        m_view = view;
+        setFocusProxy( m_view );
+    }
     KoView * koView() const { return m_view; }
 private:
     KoView* m_view;
@@ -1025,8 +1031,8 @@ bool KoDocument::openFile()
     {
         // See addClient below
         KXMLGUIFactory* guiFactory = factory();
-        assert( guiFactory );
-        guiFactory->removeClient( this );
+        if( guiFactory ) // 0L when splitting views in konq, for some reason
+            guiFactory->removeClient( this );
 
         KoView *view = createView( d->m_wrapperWidget );
         d->m_wrapperWidget->setKoView( view );
@@ -1034,7 +1040,8 @@ bool KoDocument::openFile()
 
         // Ok, now we have a view, so action() and domDocument() will work as expected
         // -> rebuild GUI
-        guiFactory->addClient( this );
+        if ( guiFactory )
+            guiFactory->addClient( this );
     }
 
     // We decided not to save in the file's original format by default
