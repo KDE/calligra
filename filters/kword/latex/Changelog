@@ -1,6 +1,10 @@
+14 October
+- BUG FIXES
+	o Some special char. were not corected generated.
+
 22 August
 - BUG FIXES
-	o the list are not closed when it's following directly by a chapter title. corrected.
+	o the list were not closed when it's following directly by a chapter title. corrected.
 
 ---------------------------------------
 29 July 2001
