@@ -890,8 +890,9 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
     if ( flags & KWParagLayout::Tabulator )
         setTabList( layout.tabList() );
 
-    // Don't call setStyle from here, it would overwrite any paragraph-specific settings
-    setStyle( layout.style );
+    if ( flags == KWParagLayout::All )
+        // Don't call setStyle from here, it would overwrite any paragraph-specific settings
+        setStyle( layout.style );
 }
 
 #ifndef NDEBUG
@@ -899,11 +900,11 @@ void KWTextParag::printRTDebug( int info )
 {
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
-        kdWarning() << "Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
+        kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
     if ( next() && next()->paragId() != paragId() + 1 )
-        kdWarning() << "Next paragraph " << next() << " has ID " << next()->paragId() << endl;
+        kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     if ( !next() )
-        kdDebug() << "next is 0L" << endl;
+        kdDebug() << "  next is 0L" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QVector<QStyleSheetItem> vec = styleSheetItems();
@@ -925,9 +926,9 @@ void KWTextParag::printRTDebug( int info )
                       << " depth=" << counter()->depth()
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
-        kdDebug() << "rect() : " << DEBUGRECT( rect() ) << endl;
+        kdDebug() << "  rect() : " << DEBUGRECT( rect() ) << endl;
 
-        kdDebug() << "topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
+        kdDebug() << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " rightMargin()=" << rightMargin() << endl;
 
         static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
@@ -1216,7 +1217,10 @@ void KWParagLayout::save( QDomElement & parentElem )
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
-    element.setAttribute( "value", style->name() );
+    if ( style )
+        element.setAttribute( "value", style->name() );
+    else
+        kdWarning() << "KWParagLayout::save: style==0L!" << endl;
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );

@@ -1272,7 +1272,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem, m_defaultFont );
-        kdDebug() << "KWDocument::loadStyleTemplates " << sty->name() << endl;
+        //kdDebug() << "KWDocument::loadStyleTemplates " << sty->name() << endl;
         addStyleTemplate( sty );
         if(m_styleList.count() > followingStyles.count() )
             followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
