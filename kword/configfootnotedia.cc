@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 #include <qradiobutton.h>
-#include <qspinbox.h>
+#include <knuminput.h>
 #include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <qvbox.h>
@@ -66,10 +66,14 @@ void KWConfigFootNoteDia::setupTab3()
     rbPosLeft = new QRadioButton( i18n("Left"), bgSeparatorPosition);
     rbPosCentered = new QRadioButton( i18n("Centered"), bgSeparatorPosition);
     rbPosRight = new QRadioButton( i18n("Right"), bgSeparatorPosition);
-    QLabel *lab = new QLabel(i18n("Length"), page);
-    spLength = new QSpinBox( page);
-    spLength->setValue( m_doc->footNoteSeparatorLineLength());
+    QVButtonGroup *bgSeparatorLength = new QVButtonGroup( i18n( "Separator Line Length" ), page );
 
+    QLabel *lab = new QLabel(i18n("Length:"), bgSeparatorLength);
+
+    spLength = new KIntNumInput( 1, bgSeparatorLength );
+    spLength->setRange( 1, 100, 1,false );
+    spLength->setValue( m_doc->footNoteSeparatorLineLength());
+    spLength->setSuffix(i18n(" %"));
     switch( m_doc->footNoteSeparatorLinePosition() )
     {
     case SLP_LEFT:

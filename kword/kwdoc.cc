@@ -165,7 +165,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_styleColl=new KoStyleCollection();
     m_frameStyleColl = new KWFrameStyleCollection();
     m_tableStyleColl = new KWTableStyleCollection();
-    
+
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10.0;
@@ -276,7 +276,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // And let's do the same for tablestyles
     m_tableStyleColl->addTableStyleTemplate( new KWTableStyle( "Plain", standardStyle, standardFrameStyle ) );
-    
+
     if ( name )
         dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
@@ -962,6 +962,17 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
         __hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         __hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
+        m_iFootNoteSeparatorLineLength = getAttribute( paper, "slFootNoteLength", 20);
+        if ( paper.hasAttribute("slFootNotePosition"))
+        {
+            QString tmp =paper.attribute("slFootNotePosition");
+            if ( tmp =="centered" )
+                m_footNoteSeparatorLinePos = SLP_CENTERED;
+            else if ( tmp =="right")
+                m_footNoteSeparatorLinePos = SLP_RIGHT;
+            else if ( tmp =="left" )
+                m_footNoteSeparatorLinePos = SLP_LEFT;
+        }
         __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
         __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
         // Now part of the app config
@@ -1066,7 +1077,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         loadTableStyleTemplates( tableStylesElem );
     else // load default styles
         loadDefaultTableStyleTemplates();
-        
+
     emit sigProgress(20);
 
     QDomElement spellCheckIgnore = word.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
@@ -1906,6 +1917,17 @@ QDomDocument KWDocument::saveXML()
     paper.setAttribute( "spHeadBody", m_pageHeaderFooter.ptHeaderBodySpacing );
     paper.setAttribute( "spFootBody", m_pageHeaderFooter.ptFooterBodySpacing );
     paper.setAttribute( "spFootNoteBody", m_pageHeaderFooter.ptFootNoteBodySpacing );
+    if ( m_footNoteSeparatorLinePos!=SLP_LEFT )
+    {
+        if (m_footNoteSeparatorLinePos==SLP_CENTERED )
+            paper.setAttribute( "slFootNotePosition", "centered" );
+        else if ( m_footNoteSeparatorLinePos==SLP_RIGHT )
+            paper.setAttribute( "slFootNotePosition", "right" );
+        else if ( m_footNoteSeparatorLinePos==SLP_LEFT ) //never !
+            paper.setAttribute( "slFootNotePosition", "left" );
+    }
+    paper.setAttribute("slFootNoteLength", m_iFootNoteSeparatorLineLength);
+
     // Now part of the app config
     //paper.setAttribute( "zoom",m_zoom );
 
@@ -2009,7 +2031,7 @@ QDomDocument KWDocument::saveXML()
     QPtrList<KWTableStyle> m_tableStyleList(m_tableStyleColl->tableStyleList());
     for ( KWTableStyle * p = m_tableStyleList.first(); p != 0L; p = m_tableStyleList.next() )
         saveTableStyle( p, tableStyles );
-        
+
     // Save the PIXMAPS list
     QDomElement pixmaps = m_imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, saveImages );
     kwdoc.appendChild( pixmaps );
