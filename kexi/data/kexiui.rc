@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="0.7">
+<kpartgui name="kexi" version="0.8">
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
   </Menu>
@@ -9,6 +9,7 @@
   </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
+  <text>Main Toolbar</text>
   <action name="file_open">
   <action name="file_save">
   <action name="file_save_as">
