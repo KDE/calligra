@@ -19,7 +19,7 @@
 
 #include "KexiXMLStorage.h"
 
-#include "KexiDBConnectionSet.h"
+#include "kexidbconnectionset.h"
 
 #include <qdom.h>
 #include <qdir.h>

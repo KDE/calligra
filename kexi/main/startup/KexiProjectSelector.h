@@ -21,7 +21,7 @@
 #define KEXIPROJECTSELECTOR_H
 
 #include "KexiProjectSelectorBase.h"
-#include "KexiProjectSet.h"
+#include "kexiprojectset.h"
 
 #include <kdialogbase.h>
 #include <qwidgetstack.h>
@@ -32,7 +32,7 @@ class KexiProjectSelectorWidgetPrivate;
 
 /*! Widget that allows to select a kexi project (or database)
 */
-class KEXICORE_EXPORT KexiProjectSelectorWidget : public KexiProjectSelectorBase
+class KEXIMAIN_EXPORT KexiProjectSelectorWidget : public KexiProjectSelectorBase
 {
 	Q_OBJECT
 

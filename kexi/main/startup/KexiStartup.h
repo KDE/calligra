@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXI_CORE_STARTUP_H
-#define KEXI_CORE_STARTUP_H
+#ifndef KEXI_MAIN_STARTUP_H
+#define KEXI_MAIN_STARTUP_H
 
 #include <qstring.h>
 
@@ -29,7 +29,7 @@ namespace Kexi
 {
 	/*! Detects filename by mime type and returns project data, if it can be detected,
 	 otherwise - NULL. \a parent is passed as parent for potential error message boxes */
-	KEXICORE_EXPORT KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
+	KEXIMAIN_EXPORT KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
 }
 
 #endif

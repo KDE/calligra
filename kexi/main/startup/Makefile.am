@@ -1,20 +1,20 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-noinst_LTLIBRARIES = libkexicorestartup.la
+noinst_LTLIBRARIES = libkeximainstartup.la
 
-libkexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
+libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
 	KexiNewFileDBWidget.ui KexiOpenExistingFile.ui \
 	KexiNewPrjTypeSelector.ui KexiDBTitlePage.ui \
 	KexiServerDBNamePage.ui \
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
-	KexiStartupDialog.cpp KexiDBConnectionSet.cpp KexiProjectSet.cpp \
+	KexiStartupDialog.cpp \
 	KexiXMLStorage.cpp KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
 	KexiStartup.cpp
 
-libkexicorestartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkexicorestartup_la_LIBADD =
+libkeximainstartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkeximainstartup_la_LIBADD =
 
-libkexicorestartup_la_METASOURCES = AUTO
+libkeximainstartup_la_METASOURCES = AUTO
 
 SUBDIRS = .
 
@@ -39,5 +39,5 @@ SUBDIRS = .
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/startup -I$(top_srcdir)/kexi/core $(all_includes)
+INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/main/startup -I$(top_srcdir)/kexi/core $(all_includes)
 

@@ -20,7 +20,7 @@
 #ifndef KexiNewProjectWizard_H
 #define KexiNewProjectWizard_H
 
-#include "KexiDBConnectionSet.h"
+#include "kexidbconnectionset.h"
 #include <kexidb/connectiondata.h>
 
 #include <kwizard.h>
@@ -33,7 +33,7 @@ class KexiServerDBNamePage;
 class KexiProjectSelectorWidget;
 class QIconViewItem;
 
-class KEXICORE_EXPORT KexiNewProjectWizard : public KWizard
+class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
 {
 	Q_OBJECT
 	public:

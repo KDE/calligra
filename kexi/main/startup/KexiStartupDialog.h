@@ -34,7 +34,7 @@
 class KTextBrowser;
 
 /*! Helper class for displaying templates set with description. */
-class KEXICORE_EXPORT TemplatesPage : public QSplitter
+class KEXIMAIN_EXPORT TemplatesPage : public QSplitter
 {
 	Q_OBJECT
 	
@@ -63,7 +63,7 @@ class ConnectionDataLVItem;
    on Kexi startup. If only one page is shown, tab is no displayed, so dialog 
    becomes a normal "plain" type dialog.
  */
-class KEXICORE_EXPORT KexiStartupDialog : public KDialogBase
+class KEXIMAIN_EXPORT KexiStartupDialog : public KDialogBase
 {
     Q_OBJECT
 

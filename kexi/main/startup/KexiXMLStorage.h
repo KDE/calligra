@@ -23,7 +23,7 @@
 #include <kexidb/connectiondata.h>
 
 #include "core/kexiprojectdata.h"
-#include "KexiProjectSet.h"
+#include "kexiprojectset.h"
 
 class QIODevice;
 class KexiDBConnectionSet;
@@ -34,37 +34,37 @@ bool saveKexiConnectionDataListXML( QIODevice *dev, const KexiDBConnectionSet& c
 /*! \return a new KexiConnectionData object loaded from xml contents on \a dev device
 	or NULL on error (then i18n'd error message is filled in \a error).
 */
-KEXICORE_EXPORT KexiProjectData* 
+KEXIMAIN_EXPORT KexiProjectData* 
 loadKexiConnectionDataXML(QIODevice *dev, QString &error);
 
 /*! Saves \a data of KexiDB::ConnectionData object at xml on \a dev device;
 	\return false on error (then i18n'd error message is filled in \a error).
 */
-KEXICORE_EXPORT bool 
+KEXIMAIN_EXPORT bool 
 saveKexiConnectionDataXML(QIODevice *dev, const KexiDB::ConnectionData &data, QString &error);
 
 /*! \return a new KexiProjectData object loaded from xml contents on \a dev device
 	or NULL on error (then i18n'd error message is filled in \a error).
 */
-KEXICORE_EXPORT KexiProjectData* 
+KEXIMAIN_EXPORT KexiProjectData* 
 loadKexiProjectDataXML(QIODevice *dev, QString &error);
 
 /*! Saves \a data of KexiProjectData object at xml on \a dev device;
 	\return false on error (then i18n'd error message is filled in \a error).
 */
-KEXICORE_EXPORT bool 
+KEXIMAIN_EXPORT bool 
 saveKexiProjectDataXML(QIODevice *dev, const KexiProjectData &data, QString &error);
 
 /*! \return a new KexiProjectSet object loaded from xml contents on \a dev device
 	or NULL on error (then i18n'd error message is filled in \a error).
 */
-KEXICORE_EXPORT KexiProjectData* 
+KEXIMAIN_EXPORT KexiProjectData* 
 loadKexiProjectSetXML(QIODevice *dev, QString &error);
 
 /*! Saves \a data of KexiProjectSet object at xml on \a dev device;
 	\return false on error (then i18n'd error message is filled in \a error).
 */
-KEXICORE_EXPORT bool 
+KEXIMAIN_EXPORT bool 
 saveKexiProjectSetXML(QIODevice *dev, const KexiProjectSet &pset, QString &error);
 
 #endif

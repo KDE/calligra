@@ -20,7 +20,7 @@
 #ifndef KEXICONNSELECTOR_H
 #define KEXICONNSELECTOR_H
 
-#include "KexiDBConnectionSet.h"
+#include "kexidbconnectionset.h"
 #include "KexiConnSelectorBase.h"
 #include "KexiStartupFileDialog.h"
 #include <kexidb/driver.h>
@@ -49,7 +49,7 @@ class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
 */
-class KEXICORE_EXPORT KexiConnSelectorWidget : public QWidgetStack
+class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
 {
 	Q_OBJECT
 
