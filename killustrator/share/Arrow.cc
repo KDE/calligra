@@ -25,9 +25,16 @@
 #include <qcolor.h>
 #include "Arrow.h"
 
+#if 0
 static QCOORD sysArrow_1[] = { -5, -3, 10, 0, -5, 3 };
 static QCOORD sysArrow_2[] = { -5, -3, 10, 0, -5, 3, 0, 0, -5, -3 };
 static QCOORD sysArrow_3[] = { -2, -2, 4, 0, -2, 2 };
+#else
+// Ben Skelton <skeltobc@elec.canterbury.ac.nz> has proposed this:
+static QCOORD sysArrow_1[] = { -15, -3, 0, 0, -15, 3 };
+static QCOORD sysArrow_2[] = { -15, -3, 0, 0, -15, 3, -10, 0, -15, -3 };
+static QCOORD sysArrow_3[] = { -6, -2, 0, 0, -6, 2 };
+#endif
 
 QIntDict<Arrow> Arrow::arrows;
 
@@ -58,7 +65,8 @@ QPixmap& Arrow::leftPixmap () {
     p.begin (lpreview);
     p.scale (2, 2);
     p.drawLine (5, 5, 35, 5);
-    draw (p, Coord (10, 5), black, 1, 180);
+    //    draw (p, Coord (10, 5), black, 1, 180);
+    draw (p, Coord (0, 5), black, 1, 180);
     p.end ();
   }
   return *lpreview;
@@ -71,8 +79,10 @@ QPixmap& Arrow::rightPixmap () {
     Painter p;
     p.begin (rpreview);
     p.scale (2, 2);
-    p.drawLine (0, 5, 10, 5);
-    draw (p, Coord (10, 5), black, 1, 0);
+    //    p.drawLine (0, 5, 10, 5);
+    //    draw (p, Coord (10, 5), black, 1, 0);
+    p.drawLine (0, 5, 35, 5);
+    draw (p, Coord (25, 5), black, 1, 0);
     p.end ();
   }
   return *rpreview;
@@ -85,11 +95,13 @@ void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
   p.rotate (angle);
   if (width == 0)
     width = 1.0;
-  p.scale (width, width);
+  //  p.scale (width, width);
+  p.scale (1.0, width);
   if (fill)
     p.setBrush (color);
   else
     p.setBrush (white);
+  p.setPen (color);
   p.drawPolygon (points);
   p.restore ();
 }

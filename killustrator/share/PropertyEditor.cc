@@ -268,9 +268,11 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     label->setText (i18n ("Arrows:"));
     label->setGeometry (10, 140, 60, 30);
     leftArrows = new KCombo (w);
-    leftArrows->setGeometry (80, 140, 60, 30);
+    //    leftArrows->setGeometry (80, 140, 60, 30);
+    leftArrows->setGeometry (80, 140, 75, 30);
     rightArrows = new KCombo (w);
-    rightArrows->setGeometry (150, 140, 60, 30);
+    //    rightArrows->setGeometry (150, 140, 60, 30);
+    rightArrows->setGeometry (165, 140, 75, 30);
     QIntDictIterator<Arrow> iter = Arrow::getArrows ();
     QPixmap empty (50, 20);
     empty.fill (white);
