@@ -31,9 +31,18 @@
 
 KWVariableSettings::KWVariableSettings() : KoVariableSettings()
 {
-    m_startFootNoteVal=0;
-    m_autoNumberType=FN_NUMBER;
 }
+
+void KWVariableSettings::changeFootNoteCounter( KoParagCounter _c )
+{
+    m_footNoteCounter = _c;
+}
+
+void KWVariableSettings::changeEndNoteCounter( KoParagCounter _c )
+{
+    m_endNoteCounter = _c;
+}
+
 
 void KWVariableSettings::save( QDomElement &parentElem )
 {
@@ -191,7 +200,12 @@ void KWFootNoteVariable::load( QDomElement &elem )
 QString KWFootNoteVariable::text()
 {
     if ( m_numberingType == Auto )
-        return m_varFormat->convert( QVariant( m_varValue.toInt() + static_cast<KWVariableSettings*>(m_varColl->variableSetting())->startFootNoteValue()) );
+    {
+        if (m_noteType == FootNote )
+            return m_varFormat->convert( QVariant( m_varValue.toInt()+ static_cast<KWVariableSettings*>(m_varColl->variableSetting())->footNoteCounter().startNumber()-1) );
+        else
+            return m_varFormat->convert( QVariant( m_varValue.toInt()+ static_cast<KWVariableSettings*>(m_varColl->variableSetting())->endNoteCounter().startNumber()-1) );
+    }
     else
         return m_varFormat->convert( m_varValue );
 }

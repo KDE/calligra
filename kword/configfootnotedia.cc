@@ -25,6 +25,7 @@
 
 #include <qvbox.h>
 #include <koParagDia.h>
+#include <kwvariable.h>
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
@@ -40,18 +41,21 @@ void KWConfigFootNoteDia::setupTab1()
 {
     QVBox * page = addVBoxPage( i18n( "FootNotes" ) );
     m_footNoteConfig = new KoCounterStyleWidget( false, true, page );
-
+    m_footNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
+    m_footNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
 }
 
 void KWConfigFootNoteDia::setupTab2()
 {
     QVBox * page = addVBoxPage( i18n( "EndNotes" ) );
     m_endNoteConfig = new KoCounterStyleWidget( false, true/*onlyStyleLetter*/, page );
+    m_endNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
 }
 
 
 void KWConfigFootNoteDia::slotOk()
 {
-    //todo
+    static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeFootNoteCounter( m_footNoteConfig->counter() );
+    static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeEndNoteCounter( m_endNoteConfig->counter() );
     KDialogBase::slotOk();
 }
