@@ -103,7 +103,7 @@ protected:
     QWidget *tab2;
     QRadioButton *rRunNo, *rRunBounding, *rRunContur;
     QGroupBox *runGroup;
-    QLineEdit *eRGap;
+    KDoubleNumInput *eRGap;
 
     // TAB 3:
     QWidget *tab3;

@@ -538,12 +538,9 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     QLabel *lRGap = new QLabel( i18n( "Run around gap (%1):" ).arg(doc->getUnitName()), tab2 );
     Layout1->addWidget( lRGap );
 
-    eRGap = new QLineEdit( tab2 );
-    eRGap->setValidator( new KFloatValidator(0,9999,true, eRGap ) );
-    eRGap->setText( "0.00" );
-    eRGap->setMaxLength( 5 );
-    eRGap->setEchoMode( QLineEdit::Normal );
-    eRGap->setFrame( true );
+    eRGap = new KDoubleNumInput( tab2 );
+    eRGap->setValue( 0.0 );
+    eRGap->setMinimumWidth ( 100 );
     Layout1->addWidget( eRGap );
     form1Layout->addLayout( Layout1 );
     QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -586,10 +583,10 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
         }
     }
 
-    QString str;
+    double str=0.0;
     if(show)
-        str = KoUnit::userValue( ragap, doc->getUnit() );
-    eRGap->setText( str );
+        str = KoUnit::ptToUnit( ragap, doc->getUnit() );
+    eRGap->setValue( str );
 
     enableRunAround();
 
@@ -1444,14 +1441,12 @@ bool KWFrameDia::applyChanges()
                 f->setRunAround(ra);
         }
         // run around gap.
-        if(! eRGap->text().isEmpty()) {
-            double newValue = KoUnit::fromUserValue( eRGap->text(), doc->getUnit() );
-            if(frame)
-                frame->setRunAroundGap(newValue);
-            else
-                for(KWFrame *f=allFrames.first();f; f=allFrames.next())
-                    f->setRunAroundGap(newValue);
-        }
+        double newValue = QMAX( 0, KoUnit::ptFromUnit( eRGap->value(), doc->getUnit() ));
+        if(frame)
+            frame->setRunAroundGap(newValue);
+        else
+            for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                f->setRunAroundGap(newValue);
     }
 
     if(tab5) {
