@@ -438,6 +438,6 @@ VPath::load( const QDomElement& element )
 void
 VPath::accept( VVisitor& visitor )
 {
-	visitor.visitVPath( *this, m_segmentLists );
+	visitor.visitVPath( *this );
 }
 

@@ -36,6 +36,8 @@ public:
 
 	virtual VLayer* clone() const;
 
+	virtual void accept( VVisitor& visitor );
+
 
 	void bringToFront( const VObject& object );
 

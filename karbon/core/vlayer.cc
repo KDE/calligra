@@ -14,6 +14,7 @@
 #include "vgroup.h"
 #include "vobject.h"
 //#include "vtext.h"
+#include "vvisitor.h"
 
 #include <kdebug.h>
 
@@ -187,3 +188,8 @@ VLayer::clone() const
 	return new VLayer( *this );
 }
 
+void
+VLayer::accept( VVisitor& visitor )
+{
+	visitor.visitVLayer( *this );
+}

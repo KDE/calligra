@@ -42,8 +42,6 @@ public:
 	// TODO
 	virtual void transform( const QWMatrix& ) {}
 
-	virtual VDocument* clone() const;
-
 	const QString& mime() { return m_mime; }
 	void setMime( const QString& mime ) { m_mime = mime; }
 
@@ -64,6 +62,10 @@ public:
 	bool loadXML( const QDomElement& element );
 	virtual void save( QDomElement& ) const {}
 	virtual void load( const QDomElement& element ) { loadXML( element ); }
+
+	virtual VDocument* clone() const;
+
+	virtual void accept( VVisitor& visitor );
 
 
 	// manipulate selection:

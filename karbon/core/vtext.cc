@@ -2,11 +2,12 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qdom.h>
+
 #include "karbon_view.h"
 #include "vpath.h"
 #include "vtext.h"
-
-#include <qdom.h>
+#include "vvisitor.h"
 
 #include <kdebug.h>
 
@@ -175,7 +176,7 @@ VText::isInside( const KoRect& rect ) const
 }
 
 VText*
-VText::clone()
+VText::clone() const
 {
 	return new VText( *this );
 }
@@ -233,6 +234,12 @@ VText::load( const QDomElement& element )
 			}
 		}
 	}
+}
+
+void
+VText::accept( VVisitor& visitor )
+{
+	visitor.visitVText( *this );
 }
 
 #ifdef HAVE_FREETYPE

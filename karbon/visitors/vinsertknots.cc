@@ -2,9 +2,12 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qptrlist.h>
+
 #include "vinsertknots.h"
 #include "vpath.h"
 #include "vsegment.h"
+
 
 void
 VInsertKnots::setKnots( uint knots )
@@ -14,23 +17,27 @@ VInsertKnots::setKnots( uint knots )
 }
 
 void
-VInsertKnots::visitVPath(
-	VPath& /*path*/, QPtrList<VSegmentList>& lists )
+VInsertKnots::visitVPath( VPath& path )
 {
-	QPtrListIterator<VSegmentList> itr( lists );
+	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
 	for( ; itr.current(); ++itr )
-	{
-		itr.current()->first();
+		itr.current()->accept( *this );
+}
 
-		// ommit "begin" segment:
-		while( itr.current()->next() )
+void
+VInsertKnots::visitVSegmentList( VSegmentList& segmentList )
+{
+	segmentList.first();
+
+	// ommit "begin" segment:
+	while( segmentList.next() )
+	{
+		for( uint i = m_knots; i > 0; --i )
 		{
-			for( uint i = m_knots; i > 0; --i )
-			{
-				itr.current()->insert(
-					itr.current()->current()->splitAt( 1.0 / ( i + 1.0 ) ) );
-				itr.current()->next();
-			}
+			segmentList.insert(
+				segmentList.current()->splitAt( 1.0 / ( i + 1.0 ) ) );
+
+			segmentList.next();
 		}
 	}
 }

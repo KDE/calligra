@@ -35,11 +35,13 @@ public:
 
 	virtual bool isInside( const KoRect& rect ) const;
 
-	virtual VText* clone();
-
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
+	virtual VText* clone() const;
+
+	virtual void accept( VVisitor& visitor );
+	
 	void setState( const VState state );
 
 private:

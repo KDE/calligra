@@ -18,6 +18,7 @@ class QDomElement;
 class QWMatrix;
 class VPainter;
 class VSegment;
+class VVisitor;
 
 
 typedef QPtrList<VSegmentList> VSegmentListList;
@@ -108,10 +109,10 @@ public:
 	virtual const KoRect& boundingBox() const;
 	virtual bool isInside( const KoRect& rect ) const;
 
-	virtual VPath* clone() const;
-
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
+
+	virtual VPath* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 

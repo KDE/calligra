@@ -9,6 +9,7 @@
 #include "vfill.h"
 #include "vselection.h"
 #include "vstroke.h"
+#include "vvisitor.h"
 
 #include <kdebug.h>
 
@@ -146,6 +147,13 @@ VDocument::loadXML( const QDomElement& doc )
 	}
 	return true;
 }
+
+void
+VDocument::accept( VVisitor& visitor )
+{
+	visitor.visitVDocument( *this );
+}
+
 
 void
 VDocument::select( VObject& object, bool exclusive ) const

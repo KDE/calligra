@@ -2,31 +2,40 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qptrlist.h>
 #include <qvaluelist.h>
 
 #include "vboolean.h"
 #include "vpath.h"
 #include "vsegment.h"
+#include "vsegmentlist.h"
 
 
 void
 VBoolean::visit( VObject& object1, VObject& object2 )
 {
-	m_lists1 = 0L;
-	m_lists2 = 0L;
+	m_list1 = 0L;
+	m_list2 = 0L;
 	object1.accept( *this );
 	object2.accept( *this );
 }
 
 void
-VBoolean::visitVPath(
-	VPath& /*path*/, QPtrList<VSegmentList>& lists )
+VBoolean::visitVPath( VPath& path )
 {
-	if( m_lists1 == 0L )
-		m_lists1 = &lists;
-	else if( m_lists2 == 0L )
+	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
+}
+
+void
+VBoolean::visitVSegmentList( VSegmentList& segmentList )
+{
+	if( m_list1 == 0L )
+		m_list1 = &segmentList;
+	else if( m_list2 == 0L )
 	{
-		m_lists2 = &lists;
+		m_list2 = &segmentList;
 		doIt();
 	}
 }
@@ -34,11 +43,8 @@ VBoolean::visitVPath(
 void
 VBoolean::doIt()
 {
-	if( m_lists1 == 0L || m_lists2 == 0L )
+	if( m_list1 == 0L || m_list2 == 0L )
 		return;
-
-	QPtrListIterator<VSegmentList> itr1( *m_lists1 );
-	QPtrListIterator<VSegmentList> itr2( *m_lists2 );
 
 	// intersection parameters (t):
 	VParamList params1;
@@ -47,61 +53,54 @@ VBoolean::doIt()
 
 	double prevParam;
 
-	// test each segment with all others:
-	for( ; itr1.current(); ++itr1 )
+	m_list1->first();
+
+	// ommit "begin" segment:
+	while( m_list1->next() )
 	{
-		for( ; itr2.current(); ++itr2 )
+		params1.clear();
+
+		m_list2->first();
+
+		// ommit "begin" segment:
+		while( m_list2->next() )
 		{
-			itr1.current()->first();
+			params2.clear();
+		
+			recursiveSubdivision(
+				*m_list1->current(), 0.0, 1.0,
+				*m_list2->current(), 0.0, 1.0,
+				params1, params2 );
 
-			// ommit "begin" segment:
-			while( itr1.current()->next() )
+			qHeapSort( params2 );
+
+			prevParam = 0.0;
+
+			// walk down all intersection params and insert knots:
+			for( pItr = params2.begin(); pItr != params2.end(); ++pItr )
 			{
-				params1.clear();
+				m_list2->insert(
+					m_list2->current()->splitAt(
+						( *pItr - prevParam )/( 1.0 - prevParam ) ) );
 
-				itr2.current()->first();
-
-				// ommit "begin" segment:
-				while( itr2.current()->next() )
-				{
-					params2.clear();
-				
-					recursiveSubdivision(
-						*itr1.current()->current(), 0.0, 1.0,
-						*itr2.current()->current(), 0.0, 1.0,
-						params1, params2 );
-
-					qHeapSort( params2 );
-
-					prevParam = 0.0;
-
-					// walk down all intersection params and insert knots:
-					for( pItr = params2.begin(); pItr != params2.end(); ++pItr )
-					{
-						itr2.current()->insert(
-							itr2.current()->current()->splitAt(
-								( *pItr - prevParam )/( 1.0 - prevParam ) ) );
-
-						itr2.current()->next();
-						prevParam = *pItr;
-					}
-				}
-
-				qHeapSort( params1 );
-
-				prevParam = 0.0;
-
-				// walk down all intersection params and insert knots:
-				for( pItr = params1.begin(); pItr != params1.end(); ++pItr )
-				{
-					itr1.current()->insert(
-						itr1.current()->current()->splitAt(
-							( *pItr - prevParam )/( 1.0 - prevParam ) ) );
-
-					itr1.current()->next();
-					prevParam = *pItr;
-				}
+				m_list2->next();
+				prevParam = *pItr;
 			}
+		}
+
+		qHeapSort( params1 );
+
+		prevParam = 0.0;
+
+		// walk down all intersection params and insert knots:
+		for( pItr = params1.begin(); pItr != params1.end(); ++pItr )
+		{
+			m_list1->insert(
+				m_list1->current()->splitAt(
+					( *pItr - prevParam )/( 1.0 - prevParam ) ) );
+
+			m_list1->next();
+			prevParam = *pItr;
 		}
 	}
 }

@@ -4,119 +4,124 @@
 
 #include <math.h>
 
+#include <qptrlist.h>
 #include <qwmatrix.h>
 
 #include "vglobal.h"
 #include "vpath.h"
 #include "vsegment.h"
+#include "vsegmentlist.h"
 #include "vwhirlpinch.h"
 
 
 void
-VWhirlPinch::visitVPath(
-	VPath& /*path*/, QPtrList<VSegmentList>& lists )
+VWhirlPinch::visitVPath( VPath& path )
+{
+	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
+}
+
+void
+VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 {
 kdDebug() << "*** r: " << m_radius << endl;
 	QWMatrix m;
 	KoPoint delta;
 	double dist;
 
-	QPtrListIterator<VSegmentList> itr( lists );
-	for( ; itr.current(); ++itr )
+	segmentList.first();
+
+	while( segmentList.current() )
 	{
-		itr.current()->first();
+		segmentList.current()->convertToCurve();
 
-		while( itr.current()->current() )
+
+		delta = segmentList.current()->knot2() - m_center;
+		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+
+kdDebug() << "**" << dist << endl;
+		if( dist < m_radius )
 		{
-			itr.current()->current()->convertToCurve();
+			m.reset();
 
+			if( dist != 0.0 )
+				dist = m_radius / dist;
 
-			delta = itr.current()->current()->knot2() - m_center;
-			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+			// pinch:
+			m.scale(
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
 
-kdDebug() << "**" << dist << endl;
-			if( dist < m_radius )
-			{
-				m.reset();
+			// whirl:
+			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 
-				if( dist != 0.0 )
-					dist = m_radius / dist;
+			m.translate( m_center.x(), m_center.y() );
 
-				// pinch:
-				m.scale(
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
-
-				// whirl:
-				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-
-				m.translate( m_center.x(), m_center.y() );
-
-				itr.current()->current()->setKnot2( delta.transform( m ) );
-			}
-
-
-			if( itr.current()->current()->type() == segment_begin )
-			{
-				itr.current()->next();
-				continue;
-			}
-
-
-			delta = itr.current()->current()->ctrlPoint1() - m_center;
-			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
-
-kdDebug() << "**" << dist << endl;
-			if( dist < m_radius )
-			{
-				m.reset();
-
-				if( dist != 0.0 )
-					dist = m_radius / dist;
-
-				// pinch:
-				m.scale(
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
-
-				// whirl:
-				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-
-				m.translate( m_center.x(), m_center.y() );
-
-				itr.current()->current()->setCtrlPoint1( delta.transform( m ) );
-			}
-
-
-			delta = itr.current()->current()->ctrlPoint2() - m_center;
-			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
-
-kdDebug() << "**" << dist << endl;
-			if( dist < m_radius )
-			{
-				m.reset();
-
-				if( dist != 0.0 )
-					dist = m_radius / dist;
-
-				// pinch:
-				m.scale(
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
-
-				// whirl:
-				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-
-				m.translate( m_center.x(), m_center.y() );
-
-				itr.current()->current()->setCtrlPoint2( delta.transform( m ) );
-			}
-
-			// invalidate bounding box once:
-			itr.current()->invalidateBoundingBox();
-
-			itr.current()->next();
+			segmentList.current()->setKnot2( delta.transform( m ) );
 		}
+
+
+		if( segmentList.current()->type() == segment_begin )
+		{
+			segmentList.next();
+			continue;
+		}
+
+
+		delta = segmentList.current()->ctrlPoint1() - m_center;
+		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+
+kdDebug() << "**" << dist << endl;
+		if( dist < m_radius )
+		{
+			m.reset();
+
+			if( dist != 0.0 )
+				dist = m_radius / dist;
+
+			// pinch:
+			m.scale(
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+
+			// whirl:
+			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+
+			m.translate( m_center.x(), m_center.y() );
+
+			segmentList.current()->setCtrlPoint1( delta.transform( m ) );
+		}
+
+
+		delta = segmentList.current()->ctrlPoint2() - m_center;
+		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+
+kdDebug() << "**" << dist << endl;
+		if( dist < m_radius )
+		{
+			m.reset();
+
+			if( dist != 0.0 )
+				dist = m_radius / dist;
+
+			// pinch:
+			m.scale(
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+
+			// whirl:
+			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+
+			m.translate( m_center.x(), m_center.y() );
+
+			segmentList.current()->setCtrlPoint2( delta.transform( m ) );
+		}
+
+		// invalidate bounding box once:
+		segmentList.invalidateBoundingBox();
+
+		segmentList.next();
 	}
 }
 

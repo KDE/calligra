@@ -10,6 +10,7 @@
 
 #include "vsegment.h"
 #include "vsegmentlist.h"
+#include "vvisitor.h"
 
 #include <kdebug.h>
 
@@ -399,6 +400,13 @@ VSegmentList::load( const QDomElement& element )
 	if( m_isClosed )
 		close();
 }
+
+void
+VSegmentList::accept( VVisitor& visitor )
+{
+	visitor.visitVSegmentList( *this );
+}
+
 
 VSegmentList&
 VSegmentList::operator=( const VSegmentList& list )

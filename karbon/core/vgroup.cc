@@ -10,6 +10,7 @@
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vpath.h"
+#include "vvisitor.h"
 
 #include <kdebug.h>
 
@@ -185,20 +186,17 @@ VGroup::load( const QDomElement& element )
 	}
 }
 
+void
+VGroup::accept( VVisitor& visitor )
+{
+	visitor.visitVGroup( *this );
+}
+
 
 void
 VGroup::take( const VObject& object )
 {
 	m_objects.removeRef( &object );
-}
-
-void
-VGroup::accept( VVisitor& visitor )
-{
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current() ; ++itr )
-		itr.current()->accept( visitor );
 }
 
 void

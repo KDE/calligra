@@ -13,6 +13,7 @@
 class QDomElement;
 class QWMatrix;
 class VSegment;
+class VVisitor;
 
 
 // The general list stuff is stolen from Qt.
@@ -50,10 +51,12 @@ public:
 
 	virtual const KoRect& boundingBox() const;
 
-	virtual VSegmentList* clone() const;
-
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
+
+	virtual VSegmentList* clone() const;
+
+	virtual void accept( VVisitor& visitor );
 
 
 	// general list stuff:

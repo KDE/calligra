@@ -32,11 +32,12 @@ public:
 	VBooleanType type() const { return m_type; }
 	void setType( VBooleanType type ) { m_type = type; }
 
+	// we can only visit object pairs:
 	virtual void visit( VObject& /*object*/ ) {}
 	void visit( VObject& object1, VObject& object2 );
 
-	virtual void visitVPath(
-		VPath& path, QPtrList<VSegmentList>& lists );
+	virtual void visitVPath( VPath& path );
+	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:
 	void doIt();
@@ -48,8 +49,8 @@ private:
 		VParamList& params1, VParamList& params2 );
 
 	VBooleanType m_type;
-	QPtrList<VSegmentList>* m_lists1;
-	QPtrList<VSegmentList>* m_lists2;
+	VSegmentList* m_list1;
+	VSegmentList* m_list2;
 };
 
 #endif

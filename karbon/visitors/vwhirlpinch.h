@@ -36,8 +36,8 @@ public:
 	double radius() const { return m_radius; }
 	void setRadius( double radius ) { m_radius = radius; }
 
-	virtual void visitVPath(
-		VPath& path, QPtrList<VSegmentList>& lists );
+	virtual void visitVPath( VPath& path );
+	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:
 	KoPoint m_center;
