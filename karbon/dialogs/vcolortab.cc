@@ -76,9 +76,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	new QLabel( i18n( "R:" ), cgroupbox );
 	new QLabel( i18n( "G:" ), cgroupbox );
 	new QLabel( i18n( "B:" ), cgroupbox );
-	mRed = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
-	mGreen = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
-	mBlue = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
+	mRed = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
+	mGreen = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
+	mBlue = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
@@ -87,9 +87,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	new QLabel( i18n( "Hue:", "H:" ), cgroupbox );
 	new QLabel( i18n( "Saturation:", "S:" ), cgroupbox );
 	new QLabel( i18n( "Value:", "V:" ), cgroupbox );
-	mHue = new KIntSpinBox( 0, 359, 1, 0, 0, cgroupbox );
-	mSaturation = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
-	mValue = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
+	mHue = new KIntSpinBox( 0, 359, 1, 0, 10, cgroupbox );
+	mSaturation = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
+	mValue = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
 	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
