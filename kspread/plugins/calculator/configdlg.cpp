@@ -74,7 +74,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
              this, SLOT( set_background_color( const QColor & ) ) );
 
 
-  connect(button2,SIGNAL(clicked()),this,SLOT(set_background_color()));
+  //  connect(button2,SIGNAL(clicked()),this,SLOT(set_background_color()));
 
 
   label5 = new QLabel(box);
