@@ -62,10 +62,16 @@
   		<Action name="configure" group="settings_configure"/>
 	</Menu>
 	</MenuBar>
-	<ToolBar name="view_toolbar" fullWidth="false">
-		<Text>View</Text>
+	<ToolBar name="edit_toolbar" fullWidth="false">
+		<Text>Edit</Text>
 		<Action name="edit_undo"/>
   		<Action name="edit_redo"/>
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+	</ToolBar>
+	<ToolBar name="view_toolbar" fullWidth="false">
+		<Text>View</Text>
 		<Action name="view_mode"/>
 		<Action name="view_zoom"/>
 		<Action name="help_context"/>
