@@ -112,7 +112,7 @@ public:
     void handleKeyPressEvent( QKeyEvent * e );
     void handleKeyReleaseEvent( QKeyEvent * e );
     // iPoint is in Layout Unit pixels
-    void handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true );
+    void handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true, bool insertDirectCursor = false );
     void handleMouseMoveEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseReleaseEvent();
     void handleMouseDoubleClickEvent( QMouseEvent* e, const QPoint& iPoint );
@@ -200,7 +200,7 @@ protected:
      * and to call the parent implementation (in all cases)
      */
     virtual void drawCursor( bool b );
-    void placeCursor( const QPoint &pos /* in internal coordinates */ );
+    void placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
 
     /** Reimplement this to handle PageUp. Example implementation:
         textView->cursor()->gotoPageUp( scrollview->visibleHeight() ); */
@@ -215,6 +215,7 @@ protected:
 
     void deleteWordLeft();
     void deleteWordRight();
+    void insertParagraph(const QPoint &pos);
 
 private slots:
     void blinkCursor();

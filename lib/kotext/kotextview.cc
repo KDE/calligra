@@ -570,7 +570,7 @@ QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
     return QString::null;
 }
 
-void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag )
+void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag, bool insertDirectCursor )
 {
     mightStartDrag = FALSE;
     hideCursor();
@@ -582,7 +582,7 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
     }
 
     KoTextCursor oldCursor = *m_cursor;
-    placeCursor( iPoint );
+    placeCursor( iPoint, insertDirectCursor );
     ensureCursorVisible();
 
     if ( e->button() != LeftButton )
@@ -754,8 +754,25 @@ bool KoTextView::maybeStartDrag( QMouseEvent* e )
     return false;
 }
 
-void KoTextView::placeCursor( const QPoint &pos )
+void KoTextView::insertParagraph(const QPoint &pos)
 {
+    KoTextParag *last = textDocument()->lastParag();
+    //todo add kotextparag.
+    for (int i = 0; i < 3 ;i++)
+    {
+        KoTextParag *s=textDocument()->createParag( textDocument(), last );
+        last = s;
+    }
+}
+
+void KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
+{
+    if ( insertDirectCursor && (pos.y()>textDocument()->height()) )
+    {
+        kdDebug()<<" pos.x() !"<<pos.x()<<" pos.y() :!"<<pos.y()<<endl;
+        kdDebug()<<" textDocument()->height() :"<<textDocument()->height()<<endl;
+        insertParagraph(pos);
+    }
     m_cursor->restoreState();
     KoTextParag *s = textDocument()->firstParag();
     m_cursor->place( pos, s, false, &variablePosition );
