@@ -9,6 +9,7 @@
 #include <kfiledialog.h>
 #include <opMainWindowIf.h>
 #include <kapp.h>
+#include <klocale.h>
 
 QList<KFormulaShell>* KFormulaShell::s_lstShells = 0L;
 

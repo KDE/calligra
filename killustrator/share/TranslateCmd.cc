@@ -23,6 +23,7 @@
 */
 
 #include "TranslateCmd.h"
+#include <klocale.h>
 
 TranslateCmd::TranslateCmd (GDocument* doc, float x, float y) :
   ObjectManipCmd (doc, i18n("Translate")) {

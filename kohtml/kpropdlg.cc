@@ -30,6 +30,7 @@
 #include "kpropdlg.moc"
 #include "kapp.h"
 #include "kpanner.h"
+#include <klocale.h>
 
 #define QT_14
 

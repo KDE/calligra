@@ -17,6 +17,7 @@
 #include "kword_page.h"
 #include "frame.h"
 #include "framedia.h"
+#include <klocale.h>
 #include "framedia.moc"
 
 /******************************************************************/

@@ -23,6 +23,7 @@
 */
 
 #include "AddLineSegmentCmd.h"
+#include <klocale.h>
 
 AddLineSegmentCmd::AddLineSegmentCmd (GDocument* doc, GPolyline* obj,
 				      int idx, QList<Coord>& pnts) 

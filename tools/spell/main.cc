@@ -24,6 +24,7 @@
 #include <komAutoLoader.h>
 
 #include <qmsgbox.h>
+#include <klocale.h>
 
 typedef KOMAutoLoader<MyTool> MyAutoLoader;
 

@@ -21,6 +21,7 @@
 #include "searchdia.moc"
 
 #include <kmsgbox.h>
+#include <klocale.h>
 
 /******************************************************************/
 /* Class: KWSearchDia                                             */

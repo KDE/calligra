@@ -16,6 +16,7 @@
 #include "sheetdlg.h"
 #include "sheetdlg.moc"
 #include <kapp.h>
+#include <klocale.h>
 
 SheetDlg::SheetDlg( QDialog *parent, const char *name )
     :QWidget( (QWidget*)parent, name )

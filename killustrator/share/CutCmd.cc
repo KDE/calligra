@@ -26,6 +26,7 @@
 #include <strstream.h>
 #include <qclipboard.h>
 #include "CutCmd.h"
+#include <klocale.h>
 
 CutCmd::CutCmd (GDocument* doc) 
   : Command(i18n("Cut"))

@@ -57,6 +57,7 @@
 #include "edithtmldlg.h"
 #include "openurldlg.h"
 #include "kfileio.h"
+#include <klocale.h>
 
 KoHTMLFrame::KoHTMLFrame(KoHTMLView *_view, KoHTMLChild *_child)
 :KoFrame(_view)

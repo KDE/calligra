@@ -24,6 +24,7 @@
 
 #include "InsertPixmapCmd.h"
 #include "GPixmap.h"
+#include <klocale.h>
 
 InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const char* fname) :
  Command(i18n("Insert Pixmap"))

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "ScaleCmd.h"
+#include <klocale.h>
 
 ScaleCmd::ScaleCmd (GDocument* doc, int mask, float x, float y) : 
   ObjectManipCmd (doc, i18n("Scale")) 

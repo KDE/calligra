@@ -29,6 +29,7 @@
 #include <qpushbutton.h>
 
 #include <kapp.h>
+#include <klocale.h>
 
 HTMLEditDlg::HTMLEditDlg(QString data)
 :QDialog(0L, "htmlEditDlg", true)

@@ -23,6 +23,7 @@
 */
 
 #include "ReorderCmd.h"
+#include <klocale.h>
 
 ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos) 
   : Command(i18n("Reorder"))

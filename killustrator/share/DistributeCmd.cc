@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "DistributeCmd.h"
+#include <klocale.h>
 
 DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib, 
 			      VertDistribution vdistrib, 

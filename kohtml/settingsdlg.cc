@@ -36,6 +36,7 @@
 #include "kpropgroup.h"
 #include "kpropfont.h"
 #include "kpropcolor.h"
+#include <klocale.h>
 
 SettingsDlg::SettingsDlg()
 :KPropDlg(KPropDlg::TREE, KPropDlg::OK | KPropDlg::CANCEL | KPropDlg::APPLY,

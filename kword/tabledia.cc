@@ -16,6 +16,7 @@
 #include "kword_doc.h"
 
 #include "tabledia.h"
+#include <klocale.h>
 #include "tabledia.moc"
 
 /******************************************************************/

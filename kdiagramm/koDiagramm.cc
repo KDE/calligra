@@ -58,6 +58,7 @@ const double KREIS_CUTOFF = 1.0;
 #include "KoDiagrammLinesConfigDialog.h"
 #include "KoDiagrammLinesPointsConfigDialog.h"
 #include "KoDiagrammPointsConfigDialog.h"
+#include <klocale.h>
 #endif
 
 bool operator < ( const pair<double, string>& x, const pair<double, string>& y)

@@ -38,6 +38,7 @@
 #include "clipbrd_dnd.h"
 
 #include <qevent.h>
+#include <klocale.h>
 
 /******************************************************************/
 /* Class: KWordChild                                              */

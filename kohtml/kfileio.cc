@@ -13,6 +13,7 @@
 #include <qfileinf.h>
 
 #include "kfileio.h"
+#include <klocale.h>
 
 
 //-----------------------------------------------------------------------------

@@ -20,6 +20,7 @@
 #include "frame.h"
 #include "parag.h"
 #include "char.h"
+#include <klocale.h>
 
 /******************************************************************/
 /* Class: KWFootNoteManager                                       */

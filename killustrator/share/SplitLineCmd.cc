@@ -23,6 +23,7 @@
 */
 
 #include "SplitLineCmd.h"
+#include <klocale.h>
 
 SplitLineCmd::SplitLineCmd (GDocument* doc, GPolyline* o, int idx) 
   : Command(i18n("Split Line"))

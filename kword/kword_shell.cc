@@ -21,6 +21,7 @@
 
 #include <koAboutDia.h>
 #include <kfiledialog.h>
+#include <klocale.h>
 #include <opMainWindowIf.h>
 #include <kapp.h>
 #include <qmsgbox.h>

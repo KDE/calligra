@@ -36,6 +36,7 @@
 
 #include "clipbrd_dnd.h"
 #include "defs.h"
+#include <klocale.h>
 
 #define DEBUG
 

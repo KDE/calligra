@@ -37,6 +37,7 @@
 
 #include "kdiagramm_doc.h"
 #include "kdiagramm_shell.h"
+#include <klocale.h>
 
 /*****************************************************************************
  *

@@ -27,6 +27,7 @@
 #include <opMainWindowIf.h>
 #include <kapp.h>
 #include <qmsgbox.h>
+#include <klocale.h>
 
 QList<KDiagrammShell>* KDiagrammShell::s_lstShells = 0L;
 

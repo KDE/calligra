@@ -25,6 +25,7 @@
 #include "InsertClipartCmd.h"
 #include "qwmf.h"
 #include "GClipart.h"
+#include <klocale.h>
 
 InsertClipartCmd::InsertClipartCmd (GDocument* doc, const char* fname) :
  Command(i18n("Insert Clipart"))

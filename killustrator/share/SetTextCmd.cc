@@ -23,6 +23,7 @@
 */
 
 #include "SetTextCmd.h"
+#include <klocale.h>
 
 SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString& s) 
   : Command(i18n("Change Text"))

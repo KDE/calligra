@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreateOvalCmd.h"
+#include <klocale.h>
 
 CreateOvalCmd::CreateOvalCmd (GDocument* doc, GOval* oval) : 
   Command(i18n("Create Oval")) 

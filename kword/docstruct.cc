@@ -17,6 +17,7 @@
 #include "kword_view.h"
 
 #include "docstruct.h"
+#include <klocale.h>
 #include "docstruct.moc"
 
 /******************************************************************/

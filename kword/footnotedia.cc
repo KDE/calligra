@@ -22,6 +22,7 @@
 #include "footnote.h"
 
 #include <qlist.h>
+#include <klocale.h>
 
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */

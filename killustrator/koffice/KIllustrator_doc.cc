@@ -31,6 +31,7 @@
 #include "GfxWrapper.h"
 #include <opApplication.h>
 #include <qmessagebox.h>
+#include <klocale.h>
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
 				      const QRect& rect,

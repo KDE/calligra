@@ -32,6 +32,7 @@
 #include <kapp.h>
 #include <kseparator.h>
 #include <kfiledialog.h>
+#include <klocale.h>
 
 OpenURLDlg::OpenURLDlg()
 :QDialog(0L, "openURLDlg", true)

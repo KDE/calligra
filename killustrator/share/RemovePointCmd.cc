@@ -23,6 +23,7 @@
 */
 
 #include "RemovePointCmd.h"
+#include <klocale.h>
 
 RemovePointCmd::RemovePointCmd (GDocument* doc, GPolyline* o, int idx) 
   : Command(i18n("Remove Point"))

@@ -23,6 +23,7 @@
 */
 
 #include "EditPointCmd.h"
+#include <klocale.h>
 
 EditPointCmd::EditPointCmd (GDocument* doc, GObject* o,
 			    int idx, float dx, float dy) 

@@ -54,6 +54,7 @@
 #include "xmlutils/XmlReader.h"
 
 #include "units.h"
+#include <klocale.h>
 
 // default papersize in mm
 #define PAPER_WIDTH 210.0

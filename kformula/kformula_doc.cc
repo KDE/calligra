@@ -26,6 +26,7 @@
 #include <qwidget.h>
 
 #include <unistd.h>
+#include <klocale.h>
 
 //#define FIXEDSPACE 1             // Space between 2 blocks
 #define DEFAULT_FONT_SIZE 24

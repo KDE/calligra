@@ -26,6 +26,7 @@
 #include <qclipboard.h>
 #include <strstream.h>
 #include "CopyCmd.h"
+#include <klocale.h>
 
 CopyCmd::CopyCmd (GDocument* doc) 
   : Command(i18n("Copy"))

@@ -40,6 +40,7 @@
 
 #include "kimage_doc.h"
 #include "kimage_shell.h"
+#include <klocale.h>
 
 bool shit = false;
 

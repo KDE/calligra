@@ -27,6 +27,7 @@
 #include <strstream.h>
 #include "DuplicateCmd.h"
 #include "PStateManager.h"
+#include <klocale.h>
 
 DuplicateCmd::DuplicateCmd (GDocument* doc) 
   : Command(i18n("Duplicate"))

@@ -23,6 +23,7 @@
 */
 
 #include "GroupCmd.h"
+#include <klocale.h>
 #include <map>
 
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreatePolygonCmd.h"
+#include <klocale.h>
 
 CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj) 
   : Command(i18n("Create Polygon"))

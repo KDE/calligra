@@ -35,6 +35,7 @@
 
 #include "htmwidget.h"
 #include "kfileio.h"
+#include <klocale.h>
 
 KoHTMLChild::KoHTMLChild(KoHTMLDoc *doc, const KRect &rect, KOffice::Document_ptr koDoc)
 :KoDocumentChild(rect, koDoc)

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "RotateCmd.h"
+#include <klocale.h>
 
 RotateCmd::RotateCmd (GDocument* doc, const Coord& center, float a) :
   ObjectManipCmd (doc, i18n("Rotate")) {

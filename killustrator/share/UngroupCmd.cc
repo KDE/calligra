@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "UngroupCmd.h"
+#include <klocale.h>
 
 UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
   document = doc;

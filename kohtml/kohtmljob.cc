@@ -35,6 +35,7 @@
 #include <kapp.h>
 
 #include "kfileio.h"
+#include <klocale.h>
 
 KoHTMLJob::KoHTMLJob( KMyHTMLView *_view, const char *_url, const char *_dataURL, JobType _jType, bool _reload )
 :CachedKIOJob()

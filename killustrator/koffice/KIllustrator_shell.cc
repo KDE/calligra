@@ -38,6 +38,7 @@
 #include <qmsgbox.h>
 #include <qkeycode.h>
 #include <qfileinfo.h>
+#include <klocale.h>
 
 list<KIllustratorShell*>* KIllustratorShell::s_lstShells = 0L;
 bool KIllustratorShell::previewHandlerRegistered = false;

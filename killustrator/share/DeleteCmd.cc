@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "DeleteCmd.h"
+#include <klocale.h>
 
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;

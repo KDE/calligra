@@ -34,6 +34,7 @@
 #include <kapp.h>
 #include <kiconloader.h>
 #include <qmsgbox.h>
+#include <klocale.h>
 
 QList <KoHTMLShell> *KoHTMLShell::s_lstShells = 0L;
 

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreatePolylineCmd.h"
+#include <klocale.h>
 
 CreatePolylineCmd::CreatePolylineCmd (GDocument* doc, GPolyline* line) 
   : Command(i18n("Create Polyline"))

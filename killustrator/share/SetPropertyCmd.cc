@@ -23,6 +23,7 @@
 */
 
 #include "SetPropertyCmd.h"
+#include <klocale.h>
 
 SetPropertyCmd::SetPropertyCmd (GDocument* doc, 
 				const GObject::OutlineInfo& oinfo,

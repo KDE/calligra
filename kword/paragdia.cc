@@ -17,6 +17,7 @@
 #include "paragdia.moc"
 #include <kiconloader.h>
 #include "kword_doc.h"
+#include <klocale.h>
 
 /******************************************************************/
 /* class KWPagePreview                                            */

@@ -19,6 +19,7 @@
 #include "font.h"
 
 #include "stylist.h"
+#include <klocale.h>
 #include "stylist.moc"
 
 /******************************************************************/

@@ -20,6 +20,7 @@
 #include "kword_view.h"
 #include "footnote.h"
 #include "clipbrd_dnd.h"
+#include <klocale.h>
 
 /******************************************************************/
 /* Class: KWPage                                                  */

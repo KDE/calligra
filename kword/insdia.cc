@@ -18,6 +18,7 @@
 #include "kword_page.h"
 
 #include "insdia.h"
+#include <klocale.h>
 #include "insdia.moc"
 
 /******************************************************************/

@@ -16,6 +16,7 @@
 #include <kfiledialog.h>
 #include <kapp.h>
 #include <qmsgbox.h>
+#include <klocale.h>
 
 QList<KoShellWindow>* KoShellWindow::s_lstShells = 0L;
 

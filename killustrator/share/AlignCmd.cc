@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "AlignCmd.h"
+#include <klocale.h>
 
 AlignCmd::AlignCmd (GDocument* doc, HorizAlignment halign, 
                     VertAlignment valign, bool centerToPage, 

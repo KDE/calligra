@@ -18,6 +18,7 @@
 #include "kword_page.h"
 
 #include "deldia.h"
+#include <klocale.h>
 #include "deldia.moc"
 
 /******************************************************************/
