@@ -185,14 +185,18 @@ New:
 - More DCOP calls
 
 Layout/painting fixes:
+- Fixed WYSIWYG algorithm, no more negative spaces at some zoom levels.
 - Transparency painting fixes: transparent frames, including text frames.
 Note that transparent images do not print properly with the current Qt, Qt 3.1 will fix it.
 - Footnote layout fix, when multiple footnotes are on the same page and the last one won't fit
 - Improved algorithm for the way the text flows between frames of the same frameset.
+- Zigzag lines for background checked words
 - Fixed paragraph height increasing when inserting a footnote.
 - Fixed the white lines during the painting of inline frames
 - Fixed footer layout in some first/even/odd footer settings
-- Zigzag lines for background checked words
+- Fixed baseline alignment for variables
+- Delete overflowing frame (in auto-resize mode) when removing text from it
+- Compress repaint events coming from the background spell-checking
 
 Bugfixes:
 - Several fixes for the readonly case
@@ -216,6 +220,8 @@ Bugfixes:
 - Faster pasting of text
 - Fix use keyboard when frameset is protect content.
 - Fix reload PgUp and PgDn config
+- Fixed disappearing frame after undoing deletion of inline frame
+- Inserting a non-inline table makes the text flow around it by default
 
 KoText library fixes:
 - Fixed preview in paragraph dialog (was truncated)
@@ -232,7 +238,7 @@ Crashes:
 - Do not crash when pasting an embedded object (not implemented though)
 - Fixed crash when removing a footnote variable
 - Fixed crash when we close kword and "special char dialogbox" is not closed
-- Fixed infinite loop when we resizing footnote
+- Fixed several problems with footnote layout
 - Fixed crash when we delete style that is also used as a 'following style'.
 - Fixed crash with bookmarks
 - Fixed several memory leaks
