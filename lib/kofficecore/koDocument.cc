@@ -1216,7 +1216,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
-                                  .arg( errorLine ).arg( errorColumn ).arg( errorMsg );
+                                  .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) );
             res=false;
         }
 
@@ -1250,7 +1250,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
                                 << "  Line: " << errorLine << " Column: " << errorColumn << endl
                                 << "  Message: " << errorMsg << endl;
                 d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
-                                      .arg( errorLine ).arg( errorColumn ).arg( errorMsg );
+                                      .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) );
                 delete store;
                 QApplication::restoreOverrideCursor();
                 return false;
