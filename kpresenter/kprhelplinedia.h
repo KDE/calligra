@@ -27,6 +27,7 @@ class QRadioButton;
 class KPresenterDoc;
 class KLineEdit;
 class KFloatValidator;
+class KDoubleNumInput;
 
 class KPrMoveHelpLineDia : public KDialogBase
 {
@@ -41,7 +42,7 @@ private slots:
     void slotRemoveHelpLine();
 
 protected:
-    KLineEdit* position;
+    KDoubleNumInput* position;
     KPresenterDoc *m_doc;
     bool m_bRemoveLine;
 };
@@ -61,11 +62,10 @@ private slots:
 
 protected:
     KoRect limitOfPage;
-    KLineEdit* position;
+    KDoubleNumInput* position;
     QRadioButton *m_rbHoriz;
     QRadioButton *m_rbVert;
     KPresenterDoc *m_doc;
-    KFloatValidator *floatValidator;
 };
 
 
@@ -83,8 +83,8 @@ private slots:
 protected:
     KoRect limitOfPage;
     bool m_bRemovePoint;
-    KLineEdit* positionX;
-    KLineEdit* positionY;
+    KDoubleNumInput* positionX;
+    KDoubleNumInput* positionY;
     KPresenterDoc *m_doc;
 };
 
