@@ -2238,7 +2238,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The SUMX2MY2() function (SUM(X^2-Y^2) returns the difference of the squares of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
+	<Text>The SUMX2MY2() function (SUM(X^2-Y^2)) returns the difference of the squares of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
 	<Syntax>SUMX2MY2(array1;array2)</Syntax>
 	<Example>SUMX2MY2(A1:A2;B1:B2) with A1=2 A2=5 and B1=3 B2=5 returns -5</Example>
       </Help>
