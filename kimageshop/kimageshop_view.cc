@@ -80,7 +80,7 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
   m_pDoc = _doc;
-  m_pCanvas = 0L;
+  m_pCanvasView = 0L;
   m_pLayerList = 0L;
   m_pHorz = 0L;
   m_pVert = 0L;
@@ -143,7 +143,7 @@ void KImageShopView::cleanUp()
   delete m_pVert;
   delete m_pHRuler;
   delete m_pVRuler;
-  delete m_pCanvas;
+  delete m_pCanvasView;
   delete m_pLayerList;
   
   KoViewIf::cleanUp();
@@ -228,34 +228,11 @@ void KImageShopView::createGUI()
 {
   kimgioRegister();
 
-  // setup canvas
-  m_pCanvas = new canvas( 510, 515, this );
-
-  // load some test layers
-  m_pCanvas->addRGBLayer("canvas/images/cam9b.jpg");
-  m_pCanvas->setLayerOpacity(200);
-
-  m_pCanvas->addRGBLayer("canvas/images/cambw12.jpg");
-  m_pCanvas->moveLayer(256,384);
-  m_pCanvas->setLayerOpacity(180);
-  m_pCanvas->addRGBLayer("canvas/images/cam05.jpg");
-  m_pCanvas->setLayerOpacity(255);
-  m_pCanvas->addRGBLayer("canvas/images/cam6.jpg");
-  m_pCanvas->moveLayer(240,280);
-  m_pCanvas->setLayerOpacity(255);
-  m_pCanvas->addRGBLayer("canvas/images/img2.jpg");
-  m_pCanvas->setLayerOpacity(80);
-  
-  brush br("canvas/images/brush.jpg");
-  br.setHotSpot(QPoint(25,25));
-  m_pCanvas->currentBrush=&br;
-  
-  
-  m_pCanvas->compositeImage(QRect());
-  m_pCanvas->show();
+  m_pCanvasView = new CanvasView(m_pDoc->canvas_(), this);
+  m_pDoc->canvas_()->addView(m_pCanvasView);
   
   // layerlist
-  //m_pLayerList  = new layerList(m_pCanvas);
+  //m_pLayerList  = new layerList(m_pCanvasView);
   //m_pLayerList->show();
   //m_pLayerList->resize(150,200);
 
@@ -281,8 +258,8 @@ void KImageShopView::setupScrollbars()
   m_pVert->setValue(m_pVert->minValue());
   m_pHorz->setValue(m_pHorz->minValue());
   
-  if ( m_pCanvas ) 
-    m_pCanvas->resize( widget()->width()-16, widget()->height()-16 );
+  if ( m_pCanvasView ) 
+    m_pCanvasView->resize( widget()->width()-16, widget()->height()-16 );
   
   m_pVert->setGeometry( widget()->width()-16, 0, 16, widget()->height()-16 );
   m_pHorz->setGeometry( 0, widget()->height()-16, widget()->width()-16, 16 );
@@ -292,10 +269,10 @@ void KImageShopView::setupRulers()
 {
   m_pHRuler = new KRuler( KRuler::horizontal, this );
   m_pVRuler = new KRuler( KRuler::vertical, this );
-  m_pCanvas->resize( m_pCanvas->width() - 20, m_pCanvas->height() - 20 );
-  m_pCanvas->move( 20, 20 );
-  m_pHRuler->setGeometry( 20, 0, m_pCanvas->width(), 20 );
-  m_pVRuler->setGeometry( 0, 20, 20, m_pCanvas->height() );
+  m_pCanvasView->resize( m_pCanvasView->width() - 20, m_pCanvasView->height() - 20 );
+  m_pCanvasView->move( 20, 20 );
+  m_pHRuler->setGeometry( 20, 0, m_pCanvasView->width(), 20 );
+  m_pVRuler->setGeometry( 0, 20, 20, m_pCanvasView->height() );
 
   m_pVRuler->showTinyMarks(true);
   m_pVRuler->showLittleMarks(true);
@@ -312,21 +289,21 @@ void KImageShopView::setupRulers()
 
 void KImageShopView::setRanges()
 {
-  m_pVRuler->setRange(0, m_pCanvas->height());
-  m_pHRuler->setRange(0, m_pCanvas->width());
+  m_pVRuler->setRange(0, m_pCanvasView->height());
+  m_pHRuler->setRange(0, m_pCanvasView->width());
 
-  m_pVert->setRange(0, m_pCanvas->height());
-  m_pHorz->setRange(0, m_pCanvas->width());
+  m_pVert->setRange(0, m_pCanvasView->height());
+  m_pHorz->setRange(0, m_pCanvasView->width());
 }
 
 void KImageShopView::scrollH( int _value )
 {
-  m_pCanvas->scroll( _value, 0 );
+  m_pCanvasView->scroll( _value, 0 );
 }
 
 void KImageShopView::scrollV( int _value )
 {
-  m_pCanvas->scroll( 0, _value );
+  m_pCanvasView->scroll( 0, _value );
 }
 
 void KImageShopView::newView()
@@ -371,15 +348,15 @@ void KImageShopView::resizeEvent( QResizeEvent* )
       if ( m_pVRuler )
 	m_pVRuler->show();
 	
-      m_pCanvas->resize( widget()->width() - 36, widget()->height() - 36 );
-      m_pCanvas->move( 20, 20 );
+      m_pCanvasView->resize( widget()->width() - 36, widget()->height() - 36 );
+      m_pCanvasView->move( 20, 20 );
       m_pVert->setGeometry( widget()->width() - 16, 0, 16, widget()->height() - 16 );
       m_pHorz->setGeometry( 0, widget()->height() - 16, widget()->width() - 16, 16 );
       
       if ( m_pHRuler )
-	m_pHRuler->setGeometry( 20, 0, m_pCanvas->width(), 20 );
+	m_pHRuler->setGeometry( 20, 0, m_pCanvasView->width(), 20 );
       if ( m_pVRuler )
-	m_pVRuler->setGeometry( 0, 20, 20, m_pCanvas->height() );
+	m_pVRuler->setGeometry( 0, 20, 20, m_pCanvasView->height() );
     }
   else
     {
@@ -391,8 +368,8 @@ void KImageShopView::resizeEvent( QResizeEvent* )
       if ( m_pVRuler )
 	m_pVRuler->hide();
 
-      m_pCanvas->move( 0, 0 );
-      m_pCanvas->resize( widget()->width(), widget()->height() );
+      m_pCanvasView->move( 0, 0 );
+      m_pCanvasView->resize( widget()->width(), widget()->height() );
     }
 
   slotUpdateView();

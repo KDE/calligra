@@ -33,6 +33,7 @@
 
 #include "kimageshop.h"
 #include "kimageshop_view.h"
+#include "canvas.h"
 
 #define MIME_TYPE "application/x-kimageshop"
 #define EDITOR "IDL:KImageShop/Document:1.0"
@@ -48,6 +49,7 @@ class KImageShopDoc : public QObject,
   KImageShopDoc();
   ~KImageShopDoc();
 
+  Canvas* canvas_() { return m_pCanvas; }
   virtual bool save( ostream&, const char* _format );
   virtual bool completeSaving( KOStore::Store_ptr _store );
   virtual bool hasToWriteMultipart() { return true; }
@@ -259,6 +261,7 @@ protected:
 public:
   QString m_strImageFormat;
   bool m_executeCommand;
+  Canvas *m_pCanvas;
 };
 
 #endif

@@ -24,7 +24,7 @@ layerList::layerList(QWidget * parent, const char * name, WFlags f)
 	init(0);
 }
 
-layerList::layerList(canvas *c, QWidget *parent, const char *name,
+layerList::layerList(Canvas *c, QWidget *parent, const char *name,
 										 WFlags f=0)
 	: QTableView(parent, name, f)
 {
@@ -32,7 +32,7 @@ layerList::layerList(canvas *c, QWidget *parent, const char *name,
 }
 
 void
-layerList::init(canvas *c)
+layerList::init(Canvas *c)
 {
 	setTableFlags(Tbl_autoVScrollBar);
 	can=c;

@@ -67,6 +67,32 @@ KImageShopDoc::KImageShopDoc()
   kimgioRegister();
 
   m_lstViews.setAutoDelete( false );
+
+  // setup canvas
+  m_pCanvas = new Canvas( 510, 515 );
+
+  // load some test layers
+  m_pCanvas->addRGBLayer("canvas/images/cam9b.jpg");
+  m_pCanvas->setLayerOpacity(200);
+
+  m_pCanvas->addRGBLayer("canvas/images/cambw12.jpg");
+  m_pCanvas->moveLayer(256,384);
+  m_pCanvas->setLayerOpacity(180);
+  m_pCanvas->addRGBLayer("canvas/images/cam05.jpg");
+  m_pCanvas->setLayerOpacity(255);
+  m_pCanvas->addRGBLayer("canvas/images/cam6.jpg");
+  m_pCanvas->moveLayer(240,280);
+  m_pCanvas->setLayerOpacity(255);
+  m_pCanvas->addRGBLayer("canvas/images/img2.jpg");
+  m_pCanvas->setLayerOpacity(80);
+  
+  brush br("canvas/images/brush.jpg");
+  br.setHotSpot(QPoint(25,25));
+  m_pCanvas->currentBrush=&br;
+  
+  
+  m_pCanvas->compositeImage(QRect());
+  //m_pCanvas->show();
 }
 
 CORBA::Boolean KImageShopDoc::initDoc()

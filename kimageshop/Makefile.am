@@ -18,6 +18,7 @@ kimageshop_SOURCES = \
  preferencesdlg.cc \
  zoomfactordlg.cc \
  canvas.cc \
+ canvasview.cc \
  layer.cc \
  layerlist.cc \
  brush.cc \
@@ -32,6 +33,7 @@ noinst_HEADERS = \
  preferencesdlg.h \
  zoomfactordlg.h \
  canvas.h \
+ canvasview.h \
  layer.h \
  layerlist.h \
  brush.h \
@@ -46,6 +48,7 @@ METASOURCES = \
  preferencesdlg.moc \
  zoomfactordlg.moc \
  canvas.moc \
+ canvasview.moc \
  layer.moc
 
 idl_DATA = kimageshop.idl

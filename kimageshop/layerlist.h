@@ -15,7 +15,7 @@ class layerList : public QTableView
 {
  public:
 	layerList(QWidget * parent=0, const char * name=0, WFlags f=0);
-	layerList(canvas *c, QWidget *parent=0, const char *name=0, WFlags f=0);
+	layerList(Canvas *c, QWidget *parent=0, const char *name=0, WFlags f=0);
 
 	void updateTable();
 
@@ -24,9 +24,9 @@ class layerList : public QTableView
 	virtual void mousePressEvent(QMouseEvent *e);
 
  private:
-	void init(canvas *c);
+	void init(Canvas *c);
 
-	canvas *can;
+	Canvas *can;
 	int items, selected;
 	static QPixmap *eyeIcon, *linkIcon;
 	static QRect eyeRect, linkRect;

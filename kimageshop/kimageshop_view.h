@@ -35,7 +35,7 @@
 
 #include "kimageshop.h"
 
-class canvas;
+class CanvasView;
 class layerList;
 class KImageShopDoc;
 class QScrollBar;
@@ -89,7 +89,7 @@ protected:
   
 private:
   KImageShopDoc *m_pDoc; 
-  canvas        *m_pCanvas;
+  CanvasView    *m_pCanvasView;
   layerList     *m_pLayerList;
   QScrollBar    *m_pHorz, *m_pVert;
   KRuler        *m_pHRuler, *m_pVRuler;
