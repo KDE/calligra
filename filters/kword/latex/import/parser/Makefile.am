@@ -2,7 +2,7 @@
 
 INCLUDES= -I$(srcdir) $(all_includes)
 liblatexparser_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-liblatexparser_la_LIBADD  = -lfl -lm $(KOFFICE_LIBS)
+liblatexparser_la_LIBADD  = -lm $(KOFFICE_LIBS)
 
 ####### Files
 
