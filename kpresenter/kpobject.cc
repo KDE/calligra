@@ -1268,7 +1268,7 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     saveOasisPosObject( xmlWriter );
-    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphics" );
+    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
     switch ( fillType )
     {
     case FT_BRUSH:
@@ -1290,22 +1290,22 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
 
     KPShadowObject::loadOasis(element, context, animation);
     KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( "draw:fill" ) )
+    if ( styleStack.hasAttribute( "draw:fill", QString::null, "graphic" ) )
     {
-        const QString fill = styleStack.attribute( "draw:fill" );
+        const QString fill = styleStack.attribute( "draw:fill", QString::null, "graphic" );
         kdDebug()<<" fill :"<<fill<<endl;
         QBrush tmpBrush;
 
         if ( fill == "solid" )
         {
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
-            if ( styleStack.hasAttribute( "draw:fill-color" ) )
-                tmpBrush.setColor(styleStack.attribute( "draw:fill-color" ) );
+            if ( styleStack.hasAttribute( "draw:fill-color", QString::null, "graphic" ) )
+                tmpBrush.setColor(styleStack.attribute( "draw:fill-color", QString::null, "graphic" ) );
             setBrush(tmpBrush );
         }
         else if ( fill == "hatch" )
         {
-            QString style = styleStack.attribute( "draw:fill-hatch-name" );
+            QString style = styleStack.attribute( "draw:fill-hatch-name", QString::null, "graphic" );
             kdDebug()<<" hatch style is  : "<<style<<endl;
 
             //type not defined by default
@@ -1400,7 +1400,7 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
             // otherwise the properties dialog for the object won't
             // display the preview for the gradient.
 
-            QString style = styleStack.attribute( "draw:fill-gradient-name" );
+            QString style = styleStack.attribute( "draw:fill-gradient-name", QString::null, "graphic" );
             kdDebug()<<" style gradient name :"<<style<<endl;
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
             kdDebug()<<" draw : "<<draw<<endl;
