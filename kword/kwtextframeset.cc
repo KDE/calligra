@@ -917,21 +917,27 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 
 int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
-    int marginLeft;
-    getMargins( yp, h, &marginLeft, 0L, 0L, 0L );
+    int marginLeft = 0;
+    if ( m_doc->viewMode()->shouldAdjustMargins() )
+    {
+        getMargins( yp, h, &marginLeft, 0L, 0L, 0L );
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
+        kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
 #endif
+    }
     return KoTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
 }
 
 int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
-    int marginRight;
-    getMargins( yp, h, 0L, &marginRight, 0L, 0L );
+    int marginRight = 0;
+    if ( m_doc->viewMode()->shouldAdjustMargins() )
+    {
+        getMargins( yp, h, 0L, &marginRight, 0L, 0L );
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
+        kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
 #endif
+    }
     return KoTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
 

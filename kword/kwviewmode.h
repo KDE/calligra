@@ -92,6 +92,9 @@ public:
     // TODO: maybe this should be more fine-grained.
     virtual bool shouldFormatVertically() { return true; }
 
+    // Should adjust[LR]Margin() happen (to run the text around frames on top etc.)
+    virtual bool shouldAdjustMargins() { return true; }
+
     // Does this viewmode know anything about frames?
     virtual bool hasFrames() { return true; }
 
@@ -200,6 +203,7 @@ public:
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
     virtual const QString type() {return "ModeText";}
     virtual bool shouldFormatVertically() { return false; }
+    virtual bool shouldAdjustMargins() { return false; }
     virtual bool hasFrames() { return false; }
 
     virtual bool isFrameSetVisible( const KWFrameSet* fs );
