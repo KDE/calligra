@@ -135,7 +135,7 @@ public:
 
   QString typeName() const;
   QDomElement writeToXml(QDomDocument &document);
-  void draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void draw(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
   int getNeighbourPoint(const KoPoint &point);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);

@@ -142,7 +142,7 @@ QDomElement GOval::writeToXml(QDomDocument &document)
   return oval;
 }
 
-void GOval::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool)
+void GOval::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool)
 {
   setPen(p);
   setBrush(p);
@@ -151,8 +151,6 @@ void GOval::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
   double cx = (ePoint.x() + sPoint.x()) * 0.5;
   double cy = (ePoint.y() + sPoint.y()) * 0.5;
   KoVectorPath *v = KoVectorPath::ellipse(cx, cy, rx, ry);
-  QWMatrix m;
-  m = m.translate(aXOffset, aYOffset);
   v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;

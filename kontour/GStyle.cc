@@ -42,17 +42,16 @@ GStyle::GStyle()
 GStyle::GStyle(const QDomElement &style)
 {
   mOutline = new KoOutline;
+  mFill = new KoFill;
   mStroked = style.attribute("stroked").toInt();;
-//  d->ocolor = ;
-/*
-  d->lwidth = style.attribute("width").toInt();
-  d->oopacity = style.attribute("oopacity").toInt();
-  d->join = (Qt::PenJoinStyle)style.attribute("join").toInt();
-  d->cap = (Qt::PenCapStyle)style.attribute("cap").toInt();
-  d->ftype = style.attribute("ftype").toInt();*/
-//  d->fcolor = ;
-//  d->fopacity = obj.d->fopacity;
-//  d->pattern = obj.d->pattern;
+  mOutline->width(style.attribute("width").toDouble());
+  mOutlineOpacity = style.attribute("oopacity").toInt();
+  mOutline->opacity(static_cast<int>(255.0 * static_cast<double>(mOutlineOpacity) / 100.0));
+  mOutline->join(static_cast<KoOutline::Join>(style.attribute("join").toInt()));
+  mOutline->cap(static_cast<KoOutline::Cap>(style.attribute("cap").toInt()));
+  mFilled = style.attribute("ftype").toInt();
+  mFillOpacity = style.attribute("fopacity").toInt();
+  mFill->opacity(static_cast<int>(255.0 * static_cast<double>(mFillOpacity) / 100.0));
 }
 
 GStyle::GStyle(GStyle &obj)
@@ -88,15 +87,15 @@ KoFill *GStyle::fill() const
 QDomElement GStyle::writeToXml(QDomDocument &document)
 {
   QDomElement style = document.createElement("style");
-/*  style.setAttribute("stroked", d->stroked);
-  style.setAttribute("ocolor", d->ocolor.name());
-  style.setAttribute("width", d->lwidth);
-  style.setAttribute("oopacity", d->oopacity);
-  style.setAttribute("join", d->join);
-  style.setAttribute("cap", d->cap);
-  style.setAttribute("ftype", d->ftype);
-  style.setAttribute("fcolor", d->fcolor.name());
-  style.setAttribute("pattern", d->pattern);*/
+  style.setAttribute("stroked", mStroked);
+  style.setAttribute("ocolor", mOutline->color().name());
+  style.setAttribute("width", mOutline->width());
+  style.setAttribute("oopacity", mOutlineOpacity);
+  style.setAttribute("join", mOutline->join());
+  style.setAttribute("cap", mOutline->cap());
+  style.setAttribute("ftype", mFilled);
+  style.setAttribute("fcolor", mFill->color().name());
+  style.setAttribute("fopacity", mFillOpacity);
   return style;
 }
 

@@ -128,7 +128,7 @@ QDomElement GPolygon::writeToXml(QDomDocument &document)
   return rect;
 }
 
-void GPolygon::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool)
+void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool)
 {
   setPen(p);
   setBrush(p);
@@ -152,79 +152,11 @@ void GPolygon::calcBoundingBox()
 
 int GPolygon::getNeighbourPoint(const KoPoint &p)
 {
-// TODO implement isNear() and transform()
-/*  for(int i = 1; i >= 0; i--)
-  {
-    KoPoint c = segPoint[i].transform(tMatrix);
-    if(c.isNear(p, Kontour::nearDistance))
-      return i;
-  }*/
   return -1;
 }
 
 void GPolygon::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
-/*  double adx = fabs (dx);
-  double ady = fabs (dy);
-  double angle = 0;
-
-  if (idx == 0 && segPoint[0] == segPoint[1])
-    idx = 1;
-
-  Rect r (sPoint, ePoint);
-  r.normalize ();
-
-  double a = r.width () / 2.0;
-  double b = r.height () / 2.0;
-
-  if (adx > ady) {
-    double x = segPoint[idx].x () + dx;
-    if (x < r.left ())
-      x = r.left ();
-    else if (x > r.right ())
-      x = r.right ();
-
-    x -= (r.left () + a);
-    angle = acos (x / a) * RAD_FACTOR;
-    if (segPoint[idx].y () < r.center ().y ())
-      angle = 360 - angle;
-  }
-  else {
-    double y = segPoint[idx].y () + dy;
-    if (y < r.top ())
-      y = r.top ();
-    else if (y > r.bottom ())
-      y = r.bottom ();
-
-    y -= (r.top () + b);
-    angle = asin (y / b) * RAD_FACTOR;
-    if (segPoint[idx].y () < r.center ().y ()) {
-      if (segPoint[idx].x () > r.center ().x ())
-        angle += 360;
-      else
-        angle = 180 - angle;;
-    }
-    else if (segPoint[idx].x () < r.center ().x ())
-      angle = 180 - angle;
-  }
-  if (idx == 0)
-    sAngle = angle;
-  else
-    eAngle = angle;
-
-  // test for equality
-  double a1 = qRound (sAngle < 0 ? sAngle + 360 : sAngle);
-  double a2 = qRound (eAngle < 0 ? eAngle + 360 : eAngle);
-  if (a1 >= a2 - 1 && a1 <= a2 + 1) {
-    eAngle = sAngle;
-    outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
-  }
-  else if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    outlineInfo.shape = GObject::OutlineInfo::ArcShape;
-
-  gShape.setInvalid ();
-
-  updateRegion ();*/
 }
 
 void GPolygon::removePoint(int idx, bool update)

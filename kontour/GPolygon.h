@@ -48,7 +48,7 @@ public:
 
   QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);
-  void draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void draw(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
   int getNeighbourPoint(const KoPoint &point);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
@@ -61,10 +61,12 @@ public:
   bool isConvertible() const;
 
 private:
-  KoPoint     sPoint;           // Start point
-  KoPoint     ePoint;           // End point
-  double      mXRoundness;      // Rectangle roundness
-  double      mYRoundness;      // Rectangle roundness
+  int mNumber;
+  KoPoint mCenter;
+  double mAAngle;
+  double mBAngle;
+  double mARadius;
+  double mBRadius;
 };
 
 #endif

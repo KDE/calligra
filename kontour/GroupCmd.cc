@@ -35,22 +35,21 @@
 GroupCmd::GroupCmd(GDocument *aGDoc):
 Command(aGDoc, i18n("Group Objects"))
 {
-/*  group = 0L;
+  group = 0L;
 
   QMap<int, GObject*> idx_map;
 
-  for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+  for(QPtrListIterator<GObject> it(document()->activePage()->getSelection()); it.current(); ++it)
+  {
     // remember position of object in order to keep the order of
     // objects in the group
-    GObject* o = *it;
-    int idx = (int) document->activePage()->findIndexOfObject (o);
+    GObject *o = *it;
+    int idx = static_cast<int>(document()->activePage()->findIndexOfObject(o));
     idx_map.insert(idx, o);
   }
-  for (QMap<int, GObject*>::ConstIterator it=idx_map.begin();
-       it != idx_map.end(); ++it) {
-      // now insert the objects according their position in the list
-      objects.append(it.data());
-  }*/
+  for(QMap<int, GObject*>::ConstIterator it = idx_map.begin(); it != idx_map.end(); ++it)
+    // now insert the objects according their position in the list
+    objects.append(it.data());
 }
 
 GroupCmd::~GroupCmd()
@@ -61,24 +60,21 @@ GroupCmd::~GroupCmd()
 
 void GroupCmd::execute()
 {
-/*  if (!objects.isEmpty ()) {
-    group = new GGroup (document);
+  if(!objects.isEmpty())
+  {
+    group = new GGroup();
     group->ref();
 
-    document->setAutoUpdate (false);
-
-    for (GObject *o=objects.first(); o!=0L;
-         o=objects.next())
-      group->addObject (o);
+    for(GObject *o = objects.first(); o != 0L; o = objects.next())
+    group->addObject(o);
 
     // now insert the new group into the document
-    document->activePage()->insertObject (group);
+    document()->activePage()->insertObject(group);
 
     // and select it (but only it !)
-    document->activePage()->deleteSelectedObjects ();
-    document->activePage()->selectObject (group);
-    document->setAutoUpdate (true);
-  }*/
+    document()->activePage()->deleteSelectedObjects();
+    document()->activePage()->selectObject(group);
+  }
 }
 
 void GroupCmd::unexecute()

@@ -125,8 +125,8 @@ public:
   unsigned int selectionCount() const {return selection.count(); }
   unsigned int convertibleCount() const {return mConvertibleCount; }
 
-  void drawContents(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
-  void drawContentsInRegion(KoPainter *p, int aXOffset, int aYOffset, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void drawContents(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void drawContentsInRegion(KoPainter *p, const QWMatrix &m, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
   GObject *findContainingObject(double x, double y);
   bool findNearestObject(const QString &otype, int x, int y, double max_dist, GObject *&obj, int &pidx, bool all = false);

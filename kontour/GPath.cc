@@ -342,7 +342,7 @@ QDomElement GPath::writeToXml(QDomDocument &document)
   return path;
 }
 
-void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
+void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
 {
   setPen(p);
   setBrush(p);
@@ -354,26 +354,23 @@ void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
     GSegment *s = *seg;
     if(s->type() == 'm')
     {
-      c = s->point(0).transform(tmpMatrix);
+      c = s->point(0).transform(tmpMatrix * m);
       v->moveTo(c.x(), c.y());
     }
     else if(s->type() == 'l')
     {
-      c = s->point(0).transform(tmpMatrix);
+      c = s->point(0).transform(tmpMatrix * m);
       v->lineTo(c.x(), c.y());
     }
     else if(s->type() == 'c')
     {
-      c = s->point(0).transform(tmpMatrix);
-      c1 = s->point(1).transform(tmpMatrix);
-      c2 = s->point(2).transform(tmpMatrix);
+      c = s->point(0).transform(tmpMatrix * m);
+      c1 = s->point(1).transform(tmpMatrix * m);
+      c2 = s->point(2).transform(tmpMatrix * m);
       v->bezierTo(c.x(), c.y(), c1.x(), c1.y(), c2.x(), c2.y());
     }
   }
   v->end();
-  QWMatrix m;
-  m = m.translate(aXOffset, aYOffset);
-  v->transform(m);
   p->drawVectorPath(v);
   delete v;
   if(withBasePoints)
@@ -383,10 +380,10 @@ void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
     KoPoint c;
     for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
     {
-      c = (*seg)->point(0).transform(tmpMatrix);
+      c = (*seg)->point(0).transform(tmpMatrix * m);
       x = static_cast<int>(c.x());
       y = static_cast<int>(c.y());
-      drawNode(p, x + aXOffset, y + aYOffset, false);
+      drawNode(p, x, y, false);
     }
   }
 }

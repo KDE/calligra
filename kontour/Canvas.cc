@@ -204,7 +204,10 @@ void Canvas::updateBuf(const QRect &rect)
   p.lineTo(1, h+1);
   p.setPen(Qt::black);*/
 
-  document()->activePage()->drawContents(painter, mXOffset, mYOffset, mWithBasePoints, mOutlineMode);
+  QWMatrix m;
+  m.translate(mXOffset, mYOffset);
+
+  document()->activePage()->drawContents(painter, m, mWithBasePoints, mOutlineMode);
 
   if(!document()->activePage()->selectionIsEmpty())
     document()->activePage()->handle().draw(painter, mXOffset, mYOffset, zoomFactor());

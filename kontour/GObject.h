@@ -135,7 +135,7 @@ public:
    * @param withBasePoints If true, draw the base points of the
    *                       object.
    */
-  virtual void draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true) = 0;
+  virtual void draw(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true) = 0;
 
   void drawNode(KoPainter *p, int x, int y, bool active);
   

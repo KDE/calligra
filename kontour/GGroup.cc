@@ -79,6 +79,7 @@ void GGroup::addObject(GObject *obj)
 {
   obj->ref();
   members.append(obj);
+  calcBoundingBox();
 }
 
 GObject *GGroup::copy() const
@@ -100,10 +101,10 @@ QDomElement GGroup::writeToXml(QDomDocument &document)
   return group;
 }
 
-void GGroup::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
+void GGroup::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
 {
-//  for(GObject *o = members.first(); o != 0L; o = members.next())
-//    o->draw(p, false, outline);
+  for(GObject *o = members.first(); o != 0L; o = members.next())
+    o->draw(p, tmpMatrix * m, false, outline);
 }
 
 int GGroup::getNeighbourPoint(const KoPoint &p)
@@ -137,19 +138,19 @@ bool GGroup::findNearestPoint(const KoPoint &p, double max_dist, double &dist, i
 
 void GGroup::calcBoundingBox()
 {
-/*  if (members.isEmpty ())
+  if(members.isEmpty())
     return;
 
-  GObject *o=members.first();
-  for (; o!=0; o=members.next())
+  GObject *o = members.first();
+/*  for (; o!=0; o=members.next())
       o->calcBoundingBox ();
 
-  o = members.first();
-  Rect r = o->boundingBox ();
-  for (o=members.next(); o!=0L; o=members.next())
-    r = r.unite (o->boundingBox ());
+  o = members.first();*/
+  box = o->boundingBox();
+  for(o = members.next(); o != 0L; o=members.next())
+    box = box.unite(o->boundingBox());
 
-  Coord p[4];
+/*  Coord p[4];
   p[0] = r.topLeft ().transform (tmpMatrix);
   p[1] = Coord (r.right (), r.top ()).transform (tmpMatrix);
   p[2] = r.bottomRight ().transform (tmpMatrix);

@@ -103,12 +103,11 @@ QDomElement GImage::writeToXml(QDomDocument &document)
   return image;
 }
 
-void GImage::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
+void GImage::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
 {
-  QWMatrix m;
-  m = m.translate(aXOffset, aYOffset);
-  m = tmpMatrix * m;
-  p->drawImage(mImage, style()->fillOpacity(), m);
+  QWMatrix mm;
+  mm = tmpMatrix * m;
+  p->drawImage(mImage, style()->fillOpacity(), mm);
 }
 
 int GImage::getNeighbourPoint(const KoPoint &p)
