@@ -570,3 +570,30 @@ void KWFrameMoveCommand::unexecute()
 
     m_pDoc->repaintAllViews();
 }
+
+
+
+KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,KWGUI *_gui,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
+    KCommand(name),
+    m_pDoc(_doc),
+    m_pGui(_gui),
+    m_OldLayout(_oldLayout),
+    m_NewLayout(_newLayout)
+{
+}
+
+void KWPageLayoutCommand::execute()
+{
+    m_pDoc->setPageLayout( m_NewLayout._pgLayout,m_NewLayout._cl, m_NewLayout._hf );
+    m_pGui->getVertRuler()->setPageLayout( m_NewLayout._pgLayout );
+    m_pGui->getHorzRuler()->setPageLayout( m_NewLayout._pgLayout );
+    m_pDoc->repaintAllViews();
+}
+
+void KWPageLayoutCommand::unexecute()
+{
+    m_pDoc->setPageLayout( m_OldLayout._pgLayout,m_OldLayout._cl, m_OldLayout._hf);
+    m_pGui->getVertRuler()->setPageLayout( m_OldLayout._pgLayout );
+    m_pGui->getHorzRuler()->setPageLayout( m_OldLayout._pgLayout );
+    m_pDoc->repaintAllViews();
+}

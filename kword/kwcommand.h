@@ -21,6 +21,10 @@
 #define KWORD_COMMAND_H
 
 #include <kcommand.h>
+#include <koGlobal.h>
+
+class KWGUI;
+
 namespace Qt3 {
 class QTextCommand;
 }
@@ -243,4 +247,31 @@ protected:
     QList<FrameResizeStruct> m_frameMove;
     KWDocument *m_pDoc;
 };
+
+
+///////////////////////////////layout command///////////////////////////
+struct pageLayout {
+    KoPageLayout _pgLayout;
+    KoColumns _cl;
+    KoKWHeaderFooter _hf;
+};
+
+/**
+ * Command created when you change layout
+ */
+class KWPageLayoutCommand : public KCommand
+{
+public:
+    KWPageLayoutCommand( const QString &name,KWDocument *_doc,KWGUI *_gui,pageLayout &_oldLayout, pageLayout &_newLayout) ;
+    ~KWPageLayoutCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    KWGUI *m_pGui;
+    pageLayout m_OldLayout;
+    pageLayout m_NewLayout;
+};
+
 #endif

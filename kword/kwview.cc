@@ -55,6 +55,7 @@
 #include "serialletter.h"
 #include "kwconfig.h"
 #include "kcharselectdia.h"
+#include "kwcommand.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -1481,6 +1482,11 @@ void KWView::formatPage()
     KoKWHeaderFooter kwhf;
     doc->getPageLayout( pgLayout, cl, kwhf );
 
+    pageLayout tmpOldLayout;
+    tmpOldLayout._pgLayout=pgLayout;
+    tmpOldLayout._cl=cl;
+    tmpOldLayout._hf=kwhf;
+
     KoHeadFoot hf;
     int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
     if ( doc->processingType() == KWDocument::WP )
@@ -1489,6 +1495,15 @@ void KWView::formatPage()
         flags = flags | DISABLE_BORDERS;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
+
+        pageLayout tmpNewLayout;
+        tmpNewLayout._pgLayout=pgLayout;
+        tmpNewLayout._cl=cl;
+        tmpNewLayout._hf=kwhf;
+
+        KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,gui,tmpOldLayout,tmpNewLayout ) ;
+        doc->addCommand(cmd);
+
         doc->setPageLayout( pgLayout, cl, kwhf );
         gui->getVertRuler()->setPageLayout( pgLayout );
         gui->getHorzRuler()->setPageLayout( pgLayout );
@@ -2569,7 +2584,22 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KoKWHeaderFooter hf;
     doc->getPageLayout( pgLayout, cl, hf );
 
+    pageLayout tmpOldLayout;
+    tmpOldLayout._pgLayout=pgLayout;
+    tmpOldLayout._cl=cl;
+    tmpOldLayout._hf=hf;
+
     doc->setPageLayout( _layout, cl, hf );
+
+    pageLayout tmpNewLayout;
+    tmpNewLayout._pgLayout=_layout;
+    tmpNewLayout._cl=cl;
+    tmpNewLayout._hf=hf;
+
+    KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,gui,tmpOldLayout,tmpNewLayout ) ;
+    doc->addCommand(cmd);
+
+
     gui->getHorzRuler()->setPageLayout( _layout );
     gui->getVertRuler()->setPageLayout( _layout );
     gui->canvasWidget()->repaintAll();
@@ -2584,6 +2614,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
     gui->canvasWidget()->frameSizeChanged( _layout );
     gui->canvasWidget()->forceFullUpdate();
 #endif
+
 }
 
 /*================================================================*/
