@@ -331,7 +331,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     int totalh = qRound( zoomIt(layout.ptHeight) );
-    if ( ( diffy > 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh > 0 ) ) {
+    if ( ( diffy >= 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh >= 0 ) ) {
         double dist=0.0;
         int j = 0;
         QString str;
