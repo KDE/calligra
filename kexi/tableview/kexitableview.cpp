@@ -124,6 +124,14 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 		m_contents = contents;
 		m_numRows = contents->count();
 		triggerUpdate();
+		KexiTableItem *it;
+		for(it = m_contents->first(); it; it = m_contents->next())
+		{
+			if(!it->isInsertItem())
+				m_pVerticalHeader->addLabel("",  m_rowHeight);
+			else
+				m_pVerticalHeader->addLabel("*",  m_rowHeight);
+		}
 	}
 
 	m_contents->setAutoDelete(true);

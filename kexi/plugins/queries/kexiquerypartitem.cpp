@@ -35,7 +35,7 @@ KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 	:KexiProjectHandlerItem(parent,name,mime,identifier)
 {
 	m_designData = new KexiTableList();
-	KexiTableItem *item = new KexiTableItem(6);
+	KexiTableItem *item = new KexiTableItem(5);
 
 	item->setValue(0, 0);
 	item->setValue(2, true);
@@ -174,6 +174,12 @@ KexiQueryPartItem::load(KoStore* store)
 			}
 		}
 		m_sql = el.namedItem("sql").toElement().attribute("statement");
+
+		KexiTableItem *item = new KexiTableItem(5);
+		item->setValue(0, 0);
+		item->setValue(2, true);
+		item->setInsertItem(true);
+		m_designData->append(item);
 	}
 }
 
