@@ -510,13 +510,10 @@ bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
         if ( !ok )
             return false;
         // Validation
-        if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+        if ( (unsigned int)a >= 1 || (unsigned int)a <= 4 )
         {
-            kdDebug(36001) << "Value out of range Cell::align=" << (unsigned int)a << endl;
-            return false;
+            setAlign( a );
         }
-        // Assignment
-        setAlign( a );
     }
     if ( f.hasAttribute( "alignY" ) )
     {
@@ -524,13 +521,10 @@ bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
         if ( !ok )
             return false;
         // Validation
-        if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+        if ( (unsigned int)a >= 1 || (unsigned int)a <= 4 )
         {
-            kdDebug(36001) << "Value out of range Cell::alignY=" << (unsigned int)a << endl;
-            return false;
+            setAlignY( a );
         }
-        // Assignment
-        setAlignY( a );
     }
 
     if ( f.hasAttribute( "bgcolor" ) )
@@ -558,26 +552,20 @@ bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
     {
         FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
         if ( !ok ) return false;
-        if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
+        if ( (unsigned int)a >= 1 || (unsigned int)a <= 3 )
         {
-            kdDebug(36001) << "Value out of range Cell::float=" << (unsigned int)a << endl;
-            return false;
+            setFloatFormat( a );
         }
-        // Assignment
-        setFloatFormat( a );
     }
 
     if ( f.hasAttribute( "floatcolor" ) )
     {
         FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
         if ( !ok ) return false;
-        if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
+        if ( (unsigned int)a >= 1 || (unsigned int)a <= 2 )
         {
-            kdDebug(36001) << "Value out of range Cell::floatcolor=" << (unsigned int)a << endl;
-            return false;
+            setFloatColor( a );
         }
-        // Assignment
-        setFloatColor( a );
     }
 
     if ( f.hasAttribute( "faktor" ) )
