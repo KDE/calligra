@@ -18,6 +18,7 @@
 #include <qdrawutil.h>
 #include <qbutton.h>
 #include <qapplication.h>
+#include <qtimer.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, KSpreadView * _view )
   : QLineEdit( _parent, "KSpreadLocationEditWidget" )
@@ -275,6 +276,9 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   setMouseTracking( TRUE );
   m_bMousePressed = false;
+
+  m_scrollTimer = new QTimer( this );
+  connect (m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
 
   choose_visible = false;
   setFocus();
@@ -939,13 +943,16 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 {
+  if ( m_scrollTimer->isActive() )
+      m_scrollTimer->stop();
+
+  m_bMousePressed = false;
+
   if( m_bChoose )
   {
     chooseMouseReleaseEvent( _ev );
     return;
   }
-
-  m_bMousePressed = false;
 
   KSpreadTable *table = activeTable();
   if ( !table )
@@ -1012,6 +1019,9 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
+    if ( _ev->button() == LeftButton )
+        m_bMousePressed = true;
+
     // If in choose mode, we handle the mouse differently.
     if( m_bChoose )
     {
@@ -1020,7 +1030,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     }
 
     KSpreadTable *table = activeTable();
-    m_bMousePressed = true;
+
     if ( !table )
         return;
 
@@ -1029,6 +1039,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     {
         deleteEditor( true ); // save changes
     }
+
+    m_scrollTimer->start( 50 );
 
     // Remember current values.
     QRect selection( table->selectionRect() );
@@ -1320,13 +1332,12 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::chooseMouseReleaseEvent( QMouseEvent* )
 {
-  m_bMousePressed = FALSE;
+    // gets done in mouseReleaseEvent
+    //  m_bMousePressed = FALSE;
 }
 
 void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 {
-  m_bMousePressed = TRUE;
-
   KSpreadTable *table = activeTable();
   if ( !table )
     return;
@@ -1506,6 +1517,9 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
 
 void KSpreadCanvas::focusOutEvent( QFocusEvent* )
 {
+    if (m_scrollTimer->isActive())
+        m_scrollTimer->stop();
+    m_bMousePressed = false;
 }
 
 void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
@@ -2232,6 +2246,31 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // _ev->accept();
 
   // m_pView->eventKeyPressed( _ev, m_bChoose );
+}
+
+void KSpreadCanvas::doAutoScroll()
+{
+    if ( !m_bMousePressed)
+    {
+        m_scrollTimer->stop();
+        return;
+    }
+
+    QPoint pos( mapFromGlobal( QCursor::pos() ) );
+    if ( pos.y() < 0 )
+        vertScrollBar()->setValue(vertScrollBar()->value() - 20);
+    else if ( pos.y() > height() )
+        vertScrollBar()->setValue(vertScrollBar()->value() + 20);
+    
+    if ( pos.x() < 0 )
+        horzScrollBar()->setValue(horzScrollBar()->value() - 20);
+    else if ( pos.x() > width() )
+        horzScrollBar()->setValue(horzScrollBar()->value() + 20);
+    
+    if (m_bChoose)
+    {
+        
+    }
 }
 
 void KSpreadCanvas::deleteEditor( bool saveChanges )

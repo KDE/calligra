@@ -19,7 +19,7 @@ class KSpreadRange;
 class KSpreadCellEditor;
 class KSpreadCell;
 class QWidget;
-
+class QTimer;
 
 class QPainter;
 class QLabel;
@@ -302,6 +302,9 @@ protected:
     virtual void focusOutEvent( QFocusEvent* );
     virtual void resizeEvent( QResizeEvent * _ev );
 
+private slots:
+    void doAutoScroll();
+
 private:
     virtual void chooseMousePressEvent( QMouseEvent* _ev );
     virtual void chooseMouseReleaseEvent( QMouseEvent* _ev );
@@ -338,6 +341,7 @@ private:
 
     KSpreadView *m_pView;
     KSpreadDoc* m_pDoc;
+    QTimer * m_scrollTimer;
 
     /**
      * If the user is dragging around with the mouse then this tells us what he is doing.
