@@ -1,0 +1,3 @@
+=== KOffice 1.4 Alpha ===
+- make it compile on gcc 3.4
+- import dotted underline correctly (instead as double underline)
