@@ -1,3 +1,8 @@
+Changes after KWord 1.3 rc (1.2.94)
+===================================
+- Fixed crash in table operations (#66349)
+- Fixed "edit frameset" for tables in doc structure panel (#67084)
+
 Changes after KWord 1.3 beta4
 =============================
 - fix for frames extending beyond the page getting the wrong size in 'preview mode'
