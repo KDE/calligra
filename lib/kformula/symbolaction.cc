@@ -49,8 +49,11 @@ private:
     QString m_name;
     QFont m_font;
     uchar m_symbol;
+
+    static int widest;
 };
 
+int SymbolComboItem::widest = 0;
 
 SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
                                   uchar symbol, QComboBox *combo )
@@ -61,44 +64,37 @@ SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
       m_symbol( symbol )
 {
     setText( name );
+    int charWidth = QFontMetrics( m_font ).width( QChar( m_symbol ) );
+    widest = QMAX( widest, charWidth );
 }
 
 SymbolComboItem::~SymbolComboItem()
 {
 }
 
-int SymbolComboItem::width( const QListBox *lb ) const
+int SymbolComboItem::width( const QListBox * /*lb*/ ) const
 {
-    return QFontMetrics( KGlobalSettings::generalFont() ).width( text() + ":" ) + 6 +
-        QFontMetrics( m_font ).width( m_symbol );
+    return widest + QFontMetrics( KGlobalSettings::generalFont() ).width( text() ) + 12;
 }
 
-int SymbolComboItem::height( const QListBox *lb ) const
+int SymbolComboItem::height( const QListBox * /*lb*/ ) const
 {
-    return QMAX( QFontMetrics( KGlobalSettings::generalFont() ).lineSpacing(),
-                 QFontMetrics( m_font ).lineSpacing() ) + 2;
+    int generalHeight = QFontMetrics( KGlobalSettings::generalFont() ).lineSpacing();
+    int fontHeight = QFontMetrics( m_font ).lineSpacing();
+    return QMAX( generalHeight, fontHeight ) + 2;
 }
 
 void SymbolComboItem::paint( QPainter *p )
 {
-    p->setFont( KGlobalSettings::generalFont() );
-    QFontMetrics fm( p->fontMetrics() );
-    p->drawText( 3, height( m_combo->listBox() ) / 2 + fm.strikeOutPos(), m_name + ":" );
-
     p->setFont( m_font );
+    QFontMetrics fm( p->fontMetrics() );
+    p->drawText( 3, fm.ascent() + fm.leading() / 2,
+                 QString( "%1" ).arg( QChar( m_symbol ) ) );
+
+    p->setFont( KGlobalSettings::generalFont() );
     fm = p->fontMetrics();
-    p->drawText( fm.ascent() + fm.leading() / 2 + fm.width( m_name + ":" ),
-                 fm.ascent() + fm.leading() / 2,
-                 QString::fromLatin1( "%1" ).arg( QChar( m_symbol ) ) );
+    p->drawText( widest + 6, height( m_combo->listBox() ) / 2 + fm.strikeOutPos(), m_name );
 }
-
-
-/*class SymbolCombo : public KComboBox
-{
-public:
-    SymbolCombo( QWidget*, const char* )
-    setSymbols(
-*/
 
 /*
  * The symbol action *
@@ -116,8 +112,6 @@ SymbolAction::SymbolAction( const QString& text, const KShortcut& cut,
 {
     setEditable( FALSE );
 }
-
-
 
 int SymbolAction::plug( QWidget* w, int index )
 {
@@ -138,16 +132,11 @@ int SymbolAction::plug( QWidget* w, int index )
 
         connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 
-        updateCurrentItem( containerCount() - 1 );
-
-        int len = containerCount();
-        for ( int i = 0; i < len; ++i )
-            updateItems( i );
+        updateItems( containerCount() - 1 );
 
         return containerCount() - 1;
     }
     else return KSelectAction::plug( w, index );
-
 }
 
 void SymbolAction::setSymbols( const QStringList &names, const QValueList<QFont>& fonts,
@@ -171,7 +160,7 @@ void SymbolAction::updateItems( int id )
             QComboBox *cb = static_cast<QComboBox*>( r );
             cb->clear();
 
-            for( int i = 0; i <= items().count(); ++i ) {
+            for( uint i = 0; i < items().count(); ++i ) {
                 new SymbolComboItem( *items().at( i ), *m_fonts.at( i ),
                                      m_chars.at( i ), cb );
             }
