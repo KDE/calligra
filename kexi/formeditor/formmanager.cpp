@@ -126,7 +126,7 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 
 	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
 
-	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "drag", KShortcut(0), this, SLOT(startDraggingConnection()), parent, "drag_connection");
+	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "signalslot", KShortcut(0), this, SLOT(startDraggingConnection()), parent, "drag_connection");
 	m_dragConnection->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_dragConnection->setChecked(false);
 	actions.append(m_dragConnection);
