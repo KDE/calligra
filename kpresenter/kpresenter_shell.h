@@ -34,8 +34,6 @@ public:
     QString nativeFormatPattern() const { return "*.kpr"; }
     QString nativeFormatName() const;
 
-    virtual void setRootDocument( KoDocument* );
-
 public slots:
     void slotFilePrint();
     void slotHelpAbout();

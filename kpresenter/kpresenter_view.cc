@@ -71,6 +71,7 @@
 #include <kfontdialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
+#include <kparts/event.h>
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
@@ -1626,6 +1627,14 @@ void KPresenterView::initGui()
     actionEditRedo->setEnabled( false );
 }
 
+void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    if ( ev->activated() )
+        initGui();
+
+    KoView::guiActivateEvent( ev );
+}
+
 /*====================== construct ==============================*/
 void KPresenterView::setupActions()
 {
@@ -1949,7 +1958,7 @@ void KPresenterView::setupActions()
                                      actionCollection(), "screen_last" );
 
     actionScreenSkip = new KAction( i18n( "Goto &Page..." ),
-                                     "goto", 0, 
+                                     "goto", 0,
                                      this, SLOT( screenSkip() ),
                                      actionCollection(), "screen_skip" );
 

@@ -41,13 +41,6 @@ QString KPresenterShell::nativeFormatName() const
   return i18n("KPresenter");
 }
 
-void KPresenterShell::setRootDocument( KoDocument *part )
-{
-    KoMainWindow::setRootDocument( part );
-    if ( part )
-	( (KPresenterView*)rootView() )->initGui();
-}
-
 void KPresenterShell::slotFilePrint()
 {
     ( (KPresenterView*)rootView() )->printDlg();

@@ -348,7 +348,7 @@ protected slots:
     void unitChanged( QString );
 
     void search();
-    
+
 protected:
 
 // ********* functions ***********
@@ -361,6 +361,8 @@ protected:
     virtual void dropEvent( QDropEvent *e );
 
     virtual void wheelEvent( QWheelEvent *e );
+
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
 // GUI
     void setupActions();
@@ -409,7 +411,7 @@ protected:
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
     QGuardedPtr<SearchDialog> searchDialog;
-    
+
     // default pen and brush
     QPen pen;
     QBrush brush;
