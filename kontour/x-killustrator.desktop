@@ -1,21 +1,3 @@
-# KDE Config File
 [Desktop Entry]
-MimeType=application/x-killustrator
-Comment=KIllustrator
-Comment[eo]=Ilustrilo
-Comment[es]=Documento de KIllustrator
-Comment[et]=KDE vektorgraafika redaktor
-Comment[is]=killustrator-skrá (mynd)
-Comment[ko]=K삽화가
-Comment[lv]=KIllustrators
-Comment[mk]=K-илустратор
-Comment[pl]=Killustrator
-Comment[pt_BR]=Programa de desenho vetoriais
-Comment[sk]=KIllustrátor
-Icon=killustrator
 Type=MimeType
-Patterns=*.kil;
-X-KDE-AutoEmbed=false
-[Property::X-KDE-NativeExtension]
-Type=QString
-Value=.kil
+Hidden=true

@@ -1,0 +1,11 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-kontour
+Comment=Kontour
+Icon=kontour
+Type=MimeType
+Patterns=*.kil;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kil

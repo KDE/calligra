@@ -1,40 +1,38 @@
 # This file you have to edit. Change the name here
 SUBDIRS = filter pics templates
 
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/killustrator/filter -I$(top_srcdir)/killustrator $(all_includes)
-
-##EXTRA_DIST = README kil.dtd killustrator.lsm
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(srcdir)/filter -I$(srcdir) $(all_includes)
 
 messages: rc.cpp
 	$(XGETTEXT) -kI18N -kSI18N rc.cpp *.cc KIllustrator_aboutdata.h -o $(podir)/killustrator.pot
 
-kdelnk_DATA = killustrator.desktop
+kdelnk_DATA = killustrator.desktop kontour.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-killustrator.desktop
+kdemime_DATA = x-killustrator.desktop x-kontour.desktop
 kdemimedir = $(kde_mimedir)/application
 
-rcdir = $(kde_datadir)/killustrator
+rcdir = $(kde_datadir)/kontour
 rc_DATA = KIllustrator.rc
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = killustrator.la
-killustrator_la_SOURCES = main.cc
-killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module
-killustrator_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+lib_LTLIBRARIES = kontour.la
+kontour_la_SOURCES = main.cc
+kontour_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kontour_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
-bin_PROGRAMS = killustrator
-killustrator_SOURCES = dummy.cc
-killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-killustrator_LDADD = killustrator.la
+bin_PROGRAMS = kontour
+kontour_SOURCES = dummy.cc
+kontour_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kontour_LDADD = kontour.la
 
 dummy.cc:
 	echo > dummy.cc
 
 ## The part
-kde_module_LTLIBRARIES = libkillustratorpart.la
-libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
+kde_module_LTLIBRARIES = libkontourpart.la
+libkontourpart_la_SOURCES = KIllustrator_doc.cc \
 	KIllustrator_view.cc \
 	InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
 	GPage.cc \
@@ -76,7 +74,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	BlendDialog.cc BlendCmd.cc stencilbarmovemanager.cc \
 	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
 
-libkillustratorpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkillustratorpart_la_LIBADD = $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
+libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkontourpart_la_LIBADD = $(top_builddir)/kontour/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 METASOURCES = AUTO
