@@ -37,10 +37,10 @@
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
 #include <visitors/vselectiondesc.h>
-#include "vcanvas.h"
+#include <widgets/vcanvas.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
-	: KDialogBase( 0L, "", true, i18n( "Insert Star" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( 0L, "", true, i18n( "Selection" ), Ok | Cancel ), m_part( part )
 {
 	QButtonGroup *group = new QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
 
