@@ -7,3 +7,12 @@
 #endif
 #include <assert.h>
 #endif
+
+/*
+ * AIX defines FD_SET in terms of bzero, but fails to include <strings.h>
+ * that defines bzero. It also needs <strings.h> for some aother stuff.
+ */
+
+#if defined(_AIX)
+#include <strings.h>
+#endif
