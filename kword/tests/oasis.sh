@@ -60,7 +60,13 @@ cd /tmp/oasisregtest-oasis
 unzip $tmpoasisfile || exit 1
 cd ..
 
-diff -urp oasisregtest-orig oasisregtest-final | less
+# Some fixups
+# 1) modification time obviously changed, remove it
+# 2) the name of the main text frameset changes, no big deal, so adjust in orig
+perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//;s/\"Text Frameset 1\"/\"Main Text Frameset\"/' oasisregtest-orig/maindoc.xml
+perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//' oasisregtest-final/maindoc.xml
+
+diff -urp oasisregtest-orig oasisregtest-final 2>&1 | tee oasisdiff | less
 
 echo "See /tmp/oasisregtest-oasis for the OASIS xml files."
 
