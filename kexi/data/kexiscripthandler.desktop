@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Kexi Script Handler
+Name[ar]=مِقبض خواطيط Kexi
 Name[bg]=Обработка на скриптове в Kexi
 Name[ca]=Manejador d'scripts de Kexi
 Name[cs]=Ovladač skriptů Kexi
@@ -14,6 +15,7 @@ Name[el]=Διαχειριστής σεναρίων του Kexi
 Name[es]=Manejador de scripts de Kexi
 Name[et]=Kexi skriptide käsitleja
 Name[fa]=Kexi اداره کننده نویسه برای
+Name[fi]=Kexin skriptikäsittelijä
 Name[fr]=Gestionnaire de scripts de Kexi
 Name[hu]=Kexi szkriptkezelő
 Name[it]=Gestione script di Kexi
