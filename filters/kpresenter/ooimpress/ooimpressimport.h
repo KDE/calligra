@@ -32,6 +32,12 @@
 
 class KZip;
 
+struct animationList
+{
+    QDomElement *element;
+    int order;
+};
+
 class OoImpressImport : public KoFilter
 {
     Q_OBJECT
@@ -66,7 +72,7 @@ private:
     void appendLineEnds( QDomDocument& doc, QDomElement& e, bool _orderEndStartLine = true );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
-    QDomNode findAnimationByObjectID(const QString & id);
+    QDomNode findAnimationByObjectID(const QString & id,  int & order);
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 	void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );
 
@@ -91,7 +97,7 @@ private:
     QDomDocument    m_meta;
     QDomDocument    m_settings;
     QDict<QDomElement> m_styles, m_draws,m_stylesPresentation;
-    QDict<QDomElement> m_animations;
+    QDict<animationList> m_animations;
     KZip * m_zip;
     StyleStack m_styleStack;
 };
