@@ -110,19 +110,7 @@ protected slots:
     QString getExportFileName (FilterManager *filterMgr);
 
     void showCurrentMode (const QString &msg);
-    /* protected slots:
-       void editCutSlot ();
-       void editCopySlot ();
-       void editPropertiesSlot ();
-       void arrangeAlignSlot ();
-       void arrangeToFrontSlot ();
-       void arrangeToBackSlot ();
-       void arrangeOneForwardSlot ();
-       void arrangeOneBackSlot ();
-
-       void popupForSelection (int x, int y);
-       void setUndoStatus(bool undoPossible, bool redoPossible);
-
+/*
        void insertPartSlot (KIllustratorChild *child, GPart *part);
        void changeChildGeometrySlot (KIllustratorChild *child); */
 
@@ -189,6 +177,8 @@ private slots:
     void slotLoadPalette ();
     void slotConfigurePolygon();
     void slotConfigureEllipse();
+    void slotAddHelpline(int x, int y, bool d);
+    void slotZoomFactorChanged(float factor);
 
 protected:
     KIllustratorDocument *m_pDoc;
@@ -216,11 +206,13 @@ protected:
     KAction* m_toBack;
     KAction* m_forwardOne;
     KAction* m_backOne;
+    KToggleAction *m_showHelplines;
     KToggleAction* m_selectTool;
     KToggleAction* m_moveNode;
     KToggleAction* m_newNode;
     KToggleAction* m_deleteNode;
     KToggleAction* m_splitLine;
+    KSelectAction *m_viewZoom;
     QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
             lastExportDir, lastImportDir, lastPaletteDir;
     QString lastExport;

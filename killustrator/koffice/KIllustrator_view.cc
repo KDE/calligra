@@ -22,6 +22,7 @@
 
 */
 
+#include <kdebug.h>
 #include <KIllustrator_shell.h>
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
@@ -149,7 +150,7 @@ void KIllustratorView::createMyGUI()
     connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
     KToggleAction *m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
     connect( m_showGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotShowGrid( bool ) ) );
-    KToggleAction *m_showHelplines = new KToggleAction( i18n("Show &Helplines"), 0, actionCollection(), "showHelplines" );
+    m_showHelplines = new KToggleAction( i18n("Show &Helplines"), 0, actionCollection(), "showHelplines" );
     connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
 
     // Insert menu
@@ -223,7 +224,7 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("&Ellipse Settings..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
     new KAction( i18n("&Polygon Settings..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
-    KSelectAction *m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
+    m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
     QStringList zooms;
     zooms << "50%";
     zooms << "100%";
@@ -326,8 +327,8 @@ void KIllustratorView::setupCanvas()
                       hRuler, SLOT(setZoomFactor (float)));
     QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
                       vRuler, SLOT(setZoomFactor (float)));
-    //  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-    //       this, SLOT(updateZoomFactor (float)));
+    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
+                      this, SLOT(slotZoomFactorChanged(float)));
     QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
                       hRuler, SLOT(updatePointer(int, int)));
     QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
@@ -341,9 +342,9 @@ void KIllustratorView::setupCanvas()
     connect (vRuler, SIGNAL (drawHelpline(int, int, bool)),
              canvas, SLOT(drawTmpHelpline(int, int, bool)));
     connect (hRuler, SIGNAL (addHelpline(int, int, bool)),
-             canvas, SLOT(addHelpline(int, int, bool)));
+             this, SLOT(slotAddHelpline(int, int, bool)));
     connect (vRuler, SIGNAL (addHelpline(int, int, bool)),
-             canvas, SLOT(addHelpline(int, int, bool)));
+             this, SLOT(slotAddHelpline(int, int, bool)));
 
     setFocusPolicy(QWidget::StrongFocus);
     setFocusProxy(canvas);
@@ -1127,4 +1128,22 @@ void KIllustratorView::slotViewZoom (const QString& s) {
         canvas->setZoomFactor (zoom);
 }
 
-#include "KIllustrator_view.moc"
+void KIllustratorView::slotAddHelpline(int x, int y, bool d) {
+    m_showHelplines->setChecked(true);
+    canvas->addHelpline(x, y, d);
+}
+
+void KIllustratorView::slotZoomFactorChanged(float factor) {
+
+    QStringList list=m_viewZoom->items();
+    QString f=QString::number(qRound(factor*100.0));
+    int i=0;
+    for(QValueList<QString>::Iterator it=list.begin(); it!=list.end(); ++it, ++i) {
+        if((*it).left((*it).length()-1)==f) {
+            m_viewZoom->setCurrentItem(i);
+            break;
+        }
+    }
+}
+
+#include <KIllustrator_view.moc>

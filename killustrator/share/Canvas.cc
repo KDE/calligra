@@ -628,11 +628,13 @@ void Canvas::printDocument () {
 
 void Canvas::zoomIn (int x, int y) {
   for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
-    if (*i == getZoomFactor ()) {
-      setZoomFactor(*(++i));
-      scrollview->center(x, y);
-      emit zoomFactorChanged(*(++i));
-      break;
+    if (*i == getZoomFactor()) {
+        if(*i!=zoomFactors.last()) {
+             ++i;
+            setZoomFactor(*i);
+            scrollview->center(x, y);
+            break;
+        }
     }
   }
 }
@@ -640,8 +642,11 @@ void Canvas::zoomIn (int x, int y) {
 void Canvas::zoomOut () {
   for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
     if (*i == getZoomFactor ()) {
-      setZoomFactor(*(--i));
-      break;
+        if(*i!=zoomFactors.first()) {
+            --i;
+            setZoomFactor(*i);
+            break;
+        }
     }
   }
 }
