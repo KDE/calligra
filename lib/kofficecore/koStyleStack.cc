@@ -79,7 +79,7 @@ void KoStyleStack::push( const QDomElement& style )
 #endif
 }
 
-bool KoStyleStack::hasAttribute( const QString& name, const QString& detail, const QString &typeProperties ) const
+bool KoStyleStack::hasAttribute( const QString& name, const QString& detail ) const
 {
     QString fullName( name );
     if ( !detail.isEmpty() )
@@ -88,11 +88,10 @@ bool KoStyleStack::hasAttribute( const QString& name, const QString& detail, con
         fullName += detail;
     }
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
-    QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        QDomElement properties = (*it).namedItem( m_propertiesTagName ).toElement();
         if ( properties.hasAttribute( name ) ||
              ( !detail.isEmpty() && properties.hasAttribute( fullName ) ) )
             return true;
@@ -100,7 +99,7 @@ bool KoStyleStack::hasAttribute( const QString& name, const QString& detail, con
     return false;
 }
 
-QString KoStyleStack::attribute( const QString& name, const QString& detail, const QString &typeProperties ) const
+QString KoStyleStack::attribute( const QString& name, const QString& detail ) const
 {
     QString fullName( name );
     if ( !detail.isEmpty() )
@@ -109,11 +108,10 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail, con
         fullName += detail;
     }
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
-    QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        QDomElement properties = (*it).namedItem( m_propertiesTagName ).toElement();
         if ( properties.hasAttribute( name ) )
             return properties.attribute( name );
         if ( !detail.isEmpty() && properties.hasAttribute( fullName ) )
@@ -125,17 +123,16 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail, con
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
 // This can be generalized though (hasAttributeThatCanBePercentOfParent() ? :)
 // Although, if we also add support for fo:font-size-rel here then it's not general anymore.
-double KoStyleStack::fontSize(const QString &typeProperties) const
+double KoStyleStack::fontSize() const
 {
     QString name = "fo:font-size";
     double percent = 1;
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
-    QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
 
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        QDomElement properties = (*it).namedItem( m_propertiesTagName ).toElement();
         if ( properties.hasAttribute( name ) ) {
             QString value = properties.attribute( name );
             if ( value.endsWith( "%" ) )
@@ -147,14 +144,13 @@ double KoStyleStack::fontSize(const QString &typeProperties) const
     return 0;
 }
 
-bool KoStyleStack::hasChildNode(const QString & name, const QString &typeProperties) const
+bool KoStyleStack::hasChildNode(const QString & name) const
 {
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
-    QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        QDomElement properties = (*it).namedItem( m_propertiesTagName ).toElement();
         if ( !properties.namedItem( name ).isNull() )
             return true;
     }
@@ -162,15 +158,14 @@ bool KoStyleStack::hasChildNode(const QString & name, const QString &typePropert
     return false;
 }
 
-QDomNode KoStyleStack::childNode(const QString & name, const QString &typeProperties) const
+QDomNode KoStyleStack::childNode(const QString & name) const
 {
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
-    QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
 
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        QDomElement properties = (*it).namedItem( m_propertiesTagName ).toElement();
         if ( !properties.namedItem( name ).isNull() )
             return properties.namedItem( name );
     }
@@ -197,4 +192,9 @@ QString KoStyleStack::userStyleName() const
     }
     // Can this ever happen?
     return "Standard";
+}
+
+void KoStyleStack::setTypeProperties( const QString& typeProperties )
+{
+    m_propertiesTagName = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
 }
