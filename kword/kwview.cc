@@ -811,7 +811,7 @@ void KWView::setupActions()
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction* actNbsp = new KAction( i18n( "Insert non-breaking spacve" ), CTRL+Key_Space,
+    KAction* actNbsp = new KAction( i18n( "Insert non-breaking space" ), CTRL+Key_Space,
                         this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
     KAction* actSoftHyphen = new KAction( i18n( "Insert soft hyphen" ), CTRL+Key_Minus,
                         this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );

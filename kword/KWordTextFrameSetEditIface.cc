@@ -74,6 +74,11 @@ void KWordTextFrameSetEditIface::paste()
     m_framesetedit->paste();
 }
 
+void KWordTextFrameSetEditIface::insertNonbreakingSpace()
+{
+    m_framesetedit->insertNonbreakingSpace();
+}
+
 void KWordTextFrameSetEditIface::insertVariable( const QString & var)
 {
   if( var=="DATE")

@@ -45,6 +45,7 @@ k_dcop:
     void cut();
     void copy();
     void paste();
+    void insertNonbreakingSpace();
 
 private:
     KWTextFrameSetEdit *m_framesetedit;
