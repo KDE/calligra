@@ -3114,7 +3114,6 @@ void QTextParag::join( QTextParag *s )
     delete s;
     invalidate( 0 );
     r.setHeight( oh );
-    format();
     needPreProcess = TRUE;
     if ( n ) {
 	QTextParag *s = n;
@@ -3126,6 +3125,7 @@ void QTextParag::join( QTextParag *s )
 	    s = s->n;
 	}
     }
+    format();
     state = -1;
 }
 
@@ -3137,11 +3137,17 @@ void QTextParag::move( int &dy )
     r.moveBy( 0, dy );
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
 	i->ypos += dy;
+    if ( p )
+       p->lastInFrame = FALSE;
     if ( doc && doc->verticalBreak() ) {
 	const int oy = r.y();
 	int y = oy;
 	doc->flow()->adjustFlow( y, r.width(), r.height(), this, TRUE );
 	if ( oy != y ) {
+           if ( p ) {
+               p->lastInFrame = TRUE;
+               p->setChanged( TRUE );
+           }
 	    int oh = r.height();
 	    r.setY( y );
 	    r.setHeight( oh );
@@ -3224,11 +3230,7 @@ void QTextParag::format( int start, bool doMove )
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	QTextParag *s = n;
-	bool makeInvalid = FALSE;
 	while ( s ) {
- 	    if ( !s->isFullWidth() )
-		makeInvalid = TRUE;
-	    if ( makeInvalid )
 		s->invalidate( 0 );
 	    s->move( dy );
 	    s = s->n;
