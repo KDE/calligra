@@ -457,12 +457,12 @@ private:
     /**
      * Returns the numbers of pages in x direction
      */
-    int pagesX( QRect& cellsPrintRange );
+    int pagesX( const QRect& cellsPrintRange );
 
     /**
      * Returns the numbers of pages in y direction
      */
-    int pagesY( QRect& cellsPrintRange );
+    int pagesY( const QRect& cellsPrintRange );
 
     /**
      * The orientation of the paper.

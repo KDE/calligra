@@ -119,7 +119,7 @@ QRect KSpreadSheetPrint::cellsPrintRange()
     return cell_range;
 }
 
-int KSpreadSheetPrint::pagesX( QRect& cellsPrintRange )
+int KSpreadSheetPrint::pagesX( const QRect& cellsPrintRange )
 {
     int pages = 0;
 
@@ -133,7 +133,7 @@ int KSpreadSheetPrint::pagesX( QRect& cellsPrintRange )
     return pages;
 }
 
-int KSpreadSheetPrint::pagesY( QRect& cellsPrintRange )
+int KSpreadSheetPrint::pagesY( const QRect& cellsPrintRange )
 {
     int pages = 0;
 
