@@ -73,19 +73,12 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
     QRect rect( QPoint(x, y) , m_image.getSize() );
     if ( !rect.intersects( QRect( cx, cy, cw, ch ) ) )
         return;
-#if 1
-    KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-    // TODO: someone with knowledge should verify this!
+    
+    QPixmap pixmap=m_image.generatePixmap(m_image.getSize());
     if ( placement() == PlaceInline )
-        m_image.draw( *p, x, y, doc->zoomItX( width ), doc->zoomItY( height ), 0, 0, 0, 0 );
+        p->drawPixmap( x, y, pixmap );
     else
-        m_image.draw( *p, x, y, doc->zoomItX( width ), doc->zoomItY( height ), cx-x, cy-y, cw, ch );
-#else
-    if ( placement() == PlaceInline )
-        p->drawPixmap( x, y, m_image.pixmap() );
-    else
-        p->drawPixmap( cx, cy, m_image.pixmap(), cx - x, cy - y, cw, ch ); // TODO: Why are cx,cy first the params and not x,y ?
-#endif
+        p->drawPixmap( cx, cy, pixmap, cx - x, cy - y, cw, ch );
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
         p->fillRect( rect , QBrush( cg.highlight(), QBrush::Dense4Pattern) );
