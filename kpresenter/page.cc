@@ -253,7 +253,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
 	int pg = getPageOfObj( i, _presFakt );
-	
+
 	if ( kpobject->isSticky() ||
 	     ( rect.intersects( kpobject->getBoundingRect( diffx( i ), diffy( i ) ) ) && editMode ) ||
 	     ( !editMode && pg == static_cast<int>( currPresPage ) &&
@@ -267,7 +267,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 		kpobject->setSubPresStep( subPresStep );
 		kpobject->doSpecificEffects( true, false );
 	    }
-	
+
 	    if ( !ignoreSkip && !kpobject->isSticky() &&
 		 editMode && painter->device()->devType() != QInternal::Printer && pg != pgNum )
 		continue;
@@ -279,7 +279,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 		op = kpobject->getOrig();
 		kpobject->setOrig( op.x(), op.y() - pg * getPageSize( 0, _presFakt ).height() + pgNum * getPageSize( 0, _presFakt ).height() );
 	    }
-	
+
 	    kpobject->draw( painter, dx, dy );
 	    kpobject->setSubPresStep( 0 );
 	    kpobject->doSpecificEffects( false );
@@ -2591,7 +2591,10 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _time.restart();
             }
             if ( _step >= _steps )
+            {
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _pix2.width(), _pix2.height() );
                 break;
+            }
         }
     } break;
     }
@@ -3347,7 +3350,7 @@ void Page::editSelectedTextArea()
 void Page::insertText( QRect _r )
 {
     view->kPresenterDoc()->insertText( _r, diffx(), diffy() );
-    selectObj( objectList()->last() ); 
+    selectObj( objectList()->last() );
 }
 
 /*================================================================*/
@@ -4143,7 +4146,7 @@ void Page::setTextBackground( KPTextObject *obj )
     QPainter painter( &pix );
     backgroundList()->at( view->getCurrPgNum() - 1 )->draw( &painter, QPoint( 0, 0 ), FALSE );
     QPixmap bpix( obj->getSize() );
-    bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() - 
+    bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
 	    getPageSize( 0 ).height() * ( view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
     QBrush b( white, bpix );
     QPalette pal( obj->getKTextObject()->palette() );
