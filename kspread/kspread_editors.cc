@@ -4,7 +4,7 @@
 #include "kspread_doc.h"
 
 #include <qapplication.h>
-
+#include <qregexp.h>
 #include <kdebug.h>
 
 /********************************************
@@ -135,10 +135,49 @@ void KSpreadTextEditor::resizeEvent( QResizeEvent* )
     m_pEdit->setGeometry( 0, 0, width(), height() );
 }
 
-void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent* _ev )
+void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 {
-    // Send the key event to the QLineEdit
-    QApplication::sendEvent( m_pEdit, _ev );
+  if (_ev->key() == Qt::Key_F4)
+  {
+    if (m_pEdit == 0)
+    {
+      QApplication::sendEvent( m_pEdit, _ev );
+      return;
+    }
+
+    QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
+
+    QString tmp(m_pEdit->text());
+
+    int n = exp.search(tmp);
+
+    if (n == -1)
+      return;
+
+    QString newPart;
+    if ((exp.cap(1) == "$") && (exp.cap(3) == "$"))
+      newPart = "$" + exp.cap(2) + exp.cap(4);
+    else if ((exp.cap(1) != "$") && (exp.cap(3) != "$"))
+      newPart = "$" + exp.cap(2) + "$" + exp.cap(4);
+    else if ((exp.cap(1) == "$") && (exp.cap(3) != "$"))
+      newPart = exp.cap(2) + "$" + exp.cap(4);
+    else if ((exp.cap(1) != "$") && (exp.cap(3) == "$"))
+      newPart = exp.cap(2) + exp.cap(4);
+
+    QString newString = tmp.left(n);
+    newString += newPart;
+
+    m_pEdit->setText(newString);
+    m_pEdit->setFocus();
+    m_pEdit->setCursorPosition(newString.length());
+
+    _ev->accept();
+
+    return;
+  }
+
+  // Send the key event to the QLineEdit
+  QApplication::sendEvent( m_pEdit, _ev );
 }
 
 QString KSpreadTextEditor::text() const
