@@ -45,6 +45,7 @@ static KCmdLineOptions options[] =
   { "design [<object_type>:]<object_name>", I18N_NOOP("Like --open, but the object will\nbe opened in Design Mode, if one is available"), 0 },
   { "edittext [<object_type>:]<object_name>", I18N_NOOP("Like --open, but the object will\nbe opened in Text Mode, if one is available"), 0 },
   { "new <object_type>", I18N_NOOP("Start new object design of type <object_type>"), 0 },
+  { "final", I18N_NOOP("Start project in final mode"), 0 },
   { "+[file]", I18N_NOOP("Database project file (or shortcut file) to open"), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
@@ -158,12 +159,21 @@ extern "C" int kdemain(int argc, char *argv[])
 //	app.dcopClient()->registerAs( "kexi" );
 
 //	KexiProject *project = new KexiProject();
-	KexiMainWindowImpl *win = new KexiMainWindowImpl();
+
+	bool final=false;
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	if(args->isSet("final"))
+		final=true;
+
+	KexiMainWindowImpl *win = new KexiMainWindowImpl(final);
 	app.setMainWidget(win);
 	win->show();
 	app.processEvents();//allow refresh our app
-	
-	win->startup(projectData);
+
+	if(!final)
+		win->startup(projectData);
+	else
+		win->initFinal(projectData);
 
 //	project->parseCmdLineOptions();
 
