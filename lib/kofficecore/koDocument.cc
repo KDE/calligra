@@ -1063,8 +1063,8 @@ QPixmap KoDocument::generatePreview( const QSize& size )
     int pixmapSize = QMAX(size.width(), size.height());
 
     if (m_pageLayout.ptWidth > 1.0) {
-        docWidth = m_pageLayout.ptWidth / 72 * QPaintDevice::x11AppDpiX();
-        docHeight = m_pageLayout.ptHeight / 72 * QPaintDevice::x11AppDpiX();
+        docWidth = m_pageLayout.ptWidth / 72 * KoGlobal::dpiX();
+        docHeight = m_pageLayout.ptHeight / 72 * KoGlobal::dpiY();
 
     } else {
         // If we don't have a page layout, just draw the top left hand corner
