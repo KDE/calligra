@@ -1675,8 +1675,37 @@ void KWView::viewHeader()
     bool state=actionViewFooter->isChecked();
     m_doc->setHeaderVisible( actionViewHeader->isChecked() );
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if(!state && edit && edit->frameSet()->isAHeader())
-        m_doc->terminateEditing( edit->frameSet() );
+    if(!state )
+    {
+        KWFrameSet *frameSet=0L;
+        if(edit)
+        {
+            frameSet=edit->frameSet();
+            if (frameSet->isAHeader())
+                m_doc->terminateEditing( frameSet );
+            else
+            {
+                KWTableFrameSet *table = frameSet->getFrame(0)->getFrameSet()->getGroupManager();
+                if (table)
+                {
+                    if (table->isFloating() && table->anchorFrameset()->isAHeader())
+                        m_doc->terminateEditing( table );
+                }
+            }
+
+        }
+        else
+        {
+            KWFormulaFrameSetEdit * editFormula = dynamic_cast<KWFormulaFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
+            if(editFormula)
+            {
+                frameSet= editFormula->frameSet();
+                if(frameSet->type()==FT_FORMULA && frameSet->isFloating())
+                    m_doc->terminateEditing( frameSet );
+            }
+
+        }
+    }
     m_doc->updateResizeHandles( );
 }
 
@@ -1685,8 +1714,37 @@ void KWView::viewFooter()
     bool state=actionViewFooter->isChecked();
     m_doc->setFooterVisible( state );
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if(!state && edit && edit->frameSet()->isAFooter())
-        m_doc->terminateEditing( edit->frameSet() );
+    if(!state )
+    {
+        KWFrameSet *frameSet=0L;
+        if(edit)
+        {
+            frameSet=edit->frameSet();
+            if (frameSet->isAFooter())
+                m_doc->terminateEditing( frameSet );
+            else
+            {
+                KWTableFrameSet *table = frameSet->getFrame(0)->getFrameSet()->getGroupManager();
+                if (table)
+                {
+                    if (table->isFloating() && table->anchorFrameset()->isAFooter())
+                        m_doc->terminateEditing( table );
+                }
+            }
+        }
+        else
+        {
+            KWFormulaFrameSetEdit * editFormula = dynamic_cast<KWFormulaFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
+            if(editFormula)
+            {
+                frameSet= editFormula->frameSet();
+                if(frameSet->type()==FT_FORMULA && frameSet->isFloating())
+                    m_doc->terminateEditing( frameSet );
+
+            }
+
+        }
+    }
     m_doc->updateResizeHandles( );
 }
 

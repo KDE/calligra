@@ -1411,6 +1411,13 @@ void KWTextFrameSet::zoom( bool forPrint )
     KWFrameSet::zoom( forPrint );
 }
 
+void KWTextFrameSet::hideCustomItems(bool _hide)
+{
+    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+        static_cast<KWAnchor *>( cit.current() )->frameSet()->setVisible( _hide );
+}
+
 void KWTextFrameSet::unzoom()
 {
     QTextFormatCollection * coll = textdoc->formatCollection();

@@ -119,6 +119,8 @@ public:
 
     KWTextFormat * zoomFormatFont( const KWTextFormat * f );
 
+    void hideCustomItems(bool);
+
     /** returns a deep copy of self (and all it contains) */
     //KWTextFrameSet *getCopy();
 
