@@ -300,8 +300,22 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
 
         kdDebug() << k_funcinfo << " dxaLeft1=" << m_pap->dxaLeft1 << " dxaLeft=" << m_pap->dxaLeft << " dxaRight=" << m_pap->dxaRight << " dyaBefore=" << m_pap->dyaBefore << " dyaAfter=" << m_pap->dyaAfter << " lspd=" << m_pap->lspd.dyaLine << "/" << m_pap->lspd.fMultLinespace << endl;
 
-        // TODO: INDENTS dxaRight dxaLeft dxaLeft1 - in which unit are those?
-        // TODO: OFFSETS dyaBefore dyaAfter
+        if ( m_pap->dxaLeft1 || m_pap->dxaLeft || m_pap->dxaRight )
+        {
+            QDomElement indentsElement = m_mainDocument.createElement("INDENTS");
+            // 'first' is relative to 'left' in both formats
+            indentsElement.setAttribute( "first", (double)m_pap->dxaLeft1 / 20.0 );
+            indentsElement.setAttribute( "left", (double)m_pap->dxaLeft / 20.0 );
+            indentsElement.setAttribute( "right", (double)m_pap->dxaRight / 20.0 );
+            layoutElement.appendChild( indentsElement );
+        }
+        if ( m_pap->dyaBefore || m_pap->dyaAfter )
+        {
+            QDomElement offsetsElement = m_mainDocument.createElement("OFFSETS");
+            offsetsElement.setAttribute( "before", (double)m_pap->dyaBefore / 20.0 );
+            offsetsElement.setAttribute( "after", (double)m_pap->dyaAfter / 20.0 );
+            layoutElement.appendChild( offsetsElement );
+        }
 
         // Linespacing
         QString lineSpacing = Conversion::lineSpacing( m_pap->lspd );
