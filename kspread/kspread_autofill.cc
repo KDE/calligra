@@ -20,6 +20,8 @@
 #include "kspread_autofill.h"
 #include "kspread_cell.h"
 #include "kspread_table.h"
+#include "kspread_undo.h"
+#include "kspread_doc.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -323,6 +325,13 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 
 void KSpreadTable::autofill( QRect &src, QRect &dest )
 {
+    if(src==dest || ( src.right() >= dest.right() &&  src.bottom() >= dest.bottom()))
+        return;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( m_pDoc, this, dest );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
     // Fill from left to right
     if ( src.left() == dest.left() && src.right() < dest.right() )
     {

@@ -123,11 +123,11 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable
 {
     m_tableName = _table->tableName();
     m_iColumn= _column;
-    
+
     QRect selection;
     selection.setCoords( _column, 0, _column, 0x7fff );
     QDomDocument doc = _table->saveCellRect( selection );
-    
+
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -227,7 +227,7 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
 {
     m_tableName = _table->tableName();
     m_iRow = _row;
-    
+
     QRect selection;
     selection.setCoords( 0, _row, 0x7fff, _row );
     QDomDocument doc = _table->saveCellRect( selection );
@@ -243,7 +243,7 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     // This allows us to treat the QCString like a QByteArray later on.
     m_data = buffer.utf8();
     int len = m_data.length();
-    char tmp = m_data[ len - 1 ]; 
+    char tmp = m_data[ len - 1 ];
     m_data.resize( len );
     *( m_data.data() + len - 1 ) = tmp;
 	
@@ -283,7 +283,7 @@ void KSpreadUndoRemoveRow::redo()
 	return;
 
     table->removeRow( m_iRow );
-    
+
     doc()->undoBuffer()->unlock();
 }
 
@@ -552,7 +552,7 @@ void KSpreadUndoDelete::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-
+    table->deleteCells( m_selection );
     table->paste( m_data, m_selection.topLeft() );
     table->recalc( true );
 
@@ -893,6 +893,71 @@ void KSpreadUndoMergedCell::redo()
     doc()->undoBuffer()->lock();
 
     table->changeMergedCell( m_iCol, m_iRow, m_iExtraRedoX,m_iExtraRedoY);
+
+    doc()->undoBuffer()->unlock();
+}
+
+
+KSpreadUndoAutofill::KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
+    : KSpreadUndoAction( _doc )
+{
+    m_tableName = table->tableName();
+    m_selection = _selection;
+    createListCell( m_data, table );
+
+}
+
+KSpreadUndoAutofill::~KSpreadUndoAutofill()
+{
+}
+
+void KSpreadUndoAutofill::createListCell( QCString &list, KSpreadTable* table )
+{
+    QDomDocument doc = table->saveCellRect( m_selection );
+    // Save to buffer
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
+
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
+    list = buffer.utf8();
+    int len = list.length();
+    char tmp = list[ len - 1 ];
+    list.resize( len );
+    *( list.data() + len - 1 ) = tmp;
+}
+
+void KSpreadUndoAutofill::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    createListCell( m_dataRedo, table );
+
+    doc()->undoBuffer()->lock();
+    table->deleteCells( m_selection );
+    table->paste( m_data, m_selection.topLeft() );
+    table->recalc( true );
+
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoAutofill::redo()
+{
+    doc()->undoBuffer()->lock();
+
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    table->deleteCells( m_selection );
+    doc()->undoBuffer()->lock();
+    table->paste( m_dataRedo, m_selection.topLeft() );
+    table->recalc( true );
 
     doc()->undoBuffer()->unlock();
 }
