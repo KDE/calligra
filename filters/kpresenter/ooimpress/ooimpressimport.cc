@@ -1484,16 +1484,26 @@ void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e, bool or
 
 void OoImpressImport::appendTextObjectMargin( QDomDocument& /*doc*/, QDomElement& e )
 {
-    if( m_styleStack.hasAttribute( "fo:padding-top" ) )
-        e.setAttribute( "btoppt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-top" ) ) );
-    if( m_styleStack.hasAttribute( "fo:padding-bottom" ) )
-        e.setAttribute( "bbottompt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-bottom" ) ) );
-    if( m_styleStack.hasAttribute( "fo:padding-left" ) )
-        e.setAttribute( "bleftpt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-left" ) ) );
-    if( m_styleStack.hasAttribute( "fo:padding-right" ) )
-        e.setAttribute( "brightpt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-right" ) ) );
+    if ( m_styleStack.hasAttribute( "fo:padding" ) )
+    {
+        double tmpValue = KoUnit::parseValue(m_styleStack.attribute( "fo:padding" ) );
+        e.setAttribute( "btoppt", tmpValue );
+        e.setAttribute( "bbottompt", tmpValue );
+        e.setAttribute( "bleftpt", tmpValue );
+        e.setAttribute( "brightpt", tmpValue );
+    }
+    else
+    {
+        if( m_styleStack.hasAttribute( "fo:padding-top" ) )
+            e.setAttribute( "btoppt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-top" ) ) );
+        if( m_styleStack.hasAttribute( "fo:padding-bottom" ) )
+            e.setAttribute( "bbottompt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-bottom" ) ) );
+        if( m_styleStack.hasAttribute( "fo:padding-left" ) )
+            e.setAttribute( "bleftpt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-left" ) ) );
+        if( m_styleStack.hasAttribute( "fo:padding-right" ) )
+            e.setAttribute( "brightpt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-right" ) ) );
+    }
 }
-
 
 QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement& textBox )
 {
