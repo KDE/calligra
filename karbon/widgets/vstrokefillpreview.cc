@@ -182,7 +182,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
 	m_painter->strokePath();
 
-	color.set( 1.0, 1.0, 0.0 );
+	color.set( 0.5, 0.5, 0.5 );
 	stroke.setColor( color );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
@@ -258,7 +258,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
 	m_painter->strokePath();
 
-	color.set( 0.0, 0.0, 0.0 );
+	color.set( 0.5, 0.5, 0.5 );
 	stroke.setColor( color );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
