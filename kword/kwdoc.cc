@@ -361,7 +361,7 @@ void KWDocument::initConfig()
       setShowRuler(config->readBoolEntry("Rulers",true));
       int defaultAutoSave = KoDocument::defaultAutoSave()/60; // in minutes
       setAutoSave(config->readNumEntry("AutoSave",defaultAutoSave)*60); // read key in minutes, call setAutoSave(seconds)
-      setBackupFile( config->readNumEntry("BackupFile", true));
+      setBackupFile( config->readBoolEntry("BackupFile", true) );
 
       setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
       m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );

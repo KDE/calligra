@@ -337,7 +337,7 @@ void KPresenterDoc::initConfig()
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
-        setBackupFile( config->readNumEntry("BackupFile", true));
+        setBackupFile( config->readBoolEntry("BackupFile", true));
         setCursorInProtectedArea( config->readBoolEntry( "cursorInProtectArea", true ));
 
         // Config-file value in mm, default 10 pt
