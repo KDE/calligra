@@ -898,3 +898,20 @@ VKoPainter::drawImage( const QImage &image )
 					affine, ART_FILTER_NEAREST, 0L );
 }
 
+void
+VKoPainter::drawRect( const KoRect &r )
+{
+	newPath();
+	moveTo( r.topLeft() );
+	lineTo( r.topRight() );
+	lineTo( r.bottomRight() );
+	lineTo( r.bottomLeft() );
+	lineTo( r.topLeft() );
+}
+
+void
+VKoPainter::drawRect( double x, double y, double w, double h )
+{
+	drawRect( KoRect( x, y, w, h ) );
+}
+

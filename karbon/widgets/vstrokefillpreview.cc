@@ -317,12 +317,15 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		else
 			m_painter->setBrush( f );
 
-		m_painter->newPath();
+		m_painter->drawRect( KoRect(	FILL_TOPX, FILL_TOPY,
+										FILL_BOTTOMX - FILL_TOPX,
+										FILL_BOTTOMY - FILL_TOPY ) );
+		/*m_painter->newPath();
 		m_painter->moveTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
 		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
 		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
 		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );*/
 		m_painter->fillPath();
 	}
 	else

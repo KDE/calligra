@@ -63,7 +63,7 @@ VGradient::VGradient( const VGradient& gradient )
 
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
-	for( unsigned int i = 0; i < cs.count(); i++ )
+	for( uint i = 0; i < cs.count(); i++ )
 		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
 } // VGradient::VGradient
@@ -82,7 +82,7 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
-	for( unsigned int i = 0; i < cs.count(); i++ )
+	for( uint i = 0; i < cs.count(); i++ )
 		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
 

@@ -73,6 +73,7 @@ public:
 	// helper
 	virtual void drawNode( const KoPoint& , int ) {}
 	virtual void drawRect( const KoRect & ) {}
+	virtual void drawRect( double, double, double, double ) {}
 
 	// pen + brush
 	virtual void setPen( const VStroke & ) = 0;

@@ -67,8 +67,11 @@ public:
     virtual void strokePath();
 	virtual void setClipPath();
 	virtual void resetClipPath();
+
 	// helper
-	virtual void drawNode( const KoPoint& p, int width);
+	virtual void drawNode( const KoPoint& p, int width );
+	virtual void drawRect( const KoRect & );
+	virtual void drawRect( double, double, double, double );
 
 	// pen + brush
 	virtual void setPen( const VStroke & );
