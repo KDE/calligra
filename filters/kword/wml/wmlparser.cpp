@@ -43,6 +43,10 @@ class WMLHandler: public QXmlDefaultHandler
     bool m_inBlock;
     QString m_text;
 
+    bool m_inLink;
+    QString m_link;
+    QString m_href;
+
     WMLFormat m_currentFormat;
     WMLFormatList m_formatList;
     WMLLayout m_currentLayout;
@@ -53,8 +57,12 @@ class WMLHandler: public QXmlDefaultHandler
 bool WMLHandler::startDocument()
 {
   m_text = "";
-  m_inBlock = FALSE;
-  return TRUE;
+  m_inBlock = false;
+
+  m_link = "";
+  m_href = "";
+  
+  return true;
 }
 
 bool WMLHandler::startElement( const QString&, const QString&,
@@ -134,6 +142,22 @@ bool WMLHandler::startElement( const QString&, const QString&,
     return TRUE;
   }
 
+  if( tag == "a" )
+  {
+    QString href = attr.value("href");
+    if( !href.isEmpty() )
+    {
+      m_inBlock = false;
+      m_inLink = true;
+      m_currentFormat.link = "";
+      m_currentFormat.href = href;
+      m_currentFormat.pos = m_text.length();
+      m_currentFormat.len = 1;
+      m_text.append( "#" ); // inline char
+      return true;
+    }
+  }
+
   // unhandled element
   return TRUE;
 }
@@ -201,6 +225,14 @@ bool WMLHandler::endElement( const QString&, const QString&,
     return TRUE;
   }
 
+  if( tag == "a" )
+  {
+    m_inBlock = true;
+    m_inLink = false;
+    m_formatList.append( m_currentFormat );
+    return true;
+  }
+
   // unhandled
   return TRUE;
 }
@@ -209,6 +241,9 @@ bool WMLHandler::characters( const QString& ch )
 {
   if( m_inBlock )
     m_text.append( ch );
+
+  if( m_inLink )
+    m_currentFormat.link.append( ch );
 
   return TRUE;
 }
@@ -226,7 +261,8 @@ bool WMLHandler::flushParagraph()
       nextpos = nextformat.pos;
     }
     else nextpos = m_text.length();
-    format.len = nextpos - format.pos;
+    if( format.len <= 0 )
+      format.len = nextpos - format.pos;
   }
 
   bool result = m_parser->doParagraph( m_text, m_formatList, m_currentLayout );
@@ -248,6 +284,8 @@ WMLFormat::WMLFormat()
   pos = len = 0;
   fontsize = Normal;
   bold = italic = underline = FALSE;
+  link = "";
+  href = "";
 }
 
 void WMLFormat::assign( const WMLFormat& f )
@@ -258,6 +296,8 @@ void WMLFormat::assign( const WMLFormat& f )
   italic = f.italic;
   underline = f.underline;
   fontsize = f.fontsize;
+  link = f.link;
+  href= f.href;
 }
 
 WMLFormat::WMLFormat( const WMLFormat& f )

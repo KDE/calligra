@@ -21,6 +21,10 @@
 </card>
 
 <card>
+<p>Hyperlink test, go to <a href="http://www.koffice.org">KOffice website</a></p>
+</card>
+
+<card>
 <p>The very last card</p>
 </card>
 

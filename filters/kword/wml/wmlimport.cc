@@ -67,6 +67,9 @@ static QString WMLFormatAsXML( WMLFormat format )
 {
   QString result;
 
+  if( format.href.isEmpty() )
+  {
+
   if( format.bold ) result.append("<WEIGHT value=\"75\" />\n" );
   if( format.italic ) result.append( "<ITALIC value=\"1\" />\n" );
   if( format.underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
@@ -80,6 +83,20 @@ static QString WMLFormatAsXML( WMLFormat format )
   result.prepend("<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
     "\" len=\"" + QString::number(format.len) + "\">\n");
   result.append( "</FORMAT>\n" );
+
+  }
+  else
+  {
+    result.append( "<FORMAT id=\"4\" pos=\"" + QString::number(format.pos) +
+     "\" len=\"" + QString::number(format.len) + "\">\n");
+    result.append( "<VARIABLE>\n" );
+    result.append( "  <TYPE key=\"STRING\" type=\"9\" text=\"" + format.link + "\" />\n" );
+    result.append( "  <LINK linkName=\"" + format.link + "\" hrefName=\"" + 
+      format.href + "\" />\n" );
+    result.append( "</VARIABLE>\n" );
+    result.append( "</FORMAT>\n" );
+  }
+
 
   return result;
 }
