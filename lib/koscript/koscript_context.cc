@@ -163,6 +163,27 @@ KSValue* KSScope::object( const QString& name, bool _insert )
       return ptr;
     }
 
+    // let's search again, now using case-insensitive comparison
+    // this way, function names in KSpread become case-insensitive
+    if( m_moduleSpace )
+    {
+      KSNamespace::ConstIterator it = m_moduleSpace->begin();
+      for( ; it != m_moduleSpace->end(); ++it )
+        if( it.key().lower() == name.lower() )
+          {
+            KSSharedPtr<KSValue> ptr( it.data() );
+            return ptr;
+          } 
+      }
+
+    it = m_globalSpace->begin();
+    for( ; it != m_globalSpace->end(); ++it )
+      if( it.key().lower() == name.lower() )
+        {
+          KSSharedPtr<KSValue> ptr( it.data() );
+          return ptr;
+        }
+
     if ( !_insert )
       return 0;
 
