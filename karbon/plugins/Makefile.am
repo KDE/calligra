@@ -1,1 +1,1 @@
-SUBDIRS = flattenpath roundcorners insertknots whirlpinch
+#SUBDIRS = flattenpath roundcorners insertknots whirlpinch
