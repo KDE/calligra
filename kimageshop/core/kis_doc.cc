@@ -23,8 +23,6 @@
 #include <stdio.h>
 
 #include <iostream.h>
-#include <istream.h>
-#include <ostream.h>
 
 #include <sys/time.h>
 #include <unistd.h>

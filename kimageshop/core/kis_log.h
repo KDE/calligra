@@ -22,7 +22,7 @@
 #ifndef __kis_log_h__
 #define __kis_log_h__
 
-#include <stream.h>
+#include <iostream.h>
 
 class KisLog
 {
