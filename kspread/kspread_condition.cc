@@ -33,25 +33,51 @@
 
 #include <kdebug.h>
 
+KSpreadConditional::KSpreadConditional():
+  val1( 0.0 ), val2( 0.0 ), strVal1( 0 ), strVal2( 0 ),
+  colorcond( 0 ), fontcond( 0 ), styleName( 0 ),
+  style( 0 ), cond( None )
+{
+}
+
+KSpreadConditional::~KSpreadConditional()
+{
+  delete strVal1;
+  delete strVal2;
+  delete colorcond;
+  delete fontcond;
+  delete styleName;
+}
+
+KSpreadConditional::KSpreadConditional( const KSpreadConditional& c )
+{
+  operator=( c );
+}
+
+KSpreadConditional& KSpreadConditional::operator=( const KSpreadConditional& d )
+{
+  strVal1 = d.strVal1 ? new QString( *d.strVal1 ) : 0;
+  strVal2 = d.strVal2 ? new QString( *d.strVal2 ) : 0;
+  styleName = d.styleName ? new QString( *d.styleName ) : 0;
+  fontcond = d.fontcond ? new QFont( *d.fontcond ) : 0;
+  colorcond = d.colorcond ? new QColor( *d.colorcond ) : 0;
+  val1  = d.val1;
+  val2  = d.val2;
+  style = d.style;
+  cond  = d.cond;
+
+  return *this;
+}
+
 
 KSpreadConditions::KSpreadConditions( const KSpreadCell * ownerCell )
-  : m_cell( ownerCell )
+  : m_cell( ownerCell ), m_matchedStyle( 0 )
 {
   Q_ASSERT( ownerCell != NULL );
 }
 
 KSpreadConditions::~KSpreadConditions()
 {
-  QValueList<KSpreadConditional>::const_iterator it;
-  for ( it = m_condList.begin(); it != m_condList.end(); ++it )
-  {
-    KSpreadConditional c = *it;
-    delete c.strVal1;
-    delete c.strVal2;
-    delete c.fontcond;
-    delete c.colorcond;
-    delete c.styleName;
-  }
   m_condList.clear();
 }
 
@@ -81,7 +107,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
     condition = *it;
 
     if ( condition.strVal1 && m_cell->value().isNumber() )
-      continue;    
+      continue;
 
     switch ( condition.cond )
     {
@@ -178,7 +204,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
         return true;
       }
       break;
-      
+
      default:
       break;
     }
@@ -194,39 +220,12 @@ QValueList<KSpreadConditional> KSpreadConditions::conditionList() const
 void KSpreadConditions::setConditionList( const QValueList<KSpreadConditional> & list )
 {
   m_condList.clear();
-  KSpreadConditional newCondition;
 
   QValueList<KSpreadConditional>::const_iterator it;
   for ( it = list.begin(); it != list.end(); ++it )
   {
     KSpreadConditional d = *it;
-    if ( d.strVal1 )
-      newCondition.strVal1 = new QString( *d.strVal1 );
-    else
-      newCondition.strVal1   = 0;
-    if ( d.strVal2 )
-      newCondition.strVal2 = new QString( *d.strVal2 );
-    else
-      newCondition.strVal2   = 0;
-    if ( d.styleName )
-      newCondition.styleName = new QString( *d.styleName );
-    else
-      newCondition.styleName = 0;
-    if ( d.fontcond )
-      newCondition.fontcond = new QFont( *d.fontcond );
-    else
-      newCondition.fontcond  = 0;
-    if ( d.colorcond )
-      newCondition.colorcond = new QColor( *d.colorcond );
-    else
-      newCondition.colorcond = 0;
-
-    newCondition.val1  = d.val1;
-    newCondition.val2  = d.val2;
-    newCondition.style = d.style;
-    newCondition.cond  = d.cond;
-
-    m_condList.append( newCondition );
+    m_condList.append( KSpreadConditional( d ) );
   }
 }
 
@@ -309,7 +308,7 @@ void KSpreadConditions::loadConditions( const QDomElement & element )
 
     ok = conditionElement.hasAttribute( "cond" );
 
-    if ( ok ) 
+    if ( ok )
       newCondition.cond = (Conditional) conditionElement.attribute( "cond" ).toInt( &ok );
     else continue;
 

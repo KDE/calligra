@@ -38,8 +38,9 @@ class QString;
  * Structure to indicate the condition we're testing on a cell and the special
  * font and color that will be applied if it's true
  */
-struct KSpreadConditional
+class KSpreadConditional
 {
+public:
   double         val1;
   double         val2;
   QString *      strVal1;
@@ -49,6 +50,11 @@ struct KSpreadConditional
   QString *      styleName;
   KSpreadStyle * style;
   Conditional    cond;
+
+  KSpreadConditional();
+  ~KSpreadConditional();
+  KSpreadConditional( const KSpreadConditional& );
+  KSpreadConditional& operator=( const KSpreadConditional& );
 };
 
 
