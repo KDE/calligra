@@ -549,6 +549,9 @@ public:
     KAction* insertChartFrame;
     KAction* customList;
     KAction* spellChecking;
+    
+    // settings
+    KToggleAction* showStatusBar;
     KAction* preference;
 
     // running calculation
@@ -905,7 +908,7 @@ void ViewPrivate::initActions()
   actions->sheetProperties = new KAction( i18n("Sheet Properties..."),
       0, view, SLOT( sheetProperties() ), ac, "sheetProperties" );
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties."));
-
+  
   actions->insertSheet = new KAction( i18n("Insert Sheet"),"inserttable",
       0, view, SLOT( insertTable() ), ac, "insertTable" );
   actions->insertSheet->setToolTip(i18n("Insert a new sheet."));
@@ -1137,10 +1140,6 @@ void ViewPrivate::initActions()
       0, view, SLOT( sortList() ), ac, "sortlist" );
   actions->customList->setToolTip(i18n("Create custom lists for sorting or autofill."));
 
-  actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
-      0, view, SLOT( preference() ), ac, "preference" );
-  actions->preference->setToolTip(i18n("Set various KSpread options."));
-
   // -- navigation actions --
 
   actions->gotoCell = new KAction( i18n("Goto Cell..."),"goto",
@@ -1163,6 +1162,18 @@ void ViewPrivate::initActions()
       0, view, SLOT( lastTable() ), ac, "lastTable");
   actions->lastSheet->setToolTip(i18n("Move to the last sheet."));
 
+  // -- settings actions --
+  
+  actions->showStatusBar = new KToggleAction( i18n("Show Status Bar"), 
+      0, ac, "showStatusBar" );
+  QObject::connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
+      view, SLOT( showStatusBar( bool ) ) );
+  actions->showStatusBar->setToolTip(i18n("Show the status bar."));
+
+  actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
+      0, view, SLOT( preference() ), ac, "preference" );
+  actions->preference->setToolTip(i18n("Set various KSpread options."));
+  
   // -- running calculation actions --
 
   actions->calcNone = new KToggleAction( i18n("None"), 0, ac, "menu_none");
@@ -1328,7 +1339,10 @@ void ViewPrivate::adjustActions( bool mode )
   else
     actions->renameSheet->setEnabled( false );
 
+  actions->showStatusBar->setChecked( doc->showStatusBar() );  
+  
   view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
+  
 }
 
 void ViewPrivate::adjustActions( KSpreadSheet* sheet, KSpreadCell* cell )
@@ -1508,8 +1522,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     // build the DCOP object
     dcopObject();
-
-    connect( doc->commandHistory(), SIGNAL( commandExecuted() ),
+    
+    connect( doc->commandHistory(), SIGNAL( commandExecuted() ), 
         this, SLOT( commandExecuted() ) );
 
     // GUI Initializations
@@ -3513,7 +3527,7 @@ void KSpreadView::sheetProperties()
     // sanity check, shouldn't happen
     if( d->workbook->isProtected() ) return;
     if( d->activeSheet->isProtected() ) return;
-
+    
     SheetPropertiesDialog* dlg = new SheetPropertiesDialog( this );
     dlg->setAutoCalc( d->activeSheet->getAutoCalc() );
     dlg->setShowGrid( d->activeSheet->getShowGrid() );
@@ -3524,7 +3538,7 @@ void KSpreadView::sheetProperties()
     dlg->setColumnAsNumber( d->activeSheet->getShowColumnNumber() );
     dlg->setLcMode( d->activeSheet->getLcMode() );
     dlg->setCapitalizeFirstLetter( d->activeSheet->getFirstLetterUpper() );
-
+    
     if( dlg->exec() )
     {
         d->activeSheet->setAutoCalc( dlg->autoCalc() );
@@ -3535,13 +3549,13 @@ void KSpreadView::sheetProperties()
         d->activeSheet->setShowFormulaIndicator( dlg->showFormulaIndicator() );
         d->activeSheet->setShowColumnNumber( dlg->columnAsNumber() );
         d->activeSheet->setLcMode( dlg->lcMode() );
-        d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );
-
+        d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );    
+    
         slotUpdateView( d->activeSheet );
-
+        
         // FIXME create command & undo object
     }
-
+    
     delete dlg;
 }
 
@@ -4595,6 +4609,12 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
   d->doc->emitEndOperation();
 }
 
+void KSpreadView::showStatusBar( bool b )
+{
+  d->doc->setShowStatusBar( b );
+  refreshView();
+}
+
 void KSpreadView::preference()
 {
   if ( !d->activeSheet )
@@ -4838,7 +4858,7 @@ void KSpreadView::refreshView()
   int left = 0;
   if ( table->isRightToLeft() && d->doc->getShowVerticalScrollBar() )
     left = widthVScrollbar;
-
+    
   if (!d->doc->getShowHorizontalScrollBar())
     d->tabBar->setGeometry( left, height() - heightHScrollbar,
                             width(), heightHScrollbar );
@@ -4900,7 +4920,7 @@ void KSpreadView::refreshView()
 
   if ( statusBar() )
   {
-    if ( d->doc->getShowStatusBar() )
+    if ( d->doc->showStatusBar() )
       statusBar()->show();
     else
       statusBar()->hide();
@@ -6014,7 +6034,7 @@ void KSpreadView::slotRename()
 {
 
   KSpreadSheet * table = activeTable();
-
+  
   if( table->isProtected() )
   {
       KMessageBox::error( 0, i18n ( "You cannot change a protected sheet." ) );
@@ -6064,12 +6084,12 @@ void KSpreadView::slotRename()
       slotRename();
       return;
     }
-
+    
     KCommand* command = new RenameSheetCommand( table, newName );
     d->doc->addCommand( command );
     command->execute();
-
-    //table->setTableName( newName );
+    
+    //table->setTableName( newName );    
 
     d->doc->emitBeginOperation(false);
     updateEditWidget();

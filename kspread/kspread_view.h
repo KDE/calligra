@@ -446,7 +446,12 @@ public slots:
 
     void statusBarClicked(int _id);
     void menuCalc(bool);
-
+    
+    /**
+     * Shows the status bar if b is true, otherwise the status bar will be hidden.
+     */
+    void showStatusBar( bool b );
+    
     /**
      * Shows context menu when tabbar is double-clicked.
      */
