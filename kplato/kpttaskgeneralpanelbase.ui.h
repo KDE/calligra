@@ -87,16 +87,14 @@ int KPTTaskGeneralPanelBase::pessimistic()
 
 void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
 {
+    scheduleStartTime->setEnabled(false);
+    scheduleEndTime->setEnabled(false);
+    scheduleStartDate->setEnabled(false);
+    scheduleEndDate->setEnabled(false);
     switch (scheduleType)
     {
     case 0: //ASAP
     case 1: //ALAP
-        if (useTime) {
-            scheduleStartTime->setEnabled(false);
-            scheduleEndTime->setEnabled(false);
-        }
-        scheduleStartDate->setEnabled(false);
-        scheduleEndDate->setEnabled(false);
         break;
     case 2: //Must start on
     case 4: // Start not earlier
@@ -117,16 +115,14 @@ void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
         scheduleEndDate->setEnabled(true);
         break;
     case 6: //Fixed interval
-        scheduleStartTime->setEnabled(true);
-        scheduleEndTime->setEnabled(true);
+        if (useTime) {
+            scheduleStartTime->setEnabled(true);
+            scheduleEndTime->setEnabled(true);
+        }
+        scheduleStartDate->setEnabled(true);
+        scheduleEndDate->setEnabled(true);
         break;
     default:
-        if (useTime) {
-            scheduleStartTime->setEnabled(false);
-            scheduleEndTime->setEnabled(false);
-        }
-        scheduleStartDate->setEnabled(false);
-        scheduleEndDate->setEnabled(false);
         break;
     }
 }
