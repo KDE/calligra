@@ -156,7 +156,18 @@ void ASCIIWorker::ProcessParagraphData (const QString& paraText,
         {
             if (1==(*paraFormatDataIt).id) // Normal text
             {
-                *m_streamOut << paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+                QString strText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
+
+                // Replace line feeds by line ends
+                int pos;
+                int oldpos=0;
+                while ((pos=strText.find(QChar(10),oldpos))>-1)
+                {
+                    strText.replace(pos,1,m_eol);
+                    oldpos=pos+1;
+                }
+
+                *m_streamOut << strText;
             }
             else if (4==(*paraFormatDataIt).id) // Variable
             {
