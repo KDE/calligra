@@ -240,7 +240,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		inline QWidgetStack * stack() const { return m_stack; }
 
 		void dirtyChanged();
-
+#if 0
 		/*! Loads large string data \a dataString block (e.g. xml form's representation), 
 		 indexed with optional \a dataID, from the database backend.
 		 \return true on success
@@ -266,7 +266,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 Used by KexiDialogBase::storeDataBlock() and by KexiViewBase::storeDataBlock().
 		*/
 		bool storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID );
-
+#endif
 //		void setError(const QString& message, const QString& details);
 
 	private:

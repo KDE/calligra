@@ -471,6 +471,7 @@ bool KexiDialogBase::storeData(bool &cancel)
 	return true;
 }
 
+#if 0
 bool KexiDialogBase::storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID )
 {
 	if (o_id<=0)
@@ -528,6 +529,7 @@ bool KexiDialogBase::removeDataBlock( QString & /*dataString*/, const QString& d
 		setStatus(conn->errorMsg(), ""); 
 	return ok;
 }
+#endif
 
 void KexiDialogBase::activate()
 {

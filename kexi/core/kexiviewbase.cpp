@@ -171,7 +171,7 @@ bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID )
 {
 	if (!m_dialog)
 		return false;
-	return m_dialog->loadDataBlock(dataString, dataID);
+	return m_mainWin->project()->dbConnection()->loadDataBlock(m_dialog->id(), dataString, dataID);
 }
 
 bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dataID )
@@ -186,14 +186,15 @@ bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dat
 	else
 		effectiveID = m_dialog->id();
 
-	return effectiveID>0 && m_dialog->storeDataBlock_internal( dataString, effectiveID, dataID );
+	return effectiveID>0 
+		&& m_mainWin->project()->dbConnection()->storeDataBlock(effectiveID, dataString, dataID);
 }
 
-bool KexiViewBase::removeDataBlock( QString &dataString, const QString& dataID )
+bool KexiViewBase::removeDataBlock( const QString& dataID )
 {
 	if (!m_dialog)
 		return false;
-	return m_dialog->removeDataBlock(dataString, dataID);
+	return m_mainWin->project()->dbConnection()->removeDataBlock(m_dialog->id(), dataID);
 }
 
 bool KexiViewBase::eventFilter( QObject *o, QEvent *e )

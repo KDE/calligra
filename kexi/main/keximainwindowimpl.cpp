@@ -1929,7 +1929,7 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 		}
 		//check if that name already exists
 		KexiDB::SchemaData tmp_sdata;
-		found = project()->dbConnection()->findObjectSchemaData(
+		found = project()->dbConnection()->loadObjectSchemaData(
 				dlg->part()->info()->projectPartID(),
 				d->nameDialog->widget()->nameText(), tmp_sdata );
 		if (found) {

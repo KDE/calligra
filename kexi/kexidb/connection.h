@@ -344,16 +344,21 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return schema of a table pointed by \a tableId, retrieved from currently 
 		 used database. The schema is cached inside connection, 
 		 so retrieval is performed only once, on demand. */
-		TableSchema* tableSchema( const int tableId );
+		TableSchema* tableSchema( int tableId );
 		
 		/*! \return schema of a table pointed by \a tableName, retrieved from currently 
 		 used database. KexiDB system table schema can be also retrieved.
-		 \sa tableSchema( const int tableId ) */
+		 \sa tableSchema( int tableId ) */
 		TableSchema* tableSchema( const QString& tableName );
 		
-		/*! \return schema of \a tablename table retrieved from currently 
-		 used database. */
-		QuerySchema* querySchema( const int queryId );
+		/*! \return schema of a query pointed by \a queryId, retrieved from currently 
+		 used database. The schema is cached inside connection, 
+		 so retrieval is performed only once, on demand. */
+		QuerySchema* querySchema( int queryId );
+
+		/*! \return schema of a query pointed by \a queryName, retrieved from currently 
+		 used database.  \sa querySchema( int queryId ) */
+		QuerySchema* querySchema( const QString& queryName );
 
 //js: MOVED TO Driver		QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
 //		QString valueToSQL( const Field *field, const QVariant& v ) const;
@@ -362,7 +367,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 This is convenient method when we need only first recors from query result,
 		 or when we know that query result has only one record.
 		 \return true if query was successfully executed and first record has been found. */
-		bool querySingleRecord(const QString& sql, KexiDB::RowData &data);
+		bool querySingleRecord(const QString& sql, RowData &data);
 
 		/*! Executes \a sql query and stores first record's first field's string value 
 		 inside \a value. Therefore, for efficiency it's recommended that a query defined by \a sql
@@ -425,14 +430,14 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: on error, \a tableSchema is not inserted into Connection structures,
 		 so you are still owner of this object.
 		*/
-		bool createTable( KexiDB::TableSchema* tableSchema );
+		bool createTable( TableSchema* tableSchema );
 
 		/*! Drops a table defined by \a tableSchema.
 		 If true is returned, schema information \a tableSchema is destoyed
 		 (because it's owned), so don't keep this anymore!
 		*/
 //TODO(js): update any structure (e.g. query) that depend on this table!
-		bool dropTable( KexiDB::TableSchema* tableSchema );
+		bool dropTable( TableSchema* tableSchema );
 
 		/*! It is a convenience function, does exactly the same as 
 		 bool dropTable( KexiDB::TableSchema* tableSchema ) */
@@ -442,7 +447,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 If true is returned, schema information \a querySchema is destoyed 
 		 (because it's owned), so don't keep this anymore!
 		*/
-		bool dropQuery( KexiDB::QuerySchema* querySchema );
+		bool dropQuery( QuerySchema* querySchema );
+
+		/*! It is a convenience function, does exactly the same as 
+		 bool dropQuery( KexiDB::QuerySchema* querySchema ) */
+		bool dropQuery( const QString& query );
 
 		/*! Removes information about object with \a objId 
 		 from internal "kexi__object" and "kexi__objectdata" tables.
@@ -453,7 +462,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 null if there are no such field.
 		 For checking Driver::isSystemFieldName() is used, so this check can 
 		 be driver-dependent. */
-		Field* findSystemFieldName(KexiDB::FieldList *fieldlist);
+		Field* findSystemFieldName(FieldList *fieldlist);
 
 		/*! \return name of any (e.g. first found) database for this connection.
 		 This method does not close or open this connection. The method can be used
@@ -520,7 +529,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		
 		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&)
 		*/
-		int lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table);
+		int lastInsertedAutoIncValue(const QString& aiFieldName, const TableSchema& table);
 
 		/*! Executes query \a statement, but without returning resulting 
 		 rows (used mostly for functional queries). 
@@ -533,7 +542,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString selectStatement( KexiDB::QuerySchema& querySchema ) const;
+		QString selectStatement( QuerySchema& querySchema ) const;
 
 		/*! \return sql string of actually executed SQL statement,
 		 usually using drv_executeSQL(). */
@@ -552,12 +561,33 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Added for convenience. 
 		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ) */
-		bool setupObjectSchemaData( int objectID, SchemaData &sdata );
+		bool loadObjectSchemaData( int objectID, SchemaData &sdata );
 
 		/*! Finds object schema data for object of type \a obejctType and name \a objectName.
 		 If the object is found, resulted schema is stored in \a sdata and true is returned,
 		 otherwise false is returned. */
-		bool findObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata );
+		bool loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata );
+
+		/*! Loads (potentially large) data block (e.g. xml form's representation), referenced by objectID
+		 and puts it to \a dataString. The can be block indexed with optional \a dataID.
+		 \return true on success
+		 \sa storeDataBlock(). */
+		bool loadDataBlock( int objectID, QString &dataString, const QString& dataID );
+
+		/*! Stores (potentially large) data block \a dataString (e.g. xml form's representation), 
+		 referenced by objectID. Block will be stored in "kexi__objectdata" table and 
+		 an optional \a dataID identifier. 
+		 If there is already such record in the table, it's simply overwritten.
+		 \return true on success
+		 \sa loadDataBlock(). */
+		bool storeDataBlock( int objectID, const QString &dataString, const QString& dataID = QString::null );
+
+		/*! Removes (potentially large) string data (e.g. xml form's representation), 
+		 referenced by objectID, and pointed by optional \a dataID.
+		 \return true on success. Does not fail if the block does not exist.
+		 Note that if \a dataID is not specified, all data blocks for this dialog will be removed.
+		 \sa loadDataBlock() storeDataBlock(). */
+		bool removeDataBlock( int objectID, const QString& dataID = QString::null);
 
 	protected:
 		/*! Used by Driver */
@@ -638,7 +668,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString createTableStatement( const KexiDB::TableSchema& tableSchema ) const;
+		QString createTableStatement( const TableSchema& tableSchema ) const;
 
 
 		/*! returns "SELECT ..." statement's string needed for executing query 
@@ -648,7 +678,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString selectStatement( KexiDB::TableSchema& tableSchema ) const;
+		QString selectStatement( TableSchema& tableSchema ) const;
 
 		/*! Creates table using \a tableSchema information.
 		 \return true on success. Default implementation 
@@ -656,7 +686,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note for driver developers: reimplement this only if you want do to 
 		 this in other way.
 		 */
-		virtual bool drv_createTable( const KexiDB::TableSchema& tableSchema );
+		virtual bool drv_createTable( const TableSchema& tableSchema );
 
 		/*! 
 		 Creates table named by \a tableSchemaName. Schema object must be on
@@ -769,11 +799,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Setups schema data for object that owns sdata (e.g. table, query)
 			using \a cursor opened on 'kexi__objects' table, pointing to a record
 			corresponding to given object. */
-		bool setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata );
+		bool setupObjectSchemaData( const RowData &data, SchemaData &sdata );
 
-		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
-			Used internally by tableSchema() methods. */
-		KexiDB::TableSchema* setupTableSchema( const KexiDB::RowData &data );
+		/*! \return a full table schema for a table using 'kexi__*' system tables. 
+		 Used internally by tableSchema() methods. */
+		TableSchema* setupTableSchema( const RowData &data );
+
+		/*! \return a full query schema for a query using 'kexi__*' system tables. 
+		 Used internally by querySchema() methods. */
+		QuerySchema* setupQuerySchema( const RowData &data );
 
 		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf);
 
