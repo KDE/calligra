@@ -46,7 +46,7 @@ k_dcop:
     virtual void stylist();
     virtual void createTemplate();
 
-    virtual uint tableSelectCell(const QString &name, uint row, uint col);
+    virtual int tableSelectCell(const QString &name, uint row, uint col);
     virtual void insertTable();
     virtual void tableInsertRow();
     virtual void tableInsertRow(uint row);
@@ -54,7 +54,9 @@ k_dcop:
     virtual void tableInsertCol(uint col);
     virtual void tableResizeCol();
     virtual void tableDeleteRow();
+    virtual int  tableDeleteRow(uint row);
     virtual void tableDeleteCol();
+    virtual int  tableDeleteCol(uint col);
     virtual void tableJoinCells();
     virtual void tableSplitCells();
     virtual void tableUngroupTable();

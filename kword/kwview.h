@@ -196,6 +196,12 @@ public:
 
     QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
 
+    int  tableSelectCell(const QString &tableName, uint row, uint col);
+    void tableInsertRow(uint row, KWTableFrameSet *table = 0);
+    void tableInsertCol(uint col, KWTableFrameSet *table = 0);
+    int tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table = 0);
+    int tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table = 0);
+
 public slots:
     void fileStatistics();
     void editCut();
@@ -251,12 +257,9 @@ public slots:
     void insertFormula( QMimeSource* source=0 );
     void toolsPart();
 
-    int  tableSelectCell(const QString &tableName, uint row, uint col);
     void tableProperties();
     void tableInsertRow();
-    void tableInsertRow(uint row, KWTableFrameSet *table = 0);
     void tableInsertCol();
-    void tableInsertCol(uint col, KWTableFrameSet *table = 0);
     void tableResizeCol();
     void tableDeleteRow();
     void tableDeleteCol();

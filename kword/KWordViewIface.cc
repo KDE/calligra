@@ -181,7 +181,7 @@ void KWordViewIface::createStyleFromSelection()
     view->createStyleFromSelection();
 }
 
-uint KWordViewIface::tableSelectCell(const QString &name, uint row, uint col)
+int KWordViewIface::tableSelectCell(const QString &name, uint row, uint col)
 {
     return view->tableSelectCell(name, row, col);
 }
@@ -216,9 +216,23 @@ void KWordViewIface::tableDeleteRow()
     view->tableDeleteRow();
 }
 
+int KWordViewIface::tableDeleteRow(uint row)
+{
+    QValueList<uint> list;
+    list.append(row);
+    return view->tableDeleteRow(list);
+}
+
 void KWordViewIface::tableDeleteCol()
 {
     view->tableDeleteCol();
+}
+
+int KWordViewIface::tableDeleteCol(uint col)
+{
+    QValueList<uint> list;
+    list.append(col);
+    return view->tableDeleteCol(list);
 }
 
 void KWordViewIface::tableJoinCells()

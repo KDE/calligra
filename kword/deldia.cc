@@ -22,6 +22,7 @@
 #include "deldia.h"
 #include "deldia.moc"
 #include "kwcommand.h"
+#include "kwview.h"
 
 #include <klocale.h>
 
@@ -90,36 +91,11 @@ void KWDeleteDia::setupTab1()
 
 bool KWDeleteDia::doDelete()
 {
-    KMacroCommand *globalCommand=0L;
-
-    if (m_toRemove.count() == ( (type == ROW) ? table->getRows() : table->getCols() ) )
-    {   // we have to delete the whole table
-        //globalCommand = new KWDeleteTableCommand(i18n("Remove Table"), table);
-        doc->deleteTable(table);
-    }
+    KWView *view = dynamic_cast<KWView*>( parent() );
+    if(type == ROW)
+        view->tableDeleteRow(m_toRemove);
     else
-    {   // we will just delete some row/cols
-        if ( type == ROW )
-        {
-            globalCommand = new KMacroCommand(i18n("Remove Rows"));
-            for (uint i=0;i<m_toRemove.count();i++)
-            {
-                KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove Row"), table, m_toRemove[i] );
-                globalCommand->addCommand(cmd);
-            }
-        }
-        else
-        {
-            globalCommand = new KMacroCommand(i18n("Remove Columns"));
-            for (uint i=0;i<m_toRemove.count();i++)
-            {
-                KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove Column"), table, m_toRemove[i] );
-                globalCommand->addCommand(cmd);
-            }
-        }
-        globalCommand->execute();
-        doc->addCommand(globalCommand);
-    }
+        view->tableDeleteCol(m_toRemove);
 
     return true;
 }

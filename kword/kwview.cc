@@ -3895,6 +3895,57 @@ int KWView::tableSelectCell(const QString &tableName, uint row, uint col)
     return 0; 
 }
 
+int KWView::tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table )
+{
+    if(!table)
+        table = m_gui->canvasWidget()->getCurrentTable();
+
+    if (!m_doc || !table)
+        return -1;
+
+    if(rows.count() >= table->getRows()) {
+        m_doc->deleteTable(table);
+        return 0;
+    }
+
+    KMacroCommand *macro = new KMacroCommand(i18n("Remove Rows"));
+
+    for (uint i = 0 ; i < rows.count() ; i++) {
+        KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove Row"),
+            table, rows[i] );
+        macro->addCommand(cmd);
+    }
+
+    macro->execute();
+    m_doc->addCommand(macro);
+    return 0;
+}
+
+int KWView::tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table)
+{
+    if(!table)
+        table = m_gui->canvasWidget()->getCurrentTable();
+
+    if (!m_doc || !table)
+        return -1;
+
+    if(cols.count() >= table->getCols()) {
+        m_doc->deleteTable(table);
+        return 0;
+    }
+
+    KMacroCommand *macro = new KMacroCommand(i18n("Remove Columns"));
+
+    for (uint i = 0 ; i < cols.count() ; i++) {
+        KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove Column"),
+            table, cols[i] );
+        macro->addCommand(cmd);
+    }
+
+    macro->execute();
+    m_doc->addCommand(macro);
+    return 0;
+}
 
 void KWView::tableProperties()
 {
