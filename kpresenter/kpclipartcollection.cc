@@ -23,7 +23,7 @@
 
 KPClipart KPClipartCollection::findOrLoad( const QString & fileName, const QDateTime & dateTime )
 {
-    ASSERT( !fileName.isEmpty() );
+    Q_ASSERT( !fileName.isEmpty() );
     if ( dateTime.isValid() )
         return findClipart( KPClipartKey( fileName, dateTime ) );
     else

@@ -1331,7 +1331,7 @@ void Page::setupMenus()
 {
     // create right button presentation menu
     presMenu = new QPopupMenu();
-    CHECK_PTR( presMenu );
+    Q_CHECK_PTR( presMenu );
     presMenu->setCheckable( true );
     PM_SM = presMenu->insertItem( i18n( "&Switching mode" ), this, SLOT( switchingMode() ) );
     PM_DM = presMenu->insertItem( i18n( "&Drawing mode" ), this, SLOT( drawingMode() ) );
@@ -1695,7 +1695,7 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
         }
         //kdDebug(33001) << "selectedSlides : " << debugstr << endl;
     }
-    ASSERT( slideList.count() );
+    Q_ASSERT( slideList.count() );
     slideListIterator = slideList.begin();
 
     setCursor( blankCursor );

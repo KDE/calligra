@@ -3300,7 +3300,8 @@ KTextEditFormatCollection::KTextEditFormatCollection()
     //fonts! not everyone has utopia...
     QFont font = KGlobalSettings::generalFont();
     font.setPointSize(20);
-    KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
+    // ####### Not needed anymore with 3.0?
+    //KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     defFormat = new KTextEditFormat( font, Qt::black );
     lastFormat = cres = 0;
     cflags = -1;

@@ -764,7 +764,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                         if ( nr >= 0 )
                         {
                             //kdDebug(33001) << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
-                            ASSERT( nr == (int)m_selectedSlides.count() );
+                            Q_ASSERT( nr == (int)m_selectedSlides.count() );
                             m_selectedSlides.append( show );
                         } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
                     }
@@ -2938,7 +2938,7 @@ void KPresenterDoc::deletePage( int _page )
     _backgroundList.remove( _page );
     repaint( false );
 
-    ASSERT( _page < (int)m_selectedSlides.count() );
+    Q_ASSERT( _page < (int)m_selectedSlides.count() );
     m_selectedSlides.remove( m_selectedSlides.at( _page ) );
 
     // Delete page title.
@@ -3696,8 +3696,8 @@ void KPresenterDoc::clipboardDataChanged()
 
 void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 {
-    ASSERT( pgNum >= 0 );
-    ASSERT( pgNum < (int)m_selectedSlides.count() );
+    Q_ASSERT( pgNum >= 0 );
+    Q_ASSERT( pgNum < (int)m_selectedSlides.count() );
     m_selectedSlides[ pgNum ] = select;
     kdDebug(33001) << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
@@ -3709,8 +3709,8 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const
 {
-    ASSERT( pgNum >= 0 );
-    ASSERT( pgNum < (int)m_selectedSlides.count() );
+    Q_ASSERT( pgNum >= 0 );
+    Q_ASSERT( pgNum < (int)m_selectedSlides.count() );
     return m_selectedSlides[ pgNum ];
 }
 

@@ -23,7 +23,7 @@
 
 KPImage KPImageCollection::findOrLoad( const QString & fileName, const QDateTime & dateTime )
 {
-    ASSERT( !fileName.isEmpty() );
+    Q_ASSERT( !fileName.isEmpty() );
     if ( dateTime.isValid() )
         return findImage( KoImageKey( fileName, dateTime ) );
     else

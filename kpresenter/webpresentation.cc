@@ -45,6 +45,7 @@
 #include <qdir.h>
 #include <qheader.h>
 #include <qwmatrix.h>
+#include <qtextcodec.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -229,8 +230,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     int p;
     QString format = imageFormat( imgFormat );
 
-    QFont::CharSet chset = KGlobal::charsets()->charsetForLocale();
-    QString chsetName = KGlobal::charsets()->name(chset);
+    QString chsetName = QTextCodec::codecForLocale()->mimeName();
 
     QString html;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
@@ -331,8 +331,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QString html;
 
-    QFont::CharSet chset = KGlobal::charsets()->charsetForLocale();
-    QString chsetName = KGlobal::charsets()->name(chset);
+    QString chsetName = QTextCodec::codecForLocale()->mimeName();
 
     html = QString( "<HTML><HEAD><TITLE>%1 - ").arg( title );
     html += i18n("Table of Contents");

@@ -393,7 +393,7 @@ void KPObject::zoom( float _fakt )
 /*==================== zoom orig =================================*/
 void KPObject::zoomOrig()
 {
-    ASSERT(zoomed);
+    Q_ASSERT(zoomed);
     zoomed = false;
 
     orig = oldOrig;

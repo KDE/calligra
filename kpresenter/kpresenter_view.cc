@@ -2910,7 +2910,7 @@ void KPresenterView::setupPopupMenus()
 
     // create right button object align menu
     rb_oalign = new QPopupMenu();
-    CHECK_PTR( rb_oalign );
+    Q_CHECK_PTR( rb_oalign );
     rb_oalign->insertItem( KPBarIcon("aoleft" ), this, SLOT( extraAlignObjLeft() ) );
     rb_oalign->insertSeparator( -1 );
     rb_oalign->insertItem( KPBarIcon("aocenterh" ), this, SLOT( extraAlignObjCenterH() ) );
@@ -2927,7 +2927,7 @@ void KPresenterView::setupPopupMenus()
 
     // create right button line begin
     rb_lbegin = new QPopupMenu();
-    CHECK_PTR( rb_lbegin );
+    Q_CHECK_PTR( rb_lbegin );
     rb_lbegin->insertItem( KPBarIcon("line_normal_begin" ), this, SLOT( extraLineBeginNormal() ) );
     rb_lbegin->insertSeparator( -1 );
     rb_lbegin->insertItem( KPBarIcon("line_arrow_begin" ), this, SLOT( extraLineBeginArrow() ) );
@@ -2940,7 +2940,7 @@ void KPresenterView::setupPopupMenus()
 
     // create right button line end
     rb_lend = new QPopupMenu();
-    CHECK_PTR( rb_lend );
+    Q_CHECK_PTR( rb_lend );
     rb_lend->insertItem( KPBarIcon("line_normal_end" ), this, SLOT( extraLineEndNormal() ) );
     rb_lend->insertSeparator( -1 );
     rb_lend->insertItem( KPBarIcon("line_arrow_end" ), this, SLOT( extraLineEndArrow() ) );
@@ -2953,7 +2953,7 @@ void KPresenterView::setupPopupMenus()
 
     // create right button pen style
     rb_pstyle = new QPopupMenu();
-    CHECK_PTR( rb_pstyle );
+    Q_CHECK_PTR( rb_pstyle );
     rb_pstyle->insertItem( KPBarIcon( "pen_style_solid" ), this, SLOT( extraPenStyleSolid() ) );
     rb_pstyle->insertSeparator( -1 );
     rb_pstyle->insertItem( KPBarIcon( "pen_style_dash" ), this, SLOT( extraPenStyleDash() ) );
@@ -2970,7 +2970,7 @@ void KPresenterView::setupPopupMenus()
 
     // create right button pen width
     rb_pwidth = new QPopupMenu();
-    CHECK_PTR( rb_pwidth );
+    Q_CHECK_PTR( rb_pwidth );
     rb_pwidth->insertItem( KPBarIcon( "pen_width1" ), this, SLOT( extraPenWidth1() ) );
     rb_pwidth->insertSeparator( -1 );
     rb_pwidth->insertItem( KPBarIcon( "pen_width4" ), this, SLOT( extraPenWidth4() ) );

@@ -21,6 +21,7 @@
 #define kpresenter_view_h
 
 #include <qguardedptr.h>
+#include <qtimer.h>
 
 #include <koView.h>
 #include <kpresenter_doc.h>

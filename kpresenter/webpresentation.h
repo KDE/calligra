@@ -22,6 +22,7 @@
 
 #include <qwizard.h>
 #include <qdialog.h>
+#include <qvaluelist.h>
 
 class KPresenterDoc;
 class KPresenterView;
@@ -184,7 +185,7 @@ protected:
 protected slots:
     virtual void finish();
     void pageChanged();
-    void slotChoosePath(const QString &); 
+    void slotChoosePath(const QString &);
     void slideTitleChanged( const QString & );
     void slideTitleChanged( QListViewItem * );
 
