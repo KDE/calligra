@@ -1552,7 +1552,7 @@ void KWFrameSetEdit::showPopup( KWFrame* frame, KWView* view, const QPoint & _po
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/
 KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc )
+    : KWFrameSet( _doc ), m_finalSize( false )
 {
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Picture %1" ) );
@@ -1590,7 +1590,7 @@ void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double new
 {
     KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
     //QSize newSize = kWordDocument()->zoomSize( frame->innerRect().size() );
-    /// ### the fast vs slow resize of EPS images (depending on finalSize) is gone :(
+    m_finalSize=finalSize; // Cache the value for drawing time!
 }
 
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
@@ -1655,7 +1655,7 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
 {
     //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << crect << endl;
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
-                  crect.x(), crect.y(), crect.width(), crect.height());
+                  crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }
 
 bool KWPictureFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
@@ -1671,13 +1671,7 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     KWFrameSet::printDebug( frame );
     if ( !isDeleted() )
     {
-#if 1
         kdDebug() << "Image: key=" << m_image.getKey().toString() << endl;
-#else
-        kdDebug() << "KoImage: key=" << m_image.key().toString()
-                  << " hasRawData=" << !m_image.rawData().isNull()
-                  << " image size=" << m_image.size().width() << "x" << m_image.size().height() << endl;
-#endif
     }
 }
 #endif

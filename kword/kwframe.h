@@ -730,7 +730,8 @@ public:
 
     /**
      * @deprecated
-     * Size of image is now only needed at drawing time, not before anymore
+     * The size of the image is now only needed at drawing time, not before anymore.
+     * However at drawing time, it is the frame's size that matters.
      */
     void setSize( const QSize & _imgSize );
 
@@ -757,8 +758,11 @@ public:
     bool keepAspectRatio() const { return m_keepAspectRatio; }
     void setKeepAspectRatio( bool b ) { m_keepAspectRatio = b; }
 protected:
+    /// The image
     KoPicture m_image;
     bool m_keepAspectRatio;
+    /// Cache the finalSize parameter of the method resizeFrame for drawFrame
+    bool m_finalSize;
 };
 
 /******************************************************************/
@@ -795,6 +799,7 @@ public:
 
     virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
 protected:
+    /// The clipart
     KoPicture m_clipart;
 };
 
