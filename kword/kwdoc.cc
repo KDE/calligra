@@ -323,16 +323,18 @@ bool KWDocument::initDoc()
         QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
         resetURL();
         ok = loadNativeFormat( fileName );
+        setEmpty();
     } else if ( ret == KoTemplateChooseDia::File ) {
         KURL url( _template);
+        kdDebug() << "KWDocument::initDoc opening URL " << url.prettyURL() << endl;
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
         resetURL();
         ok = loadNativeFormat( fileName );
+        setEmpty();
     }
     setModified( FALSE );
-    setEmpty();
     return ok;
 }
 
