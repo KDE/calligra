@@ -574,16 +574,16 @@ KarbonView::initActions()
 
 	// tools ----->
 	m_ellipseToolAction = new KToggleAction(
-		i18n( "&Ellipse" ), "ellipse", 0, this,
+		i18n( "&Ellipse" ), "14_ellipse", 0, this,
 		SLOT( ellipseTool() ), actionCollection(), "tool_ellipse" );
 	m_polygonToolAction = new KToggleAction(
-		i18n( "&Polygon" ), "polygon", 0, this,
+		i18n( "&Polygon" ), "14_polygon", 0, this,
 		SLOT( polygonTool() ), actionCollection(), "tool_polygon" );
 	m_rectangleToolAction = new KToggleAction(
 		i18n( "&Rectangle" ), "rectangle", 0, this,
 		SLOT( rectangleTool() ), actionCollection(), "tool_rectangle" );
 	m_roundRectToolAction = new KToggleAction(
-		i18n( "&Round Rectangle" ), "roundrect", 0, this,
+		i18n( "&Round Rectangle" ), "14_roundrect", 0, this,
 		SLOT( roundRectTool() ), actionCollection(), "tool_roundrect" );
 	m_sinusToolAction = new KToggleAction(
 		i18n( "S&inus" ), "sinus", 0, this,

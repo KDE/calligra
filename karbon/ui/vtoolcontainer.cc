@@ -66,7 +66,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Shear );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("ellipse",KarbonFactory::instance());
+	pixmap = BarIcon("14_ellipse",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( ellipseToolActivated() ) );
@@ -80,14 +80,14 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Rectangle );
 
 	button = new QToolButton(btngroup);
-	pixmap=BarIcon("roundrect",KarbonFactory::instance());
+	pixmap=BarIcon("14_roundrect",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( roundRectToolActivated() ) );
 	btngroup->insert( button, Roundrect );
 
 	button = new QToolButton(btngroup);
-	pixmap=BarIcon("polygon", KarbonFactory::instance());
+	pixmap=BarIcon("14_polygon", KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polygonToolActivated() ) );

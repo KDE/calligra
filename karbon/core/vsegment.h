@@ -96,7 +96,7 @@ public:
 	VSegment* splitAt( double t );
 
 	/**
-	 * Converts the segment to a bezier curve. Lines obtain control points at
+	 * Makes the segment a bezier curve. Lines obtain control points at
 	 * t = 1/3 and t = 2/3.
 	 */
 	void convertToCurve();
