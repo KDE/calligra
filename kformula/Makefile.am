@@ -42,5 +42,5 @@ kdemimedir = $(kde_mimedir)/application
 
 SUBDIRS =  pics
 
-messages:
-	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kformula.pot
+messages: rc.cpp
+#	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kformula.pot

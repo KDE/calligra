@@ -43,5 +43,6 @@ rcdir = $(kde_datadir)/graphite
 
 # SUBDIRS =  . plugins pics dtd toolbar
 
-messages:
+messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc -o $(podir)/graphite.pot
+
