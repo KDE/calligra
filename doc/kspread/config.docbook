@@ -86,7 +86,7 @@ the mouse button when it is some distance from any of &kspread;'s window
 sides, and then you will get a floating toolbar, which is not locked to any 
 particular part of &kspread;'s window and can in fact be moved outside of 
 the window. To put a floating toolbar back into one of the traditional 
-positions <mousebutton>right</mousebutton> click on the its titlebar to bring 
+positions <mousebutton>right</mousebutton> click on its titlebar to bring 
 up the <guilabel>Toolbar Menu</guilabel> then choose one of the options in 
 the <guisubmenu>Orientation</guisubmenu> sub menu.</para>
 <para>You can also <quote>flatten</quote> a toolbar by <mousebutton>left

@@ -167,7 +167,7 @@ at the bottom of the worksheet.
 
 <varlistentry>
 <term><guilabel>Show status bar</guilabel></term>
-<listitem><para>Uncheck this box if you do not want the status bar to appear.
+<listitem><para>Uncheck this box if you want to hide the status bar.
 </para></listitem>
 </varlistentry>
 
@@ -253,7 +253,7 @@ default page size, orientation and units used by the printer and by the
 
 <sect1 id="configspelling">
 <title><guilabel>Spelling</guilabel></title>
-<para>This page lets you configure the behavior of &kspread;'s spelling 
+<para>This page lets you configure the behavior of &kspread;'s spell 
 checker.</para>
 <para><variablelist>
 
@@ -263,7 +263,7 @@ checker.</para>
 <listitem><para>If this box is checked then when &kspread; finds a word in 
 the document which it does not recognize but which consists of a recognized
 root word plus a recognized prefix or suffix it will accept it, whereas if
-the box is not checked the spelling checker will reject it.
+the box is not checked the spell checker will reject it.
 </para></listitem>
 </varlistentry>
 
