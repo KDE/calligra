@@ -697,25 +697,25 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     if ( !element.isNull() )
         layout.leftBorder = KoBorder::loadBorder( element );
     else
-        layout.leftBorder.ptWidth = 0;
+        layout.leftBorder.setPenWidth( 0);
 
     element = parentElem.namedItem( "RIGHTBORDER" ).toElement();
     if ( !element.isNull() )
         layout.rightBorder = KoBorder::loadBorder( element );
     else
-        layout.rightBorder.ptWidth = 0;
+        layout.rightBorder.setPenWidth( 0);
 
     element = parentElem.namedItem( "TOPBORDER" ).toElement();
     if ( !element.isNull() )
         layout.topBorder = KoBorder::loadBorder( element );
     else
-        layout.topBorder.ptWidth = 0;
+        layout.topBorder.setPenWidth(0);
 
     element = parentElem.namedItem( "BOTTOMBORDER" ).toElement();
     if ( !element.isNull() )
         layout.bottomBorder = KoBorder::loadBorder( element );
     else
-        layout.bottomBorder.ptWidth = 0;
+        layout.bottomBorder.setPenWidth(0);
 
     element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )
@@ -818,25 +818,25 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
             element.setAttribute( "value", layout.lineSpacing );
     }
 
-    if ( layout.leftBorder.ptWidth > 0 )
+    if ( layout.leftBorder.penWidth() > 0 )
     {
         element = doc.createElement( "LEFTBORDER" );
         parentElem.appendChild( element );
         layout.leftBorder.save( element );
     }
-    if ( layout.rightBorder.ptWidth > 0 )
+    if ( layout.rightBorder.penWidth() > 0 )
     {
         element = doc.createElement( "RIGHTBORDER" );
         parentElem.appendChild( element );
         layout.rightBorder.save( element );
     }
-    if ( layout.topBorder.ptWidth > 0 )
+    if ( layout.topBorder.penWidth() > 0 )
     {
         element = doc.createElement( "TOPBORDER" );
         parentElem.appendChild( element );
         layout.topBorder.save( element );
     }
-    if ( layout.bottomBorder.ptWidth > 0 )
+    if ( layout.bottomBorder.penWidth() > 0 )
     {
         element = doc.createElement( "BOTTOMBORDER" );
         parentElem.appendChild( element );

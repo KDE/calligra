@@ -170,25 +170,25 @@ void KoStyle::saveStyle( QDomElement & parentElem )
             element.setAttribute( "hardFrameBreakAfter", "true" );
     }
 
-    if ( m_paragLayout.leftBorder.ptWidth > 0 )
+    if ( m_paragLayout.leftBorder.penWidth() > 0 )
     {
         element = doc.createElement( "LEFTBORDER" );
         parentElem.appendChild( element );
         m_paragLayout.leftBorder.save( element );
     }
-    if ( m_paragLayout.rightBorder.ptWidth > 0 )
+    if ( m_paragLayout.rightBorder.penWidth() > 0 )
     {
         element = doc.createElement( "RIGHTBORDER" );
         parentElem.appendChild( element );
         m_paragLayout.rightBorder.save( element );
     }
-    if ( m_paragLayout.topBorder.ptWidth > 0 )
+    if ( m_paragLayout.topBorder.penWidth() > 0 )
     {
         element = doc.createElement( "TOPBORDER" );
         parentElem.appendChild( element );
         m_paragLayout.topBorder.save( element );
     }
-    if ( m_paragLayout.bottomBorder.ptWidth > 0 )
+    if ( m_paragLayout.bottomBorder.penWidth() > 0 )
     {
         element = doc.createElement( "BOTTOMBORDER" );
         parentElem.appendChild( element );
@@ -352,25 +352,25 @@ KoParagLayout KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
     if ( !element.isNull() )
         layout.leftBorder = KoBorder::loadBorder( element );
     else
-        layout.leftBorder.ptWidth = 0;
+        layout.leftBorder.setPenWidth (0);
 
     element = parentElem.namedItem( "RIGHTBORDER" ).toElement();
     if ( !element.isNull() )
         layout.rightBorder = KoBorder::loadBorder( element );
     else
-        layout.rightBorder.ptWidth = 0;
+        layout.rightBorder.setPenWidth(0);
 
     element = parentElem.namedItem( "TOPBORDER" ).toElement();
     if ( !element.isNull() )
         layout.topBorder = KoBorder::loadBorder( element );
     else
-        layout.topBorder.ptWidth = 0;
+        layout.topBorder.setPenWidth(0);
 
     element = parentElem.namedItem( "BOTTOMBORDER" ).toElement();
     if ( !element.isNull() )
         layout.bottomBorder = KoBorder::loadBorder( element );
     else
-        layout.bottomBorder.ptWidth = 0;
+        layout.bottomBorder.setPenWidth(0);
 
     element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )

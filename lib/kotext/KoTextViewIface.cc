@@ -353,26 +353,26 @@ void KoTextViewIface::setBottomBorder(const QColor & c,double width )
 double KoTextViewIface::leftBorderWidth() const
 {
     KoTextParag *parag= m_textView->cursor()->parag();
-    return  parag->leftBorder().ptWidth;
+    return  parag->leftBorder().width();
 }
 
 double KoTextViewIface::rightBorderWidth() const
 {
     KoTextParag *parag= m_textView->cursor()->parag();
-    return parag->rightBorder().ptWidth;
+    return parag->rightBorder().width();
 
 }
 double KoTextViewIface::topBorderWidth() const
 {
     KoTextParag *parag= m_textView->cursor()->parag();
-    return parag->topBorder().ptWidth;
+    return parag->topBorder().width();
 
 }
 
 double KoTextViewIface::bottomBorderWidth() const
 {
     KoTextParag *parag= m_textView->cursor()->parag();
-    return parag->bottomBorder().ptWidth;
+    return parag->bottomBorder().width();
 
 }
 

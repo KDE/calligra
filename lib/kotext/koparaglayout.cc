@@ -101,10 +101,10 @@ void KoParagLayout::initialise()
         margins[i] = 0;
     lineSpacing = 0;
     counter = 0L;
-    leftBorder.ptWidth = 0;
-    rightBorder.ptWidth = 0;
-    topBorder.ptWidth = 0;
-    bottomBorder.ptWidth = 0;
+    leftBorder.setPenWidth( 0);
+    rightBorder.setPenWidth( 0);
+    topBorder.setPenWidth( 0);
+    bottomBorder.setPenWidth( 0);
     pageBreaking = 0;
     style = 0L;
     shadowDistance = 0;

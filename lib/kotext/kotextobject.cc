@@ -1136,7 +1136,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
         KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         KoBorder tmpBorder;
-        tmpBorder.ptWidth=0;
+        tmpBorder.setPenWidth(0);
         for ( ; start && start != end->next() ; start = start->next() )
           {
             start->setLeftBorder(leftBorder);

@@ -277,7 +277,7 @@ int KoTextParag::topMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
-        + m_layout.topBorder.ptWidth );
+        + m_layout.topBorder.width() );
 }
 
 int KoTextParag::bottomMargin() const
@@ -285,7 +285,7 @@ int KoTextParag::bottomMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
-        + m_layout.bottomBorder.ptWidth );
+        + m_layout.bottomBorder.width() );
 }
 
 int KoTextParag::leftMargin() const
@@ -293,7 +293,7 @@ int KoTextParag::leftMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
-        + m_layout.leftBorder.ptWidth )
+        + m_layout.leftBorder.width() )
         + counterWidth() /* in layout units already */;
 }
 
@@ -302,7 +302,7 @@ int KoTextParag::rightMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginRight ]
-        + m_layout.rightBorder.ptWidth );
+        + m_layout.rightBorder.width() );
 }
 
 int KoTextParag::firstLineMargin() const
@@ -406,15 +406,15 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         //r.setRight( rect().width() - rightMargin() - 1 );
 
         // New solution: occupy the full width
-        r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 ) );
+        r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.width(), zh, 0 ) );
         // ## documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
-        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
+        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
         int lastLine = lines() - 1;
         r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) )+QABS( shadowY( zh ) ));
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
-        if ( m_layout.bottomBorder.ptWidth > 0 )
+        if ( m_layout.bottomBorder.width() > 0 )
             r.rBottom() -= zh->layoutUnitToPixelY(lineSpacing( lastLine )) + 1;
         //kdDebug() << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
         KoBorder::drawBorders( painter, zh, r,

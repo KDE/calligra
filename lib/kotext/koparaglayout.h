@@ -88,10 +88,10 @@ public:
 
     KoStyle* style;
 
-    bool hasBorder() const { return topBorder.ptWidth > 0
-                                 || bottomBorder.ptWidth > 0
-                                 || leftBorder.ptWidth > 0
-                                 || rightBorder.ptWidth > 0; }
+    bool hasBorder() const { return topBorder.penWidth() > 0
+                                 || bottomBorder.penWidth() > 0
+                                 || leftBorder.penWidth() > 0
+                                 || rightBorder.penWidth() > 0; }
 
     void setTabList( const KoTabulatorList & tabList ) { m_tabList = tabList; }
     const KoTabulatorList& tabList() const { return m_tabList; }

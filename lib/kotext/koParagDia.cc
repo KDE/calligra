@@ -269,22 +269,22 @@ void KoBorderPreview::drawContents( QPainter* painter )
     painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ),
                           r.height() - 2 * fm.height() );
 
-    if ( m_topBorder.ptWidth > 0 ) {
+    if ( m_topBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_topBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.right() - 20, r.y() + 30 );
     }
 
-    if ( m_bottomBorder.ptWidth > 0 ) {
+    if ( m_bottomBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_bottomBorder ) );
         painter->drawLine( r.x() + 20, r.bottom() - 30, r.right() - 20, r.bottom() - 30 );
     }
 
-    if ( m_leftBorder.ptWidth > 0 ) {
+    if ( m_leftBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_leftBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.x() + 20, r.bottom() - 30 );
     }
 
-    if ( m_rightBorder.ptWidth > 0 ) {
+    if ( m_rightBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_rightBorder ) );
         painter->drawLine( r.right() - 20, r.y() + 30, r.right() - 20, r.bottom() - 30 );
     }
@@ -294,7 +294,7 @@ QPen KoBorderPreview::setBorderPen( KoBorder _brd )
 {
     QPen pen( black, 1, SolidLine );
 
-    pen.setWidth( static_cast<int>( _brd.ptWidth ) );
+    pen.setWidth( static_cast<int>( _brd.penWidth() ) );
     pen.setColor( _brd.color );
 
     switch ( _brd.style ) {
@@ -944,10 +944,10 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+Ko_SPACE);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
-        if( (  ((int)m_topBorder.ptWidth != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
+        if( (  ((int)m_topBorder.penWidth() != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
                ||(m_topBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bTop->isOn() )
         {
-            m_topBorder.ptWidth = cWidth->currentText().toInt();
+            m_topBorder.setPenWidth( cWidth->currentText().toInt() );
             m_topBorder.color = QColor( bColor->color() );
             m_topBorder.style = KoBorder::getStyle(cStyle->currentText());
             prev3->setTopBorder( m_topBorder );
@@ -958,10 +958,10 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-Ko_SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
-        if( (  ((int)m_bottomBorder.ptWidth != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
+        if( (  ((int)m_bottomBorder.penWidth() != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
                ||(m_bottomBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
         {
-            m_bottomBorder.ptWidth = cWidth->currentText().toInt();
+            m_bottomBorder.setPenWidth(cWidth->currentText().toInt());
             m_bottomBorder.color = QColor( bColor->color() );
             m_bottomBorder.style=KoBorder::getStyle(cStyle->currentText());
             prev3->setBottomBorder( m_bottomBorder );
@@ -974,10 +974,10 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
 
-        if( (  ((int)m_leftBorder.ptWidth != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
+        if( (  ((int)m_leftBorder.penWidth() != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
                ||(m_leftBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
         {
-            m_leftBorder.ptWidth = cWidth->currentText().toInt();
+            m_leftBorder.setPenWidth( cWidth->currentText().toInt());
             m_leftBorder.color = QColor( bColor->color() );
             m_leftBorder.style=KoBorder::getStyle(cStyle->currentText());
             prev3->setLeftBorder( m_leftBorder );
@@ -989,10 +989,10 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
 
-        if( (  ((int)m_rightBorder.ptWidth != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
+        if( (  ((int)m_rightBorder.penWidth() != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
                ||(m_rightBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bRight->isOn() )
         {
-            m_rightBorder.ptWidth = cWidth->currentText().toInt();
+            m_rightBorder.setPenWidth( cWidth->currentText().toInt());
             m_rightBorder.color = bColor->color();
             m_rightBorder.style=KoBorder::getStyle(cStyle->currentText());
             prev3->setRightBorder( m_rightBorder );
@@ -1007,10 +1007,10 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
 
 void KoParagBorderWidget::updateBorders()
 {
-    bLeft->setOn( m_leftBorder.ptWidth > 0 );
-    bRight->setOn( m_rightBorder.ptWidth > 0 );
-    bTop->setOn( m_topBorder.ptWidth > 0 );
-    bBottom->setOn( m_bottomBorder.ptWidth > 0 );
+    bLeft->setOn( m_leftBorder.penWidth() > 0 );
+    bRight->setOn( m_rightBorder.penWidth() > 0 );
+    bTop->setOn( m_topBorder.penWidth() > 0 );
+    bBottom->setOn( m_bottomBorder.penWidth() > 0 );
     prev3->setLeftBorder( m_leftBorder );
     prev3->setRightBorder( m_rightBorder );
     prev3->setTopBorder( m_topBorder );
@@ -1020,9 +1020,9 @@ void KoParagBorderWidget::updateBorders()
 void KoParagBorderWidget::brdLeftToggled( bool _on )
 {
     if ( !_on )
-        m_leftBorder.ptWidth = 0;
+        m_leftBorder.setPenWidth(0);
     else {
-        m_leftBorder.ptWidth = cWidth->currentText().toInt();
+        m_leftBorder.setPenWidth(cWidth->currentText().toInt());
         m_leftBorder.color = bColor->color();
         m_leftBorder.style= KoBorder::getStyle( cStyle->currentText() );
     }
@@ -1032,9 +1032,9 @@ void KoParagBorderWidget::brdLeftToggled( bool _on )
 void KoParagBorderWidget::brdRightToggled( bool _on )
 {
     if ( !_on )
-        m_rightBorder.ptWidth = 0;
+        m_rightBorder.setPenWidth(0);
     else {
-        m_rightBorder.ptWidth = cWidth->currentText().toInt();
+        m_rightBorder.setPenWidth(cWidth->currentText().toInt());
         m_rightBorder.color = bColor->color();
         m_rightBorder.style= KoBorder::getStyle( cStyle->currentText() );
     }
@@ -1044,9 +1044,9 @@ void KoParagBorderWidget::brdRightToggled( bool _on )
 void KoParagBorderWidget::brdTopToggled( bool _on )
 {
     if ( !_on )
-        m_topBorder.ptWidth = 0;
+        m_topBorder.setPenWidth(0);
     else {
-        m_topBorder.ptWidth = cWidth->currentText().toInt();
+        m_topBorder.setPenWidth(cWidth->currentText().toInt());
         m_topBorder.color = bColor->color();
         m_topBorder.style= KoBorder::getStyle( cStyle->currentText() );
     }
@@ -1056,9 +1056,9 @@ void KoParagBorderWidget::brdTopToggled( bool _on )
 void KoParagBorderWidget::brdBottomToggled( bool _on )
 {
     if ( !_on )
-        m_bottomBorder.ptWidth = 0;
+        m_bottomBorder.setPenWidth ( 0 );
     else {
-        m_bottomBorder.ptWidth = cWidth->currentText().toInt();
+        m_bottomBorder.setPenWidth( cWidth->currentText().toInt());
         m_bottomBorder.color = bColor->color();
         m_bottomBorder.style=KoBorder::getStyle(cStyle->currentText());
     }

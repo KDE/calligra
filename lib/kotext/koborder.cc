@@ -25,17 +25,29 @@
 #include "qrichtext_p.h" // for KoTextFormat
 
 KoBorder::KoBorder()
-    : color(), style( SOLID ), ptWidth( 1 ) { }
+    : color(), style( SOLID )
+{
+    setPenWidth( 1 );
+}
 
 KoBorder::KoBorder( const QColor & c, BorderStyle s, double width )
-    : color( c ), style( s ), ptWidth( width ) { }
+    : color( c ), style( s )
+{
+    setPenWidth( width );
+}
 
 bool KoBorder::operator==( const KoBorder _brd ) const {
-    return ( style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth );
+    return ( style == _brd.style && color == _brd.color && ptPenWidth == _brd.ptPenWidth );
 }
 
 bool KoBorder::operator!=( const KoBorder _brd ) const {
-    return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
+    return ( style != _brd.style || color != _brd.color || ptPenWidth != _brd.ptPenWidth );
+}
+
+void KoBorder::setPenWidth(double _w)
+{
+    ptPenWidth = _w;
+    ptWidth = _w;
 }
 
 QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor )
@@ -76,7 +88,7 @@ KoBorder KoBorder::loadBorder( const QDomElement & elem )
         bd.color.setRgb( r, g, b );
     }
     bd.style = static_cast<BorderStyle>( elem.attribute("style").toInt() );
-    bd.ptWidth = elem.attribute("width").toInt();
+    bd.setPenWidth( elem.attribute("width").toInt());
     return bd;
 }
 
@@ -88,7 +100,7 @@ void KoBorder::save( QDomElement & elem ) const
         elem.setAttribute("blue", color.blue());
     }
     elem.setAttribute("style", static_cast<int>( style ));
-    elem.setAttribute("width", ptWidth);
+    elem.setAttribute("width", ptPenWidth);
 }
 
 KoBorder::BorderStyle KoBorder::getStyle( const QString &style )
@@ -142,10 +154,15 @@ int KoBorder::zoomWidthY( double ptWidth, KoZoomHandler * zoomHandler, int minbo
 
 void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRect rect, KoBorder leftBorder, KoBorder rightBorder, KoBorder topBorder, KoBorder bottomBorder, int minborder, QPen defaultPen )
 {
-    int topBorderWidth = zoomWidthY( topBorder.ptWidth, zoomHandler, minborder );
-    int bottomBorderWidth = zoomWidthY( bottomBorder.ptWidth, zoomHandler, minborder );
-    int leftBorderWidth = zoomWidthX( leftBorder.ptWidth, zoomHandler, minborder );
-    int rightBorderWidth = zoomWidthX( rightBorder.ptWidth, zoomHandler, minborder );
+    int topBorderWidth = zoomWidthY( topBorder.width(), zoomHandler, minborder );
+    int bottomBorderWidth = zoomWidthY( bottomBorder.width(), zoomHandler, minborder );
+    int leftBorderWidth = zoomWidthX( leftBorder.width(), zoomHandler, minborder );
+    int rightBorderWidth = zoomWidthX( rightBorder.width(), zoomHandler, minborder );
+
+    int topBorderPenWidth = zoomWidthY( topBorder.penWidth(), zoomHandler, minborder );
+    int bottomBorderPenWidth = zoomWidthY( bottomBorder.penWidth(), zoomHandler, minborder );
+    int leftBorderPenWidth = zoomWidthX( leftBorder.penWidth(), zoomHandler, minborder );
+    int rightBorderPenWidth = zoomWidthX( rightBorder.penWidth(), zoomHandler, minborder );
 
     //kdDebug() << "KoBorder::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
     //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
@@ -154,8 +171,8 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
 
     if ( topBorderWidth > 0 )
     {
-        if ( topBorder.ptWidth > 0 )
-            painter.setPen( KoBorder::borderPen( topBorder, topBorderWidth, defaultColor ) );
+        if ( topBorder.penWidth() > 0 )
+            painter.setPen( KoBorder::borderPen( topBorder, topBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int y = rect.top() - topBorderWidth + topBorderWidth/2;
@@ -163,8 +180,8 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
     }
     if ( bottomBorderWidth > 0 )
     {
-        if ( bottomBorder.ptWidth > 0 )
-            painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderWidth, defaultColor ) );
+        if ( bottomBorder.penWidth() > 0 )
+            painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
 	//kdDebug() << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
@@ -174,8 +191,8 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
     }
     if ( leftBorderWidth > 0 )
     {
-        if ( leftBorder.ptWidth > 0 )
-            painter.setPen( KoBorder::borderPen( leftBorder, leftBorderWidth, defaultColor ) );
+        if ( leftBorder.penWidth() > 0 )
+            painter.setPen( KoBorder::borderPen( leftBorder, leftBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int x = rect.left() - leftBorderWidth + leftBorderWidth/2;
@@ -183,8 +200,8 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
     }
     if ( rightBorderWidth > 0 )
     {
-        if ( rightBorder.ptWidth > 0 )
-            painter.setPen( KoBorder::borderPen( rightBorder, rightBorderWidth, defaultColor ) );
+        if ( rightBorder.penWidth() > 0 )
+            painter.setPen( KoBorder::borderPen( rightBorder, rightBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int x = rect.right() + rightBorderWidth - (rightBorderWidth-1)/2;

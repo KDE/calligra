@@ -37,7 +37,10 @@ public:
     KoBorder( const QColor & c, BorderStyle s, double width );
     QColor color;
     BorderStyle style;
-    double ptWidth;
+    void setPenWidth(double _w);
+
+    double penWidth() const{ return ptPenWidth;}
+    double width() const { return ptWidth; }
 
     bool operator==( const KoBorder _brd ) const;
     bool operator!=( const KoBorder _brd ) const;
@@ -65,6 +68,9 @@ public:
     static void drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRect rect,
                              KoBorder left, KoBorder right, KoBorder top, KoBorder bottom,
                              int minborder, QPen defaultPen );
+private:
+    double ptWidth;
+    double ptPenWidth;
 };
 
 #endif
