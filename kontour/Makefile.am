@@ -9,7 +9,7 @@ kdelnk_DATA = kontour.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 rcdir = $(kde_datadir)/kontour
-rc_DATA = kontour.rc
+rc_DATA = kontour.rc kontour_readonly.rc
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kontour.la

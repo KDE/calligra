@@ -1,0 +1,25 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Kontour" version="1">
+<MenuBar>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="copy"/>
+  <Separator/>
+  <Action name="selectAll"/>
+  <Action name="deselectAll"/>
+ </Menu>
+ <Menu name="view"><text>&amp;View</text>
+  <Action name="zoomin"/>
+  <Action name="zoomout"/>
+  <Action name="view_zoom"/>
+  <Separator/>
+  <Action name="showRuler"/>
+  <Action name="showGrid"/>
+  <Action name="showHelplines"/>
+ </Menu>
+</MenuBar>
+<ToolBar fullWidth="false" name="edit"><Text>Edit</Text>
+  <Action name="copy"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+  <Action name="zoomin"/>
+  <Action name="zoomout"/>
+</ToolBar>

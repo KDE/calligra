@@ -93,7 +93,10 @@ KoView(doc, parent, name)
   rulerMenu = 0;
 
   setInstance(KontourFactory::global());
-  setXMLFile("kontour.rc");
+  if ( !doc->isReadWrite() )
+      setXMLFile("kontour_readonly.rc");
+  else
+      setXMLFile("kontour.rc");
 
   readConfig();
   setupActions();
