@@ -36,12 +36,13 @@ class QPushButton;
 class QSpinBox;
 class QStringList;
 class QWidget;
+class QGroupBox;
 
 class KColorButton;
 class KConfig;
 class KListView;
 class KPushButton;
-
+class KIntNumInput;
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -56,6 +57,10 @@ public:
     ConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name = 0 );
     void apply();
     void slotDefault();
+
+protected:
+
+    bool selectFont( QFont & );
 
 protected slots:
 
@@ -82,7 +87,8 @@ private:
     QFont nameFont;
     QFont numberFont;
     QFont operatorFont;
-    QSpinBox* sizeSpin;
+
+    KIntNumInput* sizeSpin;
 
     QLabel* defaultFontName;
     QLabel* nameFontName;
@@ -95,6 +101,7 @@ private:
     KColorButton* emptyColorBtn;
     KColorButton* errorColorBtn;
     QCheckBox* syntaxHighlighting;
+    QGroupBox* hlBox;
 };
 
 

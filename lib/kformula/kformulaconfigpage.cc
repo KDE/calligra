@@ -26,6 +26,7 @@
 #include <qspinbox.h>
 #include <qstringlist.h>
 #include <qvbox.h>
+#include <qgroupbox.h>
 #include <qwidget.h>
 
 #include <algorithm>
@@ -37,6 +38,7 @@
 #include <klistview.h>
 #include <klocale.h>
 #include <kpushbutton.h>
+#include <knuminput.h>
 
 #include "contextstyle.h"
 #include "kformulaconfigpage.h"
@@ -52,127 +54,122 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 {
     const ContextStyle& contextStyle = document->getContextStyle( true );
 
-
     // fonts
 
-    QWidget* fontWidget = new QWidget( box );
-    QGridLayout* fontLayout = new QGridLayout( fontWidget, 5, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGroupBox *gbox = new QGroupBox( i18n( "Fonts" ), box );
+    gbox->setColumnLayout( 0, Qt::Horizontal );
 
-    fontLayout->setColStretch(0, 0);
-    fontLayout->setColStretch(1, 1);
-    fontLayout->setColStretch(2, 0);
+    QGridLayout* grid = new QGridLayout( gbox->layout(), 5, 3 );
+    grid->setSpacing( KDialog::spacingHint() );
+
+    grid->setColStretch(1, 1);
 
     defaultFont = contextStyle.getDefaultFont();
     nameFont = contextStyle.getNameFont();
     numberFont = contextStyle.getNumberFont();
     operatorFont = contextStyle.getOperatorFont();
 
-    connect( buildFontLine( fontWidget, fontLayout, 0,
-                            defaultFont, i18n( "Default font:" ), defaultFontName ), SIGNAL( clicked() ),
-             this, SLOT( selectNewDefaultFont() ) );
-    connect( buildFontLine( fontWidget, fontLayout, 1,
-                            nameFont, i18n( "Name font:" ), nameFontName ), SIGNAL( clicked() ),
-             this, SLOT( selectNewNameFont() ) );
-    connect( buildFontLine( fontWidget, fontLayout, 2,
-                            numberFont, i18n( "Number font:" ), numberFontName ), SIGNAL( clicked() ),
-             this, SLOT( selectNewNumberFont() ) );
-    connect( buildFontLine( fontWidget, fontLayout, 3,
-                            operatorFont, i18n( "Operator font:" ), operatorFontName ), SIGNAL( clicked() ),
-             this, SLOT( selectNewOperatorFont() ) );
+    connect( buildFontLine( gbox, grid, 0, defaultFont, 
+            i18n( "Default font:" ), defaultFontName ), 
+            SIGNAL( clicked() ), SLOT( selectNewDefaultFont() ) );
 
-    QLabel* sizeTitle = new QLabel( i18n( "Base size:" ), fontWidget );
-    fontLayout->addWidget( sizeTitle, 4, 0 );
+    connect( buildFontLine( gbox, grid, 1, nameFont, 
+            i18n( "Name font:" ), nameFontName ), 
+            SIGNAL( clicked() ), SLOT( selectNewNameFont() ) );
 
-    QWidget* baseSpinContainer = new QWidget( fontWidget );
-    QGridLayout* baseSpinLayout = new QGridLayout( baseSpinContainer, 1, 2 );
-    baseSpinLayout->setColStretch(1, 1);
+    connect( buildFontLine( gbox, grid, 2, numberFont, 
+            i18n( "Number font:" ), numberFontName ),
+            SIGNAL( clicked() ), SLOT( selectNewNumberFont() ) );
 
-    sizeSpin = new QSpinBox( 8, 72, 1, baseSpinContainer );
-    sizeSpin->setValue( contextStyle.baseSize() );
-    sizeSpin->setFixedSize(sizeSpin->sizeHint());
-    baseSpinLayout->addWidget( sizeSpin, 0, 0);
+    connect( buildFontLine( gbox, grid, 3, operatorFont, 
+            i18n( "Operator font:" ), operatorFontName ), 
+            SIGNAL( clicked() ), SLOT( selectNewOperatorFont() ) );
 
-    fontLayout->addWidget( baseSpinContainer, 4, 1 );
+    QLabel* sizeTitle = new QLabel( i18n( "Base size:" ), gbox );
+    grid->addWidget( sizeTitle, 4, 0 );
 
-    connect( sizeSpin, SIGNAL( valueChanged( int ) ), this, SLOT( baseSizeChanged( int ) ) );
+    sizeSpin = new KIntNumInput( contextStyle.baseSize(), gbox );
+    sizeSpin->setRange( 8, 72, 1, true );
+
+    grid->addMultiCellWidget( sizeSpin, 4, 4, 1, 2 );
+
+    connect( sizeSpin, SIGNAL( valueChanged( int ) ), 
+            SLOT( baseSizeChanged( int ) ) );
 
     // syntax highlighting
 
-    syntaxHighlighting = new QCheckBox( i18n( "Syntax highlighting" ), box );
+    syntaxHighlighting = new QCheckBox( i18n( "Use syntax highlighting" ),box );
     syntaxHighlighting->setChecked( contextStyle.syntaxHighlighting() );
 
-    QWidget* widget = new QWidget( box );
+    hlBox = new QGroupBox( i18n( "Highlight Colors" ), box );
+    hlBox->setColumnLayout( 0, Qt::Horizontal );
 
-    QGridLayout* layout = new QGridLayout( widget );
-    layout->setSpacing( KDialog::spacingHint() );
-    layout->setMargin( KDialog::marginHint() );
+    grid = new QGridLayout( hlBox->layout(), 5, 2 );
+    grid->setSpacing( KDialog::spacingHint() );
 
-    QLabel* defaultLabel = new QLabel( widget, "defaultLabel" );
+    QLabel* defaultLabel = new QLabel( hlBox, "defaultLabel" );
     defaultLabel->setText( i18n( "Default color:" ) );
-    layout->addWidget( defaultLabel, 0, 0 );
+    grid->addWidget( defaultLabel, 0, 0 );
 
-    defaultColorBtn = new KColorButton( widget, "defaultColor" );
+    defaultColorBtn = new KColorButton( hlBox, "defaultColor" );
     defaultColorBtn->setColor( contextStyle.getDefaultColor() );
-    layout->addWidget( defaultColorBtn, 0, 1 );
+    grid->addWidget( defaultColorBtn, 0, 1 );
 
 
-    QLabel* numberLabel = new QLabel( widget, "numberLabel" );
+    QLabel* numberLabel = new QLabel( hlBox, "numberLabel" );
     numberLabel->setText( i18n( "Number color:" ) );
-    layout->addWidget( numberLabel, 1, 0 );
+    grid->addWidget( numberLabel, 1, 0 );
 
-    numberColorBtn = new KColorButton( widget, "numberColor" );
+    numberColorBtn = new KColorButton( hlBox, "numberColor" );
     numberColorBtn->setColor( contextStyle.getNumberColorPlain() );
-    layout->addWidget( numberColorBtn, 1, 1 );
+    grid->addWidget( numberColorBtn, 1, 1 );
 
 
-    QLabel* operatorLabel = new QLabel( widget, "operatorLabel" );
+    QLabel* operatorLabel = new QLabel( hlBox, "operatorLabel" );
     operatorLabel->setText( i18n( "Operator color:" ) );
-    layout->addWidget( operatorLabel, 2, 0 );
+    grid->addWidget( operatorLabel, 2, 0 );
 
-    operatorColorBtn = new KColorButton( widget, "operatorColor" );
+    operatorColorBtn = new KColorButton( hlBox, "operatorColor" );
     operatorColorBtn->setColor( contextStyle.getOperatorColorPlain() );
-    layout->addWidget( operatorColorBtn, 2, 1 );
+    grid->addWidget( operatorColorBtn, 2, 1 );
 
 
-    QLabel* emptyLabel = new QLabel( widget, "emptyLabel" );
+    QLabel* emptyLabel = new QLabel( hlBox, "emptyLabel" );
     emptyLabel->setText( i18n( "Empty color:" ) );
-    layout->addWidget( emptyLabel, 3, 0 );
+    grid->addWidget( emptyLabel, 3, 0 );
 
-    emptyColorBtn = new KColorButton( widget, "emptyColor" );
+    emptyColorBtn = new KColorButton( hlBox, "emptyColor" );
     emptyColorBtn->setColor( contextStyle.getEmptyColorPlain() );
-    layout->addWidget( emptyColorBtn, 3, 1 );
+    grid->addWidget( emptyColorBtn, 3, 1 );
 
 
-    QLabel* errorLabel = new QLabel( widget, "errorLabel" );
+    QLabel* errorLabel = new QLabel( hlBox, "errorLabel" );
     errorLabel->setText( i18n( "Error color:" ) );
-    layout->addWidget( errorLabel, 4, 0 );
+    grid->addWidget( errorLabel, 4, 0 );
 
-    errorColorBtn = new KColorButton( widget, "errorColor" );
+    errorColorBtn = new KColorButton( hlBox, "errorColor" );
     errorColorBtn->setColor( contextStyle.getErrorColorPlain() );
-    layout->addWidget( errorColorBtn, 4, 1 );
-
-//     boxLayout->addLayout( layout );
-//     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-//     boxLayout->addItem( spacer );
+    grid->addWidget( errorColorBtn, 4, 1 );
 
     connect( syntaxHighlighting, SIGNAL( clicked() ),
-             this, SLOT( syntaxHighlightingClicked() ) );
+            SLOT( syntaxHighlightingClicked() ) );
 
     syntaxHighlightingClicked();
 }
 
 
-QPushButton* ConfigurePage::buildFontLine( QWidget* fontWidget, QGridLayout* layout, int number,
-                                           QFont font, QString name, QLabel*& fontName )
+QPushButton* ConfigurePage::buildFontLine( QWidget* parent, 
+            QGridLayout* layout, int number, QFont font, QString name, 
+            QLabel*& fontName )
 {
-    QLabel* fontTitle = new QLabel( name, fontWidget );
+    QLabel* fontTitle = new QLabel( name, parent );
 
     QString labelName = font.family() + ' ' + QString::number( font.pointSize() );
-    fontName = new QLabel( labelName, fontWidget );
+    fontName = new QLabel( labelName, parent );
     fontName->setFont( font );
     fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
-    QPushButton* chooseButton = new QPushButton( i18n( "Choose..." ), fontWidget );
+    QPushButton* chooseButton = new QPushButton( i18n( "Choose..." ), parent );
 
     layout->addWidget( fontTitle, number, 0 );
     layout->addWidget( fontName, number, 1 );
@@ -221,9 +218,9 @@ void ConfigurePage::apply()
 void ConfigurePage::slotDefault()
 {
     defaultFont = QFont( "Times", 12, QFont::Normal, true );
-    nameFont = QFont( "Times" );
-    numberFont = QFont( "Times" );
-    operatorFont = QFont( "Times" );
+    nameFont = defaultFont;
+    numberFont = defaultFont;
+    operatorFont = defaultFont;
 
     sizeSpin->setValue( 20 );
 
@@ -244,70 +241,49 @@ void ConfigurePage::slotDefault()
 void ConfigurePage::syntaxHighlightingClicked()
 {
     bool checked = syntaxHighlighting->isChecked();
-    defaultColorBtn->setEnabled( checked );
-    numberColorBtn->setEnabled( checked );
-    operatorColorBtn->setEnabled( checked );
-    emptyColorBtn->setEnabled( checked );
-    errorColorBtn->setEnabled( checked );
+    hlBox->setEnabled( checked );
 }
 
-void ConfigurePage::selectNewDefaultFont() {
-    QStringList list;
-    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
-    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
-    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
-    dlg.setFont( defaultFont );
-    int result = dlg.exec();
-    if ( KDialog::Accepted == result ) {
-        defaultFont = dlg.font();
-        defaultFont.setPointSize( 12 );
+void ConfigurePage::selectNewDefaultFont()
+{
+    if ( selectFont( defaultFont ) )
         updateFontLabel( defaultFont, defaultFontName );
-    }
 }
 
 void ConfigurePage::selectNewNameFont()
 {
-    QStringList list;
-    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
-    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
-    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
-    dlg.setFont( defaultFont );
-    int result = dlg.exec();
-    if ( KDialog::Accepted == result ) {
-        nameFont = dlg.font();
-        nameFont.setPointSize( 12 );
+    if ( selectFont( nameFont ) )
         updateFontLabel( nameFont, nameFontName );
-    }
 }
 
 void ConfigurePage::selectNewNumberFont()
 {
-    QStringList list;
-    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
-    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
-    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
-    dlg.setFont( defaultFont );
-    int result = dlg.exec();
-    if ( KDialog::Accepted == result ) {
-        numberFont = dlg.font();
-        numberFont.setPointSize( 12 );
+    if ( selectFont( numberFont ) )
         updateFontLabel( numberFont, numberFontName );
-    }
 }
 
 void ConfigurePage::selectNewOperatorFont()
 {
-    QStringList list;
-    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
-    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
-    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
-    dlg.setFont( defaultFont );
-    int result = dlg.exec();
-    if ( KDialog::Accepted == result ) {
-        operatorFont = dlg.font();
-        operatorFont.setPointSize( 12 );
+    if ( selectFont( operatorFont ) )
         updateFontLabel( operatorFont, operatorFontName );
+}
+
+bool ConfigurePage::selectFont( QFont & font )
+{
+    QStringList list;
+
+    KFontChooser::getFontList( list, KFontChooser::SmoothScalableFonts );
+
+    KFontDialog dlg( m_view, 0, false, true, list );
+    dlg.setFont( font );
+
+    int result = dlg.exec();
+    if (  KDialog::Accepted == result ) {
+        font = dlg.font();
+        return true;
     }
+
+    return false;
 }
 
 void ConfigurePage::baseSizeChanged( int /*value*/ )
