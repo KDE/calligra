@@ -4233,6 +4233,11 @@ bool KSpreadTable::hasToWriteMultipart()
 KSpreadTable::~KSpreadTable()
 {
   s_mapTables->remove( m_id );
+
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for (; it.current(); ++it )
+  it.current()->setExtraCells( -1, -1 );
+
   m_dctCells.clear(); // cells destructor needs table to still exist
 
   m_pPainter->end();

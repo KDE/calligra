@@ -867,6 +867,9 @@ KSpreadDoc::~KSpreadDoc()
     delete m_pUndoBuffer;
 
   delete m_dcop;
+  
+  if ( m_pMap )
+    delete m_pMap;
 }
 
 DCOPObject* KSpreadDoc::dcopObject()

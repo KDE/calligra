@@ -153,7 +153,7 @@ public:
     virtual bool textFontBold() { return m_textFont.bold(); }
     virtual bool textFontItalic() { return m_textFont.italic(); }
     virtual bool textFontUnderline() { return m_textFont.underline(); }
-    
+
     virtual Align align() { return m_eAlign; }
 
     virtual AlignY alignY() { return m_eAlignY; }

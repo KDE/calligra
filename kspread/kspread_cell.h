@@ -108,7 +108,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    
+
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     ~KSpreadCell();
 
@@ -486,6 +486,7 @@ public:
      * @return TRUE if the cell is forced to obscure other cells.
      */
     bool isForceExtraCells() const { return m_bForceExtraCells; }
+    void setExtraCells( int x, int y ) { m_iExtraXCells = x; m_iExtraYCells = y; }
     /**
      * @return the amount of obscured cells in the horizontal direction
      */
@@ -534,24 +535,24 @@ public:
 
     void defaultStyle();
 
-    
+
     //valid or not conditionIsTrue
     void verifyCondition();
-    KSpreadConditional * getFirstCondition(int newStruct=-1) 
+    KSpreadConditional * getFirstCondition(int newStruct=-1)
     	{
     	if((m_firstCondition==0)&&(newStruct==-1))
     		m_firstCondition=new KSpreadConditional;
     	return  m_firstCondition;
     	}
     	
-    KSpreadConditional * getSecondCondition(int newStruct=-1) 
+    KSpreadConditional * getSecondCondition(int newStruct=-1)
     	{
     	if((m_secondCondition==0)&&(newStruct==-1))
     		m_secondCondition=new KSpreadConditional;
     	return m_secondCondition;
     	}
     	
-    KSpreadConditional * getThirdCondition(int newStruct=-1) 
+    KSpreadConditional * getThirdCondition(int newStruct=-1)
     	{
     	if((m_thirdCondition==0)&&(newStruct==-1))
     		m_thirdCondition=new KSpreadConditional;

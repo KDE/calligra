@@ -3576,7 +3576,7 @@ KSpreadCell::~KSpreadCell()
     {
       KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
       if ( cell && cell != this )
-	cell->unobscure();
+      cell->unobscure();
     }
 }
 
