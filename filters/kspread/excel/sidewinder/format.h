@@ -25,53 +25,126 @@
 namespace Sidewinder
 {
 
+/**
+ * Defines font information for cell format.
+ *
+ * Class FormatFont defines the font family, size and other attributes
+ * for use in cell format.
+ * 
+ */
 
 class FormatFont
 {
 public:
 
+  /**
+   * Creates a default font information.
+   */
   FormatFont();
   
+  /**
+   * Destroys the font information
+   */
   ~FormatFont();
   
+  /**
+   * Creates a copy of font information.
+   */
   FormatFont( const FormatFont& );
   
+  /**
+   * Assigns from another font information.
+   */
   FormatFont& operator=( const FormatFont& );
   
+  /**
+   * Assigns from another font information.
+   */
   FormatFont& assign( const FormatFont& );
   
+  /**
+   * Returns true if it is a default font information.
+   */
   bool isNull() const;
   
+  /**
+   * Returns the name of font family, e.g "Helvetica".
+   */
   UString fontFamily() const;
   
+  /**
+   * Sets a new family for the font information.
+   */
   void setFontFamily( const UString& fontFamily );
   
+  /**
+   * Returns the size of font (in points).
+   */
   double fontSize() const;
   
+  /**
+   * Sets the size of font (in points).
+   */
   void setFontSize( double fs );
   
+  /**
+   * Returns true if bold has been set.
+   */
   bool bold() const;
   
+  /**
+   * If b is true, bold is set on; otherwise bold is set off.
+   */
   void setBold( bool b );
 
+  /**
+   * Returns true if italic has been set.
+   */
   bool italic() const;
   
+  /**
+   * If i is true, italic is set on; otherwise italic is set off.
+   */
   void setItalic( bool i );
   
+  /**
+   * Returns true if underline has been set.
+   */
   bool underline() const;
   
+  /**
+   * If u is true, underline is set on; otherwise underline is set off.
+   */
   void setUnderline( bool u );
   
+  /**
+   * Returns true if strikeout has been set.
+   */
   bool strikeout() const;
   
+  /**
+   * If s is true, strikeout is set on; otherwise strikeout is set off.
+   */
   void setStrikeout( bool s );
   
+  /**
+   * Returns true if subscript has been set.
+   */
   bool subscript() const;
   
+  /**
+   * If s is true, subscript is set on; otherwise subscript is set off.
+   */
   void setSubscript( bool s );
   
+  /**
+   * Returns true if superscript has been set.
+   */
   bool superscript() const;
   
+  /**
+   * If s is true, superscript is set on; otherwise superscript is set off.
+   */
   void setSuperscript( bool s );
   
 private:  
