@@ -68,6 +68,13 @@ void KWTextFormatCollection::remove( QTextFormat *f )
 
 ///
 
+KWTextFormat::KWTextFormat( const KWTextFormat & fm )
+    : QTextFormat( fm )
+{
+    //kdDebug() << "KWTextFormat::KWTextFormat(copy of " << (void*)&fm << " " << fm.key() << ")"
+    //          << " pointSizeFloat:" << fn.pointSizeFloat() << endl;
+}
+
 void KWTextFormat::copyFormat( const QTextFormat & nf, int flags )
 {
     QTextFormat::copyFormat( nf, flags );
@@ -76,6 +83,8 @@ void KWTextFormat::copyFormat( const QTextFormat & nf, int flags )
     if ( flags & KWTextFormat::StrikeOut )
         fn.setStrikeOut( nf.font().strikeOut() );
     update();
+    //kdDebug() << "KWTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key()
+    //          << " flags=" << flags << " ==> result " << this << " " << key() << endl;
 }
 
 void KWTextFormat::setPointSizeFloat( float size )

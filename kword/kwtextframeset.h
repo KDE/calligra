@@ -98,7 +98,7 @@ public:
     //int docFontSize( float zoomedFontSize ) const; // zoomed -> doc
     float zoomedFontSize( int docFontSize ) const; // doc -> zoomed
 
-    QTextFormat * zoomFormatFont( const QTextFormat * f );
+    KWTextFormat * zoomFormatFont( const KWTextFormat * f );
 
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
@@ -169,9 +169,11 @@ public:
     void setPageBreaking( QTextCursor * cursor, int pageBreaking );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
-    void applyStyle( QTextCursor * cursor, const KWStyle * style, KWTextFormat * & currentFormat,
+    void applyStyle( QTextCursor * cursor, const KWStyle * style,
                      int selectionId = QTextDocument::Standard,
-                     int paragLayoutFlags = KWParagLayout::All, int formatFlags = QTextFormat::Format );
+                     int paragLayoutFlags = KWParagLayout::All, int formatFlags = QTextFormat::Format,
+                     bool zoomFormats = true, bool createUndoRedo = true, bool interactive = true );
+
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
     void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );

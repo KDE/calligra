@@ -905,6 +905,8 @@ void KWTextFrameSet::zoom()
     if ( !m_origFontSizes.isEmpty() )
         unzoom();
     QTextFormatCollection * coll = textdoc->formatCollection();
+    // This is because we are setting pt sizes (so Qt applies x11AppDpiY already)
+    // If you change this, fix zoomedFontSize too.
     double factor = kWordDocument()->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
 #ifdef DEBUG_FORMATS
     kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
@@ -1005,26 +1007,49 @@ int KWTextFrameSet::docFontSize( QTextFormat * format ) const
 
 float KWTextFrameSet::zoomedFontSize( int docFontSize ) const
 {
-    return static_cast<float>( docFontSize ) * kWordDocument()->zoomedResolutionY();
+#ifdef DEBUG_FORMATS
+    kdDebug() << "   KWTextFrameSet::zoomedFontSize docFontSize=" << docFontSize
+              << " zoomedResolutionY=" << kWordDocument()->zoomedResolutionY()
+              << " -> " << static_cast<float>( docFontSize ) * kWordDocument()->zoomedResolutionY()
+              << endl;
+#endif
+    double factor = kWordDocument()->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
+    return static_cast<float>( docFontSize ) * factor;
 }
 
-QTextFormat * KWTextFrameSet::zoomFormatFont( const QTextFormat * f )
+KWTextFormat * KWTextFrameSet::zoomFormatFont( const KWTextFormat * f )
 {
-    KWTextFormat format = *static_cast<const KWTextFormat *>( f );
+    KWTextFormat format = *f;
     int origFontSize = format.font().pointSize();
     format.setPointSizeFloat( zoomedFontSize( origFontSize ) );                // zoom it
     QTextFormat * fcf = textDocument()->formatCollection()->format( &format );   // find it in the collection
+#ifdef DEBUG_FORMATS
+    kdDebug() << "KWTextFrameSet::zoomFormatFont new format is " << fcf << " " << fcf->key() << endl;
+#endif
     if ( !m_origFontSizes.find( fcf ) )
+    {
+#ifdef DEBUG_FORMATS
+        kdDebug() << "KWTextFrameSet::zoomFormatFont inserting " << fcf << " " << fcf->key() << " into m_origFontSizes" << endl;
+#endif
         m_origFontSizes.insert( fcf, new int( origFontSize ) );           // insert in dict if necessary
-    return fcf;
+    }
+    return static_cast<KWTextFormat *>(fcf);
 }
 
 void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
+    // TODO: if we are concerned about performance when updating many styles,
+    // We could make a single call to this method, with a QMap<KWStyle *, struct holding flags>
+    // in order to iterate over all paragraphs only once.
+
     /*kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle->name()
                      << " paragLayoutChanged=" << paragLayoutChanged
                      << " formatChanged=" << formatChanged
                      << endl;*/
+
+    // setFormat(of,nf,flags) might create new formats, so we need to unzoom first
+    // and zoom all formats again at the end.
+    unzoom();
     QTextDocument * textdoc = textDocument();
     KWTextParag *p = static_cast<KWTextParag *>(textdoc->firstParag());
     while ( p ) {
@@ -1038,16 +1063,10 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
             else
             {
                 // Apply this style again, to get the changes
-                // To get undo/redo and to reuse code, we call applyStyle with a temp selection
-                // Using Temp+1 to avoid conflicting with QRT's internals (just in case)
-                QTextCursor start( textdoc );
-                QTextCursor end( textdoc );
-                start.setParag( p );
-                start.setIndex( 0 );
-                textdoc->setSelectionStart( QTextDocument::Temp+1, &start );
-                end.setParag( p );
-                end.setIndex( p->string()->length()-1 );
-                textdoc->setSelectionEnd( QTextDocument::Temp+1, &end );
+                QTextCursor cursor( textdoc );
+                cursor.setParag( p );
+                cursor.setIndex( 0 );
+                kdDebug() << "KWTextFrameSet::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
 #if 0
                 KWStyle styleApplied=*style;
                 if ( (m_doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)
@@ -1083,14 +1102,16 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginTop]=p->margin(QStyleSheetItem::MarginTop);
                 }
 #endif
-                KWTextFormat * dummy = 0L;
-                applyStyle( 0L, changedStyle, dummy, QTextDocument::Temp+1, paragLayoutChanged, formatChanged );
-                textdoc->removeSelection( QTextDocument::Temp+1 );
+                applyStyle( &cursor, changedStyle,
+                            -1, // A selection we can't possibly have
+                            paragLayoutChanged, formatChanged,
+                            false, false, false ); // don't zoom formats, don't create undo/redo, not interactive
             }
         }
         p = static_cast<KWTextParag *>(p->next());
     }
-    setLastFormattedParag( textdoc->firstParag() );
+    zoom();
+    //setLastFormattedParag( textdoc->firstParag() ); // done by zoom
     formatMore();
     emit repaintChanged( this );
     emit updateUI();
@@ -1674,11 +1695,12 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
 }
 
 void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
-                                 KWTextFormat * & /*currentFormat*/, int selectionId,
-                                 int paragLayoutFlags, int formatFlags )
+                                 int selectionId,
+                                 int paragLayoutFlags, int formatFlags,
+                                 bool zoomFormats, bool createUndoRedo, bool interactive )
 {
     QTextDocument * textdoc = textDocument();
-    if ( cursor ) // "interactive" version. If cursor=0, we are called by applyStyleChange
+    if ( interactive )
         emit hideCursor();
 
     /// Applying a style is three distinct operations :
@@ -1686,7 +1708,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     /// 2 - Changing the character formatting for each char in the paragraph (setFormat(indices))
     /// 3 - Changing the character formatting for the whole paragraph (setFormat()) [just in case]
     /// -> We need a macro command to hold the 3 commands
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Apply style %1").arg(newStyle->name()) );
+    KMacroCommand * macroCmd = createUndoRedo ? new KMacroCommand( i18n("Apply style %1").arg(newStyle->name()) ) : 0;
 
     // 1
     //kdDebug(32001) << "KWTextFrameSet::applyStyle setParagLayout" << endl;
@@ -1703,7 +1725,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
                 static_cast<KWTextParag*>(start)->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
         }
 
-        if ( cursor )
+        if ( createUndoRedo )
         {
             //kdDebug(32001) << "KWTextFrameSet::applyStyle KWTextParagCommand" << endl;
             QTextCommand * cmd = new KWTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
@@ -1731,9 +1753,22 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
 
     if ( formatFlags != 0 )
     {
-        QTextFormat * newFormat = zoomFormatFont( & newStyle->format() );
+        KWTextFormat * newFormat;
+        if ( zoomFormats )
+        {
+            newFormat = zoomFormatFont( & newStyle->format() );
+#ifdef DEBUG_FORMATS
+            kdDebug() << "KWTextFrameSet::applyStyle zoomed format " << newStyle->format().key()
+                      << " (pointsize " << newStyle->format().pointSizeFloat() << ")"
+                      << " to newFormat=" << newFormat << " " << newFormat->key()
+                      << " (pointsize " << newFormat->pointSizeFloat() << ")" << endl;
+#endif
+        } else {
+            KWTextFormat * styleFormat = const_cast<KWTextFormat *>( &newStyle->format() ); // grmbl
+            newFormat = static_cast<KWTextFormat *>( textdoc->formatCollection()->format(styleFormat) );
+        }
 
-        if ( cursor )
+        if ( createUndoRedo )
         {
             QValueList<QTextFormat *> lstFormats;
             QString str;
@@ -1771,7 +1806,8 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         // apply '2' and '3' (format)
         for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
         {
-            //kdDebug(32001) << "KWTextFrameSet::applyStyle " << parag->string()->length() << endl;
+            kdDebug(32001) << "KWTextFrameSet::applyStyle parag:" << parag->paragId()
+                           << ", from 0 to " << parag->string()->length() << ", format=" << newFormat << endl;
             parag->setFormat( 0, parag->string()->length(), newFormat, true, formatFlags );
             parag->setFormat( newFormat );
         }
@@ -1779,13 +1815,14 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         //kdDebug() << "KWTextFrameSet::applyStyle currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
     }
 
-    if ( cursor )
+    if ( interactive )
     {
         setLastFormattedParag( firstParag );
         formatMore();
         emit repaintChanged( this );
         emit updateUI();
-        m_doc->addCommand( macroCmd );
+        if ( createUndoRedo )
+            m_doc->addCommand( macroCmd );
         emit showCursor();
     }
 
@@ -3411,11 +3448,11 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
             --i;
 #ifdef DEBUG_FORMATS
         if ( m_currentFormat )
-            kdDebug(32003) << "KWTextFrameSet::updateUI m_currentFormat=" << m_currentFormat
+            kdDebug(32003) << "KWTextFrameSet::updateUI old m_currentFormat=" << m_currentFormat
                            << " " << m_currentFormat->key()
                            << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
         else
-            kdDebug(32003) << "KWTextFrameSetEdit::updateUI m_currentFormat=0" << endl;
+            kdDebug(32003) << "KWTextFrameSetEdit::updateUI old m_currentFormat=0" << endl;
 #endif
         if ( !m_currentFormat || m_currentFormat->key() != cursor->parag()->at( i )->format()->key() )
         {
@@ -3423,7 +3460,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
                 m_currentFormat->removeRef();
 #ifdef DEBUG_FORMATS
             kdDebug() << "Setting m_currentFormat from format " << cursor->parag()->at( i )->format()
-                      << " ( character " << i << " in paragraph " << cursor->parag() << " )" << endl;
+                      << " ( character " << i << " in paragraph " << cursor->parag()->paragId() << " )" << endl;
 #endif
             m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->at( i )->format() ) );
             if ( m_currentFormat->isMisspelled() ) {
@@ -3494,7 +3531,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
 
 void KWTextFrameSetEdit::applyStyle( const KWStyle * style )
 {
-    textFrameSet()->applyStyle( cursor, style, m_currentFormat );
+    textFrameSet()->applyStyle( cursor, style );
     kdDebug() << "KWTextFrameSetEdit::applyStyle m_currentFormat=" << m_currentFormat << " " << m_currentFormat->key() << endl;
     showCurrentFormat();
 }

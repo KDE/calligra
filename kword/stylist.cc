@@ -331,10 +331,10 @@ void KWStyleManager::apply() {
     noSignals=true;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0) {           // newly added style
-kdDebug() << "adding new " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
+            kdDebug() << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
             m_doc->addStyleTemplate(m_changedStyles.at(i));
         } else if(m_changedStyles.at(i) == 0) { // deleted style
-kdDebug() << "deleting orig " <<  m_origStyles.at(i)->name() << " (" << i << ")" <<  endl;
+            kdDebug() << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
             KWStyle *orig = m_origStyles.at(i);
             m_doc->applyStyleChange( orig, -1, -1 );
@@ -342,13 +342,15 @@ kdDebug() << "deleting orig " <<  m_origStyles.at(i)->name() << " (" << i << ")"
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
 
         } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
-kdDebug() << "update style " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
+            kdDebug() << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
                                                 // simply updated style
             KWStyle *orig = m_origStyles.at(i);
             KWStyle *changed = m_changedStyles.at(i);
 
             int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
             int formatChanged = orig->format().compare( changed->format() );
+            //kdDebug() << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
+            //kdDebug() << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
 
             // Copy everything from changed to orig
             *orig = *changed;
