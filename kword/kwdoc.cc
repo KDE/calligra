@@ -3289,10 +3289,9 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
         KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_lstViews.first()->getGUI()->canvasWidget()->currentFrameSetEdit());
         if(edit)
         {
-            if(edit->textFrameSet()!=obj)
-                obj->textObject()->setNeedSpellCheck(false);
-            else
-                active=true;
+            active=(edit->textFrameSet()==obj);
+            if( active)
+                obj->textObject()->setNeedSpellCheck(true);
         }
     }
     QPtrList<KWTextFrameSet> textFramesets;
