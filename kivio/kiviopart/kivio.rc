@@ -1,7 +1,8 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="9">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="10">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="addStencilSet"/>
+  <Separator/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
