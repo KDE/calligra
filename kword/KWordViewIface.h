@@ -85,6 +85,10 @@ k_dcop:
     void setConfigSplitCellRows( unsigned int _nb );
     void setConfigSplitCellCols( unsigned int _nb );
 
+    //return false if there is no frame in document
+    bool selectAllFrames();
+    bool unSelectAllFrames();
+
 private:
     KWView *view;
 

@@ -178,6 +178,7 @@ public:
 
     void setFootNoteType( NoteType _type ) { m_footEndNote.noteType = _type; }
     void setNumberingFootNoteType(KWFootNoteVariable::Numbering _type) { m_footEndNote.numberingType = _type; }
+    bool selectAllFrames( bool select );
 
 protected:
     void applyGrid( KoPoint &p );
@@ -211,7 +212,6 @@ protected:
     virtual void contentsDropEvent( QDropEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
 
-    bool selectAllFrames( bool select );
     void selectFrame( KWFrame* frame, bool select );
 
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table

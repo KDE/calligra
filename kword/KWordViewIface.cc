@@ -260,3 +260,15 @@ int KWordViewIface::configSplitCellCols() const
 {
     return (int)view->getGUI()->canvasWidget()->splitCellCols();
 }
+
+bool KWordViewIface::selectAllFrames()
+{
+    return view->getGUI()->canvasWidget()->selectAllFrames(true);
+}
+
+bool KWordViewIface::unSelectAllFrames()
+{
+    return view->getGUI()->canvasWidget()->selectAllFrames(false);
+}
+
+
