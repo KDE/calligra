@@ -213,6 +213,30 @@ bool KPTCalendarDay::hasInterval(const QTime &start, const QTime &end) const {
     return false;
 }
 
+bool KPTCalendarDay::hasIntervalBefore(const QTime &time) const {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
+    for (; it.current(); ++it) {
+        if (time > it.current()->first) {
+            //kdDebug()<<k_funcinfo<<"true:"<<it.current()->first.toString()<<" - "<<it.current()->second.toString()<<endl;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KPTCalendarDay::hasIntervalAfter(const QTime &time) const {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
+    for (; it.current(); ++it) {
+        if (time < it.current()->second) {
+            //kdDebug()<<k_funcinfo<<"true:"<<it.current()->first.toString()<<" - "<<it.current()->second.toString()<<endl;
+            return true;
+        }
+    }
+    return false;
+}
+
 KPTDuration KPTCalendarDay::duration() const {
     KPTDuration dur;
     QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
@@ -370,6 +394,16 @@ bool KPTCalendarWeekdays::hasInterval(const QDate date, const QTime &start, cons
     return day && day->hasInterval(start, end);
 }
 
+bool KPTCalendarWeekdays::hasInterval() const {
+    //kdDebug()<<k_funcinfo<<date.toString()<<": "<<start.toString()<<" - "<<end.toString()<<endl;
+    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+    for (; it.current(); ++it) {
+        if (it.current()->state() == KPTMap::Working)
+            return true;
+    }
+    return false;
+}
+
 KPTCalendarDay *KPTCalendarWeekdays::weekday(int day) const {
     QPtrListIterator<KPTCalendarDay> it = m_weekdays;
     for (int i=0; it.current(); ++it, ++i) {
@@ -461,7 +495,6 @@ int KPTCalendarWeeks::state(const QDate &date) {
     //kdDebug()<<k_funcinfo<<week<<", "<<year<<"="<<st<<endl;
     return st;
 }
-
 
 /////   KPTCalendar   ////
 
@@ -759,6 +792,31 @@ QPair<KPTDateTime, KPTDateTime> KPTCalendar::interval(const KPTDateTime &start, 
     return QPair<KPTDateTime, KPTDateTime>(start, end); // hmmmm, what else to do?
 }
 
+bool KPTCalendar::hasIntervalBefore(const KPTDateTime &time) const {
+    if (m_weekdays->hasInterval()) {
+        return true;
+    }
+    QPtrListIterator<KPTCalendarDay> it = m_days;
+    for (; it.current(); ++it) {
+        if (it.current()->hasIntervalBefore(time.time())) {
+            return true; //TODO: check weeks?
+        }
+    }
+    return false;
+}
+bool KPTCalendar::hasIntervalAfter(const KPTDateTime &time) const {
+    if (m_weekdays->hasInterval()) {
+        return true;
+    }
+    QPtrListIterator<KPTCalendarDay> it = m_days;
+    for (; it.current(); ++it) {
+        if (it.current()->hasIntervalAfter(time.time())) {
+            return true; //TODO: check weeks?
+        }
+    }
+    return false;
+}
+
 bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     QTime startTime;
@@ -788,7 +846,7 @@ bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) 
 }
 
 KPTDateTime KPTCalendar::availableAfter(const KPTDateTime &time) {
-    //kdDebug()<<k_funcinfo<<time.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" "<<time.toString()<<endl;
     KPTDateTime start = time;
     KPTDateTime end(time.date(), QTime(23,59,59));
     KPTDateTime t = time;
@@ -799,7 +857,7 @@ KPTDateTime KPTCalendar::availableAfter(const KPTDateTime &time) {
     }
     if (i > 0)
         t = interval(start, end).first;
-    //kdDebug()<<k_funcinfo<<t.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" "<<t.toString()<<endl;
     return t;
 }
 
@@ -954,8 +1012,38 @@ int KPTStandardWorktime::state(int weekday) const {
     return m_weekdays.state(weekday);
 }
 
+int KPTStandardWorktime::state(const QDate &date) const {
+    return m_weekdays.state(date.dayOfWeek()-1);
+}
+
 void KPTStandardWorktime::setState(int weekday, int state) {
     m_weekdays.setState(weekday, state);
+}
+
+KPTDateTime KPTStandardWorktime::workStartAfter(const KPTDateTime &dt) const {
+    QDate date = dt.date();
+    if (state(date) == KPTMap::Working && endOfDay(date) > dt.time())
+        return dt;
+    date.addDays(1);
+    for (int i = 0; i < 6; ++i) {
+        if (state(date) == KPTMap::Working)
+            return KPTDateTime(date, startOfDay(date));
+        date = date.addDays(1);
+    }
+    return dt;
+}
+
+KPTDateTime KPTStandardWorktime::workFinishBefore(const KPTDateTime &dt) const {
+    QDate date = dt.date();
+    if (state(date) == KPTMap::Working && startOfDay(date) < dt.time())
+        return dt;
+    date = date.addDays(-1);
+    for (int i = 0; i < 6; ++i) {
+        if (state(date) == KPTMap::Working)
+            return KPTDateTime(date, endOfDay(date));
+        date = date.addDays(-1);
+    }
+    return dt;
 }
 
 #ifndef NDEBUG

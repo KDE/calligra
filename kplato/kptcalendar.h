@@ -58,6 +58,10 @@ public:
         m_workingIntervals.clear();
         m_workingIntervals = intervals;
     }
+    
+    bool KPTCalendarDay::hasIntervalBefore(const QTime &time) const;
+    bool KPTCalendarDay::hasIntervalAfter(const QTime &time) const;
+
     QTime startOfDay() const;
     QTime endOfDay() const;
     
@@ -149,6 +153,8 @@ public:
      * for the interval @param start to @param end.
      */
     bool hasInterval(const QDate date, const QTime &start, const QTime &end) const;
+    
+    bool hasInterval() const;
 
     KPTDuration duration() const;
     KPTDuration duration(int weekday) const;
@@ -273,12 +279,16 @@ public:
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
     QPair<KPTDateTime, KPTDateTime> interval(const KPTDateTime &start, const KPTDateTime &end) const;
+    
+    bool hasIntervalBefore(const KPTDateTime &time) const;
+    bool hasIntervalAfter(const KPTDateTime &time) const;
+
     /**
      * Returns true if at lesst a part of a 'work interval' exists 
      * for the interval starting at @param start with duration @param duration.
      */
     bool hasInterval(const KPTDateTime &start, const KPTDateTime &end) const;
-    
+        
     KPTDateTime availableAfter(const KPTDateTime &time);
     KPTDateTime availableBefore(const KPTDateTime &time);
 
@@ -354,6 +364,7 @@ public:
     void save(QDomElement &element);
 
     int state(int weekday) const;
+    int state(const QDate &date) const;
     void setState(int weekday, int state);
     
     const QPtrList<QPair<QTime, QTime> > &intervals() const { 
@@ -372,6 +383,9 @@ public:
     void clearIntervals() { m_day.clearIntervals(); }
     void clearIntervals(int weekday) { m_weekdays.clearIntervals(weekday); }
     
+    KPTDateTime workStartAfter(const KPTDateTime &dt) const;
+    KPTDateTime workFinishBefore(const KPTDateTime &dt) const;
+
 protected:
     void init();
     

@@ -202,11 +202,14 @@ public:
 
     void copy(KPTResource *resource);
 
-    //TODO: calendar stuff
-    void setAvailableFrom(QTime af) {m_availableFrom=af;}
-    const QTime &availableFrom() const {return m_availableFrom;}
-    void setAvailableUntil(QTime au) {m_availableUntil=au;}
-    const QTime &availableUntil() const {return m_availableUntil;}
+    /// Set the time from when the resource is available to this project
+    void setAvailableFrom(const QDateTime &af) {m_availableFrom=af;}
+    /// Return the time when the resource is available to this project
+    const KPTDateTime &availableFrom() const {return m_availableFrom;}
+    /// Set the time when the resource is no longer available to this project
+    void setAvailableUntil(const QDateTime au) {m_availableUntil=au;}
+    /// Return the time when the resource is no longer available to this project.
+    const KPTDateTime &availableUntil() const {return m_availableUntil;}
 
     void addWorkingHour(QTime from, QTime until);
     QPtrList<QTime> workingHours() { return m_workingHours; }
@@ -273,7 +276,7 @@ public:
     const QPtrList<KPTResourceRequest> &requests() const
         { return m_requests; }
         
-    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
+    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration, bool *ok=0) const;
 
     KPTDateTime availableAfter(const KPTDateTime &time);
     KPTDateTime availableBefore(const KPTDateTime &time);
@@ -293,8 +296,8 @@ private:
     QString m_name;
     QString m_initials;
     QString m_email;
-    QTime m_availableFrom;
-    QTime m_availableUntil;
+    KPTDateTime m_availableFrom;
+    KPTDateTime m_availableUntil;
     QPtrList<QTime> m_workingHours;
 
     int m_units; // avalable units in percent
@@ -533,6 +536,8 @@ class KPTResourceGroupRequest {
         */
         int workUnits() const;
     
+        KPTDuration effort(const KPTDateTime &time, const KPTDuration &duration, bool *ok=0) const;
+        
         /**
          * Returns the duration needed to do the effort @param effort
          * starting at @param start.

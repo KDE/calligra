@@ -196,8 +196,6 @@ void KPTResourceGroup::insertId(const QString &id) {
 
 
 KPTResource::KPTResource(KPTProject *project) : m_project(project), m_appointments(), m_workingHours(), m_overbooked(false) {
-    m_availableFrom = QTime(8,0,0);
-    m_availableUntil = QTime(18,0,0);
     m_type = Type_Work;
     m_units = 100; // %
 
@@ -451,14 +449,21 @@ void KPTResource::saveAppointments(QDomElement &element) const {
 }
 
 // the amount of effort we can do within the duration
-KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &duration) const {
+KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &duration, bool *ok) const {
     //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(KPTDuration::Format_Day)<<endl;
+    bool sts=false;
     KPTDuration e;
-    KPTCalendar *cal = calendar();
-    if (cal)
-        e = (cal->effort(start, duration) * m_units)/100;
-    
+    if ((!m_availableFrom.isValid() || start+duration >= m_availableFrom) && 
+        (!m_availableUntil.isValid() || start < m_availableUntil)) 
+    {
+        KPTCalendar *cal = calendar();
+        if (cal && cal->hasIntervalAfter(start)) {
+            sts = true;
+            e = (cal->effort(start, duration) * m_units)/100;
+        }
+    }
     //kdDebug()<<k_funcinfo<<"e="<<e.toString(KPTDuration::Format_Day)<<" ("<<m_units<<")"<<endl;
+    if (ok) *ok = sts;
     return e;
 }
 
@@ -467,6 +472,7 @@ KPTDateTime KPTResource::availableAfter(const KPTDateTime &time) {
     KPTCalendar *cal = calendar();
     if (cal)
         t = cal->availableAfter(time);
+    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
@@ -938,40 +944,153 @@ int KPTResourceGroupRequest::workUnits() const {
 }
 
 //TODO: handle nonspecific resources
-KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
-    //kdDebug()<<k_funcinfo<<m_group->name()<<": effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
-    KPTDuration dur = effort; // have to start somewhere
-    KPTDuration down = dur/2;
-    KPTDuration up = dur;
+KPTDuration KPTResourceGroupRequest::effort(const KPTDateTime &time, const KPTDuration &duration, bool *ok) const {
     KPTDuration e;
+    bool sts=false;
+    if (ok) *ok = sts;
+    QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
+    for (; it.current(); ++it) {
+        e = it.current()->resource()->effort(time, duration, &sts);
+        if (sts && ok) *ok = sts;
+    }
+    return e;
+}
+
+// FIXME: Handle 'any' duration, atm stops at a year.
+KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPTDuration &_effort, bool backward) {
+    //kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(KPTDuration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
+    KPTDuration e;
+    bool sts=false;
     bool match = false;
-    for (int i=0; !match && i < 50; ++i) {
-        // calculate new effort
-        e = KPTDuration::zeroDuration;
-        QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
-        for (; it.current(); ++it) {
-            e += it.current()->resource()->effort((backward ? (time - dur) : time), dur);
-            
+    KPTDateTime start = time;
+    int inc = backward ? -1 : 1;
+    KPTDateTime end = start;
+    end.setTime(QTime());
+    KPTDuration e1;
+    for (int i=0; !match && i < 52; ++i) {
+        // weeks
+        end = end.addDays(inc*7);
+        e1 = backward ? effort(end, start - end, &sts) 
+                      : effort(start, end - start, &sts);
+        if (e + e1 < _effort) {
+            e += e1;
+            if (!sts)
+                break;
+            start = end;
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else {
+            end.setDate(start.date());
+            break;
         }
-        //kdDebug()<<k_funcinfo<<"now e["<<i<<"]: "<<e.toString()<<" match: "<<effort.toString()<<endl;
-        // TODO: we need to make this smarter
-        match = e.isCloseTo(effort);
-        if (!match) {
-            if (e > effort) {
-                dur -= down;
-                //kdDebug()<<k_funcinfo<<"down["<<i<<"]: "<<down.toString(KPTDuration::Format_Day)<<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
-                up = down/2;
-                down = up;
-            } else {
-                dur += up;
-                //kdDebug()<<k_funcinfo<<"up["<<i<<"]: "<<up.toString(KPTDuration::Format_Day)<<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
-            }
+        //kdDebug()<<"duration(w)["<<i<<"]"<<(backward?"backward":"forward:")<<" date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+    }
+    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<endl;
+    for (int i=0; !match && i < 7; ++i) {
+        // days
+        end = end.addDays(inc);
+        e1 = backward ? effort(end, start - end, &sts) 
+                      : effort(start, end - start, &sts);
+        if (e + e1 < _effort) {
+            e += e1;
+            if (!sts)
+                break;
+            start = end;
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else {
+            end.setDate(start.date());
+            break;
         }
+        //kdDebug()<<"duration(d)["<<i<<"]"<<(backward?"backward":"forward:")<<" date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+    }
+    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<endl;
+    for (int i=start.time().hour(); !match && i < 24 && sts; ++i) {
+        // hours
+        end = end.addSecs(inc*60*60);
+        e1 = backward ? effort(end, start - end, &sts) 
+                      : effort(start, end - start, &sts);
+        if (e + e1 < _effort) {
+            e += e1;
+            if (!sts)
+                break;
+            start = end;
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else if (e + e1 > _effort) {
+            end = start;
+            break;
+        }
+        //kdDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+    }
+    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<endl;
+    for (int i=start.time().minute(); !match && i < 60 && sts; ++i) {
+        //minutes
+        end = end.addSecs(inc*60);
+        e1 = backward ? effort(end, start - end, &sts) 
+                      : effort(start, end - start, &sts);
+        if (e + e1 < _effort) {
+            e += e1;
+            if (!sts)
+                break;
+            start = end;
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else if (e + e1 > _effort) {
+            end = start;
+            break;
+        }
+        //kdDebug()<<"duration(m) "<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<endl;
+    }
+    for (int i=start.time().second(); !match && i < 60 && sts; ++i) {
+        //seconds
+        e1 = backward ? effort(end, start - end, &sts) 
+                      : effort(start, end - start, &sts);
+        if (e + e1 < _effort) {
+            e += e1;
+            if (!sts)
+                break;
+            start = end;
+            end = end.addSecs(inc);
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else if (e + e1 > _effort) {
+            end = start;
+            break;
+        }
+        //kdDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<endl;
+    }
+    for (int i=start.time().msec(); !match && i < 1000 && sts; ++i) {
+        //milliseconds
+        end.setTime(end.time().addMSecs(inc));
+        e1 = backward ? effort(end, start - end, &sts) 
+                      : effort(start, end - start, &sts);
+        if (e + e1 < _effort) {
+            e += e1;
+            if (!sts)
+                break;
+            start = end;
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else if (e + e1 > _effort) {
+            end = start;
+            break;
+        }
+        //kdDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<endl;
     }
     if (!match) {
-        kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
+        kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<_effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
     }
-    return dur;   
+    end = backward ? availableAfter(end) : availableBefore(end);
+    
+    //kdDebug()<<k_funcinfo<<"<---"<<(backward?"(B) ":"(F) ")<<m_group->name()<<": "<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort: "<<_effort.toString(KPTDuration::Format_Day)<<endl;
+    return end - time;
 }
 
 KPTDateTime KPTResourceGroupRequest::availableAfter(const KPTDateTime &time) {
@@ -979,11 +1098,12 @@ KPTDateTime KPTResourceGroupRequest::availableAfter(const KPTDateTime &time) {
     QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         KPTDateTime t = it.current()->resource()->availableAfter(time);
-        if (!start.isValid() || start > t)
+        if (t.isValid() && (!start.isValid() || t < start))
             start = t;
     }
-    if (!start.isValid() || start < time)
+    if (start.isValid() && start < time)
         start = time;
+    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<" "<<m_group->name()<<endl;
     return start;
 }
 
@@ -1108,11 +1228,12 @@ KPTDateTime KPTResourceRequestCollection::availableAfter(const KPTDateTime &time
     QPtrListIterator<KPTResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         KPTDateTime t = it.current()->availableAfter(time);
-        if (!start.isValid() || start > t)
+        if (!start.isValid() || t < start)
             start = t;
     }
-    if (!start.isValid() || start < time)
+    if (start.isValid() && start < time)
         start = time;
+    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<endl;
     return start;
 }
 
