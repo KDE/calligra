@@ -163,6 +163,7 @@ private:
 #ifndef USE_QFD
     PreviewStack *ps;
     mutable QMap<QString, long> dialogMap;
+    QMap<long, KoFilterDialog*> originalDialogs;
 #endif
 };
 
@@ -177,6 +178,9 @@ public:
 
 public slots:
     void showPreview(const KURL &url);
+
+protected:
+    virtual void mousePressEvent(QMouseEvent &);
 
 private:
     const KoFilterManager * const mgr;

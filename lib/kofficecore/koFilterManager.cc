@@ -249,6 +249,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                 dialogMap.insert(tmp.right(k), id);
             }
             ps->addWidget(filterdia, id);
+            originalDialogs.insert(id, filterdia);
             ++id;
         }
     }
@@ -263,15 +264,16 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 void KoFilterManager::cleanUp() {
 
     if(!dialogMap.isEmpty() && ps!=0L) {
-        QWidget *tmp=ps->visibleWidget();
-        if(tmp!=0L && tmp!=ps->widget(0)) {
-            KoFilterDialog *dia=dynamic_cast<KoFilterDialog*>(tmp);
+        long id=ps->id(ps->visibleWidget());
+        if(id!=0L) {
+            KoFilterDialog *dia=originalDialogs.find(id).data();
             if(dia!=0L) {
                 kDebugInfo(30003, dia->status());
                 // Save the status and pass is on to the filter...
+                kDebugWarning(30003, "found dia!");
             }
             else
-                kDebugWarning(30003, "*dia==0x0");
+                kDebugWarning(30003, "default dia!");
         }
     }
 }
@@ -437,5 +439,9 @@ void PreviewStack::showPreview(const KURL &url) {
     }
     else
         raiseWidget(0);
+}
+
+void PreviewStack::mousePressEvent(QMouseEvent &) {
+    kDebugInfo(30003, "MOUSE EVENT -------------------");
 }
 #endif
