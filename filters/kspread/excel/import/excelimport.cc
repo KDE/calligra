@@ -151,6 +151,50 @@ QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
   return e;
 }
 
+static QDomElement convertValue( QDomDocument& doc, const Sidewinder::Value& value )
+{
+  QDomElement textElement;
+  textElement = doc.createElement( "text" );
+
+  if( value.isBoolean() )
+  {
+    textElement.setAttribute( "dataType", "Bool" );
+    if( value.asBoolean() )
+    {
+      textElement.setAttribute( "outStr", "True" );
+      textElement.appendChild( doc.createTextNode( "true" ) );
+    }
+    else
+    {
+      textElement.setAttribute( "outStr", "False" );
+      textElement.appendChild( doc.createTextNode( "false" ) );
+    }
+  }
+
+  else if( value.isFloat() )
+  {
+    textElement.setAttribute( "dataType", "Num" );
+    QString str = QString::number( value.asFloat() );
+    textElement.appendChild( doc.createTextNode( str ) );
+  }
+
+  else if( value.isInteger() )
+  {
+    textElement.setAttribute( "dataType", "Num" );
+    QString str = QString::number( value.asInteger() );
+    textElement.appendChild( doc.createTextNode( str ) );
+  }
+
+  else if( value.isString() )
+  {
+    textElement.setAttribute( "dataType", "Str" );
+    QString str = string( value.asString() ).string();
+    textElement.appendChild( doc.createTextNode( str ) );
+  }
+
+  return textElement;
+}
+
 
 KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCString& to )
 {
@@ -219,9 +263,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         e.setAttribute( "column", i+1 );
         e.setAttribute( "width", column->width() );
         table.appendChild( e );
-
-        QDomElement fe = convertFormat( mainDocument, column->format() );
-        e.appendChild( fe );
+        e.appendChild( convertFormat( mainDocument, column->format() ) );
       }
     }
 
@@ -235,9 +277,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         e.setAttribute( "row", i+1 );
         e.setAttribute( "height", POINT_TO_MM ( row->height() ) );
         table.appendChild( e );
-
-        QDomElement fe = convertFormat( mainDocument, row->format() );
-        e.appendChild( fe );
+        e.appendChild( convertFormat( mainDocument, row->format() ) );
       }
     }
 
@@ -253,48 +293,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
           ce.setAttribute( "column", col+1 );
           table.appendChild( ce );
 
-          QDomElement fe;
-          fe = convertFormat( mainDocument, cell->format() );
-          ce.appendChild( fe );
-
-          Sidewinder::Value value = cell->value();
-
-          QDomElement ve;
-          ve = mainDocument.createElement( "text" );
-          ce.appendChild( ve );
-
-          if( value.isBoolean() )
-          {
-            ve.setAttribute( "dataType", "Bool" );
-            if( value.asBoolean() )
-            {
-              ve.setAttribute( "outStr", "True" );
-              ve.appendChild( mainDocument.createTextNode( "true" ) );
-            }
-            else
-            {
-              ve.setAttribute( "outStr", "False" );
-              ve.appendChild( mainDocument.createTextNode( "false" ) );
-            }
-          }
-          else if( value.isFloat() )
-          {
-            ve.setAttribute( "dataType", "Num" );
-            QString str = QString::number( value.asFloat() );
-            ve.appendChild( mainDocument.createTextNode( str ) );
-          }
-          else if( value.isInteger() )
-          {
-            ve.setAttribute( "dataType", "Num" );
-            QString str = QString::number( value.asInteger() );
-            ve.appendChild( mainDocument.createTextNode( str ) );
-          }
-          else if( value.isString() )
-          {
-            ve.setAttribute( "dataType", "Str" );
-            QString str = string( value.asString() ).string();
-            ve.appendChild( mainDocument.createTextNode( str ) );
-          }
+          ce.appendChild( convertFormat( mainDocument, cell->format() ) );
+          ce.appendChild( convertValue( mainDocument, cell->value() )  );
 
         }
       }
