@@ -557,7 +557,7 @@ void KformEditorView::resizeEvent( QResizeEvent* _event )
   slotUpdateView();
 }
 
-void KformEditorView::mouseMoveEvent( QMouseEvent* _event )
+void KformEditorView::mouseMoveEvent( QMouseEvent*  )
 {
   cerr << "KformEditorView::mouseMoveEvent: moving" << endl;
 }

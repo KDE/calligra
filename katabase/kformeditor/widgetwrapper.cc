@@ -30,8 +30,7 @@ WidgetWrapper::WidgetWrapper()
 }
 
 WidgetWrapper::WidgetWrapper( QWidget* _widget, WFlags f )
-  : m_widget( _widget )
-  , m_selected ( FALSE )
+  : m_selected ( FALSE ), m_widget( _widget )
 {
   m_widget->reparent( this, f, QPoint( 0, 0 ), TRUE );
   //reparent( m_widget, f, QPoint( 0, 0 ), TRUE );
@@ -71,18 +70,18 @@ void WidgetWrapper::slotUnselect()
   select( FALSE );
 }
 
-void WidgetWrapper::mousePressEvent( QMouseEvent* _event )
+void WidgetWrapper::mousePressEvent( QMouseEvent*  )
 {
   cerr << "WidgetWrapper::mousePressEvent()" << endl;
 
   emit clicked( this );
 }
 
-void WidgetWrapper::resizeEvent( QResizeEvent* _event )
+void WidgetWrapper::resizeEvent( QResizeEvent*  )
 {
 }
 
-void WidgetWrapper::paintEvent( QPaintEvent* _event )
+void WidgetWrapper::paintEvent( QPaintEvent* )
 {
   m_widget->repaint();
 
