@@ -1265,7 +1265,7 @@ bool KoDocument::openFile()
         kdError(30003) << "No mimetype found for " << m_file << endl;
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
-            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
         return false;
     }
 
@@ -1281,7 +1281,7 @@ bool KoDocument::openFile()
                  status != KoFilter::BadConversionGraph &&
                  d->m_autoErrorHandlingEnabled )
                 // Any way of passing a better error message from the filter?
-                KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+                KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
 
             return false;
         }
@@ -1302,9 +1302,9 @@ bool KoDocument::openFile()
             if ( d->m_autoErrorHandlingEnabled )
             {
                 if ( d->lastErrorMessage.isEmpty() )
-                    KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+                    KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
                 else if ( d->lastErrorMessage != "USER_CANCELED" )
-                    KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
+                    KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ).arg( d->lastErrorMessage ) );
             }
         }
     }
@@ -1694,7 +1694,7 @@ void KoDocument::setTitleModified()
                 caption = static_cast<KoDocumentInfoAbout *>(page)->title();
         }
         if ( caption.isEmpty() )
-            caption = url().prettyURL();             // Fall back to document URL
+            caption = url().prettyURL( 0, KURL::StripFileProtocol );             // Fall back to document URL
 
         //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<endl;
         if ( doc )
