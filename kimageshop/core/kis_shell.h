@@ -36,11 +36,8 @@ public:
   KisShell( const char* name = 0 );
   ~KisShell();
 
-  /**
-   * Change these according to your native mimetype.
-   */
   QString nativeFormatPattern() const { return "*.kis"; }
-  QString nativeFormatName() const { return "KImageShop"; }
+  QString nativeFormatName() const;
 
 public slots:
 

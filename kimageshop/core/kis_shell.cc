@@ -48,6 +48,10 @@ KisShell::~KisShell()
 {
 }
 
+QString KisShell::nativeFormatName() const {
+  return i18n("KImageShop");
+}
+
 KoDocument* KisShell::createDoc()
 {
     return new KisDoc;
