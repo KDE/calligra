@@ -27,6 +27,7 @@
 #include <kdcopactionproxy.h>
 #include <kaction.h>
 #include <kdebug.h>
+#include <kdcoppropertyproxy.h>
 
 //static
 QCString KoDocumentIface::newIfaceName()
@@ -399,4 +400,17 @@ void KoDocumentIface::setDocumentInfoAbstract(const QString &text)
        aboutPage->setAbstract(text);
 }
 
+QCStringList KoDocumentIface::functionsDynamic()
+{
+    return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
+}
+
+bool KoDocumentIface::processDynamic( const QCString &fun, const QByteArray &data,
+                                      QCString& replyType, QByteArray &replyData )
+{
+    if ( KDCOPPropertyProxy::isPropertyRequest( fun, m_pDoc ) )
+        return KDCOPPropertyProxy::processPropertyRequest( fun, data, replyType, replyData, m_pDoc );
+
+    return DCOPObject::processDynamic( fun, data, replyType, replyData );
+}
 

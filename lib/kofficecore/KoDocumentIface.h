@@ -92,6 +92,11 @@ k_dcop:
     void setDocumentInfoStreet(const QString &text);
     void setDocumentInfoAbstract(const QString &text);
 
+public:
+    virtual QCStringList functionsDynamic();
+    virtual bool processDynamic( const QCString &fun, const QByteArray &data,
+                                 QCString& replyType, QByteArray &replyData );
+
 protected:
     KoDocument * m_pDoc;
     KDCOPActionProxy *m_actionProxy;

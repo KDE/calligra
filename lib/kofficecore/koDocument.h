@@ -55,6 +55,7 @@ class KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
     Q_PROPERTY( QCString dcopObjectId READ dcopObjectId)
+    Q_PROPERTY( bool backupFile READ backupFile WRITE setBackupFile )
 
 public:
 
