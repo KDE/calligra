@@ -1003,9 +1003,9 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
         else
         {
             if ( format[0]=='0' && positive )
-                exponential++;
+                exponentdigits++;
             else if ( format[0]=='0' && !positive )
-                exponential=exponential-1;
+                exponentdigits--;
             else
                 kdDebug()<<" error into scientific number exponential value\n";
         }
@@ -1015,7 +1015,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     elementWriter.startElement( "number:scientific-number" );
     text =  _prefix ;
     addTextNumber(text, elementWriter );
-
+    kdDebug()<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits<<endl;
     elementWriter.addAttribute( "number:decimal-places", decimalplace );
     elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );

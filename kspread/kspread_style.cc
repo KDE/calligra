@@ -590,7 +590,8 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
     //</number:number-style>
     //TODO add decimal etc.
-    QString format;
+    //TODO change with precision
+    QString format="0.0E+00";
     return KoOasisStyles::saveOasisScientificStyle( mainStyles, format );
 }
 

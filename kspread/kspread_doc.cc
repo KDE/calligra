@@ -705,6 +705,12 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         (*it).style->writeStyle( contentWriter, mainStyles, "number:currency", (*it).name, 0 /*TODO ????*/  );
     }
 
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
+    }
+
 
     contentWriter->endElement(); // office:automatic-styles
 
