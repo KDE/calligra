@@ -22,10 +22,12 @@
 
 #include "vcommand.h"
 
-
 class VSelection;
 
-
+/**
+ * Command that changes the z-order of the selection within a layer
+ * to front, back, one step up, or one step down.
+ */
 class VZOrderCmd : public VCommand
 {
 public:
@@ -45,8 +47,8 @@ public:
 	virtual bool isExecuted() { return true; }
 
 protected:
-	VSelection* m_selection;
-	VOrder m_state;
+	VSelection *m_selection;
+	VOrder		m_state;
 };
 
 #endif
