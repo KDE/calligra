@@ -10,7 +10,6 @@ GUI:
 	try to reuse them.
 
 REAL BUGS:
--	y-mirroring while being embedded
 -	fix i18n singular/plural
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")

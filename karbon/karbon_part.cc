@@ -221,7 +221,7 @@ KarbonPart::repaintAllViews( bool repaint )
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-	bool /*transparent*/, double zoomX, double /*zoomY*/ )
+	bool /*transparent*/, double zoomX, double zoomY )
 {
 	kdDebug() << "**** part->paintContent()" << endl;
 	painter.eraseRect( rect );
@@ -238,7 +238,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	//p->setWorldMatrix( painter.worldMatrix() );
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( painter.worldMatrix().dx(), painter.worldMatrix().dy() - metrics.height() );
+	mat.translate( painter.worldMatrix().dx(), ( painter.worldMatrix().dy() - rect.height() ) );
 	p->setWorldMatrix( mat );
 
 	m_doc.selection()->clear();
