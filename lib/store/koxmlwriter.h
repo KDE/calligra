@@ -59,6 +59,8 @@ public:
     /// Destructor
     ~KoXmlWriter();
 
+    QIODevice *device() const { return m_dev; }
+
     /**
      * Start the XML document.
      * This writes out the \<?xml?\> tag with utf8 encoding, and the DOCTYPE.
