@@ -109,7 +109,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
 {
     double dx = position.x() - m_colPositions[0];
     double dy = position.y() - m_rowPositions[0];
-    
+
     moveBy( dx, dy);
     kWordDocument()->updateAllFrames();
 }
@@ -321,7 +321,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         if(moved > -0.01 && moved < 0.01) { // we were simply moved.
             row=0;
             difference = difference2;
-        } else if( difference2!=0) 
+        } else if( difference2!=0)
             difference = difference2;
     }
 
@@ -425,7 +425,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 }
             }
             pageNumber++;
-            pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();    
+            pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
         }
         if ( *j >= m_doc->ptPaperHeight() * m_doc->getPages() )
             m_doc->appendPage();
@@ -448,8 +448,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     redrawFromCol=m_cols;
 
     // check if any rowPosition entries are unused
-   
-    // first create a hash of all row entries 
+
+    // first create a hash of all row entries
     QMap<unsigned int,int> rows;        // rownr, count
     unsigned int top=m_rowPositions.count() - m_pageBoundaries.count()-1;
     for(unsigned int i=0; i < top; rows[i++]=0);
@@ -458,12 +458,12 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     for (cell = m_cells.first(); cell; cell = m_cells.next()) {
         rows[cell->m_row]+=1;
     }
-  
-    // check if some entries have stayed unused. 
+
+    // check if some entries have stayed unused.
     unsigned int counter=top;
     int adjustment=m_pageBoundaries.count()-1;
 
-    do { 
+    do {
         counter--;
         if(adjustment >= 0 && counter == m_pageBoundaries[adjustment])
             adjustment--;
@@ -1691,19 +1691,19 @@ double KWTableFrameSet::Cell::leftBorder() {
     return (b / (m_col==0?1:2));
 }
 
-double KWTableFrameSet::Cell::rightBorder() { 
+double KWTableFrameSet::Cell::rightBorder() {
     double b=frame(0)->rightBorder().ptWidth;
     if(b==0) return 0;
     return (b / ((m_col+m_cols)==m_table->m_cols?1:2));
 }
 
-double KWTableFrameSet::Cell::topBorder() { 
+double KWTableFrameSet::Cell::topBorder() {
     double b = frame(0)->topBorder().ptWidth;
     if(b==0) return 0;
     return (b / (m_row==0?1:2));
 }
 
-double KWTableFrameSet::Cell::bottomBorder() { 
+double KWTableFrameSet::Cell::bottomBorder() {
     double b = frame(0)->bottomBorder().ptWidth;
     if(b==0) return 0;
     return ( b / ((m_row+m_rows)==m_table->m_rows?1:2));
@@ -1850,6 +1850,27 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         setCurrentCell( fs );
     else
         m_currentCell->keyPressEvent( e );
+}
+
+void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d )
+{
+    kdDebug()<<"m_currentCell :"<<m_currentCell<<endl;
+    if ( m_currentCell )
+    {
+        KWFrameSet *fs = tableFrameSet()->getCellByPos( d.x(), d.y() );
+        kdDebug()<<"fs :"<<fs <<endl;
+        if(fs && fs != m_currentCell->frameSet())
+            setCurrentCell(fs);
+        if(m_currentCell)
+            m_currentCell->dragMoveEvent( e, n, d );
+    }
+    else
+    {
+        setCurrentCell( d );
+        kdDebug()<<"apres m_currentCell :"<<m_currentCell<<endl;
+        if(m_currentCell)
+            m_currentCell->dragMoveEvent( e, n, d );
+    }
 }
 
 void KWTableFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )

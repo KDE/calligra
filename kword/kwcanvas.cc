@@ -1690,6 +1690,37 @@ KWTableFrameSet *KWCanvas::getTable()
     return 0L;
 }
 
+bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
+{
+    bool emitChanged = false;
+
+    if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
+    {
+        KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+        if(edit)
+        {
+            // Don't use terminateCurrentEdit here, we want to emit changed only once
+            m_currentFrameSetEdit->terminate();
+            delete m_currentFrameSetEdit;
+            m_currentFrameSetEdit = 0L;
+            emitChanged = true;
+        }
+    }
+
+    // Edit the frameset under the mouse, if any
+    if ( fs && !m_currentFrameSetEdit )
+    {
+        //just text frameset
+        if(fs->type()==FT_TABLE || fs->type()==FT_TEXT)
+        {
+            m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+            kdDebug()<<"create m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
+            emitChanged = true;
+        }
+    }
+    return emitChanged;
+}
+
 bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
 {
     bool emitChanged = false;
@@ -1808,7 +1839,23 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
     {
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-        m_currentFrameSetEdit->dragMoveEvent( e, normalPoint, docPoint );
+        KWFrame * frame = m_doc->frameUnderMouse( normalPoint );
+        KWFrameSet * fs = frame ? frame->frameSet() : 0L;
+        bool emitChanged = false;
+        if ( fs )
+        {
+            KWTableFrameSet *table = fs->getGroupManager();
+            kdDebug()<<"table :"<<table<<endl;
+            emitChanged = checkCurrentTextEdit( table ? table : fs );
+        }
+        kdDebug()<<"m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
+        if ( m_currentFrameSetEdit )
+        {
+            m_currentFrameSetEdit->dragMoveEvent( e, normalPoint, docPoint );
+
+            if ( emitChanged ) // emitted after mousePressEvent [for tables]
+                emit currentFrameSetEditChanged();
+        }
     }
 }
 

@@ -207,6 +207,8 @@ protected:
 
     void terminateCurrentEdit();
     bool checkCurrentEdit( KWFrameSet * fs );
+    //for dnd
+    bool checkCurrentTextEdit( KWFrameSet * fs );
 
 signals:
     // Emitted when the current frameset edit changes

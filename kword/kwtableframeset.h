@@ -311,8 +311,7 @@ public:
 
     virtual void dragEnterEvent( QDragEnterEvent * e )
     { if ( m_currentCell ) m_currentCell->dragEnterEvent( e ); }
-    virtual void dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d )
-    { if ( m_currentCell ) m_currentCell->dragMoveEvent( e, n, d ); }
+    virtual void dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d );
     virtual void dragLeaveEvent( QDragLeaveEvent * e )
     { if ( m_currentCell ) m_currentCell->dragLeaveEvent( e ); }
     virtual void dropEvent( QDropEvent * e, const QPoint &n, const KoPoint &d )
