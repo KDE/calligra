@@ -3482,6 +3482,13 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
 }
 
 
+void KWTextFrameSetEdit::setDefaultFormat() {
+    QTextFormatCollection * coll = textDocument()->formatCollection();
+    KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
+    textFrameSet()->setFormat( cursor, m_currentFormat, format, QTextFormat::Format );
+}
+
+
 void KWTextFrameSetEdit::setBold( bool on ) {
     KWTextFormat format( *m_currentFormat );
     format.setBold( on );

@@ -380,6 +380,8 @@ public:
     void setTextSubScript(bool on);
     void setTextSuperScript(bool on);
 
+    void setDefaultFormat();
+
     QColor textColor() const;
     QFont textFont() const;
     int textFontSize()const;

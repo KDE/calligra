@@ -439,6 +439,10 @@ void KWView::setupActions()
              this, SLOT( textStyleSelected( int ) ) );
     updateStyleList();
 
+    actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
+                                          this, SLOT( textDefaultFormat() ),
+                                          actionCollection(), "text_default" );
+
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
                                            this, SLOT( textBold() ),
                                            actionCollection(), "format_bold" );
@@ -2295,6 +2299,15 @@ void KWView::textDecreaseIndent()
         }
     }
 }
+
+
+void KWView::textDefaultFormat()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->setDefaultFormat();
+}
+
 
 void KWView::borderOutline()
 {

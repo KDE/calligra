@@ -56,6 +56,7 @@
   <Action name="tools_part"/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
+  <Action name="text_default"/>
   <Action name="format_font"/>
   <!--<Action name="format_color"/> part of format_font now-->
   <Action name="format_paragraph"/>
@@ -200,6 +201,7 @@
 <Menu name="text_popup">
  <Action name="format_paragraph"/>
  <Separator/>
+ <Action name="text_default"/>
  <Action name="format_font"/>
   <!--<Action name="format_color"/> part of format_font now-->
  <Separator/>

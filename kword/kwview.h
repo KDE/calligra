@@ -209,6 +209,7 @@ public slots:
     void textSubScript();
     void textIncreaseIndent();
     void textDecreaseIndent();
+    void textDefaultFormat();
 
     // Text and Frame borders.
     void borderOutline();
@@ -329,6 +330,8 @@ private:
     KToggleAction *actionToolsCreatePart;
 
     KAction *actionFormatFont;
+    KAction *actionFormatDefault;
+
     KFontSizeAction *actionFormatFontSize;
     KFontAction *actionFormatFontFamily;
     KSelectAction *actionFormatStyle;
@@ -376,8 +379,6 @@ private:
     KAction *actionTableInsertCol;
     KAction *actionTableJoinCells;
     KAction *actionTableSplitCells;
-/*    KAction *actionTableSplitCellsVerticaly;
-    KAction *actionTableSplitCellsHorizontaly; */
 
     KAction *actionTableUngroup;
     KAction *actionTableDelete;
