@@ -846,6 +846,8 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
             table->recalcCols();
             table->recalcRows();
             table->updateTempHeaders();
+            if(frameResized)
+                table->refreshSelectedCell();
             //repaintTableHeaders( table );
         }
 

@@ -575,6 +575,18 @@ void KWTableFrameSet::deselectAll()
 }
 
 /*================================================================*/
+void KWTableFrameSet::refreshSelectedCell()
+{
+    unsigned int row,col;
+    if ( !isOneSelected( row, col ) )
+        return;
+
+    Cell *cell=getCell(row,col);
+    if(cell)
+        cell->getFrame( 0 )->updateResizeHandles();
+}
+
+/*================================================================*/
 void KWTableFrameSet::selectUntil( int x, int y) {
     KWFrame *f = getFrame(x,y);
     if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->getFrameSet()));

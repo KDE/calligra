@@ -138,6 +138,9 @@ public:
     /** deselect all frames */
     void deselectAll();
 
+    /** refresh resize handle */
+    void refreshSelectedCell();
+
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( int dx, int dy );
     /** point the outlines of all the cells */

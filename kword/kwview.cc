@@ -1349,7 +1349,7 @@ void KWView::viewZoom( const QString &s )
         KWFrame *frame=0L;
         for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
         {
-            frame->setSelected(true);
+            frame->updateResizeHandles();
         }
     }
     gui->canvasWidget()->repaintAll();
@@ -1656,7 +1656,7 @@ void KWView::formatPage()
         KWFrame *frame=0L;
         for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
         {
-            frame->setSelected(true);
+            frame->updateResizeHandles();
         }
 #if 0
         gui->canvasWidget()->frameSizeChanged( pgLayout );
@@ -2618,7 +2618,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KWFrame *frame=0L;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame->setSelected(true);
+        frame->updateResizeHandles();
     }
 
 #if 0
