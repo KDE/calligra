@@ -2629,12 +2629,15 @@ MarginsStruct::MarginsStruct( double _left, double _top, double _right, double _
 }
 
 
-KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin, MarginsStruct _MarginsEnd ) :
+KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin, MarginsStruct _MarginsEnd, KPresenterDoc *_doc ) :
     KNamedCommand(name),
     m_obj( _obj ),
     m_marginsBegin(_MarginsBegin),
-    m_marginsEnd(_MarginsEnd)
+    m_marginsEnd(_MarginsEnd),
+    m_doc( _doc )
 {
+    m_page = m_doc->findSideBarPage( _obj );
+
 }
 
 void KPrChangeMarginCommand::execute()
@@ -2643,6 +2646,12 @@ void KPrChangeMarginCommand::execute()
     m_obj->resizeTextDocument();
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_page);
+        m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    }
+
 }
 
 void KPrChangeMarginCommand::unexecute()
@@ -2651,6 +2660,12 @@ void KPrChangeMarginCommand::unexecute()
     m_obj->resizeTextDocument();
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_page);
+        m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    }
+
 }
 
 

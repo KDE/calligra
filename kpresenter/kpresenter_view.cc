@@ -3602,7 +3602,7 @@ void KPresenterView::styleOk()
 
                 MarginsStruct _MarginsEnd( styleDia->marginsLeft(),styleDia->marginsTop(), styleDia->marginsRight(), styleDia->marginsBottom());
 
-                KPrChangeMarginCommand * cmd = new KPrChangeMarginCommand( i18n("Change Margins"), obj, _MarginsBegin, _MarginsEnd );
+                KPrChangeMarginCommand * cmd = new KPrChangeMarginCommand( i18n("Change Margins"), obj, _MarginsBegin, _MarginsEnd,kPresenterDoc() );
                 cmd->execute();
                 macro->addCommand(cmd);
             }

@@ -1056,7 +1056,7 @@ struct MarginsStruct {
 class KPrChangeMarginCommand : public KNamedCommand
 {
 public:
-    KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin, MarginsStruct _MarginsEnd );
+    KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin, MarginsStruct _MarginsEnd, KPresenterDoc *_doc );
     ~KPrChangeMarginCommand() {}
 
     virtual void execute();
@@ -1065,6 +1065,8 @@ protected:
     KPTextObject *m_obj;
     MarginsStruct m_marginsBegin;
     MarginsStruct m_marginsEnd;
+    KPrPage *m_page;
+    KPresenterDoc *m_doc;
 };
 
 
