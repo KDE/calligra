@@ -431,7 +431,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             }
             else
             {
-                selectAllFrames( false );
+                if ( selectAllFrames( false ) )
+                    emit frameSelectedChanged();
 
                 frame = doc->frameAtPos( docPoint.x(), docPoint.y() );
                 KWFrameSet * fs = frame ? frame->getFrameSet() : 0L;
@@ -968,7 +969,10 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             if ( !frame )
                 frame = doc->frameAtPos( docPoint.x(), docPoint.y() );
             if ( m_ctrlClickOnSelectedFrame && frame->isSelected() )
+            {
                 selectFrame( frame, false );
+                emit frameSelectedChanged();
+            }
         }
     }
     doc->repaintAllViews();
@@ -1544,14 +1548,9 @@ void KWCanvas::editFrameProperties()
     delete frameDia;
 }
 
-
-void KWCanvas::updateFrameFormat()
+bool KWCanvas::selectAllFrames( bool select )
 {
-    doc->refreshFrameBorderButton();
-}
-
-void KWCanvas::selectAllFrames( bool select )
-{
+    bool ret = false;
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1561,24 +1560,19 @@ void KWCanvas::selectAllFrames( bool select )
         {
             KWFrame * frame = frameIt.current();
             if ( frame->isSelected() != select )
+            {
                 frame->setSelected( select );
+                ret = true;
+            }
         }
     }
-}
-
-void KWCanvas::selectFrame( double mx, double my, bool select )
-{
-    KWFrame *frame = doc->frameAtPos( mx, my );
-    if ( frame )
-        selectFrame( frame, select );
+    return ret;
 }
 
 void KWCanvas::selectFrame( KWFrame * frame, bool select )
 {
     if ( frame->isSelected() != select )
         frame->setSelected( select );
-    updateFrameFormat();
-    m_gui->getView()->updatePopupMenuChangeAction();
 }
 
 KWTableFrameSet *KWCanvas::getTable()
@@ -1637,7 +1631,8 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
 {
     if ( m_mouseMode != newMouseMode )
     {
-        selectAllFrames( false );
+        if ( selectAllFrames( false ) )
+            emit frameSelectedChanged();
 
         if ( newMouseMode != MM_EDIT )
         {

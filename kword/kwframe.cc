@@ -27,6 +27,7 @@
 #include "kwutils.h"
 #include "kwtextframeset.h"
 #include "kwanchor.h"
+#include "kwanchorpos.h"
 #include "resizehandles.h"
 
 #include <kformulacontainer.h>
@@ -219,16 +220,14 @@ KoRect KWFrame::outerKoRect() const
 /* Class: KWFrameSet                                              */
 /******************************************************************/
 KWFrameSet::KWFrameSet( KWDocument *doc )
-    : frames(), removeableHeader( false ), visible( true )
+    : m_doc( doc ), frames(), m_framesOnTop(), frameInfo( FI_BODY ),
+      m_current( 0 ), grpMgr( 0L ), removeableHeader( false ), visible( true ),
+      m_anchorTextFs( 0L )
 {
-    m_doc = doc;
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
-    frameInfo = FI_BODY;
-    m_current = 0;
-    grpMgr = 0L;
 }
 
 KWFrameSet::~KWFrameSet()
@@ -244,11 +243,6 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
     _frame->setFrameSet(this);
     if(recalc)
         updateFrames();
-    /*if ( isFloating() )
-    {
-        findFirstAnchor();
-        updateAnchors();
-    }*/
 }
 
 void KWFrameSet::delFrame( unsigned int _num )
@@ -266,21 +260,13 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     if ( _num == -1 )
         return;
 
-    // It's the anchor that deletes the frame, not the other way round.
-    //if ( isFloating() )
-    //    deleteAnchors();
-
     frm->setFrameSet(0L);
     if ( !remove )
-    //if ( !del || !remove )
         frames.take( _num );
     else
         frames.remove( _num );
 
     updateFrames();
-
-    //if ( isFloating() )
-    //    updateAnchors();
 }
 
 void KWFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
@@ -357,84 +343,60 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int in
 {
     ASSERT( textfs );
     ASSERT( parag );
-    KWAnchorPosition pos;
-    pos.textfs = textfs;
-    pos.parag = parag;
-    pos.index = index;
-    setAnchored( pos );
+    if ( isFloating() )
+        deleteAnchors();
+    m_anchorTextFs = textfs;
+    createAnchors( parag, index );
 }
 
 void KWFrameSet::setAnchored( KWAnchorPosition & pos, bool placeHolderExists /* = false */ )
 {
     if ( isFloating() )
         deleteAnchors();
-    m_anchorPos = pos;
-    updateAnchors( placeHolderExists );
+    m_anchorTextFs = pos.textfs;
+    createAnchors( pos.parag, pos.index, placeHolderExists );
 }
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 {
-    m_anchorPos.textfs = textfs;
-    findFirstAnchor();
+    m_anchorTextFs = textfs;
 }
 
 void KWFrameSet::setFixed()
 {
     if ( isFloating() )
-        deleteAnchors(); // is this a problem with undo/redo ?
-    m_anchorPos.makeInvalid();
+        deleteAnchors();
+    m_anchorTextFs = 0L;
 }
 
-void KWFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used when loading*/ )
+void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
-    kdDebug() << "KWFrameSet::updateAnchors" << endl;
-    int index = m_anchorPos.index;
+    ASSERT( m_anchorTextFs );
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
     {
         if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), this,
+            KWAnchor * anchor = new KWAnchor( m_anchorTextFs->textDocument(), this,
                                               getFrameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
-                m_anchorPos.parag->insert( index, QChar('@') /*whatever*/ );
-            m_anchorPos.parag->setCustomItem( index, anchor, 0 );
+                parag->insert( index, QChar('@') /*whatever*/ );
+            parag->setCustomItem( index, anchor, 0 );
             frameIt.current()->setAnchor( anchor );
         }
     }
-    m_anchorPos.parag->setChanged( true );
-    //kdDebug() << "KWFrameSet::updateAnchors emit repaintChanged" << endl;
-    emit repaintChanged( m_anchorPos.textfs );
+    parag->setChanged( true );
+    emit repaintChanged( m_anchorTextFs );
 }
 
 void KWFrameSet::deleteAnchors()
 {
-    kdDebug() << "KWFrameSet::deleteAnchors" << endl;
-    findFirstAnchor();
-    int index = m_anchorPos.index;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->anchor() )
-        {
-            // Delete anchor (after removing anchor char)
-            m_anchorPos.parag->removeCustomItem( index );
-            frameIt.current()->deleteAnchor();
-        }
-}
+            m_anchorTextFs->deleteAnchoredFrame( frameIt.current()->anchor() );
 
-void KWFrameSet::findFirstAnchor()
-{
-    ASSERT( frames.count() );
-    if ( frames.count() > 0 && frames.first()->anchor() )
-    {
-        KWAnchor * anchor = frames.first()->anchor();
-        m_anchorPos.parag = static_cast<KWTextParag *>( anchor->paragraph() );
-        m_anchorPos.index = m_anchorPos.parag->findCustomItem( anchor );
-    } else {
-        kdDebug() << "KWFrameSet::findFirstAnchor no anchor !" << endl;
-        m_anchorPos.parag = 0L;
-    }
 }
 
 void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
@@ -579,14 +541,18 @@ void KWFrameSet::updateFrames()
     //               << m_framesOnTop.count() << endl;
 
     if ( isFloating() )
-    { // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights
-        m_anchorPos.parag->invalidate( 0 );
+    {
         QListIterator<KWFrame> frameIt = frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {
-            //kdDebug() << "KWFrameSet::updateFrames anchor=" << frameIt.current()->anchor() << endl;
-            if ( frameIt.current()->anchor() )
-                frameIt.current()->anchor()->resize();
+            KWAnchor * anchor = frameIt.current()->anchor();
+            //kdDebug() << "KWFrameSet::updateFrames anchor=" << anchor << endl;
+            if ( anchor )
+            {
+                anchor->resize();
+                // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights
+                anchor->paragraph()->invalidate( 0 );
+            }
         }
     }
 }
@@ -1051,6 +1017,7 @@ void KWFrameSet::printDebug()
     kdDebug() << " |  Visible: " << isVisible() << endl;
     kdDebug() << " |  Type: " << typeFrameset[ getFrameType() ] << endl;
     kdDebug() << " |  Info: " << infoFrameset[ getFrameInfo() ] << endl;
+    kdDebug() << " |  Floating: " << isFloating() << endl;
     kdDebug() << " |  Number of frames on top: " << m_framesOnTop.count() << endl;
 
     QListIterator<KWFrame> frameIt = frameIterator();

@@ -121,7 +121,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setXMLFile( "kword.rc" );
 
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
-                      this, SLOT( insertPicture( const QString & ) ) ); /////// # wrong one ! should create a picture frame (TODO)
+                      this, SLOT( insertPicture( const QString & ) ) );
 
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
@@ -1048,8 +1048,6 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableSplitCellsVerticaly->setEnabled( FALSE );
     actionTableSplitCellsHorizontaly->setEnabled( FALSE );
     actionFormatFrameSet->setEnabled(FALSE);
-
-    frameSelectedChanged();
 }
 
 void KWView::showStyle( const QString & styleName )
@@ -1133,31 +1131,16 @@ void KWView::editReplace()
 void KWView::editDeleteFrame()
 {
     QList<KWFrame> frames=doc->getSelectedFrames();
-    if(frames.count()>1)  {
-        KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
-                                        "You can only delete one frame at the time." ),
-                            i18n( "Delete Frame" ) );
+    ASSERT( frames.count() == 1 ); // the action isn't enabled otherwise.
+    if( frames.count() != 1)
         return;
-    }
-    if(frames.count()<1)  {
-        KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
-                                        "You need to select a frame first in order to delete it."),
-                            i18n( "Delete Frame" ) );
-        return;
-    }
     KWFrame *theFrame = frames.at(0);
     KWFrameSet *fs = theFrame->getFrameSet();
 
-    if ( fs->isAHeader() ) {
-        KMessageBox::sorry( this, i18n( "This is a header frame. It can not be deleted."),
-                            i18n( "Delete Frame"  ) );
+    ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
+    ASSERT( !fs->isAFooter() );
+    if ( fs->isAFooter() || fs->isAHeader() )
         return;
-    }
-    if ( fs->isAFooter() ) {
-        KMessageBox::sorry( this, i18n( "This is a footer frame. It can not be deleted."),
-                            i18n( "Delete Frame"  ) );
-        return;
-    }
 
     // frame is part of a table?
     if ( fs->getGroupManager() ) {
@@ -2709,16 +2692,18 @@ void KWView::updateButtons()
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
-
-    frameSelectedChanged();
-
 }
 
 void KWView::frameSelectedChanged()
 {
     int nbFrame=doc->getSelectedFrames().count();
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
-    actionEditDelFrame->setEnabled( !currentTextEdit() && (nbFrame==1));
+    if ( !currentTextEdit() && (nbFrame==1) )
+    {
+        KWFrameSet * fs = doc->getFirstSelectedFrame()->getFrameSet();
+        actionEditDelFrame->setEnabled( !fs->isAHeader() && !fs->isAFooter() );
+    } else
+        actionEditDelFrame->setEnabled( false );
 
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
 
@@ -2738,6 +2723,8 @@ void KWView::frameSelectedChanged()
     actionTableDelCol->setEnabled( state );
     actionTableDelete->setEnabled( state );
     actionTableUngroup->setEnabled( state );
+
+    doc->refreshFrameBorderButton();
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)

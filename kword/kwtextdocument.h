@@ -82,6 +82,10 @@ public:
     // It is important to start with "if ( m_deleted ) return;"
     virtual void resize() {}
 
+    // The index in paragraph(), where this anchor is
+    // Slightly slow (does a linear search in the paragraph)
+    int index() const;
+
 protected:
     virtual void adjustToPainter( QPainter* ) { resize(); }
     bool m_deleted;

@@ -146,6 +146,8 @@ public:
 
     void findPosition( const QPoint &nPoint, QTextParag * & parag, int & index );
 
+    void deleteAnchoredFrame( KWAnchor * anchor );
+
     // Highlighting support (for search/replace, spellchecking etc.)
     void highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas );
     void removeHighlight();

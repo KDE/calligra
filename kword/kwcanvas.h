@@ -178,8 +178,7 @@ protected:
     virtual void contentsDropEvent( QDropEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
 
-    void selectAllFrames( bool select );
-    void selectFrame( double mx, double my, bool select );
+    bool selectAllFrames( bool select );
     void selectFrame( KWFrame* frame, bool select );
 
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table

@@ -76,11 +76,9 @@ KWVariable::~KWVariable()
 
 QTextFormat * KWVariable::format() const
 {
-    ASSERT( paragraph() );
-    KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
-    int index = parag->findCustomItem( this );
-    //kdDebug() << "KWVariable::format index=" << index << " format=" << parag->at( index )->format() << endl;
-    return parag->at( index )->format();
+    QTextParag * parag = paragraph();
+    //kdDebug() << "KWVariable::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
+    return parag->at( index() )->format();
 }
 
 void KWVariable::resize()
@@ -102,9 +100,8 @@ void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*
     QTextFormat * f = format();
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
-    int index = parag->findCustomItem( this );
-    //kdDebug() << "KWVariable::draw index=" << index << " x=" << x << " y=" << y << endl;
-    int h = parag->lineHeightOfChar( index, &bl, &_y );
+    //kdDebug() << "KWVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
+    int h = parag->lineHeightOfChar( index(), &bl, &_y );
 
     p->save();
     p->setPen( QPen( f->color() ) );

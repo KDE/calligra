@@ -237,7 +237,7 @@ public:
     void addCell( Cell *cell );
 protected:
     virtual void deleteAnchors();
-    virtual void updateAnchors( bool placeHolderExists = false );
+    virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
     //void addCell( Cell *cell );
 
 private:

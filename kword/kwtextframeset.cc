@@ -2498,6 +2498,16 @@ void KWTextFrameSet::findPosition( const QPoint &nPoint, QTextParag * & parag, i
     }
 }
 
+void KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
+{
+    ASSERT( anchor );
+    QTextCursor c( textdoc );
+    c.setParag( anchor->paragraph() );
+    c.setIndex( anchor->index() );
+    KWTextFormat * currentFormat = 0L;//unused
+    doKeyboardAction( &c, currentFormat, ActionDelete );
+}
+
 void KWTextFrameSet::highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas )
 {
     removeHighlight(); // remove previous highlighted selection

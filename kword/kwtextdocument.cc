@@ -42,6 +42,12 @@ QTextParag * KWTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTex
     return new KWTextParag( d, pr, nx, updateIds );
 }
 
+int KWTextCustomItem::index() const
+{
+    ASSERT( paragraph() );
+    KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
+    return parag->findCustomItem( this );
+}
 
 void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )
 {

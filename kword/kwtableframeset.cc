@@ -140,33 +140,25 @@ KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
     return 0L;
 }
 
-void KWTableFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used when loading*/ )
+void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
-    int index = m_anchorPos.index;
     // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
     if ( !m_anchor )
     {
         // Anchor this frame, after the previous one
-        m_anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), this, 0 /*....*/ );
+        m_anchor = new KWAnchor( m_anchorTextFs->textDocument(), this, 0 /*....*/ );
         if ( !placeHolderExists )
-            m_anchorPos.parag->insert( index, QChar('£') /*whatever*/ );
-        m_anchorPos.parag->setCustomItem( index, m_anchor, 0 );
+            parag->insert( index, QChar(' ') );
+        parag->setCustomItem( index, m_anchor, 0 );
     }
-    m_anchorPos.parag->setChanged( true );
-    emit repaintChanged( m_anchorPos.textfs );
+    parag->setChanged( true );
+    emit repaintChanged( m_anchorTextFs );
 }
 
 void KWTableFrameSet::deleteAnchors()
 {
-    findFirstAnchor();
-    int index = m_anchorPos.index;
     if ( m_anchor )
-    {
-        // Delete anchor (after removing anchor char)
-        m_anchorPos.parag->removeCustomItem( index );
-        delete m_anchor;
-        m_anchor = 0L;
-    }
+        m_anchorTextFs->deleteAnchoredFrame( m_anchor );
 }
 
 void KWTableFrameSet::addCell( Cell *cell )

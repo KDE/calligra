@@ -106,7 +106,7 @@ void KWAnchor::resize()
     QSize s = size();
     width = s.width();
     height = s.height();
-    //kdDebug() << "KWAnchor::resize " << width << "x" << height << endl;
+    //kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
 }
 
 KWTextDocument * KWAnchor::textDocument() const
@@ -116,13 +116,13 @@ KWTextDocument * KWAnchor::textDocument() const
 
 KCommand * KWAnchor::createCommand()
 {
-    kdDebug() << "KWAnchor::addCreateCommand" << endl;
+    kdDebug(32001) << "KWAnchor::addCreateCommand" << endl;
     return m_frameset->anchoredObjectCreateCommand( m_frameNum );
 }
 
 KCommand * KWAnchor::deleteCommand()
 {
-    kdDebug() << "KWAnchor::addDeleteCommand" << endl;
+    kdDebug(32001) << "KWAnchor::addDeleteCommand" << endl;
     return m_frameset->anchoredObjectDeleteCommand( m_frameNum );
 }
 

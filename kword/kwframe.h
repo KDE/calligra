@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include "kwimage.h"
-#include "kwanchorpos.h"
 
 #include <koRect.h>
 #include <qbrush.h>
@@ -37,6 +36,7 @@ namespace KFormula {
 
 class KCommand;
 class KWAnchor;
+class KWAnchorPosition;
 class KWCanvas;
 class KWChild;
 class KWDocument;
@@ -397,9 +397,9 @@ public:
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
-    bool isFloating() { return m_anchorPos.parag && m_anchorPos.textfs; }
+    bool isFloating() { return m_anchorTextFs; }
     /** Return the frameset in which our anchor is - assuming isFloating() */
-    KWTextFrameSet * anchorFrameset() const { return m_anchorPos.textfs; }
+    KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
 
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
@@ -462,8 +462,7 @@ protected:
                              KWViewMode * viewMode, bool onlyChanged );
 
     virtual void deleteAnchors();
-    virtual void updateAnchors( bool placeHolderExists = false );
-    void findFirstAnchor();
+    virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
 
     KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames
@@ -481,7 +480,7 @@ protected:
     KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
     QString m_name;
-    KWAnchorPosition m_anchorPos;
+    KWTextFrameSet * m_anchorTextFs;
 };
 
 /******************************************************************/

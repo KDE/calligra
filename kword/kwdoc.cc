@@ -2541,10 +2541,18 @@ void KWDocument::deleteFrame( KWFrame * frame )
         ASSERT( 0 );
         break;
     }
-    KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, this, frame );
-    addCommand( cmd );
-    cmd->execute();
-
+    if ( fs->isFloating() )
+    {
+        fs->anchorFrameset()->deleteAnchoredFrame( frame->anchor() );
+        frameChanged( 0L );
+        repaintAllViews();
+    }
+    else
+    {
+        KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, this, frame );
+        addCommand( cmd );
+        cmd->execute();
+    }
     emit docStructureChanged(docItem);
 }
 
