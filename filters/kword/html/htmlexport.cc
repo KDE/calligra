@@ -251,10 +251,6 @@ void AllowNoAttributes ( QDomNode  myNode )
 }
 // End processor's functions
 
-HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
-}
-
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
 // ProcessSubtags throuch the TagProcessing class.  The top level
@@ -736,22 +732,25 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
     ProcessSubtags (myNode, tagProcessingList, outputText);
 }
 
-const bool HTMLExport::filter(const QString  &filenameIn,
-                               const QString  &filenameOut,
-                               const QString  &from,
-                               const QString  &to,
-                               const QString  &         )
-{
-    if ((from != "application/x-kword") || (to != "text/html"))
-    {
-        return false;
-    }
+// ClassExportFilterBase
 
-#if 1
-    // Some "security" to see if I have forgotten to run "make install"
-    // (Can be deleted when the filter will be stable.)
-    kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << "$Revision$" << endl;
-#endif
+class ClassExportFilterBase
+{
+    public:
+        ClassExportFilterBase(void) {}
+        virtual ~ClassExportFilterBase(void) {}
+    public: //Non-virtual
+        const bool filter(const QString  &filenameIn, const QString  &filenameOut,
+                          const QString  &from, const QString  &to, const QString& );
+    public: //virtual
+        virtual QString getDocType(void)=0;
+    protected:
+        QDomDocument qDomDocumentIn;
+};
+
+const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &filenameOut,
+                                         const QString& , const QString& , const QString& )
+{
 
     KoStore koStoreIn (filenameIn, KoStore::Read);
 
@@ -765,8 +764,6 @@ const bool HTMLExport::filter(const QString  &filenameIn,
 
     QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
-
-    QDomDocument qDomDocumentIn;
 
     // let parse the buffer just read from the file
     qDomDocumentIn.setContent(byteArrayIn);
@@ -790,12 +787,12 @@ const bool HTMLExport::filter(const QString  &filenameIn,
     streamOut.setEncoding( QTextStream::UnicodeUTF8 ); // TODO: possibility of choosing other encodings
 
     // Make the file header
-    // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
-
-    streamOut << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">" << endl;
+    // TODO: For XHTML, write the XML declaration!
+    // write <!DOCTYPE
+    streamOut << getDocType() << endl;
 
     // No "lang" attribute for <HTML>, as we do not know in which language the document is!
-    streamOut << "<html>" << endl;
+    streamOut << "<html>" << endl;  //TODO: XHTML has special attribute
 
     streamOut << "<head>" << endl;
 
@@ -810,7 +807,7 @@ const bool HTMLExport::filter(const QString  &filenameIn,
               << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
               << "\">" << endl;
 
-    streamOut << "<title>No name</title>\n"; // GRR: Just temporary, some user agents *do* choke without <TITLE> if there is a <HEAD> element
+    streamOut << "<title>No name</title>\n"; // GRR: Just temporary! IIRC some user agents *do* choke without <TITLE> if there is a <HEAD> element
 
     streamOut << "</head>" << endl << "<body>" << endl;
 
@@ -827,3 +824,80 @@ const bool HTMLExport::filter(const QString  &filenameIn,
 
 }
 
+// ClassExportFilterHtmlTransitional (normal HTML 4.01 Transitional)
+
+class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
+{
+    public:
+        ClassExportFilterHtmlTransitional(void) {}
+        virtual ~ClassExportFilterHtmlTransitional(void) {}
+    public: //virtual
+        virtual QString getDocType(void);
+};
+
+QString ClassExportFilterHtmlTransitional::getDocType(void)
+{
+    // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
+    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
+}
+
+
+// ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
+
+class ClassExportFilterXHtmlTransitional : public ClassExportFilterBase
+{
+    public:
+        ClassExportFilterXHtmlTransitional(void) {}
+        virtual ~ClassExportFilterXHtmlTransitional(void) {}
+    public: //virtual
+        virtual QString getDocType(void);
+};
+
+QString ClassExportFilterXHtmlTransitional::getDocType(void)
+{
+    // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
+    // Note "html" is lower-case in XHTML, while "DOCTYPE" and "!PUBLIC" are upper-case!
+    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">";
+}
+
+// HTMLExport
+HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
+                     KoFilter(parent, name) {
+}
+
+const bool HTMLExport::filter(const QString  &filenameIn,
+                               const QString  &filenameOut,
+                               const QString  &from,
+                               const QString  &to,
+                               const QString  &param)
+{
+    if ((from != "application/x-kword") || (to != "text/html"))
+    {
+        return false;
+    }
+
+#if 1
+    // Some "security" to see if I have forgotten to run "make install"
+    // (Can be deleted when the filter will be stable.)
+    kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << "$Revision$" << endl;
+#endif
+
+    ClassExportFilterBase* exportFilter=NULL;
+
+    if (1)
+    { //HTML 4.01 Transitional
+        exportFilter=new ClassExportFilterHtmlTransitional;
+    }
+    else if (0)
+    { //XHTML 1.0 Transitional
+        exportFilter=new ClassExportFilterXHtmlTransitional;
+    }
+    //TODO memory failure recovery
+
+    // Do the work!
+    const bool result = exportFilter->filter(filenameIn,filenameOut,from,to,param);
+
+    delete exportFilter;
+
+    return result;
+}
