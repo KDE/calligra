@@ -62,6 +62,7 @@ class KexiQueryPart : public KexiPart::Part
 				virtual ~TempData();
 				virtual tristate closeListener();
 				void clearQuery();
+				void unregisterForTablesSchemaChanges();
 				void registerTableSchemaChanges(KexiDB::QuerySchema *q);
 
 				KexiDB::QuerySchema *query;

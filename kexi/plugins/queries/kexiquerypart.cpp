@@ -174,6 +174,7 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 
 KexiQueryPart::TempData::TempData(KexiDialogBase* parent, KexiDB::Connection *conn)
  : KexiDialogTempData(parent)
+ , KexiDB::Connection::TableSchemaChangeListenerInterface()
  , query(0)
  , queryChangedInPreviousView(false)
 {
@@ -189,8 +190,13 @@ void KexiQueryPart::TempData::clearQuery()
 {
 	if (!query)
 		return;
-	conn->unregisterForTablesSchemaChanges(*this);
+	unregisterForTablesSchemaChanges();
 	query->clear();
+}
+
+void KexiQueryPart::TempData::unregisterForTablesSchemaChanges()
+{
+	conn->unregisterForTablesSchemaChanges(*this);
 }
 
 void KexiQueryPart::TempData::registerTableSchemaChanges(KexiDB::QuerySchema *q)

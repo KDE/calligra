@@ -385,21 +385,29 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 ** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
    format without opening database
 
-
 === 2004 LT TODO ===
 -improve sql parser
 -improve sql gui designer
 --totals (sum, avg)
 -simple docs
 
+TODO: Query des.: fix hiding table (fields are not properly removed)
 
 CCMAIL: dkite@shaw.ca
 
 
+~~~~ 2004 LT ~~~~
 
 2004-11-22
 I18N
 - pl translation updated
+Main
+- disabling forms support fixed
+KexiDB
+- fixed setting relationships within query
+Query Designer
+- criteria handling fixed
+- information syncing fixed a bit more
 
 2004-11-20
 KexiDB

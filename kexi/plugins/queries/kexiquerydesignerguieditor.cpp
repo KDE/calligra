@@ -249,7 +249,8 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 	d->fieldColumnData->append( item );
 	d->fieldColumnIdentifiers.insert((*item)[0].toString(), (char*)1); //cache
 
-	tempData()->clearQuery();
+//	tempData()->clearQuery();
+	tempData()->unregisterForTablesSchemaChanges();
 	for (QStringList::const_iterator it = sortedTableNames.constBegin(); 
 		it!=sortedTableNames.constEnd(); ++it)
 	{
@@ -327,21 +328,12 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		temp->query->addTable( it.current()->table() );
 	}
 
-	//add relations (looking for connections)
-	for (ConnectionListIterator it(*d->relations->connections()); it.current(); ++it) {
-		KexiRelationViewTableContainer *masterTable = it.current()->masterTable();
-		KexiRelationViewTableContainer *detailsTable = it.current()->detailsTable();
-
-		temp->query->addRelationship(
-			masterTable->table()->field(it.current()->masterField()),
-			detailsTable->table()->field(it.current()->detailsField()) );
-	}
-
 	//add fields
 	KexiDB::BaseExpr *whereExpr = 0;
 	KexiTableViewData::Iterator it(d->data->iterator());
+	const uint count = QMIN(d->data->count(), d->buffers->size());
 	bool fieldsFound = false;
-	for (int i=0; i<(int)d->buffers->size(); ++it, i++) {
+	for (uint i=0; i<count; ++it, i++) {
 		if (!it.current()->at(1).isNull() && it.current()->at(0).isNull()) {
 			//show message about missing field name, and set focus to that cell
 			kexipluginsdbg << "no field provided!" << endl;
@@ -443,6 +435,16 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	//set always, because if whereExpr==NULL, 
 	//this will clear prev. expr
 	temp->query->setWhereExpression( whereExpr );
+
+	//add relations (looking for connections)
+	for (ConnectionListIterator it(*d->relations->connections()); it.current(); ++it) {
+		KexiRelationViewTableContainer *masterTable = it.current()->masterTable();
+		KexiRelationViewTableContainer *detailsTable = it.current()->detailsTable();
+
+		temp->query->addRelationship(
+			masterTable->table()->field(it.current()->masterField()),
+			detailsTable->table()->field(it.current()->detailsField()) );
+	}
 
 	temp->query->debug();
 	temp->registerTableSchemaChanges(temp->query);
@@ -1180,14 +1182,19 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		}
 		else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
 		{
-			QString tokenStr;
-			if (token!='=') {
-				KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
-				tokenStr = be.tokenToString() + " ";
+			if (e) {
+				QString tokenStr;
+				if (token!='=') {
+					KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
+					tokenStr = be.tokenToString() + " ";
+				}
+				(*buf)["criteria"] = tokenStr + e->toString(); //print it prettier
+				//this is just checking: destroy expr. object
+				delete e;
 			}
-			(*buf)["criteria"] = tokenStr + e->toString(); //print it prettier
-			//this is just checking: destroy expr. object
-			delete e;
+			else if (str.isEmpty()) {
+				(*buf)["criteria"] = QVariant(); //clear it
+			}
       setDirty(true);
 		} 
 		else {
