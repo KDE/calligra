@@ -210,24 +210,13 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 
 void KSpreadCell::defaultStyle()
 {
-  setBottomBorderStyle( Qt::NoPen );
-  setBottomBorderColor( Qt::black ); // TODO set to QColor() and change painting to use default colors
-  setBottomBorderWidth( 1 );
-  setRightBorderStyle( Qt::NoPen );
-  setRightBorderColor( Qt::black );
-  setRightBorderWidth( 1 );
-  setLeftBorderStyle( Qt::NoPen );
-  setLeftBorderColor( Qt::black );
-  setLeftBorderWidth( 1 );
-  setTopBorderStyle( Qt::NoPen );
-  setTopBorderColor( Qt::black );
-  setTopBorderWidth( 1 );
-  setFallDiagonalStyle( Qt::NoPen );
-  setFallDiagonalColor( Qt::black );
-  setFallDiagonalWidth( 1 );
-  setGoUpDiagonalStyle(Qt::NoPen );
-  setGoUpDiagonalColor( Qt::black );
-  setGoUpDiagonalWidth( 1 );
+  QPen pen( Qt::black,1,Qt::NoPen); // TODO set to QColor() and change painting to use default colors
+  setBottomBorderPen(pen);
+  setRightBorderPen(pen);
+  setLeftBorderPen(pen);
+  setTopBorderPen(pen);
+  setFallDiagonalPen(pen);
+  setGoUpDiagonalPen(pen);
   setAlign( KSpreadCell::Undefined );
   setAlignY( KSpreadCell::Middle );
   setBackGroundBrushColor(Qt::red);
