@@ -169,8 +169,8 @@ public:
     /** return true if some text is selected */
     bool hasSelection() const { return textdoc->hasSelection( KoTextDocument::Standard ); }
     /** returns the selected text [without formatting] if hasSelection() */
-    QString selectedText() const {
-        return textdoc->selectedText( KoTextDocument::Standard );
+    QString selectedText( int selectionId = KoTextDocument::Standard ) const {
+        return textdoc->selectedText( selectionId );
     }
 
     /**

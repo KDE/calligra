@@ -437,7 +437,7 @@ void KoTextView::moveCursor( CursorAction action )
     updateUI( true );
 }
 
-KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor )
+KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int selectionId )
 {
     KoTextCursor c1 = cursor;
     KoTextCursor c2 = cursor;
@@ -463,8 +463,8 @@ KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor )
         }
     }
 
-    textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
-    textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
+    textDocument()->setSelectionStart( selectionId, &c1 );
+    textDocument()->setSelectionEnd( selectionId, &c2 );
     return c2;
 }
 
@@ -481,9 +481,9 @@ KoTextCursor KoTextView::selectParagUnderCursor()
 
 QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
 {
-    selectWordUnderCursor( cursor );
-    QString text = textObject()->selectedText();
-    textDocument()->removeSelection( KoTextDocument::Standard );
+    selectWordUnderCursor( cursor, KoTextDocument::Temp );
+    QString text = textObject()->selectedText( KoTextDocument::Temp );
+    textDocument()->removeSelection( KoTextDocument::Temp );
     // ### Not a very precise method of noticing custom items
     if(text.find(KoTextObject::customItemChar()) == -1)
         return text;

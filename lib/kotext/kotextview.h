@@ -116,7 +116,7 @@ public:
     void handleMouseTripleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
     bool maybeStartDrag( QMouseEvent* e );
 
-    KoTextCursor selectWordUnderCursor( const KoTextCursor& cursor );
+    KoTextCursor selectWordUnderCursor( const KoTextCursor& cursor, int selectionId = KoTextDocument::Standard );
     KoTextCursor selectParagUnderCursor();
 
     QString wordUnderCursor( const KoTextCursor& cursor );
