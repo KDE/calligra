@@ -256,7 +256,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 	if ( outlineBorderWidth != obj->bottomBorderWidth( x, _bottom ) )
 	    bOutlineBorderStyle = FALSE;
 	if ( outlineBorderColor != obj->bottomBorderColor( x, _bottom ) )
-	    bOutlineBorderColor = FALSE;	
+	    bOutlineBorderColor = FALSE;
     }
 
     for ( int y = _top; y <= _bottom; y++ )
@@ -269,9 +269,9 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 	    bOutlineBorderStyle = FALSE;
 	if ( outlineBorderColor != obj->leftBorderColor( _left, y ) )
 	    bOutlineBorderColor = FALSE;
-	
+
 	obj = table->cellAt( _right, y );
-	
+
 	if ( outlineBorderStyle != obj->rightBorderStyle( _left, y ) )
 	    bOutlineBorderStyle = FALSE;
 	if ( outlineBorderWidth != obj->rightBorderWidth( _left, y ) )
@@ -519,7 +519,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     selectedBorder = 0L;
 
     dlg = _dlg;
-
+    
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox( this, "GroupBox_2" );
     tmpQGroupBox->setGeometry( 135, 10, 140, 175 );
@@ -1230,7 +1230,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
 
   size_combo = new QComboBox( true, this, "Size" );
-  size_combo->insertItem( "", 0 );
+  /*size_combo->insertItem( "", 0 );
   size_combo->insertItem( "4" );
   size_combo->insertItem( "5" );
   size_combo->insertItem( "6" );
@@ -1254,7 +1254,13 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   size_combo->insertItem( "28" );
   size_combo->insertItem( "32" );
   size_combo->insertItem( "48" );
-  size_combo->insertItem( "64" );
+  size_combo->insertItem( "64" );*/
+  QStringList lst;
+    for ( unsigned int i = 0; i < 100; ++i )
+	lst.append( QString( "%1" ).arg( i + 1 ) );
+
+  size_combo->insertStringList( lst );
+
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
   size_combo->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
 			    ,8*YOFFSET - COMBO_ADJUST
@@ -1430,7 +1436,7 @@ void CellLayoutPageFont::setCombos()
      string.setNum( dlg->textFontSize );
      found = false;
 
-     for (int i = 1; i < number_of_entries - 1; i++){
+     for (int i = 0; i < number_of_entries ; i++){
 	 if ( string == (QString) combo->text(i)){
 	     combo->setCurrentItem(i);
 	     found = true;
