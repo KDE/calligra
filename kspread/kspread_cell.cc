@@ -451,7 +451,6 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                         //now calculate the row as integer value
                         int col = 0;
                         col = util_decodeColumnLabelText( buffer );
-
                         if ( fix1 )
                             erg += QString( "$%1" ).arg( col );
                         else

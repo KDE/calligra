@@ -266,7 +266,7 @@ util_dateFormat(KLocale * locale, QDate m_Date,
 }
 
 
-int util_decodeColumnLabelText( QString _col )
+int util_decodeColumnLabelText( const QString &_col )
 {
     int col = 0;
     int offset='a'-'A';
@@ -332,14 +332,14 @@ QString util_cellName(KSpreadTable * table, int _col, int _row)
 	    .arg(_row);
 }
 
-QString util_rangeName(QRect _area)
+QString util_rangeName(const QRect &_area)
 {
     return QString("%1:%2")
 	    .arg(util_cellName(_area.left(), _area.top()))
 	    .arg(util_cellName(_area.right(), _area.bottom()));
 }
 
-QString util_rangeName(KSpreadTable * _table, QRect _area)
+QString util_rangeName(KSpreadTable * _table, const QRect &_area)
 {
     return QString("%1!%2")
 	    .arg(_table->tableName())
@@ -383,12 +383,12 @@ void
     //default is error
     int x = -1;
     //search for the first character != text
-    int result = _str.find(QRegExp("[^A-Za-z]+"), p);
+    QString tmpStr=_str.mid( p, _str.length()-p );
+    int result = tmpStr.find(QRegExp("[^A-Za-z]+"));
 
     //get the colomn number for the character between actual position and the first non text charakter
     if (result != -1)
-	x = util_decodeColumnLabelText( _str.mid( p, result ) ); // x is defined now
-
+	x = util_decodeColumnLabelText( tmpStr.mid( 0, result ) ); // x is defined now
     p += result;
 
     //limit is KS_colMax
