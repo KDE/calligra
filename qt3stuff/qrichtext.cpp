@@ -1,6 +1,4 @@
 /****************************************************************************
-** $Id$
-**
 ** Implementation of the internal Qt classes dealing with rich text
 **
 ** Created : 990101
