@@ -7210,8 +7210,11 @@ void KWView::addWordToDictionary()
     if ( edit && m_doc->backgroundSpellCheckEnabled() )
     {
         QString word = edit->wordUnderCursor( *edit->cursor() );
-        if ( !word.isEmpty())
+        if ( !word.isEmpty()) {
             m_doc->addWordToDictionary( word);
+            // Re-check everything to make this word normal again
+            m_doc->reactivateBgSpellChecking();
+        }
     }
 }
 
