@@ -29,6 +29,9 @@ class KCommandHistory;
 class KoZoomHandler;
 class KoAutoFormat;
 class KoUnit;
+class KoVariable;
+class KoVariableFormatCollection;
+class KoVariableCollection;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -339,6 +342,13 @@ public:
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
+    KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
+
+    void recalcVariables( int type );
+    KoVariableCollection *getVariableCollection() {return m_varColl;}
+
+    void refreshMenuCustomVariable();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -346,6 +356,8 @@ public slots:
     void clipboardDataChanged();
 
     void slotRepaintChanged( KPTextObject * );
+    
+    void slotRepaintVariable();
 
 signals:
 
@@ -360,9 +372,12 @@ signals:
     // update child geometry
     //void sig_updateChildGeometry( KPresenterChild *_child );
 
+    void sig_refreshMenuCustomVariable();
+
 protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
+    void slotDocumentInfoModifed();
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
@@ -460,7 +475,9 @@ protected:
 
     KoUnit::Unit m_unit;
     int m_maxRecentFiles;
-
+    
+    KoVariableFormatCollection *m_varFormatCollection;
+    KoVariableCollection *m_varColl;
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

@@ -51,6 +51,8 @@
 #include <kotextparag.h>
 #include <koDataTool.h>
 #include <qpopupmenu.h>
+#include <koVariable.h>
+#include <koVariableDlgs.h>
 
 using namespace std;
 
@@ -944,4 +946,54 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point )
     Q_ASSERT(popup);
     if (popup)
         popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+}
+
+
+void KPTextView::insertCustomVariable( const QString &name)
+{
+     KoVariable * var = 0L;
+     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+     var = new KoCustomVariable( textObject()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+     insertVariable( var);
+}
+
+void KPTextView::insertVariable( int type, int subtype )
+{
+    kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
+    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+
+    KoVariable * var = 0L;
+    if ( type == VT_CUSTOM )
+    {
+        // Choose an existing variable
+        KoVariableNameDia dia( m_page, doc->getVariableCollection()->getVariables() );
+        if ( dia.exec() == QDialog::Accepted )
+            var = new KoCustomVariable( textObject()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+    }
+    else
+        var = KoVariable::createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc,doc->getVariableCollection());
+
+    insertVariable( var );
+}
+
+void KPTextView::insertVariable( KoVariable *var )
+{
+    if ( var )
+    {
+        CustomItemsMap customItemsMap;
+        customItemsMap.insert( 0, var );
+        kdDebug() << "KPTextView::insertVariable inserting into paragraph" << endl;
+#ifdef DEBUG_FORMATS
+        kdDebug() << "KPTextView::insertVariable currentFormat=" << currentFormat() << endl;
+#endif
+        textObject()->insert( cursor(), currentFormat(), KoTextObject::customItemChar(),
+                                false, false, i18n("Insert Variable"),
+                                customItemsMap );
+        var->recalc();
+        cursor()->parag()->invalidate(0);
+        cursor()->parag()->setChanged( true );
+
+        kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
+        kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
+    }
 }

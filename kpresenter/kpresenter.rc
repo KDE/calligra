@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="19">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="20">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -34,6 +34,8 @@
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_specialchar"/>
+  <Action name="insert_variable"/> <!-- menu -->
+  <Action name="insert_expression"/> <!-- menu -->
   <Action name="insert_link"/>
   <Separator/>
   <Action name="insert_page"/>

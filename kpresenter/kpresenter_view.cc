@@ -103,6 +103,8 @@
 #include <koAutoFormatDia.h>
 #include <koparagcounter.h>
 #include <koParagDia.h>
+#include <koVariable.h>
+#include <koVariableDlgs.h>
 
 #include <kspell.h>
 
@@ -239,6 +241,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     }
 
     connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
+    connect( m_pKPresenterDoc, SIGNAL( sig_refreshMenuCustomVariable()),
+             this, SLOT( refreshCustomMenu()));
 }
 
 /*=============================================================*/
@@ -286,6 +290,8 @@ KPresenterView::~KPresenterView()
 /*=========================== file print =======================*/
 void KPresenterView::setupPrinter( KPrinter &prt )
 {
+    m_pKPresenterDoc->recalcVariables(  VT_TIME );
+    m_pKPresenterDoc->recalcVariables(  VT_DATE );
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
     prt.setOption( "kde-range", m_pKPresenterDoc->selectedForPrinting() );
@@ -2490,7 +2496,18 @@ void KPresenterView::setupActions()
     actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
                                           this, SLOT( textDefaultFormat() ),
                                           actionCollection(), "text_default" );
+    m_variableDefMap.clear();
+    actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
+                                            actionCollection(), "insert_variable" );
+    // The last argument is only needed if a submenu is to be created
+    addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
+    addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
+    addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
 
+    actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
+                                            actionCollection(), "insert_custom" );
+     actionInsertVariable->insert(actionInsertCustom);
+     refreshCustomMenu();
 }
 
 void KPresenterView::textSubScript()
@@ -2557,6 +2574,7 @@ void KPresenterView::objectSelectedChanged()
     actionInsertLink->setEnabled(val);
     actionEditFind->setEnabled(val);
     actionFormatParag->setEnabled(val);
+    actionInsertVariable->setEnabled(val);
 
     state=state || isText;
     actionEditCopy->setEnabled(state);
@@ -4075,5 +4093,112 @@ QPopupMenu * KPresenterView::popupMenu( const QString& name )
         return ((QPopupMenu*)factory()->container( name, this ));
     return 0L;
 }
+
+void KPresenterView::addVariableActions( int type, const QStringList & texts,
+                                 KActionMenu * parentMenu, const QString & menuText )
+{
+    // Single items go directly into parentMenu.
+    // For multiple items we create a submenu.
+    if ( texts.count() > 1 && !menuText.isEmpty() )
+    {
+        KActionMenu * subMenu = new KActionMenu( menuText, actionCollection() );
+        parentMenu->insert( subMenu );
+        parentMenu = subMenu;
+    }
+    QStringList::ConstIterator it = texts.begin();
+    for ( int i = 0; it != texts.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            VariableDef v;
+            v.type = type;
+            v.subtype = i;
+            KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
+                                         actionCollection(), "var-action" );
+            m_variableDefMap.insert( act, v );
+            parentMenu->insert( act );
+        }
+    }
+}
+
+void KPresenterView::refreshCustomMenu()
+{
+    actionInsertCustom->popupMenu()->clear();
+    QPtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
+    KAction * act=0;
+    QStringList lst;
+    QString varName;
+    for ( ; it.current() ; ++it )
+    {
+        KoVariable *var = it.current();
+        if ( var->type() == VT_CUSTOM )
+        {
+            varName=( (KoCustomVariable*) var )->name();
+            if ( !lst.contains( varName) )
+            {
+                 lst.append( varName );
+                 act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
+                                    actionCollection(), "custom-action" );
+                 actionInsertCustom->insert( act );
+            }
+        }
+    }
+    bool state=!lst.isEmpty();
+    if(state)
+        actionInsertCustom->popupMenu()->insertSeparator();
+
+    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
+    actionInsertCustom->insert( act );
+
+    actionInsertCustom->popupMenu()->insertSeparator();
+
+    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
+                                        this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_customvars" );
+    actionEditCustomVars->setEnabled(state);
+    actionInsertCustom->insert( actionEditCustomVars );
+}
+
+
+void KPresenterView::insertCustomVariable()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+    {
+        KAction * act = (KAction *)(sender());
+        edit->insertCustomVariable(act->text());
+    }
+}
+
+void KPresenterView::insertNewCustomVariable()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+        edit->insertVariable( VT_CUSTOM, 0 );
+}
+
+void KPresenterView::editCustomVars()
+{
+    KoCustomVariablesDia dia( this, m_pKPresenterDoc->getVariableCollection()->getVariables() );
+    if(dia.exec())
+        m_pKPresenterDoc->recalcVariables( VT_CUSTOM );
+}
+
+void KPresenterView::insertVariable()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+    {
+        KAction * act = (KAction *)(sender());
+        VariableDefMap::Iterator it = m_variableDefMap.find( act );
+        if ( it == m_variableDefMap.end() )
+            kdWarning() << "Action not found in m_variableDefMap." << endl;
+        else
+        {
+            edit->insertVariable( (*it).type, (*it).subtype );
+        }
+    }
+}
+
 
 #include <kpresenter_view.moc>

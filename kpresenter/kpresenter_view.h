@@ -60,6 +60,7 @@ class KSelectAction;
 class KFontAction;
 class KSpell;
 class KoParagCounter;
+class KActionMenu;
 
 class PageBase : public QWidget
 {
@@ -268,6 +269,13 @@ public slots:
 
     void formatParagraph();
     void changeNbOfRecentFiles(int _nb);
+    
+    void insertVariable();
+
+    void insertCustomVariable();
+    void insertNewCustomVariable();
+    void refreshCustomMenu();
+    void editCustomVars ();
 
 public:
     // create GUI
@@ -461,6 +469,9 @@ protected:
     void startScreenPres( int pgNum = -1 );
 
     virtual void updateReadWrite( bool readwrite );
+    
+    void addVariableActions( int type, const QStringList & texts,
+                             KActionMenu * parentMenu, const QString & menuText );
 
 private:
 // ********** variables **********
@@ -533,6 +544,7 @@ private:
 
     // actions
     KAction *actionEditCut;
+    KAction *actionEditCustomVars;
     KAction *actionEditCopy;
     KAction *actionEditPaste;
     KAction *actionEditDelete;
@@ -679,6 +691,14 @@ private:
 	KMacroCommand * macroCmdSpellCheck;
      } m_spell;
 
+    KActionMenu *actionInsertVariable;
+    KActionMenu *actionInsertCustom;
+    struct VariableDef {
+        int type;
+        int subtype;
+    };
+    typedef QMap<KAction *, VariableDef> VariableDefMap;
+    VariableDefMap m_variableDefMap;
 };
 
 #endif

@@ -37,6 +37,7 @@ class KPTextView;
 class KCommand;
 class Page;
 class KoPoint;
+class KoVariable;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -158,6 +159,10 @@ public:
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
     void showPopup( KPresenterView *view, const QPoint &point );
+    void insertVariable( int type, int subtype = 0 );
+    void insertCustomVariable( const QString &name);
+    void insertVariable( KoVariable *var);
+
 
 public slots:
     void cut();

@@ -75,6 +75,9 @@
 #include <KPresenterDocIface.h>
 #include <kspell.h>
 
+#include <koVariable.h>
+#include <koDocumentInfo.h>
+
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
@@ -124,6 +127,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
     m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
     m_zoomHandler = new KoZoomHandler;
+
+    m_varFormatCollection = new KoVariableFormatCollection;
+    m_varColl=new KoVariableCollection;
 
     dcop = 0;
     m_autoFormat = new KoAutoFormat(this);
@@ -192,10 +198,18 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
+    connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
+    connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
     if ( name )
 	dcopObject();
 
 }
+
+void KPresenterDoc::refreshMenuCustomVariable()
+{
+   emit sig_refreshMenuCustomVariable();
+}
+
 
 void KPresenterDoc::slotDocumentRestored()
 {
@@ -289,11 +303,13 @@ KPresenterDoc::~KPresenterDoc()
     delete _objectList;
     _backgroundList.clear();
     delete m_standardStyle;
-    //delete fCollection;
 
     delete m_commandHistory;
     delete m_zoomHandler;
     delete m_autoFormat;
+    delete m_varColl;
+    delete m_varFormatCollection;
+    delete dcop;
 }
 
 
@@ -3857,5 +3873,28 @@ void KPresenterDoc::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setEncoding(_kspell.encoding());
   m_pKSpellConfig->setClient(_kspell.client());
 }
+
+void KPresenterDoc::recalcVariables( int type )
+{
+    m_varColl->recalcVariables(type);
+    slotRepaintVariable();
+}
+
+void KPresenterDoc::slotRepaintVariable()
+{
+    kdDebug()<<"*********************************************************\n";
+    KPObject *kpobject;
+    for ( kpobject = objectList()->first(); kpobject; kpobject = objectList()->next() )
+    {
+	if ( kpobject->getType() == OT_TEXT )
+            repaint( kpobject );
+    }
+}
+
+void KPresenterDoc::slotDocumentInfoModifed()
+{
+    recalcVariables( VT_FIELD );
+}
+
 
 #include <kpresenter_doc.moc>
