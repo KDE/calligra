@@ -1930,7 +1930,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
       lastCell = cell;
       row = marker.y()-1;
       cell = table->cellAt(cell->column(), row);
-      while((cell != NULL) && (row > 1) && (!cell->isEmpty()) )
+      while((cell != NULL) && (row > 0) && (!cell->isEmpty()) )
       {
         if(!(table->rowFormat(cell->row())->isHide()))
         {
@@ -1938,7 +1938,8 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
           searchThroughEmpty = FALSE;
         }
         row--;
-        cell = table->cellAt(cell->column(), row);
+        if( row > 0 )
+          cell = table->cellAt(cell->column(), row);
       }
       cell = lastCell;
     }
@@ -2022,7 +2023,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
       lastCell = cell;
       col = marker.x()-1;
       cell = table->cellAt(col, cell->row());
-      while((cell != NULL) && (col > 1) && (!cell->isEmpty()) )
+      while((cell != NULL) && (col > 0) && (!cell->isEmpty()) )
       {
         if(!(table->columnFormat(cell->column())->isHide()))
         {
@@ -2030,7 +2031,8 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
           searchThroughEmpty = FALSE;
         }
         col--;
-        cell = table->cellAt(col, cell->row());
+        if( col > 0 )
+            cell = table->cellAt(col, cell->row());
       }
       cell = lastCell;
     }
