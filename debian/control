@@ -102,12 +102,23 @@ Description: KDE Office Suite - KWord
  .
  A Professional Text editor based on QT and KDE
 
+Package: kimageshop
+Architecture: any
+Section: x11
+Replaces: koffice-common
+Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Suggests: kdebase
+Description: KDE Office Suite - KImageshop
+ KDE Office Suite - KImageshop
+ .
+ Professional Image tools for KOffice
+
 Package: koshell
 Architecture: any
 Section: x11
 Replaces: koffice-libs (<< 2.0.1-0)
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
-Recommends: kchart, kformula, kword, kspread, killustrator, kpresenter, kivio
+Recommends: kchart, kformula, kword, kspread, killustrator, kpresenter, kivio, kimageshop
 Suggests: kdebase
 Description: KDE Office Workspace
  KDE Office Workspace

@@ -1,9 +1,10 @@
-koffice (2.1-20001214-1) unstable; urgency=low
+koffice (2.1-20001216-1) unstable; urgency=low
 
   * more upstream fixes
   * Adding in missing conflicts for koffice and koffice-common
+  * Adding in kimageshop
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 14 Dec 2000 23:00:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 16 Dec 2000 23:00:00 -0700
 
 koffice (2.0-20001013-0) unstable; urgency=low
  

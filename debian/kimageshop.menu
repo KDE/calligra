@@ -1,0 +1,7 @@
+?package(kimageshop):\
+	needs=x11\
+	section=Apps/Graphics\
+	hints="KDE"\
+	title="Krayon"\
+	command=krayon
+

@@ -1,0 +1,5 @@
+# modules
+kimageshop: shlib-missing-in-control-file libkrayonpart usr/lib/libkrayonpart.so
+kimageshop: shlib-missing-in-control-file libkisp_example usr/lib/libkisp_example.so
+kimageshop: shlib-missing-in-control-file krayon usr/lib/krayon.so
+kimageshop: unused-shlib-entry-in-control-file libkochart
