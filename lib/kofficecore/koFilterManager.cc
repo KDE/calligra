@@ -296,9 +296,14 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
-        QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-        document->slotProgress(0);
 
+        // Allow for document to be null, since we might be invoked from a context where
+        // it is not available (e.g. within an OLEfilter filter).
+        if (document)
+        {
+            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+            document->slotProgress(0);
+        }
         if(vec[i].implemented.lower()=="file") {
             //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
             KTempFile tempFile; // create with default file prefix, extension and mode
@@ -325,7 +330,10 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
             if(ok)
                 document->changedByFilter();
         }
-        document->slotProgress(-1);  // remove the bar
+        if (document)
+        {
+            document->slotProgress(-1);  // remove the bar
+        }
         delete filter;
         ++i;
     }
