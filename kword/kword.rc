@@ -163,6 +163,9 @@
   <Separator/>
   <Action name="format_super"/>
   <Action name="format_sub"/>
+  <Separator/>
+  <Action name="format_increaseindent"/>
+  <Action name="format_decreaseindent"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="border_outline"/>

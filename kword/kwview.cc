@@ -423,11 +423,11 @@ void KWView::setupActions()
                                               actionCollection(), "format_sub" );
     actionFormatSub->setExclusiveGroup( "valign" );
 
-    actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ), 0,
+    actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ), "format_increaseindent", 0,
                                       this, SLOT( textIncreaseIndent() ),
                                       actionCollection(), "format_increaseindent" );
 
-    actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ), 0,
+    actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ),"format_decreaseindent", 0,
                                       this, SLOT( textDecreaseIndent() ),
                                       actionCollection(), "format_decreaseindent" );
 
@@ -2119,8 +2119,8 @@ void KWView::textIncreaseIndent()
     if ( edit )
         {
             KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-            double val=(u.pt()+10);
-            if(val <=doc->paperWidth())
+            double val=(u.pt()+MM_TO_POINT(10));
+            if(val <=(doc->paperWidth()-doc->rightBorder()-doc->leftBorder()))
                 {
                     u.setPT( val );
                     edit->setMargin( QStyleSheetItem::MarginLeft, u );
@@ -2135,10 +2135,10 @@ void KWView::textDecreaseIndent()
     if ( edit )
         {
              KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-             double val=(u.pt()-10);
-             if(val>=0)
+             double val=(u.pt()-MM_TO_POINT(10));
+             if(val!=0)
                  {
-                     u.setMM( (u.pt()-10) );
+                     u.setPT( QMAX(val,0.0) );
                      edit->setMargin( QStyleSheetItem::MarginLeft, u );
                  }
         }
