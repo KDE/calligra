@@ -233,7 +233,7 @@ public:
     QColor borderColor() const;
 
     KSpreadSelection* selectionInfo() const;
-    QRect selection() const;
+    QRect selection(bool extend = true) const;
     QPoint marker() const;
 
     void updateShowTableMenu();

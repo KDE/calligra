@@ -70,7 +70,7 @@ QPoint KSpreadSelection::marker() const
   return m_marker;
 }
 
-QRect KSpreadSelection::selection() const
+QRect KSpreadSelection::selection(bool extend) const
 {
   int left, top, right, bottom;
   left = QMIN(m_anchor.x(), m_marker.x());
@@ -79,7 +79,9 @@ QRect KSpreadSelection::selection() const
   bottom = QMAX(m_anchor.y(), m_marker.y());
   QRect selection(QPoint(left, top), QPoint(right, bottom));
 
-  return extendToMergedAreas(selection);
+  if (extend)
+      return extendToMergedAreas(selection);
+  return selection;
 }
 
 bool KSpreadSelection::singleCellSelection() const
@@ -136,6 +138,9 @@ void KSpreadSelection::setSelection( const QPoint &newMarker,
   m_anchor = newAnchor;
 
   QRect newSelection = selection();
+
+  //kdDebug(36001) << "setSelection: anchor = " << newAnchor
+  //		 << " marker = " << newMarker << endl;
 
   const KSpreadCell* cell = table->cellAt(newMarker);
   if (!util_isColumnSelected(newSelection) &&

@@ -1673,9 +1673,9 @@ KSpreadSelection* KSpreadView::selectionInfo() const
     return d->selectionInfo;
 }
 
-QRect KSpreadView::selection() const
+QRect KSpreadView::selection(bool extend) const
 {
-    return selectionInfo()->selection();
+    return selectionInfo()->selection(extend);
 }
 
 QPoint KSpreadView::marker() const
@@ -3633,7 +3633,8 @@ void KSpreadView::paste()
   d->doc->emitBeginOperation( false );
   if ( !d->canvas->editor() )
   {
-    d->activeSheet->paste( selection(), true, Normal, OverWrite, false, 0, true );
+      //kdDebug(36001) << "Pasting. Rect= " << selection(false) << " bytes" << endl;
+    d->activeSheet->paste( selection(false), true, Normal, OverWrite, false, 0, true );
     resultOfCalc();
     updateEditWidget();
   }

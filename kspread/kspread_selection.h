@@ -52,7 +52,7 @@ public:
    * (0, 0, 0, 0).  Whether the selection is one cell or many this will give
    * the region.
    */
-  QRect selection() const;
+  QRect selection(bool extend = true) const;
 
   /**
    * @return a boolean indicator of whether a single cell is selected or not

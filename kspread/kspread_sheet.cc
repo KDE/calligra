@@ -5738,11 +5738,14 @@ void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
     }
     else
         return;
+
+    // Do the actual pasting.
     doc()->emitBeginOperation();
     paste( b, pasteArea, makeUndo, sp, op, insert, insertTo, pasteFC );
     emit sig_updateView( this );
     // doc()->emitEndOperation();
 }
+
 
 void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
 {
@@ -5846,6 +5849,8 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
                                   int insertTo, bool pasteFC )
 {
     QDomElement e = doc.documentElement();
+
+    //kdDebug(36001) << "loadSelection called. pasteArea=" << pasteArea << endl;
 
     if (!isLoading() && makeUndo)
         loadSelectionUndo( doc, pasteArea, _xshift, _yshift, insert, insertTo );
