@@ -901,7 +901,7 @@ void KSpreadDoc::endEditPythonCode()
   m_pMap->getPythonCodeFromFile();
   m_bModified = TRUE;
 
-  m_editorBuffer = 0L;
+  m_editorBuffer = QString::null;
 }
 
 void KSpreadDoc::undo()
