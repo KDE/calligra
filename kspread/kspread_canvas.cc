@@ -1002,9 +1002,12 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Paste operation with the middle button ?
   if( _ev->button() == MidButton )
   {
-    selectionInfo()->setMarker( QPoint( col, row ), table );
-    table->paste( QRect(marker(), marker()) );
-    table->cellAt( marker() )->update();
+      if ( m_pView->koDocument()->isReadWrite() )
+      {
+          selectionInfo()->setMarker( QPoint( col, row ), table );
+          table->paste( QRect(marker(), marker()) );
+          table->cellAt( marker() )->update();
+      }
   }
 
   // Update the edit box
