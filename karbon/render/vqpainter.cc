@@ -95,7 +95,10 @@ VQPainter::setPen( const VStroke &stroke )
 	m_painter->setPen( pen );
 }
 
-// void setBrush( const VBrush & );
+void
+VQPainter::setBrush( const VFill & )
+{
+}
 
 void
 VQPainter::setPen( const QColor &c )
@@ -107,12 +110,6 @@ void
 VQPainter::setPen( Qt::PenStyle style )
 {
 	m_painter->setPen( style );
-}
-
-void
-VQPainter::setBrush( const QBrush &b )
-{
-	m_painter->setBrush( b );
 }
 
 void

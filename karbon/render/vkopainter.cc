@@ -7,6 +7,7 @@
 
 #include "vkopainter.h"
 #include "vstroke.h"
+#include "vfill.h"
 #include "vcolor.h"
 
 #include <qwidget.h>
@@ -14,10 +15,13 @@
 #include <qpointarray.h>
 
 #include <art_vpath_bpath.h>
+#include <art_svp_vpath.h>
 #include <art_svp_vpath_stroke.h>
 #include <art_svp.h>
+#include <art_svp_ops.h>
 #include <art_affine.h>
 #include <art_rgb_svp.h>
+#include <art_svp_intersect.h>
 
 #include <X11/Xlib.h>
 
@@ -37,6 +41,7 @@ VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h
 	clear();
 
 	m_stroke = 0L;
+	m_fill = 0L;
 
 	xlib_rgb_init_with_depth( target->x11Display(), XScreenOfDisplay( target->x11Display(),
 							  target->x11Screen() ), target->x11Depth() );
@@ -50,6 +55,7 @@ VKoPainter::~VKoPainter()
 		art_free( m_buffer );
 
 	delete m_stroke;
+	delete m_fill;
 
 	if( gc )
 		XFreeGC( m_target->x11Display(), gc );
@@ -178,8 +184,6 @@ VKoPainter::setPen( const VStroke &stroke )
 	*m_stroke = stroke;
 }
 
-// void setBrush( const VBrush & );
-
 void
 VKoPainter::setPen( const QColor &c )
 {
@@ -199,17 +203,25 @@ VKoPainter::setPen( Qt::PenStyle style )
 }
 
 void
-VKoPainter::setBrush( const QBrush &b )
-{
-}
-
-void
 VKoPainter::setBrush( const QColor &c )
 {
+	delete m_fill;
+	m_fill = new VFill;
+	VColor color;
+	float r = static_cast<float>( c.red()   ) / 255.0;
+	float g = static_cast<float>( c.green() ) / 255.0;
+	float b = static_cast<float>( c.blue()  ) / 255.0;
+	color.setValues( &r, &g, &b );
+	m_fill->setColor( color );
 }
 
 void
 VKoPainter::setBrush( Qt::BrushStyle style )
+{
+}
+
+void
+VKoPainter::setBrush( const VFill & )
 {
 }
 
@@ -245,7 +257,8 @@ void
 VKoPainter::drawVPath( ArtVpath *vec )
 {
 	QColor color;
-	ArtSVP *svp = 0L;
+	ArtSVP *strokeSvp = 0L;
+	//ArtSVP *fillSvp = 0L;
 
 	// set up world matrix
 	double affine[6];
@@ -258,31 +271,34 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
 	vec = temp;
 
-    // TODO : filling
-	/*{
-		fillColor = (qRed(m_fillColor.rgb()) << 24) | (qGreen(m_fillColor.rgb()) << 16) | (qBlue(m_fillColo
-					r.rgb()) << 8) | (qAlpha(m_fillColor.rgb()));
-
-		ArtSvpWriter *swr;
-		ArtSVP *temp;
-		temp = art_svp_from_vpath(vec);
-
-		if(m_drawShape->getFillRule() == "evenodd")
-			swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
-		else
-			swr = art_svp_writer_rewind_new(ART_WIND_RULE_NONZERO);
-
-		art_svp_intersector(temp, swr);
-		svp = art_svp_writer_rewind_reap(swr);
-		m_fillSVP = svp;
-
-		art_svp_free(temp);
-	}*/
-
 	int r = 0;
 	int g = 0;
 	int b = 0;
 	int a = 0;
+	//art_u32 fillColor;
+    // TODO : filling
+	/*if( m_fill )
+	{
+		m_fill->color().pseudoValues( r, g, b );
+		a = qRound( 255 * m_fill->opacity() );
+		fillColor = ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | a;
+
+		ArtSvpWriter *swr;
+		ArtSVP *temp;
+		temp = art_svp_from_vpath( vec );
+
+		//if(m_drawShape->getFillRule() == "evenodd")
+			swr = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
+		//else
+		//	swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );
+
+		art_svp_intersector( temp, swr );
+		fillSvp = art_svp_writer_rewind_reap( swr );
+
+		art_svp_free( temp );
+	}*/
+
+	art_u32 strokeColor;
 	// stroke
 	if( m_stroke )
 	{
@@ -292,6 +308,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 		m_stroke->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_stroke->opacity() );
+		strokeColor = ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | a;
 
 		// caps translation karbon -> art
 		if( m_stroke->lineCap() == VStroke::cap_butt )
@@ -311,17 +328,20 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 		// zoom stroke width;
 		double ratio = sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
-		svp = art_svp_vpath_stroke( vec, /*ART_PATH_STROKE_JOIN_ROUND*/joinStyle, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
+		strokeSvp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND/*joinStyle*/, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
 	// render the svp to the buffer
-	if( svp )
-	{
-		art_u32 strokeColor = ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | a;
-		//art_rgb_svp_alpha( svp, 0, 0, m_width, m_height, color.rgb(), alpha, m_buffer, m_width * 3, 0 );
-		art_rgb_svp_alpha( svp, 0, 0, m_width, m_height, strokeColor, m_buffer, m_width * 3, 0 );
-	}
+	if( strokeSvp )
+		art_rgb_svp_alpha( strokeSvp, 0, 0, m_width, m_height, strokeColor, m_buffer, m_width * 3, 0 );
+
+	//if( fillSvp )
+	//	art_rgb_svp_alpha( fillSvp, 0, 0, m_width, m_height, fillColor, m_buffer, m_width * 3, 0 );
 
 	m_stroke = 0L;
+	m_fill = 0L;
+
+	art_svp_free( strokeSvp );
+	//art_svp_free( fillSvp );
 }
 

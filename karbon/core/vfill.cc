@@ -18,13 +18,26 @@ VFill::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "FILL" );
 	element.appendChild( me );
 
-
+	// save color:
+	m_color.save( me );
 }
 
 void
-VFill::load( const QDomElement& /*element*/ )
+VFill::load( const QDomElement& element )
 {
-
+	// load color:
+	QDomNodeList list = element.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+			if( e.tagName() == "COLOR" )
+			{
+				m_color.load( e );
+			}
+		}
+	}
 }
 
 

@@ -37,11 +37,9 @@ public:
 
 	// pen + brush
 	virtual void setPen( const VStroke & );
-	// virtual void setBrush( const VBrush & );
-	//virtual void setPen( const QPen & );
 	virtual void setPen( const QColor & );
 	virtual void setPen( Qt::PenStyle style );
-	virtual void setBrush( const QBrush & );
+	virtual void setBrush( const VFill & );
 	virtual void setBrush( const QColor & );
 	virtual void setBrush( Qt::BrushStyle style );
 
@@ -63,6 +61,7 @@ private:
 	unsigned int m_height;
 	QWMatrix m_matrix;
 	VStroke *m_stroke;
+	VFill *m_fill;
 
 	GC gc;
 };

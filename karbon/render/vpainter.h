@@ -18,6 +18,7 @@ class QPen;
 class QBrush;
 
 class VStroke;
+class VFill;
 
 class VPainter
 {
@@ -40,11 +41,10 @@ public:
 
 	// pen + brush
 	virtual void setPen( const VStroke & ) = 0;
-	// virtual void setBrush( const VBrush & ) = 0;
 	// compatibility, use VPen/VBrush later ?
 	virtual void setPen( const QColor & ) = 0;
 	virtual void setPen( Qt::PenStyle style ) = 0;
-	virtual void setBrush( const QBrush & ) = 0;
+	virtual void setBrush( const VFill & ) = 0;
 	virtual void setBrush( const QColor & ) = 0;
 	virtual void setBrush( Qt::BrushStyle style ) = 0;
 

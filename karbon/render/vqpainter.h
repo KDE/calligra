@@ -33,11 +33,9 @@ public:
 
 	// pen + brush
 	virtual void setPen( const VStroke & );
-	// virtual void setBrush( const VBrush & );
-	//virtual void setPen( const QPen & );
 	virtual void setPen( const QColor & );
 	virtual void setPen( Qt::PenStyle style );
-	virtual void setBrush( const QBrush & );
+	virtual void setBrush( const VFill & );
 	virtual void setBrush( const QColor & );
 	virtual void setBrush( Qt::BrushStyle style );
 
