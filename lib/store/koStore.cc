@@ -623,5 +623,5 @@ void KoStore::disallowNameExpansion( void )
 
 bool KoStore::hasFile( const QString& fileName )
 {
-  return fileExists( currentPath() + fileName );
+  return fileExists( toExternalNaming( currentPath() + fileName ) );
 }
