@@ -1665,7 +1665,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 	if (d->insideCloseDialog)
 		return true;
 	d->insideCloseDialog = true;
-	bool remove_on_closing = dlg->partItem()->neverSaved();
+	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
 		const int res = KMessageBox::warningYesNoCancel( this,
