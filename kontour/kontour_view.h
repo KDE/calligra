@@ -47,6 +47,7 @@ class KToggleAction;
 class KSelectAction;
 class KPopupMenu;
 class SelectTool;
+class EditPointTool;
 class RectTool;
 class OvalTool;
 class ZoomTool;
@@ -227,6 +228,7 @@ private:
   ToolController *tcontroller;
 
   SelectTool *mSelectTool;
+  EditPointTool *mEditPointTool;
   RectTool *mRectTool;
   OvalTool *mOvalTool;
   ZoomTool *mZoomTool;

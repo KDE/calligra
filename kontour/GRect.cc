@@ -85,24 +85,6 @@ void GRect::startPoint(const KoPoint &p)
 
 void GRect::endPoint(const KoPoint &p)
 {
-/*  if(squareFlag && ePoint.x() != 0 && ePoint.y() != 0)
-  {
-      double dx = (double) fabs (p.x () - sPoint.x ());
-      double dy = (double) fabs (p.y () - sPoint.y ());
-      double xoff = p.x () - sPoint.x ();
-      double yoff = p.y () - sPoint.y ();
-      if (dx > dy)
-      {
-         ePoint.x (p.x ());
-         ePoint.y (sPoint.y () + xoff);
-      }
-      else
-      {
-         ePoint.x (sPoint.x () + yoff);
-         ePoint.y (p.y ());
-      }
-  }
-  else*/
   ePoint = p;
   calcBoundingBox();
 }

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,39 +23,22 @@
 
 */
 
-#ifndef EditPointTool_h_
-#define EditPointTool_h_
+#ifndef __EditPointTool_h__
+#define __EditPointTool_h__
 
-#include <Tool.h>
+#include "Tool.h"
 
-class QCursor;
-class GObject;
-
-class EditPointTool : public Tool {
+class EditPointTool : public Tool
+{
+  Q_OBJECT
 public:
-  enum Mode {
-    MovePoint, InsertPoint, RemovePoint, Join, Split
-  };
+  EditPointTool(QString aId, ToolController *tc);
 
-  EditPointTool (CommandHistory *history);
-  ~EditPointTool ();
-
-  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
-
-  void setMode (Mode m);
-
-  void activate (GDocument* doc, Canvas* canvas);
-  void deactivate (GDocument* doc, Canvas* canvas);
-
-//signals:
-//    void activated(bool);
+  void activate();
+  void deactivate();
+  void processEvent(QEvent *e);
 
 private:
-  Mode mode;
-  GObject* obj;
-  int pointIdx;
-  Coord startPos, lastPos;
-  QCursor *cursor;
 };
 
 #endif

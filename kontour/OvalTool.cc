@@ -23,13 +23,13 @@
 */
 
 #include "OvalTool.h"
-#include "kontour_factory.h"
-#include <kiconloader.h>
+
 #include <qpainter.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "kontour_factory.h"
 #include "kontour_view.h"
 #include "kontour_doc.h"
 #include "GDocument.h"

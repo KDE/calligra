@@ -57,6 +57,7 @@
 #include "OptionsDialog.h"
 #include "ToolController.h"
 #include "SelectTool.h"
+#include "EditPointTool.h"
 #include "RectTool.h"
 #include "OvalTool.h"
 #include "ZoomTool.h"
@@ -70,9 +71,8 @@
 #include "ReorderCmd.h"
 #include "ToPathCmd.h"
 
-//#include <kdebug.h>
-KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc)
-:KoView(doc, parent, name)
+KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc):
+KoView(doc, parent, name)
 {
   mDoc = doc;
 
@@ -366,6 +366,9 @@ void KontourView::setupTools()
 
   mSelectTool = new SelectTool("Select", tcontroller);
   tcontroller->registerTool(mSelectTool);
+
+  mEditPointTool = new EditPointTool("EditPoint", tcontroller);
+  tcontroller->registerTool(mEditPointTool);
 
   mRectTool = new RectTool("Rect", tcontroller);
   tcontroller->registerTool(mRectTool);

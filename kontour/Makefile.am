@@ -53,6 +53,7 @@ libkontourpart_la_SOURCES = \
 	Tool.cc \
 	ToolController.cc \
 	SelectTool.cc \
+	EditPointTool.cc \
 	RectTool.cc \
 	OvalTool.cc \
 	ZoomTool.cc \
@@ -66,9 +67,9 @@ libkontourpart_la_SOURCES = \
 	ToPathCmd.cc \
 	ReorderCmd.cc \
 	TranslateCmd.cc \
-	RotateCmd.cc \
 	ScaleCmd.cc \
 	ShearCmd.cc \
+	RotateCmd.cc \
 	SetPropertyCmd.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
