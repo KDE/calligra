@@ -241,7 +241,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
         //Create a transaction
         m_trans = new pqxx::nontransaction(*m_pqxxsql);
 
-        //Create a result opject through the transaction
+        //Create a result object through the transaction
         m_res = new pqxx::result(m_trans->exec(statement.utf8()));
 
         //Commit the transaction
@@ -260,7 +260,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
     {
     	setError();
     }
-    KexiDBDrvDbg << "EXECUTE SQL OK: OID was " <<m_res->inserted_oid() << endl;
+    KexiDBDrvDbg << "EXECUTE SQL OK: OID was " << (m_res ? m_res->inserted_oid() : 0) << endl;
     return ok;
 }
 
