@@ -406,7 +406,7 @@ void KWView::setupActions()
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
                                     this, SLOT( formatFont() ),
                                     actionCollection(), "format_font" );
-    actionFormatColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,
+    actionFormatColor = new KColorAction( i18n( "Text Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,
                                      this, SLOT( textColor() ),
                                      actionCollection(), "format_color" );
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
