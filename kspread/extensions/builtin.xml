@@ -1219,7 +1219,19 @@
       </Help>
     </Function>
 
-
+    <Function>
+      <Name>CUR</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The CUR() function returns the non-negative square 3 of x.</Text>
+	<Syntax>CUR( x )</Syntax>
+	<Example>CUR(27) equals 3</Example>
+      </Help>
+    </Function>
 
     <Function>
       <Name>log</Name>

@@ -203,6 +203,21 @@ static bool kspreadfunc_sqrtn( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_cur( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "CUR", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( exp( log(args[0]->doubleValue())/3)) );
+
+  return true;
+}
+
 
 static bool kspreadfunc_fabs( KSContext& context )
 {
@@ -4050,6 +4065,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "LOGn", new KSValue( new KSBuiltinFunction( module, "LOGn", kspreadfunc_logn ) ) );
   module->addObject( "SQRTn", new KSValue( new KSBuiltinFunction( module, "SQRTn", kspreadfunc_sqrtn ) ) );
   module->addObject( "count", new KSValue( new KSBuiltinFunction( module, "count", kspreadfunc_count ) ) );
+  module->addObject( "CUR", new KSValue( new KSBuiltinFunction( module, "CUR", kspreadfunc_cur ) ) );
+
+
+
   return module;
 }
 

@@ -309,7 +309,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_preview = new KAction( i18n("Preview..."), 0, this, SLOT( printPreview() ), actionCollection(), "printpreview" );
     
-    m_sortList = new KAction( i18n("Sort list..."), 0, this, SLOT( sortList() ), actionCollection(), "sortlist" );
+    m_sortList = new KAction( i18n("Sort lists..."), 0, this, SLOT( sortList() ), actionCollection(), "sortlist" );
 
 
     m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
