@@ -42,12 +42,12 @@ class KEXI_DB_EXPORT TransactionData
 };
 
 /*! This class encapsulates transaction handle.
-	Transaction handle sql driver-dependent,
-	but on outside Transaction is visible as universal container 
+	Transaction handle is sql driver-dependent,
+	but outside Transaction is visible as universal container 
 	for any handler implementation.
 	
-	Transaction is value-based, internal data (handle) structure
-	is reference-counted.
+	Transaction object is value-based, internal data (handle) structure,
+	reference-counted.
 */
 class KEXI_DB_EXPORT Transaction : public QObject
 {
