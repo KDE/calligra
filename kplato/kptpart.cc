@@ -270,10 +270,14 @@ void KPTPart::addCommand(KCommand * cmd, bool execute)
 void KPTPart::slotCommandExecuted() {
     //kdDebug()<<k_funcinfo<<endl;
     setModified(true);
-    if (m_calculate)
-        m_view->slotUpdate(true);
-    else if (m_update)
+    if (config().behavior().calculationMode == KPTBehavior::Manual) {
         m_view->slotUpdate(false);
+    } else {
+        if (m_calculate)
+            m_view->slotUpdate(true);
+        else if (m_update)
+            m_view->slotUpdate(false);
+    }        
     m_update = m_calculate = false;
 }
 
