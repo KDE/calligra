@@ -432,11 +432,18 @@ if(k->key()==Key_Backspace) {
     if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);  
     }    else 
  */
- int elReturn;
+ int elReturn=0;
  if((k->ascii()>32)&&(k->ascii()<127))
   { 
-   if (theActiveElement!=0L) {
+   if (theActiveElement!=0L) 
      elReturn=theActiveElement->takeAsciiFromKeyb(k->ascii());
+  }
+    else   //Not ascii
+  {
+   if (theActiveElement!=0L) 
+     elReturn=theActiveElement->takeActionFromKeyb(k->key());  
+  }	
+
     if (elReturn==FCOM_TEXTCLONE)
       {
           BasicElement *newElement;
@@ -446,10 +453,7 @@ if(k->key()==Key_Backspace) {
 	  setActiveElement(newElement);
 	  warning("delete %p",b);
 	  delete b;
-
       }
-     }
-    }	
 
 //ChText(Blocks[getCurrent()]->getcont());
 //ChType(Blocks[getCurrent()]->gettype());
@@ -465,6 +469,9 @@ void KFormulaDocument::paintEvent( QPaintEvent *_ev, QWidget *paintGround )
     thePainter->setPen( black );
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
+    if(theActiveElement!=0L)
+     if(theActiveElement->type()==EL_TEXT)
+      thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
 }
 

@@ -2,6 +2,7 @@
 [KDE Desktop Entry]
 Name=KFormula
 Exec=kformula.bin --server
+Icon=kformula.xpm
 Comment=The Formula Editor
 MimeTypes=application/x-kformula
 RepoID=IDL:KFormula/Factory:1.0,

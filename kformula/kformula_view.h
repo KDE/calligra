@@ -103,7 +103,9 @@ protected:
     virtual void addTopRightIndex();
     virtual void addBottomRightIndex();
     virtual void indexList();
-    virtual void insertIndex(unsigned long i);
+
+protected slots:
+   void insertIndex(int i);
 };
 
 #endif

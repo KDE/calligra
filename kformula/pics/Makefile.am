@@ -7,6 +7,6 @@ data_DATA = kformula2-1.xpm mini-symbols.xpm enlarge.xpm \
     kformula3-2.xpm mini-root.xpm reduce.xpm kformula2-0.xpm \
     mini-bra.xpm mini-rootindex.xpm reduceall.xpm greek.xpm enlargeall.xpm \
     enlargenext.xpm par1.xbm par2.xbm par3.xbm index0.xpm index1.xpm index2.xpm \
-    index3.xpm
+    index3.xpm index.xpm
     
     

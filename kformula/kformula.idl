@@ -26,7 +26,7 @@ module KFormula
 	  slot void addTopRightIndex();
 	  slot void addBottomRightIndex();
           slot void indexList();
-	  slot void insertIndex(in unsigned long i);
+//	  slot void insertIndex(in unsigned long i);
 	};
 
 	interface Document : OPParts::Document

@@ -7,13 +7,8 @@
 */
 
 //#define RECT
-/*#include <qstring.h>
-#include <qpainter.h>
-#include <qcolor.h>
-*/
 #include <qrect.h> 
-/*#include <qfont.h>
-included in ...*/
+#include <qkeycode.h>
 #include "BasicElement.h" 
 #include "TextElement.h" 
 #include "formuladef.h"
@@ -21,15 +16,10 @@ included in ...*/
 TextElement::TextElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relation=-1,BasicElement *Next=0L,
 			    QString Content="") : BasicElement(Formula,Prev,Relation,Next,Content)
 {
-//warning("Utopiaaa");
-  /*
-   * I'll remove this code to use formula->getFont()
-   */
-     font.setFamily( "utopia" );
-     font.setPointSize( numericFont );
-     font.setWeight( QFont::Normal );
-     font.setItalic( FALSE ); 
-    position=content.length();
+ // warning("A new text is born.. ");
+  font=0L;  
+  position=content.length();
+
 }
 
 TextElement::~TextElement()
@@ -50,22 +40,31 @@ void TextElement::draw(QPoint drawPoint,int resolution=72)
   if ( content == "" )
     pen->drawRect(x+familySize.x(),y-5,10,10);
   else {
-/*
-* I MUST to implement a generalFont
-*/
-    pen->setFont(font);
-    pen->drawText(x+familySize.x(),y+offsetY,content); 
-    // if( active )
-    //          m_pDoc->setCursor(QRect(x+fm.width(content,m_pDoc->getPos()),y-oyu,2,oyu+oyd));
+
+//warning("Font for text");
+QFont formulaFont;
+  if(font!=0L)     
+    formulaFont=(*font);
+   else
+    {
+    formulaFont=formula->generalFont();
+    formulaFont.setPointSize(numericFont);
+    }
+  pen->setFont(formulaFont);
+  pen->drawText(x+familySize.x(),y+offsetY,content); 
+     if( beActive )
+     {
+      QFontMetrics fm(formulaFont);
+      formula->setCursor(QRect(x+fm.width(content,position),y+familySize.top()-1,
+	                         3,familySize.height()+2));
+     }
+
   }
 if(beActive)
   pen->setPen(blue);
   myArea=globalSize;
   myArea.moveBy(x,y);
-/*  globalArea=globalSize;
-  globalArea.moveBy(x,y);*/
 #ifdef RECT
- // pen->drawRect(myArea); 
   QRect  localArea;
   localArea=localSize;
   localArea.moveBy(x,y);  
@@ -73,7 +72,6 @@ if(beActive)
   localArea=familySize;
   localArea.moveBy(x,y);  
   pen->drawRect(localArea); 
-
 #endif
   drawIndexes(pen,resolution);
 
@@ -83,9 +81,18 @@ if(beActive)
 }
 
 void TextElement::checkSize()
-{
-//warning("T %p",this);
-  QFontMetrics fm(font);
+{ 
+//  warning("T %p",this);
+  QFont formulaFont;
+  if(font!=0L)     
+    formulaFont=(*font);
+   else
+    {
+    formulaFont=formula->generalFont();
+    formulaFont.setPointSize(numericFont);
+    }
+
+  QFontMetrics fm(formulaFont);
   QRect nextDimension; 
 
   if (next!=0L)
@@ -123,17 +130,30 @@ void TextElement::checkSize()
 
 int TextElement::takeAsciiFromKeyb(char ch) 
 {
-content.insert(content.length(),ch);
+content.insert(position,ch);
+position++;
 return 1;
 }     
 
 int TextElement::takeActionFromKeyb(int action)
 {
+
+if(action==Key_Backspace) 
+    {
+         if(position>0) { 
+	     position--;
+             content.remove(position,1);
+		   }
+    }
+ else 
+ if(action==Key_Delete) 
+     content.remove(position,1);   //Change this....
+
 return position;
 }
 
 void TextElement::setNumericFont(int value)
 {
  numericFont=value;
- font.setPointSize( numericFont );
+if(font!=0L) font->setPointSize( numericFont );
 }

@@ -67,8 +67,9 @@ class TextElement : public BasicElement
    
    /*  
     * Change "font"     
+    * Rewrite This, it's better to pass a QFont not a QFont*
     */
-   void setFont(QFont Font) {font=Font;};
+   void setFont(QFont *Font) {font=Font;};
    
    /*
     * usually call by keyPressedEvent() 
@@ -103,7 +104,7 @@ protected:
    /*
     * Font
     */
-   QFont font;
+   QFont *font;
 
   /*
    * StringCursor Internal position

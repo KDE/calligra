@@ -12,6 +12,14 @@ FormulaClass::FormulaClass(QPainter *p=0L)
 if(p==0L)
  p=new QPainter();
  thePainter=p; 
+     
+warning("General Settings");
+ theFont.setFamily( "utopia" );
+ theFont.setPointSize(32);
+ theFont.setWeight( QFont::Normal );
+ theFont.setItalic( FALSE ); 
+ theColor=black;
+warning("General Font OK");
 }
 
 void FormulaClass::setActiveElement(BasicElement* c)

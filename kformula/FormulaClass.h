@@ -21,19 +21,23 @@ public:
  FormulaClass(QPainter *p=0L);
  void setPainter(QPainter* p) { thePainter=p; }
  void setActiveElement(BasicElement* c); 
- void setCursor(QRect *r) { theCursor=r; }
- void setFont(QFont *f) { theFont=f;}
+ void setCursor(QRect r) { theCursor=r; }
+ void setFont(QFont f) { theFont=f;}
+ void setColor(QColor c) { theColor=c;}
  QPainter * painter() { return thePainter; } 
  BasicElement *activeElement() {return theActiveElement; } 
- QRect *cursor() {return theCursor;}
- QFont *defaultFont() {return theFont; }
+ QRect cursor() {return theCursor;}
+ QFont generalFont() {return theFont; }
+ QColor generalColor() {return theColor; }
+
 protected:
 // QPoint theClickPoint;
  QPainter *thePainter;
  BasicElement *theActiveElement;
  BasicElement *theFirstElement;
- QRect *theCursor;
- QFont *theFont;
+ QRect theCursor;
+ QFont theFont;
+ QColor theColor;
 };
 
 #endif		     

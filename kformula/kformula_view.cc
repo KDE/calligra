@@ -130,20 +130,20 @@ void KFormulaView::createGUI()
     tmp += "/kformula/pics/";
       mn_indexList = new QPopupMenu();
       pix.load(tmp+"index0.xpm");
-      mn_indexList->insertItem(pix,this,SLOT(addTopLeftIndex()));
+      mn_indexList->insertItem(pix,0);
       mn_indexList->insertSeparator();
       pix.load(tmp+"index1.xpm");
-      mn_indexList->insertItem(pix,this,SLOT(addBottomLeftIndex()));
+      mn_indexList->insertItem(pix,1);
       mn_indexList->insertSeparator();
       pix.load(tmp+"index2.xpm");
-      mn_indexList->insertItem(pix,this,SLOT(addTopRightIndex()));
+      mn_indexList->insertItem(pix,2);
       mn_indexList->insertSeparator();
       pix.load(tmp+"index3.xpm");
-      mn_indexList->insertItem(pix,this,"addBottomRightIndex");
+      mn_indexList->insertItem(pix,3);
       mn_indexList->setMouseTracking(true);
       mn_indexList->setCheckable(false);
 
-//    QObject::connect(mn_indexList,SIGNAL(activated(int)),this,SLOT(insertIndex(unsigned long)));
+    QObject::connect(mn_indexList,SIGNAL(activated(int)),this,SLOT(insertIndex(int)));
 
     m_vToolBarFactory = m_vPartShell->toolBarFactory();
     if ( !CORBA::is_nil( m_vToolBarFactory ) ) {
@@ -368,7 +368,7 @@ void KFormulaView::indexList()
   QPoint pnt(QCursor::pos());
   mn_indexList->popup(pnt);  
 }
-void KFormulaView::insertIndex(unsigned long i)
+void KFormulaView::insertIndex(int i)
 {
     debug("index %i",i);
     m_pDoc->addIndex(i);
