@@ -38,6 +38,7 @@
 // prototypes (sort alphabetically)
 bool kspreadfunc_acos( KSContext& context );
 bool kspreadfunc_acosh( KSContext& context );
+bool kspreadfunc_acot( KSContext& context );
 bool kspreadfunc_asinh( KSContext& context );
 bool kspreadfunc_asin( KSContext& context );
 bool kspreadfunc_atan( KSContext& context );
@@ -60,6 +61,7 @@ void KSpreadRegisterTrigFunctions()
 
   repo->registerFunction( "ACOS",   kspreadfunc_acos );
   repo->registerFunction( "ACOSH",  kspreadfunc_acosh );
+  repo->registerFunction( "ACOT",  kspreadfunc_acot );
   repo->registerFunction( "ASIN",   kspreadfunc_asin );
   repo->registerFunction( "ASINH",  kspreadfunc_asinh );
   repo->registerFunction( "ATAN",   kspreadfunc_atan );
@@ -207,6 +209,29 @@ bool kspreadfunc_acos( KSContext& context )
 
   return true;
 }
+
+bool kspreadfunc_acot( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "acot", true ) )
+    return false;
+
+  double val=0.0;
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
+
+
+  context.setValue( new KSValue( M_PI/2 - atan( val ) ) );
+
+  return true;
+}
+
 
 // Function: asinh
 bool kspreadfunc_asinh( KSContext& context )

@@ -21,6 +21,21 @@
     </Function>
 
     <Function>
+      <Name>ACOT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACOT() function returns the inverse cotangent of a number.</Text>
+	<Syntax>ACOT(Float)</Syntax>
+	<Example>ACOT(0) equals 1.57079633</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>SIN</Name>
       <Type>Float</Type>
       <Parameter>
