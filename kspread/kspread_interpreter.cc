@@ -623,6 +623,39 @@ static bool kspreadfunc_variante( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_mult_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_mult_helper( context, (*it)->listValue(), result ) )
+	return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      result *= (*it)->doubleValue();
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_mult( KSContext& context )
+{
+  double result = 1.0;
+  bool b = kspreadfunc_mult_helper( context, context.value()->listValue(), result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -653,6 +686,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "radian", new KSValue( new KSBuiltinFunction( module, "radian", kspreadfunc_radian ) ) );
   module->addObject( "average", new KSValue( new KSBuiltinFunction( module, "average", kspreadfunc_average ) ) );
   module->addObject( "variante", new KSValue( new KSBuiltinFunction( module, "variante", kspreadfunc_variante) ) );
+  module->addObject( "mult", new KSValue( new KSBuiltinFunction( module, "mult", kspreadfunc_mult) ) );
 
   return module;
 }

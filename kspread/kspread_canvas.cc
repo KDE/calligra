@@ -961,7 +961,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	// TODO: Choose the correct editor here!
 	  {
 	  m_pEditor = new KSpreadTextEditor( cell, this );
-	  setEditorActivate(true);
+	  if ( _ev->ascii() == '=' )
+	  	{
+	  	setEditorActivate(true);
+	  	}
 	  }
 	int w = cell->width( m_iMarkerColumn, this );
 	int h = cell->height( m_iMarkerRow, this );

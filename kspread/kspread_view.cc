@@ -55,6 +55,7 @@
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 #include "kspread_view.h"
+#include "kspread_dlg_formula.h"
 
 /*****************************************************************************
  *
@@ -655,41 +656,17 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, ( wstr = Q2C( i18n( "Insert Chart" ) ) ), -1 );
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
-
   //laurent
 
   m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarMath->setFullWidth(false);
   
   OpenPartsUI::StrList math;
-  math.length( 26 );
-  math[0] = CORBA::string_dup( "cos" );
-  math[1] = CORBA::string_dup( "sin" );
-  math[2] = CORBA::string_dup( "tan" );
-  math[3] = CORBA::string_dup( "acos" );
-  math[4] = CORBA::string_dup( "asin" );
-  math[5] = CORBA::string_dup( "atan" );
-  math[6] = CORBA::string_dup( "sqrt" );
-  math[7] = CORBA::string_dup( "sum" );
-  math[8] = CORBA::string_dup( "ln" );
-  math[9] = CORBA::string_dup( "log" );
-  math[10] = CORBA::string_dup( "exp" );
-  math[11] = CORBA::string_dup( "fabs" );
-  math[12] = CORBA::string_dup( "floor" );
-  math[13] = CORBA::string_dup( "ceil" );
-  math[14] = CORBA::string_dup( "max" );
-  math[15] = CORBA::string_dup( "min" );
-  math[16] = CORBA::string_dup( "cosh" );
-  math[17] = CORBA::string_dup( "sinh" );
-  math[18] = CORBA::string_dup( "tanh" );
-  math[19] = CORBA::string_dup( "acosh" );
-  math[20] = CORBA::string_dup( "asinh" );
-  math[21] = CORBA::string_dup( "atanh" );
-  math[22] = CORBA::string_dup( "degree" );
-  math[23] = CORBA::string_dup( "radian" );
-  math[24] = CORBA::string_dup( "average" );
-  math[25] = CORBA::string_dup( "variante" );
-
+  math.length( 4 );
+  math[0] = CORBA::string_dup( "sum" );
+  math[1] = CORBA::string_dup( "cos" );
+  math[2] = CORBA::string_dup( "sqrt" );
+  math[3] = CORBA::string_dup( "Others.." );
   m_idComboMath = m_vToolBarMath->insertCombo( math, 1, false, SIGNAL( activated( const QString & ) ), this,
 					       "formulaselection", true, ( wstr = Q2C( i18n( "Formula") ) ),
 					       80,-1, OpenPartsUI::AtBottom );
@@ -930,44 +907,55 @@ void KSpreadView::fontSelected( const CORBA::WChar *_font )
 
 void KSpreadView::formulaselection( const CORBA::WChar *_math )
 {
-    if ( m_pTable != 0L )
-    {
-     	QString name_function;
-     	QString string;
-     	int pos;
-     	string="";
-     		
-     	if(C2Q(_math) =="variante" || C2Q(_math) =="average" || C2Q(_math) =="sum" || C2Q(_math) =="max" || C2Q(_math) =="min")
-	{
-	    string=":";
-	}
-     	if(editWidget()->isActivate() )
-	{
-	
-	
-	    name_function= C2Q( _math ) + "(" + string + ")";
-	    //last position of cursor + length of function +1 "("
-	
-	    pos=editWidget()->cursorPosition()+ C2Q( _math ).length()+1;
-	    editWidget()->setText( editWidget()->text().insert(editWidget()->cursorPosition(),name_function) );
-	    editWidget()->setFocus();
-	    editWidget()->setCursorPosition(pos);
-	}
-     	if(m_pCanvas->pointeur() != 0)
-	{
-	    if(m_pCanvas->EditorisActivate())
-	    {
-		name_function= C2Q( _math ) + "(" + string + ")";
-		pos=m_pCanvas->posEditor()+ C2Q( _math ).length()+1;
-		m_pCanvas->setEditor(m_pCanvas->editEditor().insert(m_pCanvas->posEditor(),name_function) );
-	    	m_pCanvas->focusEditor();
-	    	m_pCanvas->setPosEditor(pos);
-	    }
-	}
-     	
-    }
 
- }
+
+    if ( m_pTable != 0L )
+    	{
+     	if(C2Q(_math)=="Others..")
+     	    {
+     	    if(editWidget()->isActivate()|| ((m_pCanvas->pointeur() != 0)&&m_pCanvas->EditorisActivate()))
+     	    	{
+     	    	KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula" );
+            	dlg->show();
+            	}
+            }
+        else
+            {
+     	    QString name_function;
+     	    QString string;
+     	    int pos;
+     	    string="";
+     	    	
+     	    if( C2Q(_math) =="sum" )
+		{
+	    	string=":";
+		}
+            if(editWidget()->isActivate() )
+		{
+		
+		name_function= C2Q( _math ) + "(" + string + ")";
+	    	//last position of cursor + length of function +1 "("
+		pos=editWidget()->cursorPosition()+ C2Q( _math ).length()+1;
+	    	editWidget()->setText( editWidget()->text().insert(editWidget()->cursorPosition(),name_function) );
+	    	editWidget()->setFocus();
+	    	editWidget()->setCursorPosition(pos);
+		}
+            if(m_pCanvas->pointeur() != 0)
+		{
+	    	if(m_pCanvas->EditorisActivate())
+	    		{
+			name_function= C2Q( _math ) + "(" + string + ")";
+			pos=m_pCanvas->posEditor()+ C2Q( _math ).length()+1;
+			m_pCanvas->setEditor(m_pCanvas->editEditor().insert(m_pCanvas->posEditor(),name_function) );
+	    		m_pCanvas->focusEditor();
+	    		m_pCanvas->setPosEditor(pos);
+	  		}
+		}
+     	
+          }
+  	}
+
+}
 
 
 void KSpreadView::fontSizeSelected( const CORBA::WChar *_size )
