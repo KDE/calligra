@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +24,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#include <kdialogbase.h>
 
 #include "qframe.h"
 #include "qgroupbox.h"
@@ -96,12 +97,12 @@ protected:
 };
 
 
-class VTextOptionsWidget : public QFrame
+class VTextOptionsWidget : public KDialogBase
 {
 	Q_OBJECT
 
 public:
-	VTextOptionsWidget( VTextTool* tool, QWidget* parent = 0L );
+	VTextOptionsWidget( VTextTool* tool, QWidget *parent );
 	~VTextOptionsWidget();
 
 	void setFont( const QFont& font );
@@ -153,10 +154,7 @@ public:
 	virtual QString icon() { return "14_text"; }
 
 	virtual QString contextHelp();
-	virtual QWidget* optionsWidget()
-	{
-		return m_optionsWidget;
-	}
+	virtual bool showDialog() const;
 
 	virtual void activate();
 	virtual void deactivate();

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -98,8 +97,7 @@ ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
 		a = int( ( dy <= 0 ? r : VGlobal::twopi - r ) / VGlobal::twopi * 360. );
 	}
 
-	emit changed( a, ( int
-) fd, m_parent->isTranslucent() );
+	emit changed( a, ( int ) fd, m_parent->isTranslucent() );
 }
 
 void
@@ -313,16 +311,16 @@ ShadowWidget::updatePreview()
 	m_translucent->setEnabled( ok );
 }
 
-VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
-		: QFrame( parent, "TextOptionsWidget" ), m_tool( tool )
+VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
+	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel ), m_tool( tool )
 {
-	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-	setFrameStyle( Box | Sunken );
-	QVBoxLayout* mainLayout = new QVBoxLayout( this );
+	//setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+	//setFrameStyle( Box | Sunken );
+	QWidget *base = new QWidget( this );
+	QVBoxLayout* mainLayout = new QVBoxLayout( base );
 	mainLayout->setMargin( 3 );
 
-	mainLayout->add
-	( m_tabWidget = new QTabWidget( this ) );
+	mainLayout->add( m_tabWidget = new QTabWidget( base ) );
 
 	m_tabWidget->setFont( QFont( "helvetica" , 8 ) );
 
@@ -390,6 +388,9 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	connect( m_textEditor, SIGNAL( textChanged( const QString& ) ), this, SLOT( textChanged( const QString& ) ) );
 	connect( m_editBasePath, SIGNAL( clicked() ), this, SLOT( editBasePath() ) );
 	connect( m_convertToShapes, SIGNAL( clicked() ), this, SLOT( convertToShapes() ) );
+
+	setMainWidget( base );
+	setFixedSize( baseSize() );
 }
 
 VTextOptionsWidget::~VTextOptionsWidget()
@@ -524,7 +525,7 @@ VTextOptionsWidget::shadowDistance()
 VTextTool::VTextTool( KarbonView* view, const char* name )
 		: VTool( view, name )
 {
-	m_optionsWidget = new VTextOptionsWidget( this );
+	m_optionsWidget = new VTextOptionsWidget( this, view );
 	m_text = 0L;
 	m_editedText = 0L;
 	registerTool( this );
@@ -968,6 +969,14 @@ VTextTool::VTextToCompositeCmd::unexecute()
 
 	m_executed = false;
 }
+
+bool
+VTextTool::showDialog() const
+{
+	m_optionsWidget->show();
+	return true;
+}
+
 
 #include "vtexttool.moc"
 

@@ -90,16 +90,19 @@ VShapeTool::mouseButtonRelease()
 
 	recalc();
 
-	VComposite* composite = shape( true );
-
-	if( composite )
+	if( showDialog() )
 	{
-		VShapeCmd* cmd = new VShapeCmd(
-			&view()->part()->document(),
-			name(), composite, icon() );
+		VComposite* composite = shape( true );
 
-		view()->part()->addCommand( cmd, true );
-		view()->selectionChanged();
+		if( composite )
+		{
+			VShapeCmd* cmd = new VShapeCmd(
+				&view()->part()->document(),
+				name(), composite, icon() );
+
+			view()->part()->addCommand( cmd, true );
+			view()->selectionChanged();
+		}
 	}
 
 	m_isSquare = false;

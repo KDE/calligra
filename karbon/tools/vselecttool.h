@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,26 +20,25 @@
 #ifndef __VSELECTTOOL_H__
 #define __VSELECTTOOL_H__
 
-#include <qbuttongroup.h>
-
+#include <kdialogbase.h>
 #include <klocale.h>
 
 #include "vtool.h"
 
 class KarbonView;
 
-class VSelectOptionsWidget : public QButtonGroup
+class VSelectOptionsWidget : public KDialogBase
 {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		VSelectOptionsWidget( KarbonView* view );
+public:
+	VSelectOptionsWidget( KarbonView* view );
 
-	public slots:
-		void modeChange( int mode );
+public slots:
+	void modeChange( int mode );
 
-	private:
-		KarbonView*     m_view;
+private:
+	KarbonView*     m_view;
 }; // VSelectOptionsWidget
 
 class VSelectTool : public VTool
@@ -51,7 +49,7 @@ public:
 
 	virtual void activate();
 
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 	virtual QString name() { return i18n( "Select Tool" ); }
 	virtual QString icon() { return "14_select"; }
 	virtual QString category() { return "manipulation"; }
@@ -94,7 +92,7 @@ private:
 	// A list of temporary objects:
 	VObjectList m_objects;
 	// The options widget.
-	QWidget*    m_optionsWidget;
+	VSelectOptionsWidget	*m_optionsWidget;
 };
 
 #endif

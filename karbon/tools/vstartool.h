@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,9 +20,8 @@
 #ifndef __VSTARTOOL_H__
 #define __VSTARTOOL_H__
 
-#include <qgroupbox.h>
-
 #include <klocale.h>
+#include <kdialogbase.h>
 
 #include "vshapetool.h"
 
@@ -33,7 +31,7 @@ class KIntSpinBox;
 class KComboBox;
 class KarbonPart;
 
-class VStarOptionsWidget : public QGroupBox
+class VStarOptionsWidget : public KDialogBase
 {
 Q_OBJECT
 public:
@@ -72,7 +70,7 @@ public:
 	VStarTool( KarbonView* view );
 	virtual ~VStarTool();
 
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 	virtual QString name() { return i18n( "Star Tool" ); }
 	virtual QString icon() { return "14_star"; }
 

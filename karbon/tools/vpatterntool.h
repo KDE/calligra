@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +20,7 @@
 #ifndef __VPATTERNTOOL_H__
 #define __VPATTERNTOOL_H__
 
-#include <qframe.h>
+#include <kdialogbase.h>
 
 #include "vtool.h"
 #include "vpattern.h"
@@ -31,7 +30,7 @@ class QToolButton;
 class KarbonView;
 class KoIconChooser;
 
-class VPatternWidget : public QFrame
+class VPatternWidget : public KDialogBase
 {
 Q_OBJECT
 
@@ -69,7 +68,7 @@ public:
 	virtual QString name() { return i18n( "Pattern Tool" ); }
 	virtual QString icon() { return "14_pattern"; }
 	virtual QString contextHelp();
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 
 protected:
 	virtual void draw();

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +18,7 @@
 */
 
 #include <qlabel.h>
+#include <qgroupbox.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -32,10 +32,11 @@
 
 
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
+	: KDialogBase( parent, name, true, i18n( "Insert star" ), Ok | Cancel ), m_part( part )
 {
-	new QLabel( i18n( "Type:" ), this );
-	m_type = new KComboBox( false, this );
+	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "" ), this );
+	new QLabel( i18n( "Type:" ), group );
+	m_type = new KComboBox( false, group );
 	m_type->insertItem( i18n( "Star Outline" ), VStar::star_outline );
 	m_type->insertItem( i18n( "Spoke" ), VStar::spoke );
 	m_type->insertItem( i18n( "Wheel" ), VStar::wheel );
@@ -46,33 +47,36 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
-	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
-	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), group );
+	m_outerR = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	connect( m_outerR, SIGNAL( valueChanged( double ) ), this, SLOT( setOuterRadius( double ) ) );
 
-	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
-	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
+	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), group );
+	m_innerR = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
 
 	refreshUnit();
 
-	new QLabel( i18n( "Edges:" ), this );
-	m_edges = new KIntSpinBox( this );
+	new QLabel( i18n( "Edges:" ), group );
+	m_edges = new KIntSpinBox( group );
 	m_edges->setMinValue( 3 );
 	connect( m_edges, SIGNAL( valueChanged( int ) ), this, SLOT( setEdges( int ) ) );
 
-	new QLabel( i18n( "Inner angle:" ), this );
-	m_innerAngle = new KIntSpinBox( this );
+	new QLabel( i18n( "Inner angle:" ), group );
+	m_innerAngle = new KIntSpinBox( group );
 	m_innerAngle->setMinValue( 0 );
 	m_innerAngle->setMaxValue( 360 );
 
-	new QLabel( i18n( "Roundness:" ), this );
-	m_roundness = new KDoubleNumInput( 0.0, this );
+	new QLabel( i18n( "Roundness:" ), group );
+	m_roundness = new KDoubleNumInput( 0.0, group );
 	m_roundness->setRange( 0.0, 1.0, 0.05 );
 
 	typeChanged( VStar::star_outline );
 
-	setInsideMargin( 4 );
-	setInsideSpacing( 2 );
+	group->setInsideMargin( 4 );
+	group->setInsideSpacing( 2 );
+
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 void
@@ -218,6 +222,12 @@ VStarTool::shape( bool interactive ) const
 				m_optionsWidget->edges(),
 				m_d2, m_optionsWidget->innerAngle(),
 				m_optionsWidget->roundness(), (VStar::VStarType)m_optionsWidget->type() );
+}
+
+bool
+VStarTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 
 #include "vstartool.moc"

@@ -24,8 +24,8 @@
 #include <qcursor.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 
-#include <klocale.h>
 #include <koPoint.h>
 #include <koRect.h>
 #include <kdebug.h>
@@ -40,16 +40,24 @@
 #include <visitors/vselectiondesc.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
-	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ) ), m_view( view )
+	: KDialogBase( 0L, "", true, i18n( "Insert star" ), Ok | Cancel ), m_view( view )
 {
-	new QRadioButton( i18n( "Select in current layer" ), this );
-	new QRadioButton( i18n( "Select in visible layers" ), this );
-	new QRadioButton( i18n( "Select in selected layers" ), this );
+	QButtonGroup *group = new QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
+
+	new QRadioButton( i18n( "Select in current layer" ), group );
+	new QRadioButton( i18n( "Select in visible layers" ), group );
+	new QRadioButton( i18n( "Select in selected layers" ), group );
 	
-	setRadioButtonExclusive( true );
-	setButton( m_view->part()->document().selectionMode() );
+	group->setRadioButtonExclusive( true );
+	group->setButton( m_view->part()->document().selectionMode() );
 	
 	connect( this, SIGNAL( clicked( int ) ), this, SLOT( modeChange( int ) ) );
+
+	group->setInsideMargin( 4 );
+	group->setInsideSpacing( 2 );
+
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 } // VSelectOptionsWidget::VSelectOptionsWidget
 
 void VSelectOptionsWidget::modeChange( int mode )
@@ -421,6 +429,12 @@ VSelectTool::recalc()
 
 		delete( cmd );
 	}
+}
+
+bool
+VSelectTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 
 #include "vselecttool.moc"

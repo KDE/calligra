@@ -36,10 +36,18 @@
 
 #include <kdebug.h>
 
+VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient *gradient )
+	: KDialogBase( 0L, "", true, i18n( "" ), Ok | Cancel )
+{
+	m_gradientWidget = new VGradientTabWidget( *gradient, KarbonFactory::rServer(), this );
+	setMainWidget( m_gradientWidget );
+	setFixedSize( baseSize() );
+}
+
 VGradientTool::VGradientTool( KarbonView* view, const char *name )
 	: VTool( view, name )
 {
-	m_optionsWidget = new VGradientTabWidget( m_gradient, KarbonFactory::rServer() );
+	m_optionsWidget = new VGradientOptionsWidget( &m_gradient );
 	registerTool( this );
 }
 
@@ -65,12 +73,6 @@ VGradientTool::contextHelp()
 	s += i18n( "<i>Double click</i> on a color point to edit it.<br>" );
 	s += i18n( "<i>Right click</i> on a color point to remove it.</qt>" );
 	return s;
-}
-
-QWidget*
-VGradientTool::optionsWidget()
-{
-	return m_optionsWidget;
 }
 
 void
@@ -113,7 +115,7 @@ VGradientTool::mouseButtonRelease()
 		p.setX( first().x() + 1 );
 	m_gradient.setVector( p );
 
-	if( m_optionsWidget->target() == VGradientTabWidget::FILL )
+	if( m_optionsWidget->gradientWidget()->target() == VGradientTabWidget::FILL )
 	{
 		VFill fill;
 		fill.gradient() = m_gradient;
@@ -150,13 +152,13 @@ VGradientTool::mouseDragRelease()
 	m_gradient.setFocalPoint( fp );
 	m_gradient.setVector( lp );
 
-	if( m_optionsWidget->target() == VGradientTabWidget::FILL )
+	if( m_optionsWidget->gradientWidget()->target() == VGradientTabWidget::FILL )
 	{
 		VFill fill;
 		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
 		VColor c = fill.color();
-		c.setOpacity( m_optionsWidget->opacity() );
+		c.setOpacity( m_optionsWidget->gradientWidget()->opacity() );
 		fill.setColor( c, false );
 		view()->part()->addCommand(
 			new VFillCmd( &view()->part()->document(), fill, "14_gradient" ), true );
@@ -174,5 +176,11 @@ VGradientTool::cancel()
 	// Erase old object:
 	if( isDragging() )
 		draw();
+}
+
+bool
+VGradientTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 

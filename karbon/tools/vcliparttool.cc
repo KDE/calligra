@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,13 +42,14 @@
 #include <render/vpainter.h>
 
 VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent )
-		: QFrame( parent ), m_view( view )
+	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel ), m_view( view )
 {
 	KIconLoader il;
 
-	QVBoxLayout* layout = new QVBoxLayout( this );
-	layout->addWidget( m_clipartChooser = new KoIconChooser( QSize( 32, 32 ), this ) );
-	layout->addWidget( m_buttonGroup = new QHButtonGroup( this ) );
+	QWidget *base = new QWidget( this );
+	QVBoxLayout* layout = new QVBoxLayout( base );
+	layout->addWidget( m_clipartChooser = new KoIconChooser( QSize( 32, 32 ), base ) );
+	layout->addWidget( m_buttonGroup = new QHButtonGroup( base ) );
 	QToolButton* m_addClipartButton;
 	m_buttonGroup->insert( m_addClipartButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_importClipartButton = new QToolButton( m_buttonGroup ) );
@@ -66,7 +66,7 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 	m_importClipartButton->setEnabled( false );
 	m_deleteClipartButton->setEnabled( false );
 
-	setFrameStyle( Box | Sunken );
+	//setFrameStyle( Box | Sunken );
 	layout->setMargin( 3 );
 
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
@@ -80,6 +80,8 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 		m_clipartChooser->addItem( item );
 
 	m_clipartItem = ( clipartItems->first() ) ? clipartItems->first()->clone() : 0;
+
+	setMainWidget( base );
 }
 
 VClipartWidget::~VClipartWidget()
@@ -415,6 +417,12 @@ VClipartTool::VClipartCmd::unexecute()
 	m_clipart->setState( VObject::deleted );
 
 	m_executed = false;
+}
+
+bool
+VClipartTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 
 #include "vcliparttool.moc"

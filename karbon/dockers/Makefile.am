@@ -15,7 +15,6 @@ noinst_HEADERS = \
 	vdocker.h \
 	vcolordocker.h \
 	vstrokedocker.h \
-	vtooloptionsdocker.h \
 	vtransformdocker.h \
 	vdocumentdocker.h
 
@@ -24,7 +23,6 @@ libkarbondockers_la_SOURCES = \
 	vdocker.cc \
 	vcolordocker.cc \
 	vstrokedocker.cc \
-	vtooloptionsdocker.cc \
 	vtransformdocker.cc \
 	vdocumentdocker.cc
 

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,9 +21,8 @@
 #define __VRECTANGLETOOL_H__
 
 
-#include <qgroupbox.h>
-
 #include <klocale.h>
+#include <kdialogbase.h>
 
 #include "vshapetool.h"
 
@@ -32,23 +30,23 @@ class KarbonPart;
 class QLabel;
 class KoUnitDoubleSpinBox;
 
-
 class VRectangleTool : public VShapeTool
 {
 public:
 	VRectangleTool( KarbonView* view );
 	virtual ~VRectangleTool();
 
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Rectangle Tool" ); }
 	virtual QString icon() { return "14_rectangle"; }
 
 	virtual VComposite* shape( bool interactive = false ) const;
 
-    void refreshUnit();
+	void refreshUnit();
+
+	virtual bool showDialog() const;
 
 private:
-	class VRectangleOptionsWidget : public QGroupBox
+	class VRectangleOptionsWidget : public KDialogBase
 	{
 	public:
 		VRectangleOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
@@ -67,7 +65,7 @@ private:
 		QLabel				*m_widthLabel;
 	};
 
-	VRectangleOptionsWidget* m_optionsWidget;
+	VRectangleOptionsWidget *m_optionWidget;
 };
 
 #endif

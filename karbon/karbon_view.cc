@@ -56,7 +56,6 @@
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"
-#include "vtooloptionsdocker.h"
 #include "vtransformdocker.h"
 
 // ToolBars
@@ -88,7 +87,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 {
 	m_toolbox = 0L;
 	m_currentTool = 0L;
-	m_toolOptionsDocker = 0L;
 	m_documentDocker = 0L;
 	m_toolFactory = 0L;
 
@@ -197,7 +195,6 @@ KarbonView::registerTool( VTool *tool )
 		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
 		if( !m_toolFactory )
 			m_toolFactory = new VToolFactory( this );
-		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 	}
 	m_toolbox->registerTool( tool );
 	m_currentTool = tool;
@@ -233,8 +230,6 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 
 			m_documentDocker = new VDocumentDocker( this );
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
-			m_toolOptionsDocker = new VToolOptionsDocker( this );
-			m_toolOptionsDocker->show();
 			// set selectTool by default
 			m_toolbox->slotPressButton( 0 );
 		}
@@ -256,7 +251,6 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	if( shell() && container == m_toolbox )
 	{
 		delete m_toolbox;
-		delete m_toolOptionsDocker;
 		delete m_documentDocker;
 		m_toolbox = 0L;
 		delete m_toolFactory;
@@ -639,9 +633,13 @@ KarbonView::slotActiveToolChanged( VTool *tool )
 	if( m_currentTool )
 		m_currentTool->deactivate();
 
-	m_currentTool = tool;
-
-	m_currentTool->activateAll();
+	if( m_currentTool == tool )
+		m_currentTool->showDialog();
+	else
+	{
+		m_currentTool = tool;
+		m_currentTool->activateAll();
+	}
 
 	m_canvas->repaintAll();
 }
@@ -795,15 +793,6 @@ KarbonView::viewColorManager()
 }
 
 void
-KarbonView::viewToolOptions()
-{
-	if( m_toolOptionsDocker->isVisible() == false )
-	{
-		m_toolOptionsDocker->show();
-	}
-}
-
-void
 KarbonView::viewStrokeDocker()
 {
 	if( m_strokeDocker->isVisible() == false )
@@ -933,9 +922,6 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-	new KAction(
-		i18n( "&Tool Options" ), "tooloptions", 0, this,
-		SLOT( viewToolOptions() ), actionCollection(), "view_tool_options" );
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );

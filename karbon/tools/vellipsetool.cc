@@ -35,10 +35,11 @@
 
 
 VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent, const char *name )
-	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
+	: KDialogBase( parent, name, true, i18n( "Insert ellipse" ), Ok | Cancel ), m_part( part )
 {
-	new QLabel( i18n( "Type:" ), this );
-	m_type = new KComboBox( false, this );
+	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "" ), this );
+	new QLabel( i18n( "Type:" ), group );
+	m_type = new KComboBox( false, group );
 	m_type->insertItem( i18n( "Full" ), VEllipse::full );
 	m_type->insertItem( i18n( "Section" ), VEllipse::section );
 	m_type->insertItem( i18n( "Pie" ), VEllipse::cut );
@@ -46,26 +47,30 @@ VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent,
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
-	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
-	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	m_widthLabel = new QLabel( i18n( "Width:" ), group );
+	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	m_heightLabel = new QLabel( i18n( "Height:" ), group );
+	m_height = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 
-	new QLabel( i18n( "Start angle:" ), this );
-	m_startAngle = new KIntSpinBox( this );
+	new QLabel( i18n( "Start angle:" ), group );
+	m_startAngle = new KIntSpinBox( group );
 	m_startAngle->setMinValue( 0 );
 	m_startAngle->setMaxValue( 360 );
 
-	new QLabel( i18n( "End angle:" ), this );
-	m_endAngle = new KIntSpinBox( this );
+	new QLabel( i18n( "End angle:" ), group );
+	m_endAngle = new KIntSpinBox( group );
 	m_endAngle->setMinValue( 0 );
 	m_endAngle->setMaxValue( 360 );
 
 	typeChanged( VEllipse::full );
 
 	refreshUnit();
-	setInsideMargin( 4 );
-	setInsideSpacing( 2 );
+
+	group->setInsideMargin( 4 );
+	group->setInsideSpacing( 2 );
+
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 void
@@ -248,6 +253,12 @@ VEllipseTool::cancel()
 
 	m_startAngle = m_endAngle = 0;
 	m_state = normal;
+}
+
+bool
+VEllipseTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 
 #include "vellipsetool.moc"

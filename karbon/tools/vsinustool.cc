@@ -34,21 +34,27 @@
 
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
+	: KDialogBase( parent, name, true, i18n( "Insert sinus" ), Ok | Cancel ), m_part( part )
 {
+	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "" ), this );
+
 	// add width/height-input:
-	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
-	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	m_widthLabel = new QLabel( i18n( "Width:" ), group );
+	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	m_heightLabel = new QLabel( i18n( "Height:" ), group );
+	m_height = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 
 	refreshUnit();
 
-	new QLabel( i18n( "Periods:" ), this );
-	m_periods = new KIntSpinBox( this );
+	new QLabel( i18n( "Periods:" ), group );
+	m_periods = new KIntSpinBox( group );
 	m_periods->setMinValue( 1 );
-	setInsideMargin( 4 );
-	setInsideSpacing( 2 );
+
+	group->setInsideMargin( 4 );
+	group->setInsideSpacing( 2 );
+
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 double
@@ -133,5 +139,11 @@ VSinusTool::shape( bool interactive ) const
 				m_d1,
 				m_d2,
 				m_optionsWidget->periods() );
+}
+
+bool
+VSinusTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 

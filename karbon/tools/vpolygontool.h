@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef __VPOLYGONTOOL_H__
 #define __VPOLYGONTOOL_H__
 
-#include <qgroupbox.h>
+#include <kdialogbase.h>
 
 #include "vshapetool.h"
 
@@ -35,7 +35,7 @@ public:
 	virtual ~VPolygonTool();
 
 	virtual QString name() { return i18n( "Polygon Tool" ); }
-	virtual QWidget *optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 	
 	virtual VComposite *shape( bool interactive = false ) const;
 
@@ -44,7 +44,7 @@ public:
 	virtual void arrowKeyReleased( Qt::Key );
 
 private:
-	class VPolygonOptionsWidget : public QGroupBox
+	class VPolygonOptionsWidget : public KDialogBase
 	{
 	public:
 		VPolygonOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );

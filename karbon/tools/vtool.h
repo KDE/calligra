@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,10 +55,7 @@ public:
 	 */
 	virtual void deactivate() {}
 
-	/**
-	 * The options widget for this tool to show in a docker.
-	 */
-	virtual QWidget* optionsWidget() { return 0L; }
+	virtual bool showDialog() const { return false; }
 
 	/**
 	 * The name of the tool.

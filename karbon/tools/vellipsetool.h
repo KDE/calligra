@@ -20,7 +20,7 @@
 #ifndef __VELLIPSETOOL_H__
 #define __VELLIPSETOOL_H__
 
-#include <qgroupbox.h>
+#include <kdialogbase.h>
 
 #include "vshapetool.h"
 
@@ -32,7 +32,7 @@ class KarbonPart;
 class QLabel;
 class QWidget;
 
-class VEllipseOptionsWidget : public QGroupBox
+class VEllipseOptionsWidget : public KDialogBase
 {
 Q_OBJECT
 public:
@@ -69,7 +69,7 @@ public:
 
 	virtual QString name() { return i18n( "Ellipse Tool" ); }
 	virtual QString icon() { return "14_ellipse"; }
-	virtual QWidget *optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 
 	virtual VComposite *shape( bool interactive = false ) const;
 	void refreshUnit();

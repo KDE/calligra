@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +18,7 @@
 */
 
 #include <qlabel.h>
+#include <qgroupbox.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -32,30 +32,35 @@
 
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
+	: KDialogBase( parent, name, true, i18n( "Insert spiral" ), Ok | Cancel ), m_part(part)
 {
-	new QLabel( i18n( "Type:" ), this );
-	m_type = new KComboBox( false, this );
+	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+
+	new QLabel( i18n( "Type:" ), group );
+	m_type = new KComboBox( false, group );
 	m_type->insertItem( i18n( "Round" ), 0 );
 	m_type->insertItem( i18n( "Rectangular" ), 1 );
 
-	new QLabel( i18n( "Radius:" ), this );
-	m_radius = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	new QLabel( i18n( "Radius:" ), group );
+	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	refreshUnit();
-	new QLabel( i18n( "Segments:" ), this );
-	m_segments = new KIntSpinBox( this );
+	new QLabel( i18n( "Segments:" ), group );
+	m_segments = new KIntSpinBox( group );
 	m_segments->setMinValue( 1 );
-	new QLabel( i18n( "Fade:" ), this );
-	m_fade = new KDoubleNumInput( 0.0, this );
+	new QLabel( i18n( "Fade:" ), group );
+	m_fade = new KDoubleNumInput( 0.0, group );
 	m_fade->setRange( 0.0, 1.0, 0.05 );
 
-	new QLabel( i18n( "Orientation:" ), this );
-	m_clockwise = new KComboBox( false, this );
+	new QLabel( i18n( "Orientation:" ), group );
+	m_clockwise = new KComboBox( false, group );
 	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
 	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
 	
-	setInsideMargin( 4 );
-	setInsideSpacing( 2 );
+	group->setInsideMargin( 4 );
+	group->setInsideSpacing( 2 );
+
+	setMainWidget( group );
+	//setFixedSize( baseSize() );
 }
 
 double
@@ -184,5 +189,11 @@ VSpiralTool::shape( bool interactive ) const
 				m_optionsWidget->fade(),
 				m_optionsWidget->clockwise(),
 				m_d2, (VSpiral::VSpiralType)m_optionsWidget->type() );
+}
+
+bool
+VSpiralTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 

@@ -45,7 +45,6 @@ class KoRuler;
 
 class VColorDocker;
 class VDocumentDocker;
-class VToolOptionsDocker;
 
 class VFill;
 class VPainterFactory;
@@ -91,8 +90,6 @@ public:
 	virtual void print( KPrinter& printer );
 
 	KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
-
-	VToolOptionsDocker* toolOptionsDocker() const { return m_toolOptionsDocker; }
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
@@ -166,7 +163,6 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged( const KoPoint & = KoPoint() );
 	void viewColorManager();
-	void viewToolOptions();
 	void viewStrokeDocker();
 
 	// Toolbox dialogs.
@@ -221,7 +217,6 @@ private:
 	VColorDocker			*m_ColorManager;
 	VDocumentDocker			*m_documentDocker;
 	VStrokeDocker			*m_strokeDocker;
-	VToolOptionsDocker		*m_toolOptionsDocker;
 	VTransformDocker		*m_TransformDocker;
 
 	VSelectToolBar			*m_selectToolBar;

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +20,8 @@
 #ifndef __VROUNDRECTTOOL_H__
 #define __VROUNDRECTTOOL_H__
 
-
-#include <qgroupbox.h>
-
 #include <klocale.h>
+#include <kdialogbase.h>
 
 #include "vshapetool.h"
 
@@ -39,27 +36,16 @@ public:
 	VRoundRectTool( KarbonView* view );
 	virtual ~VRoundRectTool();
 
-	virtual QWidget *optionsWidget()
-	{
-		return m_optionsWidget;
-	}
-
-	virtual QString name()
-	{
-		return i18n( "Round Rectangle Tool" );
-	}
-
-	virtual QString icon()
-	{
-		return "14_roundrect";
-	}
+	virtual bool showDialog() const;
+	virtual QString name() { return i18n( "Round Rectangle Tool" ); }
+	virtual QString icon() { return "14_roundrect"; }
 
 	virtual VComposite* shape( bool interactive = false ) const;
 
 	void refreshUnit();
 
 private:
-	class VRoundRectOptionsWidget : public QGroupBox
+	class VRoundRectOptionsWidget : public KDialogBase
 	{
 	public:
 		VRoundRectOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );

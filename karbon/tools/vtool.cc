@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +27,6 @@
 #include "karbon_part.h"
 #include "kocontexthelp.h"
 #include "vtool.h"
-#include "vtooloptionsdocker.h"
 
 
 VTool::VTool( KarbonView *view, const char* ) : m_view( view )
@@ -54,7 +52,6 @@ VTool::registerTool( VTool *tool )
 void VTool::activateAll()
 {
 	refreshUnit();
-	view()->toolOptionsDocker()->manageTool( this );
 	QPixmap Icon = BarIcon( icon() );
 	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &Icon );
 	view()->statusMessage()->setText( statusText() );

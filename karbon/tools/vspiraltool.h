@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +20,7 @@
 #ifndef __VSPIRALTOOL_H__
 #define __VSPIRALTOOL_H__
 
-#include <qgroupbox.h>
-
+#include <kdialogbase.h>
 #include <klocale.h>
 
 #include "vshapetool.h"
@@ -39,7 +37,7 @@ public:
 	VSpiralTool( KarbonView *view );
 	virtual ~VSpiralTool();
 
-	virtual QWidget *optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 	virtual QString name() { return i18n( "Spiral Tool" ); }
 	virtual QString icon() { return "14_spiral"; }
 
@@ -50,7 +48,7 @@ public:
 	virtual void arrowKeyReleased( Qt::Key );
 
 private:
-	class VSpiralOptionsWidget : public QGroupBox
+	class VSpiralOptionsWidget : public KDialogBase
 	{
 	public:
 		VSpiralOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char* name = 0L );

@@ -20,6 +20,8 @@
 #ifndef __VGRADIENTTOOL_H__
 #define __VGRADIENTTOOL_H__
 
+#include <kdialogbase.h>
+
 #include "vtool.h"
 #include "vgradient.h"
 
@@ -36,7 +38,7 @@ public:
 	virtual QString name() { return i18n( "Gradient Tool" ); }
 	virtual QString icon() { return "14_gradient"; }
 	virtual QString contextHelp();
-	virtual QWidget* optionsWidget();
+	virtual bool showDialog() const;
 
 protected:
 	virtual void draw();
@@ -48,9 +50,17 @@ protected:
 	void cancel();
 
 private:
+	class VGradientOptionsWidget : public KDialogBase
+	{
+	public:
+		VGradientOptionsWidget( VGradient *gradient );
+		VGradientTabWidget *gradientWidget() { return m_gradientWidget; }
+	private:
+		VGradientTabWidget *m_gradientWidget;
+	};
 	VGradient            m_gradient;
 	KoPoint              m_current;
-	VGradientTabWidget*  m_optionsWidget;
+	VGradientOptionsWidget*  m_optionsWidget;
 };
 
 #endif

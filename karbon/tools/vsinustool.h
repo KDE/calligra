@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +20,8 @@
 #ifndef __VSINUSTOOL_H__
 #define __VSINUSTOOL_H__
 
+#include <kdialogbase.h>
 #include "vshapetool.h"
-#include <qwidget.h>
 
 class KoUnitDoubleSpinBox;
 class KIntSpinBox;
@@ -35,16 +34,16 @@ public:
 	VSinusTool( KarbonView *view );
 	virtual ~VSinusTool();
 
-	virtual QWidget *optionsWidget() { return m_optionsWidget; }
+	virtual bool showDialog() const;
 	virtual QString name() { return "Sinus Tool"; }
 	virtual QString icon() { return "14_sinus"; }
 
 	virtual VComposite *shape( bool interactive = false ) const;
 
-    void refreshUnit();
+	void refreshUnit();
 
 private:
-	class VSinusOptionsWidget : public QGroupBox
+	class VSinusOptionsWidget : public KDialogBase
 	{
 	public:
 		VSinusOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );

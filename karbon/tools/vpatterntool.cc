@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,13 +41,14 @@
 #include <commands/vfillcmd.h>
 
 VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent )
-		: QFrame( parent ), m_tool( tool )
+	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel )
 {
 	KIconLoader il;
 
-	QVBoxLayout* layout = new QVBoxLayout( this );
-	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), this ) );
-	layout->addWidget( m_buttonGroup = new QHButtonGroup( this ) );
+	QWidget *base = new QWidget( this );
+	QVBoxLayout* layout = new QVBoxLayout( base );
+	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), base ) );
+	layout->addWidget( m_buttonGroup = new QHButtonGroup( base ) );
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );
 	m_patternChooser->setFixedSize( 180, 120 );
@@ -61,7 +61,7 @@ VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWi
 	m_importPatternButton->setEnabled( true );
 	m_deletePatternButton->setEnabled( false );
 
-	setFrameStyle( Box | Sunken );
+	//setFrameStyle( Box | Sunken );
 	layout->setMargin( 3 );
 
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
@@ -71,6 +71,8 @@ VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWi
 	for( item = patterns->first(); item; item = patterns->next() )
 		m_patternChooser->addItem( item );
 	m_pattern = (VPattern*)patterns->first();
+
+	setMainWidget( base );
 } // VPatternWidget::VPatternWidget
 
 VPatternWidget::~VPatternWidget()
@@ -238,5 +240,12 @@ VPatternTool::cancel()
 	if( isDragging() )
 		draw();
 }
+
+bool
+VPatternTool::showDialog() const
+{
+	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
 
 #include "vpatterntool.moc"
