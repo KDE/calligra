@@ -153,8 +153,9 @@ void KexiView::initActions()
 
 	m_actionRelations = new KAction(i18n("Table Relations"), "relation", Key_F8, actionCollection(), "relations");
 	connect(m_actionRelations, SIGNAL(activated()), this, SLOT(slotShowRelations()));
+	connect(m_project, SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
 
-	m_actionRelations->setEnabled(false);
+	m_actionRelations->setEnabled(m_project->dbIsAvaible());
 
 }
 

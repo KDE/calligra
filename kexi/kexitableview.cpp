@@ -346,7 +346,7 @@ KexiTableView::~KexiTableView()
         delete m_pBufferPm;
 }
 /*
-void KexiTableView::setColumn(int col, QString name, ColumnType type, bool changeable=false)
+void KexiTableView::setColumn(int col, QString name, ColumnTyFpe type, bool changeable=false)
 {
 	(m_pColumnTypes->at(col)) = type;
 	m_pTopHeader->setLabel(col, name);
@@ -705,6 +705,10 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		{
 			boolToggled();
 			updateCell( m_curRow, m_curCol );
+		}
+		else if(columnType(QVariant::StringList) && columnEditable(m_curCol))
+		{
+			createEditor(m_curRow, m_curCol);
 		}
 	}
 }
