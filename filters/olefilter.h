@@ -6,8 +6,8 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qstring.h>
-#include "klaola.h"
-#include "ktar.h"
+#include <klaola.h>
+#include <ktar.h>
 #include <filterbase.h>
 #include <wordfilter.h>
 #include <myfile.h>

@@ -5,7 +5,7 @@
  *          "Structured Storage"
  *          (c) 1996, 1997 by martin schwartz@cs.tu-berlin.de
  */
-#include "klaola.h"
+#include <klaola.h>
 
 KLaola::KLaola(const myFile &file) {
     

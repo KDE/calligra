@@ -1,5 +1,5 @@
-#include "filterbase.h"
-#include "filterbase.moc"
+#include <filterbase.h>
+#include <filterbase.moc>
 
 
 FilterBase::FilterBase() : QObject() {

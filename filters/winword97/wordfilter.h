@@ -16,10 +16,10 @@
 #ifndef WORDFILTER_H
 #define WORDFILTER_H
 
-#include "filterbase.h"
-#include "winworddoc.h"
-#include "kworddoc.h"
-#include "myfile.h"
+#include <filterbase.h>
+#include <winworddoc.h>
+#include <kworddoc.h>
+#include <myfile.h>
 
 
 class WordFilter : public FilterBase {

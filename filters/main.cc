@@ -13,8 +13,8 @@
 /* Module: Filter                                                 */
 /******************************************************************/
 
-#include "main.h"
-#include "main.moc"
+#include <main.h>
+#include <main.moc>
 
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
@@ -432,7 +432,6 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
 
 /*================================================================*/
 int main(int argc,char **argv) {
-
     MyApplication app(argc,argv);
     MyAutoLoader loader("IDL:KOffice/FilterFactory:1.0","OLEFilter");
     app.exec();

@@ -1,5 +1,5 @@
-#include "wordfilter.h"
-#include "wordfilter.moc"
+#include <wordfilter.h>
+#include <wordfilter.moc>
 
 WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
@@ -25,10 +25,9 @@ WordFilter::~WordFilter() {
 
 const QString WordFilter::part() {
 
-    if(ready && success) {
+    if(ready && success)
         // return real file from KWordDoc...
-    }
+        return FilterBase::part();  // just at the moment to keep the compiler quiet
     else
         return FilterBase::part();
-    return FilterBase::part();  // just to keep the compiler quiet
 }

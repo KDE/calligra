@@ -1,4 +1,4 @@
-#include "winworddoc.h"
+#include <winworddoc.h>
 
 WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
@@ -73,6 +73,17 @@ void WinWordDoc::FIBInfo() {
     kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->chsTables));
     kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMin));
     kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
+    kdebug(KDEBUG_INFO, 31000, "T-e-x-t-------------------");
+
+    char *str=new char[fib->fcMac - fib->fcMin];
+    int i, j;
+
+    for(i=fib->fcMin, j=0;i<fib->fcMac;++i, ++j)
+        str[j]=*(main.data+i);
+
+    kdebug(KDEBUG_INFO, 31000, (const char*)str);
+    kdebug(KDEBUG_INFO, 31000, "--------------------------");
+    delete [] str;
 }
 
 void WinWordDoc::readFIB() {

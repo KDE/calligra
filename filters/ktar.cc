@@ -1,4 +1,4 @@
-#include "ktar.h"
+#include <ktar.h>
 
 
 KTar::KTar( const QString& filename )

@@ -2,8 +2,8 @@
 #define WINWORDDOC_H
 
 #include <qstring.h>
-#include "myfile.h"
-#include "fib.h"
+#include <myfile.h>
+#include <fib.h>
 #include <kdebug.h>
 
 

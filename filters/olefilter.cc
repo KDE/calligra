@@ -1,5 +1,5 @@
-#include "olefilter.h"
-#include "olefilter.moc"
+#include <olefilter.h>
+#include <olefilter.moc>
 
 OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
                      const OUT o) : QObject(), fileIn(in),
@@ -71,7 +71,8 @@ void OLEFilter::slotSavePic(const char *data, const char *type,
     name+="pic";
     name+=QString::number(numPic);
     ++numPic;
-    name+='.';
+    if(type[0]!='.')
+        name+='.';
     name+=type;
     *nameOUT=new char[name.length()+1];
     strncpy(*nameOUT, (const char*)name, name.length());
@@ -94,13 +95,15 @@ void OLEFilter::slotPart(const char *nameIN, const char *type,
             value="part";
             value+=QString::number(numPart);
             numPart++;
-            value+='.';
-            value+=type;
+            if(type[0]!='.')
+                value+='.';
+            value+=QString(type);
             partMap.insert(key, value);
         }
-        *nameOUT=new char[value.length()+1];
-        strncpy(*nameOUT, (const char*)value, value.length());
-        *nameOUT[value.length()]='\0';
+        int len=value.length();
+        *nameOUT=new char[len+1];
+        strncpy(*nameOUT, (const char*)value, len);
+        *nameOUT[len]='\0';
     }
 }
 
@@ -230,7 +233,7 @@ void OLEFilter::convert(const QString &dirname) {
 // Ich war mir nicht sicher, ob ein "connect" ausreichend ist - es sollte
 // eigentlich genügen. Ich habe nur in einer Datei in den libs "QObject::
 // connect" gesehen und dachte mir - schaden kann das nicht...
-void OLEFilter::connectCommon(FilterBase **) { // myFilter) {
+void OLEFilter::connectCommon(FilterBase **) { //myFilter) {
 
 /*    QObject::connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
                      const unsigned int, char **)), this, SLOT(slotSavePic(const char *,

@@ -1,4 +1,4 @@
-#include "paragraph.h"
+#include <paragraph.h>
 
 Paragraph::Paragraph() {
 }

@@ -2,7 +2,7 @@
 #define FILTERBASE_H
 
 #include <qobject.h>
-#include "myfile.h"
+#include <myfile.h>
 
 // Attention: The nameOUT Strings are allocated with new[] in the
 // slots!!! Therefore you have to delete [] them!
