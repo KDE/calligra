@@ -161,6 +161,8 @@ void KDChartPiePainter::paintData( QPainter* painter,
     }
 
     double sum = data->rowAbsSum( dataset );
+	if (sum==0) //nothing to draw
+		return;
     double sectorsPerValue = 5760.0 / sum; // 5760 == 16*360, number of sections in Qt circle
 
     int currentValue = params()->pieStart() * 16;
