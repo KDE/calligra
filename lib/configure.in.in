@@ -18,3 +18,6 @@ AC_SUBST(LIB_KOSCRIPT, '$(top_builddir)/lib/koscript/libkoscript.la')
 AC_SUBST(interfacedir, '$(top_srcdir)/lib/interfaces')
 AC_SUBST(KOFFICE_LIBS, '$(LIB_KOFFICEUI) $(LIB_KOFFICECORE) $(LIB_KSTORE)')
 AC_SUBST(KOFFICE_INCLUDES, '$(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(KSTORE_INCLUDES) $(KWMF_INCLUDES)')
+
+AC_DEFINE_UNQUOTED(PREFIX,"$prefix",[Define the PREFIX where to install this package])
+

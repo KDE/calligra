@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "config.h"
 #include <dcopclient.h>
 #include <koApplication.h>
 #include <KoApplicationIface.h>
@@ -27,6 +28,7 @@
 #include <kimageio.h>
 #include <kiconloader.h>
 #include <kcmdlineargs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <stdlib.h>
 
@@ -40,6 +42,9 @@ KoApplication::KoApplication()
 
     KImageIO::registerFormats();
 
+    // Tell KStandardDirs about the koffice prefix
+    KGlobal::dirs()->addPrefix(PREFIX);
+    
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::iconLoader()->addAppDir("koffice");
 
