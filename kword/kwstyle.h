@@ -50,6 +50,7 @@ public:
     QTextFormat & format() { return m_format; }
 
     QString followingStyle() const { return m_followingStyle; }
+    void setFollowingStyle( const QString & fst ) { m_followingStyle = fst; }
 
     void save( QDomElement parentElem );
 

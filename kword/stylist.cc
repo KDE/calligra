@@ -461,7 +461,7 @@ void KWStyleEditor::setupTab1()
     nwid = new QWidget( tab1 );
     grid2 = new QGridLayout( nwid, 3, 2, 15, 7 );
 
-    lName = new QLabel( i18n( "Name:" ), nwid );
+    QLabel * lName = new QLabel( i18n( "Name:" ), nwid );
     lName->resize( lName->sizeHint() );
     lName->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lName, 0, 0 );
@@ -482,7 +482,7 @@ void KWStyleEditor::setupTab1()
         eName->setEnabled( false );
 */
 
-    lFollowing = new QLabel( i18n( "Following Style:" ), nwid );
+    QLabel * lFollowing = new QLabel( i18n( "Following Style:" ), nwid );
     lFollowing->resize( lFollowing->sizeHint() );
     lFollowing->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lFollowing, 1, 0 );
@@ -496,7 +496,6 @@ void KWStyleEditor::setupTab1()
      }
     cFollowing->resize( cFollowing->sizeHint() );
     grid2->addWidget( cFollowing, 1, 1 );
-    //connect( cFollowing, SIGNAL( activated( const QString & ) ), this, SLOT( fplChanged( const QString & ) ) );
 
     grid2->addRowSpacing( 0, lName->height() );
     grid2->addRowSpacing( 0, eName->height() );
@@ -672,8 +671,6 @@ void KWStyleEditor::changeTabulators()
 /*================================================================*/
 void KWStyleEditor::paragDiaOk()
 {
-    QList<KoTabulator> tmp;
-    QListIterator<KoTabulator> it( tmp );
    switch ( paragDia->getFlags() ) {
    case KWParagDia::PD_SPACING: {
      style->paragLayout().margins[QStyleSheetItem::MarginTop]=paragDia->spaceBeforeParag() ;
@@ -710,10 +707,12 @@ bool KWStyleEditor::apply()
 {
     *ostyle = *style;
 
-    if ( eName->text() != style->name() ) {
+    // Apply name change
+    if ( eName->text() != style->name() )
+    {
         bool same = false;
 	QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
-        for ( unsigned int i = 0; i < styles.count(); i++ ) {
+        for ( unsigned int i = 0; i < styles.count() && !same; i++ ) {
             if ( styles.at( i )->name() == eName->text() )
                 same = true;
         }
@@ -723,6 +722,11 @@ bool KWStyleEditor::apply()
             emit updateStyleList();
         }
     }
+
+    // Apply "following style" change
+    ostyle->setFollowingStyle( cFollowing->currentText() );
+
+    // ### TODO a dirty flag for this !
     doc->applyStyleChange(eName->text());
     return true;
 }

@@ -120,7 +120,6 @@ protected:
     QPushButton *bFont, *bColor, *bSpacing, *bAlign, *bBorders, *bNumbering, *bTabulators;
     KButtonBox *bButtonBox;
     KWStylePreview *preview;
-    QLabel *lName, *lFollowing;
     QLineEdit *eName;
     QComboBox *cFollowing;
 
