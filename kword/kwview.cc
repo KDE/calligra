@@ -465,7 +465,7 @@ void KWView::setupActions()
     actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame." ) );
     actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
 
-     actionInsertLink = new KAction( i18n( "Insert link" ), 0,
+     actionInsertLink = new KAction( i18n( "Link" ), 0,
                                         this, SLOT( insertLink() ),
                                         actionCollection(), "insert_link" );
     actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
