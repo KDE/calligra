@@ -1,0 +1,1238 @@
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="filemenu">
+<title>The File Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Create a new document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open an existing document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open an existing document</action> by selecting it
+from a drop down list of recently used files.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save the document with a new name or format.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Template From Document...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Create a &kspread; <link linkend="templates">template</link>
+based on this document.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Print the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View the document as it will be printed.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document information...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View or enter information about the document and 
+author.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Send File...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Send the file as an email attachment.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Close the current document but leave &kspread; running.
+</action></para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quit</action> &kspread;.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title>The Edit Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Undo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Undo the last action.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Redo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Redo the last undone action.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>X</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Put selected item(s) into the clipboard.</action> If you then 
+do a <guimenuitem>Paste</guimenuitem> the item(s) will be moved from the 
+original location to the new one.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Copy selected item(s) to the clipboard.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Paste item(s) from the clipboard to the selected 
+cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Special Paste...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Special forms of Paste.
+</action> See the sections <link linkend="specialpaste">Other Paste 
+Modes</link> and <link linkend="sumspecialpaste">Arithmetic using Special 
+Paste</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Find cell containing given text.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Replace...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Find and replace given text in cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Clear</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Clear text, Comment, Validity or Conditional Cell 
+Attributes from selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete everything from selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Conditional Cell Attributes...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Add or modify conditional cell attributes.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Validity...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set or modify the error checking criteria and error 
+alert message for selected cell(s).</action> See <link linkend="validcheck">
+Validity Checking</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Modify Cell</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>To modify selected cell in-situ.</action>
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title>The View Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>New View</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open a new instance of &kspread;.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Close All Views</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Close all open instances of &kspread;.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Split View</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Split current view into two parts.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Remove View</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove current view.</action> (Where the window 
+contains two or more views)
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Splitter Orientation</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change view split to horizontal or vertical.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Goto Cell...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change &kspread;'s focus to show defined cell.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Page Borders</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle marking of printed page borders in the sheet 
+with red lines.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Zoom</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Increase or decrease the magnification used to display 
+the spreadsheet.
+</action>
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+
+<sect1 id="insertmenu">
+<title>The Insert Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Sheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Add another worksheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Cell Comment</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Add, modify or remove cell comment.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Function...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert a mathematical function.</action> See the 
+section <link linkend="formulas">Formulae</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Series...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert a series.</action> See the section 
+<link linkend="series">Series</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Link...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert a link into the selected cell.</action> 
+See the section 
+<link linkend="hyper">Link Cells</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Object...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>This feature is not yet fully implemented.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Chart</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert a chart.</action> See the section 
+<link linkend="insertchart">Inserting a Chart</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>External Data</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert data from a text file, database or from the 
+clipboard.</action> See the section <link linkend="insertdata">Inserting 
+External Data</link> for more details.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title>The Format Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>Format</guimenu>
+<guimenuitem>Cell Format...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Format selected cell(s).</action> See the 
+<link linkend="formatspread">Spreadsheet Formatting</link> section for more 
+details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Paper Layout...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Format printed page layout.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Print Range</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Define or reset the print range.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Sheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove, hide or show worksheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Adjust Row and Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set row and column sizes to show selected cell(s)
+properly.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Row</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Resize, equalize, hide or show row(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Resize, equalize, hide or show column(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Default</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set default format for selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Percent Format</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set percent format for selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Increase Precision</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Increase displayed precision of numbers in selected 
+cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Decrease Precision</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Decrease displayed precision of numbers in selected 
+cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Money Format</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set money format for selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Increase Indent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move text in selected cell(s) to the right.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Decrease Indent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move text in selected cell(s) to the left.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Change Angle...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change angle of displayed text in selected cell(s).
+</action>
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title>The Data Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Sort...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sort data in selected cells.</action> See the section 
+<link linkend="sort">Sorting Data</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Sort Increasing</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sort data in selected cells so that values are in 
+increasing order.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Sort Decreasing</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sort data in selected cells so that values are in 
+decreasing order.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Insert Column(s)</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert new column(s) at left of selected column(s).
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Insert Row(s)</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert new row(s) above selected row(s).
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Delete Column(s)</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete selected column(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Delete Row(s)</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete selected row(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Insert Cell(s)...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert new cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Remove Cell(s)...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Merge Cells</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merge selected cells.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Dissociate Cells</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Dissociate (split apart) previously merged cells.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Show Area...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change &kspread;'s focus to show a previously 
+named area.</action> See the section <link linkend="namedareas">Named Cells 
+and Areas</link> for further details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Goal Seek</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open the Goal Seek dialog box</action>. See
+<link linkend="goalseek">Goal Seeking</link> for details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Consolidate...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Consolidate data.</action> See the section 
+<link linkend="consolidate">Consolidating Data</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Text to Columns</guimenuitem>
+</menuchoice></term>
+<listitem><para>This option attempts to interpret text in the selected cell(s) 
+as <acronym>CSV</acronym> data, placing each 
+item into a different cell in the row.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title>The Tools Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Spelling...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Check spelling of words in the worksheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Custom Lists...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View or amend the special series of words recognized 
+by &kspread;.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keysym>F9</keysym></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Recalculate Sheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Recalculate formulae in the current sheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keysym>F9</keysym>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Recalculate Workbook</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Recalculate all sheets.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Calculator</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open an instance of the desktop calculator &kcalc;.
+</action>
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title>The Settings Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show File Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the File toolbar.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Edit Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Edit toolbar.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Math Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Math toolbar.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Format Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Format toolbar.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Color/Border Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Color/Border toolbar.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure the keyboard shortcuts used by &kspread;.
+</action> See the section on <link linkend="configshort">configuring shortcuts
+</link> for more details.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure the toolbars.</action> The section on 
+<link linkend="configtoolbars">configuring toolbars</link> has more 
+information.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &kspread;...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>General &kspread; configuration.</action> See the 
+section on <link linkend="configdialog">&kspread; configuration</link> for 
+more details.
+</para></listitem>
+</varlistentry>
+
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect1>
+
+<sect1 id="rmbmenu">
+<title>The Right Mouse Button Menu</title>
+<para>This section describes the items in the pop up menu obtained by 
+<mousebutton>right</mousebutton> clicking on a selected cell or cells, 
+row(s) or column(s).
+</para>
+
+<para><variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Cell Format...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Format selected cell(s).</action> See the 
+<link linkend="formatspread">Spreadsheet Formatting</link> section for more 
+details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Put selected item(s) into the clipboard.</action> If 
+you then do a <guilabel>Paste</guilabel> the item(s) will be moved from the 
+original location to the new one.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Copy</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Copy selected item(s) into the clipboard.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Paste item(s) from the clipboard to the selected cells.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Special Paste...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Special forms of Paste.
+</action> See the sections <link linkend="specialpaste">Other Paste 
+Modes</link> and <link linkend="sumspecialpaste">Arithmetic using Special 
+Paste</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Paste with Insertion...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Paste from the clipboard to the selected cell(s), moving the 
+previous cell(s) to make room.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Delete</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete contents of selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Adjust Row and Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change size of row and column to display selected 
+cell(s) completely.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Resize Row...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change height of selected row.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Adjust Row</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change height of selected row to display cell(s) 
+completely.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Resize Column...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change width of selected column.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Adjust Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change width of selected column to display cell(s) 
+completely.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Default</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set default formats for selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Area Name...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Name selected area.</action> See the section 
+<link linkend="namedareas">Named Areas</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Insert Cell(s)...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert new cell(s) at selected location, moving 
+existing cell(s) to make room.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Remove Cell(s)...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove selected cell(s), moving other cell(s) to 
+occupy the space left by the removed cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Add/Modify Comment...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Add or modify a comment to the selected cell.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Show Related Words</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the Related Words dialog box.</action> 
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="othershort">
+<title>Other Shortcuts</title>
+<para>This section describes those &kspread; shortcut keys used for operations 
+that do not appear in any of the menus.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>Arrow keys</keysym></keycombo>
+</term>
+<listitem><para><action>If the selected cell is occupied then move the 
+selection to the start or end of the occupied block in the current row or 
+column. If the selected cell is not occupied then move the selection to 
+the start or end of the block of unoccupied cells in the current row or column.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;&Shift;<keysym>Arrow keys</keysym></keycombo>
+</term>
+<listitem><para><action>If the selected cell is occupied then select all 
+occupied cells to the start or end of that block of occupied cells in the 
+current row or column. 
+If the selected cell is not occupied then select all unoccupied cells to the 
+start or end of that block of unoccupied cells in the current row or column.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym>Page Down</keysym>
+</term>
+<listitem><para><action>Move the selection 10 cells down.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym>Page Up</keysym>
+</term>
+<listitem><para><action>Move the selection 10 cells up.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>Page Down</keysym></keycombo>
+</term>
+<listitem><para><action>Move to the next sheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>Page Up</keysym></keycombo>
+</term>
+<listitem><para><action>Move to the previous sheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym>F4</keysym>
+</term>
+<listitem><para><action>Change cell reference</action> between normal and 
+<link linkend="absolute">absolute reference</link> types.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>&amp;</keysym></keycombo>
+</term>
+<listitem><para><action>Add a border to the selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>$</keysym></keycombo>
+</term>
+<listitem><para><action>Display the value of the selected cell(s) in Money
+format.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>%</keysym></keycombo>
+</term>
+<listitem><para><action>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>^</keysym></keycombo>
+</term>
+<listitem><para><action>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>#</keysym></keycombo>
+</term>
+<listitem><para><action>Display the value of the selected cell(s) in 
+Date format</action>. The value is taken as the number of days since 
+1 January 1900.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>@</keysym></keycombo>
+</term>
+<listitem><para><action>Display the value of the selected cell(s) in
+Time format</action>. The value is taken as the number of seconds since
+midnight.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keysym>!</keysym></keycombo>
+</term>
+<listitem><para><action>Display the value of the selected cell(s) in
+normal Number format</action>.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+</chapter>
