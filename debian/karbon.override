@@ -1,0 +1,13 @@
+# There is no -dev package.
+karbon: non-dev-pkg-with-shlib-symlink usr/lib/karbon.so.0.0.0 usr/lib/karbon.so
+# These are modules in /usr/lib/kde3/.
+karbon: binary-or-shlib-defines-rpath ./usr/bin/karbon /usr/lib/kde3
+karbon: binary-or-shlib-defines-rpath ./usr/lib/karbon.so.0.0.0 /usr/lib/kde3
+karbon: binary-or-shlib-defines-rpath ./usr/lib/kde3/libkarbonaiimport.so.1.0.0 /usr/lib/kde3
+karbon: binary-or-shlib-defines-rpath ./usr/lib/kde3/libkarbonepsexport.so /usr/lib/kde3
+karbon: binary-or-shlib-defines-rpath ./usr/lib/kde3/libkarbonpngexport.so /usr/lib/kde3
+karbon: binary-or-shlib-defines-rpath ./usr/lib/kde3/libkarbonsvgexport.so /usr/lib/kde3
+# This is inserted by debhelper and is legal.
+karbon: postrm-calls-ldconfig
+# Menu item.
+karbon: menu-item-contains-unknown-tag kderemove /usr/lib/menu/karbon:8

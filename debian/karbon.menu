@@ -1,0 +1,9 @@
+?package(karbon):\
+	needs=x11\
+	section=Apps/Graphics\
+	hints="KDE"\
+	kderemove="1"\
+	title="Karbon"\
+	icon="/usr/share/pixmaps/karbon.xpm"\
+	command=karbon
+
