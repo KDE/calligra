@@ -1735,6 +1735,13 @@ QString KSpreadCell::valueString() const
 void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
                              QPoint corner, QPoint cellRef, bool drawCursor )
 {
+    QPoint size( width(), height() );
+    paintCell(rect, painter, view, corner, size, cellRef, drawCursor);
+}
+
+void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
+                             QPoint corner, QPoint size, QPoint cellRef, bool drawCursor )
+{
   static int paintingObscured = 0;
   /* this flag indicates that we are working on drawing the cells that a cell
      is obscuring.  The value is the number of levels down we are currently
@@ -1758,7 +1765,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
-/*
+
   if (view != NULL)
   {
     if (view->zoom() > 1.5)
@@ -1772,7 +1779,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
       width--;
     }
   }
-*/
+
   bool selected = false;
 
   if (view != NULL)
@@ -1996,7 +2003,6 @@ void KSpreadCell::paintBackground(QPainter& painter, KSpreadView* view,
       painter.fillRect( corner.x(), corner.y(), width, height, bb );
     }
   }
-
   // Erase the background of the cell.
   if ( !painter.device()->isExtDev() )
     painter.eraseRect( corner.x(), corner.y(), width, height );
@@ -2049,13 +2055,15 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
 
   paintLeft = ( left_pen.style() == Qt::NoPen &&
                 table()->getShowGrid() );
-  paintRight = ( painter.device()->isExtDev() && // Only on printout
+  paintRight = ( ((view != NULL) && ( view->zoom()<= 0.5 ) || ( view->zoom()>= 1.5 ) ) || //If we zoom, we repaint the borders too
+                 painter.device()->isExtDev() && // Only on printout
                  right_pen.style() == Qt::NoPen &&
                  table()->getShowGrid() &&
                  table()->isOnNewPageX( cellRef.x() + 1 ) );  //Only when last cell on page
   paintTop = ( top_pen.style() == Qt::NoPen &&
                table()->getShowGrid() );
-  paintBottom = ( painter.device()->isExtDev() &&  // Only on printout
+  paintBottom = ( ((view != NULL) && ( view->zoom()<= 0.5 ) || ( view->zoom()>= 1.5 ) ) || //If we zoom, we repaint the borders too
+                  painter.device()->isExtDev() &&  // Only on printout
                   bottom_pen.style() == Qt::NoPen &&
                   table()->getShowGrid() &&
                   table()->isOnNewPageY( cellRef.y() + 1 ) ); //Only when last cell on page

@@ -26,6 +26,7 @@
 
 #include <qregexp.h>
 #include <qfileinfo.h>
+#include <qpair.h>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -204,7 +205,39 @@ void KSpreadDoc::initConfig()
       setUnit( (KoUnit::Unit)config->readNumEntry( "Default unit page" ,0));
     }
 
+    m_zoom = 100;
+    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    newZoomAndResolution( false, false );
+
 }
+
+
+void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
+{
+    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
+//    if ( m_formulaDocument )
+//        m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
+}
+
+
+void KSpreadDoc::newZoomAndResolution( bool updateViews, bool forPrint )
+{
+/*    if ( m_formulaDocument )
+        m_formulaDocument->newZoomAndResolution( updateViews,forPrint );
+    // Update all fonts
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->zoom( forPrint );
+
+    layout();
+    updateAllFrames();
+    if ( updateViews )
+    {
+        emit newContentsSize();
+        repaintAllViews( true );
+    }*/
+}
+
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
@@ -638,12 +671,13 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     KSpreadTable* table = m_pMap->firstTable();
     if ( !table )
         return;
+
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     // ### TODO support zooming
     painter.save();
 
     painter.scale(zoomX, zoomY);
-    paintContent( painter, rect, transparent, table,false );
+    paintContent( painter, rect, transparent, table, false );
 
     painter.restore();
 }
@@ -674,6 +708,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 
     paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
 }
+
 
 void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
                                   KSpreadView* view,
@@ -737,41 +772,44 @@ void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
     return;
 
   /* get the world coordinates of the upper left corner of the paintRegion */
-  QPoint corner(table->columnPos(paintRegion.left()),
-                table->rowPos(paintRegion.top()));
-/*
-  QPoint bottomRight(table->columnPos(paintRegion.right() + 1),
-                     table->rowPos(paintRegion.bottom() + 1));
-
-  int w = bottomRight.x() - corner.x();
-  int h = bottomRight.y() - corner.y();
-
-  if ( !painter.device()->isExtDev() )
-    painter.eraseRect( corner.x(), corner.y(), w, h);
-*/
+  QPoint corner( table->columnPos(paintRegion.left()),
+                 table->rowPos(paintRegion.top()) );
+  QPair<double,double> dblCorner = qMakePair( (double)table->columnPos(paintRegion.left()),
+                                              (double)table->rowPos(paintRegion.top()) );
 
   QPoint currentCellPos = corner;
+  QPair<double,double> dblCurrentCellPos = dblCorner;
+  ColumnLayout *col_lay;
+  RowLayout *row_lay;
+  KSpreadCell *cell;
 
   for ( int y = paintRegion.top();
         y <= paintRegion.bottom() && currentCellPos.y() <= viewRegion.bottom();
         y++ )
   {
-    RowLayout *row_lay = table->rowLayout( y );
-    currentCellPos.setX(corner.x());
+    row_lay = table->rowLayout( y );
+    dblCurrentCellPos.first = dblCorner.first;
+    currentCellPos.setX((int)dblCorner.first);
 
     for ( int x = paintRegion.left();
           x <= paintRegion.right() && currentCellPos.x() <= viewRegion.right();
           x++ )
     {
-      ColumnLayout *col_lay = table->columnLayout( x );
-      KSpreadCell *cell = table->cellAt( x, y );
+      col_lay = table->columnLayout( x );
+      cell = table->cellAt( x, y );
 
       QPoint cellCoordinate( x, y );
-      cell->paintCell( viewRegion, painter, view, currentCellPos, cellCoordinate);
+      QPoint size(int(dblCurrentCellPos.first + col_lay->dblWidth()) - currentCellPos.x(),
+                  int(dblCurrentCellPos.second + row_lay->dblHeight()) - currentCellPos.y());
+kdDebug(36001)<<"  x: "<<currentCellPos.x()<<"  width: " << col_lay->width()<<"  size.x: "<<size.x()<<endl;
+kdDebug(36001)<<"  y: "<<currentCellPos.y()<<"  height: " << row_lay->height()<<"  size.y: "<<size.y()<<endl;
+      cell->paintCell( viewRegion, painter, view, currentCellPos, size, cellCoordinate);
 
-      currentCellPos.setX(currentCellPos.x() + col_lay->width());
+      dblCurrentCellPos.first += col_lay->dblWidth();
+      currentCellPos.setX((int)dblCurrentCellPos.first);
     }
-    currentCellPos.setY(currentCellPos.y() + row_lay->height());
+    dblCurrentCellPos.second += row_lay->dblHeight();
+    currentCellPos.setY((int)dblCurrentCellPos.second);
   }
 }
 

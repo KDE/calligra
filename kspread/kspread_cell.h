@@ -204,6 +204,22 @@ public:
     void paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
                     QPoint corner, QPoint cellRef, bool drawCursor=true );
 
+    /**
+     * Paints the cell.
+     *
+     * @param rect the portion of the canvas that is actually in view
+     * @param painter the painter object to paint on
+     * @param the view of this data.  This may be NULL, but no selection
+     *        will be included with the painting.
+     * @param corner coordinates on the painter where the top left corner
+     *               of the cell should be painted
+     * @param size size of the cell (width, height) in points
+     * @param cellRef the column/row coordinates of the cell.
+     * @param drawCursor whether to draw the cursor and selection or not
+     */
+    void paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
+                    QPoint corner, QPoint size, QPoint cellRef, bool drawCursor=true );
+
   /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
      */
