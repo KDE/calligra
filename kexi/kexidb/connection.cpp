@@ -732,7 +732,8 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 		else
 			sql += ", ";
 		QString v = escapeIdentifier(field->m_name) + " ";
-		const bool pk = field->isPrimaryKey() || m_driver->beh->AUTO_INCREMENT_REQUIRES_PK;
+		const bool pk = field->isPrimaryKey() || (field->isAutoIncrement() && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
+//TODO: warning: ^^^^^ this allows only ont autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
 		if (field->isAutoIncrement() && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
 			if (pk)
 				v += m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
@@ -1311,28 +1312,88 @@ bool Connection::alterTable( TableSchema& tableSchema, TableSchema& newTableSche
 	return ok;
 }
 
-bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName)
+bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
 {
 	clearError();
+	if (&tableSchema!=m_tables[tableSchema.id()]) {
+		setError(ERR_OBJECT_NOT_EXISTING, i18n("Unknown table \"%1\"").arg(tableSchema.name()));
+		return false;
+	}
 	if (newName.isEmpty() || !Kexi::isIdentifier(newName)) {
-		setError(ERR_INVALID_IDENTIFIER);
+		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"").arg(newName));
 		return false;
 	}
 	const QString& newTableName = newName.lower().stripWhiteSpace();
 	if (tableSchema.name().lower().stripWhiteSpace() == newTableName) {
-		setError(ERR_OBJECT_THE_SAME);//i18n(...)
+		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.")
+			.arg(newTableName));
 		return false;
 	}
-	return drv_alterTableName(tableSchema, newName);
+	const bool res = drv_alterTableName(tableSchema, newTableName);
+	if (res) {
+		//update tableSchema:
+		m_tables_byname.take(tableSchema.name());
+		tableSchema.setName(newTableName);
+		m_tables_byname.insert(tableSchema.name(), &tableSchema);
+	}
+	return res;
 }
 
-bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName)
+bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName, 
+	bool replace)
 {
 //TODO: alter table name for server DB backends!
 //TODO: what about objects (queries/forms) that use old name?
-//	dropTable
 //TODO	
-	return true;
+	const bool destTableExists = this->tableSchema( newName ) != 0;
+	if (!replace && destTableExists) {
+		setError(ERR_OBJECT_EXISTS, 
+			i18n("Could not rename table \"%1\" to \"%2\". Table \"%3\" already exists.")
+			.arg(tableSchema.name()).arg(newName).arg(newName));
+		return false;
+	}
+
+	Transaction trans;
+	if (!beginAutoCommitTransaction(trans))
+		return false;
+	TransactionGuard tg(trans);
+
+	//1. drop the table
+	if (destTableExists && !drv_dropTable( newName ))
+		return false;
+
+	//2. create a copy of the table
+//TODO: move this code to drv_copyTable()
+	const QString& oldTableName = tableSchema.name();
+	tableSchema.setName(newName);
+
+//helper:
+#define drv_alterTableName_ERR \
+		tableSchema.setName(oldTableName) //restore old name
+
+	if (!drv_createTable( tableSchema )) {
+		drv_alterTableName_ERR;
+		return false;
+	}
+	
+//TODO indices, etc.???
+
+	// 3. copy all rows
+	// 4. drop old table.
+	if (!drv_dropTable( oldTableName )) {
+		drv_alterTableName_ERR;
+		return false;
+	}
+
+	// 5. Update kexi__objects
+	//TODO
+	if (!executeSQL(QString("UPDATE kexi__objects set o_name=%1 where o_id=%1")
+		.arg(tableSchema.id()))) {
+		drv_alterTableName_ERR;
+		return false;
+	}
+
+	return commitAutoCommitTransaction(trans);
 }
 
 bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )

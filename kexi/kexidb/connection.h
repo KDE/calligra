@@ -459,11 +459,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true on success. */
 //TODO(js): implement real altering
 //TODO(js): update any structure (e.g. query) that depend on this table!
-		bool alterTable( TableSchema& tableSchema, TableSchema& newTableSchema );
+		bool alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
 
 		/*! Alters table's described \a tableSchema name to \a newName. 
+		 If \a replace is true, destination table is replaced, if present.
+		 If \a replace is false (the default) and destination table is present 
+		 -- false is returned and ERR_OBJECT_EXISTS error is set.
+		 \a tableSchema is updated on success.
 		 \return true on success. */
-		bool alterTableName(TableSchema& tableSchema, const QString& newName);
+		bool alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
 
 		/*! Drops a query defined by \a querySchema. 
 		 If true is returned, schema information \a querySchema is destoyed 
@@ -789,11 +793,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 - creates a copy of the table
 		 - copies all rows
 		 - drops old table.
-		 This is how SQLite driver work.
+		 All this is performed within single transaction. This is how SQLite driver work.
 		 \return true on success.
 		 More advanced server backends should reinplement this using "ALTER TABLE". 
 		*/
-		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
+		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
 
 		/*! Internal, for handling autocommited transactions:
 		 begins transaction is one is supported.
