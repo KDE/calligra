@@ -214,8 +214,9 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     if ( m_layout.counter->isBullet() )
     {
         // Modify x offset.
-        for ( unsigned int i = 0; i < m_layout.counter->suffix().length(); i++ )
-            x -= format->width( m_layout.counter->suffix(), i );
+        QString suffix = m_layout.counter->suffix() + ' ' /*the trailing space*/;
+        for ( unsigned int i = 0; i < suffix.length(); i++ )
+            x -= format->width( suffix, i );
         int width = format->width( ' ' );
         int height = format->height();
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
@@ -246,6 +247,7 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             default:
                 break;
         }
+        // TODO draw suffix text ?
     }
     else
     {
