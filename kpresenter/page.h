@@ -109,6 +109,8 @@ public:
   void setPartEntry(KoPartEntry *pe)
     { partEntry = pe; }
   void setToolEditMode(ToolEditMode _m);
+  void setAutoForm(QString _autoform)
+    { autoform = _autoform; }
 
   KTextObject *haveASelectedTextObj();
 
@@ -190,6 +192,10 @@ protected:
   void insertEllipse(KRect);
   void insertPie(KRect);
   void insertObject(KRect);
+  void insertTable(KRect);
+  void insertDiagramm(KRect);
+  void insertFormula(KRect);
+  void insertAutoform(KRect);
 
   void selectNext();
   void selectPrev();
@@ -216,7 +222,8 @@ protected:
   ToolEditMode toolEditMode;
   KRect insRect;
   KoPartEntry* partEntry;
-  QList <KPObject> tmpObjs;
+  QList<KPObject> tmpObjs;
+  QString autoform;
   
 public slots:
   void chPic();

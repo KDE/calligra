@@ -60,6 +60,7 @@ class KPresenterView;
 #include "kptextobject.h"
 #include "kppixmapobject.h"
 #include "kppieobject.h"
+#include "kppartobject.h"
 #include "kpresenter_view.h"
 #include "global.h"
 #include "kpbackground.h"
@@ -104,9 +105,6 @@ public:
   KPresenterChild( KPresenterDoc *_kpr );
   ~KPresenterChild();
 
-  KRect _geometry() {return __geometry;}
-  void _setGeometry(KRect g) {__geometry = g;}
-  
   // get parent
   KPresenterDoc* parent() {return m_pKPresenterDoc;}
   
@@ -114,7 +112,7 @@ protected:
 
   // parent, document and geometry
   KPresenterDoc *m_pKPresenterDoc;
-  KRect __geometry;
+
 };
 
 /*****************************************************************/
@@ -248,7 +246,7 @@ public:
   void insertPie(KRect,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
   void insertText(KRect,int,int);
-  void insertAutoform(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
+  void insertAutoform(KRect,QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
   
   // get list of pages and objects
   QList<KPBackGround> *backgroundList() {return &_backgroundList;}
@@ -342,7 +340,7 @@ signals:
   void sig_KPresenterModified();
 
   // object inserted - removed
-  void sig_insertObject(KPresenterChild *_child);
+  void sig_insertObject(KPresenterChild *_child,KPPartObject *_kppo);
   void sig_removeObject(KPresenterChild *_child);
 
   // update child geometry

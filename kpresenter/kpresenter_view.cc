@@ -100,8 +100,8 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   m_bKPresenterModified = true;
 
   QObject::connect(m_pKPresenterDoc,SIGNAL(sig_KPresenterModified()),this,SLOT(slotKPresenterModified()));
-  QObject::connect(m_pKPresenterDoc,SIGNAL(sig_insertObject(KPresenterChild*)),
-		   this,SLOT(slotInsertObject(KPresenterChild*)));
+  QObject::connect(m_pKPresenterDoc,SIGNAL(sig_insertObject(KPresenterChild*,KPPartObject*)),
+		   this,SLOT(slotInsertObject(KPresenterChild*,KPPartObject*)));
   QObject::connect(m_pKPresenterDoc,SIGNAL(sig_updateChildGeometry(KPresenterChild*)),
 		   this,SLOT(slotUpdateChildGeometry(KPresenterChild*)));
 
@@ -134,9 +134,9 @@ void KPresenterView::init()
     cerr << "Did not get a tool bar manager" << endl;  
 
   // Show every embedded object
-  QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
-  for(;it.current();++it)
-    slotInsertObject(it.current());
+//   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
+//   for(;it.current();++it)
+//     slotInsertObject(it.current());
 }
 
 /*======================= destructor ============================*/
@@ -467,7 +467,6 @@ void KPresenterView::toolsCircleOrEllipse()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_ELLIPSE);
-  //m_pKPresenterDoc->insertCircleOrEllipse(pen,brush,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*==============================================================*/
@@ -475,7 +474,48 @@ void KPresenterView::toolsPie()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_PIE);
-  //m_pKPresenterDoc->insertPie(pen,brush,fillType,gColor1,gColor2,gType,pieType,pieAngle,pieLength,lineBegin,lineEnd,xOffset,yOffset);
+}
+
+/*==============================================================*/
+void KPresenterView::toolsDiagramm()
+{
+  page->deSelectAllObj();
+  page->setToolEditMode(INS_DIAGRAMM);
+
+  QStrList mimes,repos;
+  mimes.append("application/x-kdiagramm");
+  repos.append("IDL:KDiagramm/DocumentFactory:1.0");
+
+  KoPartEntry *pe = new KoPartEntry("KDiagramm","kdiagramm.bin --server","shared","Torben's Chart",mimes,repos);
+  page->setPartEntry(pe);
+}
+
+/*==============================================================*/
+void KPresenterView::toolsTable()
+{
+  page->deSelectAllObj();
+  page->setToolEditMode(INS_TABLE);
+
+  QStrList mimes,repos;
+  mimes.append("application/x-kspread");
+  repos.append("IDL:KSpread/DocumentFactory:1.0");
+
+  KoPartEntry *pe = new KoPartEntry("KSpread","kspread.bin --server","shared","Torben's Spread Sheet",mimes,repos);
+  page->setPartEntry(pe);
+}
+
+/*==============================================================*/
+void KPresenterView::toolsFormula()
+{
+  page->deSelectAllObj();
+  page->setToolEditMode(INS_FORMULA);
+
+  QStrList mimes,repos;
+  mimes.append("application/x-kformula");
+  repos.append("IDL:KFormula/DocumentFactory:1.0");
+
+  KoPartEntry *pe = new KoPartEntry("KFormula","kformula.bin --server","shared","Andrea's Formula Editor",mimes,repos);
+  page->setPartEntry(pe);
 }
 
 /*===================== insert a textobject =====================*/
@@ -483,12 +523,13 @@ void KPresenterView::toolsText()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_TEXT);
-  //m_pKPresenterDoc->insertText(xOffset,yOffset);
 }
 
-/*======================== insert autoform ======================*/
-void KPresenterView::insertAutoform()
+/*===============================================================*/
+void KPresenterView::toolsAutoform()
 {
+  page->deSelectAllObj();
+  page->setToolEditMode(TEM_MOUSE);
   if (afChoose)
     {
       QObject::disconnect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
@@ -502,7 +543,6 @@ void KPresenterView::insertAutoform()
   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
   QObject::connect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
-  page->setToolEditMode(TEM_MOUSE);
   afChoose->show();
 }
 
@@ -510,6 +550,7 @@ void KPresenterView::insertAutoform()
 void KPresenterView::toolsObject()
 {
   page->deSelectAllObj();
+  page->setToolEditMode(TEM_MOUSE);
   KoPartEntry* pe = KoPartSelectDia::selectPart();
   if (!pe) return;
   
@@ -905,6 +946,10 @@ void KPresenterView::screenStart()
 	  page->setFocusPolicy(QWidget::StrongFocus);
 	  page->setFocus();
 	}
+      QPainter p;
+      p.begin(page);
+      presentParts(page->presFakt(),&p,KRect(0,0,0,0),xOffset,yOffset);
+      p.end();
 
       if (!kPresenterDoc()->spManualSwitch())
 	{
@@ -1431,9 +1476,9 @@ void KPresenterView::construct()
 
   m_lstFrames.clear();
   
-  QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
-  for(;it.current();++it)
-    slotInsertObject(it.current());
+//   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
+//   for(;it.current();++it)
+//     slotInsertObject(it.current());
 
   // We are now in sync with the document
   m_bKPresenterModified = false;
@@ -1449,7 +1494,7 @@ void KPresenterView::slotKPresenterModified()
 }
 
 /*======================= insert object ========================*/
-void KPresenterView::slotInsertObject(KPresenterChild *_child)
+void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kppo)
 { 
   OpenParts::View_var v;
 
@@ -1481,51 +1526,52 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child)
   assert( !CORBA::is_nil( kv ) );
   p->attachView( kv );
 
-  p->show();
+  p->hide();
+  _kppo->setView(p);
 
-  page->insertChild(p);
-  vert->raise();
-  horz->raise();
+//   page->insertChild(p);
+//   vert->raise();
+//   horz->raise();
   
-  QObject::connect(p,SIGNAL(sig_geometryEnd(KoFrame*)),
-		   this,SLOT(slotGeometryEnd(KoFrame*)));
-  QObject::connect(p,SIGNAL(sig_moveEnd(KoFrame*)),
-		   this,SLOT(slotMoveEnd(KoFrame*)));  
+//   QObject::connect(p,SIGNAL(sig_geometryEnd(KoFrame*)),
+// 		   this,SLOT(slotGeometryEnd(KoFrame*)));
+//   QObject::connect(p,SIGNAL(sig_moveEnd(KoFrame*)),
+// 		   this,SLOT(slotMoveEnd(KoFrame*)));  
 } 
 
 /*========================== update child geometry =============*/
 void KPresenterView::slotUpdateChildGeometry(KPresenterChild *_child)
 {
-  // Find frame for child
-  KPresenterFrame *f = 0L;
-  QListIterator<KPresenterFrame> it(m_lstFrames);
-  for (;it.current() && !f;++it)
-    if (it.current()->child() == _child)
-      f = it.current();
+//   // Find frame for child
+//   KPresenterFrame *f = 0L;
+//   QListIterator<KPresenterFrame> it(m_lstFrames);
+//   for (;it.current() && !f;++it)
+//     if (it.current()->child() == _child)
+//       f = it.current();
   
-  assert(f != 0L);
+//   assert(f != 0L);
   
-  // Are we already up to date ?
-  if (_child->geometry() == f->partGeometry()) return;
+//   // Are we already up to date ?
+//   if (_child->geometry() == f->partGeometry()) return;
   
-  // TODO scaling
-  f->setPartGeometry(_child->geometry());
+//   // TODO scaling
+//   f->setPartGeometry(_child->geometry());
 }
 
 /*======================= slot geometry end ====================*/
 void KPresenterView::slotGeometryEnd(KoFrame* _frame)
 {
-  KPresenterFrame *f = (KPresenterFrame*)_frame;
-  // TODO scaling
-  m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry(),xOffset,yOffset);
+//   KPresenterFrame *f = (KPresenterFrame*)_frame;
+//   // TODO scaling
+//   m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry(),xOffset,yOffset);
 }
 
 /*==================== slot move end ===========================*/
 void KPresenterView::slotMoveEnd(KoFrame* _frame)
 {
-  KPresenterFrame *f = (KPresenterFrame*)_frame;
-  // TODO scaling
-  m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry(),xOffset,yOffset);
+//   KPresenterFrame *f = (KPresenterFrame*)_frame;
+//   // TODO scaling
+//   m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry(),xOffset,yOffset);
 }
 
 /*=========== take changes for backgr dialog =====================*/
@@ -1555,7 +1601,11 @@ void KPresenterView::afChooseOk(const char* c)
   QString fileName(afDir + "/kpresenter/autoforms/" + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
   
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,fillType,gColor1,gColor2,gType,fileName,xOffset,yOffset);
+  //m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,fillType,gColor1,gColor2,gType,fileName,xOffset,yOffset);
+
+  page->deSelectAllObj();
+  page->setToolEditMode(INS_AUTOFORM);
+  page->setAutoForm(fileName);
 }
 
 /*=========== take changes for style dialog =====================*/
@@ -2431,7 +2481,7 @@ void KPresenterView::doAutomaticScreenPres()
 void KPresenterView::hideParts()
 {
   QListIterator<KPresenterFrame> it(m_lstFrames);
-
+  
   for(;it.current();++it)
     it.current()->hide();
 }
@@ -2439,45 +2489,45 @@ void KPresenterView::hideParts()
 /*====================== present parts ==========================*/
 void KPresenterView::presentParts(float _presFakt,QPainter* _painter,KRect _rect,int _diffx,int _diffy)
 {
-  QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
-  KRect child_geometry;
-  float scale_w,scale_h;
+//   QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
+//   KRect child_geometry;
+//   float scale_w,scale_h;
 
-  for(;chl.current();++chl)
-    {
-      child_geometry.setLeft(static_cast<int>(static_cast<float>(chl.current()->_geometry().left()) * _presFakt));
-      child_geometry.setTop(static_cast<int>(static_cast<float>(chl.current()->_geometry().top()) * _presFakt));
+//   for(;chl.current();++chl)
+//     {
+//       child_geometry.setLeft(static_cast<int>(static_cast<float>(chl.current()->_geometry().left()) * _presFakt));
+//       child_geometry.setTop(static_cast<int>(static_cast<float>(chl.current()->_geometry().top()) * _presFakt));
 
-      child_geometry.setRight(chl.current()->_geometry().right());
-      child_geometry.setBottom(chl.current()->_geometry().bottom());
+//       child_geometry.setRight(chl.current()->_geometry().right());
+//       child_geometry.setBottom(chl.current()->_geometry().bottom());
 
-      scale_w = static_cast<float>(chl.current()->_geometry().width()) * _presFakt / 
-	static_cast<float>(chl.current()->_geometry().width());
+//       scale_w = static_cast<float>(chl.current()->_geometry().width()) * _presFakt / 
+// 	static_cast<float>(chl.current()->_geometry().width());
 
-      scale_h = static_cast<float>(chl.current()->_geometry().height()) * _presFakt / 
-	static_cast<float>(chl.current()->_geometry().height());
+//       scale_h = static_cast<float>(chl.current()->_geometry().height()) * _presFakt / 
+// 	static_cast<float>(chl.current()->_geometry().height());
 
-      _painter->translate(static_cast<float>(child_geometry.left()) - static_cast<float>(_diffx),
-			  static_cast<float>(child_geometry.top()) - static_cast<float>(_diffy));
-      _painter->scale(scale_w,scale_h);
+//       _painter->translate(static_cast<float>(child_geometry.left()) - static_cast<float>(_diffx),
+// 			  static_cast<float>(child_geometry.top()) - static_cast<float>(_diffy));
+//       _painter->scale(scale_w,scale_h);
 
-      QPicture* pic;
-      pic = chl.current()->draw();
+//       QPicture* pic;
+//       pic = chl.current()->draw();
 
-      if (pic && !pic->isNull())
-	_painter->drawPicture(*pic);
+//       if (pic && !pic->isNull())
+// 	_painter->drawPicture(*pic);
   
-      _painter->resetXForm();
-    }
+//       _painter->resetXForm();
+//     }
 }
 
 /*==================== show parts again =========================*/
 void KPresenterView::showParts()
 {
-  QListIterator<KPresenterFrame> it(m_lstFrames);
+//   QListIterator<KPresenterFrame> it(m_lstFrames);
 
-  for(;it.current();++it)
-    it.current()->show();
+//   for(;it.current();++it)
+//     it.current()->show();
 }
 
 /*========================= change undo =========================*/
@@ -2614,34 +2664,43 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix, i18n("&Clipart..."), this,"insertClipart", Key_F3, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
-  m_idMenuInsert_Autoform = m_vMenuInsert->insertItem6(pix, i18n("&Autoform..."), this,"insertAutoform", Key_F4, -1, -1 );
-
   m_vMenuInsert->setCheckable(true);
 
   // MENU Tools
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
-  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix, i18n("&Mouse"), this,"toolsMouse", Key_F5, -1, -1 );
+  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix, i18n("&Mouse"), this,"toolsMouse", Key_F4, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
-  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix, i18n("&Line"), this,"toolsLine", Key_F6, -1, -1 );
+  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix, i18n("&Line"), this,"toolsLine", Key_F5, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
-  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix, i18n("&Rectangle"), this,"toolsRectangle", Key_F7, -1, -1 );
+  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix, i18n("&Rectangle"), this,"toolsRectangle", Key_F6, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
-  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix, i18n("C&ircle or Ellipse"), this,"toolsCircleOrEllipse", Key_F8, -1, -1 );
+  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix, i18n("C&ircle or Ellipse"), this,"toolsCircleOrEllipse", Key_F7, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
-  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix, i18n("Pie/&Arc/Chord"), this,"toolsPie", Key_F9, -1, -1 );
+  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix, i18n("Pie/&Arc/Chord"), this,"toolsPie", Key_F8, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
-  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix, i18n("&Text"), this,"toolsText", Key_F10, -1, -1 );
+  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix, i18n("&Text"), this,"toolsText", Key_F9, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
+  m_idMenuTools_Autoform = m_vMenuTools->insertItem6(pix, i18n("&Autoform..."), this,"toolsAutoform", Key_F10, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("chart.xpm"));
+  m_idMenuTools_Diagramm = m_vMenuTools->insertItem6(pix, i18n("&Diagramm"), this,"toolsDiagramm", Key_F11, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  m_idMenuTools_Table = m_vMenuTools->insertItem6(pix, i18n("&Table"), this,"toolsTable", Key_F12, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
+  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix, i18n("&Formula"), this,"toolsFormula", ALT + Key_F1, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", Key_F11, -1, -1 );
+  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", ALT + Key_F2, -1, -1 );
 
   m_vMenuTools->setCheckable( true );
 
@@ -3000,10 +3059,6 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1 );
   
-  // autoform
-  pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
-  m_idButtonInsert_Autoform = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertAutoform", true, i18n("Insert Autoform"), -1 );
-  
   m_vToolBarInsert->enable( OpenPartsUI::Show );
 
   ///////
@@ -3055,6 +3110,34 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 							   true, i18n("Create Text"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_TEXT,true);
   m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
+
+  // autoform
+  pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
+  m_idButtonTools_Autoform = m_vToolBarTools->insertButton2( pix, ID_TOOL_AUTOFORM, SIGNAL( clicked() ), this, "toolsAutoform", 
+							     true, i18n("Create Autoform"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_AUTOFORM,true);
+  m_vToolBarTools->setButton(ID_TOOL_AUTOFORM,false);
+
+  // diagramm
+  pix = OPUIUtils::convertPixmap(ICON("chart.xpm"));
+  m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2( pix, ID_TOOL_DIAGRAMM, SIGNAL( clicked() ), this, "toolsDiagramm", 
+							   true, i18n("Create Diagramm"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_DIAGRAMM,true);
+  m_vToolBarTools->setButton(ID_TOOL_DIAGRAMM,false);
+
+  // table
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_TABLE, SIGNAL( clicked() ), this, "toolsTable", 
+							   true, i18n("Create Table"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_TABLE,true);
+  m_vToolBarTools->setButton(ID_TOOL_TABLE,false);
+
+  // formula
+  pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
+  m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_FORMULA, SIGNAL( clicked() ), this, "toolsFormula", 
+							   true, i18n("Create Formula"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_FORMULA,true);
+  m_vToolBarTools->setButton(ID_TOOL_FORMULA,false);
 
   // parts
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
@@ -3421,6 +3504,10 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
   m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,false);
   m_vToolBarTools->setButton(ID_TOOL_PIE,false);
   m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
+  m_vToolBarTools->setButton(ID_TOOL_AUTOFORM,false);
+  m_vToolBarTools->setButton(ID_TOOL_TABLE,false);
+  m_vToolBarTools->setButton(ID_TOOL_DIAGRAMM,false);
+  m_vToolBarTools->setButton(ID_TOOL_FORMULA,false);
   m_vToolBarTools->setButton(ID_TOOL_OBJECT,false);
 
   m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,false);
@@ -3429,6 +3516,10 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
   m_vMenuTools->setItemChecked(m_idMenuTools_Circle,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Pie,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Text,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Autoform,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Table,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Diagramm,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Formula,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Part,false);
 
   switch (toolEditMode)
@@ -3463,10 +3554,30 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 	m_vMenuTools->setItemChecked(m_idMenuTools_Part,true);
 	m_vToolBarTools->setButton(ID_TOOL_OBJECT,true);
       } break;
+    case INS_DIAGRAMM:
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Diagramm,true);
+	m_vToolBarTools->setButton(ID_TOOL_DIAGRAMM,true);
+      } break;
+    case INS_TABLE:
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Table,true);
+	m_vToolBarTools->setButton(ID_TOOL_TABLE,true);
+      } break;
+    case INS_FORMULA:
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Formula,true);
+	m_vToolBarTools->setButton(ID_TOOL_FORMULA,true);
+      } break;
     case INS_TEXT:
       {
 	m_vMenuTools->setItemChecked(m_idMenuTools_Text,true);
 	m_vToolBarTools->setButton(ID_TOOL_TEXT,true);
+      } break;
+    case INS_AUTOFORM:
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Autoform,true);
+	m_vToolBarTools->setButton(ID_TOOL_AUTOFORM,true);
       } break;
     }
 }

@@ -83,6 +83,7 @@ class Page;
 #include "pglayoutcmd.h"
 #include "shadowcmd.h"
 #include "rotatecmd.h"
+#include "kppartobject.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>
@@ -157,7 +158,6 @@ public:
   virtual void insertPage();
   virtual void insertPicture();
   virtual void insertClipart();
-  virtual void insertAutoform();
 
   // tools menu
   virtual void toolsMouse();
@@ -166,6 +166,10 @@ public:
   virtual void toolsCircleOrEllipse();
   virtual void toolsPie();
   virtual void toolsText();
+  virtual void toolsAutoform();
+  virtual void toolsDiagramm();
+  virtual void toolsTable();
+  virtual void toolsFormula();
   virtual void toolsObject();
 
   // extra menu
@@ -317,7 +321,7 @@ public slots:
 
   // Document signals
   void slotKPresenterModified();
-  void slotInsertObject(KPresenterChild *_child);
+  void slotInsertObject(KPresenterChild *_child,KPPartObject *_kppo);
   void slotUpdateChildGeometry(KPresenterChild *_child);
   
   // KPresenterFrame signals
@@ -461,7 +465,6 @@ protected:
   CORBA::Long m_idMenuInsert_Page;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
-  CORBA::Long m_idMenuInsert_Autoform;
 
   // tools menu
   OpenPartsUI::Menu_var m_vMenuTools;
@@ -471,6 +474,10 @@ protected:
   CORBA::Long m_idMenuTools_Circle;
   CORBA::Long m_idMenuTools_Pie;
   CORBA::Long m_idMenuTools_Text;
+  CORBA::Long m_idMenuTools_Autoform;
+  CORBA::Long m_idMenuTools_Diagramm;
+  CORBA::Long m_idMenuTools_Table;
+  CORBA::Long m_idMenuTools_Formula;
   CORBA::Long m_idMenuTools_Part;
  
   // text menu
@@ -560,7 +567,6 @@ protected:
   CORBA::Long m_idButtonInsert_Page;
   CORBA::Long m_idButtonInsert_Picture;
   CORBA::Long m_idButtonInsert_Clipart;
-  CORBA::Long m_idButtonInsert_Autoform;
 
   // tools toolbar
   OpenPartsUI::ToolBar_var m_vToolBarTools;
@@ -570,6 +576,10 @@ protected:
   CORBA::Long m_idButtonTools_Circle;
   CORBA::Long m_idButtonTools_Pie;
   CORBA::Long m_idButtonTools_Text;
+  CORBA::Long m_idButtonTools_Autoform;
+  CORBA::Long m_idButtonTools_Diagramm;
+  CORBA::Long m_idButtonTools_Table;
+  CORBA::Long m_idButtonTools_Formula;
   CORBA::Long m_idButtonTools_Part;
 
   // text toolbar
@@ -693,6 +703,10 @@ protected:
   static const int ID_FONT_SIZE = 17;
   static const int ID_UNDO = 18;
   static const int ID_REDO = 19;
+  static const int ID_TOOL_DIAGRAMM = 20;
+  static const int ID_TOOL_TABLE = 21;
+  static const int ID_TOOL_FORMULA = 22;
+  static const int ID_TOOL_AUTOFORM = 23;
 
 };
 

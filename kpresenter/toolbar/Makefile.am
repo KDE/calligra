@@ -16,7 +16,8 @@ toolbar_DATA = 121.xpm \
 	edit_text.xpm edit_pie.xpm mouse.xpm depth-.xpm depth+.xpm \
 	spacing.xpm delslide.xpm newslide.xpm line_begin.xpm line_end.xpm \
 	line_arrow_begin.xpm line_circle_begin.xpm line_rect_begin.xpm line_normal_begin.xpm \
-	line_arrow_end.xpm line_circle_end.xpm line_rect_end.xpm line_normal_end.xpm
+	line_arrow_end.xpm line_circle_end.xpm line_rect_end.xpm line_normal_end.xpm \
+	table.xpm chart.xpm formula.xpm
 
 toolbardir = $(kde_datadir)/kpresenter/toolbar
 

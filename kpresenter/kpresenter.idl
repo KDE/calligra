@@ -25,7 +25,6 @@ module KPresenter
       slot void insertPage();
       slot void insertPicture();
       slot void insertClipart();
-      slot void insertAutoform();
 
       slot void toolsMouse();
       slot void toolsLine();
@@ -33,6 +32,10 @@ module KPresenter
       slot void toolsCircleOrEllipse();
       slot void toolsPie();
       slot void toolsText();
+      slot void toolsAutoform();
+      slot void toolsDiagramm();
+      slot void toolsTable();
+      slot void toolsFormula();
       slot void toolsObject();
 
       slot void extraPenBrush();

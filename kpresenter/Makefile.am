@@ -21,7 +21,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	confpiedia.cc spacingdia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
-	kppixmapobject.cc kppieobject.cc \
+	kppixmapobject.cc kppieobject.cc kppartobject.cc \
 	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
@@ -40,7 +40,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		delpagedia.h inspagedia.h confpiedia.h spacingdia.h confrectdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
-		kppixmapobject.h kppieobject.h \
+		kppixmapobject.h kppieobject.h kppartobject.h \
 		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
@@ -59,7 +59,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		spacingdia.moc confrectdia.moc \
 		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
 		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
-		kppixmapobject.moc kppieobject.moc \
+		kppixmapobject.moc kppieobject.moc kppartobject.moc \
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
 		kppixmapcollection.moc kpgradientcollection.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
@@ -137,6 +137,7 @@ kpgradient.cc: kpgradient.moc
 kppixmapcollection.cc: kppixmapcollection.moc
 kpgradientcollection.cc: kpgradientcollection.moc
 kppieobject.cc: kppieobject.moc
+kppartobject.cc: kppartobject.moc
 
 command.cc: command.moc
 movecmd.cc: movecmd.moc

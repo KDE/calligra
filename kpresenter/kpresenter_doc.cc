@@ -28,8 +28,7 @@ KPresenterChild::KPresenterChild(KPresenterDoc *_kpr, const KRect& _rect,KOffice
 {
   m_pKPresenterDoc = _kpr;
   m_rDoc = KOffice::Document::_duplicate(_doc);
-  m_geometry = _rect;
-  __geometry = KRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom());
+  setGeometry(KRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.width(),_rect.height()));
 }
 
 /*====================== constructor =============================*/
@@ -46,7 +45,7 @@ KPresenterChild::~KPresenterChild()
 }
 
 /******************************************************************/
-/* class KPresenterDoc                                  */
+/* class KPresenterDoc                                            */
 /******************************************************************/
 
 /*====================== constructor =============================*/
@@ -348,7 +347,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	  KPresenterChild *ch = new KPresenterChild(this);
 	  ch->load(parser,lst);
 	  insertChild(ch);
-	  ch->_setGeometry(ch->geometry());
+	  ch->setGeometry(ch->geometry());
 	}
       else if (name == "PAPER")
 	{
@@ -700,16 +699,28 @@ void KPresenterDoc::insertObject(const KRect& _rect, const char* _server_name,in
 
   KPresenterChild* ch = new KPresenterChild(this,_rect,doc,_diffx,_diffy);
 
-  insertChild( ch );
+  KPPartObject *kppartobject = new KPPartObject(ch);
+
+  insertChild(ch);
   m_bModified = true;
+
+  kppartobject->setOrig(_rect.x() + _diffx,_rect.y() + _diffy);
+  kppartobject->setSize(_rect.width(),_rect.height());
+  kppartobject->setSelected(true);
+
+  InsertCmd *insertCmd = new InsertCmd(i18n("Embed Object"),kppartobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
+
+  emit sig_insertObject(ch,kppartobject);
+
+  repaint(false);
 }
 
 /*========================= insert a child object =====================*/
 void KPresenterDoc::insertChild(KPresenterChild *_child)
 {
   m_lstChildren.append(_child);
-  
-  emit sig_insertObject(_child);
   m_bModified = true;
 }
 
@@ -717,7 +728,6 @@ void KPresenterDoc::insertChild(KPresenterChild *_child)
 void KPresenterDoc::changeChildGeometry(KPresenterChild *_child,const KRect& _rect,int _diffx,int _diffy)
 {
   _child->setGeometry(_rect);
-  _child->_setGeometry(KRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom()));
 
   emit sig_updateChildGeometry(_child);
 
@@ -1716,12 +1726,12 @@ void KPresenterDoc::insertText(KRect r,int diffx,int diffy)
 }
 
 /*======================= insert an autoform ====================*/
-void KPresenterDoc::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
-					     BCType gt,QString fileName,int diffx,int diffy)
+void KPresenterDoc::insertAutoform(KRect r,QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
+				   BCType gt,QString fileName,int diffx,int diffy)
 {
   KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le,ft,g1,g2,gt);
-  kpautoformobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
-  kpautoformobject->setSize(150,150);
+  kpautoformobject->setOrig(r.x() + diffx,r.y() + diffy);
+  kpautoformobject->setSize(r.width(),r.height());
   kpautoformobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert autoform"),kpautoformobject,this);

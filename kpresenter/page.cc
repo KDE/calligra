@@ -187,6 +187,12 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	}
+      else if (kpobject->getType() == OT_PART)
+	{
+	  kpobject->deactivate();
+	  setFocusProxy(0);
+	  setFocusPolicy(QWidget::NoFocus);
+	}
     }
 
   if (editMode)
@@ -633,8 +639,30 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       if (insRect.width() > 0 && insRect.height() > 0) insertPie(insRect);
       break;
     case INS_OBJECT:
-      if (insRect.width() > 0 && insRect.height() > 0) insertObject(insRect);
-      break;
+      {
+	if (insRect.width() > 0 && insRect.height() > 0) insertObject(insRect);
+	setToolEditMode(TEM_MOUSE);
+      } break;
+    case INS_DIAGRAMM:
+      {
+	if (insRect.width() > 0 && insRect.height() > 0) insertDiagramm(insRect);
+	setToolEditMode(TEM_MOUSE);
+      } break;
+    case INS_TABLE:
+      {
+	if (insRect.width() > 0 && insRect.height() > 0) insertTable(insRect);
+	setToolEditMode(TEM_MOUSE);
+      } break;
+    case INS_FORMULA:
+      {
+	if (insRect.width() > 0 && insRect.height() > 0) insertFormula(insRect);
+	setToolEditMode(TEM_MOUSE);
+      } break;
+    case INS_AUTOFORM:
+      {
+	if (insRect.width() > 0 && insRect.height() > 0) insertAutoform(insRect);
+	setToolEditMode(TEM_MOUSE);
+      } break;
     }
 
   if (toolEditMode != TEM_MOUSE && editMode) repaint(false);
@@ -778,7 +806,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		oldMx = e->x();
 		oldMy = e->y();
 	      } break;
-	    case INS_TEXT: case INS_OBJECT:
+	    case INS_TEXT: case INS_OBJECT: case INS_TABLE: case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
 	      {
 		QPainter p(this);
 		p.setPen(QPen(black,1,SolidLine));
@@ -916,6 +944,16 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
+		  editNum = i;
+		  break;
+		}
+	      else if (kpobject->getType() == OT_PART)
+		{
+		  kpobject->activate(this,diffx(),diffy());
+		  setFocusProxy(dynamic_cast<KPPartObject*>(kpobject)->getView());
+		  setFocusPolicy(QWidget::StrongFocus);
+		  dynamic_cast<KPPartObject*>(kpobject)->getView()->setFocusPolicy(QWidget::StrongFocus);
+		  dynamic_cast<KPPartObject*>(kpobject)->getView()->setFocus();
 		  editNum = i;
 		  break;
 		}
@@ -1491,6 +1529,12 @@ void Page::startScreenPresentation(bool zoom)
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	  kptextobject->getKTextObject()->setShowCursor(false);
+	  setFocusProxy(0);
+	  setFocusPolicy(QWidget::NoFocus);
+	}
+      else if (kpobject->getType() == OT_PART)
+	{
+	  kpobject->deactivate();
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	}
@@ -2631,7 +2675,33 @@ void Page::insertPie(KRect _r)
 }
 
 /*================================================================*/
+void Page::insertAutoform(KRect _r)
+{
+  view->kPresenterDoc()->insertAutoform(_r,view->getPen(),view->getBrush(),view->getLineBegin(),view->getLineEnd(),
+					view->getFillType(),view->getGColor1(),view->getGColor2(),view->getGType(),
+					autoform,diffx(),diffy());
+}
+
+/*================================================================*/
 void Page::insertObject(KRect _r)
+{
+  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+}
+
+/*================================================================*/
+void Page::insertTable(KRect _r)
+{
+  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+}
+
+/*================================================================*/
+void Page::insertDiagramm(KRect _r)
+{
+  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+}
+
+/*================================================================*/
+void Page::insertFormula(KRect _r)
 {
   view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
 }
@@ -2655,6 +2725,12 @@ void Page::setToolEditMode(ToolEditMode _m)
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	  kptextobject->getKTextObject()->setShowCursor(false);
+	  setFocusProxy(0);
+	  setFocusPolicy(QWidget::NoFocus);
+	}
+      else if (kpobject->getType() == OT_PART)
+	{
+	  kpobject->deactivate();
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	}
