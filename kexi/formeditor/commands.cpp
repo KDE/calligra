@@ -425,6 +425,7 @@ PasteWidgetCommand::execute()
 		return;
 	}
 
+	kdDebug() << domDoc.toString() << endl;
 	if(!domDoc.namedItem("UI").hasChildNodes())
 		return;
 	if(domDoc.namedItem("UI").firstChild().nextSibling().isNull())
@@ -447,7 +448,7 @@ PasteWidgetCommand::execute()
 	for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		if(n.toElement().tagName() != "widget")
-			break;
+			continue;
 		for(QDomNode m = n.firstChild(); !m.isNull(); n = m.nextSibling())
 		{
 			if((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name"))
@@ -456,6 +457,17 @@ PasteWidgetCommand::execute()
 				break;
 			}
 		}
+	}
+
+	ObjectTreeItem *item = m_form->objectTree()->lookup(m_names.first());
+	if(item)
+		m_container->setSelectedWidget(item->widget(), false);
+	QStringList::Iterator it = m_names.begin();
+	for(++it; it != m_names.end(); ++it)
+	{
+		item = m_form->objectTree()->lookup(*it);
+		if(item)
+			m_container->setSelectedWidget(item->widget(), true);
 	}
 }
 

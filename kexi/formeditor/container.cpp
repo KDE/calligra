@@ -185,7 +185,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			else if(m_selected.count() > 1)
 			{
 				if(m_selected.findRef(m_moving) == -1)
-					setSelectedWidget(m_moving, true);
+					setSelectedWidget(m_moving, false);
 			}
 			else
 				setSelectedWidget(m_moving, false);
@@ -235,7 +235,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					//w = it.current()->widget();
 					w = item->widget();
 					if(!w) continue;
-					if(w->geometry().intersects(r))
+					if(w->geometry().intersects(r) && w != m_container)
 						list.append(w);
 				}
 

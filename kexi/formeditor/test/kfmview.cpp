@@ -60,6 +60,7 @@ KFMView::KFMView()
 	KStdAction::paste(manager, SLOT(pasteWidget()), actionCollection());
 	KStdAction::quit( KApplication::kApplication(), SLOT(quit()), actionCollection());
 	new KAction(i18n("Edit tab order"), "tab_order", KShortcut(0), manager, SLOT(editTabOrder()), actionCollection(), "taborder");
+	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), manager, SLOT(ajustWidgetSize()), actionCollection(), "adjust");
 	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());

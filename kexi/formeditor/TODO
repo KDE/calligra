@@ -16,7 +16,6 @@
 
 ****** Bugfixes/Changes : *****
 * Make ObjectTreeView handle multiple widgets
-* Select all widgets when pasted
 * Add a grouping ability to Widget
 * Make actions toggable (with KRadioAction)
 
@@ -53,3 +52,4 @@
 * Rich text editor (see BasKet source) (4/20/04)
 * Allow to select multiple widgets by drawing a rectangle on form (4/22/04)
 * Add a "Lay out Vertcally / horizontally " menu item when multiple widgets are selected (4/22/04)
+* Select all widgets when pasted (8/05/04)

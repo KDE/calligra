@@ -105,7 +105,12 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 {
 	m_collection = parent;
 	m_client = client;
-	return m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
+
+	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
+	m_pointer = new KToggleAction(i18n("Pointer"), "stop", KShortcut(0), this, SLOT(stopInsert()), parent, "pointer");
+	m_pointer->setChecked(true);
+	actions.append(m_pointer);
+	return actions;
 }
 
 void
@@ -120,6 +125,7 @@ FormManager::insertWidget(const QString &classname)
 
 	m_inserting = true;
 	m_insertClass = classname;
+	m_pointer->setChecked(false);
 }
 
 void
@@ -131,6 +137,7 @@ FormManager::stopInsert()
 		form->toplevelContainer()->widget()->unsetCursor();
 	}
 	m_inserting = false;
+	m_pointer->setChecked(true);
 }
 
 void
@@ -525,6 +532,17 @@ FormManager::editTabOrder()
 	if(!m_active)  return;
 	TabStopDialog *d = new TabStopDialog(m_active, m_active->toplevelContainer()->widget()->topLevelWidget());
 	delete d;
+}
+
+void
+FormManager::ajustWidgetSize()
+{
+	if(!m_active)
+		return;
+	if(m_active->selectedWidgets()->count() > 1)
+		return;
+
+	m_active->selectedWidgets()->first()->resize(m_active->selectedWidgets()->first()->sizeHint());
 }
 
 void

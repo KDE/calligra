@@ -7,10 +7,12 @@
   </Menu>
   <Menu name="tools">
    <Action name="taborder"/>
+   <Action name="adjust"/>
   </Menu>
   <Menu name="widgets">
    <text>&amp;Widgets</text>
    <Merge/>
+   <Action name="pointer"/>
    <Separator/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
@@ -45,6 +47,7 @@
 
 <ToolBar name="containers" fullWidth="false">
  <text>Containers</text>
+   <Action name="pointer"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>

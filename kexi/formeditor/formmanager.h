@@ -32,6 +32,7 @@ class KexiPropertyEditor;
 class KexiPropertyBuffer;
 class KActionCollection;
 class KAction;
+class KToggleAction;
 class KXMLGUIClient;
 class KMainWindow;
 
@@ -147,6 +148,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void pasteWidget();
 
 		void editTabOrder();
+		void ajustWidgetSize();
 		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
@@ -204,6 +206,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		QGuardedPtr<KActionCollection>	m_collection;
 		KMainWindow 		*m_client;
+		KToggleAction		*m_pointer;
 
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;
