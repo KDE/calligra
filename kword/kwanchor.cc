@@ -150,8 +150,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // The amount we have to move depends on the frame we are positioned in, as we don't know this
     // lets find out via our containting frameset.
     KoPoint topLeft = KoPoint(
-        zh->unzoomItX(m_frameset->frame(m_frameNum)->outerRect().x()) + 1, // we add one to x and y to 
-        zh->unzoomItY(m_frameset->frame(m_frameNum)->outerRect().y()) + 1);// compensate for rounding errors.
+        zh->unzoomItX(m_frameset->frame(m_frameNum)->outerRect().x()) + 2, // we add one to x and y to 
+        zh->unzoomItY(m_frameset->frame(m_frameNum)->outerRect().y()) + 2);// compensate for rounding errors.
 
     QPoint dud;
     KWFrame *containingFrame=fs->documentToInternal(topLeft, dud, false);
