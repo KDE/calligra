@@ -1,17 +1,30 @@
+since 1.3 RC1
+=============
+- fix problem formatting the whole row (#65504)
+- make the top/middle/bottom alignment buttons work
+- fix problem with reference from another sheet (bug #60455)
+- show indicator of chosen/selected cells (bug #58098)
+- hide in-place cell editing when choosing other sheet
+- proper zoom and display of formatted hyperlink (#66214)
+- fix flickering problem with many hyperlinks (#65501)
+- don't crash when leaving the preview in Konq (#65928)
+- fix redraw problem with Print Preview (#60147)
+- support only one zoom for two or more views
+- fix painting problem with multiple view
+
 since 1.3 beta4
 ===============
 - #64794: kspread problem with calculating dates
-- #61570: cell border does not work with merged cells 
+- #61570: cell border does not work with merged cells
 
 since 1.3 beta3
 ===============
 - KSpread is slow during text to column conversion (#59999)
-- fix problem cycling absolute cell reference with F4 key (#46959) 
+- fix problem cycling absolute cell reference with F4 key (#46959)
 - the calculator plugin saves its configuration now (#49954)
 
 since 1.3 beta2
 ===============
-- KSpread fails to redraw during and after 'Print Preview' (#60147)
 - KSpread crash when changing paper orientation (#60279)
 
 
