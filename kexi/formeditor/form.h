@@ -30,6 +30,7 @@ class QWidget;
 class QDomElement;
 class KActionCollection;
 class KCommandHistory;
+class KCommand;
 
 namespace KFormDesigner {
 
@@ -129,6 +130,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		KCommandHistory*	commandHistory() { return m_history; }
 		KActionCollection*	actionCollection() { return m_collection; }
+
+		void addCommand(KCommand *command, bool execute);
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem

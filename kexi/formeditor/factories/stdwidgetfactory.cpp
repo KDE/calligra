@@ -11,6 +11,7 @@
 #include <qlabel.h>
 #include <klineedit.h>
 #include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -74,6 +75,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "QLineEdit")
 	{
 		QWidget *w = new QLineEdit(p, n);
+		w->setCursor(QCursor(Qt::ArrowCursor));
 		//((QLineEdit *)w)->setReadOnly(true);
 		w->installEventFilter(container);
 		return w;

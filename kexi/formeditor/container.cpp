@@ -171,7 +171,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(m_form->manager()->inserting())
 			{
 				KCommand *com = new InsertWidgetCommand(this, mev->pos());
-				m_form->commandHistory()->addCommand(com, true);
+				m_form->addCommand(com, true);
 			}
 			else if(mev->button() == RightButton)
 			{

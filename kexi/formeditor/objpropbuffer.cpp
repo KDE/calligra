@@ -79,7 +79,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 			else if(!m_undoing)
 			{
 				m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property(property.latin1()), value, prop.name());
-				m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+				m_manager->activeForm()->addCommand(m_lastcom, false);
 			}
 			m_object->setProperty(property.latin1(), value);
 			emit propertyChanged(m_object, property, value);
@@ -96,7 +96,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 					list.insert(w->name(), w->property(property.latin1()));
 
 				m_lastcom = new PropertyCommand(this, list, value, prop.name());
-				m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+				m_manager->activeForm()->addCommand(m_lastcom, false);
 			}
 
 			for(w = m_widgets.first(); w; w = m_widgets.next())
@@ -297,7 +297,7 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 				list.append(w->name());
 
 			m_lastgeocom = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
-			m_manager->activeForm()->commandHistory()->addCommand(m_lastgeocom, false);
+			m_manager->activeForm()->addCommand(m_lastgeocom, false);
 		}
 	}
 	return false;
@@ -450,7 +450,7 @@ ObjectPropertyBuffer::saveAlignProperty()
 	else if(!m_undoing)
 	{
 		m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property("alignment"), meta->keysToValue(list), "alignment");
-		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+		m_manager->activeForm()->addCommand(m_lastcom, false);
 	}
 }
 
@@ -524,7 +524,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
 	else if(!m_undoing)
 	{
 		m_lastcom = new LayoutPropertyCommand(this, m_object->name(), (*this)["layout"]->oldValue(), value);
-		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+		m_manager->activeForm()->addCommand(m_lastcom, false);
 	}
 
 	cont->setLayout(type);

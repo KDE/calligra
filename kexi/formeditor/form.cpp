@@ -169,6 +169,13 @@ Form::emitChildRemoved(ObjectTreeItem *item)
 	emit childRemoved(item);
 }
 
+void
+Form::addCommand(KCommand *command, bool execute)
+{
+	emit m_manager->dirty(this);
+	m_history->addCommand(command, execute);
+}
+
 Container*
 Form::activeContainer()
 {

@@ -167,6 +167,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	signals:
 		/*! this signal is emmited as the property buffer switched */
 		void bufferSwitched(KexiPropertyBuffer *buff);
+		void dirty(Form *form);
 
 	private:
 		ObjectPropertyBuffer	*m_buffer;
@@ -190,6 +191,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KMainWindow 		*m_client;
 
 		friend class CutWidgetCommand;
+		friend class Form;
 };
 
 }

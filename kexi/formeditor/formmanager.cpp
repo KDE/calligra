@@ -30,7 +30,7 @@
 #include <kxmlguiclient.h>
 #include <kmainwindow.h>
 
-#include <kdeversion.h> 
+#include <kdeversion.h>
 #if KDE_IS_VERSION(3,1,9)
 # include <kactioncollection.h>
 #endif
@@ -192,7 +192,7 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 	QString n;
 
 	n = "Form" + QString::number(m_count + 1);
-	w = new QWidget(parent, n.latin1());
+	w = new QWidget(parent, n.latin1(), Qt::WDestructiveClose);
 
 	form->createToplevel(w, classname);
 	w->setCaption(n);
@@ -225,7 +225,7 @@ FormManager::loadForm(bool preview)
 {
 //	QString n = "Form" + QString::number(m_count + 1);
 	Form *form = new Form(this);//, n.latin1());
-	QWidget *w = new QWidget(m_parent);
+	QWidget *w = new QWidget(m_parent, 0, Qt::WDestructiveClose);
 	form->createToplevel(w);
 	if(!FormIO::loadForm(form, w))
 	{
@@ -326,7 +326,7 @@ FormManager::deleteWidget()
 		return;
 
 	KCommand *com = new DeleteWidgetCommand(*list, activeForm());
-	activeForm()->commandHistory()->addCommand(com, true);
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -367,7 +367,7 @@ FormManager::cutWidget()
 		return;
 
 	KCommand *com = new CutWidgetCommand(*list, activeForm());
-	activeForm()->commandHistory()->addCommand(com, true);
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -380,7 +380,7 @@ FormManager::pasteWidget()
 		return;
 
 	KCommand *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
-	activeForm()->commandHistory()->addCommand(com, true);
+	activeForm()->addCommand(com, true);
 }
 
 void
