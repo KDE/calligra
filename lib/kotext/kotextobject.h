@@ -283,10 +283,32 @@ public:
     KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
 
-    KCommand* applyStyle( KoTextCursor * cursor, const KoStyle * style,
+    /**
+     * Apply a KoStyle to a selection.
+     * @param cursor the current cursor; used if there is no selection. Can be 0L if there is one.
+     * @param style the KoStyle to apply
+     * @param selectionId the id of the selection, usually Standard or Temp
+     * @param paragLayoutFlags which settings from the paragraph layout to apply
+     * @param formatFlags which settings from the text format to apply
+     * @param createUndoRedo if true, an undo/redo command will be created and emitted
+     * @param interactive if true, the text will be reformatted/repainted to show the new style
+     */
+    void applyStyle( KoTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
-                     bool createUndoRedo = true, bool interactive = true, bool emitCommand = true );
+                     bool createUndoRedo = true, bool interactive = true );
+
+    /**
+     * Helper for applyStyle. Can also be called directly, so that the command isn't emitted,
+     * e.g. to put it into a macro-command.
+     * @return the command for 'apply style', or 0L if createUndoRedo is false.
+     */
+    KCommand* applyStyleCommand( KoTextCursor * cursor, const KoStyle * style,
+                     int selectionId = KoTextDocument::Standard,
+                     int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
+                     bool createUndoRedo = true, bool interactive = true );
+
+
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
      *  @param paragLayoutChanged paragraph flags

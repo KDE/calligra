@@ -1484,7 +1484,7 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
     Form1Layout->addItem( spacer );
 }
 
-void KoParagCounterWidget::styleChanged (KoParagCounter::Style st )
+void KoParagCounterWidget::styleChanged( KoParagCounter::Style st )
 {
     m_counter.setStyle( st );
     updatePreview();

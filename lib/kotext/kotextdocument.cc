@@ -120,6 +120,8 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	return;
 
     Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
+    if (m_drawingFlags & DrawSelections)
+           kdDebug() << kdBacktrace();
     if ( paper ) {
 	p->setBrushOrigin( -(int)p->translationX(),
 			   -(int)p->translationY() );

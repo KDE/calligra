@@ -686,9 +686,24 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
 }
 
 
-KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newStyle,
+void KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newStyle,
                                int selectionId,
-                               int paragLayoutFlags, int formatFlags, bool createUndoRedo, bool interactive, bool emitCommand )
+                               int paragLayoutFlags, int formatFlags,
+                               bool createUndoRedo, bool interactive )
+{
+    KCommand *cmd = applyStyleCommand( cursor, newStyle, selectionId,
+                                       paragLayoutFlags, formatFlags,
+                                       createUndoRedo, interactive );
+    if ( createUndoRedo && cmd )
+        emit newCommand( cmd );
+    else
+        Q_ASSERT( !cmd ); // mem leak, if applyStyleCommand created a command despite createUndoRedo==false!
+}
+
+KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoStyle * newStyle,
+                               int selectionId,
+                               int paragLayoutFlags, int formatFlags,
+                               bool createUndoRedo, bool interactive )
 {
     if ( protectContent())
         return 0L;
@@ -727,7 +742,7 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
                                                          undoRedoInfo.oldParagLayouts,
                                                          newStyle->paragLayout(), paragLayoutFlags );
             textdoc->addCommand( cmd );
-            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */QString::null ) );
+            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */"related to KoTextParagCommand" ) );
         }
     }
 
@@ -774,13 +789,13 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
                                                          undoRedoInfo.text.rawData(), newFormat,
                                                          formatFlags );
             textdoc->addCommand( cmd );
-            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */QString::null ) );
+            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */"related to KoTextFormatCommand" ) );
 
             // sub-command for '3' (paragFormat)
             cmd = new KoParagFormatCommand( textdoc, firstParag->paragId(), lastParag->paragId(),
                                             lstFormats, newFormat );
             textdoc->addCommand( cmd );
-            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */QString::null ) );
+            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */"related to KoParagFormatCommand" ) );
         }
 
         // apply '2' and '3' (format)
@@ -807,8 +822,6 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
         formatMore( 2 );
         emit repaintChanged( this );
         emit updateUI( true );
-        if ( createUndoRedo && emitCommand )
-            emit newCommand( macroCmd );
         emit showCursor();
     }
 
