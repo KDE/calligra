@@ -242,7 +242,7 @@ private:
 	int m_headerType, m_footerType;
 	bool m_hasHeader, m_isHeaderOnFirstPage;
 	bool m_hasFooter, m_isFooterOnFirstPage;
-	
+
 	enum inWhatPossiblities
 	{
 		Nothing,
@@ -902,6 +902,16 @@ public:
 		MSWrite::Long height = bih.getHeight ();
 
 
+		// Note: not from LibMSWrite's wmf.cpp
+		kdDebug (30509) << "\t\tBIH: width(pt)=" << width
+								<< " height(pt)=" << height
+								<< " BPP=" << bih.getBitsPerPixel ()
+								<< endl;
+		kdDebug (30509) << "\t\tBIH: xPixelsPerMeter=" << bih.getXPixelsPerMeter ()
+								<< " yPixelsPerMeter=" << bih.getYPixelsPerMeter ()
+								<< endl;
+
+
 		// write WMF Header
 		MSWrite::WMFHeader wmfHeader;
 		wmfHeader.setDevice (&writeDevice);
@@ -979,7 +989,7 @@ public:
 	// all windows measurements depend on there being 72 dots/points per inch
 	static double getDimen72DPI (const int measurement, const int dotsPerMeter)
 	{
-		kdDebug (30509) << "getDimen72DPI (measurement=" << measurement
+		kdDebug (30509) << "\t\tgetDimen72DPI (measurement=" << measurement
 								<< ",dotsPerMeter=" << dotsPerMeter << ")" << endl;
 
 		// Can't get resolution?
@@ -1007,10 +1017,12 @@ public:
 	//
 	bool processImage (const FrameAnchor &frameAnchor,
 								const MSWrite::FormatParaProperty *paraPropIn,
-								const MSWrite::FormatCharProperty *charPropIn)
+								const MSWrite::FormatCharProperty *charPropIn,
+								const bool ignoreIndent)
 	{
-		kdDebug (30509) << "processImage()" << endl;
-		
+		kdDebug (30509) << "--------------------------" << endl
+								<< "processImage()" << endl;
+
 
 		// Write supports images in 3 formats:
 		//
@@ -1036,13 +1048,13 @@ public:
 		QString imageType;
 		int pos = frameAnchor.picture.koStoreName.findRev ('.');
 		if (pos != -1) imageType = frameAnchor.picture.koStoreName.mid (pos).lower ();
-		kdDebug (30509) << "imageType: " << imageType << endl;
-		
+		kdDebug (30509) << "\timageType: " << imageType << endl;
+
 		QByteArray imageData;
-		kdDebug (30509) << "Reading image: " << frameAnchor.picture.koStoreName << endl;
+		kdDebug (30509) << "\tReading image: " << frameAnchor.picture.koStoreName << endl;
 		if (!loadSubFile (frameAnchor.picture.koStoreName, imageData))
 			ErrorAndQuit (MSWrite::Error::FileError, "could not open image from store\n");
-			
+
 		// FSM
 		for (;;)
 		{
@@ -1076,29 +1088,29 @@ public:
 
 					if (wmf.isPlaceable ())
 					{
-						kdDebug (30509) << "Converting Placeable WMF" << endl;
+						kdDebug (30509) << "\tConverting Placeable WMF" << endl;
 
 						// Remove Aldus Placeable WMF Header
 						for (int i = 0; i < int (imageSize) - 22; i++)
 							imageData [i] = imageData [i + 22];
-						
+
 						imageData.resize (imageSize - 22);
 						imageSize -= 22;
 					}
 					else if (wmf.isEnhanced ())
 					{
-						kdDebug (30509) << "Enhanced WMF unsupported by QWmf" << endl;
-						
+						kdError (30509) << "Enhanced WMF unsupported by QWmf, internal error!" << endl;
+
 						return true;
 					}
 					// Standard WMF
 					else
 					{
-						kdDebug (30509) << "Standard WMF - no conversion required" << endl;
+						kdDebug (30509) << "\tStandard WMF - no conversion required" << endl;
 					}
 				}
-				
-				kdDebug (30509) << "Now WMF: width=" << imageActualWidth
+
+				kdDebug (30509) << "\tNow WMF: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
 										<< " size=" << imageSize
 										<< endl;
@@ -1115,53 +1127,24 @@ public:
 					kdError (30509) << "QImage IsNull: Line=" << __LINE__ << endl;
 					return true;
 				}
-					
-				// TODO: Standard WMF can't take 32-bit?
-				if (image.depth () == 32)
-				{
-					kdWarning (30509) << "32bpp BMP unsupported" << endl;
-#if 0
-					QImage newImage = image.convertDepth (16/*24 not supported by QT*/);
-					if (newImage.isNull ())
-						ErrorAndQuit (MSWrite::Error::InternalError, "could not convert 32-bit BMP to 16-bit\n");
-						
-					QImageIO imageIO (newImage);
-					if (!imageIO.read ())
-						return false;
-					
-					QBuffer outBuffer (imageData);
-					outBuffer.open (IO_WriteOnly);
-					imageIO.setIODevice (&outBuffer);
-					imageIO.setFormat ("BMP");
-					if (!imageIO.write ())
-						return false;
-					
-					outBuffer.close ();
-					
-					// reload image
-					if (!image.loadFromData (imageData))
-						ErrorAndQuit (MSWrite::Error::InternalError, "could not convert 32-bit BMP to 16-bit (2)\n");
-#endif
-					//return true;
-				}
-				
+
 				if (imageActualWidth == -1 && imageActualHeight == -1)
 				{
 					imageActualWidth = Point2Twip (getDimen72DPI (image.width (), image.dotsPerMeterX ()));
 					imageActualHeight = Point2Twip (getDimen72DPI (image.height (), image.dotsPerMeterY ()));
 				}
 
-				kdDebug (30509) << "Now BMP: width=" << imageActualWidth
+				kdDebug (30509) << "\tNow BMP: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
 										<< " size=" << imageSize
 										<< endl;
-				
+
 				QByteArray imageWMF;
 					// input device
 					QBuffer inBuffer (imageData);
 					inBuffer.open (IO_ReadOnly);
 					QBufferDevice inDevice (&inBuffer);
-					
+
 					// output device
 					QBuffer outBuffer (imageWMF);
 					outBuffer.open (IO_WriteOnly);
@@ -1177,7 +1160,7 @@ public:
 					outBuffer.close ();
 					inBuffer.close ();
 				imageData = imageWMF.copy ();
-				
+
 				imageType = ".wmf";
 			}
 			else
@@ -1194,8 +1177,8 @@ public:
 					imageActualWidth = Point2Twip (getDimen72DPI (image.width (), image.dotsPerMeterX ()));
 					imageActualHeight = Point2Twip (getDimen72DPI (image.height (), image.dotsPerMeterY ()));
 				}
-				
-				kdDebug (30509) << "Foreign format: width=" << imageActualWidth
+
+				kdDebug (30509) << "\tForeign format: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
 										<< " size=" << imageSize
 										<< endl;
@@ -1204,7 +1187,7 @@ public:
 					// input device
 					QBuffer inBuffer (imageData);
 					inBuffer.open (IO_ReadOnly);
-				
+
 					// read foreign image
 					QImageIO imageIO (&inBuffer, NULL);
 					if (!imageIO.read ())
@@ -1212,11 +1195,11 @@ public:
 						kdError (30509) << "Could not read foreign format" << endl;
 						return true;
 					}
-					
+
 					// output device
 					QBuffer outBuffer (imageBMP);
 					outBuffer.open (IO_WriteOnly);
-					
+
 					// write BMP
 					imageIO.setIODevice (&outBuffer);
 					imageIO.setFormat ("BMP");
@@ -1225,37 +1208,39 @@ public:
 						kdError (30509) << "Could not convert to BMP" << endl;
 						return true;
 					}
-					
+
 					outBuffer.close ();
 					inBuffer.close ();
 				imageData = imageBMP.copy ();
-			
+
 				imageType = ".bmp";
 			}
 		}
-		
 
-		kdDebug (30509) << "Actual dimensions: width=" << imageActualWidth
+
+		kdDebug (30509) << "\tActual dimensions: width=" << imageActualWidth
 								<< " height=" << imageActualHeight << endl;
 
-		kdDebug (30509) << "KOffice position: left=" << frameAnchor.left
+		kdDebug (30509) << "\tKOffice position: left=" << frameAnchor.left
 								<< " right=" << frameAnchor.right
 								<< " top=" << frameAnchor.top
 								<< " bottom=" << frameAnchor.bottom
 								<< endl;
-		
-		kdDebug (30509) << "Indent=" << MSWrite::Word (Point2Twip (frameAnchor.left)) - m_leftMargin << endl;
-		
-		double displayedWidth = Point2Twip (frameAnchor.right - frameAnchor.left);
-		double displayedHeight = Point2Twip (frameAnchor.bottom - frameAnchor.top);
-		
-		kdDebug (30509) << "displayedWidth=" << displayedWidth
+
+		kdDebug (30509) << "\tIndent=" << MSWrite::Word (Point2Twip (frameAnchor.left)) - m_leftMargin << endl;
+		if (ignoreIndent)
+			kdDebug (30509) << "\t\tIgnoring indent - already exported at least one image in a KWord paragraph" << endl;
+
+		double displayedWidth = Point2Twip (frameAnchor.right - frameAnchor.left + 1);
+		double displayedHeight = Point2Twip (frameAnchor.bottom - frameAnchor.top + 1);
+
+		kdDebug (30509) << "\tdisplayedWidth=" << displayedWidth
 								<< " displayedHeight=" << displayedHeight
 								<< endl;
 
 
 		//
-		// Start writing out the image now 
+		// Start writing out the image now
 		//
 		// Note: here, we can start returning false again because the errors
 		// won't be conversion-related
@@ -1263,14 +1248,17 @@ public:
 
 		MSWrite::Image image;
 		image.setIsWMF (true);
-		if (paraPropIn->getAlignment () != MSWrite::Alignment::Centre)
-			image.setIndent (MSWrite::Word (Point2Twip (frameAnchor.left)) - m_leftMargin);
-		else
+		if (!ignoreIndent)
 		{
-			// TODO: what is the image offset relative to (it's not always rel. to the left margin)?
-			kdDebug (30509) << "\tCentred paragraph, cannot position image" << endl;
+			if (paraPropIn->getAlignment () != MSWrite::Alignment::Centre)
+				image.setIndent (MSWrite::Word (Point2Twip (frameAnchor.left)) - m_leftMargin);
+			else
+			{
+				// TODO: what is the image offset relative to (it's not always rel. to the left margin)?
+				kdDebug (30509) << "\tCentred paragraph, cannot position image" << endl;
+			}
 		}
-		
+
 		image.setOriginalWidth (imageActualWidth);
 		image.setOriginalHeight (imageActualHeight);
 		image.setDisplayedWidth (displayedWidth);
@@ -1302,10 +1290,13 @@ public:
 			return false;
 
 
-		kdDebug (30509) << "processImage() successful!" << endl;
+		kdDebug (30509) << "processImage() successful!" << endl
+								<< "==========================" << endl
+																			<< endl
+																			<< endl;
 		return true;
 	}
-	
+
 	bool processTable (const Table &table)
 	{
 		// just dump the table out for now (no layout)
@@ -1337,7 +1328,7 @@ public:
 
 	bool processCounter (const CounterData &counter)
 	{
-		kdDebug (30509) << "processCounter(counter.text=" << counter.text << ")" << endl;
+		//kdDebug (30509) << "processCounter(counter.text=" << counter.text << ")" << endl;
 
 		if (!counter.text.isEmpty ())
 		{
@@ -1348,7 +1339,7 @@ public:
 
 		return true;
 
-	#if 0	
+	#if 0
 		if (counter.numbering != CounterData::NUM_LIST &&
 				counter.numbering != CounterData::NUM_CHAPTER)
 		{
@@ -1539,16 +1530,19 @@ public:
 					ci.m_currentText += " ";
 			}
 		}
-			
+
 		QString output = ci.m_currentText;
 		output += " ";
-		
+
 		// finally output the counter
 		if (!processText (output)) return false;
 		return true;
 	#endif
 	}
-	
+
+	#ifndef NDEBUG
+		//#define KMF_DEBUG_FONT
+	#endif
 	void processFormatData (MSWrite::FormatCharProperty &charProp,
 						 			const TextFormatting &f)
 	{
@@ -1556,35 +1550,47 @@ public:
 		{
 			// create new Font with Name
 			MSWrite::Font font ((const MSWrite::Byte *) (const char *) f.fontName.utf8 ());
+		#ifdef KMF_DEBUG_FONT
 			kdDebug (30509) << "FontName " << f.fontName << endl;
-			
+		#endif
+
 			// get Font Family
 			QFont QTFontInfo (f.fontName);
 			switch (QTFontInfo.styleHint ())
 			{
 			case QFont::Serif:
+			#ifdef KMF_DEBUG_FONT
 				kdDebug (30509) << "FontFamily Serif" << endl;
+			#endif
 				font.setFamily (MSWrite::Font::Roman);
 				break;
 			case QFont::SansSerif:
+			#ifdef KMF_DEBUG_FONT
 				kdDebug (30509) << "FontFamily SansSerif" << endl;
+			#endif
 				font.setFamily (MSWrite::Font::Swiss);
 				break;
 			case QFont::Courier:
+			#ifdef KMF_DEBUG_FONT
 				kdDebug (30509) << "FontFamily Courier" << endl;
+			#endif
 				font.setFamily (MSWrite::Font::Modern);
 				break;
 			case QFont::OldEnglish:
+			#ifdef KMF_DEBUG_FONT
 				kdDebug (30509) << "FontFamily OldEnglish" << endl;
+			#endif
 				font.setFamily (MSWrite::Font::Decorative);
 				break;
 			default:
+			#ifdef KMF_DEBUG_FONT
 				kdDebug (30509) << "FontFamily DontKnow" << endl;
+			#endif
 				// it's either DontCare or MSWrite::Font::Script
 				font.setFamily (MSWrite::Font::DontCare);
 				break;
 			}
-			
+
 			charProp.setFont (&font);
 		}
 		if (f.fontSize > 0) charProp.setFontSize (f.fontSize);
@@ -1592,7 +1598,7 @@ public:
 		charProp.setIsItalic (f.italic);
 		charProp.setIsUnderlined (f.underline);	// TODO: underlineWord
 		charProp.setIsBold (f.weight > (50/*normal*/ + 75/*bold*/) / 2);
-        
+
 		switch (f.verticalAlignment)
 		{
 		case 0:	// normal
@@ -1688,12 +1694,12 @@ public:
 		if (layout.indentFirst) paraProp.setLeftIndentFirstLine (MSWrite::Short (Point2Twip (layout.indentFirst)));
 		if (layout.indentLeft >= 0) paraProp.setLeftIndent (MSWrite::Word (Point2Twip (layout.indentLeft)));
 		if (layout.indentRight >= 0) paraProp.setRightIndent (MSWrite::Word (Point2Twip (layout.indentRight)));
-	#if 1
+	#if 0
 		kdDebug (30509) << "Indent: " << Point2Twip (layout.indentFirst) << " "
 												<< Point2Twip (layout.indentLeft) << " "
 												<< Point2Twip (layout.indentRight) << endl;
 	#endif
-		
+
 		// Line Spacing
 		MSWrite::Word lineSpacing = MSWrite::LineSpacing::Normal;
 		switch (layout.lineSpacingType)
@@ -1743,7 +1749,7 @@ public:
 			else
 				// Write only supports Decimal and Left tabs
 				tab.setIsNormal ();
-			
+
 			tab.setIndent (MSWrite::Word (Point2Twip ((*tabIt).m_ptpos)));
 
 			// int m_filling;
@@ -1762,29 +1768,32 @@ public:
 		// TODO: QString     styleFollowing;
 		
 		if (!m_generator->writeParaInfoBegin (&paraProp)) return false;
-	
+
 		// get this paragraph's "default formatting"
 		MSWrite::FormatCharProperty charPropDefault;
 		processFormatData (charPropDefault, layout.formatData.text);
-		
-		MSWrite::DWord uptoByte = 0;	// relative to start of paragraph
-		MSWrite::DWord numBytes = paraText.length ();	// relative to start of paragraph
-		
+
+		MSWrite::DWord uptoByte = 0;	// relative to start of KWord paragraph
+		MSWrite::DWord numBytes = paraText.length ();	// relative to start of KWord paragraph
+
+		bool startOfWRIParagraph = true;
+		bool exportedAtLeastOneImage = false;	// ...from the KWord paragraph
+
 		// empty paragraph
 		if (numBytes == 0)
 		{
-			kdDebug (30509) << "Outputting empty paragraph!" << endl;
-			
+			//kdDebug (30509) << "Outputting empty paragraph!" << endl;
+
 			// write default character property start
 			if (!m_generator->writeCharInfoBegin (&charPropDefault)) return false;
-			
+
 			// page break at start of paragraph?
 			if (layout.pageBreakBefore)
 				if (!m_generator->writePageBreak ()) return false;
-				
+
 			// counter data
 			processCounter (layout.counter);
-				
+
 			// end of line
 			if (!m_generator->writeCarriageReturn ()) return false;
 			if (!m_generator->writeNewLine (true/*end of paragraph*/)) return false;
@@ -1803,7 +1812,7 @@ public:
 					formatIt++)
 			{
 				bool textSegment = true;
-				
+
 				// apply local <FORMAT> tag on top of "default formatting"
 				MSWrite::FormatCharProperty charProp; charProp = charPropDefault;
 				processFormatData (charProp, (*formatIt).text);
@@ -1815,12 +1824,13 @@ public:
 					// page break at start of paragraph?
 					if (layout.pageBreakBefore)
 						if (!m_generator->writePageBreak ()) return false;
-						
+
 					// counter data
 					processCounter (layout.counter);
 				}
 
 				// yes, this is slightly premature but it doesn't matter
+				// ... just be careful when using uptoByte
 				uptoByte += (*formatIt).len;
 
 				switch ((*formatIt).id)
@@ -1831,6 +1841,8 @@ public:
 					if (!processText (paraText.mid ((*formatIt).pos, (*formatIt).len)))
 											/*uptoByte == numBytes))*/
 							return false;
+
+					startOfWRIParagraph = false;
 					break;
 				case 2:	// picture (deprecated)
 					m_device->error (MSWrite::Error::Warn, "Picture (deprecated) unsupported\n");
@@ -1851,12 +1863,12 @@ public:
 						charProp.setIsPageNumber (true);
 						// if you don't do this it will print out the character literally (char 1)
 						if (!m_generator->writeCharInfoBegin (&charProp)) return false;
-						
+
 						// only variable Write supports (and only in headers/footers)
 						// if you don't write out char 1, Write will not treat it as a
 						// variable anchor and will print the character out literally
 						if (!m_generator->writePageNumber ()) return false;
-						
+
 						if (!m_generator->writeCharInfoEnd (&charProp)) return false;
 						charProp.setIsPageNumber (false);
 						if (!m_generator->writeCharInfoBegin (&charProp)) return false;
@@ -1870,38 +1882,70 @@ public:
 							return false;
 					}
 
+					startOfWRIParagraph = false;
 					break;
 				}
 				case 5:	// footnote (KOffice 1.1)
 					m_device->error (MSWrite::Error::Warn, "Footnote unsupported\n");
 					break;
 				case 6:	// anchor for frame
+					//
+					// Write does not support inline frames so:
+					//
+					// - we end the current paragraph
+					// - dump the inline frame in a paragraph of its own
+					// - continue with a new paragraph
+					//
+
+					if (!startOfWRIParagraph)
+					{
+						kdDebug (30509) << "Writing CRLF to end text paragraph" << endl;
+
+						// If you don't have CRLF at the end of the text
+						// paragraph, Write will think that the next paragraph
+						// (the image) is part of the text...
+						if (!m_generator->writeCarriageReturn ()) return false;
+						if (!m_generator->writeNewLine (true/*end of paragraph*/)) return false;
+					}
+					else
+						kdDebug (30509) << "Inline frame is anchored at start of paragraph, no CRLF" << endl;
+
+					if (!m_generator->writeCharInfoEnd (&charProp)) return false;
+					if (!m_generator->writeParaInfoEnd (&paraProp)) return false;
+
+
 					if ((*formatIt).frameAnchor.type == 6)
 					{
 						kdDebug (30509) << "Table detected" << endl;
+
+						// this will make its own paragraph(s)...
 						processTable ((*formatIt).frameAnchor.table);
+
+						// HACK: inline tables are flushed to the left and right
+						// margins, despite being inline, hence the next image
+						// indent will be sensible and should not be ignored.
+						kdDebug (30509) << "Table hack: resetting image-ignore-indent flag" << endl;
+						exportedAtLeastOneImage = false;
 					}
 					else if ((*formatIt).frameAnchor.type == 2)
 					{
 						kdDebug (30509) << "Image detected" << endl;
 
-						// In Write, text cannot be flowed around images so
-						// an image occupies an entire paragraph.  So we
-						// must end our current paragraph here and recontinue
-						// after an "image paragraph"
-						if (!m_generator->writeCharInfoEnd (&charProp)) return false;
-						if (!m_generator->writeParaInfoEnd (&paraProp)) return false;
-
 						// this will make its own paragraph...
-						if (!processImage ((*formatIt).frameAnchor, &paraProp, &charProp)) return false;
+						if (!processImage ((*formatIt).frameAnchor, &paraProp, &charProp,
+													exportedAtLeastOneImage)) return false;
 
-						// recontinue paragraph
-						if (!m_generator->writeParaInfoBegin (&paraProp)) return false;
-						if (!m_generator->writeCharInfoBegin (&charProp)) return false;
+						exportedAtLeastOneImage = true;
 					}
 					else
 						kdWarning (30509) << "Unknown type of anchor: " << (*formatIt).frameAnchor.type << endl;
-							
+
+
+					// recontinue paragraph
+					if (!m_generator->writeParaInfoBegin (&paraProp)) return false;
+					startOfWRIParagraph = true;
+					if (!m_generator->writeCharInfoBegin (&charProp)) return false;
+
 					textSegment = false;
 					break;
 				}
@@ -1923,13 +1967,13 @@ public:
 				if (!m_generator->writeCharInfoEnd (&charProp, uptoByte == numBytes)) return false;
 			}
 		}
-		
+
 		if (!m_generator->writeParaInfoEnd (&paraProp)) return false;
-		kdDebug (30509) << "Just Output " << uptoByte << "/" << numBytes << " with text \'" << paraText.utf8 () << "\'" << endl;
+		//if (numBytes) kdDebug (30509) << "Just Output " << uptoByte << "/" << numBytes << " with text \'" << paraText.utf8 () << "\'" << endl;
 
 		return true;
 	}
-	
+
 	template <class dtype>
 	dtype min (const dtype a, const dtype b, const dtype c)
 	{
@@ -1939,7 +1983,7 @@ public:
 	}
 
 	#ifndef NDEBUG
-		#define DEBUG_PROCESS_TEXT
+		//#define DEBUG_PROCESS_TEXT
 	#endif
 	bool processText (const QString &stringUnicode)
 	{
@@ -1953,9 +1997,9 @@ public:
 		// 31 optionalHyphen
 		// ?  text
 		//
-		
+
 		int softHyphen = -2, nonBreakingSpace = -2, newLine = -2;
-		
+
 		int upto = 0;
 		int stringUnicodeLength = stringUnicode.length ();
 		while (upto < stringUnicodeLength)
@@ -1969,19 +2013,19 @@ public:
 				softHyphen = stringUnicode.find (QChar (0xAD), upto);
 				if (softHyphen == -1) softHyphen = INT_MAX;
 			}
-			
+
 			if (nonBreakingSpace == -2)
 			{
 				nonBreakingSpace = stringUnicode.find (QChar (0xA0), upto);
 				if (nonBreakingSpace == -1) nonBreakingSpace = INT_MAX;
 			}
-			
+
 			if (newLine == -2)
 			{
 				newLine = stringUnicode.find (QChar ('\n'), upto);
 				if (newLine == -1) newLine = INT_MAX;
 			}
-				
+
 			// look for the closest one
 			int specialLocation = min (softHyphen, nonBreakingSpace, newLine);
 
@@ -1998,11 +2042,11 @@ public:
 			kdDebug (30509) << "Child string:   length=" << length
 									<< " (specialLoc=" << specialLocation << ")" << endl;
 		#endif
-		
+
 			//
 			// convert substring to windows-1251
 			//
-			
+
 			QCString stringWin;
 
 			// there is a codec, therefore there is an encoder...
@@ -2066,7 +2110,7 @@ public:
 				{
 					ErrorAndQuit (MSWrite::Error::InternalError, "simply impossible specialLocation\n");
 				}
-				
+
 				// skip past special character
 				upto++;
 			}
@@ -2125,15 +2169,15 @@ KoFilter::ConversionStatus MSWriteExport::convert (const QCString &from, const Q
 	case MSWrite::Error::Ok:
 		kdDebug (30509) << "Returning error code " << ret << endl;
 		return ret;	// not KoFilter::OK in case KWEFKWordLeader wants to report something
-		
+
 	case MSWrite::Error::Warn:
 		kdDebug (30509) << "Error::Warn" << endl;
 		return KoFilter::InternalError;	// warnings should _never_ set m_error
-		
+
 	case MSWrite::Error::InvalidFormat:
 		kdDebug (30509) << "Error::InvalidFormat" << endl;
 		return KoFilter::InternalError;	// how can the file I'm _writing_ be of an invalid format?
-		
+
 	case MSWrite::Error::OutOfMemory:
 		kdDebug (30509) << "Error::OutOfMemory" << endl;
 		return KoFilter::OutOfMemory;
