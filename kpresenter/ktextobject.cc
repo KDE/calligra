@@ -3463,6 +3463,11 @@ KTextObject& KTextObject::operator=(KTextObject &txtObj)
 
   setObjType(txtObj.objType());
   setLineBreak(txtObj.getLineBreakWidth());
+  setEnumListType(txtObj.enumListType());
+  setUnsortListType(txtObj.unsortListType());
+  setShowCursor(txtObj.showCursor());
+  toggleModified(txtObj.isModified());
+
   resize(size());
 
   for (int i = 0;i < (int)txtObj.paragraphs();i++)
@@ -3488,6 +3493,9 @@ KTextObject& KTextObject::operator=(KTextObject &txtObj)
 	  para2->append(linePtr);
 	}
     }
+
+  txtCursor->setPositionAbs(txtObj.getTxtCursor()->positionAbs());
+  recalc();
 
   return *this;
 }

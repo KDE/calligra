@@ -1556,9 +1556,14 @@ public:
   int getLineBreakWidth() {return linebreak_width;}
 
   /**
-   * Return parent widget.
+   * Returns parent widget.
    */
   QWidget* getParent() {return _parent;}
+
+  /**
+   * Return reference to the text cursor.
+   */
+  TxtCursor *getTxtCursor() {return txtCursor;}
 
 signals:
 

@@ -21,6 +21,7 @@
 
 #include "global.h"
 #include "graphobj.h"
+#include "ktextobject.h"
 
 /******************************************************************/
 /* Class: UndoRedoBaseClass                                       */
@@ -109,7 +110,9 @@ public:
 
 protected:
   PageObjects *ptr_old,*ptr_new;
-  PageObjects tmp;
+  PageObjects tmp_obj;
+  GraphObj tmp_graph;
+  KTextObject tmp_txt;
 
 };
 
@@ -133,6 +136,7 @@ protected:
   QList<PageObjects> *ptr_old,*ptr_new;
   PageObjects tmp_obj;
   GraphObj tmp_graph;
+  KTextObject tmp_txt;
 
 };
 

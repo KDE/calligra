@@ -37,11 +37,15 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
   xRnd = 20;
   yRnd = 20;
   hide();
+
   if (objType == OT_AUTOFORM) 
     {
       atfInterp = new ATFInterpreter(this,fi.baseName());
       atfInterp->load(fileName);
     }
+  else
+    atfInterp = 0;
+
   pix_data = "";
   pix_data_native = "";
 }
@@ -49,6 +53,7 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
 /*===================== destructor ===============================*/
 GraphObj::~GraphObj()
 {
+  if (atfInterp) delete atfInterp;
 }
 
 /*======================= get pic ================================*/

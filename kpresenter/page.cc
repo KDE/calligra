@@ -488,7 +488,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  if (objList()->at(i)->isSelected)
 	    {
 	      objPtr = objList()->at(i);
-	      if (objPtr->objType != OT_TEXT) appendUndoListNew(objPtr);
+	      appendUndoListNew(objPtr);
 	    }
 	}
       
@@ -504,7 +504,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       _assign_page_obj_ = true;
 
       UndoRedoPageObjects *o = new UndoRedoPageObjects(_page_obj_,_page_obj_new_,i18n("Resize object"));
-      if (_page_obj_new_->objType != OT_TEXT) view->KPresenterDoc()->addUndo(o);
+      view->KPresenterDoc()->addUndo(o);
     }
 
   mousePressed = false;
@@ -597,7 +597,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		  if (objList()->at(i)->isSelected)
 		    {
 		      objPtr = objList()->at(i);
-		      if (_append_undo_list_ && objPtr->objType != OT_TEXT)
+		      if (_append_undo_list_)
 			appendUndoList(objPtr);
 		      oox = objPtr->ox; ooy = objPtr->oy;
 		      oow = objPtr->ow; ooh = objPtr->oh;
@@ -635,15 +635,22 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		}
 	      objNum = resizeObjNum;
 
-	      if (_assign_page_obj_ && getObject(objNum) && getObject(objNum)->objType != OT_TEXT)
+	      if (_assign_page_obj_ && getObject(objNum))
 		{
 		  _assign_page_obj_ = false;
 		  _page_obj_ = new PageObjects;
 		  *_page_obj_ = *getObject(objNum);
+		  
 		  if (getObject(objNum)->graphObj)
 		    {
 		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
 		      *_page_obj_->graphObj = *getObject(objNum)->graphObj;
+		    }
+
+		  if (getObject(objNum)->textObj)
+		    {
+		      _page_obj_->textObj = new KTextObject(getObject(objNum)->textObj->getParent(),"txtObj",KTextObject::PLAIN);
+		      *_page_obj_->textObj = *getObject(objNum)->textObj;
 		    }
 		}
 
@@ -2434,6 +2441,13 @@ void Page::appendUndoList(PageObjects *o)
 	  p->graphObj = new GraphObj(0,"graphObj");
 	  *p->graphObj = *o->graphObj;
 	}
+
+      if (o->textObj)
+	{
+	  p->textObj = new KTextObject(o->textObj->getParent(),"txtObj",KTextObject::PLAIN);
+	  *p->textObj = *o->textObj;
+	}
+
       _page_obj_list_->append(p);
     }
 }

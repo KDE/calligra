@@ -169,6 +169,26 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
 KPresenterDocument_impl::~KPresenterDocument_impl()
 {
   sdeb("KPresenterDocument_impl::~KPresenterDocument_impl()\n");
+  for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+    {
+      if (objPtr->graphObj)
+	delete objPtr->graphObj;
+      if (objPtr->textObj)
+	delete objPtr->textObj;
+    }
+  
+  for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
+    {
+      if (pagePtr->backPic)
+	delete pagePtr->backPic;
+      if (pagePtr->backClip)
+	delete pagePtr->backClip;
+      if (pagePtr->pic)
+	delete pagePtr->pic;
+      if (pagePtr->cPix)
+	delete pagePtr->cPix;
+    }
+
   _objList.clear();
   _pageList.clear();
   cleanUp();
@@ -1062,7 +1082,8 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
  	      else if (name == "GRAPHOBJ")
  		{
  		  objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType);
- 		  objPtr->graphObj->load(parser,lst);
+ 		  objPtr->textObj = 0;
+		  objPtr->graphObj->load(parser,lst);
  		  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
 		  if (objPtr->objType == OT_PICTURE)
 		    objPtr->graphObj->loadPixmap();
@@ -1073,7 +1094,8 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 	      // text object
  	      else if (name == "TEXTOBJ")
  		{
- 		  objPtr->textObj = new KTextObject(0,"textObj",KTextObject::PLAIN);
+ 		  objPtr->graphObj = 0;
+		  objPtr->textObj = new KTextObject(0,"textObj",KTextObject::PLAIN);
 		  objPtr->textObj->clear(false);
 		  KOMLParser::parseTag(tag.c_str(),name,lst);
 		  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1917,6 +1939,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->graphObj = new GraphObj(0,"graphObj",OT_PICTURE,QString(filename));
 	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
 	  objPtr->graphObj->loadPixmap();
+	  objPtr->textObj = 0;
 	  objPtr->presNum = 0;
 	  objPtr->effect = EF_NONE;
 	  objPtr->effect2 = EF2_NONE;
@@ -1948,6 +1971,7 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->graphObj = new GraphObj(0,"graphObj",OT_CLIPART,QString(filename));
       objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
       objPtr->graphObj->loadClipart();
+      objPtr->textObj = 0;
       objPtr->presNum = 0;
       objPtr->effect = EF_NONE;
       objPtr->effect2 = EF2_NONE;
@@ -2051,6 +2075,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   objPtr->graphObj->setLineBegin(lb);
   objPtr->graphObj->setLineEnd(le);
+  objPtr->textObj = 0;
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
@@ -2078,6 +2103,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->graphObj->setRectType(rt);
   objPtr->graphObj->setRnds(_xRnd,_yRnd);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+  objPtr->textObj = 0;
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
@@ -2104,6 +2130,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->graphObj->setObjBrush(brush);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   objPtr->presNum = 0;
+  objPtr->textObj = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
@@ -2129,6 +2156,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   //objPtr->textObj->breakLines(objPtr->ow);
   objPtr->textObj->resize(objPtr->ow,objPtr->oh);
   objPtr->textObj->setShowCursor(false);
+  objPtr->graphObj = 0;
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
@@ -2155,6 +2183,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   objPtr->graphObj->setObjBrush(brush);
   objPtr->graphObj->setLineBegin(lb);
   objPtr->graphObj->setLineEnd(le);
+  objPtr->textObj = 0;
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;

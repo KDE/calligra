@@ -175,6 +175,10 @@ UndoRedoPageObjects::UndoRedoPageObjects(PageObjects *_ptr_old_,PageObjects *_pt
 /*======================== destructor ============================*/
 UndoRedoPageObjects::~UndoRedoPageObjects()
 {
+  if (ptr_old->graphObj)
+    delete ptr_old->graphObj;
+  if (ptr_old->textObj)
+    delete ptr_old->textObj;
   delete ptr_old;
 }
 
@@ -205,9 +209,24 @@ PageObjects* UndoRedoPageObjects::get_new()
 /*========================== do revert ===========================*/
 void UndoRedoPageObjects::revert()
 {
-  tmp = *ptr_new;
+  if (ptr_new->graphObj)
+    tmp_graph = *ptr_new->graphObj;
+  if (ptr_new->textObj)
+    tmp_txt = *ptr_new->textObj;
+  tmp_obj = *ptr_new;
+
+  if (ptr_old->textObj)
+    *ptr_new->textObj = *ptr_old->textObj;
   *ptr_new = *ptr_old;
-  *ptr_old = tmp;
+  if (ptr_old->graphObj)
+    *ptr_new->graphObj = *ptr_old->graphObj;
+      
+  if (ptr_new->textObj)
+    *ptr_old->textObj = tmp_txt;
+  *ptr_old = tmp_obj;
+  if (ptr_new->graphObj)
+    *ptr_old->graphObj = tmp_graph;
+
   UndoRedoBaseClass::revert();
 }
 
@@ -226,9 +245,18 @@ UndoRedoPageObjectsList::UndoRedoPageObjectsList(QList<PageObjects> *_ptr_old_,Q
 /*======================== destructor ============================*/
 UndoRedoPageObjectsList::~UndoRedoPageObjectsList()
 {
+  PageObjects *objPtr_old;
+
+  for (objPtr_old = ptr_old->first();objPtr_old != 0;objPtr_old = ptr_old->next())
+    {
+      if (objPtr_old->graphObj)
+	delete objPtr_old->graphObj;
+      if (objPtr_old->textObj)
+	delete objPtr_old->textObj;
+    }
+
   ptr_old->clear();
   delete ptr_old;
-  ptr_new->clear();
   delete ptr_old;
 }
 
@@ -264,18 +292,23 @@ void UndoRedoPageObjectsList::revert()
   for (objPtr_new = ptr_new->first(),objPtr_old = ptr_old->first();objPtr_new != 0 && objPtr_old != 0;
        objPtr_new = ptr_new->next(),objPtr_old = ptr_old->next())
     {
-      tmp_obj = *objPtr_new;
       if (objPtr_new->graphObj)
 	tmp_graph = *objPtr_new->graphObj;
+      if (objPtr_new->textObj)
+	tmp_txt = *objPtr_new->textObj;
+      tmp_obj = *objPtr_new;
 
+      if (objPtr_old->textObj)
+	*objPtr_new->textObj = *objPtr_old->textObj;
       *objPtr_new = *objPtr_old;
       if (objPtr_old->graphObj)
 	*objPtr_new->graphObj = *objPtr_old->graphObj;
-      
+     
+      if (objPtr_new->textObj)
+	*objPtr_old->textObj = tmp_txt;
       *objPtr_old = tmp_obj;
       if (objPtr_new->graphObj)
 	*objPtr_old->graphObj = tmp_graph;
-
     }
 
   UndoRedoBaseClass::revert();

@@ -32,6 +32,13 @@ ATFInterpreter::ATFInterpreter(QObject* parent=0,const char* name=0)
 /*======================= destrcutor =============================*/
 ATFInterpreter::~ATFInterpreter()
 {
+  coordList.setAutoDelete(true);
+  lines.setAutoDelete(true);
+  pointList.setAutoDelete(true);
+  
+  pointList.clear();
+  coordList.clear();
+  lines.clear();
 }
 
 /*====================== load autoform ===========================*/
