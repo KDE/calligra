@@ -23,6 +23,8 @@
 
 #include <qdockwindow.h>
 
+class QGrid;
+
 class KDoubleNumInput;
 
 class KarbonPart;
@@ -36,8 +38,12 @@ class VObjectDlg : public QDockWindow
 public:
 	VObjectDlg( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
 	virtual ~VObjectDlg();
-  
+	void enable();
+	void disable();
+	void reset();
+
 private:
+	QGrid *mainLayout;
 	KarbonPart *m_part;
 	KDoubleNumInput *m_X;
 	KDoubleNumInput *m_Y;

@@ -147,6 +147,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	//Create Dockers
 	m_ColorManager = new VColorDlg( m_part, this );
 	m_objectDlg = new VObjectDlg( m_part, this );
+	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
 	m_TransformDlg = new VTransformDlg( m_part, this );
 
         setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -1198,11 +1199,14 @@ KarbonView::selectionChanged()
 												*part()->document().selection()->objects().getFirst()->fill() );
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+		m_objectDlg->enable();
 	}
 	else
 	{
 		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 		m_setLineWidth->setEnabled( false );
+		m_objectDlg->reset();
+		m_objectDlg->disable();
 	}
 }
 

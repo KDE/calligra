@@ -39,7 +39,7 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	setCloseMode( QDockWindow::Always );
 	
 	//Widgets layout:
-	QGrid* mainLayout = new QGrid( 2, Vertical, this );
+	mainLayout = new QGrid( 2, Vertical, this );
 	mainLayout->setSpacing( 5 );
 	
 	new QLabel( i18n( "X:" ), mainLayout );
@@ -66,6 +66,28 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 VObjectDlg::~VObjectDlg()
 {
 
+}
+
+void
+VObjectDlg::enable()
+{
+	mainLayout->setEnabled ( true ); //Needed to enable the main widget, but not the entire docker
+}
+
+void
+VObjectDlg::disable()
+{
+	mainLayout->setEnabled ( false ); //Needed to disable the main widget, but not the entire docker
+}
+
+void
+VObjectDlg::reset() //Show default values
+{
+	m_X->setValue( 0.00 );
+	m_Y->setValue( 0.00 );
+	m_Width->setValue( 0.00 );
+	m_Height->setValue( 0.00 );
+	m_setLineWidth->setValue( 0.0 );
 }
 
 #include "vobjectdlg.moc"
