@@ -20,17 +20,17 @@
 
 #ifndef ASCIIIMPORT_H
 #define ASCIIIMPORT_H
-#define MAXLINES  1000
-#define MAXCOLUMNS 15
 
 #include <qstring.h>
 #include <qfile.h>
+#include <qtextstream.h>
 #include <qobject.h>
 
 #include <koFilter.h>
 #include <koStore.h>
 
-
+#define MAXLINES  1000
+#define MAXCOLUMNS 15
 
  const double ptsperline = 15.0;
  const double ptsperchar = 6.0;
@@ -55,17 +55,6 @@
     double right;
     };
 
-
-
-
- template <class M>
- M max(M x, M y)
-   {
-   return (x > y) ? x : y;
-   }
-
-
-
 class ASCIIImport : public KoFilter {
 
     Q_OBJECT
@@ -78,7 +67,7 @@ public:
     virtual bool filter(const QString &fileIn, const QString &fileOut,
                         const QString &from, const QString &to,
                         const QString &config=QString::null);
-
+private: // not yet changed
     void WriteOutParagraph( QString name, QString type, QString text,
        int firstindent, int secondindent, QString &str);
 
@@ -103,5 +92,6 @@ private:
     int Indent(const QString& line) const;
     int MultSpaces(const QString& text, const int index) const;
     bool IsWhiteSpace(const QChar& c) const;
+    QString readLine(QTextStream& textstream, bool& lastCharWasCr);
 };
 #endif // ASCIIIMPORT_H

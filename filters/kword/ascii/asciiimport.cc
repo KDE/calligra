@@ -1,3 +1,5 @@
+// $Id$
+
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
@@ -51,7 +53,6 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
   int linecount = 0;  // line counter used to position tables
   int table_no = 0;  // used for table identifiers
   int i; // counter
-  int length;  // line length
   int begin;  // beginning line number of a paragraph
   int numLines; // Number of lines of the paragraph
 
@@ -71,7 +72,7 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
 
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     //str += "<!DOCTYPE DOC >\n";
-    str += "<DOC  editor=\"KWord plain text import filter\"";
+    str += "<DOC editor=\"KWord plain text import filter\"";
     // TODO: We claim to be syntax version 2, but we should verify that it is also true.
     str += " mime=\"application/x-kword\" syntaxVersion=\"2\">\n";
     // TODO: other paper formats
@@ -84,28 +85,29 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     str += "<FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" />\n";
 
     QTextStream stream(&in);
+    bool lastCharWasCr=false; // Was the previous character a Carriage Return?
+    QString strLine;
 
     while(!stream.atEnd())
     {
-        QString strLine;
         // Read in paragraph
         for(int line_no = numLines = 0; line_no < MAXLINES; line_no++, numLines++)
         {
-            // TODO: we need to replace QStreamText::readLine,
-            // TODO:   as it does not know anything about Carriage Returns
-            strLine = stream.readLine();
+            // We need to read a line
+            // NOTE: we cannot use QStreamText::readLine,
+            //   as it does not know anything about Carriage Returns
+            strLine=readLine(stream,lastCharWasCr);
             if (strLine.isEmpty())
             {
                 Line[line_no]=QString::null;
                 break;
             }
 
-            length = strLine.length();
-            // TODO: why not test the character directly, instead of using find?
-            if (strLine.find('-', -1) == (length - 1))
-                strLine.replace(QRegExp("-$"),"");  // remove - at line end
+            int length = strLine.length();
+            if (strLine.at(length-1) == '-')
+                strLine = strLine.left(length-1);  // remove the - at line end
             else
-                strLine += " "; // add space to end of line
+                strLine += ' '; // add space to end of line
 
             Line[line_no]=strLine;
         } // for(line_no = 0;
@@ -825,3 +827,43 @@ bool ASCIIImport::IsWhiteSpace(const QChar& c) const
      else
         return false;
 } // IsWhiteSpace
+
+QString ASCIIImport::readLine(QTextStream& textstream, bool& lastCharWasCr)
+{
+    // We need to read a line, character by character
+    // NOTE: we cannot use QStreamText::readLine,
+    //   as it does not know anything about Carriage Returns
+    QString strLine;
+    QChar ch;
+    while (!textstream.atEnd())
+    {
+        textstream >> ch; // Read one character
+        if (ch=="\n")
+        {
+            if (lastCharWasCr)
+            {
+                // We have a line feed following a Carriage Return
+                // As the Carriage Return has already ended the previous line,
+                // discard this Line Feed.
+                lastCharWasCr=false;
+            }
+            else
+            {
+                // We have a normal Line Feed, therefore end the line
+                break;
+            }
+        }
+        else if (ch=="\r")
+        {
+            // We have a Carraiage Return, therefore end the line
+            lastCharWasCr=true;
+            break;
+        }
+        else
+        {
+            strLine+=ch;
+            lastCharWasCr=false;
+        }
+    } // while
+    return strLine;
+}
