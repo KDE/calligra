@@ -42,6 +42,8 @@ class KexiDB : public QObject
 
 		//now driver related functions
 
+		virtual QString driverName();
+
 		/*! connect to database hope that is ansi-compatible */
 		virtual bool connect(QString host, QString user, QString password);
 		virtual bool connect(QString host, QString user, QString password, QString db);

@@ -133,35 +133,29 @@ KexiProject::loadProject()
 bool 
 KexiProject::initDbConnection(const Credentials &cred)
 {
-	KexiDB *addDB = m_db->add(cred.driver);
-	if(addDB)
-	{
-		m_db = addDB;
-	}
-	else
-	{
-		return false;
-	}
-//	hope that will change to static soon
+	kdDebug() << "KexiProject::initDbConnection()" << endl;
 	
-/*	m_db->setDatabaseName(cred.database);
-	m_db->setUserName(cred.user);
-	m_db->setPassword(cred.password);
-	m_db->setHostName(cred.host); */
+	kdDebug() << "KexiProject::initDbConnection(): engine:" << cred.driver << endl;
+	kdDebug() << "KexiProject::initDbConnection(): host:" << cred.host << endl;
+	kdDebug() << "KexiProject::initDbConnection(): user:" << cred.user << endl;
+	kdDebug() << "KexiProject::initDbConnection(): database:" << cred.database << endl;
 
-	kdDebug() << "KexiProject::initDbConnection(): connecting" << endl;
-	if(!m_db->connect(cred.host, cred.user, cred.password, cred.database))
-	{
-		kdDebug() << "KexiProject::initDbConnection(): connection failed: #need to implement" /*m_db->lastError().databaseText() */ << endl;
-		m_cred = cred;
-		return false;
-	}
-	else
+	
+	if(!m_db->driverName() == cred.driver)
+		initHostConnection(cred);
+
+	if(m_db->connect(cred.host, cred.user, cred.password, cred.database))
 	{
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
 		kexi->mainWindow()->slotProjectModified();
 		return true;
+	}
+	else
+	{
+		kdDebug() << "KexiProject::initDbConnection(): connection failed: #need to implement" /*m_db->lastError().databaseText() */ << endl;
+		m_cred = cred;
+		return false;
 	}
 }
 

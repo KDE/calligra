@@ -68,8 +68,10 @@ MySqlDB::connect(QString host, QString user, QString password, QString db)
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
 	if(m_connected && host == m_host && user == m_user && password == m_password)
 	{
+		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
 		//simple change to db:
 		query("use "+db);
+		kdDebug() << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
 		m_connectedDB = true;
 		return true;
 	}
@@ -180,6 +182,12 @@ unsigned long
 MySqlDB::affectedRows()
 {
 	return 0;
+}
+
+QString
+MySqlDB::driverName()
+{
+	return QString::fromLatin1("mySQL");
 }
 
 MySqlDB::~MySqlDB()

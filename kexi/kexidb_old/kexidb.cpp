@@ -96,6 +96,12 @@ KexiDB::connect(QString, QString, QString, QString)
 	return false;
 }
 
+QString
+KexiDB::driverName()
+{
+	return QString::null;
+}
+
 bool
 KexiDB::load(QString file)
 {

@@ -15,31 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qdict.h>
-#include <qstringlist.h>
-#include <qsqldatabase.h>
-#include <qsqlquery.h>
-
 #include <klocale.h>
 #include <kdebug.h>
-#include <kcombobox.h>
-#include <klineedit.h>
-#include <ktextbrowser.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <klistview.h>
+#include <kwizard.h>
 
-#include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbdriver.h"
-
-#include "kexiapplication.h"
-#include "keximainwindow.h"
-#include "kexitabbrowser.h"
-#include "kexidoc.h"
-#include "kexiproject.h"
+#include "kexicreateprojectpage.h"
+#include "kexicreateprojectpageengine.h"
+#include "kexicreateprojectpageconnection.h"
+#include "kexicreateprojectpagedb.h"
 
 #include "kexicreateproject.h"
 
@@ -47,172 +31,55 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 {
 	setCaption(i18n("Create Project"));
 
-	m_wpic = QPixmap(locate("data","kexi/pics/cp-wiz.png"));
-	
-	connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
-	
-	QWidget *page0 = generatePage0();
-	addPage(page0, i18n("New Project"));
+	m_wpic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
 
-	m_page1 = generatePage1();
-	addPage(m_page1, i18n("Database Location"));
+	m_pageEngine = new KexiCreateProjectPageEngine(this, m_wpic, "page_engine");
+	addItem(m_pageEngine, i18n("Engine"));
+	m_pageConnection = new KexiCreateProjectPageConnection(this, m_wpic, "page_connection");
+	addItem(m_pageConnection, i18n("Connection"));
+	m_pageDatabase = new KexiCreateProjectPageDB(this, m_wpic, "page_db");
+	addItem(m_pageDatabase, i18n("Database"));
+}
 
-	m_page2 = generatePage2();
-	addPage(m_page2, i18n("Choose Database"));
-		
-	if(m_cEngine->count() > 0)
+void
+KexiCreateProject::addItem(KexiCreateProjectPage *page, QString title)
+{
+	addPage(page, title);
+	connect(page, SIGNAL(valueChanged(KexiCreateProjectPage*, QString &)), this,
+	   SLOT(slotValueChanged(KexiCreateProjectPage*, QString &)));
+}
+
+void
+KexiCreateProject::slotValueChanged(KexiCreateProjectPage *page, QString &data)
+{
+	if(page && data == "finish")
 	{
-		engineSelectionChanged(m_cEngine->text(m_cEngine->currentItem()));
-		kdDebug() << "item: " << m_cEngine->currentItem() << endl;
+		setFinishEnabled(page, page->data("finish").toBool());
 	}
 }
 
-QWidget *KexiCreateProject::generatePage0()
+void
+KexiCreateProject::next()
 {
-	QWidget *p0 = new QWidget(this);
-	QGridLayout *g0 = new QGridLayout(p0);
-	
-	QLabel *pic0 = new QLabel("", p0);
-	pic0->setPixmap(m_wpic);
-	
-	QLabel *lEngine = new QLabel(i18n("Engine:"), p0);
-	m_cEngine = new KComboBox(p0);
-	
-	connect(m_cEngine, SIGNAL(activated(const QString &)), this, SLOT(engineSelectionChanged(const QString &)));
-
-//	QLabel *lName = new QLabel(i18n("Database Name:"), p0);
-//	m_dbName = new KLineEdit(p0);
-	
-	m_iEngine = new KTextBrowser(p0);
-	m_iEngine->setText("<i>no information avaible</i>");
-	
-	
-	//checking drivers and making them avaible	
-	QStringList drivers = kexi->project()->db()->getDrivers();
-	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
+	kdDebug() << "KexiCreateProject::next()" << endl;
+	if(currentPage() == m_pageConnection)
 	{
-		kdDebug() << "found driver:" << *it << endl;
-		m_cEngine->insertItem(*it);
+		kdDebug() << "KexiCreateProject::next(): time to connect..." << endl;
+		QString engine = m_pageEngine->data("engine").toString();
+		QString host = m_pageConnection->data("host").toString();
+		QString user = m_pageConnection->data("user").toString();
+		QString pass = m_pageConnection->data("pass").toString();
+		
+		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass);
 	}
-	
-	QString description = "<b>";
-	description += m_cEngine->currentText();
-	description += "</b><br><hr><br>";
-	description += kexi->project()->db()->driverInfo(m_cEngine->currentText())->service()->comment();
-	m_iEngine->setText(description);
-	
-	g0->addMultiCellWidget(pic0,	0,	2,	0,	0);
-	g0->addWidget(lEngine,		0,	1);
-	g0->addWidget(m_cEngine,	0,	2);
-//	g0->addWidget(lName,		1,	1);
-//	g0->addWidget(m_dbName,		1,	2);
-	g0->addMultiCellWidget(m_iEngine,	1,	1,	1,	2);
-	
-//	#warning "TODO: don't load here!"
-	return p0;
+	KWizard::next();
 }
 
-QWidget *KexiCreateProject::generatePage1()
+void
+KexiCreateProject::accept()
 {
-//	kdDebug() << "KexiCreateProject::generatePage1()" << endl;
-	QWidget *p1 = new QWidget(this);
-	QGridLayout *g1 = new QGridLayout(p1);
-	QLabel *pic1 = new QLabel("", p1);
-	pic1->setPixmap(m_wpic);
-	m_dbHost = new KLineEdit(p1);
-	QLabel *lHost = new QLabel(m_dbHost, i18n("&Host:"), p1);
-	m_dbUser = new KLineEdit(p1);
-	QLabel *lUser = new QLabel(m_dbUser, i18n("&User:"), p1);
-	m_dbPass = new KLineEdit(p1);
-	m_dbPass->setEchoMode(QLineEdit::Password);
-	QLabel *lPass = new QLabel(m_dbPass, i18n("&Password:"), p1);
-		
-	QSpacerItem *s1 = new QSpacerItem(40, 40);
-	
-	g1->addMultiCellWidget(pic1,	0,	3,	0,	0);
-	g1->addWidget(lHost,		0,	1);
-	g1->addWidget(m_dbHost,		0,	2);
-	g1->addWidget(lUser,		1,	1);
-	g1->addWidget(m_dbUser,		1,	2);
-	g1->addWidget(lPass,		2,	1);
-	g1->addWidget(m_dbPass,		2,	2);
-	g1->addItem(s1,			3,	1);
-	kdDebug() << "KexiCreateProject::generatePage1(): 11" << endl;
-	
-	return p1;
-}
-
-
-QWidget *KexiCreateProject::generatePage2()
-{
-	QWidget *p2 = new QWidget(this);
-	QGridLayout *g2 = new QGridLayout(p2);
-	
-	QLabel *pic2 = new QLabel(QString::null, p2);
-	pic2->setPixmap(m_wpic);
-	
-	//QLabel *lLog = new QLabel(i18n("connection log"), p2);
-	m_databaseList = new KListView(p2);
-	m_databaseList->addColumn(i18n("Databases"));
-	
-	g2->addWidget(pic2, 0, 0);
-	g2->addWidget(m_databaseList, 0, 1);
-	
-	return p2;
-}
-
-void KexiCreateProject::engineSelectionChanged(const QString &engineName)
-{
-	kdDebug() << "engine is changing to " << engineName << endl;
-	
-	QString description = "<b>";
-	description += m_cEngine->currentText();
-	description += "</b><br><hr><br>";
-	description += kexi->project()->db()->driverInfo(m_cEngine->currentText())->service()->comment();
-	m_iEngine->setText(description);
-
-}
-
-
-void KexiCreateProject::nextClicked(const QString &pageTitle)
-{
-	if(pageTitle == i18n("Choose Database"))
-	{
-		kdDebug() << "it's time to connect to the db..." << endl;
-		
-		m_databaseList->clear();
-
-		Credentials projCred;
-		
-		projCred.host = m_dbHost->text();
-		projCred.driver = m_cEngine->currentText();
-		projCred.user = m_dbUser->text();
-		projCred.password = m_dbPass->text();
-		
-		if(kexi->project()->initHostConnection(projCred))
-		{
-			QStringList databases = kexi->project()->db()->databases();
-			for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
-			{
-				KListViewItem *i = new KListViewItem(m_databaseList, (*it));
-				m_databaseList->setCurrentItem(i);
-			}
-			projCred.database = m_databaseList->currentItem()->text(0);
-			if(kexi->project()->initDbConnection(projCred))
-			{
-				kexi->mainWindow()->browser()->generateView();
-			}
-			
-			setFinishEnabled(m_page2, true);
-		}
-		else
-		{
-			QString msg = i18n("Connection failed: #need to implement");
-//			msg += kexi->project()->db()->lastError().databaseText();
-//			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
-		}
-		
-	}
+	static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB();
+	KWizard::accept();
 }
 
 KexiCreateProject::~KexiCreateProject()

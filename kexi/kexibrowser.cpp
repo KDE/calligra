@@ -89,6 +89,8 @@ void KexiBrowser::generateView()
 
 void KexiBrowser::addTables(KexiBrowserItem *parent)
 {
+	kdDebug() << "KexiBrowser::addTables()" << endl;
+
 	QStringList tables = kexi->project()->db()->tables();
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )

@@ -34,6 +34,7 @@ void
 KexiCreateProjectPage::setProperty(QString property, QVariant data)
 {
 	m_data[property] = data;
+	emit valueChanged(this, property);
 }
 
 KexiCreateProjectPage::~KexiCreateProjectPage()

@@ -37,14 +37,13 @@ class KexiCreateProjectPage : public QWidget
 		~KexiCreateProjectPage();
 
 		QVariant data(QString property) const;
-
-	protected:
 		void setProperty(QString property, QVariant data);
 
+	protected:
 		DataMap m_data;
 		
 	signals:
-		void valueChanged(QString, KexiCreateProjectPage *);
+		void valueChanged(KexiCreateProjectPage *, QString &);
 };
 
 #endif

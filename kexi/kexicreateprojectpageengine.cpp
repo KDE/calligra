@@ -17,14 +17,78 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#include <kcombobox.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
+#include <klocale.h>
+#include <kdebug.h>
+#include <kcombobox.h>
+#include <ktextbrowser.h>
+
+#include "kexiDB/kexidbdriver.h"
+
+#include "kexiapplication.h"
 #include "kexicreateprojectpageengine.h"
 
 KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
 {
+	QLabel *lPic = new QLabel("", this);
+	lPic->setPixmap(*wpic);
+
+	QLabel *lEngine = new QLabel(i18n("Driver: "), this);
+	
 	m_engine = new KComboBox(this);
+	connect(m_engine, SIGNAL(activated(const QString &)), this, SLOT(slotActivated(const QString &)));
+
+	m_summery = new KTextBrowser(this);
+	
+	QGridLayout *g = new QGridLayout(this);
+	g->addMultiCellWidget(lPic,	0,	1,	0,	0);
+	g->addWidget(lEngine,		0,	1);
+	g->addWidget(m_engine,		0,	2);
+	g->addMultiCellWidget(m_summery,1,	1,	1,	2);
+
+	fill();
+}
+
+void
+KexiCreateProjectPageEngine::fill()
+{
+	QStringList drivers = kexi->project()->db()->getDrivers();
+	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
+	{
+		m_engine->insertItem(*it);
+	}
+
+	if(m_engine->currentText() != "")
+	{
+		setProperty("engine", QVariant(m_engine->currentText()));
+		setProperty("continue", QVariant(true));
+	}
+
+	fillSummery();
+}
+
+void
+KexiCreateProjectPageEngine::fillSummery()
+{
+	QString engineSummery = kexi->project()->db()->driverInfo(m_engine->currentText())->service()->comment();
+	QString userSummery = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummery);
+	
+
+	if(m_engine->currentText() != "")
+	{
+		m_summery->setText(userSummery);
+	}
+}
+
+void
+KexiCreateProjectPageEngine::slotActivated(const QString &engine)
+{
+	setProperty("engine", QVariant(engine));
+	setProperty("continue", QVariant(true));
+	fillSummery();
 }
 
 KexiCreateProjectPageEngine::~KexiCreateProjectPageEngine()

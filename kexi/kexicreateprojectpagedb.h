@@ -17,32 +17,34 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXICREATEPROJECTPAGEENGINE_H
-#define KEXICREATEPROJECTPAGEENGINE_H
+#ifndef KEXICREATEPROJECTPAGEDB_H
+#define KEXICREATEPROJECTPAGEDB_H
 
+#include "kexiproject.h"
 #include "kexicreateprojectpage.h"
 
-class KComboBox;
-class KTextBrowser;
+class KListView;
+class QTimer;
+
 class KexiCreateProject;
 
-class KexiCreateProjectPageEngine : public KexiCreateProjectPage
+class KexiCreateProjectPageDB : public KexiCreateProjectPage
 {
 	Q_OBJECT
 	
 	public:
-		KexiCreateProjectPageEngine(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
-		~KexiCreateProjectPageEngine();
+		KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
+		~KexiCreateProjectPageDB();
+
+		void		connectHost(QString driver, QString host, QString user, QString password);
+		void		connectDB();
 
 	protected:
-		void		fill();
-		void		fillSummery();
-
-		KComboBox	*m_engine;
-		KTextBrowser	*m_summery;
+		KListView	*m_databases;
+		Credentials	m_cred;
 
 	protected slots:
-		void		slotActivated(const QString &);
+		void		slotDatabaseChanged();
 };
 
 #endif

@@ -25,10 +25,12 @@
   *@author lucijan busch
   */
 
-class KComboBox;
-class KLineEdit;
-class KListView;
-class KTextBrowser;
+//class KComboBox;
+//class KLineEdit;
+//class KListView;
+//class KTextBrowser;
+
+class KexiCreateProjectPage;
 
 /*! this class aims to represent
     the dirtiest class you ever saw
@@ -43,31 +45,20 @@ class KexiCreateProject : public KWizard  {
 
 		
 	protected:
-		QWidget *generatePage0();
-		QWidget *generatePage1();
-		QWidget *generatePage2();
-		
-		bool			m_engineLoaded;
-		QString			m_loadedEngine;
-		
-		QWidget			*m_page1;
-		QWidget			*m_page2;
-		KComboBox		*m_cEngine;
-		KTextBrowser		*m_iEngine;
-		
-		KLineEdit		*m_dbName;
-		KLineEdit		*m_dbHost;
-		KLineEdit		*m_dbUser;
-		KLineEdit		*m_dbPass;
-		
-		KListView		*m_databaseList;
-		
-		QPixmap			m_wpic;
-		
-	protected slots:
-		void		engineSelectionChanged(const QString &engineName);
-		void		nextClicked(const QString &pageTitle);
+		void			addItem(KexiCreateProjectPage *page, QString title);
 
+		//always the same pixmap at the left
+		QPixmap			*m_wpic;
+
+		//all the pages
+		KexiCreateProjectPage	*m_pageEngine;
+		KexiCreateProjectPage	*m_pageConnection;
+		KexiCreateProjectPage	*m_pageDatabase;
+
+	protected slots:
+		void			slotValueChanged(KexiCreateProjectPage *, QString &);
+		void			next();
+		void			accept();
 };
 
 #endif
