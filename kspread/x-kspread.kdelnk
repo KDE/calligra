@@ -2,8 +2,10 @@
 [KDE Desktop Entry]
 MimeType=application/x-kspread
 Comment=KSpread
+Comment[cs]=Tabulkovı procesor
 Comment[da]=KRegneark
 Comment[fr]=Tableaur KSpread
+Comment[is]=Töflureiknir
 Comment[ru]=üÌÅËÔÒÏÎÎÁÑ ÔÁÂÌÉÃÁ
 Comment[sv]=Kalkylprogram
 DefaultApp=KSpread

@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KDiagramm
+Name[cs]=KDiagram
 Name[da]=KDiagram
 Name[fi]=KDiagram
 Name[no]=Diagram
@@ -17,6 +18,7 @@ Comment[pt_BR]=Programa para confecÁ„o de diagramas
 Comment[ro]=Kdiagram
 Comment[ru]=Á“¡∆…À… Torben'¡
 Comment[sk]=Torbenova tabuµk·
+Comment[sl]=Torbenovi grafikoni
 Comment[sv]=Torbens diagram
 MimeTypes=application/x-kdiagramm,
 RepoID=IDL:KDiagramm/DocumentFactory:1.0,IDL:Chart/SimpleChart:1.0,

@@ -15,6 +15,7 @@ Comment[no]=Kalles graf
 Comment[pt_BR]=Programa de desenho de fluxogramas
 Comment[ro]=Kchart
 Comment[ru]=Графики Kalle
+Comment[sl]=Kallesovi grafikoni
 Comment[sv]=Kalles diagram
 MimeTypes=application/x-kchart,
 RepoID=IDL:KCharter/Factory:1.0,

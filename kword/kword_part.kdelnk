@@ -9,6 +9,7 @@ Name[sv]=Ord
 Exec=kword.bin --server
 Comment=KWord
 Comment[ca]=Processador de textos KWord
+Comment[cs]=rd
 Comment[da]=KWord-programmet
 Comment[fi]=Tekstinkäsittelyohjelma
 Comment[fr]=Traitement de texte KWord

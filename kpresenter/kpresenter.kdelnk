@@ -1,7 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KPresenter
-Name[da]=Prøsenterer
+Name[da]=Præsenterer
 Name[is]=Varpi
 Name[ro]=Presenter
 Name[ru]=ğÒÅÚÅÎÔÁÃÉÉ
@@ -9,6 +9,7 @@ Name[sv]=Presentation
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
 Comment[ca]=El programa de presentacions de Reggie
+Comment[cs]=Reggieho presentaèní software
 Comment[da]=Reggies præsentationsprogram
 Comment[es]=El Software de Presentación de Reggie
 Comment[fi]=Reggien esitysohjelma
@@ -18,6 +19,7 @@ Comment[pt_BR]=Software de Apresentações
 Comment[ro]=Program de prezentare
 Comment[ru]=ğÒÏÇÒÁÍÍÁ ÄÌÑ ĞÏÄÇÏÔÏ×ËÉ ĞÒÅÚÅÎÔÁÃÉÊ Reggie
 Comment[sk]=Reggieho Prezentaènı softvér
+Comment[sl]=Reggijev prezentacijski paket
 Comment[sv]=Reggies presentationsprogram
 MimeTypes=application/x-kpresenter,
 RepoID=IDL:KPresenter/DocumentFactory:1.0,

@@ -2,6 +2,7 @@
 [KDE Desktop Entry]
 Name=SpellTool
 Name[ca]=Ortografia
+Name[cs]=Nástoj pro kontrolu pravopisu
 Name[da]=Staveværktøj
 Name[es]=Corrector Ortográfico
 Name[is]=Réttritun
@@ -12,6 +13,7 @@ Name[sv]=Rättstavning
 Exec=spell_tool --server
 Comment=Torben's Spell Tool
 Comment[ca]=L'eina d'ortografia de Torben
+Comment[cs]=Torbenùv nástoj pro kontrolu pravopisu
 Comment[da]=Torbens staveværktøj
 Comment[es]=El Corrector Ortográfico de Torben
 Comment[fi]=Oikeinkirjoituksen tarkistaja
@@ -21,6 +23,7 @@ Comment[pt_BR]=Ferramenta de correção ortográfica
 Comment[ro]=Corector (SpellChecker)
 Comment[ru]=ðÒÏ×ÅÒËÁ ÐÒÁ×ÏÐÉÓÁÎÉÑ Torben'Á
 Comment[sk]=Torbenov kontrolér pravopisu
+Comment[sl]=Torbenov èrkovalnik
 Comment[sv]=Torbens rättstavningsverktyg
 MimeTypes=text/x-single-word,
 RepoID=IDL:DataTools/Tool:1.0,
