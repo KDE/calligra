@@ -285,6 +285,8 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
 
+  m_selectionAnchor = QPoint(1,1);
+
   m_iXOffset = 0;
   m_iYOffset = 0;
   m_pView = _view;
@@ -454,8 +456,8 @@ void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
             return;
         }
 
-        gotoLocation( _range.range.left(), _range.range.top(), table, false );
-        gotoLocation( _range.range.right(), _range.range.bottom(), table, true );
+        gotoLocation( _range.range.topLeft(), table, false );
+        gotoLocation( _range.range.bottomRight(), table, true );
 }
 
 
@@ -476,115 +478,67 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
     return;
   }
 
-  gotoLocation( _cell.pos.x(), _cell.pos.y(), table );
+  gotoLocation( _cell.pos, table );
 }
 
-void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select, bool move_into_area, bool keyPress )
+void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
+                                  bool extendSelection)
 {
   if ( table )
     table->setActiveTable();
   else
     table = activeTable();
 
-  QRect extraArea;
-  QRect tmpArea;
-  KSpreadCell* cell = table->cellAt( x, y );
-  if ( cell->isObscured() && cell->isObscuringForced() )
+  if (extendSelection)
   {
-    cell = cell->obscuringCells().getFirst();
-    int moveX=cell->column();
-    int moveY=cell->row();
-    QRect extraCell;
-    extraCell.setCoords( moveX, moveY, moveX+cell->extraXCells(),
-                         moveY+cell->extraYCells() );
-    if( (x - markerColumn()) != 0 &&
-        extraCell.contains(QPoint(markerColumn(),markerRow())))
-    {
-      extraArea.setCoords( markerColumn(), 1,
-                           QMIN(KS_colMax, cell->extraXCells()+x-1), KS_rowMax );
-      if(keyPress)
-      {
-        tmpArea.setCoords( 1, markerRow(), KS_colMax,
-                           QMIN(KS_rowMax, cell->extraYCells()+markerRow()) );
-        if(!extraArea.contains(table->getOldPos().x(), 1) &&
-           tmpArea.contains(1, table->getOldPos().y()))
-        {
-          y = table->getOldPos().y();
-        }
-        else if( extraArea.contains(table->getOldPos().x(), 1) &&
-                 table->getOldPos().y()==(cell->extraYCells()+y+1))
-        {
-          y = table->getOldPos().y()-1;
-        }
-        x = cell->extraXCells()+x;
-      }
-    }
-    else if( (y - markerRow()) != 0 &&
-             extraCell.contains( QPoint(markerColumn(), markerRow()) ) )
-    {
-      extraArea.setCoords( 1, markerRow(), KS_colMax,
-                           QMIN(KS_rowMax, cell->extraYCells()+y-1) );
-
-      tmpArea.setCoords( markerColumn(), 1,
-                         QMIN(KS_colMax, cell->extraXCells()+markerColumn()),
-                         KS_rowMax );
-      if(keyPress)
-      {
-        if( !extraArea.contains(1, table->getOldPos().y()) &&
-            tmpArea.contains(table->getOldPos().x(), 1))
-        {
-          x=table->getOldPos().x();
-        }
-        else if( table->getOldPos().x() ==
-                 (cell->extraXCells() + markerColumn() + 1))
-        {
-          x=table->getOldPos().x()-1;
-        }
-      }
-      y=cell->extraYCells()+y;
-    }
-    else
-    {
-      y = moveY;
-      x = moveX;
-    }
+    extendCurrentSelection(location);
   }
   else
   {
-    cell = table->cellAt( table->marker().x(), table->marker().y() );
-    if ( cell->isForceExtraCells() )
+    bool obscured;
+    bool forced;
+    QRect newSelection;
+    QPoint topLeft(location);
+    QPoint bottomRight;
+    KSpreadCell* cell = table->cellAt(location);
+    obscured = cell->isObscured();
+    forced = cell->isObscuringForced();
+    if ( obscured && forced )
     {
-      if(keyPress && (x-markerColumn())!=0)
-      {
-        extraArea.setCoords( markerColumn(), 1,
-                             QMIN(KS_colMax, cell->extraXCells() +
-                                  markerColumn()), KS_rowMax );
-        tmpArea.setCoords( 1, markerRow(), KS_colMax, QMIN(KS_rowMax, cell->extraYCells()+markerRow()) );
-        if( !extraArea.contains(QPoint(table->getOldPos().x(),1))&& tmpArea.contains(1,table->getOldPos().y()))
-          y=table->getOldPos().y();
-        else if( extraArea.contains(table->getOldPos().x(),1)&& table->getOldPos().y()==(cell->extraYCells()+markerRow()+1))
-          y=table->getOldPos().y()-1;
-      }
-      else if(keyPress && (y-markerRow())!=0 )
-      {
-        tmpArea.setCoords( markerColumn(), 1, QMIN(KS_colMax, cell->extraXCells()+markerColumn()), KS_rowMax );
-        extraArea.setCoords( 1, markerRow(), KS_colMax, QMIN(KS_rowMax, cell->extraYCells()+markerRow()) );
-        if( !extraArea.contains(QPoint(1,table->getOldPos().y()))&&tmpArea.contains(table->getOldPos().x(),1))
-          x=table->getOldPos().x();
-        else if( /*extraArea.contains(QPoint(1,table->getOldPos().y()))&&*/ table->getOldPos().x()==(cell->extraXCells()+markerColumn()+1))
-          x=table->getOldPos().x()-1;
-      }
+      cell = cell->obscuringCells().getFirst();
+      topLeft = QPoint(cell->column(), cell->row());
     }
-  }
-  cell= table->cellAt( x, y, true /* update scrollbar when necessary */ );
-  if( cell->isObscured() && cell->isObscuringForced() )
-  {
-    x = cell->obscuringCells().getFirst()->column();
-    y = cell->obscuringCells().getFirst()->row();
+    bottomRight.setX(topLeft.x() + cell->extraXCells());
+    bottomRight.setY(topLeft.y() + cell->extraYCells());
+    newSelection = QRect(topLeft, bottomRight);
+
+    table->setSelection(newSelection, location, this);
+    m_selectionAnchor = location;
   }
 
-  int xpos = table->columnPos( x, this );
-  int ypos = table->rowPos( y, this );
+  scrollToCell(location);
+
+  // Perhaps the user is entering a value in the cell.
+  // In this case we may not touch the EditWidget
+  if ( !m_pEditor )
+    m_pView->updateEditWidget();
+  updatePosWidget();
+}
+
+
+void KSpreadCanvas::scrollToCell(QPoint location)
+{
+  KSpreadTable* table = activeTable();
+  if (table == NULL)
+    return;
+
+  /* we don't need this cell ptr, but this call is necessary to update the
+     scroll bar correctly.  I don't like having that as part of the cellAt function
+     but I suppose that's ok for now.
+  */
+  KSpreadCell* cell = table->cellAt(location.x(), location.y(), true);
+  int xpos = table->columnPos( location.x(), this );
+  int ypos = table->rowPos( location.y(), this );
 
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation : zoom=" << zoom() << endl;
   int minX = (int) (100 * zoom()); // less than that, we scroll
@@ -627,39 +581,6 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 
     vertScrollBar()->setValue( vertScrollBarValue );
   }
-
-  QRect selection = activeTable()->selection();
-
-  if ( !make_select )
-  {
-    if ( !move_into_area)
-      activeTable()->setMarker( QPoint( x, y ) );
-    else
-      activeTable()->setSelection(selection,QPoint( x, y ),this);
-  }
-  else
-  {
-    if ( markerColumn() == selection.left() )
-      selection.setLeft( x );
-    else
-      selection.setRight( x );
-
-    if ( markerRow() == selection.top() )
-      selection.setTop( y );
-    else
-      selection.setBottom( y );
-    selection = selection.normalize();
-
-    // m_iMarkerColumn = x;
-    // m_iMarkerRow = y;
-    activeTable()->setSelection( selection, QPoint( x, y ) );
-  }
-
-  // Perhaps the user is entering a value in the cell.
-  // In this case we may not touch the EditWidget
-  if ( !m_pEditor )
-    m_pView->updateEditWidget();
-  updatePosWidget();
 }
 
 void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool make_select )
@@ -760,7 +681,7 @@ void KSpreadCanvas::highlight( const QString &/*text*/, int /*matchingIndex*/, i
 
     // ...now I remember, update it!
     // TBD: highlight it!
-    gotoLocation( cellRect.left(), cellRect.top(), activeTable() );
+    gotoLocation( cellRect.topLeft(), activeTable() );
 }
 
 // Used by replace() logic to modify a cell.
@@ -894,9 +815,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     m_strAnchor = anchor;
   }
 
-  //
-  // Now set the cursor correctly.
-  //
   if ( selectionHandle.contains( _ev->pos() ) )
     setCursor( sizeFDiagCursor );
   else if ( !m_strAnchor.isEmpty() )
@@ -909,31 +827,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   // Set the new extent of the selection
-  extendCurrentSelection(QPoint(col, row));
-
-  // Scroll the table if necessary
-  if ( _ev->pos().x() < 0 )
-    horzScrollBar()->setValue( xOffset() + xpos );
-  else if ( _ev->pos().x() > width() )
-  {
-    if ( col < KS_colMax )
-    {
-      ColumnLayout *cl = table->columnLayout( col + 1 );
-      xpos = table->columnPos( col + 1, this );
-      horzScrollBar()->setValue( xOffset() + ( xpos + cl->width( this ) - width() ) );
-    }
-  }
-  if ( _ev->pos().y() < 0 )
-    vertScrollBar()->setValue( yOffset() + ypos );
-  else if ( _ev->pos().y() > height() )
-  {
-    if ( row < KS_rowMax )
-    {
-      RowLayout *rl = table->rowLayout( row + 1 );
-      ypos = table->rowPos( row + 1, this );
-      vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
-    }
-  }
+  gotoLocation(QPoint(col, row), activeTable(), true);
 
   // Show where we are now.
   updatePosWidget();
@@ -1131,8 +1025,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax &&
        selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
   {
-    extendCurrentSelection(QPoint(col, row));
-
+    gotoLocation(QPoint(col, row), activeTable(), true);
     return;
   }
 
@@ -1492,14 +1385,595 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     }
 }
 
+void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelection)
+{
+  QPoint destination;
+  QPoint marker = activeTable()->marker();
+  QPoint cellCorner = marker;
+  KSpreadCell* cell = activeTable()->cellAt(marker.x(), marker.y());
+
+  /* cell is either the same as the marker, or the cell that is forced obscuring
+     the marker cell
+  */
+  if (cell->isObscuringForced())
+  {
+    cell = cell->obscuringCells().getFirst();
+    cellCorner = QPoint(cell->column(), cell->row());
+  }
+
+  /* how many cells must we move to get to the next cell? */
+  int offset = 0;
+  RowLayout *rl = NULL;
+  ColumnLayout *cl = NULL;
+  switch (direction)
+    /* for each case, figure out how far away the next cell is and then keep
+       going one row/col at a time after that until a visible row/col is found
+
+       NEVER use cell->column() or cell->row() -- it might be a default cell
+    */
+  {
+    case KSpread::Bottom:
+      offset = cell->mergedYCells() - (marker.y() - cellCorner.y()) + 1;
+      rl = activeTable()->rowLayout( marker.y() + offset );
+      while ( ((marker.y() + offset) <= KS_rowMax) && rl->isHide())
+      {
+        offset++;
+        rl = activeTable()->rowLayout( marker.y() + offset );
+      }
+
+      destination = QPoint(marker.x(), QMIN(marker.y() + offset, KS_rowMax));
+      break;
+    case KSpread::Top:
+      offset = (cellCorner.y() - marker.y()) - 1;
+      rl = activeTable()->rowLayout( marker.y() + offset );
+      while ( ((marker.y() + offset) >= 1) && rl->isHide())
+      {
+        offset--;
+        rl = activeTable()->rowLayout( marker.y() + offset );
+      }
+      destination = QPoint(marker.x(), QMAX(marker.y() + offset, 1));
+      break;
+    case KSpread::Left:
+      offset = (cellCorner.x() - marker.x()) - 1;
+      cl = activeTable()->columnLayout( marker.x() + offset );
+      while ( ((marker.x() + offset) >= 1) && cl->isHide())
+      {
+        offset--;
+        cl = activeTable()->columnLayout( marker.x() + offset );
+      }
+      destination = QPoint(QMAX(marker.x() + offset, 1), marker.y());
+      break;
+    case KSpread::Right:
+      offset = cell->extraXCells() - (marker.x() - cellCorner.x()) + 1;
+      cl = activeTable()->columnLayout( marker.x() + offset );
+      while ( ((marker.x() + offset) <= KS_colMax) && cl->isHide())
+      {
+        offset++;
+        cl = activeTable()->columnLayout( marker.x() + offset );
+      }
+      destination = QPoint(QMIN(marker.x() + offset, KS_colMax), marker.y());
+      break;
+  }
+
+  gotoLocation(destination, activeTable(), extendSelection);
+}
+
+void KSpreadCanvas::processEnterKey(QKeyEvent* event)
+{
+  /* save changes to the current editor */
+  if (!m_bChoose)
+  {
+    deleteEditor( true );
+  }
+
+  /* use the configuration setting to see which direction we're supposed to move
+     when enter is pressed.
+  */
+  KSpread::MoveTo direction = m_pView->doc()->getMoveToValue();
+
+  //if shift Button clicked inverse move direction
+  if(event->state() & Qt::ShiftButton)
+  {
+    switch( direction )
+    {
+    case KSpread::Bottom:
+      direction = KSpread::Top;
+      break;
+    case KSpread::Top:
+      direction = KSpread::Bottom;
+      break;
+    case KSpread::Left:
+      direction = KSpread::Right;
+      break;
+    case KSpread::Right:
+      direction = KSpread::Left;
+    }
+  }
+
+  if (!m_bChoose)
+  {
+    /* never extend a selection with the enter key -- the shift key reverses
+       direction, not extends the selection
+    */
+    moveDirection(direction, false);
+  }
+  else
+  {
+    switch( direction )
+    {
+    case KSpread::Bottom :
+      if ( chooseMarkerRow() != KS_rowMax )
+      {
+        chooseGotoLocation( chooseMarkerColumn(),
+                            QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0,
+                            false );
+      }
+      break;
+    case KSpread::Top :
+      if ( chooseMarkerRow() != 1 )
+      {
+        chooseGotoLocation( chooseMarkerColumn(),
+                            QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0,
+                            false );
+      }
+      break;
+    case KSpread::Left :
+      if ( chooseMarkerColumn() != 1 )
+      {
+        chooseGotoLocation( QMAX(chooseMarkerColumn()-1,1),  chooseMarkerRow() ,
+                            0, false );
+      }
+      break;
+    case KSpread::Right :
+      if ( chooseMarkerColumn() != KS_colMax )
+      {
+        chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn()+1 ),
+                            chooseMarkerRow() , 0, false );
+      }
+      break;
+    default:
+      break;
+    }
+  }
+  return;
+}
+
+void KSpreadCanvas::processArrowKey( QKeyEvent *event)
+{
+  /* NOTE:  hitting the tab key also calls this function.  Don't forget
+     to account for it
+  */
+
+  /* save changes to the current editor */
+  if (!m_bChoose)
+  {
+    deleteEditor( true );
+  }
+
+  KSpread::MoveTo direction = KSpread::Bottom;
+  bool makingSelection = event->state() & ShiftButton;
+
+  switch (event->key())
+  {
+  case Key_Down:
+    direction = KSpread::Bottom;
+    break;
+  case Key_Up:
+    direction = KSpread::Top;
+    break;
+  case Key_Left:
+    direction = KSpread::Left;
+    break;
+  case Key_Right:
+  case Key_Tab:
+    direction = KSpread::Right;
+  default:
+    break;
+  }
+
+  ColumnLayout *cl;
+  RowLayout *rl;
+  int moveHide=0;
+
+  if (!m_bChoose)
+  {
+    moveDirection(direction, makingSelection);
+  }
+  else
+  {
+    switch (event->key())
+    {
+    case Key_Down:
+      if ( chooseMarkerRow() != KS_rowMax )
+      {
+        moveHide=chooseMarkerRow();
+        do
+        {
+          moveHide++;
+          rl= activeTable()->rowLayout( moveHide );
+        }
+        while( rl->isHide());
+
+        chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, moveHide ),
+                            0, makingSelection);
+      }
+      break;
+
+   case Key_Up:
+     if ( chooseMarkerRow() != 1 )
+     {
+       moveHide=chooseMarkerRow();
+       do
+       {
+         moveHide--;
+         rl= activeTable()->rowLayout( moveHide );
+       }
+       while( rl->isHide() && moveHide!=0);
+       if(moveHide != 0)
+       {
+         chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, moveHide ), 0,
+                             makingSelection );
+       }
+     }
+     break;
+
+   case Key_Right:
+   case Key_Tab:
+     if ( chooseMarkerColumn() < KS_colMax )
+     {
+       moveHide=chooseMarkerColumn();
+
+       do
+       {
+         moveHide++;
+         cl= activeTable()->columnLayout( moveHide );
+       }
+       while( cl->isHide() );
+
+       chooseGotoLocation( QMIN( KS_colMax, moveHide ), chooseMarkerRow(), 0,
+                           makingSelection );
+     }
+     break;
+
+   case Key_Left:
+
+     if ( chooseMarkerColumn() != 1 )
+     {
+       moveHide=chooseMarkerColumn();
+       do
+       {
+         moveHide--;
+         cl= activeTable()->columnLayout( moveHide );
+       }
+       while( cl->isHide() && moveHide!=0);
+       // if column==0 return;
+       if(moveHide != 0)
+       {
+         chooseGotoLocation( QMAX( 1, moveHide ), chooseMarkerRow(), 0,
+                             makingSelection );
+       }
+     }
+     break;
+    }
+  }
+}
+
+void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
+{
+  if ( m_pEditor )
+    deleteEditor( false );
+
+  event->accept(); // ?
+}
+
+void KSpreadCanvas::processHomeKey(QKeyEvent* event)
+{
+  bool makingSelection = event->state() & ShiftButton;
+  KSpreadTable* table = activeTable();
+
+  if ( m_pEditor )
+  // We are in edit mode -> go beginning of line
+  {
+    // (David) Do this for text editor only, not formula editor...
+    // Don't know how to avoid this hack (member var for editor type ?)
+    if ( m_pEditor->inherits("KSpreadTextEditor") )
+      QApplication::sendEvent( m_pEditWidget, event );
+    // What to do for a formula editor ?
+  }
+  else
+  {
+    QPoint destination;
+    if ( !m_bChoose && markerColumn() == 1 )
+      return;
+    if ( m_bChoose && chooseMarkerColumn() == 1 )
+      return;
+    KSpreadCell * cell = NULL;
+    /* start at the first used cell in the row and cycle through the right until
+       we find a cell that has some output text.  But don't look past the current
+       marker.
+       The end result we want is to move to the left to the first cell with text,
+       or just to the first column if there is no more text to the left.
+
+       But why?  In excel, home key sends you to the first column always.
+       We might want to change to that behavior.
+    */
+
+    if (event->state() & ControlButton)
+    {
+      /* ctrl + Home will always just send us to location (1,1) */
+      destination = QPoint(1,1);
+    }
+    else
+    {
+      cell = table->getFirstCellRow(markerRow());
+      while (cell != NULL && cell->column() < markerColumn() && cell->isEmpty())
+      {
+        cell = table->getNextCellRight(cell->column(), cell->row());
+      }
+
+      int col = ( cell ? cell->column() : 1 );
+      destination = QPoint(col, markerRow());
+    }
+
+    if ( m_bChoose )
+    {
+      chooseGotoLocation( destination.x(), destination.y(), 0, makingSelection );
+    }
+    else
+    {
+      gotoLocation(destination, activeTable(), makingSelection);
+    }
+  }
+  return;
+}
+
+void KSpreadCanvas::processEndKey( QKeyEvent *event )
+{
+  bool makingSelection = event->state() & ShiftButton;
+  KSpreadTable* table = activeTable();
+  KSpreadCell* cell = NULL;
+
+
+  // move to the last used cell in the row
+  // We are in edit mode -> go beginning of line
+  if ( m_pEditor )
+  {
+    // (David) Do this for text editor only, not formula editor...
+    // Don't know how to avoid this hack (member var for editor type ?)
+    if ( m_pEditor->inherits("KSpreadTextEditor") )
+      QApplication::sendEvent( m_pEditWidget, event );
+    // TODO: What to do for a formula editor ?
+  }
+  else
+  {
+    int col = 1;
+
+    cell = table->getLastCellRow(markerRow());
+    while (cell != NULL && cell->column() > markerColumn() && cell->isEmpty())
+    {
+      cell = table->getNextCellLeft(cell->column(), cell->row());
+    }
+
+    col = (cell == NULL) ? KS_colMax : cell->column();
+
+    if ( m_bChoose )
+      chooseGotoLocation( col, markerRow(), 0, makingSelection );
+    else
+    {
+      gotoLocation(QPoint(col, markerRow()), activeTable(), makingSelection);
+    }
+  }
+}
+
+void KSpreadCanvas::processPriorKey(QKeyEvent *event)
+{
+  bool makingSelection = event->state() & ShiftButton;
+  if (!m_bChoose)
+  {
+    deleteEditor( true );
+  }
+
+
+  if ( m_bChoose )
+    chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 10 ),
+                        0, makingSelection );
+  else
+  {
+    QPoint destination(markerColumn(), QMAX(1, markerRow() - 10));
+
+    gotoLocation(destination, activeTable(), makingSelection);
+  }
+  return;
+}
+
+void KSpreadCanvas::processNextKey(QKeyEvent *event)
+{
+  bool makingSelection = event->state() & ShiftButton;
+  if (!m_bChoose)
+  {
+    deleteEditor( true /*save changes*/ );
+  }
+
+  QPoint destination(markerColumn(), QMAX(1, markerRow() + 10));
+
+  if ( m_bChoose )
+    chooseGotoLocation( chooseMarkerColumn(),
+                        QMIN( KS_rowMax, chooseMarkerRow() + 10 ), 0,
+                        makingSelection );
+  else
+  {
+
+    gotoLocation(destination, activeTable(), makingSelection);
+  }
+
+  return;
+}
+
+void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
+{
+  activeTable()->clearTextSelection( QPoint( markerColumn(), markerRow() ) );
+  m_pView->editWidget()->setText( "" );
+  return;
+}
+
+void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
+{
+  m_pView->editWidget()->setFocus();
+  if(m_pEditor)
+    m_pView->editWidget()->setCursorPosition(m_pEditor->cursorPosition()-1);
+  m_pView->editWidget()->cursorForward(false);
+  return;
+}
+
+void KSpreadCanvas::processF4Key(QKeyEvent* event)
+{
+  /* I have no idea what this is doing.  But it was in the code so I'm leaving it
+   */
+  if (m_pEditor)
+  {
+    m_pEditor->handleKeyPressEvent( event );
+    event->accept();
+  }
+  return;
+}
+
+void KSpreadCanvas::processOtherKey(QKeyEvent *event)
+{
+  // No null character ...
+  if ( event->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
+  {
+    event->accept();
+    return;
+  }
+
+  if ( !m_pEditor && !m_bChoose )
+  {
+    // Switch to editing mode
+    createEditor( CellEditor );
+    m_pEditor->handleKeyPressEvent( event );
+  }
+  else if ( m_pEditor )
+    m_pEditor->handleKeyPressEvent( event );
+
+  return;
+
+}
+
+void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
+{
+  if (m_bChoose)
+    /* in choose mode, just go one space at a time (ignore the control key) */
+  {
+    processArrowKey( event );
+    return;
+  }
+
+
+  bool makingSelection = event->state() & ShiftButton;
+
+  KSpreadTable* table = activeTable();
+  KSpreadCell* cell = NULL;
+  QPoint destination;
+  ColumnLayout* cl = NULL;
+  RowLayout* rl = NULL;
+
+  if(!makingSelection)
+    table->unselect();
+
+  /* here, we want to move to the next cell in the given direction that is
+     actually being used.  Ignore empty cells and cells on hidden rows/columns */
+  switch(event->key())
+  {
+
+    //Ctrl+Key_Up
+  case Key_Up:
+
+    cell = table->getNextCellUp(markerColumn(), markerRow());
+    if (cell != NULL)
+    {
+      rl = table->rowLayout(cell->row());
+    }
+    while((cell != NULL) && (cell->isEmpty()) && !(rl->isHide()))
+    {
+      cell = table->getNextCellUp(cell->column(), cell->row());
+      if (cell != NULL)
+      {
+        rl = table->rowLayout(cell->row());
+      }
+    }
+    destination.setX(markerColumn());
+    destination.setY((cell == NULL) ? 1 : cell->row());
+    break;
+
+  case Key_Down:
+
+    cell = table->getNextCellDown(markerColumn(), markerRow());
+    if (cell != NULL)
+    {
+      rl = table->rowLayout(cell->row());
+    }
+    while((cell != NULL) && (cell->isEmpty()) && !(rl->isHide()))
+    {
+      cell = table->getNextCellDown(cell->column(), cell->row());
+      if (cell != NULL)
+      {
+        rl = table->rowLayout(cell->row());
+      }
+    }
+    destination.setX(markerColumn());
+    destination.setY((cell == NULL) ? KS_rowMax : cell->row());
+    break;
+
+  case Key_Left:
+
+    cell = table->getNextCellLeft(markerColumn(), markerRow());
+    if (cell != NULL)
+    {
+      cl = table->columnLayout(cell->column());
+    }
+    while((cell != NULL) && (cell->isEmpty()) && !(cl->isHide()))
+    {
+      cell = table->getNextCellLeft(cell->column(), cell->row());
+      if (cell != NULL)
+      {
+        cl = table->columnLayout(cell->column());
+      }
+    }
+    destination.setX((cell == NULL) ? 1 : cell->column());
+    destination.setY(markerRow());
+    break;
+
+  case Key_Right:
+
+    cell = table->getNextCellRight(markerColumn(), markerRow());
+    if (cell != NULL)
+    {
+      cl = table->columnLayout(cell->column());
+    }
+    while((cell != NULL) && (cell->isEmpty()) && !(cl->isHide()))
+    {
+      cell = table->getNextCellRight(cell->column(), cell->row());
+      if (cell != NULL)
+      {
+        cl = table->columnLayout(cell->column());
+      }
+    }
+    destination.setX((cell == NULL) ? KS_colMax : cell->column());
+    destination.setY(markerRow());
+    break;
+
+  }
+
+  gotoLocation(destination, table, makingSelection);
+  return;
+}
+
+
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 {
   KSpreadTable * table = activeTable();
-  QString tmp;
-  if ( !table )
-    return;
 
-  if ( formatKeyPress( _ev ) )
+  if ( !table || formatKeyPress( _ev ))
     return;
 
   // Dont handle the remaining special keys.
@@ -1509,705 +1983,72 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
                       (_ev->key() != Key_Right) &&
                       (_ev->key() != Key_Left) &&
                       (_ev->key() != Key_Home) )
-      {
-	  QWidget::keyPressEvent( _ev );
-	  return;
-      }
+  {
+    QWidget::keyPressEvent( _ev );
+    return;
+  }
 
   // Always accept so that events are not
   // passed to the parent.
   _ev->accept();
 
-  // Find out about the current selection/choose.
-  QRect selection;
-  if ( m_bChoose )
-    selection = activeTable()->chooseRect();
-  else
-    selection = activeTable()->selection();
-
-  // Is this a key that involves goint to another cell ? If yes, do the
-  // "end of editing" stuff here, instead of for each case - this bool is
-  // also used for make_select (extending selection), so it doesn't include Return
-  bool bChangingCells = ( _ev->key() == Key_Down || _ev->key() == Key_Up ||
-                          _ev->key() == Key_Left || _ev->key() == Key_Right ||
-                          _ev->key() == Key_Prior || _ev->key() == Key_Next );
-
-  // End of editing a cell
-  if ( ( bChangingCells || _ev->key() == Key_Return || _ev->key() == Key_Enter )
-       && m_pEditor && !m_bChoose )
+  switch( _ev->key() )
   {
-    deleteEditor( true /*save changes*/ );
+  case Key_Return:
+  case Key_Enter:
+    processEnterKey( _ev );
+    break;;
+  case Key_Down:
+  case Key_Up:
+  case Key_Left:
+  case Key_Right:
+  case Key_Tab: /* a tab behaves just like a right arrow */
+    if (_ev->state() & ControlButton)
+    {
+      processControlArrowKey( _ev );
+    }
+    else
+    {
+      processArrowKey( _ev );
+    }
+    break;;
+  case Key_Escape:
+    processEscapeKey( _ev );
+    break;
+
+  case Key_Home:
+    processHomeKey( _ev );
+    break;
+
+  case Key_End:
+    processEndKey( _ev );
+    break;
+
+  case Key_Prior:  /* Page Up */
+    processPriorKey( _ev );
+    break;
+
+  case Key_Next:   /* Page Down */
+    processNextKey( _ev );
+    break;
+
+  case Key_Delete:
+    processDeleteKey( _ev );
+    break;
+
+  case Key_F2:
+    processF2Key( _ev );
+    break;
+
+  case Key_F4:
+    processF4Key( _ev );
+    break;
+
+  default:
+    processOtherKey( _ev );
+    break;
   }
-
-  // Are we making a selection right now ? Go thru this only if no selection is made
-  // or if we neither selected complete rows nor columns.
- bool make_select = m_pView->koDocument()->isReadWrite() &&
-                    ((( _ev->state() & ShiftButton ) == ShiftButton ||
-                      (( _ev->state() & ShiftButton ) == ShiftButton ) &&
-                      ( _ev->state() & ControlButton ) == ControlButton) &&
-                     ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
-
-    ColumnLayout *cl;
-    RowLayout *rl;
-    int moveHide=0;
-
-
-    if( !((( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton) && (_ev->state() != Qt::ControlButton) )
-	{
-	    KSpread::MoveTo tmpMoveTo=m_pView->doc()->getMoveToValue();
-	    //if shift Button clicked inverse move direction
-	    if(_ev->state()==Qt::ShiftButton)
-		{
-		    switch( tmpMoveTo)
-			{
-			case KSpread::Bottom:
-			    tmpMoveTo=KSpread::Top;
-			    break;
-			case KSpread::Top:
-			    tmpMoveTo=KSpread::Bottom;
-			    break;
-			case KSpread::Left:
-			    tmpMoveTo=KSpread::Right;
-			    break;
-			case KSpread::Right:
-			    tmpMoveTo=KSpread::Left;
-			}
-		}
-
-//if( _ev->state() != Qt::ControlButton ){
-      switch( _ev->key() )
-      {
-      case Key_Return:
-      case Key_Enter:
-	  switch( tmpMoveTo)
-	      {
-	      case KSpread::Bottom :
-		  {
-		      if ( !m_bChoose && markerRow() == KS_rowMax )
-			  return;
-		      if ( m_bChoose && chooseMarkerRow() == KS_rowMax )
-			  return;
-
-		      if ( m_bChoose )
-			  chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
-	      else
-			  {
-		              QRect selection = activeTable()->selection();
-			      if( selection.left() == 0 )
-				  gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 1 ), 0, make_select,false,true  );
-			      else
-				  {
-				      if( markerColumn()<selection.right() && markerRow()<selection.bottom() )
-					  gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 1 ), 0, make_select,true ,true);
-				      else if( markerRow()==selection.bottom() && markerColumn()<selection.right() )
-					  gotoLocation( QMIN(KS_colMax, markerColumn()+1), QMIN(KS_rowMax, selection.top()), 0, make_select,true, true );
-				      else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
-					  gotoLocation( selection.left(), QMIN( KS_rowMax, selection.top() ), 0, make_select,true,true );
-				      else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
-					  gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 1 ), 0, make_select,true,true );
-				  }
-			  }
-		      return;
-		  }
-	      case KSpread::Top :
-		  {
-		      /*if ( !m_bChoose && markerRow() == 1 )
-			return;*/
-		      if ( m_bChoose && chooseMarkerRow() ==1 )
-			  return;
-		      if ( m_bChoose )
-			  chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
-		      else
-			  {
-		              QRect selection = activeTable()->selection();
-			      if( selection.left() == 0 )
-				  gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,false,true  );
-			      else
-				  {
-				      if( markerRow()==selection.top() && markerColumn()==selection.left())
-					  gotoLocation( selection.right(), QMAX( 1, selection.bottom() ), 0, make_select,true,true );
-				      else if(markerColumn()==selection.right() && markerRow()>selection.top())
-					  gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,true,true );
-				      else if(markerColumn()<selection.right()&&markerRow()>selection.top() )
-					  gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,true ,true);
-				      else if( markerRow()==selection.top() && markerColumn()<=selection.right())
-					  gotoLocation( markerColumn()-1, QMAX( 1, selection.bottom() ), 0, make_select,true, true );
-
-				  }
-			  }
-		      return;
-		  }
-	      case KSpread::Left :
-		  {
-		      /*if ( !m_bChoose && markerColumn() == 1 )
-			return;*/
-		      if ( m_bChoose && chooseMarkerColumn() == 1 )
-			  return;
-
-		      if ( m_bChoose )
-			  chooseGotoLocation( QMAX(chooseMarkerColumn()-1,1),  chooseMarkerRow() , 0, make_select );
-		      else
-			  {
-		              QRect selection = activeTable()->selection();
-			      if( selection.left() == 0 )
-				  gotoLocation( QMAX(markerColumn()-1,1),  markerRow() , 0, make_select,false,true  );
-			      else
-				  {
-				      if( markerRow()==selection.top() && markerColumn()==selection.left())
-					  gotoLocation( selection.right(),selection.bottom() , 0, make_select,true,true );
-				      else if(markerColumn()>selection.left() && markerRow()<=selection.bottom())
-					  gotoLocation( QMAX(markerColumn()-1,1),  markerRow() , 0, make_select,true,true );
-				      else if(markerColumn()==selection.right()&&markerRow()==selection.bottom() && markerColumn()!=selection.left())
-					  gotoLocation( QMAX(markerColumn()-1,1), markerRow(), 0, make_select,true ,true);
-				      else if(markerColumn()==selection.right()&&markerRow()==selection.bottom() && markerColumn()==selection.left())
-					  gotoLocation( markerColumn(),QMAX( markerRow()-1,1), 0, make_select,true ,true);
-				      else if( markerColumn()==selection.left() && markerRow()<=selection.bottom())
-					  gotoLocation( selection.right(),QMAX( 1, markerRow()-1 ) , 0, make_select,true, true );
-
-				  }
-			  }
-		      return;
-		  }
-	      case KSpread::Right :
-		  {
-		      /*if ( !m_bChoose && markerColumn() == KS_colMax)
-			return;*/
-		      if ( m_bChoose && chooseMarkerColumn() == KS_colMax )
-			  return;
-		      if ( m_bChoose )
-			  chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn()+1 ),chooseMarkerRow() , 0, make_select );
-		      else
-			  {
-		              QRect selection = activeTable()->selection();
-			      if( selection.left() == 0 )
-				  gotoLocation( QMIN( KS_colMax, markerColumn()+1 ),  markerRow() , 0, make_select,false,true );
-			      else
-				  {
-				      if( markerRow()==selection.top() && markerColumn()==selection.left() && markerColumn()!=selection.right())
-					  gotoLocation( QMIN(markerColumn()+1, KS_colMax), markerRow(), 0, make_select,true,true );
-				      else if( markerRow()==selection.top() && markerColumn()==selection.left() && markerColumn()==selection.right())
-					  gotoLocation( markerColumn(), QMIN(markerRow()+1, KS_rowMax), 0, make_select,true,true );
-				      else if(markerColumn()<selection.right() && markerRow()<=selection.bottom())
-					  gotoLocation(QMIN(markerColumn()+1, KS_colMax),  markerRow() , 0, make_select,true,true );
-				      else if(markerColumn()==selection.right() && markerRow()==selection.bottom() )
-					  gotoLocation( selection.left(), selection.top(), 0, make_select,true ,true);
-				      else if( markerColumn()==selection.right() && markerRow()<=selection.bottom())
-					  gotoLocation( selection.left(), QMIN( KS_rowMax, markerRow()+1 ), 0, make_select,true, true );
-				  }
-			  }
-		      return;
-		  }
-		  return;
-	      }
-      case Key_Down:
-
-	  if ( !m_bChoose && markerRow() == KS_rowMax )
-	      return;
-	  if ( m_bChoose && chooseMarkerRow() == KS_rowMax )
-	      return;
-
-                   if(m_bChoose)
-                        moveHide=chooseMarkerRow();
-                   else
-                        moveHide=markerRow();
-                   do
-                        {
-                                moveHide++;
-                                rl= activeTable()->nonDefaultRowLayout( moveHide );
-                        }
-                   while( rl->isHide());
-
-	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, /*chooseMarkerRow() + 1*/moveHide ), 0, make_select);
-	  else
-	      gotoLocation( markerColumn(), QMIN( KS_rowMax, /*markerRow() + 1*/ moveHide), 0, make_select,false,true  );
-
-	  return;
-
-      case Key_Up:
-
-	  if ( !m_bChoose && markerRow() == 1 )
-	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 1 )
-	      return;
-
-                   if(m_bChoose)
-                        moveHide=chooseMarkerRow();
-                   else
-                        moveHide=markerRow();
-                   do
-                        {
-                                moveHide--;
-                                rl= activeTable()->nonDefaultRowLayout( moveHide );
-                        }
-                   while( rl->isHide() && moveHide!=0);
-                   if(moveHide==0)
-                        return;
-	  if ( m_bChoose )
-              chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, /*chooseMarkerRow() - 1*/moveHide ), 0, make_select );
-	  else
-	      gotoLocation( markerColumn(), QMAX( 1, /*markerRow() - 1*/ moveHide ), 0, make_select,false,true );
-
-	  return;
-
-      case Key_Right:
-      case Key_Tab:
-	  if ( !m_bChoose && markerColumn() >= KS_colMax )
-	      return;
-	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
-	      return;
-	  if(m_bChoose)
-	      moveHide=chooseMarkerColumn();
-	  else
-	      moveHide=markerColumn() ;
-
-	  do
-	  {
-	      moveHide++;
-	      cl= activeTable()->nonDefaultColumnLayout( moveHide );
-	  }
-	  while( cl->isHide() );
-
-	  if ( m_bChoose )
-	      chooseGotoLocation( QMIN( KS_colMax, /*chooseMarkerColumn() + 1*/moveHide ), chooseMarkerRow(), 0, make_select );
-	  else
-	      gotoLocation( QMIN( KS_colMax, /*markerColumn() + 1*/moveHide ), markerRow(), 0, make_select,false,true );
-
-	  return;
-
-      case Key_Left:
-
-	  if ( !m_bChoose && markerColumn() == 1 )
-	      return;
-	  if ( m_bChoose && chooseMarkerColumn() == 1 )
-	      return;
-                  if(m_bChoose)
-                        moveHide=chooseMarkerColumn();
-                   else
-                        moveHide=markerColumn();
-                   do
-                        {
-                                moveHide--;
-                                cl= activeTable()->nonDefaultColumnLayout( moveHide );
-                        }
-                   while( cl->isHide() && moveHide!=0);
-                   // if column==0 return;
-                   if(moveHide==0)
-                        return;
-	  if ( m_bChoose )
-	      chooseGotoLocation( QMAX( 1, /*chooseMarkerColumn() - 1*/moveHide ), chooseMarkerRow(), 0, make_select );
-	  else
-	      gotoLocation( QMAX( 1, /*markerColumn() - 1*/ moveHide), markerRow(), 0, make_select,false,true );
-
-	  return;
-
-      case Key_Escape:
-
-	  if ( m_pEditor )
-	      deleteEditor( false );
-
-	  _ev->accept(); // ?
-	  return;
-
-      case Key_Home:
-
-	  // We are in edit mode -> go beginning of line
-	  if ( m_pEditor )
-	      {
-		  // (David) Do this for text editor only, not formula editor...
-		  // Don't know how to avoid this hack (member var for editor type ?)
-		  if ( m_pEditor->inherits("KSpreadTextEditor") )
-		      QApplication::sendEvent( m_pEditWidget, _ev );
-		  // What to do for a formula editor ?
-	      }
-	  else
-	      {
-		  if ( !m_bChoose && markerColumn() == 1 )
-		      return;
-		  if ( m_bChoose && chooseMarkerColumn() == 1 )
-		      return;
-                  KSpreadCell * cell = table->getFirstCellRow(markerRow());
-                  int col = ( cell ? cell->column() : 1 );
-                  if (col > 1)
-                  {
-                    cell = table->cellAt(col, markerRow());
-                    while ( cell && cell->isEmpty() && col > 1 )
-                    {
-                      col = cell->column();
-                      cell = table->getNextCellLeft( col, markerRow() );
-                    }
-                  }
-                  if ( col == markerColumn() )
-                    col = 1;
-		  if ( m_bChoose )
-		      chooseGotoLocation( col, markerRow(), 0, make_select );
-		  else
-		      gotoLocation( col, markerRow(), 0, make_select,false,true );
-	      }
-	  return;
-
-      case Key_End:
-
-          // move to the last used cell in the row
-	  // We are in edit mode -> go beginning of line
-	  if ( m_pEditor )
-          {
-              // (David) Do this for text editor only, not formula editor...
-              // Don't know how to avoid this hack (member var for editor type ?)
-              if ( m_pEditor->inherits("KSpreadTextEditor") )
-                  QApplication::sendEvent( m_pEditWidget, _ev );
-              // TODO: What to do for a formula editor ?
-          }
-	  else
-          {
-              int maxCol = table->maxColumn();
-              int row    = markerRow();
-              int max    = markerColumn();
-              int i;
-
-              // we have to check every cell, cause there might
-              // be unused cells in the middle
-              for (i = 1; i < maxCol; ++i)
-              {
-                  KSpreadCell * cell = table->cellAt( i, row );
-
-                  if (cell != table->defaultCell())
-                  {
-                      if (!cell->isObscured())
-                          max = i;
-                  }
-              }
-
-              if ( max == markerColumn() )
-              {
-                  gotoLocation( KS_colMax, row, 0, make_select, true, true );
-                  return;
-              }
-
-              if ( m_bChoose )
-                  chooseGotoLocation( max, markerRow(), 0, make_select );
-              else
-                  gotoLocation( max, markerRow(), 0, make_select,false,true );
-          }
-	  return;
-
-      case Key_Prior:
-
-	  if( !m_bChoose && markerRow() == 1 )
-	      return;
-	  if( m_bChoose && chooseMarkerRow() == 1 )
-	      return;
-
-	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 10 ), 0, make_select );
-	  else
-	      gotoLocation( markerColumn(), QMAX( 1, markerRow() - 10 ), 0, make_select,false,true );
-
-	  return;
-
-      case Key_Next:
-
-	  if( !m_bChoose && markerRow() == KS_rowMax )
-	      return;
-	  if( m_bChoose && chooseMarkerRow() == KS_rowMax )
-	      return;
-
-	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 10 ), 0, make_select );
-	  else
-	      gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 10 ), 0, make_select,false,true );
-
-	  return;
-
-      case Key_Delete:
-
-	  activeTable()->clearTextSelection( QPoint( markerColumn(), markerRow() ) );
-	  m_pView->editWidget()->setText( "" );
-	  return;
-      case Key_F2:
-	  m_pView->editWidget()->setFocus();
-	  if(m_pEditor)
-	      m_pView->editWidget()->setCursorPosition(m_pEditor->cursorPosition()-1);
-	  m_pView->editWidget()->cursorForward(false);
-	  return;
-      default:
-
-          if (m_pEditor && (_ev->key() == Key_F4))
-          {
-              m_pEditor->handleKeyPressEvent( _ev );
-              _ev->accept();
-              return;
-          }
-
-	  // No null character ...
-	  if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
-	      {
-		  _ev->accept();
-		  return;
-	      }
-
-	  if ( !m_pEditor && !m_bChoose )
-	      {
-                  // Switch to editing mode
-                  createEditor( CellEditor );
-                  m_pEditor->handleKeyPressEvent( _ev );
-	      }
-	  else if ( m_pEditor )
-	      m_pEditor->handleKeyPressEvent( _ev );
-
-	  return;
-
-      } // control  button not pressed
-  }
-  else
-  { //control button pressed
-      if(!make_select)
-	  table->unselect();
-      int x, y;
-
-      switch(_ev->key()){
-
-      //Ctrl+Key_Up
-      case Key_Up:
-	  //If we are already at the end, we skip
-	  if ( !m_bChoose && markerRow() <= 1 )
-	      return;
-	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerRow() <= 1 )
-	      return;
-
-	  if ( m_bChoose )
-	      //If we are in choose mode, we only go 1 up
-	      chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
-	  else{
-
-	      x = markerColumn();
-	      y = markerRow();
-
-	      //If we are at the end of a filled or empty block, then move one up
-	      if ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x, y-1 )->isEmpty() )
-		  y --;
-	      else
-		  {
-		  // if this is a filled cell
-		  if(!activeTable()->cellAt( x, y )->isEmpty()){
-		      //Then we search as long as the previous pervios field is filled
-		      while ( (y-1 >= 1) && !(activeTable()->cellAt( x, y-1 ))->isEmpty() )
-		      {
-			  y --;
-		      }
-		  }
-		  else{
-		      //Otherwise we search as long as the previous pervios field is empty
-		      KSpreadCell * _c = activeTable()->getNextCellUp( x, y );
-
-		      //Found an existing cell, but does it contain something?
-		      while ( _c && _c->isEmpty() ) {
-			  _c = activeTable()->getNextCellUp( x, _c->row() );
-		      }
-
-		      //If there is a filled one, use the next
-		      if ( _c )
-		          y = _c->row() + 1;
-		      //Otherwise go to the first row
-		      else
-			  y = 1;
-		  }
-	      }
-
-	      gotoLocation( x, QMAX( 1, y ), 0, make_select, true, true );
-	  }
-
-	  return;
-
-      //Ctrl+Key_Down
-      case Key_Down:
-
-	  //If we are already at the end, we skip
-	  if ( !m_bChoose && markerRow() >= KS_rowMax )
-	      return;
-
-	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerRow() >= KS_rowMax )
-	      return;
-
-	  if ( m_bChoose )
-	      //If we are in choose mode, we only go 1 down
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
-	  else{
-
-	      x = markerColumn();
-	      y = markerRow();
-
-	      //If we are at the end of a filled or empty block, then move one down
-	      if ( ( y < KS_rowMax ) && ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x, y+1 )->isEmpty() ) )
-		  y ++;
-	      else
-		  {
-		  // if this is a filled cell
-		  if(!activeTable()->cellAt( x, y )->isEmpty()){
-		      //Then we search as long as the next field is filled
-		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt( x, y+1 ))->isEmpty() )
-		      {
-			  y ++;
-		      }
-		  }
-		  else{
-		      // If this already the last used field then jump to the end
-		      if ( y >= activeTable()->maxRow() ) {
-			  y = KS_rowMax;
-		      }
-		      else {
-			  //Otherwise we search for the next filled field and use the last empty one
-			  KSpreadCell * _c = activeTable()->getNextCellDown( x, y );
-
-			  //Found an existing cell, but does it contain something?
-			  while ( _c && _c->isEmpty() ) {
-			      _c = activeTable()->getNextCellDown( x, _c->row() );
-			  }
-
-			  //If there is a filled one, use the previous
-			  if ( _c )
-		              y = _c->row() - 1;
-			  //Otherwise go to the end
-			  else
-			      y = KS_rowMax;
-		      }
-		  }
-	      }
-	      gotoLocation( x, QMIN( KS_rowMax, y ), 0, make_select, true, true );
-	  }
-
-	  return;
-
-      //Ctrl+Key_Right
-      case Key_Right:
-
-	  //If we are already at the end, we skip
-          if ( !m_bChoose && markerColumn() >= KS_colMax )
-	      return;
-	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
-	      return;
-
-	  if ( m_bChoose )
-	      //If we are in choose mode, we only go 1 right
-	      chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
-	  else{
-
-	      x = markerColumn();
-	      y = markerRow();
-
-	      //If we are at the end of a filled or empty block, then move one right
-	      if ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x+1, y )->isEmpty() )
-		  x ++;
-	      else
-		  {
-		  // if this is a filled cell
-		  if(!activeTable()->cellAt( x, y )->isEmpty()){
-		      //Then we search as long as the next field is filled
-		      while ( (x < KS_colMax) && !(activeTable()->cellAt( x+1, y ))->isEmpty() ){
-			  x ++;
-		      }
-		  }
-		  else{
-		      // If this already the last used field then jump to the end
-		      if ( x >= activeTable()->maxColumn() ) {
-			  x = KS_colMax;
-		      }
-		      else {
-			  //Otherwise we search for the next filled field and use the last empty one
-			  KSpreadCell * _c = activeTable()->getNextCellRight( x, y );
-
-			  //Found an existing cell, but does it contain something?
-			  while ( _c && _c->isEmpty() ) {
-			      _c = activeTable()->getNextCellRight( _c->column(), y );
-			  }
-
-			  //If there is a filled one, use the previous
-			  if ( _c )
-		              x = _c->column() - 1;
-			  //Otherwise go to the end
-			  else
-			      x = KS_colMax;
-		      }
-		  }
-	      }
-
-	      gotoLocation( QMIN( KS_colMax, x ), y, 0, make_select, true, true );
-	  }
-
-	  return;
-
-      //Ctrl+Key_Left
-      case Key_Left:
-	  //If we are already at the end, we skip
-	  if ( !m_bChoose && markerColumn() <= 1 )
-	      return;
-	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerColumn() <= 1 )
-	      return;
-
-	  if ( m_bChoose )
-	      //If we are in choose mode, we only go 1 left
-	      chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
-	  else{
-
-	      x = markerColumn();
-	      y = markerRow();
-
-	      //If we are at the end of a filled or empty block, then move one left
-	      if ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x-1, y )->isEmpty() )
-		  x --;
-	      else
-		  {
-		  // if this is a filled cell
-		  if(!activeTable()->cellAt( x, y )->isEmpty()){
-		      //Then we search as long as the previous field is filled
-		      while ( (x-1 >= 1) && !(activeTable()->cellAt( x-1, y ))->isEmpty() ){
-			  x --;
-		      }
-		  }
-		  else{
-		      //Otherwise we search as long as the previous pervios field is empty
-		      KSpreadCell * _c = activeTable()->getNextCellLeft( x, y );
-
-		      //Found an existing cell, but does it contain something?
-		      while ( _c && _c->isEmpty() ) {
-			  _c = activeTable()->getNextCellLeft( _c->column(), y );
-		      }
-
-		      //If there is a filled one, use the next
-		      if ( _c )
-		          x = _c->column() + 1;
-		      //Otherwise go to the first row
-		      else
-			  x = 1;
-		  }
-	      }
-
-	      gotoLocation( QMAX( 1, x ), y, 0, make_select, true, true );
-	  }
-
-	  return;
-
-      //Ctrl+Key_Home
-      case Key_Home:
-
-	  gotoLocation( 1, 1, 0, make_select, true, true );
-
-	  return;
-
-      }
-  }
-
-  /**
-   * Tell the KSpreadView event handler and enable
-   * makro recording by the way.
-   */
-  // _ev->accept();
-
-  // m_pView->eventKeyPressed( _ev, m_bChoose );
+  return;
 }
 
 double KSpreadCanvas::getDouble( KSpreadCell * cell )

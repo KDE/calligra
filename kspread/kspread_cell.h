@@ -205,11 +205,11 @@ public:
   /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
      */
-    int column() const { return m_iColumn; }
+    int column() const;
     /**
      * @return the row this cell is in. May return 0 if the cell is the default cell.
      */
-    int row() const { return m_iRow; }
+    int row() const;
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -517,7 +517,7 @@ public:
     /**
      * @return TRUE if this cell is obscured by another.
      */
-    bool isObscured() const { return !( m_ObscuringCells.isEmpty() ); }
+    bool isObscured() const;
     /**
      * If obscuring is forced then the marker may never reside on this cell.
      *

@@ -723,7 +723,6 @@ public:
     void removeTable();
 
     void setActiveTable();
-    QPoint getOldPos()const {return m_oldPos;}
 
     int getScrollPosX()const {return m_iScrollPosX;}
     void setScrollPosX( int _scrollX) { m_iScrollPosX=_scrollX;}
@@ -1303,7 +1302,6 @@ protected:
     QBrush m_emptyBrush;
     QColor m_emptyColor;
 
-    QPoint m_oldPos;
     int m_iScrollPosX;
     int m_iScrollPosY;
 

@@ -7,6 +7,7 @@
 
 #include <koQueryTrader.h>
 #include <kspread_view.h>
+#include <kspread_doc.h>
 
 class KSpreadEditWidget;
 class KSpreadCanvas;
@@ -202,17 +203,39 @@ public:
      * A convenience function.
      */
     void gotoLocation( const KSpreadPoint& _cell );
+
     /**
      * Move the cursor to the specified cell. This may include switching
      * the table. In addition @ref #KSpreadView::updateEditWidget is called.
      *
-     * @param make_select determines wether this move of the marker is part of a
-     *                    selection, that means: The user holds the shift key and
-     *                    moves the cursor keys. In this case the selection is
-     *                    updated accordingly.
-     */
-    void gotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE,bool move_into_area=false,bool keypress=false);
+     * @param location the cell to move to
+     *
+     * @param table the table to move to.  If NULL, the active table is used
 
+     * @param extendSelection determines wether this move of the marker is part
+     *                        of a selection, that means: The user holds the
+     *                        shift key and moves the cursor keys. In this case
+     *                        the selection is updated accordingly.
+     *                        If this is false, the cell will be the single cell
+     *                        selected, and the selection anchor will be reset
+     *                        to this cell.
+     */
+    void gotoLocation( QPoint location, KSpreadTable* table = NULL,
+                       bool extendSelection = false);
+
+    /**
+     * convenience function
+     */
+    void gotoLocation( int col, int row, KSpreadTable* table = NULL,
+                       bool extendSelection = false)
+    {gotoLocation(QPoint(col, row), table, extendSelection);}
+
+    /**
+     * Makes sure a cell is visible onscreen by scrolling up/down and left/right
+     *
+     * @param location the cell coordinates to scroll to
+     */
+    void scrollToCell(QPoint location);
     /**
      * Chooses the correct @ref #EditorType by looking at
      * the current cells value. By default CellEditor is chosen.
@@ -490,6 +513,22 @@ private:
    * @param cell coordinates of the cell we want to extend towards.
    */
   void extendCurrentSelection(QPoint cell);
+
+  void moveDirection(KSpread::MoveTo direction, bool extendSelection);
+
+  void processEnterKey(QKeyEvent *event);
+  void processArrowKey(QKeyEvent *event);
+  void processEscapeKey(QKeyEvent *event);
+  void processHomeKey(QKeyEvent *event);
+  void processEndKey(QKeyEvent *event);
+  void processPriorKey(QKeyEvent *event);
+  void processNextKey(QKeyEvent *event);
+  void processDeleteKey(QKeyEvent *event);
+  void processF2Key(QKeyEvent *event);
+  void processF4Key(QKeyEvent *event);
+  void processOtherKey(QKeyEvent *event);
+  void processControlArrowKey(QKeyEvent *event);
+
 };
 
 /**

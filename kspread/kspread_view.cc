@@ -267,6 +267,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     setInstance( KSpreadFactory::global() );
     setXMLFile( "kspread.rc" );
 
+    m_pTable = NULL;
     m_toolbarLock = FALSE;
     m_sbCalcLabel=0;
     m_pDoc = doc;

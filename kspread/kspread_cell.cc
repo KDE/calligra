@@ -58,6 +58,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_pPrivate = 0L;
   m_pQML = NULL;
 
+  m_ObscuringCells.clear();
 
   m_lstDepends.setAutoDelete( TRUE );
   m_lstDependingOnMe.setAutoDelete( TRUE );
@@ -82,6 +83,24 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
 
   m_nbLines=0;
   m_Validity=0;
+}
+
+int KSpreadCell::row() const
+{
+  /* Make sure this isn't called for the default cell.  This assert can save you
+     (could have saved me!) the hassle of some very obscure bugs.
+  */
+  Q_ASSERT(!isDefault());
+  return m_iRow;
+}
+
+int KSpreadCell::column() const
+{
+  Q_ASSERT(!isDefault());
+  /* Make sure this isn't called for the default cell.  This assert can save you
+     (could have saved me!) the hassle of some very obscure bugs.
+  */
+  return m_iColumn;
 }
 
 void KSpreadCell::copyLayout( KSpreadCell *_cell )
@@ -294,6 +313,12 @@ bool KSpreadCell::needsPrinting() const
 bool KSpreadCell::isEmpty() const
 {
     return isDefault() || m_strText.isEmpty();
+}
+
+
+bool KSpreadCell::isObscured() const
+{
+  return !( m_ObscuringCells.isEmpty() );
 }
 
 bool KSpreadCell::isObscuringForced()
@@ -2098,7 +2123,7 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
 
-  if( !comment(column(),row()).isEmpty() && rowLayout->height() > 2 &&
+  if( !comment(cellRef.x(),cellRef.y()).isEmpty() && rowLayout->height() > 2 &&
       colLayout->width() > 10 && !painter.device()->isExtDev() &&
       table()->doc()->getShowCommentIndicator())
   {

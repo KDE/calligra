@@ -262,7 +262,6 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
       s.sprintf("Table%i", s_id );
       QObject::setName( s.data() );
   }
-  m_oldPos=QPoint(1,1);
   m_iScrollPosX=0;
   m_iScrollPosY=0;
 
