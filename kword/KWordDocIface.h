@@ -211,6 +211,9 @@ k_dcop:
     void renameBookMark(const QString &_oldname, const QString &_newName);
     QStringList listOfBookmarkName()const;
 
+    bool displayFiedCode()const;
+    void setDisplayFiedCode( bool b);
+
 private:
     KWDocument *doc;
 

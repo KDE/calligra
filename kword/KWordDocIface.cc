@@ -570,6 +570,18 @@ void KWordDocIface::setDisplayComment( bool b)
     doc->recalcVariables(VT_NOTE);
 }
 
+
+bool KWordDocIface::displayFiedCode()const
+{
+    return doc->getVariableCollection()->variableSetting()->displayFiedCode();
+}
+
+void KWordDocIface::setDisplayFiedCode( bool b)
+{
+    doc->getVariableCollection()->variableSetting()->setDisplayFiedCode( b );
+    doc->recalcVariables(VT_ALL);
+}
+
 bool KWordDocIface::configAutoSuperScript() const
 {
     return doc->getAutoFormat()->getConfigAutoSuperScript();
