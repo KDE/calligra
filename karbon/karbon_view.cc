@@ -1250,10 +1250,8 @@ KarbonView::initActions()
 
 	// line width
 	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
-#if KDE_VERSION >= 305
 	new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
-#endif
 
 	// set up join style widget
 	m_joinStyle = new VStateButton( this );
@@ -1261,10 +1259,8 @@ KarbonView::initActions()
 	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_miter" ) ) );
 	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_round" ) ) );
 	m_joinStyle->setState( 0 );
-#if KDE_VERSION >= 305
 
 	new KWidgetAction( m_joinStyle, i18n( "Set Join Style" ), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
-#endif
 
 	connect( m_joinStyle, SIGNAL( clicked() ), this, SLOT( slotJoinStyleClicked() ) );
 
@@ -1274,10 +1270,8 @@ KarbonView::initActions()
 	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_square" ) ) );
 	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_round" ) ) );
 	m_capStyle->setState( 0 );
-#if KDE_VERSION >= 305
 
 	new KWidgetAction( m_capStyle, i18n( "Set Cap Style" ), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
-#endif
 
 	connect( m_capStyle, SIGNAL( clicked() ), this, SLOT( slotCapStyleClicked() ) );
 
