@@ -647,11 +647,10 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 // ##### Are _col and _row really needed ?
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
-    setLeftBorderWidth( leftBorderWidth( _col, _row ));
-    setTopBorderWidth( topBorderWidth( _col, _row ));
-    setTopBorderWidth( topBorderWidth( _col, _row ));
-    setFallDiagonalWidth( fallDiagonalWidth( _col, _row) );
-    setGoUpDiagonalWidth( goUpDiagonalWidth( _col, _row) );
+    /*m_leftBorderPen.setWidth(leftBorderWidth( _col, _row ));
+    m_topBorderPen.setWidth(topBorderWidth( _col, _row ));/*setTopBorderWidth( topBorderWidth( _col, _row ));*/
+    //m_fallDiagonalPen.setWidth(fallDiagonalWidth( _col, _row) );
+    //m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
 
     m_nbLines = 0;
     m_bCellTooShort=false;

@@ -3049,6 +3049,12 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
         {
           c->clearProperty( KSpreadCell::PTopBorder );
           c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+          c->clearProperty( KSpreadCell::PBottomBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
+          c->clearProperty( KSpreadCell::PLeftBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+          c->clearProperty( KSpreadCell::PRightBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
         }
       }
 
@@ -3077,6 +3083,12 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
         {
           c->clearProperty( KSpreadCell::PTopBorder );
           c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+          c->clearProperty( KSpreadCell::PBottomBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
+          c->clearProperty( KSpreadCell::PLeftBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+          c->clearProperty( KSpreadCell::PRightBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
         }
       }
 
