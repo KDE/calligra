@@ -26,6 +26,7 @@
 #include "form.h"
 #include "formmanager.h"
 #include "resizehandle.h"
+#include "container.h"
 
 #define MINIMUM_WIDTH 10
 #define MINIMUM_HEIGHT 10
@@ -206,12 +207,14 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	else if(tmpy + tmph > m_set->m_widget->parentWidget()->height())
 		tmph = m_set->m_widget->parentWidget()->height() - tmpy;
 
-	// Move the widget if necessary
-	if ( (tmpx != m_set->m_widget->x()) || (tmpy != m_set->m_widget->y()) )
-		m_set->m_widget->move(tmpx,tmpy);
+	const bool shouldBeMoved = (tmpx != m_set->m_widget->x()) || (tmpy != m_set->m_widget->y());
+	const bool shouldBeResized = (tmpw != m_set->m_widget->width()) || (tmph != m_set->m_widget->height());
+
+	if (shouldBeMoved && shouldBeResized)
+		m_set->m_widget->hide();
 
 	// Resize it
-	if ( (tmpw != m_set->m_widget->width()) || (tmph != m_set->m_widget->height()) )
+	if (shouldBeResized)
 	{
 		// Keep a QSize(10, 10) minimum size
 		tmpw = (tmpw < MINIMUM_WIDTH) ? MINIMUM_WIDTH : tmpw;
@@ -219,6 +222,12 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 		m_set->m_widget->resize(tmpw,tmph);
 	}
 
+	// Move the widget if necessary
+	if (shouldBeMoved)
+		m_set->m_widget->move(tmpx,tmpy);
+
+	if (shouldBeMoved && shouldBeResized)
+		m_set->m_widget->show();
 }
 
 void ResizeHandle::mouseReleaseEvent(QMouseEvent *)
