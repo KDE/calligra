@@ -56,6 +56,8 @@ KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientColle
     xfactor = 100;
     yfactor = 100;
     pageTimer = 1;
+    soundEffect = false;
+    soundFileName = QString::null;
 
     imageCollection = _imageCollection;
     gradientCollection = _gradientCollection;
@@ -234,6 +236,13 @@ QDomElement KPBackGround::save( QDomDocument &doc )
         page.appendChild( element );
     }
 
+    if ( soundEffect || !soundFileName.isEmpty() ) {
+        element = doc.createElement( "PGSOUNDEFFECT" );
+        element.setAttribute( "soundEffect", static_cast<int>(soundEffect) );
+        element.setAttribute( "soundFileNmae", soundFileName );
+        page.appendChild( element );
+    }
+
     return page;
 }
 
@@ -389,6 +398,24 @@ void KPBackGround::load( const QDomElement &element )
         if(e.hasAttribute("timer"))
             timer=e.attribute("timer").toInt();
         setPageTimer(timer);
+    }
+    else
+        setPageTimer(1);
+    e=element.namedItem("PGSOUNDEFFECT").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("soundEffect"))
+            soundEffect=static_cast<bool>(e.attribute("soundEffect").toInt());
+        else
+            soundEffect=false;
+
+        if(e.hasAttribute("soundFileNmae"))
+            soundFileName=e.attribute("soundFileNmae");
+        else
+            soundFileName=QString::null;
+    }
+    else {
+        soundEffect=false;
+        soundFileName=QString::null;
     }
 }
 

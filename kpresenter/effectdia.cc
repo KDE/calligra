@@ -20,6 +20,7 @@
 #include <kpresenter_view.h>
 #include <effectdia.h>
 #include <kprcommand.h>
+#include <kpresenter_sound_player.h>
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -30,10 +31,19 @@
 #include <qvaluelist.h>
 #include <qlayout.h>
 #include <qspinbox.h>
+#include <qstringlist.h>
+#include <qdir.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <klocale.h>
+#include <kglobal.h>
 #include <kbuttonbox.h>
 #include <knuminput.h>
+#include <kurlrequester.h>
+#include <kurl.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -45,6 +55,8 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 {
     view = _view;
     KPObject *obj = objs.at( 0 );
+    soundPlayer1 = 0;
+    soundPlayer2 = 0;
 
     topLayout = new QVBoxLayout(this, 4);
     topLayout->setMargin( 10 );
@@ -52,7 +64,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     QGroupBox *grp1 = new QGroupBox(i18n( "Appear" ), this );
     topLayout->addWidget(grp1);
-    QGridLayout *upperRow = new QGridLayout(grp1, 3, 2, 15);
+    QGridLayout *upperRow = new QGridLayout(grp1, 5, 4, 15);
 
     lNum = new QLabel( i18n( "Number: " ), grp1 );
     lNum->setAlignment( AlignVCenter );
@@ -86,6 +98,8 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
     upperRow->addWidget(cEffect, 1, 1);
 
+    connect( cEffect, SIGNAL( activated( int ) ), this, SLOT( appearEffectChanged( int ) ) );
+
     lEffect2 = new QLabel( i18n( "Effect (object specific): " ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
     upperRow->addWidget(lEffect2, 2, 0);
@@ -115,15 +129,55 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     QLabel *lTimerOfAppear = new QLabel( i18n( "Timer of the object:" ), grp1 );
     lTimerOfAppear->setAlignment( AlignVCenter );
-    upperRow->addWidget(lTimerOfAppear, 3, 0);
+    upperRow->addWidget( lTimerOfAppear, 3, 0 );
 
     timerOfAppear = new KIntNumInput( obj->getAppearTimer(), grp1 );
     timerOfAppear->setRange( 1, 600, 1 );
     timerOfAppear->setSuffix( i18n( " seconds" ) );
-    upperRow->addWidget(timerOfAppear, 3, 1);
+    upperRow->addWidget( timerOfAppear, 3, 1 );
 
     if ( view->kPresenterDoc()->spManualSwitch() )
         timerOfAppear->setEnabled( false );
+
+
+    // setup the Sound Effect stuff
+    appearSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp1 );
+    appearSoundEffect->setChecked( obj->getAppearSoundEffect() );
+    upperRow->addWidget( appearSoundEffect, 4, 0 );
+    QWhatsThis::add( appearSoundEffect, i18n("If you use sound effect, plaese do not select No Effect.") );
+
+    if ( static_cast<int>( obj->getEffect() ) == 0 )
+        appearSoundEffect->setEnabled( false );
+
+    connect( appearSoundEffect, SIGNAL( clicked() ), this, SLOT( appearSoundEffectChanged() ) );
+
+    lSoundEffect1 = new QLabel( i18n( "File Name: " ), grp1 );
+    lSoundEffect1->setAlignment( AlignVCenter );
+    upperRow->addWidget( lSoundEffect1, 5, 0 );
+
+    requester1 = new KURLRequester( grp1 );
+    requester1->setURL( obj->getAppearSoundEffectFileName() );
+    upperRow->addWidget( requester1, 5, 1 );
+
+    connect( requester1, SIGNAL( openFileDialog( KURLRequester * ) ),
+             this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+
+    connect( requester1, SIGNAL( textChanged( const QString& ) ),
+             this, SLOT( slotAppearFileChanged( const QString& ) ) );
+
+    buttonTestPlaySoundEffect1 = new QPushButton( grp1 );
+    buttonTestPlaySoundEffect1->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
+    QToolTip::add( buttonTestPlaySoundEffect1, i18n("Play") );
+    upperRow->addWidget( buttonTestPlaySoundEffect1, 5, 2 );
+
+    connect( buttonTestPlaySoundEffect1, SIGNAL( clicked() ), this, SLOT( playSound1() ) );
+
+    buttonTestStopSoundEffect1 = new QPushButton( grp1 );
+    buttonTestStopSoundEffect1->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
+    QToolTip::add( buttonTestStopSoundEffect1, i18n("Stop") );
+    upperRow->addWidget( buttonTestStopSoundEffect1, 5, 3 );
+
+    connect( buttonTestStopSoundEffect1, SIGNAL( clicked() ), this, SLOT( stopSound1() ) );
 
 
     disappear = new QCheckBox( i18n( "Disappear" ), this );
@@ -132,7 +186,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     QGroupBox *grp2 = new QGroupBox(i18n( "Disappear" ), this);
     topLayout->addWidget(grp2);
-    QGridLayout *lowerRow = new QGridLayout(grp2, 3, 1, 15);
+    QGridLayout *lowerRow = new QGridLayout(grp2, 4, 4, 15);
 
     lDisappear = new QLabel( i18n( "Number: " ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
@@ -163,17 +217,59 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
 
+    connect( cDisappear, SIGNAL( activated( int ) ), this, SLOT( disappearEffectChanged( int ) ) );
+
     QLabel *lTimerOfDisappear = new QLabel( i18n( "Timer of the object:" ), grp2 );
     lTimerOfDisappear->setAlignment( AlignVCenter );
-    lowerRow->addWidget(lTimerOfDisappear, 2, 0);
+    lowerRow->addWidget( lTimerOfDisappear, 2, 0 );
 
     timerOfDisappear = new KIntNumInput( obj->getDisappearTimer(), grp2 );
     timerOfDisappear->setRange( 1, 600, 1 );
     timerOfDisappear->setSuffix( i18n( " seconds" ) );
-    lowerRow->addWidget(timerOfDisappear, 2, 1);
+    lowerRow->addWidget( timerOfDisappear, 2, 1 );
 
     if ( view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( false );
+
+
+    // setup the Sound Effect stuff
+    disappearSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp2 );
+    disappearSoundEffect->setChecked( obj->getDisappearSoundEffect() );
+    lowerRow->addWidget( disappearSoundEffect, 3, 0 );
+    QWhatsThis::add( disappearSoundEffect, i18n("If you use sound effect, plaese do not select No Effect.") );
+
+    if ( static_cast<int>( obj->getEffect3() ) == 0 )
+        disappearSoundEffect->setEnabled( false );
+
+    connect( disappearSoundEffect, SIGNAL( clicked() ), this, SLOT( disappearSoundEffectChanged() ) );
+
+    lSoundEffect2 = new QLabel( i18n( "File Name: " ), grp2 );
+    lSoundEffect2->setAlignment( AlignVCenter );
+    lowerRow->addWidget( lSoundEffect2, 4, 0 );
+
+    requester2 = new KURLRequester( grp2 );
+    requester2->setURL( obj->getDisappearSoundEffectFileName() );
+    lowerRow->addWidget( requester2, 4, 1 );
+
+    connect( requester2, SIGNAL( openFileDialog( KURLRequester * ) ),
+             this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+
+    connect( requester2, SIGNAL( textChanged( const QString& ) ),
+             this, SLOT( slotDisappearFileChanged( const QString& ) ) );
+
+    buttonTestPlaySoundEffect2 = new QPushButton( grp2 );
+    buttonTestPlaySoundEffect2->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
+    QToolTip::add( buttonTestPlaySoundEffect2, i18n("Play") );
+    lowerRow->addWidget( buttonTestPlaySoundEffect2, 4, 2 );
+
+    connect( buttonTestPlaySoundEffect2, SIGNAL( clicked() ), this, SLOT( playSound2() ) );
+
+    buttonTestStopSoundEffect2 = new QPushButton( grp2 );
+    buttonTestStopSoundEffect2->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
+    QToolTip::add( buttonTestStopSoundEffect2, i18n("Stop") );
+    lowerRow->addWidget( buttonTestStopSoundEffect2, 4, 3 );
+
+    connect( buttonTestStopSoundEffect2, SIGNAL( clicked() ), this, SLOT( stopSound2() ) );
 
 
     KButtonBox *bb = new KButtonBox(this);
@@ -198,6 +294,8 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
     disappearChanged();
+    appearSoundEffectChanged();
+    disappearSoundEffectChanged();
 }
 
 /*================================================================*/
@@ -215,6 +313,10 @@ void EffectDia::slotEffectDiaOk()
 	e.disappear = o->getDisappear();
 	e.appearTimer = o->getAppearTimer();
 	e.disappearTimer = o->getDisappearTimer();
+        e.appearSoundEffect = o->getAppearSoundEffect();
+        e.disappearSoundEffect = o->getDisappearSoundEffect();
+        e.a_fileName = o->getAppearSoundEffectFileName();
+        e.d_fileName = o->getDisappearSoundEffectFileName();
 	oldEffects << e;
     }
 
@@ -227,6 +329,10 @@ void EffectDia::slotEffectDiaOk()
     eff.disappear = disappear->isChecked();
     eff.appearTimer = timerOfAppear->value();
     eff.disappearTimer = timerOfDisappear->value();
+    eff.appearSoundEffect = appearSoundEffect->isChecked();
+    eff.disappearSoundEffect = disappearSoundEffect->isChecked();
+    eff.a_fileName = requester1->url();
+    eff.d_fileName = requester2->url();
 
     EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs,
 					  oldEffects, eff );
@@ -260,6 +366,148 @@ void EffectDia::num1Changed( int /*num*/ )
 /*================================================================*/
 void EffectDia::num2Changed( int /*num*/ )
 {
+}
+
+/*================================================================*/
+void EffectDia::appearEffectChanged( int num )
+{
+    if ( num == 0 ) {
+        appearSoundEffect->setEnabled( false );
+        lSoundEffect1->setEnabled( false );
+        requester1->setEnabled( false );
+        buttonTestPlaySoundEffect1->setEnabled( false );
+        buttonTestStopSoundEffect1->setEnabled( false );
+    }
+    else {
+        appearSoundEffect->setEnabled( true );
+        appearSoundEffectChanged();
+    }
+}
+
+/*================================================================*/
+void EffectDia::disappearEffectChanged( int num )
+{
+    if ( num == 0 ) {
+        disappearSoundEffect->setEnabled( false );
+        lSoundEffect2->setEnabled( false );
+        requester2->setEnabled( false );
+        buttonTestPlaySoundEffect2->setEnabled( false );
+        buttonTestStopSoundEffect2->setEnabled( false );
+    }
+    else {
+        disappearSoundEffect->setEnabled( true );
+        disappearSoundEffectChanged();
+    }
+}
+
+/*================================================================*/
+void EffectDia::appearSoundEffectChanged()
+{
+    lSoundEffect1->setEnabled( appearSoundEffect->isChecked() );
+    requester1->setEnabled( appearSoundEffect->isChecked() );
+
+    if ( !requester1->url().isEmpty() ) {
+        buttonTestPlaySoundEffect1->setEnabled( appearSoundEffect->isChecked() );
+        buttonTestStopSoundEffect1->setEnabled( appearSoundEffect->isChecked() );
+    }
+    else {
+        buttonTestPlaySoundEffect1->setEnabled( false );
+        buttonTestStopSoundEffect1->setEnabled( false );
+    }
+}
+
+/*================================================================*/
+void EffectDia::disappearSoundEffectChanged()
+{
+    lSoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
+    requester2->setEnabled( disappearSoundEffect->isChecked() );
+
+    if ( !requester2->url().isEmpty() ) {
+        buttonTestPlaySoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
+        buttonTestStopSoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
+    }
+    else {
+        buttonTestPlaySoundEffect2->setEnabled( false );
+        buttonTestStopSoundEffect2->setEnabled( false );
+    }
+}
+
+/*================================================================*/
+void EffectDia::slotRequesterClicked( KURLRequester *requester )
+{
+    // find the first "sound"-resource that contains files
+    QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
+    if ( !soundDirs.isEmpty() ) {
+	KURL soundURL;
+	QDir dir;
+	dir.setFilter( QDir::Files | QDir::Readable );
+	QStringList::Iterator it = soundDirs.begin();
+	while ( it != soundDirs.end() ) {
+	    dir = *it;
+	    if ( dir.isReadable() && dir.count() > 2 ) {
+		soundURL.setPath( *it );
+		requester->fileDialog()->setURL( soundURL );
+		break;
+	    }
+	    ++it;
+	}
+    }
+}
+
+/*================================================================*/
+void EffectDia::slotAppearFileChanged( const QString &text )
+{
+    buttonTestPlaySoundEffect1->setEnabled( !text.isEmpty() );
+    buttonTestStopSoundEffect1->setEnabled( !text.isEmpty() );
+}
+
+/*================================================================*/
+void EffectDia::slotDisappearFileChanged( const QString &text )
+{
+    buttonTestPlaySoundEffect2->setEnabled( !text.isEmpty() );
+    buttonTestStopSoundEffect2->setEnabled( !text.isEmpty() );
+}
+
+/*================================================================*/
+void EffectDia::playSound1()
+{
+    soundPlayer1 = new KPresenterSoundPlayer( requester1->url() );
+    soundPlayer1->play();
+
+    buttonTestPlaySoundEffect1->setEnabled( false );
+    buttonTestStopSoundEffect1->setEnabled( true );
+}
+
+/*================================================================*/
+void EffectDia::playSound2()
+{
+    soundPlayer2 = new KPresenterSoundPlayer( requester2->url() );
+    soundPlayer2->play();
+
+    buttonTestPlaySoundEffect2->setEnabled( false );
+    buttonTestStopSoundEffect2->setEnabled( true );
+}
+
+/*================================================================*/
+void EffectDia::stopSound1()
+{
+    if ( soundPlayer1 ) {
+        soundPlayer1->stop();
+
+        buttonTestPlaySoundEffect1->setEnabled( true );
+        buttonTestStopSoundEffect1->setEnabled( false );
+    }
+}
+
+/*================================================================*/
+void EffectDia::stopSound2()
+{
+    if ( soundPlayer2 ) {
+        soundPlayer2->stop();
+
+        buttonTestPlaySoundEffect2->setEnabled( true );
+        buttonTestStopSoundEffect2->setEnabled( false );
+    }
 }
 
 #include <effectdia.moc>

@@ -72,6 +72,10 @@ public:
     { pageEffect = _pageEffect; }
     void setPageTimer( int _pageTimer )
     { pageTimer = _pageTimer; }
+    void setPageSoundEffect( bool _soundEffect )
+    { soundEffect = _soundEffect; }
+    void setPageSoundFileName( QString _soundFileName )
+    { soundFileName = _soundFileName; }
 
     void setBgSize( QSize _size, bool visible = true );
 
@@ -100,6 +104,10 @@ public:
     { return yfactor; }
     int getPageTimer() const
     { return pageTimer; }
+    bool getPageSoundEffect() const
+    { return soundEffect; }
+    QString getPageSoundFileName() const
+    { return soundFileName; }
 
     QSize getSize() const
     { return ext; }
@@ -127,6 +135,8 @@ protected:
     bool unbalanced;
     int xfactor, yfactor;
     int pageTimer;
+    bool soundEffect;
+    QString soundFileName;
 
     KPImage backImage;
     KPImageCollection *imageCollection;

@@ -1044,7 +1044,9 @@ void KPresenterView::screenConfigPages()
 			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
 			       kPresenterDoc()->getPresSpeed(),
-			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageTimer() );
+			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageTimer(),
+			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageSoundEffect(),
+			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageSoundFileName() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->show();
@@ -1176,6 +1178,7 @@ void KPresenterView::screenStop()
 	continuePres = false;
 	exitPres = true;
         page->setNextPageTimer( true );
+        page->stopSound();
         page->showNormal();
         page->hide();
         page->reparent( pageBase, 0, QPoint( 0, 0 ), true );
@@ -2689,6 +2692,8 @@ void KPresenterView::pgConfOk()
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfinitLoop(),
 					  pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
 					  pgConfDia->getPageTimer(),
+					  pgConfDia->getPageSoundEffect(),
+					  pgConfDia->getPageSoundFileName(),
 					  kPresenterDoc()->spManualSwitch(),
 					  kPresenterDoc()->spInfinitLoop(),
 					  kPresenterDoc()->backgroundList()->
@@ -2696,6 +2701,10 @@ void KPresenterView::pgConfOk()
 					  kPresenterDoc()->getPresSpeed(),
 					  kPresenterDoc()->backgroundList()->
 					  at( getCurrPgNum() - 1 )->getPageTimer(),
+					  kPresenterDoc()->backgroundList()->
+					  at( getCurrPgNum() - 1 )->getPageSoundEffect(),
+					  kPresenterDoc()->backgroundList()->
+					  at( getCurrPgNum() - 1 )->getPageSoundFileName(),
 					  kPresenterDoc(), getCurrPgNum() - 1 );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );

@@ -460,6 +460,10 @@ void EffectCmd::execute()
 	object->setDisappearNum( newEffect.disappearNum );
 	object->setAppearTimer( newEffect.appearTimer );
 	object->setDisappearTimer( newEffect.disappearTimer );
+        object->setAppearSoundEffect( newEffect.appearSoundEffect );
+        object->setDisappearSoundEffect( newEffect.disappearSoundEffect );
+        object->setAppearSoundEffectFileName( newEffect.a_fileName );
+        object->setDisappearSoundEffectFileName( newEffect.d_fileName );
     }
 }
 
@@ -478,6 +482,10 @@ void EffectCmd::unexecute()
 	object->setDisappearNum( oldEffects[ i ].disappearNum );
 	object->setAppearTimer( oldEffects[ i ].appearTimer );
 	object->setDisappearTimer( oldEffects[ i ].disappearTimer );
+        object->setAppearSoundEffect( oldEffects[ i ].appearSoundEffect );
+        object->setDisappearSoundEffect( oldEffects[ i ].disappearSoundEffect );
+        object->setAppearSoundEffectFileName( oldEffects[ i ].a_fileName );
+        object->setDisappearSoundEffectFileName( oldEffects[ i ].d_fileName );
     }
 }
 
@@ -1179,8 +1187,10 @@ void PenBrushCmd::unexecute()
 /*================================================================*/
 PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                       PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
+                      bool _soundEffect, QString _fileName,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
+                      bool _oldSoundEffect, QString _oldFileName,
                       KPresenterDoc *_doc, int _pgNum )
     : KCommand( _name )
 {
@@ -1189,11 +1199,15 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
     pageEffect = _pageEffect;
     presSpeed = _presSpeed;
     pageTimer = _pageTimer;
+    soundEffect = _soundEffect;
+    fileName = _fileName;
     oldManualSwitch = _oldManualSwitch;
     oldInfinitLoop = _oldInfinitLoop;
     oldPageEffect = _oldPageEffect;
     oldPresSpeed = _oldPresSpeed;
     oldPageTimer = _oldPageTimer;
+    oldSoundEffect = _oldSoundEffect;
+    oldFileName = _oldFileName;
     doc = _doc;
     pgNum = _pgNum;
 }
@@ -1206,6 +1220,8 @@ void PgConfCmd::execute()
     doc->setPageEffect( pgNum, pageEffect );
     doc->setPresSpeed( presSpeed );
     doc->setPageTimer( pgNum, pageTimer );
+    doc->setPageSoundEffect( pgNum, soundEffect );
+    doc->setPageSoundFileName( pgNum, fileName );
 }
 
 /*================================================================*/
@@ -1216,6 +1232,8 @@ void PgConfCmd::unexecute()
     doc->setPageEffect( pgNum, oldPageEffect );
     doc->setPresSpeed( oldPresSpeed );
     doc->setPageTimer( pgNum, oldPageTimer );
+    doc->setPageSoundEffect( pgNum, oldSoundEffect );
+    doc->setPageSoundFileName( pgNum, oldFileName );
 }
 
 /******************************************************************/

@@ -271,6 +271,12 @@ public:
     void setPageTimer( unsigned int, int );
     int getPageTimer( unsigned int );
 
+    void setPageSoundEffect( unsigned int, bool );
+    void setPageSoundFileName( unsigned int, QString );
+
+    bool getPageSoundEffect( unsigned int );
+    QString getPageSoundFileName( unsigned int );
+
     int getLeftBorder();
     int getTopBorder();
     int getBottomBorder();

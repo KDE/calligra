@@ -1319,6 +1319,20 @@ void KPresenterDoc::setPageTimer( unsigned int pageNum, int pageTimer )
         backgroundList()->at( pageNum )->setPageTimer( pageTimer );
 }
 
+/*===================== set page sound effect ====================*/
+void KPresenterDoc::setPageSoundEffect( unsigned int pageNum, bool soundEffect )
+{
+    if ( pageNum < _backgroundList.count() )
+        backgroundList()->at( pageNum )->setPageSoundEffect( soundEffect );
+}
+
+/*=================== set page sound effect file ==================*/
+void KPresenterDoc::setPageSoundFileName( unsigned int pageNum, QString fileName )
+{
+    if ( pageNum < _backgroundList.count() )
+        backgroundList()->at( pageNum )->setPageSoundFileName( fileName );
+}
+
 /*===================== set pen and brush ========================*/
 bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
 				 BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky )
@@ -2077,6 +2091,24 @@ int KPresenterDoc::getPageTimer( unsigned int pageNum )
         return backgroundList()->at( pageNum )->getPageTimer();
 
     return 1;
+}
+
+/*=============================================================*/
+bool KPresenterDoc::getPageSoundEffect( unsigned int pageNum )
+{
+    if ( pageNum < _backgroundList.count() )
+        return backgroundList()->at( pageNum )->getPageSoundEffect();
+
+    return false;
+}
+
+/*=============================================================*/
+QString KPresenterDoc::getPageSoundFileName( unsigned int pageNum )
+{
+    if ( pageNum < _backgroundList.count() )
+        return backgroundList()->at( pageNum )->getPageSoundFileName();
+
+    return QString::null;
 }
 
 /*=============================================================*/

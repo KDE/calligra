@@ -89,6 +89,14 @@ public:
     { appearTimer = _appearTimer; }
     virtual void setDisappearTimer( int _disappearTimer )
     { disappearTimer = _disappearTimer; }
+    virtual void setAppearSoundEffect( bool b )
+    { appearSoundEffect = b; }
+    virtual void setDisappearSoundEffect( bool b )
+    { disappearSoundEffect = b; }
+    virtual void setAppearSoundEffectFileName( QString _a_fileName )
+    { a_fileName = _a_fileName; }
+    virtual void setDisappearSoundEffectFileName( QString _d_fileName )
+    { d_fileName = _d_fileName; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load(const QDomElement &element);
@@ -120,6 +128,14 @@ public:
     { return appearTimer; }
     virtual int getDisappearTimer() const
     { return disappearTimer; }
+    virtual bool getAppearSoundEffect() const
+    { return appearSoundEffect; }
+    virtual bool getDisappearSoundEffect() const
+    { return disappearSoundEffect; }
+    virtual QString getAppearSoundEffectFileName() const
+    { return a_fileName; }
+    virtual QString getDisappearSoundEffectFileName() const
+    { return d_fileName; }
     virtual int getPresNum() const
     { return presNum; }
     virtual int getSubPresSteps() const
@@ -204,9 +220,12 @@ protected:
     Effect2 effect2;
     Effect3 effect3;
     int appearTimer, disappearTimer;
+    QString a_fileName, d_fileName;
     int presNum, disappearNum;
 
     bool disappear:1;
+    bool appearSoundEffect:1;
+    bool disappearSoundEffect:1;
     bool selected:1;
     bool dSelection:1;
     bool zoomed:1;

@@ -35,6 +35,8 @@ class QRadioButton;
 class QComboBox;
 class QCheckBox;
 class KIntNumInput;
+class KURLRequester;
+class KPresenterSoundPlayer;
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -49,23 +51,33 @@ public:
     // constructor - destructor
     PgConfDia( QWidget* parent, const char* name,
                bool infLoop, bool swMan, int pgNum,
-               PageEffect pageEffect, PresSpeed presSpeed, int pageTimer );
+               PageEffect pageEffect, PresSpeed presSpeed, int pageTimer,
+               bool soundEffect, QString fileName );
     bool getInfinitLoop();
     bool getManualSwitch();
     PageEffect getPageEffect();
     PresSpeed getPresSpeed();
     int getPageTimer();
+    bool getPageSoundEffect();
+    QString getPageSoundFileName();
 
 protected:
     QButtonGroup *general, *page, *slides;
     QCheckBox *infinitLoop, *manualSwitch;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
-    QLabel *label1, *label2, *label3;
+    QLabel *label1, *label2, *label3, *lTimer;
     QPushButton *cancelBut, *okBut;
     QComboBox *effectCombo;
     QVBoxLayout *back;
     QListView *lSlides;
     KIntNumInput *timerOfPage, *speedOfObject;
+
+    QCheckBox *checkSoundEffect;
+    QLabel *lSoundEffect;
+    KURLRequester *requester;
+    QPushButton *buttonTestPlaySoundEffect, *buttonTestStopSoundEffect;
+
+    KPresenterSoundPlayer *soundPlayer;
 
 public slots:
     void confDiaOk() { emit pgConfDiaOk(); }
@@ -73,6 +85,13 @@ public slots:
 protected slots:
     void presSlidesChanged( int );
     void slotManualSwitch(); 
+
+    void effectChanged( int num );
+    void soundEffectChanged();
+    void slotRequesterClicked( KURLRequester * );
+    void slotSoundFileChanged( const QString& );
+    void playSound();
+    void stopSound();
 
 signals:
     void pgConfDiaOk();

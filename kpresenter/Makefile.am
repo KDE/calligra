@@ -1,5 +1,5 @@
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) -I$(kde_includes)/arts
 
 bin_SCRIPTS = kprconverter.pl
 
@@ -7,7 +7,7 @@ bin_SCRIPTS = kprconverter.pl
 kde_module_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
-	page.cc  styledia.cc \
+	page.cc  styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
 	kpresenter_utils.cc rotatedia.cc searchdia.ui \
 	shadowdia.cc presstructview.cc \
@@ -28,7 +28,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kpresenter_dlg_config.cc kprvariable.cc
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
 libkpresenterpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
@@ -48,7 +48,7 @@ dummy.cc:
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h styledia.h \
-		global.h kprcommand.h \
+		global.h kprcommand.h kpresenter_sound_player.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h shadowdia.h presstructview.h \
 		confpiedia.h confrectdia.h \

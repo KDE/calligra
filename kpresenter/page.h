@@ -55,6 +55,7 @@ class KPBackGround;
 class QRect;
 class QSize;
 class QPoint;
+class KPresenterSoundPlayer;
 
 class KPTextView;
 
@@ -148,6 +149,8 @@ public:
 
     KPresenterView * getView(){return view;}
     QPtrList<KPObject> *objectList();	
+
+    void stopSound();
 
 public slots:
     void exitEditMode();
@@ -306,6 +309,8 @@ private:
 
     KPTextView *m_currentTextObjectView;
 
+    KPresenterSoundPlayer *soundPlayer;
+
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
@@ -319,6 +324,8 @@ private:
     int selectedObjectPosition;
 
     bool nextPageTimer;
+
+    void playSound( QString soundFileName );
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }

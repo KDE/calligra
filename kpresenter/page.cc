@@ -43,6 +43,7 @@
 #include <kppixmapobject.h>
 #include <gotopage.h>
 #include <kptextobject.h>
+#include <kpresenter_sound_player.h>
 
 #include <kapp.h>
 #include <kmimemagic.h>
@@ -98,6 +99,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         selectedObjectPosition = -1;
         nextPageTimer = true;
         drawLineInDrawMode = false;
+        soundPlayer = 0;
     } else {
         view = 0;
         hide();
@@ -1917,7 +1919,15 @@ bool Page::pNext( bool )
         if ( !spManualSwitch() )
             view->autoScreenPresStopTimer();
 
-        changePages( _pix1, _pix2, backgroundList()->at( ( *it ) - 1 )->getPageEffect() );
+        PageEffect _pageEffect = backgroundList()->at( ( *it ) - 1 )->getPageEffect();
+        bool _soundEffect = backgroundList()->at( ( *it ) - 1 )->getPageSoundEffect();
+        QString _soundFileName = backgroundList()->at( ( *it ) - 1 )->getPageSoundFileName();
+        if ( _pageEffect != PEF_NONE && _soundEffect && !_soundFileName.isEmpty() ) {
+            stopSound();
+            playSound( _soundFileName );
+        }
+
+        changePages( _pix1, _pix2, _pageEffect );
 
         if ( !spManualSwitch() )
             view->autoScreenPresReStartTimer();
@@ -2516,6 +2526,8 @@ void Page::doObjEffects()
     bool effects = false;
     bool nothingHappens = false;
     int timer = 0;
+    bool _soundEffect = false;
+    QString _soundFileName = QString::null;
     if ( !drawn )
         bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
     QPixmap *screen = new QPixmap( screen_orig );
@@ -2532,6 +2544,9 @@ void Page::doObjEffects()
 
             if ( kpobject->getEffect() != EF_NONE )
             {
+                _soundEffect = kpobject->getAppearSoundEffect();
+                _soundFileName = kpobject->getAppearSoundEffectFileName();
+
                 _objList.append( kpobject );
 
                 int x = 0, y = 0, w = 0, h = 0;
@@ -2597,6 +2612,9 @@ void Page::doObjEffects()
 
             if ( kpobject->getEffect3() != EF3_NONE )
             {
+                _soundEffect = kpobject->getDisappearSoundEffect();
+                _soundFileName = kpobject->getDisappearSoundEffectFileName();
+
                 _objList.append( kpobject );
 
                 int x = 0, y = 0, w = 0, h = 0;
@@ -2660,6 +2678,11 @@ void Page::doObjEffects()
     {
         if ( !spManualSwitch() && timer > 0 )
             view->autoScreenPresStopTimer();
+
+        if ( _soundEffect && !_soundFileName.isEmpty() ) {
+            stopSound();
+            playSound( _soundFileName );
+        }
 
         _step_width = static_cast<int>( ( static_cast<float>( kapp->desktop()->width() ) / objSpeedFakt() ) );
         _step_height = static_cast<int>( ( static_cast<float>( kapp->desktop()->height() ) / objSpeedFakt() ) );
@@ -4007,6 +4030,18 @@ void Page::lowerObject()
             break;
         }
     }
+}
+
+void Page::playSound( QString soundFileName )
+{
+    soundPlayer = new KPresenterSoundPlayer( soundFileName );
+    soundPlayer->play();
+}
+
+void Page::stopSound()
+{
+    if ( soundPlayer )
+        soundPlayer->stop();
 }
 
 #include <page.moc>

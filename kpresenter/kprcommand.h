@@ -290,6 +290,8 @@ public:
 	Effect3 effect3;
 	bool disappear;
 	int appearTimer, disappearTimer;
+        bool appearSoundEffect, disappearSoundEffect;
+        QString a_fileName, d_fileName;
     };
 
     EffectCmd( QString _name, const QPtrList<KPObject> &_objs,
@@ -511,8 +513,10 @@ class PgConfCmd : public KCommand
 public:
     PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
+               bool _soundEffect, QString _fileName,
                bool _oldManualSwitch, bool _oldInfinitLoop,
                PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
+               bool _oldSoundEffect, QString _oldFileName,
                KPresenterDoc *_doc, int _pgNum );
 
     virtual void execute();
@@ -524,6 +528,8 @@ protected:
     PageEffect pageEffect, oldPageEffect;
     PresSpeed presSpeed, oldPresSpeed;
     int pageTimer, oldPageTimer;
+    bool soundEffect, oldSoundEffect;
+    QString fileName, oldFileName;
     int pgNum;
     KPresenterDoc *doc;
 

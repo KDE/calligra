@@ -19,6 +19,7 @@
 
 #include <pgconfdia.h>
 #include <kpresenter_doc.h>
+#include <kpresenter_sound_player.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -29,10 +30,19 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qheader.h>
+#include <qstringlist.h>
+#include <qdir.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <knuminput.h>
+#include <kglobal.h>
+#include <kurlrequester.h>
+#include <kurl.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -41,12 +51,12 @@
 /*================================================================*/
 PgConfDia::PgConfDia( QWidget* parent, const char* name,
                       bool infLoop, bool swMan, int pgNum, PageEffect pageEffect,
-                      PresSpeed presSpeed, int pageTimer )
+                      PresSpeed presSpeed, int pageTimer, bool soundEffect, QString fileName )
     : QDialog( parent, name, true )
 {
-    QVBoxLayout *back = new QVBoxLayout( this );
-    back->setMargin( 5 );
-    back->setSpacing( 5 );
+    QVBoxLayout *back = new QVBoxLayout( this, 4 );
+    back->setMargin( 10 );
+    back->setSpacing( 10 );
 
     general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), this, "general" );
     general->setFrameStyle( QFrame::Box | QFrame::Sunken );
@@ -64,14 +74,20 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
     back->addWidget(general);
 
-    page = new QButtonGroup( 1, Qt::Horizontal, i18n( "Page Configuration" ), this, "page" );
-    page->setFrameStyle( QFrame::Box | QFrame::Sunken );
 
-    label1 = new QLabel( i18n( "Page number: %1" ).arg( pgNum ), page );
+    QGroupBox *grp = new QGroupBox( i18n( "Page Configuration" ), this );
+    back->addWidget( grp );
+    QGridLayout *grid = new QGridLayout( grp, 4, 4, 15 );
 
-    label2 = new QLabel( i18n( "Effect for changing to next page:" ), page );
+    label1 = new QLabel( i18n( "Page number: %1" ).arg( pgNum ), grp );
+    label1->setAlignment( AlignVCenter );
+    grid->addWidget( label1, 0, 0 );
 
-    effectCombo = new QComboBox( false, page );
+    label2 = new QLabel( i18n( "Effect for changing to next page:" ), grp );
+    label2->setAlignment( AlignVCenter );
+    grid->addWidget( label2, 1, 0 );
+
+    effectCombo = new QComboBox( false, grp );
     effectCombo->insertItem( i18n( "No effect" ) );
     effectCombo->insertItem( i18n( "Close horizontal" ) );
     effectCombo->insertItem( i18n( "Close vertical" ) );
@@ -86,16 +102,66 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     effectCombo->insertItem( i18n( "Surround 1" ) );
     effectCombo->insertItem( i18n( "Fly away 1" ) );
     effectCombo->setCurrentItem( static_cast<int>( pageEffect ) );
+    grid->addWidget( effectCombo, 1, 1 );
 
-    timerOfPage = new KIntNumInput( pageTimer, page );
+    connect( effectCombo, SIGNAL( activated( int ) ), this, SLOT( effectChanged( int ) ) );
+
+    lTimer = new QLabel( i18n( "Timer of the page:" ), grp );
+    lTimer->setAlignment( AlignVCenter );
+    grid->addWidget( lTimer, 2, 0 );
+
+    if ( swMan )
+        lTimer->setEnabled( false );
+
+    timerOfPage = new KIntNumInput( pageTimer, grp );
     timerOfPage->setRange( 1, 600, 1 );
-    timerOfPage->setLabel( i18n( "Timer of the page:" ) );
     timerOfPage->setSuffix( i18n( " seconds" ) );
+    grid->addWidget( timerOfPage, 2, 1 );
 
     if ( swMan )
         timerOfPage->setEnabled( false );
 
-    back->addWidget(page);
+
+    // setup the Sound Effect stuff
+    checkSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp );
+    checkSoundEffect->setChecked( soundEffect );
+    QWhatsThis::add( checkSoundEffect, i18n("If you use sound effect, plaese do not select No Effect.") );
+    grid->addWidget( checkSoundEffect, 3, 0 );
+
+    if ( static_cast<int>( pageEffect ) == 0 )
+        checkSoundEffect->setEnabled( false );
+
+    connect( checkSoundEffect, SIGNAL( clicked() ), this, SLOT( soundEffectChanged() ) );
+
+    lSoundEffect = new QLabel( i18n( "File Name: " ), grp );
+    lSoundEffect->setAlignment( AlignVCenter );
+    grid->addWidget( lSoundEffect, 4, 0 );
+
+    requester = new KURLRequester( grp );
+    requester->setURL( fileName );
+    grid->addWidget( requester, 4, 1 );
+
+    connect( requester, SIGNAL( openFileDialog( KURLRequester * ) ),
+             this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+
+    connect( requester, SIGNAL( textChanged( const QString& ) ),
+             this, SLOT( slotSoundFileChanged( const QString& ) ) );
+
+    buttonTestPlaySoundEffect = new QPushButton( grp );
+    buttonTestPlaySoundEffect->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
+    QToolTip::add( buttonTestPlaySoundEffect, i18n("Play") );
+    grid->addWidget( buttonTestPlaySoundEffect, 4, 2 );
+
+    connect( buttonTestPlaySoundEffect, SIGNAL( clicked() ), this, SLOT( playSound() ) );
+
+    buttonTestStopSoundEffect = new QPushButton( grp );
+    buttonTestStopSoundEffect->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
+    QToolTip::add( buttonTestStopSoundEffect, i18n("Stop") );
+    grid->addWidget( buttonTestStopSoundEffect, 4, 3 );
+
+    connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
+
+
 
     slides = new QButtonGroup( 1, Qt::Horizontal, this );
     slides->setCaption( i18n( "Show slides in presentation" ) );
@@ -132,6 +198,8 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
     back->addWidget(bb);
+
+    soundEffectChanged();
 
     //presSlidesChanged( 0 );
 }
@@ -176,12 +244,110 @@ int PgConfDia::getPageTimer()
 }
 
 /*================================================================*/
+bool PgConfDia::getPageSoundEffect()
+{
+    return checkSoundEffect->isChecked();
+}
+
+/*================================================================*/
+QString PgConfDia::getPageSoundFileName()
+{
+    return requester->url();
+}
+
+/*================================================================*/
 void PgConfDia::slotManualSwitch()
 {
-    if ( manualSwitch->isChecked() )
+    if ( manualSwitch->isChecked() ) {
+        lTimer->setEnabled( false );
         timerOfPage->setEnabled( false );
-    else
+    }
+    else {
+        lTimer->setEnabled( true );
         timerOfPage->setEnabled( true );
+    }
+}
+
+/*================================================================*/
+void PgConfDia::effectChanged( int num )
+{
+    if ( num == 0 ) {
+        checkSoundEffect->setEnabled( false );
+        lSoundEffect->setEnabled( false );
+        requester->setEnabled( false );
+        buttonTestPlaySoundEffect->setEnabled( false );
+        buttonTestStopSoundEffect->setEnabled( false );
+    }
+    else {
+        checkSoundEffect->setEnabled( true );
+        soundEffectChanged();
+    }
+}
+
+/*================================================================*/
+void PgConfDia::soundEffectChanged()
+{
+    lSoundEffect->setEnabled( checkSoundEffect->isChecked() );
+    requester->setEnabled( checkSoundEffect->isChecked() );
+
+    if ( !requester->url().isEmpty() ) {
+        buttonTestPlaySoundEffect->setEnabled( checkSoundEffect->isChecked() );
+        buttonTestStopSoundEffect->setEnabled( checkSoundEffect->isChecked() );
+    }
+    else {
+        buttonTestPlaySoundEffect->setEnabled( false );
+        buttonTestStopSoundEffect->setEnabled( false );
+    }
+}
+
+/*================================================================*/
+void PgConfDia::slotRequesterClicked( KURLRequester *requester )
+{
+    // find the first "sound"-resource that contains files
+    QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
+    if ( !soundDirs.isEmpty() ) {
+	KURL soundURL;
+	QDir dir;
+	dir.setFilter( QDir::Files | QDir::Readable );
+	QStringList::Iterator it = soundDirs.begin();
+	while ( it != soundDirs.end() ) {
+	    dir = *it;
+	    if ( dir.isReadable() && dir.count() > 2 ) {
+		soundURL.setPath( *it );
+		requester->fileDialog()->setURL( soundURL );
+		break;
+	    }
+	    ++it;
+	}
+    }
+}
+
+/*================================================================*/
+void PgConfDia::slotSoundFileChanged( const QString &text )
+{
+    buttonTestPlaySoundEffect->setEnabled( !text.isEmpty() );
+    buttonTestStopSoundEffect->setEnabled( !text.isEmpty() );
+}
+
+/*================================================================*/
+void PgConfDia::playSound()
+{
+    soundPlayer = new KPresenterSoundPlayer( requester->url() );
+    soundPlayer->play();
+
+    buttonTestPlaySoundEffect->setEnabled( false );
+    buttonTestStopSoundEffect->setEnabled( true );
+}
+
+/*================================================================*/
+void PgConfDia::stopSound()
+{
+    if ( soundPlayer ) {
+        soundPlayer->stop();
+
+        buttonTestPlaySoundEffect->setEnabled( true );
+        buttonTestStopSoundEffect->setEnabled( false );
+    }
 }
 
 #include <pgconfdia.moc>

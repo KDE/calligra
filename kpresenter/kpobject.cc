@@ -80,6 +80,10 @@ KPObject::KPObject()
     disappear = false;
     appearTimer = 1;
     disappearTimer = 1;
+    appearSoundEffect = false;
+    disappearSoundEffect = false;
+    a_fileName = QString::null;
+    d_fileName = QString::null;
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
@@ -144,6 +148,18 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc )
         elem=doc.createElement("TIMER");
         elem.setAttribute("appearTimer", appearTimer);
         elem.setAttribute("disappearTimer", disappearTimer);
+        fragment.appendChild(elem);
+    }
+    if(appearSoundEffect || !a_fileName.isEmpty()) {
+        elem=doc.createElement("APPEARSOUNDEFFECT");
+        elem.setAttribute("appearSoundEffect", static_cast<int>(appearSoundEffect));
+        elem.setAttribute("appearSoundFileName", a_fileName);
+        fragment.appendChild(elem);
+    }
+    if(disappearSoundEffect || !d_fileName.isEmpty()) {
+        elem=doc.createElement("DISAPPEARSOUNDEFFECT");
+        elem.setAttribute("disappearSoundEffect", static_cast<int>(disappearSoundEffect));
+        elem.setAttribute("disappearSoundFileName", d_fileName);
         fragment.appendChild(elem);
     }
 
@@ -228,6 +244,28 @@ void KPObject::load(const QDomElement &element) {
     else {
         appearTimer = 1;
         disappearTimer = 1;
+    }
+    e=element.namedItem("APPEARSOUNDEFFECT").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("appearSoundEffect"))
+            appearSoundEffect = static_cast<bool>(e.attribute("appearSoundEffect").toInt());
+        if(e.hasAttribute("appearSoundFileName"))
+            a_fileName = e.attribute("appearSoundFileName");
+    }
+    else {
+        appearSoundEffect = false;
+        a_fileName = QString::null;
+    }
+    e=element.namedItem("DISAPPEARSOUNDEFFECT").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("disappearSoundEffect"))
+            disappearSoundEffect = static_cast<bool>(e.attribute("disappearSoundEffect").toInt());
+        if(e.hasAttribute("disappearSoundFileName"))
+            d_fileName = e.attribute("disappearSoundFileName");
+    }
+    else {
+        disappearSoundEffect = false;
+        d_fileName = QString::null;
     }
 }
 

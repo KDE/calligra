@@ -31,8 +31,11 @@ class QPushButton;
 class QCheckBox;
 class QBoxLayout;
 class QResizeEvent;
+class QLineEdit;
 class KPObject;
 class KIntNumInput;
+class KURLRequester;
+class KPresenterSoundPlayer;
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -58,6 +61,14 @@ protected:
     QCheckBox *disappear;
     QBoxLayout *topLayout;
     KIntNumInput *timerOfAppear, *timerOfDisappear;
+    
+    QCheckBox *appearSoundEffect, *disappearSoundEffect;
+    QLabel *lSoundEffect1, *lSoundEffect2;
+    KURLRequester *requester1, *requester2;
+    QPushButton *buttonTestPlaySoundEffect1, *buttonTestStopSoundEffect1;
+    QPushButton *buttonTestPlaySoundEffect2, *buttonTestStopSoundEffect2;
+
+    KPresenterSoundPlayer *soundPlayer1, *soundPlayer2;
 
     KPresenterView *view;
     QPtrList<KPObject> objs;
@@ -69,6 +80,17 @@ protected slots:
     void disappearChanged();
     void num1Changed( int num );
     void num2Changed( int num );
+    void appearEffectChanged( int num );
+    void disappearEffectChanged( int num );
+    void appearSoundEffectChanged();
+    void disappearSoundEffectChanged();
+    void slotRequesterClicked( KURLRequester * );
+    void slotAppearFileChanged( const QString& );
+    void slotDisappearFileChanged( const QString& );
+    void playSound1();
+    void playSound2();
+    void stopSound1();
+    void stopSound2();
 
 };
 
