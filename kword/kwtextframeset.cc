@@ -3811,9 +3811,9 @@ QTextCursor KWTextFrameSetEdit::selectWordUnderCursor()
 {
     QTextCursor c1 = *cursor;
     QTextCursor c2 = *cursor;
-    if ( cursor->index() > 0 && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() )
+    if ( cursor->index() > 0 && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() && !cursor->parag()->at( cursor->index()-1 )->isCustom())
         c1.gotoWordLeft();
-    if ( !cursor->parag()->at( cursor->index() )->c.isSpace() && !cursor->atParagEnd() )
+    if ( !cursor->parag()->at( cursor->index() )->c.isSpace() && !cursor->atParagEnd() && !cursor->parag()->at( cursor->index() )->isCustom())
         c2.gotoWordRight();
 
     textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
@@ -4338,25 +4338,32 @@ QList<KAction> KWTextFrameSetEdit::dataToolActionList()
     if ( textFrameSet()->hasSelection() )
     {
         text = textFrameSet()->selectedText();
-        if ( text.find(' ') == -1 && text.find('\t') == -1 )
+        if ( text.find(' ') == -1 && text.find('\t') == -1 && text.find(KWTextFrameSet::customItemChar()) == -1 )
             m_singleWord = true;
     }
     else // No selection -> get word under cursor
     {
         selectWordUnderCursor();
         text = textFrameSet()->selectedText();
-        textDocument()->removeSelection( QTextDocument::Standard );
-        m_singleWord = true;
-        m_wordUnderCursor = text;
+        if(text.find(KWTextFrameSet::customItemChar()) == -1)
+        {
+            textDocument()->removeSelection( QTextDocument::Standard );
+            m_singleWord = true;
+            m_wordUnderCursor = text;
+        }
+        else
+        {
+            text = "";
+        }
     }
 
 #ifdef KSPELL_HAS_IGNORE_UPPER_WORD
-    if(doc->dontCheckTitleCase() && text==text.upper())
+    if(!text.isEmpty() && doc->dontCheckTitleCase() && text==text.upper())
     {
         text="";
         m_singleWord = false;
     }
-    else if(doc->dontCheckUpperWord() && text[0]==text[0].upper())
+    else if(!text.isEmpty() && doc->dontCheckUpperWord() && text[0]==text[0].upper())
     {
         QString tmp=text[0]+text.right(text.length()-1).lower();
         if(text==tmp)
