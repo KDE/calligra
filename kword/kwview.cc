@@ -6765,8 +6765,48 @@ void KWView::convertTableToText()
 void KWView::convertToTextBox()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
-    if ( edit && edit->textFrameSet()->protectContent()) {
-        //todo
+    if( edit && !edit->textFrameSet()->protectContent() && edit->textFrameSet()->textObject()->hasSelection())
+    {
+        edit->copy();
+        KMacroCommand *macro = 0L;
+
+        KCommand *cmd = edit->textFrameSet()->textObject()->removeSelectedTextCommand( edit->textView()->cursor(), KoTextDocument::Standard );
+        if ( cmd )
+        {
+            if ( ! macro )
+                macro = new KMacroCommand( i18n("Convert to text box"));
+            macro->addCommand( cmd );
+        }
+        cmd = m_gui->canvasWidget()->createTextBox(KoRect(30,30,30,30) );
+        if ( cmd )
+        {
+            if ( ! macro )
+                macro = new KMacroCommand( i18n("Convert to text box"));
+            macro->addCommand( cmd );
+        }
+
+        edit = currentTextEdit();
+        if ( edit )
+        {
+            QMimeSource *data = QApplication::clipboard()->data();
+            // Hmm, we could reuse the result of KWView::checkClipboard...
+            if ( data->provides( KWTextDrag::selectionMimeType() ) )
+            {
+                QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+                if ( arr.size() )
+                {
+                    cmd =edit->textFrameSet()->pasteKWord( edit->textView()->cursor(), QCString( arr ), true );
+                    if ( cmd )
+                    {
+                        if ( ! macro )
+                            macro = new KMacroCommand( i18n("Convert to text box"));
+                        macro->addCommand( cmd );
+                    }
+                }
+            }
+        }
+        if ( macro )
+            m_doc->addCommand(macro);
     }
 }
 

@@ -1242,14 +1242,22 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
     m_ctrlClickOnSelectedFrame = false;
 }
 
-void KWCanvas::createTextBox(const KoRect & rect )
+KCommand *KWCanvas::createTextBox(const KoRect & rect )
 {
     if ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, rect.x(), rect.y(), rect.width(), rect.height() );
         frame->setNewFrameBehavior(KWFrame::Reconnect);
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+
+        QString name = m_doc->generateFramesetName( i18n( "Text Frameset %1" ) );
+        KWTextFrameSet *_frameSet = new KWTextFrameSet(m_doc, name );
+        _frameSet->addFrame( frame );
+        m_doc->addFrameSet( _frameSet );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame) ;
 	checkCurrentEdit(frame->frameSet(), true);
+        return cmd;
     }
+    return 0L;
 }
 
 void KWCanvas::mrCreateText()

@@ -291,3 +291,4 @@ Changes after KWord-1.2
 - Add autocorrection : "Capitalize name of days"
 - Add new font attribute : small caps
 - Now we can edit "ignore all list" 
+- Add support for convert text to textbox
