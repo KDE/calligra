@@ -651,6 +651,8 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomD
             curr->setGeometry( _rect ); // replace zoom value
 
             QDomElement settings=doc.createElement("SETTINGS");
+            if (  oIt.current()->isSticky() )
+                settings.setAttribute("sticky", 1 );
             QPtrListIterator<KPObject> setOIt(page->objectList());
             for (; setOIt.current(); ++setOIt )
             {
@@ -987,6 +989,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 //emit sig_insertObject( ch, kppartobject );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
+            int tmp=0;
+            if(settings.hasAttribute("sticky"))
+                tmp=settings.attribute("sticky").toInt();
+            bool sticky=static_cast<bool>(tmp);
             double offset = 0.0;
             if(!settings.isNull() && kppartobject!=0)
                 offset=kppartobject->load(settings);
@@ -995,7 +1001,14 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 delete kppartobject;
                 kppartobject = 0L;
             }
-            if ( kppartobject ) {
+            if ( sticky && !ignoreSticky && kppartobject )
+            {
+                m_stickyPage->appendObject(kppartobject );
+                kppartobject->setOrig(r.x(), offset);
+                kppartobject->setSize( r.width(), r.height() );
+                kppartobject->setSticky(sticky);
+            }
+            else if ( kppartobject ) {
                 kppartobject->setOrig( r.x(), 0 );
                 kppartobject->setSize( r.width(), r.height() );
                 insertObjectInPage(offset, kppartobject);
