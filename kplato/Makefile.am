@@ -1,6 +1,6 @@
-SUBDIRS = kdgantt templates pics
+SUBDIRS = templates pics
 
-INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/kdgantt -Ikdgantt \
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I../kdgantt \
                    $(all_includes)
 
 libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
@@ -23,7 +23,7 @@ noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
 ## The part
 kde_module_LTLIBRARIES = libkplatopart.la
 libkplatopart_la_LDFLAGS = $(KDE_PLUGIN)
-libkplatopart_la_LIBADD = kdgantt/libkdgantt.la $(LIB_KOFFICEUI)
+libkplatopart_la_LIBADD = ../kdgantt/libkdgantt.la $(LIB_KOFFICEUI)
 libkplatopart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
