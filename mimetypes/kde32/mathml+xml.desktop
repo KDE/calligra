@@ -1,7 +1,0 @@
-[Desktop Entry]
-Comment=MathML Document
-Hidden=false
-Icon=html
-MimeType=application/mathml+xml
-Patterns=*.mml;*.MML
-Type=MimeType
