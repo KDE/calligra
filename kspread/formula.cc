@@ -1173,32 +1173,32 @@ KSpreadValue Formula::eval() const
       // binary operation: take two values from stack, do the operation,
       // push the result to stack
       case Opcode::Add:
-        val1 = stack.pop();
         val2 = stack.pop();
+        val1 = stack.pop();
         val2 = ValueCalc::self()->add( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Sub:
-        val1 = stack.pop();
         val2 = stack.pop();
+        val1 = stack.pop();
         val2 = ValueCalc::self()->sub( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Mul:
-        val1 = stack.pop();
         val2 = stack.pop();
+        val1 = stack.pop();
         val2 = ValueCalc::self()->mul( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Div:
-        val1 = stack.pop();
         val2 = stack.pop();
+        val1 = stack.pop();
         if( val1.isZero() ) return KSpreadValue::errorDIV0();
         val2 = ValueCalc::self()->div( val1, val2 );
         if( val2.isError() ) return val2;
@@ -1206,8 +1206,8 @@ KSpreadValue Formula::eval() const
         break;
 
       case Opcode::Pow:
-        val1 = stack.pop();
         val2 = stack.pop();
+        val1 = stack.pop();
         val2 = ValueCalc::self()->pow( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
