@@ -245,7 +245,7 @@ VTranslateBezierCmd::execute()
 		{
 			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
 
-			if( i == m_firstControl ? 0 : 1 )
+			if( i == ( m_firstControl ? 0 : 1 ) )
 				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat ) );
 		}
 	}
@@ -262,7 +262,7 @@ VTranslateBezierCmd::unexecute()
 		{
 			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
 	
-			if( i == m_firstControl ? 0 : 1 )
+			if( i == ( m_firstControl ? 0 : 1 ) )
 				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat.invert() ) );
 		}
 
