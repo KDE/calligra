@@ -29,6 +29,7 @@
 #include <qvector.h>
 #include "GObject.h"
 #include "GText.h"
+#include "UnitBox.h"
 #include <kconfig.h>
 
 PStateManager* PStateManager::managerInstance = 0L;
@@ -56,6 +57,7 @@ void PStateManager::readDefaultSettings () {
     defaultUnit = UnitInch;
   else
     defaultUnit = UnitPoint;
+   UnitBox::setDefaultMeasurementUnit (defaultUnit);
   
   config->setGroup ("DefaultObjectProperties");
 
@@ -126,6 +128,7 @@ MeasurementUnit PStateManager::defaultMeasurementUnit () {
 void PStateManager::setDefaultMeasurementUnit (MeasurementUnit unit) {
   MeasurementUnit old = defaultUnit;
   defaultUnit = unit;
+  UnitBox::setDefaultMeasurementUnit (defaultUnit);
   if (old != defaultUnit)
     emit settingsChanged ();
 }

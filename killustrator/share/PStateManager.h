@@ -27,8 +27,7 @@
 
 #include <qstrlist.h>
 #include <qobject.h>
-
-enum MeasurementUnit { UnitPoint, UnitMillimeter, UnitInch };
+#include "units.h"
 
 class PStateManager : public QObject {
   Q_OBJECT
