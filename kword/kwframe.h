@@ -193,6 +193,9 @@ public:
     /** read attributes from XML. @p headerOrFooter if true some defaults are different */
     void load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion );
 
+    void setMinFrameHeight(double h) {m_minFrameHeight=h;}
+    double minFrameHeight(void) {return m_minFrameHeight;}
+
 private:
     SheetSide sheetSide;
     RunAround m_runAround;
@@ -204,6 +207,7 @@ private:
     bool m_bCopy;
     bool selected;
     int m_internalY; // for text frames only
+    double m_minFrameHeight;
 
     QBrush backgroundColor;
     Border brd_left, brd_right, brd_top, brd_bottom;

@@ -64,6 +64,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     handles.setAutoDelete(true);
+    m_minFrameHeight=0;
 }
 
 KWFrame::~KWFrame()

@@ -319,7 +319,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
                     // rescale this cell with the calculated difference
                     double newWidth=cell->getFrame(0)->width() + difference;
                     if(newWidth<minFrameWidth) {
-                        if(static_cast<int>(minFrameWidth-newWidth) > postAdjust)
+                        if(static_cast<double>(minFrameWidth-newWidth) > postAdjust)
                             postAdjust = minFrameWidth-newWidth;
                     }
                     cell->getFrame(0)->setWidth(newWidth);
@@ -368,7 +368,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
                         double newWidth = cell->getFrame(0)->width() +
                             activeCell->getFrame(0)->right() - coordinate;
                         if(newWidth<minFrameWidth) {
-                            if(static_cast<int> (minFrameWidth-newWidth) > postAdjust)
+                            if(minFrameWidth-newWidth > postAdjust)
                                 postAdjust = minFrameWidth-newWidth;
                         }
                         cell->getFrame(0)->setWidth(newWidth);
@@ -462,22 +462,27 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                 if(cell) {
                     double newHeight= cell->getFrame(0)->height() + difference;
                     if(newHeight<minFrameHeight) {
-                        if(static_cast<int> (minFrameHeight-newHeight) > postAdjust)
+                        if(minFrameHeight-newHeight > postAdjust)
                             postAdjust = minFrameHeight-newHeight;
                     }
                     cell->getFrame(0)->setHeight(newHeight);
+                    cell->getFrame(0)->setMinFrameHeight(newHeight);
                 }
             }
-            if(row!=0)
-                activeCell->getFrame(0)->setHeight(
-                    activeCell->getFrame(0)->height() +
-                    activeCell->getFrame(0)->top()- coordinate);
+            if(row!=0) {
+                double newHeight = activeCell->getFrame(0)->height() +
+                    activeCell->getFrame(0)->top()- coordinate;
+                activeCell->getFrame(0)->setHeight(newHeight);
+                activeCell->getFrame(0)->setMinFrameHeight(newHeight);
+            }
             if(postAdjust!=0) {
                 if(row==0) row++;
                 for ( unsigned int i = 0; i < m_cols; i++) {
                     cell = getCell(row-1,i);
                     if(cell->m_col == i)
                         cell->getFrame(0)->setHeight(
+                            cell->getFrame(0)->height() + postAdjust);
+                        cell->getFrame(0)->setMinFrameHeight(
                             cell->getFrame(0)->height() + postAdjust);
                 }
             }
@@ -503,18 +508,21 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                         double newHeight= cell->getFrame(0)->height() +
                             activeCell->getFrame(0)->bottom() - coordinate;
                         if(newHeight<minFrameHeight) {
-                            if(static_cast<int> (minFrameHeight-newHeight) > postAdjust)
+                            if(minFrameHeight-newHeight > postAdjust)
                                 postAdjust = minFrameHeight-newHeight;
                         }
                         cell->getFrame(0)->setHeight(newHeight);
+                        cell->getFrame(0)->setMinFrameHeight(newHeight);
                     }
                 }
             }
             if(postAdjust!=0) {
                 for ( unsigned int i = 0; i < m_cols; i++) {
                     cell = getCell(row,i);
-                    if(cell->m_col == i) cell->getFrame(0)->setHeight(
-                        cell->getFrame(0)->height() + postAdjust);
+                    if(cell->m_col == i) {
+                        cell->getFrame(0)->setHeight( cell->getFrame(0)->height() + postAdjust);
+                        cell->getFrame(0)->setMinFrameHeight( cell->getFrame(0)->height() + postAdjust);
+                    }
                 }
             }
         }
@@ -556,7 +564,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             if(cell->m_row < fromRow)
                 fromRow = cell->m_row;
             if ( fs->getFrame( 0 )->bottom() >  // fits on page?
-                  static_cast<int>((doingPage+1) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder())) { // no
+                  (doingPage+1) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder()) { // no
                 y = (unsigned)( (doingPage+1) * m_doc->ptPaperHeight() + m_doc->ptTopBorder() );
                 _addRow = true;
             }
@@ -595,6 +603,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                     newFrameSet->getFrame(0)->setBBottom( baseFrameSet->getFrame( 0 )->getBBottom() );
 
                     newFrameSet->getFrame(0)->setHeight(baseFrameSet->getFrame(0)->height());
+                    newFrameSet->getFrame(0)->setMinFrameHeight(baseFrameSet->getFrame(0)->minFrameHeight());
                 }
                 cell->getFrame( 0 )->moveTopLeft( KoPoint( cell->getFrame( 0 )->x(), y ) );
                 //cell->getFrame( 0 )->setPageNum(doingPage);
@@ -640,6 +649,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
             frame->setRect( rect.x() + j * (baseWidth + tableCellSpacing),
                 rect.y() + i * (baseHeight + tableCellSpacing), baseWidth, baseHeight );
             //frame->setPageNum(m_doc->getPageOfRect( *frame ));
+            frame->setMinFrameHeight(minBaseHeight);
         }
     }
 }
@@ -1222,7 +1232,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     kdDebug()<<"row :"<<row <<" col :"<<col<<" cell->m_cols :"<<cell->m_cols<<" cell->m_rows :"<<cell->m_rows<<endl;
     // unselect frame.
     firstFrame->setSelected(false);
-    firstFrame->removeResizeHandles();
+    firstFrame->removeResizeHandles(); 
 
     double height = (firstFrame->height() -  tableCellSpacing * (intoRows-1)) / intoRows ;
     double width = (firstFrame->width() -  tableCellSpacing * (intoCols-1))/ intoCols  ;
@@ -1235,8 +1245,11 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         height = minFrameHeight;
     }
 
+    firstFrame->setWidth(width);
+    firstFrame->setHeight(height);
+
     int rowsDiff = intoRows-cell->m_rows;
-    int colsDiff = intoCols-cell->m_cols;
+    int colsDiff = ((int) intoCols)-cell->m_cols;
 
 
     // adjust cellspan and rowspan on other cells.
@@ -1262,12 +1275,15 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         }
     }
 
-    firstFrame->setWidth(static_cast<int>(width));
-    firstFrame->setHeight(static_cast<int>(height));
-    cell->m_rows = cell->m_rows - intoRows +1;
-    if(cell->m_rows < 1)  cell->m_rows=1;
-    cell->m_cols = cell->m_cols - intoCols +1;
-    if(cell->m_cols < 1)  cell->m_cols=1;
+    // set new row and col-span. Use intermediate ints otherwise we get strange results as the 
+    // intermediate result could be negative (which goes wrong with unsigned ints)
+    int r = (cell->m_rows +1) - intoRows;
+    if(r < 1) r=1;
+    cell->m_rows = r;
+
+    int c = (cell->m_cols + 1) - intoCols;
+    if(c < 1)  c=1;
+    cell->m_cols = c;
 
     // If we created extra rows/cols, adjust the groupmanager counters.
     if(rowsDiff>0) m_rows+= rowsDiff;
@@ -1285,6 +1301,8 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             if(listFrameSet.isEmpty())
             {
                 lastFrameSet= new Cell( this, y + row, x + col );
+                lastFrameSet->m_rows = 1;
+                lastFrameSet->m_cols = 1;
                 kdDebug()<<"y + row :"<<(y + row)<<" x + col :"<<(x + col)<<endl;
             }
             else
@@ -1293,32 +1311,21 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 addCell( lastFrameSet );
             }
 
-            /*Frame *frame = new KWFrame(lastFrameSet,
-                    firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
-                    firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
-                    width, height, KWFrame::RA_NO);
-            */
             KWFrame *frame=0L;
             if(listFrame.isEmpty())
             {
                 frame=firstFrame->getCopy();
                 kdDebug()<<"frame splitted :"<<frame<<endl;
-                frame->setRect(firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
-                               firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
+                frame->setRect(firstFrame->left() + static_cast<double>((width+tableCellSpacing) * x),
+                               firstFrame->top() + static_cast<double>((height+tableCellSpacing) * y),
                                width, height);
                 frame->setRunAround( KWFrame::RA_NO );
                 frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
                 frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+                lastFrameSet->addFrame( frame );
             }
-            else
-                frame=listFrame.at(i);
-
-            lastFrameSet->addFrame( frame );
 
             i++;
-
-            lastFrameSet->m_rows = 1;
-            lastFrameSet->m_cols = 1;
 
             // if the orig cell spans more rows/cols than it is split into, make first col/row wider.
             if(rowsDiff <0 && y==0)
@@ -1329,7 +1336,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     }
 
     finalize();
-
 
     return new KWSplitCellCommand(i18n("Split Cells"),this,col,row,intoCols, intoRows);
 }
