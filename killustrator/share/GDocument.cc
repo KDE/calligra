@@ -781,7 +781,11 @@ bool GDocument::readFromXml (const char* fname) {
       else if (elem.tag () == "group") {
 	GGroup* group = new GGroup (elem.attributes ());
 	group->ref ();
-	insertObject (group);
+
+	if (!groups.empty ())
+	  groups.top ()->addObject (group);
+	else
+	  insertObject (group);
 	groups.push (group);
       }
       else if (elem.tag () == "point") {
@@ -810,7 +814,7 @@ bool GDocument::readFromXml (const char* fname) {
 	obj->ref ();
 	groups.top ()->addObject (obj);
       }
-      else
+      else 
 	insertObject (obj);
       obj = 0L;
       finished = false;
