@@ -89,7 +89,7 @@ public:
     KSpreadDoc* doc() { return m_pDoc; }
 
     void addTable( KSpreadTable *_t );
-    void removeTable( KSpreadTable *_t );
+    //void removeTable( KSpreadTable *_t );
     void removeAllTables();
     void setActiveTable( KSpreadTable *_t );
 
@@ -332,6 +332,8 @@ public slots:
     void slotTableRenamed( KSpreadTable* table, const QString& old_name );
     void slotTableHidden( KSpreadTable*_table );
     void slotTableShown( KSpreadTable*_table );
+    void slotTableRemoved( KSpreadTable*_table );
+    void slotTableActivated( KSpreadTable* table );
 
     virtual int leftBorder() const;
     virtual int rightBorder() const;

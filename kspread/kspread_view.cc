@@ -1168,10 +1168,14 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
                       this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
-    QObject::connect( _t, SIGNAL( sigTableHidden( KSpreadTable* ) ),
+    QObject::connect( _t, SIGNAL( sig_TableHidden( KSpreadTable* ) ),
                       this, SLOT( slotTableHidden( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sigTableShown( KSpreadTable* ) ),
+    QObject::connect( _t, SIGNAL( sig_TableShown( KSpreadTable* ) ),
                       this, SLOT( slotTableShown( KSpreadTable* ) ) );
+    QObject::connect( _t, SIGNAL( sig_TableRemoved( KSpreadTable* ) ),
+                      this, SLOT( slotTableRemoved( KSpreadTable* ) ) );
+    QObject::connect( _t, SIGNAL( sig_TableActivated( KSpreadTable* ) ),
+                      this, SLOT( slotTableActivated( KSpreadTable* ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
@@ -1185,7 +1189,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
         m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
 }
 
-void KSpreadView::removeTable( KSpreadTable *_t )
+void KSpreadView::slotTableRemoved( KSpreadTable *_t )
 {
   QString m_tableName=_t->tableName();
   m_pTabBar->removeTab( _t->tableName() );
@@ -1222,13 +1226,16 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
     return;
 
   m_pTabBar->setActiveTab( _t->tableName() );
-
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvas->repaint();
-
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
+
+}
+void KSpreadView::slotTableActivated( KSpreadTable* table )
+{
+  m_pTabBar->setActiveTab( table->tableName() );
 }
 
 void KSpreadView::slotTableRenamed( KSpreadTable* table, const QString& old_name )
@@ -1256,7 +1263,7 @@ void KSpreadView::changeTable( const QString& _name )
         kdDebug(36001) << "Unknown table " << _name << endl;
         return;
     }
-
+    t->setActiveTable();
     setActiveTable( t );
 
     updateEditWidget();
@@ -2260,12 +2267,12 @@ void KSpreadView::removeTable()
     if ( ret == 3 )
     {
         KSpreadTable *tbl = activeTable();
+        tbl->removeTable();
+
         doc()->map()->removeTable( tbl );
-                removeTable(tbl);
         delete tbl;
     }
 }
-
 
 
 void KSpreadView::setText( const QString& _text )

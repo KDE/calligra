@@ -5069,9 +5069,24 @@ void KSpreadTable::hideTable(bool _hide)
 {
     setHidden(_hide);
     if(_hide)
-        emit sigTableHidden(this);
+        emit sig_TableHidden(this);
     else
-        emit sigTableShown(this);
+        emit sig_TableShown(this);
+}
+
+void KSpreadTable::removeTable()
+{
+    emit sig_TableRemoved(this);
+}
+
+void KSpreadTable::setActiveTable()
+{
+    emit sig_maxColumn( maxColumn());
+    emit sig_maxRow(maxRow() );
+    emit sig_TableActivated(this);
+    emit sig_updateVBorder( this );
+    emit sig_updateHBorder( this );
+    emit sig_updateView( this );
 }
 
 bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )

@@ -223,8 +223,8 @@ void KSpreadTabBar::slotRemove( )
     if ( ret == 3 )
     {
         KSpreadTable *tbl = m_pView->activeTable();
+        tbl->removeTable();
         m_pView->doc()->map()->removeTable( tbl );
-                m_pView->removeTable(tbl);
         delete tbl;
     }
 }

@@ -938,3 +938,9 @@ Montel laurent <montell@club-internet.fr>
 -"Preference" works
 -"Show table" works
 -"Hide table" works
+
+2000-08-25-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Fix bug when you used "Split view"
+-"Remove table" works
+-"change table" works

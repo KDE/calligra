@@ -513,6 +513,10 @@ public:
 
     void hideTable(bool _hide);
 
+    void removeTable();
+
+    void setActiveTable();
+
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
@@ -750,8 +754,10 @@ signals:
      */
     void sig_polygonInvalidated( const QPointArray& );
 
-    void sigTableHidden( KSpreadTable* table);
-    void sigTableShown( KSpreadTable* table);
+    void sig_TableHidden( KSpreadTable* table);
+    void sig_TableShown( KSpreadTable* table);
+    void sig_TableRemoved( KSpreadTable* table);
+    void sig_TableActivated( KSpreadTable* );
 
 
 protected:
