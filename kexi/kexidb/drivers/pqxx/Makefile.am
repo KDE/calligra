@@ -14,3 +14,6 @@ kde_services_DATA = kexidb_pqxxsqldriver.desktop
 
 include $(top_srcdir)/kexi/Makefile.global
 noinst_HEADERS =  pqxxconnection.h
+
+KDE_CXXFLAGS += -DKEXIDB_PGSQL_DRIVER_EXPORT= -D__KEXIDB__= \
+	-include $(top_srcdir)/kexi/kexidb/global.h
