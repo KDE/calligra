@@ -1,7 +1,7 @@
 /* -*- C++ -*-
 
   This file is part of Kontour.
-  Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo..nl)
+  Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo.nl)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -25,6 +25,7 @@
 #include "TranslateCmd.h"
 #include "RotateCmd.h"
 #include "ShearCmd.h"
+#include "ScaleCmd.h"
 #include "DuplicateCmd.h"
 
 #include <qtabwidget.h>
@@ -41,6 +42,7 @@
 #include <knuminput.h>
 #include <kcommand.h>
 #include <kdebug.h>
+#include <kontour_global.h>
 
 const double deg2rad = 0.017453292519943295769; // pi/180
 
@@ -99,13 +101,38 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mLayout->addWidget(mApplyBtn, 2, 1);
   mTab->insertTab(mRotate, i18n("R"));
 
+  /* Scale */
+  mScale = new QWidget(mTab);
+  mLayout = new QGridLayout(mScale, 4, 2);
+  QLabel *mScaleXText = new QLabel(i18n("Scale horizontal"), mScale);
+  mScaleX = new QSpinBox(0, 1000, 1, mScale);
+  mScaleX->setSuffix("%");
+  QLabel *mScaleYText = new QLabel(i18n("Scale vertical"), mScale);
+  mScaleY = new QSpinBox(0, 1000, 1, mScale);
+  mScaleY->setSuffix("%");
+  QCheckBox *mSUniform = new QCheckBox(i18n("Uniform"), mScale, "S");
+  //connect(mSUniform, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
+  mDuplicateBtn = new QPushButton(i18n("Duplicate"), mScale);
+  connect(mDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
+  mApplyBtn = new QPushButton(i18n("Apply"), mScale);
+  connect(mApplyBtn, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+
+  mLayout->addWidget(mScaleXText, 0, 0);
+  mLayout->addWidget(mScaleX, 0, 1);
+  mLayout->addWidget(mScaleYText, 1, 0);
+  mLayout->addWidget(mScaleY, 1, 1);
+  mLayout->addMultiCellWidget(mSUniform, 2, 2, 0, 1);
+  mLayout->addWidget(mDuplicateBtn, 3, 0);
+  mLayout->addWidget(mApplyBtn, 3, 1);
+  mTab->insertTab(mScale, i18n("S"));
+
   /* Shear */
   mShear = new QWidget(mTab);
   mLayout = new QGridLayout(mShear, 4, 2);
   QLabel *mShearAngleXText = new QLabel(i18n("Shear horizontal"), mShear);
-  mShearAngleXBox = new QSpinBox(-360, 360, 1, mShear);
+  mShearAngleXBox = new QSpinBox(-89, 89, 1, mShear);
   QLabel *mShearAngleYText = new QLabel(i18n("Shear vertical"), mShear);
-  mShearAngleYBox = new QSpinBox(-360, 360, 1, mShear);
+  mShearAngleYBox = new QSpinBox(-89, 89, 1, mShear);
   QCheckBox *mSRelative = new QCheckBox(i18n("Relative"), mShear, "R");
   connect(mSRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
   mDuplicateBtn = new QPushButton(i18n("Duplicate"), mShear);
@@ -138,6 +165,10 @@ void TransformPanel::setContext(const QWMatrix &m, GPage *p)
     mHorizBox->setValue(int(mHandle->rotCenter().x()));
     mVertBox->setValue(int(mHandle->rotCenter().y()));
   }
+  mShearAngleXBox->setValue(0);
+  mShearAngleYBox->setValue(0);
+  mScaleX->setValue(100);
+  mScaleY->setValue(100);
 }
 
 void TransformPanel::slotRelativeToggled(bool toggled)
@@ -183,6 +214,8 @@ void TransformPanel::slotDupPressed()
   else if(mTab->currentPage() == mShear)
     c->addCommand(new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleXBox->value() * deg2rad,
 	                 mShearAngleYBox->value() * deg2rad));
+  else if(mTab->currentPage() == mScale)
+    c->addCommand(new ScaleCmd(mPage->document(), Kontour::HPos_Center, mScaleX->value() / 100.0, mScaleY->value() / 100.0, mPage->boundingBoxForSelection()));
   emit changeTransform(c);
 }
 
@@ -207,6 +240,8 @@ void TransformPanel::slotApplyPressed()
   else if(mTab->currentPage() == mShear)
     c = new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleXBox->value() * deg2rad,
 	                 mShearAngleYBox->value() * deg2rad);
+  else if(mTab->currentPage() == mScale)
+    c = new ScaleCmd(mPage->document(), Kontour::HPos_Center, mScaleX->value() / 100.0, mScaleY->value() / 100.0, mPage->boundingBoxForSelection());
 
   if(c)
     emit changeTransform(c);

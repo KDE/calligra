@@ -60,6 +60,9 @@ private:
   QWidget       *mShear;
   QSpinBox      *mShearAngleXBox;
   QSpinBox      *mShearAngleYBox;
+  QWidget       *mScale;
+  QSpinBox      *mScaleX;
+  QSpinBox      *mScaleY;
   GPage         *mPage;
   Handle        *mHandle; // not strictly necessary, so convenience
   bool          mTRelative : 1;

@@ -57,6 +57,11 @@ void ScaleCmd::execute()
     xback = box.left() + box.width() * (1.0 - sx);
   if(hmask & Kontour::HPos_Top)
     yback = box.top() + box.height() * (1.0 - sy);
+  if(hmask & Kontour::HPos_Center)
+  {
+    xback = box.left() + box.width() * 0.5 * (1.0 - sx);
+    yback = box.top() + box.height() * 0.5 * (1.0 - sy);
+  }
 
   m1.translate(-xoff, -yoff);
   m2.scale(sx, sy);

@@ -28,8 +28,6 @@
 
 #include "Command.h"
 
-#include <koPoint.h>
-
 class GOval;
 
 class CreateOvalCmd : public Command
