@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=Karbon14 EPS Import Filter
+X-KDE-Export=application/illustrator
+X-KDE-Import=image/x-eps
+X-KDE-Weight=1
+X-KDE-Library=libkarbonepsimport
+ServiceTypes=KOfficeFilter

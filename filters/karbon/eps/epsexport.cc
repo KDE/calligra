@@ -2,8 +2,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qdom.h>
 #include <qcstring.h>
+#include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
 
