@@ -155,6 +155,8 @@ public:
     static QString unitDescription( Unit _unit );
     static QStringList listOfUnitName();
 
+    // parse common koffice and OO values, like "10cm", "5mm" to pt
+    static double parseValue( QString value, double defaultVal = 0.0 );
 };
 
 
