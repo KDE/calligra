@@ -262,7 +262,7 @@ class KexiMainWindowImpl::Private
 
 	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
 	{
-		QPopupMenu *pm = popups[menuName];
+		QPopupMenu *pm = popups[menuName.ascii()];
 		if (!pm)
 			return;
 		uint i=0;
