@@ -131,16 +131,17 @@ void KFormulaView::keyPressEvent( QKeyEvent *k )
 
 CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 					 const char* pictname,
-					 const char* tooltip,
+					 const QString &tooltip,
 					 const char* func,
 					 CORBA::Long _id )
 {
     OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(pictname) );
+    CORBA::WString_var toolTip = Q2C( tooltip );
 
     CORBA::Long id =
 	toolbar->insertButton2( pix, _id,
 				SIGNAL( clicked() ), this, func, true,
-				tooltip, -1 );
+				toolTip, -1 );
 
     return id;
 }
@@ -406,8 +407,11 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     fonts[2] = CORBA::string_dup( "times" );
     fonts[3] = CORBA::string_dup( "(default)" );
 
+    CORBA::WString_var toolTip;
+    
+    toolTip = Q2C( i18n("Font Family") );
     m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts,   0, false, SIGNAL( activated( const QString & ) ), this,
-							    "fontSelected", true, i18n("Font Family"),
+							    "fontSelected", true, toolTip,
 							    120, -1, OpenPartsUI::AtBottom );
     m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontFamily, 0 );
 	
@@ -422,9 +426,10 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 	    sprintf( buffer, "%i", i+1 );
 	    sizelist[i] = CORBA::string_dup( buffer );
 	}
+    toolTip = Q2C( i18n( "Font Size"  ) );
     m_idComboFont_FontSize = m_vToolBarFont->insertCombo( sizelist,  1, true, SIGNAL( activated( const QString & ) ),
 							  this, "sizeSelected", true,
-							  i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
+							  toolTip, 50, -1, OpenPartsUI::AtBottom );
     m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontSize, 2  );
 
     m_idButtonFont_Bold = addToolButton(m_vToolBarFont, "bold.xpm",
@@ -455,9 +460,10 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 	    sizelist[ 10 + i - 1 ] = CORBA::string_dup( buffer );
 	}
 
+    toolTip = Q2C( i18n( "Font scale mode" ) );
     m_idComboFont_ScaleMode = m_vToolBarFont->insertCombo( sizelist,  5    ,true, SIGNAL( activated( const QString & ) ),
 							   this, "sizeSelected", true,
-							   i18n( "Font scale mode" ), 80, -1, OpenPartsUI::AtBottom );
+							   toolTip, 80, -1, OpenPartsUI::AtBottom );
 
 
     //    m_vToolBarFont->setCurrentComboItem( m_idComboFont_ScaleMode,  2 );
@@ -524,8 +530,9 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     fonts[6] = CORBA::string_dup("]");
     fonts[7] = CORBA::string_dup(">");
     fonts[8] = CORBA::string_dup("|");
+    toolTip = Q2C( i18n("Left delimiter") );
     m_idComboType_DelLeft = m_vToolBarType->insertCombo( fonts, 2 ,false, SIGNAL( activated( const QString & ) ), this,
-							 "delimiterLeft", true, i18n("Left delimiter"),
+							 "delimiterLeft", true, toolTip,
 							 40, -1, OpenPartsUI::AtBottom );
 
     fonts[0] = CORBA::string_dup(")");
@@ -537,8 +544,9 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     fonts[6] = CORBA::string_dup("[");
     fonts[7] = CORBA::string_dup("<");
     fonts[8] = CORBA::string_dup("|");
+    toolTip = Q2C( i18n("Right delimiter") );
     m_idComboType_DelRight = m_vToolBarType->insertCombo( fonts, 3, false, SIGNAL( activated( const QString & ) ), this,
-							  "delimiterRight", true, i18n("Right delimiter"),
+							  "delimiterRight", true, toolTip,
 							  40, -1, OpenPartsUI::AtBottom );
     //m_vToolBarType->insertSeparator(  7 );
 

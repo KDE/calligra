@@ -292,51 +292,65 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_vMainToolBar->connect("highlighted", this, "statusCallback");
 
   pix = OPUIUtils::convertPixmap(ICON("back.xpm"));
-  m_idBack = m_vMainToolBar->insertButton2(pix, ID_BACK, SIGNAL(clicked()), this, "slotBack", !m_backStack.isEmpty(), i18n("Back"), -1);
+  CORBA::WString_var toolTip = Q2C( i18n("Back") );
+  m_idBack = m_vMainToolBar->insertButton2(pix, ID_BACK, SIGNAL(clicked()), this, "slotBack", !m_backStack.isEmpty(), toolTip, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("forward.xpm"));
-  m_idForward = m_vMainToolBar->insertButton2(pix, ID_FORWARD, SIGNAL(clicked()), this, "slotForward", !m_forwardStack.isEmpty(), i18n("Forward"), -1);
+  toolTip = Q2C( i18n("Forward") );
+  m_idForward = m_vMainToolBar->insertButton2(pix, ID_FORWARD, SIGNAL(clicked()), this, "slotForward", !m_forwardStack.isEmpty(), toolTip, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("home.xpm"));
-  m_idHome = m_vMainToolBar->insertButton2(pix, ID_HOME, SIGNAL(clicked()), this, "slotHome", true, i18n("Home"), -1);
+  toolTip = Q2C( i18n("Home") );
+  m_idHome = m_vMainToolBar->insertButton2(pix, ID_HOME, SIGNAL(clicked()), this, "slotHome", true, toolTip, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("reload.xpm"));
-  m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, i18n("Reload Page"), -1);
+  toolTip = Q2C( i18n("Reload Page") );
+  m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, toolTip, -1);
 
   //grmpfl... there's already a stop icon in koffice/pics/toolbar, but I
   //don't want to use it, I want the original kfm icon
   pix = OPUIUtils::convertPixmap(ICON( kapp->kde_toolbardir() + "/stop.xpm" ));
-  m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", m_pDoc->documentLoading(), i18n("Stop"), -1);
+  toolTip = Q2C( i18n("Stop") );
+  m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", m_pDoc->documentLoading(), toolTip, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
-  m_idOpenURL = m_vMainToolBar->insertButton2(pix, ID_OPENURL, SIGNAL(clicked()), this, "slotOpenURLDlg", true, i18n("Open URL"), -1);
+  toolTip = Q2C( i18n("Open URL") );
+  m_idOpenURL = m_vMainToolBar->insertButton2(pix, ID_OPENURL, SIGNAL(clicked()), this, "slotOpenURLDlg", true, toolTip, -1);
     
   m_vMainToolBar->insertSeparator(-1);
   
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idButton_Copy = m_vMainToolBar->insertButton2(pix, ID_EDIT_COPY, SIGNAL(clicked()), this, "editCopy", true, i18n("Copy"), -1);
+  toolTip = Q2C( i18n("Copy") );
+  m_idButton_Copy = m_vMainToolBar->insertButton2(pix, ID_EDIT_COPY, SIGNAL(clicked()), this, "editCopy", true, toolTip, -1);
 
   m_vMainToolBar->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("configure.xpm"));
-  m_idConfigure = m_vMainToolBar->insertButton2(pix, ID_OPTIONS_SETTINGS, SIGNAL(clicked()), this, "editSettings", true, i18n("Settings"), -1);
+  toolTip = Q2C( i18n("Settings") );
+  m_idConfigure = m_vMainToolBar->insertButton2(pix, ID_OPTIONS_SETTINGS, SIGNAL(clicked()), this, "editSettings", true, toolTip, -1);
 
   m_vMainToolBar->insertSeparator(-1);
   
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idInsert_Object = m_vMainToolBar->insertButton2(pix, ID_EDIT_INSERT_OBJECT, SIGNAL(clicked()), this, "insertObject", true, i18n("Insert Object"), -1);
+  toolTip = Q2C( i18n("Insert Object") );
+  m_idInsert_Object = m_vMainToolBar->insertButton2(pix, ID_EDIT_INSERT_OBJECT, SIGNAL(clicked()), this, "insertObject", true, toolTip, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("edit-html.xpm"));
-  m_idEditHTMLCode = m_vMainToolBar->insertButton2(pix, ID_EDIT_HTMLCODE, SIGNAL(clicked()), this, "editHTMLCode", true, i18n("Edit current HTML code"), -1);
+  toolTip = Q2C( i18n("Edit current HTML code") );
+  m_idEditHTMLCode = m_vMainToolBar->insertButton2(pix, ID_EDIT_HTMLCODE, SIGNAL(clicked()), this, "editHTMLCode", true, toolTip, -1);
   
   m_vLocationToolBar = factory->create(OpenPartsUI::ToolBarFactory::Transient);
 
   m_vLocationToolBar->setFullWidth(true);
 
-  m_vLocationToolBar->insertTextLabel(i18n("Location : "), -1, -1);
+  CORBA::WString_var labelText = Q2C( i18n("Location : ") );
+  m_vLocationToolBar->insertTextLabel(labelText, -1, -1);
   
   CORBA::String_var htmlURL = m_pDoc->htmlURL();
-  m_idLocation = m_vLocationToolBar->insertLined(htmlURL.in(), ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, i18n("Current Location"), 70, -1);
+  QString u = htmlURL.in();
+  CORBA::WString_var wu = Q2C( u );
+  toolTip = Q2C( i18n("Current Location") );
+  m_idLocation = m_vLocationToolBar->insertLined(wu, ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, toolTip, 70, -1);
   m_vLocationToolBar->setItemAutoSized(ID_LOCATION, true);
 
   if (m_bToolBarVisible) 
@@ -678,12 +692,15 @@ void KoHTMLView::slotForward2()
 void KoHTMLView::slotDocumentContentChanged()
 {
   CORBA::String_var htmlURL = m_pDoc->htmlURL();
-  if (m_vLocationToolBar) m_vLocationToolBar->setLinedText(ID_LOCATION, htmlURL.in());
+  QString u = htmlURL.in();
+  CORBA::WString_var wu = Q2C( u );
+  if (m_vLocationToolBar) m_vLocationToolBar->setLinedText(ID_LOCATION, wu);
 } 
 
 void KoHTMLView::slotURLEntered()
 {
-  QString url = m_vLocationToolBar->linedText(ID_LOCATION);
+  CORBA::WString_var wurl = m_vLocationToolBar->linedText(ID_LOCATION);
+  QString url = C2Q( wurl.in() );
   
   if (url.isEmpty()) return;
   
@@ -700,7 +717,7 @@ void KoHTMLView::slotURLEntered()
      {
        QString tmp;
        tmp = i18n("Malformed URL\n");
-       tmp += m_vLocationToolBar->linedText(ID_LOCATION);
+       tmp += C2Q( wurl.in() );
        QMessageBox::critical((QWidget *)0L, i18n("KoHTML Error"), tmp);
        return;
      }     

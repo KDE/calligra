@@ -122,27 +122,33 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
     return true;
   }
 
+  CORBA::WString_var toolTip;
+  
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   QString tmp = kapp->kde_datadir().copy();
   tmp += "/kdiagramm/pics/lines.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
-  m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "modeLines", true, i18n( "Lines" ), -1 );
+  toolTip = Q2C( i18n( "Lines" ) );
+  m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "modeLines", true, toolTip, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kdiagramm/pics/areas.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
-  m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "modeAreas", true, i18n( "Areas" ), -1 );
+  toolTip = Q2C( i18n( "Areas" ) );
+  m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "modeAreas", true, toolTip, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kdiagramm/pics/bars.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
-  m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeBars", true, i18n( "3D-Bars" ), -1 );
+  toolTip = Q2C( i18n( "3D-Bars" ) );
+  m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeBars", true, toolTip, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kdiagramm/pics/cakes.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeCakes", true, i18n( "Cakes" ), -1 );
+  toolTip = Q2C( i18n( "Cakes" ) );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeCakes", true, toolTip, -1 );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 

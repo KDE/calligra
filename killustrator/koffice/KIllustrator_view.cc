@@ -428,73 +428,80 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   QString tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/selecttool.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap (tmp);
+  CORBA::WString_var toolTip = Q2C( i18n ("Selection Mode") );
   m_idSelectionTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_SELECT,
 				    SIGNAL (clicked ()), this,
 				    "toolSelection", true,
-				    i18n ("Selection Mode"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_SELECT, true);
   m_vToolBarTools->setButton (ID_TOOL_SELECT, true);
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/pointtool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Edit Point") );
   m_idEditPointTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_EDITPOINT,
 				    SIGNAL (clicked ()), this,
 				    "toolEditPoint", true,
-				    i18n ("Edit Point"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_EDITPOINT, true);
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/freehandtool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create FreeHand Line") );
   m_idFreeHandTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_FREEHAND,
 				    SIGNAL (clicked ()), this,
 				    "toolFreehandLine", true,
-				    i18n ("Create FreeHand Line"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_FREEHAND, true);
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/linetool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create Polyline") );
   m_idPolylineTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_LINE,
 				    SIGNAL (clicked ()), this,
 				    "toolPolyline", true,
-				    i18n ("Create Polyline"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_LINE, true);
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/beziertool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create Bezier Curve") );
   m_idBezierTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_BEZIER,
 				    SIGNAL (clicked ()), this,
 				    "toolBezier", true,
-				    i18n ("Create Bezier Curve"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_BEZIER, true);
 
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/recttool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create Rectangle") );
   m_idRectangleTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_RECTANGLE,
 				    SIGNAL (clicked ()), this,
 				    "toolRectangle", true,
-				    i18n ("Create Rectangle"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_RECTANGLE, true);
 
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/polygontool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create Polygon") );
   m_idPolygonTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_POLYGON,
 				    SIGNAL (clicked ()), this,
 				    "toolPolygon", true,
-				    i18n ("Create Polygon"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_POLYGON, true);
   m_vToolBarTools->addConnection (ID_TOOL_POLYGON, SIGNAL(doubleClicked(int)),
 				  this, "configPolygonTool");
@@ -502,11 +509,12 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/ellipsetool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create Ellipse") );
   m_idEllipseTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_ELLIPSE,
 				    SIGNAL (clicked ()), this,
 				    "toolEllipse", true,
-				    i18n ("Create Ellipse"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_ELLIPSE, true);
   m_vToolBarTools->addConnection (ID_TOOL_ELLIPSE, SIGNAL(doubleClicked(int)),
 				  this, "configEllipseTool");
@@ -514,21 +522,23 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/texttool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Create/Edit Text") );
   m_idTextTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_TEXT,
 				    SIGNAL (clicked ()), this,
 				    "toolText", true,
-				    i18n ("Create/Edit Text"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_TEXT, true);
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/zoomtool.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Zoom In") );
   m_idZoomTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_ZOOM,
 				    SIGNAL (clicked ()), this,
 				    "toolZoom", true,
-				    i18n ("Zoom In"), -1);
+				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_ZOOM, true);
 
   m_vToolBarTools->setBarPos (OpenPartsUI::Left);
@@ -542,48 +552,54 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEdit->setFullWidth (false);
 
   pix = OPUIUtils::convertPixmap (ICON("undo.xpm"));
+  toolTip = Q2C( i18n ("Undo") );
   m_idEditUndo =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_UNDO, SIGNAL (clicked ()),
-				   this, "editUndo", true, i18n ("Undo"), -1);
+				   this, "editUndo", true, toolTip, -1);
   //  m_vToolBarEdit->setItemEnabled (ID_EDIT_UNDO, false);
 
   pix = OPUIUtils::convertPixmap (ICON("redo.xpm"));
+  toolTip = Q2C( i18n ("Redo") );
   m_idEditRedo =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_REDO, SIGNAL (clicked ()),
-				   this, "editRedo", true, i18n ("Redo"), -1);
+				   this, "editRedo", true, toolTip, -1);
   //  m_vToolBarEdit->setItemEnabled (ID_EDIT_REDO, false);
   m_vToolBarEdit->insertSeparator (-1);
 
   tmp = kapp->kde_toolbardir ().copy ();
   tmp += "/editcut.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Cut") );
   m_idEditCut =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_CUT, SIGNAL (clicked ()),
-				   this, "editCut", true, i18n ("Cut"), -1);
+				   this, "editCut", true, toolTip, -1);
 
   tmp = kapp->kde_toolbardir ().copy ();
   tmp += "/editcopy.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Copy") );
   m_idEditCopy =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_COPY, SIGNAL (clicked ()),
-				   this, "editCopy", true, i18n ("Copy"), -1);
+				   this, "editCopy", true, toolTip, -1);
 
   tmp = kapp->kde_toolbardir ().copy ();
   tmp += "/editpaste.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Paste") );
   m_idEditPaste =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_PASTE, SIGNAL (clicked ()),
 				   this, "editPaste", true,
-				   i18n ("Paste"), -1);
+				   toolTip, -1);
   m_vToolBarEdit->insertSeparator (-1);
 
   tmp = kapp->kde_datadir ().copy ();
   tmp += "/kpresenter/toolbar/delete.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Delete") );
   m_idEditDelete =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_DELETE, SIGNAL (clicked ()),
 				   this, "editDelete", true,
-				   i18n ("Delete"), -1);
+				   toolTip, -1);
   m_vToolBarEdit->insertSeparator (-1);
 
   OpenPartsUI::StrList zoomSizes;
@@ -593,11 +609,12 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
     sprintf (buf, "%3.0f%%", zFactors[i] * 100);
     zoomSizes[i] = CORBA::string_dup (buf);
   }
+  toolTip = Q2C( i18n ("Zoom Factors") );
   m_idEditZoom =
   m_vToolBarEdit->insertCombo (zoomSizes, ID_EDIT_ZOOM, true,
 			       SIGNAL (activated (const QString &)),
 			       this, "zoomSizeSelected", true,
-			       i18n ("Zoom Factors"), 85, -1,
+			       toolTip, 85, -1,
 			       OpenPartsUI::AtBottom);
   m_vToolBarEdit->setCurrentComboItem (ID_EDIT_ZOOM, 1);
   m_vToolBarEdit->enable (OpenPartsUI::Show);
@@ -636,31 +653,34 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   tmp = kapp->kde_datadir ().copy ();
   tmp += "/killustrator/pics/moveNode.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Move Point") );
   m_idMovePoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_MOVE,
 					SIGNAL (clicked ()),
 					this, "toolMovePoint", true,
-					i18n ("Move Point"), -1);
+					toolTip, -1);
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_MOVE, true);
 
   tmp = kapp->kde_datadir ().copy ();
   tmp += "/killustrator/pics/newNode.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Insert Point") );
   m_idInsertPoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_INSERT,
 					SIGNAL (clicked ()),
 					this, "toolInsertPoint", true,
-					i18n ("Insert Point"), -1);
+					toolTip, -1);
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_INSERT, true);
 
   tmp = kapp->kde_datadir ().copy ();
   tmp += "/killustrator/pics/deleteNode.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
+  toolTip = Q2C( i18n ("Remove Point") );
   m_idRemovePoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_DELETE,
 					SIGNAL (clicked ()),
 					this, "toolRemovePoint", true,
-					i18n ("Remove Point"), -1);
+					toolTip, -1);
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_DELETE, true);
 
   m_vToolBarEditPoint->setBarPos (OpenPartsUI::Floating);

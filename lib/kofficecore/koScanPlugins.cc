@@ -450,8 +450,9 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
 	  tmp += t2;
 	}
 	OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
+	CORBA::WString_var toolTip = Q2C( it.current()->entry()->m_strName );
 	(void)m_vToolBar->insertButton2( pix, 1, SIGNAL( clicked() ), it.current(),
-					 "callback", true, it.current()->entry()->m_strName, -1 );
+					 "callback", true, toolTip, -1 );
 
       }
     }

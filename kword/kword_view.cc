@@ -2159,44 +2159,51 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // undo
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
-  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2(pix,ID_UNDO,SIGNAL(clicked()),this,"editUndo",true,i18n("Undo"),-1);
+  CORBA::WString_var toolTip = Q2C( i18n("Undo") );
+  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2(pix,ID_UNDO,SIGNAL(clicked()),this,"editUndo",true,toolTip,-1);
   m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
 
   // redo
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
-  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2(pix,ID_REDO,SIGNAL(clicked()),this,"editRedo",true,i18n("Redo"),-1);
+  toolTip = Q2C( i18n("Redo") );
+  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2(pix,ID_REDO,SIGNAL(clicked()),this,"editRedo",true,toolTip,-1);
   m_vToolBarEdit->setItemEnabled(ID_REDO,false);
 
   m_vToolBarEdit->insertSeparator(-1);
 
   // cut
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
+  toolTip = Q2C( i18n("Cut") );
   m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2(pix,ID_EDIT_CUT,SIGNAL(clicked()),this,
-						      "editCut",true,i18n("Cut"),-1);
+						      "editCut",true,toolTip,-1);
 
   // copy
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
+  toolTip = Q2C( i18n("Copy") );
   m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2(pix,ID_EDIT_COPY,SIGNAL(clicked()),this,
-						       "editCopy",true,i18n("Copy"),-1);
+						       "editCopy",true,toolTip,-1);
 
   // paste
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
+  toolTip = Q2C( i18n("Paste") );
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2(pix,ID_EDIT_PASTE,SIGNAL(clicked()),this,
-							"editPaste",true,i18n("Paste"),-1);
+							"editPaste",true,toolTip,-1);
 
   m_vToolBarEdit->insertSeparator(-1);
 
   // spelling
   pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
+  toolTip = Q2C( i18n("Spell Checking") );
   m_idButtonEdit_Spelling = m_vToolBarEdit->insertButton2(pix,1,SIGNAL(clicked()),this,"extraSpelling",
-							   true,i18n("Spell Checking"),-1);
+							   true,toolTip,-1);
 
   m_vToolBarEdit->insertSeparator(-1);
 
   // find
   pix = OPUIUtils::convertPixmap(ICON("kwsearch.xpm"));
+  toolTip = Q2C( i18n("Find & Replace") );
   m_idButtonEdit_Find = m_vToolBarEdit->insertButton2(pix,1,SIGNAL(clicked()),this,"editFind",
-						       true,i18n("Find & Replace"),-1);
+						       true,toolTip,-1);
 
   m_vToolBarEdit->enable(OpenPartsUI::Show);
 
@@ -2206,18 +2213,21 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // picture
   pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
-  m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertPicture",true,i18n("Insert Picture"),-1);
+  toolTip = Q2C( i18n("Insert Picture") );
+  m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertPicture",true,toolTip,-1);
 
   // clipart
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
-  m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertClipart",true,i18n("Insert Clipart"),-1);
+  toolTip = Q2C( i18n("Insert Clipart") );
+  m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertClipart",true,toolTip,-1);
 
   m_vToolBarInsert->insertSeparator(-1);
 
   // special char
   pix = OPUIUtils::convertPixmap(ICON("char.xpm"));
+  toolTip = Q2C( i18n("Insert Special Character") );
   m_idButtonInsert_SpecialChar = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertSpecialChar",
-								  true,i18n("Insert Special Character"),-1);
+								  true,toolTip,-1);
 
   m_vToolBarInsert->enable(OpenPartsUI::Show);
 
@@ -2226,20 +2236,24 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
   m_vToolBarTable->setFullWidth(false);
 
   pix = OPUIUtils::convertPixmap(ICON("rowin.xpm"));
+  toolTip = Q2C( i18n("Insert Row") );
   m_idButtonTable_InsertRow = m_vToolBarTable->insertButton2(pix,ID_TABLE_INSROW,SIGNAL(clicked()),this,"tableInsertRow",
-							     true,i18n("Insert Row"),-1);
+							     true,toolTip,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("colin.xpm"));
+  toolTip = Q2C( i18n("Insert Column") );
   m_idButtonTable_InsertCol = m_vToolBarTable->insertButton2(pix,ID_TABLE_INSCOL,SIGNAL(clicked()),this,"tableInsertCol",
-							     true,i18n("Insert Column"),-1);
+							     true,toolTip,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rowout.xpm"));
+  toolTip = Q2C( i18n("Delete Row") );
   m_idButtonTable_DeleteRow = m_vToolBarTable->insertButton2(pix,ID_TABLE_DELROW,SIGNAL(clicked()),this,"tableDeleteRow",
-							     true,i18n("Delete Row"),-1);
+							     true,toolTip,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("colout.xpm"));
+  toolTip = Q2C( i18n("Delete Column") );
   m_idButtonTable_DeleteCol = m_vToolBarTable->insertButton2(pix,ID_TABLE_DELCOL,SIGNAL(clicked()),this,"tableDeleteCol",
-							     true,i18n("Delete Column"),-1);
+							     true,toolTip,-1);
 
   m_vToolBarTable->enable(OpenPartsUI::Show);
 
@@ -2249,57 +2263,66 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // edit
   pix = OPUIUtils::convertPixmap(ICON("edittool.xpm"));
+  toolTip = Q2C( i18n("Edit Text Tool") );
   m_idButtonTools_Edit = m_vToolBarTools->insertButton2(pix,ID_TOOL_EDIT,SIGNAL(clicked()),this,"toolsEdit",
-							 true,i18n("Edit Text Tool"),-1);
+							 true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
   m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
 
   // edit frame
   pix = OPUIUtils::convertPixmap(ICON("editframetool.xpm"));
+  toolTip = Q2C( i18n("Edit Frames Tool") );
   m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2(pix,ID_TOOL_EDIT_FRAME,SIGNAL(clicked()),this,"toolsEditFrame",
-							      true,i18n("Edit Frames Tool"),-1);
+							      true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
 
   // create text frame
   pix = OPUIUtils::convertPixmap(ICON("textframetool.xpm"));
+  toolTip = Q2C( i18n("Create Text Frame") );
   m_idButtonTools_CreateText = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_TEXT,SIGNAL(clicked()),this,"toolsCreateText",
-							       true,i18n("Create Text Frame"),-1);
+							       true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
 
   // create pix frame
   pix = OPUIUtils::convertPixmap(ICON("picframetool.xpm"));
+  toolTip = Q2C( i18n("Create Picture Frame") );
   m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_PIX,SIGNAL(clicked()),this,"toolsCreatePix",
-							       true,i18n("Create Picture Frame"),-1);
+							       true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
 
   // create clip frame
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
+  toolTip = Q2C( i18n("Create Clipart Frame") );
   m_idButtonTools_Clipart = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_CLIPART,SIGNAL(clicked()),this,"toolsClipart",
-							    true,i18n("Create Clipart Frame"),-1);
+							    true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_CLIPART,true);
 
   // create table frame
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  toolTip = Q2C( i18n("Create Table Frame") );
   m_idButtonTools_Table = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_TABLE,SIGNAL(clicked()),this,"toolsTable",
-							  true,i18n("Create Table Frame"),-1);
+							  true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_TABLE,true);
 
   // create table frame
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  toolTip = Q2C( i18n("Create KSPread Table Frame") );
   m_idButtonTools_KSpreadTable = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_KSPREAD_TABLE,SIGNAL(clicked()),this,
-								 "toolsKSpreadTable",true,i18n("Create KSPread Table Frame"),-1);
+								 "toolsKSpreadTable",true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_KSPREAD_TABLE,true);
 
   // create formula frame
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
+  toolTip = Q2C( i18n("Create Formula Frame") );
   m_idButtonTools_Formula = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_FORMULA,SIGNAL(clicked()),this,"toolsFormula",
-							    true,i18n("Create Formula Frame"),-1);
+							    true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_FORMULA,true);
 
   // create part frame
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
+  toolTip = Q2C( i18n("Create Part Frame") );
   m_idButtonTools_Part = m_vToolBarTools->insertButton2(pix,ID_TOOL_CREATE_PART,SIGNAL(clicked()),this,"toolsPart",
-							 true,i18n("Create Part Frame"),-1);
+							 true,toolTip,-1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_PART,true);
 
   m_vToolBarTools->enable(OpenPartsUI::Show);
@@ -2316,8 +2339,9 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
       styleList.append(QString(m_pKWordDoc->paragLayoutList.at(i)->getName()));
       stylelist[i] = CORBA::string_dup(m_pKWordDoc->paragLayoutList.at(i)->getName());
     }
+  toolTip = Q2C( i18n("Style") );
   m_idComboText_Style = m_vToolBarText->insertCombo(stylelist,ID_STYLE_LIST,false,SIGNAL(activated(const QString &)),
-						     this,"textStyleSelected",true,i18n("Style"),
+						     this,"textStyleSelected",true,toolTip,
 						     200,-1,OpenPartsUI::AtBottom);
 
   // size combobox
@@ -2329,9 +2353,10 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
       sprintf(buffer,"%i",i);
       sizelist[i - 4] = CORBA::string_dup(buffer);
     }
+  toolTip = Q2C( i18n("Font Size" ) );
   m_idComboText_FontSize = m_vToolBarText->insertCombo(sizelist,ID_FONT_SIZE,true,SIGNAL(activated(const QString &)),
 							this,"textSizeSelected",true,
-							i18n("Font Size" ),50,-1,OpenPartsUI::AtBottom);
+							toolTip,50,-1,OpenPartsUI::AtBottom);
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,8);
   tbFont.setPointSize(12);
 
@@ -2341,8 +2366,9 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
   fonts.length(fontList.count());
   for(unsigned int i = 0;i < fontList.count();i++)
     fonts[i] = CORBA::string_dup(fontList.at(i));
+  toolTip = Q2C( i18n("Font List") );
   m_idComboText_FontList = m_vToolBarText->insertCombo(fonts,ID_FONT_LIST,true,SIGNAL(activated(const QString &)),this,
-							"textFontSelected",true,i18n("Font List"),
+							"textFontSelected",true,toolTip,
 							200,-1,OpenPartsUI::AtBottom);
   tbFont.setFamily(fontList.at(0));
   m_vToolBarText->setCurrentComboItem(ID_FONT_LIST,0);
@@ -2351,21 +2377,24 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // bold
   pix = OPUIUtils::convertPixmap(ICON("bold.xpm"));
-  m_idButtonText_Bold = m_vToolBarText->insertButton2(pix,ID_BOLD,SIGNAL(clicked()),this,"textBold",true,i18n("Bold"),-1);
+  toolTip = Q2C( i18n("Bold") );
+  m_idButtonText_Bold = m_vToolBarText->insertButton2(pix,ID_BOLD,SIGNAL(clicked()),this,"textBold",true,toolTip,-1);
   m_vToolBarText->setToggle(ID_BOLD,true);
   m_vToolBarText->setButton(ID_BOLD,false);
   tbFont.setBold(false);
 
   // italic
   pix = OPUIUtils::convertPixmap(ICON("italic.xpm"));
-  m_idButtonText_Italic = m_vToolBarText->insertButton2(pix,ID_ITALIC,SIGNAL(clicked()),this,"textItalic",true,i18n("Italic"),-1);
+  toolTip = Q2C( i18n("Italic") );
+  m_idButtonText_Italic = m_vToolBarText->insertButton2(pix,ID_ITALIC,SIGNAL(clicked()),this,"textItalic",true,toolTip,-1);
   m_vToolBarText->setToggle(ID_ITALIC,true);
   m_vToolBarText->setButton(ID_ITALIC,false);
   tbFont.setItalic(false);
 
   // underline
   pix = OPUIUtils::convertPixmap(ICON("underl.xpm"));
-  m_idButtonText_Underline = m_vToolBarText->insertButton2(pix,ID_UNDERLINE,SIGNAL(clicked()),this,"textUnderline",true,i18n("Underline"),-1);
+  toolTip = Q2C( i18n("Underline") );
+  m_idButtonText_Underline = m_vToolBarText->insertButton2(pix,ID_UNDERLINE,SIGNAL(clicked()),this,"textUnderline",true,toolTip,-1);
   m_vToolBarText->setToggle(ID_UNDERLINE,true);
   m_vToolBarText->setButton(ID_UNDERLINE,false);
   tbFont.setUnderline(false);
@@ -2374,37 +2403,42 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
   tbColor = black;
   OpenPartsUI::Pixmap colpix;
   colpix.data = CORBA::string_dup(colorToPixString(tbColor,TXT_COLOR));
+  toolTip = Q2C( i18n("Text Color") );
   m_idButtonText_Color = m_vToolBarText->insertButton2(colpix,ID_TEXT_COLOR,SIGNAL(clicked()),this,"textColor",
-							true,i18n("Text Color"),-1);
+							true,toolTip,-1);
 
   m_vToolBarText->insertSeparator(-1);
 
   // align left
   pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
+  toolTip = Q2C( i18n("Align Left") );
   m_idButtonText_ALeft = m_vToolBarText->insertButton2(pix,ID_ALEFT,SIGNAL(clicked()),this,"textAlignLeft",
-							true,i18n("Align Left"),-1);
+							true,toolTip,-1);
   m_vToolBarText->setToggle(ID_ALEFT,true);
   m_vToolBarText->setButton(ID_ALEFT,true);
 
   // align center
   pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
+  toolTip = Q2C( i18n("Align Center") );
   m_idButtonText_ACenter = m_vToolBarText->insertButton2(pix,ID_ACENTER,SIGNAL(clicked()),this,"textAlignCenter",
-							  true,i18n("Align Center"),-1);
+							  true,toolTip,-1);
   m_vToolBarText->setToggle(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
 
   // align right
   pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
+  toolTip = Q2C( i18n("Align Right") );
   m_idButtonText_ARight = m_vToolBarText->insertButton2(pix,ID_ARIGHT,SIGNAL(clicked()),this,"textAlignRight",
-							 true,i18n("Align Right"),-1);
+							 true,toolTip,-1);
   m_vToolBarText->setToggle(ID_ARIGHT,true);
   m_vToolBarText->setButton(ID_ARIGHT,false);
 
   QString tmp;
   // align block
   pix = OPUIUtils::convertPixmap(ICON("alignBlock.xpm"));
+  toolTip = Q2C( i18n("Align Block") );
   m_idButtonText_ABlock = m_vToolBarText->insertButton2(pix,ID_ABLOCK,SIGNAL(clicked()),this,"textAlignBlock",
-							 true,i18n("Align Block"),-1);
+							 true,toolTip,-1);
   m_vToolBarText->setToggle(ID_ABLOCK,true);
   m_vToolBarText->setButton(ID_ABLOCK,false);
 
@@ -2417,23 +2451,26 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
       sprintf(buffer,"%i",i);
       spclist[i] = CORBA::string_dup(buffer);
     }
+  toolTip = Q2C( i18n("Line Spacing (in pt)") );
   m_idComboText_LineSpacing = m_vToolBarText->insertCombo(spclist,ID_LINE_SPC,false,SIGNAL(activated(const QString &)),
-							  this,"textLineSpacing",true,i18n("Line Spacing (in pt)"),
+							  this,"textLineSpacing",true,toolTip,
 							  60,-1,OpenPartsUI::AtBottom);
   spc = 0;
   m_vToolBarText->insertSeparator(-1);
 
   // enum list
   pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
+  toolTip = Q2C( i18n("Enumerated List") );
   m_idButtonText_EnumList = m_vToolBarText->insertButton2(pix,ID_ENUM_LIST,SIGNAL(clicked()),this,"textEnumList",
-							   true,i18n("Enumerated List"),-1);
+							   true,toolTip,-1);
   m_vToolBarText->setToggle(ID_ENUM_LIST,true);
   m_vToolBarText->setButton(ID_ENUM_LIST,false);
 
   // unsorted list
   pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
+  toolTip = Q2C( i18n("Unsorted List") );
   m_idButtonText_EnumList = m_vToolBarText->insertButton2(pix,ID_USORT_LIST,SIGNAL(clicked()),this,"textUnsortList",
-							   true,i18n("Unsorted List"),-1);
+							   true,toolTip,-1);
   m_vToolBarText->setToggle(ID_USORT_LIST,true);
   m_vToolBarText->setButton(ID_USORT_LIST,false);
 
@@ -2441,15 +2478,17 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // superscript
   pix = OPUIUtils::convertPixmap(ICON("super.xpm"));
+  toolTip = Q2C( i18n("Superscript") );
   m_idButtonText_SuperScript = m_vToolBarText->insertButton2(pix,ID_SUPERSCRIPT,SIGNAL(clicked()),this,"textSuperScript",
-							      true,i18n("Superscript"),-1);
+							      true,toolTip,-1);
   m_vToolBarText->setToggle(ID_SUPERSCRIPT,true);
   m_vToolBarText->setButton(ID_SUPERSCRIPT,false);
 
   // subscript
   pix = OPUIUtils::convertPixmap(ICON("sub.xpm"));
+  toolTip = Q2C( i18n("Subscript") );
   m_idButtonText_SubScript = m_vToolBarText->insertButton2(pix,ID_SUBSCRIPT,SIGNAL(clicked()),this,"textSubScript",
-							    true,i18n("Subscript"),-1);
+							    true,toolTip,-1);
   m_vToolBarText->setToggle(ID_SUBSCRIPT,true);
   m_vToolBarText->setButton(ID_SUBSCRIPT,false);
 
@@ -2457,37 +2496,42 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // border left
   pix = OPUIUtils::convertPixmap(ICON("borderleft.xpm"));
+  toolTip = Q2C( i18n("Paragraph Border Left") );
   m_idButtonText_BorderLeft = m_vToolBarText->insertButton2(pix,ID_BRD_LEFT,SIGNAL(clicked()),this,"textBorderLeft",
-							     true,i18n("Paragraph Border Left"),-1);
+							     true,toolTip,-1);
   m_vToolBarText->setToggle(ID_BRD_LEFT,true);
   m_vToolBarText->setButton(ID_BRD_LEFT,false);
 
   // border right
   pix = OPUIUtils::convertPixmap(ICON("borderright.xpm"));
+  toolTip = Q2C( i18n("Paragraph Border Right") );
   m_idButtonText_BorderRight = m_vToolBarText->insertButton2(pix,ID_BRD_RIGHT,SIGNAL(clicked()),this,"textBorderRight",
-							      true,i18n("Paragraph Border Right"),-1);
+							      true,toolTip,-1);
   m_vToolBarText->setToggle(ID_BRD_RIGHT,true);
   m_vToolBarText->setButton(ID_BRD_RIGHT,false);
 
   // border top
   pix = OPUIUtils::convertPixmap(ICON("bordertop.xpm"));
+  toolTip = Q2C( i18n("Paragraph Border Top") );
   m_idButtonText_BorderTop = m_vToolBarText->insertButton2(pix,ID_BRD_TOP,SIGNAL(clicked()),this,"textBorderTop",
-							    true,i18n("Paragraph Border Top"),-1);
+							    true,toolTip,-1);
   m_vToolBarText->setToggle(ID_BRD_TOP,true);
   m_vToolBarText->setButton(ID_BRD_TOP,false);
 
   // border bottom
   pix = OPUIUtils::convertPixmap(ICON("borderbottom.xpm"));
+  toolTip = Q2C( i18n("Paragraph Border Bottom") );
   m_idButtonText_BorderBottom = m_vToolBarText->insertButton2(pix,ID_BRD_BOTTOM,SIGNAL(clicked()),this,"textBorderBottom",
-							       true,i18n("Paragraph Border Bottom"),-1);
+							       true,toolTip,-1);
   m_vToolBarText->setToggle(ID_BRD_BOTTOM,true);
   m_vToolBarText->setButton(ID_BRD_BOTTOM,false);
 
   // border color
   tmpBrd.color = black;
   colpix.data = CORBA::string_dup(colorToPixString(tmpBrd.color,FRAME_COLOR));
+  toolTip = Q2C( i18n("Paragraph Border Color") );
   m_idButtonText_BorderColor = m_vToolBarText->insertButton2(colpix,ID_BORDER_COLOR,SIGNAL(clicked()),this,"textBorderColor",
-							      true,i18n("Paragraph Border Color"),-1);
+							      true,toolTip,-1);
 
   // border width combobox
   OpenPartsUI::StrList widthlist;
@@ -2499,8 +2543,9 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
     widthlist[i-1] = CORBA::string_dup(buffer);
   }
   tmpBrd.ptWidth = 1;
+  toolTip = Q2C( i18n("Paragraph Border Width") );
   m_idComboText_BorderWidth = m_vToolBarText->insertCombo(widthlist,ID_BRD_WIDTH,false,SIGNAL(activated(const QString &)),
-							   this,"textBorderWidth",true,i18n("Paragraph Border Width"),
+							   this,"textBorderWidth",true,toolTip,
 							   60,-1,OpenPartsUI::AtBottom);
 
   // border style combobox
@@ -2510,8 +2555,9 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
   stylelist[2] = CORBA::string_dup(i18n("dot line (****)"));
   stylelist[3] = CORBA::string_dup(i18n("dash dot line (-*-*)"));
   stylelist[4] = CORBA::string_dup(i18n("dash dot dot line (-**-)"));
+  toolTip = Q2C( i18n("Paragraph Border Style") );
   m_idComboText_BorderStyle = m_vToolBarText->insertCombo(stylelist,ID_BRD_STYLE,false,SIGNAL(activated(const QString &)),
-							   this,"textBorderStyle",true,i18n("Paragraph Border Style"),
+							   this,"textBorderStyle",true,toolTip,
 							   150,-1,OpenPartsUI::AtBottom);
   tmpBrd.style = KWParagLayout::SOLID;
 
@@ -2523,51 +2569,59 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // border left
   pix = OPUIUtils::convertPixmap(ICON("borderleft.xpm"));
+  toolTip = Q2C( i18n("Frame Border Left") );
   m_idButtonFrame_BorderLeft = m_vToolBarFrame->insertButton2(pix,ID_FBRD_LEFT,SIGNAL(clicked()),this,"frameBorderLeft",
-							     true,i18n("Frame Border Left"),-1);
+							     true,toolTip,-1);
   m_vToolBarFrame->setToggle(ID_FBRD_LEFT,true);
   m_vToolBarFrame->setButton(ID_FBRD_LEFT,false);
 
   // border right
   pix = OPUIUtils::convertPixmap(ICON("borderright.xpm"));
+  toolTip = Q2C( i18n("Frame Border Right") );
   m_idButtonFrame_BorderRight = m_vToolBarFrame->insertButton2(pix,ID_FBRD_RIGHT,SIGNAL(clicked()),this,"frameBorderRight",
-							      true,i18n("Frame Border Right"),-1);
+							      true,toolTip,-1);
   m_vToolBarFrame->setToggle(ID_FBRD_RIGHT,true);
   m_vToolBarFrame->setButton(ID_FBRD_RIGHT,false);
 
   // border top
   pix = OPUIUtils::convertPixmap(ICON("bordertop.xpm"));
+  toolTip = Q2C( i18n("Frame Border Top") );
   m_idButtonFrame_BorderTop = m_vToolBarFrame->insertButton2(pix,ID_FBRD_TOP,SIGNAL(clicked()),this,"frameBorderTop",
-							    true,i18n("Frame Border Top"),-1);
+							    true,toolTip,-1);
   m_vToolBarFrame->setToggle(ID_FBRD_TOP,true);
   m_vToolBarFrame->setButton(ID_FBRD_TOP,false);
 
   // border bottom
   pix = OPUIUtils::convertPixmap(ICON("borderbottom.xpm"));
+  toolTip = Q2C( i18n("Frame Border Bottom") );
   m_idButtonFrame_BorderBottom = m_vToolBarFrame->insertButton2(pix,ID_FBRD_BOTTOM,SIGNAL(clicked()),this,"frameBorderBottom",
-							       true,i18n("Frame Border Bottom"),-1);
+							       true,toolTip,-1);
   m_vToolBarFrame->setToggle(ID_FBRD_BOTTOM,true);
   m_vToolBarFrame->setButton(ID_FBRD_BOTTOM,false);
 
   // border color
   tmpBrd.color = black;
   colpix.data = CORBA::string_dup(colorToPixString(frmBrd.color,FRAME_COLOR));
+  toolTip = Q2C( i18n("Frame Border Color") );
   m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2(colpix,ID_FBORDER_COLOR,SIGNAL(clicked()),this,"frameBorderColor",
-							      true,i18n("Frame Border Color"),-1);
+							      true,toolTip,-1);
 
+  toolTip = Q2C( i18n("Frame Border Width") );
   m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo(widthlist,ID_FBRD_WIDTH,false,SIGNAL(activated(const QString &)),
-							   this,"frameBorderWidth",true,i18n("Frame Border Width"),
+							   this,"frameBorderWidth",true,toolTip,
 							   60,-1,OpenPartsUI::AtBottom);
 
+  toolTip = Q2C( i18n("Frame Border Style") );
   m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo(stylelist,ID_FBRD_STYLE,false,SIGNAL(activated(const QString &)),
-							   this,"frameBorderStyle",true,i18n("Frame Border Style"),
+							   this,"frameBorderStyle",true,toolTip,
 							   150,-1,OpenPartsUI::AtBottom);
 
   // frame back color
   backColor.setColor(white);
   colpix.data = CORBA::string_dup(colorToPixString(backColor.color(),BACK_COLOR));
+  toolTip = Q2C( i18n("Frame Background Color") );
   m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2(colpix,ID_FBACK_COLOR,SIGNAL(clicked()),this,"frameBackColor",
-							      true,i18n("Frame Background Color"),-1);
+							      true,toolTip,-1);
 
   m_vToolBarFrame->enable(OpenPartsUI::Hide);
 

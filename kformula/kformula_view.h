@@ -53,7 +53,7 @@ protected:
 
     CORBA::Long addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 			       const char* pictname,
-			       const char* tooltip,
+			       const QString &tooltip,
 			       const char* func,
 			       CORBA::Long id );
 
