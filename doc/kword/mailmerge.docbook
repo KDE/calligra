@@ -105,7 +105,7 @@ click <guibutton>Execute</guibutton>, the new query results will appear.</para>
 <para>Or complex multitable queries:</para>
 <para><userinput>select eMail.FirstName, eMail.LastName, eMail.address, data.Birthday, 
 data.EyeColour from eMail, data where data.FirstName=eMail.FirstName and 
-data.LastName=eMail.LastName and eMail.LastName
+data.LastName=eMail.LastName
 </userinput></para>
 <para></para>
 <para></para></note>
