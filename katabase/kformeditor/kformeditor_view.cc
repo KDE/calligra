@@ -717,11 +717,6 @@ void KformEditorView::slotUpdateView()
 {
   if( !m_pDoc->isEmpty() )
   {
-    //want to make the backgound white
-    //setPalette( QPalette( white ) );
-
-    cerr << "AAAAARRRRGGGGHHHHH" << endl;
-
     resizeContents( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
   }
 
@@ -730,8 +725,6 @@ void KformEditorView::slotUpdateView()
 
 void KformEditorView::slotClick( WidgetWrapper* _widget )
 {
-  cerr << "KformEditorView::slotClick()" << endl;
-
   if( m_countSelectedWidgets == 0 )
   {
     emit unselectAll();
@@ -750,7 +743,7 @@ void KformEditorView::slotClick( WidgetWrapper* _widget )
     m_countSelectedWidgets = 1;
   }
   else if( ( m_countSelectedWidgets > 1 ) &&
-           ( _widget->selectState() == WidgetWrapper::SecondarySelect ) )
+           ( _widget->selectState() != WidgetWrapper::PrimarySelect ) )
   {
     emit unselectAll();
 
@@ -774,15 +767,13 @@ void KformEditorView::slotClick( WidgetWrapper* _widget )
 
 void KformEditorView::slotShiftClick( WidgetWrapper* _widget )
 {
-  cerr << "KformEditorView::slotShiftClick()" << endl;
-
   if( m_countSelectedWidgets == 0 )
   {
     emit unselectAll();
 
     m_primaryWidget = _widget;
     m_primaryWidget->slotSelectPrimary();
-    m_countSelectedWidgets == 1;
+    m_countSelectedWidgets = 1;
   }
   else if( ( m_countSelectedWidgets == 1 ) &&
            ( _widget->selectState() != WidgetWrapper::PrimarySelect ) )
@@ -790,11 +781,22 @@ void KformEditorView::slotShiftClick( WidgetWrapper* _widget )
     _widget->slotSelectSecondary();
     m_countSelectedWidgets++;
   }
-  else if( ( m_countSelectedWidgets > 1 ) &&
-           ( _widget->selectState() == WidgetWrapper::SecondarySelect ) )
+  else if( m_countSelectedWidgets > 1 )
   {
-    _widget->slotUnselect();
-    m_countSelectedWidgets--;
+    if( _widget->selectState() == WidgetWrapper::SecondarySelect )
+    {
+      _widget->slotUnselect();
+      m_countSelectedWidgets--;
+    }
+    else if( _widget->selectState() == WidgetWrapper::NoSelect )
+    {
+      _widget->slotSelectSecondary();
+      m_countSelectedWidgets++;
+    }
+    else
+    {
+      cerr << "ERROR IN DESIGN : Impossible Mouse select" << endl;
+    }
   }
   else if( ( m_countSelectedWidgets > 0 ) &&
            ( _widget->selectState() == WidgetWrapper::PrimarySelect ) )

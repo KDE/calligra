@@ -22,10 +22,12 @@
 // only for debug
 #include <iostream.h>
 
-ResizeWidget::ResizeWidget( Type _type, QColor _color, QWidget* _widget, WFlags f )
-  : QWidget( 0, 0 ), m_type ( _type ), m_color ( _color )
+ResizeWidget::ResizeWidget( Type _type, QColor _color, QWidget* _parent, WFlags f )
+  : QWidget( _parent, 0, f ), m_type ( _type ), m_color ( _color )
 {
   resize( 8, 8 );
+  raise();
+  setBackgroundColor( m_color );
 }
  
 ResizeWidget::~ResizeWidget()

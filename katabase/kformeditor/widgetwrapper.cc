@@ -22,6 +22,7 @@
 #include <qscrollview.h>
 
 #include "widgetwrapper.h"
+#include "resizewidget.h"
 
 // only for debug
 #include <iostream.h>
@@ -47,7 +48,7 @@ void WidgetWrapper::slotSelectPrimary()
   {
     cerr << "selecting primary : " << m_widget->name() << endl;
 
-    addExtraChilds( red );
+    addExtraChilds( black );
     m_selectState = PrimarySelect;
   }
 
@@ -60,7 +61,7 @@ void WidgetWrapper::slotSelectSecondary()
   {
     cerr << "selecting secondary : " << m_widget->name() << endl;
 
-    addExtraChilds( green );
+    addExtraChilds( darkGray );
     m_selectState = SecondarySelect;
   }
 
@@ -87,23 +88,44 @@ WidgetWrapper::SelectState WidgetWrapper::selectState()
 
 void WidgetWrapper::addExtraChilds( const QColor& _color )
 {
-  cerr << "adding extra childs" << endl;
+  // TODO: Remove this ugly SIZE construct here and add a constant to ResizeWidget
 
-  QWidget* w = new QWidget( this );
-  w->resize( size() );
-  w->setBackgroundColor( _color );
-  w->raise();
-  w->show();
-  w->installEventFilter( this );
+  int SIZE;
+
+  ResizeWidget* rw1 = new ResizeWidget( ResizeWidget::TopLeft, _color, this );
+  SIZE = rw1->size().width();
+  rw1->move( 0, 0 );
+  rw1->raise();
+  rw1->show();
+  //rw1->installEventFilter( this );
+
+  ResizeWidget* rw2 = new ResizeWidget( ResizeWidget::TopRight, _color, this );
+  rw2->move( size().width() - SIZE , 0 );
+  rw2->raise();
+  rw2->show();
+  //rw2->installEventFilter( this );
+
+  ResizeWidget* rw3 = new ResizeWidget( ResizeWidget::BottomLeft, _color, this );
+  rw3->move( 0, size().height() - SIZE );
+  rw3->raise();
+  rw3->show();
+  //rw3->installEventFilter( this );
+
+  ResizeWidget* rw4 = new ResizeWidget( ResizeWidget::BottomRight, _color, this );
+  rw4->move( size().width() - SIZE , size().height() - SIZE );
+  rw4->raise();
+  rw4->show();
+  //rw4->installEventFilter( this );
+
   raise();
+
+  QWidget::update();
 }
 
 void WidgetWrapper::removeExtraChilds()
 {
-  cerr << "removing extra childs" << endl;
-
   QWidget* obj;
-  QObjectList *list = QObject::queryList( "QWidget" );
+  QObjectList *list = QObject::queryList( "ResizeWidget" );
   QObjectListIt it( *list );             // iterate over all childs
  
   while( ( obj = ( (QWidget*) it.current() ) ) != 0 )   // for each found object...
@@ -111,12 +133,8 @@ void WidgetWrapper::removeExtraChilds()
     ++it;
     if( obj != m_widget )
     {
-      if( ( red == obj->backgroundColor() ) ||
-          ( green == obj->backgroundColor() ) )
-      {
-        obj->hide();
-        removeChild( obj );
-      }
+      obj->hide();
+      removeChild( obj );
     }
   }
   delete list;                           // delete the list, not the objects
@@ -140,25 +158,24 @@ bool WidgetWrapper::eventFilter( QObject* _obj, QEvent* _event )
       mpos = me->pos();
 
       if( me->state() & ShiftButton )
-      {
-        cerr << "LMB clicking + Shift" << endl;
-
         emit clickedShift( this );
-      }
       else
-      {
-        cerr << "LMB clicking" << endl;
-
         emit clicked( this );
-      }
     }
   }
-  if( _event->type() == QEvent::MouseMove )
+  if( ( _event->type() == QEvent::MouseMove ) &&
+      ( m_selectState == PrimarySelect ) )
   {
     me = (QMouseEvent*) _event;
     if( me->state() & LeftButton )
     {
-      move( x() - mpos.x() + me->x(), y() - mpos.y() + me->y() );
+      int xpos = x() - mpos.x() + me->x();
+      int ypos = y() - mpos.y() + me->y();
+
+      xpos = xpos > 0 ? xpos : 0;
+      ypos = ypos > 0 ? ypos : 0;
+ 
+      move( xpos, ypos );
     }
   }
   if( _event->type() == QEvent::MouseButtonRelease )

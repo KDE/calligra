@@ -30,7 +30,7 @@ public:
 
   enum Type { TopLeft, TopRight, BottomLeft, BottomRight, Top, Left, Right, Bottom };
 
-  ResizeWidget( Type _type, QColor _color, QWidget* _widget, WFlags f = 0 );
+  ResizeWidget( Type _type, QColor _color, QWidget* _parent = 0, WFlags f = 0 );
   ~ResizeWidget();
 
 protected:
