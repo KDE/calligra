@@ -6373,7 +6373,7 @@ bool KSpreadTable::testListChoose(const QPoint &_marker)
      {
        int col = c->column();
        if ( selection.left() <= col && selection.right() >= col
-	    &&!c->isObscuringForced())
+	    &&!c->isObscuringForced()&& !(col==_marker.x()&& c->row()==_marker.y()))
 	 {
 	   if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
 	      && !c->isTime() &&!c->isDate()

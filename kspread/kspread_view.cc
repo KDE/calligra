@@ -2179,7 +2179,7 @@ void KSpreadView::slotListChoosePopupMenu( )
    {
      int col = c->column();
      if ( selection.left() <= col && selection.right() >= col
-	  &&!c->isObscuringForced())
+	  &&!c->isObscuringForced()&& !(col==m_pCanvas->markerColumn()&& c->row()==m_pCanvas->markerRow()))
        {
 	 if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
          && !c->isTime() &&!c->isDate()
