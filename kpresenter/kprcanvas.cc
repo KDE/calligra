@@ -574,7 +574,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     oldMx = contentsPoint.x();
     oldMy = contentsPoint.y();
 
-    QPoint rasterPoint=applyGrid( contentsPoint,false );
+    QPoint rasterPoint=applyGrid( e->pos(), true );
 
     resizeObjNum = 0L;
 
@@ -6936,7 +6936,10 @@ QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
         newPos = m_view->kPresenterDoc()->zoomHandler()->unzoomPoint( pos );
     newPos.setX( static_cast<int>( newPos.x() / gridX ) * gridX );
     newPos.setY( static_cast<int>( newPos.y() / gridY ) * gridY );
-    return m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos );
+    QPoint point( m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos ) );
+    if ( offset )
+      point -= QPoint( diffx(), diffy() );
+    return point;    
 }
 
 int KPrCanvas::applyGridOnPosX( int pos ) const
