@@ -44,7 +44,8 @@ public :
 		
 	void setMode(KexiStartupFileDialog::Mode mode);
 	
-	KURL currentURL();
+//	KURL currentURL();
+	QString currentFileName();
 
 #ifndef Q_WS_WIN
 	KURLComboBox *locationWidget() const;
@@ -55,7 +56,8 @@ public :
 	
 	/*! \return true if the current URL meets requiec constraints (eg. exists);
 	 shows appropriate msg box if not */
-	bool checkURL();
+	bool checkFileName();
+//	bool checkURL();
 
 public slots:
 	virtual void show();
@@ -71,7 +73,8 @@ protected:
 	virtual void reject();
 
 private:
-	KURL m_lastUrl;
+//	KURL m_lastUrl;
+	QString m_lastFileName;
 	Mode m_mode;
 };
 

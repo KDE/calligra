@@ -298,7 +298,8 @@ void KexiStartupDialog::done(int r)
 			d->result = OpenExistingResult;
 			// return file or connection:
 			if (d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased) {
-				d->existingFileToOpen = d->openExistingFileDlg->currentURL().path();
+				d->existingFileToOpen = d->openExistingFileDlg->currentFileName();
+//				d->existingFileToOpen = d->openExistingFileDlg->currentURL().path();
 				d->selectedExistingConnection = 0;
 			} else {
 				d->existingFileToOpen = QString::null;
@@ -483,7 +484,8 @@ void KexiStartupDialog::updateDialogOKButton(QWidget *w)
 #endif
 	}
 	else if (w==d->pageOpenExisting) {
-		enable = !d->openExistingFileDlg->currentURL().path().isEmpty();
+//		enable = !d->openExistingFileDlg->currentURL().path().isEmpty();
+		enable = !d->openExistingFileDlg->currentFileName().isEmpty();
 	}
 	else if (w==d->pageOpenRecent) {
 		enable = (d->prj_selector->selectedProjectData()!=0);

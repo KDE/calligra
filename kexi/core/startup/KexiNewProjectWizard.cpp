@@ -285,7 +285,8 @@ void KexiNewProjectWizard::accept()
 		kdDebug() << "********** sender() " << sender()->className() << endl;
 		if (sender()==finishButton()) { /*(only if signal does not come from filedialog)*/
 			kdDebug() << "********** sender()==finishButton() ********" << endl;
-			if (!m_conn_sel->m_fileDlg->checkURL()) {
+//			if (!m_conn_sel->m_fileDlg->checkURL()) {
+			if (!m_conn_sel->m_fileDlg->checkFileName()) {
 				return;
 			}
 		}
@@ -342,7 +343,8 @@ QString KexiNewProjectWizard::projectDBName() const
 	if (d->lv_types->currentItem()==d->lvi_server) {
 		return m_server_db_name->le_dbname->text();
 	}
-	return m_conn_sel->m_fileDlg->currentURL().path();
+//	return m_conn_sel->m_fileDlg->currentURL().path();
+	return m_conn_sel->m_fileDlg->currentFileName();
 }
 
 QString KexiNewProjectWizard::projectCaption() const

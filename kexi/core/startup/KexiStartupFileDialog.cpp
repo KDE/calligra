@@ -110,11 +110,13 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 
 void KexiStartupFileDialog::show()
 {
-	m_lastUrl = KURL();
+	m_lastFileName = QString::null;
+//	m_lastUrl = KURL();
 	KFileDialog::show();
 }
 
-KURL KexiStartupFileDialog::currentURL()
+//KURL KexiStartupFileDialog::currentURL()
+QString KexiStartupFileDialog::currentFileName()
 {
 	setResult( QDialog::Accepted ); // selectedURL tests for it
 	
@@ -140,22 +142,26 @@ KURL KexiStartupFileDialog::currentURL()
 		}
 	}
 	kdDebug() << "KexiStartupFileDialog::currentURL() == " << path <<endl;
-	return KFileDialog::selectedURL();
+	return path;
+//	return KFileDialog::selectedURL();
 }
 
-bool KexiStartupFileDialog::checkURL()
+//bool KexiStartupFileDialog::checkURL()
+bool KexiStartupFileDialog::checkFileName()
 {
-	KURL url = currentURL();
-	QString path = url.path().stripWhiteSpace();
+//	KURL url = currentURL();
+//	QString path = url.path().stripWhiteSpace();
+	QString path = currentFileName().stripWhiteSpace();
 	
-	if (url.fileName().stripWhiteSpace().isEmpty()) {
+//	if (url.fileName().stripWhiteSpace().isEmpty()) {
+	if (path.isEmpty()) {
 		KMessageBox::error( this, i18n( "Enter a filename" ));
 		return false;
 	}
 	
 	kdDebug() << "KexiStartupFileDialog::checkURL() path: " << path  << endl;
-	kdDebug() << "KexiStartupFileDialog::checkURL() fname: " << url.fileName() << endl;
-	if ( url.isLocalFile() ) {
+//	kdDebug() << "KexiStartupFileDialog::checkURL() fname: " << url.fileName() << endl;
+//todo	if ( url.isLocalFile() ) {
 		QFileInfo fi(path);
 		if (mode() & KFile::ExistingOnly) {
 			if ( !fi.exists() ) {
@@ -173,28 +179,33 @@ bool KexiStartupFileDialog::checkURL()
 				return false;
 			}
 		}
-	}
+//	}
 	return true;
 }
 
 void KexiStartupFileDialog::accept()
 {
-	kdDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
-	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
-		m_lastUrl=KURL();
-		kdDebug() << "m_lastUrl==currentURL()" << endl;
+//	kdDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
+//	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
+	if (m_lastFileName==currentFileName()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
+//		m_lastUrl=KURL();
+		m_lastFileName=QString::null;
+		kdDebug() << "m_lastFileName==currentFileName()" << endl;
 #ifdef Q_WS_WIN
 		return;
 #endif
 	}
-	kdDebug() << "KexiStartupFileDialog::accept(): url = " << currentURL().path() << " " << endl;
-	if ( checkURL() ) {
+//	kdDebug() << "KexiStartupFileDialog::accept(): url = " << currentURL().path() << " " << endl;
+	kdDebug() << "KexiStartupFileDialog::accept(): path = " << currentFileName() << endl;
+//	if ( checkURL() ) {
+	if ( checkFileName() ) {
 		emit accepted();
 	}
 //	else {
 //		m_lastUrl = KURL();
 //	}
-	m_lastUrl = currentURL();
+//	m_lastUrl = currentURL();
+	m_lastFileName = currentFileName();
 }
 
 void KexiStartupFileDialog::reject()
