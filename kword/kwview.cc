@@ -2334,14 +2334,20 @@ void KWView::editReplace()
 void KWView::editFindNext()
 {
     if ( !m_findReplace ) // shouldn't be called before find or replace is activated
+    {
+        editFind();
         return;
+    }
     (void) m_findReplace->findNext();
 }
 
 void KWView::editFindPrevious()
 {
     if ( !m_findReplace ) // shouldn't be called before find or replace is activated
+    {
+        editFind();
         return;
+    }
     (void) m_findReplace->findPrevious();
 }
 
