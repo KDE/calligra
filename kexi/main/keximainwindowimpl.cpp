@@ -140,6 +140,7 @@ class KexiMainWindowImpl::Private
 		// view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
+		KRadioAction *last_checked_mode;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
@@ -185,6 +186,15 @@ class KexiMainWindowImpl::Private
 		forceDialogClosing=false;
 		insideCloseDialog=false;
 		createMenu=0;
+		last_checked_mode=0;
+	}
+
+	/*! Toggles last checked view mode radio action, if available. */
+	void toggleLastCheckedMode()
+	{
+		if (!last_checked_mode)
+			return;
+		last_checked_mode->setChecked(true);
 	}
 };
 
@@ -389,7 +399,8 @@ KexiMainWindowImpl::initActions()
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
 
 	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
-	d->action_edit_insert_empty_row->setToolTip(i18n("Inserts one empty row above currently selected table row"));
+	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
+	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
@@ -1536,25 +1547,33 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 
 void KexiMainWindowImpl::slotViewDataMode()
 {
-	if (!d->curDialog)
+	if (!d->curDialog) {
+		d->toggleLastCheckedMode();
 		return;
+	}
 	if (!d->curDialog->supportsViewMode( Kexi::DataViewMode )) {
 		// js TODO error...
+		d->toggleLastCheckedMode();
 		return;
 	}
 	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode )) {
 		// js TODO error...
+		d->toggleLastCheckedMode();
 		return;
 	}
 	invalidateSharedActions();
+	d->last_checked_mode = d->action_view_data_mode;
 }
 
 void KexiMainWindowImpl::slotViewDesignMode()
 {
-	if (!d->curDialog)
+	if (!d->curDialog) {
+		d->toggleLastCheckedMode();
 		return;
+	}
 	if (!d->curDialog->supportsViewMode( Kexi::DesignViewMode )) {
 		// js TODO error...
+		d->toggleLastCheckedMode();
 		return;
 	}
 	if (!d->curDialog->switchToViewMode( Kexi::DesignViewMode )) {
@@ -1562,21 +1581,27 @@ void KexiMainWindowImpl::slotViewDesignMode()
 		return;
 	}
 	invalidateSharedActions();
+	d->last_checked_mode = d->action_view_design_mode;
 }
 
 void KexiMainWindowImpl::slotViewTextMode()
 {
-	if (!d->curDialog)
+	if (!d->curDialog) {
+		d->toggleLastCheckedMode();
 		return;
+	}
 	if (!d->curDialog->supportsViewMode( Kexi::TextViewMode )) {
 		// js TODO error...
+		d->toggleLastCheckedMode();
 		return;
 	}
 	if (!d->curDialog->switchToViewMode( Kexi::TextViewMode )) {
 		// js TODO error...
+		d->toggleLastCheckedMode();
 		return;
 	}
 	invalidateSharedActions();
+	d->last_checked_mode = d->action_view_text_mode;
 }
 
 void
