@@ -2072,7 +2072,7 @@ void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpace
     // Translate emptySpaceRegion in device coordinates
     // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
     QRegion devReg;
-    QArray<QRect>rs = emptySpaceRegion.rects();
+    QMemArray<QRect>rs = emptySpaceRegion.rects();
     rs.detach();
     for ( uint i = 0 ; i < rs.size() ; ++i )
     {
