@@ -124,8 +124,8 @@ VText::VText( VObject* parent, VState state )
 	m_boundingBoxIsInvalid = true;
 	m_stroke = new VStroke( this );
 	m_fill = new VFill();
-	m_position			= 0;
-	m_alignment			= 0;
+	m_position			= (VText::Position)0;
+	m_alignment			= (VText::Alignment)0;
 	m_shadow			= false;
 	m_translucentShadow	= false;
 	m_shadowAngle		= 0;
@@ -200,7 +200,7 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 			}
 			int shadowDx = int( m_shadowDistance * cos( m_shadowAngle / 360. * 6.2832 ) );
 			int shadowDy = int( m_shadowDistance * sin( m_shadowAngle / 360. * 6.2832 ) );
-		
+
 			VTransformCmd trafo( 0L, QWMatrix() );
 			for( itr.toFirst(); itr.current(); ++itr )
 			{
@@ -247,7 +247,7 @@ VText::boundingBox() const
 		VCompositeListIterator itr( m_glyphs );
 		itr.toFirst();
 		// clear:
-		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect(); 
+		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
 		for( ++itr; itr.current(); ++itr )
 			if( !itr.current()->boundingBox().isEmpty() )
 				m_boundingBox |= itr.current()->boundingBox();
@@ -263,7 +263,7 @@ VText::boundingBox() const
 	}
 
 	return m_boundingBox;
-} 
+}
 
 VText*
 VText::clone() const
@@ -274,7 +274,7 @@ VText::clone() const
 VGroup* VText::toVGroup() const
 {
 	VGroup* group = new VGroup( parent() );
-	
+
 	VCompositeListIterator itr( m_glyphs );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
@@ -282,10 +282,10 @@ VGroup* VText::toVGroup() const
 		c->setParent( group );
 		group->append( c );
 	}
-	
+
 	group->setFill( *m_fill );
 	group->setStroke( *m_stroke );
-	
+
 	return group;
 } // VText::toVGroup
 
@@ -373,7 +373,7 @@ VText::load( const QDomElement& element )
 	m_fill->setFillRule( VFill::evenOdd );
 }
 
-void 
+void
 VText::setState( const VState state )
 {
 	VObject::setState( state );
@@ -511,7 +511,7 @@ VText::traceText()
 	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
 		VComposite* composite = m_glyphs.at( i );
-	
+
 		// Step 1: place (0, 0) to the rotation center of the glyph.
 		dx = *glyphXAdvance.at( i ) / 2;
 		x += dx;
@@ -622,7 +622,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 	}
 
 	// Kill pattern
-	FcPatternDestroy( match ); 
+	FcPatternDestroy( match );
 
 	return fileName;
 }
