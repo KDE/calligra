@@ -92,15 +92,15 @@ dnl ========================================
 dnl Libpqxx header/library directories
 dnl ========================================
 
-AC_ARG_WITH(pqxxsincdir,
-AC_HELP_STRING([--with-pqxxsincdir=DIR],[use PostgreSQL(libpqxx)-includes installed in this directory ]),
+AC_ARG_WITH(pqxxincdir,
+AC_HELP_STRING([--with-pqxxincdir=DIR],[use PostgreSQL(libpqxx)-includes installed in this directory ]),
 [
-  ac_ppqxx_incdir=$withval
+  ac_pqxx_incdir=$withval
 ], ac_pqxx_incdir=/usr/local/pqxx/include/pqxx
 )
 
 AC_ARG_WITH(pqxxlibdir,
-AC_HELP_STRING([--with-pqxxslibdir=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
+AC_HELP_STRING([--with-pqxxlibdir=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
 [
   ac_pqxx_libdir=$withval
 ], ac_pqxx_libdir=/usr/local/lib
