@@ -714,20 +714,21 @@ void KivioSMLStencil::drawOutlineTextBox( KivioShape *pShape, KivioIntraStencilD
   KivioPoint *pPosition = pShapeData->position();
   KivioPoint *pDimensions = pShapeData->dimensions();
   KivioPainter *painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
 
   if( pShapeData->text().length() <= 0 ) {
     return;
   }
 
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
-  _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
-  _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
+  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
+  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _w = zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
+  _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
 
   QFont f = pShapeData->textFont();
-  f.setPixelSize(m_zoomHandler->zoomItY(f.pixelSize()));
+  f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
   painter->setFont( f );
   painter->setTextColor( QColor(0, 0, 0) );
 
@@ -1335,20 +1336,21 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
   KivioPoint *pPosition = pShapeData->position();
   KivioPoint *pDimensions = pShapeData->dimensions();
   KivioPainter *painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
 
 
   if( pShapeData->text().length() <= 0 ) {
     return;
   }
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
-  _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
-  _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
+  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
+  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _w = zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
+  _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
 
   QFont f = pShapeData->textFont();
-  f.setPixelSize( m_zoomHandler->zoomItY(f.pixelSize()) );
+  f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
   painter->setFont( f );
   painter->setTextColor( pShapeData->textColor() );
 

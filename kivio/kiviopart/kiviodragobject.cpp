@@ -34,11 +34,14 @@
 #include "kivio_page.h"
 #include "kivio_screen_painter.h"
 #include "kivio_intra_stencil_data.h"
+#include "kivio_doc.h"
+#include "kivio_stencil_spawner.h"
 
 KivioDragObject::KivioDragObject(QWidget* dragSource, const char* name)
   : QDragObject(dragSource, name)
 {
   m_decodeMimeList.append("application/vnd.kde.kivio");
+  m_decodeMimeList.append("text/plain");
   m_encodeMimeList[0] = "application/vnd.kde.kivio";
   m_encodeMimeList[1] = "text/xml";
   m_encodeMimeList[2] = "text/plain";
@@ -99,6 +102,17 @@ bool KivioDragObject::decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPa
       sl.append(stencil->duplicate());
       stencil = l.stencilList()->next();
     }
+  } else if(e->provides(m_decodeMimeList[1])) {
+    QString str;
+    ok = QTextDrag::decode(e, str);
+    KivioStencilSpawner* ss = page->doc()->findInternalStencilSpawner("Dave Marotti - Text");
+    KivioStencil* stencil = ss->newStencil();
+    stencil->setPosition(0, 0);
+    stencil->setDimensions(100, 100);
+    stencil->setText(str);
+    stencil->setTextFont(page->doc()->defaultFont());
+    sl.clear();
+    sl.append(stencil);
   }
 
   return ok;
