@@ -8,9 +8,9 @@ librtfexport_la_LIBADD = $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = librtfexport.la
 
-librtfexport_la_SOURCES = rtfexport.cc kwExport.cc docinfoExport.cc tagprocessing.cc kiExport.cc kiRTFExport.cc
+librtfexport_la_SOURCES = rtfexport.cc kwExport.cc docinfoExport.cc tagprocessing.cc
 
-noinst_HEADERS = rtfexport.h kwExport.h docinfoExport.h tagprocessing.h kiExport.h kiRTFExport.h
+noinst_HEADERS = rtfexport.h kwExport.h docinfoExport.h tagprocessing.h
 
 METASOURCES = AUTO
 

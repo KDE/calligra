@@ -41,12 +41,34 @@
 extern int GhType;  // defines header type
 extern int GfType;
 
+
+class VariableData
+{
+public:
+    VariableData () {}
+    VariableData ( const QString& text ) : m_text(text) {}
+public:
+    /**
+     * Set parameters of a <LINK> element
+     */
+    void setLink(const QString& linkName, const QString& hrefName);
+    QString getLinkName(void) const; // Name of link (attribute "linkName" of <LINK>)
+    QString getHrefName(void) const; // Reference of link (attribute "hrefName" of <LINK>)
+    /**
+     * Set paramaeters of a <PGNUM> element
+     */
+    void setPgNum(const QString& subtype, const QString& value);
+    bool isPageNumber(void) const;
+    bool isPageCount(void) const;
+public:
+    QString m_key;
+    QString m_text;
+    int m_type;
+protected:
+    QMap<QString,QString> propertyMap;
+};
+
 /***************************************************************************/
-
-// Reportedly, the capability to set tabs will be taken out of kword
-// at some time in the future.
-// Note from David Faure: of course not ! Just needs to be reimplemented, that's all :)
-
 class TabularData
    {
    public:
@@ -55,32 +77,6 @@ class TabularData
    int ptpos;  // position of the tab stop in pts
    int type;  // alignment of data - 0 = left, 1 = center, 2 = right, 3 = decimal
    }; // end TabularD
-
-/***************************************************************************/
-class Time
-   {
-   public:
-   Time() { msecond = -1; second = -1; minute = -1; hour = -1; fix = -1; }
-
-   int msecond;
-   int second;
-   int minute;
-   int hour;
-   int fix;
-   }; // end TIme
-
-
-/***************************************************************************/
-class Date
-   {
-   public:
-   Date() { day = -1; month = -1; year = -1; fix = -1; }
-
-   int day;
-   int month;
-   int year;
-   int fix;
-   }; // end TIme
 
 /***************************************************************************/
 // Used to store LEFTBORDER, RIGHTBORDER, TOPBORDER, BOTTOMBORDER  tag data
@@ -180,13 +176,9 @@ class TextFormatting
                        int     v,
                        int     r,
                        int     b,
-                       int     g,
-                       int     pn,
-                       Time    t,
-                       Date    d,
-                       int     ty ) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
+                       int     g ) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
                        fontName (f), italic (i), underline (u), strikeout (so), vertalign(v),
-                       red (r), blue (b), green (g), pageNum (pn), time (t), date (d), varType (ty){}
+                       red (r), blue (b), green (g){}
 
       int     formatId;
       int     pos;
@@ -201,10 +193,7 @@ class TextFormatting
       int     red;
       int     blue;
       int     green;
-      int     pageNum;
-      Time    time;
-      Date    date;
-      int     varType;
+      VariableData    variable;
 };
 
 /***************************************************************************/
@@ -571,17 +560,5 @@ AnchoredInsert *findAnchoredInsert (AnchoredInsert   searchElement,
 void ProcessColorTag ( QDomNode    myNode,
                        void       *tagData,
                        QString    &         );
-
-void ProcessTypeTag ( QDomNode   myNode,
-                      void      *tagData,
-                      QString   &         );
-
-void ProcessDateTag ( QDomNode    myNode,
-                      void       *tagData,
-                      QString    &         );
-
-void ProcessTimeTag ( QDomNode    myNode,
-                      void       *tagData,
-                      QString    &         );
 
 #endif

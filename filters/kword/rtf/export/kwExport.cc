@@ -21,6 +21,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qmap.h>
+
 #include <kwExport.h>
 #include <docinfoExport.h>
 
@@ -31,6 +33,42 @@ BorderStyle rightBorder;
 BorderStyle topBorder;
 BorderStyle bottomBorder;
 PaperBorders paperBorders; // initialized by class init
+
+// class VariableData
+
+void VariableData::setLink(const QString& linkName, const QString& hrefName)
+{
+    propertyMap["link:linkName"]=linkName;
+    propertyMap["link:hrefName"]=hrefName;
+}
+
+QString VariableData::getLinkName(void) const
+{
+    return propertyMap["link:linkName"];
+}
+
+QString VariableData::getHrefName(void) const
+{
+    return propertyMap["link:hrefName"];
+}
+
+void VariableData::setPgNum(const QString& subtype, const QString& value)
+{
+    propertyMap["pgnum:subtype"]=subtype;
+    propertyMap["pgnum:value"]=value;
+}
+
+bool VariableData::isPageNumber(void) const
+{
+    const int num=propertyMap["pgnum:subtype"].toInt();
+    return (num==0);
+}
+
+bool VariableData::isPageCount(void) const
+{
+    const int num=propertyMap["pgnum:subtype"].toInt();
+    return (num==1);
+}
 
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
@@ -43,7 +81,7 @@ PaperBorders paperBorders; // initialized by class init
 // (which it can choose to ignore). Currently implemented is
 // processing for the following tags and attributes:
 //
-//
+// ### TODO: update the following list
 // maindoc.xml (root):
 // DOC
 //   ATTRIBUTES  processing standardpage hasHeader hasFooter unit
@@ -210,69 +248,66 @@ void ProcessIndentTag ( QDomNode    myNode,
     AllowNoSubtags (myNode);
 }   // end ProcessIndentTag
 
-
-void ProcessTimeTag ( QDomNode    myNode,
-                      void       *tagData,
-                      QString    &         )
-// Gets the attributes in the time tags
-// called by ProcessFormatTag()
-
+static void ProcessLinkTag (QDomNode myNode, void *tagData, QString&)
 {
-    Time *time = (Time *) tagData;
+    VariableData *variable = (VariableData *) tagData;
 
+    QString linkName, hrefName;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "msecond", "int", (void *) &time->msecond )
-                       << AttrProcessing ( "second",  "int", (void *) &time->second  )
-                       << AttrProcessing ( "minute",  "int", (void *) &time->minute  )
-                       << AttrProcessing ( "hour",    "int", (void *) &time->hour    )
-                       << AttrProcessing ( "fix",     "int", (void *) &time->fix     );
+    attrProcessingList.append ( AttrProcessing ("linkName", "QString", &linkName) );
+    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", &hrefName) );
     ProcessAttributes (myNode, attrProcessingList);
 
+    variable->setLink(linkName, hrefName);
+}
 
-    AllowNoSubtags (myNode);
-}   // end ProcessTimeTag
 
-
-void ProcessDateTag ( QDomNode    myNode,
-                      void       *tagData,
-                      QString    &         )
-// Gets the attributes in the Date tags
-// called by ProcessFormatTag()
-
+static void ProcessPgNumTag (QDomNode myNode, void *tagData, QString&)
 {
-    Date *date = (Date *) tagData;
+    VariableData *variable = (VariableData *) tagData;
 
+    QString subtype, value;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "day",   "int", (void *) &date->day   )
-                       << AttrProcessing ( "month", "int", (void *) &date->month )
-                       << AttrProcessing ( "year",  "int", (void *) &date->year  )
-                       << AttrProcessing ( "fix",   "int", (void *) &date->fix   );
+    attrProcessingList.append ( AttrProcessing ("subtype", "QString", &subtype) );
+    attrProcessingList.append ( AttrProcessing ("value",   "QString", &value  ) );
     ProcessAttributes (myNode, attrProcessingList);
 
+    variable->setPgNum(subtype, value);
+}
 
-    AllowNoSubtags (myNode);
-}   // end ProcessDateTag
 
-/***************************************************************************/
-
-// ProcessTypeTag is used to process the type attribute in the TYPE tag
-// called by ProcessFormatTat()
-
-void ProcessTypeTag ( QDomNode   myNode,
-                      void      *tagData,
-                      QString   &         )
+static void ProcessTypeTag (QDomNode myNode, void *tagData, QString&)
 {
-    int *value = (int *) tagData;
+    VariableData *variable = (VariableData *) tagData;
 
-    *value = -1;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type", "int", (void *) value );
+    attrProcessingList.append ( AttrProcessing ("key",  "QString", &variable->m_key ) );
+    attrProcessingList.append ( AttrProcessing ("text", "QString", &variable->m_text) );
+    attrProcessingList.append ( AttrProcessing ("type", "int",     &variable->m_type) );
     ProcessAttributes (myNode, attrProcessingList);
-    AllowNoSubtags (myNode);
+}
 
-}  // end ProcessTypeTag()
+static void ProcessVariableTag (QDomNode myNode, void* tagData, QString& outputText)
+{
+    VariableData *variable = (VariableData *) tagData;
+
+    QValueList<TagProcessing> tagProcessingList;
+    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK|NOTE"
+    tagProcessingList
+        << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
+        << TagProcessing ( "PGNUM",         ProcessPgNumTag,        variable )
+        << TagProcessing ( "DATE",          NULL,                   NULL      )
+        << TagProcessing ( "TIME",          NULL,                   NULL      )
+        << TagProcessing ( "CUSTOM",        NULL,                   NULL      )
+        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL      )
+        << TagProcessing ( "FIELD",         NULL,                   NULL      )
+        << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
+        << TagProcessing ( "NOTE",          NULL,                   NULL      )
+        ;
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
 
 /***************************************************************************/
 
@@ -426,6 +461,10 @@ void   ProcessFlowTag ( QDomNode    myNode,
     attrProcessingList << AttrProcessing ( "align", "QString", (void *) &flow );
     ProcessAttributes (myNode, attrProcessingList);
 
+    // ### TODO: implement it better. MS Word can probably do "auto"
+    if (flow=="auto")
+        flow="left";
+
     // Put flow into layout structure
     layout->flow = flow;
 
@@ -556,12 +595,12 @@ void ProcessAnchorTag ( QDomNode    myNode,
                        << AttrProcessing ( "instance", "QString", (void *) instance );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if ( type != "grpMgr" )
+    if (( type != "grpMgr" ) && ( type != "frameset"))
     {
        kdError (KDEBUG_KWFILTER) << "Unknown anchor type " << type << "!" << endl;
     }
 
-    if ( (*instance).length () == 0 )
+    if ( (*instance).isEmpty() )
     {
         kdError (KDEBUG_KWFILTER) << "Bad instance name!" << endl;
     }
@@ -691,14 +730,12 @@ void ProcessFormatTag ( QDomNode   myNode,
              int     fontSize     = -1;
              int     fontWeight   = -1;
              int     vertalign    = -1;
-             int     pageNum      = -1;
-             int     varType      = -1;
-             Time    time;
-             Date    date;
              QString fontName = "";
              bool    italic    = false;
              bool    underline = false;
              bool    strikeout = false;
+             VariableData variable;
+
              QValueList<TagProcessing> tagProcessingList;
              tagProcessingList << TagProcessing ( "SIZE",      ProcessIntValueTag,  (void *) &fontSize   )
                                << TagProcessing ( "WEIGHT",    ProcessIntValueTag,  (void *) &fontWeight )
@@ -707,16 +744,15 @@ void ProcessFormatTag ( QDomNode   myNode,
                                << TagProcessing ( "FONT",      ProcessFontTag,      (void *) &fontName   )
                                << TagProcessing ( "VERTALIGN", ProcessIntValueTag,  (void *) &vertalign  )
                                << TagProcessing ( "COLOR",     ProcessColorTag,     (void *) &color      )
-                               << TagProcessing ( "DATE",      ProcessDateTag,      (void *) &date       )
-                               << TagProcessing ( "TIME",      ProcessTimeTag,      (void *) &time       )
-                               << TagProcessing ( "PGNUM",     ProcessIntValueTag,  (void *) &pageNum    )
-                               << TagProcessing ( "TYPE",      ProcessTypeTag,      (void *) &varType    )
-                               << TagProcessing ( "ITALIC",    ProcessItalicTag,    (void *) &italic     );
+                               << TagProcessing ( "ITALIC",    ProcessItalicTag,    (void *) &italic     )
+                               << TagProcessing ( "VARIABLE",  ProcessVariableTag,  &variable);
              ProcessSubtags (myNode, tagProcessingList, outputText);
 
-             (*formatDataList) << FormatData ( TextFormatting (formatId, formatPos,
+             FormatData formatData( TextFormatting (formatId, formatPos,
              formatLen, fontSize, fontWeight, fontName, italic, underline, strikeout,
-             vertalign, color.red, color.blue, color.green, pageNum, time, date, varType ));
+             vertalign, color.red, color.blue, color.green));
+             formatData.text.variable=variable;
+             (*formatDataList) << formatData;
           }
 
           break;
@@ -724,6 +760,7 @@ void ProcessFormatTag ( QDomNode   myNode,
        case 2:   // pictures
           if ( formatPos != -1 && formatLen == -1 )
           {
+            // ### TODO: text images (even it is only KOffice 1.0 stuff, they have changed in KWord 1.2 to fix a bug.)
              QString pictureName;
              QValueList<TagProcessing> tagProcessingList;
              tagProcessingList << TagProcessing ( "FILENAME", ProcessValueTag, &pictureName );
@@ -807,11 +844,6 @@ void ProcessFrameTag ( QDomNode    myNode,
                        << AttrProcessing ( "left",              "int",    (void *) &frame->left               )
                        << AttrProcessing ( "top",               "int",    (void *) &frame->top                )
                        << AttrProcessing ( "bottom",            "int",    (void *) &frame->bottom             )
-                       // The following four are not in the dtd
-                       << AttrProcessing ( "bleftpt",           "",       NULL                                )
-                       << AttrProcessing ( "brightpt",          "",       NULL                                )
-                       << AttrProcessing ( "bbottompt",         "",       NULL                                )
-                       << AttrProcessing ( "btoppt",            "",       NULL                                )
                        << AttrProcessing ( "runaround",         "int",    (void *) &frame->runaround          )
                        << AttrProcessing ( "runaroundGap",      "int",    (void *) &frame->runaroundGap       )
                        << AttrProcessing ( "autoCreateNewFrame","int",    (void *) &frame->autoCreateNewFrame )
@@ -852,7 +884,7 @@ void ProcessFramesetTag ( QDomNode   myNode,
     ProcessAttributes  (myNode, attrProcessingList);
     (*docData).frameInfo = frameInfo;
     (*docData).grpMgr = false;  // indicate no group manager
-    if ( grpMgr.length () == 0 )  // no grpMgr, not a table
+    if ( grpMgr.isEmpty() )  // no grpMgr, not a table
     {
         // process as a paragraph
         QValueList<TagProcessing> tagProcessingList;
@@ -942,8 +974,8 @@ void ProcessPixmapsKeyTag ( QDomNode   myNode,
     QString   key;
     QString   name;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "key",  "QString", (void *) &key  )
-                       << AttrProcessing ( "name", "QString", (void *) &name );
+    attrProcessingList << AttrProcessing ( "filename", "QString", &key  )
+                       << AttrProcessing ( "name",     "QString", &name );
     ProcessAttributes (myNode, attrProcessingList);
 
     AnchoredInsert *anchoredInsert = findAnchoredInsert ( AnchoredInsert ( Picture (key),

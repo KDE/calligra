@@ -114,7 +114,7 @@ QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
                     QString preceedingText, QString followingText,
                     bool section, bool multiLevel);
 
-QString escapeRTFsymbols( QString text);
+QString escapeRTFsymbols(const QString& text);
 
 void paperSize( PaperAttributes &paper, PaperBorders &paperBorders  );
 

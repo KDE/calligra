@@ -24,8 +24,6 @@
 #include <qregexp.h>
 #include <rtfexport.moc>
 #include <qdatetime.h>
-#include <kiExport.h>
-#include <kiRTFExport.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 
@@ -148,11 +146,6 @@ QValueList<Variable>::Iterator varListIt; // iterator for variables list
                      text = text.replace( 0, 5, (*varListIt).markup );
                      varListIt++;
                      }  // end if(varList.isEmpty() && ...)
-
-                   // escape special kword symbols
-                  text = text.replace ( QRegExp ( "&amp;" ), "&" )
-                             .replace ( QRegExp ( "&lt;" ), "<"  )
-                             .replace ( QRegExp ( "&gt;" ), ">"  );
 
                   // escape special RTF symbols for non-variables
                   if( (*paraFormatDataIt).text.formatId != 4 )
@@ -463,46 +456,61 @@ void ProcessTableData ( Table   &table,
 // a KWord XML file.
 /***************************************************************************/
 
-bool ProcessStoreFile ( QString   storeFileName,
-                        QString   storeCompFileName,
-                        void     (*processor)(QDomNode, void *, QString &),
-                        QString   exportFileName,
-                        QString  &outputBuffer )
+static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
 {
-    KoStore* store = KoStore::createStore (storeFileName, KoStore::Read);
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
 
-    if ( !store->open (storeCompFileName) )
+    if ( !doc.setContent (subFile, &errorMsg, &errorLine, &errorColumn) )
     {
-        delete store;
-        kdError (KDEBUG_RTFFILTER) << "Unable to open KoStore " << storeFileName
-                                       << " component " << storeCompFileName << "!" << endl;
+        kdError (30508) << "Parsing Error! Aborting! (in ParseFile)" << endl
+            << "  Line: " << errorLine << " Column: " << errorColumn << endl
+            << "  Message: " << errorMsg << endl;
+        // ### TODO: user message
         return false;
     }
-
-    QByteArray byteArrayIn = store->read ( store->size () );
-    store->close ();
-    delete store;
-
-    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
-
-    QDomDocument qDomDocumentIn;
-    qDomDocumentIn.setContent (stringBufIn);
-
-#if 0
-    kdError (KDEBUG_RTFFILTER) << "DOM document type of KoStore " << storeFileName
-                                    << " component " << storeCompFileName
-                                    << " is " << qDomDocumentIn.doctype ().name () << "." << endl;
-#endif
-
-    QDomNode docNode = qDomDocumentIn.documentElement ();
-
-    FilterData filterData;
-    filterData.storeFileName = storeFileName;
-    filterData.exportFileName = exportFileName;
-    processor (docNode, &filterData, outputBuffer);
-
     return true;
-}  // end ProcessStoreFile()
+}
+
+static bool ProcessStoreFile ( QIODevice* subFile,
+    void (*processor) (QDomNode, void *, QString& ),
+    QString exportFileName,
+    QString& outputBuffer )
+{
+    if (!subFile)
+    {
+        kdWarning(30508) << "Could not get a device for the document!" << endl;
+    }
+    else if ( subFile->open ( IO_ReadOnly ) )
+    {
+        kdDebug (30508) << "Processing Document..." << endl;
+        QDomDocument doc;
+        if (!ParseFile(subFile, doc))
+        {
+            subFile->close();
+            return false;
+        }
+        // We must close the subFile before processing,
+        //  as the processing could open other sub files.
+        //  However, it would crash if two sub files are opened together
+        subFile->close();
+
+        QDomNode docNode = doc.documentElement();
+        
+        FilterData filterData;
+        filterData.storeFileName = QString::null;
+        filterData.exportFileName = exportFileName;
+        processor (docNode, &filterData, outputBuffer);
+        return true;
+    }
+    else
+    {
+        // Note: we do not worry too much if we cannot open the document info!
+        kdWarning (30508) << "Unable to open document!" << endl;
+    }
+    return false;
+}
 
 /***************************************************************************/
 // The virtual function called by the file dialog to export the RTF file
@@ -522,36 +530,34 @@ KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCStr
 
 
     if( to == "text/rtf" && from == "application/x-kword" )
-       {
-       filterType = kword;
-       }
-    else if( to == "text/rtf" && from == "application/x-killustrator" )
-       {
-       filterType = killustrator;
-       }
+    {
+        filterType = kword;
+    }
     else
-       {
-       return KoFilter::NotImplemented;
-       }
+    {
+        return KoFilter::NotImplemented;
+    }
 
-    QString filenameIn = m_chain->inputFile();
     QString filenameOut = m_chain->outputFile();
     QString stringBufOut;
     QString mainDoc;
-    QString kiDoc;
     QString docInf;
 
     pageMarkup = "";
 
-    ProcessStoreFile ( filenameIn, "documentinfo.xml", &ProcessDocumentInfoTag, filenameOut, docInf );
-    if(filterType == kword )
-       {
-       ProcessStoreFile ( filenameIn, "root", ProcessDocTag, filenameOut, mainDoc );
-       }
-    else
-       {
-       ProcessStoreFile ( filenameIn, "root", ProcessKillustratorTag, filenameOut, kiDoc );
-       }
+    KoStoreDevice* subFile;
+
+    subFile=m_chain->storageFile("documentinfo.xml",KoStore::Read);
+    kdDebug (KDEBUG_RTFFILTER) << "Processing documentinfo.xml..." << endl;
+    // Do not care if we cannot open the document info.
+    ProcessStoreFile (subFile, ProcessDocumentInfoTag, filenameOut, docInf );
+
+    subFile=m_chain->storageFile("root",KoStore::Read);
+    kdDebug (KDEBUG_RTFFILTER) << "Processing root..." << endl;
+    if (!ProcessStoreFile (subFile, ProcessDocTag, filenameOut, mainDoc ))
+    {
+        return KoFilter::StupidError;
+    }
 
     // Compose the RTF file
     // Begin rtf document
@@ -574,14 +580,7 @@ KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCStr
     stringBufOut += "\\linex0\\endnhere\\plain";
 
     // Markup from main parse
-    if( filterType == kword )
-       {
-       stringBufOut += mainDoc;
-       }
-    else if( filterType == killustrator )
-       {
-       stringBufOut += kiDoc;
-       }
+    stringBufOut += mainDoc;
 
     stringBufOut += " }}";   // file terminator
 
@@ -596,6 +595,7 @@ KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCStr
         return KoFilter::StupidError;
     }
 
+    // ### FIXME: local8bit could return a character in multiples bytes, so using QString::length() is wrong
     fileOut.writeBlock ( (const char *) stringBufOut.local8Bit (), stringBufOut.length () );
     fileOut.close ();
 
@@ -800,15 +800,15 @@ QString fontTableMarkup(QString fontName, QValueList< FontTable > &fontTable,
 
 /***************************************************************************/
 
-QString escapeRTFsymbols( QString text)
-   {
-   QString text1;
+QString escapeRTFsymbols(const QString& text)
+{
+   QString text1(text);
 
-   text1 = text.replace( QRegExp( "\\"), "\\\\");
+   text1 = text1.replace( QRegExp( "\\"), "\\\\");
    text1 = text1.replace( QRegExp( "{"), "\\{");
    text1 = text1.replace( QRegExp( "}"), "\\}");
    return text1;
-   }  // end escapeRTFsymbols()
+}  // end escapeRTFsymbols()
 
 /***************************************************************************/
 // The following function encodes the kword unicode characters into
@@ -1185,14 +1185,6 @@ QValueList < FormatData > combineFormatData(  QValueList<FormatData> &paraFormat
          if( (*formatIt).text.vertalign == -1 )
             {
             (*formatIt).text.vertalign  = (*paraFormatDataIt).text.vertalign ;
-            }
-         if( (*formatIt).text.varType == -1 )
-            {
-            (*formatIt).text.varType  = (*paraFormatDataIt).text.varType ;
-            }
-         if( (*formatIt).text.pageNum == -1 )
-            {
-            (*formatIt).text.pageNum  = (*paraFormatDataIt).text.pageNum ;
             }
          if( (*formatIt).text.formatId == -1 )
             {
@@ -1732,60 +1724,51 @@ QString borderMarkup (QString borderId, BorderStyle *border )
 
 void processVariables( QValueList<Variable>&varList,
                        QValueList<FormatData>paraFormat )
-   {
-   QString markup;
+{
    QValueList<FormatData>::Iterator  paraFormatDataIt;
 
    for( paraFormatDataIt = paraFormat.begin();
         paraFormatDataIt != paraFormat.end();
         paraFormatDataIt++ )
-      {
+   {
 
       if((*paraFormatDataIt).text.formatId  == 4 )  // indicates format for variable insert
+      {
+         QString markup;
+         switch ((*paraFormatDataIt).text.variable.m_type )
          {
-         switch ((*paraFormatDataIt).text.varType )
-            {
-            case 0:  // fixed date
+            case 0:  // variable date
                {
-               // convert date to QString
-               QDate fixDate = QDate( (*paraFormatDataIt).text.date.year,
-                                      (*paraFormatDataIt).text.date.month,
-                                      (*paraFormatDataIt).text.date.day );
-               markup = fixDate.toString();
-               break;
+                   // ### TODO: fixed date
+                   markup = "\\chdate";
+                   break;
                }
-            case 1:  // variable date
+            case 2:  // variable time
                {
-               markup = "\\chdate";
-               break;
-               }
-            case 2:  // fixed time
-               {
-               markup = QString::number( (*paraFormatDataIt).text.time.hour );   // 24 hour format?
-               markup += ":";
-               markup += QString::number( (*paraFormatDataIt).text.time.minute );
-               break;
-               }
-            case 3:  // variable time
-               {
-               markup = "\\chtime";
-               break;
+                   // ### TODO: fixed time
+                   markup = "\\chtime";
+                   break;
                }
             case 4:  // page number
                {
-               markup = "\\chpgn";
-               break;
+                    // ### TODO: it could be the total number of pages too!
+                    if ( (*paraFormatDataIt).text.variable.isPageNumber() )
+                       markup = "\\chpgn";
+                    break;
                }
             default :
-               {
-               markup = "";
-               }
-            }  // end switch
-      varList << Variable ( (*paraFormatDataIt).text.pos, markup );
-         }  // end if((*(paraFormatDataIt).text.formatId == 4 )
+                break;
+        }  // end switch
+        if ( markup.isEmpty() )
+        {
+            // As we do not know the variable, just insert the text of the variable
+            markup = escapeRTFsymbols( (*paraFormatDataIt).text.variable.m_text );
+        }
+        varList << Variable ( (*paraFormatDataIt).text.pos, markup );
+    }  // end if((*(paraFormatDataIt).text.formatId == 4 )
 
 
-      }  // end for(...
+  }  // end for(...
 
-   }  // end processVariables()
+}  // end processVariables()
 
