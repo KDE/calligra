@@ -23,6 +23,7 @@
 #include <qobjectlist.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 
 #include <kabc/address.h>
 #include <kabc/stdaddressbook.h>
@@ -204,6 +205,7 @@ KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
 
 void KoDocumentInfoAuthor::initParameters()
 {
+#if KDE_IS_VERSION( 3, 1, 90 )
     KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
                                            ( KABC::StdAddressBook::self() );
 
@@ -212,6 +214,7 @@ void KoDocumentInfoAuthor::initParameters()
 
     KABC::Addressee addr = ab->whoAmI();
     if ( addr.isEmpty() ) { // fallback
+#endif
       KConfig config( "kofficerc" );
       if ( config.hasGroup( "Author" ) ) {
         config.setGroup( "Author" );
@@ -222,6 +225,7 @@ void KoDocumentInfoAuthor::initParameters()
         m_city=config.readEntry( "city", "" );
         m_street=config.readEntry( "street", "" );
       }
+#if KDE_IS_VERSION( 3, 1, 90 )
     } else {
       m_fullName = addr.formattedName();
       m_initial = addr.givenName()[0] + ". " + addr.familyName()[0] + ".";
@@ -240,6 +244,7 @@ void KoDocumentInfoAuthor::initParameters()
       m_city = a.locality();
       m_street = a.street();
     }
+#endif
 }
 
 bool KoDocumentInfoAuthor::load( const QDomElement& e )
