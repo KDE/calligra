@@ -95,6 +95,18 @@ public:
    */
   virtual bool openDocument( const char* /* _filename */, const char* /* _format */ ) { return false; };
   
+  /**
+   * Saves the document, asking for a filename if necessary.
+   * Reset the URL of the document to "" in slotFileSaveAs
+   * @param _native_format the standard mimetype for your document
+   * Will allow to use filters if saving to another format
+   * @param _native_pattern *.kwd for KWord
+   * @return TRUE on success or on cancel, false on error
+   * (don't display anything in this case, the error dialog box is also implemented here
+   *  but restore the original URL in slotFileSaveAs)
+   */
+  virtual bool saveDocument( const char* _native_format, const char* _native_pattern );
+
 protected slots:
   /**
    * Called if the activated part changes.
@@ -104,6 +116,16 @@ protected slots:
   virtual void slotFileNew();
   virtual void slotFileOpen();
   virtual void slotFileSave();
+  /**
+   * Called by File / Save as...
+   * Usual implementation :
+   *
+   *  QString _url = m_pDoc->url();
+   *  m_pDoc->setURL( "" );
+   *  if ( !saveDocument() )
+   *      m_pDoc->setURL( _url );
+   *
+   */
   virtual void slotFileSaveAs();
   virtual void slotFilePrint();
   virtual void slotFileClose();

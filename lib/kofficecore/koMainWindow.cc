@@ -21,6 +21,7 @@
 #include "koFrame.h"
 #include "koDocument.h"
 #include "koView.h"
+#include "koFilterManager.h"
 
 #include <opMainWindowIf.h>
 #include <opApplication.h>
@@ -30,12 +31,16 @@
 #include <opMenu.h>
 
 #include <qkeycode.h>
+#include <qfile.h>
+#include <qmsgbox.h>
 
 #include <kapp.h>
 #include <kstdaccel.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kmimetypes.h>
+#include <kfiledialog.h>
 
 KoMainWindow::KoMainWindow( const char * )
 {
@@ -215,6 +220,54 @@ void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
     _menubar->insertSeparator();
     _menubar->insertItem( i18n( "&Help" ), m_pHelpMenu );
   }
+}
+
+bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern )
+{
+    KOffice::Document_ptr pDoc = document();
+    assert( pDoc );
+
+    CORBA::String_var url = pDoc->url();
+    const char* _url = url.in();
+    QString file;
+
+    if ( _url == 0L || *_url == 0 ) {
+	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+	   _native_format, _native_pattern, i18n("Choose document name for saving"), TRUE );
+
+        file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
+        if ( file.isNull() )
+            return false;
+
+	KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
+	if ( t->mimeType() != _native_format ) {
+            // TODO : use mk[s]temp
+	    if ( pDoc->saveToURL( "/tmp/kofficefilter", _native_format ) ) {
+                KoFilterManager::self()->export_( "/tmp/kofficefilter", file, _native_format );
+                return true;
+            } else
+                return false;
+	}
+
+        _url = file.latin1(); // careful, shallow copy
+        pDoc->setURL( _url );
+    }
+
+    KURL u( _url );
+    if ( QFile::exists( u.path() ) ) {
+	system( QString( "rm -rf %1~" ).arg( u.path() ) );
+	QString cmd = "cp %1 %2~";
+	cmd = cmd.arg( u.path() ).arg( u.path() );
+	system( cmd.latin1() );
+    }
+
+    if ( !pDoc->saveToURL( _url, _native_format ) ) {
+        QString tmp;
+        tmp.sprintf( i18n( "Could not save\n%s" ), _url );
+        QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+        return false;
+    }
+    return true;
 }
 
 void KoMainWindow::slotFileNew()
