@@ -13,66 +13,84 @@ void KSpreadLocale::load( const QDomElement& element )
     if ( element.hasAttribute( "weekStartsMonday" ) )
     {
 	QString c = element.attribute( "weekStartsMonday" );
-	setWeekStartsMonday( c != "False");
+	if ( c == "False" )
+	    m_weekStartsMonday = FALSE;
+	else
+	    m_weekStartsMonday = TRUE;
     }
     if ( element.hasAttribute( "decimalSymbol" ) )
-	setDecimalSymbol( element.attribute( "decimalSymbol" ) );
+	_decimalSymbol = element.attribute( "decimalSymbol" );
     if ( element.hasAttribute( "thousandsSeparator" ) )
-	setThousandsSeparator( element.attribute( "thousandsSeparator" ) );
+	_thousandsSeparator = element.attribute( "thousandsSeparator" );
     if ( element.hasAttribute( "currencySymbol" ) )
-	setCurrencySymbol( element.attribute( "currencySymbol" ) );
+	_currencySymbol = element.attribute( "currencySymbol" );
     if ( element.hasAttribute( "monetaryDecimalSymbol" ) )
-	setMonetaryDecimalSymbol( element.attribute( "monetaryDecimalSymbol" ) );
+	_monetaryDecimalSymbol = element.attribute( "monetaryDecimalSymbol" );
     if ( element.hasAttribute( "monetaryThousandsSeparator" ) )
-	setMonetaryThousandsSeparator( element.attribute( "monetaryThousandsSeparator" ) );
+	_monetaryThousandsSeparator = element.attribute( "monetaryThousandsSeparator" );
     if ( element.hasAttribute( "positiveSign" ) )
-	setPositiveSign( element.attribute( "positiveSign" ) );
+	_positiveSign = element.attribute( "positiveSign" );
     if ( element.hasAttribute( "negativeSign" ) )
-	setNegativeSign( element.attribute( "negativeSign" ) );
+	_negativeSign = element.attribute( "negativeSign" );
     if ( element.hasAttribute( "fracDigits" ) )
-	setFracDigits( element.attribute( "fracDigits" ).toInt() );
+	_fracDigits = element.attribute( "fracDigits" ).toInt();
     if ( element.hasAttribute( "positivePrefixCurrencySymbol" ) )
     {
 	QString c = element.attribute( "positivePrefixCurrencySymbol" );
-        setPositivePrefixCurrencySymbol( c == "True" );
+	if ( c == "True" )
+	    _positivePrefixCurrencySymbol = TRUE;
+	else if ( c == "False" )
+	    _positivePrefixCurrencySymbol = FALSE;
     }
     if ( element.hasAttribute( "negativePrefixCurrencySymbol" ) )
     {
 	QString c = element.attribute( "negativePrefixCurrencySymbol" );
-	setNegativePrefixCurrencySymbol( c == "True" );
+	if ( c == "True" )
+	    _negativePrefixCurrencySymbol = TRUE;
+	else if ( c == "False" )
+	    _negativePrefixCurrencySymbol = FALSE;
     }
     if ( element.hasAttribute( "positiveMonetarySignPosition" ) )
-	setPositiveMonetarySignPosition( (SignPosition)element.attribute( "positiveMonetarySignPosition" ).toInt() );
+	_positiveMonetarySignPosition = (SignPosition)element.attribute( "positiveMonetarySignPosition" ).toInt();
     if ( element.hasAttribute( "negativeMonetarySignPosition" ) )
-	setNegativeMonetarySignPosition( (SignPosition)element.attribute( "negativeMonetarySignPosition" ).toInt() );
+	_negativeMonetarySignPosition = (SignPosition)element.attribute( "negativeMonetarySignPosition" ).toInt();
     if ( element.hasAttribute( "timeFormat" ) )
-	setTimeFormat( element.attribute( "timeFormat" ) );
+	_timefmt = element.attribute( "timeFormat" );
     if ( element.hasAttribute( "dateFormat" ) )
-	setDateFormat( element.attribute( "dateFormat" ) );
+	_datefmt = element.attribute( "dateFormat" );
     if ( element.hasAttribute( "dateFormatShort" ) )
-	setDateFormatShort( element.attribute( "dateFormatShort" ) );
+	_datefmtshort = element.attribute( "dateFormatShort" );
 }
 
 QDomElement KSpreadLocale::save( QDomDocument& doc ) const
 {
     QDomElement element = doc.createElement( "locale" );
 
-    element.setAttribute( "weekStartsMonday", weekStartsMonday() ? "True" : "False" );
-    element.setAttribute( "decimalSymbol", decimalSymbol() );
-    element.setAttribute( "thousandsSeparator", thousandsSeparator() );
-    element.setAttribute( "currencySymbol", currencySymbol() );
-    element.setAttribute( "monetaryDecimalSymbol", monetaryDecimalSymbol() );
-    element.setAttribute( "monetaryThousandsSeparator", monetaryThousandsSeparator() );
-    element.setAttribute( "positiveSign", positiveSign() );
-    element.setAttribute( "negativeSign", negativeSign() );
-    element.setAttribute( "fracDigits", fracDigits() );
-    element.setAttribute( "positivePrefixCurrencySymbol", positivePrefixCurrencySymbol() ? "True" : "False");
-    element.setAttribute( "negativePrefixCurrencySymbol", negativePrefixCurrencySymbol() ? "True" : "False");
-    element.setAttribute( "positiveMonetarySignPosition", (int)positiveMonetarySignPosition() );
-    element.setAttribute( "negativeMonetarySignPosition", (int)negativeMonetarySignPosition() );
-    element.setAttribute( "timeFormat", timeFormat() );
-    element.setAttribute( "dateFormat", dateFormat() );
-    element.setAttribute( "dateFormatShort", dateFormatShort() );
+    if( m_weekStartsMonday )
+	element.setAttribute( "weekStartsMonday", "True" );
+    else
+	element.setAttribute( "weekStartsMonday", "False" );
+    element.setAttribute( "decimalSymbol", _decimalSymbol );
+    element.setAttribute( "thousandsSeparator", _thousandsSeparator );
+    element.setAttribute( "currencySymbol", _currencySymbol );
+    element.setAttribute( "monetaryDecimalSymbol", _monetaryDecimalSymbol );
+    element.setAttribute( "monetaryThousandsSeparator", _monetaryThousandsSeparator );
+    element.setAttribute( "positiveSign", _positiveSign );
+    element.setAttribute( "negativeSign", _negativeSign );
+    element.setAttribute( "fracDigits", _fracDigits );
+    if ( _positivePrefixCurrencySymbol )
+	element.setAttribute( "positivePrefixCurrencySymbol", "True" );
+    else
+	element.setAttribute( "positivePrefixCurrencySymbol", "False" );
+    if ( _negativePrefixCurrencySymbol )
+	element.setAttribute( "negativePrefixCurrencySymbol", "True" );
+    else
+	element.setAttribute( "negativePrefixCurrencySymbol", "False" );
+    element.setAttribute( "positiveMonetarySignPosition", (int)_positiveMonetarySignPosition );
+    element.setAttribute( "negativeMonetarySignPosition", (int)_negativeMonetarySignPosition );
+    element.setAttribute( "timeFormat", _timefmt );
+    element.setAttribute( "dateFormat", _datefmt );
+    element.setAttribute( "dateFormatShort", _datefmtshort );
 
     return element;
 }

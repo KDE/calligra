@@ -3,14 +3,14 @@
 KSLocale::KSLocale() :
 	KLocale("koffice")
 {
-    setDecimalSymbol(".");
-    setThousandsSeparator("");
-    setMonetaryDecimalSymbol(".");
-    setMonetaryThousandsSeparator("");
-    setPositiveSign("");
-    setNegativeSign("-");
-    setWeekStartsMonday(false);
-    setTimeFormat("%I:%M:%S %p");
-    setDateFormat("%A %d %B %Y");
-    setDateFormatShort("%m/%d/%y");
+    _decimalSymbol = ".";
+    _thousandsSeparator = "";
+    _monetaryDecimalSymbol = ".";
+    _monetaryThousandsSeparator = "";
+    _positiveSign = "";
+    _negativeSign = "-";
+    m_weekStartsMonday = FALSE;
+    _timefmt = "%I:%M:%S %p";
+    _datefmt = "%A %d %B %Y";
+    _datefmtshort = "%m/%d/%y";
 }
