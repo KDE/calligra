@@ -201,8 +201,13 @@ void KSpreadCell::copyFormat( int _column, int _row )
 
     QValueList<KSpreadConditional> conditionList = cell->conditionList();
     delete m_conditions;
-    m_conditions = new KSpreadConditions( this );
-    m_conditions->setConditionList( conditionList );
+    if ( cell->m_conditions )
+    {
+      m_conditions = new KSpreadConditions( this );
+      m_conditions->setConditionList( conditionList );
+    }
+    else
+      m_conditions = 0;
 
     setComment( cell->comment( _column, _row ) );
 }

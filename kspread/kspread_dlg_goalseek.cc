@@ -54,6 +54,8 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
     m_marker( m_pView->canvasWidget()->marker() ),
     m_selection( m_pView->canvasWidget()->selection() )
 {
+  setWFlags( Qt::WDestructiveClose );
+
   if ( !name )
     setName( "KSpreadGoalSeekDlg" );
 
@@ -200,9 +202,9 @@ bool KSpreadGoalSeekDlg::eventFilter( QObject* obj, QEvent* ev )
   return FALSE;
 }
 
-void KSpreadGoalSeekDlg::closeEvent ( QCloseEvent * )
+void KSpreadGoalSeekDlg::closeEvent ( QCloseEvent * e )
 {
-  delete this;
+  e->accept();
 }
 
 void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRect & _selection )
@@ -325,9 +327,6 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
   m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
-
-  delete this;
-
 }
 
 void KSpreadGoalSeekDlg::buttonCancelClicked()

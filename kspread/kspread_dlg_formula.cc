@@ -32,6 +32,7 @@
 #include <kbuttonbox.h>
 #include <knumvalidator.h>
 #include <qcombobox.h>
+#include <qevent.h>
 #include <qlistbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -41,6 +42,8 @@
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
     : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )
 {
+  setWFlags( Qt::WDestructiveClose );
+
     m_pView = parent;
     m_focus = 0;
     m_desc = 0;
@@ -307,7 +310,7 @@ void KSpreadDlgFormula::slotOk()
 
     m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
-    delete this;
+    //  delete this;
 }
 
 void KSpreadDlgFormula::slotClose()
@@ -748,9 +751,9 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
     slotSelected( functions->text(0) );
 }
 
-void KSpreadDlgFormula::closeEvent ( QCloseEvent * )
+void KSpreadDlgFormula::closeEvent ( QCloseEvent * e )
 {
-    delete this;
+  e->accept();
 }
 
 #include "kspread_dlg_formula.moc"

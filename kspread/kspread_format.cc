@@ -124,6 +124,9 @@ void KSpreadFormat::copy( const KSpreadFormat & _l )
 
 void KSpreadFormat::setKSpreadStyle( KSpreadStyle * style )
 {
+  if ( style == m_pStyle )
+    return;
+
   if ( m_pStyle && m_pStyle->release() )
     delete m_pStyle;
 
@@ -1319,7 +1322,10 @@ void KSpreadFormat::setComment( const QString & _comment )
 
   // not part of the style
   delete m_strComment;
-  m_strComment = new QString( _comment );
+  if ( !_comment.isEmpty() )
+    m_strComment = new QString( _comment );
+  else
+    m_strComment = 0;
   formatChanged();
 }
 

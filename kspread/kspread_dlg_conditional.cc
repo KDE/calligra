@@ -503,6 +503,9 @@ bool KSpreadConditionalDlg::checkInputData( KLineEdit const * const edit1,
   bool b1 = false;
   bool b2 = false;
 
+  if ( !edit2->isEnabled() )
+    return true;
+
   edit1->text().toDouble( &b1 );
   edit2->text().toDouble( &b2 );
 
