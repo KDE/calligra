@@ -1,5 +1,8 @@
+if include_KARBON
+KOPAINTERDIR = kopainter
+endif
 
-SUBDIRS = store kwmf kofficecore kofficeui koscript kotext kopainter kformula
+SUBDIRS = store kwmf kofficecore kofficeui koscript kotext $(KOPAINTERDIR) kformula
 
 messages:
 	$(EXTRACTRC) */*.rc > parts.cc

@@ -63,5 +63,5 @@ AC_SUBST(LIBART_RPATH)
 
 AM_CONDITIONAL(include_KARBON, test -n "$LIBART_LIBS")
 if test -z "$LIBART_LIBS"; then
-	DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
+	DO_NOT_COMPILE="$DO_NOT_COMPILE karbon kontour"
 fi

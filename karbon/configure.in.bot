@@ -1,0 +1,9 @@
+if test -z "$LIBART_LIBS"; then
+  echo ""
+  echo "You're missing libart 2.3.8. karbon and kontour will not be compiled."
+  echo "You can download libart from"
+  echo "http://svg.kde.org/download.html"
+  echo ""
+  all_tests=bad
+fi
+
