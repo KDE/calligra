@@ -141,3 +141,4 @@ Changes after KPresenter 1.2
 - Now kotextformat support language
 - Use kocommandhistory
 - Add support for global language
+- Add new lineSpacing type :"At least"/"exactly"/"Multiple"
