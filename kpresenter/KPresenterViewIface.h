@@ -51,6 +51,8 @@ k_dcop:
     virtual void insertPage();
     virtual void insertPicture();
     virtual void insertClipart();
+    virtual void insertSpecialChar();
+    virtual void insertLink();
 
     // tools menu
     virtual void toolsMouse();

@@ -148,6 +148,8 @@ public:
     void clearSelection();
     void insertSpecialChar(QChar _c);
     void insertLink(const QString &_linkName, const QString & hrefName);
+    void insertSoftHyphen();
+    void selectAll();
 
 public slots:
     void cut();

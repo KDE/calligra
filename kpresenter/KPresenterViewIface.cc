@@ -450,3 +450,12 @@ double KPresenterViewIface::getCurrentFaktor()
     return (double)view->getCurrentFaktor();
 }
 
+void KPresenterViewIface::insertSpecialChar()
+{
+    view->insertSpecialChar();
+}
+
+void KPresenterViewIface::insertLink()
+{
+    view->insertLink();
+}

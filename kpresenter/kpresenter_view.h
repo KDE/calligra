@@ -248,6 +248,8 @@ public slots:
 
     void insertLink();
 
+    void slotSoftHyphen();
+
 public:
     // create GUI
     virtual void createGUI();

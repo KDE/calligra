@@ -587,8 +587,10 @@ KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
 
 void KPTextView::cut()
 {
-    kdDebug()<<"KPTextView::cut()\n";
-   //todo
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        copy();
+        textObject()->removeSelectedText( cursor() );
+    }
 }
 
 void KPTextView::copy()
@@ -672,4 +674,15 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
     format.setAnchorName(_linkName);
     format.setAnchorHref( hrefName);
     textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
+}
+
+void KPTextView::insertSoftHyphen()
+{
+    textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
+                          false /* no newline */, true, i18n("Insert Soft Hyphen") );
+}
+
+void KPTextView::selectAll()
+{
+    textObject()->selectAll( true );
 }

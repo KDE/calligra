@@ -371,12 +371,13 @@ void KPresenterView::editDelete()
 /*===============================================================*/
 void KPresenterView::editSelectAll()
 {
-    if ( !page->kTxtObj() ) {
+    KPTextView *edit=page->currentTextObjectView();
+    if ( !edit ) {
 	page->setToolEditMode( TEM_MOUSE );
 	page->selectAllObj();
-    } else {
-	//page->kTxtObj()->selectAll( TRUE );
     }
+    else
+        edit->selectAll();
 }
 
 /*===============================================================*/
@@ -2356,10 +2357,16 @@ void KPresenterView::setupActions()
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
 
-     actionInsertLink = new KAction( i18n( "Insert link" ), 0,
-                                        this, SLOT( insertLink() ),
-                                        actionCollection(), "insert_link" );
+    actionInsertLink = new KAction( i18n( "Insert link" ), 0,
+                                    this, SLOT( insertLink() ),
+                                    actionCollection(), "insert_link" );
 
+    // ------------------- Actions with a key binding and no GUI item
+    KAction* actSoftHyphen = new KAction( i18n( "Insert soft hyphen" ), CTRL+Key_Minus,
+                                          this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
+    // Necessary for the actions that are not plugged anywhere
+    KAccel * accel = new KAccel( this );
+    actSoftHyphen->plugAccel( accel );
 
 #if 0
     //code from page.cc
@@ -3604,6 +3611,13 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 	  break;
 	}
       }
+}
+
+void KPresenterView::slotSoftHyphen()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+        edit->insertSoftHyphen();
 }
 
 #include <kpresenter_view.moc>
