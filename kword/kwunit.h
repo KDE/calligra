@@ -70,6 +70,11 @@ public:
     // Create a measure using a given @p value in a given @p unitType
     static KWUnit createUnit( double value, KWUnits unitType );
 
+    // Rounding methods
+    // > - All "in" values will be rounded to 0.00001 inches
+    // > - All "mm" values will be rounded to 0.0001 millimeters
+    // TODO
+
 protected:
     double _pt;
     double _mm;
