@@ -37,6 +37,12 @@ k_dcop:
     void deleteSelectedStencils();
     void groupSelectedStencils();
     void ungroupSelectedStencils();
+    QString pageName()const;
+    void copy();
+    void cut();
+    void paste();
+    void selectAllStencils();
+    void unselectAllStencils();
 
 private:
     KivioPage *m_page;

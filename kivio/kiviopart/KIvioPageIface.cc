@@ -49,3 +49,34 @@ void KIvioPageIface::ungroupSelectedStencils()
     m_page->ungroupSelectedStencils();
 }
 
+
+QString KIvioPageIface::pageName()const
+{
+    return m_page->pageName();
+}
+
+void KIvioPageIface::copy()
+{
+    m_page->copy();
+}
+
+void KIvioPageIface::cut()
+{
+    m_page->cut();
+}
+
+void KIvioPageIface::paste()
+{
+    m_page->paste();
+}
+
+void KIvioPageIface::selectAllStencils()
+{
+    m_page->selectAllStencils();
+}
+
+void KIvioPageIface::unselectAllStencils()
+{
+    m_page->unselectAllStencils();
+}
+

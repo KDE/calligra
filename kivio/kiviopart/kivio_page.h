@@ -84,7 +84,7 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-  QString pageName() { return m_strName; }
+  QString pageName()const { return m_strName; }
   bool setPageName( const QString& name, bool init = FALSE );
 
   virtual QDomElement save( QDomDocument& );
