@@ -82,6 +82,15 @@ class TabBar;
 class ViewPrivate;
 
 /**
+ * KSpreadView is used to display a spreadsheet document and provide
+ * the interface for the user to perform editing and data analysis.
+ *
+ * A view consists of several parts: canvas to display cells in a sheet,
+ * column header to show columns, row header to show rows, horizontal
+ * and vertical scrollbars for navigation, location editor to show
+ * marker and/or selection, tab bar to select active worksheet and line
+ * editor to display and edit cell contents.
+ *
  */
 class KSpreadView : public KoView
 {
@@ -89,19 +98,62 @@ class KSpreadView : public KoView
 
     Q_OBJECT
 public:
+
+    /**
+     * Creates a new view.
+     */
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
+
+    /**
+     * Destroy the view.
+     */
     ~KSpreadView();
 
+    /**
+     * Returns the corresponding document for this view.
+     */
+    KSpreadDoc* doc();
+
+    /**
+     * Returns the canvas of the view.
+     */
     KSpreadCanvas* canvasWidget() const;
+
+    /**
+     * Returns the column header.
+     */
     KSpreadHBorder* hBorderWidget() const;
+
+    /**
+     * Returns the row header.
+     */
     KSpreadVBorder* vBorderWidget() const;
+
+    /**
+     * Returns the horizontal scrollbar.
+     */
     QScrollBar* horzScrollBar() const;
+
+    /**
+     * Returns the vertical scrollbar.
+     */
     QScrollBar* vertScrollBar() const;
+
+    /**
+     * Returns the editor widget.
+     */
     KSpreadEditWidget* editWidget() const;
+
+    /**
+     * Returns the location widget.
+     */
     KSpreadLocationEditWidget* posWidget() const;
+
+    /**
+     * Returns the tab bar.
+     */
     KSpread::TabBar* tabBar() const;
 
-    KSpreadDoc* doc()const { return m_pDoc; }
     void changeZoomMenu( int zoom );
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
@@ -556,12 +608,6 @@ private:
     KSpreadChild* m_popupChildObject;
 
     /**
-     * This DCOP object represents the view.
-     */
-    DCOPObject* m_dcop;
-
-
-    /**
      * Tells whether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you
      * want to leave the cell with the marker then you must first save the new text
@@ -573,8 +619,6 @@ private:
      * The active KSpreadSheet. This table has the input focus. It may be 0L, too.
      */
     KSpreadSheet* m_pTable;
-
-    KSpreadDoc *m_pDoc;
 
     /**
      * Flags that indicate whether we should display additional
