@@ -1,4 +1,4 @@
-INCLUDES = $(KOFFICE_INCLUDES) \
+INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir) \
 	-I$(srcdir)/core \
 	-I$(srcdir)/tools \
