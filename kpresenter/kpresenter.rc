@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="42">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="43">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -517,7 +517,7 @@
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
- <Action name="border_backgroundcolor"/>
+ <Action name="brush_color"/>
  <Separator/>
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>

@@ -1419,12 +1419,12 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 }
 
 
-void KPTextView::insertComment(const QString &_note)
+void KPTextView::insertComment(const QString &_comment)
 {
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
 
-    var = new KoNoteVariable( textObject()->textDocument(),_note, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    var = new KoNoteVariable( textObject()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
     insertVariable( var);
 }
 

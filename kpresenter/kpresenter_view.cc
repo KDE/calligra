@@ -126,7 +126,7 @@
 #include <kostyle.h>
 #include "kprstylemanager.h"
 
-#include <koNoteDia.h>
+#include <koCommentDia.h>
 
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
@@ -2973,7 +2973,7 @@ void KPresenterView::setupActions()
                                     actionCollection(), "insert_comment" );
     actionEditComment = new KAction( i18n("Edit Comment"), 0,
                                   this,SLOT(editComment()),
-                                  actionCollection(), "edit_commment");
+                                  actionCollection(), "edit_comment");
 
 }
 
@@ -5650,12 +5650,12 @@ void KPresenterView::insertComment()
     else
         authorName = authorPage->fullName();
 
-    KoNoteDia *noteDia = new KoNoteDia( this, QString::null,authorName );
-    if( noteDia->exec() )
+    KoCommentDia *commentDia = new KoCommentDia( this, QString::null,authorName );
+    if( commentDia->exec() )
     {
-        edit->insertComment(noteDia->noteText());
+        edit->insertComment(commentDia->commentText());
     }
-    delete noteDia;
+    delete commentDia;
 }
 
 void KPresenterView::editComment()
@@ -5674,12 +5674,12 @@ void KPresenterView::editComment()
                 kdWarning() << "Author information not found in documentInfo !" << endl;
             else
                 authorName = authorPage->fullName();
-            KoNoteDia *noteDia = new KoNoteDia( this, var->note(), authorName);
-            if( noteDia->exec() )
+            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
+            if( commentDia->exec() )
             {
-                var->setNote( noteDia->noteText());
+                var->setNote( commentDia->commentText());
             }
-            delete noteDia;
+            delete commentDia;
         }
     }
 }
