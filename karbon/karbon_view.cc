@@ -277,10 +277,6 @@ KarbonView::dcopObject()
 	return m_dcop;
 }
 
-void
-KarbonView::updateReadWrite( bool /*rw*/ )
-{}
-
 QWidget*
 KarbonView::canvas()
 {
@@ -328,10 +324,6 @@ KarbonView::dropEvent ( QDropEvent *e )
 		selectionChanged();
 	}
 }
-
-void
-KarbonView::setupPrinter( KPrinter& /*printer*/ )
-{}
 
 void
 KarbonView::print( KPrinter &printer )

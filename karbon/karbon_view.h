@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,8 +34,6 @@ class QLabel;
 
 class KAction;
 class KarbonPart;
-class KFontAction;
-class KFontSizeAction;
 class KSelectAction;
 class KSelectColorAction;
 class KToggleAction;
@@ -90,7 +87,7 @@ public:
 	KarbonPart* part() const { return (KarbonPart *)m_part; }
 
 	// printing support, override from KoView
-	virtual void setupPrinter( KPrinter &printer );
+	virtual void setupPrinter( KPrinter &printer ) {}
 	virtual void print( KPrinter& printer );
 
 	KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
@@ -183,7 +180,7 @@ signals:
 	void selectionChange();
 
 protected:
-	virtual void updateReadWrite( bool rw );
+	virtual void updateReadWrite( bool rw ) {}
 	virtual void resizeEvent( QResizeEvent* event );
 	void dragEnterEvent( QDragEnterEvent *e );
 	void dropEvent( QDropEvent *e );
