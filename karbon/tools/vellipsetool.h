@@ -25,7 +25,7 @@
 
 #include "vshapetool.h"
 
-class KDoubleNumInput;
+class VUnitDoubleSpinBox;
 class KarbonPart;
 class QLabel;
 class QWidget;
@@ -56,8 +56,8 @@ private:
 		void refreshUnit();
 
 	private:
-		KDoubleNumInput		*m_width;
-		KDoubleNumInput		*m_height;
+		VUnitDoubleSpinBox	*m_width;
+		VUnitDoubleSpinBox	*m_height;
 		KarbonPart			*m_part;
 		QLabel				*m_heightLabel;
 		QLabel				*m_widthLabel;
