@@ -1,0 +1,10 @@
+<!DOCTYPE kpartplugin>
+<kpartplugin library="libkword_adresses"> 
+<MenuBar> 
+<Menu name="tools"><Text>&amp;Tools</Text> 
+<Action name="kword_addresses_import"/> 
+<Action name="kword_addresses_export"/> 
+<Action name="kword_addresses_configure"/> 
+</Menu> 
+</MenuBar> 
+</kpartplugin> 
