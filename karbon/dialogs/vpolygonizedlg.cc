@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
@@ -8,34 +7,31 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qpainter.h>
 #include <qpushbutton.h>
-#include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
 
-#include "vcdlg_polygon.h"
+#include "vpolygonizedlg.h"
 
-VCDlgPolygon::VCDlgPolygon()
+VPolygonizeDlg::VPolygonizeDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Insert Polygon" ) );
+	setCaption( i18n( "Polygonize" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
- );
+	QGroupBox* group = new QGroupBox(
+		2, Qt::Horizontal,
+		i18n( "Properties" ), this );
+
  	outerbox->addWidget( group );
 
-	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new QLineEdit( 0, group );
-	new QLabel( i18n( "Edges:" ), group );
-	m_edges = new QSpinBox( group );
-	m_edges->setMinValue( 3 );
+	new QLabel( i18n( "Flatness:" ), group );
+	m_flatness = new QLineEdit( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -62,29 +58,18 @@ VCDlgPolygon::VCDlgPolygon()
 }
 
 double
-VCDlgPolygon::valueRadius() const
+VPolygonizeDlg::flatness() const
 {
-	return m_radius->text().toDouble();
-}
-
-uint
-VCDlgPolygon::valueEdges() const
-{
-	return m_edges->value();
+	return m_flatness->text().toDouble();
 }
 
 void
-VCDlgPolygon::setValueRadius( const double value )
+VPolygonizeDlg::setFlatness( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
-	m_radius->setText( s );
+	m_flatness->setText( s );
 }
 
-void
-VCDlgPolygon::setValueEdges( const uint value )
-{
-	m_edges->setValue( value );
-}
+#include "vpolygonizedlg.moc"
 
-#include "vcdlg_polygon.moc"

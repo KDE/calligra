@@ -8,7 +8,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_sinus.h"	// command
-#include "vcdlg_sinus.h"	// dialog
+#include "vsinusdlg.h"	// dialog
 #include "vctool_sinus.h"
 #include "vpath.h"
 
@@ -18,10 +18,10 @@ VCToolSinus::VCToolSinus( KarbonPart* part )
 	: VShapeTool( part )
 {
 	// create config dialog:
-	m_dialog = new VCDlgSinus();
-	m_dialog->setValueWidth( 100.0 );
-	m_dialog->setValueHeight( 100.0 );
-	m_dialog->setValuePeriods( 1 );
+	m_dialog = new VSinusDlg();
+	m_dialog->setWidth( 100.0 );
+	m_dialog->setHeight( 100.0 );
+	m_dialog->setPeriods( 1 );
 }
 
 VCToolSinus::~VCToolSinus()
@@ -49,7 +49,7 @@ VCToolSinus::drawTemporaryObject(
 	
 	VCCmdSinus* cmd =
 		new VCCmdSinus( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
-			m_dialog->valuePeriods() );
+			m_dialog->periods() );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -68,9 +68,9 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 			return
 				new VCCmdSinus( part(),
 					x, y,
-					x + m_dialog->valueWidth(),
-					y + m_dialog->valueHeight(),
-					m_dialog->valuePeriods() );
+					x + m_dialog->width(),
+					y + m_dialog->height(),
+					m_dialog->periods() );
 		else
 			return 0L;
 	}
@@ -80,7 +80,7 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 				x, y,
 				x + d1,
 				y + d2,
-				m_dialog->valuePeriods() );
+				m_dialog->periods() );
 }
 
 void

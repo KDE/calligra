@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMDLGSTROKE_H__
-#define __VMDLGSTROKE_H__
+#ifndef __VSTROKEDLG_H__
+#define __VSTROKEDLG_H__
 
 #include <qtabdialog.h>
 
@@ -16,11 +16,12 @@ class KColorPatch;
 class KarbonPart;
 class KIntNumInput;
 
-class VMDlgStroke : public QTabDialog
+class VStrokeDlg : public QTabDialog
 {
 	Q_OBJECT
+
 public:
-	VMDlgStroke( KarbonPart *part );
+	VStrokeDlg( KarbonPart *part );
 
 private:
 	QWidget* mRGBWidget;

@@ -9,7 +9,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgSinus;
+class VSinusDlg;
 
 // A singleton state to create a sinus
 
@@ -32,7 +32,7 @@ protected:
 private:
 	static VCToolSinus* s_instance;
 
-	VCDlgSinus* m_dialog;
+	VSinusDlg* m_dialog;
 };
 
 #endif

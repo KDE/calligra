@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef VMPANEL_COLOR_H
-#define VMPANEL_COLOR_H
+#ifndef __VCOLORDLG_H__
+#define __VCOLORDLG_H__
 
 #include <qdockwindow.h>
 
@@ -15,11 +15,12 @@ class KoMainWindow;
 class KoView;
 class VColorSlider;
 
-class VColorPanel : public QDockWindow
+class VColorDlg : public QDockWindow
 {
-  Q_OBJECT
+	Q_OBJECT
+
 public:
- 	 VColorPanel( KoView* parent = 0L, const char* name = 0L );
+ 	 VColorDlg( KoView* parent = 0L, const char* name = 0L );
   
 private:
 	QTabWidget* mTabWidget;
@@ -33,3 +34,4 @@ private:
 };
 
 #endif
+

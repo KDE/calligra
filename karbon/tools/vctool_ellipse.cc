@@ -8,7 +8,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_ellipse.h"	// command
-#include "vcdlg_ellipse.h"	// dialog
+#include "vellipsedlg.h"	// dialog
 #include "vctool_ellipse.h"
 #include "vpath.h"
 
@@ -18,9 +18,9 @@ VCToolEllipse::VCToolEllipse( KarbonPart* part )
 	: VShapeTool( part )
 {
 	// create config dialog:
-	m_dialog = new VCDlgEllipse();
-	m_dialog->setValueWidth( 100.0 );
-	m_dialog->setValueHeight( 100.0 );
+	m_dialog = new VEllipseDlg();
+	m_dialog->setWidth( 100.0 );
+	m_dialog->setHeight( 100.0 );
 }
 
 VCToolEllipse::~VCToolEllipse()
@@ -66,8 +66,8 @@ VCToolEllipse::createCmd( double x, double y, double d1, double d2 )
 			return
 				new VCCmdEllipse( part(),
 					x, y,
-					x + m_dialog->valueWidth(),
-					y + m_dialog->valueHeight() );
+					x + m_dialog->width(),
+					y + m_dialog->height() );
 		else
 			return 0L;
 	}

@@ -20,7 +20,8 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "karbon_view_iface.h"
-//#include "vccmd_text.h"
+
+// tools:
 #include "vctool_ellipse.h"
 #include "vctool_polygon.h"
 #include "vctool_rectangle.h"
@@ -28,22 +29,28 @@
 #include "vctool_sinus.h"
 #include "vctool_spiral.h"
 #include "vctool_star.h"
+#include "vmtool_handle.h"
+#include "vmtool_rotate.h"
+#include "vmtool_scale.h"
+#include "vmtool_select.h"
+#include "vmtool_shear.h"
+
+// commands:
+//#include "vccmd_text.h"
 #include "vmcmd_delete.h"
 #include "vmcmd_fill.h"
 #include "vmcmd_group.h"
 #include "vmcmd_insertknots.h"
 #include "vmcmd_polygonize.h"
 #include "vmcmd_stroke.h"
-#include "vmdlg_insertknots.h"
-#include "vmdlg_polygonize.h"
-#include "vmdlg_solidfill.h"
-#include "vmdlg_stroke.h"
-#include "vmpanel_color.h"
-#include "vmtool_handle.h"
-#include "vmtool_rotate.h"
-#include "vmtool_scale.h"
-#include "vmtool_select.h"
-#include "vmtool_shear.h"
+
+// dialogs:
+#include "vcolordlg.h"
+#include "vfilldlg.h"
+#include "vinsertknotsdlg.h"
+#include "vpolygonizedlg.h"
+#include "vstrokedlg.h"
+
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
@@ -452,11 +459,11 @@ KarbonView::handleTool()
 void
 KarbonView::pathInsertKnots()
 {
-	VMDlgInsertKnots* dialog = new VMDlgInsertKnots();
+	VInsertKnotsDlg* dialog = new VInsertKnotsDlg();
 
 	if( dialog->exec() )
 		m_part->addCommand( new VMCmdInsertKnots(
-			m_part, m_part->selection(), dialog->valueKnots() ), true );
+			m_part, m_part->selection(), dialog->knots() ), true );
 
 	delete( dialog );
 }
@@ -464,12 +471,12 @@ KarbonView::pathInsertKnots()
 void
 KarbonView::pathPolygonize()
 {
-	VMDlgPolygonize* dialog = new VMDlgPolygonize();
-	dialog->setValueFlatness( 5.0 );
+	VPolygonizeDlg* dialog = new VPolygonizeDlg();
+	dialog->setFlatness( 5.0 );
 
 	if( dialog->exec() )
 		m_part->addCommand( new VMCmdPolygonize(
-			m_part, m_part->selection(), dialog->valueFlatness() ), true );
+			m_part, m_part->selection(), dialog->flatness() ), true );
 
 	delete( dialog );
 }
@@ -506,8 +513,8 @@ KarbonView::solidFillClicked()
 {
 	if( shell()->rootView() == this )
 	{
-		VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill( m_part );
-		m_solidFillDialog->show();
+		VFillDlg* dialog = new VFillDlg( m_part );
+		dialog->show();
 	}
 }
 
@@ -516,8 +523,8 @@ KarbonView::strokeClicked()
 {
 	if( shell()->rootView() == this )
 	{
-		VMDlgStroke* m_strokeDialog = new VMDlgStroke( m_part );
-		m_strokeDialog->show();
+		VStrokeDlg* dialog = new VStrokeDlg( m_part );
+		dialog->show();
 	}
 }
 
@@ -550,8 +557,8 @@ KarbonView::slotFillColorChanged( const QColor &c )
 void
 KarbonView::viewColorManager()
 {
-	VColorPanel* colorPanel = new VColorPanel ( this );
-	colorPanel->show();
+	VColorDlg* dialog = new VColorDlg( this );
+	dialog->show();
 }
 
 void

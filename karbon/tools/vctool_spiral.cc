@@ -8,7 +8,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_spiral.h"	// command
-#include "vcdlg_spiral.h"	// dialog
+#include "vspiraldlg.h"	// dialog
 #include "vctool_spiral.h"
 #include "vpath.h"
 
@@ -18,11 +18,11 @@ VCToolSpiral::VCToolSpiral( KarbonPart* part )
 	: VShapeTool( part, true )
 {
 	// create config dialog:
-	m_dialog = new VCDlgSpiral();
-	m_dialog->setValueRadius( 100.0 );
-	m_dialog->setValueSegments( 8 );
-	m_dialog->setValueFade( 0.8 );
-	m_dialog->setValueClockwise( true );
+	m_dialog = new VSpiralDlg();
+	m_dialog->setRadius( 100.0 );
+	m_dialog->setSegments( 8 );
+	m_dialog->setFade( 0.8 );
+	m_dialog->setClockwise( true );
 }
 
 VCToolSpiral::~VCToolSpiral()
@@ -52,9 +52,9 @@ VCToolSpiral::drawTemporaryObject(
 		new VCCmdSpiral( part(),
 			p.x(), p.y(),
 			d1,
-			m_dialog->valueSegments(),
-			m_dialog->valueFade(),
-			m_dialog->valueClockwise(),
+			m_dialog->segments(),
+			m_dialog->fade(),
+			m_dialog->clockwise(),
 			d2 );
 
 	VObject* path = cmd->createPath();
@@ -74,10 +74,10 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 			return
 				new VCCmdSpiral( part(),
 					x, y,
-					m_dialog->valueRadius(),
-					m_dialog->valueSegments(),
-					m_dialog->valueFade(),
-					m_dialog->valueClockwise(),
+					m_dialog->radius(),
+					m_dialog->segments(),
+					m_dialog->fade(),
+					m_dialog->clockwise(),
 					d2 );
 		else
 			return 0L;
@@ -87,9 +87,9 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 			new VCCmdSpiral( part(),
 				x, y,
 				d1,
-				m_dialog->valueSegments(),
-				m_dialog->valueFade(),
-				m_dialog->valueClockwise(),
+				m_dialog->segments(),
+				m_dialog->fade(),
+				m_dialog->clockwise(),
 				d2 );
 }
 

@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMDLGSOLIDFILL_H__
-#define __VMDLGSOLIDFILL_H__
+#ifndef __VFILLDLG_H__
+#define __VFILLDLG_H__
 
 #include <kdialogbase.h>
 
@@ -16,11 +16,12 @@ class KColorPatch;
 class KarbonPart;
 class KIntNumInput;
 
-class VMDlgSolidFill : public KDialogBase
+class VFillDlg : public KDialogBase
 {
 	Q_OBJECT
+
 public:
-	VMDlgSolidFill( KarbonPart *part );
+	VFillDlg( KarbonPart *part );
 
 private:
 	QWidget* mRGBWidget;
@@ -47,3 +48,4 @@ private slots:
 };
 
 #endif
+

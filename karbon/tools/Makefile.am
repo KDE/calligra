@@ -2,7 +2,7 @@ INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../visitors \
-	-I$(srcdir)/../ui \
+	-I$(srcdir)/../dialogs \
 	-I$(srcdir)/../commands \
 	-I$(srcdir)/../render \
 	$(all_includes)
@@ -42,7 +42,7 @@ libkarbontools_la_SOURCES = \
 	vshapetool.cc 
 
 libkarbontools_la_LIBADD = \
-	../ui/libkarbonui.la
+	../dialogs/libkarbondialogs.la
 
 libkarbontools_la_METASOURCES = \
 	AUTO

@@ -3,23 +3,24 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCDLGRECTANGLE_H__
-#define __VCDLGRECTANGLE_H__
+#ifndef __VRECTANGLEDLG_H__
+#define __VRECTANGLEDLG_H__
 
 #include <kdialog.h>
 
 class QLineEdit;
 
-class VCDlgRectangle : public KDialog
+class VRectangleDlg : public KDialog
 {
 	Q_OBJECT
-public:
-	VCDlgRectangle();
 
-	double valueWidth() const;
-	double valueHeight() const;
-	void setValueWidth( const double value );
-	void setValueHeight( const double value );
+public:
+	VRectangleDlg();
+
+	double width() const;
+	double height() const;
+	void setWidth( double value );
+	void setHeight( double value );
 
 private:
 	QLineEdit* m_width;
@@ -27,3 +28,4 @@ private:
 };
 
 #endif
+

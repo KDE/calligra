@@ -3,7 +3,6 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qcombobox.h>
 #include <qevent.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -17,31 +16,26 @@
 
 #include <klocale.h>
 
-#include "vcdlg_spiral.h"
+#include "vpolygondlg.h"
 
-VCDlgSpiral::VCDlgSpiral()
+VPolygonDlg::VPolygonDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
-		WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Insert Spiral" ) );
+	setCaption( i18n( "Insert Polygon" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
-	outerbox->addWidget( group );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
+ );
+ 	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Radius:" ), group );
 	m_radius = new QLineEdit( 0, group );
-	new QLabel( i18n( "Segments:" ), group );
-	m_segments = new QSpinBox( group );
-	m_segments->setMinValue( 1 );
-	new QLabel( i18n( "Fade:" ), group );
-	m_fade = new QLineEdit( 0, group );
-	new QLabel( i18n( "Orientation:" ), group );
-	m_clockwise = new QComboBox( false,group );
-	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
-	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
+	new QLabel( i18n( "Edges:" ), group );
+	m_edges = new QSpinBox( group );
+	m_edges->setMinValue( 3 );
 
 	outerbox->addSpacing( 2 );
 
@@ -68,34 +62,19 @@ VCDlgSpiral::VCDlgSpiral()
 }
 
 double
-VCDlgSpiral::valueRadius() const
+VPolygonDlg::radius() const
 {
 	return m_radius->text().toDouble();
 }
 
 uint
-VCDlgSpiral::valueSegments() const
+VPolygonDlg::edges() const
 {
-	return m_segments->value();
-}
-
-double
-VCDlgSpiral::valueFade() const
-{
-	return m_fade->text().toDouble();
-}
-
-bool
-VCDlgSpiral::valueClockwise() const
-{
-	if( m_clockwise->currentItem() == 0 )
-		return true;
-	else
-		return false;
+	return m_edges->value();
 }
 
 void
-VCDlgSpiral::setValueRadius( const double value )
+VPolygonDlg::setRadius( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -103,26 +82,10 @@ VCDlgSpiral::setValueRadius( const double value )
 }
 
 void
-VCDlgSpiral::setValueSegments( const uint value )
+VPolygonDlg::setEdges( uint value )
 {
-	m_segments->setValue( value );
+	m_edges->setValue( value );
 }
 
-void
-VCDlgSpiral::setValueFade( const double value )
-{
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_fade->setText( s );
-}
+#include "vpolygondlg.moc"
 
-void
-VCDlgSpiral::setValueClockwise( const bool value )
-{
-	if( value )
-		m_clockwise->setCurrentItem( 0 );
-	else
-		m_clockwise->setCurrentItem( 1 );
-}
-
-#include "vcdlg_spiral.moc"

@@ -9,7 +9,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgStar;
+class VStarDlg;
 
 // A singleton state to create a star
 
@@ -32,7 +32,7 @@ protected:
 private:
 	static VCToolStar* s_instance;
 
-	VCDlgStar* m_dialog;
+	VStarDlg* m_dialog;
 };
 
 #endif

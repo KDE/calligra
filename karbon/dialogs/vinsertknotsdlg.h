@@ -2,24 +2,26 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMDLGINSERTKNOTS_H__
-#define __VMDLGINSERTKNOTS_H__
+#ifndef __VINSERTKNOTSDLG_H__
+#define __VINSERTKNOTSDLG_H__
 
 #include <kdialog.h>
 
 class QSpinBox;
 
-class VMDlgInsertKnots : public KDialog
+class VInsertKnotsDlg : public KDialog
 {
 	Q_OBJECT
-public:
-	VMDlgInsertKnots();
 
-	uint valueKnots() const;
-	void setValueKnots( uint value );
+public:
+	VInsertKnotsDlg();
+
+	uint knots() const;
+	void setKnots( uint value );
 
 private:
 	QSpinBox* m_knots;
 };
 
 #endif
+

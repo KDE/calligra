@@ -9,7 +9,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgRectangle;
+class VRectangleDlg;
 
 // A singleton state to create a rectangle.
 
@@ -30,7 +30,7 @@ protected:
 private:
 	static VCToolRectangle* s_instance;
 
-	VCDlgRectangle* m_dialog;
+	VRectangleDlg* m_dialog;
 };
 
 #endif

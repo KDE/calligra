@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
@@ -6,33 +7,34 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qlineedit.h>
+#include <qpainter.h>
 #include <qpushbutton.h>
-#include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
 
-#include "vmdlg_insertknots.h"
+#include "vellipsedlg.h"
 
-VMDlgInsertKnots::VMDlgInsertKnots()
+VEllipseDlg::VEllipseDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Insert Knots" ) );
+	setCaption( i18n( "Insert Ellipse" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox(
-		2, Qt::Horizontal,
-		i18n( "Properties" ), this );
-
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
+ );
  	outerbox->addWidget( group );
 
-	new QLabel( i18n( "Knots:" ), group );
-	m_knots = new QSpinBox( group );
-	m_knots->setMinValue( 1 );
+	// add width/height-input:
+	new QLabel( i18n( "Width:" ), group );
+	m_width = new QLineEdit( 0, group );
+	new QLabel( i18n( "Height:" ), group );
+	m_height = new QLineEdit( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -58,17 +60,33 @@ VMDlgInsertKnots::VMDlgInsertKnots()
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
-uint
-VMDlgInsertKnots::valueKnots() const
+double
+VEllipseDlg::width() const
 {
-	return m_knots->value();
+	return m_width->text().toDouble();
+}
+
+double
+VEllipseDlg::height() const
+{
+	return m_height->text().toDouble();
 }
 
 void
-VMDlgInsertKnots::setValueKnots( uint value )
+VEllipseDlg::setWidth( double value )
 {
-	m_knots->setValue( value );
+	QString s;
+	s.setNum( value, 'f', 3 );
+	m_width->setText( s );
 }
 
-#include "vmdlg_insertknots.moc"
+void
+VEllipseDlg::setHeight( double value )
+{
+	QString s;
+	s.setNum( value, 'f', 3 );
+	m_height->setText( s );
+}
+
+#include "vellipsedlg.moc"
 

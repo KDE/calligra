@@ -8,7 +8,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_roundrect.h"	// command
-#include "vcdlg_roundrect.h"	// dialog
+#include "vroundrectdlg.h"	// dialog
 #include "vctool_roundrect.h"
 #include "vpath.h"
 
@@ -18,10 +18,10 @@ VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
 	: VShapeTool( part )
 {
 	// create config dialog:
-	m_dialog = new VCDlgRoundRect();
-	m_dialog->setValueWidth( 100.0 );
-	m_dialog->setValueHeight( 100.0 );
-	m_dialog->setValueRound( 20.0 );
+	m_dialog = new VRoundRectDlg();
+	m_dialog->setWidth( 100.0 );
+	m_dialog->setHeight( 100.0 );
+	m_dialog->setRound( 20.0 );
 }
 
 VCToolRoundRect::~VCToolRoundRect()
@@ -49,7 +49,7 @@ VCToolRoundRect::drawTemporaryObject(
 	
 	VCCmdRoundRect* cmd =
 		new VCCmdRoundRect( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
-			m_dialog->valueRound() );
+			m_dialog->round() );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -68,9 +68,9 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 			return
 				new VCCmdRoundRect( part(),
 					x, y,
-					x + m_dialog->valueWidth(),
-					y + m_dialog->valueHeight(),
-					m_dialog->valueRound() );
+					x + m_dialog->width(),
+					y + m_dialog->height(),
+					m_dialog->round() );
 		else
 			return 0L;
 	}
@@ -80,7 +80,7 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 				x, y,
 				x + d1,
 				y + d2,
-				m_dialog->valueRound() );
+				m_dialog->round() );
 }
 
 void

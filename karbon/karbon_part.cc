@@ -451,10 +451,10 @@ void KarbonPart::reorganizeGUI ()
 	}
 }
 
-void KarbonPart::setUndoRedoLimit(int val)
+void KarbonPart::setUndoRedoLimit( int undos )
 {
-	m_commandHistory->setUndoLimit(val);
-	m_commandHistory->setRedoLimit(val);
+	m_commandHistory->setUndoLimit( undos );
+	m_commandHistory->setRedoLimit( undos );
 }
 
 void KarbonPart::initConfig()
@@ -472,10 +472,11 @@ void KarbonPart::initConfig()
 	if( config->hasGroup( "Misc" ) )
 	{
 		config->setGroup( "Misc" );
-		int undo=config->readNumEntry( "UndoRedo", -1 );
-		if( undo != -1 )
-			setUndoRedoLimit( undo );
+		int undos = config->readNumEntry( "UndoRedo", -1 );
+		if( undos != -1 )
+			setUndoRedoLimit( undos );
 	}
 }
 
 #include "karbon_part.moc"
+

@@ -10,24 +10,24 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
+#include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
 
-#include "vcdlg_roundrect.h"
+#include "vsinusdlg.h"
 
-VCDlgRoundRect::VCDlgRoundRect()
+VSinusDlg::VSinusDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Insert Round Rectangle" ) );
+	setCaption( i18n( "Insert Sinus" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
- );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
  	outerbox->addWidget( group );
 
 	// add width/height-input:
@@ -35,8 +35,9 @@ VCDlgRoundRect::VCDlgRoundRect()
 	m_width = new QLineEdit( 0, group );
 	new QLabel( i18n( "Height:" ), group );
 	m_height = new QLineEdit( 0, group );
-	new QLabel( i18n( "Edge Radius:" ), group );
-	m_round = new QLineEdit( 0, group );
+	new QLabel( i18n( "Periods:" ), group );
+	m_periods = new QSpinBox( group );
+	m_periods->setMinValue( 1 );
 
 	outerbox->addSpacing( 2 );
 
@@ -63,25 +64,25 @@ VCDlgRoundRect::VCDlgRoundRect()
 }
 
 double
-VCDlgRoundRect::valueWidth() const
+VSinusDlg::width() const
 {
 	return m_width->text().toDouble();
 }
 
 double
-VCDlgRoundRect::valueHeight() const
+VSinusDlg::height() const
 {
 	return m_height->text().toDouble();
 }
 
-double
-VCDlgRoundRect::valueRound() const
+uint
+VSinusDlg::periods() const
 {
-	return m_round->text().toDouble();
+	return m_periods->value();
 }
 
 void
-VCDlgRoundRect::setValueWidth( const double value )
+VSinusDlg::setWidth( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -89,7 +90,7 @@ VCDlgRoundRect::setValueWidth( const double value )
 }
 
 void
-VCDlgRoundRect::setValueHeight( const double value )
+VSinusDlg::setHeight( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -97,11 +98,10 @@ VCDlgRoundRect::setValueHeight( const double value )
 }
 
 void
-VCDlgRoundRect::setValueRound( const double value )
+VSinusDlg::setPeriods( uint value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_round->setText( s );
+	m_periods->setValue( value );
 }
 
-#include "vcdlg_roundrect.moc"
+#include "vsinusdlg.moc"
+

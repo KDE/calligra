@@ -9,7 +9,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgSpiral;
+class VSpiralDlg;
 
 // A singleton state to create a spiral.
 
@@ -32,7 +32,7 @@ protected:
 private:
 	static VCToolSpiral* s_instance;
 
-	VCDlgSpiral* m_dialog;
+	VSpiralDlg* m_dialog;
 };
 
 #endif

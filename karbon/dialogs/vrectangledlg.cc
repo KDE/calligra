@@ -10,19 +10,18 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
-#include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
 
-#include "vcdlg_sinus.h"
+#include "vrectangledlg.h"
 
-VCDlgSinus::VCDlgSinus()
+VRectangleDlg::VRectangleDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Insert Sinus" ) );
+	setCaption( i18n( "Insert Rectangle" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
@@ -35,9 +34,6 @@ VCDlgSinus::VCDlgSinus()
 	m_width = new QLineEdit( 0, group );
 	new QLabel( i18n( "Height:" ), group );
 	m_height = new QLineEdit( 0, group );
-	new QLabel( i18n( "Periods:" ), group );
-	m_periods = new QSpinBox( group );
-	m_periods->setMinValue( 1 );
 
 	outerbox->addSpacing( 2 );
 
@@ -64,25 +60,19 @@ VCDlgSinus::VCDlgSinus()
 }
 
 double
-VCDlgSinus::valueWidth() const
+VRectangleDlg::width() const
 {
 	return m_width->text().toDouble();
 }
 
 double
-VCDlgSinus::valueHeight() const
+VRectangleDlg::height() const
 {
 	return m_height->text().toDouble();
 }
 
-uint
-VCDlgSinus::valuePeriods() const
-{
-	return m_periods->value();
-}
-
 void
-VCDlgSinus::setValueWidth( const double value )
+VRectangleDlg::setWidth( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -90,17 +80,12 @@ VCDlgSinus::setValueWidth( const double value )
 }
 
 void
-VCDlgSinus::setValueHeight( const double value )
+VRectangleDlg::setHeight( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
 	m_height->setText( s );
 }
 
-void
-VCDlgSinus::setValuePeriods( const uint value )
-{
-	m_periods->setValue( value );
-}
+#include "vrectangledlg.moc"
 
-#include "vcdlg_sinus.moc"

@@ -3,24 +3,25 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCDLGPOLYGON_H__
-#define __VCDLGPOLYGON_H__
+#ifndef __VPOLYGONDLG_H__
+#define __VPOLYGONDLG_H__
 
 #include <kdialog.h>
 
 class QLineEdit;
 class QSpinBox;
 
-class VCDlgPolygon : public KDialog
+class VPolygonDlg : public KDialog
 {
 	Q_OBJECT
-public:
-	VCDlgPolygon();
 
-	double valueRadius() const;
-	uint valueEdges() const;
-	void setValueRadius( const double value );
-	void setValueEdges( const uint value );
+public:
+	VPolygonDlg();
+
+	double radius() const;
+	uint edges() const;
+	void setRadius( double value );
+	void setEdges( uint value );
 
 private:
 	QLineEdit* m_radius;
@@ -28,3 +29,4 @@ private:
 };
 
 #endif
+

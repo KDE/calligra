@@ -16,9 +16,9 @@
 
 #include <klocale.h>
 
-#include "vcdlg_star.h"
+#include "vstardlg.h"
 
-VCDlgStar::VCDlgStar()
+VStarDlg::VStarDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
@@ -64,25 +64,25 @@ VCDlgStar::VCDlgStar()
 }
 
 double
-VCDlgStar::valueInnerR() const
+VStarDlg::innerR() const
 {
 	return m_innerR->text().toDouble();
 }
 
 double
-VCDlgStar::valueOuterR() const
+VStarDlg::outerR() const
 {
 	return m_outerR->text().toDouble();
 }
 
 uint
-VCDlgStar::valueEdges() const
+VStarDlg::edges() const
 {
 	return m_edges->value();
 }
 
 void
-VCDlgStar::setValueInnerR( const double value )
+VStarDlg::setInnerR( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -90,7 +90,7 @@ VCDlgStar::setValueInnerR( const double value )
 }
 
 void
-VCDlgStar::setValueOuterR( const double value )
+VStarDlg::setOuterR( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -98,9 +98,10 @@ VCDlgStar::setValueOuterR( const double value )
 }
 
 void
-VCDlgStar::setValueEdges( const uint value )
+VStarDlg::setEdges( uint value )
 {
 	m_edges->setValue( value );
 }
 
-#include "vcdlg_star.moc"
+#include "vstardlg.moc"
+

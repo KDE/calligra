@@ -1,6 +1,4 @@
 -	mirror coordinate-system so origin is bottom-left
--	eps-filter cannot handle filenames with spaces. look at kdelibs/kio/kio/krun.h for
-	a solution
 -	rotate/scale/shear tool dont work
 -	optimize boundingbox: cache in vsegmentlist (+ vsegment ?) and apply affine
 	trafos (dont recalculate in that case) to them too

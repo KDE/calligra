@@ -15,15 +15,19 @@
 #include <koView.h>
 
 #include "vcolorslider.h"
-#include "vmpanel_color.h"
 
-VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
+#include "vcolordlg.h"
+
+VColorDlg::VColorDlg( KoView* parent, const char* /*name*/ )
 	: QDockWindow( QDockWindow::OutsideDock, parent->shell() )
 {
-	setCaption(i18n( "Color Manager" ));
+	setCaption( i18n( "Color Manager" ) );
+
 	setCloseMode( QDockWindow::Always );
+
 	mTabWidget = new QTabWidget( this );
 	mRGBWidget = new QWidget(mTabWidget);
+
 	QGridLayout *mainLayout = new QGridLayout(mRGBWidget, 4, 1);
 
 	//Reference
@@ -55,4 +59,5 @@ VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
 	setWidget( mTabWidget );
 }
 
-#include "vmpanel_color.moc"
+#include "vcolordlg.moc"
+

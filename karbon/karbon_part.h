@@ -74,19 +74,19 @@ public:
 	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
 	void applyDefaultColors( VObject & ) const;
 
-    bool showStatusBar () const {return m_bShowStatusBar;}
-    void setShowStatusBar (bool b);
-    void reorganizeGUI ();
+	bool showStatusBar() const { return m_bShowStatusBar; }
+	void setShowStatusBar( bool b );
+	void reorganizeGUI();
 
-    void setUndoRedoLimit( int _undo );
+	void setUndoRedoLimit( int undos );
 
-    void initConfig();
-    int maxRecentFiles() const { return m_maxRecentFiles; }
+	void initConfig();
+	int maxRecentFiles() const { return m_maxRecentFiles; }
 
 public slots:
-    void repaintAllViews( bool erase = false );
-    void slotDocumentRestored();
-    void slotCommandExecuted();
+	void repaintAllViews( bool erase = false );
+	void slotDocumentRestored();
+	void slotCommandExecuted();
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
@@ -102,9 +102,9 @@ private:
 	VColor m_defaultStrokeColor;
 	VColor m_defaultFillColor;
 
-    bool m_bShowStatusBar;
-    int m_maxRecentFiles;
-    DCOPObject *dcop;
+	bool m_bShowStatusBar;
+	int m_maxRecentFiles;
+	DCOPObject *dcop;
 };
 
 #endif

@@ -8,7 +8,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_polygon.h"	// command
-#include "vcdlg_polygon.h"	// dialog
+#include "vpolygondlg.h"	// dialog
 #include "vctool_polygon.h"
 #include "vpath.h"
 
@@ -18,9 +18,9 @@ VCToolPolygon::VCToolPolygon( KarbonPart* part )
 	: VShapeTool( part, true )
 {
 	// create config dialog:
-	m_dialog = new VCDlgPolygon();
-	m_dialog->setValueRadius( 100.0 );
-	m_dialog->setValueEdges( 5 );
+	m_dialog = new VPolygonDlg();
+	m_dialog->setRadius( 100.0 );
+	m_dialog->setEdges( 5 );
 }
 
 VCToolPolygon::~VCToolPolygon()
@@ -50,7 +50,7 @@ VCToolPolygon::drawTemporaryObject(
 		new VCCmdPolygon( part(),
 			p.x(), p.y(),
 			d1,
-			m_dialog->valueEdges(),
+			m_dialog->edges(),
 			d2 );
 
 	VObject* path = cmd->createPath();
@@ -70,8 +70,8 @@ VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 			return
 				new VCCmdPolygon( part(),
 					x, y,
-					m_dialog->valueRadius(),
-					m_dialog->valueEdges() );
+					m_dialog->radius(),
+					m_dialog->edges() );
 		else
 			return 0L;
 	}
@@ -80,7 +80,7 @@ VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 			new VCCmdPolygon( part(),
 				x, y,
 				d1,
-				m_dialog->valueEdges(),
+				m_dialog->edges(),
 				d2 );
 }
 

@@ -9,7 +9,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgRoundRect;
+class VRoundRectDlg;
 
 // A singleton state to create a rectangle.
 
@@ -32,7 +32,7 @@ protected:
 private:
 	static VCToolRoundRect* s_instance;
 
-	VCDlgRoundRect* m_dialog;
+	VRoundRectDlg* m_dialog;
 };
 
 #endif

@@ -3,23 +3,24 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCDLGELLIPSE_H__
-#define __VCDLGELLIPSE_H__
+#ifndef __VELLIPSEDLG_H__
+#define __VELLIPSEDLG_H__
 
 #include <kdialog.h>
 
 class QLineEdit;
 
-class VCDlgEllipse : public KDialog
+class VEllipseDlg : public KDialog
 {
 	Q_OBJECT
-public:
-	VCDlgEllipse();
 
-	double valueWidth() const;
-	double valueHeight() const;
-	void setValueWidth( const double value );
-	void setValueHeight( const double value );
+public:
+	VEllipseDlg();
+
+	double width() const;
+	double height() const;
+	void setWidth( double value );
+	void setHeight( double value );
 
 private:
 	QLineEdit* m_width;
@@ -27,3 +28,4 @@ private:
 };
 
 #endif
+

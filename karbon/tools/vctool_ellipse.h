@@ -9,7 +9,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgEllipse;
+class VEllipseDlg;
 
 // A singleton state to create an ellipse
 
@@ -30,7 +30,7 @@ protected:
 private:
 	static VCToolEllipse* s_instance;
 
-	VCDlgEllipse* m_dialog;
+	VEllipseDlg* m_dialog;
 };
 
 #endif

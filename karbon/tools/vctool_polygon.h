@@ -8,7 +8,7 @@
 #include "vshapetool.h"
 
 class KarbonPart;
-class VCDlgPolygon;
+class VPolygonDlg;
 
 // A singleton state to create a polygon.
 
@@ -31,7 +31,7 @@ protected:
 private:
 	static VCToolPolygon* s_instance;
 
-	VCDlgPolygon* m_dialog;
+	VPolygonDlg* m_dialog;
 };
 
 #endif

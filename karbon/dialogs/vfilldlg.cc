@@ -16,11 +16,13 @@
 #include <qgroupbox.h>
 #include <kselect.h>
 
-#include "vmdlg_solidfill.h"
+#include "vfilldlg.h"
 
 #include <kdebug.h>
 
-VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : KDialogBase ( 0L, 0, true, i18n( "Uniform Color" ), KDialogBase::Ok | KDialogBase::Cancel ), m_part( part )
+VFillDlg::VFillDlg( KarbonPart *part )
+	: KDialogBase ( 0L, 0, true, i18n( "Uniform Color" ),
+		KDialogBase::Ok | KDialogBase::Cancel ), m_part( part )
 {
 	QGridLayout *mainLayout;
 
@@ -106,7 +108,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : KDialogBase ( 0L, 0, true, 
 	mBlue->setValue( color.blue() );
 }
 
-void VMDlgSolidFill::slotUpdateFromRGBSpinBoxes()
+void VFillDlg::slotUpdateFromRGBSpinBoxes()
 {
 	QColor color( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb );
     mColorPreview->setColor( color );
@@ -135,7 +137,7 @@ void VMDlgSolidFill::slotUpdateFromRGBSpinBoxes()
 	mValue->blockSignals( false );
 }
 
-void VMDlgSolidFill::slotUpdateFromHSVSpinBoxes()
+void VFillDlg::slotUpdateFromHSVSpinBoxes()
 {
     QColor color( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv );
     mColorPreview->setColor( color );
@@ -160,7 +162,7 @@ void VMDlgSolidFill::slotUpdateFromHSVSpinBoxes()
 	mBlue->blockSignals( false );
 }
 
-void VMDlgSolidFill::slotApplyButtonPressed()
+void VFillDlg::slotApplyButtonPressed()
 {
 	VColor color;
 	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
@@ -172,14 +174,14 @@ void VMDlgSolidFill::slotApplyButtonPressed()
 		m_part->addCommand( new VMCmdFill( m_part, color ), true );
 }
 
-void VMDlgSolidFill::slotUpdate(QColor *color)
+void VFillDlg::slotUpdate(QColor *color)
 {
 	/*mRed->setValue( color->red() );
 	mGreen->setValue( color->green() );
 	mBlue->setValue( color->blue() );*/
 }
 
-void VMDlgSolidFill::slotHSChanged( int h, int s )
+void VFillDlg::slotHSChanged( int h, int s )
 {
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
 	mHue->setValue( h );
@@ -189,10 +191,11 @@ void VMDlgSolidFill::slotHSChanged( int h, int s )
 	mSelector->setColors( color1, color2 );
 }
 
-void VMDlgSolidFill::slotVChanged( int newVal )
+void VFillDlg::slotVChanged( int newVal )
 {
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
 	mValue->setValue( static_cast<int>(float( newVal ) / 99.0 * 255.0) );
 }
 
-#include "vmdlg_solidfill.moc"
+#include "vfilldlg.moc"
+

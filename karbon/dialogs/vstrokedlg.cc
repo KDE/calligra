@@ -15,11 +15,11 @@
 #include <qgroupbox.h>
 #include <kselect.h>
 
-#include "vmdlg_stroke.h"
+#include "vstrokedlg.h"
 
 #include <kdebug.h>
 
-VMDlgStroke::VMDlgStroke( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_part( part )
+VStrokeDlg::VStrokeDlg( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_part( part )
 {
 	setCaption(i18n( "Uniform Color" ));
 	setCancelButton();
@@ -105,7 +105,7 @@ VMDlgStroke::VMDlgStroke( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_par
 	mBlue->setValue( color.blue() );
 }
 
-void VMDlgStroke::slotUpdateFromRGBSpinBoxes( int newVal )
+void VStrokeDlg::slotUpdateFromRGBSpinBoxes( int newVal )
 {
 	//kdDebug() << "In slotUpdateRGB with val : " << newVal << endl;
 	QColor color( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb );
@@ -135,7 +135,7 @@ void VMDlgStroke::slotUpdateFromRGBSpinBoxes( int newVal )
 	mValue->blockSignals( false );
 }
 
-void VMDlgStroke::slotUpdateFromHSVSpinBoxes( int newVal )
+void VStrokeDlg::slotUpdateFromHSVSpinBoxes( int newVal )
 {
 	//kdDebug() << "In slotUpdateHSV with val : " << newVal << endl;
 	QColor color( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv );
@@ -161,7 +161,7 @@ void VMDlgStroke::slotUpdateFromHSVSpinBoxes( int newVal )
 	mBlue->blockSignals( false );
 }
 
-void VMDlgStroke::slotApplyButtonPressed()
+void VStrokeDlg::slotApplyButtonPressed()
 {
 	VColor color;
 	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
@@ -173,14 +173,14 @@ void VMDlgStroke::slotApplyButtonPressed()
 		m_part->addCommand( new VMCmdStroke( m_part, color ), true );
 }
 
-void VMDlgStroke::slotUpdate(QColor *color)
+void VStrokeDlg::slotUpdate(QColor *color)
 {
 	/*mRed->setValue( color->red() );
 	mGreen->setValue( color->green() );
 	mBlue->setValue( color->blue() );*/
 }
 
-void VMDlgStroke::slotHSChanged( int h, int s )
+void VStrokeDlg::slotHSChanged( int h, int s )
 {
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
 	mHue->setValue( h );
@@ -190,10 +190,11 @@ void VMDlgStroke::slotHSChanged( int h, int s )
 	mSelector->setColors( color1, color2 );
 }
 
-void VMDlgStroke::slotVChanged( int newVal )
+void VStrokeDlg::slotVChanged( int newVal )
 {
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
 	mValue->setValue( static_cast<int>(float( newVal ) / 99.0 * 255.0) );
 }
 
-#include "vmdlg_stroke.moc"
+#include "vstrokedlg.moc"
+

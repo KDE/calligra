@@ -8,7 +8,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_star.h"	// command
-#include "vcdlg_star.h"	// dialog
+#include "vstardlg.h"	// dialog
 #include "vctool_star.h"
 #include "vpath.h"
 
@@ -18,10 +18,10 @@ VCToolStar::VCToolStar( KarbonPart* part )
 	: VShapeTool( part, true )
 {
 	// create config dialog:
-	m_dialog = new VCDlgStar();
-	m_dialog->setValueOuterR( 100.0 );
-	m_dialog->setValueInnerR( 50.0 );
-	m_dialog->setValueEdges( 5 );
+	m_dialog = new VStarDlg();
+	m_dialog->setOuterR( 100.0 );
+	m_dialog->setInnerR( 50.0 );
+	m_dialog->setEdges( 5 );
 }
 
 VCToolStar::~VCToolStar()
@@ -51,8 +51,8 @@ VCToolStar::drawTemporaryObject(
 		new VCCmdStar( part(),
 			p.x(), p.y(),
 			d1,
-			m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
-			m_dialog->valueEdges(),
+			m_dialog->innerR() * d1 / m_dialog->outerR(),
+			m_dialog->edges(),
 			d2 );
 
 	VObject* path = cmd->createPath();
@@ -72,9 +72,9 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 			return
 				new VCCmdStar( part(),
 					x, y,
-					m_dialog->valueOuterR(),
-					m_dialog->valueInnerR(),
-					m_dialog->valueEdges() );
+					m_dialog->outerR(),
+					m_dialog->innerR(),
+					m_dialog->edges() );
 		else
 			return 0L;
 	}
@@ -83,8 +83,8 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 			new VCCmdStar( part(),
 				x, y,
 				d1,
-				m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
-				m_dialog->valueEdges(),
+				m_dialog->innerR() * d1 / m_dialog->outerR(),
+				m_dialog->edges(),
 				d2 );
 }
 

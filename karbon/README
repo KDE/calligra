@@ -12,6 +12,9 @@ core/
 data/
 	kde data
 
+dialogs/
+	dialogs
+
 pics/
 	icons and grafx
 
@@ -24,8 +27,8 @@ tests/
 tools/
 	stuff you can do with the mouse
 
-ui/
-	dialog definitions and widgets
-
 visitors/
 	shape (mostly paths) manipulation stuff
+
+widgets/
+	widgets

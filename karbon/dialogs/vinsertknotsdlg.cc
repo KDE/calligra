@@ -6,20 +6,20 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
+#include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
 
-#include "vmdlg_polygonize.h"
+#include "vinsertknotsdlg.h"
 
-VMDlgPolygonize::VMDlgPolygonize()
+VInsertKnotsDlg::VInsertKnotsDlg()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Polygonize" ) );
+	setCaption( i18n( "Insert Knots" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
@@ -30,8 +30,9 @@ VMDlgPolygonize::VMDlgPolygonize()
 
  	outerbox->addWidget( group );
 
-	new QLabel( i18n( "Flatness:" ), group );
-	m_flatness = new QLineEdit( 0, group );
+	new QLabel( i18n( "Knots:" ), group );
+	m_knots = new QSpinBox( group );
+	m_knots->setMinValue( 1 );
 
 	outerbox->addSpacing( 2 );
 
@@ -57,19 +58,17 @@ VMDlgPolygonize::VMDlgPolygonize()
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
-double
-VMDlgPolygonize::valueFlatness() const
+uint
+VInsertKnotsDlg::knots() const
 {
-	return m_flatness->text().toDouble();
+	return m_knots->value();
 }
 
 void
-VMDlgPolygonize::setValueFlatness( double value )
+VInsertKnotsDlg::setKnots( uint value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_flatness->setText( s );
+	m_knots->setValue( value );
 }
 
-#include "vmdlg_polygonize.moc"
+#include "vinsertknotsdlg.moc"
 
