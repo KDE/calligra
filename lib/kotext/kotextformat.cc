@@ -504,9 +504,9 @@ QString KoTextFormat::attributeFontToString( KoTextFormat::AttributeStyle _attr 
     if (_attr == KoTextFormat::ATT_NONE )
         return QString("none");
     else if ( _attr == KoTextFormat::ATT_UPPER )
-        return QString("upper");
+        return QString("uppercase");
     else if ( _attr == KoTextFormat::ATT_LOWER )
-        return QString("lower");
+        return QString("lowercase");
     else
         return QString("none");
 }
@@ -515,9 +515,9 @@ KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString 
 {
     if ( _str == "none" )
         return KoTextFormat::ATT_NONE;
-    else if ( _str == "upper")
+    else if ( _str == "uppercase")
         return KoTextFormat::ATT_UPPER;
-    else if ( _str == "lower")
+    else if ( _str == "lowerlower")
         return KoTextFormat::ATT_LOWER;
     else
         return KoTextFormat::ATT_NONE;
