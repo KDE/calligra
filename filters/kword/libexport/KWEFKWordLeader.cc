@@ -151,11 +151,16 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 {
     FrameAnchor* frameAnchor= (FrameAnchor*) tagData;
 
-    int lRed, lBlue, lGreen;
-    int rRed, rBlue, rGreen;
-    int tRed, tBlue, tGreen;
-    int bRed, bBlue, bGreen;
-    int bkRed, bkBlue, bkGreen;
+    int lRed=0, lBlue=0, lGreen=0;
+    int rRed=0, rBlue=0, rGreen=0;
+    int tRed=0, tBlue=0, tGreen=0;
+    int bRed=0, bBlue=0, bGreen=0;
+    int bkRed=255, bkBlue=255, bkGreen=255;
+
+    frameAnchor->frame.lWidth=0.0;
+    frameAnchor->frame.rWidth=0.0;
+    frameAnchor->frame.tWidth=0.0;
+    frameAnchor->frame.bWidth=0.0;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
