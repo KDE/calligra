@@ -293,11 +293,12 @@ void KWFrame::setSelected( bool _selected )
 
 QRect KWFrame::outerRect() const
 {
-    QRect outerRect( getFrameSet()->kWordDocument()->zoomRect( *this ) );
-    outerRect.rLeft() -= QMAX( 1, getLeftBorder().ptWidth );
-    outerRect.rTop() -= QMAX( 1, getTopBorder().ptWidth );
-    outerRect.rRight() += QMAX( 1, getRightBorder().ptWidth );
-    outerRect.rBottom() += QMAX( 1, getBottomBorder().ptWidth );
+    KWDocument *doc = getFrameSet()->kWordDocument();
+    QRect outerRect( doc->zoomRect( *this ) );
+    outerRect.rLeft() -= QMAX( 1, doc->zoomItX( getLeftBorder().ptWidth ) + 0.5 );
+    outerRect.rTop() -= QMAX( 1, doc->zoomItY( getTopBorder().ptWidth ) + 0.5 );
+    outerRect.rRight() += QMAX( 1, doc->zoomItX( getRightBorder().ptWidth ) + 0.5 );
+    outerRect.rBottom() += QMAX( 1, doc->zoomItY( getBottomBorder().ptWidth ) + 0.5 );
     return outerRect;
 }
 
@@ -787,17 +788,17 @@ void KWFrameSet::load( QDomElement &attributes )
             sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
 
             KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, rainch == -1 ? runAroundGap : KWUnit( rapt, ramm, rainch ) );
-            if(c==l.color && l.ptWidth==1 && l.style==0 )
-                l.ptWidth=0;
+//            if(c==l.color && l.ptWidth==1 && l.style==0 )
+//                l.ptWidth=0;
             frame->setLeftBorder( l );
-            if(c==r.color  && r.ptWidth==1 && r.style==0)
-                r.ptWidth=0;
+//            if(c==r.color  && r.ptWidth==1 && r.style==0)
+//                r.ptWidth=0;
             frame->setRightBorder( r );
-            if(c==t.color && t.ptWidth==1 && t.style==0 )
-                t.ptWidth=0;
+//            if(c==t.color && t.ptWidth==1 && t.style==0 )
+//                t.ptWidth=0;
             frame->setTopBorder( t );
-            if(c==b.color && b.ptWidth==1 && b.style==0 )
-                b.ptWidth=0;
+//            if(c==b.color && b.ptWidth==1 && b.style==0 )
+//                b.ptWidth=0;
             frame->setBottomBorder( b );
             frame->setBackgroundColor( QBrush( c ) );
             frame->setBLeft( KWUnit( lpt, lmm, linch ) );
@@ -1195,8 +1196,8 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     frames.first()->setWidth( width );
     frames.first()->setHeight( height );
 
-    if ( ( oldWidth != width ) || ( oldHeight != height ) ) {
-        kWordDocument()->repaintAllViews( false );
+    if ( ( oldWidth > width ) || ( oldHeight > height ) ) {
+        kWordDocument()->repaintAllViews( true ); // ## is "true" necessary ? Try false (DF)
     }
 
     updateFrames();
