@@ -30,6 +30,7 @@ moc_koMainWindow.cc: koMainWindow.h
 
 koDocument.cc: koDocument.h
 koDocument.h: koffice.h
+koffice.cc: koffice.h
 koffice.h: koffice.idl
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) koffice.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I../store -I$(idldir) koffice.idl
 
