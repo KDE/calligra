@@ -214,6 +214,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     createGUI();
 
     setKeyCompression( true );
+    
+    connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
 }
 
 /*=============================================================*/
@@ -458,6 +460,18 @@ void KPresenterView::insertPicture()
     }
 
     file = url.path();
+
+    QCursor c = page->cursor();
+    page->setCursor( waitCursor );
+    if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file, xOffset, yOffset );
+    page->setCursor( c );
+}
+
+/*====================== insert a picture (w/o filedialog) =======================*/
+void KPresenterView::insertPicture(const QString &file)
+{
+    page->setToolEditMode( TEM_MOUSE );
+    page->deSelectAllObj();
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );

@@ -133,6 +133,7 @@ public slots:
     // insert menu
     void insertPage();
     void insertPicture();
+    void insertPicture(const QString &file);
     void insertClipart();
 
     // tools menu
