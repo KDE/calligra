@@ -186,6 +186,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
     m_bAllowAutoFormat = true;
+    usedSoundFile = QStringList();
+    haveNotOwnDiskSoundFile = QStringList();
 
     m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     newZoomAndResolution(false,false);
@@ -420,6 +422,11 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 /*========================== save ===============================*/
 QDomDocument KPresenterDoc::saveXML()
 {
+    if ( saveOnlyPage == -1 ) {
+        emit sigStartProgressForSaveFile();
+        emit sigProgress( 0 );
+    }
+
     KPObject *kpobject = 0L;
     QDomDocument doc("DOC");
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -450,6 +457,9 @@ QDomDocument KPresenterDoc::saveXML()
 
     presenter.appendChild(saveAttribute( doc ));
 
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 5 );
+
     QDomElement element=doc.createElement("BACKGROUND");
     element.setAttribute("rastX", _rastX);
     element.setAttribute("rastY", _rastY);
@@ -458,6 +468,9 @@ QDomDocument KPresenterDoc::saveXML()
 #endif
     element.appendChild(saveBackground( doc ));
     presenter.appendChild(element);
+
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 10 );
 
     element=doc.createElement("HEADER");
     element.setAttribute("show", static_cast<int>( hasHeader() ));
@@ -469,9 +482,15 @@ QDomDocument KPresenterDoc::saveXML()
     element.appendChild(_footer->save( doc,0 ));
     presenter.appendChild(element);
 
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 20 );
+
     presenter.appendChild(saveTitle( doc ));
 
     presenter.appendChild(saveNote( doc ));
+
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 30 );
 
     presenter.appendChild(saveObjects(doc));
 
@@ -490,6 +509,9 @@ QDomDocument KPresenterDoc::saveXML()
     presenter.appendChild(element);
 
     if ( saveOnlyPage == -1 )
+        emit sigProgress( 40 );
+
+    if ( saveOnlyPage == -1 )
     {
         element=doc.createElement("SELSLIDES");
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
@@ -499,6 +521,8 @@ QDomDocument KPresenterDoc::saveXML()
             element.appendChild(slide);
         }
         presenter.appendChild(element);
+
+        emit sigProgress( 50 );
     }
 
     if ( saveOnlyPage == -1 )
@@ -508,6 +532,8 @@ QDomDocument KPresenterDoc::saveXML()
         QPtrList<KoStyle> m_styleList(m_styleColl->styleList());
         for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
             saveStyle( p, styles );
+
+        emit sigProgress( 60 );
     }
 
     // Write "OBJECT" tag for every child
@@ -555,6 +581,10 @@ QDomDocument KPresenterDoc::saveXML()
             }
         }
     }
+
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 70 );
+
     makeUsedPixmapList();
 
     // Save the PIXMAPS and CLIPARTS list
@@ -563,8 +593,14 @@ QDomDocument KPresenterDoc::saveXML()
     QDomElement pixmaps = _imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, usedPixmaps, prefix );
     presenter.appendChild( pixmaps );
 
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 80 );
+
     QDomElement cliparts = _clipartCollection.saveXML( KoPictureCollection::CollectionClipart, doc, usedCliparts, prefix );
     presenter.appendChild( cliparts );
+
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 90 );
 
     // Save sound file list.
     makeUsedSoundFileList();
@@ -697,12 +733,25 @@ QDomElement KPresenterDoc::saveUsedSoundFileToXML( QDomDocument &_doc, QStringLi
 /*==============================================================*/
 bool KPresenterDoc::completeSaving( KoStore* _store )
 {
-    if ( !_store )
+    if ( !_store ) {
+        if ( saveOnlyPage == -1 ) {
+            emit sigProgress( 100 );
+            emit sigProgress( -1 );
+            emit sigStopProgressForSaveFile();
+        }
 	return true;
+    }
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
     _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps, prefix );
     _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts, prefix );
     saveUsedSoundFileToStore( _store, usedSoundFile, prefix );
+
+    if ( saveOnlyPage == -1 ) {
+        emit sigProgress( 100 );
+        emit sigProgress( -1 );
+        emit sigStopProgressForSaveFile();
+    }
+
     return true;
 }
 
@@ -872,11 +921,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
     QDomElement elem=document.firstChild().toElement();
 
-    uint childCount=document.childNodes().count();
+    uint childTotalCount=document.childNodes().count();
+    uint childCount = 0;
 
     while(!elem.isNull()) {
-        uint base = childCount;
-
         kdDebug() << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
             KPresenterChild *ch = new KPresenterChild( this );
@@ -1075,9 +1123,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         }
         elem=elem.nextSibling().toElement();
 
-        base-=1;
-
-        emit sigProgress(::abs(100-base/childCount*100)+10);
+        emit sigProgress( childCount * ( 70/childTotalCount ) + 15 );
+        childCount += 1;
     }
 
     if ( _rastX == 0 ) _rastX = 10;
@@ -1086,7 +1133,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
     setModified(false);
-    emit sigProgress(-1);
+
     return true;
 }
 
@@ -1551,13 +1598,17 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
             delete m_pixmapMap;
             m_pixmapMap = NULL;
         }
+        emit sigProgress( 80 );
+
         if ( m_clipartMap ) {
             _clipartCollection.readFromStore( _store, *m_clipartMap, prefix );
             delete m_clipartMap;
             m_clipartMap = NULL;
         }
+        emit sigProgress( 90 );
 
-        loadUsedSoundFileFromStore( _store, usedSoundFile, prefix );
+        if ( !usedSoundFile.isEmpty() )
+            loadUsedSoundFileFromStore( _store, usedSoundFile, prefix );
 
 	if ( _clean )
         {
@@ -1582,7 +1633,11 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	else
 	    setPageLayout( m_pageLayout );
     }
+
+    emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
+    emit sigProgress( -1 );
+
     return true;
 }
 

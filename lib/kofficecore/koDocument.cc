@@ -322,12 +322,13 @@ void KoDocument::slotAutoSave()
     //kdDebug()<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
     if ( !m_file.isEmpty() && isModified() && d->modifiedAfterAutosave )
     {
-      d->m_autosaving = true;
-      // TODO temporary message in statusbar ?
-      /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
-      setModified( true );
-      d->modifiedAfterAutosave=false;
-      d->m_autosaving = false;
+        connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
+        d->m_autosaving = true;
+        /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
+        setModified( true );
+        d->modifiedAfterAutosave=false;
+        d->m_autosaving = false;
+        disconnect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
     }
 }
 

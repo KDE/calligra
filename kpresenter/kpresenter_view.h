@@ -267,6 +267,8 @@ public slots:
     void updateObjectStatusBarItem();
     void pageNumChanged();
     void updateSideBarMenu();
+    void slotStartProgressForSaveFile();
+    void slotStopProgressForSaveFile();
 
     void objectSelectedChanged();
 
@@ -653,6 +655,7 @@ private:
     // Statusbar items
     QLabel * m_sbPageLabel; // 'Current page number and page count' label
     QLabel * m_sbObjectLabel; // Info about selected object
+    QLabel *m_sbSavingLabel; // use when saving file
 
     // actions
     KAction *actionEditCut;

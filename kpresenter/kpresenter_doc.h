@@ -362,6 +362,8 @@ signals:
     void sig_terminateEditing( KPTextObject * );
     void sig_changeActivePage( KPrPage* );
     void sig_updateMenuBar();
+    void sigStartProgressForSaveFile();
+    void sigStopProgressForSaveFile();
 
 protected slots:
     void slotDocumentRestored();
