@@ -61,6 +61,32 @@ public:
     void unexecute() { KivioHidePageCommand::execute(); }
 };
 
+class KivioAddPageCommand : public KNamedCommand
+{
+public:
+    KivioAddPageCommand( const QString &_name, KivioPage *_page );
+    ~KivioAddPageCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage * m_page;
+};
+
+class KivioRemovePageCommand : public KNamedCommand
+{
+public:
+    KivioRemovePageCommand( const QString &_name, KivioPage *_page );
+    ~KivioRemovePageCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage * m_page;
+};
+
 
 #endif
 

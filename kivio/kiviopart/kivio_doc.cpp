@@ -416,6 +416,21 @@ void KivioDoc::addPage( KivioPage* page )
   emit sig_addPage(page);
 }
 
+void KivioDoc::insertPage( KivioPage * page )
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KivioView*)it.current())->insertPage( page );
+}
+
+void KivioDoc::takePage( KivioPage * page )
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KivioView*)it.current())->removePage( page );
+}
+
+
 void KivioDoc::paintContent( QPainter&, const QRect&, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
     // ## TODO - otherwise kivio isn't embeddable

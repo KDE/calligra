@@ -136,6 +136,10 @@ public:
     void setUndoRedoLimit(int val);
     KCommandHistory * commandHistory() { return m_commandHistory; }
 
+    void insertPage( KivioPage * page );
+    void takePage( KivioPage * page );
+
+
 public slots:
   void updateView(KivioPage*, bool modified=true);
 

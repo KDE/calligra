@@ -56,6 +56,10 @@ public:
    */
   void addPage( KivioPage* );
 
+    void takePage( KivioPage* page );
+    void insertPage( KivioPage* page );
+
+
   /**
    * @param _pages becomes removed from the map. This won't delete the page.
    */

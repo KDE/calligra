@@ -47,6 +47,17 @@ KivioMap::~KivioMap()
 
 }
 
+void KivioMap::takePage( KivioPage* page )
+{
+    int pos=m_lstPages.findRef(page);
+    m_lstPages.take( pos );
+}
+
+void KivioMap::insertPage( KivioPage* page )
+{
+  m_lstPages.append(page);
+}
+
 void KivioMap::addPage( KivioPage* page )
 {
   m_lstPages.append(page);

@@ -19,6 +19,8 @@
 #include <kcommand.h>
 #include "kivio_command.h"
 #include "kivio_page.h"
+#include "kivio_map.h"
+#include "kivio_doc.h"
 
 KivioChangePageNameCommand::KivioChangePageNameCommand(const QString &_name,  const QString & _oldPageName, const QString & _newPageName, KivioPage *_page)
     : KNamedCommand( _name ),
@@ -69,3 +71,52 @@ KivioShowPageCommand::KivioShowPageCommand( const QString &_name, KivioPage *_pa
 {
 }
 
+
+KivioAddPageCommand::KivioAddPageCommand(const QString &_name, KivioPage *_page)
+    : KNamedCommand( _name ),
+      m_page( _page )
+{
+}
+
+KivioAddPageCommand::~KivioAddPageCommand()
+{
+    delete m_page;
+    m_page=0L;
+}
+
+void KivioAddPageCommand::execute()
+{
+    m_page->map()->insertPage( m_page );
+    m_page->doc()->insertPage( m_page );
+}
+
+void KivioAddPageCommand::unexecute()
+{
+    m_page->map()->takePage( m_page );
+    m_page->doc()->takePage( m_page );
+}
+
+KivioRemovePageCommand::KivioRemovePageCommand(const QString &_name, KivioPage *_page)
+    : KNamedCommand( _name ),
+      m_page( _page )
+{
+}
+
+KivioRemovePageCommand::~KivioRemovePageCommand()
+{
+    delete m_page;
+    m_page=0L;
+}
+
+void KivioRemovePageCommand::execute()
+{
+    m_page->map()->takePage( m_page );
+    m_page->doc()->takePage( m_page );
+}
+
+void KivioRemovePageCommand::unexecute()
+{
+    m_page->map()->insertPage( m_page );
+    m_page->doc()->insertPage( m_page );
+
+}

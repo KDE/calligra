@@ -119,7 +119,7 @@
 
 #include "kivio_paragraph_action.h"
 #include "KIvioViewIface.h"
-
+#include "kivio_command.h"
 #include <qiconview.h>
 
 
@@ -515,18 +515,23 @@ void KivioView::updateReadWrite( bool readwrite )
 
 void KivioView::addPage( KivioPage* page )
 {
-  if( !page->isHidden() ) {
-    m_pTabBar->addTab(page->pageName());
-    setActivePage(page);
-  } else {
-    m_pTabBar->addHiddenTab(page->pageName());
-  }
+  insertPage(  page );
 
   QObject::connect( page, SIGNAL( sig_PageHidden( KivioPage* ) ),
                     this, SLOT( slotPageHidden( KivioPage* ) ) );
   QObject::connect( page, SIGNAL( sig_PageShown( KivioPage* ) ),
                     this, SLOT( slotPageShown( KivioPage* ) ) );
 
+}
+
+void KivioView::insertPage( KivioPage* page )
+{
+    if( !page->isHidden() ) {
+    m_pTabBar->addTab(page->pageName());
+    setActivePage(page);
+  } else {
+    m_pTabBar->addHiddenTab(page->pageName());
+  }
 }
 
 void KivioView::removePage( KivioPage *_t )
@@ -584,7 +589,10 @@ void KivioView::changePage( const QString& name )
 
 void KivioView::insertPage()
 {
-  m_pDoc->addPage(m_pDoc->createPage());
+    KivioPage * t =m_pDoc->createPage();
+    m_pDoc->addPage(t);
+    KivioAddPageCommand * cmd = new KivioAddPageCommand(i18n("Insert Page"), t);
+    m_pDoc->addCommand( cmd );
 }
 
 void KivioView::hidePage()
@@ -639,9 +647,12 @@ void KivioView::removePage()
 
   if ( ret == 3 ) {
       KivioPage* tbl = m_pActivePage;
-      doc()->map()->removePage( tbl );
-      removePage(tbl);
-      delete tbl;
+      KivioRemovePageCommand *cmd = new KivioRemovePageCommand(i18n("Remove Page"), tbl);
+      cmd->execute();
+      doc()->addCommand( cmd );
+      //doc()->map()->removePage( tbl );
+      //removePage(tbl);
+      //delete tbl;
   }
 }
 

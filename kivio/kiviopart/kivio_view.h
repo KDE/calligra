@@ -129,6 +129,8 @@ public:
   QColor bgColor();
   int lineWidth();
     void updateButton();
+    void insertPage( KivioPage* page );
+
 
 protected:
   virtual void customEvent( QCustomEvent* );
