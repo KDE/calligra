@@ -165,4 +165,5 @@ splash_DATA = kiviosplash.png
 
 kivio_view.lo: ui/gridsetupdialogbase.h ui/kivio_protection_panel_base.h \
 	ui/kivio_layer_panel_base.h ui/kivio_birdeye_panel_base.h \
-	ui/export_page_dialog_base.h ui/guidessetupdialogbase.h ui/kiviooptionsdialogbase.h
+	ui/export_page_dialog_base.h ui/guidessetupdialogbase.h ui/kiviooptionsdialogbase.h \
+	ui/aligndialog.h
