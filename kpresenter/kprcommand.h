@@ -76,6 +76,7 @@ protected:
     QPtrList<ShadowValues> oldShadow;
     QPtrList<KPObject> objects;
     ShadowValues newShadow;
+    KPrPage *m_page;
 
 };
 

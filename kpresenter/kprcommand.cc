@@ -64,6 +64,8 @@ ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, 
     doc = _doc;
     newShadow = _newShadow;
 
+    m_page = doc->findSideBarPage( objects );
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
@@ -88,6 +90,12 @@ void ShadowCmd::execute()
         it.current()->setShadowParameter(newShadow.shadowDistance,newShadow.shadowDirection,newShadow.shadowColor);
       }
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -98,6 +106,12 @@ void ShadowCmd::unexecute()
         objects.at( i )->setShadowParameter(oldShadow.at(i)->shadowDistance,oldShadow.at(i)->shadowDirection,oldShadow.at(i)->shadowColor);
     }
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /******************************************************************/
@@ -412,7 +426,7 @@ void DeleteCmd::execute()
     if ( doc->refreshSideBar())
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 
@@ -429,7 +443,7 @@ void DeleteCmd::unexecute()
     {
 
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 
@@ -765,6 +779,12 @@ void LowerRaiseCmd::execute()
 {
     m_page->setObjectList( newList );
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -772,6 +792,12 @@ void LowerRaiseCmd::unexecute()
 {
     m_page->setObjectList( oldList );
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /******************************************************************/
@@ -824,7 +850,7 @@ void MoveByCmd::execute()
     if ( doc->refreshSideBar()) //for redo
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 
@@ -848,7 +874,7 @@ void MoveByCmd::unexecute()
     if ( doc->refreshSideBar())
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 
@@ -908,7 +934,7 @@ void MoveByCmd2::execute()
     if ( doc->refreshSideBar()) //for redo
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 
@@ -932,7 +958,7 @@ void MoveByCmd2::unexecute()
     if ( doc->refreshSideBar()) //for redo
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 

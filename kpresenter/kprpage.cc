@@ -3092,7 +3092,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
                                    _objects, m_doc,this );
 	if ( m_doc->refreshSideBar()) {  //because it's a macro command
 	  int pos=m_doc->pageList().findRef(this);
-	  m_doc->updateSideBarItem(pos);
+	  m_doc->updateSideBarItem(pos, ( this == m_doc->stickyPage()) ? true: false );
 	}
     }
     return moveByCmd;
