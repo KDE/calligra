@@ -1254,32 +1254,33 @@ void KWCanvas::mrCreateText()
 
 void KWCanvas::mrCreatePixmap()
 {
-    //kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
+    kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
     // Make sure it's completely on page.
-    if(m_insRect.right() > m_doc->ptPaperWidth()) {
-        double width = m_insRect.width();
+    KoRect picRect( QMIN(m_insRect.left(), m_insRect.right()), QMIN( m_insRect.top(), m_insRect.bottom()), QABS( m_insRect.width()), QABS(m_insRect.height()));
+    if(picRect.right() > m_doc->ptPaperWidth()) {
+        double width = picRect.width();
+
         m_insRect.setLeft(m_doc->ptPaperWidth() - width);
         m_insRect.setRight(m_doc->ptPaperWidth());
     }
-    int page = static_cast<int>(m_insRect.top() / m_doc->ptPaperHeight()) + 1;
-    //kdDebug() << "page: " << page << endl;
+    int page = static_cast<int>(picRect.top() / m_doc->ptPaperHeight()) + 1;
 
-    if(m_insRect.bottom() > m_doc->ptPaperHeight() * page) {
-        double height = m_insRect.height();
-        m_insRect.setTop(m_doc->ptPaperHeight() * page - height);
-        m_insRect.setBottom(m_doc->ptPaperHeight() * page);
+    if(picRect.bottom() > m_doc->ptPaperHeight() * page) {
+        double height = picRect.height();
+        picRect.setTop(m_doc->ptPaperHeight() * page - height);
+        picRect.setBottom(m_doc->ptPaperHeight() * page);
     }
 
-    if ( m_insRect.width() > 0 /*m_doc->gridX()*/ && m_insRect.height() > 0 /*m_doc->gridY()*/ && !m_pictureFilename.isEmpty() )
+    if ( picRect.width() > 0 /*m_doc->gridX()*/ &&picRect.height() > 0 /*m_doc->gridY()*/ && !m_pictureFilename.isEmpty() )
     {
         KWFrameSet * fs = 0L;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
         frameset->loadPicture( m_pictureFilename );
         frameset->setKeepAspectRatio( m_keepRatio ); // For a clipart, this has almost no effect
         fs = frameset;
-        m_insRect = m_insRect.normalize();
-        KWFrame *frame = new KWFrame(fs, m_insRect.x(), m_insRect.y(), m_insRect.width(),
-                                     m_insRect.height() );
+        picRect = picRect.normalize();
+        KWFrame *frame = new KWFrame(fs, picRect.x(), picRect.y(), picRect.width(),
+                                     picRect.height() );
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
