@@ -41,6 +41,7 @@
 #include <kparts/componentfactory.h>
 
 #include <kexidb/connection.h>
+#include <kexidb/utils.h>
 
 #include "kexibrowser.h"
 #include "kexipropertyeditorview.h"
@@ -1436,7 +1437,10 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 		showErrorMessage(msg);
 		return;
 	}
-	msg += ("<p>"+obj->errorMsg());
+	QString details;
+	KexiDB::getHTMLErrorMesage(obj, msg, details);
+	
+/*	msg += ("<p>"+obj->errorMsg());
 	QString details;
 	if (!obj->serverErrorMsg().isEmpty())
 		details += "<p><b>" +i18n("Message from server:") + "</b> " + obj->serverErrorMsg();
@@ -1446,7 +1450,7 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 	if (!details.isEmpty()) {
 		details += (QString("<p><b>")+i18n("Result number:")+"</b> "+QString::number(obj->serverResult()));
 //		KMessageBox::detailedError(this, msg, details);
-	}
+	}*/
 	showErrorMessage(msg, details);
 }
 
