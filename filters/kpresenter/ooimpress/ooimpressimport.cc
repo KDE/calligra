@@ -665,6 +665,8 @@ void OoImpressImport::appendBackgroundPage( QDomDocument &doc, QDomElement &back
             pef=22;
         else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
             pef=20;
+        else if (effect=="random") // PEF_RANDOM
+            pef=-1;
         else         // we choose a random transition instead of the unsupported ones ;)
             pef=-1;
 

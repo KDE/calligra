@@ -699,6 +699,9 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
         kdDebug()<<" tmp :"<<tmp<<endl;
         switch( tmp )
         {
+        case -1:
+            m_page_effect = "random";
+            break;
         case 1:
             m_page_effect = "close-vertical";
             break;
