@@ -2120,7 +2120,7 @@ void KWView::textIncreaseIndent()
         {
             KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
             double val=(u.pt()+MM_TO_POINT(10));
-            if(val <=(doc->paperWidth()-doc->rightBorder()-doc->leftBorder()))
+            if(val <=(doc->ptPaperWidth()-doc->ptRightBorder()-doc->ptLeftBorder()))
                 {
                     u.setPT( val );
                     edit->setMargin( QStyleSheetItem::MarginLeft, u );
