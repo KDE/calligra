@@ -318,7 +318,7 @@ void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *p
     if( m_autoCompletion )
     {
         QString lastWord = getLastWord(parag, index+1);
-        QString word=m_listCompletion->makeCompletion( lastWord );
+        QString word=m_listCompletion->makeCompletion( lastWord.lower() );
         if( !word.isEmpty() )
         {
             unsigned int length = lastWord.length();
@@ -327,6 +327,7 @@ void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *p
             cursor.setParag( parag );
             cursor.setIndex( start );
             KoTextDocument * textdoc = parag->textDocument();
+            word=lastWord+word.right(word.length()-lastWord.length());
             if( m_completionAppendSpace )
                 word+=" ";
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -407,7 +408,7 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         QString lastWord = getLastWord(parag, index);
         if( m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
             && lastWord.length()>= m_minCompletionWordLength )
-            m_listCompletion->addItem( lastWord );
+            m_listCompletion->addItem( lastWord.lower() );
 
         detectStartOfLink(lastWord);
         //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
