@@ -23,12 +23,16 @@ DESCRIPTION
    its child objects have been processed.
 */
 
+#include <excelfilter.h>
 #include <koFilterManager.h>
 #include <koQueryTrader.h>
 #include <ktempfile.h>
+#include <myfile.h>
 #include <olefilter.h>
 #include <olefilter.moc>
+#include <powerpointfilter.h>
 #include <unistd.h>
+#include <wordfilter.h>
 
 OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -131,6 +135,7 @@ void OLEFilter::slotSavePart(
     {
         // The key is already here - return the part id.
         id = partMap[key];
+        mimeType = mimeMap[key];
     }
     else
     {
@@ -146,16 +151,16 @@ void OLEFilter::slotSavePart(
 
         tempFile.file()->writeBlock(data, length);
         tempFile.close();
-        QString result = mgr->import(tempFile.name(), mimeType, config, m_prefixOut + id.mid(sizeof("tar:") - 1) );
+        QString result = mgr->import(tempFile.name(), mimeType, config, m_prefixOut + id.mid(sizeof("tar:") - 1));
         unlink(tempFile.name().local8Bit());
         partMap.insert(key, id);
         mimeMap.insert(key, mimeType);
 
-        // Now fetch out the root element from the resulting KoStore.
+        // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
 
         KoStore storedPart(result, KoStore::Read);
         if (!store->embed(id, storedPart))
-            kdError(s_area) << "OLEFilter::slotSavePart(): Could not embed in KoStore!" << endl;
+            kdError(s_area) << "Could not embed in KoStore!" << endl;
         unlink(result.local8Bit());
     }
     //storageId = QFile::encodeName(id);
@@ -289,11 +294,13 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
     m_path = parentPath;
     if(!onlyDirs) {
         FilterBase *myFilter=0L;
+        QStringList nodeNames;
         node=list.first();
 
         // Find out the correct file type and create the appropriate filter
         do {
             kdDebug(s_area) << "OLEFilter::convert(): " << node->name << endl;
+            nodeNames += node->name;
             if(node->name=="WordDocument") {
 
                 myFile main, table0, table1, data;
@@ -345,13 +352,14 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
             }
             else
                 node=list.next();
-        } while(myFilter==0L && node!=0);
+        } while(!myFilter && node);
 
-        if(myFilter==0L) {
-            // unknown type
-            kdDebug(s_area) << "OLEFilter::convert(): superunknown -> black hole sun ;)" << endl;
-            myFilter=new FilterBase();
+        if(!myFilter) {
+            // Unknown type. We turn it into a dummy kword document...
+            myFilter=new FilterBase(nodeNames);
+            mimeType = "application/x-kword";
         }
+
         // connect SIGNALs&SLOTs
         connectCommon(&myFilter);
 
