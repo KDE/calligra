@@ -39,7 +39,7 @@ public:
 
   QColor color() const { return m_pCurrentColor; }
 
-  KPopupMenu* popupMenu() { return m_pMenu; }
+  KPopupMenu* popupMenu() const { return m_pMenu; }
   void setDefaultColor(const QColor &_col);
 
 
@@ -56,7 +56,7 @@ protected slots:
   void panelColorSelected( const QColor& );
   void panelReject();
   virtual void slotActivated();
-  void defaulColor();
+  void defaultColor();
 
 protected:
   void init();
@@ -84,7 +84,7 @@ public:
 
   void setActive( bool );
 
-  QColor panelColor() { return m_Color; }
+  QColor panelColor() const { return m_Color; }
 
 signals:
   void selected( const QColor& );

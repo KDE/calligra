@@ -99,7 +99,7 @@ void TKSelectColorAction::init()
   if(d->defaultColorMenu)
   {
       m_pMenu->insertSeparator();
-      m_pMenu->insertItem(i18n("Default Color"),this,SLOT(defaulColor()));
+      m_pMenu->insertItem(i18n("Default Color"),this,SLOT(defaultColor()));
   }
 
   connect(m_pStandardColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
@@ -120,7 +120,7 @@ void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
   updatePixmap();
 }
 
-void TKSelectColorAction::defaulColor()
+void TKSelectColorAction::defaultColor()
 {
    m_pCurrentColor = d->defaultColor;
    emit activated();
@@ -197,6 +197,8 @@ void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
 
 void TKSelectColorAction::setCurrentColor( const QColor& color )
 {
+    if ( color == m_pCurrentColor )
+        return;
     m_pCurrentColor = color;
     setActiveColor( color );
     m_pRecentColor->setActiveColor(color );
@@ -584,10 +586,7 @@ void TKColorPanelButton::paintEvent( QPaintEvent* ev )
 void TKColorPanelButton::setActive( bool f )
 {
   m_bActive = f;
-  if (m_bActive)
-    setFrameStyle( Panel | Sunken );
-  else
-    setFrameStyle( NoFrame );
+  setFrameStyle( m_bActive ? Panel | Sunken : NoFrame );
 }
 
 void TKColorPanelButton::mouseReleaseEvent( QMouseEvent* )
