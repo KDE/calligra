@@ -2221,9 +2221,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 
     // Erase the background of the cell.
-    _painter.eraseRect( _tx + left_offset, _ty + top_offset,
-			w - left_offset - right_offset,
-			h - top_offset - bottom_offset );
+    if ( !_painter.device()->isExtDev() )
+	_painter.eraseRect( _tx + left_offset, _ty + top_offset,
+			    w - left_offset - right_offset,
+			    h - top_offset - bottom_offset );
 
     // Draw a background brush
     QBrush bb = backGroundBrush( _col, _row );
