@@ -3368,7 +3368,19 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
     drawBackground( &p, _pix.rect() );
 
     //objects in current page
-    drawAllObjectsInPage( &p, m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->objectList() );
+    QPtrList<KPObject> _list = m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->objectList();
+
+    // check if object is selected, if so put it on the right place for the output
+    if( _list.count() > 1 && (int)_list.count() > selectedObjectPosition && selectedObjectPosition >= 0) {
+        _list.setAutoDelete( false );
+        KPObject *kpobject = _list.last();
+        if ( kpobject->isSelected() ) {
+            _list.take( _list.count() - 1 );
+            _list.insert( selectedObjectPosition, kpobject );
+        }
+    }
+
+    drawAllObjectsInPage( &p, _list );
 
     //draw sticky object
     //the numbers for the sticky page have to be recalculated
