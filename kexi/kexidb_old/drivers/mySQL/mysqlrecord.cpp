@@ -70,16 +70,19 @@ MySqlRecord::reset()
 bool
 MySqlRecord::commit(unsigned int record, bool insertBuffer)
 {
+	kdDebug() << "MySqlRecord::commit()" << endl;
 	for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
 	{
 		if((*it).record == record && (*it).done == false)
 		{
+			kdDebug() << "MySqlRecord::commit(): escaping (" << (*it).value.toString() << endl;
 			QString value = m_db->escape((*it).value.toString());
+			kdDebug() << "MySqlRecord::commit(): escaped" << endl;
 			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
 			
 			if(!(*it).insertItem)
 			{
-
+				kdDebug() << "MySqlRecord::commit: committing update" << endl;
 				QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
 				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
 				m_db->query(statement);
@@ -87,7 +90,9 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			}
 			else
 			{
-//				QString statement("insert into %s set %s = '%s'"). m_table, (*it).field, (*it).value;
+				kdDebug() << "MySqlRecord::commit: committing suicide" << endl;
+				QString statement("insert into " + m_table + " set " + (*it).field + " = '" + value + "'");
+				kdDebug() << "MySqlRecord::commit(id, true): " << statement << endl;
 			}
 		}
 	}

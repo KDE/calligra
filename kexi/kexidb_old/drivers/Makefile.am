@@ -1,7 +1,7 @@
 if compile_mysql_plugin
-MYSQL_DIR=mySQL
+mysql_dir=mySQL
 endif
 
-SUBDIRS = $(MYSQL_DIR)
+SUBDIRS = $(mysql_dir)
 
 
