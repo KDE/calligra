@@ -183,7 +183,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 						unSelectWidget(m_moving);
 					else
 					{
-						kdDebug() << "The new insert Rect is " << m_moving->geometry() << endl;
+						kdDebug() << "The new insert Rect is " << m_moving->geometry().x() << " " << m_moving->geometry().y() << " " << m_moving->geometry().width() << " " << m_moving->geometry().height() <<endl;
 						m_insertRect = m_moving->geometry();
 					}
 				}
