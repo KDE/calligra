@@ -32,6 +32,7 @@
 #include <kdebug.h>
 #include <kozoomhandler.h>
 #include <koPoint.h>
+#include <kstdaction.h>
 
 #include <qapplication.h>
 #include <qcursor.h>
@@ -49,13 +50,11 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_panAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
-  m_pPlus = new KAction( i18n("Zoom Plus"), "viewmag+", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
+  m_pPlus = KStdAction::zoomIn(this, SLOT(zoomPlus()), actionCollection(), "zoomPlus");
   m_pPlus->setWhatsThis(i18n("You can zoom in on the document by pressing this button."));
-  connect(m_pPlus,SIGNAL(activated()),SLOT(zoomPlus()));
 
-  m_pMinus = new KAction( i18n("Zoom Minus"), "viewmag-", SHIFT+Key_F3, actionCollection(), "zoomMinus" );
+  m_pMinus = KStdAction::zoomOut(this, SLOT(zoomMinus()), actionCollection(), "zoomMinus");
   m_pMinus->setWhatsThis(i18n("By pressing this button you can zoom out of the document."));
-  connect(m_pMinus,SIGNAL(activated()),SLOT(zoomMinus()));
 
   m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", SHIFT+Key_F4, actionCollection(), "zoomWidth" );
   m_pZoomWidth->setWhatsThis(i18n("You can zoom the document that it fits into the window width."));
