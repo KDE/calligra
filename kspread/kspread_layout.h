@@ -97,8 +97,10 @@ public:
 
     bool load( const QDomElement& f, PasteMode pm );
     bool loadLayout( const QDomElement& f, PasteMode pm=Normal);
-    QDomElement save( QDomDocument& doc, bool force = false ) const;
+    QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false ) const;
     QDomElement saveLayout( QDomDocument& doc, bool force = false ) const;
+    QDomElement saveLayout( QDomDocument& doc, int _col, int _row, bool force=false ) const;
+
 
     ////////////////////////////////
     //

@@ -3933,7 +3933,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     //
     // Save the formatting information
     //
-    QDomElement format = KSpreadLayout::save( doc, force );
+    QDomElement format = KSpreadLayout::save( doc, m_iColumn, m_iRow, force );
     if ( format.hasChildNodes() || format.attributes().length() ) // don't save empty tags
         cell.appendChild( format );
 

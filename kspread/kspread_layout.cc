@@ -284,6 +284,91 @@ QPen KSpreadLayout::toPen(QDomElement &element) const
     return p;
 }
 
+QDomElement KSpreadLayout::saveLayout( QDomDocument& doc,int _col, int _row, bool force ) const
+{
+    QDomElement format = doc.createElement( "format" );
+
+    if ( hasProperty( PAlign ) || force )
+	format.setAttribute( "align", (int)align(_col,_row) );
+    if ( hasProperty( PAlignY ) || force  )
+	format.setAttribute( "alignY", (int)alignY(_col,_row) );
+    if ( ( hasProperty( PBackgroundColor ) || force ) && m_bgColor.isValid() )
+	format.setAttribute( "bgcolor", bgColor(_col,_row).name() );
+    if ( ( hasProperty( PMultiRow ) || force ) && testFlag(Flag_MultiRow) )
+	format.setAttribute( "multirow", "yes" );
+    if ( ( hasProperty( PVerticalText ) || force ) &&
+         testFlag( Flag_VerticalText) )
+	format.setAttribute( "verticaltext", "yes" );
+    if ( hasProperty( PPrecision ) || force )
+	format.setAttribute( "precision", precision(_col, _row) );
+    if ( ( hasProperty( PPrefix ) || force ) && !prefix(_col, _row).isEmpty() )
+	format.setAttribute( "prefix", prefix(_col, _row) );
+    if ( ( hasProperty( PPostfix ) || force ) && !postfix(_col, _row).isEmpty() )
+	format.setAttribute( "postfix", postfix(_col, _row) );
+    if ( hasProperty( PFloatFormat ) || force )
+	format.setAttribute( "float", (int)floatFormat(_col, _row) );
+    if ( hasProperty( PFloatColor ) || force )
+	format.setAttribute( "floatcolor", (int)floatColor(_col, _row ) );
+    if ( hasProperty( PFactor ) || force )
+	format.setAttribute( "faktor", factor(_col, _row ) );
+    if ( hasProperty( PFormatType ) || force )
+	format.setAttribute( "format",(int)getFormatType(_col,_row ));
+    if ( hasProperty( PAngle ) || force )
+	format.setAttribute( "angle", getAngle(_col, _row) );
+    if ( hasProperty( PIndent ) || force )
+	format.setAttribute( "indent", getIndent(_col, _row) );
+    if( ( hasProperty( PDontPrintText ) || force ) &&
+        testFlag( Flag_DontPrintText))
+	format.setAttribute( "dontprinttext", "yes" );
+    if ( hasProperty( PFont ) || force )
+	format.appendChild( createElement( "font", textFont( _col, _row ), doc ) );
+    if ( ( hasProperty( PTextPen ) || force ) && textPen(_col, _row ).color().isValid() )
+	format.appendChild( createElement( "pen", textPen(_col, _row ), doc ) );
+    if ( hasProperty( PBackgroundBrush ) || force )
+    {
+	format.setAttribute( "brushcolor", backGroundBrushColor(_col, _row).name() );
+	format.setAttribute( "brushstyle",(int)backGroundBrushStyle(_col, _row) );
+    }
+    if ( hasProperty( PLeftBorder ) || force )
+    {
+	QDomElement left = doc.createElement( "left-border" );
+	left.appendChild( createElement( "pen", leftBorderPen(_col, _row), doc ) );
+	format.appendChild( left );
+    }
+    if ( hasProperty( PTopBorder ) || force )
+    {
+	QDomElement top = doc.createElement( "top-border" );
+	top.appendChild( createElement( "pen", topBorderPen(_col, _row), doc ) );
+	format.appendChild( top );
+    }
+    if ( hasProperty( PRightBorder ) || force )
+    {
+	QDomElement right = doc.createElement( "right-border" );
+	right.appendChild( createElement( "pen", rightBorderPen(_col, _row), doc ) );
+	format.appendChild( right );
+    }
+    if ( hasProperty( PBottomBorder ) || force )
+    {
+	QDomElement bottom = doc.createElement( "bottom-border" );
+	bottom.appendChild( createElement( "pen", bottomBorderPen(_col, _row), doc ) );
+	format.appendChild( bottom );
+    }
+    if ( hasProperty( PFallDiagonal ) || force )
+    {
+	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+	fallDiagonal.appendChild( createElement( "pen", fallDiagonalPen(_col, _row), doc ) );
+	format.appendChild( fallDiagonal );
+    }
+    if ( hasProperty( PGoUpDiagonal ) || force )
+    {
+	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+	goUpDiagonal.appendChild( createElement( "pen", goUpDiagonalPen( _col, _row ), doc ) );
+	format.appendChild( goUpDiagonal );
+    }
+    return format;
+}
+
+
 QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
 {
     QDomElement format = doc.createElement( "format" );
@@ -368,9 +453,9 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
     return format;
 }
 
-QDomElement KSpreadLayout::save( QDomDocument& doc, bool force ) const
+QDomElement KSpreadLayout::save( QDomDocument& doc, int _col, int _row,bool force ) const
 {
-    QDomElement format = saveLayout(doc, force);
+    QDomElement format = saveLayout(doc, _col, _row,force);
     return format;
 }
 
