@@ -2761,6 +2761,23 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>GAMMALN</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the natural logarithm of the gamma function: G(x). The number
+          parameter must be positive.
+        </Text>
+        <Syntax>GAMMALN(Number)</Syntax>
+        <Example>GAMMALN(2) returns 0</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

@@ -2574,6 +2574,26 @@ static bool kspreadfunc_norminv( KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_gammaln( KSContext& context ) {
+  //returns the natural logarithm of the gamma function
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "GAMMALN", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+
+  if (x > 0.0)
+    context.setValue( new KSValue(GetLogGamma(x)));
+  else
+    return false;
+  
+  return true;        
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -5078,6 +5098,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "WEIBULL", new KSValue( new KSBuiltinFunction( module, "WEIBULL", kspreadfunc_weibull) ) );
   module->addObject( "NORMSINV", new KSValue( new KSBuiltinFunction( module, "NORMSINV", kspreadfunc_normsinv) ) );
   module->addObject( "NORMINV", new KSValue( new KSBuiltinFunction( module, "NORMINV", kspreadfunc_norminv) ) );
+  module->addObject( "GAMMALN", new KSValue( new KSBuiltinFunction( module, "GAMMALN", kspreadfunc_gammaln) ) );
 
   return module;
 }
