@@ -1081,7 +1081,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
         {
             if( lastWord.at(0).isPunct() )
-                lastWord = lastWord.mid(1);
+                lastWord.remove(0,1);
             KCommand * cmd = doAutoSuperScript( textEditCursor, parag, index, lastWord, txtObj  );
             if ( cmd )
                 txtObj->emitNewCommand( cmd );
