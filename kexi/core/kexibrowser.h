@@ -46,7 +46,7 @@ class KEXICORE_EXPORT KexiBrowser : public KListView
 		KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part, const char *name=0);
 
 	private:
-		KexiView	*m_view;
+//		KexiView	*m_view;
 		KexiProjectHandler	*m_part;
 		QString		m_mime;
 

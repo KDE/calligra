@@ -93,7 +93,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 		w->setCloseMode(QDockWindow::Always);
 		 reparent(w,QPoint(0,0),true);
 		w->setWidget(this);
-	      	m_view->mainWindow()->moveDockWindow(w, DockLeft);
+		m_view->mainWindow()->moveDockWindow(w, DockLeft);
 		w->setCaption(this->caption());
 		kexiView()->addQDockWindow(w);
 		return;

@@ -72,10 +72,11 @@ public:
 
     virtual void updateReadWrite( bool readwrite );
 
+#ifndef KEXI_NO_PRINT
     //printing
     virtual void setupPrinter(KPrinter &printer);
     virtual void print(KPrinter &printer);
-
+#endif
     void addQDockWindow(QDockWindow *w);
     void removeQDockWindow(QDockWindow * w);
 

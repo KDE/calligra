@@ -38,7 +38,6 @@ class KexiBrowser;
 class KexiBrowserItem;
 
 class KEXICORE_EXPORT KexiTabBrowser : public KexiDialogBase
-//class KexiTabBrowser : public QDockWindow 
 {
 	Q_OBJECT
 
@@ -55,6 +54,8 @@ class KEXICORE_EXPORT KexiTabBrowser : public KexiDialogBase
 		void			generateTables();
 		void			generateQueries();
 
+		KexiProject     *m_project;
+
 		KMultiTabBar		*m_tabBar;
 		QWidgetStack		*m_stack;
 		QIntDict<QWidget>	m_browserDict;
@@ -63,7 +64,7 @@ class KEXICORE_EXPORT KexiTabBrowser : public KexiDialogBase
 		int			m_activeTab;
 
 		KexiBrowser		*m_db;
-		KexiBrowser		*m_tables;
+/*		KexiBrowser		*m_tables;
 		KexiBrowser		*m_queries;
 		KexiBrowser		*m_forms;
 		KexiBrowser		*m_reports;
@@ -71,8 +72,8 @@ class KEXICORE_EXPORT KexiTabBrowser : public KexiDialogBase
 		KexiBrowserItem	*m_dbQueries;
 		KexiBrowserItem	*m_dbForms;
 		KexiBrowserItem	*m_dbReports;
-
-		KexiProject     *m_project;
+*/
+void resizeEvent( QResizeEvent *e );
 
 	protected slots:
 		void			slotTabActivated(int id);

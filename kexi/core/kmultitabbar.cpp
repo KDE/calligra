@@ -67,7 +67,7 @@ void KMultiTabBarInternal::setStyle(KMultiTabBar::KMultiTabBarStyle style)
 	m_style=style;
         for (uint i=0;i<m_tabs.count();i++)
                 m_tabs.at(i)->setStyle(m_style);
-        viewport()->repaint();
+        viewport()->repaint ();
 }
 
 void KMultiTabBarInternal::drawContents ( QPainter * paint, int clipx, int clipy, int clipw, int cliph )
@@ -81,32 +81,30 @@ void KMultiTabBarInternal::drawContents ( QPainter * paint, int clipx, int clipy
                 paint->drawLine(0,0,0,viewport()->height());
                 paint->setPen(colorGroup().background().dark(120));
                 paint->drawLine(1,0,1,viewport()->height());
-
-
 	}
 	else
 	if (position==KMultiTabBar::Left)
 	{
-                paint->setPen(colorGroup().light());
+		paint->setPen(colorGroup().light());
 		paint->drawLine(23,0,23,viewport()->height());
-                paint->drawLine(22,0,22,viewport()->height());
+		paint->drawLine(22,0,22,viewport()->height());
 
-                paint->setPen(colorGroup().shadow());
-                paint->drawLine(0,0,0,viewport()->height());
+		paint->setPen(colorGroup().shadow());
+		paint->drawLine(0,0,0,viewport()->height());
 	}
 	else
 	if (position==KMultiTabBar::Bottom)
 	{
 		paint->setPen(colorGroup().shadow());
 		paint->drawLine(0,0,viewport()->width(),0);
-                paint->setPen(colorGroup().background().dark(120));
-                paint->drawLine(0,1,viewport()->width(),1);
+		paint->setPen(colorGroup().background().dark(120));
+		paint->drawLine(0,1,viewport()->width(),1);
 	}
 	else
 	{
-	        paint->setPen(colorGroup().light());
+		paint->setPen(colorGroup().light());
 		paint->drawLine(0,23,viewport()->width(),23);
-                paint->drawLine(0,22,viewport()->width(),22);
+		paint->drawLine(0,22,viewport()->width(),22);
 
 /*                paint->setPen(colorGroup().shadow());
                 paint->drawLine(0,0,0,viewport()->height());*/
@@ -232,6 +230,15 @@ KMultiTabBarTab::KMultiTabBarTab(const QPixmap& pic, const QString& text,
 	m_expandedSize=24;
 	m_showActiveTabText=false;
 	setToggleButton(true);
+
+	//scale font by 85%, set bold
+	QFont f = font();
+	if (f.pointSize()!=-1)
+		f.setPointSize( f.pointSize() * 85 / 100 );
+	else
+		f.setPixelSize( f.pixelSize() * 85 / 100 );
+	f.setBold(true);
+	setFont(f);
 }
 
 void KMultiTabBarTab::setIcon(const QString& icon)
@@ -290,7 +297,7 @@ void KMultiTabBarTab::updateState()
 
 int KMultiTabBarTab::neededSize()
 {
-	return (24+QFontMetrics(QFont()).width(m_text)+6);
+	return (24+fontMetrics().width(m_text)+6);
 }
 
 void KMultiTabBarTab::setSize(int size)
@@ -322,7 +329,7 @@ void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 	QPixmap pixmap( sh.width(),24); ///,sh.height());
 	pixmap.fill(eraseColor());
 	QPainter painter(&pixmap);
-
+	painter.setFont(font());
 
 	QStyle::SFlags st=QStyle::Style_Default;
 	
@@ -334,11 +341,11 @@ void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 		colorGroup(),st);
 	style().drawControl(QStyle::CE_PushButtonLabel,&painter,this, QRect(0,0,pixmap.width(),pixmap.height()),
 		colorGroup(),st);
-
 	switch (position) {
 		case KMultiTabBar::Left:
 						paint->rotate(-90);
 						paint->drawPixmap(-pixmap.width(),0,pixmap);	
+
 						break;
 		case KMultiTabBar::Right:
 						paint->rotate(90);
@@ -440,7 +447,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 				painter.fillRect(0,0,tpixmap.width(),tpixmap.height(),QBrush(colorGroup().light()));
 
 				painter.setPen(colorGroup().text());
-				painter.drawText(0,+width()/2+QFontMetrics(QFont()).height()/2,m_text);
+				painter.drawText(0,+width()/2+fontMetrics().height()/2,m_text);
 
 				paint->rotate(90);
 				kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;

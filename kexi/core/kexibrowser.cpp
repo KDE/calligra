@@ -56,7 +56,8 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part
 	header()->hide();
 
 	addColumn("");
-	setResizeMode(QListView::LastColumn);
+	setShowToolTips(true);
+//(JS)	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));

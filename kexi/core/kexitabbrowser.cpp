@@ -39,29 +39,29 @@
 #include <kexiview.h>
 
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
-	: KexiDialogBase(view,parent,name)
+	: KexiDialogBase(view,parent,name),
+		m_project( view->project() ),
+		m_tabBar( new KMultiTabBar(this, KMultiTabBar::Vertical) ),
+		m_stack( new QWidgetStack(this) ),
+		m_tabs( 0 ),
+		m_activeTab( -1 ),
+		m_db( new KexiBrowser(m_stack, "kexi/db", 0) )
 {
 	setCaption(i18n("Project"));
-	m_project = view->project();
-	
+
 	QGridLayout *layout=new QGridLayout(this);
-	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
 	m_tabBar->setPosition(KMultiTabBar::Left);
 	m_tabBar->showActiveTabTexts(true);
-
-	m_stack = new QWidgetStack(this);
 
 	layout->addWidget(m_tabBar,     0,      0);
 	layout->addWidget(m_stack,      0,      1);
 	layout->setColStretch(1, 1);
 	
+//	m_stack->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum); //(JS)
+
 	m_stack->show();
 	m_tabBar->show();
 
-
-	m_activeTab = -1;
-
-	m_db = new KexiBrowser(m_stack, "kexi/db", 0);
 	addBrowser(m_db, kapp->iconLoader()->loadIcon("db", KIcon::Small), i18n("Database"));
 
 /*	m_db = new KexiBrowser(view,m_stack, KexiBrowser::SectionDB);
@@ -95,6 +95,8 @@ KexiTabBrowser::addBrowser(KexiBrowser *browser, QPixmap icon, QString text)
 	m_tabs++;
 //	m_tabBar->appendTab(kapp->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
 	m_tabBar->appendTab(icon, m_tabs,text);
+
+//	browser->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum); //(JS)
 
 	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 	m_stack->addWidget(browser);
@@ -157,5 +159,10 @@ KXMLGUIClient *KexiTabBrowser::guiClient()
 	kdDebug()<<"KexiTabBrowser::guiClient() not implemented yet"<<endl;
 	return new KXMLGUIClient();
 }
+
+void KexiTabBrowser::resizeEvent( QResizeEvent *e )
+{
+}
+
 
 #include "kexitabbrowser.moc"

@@ -60,7 +60,7 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		void aboutToShow();
 		void aboutToHide();
 
-		QDockWindow	*dock() { return w; }
+		QDockWindow *dock() { return w; }
 
 	signals:
 		void closing(KexiDialogBase *);

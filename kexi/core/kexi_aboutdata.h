@@ -26,7 +26,7 @@
 #include <config.h>
 
 static const char *description =
-	I18N_NOOP("Database Management");
+	I18N_NOOP("Easy database creation for everyone");
 
 KAboutData *newKexiAboutData()
 {
