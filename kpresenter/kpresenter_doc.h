@@ -28,7 +28,7 @@ class KMacroCommand;
 class KCommandHistory;
 class KoZoomHandler;
 class KoAutoFormat;
-//class KTextEditFormatCollection;
+class KWUnit;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -48,7 +48,7 @@ class KoAutoFormat;
 #include <kpimage.h>
 #include <kpgradientcollection.h>
 #include <kpclipartcollection.h>
-
+#include <kwunit.h>
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -276,8 +276,6 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    void setUnit( KoUnit _unit, QString __unit );
-
     QString getPageTitle( unsigned int pgNum, const QString &_title, float fakt = 1.0 );
 
     KPTextObject *header() { return _header; }
@@ -329,6 +327,12 @@ public:
     // in pt
     double getIndentValue() { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
+
+    // The user-chosen global unit
+    QString getUnitName() { return KWUnit::unitName( m_unit ); }
+    KWUnit::Unit getUnit() { return m_unit; }
+    void setUnit( KWUnit::Unit _unit );
+
 
 public slots:
     void movePage( int from, int to );
@@ -448,6 +452,8 @@ protected:
     bool m_bDontCheckTitleCase;
 
     double m_indent; // in pt
+
+    KWUnit::Unit m_unit;
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

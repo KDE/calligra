@@ -3177,31 +3177,14 @@ void KPresenterView::setupRulers()
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
 		      this, SLOT( openPageLayoutDia() ) );
 
-    switch ( m_pKPresenterDoc->pageLayout().unit ) {
-    case PG_MM: {
-	h_ruler->setUnit( "mm" );
-	v_ruler->setUnit( "mm" );
-    } break;
-    case PG_PT: {
-	h_ruler->setUnit( "pt" );
-	v_ruler->setUnit( "pt" );
-    } break;
-    case PG_INCH: {
-	h_ruler->setUnit( "inch" );
-	v_ruler->setUnit( "inch" );
-    } break;
-    }
+    h_ruler->setUnit( m_pKPresenterDoc->getUnitName() );
+    v_ruler->setUnit( m_pKPresenterDoc->getUnitName() );
 }
 
 /*==============================================================*/
 void KPresenterView::unitChanged( QString u )
 {
-    if ( u == "mm" )
-	m_pKPresenterDoc->setUnit( PG_MM, u );
-    else if ( u == "pt" )
-	m_pKPresenterDoc->setUnit( PG_PT, u );
-    else if ( u == "inch" )
-	m_pKPresenterDoc->setUnit( PG_INCH, u );
+    m_pKPresenterDoc->setUnit(KWUnit::unit( u ) );
 }
 
 /*===================== set ranges of scrollbars ===============*/
@@ -3901,7 +3884,7 @@ void KPresenterView::formatParagraph()
         KoParagDia *paragDia = new KoParagDia( this, "",
                                                KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                                KoParagDia::PD_BORDERS |
-                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, KWUnit::U_MM/*m_doc->getUnit()*//*,edit->textFrameSet()->getFrame(0)->width()*/ );
+                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_pKPresenterDoc->getUnit()/*,edit->textFrameSet()->getFrame(0)->width()*/ );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings

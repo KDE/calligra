@@ -113,7 +113,7 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       _gradientCollection(), _clipartCollection(), _hasHeader( false ),
-      _hasFooter( false ), urlIntern()
+      _hasFooter( false ),  m_unit( KWUnit::U_MM ),urlIntern()
 {
     //fCollection = new KTextEditFormatCollection;
     setInstance( KPresenterFactory::global() );
@@ -207,6 +207,24 @@ void KPresenterDoc::slotCommandExecuted()
     setModified( true );
 }
 
+void KPresenterDoc::setUnit( KWUnit::Unit _unit )
+{
+    m_unit = _unit;
+    switch ( m_unit ) {
+    case KWUnit::U_MM: _pageLayout.unit = PG_MM;
+        break;
+    case KWUnit::U_PT: _pageLayout.unit = PG_PT;
+        break;
+    case KWUnit::U_INCH: _pageLayout.unit = PG_INCH;
+        break;
+    }
+
+    QPtrListIterator<KoView> it( views() );
+    for( ; it.current(); ++it ) {
+        ((KPresenterView*)it.current())->getHRuler()->setUnit( KWUnit::unitName( m_unit ) );
+        ((KPresenterView*)it.current())->getVRuler()->setUnit( KWUnit::unitName( m_unit ) );
+    }
+}
 
 void KPresenterDoc::initConfig()
 {
@@ -1163,7 +1181,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
     case PG_INCH: unit = "inch";
 	break;
     }
-    setUnit( _pageLayout.unit, unit );
+    setUnit(  KWUnit::unit( unit) );
 
     repaint( false );
     // don't setModified(true) here, since this is called on startup
@@ -2821,18 +2839,6 @@ void KPresenterDoc::repaint( bool erase )
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
 	((KPresenterView*)it.current())->repaint( erase );
-    }
-}
-
-/*==============================================================*/
-void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
-{
-    _pageLayout.unit = _unit;
-
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it ) {
-	((KPresenterView*)it.current())->getHRuler()->setUnit( __unit );
-	((KPresenterView*)it.current())->getVRuler()->setUnit( __unit );
     }
 }
 
