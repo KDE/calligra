@@ -79,7 +79,7 @@ the spreadsheet.</para>
 <para>Instead of using the <guilabel>Parameters</guilabel> page, cell 
 references such as <userinput>B6</userinput> can be entered by typing them 
 directly into the edit box at the bottom of the <guilabel>Function</guilabel> 
-dialog. If an expression has more then one parameter separate them with a 
+dialog. If an expression has more than one parameter separate them with a 
 semi-colon (<keysym>;</keysym>).</para>
 <para>Pressing the <guibutton>OK</guibutton> button will transfer the 
 expression to the main &kspread; window's Formula toolbar edit box and close 
@@ -323,7 +323,7 @@ data.</para>
 <menuchoice><guimenu>Insert</guimenu><guimenuitem>Chart</guimenuitem>
 </menuchoice>. The cursor will change to a small cross shape which you 
 should drag across the sheet while holding the <mousebutton>left
-</mousebutton> mouse button held down to define the area where you want the 
+</mousebutton> mouse button down to define the area where you want the 
 chart to appear, there is no need to be too accurate at this stage as the 
 chart size can easily be changed at any time. When you release the mouse 
 button a chart wizard dialog box will appear.</para>
@@ -439,12 +439,12 @@ dialog box which has two tabbed pages.</para>
 be considered valid from the <guilabel>Allow:</guilabel> combo box list then 
 define the valid range of values by choosing one of the options in the 
 <guilabel>Data:</guilabel> combo box and entering suitable value(s) into 
-ont or both of the edit box(es).</para>
+one or both of the edit box(es).</para>
 <para>When you have done this change to the <guilabel>Error Alert</guilabel> 
-tab page. Here you can choose the type of message box (<guimenuitem>Stop
-</guimenuitem>, <guimenuitem>Warning</guimenuitem> or <guimenuitem>Information
-</guimenuitem>) that will appear when an invalid value is entered, and define 
-the message box title and message text.</para>
+tab page. Here you can choose the type of message box
+(<guimenuitem>Stop</guimenuitem>, <guimenuitem>Warning</guimenuitem>
+or <guimenuitem>Information</guimenuitem>) that will appear when an invalid
+value is entered, and define the message box title and message text.</para>
 <para>Note that this feature only checks data that you enter into the cell, 
 for a way of checking the results from formulae cells see the <link 
 linkend="formatdata">Conditional Cell Attributes</link> section of this 
@@ -463,7 +463,7 @@ Split View</guimenuitem></menuchoice> which will split the current view into
 two parts. <menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation
 </guisubmenu></menuchoice> lets you choose between horizontal and vertical 
 splitting.</para>
-<para>This technique is particularly useful when you want select an area 
+<para>This technique is particularly useful when you want to select an area 
 of the spreadsheet that is larger than can be shown in one view, perhaps to
 paste a copied cell into it. 
 Use the scrollbars to position the two views to show the top left and 
@@ -473,7 +473,7 @@ bottom right cell with the <mousebutton>left</mousebutton> mouse button.</para>
 <para>If there is more than one sheet in your workbook, you can show a 
 different sheet in each of the split views.</para>
 <para>The relative sizes of the views can be changed by dragging the thick bar 
-separating the them.</para>
+separating the views.</para>
 <para>To remove a view select <menuchoice><guimenu>View</guimenu><guimenuitem>
 Remove View</guimenuitem></menuchoice></para>
 </sect2>
