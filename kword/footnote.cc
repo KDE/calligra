@@ -214,66 +214,49 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 }
 
 /*================================================================*/
-void KWFootNoteManager::save( ostream &out )
+QDOM::Element KWFootNoteManager::save( QDOM::Document& doc )
 {
-    out << indent << "<START value=\"" << start << "\"/>" << endl;
-    out << indent << "<FORMAT superscript=\"" << superscript
-        << "\" type=\"" << static_cast<int>( noteType ) << "\"/>" << endl;
-    out << indent << "<FIRSTPARAG ref=\"" << correctQString( firstParag ).latin1() << "\"/>" << endl;
+  QDOM::Element e = doc.createElement( "FOOTNODE-GLOBAL" );
+
+  QDOM::Element s = doc.createElement( "START" );
+  e.appendChild( s );
+  s.setAttribute( "value", start );
+
+  QDOM::Element format = doc.createElement( "FORMAT" );
+  e.appendChild( format );
+  format.setAttribute( "superscript", superscript );
+  format.setAttribute( "type", (int)noteType );
+
+  QDOM::Element fp = doc.createElement( "FIRSTPARAG" );
+  e.appendChild( fp );
+  fp.setAttribute( "ref", firstParag );
+
+  return e;
 }
 
 /*================================================================*/
-void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
+bool KWFootNoteManager::load( QDOM::Element &e )
 {
-    string tag;
-    string name;
+  bool ok;
 
-    while ( parser.open( 0L, tag ) )
-    {
-        KOMLParser::parseTag( tag.c_str(), name, lst );
+  QDOM::Element s = e.namedItem( "START" ).toElement();
+  if ( s.isNull() )
+    return false;
+  start = s.attribute( "value" ).toInt( &ok );
+  if ( !ok ) return false;
 
-        if ( name == "START" )
-        {
-            KOMLParser::parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    start = atoi( ( *it ).m_strValue.c_str() );
-            }
-        }
-        else if ( name == "FORMAT" )
-        {
-            KOMLParser::parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
-                if ( ( *it ).m_strName == "superscript" )
-                    superscript = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-                else if ( ( *it ).m_strName == "type" )
-                    noteType = static_cast<NoteType>( atoi( ( *it ).m_strValue.c_str() ) );
-            }
-        }
-        else if ( name == "FIRSTPARAG" )
-        {
-            KOMLParser::parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
-                if ( ( *it ).m_strName == "ref" )
-                    firstParag = correctQString( ( *it ).m_strValue.c_str() );
-            }
-        }
+  s = e.namedItem( "FORMAT" ).toElement();
+  if ( s.isNull() )
+    return false;
+  superscript = (bool)s.attribute( "superscript" ).toInt();
+  noteType = (NoteType)s.attribute( "type" ).toInt();
 
-        else
-            cerr << "Unknown tag '" << tag << "' in FOOTNOTEMGR" << endl;
+  s = e.namedItem( "FIRSTPARAG" ).toElement();
+  if ( s.isNull() )
+    return false;
+  firstParag = s.attribute( "ref" );
 
-        if ( !parser.close( tag ) )
-        {
-            cerr << "ERR: Closing Child" << endl;
-            return;
-        }
-    }
+  return true;
 }
 
 /******************************************************************/

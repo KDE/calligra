@@ -18,11 +18,7 @@
 
 #include <qlist.h>
 #include <qpainter.h>
-
-#include <koStream.h>
-
-#include <iostream>
-#include <string>
+#include <qdom.h>
 
 class KWFootNote;
 class KWordDocument;
@@ -58,8 +54,8 @@ public:
     NoteType getNoteType() { return noteType; }
     void setNoteType( NoteType nt ) { noteType = nt; }
 
-    void save( ostream &out );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
+    QDOM::Element save( QDOM::Document& );
+    bool load( QDOM::Element& );
 
 protected:
     void addFootNoteText( KWFootNote *fn );

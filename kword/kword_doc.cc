@@ -33,18 +33,10 @@
 #include "char.h"
 #include "kword_utils.h"
 
-#include <komlMime.h>
-#include <koStream.h>
-#include <komlParser.h>
-#include <komlStreamFeed.h>
-#include <komlWriter.h>
-
 #include <kurl.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-#include <strstream>
-#include <fstream>
 #include <unistd.h>
 #include <math.h>
 
@@ -618,7 +610,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
 {
     _loaded = true;
     pixmapKeys.clear();
@@ -722,10 +714,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
     pages = 1;
 
-    string tag;
-    vector<KOMLAttrib> lst;
-    string name;
-
     KoPageLayout __pgLayout;
     __pgLayout.unit = PG_MM;
     KoColumns __columns;
@@ -739,24 +727,81 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     __hf.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
     __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
 
+  // <DOC>
+  if ( doc.doctype().name() != "DOC" )
+    return false;
 
-    // DOC
-    if ( !parser.open( "DOC", tag ) ) {
-	cerr << "Missing DOC" << endl;
-	return false;
-    }
+  QDOM::Element word = doc.documentElement();
 
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-    vector<KOMLAttrib>::const_iterator it = lst.begin();
-    for( ; it != lst.end(); it++ ) {
-	if ( ( *it ).m_strName == "mime" ) {
-	    if ( ( *it ).m_strValue != "application/x-kword" ) {
-		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
-		return false;
-	    }
-	} else if ( ( *it ).m_strName == "url" )
-	    urlIntern = ( *it ).m_strValue.c_str();
-    }
+  if ( word.attribute( "mime" ) != "application/x-kword" )
+    return false;
+
+  QDOM::Element paper = doc.namedItem("PAPER").toElement();
+  if ( paper.isNull() )
+    return false;
+  __pgLayout.format = (KoFormat)paper.attribute( "format" ).toInt();
+  __pgLayout.orientation = (KoOrientation)paper.attribute( "orientation" ).toInt();
+
+		if ( ( *it ).m_strName == "format" )
+		    __pgLayout.format = ( KoFormat )atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "orientation" )
+		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "width" ) {
+		    __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		} else if ( ( *it ).m_strName == "height" ) {
+		    __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		} else if ( ( *it ).m_strName == "columns" )
+		    __columns.columns = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "columnspacing" ) {
+		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __columns.mmColumnSpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
+		    __columns.inchColumnSpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		} else if ( ( *it ).m_strName == "hType" )
+		    __hf.header = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "fType" )
+		    __hf.footer = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "spHeadBody" ) {
+		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __hf.mmHeaderBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
+		    __hf.inchHeaderBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		} else if ( ( *it ).m_strName == "spFootBody" ) {
+		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __hf.mmFooterBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
+		    __hf.inchFooterBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		} else if ( ( *it ).m_strName == "ptWidth" )
+		    __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchWidth" )
+		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmWidth" )
+		    __pgLayout.mmWidth = __pgLayout.width = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptHeight" )
+		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchHeight" )
+		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmHeight" )
+		    __pgLayout.mmHeight = __pgLayout.height = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptHeadBody" )
+		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchHeadBody" )
+		    __hf.inchHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmHeadBody" )
+		    __hf.mmHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptFootBody" )
+		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchFootBody" )
+		    __hf.inchFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmFootBody" )
+		    __hf.mmFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmColumnspc" )
+		    __columns.mmColumnSpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptColumnspc" )
+		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchColumnspc" )
+		    __columns.inchColumnSpacing = atof( ( *it ).m_strValue.c_str() );
 
     // PAPER
     while ( parser.open( 0L, tag ) ) {
@@ -1312,61 +1357,97 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::save(ostream &out,const char* /* _format */)
+bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format )
 {
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-    //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org"
-	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\" url=\"" << url() << "\">" << endl;
-    out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
-	<< "\" ptHeight=\"" << pageLayout.ptHeight
-	<< "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
-	<< "\" inchWidth =\"" << pageLayout.inchWidth << "\" inchHeight=\"" << pageLayout.inchHeight
-	<< "\" orientation=\"" << static_cast<int>( pageLayout.orientation )
-	<< "\" columns=\"" << pageColumns.columns << "\" ptColumnspc=\"" << pageColumns.ptColumnSpacing
-	<< "\" mmColumnspc=\"" << pageColumns.mmColumnSpacing << "\" inchColumnspc=\"" << pageColumns.inchColumnSpacing
-	<< "\" hType=\"" << static_cast<int>( pageHeaderFooter.header ) << "\" fType=\"" << static_cast<int>( pageHeaderFooter.footer )
-	<< "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\"" << pageHeaderFooter.ptFooterBodySpacing
-	<< "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\"" << pageHeaderFooter.mmFooterBodySpacing
-	<< "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\"" << pageHeaderFooter.inchFooterBodySpacing
-	<< "\">" << endl;
-    out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop << "\" mmRight=\""
-	<< pageLayout.mmRight << "\" mmBottom=\"" << pageLayout.mmBottom
-	<< "\" ptLeft=\"" << pageLayout.ptLeft << "\" ptTop=\"" << pageLayout.ptTop << "\" ptRight=\""
-	<< pageLayout.ptRight << "\" ptBottom=\"" << pageLayout.ptBottom
-	<< "\" inchLeft=\"" << pageLayout.inchLeft << "\" inchTop=\"" << pageLayout.inchTop << "\" inchRight=\""
-	<< pageLayout.inchRight << "\" inchBottom=\"" << pageLayout.inchBottom << "\"/>" << endl;
-    out << etag << "</PAPER>" << endl;
-    out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>( processingType ) << "\" standardpage=\"" << 1
-	<< "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
-	<< "\" unit=\"" << correctQString( getUnit() ).latin1() << "\"/>" << endl;
+    QDOM::Document doc( "DOC" );
+    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDOM::Element word = doc.createElement( "DOC" );
 
-    out << otag << "<FOOTNOTEMGR>" << endl;
-    footNoteManager.save( out );
-    out << etag << "</FOOTNOTEMGR>" << endl;
+    word.setAttribute( "author", "Reginald Stadlbauer and Torben Weis" );
+    word.setAttribute( "email", "reggie@kde.org and weis@kde.org" );
+    word.setAttribute( "editor", "KWord" );
+    word.setAttribute( "mime", "application/x-kword" );
+    word.appendChild( spread );
 
-    out << otag << "<FRAMESETS>" << endl;
+    QDOM::Element paper = doc.createElement( "PAPER" );
+    word.appendChild( paper );
+    paper.setAttribute( "format", (int)pageLayout.format );
+    paper.setAttribute( "ptWidth", pageLayout.ptWidth );
+    paper.setAttribute( "ptHeight", pageLayout.ptHeight );
+    paper.setAttribute( "mmWidth", pageLayout.mmWidth );
+    paper.setAttribute( "mmHeight", pageLayout.mmHeight );
+    paper.setAttribute( "inchWidth", pageLayout.inchWidth );
+    paper.setAttribute( "inchHeight", pageLayout.inchHeight );
+    paper.setAttribute( "inchHeight", pageLayout.inchHeight );
+    paper.setAttribute( "columns", pageColumns.columns );
+    paper.setAttribute( "ptColumnspc", pageColumns.ptColumnSpacing );
+    paper.setAttribute( "mmColumnspc", pageColumns.mmColumnSpacing );
+    paper.setAttribute( "inchColumnspc", pageColumns.inchColumnSpacing );
+    paper.setAttribute( "hType", (int)pageHeaderFooter.header );
+    paper.setAttribute( "fType", (int)pageHeaderFooter.footer );
+    paper.setAttribute( "ptHeadBody", pageHeaderFooter.ptHeaderBodySpacing );
+    paper.setAttribute( "mmHeadBody", pageHeaderFooter.mmHeaderBodySpacing );
+    paper.setAttribute( "inchHeadBody", pageHeaderFooter.inchHeaderBodySpacing );
+    paper.setAttribute( "ptFootBody", pageHeaderFooter.ptFooterBodySpacing );
+    paper.setAttribute( "mmFootBody", pageHeaderFooter.mmFooterBodySpacing );
+    paper.setAttribute( "inchFootBody", pageHeaderFooter.inchFooterBodySpacing );
+
+    QDOM::Element border = doc.createElement( "PAPERBORDERS" );
+    paper.appendChild( border );
+    border.setAttribute( "mmLeft", pageLayout.mmLeft );
+    border.setAttribute( "mmTop", pageLayout.mmTop );
+    border.setAttribute( "mmRight", pageLayout.mmRight );
+    border.setAttribute( "mmBottom", pageLayout.mmBottom );
+    border.setAttribute( "ptLeft", pageLayout.ptLeft );
+    border.setAttribute( "ptTop", pageLayout.ptTop );
+    border.setAttribute( "ptRight", pageLayout.ptRight );
+    border.setAttribute( "ptBottom", pageLayout.ptBottom );
+    border.setAttribute( "inchLeft", pageLayout.inchLeft );
+    border.setAttribute( "inchTop", pageLayout.inchTop );
+    border.setAttribute( "inchRight", pageLayout.inchRight );
+    border.setAttribute( "inchBottom", pageLayout.inchBottom );
+
+    QDOM::Element attr = doc.createElement( "ATTRIBUTES" );
+    word.appendChild( attr );
+    attr.setAttribute( "processing", (int)processingType );
+    attr.setAttribute( "hasHeader", hasHeader() );
+    attr.setAttribute( "hasFooter", hasFooter() );
+    attr.setAttribute( "unit", getUnit() );
+
+    QDOM::Element fn = footNodeManager.save( doc );
+    if ( fn.isNull() )
+      return false;
+    word.appendChild( fn );
+
+    QDOM::Element fs = doc.createElement( "FRAMESETS" );
+    word.appendChild( fs );
 
     KWFrameSet *frameSet = 0L;
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
     {
 	frameSet = getFrameSet( i );
 	if ( frameSet->getFrameType() != FT_PART )
-	    frameSet->save( out );
+	{
+	    QDOM::Element e = frameSet->save( doc );
+	    if ( e.isNull() )
+	      return false;
+	    fs.append( e );
+	}
     }
 
-    out << etag << "</FRAMESETS>" << endl;
+    QDOM::Element styles = doc.createElement( "STYLES" );
+    word.appendChild( styles );
 
-    out << otag << "<STYLES>" << endl;
     for ( unsigned int j = 0; j < paragLayoutList.count(); j++ )
     {
-	out << otag << "<STYLE>" << endl;
-	paragLayoutList.at( j )->save( out );
-	out << etag << "</STYLE>" << endl;
+      QDOM::Element e = paragLayoutList.at( j )->save( doc );
+      if ( e.isNull() )
+	return false;
+      styles.append( e );
     }
-    out << etag << "</STYLES>" << endl;
 
-    out << otag << "<PIXMAPS>" << endl;
+    QDOM::Element pix = doc.createElement( "PIXMAPS" );
+    word.appendChild( pix );
 
     QDictIterator<KWImage> it = imageCollection.iterator();
     QStringList keys, images;
@@ -1374,18 +1455,22 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
-	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() << "\"/>" << endl;
+	QDOM::Element e = doc.createElement( "KEY" );
+	e.setAttribute( "key", it.current()->getFilename() );
+	pix.appendChild( e )
 	keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }
-    out << etag << "</PIXMAPS>" << endl;
 
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
-	chl.current()->save( out );
-
-    out << etag << "</DOC>" << endl;
+    {
+      QDOM::Element e = chl.current()->save( doc );
+      if ( e.isNull() )
+	return false;
+      word.appendChild( e );
+    }
 
     return true;
 }

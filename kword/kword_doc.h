@@ -27,8 +27,6 @@ class KWPictureFrameSet;
 #include <koPageLayoutDia.h>
 #include <koQueryTypes.h>
 
-#include <iostream>
-
 #include "kword_view.h"
 #include "fc.h"
 #include "parag.h"
@@ -49,6 +47,7 @@ class KWPictureFrameSet;
 #include <qstringlist.h>
 #include <qrect.h>
 #include <qdict.h>
+#include <qdom.h>
 
 /******************************************************************/
 /* Class: KWordChild						  */
@@ -106,9 +105,9 @@ public:
     virtual CORBA::Boolean initDoc();
 
     // C++
-    virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
+    virtual bool loadXML( QDOM::Document&, KOStore::Store_ptr _store );
     virtual bool loadChildren( KOStore::Store_ptr _store );
-    virtual bool save( ostream& out, const char *_format );
+    virtual bool save( QIODevice* dev, KOStore::Store_ptr, const char* format )
     virtual bool completeSaving( KOStore::Store_ptr _store );
 
     virtual bool loadTemplate( const char *_url );
