@@ -20,7 +20,6 @@
 #define TOOL_TEXT_H
 
 #include "tool.h"
-#include "tkunits.h"
 
 class QMouseEvent;
 class QCursor;
@@ -65,7 +64,7 @@ protected:
       stmNone,
       stmDrawRubber
   };
-    
+
 private:
   // Flag to indicate that we are drawing a rubber band
   int m_mode;

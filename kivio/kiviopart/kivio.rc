@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="7">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="8">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -26,6 +26,8 @@
    <Separator/>
    <Action name="snapGrid"/>
    <Action name="snapGuides"/>
+   <Separator/>
+   <Action name="viewZoom"/>
    <Separator/>
    <Menu name="Docker"><text>&amp;Docker</text>
      <Action name="stencilGeometry"/>
@@ -69,7 +71,6 @@
   <Separator lineSeparator="true" />
   <Action name="showRulers"/>
   <Action name="showGrid"/>
-  <Action name="units"/>
 </ToolBar>
 <ToolBar name="StencilBar" fullWidth="false"><text>Edit</text>
   <Action name="edit_undo"/>

@@ -60,7 +60,6 @@ class KActionMenu;
 class LineEndsAction;
 
 class TKSizeAction;
-class TKPositionAction;
 
 class QStringList;
 class QButton;

@@ -413,7 +413,6 @@ void KivioView::setupActions()
            this, SLOT( setFontSize(int ) ) );
 
 
-  //FIXME: Port to KOffice!
   m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
 

@@ -270,7 +270,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     int w = x + rect.width();
     int h = y + rect.height();
 
-    KoSize dxy = actualGridFrequency();
+    KoSize dxy = m_pDoc->grid().freq;
 
     KoPoint p(0, 0);
 
