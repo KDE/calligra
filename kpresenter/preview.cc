@@ -19,6 +19,7 @@
 
 #include <qpicture.h>
 #include <qpixmap.h>
+#include <qbitmap.h>
 #include "preview.h"
 #include "preview.moc"
 #include "qwmf.h"
@@ -85,6 +86,8 @@ public:
 
     void setPixmap( const QPixmap &pix ) {
 	pixmap = pix;
+        const QBitmap nullBitmap;
+        pixmap.setMask( nullBitmap );  //don't show transparency
 	resizeContents( pixmap.size().width(), pixmap.size().height() );
 	viewport()->repaint( false );
     }
