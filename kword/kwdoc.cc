@@ -47,6 +47,7 @@
 #include "kwtextimage.h"
 #include <kdebug.h>
 
+#include <kotextobject.h>
 #include <kspell.h>
 
 #include <KWordDocIface.h>
@@ -3091,5 +3092,21 @@ void KWDocument::setUndoRedoLimit(int val)
     m_commandHistory->setUndoLimit(val);
     m_commandHistory->setRedoLimit(val);
 }
+
+QList<KoTextObject> KWDocument::frameTextObject() const
+{
+    QPtrList<KoTextObject>lst;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
+        if ( fs && fs->isVisible() )
+        {
+            lst.append(fs->textObject());
+        }
+    }
+    return lst;
+}
+
 
 #include "kwdoc.moc"

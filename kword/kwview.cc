@@ -1388,6 +1388,7 @@ void KWView::editSelectAll()
         edit->selectAll();
 }
 
+
 void KWView::editFind()
 {
     // Already a find or replace running ?
@@ -1403,20 +1404,9 @@ void KWView::editFind()
     bool hasSelection=edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection();
     KoSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry,hasSelection );
 
-    QPtrList<KoTextObject>lst;
-    QPtrListIterator<KWFrameSet> fit = m_gui->canvasWidget()->kWordDocument()->framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
-        if ( fs && fs->isVisible() )
-        {
-            lst.append(fs->textObject());
-        }
-    }
-
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,lst);
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject());
         doFindReplace();
     }
 }
@@ -1435,24 +1425,13 @@ void KWView::editReplace()
     if (!m_replaceEntry)
         m_replaceEntry = new KoSearchContext();
 
-    QPtrList<KoTextObject>lst;
-    QPtrListIterator<KWFrameSet> fit = m_gui->canvasWidget()->kWordDocument()->framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
-        if ( fs && fs->isVisible() )
-        {
-            lst.append(fs->textObject());
-        }
-    }
-
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
     bool hasSelection=edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection();
 
     KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry,hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,lst);
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject());
         doFindReplace();
     }
 }
