@@ -187,22 +187,16 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // Get default font from the KWord config file
     KConfig *config = KWFactory::global()->config();
-    QString defaultFontname;
-    if( config->hasGroup("Document defaults") ) {
-        config->setGroup("Document defaults" );
-        defaultFontname=config->readEntry("DefaultFont");
-    }
-    // If not found, fallback to the KDE-wide font (the one from KControl's font module)
-    if ( defaultFontname.isEmpty() )
-    {
-        config->setGroup("General");
-        defaultFontname=config->readEntry("font","Sans serif,12,-1,5,50,0,0,0,0,0");
-    }
-    m_defaultFont= QFont();
-    m_defaultFont.fromString(defaultFontname);
-    // Try to force a scalable font. ### That might not be enough, if asking for "fixed"
-    // or some other bitmap-only font. We should probably use QFontDatabase to find a good font then.
+    config->setGroup("Document defaults" );
+    QString defaultFontname=config->readEntry("DefaultFont");
+    if ( !defaultFontname.isEmpty() )
+        m_defaultFont.fromString( defaultFontname );
+    // If not found, we automatically fallback to the application font (the one from KControl's font module)
+
+    // Try to force a scalable font.
     m_defaultFont.setStyleStrategy( QFont::ForceOutline );
+    //kdDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
+    //kdDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
     int ptSize = m_defaultFont.pointSize();
     if ( ptSize == -1 ) // specified with a pixel size ?
