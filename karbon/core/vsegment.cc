@@ -70,17 +70,6 @@ VSegment::VSegment( int degree )
 
 	m_prev = 0L;
 	m_next = 0L;
-
-	m_nodeSelected[ 0 ] = false;
-	m_nodeSelected[ 1 ] = false;
-	m_nodeSelected[ 2 ] = false;
-
-	m_nodeEdited[ 0 ] = false;
-	m_nodeEdited[ 1 ] = false;
-	m_nodeEdited[ 2 ] = false;
-
-
-	m_ctrlPointFixing = none;
 }
 
 VSegment::VSegment( const VSegment& segment )
@@ -102,16 +91,6 @@ VSegment::VSegment( const VSegment& segment )
 	{
 		setPoint( i, segment.point( i ) );
 	}
-
-	m_nodeSelected[ 0 ] = segment.m_nodeSelected[ 0 ];
-	m_nodeSelected[ 1 ] = segment.m_nodeSelected[ 1 ];
-	m_nodeSelected[ 2 ] = segment.m_nodeSelected[ 2 ];
-
-	m_nodeEdited[ 0 ] = segment.m_nodeEdited[ 0 ];
-	m_nodeEdited[ 1 ] = segment.m_nodeEdited[ 1 ];
-	m_nodeEdited[ 2 ] = segment.m_nodeEdited[ 2 ];
-
-	m_ctrlPointFixing = segment.m_ctrlPointFixing;
 }
 
 VSegment::~VSegment()
@@ -508,7 +487,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	 * solutions of f(t) = ( C(t) - p ) * C'(t) = 0.
 	 * ( C(t) - p ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
 	 * (2n - 1)th degree curve and thus has up to 2n - 1 distinct solutions.
-	 * To solve it, we apply the newton iteration: a parameter approximation t_i leads
+	 * To solve it, we apply the Newton Raphson iteration: a parameter approximation t_i leads
 	 * to the next approximation t_{i+1}
 	 *
 	 *                  f(t_i)
@@ -640,6 +619,11 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 // TODO
 	return 0.0;
+}
+
+void
+VSegment::roots( QValueList<double>& /*params*/, int /*depth*/ ) const
+{
 }
 
 bool
@@ -856,18 +840,7 @@ VSegment::revert() const
 	segment->setKnot( m_prev->knot() );
 
 
-	// Swap node selection.
-	segment->m_nodeSelected[ 0 ] = m_nodeSelected[ 1 ];
-	segment->m_nodeSelected[ 1 ] = m_nodeSelected[ 0 ];
-	segment->m_nodeSelected[ 2 ] = m_prev->m_nodeSelected[ 2 ];
-
-	// Swap control point fixing.
-
-	if( m_ctrlPointFixing == first )
-		segment->m_ctrlPointFixing = second;
-	else if( m_ctrlPointFixing == second )
-		segment->m_ctrlPointFixing = first;
-
+	// TODO swap node attributes (selected)
 
 	return segment;
 }
@@ -910,19 +883,7 @@ VSegment::transform( const QWMatrix& m )
 void
 VSegment::load( const QDomElement& element )
 {
-	switch( element.attribute( "ctrlPointFixing", "0" ).toUShort() )
-	{
-		case 1:
-			m_ctrlPointFixing = first;
-			break;
-
-		case 2:
-			m_ctrlPointFixing = second;
-			break;
-
-		default:
-			m_ctrlPointFixing = none;
-	}
+	// TOD save control point fixing?
 
 	if( element.tagName() == "CURVE" )
 	{

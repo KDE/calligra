@@ -26,7 +26,6 @@
 
 #include "vcommand.h"
 
-
 class VPath;
 class VSegment;
 class VSelection;
@@ -49,11 +48,16 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-	// We can only visit object pairs:
-	virtual bool visit( VObject& /*object*/ ) { return false; }
-	
+
+	// We can only visit object pairs.
+	virtual bool visit( VObject& /*object*/ )
+	{
+		return false;
+	}
+
 	// A pair visit() function.
 	bool visit( VObject& object1, VObject& object2 );
+
 
 	virtual void visitVPath( VPath& path );
 
@@ -67,9 +71,11 @@ protected:
 
 	void doIt();
 
+
 	VSelection* m_selection;
 
 	VBooleanType m_type;
+
 	VPath* m_path1;
 	VPath* m_path2;
 };

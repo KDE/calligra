@@ -20,6 +20,7 @@
 
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include <klocale.h>
 

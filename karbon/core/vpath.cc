@@ -243,7 +243,6 @@ VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 	VSegment* s = new VSegment();
 
 	s->setType( VSegment::curve );
-	s->setCtrlPointFixing( VSegment::first );
 
 	s->setPoint( 0, s->prev()->knot() );
 	s->setPoint( 1, p2 );
@@ -264,7 +263,6 @@ VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 	VSegment* s = new VSegment();
 
 	s->setType( VSegment::curve );
-	s->setCtrlPointFixing( VSegment::second );
 
 	s->setPoint( 0, p1 );
 	s->setPoint( 1, p3 );

@@ -22,6 +22,7 @@
 #define __VSEGMENT_H__
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include <koPoint.h>
 #include <koRect.h>
@@ -29,9 +30,7 @@
 #include "vglobal.h"
 
 class QDomElement;
-
 class QWMatrix;
-
 class VPainter;
 
 /**
@@ -157,7 +156,7 @@ public:
 	}
 
 	/**
-	 * Sets the knot. This is a convenience function using setPoint().
+	 * Sets the knot. This is a convenience function.
 	 */
 	void setKnot( const KoPoint& p )
 	{
@@ -165,22 +164,44 @@ public:
 	}
 
 
-	// TODO: remove
-	VCtrlPointFixing ctrlPointFixing() const
+	/**
+	 * Returns true if the point with index 0 <= i < degree() is selected.
+	 */
+	bool pointIsSelected( int i ) const
 	{
-		return m_ctrlPointFixing;
+		return m_nodes[ i ].m_isSelected;
 	}
 
-	void setCtrlPointFixing( VCtrlPointFixing fixing )
+	/**
+	 * Returns true if the knot is selected. This is a convenience function.
+	 */
+	bool knotIsSelected() const
 	{
-		m_ctrlPointFixing = fixing;
+		return m_nodes[ degree() - 1 ].m_isSelected;
 	}
+
+	/**
+	 * Selects the point with index 0 <= i < degree().
+	 */
+	void selectPoint( int i, bool select = true )
+	{
+		m_nodes[ i ].m_isSelected = select;
+	}
+
+	/**
+	 * Returns true if the knot is selected. This is a convenience function.
+	 */
+	void selectKnot( bool select = true )
+	{
+		m_nodes[ degree() - 1 ].m_isSelected = select;
+	}
+
 
 	/**
 	 * Returns index of the node at point p. Returns 0 of none
 	 * matches.
 	 */
-// TODO: Move this function into "userland"
+	// TODO: Move this function into "userland"
 	uint nodeNear( const KoPoint& p,
 				   double isNearRange = VGlobal::isNearRange ) const;
 
@@ -206,7 +227,7 @@ public:
 
 	/**
 	 * Calculates the point on this segment at parameter 0 <= t <= 1.
-	 * This is a convenience wrapper for pointDerivatives().
+	 * This is a convenience wrapper for pointDerivativesAt().
 	 */
 	KoPoint pointAt( double t ) const;
 
@@ -221,7 +242,7 @@ public:
 	/**
 	 * Calculates the normalized tangent vector (length=1) at the point
 	 * parameterized by 0 <= t <= 1. This is a convenience wrapper
-	 * for pointTangentNormal(). Use the latter function directly if you
+	 * for pointTangentNormalAt(). Use the latter function directly if you
 	 * need to calculate the point and normal vector or tangent vector
 	 * at once.
 	 */
@@ -260,6 +281,7 @@ public:
 	 */
 	double lengthParam( double len ) const;
 
+
 	/**
 	 * Calculates the parameter of the nearest point on this segment
 	 * to the point p. This function is pretty expensive.
@@ -269,7 +291,7 @@ public:
 
 
 	/**
-	 * Calculates wether the tangent at knot is exactly parallel to
+	 * Calculates wether the tangent at the knot is exactly parallel to
 	 * the tangent at p0 of the next segment. Returns false if the
 	 * current segment is a "begin".
 	 */
@@ -293,8 +315,8 @@ public:
 
 	/**
 	 *  Splits the segment at parameter 0 <= t <= 1. Returns a pointer
-	 *  to the first segment and transforms the current one to
-	 *  the second segment.
+	 *  to the first segment and modifies the current one to
+	 *  be the second segment.
 	 */
 	VSegment* splitAt( double t );
 
@@ -310,71 +332,17 @@ public:
 
 
 	/**
-	 * Selects or deselects node with 1 <= index <= 3.
-	 */
-	void select( uint index, bool select = true )
-	{
-		m_nodeSelected[ --index ] = select;
-	}
-
-	/**
-	 * Returns true if node with 1 <= index <= 3 is selected.
-	 */
-	bool selected( uint index ) const
-	{
-		return m_nodeSelected[ --index ];
-	}
-
-	void selectCtrlPoint1( bool select = true )
-	{
-		m_nodeSelected[ 0 ] = select;
-	}
-
-	void selectCtrlPoint2( bool select = true )
-	{
-		m_nodeSelected[ 1 ] = select;
-	}
-
-	void selectKnot( bool select = true )
-	{
-		m_nodeSelected[ 2 ] = select;
-	}
-
-	bool ctrlPoint1Selected() const
-	{
-		return m_nodeSelected[ 0 ];
-	}
-
-	bool ctrlPoint2Selected() const
-	{
-		return m_nodeSelected[ 1 ];
-	}
-
-	bool knotSelected() const
-	{
-		return m_nodeSelected[ 2 ];
-	}
-
-
-	bool edited( uint index ) const
-	{
-		return m_nodeEdited[ index ];
-	}
-
-
-	/**
-	 * Returns the bounding box.
+	 * Calculates the bounding box.
 	 */
 	KoRect boundingBox() const;
 
 
 	void draw( VPainter* painter ) const;
 
-
 	void transform( const QWMatrix& m );
 
-
 	void load( const QDomElement& element );
+
 
 	/**
 	 * Returns a pointer to a copy of this segment.
@@ -383,7 +351,14 @@ public:
 
 private:
 	/**
-	 * Degree. For beziers most likely "three", "one" for lines.
+	 * Calculates the roots y(x) = 0 for 0 <= x <= 1.
+	 */
+// TODO: isnt finished yet.
+	void roots( QValueList<double>& params, int depth ) const;
+
+
+	/**
+	 * The segment degree. For (cubic) beziers "three", "one" for lines.
 	 */
 	int m_degree;
 
@@ -401,7 +376,6 @@ private:
 	/**
 	 * Node data.
 	 */
-
 	struct VNodeData
 	{
 		KoPoint m_vector;
@@ -413,11 +387,6 @@ private:
 	 */
 	VNodeData* m_nodes;
 
-
-	// TODO: remove
-	bool m_nodeSelected[ 3 ];
-	bool m_nodeEdited[ 3 ];
-	VCtrlPointFixing m_ctrlPointFixing;
 
 	/**
 	 * Pointer to the previous segment.

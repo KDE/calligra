@@ -103,9 +103,9 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 					// Draw control lines:
 					if(
-						jtr.current()->prev() &&
+						jtr.current()->prev() /*&&
 						( jtr.current()->ctrlPoint1Selected() ||
-						  jtr.current()->prev()->knotSelected() ) )
+						  jtr.current()->prev()->knotSelected() )*/ )
 					{
 						m_painter->moveTo(
 							jtr.current()->prev()->knot() );
@@ -115,7 +115,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->strokePath();
 					}
 
-					if(
+/*					if(
 						jtr.current()->ctrlPoint2Selected() ||
 						jtr.current()->knotSelected() )
 					{
@@ -126,10 +126,12 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 						m_painter->strokePath();
 					}
+*/
 
 					// Draw control node1:
 					m_painter->newPath();
 
+/*
 					if(
 						jtr.current()->prev() &&
 						( jtr.current()->ctrlPoint1Selected() ||
@@ -138,7 +140,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->setBrush( Qt::blue.light() );
 						m_painter->drawNode( jtr.current()->point( 0 ), 2 );
 					}
-					else
+					else */
 						m_painter->setBrush( Qt::NoBrush );
 
 					m_painter->strokePath();
@@ -147,6 +149,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 					// Draw control node2:
 					m_painter->newPath();
 
+/*
 					if(
 						jtr.current()->ctrlPoint2Selected() ||
 						jtr.current()->knotSelected() )
@@ -154,7 +157,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->setBrush( Qt::blue.light() );
 						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
 					}
-					else
+					else */
 						m_painter->setBrush( Qt::NoBrush );
 
 					m_painter->strokePath();
@@ -163,9 +166,9 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				// Draw knot:
 				m_painter->setPen( Qt::NoPen );
 
-				if( jtr.current()->knotSelected() )
+/*				if( jtr.current()->knotSelected() )
 					m_painter->setBrush( Qt::blue );
-				else
+				else */
 					m_painter->setBrush( Qt::blue.light() );
 
 				m_painter->drawNode( jtr.current()->knot(), composite.stroke()->lineWidth() > 5.0 ? 3 : 2 );

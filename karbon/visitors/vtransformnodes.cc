@@ -36,7 +36,7 @@ VTransformNodes::visitVPath( VPath& path )
 	// skip "begin":
 	while( path.next() )
 	{
-		if(
+/*		if(
 			path.current()->prev() &&
 			path.current()->prev()->edited( 2 ) )
 		{
@@ -78,6 +78,7 @@ VTransformNodes::visitVPath( VPath& path )
 				1,
 				path.current()->point( 1 ).transform( m_matrix ) );
 		}
+*/
 
 		if( !success() )
 			setSuccess();
