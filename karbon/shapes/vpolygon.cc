@@ -35,7 +35,7 @@ VPolygon::VPolygon( VObject* parent, VState state )
 
 VPolygon::VPolygon( VObject* parent, const QString &points,
 		const KoPoint& topLeft, double width, double height )
-	: VComposite( parent ), m_points( points ), m_topLeft( topLeft ), m_width( width), m_height( height )
+	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_points( points )
 {
 	init();
 }
