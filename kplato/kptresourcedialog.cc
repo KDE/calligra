@@ -32,6 +32,7 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qptrlist.h>
+#include <qstringlist.h>
 
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
@@ -48,15 +49,17 @@ KPTResourceDialogImpl::KPTResourceDialogImpl (QWidget *parent)
     : ResourceDialogBase(parent)
 {
 
-    connect(type, SIGNAL(activated(int)), SLOT(slotChanged(int)));
-    connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged(int)));
-    connect(nameEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
+    connect(type, SIGNAL(activated(int)), SLOT(slotChanged()));
+    connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged()));
+    connect(nameEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(initialsEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(emailEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
 
-    connect(calendarList, SIGNAL(activated(int)), SLOT(slotChanged(int)));
+    connect(calendarList, SIGNAL(activated(int)), SLOT(slotChanged()));
 
-    connect(rateEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
-    connect(overtimeEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
-    connect(fixedCostEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
+    connect(rateEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(overtimeEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(fixedCostEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
 
     connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
     
@@ -64,15 +67,7 @@ KPTResourceDialogImpl::KPTResourceDialogImpl (QWidget *parent)
 }
 
 
-void KPTResourceDialogImpl::slotChanged(const QString&) {
-    emit changed();
-}
-
-void KPTResourceDialogImpl::slotChanged(const QTime&) {
-    emit changed();
-}
-
-void KPTResourceDialogImpl::slotChanged(int) {
+void KPTResourceDialogImpl::slotChanged() {
     emit changed();
 }
 
@@ -83,10 +78,18 @@ void KPTResourceDialogImpl::slotCalculationNeeded(const QString&) {
 
 void KPTResourceDialogImpl::slotChooseResource()
 {
-  KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-  if (!a.isEmpty()) {
-	  nameEdit->setText(a.fullEmail());
-  }
+    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
+    if (!a.isEmpty()) {
+        nameEdit->setText(a.assembledName());
+        emailEdit->setText(a.preferredEmail());
+        QStringList l = QStringList::split(' ', a.assembledName());
+        QString in;
+        QStringList::Iterator it = l.begin();
+        for (int i=0; it != l.end(); ++it) {
+            in += (*it)[0];
+        }
+        initialsEdit->setText(in);
+    }
 }
 
 void KPTResourceDialogImpl::slotEditCalendarClicked()
@@ -105,6 +108,8 @@ KPTResourceDialog::KPTResourceDialog(KPTProject &project, KPTResource &resource,
     enableButtonOK(false);
 
     dia->nameEdit->setText(resource.name());
+    dia->initialsEdit->setText(resource.initials());
+    dia->emailEdit->setText(resource.email());
     dia->units->setValue(resource.units());
     dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource.normalRate()));
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
@@ -138,12 +143,16 @@ void KPTResourceDialog::slotCalculationNeeded() {
 
 void KPTResourceDialog::slotOk() {
     m_resource.setName(dia->nameEdit->text());
+    m_resource.setInitials(dia->initialsEdit->text());
+    m_resource.setEmail(dia->emailEdit->text());
     m_resource.setType((KPTResource::Type)(dia->type->currentItem()));
     m_resource.setUnits(dia->units->value());
+    //FIXME: readMoney() can't read formatMoney() format!!
     m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
     m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
     m_resource.setFixedCost(KGlobal::locale()->readMoney(dia->fixedCostEdit->text()));
-
+    m_resource.setCalendar(m_calendars[dia->calendarList->currentItem()]);
+    
     accept();
 }
 

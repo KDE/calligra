@@ -187,11 +187,11 @@ KPTResourcesPanel::KPTResourcesPanel(QWidget *parent, KPTProject *p) : Resources
     connect (bRemove, SIGNAL( clicked() ), this, SLOT ( slotDeleteGroup() ));
     connect (listOfGroups, SIGNAL( selectionChanged( QListBoxItem*) ), this, SLOT( slotGroupChanged( QListBoxItem*) ));
 
-    connect (bChooseResource, SIGNAL( clicked() ), this, SLOT ( slotChooseResource() ));
     connect (bAddResource, SIGNAL( clicked() ), this, SLOT ( slotAddResource() ));
     connect (bEditResource, SIGNAL( clicked() ), this, SLOT ( slotEditResource() ));
     connect (bRemoveResource, SIGNAL( clicked() ), this, SLOT ( slotDeleteResource() ));
     connect (listOfResources, SIGNAL( selectionChanged( QListBoxItem*) ), this, SLOT ( slotResourceChanged( QListBoxItem*) ));
+    connect (listOfResources, SIGNAL( currentChanged( QListBoxItem*) ), this, SLOT ( slotCurrentChanged( QListBoxItem*) ));
     connect (resourceName, SIGNAL( textChanged( const QString&) ), this, SLOT ( slotResourceRename( const QString&) ));
     connect (groupName, SIGNAL( textChanged( const QString&) ), this, SLOT ( slotGroupRename( const QString&) ));
 }
@@ -228,41 +228,36 @@ void KPTResourcesPanel::slotDeleteGroup() {
     emit changed();
 }
 
-void KPTResourcesPanel::slotChooseResource() {
-  KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-  if (!a.isEmpty()) {
-	  resourceName->setText(a.fullEmail());
-  }
-}
-
 void KPTResourcesPanel::slotAddResource() {
-    if(resourceName->text().isEmpty()) return;
     if (!m_groupItem) {
         KMessageBox::sorry(this, i18n("Resources belong to resource groups, select the group first to add a new resource to"));
         return;
     }
-
-    KPTResource *res = new KPTResource(project);
-    res->setName(resourceName->text());
-
-    KPTResourceItem *resourceItem = new KPTResourceItem(res, KPTResourceItem::New);
-    m_groupItem->m_group->m_resourceItems.append(resourceItem);
-    //kdDebug()<<k_funcinfo<<" Added: "<<resourceItem->name()<<" ("<<resourceItem<<")"<<endl;
-
-    listOfResources->insertItem(new KPTResourceLBItem(resourceItem));
-    resourceName->clear();
-
-	emit changed();
+    listOfResources->setSelected(listOfResources->selectedItem(), false);
+    KPTResource *r = new KPTResource(project);
+    KPTResourceDialog *dia = new KPTResourceDialog(*project, *r);
+    if (dia->exec()) {
+        KPTResourceItem *resourceItem = new KPTResourceItem(r, KPTResourceItem::New);
+        m_groupItem->m_group->m_resourceItems.append(resourceItem);
+        KPTResourceLBItem *item = new KPTResourceLBItem(resourceItem);
+        listOfResources->insertItem(item);
+        resourceName->clear();
+        listOfResources->setSelected(item, true);
+        emit changed();
+        //kdDebug()<<k_funcinfo<<" Added: "<<resourceItem->name()<<" to "<<m_groupItem->m_group->m_name<<endl;
+    } else {
+        delete r;
+    }
+    delete dia;
 }
 
 void KPTResourcesPanel::slotEditResource() {
     //kdDebug()<<k_funcinfo<<endl;
     KPTResourceLBItem *item = dynamic_cast<KPTResourceLBItem*> (listOfResources->selectedItem());
-    if(item == NULL) return;
+    if(item == 0) return;
     KPTResource *r = item->m_resourceItem->m_resource;
     KPTResourceDialog *dia = new KPTResourceDialog(*project, *r);
     if (dia->exec()) {
-        r->setCalendar(dia->calendar());
         resourceName->setText(r->name());
         item->m_resourceItem->setState(KPTResourceItem::Modified);
         item->setName(r->name()); // refresh list
@@ -321,13 +316,22 @@ void KPTResourcesPanel::slotGroupRename( const QString &newName) {
 /* Select another resource */
 void KPTResourcesPanel::slotResourceChanged( QListBoxItem *item) {
     if (!item) {
+        resourceName->setEnabled(false);
         bEditResource->setEnabled(false);
         bRemoveResource->setEnabled(false);
         return;
     }
     resourceName->setText( ((KPTResourceLBItem *)item)->name());
+    resourceName->setEnabled(true);
     bEditResource->setEnabled(true);
     bRemoveResource->setEnabled(true);
+}
+
+/* Select another resource */
+void KPTResourcesPanel::slotCurrentChanged( QListBoxItem *item) {
+    if (item && !item->isSelected()) {
+        listOfResources->setSelected(item, true);
+    }
 }
 
 void KPTResourcesPanel::slotResourceRename( const QString &newName) {

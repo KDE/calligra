@@ -295,6 +295,8 @@ void KPTResource::copy(KPTResource *resource) {
     //m_appointments = resource->appointments(); // Note
     m_id = resource->id();
     m_name = resource->name();
+    m_initials = resource->initials();
+    m_email = resource->email();
     m_availableFrom = resource->availableFrom();
     m_availableUntil = resource->availableUntil();
     m_workingHours.clear();
@@ -355,6 +357,8 @@ void KPTResource::save(QDomElement &element) {
         me.setAttribute("calendar-id", m_calendar->id());
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
+    me.setAttribute("initials", m_initials);
+    me.setAttribute("email", m_email);
 
 /* We save these after tasks...
     QPtrListIterator<KPTAppointment> it(m_appointments);

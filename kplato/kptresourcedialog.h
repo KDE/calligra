@@ -43,9 +43,7 @@ public:
     KPTResourceDialogImpl (QWidget *parent);
 
 public slots:
-    void slotChanged(const QString&);
-    void slotChanged(const QTime&);
-    void slotChanged(int);
+    void slotChanged();
     void slotCalculationNeeded(const QString&);
     void slotChooseResource();
     void slotEditCalendarClicked();

@@ -1,5 +1,6 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::ResourcesPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>ResourcesPanelBase</cstring>
@@ -11,6 +12,9 @@
             <width>679</width>
             <height>445</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>ResourcesPanelBase</string>
     </property>
     <grid>
         <property name="name">
@@ -127,18 +131,10 @@
                         </property>
                         <widget class="QPushButton">
                             <property name="name">
-                                <cstring>bChooseResource</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Choose...</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
                                 <cstring>bAddResource</cstring>
                             </property>
                             <property name="text">
-                                <string>Add</string>
+                                <string>Add...</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">

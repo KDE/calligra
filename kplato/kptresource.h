@@ -181,8 +181,14 @@ class KPTResource {
         Type type() const { return m_type; }
         QString typeToString() const;
 
-	    void setName(QString n) {m_name=n;}
-	    const QString &name() const {return m_name;}
+        void setName(QString n) {m_name=n;}
+        const QString &name() const {return m_name;}
+
+        void setInitials(QString initials) {m_initials=initials;}
+        const QString &initials() const {return m_initials;}
+
+        void setEmail(QString email) {m_email=email;}
+        const QString &email() const {return m_email;}
 
         void copy(KPTResource *resource);
 
@@ -257,6 +263,8 @@ class KPTResource {
         QPtrList<KPTAppointment> m_appointments; // TODO: Move appointments to KPTProject ????
         QString m_id; // unique id
         QString m_name;
+        QString m_initials;
+        QString m_email;
         QTime m_availableFrom;
         QTime m_availableUntil;
         QPtrList<QTime> m_workingHours;

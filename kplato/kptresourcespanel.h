@@ -47,7 +47,6 @@ protected slots:
     void slotAddGroup();
     void slotDeleteGroup();
 
-    void slotChooseResource();
     void slotAddResource();
     void slotEditResource();
     void slotDeleteResource();
@@ -56,6 +55,7 @@ protected slots:
     void slotGroupRename( const QString &newName);
     void slotResourceRename(const QString &newName);
     void slotResourceChanged( QListBoxItem*);
+    void slotCurrentChanged( QListBoxItem*);
 signals:
 	void changed();
 

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::ResourceDialogBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
@@ -9,34 +9,32 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>601</width>
-            <height>256</height>
+            <width>625</width>
+            <height>257</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>ResourceDialogBase</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QFrame">
             <property name="name">
-                <cstring>layout13</cstring>
+                <cstring>frame3</cstring>
             </property>
-            <hbox>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Name:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>nameEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
+                <widget class="QLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>nameEdit</cstring>
                     </property>
@@ -44,7 +42,7 @@
                         <string></string>
                     </property>
                 </widget>
-                <widget class="QPushButton">
+                <widget class="QPushButton" row="0" column="2">
                     <property name="name">
                         <cstring>chooseBtn</cstring>
                     </property>
@@ -55,7 +53,72 @@
                         <string>Choose resource from addressbook</string>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>nameEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Initials</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>initialsEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>initialsEdit</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>100</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Email</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>emailEdit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>emailEdit</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
