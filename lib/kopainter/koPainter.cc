@@ -124,6 +124,8 @@ void KoPainter::fillAreaRGB(const QRect &r, const KoColor &c)
   for(int y = t; y <= b; y++)
   {
     QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
+    if ( !ptr )
+        return;
     for(int x = l; x <= ri; x++)
       *(ptr + x) = a;
   }
@@ -134,14 +136,20 @@ void KoPainter::drawRectRGB(const QRect &r, const KoColor &c)
   QRgb a = c.color().rgb();
   QRgb *ptr;
   ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(r.top()));
+  if ( !ptr)
+      return;
   for(int x = r.left(); x <= r.right(); x++)
     *(ptr + x) = a;
   ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(r.bottom()));
+  if ( !ptr )
+      return;
   for(int x = r.left(); x <= r.right(); x++)
     *(ptr + x) = a;
   for(int y = r.top() + 1; y < r.bottom(); y++)
   {
     ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
+    if ( !ptr )
+        return;
     *(ptr + r.left()) = a;
     *(ptr + r.right()) = a;
   }
@@ -151,6 +159,8 @@ void KoPainter::drawHorizLineRGB(const int x1, const int x2, const int y, const 
 {
   QRgb a = c.rgb();
   QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
+  if ( !ptr)
+      return;
   for(int x = x1; x <= x2; x++)
     *(ptr + x) = a;
 }
@@ -159,9 +169,12 @@ void KoPainter::drawVertLineRGB(const int x, const int y1, const int y2, const Q
 {
   QRgb a = c.rgb();
   QRgb *ptr;
+
   for(int y = y1; y <= y2; y++)
   {
     ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
+    if ( !ptr )
+        return;
     *(ptr + x) = a;
   }
 }
