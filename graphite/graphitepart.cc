@@ -72,7 +72,7 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
     m_nodeZero->setDirty();
 }
 
-void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool transparent) {
+void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool transparent, double /*zoomX*/, double /*zoomY*/) {
     // draws all the objects
     // Note: To get the page "borders" and the selection the view calls the
     // two functions paintPageBorders and paintSelection
