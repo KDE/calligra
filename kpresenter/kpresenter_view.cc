@@ -6435,7 +6435,7 @@ void KPresenterView::slotObjectEditChanged()
     }
 
     KPTextView *edit=m_canvas->currentTextObjectView();
-
+    actionCreateStyleFromSelection->setEnabled((edit!=0));
     bool val=(edit!=0) && isText && !edit->kpTextObject()->isProtectContent();
     actionInsertSpecialChar->setEnabled(val);
     actionInsertComment->setEnabled( val );
