@@ -860,7 +860,7 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, QColor bd_Col
    	  if(it.current()->fallDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
    	   	it.current()->setFallDiagonalColor(bd_Color);
    	  if(it.current()->goUpDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
-   	   	it.current()->setGoUpDiagonalColor(bd_Color);    	   
+   	   	it.current()->setGoUpDiagonalColor(bd_Color);    	
 	  if(it.current()->bottomBorderStyle(it_Row,it_Col)!=Qt::NoPen)
    	   	it.current()->setBottomBorderColor(bd_Color);
    	  if(it.current()->rightBorderStyle(it_Row,it_Col)!=Qt::NoPen)
@@ -893,12 +893,12 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, QColor bd_Col
    	  if(it.current()->fallDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
    	   	it.current()->setFallDiagonalColor(bd_Color);
    	  if(it.current()->goUpDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
-   	   	it.current()->setGoUpDiagonalColor(bd_Color);    	   
+   	   	it.current()->setGoUpDiagonalColor(bd_Color);    	
 	  if(it.current()->bottomBorderStyle(it_Row,it_Col)!=Qt::NoPen)
    	   	it.current()->setBottomBorderColor(bd_Color);
    	  if(it.current()->rightBorderStyle(it_Row,it_Col)!=Qt::NoPen)
    	   	it.current()->setRightBorderColor(bd_Color);
-	  
+	
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -934,7 +934,7 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, QColor bd_Col
    	   		if(cell->fallDiagonalStyle(x,y)!=Qt::NoPen)
    	   			cell->setFallDiagonalColor(bd_Color);
    	   		if(cell->goUpDiagonalStyle(x,y)!=Qt::NoPen)
-   	   			cell->setGoUpDiagonalColor(bd_Color);    	   
+   	   			cell->setGoUpDiagonalColor(bd_Color);    	
 	   		if(cell->bottomBorderStyle(x,y)!=Qt::NoPen)
    	   			cell->setBottomBorderColor(bd_Color);
    	   		if(cell->rightBorderStyle(x,y)!=Qt::NoPen)
@@ -1942,7 +1942,7 @@ void KSpreadTable::borderAll( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    
+
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
 	{
@@ -4503,18 +4503,6 @@ bool KSpreadTable::saveChildren( KoStore* _store, const char *_path )
       return false;
   }
   return true;
-}
-
-bool KSpreadTable::hasToWriteMultipart()
-{
-  QListIterator<KSpreadChild> it( m_lstChildren );
-  for( ; it.current(); ++it )
-  {
-    if ( !it.current()->isStoredExtern() )
-      return true;
-  }
-
-  return false;
 }
 
 KSpreadTable::~KSpreadTable()

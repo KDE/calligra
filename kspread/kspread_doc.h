@@ -281,15 +281,6 @@ protected:
   virtual bool saveChildren( KoStore* _store, const char *_path );
 
   /**
-   * @return true if one of the direct children wants to
-   *              be saved embedded. If there are no children or if
-   *              every direct child saves itself into its own file
-   *              then false is returned.
-   *
-   */
-  virtual bool hasToWriteMultipart();
-
-  /**
    * Initializes the KScript Interpreter.
    */
   void initInterpreter();

@@ -159,11 +159,6 @@ bool KSpreadDoc::saveChildren( KoStore* _store, const char *_path )
   return m_pMap->saveChildren( _store, _path );
 }
 
-bool KSpreadDoc::hasToWriteMultipart()
-{
-  return m_pMap->hasToWriteMultipart();
-}
-
 bool KSpreadDoc::save( ostream& out, const char* )
 {
   //Terminate current cell edition, if any

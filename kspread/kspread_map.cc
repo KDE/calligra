@@ -182,18 +182,6 @@ bool KSpreadMap::loadChildren( KoStore* _store )
   return true;
 }
 
-bool KSpreadMap::hasToWriteMultipart()
-{
-  QListIterator<KSpreadTable> it( m_lstTables );
-  for( ; it.current(); ++it )
-  {
-    if ( it.current()->hasToWriteMultipart() )
-      return true;
-  }
-
-  return false;
-}
-
 // ######### Torben: Is that really needed ?
 // ### The header says 'Needed for the printing extension KOffice::Print' (David)
 void KSpreadMap::draw( QPaintDevice* _dev, long int _width, long int _height,
