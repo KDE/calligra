@@ -28,6 +28,8 @@
 #include <qdom.h>
 #include <koUtils.h>
 #include <koDocument.h>
+#include <kdialogbase.h>
+#include "timeformatwidget_impl.h"
 
 QString KoVariableDateFormat::convert( const QDate & date ) const
 {
@@ -47,14 +49,27 @@ void KoVariableDateFormat::load( const QCString &key )
     // TODO else: use the last setting ?  (useful for the interactive case)
 }
 
+KoVariableTimeFormat::KoVariableTimeFormat():KoVariableFormat(){
+    m_strFormat="";
+}
+
+void KoVariableTimeFormat::load( const QCString &key )
+{
+    QCString params( key.mid( 4 ) );
+    if ( !params.isEmpty() )
+	m_strFormat = QString::fromUtf8(params);
+}
+
 QString KoVariableTimeFormat::convert( const QTime & time ) const
 {
-    return KGlobal::locale()->formatTime( time );
+    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())
+	return KGlobal::locale()->formatTime( time );
+    return time.toString(m_strFormat);
 }
 
 QCString KoVariableTimeFormat::key() const
 {
-    return "TIME";
+    return QCString("TIME")+m_strFormat.utf8();
 }
 
 QString KoVariableStringFormat::convert( const QString & string ) const
@@ -264,6 +279,9 @@ void KoVariable::load( QDomElement & )
 //static
 KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,KoVariableCollection *varColl )
 {
+    QCString string;
+    KDialogBase* dialog;
+    QWidget* widget;
     if ( varFormat == 0L )
     {
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)
@@ -272,7 +290,18 @@ KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormat
             varFormat = coll->format( "DATE" );
             break;
         case VT_TIME:
-            varFormat = coll->format( "TIME" );
+	    dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
+	    dialog->disableResize();
+	    widget=new TimeFormatWidget(dialog);
+	    dialog->setMainWidget(widget);
+	    if(dialog->exec()==QDialog::Accepted){
+    		string=dynamic_cast<TimeFormatWidget*>(dialog->mainWidget())->resultString().utf8();
+    	    }
+	    else{
+		return 0;
+	    }
+	    delete dialog;
+            varFormat = coll->format( "TIME"+string );
             break;
         case VT_PGNUM:
             varFormat = coll->format( "NUMBER" );

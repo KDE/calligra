@@ -1,0 +1,174 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>TimeFormatWidgetPrototype</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>TimeFormatWidgetPrototype</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>260</width>
+            <height>220</height>
+        </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>260</width>
+            <height>220</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>260</width>
+            <height>220</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>TimeFormat</string>
+        <comment>This dialog allows you to set the format of the time variable</comment>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>190</y>
+                <width>240</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="textFormat">
+            <enum>PlainText</enum>
+        </property>
+        <property name="indent">
+            <number>5</number>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>50</y>
+                <width>240</width>
+                <height>130</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>am/pm usage</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>radio1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>30</y>
+                    <width>220</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>24 hour time</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>radio2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>60</y>
+                    <width>220</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>12 hour time (am/pm)</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>radio3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>90</y>
+                    <width>220</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>12 hour time (AM/PM)</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QComboBox">
+        <item>
+            <property name="text">
+                <string>h:m:s</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Locale</string>
+            </property>
+        </item>
+        <property name="name">
+            <cstring>combo</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>240</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="editable">
+            <bool>true</bool>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>combo</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>TimeFormatWidgetPrototype</receiver>
+        <slot>updateLabel()</slot>
+    </connection>
+    <connection>
+        <sender>radio1</sender>
+        <signal>clicked()</signal>
+        <receiver>TimeFormatWidgetPrototype</receiver>
+        <slot>updateLabel()</slot>
+    </connection>
+    <connection>
+        <sender>radio2</sender>
+        <signal>clicked()</signal>
+        <receiver>TimeFormatWidgetPrototype</receiver>
+        <slot>updateLabel()</slot>
+    </connection>
+    <connection>
+        <sender>radio3</sender>
+        <signal>clicked()</signal>
+        <receiver>TimeFormatWidgetPrototype</receiver>
+        <slot>updateLabel()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>updateLabel()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

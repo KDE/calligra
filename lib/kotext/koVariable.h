@@ -72,10 +72,11 @@ private:
 class KoVariableTimeFormat : public KoVariableFormat
 {
 public:
-    KoVariableTimeFormat() : KoVariableFormat() {}
+    KoVariableTimeFormat();
     QString convert( const QTime & time ) const;
     virtual QCString key() const;
-    virtual void load( const QCString & /*key*/ ) {}
+    virtual void load( const QCString & /*key*/ );
+    QString m_strFormat;
     // TODO custom time formats
 };
 
