@@ -144,20 +144,24 @@ void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
 
   format = _format;
 
-  fontList.find(_format.getUserFont()->getFontName());
-  m_rToolBarText->setCurrentComboItem(m_idComboText_FontList,fontList.at());
-  m_rToolBarText->setCurrentComboItem(m_idComboText_FontSize,_format.getPTFontSize() - 4);
+  if (_format.getUserFont()->getFontName())
+    {
+      fontList.find(_format.getUserFont()->getFontName());
+      m_rToolBarText->setCurrentComboItem(m_idComboText_FontList,fontList.at());
+    }
+
+  if (_format.getPTFontSize() != -1)
+    m_rToolBarText->setCurrentComboItem(m_idComboText_FontSize,_format.getPTFontSize() - 4);
   
   if (_format.getWeight() != -1)
     m_rToolBarText->setButton(m_idButtonText_Bold,_format.getWeight() == QFont::Bold);
   if (_format.getItalic() != -1)
     m_rToolBarText->setButton(m_idButtonText_Italic,_format.getItalic() == 1);
+  if (_format.getUnderline() != -1)
+    m_rToolBarText->setButton(m_idButtonText_Underline,_format.getUnderline() == 1);
 
-  m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(_format.getColor())));
-
-  // we have no underlined ????
-  //   if (_format.getItalic() != -1)
-  //   m_rToolBarText->setButton(m_idButtonText_Underline,tbFont.underline());
+  if (_format.getColor().isValid())
+    m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(_format.getColor())));
 
   gui->getPaperWidget()->formatChanged(format);
 }
@@ -241,6 +245,9 @@ void KWordView_impl::textItalic()
 /*======================== text underline =======================*/
 void KWordView_impl::textUnderline()
 {
+  tbFont.setUnderline(!tbFont.underline());
+  format.setUnderline(tbFont.underline() ? 1 : 0);
+  gui->getPaperWidget()->formatChanged(format);
 }
 
 /*=========================== text color ========================*/

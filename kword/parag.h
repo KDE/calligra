@@ -46,7 +46,6 @@ public:
      * @return the paragraph before this one or 0L if this is the first one.
      */
     KWParag* getPrev() { return prev; }    
-
     /**
      * @return The page this paragraph starts on. This value is only valid if this paragraph is
      *         in front of the last modified paragraph. The value is zoomed.
@@ -87,7 +86,8 @@ public:
      */
     KWChar* getText() { return text.data; }
     KWChar* getChar( unsigned int _pos ) { assert( _pos < text.len ); return text.data + _pos; }
-  
+    KWString* getKWString() { return &text; }
+
     /**
      * @return the paragraph Llyout of this paragraph.
      */
@@ -117,6 +117,8 @@ public:
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
 
     void insertText( unsigned int _pos, const char *_text );
+    void appendText(KWChar *_text,unsigned int _len);
+    bool deleteText( unsigned int _pos, unsigned int _len = 1);
     void setFormat( unsigned int _pos, const KWFormat &format );
   
 protected:

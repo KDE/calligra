@@ -92,6 +92,16 @@ void KWParag::insertText( unsigned int _pos, const char *_text )
   text.insert( _pos, _text );
 }
 
+void KWParag::appendText(KWChar *_text,unsigned int _len)
+{
+  text.append(_text,_len);
+}
+
+bool KWParag::deleteText( unsigned int _pos, unsigned int _len = 1)
+{
+  return text.remove( _pos, _len );
+}
+
 void KWParag::setFormat( unsigned int _pos, const KWFormat &_format )
 {
   assert( _pos < text.len );

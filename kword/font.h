@@ -37,7 +37,7 @@ class KWDisplayFont : public QFont
 {
 public:
     KWDisplayFont( KWordDocument_impl *_doc, KWUserFont *_font, unsigned int _size,
-		   int _weight, bool _italic );
+		   int _weight, bool _italic, bool _underline );
     ~KWDisplayFont();
     
     void scaleFont();
@@ -56,6 +56,7 @@ public:
     void setPTSize(int _size);
     void setWeight(int _weight);
     void setItalic(bool _italic);
+    void setUnderline(bool _underline);
 
 protected:
     QFontMetrics fm;

@@ -48,16 +48,20 @@ struct KWString
 {
   KWString() { max = 0; len = 0; data = 0L; }
   KWString( const char* _text );
+  KWString(const KWString &_string);
   ~KWString() { free( data, len ); delete []data; }
-  
+
   unsigned int size() { return len; }
+  void append(KWChar *_text,unsigned int _len);
   void insert( unsigned int _pos, const char *_text );
   void insert( unsigned int _pos, const char _c );
   void resize( unsigned int _size );
-  
+  bool remove( unsigned int _pos,unsigned int _len = 1 );
+
   // Intern
   KWChar* alloc( unsigned int _size );
   void free( KWChar* _data, unsigned int _len );
+  KWChar* copy(KWChar *_data,unsigned int _len);
   
   unsigned int len;
   unsigned int max;

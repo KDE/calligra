@@ -21,9 +21,11 @@ KWUserFont::~KWUserFont()
 }
 
 KWDisplayFont::KWDisplayFont( KWordDocument_impl *_doc, KWUserFont *_font, unsigned int _size,
-			      int _weight, bool _italic ) :
+			      int _weight, bool _italic, bool _underline ) :
     QFont( _font->getFontName(), ZOOM(_size), _weight, _italic ), fm(*this)
 {
+  setUnderline(_underline);
+
   document = _doc;
   document->displayFontList.append( this );
 
@@ -53,6 +55,12 @@ void KWDisplayFont::setWeight(int _weight)
 void KWDisplayFont::setItalic(bool _italic)
 {
   QFont::setItalic(_italic);
+  fm = QFontMetrics(*this);
+}
+
+void KWDisplayFont::setUnderline(bool _underline)
+{
+  QFont::setUnderline(_underline);
   fm = QFontMetrics(*this);
 }
 

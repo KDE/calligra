@@ -189,6 +189,117 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoDown(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
       } break;
+    case Key_Return: case Key_Enter:
+      {
+      } break;
+    case Key_Delete:
+      {
+	if (has_to_copy) copyBuffer();
+	draw_buffer = true;
+
+	unsigned int tmpTextPos = fc->getTextPos();
+	bool del = fc->getParag()->deleteText(tmpTextPos,1); 
+
+	if (!del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext())
+	  {
+	    KWParag *p = fc->getParag()->getNext();
+	    doc->deleteParag(fc->getParag());
+	    if (p) fc->init(p,painter);
+	  }
+
+	if (!del && fc->getParag()->getTextLen() > 0)
+	  doc->joinParag(fc->getParag(),fc->getParag()->getNext());
+	  
+	fc->makeLineLayout(painter);
+	KWFormatContext paintfc(doc);
+	paintfc = *fc;
+	bool bend = false;
+
+	while (!bend)
+	  {
+	    painter.fillRect(paintfc.getPTLeft() - xOffset,
+			     paintfc.getPTY() - yOffset,
+			     paintfc.getPTWidth(),
+			     paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
+			     QBrush(white));
+	    doc->printLine(paintfc,painter,xOffset,yOffset);
+	    bend = !paintfc.makeNextLineLayout(painter);
+	    if (paintfc.getPage() > lastVisiblePage)
+	      bend = true; 
+	  }
+
+	fc->cursorGotoPos(tmpTextPos,painter);
+      } break;
+    case Key_Backspace:
+      {
+	if (has_to_copy) copyBuffer();
+	draw_buffer = true;
+
+	// HACK
+	if (fc->isCursorAtLineStart() && !fc->isCursorAtParagStart()) 
+	  {
+	    fc->cursorGotoLeft(painter);
+	    painter.end();
+	    draw_buffer = false;
+	    repaint(false);
+	    // HACK
+	    kbdc.auto_repeat_mode = repeat;
+	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    return;
+	  }
+
+	unsigned int tmpTextPos = fc->getTextPos() - 1;
+	unsigned int paraLen = (fc->getParag()->getPrev() ? fc->getParag()->getPrev()->getTextLen() : 0);
+	bool del = fc->getParag()->deleteText(tmpTextPos,1); 
+	bool joined = false;
+
+	if (!del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext())
+	  {
+	    KWParag *p = fc->getParag()->getNext();
+	    doc->deleteParag(fc->getParag());
+	    if (p) fc->init(p,painter);
+	  }
+
+	if (!del && fc->getParag()->getTextLen() > 0)
+	  {
+	    KWParag *p = fc->getParag()->getPrev();
+	    doc->joinParag(fc->getParag()->getPrev(),fc->getParag());
+	    if (p) fc->init(p,painter);
+	    joined = p ? true : false;
+	  }
+
+	fc->makeLineLayout(painter);
+	KWFormatContext paintfc(doc);
+	paintfc = *fc;
+	bool bend = false;
+
+	while (!bend)
+	  {
+	    painter.fillRect(paintfc.getPTLeft() - xOffset,
+			     paintfc.getPTY() - yOffset,
+			     paintfc.getPTWidth(),
+			     paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
+			     QBrush(white));
+	    doc->printLine(paintfc,painter,xOffset,yOffset);
+	    bend = !paintfc.makeNextLineLayout(painter);
+	    if (paintfc.getPage() > lastVisiblePage)
+	      bend = true; 
+	  }
+
+	if (!joined)
+	  {
+	    fc->cursorGotoPos(tmpTextPos + 1,painter);
+	    fc->cursorGotoLeft(painter);
+	  }
+	else
+	  {
+	    // HACK
+	    fc->gotoStartOfParag(painter);
+	    fc->cursorGotoLineStart(painter);
+	    for (unsigned int i = 0;i < paraLen;i++)
+	      fc->cursorGotoRight(painter);
+	  }
+      } break;
     case Key_Shift: case Key_Control: case Key_Alt: case Key_Meta:
       // these keys do nothing at the moment
       break;
@@ -251,6 +362,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 void KWPage::resizeEvent(QResizeEvent *)
 {
   buffer.resize(width(),height());
+  buffer.fill(white);
   calcVisiblePages();
 }
 
@@ -388,6 +500,11 @@ void KWPage::formatChanged(KWFormat &_format)
 //     format.setItalic(-1);
 //   else
 //     format.setItalic(_format.getItalic());
+
+//   if (format.getUnderline() == _format.getUnderline())
+//     format.setUnderline(-1);
+//   else
+//     format.setUnderline(_format.getUnderline());
 
 //   if (format.getPTFontSize() == _format.getPTFontSize())
 //     format.setPTFontSize(-1);

@@ -17,3 +17,17 @@ Reggie, 9.9.1998:
   is placed correctly if it jumps to the next line.
 - Fixed a redraw bug.
 - Fixed a problem in KWDisplayFont.
+
+Reggie, 10.9.1998:
+------------------
+- Introduced font attribute UNDERLINE.
+- Implemented 'bool KWString::remove(unsigned int _pos,unsigned int _len)', 
+  'void KWString::append(KWChar* _text,unsigned int _len) and 
+  'KWChar* KWString::copy(KWChar *_data,unsigned int _len)'
+- Implemented 'bool KWParag::deleteText(pos,len)', 'void KWParag::appendText(KWChar* _text,unsigned int _len)'.
+
+Reggie, 11.9.1998:
+------------------
+- Implemented Key_Delete and Key_Backspace, and everything which 
+  was needed for that. There are still lots of problems with that,
+  especially with placing the cursor and redrawing.

@@ -166,7 +166,7 @@ public:
   /**
    * @return a display font matching the criteriums or 0L if none is found.
    */
-  KWDisplayFont* findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic);
+  KWDisplayFont* findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic,bool _underline);
 
   /**
    * @return a pointer to the parag with the given name or 0L if not found.
@@ -218,6 +218,9 @@ public:
 
   void setPages(int _pages)
     { pages = _pages; updateAllRanges(); }
+
+  void deleteParag(KWParag *_parag);
+  void joinParag(KWParag *_parag1,KWParag *_parag2);
 
 signals:
   void sig_imageModified();

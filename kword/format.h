@@ -26,13 +26,14 @@ public:
      * @param _font_size The size of the font to use or -1 if this value does not change.
      * @param _weight The fonts weight or -1 if the value should not change
      * @param _italic 1 to enable italic font, 0 to disable and -1 for no change.
+     * @param _underline 1 to enable underline font, 0 to disable and -1 for no change.
      * @param _math 1 to enable math mode, 0 to disable and -1 for no change.
      * @param _direct 1 to enable direct mode, 0 to disable and -1 for no change.
      *
      * @see KWUserFont
      */
     KWFormat( const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-	      char _italic = -1, char _math = -1, char _direct = -1 );
+	      char _italic = -1, char _underline = -1, char _math = -1, char _direct = -1 );
     
     /**
      * Creates a new KWFormat instance. This instance has set all values to
@@ -81,6 +82,11 @@ public:
      * @return The italic mode. The return value may be -1 if the italic mode should not change.
      */
     char getItalic() const { return italic; }
+
+    /**
+     * @return The underline mode. The return value may be -1 if the underline mode should not change.
+     */
+    char getUnderline() const { return underline; }
 
     /**
      * Fills all values with defaults. No value will remain in the 'dont change' state.
@@ -134,6 +140,13 @@ public:
      */
     void setItalic( char _italic ) { italic = _italic; }
 
+    /**
+     * Sets the fonts underline mode.
+     *
+     * @param _underline 1 to enable underline font, 0 to disable and -1 for no change.
+     */
+    void setUnderline( char _underline ) { underline = _underline; }
+
 protected:
     /**
      * Pointer to the font we have to use. If this value is 0L we are told
@@ -156,6 +169,12 @@ protected:
      * the mode'.
      */
     char italic;
+    /**
+     * Indicates wether to use underline or not. A value of 0 tells us 'no',
+     * a value of 1 tells 'yes' and a value of -1 tells us 'dont change
+     * the mode'.
+     */
+    char underline;
     /**
      * The color to use for the text. If this color is not not valid
      * ( find out with QColor::isValid ) then the color does not change.

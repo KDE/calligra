@@ -727,6 +727,9 @@ void KWFormatContext::apply( KWFormat &_format )
 	displayFont->setWeight(_format.getWeight());
       if (_format.getItalic() != -1)
 	displayFont->setItalic(_format.getItalic());
+      if (_format.getUnderline() != -1)
+	displayFont->setUnderline(_format.getUnderline());
+
       ptAscender = displayFont->getPTAscender();
       ptDescender = displayFont->getPTDescender();
       ptMaxAscender = max(ptAscender,ptMaxAscender);
