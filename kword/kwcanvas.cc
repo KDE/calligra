@@ -2222,7 +2222,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 }
 #endif
                 // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
-                if ( !m_doc->pgUpDownMovesCaret() && ( keyev->key() == Key_PageUp || keyev->key() == Key_PageDown ) )
+                if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & ShiftButton) == 0 )
+                     && ( keyev->key() == Key_PageUp || keyev->key() == Key_PageDown ) )
                 {
                     if ( keyev->key() == Key_PageUp )
                         setContentsPos( contentsX(), contentsY() - visibleHeight() );
