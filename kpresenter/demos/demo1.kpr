@@ -9,7 +9,7 @@
    <BACKCOLOR1 red="0" green="0" blue="255"/>
    <BACKCOLOR2 red="0" green="0" blue="0"/>
    <BCTYPE value="1"/>
-   <PGEFFECT value="5"/>
+   <PGEFFECT value="7"/>
   </PAGE>
   <PAGE>
    <BACKTYPE value="0"/>
@@ -17,14 +17,14 @@
    <BACKCOLOR1 red="128" green="0" blue="0"/>
    <BACKCOLOR2 red="0" green="0" blue="128"/>
    <BCTYPE value="2"/>
-   <PGEFFECT value="6"/>
+   <PGEFFECT value="11"/>
   </PAGE>
   <PAGE>
    <BACKTYPE value="0"/>
    <BACKVIEW value="1"/>
    <BACKCOLOR1 red="0" green="128" blue="0"/>
    <BACKCOLOR2 red="0" green="0" blue="128"/>
-   <BCTYPE value="1"/>
+   <BCTYPE value="4"/>
    <PGEFFECT value="3"/>
   </PAGE>
   <PAGE>

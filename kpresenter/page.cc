@@ -1,7 +1,6 @@
-
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.0.1                                                 */
+/* Version: 0.1.0                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
@@ -730,7 +729,6 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	}
     }
 }
-
 /*====================== key press event =========================*/
 void Page::keyPressEvent(QKeyEvent *e)
 {
@@ -2197,8 +2195,36 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   repaint(false);
 }
 
+/*================================================================*/
+void Page::editSelectedTextArea()
+{
+  KPObject *kpobject = 0;
 
-
-
-
-
+  if (objectList()->count() - 1 >= 0)
+    {
+      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	{
+	  kpobject = objectList()->at(i);
+	  if (kpobject->isSelected())
+	    {
+	      if (kpobject->getType() == OT_TEXT)
+		{
+		  KPTextObject *kptextobject = dynamic_cast<KPTextObject*>(kpobject);
+		  
+		  kpobject->activate(this,diffx(),diffy());
+		  kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
+		  setFocusProxy(kptextobject->getKTextObject());
+		  setFocusPolicy(QWidget::StrongFocus);
+		  kptextobject->getKTextObject()->setFocus();
+		  kptextobject->getKTextObject()->setShowCursor(true);
+		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
+			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
+		  editNum = i;
+		  break;
+		}
+	    }
+	}
+    }
+}

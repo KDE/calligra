@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.0.1                                                 */
+/* Version: 0.1.0                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
@@ -81,17 +81,10 @@ void KPGradient::paint()
 	  }
 
 	QPixmap pmCrop;
-	int ySize = pixmap.size().height();
+	int ySize = pixmap.size().height() + 16;
 	makeLineGradient(pmCrop,color2,color1,ySize);
 
-	int s;
-	int sSize = 20;
-	int sOffset = 5;
-
-	s = pixmap.size().width() / sSize + 1;
-
-	for(int i = 0;i < s;i++)
-	  painter.drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
+	painter.drawTiledPixmap(-1,-1,pixmap.width() + 1,pixmap.height() + 1,pmCrop);
 
 	painter.end();
       } break;
@@ -108,21 +101,15 @@ void KPGradient::paint()
 	  }
 
 	QPixmap pmCrop;
-	int ySize = pixmap.size().width();
+	int ySize = pixmap.size().width() + 16;
 	makeLineGradient(pmCrop,color1,color2,ySize);
-
-	int s;
-	int sSize = 20;
-	int sOffset = 5;
-
-	s = pixmap.size().height() / sSize + 1;
 
 	QWMatrix matrix;
 	matrix.translate(static_cast<float>(pixmap.size().width()),0.0);
 	matrix.rotate(90.0);
 	painter.setWorldMatrix(matrix);
-	for(int i = 0;i < s;i++)
-	  painter.drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
+
+	painter.drawTiledPixmap(-1,-1,pixmap.height() + 1,pixmap.width() + 1,pmCrop);
 
 	painter.end();
       } break;
@@ -130,7 +117,7 @@ void KPGradient::paint()
       {
 	painter.begin(&pixmap);
 
-	if (color1 == color2)
+  	if (color1 == color2)
 	  {
 	    painter.setPen(NoPen);
 	    painter.setBrush(color2);
@@ -148,40 +135,20 @@ void KPGradient::paint()
 
 	makeLineGradient(pmCrop,color2,color1,ySize);
 
-	int s;
-	int sSize = 20;
-	int sOffset = 5;
+	painter.drawTiledPixmap(0,0,ySize,ySize,pmCrop);
 
-	s = static_cast<int>(sqrt(pixmap.size().width() * pixmap.size().width() + 
-				  pixmap.size().height() * pixmap.size().height())) / sSize + 1;
-	
-	QRect br = QRect(QRect(0,0,ySize,ySize));
-	int pw = br.width();
-	int ph = br.height();
-	QRect rr = br;
-	int yPos = -rr.y();
-	int xPos = -rr.x();
-	rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-      
-	QWMatrix m,mtx,m2;
+	painter.end();
 
+	QWMatrix mtx;
 	if (bcType == BCT_GDIAGONAL1)
 	  mtx.rotate(-45.0);
 	else
 	  mtx.rotate(45.0);
+	pix = pix.xForm(mtx);
 
-	m.translate(pw / 2,ph / 2);
-	m2.translate(rr.left() + xPos,rr.top() + yPos);
-	m = m2 * mtx * m;
-      
-	painter.setWorldMatrix(m);
-
-	for(int i = 0;i < s;i++)
-	  painter.drawPixmap(sSize * i,0,pmCrop,sOffset,0,sSize + 2,ySize);
-
+	painter.begin(&pixmap);
+	painter.drawPixmap((pixmap.width() - pix.width()) / 2,(pixmap.height() - pix.height()) / 2,pix);
 	painter.end();
-
-	bitBlt(&pixmap,0,0,&pix,(ySize - pixmap.size().width()) / 2,(ySize - pixmap.size().height()) / 2,pixmap.width(),pixmap.height());
       } break;
     case BCT_GCIRCLE: case BCT_GRECT:
       {
@@ -252,9 +219,9 @@ void KPGradient::makeLineGradient(QPixmap &pmCrop,QColor _color1,QColor _color2,
   gDiff = _color2.green() - _color1.green();
   bDiff = _color2.blue() - _color1.blue();
   
-  for (int y = _ySize - 1;y > 0;y--) 
+  for (int y = _ySize;y > 0;y--) 
     {
-      p = (unsigned int*)image.scanLine(_ySize - y - 1);
+      p = (unsigned int*)image.scanLine(_ySize - y);
       rat = 1.0 * y / _ySize;
       
       cRow.setRgb(rca + static_cast<int>(rDiff * rat),

@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.0.1                                                 */
+/* Version: 0.1.0                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
@@ -105,6 +105,8 @@ public:
 
   void print(QPainter*,QPrinter*,float,float);
 
+  void editSelectedTextArea();
+
 public slots:
 
   // public slots
@@ -194,6 +196,10 @@ protected:
   bool drawRubber;
   QRect rubber,oldBoundingRect;
 
+public slots:
+  void chPic();
+  void chClip();
+
 private slots:
 
   // slots to react on changes
@@ -201,8 +207,6 @@ private slots:
   void toColorChanged(QColor* color) { emit colorChanged(color); }
   void toAlignChanged(TxtParagraph::HorzAlign a) { emit alignChanged(a); } 
   void objProperties();
-  void chPic();
-  void chClip();
   void assignEffect() {view->screenAssignEffect();}
   void drawingMode()
     {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}

@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.0.1                                                 */
+/* Version: 0.1.0                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */

@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.0.1                                                 */
+/* Version: 0.1.0                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
@@ -15,6 +15,7 @@
 
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
+#include "page.h"
 #include "presstructview.h"
 #include "presstructview.moc"
 
@@ -619,6 +620,7 @@ void PresStructViewer::slotDelete()
 /*================================================================*/
 void PresStructViewer::slotEdit()
 {
+  view->getPage()->editSelectedTextArea();
 }
 
 /*================================================================*/
@@ -636,6 +638,13 @@ void PresStructViewer::slotConfigPages()
 /*================================================================*/
 void PresStructViewer::slotChangeFilename()
 {
+  if (lastSelected)
+    {
+      if (lastSelected->getType() == OT_PICTURE)
+	view->getPage()->chPic();
+      else
+	view->getPage()->chClip();
+    }
 }
 
 /*================================================================*/
