@@ -1,7 +1,11 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KivioTextTool" library="libkiviotexttool" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="KivioTextTool" library="libkiviotexttool" version="2">
 <MenuBar>
- <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="text"/>
- </Menu>
+  <Menu name="Edit"><text>&amp;Edit</text>
+    <Action name="text"/>
+  </Menu>
+  <Menu name="Tools">
+    <Action name="text"/>
+  </Menu>
 </MenuBar>
 </kpartgui>

@@ -28,7 +28,7 @@
 class KivioView;
 class KivioPage;
 class QMouseEvent;
-class KActionMenu;
+class KPopupMenu;
 
 class KivioStencil;
 
@@ -89,7 +89,6 @@ class SelectTool : public Tool
     void endCustomDragging(const QPoint&);
     void endRubberBanding(const QPoint&);
 
-    void buildPopupMenu();
     void showPopupMenu(const QPoint&);
 
     void changeMouseCursor(const QPoint&);
@@ -117,7 +116,7 @@ class SelectTool : public Tool
     int m_customDragID;
     QPtrList <KivioSelectDragData> m_lstOldGeometry;
 
-    KActionMenu *m_pMenu;
+    KPopupMenu *m_pMenu;
 };
 
 #endif

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="14">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="15">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="addStencilSet"/>
@@ -65,6 +65,8 @@
    <Action name="bringStencilToFront"/>
    <Separator/>
  </Menu>
+ <Menu name="Tools"><text>&amp;Tools</text>
+ </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Separator group="settings_show"/>
    <Action name="options" group="settings_configure"/>
@@ -116,5 +118,21 @@
   <Action name="renamePage"/>
   <Action name="insertPage"/>
   <Action name="removePage"/>
+</Menu>
+<Menu name="select_popup">
+  <Action name="text"/>
+  <Separator/>
+  <Action name="cutStencil"/>
+  <Action name="copyStencil"/>
+  <Action name="pasteStencil"/>
+  <Separator/>
+  <Action name="alignStencils"/>
+  <Separator/>
+  <Action name="groupStencils"/>
+  <Action name="ungroupStencils"/>
+  <Separator/>
+  <Action name="sendStencilToBack"/>
+  <Action name="bringStencilToFront"/>
+  <Separator/>
 </Menu>
 </kpartgui>

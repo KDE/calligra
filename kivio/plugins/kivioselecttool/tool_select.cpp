@@ -59,11 +59,7 @@ SelectTool::SelectTool( KivioView* view )
   m_lstOldGeometry.setAutoDelete(true);
 
   m_customDragID = 0;
-
-  m_pMenu = new KActionMenu( i18n("Select Tool Menu"), this, "selectToolMenu" );
-
-  buildPopupMenu();
-
+  m_pMenu = 0;
 }
 
 SelectTool::~SelectTool()
@@ -111,9 +107,9 @@ void SelectTool::processEvent( QEvent* e )
 
 void SelectTool::activate()
 {
-   kdDebug() << "SelectTool activate" << endl;
-    m_pCanvas->setCursor(arrowCursor);
-    m_mode = stmNone;
+  kdDebug() << "SelectTool activate" << endl;
+  m_pCanvas->setCursor(arrowCursor);
+  m_mode = stmNone;
 }
 
 void SelectTool::deactivate()
@@ -953,47 +949,20 @@ void SelectTool::endResizing(const QPoint&)
     m_resizeHandle = 0;
 }
 
-
-/**
- * Builds the popup menu for this tool.
- */
-void SelectTool::buildPopupMenu()
-{
-  // Add existing actions
-  m_pMenu->insert( new KAction( i18n("Edit Stencil Text..."), "kivio_text", CTRL+Key_T,
-    this, SLOT(editText()), actionCollection(), "text" ));
-
-  m_pMenu->popupMenu()->insertSeparator();
-
-  m_pMenu->insert( new KAction( i18n("Cut"), "editcut", 0, m_pView, SLOT(cutStencil()),
-    actionCollection(), "cutStencil" ) );
-  m_pMenu->insert( new KAction( i18n("Copy"), "editcopy", 0, m_pView, SLOT(copyStencil()),
-    actionCollection(), "copyStencil" ) );
-  m_pMenu->insert( new KAction( i18n("Paste"), "editpaste", 0, m_pView, SLOT(pasteStencil()),
-    actionCollection(), "pasteStencil" ) );
-
-  m_pMenu->popupMenu()->insertSeparator();
-
-  m_pMenu->insert( new KAction( i18n("Group Selected Stencils"), "group_stencils", 0,
-    m_pView, SLOT(groupStencils()), actionCollection(), "groupStencils" ) );
-  m_pMenu->insert( new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", 0,
-    m_pView, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" ) );
-
-  m_pMenu->popupMenu()->insertSeparator();
-
-  m_pMenu->insert( new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, m_pView,
-    SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" ) );
-  m_pMenu->insert( new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, m_pView,
-    SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" ) );
-}
-
-
 /**
  * Shows the popupmenu at a given point.
  */
 void SelectTool::showPopupMenu( const QPoint &pos )
 {
+  if(!m_pMenu) {
+    m_pMenu = static_cast<KPopupMenu*>(m_pView->factory()->container("select_popup", m_pView));
+  }
+
+  if(m_pMenu) {
     m_pMenu->popup( pos );
+  } else {
+    kdDebug() << "What no popup! *ARGH*!" << endl;
+  }
 }
 
 

@@ -1,5 +1,6 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KivioZoomTool" library="libkiviozoomtool" version="4">
-<ToolBar name="ZoomToolBar" fullWidth="false" position="top"><text>Zoom Tool</text>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="KivioZoomTool" library="libkiviozoomtool" version="5">
+<ToolBar name="ZoomToolBar" fullWidth="false" position="left"><text>Zoom Tool</text>
   <Action name="zoom"/>
   <Action name="zoomHand"/>
   <Separator lineSeparator="true" />
@@ -26,6 +27,10 @@
     <Action name="zoomSelected"/>
     <Action name="zoomAllObjects"/>
    </Menu>
+ </Menu>
+ <Menu name="Tools">
+  <Action name="zoom"/>
+  <Action name="zoomHand"/>
  </Menu>
 </MenuBar>
 </kpartgui>
