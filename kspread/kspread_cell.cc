@@ -1909,9 +1909,10 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
     return;
   }
 
+  QColor backgroundColor = bgColor( cellRef.x(), cellRef.y() );
   if ( !isObscuringForced() )
   {
-    paintBackground( painter, cellRect, cellRef, selected );
+    paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
   }
 
   paintDefaultBorders( painter, rect, cellRect, cellRef );
@@ -1939,11 +1940,11 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
     /* don't paint content if this cell is obscured */
   {
     if ( !painter.device()->isExtDev() || m_pTable->getPrintCommentIndicator() )
-      paintCommentIndicator( painter, cellRect, cellRef );
+      paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
     if ( !painter.device()->isExtDev() || m_pTable->getPrintFormulaIndicator() )
-      paintFormulaIndicator( painter, cellRect );
+      paintFormulaIndicator( painter, cellRect, backgroundColor );
 
-    paintMoreTextIndicator( painter, cellRect );
+    paintMoreTextIndicator( painter, cellRect, backgroundColor );
 
   /**
    * QML ?
@@ -2092,7 +2093,8 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 
 
 void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
-                                   const QPoint &cellRef, bool selected )
+                                   const QPoint &cellRef, bool selected,
+                                   QColor &backgroundColor )
 {
   QColorGroup defaultColorGroup = QApplication::palette().active();
 
@@ -2149,11 +2151,11 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
 
   // Draw a background brush
   QBrush bb = backGroundBrush( cellRef.x(), cellRef.y() );
-
   if( bb.style() != Qt::NoBrush )
   {
     painter.fillRect( zoomedCellRect, bb );
   }
+  backgroundColor = painter.backgroundColor();
 
 }
 
@@ -2345,7 +2347,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
 void KSpreadCell::paintCommentIndicator( QPainter& painter,
                                          const KoRect &cellRect,
-                                         const QPoint &cellRef )
+                                         const QPoint &cellRef,
+                                         QColor &backgroundColor )
 {
   KSpreadDoc* doc = table()->doc();
 
@@ -2357,6 +2360,15 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
       ( table()->getPrintCommentIndicator() ||
         ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) )
   {
+    QColor penColor = Qt::red;
+    //If background has high red part, switch to blue
+    if( qRed( backgroundColor.rgb() ) > 127 && 
+        qGreen( backgroundColor.rgb() ) < 80 &&
+        qBlue( backgroundColor.rgb() ) < 80 )
+    {
+        penColor = Qt::blue;
+    }
+
     QPointArray point( 3 );
     point.setPoint( 0, doc->zoomItX( cellRect.right() - 5.0 ),
                        doc->zoomItY( cellRect.y() ) );
@@ -2364,7 +2376,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
                        doc->zoomItY( cellRect.y() ) );
     point.setPoint( 2, doc->zoomItX( cellRect.right() ),
                        doc->zoomItY( cellRect.y() + 5.0 ) );
-    painter.setBrush( QBrush(Qt::red ) );
+    painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
   }
@@ -2373,7 +2385,8 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
 
 // small blue rectangle if this cell holds a formula
 void KSpreadCell::paintFormulaIndicator( QPainter& painter,
-                                         const KoRect &cellRect )
+                                         const KoRect &cellRect,
+                                         QColor &backgroundColor )
 {
   if( isFormula() &&
       m_pTable->getShowFormulaIndicator() &&
@@ -2382,6 +2395,15 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
   {
     KSpreadDoc* doc = table()->doc();
 
+    QColor penColor = Qt::blue;
+    //If background has high blue part, switch to red
+    if( qRed( backgroundColor.rgb() ) < 80 && 
+        qGreen( backgroundColor.rgb() ) < 80 &&
+        qBlue( backgroundColor.rgb() ) > 127 )
+    {
+        penColor = Qt::red;
+    }
+
     QPointArray point( 3 );
     point.setPoint( 0, doc->zoomItX( cellRect.x() ),
                        doc->zoomItY( cellRect.bottom() - 6.0 ) );
@@ -2389,7 +2411,7 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
                        doc->zoomItY( cellRect.bottom() ) );
     point.setPoint( 2, doc->zoomItX( cellRect.x() + 6.0 ),
                        doc->zoomItY( cellRect.bottom() ) );
-    painter.setBrush( QBrush(Qt::blue ) );
+    painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
   }
@@ -2397,7 +2419,8 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
 
 
 void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
-                                          const KoRect &cellRect )
+                                          const KoRect &cellRect,
+                                          QColor &backgroundColor )
 {
   //show  a red triangle when it's not possible to write all text in cell
   //don't print the red triangle if we're printing
@@ -2409,6 +2432,15 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
   {
     KSpreadDoc* doc = table()->doc();
 
+    QColor penColor = Qt::red;
+    //If background has high red part, switch to blue
+    if( qRed( backgroundColor.rgb() ) > 127 && 
+        qGreen( backgroundColor.rgb() ) < 80 &&
+        qBlue( backgroundColor.rgb() ) < 80 )
+    {
+        penColor = Qt::blue;
+    }
+
     QPointArray point( 3 );
     point.setPoint( 0, doc->zoomItX( cellRect.right() - 4.0 ),
                        doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 - 4.0 ) );
@@ -2416,7 +2448,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
                        doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 ) );
     point.setPoint( 2, doc->zoomItX( cellRect.right() - 4.0 ),
                        doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 + 4.0 ) );
-    painter.setBrush( QBrush(Qt::red  ) );
+    painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
   }

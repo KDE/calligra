@@ -1007,14 +1007,17 @@ private:
                            const QPoint &cellRef );
     void paintText( QPainter& painter, const KoRect &cellRect,
                     const QPoint &cellRef );
-    void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect );
+    void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect,
+                                 QColor &backgroundColor );
     void paintCommentIndicator( QPainter& painter, const KoRect &cellRect,
-                                const QPoint &cellRef );
-    void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect );
+                                const QPoint &cellRef, QColor &backgroundColor );
+    void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect,
+                                QColor &backgroundColor );
     void paintDefaultBorders( QPainter& painter, const KoRect &rect,
                               const KoRect &cellRect, const QPoint &cellRef );
     void paintBackground( QPainter& painter, const KoRect &cellRect,
-                          const QPoint &cellRef, bool selected );
+                          const QPoint &cellRef, bool selected,
+                          QColor &backgroundColor );
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
                              KSpreadView* view, const KoRect &cellRect,
                              const QPoint &cellRef );
