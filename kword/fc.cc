@@ -173,13 +173,13 @@ void KWFormatContext::init( KWParag *_parag, bool _fromStart,
     if ( _fromStart ) {
 	// Offset from the top of the page
 	if ( pFrameSet->getNumFrames() > 0 )
-	    ptY = pFrameSet->getFrame( 0 )->top() + pFrameSet->getFrame( 0 )->getBTop().pt();
+	    ptY = static_cast<int>(pFrameSet->getFrame( 0 )->top() + pFrameSet->getFrame( 0 )->getBTop().pt());
 	else
 	    ptY = 0;
 	if ( _frame != -1 && _page != -1 && pFrameSet->getFrameInfo() != FI_BODY ) {
 	    setFrame( _frame );
 	    page = _page;
-	    ptY = pFrame->top() + pFrame->getBTop().pt();
+	    ptY = static_cast<int>(pFrame->top() + pFrame->getBTop().pt());
 	} else {
 	    setFrame( 1 );
 	    page = 1;
@@ -1047,19 +1047,19 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	// Change fonts & stuff to match the paragraphs layout
 	apply( parag->getParagLayout()->getFormat() );
 
-	indent = parag->getParagLayout()->getFirstLineLeftIndent().pt();
+	indent = static_cast<int>(parag->getParagLayout()->getFirstLineLeftIndent().pt());
     } else
-	indent = parag->getParagLayout()->getLeftIndent().pt();
+	indent = static_cast<int>(parag->getParagLayout()->getLeftIndent().pt());
 
     indent += _left;
 
     // Calculate the shift for the first visible character. This may be the counter, too
-    unsigned int xShift = pFrame->left() + pFrame->getBLeft().pt() + indent;
+    unsigned int xShift = static_cast<int>(pFrame->left() + pFrame->getBLeft().pt() + indent);
 
     ptLeft = xShift;
-    ptWidth = pFrame->width() -
+    ptWidth = static_cast<int>(pFrame->width() -
 	      pFrame->getBLeft().pt() -
-	      pFrame->getBRight().pt() - indent - _right;
+	      pFrame->getBRight().pt() - indent - _right);
 
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE ) {
@@ -1270,16 +1270,16 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
     }
 
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER ) {
-	ptPos = xShift + ( ( pFrame->width() -
+	ptPos = static_cast<int>(xShift + ( ( pFrame->width() -
 			     pFrame->getBLeft().pt() -
 			     pFrame->getBRight().pt() ) -
-			   indent - left - right - ptTextLen - _right ) / 2;
+			   indent - left - right - ptTextLen - _right ) / 2);
 	ptStartPos = ptPos;
     } else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT ) {
-	ptPos = xShift + ( pFrame->width() -
+	ptPos = static_cast<int>(xShift + ( pFrame->width() -
 			   pFrame->getBLeft().pt() -
 			   pFrame->getBRight().pt() ) -
-		right - ptTextLen - indent - _right;
+		right - ptTextLen - indent - _right);
 	ptStartPos = ptPos;
     }
 
@@ -1304,8 +1304,8 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	// Are we a header or footer?
 	if ( isAHeader( pFrameSet->getFrameInfo() ) ||
 	     isAFooter( pFrameSet->getFrameInfo() ) ) {
-	    int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
-						     pFrame->getBBottom().pt() );
+	    int diff = static_cast<int>(( ptY + getLineHeight() ) - ( pFrame->bottom() -
+						     pFrame->getBBottom().pt() ));
 
 	    if ( doc->canResize( pFrameSet,
 				      pFrame,
@@ -1332,12 +1332,12 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		page++;
 	    parag->setEndPage( page );
 	    parag->setEndFrame( frame );
-	    ptY = pFrame->top() + pFrame->getBTop().pt();
+	    ptY = static_cast<int>(pFrame->top() + pFrame->getBTop().pt());
 	    return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	} else { // append a page or resize frame
 	    if ( pFrame->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
-		int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
-							 pFrame->getBBottom().pt() );
+		int diff = static_cast<int>(( ptY + getLineHeight() ) - ( pFrame->bottom() -
+							 pFrame->getBBottom().pt() ));
 
 		if ( doc->canResize( pFrameSet,
 					  pFrame,
@@ -1364,8 +1364,8 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		setFrame( frame + 1 );
 		parag->setEndPage( page );
 		parag->setEndFrame( frame );
-		ptY = pFrame->top() +
-		      pFrame->getBTop().pt();
+		ptY = static_cast<int>(pFrame->top() +
+		      pFrame->getBTop().pt());
 		return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	    }
 	}
@@ -1386,7 +1386,7 @@ unsigned int KWFormatContext::getLineHeight() const
     unsigned int hei = ptMaxAscender + ptMaxDescender;
     unsigned int plus = 0;
 
-    return QMAX( hei, specialHeight ) + getParag()->getParagLayout()->getLineSpacing().pt() + plus;
+    return QMAX( hei, specialHeight ) + static_cast<int>(getParag()->getParagLayout()->getLineSpacing().pt()) + plus;
 }
 
 /*================================================================*/
@@ -1434,9 +1434,9 @@ void KWFormatContext::apply( const KWFormat &_format )
 
     if ( !offsetsAdded ) {
 	if ( isCursorInLastLine()  && getParag() && getParag()->getParagLayout()->getParagFootOffset().pt() != 0 )
-	    ptMaxDescender += getParag()->getParagLayout()->getParagFootOffset().pt();
+	    ptMaxDescender += static_cast<int>(getParag()->getParagLayout()->getParagFootOffset().pt());
 	if ( isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getParagHeadOffset().pt() != 0 )
-	    ptMaxAscender += getParag()->getParagLayout()->getParagHeadOffset().pt();
+	    ptMaxAscender += static_cast<int>(getParag()->getParagLayout()->getParagHeadOffset().pt());
 	offsetsAdded = TRUE;
     }
 }

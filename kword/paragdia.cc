@@ -52,6 +52,7 @@
 #include <koRuler.h>
 
 #include <stdlib.h>
+#include <stdio.h>
 
 /******************************************************************/
 /* class KWPagePreview						  */

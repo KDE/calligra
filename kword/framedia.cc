@@ -100,8 +100,8 @@ void KWFrameDia::init() {
         if(!doc) {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
             return;
-        } 
-        if(doc->getProcessingType() != KWordDocument::DTP && 
+        }
+        if(doc->getProcessingType() != KWordDocument::DTP &&
               frame->getFrameSet() == doc->getFrameSet(0)) {
             setupTab2();
             setupTab4();
@@ -124,7 +124,7 @@ void KWFrameDia::init() {
             setupTab2();
             setupTab4();
         }
-    } else 
+    } else
         kdDebug() << "ERROR: KWFrameDia::init  no frame.."<<endl;
     setInitialSize( QSize(550, 400) );
 }
@@ -159,7 +159,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     else
 	grid1->addWidget(floating,0,0);
     /* ideally the following properties could be given to any floating frame:
-       Position: 
+       Position:
         Top of frame
         Top of paragraph
         Above current line
@@ -513,7 +513,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         }
         if(!same) found=false;
     }
-                
+
     eFrameSetName->setText( i18n( "Frameset %1" ).arg( numTxtFrameSets ) );
     connectListSelected( lFrameSList->firstChild() );
 
@@ -869,7 +869,7 @@ void KWFrameDia::setFrameBehaviourInputOff() {
 }
 
 /*================================================================*/
-bool KWFrameDia::applyChanges() 
+bool KWFrameDia::applyChanges()
 {
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;
     if(frame && frameType==FT_TEXT ) {
@@ -919,7 +919,7 @@ bool KWFrameDia::applyChanges()
     int currFS = -1;
 
     if (frame && frameType==FT_TEXT) {
-	if ( tab1 ) { 
+	if ( tab1 ) {
 	    QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
 	    QString name = QString::null;
 	    if ( str[ 0 ] == '*' ) {
@@ -983,16 +983,16 @@ bool KWFrameDia::applyChanges()
 		unsigned int px, py, pw, ph;
 		switch ( KWUnit::unitType( doc->getUnit() ) ) {
 		case U_MM:
-		    px = MM_TO_POINT( atof( sx->text() ) );
-		    py = MM_TO_POINT( atof( sy->text() ) );
-		    pw = MM_TO_POINT( atof( sw->text() ) );
-		    ph = MM_TO_POINT( atof( sh->text() ) );
+		    px = static_cast<int>(MM_TO_POINT( atof( sx->text() ) ));
+		    py = static_cast<int>(MM_TO_POINT( atof( sy->text() ) ));
+		    pw = static_cast<int>(MM_TO_POINT( atof( sw->text() ) ));
+		    ph = static_cast<int>(MM_TO_POINT( atof( sh->text() ) ));
 		    break;
 		case U_INCH:
-		    px = INCH_TO_POINT( atof( sx->text() ) );
-		    py = INCH_TO_POINT( atof( sy->text() ) );
-		    pw = INCH_TO_POINT( atof( sw->text() ) );
-		    ph = INCH_TO_POINT( atof( sh->text() ) );
+		    px = static_cast<int>(INCH_TO_POINT( atof( sx->text() ) ));
+		    py = static_cast<int>(INCH_TO_POINT( atof( sy->text() ) ));
+		    pw = static_cast<int>(INCH_TO_POINT( atof( sw->text() ) ));
+		    ph = static_cast<int>(INCH_TO_POINT( atof( sh->text() ) ));
 		    break;
 		case U_PT:
 		    px = atoi( sx->text() );

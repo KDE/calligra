@@ -1369,7 +1369,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    if ( fsname.isEmpty() ) {
             if(frameInfo!=FI_BODY)
                 fsname = i18n( "TextFrameset %1" ).arg( frames.count() + 1 );
-            else 
+            else
                 fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
         }
 
@@ -1824,7 +1824,7 @@ void KWordDocument::slotChildChanged( KoDocumentChild *child )
     // directly in the appropriate KWPartFrameSet.
     // But framesets are not a QObject. Should it ?
     // (David)
-    for ( int j = 0; j < frames.count(); j++ ) {
+    for ( unsigned int j = 0; j < frames.count(); j++ ) {
         if ( frames.at( j )->getFrameType() == FT_PART )
         {
             KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>( getFrameSet( j ) );
@@ -2309,14 +2309,14 @@ kdDebug(32001) << "new x=" << x <<", new y="<<y<<endl;
 								   _f->getItalic(), _f->getUnderline() ) );
 
 				_painter.setPen( QPen( _fc.getColor(), fm.lineWidth(), SolidLine ) );
-				int ly = _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
+				int ly = static_cast<int>(_fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
 					 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus +
-					 fm.underlinePos() + fm.lineWidth() / 2;
-				int lx1 = _fc.getPTPos();
+					 fm.underlinePos() + fm.lineWidth() / 2);
+				int lx1 = static_cast<int>(_fc.getPTPos());
 				lastPTPos = _fc.getPTPos();
 				_fc.cursorGotoNextChar();
 				goneForward = TRUE;
-				int lx2 = _fc.getPTPos();
+				int lx2 = static_cast<int>(_fc.getPTPos());
 				_painter.drawLine( lx1, ly, lx2, ly );
 			    }
 			}
@@ -2458,7 +2458,7 @@ void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
 	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
 	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() ) {
 		if ( viewPtr != _view ) {
-		    if ( _clear ) 
+		    if ( _clear )
 			viewPtr->getGUI()->getPaperWidget()->clear();
 		    viewPtr->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 		}
@@ -3154,7 +3154,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 /*================================================================*/
 void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenAppendPage*/ )
 {
-    QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
+    //QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
     kdDebug() <<"KWordDocument::appendPage" << endl;
     pages++;
 
@@ -3812,7 +3812,7 @@ bool KWordDocument::isOnlyOneFrameSelected()
 	}
     }
 
-    return _selected == 1; 
+    return _selected == 1;
 */
 }
 
@@ -4044,7 +4044,7 @@ void KWordDocument::checkNumberOfPages( KWFormatContext *fc )
     return;
 
     // what about a loop through all frames and ask the frames which page they
-    // are on. Thereby selecting the max page. filter empty frames from 
+    // are on. Thereby selecting the max page. filter empty frames from
     // frameset 0 (only if WP)
     // Will get back to this, but the picture and other frames first must remember
     // their page num ;-) (TZ)

@@ -269,7 +269,7 @@ int KWFrame::getLeftIndent( int _y, int _h )
     for ( unsigned int i = 0; i < reg.rects().size(); ++i )
 	_left = QMAX( _left, reg.rects()[ i ].left() - x() );
     if ( _left > 0 )
-	_left += runAroundGap.pt();
+	_left += static_cast<int>(runAroundGap.pt());
     if ( _left > 0 && runAround == RA_SKIP )
 	_left = width();
 
@@ -294,7 +294,7 @@ int KWFrame::getRightIndent( int _y, int _h )
 	    _right = QMAX( _right, reg.rects()[ i ].width() );
     }
     if ( _right > 0 )
-	_right += runAroundGap.pt();
+	_right += static_cast<int>(runAroundGap.pt());
     if ( _right > 0 && runAround == RA_SKIP )
 	_right = width();
 
@@ -485,7 +485,7 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 
     KWFrame *f;
 
-    // This check is totally irrelevant since we allready check 
+    // This check is totally irrelevant since we allready check
     // for duplicate occurences on addFrame (TZ)
     bool del = true;
     int i = 0;
@@ -1200,7 +1200,7 @@ KWPictureFrameSet::~KWPictureFrameSet() {
     if(image) {
         image->decRef();
     }
-} 
+}
 
 /*================================================================*/
 void KWPictureFrameSet::setFileName( QString _filename )
@@ -2119,9 +2119,9 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
 	    frame->setBTop( u );
 	    frame->setBBottom( u );
 	    _wid = wid;
-	    _wid += frame->getBLeft().pt() + frame->getBRight().pt();
+	    _wid += static_cast<int>(frame->getBLeft().pt() + frame->getBRight().pt());
 	    _hei = hei;
-	    _hei += frame->getBTop().pt() + frame->getBBottom().pt();
+	    _hei += static_cast<int>(frame->getBTop().pt() + frame->getBBottom().pt());
 	    frame->setRect( x + j * _wid + 2 * j, y + i * _hei + 2 * i, _wid, _hei );
 	}
     }
@@ -2449,7 +2449,7 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->setGroupManager( this );
 	_frameSet->setIsRemoveableHeader( _removeable );
-    
+
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
         if ( anchored ) {
