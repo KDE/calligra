@@ -6502,7 +6502,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     }
 
     int rowIndex = 0;
-    int indexCol = 0;
+    int indexCol = 1;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
@@ -6712,6 +6712,8 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         kdDebug()<<" default-cell-style-name :"<<str<<endl;
         QDomElement *style = oasisStyles.styles()[str];
         kdDebug()<<"default column style :"<<style<<endl;
+        styleStack.push( *style );
+        layout.loadOasisStyleProperties( styleStack, oasisStyles );
     }
 
 
@@ -6722,7 +6724,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
-    layout.loadOasisStyleProperties( styleStack, oasisStyles );
+    //layout.loadOasisStyleProperties( styleStack, oasisStyles );
 
     if ( styleStack.hasAttribute( "style:column-width" ) )
     {
