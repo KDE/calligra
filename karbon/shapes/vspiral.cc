@@ -83,3 +83,10 @@ VSpiral::VSpiral( VObject* parent,
 	cmd.visit( *this );
 }
 
+QString
+VSpiral::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Spiral";
+}
+

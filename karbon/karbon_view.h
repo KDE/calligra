@@ -226,6 +226,7 @@ private:
 
 	VSelectToolBar			*m_selectToolBar;
 	QLabel					*m_status;
+	QLabel					*m_cursorCoords;
 
 	// dcop
 	DCOPObject				*m_dcop;

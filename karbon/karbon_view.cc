@@ -113,6 +113,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_status->setAlignment( AlignLeft | AlignVCenter );
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
+	m_cursorCoords = new KStatusBarLabel( QString::null, 0, statusBar() );
+	m_cursorCoords->setAlignment( AlignLeft | AlignVCenter );
+	m_cursorCoords->setMinimumWidth( 50 );
+	addStatusBarItem( m_cursorCoords, 0 );
 
 	initActions();
 
@@ -175,6 +179,7 @@ KarbonView::~KarbonView()
 
 	// widgets:
 	delete( m_status );
+	delete( m_cursorCoords );
 
 	delete( m_painterFactory );
 
@@ -911,6 +916,7 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 		m_horizRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
 		m_vertRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
+		m_cursorCoords->setText( QString( "%1, %2" ).arg( p.x(), 0, 'f', 2 ).arg( p.y(), 0, 'f', 2 ) );
 	}
 	if( m_currentTool )
 		return m_currentTool->mouseEvent( event, p );

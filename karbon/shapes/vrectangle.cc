@@ -35,3 +35,10 @@ VRectangle::VRectangle( VObject* parent,
 	close();
 }
 
+QString
+VRectangle::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Rectangle";
+}
+

@@ -28,6 +28,8 @@ class VRectangle : public VComposite
 public:
 	VRectangle( VObject* parent,
 		const KoPoint& topLeft, double width, double height );
+
+	virtual QString name() const;
 };
 
 #endif
