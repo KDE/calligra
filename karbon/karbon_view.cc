@@ -701,7 +701,7 @@ KarbonView::slotStrokeChanged( const VStroke &c )
 	kdDebug() << "In KarbonView::slotStrokeColorChanged" << endl;
 	m_part->document().setDefaultStroke( c );
 
-	m_part->addCommand( new VStrokeCmd( &m_part->document(), c ), true );
+	m_part->addCommand( new VStrokeCmd( &m_part->document(), &c ), true );
 
 	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }

@@ -149,7 +149,7 @@ void VStrokeDlg::slotOKClicked()
 	m_stroke.setColor( m_colortab->getColor() );
 
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_stroke ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
 
 	emit strokeChanged( VStroke( m_stroke ) );
 }

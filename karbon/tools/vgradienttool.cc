@@ -102,11 +102,8 @@ VGradientTool::eventFilter( QEvent* event )
 		}
 		else
 		{
-			VStroke stroke;
-			stroke.gradient() = gradient;
-			stroke.setType( VStroke::grad );
 			view()->part()->addCommand(
-				new VStrokeCmd( &view()->part()->document(), stroke ), true );
+				new VStrokeCmd( &view()->part()->document(), &gradient ), true );
 		}
 
 		view()->selectionChanged();

@@ -118,7 +118,7 @@ void VColorDlg::buttonClicked( int button_ID )
 			stroke.setMiterLimit ( m_part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
 		}
 		stroke.setColor ( color );
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( stroke ) ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), &stroke ), true );
 		break;
 	}
 

@@ -8,7 +8,6 @@
 
 #include "vcommand.h"
 #include "vcolor.h"
-#include "vstroke.h"
 
 #include <qvaluevector.h>
 
@@ -17,12 +16,14 @@
 
 class VPath;
 class VSelection;
-
+class VStroke;
+class VGradient;
 
 class VStrokeCmd : public VCommand
 {
 public:
-	VStrokeCmd( VDocument *doc, const VStroke& );
+	VStrokeCmd( VDocument *doc, const VStroke * );
+	VStrokeCmd( VDocument *doc, VGradient * );
 	virtual ~VStrokeCmd();
 
 	virtual void execute();
@@ -31,7 +32,8 @@ public:
 private:
 	VSelection* m_selection;
 
-	VStroke m_stroke;
+	VStroke *m_stroke;
+	VGradient *m_gradient;
 
 	QValueVector<VStroke> m_oldcolors;
 };

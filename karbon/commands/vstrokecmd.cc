@@ -7,13 +7,24 @@
 
 #include "vselection.h"
 #include "vstroke.h"
+#include "vgradient.h"
 #include "vstrokecmd.h"
 
-
-VStrokeCmd::VStrokeCmd( VDocument *doc, const VStroke& stroke )
+VStrokeCmd::VStrokeCmd( VDocument *doc, const VStroke *stroke )
 	: VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke( stroke )
 {
 	m_selection = m_doc->selection()->clone();
+	m_gradient = 0L;
+
+	if( m_selection->objects().count() == 1 )
+		setName( i18n( "Stroke Object" ) );
+}
+
+VStrokeCmd::VStrokeCmd( VDocument *doc, VGradient *gradient )
+	: VCommand( doc, i18n( "Stroke Objects" ) ), m_gradient( gradient )
+{
+	m_selection = m_doc->selection()->clone();
+	m_stroke = 0L;
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );
@@ -36,24 +47,26 @@ VStrokeCmd::execute()
 		m_oldcolors.push_back( *itr.current()->stroke() );
 
 		VStroke stroke( *itr.current()->stroke() );
-		stroke.setLineCap( m_stroke.lineCap() );
-		stroke.setLineJoin( m_stroke.lineJoin() );
-		stroke.setParent( 0L );
-		stroke.setLineWidth( m_stroke.lineWidth() );
-		if( m_stroke.type() == VStroke::grad )
+		if( m_gradient )
 		{
-			stroke.gradient() = m_stroke.gradient();
+			stroke.gradient() = *m_gradient;
 			stroke.setType( VStroke::grad );
-			stroke.setLineWidth( m_stroke.lineWidth() );
 		}
-		else if( m_stroke.type() == VStroke::solid )
+		else if( m_stroke )
 		{
-			stroke.setColor( m_stroke.color() );
-			stroke.setType( VStroke::solid );
-		}
-		else if( m_stroke.type() == VStroke::none )
-		{
-			stroke.setType( VStroke::none );
+			stroke.setLineCap( m_stroke->lineCap() );
+			stroke.setLineJoin( m_stroke->lineJoin() );
+			stroke.setParent( 0L );
+			stroke.setLineWidth( m_stroke->lineWidth() );
+			if( m_stroke->type() == VStroke::none )
+			{
+				stroke.setType( VStroke::none );
+			}
+			else if( m_stroke->type() == VStroke::solid )
+			{
+				stroke.setColor( m_stroke->color() );
+				stroke.setType( VStroke::solid );
+			}
 		}
 		itr.current()->setStroke( stroke );
 	}
