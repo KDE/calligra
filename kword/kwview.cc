@@ -606,7 +606,6 @@ void KWView::setupActions()
                                               actionCollection(), "format_fontsize" );
     connect( actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( textSizeSelected( int ) ) );
-    actionFormatFontSize->setComboWidth( 30 );
 
     actionFontSizeIncrease = new KAction( i18n("Increase Font Size") , CTRL + Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
     actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
@@ -735,7 +734,6 @@ void KWView::setupActions()
                             0,  actionCollection(), "border_style" );
     connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
              this, SLOT( borderStyle( const QString & ) ) );
-    actionBorderStyle->setComboWidth( 30 );
 
     QStringList lst;
     lst << KoBorder::getStyle( KoBorder::SOLID );
@@ -753,7 +751,6 @@ void KWView::setupActions()
     for ( unsigned int i = 1; i < 10; i++ )
         lst << QString::number( i );
     actionBorderWidth->setItems( lst );
-    actionBorderWidth->setComboWidth( 30 );
 
     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color",true );
     actionBorderColor->setDefaultColor(QColor());
