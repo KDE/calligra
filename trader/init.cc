@@ -62,7 +62,6 @@ void initServiceTypes( Trader* _trader )
   {
     CosTradingRepos::ServiceTypeRepository::PropStructSeq seq;
     CosTradingRepos::ServiceTypeRepository::ServiceTypeNameSeq superseq;
-    CosTradingRepos::ServiceTypeRepository::PropertySeq valueseq;
 
     if ( it.group() && strcmp( it.group()->type(), "servicetype" ) == 0 )
     {       
@@ -136,72 +135,8 @@ void initServiceTypes( Trader* _trader )
 	cerr << it.group()->name() << " does not have an interface entry" << endl;
 	continue;
       }
-      /*
-      list<CosTradingRepos::ServiceTypeRepository::Property> values;
-      K2Config::iterator it2 = it.group()->begin();
-      for( ; it2 != it.group()->end(); it2++ )
-      {
-	if ( it2.item() && strcmp( it2.item()->name(), "Interface" ) != 0 &&
-	     strcmp( it2.item()->name(), "SuperTypes" ) != 0 )
-	{	
-	  K2ConfigItem *item = it2.item();
-	  CosTradingRepos::ServiceTypeRepository::Property p;
-	  p.name = CORBA::string_dup( item->name() );
-	  p.is_file = false;
-	  
-	  switch( item->type() )
-	  {
-	  case K2ConfigItem::TBOOLEAN:
-	    p.value <<= CORBA::Any::from_boolean( item->boolean() );
-	    p.value_type = CORBA::_tc_boolean;
-	    break;
-	  case K2ConfigItem::TSTRING:
-	    p.value <<= CORBA::Any::from_string( (char *) item->text(), 0 );
-	    p.value_type = CORBA::_tc_string;
-	    break;
-	  case K2ConfigItem::TSTRING_LIST:
-	    {	      
-	      CosTrading::StringList l;
-	      l.length( item->stringList().size() );
-	      list<string>::iterator it = item->stringList().begin();
-	      int i = 0;
-	      for( ; it != item->stringList().end(); ++it )
-		l[ i++ ] = CORBA::string_dup( it->c_str() );
-	      
-	      p.value <<= l;
-	      p.value_type = CosTrading::_tc_StringList;
-	    }
-	    break;
-	  case K2ConfigItem::TLONG:
-	    p.value <<= (CORBA::Long)item->integer();
-	    p.value_type = CORBA::_tc_long;
-	    break;
-	  case K2ConfigItem::TFLOAT:
-	    p.value <<= (CORBA::Float)item->fp();
-	    p.value_type = CORBA::_tc_float;
-	    break;
-	  case K2ConfigItem::TFILE:
-	    p.value <<= CORBA::Any::from_string( (char *) item->fileName(), 0 );
-	    p.value_type = CORBA::_tc_string;
-	    p.is_file = true;
-	    break;
-	  default:
-	    cerr << "Type of item " << item->name() << " in service type " << it.group()->name() << " not allowed" << endl;
-	    continue;
-	  }
-
-	  values.push_back( p );
-	}
-      }
-      valueseq.length( values.size() );
-      list<CosTradingRepos::ServiceTypeRepository::Property>::iterator it3 = values.begin();
-      int k = 0;
-      for( ; it3 != values.end(); it3++ )
-	valueseq[ k++ ] = *it3;
-      */
-      valueseq.length( 0 );
       
-      repo->add_type( (char*)it.group()->name(), (char*)interface.c_str(), seq, superseq, valueseq );
+      repo->add_type( (char*)it.group()->name(), (char*)interface.c_str(), seq, superseq );
 
       (*g_mapServiceType2Interface)[ it.group()->name() ] = interface;
     }

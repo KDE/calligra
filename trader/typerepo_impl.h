@@ -18,8 +18,7 @@ public:
           add_type( const char* name,
 		    const char* if_name,
 		    const CosTradingRepos::ServiceTypeRepository::PropStructSeq& props,
-		    const CosTradingRepos::ServiceTypeRepository::ServiceTypeNameSeq& super_types,
-		    const CosTradingRepos::ServiceTypeRepository::PropertySeq& values );
+		    const CosTradingRepos::ServiceTypeRepository::ServiceTypeNameSeq& super_types );
   virtual void remove_type( const char* name );
   virtual CosTradingRepos::ServiceTypeRepository::ServiceTypeNameSeq*
           list_types( const CosTradingRepos::ServiceTypeRepository::SpecifiedServiceTypes& which_types );
@@ -57,16 +56,7 @@ protected:
    */
   map<string,CosTradingRepos::ServiceTypeRepository::TypeStruct>::iterator
           checkServiceType( const char* name );
-  
-  /**
-   * Replaces every value that has the 'is_file' set with the content of the file.
-   * This is done before a 'TypeStruct' is returned.
-   *
-   * @see describe_type
-   * @see fully_describe_type
-   */
-  void completeTypeStruct( TypeStruct *t );
-  
+    
   Trader* m_pTrader;
 
   CosTradingRepos::ServiceTypeRepository::IncarnationNumber m_incarnation;

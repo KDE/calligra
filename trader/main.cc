@@ -1,5 +1,5 @@
 #include "trader_main.h"
-#include "typerepo.h"
+#include <typerepo.h>
 #include "typerepo_impl.h"
 #include "activator.h"
 
@@ -14,8 +14,6 @@
 CORBA::ORB_var orb;
 CORBA::BOA_var boa;
 
-Trader* trader = 0L;
-
 class TraderLoader : public CORBA::BOAObjectRestorer
 {
 public:
@@ -26,7 +24,7 @@ public:
       if ( strcmp( _obj->_repoid(), "IDL:omg.org/CosTrading/Lookup:1.0" ) == 0 )
       {
 	cerr << "restoring ... " << endl;
-	trader = new Trader( _obj );
+	(void)new Trader( _obj );
 	cerr << "restored ... " << endl;
 	return TRUE;
       }
@@ -39,7 +37,7 @@ public:
       if ( strcmp( repoid, "IDL:omg.org/CosTrading/Lookup:1.0" ) == 0 )
       {
 	cerr << "creating Trader" << endl;
-	trader = new Trader( tag );
+	(void)new Trader( tag );
 	return TRUE;
       }
       return FALSE;
@@ -55,8 +53,8 @@ int main( int argc, char **argv )
   orb = CORBA::ORB_init( argc, argv, "mico-local-orb" );
   boa = orb->BOA_init (argc, argv, "mico-local-boa");
 
-  Activator::initStatic( orb );  
-  
+  Activator::initStatic( orb );
+
   cout << "Trader running ..." << endl;
   boa->impl_is_ready( CORBA::ImplementationDef::_nil() );
   orb->run();

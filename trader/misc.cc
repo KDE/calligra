@@ -21,22 +21,22 @@ CosTrading::Lookup_ptr TraderComponents::lookup_if()
 
 CosTrading::Register_ptr TraderComponents::register_if()
 {
-  return 0L;
+  return m_pTrader->register_if();
 }
 
 CosTrading::Link_ptr TraderComponents::link_if()
 {
-  return 0L;
+  return m_pTrader->link_if();
 }
 
 CosTrading::Proxy_ptr TraderComponents::proxy_if()
 {
-  return 0L;
+  return m_pTrader->proxy_if();
 }
 
 CosTrading::Admin_ptr TraderComponents::admin_if()
 {
-  return 0L;
+  return CosTrading::Admin::_nil();
 }
 
 /**************************************************************
@@ -134,6 +134,22 @@ CosTrading::FollowOption ImportAttributes::def_follow_policy()
 CosTrading::FollowOption ImportAttributes::max_follow_policy()
 {
   return m_pTrader2->maxLinkFollowPolicy();
+}
+
+/**************************************************************
+ *
+ * LinkAttributes
+ *
+ **************************************************************/
+
+LinkAttributes::LinkAttributes( Trader *_trader )
+{
+  m_pTrader5 = _trader;
+}
+
+CosTrading::FollowOption LinkAttributes::max_link_follow_policy()
+{
+  return m_pTrader5->maxLinkFollowPolicy();
 }
 
 

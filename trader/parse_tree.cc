@@ -624,12 +624,92 @@ bool ParseTreeRANDOM::eval( ParseContext *_context )
   return true;
 }
 
+bool ParseTreeMIN2::eval( ParseContext *_context )
+{
+  _context->type = ParseContext::T_FLOAT;
+
+  int max = _context->seq->length();
+  int i;
+  for( i = 0; i < max; i++ )
+  {
+    if ( strcmp( (const char*)((*_context->seq)[i].name), m_strId.c_str() ) == 0 )
+      break;
+  }
+  cerr << "############1" << endl;
+  // Identifier unknown ?
+  if ( i == max )
+    return false;
+
+  cerr << "############2 " << m_strId << endl;
+  map<string,PreferencesMaxima>::iterator it = _context->maxima.find( m_strId );
+  if ( it == _context->maxima.end() )
+    return false;
+  
+  cerr << "############3" << endl;
+  CORBA::Long l;
+  if ( ( (*_context->seq)[i].value >>= l ) && it->second.type == PreferencesMaxima::PM_INT )
+  {
+    _context->f = (float)( l - it->second.iMin ) /
+      (float)(it->second.iMax - it->second.iMin ) * (-2.0) + 1.0;
+    return true;
+  }
+  cerr << "############4" << endl;
+  CORBA::Float f;
+  if ( ( (*_context->seq)[i].value >>= f ) && it->second.type == PreferencesMaxima::PM_FLOAT )
+  {
+    _context->f = ( l - it->second.fMin ) /
+      (it->second.fMax - it->second.fMin ) * (-2.0) + 1.0;
+    return true;
+  }
+
+  cerr << "############5" << endl;
+  return false;
+}
+
+bool ParseTreeMAX2::eval( ParseContext *_context )
+{
+  _context->type = ParseContext::T_FLOAT;
+
+  int max = _context->seq->length();
+  int i;
+  for( i = 0; i < max; i++ )
+  {
+    if ( strcmp( (const char*)((*_context->seq)[i].name), m_strId.c_str() ) == 0 )
+      break;
+  }
+  // Identifier unknown ?
+  if ( i == max )
+    return false;
+
+  map<string,PreferencesMaxima>::iterator it = _context->maxima.find( m_strId );
+  if ( it == _context->maxima.end() )
+    return false;
+  
+  CORBA::Long l;
+  if ( ( (*_context->seq)[i].value >>= l ) && it->second.type == PreferencesMaxima::PM_INT )
+  {
+    _context->f = (float)( l - it->second.iMin ) /
+      (float)(it->second.iMax - it->second.iMin ) * 2.0 - 1.0;
+    return true;
+  }
+  CORBA::Float f;
+  if ( ( (*_context->seq)[i].value >>= f ) && it->second.type == PreferencesMaxima::PM_FLOAT )
+  {
+    _context->f = ( l - it->second.fMin ) /
+      (it->second.fMax - it->second.fMin ) * 2.0 - 1.0;
+    return true;
+  }
+
+  return false;
+}
+
 int matchConstraint( ParseTreeBase *_tree, CosTrading::PropertySeq *_props )
 {
   if ( !_tree )
     return 1;
   
-  ParseContext c( _props );
+  map<string,PreferencesMaxima> dummy;
+  ParseContext c( _props, dummy );
 
   if ( !_tree->eval( &c ) )
     return -1;
@@ -642,7 +722,8 @@ int matchConstraint( ParseTreeBase *_tree, CosTrading::PropertySeq *_props )
   return 0;
 }
 
-int matchPreferences( ParseTreeBase *_tree, CosTrading::PropertySeq *_props, PreferencesReturn &_ret )
+int matchPreferences( ParseTreeBase *_tree, CosTrading::PropertySeq *_props,
+		      PreferencesReturn &_ret, map<string,PreferencesMaxima>& _maxima )
 {
   if ( !_tree )
   {
@@ -657,7 +738,7 @@ int matchPreferences( ParseTreeBase *_tree, CosTrading::PropertySeq *_props, Pre
     return 1;
   }
  
-  ParseContext c( _props );
+  ParseContext c( _props, _maxima );
 
   if ( !_tree->eval( &c ) )
   {

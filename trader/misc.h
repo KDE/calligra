@@ -63,4 +63,19 @@ private:
   Trader *m_pTrader2;
 };
 
+class LinkAttributes : virtual public CosTrading::LinkAttributes
+{
+public:
+  LinkAttributes( Trader *_trader );
+
+  virtual CosTrading::FollowOption max_link_follow_policy();
+
+private:
+  /**
+   * Renamed to solve problem with multiple inheritance. I dont want two member
+   * variables with the same name.
+   */
+  Trader* m_pTrader5;
+};
+
 #endif

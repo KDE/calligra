@@ -17,6 +17,29 @@
 #include <dirent.h>    
 #include <sys/stat.h>
 
+bool fillFromFile( CORBA::Any& _any, const char* _filename )
+{
+  struct stat buff;
+  stat( _filename, &buff );
+  int size = buff.st_size;
+    
+  FILE *f = fopen( _filename, "rb" );
+  if ( !f )
+  {
+    cerr << "Could not open " << _filename << endl;
+    return false;
+  }
+
+  char *p = new char[ size + 1 ];
+  int n = fread( p, 1, size, f );
+  p[n] = 0;
+  fclose( f );
+  _any <<= CORBA::Any::from_string( (char *) p, 0 );
+  delete []p;
+
+  return true;
+}
+
 /********************************************************
  *
  * Parts
@@ -163,28 +186,30 @@ void koScanPartFile( Trader *_trader, const char* _file, CORBA::ImplRepository_p
     return;
   }
 
-  imrCreate( name, mode, cmd, repoids.first(), _imr );
-
   CosTrading::PropertySeq props;
   props.length( 8 );
-  props[0].is_file = false;
   props[0].name = CORBA::string_dup( "Comment" );
   props[0].value <<= CORBA::Any::from_string( (char*)comment.data(), 0 );
-  props[1].is_file = false;
   props[1].name = CORBA::string_dup( "Name" );
   props[1].value <<= CORBA::Any::from_string( (char*)name.data(), 0 );
-  props[2].is_file = false;
   props[2].name = CORBA::string_dup( "Exec" );
   props[2].value <<= CORBA::Any::from_string( (char*)cmd.data(), 0 );
-  props[3].is_file = false;
   props[3].name = CORBA::string_dup( "ActivationMode" );
   props[3].value <<= CORBA::Any::from_string( (char*)mode.data(), 0 );
-  props[4].is_file = true;
   props[4].name = CORBA::string_dup( "Icon" );
-  props[4].value <<= CORBA::Any::from_string( (char*)icon.data(), 0 );
-  props[5].is_file = true;
+  if ( !fillFromFile( props[4].value, icon ) )
+  {
+    koScanPartsError( _file, "Icon" );
+    return;
+  }    
+  // props[4].value <<= CORBA::Any::from_string( (char*)icon.data(), 0 );
   props[5].name = CORBA::string_dup( "MiniIcon" );
-  props[5].value <<= CORBA::Any::from_string( (char*)mini_icon.data(), 0 );
+  if ( !fillFromFile( props[5].value, mini_icon ) )
+  {
+    koScanPartsError( _file, "MiniIcon" );
+    return;
+  }    
+  // props[5].value <<= CORBA::Any::from_string( (char*)mini_icon.data(), 0 );
   CosTrading::StringList lst;
   const char *s = repoids.first();
   lst.length( repoids.count() );
@@ -193,7 +218,6 @@ void koScanPartFile( Trader *_trader, const char* _file, CORBA::ImplRepository_p
     lst[i] = CORBA::string_dup( s );
     s = repoids.next();
   }
-  props[6].is_file = false;
   props[6].name = CORBA::string_dup( "RepoID" );
   props[6].value <<= lst;
   s = mimes.first();
@@ -203,7 +227,6 @@ void koScanPartFile( Trader *_trader, const char* _file, CORBA::ImplRepository_p
     lst[i] = CORBA::string_dup( s );
     s = mimes.next();
   }
-  props[7].is_file = false;
   props[7].name = CORBA::string_dup( "MimeTypes" );
   props[7].value <<= lst;
   
@@ -213,9 +236,13 @@ void koScanPartFile( Trader *_trader, const char* _file, CORBA::ImplRepository_p
   
   CORBA::Object_var obj = Activator::self()->createReference( name, "IDL:KOffice/DocumentFactory:1.0" );
 
+  // Register at IMR
+  imrCreate( name, mode, cmd, repoids.first(), _imr );
+
   // Register the service
   CosTrading::OfferId_var id;
-  id = _trader->export( obj, stype, props );
+  CosTrading::Register_var reg = _trader->register_if();
+  id = reg->export( obj, stype, props );
 }
 
 /********************************************************
@@ -309,18 +336,27 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
     koScanFiltersError( _file, "Exec" );
     return;
   }
-  QString icon = config.readEntry( "Icon" );
-  if ( icon.isEmpty() )
+
+  QString tmp = config.readEntry( "Icon" );
+  if ( tmp.isEmpty() )
   {
-    koScanFiltersError( _file, "Icon" );
+    koScanPartsError( _file, "Icon" );
     return;
   }
-  QString mini_icon = config.readEntry( "MiniIcon" );
-  if ( mini_icon.isEmpty() )
+  QString icon = kapp->kde_icondir().data();
+  icon += "/";
+  icon += tmp;
+  
+  tmp = config.readEntry( "MiniIcon" );
+  if ( tmp.isEmpty() )
   {
-    koScanFiltersError( _file, "MiniIcon" );
+    koScanPartsError( _file, "MiniIcon" );
     return;
   }
+  QString mini_icon = kapp->kde_icondir().data();
+  mini_icon += "/mini/";
+  mini_icon += tmp;
+
   QStrList repoids;
   if ( config.readListEntry( "RepoID", repoids ) == 0 || repoids.isEmpty() )
   {
@@ -377,24 +413,27 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
 
   CosTrading::PropertySeq props;
   props.length( 11 );
-  props[0].is_file = false;
   props[0].name = CORBA::string_dup( "Comment" );
   props[0].value <<= CORBA::Any::from_string( (char*)comment.data(), 0 );
-  props[1].is_file = false;
   props[1].name = CORBA::string_dup( "Name" );
   props[1].value <<= CORBA::Any::from_string( (char*)name.data(), 0 );
-  props[2].is_file = false;
   props[2].name = CORBA::string_dup( "Exec" );
   props[2].value <<= CORBA::Any::from_string( (char*)cmd.data(), 0 );
-  props[3].is_file = false;
   props[3].name = CORBA::string_dup( "ActivationMode" );
   props[3].value <<= CORBA::Any::from_string( (char*)mode.data(), 0 );
-  props[4].is_file = true;
   props[4].name = CORBA::string_dup( "Icon" );
-  props[4].value <<= CORBA::Any::from_string( (char*)icon.data(), 0 );
-  props[5].is_file = true;
+  if ( !fillFromFile( props[4].value, icon ) )
+  {
+    koScanPartsError( _file, "Icon" );
+    return;
+  }    
   props[5].name = CORBA::string_dup( "MiniIcon" );
-  props[5].value <<= CORBA::Any::from_string( (char*)mini_icon.data(), 0 );
+  if ( !fillFromFile( props[5].value, mini_icon ) )
+  {
+    koScanPartsError( _file, "MiniIcon" );
+    return;
+  }    
+
   CosTrading::StringList lst;
   const char *s = repoids.first();
   lst.length( repoids.count() );
@@ -403,19 +442,14 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
     lst[i] = CORBA::string_dup( s );
     s = repoids.next();
   }
-  props[6].is_file = false;
   props[6].name = CORBA::string_dup( "RepoID" );
   props[6].value <<= lst;
-  props[7].is_file = false;
   props[7].name = CORBA::string_dup( "Import" );
   props[7].value <<= CORBA::Any::from_string( (char*)imports.data(), 0 );
-  props[8].is_file = false;
   props[8].name = CORBA::string_dup( "Export" );
   props[8].value <<= CORBA::Any::from_string( (char*)exports.data(), 0 );
-  props[9].is_file = false;
   props[9].name = CORBA::string_dup( "ImportDescription" );
   props[9].value <<= CORBA::Any::from_string( (char*)importDescription.data(), 0 );
-  props[10].is_file = false;
   props[10].name = CORBA::string_dup( "ExportDescription" );
   props[10].value <<= CORBA::Any::from_string( (char*)exportDescription.data(), 0 );
 
@@ -426,5 +460,6 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
 
   // Register the service
   CosTrading::OfferId_var id;
-  id = _trader->export( obj, stype, props );
+  CosTrading::Register_var reg = _trader->register_if();
+  id = reg->export( obj, stype, props );
 }

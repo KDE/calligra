@@ -148,3 +148,12 @@ void* newRANDOM()
   return new ParseTreeRANDOM();
 }
 
+void* newMAX2( const char *_id )
+{
+  return new ParseTreeMAX2( _id );
+}
+
+void* newMIN2( const char *_id )
+{
+  return new ParseTreeMIN2( _id );
+}

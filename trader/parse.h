@@ -24,6 +24,8 @@ void* newBOOL( char _b );
 void* newWITH( void *_ptr1 );
 void* newMAX( void *_ptr1 );
 void* newMIN( void *_ptr1 );
+void* newMAX2( const char *_id );
+void* newMIN2( const char *_id );
 void* newFIRST();
 void* newRANDOM();
 

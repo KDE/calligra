@@ -29,8 +29,7 @@ CosTradingRepos::ServiceTypeRepository::IncarnationNumber
 TypeRepository::add_type( const char* name,
 			  const char* if_name,
 			  const CosTradingRepos::ServiceTypeRepository::PropStructSeq& props,
-			  const CosTradingRepos::ServiceTypeRepository::ServiceTypeNameSeq& super_types,
-			  const CosTradingRepos::ServiceTypeRepository::PropertySeq& values )
+			  const CosTradingRepos::ServiceTypeRepository::ServiceTypeNameSeq& super_types )
 {
   /**
    * Find duplicate entries
@@ -40,7 +39,7 @@ TypeRepository::add_type( const char* name,
   {
     CosTradingRepos::ServiceTypeRepository::DuplicateServiceTypeName exc;
     exc.name = CORBA::string_dup( name );
-    throw exc;
+    mico_throw( exc );
   }
 
   /**
@@ -56,7 +55,7 @@ TypeRepository::add_type( const char* name,
     {
       CosTrading::UnknownServiceType exc;
       exc.type = CORBA::string_dup( super_types[ i ] );
-      throw exc;
+      mico_throw( exc );
     }
   }
     
@@ -70,20 +69,19 @@ TypeRepository::add_type( const char* name,
   type.super_types = super_types;
   type.masked = false;
   type.incarnation = m_incarnation;
-  type.values = values;
   
   /**
    * Check for duplicate property names
    */
   map<string,bool> mp;
-  for( unsigned int j = 0; j < type.props.length(); j++ )
+  for( int j = 0; j < type.props.length(); j++ )
   {
     map<string,bool>::iterator it = mp.find( static_cast<const char*>(type.props[j].name) );
     if ( it != mp.end() )
     {
       CosTrading::DuplicatePropertyName exc;
       exc.name = CORBA::string_dup( type.props[j].name );
-      throw exc;
+      mico_throw( exc );
     }
     mp[ static_cast<const char*>(type.props[j].name) ] = true;
   }
@@ -94,14 +92,14 @@ TypeRepository::add_type( const char* name,
   // Make a copy
   TypeStruct t2 = type;
   // Recursion over all super types to get all properties
-  for( unsigned int k = 0; k < type.super_types.length(); k++ )
+  for( int k = 0; k < type.super_types.length(); k++ )
   {
     map<string,CosTradingRepos::ServiceTypeRepository::TypeStruct>::iterator it2 = checkServiceType( type.super_types[ k ] );
     fully_describe_type( &t2, it2->second );
   }
   // Find duplicate properties
   map<string,CosTradingRepos::ServiceTypeRepository::PropStruct> map2;
-  for( unsigned int l = 0; l < t2.props.length(); l++ )
+  for( int l = 0; l < t2.props.length(); l++ )
   {
     map<string,CosTradingRepos::ServiceTypeRepository::PropStruct>::iterator it =
       map2.find( static_cast<const char*>(t2.props[l].name) );
@@ -115,7 +113,7 @@ TypeRepository::add_type( const char* name,
 	exc.type_2 = CORBA::string_dup( "HACK" );
 	exc.definition_1 = t2.props[l];
 	exc.definition_2 = it->second;
-	throw exc;
+	mico_throw( exc );
       }
     }
     map2[ static_cast<const char*>(t2.props[l].name) ] = t2.props[l];
@@ -156,7 +154,7 @@ void TypeRepository::remove_type( const char* name )
 	CosTradingRepos::ServiceTypeRepository::HasSubTypes exc;
 	exc.the_type = name;
 	exc.sub_type = CORBA::string_dup( it2->first.c_str() );
-	throw exc;
+	mico_throw( exc );
       }
     }
   }
@@ -224,8 +222,6 @@ CosTradingRepos::ServiceTypeRepository::TypeStruct* TypeRepository::describe_typ
   
   CosTradingRepos::ServiceTypeRepository::TypeStruct* t = new CosTradingRepos::ServiceTypeRepository::TypeStruct;
   *t = it->second;
-
-  completeTypeStruct( t );
   
   return t;
 }
@@ -244,13 +240,11 @@ TypeRepository::fully_describe_type( const char* name )
   /**
    * Recursion over all super types
    */
-  for( unsigned int i = 0; i < t->super_types.length(); i++ )
+  for( int i = 0; i < t->super_types.length(); i++ )
   {
     map<string,CosTradingRepos::ServiceTypeRepository::TypeStruct>::iterator it2 = checkServiceType( t->super_types[ i ] );
     fully_describe_type( t, it2->second );
   }
-    
-  completeTypeStruct( t );
 
   return t;
 }
@@ -263,25 +257,15 @@ void TypeRepository::fully_describe_type( CosTradingRepos::ServiceTypeRepository
    */
   int len = result->props.length();
   result->props.length( len + super_type.props.length() );
-  for( unsigned int k = 0; k < super_type.props.length(); k++ )
+  for( int k = 0; k < super_type.props.length(); k++ )
   {
     result->props[ len + k ] = super_type.props[ k ];
   }
 
   /**
-   * Add values.
-   */
-  len = result->values.length();
-  result->values.length( len + super_type.values.length() );
-  for( unsigned int j = 0; j < super_type.values.length(); j++ )
-  {
-    result->values[ len + j ] = super_type.values[ j ];
-  }
-
-  /**
    * Recursion over all super types
    */
-  for( unsigned int i = 0; i < super_type.super_types.length(); i++ )
+  for( int i = 0; i < super_type.super_types.length(); i++ )
   {
     // Add supertypes
     int len = result->super_types.length();
@@ -308,7 +292,7 @@ void TypeRepository::mask_type( const char* name )
   {
     CosTradingRepos::ServiceTypeRepository::AlreadyMasked esc;
     esc.name = CORBA::string_dup( name );
-    throw esc;
+    mico_throw( esc );
   }
   
   /**
@@ -331,7 +315,7 @@ void TypeRepository::unmask_type( const char* name )
   {
     CosTradingRepos::ServiceTypeRepository::NotMasked esc;
     esc.name = CORBA::string_dup( name );
-    throw esc;
+    mico_throw( esc );
   }
   
   /**
@@ -354,7 +338,7 @@ bool TypeRepository::isSubTypeOf( const char* sub, const char* super )
   
   CosTradingRepos::ServiceTypeRepository::TypeStruct_var v = fully_describe_type( sub );
   
-  for( unsigned int i = 0; i < v->super_types.length(); i++ )
+  for( int i = 0; i < v->super_types.length(); i++ )
     if ( strcmp( v->super_types[i], super ) == 0 )
       return true;
   
@@ -385,42 +369,6 @@ void TypeRepository::incIncarnationNumber()
   m_incarnation.low++;
   if ( m_incarnation.low == 0 )
     m_incarnation.high++;
-}
-
-void TypeRepository::completeTypeStruct( TypeStruct *t )
-{
-  for( unsigned int i = 0; i < t->values.length(); i++ )
-  {
-    if ( t->values[ i ].is_file )
-    {
-      char *s;
-      if ( !( t->values[ i ].value >>= s ) )
-      {
-	cerr << "Value " << t->values[ i ].name << " is not of type string as expected" << endl;
-	continue;
-      }
-      string filename = (const char*)s;
-      CORBA::string_free( s );
-      
-      struct stat buff;
-      stat( filename.c_str(), &buff );
-      int size = buff.st_size;
-    
-      FILE *f = fopen( filename.c_str(), "rb" );
-      if ( !f )
-      {
-	cerr << "Could not open " << filename << endl;
-	continue;
-      }
-
-      char *p = new char[ size + 1 ];
-      int n = fread( p, 1, size, f );
-      p[n] = 0;
-      fclose( f );
-      t->values[i].value <<= CORBA::Any::from_string( (char *) p, 0 );
-      delete []p;
-    }
-  }
 }
 
 bool operator!= ( const CosTradingRepos::ServiceTypeRepository::PropStruct& p1,
@@ -458,7 +406,7 @@ TypeRepository::checkServiceType( const char* name )
   {
     CosTrading::UnknownServiceType exc;
     exc.type = CORBA::string_dup( name );
-    throw exc;
+    mico_throw( exc );
   }
 
   return it;

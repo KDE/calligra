@@ -2,6 +2,7 @@
 #define __parse_tree_h__
 
 #include <string>
+#include <map>
 
 #include "trader.h"
 
@@ -38,6 +39,17 @@ public:
   float f;
 };
 
+struct PreferencesMaxima
+{
+  enum Type { PM_INVALID_INT, PM_INVALID_FLOAT, PM_FLOAT, PM_INT };
+  
+  Type type;
+  CORBA::Long iMax;
+  CORBA::Long iMin;
+  CORBA::Float fMax;
+  CORBA::Float fMin;
+};
+
 /**
  * @param _return is filled with the return value.
  *                If the type of the expression is PST_WITH, then only PreferencesReturn::i is set to 0 or 1.
@@ -45,7 +57,8 @@ public:
 
  * @return 1 on success or <0 on Error
  */
-int matchPreferences( ParseTreeBase *_tree, CosTrading::PropertySeq *_props, PreferencesReturn &_ret );
+int matchPreferences( ParseTreeBase *_tree, CosTrading::PropertySeq *_props,
+		      PreferencesReturn &_ret, map<string,PreferencesMaxima>& _max );
 
 ParseTreeBase* parseConstraints( const char *_constr );
 ParseTreeBase* parsePreferences( const char *_prefs, PreferencesSortType &type );
@@ -53,8 +66,9 @@ ParseTreeBase* parsePreferences( const char *_prefs, PreferencesSortType &type )
 class ParseContext
 {
 public:
-  ParseContext( ParseContext* _ctx ) { seq = _ctx->seq; }
-  ParseContext( CosTrading::PropertySeq *_seq ) { seq = _seq; }
+  ParseContext( ParseContext* _ctx ) : maxima( _ctx->maxima ) { seq = _ctx->seq; }
+  ParseContext( CosTrading::PropertySeq *_seq, map<string,PreferencesMaxima>& _m )
+    : maxima( _m ) { seq = _seq; }
 
   enum Type { T_STRING = 1, T_FLOAT = 2, T_NUM = 3, T_BOOL = 4, T_NUM_SEQ = 5, T_STR_SEQ = 6, T_FLOAT_SEQ = 7 };
   
@@ -67,6 +81,7 @@ public:
   CosTrading::StringList strSeq;
   Type type;
   CosTrading::PropertySeq* seq;
+  map<string,PreferencesMaxima>& maxima;
 };
 
 class ParseTreeBase
@@ -318,6 +333,34 @@ public:
   
 protected:
   ParseTreeBase *m_pLeft;
+};
+
+class ParseTreeMAX2 : public ParseTreeBase
+{
+public:
+  ParseTreeMAX2( const char *_id ) { m_strId = _id; }
+  ~ParseTreeMAX2() { }
+  
+  bool eval( ParseContext *_context );
+
+  virtual bool isA( const char *_t ) { return ( strcmp( _t, "ParseTreeMax2" ) == 0 ); }
+  
+protected:
+  string m_strId;
+};
+
+class ParseTreeMIN2 : public ParseTreeBase
+{
+public:
+  ParseTreeMIN2( const char *_id ) { m_strId = _id; }
+  ~ParseTreeMIN2() { }
+  
+  bool eval( ParseContext *_context );
+
+  virtual bool isA( const char *_t ) { return ( strcmp( _t, "ParseTreeMin2" ) == 0 ); }
+  
+protected:
+  string m_strId;
 };
 
 #endif

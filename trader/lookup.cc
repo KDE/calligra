@@ -1,15 +1,15 @@
 #include "lookup.h"
 #include "trader_main.h"
 
-Lookup::Lookup( Trader *_trader , CORBA::Object_ptr _obj )
-  :  ::TraderComponents( _trader ), ::SupportAttributes( _trader ),
-     ::ImportAttributes( _trader ), CosTrading::Lookup_skel( _obj )
+Lookup::Lookup( Trader *_trader, CORBA::Object_ptr _obj ) :  
+  ::TraderComponents( _trader ), ::SupportAttributes( _trader ),
+  ::ImportAttributes( _trader ), CosTrading::Lookup_skel( _obj )
 {
 }
 
-Lookup::Lookup( Trader *_trader, const CORBA::BOA::ReferenceData &tag )
-  :  ::TraderComponents( _trader ), ::SupportAttributes( _trader ),
-     ::ImportAttributes( _trader ), CosTrading::Lookup_skel( tag )
+Lookup::Lookup( Trader *_trader, const CORBA::BOA::ReferenceData &tag ) :
+  ::TraderComponents( _trader ), ::SupportAttributes( _trader ),
+  ::ImportAttributes( _trader ), CosTrading::Lookup_skel( tag )
 {
 }
 

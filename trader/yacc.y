@@ -29,6 +29,8 @@ void initFlex( const char *s );
 %token NEQ
 %token LEQ
 %token GEQ
+%token LE
+%token GR
 %token OR
 %token AND
 %token IN
@@ -38,6 +40,8 @@ void initFlex( const char *s );
 %token MAX
 %token MIN
 %token WITH
+%token MAX2
+%token MIN2
 
 %token <valb> BOOL
 %token <name> STRING
@@ -87,8 +91,8 @@ bool_compare: expr_in EQ expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 1 ); }
             | expr_in NEQ expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 2 ); }
             | expr_in GEQ expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 3 ); }
             | expr_in LEQ expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 4 ); }
-            | expr_in '<' expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 5 ); }
-            | expr_in '>' expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 6 ); }
+            | expr_in LE expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 5 ); }
+            | expr_in GR expr_in { $$ = newCMP( $<ptr>1, $<ptr>3, 6 ); }
             | expr_in { $$ = $<ptr>1; }
 ;
 
@@ -121,6 +125,8 @@ factor: '(' bool_or ')' { $$ = newBRACKETS( $<ptr>2 ); }
       | FLOAT { $$ = newFLOAT( $<vald>1 ); }
       | STRING { $$ = newSTRING( $<name>1 ); }
       | BOOL { $$ = newBOOL( $<valb>1 ); }
+      | MAX2 ID { $$ = newMAX2( $<name>2 ); }
+      | MIN2 ID { $$ = newMIN2( $<name>2 ); }
 ;      
 
 /* End of grammar */

@@ -16,6 +16,8 @@ DIGIT    [0-9]
 
 "==" { return EQ; }
 "!=" { return NEQ; }
+"<" { return LE; }
+">" { return GR; }
 "<=" { return LEQ; }
 ">=" { return GEQ; }
 "not" { return NOT; }
@@ -28,6 +30,8 @@ DIGIT    [0-9]
 "min" { return MIN; }
 "random" { return RANDOM; }
 "first" { return FIRST; }
+"maximize" { return MAX2; }
+"minimize" { return MIN2; }
 
 "~"|"/"|"+"|"-"|"="|"*"|"("|")"|","  { yylval.name = 0L; return (int)(*yytext); }
 
