@@ -432,10 +432,10 @@ void KWordView_impl::helpContents()
 void KWordView_impl::helpAbout()
 {
   QMessageBox::information(this,"KWord",
-			   "KWord  0.0.1 alpha\n\n"
+			   i18n("KWord 0.0.1 alpha\n\n"
 			   "(c) by Torben Weis <weis@kde.org> and \n"
 			   "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
-			   "KWord is under GNU GPL");
+			   "KWord is under GNU GPL"));
 }
 
 /*===============================================================*/
