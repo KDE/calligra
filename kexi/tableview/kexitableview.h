@@ -282,7 +282,7 @@ public:
 
 	virtual QSize tableSize() const;
 
-//jsL NOT ENOUGH GENERIC 	void		addDropFilter(const QString &filter);
+//js: NOT ENOUGH GENERIC 	void		addDropFilter(const QString &filter);
 
 //	void		inserted();
 
@@ -364,6 +364,14 @@ public slots:
 
 	//! Sorts all rows by column selected with setSorting()
 	void sort();
+
+	/*! Sorts currently selected column in ascending order. 
+	 This slot is used typically for "data_sort_az" action. */
+	void sortAscending();
+
+	/*! Sorts currently selected column in descending order.
+	 This slot is used typically for "data_sort_za" action. */
+	void sortDescending();
 
 	/*! Adjusts \a colNum column's width to its (current) contents. 
 	 If \a colNum == -1, all columns' width is adjusted. */

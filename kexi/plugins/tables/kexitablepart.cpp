@@ -52,7 +52,7 @@ KexiTablePart::~KexiTablePart()
 
 void KexiTablePart::initActions()
 {
-	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "filter", 0, "tablepart_filter");
+//moved to main window	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "filter", 0, "tablepart_filter");
 
 	KAction *a = createSharedToggleAction(
 		Kexi::DesignViewMode, i18n("Toggle Primary Key"), "key", 0, "tablepart_toggle_pkey");

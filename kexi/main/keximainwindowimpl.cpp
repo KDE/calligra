@@ -448,6 +448,11 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item."));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
+	setActionVolatile( d->action_edit_insert_empty_row, true );
+	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
+	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
+
 	//VIEW MENU
 	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(),
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
@@ -492,10 +497,21 @@ KexiMainWindowImpl::initActions()
 	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
 
-	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
-	setActionVolatile( d->action_edit_insert_empty_row, true );
-	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
-	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
+	action = createSharedAction(i18n("&Filter"), "filter", 0, "data_filter");
+	setActionVolatile( action, true );
+//	action->setToolTip(i18n("")); //todo
+//	action->setWhatsThis(i18n("")); //todo
+
+//	setSharedMenu("data_sort");
+	action = createSharedAction(i18n("&Ascending"), "sort_az", 0, "data_sort_az");
+	setActionVolatile( action, true );
+	action->setToolTip(i18n("Sort data in ascending order"));
+	action->setWhatsThis(i18n("Sorts data in ascending order (from A to Z and from 0 to 9). Data from selected column is used for sorting."));
+
+	action = createSharedAction(i18n("&Descending"), "sort_za", 0, "data_sort_za");
+	setActionVolatile( action, true );
+	action->setToolTip(i18n("Sort data in descending order"));
+	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );

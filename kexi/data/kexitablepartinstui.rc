@@ -1,12 +1,14 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexitablepartinst" version="2">
+<kpartgui name="kexitablepartinst" version="3">
 
 <MenuBar>
 </MenuBar>
 
-<ToolBar name="table" fullWidth="false" noMerge="1">
-  <text>Table</text>
-  <Action name="tablepart_filter"/>
+<ToolBar name="data" fullWidth="false" noMerge="0>
+  <text>Data</text>
+  <!-- Data View -->
+  <!-- Action name="tablepart_filter"/ -->
+  <!-- Designs View -->
   <Action name="tablepart_toggle_pkey"/>
 </ToolBar>
 

@@ -320,6 +320,9 @@ New API Tests
 - "dr_prop" test added
 SQLITE Driver
 - Kexi file driver now supports UTF8 storage for text fields
+Shared Actions
+- data_sort_az, data_sort_za, data_filter actions are now shared & volatile,
+ KexiTableView and KexiDataTable now use these
 
 2004-08-17..18
 Core

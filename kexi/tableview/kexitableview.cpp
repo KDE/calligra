@@ -1012,6 +1012,7 @@ void KexiTableView::setSortingEnabled(bool set)
 	if (d->isSortingEnabled && !set)
 		setSorting(-1);
 	d->isSortingEnabled = set;
+	emit reloadActions();
 }
 
 int KexiTableView::sortedColumn()
@@ -1032,7 +1033,7 @@ void KexiTableView::setSorting(int col, bool ascending/*=true*/)
 		return;
 //	d->sortOrder = ascending;
 //	d->sortedColumn = col;
-	d->pTopHeader->setSortIndicator(col, ascending);//d->sortOrder);
+	d->pTopHeader->setSortIndicator(col, ascending ? Ascending : Descending);//d->sortOrder);
 	m_data->setSorting(col, ascending); //d->sortOrder);
 //	sort();
 //	columnSort(col);
@@ -1073,6 +1074,22 @@ void KexiTableView::sort()
 
 	updateContents();
 //	d->pUpdateTimer->start(1,true);
+}
+
+void KexiTableView::sortAscending()
+{
+	if (currentColumn()<0)
+		return;
+	setSorting(currentColumn(), true);
+	sort();
+}
+
+void KexiTableView::sortDescending()
+{
+	if (currentColumn()<0)
+		return;
+	setSorting(currentColumn(), false);
+	sort();
 }
 
 void KexiTableView::sortColumnInternal(int col)
