@@ -13,9 +13,6 @@ apps_DATA = kugar.desktop
 rcdir = $(kde_datadir)/kugar
 rc_DATA = kugarpart.rc
 
-mimedir = $(kde_mimedir)/application
-mime_DATA = x-kugar.desktop
-
 dtddir = $(kde_datadir)/kugar/dtd
 dtd_DATA = kugartemplate.dtd
 
@@ -23,7 +20,6 @@ EXTRA_DIST = \
 	kugar_part.h \
 	$(apps_DATA) \
 	$(rc_DATA) \
-	$(mime_DATA) \
 	$(dtd_DATA)
 
 CLEANFILES = kugarpart_meta_unload.cpp

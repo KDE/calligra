@@ -146,9 +146,6 @@ dummy.cpp:
 kdelnk_DATA = kivio.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kivio.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rc_DATA = kivio.rc
 rcdir = $(kde_datadir)/kivio
 

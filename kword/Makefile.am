@@ -63,9 +63,6 @@ dummy.cc:
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kword.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc
 

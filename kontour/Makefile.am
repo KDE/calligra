@@ -8,9 +8,6 @@ messages: rc.cpp
 kdelnk_DATA = kontour.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kontour.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rcdir = $(kde_datadir)/kontour
 rc_DATA = kontour.rc
 

@@ -32,9 +32,6 @@ noinst_HEADERS =  kformula_doc.h \
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kformula.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rc_DATA = kformula.rc
 rcdir = $(kde_datadir)/kformula
 

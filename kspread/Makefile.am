@@ -76,9 +76,6 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kspread.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc
 
