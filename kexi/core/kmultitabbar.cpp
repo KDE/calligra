@@ -231,7 +231,7 @@ KMultiTabBarTab::KMultiTabBarTab(const QPixmap& pic, const QString& text,
 	m_showActiveTabText=false;
 	setToggleButton(true);
 
-	//scale font by 85%, set bold
+	//scale font by 90%
 	QFont f = font();
 	if (f.pointSize()!=-1)
 		f.setPointSize( f.pointSize() * 9 / 10 );
