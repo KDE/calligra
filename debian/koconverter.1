@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH KOCONVERTER 1 "July 5, 2002"
+.TH KOCONVERTER 1 "May 9, 2003"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -23,12 +23,6 @@ koconverter \- convert between office suite file formats
 [ \fB\-\-mimetype\fP \fImime\fP ]
 \fIinput\fP \fIoutput\fP
 .SH DESCRIPTION
-This manual page documents briefly the
-.B koconverter
-command.
-This manual page was written for the Debian GNU/Linux distribution
-because the original program does not have a manual page.
-.PP
 \fBKOConverter\fP is the KOffice file format converter.  It uses the
 KOffice import and export filters to convert from any file format
 that is understood by KOffice to any other.
@@ -53,6 +47,7 @@ file.
 The following line will convert an Excel spreadsheet to a plain text
 file.  Note that this conversion is done interally by first importing
 to a KSpread spreadsheet and then exporting as plain text.
+.PP
 .RS
 \fIexample$\fP koconverter file.xls file.txt
 .RE
