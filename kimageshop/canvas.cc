@@ -243,16 +243,12 @@ void Canvas::compositeImage(QRect r)
       }
   TIME_END("compositeImage");
 
-  cerr << "Michael : need an update" << endl;
-
   if( !views.isEmpty() )
   {
     CanvasView *current = views.first();
  
     while( current )
     {
-      cerr << "Michael : update" << endl;
-
       current->repaint( false );
       current = views.next();
     }
