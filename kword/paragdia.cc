@@ -624,42 +624,46 @@ void KWIndentSpacingWidget::afterChanged( const QString & _text )
     prev1->setAfter( _text.toDouble() );
 }
 
-
-/******************************************************************/
-/* Class: KWParagDia                                              */
-/******************************************************************/
-
 /*================================================================*/
-KWParagDia::KWParagDia( QWidget* parent, const char* name,
-                        int _flags, KWDocument *_doc )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
+KWParagAlignWidget::KWParagAlignWidget( QWidget * parent, const char * name )
+        : KWParagLayoutWidget( KWParagDia::PD_ALIGN, parent, name )
 {
-    flags = _flags;
-    doc = _doc;
-    if ( _flags & PD_SPACING )
-    {
-        QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
-        m_indentSpacingWidget = new KWIndentSpacingWidget( doc->getUnit(), page, "indent-spacing" );
-    }
-    if ( _flags & PD_ALIGN )
-        setupTab2();
-    if ( _flags & PD_BORDERS )
-        setupTab3();
-    if ( _flags & PD_NUMBERING )
-        setupTab4();
-    if ( _flags & PD_TABS )
-        setupTab5();
-    setInitialSize( QSize(600, 500) );
+    QGridLayout *grid = new QGridLayout( this, 6, 2, 15, 7 );
+
+    QLabel * lAlign = new QLabel( i18n( "Align:" ), this );
+    grid->addWidget( lAlign, 0, 0 );
+
+    rLeft = new QRadioButton( i18n( "Left" ), this );
+    grid->addWidget( rLeft, 1, 0 );
+    connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
+
+    rCenter = new QRadioButton( i18n( "Center" ), this );
+    grid->addWidget( rCenter, 2, 0 );
+    connect( rCenter, SIGNAL( clicked() ), this, SLOT( alignCenter() ) );
+
+    rRight = new QRadioButton( i18n( "Right" ), this );
+    grid->addWidget( rRight, 3, 0 );
+    connect( rRight, SIGNAL( clicked() ), this, SLOT( alignRight() ) );
+
+    rJustify = new QRadioButton( i18n( "Justify" ), this );
+    grid->addWidget( rJustify, 4, 0 );
+    connect( rJustify, SIGNAL( clicked() ), this, SLOT( alignJustify() ) );
+
+    clearAligns();
+    rLeft->setChecked( true );
+
+    // --------------- preview --------------------
+    prev2 = new KWPagePreview2( this );
+    grid->addMultiCellWidget( prev2, 0, 5, 1, 1 );
+
+    // --------------- main grid ------------------
+    grid->setColStretch( 1, 1 );
+    grid->setRowStretch( 5, 1 );
 }
 
-/*================================================================*/
-KWParagDia::~KWParagDia()
+void KWParagAlignWidget::display( const KWParagLayout & lay )
 {
-}
-
-/*================================================================*/
-void KWParagDia::setAlign( int align )
-{
+    int align = lay.alignment;
     prev2->setAlign( align );
 
     clearAligns();
@@ -680,8 +684,12 @@ void KWParagDia::setAlign( int align )
     }
 }
 
-/*================================================================*/
-int KWParagDia::align() const
+void KWParagAlignWidget::save( KWParagLayout & lay )
+{
+    lay.alignment = align();
+}
+
+int KWParagAlignWidget::align() const
 {
     if ( rLeft->isChecked() ) return Qt::AlignLeft;
     else if ( rCenter->isChecked() ) return Qt::AlignCenter;
@@ -691,78 +699,82 @@ int KWParagDia::align() const
     return Qt::AlignLeft;
 }
 
-/*================================================================*/
-void KWParagDia::setupTab2()
+QString KWParagAlignWidget::tabName()
 {
-    QWidget *tab = addPage( i18n( "Aligns" ) );
-    QGridLayout *grid = new QGridLayout( tab, 6, 2, 15, 7 );
+    return i18n( "Aligns" );
+}
 
-    QLabel * lAlign = new QLabel( i18n( "Align:" ), tab );
-    grid->addWidget( lAlign, 0, 0 );
-
-    rLeft = new QRadioButton( i18n( "Left" ), tab );
-    grid->addWidget( rLeft, 1, 0 );
-    connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
-
-    rCenter = new QRadioButton( i18n( "Center" ), tab );
-    grid->addWidget( rCenter, 2, 0 );
-    connect( rCenter, SIGNAL( clicked() ), this, SLOT( alignCenter() ) );
-
-    rRight = new QRadioButton( i18n( "Right" ), tab );
-    grid->addWidget( rRight, 3, 0 );
-    connect( rRight, SIGNAL( clicked() ), this, SLOT( alignRight() ) );
-
-    rJustify = new QRadioButton( i18n( "Justify" ), tab );
-    grid->addWidget( rJustify, 4, 0 );
-    connect( rJustify, SIGNAL( clicked() ), this, SLOT( alignJustify() ) );
-
+void KWParagAlignWidget::alignLeft()
+{
+    prev2->setAlign( Qt::AlignLeft );
     clearAligns();
     rLeft->setChecked( true );
+}
 
-    // --------------- preview --------------------
-    prev2 = new KWPagePreview2( tab );
-    grid->addMultiCellWidget( prev2, 0, 5, 1, 1 );
+void KWParagAlignWidget::alignCenter()
+{
+    prev2->setAlign( Qt::AlignCenter );
+    clearAligns();
+    rCenter->setChecked( true );
+}
 
-    // --------------- main grid ------------------
-    grid->setColStretch( 1, 1 );
-    grid->setRowStretch( 5, 1 );
+void KWParagAlignWidget::alignRight()
+{
+    prev2->setAlign( Qt::AlignRight );
+    clearAligns();
+    rRight->setChecked( true );
+}
+
+void KWParagAlignWidget::alignJustify()
+{
+    prev2->setAlign( Qt3::AlignJustify );
+    clearAligns();
+    rJustify->setChecked( true );
+}
+
+void KWParagAlignWidget::clearAligns()
+{
+    rLeft->setChecked( false );
+    rCenter->setChecked( false );
+    rRight->setChecked( false );
+    rJustify->setChecked( false );
 }
 
 /*================================================================*/
-void KWParagDia::setupTab3()
+KWParagBorderWidget::KWParagBorderWidget( QWidget * parent, const char * name )
+    : KWParagLayoutWidget( KWParagDia::PD_BORDERS, parent, name )
 {
-    QWidget *tab = addPage( i18n( "Borders" ) );
-    QGridLayout *grid = new QGridLayout( tab, 8, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( this, 8, 2, 15, 7 );
 
-    QLabel * lStyle = new QLabel( i18n( "Style:" ), tab );
+    QLabel * lStyle = new QLabel( i18n( "Style:" ), this );
     grid->addWidget( lStyle, 0, 0 );
 
-    cStyle = new QComboBox( false, tab );
+    cStyle = new QComboBox( false, this );
     cStyle->insertItem( Border::getStyle( Border::SOLID ) );
     cStyle->insertItem( Border::getStyle( Border::DASH ) );
     cStyle->insertItem( Border::getStyle( Border::DOT ) );
     cStyle->insertItem( Border::getStyle( Border::DASH_DOT ) );
     cStyle->insertItem( Border::getStyle( Border::DASH_DOT_DOT ) );
     grid->addWidget( cStyle, 1, 0 );
-    connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
+    //connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
-    QLabel * lWidth = new QLabel( i18n( "Width:" ), tab );
+    QLabel * lWidth = new QLabel( i18n( "Width:" ), this );
     grid->addWidget( lWidth, 2, 0 );
 
-    cWidth = new QComboBox( false, tab );
+    cWidth = new QComboBox( false, this );
     for( unsigned int i = 1; i <= 10; i++ )
         cWidth->insertItem(QString::number(i));
     grid->addWidget( cWidth, 3, 0 );
-    connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
+    //connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
 
-    QLabel * lColor = new QLabel( i18n( "Color:" ), tab );
+    QLabel * lColor = new QLabel( i18n( "Color:" ), this );
     grid->addWidget( lColor, 4, 0 );
 
-    bColor = new KColorButton( tab );
+    bColor = new KColorButton( this );
     grid->addWidget( bColor, 5, 0 );
-    connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
+    //connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
 
-    QButtonGroup * bb = new QHButtonGroup( tab );
+    QButtonGroup * bb = new QHButtonGroup( this );
     bb->setFrameStyle(QFrame::NoFrame);
     bLeft = new QPushButton(bb);
     bLeft->setPixmap( KWBarIcon( "borderleft" ) );
@@ -783,7 +795,7 @@ void KWParagDia::setupTab3()
     connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
     connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
 
-    QGroupBox *grp=new QGroupBox( i18n( "Preview" ), tab );
+    QGroupBox *grp=new QGroupBox( i18n( "Preview" ), this );
     grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
     prev3 = new KWBorderPreview( grp );
     QVBoxLayout *lay1 = new QVBoxLayout( grp );
@@ -791,87 +803,224 @@ void KWParagDia::setupTab3()
     lay1->setSpacing( 1 );
     lay1->addWidget(prev3);
 
-    connect( prev3 ,SIGNAL( choosearea(QMouseEvent * )),
-           this,SLOT( slotPressEvent(QMouseEvent *)));
+    connect( prev3, SIGNAL( choosearea(QMouseEvent * ) ),
+             this, SLOT( slotPressEvent(QMouseEvent *) ) );
 
     grid->setRowStretch( 7, 1 );
     grid->setColStretch( 1, 1 );
+}
 
-    m_bAfterInitBorder=false;
+void KWParagBorderWidget::display( const KWParagLayout & lay )
+{
+    m_leftBorder = lay.leftBorder;
+    m_rightBorder = lay.rightBorder;
+    m_topBorder = lay.topBorder;
+    m_bottomBorder = lay.bottomBorder;
+    bLeft->blockSignals( true );
+    bRight->blockSignals( true );
+    bTop->blockSignals( true );
+    bBottom->blockSignals( true );
+    updateBorders();
+    bLeft->blockSignals( false );
+    bRight->blockSignals( false );
+    bTop->blockSignals( false );
+    bBottom->blockSignals( false );
+}
+
+void KWParagBorderWidget::save( KWParagLayout & lay )
+{
+    lay.leftBorder = m_leftBorder;
+    lay.rightBorder = m_rightBorder;
+    lay.topBorder = m_topBorder;
+    lay.bottomBorder = m_bottomBorder;
 }
 
 #define OFFSETX 15
 #define OFFSETY 7
 #define KW_SPACE 30
-void KWParagDia::slotPressEvent(QMouseEvent *_ev)
+void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
 {
     QRect r = prev3->contentsRect();
     QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+KW_SPACE);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        if( (  ((int)m_topBorder.ptWidth != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
+               ||(m_topBorder.style!=Border::getStyle(cStyle->currentText()) )) && bTop->isOn() )
         {
-            if( (  ((int)m_topBorder.ptWidth != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
-                   ||(m_topBorder.style!=Border::getStyle(cStyle->currentText()) )) && bTop->isOn() )
-                {
-                    m_topBorder.ptWidth = cWidth->currentText().toInt();
-                    m_topBorder.color = QColor( bColor->color() );
-                    m_topBorder.style=Border::getStyle(cStyle->currentText());
-                    prev3->setTopBorder( m_topBorder );
-                }
-            else
-                bTop->setOn(!bTop->isOn());
+            m_topBorder.ptWidth = cWidth->currentText().toInt();
+            m_topBorder.color = QColor( bColor->color() );
+            m_topBorder.style=Border::getStyle(cStyle->currentText());
+            prev3->setTopBorder( m_topBorder );
         }
+        else
+            bTop->setOn(!bTop->isOn());
+    }
     rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-KW_SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        if( (  ((int)m_bottomBorder.ptWidth != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
+               ||(m_bottomBorder.style!=Border::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
         {
-            if( (  ((int)m_bottomBorder.ptWidth != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
-                   ||(m_bottomBorder.style!=Border::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
-                {
-                    m_bottomBorder.ptWidth = cWidth->currentText().toInt();
-                    m_bottomBorder.color = QColor( bColor->color() );
-                    m_bottomBorder.style=Border::getStyle(cStyle->currentText());
-                    prev3->setBottomBorder( m_bottomBorder );
-                }
-            else
-                bBottom->setOn(!bBottom->isOn());
+            m_bottomBorder.ptWidth = cWidth->currentText().toInt();
+            m_bottomBorder.color = QColor( bColor->color() );
+            m_bottomBorder.style=Border::getStyle(cStyle->currentText());
+            prev3->setBottomBorder( m_bottomBorder );
         }
+        else
+            bBottom->setOn(!bBottom->isOn());
+    }
 
     rect.setCoords(r.x()+OFFSETX,r.y()+OFFSETY,r.x()+KW_SPACE+OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
-        {
+    {
 
-            if( (  ((int)m_leftBorder.ptWidth != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
-                   ||(m_leftBorder.style!=Border::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
-                {
-                    m_leftBorder.ptWidth = cWidth->currentText().toInt();
-                    m_leftBorder.color = QColor( bColor->color() );
-                    m_leftBorder.style=Border::getStyle(cStyle->currentText());
-                    prev3->setLeftBorder( m_leftBorder );
-                }
-            else
-                bLeft->setOn(!bLeft->isOn());
+        if( (  ((int)m_leftBorder.ptWidth != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
+               ||(m_leftBorder.style!=Border::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
+        {
+            m_leftBorder.ptWidth = cWidth->currentText().toInt();
+            m_leftBorder.color = QColor( bColor->color() );
+            m_leftBorder.style=Border::getStyle(cStyle->currentText());
+            prev3->setLeftBorder( m_leftBorder );
         }
+        else
+            bLeft->setOn(!bLeft->isOn());
+    }
     rect.setCoords(r.width()-OFFSETX-KW_SPACE,r.y()+OFFSETY,r.width()-OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+
+        if( (  ((int)m_rightBorder.ptWidth != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
+               ||(m_rightBorder.style!=Border::getStyle(cStyle->currentText()) )) && bRight->isOn() )
         {
-
-            if( (  ((int)m_rightBorder.ptWidth != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
-                   ||(m_rightBorder.style!=Border::getStyle(cStyle->currentText()) )) && bRight->isOn() )
-                {
-                    m_rightBorder.ptWidth = cWidth->currentText().toInt();
-                    m_rightBorder.color = QColor( bColor->color() );
-                    m_rightBorder.style=Border::getStyle(cStyle->currentText());
-                    prev3->setRightBorder( m_rightBorder );
-                }
-            else
-                bRight->setOn(!bRight->isOn());
+            m_rightBorder.ptWidth = cWidth->currentText().toInt();
+            m_rightBorder.color = QColor( bColor->color() );
+            m_rightBorder.style=Border::getStyle(cStyle->currentText());
+            prev3->setRightBorder( m_rightBorder );
         }
-
-
+        else
+            bRight->setOn(!bRight->isOn());
+    }
 }
-
 #undef OFFSETX
 #undef OFFSETY
 #undef KW_SPACE
+
+void KWParagBorderWidget::updateBorders()
+{
+    if ( m_leftBorder.ptWidth == 0 )
+        bLeft->setOn( false );
+    else
+        bLeft->setOn( true );
+
+    if ( m_rightBorder.ptWidth == 0 )
+        bRight->setOn( false );
+    else
+        bRight->setOn( true );
+
+    if ( m_topBorder.ptWidth == 0 )
+        bTop->setOn( false );
+    else
+        bTop->setOn( true );
+
+    if ( m_bottomBorder.ptWidth == 0 )
+        bBottom->setOn( false );
+    else
+        bBottom->setOn( true );
+    prev3->setLeftBorder( m_leftBorder );
+    prev3->setRightBorder( m_rightBorder );
+    prev3->setTopBorder( m_topBorder );
+    prev3->setBottomBorder( m_bottomBorder );
+}
+
+void KWParagBorderWidget::brdLeftToggled( bool _on )
+{
+    if ( !_on )
+        m_leftBorder.ptWidth = 0;
+    else {
+        m_leftBorder.ptWidth = cWidth->currentText().toInt();
+        m_leftBorder.color = QColor( bColor->color() );
+        m_leftBorder.style= Border::getStyle( cStyle->currentText() );
+    }
+    prev3->setLeftBorder( m_leftBorder );
+}
+
+void KWParagBorderWidget::brdRightToggled( bool _on )
+{
+    if ( !_on )
+        m_rightBorder.ptWidth = 0;
+    else {
+        m_rightBorder.ptWidth = cWidth->currentText().toInt();
+        m_rightBorder.color = QColor( bColor->color() );
+        m_rightBorder.style= Border::getStyle( cStyle->currentText() );
+    }
+    prev3->setRightBorder( m_rightBorder );
+}
+
+void KWParagBorderWidget::brdTopToggled( bool _on )
+{
+    if ( !_on )
+        m_topBorder.ptWidth = 0;
+    else {
+        m_topBorder.ptWidth = cWidth->currentText().toInt();
+        m_topBorder.color = QColor( bColor->color() );
+        m_topBorder.style= Border::getStyle( cStyle->currentText() );
+    }
+    prev3->setTopBorder( m_topBorder );
+}
+
+void KWParagBorderWidget::brdBottomToggled( bool _on )
+{
+    if ( !_on )
+        m_bottomBorder.ptWidth = 0;
+    else {
+        m_bottomBorder.ptWidth = cWidth->currentText().toInt();
+        m_bottomBorder.color = QColor( bColor->color() );
+        m_bottomBorder.style=Border::getStyle(cStyle->currentText());
+    }
+    prev3->setBottomBorder( m_bottomBorder );
+}
+
+QString KWParagBorderWidget::tabName()
+{
+    return i18n( "Borders" );
+}
+
+/******************************************************************/
+/* Class: KWParagDia                                              */
+/******************************************************************/
+KWParagDia::KWParagDia( QWidget* parent, const char* name,
+                        int _flags, KWDocument *_doc )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
+{
+    flags = _flags;
+    doc = _doc;
+    if ( _flags & PD_SPACING )
+    {
+        QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
+        m_indentSpacingWidget = new KWIndentSpacingWidget( doc->getUnit(), page, "indent-spacing" );
+    }
+    if ( _flags & PD_ALIGN )
+    {
+        QVBox * page = addVBoxPage( i18n( "Aligns" ) );
+        m_alignWidget = new KWParagAlignWidget( page, "align" );
+    }
+    if ( _flags & PD_BORDERS )
+    {
+        QVBox * page = addVBoxPage( i18n( "Borders" ) );
+        m_borderWidget = new KWParagBorderWidget( page, "border" );
+    }
+    if ( _flags & PD_NUMBERING )
+        setupTab4();
+    if ( _flags & PD_TABS )
+        setupTab5();
+    setInitialSize( QSize(600, 500) );
+}
+
+/*================================================================*/
+KWParagDia::~KWParagDia()
+{
+}
+
 
 /*================================================================*/
 void KWParagDia::setupTab4()
@@ -1059,7 +1208,7 @@ void KWParagDia::setupTab5()
     lTabs = new QListBox( tab );
     grid->addWidget( lTabs, 3, 0 );
 
-    g3 = new QButtonGroup( "", tab );
+    QButtonGroup * g3 = new QButtonGroup( "", tab );
     QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, 15, 7 );
     g3->setExclusive( true );
 
@@ -1220,156 +1369,6 @@ void KWParagDia::slotDoubleClicked( QListBoxItem * )
     }
 }
 
-
-
-/*================================================================*/
-void KWParagDia::clearAligns()
-{
-    rLeft->setChecked( false );
-    rCenter->setChecked( false );
-    rRight->setChecked( false );
-    rJustify->setChecked( false );
-}
-
-/*================================================================*/
-void KWParagDia::updateBorders()
-{
-    if ( m_leftBorder.ptWidth == 0 )
-        bLeft->setOn( false );
-    else
-        bLeft->setOn( true );
-
-    if ( m_rightBorder.ptWidth == 0 )
-        bRight->setOn( false );
-    else
-        bRight->setOn( true );
-
-    if ( m_topBorder.ptWidth == 0 )
-        bTop->setOn( false );
-    else
-        bTop->setOn( true );
-
-    if ( m_bottomBorder.ptWidth == 0 )
-        bBottom->setOn( false );
-    else
-        bBottom->setOn( true );
-    prev3->setLeftBorder( m_leftBorder );
-    prev3->setRightBorder( m_rightBorder );
-    prev3->setTopBorder( m_topBorder );
-    prev3->setBottomBorder( m_bottomBorder );
-}
-
-/*================================================================*/
-void KWParagDia::alignLeft()
-{
-    prev2->setAlign( Qt::AlignLeft );
-    clearAligns();
-    rLeft->setChecked( true );
-}
-
-/*================================================================*/
-void KWParagDia::alignCenter()
-{
-    prev2->setAlign( Qt::AlignCenter );
-    clearAligns();
-    rCenter->setChecked( true );
-}
-
-/*================================================================*/
-void KWParagDia::alignRight()
-{
-    prev2->setAlign( Qt::AlignRight );
-    clearAligns();
-    rRight->setChecked( true );
-}
-
-/*================================================================*/
-void KWParagDia::alignJustify()
-{
-    prev2->setAlign( Qt3::AlignJustify );
-    clearAligns();
-    rJustify->setChecked( true );
-}
-
-/*================================================================*/
-void KWParagDia::brdLeftToggled( bool _on )
-{
-    if ( !_on )
-        m_leftBorder.ptWidth = 0;
-    else {
-      if(m_bAfterInitBorder)
-	{
-	  m_leftBorder.ptWidth = cWidth->currentText().toInt();
-	  m_leftBorder.color = QColor( bColor->color() );
-	  m_leftBorder.style= Border::getStyle( cStyle->currentText() );
-	}
-    }
-    prev3->setLeftBorder( m_leftBorder );
-}
-
-/*================================================================*/
-void KWParagDia::brdRightToggled( bool _on )
-{
-    if ( !_on )
-        m_rightBorder.ptWidth = 0;
-    else {
-      if(m_bAfterInitBorder)
-	{
-	  m_rightBorder.ptWidth = cWidth->currentText().toInt();
-	  m_rightBorder.color = QColor( bColor->color() );
-	  m_rightBorder.style= Border::getStyle( cStyle->currentText() );
-	}
-    }
-    prev3->setRightBorder( m_rightBorder );
-}
-
-/*================================================================*/
-void KWParagDia::brdTopToggled( bool _on )
-{
-    if ( !_on )
-        m_topBorder.ptWidth = 0;
-    else {
-      if(m_bAfterInitBorder)
-	{
-
-	  m_topBorder.ptWidth = cWidth->currentText().toInt();
-	  m_topBorder.color = QColor( bColor->color() );
-	  m_topBorder.style= Border::getStyle( cStyle->currentText() );
-	}
-    }
-    prev3->setTopBorder( m_topBorder );
-}
-
-/*================================================================*/
-void KWParagDia::brdBottomToggled( bool _on )
-{
-    if ( !_on )
-        m_bottomBorder.ptWidth = 0;
-    else {
-      if(m_bAfterInitBorder)
-	{
-	  m_bottomBorder.ptWidth = cWidth->currentText().toInt();
-	  m_bottomBorder.color = QColor( bColor->color() );
-	  m_bottomBorder.style=Border::getStyle(cStyle->currentText());
-	}
-    }
-    prev3->setBottomBorder( m_bottomBorder );
-}
-
-/*================================================================*/
-void KWParagDia::brdStyleChanged( const QString & )
-{
-}
-
-/*================================================================*/
-void KWParagDia::brdWidthChanged( const QString & )
-{
-}
-
-/*================================================================*/
-void KWParagDia::brdColorChanged( const QColor & )
-{
-}
 
 /*================================================================*/
 void KWParagDia::numChangeBullet()
@@ -1538,9 +1537,9 @@ bool KWParagDia::isBulletChanged() const
 
 void KWParagDia::setParagLayout( const KWParagLayout & lay )
 {
-    setAlign( lay.alignment );
-
     m_indentSpacingWidget->display( lay );
+    m_alignWidget->display( lay );
+    m_borderWidget->display( lay );
 
     if ( lay.counter )
         setCounter( *lay.counter );
@@ -1549,15 +1548,9 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
         numTypeChanged( Counter::NUM_NONE );
         gNumbering->setButton(Counter::NUM_NONE );
     }
-    setLeftBorder( lay.leftBorder );
-    setRightBorder( lay.rightBorder );
-    setTopBorder( lay.topBorder );
-    setBottomBorder( lay.bottomBorder );
+
     setTabList( lay.tabList() );
     oldLayout=lay;
-    //setTabList( lay.ParagLayout->getTabList );
-    //border init it's necessary to allow left border works
-    m_bAfterInitBorder=true;
 }
 
 #include "paragdia.moc"

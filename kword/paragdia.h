@@ -89,7 +89,7 @@ private:
 };
 
 /**
- * The widget for editing idents and spacings
+ * The widget for editing idents and spacings (tab 1)
  */
 class KWIndentSpacingWidget : public KWParagLayoutWidget
 {
@@ -128,6 +128,78 @@ private:
 };
 
 /**
+ * The widget for editing paragraph alignment (tab 2)
+ */
+class KWParagAlignWidget : public KWParagLayoutWidget
+{
+    Q_OBJECT
+public:
+    KWParagAlignWidget( QWidget * parent, const char * name = 0 );
+    virtual ~KWParagAlignWidget() {}
+
+    virtual void display( const KWParagLayout & lay );
+    virtual void save( KWParagLayout & lay );
+    //virtual bool isModified();
+    virtual QString tabName();
+
+    int align() const;
+
+protected slots:
+    void alignLeft();
+    void alignCenter();
+    void alignRight();
+    void alignJustify();
+
+protected:
+    void clearAligns();
+
+private:
+    QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
+    KWPagePreview2 *prev2;
+};
+
+/**
+ * The widget for editing paragraph borders (tab 3)
+ */
+class KWParagBorderWidget : public KWParagLayoutWidget
+{
+    Q_OBJECT
+public:
+    KWParagBorderWidget( QWidget * parent, const char * name = 0 );
+    virtual ~KWParagBorderWidget() {}
+
+    virtual void display( const KWParagLayout & lay );
+    virtual void save( KWParagLayout & lay );
+    //virtual bool isModified();
+    virtual QString tabName();
+
+    Border leftBorder() const { return m_leftBorder; }
+    Border rightBorder() const { return m_rightBorder; }
+    Border topBorder() const { return m_topBorder; }
+    Border bottomBorder() const { return m_bottomBorder; }
+
+protected:
+    void updateBorders();
+
+protected slots:
+    void brdLeftToggled( bool );
+    void brdRightToggled( bool );
+    void brdTopToggled( bool );
+    void brdBottomToggled( bool );
+    //void brdStyleChanged( const QString & );
+    //void brdWidthChanged( const QString & );
+    //void brdColorChanged( const QColor& );
+    void slotPressEvent(QMouseEvent *_ev);
+
+private:
+    QComboBox *cWidth, *cStyle;
+    QPushButton *bLeft, *bRight, *bTop, *bBottom;
+    KColorButton *bColor;
+    Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
+    KWBorderPreview *prev3;
+};
+
+/**
  * The complete(*) dialog for changing attributes of a paragraph
  *
  * (*) the flags (to only show parts of it) have been kept just in case
@@ -158,17 +230,12 @@ public:
     double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
     bool linesTogether() const { return m_indentSpacingWidget->linesTogether(); }
 
-    int align() const;
-    void setAlign( int align );
+    int align() const { return m_alignWidget->align(); }
 
-    Border leftBorder() const { return m_leftBorder; }
-    void setLeftBorder( Border _leftBorder ) { m_leftBorder = _leftBorder; updateBorders(); }
-    Border rightBorder() const { return m_rightBorder; }
-    void setRightBorder( Border _rightBorder ) { m_rightBorder = _rightBorder; updateBorders(); }
-    Border topBorder() const { return m_topBorder; }
-    void setTopBorder( Border _topBorder ) { m_topBorder = _topBorder; updateBorders(); }
-    Border bottomBorder() const { return m_bottomBorder; }
-    void setBottomBorder( Border _bottomBorder ) { m_bottomBorder = _bottomBorder; updateBorders(); }
+    Border leftBorder() const { return m_borderWidget->leftBorder(); }
+    Border rightBorder() const { return m_borderWidget->rightBorder(); }
+    Border topBorder() const { return m_borderWidget->topBorder(); }
+    Border bottomBorder() const { return m_borderWidget->bottomBorder(); }
 
     void setCounter( Counter _counter );
     Counter counter() const { return m_counter; }
@@ -194,22 +261,18 @@ public:
 					 oldLayout.rightBorder!=rightBorder() ||
 					 oldLayout.topBorder!=topBorder() ||
 					 oldLayout.bottomBorder!=bottomBorder() ); }
-    //necessary when you used just border dialog
-    void setAfterInitBorder(bool _b){m_bAfterInitBorder=_b;}
     void changeKWSpinboxType();
 protected:
-    void setupTab2();
-    void setupTab3();
     void setupTab4();
     void setupTab5();
-    void clearAligns();
-    void updateBorders();
     void setActiveItem(double value);
     bool findExistingValue(double val);
 //    void enableUIForCounterType();
 
 private:
     KWIndentSpacingWidget * m_indentSpacingWidget;
+    KWParagAlignWidget * m_alignWidget;
+    KWParagBorderWidget * m_borderWidget;
 
     // Tab4 data.
     QButtonGroup *gNumbering;
@@ -225,42 +288,19 @@ private:
     QLineEdit *eTabPos;
     QGroupBox *gText;
 
-    QComboBox *cWidth, *cStyle;
-    QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
-    KWPagePreview2 *prev2;
-    QPushButton *bLeft, *bRight, *bTop, *bBottom, *bFont, *bAdd, *bDel, *bModify;
-    KWBorderPreview *prev3;
-    KColorButton *bColor;
-    QButtonGroup *g2, *g3;
+    QPushButton *bFont, *bAdd, *bDel, *bModify;
     KWNumPreview *prev4;
     QListBox *lTabs;
     QLabel *lTab;
     QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
 
-
-    Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
     int flags;
     Counter m_counter;
     KWDocument *doc;
     KoTabulatorList _tabList;
     KWParagLayout oldLayout;
 
-    bool m_bAfterInitBorder;
-
 protected slots:
-    void slotPressEvent(QMouseEvent *_ev);
-    void alignLeft();
-    void alignCenter();
-    void alignRight();
-    void alignJustify();
-    void brdLeftToggled( bool );
-    void brdRightToggled( bool );
-    void brdTopToggled( bool );
-    void brdBottomToggled( bool );
-    void brdStyleChanged( const QString & );
-    void brdWidthChanged( const QString & );
-    void brdColorChanged( const QColor& );
-
     // Tab 4 slots.
     void numChangeBullet();
     void numStyleChanged( int );

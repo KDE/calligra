@@ -460,6 +460,7 @@ void KWStyleEditor::changeBorders() {
     paragDia = new KWParagDia( this, "", KWParagDia::PD_BORDERS, doc );
     paragDia->setCaption( i18n( "Paragraph Borders" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
+    // ## use display() instead
     paragDia->setLeftBorder( style->paragLayout().leftBorder );
     paragDia->setRightBorder( style->paragLayout().rightBorder );
     paragDia->setTopBorder( style->paragLayout().topBorder );
