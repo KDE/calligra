@@ -232,19 +232,6 @@ HINT: removing Qt::WStaticContents from KExiTableView ctor fixed repaint problem
   the problem was with repainting when hscrollbar disapperars....
 
 
-FIXIT::::::::::::::
-	js: Do you have repaint / resize problems of the document views in tabbed or ideal mode too ?
-js^	jowenn: you can publish a screenshot of one? i cant tell if i have the same problem as you
-jowenn	one moment
-jowenn	http://www.jowenn.at/tmp/img.png
-jowenn	after chaning view or resizing the window is works. Only a small part (the top left tables gets repainted otherwise)
-js^	jowenn: ah i see - this is because empty TVs and these not-db-aware are not finished yet
-js^	and query shows empty
-jowenn	happens with a table with data too, there it only loses one repaint event though, when the project navigator collapses
-js^	jowenn: i agree, will be fixed, thx, btw - i've fixed one crash on main window now. 
-:::::::::::FIXIT::::::::::::::
-
-
 FIXIT::: CRASH!! in kexidb
 lucijan	#2 <signal handler called>
 lucijan	#3 0x414dbf54 in strdup () from /lib/tls/libc.so.6
@@ -296,6 +283,10 @@ Detailed TODO for Beta3:
 --ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
 -use one and multi-key relations from kexidb
 
+=== Table View TODO ====
+-move validation code (performed on cell accepting and row accepting) somewhere to Validator (KEXIDB?),
+ so LATER this may be also used for forms
+
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
   (2 methods: 1) in additional dock 2) in property editor
@@ -310,6 +301,49 @@ Detailed TODO for Beta3:
 - text does not fit well inside combobox editor
 - double editor should be klineedit with doublevalidator, not spinbox
 - update parent property (e.g. Rect) on child's change
+
+2004-02-21
+Main Window:
+	-buffer in the property editor is properly cleared when current dialog is changed 
+	 or there is no dialog
+Table View:
+	-clearSelection() and field(int) methods added
+	-on row deleting: cursor is moved up only if we're deleted the last row 
+		and row-inserting is not enabled
+	-fixed selecting row after no row was selected
+	-messagees are displayed on failed row updating/inserting
+	-CONSTRAINTS: illegal null/empty fields are checked on updating/inserting
+	(msg boxes are used if required)
+	-the cursor is moved to faulty cell's value on record update/insert error
+Combo box editor:
+	-selection on the popup table view is cleared then no test is entered
+	-up/down/left/right key presing leaves the lineedit if there is no 
+		line selected on the popup table
+	-improved editing convenience
+KexiDB:
+	-isEmptyValue() generic function added for checking if a value of QVariant 
+	is empty but not null
+Alter Table Dialog:
+	-"data type" column declared as NOT EMPTY
+
+
+2004-02-20
+KexiDB::Field:
+-setNonEmpty() fixed
+-NOT EMPTY constraint is now implied by PRIMARY KEY constraint
+Table View:
+-on a table cell edit accepting: violating of the following:
+--NOT NULL or NOT EMPTY constraints
+--validation rules (using attached KexiValidator)
+--from-editor value getting errors (d->pEditor->value())
+..is now signaled using message box
+Alter Table Dialog:
+-"field name" field acts like a primary key
+
+2004-02-19
+KFormEditor lib: 
+-ported to win32
+-some sanity checks added
 
 2004-02-18
 KexiPropertyEditor: 
