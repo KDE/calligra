@@ -1037,7 +1037,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else
     {
-        m_strOutText = m_strText;
+        if(m_strText[0]!='\'')
+                m_strOutText = m_strText;
     }
 
     // Empty text?
@@ -3509,6 +3510,14 @@ void KSpreadCell::checkValue()
     if ( p.isEmpty() )
     {
       return;
+    }
+
+    // Treat anything starting with a quote as a litteral text
+    if( p.at(0)=='\'')
+    {
+        m_strOutText=p.right(p.length()-1);
+        setFormatNumber(Number); // default format
+        return;
     }
 
     // Test for boolean
