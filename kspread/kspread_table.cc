@@ -5913,6 +5913,10 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             m_pDoc->setDefaultGridPen( gridPen );
         }
         m_bShowGrid = oldShowGrid;
+
+        //abort printing
+        _printer->abort();
+
         return;
     }
 
