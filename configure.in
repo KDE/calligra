@@ -74,22 +74,43 @@ AC_SUBST(KOFFICE_LIBS)
 KOFFICE_INCLUDES='-I$(top_srcdir)/lib $(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(KOML_INCLUDES) $(KSTORE_INCLUDES)'
 AC_SUBST(KOFFICE_INCLUDES)
 
-dnl Check for PostgreSQL-headers
-dnl if present compile Katabase
-
-dnl check: /usr/include/pgsql/libpq++.h
-AC_CHECK_HEADER(pgsql/libpgtcl.h, katabase_has_postgres_headers=yes)
-dnl cannot check for libpq++.h because of the plusplus.
-dnl check: /usr/lib/pgsql/include/libpq++.h
-dnl need another check for suse (libpq++.h located in /usr/lib/pgsql/include/libpq++.h, very ugly!!!)
-if test "x$katabase_has_postgres_headers" = "xyes"; then
-  KATABASE_DIR='katabase'
-else
-  AC_MSG_WARN(you don't have libpq++.h somewhere. 
-Please install PostgreSQL-Headers to compile and install Katabase.)
+dnl check for PostgreSQL headers and libraries
+dnl if present compile Katabase 
+AC_MSG_CHECKING([for PostgreSQL])
+ 
+AC_ARG_WITH(pgsqldir,
+[  --with-pgsqldir=pgsqldir   use pgsql installed in pgsqldir ],
+[
+  ac_pgsql_dir=$withval
+], ac_pgsql_dir=/usr/local
+)
+ 
+pgsql_incdirs="$ac_pgsql_dir/pgsql/include /usr/include/pgsql /usr/include /usr/local/include"
+AC_FIND_FILE(libpq++.h, $pgsql_incdirs, pgsql_incdir)
+if test ! -r $pgsql_incdir/libpq++.h; then
+  AC_MSG_ERROR(libpq++.h not found.)
   KATABASE_DIR=''
+else
+  KATABASE_DIR='katabase'
 fi
 AC_SUBST(KATABASE_DIR)
+
+PGSQLINC=-I$pgsql_incdir
+AC_SUBST(PGSQLINC)
+
+pgsql_libdirs="$ac_pgsql_dir/pgsql/lib /usr/lib /usr/local/lib"
+AC_FIND_FILE(libpq.a, $pgsql_libdirs, pgsql_libdir)
+if test ! -r $pgsql_libdir/libpq++.a; then
+  AC_MSG_ERROR(libpq++ not found.)
+fi
+
+PGSQLLIB=-L$pgsql_libdir
+AC_SUBST(PGSQLLIB)
+ 
+AC_MSG_RESULT([headers $pgsql_incdir, libraries $pgsql_libdir])
+ 
+KATABASE_LIBS="-lpq++"
+AC_SUBST(KATABASE_LIBS)
 
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
