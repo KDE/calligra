@@ -23,6 +23,7 @@
 #include <klistview.h>
 #include <klocale.h>
 #include "kmultitabbar.h"
+#include <ktoolbar.h>
 
 #include <qtabwidget.h>
 #include <qlayout.h>
@@ -34,12 +35,17 @@
 #include "kexibrowseritem.h"
 #include "kexitabbrowser.h"
 #include "kexiproject.h"
+#include <kexiview.h>
 
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
-	: KexiDialogBase(view,parent, name)
+	: KToolBar(view->mainWindow(), name, false, false)
+//	: KexiDialogBase(view,parent, name)
 {
+	view->mainWindow()->moveDockWindow(this, DockLeft);
+	setTitle(i18n("Project"));
+	m_project = view->project();
+	
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser()" << endl;
-	setCaption("Project");
 	QGridLayout *layout = new QGridLayout(this);
 
 	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
@@ -65,7 +71,7 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	layout->addWidget(m_tabBar,	0,	0);
 	layout->addWidget(m_stack,	0,	1);
 	layout->setColStretch(1, 1);
-	registerAs(ToolWindow);
+	//registerAs(ToolWindow);
 
 	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser(): connecting to " << kexiProject() << endl;

@@ -26,15 +26,18 @@
 
 #include <qwidget.h>
 #include <qobject.h>
-
 #include <qintdict.h>
+
 #include <kexidialogbase.h>
+#include <ktoolbar.h>
+
 
 class QWidgetStack;
 class KMultiTabBar;
 class KexiBrowser;
 
-class KexiTabBrowser : public KexiDialogBase
+//class KexiTabBrowser : public KexiDialogBase
+class KexiTabBrowser : public KToolBar
 {
 	Q_OBJECT
 
@@ -47,6 +50,7 @@ class KexiTabBrowser : public KexiDialogBase
 
 	protected:
 		void			addBrowser(KexiBrowser *browser, QString icon,QString text);
+		KexiProject*    kexiProject() const {return m_project;};
 
 		void			generateTables();
 
@@ -62,6 +66,8 @@ class KexiTabBrowser : public KexiDialogBase
 		KexiBrowser		*m_queries;
 		KexiBrowser		*m_forms;
 		KexiBrowser		*m_reports;
+
+		KexiProject     *m_project;
 
 	protected slots:
 		void			slotTabActivated(int id);
