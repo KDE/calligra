@@ -1308,6 +1308,9 @@ QString ClassExportFilterHtmlTransitional::getParagraphElement(const QString& st
         fontAttributes+=fontName; // TODO: add alternative font names
         fontAttributes+="\"";
     }
+#if 0
+    // FIXME: using "size=+-" make things ugly. So for now, it is deactivated
+
     // Give the font size relatively (be kind with people with impered vision)
     // TODO: option to give absolute font sizes
     int size=layout.formatData.fontSize;
@@ -1329,6 +1332,7 @@ QString ClassExportFilterHtmlTransitional::getParagraphElement(const QString& st
             fontAttributes+="\"";
         }
     }
+#endif
     if ( layout.formatData.colour.isValid() )
     {
         // Give colour
