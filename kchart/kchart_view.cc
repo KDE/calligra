@@ -157,6 +157,8 @@ void KChartView::loadConfig() {
     qDebug("Load config...");
     KGlobal::config()->reparseConfiguration();
     ((KChartPart*)part())->loadConfig( KGlobal::config() );
+    //refresh chart when you load config
+    repaint();
 }
 
 

@@ -37,7 +37,7 @@ KChartPart::KChartPart( KoDocument* parent, const char* name )
   m_bLoading = false;
   cerr << "Contstructor started!\n";
   initDoc();
-  // hack 
+  // hack
   setModified(true);
 }
 
@@ -52,13 +52,13 @@ KChartPart::~KChartPart()
 bool KChartPart::initDoc()
 {
   // Initialize the parameter set for this chart document
-  // PENDING(kalle,torben) Where to delete this?    
+  // PENDING(kalle,torben) Where to delete this?
   cerr << "InitDOC";
   _params = new KChartParameters;
   initRandomData();
   // PENDING(lotzi) This is where to start the wizard and fill the
   // params struct with the data the users enters there.
-  
+
   return TRUE;
 }
 
@@ -130,7 +130,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 	     _params,	      // the parameters of the chart,
 	     // including the type
 	     currentData );
-  
+
 }
 
 QString KChartPart::configFile() const
@@ -174,7 +174,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   data.setAttribute("cols", currentData.cols());
   for (unsigned int row = 0;row < currentData.rows();row++) {
       for (unsigned int col = 0;col < currentData.cols();col++) {
-	// later we need a value 
+	// later we need a value
 	cerr << "Row " << row << "\n";
 	KChartValue t = currentData.cell(row, col);
 	QDomElement e = doc.createElement("cell");
@@ -182,12 +182,17 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
 	  /*
 	  if ( e.isNull() )
 	      return e;
-	  */      	  
+	  */
 	data.appendChild(e);
       }
   }
   // now save the parameters
   chart.appendChild(data);
+
+  QDomElement params = doc.createElement("params");
+  params.setAttribute("type",(int)_params->type);
+  chart.appendChild(params);
+
   cerr << "Ok, till here!!!";
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
@@ -217,7 +222,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   }
 
   cerr << "Ok, it is a chart\n";
-  
+
   QDomElement chart = doc.documentElement();
   if ( chart.attribute( "mime" ) != "application/x-kchart" )
     return false;
@@ -241,22 +246,29 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
       if (n.isNull()) {
 	qDebug("Some problems, there is less data than it should be!");
 	break;
-      }	  
+      }
       QDomElement e = n.toElement();
       if ( !e.isNull() && e.tagName() == "cell" ) {
 	  // add the cell to the corresponding place...
 	  double val = e.attribute("value").toDouble(&ok);
 	  if (!ok)  {  return false; }
-	  cerr << i << " " << j << "=" << val << "\n";      
-	  KChartValue t; 
+	  cerr << i << " " << j << "=" << val << "\n";
+	  KChartValue t;
 	  t.exists= true;
 	  t.value.setValue(val);
 	  // cerr << "Set cell for " << row << "," << col << "\n";
-	  currentData.setCell(i,j,t);     
-	  n = n.nextSibling();	  
+	  currentData.setCell(i,j,t);
+	  n = n.nextSibling();
       }
     }
   }
+  QDomElement params = chart.namedItem( "params" ).toElement();
+  if ( params.hasAttribute( "type" ) )
+        {
+	 _params->type = (KChartType)params.attribute("type").toInt( &ok );
+	 if ( !ok )
+	        return false;
+         }
   return true;
 };
 
@@ -296,6 +308,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.12  1999/12/21 22:36:17  faure
+ * Porting to new QVariant. More like this and I write a script !
+ *
  * Revision 1.11  1999/11/29 21:26:14  wtrobin
  * - fixed some ugly warnings
  * - made kchart compile with --enable-final

@@ -30,16 +30,16 @@ KChartBarConfigDialog::KChartBarConfigDialog( KChartParameters* params,
 void KChartBarConfigDialog::apply()
 {
     KChartConfigDialog::apply();
-//     _params->_overwrite = _barpage->overwriteMode();
-//     _params->_xbardist = _barpage->xAxisDistance();
+     //_params->_overwrite = _barpage->overwriteMode();
+     //_params->_xbardist = _barpage->xAxisDistance();
 }
 
 
 void KChartBarConfigDialog::defaults()
 {
     KChartConfigDialog::defaults();
-//     _barpage->setOverwriteMode( _params->_overwrite );
-//     _barpage->setXAxisDistance( _params->_xbardist );
+     //_barpage->setOverwriteMode( _params->_overwrite );
+     //_barpage->setXAxisDistance( _params->_xbardist );
 }
 
 

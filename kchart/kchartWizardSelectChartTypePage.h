@@ -2,6 +2,7 @@
 #define _kchartWIZARDSELECTCHARTTYPEPAGE_H
 
 #include <qwidget.h>
+#include "kchartparams.h"
 
 class QFrame;
 class QPushButton;
@@ -10,11 +11,13 @@ class KChartPart;
 
 class kchartWizardSelectChartTypePage : public QWidget
 {
-  Q_OBJECT 
+  Q_OBJECT
 
 public:
   kchartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart );
 
+public slots:
+  void apply();
 private slots:
   void chartTypeSelected( int type );
 
@@ -27,7 +30,7 @@ private:
   int ylabelsize;
   int xstep;
   int ystep;
-
+  KChartType _type;
 
   void addButton(QString name, QString icon_name, int type);
 };

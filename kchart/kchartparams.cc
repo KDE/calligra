@@ -32,7 +32,7 @@ KChartParameters::KChartParameters() :
 	ExtColor.setColor( 9, Qt::darkCyan );
 	ExtColor.setColor( 10, Qt::darkMagenta );
 	ExtColor.setColor( 11, Qt::darkYellow );
-	
+
 	setTitleFont( QFont( "Helvetica", 12 ) );
 	setYTitleFont( QFont( "Helvetica", 12 ) );
 	setXTitleFont( QFont( "Helvetica", 12 ) );
@@ -199,6 +199,7 @@ void KChartParameters::saveConfig(KConfig *conf) {
   conf->writeEntry("TitleColor", TitleColor);
   conf->writeEntry("XTitleColor", XTitleColor);
   conf->writeEntry("YTitleColor", YTitleColor );
+  conf->writeEntry("YTitle2Color", YTitle2Color);
   conf->writeEntry("XLabelColor", XLabelColor );
   conf->writeEntry("YLabelColor", YLabelColor);
   conf->writeEntry("YLabel2Color", YLabel2Color);

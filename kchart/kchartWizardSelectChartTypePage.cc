@@ -2,7 +2,7 @@
 
 #include "kchartWizardSelectChartTypePage.h"
 #include "kchart_view.h"
-#include "kchartparams.h"
+//#include "kchartparams.h"
 
 #include <qbuttongroup.h>
 #include <qframe.h>
@@ -67,7 +67,7 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
   addButton("Hi-lo-close", "chart_hiloclose", KCHARTTYPE_LINE);
   addButton("Combo line bar", "chart_combo_line_bar", 
 	    KCHARTTYPE_COMBO_LINE_BAR);
-  addButton("Combo HLC bar", "chart_combo_hlc_bar", 
+  addButton("Combo HLC bar", "chart_combo_hlc_bar",
 	    KCHARTTYPE_COMBO_HLC_BAR);
 
   addButton("Combo line area","chart_combo_line_area", 
@@ -88,19 +88,19 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
 	    KCHARTTYPE_3DCOMBO_HLC_AREA);
   addButton("3DBAR","3DBAR", KCHARTTYPE_3DBAR);
   addButton("3DAREA","3DAREA", KCHARTTYPE_3DAREA);
-  
+
   addButton("3DLINE","3DLINE", KCHARTTYPE_3DLINE);
   addButton("3DPIE","3DPIE", KCHARTTYPE_3DPIE);
   addButton("2DPIE","2DPIE", KCHARTTYPE_2DPIE);
-  
+
   QPushButton *current = ((QPushButton*)_typeBG->find( _chart->params()->type ));
   if (current != NULL) {
-    current->setOn( true ); 
+    current->setOn( true );
   }
-
+  _type=_chart->params()->type ;
   connect( _typeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( chartTypeSelected( int ) ) );
-	
+
   //  parent->resize( 425, 256 );
   parent->resize(xstep*5+50, ystep*4 + 100);
 }
@@ -109,8 +109,16 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
 void kchartWizardSelectChartTypePage::chartTypeSelected( int type )
 {
   cerr << "Type selected: " << type << "\n";
-    _chart->params()->type = (KChartType)type;
+   _type=(KChartType)type;
+   // _chart->params()->type = (KChartType)type;
+
 }
 
+void kchartWizardSelectChartTypePage::apply()
+{
+
+ cerr << "Type selected: " <<(int)_type <<endl;
+ _chart->params()->type = _type;
+}
 
 #include "kchartWizardSelectChartTypePage.moc"

@@ -7,7 +7,7 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
-
+#include "kchartparams.h"
 #include <klocale.h>
 
 kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
@@ -19,6 +19,7 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
 
   _xlabelED = new QLineEdit( this );
   _xlabelED->setGeometry( 270, 40, 100, 30 );
+  _xlabelED->setText(_chart->params()->xtitle);
   /*
   connect( _xlabelED, SIGNAL( textChanged( const QString & ) ),
 		   _chart, SLOT( setXLabel( const QString & ) ) );
@@ -29,28 +30,28 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
 
   _ylabelED = new QLineEdit( this );
   _ylabelED->setGeometry( 270, 120, 100, 30 );
-
+  _ylabelED->setText(_chart->params()->ytitle);
   /*
   connect( _ylabelED, SIGNAL( textChanged( const QString & ) ),
 		   _chart, SLOT( setYLabel( const QString & ) ) );
   */
-							 
+
   QLabel* titleLA = new QLabel( i18n( "Title:" ), this );
   titleLA->setGeometry( 270, 170, 100, 30 );
-  
+
   _titleED = new QLineEdit( this );
   _titleED->setGeometry( 270, 200, 100, 30 );
-
+  _titleED->setText(_chart->params()->title);
   /*
   connect( _titleED, SIGNAL( textChanged( const QString & ) ),
 		   _chart, SLOT( setTitle( const QString & ) ) );
   */
 
   /*
-  QButtonGroup* placementBG = new QButtonGroup( i18n( "Legend placement" ), 
+  QButtonGroup* placementBG = new QButtonGroup( i18n( "Legend placement" ),
 												this );
   placementBG->setGeometry( 390, 10, 140, 210 );
-  
+
   _righttopRB = new QRadioButton( i18n( "Right/Top" ), this );
   _righttopRB->setGeometry( 410, 30, 100, 30 );
   placementBG->insert( _righttopRB, RightTop );
@@ -103,4 +104,10 @@ kchartWizardLabelsLegendPage::~kchartWizardLabelsLegendPage()
   //  _chart->removeAutoUpdate( preview );
 }
 
+void kchartWizardLabelsLegendPage::apply(  )
+{
+   _chart->params()->title= _titleED->text();
+   _chart->params()->xtitle= _xlabelED->text();
+   _chart->params()->ytitle= _ylabelED->text();
+}
 #include "kchartWizardLabelsLegendPage.moc"

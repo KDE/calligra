@@ -17,7 +17,8 @@ public:
   ~kchartWizardLabelsLegendPage();
 
   void placementChanged( int );
-
+public slots:
+  void apply();
 private:
   KChartPart* _chart;
   kchartWidget* preview;

@@ -23,19 +23,19 @@ void kchartEngine::computeSize() {
     + 2:
     2;
   int	xlabel_hgt = 0;
-  int	xtitle_hgt = !params->xtitle.isEmpty()? 1+params->xTitleFontHeight()+1: 0; 
+  int	xtitle_hgt = !params->xtitle.isEmpty()? 1+params->xTitleFontHeight()+1: 0;
   int	ytitle_hgt = !params->ytitle.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
   int	vtitle_hgt = params->do_vol() && !params->ytitle2.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
   int	ylabel_wth = 0;
   int	vlabel_wth = 0;
-  
+
   int	xtics       = params->grid||params->xaxis? 1+2: 0;
   int	ytics       = params->grid||params->yaxis? 1+3: 0;
   int	vtics       = params->yaxis&& params->do_vol() ? 3+1: 0;
-  
+
   qDebug( "done width, height, tics computation" );
-  
-  
+
+
   xdepth_3D      = params->threeD() ? (int)( cos(RAD_DEPTH) * HYP_DEPTH ): 0;
   ydepth_3D      = params->threeD() ? (int)( sin(RAD_DEPTH) * HYP_DEPTH ): 0;
   xdepth_3Dtotal = xdepth_3D*(params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
@@ -51,24 +51,24 @@ void kchartEngine::computeSize() {
     1 +											/* space under note */
     2: 0;										/* space to chart */
   annote_len *= params->annotationFontWidth();
-  
+
   qDebug( "done annote_len computation" );
-  
+
   // for the time being: no x labels
   hasxlabels = 0;
-  /*	
+  /*
 	if( params->xaxis && hasxlabels ) {
 	int biggest     = -MAXINT;
-	
+
 	int		len = 0;
 	for( i=0; i<num_points; ++i ) {
 	biggest = MAX( len, xlbl[i].length() );
 	}
-	
+
 	xlabel_hgt = 1+ biggest*params->xAxisFontWidth() +1;
 	}
   */
-  
+
   grapheight = imageheight - ( xtics          +
 			       xtitle_hgt     +
 			       xlabel_hgt     +
@@ -79,9 +79,9 @@ void kchartEngine::computeSize() {
   if( params->hard_size && params->hard_graphheight )				/* user wants to use his */
     grapheight = params->hard_graphheight;
   params->hard_graphheight = grapheight;
-  
+
   qDebug( "done grapheight computation" );
-  
+
   // before width can be known...
   /* ----- y labels intervals ----- */
   {
@@ -119,12 +119,12 @@ void kchartEngine::computeSize() {
 
     /* gotta go through the above loop to catch the 'tweeners :-| */
     ylbl_interval = params->requested_yinterval != -MAXDOUBLE &&
-      params->requested_yinterval > ypoints[jumpout_value-1] ? 
+      params->requested_yinterval > ypoints[jumpout_value-1] ?
       params->requested_yinterval:
       ypoints[jumpout_value-1];
     cout << "ylbl_interval:" << ylbl_interval << "\n";
     // FIXME: This seems to be a total mess: != ???
-    
+
     /* perform floating point remainders */
     /* gonculate largest interval-point < lowest */
     if( lowest != 0.0 &&
@@ -137,7 +137,7 @@ void kchartEngine::computeSize() {
       lowest = ylbl_interval * (float)(int)((lowest-ypoints[0])/ylbl_interval);
     }
     cerr << "Alive and healthy!\n";
-    
+
     /* find smallest interval-point > highest */
     tmp_highest = lowest;
     int maxcount = 0;
@@ -146,7 +146,7 @@ void kchartEngine::computeSize() {
       char	*price_to_str( float, int*, int*, int*, const char* );
       int		lbl_len;
       char	foo[32];
-      
+
       if( params->yaxis )	{ /* XPG2 compatibility */
 	//cerr << "At least I am doing something\n";
 	sprintf( foo, do_ylbl_fractions ? QString( "%.0f" ): params->ylabel_fmt, tmp_highest );
@@ -158,15 +158,15 @@ void kchartEngine::computeSize() {
 	  strlen( foo );
 	longest_ylblen = MAX( longest_ylblen, lbl_len );
       }
-      
+
       tmp_highest += ylbl_interval;
       //break; // force it
     } while( tmp_highest <= highest); // BL.
-    
+
     ylabel_wth = longest_ylblen * params->yAxisFontWidth();
     highest = params->requested_ymax==-MAXDOUBLE? tmp_highest:
       MAX( params->requested_ymax, highest );
-    
+
     if( params->do_vol() ) {
       float	num_yintrvls = (highest-lowest) / ylbl_interval;
 				/* no skyscrapers */
@@ -174,7 +174,7 @@ void kchartEngine::computeSize() {
 	vhighest += (vhighest-vlowest) / (num_yintrvls*2.0);
       if( vlowest != 0.0 )
 	vlowest -= (vhighest-vlowest) / (num_yintrvls*2.0);
-      
+
       if( params->yaxis2 ) {
 	char	svlongest[32];
 	int		lbl_len_low  = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vlowest );
@@ -196,7 +196,7 @@ void kchartEngine::computeSize() {
   if( params->hard_size && params->hard_graphwidth )				/* user wants to use his */
     graphwidth = params->hard_graphwidth;
   params->hard_graphwidth = graphwidth;
-  
+
   qDebug( "done graphwidth computation" );
   
   /* ----- scale to gif size ----- */
@@ -229,7 +229,7 @@ void kchartEngine::computeSize() {
   //????	if( params->hard_size && params->hard_yorig )					/* vyorig too? */
   //????		yorig = params->hard_yorig;
   params->hard_yorig = (int)yorig;
-  
+
   hlf_barwdth     = (int)( (float)(PX(2)-PX(1)) * (((float)params->bar_width/100.0)/2.0) );	// used only for bars
   hlf_hlccapwdth  = (int)( (float)(PX(2)-PX(1)) * (((float)params->hlc_cap_width/100.0)/2.0) );
 }
@@ -284,7 +284,7 @@ void kchartEngine::computeMinMaxValues() {
   }
   qDebug( "done computation highest and lowest value" );
   cerr << "Highest:" << highest << " lowest " << lowest << "\n";
-    
+
   if( params->scatter )
     cerr << "doing scattering?\n";
     for(int i=0; i<params->num_scatter_pts; ++i ) {
@@ -297,21 +297,27 @@ void kchartEngine::computeMinMaxValues() {
   if( params->do_vol() ) { // for now only one combo set allowed
     // vhighest = 1.0;
     // vlowest  = 0.0;
+
+    uvol=new float[num_points];
+    cout <<"Uvol doesn't work !!!!!!!!!!!!!!!!!!!!\n";
     for(int j=0; j<num_points; ++j )
       if( uvol[j] != GDC_NOVALUE ) {
-	vhighest = MAX( uvol[j], vhighest );
-	vlowest  = MIN( uvol[j], vlowest );
+	/*vhighest = MAX( uvol[j], vhighest );
+	vlowest  = MIN( uvol[j], vlowest );*/
+        vhighest = MAX( CELLVALUE( 1, j ), vhighest );
+	  vlowest  = MIN( CELLVALUE( 1, j ), vlowest );
+        cout <<" j: "<<j <<"vhight : "<<vhighest<<"vlowest : " <<vlowest<<endl;
       }
-    if( vhighest == -MAXFLOAT )			// no values
+    if( vhighest == -MAXFLOAT )		  	// no values
       vhighest = 1.0;						// for scaling, need a range
     else if( vhighest < 0.0 )
       vhighest = 0.0;
     if( vlowest > 0.0 || vlowest == MAXFLOAT )
       vlowest = 0.0;						// vol should always start at 0
   }
-    
+
   debug( "done vlowest computation" );
-  
+
   if( lowest == MAXFLOAT )
     lowest = 0.0;
   if( highest == -MAXFLOAT )
@@ -324,11 +330,11 @@ void kchartEngine::computeMinMaxValues() {
       highest = 0.0;
     else if( lowest > 0.0 )						// negs should be drawn from 0
       lowest = 0.0;
-  
+
   if( params->requested_ymin != -MAXDOUBLE && params->requested_ymin < lowest )
     lowest = params->requested_ymin;
   if( params->requested_ymax != -MAXDOUBLE && params->requested_ymax > highest )
     highest = params->requested_ymax;
-  
+
   qDebug( "done requested_* computation" );
 }

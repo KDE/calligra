@@ -3,6 +3,8 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
 
 class KChartPart;
 class kchartWidget;
@@ -16,10 +18,16 @@ public:
   ~kchartWizardSetupAxesPage();
 
 public slots:
-      void setGrid(bool value);
+      //void setGrid(bool value);
+      void apply();
 private:
   kchartWidget* preview;
   KChartPart* _chart;
+  QCheckBox* grid;
+  QCheckBox* border;
+  QLineEdit *y_interval;
+  QLineEdit *y_max;
+  QLineEdit *y_min;
 };
 
 #endif
