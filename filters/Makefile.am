@@ -1,1 +1,1 @@
-SUBDIRS = kspread kword kpresenter olefilters wrapper
+SUBDIRS = kspread kword kpresenter olefilters wrapper kontour
