@@ -40,6 +40,11 @@ public:
     virtual bool filter(const QString &fileIn, const QString &fileOut,
                         const QString &from, const QString &to,
                         const QString &config=QString::null);
+public slots:
+    void setPassword(QString x);
+
+private:
+    QString pass;
 };
 
 

@@ -38,6 +38,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <pwdprompt.h>
+
 
 #define READ_ERROR_CHECK()  do {                                           \
       if (rc < 0) {                                                        \
@@ -108,14 +110,22 @@ int rc;
         return false;
     }
 
-    // FIXME: obtain the password and ensure that we can use it.
+    PasswordPrompt *pp = new PasswordPrompt(false);
+    connect(pp, SIGNAL(setPassword(QString)), this, SLOT(setPassword(QString)));
+    int dlgrc = pp->exec();
+    delete pp;
+    if (dlgrc == QDialog::Rejected) return false;
 
     BlockCipher *cipher = new BlowFish;
     BlockCipher *cbc = new CipherBlockChain(cipher);
-    char *thekey = "a test key";
+    char thekey[512];
+
+    // FIXME: obtain the password and ensure that we can use it.
+    strncpy(thekey, pass.latin1(), 56);
+    thekey[56] = 0;
 
     // this propagates to the cipher
-    if (!cbc->setKey((void *)thekey, 80)) {
+    if (!cbc->setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
        KMessageBox::error(NULL,
                   i18n("There was an internal error preparing the passphrase."),
@@ -238,6 +248,11 @@ int rc;
     }
 
     return true;
+}
+
+
+void KoCryptExport::setPassword(QString x) {
+   pass = x;
 }
 
 

@@ -113,7 +113,7 @@ int rc;
     thekey[56] = 0;
  
     // propagates to the cipher
-    if (!cbc->setKey((void *)thekey, pass.length()*8)) {
+    if (!cbc->setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
        KMessageBox::error(NULL, 
                   i18n("There was an internal error preparing the passphrase."),

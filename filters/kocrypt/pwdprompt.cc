@@ -30,7 +30,7 @@
 #include <qpushbutton.h>
 #include <kdialog.h>
 #include <klocale.h>
-
+#include <kmessagebox.h>
 
 PasswordPrompt::~PasswordPrompt() {
    QApplication::restoreOverrideCursor();
@@ -54,6 +54,7 @@ QGridLayout *grid = new QGridLayout(this, 3, 6, KDialog::marginHint(),
    _ok = new QPushButton(i18n("&Ok"), this);
    _cancel = new QPushButton(i18n("&Cancel"), this);
 
+   // FIXME: limit size of input field
    grid->addMultiCellWidget(_prompt, 0, 0, 0, 5);
    grid->addMultiCellWidget(_pwd, 1, 1, 0, 4);
    grid->addMultiCellWidget(_ok, 2, 2, 3, 3);
@@ -82,6 +83,10 @@ void PasswordPrompt::doOk(const QString&) {
 
 
 void PasswordPrompt::ok() {
+   if (!_importer) {
+      KMessageBox::information(NULL, "Documents saved with this version of the filter will not be readable in the near future.",
+                           "Cryptofilter");
+   }
    _password = _ok->text();
    emit setPassword(_pwd->text());
    accept();
