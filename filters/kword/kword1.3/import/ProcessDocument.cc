@@ -915,10 +915,10 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
     if ( leader->m_oldSyntax )
     {
         // KWord 0.8
-        attrProcessingList << AttrProcessing ( "align", oldAlign ); // KWord 0.8
+        attrProcessingList << AttrProcessing ( "value", oldAlign ); // KWord 0.8
     }
     // New syntax and some files from syntax 1
-    attrProcessingList << AttrProcessing ( "value", normalAlign );
+    attrProcessingList << AttrProcessing ( "align", normalAlign );
     attrProcessingList << AttrProcessing ( "dir" ); // ### TODO
     ProcessAttributes (myNode, attrProcessingList);
 
