@@ -55,6 +55,7 @@ private:
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
+    void appendPicture(QDomDocument& doc, QDomElement& para, QDomElement& formats, const QDomElement& object, uint pos);
 
 
     QDomDocument    m_content;
@@ -65,6 +66,8 @@ private:
 
     QDict<QDomElement>   m_styles;
     StyleStack m_styleStack;
+    
+    uint m_pictureNumber; // Number of the picture (increment *before* use)
 };
 
 #endif

@@ -35,6 +35,7 @@
 #include <kmessagebox.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
+#include <koPicture.h>
 #include "conversion.h"
 
 typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
@@ -42,7 +43,7 @@ K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriteri
 
 
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
-  : KoFilter()
+  : KoFilter(), m_pictureNumber(0)
 {
     m_styles.setAutoDelete( true );
 }
@@ -692,6 +693,11 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
             // One more good reason to switch to <text:tab-stop> instead...
             textData = '\t';
         }
+        else if ( tagName == "draw:image" )
+        {
+            textData = '#'; // anchor placeholder
+            appendPicture(doc, p, formats, ts, pos);
+        }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
             if ( tagName != "text:span" )
@@ -1056,6 +1062,103 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
 void OoWriterImport::appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos)
 {
     // TODO
+}
+
+void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomElement& formats, const QDomElement& object, uint pos)
+{
+    QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
+    double height=KoUnit::parseValue( object.attribute("svg:height") );
+    double width=KoUnit::parseValue( object.attribute("svg:width") );
+    QString href ( object.attribute("xlink:href") );
+    
+    QString strExtension;
+    const int result=href.findRev(".");
+    if (result>=0)
+    {
+        strExtension=href.mid(result+1);
+    }
+    KoPicture picture;
+    if ( href[0]=='#' )
+    {
+        QString filename(href.mid(2));
+ 
+        KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
+        if (store->open("filename"))
+        {
+            if (!picture.load(store->device(),strExtension))
+                kdWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
+            
+            store->close();
+        } 
+        else
+            kdWarning(30518) << "Cannot find picture: " << frameName << " " << href << endl;
+        // ### TODO: correct picture key
+    }
+    else
+    {
+        KURL url;
+        url.setPath(href);
+        picture.setKeyAndDownloadPicture(url);
+    }
+    
+    QString strStoreName;
+    strStoreName="pictures/picture";
+    strStoreName+=QString::number(++m_pictureNumber);
+    strStoreName+=strExtension;
+    KoStoreDevice* out = m_chain->storageFile( strStoreName , KoStore::Write );
+    if (!out)
+        if (!picture.save(out))
+            kdWarning(30518) << "Cannot save picture: " << frameName << " " << href << endl;
+    else
+         kdWarning(30518) << "Cannot store picture: " << frameName << " " << href << endl;
+         
+    // Now that we have copied the image, we need to make some bookkeeping
+       
+    QDomElement framesetsPluralElement ( doc.documentElement().namedItem("FRAMESETS").toElement() );
+    
+    QDomElement framesetElement=doc.createElement("FRAMESET");
+    framesetElement.setAttribute("frameType",2);
+    framesetElement.setAttribute("frameInfo",0);
+    framesetElement.setAttribute("visible",1);
+    framesetElement.setAttribute("name",frameName);
+    framesetsPluralElement.appendChild(framesetElement);
+
+    QDomElement frameElementOut=doc.createElement("FRAME");
+    frameElementOut.setAttribute("left",0);
+    frameElementOut.setAttribute("top",0);
+    frameElementOut.setAttribute("bottom",height);
+    frameElementOut.setAttribute("right" ,width );
+    frameElementOut.setAttribute("runaround",1);
+    // TODO: a few attributes are missing
+    framesetElement.appendChild(frameElementOut);
+
+    QDomElement element=doc.createElement("PICTURE");
+    element.setAttribute("keepAspectRatio","true");
+    framesetElement.setAttribute("frameType",2); // Picture
+    framesetElement.appendChild(element);
+    
+    QDomElement singleKey ( doc.createElement("KEY") );
+    picture.getKey().saveAttributes(singleKey);
+    element.appendChild(singleKey);
+
+    QDomElement picturesPluralElement ( doc.documentElement().namedItem("PICTURES").toElement() );
+    
+    QDomElement pluralKey ( doc.createElement("KEY") );
+    picture.getKey().saveAttributes(pluralKey);
+    pluralKey.setAttribute("name",strStoreName);
+    picturesPluralElement.appendChild(pluralKey);
+
+    QDomElement formatElementOut=doc.createElement("FORMAT");
+    formatElementOut.setAttribute("id",6); // Normal text!
+    formatElementOut.setAttribute("pos",pos); // Start position
+    formatElementOut.setAttribute("len",1); // Start position
+    formats.appendChild(formatElementOut); //Append to <FORMATS>
+
+    QDomElement anchor=doc.createElement("ANCHOR");
+    // No name attribute!
+    anchor.setAttribute("type","frameset");
+    anchor.setAttribute("instance",frameName);
+    formatElementOut.appendChild(anchor);
 }
 
 #include "oowriterimport.moc"
