@@ -22,6 +22,9 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split" />
+  <Action name="view_pagemode"/>
+  <Action name="view_previewmode"/>
+  <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
   <Separator/>
@@ -110,7 +113,7 @@
   <Separator/>
   <Action name="view_zoom"/>
 </ToolBar>
-<ToolBar hidden="false" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
+<ToolBar hidden="true" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>

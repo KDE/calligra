@@ -66,6 +66,7 @@ public:
     KWGUI * gui() const { return m_gui; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
+    void switchViewMode( KWViewMode * newViewMode );
     KWViewMode *viewMode() const { return m_viewMode; }
 
     void repaintAll( bool erase = false );

@@ -33,6 +33,7 @@
 #include <qpaintdevicemetrics.h>
 
 #include "kwview.h"
+#include "kwviewmode.h"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwdoc.h"
@@ -111,6 +112,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     replaceEntry = 0L;
     doc = _doc;
     backColor = QBrush( white );
+    // Default values.
+    m_zoomViewModeNormal = doc->zoom();
+    m_zoomViewModePreview = 33;
 
     setInstance( KWFactory::global() );
     setXMLFile( "kword.rc" );
@@ -223,10 +227,7 @@ void KWView::initGui()
     actionFormatColor->setColor( Qt::black );
 
     //refresh zoom combobox
-    QStringList list=actionViewZoom->items();
-    QString zoomStr=QString::number(doc->zoom())+'%';
-    actionViewZoom->setCurrentItem(list.findIndex(zoomStr)  );
-
+    showZoom( doc->zoom() );
 
     MouseMode mouseMode=gui->canvasWidget()->getMouseMode();
     gui->canvasWidget()->setMouseMode( mouseMode );
@@ -284,6 +285,16 @@ void KWView::setupActions()
 
 
     // -------------- View menu
+    actionViewPageMode = new KToggleAction( i18n( "&Page mode" ), 0,
+                                            this, SLOT( viewPageMode() ),
+                                            actionCollection(), "view_pagemode" );
+    actionViewPageMode->setExclusiveGroup( "viewmodes" );
+    actionViewPageMode->setChecked( true );
+    actionViewPreviewMode = new KToggleAction( i18n( "Pre&view mode" ), 0,
+                                            this, SLOT( viewPreviewMode() ),
+                                            actionCollection(), "view_previewmode" );
+    actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
+
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( viewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
@@ -300,17 +311,20 @@ void KWView::setupActions()
     actionViewFootNotes = new KToggleAction( i18n( "Foot&notes" ), 0,
                                              this, SLOT( viewFootNotes() ),
                                           actionCollection(), "view_footnotes" );
+    actionViewFootNotes->setEnabled( false ); // #### TODO
     actionViewFootNotes->setExclusiveGroup( "notes" );
     actionViewEndNotes = new KToggleAction( i18n( "&Endnotes" ), 0,
                                              this, SLOT( viewEndNotes() ),
                                           actionCollection(), "view_endnotes" );
     actionViewEndNotes->setExclusiveGroup( "notes" );
+    actionViewEndNotes->setEnabled( false ); // #### TODO
 
     actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                         actionCollection(), "view_zoom" );
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     QStringList lst;
+    lst << "33%";
     lst << "50%";
     lst << "75%";
     lst << "100%";
@@ -828,7 +842,6 @@ void KWView::print( KPrinter &prt )
     doc->repaintAllViews();
 }
 
-/*================================================================*/
 void KWView::showFormat( const QTextFormat &currentFormat )
 {
     // update the gui with the current format.
@@ -867,7 +880,6 @@ void KWView::showFormat( const QTextFormat &currentFormat )
 
 }
 
-
 void KWView::showRulerIndent( double _leftMargin, double _firstLine )
 {
   KoRuler * hRuler = gui ? gui->getHorzRuler() : 0;
@@ -879,7 +891,6 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine )
   }
 }
 
-/*================================================================*/
 void KWView::showAlign( int align ) {
     switch ( align ) {
         case Qt3::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
@@ -898,20 +909,17 @@ void KWView::showAlign( int align ) {
     }
 }
 
-/*================================================================*/
 void KWView::showCounter( Counter &c )
 {
     actionFormatList->setChecked( c.numbering() == Counter::NUM_LIST );
 }
 
-/*================================================================*/
 void KWView::showFrameBorders( Border _left, Border _right,
                                Border _top, Border _bottom )
 {
     showParagBorders( _left, _right, _top, _bottom );
 }
 
-/*================================================================*/
 void KWView::showParagBorders( Border left, Border right,
                                Border top, Border bottom )
 {
@@ -975,7 +983,6 @@ void KWView::updateReadWrite( bool readwrite )
     }
 }
 
-/*===============================================================*/
 void KWView::setTool( MouseMode _mouseMode )
 {
     switch ( _mouseMode ) {
@@ -1046,7 +1053,6 @@ void KWView::setTool( MouseMode _mouseMode )
     }
 }
 
-/*===============================================================*/
 void KWView::showStyle( const QString & styleName )
 {
     QListIterator<KWStyle> styleIt( doc->styleList() );
@@ -1059,7 +1065,6 @@ void KWView::showStyle( const QString & styleName )
     }
 }
 
-/*===============================================================*/
 void KWView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
@@ -1072,7 +1077,6 @@ void KWView::updateStyleList()
     showStyle( currentStyle );
 }
 
-/*===============================================================*/
 void KWView::editCut()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
@@ -1080,7 +1084,6 @@ void KWView::editCut()
         edit->cut();
 }
 
-/*===============================================================*/
 void KWView::editCopy()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
@@ -1088,7 +1091,6 @@ void KWView::editCopy()
         edit->copy();
 }
 
-/*===============================================================*/
 void KWView::editPaste()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
@@ -1096,7 +1098,6 @@ void KWView::editPaste()
         edit->paste();
 }
 
-/*===============================================================*/
 void KWView::editSelectAll()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
@@ -1104,7 +1105,6 @@ void KWView::editSelectAll()
         edit->selectAll();
 }
 
-/*===============================================================*/
 void KWView::editFind()
 {
     if (!searchEntry)
@@ -1117,7 +1117,6 @@ void KWView::editFind()
     }
 }
 
-/*===============================================================*/
 void KWView::editReplace()
 {
     if (!searchEntry)
@@ -1132,7 +1131,6 @@ void KWView::editReplace()
     }
 }
 
-/*================================================================*/
 void KWView::editDeleteFrame()
 {
     QList<KWFrame> frames=doc->getSelectedFrames();
@@ -1209,7 +1207,6 @@ void KWView::editDeleteFrame()
         gui->canvasWidget()->deleteFrame( theFrame );
 }
 
-/*================================================================*/
 void KWView::editReconnectFrame()
 {
 #if 0
@@ -1217,7 +1214,6 @@ void KWView::editReconnectFrame()
 #endif
 }
 
-/*===============================================================*/
 void KWView::editCustomVars()
 {
     KWCustomVariablesDia dia( this, doc->getVariables() );
@@ -1225,7 +1221,6 @@ void KWView::editCustomVars()
     doc->updateTextCustomItem();
 }
 
-/*===============================================================*/
 void KWView::editSerialLetterDataBase()
 {
 #if 0
@@ -1237,22 +1232,51 @@ void KWView::editSerialLetterDataBase()
 #endif
 }
 
-/*===============================================================*/
+void KWView::viewPageMode()
+{
+    if ( actionViewPageMode->isChecked() )
+    {
+        m_zoomViewModePreview = doc->zoom();
+        showZoom( m_zoomViewModeNormal );
+        setZoom( m_zoomViewModeNormal );
+        gui->canvasWidget()->switchViewMode( new KWViewModeNormal( gui->canvasWidget() ) );
+    }
+    else
+        actionViewPageMode->setChecked( true ); // always one has to be checked !
+}
+
+void KWView::viewPreviewMode()
+{
+    if ( actionViewPreviewMode->isChecked() )
+    {
+        m_zoomViewModeNormal = doc->zoom();
+        showZoom( m_zoomViewModePreview );
+        setZoom( m_zoomViewModePreview );
+        gui->canvasWidget()->switchViewMode( new KWViewModePreview( gui->canvasWidget() ) );
+    }
+    else
+        actionViewPreviewMode->setChecked( true ); // always one has to be checked !
+}
+
+void KWView::showZoom( int zoom )
+{
+    QStringList list = actionViewZoom->items();
+    QString zoomStr = QString::number( zoom ) + '%';
+    actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+}
+
 void KWView::viewFormattingChars()
 {
-
     doc->setViewFormattingChars(actionViewFormattingChars->isChecked());
     gui->canvasWidget()->repaintAll();
 }
 
-/*===============================================================*/
 void KWView::viewFrameBorders()
 {
     doc->setViewFrameBorders(actionViewFrameBorders->isChecked());
     gui->canvasWidget()->repaintAll();
 }
 
-/*===============================================================*/
 void KWView::viewHeader()
 {
     doc->setHeaderVisible( actionViewHeader->isChecked() );
@@ -1266,7 +1290,6 @@ void KWView::viewHeader()
     */
 }
 
-/*===============================================================*/
 void KWView::viewFooter()
 {
     doc->setFooterVisible( actionViewFooter->isChecked() );
@@ -1280,7 +1303,6 @@ void KWView::viewFooter()
     */
 }
 
-/*===============================================================*/
 void KWView::viewFootNotes()
 {
 #if 0
@@ -1290,7 +1312,6 @@ void KWView::viewFootNotes()
 #endif
 }
 
-/*===============================================================*/
 void KWView::viewEndNotes()
 {
 #if 0
@@ -1327,22 +1348,25 @@ void KWView::viewZoom( const QString &s )
     z = z.simplifyWhiteSpace();
     int zoom = z.toInt();
     if ( zoom != doc->zoom() ) {
-        doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), true );
-        gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
-        gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
-
-        doc->updateResizeHandles( );
-        gui->canvasWidget()->repaintAll();
-        KWTextFrameSetEdit * edit = currentTextEdit();
-        if ( edit )
-            edit->ensureCursorVisible();
+        setZoom( zoom );
     }
     gui->canvasWidget()->setFocus();
 
 }
 
+void KWView::setZoom( int zoom )
+{
+    doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), true );
+    gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
+    gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
 
-/*===============================================================*/
+    doc->updateResizeHandles( );
+    gui->canvasWidget()->repaintAll();
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->ensureCursorVisible();
+}
+
 void KWView::insertPicture()
 {
     QString file;
@@ -1380,7 +1404,6 @@ void KWView::insertPicture()
 
 }
 
-/*===============================================================*/
 void KWView::insertPicture(const QString &filename)
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -1388,7 +1411,6 @@ void KWView::insertPicture(const QString &filename)
         edit->insertPicture( filename );
 }
 
-/*===============================================================*/
 void KWView::insertSpecialChar()
 {
     KWTextFrameSetEdit *edit=currentTextEdit();
@@ -1403,7 +1425,6 @@ void KWView::insertSpecialChar()
 
 }
 
-/*===============================================================*/
 void KWView::slotSpecialChar(QChar c, const QString &_font)
 {
     KWTextFrameSetEdit *edit=currentTextEdit();
@@ -1414,7 +1435,6 @@ void KWView::slotSpecialChar(QChar c, const QString &_font)
 
 }
 
-/*===============================================================*/
 void KWView::insertFrameBreak()
 {
 #if 0
@@ -1427,7 +1447,6 @@ void KWView::insertFrameBreak()
 #endif
 }
 
-/*===============================================================*/
 void KWView::insertVariable()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2185,7 +2204,6 @@ void KWView::textDecreaseIndent()
     }
 }
 
-/*================================================================*/
 void KWView::borderOutline()
 {
     bool b = actionBorderOutline->isChecked();
@@ -2198,7 +2216,6 @@ void KWView::borderOutline()
     borderSet();
 }
 
-/*================================================================*/
 void KWView::borderLeft()
 {
     actionBorderOutline->setChecked(
@@ -2210,7 +2227,6 @@ void KWView::borderLeft()
     borderSet();
 }
 
-/*================================================================*/
 void KWView::borderRight()
 {
     actionBorderOutline->setChecked(
@@ -2222,7 +2238,6 @@ void KWView::borderRight()
     borderSet();
 }
 
-/*================================================================*/
 void KWView::borderTop()
 {
     actionBorderOutline->setChecked(
@@ -2234,7 +2249,6 @@ void KWView::borderTop()
     borderSet();
 }
 
-/*================================================================*/
 void KWView::borderBottom()
 {
     actionBorderOutline->setChecked(
@@ -2246,7 +2260,6 @@ void KWView::borderBottom()
     borderSet();
 }
 
-/*================================================================*/
 void KWView::borderColor()
 {
     m_border.common.color = actionBorderColor->color();
@@ -2257,7 +2270,6 @@ void KWView::borderColor()
     borderSet();
 }
 
-/*================================================================*/
 void KWView::borderWidth( const QString &width )
 {
     m_border.common.ptWidth = width.toInt();
@@ -2269,7 +2281,6 @@ void KWView::borderWidth( const QString &width )
     gui->canvasWidget()->setFocus();
 }
 
-/*================================================================*/
 void KWView::borderStyle( const QString &style )
 {
     m_border.common.style = Border::getStyle( style );
@@ -2281,7 +2292,6 @@ void KWView::borderStyle( const QString &style )
     gui->canvasWidget()->setFocus();
 }
 
-/*================================================================*/
 void KWView::backgroundColor()
 {
     // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
@@ -2294,7 +2304,6 @@ void KWView::backgroundColor()
     //borderSet();
 }
 
-/*================================================================*/
 void KWView::borderSet()
 {
     // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
@@ -2692,6 +2701,31 @@ void KWView::docStructChanged(TypeStructDocItem _type)
         m_pDocStruct->getDocStructTree()->refreshTree(_type);
 }
 
+bool KWView::doubleClickActivation() const
+{
+    return TRUE;
+}
+
+QWidget* KWView::canvas()
+{
+    return gui->canvasWidget()->viewport();
+}
+
+int KWView::canvasXOffset() const
+{
+    return gui->canvasWidget()->contentsX();
+}
+
+int KWView::canvasYOffset() const
+{
+    return gui->canvasWidget()->contentsY();
+}
+
+void KWView::canvasAddChild( KoViewChild *child )
+{
+    gui->canvasWidget()->addChild( child->frame() );
+}
+
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
 /******************************************************************/
@@ -2779,20 +2813,17 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     canvas->setContentsPos( 0, 0 );
 }
 
-/*================================================================*/
 void KWGUI::showGUI()
 {
     reorganize();
 }
 
-/*================================================================*/
 void KWGUI::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
     reorganize();
 }
 
-/*================================================================*/
 void KWGUI::reorganize()
 {
     int space=20;
@@ -2817,38 +2848,9 @@ void KWGUI::reorganize()
     r_vert->setGeometry( 0, space, space, left->height() - space );
 }
 
-/*================================================================*/
 void KWGUI::unitChanged( QString u )
 {
     doc->setUnit( KWUnit::unit( u ) );
-}
-
-/*================================================================*/
-bool KWView::doubleClickActivation() const
-{
-    return TRUE;
-}
-
-/*================================================================*/
-QWidget* KWView::canvas()
-{
-    return gui->canvasWidget()->viewport();
-}
-
-/*================================================================*/
-int KWView::canvasXOffset() const
-{
-    return gui->canvasWidget()->contentsX();
-}
-/*================================================================*/
-int KWView::canvasYOffset() const
-{
-    return gui->canvasWidget()->contentsY();
-}
-/*================================================================*/
-void KWView::canvasAddChild( KoViewChild *child )
-{
-    gui->canvasWidget()->addChild( child->frame() );
 }
 
 #include "kwview.moc"

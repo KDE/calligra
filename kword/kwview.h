@@ -86,6 +86,8 @@ public:
 
     void showStyle( const QString & styleName );
     void showRulerIndent( double _leftMargin, double _firstLine );
+    void showZoom( int zoom ); // show a zoom value in the combo
+    void setZoom( int zoom ); // change the zoom value
 
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
@@ -141,6 +143,8 @@ public slots:
     void editCustomVars();
     void editSerialLetterDataBase();
 
+    void viewPageMode();
+    void viewPreviewMode();
     void viewFormattingChars();
     void viewFrameBorders();
     void viewHeader();
@@ -267,6 +271,9 @@ private:
     KAction *actionEditReconnectFrame;
     KAction *actionEditCustomVars;
 
+    KToggleAction *actionViewPageMode;
+    KToggleAction *actionViewPreviewMode;
+
     KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewFrameBorders;
     KToggleAction *actionViewHeader;
@@ -363,6 +370,10 @@ private:
 
     // Statusbar items
     QLabel * m_sbPageLabel; // 'Current page number and page count' label
+
+    // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
+    int m_zoomViewModeNormal;
+    int m_zoomViewModePreview;
 };
 
 /******************************************************************/

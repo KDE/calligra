@@ -49,8 +49,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_gui = lGui;
     m_currentFrameSetEdit = 0L;
     m_mousePressed = false;
-    m_viewMode = new KWViewModeNormal( this );
-    //m_viewMode = new KWViewModePreview( this ); // for testing
+    m_viewMode = new KWViewModeNormal( this ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
     cmdMoveFrame=0L;
 
     // Default table parameters.
@@ -260,6 +259,14 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
     }
     // The key events in read-write mode are handled by eventFilter(), otherwise
     // we don't get <Tab> key presses.
+}
+
+void KWCanvas::switchViewMode( KWViewMode * newViewMode )
+{
+    delete m_viewMode;
+    m_viewMode = newViewMode;
+    slotNewContentsSize();
+    repaintAll( true );
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
