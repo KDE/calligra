@@ -99,13 +99,13 @@ void FilterManager::installDefaultFilters () {
 						  "Corel Exchange", "cmx",
 						  "Kai-Uwe Sattler",
 						  "0.1", cmxFilter, 0L));
-#endif
   PSImport* psFilter = new PSImport ();
   if (psFilter->installed ())
     filters.insert ("PS", new FilterInfo (FilterInfo::FKind_Import,
 					  "Postscript", "ps",
 					  "Kai-Uwe Sattler",
 					  "0.1", psFilter, 0L));
+#endif
 }
 
 QString FilterManager::importFilters () {

@@ -55,7 +55,7 @@ bool PSImport::installed () {
   const char* dir = strtok (path, ":");
   const char* fpath = NULL;
   do {
-    if (fpath = check_for_pstoedit (dir)) {
+    if ((fpath = check_for_pstoedit (dir))) {
       fullPath = fpath;
       return true;
     }

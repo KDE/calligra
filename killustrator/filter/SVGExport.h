@@ -49,21 +49,21 @@ public:
   bool setup (GDocument *doc, const char* fmt);
   bool exportToFile (GDocument *doc);
 private:
-  QDomElement exportObject (QDomDocument &document, GObject* obj);
-  QDomElement exportPolygon (QDomDocument &document, GPolygon* obj);
-  QDomElement exportPolyline (QDomDocument &document, GPolyline* obj);
-  QDomElement exportEllipse (QDomDocument &document, GOval* obj);
-  QDomElement exportText (QDomDocument &document, GText* obj);
-  QDomElement exportTextLine (QDomDocument &document, GText* obj, int line, float xoff,
+  QDomDocumentFragment exportObject (QDomDocument &document, GObject* obj);
+  QDomDocumentFragment exportPolygon (QDomDocument &document, GPolygon* obj);
+  QDomDocumentFragment exportPolyline (QDomDocument &document, GPolyline* obj);
+  QDomDocumentFragment exportEllipse (QDomDocument &document, GOval* obj);
+  QDomDocumentFragment exportText (QDomDocument &document, GText* obj);
+  QDomDocumentFragment exportTextLine (QDomDocument &document, GText* obj, int line, float xoff,
 		       float yoff);
-  QDomElement exportCurve (QDomDocument &document, GCurve* obj);
-  QDomElement exportBezier (QDomDocument &document, GBezier* obj);
-  QDomElement exportGroup (QDomDocument &document, GGroup* obj);
-  QDomElement exportPixmap (QDomDocument &document, GPixmap* obj);
+  QDomDocumentFragment exportCurve (QDomDocument &document, GCurve* obj);
+  QDomDocumentFragment exportBezier (QDomDocument &document, GBezier* obj);
+  QDomDocumentFragment exportGroup (QDomDocument &document, GGroup* obj);
+  QDomDocumentFragment exportPixmap (QDomDocument &document, GPixmap* obj);
 
-  QDomElement addTransformationAttribute (QDomDocument &document, GObject* obj);
-  QDomElement addStyleAttribute (QDomDocument &document, GObject* obj);
-  QDomElement addTextStyleAttribute (QDomDocument &document, GText* obj);
+  void addTransformationAttribute (QDomElement &element, GObject* obj);
+  void addStyleAttribute (QDomElement &element, GObject* obj);
+  void addTextStyleAttribute (QDomElement &element, GText* obj);
 
   QString format;
 };

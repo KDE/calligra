@@ -49,7 +49,10 @@
 #include <GText.h>
 #include <GPixmap.h>
 
-#include <stdio.h>
+//#include <stdio.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <kdebug.h>
 
 SVGExport::SVGExport () {
 }
@@ -64,7 +67,7 @@ bool SVGExport::setup (GDocument *, const char*) {
 bool SVGExport::exportToFile (GDocument* doc) {
 
     QDomDocument document("svg");
-    document->doctype()->setPublicId("svg PUBLIC \"-//W3C//DTD SVG December 1999//EN\"\n\"http:://www.w3.org/Graphics/SVG/SVG-19991203.dtd\"");
+    document.doctype().setPublicId("svg PUBLIC \"-//W3C//DTD SVG December 1999//EN\"\n\"http:://www.w3.org/Graphics/SVG/SVG-19991203.dtd\"");
 
     QDomElement svg=document.createElement("svg");
     svg.setAttribute("width", doc->getPaperWidth());
@@ -81,21 +84,21 @@ bool SVGExport::exportToFile (GDocument* doc) {
 	const list<GObject*>& contents = (*li)->objects ();
 	for (list<GObject*>::const_iterator oi = contents.begin ();
 	     oi != contents.end (); oi++) {
-	    sgv.appendChild(exportObject (document, *oi));
+	    svg.appendChild(exportObject (document, *oi));
 	}
     }
     QFile file(outputFileName());
     if(!file.open(IO_WriteOnly)) {
-	kdError << "Could not open the output file: " << outputFileName() << endl;
+	kdError() << "Could not open the output file: " << outputFileName() << endl;
 	return false;
     }
-    QTextStream s(file);
+    QTextStream s(&file);
     s << document;
     file.close();
     return true;
 }
 
-QDomElement SVGExport::exportObject (QDomDocument &document, GObject* obj) {
+QDomDocumentFragment SVGExport::exportObject (QDomDocument &document, GObject* obj) {
 
     if (obj->isA ("GPolygon"))
 	return exportPolygon (document, (GPolygon *) obj);
@@ -113,17 +116,14 @@ QDomElement SVGExport::exportObject (QDomDocument &document, GObject* obj) {
 	return exportCurve (document, (GCurve *) obj);
     else if (obj->isA ("GPixmap"))
 	return exportPixmap (document, (GPixmap *) obj);
+    return QDomDocumentFragment();
 }
 
-QDomElement SVGExport::exportText (QDomDocument &document, GText* obj) {
+QDomDocumentFragment SVGExport::exportText (QDomDocument &document, GText* obj) {
 
+    QDomDocumentFragment textlines=document.createDocumentFragment();
     if (obj->lines () > 1) {
 	GText::TextInfo tInfo = obj->getTextInfo ();
-	/*
-	  xw.startTag ("g", false);
-	  addTransformationAttribute (xw, obj);
-	  xw.closeTag ();
-	*/
 	QFontMetrics fm (tInfo.font);
 	float yoff = fm.ascent ();
 
@@ -134,133 +134,142 @@ QDomElement SVGExport::exportText (QDomDocument &document, GText* obj) {
 		xoff = -ws / 2;
 	    else if (tInfo.align == GText::TextInfo::AlignRight)
 		xoff = -ws;
-	    exportTextLine (xw, obj, i, xoff, yoff);
+	    textlines.appendChild(exportTextLine (document, obj, i, xoff, yoff));
 	    yoff += fm.height ();
 	}
-
-	//    xw.endTag ();
     }
     else
-	exportTextLine (xw, obj, 0, 0, 0);
+	textlines.appendChild(exportTextLine (document, obj, 0, 0, 0));
+    return textlines;
 }
 
-QDomElement SVGExport::exportTextLine (QDomDocument &document, GText* obj, int line,
+QDomDocumentFragment SVGExport::exportTextLine (QDomDocument &document, GText* obj, int line,
 				       float xoff, float yoff) {
-    QString text = obj->line (line);
-    xw.startTag ("text", false);
-    xw.addAttribute ("x", xoff);
-    xw.addAttribute ("y", yoff);
-    addTransformationAttribute (xw, obj);
-    addTextStyleAttribute (xw, obj);
-    xw.closeTag ();
-    xw.writeText ((const char *) text);
-    xw.endTag ();
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element=document.createElement("text");
+    element.setAttribute ("x", xoff);
+    element.setAttribute ("y", yoff);
+    addTransformationAttribute (element, obj);
+    addTextStyleAttribute (element, obj);
+    element.appendChild(document.createTextNode(obj->line(line)));
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportBezier (QDomDocument &document, GBezier* obj) {
-    xw.startTag ("path", false);
-    ostrstream s;
+QDomDocumentFragment SVGExport::exportBezier (QDomDocument &document, GBezier* obj) {
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element=document.createElement("path");
+    QString s;
     Coord p = obj->getPoint (1);
-    s << "M " << p.x () << " " << p.y () << " ";
+    s = "M " + QString::number(p.x()) + " " + QString::number(p.y()) + " ";
     unsigned int i = 2;
     while (i < obj->numOfPoints () - 2) {
-	s << "C ";
+	s += "C ";
 	for (int n = 0; n < 3; n++) {
 	    p = obj->getPoint (i + n);
-	    s << p.x () << " " << p.y () << " ";
+	    s += QString::number(p.x()) + " " + QString::number(p.y()) + " ";
 	}
 	i += 3;
     }
-    s << ends;
-    xw.addAttribute ("d", s.str ());
-    addTransformationAttribute (xw, obj);
-    addStyleAttribute (xw, obj);
-    xw.closeTag (true);
+    element.setAttribute("d", s);
+    addTransformationAttribute (element, obj);
+    addStyleAttribute (element, obj);
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportCurve (QDomDocument &document, GCurve* obj) {
-    xw.startTag ("path", false);
+QDomDocumentFragment SVGExport::exportCurve (QDomDocument &document, GCurve* obj) {
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element=document.createElement("path");
+    QString s;
     bool first = true;
-    ostrstream s;
     for (int i = 0; i < obj->numOfSegments (); i++) {
 	const GSegment& seg = obj->getSegment (i);
 	if (first) {
-	    s << "M " << seg.pointAt (0).x () << " "
-	      << seg.pointAt (0).y () << " ";
+	    s += "M " + QString::number(seg.pointAt(0).x ()) + " " +
+		 QString::number(seg.pointAt (0).y()) + " ";
 	    first = false;
 	}
 	if (seg.kind () == GSegment::sk_Line) {
-	    s << "L " << seg.pointAt (1).x () << " "
-	      << seg.pointAt (1).y () << " ";
+	    s += "L " + QString::number(seg.pointAt (1).x()) + " " +
+		 QString::number(seg.pointAt (1).y()) + " ";
 	}
 	else if (seg.kind () == GSegment::sk_Bezier) {
-	    s << "C ";
+	    s += "C ";
 	    for (int n = 1; n < 4; n++)
-		s << seg.pointAt (n).x () << " "
-		  << seg.pointAt (n).y () << " ";
+		s += QString::number(seg.pointAt (n).x()) + " " +
+		     QString::number(seg.pointAt (n).y()) + " ";
 	}
     }
     if (obj->isClosed ())
-	s << "Z";
+	s += "Z";
 
-    s << ends;
-    xw.addAttribute ("d", s.str ());
-    addTransformationAttribute (xw, obj);
-    addStyleAttribute (xw, obj);
-    xw.closeTag (true);
+    element.setAttribute("d", s);
+    addTransformationAttribute (element, obj);
+    addStyleAttribute (element, obj);
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportGroup (QDomDocument &document, GGroup* obj) {
-    xw.startTag ("g", false);
-    addTransformationAttribute (xw, obj);
-    addStyleAttribute (xw, obj);
-    xw.closeTag ();
+QDomDocumentFragment SVGExport::exportGroup (QDomDocument &document, GGroup* obj) {
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element=document.createElement("g");
+    addTransformationAttribute(element, obj);
+    addStyleAttribute(element, obj);
+
     const list<GObject*>& objs = obj->getMembers ();
     for (list<GObject*>::const_iterator i = objs.begin ();
 	 i != objs.end (); i++) {
-	exportObject (xw, *i);
+	element.appendChild(exportObject (document, *i));
     }
-
-    xw.endTag ();
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportPolyline (QDomDocument &document, GPolyline* obj) {
-    xw.startTag ("polyline", false);
-    ostrstream s;
+QDomDocumentFragment SVGExport::exportPolyline (QDomDocument &document, GPolyline* obj) {
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element=document.createElement("polyline");
+    QString s;
     for (unsigned int i = 0; i < obj->numOfPoints (); i++) {
 	Coord p = obj->getPoint (i);
-	s << p.x () << "," << p.y () << " ";
+	s += QString::number(p.x()) + "," + QString::number(p.y()) + " ";
     }
-    s << ends;
-    xw.addAttribute ("points", s.str ());
-    addTransformationAttribute (xw, obj);
-    addStyleAttribute (xw, obj);
-    xw.closeTag (true);
+    element.setAttribute("points", s);
+    addTransformationAttribute (element, obj);
+    addStyleAttribute (element, obj);
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportEllipse (QDomDocument &document, GOval* obj) {
+QDomDocumentFragment SVGExport::exportEllipse (QDomDocument &document, GOval* obj) {
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element;
     const Coord& p0 = obj->startPoint ();
     const Coord& p1 = obj->endPoint ();
     if (obj->isCircle ()) {
-	xw.startTag ("circle", false);
-	xw.addAttribute ("cx", (p1.x () + p0.x ()) / 2.0);
-	xw.addAttribute ("cy", (p1.y () + p0.y ()) / 2.0);
-	xw.addAttribute ("r", (p1.x () - p0.x ()) / 2.0);
-	addTransformationAttribute (xw, obj);
-	addStyleAttribute (xw, obj);
-	xw.closeTag (true);
+	element=document.createElement("circle");
+	element.setAttribute ("cx", (p1.x () + p0.x ()) / 2.0);
+	element.setAttribute ("cy", (p1.y () + p0.y ()) / 2.0);
+	element.setAttribute ("r", (p1.x () - p0.x ()) / 2.0);
+	addTransformationAttribute (element, obj);
+	addStyleAttribute (element, obj);
     }
     else {
 	GObject::OutlineInfo oInfo = obj->getOutlineInfo ();
 	if (oInfo.shape == GObject::OutlineInfo::DefaultShape) {
-	    xw.startTag ("ellipse", false);
-	    xw.addAttribute ("cx", (p1.x () + p0.x ()) / 2.0);
-	    xw.addAttribute ("cy", (p1.y () + p0.y ()) / 2.0);
-	    xw.addAttribute ("rx", (p1.x () - p0.x ()) / 2.0);
-	    xw.addAttribute ("ry", (p1.y () - p0.y ()) / 2.0);
-	    addTransformationAttribute (xw, obj);
-	    addStyleAttribute (xw, obj);
-	    xw.closeTag (true);
+	    element=document.createElement("ellipse");
+	    element.setAttribute ("cx", (p1.x () + p0.x ()) / 2.0);
+	    element.setAttribute ("cy", (p1.y () + p0.y ()) / 2.0);
+	    element.setAttribute ("rx", (p1.x () - p0.x ()) / 2.0);
+	    element.setAttribute ("ry", (p1.y () - p0.y ()) / 2.0);
+	    addTransformationAttribute (element, obj);
+	    addStyleAttribute (element, obj);
 	}
 	else if (oInfo.shape == GObject::OutlineInfo::ArcShape) {
 	    // TODO
@@ -269,92 +278,98 @@ QDomElement SVGExport::exportEllipse (QDomDocument &document, GOval* obj) {
 	    // TODO
 	}
     }
-
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportPolygon (QDomDocument &document, GPolygon* obj) {
+QDomDocumentFragment SVGExport::exportPolygon (QDomDocument &document, GPolygon* obj) {
+
+    QDomDocumentFragment fragment=document.createDocumentFragment();
+    QDomElement element;
     if (obj->isRectangle ()) {
+	element=document.createElement("rect");
 	Coord p0 = obj->getPoint (0);
 	Coord p2 = obj->getPoint (2);
 	//    const QWMatrix& m = obj->matrix ();
-	xw.startTag ("rect", false);
-	xw.addAttribute ("x", p0.x ());
-	xw.addAttribute ("y", p0.y ());
-	xw.addAttribute ("width", p2.x () - p0.x ());
-	xw.addAttribute ("height", p2.y () - p0.y ());
-	addTransformationAttribute (xw, obj);
-	addStyleAttribute (xw, obj);
-	xw.closeTag (true);
+	element.setAttribute ("x", p0.x ());
+	element.setAttribute ("y", p0.y ());
+	element.setAttribute ("width", p2.x () - p0.x ());
+	element.setAttribute ("height", p2.y () - p0.y ());
+	addTransformationAttribute (element, obj);
+	addStyleAttribute (element, obj);
     }
     else {
-	xw.startTag ("polygon", false);
-	ostrstream s;
+	element=document.createElement("polygon");
+	QString s;
 	for (unsigned int i = 0; i < obj->numOfPoints (); i++) {
 	    Coord p = obj->getPoint (i);
-	    s << p.x () << "," << p.y () << " ";
+	    s += QString::number(p.x()) + "," + QString::number(p.y()) + " ";
 	}
-	s << ends;
-	xw.addAttribute ("points", s.str ());
-	addTransformationAttribute (xw, obj);
-	addStyleAttribute (xw, obj);
-	xw.closeTag (true);
+	element.setAttribute ("points", s);
+	addTransformationAttribute (element, obj);
+	addStyleAttribute (element, obj);
     }
+    fragment.appendChild(element);
+    return fragment;
 }
 
-QDomElement SVGExport::exportPixmap (QDomDocument &document, GPixmap* obj) {
+QDomDocumentFragment SVGExport::exportPixmap (QDomDocument &/*document*/, GPixmap* /*obj*/) {
+    return QDomDocumentFragment();
 }
 
-QDomElement SVGExport::addTransformationAttribute (QDomDocument &document, GObject* obj) {
-    ostrstream s;
+void SVGExport::addTransformationAttribute (QDomElement &element, GObject* obj) {
+
+    QString s;
     QWMatrix im;
 
     const QWMatrix& m = obj->matrix ();
     if (m != im) {
-	s << "matrix(" << m.m11 () << " " << m.m12 () << " " << m.m21 ()
-	  << " " << m.m22 () << " " << m.dx () << " " << m.dy ()
-	  << ")" << ends;
-	xw.addAttribute ("transform", s.str ());
+	s += "matrix(" + QString::number(m.m11()) + " " + QString::number(m.m12()) + " " +
+	     QString::number(m.m21()) + " " + QString::number(m.m22()) + " " + QString::number(m.dx()) +
+	     " " + QString::number(m.dy()) + ")";
+	element.setAttribute ("transform", s);
     }
 }
 
-QDomElement SVGExport::addStyleAttribute (QDomDocument &document, GObject* obj) {
-    ostrstream s;
+void SVGExport::addStyleAttribute (QDomElement &element, GObject* obj) {
+
+    QString s;
     GObject::FillInfo fInfo = obj->getFillInfo ();
     GObject::OutlineInfo oInfo = obj->getOutlineInfo ();
 
-    s << "fill:";
+    s += "fill:";
     if (fInfo.fstyle == GObject::FillInfo::NoFill || obj->isA ("GPolyline") ||
 	(obj->isA ("GBezier") && ! ((GBezier *) obj)->isClosed ()) ||
 	(obj->isA ("GCurve") && ! ((GCurve *) obj)->isClosed ()))
-	s << "none ; " ;
+	s += "none ; ";
     else if (fInfo.fstyle == GObject::FillInfo::SolidFill) {
-	s << "rgb(" << fInfo.color.red () << "," << fInfo.color.green ()
-	  << "," << fInfo.color.blue () << ") ; ";
+	s += "rgb(" + QString::number(fInfo.color.red()) + "," +
+	     QString::number(fInfo.color.green()) + "," + QString::number(fInfo.color.blue()) + ") ; ";
     }
-    s << "stroke:";
+    s += "stroke:";
     if (oInfo.style == Qt::NoPen)
-	s << "none ; ";
+	s += "none ; ";
     else
-	s << "rgb(" << oInfo.color.red () << "," << oInfo.color.green ()
-	  << "," << oInfo.color.blue () << ") ; ";
-    s << "stroke-width:" << oInfo.width << ends;
-    xw.addAttribute ("style", s.str ());
+	s += "rgb(" + QString::number(oInfo.color.red()) + "," +
+	     QString::number(oInfo.color.green()) + "," + QString::number(oInfo.color.blue()) + ") ; ";
+    s += "stroke-width:" + QString::number(oInfo.width);
+    element.setAttribute ("style", s);
 }
 
-QDomElement SVGExport::addTextStyleAttribute (QDomDocument &document, GText* obj) {
-    ostrstream s;
+void SVGExport::addTextStyleAttribute (QDomElement &element, GText* obj) {
+
+    QString s;
     GObject::OutlineInfo oInfo = obj->getOutlineInfo ();
     GText::TextInfo tInfo = obj->getTextInfo ();
 
-    s << "font-family:" << tInfo.font.family ();
-    s << "; font-size:" << tInfo.font.pointSize ();
-    s << "; fill:";
+    s += "font-family:" + tInfo.font.family ();
+    s += "; font-size:" + QString::number(tInfo.font.pointSize ());
+    s += "; fill:";
     if (oInfo.style == Qt::NoPen)
-	s << "none" ;
+	s += "none" ;
     else {
-	s << "rgb(" << oInfo.color.red () << "," << oInfo.color.green ()
-	  << "," << oInfo.color.blue () << ")";
+	s += "rgb(" + QString::number(oInfo.color.red()) + "," + QString::number(oInfo.color.green()) +
+	     + "," + QString::number(oInfo.color.blue()) + ")";
     }
-    s << ends;
-    xw.addAttribute ("style", s.str ());
+    element.setAttribute ("style", s);
 }

@@ -1,5 +1,5 @@
 
-INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. -I$(srcdir)/../../lib/kofficeui  $(all_includes) 
+INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. -I$(srcdir)/../../lib/kofficeui  $(all_includes)
 
 noinst_LTLIBRARIES = libfilter.la
 
@@ -18,5 +18,5 @@ libfilter_la_SOURCES = FilterManager.cc \
 	EPSExport.cc \
 	KilluImport.cc \
 	XfigImport.cc \
-	SVGExport.cc \
-	PSImport.cc
+	SVGExport.cc
+#	PSImport.cc
