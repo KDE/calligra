@@ -312,12 +312,15 @@ protected:
     KCommand *doCapitalizeNameOfDays( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
 
     static void changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags );
-    void loadEntry( const QDomElement &nl);
+    void loadEntry( const QDomElement &nl, bool _allLanguages = false);
     QDomElement saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc);
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
     void loadListOfWordCompletion();
+    void loadAutoCorrection( const QDomElement & _de, bool _allLanguages = false );
+    void loadAllLanguagesAutoCorrection();
+    KCommand *autoFormatWord( KoTextCursor* textEditCursor, KoTextParag *parag, int &index, KoTextObject *txtObj, QString * _wordArray, bool _allLanguages );
 
     KoDocument *m_doc;
     KoVariableCollection *m_varCollection;
@@ -353,6 +356,7 @@ private:
     KCompletion *m_listCompletion;
 
     QDict<KoAutoFormatEntry> m_entries;
+    QDict<KoAutoFormatEntry> m_allLanguages;
 
     KoAutoFormatEntryMap m_superScriptEntries;
 

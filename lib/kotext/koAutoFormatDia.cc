@@ -501,7 +501,9 @@ void KoAutoFormatDia::setupTab3()
 
     QStringList lst;
     lst<<i18n("Default");
+    lst<<i18n("All Languages");
     exceptionLanguageName.insert( i18n("Default"), "");
+    exceptionLanguageName.insert( i18n("All Languages"), "all_languages");
 
     KStandardDirs *standard = new KStandardDirs();
     QStringList tmp = standard->findDirs("data", "koffice/autocorrect/");
@@ -690,7 +692,6 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
     {
         m_docAutoFormat->configAutoFormatLanguage( exceptionLanguageName.find(text).data());
     }
-
     if ( !noSignal )
     {
         changeLanguage=true;

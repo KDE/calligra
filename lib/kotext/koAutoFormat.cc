@@ -115,6 +115,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_typographicDefaultSimpleQuotes(),
       m_listCompletion( new KCompletion ),
       m_entries(),
+      m_allLanguages(),
       m_superScriptEntries(),
       m_upperCaseExceptions(),
       m_twoUpperLetterException(),
@@ -163,6 +164,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_typographicDefaultSimpleQuotes( format.m_typographicDefaultSimpleQuotes),
       m_listCompletion( 0L ), // don't copy it!
       m_entries( ),//don't copy it.
+      m_allLanguages(), //don't copy it
       m_superScriptEntries ( format.m_superScriptEntries ),
       m_upperCaseExceptions( format.m_upperCaseExceptions ),
       m_twoUpperLetterException( format.m_twoUpperLetterException ),
@@ -181,6 +183,8 @@ KoAutoFormat::~KoAutoFormat()
     delete m_listCompletion;
     m_entries.setAutoDelete( true );
     m_entries.clear();
+    m_allLanguages.setAutoDelete( true );
+    m_allLanguages.clear();
 }
 
 void KoAutoFormat::loadListOfWordCompletion()
@@ -251,6 +255,9 @@ void KoAutoFormat::readConfig(bool force)
         m_entries.setAutoDelete(true);
         m_entries.clear();
         m_entries.setAutoDelete(false);
+        m_allLanguages.setAutoDelete(true);
+        m_allLanguages.clear();
+        m_allLanguages.setAutoDelete(false);
         m_upperCaseExceptions.clear();
         m_superScriptEntries.clear();
         m_twoUpperLetterException.clear();
@@ -263,9 +270,10 @@ void KoAutoFormat::readConfig(bool force)
     bool fileNotFound = false;
     QFile xmlFile;
     KLocale klocale(m_doc->instance()->instanceName());
-
+    kdDebug()<<"m_autoFormatLanguage :"<<m_autoFormatLanguage<<endl;
     if ( m_autoFormatLanguage.isEmpty() )
     {
+        kdDebug()<<"klocale.languageList().front() :"<<klocale.languageList().front()<<endl;
         xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
         if(!xmlFile.open(IO_ReadOnly)) {
             xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
@@ -279,14 +287,16 @@ void KoAutoFormat::readConfig(bool force)
         xmlFile.setName(locate( "data", "koffice/autocorrect/" + m_autoFormatLanguage + ".xml", m_doc->instance() ));
         if(!xmlFile.open(IO_ReadOnly))
         {
-            xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
-            if(!xmlFile.open(IO_ReadOnly)) {
-                xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
+            if ( m_autoFormatLanguage!="all_languages" )
+            {
+                xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
                 if(!xmlFile.open(IO_ReadOnly)) {
-                    fileNotFound = true;
+                    xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
+                    if(!xmlFile.open(IO_ReadOnly)) {
+                        fileNotFound = true;
+                    }
                 }
             }
-
         }
     }
 
@@ -299,15 +309,8 @@ void KoAutoFormat::readConfig(bool force)
             //return;
         }
         QDomElement de=doc.documentElement();
-        QDomElement item = de.namedItem( "items" ).toElement();
-        if(!item.isNull())
-        {
-            QDomNodeList nl = item.childNodes();
-            m_maxFindLength=nl.count();
-            for(uint i = 0; i < m_maxFindLength; i++) {
-                loadEntry( nl.item(i).toElement());
-            }
-        }
+
+        loadAutoCorrection( de );
 
         QDomElement upper = de.namedItem( "UpperCaseExceptions" ).toElement();
         if(!upper.isNull())
@@ -421,12 +424,46 @@ void KoAutoFormat::readConfig(bool force)
 
 
     xmlFile.close();
+    loadAllLanguagesAutoCorrection();
     buildMaxLen();
     autoFormatIsActive();
     m_configRead = true;
 }
 
-void KoAutoFormat::loadEntry( const QDomElement &nl)
+void KoAutoFormat::loadAllLanguagesAutoCorrection()
+{
+    QFile xmlFile;
+    xmlFile.setName(locate( "data", "koffice/autocorrect/all_languages.xml", m_doc->instance() ));
+    if(xmlFile.open(IO_ReadOnly))
+    {
+        QDomDocument doc;
+        if(!doc.setContent(&xmlFile)) {
+            //return;
+        }
+        if(doc.doctype().name() != "autocorrection") {
+            //return;
+        }
+        QDomElement de=doc.documentElement();
+
+        loadAutoCorrection( de, true );
+        xmlFile.close();
+    }
+}
+
+void KoAutoFormat::loadAutoCorrection( const QDomElement & _de, bool _allLanguages )
+{
+    QDomElement item = _de.namedItem( "items" ).toElement();
+    if(!item.isNull())
+    {
+        QDomNodeList nl = item.childNodes();
+        m_maxFindLength=nl.count();
+        for(uint i = 0; i < m_maxFindLength; i++) {
+            loadEntry( nl.item(i).toElement(), _allLanguages);
+        }
+    }
+}
+
+void KoAutoFormat::loadEntry( const QDomElement &nl, bool _allLanguages)
 {
     KoAutoFormatEntry *tmp =new KoAutoFormatEntry(nl.attribute("replace"));
     if ( nl.hasAttribute("FONT"))
@@ -507,7 +544,11 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
         QColor col( nl.attribute("TEXTBGCOLOR" ));
         tmp->formatEntryContext()->m_backGroundColor = col;
     }
-    m_entries.insert( nl.attribute("find"), tmp );
+    if ( !_allLanguages )
+        m_entries.insert( nl.attribute("find"), tmp );
+    else
+        m_allLanguages.insert( nl.attribute("find"), tmp );
+
 }
 
 void KoAutoFormat::saveConfig()
@@ -573,8 +614,9 @@ void KoAutoFormat::saveConfig()
     for ( ; it.current() ; ++it )
     {
 	items.appendChild(saveEntry( it, doc));
-        m_maxFindLength=QMAX(m_maxFindLength,it.currentKey().length());
+        //m_maxFindLength=QMAX(m_maxFindLength,it.currentKey().length());
     }
+    buildMaxLen();
     begin.appendChild(items);
 
     QDomElement upper;
@@ -843,7 +885,8 @@ void KoAutoFormat::autoFormatIsActive()
                           m_completion ||
                           m_typographicDoubleQuotes.replace ||
                           m_typographicSimpleQuotes.replace ||
-       m_entries.count()!=0;
+                          m_entries.count()!=0 ||
+                          m_allLanguages.count()!=0;
 }
 
 void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj )
@@ -1009,6 +1052,16 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 break;
         }
     }
+    KCommand *cmd = autoFormatWord( textEditCursor, parag, index, txtObj, wordArray, false );
+    if ( !cmd )
+        cmd = autoFormatWord( textEditCursor, parag, index, txtObj, wordArray, true );
+    delete [] wordArray;
+    return cmd;
+}
+
+
+KCommand *KoAutoFormat::autoFormatWord( KoTextCursor* textEditCursor, KoTextParag *parag, int &index, KoTextObject *txtObj, QString * _wordArray, bool _allLanguages )
+{
     KoTextDocument * textdoc = parag->textDocument();
 
     // Now for each entry in the autocorrect list, look if
@@ -1016,12 +1069,16 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
     // This allows an o(n) behaviour instead of an o(n^2).
     for(int i=m_maxFindLength;i>0;--i)
     {
-        if ( !wordArray[i].isEmpty())
+        if ( !_wordArray[i].isEmpty())
         {
-            KoAutoFormatEntry* it = m_entries[wordArray[i].lower()];
-            if ( wordArray[i]!=0  && it )
+            KoAutoFormatEntry* it = 0L;
+            if ( _allLanguages )
+                it = m_allLanguages[_wordArray[i].lower()];
+            else
+                it = m_entries[_wordArray[i].lower()];
+            if ( _wordArray[i]!=0  && it )
             {
-                unsigned int length = wordArray[i].length();
+                unsigned int length = _wordArray[i].length();
                 int start = index - length;
                 KoTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
@@ -1030,6 +1087,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 cursor.setIndex( start + length );
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
                 KCommand *cmd = 0L;
+                kdDebug()<<"it->replace() :"<<it->replace()<<endl;
                 if (!it->formatEntryContext() || !m_bAutoCorrectionWithFormat)
                     cmd = txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
                                                            KoTextObject::HighlightSelection,
@@ -1063,13 +1121,11 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 txtObj->emitHideCursor();
                 textEditCursor->gotoRight();
                 txtObj->emitShowCursor();
-                delete [] wordArray;
                 index = index - length + it->replace().length();
                 return cmd;
             }
         }
     }
-    delete [] wordArray;
     return 0L;
 }
 
@@ -1832,10 +1888,16 @@ bool KoAutoFormat::isSeparator( const QChar &c )
 void KoAutoFormat::buildMaxLen()
 {
     m_maxFindLength = 0;
-
     QDictIterator<KoAutoFormatEntry> it( m_entries );
     for( ; it.current(); ++it )
+    {
 	m_maxFindLength = QMAX( m_maxFindLength, it.currentKey().length() );
+    }
+    QDictIterator<KoAutoFormatEntry> it2( m_allLanguages );
+    for( ; it2.current(); ++it2 )
+    {
+	m_maxFindLength = QMAX( m_maxFindLength, it2.currentKey().length() );
+    }
 }
 
 QStringList KoAutoFormat::listCompletion() const
