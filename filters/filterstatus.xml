@@ -168,7 +168,7 @@
                 <note xml:lang="en_us">Palm documents</note>
                 <stat import="fivestars" export="fivestars"/>
             </filter>
-            <filter id="kword_ascii" webcvspath="koffice/filters/kword/ascii">
+            <filter id="kword_plaintext" webcvspath="koffice/filters/kword/ascii">
                 <title xml:lang="en_us">Plain text</title>
                 <stat import="fivestars" export="fivestars"/>
             </filter>
