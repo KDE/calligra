@@ -26,6 +26,7 @@
 #include "kostyle.h"
 #include <klocale.h>
 #include <kdebug.h>
+#include <assert.h>
 #include "koFontDia.h"
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
