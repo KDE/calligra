@@ -25,7 +25,8 @@
 ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
 {
   m_pColorButton = new KDualColorButton(this);
-  m_pColorButton->setGeometry(3, 20, 40, 40);
+  resize(60, 62);
+  m_pColorButton->setGeometry(10, 18, 40, 40);
 }
 
 ColorDialog::~ColorDialog() {}

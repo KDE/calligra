@@ -23,8 +23,11 @@
 
 #include <qpoint.h>
 #include <qframe.h>
+#include <qpushbutton.h>
 
 #define TITLE_HEIGHT 18
+#define MIN_HEIGHT 18
+#define MIN_WIDTH 60
 #define GRADIENT_HEIGHT 14
 #define FRAMEBORDER 2
 
@@ -67,7 +70,8 @@ class KFloatingDialog : public QFrame
   int      m_unshadedHeight;
   int      m_resizeMode;
 
-  QWidget  *m_pParent;
+  QWidget     *m_pParent;
+  QPushButton *m_pCloseButton, *m_pDockButton, *m_pMinButton;
 };
 
 #endif

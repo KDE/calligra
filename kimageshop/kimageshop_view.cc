@@ -339,7 +339,6 @@ void KImageShopView::createGUI()
 
   m_pColorDialog = new ColorDialog(m_pCanvasView);
   m_pColorDialog->move(100, 100);
-  m_pColorDialog->resize(46,63);
   m_pColorDialog->show();
   
   // setup GUI

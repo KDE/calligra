@@ -19,12 +19,16 @@
  */
 
 #include <qcursor.h>
-#include <kpixmap.h>
 #include <qpainter.h>
 #include <qrect.h>
+#include <qwindowsstyle.h>
+
+#include <kglobal.h>
+#include <kstddirs.h>
+#include <kpixmap.h>
 #include <kpixmapeffect.h>
-#include <kapp.h>
 #include <kdebug.h>
+#include <kapp.h>
 
 #include "kfloatingdialog.h"
 
@@ -39,22 +43,39 @@ KFloatingDialog::KFloatingDialog(QWidget *parent) : QFrame(parent)
   setMouseTracking(true);
   setFrameStyle(QFrame::Panel | QFrame::Raised);
   setLineWidth(FRAMEBORDER);
+
+  m_pCloseButton = new QPushButton(this);
+  QPixmap close_pm(locate("data", "kimageshop/pics/close.xpm"));
+  m_pCloseButton->setPixmap(close_pm);
+  m_pCloseButton->setStyle(new QWindowsStyle);
+  m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
+
+  m_pMinButton = new QPushButton(this);
+  QPixmap min_pm(locate("data", "kimageshop/pics/minimize.xpm"));
+  m_pMinButton->setPixmap(min_pm);
+  m_pMinButton->setStyle(new QWindowsStyle);
+  m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
+
+  m_pDockButton = new QPushButton(this);
+  QPixmap dock_pm(locate("data", "kimageshop/pics/dock.xpm"));
+  m_pDockButton->setPixmap(dock_pm);
+  m_pDockButton->setStyle(new QWindowsStyle);
+  m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
+
 }
 KFloatingDialog::~KFloatingDialog() {}
 
 void KFloatingDialog::paintEvent(QPaintEvent *e)
 {
-  QPainter p;
-  p.begin(this);
-
   KPixmap pm;
+
   pm.resize(_width(), GRADIENT_HEIGHT);
   QRect gradient(FRAMEBORDER, FRAMEBORDER, _width(), GRADIENT_HEIGHT);
 
   KPixmapEffect::gradient(pm, Qt::blue, Qt::black, KPixmapEffect::HorizontalGradient);
   
+  QPainter p(this);
   p.drawPixmap(FRAMEBORDER, FRAMEBORDER, pm);
-  p.end();
 
   QFrame::paintEvent(e);
 }
@@ -147,6 +168,12 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 
 	  QPoint newSize = QPoint(width(), height()) - dist;
 
+	  if (newSize.x() < MIN_WIDTH)
+		newSize.setX(MIN_WIDTH);
+
+	  if (newSize.y() < MIN_HEIGHT)
+		newSize.setY(MIN_HEIGHT);
+
       if(m_shaded)
 		newSize.setY(height());
       
@@ -154,7 +181,7 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
       m_start = e->globalPos();
     }
 				  
-  if (bottomRect().contains(e->pos()))
+  if (bottomRect().contains(e->pos()) && !m_shaded)
 	{
 	  if (!QApplication::overrideCursor() || QApplication::overrideCursor()->shape() != SizeVerCursor)
 		{
@@ -174,7 +201,7 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 		}
 	  m_cursor = true;
 	}
-  else if (lowerRightRect().contains(e->pos()))
+  else if (lowerRightRect().contains(e->pos()) && !m_shaded)
 	{
 	  if (!QApplication::overrideCursor() || QApplication::overrideCursor()->shape() != SizeFDiagCursor)
 		{
@@ -202,7 +229,9 @@ void KFloatingDialog::mouseReleaseEvent(QMouseEvent *e)
 
 void KFloatingDialog::resizeEvent(QResizeEvent *e)
 {
-  kdebug(KDEBUG_INFO, 0, "ColorDialog::resizeEvent");
+  m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
+  m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
+  m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
 }
 
 void  KFloatingDialog::leaveEvent(QEvent *)
