@@ -151,7 +151,7 @@ public:
     /// By default the whole paragraph is saved. from/to allow to save only a portion of it.
     /// The 'from' and 'to' characters are both included.
     void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
-                    int from = 0, int to = -1, bool saveAnchorsFramesets = false ) const;
+                    int from, int to, bool saveAnchorsFramesets = false ) const;
 
     void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
 

@@ -742,7 +742,7 @@ QString KoTextDocument::copySelection( KoXmlWriter& writer, KoSavingContext& con
             p = p->next();
         }
         text += c2.parag()->toString( 0, c2.index() );
-        c2.parag()->saveOasis( writer, context, 0, QMAX( 0, c2.index() - 1 ), true );
+        c2.parag()->saveOasis( writer, context, 0, c2.index() - 1, true );
     }
     return text;
 }
@@ -1642,7 +1642,8 @@ void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
 {
     KoTextParag* parag = firstParag();
     while ( parag ) {
-        parag->saveOasis( writer, context );
+        // Save the whole parag, without the trailing space.
+        parag->saveOasis( writer, context, 0, parag->length() - 2 );
         parag = parag->next();
     }
 }

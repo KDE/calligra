@@ -1811,7 +1811,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 }
 
 void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
-                             int from /* default 0 */, int to /* default -1 i.e. length()-2 */,
+                             int from /* default 0 */, int to /* usually length()-2 */,
                              bool saveAnchorsFramesets /* default false */ ) const
 {
     KoGenStyles& mainStyles = context.mainStyles();
@@ -1856,11 +1856,6 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         writer.endElement();
     }
 
-    if ( to == -1 ) {
-        // Save the whole parag. If length() == 1 (only trailing space),
-        // then to will be set to -1, and we'll save no characters, as intended.
-        to = length() - 2;
-    }
     QString text = string()->toString();
     Q_ASSERT( text.right(1)[0] == ' ' );
 
@@ -1886,6 +1881,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     // Once we have a span, we need to keep using them. Otherwise we might generate
     // <text:span>foo</text:span> <text:span>bar</text:span> and lose the space between
     // the two spans.
+    // ###### The above isn't true anymore, with the report-whitespace-only setting...
     for ( int i = from; i <= to; ++i ) {
         KoTextStringChar & ch = string()->at(i);
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
@@ -1904,7 +1900,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     //kdDebug() << k_funcinfo << "startPos=" << startPos << " to=" << to << " curFormat=" << curFormat << endl;
 
-    if ( to > startPos ) { // Save last format
+    if ( to >= startPos ) { // Save last format
         WRITESPAN( to + 1 )
     }
 
