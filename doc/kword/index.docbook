@@ -286,11 +286,11 @@ comments are stored in the &kword; file, and can be changed or deleted easily.</
 <listitem><para>&kword; can create PDF files.</para></listitem>
 
 <listitem>
-<para>You can edit one document from multiple views.  This allows you to have several windows open on <emphasis>one document
-</emphasis>.  Edits in one window are immediately updated in the other window.</para>
+<para>You can edit one document from multiple views.  This allows you to have several windows open on 
+<emphasis>one document</emphasis>.  Edits in one window are immediately updated in the other window.</para>
 </listitem>
 <listitem>
-<para>&kword; can surround your frames with borders and you can set the background color of each frame separately if you want..</para>
+<para>&kword; can surround your frames with borders and you can set the background color of each frame separately if you want.</para>
 </listitem>
 
 </itemizedlist>
@@ -316,11 +316,11 @@ the previous sections of the manual to find the instructions
 useful.</para>
 
 <para>To help determine what
-should read before starting to work with &kword;, a suggested
+should be read before starting to work with &kword;, a suggested
 reading list for three levels of users is given below.</para>
 
 <para>If each of these sections is read <emphasis>before</emphasis>
- staring to use &kword;, using &kword; will be easier.</para>
+ starting to use &kword;, using &kword; will be easier.</para>
 
 <informaltable>
 <tgroup cols="3">
@@ -374,7 +374,7 @@ or <application>Applixware</application>.)</entry>
 <para>These sections will help with the basic information. As other specific questions or situations arise, the
 other sections of this manual can be used as a reference.</para>
 
-<para>Obviously this will not cover everyones needs.  Please use it as a guide to help
+<para>Obviously this will not cover everyone's needs.  Please use it as a guide to help
 determine which parts of the manual will be helpful to read before you begin using &kword;.</para>
 
 </sect1>
@@ -398,7 +398,7 @@ blocks of text (frames, then paragraphs, then characters). At each level, all of
 layout options will be explained.</para>
 
 <para>After discussing the formatting of individual characters, the manual will elaborate on styles
-(to provide consistant formatting through the document), lists, multi-column documents, tables and finally the use of headers
+(to provide consistent formatting through the document), lists, multi-column documents, tables and finally the use of headers
 and footers in a document.</para>
 
 <para>The final part will show you how to save a document as a template for future documents.</para>
@@ -425,7 +425,7 @@ insert other types of &koffice; data into a document.</para>
 <sect1 id="documentinfo"><title>Entering Document information </title>
 <indexterm><primary>document information</primary></indexterm>
 <para>&kword; can store information about the author and the document in the same file as the text and data of the document.</para>
-<para>Entering this information into &kword;, you can do two things:</para>
+<para>Entering this information into &kword; has two potential benefits:</para>
 <orderedlist>
 <listitem><para>This information will always be available for reference.  This is especially important in situations where
 there are many possible authors (employees) and hundreds (or thousands) of documents.</para></listitem>
@@ -435,7 +435,7 @@ there are many possible authors (employees) and hundreds (or thousands) of docum
 <para>To enter document information, simply select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Document Information...</guimenuitem>
 </menuchoice> from the menubar.  This will bring up a dialog box with two tabs.</para>
-<para>The first tab is labled <guilabel>Author</guilabel> and has blanks to enter the authors name, title, company and contact
+<para>The first tab is labeled <guilabel>Author</guilabel> and has blanks to enter the authors name, title, company and contact
 information (email address, telephone numbers and physical address).</para>
 <tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
@@ -445,7 +445,7 @@ on this button will automatically insert your information contained in the KDE a
 <para>To do this, open the KDE addressbook, select the entry that contains your name and address.  Now select <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the KDE addressbook. This only needs to be performed once.</para>
 <para>&kword; will now insert the entered information when the <guibutton>Load from Address Book</guibutton> button is clicked.</para></note>
-<para>The second tab is labled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
+<para>The second tab is labeled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
 <tip><para>Both the document title and the abstract can be accessed through
 <link linkend="variables">document variables</link>.</para></tip>
 <para>When finished entering the information, click <guibutton>OK</guibutton> to apply the changes.
@@ -522,14 +522,14 @@ from the menubar.</para></listitem>
 <listitem><para>Click the <guibutton>Center</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
  
 <listitem><para>Click the <guibutton>New</guibutton> button again.</para></listitem>
-<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly slightly less than the frame width.  The frame width is
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is slightly less than the frame width.  The frame width is
  listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
 <listitem><para>Click the <guibutton>Right</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
 
 <listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
 <listitem><para>Click in the header again with the &LMB;.</para></listitem>
 <listitem><para>Type the Tab Key.  This will move the cursor to the center of the header.</para></listitem>
-<listitem><para>Select Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
 <guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Type the Tab key again.  This will move the cursor near the right margin of the header.</para></listitem>
@@ -576,7 +576,7 @@ headers in your document.</para>
 <listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>
 from the menubar.</para>
 <para>This will bring up the print dialog.</para></listitem>
-<listitem><para>In the combo box labled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF)</guilabel></para></listitem>
+<listitem><para>In the combo box labeled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF)</guilabel></para></listitem>
 <listitem><para>Enter your desired filename in the <guilabel>Output file:</guilabel> text box.</para></listitem>
 <listitem><para>If you wish to make any changes to the PDF formatting, select <guibutton>Properties</guibutton>.</para>
 <para>A complete explanation to all these properties, is beyond the scope of this document.</para></listitem>
@@ -698,7 +698,7 @@ the best way to do this ?</para>
 </question>
 <answer>
 <para>What you and your friend need to do is agree on a file format that both word processors
-can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</link> is probably a good choice.</para>
+can read and write effectively.  <link linkend="filters-rtf">Rich Text Format</link> is probably a good choice.</para>
 </answer>
 </qandaentry>
 
@@ -844,7 +844,7 @@ the QT toolkit compiled with SQL support.  To add SQL support (as a plugin), sim
 <title>&kword; Command Line Options</title>
 <indexterm><primary>&kword;</primary><secondary>command line options</secondary></indexterm>
 
-<para>You can specify some initial actions for &kword;.  The two most
+<para>You can specify some initial actions for &kword;.  The most
 commonly used options are discussed below with instructions on finding
 help on the rest of the command line options.</para>
 
@@ -919,7 +919,7 @@ attempt.</para>
 
 <para>When &kword; reads data <emphasis>into</emphasis>
 &kword; from a non-&koffice; file format, it is
-<emphasis>importing</emphasis> the data</para>
+<emphasis>importing</emphasis> the data.</para>
 
 
 <para>When &kword; saves a &kword; document as a non-&koffice;
@@ -1025,8 +1025,8 @@ supported.</para>
 
 <para>&kword; cannot import LaTeX documents.</para>
 
-<para>&kword; can export to text to LaTeX documents.  Formulas, pictures, and simple tables are partially supported.  </para>
-<para>Kword is used only as a text editor and does not function as a WYSIWYG editor for LaTeX documents. </para>
+<para>&kword; can export text to LaTeX documents.  Formulas, pictures, and simple tables are partially supported.  </para>
+<para>&kword; is used only as a text editor and does not function as a WYSIWYG editor for LaTeX documents. </para>
 
 <para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/latex.phtml">LaTeX filter table</ulink></para>
@@ -1035,7 +1035,7 @@ supported.</para>
 <sect2 id="filters-msword97"><title>&Microsoft; Word 97/2000</title>
 
 <para>&kword; can read all text from &Microsoft; Word files.  Basic text formatting
-(bold, italics, etc) are preserved.  Numbered headings, lists, built-in colors, tables, and internationalization support
+(bold, italics, etc) is preserved.  Numbered headings, lists, built-in colors, tables, and internationalization support
 are nearly complete.</para>
 
 <para>Many other features (headers, footers, embedded objects, etc) are not supported.</para>
@@ -1100,7 +1100,7 @@ encoding options.</para>
 content to mobile devices. WML is like a mobile
 version of HTML.</para>
 
-<para>&kword; can read from and save to WML format files and already understand most WML
+<para>&kword; can read from and save to WML format files and already understands most WML
 tags.</para>
 
 <para>There is no support for WBMP (Wireless Bitmap), which is the
@@ -1191,8 +1191,8 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
 <tgroup cols="2"><tbody>
 <row><entry>Move selection one character to the left.</entry><entry><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
 <row><entry>Move selection one word to the left.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
-<row><entry>Move selection one character to the Right.</entry><entry><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
-<row><entry>Move selection one word to the Right.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one character to the right.</entry><entry><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one word to the right.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
 
 <row><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry><entry><keycombo action="simul">&Shift;<keycap>Up Arrow</keycap></keycombo></entry></row>
 <row><entry>Selects all characters from the start of the selection, to the first character of the line directly above.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Up Arrow</keycap></keycombo></entry></row>
@@ -1212,7 +1212,7 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
 
 <row><entry>Moves the current endpoint down one screen.</entry><entry><keycombo action="simul">&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
 
-<row><entry>Moves the current endpoint down one page.  The endpoint is locate at the first character of this page.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
+<row><entry>Moves the current endpoint down one page.  The endpoint is located at the first character of this page.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
 <row><entry>Select all text in the current frame.</entry><entry><keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo></entry></row>
 
 </tbody>
@@ -1472,10 +1472,10 @@ action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 
 &techstuff;
 <sect1 id="mimetype">
-<title>Kword mimetype</title>
-<indexterm><primary>&kword;</primary><secondary>mimetypes</secondary></indexterm>
+<title>Kword MIME types</title>
+<indexterm><primary>&kword;</primary><secondary>MIME types</secondary></indexterm>
 
-<para>The &kword; mime type is :  application/x-kword</para>
+<para>The &kword; MIME type is :  application/x-kword</para>
 </sect1>
 </appendix>
 
@@ -1503,8 +1503,10 @@ distortion to the picture.</para>
 <para>Binary code is the actual instructions for the computer. So if we
 refer to <emphasis>binaries</emphasis> we mean the executable &kword;
 program.  While computers have no difficulties reading binary files,
-they are not easily understood by people.  Compare to <glossterm
-linkend="defsourcecode">Source Code</glossterm>.</para>
+they are not easily understood by people.  Compare this distribution method to <glossterm
+linkend="defsourcecode">Source Code</glossterm>. For more information on compiling &kword;, see
+the section entitled <link
+linkend="installation">Installation</link></para>
 </glossdef>
 </glossentry>
 
@@ -1516,8 +1518,7 @@ file is very good for photographs and complex drawings. The downside of
 using bitmap images, is that when you change the size of the image on
 the page, there is a loss of detail. The file names of such pictures
 often end in <emphasis>jpeg</emphasis>, <emphasis>png</emphasis> or
-<emphasis>gif</emphasis>. Compare to <glossterm
-linkend="defclipart">Clipart</glossterm>.</para>
+<emphasis>gif</emphasis>. </para>
 </glossdef>
 </glossentry>
 
@@ -1526,21 +1527,6 @@ linkend="defclipart">Clipart</glossterm>.</para>
 <glossdef>
 <para>Tables are made up of rows and columns of cells.  Each cell is
 defined by a combination of the row and column of a heading.</para>
-</glossdef>
-</glossentry>
-
-<glossentry id="defclipart">
-<glossterm>Clipart</glossterm>
-<glossdef>
-<para>Clip art refers to vector based graphics. These graphic files
-describe the picture as a collection of lines, curves and dots.  These
-file formats are preferable to bit-mapped images, because their size can
-be made larger or smaller, without any loss in quality. The downside of
-vector formats, is that it can be quite difficult to describe certain
-types of photographs using only lines and curves.  These images result in
-difficult, complicated files and most of the benefits of vector formats
-are lost.  Compare to <glossterm linkend="defbitmap">Bitmap
-images</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1562,11 +1548,14 @@ section on <link linkend="clipboard">Cut/Copy/Paste</link>.</para>
 <glossdef>
 <para>When you compile a program, you are converting it from
 a source file (which is easily edited by a programmer) into a binary
-file (which the computer uses). If you are planning on compiling &kword;,
-please try to find a binary version of &koffice; first. Compiling programs
-is not for the beginner. For more information on compiling &kword;, see
-the section entitled <link
-linkend="installation">Installation</link></para></glossdef>
+file (which the computer uses). Compare this distribution method to <glossterm
+linkend="defbinarycode">Binary Code</glossterm>.</para>  
+<para>Compiling programs
+is not as easy as installing binary versions. Users who are only interested in 
+using &kword; are encouraged to find a binary version of &kword; for their computer.  For 
+users who want to learn more about programming, more information on compiling &kword; is 
+available in the section entitled <link
+linkend="installation">Installation</link>.</para></glossdef>
 </glossentry>
 
 <glossentry id="defcustomvariables">
@@ -1737,7 +1726,7 @@ Web.</para>
 </glossentry>
 
 <glossentry id="defhue">
-<glossterm><acronym>Hue</acronym></glossterm>
+<glossterm>Hue</glossterm>
 <glossdef>
 <para>Hue is a more technically correct term for what we generally refer to as <emphasis>color</emphasis>.</para>
 <para>Examples of hues include red, green, blue and purple.</para>
@@ -1937,9 +1926,8 @@ fileref="value.png" format="PNG"/></imageobject></inlinemediaobject></para>
 <glossterm>Vector Image</glossterm>
 <glossdef>
 <para>A vector based graphic is described in terms of lines and shapes,
-not in terms of dots.  These files are often referred to as <glossterm
-linkend="defclipart">clip-art</glossterm>. Because of this, clipart usually
-scales better than bit-mapped images. </para>
+not in terms of dots.  These files 
+scale better than bit-mapped images. </para>
 </glossdef>
 </glossentry>
 
