@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -50,10 +51,6 @@
 #include <kprcommand.h>
 #include <kdeversion.h>
 
-/******************************************************************/
-/* class Pen and Brush preview					  */
-/******************************************************************/
-
 PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
     : QFrame( parent, name )
 {
@@ -94,37 +91,36 @@ void PBPreview::drawContents( QPainter *painter )
     if ( paintType == Pen ) {
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
                            colorGroup().base() );
-	KoSize diff1( 0, 0 ), diff2( 0, 0 );
+        KoSize diff1( 0, 0 ), diff2( 0, 0 );
         int _w = pen.width();
 
-	if ( lineBegin != L_NORMAL )
-	    diff1 = getOffset( lineBegin, _w, + 180.0 );
+        if ( lineBegin != L_NORMAL )
+            diff1 = getOffset( lineBegin, _w, + 180.0 );
 
-	if ( lineEnd != L_NORMAL )
-	    diff2 = getOffset( lineEnd, _w, 0 );
+        if ( lineEnd != L_NORMAL )
+            diff2 = getOffset( lineEnd, _w, 0 );
 
-	if ( lineBegin != L_NORMAL )
-	    drawFigure( lineBegin, painter, KoPoint( 5, _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
-			pen.color(), _w, 180.0, _zoomHandler );
+        if ( lineBegin != L_NORMAL )
+            drawFigure( lineBegin, painter, KoPoint( 5, _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
+                        pen.color(), _w, 180.0, _zoomHandler );
 
-	if ( lineEnd != L_NORMAL )
-	    drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX( contentsRect().width() - 7 ) ,
-                                               _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
-                    pen.color(), _w, 0.0, _zoomHandler );
+        if ( lineEnd != L_NORMAL )
+            drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX( contentsRect().width() - 7 ) ,
+                                                   _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
+                        pen.color(), _w, 0.0, _zoomHandler );
 
-	painter->setPen( pen );
-	painter->drawLine( - (int)diff1.width() + 8,
-                       contentsRect().height() / 2,
-                       contentsRect().width() - (int)diff2.width() - 7,
-                       contentsRect().height() / 2 );
+        painter->setPen( pen );
+        painter->drawLine( - (int)diff1.width() + 8,
+                           contentsRect().height() / 2,
+                           contentsRect().width() - (int)diff2.width() - 7,
+                           contentsRect().height() / 2 );
 
     } else if ( paintType == Brush ) {
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
                            colorGroup().base() );
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
-    } else if ( paintType == Gradient && gradient ) {
+    } else if ( paintType == Gradient && gradient )
         painter->drawPixmap( 0, 0, gradient->pixmap());
-    }
 
     painter->restore();
 }
@@ -133,10 +129,6 @@ PBPreview::~PBPreview()
 {
     delete _zoomHandler;
 }
-
-/******************************************************************/
-/* class ConfPenDia                                               */
-/******************************************************************/
 
 ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     : QWidget( parent, name ), m_flags(flags), m_bLineBeginChanged(false), m_bLineEndChanged(false),
@@ -219,12 +211,10 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clineEnd->insertItem( i18n("Double Arrow") );
     clineEnd->insertItem( i18n("Double Line Arrow") );
     connect( clineEnd, SIGNAL( activated( int ) ),
-	     this, SLOT( slotLineEndChanged() ) );
+             this, SLOT( slotLineEndChanged() ) );
 
     if ( !(m_flags & StyleDia::SdEndBeginLine) )
-    {
         grp->setEnabled(false);
-    }
 
     //hack for better layout
     l = new QLabel( " ", right );
@@ -384,10 +374,6 @@ void ConfPenDia::slotLineEndChanged()
     penPrev->setLineEnd(getLineEnd());
 }
 
-/******************************************************************/
-/* class ConfBrushDia                                             */
-/******************************************************************/
-
 ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     : QWidget( parent, name ), m_bBrushColorChanged(false), m_bBrushStyleChanged(false),
       m_bFillTypeChanged(false), m_bGColor1Changed(false), m_bGColor2Changed(false),
@@ -409,13 +395,13 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
         cFillType->insertItem( i18n( "Gradient" ) );
 
     connect( cFillType, SIGNAL( activated( int ) ),
-	     this, SLOT( slotFillTypeChanged() ) );
+             this, SLOT( slotFillTypeChanged() ) );
 
     (void)new QWidget( left );
 
     stack = new QWidgetStack( left );
     connect( cFillType, SIGNAL( activated( int ) ),
-	     stack, SLOT( raiseWidget( int ) ) );
+             stack, SLOT( raiseWidget( int ) ) );
 
     QVBox *brushConfig = new QVBox( stack );
     brushConfig->setSpacing( 5 );
@@ -428,7 +414,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
                                    Qt::white,
                                    brushConfig );
     connect( chooseBCol, SIGNAL( changed( const QColor & ) ),
-	     this, SLOT( slotBrushColorChanged() ) );
+             this, SLOT( slotBrushColorChanged() ) );
 
     l = new QLabel( i18n( "Brush style:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
@@ -470,12 +456,12 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     l->setFixedHeight( l->sizeHint().height() );
 
     gradient1 = new KColorButton( red,
-                                   red,
+                                  red,
                                   gradientConfig );
     connect( gradient1, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotGColor1Changed() ) );
     gradient2 = new KColorButton( green,
-                                   green,
+                                  green,
                                   gradientConfig );
     connect( gradient2, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotGColor2Changed() ) );
@@ -536,38 +522,38 @@ void ConfBrushDia::setBrush( const QBrush &_brush )
 {
     oldBrush =_brush;
     switch ( _brush.style() ) {
-        case NoBrush: chooseBStyle->setCurrentItem( 0 );
-            break;
-        case SolidPattern: chooseBStyle->setCurrentItem( 1 );
-            break;
-        case Dense1Pattern: chooseBStyle->setCurrentItem( 2 );
-            break;
-        case Dense2Pattern: chooseBStyle->setCurrentItem( 3 );
-            break;
-        case Dense3Pattern: chooseBStyle->setCurrentItem( 4 );
-            break;
-        case Dense4Pattern: chooseBStyle->setCurrentItem( 5 );
-            break;
-        case Dense5Pattern: chooseBStyle->setCurrentItem( 6 );
-            break;
-        case Dense6Pattern: chooseBStyle->setCurrentItem( 7 );
-            break;
-        case Dense7Pattern: chooseBStyle->setCurrentItem( 8 );
-            break;
-        case HorPattern: chooseBStyle->setCurrentItem( 9 );
-            break;
-        case VerPattern: chooseBStyle->setCurrentItem( 10 );
-            break;
-        case CrossPattern: chooseBStyle->setCurrentItem( 11 );
-            break;
-        case BDiagPattern: chooseBStyle->setCurrentItem( 12 );
-            break;
-        case FDiagPattern: chooseBStyle->setCurrentItem( 13 );
-            break;
-        case DiagCrossPattern: chooseBStyle->setCurrentItem( 14 );
-            break;
-        case CustomPattern:
-            break;
+    case NoBrush: chooseBStyle->setCurrentItem( 0 );
+        break;
+    case SolidPattern: chooseBStyle->setCurrentItem( 1 );
+        break;
+    case Dense1Pattern: chooseBStyle->setCurrentItem( 2 );
+        break;
+    case Dense2Pattern: chooseBStyle->setCurrentItem( 3 );
+        break;
+    case Dense3Pattern: chooseBStyle->setCurrentItem( 4 );
+        break;
+    case Dense4Pattern: chooseBStyle->setCurrentItem( 5 );
+        break;
+    case Dense5Pattern: chooseBStyle->setCurrentItem( 6 );
+        break;
+    case Dense6Pattern: chooseBStyle->setCurrentItem( 7 );
+        break;
+    case Dense7Pattern: chooseBStyle->setCurrentItem( 8 );
+        break;
+    case HorPattern: chooseBStyle->setCurrentItem( 9 );
+        break;
+    case VerPattern: chooseBStyle->setCurrentItem( 10 );
+        break;
+    case CrossPattern: chooseBStyle->setCurrentItem( 11 );
+        break;
+    case BDiagPattern: chooseBStyle->setCurrentItem( 12 );
+        break;
+    case FDiagPattern: chooseBStyle->setCurrentItem( 13 );
+        break;
+    case DiagCrossPattern: chooseBStyle->setCurrentItem( 14 );
+        break;
+    case CustomPattern:
+        break;
     }
     chooseBCol->setColor( _brush.color() );
     brushPrev->setBrush(_brush);
@@ -602,7 +588,7 @@ void ConfBrushDia::setFillType( FillType ft )
 }
 
 void ConfBrushDia::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
-			    bool _unbalanced, int _xfactor, int _yfactor )
+                                bool _unbalanced, int _xfactor, int _yfactor )
 {
     oldC1=_c1;
     oldC2=_c2;
@@ -639,36 +625,36 @@ QBrush ConfBrushDia::getBrush() const
     QBrush brush;
 
     switch ( chooseBStyle->currentItem() ) {
-        case 0: brush.setStyle( NoBrush );
-            break;
-        case 1: brush.setStyle( SolidPattern );
-            break;
-        case 2: brush.setStyle( Dense1Pattern );
-            break;
-        case 3: brush.setStyle( Dense2Pattern );
-            break;
-        case 4: brush.setStyle( Dense3Pattern );
-            break;
-        case 5: brush.setStyle( Dense4Pattern );
-            break;
-        case 6: brush.setStyle( Dense5Pattern );
-            break;
-        case 7: brush.setStyle( Dense6Pattern );
-            break;
-        case 8: brush.setStyle( Dense7Pattern );
-            break;
-        case 9: brush.setStyle( HorPattern );
-            break;
-        case 10: brush.setStyle( VerPattern );
-            break;
-        case 11: brush.setStyle( CrossPattern );
-            break;
-        case 12: brush.setStyle( BDiagPattern );
-            break;
-        case 13: brush.setStyle( FDiagPattern );
-            break;
-        case 14: brush.setStyle( DiagCrossPattern );
-            break;
+    case 0: brush.setStyle( NoBrush );
+        break;
+    case 1: brush.setStyle( SolidPattern );
+        break;
+    case 2: brush.setStyle( Dense1Pattern );
+        break;
+    case 3: brush.setStyle( Dense2Pattern );
+        break;
+    case 4: brush.setStyle( Dense3Pattern );
+        break;
+    case 5: brush.setStyle( Dense4Pattern );
+        break;
+    case 6: brush.setStyle( Dense5Pattern );
+        break;
+    case 7: brush.setStyle( Dense6Pattern );
+        break;
+    case 8: brush.setStyle( Dense7Pattern );
+        break;
+    case 9: brush.setStyle( HorPattern );
+        break;
+    case 10: brush.setStyle( VerPattern );
+        break;
+    case 11: brush.setStyle( CrossPattern );
+        break;
+    case 12: brush.setStyle( BDiagPattern );
+        break;
+    case 13: brush.setStyle( FDiagPattern );
+        break;
+    case 14: brush.setStyle( DiagCrossPattern );
+        break;
     }
 
     brush.setColor( chooseBCol->color() );
@@ -751,9 +737,9 @@ void ConfBrushDia::slotBrushStyleChanged()
 {
     m_bBrushStyleChanged = true;
     QBrush b = getBrush();
-    if(b.style()==NoBrush) {
+    if(b.style()==NoBrush)
         brushPrev->hide();
-    } else {
+    else {
         brushPrev->show();
         brushPrev->setBrush(b);
         brushPrev->repaint(true);
@@ -835,11 +821,8 @@ void ConfBrushDia::slotGYFactorChanged()
     brushPrev->repaint(false);
 }
 
-/******************************************************************/
-/* class StyleDia						  */
-/******************************************************************/
-
-StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool _stickyObj, bool _oneObject, bool _alltextobj )
+StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc,
+                    bool _stickyObj, bool _oneObject, bool _alltextobj )
     : QTabDialog( parent, name, true ),
       m_doc(_doc),
       m_confPenDia(0),
@@ -956,7 +939,7 @@ void StyleDia::setupTabGeneral()
 {
     PageConfigGeneral *w = new PageConfigGeneral( this );
     sticky = w->checkboxSticky;
-    addTab( w , i18n( "&General" ) );
+    addTab( w, i18n( "&General" ) );
 }
 
 void StyleDia::setupTabGeometry()
@@ -973,7 +956,7 @@ void StyleDia::setupTabGeometry()
     keepRatio= new QCheckBox( i18n("Keep ratio"), tab);
     layout->addWidget(keepRatio);
     connect( keepRatio, SIGNAL(toggled(bool)),
-	     this, SLOT(slotKeepRatioToggled(bool)));
+             this, SLOT(slotKeepRatioToggled(bool)));
 
     if ( allTextObj )
     {
@@ -1005,7 +988,7 @@ void StyleDia::setupTabGeometry()
     m_lineWidth= new KDoubleNumInput( grp1 );
     m_lineWidth->setRange ( 0, 9999, 1, false);
     connect( m_lineWidth, SIGNAL(valueChanged(double)),
-	     this, SLOT(slotUpdateHeightForWidth(double)) );
+             this, SLOT(slotUpdateHeightForWidth(double)) );
 
     pGrid->addWidget( m_lineWidth, 4, 0 );
 
@@ -1025,7 +1008,7 @@ void StyleDia::setupTabGeometry()
     m_lineHeight= new KDoubleNumInput( grp1 );
     m_lineHeight->setRange ( 0, 9999, 1, false);
     connect( m_lineHeight, SIGNAL(valueChanged(double)),
-	     this, SLOT(slotUpdateWidthForHeight(double)) );
+             this, SLOT(slotUpdateWidthForHeight(double)) );
 
     pGrid->addWidget( m_lineHeight, 4, 1 );
 
@@ -1195,13 +1178,12 @@ void StyleDia::slotKeepRatioToggled( bool on ) {
 void StyleDia::protectChanged()
 {
     if ( lockUpdate )
-	return;
+        return;
     bool state=!(protect->isChecked())&&oneObject;
     m_lineTop->setEnabled( state);
     m_lineLeft->setEnabled( state);
     m_lineWidth->setEnabled( state);
     m_lineHeight->setEnabled( state);
-
 }
 
 StyleDia::~StyleDia()
@@ -1224,7 +1206,6 @@ void StyleDia::setMargins( double left, double right, double top, double bottom)
     smr->setValue( KoUnit::ptToUnit( QMAX(0.00, right), m_doc->getUnit() ) );
     smt->setValue( KoUnit::ptToUnit( QMAX(0.00, top), m_doc->getUnit() ) );
     smb->setValue( KoUnit::ptToUnit( QMAX(0.00, bottom), m_doc->getUnit() ) );
-
 }
 
 double StyleDia::marginsLeft()
@@ -1247,7 +1228,6 @@ double StyleDia::marginsTop()
     return QMAX(KoUnit::ptFromUnit( smt->value(), m_doc->getUnit() ),0);
 }
 
-
 void StyleDia::setSticky( PropValue p )
 {
     oldSticky=p;
@@ -1264,7 +1244,7 @@ void StyleDia::setSticky( PropValue p )
         case STATE_UNDEF:
             sticky->setTristate( true );
             sticky->setNoChange();
-        break;
+            break;
         default:
             sticky->setChecked( false );
             break;
@@ -1374,17 +1354,13 @@ void StyleDia::setSize(const KoRect & _rect)
 void StyleDia::setProtectContent( bool p )
 {
     if ( isAllTextObject() &&protectContent )
-    {
         protectContent->setChecked(p);
-    }
 }
 
 bool StyleDia::isProtectContent()const
 {
     if ( isAllTextObject()&& protectContent)
-    {
         return protectContent->isChecked();
-    }
     return false;
 }
 
@@ -1397,4 +1373,4 @@ void StyleDia::slotProtectContentChanged( bool b)
     synchronize->setEnabled( !b );
 }
 
-#include <styledia.moc>
+#include "styledia.moc"

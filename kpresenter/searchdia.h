@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001, Laurent Montel <lmontel@mandrakesoft.com>
 
@@ -47,8 +48,10 @@ public:
      * The parent widget can't be the canvas, otherwise the 'find next' dialog
      * scrolls up/down when using the scrollbars (hehe, cool effect).
      */
-    KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
-    KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
+    KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog,
+                    const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
+    KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog,
+                    const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
     ~KPrFindReplace();
 
     virtual void emitNewCommand(KCommand *);

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -8,7 +9,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -39,40 +40,40 @@ class OutlineToolTip;
 
 class ThumbBar : public KIconView
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
-  ~ThumbBar();
-  void setCurrentPage( int pg );
-  void updateItem( int pagenr, bool sticky = false );
-  void addItem( int pos );
-  void moveItem( int oldPos, int newPos );
-  void removeItem( int pos );
-  void refreshItems ( bool offset = false );
-  QRect tip(const QPoint &pos, QString &title);
+    ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+    ~ThumbBar();
+    void setCurrentPage( int pg );
+    void updateItem( int pagenr, bool sticky = false );
+    void addItem( int pos );
+    void moveItem( int oldPos, int newPos );
+    void removeItem( int pos );
+    void refreshItems ( bool offset = false );
+    QRect tip(const QPoint &pos, QString &title);
 
-  bool uptodate;
+    bool uptodate;
 
 signals:
-  void showPage( int i );
+    void showPage( int i );
 
 public slots:
-  void rebuildItems();
+    void rebuildItems();
 
 private slots:
-  void itemClicked(QIconViewItem *i);
-  void slotContentsMoving(int x, int y);
-  void slotRefreshItems();
+    void itemClicked(QIconViewItem *i);
+    void slotContentsMoving(int x, int y);
+    void slotRefreshItems();
 
 private:
-  QPixmap getSlideThumb(int slideNr) const;
+    QPixmap getSlideThumb(int slideNr) const;
 
-  KPresenterDoc *doc;
-  KPresenterView *view;
-  ThumbToolTip *thumbTip;
-  int offsetX;
-  int offsetY;
+    KPresenterDoc *doc;
+    KPresenterView *view;
+    ThumbToolTip *thumbTip;
+    int offsetX;
+    int offsetY;
 };
 
 
@@ -122,40 +123,40 @@ private:
 
 class SideBar: public QTabWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
-  void setCurrentPage( int pg ) {
-      _outline->setCurrentPage(pg);
-      _thb->setCurrentPage(pg);
-  };
-  void setOn( int , bool ) { };
-  //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
-  void updateItem( int pagenr, bool sticky = false);
-  void addItem( int pos );
-  void moveItem( int oldPos, int newPos );
-  void removeItem( int pos );
+    SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+    void setCurrentPage( int pg ) {
+        _outline->setCurrentPage(pg);
+        _thb->setCurrentPage(pg);
+    };
+    void setOn( int , bool ) { };
+    //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
+    void updateItem( int pagenr, bool sticky = false);
+    void addItem( int pos );
+    void moveItem( int oldPos, int newPos );
+    void removeItem( int pos );
 
-  Outline *outline() const { return _outline; };
-  ThumbBar *thumbBar() const { return _thb; };
+    Outline *outline() const { return _outline; };
+    ThumbBar *thumbBar() const { return _thb; };
 
 signals: // all page numbers 0-based
-  void showPage( int i );
-  void movePage( int from, int to );
-  void selectPage( int i, bool );
+    void showPage( int i );
+    void movePage( int from, int to );
+    void selectPage( int i, bool );
 
 public slots:
-  //void rebuildItems() { _outline->rebuildItems(); _thb->rebuildItems();};
-  void renamePageTitle() { _outline->renamePageTitle(); };
-  void currentChanged(QWidget *tab);
+    //void rebuildItems() { _outline->rebuildItems(); _thb->rebuildItems();};
+    void renamePageTitle() { _outline->renamePageTitle(); };
+    void currentChanged(QWidget *tab);
 
 private:
-  Outline *_outline;
-  ThumbBar *_thb;
+    Outline *_outline;
+    ThumbBar *_thb;
 
-  KPresenterDoc *doc;
-  KPresenterView *view;
+    KPresenterDoc *doc;
+    KPresenterView *view;
 };
 
 #endif

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 #ifndef __rotationdialogimpl_h__
 #define __rotationdialogimpl_h__
 

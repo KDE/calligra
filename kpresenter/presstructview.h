@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -33,12 +34,6 @@ class KPBackGround;
 class KPObject;
 class KPPresStructObjectItem;
 
-/******************************************************************
- *
- * Class: KPSlidePreview
- *
- ******************************************************************/
-
 class KPSlidePreview : public QLabel
 {
     Q_OBJECT
@@ -55,12 +50,6 @@ protected:
 
 };
 
-/******************************************************************
- *
- * Class: KPPresStructObjectItem
- *
- ******************************************************************/
-
 class KPPresStructObjectItem : public KListViewItem
 {
 public:
@@ -69,7 +58,8 @@ public:
 
     void setPage( KPBackGround *p, int pgnum );
     //now we can add specific text for example header/footer
-    void setObject( KPObject *o, int num, bool sticky=false, const QString &name=QString::null );
+    void setObject( KPObject *o, int num, bool sticky=false,
+                    const QString &name=QString::null );
     void setNum(int _num) {num = _num;};
     int getNum() const { return num;};
     KPBackGround *getPage() const;
@@ -82,12 +72,6 @@ protected:
     int pageNum;
     int num;
 };
-
-/******************************************************************
- *
- * Class: KPPresStructView
- *
- ******************************************************************/
 
 class KPPresStructView : public KDialogBase
 {

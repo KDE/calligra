@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
@@ -72,8 +73,8 @@
 
 
 // Comes from koffice/filters/libexport/KWEFUtils.cc
-static QString EscapeSgmlText(const QTextCodec* codec,
-    const QString& strIn, const bool quot = false , const bool apos = false )
+static QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
+                              const bool quot = false , const bool apos = false )
 {
     QString strReturn;
     QChar ch;
@@ -84,52 +85,52 @@ static QString EscapeSgmlText(const QTextCodec* codec,
         switch (ch.unicode())
         {
         case 38: // &
-            {
-                strReturn+="&amp;";
-                break;
-            }
+        {
+            strReturn+="&amp;";
+            break;
+        }
         case 60: // <
-            {
-                strReturn+="&lt;";
-                break;
-            }
+        {
+            strReturn+="&lt;";
+            break;
+        }
         case 62: // >
-            {
-                strReturn+="&gt;";
-                break;
-            }
+        {
+            strReturn+="&gt;";
+            break;
+        }
         case 34: // "
-            {
-                if (quot)
-                    strReturn+="&quot;";
-                else
-                    strReturn+=ch;
-                break;
-            }
-        case 39: // '
-            {
-                // NOTE:  HTML does not define &apos; by default (only XML/XHTML does)
-                if (apos)
-                    strReturn+="&apos;";
-                else
-                    strReturn+=ch;
-                break;
-            }
-        default:
-            {
-                // verify that the character ch can be expressed in the
-                //   encoding in which we will write the HTML file.
-                if (codec)
-                {
-                    if (!codec->canEncode(ch))
-                    {
-                        strReturn+=QString("&#%1;").arg(ch.unicode());
-                        break;
-                    }
-                }
+        {
+            if (quot)
+                strReturn+="&quot;";
+            else
                 strReturn+=ch;
-                break;
+            break;
+        }
+        case 39: // '
+        {
+            // NOTE:  HTML does not define &apos; by default (only XML/XHTML does)
+            if (apos)
+                strReturn+="&apos;";
+            else
+                strReturn+=ch;
+            break;
+        }
+        default:
+        {
+            // verify that the character ch can be expressed in the
+            //   encoding in which we will write the HTML file.
+            if (codec)
+            {
+                if (!codec->canEncode(ch))
+                {
+                    strReturn+=QString("&#%1;").arg(ch.unicode());
+                    break;
+                }
             }
+            strReturn+=ch;
+            break;
+        }
         }
     }
 
@@ -159,11 +160,6 @@ static QString EscapeEncodingOnly(const QTextCodec* codec, const QString& strIn)
     return strReturn;
 }
 
-/******************************************************************/
-/* Class: KPWebPresentation                                       */
-/******************************************************************/
-
-/*================================================================*/
 KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view )
     : config( QString::null ), xml( false )
 {
@@ -172,7 +168,6 @@ KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view
     init();
 }
 
-/*================================================================*/
 KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view )
     : config( _config ), xml( false )
 {
@@ -182,18 +177,16 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_do
     loadConfig();
 }
 
-/*================================================================*/
 KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
-      textColor( webPres.textColor ), path( webPres.path ), 
+      textColor( webPres.textColor ), path( webPres.path ),
       xml( webPres.xml), zoom( webPres.zoom ), m_encoding( webPres.m_encoding )
 {
     doc = webPres.doc;
     view = webPres.view;
 }
 
-/*================================================================*/
 void KPWebPresentation::loadConfig()
 {
     if ( config.isEmpty() )
@@ -230,7 +223,6 @@ void KPWebPresentation::loadConfig()
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
 }
 
-/*================================================================*/
 void KPWebPresentation::saveConfig()
 {
     KSimpleConfig cfg( config );
@@ -253,7 +245,6 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "Encoding", m_encoding );
 }
 
-/*================================================================*/
 void KPWebPresentation::initCreation( KProgress *progressBar )
 {
     QString cmd;
@@ -274,8 +265,8 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
 
     KURL srcurl, desturl;
-    
-    for ( uint index = 0; pics[ index ]; index ++ )    
+
+    for ( uint index = 0; pics[ index ]; index ++ )
     {
         QString filename = pics[ index ];
         filename += ".png";
@@ -289,7 +280,6 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     }
 }
 
-/*================================================================*/
 void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
     if ( slideInfos.isEmpty() )
@@ -310,7 +300,6 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
     }
 }
 
-/*================================================================*/
 QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& strText ) const
 {
     // Escape quotes (needed in attributes)
@@ -318,14 +307,13 @@ QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& str
     return EscapeSgmlText( codec, strText, true, false );
 }
 
-/*================================================================*/
 void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml, const QString& subtitle)
 {
     QString mimeName ( codec->mimeName() );
     if ( isXML() )
     {   //Write out the XML declaration
         streamOut << "<?xml version=\"1.0\" encoding=\""
-            << mimeName << "\"?>\n";
+                  << mimeName << "\"?>\n";
     }
     // write <!DOCTYPE
     streamOut << "<!DOCTYPE ";
@@ -333,7 +321,6 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
     {
         streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
         streamOut << " \"DTD/xhtml1-transitional.dtd\">\n";
-
     }
     else
     {
@@ -357,26 +344,25 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     streamOut << "<meta name=\"Generator\" content=\"KPresenter's Web Presentation "
-        << strVersion.mid(10).replace("$","")
-        << "\""<< ( isXML() ?" /":"") // X(HT)ML closes empty elements, HTML not!
-        << ">\n";
+              << strVersion.mid(10).replace("$","")
+              << "\""<< ( isXML() ?" /":"") // X(HT)ML closes empty elements, HTML not!
+              << ">\n";
 
     streamOut << "<title>"<< escapeHtmlText( codec, title ) << " - " << escapeHtmlText( codec, subtitle ) << "</title>\n";
 
     // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 }
 
-/*================================================================*/
 void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
-    
+
     const QString brtag ( "<br" + QString(isXML()?" /":"") + ">" );
 
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
-        
+
         unsigned int pgNum = i + 1;
-        
+
         QFile file( QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum ) );
         file.open( IO_WriteOnly );
         QTextStream streamOut( &file );
@@ -398,9 +384,9 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         streamOut << "</head>\n";
         streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
-        
+
         streamOut << "  <center>\n";
-        
+
         if ( i > 0 )
             streamOut << "    <a href=\"slide_1.html\">";
         streamOut << "<img src=\"../pics/first.png\" border=\"0\" alt=\"First\" title=\"First\"" << ( isXML() ?" /":"") << ">";
@@ -408,7 +394,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             streamOut << "</a>";
 
         streamOut << "\n";
-            
+
         if ( i > 0 )
             streamOut << "    <a href=\"slide_" << pgNum - 1 << ".html\">";
         streamOut << "<img src=\"../pics/prev.png\" border=\"0\" alt=\"Previous\" title=\"Previous\"" << ( isXML() ?" /":"") << ">";
@@ -416,7 +402,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             streamOut << "</a>";
 
         streamOut << "\n";
-        
+
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << pgNum + 1 << ".html\">";
         streamOut << "<img src=\"../pics/next.png\" border=\"0\" alt=\"Next\" title=\"Next\"" << ( isXML() ?" /":"") << ">";;
@@ -424,7 +410,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             streamOut << "</a>";
 
         streamOut << "\n";
-        
+
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
         streamOut << "<img src=\"../pics/last.png\" border=\"0\" alt=\"Last\" title=\"Last\"" << ( isXML() ?" /":"") << ">";;
@@ -453,7 +439,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             streamOut << "</a>";
 
         streamOut << "\n";
-        
+
         streamOut << "    </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
 
         QPtrList<KPrPage> _tmpList( doc->getPageList() );
@@ -461,21 +447,21 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         if ( !note.isEmpty() ) {
             streamOut << "  <b>" << escapeHtmlText( codec, i18n( "Note" ) ) << "</b>\n";
             streamOut << " blockquote>\n";
-            
+
             streamOut << note.replace( "\n", brtag );
 
             streamOut << "  </blockquote><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
         }
 
         streamOut << "  <center>\n";
-        
+
         QString htmlAuthor;
         if (email.isEmpty())
             htmlAuthor=escapeHtmlText( codec, author );
         else
             htmlAuthor=QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
-        streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
-            .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
+        streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" )
+                                          .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
 
         streamOut << "    </center><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
         streamOut << "</body>\n</html>\n";
@@ -488,7 +474,6 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     }
 }
 
-/*================================================================*/
 void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
@@ -497,19 +482,19 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     file.open( IO_WriteOnly );
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
-        
+
     writeStartOfHeader( streamOut, codec,  isXML() , i18n("Table of Contents") );
     streamOut << "</head>\n";
-    
+
     streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
-    
-    streamOut << "<h1 align=\"center\"><font color=\"" << titleColor.name() 
-        << "\">" << title << "</font></h1>";
+
+    streamOut << "<h1 align=\"center\"><font color=\"" << titleColor.name()
+              << "\">" << title << "</font></h1>";
 
     streamOut << "<p align=\"center\"><a href=\"html/slide_1.html\">";
     streamOut << i18n("Click here to start the Slideshow");
     streamOut << "</a></p>\n";
-    
+
     streamOut << "<p><b>" << i18n("Table of Contents") << "</b></p>\n";
 
     // create list of slides (with proper link)
@@ -520,9 +505,9 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 
     // footer: author name, e-mail
     QString htmlAuthor = email.isEmpty() ? escapeHtmlText( codec, author ) :
-        QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
-    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
-        .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
+                         QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
+    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" )
+                                      .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
 
     streamOut << "</body>\n</html>\n";
     file.close();
@@ -531,7 +516,6 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     kapp->processEvents();
 }
 
-/*================================================================*/
 void KPWebPresentation::init()
 {
 
@@ -569,11 +553,6 @@ void KPWebPresentation::init()
     m_encoding = QTextCodec::codecForLocale()->name();
 }
 
-/******************************************************************/
-/* Class: KPWebPresentationWizard                                 */
-/******************************************************************/
-
-/*================================================================*/
 KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc,
                                                   KPresenterView *_view )
     : KWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
@@ -591,13 +570,11 @@ KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrese
     connect( finishButton(), SIGNAL( clicked() ), this, SLOT( finish() ) );
 }
 
-/*================================================================*/
 KPWebPresentationWizard::~KPWebPresentationWizard()
 {
     view->enableWebPres();
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPresenterDoc *_doc,
                                                      KPresenterView *_view )
 {
@@ -607,7 +584,6 @@ void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPr
     dlg->show();
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::setupPage1()
 {
     page1 = new QHBox( this );
@@ -622,8 +598,8 @@ void KPWebPresentationWizard::setupPage1()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page1 );
-    QGridLayout *layout = new QGridLayout( canvas, 7, 2, 
-        KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *layout = new QGridLayout( canvas, 7, 2,
+                                           KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
@@ -665,22 +641,20 @@ void KPWebPresentationWizard::setupPage1()
     path->lineEdit()->setText(webPres.getPath());
     layout->addWidget( path, 5, 1 );
 
-    QSpacerItem* spacer = new QSpacerItem( 1, 10, 
-        QSizePolicy::Minimum, QSizePolicy::Expanding );
+    QSpacerItem* spacer = new QSpacerItem( 1, 10,
+                                           QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addMultiCell( spacer, 6, 6, 0, 1 );
 
     connect(path, SIGNAL(textChanged(const QString&)),
-           this,SLOT(slotChoosePath(const QString&)));
+            this,SLOT(slotChoosePath(const QString&)));
     connect(path, SIGNAL(urlSelected( const QString& )),
-           this,SLOT(slotChoosePath(const QString&)));
+            this,SLOT(slotChoosePath(const QString&)));
 
     addPage( page1, i18n( "Step 1: General Information" ) );
 
     setHelpEnabled(page1, false);  //doesn't do anything currently
-
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::setupPage2()
 {
     page2 = new QHBox( this );
@@ -695,8 +669,8 @@ void KPWebPresentationWizard::setupPage2()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
-        KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2,
+                                           KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
@@ -737,8 +711,8 @@ void KPWebPresentationWizard::setupPage2()
     doctype->insertItem( "HTML 4.01", -1 );
     doctype->insertItem( "XHTML 1.0", -1 );
 
-    QSpacerItem* spacer = new QSpacerItem( 1, 10, 
-        QSizePolicy::Minimum, QSizePolicy::Expanding );
+    QSpacerItem* spacer = new QSpacerItem( 1, 10,
+                                           QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addMultiCell( spacer, 5, 5, 0, 1 );
 
     addPage( page2, i18n( "Step 2: Configure HTML" ) );
@@ -746,7 +720,6 @@ void KPWebPresentationWizard::setupPage2()
     setHelpEnabled(page2, false);  //doesn't do anything currently
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::setupPage3()
 {
     page3 = new QHBox( this );
@@ -761,8 +734,8 @@ void KPWebPresentationWizard::setupPage3()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page3 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
-        KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2,
+                                           KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
@@ -792,8 +765,8 @@ void KPWebPresentationWizard::setupPage3()
     backColor = new KColorButton( webPres.getBackColor(), canvas );
     layout->addWidget( backColor, 4, 1 );
 
-    QSpacerItem* spacer = new QSpacerItem( 1, 10, 
-        QSizePolicy::Minimum, QSizePolicy::Expanding );
+    QSpacerItem* spacer = new QSpacerItem( 1, 10,
+                                           QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addMultiCell( spacer, 5, 5, 0, 1 );
 
     addPage( page3, i18n( "Step 3: Customize Colors" ) );
@@ -801,7 +774,6 @@ void KPWebPresentationWizard::setupPage3()
     setHelpEnabled(page3, false);  //doesn't do anything currently
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::setupPage4()
 {
     page4 = new QHBox( this );
@@ -816,8 +788,8 @@ void KPWebPresentationWizard::setupPage4()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page4 );
-    QGridLayout *layout = new QGridLayout( canvas, 3, 2, 
-        KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *layout = new QGridLayout( canvas, 3, 2,
+                                           KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
@@ -868,7 +840,6 @@ void KPWebPresentationWizard::setupPage4()
 }
 
 
-/*================================================================*/
 void KPWebPresentationWizard::finish()
 {
     webPres.setAuthor( author->text() );
@@ -891,12 +862,10 @@ void KPWebPresentationWizard::finish()
     KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::pageChanged()
 {
-    if ( currentPage() != page4 ) 
+    if ( currentPage() != page4 )
     {
-
         QString pathname = path->lineEdit()->text();
         QFileInfo fi( pathname );
 
@@ -904,55 +873,53 @@ void KPWebPresentationWizard::pageChanged()
         if ( !fi.exists() )
         {
             QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
-                    "Do you want create it?</qt>" );
-            if( KMessageBox::questionYesNo( this, msg.arg( pathname ), 
-                    i18n( "Directory Not Found" ) )
-                    == KMessageBox::Yes)
+                                "Do you want create it?</qt>" );
+            if( KMessageBox::questionYesNo( this, msg.arg( pathname ),
+                                            i18n( "Directory Not Found" ) )
+                == KMessageBox::Yes)
             {
                 QDir dir;
                 bool ok = dir.mkdir( pathname );
                 if( !ok )
                 {
                     KMessageBox::sorry( this,
-                        i18n( "Can't create directory!" ) );
+                                        i18n( "Can't create directory!" ) );
                     // go back to first step
                     showPage( page1 );
                     path->setFocus();
                 }
- 
+
             }
             else
             {
-                 // go back to first step
-                 showPage( page1 );
-                 path->setFocus();
+                // go back to first step
+                showPage( page1 );
+                path->setFocus();
             }
         }
-        
-        // path exists but it's not a valid directory. warn the user.
-        else if ( !fi.isDir() ) 
-            {
-                KMessageBox::error( this,
-                    i18n( "The path you entered is not a valid directory!\n"
-                    "Please correct this." ),
-                    i18n( "Invalid Path" ) );
 
-                 // go back to first step
-                 showPage( page1 );
-                 path->setFocus();
-            }
+        // path exists but it's not a valid directory. warn the user.
+        else if ( !fi.isDir() )
+        {
+            KMessageBox::error( this,
+                                i18n( "The path you entered is not a valid directory!\n"
+                                      "Please correct this." ),
+                                i18n( "Invalid Path" ) );
+
+            // go back to first step
+            showPage( page1 );
+            path->setFocus();
+        }
     } else
         finishButton()->setEnabled( true );
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::slideTitleChanged( const QString &s )
 {
     if ( slideTitles->currentItem() )
         slideTitles->currentItem()->setText( 1, s );
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::slideTitleChanged( QListViewItem *i )
 {
     if ( !i ) return;
@@ -961,7 +928,6 @@ void KPWebPresentationWizard::slideTitleChanged( QListViewItem *i )
     view->skipToPage( i->text( 0 ).toInt() - 1 );
 }
 
-/*================================================================*/
 void KPWebPresentationWizard::closeEvent( QCloseEvent *e )
 {
     view->enableWebPres();
@@ -973,11 +939,6 @@ void KPWebPresentationWizard::slotChoosePath(const QString &text)
     webPres.setPath(text);
 }
 
-/******************************************************************/
-/* Class: KPWebPresentationCreateDialog                           */
-/******************************************************************/
-
-/*================================================================*/
 KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view,
                                                               const KPWebPresentation &_webPres )
     : QDialog( 0, "", false ), webPres( _webPres )
@@ -988,13 +949,11 @@ KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPresenterDoc *_do
     setupGUI();
 }
 
-/*================================================================*/
 KPWebPresentationCreateDialog::~KPWebPresentationCreateDialog()
 {
     view->enableWebPres();
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::createWebPresentation( KPresenterDoc *_doc, KPresenterView *_view,
                                                            const KPWebPresentation &_webPres )
 {
@@ -1006,7 +965,6 @@ void KPWebPresentationCreateDialog::createWebPresentation( KPresenterDoc *_doc, 
     dlg->start();
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::start()
 {
     setCursor( waitCursor );
@@ -1020,7 +978,6 @@ void KPWebPresentationCreateDialog::start()
     bSave->setEnabled( true );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::initCreation()
 {
     QFont f = step1->font(), f2 = step1->font();
@@ -1036,7 +993,6 @@ void KPWebPresentationCreateDialog::initCreation()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::createSlidesPictures()
 {
     QFont f = step2->font(), f2 = f;
@@ -1054,7 +1010,6 @@ void KPWebPresentationCreateDialog::createSlidesPictures()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::createSlidesHTML()
 {
     QFont f = step3->font(), f2 = step3->font();
@@ -1072,7 +1027,6 @@ void KPWebPresentationCreateDialog::createSlidesHTML()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::createMainPage()
 {
     QFont f = step4->font(), f2 = step4->font();
@@ -1088,7 +1042,6 @@ void KPWebPresentationCreateDialog::createMainPage()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::setupGUI()
 {
     back = new QVBox( this );
@@ -1127,14 +1080,12 @@ void KPWebPresentationCreateDialog::setupGUI()
     connect( bSave, SIGNAL( clicked() ), this, SLOT( saveConfig() ) );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
 }
 
-/*================================================================*/
 void KPWebPresentationCreateDialog::saveConfig()
 {
     QString filename = webPres.getConfig();
@@ -1146,13 +1097,13 @@ void KPWebPresentationCreateDialog::saveConfig()
     KURL url = KFileDialog::getOpenURL( filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)") );
 
     if( url.isEmpty() )
-      return;
+        return;
 
     // ### TODO: use KIO::NetAccess for remote files (floppy: is remote!)
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
-      return;
+        KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
+        return;
     }
 
     filename = url.path();
@@ -1163,4 +1114,4 @@ void KPWebPresentationCreateDialog::saveConfig()
     }
 }
 
-#include <webpresentation.moc>
+#include "webpresentation.moc"

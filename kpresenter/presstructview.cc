@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -37,20 +38,12 @@
 #include <qlayout.h>
 #include <qimage.h>
 
-/******************************************************************
- *
- * Class: KPSlidePreview
- *
- ******************************************************************/
-
-/*================================================================*/
 KPSlidePreview::KPSlidePreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view )
     : QLabel( parent ), doc( _doc ), view( _view )
 {
     setFrameStyle( StyledPanel | Sunken );
 }
 
-/*================================================================*/
 void KPSlidePreview::setPage( QListViewItem *item )
 {
     if ( !item )
@@ -79,25 +72,16 @@ void KPSlidePreview::setPage( QListViewItem *item )
     setPixmap( pix );
 }
 
-/******************************************************************
- *
- * Class: KPPresStructObjectItem
- *
- ******************************************************************/
-
-/*================================================================*/
 KPPresStructObjectItem::KPPresStructObjectItem( KListView *parent )
     : KListViewItem( parent ), page( 0 ), object( 0 )
 {
 }
 
-/*================================================================*/
 KPPresStructObjectItem::KPPresStructObjectItem( KListViewItem *parent )
     : KListViewItem( parent ), page( 0 ), object( 0 )
 {
 }
 
-/*================================================================*/
 void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
 {
     page = p;
@@ -106,105 +90,95 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
         setPixmap( 0, KPBarIcon( "newslide" ) );
 }
 
-/*================================================================*/
-void KPPresStructObjectItem::setObject( KPObject *o, int num, bool sticky,const QString &_objName )
+void KPPresStructObjectItem::setObject( KPObject *o, int num, bool sticky, const QString &_objName )
 {
-  object = o;
-  if ( object && parent() ) {
-    QString type = _objName.isEmpty() ? (object->getTypeString() + " (%1)").arg( num + 1 ):_objName;
-    if( sticky )
-        type+=i18n(" (Sticky object)");
-    setText(0, type);
-    switch ( object->getType() ) {
-    case OT_PICTURE:
-      setPixmap( 0, KPBarIcon( "frame_image" ) );
-      break;
-    case OT_LINE:
-      setPixmap( 0, KPBarIcon( "mini_line" ) );
-      break;
-    case OT_RECT:
-      setPixmap( 0, KPBarIcon( "mini_rect" ) );
-      break;
-    case OT_ELLIPSE:
-      setPixmap( 0, KPBarIcon( "mini_circle" ) );
-      break;
-    case OT_TEXT:
-      setPixmap( 0, KPBarIcon( "frame_text" ) );
-      break;
-    case OT_AUTOFORM:
-      setPixmap( 0, KPBarIcon( "mini_autoform" ) );
-      break;
-    case OT_CLIPART:
-      setPixmap( 0, KPBarIcon( "mini_clipart" ) );
-      break;
-    case OT_UNDEFINED:
-      setText( 0, i18n( "Undefined (%1)" ).arg( num + 1 ) );
-      break;
-    case OT_PIE:
-      setPixmap( 0, KPBarIcon( "mini_pie" ) );
-      break;
-    case OT_PART:
-      setPixmap( 0, KPBarIcon( "frame_query" ) );
-      break;
-    case OT_FREEHAND:
-      setPixmap( 0, KPBarIcon( "freehand" ) );
-      break;
-    case OT_POLYLINE:
-      setPixmap( 0, KPBarIcon( "polyline" ) );
-      break;
-    case OT_QUADRICBEZIERCURVE:
-      setPixmap( 0, KPBarIcon( "quadricbeziercurve" ) );
-      break;
-    case OT_CUBICBEZIERCURVE:
-      setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
-      break;
-    case OT_POLYGON:
-      setPixmap( 0, KPBarIcon( "mini_polygon" ) );
-      break;
-    case OT_CLOSED_LINE: {
-        QString _typeString = object->getTypeString();
+    object = o;
+    if ( object && parent() ) {
+        QString type = _objName.isEmpty() ? (object->getTypeString() + " (%1)").arg( num + 1 ):_objName;
+        if( sticky )
+            type+=i18n(" (Sticky object)");
+        setText(0, type);
+        switch ( object->getType() ) {
+        case OT_PICTURE:
+            setPixmap( 0, KPBarIcon( "frame_image" ) );
+            break;
+        case OT_LINE:
+            setPixmap( 0, KPBarIcon( "mini_line" ) );
+            break;
+        case OT_RECT:
+            setPixmap( 0, KPBarIcon( "mini_rect" ) );
+            break;
+        case OT_ELLIPSE:
+            setPixmap( 0, KPBarIcon( "mini_circle" ) );
+            break;
+        case OT_TEXT:
+            setPixmap( 0, KPBarIcon( "frame_text" ) );
+            break;
+        case OT_AUTOFORM:
+            setPixmap( 0, KPBarIcon( "mini_autoform" ) );
+            break;
+        case OT_CLIPART:
+            setPixmap( 0, KPBarIcon( "mini_clipart" ) );
+            break;
+        case OT_UNDEFINED:
+            setText( 0, i18n( "Undefined (%1)" ).arg( num + 1 ) );
+            break;
+        case OT_PIE:
+            setPixmap( 0, KPBarIcon( "mini_pie" ) );
+            break;
+        case OT_PART:
+            setPixmap( 0, KPBarIcon( "frame_query" ) );
+            break;
+        case OT_FREEHAND:
+            setPixmap( 0, KPBarIcon( "freehand" ) );
+            break;
+        case OT_POLYLINE:
+            setPixmap( 0, KPBarIcon( "polyline" ) );
+            break;
+        case OT_QUADRICBEZIERCURVE:
+            setPixmap( 0, KPBarIcon( "quadricbeziercurve" ) );
+            break;
+        case OT_CUBICBEZIERCURVE:
+            setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
+            break;
+        case OT_POLYGON:
+            setPixmap( 0, KPBarIcon( "mini_polygon" ) );
+            break;
+        case OT_CLOSED_LINE: {
+            QString _typeString = object->getTypeString();
 
-        if ( _typeString == i18n( "Closed Freehand" ) )
-            setPixmap( 0, KPBarIcon( "closed_freehand" ) );
-        else if ( _typeString == i18n( "Closed Polyline" ) )
-            setPixmap( 0, KPBarIcon( "closed_polyline" ) );
-        else if ( _typeString == i18n( "Closed Quadric Bezier Curve" ) )
-            setPixmap( 0, KPBarIcon( "closed_quadricbeziercurve" ) );
-        else if ( _typeString == i18n( "Closed Cubic Bezier Curve" ) )
-            setPixmap( 0, KPBarIcon( "closed_cubicbeziercurve" ) );
-    } break;
-    case OT_GROUP:
-      setPixmap( 0, KPBarIcon( "group" ) );
-      break;
+            if ( _typeString == i18n( "Closed Freehand" ) )
+                setPixmap( 0, KPBarIcon( "closed_freehand" ) );
+            else if ( _typeString == i18n( "Closed Polyline" ) )
+                setPixmap( 0, KPBarIcon( "closed_polyline" ) );
+            else if ( _typeString == i18n( "Closed Quadric Bezier Curve" ) )
+                setPixmap( 0, KPBarIcon( "closed_quadricbeziercurve" ) );
+            else if ( _typeString == i18n( "Closed Cubic Bezier Curve" ) )
+                setPixmap( 0, KPBarIcon( "closed_cubicbeziercurve" ) );
+        } break;
+        case OT_GROUP:
+            setPixmap( 0, KPBarIcon( "group" ) );
+            break;
+        }
     }
-  }
 }
 
-/*================================================================*/
 KPBackGround *KPPresStructObjectItem::getPage() const
 {
     return page;
 }
 
-/*================================================================*/
 KPObject *KPPresStructObjectItem::getObject() const
 {
     return object;
 }
 
-/*================================================================*/
 int KPPresStructObjectItem::getPageNum() const
 {
     return pageNum;
 }
 
-/******************************************************************
- *
- * Class: KPPresStructView
- *
- ******************************************************************/
 
-/*================================================================*/
 KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
                                     KPresenterDoc *_doc, KPresenterView *_view )
     : KDialogBase( parent, name, false, "", KDialogBase::Close ), doc( _doc ), view( _view )
@@ -222,8 +196,6 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
     connect(this,SIGNAL(closeClicked()),this,SLOT(slotCloseDialog()));
 }
 
-
-/*================================================================*/
 void KPPresStructView::setupSlideList()
 {
     slides = new KListView( hsplit );
@@ -274,7 +246,6 @@ void KPPresStructView::setupSlideList()
     }
 }
 
-/*================================================================*/
 void KPPresStructView::setupPagePreview()
 {
     QVBox *box = new QVBox( hsplit );
@@ -294,13 +265,11 @@ void KPPresStructView::setupPagePreview()
              this, SLOT( makeStuffVisible( QListViewItem * ) ) );
 }
 
-/*================================================================*/
 void KPPresStructView::resizeEvent( QResizeEvent * )
 {
     hsplit->resize( size() );
 }
 
-/*================================================================*/
 void KPPresStructView::makeStuffVisible( QListViewItem *item )
 {
     if ( !item )
@@ -315,16 +284,16 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
             view->skipToPage( item->text( 0 ).toInt() - 1 );
         KPObject *kpobject = dynamic_cast<KPPresStructObjectItem *>(item)->getObject();
         if (kpobject) {
-          QRect rect( doc->zoomHandler()->zoomRect( kpobject->getBoundingRect() ) );
-          kpobject->setSelected( true );
-          doc->repaint( kpobject );
-          rect.setLeft( rect.left() - 20 );
-          rect.setTop( rect.top() - 20 );
-          rect.setRight( rect.right() + 20 );
-          rect.setBottom( rect.bottom() + 20 );
-          view->makeRectVisible( rect );
+            QRect rect( doc->zoomHandler()->zoomRect( kpobject->getBoundingRect() ) );
+            kpobject->setSelected( true );
+            doc->repaint( kpobject );
+            rect.setLeft( rect.left() - 20 );
+            rect.setTop( rect.top() - 20 );
+            rect.setRight( rect.right() + 20 );
+            rect.setBottom( rect.bottom() + 20 );
+            view->makeRectVisible( rect );
         }
     }
 }
 
-#include <presstructview.moc>
+#include "presstructview.moc"

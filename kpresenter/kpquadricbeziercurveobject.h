@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -29,16 +30,12 @@ class QPainter;
 class KoZoomHandler;
 class DCOPObject;
 
-/******************************************************************/
-/* Class: KPQuadricBezierCurveObject                              */
-/******************************************************************/
-
 class KPQuadricBezierCurveObject : public KPShadowObject
 {
 public:
     KPQuadricBezierCurveObject();
     KPQuadricBezierCurveObject( const KoPointArray &_controlPoints,
-				const KoPointArray &_allPoints, const KoSize &_size,
+                                const KoPointArray &_allPoints, const KoSize &_size,
                                 const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPQuadricBezierCurveObject() {}
 
@@ -58,7 +55,7 @@ public:
 
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
-    { setSize( _size.width(), _size.height() ); }
+        { setSize( _size.width(), _size.height() ); }
 
     virtual void flip(bool horizontal );
     virtual void closeObject(bool close);
@@ -66,7 +63,7 @@ public:
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour = FALSE );
+                        bool drawingShadow, bool drawContour = FALSE );
 
     void updatePoints( double _fx, double _fy );
 

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
@@ -58,41 +59,41 @@ KPEffectPreview::KPEffectPreview( QWidget *parent, KPresenterDoc *_doc, KPresent
 
 void KPEffectPreview::setPixmap( const QPixmap& pixmap )
 {
-  // find the right size
-  QRect rect = pixmap.rect();
-  int w = rect.width();
-  int h = rect.height();
-  if ( w > h ) {
+    // find the right size
+    QRect rect = pixmap.rect();
+    int w = rect.width();
+    int h = rect.height();
+    if ( w > h ) {
         w = 297;
         h = 210;
-  }
-  else if ( w < h ) {
+    }
+    else if ( w < h ) {
         w = 210;
         h = 297;
-  }
+    }
     else if ( w == h ) {
         w = 297;
         h = 297;
-  }
+    }
 
-  setMinimumSize( w, h );
+    setMinimumSize( w, h );
 
-  // create smaller pixmap for preview
-  const QImage img( pixmap.convertToImage().smoothScale( w, h, QImage::ScaleFree ) );
-  m_pixmap.convertFromImage( img );
+    // create smaller pixmap for preview
+    const QImage img( pixmap.convertToImage().smoothScale( w, h, QImage::ScaleFree ) );
+    m_pixmap.convertFromImage( img );
 
-  QLabel::setPixmap( m_pixmap );
+    QLabel::setPixmap( m_pixmap );
 }
 
 void KPEffectPreview::run( PageEffect effect, PresSpeed speed )
 {
-  QRect rect = m_pixmap.rect();
-  QPixmap target( rect.size() );
-  target.fill( Qt::black );
+    QRect rect = m_pixmap.rect();
+    QPixmap target( rect.size() );
+    target.fill( Qt::black );
 
-  kPchangePages( this, m_pixmap, target, effect, speed );
+    kPchangePages( this, m_pixmap, target, effect, speed );
 
-  QLabel::update();
+    QLabel::update();
 }
 
 
@@ -183,7 +184,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     // workaround, because Random Effect is always negative
     if( pageEffect == PEF_RANDOM )
-      effectList->setCurrentItem( effectList->count() );
+        effectList->setCurrentItem( effectList->count() );
 
     connect( effectList, SIGNAL(highlighted(int)), this, SLOT(effectChanged(int)) );
 
@@ -212,7 +213,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     QWidget* previewspacer = new QWidget( previewgrp );
     previewspacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
-        QSizePolicy::Expanding ) );
+                                               QSizePolicy::Expanding ) );
 
     previewButton = new QPushButton( previewgrp );
     previewButton->setText( i18n("Preview") );
@@ -277,29 +278,29 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
 void KPTransEffectDia::preview()
 {
-  effectPreview->run( pageEffect, speed );
+    effectPreview->run( pageEffect, speed );
 }
 
 void KPTransEffectDia::effectChanged( int index )
 {
-  if( effectList->currentText() == i18n( "Random Transition" ) )
-     pageEffect = PEF_RANDOM;
-  else
-     pageEffect =  static_cast<PageEffect>( index );
+    if( effectList->currentText() == i18n( "Random Transition" ) )
+        pageEffect = PEF_RANDOM;
+    else
+        pageEffect =  static_cast<PageEffect>( index );
 
-  if( automaticPreview->isChecked() ) preview();
+    if( automaticPreview->isChecked() ) preview();
 }
 
 void KPTransEffectDia::speedChanged( int value )
 {
-  if( value <= 0 ) value = 1;
-  speed = static_cast<PresSpeed>(value);
+    if( value <= 0 ) value = 1;
+    speed = static_cast<PresSpeed>(value);
 }
 
 void KPTransEffectDia::timeChanged( int value )
 {
-  if( value <= 0 ) value = 1;
-  slideTime = value;
+    if( value <= 0 ) value = 1;
+    slideTime = value;
 }
 
 void KPTransEffectDia::soundEffectChanged()
@@ -317,7 +318,6 @@ void KPTransEffectDia::soundEffectChanged()
         buttonTestPlaySoundEffect->setEnabled( false );
         buttonTestStopSoundEffect->setEnabled( false );
     }
-
 }
 
 static QString getSoundFileFilter()
@@ -388,7 +388,7 @@ void KPTransEffectDia::playSound()
 
 void KPTransEffectDia::stopSound()
 {
-   if ( soundPlayer ) {
+    if ( soundPlayer ) {
         soundPlayer->stop();
         delete soundPlayer;
         soundPlayer = 0;
@@ -398,4 +398,4 @@ void KPTransEffectDia::stopSound()
     }
 }
 
-#include <transeffectdia.moc>
+#include "transeffectdia.moc"

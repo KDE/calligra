@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 #include <qradiobutton.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -18,9 +19,9 @@ RotationDialogImpl::RotationDialogImpl( QWidget *parent, const char* name )
 
     customInput->setRange( 0, 360, 0.1, TRUE );
     connect( customRadio, SIGNAL( toggled( bool ) ),
-	     customInput, SLOT( setEnabled( bool ) ) );
+             customInput, SLOT( setEnabled( bool ) ) );
     connect( customInput, SIGNAL( valueChanged( double ) ),
-	     this, SLOT( angleChanged( double ) ) );
+             this, SLOT( angleChanged( double ) ) );
 }
 
 void RotationDialogImpl::applyClicked()
@@ -39,11 +40,11 @@ void RotationDialogImpl::setAngle( double angle )
     customInput->setValue( angle );
 
     if ( angle == 90
-	 || angle == 180
-	 || angle == 270 )
-	angleGroup->setButton( (int)angle );
+         || angle == 180
+         || angle == 270 )
+        angleGroup->setButton( (int)angle );
     else if ( angle == 0 )
-	angleGroup->setButton( 1 );
+        angleGroup->setButton( 1 );
     else
         angleGroup->setButton( 0 );
 }
@@ -53,16 +54,16 @@ double RotationDialogImpl::angle()
     int id = angleGroup->id( angleGroup->selected() );
 
     switch( id ) {
-	case 1:
-	    return 0;
-	case 90:
-	    return 90;
-	case 180:
-	    return 180;
-	case 270:
-	    return 270;
-	default:
-	    return customInput->value();
+    case 1:
+        return 0;
+    case 90:
+        return 90;
+    case 180:
+        return 180;
+    case 270:
+        return 270;
+    default:
+        return customInput->value();
     }
 }
 

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
@@ -42,7 +43,7 @@ class KPPresStructObjectItem;
 class KURLRequester;
 class KIntNumInput;
 class KPresenterSoundPlayer;
- 
+
 class KPEffectPreview : public QLabel
 {
     Q_OBJECT
@@ -56,7 +57,7 @@ public slots:
 
 protected:
     KPresenterDoc *doc;
-    KPresenterView *view; 
+    KPresenterView *view;
     QPixmap m_pixmap;
 
 };

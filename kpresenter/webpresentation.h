@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -44,10 +45,6 @@ class QCloseEvent;
 class KProgress;
 class QLabel;
 
-/******************************************************************/
-/* Class: KPWebPresentation                                       */
-/******************************************************************/
-
 class KPWebPresentation
 {
 public:
@@ -57,23 +54,23 @@ public:
     KPWebPresentation( const KPWebPresentation &webPres );
 
     void setAuthor( const QString &_author )
-    { author = _author; }
+        { author = _author; }
     void setEMail( const QString &_email )
-    { email = _email; }
+        { email = _email; }
     void setTitle( const QString &_title )
-    { title = _title; }
+        { title = _title; }
     void setBackColor( const QColor &_backColor )
-    { backColor = _backColor; }
+        { backColor = _backColor; }
     void setTitleColor( const QColor &_titleColor )
-    { titleColor = _titleColor; }
+        { titleColor = _titleColor; }
     void setTextColor( const QColor &_textColor )
-    { textColor = _textColor; }
+        { textColor = _textColor; }
     void setXML( bool _xml )
-    { xml = _xml; }
+        { xml = _xml; }
     void setPath( const QString &_path )
-    { path = _path; }
+        { path = _path; }
     void setZoom( int _zoom )
-    { zoom = _zoom; }
+        { zoom = _zoom; }
     void setEncoding( const QString &_encoding ) { m_encoding = _encoding; }
 
     QString getAuthor() const { return author; }
@@ -96,10 +93,10 @@ public:
     QValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
 
     void setSlideTitle( int i, const QString &slideTitle )
-    { slideInfos[i].slideTitle = slideTitle; }
+        { slideInfos[i].slideTitle = slideTitle; }
 
     void setConfig( const QString &_config )
-    { config = _config; }
+        { config = _config; }
     QString getConfig() const { return config; }
 
     void loadConfig();
@@ -118,8 +115,9 @@ public:
 protected:
     void init();
     QString escapeHtmlText( QTextCodec *codec, const QString& strText ) const;
-    void writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml, const QString& subtitle);
-    
+    void writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml,
+                            const QString& subtitle);
+
     KPresenterDoc *doc;
     KPresenterView *view;
     QString config;
@@ -132,10 +130,6 @@ protected:
     int zoom;
     QString m_encoding;
 };
-
-/******************************************************************/
-/* Class: KPWebPresentationWizard                                 */
-/******************************************************************/
 
 class KPWebPresentationWizard : public KWizard
 {
@@ -178,10 +172,6 @@ protected slots:
     void slideTitleChanged( QListViewItem * );
 
 };
-
-/******************************************************************/
-/* Class: KPWebPresentationCreateDialog                           */
-/******************************************************************/
 
 class KPWebPresentationCreateDialog : public QDialog
 {

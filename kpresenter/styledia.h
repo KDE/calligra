@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -47,7 +48,7 @@ class KPresenterDoc;
 class KDoubleNumInput;
 
 /******************************************************************/
-/* class Pen and Brush preview					  */
+/* class Pen and Brush preview                    */
 /******************************************************************/
 
 class PBPreview : public QFrame
@@ -187,7 +188,7 @@ private slots:
 };
 
 /******************************************************************/
-/* class StyleDia						  */
+/* class StyleDia                         */
 /******************************************************************/
 
 class StyleDia : public QTabDialog
@@ -199,7 +200,7 @@ public:
         SdPen = 1,
         SdBrush = 2,
         SdGradient = 4,
-	SdEndBeginLine = 8,
+        SdEndBeginLine = 8,
         SdPie = 16,
         SdPicture = 32,
         SdPolygon = 64,

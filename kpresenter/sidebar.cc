@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 Lukas Tinkl <lukas@kde.org>
@@ -10,7 +11,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -45,8 +46,8 @@ class ThumbToolTip : public QToolTip
 {
 public:
     ThumbToolTip(QWidget *parent)
-     : QToolTip(parent)
-     {}
+        : QToolTip(parent)
+        {}
 
 protected:
     void maybeTip(const QPoint &pos)
@@ -64,8 +65,8 @@ class OutlineToolTip : public QToolTip
 {
 public:
     OutlineToolTip(QWidget *parent)
-     : QToolTip(parent)
-     {}
+        : QToolTip(parent)
+        {}
 
 protected:
     void maybeTip( const QPoint &pos )
@@ -100,7 +101,7 @@ class OutlineObjectItem: public KListViewItem
 public:
 
     OutlineObjectItem( OutlineSlideItem * parent, KPObject* object,
-       int num, bool sticky, const QString& name = QString::null );
+                       int num, bool sticky, const QString& name = QString::null );
 
     KPObject* object(){ return m_object; }
 
@@ -114,11 +115,11 @@ class ThumbItem : public QIconViewItem
 {
 public:
     ThumbItem( QIconView *parent, const QString & text, const QPixmap & icon )
-     : QIconViewItem( parent, text, icon )
-     { uptodate = true; }
+        : QIconViewItem( parent, text, icon )
+        { uptodate = true; }
     ThumbItem( QIconView *parent, QIconViewItem *after, const QString & text, const QPixmap & icon )
-     : QIconViewItem( parent, after, text, icon )
-     { uptodate = true; }
+        : QIconViewItem( parent, after, text, icon )
+        { uptodate = true; }
 
     virtual bool isUptodate() { return uptodate; };
     virtual void setUptodate( bool _uptodate) { uptodate = _uptodate; };
@@ -128,33 +129,33 @@ private:
 };
 
 SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
-  :QTabWidget(parent), doc(d), view(v)
+    :QTabWidget(parent), doc(d), view(v)
 {
-  setTabPosition(QTabWidget::Top);
-  setTabShape(QTabWidget::Triangular);
+    setTabPosition(QTabWidget::Top);
+    setTabShape(QTabWidget::Triangular);
 
-  _outline = new Outline(this, doc, view);
-  addTab(_outline, i18n("Outline"));
+    _outline = new Outline(this, doc, view);
+    addTab(_outline, i18n("Outline"));
 
-  _thb = new ThumbBar(this, doc, view);
-  addTab(_thb,i18n("Preview"));
+    _thb = new ThumbBar(this, doc, view);
+    addTab(_thb,i18n("Preview"));
 
 
-  //TODO find a better way
-  connect(_outline, SIGNAL(showPage(int)),
-          this, SIGNAL(showPage(int)));
+    //TODO find a better way
+    connect(_outline, SIGNAL(showPage(int)),
+            this, SIGNAL(showPage(int)));
 
-  connect(_thb, SIGNAL(showPage(int)),
-          this, SIGNAL(showPage(int)));
+    connect(_thb, SIGNAL(showPage(int)),
+            this, SIGNAL(showPage(int)));
 
-  connect(_outline, SIGNAL(movePage(int,int)),
-          this, SIGNAL(movePage(int,int)));
+    connect(_outline, SIGNAL(movePage(int,int)),
+            this, SIGNAL(movePage(int,int)));
 
-  connect(_outline, SIGNAL(selectPage(int,bool)),
-          this, SIGNAL(selectPage(int,bool)));
+    connect(_outline, SIGNAL(selectPage(int,bool)),
+            this, SIGNAL(selectPage(int,bool)));
 
-  connect(this, SIGNAL(currentChanged(QWidget *)),
-          this, SLOT(currentChanged(QWidget *)));
+    connect(this, SIGNAL(currentChanged(QWidget *)),
+            this, SLOT(currentChanged(QWidget *)));
 
 }
 
@@ -193,24 +194,24 @@ void SideBar::updateItem( int pos, bool sticky )
 }
 
 ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
-  :KIconView(parent), doc(d), view(v)
+    :KIconView(parent), doc(d), view(v)
 {
-  uptodate = false;
-  offsetX = 0;
-  offsetY = 0;
+    uptodate = false;
+    offsetX = 0;
+    offsetY = 0;
 
-  setArrangement(QIconView::LeftToRight);
-  setAutoArrange(true);
-  setSorting(false);
-  setItemsMovable(false);
-  setResizeMode(QIconView::Adjust);
+    setArrangement(QIconView::LeftToRight);
+    setAutoArrange(true);
+    setSorting(false);
+    setItemsMovable(false);
+    setResizeMode(QIconView::Adjust);
 
-  thumbTip = new ThumbToolTip(this);
+    thumbTip = new ThumbToolTip(this);
 
-  connect(this, SIGNAL(currentChanged(QIconViewItem *)),
-          this, SLOT(itemClicked(QIconViewItem *)));
-  connect(this, SIGNAL(contentsMoving(int, int)),
-          this, SLOT(slotContentsMoving(int, int)));
+    connect(this, SIGNAL(currentChanged(QIconViewItem *)),
+            this, SLOT(itemClicked(QIconViewItem *)));
+    connect(this, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotContentsMoving(int, int)));
 }
 
 ThumbBar::~ThumbBar()
@@ -230,7 +231,6 @@ void ThumbBar::setCurrentPage( int pg )
             return;
         }
     }
-
 }
 
 QRect ThumbBar::tip(const QPoint &pos, QString &title)
@@ -310,17 +310,15 @@ void ThumbBar::rebuildItems()
 void ThumbBar::refreshItems(bool offset)
 {
     QRect vRect = visibleRect();
-    if ( offset ) {
+    if ( offset )
         vRect.moveBy( offsetX, offsetY );
-    }
-    else {
+    else
         vRect.moveBy( contentsX(), contentsY() );
-    }
 
     QIconViewItem *it = findFirstVisibleItem( vRect );
     while ( it )
     {
-kdDebug(33001) << "visible page = " << it->text().toInt() << endl;
+        kdDebug(33001) << "visible page = " << it->text().toInt() << endl;
         if ( ! dynamic_cast<ThumbItem *>(it)->isUptodate( ) ){
             //todo refresh picture
             it->setPixmap( getSlideThumb( it->text().toInt() - 1 ) );
@@ -401,9 +399,8 @@ void ThumbBar::addItem( int pos )
             it = it->nextItem();
         }
         // update page numbers
-        if ( page >= pos ) {
+        if ( page >= pos )
             it->setText( QString::number(page+2) );
-        }
         page++;
     }
 }
@@ -417,26 +414,24 @@ void ThumbBar::moveItem( int oldPos, int newPos )
     QIconViewItem *take = 0;
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         // find page which should move
-        if ( page == oldPos ) {
+        if ( page == oldPos )
             take = it;
-        }
         // find position where page should be insert
         // as a page can not be insert at the beginning get the first one
         // the page to get depends on if a page is moved forward / backwards
-        if ( page == newPos ) {
+        if ( page == newPos )
             after = page == 0 ? it : newPos > oldPos ? it : it->prevItem();
-        }
         page++;
     }
 
     if ( ! take )
         return;
-    
+
     // workaround for a bug in qt 3.1.1 insertItem dose not work.
     // TODO remove workaround when qt 3.1.2 comes out tz
     //takeItem( take );
     //insertItem( take, after);
-    ThumbItem *item = new ThumbItem( static_cast<QIconView *>(this), after, QString::number( newPos ), *(take->pixmap()) ); 
+    ThumbItem *item = new ThumbItem( static_cast<QIconView *>(this), after, QString::number( newPos ), *(take->pixmap()) );
     item->setDragEnabled(false);  //no dragging for now
     delete take;
     // update the thumbs if new pos was 0
@@ -453,9 +448,8 @@ void ThumbBar::moveItem( int oldPos, int newPos )
     int highPage = oldPos < newPos ? newPos : oldPos;
     page = 0;
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
-        if ( page >= lowPage && page <= highPage) {
+        if ( page >= lowPage && page <= highPage)
             it->setText( QString::number(page+1) );
-        }
         page++;
     }
 }
@@ -472,11 +466,10 @@ void ThumbBar::removeItem( int pos )
             itemToDelete = it;
             if ( it->nextItem() )
                 it = it->nextItem();
-                change = true;
+            change = true;
         }
-        if ( change ) {
+        if ( change )
             it->setText( QString::number( page + 1 ) );
-        }
         page++;
     }
     delete itemToDelete;
@@ -570,15 +563,15 @@ void OutlineSlideItem::update()
     OutlineObjectItem *ooi = 0;
     while ( ( ooi = dynamic_cast<OutlineObjectItem*>( this->firstChild() ) ) )
         delete ooi;
-    
+
     // keep selected object
     ooi = 0;
     QPtrList<KPObject> list(m_page->objectList());
     for ( int j = m_page->objNums() - 1; j >= 0; --j ) {
         KPObject* object = list.at( j );
         OutlineObjectItem *item = new OutlineObjectItem( this, object, j+1, false );
-        item->setDragEnabled( false ); 
-        if ( object->isSelected() ) 
+        item->setDragEnabled( false );
+        if ( object->isSelected() )
             ooi = item;
     }
 
@@ -598,35 +591,34 @@ void OutlineSlideItem::update()
             footer = object;
         else if( ! doc->isHeader( object ) && ! doc->isFooter( object ) ) {
             OutlineObjectItem *item = new OutlineObjectItem( this, object, 0, true );
-            if ( object->isSelected() ) 
+            if ( object->isSelected() )
                 ooi = item;
         }
-        
+
     }
 
     // add header and footer (if any)
     if ( footer ) {
         OutlineObjectItem *item = new OutlineObjectItem( this, footer, 0, true, i18n("Footer") );
-        if ( footer->isSelected() ) 
-            ooi = item;
-    }
-    
-    if ( header ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, header, 0, true, i18n("Header") );
-        if ( header->isSelected() ) 
+        if ( footer->isSelected() )
             ooi = item;
     }
 
-    // select selected object the page is necessary that a 
+    if ( header ) {
+        OutlineObjectItem *item = new OutlineObjectItem( this, header, 0, true, i18n("Header") );
+        if ( header->isSelected() )
+            ooi = item;
+    }
+
+    // select selected object the page is necessary that a
     // sticky object is selected on the active page
     if ( ooi && doc->activePage() == m_page )
         (ooi->listView())->setSelected( ooi, true );
-    
 }
 
 
 OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object,
-    int num, bool sticky, const QString& name )
+                                      int num, bool sticky, const QString& name )
     : KListViewItem( parent ), m_object( _object )
 {
     setObject( m_object );
@@ -728,7 +720,6 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     setDropVisualizer( true );
     setFullWidth( true );
     this->setRootIsDecorated( true );
-
 }
 
 Outline::~Outline()
@@ -773,9 +764,8 @@ void Outline::updateItem( int pagenr /* 0-based */, bool sticky )
         }
     } else {
         blockSignals(true);
-        for( QListViewItem *item = this->firstChild(); item; item = item->nextSibling() ) {
+        for( QListViewItem *item = this->firstChild(); item; item = item->nextSibling() )
             dynamic_cast<OutlineSlideItem*>(item)->update();
-        }
         blockSignals(false);
     }
 }
@@ -795,10 +785,8 @@ void Outline::addItem( int pos )
     }
 
     // update title
-    for( ; item; item = dynamic_cast<OutlineSlideItem*>(item->nextSibling()) ) {
+    for( ; item; item = dynamic_cast<OutlineSlideItem*>(item->nextSibling()) )
         item->update();
-    }
-
 }
 
 // move an Outline Item so that not the hole list has to be recreated
@@ -846,7 +834,7 @@ QRect Outline::tip(const QPoint &pos, QString &title)
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( !slideItem )
         return QRect(0, 0, -1, -1);
-	title = slideItem->text( 0 );
+    title = slideItem->text( 0 );
 
     return itemRect(item);
 }
@@ -977,9 +965,9 @@ void Outline::renamePageTitle()
     bool ok = false;
     QString activeTitle = item->text( 0 );
     QString newTitle = KLineEditDlg::getText( i18n("Rename Slide"),
-        i18n("Slide title:"), activeTitle, &ok, this,
-        // we want to allow empty titles. Empty == automatic.
-        &QRegExpValidator(QRegExp(".*"), 0) );
+                                              i18n("Slide title:"), activeTitle, &ok, this,
+                                              // we want to allow empty titles. Empty == automatic.
+                                              &QRegExpValidator(QRegExp(".*"), 0) );
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
@@ -993,4 +981,4 @@ void Outline::renamePageTitle()
 }
 
 
-#include <sidebar.moc>
+#include "sidebar.moc"

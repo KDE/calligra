@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 #include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -26,7 +27,7 @@ ShadowDialogImpl::ShadowDialogImpl( QWidget *parent, const char* name )
     lButton->setPixmap( BarIcon( "shadowL" ) );
 
     connect( colorButton, SIGNAL( changed( const QColor& ) ),
-	     SLOT( colorChanged( const QColor& ) ) );
+             SLOT( colorChanged( const QColor& ) ) );
 }
 
 void ShadowDialogImpl::setShadowDirection( ShadowDirection d )

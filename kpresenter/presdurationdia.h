@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -26,12 +27,6 @@ class KPresenterDoc;
 class KListView;
 class QLabel;
 
-/******************************************************************
- *
- * Class: KPPresDurationDia
- *
- ******************************************************************/
-
 class KPPresDurationDia : public KDialogBase
 {
     Q_OBJECT
@@ -40,7 +35,7 @@ public:
     KPPresDurationDia( QWidget *parent, const char *name,
                        KPresenterDoc *_doc,
                        QStringList _durationListString,
-		       const QString &_durationString );
+                       const QString &_durationString );
 
 protected:
     void setupSlideList( QWidget *_page );
