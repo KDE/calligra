@@ -228,10 +228,11 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 		return false;
 
 	if (view) {
-		if (!view->beforeSwitchTo(newViewMode, cancelled, dontStore))
-			return false;
+		bool success = view->beforeSwitchTo(newViewMode, cancelled, dontStore);
 		if (cancelled)
 			return true;
+		if (!success)
+			return false;
 		if (!dontStore && view->dirty()) {
 			if (!m_parentWindow->saveObject(this, cancelled, i18n("Design has been changed. You must save it before switching to other view.")))
 				return false;

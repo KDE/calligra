@@ -288,6 +288,12 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - make "1" and "inf" signs a bit larger (scalable)
 - 'criteria' and 'totals' are unused yet
 
+==== SQL Editor TODO: =====
+- change font to courier
+- add syntax highlighting
+- intergrate editor's (KPart) actions with KexiMainWindow's Actions
+
+
 ==== Main window TODO ====
 - show error message if createView() returned 0
 
@@ -314,14 +320,16 @@ Query Designer
 - KexiQueryDesignerSQLView -> KexiQueryDesignerSQL
 - KexiQueryDesignerSQLEditor: now inherits KexiViewBase
 - Double clicking on table's field in Relation View allows to auto-add this field
+- KexiQueryDocument no longer used, similar KexiQueryPart::TempData is used
+- switching to SQL View working again
+- added warning when switching to dataview with empty design
 KexiTableView
 - Editor's focus position is updated (moved down) 
   when new row is inserted above current row
 
-Query Designer
--KexiQueryDocument no longer used, similar KexiQueryPart::TempData is used
--Switching to SQL View working again
-
+KexiDialogBase
+- returning without failure when KexiViewBase::beforeSwitchTo() 
+  returned cancel==true and success==false
 
 2004-06-17
 KexiTableView
