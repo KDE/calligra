@@ -35,7 +35,7 @@ public:
 
 k_dcop:
     DCOPRef partFrameSet();
-
+    DCOPRef childInterface();
 private:
     KWPartFrameSetEdit *m_partedit;
 };

@@ -24,6 +24,8 @@
 #include "kwdoc.h"
 #include <kapplication.h>
 #include <dcopclient.h>
+#include <koDocumentChild.h>
+#include <koDocument.h>
 
 KWordPartFrameSetEditIface::KWordPartFrameSetEditIface( KWPartFrameSetEdit *_framesetedit )
     :DCOPObject()
@@ -35,5 +37,12 @@ DCOPRef KWordPartFrameSetEditIface::partFrameSet()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
 		    static_cast<KWPartFrameSet *>(m_partedit->partFrameSet() )->dcopObject()->objId() );
+
+}
+
+DCOPRef KWordPartFrameSetEditIface::childInterface()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		    (m_partedit->partFrameSet()->getChild()->document())->dcopObject()->objId() );
 
 }
