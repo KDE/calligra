@@ -205,6 +205,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     dcop = 0;
     m_tabStop = MM_TO_POINT( 15.0 );
     bgFrameSpellChecked = 0L;
+    m_processingType = WP;
 
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
