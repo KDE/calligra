@@ -130,6 +130,7 @@ void VColorDocker::slotItemSelected( KoIconItem *item )
 	{
 		VFill fill;
 		fill.pattern() = *pattern;//.load( pattern->tilename() );
+		fill.setColor( *m_Color );
 		fill.setType( VFill::patt );
 		m_part->addCommand( new VFillCmd( &m_part->document(), fill ), true );
 	}
