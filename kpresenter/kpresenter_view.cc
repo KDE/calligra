@@ -3066,12 +3066,11 @@ void KPresenterView::objectSelectedChanged()
         double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
         actionTextDepthMinus->setEnabled( val && leftMargin>0);
     }
-
+    actionChangeCase->setEnabled( isText);
     if(!edit)
     {
         actionEditCopy->setEnabled(state);
         actionEditCut->setEnabled(state);
-        actionChangeCase->setEnabled( val);
     }
     actionFormatStyle->setEnabled(val);
     state=m_canvas->oneObjectTextExist();
@@ -5115,13 +5114,27 @@ void KPresenterView::slotHRulerDoubleClicked()
 
 void KPresenterView::changeCaseOfText()
 {
-    KPTextView *edit=m_canvas->currentTextObjectView();
-    if(!edit)
-        return;
+    QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    bool createmacro=false;
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        edit->changeCaseOfText(caseDia->getTypeOfCase());
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change case of text") );
+        for ( ; it.current() ; ++it )
+        {
+            KCommand *cmd = it.current()->setChangeCaseOfTextCommand(caseDia->getTypeOfCase());
+            if (cmd)
+            {
+                createmacro=true;
+                macroCmd->addCommand(cmd);
+            }
+        }
+        if( createmacro )
+            m_pKPresenterDoc->addCommand(macroCmd);
+        else
+            delete macroCmd;
     }
     delete caseDia;
 }
