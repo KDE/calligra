@@ -259,6 +259,8 @@ protected:
    */
   virtual void partActivateEvent( KParts::PartActivateEvent *event );
   virtual void partSelectEvent( KParts::PartSelectEvent *event );
+  virtual void guiActivateEvent( KParts::GUIActivateEvent * );
+
 
   /**
    * You have to implement this method and disable/enable certain functionality (actions for example) in

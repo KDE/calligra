@@ -95,6 +95,7 @@ public:
 */
 
 protected:
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
     void showTransformationDialog (int id);
 
     void setupCanvas ();
@@ -104,6 +105,7 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
 protected slots:
+    void showNodesToolbar(bool show);
     void setUndoStatus( bool undoPossible, bool redoPossible );
     void popupForSelection (int x, int y);
     void resetTools();

@@ -247,6 +247,7 @@ void EditPointTool::activate (GDocument* doc, Canvas* canvas) {
     // redraw with highlighted points
     canvas->showBasePoints (true);
   }
+  emit activated(true);
 }
 
 void EditPointTool::deactivate (GDocument* doc, Canvas* canvas) {
@@ -255,6 +256,7 @@ void EditPointTool::deactivate (GDocument* doc, Canvas* canvas) {
     // redraw with unhighlighted points
     canvas->showBasePoints (false);
   }
+  emit activated(false);
 }
 
 #include <EditPointTool.moc>

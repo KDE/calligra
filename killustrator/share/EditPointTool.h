@@ -47,6 +47,9 @@ public:
   void activate (GDocument* doc, Canvas* canvas);
   void deactivate (GDocument* doc, Canvas* canvas);
 
+signals:
+    void activated(bool);
+
 private:
   Mode mode;
   GObject* obj;

@@ -233,6 +233,8 @@ void KoView::customEvent( QCustomEvent *ev )
     partActivateEvent( (KParts::PartActivateEvent *)ev );
   else if ( KParts::PartSelectEvent::test( ev ) )
     partSelectEvent( (KParts::PartSelectEvent *)ev );
+  else if( KParts::GUIActivateEvent::test( ev ) )
+    guiActivateEvent( (KParts::GUIActivateEvent*)ev );
 }
 
 void KoView::partActivateEvent( KParts::PartActivateEvent *event )
@@ -291,6 +293,9 @@ void KoView::partSelectEvent( KParts::PartSelectEvent *event )
   }
   else
     emit selected( event->selected() );
+}
+
+void KoView::guiActivateEvent( KParts::GUIActivateEvent * ) {
 }
 
 KoDocumentChild *KoView::selectedChild()

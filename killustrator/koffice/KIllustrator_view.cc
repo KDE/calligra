@@ -84,6 +84,7 @@
 #include <kcoloractions.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
+#include <kparts/event.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
                                     KIllustratorDocument* doc) :
@@ -362,6 +363,7 @@ void KIllustratorView::setupCanvas()
                                editPointTool = new EditPointTool (&cmdHistory));
     QObject::connect (editPointTool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
+    connect(editPointTool, SIGNAL(activated(bool)), this, SLOT(showNodesToolbar(bool)));
     Tool* tool;
     tcontroller->registerTool (ID_TOOL_FREEHAND,
                                tool = new FreeHandTool (&cmdHistory));
@@ -448,6 +450,11 @@ void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
+void KIllustratorView::guiActivateEvent( KParts::GUIActivateEvent *ev ) {
+    if(ev->activated())
+        showNodesToolbar(false);
+}
+
 void KIllustratorView::showTransformationDialog( int id )
 {
     TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
@@ -455,6 +462,21 @@ void KIllustratorView::showTransformationDialog( int id )
                       transformationDialog, SLOT (update ()));
     transformationDialog->setDocument ( m_pDoc->gdoc() );
     transformationDialog->showTab (id);
+}
+
+void KIllustratorView::showNodesToolbar(bool show) {
+
+    if ( !factory() )
+        return;
+
+    QWidget *tb = factory()->container( "nodes", this );
+    if( !tb )
+        return;
+
+    if (show)
+        tb->show();
+    else
+        tb->hide();
 }
 
 bool KIllustratorView::printDlg()

@@ -160,6 +160,8 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
             QApplication::sendEvent( parent(), e );
             return TRUE;
         }
+        else if( k->key() == Key_Tab )
+            return true;
 
         // End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
