@@ -204,41 +204,6 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
 
     m_textBody+="}";
 
-
-
-#if 0
-    QString strImageName(anchor.picture.koStoreName);
-
-    QString strImagePath(strImageName);
-
-    QByteArray image;
-
-    kdDebug(30503) << "Image " << anchor.picture.koStoreName << " will be written in " << strImageName << endl;
-
-    if (loadKoStoreFile(anchor.picture.koStoreName,image))
-    {
-        QFile file(strImagePath);
-
-        if ( !file.open (IO_WriteOnly) )
-        {
-            kdError(30503) << "Unable to open image output file!" << endl;
-            return false;
-        }
-
-        file.writeBlock(image);
-        file.close();
-
-        m_textBody += "<img "; // This is an empty element!
-        m_textBody += "src=\"" + strImageName + "\" ";
-        m_textBody += "alt=\"" + anchor.picture.key.filename() + "\"";
-        m_textBody += ">\n";
-        kdDebug(30503) << "Image written" << endl;
-    }
-    else
-    {
-        kdWarning(30503) << "Unable to load image " << anchor.picture.koStoreName << endl;
-    }
-#endif
     return true;
 }
 
