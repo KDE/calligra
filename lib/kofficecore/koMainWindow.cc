@@ -226,6 +226,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     d->m_paDocInfo->setEnabled( false );
     d->m_paSaveAs->setEnabled( false );
+    d->m_reloadfile->setEnabled( false );
     d->m_paSave->setEnabled( false );
     d->m_paPrint->setEnabled( false );
     d->m_paPrintPreview->setEnabled( false );
@@ -347,6 +348,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_paDocInfo->setEnabled( enable );
   d->m_paSave->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
+  d->m_reloadfile->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
@@ -372,6 +374,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView
   bool enable = d->m_rootDoc != 0 ? true : false;
   d->m_paDocInfo->setEnabled( enable );
   d->m_paSave->setEnabled( enable );
+  d->m_reloadfile->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
