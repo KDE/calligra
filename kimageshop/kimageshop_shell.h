@@ -33,17 +33,21 @@ class KImageShopShell : public KoMainWindow
   Q_OBJECT
 
 public:
+
   KImageShopShell();
   ~KImageShopShell();
+
   virtual void cleanUp();
-  void setDocument( KImageShopDoc* _doc );
+  void setDocument(KImageShopDoc* _doc);
+
   virtual bool newDocument();
-  virtual bool openDocument( const char* _filename, const char* _format );
-  virtual bool saveDocument( const char* _file, const char* _format );
+  virtual bool openDocument(const char* _filename, const char* _format);
+  virtual bool saveDocument(const char* _file, const char* _format);
   virtual bool closeDocument();
   virtual bool closeAllDocuments();
 
 protected slots:
+
   void slotFileNew();
   void slotFileOpen();
   void slotFileSave();
@@ -53,11 +57,13 @@ protected slots:
   void slotFileQuit();
 
 protected:
+
   virtual KOffice::Document_ptr document();
   virtual KOffice::View_ptr view();
   virtual bool printDlg();
   virtual void helpAbout();
   virtual int documentCount();
+
   bool isModified();
   bool requestClose();
   void releaseDocument();

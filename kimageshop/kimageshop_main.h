@@ -30,7 +30,8 @@ class KImageShopApp : public KoApplication
   Q_OBJECT
 
 public:
-  KImageShopApp( int& argc, char** argv );
+
+  KImageShopApp(int& argc, char** argv);
   ~KImageShopApp() { };
 
   virtual KoMainWindow* createNewShell();

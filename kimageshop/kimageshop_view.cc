@@ -22,9 +22,8 @@
 #include <qmsgbox.h>
 #include <qkeycode.h>
 #include <qprndlg.h>
-#include <qwmatrix.h>
-#include <kimgio.h>
 
+#include <kimgio.h>
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
@@ -32,7 +31,6 @@
 #include <kstddirs.h>
 #include <kstdaccel.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
 #include <kruler.h>
 #include <kpixmapcache.h>
 
@@ -42,9 +40,6 @@
 
 #include <koPartSelectDia.h>
 #include <koAboutDia.h>
-
-#include "zoomfactordlg.h"
-#include "preferencesdlg.h"
 
 #include "kimageshop_doc.h"
 #include "kimageshop_view.h"
@@ -56,25 +51,6 @@
 #include "movetool.h"
 #include "brushtool.h"
 #include "zoomtool.h"
-
-#define CHECK_DOCUMENT \
-	if( m_pDoc->isEmpty() ) \
-	{ \
-	  kdebug( KDEBUG_INFO, 0, "Document is empty. Action won't be executed." ); \
-	  return; \
-	}
-
-#define CHECK_RUNNING \
-	if( m_pDoc->m_executeCommand ) \
-	{ \
-	  kdebug( KDEBUG_INFO, 0, "Document is empty. External command won't be executed." ); \
-	  return; \
-	}
-	
-#define CHECK_ALL \
-	CHECK_DOCUMENT \
-	CHECK_RUNNING
-
 
 KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc )
   : QWidget( _parent, _name )
@@ -95,18 +71,18 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pVRuler = 0L;
   m_ZoomFactor = 1;
 
-  QObject::connect( m_pDoc, SIGNAL( sigUpdateView(const QRect&) ), this, SLOT( slotUpdateView(const QRect&) ) );
+  QObject::connect(m_pDoc, SIGNAL(sigUpdateView(const QRect&)), this, SLOT(slotUpdateView(const QRect&)));
 }
 
 KImageShopView::~KImageShopView()
 {
-  kdebug( KDEBUG_INFO, 0, "KImageShopView::~KImageShopView() %li", _refcnt() );
+  kdebug(KDEBUG_INFO, 0, "KImageShopView::~KImageShopView() %li", _refcnt());
   cleanUp();
 }
 
 void KImageShopView::init()
 {
-  // register the view at the parent parts UI managers
+  // register the view at the parent-parts UI managers
   kdebug( KDEBUG_INFO, 0, "Registering menu as %li", id() );
   
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
@@ -121,6 +97,7 @@ void KImageShopView::init()
   else
     kdebug( KDEBUG_ERROR, 0, "Did not get a tool bar manager" );
 
+  // setup scrollbars/rulers etc.
   createGUI();
 }
 
@@ -143,7 +120,7 @@ void KImageShopView::cleanUp()
     tool_bar_manager->unregisterClient( id() );
   
   // let the document know that this view is gone
-  m_pDoc->removeView( this );
+  m_pDoc->removeView(this);
 
   delete m_pHorz;
   delete m_pVert;
@@ -170,9 +147,9 @@ bool KImageShopView::event( const char* _event, const CORBA::Any& _value )
 
 bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  kdebug( KDEBUG_INFO, 0, "ImageShopView::mappingCreateToolbar" );
+  kdebug(KDEBUG_INFO, 0, "ImageShopView::mappingCreateToolbar");
 
-  if ( CORBA::is_nil( _factory ) )
+  if (CORBA::is_nil(_factory))
   {
     // ToolBarFactory is nil -> we lost control over the toolbar
     kdebug( KDEBUG_INFO, 0, "Setting to nil" );
@@ -213,21 +190,21 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->insertButton2(pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1);
   m_vToolBarTools->setToggle(TBTOOLS_BRUSHTOOL, true);
 
-  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar : done" );
+  kdebug(KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar : done");
   return true;
 }
 
 bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 {
-  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateMenubar" );
+  kdebug(KDEBUG_INFO, 0, "KImageShopView::mappingCreateMenubar");
 
-  if ( CORBA::is_nil( menubar ) )
+  if (CORBA::is_nil(menubar))
   {
     // MenuBar_ptr is nil -> we lost control over the menubar
     kdebug( KDEBUG_INFO, 0, "Setting to nil" );
     m_vMenuEdit = 0L;
     m_vMenuView = 0L;
-    m_vMenuTransform = 0L;
+    m_vMenuImage = 0L;
     m_vMenuPlugIns = 0L;
     m_vMenuOptions = 0L;
     return true;
@@ -262,9 +239,9 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
   m_vMenuEdit->setItemChecked( m_idMenuView_LayerDialog, false );
 
-  // transform menu
-  text = Q2C( i18n( "&Transform" ) );
-  menubar->insertMenu( text , m_vMenuTransform, -1, -1 );
+  // image menu
+  text = Q2C( i18n( "&Image" ) );
+  menubar->insertMenu( text , m_vMenuImage, -1, -1 );
 
   // plugins menu
   text = Q2C( i18n( "&Plugins" ) );
@@ -300,7 +277,7 @@ void KImageShopView::createGUI()
   m_pMoveTool = new MoveTool(m_pDoc);
   m_pTool = m_pMoveTool;
 
-  // we have no brush -> create a default one
+  // create a default brush
   QString _image = locate("data", "kimageshop/brushes/brush.jpg");
   m_pBrush = new Brush(_image);
   m_pBrush->setHotSpot(QPoint(25,25));
@@ -316,7 +293,7 @@ void KImageShopView::createGUI()
   m_pLayerDialog->show();
   m_pLayerDialog->resize(150,200);
 
-  resizeEvent( 0L );
+  resizeEvent(0L);
 }
 
 void KImageShopView::setupScrollbars()
@@ -325,23 +302,23 @@ void KImageShopView::setupScrollbars()
   m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
 
   if (m_pCanvasView)
-    m_pCanvasView->resize( widget()->width()-16, widget()->height()-16 );
+    m_pCanvasView->resize(widget()->width()-16, widget()->height()-16);
   
-  m_pVert->setGeometry( widget()->width()-16, 0, 16, widget()->height()-16 );
-  m_pHorz->setGeometry( 0, widget()->height()-16, widget()->width()-16, 16 );
+  m_pVert->setGeometry(widget()->width()-16, 0, 16, widget()->height()-16);
+  m_pHorz->setGeometry(0, widget()->height()-16, widget()->width()-16, 16);
   m_pVert->show();
   m_pHorz->show();
 
-  QObject::connect( m_pVert, SIGNAL( valueChanged( int ) ), this, SLOT( scrollV( int ) ) );
-  QObject::connect( m_pHorz, SIGNAL( valueChanged( int ) ), this, SLOT( scrollH( int ) ) );
+  QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
+  QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
 
 }
 
 void KImageShopView::setupRulers()
 {
-  m_pHRuler = new KRuler( KRuler::horizontal, this );
-  m_pVRuler = new KRuler( KRuler::vertical, this );
-  m_pCanvasView->resize( m_pCanvasView->width() - 20, m_pCanvasView->height() - 20);
+  m_pHRuler = new KRuler(KRuler::horizontal, this);
+  m_pVRuler = new KRuler(KRuler::vertical, this);
+  m_pCanvasView->resize(m_pCanvasView->width() - 20, m_pCanvasView->height() - 20);
   m_pCanvasView->move(20, 20);
   m_pHRuler->setGeometry(20, 0, m_pCanvasView->width(), 20);
   m_pVRuler->setGeometry(0, 20, 20, m_pCanvasView->height());
@@ -353,13 +330,13 @@ void KImageShopView::setupRulers()
   m_pHRuler->setRulerStyle(KRuler::pixel);
 }
 
-void KImageShopView::scrollH(int )
+void KImageShopView::scrollH(int)
 {
   m_pHRuler->setOffset(m_pHorz->value());
   slotCVPaint(0L);
 }
 
-void KImageShopView::scrollV(int )
+void KImageShopView::scrollV(int)
 {
   m_pVRuler->setOffset(m_pVert->value());
   slotCVPaint(0L);
@@ -367,11 +344,11 @@ void KImageShopView::scrollV(int )
 
 void KImageShopView::newView()
 {
-  ASSERT( m_pDoc != 0L );
+  ASSERT(m_pDoc != 0L);
 
   KImageShopShell* shell = new KImageShopShell;
   shell->show();
-  shell->setDocument( m_pDoc );
+  shell->setDocument(m_pDoc);
 }
 
 KImageShopDoc* KImageShopView::doc()
@@ -381,16 +358,16 @@ KImageShopDoc* KImageShopView::doc()
 
 void KImageShopView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kimageshop/kimage.html", QString::null );
+  kapp->invokeHTMLHelp("kimageshop/kimageshop.html", QString::null);
 }
 
 CORBA::Boolean KImageShopView::printDlg()
 {
   QPrinter prt;
 
-  if( QPrintDialog::getPrinterSetup( &prt ) )
+  if(QPrintDialog::getPrinterSetup(&prt))
   {
-    m_pDoc->print( &prt );
+    m_pDoc->print(&prt);
   }
   return true;
 }
@@ -399,8 +376,8 @@ void KImageShopView::resizeEvent(QResizeEvent*)
 {
   if ((KoViewIf::hasFocus() || mode() == KOffice::View::RootMode))
     {
-      int docHeight = m_pDoc->height();
-      int docWidth = m_pDoc->width();
+      int docHeight = static_cast<int>(m_pDoc->height() * m_ZoomFactor);
+      int docWidth = static_cast<int>(m_pDoc->width() * m_ZoomFactor);
 
       m_pHRuler->show();
       m_pVRuler->show();
@@ -448,9 +425,16 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pHRuler->setGeometry(20, 0, m_pCanvasView->width(), 20);
       m_pVRuler->setGeometry(0, 20, 20, m_pCanvasView->height());
 
-      m_pVRuler->setRange(0, docHeight);
-      m_pHRuler->setRange(0, docWidth);
+      if (docHeight > height())
+	m_pVRuler->setRange(-docHeight, docHeight);
+      else
+	m_pVRuler->setRange(-height(), height());
 
+      if (docWidth > width())
+	m_pHRuler->setRange(-docWidth, docWidth);
+      else
+	m_pHRuler->setRange(-width(), width());
+      
       if(!m_pVert->isVisible())
 	m_pVRuler->setOffset(-(m_pCanvasView->height() - docHeight)/2);
       else
@@ -490,9 +474,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
 void KImageShopView::slotActivateMoveTool()
 {
   if (!m_pMoveTool)
-    {
       m_pMoveTool = new MoveTool(m_pDoc);
-    }
 
   m_pTool = m_pMoveTool;
   
@@ -526,7 +508,6 @@ void KImageShopView::slotActivateBrushTool()
 
   m_pTool = m_pBrushTool;
 
-  
   if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
     {
       // brush tool is already on but will automatically be toggled by
@@ -548,7 +529,6 @@ void KImageShopView::slotActivateZoomTool()
     m_pZoomTool = new ZoomTool(this);
 
   m_pTool = m_pZoomTool;
-
   
   if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
     {
@@ -568,7 +548,7 @@ void KImageShopView::slotActivateZoomTool()
 void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coordiantes
 {
   // viewrect in canvas coordinates
-  QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor);
+  QRect viewRect(static_cast<int>(m_pHorz->value()/m_ZoomFactor), static_cast<int>(m_pVert->value()/m_ZoomFactor), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor);
 
   // does the area intersect the viewrect?
   if (!_area.intersects(viewRect)) return;
@@ -577,13 +557,13 @@ void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coord
   QRect area = viewRect & _area;
 
   // offset
-  QPoint offset(m_pHorz->value(), m_pVert->value());
+  QPoint offset(static_cast<int>(m_pHorz->value()/m_ZoomFactor), static_cast<int>(m_pVert->value()/m_ZoomFactor));
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
   
   // repaint
   m_pDoc->paintPixmap(m_pCanvasView, area, offset, QPoint(x,y), m_ZoomFactor);
@@ -601,10 +581,10 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
     return;
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
 
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
@@ -630,10 +610,10 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
     return;
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
 
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
@@ -662,10 +642,10 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
     return;
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
 
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
@@ -687,20 +667,23 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
 
 void KImageShopView::slotSetZoomFactor(float zoomFactor)
 {
-  if (zoomFactor == 0) // avoid divide by null
+  // avoid divide by null
+  if (zoomFactor == 0)
     m_ZoomFactor = 1;
 
-  if (zoomFactor < 0.03125) // min == 1/32
+  // min == 1/32
+  if (zoomFactor < 0.03125)
     zoomFactor = 0.03125;
 
-  if (zoomFactor > 32) // max == 32/1
+  // max == 32/1
+  if (zoomFactor > 32)
     zoomFactor = 32;
 
   if (zoomFactor == m_ZoomFactor)
     return;
 
   m_ZoomFactor = zoomFactor;
-  m_pCanvasView->repaint();
+  resizeEvent(0L);
 }
 
 void KImageShopView::editUndo()
@@ -713,18 +696,15 @@ void KImageShopView::editRedo()
 
 void KImageShopView::viewLayerDialog()
 {
-  if( m_pLayerDialog )
-  {
-    if( m_pLayerDialog->isVisible() )
+  if(m_pLayerDialog)
     {
-      m_pLayerDialog->hide();
+      if(m_pLayerDialog->isVisible())
+	  m_pLayerDialog->hide();
+      else
+	  m_pLayerDialog->show();
+      
+      m_vMenuView->setItemChecked(m_idMenuView_LayerDialog, true);
     }
-    else
-    {
-      m_pLayerDialog->show();
-    }
-    m_vMenuView->setItemChecked(m_idMenuView_LayerDialog, true);
-  }
 }
 
 #include "kimageshop_view.moc"

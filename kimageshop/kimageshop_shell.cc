@@ -20,8 +20,6 @@
 
 #include <qprinter.h>
 #include <qmsgbox.h>
-
-#include <qtimer.h>
 #include <qstring.h>
 
 #include <klocale.h>
@@ -43,25 +41,24 @@ KImageShopShell::KImageShopShell()
   m_pDoc = 0L;
   m_pView = 0L;
 
-  if ( s_lstShells == 0L )
+  if (s_lstShells == 0L)
     s_lstShells = new QList<KImageShopShell>;
 
-  s_lstShells->append( this );
+  s_lstShells->append(this);
   resize(700,500);
 }
 
 KImageShopShell::~KImageShopShell()
 {
-  kdebug( KDEBUG_INFO, 0, "KImageShopShell::~KImageShopShell()" );
+  kdebug(KDEBUG_INFO, 0, "KImageShopShell::~KImageShopShell()");
 
   cleanUp();
-
-  s_lstShells->removeRef( this );
+  s_lstShells->removeRef(this);
 }
 
 bool KImageShopShell::isModified()
 {
-  if ( m_pDoc )
+  if (m_pDoc)
     return (bool)m_pDoc->isModified();
 
   return false;
@@ -72,19 +69,17 @@ bool KImageShopShell::requestClose()
   int res = QMessageBox::warning( 0L, i18n("Warning"), i18n("The document has been modified\nDo you want to save it ?" ),
 				  i18n("Yes"), i18n("No"), i18n("Cancel") );
 
-  if ( res == 0 )
-    return saveDocument( "", "" );
+  if (res == 0)
+    return saveDocument("", "");
 
-  if ( res == 1 )
+  if (res == 1)
     return true;
-
   return false;
 }
 
 void KImageShopShell::cleanUp()
 {
   releaseDocument();
-
   KoMainWindow::cleanUp();
 }
 

@@ -1,8 +1,6 @@
 Current todo list:
 (add ideas here :-)
 
-- zooming
-- zoom tool
 - menu: view->zoom in, zoom out, zoom factor
 - ruler context menu to select metrics
 - paint on/move linked layers
@@ -12,4 +10,9 @@ Current todo list:
 - implement selections
 - extend layerdialog
 - undo/redo
+- replace BIGNUM with BIG_TILE_MULT
+- disallow negative coordinates in channels - move the layer wrt the
+     canvas instead
+- check that the imageRect is correctly updated when a new point above or
+     to the left of the layer
 

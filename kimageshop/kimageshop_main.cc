@@ -34,20 +34,17 @@
 KOFFICE_DOCUMENT_FACTORY( KImageShopDoc, KImageShopFactory, KImageShop::DocumentFactory_skel )
 typedef OPAutoLoader<KImageShopFactory> KImageShopAutoLoader;
 
-KImageShopApp::KImageShopApp( int& argc, char** argv ) 
-  : KoApplication( argc, argv, "kimageshop" )
-{
-}
+KImageShopApp::KImageShopApp(int& argc, char** argv) : KoApplication(argc, argv, "kimageshop"){}
 
 KoMainWindow* KImageShopApp::createNewShell()
 {
   return new KImageShopShell;
 }
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
-  KImageShopAutoLoader loader( "IDL:KImageShop/DocumentFactory:1.0", "KImageShop" );
-  KImageShopApp app( argc, argv );
+  KImageShopAutoLoader loader("IDL:KImageShop/DocumentFactory:1.0", "KImageShop");
+  KImageShopApp app(argc, argv);
 
   app.exec();
 

@@ -21,11 +21,8 @@
 #ifndef __kimageshop_view_h__
 #define __kimageshop_view_h__
 
-#include <qpixmap.h>
 #include <qwidget.h>
 
-#include <kprocess.h>
- 
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <openparts_ui.h>
@@ -54,7 +51,7 @@ class KImageShopView : public QWidget,
     
 public:
 
-  KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc );
+  KImageShopView(QWidget* _parent, const char* _name, KImageShopDoc* _doc);
   ~KImageShopView();
   
   virtual void cleanUp();
@@ -68,12 +65,15 @@ public:
 public slots:
 
   void slotUpdateView(const QRect &area);
+
   void slotCVPaint(QPaintEvent *e);
   void slotCVMousePress(QMouseEvent *e);
   void slotCVMouseMove(QMouseEvent *e);
   void slotCVMouseRelease(QMouseEvent *e);
+
   void scrollH(int);
   void scrollV(int);
+
   void slotSetZoomFactor(float);
 
   virtual void slotActivateMoveTool();
@@ -81,6 +81,7 @@ public slots:
   virtual void slotActivateZoomTool();
 
 protected:
+
   virtual void init();
 
   void setupScrollbars();
@@ -93,7 +94,7 @@ protected:
   virtual void newView();
   virtual void helpUsing();
 
-  virtual void resizeEvent( QResizeEvent* _ev );
+  virtual void resizeEvent(QResizeEvent* _ev);
 
   void editUndo();
   void editRedo();
@@ -109,7 +110,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_LayerDialog;
 
-  OpenPartsUI::Menu_var m_vMenuTransform;
+  OpenPartsUI::Menu_var m_vMenuImage;
   OpenPartsUI::Menu_var m_vMenuPlugIns;
   OpenPartsUI::Menu_var m_vMenuOptions;
   

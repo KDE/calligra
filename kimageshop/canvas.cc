@@ -147,8 +147,8 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
 		  else
 		    pixH = -1;
 		  */
-		  startX+=paintOffset.x();
-		  startY+=paintOffset.y();
+		  startX += static_cast<int>(paintOffset.x()/zoomFactor);
+		  startY += static_cast<int>(paintOffset.y()/zoomFactor);
 
 		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);//, pixW, pixH);
 		}
