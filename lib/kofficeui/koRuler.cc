@@ -72,7 +72,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       m_unit( _unit )
 {
-    setWFlags( WResizeNoErase );
+    setWFlags( WResizeNoErase | WRepaintNoErase );
     setFrameStyle( Box | Raised );
 
     d=new KoRulerPrivate();
@@ -449,7 +449,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 
             if ( d->canvas )
                 drawLine(d->oldMx, -1);
-            repaint( false );
+            update();
         } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
             if ( d->action == A_BR_TOP )
                 d->whileMovingBorderTop = true;
@@ -462,7 +462,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
                 p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
                 p.end();
             }
-            repaint( false );
+            update();
         } else if ( d->action == A_FIRST_INDENT || d->action == A_LEFT_INDENT || d->action == A_RIGHT_INDENT ) {
             if ( d->canvas )
                 drawLine(d->oldMx, -1);
@@ -506,7 +506,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             d->currTab=d->removeTab;
 
             emit tabListChanged( d->tabList );
-            repaint( false );
+            update();
         }
         else if ( d->flags & F_HELPLINES )
         {
@@ -536,7 +536,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 
         if ( d->canvas )
             drawLine(d->oldMx, -1);
-        repaint( false );
+        update();
         emit newPageLayout( layout );
     } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
         d->whileMovingBorderTop = false;
@@ -548,17 +548,17 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
             p.end();
         }
-        repaint( false );
+        update();
         emit newPageLayout( layout );
     } else if ( d->action == A_FIRST_INDENT ) {
         if ( d->canvas )
             drawLine(d->oldMx, -1);
-        repaint( false );
+        update();
         emit newFirstIndent( i_first );
     } else if ( d->action == A_LEFT_INDENT ) {
         if ( d->canvas )
             drawLine(d->oldMx, -1);
-        repaint( false );
+        update();
         double _tmp = i_first;
         emit newLeftIndent( i_left );
         i_first = _tmp;
@@ -566,7 +566,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
     } else if ( d->action == A_RIGHT_INDENT ) {
         if ( d->canvas )
             drawLine(d->oldMx, -1);
-        repaint( false );
+        update();
         emit newRightIndent( d->i_right );
     } else if ( d->action == A_TAB ) {
         if ( d->canvas && !fakeMovement ) {
@@ -592,7 +592,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         }
         searchTab( e->x() );
         emit tabListChanged( d->tabList );
-        repaint( false );
+        update();
     }
     else if( d->action == A_HELPLINES )
     {
@@ -701,7 +701,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             }
                             d->oldMx = mx;
                             d->oldMy = my;
-                            repaint( false );
+                            update();
                         }
                         else
                             return;
@@ -730,7 +730,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             }
                             d->oldMx = mx;
                             d->oldMy = my;
-                            repaint( false );
+                            update();
                         }
                         else
                             return;
@@ -742,7 +742,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             drawLine( d->oldMx, newPos);
                             d->oldMx=newPos;
                             i_first = newValue;
-                            repaint( false );
+                            update();
                         }
                     } break;
                     case A_LEFT_INDENT: {
@@ -756,7 +756,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             i_first = newFirst;
                             i_left = newValue;
                             d->oldMx = newPos;
-                            repaint( false );
+                            update();
                         }
                     } break;
                     case A_RIGHT_INDENT: {
@@ -767,7 +767,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             drawLine( d->oldMx, newPos);
                             d->i_right=rightValue;
                             d->oldMx = newPos;
-                            repaint( false );
+                            update();
                         }
                     } break;
                     case A_TAB: {
@@ -788,7 +788,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             d->oldMx = mx;
                             d->oldMy = my;
                             d->removeTab=d->tabList.end();
-                            repaint( false );
+                            update();
                         }
                     } break;
                     default: break;
@@ -826,7 +826,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
                             d->oldMx = mx;
                             d->oldMy = my;
-                            repaint( false );
+                            update();
                         }
                         else
                             return;
@@ -841,7 +841,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
                             d->oldMx = mx;
                             d->oldMy = my;
-                            repaint( false );
+                            update();
                         }
                         else
                             return;
@@ -881,7 +881,7 @@ void KoRuler::handleDoubleClick()
             d->tabList.remove( d->removeTab );
             d->removeTab=d->tabList.end();
             emit tabListChanged( d->tabList );
-            repaint( false );
+            update();
         } else if ( d->action == A_TAB ) {
             // Double-click on a tab
             emit doubleClicked( (*d->currTab).ptPos );
@@ -916,7 +916,7 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
         d->currTab=d->tabList.end();
     else
         d->currTab=d->tabList.find(curr);
-    repaint( false );
+    update();
 }
 
 double KoRuler::makeIntern( double _v )
@@ -976,7 +976,7 @@ void KoRuler::setUnit( KoUnit::Unit unit )
         d->rb_menu->setItemChecked( d->mINCH, true );
         break;
     }
-    repaint( false );
+    update();
 }
 
 void KoRuler::setZoom( const double& zoom )
@@ -985,7 +985,7 @@ void KoRuler::setZoom( const double& zoom )
         return;
     m_zoom=zoom;
     m_1_zoom=1/m_zoom;
-    repaint( false );
+    update();
 }
 
 void KoRuler::rbRemoveTab() {
@@ -993,7 +993,7 @@ void KoRuler::rbRemoveTab() {
     d->tabList.remove( d->currTab );
     d->currTab=d->tabList.end();
     emit tabListChanged( d->tabList );
-    repaint(false);
+    update();
 }
 
 void KoRuler::setReadWrite(bool _readWrite)
@@ -1033,7 +1033,7 @@ void KoRuler::showMousePos( bool _showMPos )
     hasToDelete = false;
     mposX = -1;
     mposY = -1;
-    repaint( false );
+    update();
 }
 
 void KoRuler::setOffset( int _diffx, int _diffy )
@@ -1041,7 +1041,7 @@ void KoRuler::setOffset( int _diffx, int _diffy )
     //kdDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy << endl;
     diffx = _diffx;
     diffy = _diffy;
-    repaint( false );
+    update();
 }
 
 void KoRuler::setFrameStartEnd( int _frameStart, int _frameEnd )
@@ -1053,20 +1053,20 @@ void KoRuler::setFrameStartEnd( int _frameStart, int _frameEnd )
         // Remember that setFrameStartEnd was called. This activates a slightly
         // different mode (when moving start and end positions).
         m_bFrameStartSet = true;
-        repaint( false );
+        update();
     }
 }
 
 void KoRuler::setRightIndent( double _right )
 {
     d->i_right = makeIntern( _right );
-    repaint( false );
+    update();
 }
 
 void KoRuler::setDirection( bool rtl )
 {
     d->rtl = rtl;
-    repaint( false );
+    update();
 }
 
 void KoRuler::changeFlags(int _flags)

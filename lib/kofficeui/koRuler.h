@@ -127,7 +127,7 @@ public:
      * from which the size of the ruler is deducted.
      */
     void setPageLayout( KoPageLayout _layout )
-    { layout = _layout; repaint( false ); }
+    { layout = _layout; update(); }
 
     /**
      * Call showMousePos(true) if the ruler should indicate the position
@@ -153,13 +153,13 @@ public:
      * Set the [paragraph] left indent to the specified position (in the current unit)
      */
     void setLeftIndent( double _left )
-    { i_left = makeIntern( _left ); repaint( false ); }
+    { i_left = makeIntern( _left ); update(); }
 
     /**
      * Set the [paragraph] first-line left indent to the specified position (in the current unit)
      */
     void setFirstIndent( double _first )
-    { i_first = makeIntern( _first ); repaint( false ); }
+    { i_first = makeIntern( _first ); update(); }
 
     /**
      * Set the [paragraph] right indent to the specified position (in the current unit)
