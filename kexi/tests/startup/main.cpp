@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	
 	//some recent projects data
 	KexiProjectData *prjdata;
-	prjdata = new KexiProjectData( *conndata, "bigdb" );
+	prjdata = new KexiProjectData( *conndata, "bigdb", "Big DB" );
 	prjdata->setCaption("My Big Project");
 	prjdata->setHelpText("This is my first biger project started yesterday. Have fun!");
 	KexiProjectSet prj_set;
