@@ -28,10 +28,11 @@ public:
     QCString appId() const;
     QCString objId() const;
 
+    static QString pack( KSContext&, QDataStream& str, KSValue::Ptr& v );
+    static KSValue::Ptr unpack( KSContext&, QDataStream& str, const QCString& type );
+
 protected:
     bool call( KSContext& context, const QString& name );
-    QString pack( KSContext&, QDataStream& str, KSValue::Ptr& v );
-    KSValue::Ptr unpack( KSContext&, QDataStream& str, const QCString& type );
 
 private:
     QCString m_app;

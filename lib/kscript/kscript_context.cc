@@ -244,7 +244,7 @@ void KSModule::setCode( KSParseNode* node )
 {
     if ( m_code )
 	delete m_code;
-    
+
     m_code = node;
 }
 

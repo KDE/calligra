@@ -661,6 +661,7 @@ bool KSEval_func_lines( KSParseNode* node, KSContext& context )
 {
   if ( node->branch1() )
   {
+    context.interpreter()->context().setException( 0 ); // ### reset -- HACK (Simon)
     if ( !node->branch1()->eval( context ) )
       return false;
     if ( context.returnFlag() )

@@ -24,7 +24,8 @@ public:
   bool ksQComboBox( KSContext& );
   bool ksQComboBox_activated( KSContext& );
   bool ksQComboBox_insertItem( KSContext& );
-    
+  bool ksQComboBox_clear( KSContext & );
+
   KSValue::Ptr member( KSContext& context, const QString& name );
   bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );
 

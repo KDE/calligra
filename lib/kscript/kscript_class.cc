@@ -22,7 +22,7 @@ bool KSScriptClass::hasSignal( const QString& name )
 	if ( (*it2)->classValue()->hasSignal( name ) )
 	    return TRUE;
     }
-    
+
     return false;
 }
 

@@ -8,6 +8,7 @@
 #include "kscript_ext_qradiobutton.h"
 #include "kscript_ext_qpushbutton.h"
 #include "kscript_ext_qcombobox.h"
+#include "kscript_ext_qlistbox.h"
 #include "kscript_ext_qlabel.h"
 #include "kscript_ext_qboxlayout.h"
 #include "kscript_ext_qvboxlayout.h"
@@ -17,6 +18,9 @@
 #include "kscript_value.h"
 #include "kscript_util.h"
 #include "kscript.h"
+
+#include <qmetaobject.h>
+#include <qvariant.h>
 
 #undef CHECKTYPE
 #define CHECKTYPE( context, v, type ) if ( !checkType( context, v, type ) ) return FALSE;
@@ -35,6 +39,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
   module->addObject( "QCheckBox", new KSValue( new KSClass_QCheckBox( module ) ) );
   module->addObject( "QComboBox", new KSValue( new KSClass_QComboBox( module ) ) );
+  module->addObject( "QListBox", new KSValue( new KSClass_QListBox( module ) ) );
   module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
   module->addObject( "QBoxLayout", new KSValue( new KSClass_QBoxLayout( module ) ) );
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
@@ -45,7 +50,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QRect", new KSValue( new KSQt::Rect( module, "QRect" ) ) );
   module->addObject( "QPoint", new KSValue( new KSQt::Point( module, "QPoint" ) ) );
   module->addObject( "QSize", new KSValue( new KSQt::Size( module, "QSize" ) ) );
-    
+
   return module;
 }
 
@@ -134,10 +139,11 @@ void KS_Qt_Callback::slotDestroyed()
 
 void KS_Qt_Callback::emitSignal( const QValueList<KSValue::Ptr>& params, const char* name )
 {
+  QGuardedPtr<QObject> theSender = const_cast<QObject *>( sender() ); 
   QValueList<Connection>::Iterator it =  m_connections.begin();
   while( it != m_connections.end() )
   {
-    if ( sender() == (*it).m_sender && (*it).m_kscriptSignal == name )
+    if ( static_cast<QObject *>( theSender ) == (*it).m_sender && (*it).m_kscriptSignal == name )
     {
 	// Get context
 	KSContext& context = (*it).m_receiver->getClass()->module()->interpreter()->context();
@@ -152,6 +158,9 @@ void KS_Qt_Callback::emitSignal( const QValueList<KSValue::Ptr>& params, const c
 
 	context.scope()->popModule();
 	context.scope()->pushModule( module );
+	
+	if ( !theSender ) // it is possible that we have just been destroyed (Simon)
+	  return;
     }
     ++it;
   }
@@ -186,6 +195,19 @@ void KS_Qt_Callback::activated( const QString& param1 )
     emitSignal( params, "activated");
 }
 
+void KS_Qt_Callback::selected( int param1 )
+{
+    QValueList<KSValue::Ptr> params;
+    params.append( new KSValue( param1 ) );
+    emitSignal( params, "selected");
+}
+
+void KS_Qt_Callback::selected( const QString& param1 )
+{
+    QValueList<KSValue::Ptr> params;
+    params.append( new KSValue( param1 ) );
+    emitSignal( params, "selected");
+}
 
 /**********************************************
  *
@@ -234,22 +256,55 @@ bool KS_Qt_Object::destructor()
     {
 	if ( m_ownership )
         {
-	    qDebug("Deleting %x and widget %x %s",(int)this,(int)m_object,m_object->className());
-	    delete m_object;
+	    qDebug("Deleting %x and widget %x %s",(int)this,(int)(QObject *)m_object,m_object->className());
+	    delete static_cast<QObject *>( m_object );
 	}
 	m_object = 0;
     }
 
+    qDebug( "WAH!" );
     // In the constructor there is an extra reference count.
     // That is dropped upon calling "destroy".
     if ( deref() )
-	delete this;
+      delete this;
 
     return b;
 }
 
 KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
 {
+  if ( m_object.isNull() )
+  {
+    return KSObject::member( context, name );
+  //    context.setException( new KSException( "NullPointer", "QObject already dead" ) );
+  //    return KSValue::Ptr( 0 );
+  }
+   
+  QMetaObject* meta = m_object->metaObject();
+  ASSERT( meta );
+  const QMetaProperty *property = meta->property( name, TRUE );
+  if ( !property )
+  {
+    return KSObject::member( context, name );
+  /*
+    QString tmp( "Unknown property '%1' in object of class '%2'" );
+    context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_object->className() ) ) );
+    return KSValue::Ptr( 0 );
+  */
+  }
+
+  if ( context.leftExpr() )
+  {
+    this->ref();
+    KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
+    ptr->setMode( KSValue::LeftExpr );
+    return ptr;
+  }
+
+  QVariant var = m_object->property( name );
+  return unpack( context, var );
+  
+/* 
   KSValue::Ptr ptr;
   if ( name == "name" )
     ptr = new KSValue( QString( m_object->name() ) );
@@ -261,10 +316,37 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
   }
 
   return KSObject::member( context, name );
+*/
 }
 
 bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
+  if ( m_object.isNull() )
+  {
+    return KSObject::setMember( context, name, v );
+  /*
+    context.setException( new KSException( "NullPointer", "QObject already dead" ) );
+    return KSValue::Ptr( 0 );
+  */
+  }
+  
+  QMetaObject* meta = m_object->metaObject();
+  ASSERT( meta );
+  const QMetaProperty *property = meta->property( name, TRUE );
+  if ( property )
+  {
+    QVariant var;
+    if ( !pack( context, var, v ) )
+    {
+      QString tmp( "Unknown property '%1' in object of class '%2'" );
+      context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_object->className() ) ) );
+      return FALSE;
+    }
+    return m_object->setProperty( name, var );
+  }
+  
+  return KSObject::setMember( context, name, v );
+/* 
   if ( name == "name" )
   {
     CHECKTYPE( context, v, StringType );
@@ -273,6 +355,120 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
   }
 
   return KSObject::setMember( context, name, v );
+*/  
+}
+
+bool KS_Qt_Object::pack( KSContext& context, QVariant& var, const KSValue::Ptr& v )
+{
+    switch( v->type() )
+    {
+    case KSValue::StringType:
+	var = QVariant( v->stringValue() );
+	return TRUE;
+    case KSValue::IntType:
+	var = QVariant( (int)v->intValue() );
+	return TRUE;
+    case KSValue::BoolType:
+	var = QVariant( v->boolValue(), 1 );
+	return TRUE;
+    case KSValue::DoubleType:
+	var = QVariant( v->doubleValue() );
+	return TRUE;
+    case KSValue::StructType:
+	{
+	    const KSStruct* s = v->structValue();
+	    if ( s->getClass()->fullName() == "qt:QRect" )
+            {
+		var = QVariant( KSQt::Rect::convert( context, v ) );
+		return TRUE;
+	    }
+	    if ( s->getClass()->fullName() == "qt:QPoint" )
+            {
+		var = QVariant( KSQt::Point::convert( context, v ) );
+		return TRUE;
+	    }
+	    if ( s->getClass()->fullName() == "qt:QSize" )
+            {
+		var = QVariant( KSQt::Size::convert( context, v ) );
+		return TRUE;
+	    }
+	}
+	// TODO: Give error
+	break;
+    case KSValue::ProxyType:
+    case KSValue::CharRefType:
+    case KSValue::CharType:
+    case KSValue::ListType:
+    case KSValue::MapType:
+    case KSValue::FunctionType:
+    case KSValue::ClassType:
+    case KSValue::ObjectType:
+    case KSValue::MethodType:
+    case KSValue::PropertyType:
+    case KSValue::ModuleType:
+    case KSValue::StructClassType:
+    case KSValue::BuiltinMethodType:
+    case KSValue::ProxyBuiltinMethodType:
+    case KSValue::StructBuiltinMethodType:
+    case KSValue::Empty:
+      // TODO: Give error
+      break;
+    case KSValue::NTypes:
+      ASSERT( 0 );
+    }
+
+    return FALSE;
+}
+
+KSValue::Ptr KS_Qt_Object::unpack( KSContext& context, QVariant& var )
+{
+    if ( var.type() == QVariant::String )
+    {
+	return new KSValue( var.toString() );
+    }
+    if ( var.type() == QVariant::CString )
+    {
+        return new KSValue( QString::fromLatin1( var.toCString() ) );
+    }
+    if ( var.type() == QVariant::Int )
+    {
+	return new KSValue( var.toInt() );
+    }
+    if ( var.type() == QVariant::Double )
+    {
+	return new KSValue( var.toDouble() );
+    }
+    if ( var.type() == QVariant::Bool )
+    {
+	return new KSValue( var.toBool() );
+    }
+    if ( var.type() == QVariant::StringList )
+    {
+	QStringList lst = var.toStringList();
+	KSValue* v = new KSValue( KSValue::ListType );
+	QStringList::ConstIterator it = lst.begin();
+	for( ; it != lst.end(); ++it )
+	    v->listValue().append( new KSValue( *it ) );
+	return v;
+    }
+    if ( var.type() == QVariant::Rect )
+    {
+	return KSQt::Rect::convert( context, var.toRect() );
+    }
+    if ( var.type() == QVariant::Size )
+    {
+	return KSQt::Size::convert( context, var.toSize() );
+    }
+    if ( var.type() == QVariant::Point )
+    {
+	return KSQt::Point::convert( context, var.toPoint() );
+    }
+
+    QString e( "KScript does not understand the property type %1" );
+    e = e.arg( var.typeName() );
+    context.setException( new KSException( "Unsupported", e ) );
+	
+    return KSValue::Ptr( 0 );
 }
 
 bool KS_Qt_Object::KSQObject_destroy( KSContext& context )

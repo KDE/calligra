@@ -9,15 +9,23 @@ KSClass_QApplication::KSClass_QApplication( KSModule* m ) : KSScriptClass( m, "Q
   nameSpace()->insert( "QApplication", new KSValue( (KSBuiltinMethod)&KSObject_QApplication::ksQApplication ) );
   nameSpace()->insert( "exec", new KSValue( (KSBuiltinMethod)&KSObject_QApplication::ksQApplication_exec ) );
   nameSpace()->insert( "delete", new KSValue( (KSBuiltinMethod)&KSObject_QApplication::ksQApplication_delete ) );
+  nameSpace()->insert( "quit", new KSValue( (KSBuiltinMethod)&KSObject_QApplication::ksQApplication_quit ) );
 }
 
 KSScriptObject* KSClass_QApplication::createObject( KSClass* c )
 {
+  qDebug( "createApplicationObject -- %s", c->name().ascii() ); 
   return new KSObject_QApplication( c );
 }
 
 KSObject_QApplication::KSObject_QApplication( KSClass* c ) : KS_Qt_Object( c )
 {
+  qDebug( "KSObject_QApplication constructor -- %s", c->name().ascii() );
+  KSContext blah;
+  KSNamespace::Iterator mIt = c->module()->nameSpace()->begin();
+  KSNamespace::Iterator mEnd = c->module()->nameSpace()->end();
+  for (; mIt != mEnd; ++mIt )
+    qDebug( (*mIt)->toString( blah ).ascii() );
 }
 
 bool KSObject_QApplication::ksQApplication( KSContext& context )
@@ -55,6 +63,12 @@ bool KSObject_QApplication::ksQApplication_exec( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 0, "QApplication::QApplication" ) )
       return false;
 
+  qDebug( "current namespace in _exec" );
+  KSNamespace::Iterator mIt = context.module()->nameSpace()->begin();
+  KSNamespace::Iterator mEnd = context.module()->nameSpace()->end();
+  for (; mIt != mEnd; ++mIt )
+    qDebug( (*mIt)->toString( context ).ascii() );
+  
   QApplication* a = (QApplication*)object();
   a->exec();
 
@@ -64,7 +78,7 @@ bool KSObject_QApplication::ksQApplication_exec( KSContext& context )
 bool KSObject_QApplication::ksQApplication_delete( KSContext& context )
 {
   qDebug("QApplication::delete\n");
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 0, "QApplication::QApplication" ) )
       return false;
 
@@ -75,5 +89,21 @@ bool KSObject_QApplication::ksQApplication_delete( KSContext& context )
     delete object();
   setObject( 0 );
 
+  return true;
+}
+
+bool KSObject_QApplication::ksQApplication_quit( KSContext& context )
+{
+  qDebug("QApplication::quit\n");
+
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QApplication::QApplication" ) )
+      return false;
+
+  if ( !object() )
+    return true;
+  
+  QApplication *a = static_cast<QApplication *>( object() );
+  a->quit();
+  
   return true;
 }

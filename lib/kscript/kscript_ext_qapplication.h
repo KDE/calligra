@@ -12,6 +12,8 @@ class KSClass_QApplication : public KSScriptClass
 public:
   KSClass_QApplication( KSModule* );
 
+  virtual bool isBuiltin() { return true; }
+
 protected:
   virtual KSScriptObject* createObject( KSClass* c );
 };
@@ -24,6 +26,7 @@ public:
   bool ksQApplication( KSContext& );
   bool ksQApplication_exec( KSContext& );
   bool ksQApplication_delete( KSContext& );
+  bool ksQApplication_quit( KSContext& );
 
   bool inherits( const char* name ) { return ( strcmp( name, "KSObject_QApplication" ) == 0 || KS_Qt_Object::inherits( name ) ); }
 };

@@ -25,6 +25,7 @@ KSClass_QComboBox::KSClass_QComboBox( KSModule* m, const char* name ) : KSClass_
   nameSpace()->insert( "QComboBox", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox ) );
   nameSpace()->insert( "activated", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_activated ) );
   nameSpace()->insert( "insertItem", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_insertItem ) );
+  nameSpace()->insert( "clear", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_clear ) );
 
   addQtSignal( "activated" );
 }
@@ -142,6 +143,17 @@ bool KSObject_QComboBox::ksQComboBox_insertItem( KSContext& context )
 
   qDebug("QComboBox::insertItem 3\n");
 }
+
+bool KSObject_QComboBox::ksQComboBox_clear( KSContext &context )
+{
+  if ( !checkLive( context, "QComboBox::clear" ) )
+    return false;
+  
+  QComboBox *w = static_cast<QComboBox *>( object() );
+  w->clear();
+
+  return true;
+} 
 
 KSValue::Ptr KSObject_QComboBox::member( KSContext& context, const QString& name )
 {

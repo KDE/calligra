@@ -42,7 +42,7 @@ bool KSObject::destructor()
     if ( m_status == Dead )
 	return TRUE;
 
-    qDebug("KSObject::destructor");
+    qDebug("KSObject::destructor %p", this);
     QListIterator<KSObject> it( m_sender );
     for( ; it.current(); ++it )
 	it.current()->disconnect( this );
@@ -253,13 +253,13 @@ bool KSObject::emitSignal( const QString& name, KSContext& context )
   // Nobody registered for that signal until now
   if ( !l )
     return true;
-
+  
   // Remove our namespaces
   KSSubScope* scope = context.scope()->popLocalScope();
 
   // Save the parameters
   QValueList<KSValue::Ptr> params = context.value()->listValue();
-
+  
   SignalList::Iterator it = l->begin();
   for( ; it != l->end(); ++it )
   {

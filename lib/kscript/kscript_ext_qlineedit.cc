@@ -141,16 +141,17 @@ bool KSObject_QLineEdit::ksQLineEdit_returnPressed( KSContext& context )
 
 KSValue::Ptr KSObject_QLineEdit::member( KSContext& context, const QString& name )
 {
+/* 
   CHECK_LEFTEXPR( context, name );
 
   RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );
-
+*/
   return KSObject_QWidget::member( context, name );
 }
 
 bool KSObject_QLineEdit::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
-  SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType );
+//  SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType );
 
   return KSObject_QWidget::setMember( context, name, v );
 }

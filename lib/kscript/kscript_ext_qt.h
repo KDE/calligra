@@ -10,6 +10,7 @@
 #include <qcstring.h>
 #include <qvaluelist.h>
 #include <qconnection.h>
+#include <qguardedptr.h>
 
 class KSClass;
 class KSInterpreter;
@@ -61,6 +62,8 @@ private slots:
   void clicked();
   void activated( int );
   void activated( const QString& );
+  void selected( int );
+  void selected( const QString & );
 
 private:
   struct Connection
@@ -142,7 +145,7 @@ public:
    * Implements the method "destroy"
    */
   bool KSQObject_destroy( KSContext& context );
-    
+
   static bool checkArguments( KSContext& context, KSValue* v, const QString& name, Type t1 = NoType, Type t2 = NoType,
 			      Type t3 = NoType, Type t4 = NoType, Type t5 = NoType, Type t6 = NoType );
   static bool tryArguments( KSContext& context, KSValue* v, Type t1 = NoType, Type t2 = NoType,
@@ -156,6 +159,9 @@ public:
 
   static QObject* convert( KSValue* v ) { return ((KS_Qt_Object*)v->objectValue())->m_object; }
 
+  static bool pack( KSContext& context, QVariant& var, const KSValue::Ptr& v );
+  static KSValue::Ptr unpack( KSContext& context, QVariant& var );
+
 protected:
   virtual bool destructor();
 
@@ -163,7 +169,7 @@ protected:
   bool checkLive( KSContext& context, const QString& name );
 
 private:
-  QObject* m_object;
+  QGuardedPtr<QObject> m_object;
   bool m_ownership;
 };
 

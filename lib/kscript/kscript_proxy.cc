@@ -3,7 +3,7 @@
 #include "kscript_util.h"
 #include "kscript_object.h"
 #include "kscript_qstructs.h"
-#include "kscript_qobject.h"
+#include "kscript_ext_qt.h"
 
 #include <dcopclient.h>
 #include <kapp.h>
@@ -72,10 +72,10 @@ bool KSProxy::call( KSContext& context, const QString& name )
 				  functions.contains( "setProperty(QCString,QVariant);" ) &&
 				  functions.contains( "propertyNames(bool);" );
       }
-      
+
       m_propertyProxyCheckDone = true;
     }
-    
+
     QByteArray data;
     QByteArray reply;
     QString func( name );
@@ -89,7 +89,7 @@ bool KSProxy::call( KSContext& context, const QString& name )
         {
 	    if ( !first )
 		func += ",";
-	    
+	
 	    if ( m_supportsPropertyProxy && first && ( name == getPropMethod || name == setPropMethod ) )
 	    {
 	      func += "QCString";
@@ -99,12 +99,12 @@ bool KSProxy::call( KSContext& context, const QString& name )
 	    {
 	      func += "QVariant";
 	      QVariant var;
-	      KSQObject::pack( context, var, *it );
+	      KS_Qt_Object::pack( context, var, *it );
 	      str << var;
 	    }
 	    else
   	      func += pack( context, str, *it );
-	    
+	
 	    if ( context.exception() )
 		return FALSE;
 	    first = FALSE;
@@ -310,6 +310,17 @@ KSValue::Ptr KSProxy::unpack( KSContext& context, QDataStream& str, const QCStri
 	    v->listValue().append( new KSValue( *it ) );
 	return v;
     }
+    if ( type == "QCStringList" )
+    {
+        QValueList<QCString> lst;
+	str >> lst;
+	KSValue *v = new KSValue( KSValue::ListType );
+	QValueList<QCString>::ConstIterator it = lst.begin();
+	QValueList<QCString>::ConstIterator end = lst.end();
+	for (; it != end; ++it )
+  	  v->listValue().append( new KSValue( QString::fromLatin1( *it ) ) );
+	return v;
+    }
     if ( type == "QRect" )
     {
 	QRect rect;
@@ -356,7 +367,7 @@ KSValue::Ptr KSProxy::unpack( KSContext& context, QDataStream& str, const QCStri
     {
         QVariant var;
 	str >> var;
-	return KSQObject::unpack( context, var );
+	return KS_Qt_Object::unpack( context, var );
     }
     return KSValue::Ptr( 0 );
 }

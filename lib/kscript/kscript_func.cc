@@ -7,6 +7,7 @@
 #include "kscript_proxy.h"
 
 #include <kapp.h>
+#include <dcopclient.h>
 
 #include <iostream.h>
 
@@ -230,6 +231,31 @@ static bool ksfunc_arg( KSContext& context )
     return TRUE;
 }
 
+static bool ksfunc_stringListSplit( KSContext &context )
+{
+  QValueList<KSValue::Ptr> &args = context.value()->listValue(); 
+  
+  if ( !KSUtil::checkArgumentsCount( context, 2, "arg", true ) );
+  
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, TRUE ) )
+    return false;
+  
+  QString sep = args[0]->stringValue();
+  QString str = args[1]->stringValue();
+  
+  QStringList strLst = QStringList::split( sep, str );
+  
+  KSValue *v = new KSValue( KSValue::ListType );
+  
+  QStringList::ConstIterator it = strLst.begin();
+  QStringList::ConstIterator end = strLst.end();
+  for (; it != end; ++it )
+    v->listValue().append( new KSValue( *it ) );
+  
+  context.setValue( v );
+  return true;
+} 
+
 static bool ksfunc_connect( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -325,17 +351,76 @@ static bool ksfunc_startApplication( KSContext& context )
     QCString dcopService;
     int res = KApplication::startServiceByDesktopName( args[0]->stringValue(),
 						       QString::null, &error, &dcopService );
-    
+
     if ( res != 0 )
     {
       qDebug( "klauncher error: %s", error.ascii() );
       return false;
     }
-    
+
     context.setValue( new KSValue( new KSProxy( dcopService, args[1]->stringValue().latin1() ) ) );
 
     return TRUE;
 }
+
+static bool ksfunc_dcopCall( KSContext &context )
+{
+  QValueList<KSValue::Ptr> &args = context.value()->listValue();
+  
+  if ( args.count() < 3 )
+  {
+    KSUtil::tooFewArgumentsError( context, "dcopCall" );
+    return false;
+  }
+  
+  if ( args.count() > 4 )
+  {
+    KSUtil::tooManyArgumentsError( context, "dcopCall" );
+    return false;
+  }
+
+  //  if ( !KSUtil::checkArgs( context, args, "sss", "dcopCall" ) )
+  //    return false;
+  
+  QCString app = args[0]->stringValue().latin1();
+  QCString obj = args[1]->stringValue().latin1();
+  QCString fun = args[2]->stringValue().latin1();
+  
+  QByteArray data;
+  QDataStream str( data, IO_WriteOnly );
+  /*
+  if ( args.count() >= 4 )
+  {
+    for ( int i = 3; i < args.count(); i++ )
+    {
+      KSProxy::pack( context, str, args[i] );
+      if ( context.exception() )
+        return false;
+    }
+  }
+  */
+  if ( args.count() == 4 )
+  {
+    QValueList<KSValue::Ptr> &lst = args[3]->listValue();
+    QValueList<KSValue::Ptr>::Iterator it = lst.begin();
+    QValueList<KSValue::Ptr>::Iterator end = lst.end();
+    for (; it != end; ++it )
+    {
+      KSProxy::pack( context, str, *it );
+      if ( context.exception() )
+        return false;
+    }
+    
+    KSProxy::pack( context, str, args[3] );
+    if ( context.exception() )
+      return false;
+  }
+  
+  QByteArray replyData;
+  QCString replyType;
+  
+  return kapp->dcopClient()->call( app, obj, fun, data, replyType, replyData );
+} 
 
 KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 {
@@ -352,8 +437,10 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "isEmpty", new KSValue( new KSBuiltinFunction( module, "isEmpty", ksfunc_isEmpty ) ) );
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );
+  module->addObject( "stringListSplit", new KSValue( new KSBuiltinFunction( module, "stringListSplit", ksfunc_stringListSplit ) ) );
   module->addObject( "findApplication", new KSValue( new KSBuiltinFunction( module, "findApplication", ksfunc_application ) ) );
   module->addObject( "startApplication", new KSValue( new KSBuiltinFunction( module, "startApplication", ksfunc_startApplication ) ) );
-  
+  module->addObject( "dcopCall", new KSValue( new KSBuiltinFunction( module, "dcopCall", ksfunc_dcopCall ) ) );
+
   return module;
 }
