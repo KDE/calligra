@@ -505,12 +505,12 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
             }
             else if ( format->m_id == 3 )
             {    // Old tabulator
-                // ### PROVISORY: do it with KWord13FormatOneData
+                // ### TEMPORARY: do it with KWord13FormatOneData
                 writer.addTextSpan("\t"); // Tabulator
             }
             else if ( format->m_id == 4 )
             {    // Variable
-                // ### PROVISORY
+                // ### TEMPORARY
                 const QString text ( ( (KWord13FormatFour*) format ) -> m_text );
                 if ( text.isEmpty() )
                     writer.addTextNode( "#" ); // Placeholder
@@ -519,7 +519,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
             }
             else
             {
-                // ### PROVISORY
+                // ### TEMPORARY
                 writer.addTextNode("#"); // Placeholder
             }
             currentPos += length;

@@ -530,7 +530,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     }
     else if ( name == "TYPE" )
     {
-        // ### PROVISORY
+        // ### TEMPORARY
         if ( m_currentFormat && ( stackItem->elementType == KWord13TypeVariable ) )
         {
             ( (KWord13FormatFour*) m_currentFormat ) -> m_text =  attributes.value( "text" );
