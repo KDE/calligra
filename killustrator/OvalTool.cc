@@ -51,7 +51,7 @@
 OvalTool::OvalTool (CommandHistory *history) : Tool (history)
 {
   oval = 0L;
-  kdDebug()<<"OvalTool::OvalTool()"<<endl;
+  kdDebug(38000)<<"OvalTool::OvalTool()"<<endl;
   m_id=ToolEllipse;
 }
 
@@ -179,7 +179,7 @@ void OvalTool::aroundFixedCenter (bool flag) {
   if (useFixedCenter != flag) {
     useFixedCenter = flag;
 
-    kdDebug()<<"OvalTool::aroundFixedCenter()"<<endl;
+    kdDebug(38000)<<"OvalTool::aroundFixedCenter()"<<endl;
     KConfig* config = KIllustratorFactory::global()->config ();
 
     config->setGroup ("EllipseTool");

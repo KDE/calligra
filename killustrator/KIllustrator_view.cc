@@ -113,25 +113,25 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_bShowRulers = true;
     mParent = parent;
 
-    //kdDebug()<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
+    //kdDebug(38000)<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
 
     // restore default settings
     PStateManager::instance ();
-    kdDebug()<<"KIlluView after instance: "<<time.elapsed()<<endl;
+    kdDebug(38000)<<"KIlluView after instance: "<<time.elapsed()<<endl;
 
     connect (m_pDoc,SIGNAL(partInserted(KIllustratorChild*,GPart*)),this,SLOT(insertPartSlot(KIllustratorChild*,GPart*)));
     connect (m_pDoc,SIGNAL(childGeometryChanged(KIllustratorChild*)),this,SLOT(changeChildGeometrySlot(KIllustratorChild*)));
     connect (this,SIGNAL(embeddImage(const QString &)),this,SLOT(slotInsertBitmap(const QString &)));
 
     setupCanvas();
-    kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
+    kdDebug(38000)<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
     setXMLFile( "KIllustrator.rc" );
-    kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl
+    kdDebug(38000)<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl
         ;
     canvas->docSizeChanged();
 
     createMyGUI();
-    kdDebug()<<"KIlluView after createMyGUI: "<<time.elapsed()<<endl;
+    kdDebug(38000)<<"KIlluView after createMyGUI: "<<time.elapsed()<<endl;
 
     connect (activeDocument(),SIGNAL(pageChanged()),canvas,SLOT(repaint()));
     connect (activeDocument(),SIGNAL(pageChanged()),this,SLOT(refreshLayerPanel()));
@@ -190,7 +190,7 @@ void KIllustratorView::createMyGUI()
     // Insert menu
     new KAction( i18n("Insert &Bitmap..."),"frame_image", 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
     new KAction( i18n("Insert &Clipart..."),"insertclipart", 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
-    kdDebug()<<"inside createMyGUI(): a: "<<time.elapsed()<<" msecs elapsed"<<endl;
+    kdDebug(38000)<<"inside createMyGUI(): a: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
     // Tools
     m_selectTool = new KToggleAction( i18n("Select objects"), "frame_edit", CTRL+Key_1, actionCollection(), "mouse" );
@@ -271,7 +271,7 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("&Ellipse..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
     new KAction( i18n("P&olygon..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
-    kdDebug()<<"inside createMyGUI(): b: "<<time.elapsed()<<" msecs elapsed"<<endl;
+    kdDebug(38000)<<"inside createMyGUI(): b: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
     m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
     QStringList zooms;
@@ -331,7 +331,7 @@ void KIllustratorView::createMyGUI()
     connect (&cmdHistory, SIGNAL(changed(bool, bool)),SLOT(setUndoStatus(bool, bool)));
     // Disable node actions
     toolActivated(Tool::ToolEditPoint,false);
-    kdDebug()<<"inside createMyGUI(): c: "<<time.elapsed()<<" msecs elapsed"<<endl;
+    kdDebug(38000)<<"inside createMyGUI(): c: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
 }
 
@@ -1237,7 +1237,7 @@ void KIllustratorView::slotLoadPalette () {
 
 void KIllustratorView::slotViewZoom (const QString& s)
 {
-   //kdDebug()<<"slotViewZoom(): -"<<s<<"-"<<endl;
+   //kdDebug(38000)<<"slotViewZoom(): -"<<s<<"-"<<endl;
    QString z (s);
    z = z.replace (QRegExp ("%"), "");
    z = z.simplifyWhiteSpace ();
@@ -1264,10 +1264,10 @@ void KIllustratorView::slotZoomFactorChanged(float factor)
    QStringList list=m_viewZoom->items();
    QString f=QString::number(qRound(factor*100.0));
    int i=0;
-   //kdDebug()<<"slotZoomFactorChanged(): -"<<f<<"-"<<endl;
+   //kdDebug(38000)<<"slotZoomFactorChanged(): -"<<f<<"-"<<endl;
    for(QValueList<QString>::Iterator it=list.begin(); it!=list.end(); ++it, ++i)
    {
-      //kdDebug()<<"slotZoomFactorChanged(): it -"<<(*it).left((*it).length()-1)<<"-"<<endl;
+      //kdDebug(38000)<<"slotZoomFactorChanged(): it -"<<(*it).left((*it).length()-1)<<"-"<<endl;
       if((*it).left((*it).length()-1)==f)
       {
          m_viewZoom->setCurrentItem(i);

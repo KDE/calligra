@@ -199,7 +199,7 @@ void GPolyline::removePoint (int idx, bool update)
    {
       GPolygon *poly = (GPolygon *) this;
       poly->setKind (GPolygon::PK_Polygon);
-      kdDebug()<<"setting kind to polygon"<<endl;
+      kdDebug(38000)<<"setting kind to polygon"<<endl;
    };
 
    if (points.count () > 2)

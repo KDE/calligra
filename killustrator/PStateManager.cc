@@ -53,7 +53,7 @@ PStateManager* PStateManager::instance ()
 void PStateManager::readDefaultSettings ()
 {
 
-   kdDebug()<<"PStateManager::readDefaultSettings()"<<endl;
+   kdDebug(38000)<<"PStateManager::readDefaultSettings()"<<endl;
    KConfig* config = KIllustratorFactory::global()->config ();
 
    config->setGroup ("General");
@@ -137,7 +137,7 @@ void PStateManager::setDuplicateOffsets (float x, float y)
 void PStateManager::saveDefaultSettings ()
 {
 
-   kdDebug()<<"PStateManager::saveDefaultSettings()"<<endl;
+   kdDebug(38000)<<"PStateManager::saveDefaultSettings()"<<endl;
    KConfig* config = KIllustratorFactory::global()->config ();
 
    config->setGroup ("General");

@@ -76,7 +76,7 @@ void GridDialog::createGridWidget (QWidget* parent) {
 
     sbutton = new QCheckBox(i18n("Show Grid"), parent);
     layout->addWidget(sbutton, 1, 1);
-    
+
     cbutton = new KColorButton(parent);
     QLabel* clabel = new QLabel(i18n("Grid Color"), this);
     layout->addWidget(cbutton, 2, 1);
@@ -110,7 +110,7 @@ void GridDialog::setShowGridOn (bool flag) {
 
 void GridDialog::setSnapToGridOn (bool flag)
 {
-   kdDebug()<<"GridDialog::setSnapToGridOn: flag "<<int(flag)<<endl;
+   kdDebug(38000)<<"GridDialog::setSnapToGridOn: flag "<<int(flag)<<endl;
   gbutton->setChecked (flag);
 }
 

@@ -39,7 +39,7 @@ void RotateCmd::execute () {
   m1.translate (-rcenter.x (), -rcenter.y ());
   m2.rotate (angle);
   m3.translate (rcenter.x (), rcenter.y ());
-  kdDebug()<<"RotateCmd::exec(): rotating around ("<<rcenter.x()<<"|"<<rcenter.y()<<") by "<<angle<<" degree"<<endl;
+  kdDebug(38000)<<"RotateCmd::exec(): rotating around ("<<rcenter.x()<<"|"<<rcenter.y()<<") by "<<angle<<" degree"<<endl;
 
   ObjectManipCmd::execute ();
 

@@ -199,22 +199,22 @@ void GObject::updateRegion (bool recalcBBox) {
 
 void GObject::transform (const QWMatrix& m, bool update)
 {
-   kdDebug()<<"----------------------"<<endl;
-   kdDebug()<<"GObject::transform() m"<<endl;
-   kdDebug()<<"( "<<m.m11()<<" | "<<m.m12()<<" 0 )"<<endl;
-   kdDebug()<<"( "<<m.m21()<<" | "<<m.m22()<<" 0 )"<<endl;
-   kdDebug()<<"( "<<m.dx()<<" | "<<m.dy()<<" 1 )"<<endl;
+   kdDebug(38000)<<"----------------------"<<endl;
+   kdDebug(38000)<<"GObject::transform() m"<<endl;
+   kdDebug(38000)<<"( "<<m.m11()<<" | "<<m.m12()<<" 0 )"<<endl;
+   kdDebug(38000)<<"( "<<m.m21()<<" | "<<m.m22()<<" 0 )"<<endl;
+   kdDebug(38000)<<"( "<<m.dx()<<" | "<<m.dy()<<" 1 )"<<endl;
    tMatrix = tMatrix * m;
-   kdDebug()<<"GObject::transform() tmpMatrix"<<endl;
-   kdDebug()<<"( "<<tMatrix.m11()<<" | "<<tMatrix.m12()<<" 0 )"<<endl;
-   kdDebug()<<"( "<<tMatrix.m21()<<" | "<<tMatrix.m22()<<" 0 )"<<endl;
-   kdDebug()<<"( "<<tMatrix.dx()<<" | "<<tMatrix.dy()<<" 1 )"<<endl;
+   kdDebug(38000)<<"GObject::transform() tmpMatrix"<<endl;
+   kdDebug(38000)<<"( "<<tMatrix.m11()<<" | "<<tMatrix.m12()<<" 0 )"<<endl;
+   kdDebug(38000)<<"( "<<tMatrix.m21()<<" | "<<tMatrix.m22()<<" 0 )"<<endl;
+   kdDebug(38000)<<"( "<<tMatrix.dx()<<" | "<<tMatrix.dy()<<" 1 )"<<endl;
    iMatrix = tMatrix.invert ();
    initTmpMatrix ();
-   kdDebug()<<"GObject::transform() iMatrix"<<endl;
-   kdDebug()<<"( "<<iMatrix.m11()<<" | "<<iMatrix.m12()<<" 0 )"<<endl;
-   kdDebug()<<"( "<<iMatrix.m21()<<" | "<<iMatrix.m22()<<" 0 )"<<endl;
-   kdDebug()<<"( "<<iMatrix.dx()<<" | "<<iMatrix.dy()<<" 1 )"<<endl;
+   kdDebug(38000)<<"GObject::transform() iMatrix"<<endl;
+   kdDebug(38000)<<"( "<<iMatrix.m11()<<" | "<<iMatrix.m12()<<" 0 )"<<endl;
+   kdDebug(38000)<<"( "<<iMatrix.m21()<<" | "<<iMatrix.m22()<<" 0 )"<<endl;
+   kdDebug(38000)<<"( "<<iMatrix.dx()<<" | "<<iMatrix.dy()<<" 1 )"<<endl;
    gShape.setInvalid ();
    if (update)
       updateRegion ();

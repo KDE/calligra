@@ -104,9 +104,9 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 
       QMouseEvent *me = (QMouseEvent *) e;
       float xpos = me->x (), ypos = me->y ();
-      kdDebug()<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
       canvas->snapPositionToGrid (xpos, ypos);
-      kdDebug()<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
       rect->setEndPoint (Coord (xpos, ypos));
       if (! rect->isValid ())
       {

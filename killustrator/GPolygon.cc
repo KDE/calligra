@@ -223,7 +223,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline, bool)
          ycorr = 1.0 / m.m22 ();
       else
          ycorr = 0;
-      kdDebug()<<"xcorr: "<<xcorr<<"  ycorr: "<<ycorr<<endl;*/
+      kdDebug(38000)<<"xcorr: "<<xcorr<<"  ycorr: "<<ycorr<<endl;*/
       const Coord& p1 = *(points.at (0));
       const Coord& p2 = *(points.at (2));
       if (Roundness != 0)
@@ -236,7 +236,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline, bool)
          Painter::drawRect (p, p1.x (), p1.y (),
                             qRound (p2.x () - p1.x ()/* + xcorr*/),
                             qRound (p2.y () - p1.y () /*+ ycorr*/));
-         //kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
+         //kdDebug(38000)<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
       };
    }
 
@@ -315,8 +315,8 @@ void GPolygon::setEndPoint (const Coord& p)
       p2 = p;
    setPoint (1, Coord (p2.x (), p0.y ()));
    setPoint (3, Coord (p0.x (), p2.y ()));
-   kdDebug()<<"GPolygon::setEndPoint(): p0: ("<<p0.x()<<" | "<<p0.y()<<")"<<endl;
-   kdDebug()<<"GPolygon::setEndPoint(): p2: ("<<p2.x()<<" | "<<p2.y()<<")"<<endl;
+   kdDebug(38000)<<"GPolygon::setEndPoint(): p0: ("<<p0.x()<<" | "<<p0.y()<<")"<<endl;
+   kdDebug(38000)<<"GPolygon::setEndPoint(): p2: ("<<p2.x()<<" | "<<p2.y()<<")"<<endl;
    updateRegion ();
 }
 
@@ -499,14 +499,14 @@ void GPolygon::updateGradientShape (QPainter& p)
    // (in object coordinate system)
    if (kind != PK_Polygon)
    {
-      //kdDebug()<<"updategradientshape() rect"<<endl;
+      //kdDebug(38000)<<"updategradientshape() rect"<<endl;
       const Coord& p1 = *(points.at (0));
       const Coord& p2 = *(points.at (2));
       gShape.setBox (Rect (p1, p2));
    }
   else
   {
-     //kdDebug()<<"updategradientshape() no rect"<<endl;
+     //kdDebug(38000)<<"updategradientshape() no rect"<<endl;
      gShape.setBox (calcEnvelope ());
   };
   // define the clipping region
@@ -526,7 +526,7 @@ void GPolygon::updateGradientShape (QPainter& p)
      }
      else if (Roundness == 100)
      {
-        //kdDebug()<<"updategradientshape() rect"<<endl;
+        //kdDebug(38000)<<"updategradientshape() rect"<<endl;
         // special case: ellipse
         unsigned int w, h;
         w = pnts.point (2).x () - pnts.point (0).x ();
@@ -542,7 +542,7 @@ void GPolygon::updateGradientShape (QPainter& p)
   else if (kind != PK_Polygon)
   {
      //rectangle
-     //kdDebug()<<"updategradientshape() rect"<<endl;
+     //kdDebug(38000)<<"updategradientshape() rect"<<endl;
      unsigned int w, h;
      w = pnts.point (2).x () - pnts.point (0).x ();
      h = pnts.point (2).y () - pnts.point (0).y ();

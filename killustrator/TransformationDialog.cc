@@ -26,7 +26,6 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <knuminput.h>
 #include <kdebug.h>
 
@@ -404,7 +403,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
   xcenter = horizRotCenter->getValue ();
   ycenter = vertRotCenter->getValue ();
   angle = rotAngle->value();
-  kdDebug()<<"TransformationDialog::rotate() angle=="<<angle<<endl;
+  kdDebug(38000)<<"TransformationDialog::rotate() angle=="<<angle<<endl;
 
   if (relativeRotCenter->isChecked ()) {
     // the given values are relative to the current bounding box

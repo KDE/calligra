@@ -494,13 +494,13 @@ void GText::updateMatricesForPath ()
       for (it = text.begin (); it != text.end (); it++)
          num_chars += (*it).length ();
       cmatrices.clear ();
-      //kdDebug()<<"updateMatrices...   num_chars: "<<num_chars<<endl;
+      //kdDebug(38000)<<"updateMatrices...   num_chars: "<<num_chars<<endl;
 
       cmatrices.resize (num_chars);
-      //kdDebug()<<"cmatrices size(): "<<cmatrices.size()<<" count(): "<<cmatrices.count()<<endl;
+      //kdDebug(38000)<<"cmatrices size(): "<<cmatrices.size()<<" count(): "<<cmatrices.count()<<endl;
       for (int i=0; i<num_chars; i++)
          cmatrices.insert(i,new QWMatrix);
-      //kdDebug()<<"cmatrices size(): "<<cmatrices.size()<<" count(): "<<cmatrices.count()<<endl;
+      //kdDebug(38000)<<"cmatrices size(): "<<cmatrices.size()<<" count(): "<<cmatrices.count()<<endl;
 
       if (pathObj->inherits ("GPolyline") || pathObj->isA ("GOval"))
       {
@@ -546,7 +546,7 @@ void GText::updateMatricesForPath ()
                   {
                      lpos = 0;
                      int pidx = (e_pos + s_pos) / 2;
-                     //kdDebug()<<"updateMatricesForPath() pidx: "<<pidx<<" pathlength: "<<path.count()-1<<endl;
+                     //kdDebug(38000)<<"updateMatricesForPath() pidx: "<<pidx<<" pathlength: "<<path.count()-1<<endl;
                      cmatrices[i]->translate (path[pidx].x (), path[pidx].y ());
                      cmatrices[i]->rotate (angle);
                      cmatrices[i]->translate (-cwidth/2, 0);
@@ -558,10 +558,10 @@ void GText::updateMatricesForPath ()
                   }
                   else
                   {
-                     //kdDebug()<<"updateMatricesForPath() s_pos: "<<s_pos<<" pathlength: "<<path.count()-1<<" x: "<<path[s_pos].x ()<<" y: "<<path[s_pos].y ()<<endl;
-                     //kdDebug()<<"updateMatricesForPath() i: "<<i<<" vector size: "<<cmatrices.count()-1<<endl;
+                     //kdDebug(38000)<<"updateMatricesForPath() s_pos: "<<s_pos<<" pathlength: "<<path.count()-1<<" x: "<<path[s_pos].x ()<<" y: "<<path[s_pos].y ()<<endl;
+                     //kdDebug(38000)<<"updateMatricesForPath() i: "<<i<<" vector size: "<<cmatrices.count()-1<<endl;
                      cmatrices[i]->translate (path[s_pos].x (), path[s_pos].y ());
-                     //kdDebug()<<"updateMatricesForPath() succeeded"<<endl;
+                     //kdDebug(38000)<<"updateMatricesForPath() succeeded"<<endl;
                      cmatrices[i]->rotate (angle);
                      cmatrices[i]->translate (lpos, 0);
                      lpos += cwidth;

@@ -48,7 +48,7 @@ PolygonTool::PolygonTool (CommandHistory* history)
    : Tool (history)
 {
    obj = 0L;
-   kdDebug()<<"PolygonTool::PolygonTool()"<<endl;
+   kdDebug(38000)<<"PolygonTool::PolygonTool()"<<endl;
    m_id=ToolPolygon;
 }
 

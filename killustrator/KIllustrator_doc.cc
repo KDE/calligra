@@ -63,11 +63,11 @@ KoDocument *KIllustratorChild::hitTest( const QPoint &, const QWMatrix & )
 KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-    kdDebug()<<"KIlluDoc::KIlluDoc() starts"<<endl;
+    kdDebug(38000)<<"KIlluDoc::KIlluDoc() starts"<<endl;
     setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument(this);
     connect(m_gdocument, SIGNAL(wasModified(bool)), this, SLOT(modified(bool)));
-    kdDebug()<<"KIlluDoc::KIlluDoc() ends"<<endl;
+    kdDebug(38000)<<"KIlluDoc::KIlluDoc() ends"<<endl;
     //GObject::registerPrototype ("object", new GPart());
 }
 
