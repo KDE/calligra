@@ -1964,6 +1964,7 @@ void KWTextFrameSetEdit::placeCursor( const QPoint &pos, QTextCursor *c )
     c->restoreState();
     QTextParag *s = textDocument()->firstParag();
     c->place( pos,  s );
+    emit updateUI();
 }
 
 void KWTextFrameSetEdit::blinkCursor()

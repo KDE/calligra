@@ -1643,7 +1643,7 @@ void KWCanvas::printRTDebug()
     QTextDocument * textdoc = textfs->textDocument();
     for (QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
     {
-        kdDebug() << "Paragraph ---------- " << endl;
+        kdDebug() << "Paragraph " << parag << "------------------ " << endl;
         QVector<QStyleSheetItem> vec = parag->styleSheetItems();
         for ( uint i = 0 ; i < vec.size() ; ++i )
         {

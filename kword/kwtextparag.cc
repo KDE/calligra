@@ -354,6 +354,7 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 
 KWTextParag::~KWTextParag()
 {
+    kdDebug() << "KWTextParag::~KWTextParag " << this << endl;
     delete m_item;
     delete m_counter;
 }
