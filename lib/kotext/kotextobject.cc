@@ -742,8 +742,8 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
         // apply '2' and '3' (format)
         for ( KoTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
         {
-            kdDebug(32001) << "KoTextObject::applyStyle parag:" << parag->paragId()
-                           << ", from 0 to " << parag->string()->length() << ", format=" << newFormat << endl;
+            //kdDebug(32001) << "KoTextObject::applyStyle parag:" << parag->paragId()
+            //               << ", from 0 to " << parag->string()->length() << ", format=" << newFormat << endl;
             parag->setFormat( 0, parag->string()->length(), newFormat, true, formatFlags );
             parag->setFormat( newFormat );
         }
@@ -800,7 +800,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
                 KoTextCursor cursor( textdoc );
                 cursor.setParag( p );
                 cursor.setIndex( 0 );
-                kdDebug() << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
+                //kdDebug() << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
 #if 0
                 KoStyle styleApplied=*style;
                 if ( (m_doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)

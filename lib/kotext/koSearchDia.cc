@@ -33,6 +33,8 @@
 #include <kseparator.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qregexp.h>
+
 KoSearchContext::KoSearchContext()
 {
     m_family = "times";
@@ -328,8 +330,9 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
     highlightPortion(m_currentParag, m_offset + matchingIndex, matchingLength, m_currentTextObj->textDocument());
 }
 
-void KoFindReplace::replace( const QString &, int matchingIndex,
-                             int /*matchingLength*/ ,int matchedLength,  const QRect &/*expose*/ )
+// slot connected to the 'replace' signal
+void KoFindReplace::replace( const QString &text, int matchingIndex,
+                             int replacementLength, int matchedLength, const QRect &/*expose*/ )
 {
     if(!m_macroCmd)
         m_macroCmd=new KMacroCommand(i18n("Insert Replacement"));
@@ -349,7 +352,9 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
     {
         replaceWithAttribut( &cursor, index );
     }
-    KCommand *cmd=m_currentTextObj->replaceSelectionCommand(&cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null );
+    // Grab replacement string
+    QString rep = text.mid( matchingIndex, replacementLength );
+    KCommand *cmd=m_currentTextObj->replaceSelectionCommand(&cursor, rep, KoTextObject::HighlightSelection, QString::null );
     if( cmd )
         m_macroCmd->addCommand(cmd);
 }
