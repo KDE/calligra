@@ -1,3 +1,5 @@
+KDE_OPTIONS = nofinal
+
 INCLUDES= -I$(srcdir) -I$(srcdir)/../goo
 
 noinst_LTLIBRARIES = libxpdf.la

@@ -1,3 +1,5 @@
+KDE_OPTIONS = nofinal
+
 SUBDIRS = xpdf
 
 INCLUDES= $(KOFFICE_INCLUDES) -I$(srcdir) -I$(srcdir)/xpdf/goo -I$(srcdir)/xpdf/xpdf $(all_includes)
