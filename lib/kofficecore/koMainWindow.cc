@@ -74,12 +74,13 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
 			  actionCollection(), "about" );
 
     KToolBar* fileTools = new KToolBar( this, "file operations" );
+    fileTools->setFullWidth( FALSE );
     fnew->plug( fileTools );
     open->plug( fileTools );
     save->plug( fileTools );
     print->plug( fileTools );
-    (void)QWhatsThis::whatsThisButton( fileTools );
-    fileTools->show();
+    //(void)QWhatsThis::whatsThisButton( fileTools );
+    addToolBar( fileTools );
 }
 
 KoMainWindow::~KoMainWindow()
