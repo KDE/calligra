@@ -220,6 +220,20 @@ QString KoDocumentIface::documentInfoCity() const
         return authorPage->city();
 
 }
+
+QString KoDocumentIface::documentInfoInitial() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->initial();
+}
+
 QString KoDocumentIface::documentInfoStreet() const
 {
         KoDocumentInfo * info = m_pDoc->documentInfo();
@@ -372,8 +386,21 @@ void KoDocumentIface::setDocumentInfoCity(const QString & text)
     }
     else
         authorPage->setCity(text);
-
 }
+
+void KoDocumentIface::setDocumentInfoInitial(const QString & text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setInitial(text);
+}
+
+
 void KoDocumentIface::setDocumentInfoStreet(const QString &text)
 {
         KoDocumentInfo * info = m_pDoc->documentInfo();

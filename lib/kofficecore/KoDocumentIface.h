@@ -80,6 +80,7 @@ k_dcop:
     QString documentInfoPostalCode() const;
     QString documentInfoCity() const;
     QString documentInfoStreet() const;
+    QString documentInfoInitial() const;
     void setDocumentInfoAuthorName(const QString & text);
     void setDocumentInfoEmail(const QString &text);
     void setDocumentInfoCompanyName(const QString &text);
@@ -91,6 +92,7 @@ k_dcop:
     void setDocumentInfoCity(const QString & text);
     void setDocumentInfoStreet(const QString &text);
     void setDocumentInfoAbstract(const QString &text);
+    void setDocumentInfoInitial(const QString & text);
 
 public:
     virtual QCStringList functionsDynamic();
