@@ -3257,35 +3257,19 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
     return shadowCmd;
 }
 
-
-QPtrList<KoTextObject> KPrPage::objectText(QPtrList<KPObject> list)
+QPtrList<KoTextObject> KPrPage::allTextObjects() const
 {
-    QPtrList<KoTextObject>lst;
-    QPtrListIterator<KPObject> it( list );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->getType() == OT_TEXT)
-        {
-            KPTextObject* obj=dynamic_cast<KPTextObject*>(it.current());
-            if(obj && !obj->isProtectContent())
-            {
-                lst.append(obj->textObject());
-            }
-        }
-        else if (it.current()->getType() == OT_GROUP)
-        {
-            QPtrList<KoTextObject> lst2 = objectText(static_cast<KPGroupObject*>(it.current())->objectList() );
-            QPtrListIterator<KoTextObject> it2( lst2 );
-            for ( ; it2.current() ; ++it2 )
-            {
-                lst.append(it2.current());
-            }
-
-        }
-    }
+    QPtrList<KoTextObject> lst;
+    addTextObjects( lst );
     return lst;
 }
 
+void KPrPage::addTextObjects(QPtrList<KoTextObject>& lst) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+        it.current()->addTextObjects( lst );
+}
 
 KPObject * KPrPage::getCursor( const QPoint &pos )
 {
@@ -3294,33 +3278,31 @@ KPObject * KPrPage::getCursor( const QPoint &pos )
 
 KPObject * KPrPage::getCursor(const KoPoint &pos )
 {
-    KPObject *kpobject=0L;
-    for ( int i = m_objectList.count() - 1; i >= 0; i-- ) {
-        kpobject = m_objectList.at( i );
-        if ( kpobject->contains( pos )) {
-            if ( kpobject->isSelected() ) {
-                return kpobject;
-            }
+    QPtrListIterator<KPObject> it( m_objectList );
+    KPObject *kpobject = it.toLast();
+    while ( kpobject ) {
+        if ( kpobject->contains( pos ) && kpobject->isSelected() ) {
+            return kpobject;
         }
+        kpobject = --it;
     }
     return 0L;
 }
 
 KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize )
 {
-    KPObject *kpobject=0L;
-    if ( (int)m_objectList.count() - 1 >= 0 ) {
-        for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
-            kpobject = m_objectList.at( i );
-            if ( !kpobject->isProtect() && kpobject->contains( pos ) ) {
-                _over = true;
-                if ( kpobject->isSelected() && modType == MT_MOVE )
-                    desel = false;
-                if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE )
-                    _resize = true;
-                return kpobject;
-            }
+    QPtrListIterator<KPObject> it( m_objectList );
+    KPObject *kpobject = it.toLast();
+    while ( kpobject ) {
+        if ( !kpobject->isProtect() && kpobject->contains( pos ) ) {
+            _over = true;
+            if ( kpobject->isSelected() && modType == MT_MOVE )
+                desel = false;
+            if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE )
+                _resize = true;
+            return kpobject;
         }
+        kpobject = --it;
     }
     return 0L;
 }

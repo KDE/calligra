@@ -582,3 +582,10 @@ void KPGroupObject::getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force 
             it.current()->getAllObjectSelectedList( lst, true );
     }
 }
+
+void KPGroupObject::addTextObjects( QPtrList<KoTextObject> &lst ) const
+{
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->addTextObjects( lst );
+}

@@ -80,9 +80,10 @@ public:
     QPtrList<KPObject> getObjects() {
         return objects;
     }
-    const QPtrList<KPObject> &objectList() {
+    const QPtrList<KPObject> &objectList() const {
         return objects;
     }
+    virtual void addTextObjects( QPtrList<KoTextObject> & ) const;
 
     void selectAllObj();
     void deSelectAllObj();

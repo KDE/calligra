@@ -2290,7 +2290,7 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
             return QString::null;
         QFileInfo fileInfo( _template );
         fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
-        
+
         KURL src, dest;
         src.setPath( fileName );
         dest.setPath( locateLocal( "appdata", "default.kpr" ) );
@@ -2985,7 +2985,6 @@ void KPresenterDoc::applyStyleChange( StyleChangeDefMap changed )
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->applyStyleChange( changed );
-    //styckypage
     m_stickyPage->applyStyleChange( changed );
 }
 
@@ -3006,9 +3005,9 @@ void KPresenterDoc::startBackgroundSpellCheck()
     //don't start spell checking when document is embedded in konqueror
     if(backgroundSpellCheckEnabled() && isReadWrite())
     {
-        if(m_initialActivePage->objectText(m_initialActivePage->objectList()).count()>0)
+        if(m_initialActivePage->allTextObjects().count()>0)
         {
-            m_bgSpellCheck->objectForSpell(m_initialActivePage->textFrameSet (0));
+            m_bgSpellCheck->objectForSpell(m_initialActivePage->textFrameSet(0));
             m_bgSpellCheck->startBackgroundSpellCheck();
         }
     }
@@ -3047,6 +3046,16 @@ void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
     }
     m_stickyPage->reactivateBgSpellChecking(refreshTextObj);
     startBackgroundSpellCheck();
+}
+
+QPtrList<KoTextObject> KPresenterDoc::allTextObjects() const
+{
+    QPtrList<KoTextObject> lst;
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
+        it.current()->addTextObjects( lst );
+    m_stickyPage->addTextObjects( lst );
+    return lst;
 }
 
 KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)

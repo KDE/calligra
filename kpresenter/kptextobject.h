@@ -95,6 +95,10 @@ public:
 
     /** Return the contained text object */
     KoTextObject * textObject() const { return m_textobj; }
+    virtual void addTextObjects( QPtrList<KoTextObject> &lst ) const {
+        if ( !isProtectContent() )
+            lst.append( m_textobj );
+    }
 
     KPrTextDocument *textDocument() const;
 

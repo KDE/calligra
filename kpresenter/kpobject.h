@@ -40,6 +40,7 @@ class QDomElement;
 class KoZoomHandler;
 class KPresenterDoc;
 class KPTextObject;
+class KoTextObject;
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -214,7 +215,14 @@ public:
     void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler,
 			 SelectionMode selectionMode );
 
-    virtual KPTextObject *nextTextObject() { return 0L;}
+    /**
+     * Collect all textobjects.
+     * (KPTextObject returns the object it contains,
+     * a KPGroupObject returns all the text objects it contains)
+     */
+    virtual void addTextObjects( QPtrList<KoTextObject> & ) const {}
+
+    virtual KPTextObject *nextTextObject() { return 0L;} // deprecated
     virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false ) { if (selected || force ) lst.append( this );}
     virtual QPen getPen() const;
 
