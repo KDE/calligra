@@ -68,11 +68,17 @@ k_dcop:
     virtual void toolsTable();
     virtual void toolsFormula();
     virtual void toolsObject();
+    virtual void toolsFreehand();
+    virtual void toolsPolyline();
+    virtual void toolsQuadricBezierCurve();
+    virtual void toolsCubicBezierCurve();
+    virtual void toolsConvexOrConcavePolygon();
 
     // extra menu
     virtual void extraPenBrush();
     virtual void extraConfigPie();
     virtual void extraConfigRect();
+    virtual void extraConfigPolygon();
     virtual void extraRaise();
     virtual void extraLower();
     virtual void extraRotate();
@@ -85,6 +91,8 @@ k_dcop:
     virtual void extraWebPres();
     virtual void extraGroup();
     virtual void extraUnGroup();
+    virtual void extraPenStyle();
+    virtual void extraPenWidth();
 
     virtual void extraAlignObjLeft();
     virtual void extraAlignObjCenterH();
@@ -114,8 +122,8 @@ k_dcop:
     virtual void screenViewPage();
 
     // text toolbar
-    virtual void sizeSelected();
-    virtual void fontSelected();
+    virtual void sizeSelected( int size );
+    virtual void fontSelected( const QString &fontFamily );
     virtual void textBold();
     virtual void textItalic();
     virtual void textUnderline();
@@ -131,6 +139,10 @@ k_dcop:
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
     virtual void formatParagraph();
+
+    // color bar
+    virtual void penChosen();
+    virtual void brushChosen();
 
     // in presentation mode
     virtual int getCurrentPresPage();

@@ -1545,21 +1545,19 @@ void KPresenterView::screenSkip()
 }
 
 /*===============================================================*/
-void KPresenterView::sizeSelected()
+void KPresenterView::sizeSelected( int size )
 {
-    tbFont.setPointSize( actionTextFontSize ->fontSize() );
-    m_canvas->setTextPointSize( tbFont.pointSize() );
+    tbFont.setPointSize( size );
+    m_canvas->setTextPointSize( size );
     m_canvas->setFocus();
-    kdDebug(33001) << "sizeSelected() " << tbFont.pointSize() << endl;
 }
 
 /*===============================================================*/
-void KPresenterView::fontSelected()
+void KPresenterView::fontSelected( const QString &fontFamily )
 {
-    tbFont.setFamily( actionTextFontFamily->currentText() );
-    m_canvas->setTextFamily( tbFont.family() );
+    tbFont.setFamily( fontFamily );
+    m_canvas->setTextFamily( fontFamily );
     m_canvas->setFocus();
-    kdDebug(33001) << "fontSelected() " << tbFont.family() << endl;
 }
 
 void KPresenterView::textBold()
@@ -2528,13 +2526,13 @@ void KPresenterView::setupActions()
 
     actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
 					      actionCollection(), "text_fontsize" );
-    connect(actionTextFontSize, SIGNAL( activated( const QString & ) ),
-	     this, SLOT( sizeSelected() ) );
+    connect( actionTextFontSize, SIGNAL( fontSizeChanged( int ) ),
+	     this, SLOT( sizeSelected( int ) ) );
 
     actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0,
 					      actionCollection(), "text_fontfamily" );
     connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
-	     this, SLOT( fontSelected() ) );
+	     this, SLOT( fontSelected( const QString & ) ) );
 
     actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
 					   this, SLOT( textBold() ),

@@ -228,8 +228,8 @@ public slots:
     void screenPenWidth( const QString &w );
 
     // text toolbar
-    void sizeSelected();
-    void fontSelected();
+    void sizeSelected( int size );
+    void fontSelected( const QString &fontFamily );
     void textBold();
     void textItalic();
     void textUnderline();

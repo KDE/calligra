@@ -151,6 +151,31 @@ void KPresenterViewIface::toolsObject()
     view->toolsObject();
 }
 
+void KPresenterViewIface::toolsFreehand()
+{
+    view->toolsFreehand();
+}
+
+void KPresenterViewIface::toolsPolyline()
+{
+    view->toolsPolyline();
+}
+
+void KPresenterViewIface::toolsQuadricBezierCurve()
+{
+    view->toolsQuadricBezierCurve();
+}
+
+void KPresenterViewIface::toolsCubicBezierCurve()
+{
+    view->toolsCubicBezierCurve();
+}
+
+void KPresenterViewIface::toolsConvexOrConcavePolygon()
+{
+    view->toolsConvexOrConcavePolygon();
+}
+
 void KPresenterViewIface::extraPenBrush()
 {
     view->extraPenBrush();
@@ -164,6 +189,11 @@ void KPresenterViewIface::extraConfigPie()
 void KPresenterViewIface::extraConfigRect()
 {
     view->extraConfigRect();
+}
+
+void KPresenterViewIface::extraConfigPolygon()
+{
+    view->extraConfigPolygon();
 }
 
 void KPresenterViewIface::extraRaise()
@@ -261,6 +291,16 @@ void KPresenterViewIface::extraUnGroup()
     view->extraUnGroup();
 }
 
+void KPresenterViewIface::extraPenStyle()
+{
+    view->extraPenStyle();
+}
+
+void KPresenterViewIface::extraPenWidth()
+{
+    view->extraPenWidth();
+}
+
 void KPresenterViewIface::screenConfigPages()
 {
     view->screenConfigPages();
@@ -331,14 +371,14 @@ void KPresenterViewIface::screenViewPage()
     view->screenViewPage();
 }
 
-void KPresenterViewIface::sizeSelected()
+void KPresenterViewIface::sizeSelected( int size )
 {
-    view->sizeSelected();
+    view->sizeSelected( size );
 }
 
-void KPresenterViewIface::fontSelected()
+void KPresenterViewIface::fontSelected( const QString &fontFamily )
 {
-    view->fontSelected();
+    view->fontSelected( fontFamily );
 }
 
 void KPresenterViewIface::textBold()
@@ -409,6 +449,16 @@ void KPresenterViewIface::textContentsToHeight()
 void KPresenterViewIface::textObjectToContents()
 {
     view->textObjectToContents();
+}
+
+void KPresenterViewIface::penChosen()
+{
+    view->penChosen();
+}
+
+void KPresenterViewIface::brushChosen()
+{
+    view->brushChosen();
 }
 
 int KPresenterViewIface::getCurrentPresPage()
