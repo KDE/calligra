@@ -229,14 +229,23 @@ void KoDocumentInfoDlg::save()
   QStringList pages = d->m_info->pages();
   QStringList::ConstIterator it = pages.begin();
   QStringList::ConstIterator end = pages.end();
+  bool saveInfo=false;
   for (; it != end; ++it )
   {
     KoDocumentInfoPage *pg = d->m_info->page( *it );
     if ( pg->inherits( "KoDocumentInfoAuthor" ) )
-      save( static_cast<KoDocumentInfoAuthor *>( pg ) );
+    {
+        saveInfo=true;
+        save( static_cast<KoDocumentInfoAuthor *>( pg ) );
+    }
     else if ( pg->inherits( "KoDocumentInfoAbout" ) )
-      save( static_cast<KoDocumentInfoAbout *>( pg ) );
+    {
+        saveInfo=true;
+        save( static_cast<KoDocumentInfoAbout *>( pg ) );
+    }
   }
+  if(saveInfo)
+      d->m_info->documentInfochanged();
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
@@ -263,8 +272,6 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   config.writeEntry("postal-code",d->m_lePostalCode->text());
   config.writeEntry("city",  d->m_leCity->text());
   config.writeEntry("street", d->m_leStreet->text());
-
-  d->m_info->documentInfochanged();
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
