@@ -383,7 +383,7 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
                 undoRedoInfo.text = QString::null;
                 undoRedoInfo.oldParagLayouts << parag->paragLayout();
             }
-            cursor->gotoLeft();
+            cursor->gotoPreviousLetter();
             KoTextStringChar * ch = cursor->parag()->at( cursor->index() );
             undoRedoInfo.text.prepend( QString( ch->c ) );
             copyCharFormatting( cursor->parag(), cursor->index(), 0, true );
@@ -534,7 +534,7 @@ void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
             copyCharFormatting( c2.parag(), c2.index(), oldLen + i, false );
-        c2.gotoRight();
+        c2.gotoNextLetter();
     }
 
     if ( !removeSelected ) {
