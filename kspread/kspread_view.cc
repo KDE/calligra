@@ -4142,7 +4142,6 @@ void KSpreadView::replace()
 void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
 {
     d->canvas->gotoLocation( d->findPos, activeTable() );
-#if KDE_IS_VERSION(3,1,90)
     KDialogBase *baseDialog=0L;
     if ( d->find )
         baseDialog = d->find->findNextDialog();
@@ -4152,7 +4151,6 @@ void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/,
     QRect globalRect( d->findPos, d->findEnd );
     globalRect.moveTopLeft( canvasWidget()->mapToGlobal( globalRect.topLeft() ) );
     KDialog::avoidArea( baseDialog, QRect( d->findPos, d->findEnd ));
-#endif
 }
 
 void KSpreadView::slotReplace( const QString &newText, int, int, int )
