@@ -140,6 +140,7 @@ public:
     double indentFirst, indentLeft, indentRight, marginBottom, marginTop,lineSpacing;
     bool pageBreakBefore, pageBreakAfter;
     QString abiprops; // AbiWord properties (TODO: get rid of it)
+    QString tabulator;
 };
 
 // Helper functions

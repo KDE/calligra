@@ -117,11 +117,51 @@ static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KW
     AllowNoSubtags (myNode);
 }
 
+
+static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*exportFilter)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    double ptPos;
+    int type;
+
+    QValueList<AttrProcessing> attrProcessingList;
+
+    attrProcessingList.append ( AttrProcessing ( "ptpos", "double",(void *)&ptPos ) );
+    attrProcessingList.append ( AttrProcessing ( "type", "int", (void *) &type ) );
+    ProcessAttributes (myNode, attrProcessingList);
+    if(layout->tabulator.isEmpty())
+        layout->tabulator=QString::number(ptPos);
+    else
+        layout->tabulator+=","+QString::number(ptPos);
+    layout->tabulator+="pt";
+
+    switch(type)
+    {
+    case 0:
+        layout->tabulator+="/L0";
+        break;
+    case 1:
+        layout->tabulator+="/C0";
+        break;
+    case 2:
+        layout->tabulator+="/R0";
+        break;
+    case 3:
+        layout->tabulator+="/D0";
+        break;
+    default:
+        layout->tabulator+="/L0";
+        break;
+    }
+    AllowNoSubtags (myNode);
+}
+
 static void ProcessLayoutOffsetTag( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
 {
     LayoutData *layout = (LayoutData *) tagData;
     QValueList<AttrProcessing> attrProcessingList;
-    
+
     attrProcessingList.append ( AttrProcessing ("after" , "double", (void *)&layout->marginBottom ) );
     attrProcessingList.append ( AttrProcessing ("before" , "double", (void *)&layout->marginTop ) );
 
@@ -141,7 +181,7 @@ static void ProcessLayoutLineSpacingTag( QDomNode myNode, void *tagData, QString
       layout->lineSpacing=1.5;
     else if( line=="double")
       layout->lineSpacing=2.0;
-    else 
+    else
       layout->lineSpacing=line.toDouble();
     AllowNoSubtags (myNode);
 }
@@ -440,12 +480,12 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ( "COUNTER",   ProcessCounterTag,      (void *) &layout->counter ) );
     tagProcessingList.append ( TagProcessing ( "FORMAT",    ProcessSingleFormatTag, (void *) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING",   ProcessLayoutLineSpacingTag, (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",   ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ("PAGEBREAKING",ProcessLineBreakingTag,(void *) layout ) );
+    tagProcessingList.append ( TagProcessing ("TABULATOR",ProcessLayoutTabulatorTag,(void *) layout ) );
     ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 
     layout->abiprops += formatData.abiprops;
@@ -632,6 +672,9 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         kdWarning(30506) << "Unknown alignment: " << paraLayout.alignment << endl;
     }
 
+    if ( !paraLayout.tabulator.isEmpty())
+        props +="tabstops:"+paraLayout.tabulator+"; ";
+
     if ( paraLayout.indentLeft!=0.0 )
     {
         props += QString("margin-left:%1pt;").arg(paraLayout.indentLeft);
@@ -649,15 +692,15 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 
     if( paraLayout.marginBottom!=0.0)
     {
-       props += QString("margin-bottom:%1pt;").arg(paraLayout.marginBottom); 
+       props += QString("margin-bottom:%1pt;").arg(paraLayout.marginBottom);
     }
     if( paraLayout.marginTop!=0.0  )
     {
-       props += QString("margin-top:%1pt;").arg(paraLayout.marginTop); 
+       props += QString("margin-top:%1pt;").arg(paraLayout.marginTop);
     }
     if( paraLayout.lineSpacing!=0.0  )
     {
-       props += QString("line-height:%1pt;").arg(paraLayout.lineSpacing); 
+       props += QString("line-height:%1pt;").arg(paraLayout.lineSpacing);
     }
 
 
