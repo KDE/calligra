@@ -25,7 +25,7 @@
 
 #include "koStore.h"
 #include "koTarStore.h"
-//#include "koZipStore.h"
+#include "koZipStore.h"
 #include "koDirectoryStore.h"
 
 #include <kdebug.h>
@@ -74,7 +74,7 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QCStrin
   case Tar:
     return new KoTarStore( fileName, mode, appIdentification );
   case Zip:
-    //return new KoZipStore( fileName, mode, appIdentification );
+    return new KoZipStore( fileName, mode, appIdentification );
   case Directory:
     return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
   default:
@@ -95,7 +95,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
   switch ( backend )
   {
   case Zip:
-    //return new KoZipStore( device, mode, appIdentification );
+    return new KoZipStore( device, mode, appIdentification );
   case Directory:
     kdError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
     // fallback
@@ -131,6 +131,7 @@ KoStore::~KoStore()
 
 bool KoStore::open( const QString & _name )
 {
+  // This also converts from relative to absolute, i.e. merges the currentPath()
   m_sName = toExternalNaming( _name );
 
   if ( m_bIsOpen )
@@ -414,6 +415,7 @@ QIODevice::Offset KoStore::size() const
 
 bool KoStore::enterDirectory( const QString& directory )
 {
+  //kdDebug(s_area) << "KoStore::enterDirectory " << directory << endl;
   int pos;
   bool success = true;
   QString tmp( directory );
@@ -457,7 +459,6 @@ void KoStore::pushDirectory()
 void KoStore::popDirectory()
 {
   m_currentPath.clear();
-  //m_currentDir = 0;
   enterAbsoluteDirectory( QString::null );
   enterDirectory( m_directoryStack.pop() );
 }

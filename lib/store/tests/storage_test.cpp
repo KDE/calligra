@@ -29,7 +29,6 @@
 #include <string.h>
 
 namespace {
-    const char* const testFile = "test.tgz";
     const char* const test1 = "This test checks whether we're able to write to some arbitrary directory.\n";
     const char* const testDir = "0";
     const char* const testDirResult = "0/";
@@ -52,7 +51,7 @@ int cleanUp( KoStore* store, const char* error )
     return 1;
 }
 
-int test( const char* testName, KoStore::Backend backend )
+int test( const char* testName, KoStore::Backend backend, const char* testFile )
 {
     if ( QFile::exists( testFile ) )
         QFile::remove( testFile );
@@ -158,16 +157,23 @@ int test( const char* testName, KoStore::Backend backend )
     if ( store->currentPath() != QString( testDirResult ) )
         return cleanUp( store, brokenPath );
 
-    if ( store->open( "root" ) && store->size() == 22 ) {
-        QIODevice* dev = store->device();
-        unsigned int i = 0;
-        while ( static_cast<char>( dev->getch() ) == test3[i++] );
-        store->close();
-        if ( ( i - 1 ) != strlen( test3 ) )
-            return cleanUp( store, unableToRead );
+    if ( store->open( "root" ) ) {
+        if ( store->size() == 22 ) {
+            QIODevice* dev = store->device();
+            unsigned int i = 0;
+            while ( static_cast<char>( dev->getch() ) == test3[i++] );
+            store->close();
+            if ( ( i - 1 ) != strlen( test3 ) )
+                return cleanUp( store, unableToRead );
+        }
+        else {
+            kdError() << "Wrong size! maindoc.xml is " << store->size() << " should be 22." << endl;
+            delete store;
+            return 1;
+        }
     }
     else {
-        kdError() << "Couldn't open storage (or wrong size)!" << endl;
+        kdError() << "Couldn't open storage!" << endl;
         delete store;
         return 1;
     }
@@ -200,10 +206,10 @@ int main( int argc, char **argv )
     KCmdLineArgs::init( argc, argv, "storage_test", "A test for the KoStore classes", "1" );
     KApplication app( argc, argv );
 
-    if ( test( "Tar", KoStore::Tar ) != 0 )
+    if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
       return 1;
-    //if ( test( "Zip", KoStore::Zip ) != 0 )
-    //  return 1;
-    if ( test( "Directory", KoStore::Directory ) != 0 )
+    if ( test( "Directory", KoStore::Directory, "testdir" ) != 0 )
+      return 1;
+    if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
       return 1;
 }

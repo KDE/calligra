@@ -41,7 +41,7 @@ protected:
 
     bool openReadOrWrite( const QString& name, int iomode );
 private:
-    // Path to base directory
+    // Path to base directory (== the ctor argument)
     QString m_basePath;
 
     // Path to current directory

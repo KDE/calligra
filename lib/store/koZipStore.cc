@@ -27,7 +27,7 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
     kdDebug(s_area) << "KoZipStore Constructor filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
-    m_pZip = new KoZip( _filename );
+    m_pZip = new KoZip( _filename, "application/x-zip" );
 
     m_bGood = init( _mode ); // open the zip file and init some vars
 

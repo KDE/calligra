@@ -199,6 +199,7 @@ protected:
   /**
    * Open the file @p name in the store, for writing
    * On success, this method must set m_stream to a stream in which we can write.
+   * @param name "absolute path" (in the archive) to the file to open
    * @return true on success
    */
   virtual bool openWrite( const QString& name ) = 0;
@@ -206,6 +207,7 @@ protected:
    * Open the file @p name in the store, for reading.
    * On success, this method must set m_stream to a stream from which we can read,
    * as well as setting m_iSize to the size of the file.
+   * @param name "absolute path" (in the archive) to the file to open
    * @return true on success
    */
   virtual bool openRead( const QString& name ) = 0;
