@@ -510,7 +510,8 @@ KCommand *ConfigureMiscPage::apply()
     if(m_oldUnit!=m_unit->currentItem())
     {
         QString unitName;
-        switch (m_unit->currentItem())
+        m_oldUnit=m_unit->currentItem();
+        switch (m_oldUnit)
         {
             case 0:
                 unitName=KoUnit::unitName(KoUnit::U_MM  );
@@ -618,7 +619,7 @@ void ConfigureMiscPage::slotDefault()
    m_cbViewFormattingSpace->setChecked(true);
    m_cbViewFormattingTabs->setChecked(true);
    m_cbViewFormattingBreak->setChecked(true);
-
+   m_unit->setCurrentItem(0);
 }
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )
