@@ -337,9 +337,9 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                     {
                         // A link (TODO: verify the code, as the tags were copied from a XML DocBook file)
                         outputText += "<ULINK URL=\"";
-                        outputText += EscapeXmlText ( (*formattingIt).variable.m_linkName, true, true );
+                        outputText += EscapeXmlText ( (*formattingIt).variable.getHrefName(), true, true );
                         outputText += "\">";
-                        outputText += EscapeXmlText ( (*formattingIt).variable.m_hrefName );
+                        outputText += EscapeXmlText ( (*formattingIt).variable.getLinkName() );
                         outputText += "</ULINK>";
                     }
                     else
@@ -693,7 +693,7 @@ bool DocBookWorker::doCloseDocument ( void )
 }
 
 
-bool DocBookWorker::doOpenFile ( const QString &filenameOut, const QString &to )
+bool DocBookWorker::doOpenFile ( const QString &filenameOut, const QString & /*to*/ )
 {
     fileOut = new QFile(filenameOut);
 
@@ -728,7 +728,7 @@ bool DocBookWorker::doCloseFile ( void )
     //  we need to use QCString::length instead of QString::length
     QCString cstr = outputText.local8Bit ();
     fileOut->writeBlock ( cstr, cstr.length () );
-    
+
     fileOut->close ();
     delete fileOut;
     fileOut = NULL;
