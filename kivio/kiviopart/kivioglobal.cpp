@@ -22,6 +22,8 @@
 
 #include <qdom.h>
 
+#include <kdebug.h>
+
 struct PaperSizeDef {
   const char* title;
   float width;
@@ -47,6 +49,7 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
   
   if(e.hasAttribute("unit")) {
     // Compatability with Kivio <= 1.2.x
+    kdDebug() << "Compatability mode..." << endl;
     KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, "unit", 0));
     layout.ptWidth = KoUnit::ptFromUnit(XmlReadFloat(e, "width", 0.0), unit);
     layout.ptHeight = KoUnit::ptFromUnit(XmlReadFloat(e, "height", 0.0), unit);
@@ -55,6 +58,7 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
     layout.ptTop = KoUnit::ptFromUnit(XmlReadFloat(e, "marginTop", 0.0), unit);
     layout.ptBottom = KoUnit::ptFromUnit(XmlReadFloat(e, "marginBottom", 0.0), unit);
     Kivio::setFormatOrientation(layout);
+    kdDebug() << "Ready." << endl;
   } else {
     layout.ptWidth = XmlReadFloat(e, "width", 0.0);
     layout.ptHeight = XmlReadFloat(e, "height", 0.0);
@@ -139,6 +143,7 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
     
     {"null",0,0,-2}     // -2 for end of list
   };
+  int j = 0;
   PaperSizeDef sizeDef = PapersTable[0];
   bool found = false;
   float width, height;
@@ -158,6 +163,8 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
       layout.orientation = PG_LANDSCAPE;
       found = true;
     }
+    
+    sizeDef = PapersTable[++j];
   }
 }
 
