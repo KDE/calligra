@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
-   Copyright (c) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -350,10 +350,10 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	}
 	
 	if (!d->pInsertItem) {//first setData() call - add 'insert' item
-		d->pInsertItem = new KexiTableItem(cols());
+		d->pInsertItem = new KexiTableItem(columns());
 	}
 	else {//just reinit
-		d->pInsertItem->init(cols());
+		d->pInsertItem->init(columns());
 	}
 
 	//update gui mode
@@ -743,7 +743,7 @@ void KexiTableView::sortColumnInternal(int col)
 
 	if(i)
 	{
-		KexiTableItem *insert = new KexiTableItem(cols());
+		KexiTableItem *insert = new KexiTableItem(columns());
 //js		insert->setHint(hint);
 //js		insert->setInsertItem(true);
 		d->pInsertItem = insert;
@@ -785,7 +785,7 @@ QSize KexiTableView::sizeHint() const
 QSize KexiTableView::minimumSizeHint() const
 {
 	return QSize(
-		leftMargin() + ((cols()>0)?columnWidth(0):KEXITV_DEFAULT_COLUMN_WIDTH) + 2*2, 
+		leftMargin() + ((columns()>0)?columnWidth(0):KEXITV_DEFAULT_COLUMN_WIDTH) + 2*2, 
 		d->rowHeight*5/2 + topMargin() + (d->navPanel ? d->navPanel->height() : 0)
 	);
 }
@@ -813,7 +813,7 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 	if (colfirst==-1)
 		colfirst=0;
 	if (collast==-1)
-		collast=cols()-1;
+		collast=columns()-1;
 
 	int colp=0, colw;
 	colp = 0;
@@ -869,10 +869,10 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 //	kdDebug(44021)<<" plus1row=" << plus1row<<endl;
 	
 	if ( collast == -1 )
-		collast = cols() - 1;
+		collast = columns() - 1;
 
 // 	qDebug("cx:%3d cy:%3d w:%3d h:%3d col:%2d..%2d row:%2d..%2d tsize:%4d,%4d", 
-//    cx, cy, cw, ch, colfirst, collast, rowfirst, rowlast, tableSize().width(), tableSize().height());
+//	cx, cy, cw, ch, colfirst, collast, rowfirst, rowlast, tableSize().width(), tableSize().height());
 
 //	triggerUpdate();
 
@@ -892,7 +892,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 
 
 //	int maxwc = QMIN(cw, (columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
-	int maxwc = columnPos(cols() - 1) + columnWidth(cols() - 1);
+	int maxwc = columnPos(columns() - 1) + columnWidth(columns() - 1);
 //	kdDebug(44021) << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
 
 // 	pb->fillRect(maxwc, 0, cw - maxwc, ch, colorGroup().base());
@@ -1228,20 +1228,19 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 QPoint KexiTableView::contentsToViewport2( const QPoint &p )
 {
-    return QPoint( p.x() - contentsX(),
-		   p.y() - contentsY() );
+	return QPoint( p.x() - contentsX(), p.y() - contentsY() );
 }
 
 void KexiTableView::contentsToViewport2( int x, int y, int& vx, int& vy )
 {
-    const QPoint v = contentsToViewport2( QPoint( x, y ) );
-    vx = v.x();
-    vy = v.y();
+	const QPoint v = contentsToViewport2( QPoint( x, y ) );
+	vx = v.x();
+	vy = v.y();
 }
 
 QPoint KexiTableView::viewportToContents2( const QPoint& vp )
 {
-    return QPoint( vp.x() + contentsX(),
+	return QPoint( vp.x() + contentsX(),
 		   vp.y() + contentsY() );
 }
 
@@ -1249,10 +1248,10 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 {
 //  qDebug("%s: paintEmptyArea(x:%d y:%d w:%d h:%d)", (const char*)parentWidget()->caption(),cx,cy,cw,ch);
 
-    // Regions work with shorts, so avoid an overflow and adjust the
-    // table size to the visible size
-    QSize ts( tableSize() );
-//    ts.setWidth( QMIN( ts.width(), visibleWidth() ) );
+	// Regions work with shorts, so avoid an overflow and adjust the
+	// table size to the visible size
+	QSize ts( tableSize() );
+//	ts.setWidth( QMIN( ts.width(), visibleWidth() ) );
 //	ts.setHeight( QMIN( ts.height() - (d->navPanel ? d->navPanel->height() : 0), visibleHeight()) );
 /*	kdDebug(44021) << QString(" (cx:%1 cy:%2 cw:%3 ch:%4)")
 			.arg(cx).arg(cy).arg(cw).arg(ch) << endl;
@@ -1260,16 +1259,16 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 			.arg(ts.width()).arg(ts.height()) << endl;*/
 	
 	// Region of the rect we should draw, calculated in viewport
-    // coordinates, as a region can't handle bigger coordinates
-    contentsToViewport2( cx, cy, cx, cy );
-    QRegion reg( QRect( cx, cy, cw, ch ) );
+	// coordinates, as a region can't handle bigger coordinates
+	contentsToViewport2( cx, cy, cx, cy );
+	QRegion reg( QRect( cx, cy, cw, ch ) );
 
-    // Subtract the table from it
-    reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,d->navPanel ? d->navPanel->height() : 0) ) );
+	// Subtract the table from it
+	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,d->navPanel ? d->navPanel->height() : 0) ) );
 
-    // And draw the rectangles (transformed inc contents coordinates as needed)
-    QMemArray<QRect> r = reg.rects();
-    for ( int i = 0; i < (int)r.count(); ++i ) {
+	// And draw the rectangles (transformed inc contents coordinates as needed)
+	QMemArray<QRect> r = reg.rects();
+	for ( int i = 0; i < (int)r.count(); ++i ) {
 		QRect rect( viewportToContents2(r[i].topLeft()), r[i].size() );
 /*		kdDebug(44021) << QString("- pEA: p->fillRect(x:%1 y:%2 w:%3 h:%4)")
 			.arg(rect.x()).arg(rect.y())
@@ -1595,13 +1594,13 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 	case Key_Right:
 		if (nobtn)
-			curCol = QMIN(cols() - 1, curCol + 1);
+			curCol = QMIN(columns() - 1, curCol + 1);
 		break;
 	case Key_Tab:
 	case Key_Backtab:
 		if (nobtn && e->key()==Key_Tab) {
 			acceptEditor();
-			curCol = QMIN(cols() - 1, curCol + 1);
+			curCol = QMIN(columns() - 1, curCol + 1);
 		}
 		else if ((e->state()==ShiftButton && e->key()==Key_Tab)
 			|| (e->state()==NoButton && e->key()==Key_Backtab)
@@ -1644,14 +1643,14 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 	case Key_End:
 		if (nobtn) {
-			curCol = cols()-1;//to last col
+			curCol = columns()-1;//to last col
 		}
 		else if (e->state()==ControlButton) {
 			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
 		}
 		else if (e->state()==(ControlButton|ShiftButton)) {
 			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row and col
-			curCol = cols()-1;//to last col
+			curCol = columns()-1;//to last col
 		}
 		break;
 
@@ -1805,7 +1804,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			//'insert' row editing: show another row after that:
 			m_data->append( d->pInsertItem );
 			//new empty insert item
-			d->pInsertItem = new KexiTableItem(cols());
+			d->pInsertItem = new KexiTableItem(columns());
 //			updateContents();
 			d->pVerticalHeader->addLabel();
 			QSize s(tableSize());
@@ -1816,7 +1815,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		}
 	}	
 //	else {//just reinit
-//		d->pAfterInsertItem->init(cols());
+//		d->pAfterInsertItem->init(columns());
 //			d->paintAfterInsertRow = true;
 //	}
 
@@ -1945,8 +1944,8 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 
 void KexiTableView::viewportResizeEvent( QResizeEvent *e )
 {
-    QScrollView::viewportResizeEvent( e );
-    updateGeometries();
+	QScrollView::viewportResizeEvent( e );
+	updateGeometries();
 //	erase(); repaint();
 }
 
@@ -1955,7 +1954,7 @@ void KexiTableView::showEvent(QShowEvent *e)
 	QScrollView::showEvent(e);
 	QSize s(tableSize());
 
-//	QRect r(cellGeometry(rows() - 1 + (isInsertingEnabled()?1:0), cols() - 1 ));
+//	QRect r(cellGeometry(rows() - 1 + (isInsertingEnabled()?1:0), columns() - 1 ));
 //	resizeContents(r.right() + 1, r.bottom() + 1);
 	resizeContents(s.width(),s.height());
 	updateGeometries();
@@ -2075,14 +2074,14 @@ QRect KexiTableView::cellGeometry(int row, int col) const
 
 QSize KexiTableView::tableSize() const
 {
-	if (rows() > 0 && cols() > 0) {
-		kdDebug() << "tableSize()= " << columnPos( cols() - 1 ) + columnWidth( cols() - 1 ) 
+	if (rows() > 0 && columns() > 0) {
+		kdDebug() << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
 			<< ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
 			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
 			+ margin() << endl;
 
 		return QSize( 
-			columnPos( cols() - 1 ) + columnWidth( cols() - 1 ),
+			columnPos( columns() - 1 ) + columnWidth( columns() - 1 ),
 			rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
 			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
 			+ margin() 
@@ -2098,7 +2097,7 @@ int KexiTableView::rows() const
 	return m_data->count();
 }
 
-int KexiTableView::cols() const
+int KexiTableView::columns() const
 {
 	return m_data->columns.count();
 }
@@ -2148,7 +2147,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 	if(col>=0)
 	{
 		newcol = QMAX(0, col);
-		newcol = QMIN(cols() - 1, newcol);
+		newcol = QMIN(columns() - 1, newcol);
 	}
 	else {
 		newcol = d->curCol; //no changes
@@ -2450,7 +2449,7 @@ bool KexiTableView::updateContextMenu()
   //  d->pContextMenu = 0L;
 //  d->pContextMenu->clear();
 //	if(d->pCurrentItem && d->pCurrentItem->isInsertItem())
-//    return;
+//	return;
 
 //	if(d->additionPolicy != NoAdd || d->deletionPolicy != NoDelete)
 //	{
@@ -2458,14 +2457,14 @@ bool KexiTableView::updateContextMenu()
   d->pContextMenu->setItemVisible(d->menu_id_addRecord, d->additionPolicy != NoAdd);
 #if 0 //todo(js)
   d->pContextMenu->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
-    && d->pCurrentItem && !d->pCurrentItem->isInsertItem());
+	&& d->pCurrentItem && !d->pCurrentItem->isInsertItem());
 #else
   d->pContextMenu->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
-    && d->pCurrentItem);
+	&& d->pCurrentItem);
 #endif
   for (int i=0; i<(int)d->pContextMenu->count(); i++) {
-    if (d->pContextMenu->isItemVisible( d->pContextMenu->idAt(i) ))
-      return true;
+	if (d->pContextMenu->isItemVisible( d->pContextMenu->idAt(i) ))
+	  return true;
   }
   return false;
 }
@@ -2513,7 +2512,7 @@ KexiTableView::print(KPrinter &/*printer*/)
 
 	KexiTableItem *i;
 	int width = leftMargin;
-	for(int col=0; col < cols(); col++)
+	for(int col=0; col < columns(); col++)
 	{
 		p.fillRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, QBrush(gray));
 		p.drawRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight);
@@ -2529,7 +2528,7 @@ KexiTableView::print(KPrinter &/*printer*/)
 		if(!i->isInsertItem())
 		{	kdDebug(44021) << "KexiTableView::print: row = " << row << " y = " << yOffset << endl;
 			int xOffset = leftMargin;
-			for(int col=0; col < cols(); col++)
+			for(int col=0; col < columns(); col++)
 			{
 				kdDebug(44021) << "KexiTableView::print: col = " << col << " x = " << xOffset << endl;
 				p.saveWorldMatrix();
@@ -2571,6 +2570,11 @@ KexiTableRM* KexiTableView::verticalHeader() const
 QString KexiTableView::columnCaption(int colNum) const
 {
 	return d->pTopHeader->label(colNum);
+}
+
+void KexiTableView::adjustColumnWidthToContents(int colNum)
+{
+	
 }
 
 int KexiTableView::currentColumn() const

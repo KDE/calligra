@@ -3,7 +3,7 @@
    Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -90,29 +90,27 @@ public:
 	 */
 	void clearColumns(bool repaint = true);
 
-/*js	enum ColumnModes
-	{
-		ColumnReadOnly = 1,
-		ColumnEditable,
-		ColumnAutoIncrement
-	};*/
-
-//	virtual void addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue = QVariant(""),
-//		int width=100, bool autoinc=false);
-
 	QString columnCaption(int colNum) const;
+
+	/*! Adjusts column's width to its (current) contents. */
+	void adjustColumnWidthToContents(int colNum);
 	
 	bool isSortingEnabled() const;
+
 	/*! \return sorted column number or -1 if no column is sorted */
 	int sortedColumn();
+
 	/*! \return true if ascending order for sorting. This not implies that 
 	 any sorting has been performed. */
 	bool sortingAscending() const;
 
 	//! one of KexiDB::Field::Type
 	int columnType(int col) const;
+
 	QVariant columnDefaultValue(int col) const;
+
 	bool columnEditable(int col) const;
+
 	inline KexiTableItem *itemAt(int row) const;
 
 	QVariant* bufferedValueAt(int col);
@@ -166,8 +164,11 @@ public:
 
 	KexiTableItem *selectedItem() const;
 
+	/*! \return number of rows in this view. */
 	int		rows() const;
-	int		cols() const;
+
+	/*! \return number of columns in this view. */
+	int		columns() const;
 
 	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
@@ -269,18 +270,22 @@ public slots:
 	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
 	//! this will dont work if sorting is disabled with setSortingEnabled()
 	void setSorting(int col, bool ascending=true);
+
 	/*! Enables or disables sorting for this table view
 		This method is different that setSorting() because it prevents both user
 		and programmer from sorting by clicking a column's header or calling setSorting().
 		By default sorting is enabled for table view.
 	*/
 	void setSortingEnabled(bool set);
+
 	//! Sorts all rows by column selected with setSorting()
 	void sort();
+
 	/*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
 	 If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
 	 differ from actual position. */
 	void setCursor(int row, int col = -1, bool forceSet = false);
+
 	void selectRow(int row);
 	void selectNextRow();
 	void selectPrevRow();
