@@ -212,7 +212,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 				tmpy = int((float)mev->y()/((float)gridY)+0.5);
 				tmpy*=gridX;
 
-				m_insertRect = QRect(m_insertBegin, QPoint(tmpx, tmpy));
+				int topx = (m_insertBegin.x() < tmpx) ? m_insertBegin.x() : tmpx;
+				int topy = (m_insertBegin.y() < tmpy) ? m_insertBegin.y() : tmpy;
+				int botx = (m_insertBegin.x() > tmpx) ? m_insertBegin.x() : tmpx;
+				int boty = (m_insertBegin.y() > tmpy) ? m_insertBegin.y() : tmpy;
+				m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
+
 				if(m_form->manager()->inserting() && m_insertRect.isValid())
 				{
 					QPainter p(m_container);
