@@ -10,6 +10,7 @@
 #include "koscript_method.h"
 #include <kdebug.h>
 #include <stdio.h>
+#include <math.h>
 
 #include <kregexp.h>
 
@@ -376,7 +377,9 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
           QTime d = r.value()->timeValue();
           int diff = d.secsTo( l.value()->timeValue() );
           FILL_VALUE( context, l, r );
-          context.value()->setValue( (KScript::Long) diff );
+          QTime _time(0,0,0);
+          _time=_time.addSecs(diff);
+          context.value()->setValue( /*(KScript::Long) diff*/_time );
           return TRUE;
       }
 
