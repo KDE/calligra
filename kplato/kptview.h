@@ -40,12 +40,14 @@ class KPTPart;
 class KPTNode;
 class KPTProject;
 
+class DCOPObject;
+
 class KPTView : public KoView {
     Q_OBJECT
 
 public:
     KPTView(KPTPart* part, QWidget* parent=0, const char* name=0);
-
+    ~KPTView();
     /**
      * Support zooming.
      */
@@ -62,11 +64,12 @@ public:
     void setReportGenerateMenu();
 
     void projectCalculate();
+
+    virtual DCOPObject* dcopObject();
     
 public slots:
     void slotUpdate(bool calculate);
-
-protected slots:
+    void slotEditResource();
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -77,11 +80,13 @@ protected slots:
     void slotAddSubTask();
     void slotAddMilestone();
     void slotProjectEdit();
+    void slotConfigure();
+
+protected slots:
     void slotProjectCalendar();
     void slotProjectCalculate();
     void slotReportDesign();
     void slotReportGenerate(int);
-    void slotConfigure();
 
     void slotOpenNode();
 	void slotDeleteTask();
@@ -93,8 +98,6 @@ protected slots:
     void slotConnectNode();
 	void slotChanged(QWidget *);
 	void slotChanged();
-
-    void slotEditResource();
 
     void slotAboutToShow(QWidget *widget);
 
@@ -124,7 +127,7 @@ private:
     KAction *actionEditCopy;
     KAction *actionEditPaste;
     KSelectAction *actionReportGenerate;
-
+    DCOPObject* m_dcop;
 
 };
 

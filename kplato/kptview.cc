@@ -39,6 +39,7 @@
 
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
+#include "KPtViewIface.h"
 
 #include <koKoolBar.h>
 #include <koRect.h>
@@ -88,6 +89,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     //kdDebug()<<k_funcinfo<<endl;
     setInstance(KPTFactory::global());
     setXMLFile("kplato.rc");
+    m_dcop = 0L;
+    // build the DCOP object
+    dcopObject();
 
 	m_tab = new QWidgetStack(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -203,6 +207,20 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 #endif
 
 }
+
+KPTView::~KPTView()
+{
+  delete m_dcop;
+}
+
+DCOPObject * KPTView::dcopObject()
+{
+  if ( !m_dcop )
+    m_dcop = new KPtViewIface( this );
+
+  return m_dcop;
+}
+
 
 KPTProject& KPTView::getProject() const
 {
