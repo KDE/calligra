@@ -36,7 +36,7 @@ namespace KexiDB
 class Driver;
 
 
-class KEXIDB_ODBC_DRIVER_EXPORT ODBCConnection : public Connection
+class ODBCConnection : public Connection
 {
 	Q_OBJECT
 
