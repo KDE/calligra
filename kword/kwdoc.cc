@@ -5122,16 +5122,19 @@ QString KWDocument::sectionTitle( int pageNum ) const
 
 void KWDocument::addIgnoreWordAll( const QString & word)
 {
+    // ### missing: undo/redo support
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
     //m_bgSpellCheck->addIgnoreWordAll( word );
-
+    setModified( true );
 }
 
+// seems to be used only by the DCOP interface
 void KWDocument::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
     //m_bgSpellCheck->clearIgnoreWordAll();
+    setModified( true );
 }
 
 int KWDocument::maxZOrder( int pageNum) const
