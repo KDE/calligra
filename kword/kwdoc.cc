@@ -1047,7 +1047,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     m_pages = 1;
     m_bHasEndNotes = false;
 
-    KoPageLayout __pgLayout;
     KoColumns __columns;
     __columns.columns = 1;
     __columns.ptColumnSpacing = m_defaultColumnSpacing;
@@ -1079,7 +1078,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( masterPageStyle )
     {
         QDomElement properties( masterPageStyle->namedItem( "style:properties" ).toElement() );
-        __pgLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
+        m_pageLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
         double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
         if ( width <= 1e-13 || height <= 1e-13 )
@@ -1088,17 +1087,17 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             return false;
         }
         // guessFormat takes millimeters
-        if ( __pgLayout.orientation == PG_LANDSCAPE )
-            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
+        if ( m_pageLayout.orientation == PG_LANDSCAPE )
+            m_pageLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
         else
-            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
-        __pgLayout.ptWidth = width;
-        __pgLayout.ptHeight = height;
+            m_pageLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
+        m_pageLayout.ptWidth = width;
+        m_pageLayout.ptHeight = height;
 
-        __pgLayout.ptLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
-        __pgLayout.ptTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
-        __pgLayout.ptRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
-        __pgLayout.ptBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
+        m_pageLayout.ptLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
+        m_pageLayout.ptTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
+        m_pageLayout.ptRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
+        m_pageLayout.ptBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
 
         //__hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
         //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
@@ -1130,21 +1129,17 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
 
+        // TODO columns  (style:columns, attribute fo:column-count)
         __columns.columns = 1; // TODO
+        // TODO columnspacing (style:column-sep ?)
         __columns.ptColumnSpacing = 2; // TODO
 
-        // TODO headers/footers
-        __hf.header = HF_SAME;
-        __hf.footer = HF_SAME;
         m_headerVisible = false;
         m_footerVisible = false;
 
-
-        // TODO columns  (style:columns, attribute fo:column-count)
-        // TODO columnspacing (style:column-sep ?)
-        // TODO hType/fType (no support for first-page)
         // TODO spHeadBody (where is this in OOo?)
         // TODO spFootBody (where is this in OOo?)
+        // Answer: margins of the <style:header-footer> element
     }
 
     m_loadingInfo = new KWLoadingInfo;
@@ -1157,8 +1152,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15); // TODO
     // TODO m_initialEditing
-
-    setPageLayout( __pgLayout, __columns, __hf, false );
 
     // TODO variable settings
     // By default display real variable value
@@ -1182,47 +1175,115 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
         m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
         fs->loadOasisContent( body, context );
-        KWFrame* frame = new KWFrame( fs, 29, 798, 42, 566 );
+        KWFrame* frame = new KWFrame( fs, 29, 42, 798-29, 566-42 );
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
     }
 
-#if 0 // TODO
-        // Header/Footer
-        QDomElement headerStyle = masterPageStyle->namedItem( "style:header-style" ).toElement();
-        QDomElement footerStyle = masterPageStyle->namedItem( "style:footer-style" ).toElement();
-        QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
-        if ( !headerLeftElem.isNull() ) {
-            kdDebug() << "Found header-left" << endl;
-            hasEvenOddHeader = true;
-            importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader, headerStyle );
-        }
-        QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
-        if ( !headerElem.isNull() ) {
-            kdDebug() << "Found header" << endl;
-            importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader, headerStyle );
-        }
-        QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
-        if ( !footerLeftElem.isNull() ) {
-            kdDebug() << "Found footer-left" << endl;
-            importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter, footerStyle );
-        }
-        QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
-        if ( !footerElem.isNull() ) {
-            kdDebug() << "Found footer" << endl;
-            importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
-        }
-#endif
+    // Header/Footer
+    // TODO support for first-page
+    bool hasEvenOddHeader = false;
+    bool hasEvenOddFooter = false;
+    QDomElement headerStyle = masterPageStyle->namedItem( "style:header-style" ).toElement();
+    QDomElement footerStyle = masterPageStyle->namedItem( "style:footer-style" ).toElement();
+    QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
+    if ( !headerLeftElem.isNull() ) {
+        kdDebug() << "Found header-left" << endl;
+        hasEvenOddHeader = true;
+        __hf.header = HF_EO_DIFF; // ###
+        loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
+    }
+    QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
+    if ( !headerElem.isNull() ) {
+        kdDebug() << "Found header" << endl;
+        loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
+    }
+    QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
+    if ( !footerLeftElem.isNull() ) {
+        kdDebug() << "Found footer-left" << endl;
+        hasEvenOddFooter = true;
+        __hf.footer = HF_EO_DIFF; // ###
+        loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
+    }
+    QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
+    if ( !footerElem.isNull() ) {
+        kdDebug() << "Found footer" << endl;
+        loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
+    }
 
     // TODO embedded objects
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     endOfLoading();
 
+    // This sets the columns and header/footer flags, and calls recalcFrames,
+    // so it must be done last.
+    setPageLayout( m_pageLayout, __columns, __hf, false );
+
     //printDebug();
 
     return true;
+}
+
+static QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
+{
+    if ( tagName == "style:header" )
+        return hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
+    if ( tagName == "style:header-left" )
+        return i18n("Even Pages Header");
+    if ( tagName == "style:footer" )
+        return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
+    if ( tagName == "style:footer-left" )
+        return i18n("Even Pages Footer");
+    kdWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
+    // ######
+    //return i18n("First Page Header");
+    //return i18n("First Page Footer");
+    return QString::null;
+}
+
+static KWFrameSet::Info headerTypeToFrameInfo( const QString& tagName, bool /*hasEvenOdd*/ )
+{
+    if ( tagName == "style:header" )
+        return KWFrameSet::FI_ODD_HEADER;
+    if ( tagName == "style:header-left" )
+        return KWFrameSet::FI_EVEN_HEADER;
+    if ( tagName == "style:footer" )
+        return KWFrameSet::FI_ODD_FOOTER;
+    if ( tagName == "style:footer-left" )
+        return KWFrameSet::FI_EVEN_FOOTER;
+
+    // ### return KWFrameSet::FI_FIRST_HEADER; TODO
+    // ### return KWFrameSet::FI_FIRST_FOOTER; TODO
+    return KWFrameSet::FI_BODY;
+}
+
+void KWDocument::loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context )
+{
+    const QString tagName = headerFooter.tagName();
+    bool isHeader = tagName.startsWith( "style:header" );
+
+    KWTextFrameSet *fs = new KWTextFrameSet( this, headerTypeToFramesetName( tagName, hasEvenOdd ) );
+    fs->setFrameSetInfo( headerTypeToFrameInfo( tagName, hasEvenOdd ) );
+    m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+
+    if ( !style.isNull() )
+        context.styleStack().push( style );
+    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
+    frame->loadCommonOasisProperties( context, fs );
+    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+    frame->setNewFrameBehavior( KWFrame::Copy );
+    fs->addFrame( frame );
+    if ( !style.isNull() )
+        context.styleStack().pop(); // don't let it be active when parsing the text
+
+    fs->loadOasisContent( headerFooter, context );
+
+    if ( isHeader )
+        m_headerVisible = true;
+    else
+        m_footerVisible = true;
 }
 
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
@@ -2985,8 +3046,8 @@ void KWDocument::setUnit( KoUnit::Unit _unit )
     m_unit = _unit;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() ) {
-            viewPtr->getGUI()->getHorzRuler()->setUnit( KoUnit::unitName( m_unit ) );
-            viewPtr->getGUI()->getVertRuler()->setUnit( KoUnit::unitName( m_unit ) );
+            viewPtr->getGUI()->getHorzRuler()->setUnit( m_unit );
+            viewPtr->getGUI()->getVertRuler()->setUnit( m_unit );
         }
     }
 }

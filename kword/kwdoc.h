@@ -835,6 +835,8 @@ protected:
     void loadDefaultTableStyleTemplates();
     void loadDefaultTableTemplates();
 
+    void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context );
+
 private:
     void endOfLoading();
     //private helper functions for frameUnderMouse
