@@ -764,7 +764,6 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
 
     QString s;
-    kdDebug() << "KWTextFrameSet::statistics avant "<<this << endl;
     KoTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
     {
@@ -773,7 +772,6 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         kapp->processEvents();
         if ( progress->wasCancelled() )
             return false;
-        kdDebug() << "KWTextFrameSet::statistics parag->at(0)->isCustom() " <<parag->at(0)->isCustom()  << endl;
         // start of a table
         if ( parag->at(0)->isCustom())
         {
