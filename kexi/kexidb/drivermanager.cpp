@@ -45,6 +45,8 @@ DriverManagerInternal::DriverManagerInternal() /* protected */
 	, lookupDriversNeeded(true)
 {
 	m_drivers.setAutoDelete(true);
+	m_serverResultNum=0;
+
 }
 
 DriverManagerInternal::~DriverManagerInternal()
@@ -140,19 +142,24 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		return 0;
 	}
 
-//	KLibLoader *libLoader = KLibLoader::self();
-
 	KService::Ptr ptr= *(m_services_lcase.find(name.lower()));
 	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
 	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
-	int errcode;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
-		this, srv_name.latin1(), QStringList(),&errcode);
+		this, srv_name.latin1(), QStringList(),&m_serverResultNum);
 
 	if (!drv) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".(%2)")
-				.arg(name).arg(errcode) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".")
+				.arg(name) );
+		if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
+			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoServiceFound]="ErrNoServiceFound";
+			m_componentLoadingErrors[KParts::ComponentFactory::ErrServiceProvidesNoLibrary]="ErrServiceProvidesNoLibrary";
+			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoLibrary]="ErrNoLibrary";
+			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoFactory]="ErrNoFactory";
+			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoComponent]="ErrNoComponent";
+		}
+		m_serverResultName=m_componentLoadingErrors[m_serverResultNum];
 		return 0;
 	}
 	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
@@ -300,6 +307,28 @@ Driver* DriverManager::driver(const QString& name)
 	if (d_int->error())
 		setError(d_int);
 	return drv;
+}
+
+QString DriverManager::serverErrorMsg()
+{
+	return d_int->m_serverErrMsg;
+}
+
+int DriverManager::serverResult()
+{
+	return d_int->m_serverResultNum;
+}
+
+QString DriverManager::serverResultName()
+{
+	return d_int->m_serverResultName;
+}
+
+void DriverManager::drv_clearServerResult()
+{
+	d_int->m_serverErrMsg=QString::null;
+	d_int->m_serverResultNum=0;
+	d_int->m_serverResultName=QString::null;
 }
 
 #include "drivermanager_p.moc"

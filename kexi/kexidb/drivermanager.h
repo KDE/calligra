@@ -77,6 +77,15 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		 \return driver name or null string if no driver found.
 		*/
 		QString lookupByMime(const QString &mimeType);
+
+		//! server error is set if there is error at KService level (useful for debugging)
+		virtual QString serverErrorMsg();
+		virtual int serverResult();
+		virtual QString serverResultName();
+
+	protected:
+		virtual void drv_clearServerResult();
+
 	private:
 		DriverManagerInternal *d_int;
 };

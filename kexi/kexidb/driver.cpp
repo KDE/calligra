@@ -163,3 +163,5 @@ bool Driver::isSystemObjectName( const QString& n ) const
 	return n.startsWith("kexi__");
 }
 
+#include "driver.moc"
+

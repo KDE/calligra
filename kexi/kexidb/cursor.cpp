@@ -256,22 +256,31 @@ bool Cursor::movePrev()
 	if (!m_opened /*|| m_beforeFirst*/ || !(m_options & Buffered))
 		return false;
 
-	if ((m_at <= 0) || (m_records_in_buf <= 0)) {
-		m_at=-1;
+	//we're after last record and there are records in the buffer
+	//--let's move to last record
+	if (m_afterLast && (m_records_in_buf>0)) {
+		drv_bufferMovePointerTo(m_records_in_buf-1);
+		m_at_buffer = true; //now current record is stored in the buffer
+		m_validRecord=true;
+		m_afterLast=false;
+		return true;
+	}
+	//we're at first record: go BOF
+	if ((m_at <= 1) || (m_records_in_buf <= 1/*sanity*/)) {
+		m_at=0;
+		m_at_buffer = false;
 		m_validRecord=false;
-//		m_beforeFirst = true;
 		return false;
 	}
 
 	m_at--;
-	if (m_at_buffer ) {//we already have got a pointer to buffer
+	if (m_at_buffer) {//we already have got a pointer to buffer
 		drv_bufferMovePointerPrev(); //just move to prev record in the buffer
 	} else {//we have no pointer
 		//compute a place in the buffer that contain next record's data
-		drv_bufferMovePointerTo(m_at);
+		drv_bufferMovePointerTo(m_at-1);
 		m_at_buffer = true; //now current record is stored in the buffer
 	}
-//		setError( NOT_SUPPORTED,  )
 	m_validRecord=true;
 	m_afterLast=false;
 	return true;
@@ -285,7 +294,6 @@ bool Cursor::eof() const
 bool Cursor::bof() const
 {
 	return m_at==0;
-//	return m_beforeFirst;
 }
 
 Q_LLONG Cursor::at() const
@@ -326,10 +334,11 @@ bool Cursor::getNextRecord()
 
 	if ((m_options & Buffered)) {//this cursor is buffered:
 		KexiDBDbg << "m_at < m_records_in_buf :: " << (long)m_at << " < " << m_records_in_buf << endl;
-		if (m_at==-1) m_at=0;
+//js		if (m_at==-1) m_at=0;
 		if (m_at < m_records_in_buf) {//we have next record already buffered:
 ///		if (m_at < (m_records_in_buf-1)) {//we have next record already buffered:
-			if (m_at_buffer && (m_at!=0)) {//we already have got a pointer to buffer
+//js			if (m_at_buffer && (m_at!=0)) {//we already have got a pointer to buffer
+			if (m_at_buffer) {//we already have got a pointer to buffer
 				drv_bufferMovePointerNext(); //just move to next record in the buffer
 			} else {//we have no pointer
 				//compute a place in the buffer that contain next record's data
@@ -343,7 +352,7 @@ bool Cursor::getNextRecord()
 				if (!m_buffering_completed) {
 					//retrieve record only if we are not after 
 					//the last buffer's item (i.e. when buffer is not fully filled):
-					KexiDBDrvDbg<<"==== (buffered) sqlite_step ===="<<endl;
+					KexiDBDrvDbg<<"==== buffering: drv_getNextRecord() ===="<<endl;
 					drv_getNextRecord();
 				}
 				if (m_result != FetchOK) {//there is no record
@@ -351,7 +360,8 @@ bool Cursor::getNextRecord()
 					KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;
 					m_validRecord = false;
 					m_afterLast = true;
-					m_at = m_records_in_buf;
+//js					m_at = m_records_in_buf;
+					m_at = -1; //position is invalid now and will not be used
 					if (m_result == FetchEnd) {
 						return false;
 					}

@@ -78,7 +78,13 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 		KexiDB::Driver::InfoMap m_driversInfo; //! used to store drivers information
 		QDict<KexiDB::Driver> m_drivers;
 		ulong m_refCount;
-		
+
+		QString m_serverErrMsg;
+		int m_serverResultNum;
+		QString m_serverResultName;
+		//! result names for KParts::ComponentFactory::ComponentLoadingError
+		QMap<int,QString> m_componentLoadingErrors;
+
 		bool lookupDriversNeeded : 1;
 
 	friend class DriverManager;

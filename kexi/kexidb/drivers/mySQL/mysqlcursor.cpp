@@ -141,6 +141,8 @@ void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
 
 
 const char** MySqlCursor::recordData() const {
+	//! @todo
+	return 0;
 }
 
 void MySqlCursor::storeCurrentRecord(RecordData &data) const {

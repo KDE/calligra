@@ -9,6 +9,7 @@ TARGET		= kexidb$$KDEBUG
 
 system( moc connection.h -o moc/connection.moc )
 system( moc drivermanager_p.h -o moc/drivermanager_p.moc )
+system( moc driver.h -o moc/driver.moc )
 
 #system( moc kexidb.h -o moc/kexidb.moc )
 #system( moc kexidbinterfacemanager.h -o moc/kexidbinterfacemanager.moc )
