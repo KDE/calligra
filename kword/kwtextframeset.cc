@@ -2232,6 +2232,8 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
     kdDebug(32002) << "KWTextFrameSet::frameResized " << theFrame << " " << *theFrame << " invalidateLayout=" << invalidateLayout << endl;
+    if ( theFrame->height() < 0 )
+        return; // safety!
 
     KWFrameSet * fs = theFrame->frameSet();
     Q_ASSERT( fs == this );
