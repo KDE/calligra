@@ -482,7 +482,6 @@ KexiProperty::format(const QVariant &v)
 			if (f.italic())
 				wstr += (i18n("Italic")+" ");
 			return f.family() + " " + wstr + QString::number(f.pointSize());
-			return QString(f.family() + " " + QString::number(f.pointSize()));
 		}
 		case QVariant::Double:
 		{
