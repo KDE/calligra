@@ -26,46 +26,29 @@
 
 #include <qdom.h>
 
-class GStylePrivate
-{
-public:
-  bool             stroked;
-  KoColor          ocolor;
-  int              oopacity;
-  unsigned int     lwidth;
-  Qt::PenCapStyle  cap;
-  Qt::PenJoinStyle join;
-  int              ftype;
-  KoColor          fcolor;
-  int              fopacity;
-  Qt::BrushStyle   pattern;
-};
-
 GStyle::GStyle()
 {
-  d = new GStylePrivate;
-  d->stroked = true;
-  d->ocolor = KoColor::black();
-  d->lwidth = 1;
-  d->oopacity = 100;
-  d->join = Qt::RoundJoin;
-  d->cap = Qt::RoundCap;
+  mStroked = true;
+  mOutline = new KoOutline;
+/*
   d->ftype = NoFill;
   d->fcolor = KoColor::white();
   d->fopacity = 100;
   d->pattern = Qt::SolidPattern;
+*/
 }
 
 GStyle::GStyle(const QDomElement &style)
 {
-  d = new GStylePrivate;
-  d->stroked = style.attribute("stroked").toInt();
+  mOutline = new KoOutline;
+  mStroked = style.attribute("stroked").toInt();;
 //  d->ocolor = ;
+/*
   d->lwidth = style.attribute("width").toInt();
   d->oopacity = style.attribute("oopacity").toInt();
   d->join = (Qt::PenJoinStyle)style.attribute("join").toInt();
   d->cap = (Qt::PenCapStyle)style.attribute("cap").toInt();
-  d->ftype = style.attribute("ftype").toInt();
+  d->ftype = style.attribute("ftype").toInt();*/
 //  d->fcolor = ;
 //  d->fopacity = obj.d->fopacity;
 //  d->pattern = obj.d->pattern;
@@ -73,28 +56,36 @@ GStyle::GStyle(const QDomElement &style)
 
 GStyle::GStyle(GStyle &obj)
 {
-  d = new GStylePrivate;
-  d->stroked = obj.d->stroked;
-  d->ocolor = obj.d->ocolor;
+  mOutline = new KoOutline;
+  mStroked = obj.mStroked;
+/*  d->ocolor = obj.d->ocolor;
   d->lwidth = obj.d->lwidth;
   d->oopacity = obj.d->oopacity;
   d->join = obj.d->join;
   d->cap = obj.d->cap;
   d->ftype = obj.d->ftype;
-  d->fcolor = obj.d->fcolor;
+  d->fcolor = obj.d->fcolor;*/
 //  d->fopacity = obj.d->fopacity;
 //  d->pattern = obj.d->pattern;
 }
 
 GStyle::~GStyle()
 {
-  delete d;
+  delete mOutline;
+}
+
+KoOutline *GStyle::outline() const
+{
+  if(mStroked)
+    return mOutline;
+  else
+    return 0L;
 }
 
 QDomElement GStyle::writeToXml(QDomDocument &document)
 {
   QDomElement style = document.createElement("style");
-  style.setAttribute("stroked", d->stroked);
+/*  style.setAttribute("stroked", d->stroked);
   style.setAttribute("ocolor", d->ocolor.name());
   style.setAttribute("width", d->lwidth);
   style.setAttribute("oopacity", d->oopacity);
@@ -102,111 +93,106 @@ QDomElement GStyle::writeToXml(QDomDocument &document)
   style.setAttribute("cap", d->cap);
   style.setAttribute("ftype", d->ftype);
   style.setAttribute("fcolor", d->fcolor.name());
-  style.setAttribute("pattern", d->pattern);
+  style.setAttribute("pattern", d->pattern);*/
   return style;
-}
-  
-void GStyle::outlineColor(const KoColor &c)
-{
-  d->ocolor = c;
 }
   
 const KoColor &GStyle::outlineColor() const
 {
-  return d->ocolor;
+  return mOutline->color();
+}
+
+void GStyle::outlineColor(const KoColor &c)
+{
+  mOutline->color(c);
 }
 
 int GStyle::outlineOpacity() const
 {
-  return d->oopacity;
+  return static_cast<int>(100.0 * static_cast<double>(mOutline->opacity()) / 255.0);
 }
 
 void GStyle::outlineOpacity(int o)
 {
-  d->oopacity = o;
+  mOutline->opacity(static_cast<int>(255.0 * static_cast<double>(o) / 100.0));
 }
 
-void GStyle::outlineWidth(unsigned int lwidth)
+int GStyle::outlineWidth() const
 {
-  d->lwidth = lwidth;
+  return static_cast<int>(mOutline->width());
 }
 
-unsigned int GStyle::outlineWidth() const
+void GStyle::outlineWidth(int w)
 {
-  return d->lwidth;
+  mOutline->width(w);
 }
 
-void GStyle::fillColor(const KoColor &c)
+KoOutline::Join GStyle::joinStyle() const
 {
-  d->fcolor = c;
+  return  mOutline->join();
+}
+
+void GStyle::joinStyle(KoOutline::Join join)
+{
+  mOutline->join(join);
+}
+
+KoOutline::Cap GStyle::capStyle() const
+{
+  return  mOutline->cap();;
+}
+
+void GStyle::capStyle(KoOutline::Cap cap)
+{
+  mOutline->cap(cap);
+}
+
+void GStyle::fillColor(const KoColor &)
+{
 }
 
 const KoColor &GStyle::fillColor() const
 {
-  return d->fcolor;
-}
-
-Qt::PenJoinStyle GStyle::joinStyle() const
-{
-  return d->join;
-}
-
-void GStyle::joinStyle(Qt::PenJoinStyle join)
-{
-  d->join = join;
-}
-
-Qt::PenCapStyle GStyle::capStyle() const
-{
-  return d->cap;
-}
-
-void GStyle::capStyle(Qt::PenCapStyle cap)
-{
-  d->cap = cap;
+  return KoColor::black();
 }
 
 Qt::BrushStyle GStyle::brushStyle() const
 {
-  return d->pattern;
+//  return d->pattern;
 }
 
 void GStyle::brushStyle(Qt::BrushStyle brushStyle)
 {
-  d->pattern = brushStyle;
+//  d->pattern = brushStyle;
 }
 
 bool GStyle::stroked() const
 {
-  return d->stroked;
+//  return d->stroked;
 }
 
 void GStyle::stroked(bool stroked)
 {
-  d->stroked = stroked;
+//  d->stroked = stroked;
 }
 
 int GStyle::filled() const
 {
-  return d->ftype;
+  return 0;
 }
 
 void GStyle::filled(int filled)
 {
-  d->ftype = filled;
+  //d->ftype = filled;
 }
 
 GStyle &GStyle::operator=(const GStyle &s)
 {
-  d->stroked = s.d->stroked;
-  d->ocolor = s.d->ocolor;
-  d->lwidth = s.d->lwidth;
-  d->oopacity = s.d->oopacity;
-  d->join = s.d->join;
-  d->cap = s.d->cap;
-  d->ftype = s.d->ftype;
+  mStroked = s.mStroked;
+  *mOutline = *s.mOutline;
+/*  d->ftype = s.d->ftype;
   d->fcolor = s.d->fcolor;
   d->fopacity = s.d->fopacity;
-  d->pattern = s.d->pattern;
+  d->pattern = s.d->pattern;*/
   return *this;
 }

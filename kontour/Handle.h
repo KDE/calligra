@@ -30,7 +30,7 @@
 #include <koRect.h>
 
 class GPage;
-class QPainter;
+class KoPainter;
 
 class Handle
 {
@@ -45,12 +45,12 @@ public:
   KoPoint rotCenter() const {return mRotCenter; }
   void rotCenter(const KoPoint &p);
 
-  void draw(QPainter &p);
+  void draw(KoPainter *p);
   int contains(const KoPoint &p);
 
 private:
   enum ArrowDirection { Arrow_Left, Arrow_Right, Arrow_Up, Arrow_Down };
-  void drawArrow(QPainter &p, int x, int y, ArrowDirection d);
+  void drawArrow(KoPainter *p, int x, int y, ArrowDirection d);
 
 private:
   GPage *mGPage;

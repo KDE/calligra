@@ -25,16 +25,12 @@
 #ifndef __GStyle_h__
 #define __GStyle_h__
 
-#include <koColor.h>
-
-#include <qpen.h>
+#include <koOutline.h>
 
 class QDomDocument;
 class QDomElement;
 
 /* Class for drawing style */
-
-class GStylePrivate;
 
 class GStyle
 {
@@ -49,6 +45,8 @@ public:
   GStyle(GStyle &obj);
   virtual ~GStyle();
 
+  KoOutline *outline() const;
+
   QDomElement writeToXml(QDomDocument &document);
 
   bool stroked() const;
@@ -60,14 +58,14 @@ public:
   int outlineOpacity() const;
   void outlineOpacity(int o);
 
-  unsigned int outlineWidth() const;
-  void outlineWidth(unsigned int lwidth);
+  int outlineWidth() const;
+  void outlineWidth(int w);
 
-  Qt::PenJoinStyle joinStyle() const;
-  void joinStyle(Qt::PenJoinStyle join);
+  KoOutline::Join joinStyle() const;
+  void joinStyle(KoOutline::Join join);
 
-  Qt::PenCapStyle capStyle() const;
-  void capStyle(Qt::PenCapStyle cap);
+  KoOutline::Cap capStyle() const;
+  void capStyle(KoOutline::Cap cap);
 
   int filled() const;
   void filled(int filled);
@@ -81,7 +79,8 @@ public:
   GStyle &operator=(const GStyle &s);
 
 private:
-  GStylePrivate *d;
+  bool         mStroked;
+  KoOutline   *mOutline;
 };
 
 #endif

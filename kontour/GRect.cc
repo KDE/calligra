@@ -27,9 +27,10 @@
 #include <math.h>
 
 #include <qdom.h>
-#include <qpainter.h>
 
 #include <klocale.h>
+#include <koVectorPath.h>
+#include <koPainter.h>
 #include <kdebug.h>
 
 #include "kontour_global.h"
@@ -74,7 +75,7 @@ GObject(obj)
 
 GObject *GRect::copy() const
 {
-	return new GRect(*this);
+  return new GRect(*this);
 }
 
 void GRect::type(Type t)
@@ -116,76 +117,15 @@ QDomElement GRect::writeToXml(QDomDocument &document)
   return rect;
 }
 
-void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
+void GRect::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool)
 {
-  p.save();
-  p.setWorldMatrix(tmpMatrix, true);
-  setPen(&p);
-  setBrush(&p);
-
-  p.drawRect((int)sPoint.x(), (int)sPoint.y(), (int)(ePoint.x() - sPoint.x()), (int)(ePoint.y() - sPoint.y()));
-  
-  p.restore();
-
-  if(withBasePoints)
-  {
-    int x;
-    int y;
-    KoPoint c;
-    c = sPoint.transform(tmpMatrix);
-    x = static_cast<int>(c.x());
-    y = static_cast<int>(c.y());
-    drawNode(p, x, y, false);
-    c = ePoint.transform(tmpMatrix);
-    x = static_cast<int>(c.x());
-    y = static_cast<int>(c.y());
-    drawNode(p, x, y, false);
-  }
-
-/*  double alen = 0;
-  if (! workInProgress () && ! outline) {
-    initBrush (brush);
-    p.setBrush (brush);
-    if (gradientFill () &&
-        outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
-      //if (! gShape.valid ())
-        updateGradientShape (p);
-      gShape.draw (p);
-    }
-  }
-
-  switch (outlineInfo.shape) {
-  case GObject::OutlineInfo::DefaultShape:
-    Painter::drawEllipse (p, sPoint.x (), sPoint.y (),
-                          ePoint.x () - sPoint.x (),
-                          ePoint.y () - sPoint.y ());
-    break;
-  case GObject::OutlineInfo::PieShape:
-    alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    Painter::drawPie (p, sPoint.x (), sPoint.y (),
-                      ePoint.x () - sPoint.x (),
-                      ePoint.y () - sPoint.y (),
-                      -eAngle * 16, -alen * 16);
-    break;
-  case GObject::OutlineInfo::ArcShape:
-    alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    Painter::drawArc (p, sPoint.x (), sPoint.y (),
-                      ePoint.x () - sPoint.x (),
-                      ePoint.y () - sPoint.y (),
-                      -eAngle * 16, -alen * 16);
-    break;
-  }
-  p.restore ();
-  p.save ();
-  if (withBasePoints) {
-    p.setPen (black);
-    p.setBrush (white);
-    for (int i = 0; i < 2; i++) {
-      Coord c = segPoint[i].transform (tmpMatrix);
-      Painter::drawRect (p, c.x () - 2.0, c.y () - 2.0, 4, 4);
-    }
-  }
- */
+  setPen(p);
+  setBrush(p);
+  KoVectorPath *v = KoVectorPath::rectangle(sPoint.x(), sPoint.y(), ePoint.x() - sPoint.x(), ePoint.y() - sPoint.y(), 0, 0);
+  QWMatrix m;
+  m = m.translate(aXOffset, aYOffset);
+  v->transform(m * tmpMatrix);
+  p->drawVectorPath(v);
 }
 
 void GRect::calcBoundingBox()

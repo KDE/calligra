@@ -29,7 +29,7 @@
 class KontourView;
 class QTabWidget;
 class GStyle;
-class QComboBox;
+class KComboBox;
 class KoColor;
 class KoColorChooser;
 class QCheckBox;
@@ -61,11 +61,11 @@ private:
 
   QTabWidget      *mTab;
   QCheckBox       *mStroked;
-  QComboBox       *mStartArrowBox;
-  QComboBox       *mEndArrowBox;
+  KComboBox       *mStartArrowBox;
+  KComboBox       *mEndArrowBox;
   QSpinBox        *mOpacityBox;
   QSpinBox        *mWidthBox;
-  QComboBox       *mLineStyleBox;
+  KComboBox       *mLineStyleBox;
   QButtonGroup    *mJoinBox;
   QButtonGroup    *mCapBox;
   KoColorChooser  *mOutlinePanel;
@@ -87,7 +87,7 @@ private:
   KontourView     *mView;
 
   QTabWidget      *mTab;
-  QComboBox       *mPaintingBox;
+  KComboBox       *mPaintingBox;
   QSpinBox        *mOpacityBox;
   KoColorChooser  *mPaintPanel;
 };

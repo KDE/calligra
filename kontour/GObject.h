@@ -36,7 +36,7 @@
 
 class QDomDocument;
 class QDomElement;
-class QPainter;
+class KoPainter;
 class GPath;
 class GLayer;
 class GOState;
@@ -127,8 +127,6 @@ public:
    */
   virtual QDomElement writeToXml(QDomDocument &document);
 
-  void drawNode(QPainter &p, int x, int y, bool active);
-
   /**
    * Draw the object with the given painter.
    * NOTE: This method has to be implemented in every subclass.
@@ -137,7 +135,9 @@ public:
    * @param withBasePoints If true, draw the base points of the
    *                       object.
    */
-  virtual void draw(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true) = 0;
+  virtual void draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true) = 0;
+
+  void drawNode(KoPainter *p, int x, int y, bool active);
   
   /**
    * Change all coords of object for new zoom factor.
@@ -243,8 +243,8 @@ protected:
   void updateBoundingBox(const KoPoint &p1, const KoPoint &p2);
   void calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft);
   void updateRegion(bool recalcBBox = true);
-  void setPen(QPainter *p);
-  void setBrush(QPainter *p);
+  void setPen(KoPainter *p);
+  void setBrush(KoPainter *p);
 
   /* Adjust the bounding box by taking into account linewidth */
   void adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft);

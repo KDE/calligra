@@ -37,9 +37,9 @@ QHBox(parent, name)
   valueBox = new KDoubleNumInput(this, "valueBox");
   ptMinVal = 1.0;
   ptMaxVal = 10.0;
-  m_step = 1.0;
+  mStep = 1.0;
   valueBox->setPrecision(2);
-  valueBox->setRange(ptMinVal, ptMaxVal, m_step);
+  valueBox->setRange(ptMinVal, ptMaxVal, mStep);
 
   unitCombo = new QComboBox(this, "unitCombo");
   unitCombo->insertItem(unitToString(UnitPoint));
@@ -82,23 +82,23 @@ void UnitBox::setValue(double value)
 
 void UnitBox::setStep(double step)
 {
-  if(m_step != step)
+  if(mStep != step)
   {
     valueBox->setRange(ptMinVal, ptMaxVal, step, false);
-    m_step = step;
+    mStep = step;
   }
 }
 
 double UnitBox::getStep() const
 {
-  return m_step;
+  return mStep;
 }
 
 void UnitBox::setRange(double minVal, double maxVal)
 {
   ptMinVal = minVal;
   ptMaxVal = maxVal;
-  valueBox->setRange(cvtPtToUnit(unit, minVal), cvtPtToUnit(unit, maxVal), m_step, false);
+  valueBox->setRange(cvtPtToUnit(unit, minVal), cvtPtToUnit(unit, maxVal), mStep, false);
 }
 
 void UnitBox::getRange(double &minVal, double &maxVal)
@@ -112,7 +112,7 @@ void UnitBox::unitChanged(int id)
   MeasurementUnit newUnit = (MeasurementUnit)id;
   double ptValue = getValue();
   unit = newUnit;
-  valueBox->setRange(cvtPtToUnit(unit, ptMinVal), cvtPtToUnit(unit, ptMaxVal), m_step, false);
+  valueBox->setRange(cvtPtToUnit(unit, ptMinVal), cvtPtToUnit(unit, ptMaxVal), mStep, false);
   setValue(ptValue);
 }
 
@@ -123,7 +123,7 @@ void UnitBox::setDefaultMeasurementUnit(MeasurementUnit unit)
 
 void UnitBox::slotValueChanged(double f)
 {
-  // convert the value according current unit
+  /* convert the value according current unit */
   if(isUnitEnabled)
   {
     double val = cvtUnitToPt(unit, static_cast<double>(f));

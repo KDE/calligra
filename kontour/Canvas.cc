@@ -26,10 +26,14 @@
 #include "Canvas.h"
 
 #include <qpainter.h>
+#include <qpaintdevicemetrics.h>
 #include <qscrollbar.h>
 #include <qrect.h>
 
 #include <kdebug.h>
+
+#include <koColor.h>
+#include <koPainter.h>
 
 #include "kontour_global.h"
 #include "kontour_view.h"
@@ -37,8 +41,8 @@
 #include "GPage.h"
 #include "ToolController.h"
 
-Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
-:QWidget(parent, name)
+Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name):
+QWidget(parent, name)
 {
   mGDoc = aGDoc;
   mView = aView;
@@ -82,15 +86,19 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
 //  connect(mGDoc, SIGNAL (handleChanged ()), this, SLOT (repaint ()));
 //  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
-  buffer = new QPixmap();
+  painter = new KoPainter(this, width(), height());
 
   setBackgroundMode(NoBackground);
+
+  QPaintDeviceMetrics pdm(this);
+  kdDebug(38000) << "DPI X =" << pdm.logicalDpiX() << endl;
+  kdDebug(38000) << "DPI Y =" << pdm.logicalDpiY() << endl;
 }
 
 Canvas::~Canvas()
 {
-  if(buffer)
-    delete buffer;
+  if(painter)
+    delete painter;
 }
 
 void Canvas::outlineMode(bool flag)
@@ -138,11 +146,39 @@ void Canvas::updateBuf()
 
 void Canvas::updateBuf(const QRect &rect)
 {
+  int left = rect.left();
+  int right = rect.right();
+  int top = rect.top();
+  int bottom = rect.bottom();
+  int width = rect.width();
+  int height = rect.height();
+
   // TODO Optimize that
   int w = mGDoc->xCanvas();
   int h = mGDoc->yCanvas();
 
-  QPainter p;
+  bool hll = mXOffset >= left;
+  bool hlr = mXOffset <= right;
+  bool hrl = mXOffset + w >= left;
+  bool hrr = mXOffset + w <= right;
+  bool vtt = mYOffset >= top;
+  bool vtb = mYOffset <= bottom;
+  bool vbt = mYOffset + h >= top;
+  bool vbb = mYOffset + h <= bottom;
+
+/*  if(vtt)
+  {
+    if(!vtb)
+    {
+      painter->fillAreaRGB(rect, KoColor::white());
+    }
+  }*/
+  painter->fillAreaRGB(rect, KoColor::white());
+  if(hll && hrr && vtt && vbb)
+  {
+    painter->fillAreaRGB(QRect(mXOffset, mYOffset, w, h) ,KoColor::red());
+  }
+/*  QPainter p;
   p.begin(buffer);
   p.setClipRect(rect);
   
@@ -166,22 +202,17 @@ void Canvas::updateBuf(const QRect &rect)
   p.lineTo(w+1, h+1);
   p.moveTo(w, h+1);
   p.lineTo(1, h+1);
-  p.setPen(Qt::black);
+  p.setPen(Qt::black);*/
 
-  p.save();
-  p.scale(document()->zoomFactor(), document()->zoomFactor());
-  document()->activePage()->drawContents(p, mWithBasePoints, mOutlineMode);
+  document()->activePage()->drawContents(painter, mXOffset, mYOffset, mWithBasePoints, mOutlineMode);
 
   if(!document()->activePage()->selectionIsEmpty())
-    document()->activePage()->handle().draw(p);
-  p.restore();
-
-  p.restore();
-
+    document()->activePage()->handle().draw(painter);
+/*
   if(mGDoc->showHelplines())
     drawHelplines(p, rect);
 
-  p.end();
+  p.end();*/
 }
 
 void Canvas::setXimPosition(int x, int y, int w, int h)
@@ -375,7 +406,7 @@ bool Canvas::eventFilter(QObject *o, QEvent *e)
 
 void Canvas::resizeEvent(QResizeEvent *)
 {
-  buffer->resize(size());
+  painter->resize(size());
 
   kdDebug(38000) << "Width=" << width() << endl;
   kdDebug(38000) << "Height=" << height() << endl;
@@ -401,7 +432,8 @@ void Canvas::resizeEvent(QResizeEvent *)
 void Canvas::paintEvent(QPaintEvent *e)
 {
   const QRect &rect = e->rect();
-  bitBlt(this, rect.x(), rect.y(), buffer, rect.x(), rect.y(), rect.width(), rect.height());
+  bitBlt((QPaintDevice *)this, rect.x(), rect.y(), painter->image(), rect.x(), rect.y(), rect.width(), rect.height());
+//  bitBlt(this, rect.x(), rect.y(), buffer, rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 void Canvas::wheelEvent(QWheelEvent *e)
@@ -538,12 +570,12 @@ void Canvas::propagateMouseEvent(QMouseEvent *e)
     mView->toolController()->delegateEvent(e);
 }
 
-void Canvas::drawGrid(QPainter &p, const QRect &rect)
+void Canvas::drawGrid(const QRect &rect)
 {
   if(!mGDoc->document()->isReadWrite())
     return;
 
-  p.save();
+/*  p.save();
   QPen pen(mGDoc->gridColor());
   p.setPen(pen);
 
@@ -563,15 +595,15 @@ void Canvas::drawGrid(QPainter &p, const QRect &rect)
     p.drawLine(rect.left(), vi, rect.right(), vi);
   }
 
-  p.restore();
+  p.restore();*/
 }
 
-void Canvas::drawHelplines(QPainter &p, const QRect &rect)
+void Canvas::drawHelplines(const QRect &rect)
 {
   if(!mGDoc->document()->isReadWrite())
     return;
 
-  p.save();
+/*  p.save();
   QPen pen(blue);
   p.setPen(pen);
 
@@ -589,7 +621,7 @@ void Canvas::drawHelplines(QPainter &p, const QRect &rect)
     p.drawLine(vi, rect.top(), vi, rect.bottom());
   }
 
-  p.restore ();
+  p.restore ();*/
 }
 
 double Canvas::snapXPositionToGrid(double pos)

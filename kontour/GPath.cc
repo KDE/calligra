@@ -26,7 +26,6 @@
 #include "GPath.h"
 
 #include <qdom.h>
-#include <qpainter.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -340,11 +339,11 @@ QDomElement GPath::writeToXml(QDomDocument &document)
   return path;
 }
 
-void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
+void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
 {
-  p.save();
+//  p.save();
 //  p.setWorldMatrix(tmpMatrix, true);
-  setPen(&p);
+/*  setPen(&p);
   setBrush(&p);
 
   int x;
@@ -410,7 +409,7 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
       y = static_cast<int>(c.y());
       drawNode(p, x, y, false);
     }
-  }
+  }*/
 }
 
 int GPath::getNeighbourPoint(const KoPoint &point)

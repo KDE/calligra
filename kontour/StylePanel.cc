@@ -31,11 +31,11 @@
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
-#include <qcombobox.h>
 
 #include <koColorChooser.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kcombobox.h>
 #include <kdebug.h>
 
 #include "kontour_factory.h"
@@ -63,7 +63,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(mStroked, SIGNAL(toggled(bool)), this, SLOT(slotChangeStroked(bool)));
 
   QLabel *mStartArrowText = new QLabel(i18n("Start Arrow"), mOutline);
-  mStartArrowBox = new QComboBox(mOutline); // It's only temporary
+  mStartArrowBox = new KComboBox(mOutline); // It's only temporary
   mStartArrowBox->insertItem("no");
   mStartArrowBox->insertItem("<-");
   mStartArrowBox->insertItem("<<-");
@@ -71,7 +71,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(mStartArrowBox, SIGNAL(activated(int)), this, SLOT(slotChangeStartArrow(int)));
 
   QLabel *mEndArrowText = new QLabel(i18n("End Arrow"), mOutline);
-  mEndArrowBox = new QComboBox(mOutline); // It's only temporary
+  mEndArrowBox = new KComboBox(mOutline); // It's only temporary
   mEndArrowBox->insertItem("no");
   mEndArrowBox->insertItem("->");
   mEndArrowBox->insertItem("->>");
@@ -108,7 +108,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(mWidthBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeLineWidth(int)));
 
   QLabel *mLineStyleText = new QLabel(i18n("Line Style"), mOutlineStyle);
-  mLineStyleBox = new QComboBox(mOutlineStyle); // It's only temporary
+  mLineStyleBox = new KComboBox(mOutlineStyle); // It's only temporary
   mLineStyleBox->insertItem("----------");
   mLineStyleBox->insertItem("- - - - - ");
   mLineStyleBox->insertItem("-  -  -  -");
@@ -286,11 +286,11 @@ void OutlinePanel::slotJoinPressed(int w)
   }
   if(mView->activeDocument()->activePage()->selectionIsEmpty())
   {
-    mView->activeDocument()->styles()->style()->joinStyle(style);
+//    mView->activeDocument()->styles()->style()->joinStyle(style);
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->joinStyle(style);
+//    mView->activeDocument()->activePage()->getSelection().first()->style()->joinStyle(style);
   }
   slotUpdate();
 }
@@ -306,11 +306,11 @@ void OutlinePanel::slotCapPressed(int w)
   }
   if(mView->activeDocument()->activePage()->selectionIsEmpty())
   {
-    mView->activeDocument()->styles()->style()->capStyle(style);
+//    mView->activeDocument()->styles()->style()->capStyle(style);
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->capStyle(style);
+//    mView->activeDocument()->activePage()->getSelection().first()->style()->capStyle(style);
   }
   slotUpdate();
 }
@@ -329,7 +329,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   QGridLayout *mPaintingLayout = new QGridLayout(mPainting, 2, 2);
 
   QLabel *mPaintingText = new QLabel(i18n("Painting"), mPainting);
-  mPaintingBox = new QComboBox(mPainting);
+  mPaintingBox = new KComboBox(mPainting);
   mPaintingBox->insertItem(i18n("No"));
   mPaintingBox->insertItem(i18n("Color"));
   mPaintingBox->insertItem(i18n("Gradient"));

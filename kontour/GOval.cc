@@ -27,7 +27,6 @@
 #include <math.h>
 
 #include <qdom.h>
-#include <qpainter.h>
 
 #include <klocale.h>
 
@@ -141,16 +140,16 @@ QDomElement GOval::writeToXml(QDomDocument &document)
   return oval;
 }
 
-void GOval::draw(QPainter &p, bool withBasePoints, bool outline, bool)
+void GOval::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool)
 {
-  p.save();
+/*  p.save();
   p.setWorldMatrix(tmpMatrix, true);
   setPen(&p);
   setBrush(&p);
 
   p.drawEllipse((int)sPoint.x(), (int)sPoint.y(), (int)(ePoint.x() - sPoint.x()), (int)(ePoint.y() - sPoint.y()));
 
-  p.restore();
+  p.restore();*/
 
 /*  double alen = 0;
   QPen pen;

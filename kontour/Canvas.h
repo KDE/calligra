@@ -32,6 +32,7 @@
 #include "GDocument.h"
 
 class KontourView;
+class KoPainter;
 class GObject;
 class QScrollBar;
 
@@ -105,8 +106,8 @@ private slots:
 
 private:
   void propagateMouseEvent(QMouseEvent *e);
-  void drawGrid(QPainter &p, const QRect &rect);
-  void drawHelplines(QPainter &p, const QRect &rect);
+  void drawGrid(const QRect &rect);
+  void drawHelplines(const QRect &rect);
 
   double snapXPositionToGrid(double pos);
   double snapYPositionToGrid(double pos);
@@ -118,7 +119,7 @@ private:
   QScrollBar *hBar;
   QScrollBar *vBar;
 
-  QPixmap *buffer;
+  KoPainter *painter;
 
   int mXOffset;
   int mYOffset;

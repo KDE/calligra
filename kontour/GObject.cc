@@ -26,7 +26,8 @@
 #include "GObject.h"
 
 #include <qdom.h>
-#include <qpainter.h>
+
+#include <koPainter.h>
 #include <kdebug.h>
 
 #include "GOval.h"
@@ -118,9 +119,9 @@ QDomElement GObject::writeToXml(QDomDocument &document)
   return go;
 }
 
-void GObject::drawNode(QPainter &p, int x, int y, bool active)
+void GObject::drawNode(KoPainter *p, int x, int y, bool active)
 {
-  p.save();
+/*  p.save();
   QWMatrix e;
   p.scale(1.0, 1.0);
   QBrush brush(Qt::magenta);
@@ -128,7 +129,7 @@ void GObject::drawNode(QPainter &p, int x, int y, bool active)
   p.setPen(Qt::black);
   p.drawRect(x - 3, y - 3, 7, 7);
   p.fillRect(x - 2, y - 2, 5, 5, brush);
-  p.restore();
+  p.restore();*/
 }
 
 void GObject::setZoomFactor(double f, double pf)
@@ -288,32 +289,21 @@ void GObject::invalidateClipRegion  () {
 }
 ---------------------*/
 
-void GObject::setPen(QPainter *p)
+void GObject::setPen(KoPainter *p)
 {
-  // TODO : set dashes, arrows, linewidth etc.
-  QPen pen;
-  if(mStyle->stroked())
-  {
-    pen.setColor(mStyle->outlineColor().color());
-    pen.setWidth(mStyle->outlineWidth());
-    pen.setCapStyle(mStyle->capStyle());
-    pen.setJoinStyle(mStyle->joinStyle());
-  }
-  else
-    pen.setStyle(Qt::NoPen);
-  p->setPen(pen);
+  p->outline(mStyle->outline());
 }
 
-void GObject::setBrush(QPainter *p)
+void GObject::setBrush(KoPainter *p)
 {
   // TODO : patterns, gradients, noFill
-  QBrush brush;
+/*  QBrush brush;
   if(mStyle->filled())
   {
     brush.setColor(mStyle->fillColor().color());
     brush.setStyle(mStyle->brushStyle());
   }
-  p->setBrush(brush);
+  p->setBrush(brush);*/
 }
 
 void GObject::adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft)

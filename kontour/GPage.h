@@ -32,12 +32,14 @@
 #include <koPageLayoutDia.h>
 #include "Handle.h"
 
+class KoPainter;
 class GDocument;
 class GLayer;
 class GObject;
 class QDomDocument;
 class QDomElement;
 class KoColor;
+
 class GPage : public QObject
 {
   Q_OBJECT
@@ -124,8 +126,8 @@ public:
   unsigned int selectionCount() const {return selection.count(); }
   unsigned int convertibleCount() const {return mConvertibleCount; }
 
-  void drawContents(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
-  void drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void drawContents(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void drawContentsInRegion(KoPainter *p, int aXOffset, int aYOffset, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
   void invalidateClipRegions();
   GObject *findContainingObject(double x, double y);

@@ -67,7 +67,7 @@ private:
   QComboBox *unitCombo;
   MeasurementUnit unit;
   double ptMinVal, ptMaxVal; // the minimal and maximal value in points
-  double m_step;
+  double mStep;
 
   static MeasurementUnit defaultUnit;
 };

@@ -480,7 +480,7 @@ KoRect GPage::boundingBoxForAllObjects()
   return box;
 }
 
-void GPage::drawContents(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
+void GPage::drawContents(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
 {
   for(QPtrListIterator<GLayer> i(layers); i.current(); ++i)
   {
@@ -489,12 +489,12 @@ void GPage::drawContents(QPainter &p, bool withBasePoints, bool outline, bool wi
       const QPtrList<GObject> &contents = (*i)->objects();
       QPtrListIterator<GObject> oi(contents);
       for(; oi.current(); ++oi)
-        (*oi)->draw(p, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
+        (*oi)->draw(p, aXOffset, aYOffset, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
     }
   }
 }
 
-void GPage::drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoints, bool outline, bool withEditMarks)
+void GPage::drawContentsInRegion(KoPainter *p, int aXOffset, int aYOffset, const KoRect &r, bool withBasePoints, bool outline, bool withEditMarks)
 {
   GLayer *i = layers.first();
   for(; i != 0; i = layers.next())
@@ -510,7 +510,7 @@ void GPage::drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoin
         //      const KoRect& bbox = (*oi)->boundingBox ();
         //      if (r.intersects (bbox))
         if((*oi)->intersects(r))
-          (*oi)->draw(p, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
+          (*oi)->draw(p, aXOffset, aYOffset, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
       }
     }
   }

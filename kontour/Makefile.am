@@ -1,5 +1,4 @@
-# This file you have to edit. Change the name here
-SUBDIRS = pics
+SUBDIRS = pics templates
 
 INCLUDES  = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir) $(all_includes)
 
