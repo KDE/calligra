@@ -1375,7 +1375,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
         case KWFrameSet::FI_ODD_FOOTER: _odd_footer = TRUE; break;
         case KWFrameSet::FI_EVEN_FOOTER: _even_footer = TRUE; break;
-        case KWFrameSet::FI_FOOTNOTE: if ( fit.current()->isEndNote() ) m_bHasEndNotes = true; break;
+        case KWFrameSet::FI_FOOTNOTE: break;
         default: break;
         }
     }
@@ -2936,7 +2936,7 @@ void KWDocument::afterAppendPage( int pageNum )
 {
     emit newContentsSize();
 
-    if ( isHeaderVisible() || isFooterVisible() || hasEndNotes() )
+    if ( isHeaderVisible() || isFooterVisible() || m_bHasEndNotes )
         recalcFrames( pageNum );  // Get headers and footers on the new page
     // else: is there a call to updateAllFrames missing?
 
@@ -3699,6 +3699,8 @@ void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPo
 
 void KWDocument::addFootNoteRequest( const QString &framesetName, KWFootNoteVariable* var )
 {
+    if ( var->noteType() == EndNote )
+        m_bHasEndNotes = true;
     m_footnoteVarRequests.insert( framesetName, var );
 }
 
