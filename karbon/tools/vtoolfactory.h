@@ -28,6 +28,7 @@ class VShearTool;
 
 class VEllipseTool;
 class VPolygonTool;
+class VPolylineTool;
 class VRectangleTool;
 class VRoundRectTool;
 class VSinusTool;
@@ -48,6 +49,7 @@ private:
 	VShearTool			*m_shearTool;
 	VEllipseTool		*m_ellipseTool;
 	VPolygonTool		*m_polygonTool;
+	VPolylineTool		*m_polylineTool;
 	VRectangleTool		*m_rectangleTool;
 	VRoundRectTool		*m_roundRectTool;
 	VSinusTool			*m_sinusTool;

@@ -28,6 +28,7 @@
 #include <karbon_part.h>
 #include <karbon_view.h>
 #include <core/vcolor.h>
+#include <core/vcanvas.h>
 #include <core/vcomposite.h>
 #include <core/vfill.h>
 #include <core/vstroke.h>
@@ -36,12 +37,8 @@
 #include <render/vpainterfactory.h>
 #include "vpolylinetool.h"
 #include <commands/vshapecmd.h>
-#include <kgenericfactory.h>
 
-typedef KGenericFactory<VPolylineTool, KarbonView> PolylineToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_polylinetoolplugin, PolylineToolPluginFactory( "karbonpolylinetoolplugin" ) );
-
-VPolylineTool::VPolylineTool( KarbonView* view, const char *name, const QStringList & )
+VPolylineTool::VPolylineTool( KarbonView* view, const char *name )
 	: VTool( view, name )
 {
 	m_bezierPoints.setAutoDelete( true );

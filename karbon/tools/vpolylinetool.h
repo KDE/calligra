@@ -50,7 +50,7 @@ class VComposite;
 class VPolylineTool : public VTool
 {
 	public:
-		VPolylineTool( KarbonView* view, const char *, const QStringList & );
+		VPolylineTool( KarbonView* view, const char * );
 		~VPolylineTool(); 
 
 		virtual void activate();
