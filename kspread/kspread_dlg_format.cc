@@ -102,7 +102,8 @@ void KSpreadFormatDlg::slotOk()
 
     QFile file( xml );
     file.open( IO_ReadOnly );
-    QDomDocument doc( &file );
+    QDomDocument doc;
+    doc.setContent( &file );
     file.close();
 
     if ( !parseXML( doc ) )
@@ -277,18 +278,18 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 
 		QDomElement pen = f.namedItem( "pen" ).toElement();
 		if ( !pen.isNull() )
-		    cell.pen = pen.toPen();
+		    cell.pen = toPen(pen);
 
 		QDomElement font = f.namedItem( "font" ).toElement();
 		if ( !font.isNull() )
-		    cell.font = font.toFont();
+		    cell.font = toFont(font);
 
 		QDomElement left = f.namedItem( "left-border" ).toElement();
 		if ( !left.isNull() )
 	        {
 		    QDomElement pen = left.namedItem( "pen" ).toElement();
 		    if ( !pen.isNull() )
-			cell.leftPen = pen.toPen();
+			cell.leftPen = toPen(pen);
 		}
 
 		QDomElement top = f.namedItem( "top-border" ).toElement();
@@ -296,7 +297,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	        {
 		    QDomElement pen = top.namedItem( "pen" ).toElement();
 		    if ( !pen.isNull() )
-			cell.topPen = pen.toPen();
+			cell.topPen = toPen(pen);
 		}
 	    }
 	
@@ -305,4 +306,40 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
     }
 
     return TRUE;
+}
+
+QFont KSpreadFormatDlg::toFont(QDomElement &element) const {
+
+    QFont f;
+    f.setFamily( element.attribute( "family" ) );
+
+    bool ok;
+    f.setPointSize( element.attribute("size").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    f.setWeight( element.attribute("weight").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    if ( element.hasAttribute( "italic" ) )
+	f.setItalic( TRUE );
+
+    if ( element.hasAttribute( "bold" ) )
+	f.setBold( TRUE );
+
+    return f;
+}
+
+QPen KSpreadFormatDlg::toPen(QDomElement &element) const {
+
+  bool ok;
+  QPen p;
+  p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
+  if ( !ok ) return QPen();
+
+  p.setWidth( element.attribute("width").toInt( &ok ) );
+  if ( !ok ) return QPen();
+
+  p.setColor( QColor( element.attribute("color") ) );
+
+  return p;
 }

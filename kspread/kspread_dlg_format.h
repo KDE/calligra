@@ -28,6 +28,8 @@ private slots:
 
 private:
     bool parseXML( const QDomDocument& doc );
+    QFont toFont(QDomElement &element) const;
+    QPen toPen(QDomElement &element) const;
 	
     QComboBox* m_combo;
     QLabel* m_label;
