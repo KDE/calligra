@@ -73,12 +73,21 @@ public:
    */
   void deleteParam( const uint _index );
   /**
+   *  Deletes an argument that is saved in the object. The iterator
+   *  represents the param that will be deleted.
+   *
+   *  @param _index Iterator that represents the argument that will be deleted.
+   */
+  void deleteParam( const QStringList::Iterator _it );
+  /**
    *  Deletes the first appearance of an argument that is saved in the object.
    *  If it is not present in the list, nothing will be deleted
    *
    *  @param _param Beginning of the argument that will be deleted.
    */
-  void deleteParam( const QString& _param );
+  //void deleteParam( const QString& _param );
+  void deleteParam( const QString& _param, bool _check );
+  void deleteParam( const QString& _shortparam, const QString& _longparam, bool _check );
   /**
    *  Test if an argument is present in the list of arguments.
    *
@@ -87,7 +96,8 @@ public:
    *  
    *  @return Returns true if the paramter is present or false if it is not.
    */
-  bool paramIsPresent( const QString& _param );
+  //bool paramIsPresent( const QString& _param );
+  bool paramIsPresent( const QString& _param, bool _check, QStringList::Iterator& _it );
   /**
    *  Test if an argument is present in the list of arguments, either in the 
    *  short or the long version of the option.
@@ -99,17 +109,22 @@ public:
    *  
    *  @return Returns true if the paramter is present or false if it is not.
    */
-  bool paramIsPresent( const QString& _longparam, const QString& _shortparam );
+  //bool paramIsPresent( const QString& _longparam, const QString& _shortparam );
+  bool paramIsPresent( const QString& _longparam, const QString& _shortparam, bool _check, QStringList::Iterator& _it );
   /**
    *  Retrieves the index of the first appearance of _param in the
    *  argument list.
    *  
    *  @param _param String of the param that will be searched for.
+   *  @param _checkWholeString If this parameter is true the whole command-line argument will 
+   *  be compared with _param. If it is false the beginning of the command-line arguments will
+   *  be checked.
+   *  @param _it In this variable a iterator for later access to the parameter will be stored
    *  
-   *  @return Returns the index of a command-line argument that begins with _param.
-   *  If no argument meets this -1 will be returned.
+   *  @return Returns either true if a parmater of a command-line begins with
+   *  _param or false no argument meets this.
    */
-  int getIndex( const QString& _param );
+  bool getIndex( const QString& _param, bool _check, QStringList::Iterator& _it );
   /**
    *  Retrieves the index of the first appearance of one of the parameters in the
    *  argument list.
@@ -118,21 +133,18 @@ public:
    *  compared with all stored arguments stored in the object.
    *  @param _shortparam This string represents the short version that will be
    *  compared with all stored arguments stored in the object.
+   *  @param _check If this parameter is true the whole command-line argument will 
+   *  be compared with _param. If it is false the beginning of the command-line arguments will
+   *  be checked.
+   *  @param _it In this variable a iterator for later access to the parameter will be stored
    *  
-   *  @return Returns the index of a command-line argument that begins with
-   *  _longparam or _shortparam. If no argument meets this -1 will be returned.
+   *  @return Returns either true if a parmater of a command-line begins with
+   *  _longparam or _shortparam or false no argument meets this.
    */
-  int getIndex( const QString& _longparam, const QString& _shortparam );
-
-/*
-  QString getParam( QStringList::Iterator _it );
-  void deleteParam( QStringList::Iterator _it );
-  QStringList::Iterator getIndex( const QString& _param );
-  QStringList::Iterator getIndex( const QString& _longparam, const QString& _shortparam );
-*/
+  bool getIndex( const QString& _longparam, const QString& _shortparam, bool _check, QStringList::Iterator& _it );
 
 protected:
-  bool compareParam( const QString& _arg, const QString& _param ) const;
+  bool compareParam( const QString& _arg, const QString& _param, bool _check ) const;
 
 private:
   QStringList m_paramList;

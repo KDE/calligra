@@ -1,48 +1,48 @@
-SUBDIRS = pics
+SUBDIRS   = pics
 
 INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
+LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 
 ####### Files
 
 bin_PROGRAMS = kimage.bin
 
 kimage_bin_SOURCES = \
-    kimage_main.cc \
-    kimage_shell.cc \
-    kimage_doc.cc \
-    kimage.cc \
-    kimage_view.cc \
-    preferencesdlg.cc \
-    kintegerinputdialog.cc \
-    zoomfactordlg.cc \
-    kstartparams.cc \
-    koShell.cc \
-    formats.cc
+ kimage.cc \
+ kimage_main.cc \
+ kimage_shell.cc \
+ kimage_doc.cc \
+ kimage_view.cc \
+ formats.cc \
+ preferencesdlg.cc \
+ zoomfactordlg.cc \
+ kintegerinputdialog.cc \
+ kstartparams.cc \
+ koShell.cc
 
 noinst_HEADERS = \
-    kimage_main.h \
-    kimage_shell.h \
-    kimage_doc.h \
-    kimage.h \
-    kimage_view.h \
-    preferencesdlg.h \
-    kintegerinputdialog.h \
-    zoomfactordlg.h \
-    kstartparams.h \
-    koShell.h \
-    formats.h
+ kimage.h \
+ kimage_main.h \
+ kimage_shell.h \
+ kimage_doc.h \
+ kimage_view.h \
+ formats.h \
+ preferencesdlg.h \
+ zoomfactordlg.h \
+ kintegerinputdialog.h \
+ kstartparams.h \
+ koShell.h
 
 METASOURCES = \
-    kimage_main.moc \
-    kimage_shell.moc \
-    kimage_doc.moc \
-    kimage_view.moc \
-    preferencesdlg.moc \
-    kintegerinputdialog.moc \
-    koShell.moc \
-    zoomfactordlg.moc
+ kimage_main.moc \
+ kimage_shell.moc \
+ kimage_doc.moc \
+ kimage_view.moc \
+ preferencesdlg.moc \
+ zoomfactordlg.moc \
+ kintegerinputdialog.moc \
+ koShell.moc
 
 idl_DATA = kimage.idl
 idl_HEADERS = kimage.h
@@ -62,10 +62,10 @@ install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kimage $(bindir)/kimage
 
 uninstall-local:
-	-rm -f $(bindir)/kimage
+	rm -f $(bindir)/kimage
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimage.pot
+	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimage.pot
 
 kimage.h: kimage.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kimage.idl
@@ -75,9 +75,10 @@ kimage_doc.cc: kimage.h
 kimage_main.cc: kimage.h
 kimage_shell.cc: kimage.h
 kimage_view.cc: kimage.h
+formats.cc: formats.h
 preferencesdlg.cc: preferencesdlg.h
-kintegerinputdialog.cc: kintegerinputdialog.h
 zoomfactordlg.cc: zoomfactordlg.h
+kintegerinputdialog.cc: kintegerinputdialog.h
 formats.cc: formats.h
 kstartparams.cc: kstartparams.h
 koShell.cc: koShell.h

@@ -44,10 +44,11 @@ KImageApp::KImageApp( int& argc, char** argv )
   formatManager = new FormatManager();
 
   // sollte in KoApplication
-  if( m_params.paramIsPresent( "--server", "-s" ) )
+  QStringList::Iterator it;
+  if( m_params.paramIsPresent( "--server", "-s", true, it ) )
   {
     m_bWithGUI = false;
-    m_params.deleteParam( m_params.getIndex( "--server", "-s" ) );
+    m_params.deleteParam( it );
   }
 }
 

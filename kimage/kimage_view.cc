@@ -46,9 +46,23 @@
 #include "kimage_shell.h"
 #include "macros.h"
 
-#define CHECK_DOCUMENT if( m_pDoc->isEmpty() ) return;
-#define CHECK_RUNNING if( m_pDoc->m_executeCommand ) return;
-#define CHECK_ALL CHECK_DOCUMENT CHECK_RUNNING
+#define CHECK_DOCUMENT \
+	if( m_pDoc->isEmpty() ) \
+	{ \
+	  kdebug( KDEBUG_INFO, 0, "Document is empty. Action won't be executed." ); \
+	  return; \
+	}
+
+#define CHECK_RUNNING \
+	if( m_pDoc->m_executeCommand ) \
+	{ \
+	  kdebug( KDEBUG_INFO, 0, "Document is empty. External command won't be executed." ); \
+	  return; \
+	}
+	
+#define CHECK_ALL \
+	CHECK_DOCUMENT \
+	CHECK_RUNNING
 
 /*****************************************************************************
  *
@@ -705,8 +719,6 @@ void KImageView::extrasRunCommand()
 
 void KImageView::resizeEvent( QResizeEvent* )
 {
-  CHECK_ALL;
-
   slotUpdateView();
 }
 
@@ -745,9 +757,6 @@ void KImageView::slotUpdateView()
   QWidget::update();
 }
 
-/**
- ** Paints the image in the shell window
- */
 void KImageView::paintEvent( QPaintEvent *_ev )
 {
   if( m_pixmap.isNull() )
