@@ -1,6 +1,10 @@
 Changes since 1.2
 =================
 Bugfixes:
+- Fix for crashes when working with long text which overlaps several cells
+  or when working with merged cells.
+- Fix popup menue, when row is selected and right click on column header.
+  Now the column below right click is selected.
 - Fix rendering bugs of cell borders (when scrolled up)
 - Fix crash on printout when printrange was one row or one column only
 - Small fix: "14: 4 am" is now "14:04 am"
