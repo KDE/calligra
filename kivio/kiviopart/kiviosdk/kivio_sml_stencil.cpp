@@ -298,7 +298,6 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 {
     KivioShape *pShape;
     KivioShapeData *pShapeData;
-    KivioPainter *painter = pData->painter;
 
 
     m_zoomHandler = pData->zoomHandler;
@@ -365,7 +364,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
             case KivioShapeData::kstNone:
             default:
-	       kdDebug() << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
+                kdDebug() << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
                 break;
         }
 
@@ -1494,7 +1493,7 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
  *
  * This function is called during loads, *ONLY* loads.
  */
-KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, int targetID )
+KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, int /*targetID*/ )
 {
     int id = p->targetId();
 

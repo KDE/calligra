@@ -45,7 +45,7 @@ protected:
     // Offsets and scale which get reused in between
     // various drawing routines.  To save time and
     // stack space, we keep them around in the class
-    double _xoff, _yoff;
+    int _xoff, _yoff;
     KoZoomHandler* m_zoomHandler;
 
 // Drawing routines
