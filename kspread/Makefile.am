@@ -89,7 +89,7 @@ kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 rcdir = $(kde_datadir)/kspread
-rc_DATA = kspread.rc
+rc_DATA = kspread.rc kspread_readonly.rc
 
 SUBDIRS =  . plugins pics dtd toolbar extensions tablestyles templates
 

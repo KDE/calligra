@@ -274,7 +274,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 {
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
     setInstance( KSpreadFactory::global() );
-    setXMLFile( "kspread.rc" );
+    if ( !doc->isReadWrite() )
+      setXMLFile( "kspread.rc" );
+    else
+      setXMLFile( "kspread_readonly.rc" );
 
     m_pTable = NULL;
     m_toolbarLock = FALSE;
