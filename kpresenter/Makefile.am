@@ -80,7 +80,7 @@ SUBDIRS = autoformEdit autoforms pics toolbar templates dtd
 ####### Build rules
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kpresenter $(bindir)/kpresenter
+	$(INSTALL_SCRIPT) $(srcdir)/kpresenter $(bindir)/kpresenter
 
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot

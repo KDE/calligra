@@ -47,7 +47,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 ####### Build rules
 
 install-exec-local:
-	$(INSTALL_SCRIPT) killustrator $(bindir)/killustrator
+	$(INSTALL_SCRIPT) $(srcdir)/killustrator $(bindir)/killustrator
 
 KIllustrator.h: KIllustrator.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/KIllustrator.idl

@@ -18,7 +18,7 @@
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # just set the variable
-APPSDIR = $(kde_appsdir)/Graphics
+
 MIMEDIR = $(kde_mimedir)/application
 DATADIR = $(kde_datadir)/killustrator
 
@@ -35,8 +35,7 @@ EXTRA_DIST = killustrator.xpm \
 bin_PROGRAMS = 	killustrator
 
 # Which sources should be compiled for killustrator.
-killustrator_SOURCES	= KIllustrator.cc \
-			  main.cc
+killustrator_SOURCES	= KIllustrator.cc main.cc
 
 # the library search path
 killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -55,8 +54,6 @@ noinst_HEADERS = KIllustrator.h
 # just to make sure, automake makes them 
 METASOURCES =	KIllustrator.moc 
 
-TARGET	=	killustrator 
-
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES
 DISTCLEANFILES = $(METASOURCES)
@@ -65,27 +62,14 @@ DISTCLEANFILES = $(METASOURCES)
 messages:
 	$(XGETTEXT) -C -ktranslate -ki18n $(killustrator_SOURCES) && mv messages.po ../po/killustrator.pot
 
-# just install datas here. Use install-exec-data for scripts and etc.
-# the binary itself is already installed from automake
-# use mkinstalldirs, not "install -d"
-# don't install a list of file. Just one file per install.
-# if you have more of them, create a subdirectory with an extra Makefile 
-install-data-local: 
-	$(mkinstalldirs) $(APPSDIR)
-	$(INSTALL_DATA) killustrator.kdelnk $(APPSDIR)
-	$(mkinstalldirs) $(MIMEDIR)
-	$(INSTALL_DATA) x-killustrator.kdelnk $(MIMEDIR)
-	$(mkinstalldirs) $(kde_icondir)
-	$(INSTALL_DATA) killustrator.xpm $(kde_icondir)
-	$(mkinstalldirs) $(DATADIR)
-	$(INSTALL_DATA) default.pal $(DATADIR)
+appsdir = $(kde_appsdir)/Graphics
+apps_DATA = killustrator.kdelnk
 
-# remove ALL you have installed in install-data-local or install-exec-local
-uninstall-local:
-	-rm -f $(APPSDIR)/killustrator.kdelnk
-	-rm -f $(MIMEDIR)/x-killustrator.kdelnk
-	-rm -f $(kde_icondir)/killustrator.xpm
-	-rm -f $(DATADIR)/default.pal
+mimedir = $(kde_mimedir)/application
+mime_DATA = x-killustrator.kdelnk
 
+kde_icon_DATA = killustrator.xpm
 
+datadir = $(kde_datadir)/killustrator
+data_DATA = default.pal
 

@@ -52,7 +52,7 @@ datadir = $(kde_datadir)/killustrator/pics
 
 install-data-local:
 	$(mkinstalldirs) $(kde_minidir)
-	$(INSTALL_DATA) mini-killustrator.xpm $(kde_minidir)/killustrator.xpm
+	$(INSTALL_DATA) $(srcdir)/mini-killustrator.xpm $(kde_minidir)/killustrator.xpm
 
 uninstall-local:
 	-rm -f $(kde_minidir)/killustrator.xpm

@@ -42,7 +42,7 @@ uninstall-local:
 ####### Build rules
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kformula $(bindir)/kformula
+	$(INSTALL_SCRIPT) $(srcdir)/kformula $(bindir)/kformula
 
 kformula.h: kformula.idl
 	rm -f kformula.h

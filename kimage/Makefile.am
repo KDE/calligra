@@ -31,7 +31,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kimage $(bindir)/kimage
+	$(INSTALL_SCRIPT) $(srcdir)/kimage $(bindir)/kimage
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kimage.pot

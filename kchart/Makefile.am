@@ -18,12 +18,12 @@ noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.
 METASOURCES =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
 		sheet.moc sheetdlg.moc table.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) chart.h chart.cc
+DISTCLEANFILES = $(idl_HEADERS:.h=.cc) $(idl_HEADERS) $(METASOURCES)
 
 IDL_INCLUDES = -I$(idldir) -I$(interfacedir)
 
 idl_DATA = kchart.idl
-idl_HEADERS = kchart.h
+idl_HEADERS = kchart.h chart.h
 
 kdelnk_DATA = kchart_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
@@ -41,10 +41,10 @@ messages:
 kchart.h: kchart.idl
 	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kchart.idl ;\
 	rm -f kchart.h kchart.cc ;\
-	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) kchart.idl
+	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) $(srcdir)/kchart.idl
 
-chart.h: ../lib/interfaces/chart.idl
-	$(IDL) --query-server-for-narrow -I$(idldir) $<
+chart.h: $(interfacedir)/chart.idl
+	$(IDL) --query-server-for-narrow -I$(idldir) $(interfacedir)/chart.idl
 
 kchart.cc: kchart.h
 kchart_view.h: kchart.h

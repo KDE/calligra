@@ -36,7 +36,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kdiagramm $(bindir)/kdiagramm
+	$(INSTALL_SCRIPT) $(srcdir)/kdiagramm $(bindir)/kdiagramm
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kdiagramm.pot

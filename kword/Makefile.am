@@ -39,7 +39,7 @@ SUBDIRS = toolbar templates
 ####### Build rules
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kword $(bindir)/kword
+	$(INSTALL_SCRIPT) $(srcdir)/kword $(bindir)/kword
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot
