@@ -1,3 +1,10 @@
+koffice (2.0-20000827-0) experimental; urgency=low
+ 
+  * More upstream fixes
+  * Merging package fixes with upstream cvs
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 27 Aug 2000 19:30:00 -0700
+                                                                               
 koffice (2.0-20000825-1.0) experimental; urgency=low
  
   * KDE 2.0 beta 4
