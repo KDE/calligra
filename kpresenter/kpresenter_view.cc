@@ -2238,11 +2238,11 @@ void KPresenterView::setupActions()
 	     this, SLOT( screenPenWidth( const QString & ) ) );
 
      // ----------------- colorbar(Brush and Pen) action
-  
+
      actionBrushColor = new TKSelectColorAction( i18n( "Brush Color" ), TKSelectColorAction::FillColor,
                                                  actionCollection(), "brush_color" );
      connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
- 
+
      actionPenColor = new TKSelectColorAction( i18n( "Pen Color" ), TKSelectColorAction::LineColor,
                                                actionCollection(), "pen_color" );
      connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
@@ -3262,6 +3262,7 @@ void KPresenterView::nextPage()
 {
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
  	return;
+    kdDebug()<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
     skipToPage( currPg+1 );
 }
 
@@ -3418,7 +3419,7 @@ void KPresenterView::penColorChanged( const QPen & _pen )
 void KPresenterView::brushColorChanged( const QBrush & _brush )
 {
     actionBrushColor->setEnabled( true );
-    actionBrushColor->setCurrentColor( _brush.color() );
+    actionBrushColor->setCurrentColor(_brush.style ()==Qt::NoBrush ? Qt::white : _brush.color() );
 }
 
 #include <kpresenter_view.moc>
