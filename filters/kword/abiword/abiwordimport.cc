@@ -1191,8 +1191,6 @@ bool StructureParser :: characters ( const QString & ch )
 bool StructureParser::startDocument(void)
 {
     indent = QString::null;  //DEBUG
-    // Add KWord's default style sheet
-    styleDataMap.defineNewStyle("Standard",-1,QString::null);
     // Add a few of AbiWord predefined style sheets
     // TODO: use the properties that AbiWord uses
     // TODO: other predefined style sheets
@@ -1217,32 +1215,8 @@ bool StructureParser::endDocument(void)
     kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
 
-#if 0
-    // At first, we must get "Standard", as it is the base for <FOLLOWING>
-
-    it=styleDataMap.find("Standard");
-    if (it==styleDataMap.end())
-    {
-        kdWarning(30506) << "Standard style not found!" << endl;
-    }
-    else
-    {
-        kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
-
-        QDomElement styleElement=mainDocument.createElement("STYLE");
-        stylesPluralElement.appendChild(styleElement);
-
-        AddStyle(styleElement, it.key(),it.data(),mainDocument);
-    }
-#endif
-
     for (it=styleDataMap.begin();it!=styleDataMap.end();it++)
     {
-#if 0
-        if (it.key()=="Standard")
-            continue; // We have already done "Standard"
-#endif
-
         kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
