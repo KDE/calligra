@@ -133,6 +133,16 @@ int KMultiTabBarInternal::appendTab(QPixmap pic ,int id,const QString& text)
 	KMultiTabBarTab  *tab;
 	m_tabs.append(tab= new KMultiTabBarTab(pic,text,id,box,position));
 	tab->showActiveTabText(m_showActiveTabTexts);
+	if (m_showActiveTabTexts)
+	{
+		int size=0;
+		for (int i=0;i<m_tabs.count();i++)
+		{
+			int tmp=m_tabs.at(i)->neededSize();
+			size=(size<tmp)?tmp:size;
+		}
+		for (int i=0;i<m_tabs.count();i++) m_tabs.at(i)->setSize(size);
+	}
 	tab->show();
 	return 0;
 }
@@ -196,6 +206,7 @@ KMultiTabBarTab::KMultiTabBarTab(const QPixmap& pic, const QString& text,
 		int id,QWidget *parent,KMultiTabBar::KMultiTabBarPosition pos)
 	:KMultiTabBarButton(pic,text,0,id,parent,pos)
 {
+	m_expandedSize=24;
 	m_showActiveTabText=false;
 	setToggleButton(true);
 }
@@ -221,11 +232,23 @@ void KMultiTabBarTab::updateState()
 		return;
 	}
 	if ((position==KMultiTabBar::Right || position==KMultiTabBar::Left))
-		setFixedHeight(24+QFontMetrics(QFont()).width(m_text)+6);
+		setFixedHeight(m_expandedSize);
+//		setFixedHeight(24+QFontMetrics(QFont()).width(m_text)+6);
 	else
-		setFixedWidth(24+QFontMetrics(QFont()).width(m_text)+6);
+		setFixedWidth(m_expandedSize);
+//		setFixedWidth(24+QFontMetrics(QFont()).width(m_text)+6);
 
-	
+}
+
+int KMultiTabBarTab::neededSize()
+{
+	return (24+QFontMetrics(QFont()).width(m_text)+6);
+}
+
+void KMultiTabBarTab::setSize(int size)
+{
+	m_expandedSize=size;
+	updateState();
 }
 
 void KMultiTabBarTab::showActiveTabText(bool show)

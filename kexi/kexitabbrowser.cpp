@@ -43,13 +43,26 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	m_project = view->project();
 	
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser()" << endl;
-	QBoxLayout *layout = boxLayout();
+	//QBoxLayout *layout = boxLayout();  that one changes the orientation dynamically :(
 
-	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
+	setResizeEnabled(true);
+
+	QWidget *box=new QWidget(this);
+	QGridLayout *layout=new QGridLayout(box);
+	m_tabBar = new KMultiTabBar(box, KMultiTabBar::Vertical);
 	m_tabBar->setPosition(KMultiTabBar::Left);
 	m_tabBar->showActiveTabTexts(true);
 
-	m_stack = new QWidgetStack(this);
+	m_stack = new QWidgetStack(box);
+
+        layout->addWidget(m_tabBar,     0,      0);
+        layout->addWidget(m_stack,      0,      1);
+        layout->setColStretch(1, 1);
+	box->show();
+	m_stack->show();
+	m_tabBar->show();
+	setWidget(box);
+
 
 	m_activeTab = -1;
 
@@ -65,10 +78,9 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	addBrowser(m_queries, "queries",i18n("Queries"));
 	addBrowser(m_reports, "reports",i18n("Reports"));
 
-	layout->addWidget(m_tabBar);
-	layout->addWidget(m_stack);
+//	layout->addWidget(m_tabBar);
+//	layout->addWidget(m_stack);
 	
-	setResizeEnabled(true);
 	
 	view->mainWindow()->moveDockWindow(this, DockLeft);
 

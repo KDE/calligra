@@ -100,8 +100,11 @@ public:
 	~KMultiTabBarTab(){;}
 	void setState(bool);
 	void showActiveTabText(bool show);
+	void setSize(int);
+	int neededSize();
 private:
 	bool m_showActiveTabText;
+	int m_expandedSize;
 protected:
 	void updateState();
 	virtual void drawButton(QPainter *);
