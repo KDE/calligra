@@ -78,7 +78,7 @@ static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
     {
         *layout = "Standard";
 
-        kdError() << "Bad layout name value!" << endl;
+        kdError(30506) << "Bad layout name value!" << endl;
     }
 
     AllowNoSubtags (myNode);
@@ -263,7 +263,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
 
     if ( formatId != 1 )
     {
-        kdError() << "Unexpected FORMAT attribute id value " << formatId << "!" << endl;
+        kdError(30506) << "Unexpected FORMAT attribute id value " << formatId << "!" << endl;
     }
 
     if ( formatData.pos == -1 || formatData.len == -1 )
@@ -271,7 +271,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
         formatData.pos = 0;
         formatData.len = 0;
 
-        kdError() << "Missing formatting!" << endl;
+        kdError(30506) << "Missing formatting!" << endl;
     }
 
     QValueList<TagProcessing> tagProcessingList;
@@ -566,7 +566,7 @@ static bool writeOutputFileUncompressed(const QString& filename, const QCString&
     {
         fileOut.close ();
 
-        kdError() << "Unable to open output file!" << endl;
+        kdError(30506) << "Unable to open output file!" << endl;
         return false;
     }
 
@@ -585,14 +585,14 @@ static bool writeOutputFileGZipped(const QString& filename, const QCString& strO
     gzFile fileOut;
 
     QCString name(filename.local8Bit());
-    kdDebug()<< "Filename: -" << name <<"-"<<endl;
+    kdDebug(30506)<< "Filename: -" << name <<"-"<<endl;
     fileOut=gzopen(name,"wb9"); //Use maximal compression
 
     if (!fileOut)
     {
         //Nothing to close
 
-        kdError() << "Unable to open gzipped output file!" << endl;
+        kdError(30506) << "Unable to open gzipped output file!" << endl;
         return false;
     }
 
@@ -602,7 +602,7 @@ static bool writeOutputFileGZipped(const QString& filename, const QCString& strO
     if (num != int(strOut.length()))
     { //We have a problem
     	gzclose (fileOut); //Close the file
-        kdError() << "Unable to write gzipped output file! " << num << " instead of " << strOut.length() << endl;
+        kdError(30506) << "Unable to write gzipped output file! " << num << " instead of " << strOut.length() << endl;
     	return false;
     }
 
@@ -627,7 +627,7 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     {
         koStoreIn.close ();
 
-        kdError() << "Unable to open input file!" << endl;
+        kdError(30506) << "Unable to open input file!" << endl;
         return false;
     }
 
@@ -660,16 +660,16 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     stringBufOut += "<!-- KWord_Home_Page = http://www.koffice.org -->\n";
     // Put the CVS version keyword into the file
     stringBufOut += "<!-- KWord_Export_Filter_Version = ";
-    QString strVersion("$Version$");
+    QString strVersion("$Revision$");
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    stringBufOut += strVersion.replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+    stringBufOut += strVersion.mid(12).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
     stringBufOut += " -->\n";
 
 #if 1
     // Some security to see if I have forgotten to run "make install"
     // (Can be deleted when the filter will be stable.)
-    kdDebug() << "abiwordexport.cc " << __DATE__ " " __TIME__ << endl;
+    kdDebug(30506) << "abiwordexport.cc " << __DATE__ " " __TIME__ << endl;
 #endif
 
     // Now that we have the header, we can do the real work!
@@ -692,7 +692,7 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
         strExt=filenameOut.mid(result);
     }
 
-    kdDebug() << "AbiWord Filter: -" << strExt << "-" << endl;
+    kdDebug(30506) << "AbiWord Filter: -" << strExt << "-" << endl;
 
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (standard extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
