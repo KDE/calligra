@@ -4260,7 +4260,11 @@ void KSpreadView::alignTop( bool b )
   if ( m_toolbarLock )
     return;
   if ( !b )
-    return;
+  {
+      m_alignMiddle->setChecked( true);
+      alignMiddle(true );
+      return;
+  }
 
   if ( m_pTable != 0L )
     m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Top );
@@ -4271,7 +4275,11 @@ void KSpreadView::alignBottom( bool b )
   if ( m_toolbarLock )
     return;
   if ( !b )
-    return;
+  {
+      m_alignMiddle->setChecked( true);
+      alignMiddle(true );
+      return;
+  }
 
   if ( m_pTable != 0L )
     m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Bottom );
@@ -4282,7 +4290,10 @@ void KSpreadView::alignMiddle( bool b )
   if ( m_toolbarLock )
     return;
   if ( !b )
-    return;
+  {
+      m_alignMiddle->setChecked( true);
+      return;
+  }
 
   if ( m_pTable != 0L )
     m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Middle );
