@@ -48,3 +48,8 @@ bool KWFootNoteFrameSetIface::isEndNote() const
     return m_footNote->isEndNote();
 }
 
+void KWFootNoteFrameSetIface::setCounterText( const QString& text )
+{
+    m_footNote->setCounterText( text );
+}
+

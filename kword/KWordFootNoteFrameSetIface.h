@@ -39,7 +39,7 @@ k_dcop:
     QString footEndNoteText() const;
     bool isFootNote() const;
     bool isEndNote() const;
-
+    void setCounterText( const QString& text );
 private:
     KWFootNoteFrameSet *m_footNote;
 
