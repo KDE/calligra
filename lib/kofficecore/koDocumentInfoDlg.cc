@@ -28,6 +28,7 @@
 #include <qvbox.h>
 
 #include <klocale.h>
+#include <kconfig.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -54,6 +55,8 @@ public:
 
   QLineEdit *m_leDocTitle;
   QMultiLineEdit *m_meAbstract;
+
+  KConfig *m_emailCfg;
 };
 
 KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, const char *name )
@@ -61,6 +64,8 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
 {
   d = new KoDocumentInfoDlgPrivate;
   d->m_info = docInfo;
+  d->m_emailCfg = new KConfig( "emaildefaults", true );
+  d->m_emailCfg->setGroup( "UserInfo" );
 
   QStringList pages = docInfo->pages();
   QStringList::ConstIterator it = pages.begin();
@@ -79,6 +84,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
 {
+  delete d->m_emailCfg; 
   delete d;
 }
 
@@ -89,6 +95,13 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "Full Name :" ), grid );
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
 
+  if ( authorInfo->fullName().isEmpty() )
+  {
+    QString name = d->m_emailCfg->readEntry( "FullName" );
+    if ( !name.isEmpty() )
+      d->m_leFullName->setText( name );
+  }
+  
   (void) new QLabel( i18n( "Title :" ), grid );
   d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), grid );
 
@@ -98,6 +111,13 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "EMail :" ), grid );
   d->m_leEmail = new QLineEdit( authorInfo->email(), grid );
 
+  if ( authorInfo->email().isEmpty() )
+  {
+    QString email = d->m_emailCfg->readEntry( "EmailAddress" );
+    if ( !email.isEmpty() )
+      d->m_leEmail->setText( email );
+  }
+  
   (void) new QLabel( i18n( "Telephone :" ), grid );
   d->m_leTelephone = new QLineEdit( authorInfo->telephone(), grid );
 
