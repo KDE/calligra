@@ -606,34 +606,34 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
     }
     int current=0;
     int nc=0; // Not double, as we check it against 0 and to avoid gcc warnings
-    for(int i=start;i<=last;i++)
+    KoTextFormat refFormat( *string->at(0).format() ); // we need a ref format, doesn't matter where it comes from
+    for(int i=start;i<=last;++i)
     {
 	KoTextFormat* format=string->at(i).format();
-	if((((!format->underline())&&
-	   (!format->doubleUnderline())&&
-	   (!format->waveUnderline())&&
-	   (format->underlineLineType()!=KoTextFormat::U_SIMPLE_BOLD))||
-	  (i==last))&&nc)
+        // End of underline
+	if ( (((!format->underline())&&
+               (!format->doubleUnderline())&&
+               (!format->waveUnderline())&&
+               (format->underlineLineType()!=KoTextFormat::U_SIMPLE_BOLD))
+              || i == last)
+             && nc )
 	{
 	    double avg=static_cast<double>(current)/nc;
 	    avg/=18.0;
-	    for(int j=i-nc;j<=i;j++)
-	    {
-		KoTextFormat* tmpfmt=new KoTextFormat(*string->at(j).format());
-		tmpfmt->setUnderLineWidth(avg);
-		string->at(j).setFormat(format->parent()->format(tmpfmt));
-		delete tmpfmt;
-	    }
+            // Apply underline width "avg" from i-nc to i
+            refFormat.setUnderLineWidth( avg );
+            parag->setFormat( i-nc, i, &refFormat, true, KoTextFormat::UnderLineWidth );
 	    nc=0;
 	    current=0;
 	}
+        // Inside underline
 	else if(format->underline()||
-	    format->waveUnderline()||
-	    format->doubleUnderline()||
-	    (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD))
+                format->waveUnderline()||
+                format->doubleUnderline()||
+                (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD))
 	{
-	    nc++;
-	    current+=format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
+	    ++nc;
+	    current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
 	}
     }
     if ( last >= 0 && last < string->length() ) {
