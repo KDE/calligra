@@ -76,6 +76,8 @@ public:
      */
     void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj );
 
+    bool doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch );
+
     /**
      * Helper method, returns the last word before parag,index
      */
@@ -94,6 +96,7 @@ public:
     void configUpperUpper( bool _uu );
     void configAdvancedAutocorrect( bool _aa );
     void configAutoDetectUrl(bool _au);
+    void configIgnoreDoubleSpace( bool _ids);
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -105,6 +108,10 @@ public:
     { return m_advancedAutoCorrect;}
     bool getConfigAutoDetectUrl() const
     { return m_autoDetectUrl;}
+
+    bool getConfigIgnoreDoubleSpace() const
+    { return m_ignoreDoubleSpace;}
+
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -165,7 +172,7 @@ private:
 
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
-    bool m_autoDetectUrl;
+    bool m_autoDetectUrl, m_ignoreDoubleSpace;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;

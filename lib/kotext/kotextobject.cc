@@ -1169,15 +1169,18 @@ KCommand * KoTextObject::setShadowCommand( QTextCursor * cursor,double dist, sho
 }
 
 
-void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, const QString & cmdName )
+void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, const QString & cmdName, bool createUndoRedo )
 {
     KoTextDocument * textdoc = textDocument();
     emit hideCursor();
-    checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
-    if ( !undoRedoInfo.valid() ) {
-        textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
-        undoRedoInfo.text = QString::null;
-        newPlaceHolderCommand( cmdName.isNull() ? i18n("Remove Selected Text") : cmdName );
+    if( createUndoRedo)
+    {
+        checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
+        if ( !undoRedoInfo.valid() ) {
+            textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
+            undoRedoInfo.text = QString::null;
+            newPlaceHolderCommand( cmdName.isNull() ? i18n("Remove Selected Text") : cmdName );
+        }
     }
     QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
     QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
@@ -1194,7 +1197,8 @@ void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, co
     emit showCursor();
     if(selectionId==KoTextDocument::Standard)
         selectionChangedNotify();
-    undoRedoInfo.clear();
+    if ( createUndoRedo)
+        undoRedoInfo.clear();
 }
 
 KCommand * KoTextObject::removeSelectedTextCommand( QTextCursor * cursor, int selectionId )
@@ -1280,7 +1284,7 @@ void KoTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int len
         textdoc->setSelectionColor( HighlightSelection,
                                     QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
         textdoc->setInvertSelectionText( HighlightSelection, true );
-        m_highlightSelectionAdded = true;
+         m_highlightSelectionAdded = true;
     }
 
     removeHighlight(); // remove previous highlighted selection

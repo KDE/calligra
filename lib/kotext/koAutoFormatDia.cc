@@ -203,6 +203,13 @@ void KoAutoFormatDia::setupTab1()
     cbDetectUrl->setChecked( m_autoFormat.getConfigAutoDetectUrl());
     ( void )new QWidget( tab1 );
 
+    cbIgnoreDoubleSpace=new QCheckBox( tab1 );
+    cbIgnoreDoubleSpace->setText( i18n( "Ignore Double Space" ) );
+    cbIgnoreDoubleSpace->resize( cbIgnoreDoubleSpace->sizeHint() );
+    cbIgnoreDoubleSpace->setChecked( m_autoFormat.getConfigIgnoreDoubleSpace());
+    ( void )new QWidget( tab1 );
+
+
     slotChangeState(state);
 }
 
@@ -421,6 +428,8 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configUpperCase( cbUpperCase->isChecked() );
     m_docAutoFormat->configUpperUpper( cbUpperUpper->isChecked() );
     m_docAutoFormat->configAutoDetectUrl( cbDetectUrl->isChecked() );
+
+    m_docAutoFormat->configIgnoreDoubleSpace( cbIgnoreDoubleSpace->isChecked());
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );

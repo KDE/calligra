@@ -275,10 +275,13 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 
                 if ( !text.isEmpty() )
                 {
-                    insertText( text );
+                    if( !doIgnoreDoubleSpace(static_cast<KoTextParag*>(m_cursor->parag()),m_cursor->index() - 1,text[ text.length() - 1 ]))
+                    {
+                        insertText( text );
 
-                    doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
-                                  m_cursor->index() - 1, text[ text.length() - 1 ] );
+                        doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+                                      m_cursor->index() - 1, text[ text.length() - 1 ] );
+                    }
                 }
                 break;
             }

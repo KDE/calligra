@@ -45,6 +45,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
       m_advancedAutoCorrect( true ),
       m_autoDetectUrl( false ),
+      m_ignoreDoubleSpace( false ),
       m_typographicQuotes(),
       m_maxlen( 0 )
 {
@@ -64,6 +65,7 @@ void KoAutoFormat::readConfig()
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
     m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
+    m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
@@ -143,6 +145,8 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
     config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
     config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
+
+    config.writeEntry( "IgnoreDoubleSpace",m_ignoreDoubleSpace );
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -465,6 +469,17 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 
 }
 
+bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
+{
+    if( m_ignoreDoubleSpace && ch.isSpace() && index > 1 )
+    {
+        KoTextString *s = parag->string();
+        QChar ch = s->at( index -1 ).c;
+        if ( ch.isSpace() )
+            return true;
+    }
+    return false;
+}
 
 void KoAutoFormat::configTypographicQuotes( TypographicQuotes _tq )
 {
@@ -489,6 +504,11 @@ void KoAutoFormat::configAdvancedAutocorrect( bool _aa )
 void KoAutoFormat::configAutoDetectUrl(bool _au)
 {
     m_autoDetectUrl=_au;
+}
+
+void KoAutoFormat::configIgnoreDoubleSpace( bool _ids)
+{
+    m_ignoreDoubleSpace=_ids;
 }
 
 bool KoAutoFormat::isUpper( const QChar &c )

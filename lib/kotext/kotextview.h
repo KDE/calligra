@@ -163,6 +163,10 @@ protected:
     virtual void doAutoFormat( QTextCursor* /*cursor*/, KoTextParag * /*parag*/,
                                int /*index*/, QChar /*ch*/ ) { }
 
+    //return true if we are a doubleSpace
+    virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,
+        int /*index*/,QChar /*ch*/ ) { return false;}
+
     /** Show the settings of this format in the GUI. Needs to be implemented in the application. */
     virtual void showFormat( KoTextFormat *format ) = 0;
 

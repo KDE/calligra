@@ -158,7 +158,7 @@ public:
      * @param cmdName the name to give the undo/redo command, if we haven't created it already
      */
     void removeSelectedText( QTextCursor * cursor, int selectionId = KoTextDocument::Standard,
-                             const QString & cmdName = QString::null );
+                             const QString & cmdName = QString::null, bool createUndoRedo=true  );
 
     KCommand * replaceSelectionCommand( QTextCursor * cursor, const QString & replacement,
                                         int selectionId, const QString & cmdName );
