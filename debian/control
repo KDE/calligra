@@ -8,6 +8,7 @@ Standards-Version: 3.5.0
 Package: koffice-dev
 Architecture: any
 Section: devel
+Replaces: kformula
 Depends: koffice-libs (>= ${Source-Version}), kdelibs-dev
 Description: Core libraries for KOffice (Development files)
  Core libraries for Koffice (Development files)
@@ -108,7 +109,7 @@ Architecture: any
 Section: x11
 Replaces: koffice-libs (<< 2.0.1-0)
 Depends: ${shlibs:Depends}
-Recommends: kchart, kformula, kword, kspread, killustrator, kpresenter, kivio, krayon
+Recommends: kchart, kword, kspread, killustrator, kpresenter, kivio, krayon
 Suggests: kdebase
 Description: KDE Office Workspace
  KDE Office Workspace
