@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,28 +21,23 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
-#include <qwidget.h>
 #include <qsize.h>
-#include <qcursor.h>
-#include <qfileinfo.h>
 #include <qhbuttongroup.h>
 #include <qtoolbutton.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <koIconChooser.h>
 #include <koMainWindow.h>
-#include <kseparator.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
-#include <karbon_drag.h>
+#include "karbon_drag.h"
 #include "vselection.h"
 #include "vfill.h"
 #include "vfillcmd.h"
-#include <commands/vtransformcmd.h>
+#include "vtransformcmd.h"
 
 #include "vstyledocker.h"
 
