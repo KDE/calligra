@@ -8,6 +8,7 @@ class KWordDocument_impl;
 #include "paraglayout.h"
 #include "fc.h"
 #include "char.h"
+#include "formatcollection.h"
 
 #include <assert.h>
 
@@ -84,8 +85,8 @@ public:
      * @return a pointer to the memory segment, which holds text paragraphs
      *         text.
      */
-    KWChar* getText() { return text.data; }
-    KWChar* getChar( unsigned int _pos ) { assert( _pos < text.len ); return text.data + _pos; }
+    KWChar* getText() { return text.data(); }
+    KWChar* getChar( unsigned int _pos ) { assert( _pos < text.size() ); return text.data() + _pos; }
     KWString* getKWString() { return &text; }
 
     /**
@@ -116,10 +117,10 @@ public:
     void setStartColumn( unsigned int _col ) { startColumn = _col; }    
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
 
-    void insertText( unsigned int _pos, const char *_text );
+    void insertText( unsigned int _pos, const char *_text);
     void appendText(KWChar *_text,unsigned int _len);
     bool deleteText( unsigned int _pos, unsigned int _len = 1);
-    void setFormat( unsigned int _pos, const KWFormat &format );
+    void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
   
 protected:
     /**

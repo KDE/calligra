@@ -6,33 +6,55 @@
 #include <qimage.h>
 #include <qpixmap.h>
 
-#define ID_KWCharFormat 1
-#define ID_KWCharImage 2
+enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2};
  
-struct KWCharAttribute
+class KWCharAttribute
 {
+public:
+  KWCharAttribute() { classId = ID_KWCharNone; }
+  virtual ~KWCharAttribute() {}
+
+  int getClassId()
+    { return classId; }
+
+protected:
   int classId;
+
 };
 
-struct KWCharFormat
+class KWCharFormat : public KWCharAttribute
 {
-  KWCharFormat() { type.classId = ID_KWCharFormat; }
-  KWCharFormat( const KWFormat& _format ) { type.classId = ID_KWCharFormat; format = _format; }
+public:
+  KWCharFormat() : KWCharAttribute() { classId = ID_KWCharFormat; format = 0L; }
+  KWCharFormat( KWFormat* _format ) : KWCharAttribute() { classId = ID_KWCharFormat; format = _format; }
+  virtual ~KWCharFormat() { format->decRef(); format = 0L; }
 
-  KWCharAttribute type;
-  KWFormat format;
+  virtual KWFormat* getFormat()
+    { return format; }
+  virtual void setFormat(KWFormat *_format)
+    { format = _format; }
+
+protected:
+  KWFormat *format;
+
 };
 
-struct KWCharImage
+class KWCharImage : public KWCharAttribute
 {
-  KWCharImage() { type.classId = ID_KWCharImage; }
+public:
+  KWCharImage() { classId = ID_KWCharImage; }
+  virtual ~KWCharImage() {}
 
-  KWCharAttribute type;
+  virtual int getClassId()
+    { return ID_KWCharImage; }
+
+protected:
   // We need the image because it has full resolution and
   // color depths. The pixmap may be reduced in both aspects
   // depending on the resolution and color depth of the display.
   QImage image;
   QPixmap pixmap;
+
 };
 
 // Be prepared for unicode
@@ -44,31 +66,41 @@ struct KWChar
   KWCharAttribute* attrib;
 };
 
-struct KWString
+class KWString
 {
-  KWString() { max = 0; len = 0; data = 0L; }
-  KWString( const char* _text );
+public:
+  KWString() 
+    { _max_ = 0; _len_ = 0; _data_ = 0L; }
+  KWString(const char* _text);
   KWString(const KWString &_string);
-  ~KWString() { free( data, len ); delete []data; }
+  ~KWString() 
+    { free(_data_,_len_); delete [] _data_; }
 
-  unsigned int size() { return len; }
+  unsigned int size() 
+    { return _len_; }
+  unsigned int max()
+    { return _max_; }
   void append(KWChar *_text,unsigned int _len);
-  void insert( unsigned int _pos, const char *_text );
-  void insert( unsigned int _pos, const char _c );
-  void resize( unsigned int _size );
-  bool remove( unsigned int _pos,unsigned int _len = 1 );
+  void insert(unsigned int _pos, const char *_text);
+  void insert(unsigned int _pos, const char _c);
+  void resize(unsigned int _size,bool del = true);
+  bool remove(unsigned int _pos,unsigned int _len = 1);
+  KWChar* split(unsigned int _pos);
 
-  // Intern
-  KWChar* alloc( unsigned int _size );
-  void free( KWChar* _data, unsigned int _len );
+  KWChar* data()
+    { return _data_; }
+
+protected:
+  KWChar* alloc(unsigned int _size);
+  void free(KWChar* _data,unsigned int _len);
   KWChar* copy(KWChar *_data,unsigned int _len);
   
-  unsigned int len;
-  unsigned int max;
-  KWChar* data;
+  unsigned int _len_;
+  unsigned int _max_;
+  KWChar* _data_;
   
 };
 
-void freeChar( KWChar& _char );
+void freeChar(KWChar& _char);
 
 #endif

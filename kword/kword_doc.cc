@@ -61,6 +61,7 @@ KWordChild::~KWordChild()
 
 /*================================================================*/
 KWordDocument_impl::KWordDocument_impl()
+  : formatCollection(this)
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0");
 
@@ -97,43 +98,40 @@ CORBA::Boolean KWordDocument_impl::init()
   calcColumnWidth();
 
   KWParag *p = new KWParag(this,0L,0L,defaultParagLayout);
-  //p->insertText(0," ");
+  p->insertText(0," ");
 
-  parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  KWFormat f1( green );
-  p->setFormat( 7, f1 );
-  KWFormat f2( black );
-  p->setFormat( 12, f2 );
-  p = new KWParag( this, parags, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, parags, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   p = new KWParag( this, p, 0L, defaultParagLayout );
+//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+
   return true;
 }
 
@@ -266,7 +264,7 @@ OPParts::View_ptr KWordDocument_impl::createView()
 {
   KWordView_impl *p = new KWordView_impl(0L);
   p->setDocument(this);
-  
+
   return OPParts::View::_duplicate(p);
 }
 
@@ -398,7 +396,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   // First line ? Draw the counter ?
   if ( pos == 0 && lay->getCounterNr() != -1 )
   {
-    KWFormat counterfm( _fc );
+    KWFormat counterfm(this, _fc );
     counterfm.apply( lay->getCounterFormat() );
     _painter.setFont( *( counterfm.loadFont( this ) ) );
     _painter.setPen( counterfm.getColor() );
@@ -423,50 +421,50 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   {
     // Init position
     if ( i == 0 )
-    {
-      // Change the painter
-      tmpPTPos = _fc.getPTPos();
-      _painter.setFont( *_fc.loadFont( this ) );
-      _painter.setPen( _fc.getColor() );
-
-      //cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
-    }
-
+      {
+	// Change the painter
+	tmpPTPos = _fc.getPTPos();
+	_painter.setFont( *_fc.loadFont( this ) );
+	_painter.setPen( _fc.getColor() );
+	
+	//cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+      }
+    
     buffer[i] = text[ _fc.getTextPos() ].c;
     
     if ( buffer[i] == 0 )
-    {
-      // Torben: TODO: Handle special objects like images here
-    }
+      {
+	// Torben: TODO: Handle special objects like images here
+      }
     else
-    {
-      if ( text[ _fc.getTextPos() ].attrib != 0L )
       {
-	// Change text format here
-	assert( text[ _fc.getTextPos() ].attrib->classId == ID_KWCharFormat );
-	KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
-	_fc.apply( f->format );
-	// Change the painter
-	_painter.setFont( *_fc.loadFont( this ) );
-	_painter.setPen( _fc.getColor() );
-	//cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+	if ( text[ _fc.getTextPos() ].attrib != 0L )
+	  {
+	    // Change text format here
+	    assert( text[ _fc.getTextPos() ].attrib->getClassId() == ID_KWCharFormat );
+	    KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
+	    _fc.apply( *f->getFormat() );
+	    // Change the painter
+	    _painter.setFont( *_fc.loadFont( this ) );
+	    _painter.setPen( _fc.getColor() );
+	    //cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+	  }
+	
+	// Test next character.
+	i++;
+	if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
+	  {
+	    // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
+	    // what we have so far
+	    buffer[i] = '\0';
+	    _painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
+	    //cerr << "#'" << buffer << "'" << endl;
+	    i = 0;
+	    // Blanks are not printed at all
+	    if ( text[_fc.getTextPos()].c == ' ' )
+	      _fc.cursorGotoNextChar(_painter);
+	  }
       }
-            
-      // Test next character.
-      i++;
-      if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
-      {
-	// there was a blank _or_ there will be a font switch _or_ a special object next, so print 
-	// what we have so far
-	buffer[i] = '\0';
-	_painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
-	//cerr << "#'" << buffer << "'" << endl;
-	i = 0;
-	// Blanks are not printed at all
-	if ( text[_fc.getTextPos()].c == ' ' )
-	  _fc.cursorGotoNextChar(_painter);
-      }
-    }
   }
 }
 
@@ -530,8 +528,8 @@ void KWordDocument_impl::deleteParag(KWParag *_parag)
     {
       p = _parag->getNext();
       p2 = _parag->getPrev();
+      if (p) p->setPrev(p2);
       p2->setNext(p);
-      p->setPrev(p2);
       delete _parag;
     }
 }
@@ -550,4 +548,46 @@ void KWordDocument_impl::joinParag(KWParag *_parag1,KWParag *_parag2)
 
       delete _parag2;
     }
+}
+
+/*================================================================*/
+void KWordDocument_impl::insertParag(KWParag *_parag,InsertPos _pos)
+{
+  KWParag *_new = 0L,*_prev = 0L,*_next = 0L;
+
+  if (_parag)
+    {
+      _prev = _parag->getPrev();
+      _next = _parag->getNext();
+    }
+
+  switch (_pos)
+    {
+    case I_AFTER:
+      {
+	_new = new KWParag(this,_parag,_next,defaultParagLayout);
+	if (_next) _next->setPrev(_new);
+      } break;
+    case I_BEFORE:
+      {
+	_new = new KWParag(this,_prev,_parag,defaultParagLayout);
+	if (_parag) _parag->setPrev(_new);
+	else setFirstParag(_new);
+      } break;
+    }
+}
+
+/*================================================================*/
+void KWordDocument_impl::splitParag(KWParag *_parag,unsigned int _pos)
+{
+  KWParag *_new = 0L,*_next = 0L;
+
+  if (_parag) _next = _parag->getNext();
+    
+  unsigned int len = _parag->getTextLen() - _pos;
+  KWChar* _string = _parag->getKWString()->split(_pos);
+  _new = new KWParag(this,_parag,_next,defaultParagLayout);
+  if (_next) _next->setPrev(_new);
+  
+  _new->appendText(_string,len);
 }

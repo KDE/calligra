@@ -7,6 +7,8 @@ class KWordDocument_impl;
 #include "defs.h"
 #include "font.h"
 
+#include <qstring.h>
+
 /**
  * This class is used to change the texts format within a paragraph.
  *
@@ -32,21 +34,22 @@ public:
      *
      * @see KWUserFont
      */
-    KWFormat( const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+    KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 	      char _italic = -1, char _underline = -1, char _math = -1, char _direct = -1 );
     
     /**
      * Creates a new KWFormat instance. This instance has set all values to
      * 'dont change'.
      */
-    KWFormat();
+    KWFormat(KWordDocument_impl *_doc);
+    KWFormat() { doc = 0L; ref = 0; }
     
     /**
      * Creates a new KWFormat instance.
      *
      * @param _format It copies its state from this KWFormat instance.
      */
-    KWFormat( const KWFormat& _format );
+    KWFormat(KWordDocument_impl *_doc, const KWFormat& _format );
 
     KWFormat& operator=( const KWFormat& _format );
   
@@ -147,6 +150,13 @@ public:
      */
     void setUnderline( char _underline ) { underline = _underline; }
 
+    void incRef();
+    void decRef();
+    int refCount()
+    { return ref; }
+
+    KWordDocument_impl *getDocument() { return doc; }
+    
 protected:
     /**
      * Pointer to the font we have to use. If this value is 0L we are told
@@ -188,6 +198,14 @@ protected:
      * 1 to enable direct mode, 0 to disable and -1 for no change.
      */
     char direct;
+
+    int ref;
+    KWordDocument_impl *doc;
+
+private:
+    // disabe normal copy constructor
+    KWFormat( const KWFormat& _format ) { ref = 0; doc = 0L; }
+
 };
 
 #endif

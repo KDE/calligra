@@ -20,6 +20,8 @@ module KWord
       slot void textAlignRight();
       slot void textEnumList();
       slot void textUnsortList();
+
+      slot void helpAbout();
       
       slot void extraLayout();
     };

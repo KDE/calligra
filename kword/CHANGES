@@ -24,10 +24,33 @@ Reggie, 10.9.1998:
 - Implemented 'bool KWString::remove(unsigned int _pos,unsigned int _len)', 
   'void KWString::append(KWChar* _text,unsigned int _len) and 
   'KWChar* KWString::copy(KWChar *_data,unsigned int _len)'
-- Implemented 'bool KWParag::deleteText(pos,len)', 'void KWParag::appendText(KWChar* _text,unsigned int _len)'.
+- Implemented 'bool KWParag::deleteText(pos,len)', 
+  'void KWParag::appendText(KWChar* _text,unsigned int _len)'.
 
 Reggie, 11.9.1998:
 ------------------
 - Implemented Key_Delete and Key_Backspace, and everything which 
   was needed for that. There are still lots of problems with that,
   especially with placing the cursor and redrawing.
+- Implemented Key_Return (== Key_Enter). It seems to work ok, but I'm sure
+  that there are also some problems in it (the same as for Key_Delete and
+  Key_Backspace). That's because I'm still not totally fimilar with the
+  KWFormatContext. So, Torben, please look at the new implemented
+  KeyPressEvents and fix the stuff which I did wrong :-))
+- Fixed a bug in "Blocksatz" (avoided division by zero if there are no
+  spaces in a line).
+- Fixed a bug in freeChar().
+- There are bigger problems with alignment center and right. The width of
+  a line is not calculated correctly - we have to find a way to do that
+  quite fast _and_ correctly.
+
+Reggie, 13.9.1998:
+------------------
+- Implemented KWFormatCollection, and it's already working
+- fixed a bug in "Blocksatz"
+
+Reggie, 14.9.1998:
+------------------
+- Fixed finally THE bug in KWString :-)
+- Totally integrated KWFormatCollecion
+- Fixed a bug in backspace

@@ -2,8 +2,9 @@
 #include "kword_doc.h"
 
 KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
+  : format(_doc), counterFormat(_doc)
 {
-    flow = LEFT;
+    flow = BLOCK; //LEFT;
     ptParagFootOffset = 0;
     ptParagHeadOffset = 0;
     ptFirstLineLeftIndent = 0;

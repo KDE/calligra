@@ -20,6 +20,8 @@ KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
       counters[i][j] = 0;
   
   during_vertical_cursor_movement = FALSE;
+
+  spacingError = 0;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -416,7 +418,11 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     unsigned int pos = lineStartPos;
     ptPos = ptStartPos;
     *((KWFormat*)this) = lineStartFormat;
-        
+
+    // test this to avoid crashes!!
+    if (_textpos > parag->getKWString()->size())
+      _textpos =  parag->getKWString()->size();
+
     while ( pos < _textpos )
     {
         if ( text[ pos ].c == 0 )
@@ -428,15 +434,16 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	  if ( text[ pos ].attrib )
 	  {
 	    // Change text format here
-	    assert( text[ pos ].attrib->classId == ID_KWCharFormat );
+	    assert( text[ pos ].attrib->getClassId() == ID_KWCharFormat );
 	    KWCharFormat *f = (KWCharFormat*)text[ pos ].attrib;
-	    apply( f->format );
+	    apply( *f->getFormat() );
 	  }
 	  
 	  if ( text[ pos ].c == ' ' && lay->getFlow() == KWParagLayout::BLOCK && 
 	       lineEndPos != parag->getTextLen() )
 	  {
 	    float sp = ptSpacing + spacingError;
+	    
 	    float dx = floor( sp );
 	    spacingError = sp - dx;
 	    
@@ -540,7 +547,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
     {
-	KWFormat counterfm( *this );
+	KWFormat counterfm(doc, *this );
 	counterfm.apply( parag->getParagLayout()->getCounterFormat() );
 	_painter.setFont( *(counterfm.loadFont( document )) );
 	_painter.setPen( counterfm.getColor() );
@@ -606,9 +613,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	if ( c != 0 && text[ textPos ].attrib )
 	{
 	  // Handle font formats here.
-	  assert( text[ textPos ].attrib->classId == ID_KWCharFormat );
+	  assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
 	  KWCharFormat *f = (KWCharFormat*)text[ textPos ].attrib;
-	  apply( f->format );
+	  apply( *f->getFormat() );
 	}
 	
 	// Is it a space character
@@ -668,9 +675,11 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     }
     
     // Calculate the space between words if we have "block" formating.
-    if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
-	ptSpacing = (float)( document->getPTColumnWidth() - ptTextLen ) / (float)spaces;
-	
+    if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
+      ptSpacing = (float)( document->getPTColumnWidth() - ptTextLen ) / (float)spaces;
+    else
+      ptSpacing = 0;
+
     // Does this line still fit on this column/page ?
     if ( !document->isPTYIn( page, ptY + getLineHeight() ) )
     {
@@ -704,7 +713,7 @@ unsigned short KWFormatContext::getCounter( unsigned int _counternr, unsigned in
 
 void KWFormatContext::makeCounterLayout( QPainter &_painter )
 {
-    KWFormat format( parag->getParagLayout()->getFormat() );
+    KWFormat format( doc,parag->getParagLayout()->getFormat() );
     format.apply( parag->getParagLayout()->getCounterFormat() );
     KWDisplayFont *font = loadFont( document );    
 
@@ -736,13 +745,4 @@ void KWFormatContext::apply( KWFormat &_format )
       ptMaxDescender = max(ptDescender,ptMaxDescender);
     }
 }
-
-
-
-
-
-
-
-
-
 

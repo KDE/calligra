@@ -3,31 +3,31 @@
 #include <string.h>
 #include <assert.h>
 
-KWString::KWString( const char *_str )
+KWString::KWString(const char *_str)
 {
-  if ( _str == 0L )
+  if (_str == 0L)
   {
-    data = 0L;
-    len = 0;
-    max = 0;
+    _data_ = 0L;
+    _len_ = 0;
+    _max_ = 0;
     return;
   }
   
-  len = strlen( _str );
-  max = len;
+  _len_ = strlen( _str );
+  _max_ = _len_;
   
-  data = alloc( len );
+  _data_ = alloc( _len_ );
   
   unsigned int i = 0;
   while( _str[i] != 0L )
-    data[i].c = _str[i++];
+    _data_[i].c = _str[i++];
 }
 
 KWString::KWString(const KWString &_string)
 {
-  data = copy(_string.data,_string.len);
-  len = _string.len;
-  max = _string.max;
+  _data_ = copy(static_cast<KWString>(_string).data(),static_cast<KWString>(_string).size());
+  _len_ = static_cast<KWString>(_string).size();
+  _max_ = static_cast<KWString>(_string).max();
 }
 
 KWChar* KWString::alloc( unsigned int _len )
@@ -53,94 +53,113 @@ void KWString::free( KWChar* _data, unsigned int _len )
   
 void KWString::append(KWChar *_text,unsigned int _len)
 {
-  unsigned int oldlen = len;
-  resize(_len + len);
+  unsigned int oldlen = _len_;
+  resize(_len + _len_);
   KWChar *_data = copy(_text,_len);
 
   for (unsigned int i = 0;i < _len;i++)
     {
-      data[oldlen + i].c = _data[i].c;
-      data[oldlen + i].attrib = _data[i].attrib;
+      _data_[oldlen + i].c = _data[i].c;
+      _data_[oldlen + i].attrib = _data[i].attrib;
     }
 }
 
-void KWString::insert( unsigned int _pos, const char *_text )
+void KWString::insert( unsigned int _pos, const char *_text)
 {
-  assert( _pos <= len );
+  assert( _pos <= _len_ );
  
   unsigned int nl = strlen( _text );
   
-  unsigned int l = len;
+  unsigned int l = _len_;
 
-  resize( len + nl );
+  resize( _len_ + nl );
   
   if ( _pos < l )
-    memmove( data + _pos + nl, data + _pos, sizeof(KWChar) * ( l - _pos ) );
+    memmove( _data_ + _pos + nl, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
   
   for( unsigned int i = 0; i < nl; ++i )
-  {
-    data[ _pos + i ].c = _text[i];
-    data[ _pos + i ].attrib = 0L;
-  }
+    {
+      _data_[ _pos + i ].c = _text[i];
+      _data_[ _pos + i ].attrib = 0L;
+    }
 }
 
 void KWString::insert( unsigned int _pos, const char _c )
 {
-  assert( _pos <= len );
+  assert( _pos <= _len_ );
 
-  unsigned int l = len;
+  unsigned int l = _len_;
   
-  resize( len + 1 );
+  resize( _len_ + 1 );
   
   if ( _pos < l )
-    memmove( data + _pos + 1, data + _pos, sizeof(KWChar) * ( l - _pos ) );
+    memmove( _data_ + _pos + 1, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
   
-  data[ _pos ].c = _c;
-  data[ _pos ].attrib = 0L;  
+  _data_[ _pos ].c = _c;
+  _data_[ _pos ].attrib = 0L;  
 }
 
 bool KWString::remove( unsigned int _pos,unsigned int _len = 1 )
 {
-  if (_pos + _len <= len && (int)_pos >= 0)
+  if (_pos + _len <= _len_ && (int)_pos >= 0)
     {
-      memmove(data + _pos,data + _pos + _len,sizeof(KWChar) * (len - _pos - _len));
-      resize(len - _len);
+      for (unsigned int i = _pos;i < _pos + _len;i++)
+	freeChar(_data_[i]);
+
+      memmove(_data_ + _pos,_data_ + _pos + _len,sizeof(KWChar) * (_len_ - _pos - _len));
+      resize(_len_ - _len,false);
+
       return true;
     }
   return false;
 }
 
-void KWString::resize( unsigned int _size )
+KWChar* KWString::split(unsigned int _pos)
 {
-  if ( _size == len )
+  KWChar *_data,*__data;
+  _data = alloc(_len_ - _pos);
+  for (unsigned int i = _pos;i < _len_;i++)
+    {
+      _data[i - _pos].c = _data_[i].c;
+      _data[i - _pos].attrib = _data_[i].attrib;
+    }
+
+  __data = copy(_data,_len_ - _pos);
+  resize(_pos);
+  return __data;
+}
+
+void KWString::resize(unsigned int _size,bool del = true)
+{
+  if ( _size == _len_ )
     return;
   
-  if ( _size < len )
+  if ( _size < _len_ )
   {
-    free( data + _size, len - _size );
-    len = _size;
+    if (del) free( _data_ + _size, _len_ - _size );
+    _len_ = _size;
 
     return;
   }
   
-  /* _size > len */
-  if ( _size < max )
+  /* _size > _len_ */
+  if ( _size < _max_ )
   {
-    len = _size;
+    _len_ = _size;
     return;
   }
   
   // Alloc some bytes more => faster when increasing size in steps of 1
   KWChar *d = alloc( _size + 10 );
-  if ( data )
+  if ( _data_ )
   {      
-    memcpy( d, data, len * sizeof(KWChar) );
-    delete []data;
+    memcpy( d, _data_, _len_ * sizeof(KWChar) );
+    delete []_data_;
   }
 
-  data = d;
-  len = _size;
-  max = _size + 10;
+  _data_ = d;
+  _len_ = _size;
+  _max_ = _size + 10;
 }
 
 KWChar* KWString::copy(KWChar *_data,unsigned int _len)
@@ -155,17 +174,19 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
       __data[i].c = _data[i].c;
       if (_data[i].attrib)
 	{
-	  switch (_data[i].attrib->classId)
+	  switch (_data[i].attrib->getClassId())
 	    {
 	    case ID_KWCharFormat: 
 	      {
-		KWCharFormat *f = new KWCharFormat(((KWCharFormat*)_data[i].attrib)->format);
-		__data[i].attrib = &(f->type);
+		KWCharFormat *attrib = (KWCharFormat*)_data[i].attrib; 
+		dynamic_cast<KWCharFormat*>(attrib)->getFormat()->incRef();
+		KWCharFormat *f = new KWCharFormat(attrib->getFormat());
+		__data[i].attrib = f;
 	      } break;
 	    case ID_KWCharImage:
 	      {
 		KWCharImage *f = new KWCharImage();
-		__data[i].attrib = &(f->type);
+		__data[i].attrib = f;
 	      } break;
 	    }
 	}
@@ -178,7 +199,7 @@ void freeChar( KWChar& _char )
 {
   if ( _char.attrib )
   {
-    switch( _char.attrib->classId )
+    switch( _char.attrib->getClassId() )
       {
       case ID_KWCharFormat:
       case ID_KWCharImage:
@@ -187,5 +208,6 @@ void freeChar( KWChar& _char )
       default:
 	assert( 0 );
       }
+    _char.attrib = 0L;
   }
 }

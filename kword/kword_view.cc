@@ -299,6 +299,16 @@ void KWordView_impl::extraLayout()
     m_pKWordDoc->setPageLayout(pgLayout,kw);
 }
 
+/*===============================================================*/
+void KWordView_impl::helpAbout()
+{
+  QMessageBox::information(this,"KWord",
+			   "KWord  0.0.1 alpha\n\n"
+			   "(c) by Torben Weis <weis@kde.org> and \n"
+			   "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
+			   "KWord is under GNU GPL");
+}
+
 /*================================================================*/
 void KWordView_impl::resizeEvent(QResizeEvent *e)
 {
@@ -902,6 +912,17 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   paperWidget->setYOffset(yOffset);
 
   reorganize();
+
+  // HACK
+  if (doc->getNumViews() == 1)
+    {
+      QKeyEvent e(Event_KeyPress,Key_Delete,0,0);
+      paperWidget->keyPressEvent(&e);
+      scrollH(0);
+      scrollV(0);
+      paperWidget->setXOffset(xOffset);
+      paperWidget->setYOffset(yOffset);
+    }
 }
 
 /*================================================================*/

@@ -87,9 +87,9 @@ QString& KWParag::makeCounterText( QString& _str )
     return _str;
 }
 
-void KWParag::insertText( unsigned int _pos, const char *_text )
+void KWParag::insertText( unsigned int _pos, const char *_text)
 {
-  text.insert( _pos, _text );
+  text.insert( _pos, _text);
 }
 
 void KWParag::appendText(KWChar *_text,unsigned int _len)
@@ -102,13 +102,23 @@ bool KWParag::deleteText( unsigned int _pos, unsigned int _len = 1)
   return text.remove( _pos, _len );
 }
 
-void KWParag::setFormat( unsigned int _pos, const KWFormat &_format )
+void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
 {
-  assert( _pos < text.len );
+  assert( _pos < text.size() );
   
-  KWCharFormat *f = new KWCharFormat( _format );
-  freeChar( text.data[ _pos ] );
-  text.data[ _pos ].attrib = &(f->type);
+  KWFormat *format = document->getFormatCollection()->getFormat(_format);
+  KWCharFormat *f = new KWCharFormat(format);
+
+  for (unsigned int i = 0;i < _len;i++)
+    {
+      if (text.data()[_pos + i].attrib && text.data()[_pos + i].attrib->getClassId() == ID_KWCharFormat)
+	{
+	  ((KWCharFormat*)text.data()[_pos + i].attrib)->getFormat()->decRef();
+	  ((KWCharFormat*)text.data()[_pos + i].attrib)->setFormat(0L);
+	}
+      freeChar( text.data()[ _pos + i] );
+      text.data()[ _pos ].attrib = f;
+    }
 }
 
 

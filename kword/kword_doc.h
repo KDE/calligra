@@ -32,6 +32,7 @@ class KWordDocument_impl;
 #include "fc.h"
 #include "parag.h"
 #include "paraglayout.h"
+#include "formatcollection.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -105,6 +106,8 @@ public:
     { return m_bModified; }
   
   // C++
+
+  unsigned int getNumViews() { return m_lstViews.count(); }
 
   virtual QStrList outputFormats();
   virtual QStrList inputFormats();
@@ -221,6 +224,11 @@ public:
 
   void deleteParag(KWParag *_parag);
   void joinParag(KWParag *_parag1,KWParag *_parag2);
+  void insertParag(KWParag *_parag,InsertPos _pos);
+  void splitParag(KWParag *_parag,unsigned int _pos);
+
+  KWFormatCollection *getFormatCollection()
+    { return &formatCollection; }
 
 signals:
   void sig_imageModified();
@@ -279,6 +287,8 @@ protected:
   KWParagLayout *defaultParagLayout;
   
   int pages;
+
+  KWFormatCollection formatCollection;
 
 };
 

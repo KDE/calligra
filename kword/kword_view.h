@@ -37,6 +37,7 @@ class KWPaintWindow;
 #include <qscrollbar.h>
 #include <qcolor.h>
 #include <qfont.h>
+#include <qmessagebox.h>
 
 #include <kruler.h>
 #include <kcolordlg.h>
@@ -100,6 +101,8 @@ public:
   virtual void textUnsortList();
 
   virtual void extraLayout();
+
+  virtual void helpAbout();
 
   virtual void setMode(OPParts::Part::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);

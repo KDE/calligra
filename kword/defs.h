@@ -37,4 +37,6 @@
 #define STANDARD_COLUMNS 2
 #define STANDARD_COLUMN_SPACING 3
 
+enum InsertPos {I_BEFORE,I_AFTER};
+
 #endif

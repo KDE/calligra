@@ -1,9 +1,10 @@
 #include "format.h"
 #include "kword_doc.h"
 
-KWFormat::KWFormat( const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+KWFormat::KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 		    char _italic = -1, char _underline = -1, char _math = -1, char _direct = -1 )
 {
+    doc = _doc;
     color = _color;
     userFont = _font;
     ptFontSize = _font_size;
@@ -12,20 +13,17 @@ KWFormat::KWFormat( const QColor& _color, KWUserFont *_font = 0L, int _font_size
     underline = _underline;
     math = _math;
     direct = _direct;
+    ref = 0;
 }
 
-KWFormat::KWFormat()
+KWFormat::KWFormat(KWordDocument_impl *_doc)
 {
-    userFont = 0L;
-    ptFontSize = -1;
-    weight = -1;
-    italic = -1;
-    underline = -1;
-    math = -1;
-    direct = -1;
+    doc = _doc;
+    setDefaults(_doc);
+    ref = 0;
 }
 
-KWFormat::KWFormat( const KWFormat &_format )
+KWFormat::KWFormat( KWordDocument_impl *_doc,const KWFormat &_format )
 {
     userFont = _format.getUserFont();
     ptFontSize = _format.getPTFontSize();
@@ -35,6 +33,8 @@ KWFormat::KWFormat( const KWFormat &_format )
     color = _format.getColor();
     math = -1;
     direct = -1;
+    ref = 0;
+    doc = _doc;
 }
 
 KWFormat& KWFormat::operator=( const KWFormat& _format )
@@ -47,6 +47,8 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     color = _format.getColor();
     math = -1;
     direct = -1;
+    ref = 0;
+    if (!doc) doc = const_cast<KWFormat>(_format).getDocument();
 
     return *this;
 }
@@ -117,4 +119,23 @@ void KWFormat::apply( KWFormat &_format )
     
     if ( _format.getColor().isValid() )
 	color = _format.getColor();
+}
+
+void KWFormat::decRef()
+{ 
+  --ref;
+  QString key = doc->getFormatCollection()->generateKey(this);
+  debug("dec ref (%d): %s",ref,key.data());
+
+  if (ref <= 0 && doc) 
+    doc->getFormatCollection()->removeFormat(this); 
+  if (!doc && ref == 0) warning("RefCount of the format == 0, but I couldn't delete it,"
+				" because I have not a pointer to the document!");
+}
+
+void KWFormat::incRef()
+{ 
+  ++ref;
+  QString key = doc->getFormatCollection()->generateKey(this);
+  debug("inc ref (%d): %s",ref,key.data());
 }

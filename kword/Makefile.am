@@ -1,7 +1,7 @@
 
 INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) -I$(idldir)
-LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+	-I../lib/koml $(all_includes) -I$(idldir) -g
+LDFLAGS	= -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
@@ -12,9 +12,13 @@ LDADD = ../lib/kofficeui/libkofficeui.la \
 bin_PROGRAMS = kword.bin
 
 kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kword_shell.cc \
-		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc
+		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
+		formatcollection.cc
+
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
-		fc.h font.h format.h kword_page.h parag.cc paraglayout.h
+		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
+		formatcollection.h
+
 SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
@@ -60,3 +64,4 @@ format.cc: format.h
 kword_page.cc: kword_page.h
 parag.cc: parag.h
 paraglayout.cc: paraglayout.h
+formatcollection.cc: formatcollection.h

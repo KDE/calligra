@@ -24,7 +24,7 @@
 
 /*================================================================*/
 KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
-  : QWidget(parent,""), buffer(width(),height()), format()
+  : QWidget(parent,""), buffer(width(),height()), format(_doc)
 { 
   setBackgroundColor(white);
   buffer.fill(white);
@@ -191,6 +191,33 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       } break;
     case Key_Return: case Key_Enter:
       {
+	if (has_to_copy) copyBuffer();
+	draw_buffer = true;
+
+	unsigned int tmpTextPos = fc->getTextPos();
+
+	if (fc->isCursorAtParagEnd())
+	  doc->insertParag(fc->getParag(),I_AFTER);
+	else if (fc->isCursorAtParagStart())
+	  {
+	    doc->insertParag(fc->getParag(),I_BEFORE);
+	    fc->init(fc->getParag()->getPrev(),painter);
+	  }
+	else 
+	  doc->splitParag(fc->getParag(),tmpTextPos);
+
+	fc->makeLineLayout(painter);
+	fc->cursorGotoPos(tmpTextPos,painter);
+	fc->cursorGotoRight(painter);
+
+	painter.end();
+	draw_buffer = false;
+	repaint(false);
+	// HACK
+	kbdc.auto_repeat_mode = repeat;
+	XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	return;
+
       } break;
     case Key_Delete:
       {
@@ -233,6 +260,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
     case Key_Backspace:
       {
 	if (has_to_copy) copyBuffer();
+	
+	if (fc->isCursorAtLineStart() && fc->isCursorAtParagStart() && fc->getParag() == doc->getFirstParag())
+	  break;
+	
 	draw_buffer = true;
 
 	// HACK
@@ -253,14 +284,19 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	bool del = fc->getParag()->deleteText(tmpTextPos,1); 
 	bool joined = false;
 
-	if (!del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext())
+	if (!del && fc->getParag()->getTextLen() == 0/* && fc->getParag()->getNext()*/)
 	  {
-	    KWParag *p = fc->getParag()->getNext();
+	    debug("here");
+	    KWParag *p = fc->getParag()->getPrev();
 	    doc->deleteParag(fc->getParag());
-	    if (p) fc->init(p,painter);
+	    if (p) 
+	      {
+		fc->init(p,painter);
+		tmpTextPos = p->getTextLen();
+	      }
 	  }
 
-	if (!del && fc->getParag()->getTextLen() > 0)
+	else if (!del && fc->getParag()->getTextLen() > 0)
 	  {
 	    KWParag *p = fc->getParag()->getPrev();
 	    doc->joinParag(fc->getParag()->getPrev(),fc->getParag());
@@ -288,8 +324,16 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	if (!joined)
 	  {
-	    fc->cursorGotoPos(tmpTextPos + 1,painter);
-	    fc->cursorGotoLeft(painter);
+	    if (!del)
+	      {
+		// HACK
+		fc->gotoStartOfParag(painter);
+		fc->cursorGotoLineStart(painter);
+		for (unsigned int i = 0;i < paraLen - 1;i++)
+		  fc->cursorGotoRight(painter);
+	      }
+	    else
+	      fc->cursorGotoPos(tmpTextPos,painter);
 	  }
 	else
 	  {
@@ -311,8 +355,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	char tmpString[2] = {0,0};
 	tmpString[0] = (char)e->ascii();
 	unsigned int tmpTextPos = fc->getTextPos();
-	fc->getParag()->insertText(fc->getTextPos(),tmpString); 
-	fc->getParag()->setFormat(fc->getTextPos(),format); 
+	fc->getParag()->insertText(fc->getTextPos(),tmpString);
+	fc->getParag()->setFormat(fc->getTextPos(),1,format);
 	fc->makeLineLayout(painter);
 	KWFormatContext paintfc(doc);
 	paintfc = *fc;
@@ -481,38 +525,6 @@ void KWPage::scroll(int dx,int dy)
 /*================================================================*/
 void KWPage::formatChanged(KWFormat &_format)
 {
-//   if (format.getColor() == _format.getColor())
-//     format.setColor(QColor());
-//   else
-//     format.setColor(_format.getColor());
-
-//   if (format.getUserFont() && _format.getUserFont() && *format.getUserFont() == *_format.getUserFont())
-//     format.setUserFont(0L);
-//   else
-//     format.setUserFont(_format.getUserFont());
-      
-//   if (format.getWeight() == _format.getWeight())
-//     format.setWeight(-1);
-//   else
-//     format.setWeight(_format.getWeight());
-
-//   if (format.getItalic() == _format.getItalic())
-//     format.setItalic(-1);
-//   else
-//     format.setItalic(_format.getItalic());
-
-//   if (format.getUnderline() == _format.getUnderline())
-//     format.setUnderline(-1);
-//   else
-//     format.setUnderline(_format.getUnderline());
-
-//   if (format.getPTFontSize() == _format.getPTFontSize())
-//     format.setPTFontSize(-1);
-//   else
-//     format.setPTFontSize(_format.getPTFontSize());
-
-  // Reggie: This is not nice. I'll make a better implementation
-
   format = _format;
 }
 
