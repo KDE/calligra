@@ -90,7 +90,6 @@ void RTFTokenizer::next()
 	}
 	ch = *fileBufferPtr++;
 
-        QCString binTest;
 	// Type is either control word or control symbol
 	if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
 	{
@@ -100,12 +99,11 @@ void RTFTokenizer::next()
 	    while ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
 	    {
 		*_text++ = ch;
-                binTest += ch;
 
 		if (fileBufferPtr == fileBufferEnd)
 		{
 		    int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
-	
+
 		    if (n <= 0)
 		    {
 			ch = ' ';
@@ -164,9 +162,9 @@ void RTFTokenizer::next()
 		--fileBufferPtr;
 	    }
 
-            if ( binTest == "bin" )
+            *_text = 0; // Just put an end of string for the test, it can then be over-written again
+            if ( !qstrncmp( tokenText.data()+1, "bin", 4 ) ) // Test the NULL too to avoid catching keywords starting with "bin"
             {   // We have \bin, so we need to read the bytes
-                *_text = 0; //DEBUG
                 kdDebug(30515) << "Token:" << tokenText << endl;
                 if (value > 0)
                 {
@@ -188,7 +186,7 @@ void RTFTokenizer::next()
                             fileBufferPtr = (uchar *)fileBuffer.data();
                             fileBufferEnd = (fileBufferPtr + n);
                         }
-                        binaryData[i]=*fileBufferPtr++; // ###TODO: end of file
+                        binaryData[i]=*fileBufferPtr++;
                     }
                 }
                 else
