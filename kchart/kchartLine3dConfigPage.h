@@ -26,6 +26,7 @@ private:
     KChartParams* _params;
     KIntNumInput* angle3dX;
     KIntNumInput* angle3dY;
+    KIntNumInput* lineWidth;
     KDoubleNumInput* depth;
     QCheckBox* line3d, *drawShadowColor;
 };

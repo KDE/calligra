@@ -30,36 +30,42 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
 
   connect(line3d, SIGNAL(toggled ( bool )),this,SLOT(slotChange3DParameter(bool)));
 
-  drawShadowColor=new QCheckBox(i18n("Draw Shadow color"),gb);
-  grid1->addWidget(drawShadowColor,1,0);
+  QLabel *tmpLabel = new QLabel( i18n( "Line Width:" ), gb );
+  grid1->addWidget(tmpLabel,1,0);
 
-  QLabel *tmpLabel = new QLabel( i18n( "Rotation around the X axis in degrees:" ), gb );
+  lineWidth=new KIntNumInput(0, gb, 10);
+  grid1->addWidget(lineWidth,1,1);
+
+  drawShadowColor=new QCheckBox(i18n("Draw Shadow color"),gb);
+  grid1->addWidget(drawShadowColor,2,0);
+
+  tmpLabel = new QLabel( i18n( "Rotation around the X axis in degrees:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   tmpLabel->setAlignment(Qt::AlignCenter);
-  grid1->addWidget(tmpLabel,2,0);
+  grid1->addWidget(tmpLabel,3,0);
 
   angle3dX=new KIntNumInput(0, gb, 10);
-  grid1->addWidget(angle3dX,2,1);
+  grid1->addWidget(angle3dX,3,1);
   angle3dX->setRange(0, 90, 1);
 
   tmpLabel = new QLabel( i18n( "Rotation around the Y axis in degrees:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   tmpLabel->setAlignment(Qt::AlignCenter);
-  grid1->addWidget(tmpLabel,3,0);
+  grid1->addWidget(tmpLabel,4,0);
 
   angle3dY=new KIntNumInput(0, gb, 10);
-  grid1->addWidget(angle3dY,3,1);
+  grid1->addWidget(angle3dY,4,1);
   angle3dY->setRange(0, 90, 1);
 
 
   tmpLabel = new QLabel( i18n( "Depth" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   tmpLabel->setAlignment(Qt::AlignCenter);
-  grid1->addWidget(tmpLabel,4,0);
+  grid1->addWidget(tmpLabel,5,0);
 
   depth=new KDoubleNumInput(0, gb);
   depth->resize(100,depth->sizeHint().height());
-  grid1->addWidget(depth,4,1);
+  grid1->addWidget(depth,5,1);
   depth->setRange(0,40, 0.1);
 
   gb->setAlignment(Qt::AlignLeft);
@@ -78,6 +84,7 @@ void KChartLine3dConfigPage::slotChange3DParameter(bool b)
     angle3dY->setEnabled(b);
     depth->setEnabled(b);
     drawShadowColor->setEnabled(b);
+    lineWidth->setEnabled(!b);
 }
 
 void KChartLine3dConfigPage::init()
@@ -88,6 +95,7 @@ void KChartLine3dConfigPage::init()
     angle3dY->setValue( _params->threeDLineYRotation() );
     depth->setValue( _params->threeDLineDepth() );
     drawShadowColor->setChecked(_params->threeDShadowColors());
+    lineWidth->setValue(_params->lineWidth());
     slotChange3DParameter(state);
 }
 
@@ -98,4 +106,5 @@ void KChartLine3dConfigPage::apply()
     _params->setThreeDLineYRotation( angle3dY->value() );
     _params->setThreeDLineDepth( depth->value() );
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
+    _params->setLineWidth( lineWidth->value() );
 }
