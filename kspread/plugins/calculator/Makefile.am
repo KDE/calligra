@@ -13,8 +13,10 @@ libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspreadpart.la
 
 METASOURCES = AUTO
 
-desktop_DATA = kspreadcalc.desktop
-desktopdir = $(kde_servicesdir)
+# Delete old unused file
+install-data-local: uninstall.desktop
+	$(mkinstalldirs) $(DESTDIR)$(kde_servicesdir)
+	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(DESTDIR)$(kde_servicesdir)/kspreadcalc.desktop
 
 rc_DATA = kspreadcalc.rc
 rcdir = $(kde_datadir)/kspread/kpartplugins
