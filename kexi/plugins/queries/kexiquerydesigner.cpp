@@ -75,7 +75,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view, KexiQueryPartItem *item,
 	QStatusBar *status = new QStatusBar(this);
 	gridLayout()->addWidget(status, 1, 0);
 
-//	registerAs(DocumentWindow, item->fullIdentifier());
+	registerAs(DocumentWindow, item->fullIdentifier());
 	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
 
 	item->setClient(this);

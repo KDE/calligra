@@ -1,4 +1,5 @@
 #include "kexikspreadsource.h"
+#include <kdatastream.h>
 #include <qtable.h>
 #include <qfile.h>
 #include <kdebug.h>
@@ -15,6 +16,26 @@
 #include <qobjectlist.h>
 #include <dcopobject.h>
 #include <dcopref.h>
+#include <qregexp.h>
+#include <math.h>
+
+static int util_decodeColumnLabelText( const QString &_col )
+{
+    int col = 0;
+    int offset='a'-'A';
+    int counterColumn = 0;
+    for ( uint i=0; i < _col.length(); i++ )
+    {
+        counterColumn = (int) pow(26.0 , static_cast<int>(_col.length() - i - 1));
+        if( _col[i] >= 'A' && _col[i] <= 'Z' )
+            col += counterColumn * ( _col[i].latin1() - 'A' + 1);  // okay here (Werner)
+        else if( _col[i] >= 'a' && _col[i] <= 'z' )
+            col += counterColumn * ( _col[i].latin1() - 'A' - offset + 1 );
+        else
+            kdDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << "'" << endl;
+    }
+    return col;
+}
 
 
 static QString util_encodeColumnLabelText( int column )
@@ -69,6 +90,8 @@ KexiKSpreadSource::KexiKSpreadSource(QWidget *parent):KexiKSpreadSourceBase(pare
 		l->activate();
 		connect(syncHeader,SIGNAL(clicked()),this,SLOT(syncHeaderSection()));
 		connect(syncDataArea,SIGNAL(clicked()),this,SLOT(syncDataSection()));
+		headerRowColumnRange->installEventFilter(this);
+		dataRange->installEventFilter(this);
 }
 
 
@@ -77,12 +100,120 @@ KexiKSpreadSource::~KexiKSpreadSource() {
 
 void KexiKSpreadSource::syncHeaderSection() {
 	headerRowColumnRange->setText(getRange());	
+//	showRange(headerRowColumnRange->text());
 }
 
 void KexiKSpreadSource::syncDataSection() {
 	dataRange->setText(getRange());
 }
 
+
+bool KexiKSpreadSource::eventFilter ( QObject * watched, QEvent * e ) {
+
+	if (e->type()==QEvent::FocusIn) {
+		showRange(dynamic_cast<QLineEdit*>(watched)->text());
+	}
+	return false;
+}
+
+void KexiKSpreadSource::showRange(const QString& range) {
+	if (!m_kspread) return;
+	if (range.isEmpty()) return;
+
+	//check for valid input
+	QRegExp rangeDescription=QRegExp("\\s*\\w+\\s*\\[\\s*[a-zA-Z]+[0-9]+\\s*\\:\\s*[a-zA-Z]+[0-9]+\\s*\\]\\s*");
+	if (!rangeDescription.exactMatch(range)) {
+		kdDebug()<<range<<" is not a valid KexiKSpreadSource range value"<<endl;
+		return;
+	}
+
+	//retrieve the table name;
+	QRegExp tableNameExpr=QRegExp("\\s*\\w+\\s*\\[");
+	tableNameExpr.search(range);
+	QString tableName=tableNameExpr.capturedTexts()[0];
+	tableName.truncate(tableName.length()-1);
+	tableName=tableName.stripWhiteSpace();
+
+	//retrieve the range begining
+	//col
+	QRegExp startColExpr=QRegExp("\\[\\s*[a-zA-Z]+");
+	startColExpr.search(range);
+	QString startColName=startColExpr.capturedTexts()[0];
+	startColName=startColName.right(startColName.length()-1);
+	startColName=startColName.stripWhiteSpace().upper();
+	int startCol=util_decodeColumnLabelText(startColName);
+	//row
+	QRegExp startLineExpr=QRegExp("[0-9]+\\s*\\:");
+	startLineExpr.search(range);
+	QString startRowName=startLineExpr.capturedTexts()[0];
+	startRowName.truncate(startRowName.length()-1);
+	startRowName=startRowName.stripWhiteSpace();
+	int startRow=startRowName.toInt();
+
+	//retrieving the range ending
+	//col
+	QRegExp endColExpr=QRegExp("\\:\\s*[a-zA-Z]+");
+	endColExpr.search(range);
+	QString endColName=endColExpr.capturedTexts()[0];
+	endColName=endColName.right(endColName.length()-1).stripWhiteSpace().upper();
+	int endCol=util_decodeColumnLabelText(endColName);
+	//row
+	QRegExp endRowExpr=QRegExp("[0-9]+\\s*\\]");
+	endRowExpr.search(range);
+	QString endRowName=endRowExpr.capturedTexts()[0];
+	endRowName.truncate(endRowName.length()-1);
+	endRowName.stripWhiteSpace();
+	int endRow=endRowName.toInt();
+
+	showRange(tableName,startCol,startRow,endCol,endRow);
+}
+
+void KexiKSpreadSource::showRange(const QString& tableName, int startCol, int startRow, int endCol, int endRow) {
+	// get view dcop reference
+        QByteArray param;
+        QByteArray data;
+        QCString retType;
+        QDataStream streamOut(param,IO_WriteOnly);
+        streamOut<<((int)0);
+        if (!m_kspread->dcopObject()->process("view(int)",param,retType,data)) {
+                kdDebug()<<"Error, can't get DCOPRef to view object (1)"<<endl;
+                return ;
+        }
+
+        if (retType!="DCOPRef") {
+                kdDebug()<<"Error, can't get DCOPRef to view object (2)"<<endl;
+                return ;
+        }
+        QDataStream streamIn(data,IO_ReadOnly);
+        DCOPRef viewRef;
+        streamIn>>viewRef;
+
+	// make sure the needed table is shown
+        DCOPReply res1=viewRef.call("showTable",tableName);
+        if (!res1.isValid()) {
+                kdDebug()<<"Error, can't show table"<<endl;
+                return ;
+        }
+	
+	if (!((bool)res1)) {
+                kdDebug()<<"Error, can't show table, table unknown"<<endl;
+		return;
+	}
+	kdDebug()<<"Table is now visible"<<endl;
+
+	QRect selRec=QRect(startCol,startRow,1+endCol-startCol,1+endRow-startRow);
+        res1=viewRef.call("setSelection",selRec);
+        if (!res1.isValid()) {
+		kdDebug()<<"Error while setting kspread selection"<<endl;
+                return ;
+        }
+	
+
+//        DCOPRef tableRef=res1;
+//        QString tableName=tableRef.call("name");
+
+
+}
 
 QString KexiKSpreadSource::getRange() {
 	if (!m_kspread) return "";
@@ -120,8 +251,8 @@ QString KexiKSpreadSource::getRange() {
 	}
 		
 	QRect sel=res;
-	return QString ("%1!%2%3 : %4!%5%6").arg(tableName).arg(util_encodeColumnLabelText(sel.x()))
-		.arg(sel.y()).arg(tableName).arg(util_encodeColumnLabelText(sel.x()+sel.width()-1))
+	return QString ("%1[%2%3 : %4%5]").arg(tableName).arg(util_encodeColumnLabelText(sel.x()))
+		.arg(sel.y()).arg(util_encodeColumnLabelText(sel.x()+sel.width()-1))
 		.arg(sel.y()+sel.height()-1);
 	
 

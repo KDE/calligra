@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
@@ -49,7 +50,7 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget, public KXMLGUIClient
 		KexiDialogBase(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent = 0, const char *name = 0 );
 		~KexiDialogBase();
 
-//		virtual KXMLGUIClient *guiClient();
+		virtual KXMLGUIClient *guiClient();
 
 		virtual void activateActions();
 		virtual void deactivateActions();
@@ -82,6 +83,7 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget, public KXMLGUIClient
 		KexiProjectHandler *part();
 
 		virtual QSize sizeHint () const;
+		const QString& identifier() {return m_identifier;}
 	public slots:
 		virtual void show();
 		virtual void hide();
@@ -100,8 +102,8 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget, public KXMLGUIClient
 		void setCustomWindowTypeName( const QString &tn );
 
 		virtual void focusInEvent ( QFocusEvent *);
-//		enum WindowType {ToolWindow, DocumentWindow};
-//		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
+		enum WindowType {ToolWindow, DocumentWindow};
+		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
 		void registerChild(QWidget *w);
 		virtual void closeEvent(QCloseEvent *ev);
 		virtual void hideEvent(QHideEvent *ev);
@@ -127,9 +129,9 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget, public KXMLGUIClient
 			\sa set
 		*/
 		QString m_windowTypeName;
-//		QDockWindow *w;
+		QDockWindow *w;
 		bool	m_registered;
-//		enum	WindowType m_wt;
+		enum	WindowType m_wt;
 		bool	m_registering;
 		QString	m_contextTitle;
 		QString	m_contextMessage;

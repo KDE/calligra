@@ -95,7 +95,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		//gui
 		KexiDataTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
-
+		bool m_embed;
 # ifndef KEXI_NO_DATATABLE_SEARCH
 		//search stuff
 		QLineEdit	*m_search;

@@ -44,7 +44,7 @@ QPtrList<KexiDialogBase> *KexiDialogBase::s_DocumentWindows=0;
 QPtrList<KexiDialogBase> *KexiDialogBase::s_ToolWindows=0;
 
 KexiDialogBase::KexiDialogBase(KexiView* view, QString identifier, QWidget *parent, const char *name) 
-	: QWidget(parent ? parent : view->workspaceWidget(), 
+	: QWidget(parent, 
 		name ? name : identifier.latin1(), WDestructiveClose)
 	,KXMLGUIClient()
 	,m_view(view)
@@ -67,7 +67,7 @@ KexiDialogBase::KexiDialogBase(KexiView* view, QString identifier, QWidget *pare
 }
 
 KexiDialogBase::KexiDialogBase(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent, const char *name )
-	: QWidget(parent ? parent : view->workspaceWidget(), 
+	: QWidget(parent, 
 		name ? name : item->fullIdentifier().latin1(), WDestructiveClose)
 	,KXMLGUIClient()
  //	: KexiDialogBase(view,parent, item->fullIdentifier().latin1())
@@ -97,24 +97,10 @@ void KexiDialogBase::init()
 	//resize to fit inside the workspace
 	QWidget * wid = m_view->workspaceWidget();
 
-/*	QSize new_size = frameSize();
-  int aaa = m_view->statusBar()->height();
-	int max_w = m_view->workspaceWidget()->width() - 10;
-	int max_h = m_view->workspaceWidget()->height() - 10 - m_view->statusBar()->height();
-	if (max_h < 0 || max_h < new_size.height())
-		max_h = new_size.height();
-//	QSize max_size = m_view->workspaceWidget()->size()-QSize(10,10+m_view->statusBar()->height());
-//	if (new_size.width() > max_size.width())
-//		new_size.setWidth( max_w );
-//	if (new_size.height() > max_size.height())
-		//new_size.setHeight( max_h );
-//	if (new_size!=frameSize())
-///		resize(max_w, max_h);
-*/
 //	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
-//  m_registering=false;
+  m_registering=false;
 
-//js	m_view->workspace()->activateView(this);
+//	m_view->workspace()->activateView(this);
 	if(!m_identifier.isEmpty())
 	{
 		m_view->registerDialog(this, m_identifier);
@@ -142,9 +128,11 @@ void KexiDialogBase::setCustomWindowTypeName( const QString &tn )
 
 QSize KexiDialogBase::sizeHint() const
 {
-	QWidget *wi = parentWidget();
+	if (!parentWidget()) return QWidget::sizeHint();
+/*	QWidget *wi = parentWidget();
 	if (parentWidget()->isA("QDockWindow"))
-		return QWidget::sizeHint();
+		return QWidget::sizeHint();*/
+	if (m_wt==ToolWindow) return QWidget::sizeHint();
 	QSize new_size = frameSize();
 	int max_w = m_view->workspaceWidget()->width() - 10;
 	int max_h = m_view->workspaceWidget()->height() - 10 - m_view->statusBar()->height();
@@ -230,11 +218,12 @@ const QString& KexiDialogBase::contextHelpMessage() const {
 	return m_contextMessage;
 }
 
-/*
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &identifier)
 {
 	m_wt=wt;
 	m_registered=true;
+
+	if (parentWidget()) return;
 	if (wt==ToolWindow)
 	{
 		w=new QDockWindow(m_view->mainWindow());
@@ -247,6 +236,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 		kexiView()->addQDockWindow(w);
 		return;
 	}
+
 	m_registering=true;
 
   //resize to fit inside the workspace
@@ -270,50 +260,9 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 	}
 //	showMaximized();
 	return;
-#if 0
-	myDock=0;
-	if (! ((m_mainWindow->windowMode()==KexiView::MDIWindowMode) && (wt==DocumentWindow)))
-        {
-		myDock=m_mainWindow->createDockWidget( "Widget",
-			(icon()?(*(icon())):SmallIcon("kexi")), 0, caption());
-		myDock->setWidget(this);
-		myDock->setEnableDocking(KDockWidget::DockFullDocking);
-		myDock->setDockSite(KDockWidget::DockFullDocking);
-		myDock->setDockWindowType(NET::Normal);
-		myDock->setDockWindowTransient(m_mainWindow,true);
-	}
-	if (wt==DocumentWindow) {
-		if (myDock!=0) {
-			if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0)) {
-				if (m_mainWindow->windowMode()==KexiView::SingleWindowMode)
-					myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
-				else
-					myDock->toDesktop();
-			}
-			else
-				myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
-		}
-		s_DocumentWindows->insert(0,this);
-		s_activeDocumentWindow=this;
-	}
-	else {
-		if ((s_activeToolWindow==0) || (s_activeToolWindow->myDock==0)) {
-			if ( (m_mainWindow->windowMode()==KexiView::SingleWindowMode) ||
-				(m_mainWindow->windowMode()==KexiView::MDIWindowMode))
-				myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockLeft, 20);
-			else
-				myDock->toDesktop();
-		}
-		else
-			myDock->manualDock(s_activeToolWindow->myDock,KDockWidget::DockCenter);
-		s_ToolWindows->insert(0,this);
-		s_activeToolWindow=this;
-	}
-
-	if (myDock) myDock->makeDockVisible();
-#endif
 }
-*/
+
+
 void KexiDialogBase::focusInEvent ( QFocusEvent *)
 {
 	kdDebug()<<"KexiDialogBase::FocusInEvent()"<<endl;
@@ -326,8 +275,8 @@ void KexiDialogBase::focusInEvent ( QFocusEvent *)
 }
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
 {
-//	if ((m_wt!=ToolWindow) && m_registered)
-	if (m_registered)
+	if ((m_wt!=ToolWindow) && m_registered)
+///	if (m_registered)
 	{
 		m_view->workspace()->slotWindowActivated(0);
 	}
@@ -431,11 +380,9 @@ void KexiDialogBase::showEvent(QShowEvent *ev)
 		m_toggleAction->setChecked(true);
 }
 
-/*KXMLGUIClient *KexiDialogBase::guiClient() { 
-	if (!m_guiClient)
-		kdWarning() << "KexiDialogBase::guiClient() empty!" << endl;
-	return m_guiClient;
-}*/
+KXMLGUIClient *KexiDialogBase::guiClient() { 
+	return this;	
+}
 
 KexiProjectHandler *KexiDialogBase::part() { return m_partItem ? m_partItem->handler() : 0; }
 

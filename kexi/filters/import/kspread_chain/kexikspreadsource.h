@@ -21,6 +21,10 @@ public:
 	virtual KexiDBTable tableStructure();
 	virtual QPtrList<QWidget> tableSourceWidgets(QWidget*){}
 	QString getRange();
+	void showRange(const QString& range);
+	void showRange(const QString&,int,int,int,int);
+protected:
+	virtual bool eventFilter ( QObject * watched, QEvent * e );
 protected slots:
 	void syncHeaderSection();
 	void syncDataSection();

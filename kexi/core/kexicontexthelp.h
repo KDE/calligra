@@ -34,7 +34,6 @@ class KEXICORE_EXPORT KexiContextHelp : public KexiDialogBase
 		KexiContextHelp(KexiView *view, QWidget *parent=0, const char *name=0);
 		~KexiContextHelp();
                 void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
-		KXMLGUIClient *guiClient();
 	private slots:
 		void linkClickedInternal(const QString &link);
 
@@ -43,7 +42,6 @@ class KEXICORE_EXPORT KexiContextHelp : public KexiDialogBase
 
 	private:
 		KoContextHelpWidget *m_widget;
-		KXMLGUIClient *m_guiClient;
 		KToggleAction	*m_action;
 };
 

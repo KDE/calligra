@@ -47,7 +47,7 @@ class KexiKugarDesignerWrapper : public KexiDialogBase
 			QWidget *parent=0, bool newrep=false);
 		~KexiKugarDesignerWrapper();
 		
-//		virtual KXMLGUIClient *guiClient();
+		virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
 		bool initFailed();
@@ -57,7 +57,7 @@ class KexiKugarDesignerWrapper : public KexiDialogBase
 	
 	private:
 		KoView *m_view;
-//		KexiKugarHandlerItem *m_item;
+		KexiKugarHandlerItem *m_item;
 		bool m_initFailed;
 };
 

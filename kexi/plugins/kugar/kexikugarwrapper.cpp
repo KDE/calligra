@@ -53,14 +53,14 @@ KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item,
 
 KexiKugarWrapper::~KexiKugarWrapper(){}
 
-/*
+
 KXMLGUIClient *KexiKugarWrapper::guiClient()
 {
 	if (m_part==0) kdDebug()<<"That shouldn't happen"<<endl;
 	return m_part;
 //	return new KXMLGUIClient();
 //	return 0;
-}*/
+}
 
 void KexiKugarWrapper::activateActions()
 {

@@ -52,17 +52,17 @@
 #include "kexiprojecthandleritem.h"
 
 KexiDataTable::KexiDataTable(KexiView *view, QString caption, QString identifier, 
-	QWidget *parent, bool embedd)
-	: KexiDialogBase(view, identifier, parent, identifier.latin1())
+	QWidget *parent, bool embed)
+	: KexiDialogBase(view, identifier, parent, identifier.latin1()),m_embed(embed)
 {
 	init(/*caption, identifier, embedd*/);
 	setCustomCaption(caption);
 }
 
 KexiDataTable::KexiDataTable(KexiView *view, KexiProjectHandlerItem *item, 
-	QWidget *parent, bool embedd)
+	QWidget *parent, bool embed)
 //	: KexiDialogBase(view, parent, item->fullIdentifier().latin1())
-	: KexiDialogBase(view, item, parent)
+	: KexiDialogBase(view, item, parent),m_embed(embed)
 {
 //	init(item->title(), item->fullIdentifier(), embedd);
 	init();
@@ -115,8 +115,8 @@ KexiDataTable::init(/*QString caption, QString identifier, bool embedd*/)
 
 //	m_first = true;
 
-//js	if(!embedd)
-//js		registerAs(DocumentWindow, identifier);
+	if(!m_embed)
+		registerAs(DocumentWindow, m_identifier);
 //js	else
 //js		m_statusBar->hide();
 

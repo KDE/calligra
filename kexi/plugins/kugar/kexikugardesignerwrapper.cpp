@@ -35,19 +35,20 @@
 KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view,  
 	KexiKugarHandlerItem *item, QWidget *parent, bool newrep)
 	: KexiDialogBase(view, item, parent)
-	,m_view(0),m_initFailed(false)
+	,m_view(0),m_initFailed(false), m_item(item)
 {
 //	setCaption(i18n("Edit Report %1").arg(m_item->title()));
 
 //	KIconLoader *iloader = KGlobal::iconLoader();
 //	setIcon(iloader->loadIcon("form", KIcon::Small));
 
-	(new QVBoxLayout(this))->setAutoAdd(true);
+//	(new QVBoxLayout(this))->setAutoAdd(true);
+	gridLayout()->setAutoAdd(true);
 //	m_part->openURL("/usr/src/kde3/koffice/kugar/samples/sample1.kud");
 //	part->widget()->show();
 	setMinimumWidth(50);
 	setMinimumHeight(50);
-//	registerAs(DocumentWindow);
+	registerAs(DocumentWindow);
 }
 
 KexiKugarDesignerWrapper::~KexiKugarDesignerWrapper(){}
@@ -64,8 +65,6 @@ void KexiKugarDesignerWrapper::getPath(QString &path) {
 	path=tempPath;
 }
 
-/*
-//TODO..
 KXMLGUIClient *KexiKugarDesignerWrapper::guiClient()
 {
 	kdDebug()<<"KexiKugarDesignerWrapper::guiClient()"<<endl;
@@ -74,22 +73,22 @@ KXMLGUIClient *KexiKugarDesignerWrapper::guiClient()
 	kdDebug()<<"Shell window does NOT exist"<<endl;
 	if (!m_view) {
 		 kdDebug()<<"Creating KuDesigner VIEW *******"<<endl;
-		 m_view=m_partItem->designer()->createView(this,"");
+		 m_view=m_item->designer()->createView(this,"");
 		 m_view->show();
 		 KParts::GUIActivateEvent ev(true);
-		 QApplication::sendEvent(m_partItem->designer(),&ev);
+		 QApplication::sendEvent(m_item->designer(),&ev);
 		 QApplication::sendEvent(m_view,&ev);
 	}
 	//if (m_view==0) kdDebug()<<"That shouldn't happen"<<endl;
 	return m_view;
 //	return new KXMLGUIClient();
 //	return 0;
-}*/
+}
 
 void KexiKugarDesignerWrapper::activateActions()
 {
 		 KParts::GUIActivateEvent ev(true);
-		 QApplication::sendEvent(static_cast<KexiKugarHandlerItem*>(m_partItem)->designer(),&ev);
+		 QApplication::sendEvent(static_cast<KexiKugarHandlerItem*>(m_item)->designer(),&ev);
 		 QApplication::sendEvent(m_view,&ev);
 
 }
@@ -97,7 +96,7 @@ void KexiKugarDesignerWrapper::activateActions()
 void KexiKugarDesignerWrapper::deactivateActions()
 {
 		 KParts::GUIActivateEvent ev(false);
-		 QApplication::sendEvent(static_cast<KexiKugarHandlerItem*>(m_partItem)->designer(),&ev);
+		 QApplication::sendEvent(static_cast<KexiKugarHandlerItem*>(m_item)->designer(),&ev);
 		 QApplication::sendEvent(m_view,&ev);
 
 }

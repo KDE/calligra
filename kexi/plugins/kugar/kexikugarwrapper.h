@@ -44,7 +44,7 @@ class KexiKugarWrapper : public KexiDialogBase
 			const QString& path, QWidget *parent = 0);
 		~KexiKugarWrapper();
 
-//                virtual KXMLGUIClient *guiClient();
+                virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
 
