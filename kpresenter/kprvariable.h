@@ -39,7 +39,6 @@ public:
     virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll,
                                         KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,
                                         int _correct, bool _forceDefaultFormat=false );
-    QPtrList<KAction> variableActionList();
 };
 
 /**

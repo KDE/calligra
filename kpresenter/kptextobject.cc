@@ -1986,7 +1986,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     view->kPresenterDoc()->getVariableCollection()->setVariableSelected(variable());
     if ( variable() )
     {
-        variableList = view->kPresenterDoc()->getVariableCollection()->variableActionList();
+        variableList = variable()->variableActionList();
     }
     if( variableList.count()>0)
     {

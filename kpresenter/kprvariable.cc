@@ -87,11 +87,6 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     }
 }
 
-QPtrList<KAction> KPrVariableCollection::variableActionList()
-{
-    return selectedVariable()->actionList();
-}
-
 
 KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
                                     KoVariableCollection *_varColl, KPresenterDoc *doc  )
@@ -337,7 +332,7 @@ QPtrList<KAction> KPrTimeVariable::actionList()
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
             KToggleAction * act = new KToggleAction( (*it));
-            if ( i == m_subtype)
+            if ( i == m_subtype )
                 act->setChecked( true );
 
             connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
