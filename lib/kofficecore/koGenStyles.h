@@ -216,7 +216,6 @@ public:
         m_attributes.insert( attrName, attrValue ? "true" : "false" );
     }
 
-    void addAttributePt( const QString& attrName, int attrValue );
     void addAttributePt( const QString& attrName, double attrValue );
 
     /**
