@@ -59,6 +59,7 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 		
 		return 0;
 	}
+	return 0;
 }
 
 bool
@@ -191,11 +192,13 @@ MySqlDB::query(QString statement)
 	const char *query = statement.latin1();
 	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
 	{
-		return true;
+		if(mysql_errno(m_mysql) == 0)
+			return true;
 	}
 	else
 	{
 		kdDebug() << "MySqlDB::query() error: " << mysql_error(m_mysql) << endl;
+		return false;
 	}
 	return false;
 }

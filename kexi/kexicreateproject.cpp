@@ -98,7 +98,7 @@ KexiCreateProject::next()
 			KWizard::next();
 		}
 	}
-	else if(currentPage() == m_pageAuth)
+	else if(currentPage() == m_pageLocation)
 	{
 		kdDebug() << "KexiCreateProject::next(): time to connect..." << endl;
 		QString engine = m_pageEngine->data("engine").toString();

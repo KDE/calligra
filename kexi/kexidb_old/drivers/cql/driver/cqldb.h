@@ -23,7 +23,15 @@ Boston, MA 02111-1307, USA.
 #include <kexidb.h>
 #include <kexidbresult.h>
 
+class CqlDB : public KexiDB
+{
+	Q_OBJECT
 
+	CqlDB(QObject *parent=0, const char *name="cql", const QStringList &args=QStringList());
+	~CqlDB();
+
+
+};
 
 #endif
 

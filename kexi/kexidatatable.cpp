@@ -86,6 +86,11 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 
 	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
 	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+	if(!m_record)
+	{
+		KMessageBox::error(this, i18n("SQL Error"), i18n("databrowser"));
+		return;
+	}
 
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
