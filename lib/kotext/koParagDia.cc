@@ -1127,8 +1127,8 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const 
     QGridLayout *grid = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QVGroupBox * AlignGroup = new QVGroupBox( i18n( "Alignment" ), this );
-        
-    QLabel * lAlign = new QLabel( i18n( "Align:" ), AlignGroup );
+
+    /*QLabel * lAlign =*/ new QLabel( i18n( "Align:" ), AlignGroup );
 //    AlignGroup->addWidget( lAlign, 0, 0 );
 
     rLeft = new QRadioButton( i18n( "&Left" ), AlignGroup );
@@ -1149,7 +1149,7 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const 
 
     clearAligns();
     rLeft->setChecked( true );
-    
+
     grid->addWidget(AlignGroup, 0, 0);
 
     // --------------- End of page /frame ---------------
@@ -1171,7 +1171,7 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const 
     grid->addWidget( endFramePage, 2, 0 );
 
     endFramePage->setEnabled(breakLine);
-    
+
     // --------------- preview --------------------
     prev2 = new KPagePreview2( this, "KPagePreview2" );
     grid->addMultiCellWidget( prev2, 0, 2, 1, 1 );
@@ -1214,7 +1214,7 @@ void KoParagAlignWidget::display( const KoParagLayout & lay )
         case Qt::AlignJustify:
             rJustify->setChecked( true );
             break;
-	    
+
     cKeepLinesTogether->setChecked( lay.pageBreaking & KoParagLayout::KeepLinesTogether );
     cHardBreakBefore->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakBefore );
     cHardBreakAfter->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakAfter );
