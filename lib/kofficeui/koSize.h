@@ -219,4 +219,12 @@ inline QSize KoSize::toQSize() const
   return QSize(qRound(wd), qRound(ht));
 }
 
+/******************************
+  kdDebug support
+*******************************/
+#include <kdebug.h>
+
+inline kdbgstream operator<<( kdbgstream str, const KoSize & sz )  { str << "[" << sz.width() << "x" << sz.height() << "]"; return str; }
+inline kndbgstream operator<<( kndbgstream str, const KoSize & )  { return str; }
+
 #endif
