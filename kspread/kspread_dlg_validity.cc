@@ -63,6 +63,8 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     listType+=i18n("All");
     listType+=i18n("Number");
     listType+=i18n("Text");
+    listType+=i18n("Date");
+    listType+=i18n("Time");
     chooseType->insertStringList(listType);
     chooseType->setCurrentItem(0);
 
@@ -165,6 +167,8 @@ switch(_index)
                 chooseAction->setEnabled(false);
                 break;
         case 2:
+        case 3:
+        case 4:
                 val_max->setEnabled(false);
                 val_min->setEnabled(false);
                 edit1->setEnabled(false);
@@ -234,6 +238,12 @@ void KSpreadDlgValidity::init()
                         break;
                 case Allow_Text:
                         chooseType->setCurrentItem(2);
+                        break;
+                case Allow_Date:
+                        chooseType->setCurrentItem(3);
+                        break;
+                case Allow_Time:
+                        chooseType->setCurrentItem(4);
                         break;
                 default :
                         chooseType->setCurrentItem(0);
@@ -310,6 +320,12 @@ else
                         break;
                 case 2:
                         result.m_allow=Allow_Text;
+                        break;
+                case 3:
+                        result.m_allow=Allow_Date;
+                        break;
+                case 4:
+                        result.m_allow=Allow_Time;
                         break;
                 default :
                         break;

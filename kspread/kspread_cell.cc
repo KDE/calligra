@@ -3620,8 +3620,18 @@ if(m_Validity!=0)
                 {
                  if(!isValue() && !isBool() && !isDate() && !isTime())
                         valid=true;
-
                 }
+        else if(m_Validity->m_allow==Allow_Time)
+                {
+                 if(isTime())
+                        valid=true;
+                }
+        else if(m_Validity->m_allow==Allow_Date)
+                {
+                 if(isDate())
+                        valid=true;
+                }
+
         }
 else
         valid= true;
