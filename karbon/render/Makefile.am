@@ -29,7 +29,7 @@ libvpainter_la_SOURCES = \
 	art_render_misc.c \
 	art_rgb_svp.c \
 	art_rgb.c \
-	art_rgba_affine.cc \
+	art_rgba_affine.c \
 	vkopainter.cc
 
 libvpainter_la_METASOURCES = \
