@@ -2056,54 +2056,54 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </chapter>
 <!-- **************************************************************************************************** -->   
 <chapter id="Appendix"><title>Appendix</title>
-<sect1 id="Glossery"><title>Glossary</title><para></para>
-<variablelist>
-<varlistentry><term><anchor id="defascii">ASCII</term><listitem><para>Stands for STUFF.  KWord can read and write documents in ASCII format.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defaspectratio">Aspect Ratio</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defbinarycode">Binary code</term><listitem><para>Binary code is the actual instructioins for the computer.  </para></listitem></varlistentry>
-<varlistentry><term><anchor id="defbitmap">Bitmap Image</term><listitem><para>Bit mapped images are composed of individual dots.  The filenames of pictures often end in jpeg, png or gif.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defcell">Cells</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defclipart">Clipart</term><listitem><para>Clip art refers to vector based graphics.   </para></listitem></varlistentry>
-<varlistentry><term><anchor id="defclipboard">Clipboard</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defcompiling">Compiling</term><listitem><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defcustomvariables">Custom Variables</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defdeb">DEB</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defdialogbox">Dialog Box</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defdtp">DTP</term><listitem><para>Stands for DeskTop Publishing.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="deffaq">FAQ</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deffilemask">File Mask</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deffilter">Filter</term><listitem><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="deffooter">Footer</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defframe">Frame</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defframeset">Frameset</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deffrmaeeditmode">Frame Edit Mode</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defftp">FTP</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defhardframebreak">Hard Frame Break</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defheader">Header</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defhtml">HTML</term><listitem><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defkde2">KDE 2.0</term><listitem><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></listitem></varlistentry>
-<varlistentry><term><anchor id="defkeybinding">Key Binding</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deflandscape">Landscape</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defmaximize">Maximize</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defmenubar">Menubar</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defminimize">Minimize</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defpicture">Picture</term><listitem><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defportrait">Portrait</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defrpm">RPM</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defscalingpicture">Scaling Pictures</term><listitem><para>Whenever you change the size of a graphics image, you are scaling that image.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defserialletter">Serial Letters</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defsourcecode">Source Code</term><listitem><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="deftar">TAR</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deftexteditmode">Text Edit Mode</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deftgz">TGZ</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="deftoolbar">Toolbar</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defvectorimage">Vector Image</term><listitem><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></listitem></varlistentry>
-<varlistentry><term><anchor id="defviews">Views</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term><anchor id="defwysiwyg">WYSIWYG</term><listitem><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></listitem></varlistentry>
-<varlistentry><term><anchor id="defx">X Windows system</term><listitem><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></listitem></varlistentry>
 
-</variablelist>
-</sect1>
+<glossary id="Glossery"><title>Glossary</title><para></para>
+<glossentry><glossterm><anchor id="defascii">ASCII</glossterm><glossdef><para>Stands for "American standard code for information interchange".  This is what many people mean when they say "plain text". KWord can read and write documents in ASCII format.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defaspectratio">Aspect Ratio</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defbinarycode">Binary code</glossterm><glossdef><para>Binary code is the actual instructions for the computer.  So if we refer to "binaries" we mean the executable &KWord; program.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defbitmap">Bitmap Image</glossterm><glossdef><para>Bit mapped images are composed of individual dots.  The filenames of such pictures often end in jpeg, png or gif.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defcell">Cells</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defclipart">Clipart</glossterm><glossdef><para>Clip art refers to vector based graphics.  </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defclipboard">Clipboard</glossterm><glossdef><para>The clipboard is where you're cut or copied selection is stored, so it later can be "pasted".  </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defcompiling">Compiling</glossterm><glossdef><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defcustomvariables">Custom Variables</glossterm><glossdef><para>Using custom variables you can store certain values (e.g. numbers or text) for later use in your document or in a script.  If you want to find out more about custom variables, see STUFF (link to manual).</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defdeb">DEB</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defdialogbox">Dialog Box</glossterm><glossdef><para>A dialog box is a window where you </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defdtp">DTP</glossterm><glossdef><para>Stands for DeskTop Publishing.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffaq">FAQ</glossterm><glossdef><para>Stands for "Frequently Asked Questions" and normally means a document, where those questions are answered. If you have a question to the developers of KOffice, you should always have a look at the FAQ first. You'll find the latest version <ulink url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffilemask">File Mask</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffilter">Filter</glossterm><glossdef><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffooter">Footer</glossterm><glossdef><para>The footer of a page is an area below the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the footer normally are the same for most pages, and changing the footer on one page will change all other pages as well. See <link linkend="defheader">Header</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defframe">Frame</glossterm><glossdef><para>Well, about everything in &KWord; is a frame. Text is always in a text frame. Pictures are in picture frames. Parts are in part frames. A frame is basically just a rectangle that can contain something and often can be moved, resized, deleted etc.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defframeset">Frameset</glossterm><glossdef><para>A frameset is a group of frames which "belong together". If you're writing text that doesn't fit into the first frame of a frameset, it will continue in the next frame belonging to that frameset.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defframeeditmode">Frame Edit Mode</glossterm><glossdef><para>In the "frame edit mode" &KWord; will act on whole <link linkend="defframe">frames</link>, rather than on their content. For example, if you click into a text frame when you're in "frame edit mode", the frame will be selected and can be moved, resized etc. If you're in <link linkend="deftexteditmode">"text edit mode"</link>, the cursor will be placed inside the frame (so "text edit mode" is the way your old word processor probably reacted).</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defftp">FTP</glossterm><glossdef><para>FTP is the "File Transfer Protocol". It's an internet protocol that allows you to retrieve files from so-called FTP servers. If you want to download KOffice from the internet, you'll probably use FTP.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defhardframebreak">Hard Frame Break</glossterm><glossdef><para>Normally, only when your text reaches the end of a frame, &KWord; will automatically continue with the next frame in your current <link linkend="defframeset">frameset</link>. By inserting a hard frame break you can force &KWord; to continue with the next frame at a certain position in your text.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defheader">Header</glossterm><glossdef><para>The header of a page is an area above the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the header normally are the same for most pages, and changing the header on one page will change all other pages as well. See <link linkend="deffooter">Footer</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defhtml">HTML</glossterm><glossdef><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defkde2">KDE 2.0</glossterm><glossdef><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defkeybinding">Key Binding</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deflandscape">Landscape</glossterm><glossdef><para>Landscape is a page orientation with greater width than height, i.e. just how you don't want to print your letters. See <link linkend="defportrait">Portrait</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defmaximize">Maximize</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defmenubar">Menubar</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defminimize">Minimize</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defpicture">Picture</glossterm><glossdef><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defportrait">Portrait</glossterm><glossdef><para>Portrait is a page orientation with greater height than width, i.e. the orientation that's normally used for letters. See <link linkend="deflandscape">Landscape</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defrpm">RPM</glossterm><glossdef><para>RPM is the RedHat package manager, a widely used packaging tool for the linux operating system.  If you still have to get KOffice and your system supports RPM packages, you should get KOffice packages ending in ".rpm". They're very easy to use.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defscalingpicture">Scaling Pictures</glossterm><glossdef><para>Whenever you change the size of a graphics image, you are scaling that image.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defserialletter">Serial Letters</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defsourcecode">Source Code</glossterm><glossdef><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftar">TAR</glossterm><glossdef><para>Tar is a tool used for the archiving of files in so-called "tar-files" which you recognize by their suffix ".tar".  You'll find KOffice source and binary distributions as <link linkend="deftgz">gzipped tar-files</link>. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftargz">tar.gz</glossterm><glossdef><para>See <link linkend="deftgz">TGZ</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftexteditmode">Text Edit Mode</glossterm><glossdef><para>In the "text edit mode" &KWord; will act on the contents of a <link linkend="defframe">frame</link>, rather than on the frame itself. This probably is the way your old word processor worked. See <link linkend="defframeeditmode">frame edit mode</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftgz">TGZ</glossterm><glossdef><para>Files ending in ".tar.gz" or ".tgz" are <link linkend="deftar">tar-files</link> compressed with the gzip program.  You'll find KOffice source and binary distributions in this format. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftoolbar">Toolbar</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defvectorimage">Vector Image</glossterm><glossdef><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defviews">Views</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defwysiwyg">WYSIWYG</glossterm><glossdef><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defx">X Windows system</glossterm><glossdef><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></glossdef></glossentry>
+</glossary>
+
 <sect1 id="Filters"><title>Import/Export Filters</title><para></para>
 <sect2 id="FilterAscii"><title>Ascii Filter</title><para></para></sect2> 
 <sect2 id="FilterHTML"><title>HTML Filter</title><para></para></sect2> 
