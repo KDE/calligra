@@ -17,7 +17,6 @@ noinst_HEADERS = \
 	vinsertknotsdlg.h \
 	vroundcornersdlg.h \
 	vstrokedlg.h \
-	vtransformdlg.h \
 	vwhirlpinchdlg.h
 
 libkarbondialogs_la_SOURCES = \
@@ -29,7 +28,6 @@ libkarbondialogs_la_SOURCES = \
 	vinsertknotsdlg.cc \
 	vroundcornersdlg.cc \
 	vstrokedlg.cc \
-	vtransformdlg.cc \
 	vwhirlpinchdlg.cc
 
 libkarbondialogs_la_METASOURCES = \

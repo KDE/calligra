@@ -83,16 +83,15 @@
 #include "vinsertknotsdlg.h"
 #include "vroundcornersdlg.h"
 #include "vstrokedlg.h"
-#include "vtransformdlg.h"
 #include "vwhirlpinchdlg.h"
 
 // Dockers.
 #include "vcolordocker.h"
 #include "vcontexthelpdocker.h"
+#include "vdocumentdocker.h"
 #include "vstrokedocker.h"
 #include "vtooloptionsdocker.h"
-#include "vcontexthelpdocker.h"
-#include "vdocumentdocker.h"
+#include "vtransformdocker.h"
 
 // ToolBars
 #include "vselecttoolbar.h"
@@ -202,7 +201,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_ColorManager = new VColorDocker( part(), this );
 		m_strokeDocker = new VStrokeDocker( part(), this );
 
-		m_TransformDlg = new VTransformDlg( part(), this );
+		m_TransformDocker = new VTransformDocker( part(), this );
 
 		//create toolbars
 		m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
@@ -237,10 +236,10 @@ KarbonView::~KarbonView()
 		delete( m_flattenDlg );
 		delete( m_roundCornersDlg );
 		delete( m_whirlPinchDlg );
+		
 		delete( m_ColorManager );
-		delete( m_TransformDlg );
-
 		delete( m_strokeDocker );
+		delete( m_TransformDocker );
 	}
 
 	// tools:
@@ -621,44 +620,44 @@ KarbonView::dummyForTesting()
 void
 KarbonView::objectTrafoTranslate()
 {
-	if( m_TransformDlg->isVisible() == false )
+	if( m_TransformDocker->isVisible() == false )
 	{
-		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
-		m_TransformDlg->setTab( Translate );
-		m_TransformDlg->show();
+		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
+		m_TransformDocker->setTab( Translate );
+		m_TransformDocker->show();
 	}
 }
 
 void
 KarbonView::objectTrafoScale()
 {
-	if( m_TransformDlg->isVisible() == false )
+	if( m_TransformDocker->isVisible() == false )
 	{
-		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
-		m_TransformDlg->setTab( Scale );
-		m_TransformDlg->show();
+		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
+		m_TransformDocker->setTab( Scale );
+		m_TransformDocker->show();
 	}
 }
 
 void
 KarbonView::objectTrafoRotate()
 {
-	if( m_TransformDlg->isVisible() == false )
+	if( m_TransformDocker->isVisible() == false )
 	{
-		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
-		m_TransformDlg->setTab( Rotate );
-		m_TransformDlg->show();
+		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
+		m_TransformDocker->setTab( Rotate );
+		m_TransformDocker->show();
 	}
 }
 
 void
 KarbonView::objectTrafoShear()
 {
-	if( m_TransformDlg->isVisible() == false )
+	if( m_TransformDocker->isVisible() == false )
 	{
-		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
-		m_TransformDlg->setTab( Shear );
-		m_TransformDlg->show();
+		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
+		m_TransformDocker->setTab( Shear );
+		m_TransformDocker->show();
 	}
 }
 

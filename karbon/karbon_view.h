@@ -31,7 +31,6 @@
 #include <koUnit.h>
 #include "vcanvas.h"
 
-
 class DCOPObject;
 class QDockArea;
 class QLabel;
@@ -78,6 +77,7 @@ class VStateButton;
 class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
+class VTransformDocker;
 
 #ifdef HAVE_KARBONTEXT
 class VTextTool;
@@ -85,7 +85,6 @@ class VTextTool;
 
 class VTool;
 class VToolBox;
-class VTransformDlg;
 class VWhirlPinchDlg;
 
 
@@ -296,14 +295,14 @@ private:
 	VFlattenDlg* m_flattenDlg;
 	VRoundCornersDlg* m_roundCornersDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
-	VTransformDlg* m_TransformDlg;
 
 	//dockers
 	VColorDocker* m_ColorManager;
 	VContextHelpDocker* m_contextHelpDocker;
-	VToolOptionsDocker* m_toolOptionsDocker;
-	VStrokeDocker* m_strokeDocker;
 	VDocumentDocker* m_documentDocker;
+	VStrokeDocker* m_strokeDocker;
+	VToolOptionsDocker* m_toolOptionsDocker;
+	VTransformDocker* m_TransformDocker;
 
 	//toolbox
 	DCOPObject* m_dcop;
