@@ -822,7 +822,7 @@ void KoMainWindow::slotFilePrintPreview()
 void KoMainWindow::slotConfigureKeys()
 {
     // We need to merge the shell, the doc, and the view's action collections
-    KActionCollection coll( *actionCollection() );
+    KActionPtrList coll( *actionCollection() );
     KoDocument *doc = rootDocument();
     if ( doc )
         coll += *doc->actionCollection();
