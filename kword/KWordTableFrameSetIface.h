@@ -44,6 +44,7 @@ k_dcop:
     //return reference to a cell
     DCOPRef getCell( int pos );
     DCOPRef getCell( unsigned int row, unsigned int col );
+    DCOPRef startEditingCell(unsigned int row, unsigned int col );
 
 private:
     KWTableFrameSet *m_table;
