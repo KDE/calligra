@@ -283,6 +283,8 @@ class KivioView : public KoView
 
     virtual void updateReadWrite( bool readwrite );
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
+    
+    void updatePageStatusLabel();
 
   private:
     KivioCanvas *m_pCanvas;
@@ -352,6 +354,7 @@ class KivioView : public KoView
     KoZoomHandler* m_zoomHandler;
 
     KStatusBarLabel* m_coordSLbl;
+    KStatusBarLabel* m_pageCountSLbl;
 
     Kivio::PluginManager* m_pluginManager;
 

@@ -32,7 +32,7 @@ KAboutData * newKivioAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kivio", I18N_NOOP("Kivio"),
                                            version, description, KAboutData::License_GPL,
-                                           I18N_NOOP("(C) 2000-2004, The Kivio Team"), 0,
+                                           I18N_NOOP("(C) 2000-2005, The Kivio Team"), 0,
                                            "http://www.koffice.org/kivio/");
     aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Maintainer"), "psn@linux.se");
     aboutData->addAuthor("Ian Reinhart Geiser", I18N_NOOP("Development"), "geiseri@kde.org");

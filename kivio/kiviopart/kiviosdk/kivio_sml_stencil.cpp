@@ -39,11 +39,9 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qcolor.h>
-#include <qsimplerichtext.h>
 #include <qpalette.h>
 #include <qrect.h>
 #include <qbitmap.h>
-#include <qstylesheet.h>
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <math.h>

@@ -130,6 +130,7 @@
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
+#define PAGECOUNT_TEXT 0
 
 using namespace Kivio;
 
@@ -145,12 +146,15 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   dcop = 0;
   dcopObject(); // build it
 
+  m_pageCountSLbl = new KStatusBarLabel(i18n("Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
+  addStatusBarItem(m_pageCountSLbl, 0, false);
+
   // Add coords to the statusbar
   QString unit = KoUnit::unitName(m_pDoc->units());
   KoPoint xy(0, 0);
   QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
   .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
-  m_coordSLbl = new KStatusBarLabel(text, 1000);
+  m_coordSLbl = new KStatusBarLabel(text, MOUSEPOS_TEXT);
   addStatusBarItem(m_coordSLbl, 0, true);
 
   // Handle progress information from the doc
@@ -588,7 +592,8 @@ void KivioView::addPage( KivioPage* page )
                     this, SLOT( slotPageHidden( KivioPage* ) ) );
   QObject::connect( page, SIGNAL( sig_PageShown( KivioPage* ) ),
                     this, SLOT( slotPageShown( KivioPage* ) ) );
-
+  
+  updatePageStatusLabel();
 }
 
 void KivioView::insertPage( KivioPage* page )
@@ -606,6 +611,8 @@ void KivioView::removePage( KivioPage *_t )
   m_pTabBar->removeTab( _t->pageName() );
   QString n = m_pDoc->map()->visiblePages().first();
   setActivePage( m_pDoc->map()->findPage( n ) );
+  
+  updatePageStatusLabel();
 }
 
 void KivioView::renamePage()
@@ -690,14 +697,17 @@ void KivioView::changePage( const QString& name )
   	return;
 
   setActivePage(t);
+  updatePageStatusLabel();
 }
 
 void KivioView::insertPage()
 {
-    KivioPage * t =m_pDoc->createPage();
-    m_pDoc->addPage(t);
-    KivioAddPageCommand * cmd = new KivioAddPageCommand(i18n("Insert Page"), t);
-    m_pDoc->addCommand( cmd );
+  KivioPage * t =m_pDoc->createPage();
+  m_pDoc->addPage(t);
+  KivioAddPageCommand * cmd = new KivioAddPageCommand(i18n("Insert Page"), t);
+  m_pDoc->addCommand( cmd );
+  
+  updatePageStatusLabel();
 }
 
 void KivioView::hidePage()
@@ -2245,6 +2255,12 @@ int KivioView::vTextAlign()
   }
 
   return Qt::AlignVCenter;
+}
+
+void KivioView::updatePageStatusLabel()
+{
+  QString text = i18n("Page %1/%2").arg(m_pDoc->map()->pageList().find(activePage()) + 1).arg(m_pDoc->map()->count());
+  m_pageCountSLbl->setText(text);
 }
 
 #include "kivio_view.moc"
