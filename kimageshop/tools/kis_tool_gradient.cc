@@ -91,6 +91,10 @@ void GradientTool::drawLine( const QPoint& start, const QPoint& end )
 
 void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
 {
+  KisImage * img = m_pDoc->current();
+  if (!img)
+	return;
+
   int x1, x2, y1, y2;
 
   x1 = start.x();
@@ -114,8 +118,8 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
   {
     // draw RGB gradient
 
-    uint color;
-    uint mask = m_pDoc->getCurrentLayer()->getPixel( x1, y1 );
+    uint color = 0;
+    uint mask = img->getCurrentLayer()->getPixel( x1, y1 );
 
     mask = color & 0xFF000000;
 
@@ -152,11 +156,11 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
       
       for( int x = x1 ; x < x2 ; x++ )
       {
-        m_pDoc->getCurrentLayer()->setPixel( x, y, color );
+        img->getCurrentLayer()->setPixel( x, y, color );
       }
     }
     
     QRect updateRect( x1, y1, x2, y2 );
-    m_pDoc->compositeImage(updateRect);
+    img->compositeImage(updateRect);
   }
 }

@@ -60,14 +60,6 @@ KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_nam
   KisFrameButton* pbRemoveChannel = new KisFrameButton( buttons );
   pbRemoveChannel->setPixmap( KISBarIcon( "deletelayer" ) );
   connect( pbRemoveChannel, SIGNAL( clicked() ), channeltable, SLOT( slotRemoveChannel() ) );
-  
-  KisFrameButton* pbUp = new KisFrameButton( buttons );
-  pbUp->setPixmap( KISBarIcon( "raiselayer" ) );
-  connect( pbUp, SIGNAL( clicked() ), channeltable, SLOT( slotRaiseChannel() ) );
-
-  KisFrameButton* pbDown = new KisFrameButton( buttons );
-  pbDown->setPixmap( KISBarIcon( "lowerlayer" ) );
-  connect( pbDown, SIGNAL( clicked() ), channeltable, SLOT( slotLowerChannel() ) );
 }
 
 ChannelTable::ChannelTable( QWidget* _parent, const char* _name )
@@ -111,13 +103,10 @@ void ChannelTable::init( KisDoc* doc )
 
   setCellWidth( CELLWIDTH );
   setCellHeight( CELLHEIGHT );
-  m_selected = m_doc->layerList().count() - 1;
+  //  m_selected = m_doc->layerList().count() - 1;
 
   QPopupMenu *submenu = new QPopupMenu();
  
-  submenu->insertItem( i18n( "Upper" ), RAISECHANNEL );
-  submenu->insertItem( i18n( "Lower" ), LOWERCHANNEL );
-
   m_contextmenu = new QPopupMenu();
 
   m_contextmenu->setCheckable(TRUE);
@@ -172,49 +161,23 @@ void ChannelTable::paintCell( QPainter* /*_painter*/, int /*_row*/, int )
 
 void ChannelTable::updateTable()
 {
-  if( m_doc )
-  {
-    m_items = 1;
-    setNumRows( 3 );
-    setNumCols( 1 );
-/*
-    m_items = m_doc->layerList().count();
-    setNumRows( m_items );
-    setNumCols( 1 );
-*/
-  }
-  else
-  {
-    m_items = 0;
-    setNumRows( 0 );
-    setNumCols( 0 );
-  }
+  m_items = 0;
+  setNumRows( 0 );
+  setNumCols( 0 );
   resize( sizeHint() );
 }
 
-void ChannelTable::update_contextmenu( int _index )
+void ChannelTable::update_contextmenu( int  )
 {
-  m_contextmenu->setItemChecked( VISIBLE, m_doc->layerList().at( _index )->isVisible() );
 }
 
 void ChannelTable::selectChannel( int/* _index*/ )
 {
-/*
-  unsigned int currentSel = m_selected;
-  m_selected = -1;
-  updateCell( currentSel, 0 );
-  m_selected = _index;
-  m_doc->setCurrentLayer( m_selected );
-  updateCell( m_selected, 0 );
-*/
+
 }
 
-void ChannelTable::slotInverseVisibility( int _index )
+void ChannelTable::slotInverseVisibility( int  )
 {
-  m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
-  updateCell( _index, 0 );
-  m_doc->compositeImage( m_doc->layerList().at( _index )->imageExtents() );
-  //  m_doc->slotUpdateViews( m_doc->layerList().at( _index )->imageExtents() );
 }
 
 void ChannelTable::slotMenuAction( int _id )
@@ -229,12 +192,6 @@ void ChannelTable::slotMenuAction( int _id )
       break;
     case REMOVECHANNEL:
       slotRemoveChannel();
-      break;
-    case RAISECHANNEL:
-      slotRaiseChannel();
-      break;
-    case LOWERCHANNEL:
-      slotLowerChannel();
       break;
     default:
       cerr << "Michael : unknown context menu action" << endl;
@@ -279,62 +236,10 @@ void ChannelTable::slotRemoveChannel()
 {
 }
 
-void ChannelTable::swapChannels( int a, int b )
-{
-  if( ( m_doc->layerList().at( a )->isVisible() ) &&
-      ( m_doc->layerList().at( b )->isVisible() ) )
-  {
-    QRect l1 = m_doc->layerList().at( a )->imageExtents();
-    QRect l2 = m_doc->layerList().at( b )->imageExtents();
-
-    if( l1.intersects( l2 ) )
-    {
-      QRect rect = l1.intersect( l2 );
- 
-      m_doc->compositeImage( rect );
-      //      m_doc->slotUpdateViews( rect );
-    }
-  }
-}
-
-void ChannelTable::slotRaiseChannel()
-{
-/*
-  unsigned int newpos = m_selected > 0 ? m_selected - 1 : 0;
-
-  if( m_selected != newpos )
-  {
-    m_doc->upperLayer( m_selected );
-    repaint();
-    swapChannels( m_selected, newpos );
-    m_selected = newpos;
-    updateCell( m_selected + 1, 0 );
-    updateCell( m_selected, 0 );
-  }
-*/
-}
-
-void ChannelTable::slotLowerChannel()
-{
-/*
-  unsigned int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
-
-  if( m_selected != newpos )
-  {
-    m_doc->lowerLayer( m_selected );
-    repaint();
-    swapChannels( m_selected, newpos );
-    m_selected = newpos;
-    updateCell( m_selected - 1, 0 );
-    updateCell( m_selected, 0 );
-  }
-*/
-}
-
 void ChannelTable::updateAllCells()
 {
-  for( unsigned int i = 0; i < m_doc->layerList().count(); i++ )
-    updateCell( i, 0 );
+  //for( unsigned int i = 0; i < m_doc->layerList().count(); i++ )
+  //  updateCell( i, 0 );
 }
 
 #include "kis_channelview.moc"

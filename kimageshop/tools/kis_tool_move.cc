@@ -51,27 +51,31 @@ void MoveCommand::unexecute()
 
 void MoveCommand::moveTo( QPoint _pos )
 {
+  KisImage* img = m_pDoc->current();
+  if (!img)
+	return;
+
   QRect oldRect;
   QRect newRect;
   QRect updateRect;
 
-  m_pDoc->setCurrentLayer( m_layer );
+  img->setCurrentLayer( m_layer );
 
-  oldRect = m_pDoc->getCurrentLayer()->imageExtents();
+  oldRect = img->getCurrentLayer()->imageExtents();
   newRect = QRect( _pos, oldRect.size() );
 
-  m_pDoc->moveLayerTo( _pos.x(), _pos.y() );
+  img->moveLayerTo( _pos.x(), _pos.y() );
 
   if( oldRect.intersects( newRect ) )
   {
     updateRect = oldRect.unite( newRect );
 
-    m_pDoc->compositeImage( updateRect );
+    img->compositeImage( updateRect );
   }
   else
   {
-    m_pDoc->compositeImage( oldRect );
-    m_pDoc->compositeImage( newRect );
+    img->compositeImage( oldRect );
+    img->compositeImage( newRect );
   }
 }
 
@@ -88,40 +92,42 @@ MoveTool::~MoveTool()
 
 void MoveTool::mousePress( QMouseEvent *e )
 {
-  if ( m_pDoc->isEmpty() )
-    return;
+  KisImage* img = m_pDoc->current();
+  if (!img)
+	return;
 
   if( e->button() != LeftButton )
     return;
 
-  if( !m_pDoc->getCurrentLayer()->isVisible() )
+  if( !img->getCurrentLayer()->isVisible() )
     return;
 
-  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
+  if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))
     return;
 
   m_dragging = true;
   m_dragStart.setX( e->x() );
   m_dragStart.setY( e->y() );
-  m_layerStart = m_pDoc->getCurrentLayer()->imageExtents().topLeft();
+  m_layerStart = img->getCurrentLayer()->imageExtents().topLeft();
   m_layerPosition = m_layerStart;
 }
 
 void MoveTool::mouseMove( QMouseEvent *e )
 {
-  if ( m_pDoc->isEmpty() )
-    return;
+  KisImage* img = m_pDoc->current();
+  if (!img)
+	return;
 
   if( m_dragging )
   {
     m_dragPosition = e->pos() - m_dragStart;
 
-    QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
-    m_pDoc->moveLayer( m_dragPosition.x(), m_dragPosition.y() );
-    updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
-    m_pDoc->compositeImage( updateRect );
+    QRect updateRect( img->getCurrentLayer()->imageExtents() );
+    img->moveLayer( m_dragPosition.x(), m_dragPosition.y() );
+    updateRect = updateRect.unite( img->getCurrentLayer()->imageExtents() );
+    img->compositeImage( updateRect );
 
-    m_layerPosition = m_pDoc->getCurrentLayer()->imageExtents().topLeft();
+    m_layerPosition = img->getCurrentLayer()->imageExtents().topLeft();
 
     m_dragStart = e->pos();
   }
@@ -129,6 +135,10 @@ void MoveTool::mouseMove( QMouseEvent *e )
 
 void MoveTool::mouseRelease(QMouseEvent *e )
 {
+  KisImage* img = m_pDoc->current();
+  if (!img)
+	return;
+
   if( e->button() != LeftButton )
     return;
 
@@ -138,7 +148,7 @@ void MoveTool::mouseRelease(QMouseEvent *e )
   if( m_layerPosition != m_layerStart )
   {
     MoveCommand *moveCommand = new MoveCommand( m_pDoc,
-      m_pDoc->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
+      img->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
 
     m_pDoc->commandHistory()->addCommand( moveCommand );
   }

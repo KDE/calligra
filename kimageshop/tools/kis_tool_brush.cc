@@ -45,13 +45,13 @@ void BrushTool::setBrush(const KisBrush *_brush)
 
 void BrushTool::mousePress(QMouseEvent *e)
 {
-  if ( m_pDoc->isEmpty() )
-    return;
-
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
-   if( !m_pDoc->getCurrentLayer()->isVisible() )
+  if(!m_pDoc->current())
+    return;
+
+  if(!m_pDoc->current()->getCurrentLayer()->isVisible() )
     return;
 
   m_dragging = true;
@@ -61,11 +61,15 @@ void BrushTool::mousePress(QMouseEvent *e)
   paint(e->pos());
   
   QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-  m_pDoc->compositeImage(updateRect);
+  m_pDoc->current()->compositeImage(updateRect);
 }
 
 bool BrushTool::paint(QPoint pos)
 {
+  KisImage * img = m_pDoc->current();
+  if (!img)
+	return false;
+
   if (!m_pBrush)
     return false;
 
@@ -75,17 +79,17 @@ bool BrushTool::paint(QPoint pos)
 
   QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
 
-  if (!clipRect.intersects(m_pDoc->getCurrentLayer()->imageExtents()))
+  if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
     return false;
   
-  clipRect = clipRect.intersect(m_pDoc->getCurrentLayer()->imageExtents());
+  clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
 
   int sx = clipRect.left() - startx;
   int sy = clipRect.top() - starty;
   int ex = clipRect.right() - startx;
   int ey = clipRect.bottom() - starty;
 
-  KisLayer *lay = m_pDoc->getCurrentLayer();
+  KisLayer *lay = img->getCurrentLayer();
  
   uint srcPix, dstPix;
   uchar *sl, *ptr;
@@ -140,6 +144,10 @@ bool BrushTool::paint(QPoint pos)
 
 void BrushTool::mouseMove(QMouseEvent *e)
 {
+  KisImage * img = m_pDoc->current();
+  if (!img)
+	return;
+
   if ( m_pDoc->isEmpty() )
     return;
 
@@ -149,7 +157,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 
   if(m_dragging)
     {
-      if( !m_pDoc->getCurrentLayer()->isVisible() )
+      if( !img->getCurrentLayer()->isVisible() )
 	return;
 
       KisVector end(e->x(), e->y());
@@ -191,7 +199,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	  dist -= spacing;
 	}
       if (!updateRect.isEmpty())
-	m_pDoc->compositeImage(updateRect);
+	img->compositeImage(updateRect);
 
       if (dist > 0)
 	m_dragdist = dist; //save for next moveevent

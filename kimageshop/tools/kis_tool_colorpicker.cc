@@ -33,7 +33,10 @@ ColorPicker::~ColorPicker() {}
 
 KisColor ColorPicker::pick(int x, int y)
 {
-  KisLayer *lay = m_pDoc->getCurrentLayer();
+  KisImage * img = m_pDoc->current();
+  if (!img)	return KisColor::white();
+
+  KisLayer *lay = img->getCurrentLayer();
   uint pixel = lay->getPixel(x, y);
 
   uchar* ptr = (uchar*)&pixel;
@@ -46,17 +49,18 @@ KisColor ColorPicker::pick(int x, int y)
 
 void ColorPicker::mousePress(QMouseEvent *e)
 {
-  if ( m_pDoc->isEmpty() )
-    return;
+  KisImage * img = m_pDoc->current();
+  if (!img)
+	return;
 
   if (e->button() != QMouseEvent::LeftButton
       && e->button() != QMouseEvent::RightButton)
     return;
 
-  if( !m_pDoc->getCurrentLayer()->isVisible() )
+  if( !img->getCurrentLayer()->isVisible() )
     return;
   
-  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
+  if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))
     return;
   
   if (e->button() == QMouseEvent::LeftButton)

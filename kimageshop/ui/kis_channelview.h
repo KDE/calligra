@@ -57,7 +57,6 @@ public:
   void updateAllCells();
   void update_contextmenu( int _index );
 
-  void swapChannels( int a, int b );
   void selectChannel( int _index );
   void slotInverseVisibility( int _index );
 
@@ -68,8 +67,6 @@ public slots:
   void slotMenuAction( int );
   void slotAddChannel();
   void slotRemoveChannel();
-  void slotRaiseChannel();
-  void slotLowerChannel();
 
 protected:
 

@@ -335,8 +335,9 @@ void KisTabBar::renameTab()
   dlg.resize(300, 60);
   dlg.setCaption("Rename image");
 
-  if (dlg.exec())
-    m_pDoc->renameImage(img, dlg.name());
+  // FIXME
+  //if (dlg.exec())
+  //  m_pDoc->renameImage(img, dlg.name());
 }
 
 void KisTabBar::mousePressEvent( QMouseEvent* _ev )

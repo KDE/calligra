@@ -41,9 +41,7 @@
 #include "kis_view.h"
 #include "kis_shell.h"
 #include "kis_factory.h"
-#include "kis_layer.h"
-#include "kis_util.h"
-#include "kis_brush.h"
+#include "kis_dlg_new.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -227,22 +225,6 @@ void KisDoc::setCurrentImage(const QString& _name)
     }
 }
 
-void KisDoc::renameImage(const QString& oldname, const QString &newname)
-{
-  KisImage *img = m_Images.first();
-
-  while (img)
-    {
-      if (img->name() == oldname)
-	{
-	  img->setName(newname);
-	  emit imageListUpdated();
-	  return;
-	}
-      img = m_Images.next();
-    }
-}
-
 QStringList KisDoc::images()
 {
   QStringList lst;
@@ -271,6 +253,11 @@ QString KisDoc::currentImage()
   return QString("");
 }
 
+KisImage* KisDoc::current()
+{
+  return m_pCurrent;
+}
+
 KisDoc::~KisDoc()
 {
   KisImage *img = m_Images.first();
@@ -280,34 +267,6 @@ KisDoc::~KisDoc()
       delete img;
       img = m_Images.next();
     }
-}
-
-int KisDoc::height()
-{
-  if (m_pCurrent)
-    return m_pCurrent->height();
-  return 0;
-}
-
-int KisDoc::width()
-{
-  if (m_pCurrent)
-    return m_pCurrent->width();
-  return 0;
-}
-
-QRect KisDoc::imageExtents()
-{
-  if (m_pCurrent)
-    return m_pCurrent->imageExtents();
-  return QRect(0, 0, 0, 0);
-}
-
-QSize KisDoc::size()
-{
-  if (m_pCurrent)
-    return m_pCurrent->size();
-  return QSize(0, 0);
 }
 
 KisImage* KisDoc::newImage(const QString& _name, int w, int h, cMode /* cm */ , bgMode /* bgm */ )
@@ -344,19 +303,9 @@ void KisDoc::slotRemoveImage( const QString& _name )
     }
 }
 
-bool KisDoc::saveImage( const QString& /*file*/, KisImage */*img*/ )
-{
-  return false;
-}
-
-bool KisDoc::saveCurrentImage( const QString& file )
-{
-  return saveImage(file, m_pCurrent);
-}
-
+/*
 bool KisDoc::loadImage( const QString& file )
 {
-  cout << " --- KisDoc::loadImage ---" << endl;
   QImage img(file);
 
   if (img.isNull())
@@ -382,10 +331,10 @@ bool KisDoc::loadImage( const QString& file )
   setCurrentImage(kis_img);
   return true;
 }
+*/
 
 void KisDoc::slotNewImage()
 {
-  cout << " --- isDoc::slotNewImage ---" << endl;
   if (!m_pNewDialog)
     m_pNewDialog = new NewDialog();
   m_pNewDialog->show();
@@ -450,153 +399,6 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
     m_pCurrent->paintPixmap(p, area);
 }
 
-void KisDoc::addRGBLayer(QString file)
-{
-  if (m_pCurrent)
-    m_pCurrent->addRGBLayer( file );
-}
-
-void KisDoc::addRGBLayer(const QRect& rect, const QColor& c, const QString& name)
-{
-  if (m_pCurrent)
-    m_pCurrent->addRGBLayer( rect, c, name );
-}
-
-void KisDoc::removeLayer( unsigned int _layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->removeLayer( _layer );
-}
-
-void KisDoc::compositeImage(QRect r)
-{
-  if (m_pCurrent)
-    m_pCurrent->compositeImage( r );
-}
-
-KisLayer* KisDoc::layerPtr( KisLayer *_layer )
-{
-  if (m_pCurrent)
-    return m_pCurrent->layerPtr( _layer );
-  return 0;
-}
-
-KisLayer* KisDoc::getCurrentLayer()
-{
-  if (m_pCurrent)
-    return m_pCurrent->getCurrentLayer();
-  return 0;
-}
-
-int KisDoc::getCurrentLayerIndex()
-{
-  if (m_pCurrent)
-    return m_pCurrent->getCurrentLayerIndex();
-  return 0;
-}
-
-void KisDoc::setCurrentLayer( int _layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->setCurrentLayer( _layer );
-}
-
-void KisDoc::setLayerOpacity( uchar _opacity, KisLayer *_layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->setLayerOpacity( _opacity, _layer );
-}
-
-void KisDoc::moveLayer( int _dx, int _dy, KisLayer *_lay )
-{
-  if (m_pCurrent)
-    m_pCurrent->moveLayer( _dx, _dy, _lay );
-}
-
-void KisDoc::moveLayerTo( int _x, int _y, KisLayer *_lay )
-{
-  if (m_pCurrent)
-    m_pCurrent->moveLayerTo( _x, _y, _lay );
-}
-
-void KisDoc::mergeAllLayers()
-{
-  if (m_pCurrent)
-    m_pCurrent->mergeAllLayers();
-}
-
-void KisDoc::mergeVisibleLayers()
-{
-  if (m_pCurrent)
-    m_pCurrent->mergeVisibleLayers();
-}
-
-void KisDoc::mergeLinkedLayers()
-{
-  if (m_pCurrent)
-    m_pCurrent->mergeLinkedLayers();
-}
-
-void KisDoc::mergeLayers(QList<KisLayer> list)
-{
-  if (m_pCurrent)
-    m_pCurrent->mergeLayers( list );
-}
-
-void KisDoc::upperLayer( unsigned int _layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->upperLayer( _layer );
-}
-
-void KisDoc::lowerLayer( unsigned int _layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->lowerLayer( _layer );
-}
-
-void KisDoc::setFrontLayer( unsigned int _layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->setFrontLayer( _layer );
-}
-
-void KisDoc::setBackgroundLayer( unsigned int _layer )
-{
-  if (m_pCurrent)
-    m_pCurrent->setBackgroundLayer( _layer );
-}
-
-void KisDoc::rotateLayer180(KisLayer *_layer)
-{
-  if (m_pCurrent)
-    m_pCurrent->rotateLayer180( _layer );
-}
-
-void KisDoc::rotateLayerLeft90(KisLayer *_layer)
-{
-  if (m_pCurrent)
-    m_pCurrent->rotateLayerLeft90( _layer );
-}
-
-void KisDoc::rotateLayerRight90(KisLayer *_layer)
-{
-  if (m_pCurrent)
-    m_pCurrent->rotateLayerRight90( _layer );
-}
-
-void KisDoc::mirrorLayerX(KisLayer *_layer)
-{
-  if (m_pCurrent)
-    m_pCurrent->mirrorLayerX( _layer );
-}
-
-void KisDoc::mirrorLayerY(KisLayer *_layer)
-{
-  if (m_pCurrent)
-    m_pCurrent->mirrorLayerY( _layer );
-}
-
 void KisDoc::slotImageUpdated()
 {
   emit docUpdated();
@@ -611,12 +413,5 @@ void KisDoc::slotLayersUpdated()
 {
   emit layersUpdated();
 }
-
-LayerList KisDoc::layerList()
-{
-  if (m_pCurrent)
-    return m_pCurrent->layerList();
-  return LayerList();
-};
 
 #include "kis_doc.moc"

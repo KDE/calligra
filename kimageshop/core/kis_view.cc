@@ -525,17 +525,18 @@ void KisView::slotDocUpdated()
 
 void KisView::slotDocUpdated(const QRect& rect)
 {
+  KisImage* img = m_pDoc->current();
+  if (!img)
+	return;
+
   QRect r = rect;
 
-  r = r.intersect(m_pDoc->imageExtents());
+  r = r.intersect(img->imageExtents());
   r.setBottom(r.bottom()+1);
   r.setRight(r.right()+1);
 
   int xt = xPaintOffset() + r.x() - m_pHorz->value();
   int yt = yPaintOffset() + r.y() - m_pVert->value();
-
-  //qDebug("KisView::slotDocUpdated l: %d; t: %d; r: %d; b: %d"
-  //	 ,r.left(), r.top(), r.right(), r.bottom());
 
   QPainter p;
 
@@ -581,14 +582,19 @@ void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
 
 void KisView::canvasGotPaintEvent( QPaintEvent*e )
 {
-  QRect ur = e->rect();
+  KisImage* img = m_pDoc->current();
+  if (!img)
+	{
+	  QPainter p (m_pCanvas);
+	  p.eraseRect(e->rect());
+	  return;
+	}
+  
   QPainter p;
-
-  //qDebug("KisView::canvasGotPaintEvent l: %d; t: %d; r: %d; b: %d"
-  //	 , e->rect().left(), e->rect().top(), e->rect().right(), e->rect().bottom());
-
+  QRect ur = e->rect();
   p.begin( m_pCanvas );
   
+  // FIXME: Michael, you scale the whole image, that makes it dog slow, scale just the are you need.
   p.scale( zoomFactor(), zoomFactor() );
 
   // draw background
@@ -599,13 +605,13 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 
   // draw the image
   ur.moveBy( - xPaintOffset() + m_pHorz->value() , - yPaintOffset() + m_pVert->value());
-  ur = ur.intersect(m_pDoc->imageExtents());
+  ur = ur.intersect(img->imageExtents());
 
   ur.setBottom(ur.bottom()+1);
   ur.setRight(ur.right()+1);
 
-  if (ur.top() > m_pDoc->height()
-      || ur.left() > m_pDoc->width())
+  if (ur.top() > img->height()
+      || ur.left() > img->width())
     {
        p.end();
        return;
@@ -841,27 +847,32 @@ void KisView::insert_layer_image()
 
 void KisView::layer_rotate180()
 {
-  m_pDoc->rotateLayer180(0);
+  if (m_pDoc->current())
+	m_pDoc->current()->rotateLayer180(0);
 }
 
 void KisView::layer_rotateleft90()
 {
-  m_pDoc->rotateLayerLeft90(0);
+  if (m_pDoc->current())
+	m_pDoc->current()->rotateLayerLeft90(0);
 }
 
 void KisView::layer_rotateright90()
 {
-  m_pDoc->rotateLayerRight90(0);
+  if (m_pDoc->current())
+	m_pDoc->current()->rotateLayerRight90(0);
 }
 
 void KisView::layer_mirrorX()
 {
-  m_pDoc->mirrorLayerX(0);
+  if (m_pDoc->current())
+	m_pDoc->current()->mirrorLayerX(0);
 }
 
 void KisView::layer_mirrorY()
 {
-  m_pDoc->mirrorLayerY(0);
+  if (m_pDoc->current())
+	m_pDoc->current()->mirrorLayerY(0);
 }
 
 /*
@@ -870,17 +881,20 @@ void KisView::layer_mirrorY()
 
 void KisView::merge_all_layers()
 {
-  m_pDoc->mergeAllLayers();
+  if (m_pDoc->current())
+	m_pDoc->current()->mergeAllLayers();
 }
 
 void KisView::merge_visible_layers()
 {
-  m_pDoc->mergeVisibleLayers();
+  if (m_pDoc->current())
+	m_pDoc->current()->mergeVisibleLayers();
 }
 
 void KisView::merge_linked_layers()
 {
-  m_pDoc->mergeLinkedLayers();
+  if (m_pDoc->current())
+	m_pDoc->current()->mergeLinkedLayers();
 }
 
 /*
@@ -916,12 +930,18 @@ void KisView::preferences()
 
 int KisView::docWidth()
 {
-  return m_pDoc->width();
+  if (m_pDoc->current())
+	return m_pDoc->current()->width();
+  else
+	return 0;
 }
 
 int KisView::docHeight()
 {
-  return m_pDoc->height();
+  if (m_pDoc->current())
+	return m_pDoc->current()->height();
+  else
+	return 0;
 }
 
 int KisView::xPaintOffset()

@@ -1,7 +1,7 @@
 /*
  *  kis_doc.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,23 +28,35 @@
 #include <koDocument.h>
 #include <koUndo.h>
 
-#include "kis_dlg_new.h"
-#include "kis_layer.h"
 #include "kis_image.h"
 #include "kis_global.h"
 
 class KisBrush;
 class NewDialog;
 
+/*
+ * A KisDoc can hold multiple KisImages.
+ *
+ * KisDoc->current() returns a Pointer to the currently active KisImage.
+ */
+
 class KisDoc : public KoDocument
 {
     Q_OBJECT
 
 public:
-
     KisDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
-    ~KisDoc();
+    virtual ~KisDoc();
 
+	/*
+	 * Reimplemented from KoDocument.
+	 * See koDocument.h.
+	 */
+    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
+    virtual KoMainWindow* createShell();
+    virtual QCString mimeType() const;
+
+    virtual bool initDoc();
 
 	virtual bool save( ostream&, const char *_format );
 	virtual bool load( istream& in, KoStore* _store );
@@ -52,100 +64,76 @@ public:
 
 	virtual bool hasToWriteMultipart();
 
-    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
-    virtual KoMainWindow* createShell();
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
-    virtual bool initDoc();
-    virtual QCString mimeType() const;
+
+	/*
+	 * KOffice undo/redo.
+	 */
     KoCommandHistory* commandHistory() { return &m_commands; };
 
-    void paintPixmap( QPainter *painter, QRect area );
+	/*
+	 * Use QPainter p to paint a rectangular are of the current image.
+	 */
+    void paintPixmap( QPainter *p, QRect area );
 
-    int height();
-    int width();
-    QRect imageExtents();
-    QSize size();
-
-    KisLayer* getCurrentLayer();
-    int getCurrentLayerIndex();
-    void setCurrentLayer( int _layer );
-
-    void upperLayer( unsigned int _layer );
-    void lowerLayer( unsigned int _layer );
-    void setFrontLayer( unsigned int _layer );
-    void setBackgroundLayer( unsigned int _layer );
-
-    void addRGBLayer( QString _file );
-    void addRGBLayer(const QRect& r, const QColor& c, const QString& name);
-    void removeLayer( unsigned int _layer );
-    void compositeImage( QRect _rect );
-    KisLayer* layerPtr( KisLayer *_layer );
-    void setLayerOpacity( uchar _opacity, KisLayer *_layer = 0 );
-
-    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay,
-			      KisLayer *dstLay, int dstTile );
-    void moveLayer( int dx, int dy, KisLayer *lay = 0 );
-    void moveLayerTo( int x, int y, KisLayer *lay = 0 );
-    void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
-			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
-    LayerList layerList();
-
-    void rotateLayer180(KisLayer *_layer);
-    void rotateLayerLeft90(KisLayer *_layer);
-    void rotateLayerRight90(KisLayer *_layer);
-    void mirrorLayerX(KisLayer *_layer);
-    void mirrorLayerY(KisLayer *_layer);
-
-    void mergeAllLayers();
-    void mergeVisibleLayers();
-    void mergeLinkedLayers();
-    void mergeLayers(QList<KisLayer>);
-
+	/*
+	 * Create new KisImage, add it to our KisImage list and make it the current Image.
+	 */
     KisImage* newImage(const QString& _name, int w, int h, cMode cm = CM_RGBA, bgMode bgm = BM_WHITE);
-    bool saveImage( const QString& file, KisImage *img );
-    bool saveCurrentImage( const QString& file );
-    bool loadImage( const QString& file );
+
+	/*
+	 * Remove img from our list and delete it.
+	 */
     void removeImage( KisImage *img );
 
-    QString currentImage();
+	/*
+	 * Return apointer to the current image.
+	 */
+	KisImage* current(); 
 
+	/*
+	 * Return the name of the current image.
+	 */
+    QString  currentImage();
+
+	/*
+	 * Make img the current image.
+	 */
     void setCurrentImage(KisImage *img);
 
+	/*
+	 * Does the doc contain any images?
+	 */
     bool isEmpty();
 
-
+	/*
+	 * Return a list of image names.
+	 */
     QStringList images();
 
-    void renameImage(const QString& oldname, const QString &newname);
-
 public slots:
-
   void setCurrentLayerOpacity( double opacity )
-    {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
+  {  if (m_pCurrent) m_pCurrent->setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
+
   void slotImageUpdated();
   void slotImageUpdated( const QRect& rect );
   void slotLayersUpdated();
 
   void slotNewImage();
   void setCurrentImage(const QString& _name);
-
   void slotRemoveImage( const QString& name );
 
 signals:
-
   void docUpdated();
   void docUpdated( const QRect& rect );
   void layersUpdated();
   void imageListUpdated();
 
 protected:
-  KoCommandHistory m_commands;
-
-private:
-
-  QList <KisImage> m_Images;
-  KisImage *m_pCurrent;
-  NewDialog       *m_pNewDialog;
+  KoCommandHistory  m_commands;
+  QList <KisImage>  m_Images;
+  KisImage         *m_pCurrent;
+  NewDialog        *m_pNewDialog;
 };
 
 #endif // __kis_doc_h__

@@ -118,7 +118,7 @@ void LayerTable::init( KisDoc* doc )
 
   setCellWidth( CELLWIDTH );
   setCellHeight( CELLHEIGHT );
-  m_selected = m_doc->layerList().count() - 1;
+  m_selected = m_doc->current()->layerList().count() - 1;
 
   QPopupMenu *submenu = new QPopupMenu();
 
@@ -168,7 +168,7 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
 		     m_eyeRect.width(), 
 		     m_eyeRect.height(), colorGroup(),
 		      true );
-  if( m_doc->layerList().at( _row )->isVisible() )
+  if( m_doc->current()->layerList().at( _row )->isVisible() )
   {
     _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
   }
@@ -178,7 +178,7 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
 		     m_linkRect.width() , 
 		     m_linkRect.height(), colorGroup(),
 		     true );
-  if( m_doc->layerList().at( _row )->isLinked() )
+  if( m_doc->current()->layerList().at( _row )->isLinked() )
   {
     _painter->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
   }
@@ -186,14 +186,14 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
   //  style().drawPanel( _painter, m_previewRect.topLeft(), ....
   
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
-  _painter->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
+  _painter->drawText( 80, 20, m_doc->current()->layerList().at( _row )->name() );
 }
 
 void LayerTable::updateTable()
 {
-  if( m_doc )
+  if( m_doc->current() )
   {
-    m_items = m_doc->layerList().count();
+    m_items = m_doc->current()->layerList().count();
     setNumRows( m_items );
     setNumCols( 1 );
   }
@@ -208,8 +208,8 @@ void LayerTable::updateTable()
 
 void LayerTable::update_contextmenu( int _index )
 {
-  m_contextmenu->setItemChecked( VISIBLE, m_doc->layerList().at( _index )->isVisible() );
-  m_contextmenu->setItemChecked( LINKING, m_doc->layerList().at( _index )->isLinked() );
+  m_contextmenu->setItemChecked( VISIBLE, m_doc->current()->layerList().at( _index )->isVisible() );
+  m_contextmenu->setItemChecked( LINKING, m_doc->current()->layerList().at( _index )->isLinked() );
 }
 
 void LayerTable::selectLayer( int _index )
@@ -218,20 +218,20 @@ void LayerTable::selectLayer( int _index )
   m_selected = -1;
   updateCell( currentSel, 0 );
   m_selected = _index;
-  m_doc->setCurrentLayer( m_selected );
+  m_doc->current()->setCurrentLayer( m_selected );
   updateCell( m_selected, 0 );
 }
 
 void LayerTable::slotInverseVisibility( int _index )
 {
-  m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
+  m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
-  m_doc->compositeImage( m_doc->layerList().at( _index )->imageExtents() );
+  m_doc->current()->compositeImage( m_doc->current()->layerList().at( _index )->imageExtents() );
 }
 
 void LayerTable::slotInverseLinking( int _index )
 {
-  m_doc->layerList().at( _index )->setLinked( !m_doc->layerList().at( _index )->isLinked() );
+  m_doc->current()->layerList().at( _index )->setLinked( !m_doc->current()->layerList().at( _index )->isLinked() );
   updateCell( _index, 0 );
 }
 
@@ -319,13 +319,13 @@ void LayerTable::mouseDoubleClickEvent( QMouseEvent *_event )
 void LayerTable::slotAddLayer()
 {
   QString image = locate( "kis_images", "cam9b.jpg", KisFactory::global() );	
-  m_doc->addRGBLayer( image );
-  m_doc->setLayerOpacity( 255 );
+  m_doc->current()->addRGBLayer( image );
+  m_doc->current()->setLayerOpacity( 255 );
 
-  QRect updateRect = m_doc->layerList().at( m_doc->layerList().count() - 1 )->imageExtents();
-  m_doc->compositeImage( updateRect );
+  QRect updateRect = m_doc->current()->layerList().at( m_doc->current()->layerList().count() - 1 )->imageExtents();
+  m_doc->current()->compositeImage( updateRect );
 
-  selectLayer( m_doc->layerList().count() - 1 );
+  selectLayer( m_doc->current()->layerList().count() - 1 );
 
   updateTable();
   updateAllCells();
@@ -333,15 +333,15 @@ void LayerTable::slotAddLayer()
 
 void LayerTable::slotRemoveLayer()
 {
-  if( m_doc->layerList().count() != 0 )
+  if( m_doc->current()->layerList().count() != 0 )
   {
-    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
+    QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
 
-    m_doc->removeLayer( m_selected );
+    m_doc->current()->removeLayer( m_selected );
 
-    m_doc->compositeImage( updateRect );
+    m_doc->current()->compositeImage( updateRect );
 
-    if( m_selected == (int)m_doc->layerList().count() )
+    if( m_selected == (int)m_doc->current()->layerList().count() )
       m_selected--;
 
     updateTable();
@@ -351,17 +351,17 @@ void LayerTable::slotRemoveLayer()
 
 void LayerTable::swapLayers( int a, int b )
 {
-  if( ( m_doc->layerList().at( a )->isVisible() ) &&
-      ( m_doc->layerList().at( b )->isVisible() ) )
+  if( ( m_doc->current()->layerList().at( a )->isVisible() ) &&
+      ( m_doc->current()->layerList().at( b )->isVisible() ) )
   {
-    QRect l1 = m_doc->layerList().at( a )->imageExtents();
-    QRect l2 = m_doc->layerList().at( b )->imageExtents();
+    QRect l1 = m_doc->current()->layerList().at( a )->imageExtents();
+    QRect l2 = m_doc->current()->layerList().at( b )->imageExtents();
 
     if( l1.intersects( l2 ) )
     {
       QRect rect = l1.intersect( l2 );
 
-      m_doc->compositeImage( rect );
+      m_doc->current()->compositeImage( rect );
     }
   }
 }
@@ -372,7 +372,7 @@ void LayerTable::slotRaiseLayer()
 
   if( m_selected != newpos )
   {
-    m_doc->upperLayer( m_selected );
+    m_doc->current()->upperLayer( m_selected );
     repaint();
     swapLayers( m_selected, newpos );
     selectLayer( newpos );
@@ -381,11 +381,11 @@ void LayerTable::slotRaiseLayer()
 
 void LayerTable::slotLowerLayer()
 {
-  int newpos = ( m_selected + 1 ) < (int)m_doc->layerList().count() ? m_selected + 1 : m_selected;
+  int newpos = ( m_selected + 1 ) < (int)m_doc->current()->layerList().count() ? m_selected + 1 : m_selected;
 
   if( m_selected != newpos )
   {
-    m_doc->lowerLayer( m_selected );
+    m_doc->current()->lowerLayer( m_selected );
     repaint();
     swapLayers( m_selected, newpos );
     selectLayer( newpos );
@@ -394,13 +394,13 @@ void LayerTable::slotLowerLayer()
 
 void LayerTable::slotFrontLayer()
 {
-  if( m_selected != (int) ( m_doc->layerList().count() - 1 ) )
+  if( m_selected != (int) ( m_doc->current()->layerList().count() - 1 ) )
   {
-    m_doc->setFrontLayer( m_selected );
-    selectLayer( m_doc->layerList().count() - 1 );
+    m_doc->current()->setFrontLayer( m_selected );
+    selectLayer( m_doc->current()->layerList().count() - 1 );
 
-    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
-    m_doc->compositeImage( updateRect );
+    QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
+    m_doc->current()->compositeImage( updateRect );
 
     updateAllCells();
   }
@@ -410,12 +410,12 @@ void LayerTable::slotBackgroundLayer()
 {
   if( m_selected != 0 )
   {
-    m_doc->setBackgroundLayer( m_selected );
+    m_doc->current()->setBackgroundLayer( m_selected );
 
     selectLayer( 0 );
 
-    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
-    m_doc->compositeImage( updateRect );
+    QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
+    m_doc->current()->compositeImage( updateRect );
 
     updateAllCells();
   }
@@ -423,18 +423,18 @@ void LayerTable::slotBackgroundLayer()
 
 void LayerTable::updateAllCells()
 {
-  for( int i = 0; i < (int)m_doc->layerList().count(); i++ )
+  for( int i = 0; i < (int)m_doc->current()->layerList().count(); i++ )
     updateCell( i, 0 );
 }
 
 void LayerTable::slotProperties()
 {
-  if( LayerPropertyDialog::editProperties( *( m_doc->layerList().at( m_selected ) ) ) )
+  if( LayerPropertyDialog::editProperties( *( m_doc->current()->layerList().at( m_selected ) ) ) )
   {
-    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
+    QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
 
     updateCell( m_selected, 0 );
-    m_doc->compositeImage( updateRect );
+    m_doc->current()->compositeImage( updateRect );
   }
 }
 
