@@ -337,6 +337,7 @@ Color FormatBorder::leftBorderColor() const
 void FormatBorder::setLeftBorderColor( const Color& color )
 {
   d->leftBorderColor = color;
+  d->null = false;
 }
 
 unsigned FormatBorder::rightBorderStyle() const
@@ -358,6 +359,7 @@ Color FormatBorder::rightBorderColor() const
 void FormatBorder::setRightBorderColor( const Color& color )
 {
   d->rightBorderColor = color;
+  d->null = false;
 }
 
 unsigned FormatBorder::topBorderStyle() const
@@ -379,6 +381,7 @@ Color FormatBorder::topBorderColor() const
 void FormatBorder::setTopBorderColor( const Color& color )
 {
   d->topBorderColor = color;
+  d->null = false;
 }
 
 unsigned FormatBorder::bottomBorderStyle() const
@@ -400,6 +403,7 @@ Color FormatBorder::bottomBorderColor() const
 void FormatBorder::setBottomBorderColor( const Color& color )
 {
   d->bottomBorderColor = color;
+  d->null = false;
 }
 
 // helper class for Format class
