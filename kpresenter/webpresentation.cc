@@ -51,6 +51,7 @@
 #include <qimage.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -173,7 +174,7 @@ KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view
 }
 
 KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view )
-    : config( _config ), xml( false )
+    : config( _config ), xml( false ), m_bWriteHeader( true ), m_bWriteFooter( true ), m_bLoopSlides( false )
 {
     doc = _doc;
     view = _view;
@@ -184,8 +185,8 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_do
 KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
-      textColor( webPres.textColor ), path( webPres.path ),
-      xml( webPres.xml), zoom( webPres.zoom ), m_encoding( webPres.m_encoding )
+      textColor( webPres.textColor ), path( webPres.path ), xml( webPres.xml),
+      zoom( webPres.zoom ), timeBetweenSlides ( webPres.timeBetweenSlides ), m_encoding( webPres.m_encoding ), m_bWriteHeader( webPres.m_bWriteHeader ), m_bWriteFooter( webPres.m_bWriteFooter ), m_bLoopSlides( webPres.m_bLoopSlides )
 {
     doc = webPres.doc;
     view = webPres.view;
@@ -223,7 +224,11 @@ void KPWebPresentation::loadConfig()
     textColor = cfg.readColorEntry( "TextColor", &textColor );
     path = cfg.readPathEntry( "Path", path );
     xml = cfg.readBoolEntry( "XML", xml );
+    m_bWriteHeader = cfg.readBoolEntry( "WriteHeader", m_bWriteHeader );
+    m_bWriteFooter = cfg.readBoolEntry( "WriteFooter", m_bWriteFooter );
+    m_bLoopSlides = cfg.readBoolEntry( "LoopSlides", m_bLoopSlides );
     zoom = cfg.readNumEntry( "Zoom", zoom );
+    timeBetweenSlides = cfg.readNumEntry("TimeBetweenSlides", timeBetweenSlides );
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
 }
 
@@ -249,7 +254,11 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "Path", path );
 #endif
     cfg.writeEntry( "XML", xml );
+    cfg.writeEntry( "WriteHeader", m_bWriteHeader );
+    cfg.writeEntry( "WriteFooter", m_bWriteFooter );
+    cfg.writeEntry( "LoopSlides", m_bLoopSlides );
     cfg.writeEntry( "Zoom", zoom );
+    cfg.writeEntry( "TimeBetweenSlides", timeBetweenSlides );
     cfg.writeEntry( "Encoding", m_encoding );
 }
 
@@ -319,7 +328,7 @@ QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& str
     return EscapeSgmlText( codec, strText, true, false );
 }
 
-void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle)
+void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle, const QString& dest, const QString& next)
 {
     QString mimeName ( codec->mimeName() );
     if ( isXML() )
@@ -360,6 +369,15 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
               << "\""<< ( isXML() ?" /":"") // X(HT)ML closes empty elements, HTML not!
               << ">\n";
 
+    // Load the next slide after time elapsed
+    if ( (timeBetweenSlides > 0) && ( QString::compare(dest,next) !=0 ) )
+    {
+        streamOut << "<meta http-equiv=\"refresh\" content=\""
+                  << timeBetweenSlides
+                  << ";url=" << next
+                  << "\">\n";
+    }
+
     streamOut << "<title>"<< escapeHtmlText( codec, title ) << " - " << escapeHtmlText( codec, subtitle ) << "</title>\n";
 
     // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
@@ -373,16 +391,17 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
 
-        unsigned int pgNum = i + 1;
+        unsigned int pgNum = i + 1; // pgquiles # elpauer . org - I think this is a bug, seems to be an overflow if we have max_unsigned_int slides
         KTempFile tmp;
         QString dest= QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum );
+        QString next= QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum<slideInfos.count() ? pgNum+1 : (m_bLoopSlides ? 1 : pgNum ) ); // Ugly, but it works
 
         QFile file( tmp.name() );
         file.open( IO_WriteOnly );
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
-        writeStartOfHeader( streamOut, codec, slideInfos[ i ].slideTitle );
+        writeStartOfHeader( streamOut, codec, slideInfos[ i ].slideTitle, dest, next ); // It would be probably better to pass pgNum instead of dest, next
 
         // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
@@ -399,91 +418,102 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         streamOut << "</head>\n";
         streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
 
-        streamOut << "  <center>\n";
+        if (m_bWriteHeader) {
+            streamOut << "  <center>\n";
 
-        if ( i > 0 )
-            streamOut << "    <a href=\"slide_1.html\">";
-        streamOut << "<img src=\"../pics/first.png\" border=\"0\" alt=\"" << i18n( "First" )
-                  << "\" title=\"" << i18n( "First" ) << "\"" << ( isXML() ?" /":"") << ">";
-        if ( i > 0 )
-            streamOut << "</a>";
+            if ( i > 0 )
+                streamOut << "    <a href=\"slide_1.html\">";
+                streamOut << "<img src=\"../pics/first.png\" border=\"0\" alt=\"" << i18n( "First" )
+                              << "\" title=\"" << i18n( "First" ) << "\"" << ( isXML() ?" /":"") << ">";
+            if ( i > 0 )
+                streamOut << "</a>";
 
-        streamOut << "\n";
+            streamOut << "\n";
 
-        if ( i > 0 )
-            streamOut << "    <a href=\"slide_" << pgNum - 1 << ".html\">";
-        streamOut << "<img src=\"../pics/prev.png\" border=\"0\" alt=\"" << i18n( "Previous" )
-                  << "\" title=\"" << i18n( "Previous" ) << "\"" << ( isXML() ?" /":"") << ">";
-        if ( i > 0 )
-            streamOut << "</a>";
+            if ( i > 0 )
+                streamOut << "    <a href=\"slide_" << pgNum - 1 << ".html\">";
+                streamOut << "<img src=\"../pics/prev.png\" border=\"0\" alt=\"" << i18n( "Previous" )
+                              << "\" title=\"" << i18n( "Previous" ) << "\"" << ( isXML() ?" /":"") << ">";
+            if ( i > 0 )
+                streamOut << "</a>";
 
-        streamOut << "\n";
+            streamOut << "\n";
 
-        if ( i < slideInfos.count() - 1 )
-            streamOut << "    <a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/next.png\" border=\"0\" alt=\"" << i18n( "Next" )
-                  << "\" title=\"" << i18n( "Next" ) << "\"" << ( isXML() ?" /":"") << ">";
-        if ( i < slideInfos.count() - 1 )
-            streamOut << "</a>";
+            if ( (m_bLoopSlides) || (i < slideInfos.count() - 1 ) )
+                streamOut << "    <a href=\"" << next << "\">";
+                streamOut << "<img src=\"../pics/next.png\" border=\"0\" alt=\"" << i18n( "Next" )
+                          << "\" title=\"" << i18n( "Next" ) << "\"" << ( isXML() ?" /":"") << ">";
+            if ( (m_bLoopSlides) || (i < slideInfos.count() - 1 ) )
+                streamOut << "</a>";
 
-        streamOut << "\n";
+            streamOut << "\n";
 
-        if ( i < slideInfos.count() - 1 )
-            streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
-        streamOut << "<img src=\"../pics/last.png\" border=\"0\" alt=\"" << i18n( "Last" )
-                  << "\" title=\"" << i18n( "Last" ) << "\"" << ( isXML() ?" /":"") << ">";
-        if ( i < slideInfos.count() - 1 )
-            streamOut << "</a>";
+            if ( i < slideInfos.count() - 1 )
+                streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
+                streamOut << "<img src=\"../pics/last.png\" border=\"0\" alt=\"" << i18n( "Last" )
+                      << "\" title=\"" << i18n( "Last" ) << "\"" << ( isXML() ?" /":"") << ">";
+            if ( i < slideInfos.count() - 1 )
+                streamOut << "</a>";
 
-        streamOut << "\n" << "    &nbsp; &nbsp; &nbsp; &nbsp;\n";
+            streamOut << "\n" << "    &nbsp; &nbsp; &nbsp; &nbsp;\n";
 
-        streamOut << "    <a href=\"../index.html\">";
-        streamOut << "<img src=\"../pics/home.png\" border=\"0\" alt=\"" << i18n( "Home" )
-                  << "\" title=\"" << i18n( "Home" ) << "\"" << ( isXML() ?" /":"") << ">";
-        streamOut << "</a>\n";
+            streamOut << "    <a href=\"../index.html\">";
+            streamOut << "<img src=\"../pics/home.png\" border=\"0\" alt=\"" << i18n( "Home" )
+                      << "\" title=\"" << i18n( "Home" ) << "\"" << ( isXML() ?" /":"") << ">";
+            streamOut << "</a>\n";
 
-        streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n"; // ### TODO: is noshade W3C?
+            streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n"; // ### TODO: is noshade W3C?
 
-        streamOut << "  <center>\n    <font color=\"" << escapeHtmlText( codec, titleColor.name() ) << "\">\n";
-        streamOut << "    <b>" << escapeHtmlText( codec, title ) << "</b> - <i>" << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</i>\n";
+            streamOut << "  <center>\n    <font color=\"" << escapeHtmlText( codec, titleColor.name() ) << "\">\n";
+            streamOut << "    <b>" << escapeHtmlText( codec, title ) << "</b> - <i>" << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</i>\n";
 
-        streamOut << "    </font>\n  </center><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << brtag << "\n";
+            streamOut << "    </font>\n  </center>\n";
+
+            streamOut << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << brtag << "\n";
+	}
 
         streamOut << "  <center>\n    ";
 
-        if ( i < slideInfos.count() - 1 )
-            streamOut << "<a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/slide_" << pgNum << ".png\" border=\"0\" alt=\""
-                  << i18n( "Slide %1" ).arg( pgNum ) << "\"" << ( isXML() ?" /":"") << ">";
-        if ( i < slideInfos.count() - 1 )
-            streamOut << "</a>";
+	if ( (m_bLoopSlides) || (i < slideInfos.count() - 1) )
+            streamOut << "<a href=\"" << next << "\">";
 
-        streamOut << "\n";
+	    streamOut << "<img src=\"../pics/slide_" << pgNum << ".png\" border=\"0\" alt=\""
+                      << i18n( "Slide %1" ).arg( pgNum ) << "\"" << ( isXML() ?" /":"") << ">";
 
-        streamOut << "    </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
+	    if ( i < slideInfos.count() - 1 )
+                streamOut << "</a>";
 
-        QPtrList<KPrPage> _tmpList( doc->getPageList() );
-        QString note ( escapeHtmlText( codec, _tmpList.at(i)->noteText() ) );
-        if ( !note.isEmpty() ) {
-            streamOut << "  <b>" << escapeHtmlText( codec, i18n( "Note" ) ) << "</b>\n";
-            streamOut << " <blockquote>\n";
+            streamOut << "\n";
 
-            streamOut << note.replace( "\n", brtag );
+            streamOut << "    </center>\n";
 
-            streamOut << "  </blockquote><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
-        }
+	if (m_bWriteFooter) {
+	    	streamOut << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
 
-        streamOut << "  <center>\n";
+            QPtrList<KPrPage> _tmpList( doc->getPageList() );
+            QString note ( escapeHtmlText( codec, _tmpList.at(i)->noteText() ) );
+            if ( !note.isEmpty() ) {
+                streamOut << "  <b>" << escapeHtmlText( codec, i18n( "Note" ) ) << "</b>\n";
+                streamOut << " <blockquote>\n";
 
-        QString htmlAuthor;
-        if (email.isEmpty())
-            htmlAuthor=escapeHtmlText( codec, author );
-        else
-            htmlAuthor=QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
-        streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" )
+                streamOut << note.replace( "\n", brtag );
+
+                streamOut << "  </blockquote><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
+            }
+
+            streamOut << "  <center>\n";
+
+            QString htmlAuthor;
+            if (email.isEmpty())
+                htmlAuthor=escapeHtmlText( codec, author );
+            else
+                htmlAuthor=QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
+            streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" )
                                           .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
 
-        streamOut << "    </center><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
+            streamOut << "    </center><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
+        }
+
         streamOut << "</body>\n</html>\n";
 
         file.close();
@@ -506,7 +536,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
 
-    writeStartOfHeader( streamOut, codec, i18n("Table of Contents") );
+    writeStartOfHeader( streamOut, codec, i18n("Table of Contents"), dest, dest );
     streamOut << "</head>\n";
 
     streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
@@ -576,6 +606,9 @@ void KPWebPresentation::init()
     path = KGlobalSettings::documentPath() + "www";
 
     zoom = 100;
+
+    timeBetweenSlides = 0;
+
     m_encoding = QTextCodec::codecForLocale()->name();
 }
 
@@ -590,6 +623,7 @@ KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrese
     setupPage2();
     setupPage3();
     setupPage4();
+    setupPage5();
 
     connect( nextButton(), SIGNAL( clicked() ), this, SLOT( pageChanged() ) );
     connect( backButton(), SIGNAL( clicked() ), this, SLOT( pageChanged() ) );
@@ -918,10 +952,88 @@ void KPWebPresentationWizard::setupPage4()
     addPage( page4, i18n( "Step 4: Customize Slide Titles" ) );
 
     setHelpEnabled(page4, false);  //doesn't do anything currently
-
-    setFinish( page4, true );
 }
 
+void KPWebPresentationWizard::setupPage5()
+{
+    page5 = new QHBox( this );
+    QWhatsThis::add( page5, i18n("This page allows you to specify some options for "
+                                 "presentations which run unattended, such as time "
+                                 "elapsed before advancing to the next slide, looping "
+                                 "and the presence of headers. If you do not want "
+                                 "an unattended presentation, just leave defaults unchanged.") );
+    page5->setSpacing( KDialog::spacingHint() );
+    page5->setMargin( KDialog::marginHint() );
+
+    QLabel* sidebar = new QLabel( page5 );
+    sidebar->setMinimumSize( 106, 318 );
+    sidebar->setMaximumSize( 106, 318 );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+
+    QWidget* canvas = new QWidget( page5 );
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2,
+                                           KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel *helptext = new QLabel( canvas );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    QString help = i18n("Here you can configure some options for unattended "
+                        "presentations, such as time elapsed before automatically advance to "
+                        "the next slide, looping and the presence of headers.");
+    helptext->setText(help);
+
+    layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
+
+    layout->addMultiCell( new QSpacerItem( 1, 50 ), 1, 1, 0, 1 );
+
+    QLabel *label1 = new QLabel( i18n("Advance after:"), canvas );
+    label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    QWhatsThis::add( label1, i18n( "This selection allows you to specify "
+                                   "the time between slides." ) );
+    layout->addWidget( label1, 2, 0 );
+
+    timeBetweenSlides = new KIntNumInput( webPres.getTimeBetweenSlides(), canvas );
+    timeBetweenSlides->setSpecialValueText(i18n( "Disabled" ));
+    QWhatsThis::add( timeBetweenSlides, i18n( "This selection allows you to specify "
+                                 "the time between slides." ) );
+    layout->addWidget( timeBetweenSlides, 2, 1 );
+    timeBetweenSlides->setSuffix( " seconds" );
+    timeBetweenSlides->setRange( 0, 900, 1 );
+
+    layout->addMultiCell( new QSpacerItem( 1, 10 ), 1, 1, 0, 1 );
+
+    writeHeader=new QCheckBox( i18n("Write header to the slides"), canvas);
+    QWhatsThis::add( writeHeader, i18n( "This checkbox allows you to specify if you "
+                                       "want to write the navigation buttons on top "
+                                       "of the slide." ) );
+    writeHeader->setChecked( webPres.wantHeader() );
+    layout->addWidget( writeHeader, 3, 1);
+
+    writeFooter=new QCheckBox( i18n("Write footer to the slides"), canvas);
+    QWhatsThis::add( writeFooter, i18n( "This checkbox allows you to specify if you "
+                                       "want to write an imprint consisting on the author "
+                                       "and the software used to create these slides." ) );
+    writeFooter->setChecked( webPres.wantFooter() );
+    layout->addWidget( writeFooter, 4, 1);
+
+    loopSlides=new QCheckBox( i18n("Loop presentation"), canvas);
+    QWhatsThis::add( loopSlides, i18n( "This checkbox allows you to specify if you "
+                                       "want the presentation to start again once "
+                                       "the latest slide is reached." ) );
+    loopSlides->setChecked( webPres.wantLoopSlides() );
+    layout->addWidget( loopSlides, 5, 1);
+
+    QSpacerItem* spacer = new QSpacerItem( 1, 10,
+                                           QSizePolicy::Minimum, QSizePolicy::Expanding );
+    layout->addMultiCell( spacer, 5, 5, 0, 1 );
+
+    addPage( page5, i18n( "Step 5: Options for unattended presentations" ) );
+
+    setHelpEnabled(page5, false);  //doesn't do anything currently
+
+    setFinish( page5, true );
+}
 
 void KPWebPresentationWizard::finish()
 {
@@ -938,6 +1050,10 @@ void KPWebPresentationWizard::finish()
     webPres.setTextColor( textColor->color() );
     webPres.setPath( path->lineEdit()->text() );
     webPres.setZoom( zoom->value() );
+    webPres.setTimeBetweenSlides( timeBetweenSlides->value() );
+    webPres.setWriteHeader( writeHeader->isChecked() );
+    webPres.setWriteFooter( writeFooter->isChecked() );
+    webPres.setLoopSlides( loopSlides->isChecked() );
     webPres.setXML( doctype->currentItem() != 0 );
     webPres.setEncoding( KGlobal::charsets()->encodingForName( encoding->currentText() ) );
 
@@ -947,7 +1063,7 @@ void KPWebPresentationWizard::finish()
 
 void KPWebPresentationWizard::pageChanged()
 {
-    if ( currentPage() != page4 )
+    if ( currentPage() != page5 )
     {
         QString pathname = path->lineEdit()->text();
 
@@ -1125,6 +1241,7 @@ void KPWebPresentationCreateDialog::setupGUI()
     step2 = new QLabel( i18n( "Create Pictures of the Slides" ), back );
     step3 = new QLabel( i18n( "Create HTML Pages for the Slides" ), back );
     step4 = new QLabel( i18n( "Create Main Page (Table of Contents)" ), back );
+    step5 = new QLabel( i18n( "Options for Unattended Presentations" ), back);
 
     line = new QFrame( back );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );

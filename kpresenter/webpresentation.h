@@ -45,6 +45,8 @@ class QCloseEvent;
 class KProgress;
 class QLabel;
 
+class QCheckBox;
+
 class KPWebPresentation
 {
 public:
@@ -67,10 +69,18 @@ public:
         { textColor = _textColor; }
     void setXML( bool _xml )
         { xml = _xml; }
+    void setWriteHeader( bool _writeHeader )
+        { m_bWriteHeader = _writeHeader; }
+    void setWriteFooter( bool _writeFooter )
+        { m_bWriteFooter = _writeFooter; }
+    void setLoopSlides( bool _loopSlides )
+        { m_bLoopSlides = _loopSlides; }
     void setPath( const QString &_path )
         { path = _path; }
     void setZoom( int _zoom )
         { zoom = _zoom; }
+    void setTimeBetweenSlides( int _timeBetweenSlides )
+        { timeBetweenSlides = _timeBetweenSlides; } // PAU
     void setEncoding( const QString &_encoding ) { m_encoding = _encoding; }
 
     QString getAuthor() const { return author; }
@@ -80,8 +90,12 @@ public:
     QColor getTitleColor() const { return titleColor; }
     QColor getTextColor() const { return textColor; }
     bool isXML() const { return xml; }
+    bool wantHeader() const { return m_bWriteHeader; }
+    bool wantFooter() const { return m_bWriteFooter; }
+    bool wantLoopSlides() const { return m_bLoopSlides; }
     QString getPath() const { return path; }
     int getZoom() const { return zoom; }
+    int getTimeBetweenSlides() const { return timeBetweenSlides; } // PAU
     QString getEncoding() const { return m_encoding; }
 
     struct SlideInfo {
@@ -116,17 +130,18 @@ protected:
     void init();
     QString escapeHtmlText( QTextCodec *codec, const QString& strText ) const;
     void writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec,
-                            const QString& subtitle);
+                            const QString& subtitle, const QString& dest, const QString& next);
 
     KPresenterDoc *doc;
     KPresenterView *view;
     QString config;
-
     QString author, title, email;
     QValueList<SlideInfo> slideInfos;
     QColor backColor, titleColor, textColor;
-    QString path;
+    QString path;    
     bool xml;
+    bool m_bWriteHeader, m_bWriteFooter, m_bLoopSlides;
+    int timeBetweenSlides;
     int zoom;
     QString m_encoding;
 };
@@ -147,6 +162,7 @@ protected:
     void setupPage2();
     void setupPage3();
     void setupPage4();
+    void setupPage5(); // PAU
 
     void closeEvent( QCloseEvent *e );
 
@@ -155,11 +171,12 @@ protected:
     KPresenterView *view;
     KPWebPresentation webPres;
 
-    QHBox *page1, *page2, *page3, *page4;
+    QHBox *page1, *page2, *page3, *page4, *page5; // PAU
+    QCheckBox *writeHeader, *writeFooter, *loopSlides; // PAU
     KLineEdit *author, *title, *email;
     KColorButton *textColor, *titleColor, *backColor;
     KComboBox *encoding, *doctype;
-    KIntNumInput *zoom;
+    KIntNumInput *zoom, *timeBetweenSlides; // PAU
     KURLRequester *path;
     KListView *slideTitles;
     KLineEdit *slideTitle;
@@ -199,7 +216,7 @@ protected:
     KPWebPresentation webPres;
 
     KProgress *progressBar;
-    QLabel *step1, *step2, *step3, *step4;
+    QLabel *step1, *step2, *step3, *step4, *step5;    
     QPushButton *bDone, *bSave;
     QVBox *back;
 
