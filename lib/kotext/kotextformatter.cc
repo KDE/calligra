@@ -78,7 +78,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
-    qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d availableWidth=%d", left, initialHeight, initialLMargin, initialRMargin, availableWidth );
+    qDebug( "KoTextFormatter::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d availableWidth=%d", left, initialHeight, initialLMargin, initialRMargin, availableWidth );
 #endif
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;

@@ -1065,7 +1065,7 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
     return new KoTextCommand( this, /*cmd, */i18n("Change List Type") );
 }
 
-KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int selectionId )
+KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align, int selectionId )
 {
     if ( protectContent() )
         return 0L;
@@ -1606,6 +1606,12 @@ void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 
     if ( d->abortFormatting ) {
         d->abortFormatting = false;
+        return;
+    }
+
+    if ( count == 0 )
+    {
+        formatTimer->start( interval, TRUE );
         return;
     }
 
