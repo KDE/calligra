@@ -9,3 +9,6 @@ kthesaurus_LDADD = $(LIB_KSYCOCA)
  
 appsdir = $(kde_appsdir)/Office
 apps_DATA = KThesaurus.desktop
+
+messages:
+	$(XGETTEXT) *.cc -o $(podir)/kthesaurus.pot

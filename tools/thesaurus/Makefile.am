@@ -19,3 +19,6 @@ servicedir = $(kde_servicesdir)
 
 datadir = $(kde_datadir)/thesaurus
 data_DATA = thesaurus.txt
+
+messages:
+	$(XGETTEXT) *.cc -o $(podir)/thesaurus_tool.pot

@@ -6,3 +6,6 @@ koconverter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 koconverter_LDADD = $(top_builddir)/lib/kofficecore/libkofficecore.la
 
 METASOURCES = AUTO
+
+messages:
+	$(XGETTEXT) *.cc -o $(podir)/koconverter.pot
