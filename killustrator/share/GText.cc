@@ -21,7 +21,7 @@
 
 */
 
-#include <cassert>
+#include <assert.h>
 #include <GText.h>
 #include <GDocument.h>
 

@@ -22,14 +22,17 @@
 
 */
 
+#include <assert.h>
+#include <stdlib.h>
+
+#include <qdom.h>
+#include <qpainter.h>
+
+#include <klocale.h>
+
 #include <GCurve.h>
 #include <GBezier.h>
 #include <Painter.h>
-#include <cassert>
-#include <klocale.h>
-#include <qdom.h>
-#include <qpainter.h>
-#include <stdlib.h>
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier

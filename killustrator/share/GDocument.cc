@@ -36,7 +36,7 @@
 #include <GCurve.h>
 #include <GLayer.h>
 
-#include <cassert>
+#include <assert.h>
 #include <kdebug.h>
 
 #ifdef __FreeBSD__
