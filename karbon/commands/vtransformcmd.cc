@@ -147,6 +147,11 @@ VTransformCmd::unexecute()
 void
 VTransformCmd::visitVComposite( VComposite& composite )
 {
+	if( composite.state() == VObject::hidden ||
+		composite.state() == VObject::normal_locked ||
+		composite.state() == VObject::hidden_locked )
+		return;
+
 	// Apply transformation to gradients.
 	if( composite.stroke()->type() == VStroke::grad )
 		composite.stroke()->gradient().transform( m_mat );
@@ -160,6 +165,11 @@ VTransformCmd::visitVComposite( VComposite& composite )
 void
 VTransformCmd::visitVPath( VPath& path )
 {
+	if( path.state() == VObject::hidden ||
+		path.state() == VObject::normal_locked ||
+		path.state() == VObject::hidden_locked )
+		return;
+
 	VSegment* segment = path.first();
 
 	while( segment )
@@ -179,6 +189,11 @@ VTransformCmd::visitVPath( VPath& path )
 void
 VTransformCmd::visitVText( VText& text )
 {
+	if( text.state() == VObject::hidden ||
+		text.state() == VObject::normal_locked ||
+		text.state() == VObject::hidden_locked )
+		return;
+
 	visit( text.basePath() );
 
 	VCompositeListIterator itr( text.glyphs() );
@@ -194,6 +209,11 @@ VTransformCmd::visitVText( VText& text )
 void
 VTransformCmd::visitVImage( VImage &img )
 {
+	if( img.state() == VObject::hidden ||
+		img.state() == VObject::normal_locked ||
+		img.state() == VObject::hidden_locked )
+		return;
+
 	img.transform( m_mat );
 }
 
