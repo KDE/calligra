@@ -28,7 +28,6 @@
 #include <shapes/vstar.h>
 #include "vstartool.h"
 #include "koUnitWidgets.h"
-#include <kgenericfactory.h>
 
 
 VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
@@ -94,10 +93,7 @@ VStarTool::VStarOptionsWidget::outerRadius() const
 	return m_outerR->value();
 }
 
-typedef KGenericFactory<VStarTool, KarbonView> StarToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_startoolplugin, StarToolPluginFactory( "karbonstartoolplugin" ) );
-
-VStarTool::VStarTool( KarbonView* view, const char *, const QStringList & )
+VStarTool::VStarTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Star" ), true )
 {
 	// create config dialog:

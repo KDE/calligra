@@ -32,7 +32,7 @@ class QLabel;
 class VSinusTool : public VShapeTool
 {
 public:
-	VSinusTool( KarbonView *view, const char *, const QStringList & );
+	VSinusTool( KarbonView *view );
 	virtual ~VSinusTool();
 
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }

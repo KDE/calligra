@@ -28,7 +28,6 @@
 #include <shapes/vrectangle.h>
 #include "vrectangletool.h"
 #include <koUnitWidgets.h>
-#include <kgenericfactory.h>
 
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
@@ -78,10 +77,7 @@ VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 	m_height->setUnit( m_part->unit() );
 }
 
-typedef KGenericFactory<VRectangleTool, KarbonView> RectangleToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_rectangletoolplugin, RectangleToolPluginFactory( "karbonrectangletoolplugin" ) );
-
-VRectangleTool::VRectangleTool( KarbonView* view, const char *, const QStringList & )
+VRectangleTool::VRectangleTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Rectangle" ) )
 {
 	// Create config dialog:

@@ -31,10 +31,9 @@
 #include <shapes/vsinus.h>
 #include "vsinustool.h"
 #include "koUnitWidgets.h"
-#include <kgenericfactory.h>
 
 
-VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
+VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
 {
 	// add width/height-input:
@@ -95,10 +94,7 @@ VSinusTool::VSinusOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-typedef KGenericFactory<VSinusTool, KarbonView> SinusToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_sinustoolplugin, SinusToolPluginFactory( "karbonsinustoolplugin" ) );
-
-VSinusTool::VSinusTool( KarbonView* view, const char *, const QStringList & )
+VSinusTool::VSinusTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Sinus" ) )
 {
 	// create config widget:

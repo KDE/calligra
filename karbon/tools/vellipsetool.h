@@ -34,7 +34,7 @@ class QWidget;
 class VEllipseTool : public VShapeTool
 {
 public:
-	VEllipseTool( KarbonView *view, const char *, const QStringList & );
+	VEllipseTool( KarbonView *view );
 	virtual ~VEllipseTool();
 
 	virtual QString name() { return i18n( "Ellipse tool" ); }

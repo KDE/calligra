@@ -31,7 +31,7 @@ class KIntSpinBox;
 class VPolygonTool : public VShapeTool
 {
 public:
-	VPolygonTool( KarbonView *view, const char *, const QStringList & );
+	VPolygonTool( KarbonView *view );
 	virtual ~VPolygonTool();
 
 	virtual QString name() { return i18n( "Polygon tool" ); }

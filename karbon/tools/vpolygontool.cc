@@ -28,7 +28,6 @@
 #include <karbon_part.h>
 #include <shapes/vpolygon.h>
 #include "vpolygontool.h"
-#include <kgenericfactory.h>
 
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
@@ -73,10 +72,7 @@ VPolygonTool::VPolygonOptionsWidget::refreshUnit()
 	m_radius->setUnit( m_part->unit() );
 }
 
-typedef KGenericFactory<VPolygonTool, KarbonView> PolygonToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_polygontoolplugin, PolygonToolPluginFactory( "karbonpolygontoolplugin" ) );
-
-VPolygonTool::VPolygonTool( KarbonView* view, const char *, const QStringList & )
+VPolygonTool::VPolygonTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Polygon" ), true )
 {
 	// create config dialog:

@@ -36,7 +36,7 @@ class KarbonPart;
 class VSpiralTool : public VShapeTool
 {
 public:
-	VSpiralTool( KarbonView *view, const char *, const QStringList & );
+	VSpiralTool( KarbonView *view );
 	virtual ~VSpiralTool();
 
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
@@ -70,7 +70,7 @@ private:
 		KoUnitDoubleSpinBox	*m_radius;
 		KIntSpinBox			*m_segments;
 		KDoubleNumInput		*m_fade;
-		QComboBox			*m_clockwise;
+		KComboBox			*m_clockwise;
 		KarbonPart			*m_part;
 	};
 

@@ -26,6 +26,14 @@ class VSelectNodesTool;
 class VRotateTool;
 class VShearTool;
 
+class VEllipseTool;
+class VPolygonTool;
+class VRectangleTool;
+class VRoundRectTool;
+class VSinusTool;
+class VSpiralTool;
+class VStarTool;
+
 class VToolFactory
 {
 public:
@@ -37,6 +45,13 @@ private:
 	VSelectNodesTool	*m_selectNodesTool;
 	VRotateTool			*m_rotateTool;
 	VShearTool			*m_shearTool;
+	VEllipseTool		*m_ellipseTool;
+	VPolygonTool		*m_polygonTool;
+	VRectangleTool		*m_rectangleTool;
+	VRoundRectTool		*m_roundRectTool;
+	VSinusTool			*m_sinusTool;
+	VSpiralTool			*m_spiralTool;
+	VStarTool			*m_starTool;
 };
 
 #endif

@@ -90,10 +90,7 @@ VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-typedef KGenericFactory<VRoundRectTool, KarbonView> RoundRectToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_roundrecttoolplugin, RoundRectToolPluginFactory( "karbonroundrecttoolplugin" ) );
-
-VRoundRectTool::VRoundRectTool( KarbonView* view, const char* name, const QStringList & )
+VRoundRectTool::VRoundRectTool( KarbonView* view )
 		: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
 {
 	// Create config dialog:

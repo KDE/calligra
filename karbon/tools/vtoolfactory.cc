@@ -27,6 +27,13 @@
 #include "vselectnodestool.h"
 #include "vrotatetool.h"
 #include "vsheartool.h"
+#include "vellipsetool.h"
+#include "vpolygontool.h"
+#include "vrectangletool.h"
+#include "vroundrecttool.h"
+#include "vsinustool.h"
+#include "vspiraltool.h"
+#include "vstartool.h"
 
 VToolFactory::VToolFactory( KarbonView *view ) 
 {
@@ -34,6 +41,13 @@ VToolFactory::VToolFactory( KarbonView *view )
 	m_selectNodesTool	= new VSelectNodesTool( view, "" );
 	m_rotateTool		= new VRotateTool( view, "" );
 	m_shearTool			= new VShearTool( view, "" );
+	m_ellipseTool		= new VEllipseTool( view );
+	m_polygonTool		= new VPolygonTool( view );
+	m_rectangleTool		= new VRectangleTool( view );
+	m_roundRectTool		= new VRoundRectTool( view );
+	m_sinusTool			= new VSinusTool( view );
+	m_spiralTool		= new VSpiralTool( view );
+	m_starTool			= new VStarTool( view );
 }
 
 VToolFactory::~VToolFactory()
@@ -42,5 +56,12 @@ VToolFactory::~VToolFactory()
 	delete m_selectNodesTool;
 	delete m_rotateTool;
 	delete m_shearTool;
+	delete m_ellipseTool;
+	delete m_polygonTool;
+	delete m_rectangleTool;
+	delete m_roundRectTool;
+	delete m_sinusTool;
+	delete m_spiralTool;
+	delete m_starTool;
 }
 

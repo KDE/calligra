@@ -29,7 +29,6 @@
 #include <shapes/vspiral.h>
 #include "vspiraltool.h"
 #include "koUnitWidgets.h"
-#include <kgenericfactory.h>
 
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
@@ -108,10 +107,7 @@ VSpiralTool::VSpiralOptionsWidget::refreshUnit()
 	m_radius->setUnit( m_part->unit() );
 }
 
-typedef KGenericFactory<VSpiralTool, KarbonView> SpiralToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_spiraltoolplugin, SpiralToolPluginFactory( "karbonspiraltoolplugin" ) );
-
-VSpiralTool::VSpiralTool( KarbonView* view, const char *, const QStringList & )
+VSpiralTool::VSpiralTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Spiral" ), true )
 {
 	// create config dialog:

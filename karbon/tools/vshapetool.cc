@@ -32,7 +32,6 @@
 #include "vshapetool.h"
 #include "vselection.h"
 
-
 VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
 	: VTool( view, name.latin1() ), m_name( name )
 {

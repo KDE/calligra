@@ -30,7 +30,6 @@
 #include <karbon_part.h>
 #include <shapes/vellipse.h>
 #include "vellipsetool.h"
-#include <kgenericfactory.h>
 
 
 VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent, const char *name )
@@ -77,10 +76,7 @@ VEllipseTool::VEllipseOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-typedef KGenericFactory<VEllipseTool, KarbonView> EllipseToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_ellipsetoolplugin, EllipseToolPluginFactory( "karbonellipsetoolplugin" ) );
-
-VEllipseTool::VEllipseTool( KarbonView* view, const char *, const QStringList & )
+VEllipseTool::VEllipseTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Ellipse" ) )
 {
 	// create config dialog:
