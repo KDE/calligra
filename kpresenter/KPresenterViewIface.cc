@@ -330,6 +330,11 @@ void KPresenterViewIface::screenPenWidth( const QString &w )
     view->screenPenWidth( w );
 }
 
+void KPresenterViewIface::screenViewPage()
+{
+    view->screenViewPage();
+}
+
 void KPresenterViewIface::sizeSelected()
 {
     view->sizeSelected();
@@ -429,6 +434,7 @@ int KPresenterViewIface::getPresStepsOfPage()
 {
     return view->getPresStepsOfPage();
 }
+
 
 int KPresenterViewIface::getNumPresPages()
 {

@@ -112,6 +112,7 @@ k_dcop:
     virtual void screenSkip();
     virtual void screenPenColor();
     virtual void screenPenWidth( const QString &w );
+    virtual void screenViewPage();
 
     // text toolbar
     virtual void sizeSelected();
