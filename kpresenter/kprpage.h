@@ -74,6 +74,7 @@ public:
     void removeObject( int pos);
     void insertObject(KPObject *_obj,int pos);
     void completeLoading( bool _clean, int lastObj );
+    void unifyObjectName( KPObject *object );
 
     KoRect getPageRect() const;
     QRect getZoomPageRect()const;
@@ -298,6 +299,7 @@ protected:
 private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );
     void completeLoadingForGroupObject( KPObject *_obj );
+    bool objectNameExists( KPObject *object, QPtrList<KPObject> &list );
 
 
     // list of objects

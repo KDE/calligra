@@ -123,6 +123,7 @@ Changes after KPresenter 1.2
 - Add autocorrection : "Capitalize name of days"
 - Added support for global language
 - Use new kospell API
+- Added support for naming objects
 
 Visual stuff:
 - objects use "forbidden" cursor when they're protected (new)

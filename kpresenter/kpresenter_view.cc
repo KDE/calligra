@@ -3485,6 +3485,26 @@ void KPresenterView::styleOk()
         }
     }
 
+    // stick has to be done before the object name is set, 
+    // so that the name is set in the right page
+    bool bSticky=styleDia->isSticky();
+    if ( !styleDia->stickyNoChange())
+    {
+        bSticky=styleDia->isSticky();
+        //all sticky obj are sticky page => when sticky=false test sticky page
+        if(bSticky)
+            cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
+        else
+            cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
+        if(cmd)
+        {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
+            macro->addCommand(cmd);
+        }
+    }
+    
     if ( styleDia->isOneObject())
     {
         KoRect rect = styleDia->getNewSize();
@@ -3499,6 +3519,10 @@ void KPresenterView::styleOk()
                                         m_canvas->getSelectedObj(), m_pKPresenterDoc );
         cmd->execute();
         macro->addCommand(cmd);
+
+        // set object name again, as it can be changed by the KPrNameObjectCommand
+        objectName = m_canvas->getSelectedObj()->getObjectName();
+        styleDia->setObjectName( objectName );
 
         if ( styleDia->isAllTextObject() )
         {
@@ -3523,23 +3547,6 @@ void KPresenterView::styleOk()
                 macro->addCommand(cmd);
             }
 
-        }
-    }
-    bool bSticky=styleDia->isSticky();
-    if ( !styleDia->stickyNoChange())
-    {
-        bSticky=styleDia->isSticky();
-        //all sticky obj are sticky page => when sticky=false test sticky page
-        if(bSticky)
-            cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
-        else
-            cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
         }
     }
 

@@ -99,9 +99,8 @@ private:
 class OutlineObjectItem: public KListViewItem
 {
 public:
-
     OutlineObjectItem( OutlineSlideItem * parent, KPObject* object,
-                       int num, bool sticky, const QString& name = QString::null );
+                       bool sticky, const QString& name = QString::null );
 
     KPObject* object(){ return m_object; }
 
@@ -564,12 +563,14 @@ void OutlineSlideItem::update()
 
     // keep selected object
     ooi = 0;
-    QPtrList<KPObject> list(m_page->objectList());
-    for ( int j = m_page->objNums() - 1; j >= 0; --j ) {
-        KPObject* object = list.at( j );
-        OutlineObjectItem *item = new OutlineObjectItem( this, object, j+1, object->isSticky() );
+
+    QPtrListIterator<KPObject> it( m_page->objectList() );
+
+    for ( ; it.current(); ++it ) {
+        OutlineObjectItem *item = new OutlineObjectItem( this, it.current(), 
+                                                         it.current()->isSticky() );
         item->setDragEnabled( false );
-        if ( object->isSelected() )
+        if ( it.current()->isSelected() )
             ooi = item;
     }
 
@@ -578,7 +579,7 @@ void OutlineSlideItem::update()
 
     KPresenterDoc *doc = m_page->kPresenterDoc();
     // add sticky objects, exclude header and footer
-    QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
+    it = doc->stickyPage()->objectList();
     for ( ; it.current() ; ++it )
     {
         KPObject* object = it.current();
@@ -588,7 +589,7 @@ void OutlineSlideItem::update()
         else if( doc->hasFooter() && doc->isFooter( object ) )
             footer = object;
         else if( !doc->isHeader( object ) && !doc->isFooter( object ) ) {
-            OutlineObjectItem *item = new OutlineObjectItem( this, object, 0, true );
+            OutlineObjectItem *item = new OutlineObjectItem( this, object, true );
             if ( object->isSelected() )
                 ooi = item;
         }
@@ -597,13 +598,13 @@ void OutlineSlideItem::update()
 
     // add header and footer (if any)
     if ( footer ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, footer, 0, true, i18n("Footer") );
+        OutlineObjectItem *item = new OutlineObjectItem( this, footer, true, i18n("Footer") );
         if ( footer->isSelected() )
             ooi = item;
     }
 
     if ( header ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, header, 0, true, i18n("Header") );
+        OutlineObjectItem *item = new OutlineObjectItem( this, header, true, i18n("Header") );
         if ( header->isSelected() )
             ooi = item;
     }
@@ -616,13 +617,12 @@ void OutlineSlideItem::update()
 
 
 OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object,
-                                      int num, bool sticky, const QString& name )
+                                      bool sticky, const QString& name )
     : KListViewItem( parent ), m_object( _object )
 {
     setObject( m_object );
 
-    QString objectName = name.isEmpty() ? m_object->getTypeString() : name;
-    if( num > 0 ) objectName += QString(" (%1)").arg( num );
+    QString objectName = name.isEmpty() ? m_object->getObjectName() : name;
     if( sticky ) objectName += i18n(" (Sticky)" );
     setText( 0, objectName );
 }

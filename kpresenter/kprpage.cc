@@ -57,6 +57,7 @@
 #include <koVariable.h>
 #include <qrichtext_p.h>
 #include <qbuffer.h>
+#include <qregexp.h>
 
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
@@ -96,8 +97,56 @@ KPObject *KPrPage::getObject(int num)
     return m_objectList.at(num);
 }
 
+/*
+ * Check if object name allready exists.
+ */
+bool KPrPage::objectNameExists( KPObject *object, QPtrList<KPObject> &list ) {
+    QPtrListIterator<KPObject> it( list );
+
+    for ( it.toFirst(); it.current(); ++it ) {
+        // object name can exist in current object.
+        if ( it.current()->getObjectName() == object->getObjectName() &&
+             it.current() != object ) {
+            return true;
+        }
+        else if ( it.current()->getType() == OT_GROUP ) {
+            QPtrList<KPObject> objectList( static_cast<KPGroupObject*>(it.current())->getObjects() );
+            if ( objectNameExists( object, objectList ) ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/*
+ * Create a uniq name for a object.
+ * if the name allready exists append ' (x)'. 
+ */
+void KPrPage::unifyObjectName( KPObject *object ) {
+    if ( object->getObjectName().isEmpty() ) {
+        object->setObjectName( object->getTypeString() );
+    }
+    QString objectName( object->getObjectName() );
+    
+    QPtrList<KPObject> list( m_objectList );
+
+    int count = 1;
+
+    while ( objectNameExists( object, list ) ) {
+        count++;
+        QRegExp rx( " \\(\\d{1,3}\\)$" );
+        if ( rx.search( objectName ) != -1 ) {
+            objectName.replace( rx, "" );
+        }
+        objectName += QString(" (%1)").arg( count );
+        object->setObjectName( objectName );
+    }
+}
+
 void KPrPage::appendObject(KPObject *_obj)
 {
+    unifyObjectName(_obj);
     m_objectList.append(_obj);
 }
 

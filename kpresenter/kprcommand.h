@@ -950,6 +950,7 @@ protected:
     QString oldObjectName, newObjectName;
     KPObject *object;
     KPresenterDoc *doc;
+    KPrPage *m_page;
 };
 
 class KPrHideShowHeaderFooter : public KNamedCommand

@@ -528,6 +528,9 @@ void GroupObjCmd::unexecute()
 {
     grpObj->setUpdateObjects( false );
 
+    m_page->takeObject( grpObj );
+    grpObj->removeFromObjList();
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
@@ -536,8 +539,6 @@ void GroupObjCmd::unexecute()
         it.current()->setSelected( true );
     }
 
-    m_page->takeObject( grpObj );
-    grpObj->removeFromObjList();
     doc->refreshGroupButton();
 
     doc->repaint( false );
@@ -573,6 +574,9 @@ void UnGroupObjCmd::execute()
 {
     grpObj->setUpdateObjects( false );
 
+    m_page->takeObject(grpObj);
+    grpObj->removeFromObjList();
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
@@ -581,8 +585,6 @@ void UnGroupObjCmd::execute()
         it.current()->setSelected( true );
     }
 
-    m_page->takeObject(grpObj);
-    grpObj->removeFromObjList();
     doc->refreshGroupButton();
 
     doc->repaint( false );
@@ -2373,6 +2375,8 @@ KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString 
     doc( _doc )
 {
     oldObjectName = object->getObjectName();
+
+    m_page = doc->findSideBarPage( object );
 }
 
 KPrNameObjectCommand::~KPrNameObjectCommand()
@@ -2382,11 +2386,18 @@ KPrNameObjectCommand::~KPrNameObjectCommand()
 void KPrNameObjectCommand::execute()
 {
     object->setObjectName( newObjectName );
+    m_page->unifyObjectName( object );
+
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
 void KPrNameObjectCommand::unexecute()
 {
     object->setObjectName( oldObjectName );
+
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
 KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc,
