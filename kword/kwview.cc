@@ -89,7 +89,6 @@
 #include <kotextobject.h>
 #include <tkcoloractions.h>
 
-#include <kaccel.h>
 #include <kaccelgen.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -811,7 +810,7 @@ void KWView::setupActions()
 
     actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
                                      this, SLOT( textColor() ),
-                                     actionCollection(), "format_color",true );
+                                     actionCollection(), "format_color", true );
     actionFormatColor->setDefaultColor(QColor());
 
 
@@ -887,12 +886,12 @@ void KWView::setupActions()
         lst << QString::number( i );
     actionBorderWidth->setItems( lst );
 
-    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color",true );
+    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", true );
     actionBorderColor->setDefaultColor(QColor());
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
-    actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color..." ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color..." ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor", true);
     actionBackgroundColor->setToolTip( i18n( "Change background color for currently selected text." ) );
     actionBackgroundColor->setWhatsThis( i18n( "Change background color for currently selected text." ) );
 
@@ -1119,8 +1118,15 @@ void KWView::setupActions()
     new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
                  this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
-    new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotCompletion() ), actionCollection(), "completition" );
+    new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
+    new KAction( i18n( "Increase Outline Level" ), ALT+Key_Right,
+                 this, SLOT( slotIncreaseOutlineLevel() ), actionCollection(), "increase_outline_level" );
+    new KAction( i18n( "Decrease Outline Level" ), ALT+Key_Left,
+                 this, SLOT( slotDecreaseOutlineLevel() ), actionCollection(), "decrease_outline_level" );
+
+
+    // --------
     actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
                                         this, SLOT( editCustomVariable() ),
                                         actionCollection(), "edit_customvars" );
@@ -6066,6 +6072,20 @@ void KWView::slotLineBreak()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertLineBreak();
+}
+
+void KWView::slotIncreaseOutlineLevel()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->increaseOutlineLevel( m_doc->styleCollection() );
+}
+
+void KWView::slotDecreaseOutlineLevel()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->decreaseOutlineLevel( m_doc->styleCollection() );
 }
 
 void KWView::refreshAllVariable()

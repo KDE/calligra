@@ -278,11 +278,11 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // And let's do the same for framestyles
     KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
-    standardFrameStyle->setBackgroundColor(QColor("white"));
-    standardFrameStyle->setTopBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
-    standardFrameStyle->setRightBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
-    standardFrameStyle->setLeftBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
-    standardFrameStyle->setBottomBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+    standardFrameStyle->setBackgroundColor(Qt::white);
+    standardFrameStyle->setTopBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    standardFrameStyle->setRightBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    standardFrameStyle->setLeftBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    standardFrameStyle->setBottomBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
     m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
 
     // And let's do the same for tablestyles
