@@ -101,7 +101,6 @@ KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
 KoMainWindow* KChartPart::createShell()
 {
     KoMainWindow* shell = new KChartShell();
-    shell->setRootDocument( this );
     shell->show();
 
     return shell;
@@ -935,6 +934,19 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.38  2000/06/20 06:40:24  wtrobin
+ * - removed the createDoc implementation of all the childs
+ *   and implemented The Right Solution(tm) in koMainWindow.cc
+ *   (We're now using the mimetype to create a KoDocumentEntry
+ *   and use it to create a doc). This fixes the "libkword closed" bug
+ *   (as discussed with Simon - Thanks once again :)
+ * - made createView non-virtual and added a protected pure virtual
+ *   createViewInstance (David, what do you think of the name? :).
+ * - Adapted all apps to these changes
+ * - removed the topmostParentDocument() hack
+ *
+ * Will test that now more accurately, but it seems to work nicely
+ *
  * Revision 1.37  2000/06/18 10:03:11  wtrobin
  * Still hunting bugs :)
  *
