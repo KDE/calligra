@@ -260,7 +260,14 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
 
 static KoFilterDialogEntry koParseFilterDialogProperties( KService::Ptr service )
 {
-  return KoFilterDialogEntry ( koParseComponentProperties( service ) );
+  KoFilterDialogEntry e( koParseComponentProperties( service ) );
+
+  e.import = service->property( "Import" )->toString();
+  e.importDescription = service->property( "ImportDescription" )->toString();
+  e.export_ = service->property( "Export" )->toString();
+  e.exportDescription = service->property( "ExportDescription" )->toString();
+
+  return e;
 }
 
 /*******************************************************************
@@ -271,6 +278,10 @@ static KoFilterDialogEntry koParseFilterDialogProperties( KService::Ptr service 
 
 KoFilterDialogEntry::KoFilterDialogEntry( const KoFilterDialogEntry& e ) : KoComponentEntry( e )
 {
+  import = e.import;
+  importDescription = e.importDescription;
+  export_ = e.export_;
+  exportDescription = e.exportDescription;
 }
 
 KoFilterDialogEntry::KoFilterDialogEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )

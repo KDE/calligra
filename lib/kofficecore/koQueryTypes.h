@@ -180,6 +180,26 @@ public:
   KoFilterDialog* createFilterDialog( QObject* parent = 0, const char* name = 0);
 
   /**
+   *  The imported mimetype of the matching filter.
+   */
+  QString import;
+
+  /**
+   *  Comment regarding the imported data format of the matching filter.
+   */
+  QString importDescription;
+
+  /**
+   *    The exported mimetype of the matching filter.
+   */
+  QString export_;
+
+  /**
+   *  Comment regarding the exported data format of the matching filter.
+   */
+  QString exportDescription;
+
+  /**
    *  This function will query KDED to find all available filter dialogs.
    *
    *  @param _constr is a constraint expression as used by KDEDs trader interface.
