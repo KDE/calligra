@@ -74,6 +74,11 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
 	m_typeButtonBox = new VTypeButtonBox( part, this );
 
+	connect( m_strokeFillPreview, SIGNAL( fillSelected() ),
+		m_typeButtonBox, SLOT( slotSetStroke( false ) ) );
+	connect( m_strokeFillPreview, SIGNAL( strokeSelected() ),
+		m_typeButtonBox, SLOT( slotSetStroke( true ) ) );
+
 	// setup tool collections
 	m_manipulationtools.resize( 10 );
 	m_shapetools.resize( 20 );

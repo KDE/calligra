@@ -39,9 +39,17 @@ public:
  	};
 
 	VTypeButtonBox( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
+	bool isStrokeManipulator() { return m_isStrokeManipulator; }
+
+public slots:
+	void slotButtonPressed( int id );
+	void slotSetStroke( bool isStroke );
 
 private:
 	KarbonPart *m_part;
+	bool m_isStrokeManipulator;
+	void manipulateFills( int id );
+	void manipulateStrokes( int id );
 };
 
 #endif

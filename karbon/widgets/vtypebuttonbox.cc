@@ -88,10 +88,16 @@ static const char* const buttonpattern[]={
 "#aabbaa#",
 ".######."};
 
-#include <qtoolbutton.h>
 #include <qpixmap.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
+
+#include <klocale.h>
 
 #include "karbon_part.h"
+#include "vfillcmd.h"
+#include "vselection.h"
+#include "vstrokecmd.h"
 
 #include "vtypebuttonbox.h"
 
@@ -103,24 +109,87 @@ VTypeButtonBox::VTypeButtonBox( KarbonPart *part, QWidget* parent, const char* n
 	button->setPixmap( QPixmap( (const char **) buttonnone ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
+	QToolTip::add( button, i18n( "None" ) );
 	insert( button, none );
 	button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttonsolid ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
+	QToolTip::add( button, i18n( "Solid" ) );
 	insert( button, solid );
 	button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttongradient ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
+	QToolTip::add( button, i18n( "Gradient" ) );
 	insert( button, gradient );
 	button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttonpattern ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
+	QToolTip::add( button, i18n( "Pattern" ) );
 	insert( button, pattern );
 	setInsideMargin( 2 );
 	setInsideSpacing( 2 );
+	connect( this, SIGNAL( clicked( int ) ), this, SLOT( slotButtonPressed( int ) ) );
+}
+
+void
+VTypeButtonBox::slotButtonPressed( int id )
+{
+	if( m_part && m_part->document().selection()->objects().count() > 0 )
+		if ( m_isStrokeManipulator )
+			manipulateStrokes( id );
+		else
+			manipulateFills( id );
+}
+
+void
+VTypeButtonBox::slotSetStroke( bool isStroke )
+{
+	m_isStrokeManipulator = isStroke;
+}
+
+void
+VTypeButtonBox::manipulateFills( int id )
+{
+	VFill m_fill;
+	m_fill = *m_part->document().selection()->objects().getFirst()->fill();
+	switch( id ){
+	case none:
+		m_fill.setType( VFill::none );
+		break;
+	case solid:
+		m_fill.setType( VFill::solid );
+		break;
+	case gradient:
+		m_fill.setType( VFill::grad );
+		break;
+	case pattern:
+		m_fill.setType( VFill::patt );
+	}
+	m_part->addCommand( new VFillCmd( &m_part->document(), m_fill ), true );
+}
+
+void
+VTypeButtonBox::manipulateStrokes( int id )
+{
+	VStroke m_stroke;
+	m_stroke = *m_part->document().selection()->objects().getFirst()->stroke();
+	switch( id ){
+	case none:
+		m_stroke.setType( VStroke::none );
+		break;
+	case solid:
+		m_stroke.setType( VStroke::solid );
+		break;
+	case gradient:
+		m_stroke.setType( VStroke::grad );
+		break;
+	case pattern:
+		m_stroke.setType( VStroke::patt );
+	}
+	m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
 }
 
 #include "vtypebuttonbox.moc"
