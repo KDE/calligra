@@ -43,7 +43,7 @@ StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&)
 {
     hasHeader = false;
     hasFooter = false;
-    frames = 0;
+    framesNumber = 0;
 }
 
 StarWriterImport::~StarWriterImport()
