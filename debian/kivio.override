@@ -5,6 +5,8 @@ kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkivioselecttool.so.0.0.0 usr/li
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkiviotexttool.so.0.0.0 usr/lib/libkiviotexttool.so
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkiviozoomtool.so.0.0.0 usr/lib/libkiviozoomtool.so
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkivioconnectortool.so.0.0.0 usr/lib/libkivioconnectortool.so
+# This is a module.
+kivio: shlib-missing-in-control-file libstraight_connector usr/lib/kivio/libstraight_connector.so
 # This is inserted by debhelper and is legal.
 kivio: postrm-calls-ldconfig
 # Menu item.

@@ -13,6 +13,7 @@ koffice (1:1.1-20010404-1) unstable; urgency=low
     single Recommends: koffice.
   * Upgraded debian/rules to DH_COMPAT=3 and removed postinst scripts;
     completely reworked debian/rules.
+  * Updated standards version to 3.5.2.
   * Added versioning to libraries in /usr/lib/.
   * Moved libcsv[export/import] and associated files from koffice-libs to
     kspread since they require kspread libraries.
