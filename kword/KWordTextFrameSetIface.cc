@@ -143,3 +143,9 @@ QColor KWordTextFrameSetIface::textBackgroundColor() const
 {
     return m_frametext->textObject()->textBackgroundColor();
 }
+
+void KWordTextFrameSetIface::setTextFamilyFont(const QString &font)
+{
+    m_frametext->textObject()->setFamilyCommand(font);
+}
+
