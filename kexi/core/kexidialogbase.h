@@ -68,16 +68,19 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		int	docID() { return m_docID; }
 //		KInstance *instance();
 
-		//! Kexi part used to create this window
+		//! \return Kexi part used to create this window
 		inline KexiPart::Part* part() const { return m_part; }
+
+		//! \return Kexi part item used to create this window
+		KexiPart::Item *partItem() const { return m_item; }
 
 		//! Kexi part's gui client
 		inline KexiPart::GUIClient* guiClient() const { return m_part ? m_part->instanceGuiClient() : 0; }
 
 		/*! Tries to close the dialog. \return true if closing is accepted 
 		 (sometimes, user may not want to close the dialog by pressing cancel). 
-		 If \a dontSaveChanges if true, changes are not saved iven if this dialog is dirty. */
-		bool tryClose(bool dontSaveChanges);
+		 If \a dontSaveChanges if true, changes are not saved even if this dialog is dirty. */
+//js removed		bool tryClose(bool dontSaveChanges);
 
 		/*! \return name of icon provided by part that created this dialog.
 		 The name is used by KexiMainWindow to set/reset icon for this dialog. */
@@ -160,7 +163,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		int m_docID;
 //		KInstance *m_instance;
 		QGuardedPtr<KexiPart::Part> m_part;
-		const KexiPart::Item *m_item;
+		KexiPart::Item *m_item;
 		QWidgetStack *m_stack;
 		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
 

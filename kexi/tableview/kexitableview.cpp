@@ -3147,19 +3147,6 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				return true;
 		}
 	}
-	else if (o==viewport() && (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut)) {
-		//update focus visibility
-		//updateCell( d->curRow, d->curCol );
-		const bool r = QScrollView::eventFilter(o,e);
-		repaintContents();
-//	QTimer::singleShot(1000, this, SLOT( slotUpdate() ));
-		kdDebug() << ">>> CURRENT CELL ("<<d->curCol<<"," << d->curRow<<")"<<endl;
-
-//		setCursor(0,1);
-//QMouseEvent e(QEvent::MouseButtonPress, QPoint(columnPos(1),rowPos(0)), LeftButton, LeftButton);
-//contentsMousePressEvent( &e );
-		return r;
-	}
 	return QScrollView::eventFilter(o,e);
 }
 

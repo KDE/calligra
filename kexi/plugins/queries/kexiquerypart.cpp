@@ -47,7 +47,7 @@ KexiQueryPart::~KexiQueryPart()
 }
 
 KexiViewBase*
-KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog,  const KexiPart::Item &item, int viewMode)
+KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
 	kdDebug() << "KexiQueryPart::createView()" << endl;
 	if (viewMode == Kexi::DataViewMode) {
@@ -70,7 +70,7 @@ KexiQueryPart::instanceName() const
 }*/
 
 bool
-KexiQueryPart::remove(KexiMainWindow *win, const KexiPart::Item &item)
+KexiQueryPart::remove(KexiMainWindow *win, KexiPart::Item &item)
 {
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return false;
@@ -80,7 +80,7 @@ KexiQueryPart::remove(KexiMainWindow *win, const KexiPart::Item &item)
 }
 
 KexiQueryDocument *
-KexiQueryPart::data(KexiDB::Connection *conn, const KexiPart::Item &i)
+KexiQueryPart::data(KexiDB::Connection *conn, KexiPart::Item &i)
 {
 	KexiQueryDocument *doc = m_data[i.identifier()];
 	if(doc)

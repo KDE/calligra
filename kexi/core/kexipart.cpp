@@ -69,7 +69,7 @@ void Part::createGUIClient(KexiMainWindow *win)
 	}
 }
 
-KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode )
+KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode )
 {
 //	KexiDialogBase *dlg = createInstance(win,item,viewMode);
 //	if (!dlg)

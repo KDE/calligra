@@ -43,6 +43,8 @@
 //KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
+ , m_baseItems(199, false)
+ , m_normalItems(199)
 {
 	QHBoxLayout *lyr = new QHBoxLayout(this);
 	m_list = new KListView(this, "list");
@@ -122,7 +124,7 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 //	item->setPixmap(0, SmallIcon(info->groupIcon()));
 //	item->setOpen(true);
 //	item->setSelectable(false);
-	m_baseItems.insert(info->mime().lower(), item);
+	m_baseItems.insert(info->mime().lower().latin1(), item);
 
 	kdDebug() << "KexiBrowser::addGroup()" << endl;
 //js: now it's executed by hand from keximainwindow:	slotItemListChanged(info);
@@ -140,22 +142,31 @@ KexiBrowser::addItem(KexiPart::Item *item)
 	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
 //	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
 	
-	(void)new KexiBrowserItem(parent, parent->info(), item);
+	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
+	m_normalItems.insert(item->identifier(), bitem);
 //	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
 }
 
 void 
 KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
 {
+	KexiBrowserItem *to_remove=m_normalItems.take(item.identifier());
+	if (!to_remove)
+		return;
+
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	QListViewItem *new_item = it->itemBelow();//nearest item to select
-	if (!new_item || new_item->parent()!=it->parent()) {
-		new_item = it->itemAbove();
+	
+	QListViewItem *new_item_to_select = 0;
+	if (it==to_remove) {//compute item to select if current one will be removed
+		new_item_to_select = it->itemBelow();//nearest item to select
+		if (!new_item_to_select || new_item_to_select->parent()!=it->parent()) {
+			new_item_to_select = it->itemAbove();
+		}
 	}
-	if (it->item()==&item)
-		delete it;
-	if (new_item)
-		m_list->setSelected(new_item, true);
+	delete to_remove;
+
+	if (new_item_to_select)
+		m_list->setSelected(new_item_to_select, true);
 }
 
 void

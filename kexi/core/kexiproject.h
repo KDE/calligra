@@ -115,7 +115,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		KexiProjectData *data() const { return m_data; }
 
-		KexiDialogBase* openObject(KexiMainWindow *wnd, const KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
+		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
 
 		//! For convenience
 		KexiDialogBase* openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
@@ -123,7 +123,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		/*! Remove part instance pointed by \a item.
 		 \return true on success.
 		*/
-		bool removeObject(KexiMainWindow *wnd, const KexiPart::Item& item);
+		bool removeObject(KexiMainWindow *wnd, KexiPart::Item& item);
 
 		/*! Creates part item for given part \a info. 
 		 Newly item will not be saved to the backend but stored in memory only

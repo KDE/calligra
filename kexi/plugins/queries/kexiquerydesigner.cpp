@@ -47,7 +47,7 @@
 
 #include "widget/relations/kexirelationwidget.h"
 
-KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &it)
+KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, KexiPart::Item &it)
 	: KexiDialogBase(win, it.name())
 {
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;

@@ -81,7 +81,7 @@ void KexiTablePart::initInstanceActions( KActionCollection *col )
 
 #if 0
 void
-KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
+KexiTablePart::execute(KexiMainWindow *win, KexiPart::Item &item)
 {
 	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(item.name());
 	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
@@ -104,9 +104,9 @@ KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
 #endif
 
 //KexiDialogBase*
-//KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode)
+//KexiTablePart::createInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode)
 KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog, 
-	const KexiPart::Item &item, int viewMode)
+	KexiPart::Item &item, int viewMode)
 {
 	KexiMainWindow *win = dialog->mainWin();
 	if (!win || !win->project() || !win->project()->dbConnection())
@@ -140,7 +140,7 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	return 0;
 }
 
-bool KexiTablePart::remove(KexiMainWindow *win, const KexiPart::Item &item)
+bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 {
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return false;

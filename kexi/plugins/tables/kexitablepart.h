@@ -35,17 +35,17 @@ class KexiTablePart : public KexiPart::Part
 		KexiTablePart(QObject *parent, const char *name, const QStringList &);
 		~KexiTablePart();
 
-		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
+		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
-//		virtual void execute(KexiMainWindow *win, const KexiPart::Item &);
+//		virtual void execute(KexiMainWindow *win, KexiPart::Item &);
 //moved to Part:		virtual void createGUIClient(KexiMainWindow *win);
 
 //		virtual QString instanceName() const;
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 	protected:
-//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		virtual void initPartActions( KActionCollection *col );
 		virtual void initInstanceActions( KActionCollection *col );

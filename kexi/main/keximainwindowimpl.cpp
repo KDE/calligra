@@ -1010,7 +1010,7 @@ KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 {
 	kdDebug() << "KexiMainWindowImpl::registerChild()" << endl;
 	connect(dlg, SIGNAL(activated(KMdiChildView *)), this, SLOT(activeWindowChanged(KMdiChildView *)));
-	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
+//	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
 	if(dlg->docID() != -1)
 		d->dialogs.insert(dlg->docID(), dlg);
 	kdDebug() << "KexiMainWindowImpl::registerChild() docID = " << dlg->docID() << endl;
@@ -1459,12 +1459,40 @@ KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
 	if (!pWnd)
 		return;
-	KXMLGUIClient *client = static_cast<KexiDialogBase *>(pWnd)->guiClient();
+	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(pWnd);
+	bool remove_on_closing = dlg->partItem()->neverSaved();
+	if (dlg->dirty()) {
+		//dialog's data is dirty:
+		const int res = KMessageBox::warningYesNoCancel( this,
+			i18n( "<p>The object has been modified: %1 \"%2\".</p><p>Do you want to save it?</p>" )
+			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
+			QString::null,
+			KStdGuiItem::save(),
+			KStdGuiItem::discard());
+		if (res==KMessageBox::Cancel)
+			return;
+		if (res==KMessageBox::Yes) {
+			//save it
+			//TODO
+			remove_on_closing = false;
+		}
+	}
+
+	if (remove_on_closing) {
+		//we won't save this object, and it was never saved -remove it
+		if (!removeObject( dlg->partItem() )) {
+			//msg?
+			return;
+		}
+	}
+
+	KXMLGUIClient *client = dlg->guiClient();
 	if (d->curDialogGUIClient==client) {
 		d->curDialogGUIClient=0;
 	}
 	if (client) {
-		if (d->closedDialogGUIClient && d->closedDialogGUIClient!=client) //sanity: ouch, it is not removed yet? - do it now
+		//sanity: ouch, it is not removed yet? - do it now
+		if (d->closedDialogGUIClient && d->closedDialogGUIClient!=client) 
 			guiFactory()->removeClient(d->closedDialogGUIClient);
 		if (d->dialogs.isEmpty()) {//now there is no dialogs - remove client RIGHT NOW!
 			d->closedDialogGUIClient=0;
@@ -1475,7 +1503,14 @@ KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 			d->closedDialogGUIClient=client; 
 		}
 	}
+
+	d->dialogs.take(dlg->docID()); //no remove
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
+
+	//focus navigator if nothing else available
+	if (d->dialogs.isEmpty())
+		d->nav->setFocus();
+
 	invalidateActions();
 }
 
@@ -1793,16 +1828,19 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item )
 	if (!part)
 		return false;
 
-	if (KMessageBox::questionYesNo(this, "<b>"+i18n("Do you want to remove:")
-		+"<p>"+part->instanceName()+" \""+ item->name() + "\"?</b>",
-		0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
-		return true;//cancelled
-
-	KexiDialogBase *dlg = d->dialogs[item->identifier()];
-	if (dlg) {//close existing window
-		if (!dlg->tryClose(true/*dontSaveChanges*/))
-			return true; //ok - close cancelled
+	if (!item->neverSaved()) {
+		if (KMessageBox::questionYesNo(this, i18n("Do you want to remove:")
+			+"<p>"+part->instanceName()+" \""+ item->name() + "\"?",
+			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
+			return true;//cancelled
 	}
+
+	/*KexiDialogBase *dlg = d->dialogs[item->identifier()];
+	if (dlg) {//close existing window
+//		if (!dlg->tryClose(true))
+		if (!dlg->close(true))
+			return true; //ok - close cancelled
+	}*/
 
 	if (!d->prj->removeObject(this, *item)) {
 		//TODO(js) some msg

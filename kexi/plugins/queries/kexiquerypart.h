@@ -43,12 +43,12 @@ class KexiQueryPart : public KexiPart::Part
 		KexiQueryPart(QObject *parent, const char *name, const QStringList &);
 		~KexiQueryPart();
 
-		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
+		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
-		KexiQueryDocument	*data(KexiDB::Connection *conn, const KexiPart::Item &item);
+		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
 
 	private:
 		QueryData		m_data;

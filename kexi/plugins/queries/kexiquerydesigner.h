@@ -38,7 +38,7 @@ class KexiQueryDesigner : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiMainWindow *parent, const KexiPart::Item &i);
+		KexiQueryDesigner(KexiMainWindow *parent, KexiPart::Item &i);
 		~KexiQueryDesigner();
 
 	public slots:

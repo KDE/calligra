@@ -320,19 +320,25 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 2004-03-03
 2004-03-02
 Kexi Dialog / View 
--fixed internal view's focusing: on click on a view, dialog is activated
--focus cell is now grayed for disabled table views, not for unfocused
+	-fixed internal view's focusing: on click on a view, dialog is activated
+	-focus cell is now grayed for disabled table views, not for unfocused
 KexiDB
--"kexi__parts" table is now filled with default (required) parts info
-  automatically in Connection::createDatabase(), not somewhere outside
+	-"kexi__parts" table is now filled with default (required) parts info
+	  automatically in Connection::createDatabase(), not somewhere outside
 TODO: add version info?
 Main Window
--Part type name removed MDI Taskbar buttons' captions, to save some space
+	-Part type name removed MDI Taskbar buttons' captions, to save some space
+	-User is now asked for saving object data on dialog closing (if it's dirty)
+	-Not stored objects are removed from memory and gui completely, 
+	 if user won't let to save them
+	-Not stored objects (part instances) have now identifiers < than -1
 Kexi Views/Dialogs
--"dirty" and "neverSaved" flags added
+	-"dirty" and "neverSaved" flags added
 Parts / Kexi Project
--so-called "unstoredItems" introduced, so they can initially exist in memory only 
- and user may want to give up, not saving them
+	-so-called "unstoredItems" introduced, so they can initially exist in memory only 
+	 and user may want to give up, not saving them
+Table View
+	-Fixed focus-stealing from editor problem
 
 2004-02-27
 Kexi Property Editor, Kexi Property Framework

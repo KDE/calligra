@@ -44,8 +44,6 @@ namespace KexiPart
 	class Item;
 }
 
-typedef QDict<KexiBrowserItem> BaseItemList;
-
 
 class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 {
@@ -97,7 +95,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 //		KexiView	*m_view;
 //		KexiPart::Info	*m_part;
 //		QString		m_mime;
-		BaseItemList	m_baseItems;
+		QAsciiDict<KexiBrowserItem> m_baseItems;
+		QIntDict<KexiBrowserItem> m_normalItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction;
 		int m_itemPopupTitle_id;

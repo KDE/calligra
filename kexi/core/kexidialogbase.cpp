@@ -155,6 +155,8 @@ void KexiDialogBase::closeEvent( QCloseEvent * e )
 	KMdiChildView::closeEvent(e);
 }
 
+#if 0
+//js removed
 bool KexiDialogBase::tryClose(bool dontSaveChanges)
 {
 	if (!dontSaveChanges && dirty()) {
@@ -167,6 +169,7 @@ bool KexiDialogBase::tryClose(bool dontSaveChanges)
 	close(true);
 	return true;
 }
+#endif
 
 bool KexiDialogBase::dirty() const
 {
@@ -246,9 +249,8 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 		return true;
 	if (m_stack->visibleWidget() && Kexi::hasParent(m_stack->visibleWidget(), obj)) {
 		if (e->type()==QEvent::FocusIn) {
-			//pass this focus
-			setFocus();
-			return true;
+			//pass the activation
+			activate();
 		}
 	}
 	return false;

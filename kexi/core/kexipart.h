@@ -51,14 +51,14 @@ class KEXICORE_EXPORT Part : public QObject
 
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
 		 \a viewMode is one of Kexi::ViewMode enum. */
-		KexiDialogBase* openInstance(KexiMainWindow *win, const KexiPart::Item &item, 
+		KexiDialogBase* openInstance(KexiMainWindow *win, KexiPart::Item &item, 
 			int viewMode = Kexi::DataViewMode);
 
 		/*! "Removes" any stored data pointed by \a item (example: table is dropped for table part). 
 		 From now this data is inaccesible, and \a item disappear.
 		 For this, a database connection associated with kexi project owned by \a win can be used.
 		*/
-		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item) = 0;
+		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item) = 0;
 
 		/*! i18n'd iunstance name usable for displaying in gui.
 		 @todo move this to Info class when the name could be moved as localised property 
@@ -71,7 +71,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );

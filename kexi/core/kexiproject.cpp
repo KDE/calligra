@@ -48,7 +48,7 @@ KexiProject::KexiProject(KexiProjectData *pdata)
  , m_data(pdata)
  , m_itemDictsCache(199)
  , m_unstoredItems(199, false)
- , m_tempPartItemID_Counter(0)
+ , m_tempPartItemID_Counter(-1)
 {
 //	m_drvManager = new KexiDB::DriverManager();
 //	m_connData = new KexiProjectConnectionData();
@@ -311,7 +311,7 @@ void KexiProject::setError( KexiDB::Object *obj )
 		emit error(m_error_title, obj);
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const KexiPart::Item& item, int viewMode)
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode)
 {
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());
 	if (!part) {
@@ -333,14 +333,14 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QString &mime
 	return it ? openObject(wnd, *it, viewMode) : 0;
 }
 
-bool KexiProject::removeObject(KexiMainWindow *wnd, const KexiPart::Item& item)
+bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 {
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());
 	if (!part) {
 //js TODO:		setError(&Kexi::partManager());
 		return false;
 	}
-	if (!part->remove(wnd, item)) {
+	if (!item.neverSaved() && !part->remove(wnd, item)) {
 		//js TODO check for errors
 		return false;
 	}
@@ -348,10 +348,7 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, const KexiPart::Item& item)
 	//now: remove this item from cache
 	if (part->info()) {
 		KexiPart::ItemDict *dict = m_itemDictsCache[ part->info()->projectPartID() ];
-		if (dict) {
-			dict->remove( item.identifier() );
-		}
-		else
+		if (!(dict && dict->remove( item.identifier() )))
 			m_unstoredItems.remove((item.mime()+" "+item.name()).latin1());//remove temp.
 	}
 	return true;
