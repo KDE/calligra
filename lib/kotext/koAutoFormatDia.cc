@@ -306,7 +306,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbAutoSuperScript = new QCheckBox( tab1 );
     cbAutoSuperScript->setText( i18n("Rep&lace 1st... with 1^st..."));
-    cbAutoSuperScript->setEnabled( m_autoFormat.nbSuperScriptEntry()>0 );
+    cbAutoSuperScript->setEnabled( m_docAutoFormat->nbSuperScriptEntry()>0 );
 
     vbox->addWidget(cbAutoSuperScript);
 
@@ -357,7 +357,7 @@ void KoAutoFormatDia::initTab1()
     cbAutoReplaceNumber->setChecked( m_autoFormat.getConfigAutoReplaceNumber());
     cbUseNumberStyle->setChecked( m_autoFormat.getConfigAutoNumberStyle());
     cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
-    cbAutoSuperScript->setChecked( m_autoFormat.getConfigAutoSuperScript());
+    cbAutoSuperScript->setChecked( m_docAutoFormat->getConfigAutoSuperScript());
     pbBulletStyle->setText( bulletStyle );
 
     slotBulletStyleToggled( cbUseBulletStyle->isChecked() );
@@ -648,6 +648,12 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
         initTab3();
         initTab4();
         autocorrectionEntryChanged=true;
+        cbAutoSuperScript->setEnabled( m_docAutoFormat->nbSuperScriptEntry()>0 );
+        oSimpleBegin= m_docAutoFormat->getConfigTypographicSimpleQuotes().begin ;
+        oSimpleEnd= m_docAutoFormat->getConfigTypographicSimpleQuotes().end;
+        oDoubleBegin= m_docAutoFormat->getConfigTypographicDoubleQuotes().begin;
+        oDoubleEnd= m_docAutoFormat->getConfigTypographicDoubleQuotes().end;
+        bulletStyle= m_docAutoFormat->getConfigBulletStyle();
         changeLanguage=false;
     }
 }
