@@ -1271,27 +1271,28 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {
-        if(! getFrameSet(i)) {
+        KWFrameSet *fs = getFrameSet(i);
+        if(!fs) {
             kdWarning() << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
-        } else if( getFrameSet(i)->type()==FT_TABLE) {
-            static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
-        } else if(! getFrameSet(i)->getFrame(0)) {
+        } else if( fs->type()==FT_TABLE) {
+            static_cast<KWTableFrameSet *>( fs )->validate();
+        } else if(!fs->getNumFrames()) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
-            KWFrameSet * fs = getFrameSet(i);
             removeFrameSet(fs);
             delete fs;
-        } else if (getFrameSet(i)->type() == FT_TEXT) {
-            for (int f=getFrameSet(i)->getNumFrames()-1; f>=0; f--) {
-                if(getFrameSet(i)->getFrame(f)->height() < static_cast <int>(minFrameHeight)) {
+        } else if (fs->type() == FT_TEXT) {
+            for (int f=fs->getNumFrames()-1; f>=0; f--) {
+                KWFrame *frame = fs->getFrame(f);
+                if(frame->height() < static_cast <int>(minFrameHeight)) {
                     kdWarning() << "frame height is so small no text will fit, adjusting (was: "
-                      << getFrameSet(i)->getFrame(f)->height() << " is: " << minFrameHeight << ")" << endl;
-                    getFrameSet(i)->getFrame(f)->setHeight(minFrameHeight);
+                      << frame->height() << " is: " << minFrameHeight << ")" << endl;
+                    frame->setHeight(minFrameHeight);
                 }
-                if(getFrameSet(i)->getFrame(f)->width() < static_cast <int>(minFrameWidth)) {
+                if(frame->width() < static_cast <int>(minFrameWidth)) {
                     kdWarning() << "frame width is so small no text will fit, adjusting (was: "
-                     << getFrameSet(i)->getFrame(f)->width() << " is: " << minFrameWidth  << ")" << endl;
-                    getFrameSet(i)->getFrame(f)->setWidth(minFrameWidth);
+                     << frame->width() << " is: " << minFrameWidth  << ")" << endl;
+                    frame->setWidth(minFrameWidth);
                 }
             }
         }
