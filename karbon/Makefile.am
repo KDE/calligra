@@ -17,21 +17,13 @@ bin_PROGRAMS = karbon
 lib_LTLIBRARIES = karbon.la
 kde_module_LTLIBRARIES = libkarbonbase.la libkarbonpart.la
 
-libkarbonpart_la_SOURCES = \
-	karbon_factory.cc \
-	karbon_resourceserver.cc \
-	karbon_part.cc \
-	karbon_part_iface.cc \
-	karbon_part_iface.skel \
-	karbon_view.cc \
-	karbon_view_iface.cc \
-	karbon_view_iface.skel
+libkarbonpart_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp
 
 libkarbonbase_la_SOURCES = \
 	karbon_view_base.cc \
 	karbon_part_base.cc
 
-libkarbonbase_la_LDFLAGS = $(KDE_PLUGIN) 
+libkarbonbase_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) $(LIBFREETYPE_RPATH)
@@ -70,7 +62,8 @@ noinst_HEADERS = \
 	karbon_part.h \
 	karbon_part_iface.h \
 	karbon_view_base.h \
-	karbon_view.h
+	karbon_view.h \
+	karbon_drag.h
 
 messages: rc.cpp
 	$(EXTRACTRC) data/*.rc >> rc.cpp

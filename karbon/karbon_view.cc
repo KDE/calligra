@@ -77,6 +77,7 @@
 #include "vstatebutton.h"
 #include "vcanvas.h"
 #include "vtoolbox.h"
+#include "karbon_drag.h"
 
 #include <unistd.h>
 
@@ -374,55 +375,35 @@ KarbonView::editCopy()
 void
 KarbonView::addSelectionToClipboard() const
 {
-	QClipboard *clipboard = QApplication::clipboard();
-	VObjectListIterator itr( part()->document().selection()->objects() );
-	// build a xml fragment containing the selection as karbon xml
-	QDomDocument doc( "clip" );
-	QDomElement elem = doc.createElement( "clip" );
-	QString result;
-	QTextStream ts( &result, IO_WriteOnly );
-	for( ; itr.current() ; ++itr )
-		itr.current()->save( elem );
-	ts << elem;
-	// push to clipbaord
-	clipboard->setText( result.latin1() );
+	if(part()->document().selection()->objects().count() <= 0) {
+		return;
+	}
 
+	KarbonDrag* kd = new KarbonDrag();
+	kd->setObjectList(part()->document().selection()->objects());
+	QApplication::clipboard()->setData(kd);
 }
 
 void
 KarbonView::editPaste()
 {
-	QClipboard *clipboard = QApplication::clipboard();
-	QDomDocument doc( "clip" );
-	doc.setContent( clipboard->text() );
-	QDomElement clip = doc.documentElement();
-	// Try to parse the clipboard data
-	if( clip.tagName() == "clip" )
-	{
-		VObjectList selection;
-		// Use group to assemble the xml contents
-		// TODO : maybe not clone() so much
-		VGroup grp( &( part()->document() ) );
-		grp.load( clip );
-		VObjectListIterator itr( grp.objects() );
-		for( ; itr.current() ; ++itr )
-		{
-			double copyOffset = m_part->instance()->config()->readNumEntry( "CopyOffset", 10 );
-			VTranslateCmd cmd( 0L, copyOffset, -copyOffset );
-			VObject *obj = itr.current()->clone();
-			cmd.visit( *obj );
-			selection.append( obj );
-		}
+	KarbonDrag kd;
+	VObjectList selection;
 
+	if( kd.decode( QApplication::clipboard()->data(), selection, part()->document() ) ) {
 		part()->document().selection()->clear();
 
 		// Calc new selection
-		VObjectListIterator itr2( selection );
+		VObjectListIterator itr( selection );
+		double copyOffset = m_part->instance()->config()->readNumEntry( "CopyOffset", 10 );
 
-		for( ; itr2.current() ; ++itr2 )
+		for( ; itr.current() ; ++itr )
 		{
-			part()->insertObject( itr2.current() );
-			part()->document().selection()->append( itr2.current() );
+			VObject *obj = itr.current();
+			part()->document().selection()->append( obj );
+			part()->insertObject( obj );
+ 			VTranslateCmd cmd( 0L, copyOffset, -copyOffset );
+ 			cmd.visit( *obj );
 		}
 
 		part()->repaintAllViews();
@@ -1041,7 +1022,7 @@ void
 KarbonView::canvasContentsMoving( int x, int y )
 {
 	if( m_canvas->horizontalScrollBar()->isVisible() )
-	{	
+	{
 		m_horizRuler->setOffset( x - m_canvas->pageOffsetX(), 0 );
 		m_horizRuler->setFrameStartEnd( 0/*-x + m_canvas->pageOffsetX()*/, int( part()->document().width() * zoom() ) );
 	}
