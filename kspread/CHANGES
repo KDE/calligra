@@ -1,7 +1,7 @@
 since 1.3 beta1
 ===============
 - adjust print zoom to limit printout to m x n pages
-- new functions: GETPIVOTDATA, BESSELI, BESSELJ, BESSELK, BESSELN
+- new functions: GETPIVOTDATA, BESSELI, BESSELJ, BESSELK, BESSELY
 - new templates: Balance Sheet, Price Quotation, Packing Slip
 
 
