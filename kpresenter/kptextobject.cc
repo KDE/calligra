@@ -566,55 +566,55 @@ void KPTextObject::saveKTextObject( QTextStream& out )
     KTextEditParag *parag = ktextobject.document()->firstParag();
     KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
     out << otag
-        << "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing()
-        << "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
-        << "\" margin=\"" << ktextobject.document()->margin()
-        << "\" bulletType1=\"" << (int)textSettings.bulletType[0]
-        << "\" bulletType2=\"" << (int)textSettings.bulletType[1]
-        << "\" bulletType3=\"" << (int)textSettings.bulletType[2]
-        << "\" bulletType4=\"" << (int)textSettings.bulletType[3]
-        << "\" bulletColor1=\"" << textSettings.bulletColor[0].name()
-        << "\" bulletColor2=\"" << textSettings.bulletColor[1].name()
-        << "\" bulletColor3=\"" << textSettings.bulletColor[2].name()
-        << "\" bulletColor4=\"" << textSettings.bulletColor[3].name()
-        << "\">" << endl;
+	<< "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing()
+	<< "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
+	<< "\" margin=\"" << ktextobject.document()->margin()
+	<< "\" bulletType1=\"" << (int)textSettings.bulletType[0]
+	<< "\" bulletType2=\"" << (int)textSettings.bulletType[1]
+	<< "\" bulletType3=\"" << (int)textSettings.bulletType[2]
+	<< "\" bulletType4=\"" << (int)textSettings.bulletType[3]
+	<< "\" bulletColor1=\"" << textSettings.bulletColor[0].name()
+	<< "\" bulletColor2=\"" << textSettings.bulletColor[1].name()
+	<< "\" bulletColor3=\"" << textSettings.bulletColor[2].name()
+	<< "\" bulletColor4=\"" << textSettings.bulletColor[3].name()
+	<< "\">" << endl;
     while ( parag ) {
-        out << otag << "<P align=\"" << parag->alignment()
-            << "\" type=\"" << (int)parag->type()
-            << "\" depth=\"" << parag->listDepth() << "\">" << endl;
-        out << indent;
-        KTextEditFormat *lastFormat = 0;
-        for ( int i = 0; i < parag->length(); ++i ) {
-            KTextEditString::Char *c = parag->at( i );
-            if ( !lastFormat || c->format->key() != lastFormat->key() ) {
-                if ( lastFormat )
-                    out << "</TEXT>";
-                lastFormat = c->format;
-                out << "<TEXT family=\"" <<  lastFormat->font().family()
-                    << "\" pointSize=\"" << lastFormat->font().pointSize()
-                    << "\" bold=\"" << (uint)lastFormat->font().bold()
-                    << "\" italic=\"" << (uint)lastFormat->font().italic()
-                    << "\" underline=\"" << (uint)lastFormat->font().underline()
-                    << "\" color=\"" << lastFormat->color().name()
-                    << "\">";
-            }
-            QChar chr = c->c;
-            if ( chr == '&' )
-                out << "&amp;";
-            else if ( chr == '<' )
-                out << "&lt;";
-            else if ( chr == '>' )
-                out << "&gt;";
-            else
-                out << QString(c->c);
-        }
-        if ( lastFormat )
-            out << "</TEXT>";
-        out << endl;
+	out << otag << "<P align=\"" << parag->alignment()
+	    << "\" type=\"" << (int)parag->type()
+	    << "\" depth=\"" << parag->listDepth() << "\">" << endl;
+	out << indent;
+	KTextEditFormat *lastFormat = 0;
+	for ( int i = 0; i < parag->length(); ++i ) {
+	    KTextEditString::Char *c = parag->at( i );
+	    if ( !lastFormat || c->format->key() != lastFormat->key() ) {
+		if ( lastFormat )
+		    out << "</TEXT>";
+		lastFormat = c->format;
+		out << "<TEXT family=\"" <<  lastFormat->font().family()
+		    << "\" pointSize=\"" << lastFormat->font().pointSize()
+		    << "\" bold=\"" << (uint)lastFormat->font().bold()
+		    << "\" italic=\"" << (uint)lastFormat->font().italic()
+		    << "\" underline=\"" << (uint)lastFormat->font().underline()
+		    << "\" color=\"" << lastFormat->color().name()
+		    << "\">";
+	    }
+	    QChar chr = c->c;
+	    if ( chr == '&' )
+		out << "&amp;";
+	    else if ( chr == '<' )
+		out << "&lt;";
+	    else if ( chr == '>' )
+		out << "&gt;";
+	    else
+		out << QString(c->c);
+	}
+	if ( lastFormat )
+	    out << "</TEXT>";
+	out << endl;
 
-        out << etag << "</P>" << endl;
+	out << etag << "</P>" << endl;
 
-        parag = parag->next();
+	parag = parag->next();
     }
     out << etag << "</TEXTOBJ>" << endl;
 }
@@ -684,6 +684,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     settings.lineSpacing = lineSpacing;
     settings.paragSpacing = paragSpacing;
     ktextobject.document()->setTextSettings( settings );
+    ktextobject.updateCurrentFormat();
 }
 
 /*================================================================*/

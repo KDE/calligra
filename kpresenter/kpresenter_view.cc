@@ -367,7 +367,7 @@ void KPresenterView::editDelPage()
 	m_pKPresenterDoc->deletePage( currPg );
 	setRanges();
 	sidebar->rebuildItems();
-	currPg = QMAX( 0, QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 ) );
+	currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
 	skipToPage( currPg );
 	sidebar->setCurrentPage( currPg );
 	pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );

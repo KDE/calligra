@@ -1099,6 +1099,10 @@ void KTextEdit::setFormat( KTextEditFormat *f, int flags )
 	currentFormat = doc->formatCollection()->format( f );
 	emit currentFontChanged( currentFormat->font() );
 	emit currentColorChanged( currentFormat->color() );
+	if ( cursor->index() == cursor->parag()->length() < 1 ) {
+	    currentFormat->addRef();
+	    cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
+	}
     }
 }
 
@@ -1196,8 +1200,6 @@ void KTextEdit::updateCurrentFormat()
     int i = cursor->index();
     if ( i > 0 )
 	--i;
-    else
-	return;
     if ( currentFormat->key() != cursor->parag()->at( i )->format->key() ) {
 	if ( currentFormat )
 	    currentFormat->removeRef();

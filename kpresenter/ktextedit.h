@@ -667,6 +667,7 @@ public:
 
     KTextEditParag *currentParagraph() { return cursor->parag(); }
     void extendContents2Height();
+    void updateCurrentFormat();
 
 public slots:
     virtual void undo();
@@ -779,7 +780,6 @@ private:
     void doKeyboardAction( int action );
     void checkUndoRedoInfo( UndoRedoInfo::Type t );
     void repaintChanged();
-    void updateCurrentFormat();
 
 private:
     KTextEditDocument *doc;
