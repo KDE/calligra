@@ -67,6 +67,7 @@ KWordView_impl::KWordView_impl(QWidget *_parent = 0L,const char *_name = 0L)
   m_lstFrames.setAutoDelete(true);  
   gui = 0;
   flow = KWParagLayout::LEFT;
+  paragDia = 0;
 }
 
 /*================================================================*/
@@ -326,6 +327,17 @@ void KWordView_impl::formatColor()
 /*===============================================================*/
 void KWordView_impl::formatParagraph()
 {
+  if (paragDia)
+    {
+      //QObject::disconnect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
+      paragDia->close();
+      delete paragDia;
+      paragDia = 0;
+    }
+  paragDia = new KWParagDia(0,"");
+  paragDia->setCaption(i18n("KWord - Paragraph settings"));
+  //QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
+  paragDia->show();
 }
 
 /*===============================================================*/

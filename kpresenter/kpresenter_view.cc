@@ -380,7 +380,7 @@ void KPresenterView_impl::insertAutoform()
       afChoose = 0;
     }
   afChoose = new AFChoose(0,i18n("Autoform-Choose"));
-  afChoose->setCaption(klocale->translate(i18n("KPresenter - Insert an Autoform")));
+  afChoose->setCaption(i18n("KPresenter - Insert an Autoform"));
   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
   QObject::connect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
@@ -417,7 +417,7 @@ void KPresenterView_impl::extraPenBrush()
   styleDia->setGradient(m_pKPresenterDoc->getGColor1(gColor1),
 			m_pKPresenterDoc->getGColor2(gColor2),
 			m_pKPresenterDoc->getGType(gType));
-  styleDia->setCaption(klocale->translate(i18n("KPresenter - Pen and Brush")));
+  styleDia->setCaption(i18n("KPresenter - Pen and Brush"));
   QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
   styleDia->show();
 }

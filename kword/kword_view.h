@@ -45,6 +45,7 @@ class KWPaintWindow;
 #include "kword_page.h"
 #include "format.h"
 #include "paraglayout.h"
+#include "paragdia.h"
 
 #include <koPageLayoutDia.h>
 
@@ -265,6 +266,8 @@ protected:
 
   KWFormat format;
   KWParagLayout::Flow flow;
+
+  KWParagDia *paragDia;
 
 };
 
