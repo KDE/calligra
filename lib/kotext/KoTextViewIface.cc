@@ -43,6 +43,11 @@ void KoTextViewIface::insertText( const QString &text )
     m_textView->insertText(text);
 }
 
+void KoTextViewIface::newParagraph()
+{
+    m_textView->newParagraph();
+}
+
 
 void KoTextViewIface::setBold(bool b)
 {

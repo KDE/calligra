@@ -166,6 +166,7 @@ public slots:
 
     /** This is a slot so that it's accessible from DCOP */
     void insertText( const QString &text );
+    void newParagraph();
 
     QString refLink()const {return m_refLink;}
 

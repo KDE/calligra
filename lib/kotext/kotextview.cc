@@ -374,6 +374,11 @@ void KoTextView::insertText( const QString &text )
     textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
 }
 
+void KoTextView::newParagraph()
+{
+    textObject()->insert( m_cursor, m_currentFormat, "\n", true, true, i18n("Insert Text") );
+}
+
 void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
 {
     if ( e->key() == Key_Alt && d->currentUnicodeNumber() >= 32 )
