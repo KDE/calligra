@@ -10,10 +10,9 @@ libhtmlimport_la_LIBADD = $(LIB_KHTML) $(KOFFICE_LIBS) $(LIB_KOTEXT)
 
 kde_module_LTLIBRARIES = libhtmlimport.la
 
-libhtmlimport_la_SOURCES = htmlimport.cpp khtmlreader.cpp kwdwriter.cpp \
-ImportDialogUI.ui ImportDialog.cpp
+libhtmlimport_la_SOURCES = htmlimport.cpp khtmlreader.cpp kwdwriter.cpp
 
-noinst_HEADERS = htmlimport.h khtmlreader.h kwdwriter.h ImportDialog.h
+noinst_HEADERS = htmlimport.h khtmlreader.h kwdwriter.h
 
 METASOURCES = AUTO
 
