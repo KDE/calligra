@@ -430,7 +430,7 @@
       <Help>
 	<Text>The EXACT() function returns True if these two strings are equal otherwise returns False.</Text>
 	<Syntax>EXACT( string1; string2 )</Syntax>
-	<Example>EXACT( "Koffice"; "Koffice" ) returns True"</Example>
+	<Example>EXACT( "Koffice"; "Koffice" ) returns True</Example>
         <Example>EXACT( "kspread"; "Koffice" ) returns False</Example>
       </Help>
     </Function>
@@ -449,7 +449,7 @@
       <Help>
 	<Text>The find() function searches a substring. This function returns True if this substring exists otherwise it returns False.</Text>
 	<Syntax>find( haystack; needle )</Syntax>
-	<Example>find( "Kof"; "Koffice" ) returns True"</Example>
+	<Example>find( "Kof"; "Koffice" ) returns True</Example>
 	<Example>find( "kspread"; "Koffice") returns False</Example>
       </Help>
     </Function>
