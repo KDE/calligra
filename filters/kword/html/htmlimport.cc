@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,20 +18,20 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qtextstream.h>
+
 #include <htmlimport.h>
 #include <htmlimport.moc>
 #include <kdebug.h>
+
+#include "htmlimportsax.h"
 
 HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
-bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
-                        const QString& from, const QString& to,
-                        const QString &) {
-
-    if(to!="application/x-kword" || from!="text/html")
-        return false;
+static bool oldfilter(const QString &fileIn, const QString &fileOut)
+{
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
@@ -68,7 +69,7 @@ bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
         if(j>step) {
             j=0;
             value+=2;
-            emit sigProgress(value);
+            // emit sigProgress(value);
         }
         QChar c = buffer[ i ];
         if ( c == QChar( '\n' ) )
@@ -108,4 +109,55 @@ bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
     in.close();
     delete [] buffer;
     return true;
+}
+
+static bool checkXMLDeclaration(const QString &fileIn)
+{
+    QFile in(fileIn);
+    if(!in.open(IO_ReadOnly)) {
+        kdError(30503) << "Unable to open input file!" << endl;
+        return false;
+    }
+
+    QTextStream inStream(&in);
+    inStream.setEncoding( QTextStream::UnicodeUTF8 );
+
+    inStream.skipWhiteSpace(); // skip white space that may be before the XML declaration
+
+    QString strToCompare="<?xml";
+    QString strRead;
+    QChar ch;
+
+    for (int i=0; i<5; i++)
+    {
+        inStream >> ch; // read one char
+        strRead+=ch;
+    }
+
+    return (strRead==strToCompare);
+}
+
+
+bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
+                        const QString& from, const QString& to,
+                        const QString &)
+{
+    if(to!="application/x-kword" || from!="text/html")
+        return false;
+
+    bool result=false;
+
+    if (checkXMLDeclaration(fileIn)) // Do we have a XML file?
+    { // We have a XML file, so we can use the new XHTML filter!
+        kdDebug(30503) << "Calling XHTML filter" << endl;
+        result=saxfilter(fileIn,fileOut);
+    }
+    else
+    {
+        // We have no XML declaration, so we have to use the old filter.
+        kdDebug(30503) << "Calling old filter" << endl;
+        result=oldfilter(fileIn,fileOut);
+    }
+
+    return result;
 }

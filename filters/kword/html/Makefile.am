@@ -13,12 +13,12 @@ libhtmlexportdia_la_LIBADD = $(KOFFICE_LIBS)
 kde_module_LTLIBRARIES = libhtmlimport.la libhtmlexport.la \
 libhtmlexportdia.la
 
-libhtmlimport_la_SOURCES = htmlimport.cc htmlimport_factory.cc
+libhtmlimport_la_SOURCES = htmlimport.cc htmlimport_factory.cc htmlimportsax.cc
 libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
 libhtmlexportdia_la_SOURCES = htmlexportdia.cc htmlexportdia_factory.cc
 
-noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlexport.h \
-htmlexport_factory.h htmlexportdia.h htmlexportdia_factory.h
+noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlimportsax.h\
+htmlexport.h htmlexport_factory.h htmlexportdia.h htmlexportdia_factory.h
 
 METASOURCES = AUTO
 
