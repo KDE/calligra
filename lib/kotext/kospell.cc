@@ -65,7 +65,7 @@ public:
 
 
 
-KoSpell::KoSpell(QWidget *_parent, QObject *obj, const char *slot, KSpellConfig *_ksc)
+KoSpell::KoSpell(QWidget */*_parent*/, QObject *obj, const char *slot, KSpellConfig *_ksc)
 {
 	d=new KoSpellPrivate;
 

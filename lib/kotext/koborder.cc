@@ -69,6 +69,7 @@ QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor 
 
     switch ( _brd.style ) {
     case KoBorder::SOLID:
+    case KoBorder::DOUBLE_LINE:
         pen.setStyle( SolidLine );
         break;
     case KoBorder::DASH:
