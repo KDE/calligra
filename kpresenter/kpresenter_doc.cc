@@ -73,6 +73,7 @@
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
 #include <koFilterManager.h>
+#include <koStoreStream.h>
 
 #include <stdlib.h>
 #include <stdio.h>
