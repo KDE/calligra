@@ -239,6 +239,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     {
         setZoom( 100, true );
         slotUpdateRuler();
+        initGui();
     }
 
     // Determine initial scroll position
