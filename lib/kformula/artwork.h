@@ -1,17 +1,17 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-                      
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -38,32 +38,32 @@ public:
 
     Artwork(SymbolType type = Empty);
     ~Artwork() {}
-    
+
     void calcSizes(const ContextStyle& style, int parentSize);
     void calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle);
     void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
               int parentSize, const QPoint& origin);
     void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
               ContextStyle::TextStyle tstyle, const QPoint& parentOrigin);
-    
+
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
 
     void setWidth(int width) { size.setWidth(width); }
     void setHeight(int height) { size.setHeight(height); }
-    
+
     int getBaseline() const { return baseline; }
     void setBaseline(int line) { baseline = line; }
 
     int getX() const { return point.x(); }
     int getY() const { return point.y(); }
-    
+
     void setX(int x) { point.setX(x); }
     void setY(int y) { point.setY(y); }
 
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
-    
+
 private:
 
     void drawCharacter(QPainter& painter, const ContextStyle& style, int x, int y, QChar ch);
@@ -71,13 +71,13 @@ private:
     bool doSimpleRoundBracket(const ContextStyle& style, int height);
     bool doSimpleSquareBracket(const ContextStyle& style, int height);
     bool doSimpleCurlyBracket(const ContextStyle& style, int height);
-    
-    void calcCharSize(const ContextStyle& style, int height, char ch);
-    
+
+    void calcCharSize(const ContextStyle& style, double height, QChar ch);
+
     void calcRoundBracket(const ContextStyle& style, int height);
     void calcSquareBracket(const ContextStyle& style, int height);
     void calcCurlyBracket(const ContextStyle& style, int height);
-    
+
     void drawLeftRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
     void drawRightRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
 
@@ -96,16 +96,16 @@ private:
     void drawRightSmallCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight);
     void drawLeftBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height, bool left = true);
     void drawRightBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height);
-    
+
     QSize size;
     QPoint point;
 
     /**
      * Used if we are a character.
      */
-    int fontSize;
+    double fontSize;
     int baseline;
-    
+
     SymbolType type;
 
     static const char leftSmallRoundBracket[];

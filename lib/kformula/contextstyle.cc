@@ -124,7 +124,7 @@ int ContextStyle::getMinimumSize() const
     return zoomItY( minimumSize );
 }
 
-int ContextStyle::getAdjustedSize( TextStyle tstyle ) const
+double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
     double unzoomed;
 
@@ -142,8 +142,8 @@ int ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 	unzoomed = m_scriptScriptStyleReduction*baseSize;
 	break;
     }
-	
-    return static_cast<int>( zoomItY( unzoomed ) );
+
+    return zoomItY( unzoomed );
 }
 
 
@@ -179,7 +179,7 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleFraction( TextStyle tstyle
 	result = scriptScriptStyle;
 	break;
     }
-	
+
     return result;
 }
 
@@ -199,7 +199,7 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 	result = scriptScriptStyle;
 	break;
     }
-	
+
     return result;
 }
 

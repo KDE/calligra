@@ -125,13 +125,13 @@ bool SequenceElement::isEmpty()
 void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     if (!isEmpty()) {
-        int mySize = context.getAdjustedSize( tstyle );
+        double mySize = context.getAdjustedSize( tstyle );
         int width = 0;
         int toBaseline = 0;
         int fromBaseline = 0;
 
         QFont font = context.getDefaultFont();
-        font.setPointSize(mySize);
+        font.setPointSizeFloat(mySize);
         QFontMetrics fm(font);
         int fromMidline = fm.strikeOutPos();
 

@@ -70,7 +70,7 @@ public:
 
     double getXResolution() const { return m_zoomedResolutionX; }
     double getYResolution() const { return m_zoomedResolutionY; }
-    
+
     void setResolution(double zX, double zY);
 
     bool getSyntaxHighlighting() { return syntaxHighlighting; }
@@ -89,7 +89,7 @@ public:
     QFont getSymbolFont()     const { return symbolFont; }
 
 
-    double getReductionFactor(TextStyle tstyle) const;	
+    double getReductionFactor(TextStyle tstyle) const;
     int getDistanceX(TextStyle tstyle) const;
     int getDistanceY(TextStyle tstyle) const;
     int getOperatorSpace(TextStyle tstyle) const;
@@ -102,7 +102,7 @@ public:
      *
      * Takes into account the current zoom factor.
      **/
-    int getAdjustedSize( TextStyle tstyle ) const;
+    double getAdjustedSize( TextStyle tstyle ) const;
     int getLineWidth() const;
 
     int getEmptyRectWidth() const;

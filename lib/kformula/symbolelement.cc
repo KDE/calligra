@@ -98,11 +98,11 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
  */
 void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle )
 {
-    int mySize = style.getAdjustedSize(tstyle);
+    double mySize = style.getAdjustedSize(tstyle);
     int distX = style.getDistanceX(tstyle);
     int distY = style.getDistanceY(tstyle);
 
-    symbol.calcSizes(style, mySize*2);
+    symbol.calcSizes(style, mySize*1.5);
     content->calcSizes(style, tstyle, istyle);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
@@ -195,7 +195,7 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
                          const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = style.getAdjustedSize( tstyle );
+    double mySize = style.getAdjustedSize( tstyle );
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
@@ -617,7 +617,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
 
     bool lowerRead = false;
     bool upperRead = false;
-    
+
     while (!node.isNull() && !(upperRead && lowerRead)) {
 
         if (!lowerRead && (node.nodeName().upper() == "LOWER")) {

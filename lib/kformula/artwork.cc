@@ -70,15 +70,15 @@ Artwork::Artwork(SymbolType t)
 }
 
 
-void Artwork::calcCharSize(const ContextStyle& style, int height, char ch)
+void Artwork::calcCharSize(const ContextStyle& style, double height, QChar ch)
 {
     QFont f = style.getSymbolFont();
-    f.setPointSize(height);
+    f.setPointSizeFloat(height);
     fontSize = height;
 
     QFontMetrics fm(f);
     QRect bound = fm.boundingRect(ch);
-    setWidth(bound.width());
+    setWidth(fm.width(ch));
     setHeight(bound.height());
     setBaseline(-bound.top());
 }
@@ -189,7 +189,7 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
 void Artwork::calcSizes(const ContextStyle& style,
                         ContextStyle::TextStyle tstyle)
 {
-    int mySize = style.getAdjustedSize( tstyle );
+    double mySize = style.getAdjustedSize( tstyle );
     switch (type) {
     case LeftSquareBracket:
         calcCharSize(style, mySize, '[');
@@ -390,12 +390,14 @@ void Artwork::drawCharacter(QPainter& painter, const ContextStyle& style, int x,
     QFont f = style.getSymbolFont();
     //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
 
-    f.setPointSize(fontSize);
+    f.setPointSizeFloat(fontSize);
 
-    QFontMetrics fm(f);
-    QRect bound = fm.boundingRect(ch);
+    //QFontMetrics fm(f);
+    //QRect bound = fm.boundingRect(ch);
     painter.setFont(f);
-    painter.drawText(x-bound.x(), y-bound.top(), QString(ch));
+    //painter.drawText(x-bound.x(), y-bound.top(), QString(ch));
+    painter.drawText(x, y+getBaseline(), QString(ch));
+
     //painter.drawRect(bound);
     //painter.drawRect(x, y, getWidth(), getHeight());
     //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;

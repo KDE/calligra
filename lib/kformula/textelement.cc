@@ -18,11 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-// Debug
-#include <iostream>
-
 #include <qfontmetrics.h>
 #include <qpainter.h>
+
+#include <kdebug.h>
 
 #include "basicelement.h"
 #include "contextstyle.h"
@@ -86,26 +85,24 @@ bool TextElement::isPhantom() const
  */
 void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle /*istyle*/)
 {
-    int mySize = context.getAdjustedSize( tstyle );
+    double mySize = context.getAdjustedSize( tstyle );
 
     QFont font = getFont(context);
-    font.setPointSize(mySize);
+    font.setPointSizeFloat(mySize);
     int spaceBefore = getSpaceBefore(context, tstyle);
     int spaceAfter = getSpaceAfter(context, tstyle);
 
     QFontMetrics fm(font);
     QRect bound = fm.boundingRect(character);
+    //QRect bound = fm.boundingRect(QString(character));
 
     setWidth(fm.width(character) + spaceBefore + spaceAfter);
-
     setHeight(bound.height());
     setBaseline(-bound.top());
-
-    // Or this way. But this doesn't seem to look better...
-    //setHeight(fm.height());
-    //setBaseline(fm.ascent()+1);
-
     setMidline(getBaseline() - fm.strikeOutPos());
+
+    //kdDebug() << "bound.height(): " << bound.height() << endl;
+    //kdDebug() << "bound.top(): " << bound.top() << endl;
 }
 
 /**
@@ -120,19 +117,19 @@ void TextElement::draw(QPainter& painter, const QRect& r,
 		       const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = context.getAdjustedSize( tstyle );
+    double mySize = context.getAdjustedSize( tstyle );
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
     QFont font = getFont(context);
-    font.setPointSize(mySize);
+    font.setPointSizeFloat(mySize);
     setUpPainter(context, painter);
     int spaceBefore = getSpaceBefore(context, tstyle);
     //int spaceAfter = getSpaceAfter(context, tstyle);
 
     painter.setFont(font);
-    painter.drawText(parentOrigin.x()+getX()+spaceBefore,
-                     parentOrigin.y()+getY()+getBaseline(), character);
+    painter.drawText(myPos.x()+spaceBefore,
+                     myPos.y()+getBaseline(), character);
 
     // Debug
     //painter.setBrush(Qt::NoBrush);

@@ -281,10 +281,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
     int llOffset = 0;
     int lrOffset = 0;
     if (content->isTextOnly()) {
-        int mySize = contextStyle.getAdjustedSize( tstyle );
-        contextStyle.getDefaultFont();
-        QFont font;
-        font.setPointSize(mySize);
+        double mySize = contextStyle.getAdjustedSize( tstyle );
+        QFont font = contextStyle.getDefaultFont();
+        font.setPointSizeFloat(mySize);
 
         QFontMetrics fm(font);
         QRect bound = fm.boundingRect('x');
@@ -302,7 +301,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         llOffset = lrOffset = content->getBaseline();
     }
     else {
-        
+
         // the upper half
         ulOffset = QMAX(ulMidline, ulHeight-content->getMidline());
         urOffset = QMAX(urMidline, urHeight-content->getMidline());
@@ -369,7 +368,7 @@ void IndexElement::draw(QPainter& painter, const QRect& r,
 
     content->draw(painter, r, contextStyle, tstyle, istyle, myPos);
     if (hasUpperLeft()) {
-        upperLeft->draw(painter, r, contextStyle, 
+        upperLeft->draw(painter, r, contextStyle,
 			contextStyle.convertTextStyleIndex(tstyle),
 			contextStyle.convertIndexStyleUpper(istyle), myPos);
     }
@@ -394,7 +393,7 @@ void IndexElement::draw(QPainter& painter, const QRect& r,
 			  contextStyle.convertIndexStyleLower(istyle), myPos);
     }
     if (hasLowerRight()) {
-        lowerRight->draw(painter, r, contextStyle, 
+        lowerRight->draw(painter, r, contextStyle,
 			 contextStyle.convertTextStyleIndex(tstyle),
 			 contextStyle.convertIndexStyleLower(istyle), myPos);
     }
@@ -1100,7 +1099,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
     bool lowerLeftRead = false;
     bool lowerMiddleRead = false;
     bool lowerRightRead = false;
-    
+
     while (!node.isNull() &&
            !(upperLeftRead && upperMiddleRead && upperRightRead &&
              lowerLeftRead && lowerMiddleRead && lowerRightRead)) {
@@ -1134,7 +1133,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
             lowerRight = buildChild(node, "LOWERRIGHT");
             lowerRightRead = lowerRight != 0;
         }
-    
+
         node = node.nextSibling();
     }
     return upperLeftRead || upperMiddleRead || upperRightRead ||
