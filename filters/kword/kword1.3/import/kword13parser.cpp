@@ -636,7 +636,30 @@ bool KWord13Parser :: characters ( const QString & ch )
         // <TEXT>
         if ( m_currentParagraph )
         {
+            bool found = false; // Some unexpected control character?
             // ### TODO: this is perhaps a good point to check for non-XML characters
+            const uint length = ch.length();
+            for ( uint i = 0; i < length; ++i )
+            {
+                const ushort uni = ch.at(i).unicode();
+                if ( uni >= 32 )
+                    continue; // Normal character
+                else if ( uni == 9 || uni == 10 || uni == 13)
+                    continue; // Tabulator, Line Feed, Carriage Return
+                else if ( uni == 1 )
+                {
+                    // Old KWord documents have a QChar(1) as anchor character
+                    // So replace it with the anchor character of recent KWord versions
+                    ch[i]='#';
+                }
+                else
+                {
+                    ch[i]='?';
+                    found = true;
+                }
+            }
+            if ( found )
+                kdWarning(30520) << "Unexcepted control characters found in text!" << endl;
             m_currentParagraph->appendText( ch );
             success = true;
         }
