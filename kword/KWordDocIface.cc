@@ -809,3 +809,13 @@ void KWordDocIface::setConfigCapitalizeNameOfDays( bool b)
     doc->getAutoFormat()->configCapitalizeNameOfDays( b );
 }
 
+
+QString KWordDocIface::globalLanguage()const
+{
+    return doc->globalLanguage();
+}
+
+void KWordDocIface::setGlobalLanguage( const QString & _lang )
+{
+    doc->setGlobalLanguage( _lang );
+}

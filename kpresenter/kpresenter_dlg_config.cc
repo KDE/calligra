@@ -642,6 +642,22 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     fontLayout->addWidget(fontName, 0, 1);
     fontLayout->addWidget(chooseButton, 0, 2);
 
+    QWidget *languageContainer = new QWidget(gbDocumentDefaults);
+    QGridLayout * languageLayout = new QGridLayout(languageContainer, 1, 3);
+
+    languageLayout->setColStretch(0, 0);
+    languageLayout->setColStretch(1, 1);
+
+    QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
+
+    m_globalLanguage = new QComboBox( languageContainer );
+    m_globalLanguage->insertStringList( KoGlobal::listOfLanguages());
+
+
+    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(doc->globalLanguage()));
+
+    languageLayout->addWidget(languageTitle, 0, 0);
+    languageLayout->addWidget(m_globalLanguage, 0, 1);
 
 
     QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
@@ -736,6 +752,13 @@ KCommand *ConfigureDefaultDocPage::apply()
     if ( state != doc->insertDirectCursor() )
         doc->setInsertDirectCursor( state );
 
+    //Laurent Todo add a message box to inform user that
+    //global language will change after re-launch kword
+    QString lang = KoGlobal::tagOfLanguage( m_globalLanguage->currentText() );
+    config->writeEntry( "language" , lang);
+    doc->setGlobalLanguage( lang );
+
+
     KMacroCommand *macro = 0L;
     int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
@@ -767,6 +790,8 @@ void ConfigureDefaultDocPage::slotDefault()
     m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
+    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));
+
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

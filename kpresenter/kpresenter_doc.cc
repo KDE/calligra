@@ -209,6 +209,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bSnapToGrid= false;
 
     m_cursorInProtectectedArea=true;
+    m_globalLanguage = KGlobal::locale()->language();
 
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
@@ -350,6 +351,7 @@ void KPresenterDoc::initConfig()
 
         setHelpLineToFront( config->readBoolEntry( "HelpLineToFront" , false ));
         m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
+        m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
 
     }
     else

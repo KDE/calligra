@@ -888,3 +888,13 @@ void KPresenterDocIface::setConfigCapitalizeNameOfDays( bool b)
 {
     doc->getAutoFormat()->configCapitalizeNameOfDays( b );
 }
+
+QString KPresenterDocIface::globalLanguage()const
+{
+    return doc->globalLanguage();
+}
+
+void KPresenterDocIface::setGlobalLanguage( const QString & _lang )
+{
+    doc->setGlobalLanguage( _lang );
+}

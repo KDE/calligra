@@ -228,6 +228,9 @@ k_dcop:
     bool configCapitalizeNameOfDays() const;
     void setConfigCapitalizeNameOfDays( bool b);
 
+    QString globalLanguage()const;
+    void setGlobalLanguage( const QString & _lang );
+
 private:
     KWDocument *doc;
 

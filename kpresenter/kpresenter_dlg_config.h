@@ -123,6 +123,7 @@ private:
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
+    QComboBox *m_globalLanguage;
 };
 
 class ConfigureToolsPage : public QObject

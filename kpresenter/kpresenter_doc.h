@@ -430,6 +430,10 @@ public:
     void setInsertDirectCursor(bool _b);
     void updateDirectCursorButton();
 
+    QString globalLanguage()const { return m_globalLanguage; }
+    void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -592,6 +596,7 @@ private:
     KPObject *bgObjSpellChecked;
     QString m_picturePath;
     bool  m_bInsertDirectCursor;
+    QString m_globalLanguage;
 };
 
 #endif

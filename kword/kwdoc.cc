@@ -251,6 +251,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bHasEndNotes = false;
 
     m_bInsertDirectCursor=false;
+    m_globalLanguage = KGlobal::locale()->language();
 
     m_lastViewMode="ModeNormal";
     m_viewMode = 0;
@@ -307,6 +308,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // Zoom its size to layout units
     m_defaultFont.setPointSize( ptToLayoutUnitPt( ptSize ) );
+
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
@@ -432,6 +434,7 @@ void KWDocument::initConfig()
           m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
       m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
       m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
+      m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
   }
   else
       m_zoom = 100;

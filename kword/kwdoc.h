@@ -742,6 +742,9 @@ public:
 
     void updateDirectCursorButton();
 
+    QString globalLanguage()const { return m_globalLanguage; }
+    void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -938,6 +941,7 @@ private:
 
     QStringList m_personalExpressionPath;
     QString m_picturePath;
+    QString m_globalLanguage;
 };
 
 
