@@ -1918,7 +1918,6 @@ QString KPresenterDoc::selectedForPrinting() {
     }
     if(','==ret[ret.length()-1])
         ret.truncate(ret.length()-1);
-    kdDebug() << "KPresenterDoc::selectedForPrinting"<<ret << endl;
     return ret;
 }
 
