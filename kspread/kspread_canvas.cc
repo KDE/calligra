@@ -478,7 +478,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
                                   bool extendSelection)
 {
-  if ( table )
+  if ( table && (table != activeTable() ))
     table->setActiveTable();
   else
     table = activeTable();
@@ -518,7 +518,8 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
   // In this case we may not touch the EditWidget
   if ( !m_pEditor || m_bChoose )
     m_pView->updateEditWidget();
-  updatePosWidget();
+
+   updatePosWidget();
 }
 
 
@@ -733,10 +734,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   // Set the new extent of the selection
-  gotoLocation(QPoint(col, row), activeTable(), true);
-
-  // Show where we are now.
-  updatePosWidget();
+  gotoLocation(QPoint(col, row), table, true);
 }
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
@@ -2518,14 +2516,6 @@ void KSpreadCanvas::ExtendRectBorder(QRect& area)
 }
 
 
-
-//---------------------------------------------
-//
-// Choose Marker
-//
-//---------------------------------------------
-
-
 void KSpreadCanvas::updatePosWidget()
 {
     QRect selection = m_pView->activeTable()->selection();
@@ -2545,22 +2535,6 @@ void KSpreadCanvas::updatePosWidget()
             buffer+=tmp.setNum( markerRow() );
         }
     }
-  /*else if((!activeTable->isRowSelected( selection.) && (!activeTable->isColumnSelected( selection.))
-        {
-        if(activeTable()->getLcMode())
-                {
-                buffer=tmp.setNum( (selection.bottom()-m_iMarkerRow+1) )+"Lx";
-                buffer+=tmp.setNum((selection.right()-m_iMarkerColumn+1))+"C";
-                }
-        else
-                {
-                buffer=util_encodeColumnLabelText( m_iMarkerColumn );
-                buffer+=tmp.setNum(m_iMarkerRow);
-                buffer+=":";
-                buffer+=util_encodeColumnLabelText( selection.right() );
-                buffer+=tmp.setNum(selection.bottom());
-                }
-        }*/
   else
   {
         if(activeTable()->getLcMode())
@@ -2586,7 +2560,8 @@ void KSpreadCanvas::updatePosWidget()
         }
   }
 
-  m_pPosWidget->setText(buffer);
+    if (buffer != m_pPosWidget->text())
+      m_pPosWidget->setText(buffer);
 }
 
 
