@@ -1438,10 +1438,12 @@ KCommand * KPTextObject::textContentsToHeight()
 
     if ( KABS( innerHeight() - textHeight ) < 1e-5 ) // floating-point equality test
         return 0L; // nothing to do
-    if ( lineSpacing < 0  || (m_textobj->textDocument()->firstParag() == m_textobj->textDocument()->lastParag() && numLines == 1)) // text object is too small
+    bool oneLine =(m_textobj->textDocument()->firstParag() == m_textobj->textDocument()->lastParag() && numLines == 1);
+    if ( lineSpacing < 0  || oneLine) // text object is too small
         lineSpacing = 0; // we can't do smaller linespacing than that, but we do need to apply it
                          // (in case there's some bigger linespacing in use)
-
+    if ( oneLine && m_textobj->textDocument()->firstParag()->kwLineSpacing() == lineSpacing)
+        return 0L;
     // Apply the new linespacing to the whole object
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
     KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing, KoTextDocument::Temp );
