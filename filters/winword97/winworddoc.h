@@ -10,7 +10,6 @@
 #include <pcd.h>
 #include <kdebug.h>
 
-
 class WinWordDoc {
 
 public:
@@ -42,7 +41,7 @@ private:
     myFile main, table, data;
     QString _part;
     QStrList mainParas;
-    StyleSheet styleSheet;
+    StyleSheet *styleSheet;
 
     // piece table (pt)
     long ptCPBase, ptSize, ptCount, ptPCDBase;

@@ -21,7 +21,6 @@
 #include <kworddoc.h>
 #include <myfile.h>
 
-
 class WordFilter : public FilterBase {
 
     Q_OBJECT

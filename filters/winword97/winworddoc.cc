@@ -11,11 +11,12 @@ const short WinWordDoc::CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
 
 WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
-                       main(mainStream), data(dataStream), styleSheet(mainStream) {
+                       main(mainStream), data(dataStream) {
 
     success=true;
     ready=false;
     fib=0L;
+    styleSheet=0L;
     ptSize=-1;      // safer that way
     readFIB();
 
@@ -27,6 +28,8 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
         table=table0Stream;
     else
         table=table1Stream;
+
+    styleSheet=new StyleSheet(table, fib);
 
     // print some debug info
     // FIBInfo();
@@ -49,6 +52,10 @@ WinWordDoc::~WinWordDoc() {
     if(fib) {
         delete fib;
         fib=0L;
+    }
+    if(styleSheet) {
+        delete styleSheet;
+        styleSheet=0L;
     }
 }
 
