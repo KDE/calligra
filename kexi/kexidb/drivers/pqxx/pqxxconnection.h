@@ -52,6 +52,9 @@ class pqxxSqlConnection : public Connection
 
 	private:
 		void clearResultInfo();
+		bool isConnected();
+		QString escapeName(const QString &tn) const;
+
 		pqxx::result* m_res;
   		pqxx::transaction_base* m_trans;
 

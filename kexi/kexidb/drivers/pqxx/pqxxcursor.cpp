@@ -17,16 +17,22 @@
 
 using namespace KexiDB;
 
+//==================================================================================
+//
 pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement, uint options):
 	Cursor(conn,statement, options),m_numFields(0)
 {
 }
 
+//==================================================================================
+//
 pqxxSqlCursor::~pqxxSqlCursor()
 {
 	close();
 }
 
+//==================================================================================
+//
 bool pqxxSqlCursor::drv_open()
 {
 	pqxxSqlConnection *conn=(pqxxSqlConnection*)m_conn;
@@ -60,6 +66,8 @@ bool pqxxSqlCursor::drv_open()
     	}
 }
 
+//==================================================================================
+//
 bool pqxxSqlCursor::drv_close()
 {
 	delete &m_res;
@@ -67,9 +75,14 @@ bool pqxxSqlCursor::drv_close()
 	m_opened=false;
 }
 
-bool pqxxSqlCursor::drv_moveFirst() {
+//==================================================================================
+//
+bool pqxxSqlCursor::drv_moveFirst()
+{
 }
 
+//==================================================================================
+//
 bool pqxxSqlCursor::drv_getNextRecord()
 {
 	if (m_cur+=1)
@@ -88,6 +101,8 @@ bool pqxxSqlCursor::drv_getNextRecord()
 	}
 }
 
+//==================================================================================
+//
 bool pqxxSqlCursor::drv_getPrevRecord()
 {
 	if (m_cur+=1)
@@ -107,8 +122,8 @@ bool pqxxSqlCursor::drv_getPrevRecord()
 	return false;
 }
 
-
-
+//==================================================================================
+//
 QVariant pqxxSqlCursor::value(int pos)
 {
 	if (!&m_res)
@@ -121,4 +136,11 @@ QVariant pqxxSqlCursor::value(int pos)
 //		return QVariant();
 
 	return QVariant(QString::fromUtf8(m_res[0][pos].c_str()));
+}
+
+//==================================================================================
+//
+const char** pqxxSqlCursor::recordData()
+{
+
 }
