@@ -379,7 +379,6 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )
 {
-    kdDebug() << "KWCanvas::keyPressEvent" << endl;
     if( !doc->isReadWrite()) {
         switch( e->key() ) {
         case Key_Down:
@@ -410,10 +409,9 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
             break;
             m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
         }
-        return;
     }
-    if ( m_currentFrameSetEdit && m_mouseMode==MM_EDIT )
-        m_currentFrameSetEdit->keyPressEvent( e );
+    // The key events in read-write mode are handled by eventFilter(), otherwise
+    // we don't get <Tab> key presses.
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
@@ -1762,14 +1760,23 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 	return TRUE;
 
     if ( o == this || o == viewport() ) {
-	if ( e->type() == QEvent::FocusIn ) {
-            if ( m_currentFrameSetEdit )
-                m_currentFrameSetEdit->focusInEvent();
-	    return TRUE;
-	} else if ( e->type() == QEvent::FocusOut ) {
-            if ( m_currentFrameSetEdit )
-                m_currentFrameSetEdit->focusOutEvent();
-	    return TRUE;
+	switch ( e->type() ) {
+            case QEvent::FocusIn:
+                if ( m_currentFrameSetEdit )
+                    m_currentFrameSetEdit->focusInEvent();
+                return TRUE;
+            case QEvent::FocusOut:
+                if ( m_currentFrameSetEdit )
+                    m_currentFrameSetEdit->focusOutEvent();
+                return TRUE;
+            case QEvent::KeyPress:
+                if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
+                {
+                    m_currentFrameSetEdit->keyPressEvent( static_cast<QKeyEvent *>(e) );
+                    return TRUE;
+                }
+            default:
+                break;
 	}
     }
 
