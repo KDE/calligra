@@ -137,7 +137,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc )
         elem.setAttribute(attrValue, angle);
         fragment.appendChild(elem);
     }
-    if(effect3!=EF3_NONE || !disappear) {
+    if(effect3!=EF3_NONE || disappear) {
         elem=doc.createElement(tagDISAPPEAR);
         elem.setAttribute(attrEffect, static_cast<int>( effect3 ));
         elem.setAttribute(attrDoit, static_cast<int>( disappear ));
