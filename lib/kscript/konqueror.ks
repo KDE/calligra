@@ -15,5 +15,6 @@ main
   locationbartoggle.setChecked( FALSE );
   println( konq.functions() );
   println( locationbartoggle.functions() );
+  println( locationbartoggle.propertyNames( TRUE ) );
 }
 

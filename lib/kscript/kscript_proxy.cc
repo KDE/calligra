@@ -3,6 +3,7 @@
 #include "kscript_util.h"
 #include "kscript_object.h"
 #include "kscript_qstructs.h"
+#include "kscript_qobject.h"
 
 #include <dcopclient.h>
 #include <kapp.h>
@@ -10,6 +11,7 @@
 #include <qcstring.h>
 #include <qstring.h>
 #include <qdatastream.h>
+#include <qvariant.h>
 
 /***************************************************
  *
@@ -307,6 +309,12 @@ KSValue::Ptr KSProxy::unpack( KSContext& context, QDataStream& str, const QCStri
 	    v->mapValue().insert( key, unpack( context, str, t ) );
 	}
 	return v;
+    }
+    if ( type == "QVariant" )
+    {
+        QVariant var;
+	str >> var;
+	return KSQObject::unpack( context, var );
     }
     return KSValue::Ptr( 0 );
 }

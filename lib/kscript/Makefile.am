@@ -8,7 +8,8 @@ LDFLAGS   = $(all_libraries)
 lib_LTLIBRARIES = libkscript.la
 libkscript_la_SOURCES = kscript_proxy.cc kscript_eval.cc kscript_object.cc kscript_class.cc kscript_func.cc kscript_context.cc \
 		  kscript_value.cc kscript_parser.cc kscript_parsenode.cc yacc.cc scanner.cc kscript.cc \
-		  kscript_util.cc kscript_struct.cc kscript_scriptmenu.cc kscript_qt.cc kscript_qstructs.cc
+		  kscript_util.cc kscript_struct.cc kscript_scriptmenu.cc kscript_qt.cc kscript_qstructs.cc \
+		  kscript_qobject.cc
 
 libkscript_la_METASOURCES = kscript_scriptmenu.moc
 

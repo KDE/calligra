@@ -91,33 +91,33 @@ bool KSQObject::pack( KSContext& context, QVariant& var, const KSValue::Ptr& v )
     switch( v->type() )
     {
     case KSValue::StringType:
-	var.setValue( v->stringValue() );
+	var = QVariant( v->stringValue() );
 	return TRUE;
     case KSValue::IntType:
-	var.setValue( (int)v->intValue() );
+	var = QVariant( (int)v->intValue() );
 	return TRUE;
     case KSValue::BoolType:
-	var.setBoolValue( v->boolValue() );
+	var = QVariant( v->boolValue() );
 	return TRUE;
     case KSValue::DoubleType:
-	var.setValue( v->doubleValue() );
+	var = QVariant( v->doubleValue() );
 	return TRUE;
     case KSValue::StructType:
 	{
 	    const KSStruct* s = v->structValue();
 	    if ( s->getClass()->fullName() == "qt:QRect" )
             {
-		var.setValue( KSQt::Rect::convert( context, v ) );
+		var = QVariant( KSQt::Rect::convert( context, v ) );
 		return TRUE;
 	    }
 	    if ( s->getClass()->fullName() == "qt:QPoint" )
             {
-		var.setValue( KSQt::Point::convert( context, v ) );
+		var = QVariant( KSQt::Point::convert( context, v ) );
 		return TRUE;
 	    }
 	    if ( s->getClass()->fullName() == "qt:QSize" )
             {
-		var.setValue( KSQt::Size::convert( context, v ) );
+		var = QVariant( KSQt::Size::convert( context, v ) );
 		return TRUE;
 	    }
 	}
