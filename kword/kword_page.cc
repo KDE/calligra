@@ -981,7 +981,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 {
   if (e->button() != LeftButton) return;
-  
+
   unsigned int mx = e->x() + xOffset;
   unsigned int my = e->y() + yOffset;
 

@@ -2134,7 +2134,7 @@ void KWordDocument::drawSelection(QPainter &_painter,int xOffset,int yOffset)
 {
   if (!selStart.getParag() || !selEnd.getParag())
     return;
-  
+
   _painter.save();
   RasterOp rop = _painter.rasterOp();
 
@@ -2320,6 +2320,8 @@ void KWordDocument::copySelectedText()
 
       clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC2.getTextPos() - tmpFC1.getTextPos() - 1);
       firstParag = new KWParag(*tmpFC1.getParag());
+      firstParag->setPrev(0L);
+      firstParag->setNext(0L);
       firstParag->deleteText(tmpFC2.getTextPos(),firstParag->getTextLen() - tmpFC2.getTextPos());
       firstParag->deleteText(0,tmpFC1.getTextPos());
     }
