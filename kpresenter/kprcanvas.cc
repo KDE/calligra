@@ -3184,7 +3184,7 @@ bool KPrCanvas::pNext( bool )
     {
         if ( !spManualSwitch() && nextPageTimer ) {
             QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
-            m_view->setAutoPresTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
+            m_view->setAutoPresTimer( doc->pageList().at((*it) - 1 )->getPageTimer() / doc->getPresSpeed() );
 
             nextPageTimer = false;
 
