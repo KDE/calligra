@@ -6,6 +6,7 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qtabwidget.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
 
@@ -18,12 +19,13 @@
 #include "vselection.h"
 #include "vstrokecmd.h"
 #include "vstrokedlg.h"
+#include "vcolortab.h"
 
 VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	: KDialogBase ( parent, name, true, i18n( "Stroke" ), Ok | Cancel ), m_part( part )
 {
 	enableButtonSeparator( true );
-	QWidget *mainWidget = new QWidget( this, "strokemain" );
+	QTabWidget *mainWidget = new QTabWidget( this, "strokemain" );
 	QHBoxLayout *mainLayout = new QHBoxLayout (mainWidget, 3);
 	
 	QVBoxLayout *leftLayout = new QVBoxLayout( mainLayout, 4 );
@@ -90,7 +92,15 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	
 	slotUpdateDialog(); //Put the values of selected objects (or default)
 	mainLayout->activate();
-	setMainWidget( mainWidget );
+
+	//setMainWidget( mainWidget );
+
+	m_colortab = new VColorTab( part, this);
+	m_colortab->insertTab( mainWidget, i18n("Stroke"), 0 );
+	m_colortab->setCurrentPage( 0 );
+
+	setMainWidget( m_colortab );
+
 	disableResize();
 	connect (this, SIGNAL( okClicked( void ) ), this, SLOT( slotOKClicked ( void ) ) );
 }
@@ -134,6 +144,8 @@ void VStrokeDlg::slotJoinChanged( int ID )
 void VStrokeDlg::slotOKClicked()
 {
 	m_stroke.setLineWidth ( m_setLineWidth->value() );
+
+	m_stroke.setColor( m_colortab->getColor() );
 
 	if( m_part )
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_stroke ), true );

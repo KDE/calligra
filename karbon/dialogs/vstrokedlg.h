@@ -14,6 +14,7 @@ class QVButtonGroup;
 class KarbonPart;
 class TKUFloatSpinBox;
 class VStroke;
+class VColorTab;
 
 class VStrokeDlg : public KDialogBase
 {
@@ -23,6 +24,7 @@ public:
 	VStrokeDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 private:
+	VColorTab* m_colortab;
 	KarbonPart *m_part;
 	TKUFloatSpinBox *m_setLineWidth;
 	QComboBox *m_styleCombo;
