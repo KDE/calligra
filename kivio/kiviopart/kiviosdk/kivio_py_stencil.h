@@ -32,6 +32,9 @@
 #include <qcolor.h>
 #include <qfont.h>
 
+/* slots gets defined in Qt 3.2 and conflicts with python 2.3 headers */
+#undef slots
+
 #include <Python.h>
 
 class KivioPyStencilSpawner;
