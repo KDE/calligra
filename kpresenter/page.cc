@@ -55,6 +55,8 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
       view = 0;
       hide();
     }
+
+  setFocusPolicy(QWidget::StrongFocus);
 }
 
 /*======================== destructor ============================*/
@@ -162,7 +164,7 @@ void Page::drawObjects(QPainter *painter,KRect rect)
 /*==================== handle mouse pressed ======================*/
 void Page::mousePressEvent(QMouseEvent *e)
 {
-  setFocus();
+  //setFocus();
 
   KPObject *kpobject = 0;
 
@@ -185,15 +187,15 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	  kptextobject->getKTextObject()->setShowCursor(false);
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
+	  //setFocusProxy(0);
+	  //setFocusPolicy(QWidget::NoFocus);
 	}
       else if (kpobject->getType() == OT_PART)
 	{
 	  kpobject->deactivate();
 	  _repaint(kpobject);
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
+	  //setFocusProxy(0);
+	  //setFocusPolicy(QWidget::NoFocus);
 	  return;
 	}
     }
@@ -948,10 +950,10 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 		
 		  kpobject->activate(this,diffx(),diffy());
 		  kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
-		  setFocusProxy(kptextobject->getKTextObject());
-		  setFocusPolicy(QWidget::StrongFocus);
-		  kptextobject->getKTextObject()->setFocusPolicy(QWidget::StrongFocus);
-		  kptextobject->getKTextObject()->setFocus();
+		  //setFocusProxy(kptextobject->getKTextObject());
+		  //setFocusPolicy(QWidget::StrongFocus);
+		  //kptextobject->getKTextObject()->setFocusPolicy(QWidget::StrongFocus);
+		  //kptextobject->getKTextObject()->setFocus();
 		  kptextobject->getKTextObject()->setShowCursor(true);
 		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
@@ -965,10 +967,10 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 		  view->kPresenterDoc()->hideAllFrames();
 		  view->setFramesToParts();
 		  kpobject->activate(this,diffx(),diffy());
-		  setFocusProxy(dynamic_cast<KPPartObject*>(kpobject)->getView());
-		  setFocusPolicy(QWidget::StrongFocus);
-		  dynamic_cast<KPPartObject*>(kpobject)->getView()->setFocusPolicy(QWidget::StrongFocus);
-		  dynamic_cast<KPPartObject*>(kpobject)->getView()->setFocus();
+		  //setFocusProxy(dynamic_cast<KPPartObject*>(kpobject)->getView());
+		  //setFocusPolicy(QWidget::StrongFocus);
+		  //dynamic_cast<KPPartObject*>(kpobject)->getView()->setFocusPolicy(QWidget::StrongFocus);
+		  //dynamic_cast<KPPartObject*>(kpobject)->getView()->setFocus();
 		  editNum = i;
 		  break;
 		}
@@ -1479,7 +1481,7 @@ void Page::setTextFont(QFont *font)
 {
   if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
     {
-      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFocus();
+      //dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFocus();
       dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFont(*font);
     }
   else
@@ -1501,7 +1503,7 @@ void Page::setTextColor(QColor *color)
 {
   if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
     {
-      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFocus();
+      //dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFocus();
       dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setColor(*color);
     }
   else
@@ -1574,15 +1576,15 @@ void Page::startScreenPresentation(bool zoom)
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	  kptextobject->getKTextObject()->setShowCursor(false);
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
+	  //setFocusProxy(0);
+	  //setFocusPolicy(QWidget::NoFocus);
 	}
       else if (kpobject->getType() == OT_PART)
 	{
 	  kpobject->deactivate();
 	  _repaint(kpobject);
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
+	  //setFocusProxy(0);
+	  //setFocusPolicy(QWidget::NoFocus);
 	}
     }
 
@@ -1624,8 +1626,8 @@ void Page::startScreenPresentation(bool zoom)
   currPresStep = (int)(presStepList.first());
   subPresStep = 0;
   repaint(true);
-  setFocusPolicy(QWidget::StrongFocus);
-  setFocus();
+  //setFocusPolicy(QWidget::StrongFocus);
+  //setFocus();
   setCursor(blankCursor);
 }
 
@@ -2752,10 +2754,10 @@ void Page::editSelectedTextArea()
 		
 		  kpobject->activate(this,diffx(),diffy());
 		  kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
-		  setFocusProxy(kptextobject->getKTextObject());
-		  setFocusPolicy(QWidget::StrongFocus);
-		  kptextobject->getKTextObject()->setFocus();
-		  kptextobject->getKTextObject()->setShowCursor(true);
+		  //setFocusProxy(kptextobject->getKTextObject());
+		  //setFocusPolicy(QWidget::StrongFocus);
+		  //kptextobject->getKTextObject()->setFocus();
+		  //kptextobject->getKTextObject()->setShowCursor(true);
 		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
@@ -2878,15 +2880,15 @@ void Page::setToolEditMode(ToolEditMode _m)
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	  kptextobject->getKTextObject()->setShowCursor(false);
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
+	  //setFocusProxy(0);
+	  //setFocusPolicy(QWidget::NoFocus);
 	}
       else if (kpobject->getType() == OT_PART)
 	{
 	  kpobject->deactivate();
 	  _repaint(kpobject);
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
+	  //setFocusProxy(0);
+	  //setFocusPolicy(QWidget::NoFocus);
 	}
     }
 

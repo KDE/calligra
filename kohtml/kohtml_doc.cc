@@ -60,7 +60,7 @@ KoHTMLDoc::KoHTMLDoc()
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
-  SIGNAL_IMPL( "documentStarted" );  
+  SIGNAL_IMPL( "documentStarted" );
   SIGNAL_IMPL( "documentDone" );
 
   m_lstViews.setAutoDelete(false);
@@ -82,13 +82,13 @@ KoHTMLDoc::KoHTMLDoc()
   m_lastYOffset = -1;
 
   m_strCurrentURL = "";
-  
+
   QObject::connect( &m_timer, SIGNAL(timeout()),
                     this, SLOT(slotTimeout()));
-  
+
   m_pInternalView = 0L;
 //  m_pInternalView = new KMyHTMLView( this );
-  
+
 //  addHTMLView(m_pInternalView);
 /*
   QObject::connect(this, SIGNAL(contentChanged()),
@@ -104,11 +104,11 @@ KoHTMLDoc::~KoHTMLDoc()
      {
        removeHTMLView(m_pInternalView);
        delete m_pInternalView;
-     }  
-  
+     }
+
   if (m_pDocumentPixmap)
     delete m_pDocumentPixmap;
-    
+
 //  cleanUp();
 }
 
@@ -138,10 +138,10 @@ void KoHTMLDoc::removeView(KoHTMLView *view)
 KoHTMLView *KoHTMLDoc::createKoHTMLView()
 {
   KoHTMLView *p = new KoHTMLView(0L, 0L, this);
-  p->QWidget::show();
+  //p->QWidget::show();
 
   m_lstViews.append(p);
-  
+
   return p;
 }
 
@@ -153,7 +153,7 @@ OpenParts::View_ptr KoHTMLDoc::createView()
 void KoHTMLDoc::viewList(OpenParts::Document::ViewList *&list)
 {
   (*list).length(m_lstViews.count());
-  
+
   int i = 0;
   QListIterator<KoHTMLView> it(m_lstViews);
   for (; it.current(); ++it)
@@ -184,26 +184,26 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
   url.stripWhiteSpace();
 
   K2URL u( url );
-  
+
   if ( u.isMalformed() )
     return;
-  
+
   K2URLList l1, l2;
   K2URL::split( url, l1 );
   K2URL::split( m_strCurrentURL, l2 );
-  
+
   string anchor = l1.back().ref();
-  
+
   l1.back().setRef("");
   l2.back().setRef("");
-  
+
   m_strCurrentURL = u.url().c_str();
-  
+
   stopLoading();
-       
+
   m_bLoadError = false;
   m_bDocumentDone = false;
-     
+
   if ( (!((bool)reload)) && urlcmp( l1, l2 ) )
     {
       K2URL::decode( anchor );
@@ -217,7 +217,7 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
       QListIterator<KMyHTMLView> it( m_lstHTMLViews );
       for (; it.current(); ++it)
         it.current()->openURL( u.url().c_str(), (bool)reload );
-       
+
       documentStarted();
     }
 }
@@ -242,14 +242,14 @@ CORBA::Boolean KoHTMLDoc::documentLoading()
 void KoHTMLDoc::stopLoading()
 {
   cerr << "killing old stuff" << endl;
-  
+
   //"stop" all views
   QListIterator<KMyHTMLView> it2( m_lstHTMLViews );
   for (; it2.current(); ++it2)
     it2.current()->stop();
 
   cerr << "1" << endl;
-      
+
   QListIterator<KoHTMLJob> it(m_lstJobs);
   for (; it.current(); ++it)
       {
@@ -257,11 +257,11 @@ void KoHTMLDoc::stopLoading()
         cerr << "killing job (" << job->url() << ")" << endl;
         m_lstJobs.removeRef(job);
         job->kill();
-      }     
+      }
 
   cerr << "2" << endl;
-      
-  assert( m_lstJobs.count() == 0 );      
+
+  assert( m_lstJobs.count() == 0 );
   m_bRepaintDocument = true;
 }
 
@@ -280,10 +280,10 @@ void KoHTMLDoc::slotHTMLLoadError(KoHTMLJob *job, const char *errMsg)
   job->view()->stop();
 
   m_lstJobs.removeRef( job );
-  
-  m_strErrorMsg = errMsg;  
 
-  m_timer.start( 0, true );  
+  m_strErrorMsg = errMsg;
+
+  m_timer.start( 0, true );
 }
 
 void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
@@ -295,7 +295,7 @@ void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
 void KoHTMLDoc::slotTimeout()
 {
   QMessageBox::critical(0L, i18n("KoHTML Error"), m_strErrorMsg, i18n("OK"));
-  
+
   QListIterator<KoHTMLView> it( m_lstViews );
   for (; it.current(); ++it)
     it.current()->slotBack();
@@ -308,29 +308,29 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
      {
        QPainter painter;
        painter.begin( dev );
-     
+
        if (_scale != 1.0) painter.translate(_scale, _scale);
-       
+
        const char *msg = i18n("KoHTML: No document loaded!");
-       
+
        QRect r = painter.fontMetrics().boundingRect(msg);
-       
+
        painter.drawText((width / 2) - (r.width() / 2), (height / 2) - (r.height() / 2) , msg);
-       
+
        drawChildren(&painter, _scale);
-       
+
        painter.end();
-       
+
        return;
      }
 
-       
+
   if ( m_lstHTMLViews.count() == 0 )
     return;
-    
+
   KMyHTMLView *view = m_lstHTMLViews.first();
 
-  if ((!m_pDocumentPixmap) || (m_bRepaintDocument) || (width != m_lastWidth) || 
+  if ((!m_pDocumentPixmap) || (m_bRepaintDocument) || (width != m_lastWidth) ||
       (height != m_lastHeight) || (_scale != m_lastScale) ||
       (view->xOffset() != m_lastXOffset) || (view->yOffset() != m_lastYOffset )
      )
@@ -339,12 +339,12 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
          m_pDocumentPixmap->resize( width, height );
        else
          m_pDocumentPixmap = new QPixmap( width, height );
-	 
+	
        drawDocument( m_pDocumentPixmap, width, height, _scale );
-       
+
        m_lastWidth = width;
        m_lastHeight = height;
-       m_lastScale = _scale;	 
+       m_lastScale = _scale;	
        m_lastXOffset = view->xOffset();
        m_lastYOffset = view->yOffset();
        m_bRepaintDocument = false;
@@ -358,38 +358,38 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 
 void KoHTMLDoc::drawDocument(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		             CORBA::Float _scale )
-{ 
+{
   KMyHTMLView *view = m_pInternalView;
 
   QPainter painter;
   painter.begin(dev);
 
   if (_scale != 1.0) painter.translate(_scale, _scale);
-  
+
   cerr << "view is #1 " << view << endl;
 
   if ( !view && m_lstHTMLViews.count() > 0 )
     view = m_lstHTMLViews.first();
 
   cerr << "view is #2 " << view << endl;
-    
+
   if ( !view )
     {
       painter.end();
-      return;    
-    }  
+      return;
+    }
 
   view->draw( &painter, width, height );
-  
+
   drawChildren(&painter, _scale);
-  
+
   painter.end();
 }
 
 void KoHTMLDoc::drawChildren( QPainter *painter, CORBA::Float _scale)
-{			     
+{			
   QListIterator<KoHTMLChild> it(m_lstChildren);
-  
+
   for (; it.current(); ++it)
       {
         QRect geom = it.current()->geometry();
@@ -401,18 +401,18 @@ void KoHTMLDoc::drawChildren( QPainter *painter, CORBA::Float _scale)
 	p2.end();
 	painter->drawPixmap(geom.left(), geom.top(), pix);
       }
-}      
+}
 
 bool KoHTMLDoc::hasToWriteMultipart()
 {
   QListIterator<KoHTMLChild> it(m_lstChildren);
-  
+
   for (; it.current(); ++it)
       {
         if (!it.current()->isStoredExtern())
 	   return true;
       }
-  return false;      
+  return false;
 }
 
 bool KoHTMLDoc::loadChildren(KOStore::Store_ptr store)
@@ -429,8 +429,8 @@ bool KoHTMLDoc::loadChildren(KOStore::Store_ptr store)
 	if (!c->loadDocument(store, c->mimeType()))
 	   return false;
       }
-      
-  return true;      
+
+  return true;
 }
 
 bool KoHTMLDoc::loadXML(KOMLParser &parser, KOStore::Store_ptr store)
@@ -439,12 +439,12 @@ bool KoHTMLDoc::loadXML(KOMLParser &parser, KOStore::Store_ptr store)
   string tag;
   vector<KOMLAttrib> lst;
   string name;
-  
+
   if (!parser.open("DOC", tag))
      return false;
-     
-  KOMLParser::parseTag(tag.c_str(), name, lst);     
-  
+
+  KOMLParser::parseTag(tag.c_str(), name, lst);
+
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for (; it != lst.end(); it++)
       {
@@ -459,14 +459,14 @@ bool KoHTMLDoc::loadXML(KOMLParser &parser, KOStore::Store_ptr store)
   while (parser.open(0L, tag))
         {
 	  KOMLParser::parseTag(tag.c_str(), name, lst);
-	  
+	
 	  if (name == "URL")
 	     {
-	     
+	
 	       string tmp;
-	       
+	
 	       parser.readText(tmp);
-		   
+		
 	       openURL( tmp.c_str(), true );
 	     }
 	  else if (name == "OBJECT")
@@ -474,21 +474,21 @@ bool KoHTMLDoc::loadXML(KOMLParser &parser, KOStore::Store_ptr store)
 	       KoHTMLChild *ch = new KoHTMLChild(this);
 	       ch->load(parser, lst);
 	       insertChild(ch);
-	     }     
-	  
+	     }
+	
 	  if (!parser.close(tag))
 	     return false;
-	}      
-      
+	}
+
   parser.close(tag);
-  
-  return true;              
+
+  return true;
 }
 
 void KoHTMLDoc::makeChildListIntern(KOffice::Document_ptr root, const char *path)
 {
   int i = 0;
-  
+
   QListIterator<KoHTMLChild> it(m_lstChildren);
   for (; it.current(); ++it)
       {
@@ -505,26 +505,26 @@ void KoHTMLDoc::makeChildListIntern(KOffice::Document_ptr root, const char *path
 bool KoHTMLDoc::save(ostream &out, const char *format)
 {
   out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Simon Hausmann" 
-              << "\" email=\"" << "<tronical@gmx.net>" 
+  out << otag << "<DOC author=\"" << "Simon Hausmann"
+              << "\" email=\"" << "<tronical@gmx.net>"
 	      << "\" editor=\"" << "KoHTML"
 	      << "\" mime=\"" << MIME_TYPE << "\" >" << endl;
-	      
+	
   out << otag << "<URL>" << m_strCurrentURL.data() << "</URL>" << endl;
 
   /*
    * m_pInternalView->save( out ) ??????
    */
-    
+
   QListIterator<KoHTMLChild> ch(m_lstChildren);
   for (; ch.current(); ++ch)
       ch.current()->save(out);
 
   out << etag << "</DOC>" << endl;
- 
+
   setModified(false);
- 
-  return true;	      
+
+  return true;	
 }
 
 const char *KoHTMLDoc::copyright()
@@ -540,28 +540,28 @@ const char *KoHTMLDoc::comment()
 void KoHTMLDoc::insertObject(const KRect &rect, KoDocumentEntry &de)
 {
   KOffice::Document_var doc = imr_createDoc(de);
-  
+
   if (CORBA::is_nil(doc))
      return;
-     
+
   if (!doc->init())
      {
        QMessageBox::critical(0L, i18n("KoHTML Error"), i18n("Could not initialize child document"), i18n("OK"));
        return;
      }
-    
+
   KoHTMLChild *c = new KoHTMLChild(this, rect, doc);
-  
-  insertChild(c);    
-        
-  m_bModified = true;     
+
+  insertChild(c);
+
+  m_bModified = true;
   m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::insertChild(KoHTMLChild *child)
 {
   m_lstChildren.append(child);
-  
+
   emit sig_insertObject(child);
 
   m_bModified = true;
@@ -572,10 +572,10 @@ void KoHTMLDoc::changeChildGeometry(KoHTMLChild *child, const KRect &rect)
 {
   child->setGeometry(rect);
   child->setkGeometry(rect);
-  
+
   emit sig_updateChildGeometry(child);
-  
-  m_bModified = true; 
+
+  m_bModified = true;
   m_bRepaintDocument = true;
 }
 
@@ -586,12 +586,12 @@ QListIterator<KoHTMLChild> KoHTMLDoc::childIterator()
 
 void KoHTMLDoc::addHTMLView(KMyHTMLView *view)
 {
-  m_lstHTMLViews.append(view);  
-/*  
+  m_lstHTMLViews.append(view);
+/*
   if ( m_pInternalView && view != m_pInternalView )
     {
       m_pInternalView->stop();
-      
+
       QListIterator<KoHTMLJob> it( m_lstJobs );
       for (; it.current(); ++it)
         {
@@ -599,8 +599,8 @@ void KoHTMLDoc::addHTMLView(KMyHTMLView *view)
 	  m_lstJobs.removeRef( job );
 	  job->kill();
 	}
-*/      
-/*      
+*/
+/*
       QListIterator<KoHTMLJob> it( m_lstJobs );
       for (; it.current(); ++it)
         {
@@ -613,9 +613,9 @@ void KoHTMLDoc::addHTMLView(KMyHTMLView *view)
                m_lstJobs.removeRef(job);
                job->kill();
              }
-     
-	}   
-*/  
+
+	}
+*/
 /*      m_lstHTMLViews.removeRef( m_pInternalView );
       delete m_pInternalView;
       m_pInternalView = 0L;
@@ -625,18 +625,18 @@ void KoHTMLDoc::addHTMLView(KMyHTMLView *view)
 void KoHTMLDoc::removeHTMLView(KMyHTMLView *view)
 {
   view->stop();
-    
+
   m_lstHTMLViews.removeRef(view);
 }
 
 void KoHTMLDoc::requestDocument( KMyHTMLView *view, const char *url, bool reload )
 {
   KoHTMLJob *job = new KoHTMLJob( view, url, url, KoHTMLJob::HTML, reload );
-  
+
   QObject::connect( job, SIGNAL(jobData( KoHTMLJob *, const char *, int, bool )),
                     this, SLOT(slotJobData( KoHTMLJob *, const char *, int, bool )));
 
-  //is a top-level view?		    
+  //is a top-level view?		
   if ( m_lstHTMLViews.findRef( view ) != -1 )
     QObject::connect( job, SIGNAL(sigRedirection(int, const char *)),
                       this, SLOT(slotHTMLRedirect(int, const char *)));
@@ -645,19 +645,19 @@ void KoHTMLDoc::requestDocument( KMyHTMLView *view, const char *url, bool reload
                     this, SLOT(slotHTMLLoadError(KoHTMLJob *, const char *)));
 
   m_lstJobs.append( job );
-  
-  job->start();		    
+
+  job->start();		
 }
 
 void KoHTMLDoc::cancelDocument( KMyHTMLView *view, const char *url )
 {
   KoHTMLJob *job = findJob( view, url, KoHTMLJob::HTML );
-  
+
   if (!job)
     return; //aarghl...
-    
-  m_lstJobs.removeRef( job );    
-  
+
+  m_lstJobs.removeRef( job );
+
   job->kill();
 }
 
@@ -668,7 +668,7 @@ void KoHTMLDoc::viewFinished( KMyHTMLView *view )
 
 //  if ( m_lstHTMLViews.count() > 0 && view == m_pInternalView )
 //    return;
-    
+
   emit contentChanged();
   documentDone();
   m_bRepaintDocument = true;
@@ -680,34 +680,34 @@ void KoHTMLDoc::requestImage( KMyHTMLView *view, const char *url, bool reload )
   K2URL::split( view->getKHTMLWidget()->getDocumentURL().url(), lst );
   K2URL u( lst.back(), url );
   string dataURL = url;
-  
+
   if ( strcmp( u.protocol(), lst.back().protocol() ) == 0 )
      {
        lst.back() = u;
        K2URL::join( lst, dataURL );
      }
-    
+
   KoHTMLJob *job = new KoHTMLJob( view, url, dataURL.c_str(), KoHTMLJob::Image, reload );
-  
+
   QObject::connect( job, SIGNAL(jobData( KoHTMLJob *, const char *, int, bool )),
                     this, SLOT(slotJobData( KoHTMLJob *, const char *, int, bool )));
 
 // leave out error handling.......arghl
 
   m_lstJobs.append( job );
-  
-  job->start();		    
+
+  job->start();		
 }
 
 void KoHTMLDoc::cancelImage( KMyHTMLView *view, const char *url )
 {
   KoHTMLJob *job = findJob( view, url, KoHTMLJob::HTML );
-  
+
   if (!job)
     return; //aarghl...
 
-  m_lstJobs.removeRef( job );    
-        
+  m_lstJobs.removeRef( job );
+
   job->kill();
 }
 
@@ -717,7 +717,7 @@ void KoHTMLDoc::slotJobData( KoHTMLJob *job, const char *data, int len, bool eof
     job->view()->feedDocumentData( data, eof );
   else
     job->view()->data( job->url(), data, len, eof );
-    
+
   if ( eof )
     m_lstJobs.removeRef( job );
 }
@@ -731,12 +731,12 @@ void KoHTMLDoc::slotDocumentDoneInternal(KHTMLView *view)
 KoHTMLJob *KoHTMLDoc::findJob( KMyHTMLView *view, const char *url, KoHTMLJob::JobType type )
 {
   QListIterator<KoHTMLJob> it( m_lstJobs );
-  
+
   for (; it.current(); ++it)
     if ( it.current()->view() == view &&
          it.current()->url() == url &&
 	 it.current()->type() == type )
       return it.current();
-  
+
   return 0L;
 }

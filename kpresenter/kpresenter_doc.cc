@@ -833,7 +833,7 @@ KOffice::MainWindow_ptr KPresenterDoc::createMainWindow()
 KPresenterView* KPresenterDoc::createPresenterView()
 {
   KPresenterView *p = new KPresenterView( 0L, 0L, this );
-  p->QWidget::show();
+  //p->QWidget::show();
   m_lstViews.append( p );
 
   return p;

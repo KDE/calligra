@@ -1532,8 +1532,8 @@ void KPresenterView::createGUI()
   QObject::connect(page,SIGNAL(fontChanged(QFont*)),this,SLOT(fontChanged(QFont*)));
   QObject::connect(page,SIGNAL(colorChanged(QColor*)),this,SLOT(colorChanged(QColor*)));
   QObject::connect(page,SIGNAL(alignChanged(TxtParagraph::HorzAlign)),this,SLOT(alignChanged(TxtParagraph::HorzAlign)));
-  widget()->setFocusPolicy(QWidget::StrongFocus);
-  widget()->setFocusProxy(page);
+  //widget()->setFocusPolicy(QWidget::StrongFocus);
+  //widget()->setFocusProxy(page);
 
   // setup GUI
   setupPopupMenus();

@@ -107,7 +107,7 @@ void KImageDoc::removeView( KImageView* _view )
 KImageView* KImageDoc::createImageView()
 {
   KImageView *p = new KImageView( 0L, 0L, this );
-  p->QWidget::show();
+  //p->QWidget::show();
   m_lstViews.append( p );
 
   return p;

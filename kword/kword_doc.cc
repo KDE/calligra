@@ -1406,7 +1406,7 @@ void KWordDocument::removeView(KWordView *_view)
 KWordView* KWordDocument::createWordView()
 {
   KWordView *p = new KWordView( 0L, 0L, this );
-  p->QWidget::show();
+  //p->QWidget::show();
   m_lstViews.append( p );
 
   return p;

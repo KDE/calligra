@@ -4469,7 +4469,7 @@ void KTextObject::leaveEvent(QEvent*)
 /*======================= enter event ============================*/
 void KTextObject::enterEvent(QEvent*)
 {
-  if (autoFocus) setFocus();
+  //if (autoFocus) setFocus();
 }
 
 /*====================== return cell width =======================*/
@@ -4727,7 +4727,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 /*====================== mouse press event ========================*/
 void KTextObject::mousePressEvent(QMouseEvent *e)
 {
-  setFocus();
+  //setFocus();
 
   if (e->button() != RightButton)
     {

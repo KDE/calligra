@@ -142,7 +142,7 @@ void KWordView::init()
   gui->show();
 
   gui->getPaperWidget()->formatChanged(format);
-  widget()->setFocusProxy(gui);
+  //widget()->setFocusProxy(gui);
 
   setFormat(format,false);
 
@@ -1169,6 +1169,7 @@ void KWordView::textStyleSelected(const char *style)
   format = m_pKWordDoc->findParagLayout(style)->getFormat();
   gui->getPaperWidget()->formatChanged(format);
   updateStyle(style,false);
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*======================= text size selected  ===================*/
@@ -1177,6 +1178,7 @@ void KWordView::textSizeSelected(const char *size)
   tbFont.setPointSize(atoi(size));
   format.setPTFontSize(atoi(size));
   gui->getPaperWidget()->formatChanged(format);
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*======================= text font selected  ===================*/
@@ -1185,6 +1187,7 @@ void KWordView::textFontSelected(const char *font)
   tbFont.setFamily(font);
   format.setUserFont(m_pKWordDoc->findUserFont(font));
   gui->getPaperWidget()->formatChanged(format);
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*========================= text bold ===========================*/
@@ -1192,7 +1195,7 @@ void KWordView::textBold()
 {
   tbFont.setBold(!tbFont.bold());
   format.setWeight(tbFont.bold() ? QFont::Bold : QFont::Normal);
-  gui->getPaperWidget()->formatChanged(format);
+  //gui->getPaperWidget()->formatChanged(format);
 }
 
 /*========================== text italic ========================*/
@@ -1275,6 +1278,7 @@ void KWordView::textLineSpacing(const char *spc)
   KWUnit u;
   u.setPT(atoi(spc));
   gui->getPaperWidget()->setLineSpacing(u);
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*====================== enumerated list ========================*/
@@ -1380,6 +1384,7 @@ void KWordView::textBorderColor()
 void KWordView::textBorderWidth(const char *width)
 {
   tmpBrd.ptWidth = atoi(width);
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*================================================================*/
@@ -1397,6 +1402,8 @@ void KWordView::textBorderStyle(const char *style)
     tmpBrd.style = KWParagLayout::DASH_DOT;
   else if (stl == i18n("dash dot dot line (-**-)"))
     tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
+
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*================================================================*/
@@ -1438,6 +1445,7 @@ void KWordView::frameBorderColor()
 void KWordView::frameBorderWidth(const char *width)
 {
   frmBrd.ptWidth = atoi(width);
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*================================================================*/
@@ -1455,6 +1463,7 @@ void KWordView::frameBorderStyle(const char *style)
     frmBrd.style = KWParagLayout::DASH_DOT;
   else if (stl == i18n("dash dot dot line (-**-)"))
     frmBrd.style = KWParagLayout::DASH_DOT_DOT;
+  //gui->getPaperWidget()->setFocus();
 }
 
 /*================================================================*/
@@ -2691,9 +2700,9 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   xOffset = 0;
   yOffset = 0;
 
-  setFocusProxy(paperWidget);
+  //setFocusProxy(paperWidget);
   paperWidget->show();
-  paperWidget->setFocusPolicy(QWidget::StrongFocus);
+  //paperWidget->setFocusPolicy(QWidget::StrongFocus);
   scrollH(0);
   scrollV(0);
   paperWidget->setXOffset(xOffset);

@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qprinter.h>
 #include "kdiagramm_doc.h"
@@ -75,10 +75,10 @@ CORBA::Boolean KDiagrammDoc::init()
   m_table.xDesc.append( "Claudia" );
   m_table.xDesc.append( "Lars" );
   m_table.xDesc.append( "Matthias" );
-  
+
   m_table.yDesc.append( "Januar" );
   m_table.yDesc.append( "Februar" );
-  
+
   line_t l;
   l.push_back( 6.0 );
   l.push_back( 7.0 );
@@ -92,14 +92,14 @@ CORBA::Boolean KDiagrammDoc::init()
   l.push_back( 2.0 );
   l.push_back( 2.5 );
   m_table.data.push_back( l );
-  
+
   return true;
 }
 
 void KDiagrammDoc::cleanUp()
 {
   cerr << "CLeanUp KDiagrammDoc" << endl;
-  
+
   if ( m_bIsClean )
     return;
 
@@ -127,9 +127,9 @@ void KDiagrammDoc::removeView( KDiagrammView* _view )
 KDiagrammView* KDiagrammDoc::createDiagrammView()
 {
   KDiagrammView *p = new KDiagrammView( 0L, 0L, this );
-  p->QWidget::show();
+  //p->QWidget::show();
   m_lstViews.append( p );
-  
+
   return p;
 }
 
@@ -160,29 +160,29 @@ bool KDiagrammDoc::save( ostream& out, const char* /* format */ )
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kdiagramm"
       << "\" mime=\"" << "application/x-kdiagramm" << "\" >" << endl;
-    
+
   out << etag << "</DOC>" << endl;
-    
+
   setModified( FALSE );
-    
+
   return true;
 }
 
 bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
   cerr << "------------------------ LOADING --------------------" << endl;
-  
+
   string tag;
   vector<KOMLAttrib> lst;
   string name;
- 
+
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
     cerr << "Missing DOC" << endl;
     return false;
   }
-  
+
   KOMLParser::parseTag( tag.c_str(), name, lst );
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for( ; it != lst.end(); it++ )
@@ -196,11 +196,11 @@ bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       }
     }
   }
-    
-  parser.close( tag ); 
+
+  parser.close( tag );
 
   cerr << "------------------------ LOADING DONE --------------------" << endl;
-  
+
   return true;
 }
 
@@ -221,7 +221,7 @@ void KDiagrammDoc::showWizard()
 void KDiagrammDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix )
 {
   cout << "Got w=" << matrix.columns << " h=" << matrix.rows << endl;
-  
+
   cerr << "1" << endl;
 
   m_table.yDesc.clear();
@@ -243,7 +243,7 @@ void KDiagrammDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix 
   m_table.data.clear();
   for ( int y = 0; y < matrix.rows; y++ )
   {
-    line_t l;    
+    line_t l;
     for ( int x = 0; x < matrix.columns; x++ )
       l.push_back( matrix.matrix[ y * matrix.columns + x ] );
     m_table.data.push_back( l );
@@ -300,7 +300,7 @@ void KDiagrammDoc::editData()
     m_table.yDesc.clear();
     for ( row = 0; row < widget->rows(); row++ )
       m_table.yDesc.append( widget->getY( row ) );
-   
+
     m_table.data.clear();
     for ( row = 0; row < widget->rows(); row++ )
     {
@@ -356,7 +356,7 @@ void KDiagrammDoc::print( QPaintDevice* _dev )
     painter.drawText( (int)( MM_TO_POINT * leftBorder() +
 			     MM_TO_POINT * printableWidth() - (float)w ),
 		      (int)( MM_TO_POINT * 10.0 ), headRight( pagenr, m_strName ) );
-  
+
   // print foot line
   w = fm.width( footLeft( pagenr, m_strName ) );
   if ( w > 0 )
@@ -375,9 +375,9 @@ void KDiagrammDoc::print( QPaintDevice* _dev )
 			     MM_TO_POINT * printableWidth() - (float)w ),
 		      (int)( MM_TO_POINT * ( paperHeight() - 10.0 ) ),
 		      footRight( pagenr, m_strName ) );
-  
+
   painter.translate( MM_TO_POINT * m_leftBorder, MM_TO_POINT * m_topBorder );
-  
+
   KoDiagramm diag;
   diag.setData( data(), "", KoDiagramm::DAT_NUMMER, m_type );
   diag.paint( painter, MM_TO_POINT * printableWidth(), MM_TO_POINT * printableHeight() );
@@ -389,16 +389,16 @@ void KDiagrammDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _he
 			 CORBA::Float _scale )
 {
   cerr << "DRAWING w=" << _width << " h=" << _height << endl;
-  
+
   QPainter painter;
   painter.begin( _dev );
 
   if ( _scale != 1.0 )
     painter.scale( _scale, _scale );
-  
+
   KoDiagramm diag;
   diag.setData( data(), "", KoDiagramm::DAT_NUMMER, m_type );
-  diag.paint( painter, _width, _height );  
+  diag.paint( painter, _width, _height );
 
   painter.end();
 }
@@ -415,7 +415,7 @@ void KDiagrammDoc::paperLayoutDlg()
   pl.right = rightBorder();
   pl.top = topBorder();
   pl.bottom = bottomBorder();
-  
+
   KoHeadFoot hf;
   hf.headLeft = headLeft();
   hf.headRight = headRight();
@@ -423,19 +423,19 @@ void KDiagrammDoc::paperLayoutDlg()
   hf.footLeft = footLeft();
   hf.footRight = footRight();
   hf.footMid = footMid();
-  
+
   if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
     return;
 
   if ( pl.format == PG_CUSTOM )
   {
     m_paperWidth = pl.width;
-    m_paperHeight = pl.height;  
+    m_paperHeight = pl.height;
   }
-  
+
   setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
 
-  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );  
+  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 
   emit sig_updateView();
 }
@@ -449,7 +449,7 @@ void KDiagrammDoc::setHeadFootLine( const char *_headl, const char *_headm, cons
   m_footLeft = _footl;
   m_footRight = _footr;
   m_footMid = _footm;
-  
+
   m_bModified = TRUE;
 }
 
@@ -462,9 +462,9 @@ void KDiagrammDoc::setPaperLayout( float _leftBorder, float _topBorder, float _r
   m_bottomBorder = _bottomBorder;
   m_orientation = _orientation;
   m_paperFormat = _paper;
-  
+
   calcPaperSize();
-    
+
   m_bModified = TRUE;
 }
 
@@ -483,7 +483,7 @@ QString KDiagrammDoc::completeHeading( const char *_data, int _page, const char 
 	} */
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
-    
+
     QString tmp = _data;
     int pos = 0;
     /* while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
@@ -541,7 +541,7 @@ void KDiagrammDoc::calcPaperSize()
 	break;
     case PG_SCREEN:
         m_paperWidth = PG_SCREEN_WIDTH;
-        m_paperHeight = PG_SCREEN_HEIGHT;    
+        m_paperHeight = PG_SCREEN_HEIGHT;
     case PG_CUSTOM:
         return;
     }

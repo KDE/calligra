@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qprinter.h>
 #include "kspread_doc.h"
@@ -59,7 +59,7 @@ PyObject * xcl_Cell( PyObject*, PyObject *args)
   int tableid;
   int row, column;
   int docid;
-  
+
   if ( !PyArg_ParseTuple( args, "iiii", &docid, &tableid, &column, &row ) )
   {
     printf("ERROR: Could not parse\n");
@@ -80,7 +80,7 @@ PyObject * xcl_Cell( PyObject*, PyObject *args)
     cerr << "ERROR: Unknown table " << tableid << endl;
     return NULL;
   }
-    
+
   KSpreadCell *obj = t->cellAt( column, row );
 
   if ( obj->isValue() )
@@ -97,7 +97,7 @@ PyObject * xcl_SetCell( PyObject*, PyObject *args)
   int row, column;
   const char* value;
   int docid;
-  
+
   if ( PyArg_ParseTuple( args, "iiiis", &docid, &tableid, &column, &row, &value ) )
   {
     /* KSpreadDoc* doc = KSpreadDoc::find( docid );
@@ -132,7 +132,7 @@ PyObject * xcl_SetCell( PyObject*, PyObject *args)
     cerr << "ERROR: Unknown document " << docid << endl;
     return NULL;
   } */
-    
+
   KSpreadTable *t = KSpreadTable::find( tableid );
   if ( t == 0L )
   {
@@ -156,21 +156,21 @@ PyObject * xcl_ParseRange( PyObject*, PyObject *args)
     printf("ERROR: Could not parse\n");
     return NULL;
   }
-  
+
   KSpreadDoc* doc = KSpreadDoc::find( docid );
   if ( !doc )
   {
     cerr << "ERROR: Unknown document " << docid << endl;
     return NULL;
   }
-  
+
   KSpreadTable *t = doc->map()->findTable( table );
   if ( t == 0L )
   {
     cerr << "ERROR: Unknown table " << table << endl;
     return NULL;
   }
-    
+
   KSpreadCell *obj = t->cellAt( column, row );
   */
 
@@ -191,7 +191,7 @@ KSpreadDoc* KSpreadDoc::find( int _docId )
 {
   if ( !s_mapDocuments )
     return 0L;
-  
+
   return (*s_mapDocuments)[ _docId ];
 }
 
@@ -199,15 +199,15 @@ KSpreadDoc::KSpreadDoc()
 {
   ADD_INTERFACE( "IDL:KSpread/Document:1.0" );
   ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
-  
+
   if ( s_mapDocuments == 0L )
     s_mapDocuments = new QIntDict<KSpreadDoc>;
   m_docId = s_docId++;
   s_mapDocuments->insert( m_docId, this );
-    
+
   m_pEditor = 0L;
   m_pPython = 0L;
-  
+
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
   m_topBorder = 20.0;
@@ -220,21 +220,21 @@ KSpreadDoc::KSpreadDoc()
   m_pMap = 0L;
   m_bLoading = false;
   m_bEmpty = true;
-    
+
   m_iTableId = 1;
 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
-  
+
   initPython();
-  
+
   m_pMap = new KSpreadMap( this );
-    
+
   m_pUndoBuffer = new KSpreadUndo( this );
-  
+
   m_bModified = FALSE;
-  
+
   m_lstViews.setAutoDelete( false );
 
   CORBA::String_var tmp = opapp_orb->object_to_string( this );
@@ -252,7 +252,7 @@ CORBA::Boolean KSpreadDoc::init()
 void KSpreadDoc::cleanUp()
 {
   cerr << "CLeanUp KSpreadDoc" << endl;
-  
+
   if ( m_bIsClean )
     return;
 
@@ -263,7 +263,7 @@ void KSpreadDoc::cleanUp()
     delete m_pMap;
     m_pMap = 0L;
   }
-  
+
   m_lstAllChildren.clear();
 
   KoDocument::cleanUp();
@@ -284,11 +284,11 @@ void KSpreadDoc::removeView( KSpreadView* _view )
 KSpreadView* KSpreadDoc::createSpreadView()
 {
   KSpreadView *p = new KSpreadView( 0L, 0L, this );
-  p->QWidget::show();
+  //p->QWidget::show();
   m_lstViews.append( p );
-  
+
   EMIT_EVENT( this, KSpread::Document::eventNewView, p );
-  
+
   return p;
 }
 
@@ -329,7 +329,7 @@ bool KSpreadDoc::save( ostream& out, const char* /* format */ )
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
       << "\" mime=\"" << "application/x-kspread" << "\" >" << endl;
-  
+
   if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
     m_pEditor->saveBuffer( m_editorBuffer );
   m_pMap->getPythonCodeFromFile();
@@ -340,18 +340,18 @@ bool KSpreadDoc::save( ostream& out, const char* /* format */ )
   out << indent << "<HEAD left=\"" << headLeft() << "\" center=\"" << headMid() << "\" right=\"" << headRight() << "\"/>" << endl;
   out << indent << "<FOOT left=\"" << footLeft() << "\" center=\"" << footMid() << "\" right=\"" << footRight() << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
-  
+
   // TODO
   // if ( !pythonCode.isNull() && pythonCode.length() > 0 )
   // {
   // }
 
   m_pMap->save( out );
-  
+
   out << etag << "</DOC>" << endl;
-    
+
   setModified( FALSE );
-    
+
   return true;
 }
 
@@ -360,11 +360,11 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   cerr << "------------------------ LOADING --------------------" << endl;
 
   m_bLoading = true;
-  
+
   string tag;
   vector<KOMLAttrib> lst;
   string name;
- 
+
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
@@ -372,7 +372,7 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     m_bLoading = false;
     return false;
   }
-  
+
   KOMLParser::parseTag( tag.c_str(), name, lst );
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for( ; it != lst.end(); it++ )
@@ -387,12 +387,12 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       }
     }
   }
-    
+
   // PAPER, MAP
   while( parser.open( 0L, tag ) )
   {
     KOMLParser::parseTag( tag.c_str(), name, lst );
- 
+
     if ( name == "PAPER" )
     {
       KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -415,7 +415,7 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
 	if ( name == "PAPERBORDERS" )
-	{    
+	{
 	  KOMLParser::parseTag( tag.c_str(), name, lst );
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for( ; it != lst.end(); it++ )
@@ -434,7 +434,7 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 	    else
 	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
-	  } 
+	  }
 	}
       	else if ( name == "HEAD" )
 	{
@@ -453,7 +453,7 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 	    else
 	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
-	  } 
+	  }
 	}
       	else if ( name == "FOOT" )
 	{
@@ -472,10 +472,10 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 	    else
 	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
-	  } 
+	  }
 	}
 	else
-	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;    
+	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
 	
 	if ( !parser.close( tag ) )
         {
@@ -489,12 +489,12 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       if ( !m_pMap->load( parser, lst ) )
       {
-	m_bLoading = false;  
+	m_bLoading = false;
 	return false;
       }
     }
     else
-      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;    
+      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
 
     if ( !parser.close( tag ) )
     {
@@ -504,10 +504,10 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     }
   }
 
-  parser.close( tag ); 
+  parser.close( tag );
 
   cerr << "------------------------ LOADING DONE --------------------" << endl;
-  
+
   return true;
 }
 
@@ -529,7 +529,7 @@ bool KSpreadDoc::completeLoading( KOStore::Store_ptr /* _store */ )
 KSpreadTable* KSpreadDoc::createTable()
 {
   char buffer[ 128 ];
-  
+
   sprintf( buffer, i18n( "Table%i" ), m_iTableId++ );
   KSpreadTable *t = new KSpreadTable( this, buffer );
   t->setMap( m_pMap );
@@ -541,14 +541,14 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
   m_pMap->addTable( _table );
 
   // TODO
-  // emit signal 
+  // emit signal
 
     /* if ( pGui )
     {
 	pGui->addKSpreadTable( _table );
 	pGui->setActiveKSpreadTable( _table );
     } */
-    
+
   m_bModified = TRUE;
 
   emit sig_addTable( _table );
@@ -563,7 +563,7 @@ void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const 
   m_footLeft = _footl;
   m_footRight = _footr;
   m_footMid = _footm;
-  
+
   m_bModified = TRUE;
 }
 
@@ -576,9 +576,9 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
   m_bottomBorder = _bottomBorder;
   m_orientation = _orientation;
   m_paperFormat = _paper;
-  
+
   calcPaperSize();
-    
+
   emit sig_updateView();
 
   m_bModified = TRUE;
@@ -589,7 +589,7 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 {
     KoFormat f = paperFormat();
     KoOrientation o = orientation();
-    
+
     if ( strcmp( "A3", _paper ) == 0L )
 	f = PG_DIN_A3;
     else if ( strcmp( "A4", _paper ) == 0L )
@@ -621,12 +621,12 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
       if ( m_paperHeight < 10.0 )
 	m_paperWidth = PG_A4_HEIGHT;
     }
-    
+
     if ( strcmp( "Portrait", _orientation ) == 0L )
 	o = PG_PORTRAIT;
     else if ( strcmp( "Landscape", _orientation ) == 0L )
 	o = PG_LANDSCAPE;
-    
+
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
 }
 
@@ -664,7 +664,7 @@ void KSpreadDoc::calcPaperSize()
 	break;
     case PG_SCREEN:
         m_paperWidth = PG_SCREEN_WIDTH;
-        m_paperHeight = PG_SCREEN_HEIGHT;    
+        m_paperHeight = PG_SCREEN_HEIGHT;
     case PG_CUSTOM:
         return;
     }
@@ -730,7 +730,7 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     QString ta = "";
     if ( _table )
 	ta = _table;
-    
+
     QString tmp = _data;
     int pos = 0;
     while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
@@ -764,7 +764,7 @@ void KSpreadDoc::reloadScripts()
 {
   if ( m_pPython )
     delete m_pPython;
-    
+
   initPython();
 
   // Update the cell content
@@ -782,13 +782,13 @@ void KSpreadDoc::reloadScripts()
 }
 
 void KSpreadDoc::initPython()
-{    
+{
     QString t2;
     t2.sprintf( "xclModule%i", ++moduleCount );
     m_pPython = new KSpreadPythonModule( t2, docId() );
     m_pPython->registerMethods( xcl_methods );
     m_pPython->setContext( this );
-    
+
     DIR *dp = 0L;
     struct dirent *ep;
 
@@ -798,21 +798,21 @@ void KSpreadDoc::initPython()
     dp = opendir( path.c_str() );
     if ( dp == 0L )
       return;
-    
+
     while ( ( ep = readdir( dp ) ) != 0L )
-    {  
+    {
       string f = path;
       f += "/";
       f += ep->d_name;
       struct stat buff;
       if ( f != "." && f != ".." && ( stat( f.c_str(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
 	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
-      {  
+      {
 	cerr << "Executing " << f << endl;
         //if (strcmp(f.c_str(),"/opt/kde/share/apps/kspread/scripts/xcllib.py") != 0)
 	//{
           int res = m_pPython->runFile( f.c_str() );
-          cerr << "Done result=" << res << endl; 
+          cerr << "Done result=" << res << endl;
         //}
  	//else cerr << "DISABLED !!" << endl;
       }
@@ -836,16 +836,16 @@ void KSpreadDoc::initPython()
     dp = opendir( path.c_str() );
     if ( dp == 0L )
       return;
-    
+
     while ( ( ep = readdir( dp ) ) != 0L )
-    {  
+    {
       string f = path;
       f += "/";
       f += ep->d_name;
       struct stat buff;
       if ( f != "." && f != ".." && ( stat( f.c_str(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
 	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
-      {  
+      {
 	cerr << "Executing " << f << endl;
 	int res = m_pPython->runFile( f.c_str() );
 	cerr << "Done result=" << res << endl;
@@ -873,14 +873,14 @@ bool KSpreadDoc::editPythonCode()
     m_pEditor = createEditor();
   if ( !m_pEditor->isOk() )
     return FALSE;
-  
+
   debug("KSpreadDoc::editPythonCode()");
   m_pMap->movePythonCodeToFile();
-  
+
   m_editorBuffer = m_pEditor->openFile( m_pMap->getPythonCodeFile() ).copy();
   debug(m_editorBuffer);
   m_pEditor->show();
-  
+
   return TRUE;
 }
 
@@ -892,15 +892,15 @@ void KSpreadDoc::endEditPythonCode()
     return;
   if ( m_editorBuffer.isNull() )
     return;
-  
+
   debug("KSpreadDoc::endEditPythonCode()");
   m_pEditor->saveBuffer( m_editorBuffer );
   m_pEditor->killBuffer( m_editorBuffer );
   m_pEditor->hide();
-  
+
   m_pMap->getPythonCodeFromFile();
   m_bModified = TRUE;
-  
+
   m_editorBuffer = 0L;
 }
 
@@ -967,7 +967,7 @@ void KSpreadDoc::paperLayoutDlg()
   pl.right = rightBorder();
   pl.top = topBorder();
   pl.bottom = bottomBorder();
-  
+
   KoHeadFoot hf;
   hf.headLeft = headLeft();
   hf.headRight = headRight();
@@ -975,19 +975,19 @@ void KSpreadDoc::paperLayoutDlg()
   hf.footLeft = footLeft();
   hf.footRight = footRight();
   hf.footMid = footMid();
-  
+
   if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
     return;
 
   if ( pl.format == PG_CUSTOM )
   {
     m_paperWidth = pl.width;
-    m_paperHeight = pl.height;  
+    m_paperHeight = pl.height;
   }
-  
+
   setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
 
-  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );  
+  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 }
 
 KSpreadDoc::~KSpreadDoc()
@@ -995,10 +995,10 @@ KSpreadDoc::~KSpreadDoc()
   cerr << "KSpreadDoc::~KSpreadDoc()" << endl;
 
   s_mapDocuments->remove( m_docId );
-  
+
   if ( m_pPython )
     delete m_pPython;
-    
+
   endEditPythonCode();
 
   if ( m_pUndoBuffer )
