@@ -217,7 +217,7 @@ protected:
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
 
-    virtual void doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
+    virtual void doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
 
     virtual void showFormat( KoTextFormat *format ) ;
 

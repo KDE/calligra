@@ -3013,11 +3013,11 @@ void KPresenterView::setupActions()
                                           actionCollection(), "enable_autocorrection" );
 
 
-    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
-                                            this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
+    KAction* actComplete = new KAction( i18n( "completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
+                                            this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
     // Necessary for the actions that are not plugged anywhere
-    actAutoComplete->plugAccel( accel );
+    actComplete->plugAccel( accel );
 
 
     actionInsertComment = new KAction( i18n( "Comment" ), 0,
@@ -3043,6 +3043,10 @@ void KPresenterView::setupActions()
     actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
                                        this,SLOT(removeComment()),
                                        actionCollection(), "remove_comment");
+
+    actionConfigureCompletion = new KAction( i18n( "&Configure completion..." ), 0,
+                                             this, SLOT( configureCompletion() ),
+                                             actionCollection(), "configure_completion" );
 
 }
 
@@ -5731,11 +5735,11 @@ void KPresenterView::slotAllowAutoFormat()
     m_pKPresenterDoc->setAllowAutoFormat( state );
 }
 
-void KPresenterView::slotAutoComplete()
+void KPresenterView::slotCompletion()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if(edit)
-        edit->autoCompletion();
+        edit->completion();
 }
 
 void KPresenterView::insertComment()
@@ -5934,6 +5938,13 @@ void KPresenterView::removeComment()
     {
         edit->removeComment();
     }
+}
+
+void KPresenterView::configureCompletion()
+{
+    m_pKPresenterDoc->getAutoFormat()->readConfig();
+    KoCompletionDia dia( this, 0, m_pKPresenterDoc->getAutoFormat() );
+    dia.exec();
 }
 
 

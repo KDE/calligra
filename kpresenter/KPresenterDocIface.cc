@@ -452,14 +452,14 @@ bool KPresenterDocIface::configAutoNumberStyle() const
     return doc->getAutoFormat()->getConfigAutoNumberStyle();
 }
 
-void KPresenterDocIface::setConfigAutoCompletion( bool b )
+void KPresenterDocIface::setConfigCompletion( bool b )
 {
-    doc->getAutoFormat()->configAutoCompletion( b );
+    doc->getAutoFormat()->configCompletion( b );
 }
 
-bool KPresenterDocIface::configAutoCompletion() const
+bool KPresenterDocIface::configCompletion() const
 {
-    return doc->getAutoFormat()->getConfigAutoCompletion();
+    return doc->getAutoFormat()->getConfigCompletion();
 }
 
 void KPresenterDocIface::setConfigAppendSpace( bool b)

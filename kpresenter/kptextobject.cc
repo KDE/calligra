@@ -1203,13 +1203,13 @@ void KPTextView::ensureCursorVisible()
     kdDebug()<<"KPTextView::ensureCursorVisible() : not implemented\n";
 }
 
-void KPTextView::doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+void KPTextView::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
 {
     if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
     {
         KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
         if( autoFormat )
-            autoFormat->doAutoCompletion(  cursor, parag, index, textObject());
+            autoFormat->doCompletion(  cursor, parag, index, textObject());
     }
 }
 

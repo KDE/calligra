@@ -214,6 +214,8 @@ public slots:
     void extraPenStyle();
     void extraPenWidth();
 
+    void configureCompletion();
+
     void extraAlignObjLeft();
     void extraAlignObjCenterH();
     void extraAlignObjRight();
@@ -352,7 +354,7 @@ public slots:
 
     void slotAllowAutoFormat();
 
-    void slotAutoComplete();
+    void slotCompletion();
 
     void removeComment();
 
@@ -864,6 +866,7 @@ private:
 
     KAction *actionAddHelpLine;
 
+    KAction *actionConfigureCompletion;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
