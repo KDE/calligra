@@ -85,12 +85,14 @@ QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
     // Scale the value as desired by the user.
     double v = cell->value().asFloat() * factor;
 
-    // A  lways unsigned ?
+    // Always unsigned ?
     if ((floatFormat == KSpreadCell::AlwaysUnsigned) && (v < 0.0))
       v *= -1.0;
 
     // Make a string out of it.
-    QString localizedNumber = createNumberFormat (v, cell);
+    QString localizedNumber = createNumberFormat (cell->locale(), v,
+      precision, cell->getCurrencySymbol(), fmtType,
+      (floatFormat == KSpreadCell::AlwaysSigned));
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
@@ -151,17 +153,14 @@ QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
   return str;
 }
 
-QString ValueFormatter::createNumberFormat (double value, KSpreadCell *cell)
+QString ValueFormatter::createNumberFormat (KLocale *locale,
+    double value, int precision, const QString &currencySymbol,
+    FormatType fmt, bool alwaysSigned)
 {
-  KSpreadFormat::FloatFormat floatFormat =
-      cell->floatFormat (cell->column(), cell->row());
-  int precision = cell->precision (cell->column(), cell->row());
-  FormatType fmt = cell->formatType();
-  
   // if precision is -1, ask for a huge number of decimals, we'll remove
   // the zeros later. Is 8 ok ?
   int p = (precision == -1) ? 8 : precision;
-  QString localizedNumber = cell->locale()->formatNumber( value, p );
+  QString localizedNumber = locale->formatNumber( value, p );
   int pos = 0;
 
   // this will avoid displaying negative zero, i.e "-0.0000"
@@ -182,17 +181,16 @@ QString ValueFormatter::createNumberFormat (double value, KSpreadCell *cell)
   switch (fmt)
   {
     case Number_format:
-      localizedNumber = cell->locale()->formatNumber(value, p);
+      localizedNumber = locale->formatNumber(value, p);
       break;
     case Percentage_format:
-      localizedNumber = cell->locale()->formatNumber (value, p)+ " %";
+      localizedNumber = locale->formatNumber (value, p)+ " %";
       break;
     case Money_format:
-      localizedNumber = cell->locale()->formatMoney (value,
-          cell->getCurrencySymbol(), p );
+      localizedNumber = locale->formatMoney (value, currencySymbol, p );
       break;
     case Scientific_format:
-      decimal_point = cell->locale()->decimalSymbol()[0];
+      decimal_point = locale->decimalSymbol()[0];
       localizedNumber = QString::number (value, 'E', p);
       if ((pos = localizedNumber.find ('.')) != -1)
         localizedNumber = localizedNumber.replace (pos, 1, decimal_point);
@@ -215,8 +213,8 @@ QString ValueFormatter::createNumberFormat (double value, KSpreadCell *cell)
   }
 
   //prepend positive sign if needed
-  if (floatFormat == KSpreadCell::AlwaysSigned && value >= 0 )
-    if (cell->locale()->positiveSign().isEmpty())
+  if (alwaysSigned && value >= 0 )
+    if (locale->positiveSign().isEmpty())
       localizedNumber='+'+localizedNumber;
 
   return localizedNumber;

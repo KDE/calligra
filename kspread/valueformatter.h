@@ -47,7 +47,8 @@ class ValueFormatter {
  
 
   /** create a number format */
-  QString createNumberFormat (double value, KSpreadCell *cell);
+  QString createNumberFormat (KLocale *locale, double value, int precision,
+      const QString &currencySymbol, FormatType fmt, bool alwaysSigned);
   
   /** create a date format */
   QString dateFormat (KLocale* locale, const QDate &_date, FormatType fmtType);
