@@ -128,6 +128,11 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 			m_lastPoint.setX( mouseEvent->pos().x() );
 			m_lastPoint.setY( mouseEvent->pos().y() );
 			update();
+			/*double dx = m_lastPoint.x() - m_firstPoint.x();
+			double dy = m_lastPoint.y() - m_firstPoint.y();
+			scaleFactor /= m_view->zoom();
+			m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
+			m_firstPoint = m_lastPoint;*/
 		}
 		else
 		{
@@ -307,7 +312,6 @@ VObjectListViewItem::key( int, bool ) const
 void
 VObjectListViewItem::update()
 {
-	KIconLoader il;
 	QPixmap preview;
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
@@ -334,10 +338,10 @@ VObjectListViewItem::update()
 	selectionDesc.visit( *m_object );
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
 	if( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked )
-		setPixmap( 1, QPixmap( il.iconPath( "locked.png", KIcon::Small ) ) );
+		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "locked.png", KIcon::Small ) ) );
 	else
-		setPixmap( 1, QPixmap( il.iconPath( "unlocked.png", KIcon::Small ) ) );
-	setPixmap( 2, QPixmap( il.iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
+		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "unlocked.png", KIcon::Small ) ) );
+	setPixmap( 2, QPixmap( KGlobal::iconLoader()->iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
 	setPixmap( 0, preview );
 }
 
@@ -351,7 +355,6 @@ VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocum
 void
 VLayerListViewItem::update()
 {
-	KIconLoader il;
 	QPixmap preview;
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
@@ -374,10 +377,10 @@ VLayerListViewItem::update()
 	setOn( m_layer->selected() );
 	setText( 0, m_layer->name() );
 	if( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked )
-		setPixmap( 1, QPixmap( il.iconPath( "locked.png", KIcon::Small ) ) );
+		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "locked.png", KIcon::Small ) ) );
 	else
-		setPixmap( 1, QPixmap( il.iconPath( "unlocked.png", KIcon::Small ) ) );
-	setPixmap( 2, QPixmap( il.iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
+		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "unlocked.png", KIcon::Small ) ) );
+	setPixmap( 2, QPixmap( KGlobal::iconLoader()->iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
 	setPixmap( 0, preview );
 } // VLayerListViewItem::update
 
@@ -400,7 +403,6 @@ VLayerListViewItem::pos()
 VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 		: QWidget( parent, "LayersTab" ), m_view( view ), m_document( &view->part()->document() )
 {
-	KIconLoader il;
 
 	QToolButton* button;
 	QVBoxLayout* layout = new QVBoxLayout( this, 1 );
