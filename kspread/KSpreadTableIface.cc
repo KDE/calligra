@@ -63,8 +63,12 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 	        return TRUE;
 	}
 
+    QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
+    cellID=m_table->tableName()+"!"+cellID;
+  
+    kdDebug()<<"KSpreadCellProxy::process: cellID="<<cellID<<endl;
 
-    KSpreadPoint p( obj.data() + m_prefix.length() );
+    KSpreadPoint p( cellID); //obj.data() + m_prefix.length() );
     if ( !p.isValid() ) {
 	kdDebug(36001)<<"KSpreadCellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
         return FALSE; 
