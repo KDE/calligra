@@ -58,7 +58,7 @@ KexiViewBase::~KexiViewBase()
 
 KexiPart::Part* KexiViewBase::part() const
 {
-	return m_dialog ? m_dialog->m_part : 0;
+	return m_dialog ? m_dialog->part() : 0;
 }
 
 bool KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*cancelled*/, bool & /*dontStore*/)
