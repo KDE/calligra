@@ -78,6 +78,8 @@ private:
     QComboBox *m_unit;
     KDoubleNumInput* columnSpacing;
     int m_oldUnit;
+    KIntNumInput* m_undoRedoLimit;
+    int m_oldNbRedo;
 };
 
 class KWConfig : public KDialogBase

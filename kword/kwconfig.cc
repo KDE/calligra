@@ -317,13 +317,14 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
-
+    m_oldNbRedo=30;
     QString unitType=KoUnit::unitName(unit);
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
         unitType=config->readEntry("Units",unitType);
         ptColumnSpacing=config->readDoubleNumEntry("ColumnSpacing",ptColumnSpacing);
+        m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
     }
 
     QLabel *unitLabel= new QLabel(i18n("Unit:"),tmpQGroupBox);
@@ -359,6 +360,11 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     columnSpacing->setSuffix( suffix );
     columnSpacing->setLabel(i18n("Default Column Spacing:"));
     grid->addWidget(columnSpacing,2,0);
+
+    m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
+    m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
+    m_undoRedoLimit->setRange(10, 60, 1);
+    grid->addWidget(m_undoRedoLimit,3,0);
 }
 
 void ConfigureMiscPage::apply()
@@ -390,11 +396,19 @@ void ConfigureMiscPage::apply()
         doc->setDefaultColumnSpacing(colSpacing);
     }
 
+    int newUndo=m_undoRedoLimit->value();
+    if(newUndo!=m_oldNbRedo)
+    {
+        config->writeEntry( "ColumnSpacing",colSpacing , true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry("UndoRedo",newUndo);
+        doc->setUndoRedoLimit(newUndo);
+    }
 }
 
 void ConfigureMiscPage::slotDefault()
 {
    columnSpacing->setValue(KoUnit::userValue( 3, m_pView->kWordDocument()->getUnit() ));
+   m_undoRedoLimit->setValue(30);
 }
 
 #include "kwconfig.moc"

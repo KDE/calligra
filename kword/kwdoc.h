@@ -487,6 +487,10 @@ public:
 
     virtual DCOPObject* dcopObject();
 
+
+    int undoRedoLimit();
+    void setUndoRedoLimit(int _val);
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();

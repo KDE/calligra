@@ -64,6 +64,8 @@ k_dcop:
     virtual void setDefaultColumnSpacing(int _val);
     virtual int maxRecentFiles();
 
+    virtual void setUndoRedoLimit(int _val);
+
 private:
     KWDocument *doc;
 

@@ -274,6 +274,15 @@ void KWDocument::initConfig()
   }
   else
       m_zoom = 100;
+
+  if(config->hasGroup("Misc" ) )
+  {
+      config->setGroup( "Misc" );
+      int undo=config->readNumEntry("UndoRedo",-1);
+      if(undo!=-1)
+          setUndoRedoLimit(undo);
+  }
+
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }
 
@@ -3070,6 +3079,17 @@ void KWDocument::updateFrameStatusBarItem()
     QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
         it.current()->updateFrameStatusBarItem();
+}
+
+int KWDocument::undoRedoLimit()
+{
+    return m_commandHistory->undoLimit();
+}
+
+void KWDocument::setUndoRedoLimit(int val)
+{
+    m_commandHistory->setUndoLimit(val);
+    m_commandHistory->setRedoLimit(val);
 }
 
 #include "kwdoc.moc"
