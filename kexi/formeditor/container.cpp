@@ -472,6 +472,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 				int gridX = m_form->gridX();
 				int gridY = m_form->gridY();
+				int realdx = mev->x() - m_grab.x();
+				int realdy = mev->y() - m_grab.y();
+				int dx=realdx, dy=realdy;
 
 				// If we later switch to copy mode, we need to store those info
 				if(m_form->selectedWidgets()->count() == 1)
@@ -483,6 +486,52 @@ Container::eventFilter(QObject *s, QEvent *e)
 				}
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
+				{
+					if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+					{
+						w = w->parentWidget(); // widget is WidgetStack page
+						if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
+							w = w->parentWidget();
+					}
+
+					int tmpx = w->x() + mev->x() - m_grab.x();
+					int tmpy = w->y() + mev->y() - m_grab.y();
+					if(tmpx < 0)
+						dx = QMAX(0 - w->x(), dx); // because dx is <0
+					else if(tmpx > w->parentWidget()->width() - gridX)
+						dx = QMIN(w->parentWidget()->width() - gridX - w->x(), dx);
+
+					if(tmpy < 0)
+						dy = QMAX(0 - w->y(), dy); // because dy is <0
+					else if(tmpy > w->parentWidget()->height() - gridY)
+						dy = QMIN(w->parentWidget()->height() - gridY - w->y(), dy);
+				}
+
+				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
+				{
+					if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+					{
+						w = w->parentWidget(); // widget is WidgetStack page
+						if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
+							w = w->parentWidget();
+					}
+
+					int tmpx, tmpy;
+					if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+					{
+						tmpx = w->x() + dx;
+						tmpy = w->y() + dy;
+					}
+					else
+					{
+						tmpx = int( float( w->x() + dx) / float(gridX) + 0.5) * gridX;
+						tmpy = int( float( w->y() + dy) / float(gridY) + 0.5) * gridY;
+					}
+
+					if((tmpx != w->x()) || (tmpy != w->y()))
+						w->move(tmpx,tmpy);
+				}
+				/*for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
 					if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 					{
@@ -515,7 +564,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 					if((tmpx != w->x()) || (tmpy != w->y()))
 						w->move(tmpx,tmpy);
-				}
+				}*/
 				m_state = MovingWidget;
 			}
 
