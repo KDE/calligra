@@ -1,3 +1,10 @@
+koffice (1:1.1-beta1-2) unstable; urgency=low
+
+  * Fleshed out man pages.
+  * Fixed the location of the kprconverter.pl man page.
+
+ -- Ben Burton <benb@acm.org>  Mon, 30 Apr 2001 16:15:49 -0500
+
 koffice (1:1.1-beta1-1) unstable; urgency=low
 
   * New upstream release.
