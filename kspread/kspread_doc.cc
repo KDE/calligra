@@ -845,6 +845,7 @@ DCOPObject* KSpreadDoc::dcopObject()
 
 void KSpreadDoc::addAreaName(QRect &_rect,QString name,QString tableName)
 {
+  setModified( true );
   Reference tmp;
   tmp.rect = _rect;
   tmp.table_name = tableName;

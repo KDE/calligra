@@ -224,6 +224,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
       s.sprintf("Table%i", s_id );
       QObject::setName( s.data() );
   }
+  m_oldPos=QPoint(1,1);
 }
 
 bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
@@ -594,7 +595,7 @@ QRect KSpreadTable::marker() const
 }
 
 void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
-{
+{   m_oldPos=QPoint( m_marker.topLeft());
     if ( _sel.left() == 0 )
         setSelection( _sel, m_marker.topLeft(), _canvas );
     else
@@ -636,17 +637,24 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
         {
         KSpreadCell* cell2 = cellAt( cell->obscuringCellsColumn(),
         cell->obscuringCellsRow() );
-        if( m.x()==cell->obscuringCellsColumn()+ cell2->extraXCells() &&
-                m.y()==cell->obscuringCellsRow()+ cell2->extraYCells())
+        QRect extraArea;
+        extraArea.setCoords( cell->obscuringCellsColumn(),cell->obscuringCellsRow(),
+        cell->obscuringCellsColumn()+ cell2->extraXCells(),cell->obscuringCellsRow()+ cell2->extraYCells());
+        if(extraArea.contains(m.x(),m.y()))
                 {
-                m_marker.setCoords( cell->obscuringCellsColumn(),
-                        cell->obscuringCellsRow(), m.x(), m.y()  );
+                m_marker=extraArea;
                 }
         else
+                {
+                m_oldPos=QPoint( m.x(),m.y());
                 m_marker = QRect( m, m );
+                }
         }
   else
+        {
+        m_oldPos=QPoint( m.x(),m.y());
       m_marker = QRect( m, m );
+      }
 
   emit sig_changeSelection( this, old, old_marker );
 }
@@ -2064,6 +2072,45 @@ KSpreadCell* c = m_cells.firstCell();
 
 }
 
+QRect KSpreadTable::selectionCellMerged(const QRect &_sel)
+{
+QRect selection(_sel);
+if(selection.bottom()==0x7FFF ||selection.right()==0x7FFF)
+        return selection;
+else
+  {
+  int top=selection.top();
+  int left=selection.left();
+  int bottom=selection.bottom();
+  int right=selection.right();
+  for ( int x = selection.left(); x <= selection.right(); x++ )
+        for ( int y = selection.top(); y <= selection.bottom(); y++ )
+        {
+                KSpreadCell *cell = cellAt( x, y );
+                if( cell->isForceExtraCells())
+                {
+                        right=QMAX(right,cell->extraXCells()+x);
+                        bottom=QMAX(bottom,cell->extraYCells()+y);
+                }
+                else if ( cell->isObscured() && cell->isObscuringForced() )
+                {
+                        int moveX=cell->obscuringCellsColumn();
+                        int moveY=cell->obscuringCellsRow();
+                        cell = cellAt( moveX, moveY );
+                        left=QMIN(left,moveX);
+                        top=QMIN(top,moveY);
+                        bottom=QMAX(bottom,moveY+cell->extraYCells());
+                        right=QMAX(right,moveX+cell->extraXCells());
+                }
+        }
+
+  selection.setCoords(left,top,right,bottom);
+  }
+  return selection;
+
+
+
+}
 
 void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
 {
@@ -4204,6 +4251,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
 {
     if(m_rctSelection.left() == 0)
         return;
+    m_pDoc->setModified( true );
     int x=_marker.x();
     int y=_marker.y();
     if( _marker.x() > m_rctSelection.left() )

@@ -516,7 +516,9 @@ public:
     void removeTable();
 
     void setActiveTable();
+    QPoint getOldPos() {return m_oldPos;}
 
+    QRect selectionCellMerged(const QRect &_sel);
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
@@ -889,6 +891,8 @@ protected:
     QPen m_emptyPen;
     QBrush m_emptyBrush;
     QColor m_emptyColor;
+
+     QPoint m_oldPos;
 };
 
 #endif

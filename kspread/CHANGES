@@ -945,9 +945,17 @@ Montel laurent <montell@club-internet.fr>
 -"Remove table" works
 -"change table" works
 
-2000-08-72-Montel laurent <montell@club-internet.fr>
+2000-08-27-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 * Fix bug when you changed table in "Split view" mode
 -when you used kspread_dlg_formula
 -when you used kspread_dlg_reference
 *Fix bug when you moved on hyperlink
+
+Summary 2000-08-27 -> 2000-08-30
+Montel laurent <montell@club-internet.fr>
+-----------------------------------------
+* Now when you select an area (with mouse) you select all cell merged
+* Now I reduce the numbre of refreshing of cell merged
+* Now when you accross a merged cell it works
+* fix others small fixes
