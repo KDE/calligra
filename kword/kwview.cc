@@ -1677,7 +1677,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     actionFormatUnderline->setChecked( currentFormat.underline());
     actionFormatStrikeOut->setChecked( currentFormat.strikeOut());
     QColor col=currentFormat.textBackgroundColor();
-    actionBackgroundColor->setEnabled(true);
+    //actionBackgroundColor->setEnabled(true);
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     actionBackgroundColor->setText(i18n("Text Background Color..."));
     actionFormatColor->setCurrentColor( currentFormat.color() );
@@ -5145,7 +5145,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatFontSize->setEnabled( rw );
     actionFormatFontFamily->setEnabled( rw );
     actionAddBookmark->setEnabled(state);
-
+    actionBackgroundColor->setEnabled( rw );
     actionFormatStyleMenu->setEnabled( rw );
     actionFormatBold->setEnabled( rw );
     actionFormatItalic->setEnabled( rw );
