@@ -1,0 +1,59 @@
+july 2001
+- bug fixes
+	o characters encoding bug
+	o somes table bugs
+	o text zone inherit paragraph format
+	
+- features
+	o news parameters dialog box
+	o anchor support
+
+---------------------------------------
+07 july 2001
+- bug fixes
+	o section are embeded in a list because of the last changes ;
+	o new paragraph (let a blanck line now) ;
+	o no environment (right, center, ...) in a header or footer
+	  (from the last changes).
+
+- features
+	o generate embedable file
+	o new xml parser = QDom
+
+---------------------------------------
+3 june 2001
+- bugs fixes
+	o color
+	o if a section doesn't exist in latex, now the title is in bold
+	o blanck line between 2 paragraphes.
+	o textsize
+	o end of environment
+
+- clean code generated
+- use QList for all lists
+- improve the table generation. Now it is pretty good.
+- new features
+	o improve the special character support but still a lot of work (mathematical
+	mode, ...).
+	o table now support border line (only top line)
+	o a dialog box to select some features (style, language/encoding)
+
+---------------------------------------
+06 may 2001
+- bug fixes
+	o enum bug fixes
+- new features
+	o formula, part and table class (not still usable, though)
+	o stock formula parts (no generation)
+	o stock table part
+
+---------------------------------------
+28 april 2001
+- bug fixes : 
+	o default color is black (new dtd)
+	o format bug (new dtd)
+	o enum bug with bullet (new dtd) 
+- new features
+	o strikeout
+	o picture
+
