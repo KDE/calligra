@@ -160,7 +160,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 /*======================== destructor ============================*/
 KPrCanvas::~KPrCanvas()
 {
-    // disconnect all signals to avoid crashes on exit
+// disconnect all signals to avoid crashes on exit
     // (exitEditMode) emits signals
     disconnect( this, 0, 0, 0 );
 

@@ -131,6 +131,11 @@ void PBPreview::drawContents( QPainter *painter )
     painter->restore();
 }
 
+PBPreview::~PBPreview()
+{
+    delete _zoomHandler;
+}
+
 /******************************************************************/
 /* class ConfPenDia                                               */
 /******************************************************************/

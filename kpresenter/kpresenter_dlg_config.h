@@ -133,6 +133,7 @@ class ConfigureToolsPage : public QObject
     Q_OBJECT
 public:
     ConfigureToolsPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
+    ~ConfigureToolsPage();
     void apply();
     void slotDefault();
 public slots:

@@ -807,6 +807,10 @@ ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char 
     tab->addTab(m_confRectDia, i18n("&Rectangle"));
 }
 
+ConfigureToolsPage::~ConfigureToolsPage()
+{
+}
+
 void ConfigureToolsPage::apply()
 {
     m_pView->setPieType(m_confPieDia->getType());

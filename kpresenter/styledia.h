@@ -62,7 +62,7 @@ public:
     };
 
     PBPreview( QWidget* parent, const char* name, PaintType _paintType );
-
+    ~PBPreview();
     void setPen( const QPen &_pen ) { pen = _pen; repaint( true ); }
     void setBrush( const QBrush &_brush ) { brush = _brush; }
     void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
