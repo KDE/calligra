@@ -121,8 +121,6 @@ public:
 
     virtual QCString mimeType() const { return MIME_TYPE; }
 
-    unsigned int viewCount() { return m_lstViews.count(); }
-
     virtual QStrList outputFormats();
     virtual QStrList inputFormats();
 
@@ -379,7 +377,7 @@ public:
     int zoomIt( int z ) const;
     unsigned int zoomIt( unsigned int z ) const;
     double zoomIt( double z ) const;
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -474,7 +472,7 @@ protected:
     QRect tmpShellSize;
 
     int zoom;
-    
+
 };
 
 inline int KWordDocument::zoomIt( int z ) const
