@@ -1800,15 +1800,15 @@ void KPresenterView::setupActions()
     connect( ( ( KFontAction* )actionTextFontFamily ), SIGNAL( activated( const QString & ) ),	
 	     this, SLOT( fontSelected() ) );
 
-    actionTextBold = new KToggleAction( i18n( "&Bold" ), "bold", CTRL + Key_B,
+    actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
 					   this, SLOT( textBold() ),
 					   actionCollection(), "text_bold" );
 
-    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "italic", CTRL + Key_I,
+    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Key_I,
 					   this, SLOT( textItalic() ),
 					   actionCollection(), "text_italic" );
 
-    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "underl", CTRL + Key_U,
+    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
 					   this, SLOT( textUnderline() ),
 					   actionCollection(), "text_underline" );
 
