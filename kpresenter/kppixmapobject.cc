@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -28,6 +29,7 @@
 #include <qpixmap.h>
 #include <qdom.h>
 #include <qimage.h>
+#include <qbitmap.h>
 
 #include <kdebug.h>
 #include <kimageeffect.h>
@@ -38,11 +40,6 @@
 #include "kpgradient.h"
 #include "KPPixmapObjectIface.h"
 
-/******************************************************************/
-/* Class: KPPixmapObject                                          */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     : KP2DObject()
 {
@@ -60,7 +57,6 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     m_ie_par3 = QVariant();
 }
 
-/*================== overloaded constructor ======================*/
 KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
     : KP2DObject()
 {
@@ -89,26 +85,21 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
-
 void KPPixmapObject::loadImage( const QString & fileName )
 {
     image = imageCollection->loadPicture( fileName );
 }
 
-
-/*================================================================*/
 KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 {
     return *this;
 }
 
-/*================================================================*/
 void KPPixmapObject::setPixmap( const KoPictureKey & key )
 {
     image = imageCollection->findPicture( key );
 }
 
-/*========================= save =================================*/
 QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
@@ -140,7 +131,6 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPPixmapObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);
@@ -250,14 +240,11 @@ double KPPixmapObject::load(const QDomElement &element)
             m_ie_par3 = QVariant();
     }
     else
-    {
         m_effect = IE_NONE;
-    }
 
     return offset;
 }
 
-/*========================= drawShadow ===========================*/
 void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler)
 {
     const double ox = orig.x();
@@ -265,7 +252,7 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
     const double ow = ext.width();
     const double oh = ext.height();
 
-     _painter->save();
+    _painter->save();
 
     QPen pen2(pen);
     pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
@@ -281,10 +268,8 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
     _painter->setPen( QPen( shadowColor ) );
     _painter->setBrush( shadowColor );
     if ( kAbs(angle) <= DBL_EPSILON )
-    {
         _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
                             _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
-    }
     else
     {
         QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
@@ -301,7 +286,7 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
         m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
-                    rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
+                     rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
 
         _painter->setWorldMatrix( m, true );
 
@@ -310,7 +295,6 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
 
     _painter->restore();
 }
-
 
 QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
@@ -345,21 +329,19 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     }
 
     image.draw( paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
+    pixmap.setMask(pixmap.createHeuristicMask());
     paint.end();
     return pixmap;
 }
 
-/*========================= draw =================================*/
 void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			   SelectionMode selectionMode, bool drawContour )
+                           SelectionMode selectionMode, bool drawContour )
 {
     if ( image.isNull() ) return;
 
 
     if ( shadowDistance > 0 && !drawContour )
-    {
         drawShadow(_painter, _zoomHandler);
-    }
 
     const double ox = orig.x();
     const double oy = orig.y();
@@ -407,10 +389,10 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             // ### TODO: this was also drawn for drawContour==true, but why?
             gradient->setSize( size );
             _painter->drawPixmap( (int)( penw ),
-                                (int)( penw ),
-                                gradient->pixmap(), 0, 0,
-                                (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                                (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+                                  (int)( penw ),
+                                  gradient->pixmap(), 0, 0,
+                                  (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                                  (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
         }
 
         // Draw pixmap

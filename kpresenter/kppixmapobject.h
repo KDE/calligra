@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,10 +30,6 @@
 
 class QPixmap;
 
-/******************************************************************/
-/* Class: KPPixmapObject                                          */
-/******************************************************************/
-
 // ### TODO in KOffice 1,3: rename the class to a better name (for example KPPictureObject)
 
 class KPPixmapObject : public KP2DObject
@@ -50,29 +47,29 @@ public:
     // Only used as a default value in the filedialog, in changePicture
     // Don't use for anything else
     QString getFileName() const
-    { return image.getKey().filename(); }
+        { return image.getKey().filename(); }
 
     KoPictureKey getKey() const
-    { return image.getKey(); }
+        { return image.getKey(); }
 
     QSize originalSize() const
-    { return image.getOriginalSize(); }
+        { return image.getOriginalSize(); }
 
     void setPixmap( const KoPictureKey & key );
 
     void reload()
-    { setPixmap( image.getKey() ); }
+        { setPixmap( image.getKey() ); }
 
     virtual ObjType getType() const
-    { return OT_PICTURE; }
+        { return OT_PICTURE; }
     virtual QString getTypeString() const
-    { return i18n("Picture"); }
+        { return i18n("Picture"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       SelectionMode selectionMode, bool drawContour = FALSE );
+                       SelectionMode selectionMode, bool drawContour = FALSE );
 
     QPixmap getOriginalPixmap();
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }
