@@ -5415,7 +5415,7 @@ void KWDocument::saveDialogShown(bool reset)
                 QString first_row = textFrameSet(0)->textDocument()->text(0).left(50);
                 bool truncate = false;
                 QChar ch;
-                for (int i=0;i<first_row.length();i++)
+                for (int i=0;i<(signed int)first_row.length();i++)
                 {
                         ch =  first_row.at(i);
                         if (!truncate)
