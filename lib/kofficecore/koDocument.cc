@@ -20,6 +20,7 @@
 #include <fstream>
 
 #include <koDocument.h>
+#include <KoDocumentIface.h>
 #include <koDocumentChild.h>
 #include <koView.h>
 #include <koApplication.h>
@@ -59,7 +60,7 @@
 #define STORE_PROTOCOL_LENGTH 4
 // Warning, keep it sync in koTarStore.cc
 
-QList<KoDocument> *KoDocument::m_documentList=0L;
+QList<KoDocument> *KoDocument::s_documentList=0L;
 
 using namespace std;
 
@@ -89,6 +90,7 @@ public:
   QWidget *m_wrapperWidget;
 
   QValueList<QMap<QString,QByteArray> > m_viewContainerStates;
+  KoDocumentIface * m_dcopObject;
 
   KoDocumentInfo *m_docInfo;
 };
@@ -118,13 +120,14 @@ public:
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KParts::ReadWritePart( parent, name )
 {
-  if(m_documentList==0L)
-    m_documentList=new QList<KoDocument>;
-  m_documentList->append(this);
+  if(s_documentList==0L)
+    s_documentList=new QList<KoDocument>;
+  s_documentList->append(this);
 
   d = new KoDocumentPrivate;
   m_bEmpty = TRUE;
   d->m_changed=false;
+  d->m_dcopObject = 0L;
 
   d->m_bSingleViewMode = singleViewMode;
 
@@ -164,7 +167,7 @@ KoDocument::~KoDocument()
   d->m_shells.clear();
 
   delete d;
-  m_documentList->removeRef(this);
+  s_documentList->removeRef(this);
 }
 
 void KoDocument::delayedDestruction()
@@ -332,7 +335,7 @@ void KoDocument::slotChildDestroyed()
 void KoDocument::slotDestruct()
 {
   delete this;
-  if(m_documentList->isEmpty())
+  if(s_documentList->isEmpty())
     kapp->quit();
 }
 
@@ -905,6 +908,13 @@ const KoMainWindow *KoDocument::firstShell()
 const KoMainWindow *KoDocument::nextShell()
 {
     return d->m_shells.next();
+}
+
+KoDocumentIface * KoDocument::dcopObject()
+{
+  if ( !d->m_dcopObject )
+    d->m_dcopObject = new KoDocumentIface( this );
+  return d->m_dcopObject;
 }
 
 #include <koDocument.moc>

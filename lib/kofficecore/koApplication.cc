@@ -17,7 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <dcopclient.h>
 #include <koApplication.h>
+#include <KoApplicationIface.h>
 #include <koQueryTrader.h>
 #include <koDocument.h>
 #include <koMainWindow.h>
@@ -42,7 +44,11 @@ KoApplication::KoApplication()
     KGlobal::iconLoader()->addAppDir("koffice");
 
     // Quit when last window closed
-    connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
+    // This shouldn't be needed anymore, KTMW does it (David)
+    //connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
+
+    // Prepare a DCOP interface
+    dcopClient()->setDefaultObject( (new KoApplicationIface())->objId() );
 }
 
 void KoApplication::start()

@@ -39,6 +39,7 @@ class KoDocumentChildPicture;
 class KoView;
 class KoDocumentPrivate;
 class KoDocumentInfo;
+class KoDocumentIface;
 
 using std::istream;
 using std::ostream;
@@ -401,6 +402,18 @@ public:
   // Hmm, name clash with the other @save. We want to give access to parent's save()
   virtual bool save() { return KParts::ReadWritePart::save(); }
 
+  /**
+   * Returns the list of all the currently opened documents
+   */
+  static QList<KoDocument> *documentList() { return s_documentList; }
+
+  /**
+   * Return a DCOP interface for this document
+   * KOffice Application are strongly recommended to reimplement this method,
+   * so that their dcop interface provides more functionality than the basic KoDocumentIface
+   */
+  virtual KoDocumentIface * dcopObject();
+
 signals:
   /**
    * This signal is emitted, if a direct or indirect child document changes
@@ -544,7 +557,7 @@ private:
     QCString m_nativeFormatMimeType;
     KURL m_strURL;
     bool m_bEmpty;
-    static QList<KoDocument> *m_documentList;
+    static QList<KoDocument> *s_documentList;
 };
 
 #endif
