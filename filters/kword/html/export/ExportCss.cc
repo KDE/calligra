@@ -225,7 +225,7 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
         if (smallcaps)
             strElement+="small-caps";
         else
-            strElement+="none";
+            strElement+="normal";
         strElement+="; ";
     }
 
