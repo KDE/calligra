@@ -35,6 +35,8 @@
    License version 2.
 */
 
+#include <qbuffer.h>
+#include <qimage.h>
 #include <qfile.h>
 #include <qdom.h>
 
@@ -42,6 +44,7 @@
 
 #include <koGlobal.h>
 #include <koStore.h>
+#include <koPicture.h>
 
 #include "KWEFStructures.h"
 #include "TagProcessing.h"
@@ -1063,6 +1066,60 @@ bool KWEFKWordLeader::doFullAllParagraphs (const QValueList<ParaData>& paraList)
         if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
             return false;
     }
+    return true;
+}
+
+QImage KWEFKWordLeader::loadAndConvertToImage(const QString& strName, const QString& inExtension) const
+{
+    QIODevice* io=getSubFileDevice(strName);
+    if (!io)
+    {
+        // NO message error, as there must be already one
+        return QImage();
+    }
+
+    kdDebug(30508) << "Picture " << strName << " has size: " << io->size() << endl;
+
+    KoPicture picture;
+    if (!picture.load(io, inExtension)) // we do not care about KoPictureKey
+    {
+        kdWarning(30508) << "Could not read picture: " << strName << " (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return QImage();
+    }
+
+    return picture.generateImage(picture.getOriginalSize()); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
+}
+
+bool KWEFKWordLeader::loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const
+{
+    QImage qimage(loadAndConvertToImage(strName,inExtension));
+    
+    if (qimage.isNull())
+    {
+        kdWarning(30508) << "Could not load image (KWEFBaseWorker::loadAndConvertToImage)" <<endl;
+        return false;
+    }
+
+    QImageIO imageIO;
+    imageIO.setImage(qimage);
+
+    QBuffer buffer(image); // A QBuffer is a QIODevice
+    if (!buffer.open(IO_WriteOnly))
+    {
+        kdWarning(30508) << "Could not open buffer! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return false;
+    }
+
+    imageIO.setIODevice(&buffer);
+    imageIO.setFormat(outExtension.utf8());
+
+    if (!imageIO.write())
+    {
+        kdWarning(30508) << "Could not write converted image! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return false;
+    }
+    buffer.close();
+
     return true;
 }
 

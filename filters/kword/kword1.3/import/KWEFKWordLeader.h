@@ -38,9 +38,12 @@ class KWEFKWordLeader
     public:
         KoFilter::ConversionStatus convert( KoFilterChain* chain,
             const QCString& from, const QCString& to);
-    public: // "callbacks"
-        virtual bool loadSubFile(const QString& fileName, QByteArray& array);
-        virtual QIODevice* getSubFileDevice(const QString& fileName) const;
+    protected:
+        bool loadSubFile(const QString& fileName, QByteArray& array);
+        QIODevice* getSubFileDevice(const QString& fileName) const;
+        QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
+        bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
+
     public: // public leader/worker functions (DO NOT use in your own code!)
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
         virtual bool doVariableSettings (const VariableSettingsData &varSettings);

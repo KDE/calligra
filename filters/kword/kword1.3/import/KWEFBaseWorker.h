@@ -35,9 +35,6 @@ class KWEFBaseWorker : public KWEFKWordLeader
     public:
         KWEFBaseWorker(void) {}
         virtual ~KWEFBaseWorker(void) {}
-    public: // indirect callbacks to Leader:
-        QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
-        bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
     public: // leader/worker functions
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
     	virtual bool doVariableSettings (const VariableSettingsData &varSettings);
