@@ -1445,6 +1445,9 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
 
+    KURL u = m_url;
+    QString f = m_file;
+    
     ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 					"application/x-kpresenter", "*.kpr",
 					"KPresenter", KoTemplateChooseDia::Everything,
@@ -1461,6 +1464,8 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	_clean = true;
 	setModified(true);
 	resetURL();
+	m_url = u;
+	m_file = f;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::File ) {
 	objStartY = 0;
@@ -1470,6 +1475,8 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	url.setPath( _template );
 	bool ok = openURL( url );
 	resetURL();
+	m_url = u;
+	m_file = f;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
@@ -1479,6 +1486,8 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	setModified(true);
 	bool ok = loadNativeFormat( fileName );
 	resetURL();
+	m_url = u;
+	m_file = f;
 	return ok;
     } else
 	return false;
@@ -3361,6 +3370,9 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     QString _template;
 
+    KURL u = m_url;
+    QString f = m_file;
+    
     if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 				       0L, 0L, 0L, KoTemplateChooseDia::OnlyTemplates,
 				       "kpresenter_template") != KoTemplateChooseDia::Cancel ) {
@@ -3378,6 +3390,8 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 	_backgroundList.take( _backgroundList.count() - 1 );
 	_backgroundList.insert( _page, kpbackground );
 	resetURL();
+	m_file = f;
+	m_url = u;
     }
 
     repaint( false );
