@@ -4780,6 +4780,32 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
         e->ignore();
 }
 
+void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, int posX, int posY )
+{
+    setToolEditMode( TEM_MOUSE );
+    deSelectAllObj();
+
+    QImage pix;
+    QImageDrag::decode( data, pix );
+
+    KTempFile tmpFile;
+    tmpFile.setAutoDelete(true);
+
+    if( tmpFile.status() != 0 ) {
+        return;
+    }
+    tmpFile.close();
+
+    pix.save( tmpFile.name(), "PNG" );
+    QCursor c = cursor();
+    setCursor( waitCursor );
+    m_activePage->insertPicture( tmpFile.name(), posX, posY  );
+    if ( resizeImageToOriginalSize )
+        picViewOriginalSize();
+    setCursor( c );
+
+}
+
 /*================================================================*/
 void KPrCanvas::dropEvent( QDropEvent *e )
 {
@@ -4789,27 +4815,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         return;
 
     if ( QImageDrag::canDecode( e ) ) {
-        setToolEditMode( TEM_MOUSE );
-        deSelectAllObj();
-
-        QImage pix;
-        QImageDrag::decode( e, pix );
-
-        KTempFile tmpFile;
-        tmpFile.setAutoDelete(true);
-
-	if( tmpFile.status() != 0 ) {
-	    return;
-	}
-        tmpFile.close();
-
-        pix.save( tmpFile.name(), "PNG" );
-        QCursor c = cursor();
-        setCursor( waitCursor );
-        m_activePage->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y()  );
-        picViewOriginalSize();
-        setCursor( c );
-
+        dropImage( e, true, e->pos().x(), e->pos().y() );
         e->accept();
     } else if ( QUriDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );

@@ -554,26 +554,7 @@ void KPresenterView::editPaste()
             emit objectSelectedChanged();
         }
         else if (QImageDrag::canDecode (data)) {
-            m_canvas->setToolEditMode( TEM_MOUSE );
-            m_canvas->deSelectAllObj();
-
-            QImage pix;
-            QImageDrag::decode( data, pix );
-
-            KTempFile tmpFile;
-            tmpFile.setAutoDelete(true);
-
-            if( tmpFile.status() != 0 ) {
-                return;
-            }
-            tmpFile.close();
-
-            pix.save( tmpFile.name(), "PNG" );
-            QCursor c = cursor();
-            setCursor( waitCursor );
-            m_canvas->activePage()->insertPicture( tmpFile.name() );
-            m_canvas->picViewOriginalSize();
-            setCursor( c );
+            m_canvas->dropImage( data );
         }
     } else {
         if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())

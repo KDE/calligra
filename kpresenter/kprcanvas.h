@@ -307,6 +307,8 @@ public:
     void alignVertical( VerticalAlignmentType _type );
     void savePicture();
 
+    void dropImage( QMimeSource * data, bool resizeImageToOriginalSize = false , int posX = 10, int posX=10 );
+
 public slots:
     void exitEditMode();
 
