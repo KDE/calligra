@@ -88,8 +88,8 @@ class GradientFrame : public QFrame
   virtual void drawContents (QPainter *);
 
  protected:
-  KColor m_c1, m_c2;
-  KPixmap *m_pPm;
+  QColor m_c1, m_c2;
+  KPixmap m_pm;
 };
 
 #endif

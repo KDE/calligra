@@ -21,6 +21,7 @@
 #include <qframe.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 
@@ -82,17 +83,24 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *e)
 GradientFrame::GradientFrame(QWidget *parent) : QFrame(parent)
 {
   setFrameStyle(Panel | Sunken);
-  setBackgroundColor(white);
-  m_c1.setRGB(255,255,255);
-  m_c2.setRGB(0,0,0);
-  m_pPm = new KPixmap;
+  m_c1 = QColor(255,255,255);
+  m_c2 = QColor(0,0,0);
 }
 GradientFrame::~GradientFrame() {}
 
 void GradientFrame::drawContents(QPainter *p)
-{ 
-  //KPixmapEffect::gradient(*m_pPm, QColor(0,0,0), QColor(255,255,255), KPixmapEffect::HorizontalGradient);
-  //p->drawPixmap(0, 0, m_pPm);
+{
+  QPixmap *pm;
+  QRect r = contentsRect();
+
+  if (m_pm.size() != r.size())
+	{
+	  m_pm.resize(r.width(), r.height());
+	  KPixmapEffect::gradient(m_pm, m_c1, m_c2, KPixmapEffect::HorizontalGradient);
+	}
+  
+  pm = &m_pm;
+  p->drawPixmap(0, 0, *pm);
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent) {}
