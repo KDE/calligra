@@ -32,7 +32,7 @@ class PasswordPrompt : public KDialog {
   Q_OBJECT
 
  public:
-   PasswordPrompt(QWidget *parent = 0L, const char *name = 0L);
+   PasswordPrompt(bool import, QWidget *parent = 0L, const char *name = 0L);
    virtual ~PasswordPrompt();
 
    QString& getPassword();
@@ -50,6 +50,7 @@ class PasswordPrompt : public KDialog {
    QLabel    *_prompt;
    QPushButton *_ok, *_cancel;
    QString    _password;
+   bool       _importer;
 };
 
 

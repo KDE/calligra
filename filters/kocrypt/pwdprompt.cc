@@ -37,15 +37,20 @@ PasswordPrompt::~PasswordPrompt() {
 }
 
 
-PasswordPrompt::PasswordPrompt(QWidget *parent, const char *name) 
+PasswordPrompt::PasswordPrompt(bool import, QWidget *parent, const char *name) 
 : KDialog(parent, name, true) {
    _password = QString::null;
+   _importer = import;
 
 QGridLayout *grid = new QGridLayout(this, 3, 6, KDialog::marginHint(),
                                                 KDialog::spacingHint());
 
    _pwd = new KLineEdit(this);
-   _prompt = new QLabel(i18n("Enter the passphrase for the document:"), this);
+   if (_importer)
+     _prompt = new QLabel(i18n("Enter the passphrase for the document:"), this);
+   else
+     _prompt = new QLabel(i18n("Enter a passphrase for the document:"), this);
+
    _ok = new QPushButton(i18n("&Ok"), this);
    _cancel = new QPushButton(i18n("&Cancel"), this);
 
@@ -53,6 +58,11 @@ QGridLayout *grid = new QGridLayout(this, 3, 6, KDialog::marginHint(),
    grid->addMultiCellWidget(_pwd, 1, 1, 0, 4);
    grid->addMultiCellWidget(_ok, 2, 2, 3, 3);
    grid->addMultiCellWidget(_cancel, 2, 2, 4, 4);
+
+   if (!_importer) {
+      // display the "approximate strength" indicator and connect
+      // the keyin signal to the updater
+   }
 
    grid->activate();
 

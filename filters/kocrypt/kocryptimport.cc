@@ -98,7 +98,7 @@ int rc;
 
     //kdDebug() << "Crypto Filter Parameters: " << config << endl;
 
-    PasswordPrompt *pp = new PasswordPrompt;
+    PasswordPrompt *pp = new PasswordPrompt(true);
     connect(pp, SIGNAL(setPassword(QString)), this, SLOT(setPassword(QString)));
     int dlgrc = pp->exec();
     delete pp;
