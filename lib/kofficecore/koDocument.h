@@ -557,6 +557,12 @@ public:
     
     bool hasExternURL();
     
+    /**
+     * Sets the document URL to @p url
+     * KParts doesn't really allow this, but it is needed for undo of setStoreInternal()
+     */
+    void setUrl( KURL url ) { m_url = url; }
+    
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes
