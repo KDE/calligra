@@ -104,7 +104,15 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
         && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
         strElement+="font-family: ";
-        strElement+=escapeHtmlText(fontName); // TODO: add alternative font names
+        if (fontName.find(' ')==-1)
+            strElement+=escapeHtmlText(fontName);
+        else
+        {   // If the font name contains a space, it should be quoted.
+            strElement+='"';
+            strElement+=escapeHtmlText(fontName);
+            strElement+='"';
+        }
+        // ### TODO: add alternative font names
         strElement+="; ";
     }
 
