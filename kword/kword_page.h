@@ -49,6 +49,7 @@ class KWordDocument;
 
 enum MouseMode {MM_EDIT = 0,MM_EDIT_FRAME = 1,MM_CREATE_TEXT = 2,MM_CREATE_PIX = 3,MM_CREATE_CLIPART = 4,MM_CREATE_TABLE = 5,\
 		MM_CREATE_FORMULA = 6,MM_CREATE_PART = 7,MM_CREATE_KSPREAD_TABLE = 8};
+enum EditMode {EM_INSERT,EM_DELETE,EM_BACKSPACE,EM_CMOVE,EM_NONE,EM_RETURN};
 
 /******************************************************************/
 /* Class: KWPage                                                  */
@@ -264,6 +265,8 @@ protected:
   void setRulerFirstIndent(KoRuler *ruler,KWUnit _value);
   void setRulerLeftIndent(KoRuler *ruler,KWUnit _value);
 
+  bool editModeChanged(QKeyEvent *e);
+
   KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
@@ -327,6 +330,8 @@ protected:
 
   bool recalcingText;
   bool mouseMoved;
+
+  EditMode editMode;
 
 };
 

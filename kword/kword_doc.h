@@ -376,6 +376,8 @@ public:
   const QString getUnit() { return unit; }
   void setUnit(QString _unit) { unit = _unit; }
 
+  int &getNumParags() { return numParags; }
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -469,6 +471,7 @@ protected:
   bool _needRedraw;
 
   QString unit;
+  int numParags;
   
 };
 

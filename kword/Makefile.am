@@ -13,18 +13,18 @@ kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kw
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
 		formats.cc frame.cc framedia.cc stylist.cc kcharselect.cc kcharselectdia.cc \
 		kword_utils.cc searchdia.cc preview.cc tabledia.cc insdia.cc deldia.cc variable.cc \
-		docstruct.cc
+		docstruct.cc kword_undo.cc
 
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
 		formats.h frame.h framedia.h stylist.h  kcharselect.h kcharselectdia.h \
 		kword_utils.h searchdia.h preview.h tabledia.h insdia.h deldia.h variable.h \
-		docstruct.h
+		docstruct.h kword_undo.h
 
 METASOURCES =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_page.moc framedia.moc stylist.moc kcharselect.moc kcharselectdia.moc \
-		searchdia.moc tabledia.moc insdia.moc deldia.moc docstruct.moc
+		searchdia.moc tabledia.moc insdia.moc deldia.moc docstruct.moc kword_undo.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
@@ -73,3 +73,4 @@ tabledia.cc: tabledia.h
 deldia.cc: deldia.h
 variable.cc: variable.h
 docstruct.cc: docstruct.h 
+kword_undo.cc: kword_undo.h

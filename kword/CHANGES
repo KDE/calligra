@@ -824,3 +824,8 @@ Reggie, 6.2.1999:
 Reggie, 7.2.1999:
 -----------------
 - Small fix in printLine
+
+Reggie, 11.2.1999:
+------------------
+- Started with undo/redo
+- Added copy constructor for KWParag

@@ -87,6 +87,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   painter.end();
   recalcWholeText(false);
   recalcCursor(false,0,fc);
+
+  editMode = EM_NONE;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -1447,6 +1449,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 {
   if (mouseMode != MM_EDIT) return;
 
+  editModeChanged(e);
+
   // if we are in a table and CTRL-Return was pressed 
   if ((e->key() == Key_Return || e->key() == Key_Return) && (e->state() & ControlButton) &&
       doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager())
@@ -1945,7 +1949,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	if (goNext)
 	  fc->cursorGotoNextLine(painter);
 	recalc = lineEndPos != fc->getLineEndPos();
-	
+
 	if (recalc && goNext)
 	  recalcCursor(false,tmpTextPos);
 	else
@@ -3739,4 +3743,62 @@ void KWPage::setRulerLeftIndent(KoRuler *ruler,KWUnit _value)
       ruler->setLeftIndent(_value.pt());
       break;
     }
+}
+
+/*================================================================*/
+bool KWPage::editModeChanged(QKeyEvent *e)
+{
+  switch (e->key())
+    {
+    case Key_Delete:
+      {
+	if (editMode != EM_DELETE)
+	  {
+	    editMode = EM_DELETE;
+	    //debug("edit mode changed");
+	    return true;
+	  }
+      } break;
+    case Key_Backspace:
+      {
+	if (editMode != EM_BACKSPACE)
+	  {
+	    editMode = EM_BACKSPACE;
+	    //debug("edit mode changed");
+	    return true;
+	  }
+      } break;
+    case Key_Return: case Key_Enter:
+      {
+	if (editMode != EM_RETURN)
+	  {
+	    editMode = EM_RETURN;
+	    //debug("edit mode changed");
+	    return true;
+	  }
+      } break;
+    default:
+      {
+	if (e->ascii() && e->ascii() > 31)
+	  {
+	    if (editMode != EM_INSERT)
+	      {
+		editMode = EM_INSERT;
+		//debug("edit mode changed");
+		return true;
+	      }
+	  }
+	else
+	  {
+	    if (editMode != EM_NONE)
+	      {
+		editMode = EM_NONE;
+		//debug("edit mode changed");
+		return true;
+	      }
+	  }
+      }
+    }
+
+  return false;
 }

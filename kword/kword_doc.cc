@@ -69,7 +69,7 @@ KWordChild::~KWordChild()
 /*================================================================*/
 KWordDocument::KWordDocument()
   : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1),
-    ret_pix(ICON("return.xpm")), unit("mm")
+    ret_pix(ICON("return.xpm")), unit("mm"), numParags(0)
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -800,7 +800,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	{
 	  KWordChild *ch = new KWordChild(this);
 	  ch->load(parser,lst);
-	  QRect r = ch->geometry();
+	  //QRect r = ch->geometry();
 	  insertChild(ch);
 // 	  KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
 // 	  KWFrame *frame = new KWFrame(r.x(),r.y(),r.width(),r.height());

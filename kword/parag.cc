@@ -37,6 +37,32 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, 
   hardBreak = false;
 
   counterText = "";
+
+  paragName.sprintf("%d",++(document->getNumParags()));
+}
+
+KWParag::KWParag(const KWParag& _parag)
+{
+  prev = _parag.prev;
+  next = _parag.next;
+  document = _parag.document;
+  paragLayout = new KWParagLayout(document,false);
+  *paragLayout = *_parag.paragLayout;
+  frameSet = _parag.frameSet;
+
+  startPage = _parag.startPage;
+  startFrame = _parag.startFrame;
+  endFrame = _parag.endFrame;
+  ptYStart = _parag.ptYStart;
+  ptYEnd = _parag.ptYEnd;
+
+  hardBreak = _parag.hardBreak;
+
+  counterText = _parag.counterText;
+
+  // I'm not sure if this is correct. Perhaps we should use the
+  // name of _parag too?
+  paragName.sprintf("%d",++(document->getNumParags()));
 }
 
 KWParag::~KWParag()
