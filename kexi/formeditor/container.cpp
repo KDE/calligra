@@ -384,6 +384,7 @@ Container::setLayout(LayoutType type)
 	}
 }
 
+void
 Container::createBoxLayout(QObjectList *list)
 {
 	QObjectList *olist = m_container->queryList("QWidget", 0, true, false);
