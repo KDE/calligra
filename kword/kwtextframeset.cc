@@ -3021,7 +3021,7 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
         text = textObject()->selectedText();
         if(text.find(KoTextObject::customItemChar()) == -1)
         {
-            //kdDebug()<<"bool KWTextFrameSet::textSelectedIsAnLink() :"<< textObject()->textSelectedIsAnLink(m_refLink)<<endl;
+            textObject()->textSelectedIsAnLink(m_refLink);
             textDocument()->removeSelection( QTextDocument::Standard );
             m_singleWord = true;
             m_wordUnderCursor = text;
