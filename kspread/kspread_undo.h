@@ -82,10 +82,11 @@ public:
     virtual void redo() = 0;
 
     KSpreadDoc* doc() { return m_pDoc; }
-
+    QString text() {return title ;}
 // #### To be private
 protected:
     KSpreadDoc *m_pDoc;
+    QString title;
 };
 
 class KSpreadUndoRemoveColumn : public KSpreadUndoAction
@@ -448,7 +449,8 @@ public:
     bool hasRedoActions() { return !m_stckRedo.isEmpty(); }
 
     void appendUndo( KSpreadUndoAction *_action );
-
+    QString getUndoTitle();
+    QString getRedoTitle();
 protected:
     QStack<KSpreadUndoAction> m_stckUndo;
     QStack<KSpreadUndoAction> m_stckRedo;
