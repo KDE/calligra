@@ -138,6 +138,10 @@ binary-arch: build install
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
+	# Move the .pl.* manpages to the correct place.
+	-mv debian/kpresenter/usr/share/man/pl/man1/* \
+		debian/kpresenter/usr/share/man/man1
+	-rm -rf debian/kpresenter/usr/share/man/pl
 	dh_undocumented -a
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkoffice-dev
