@@ -68,7 +68,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 
         QString strMime; // Mime type of the compressor
         if ((strExt==".gz")      //in case of .svg.gz (logical extension)
-                ||(strExt==".zsvg")) //in case of .zsvg (extension used prioritary)
+                ||(strExt==".svgz")) //in case of .svgz (extension used prioritary)
                 strMime="application/x-gzip"; // Compressed with gzip
         else if (strExt==".bz2") //in case of .svg.bz2 (logical extension)
                 strMime="application/x-bzip2"; // Compressed with bzip2
