@@ -80,7 +80,7 @@ void KexiFormPart::initInstanceActions( KActionCollection *col )
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }
 
-KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog, 
+KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiPart::Item &item, int viewMode)
 {
 	kdDebug() << "KexiFormPart::createView()" << endl;
@@ -151,7 +151,8 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 		view = new KexiDBForm(this, it, win, parent, item.name().latin1(), win->project()->dbConnection());
 		form->createToplevel(view);
 		view->initForm();
-		view->preview();
+		form->setDesignMode(false);
+		//view->preview();
 	}
 
 	dialog->resize(400, 300);
@@ -183,7 +184,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 	QDomElement baseWidget = domDoc.createElement("widget");
 	baseWidget.setAttribute("class", "QWidget");
 
-	int y=0;	
+	int y=0;
 
 	for(unsigned int i=0; i < list->fieldCount(); i++)
 	{
@@ -234,7 +235,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
 		///line edit!
 
-		
+
 		QDomElement vclass = domDoc.createElement("widget");
 		baseWidget.appendChild(vclass);
 		vclass.setAttribute("class", "KLineEdit");

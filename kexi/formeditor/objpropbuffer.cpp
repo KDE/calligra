@@ -195,6 +195,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 		if(QString(meta->name()) == "name")
 			(*this)["name"]->setAutoSync(0);
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
+		if(!tree)  return;
 		if(tree->modifProp()->contains(meta->name()))
 		{
 			blockSignals(true);

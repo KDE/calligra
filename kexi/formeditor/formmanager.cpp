@@ -312,6 +312,8 @@ bool
 FormManager::isTopLevel(QWidget *w)
 {
 	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = " << activeForm()->objectTree()->lookup(w->name())<< endl;
+	if(!activeForm()->objectTree())
+		return false;
 	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
 	if(!item)
 		return true;

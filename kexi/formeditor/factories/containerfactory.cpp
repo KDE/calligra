@@ -175,7 +175,7 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 			menu->setItemEnabled(id, false);
 		return true;
 	}
-	else if(w->parentWidget()->isA("QWidgetStack"))
+	else if(w->parentWidget()->isA("QWidgetStack") && !w->parentWidget()->parentWidget()->isA("QTabWidget"))
 	{
 		m_widget = w->parentWidget();
 		QWidgetStack *stack = (QWidgetStack*)m_widget;

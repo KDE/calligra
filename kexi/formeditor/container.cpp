@@ -132,14 +132,15 @@ Container::eventFilter(QObject *s, QEvent *e)
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
-			if(!m_form->manager()->isTopLevel(m_moving) && m_moving->parent()->inherits("QWidgetStack"))
+			if(!m_form->manager()->isTopLevel(m_moving) && m_moving->parentWidget() && m_moving->parentWidget()->isA("QWidgetStack"))
 			{
-				if(m_moving->parentWidget())
-				{
-					m_moving = m_moving->parentWidget();
-					if(m_moving->parentWidget() && !m_moving->isA("QWidgetStack"))
+			kdDebug() << "composed widget before " << m_moving->name() << endl;
+				//if(m_moving->parentWidget())
+				//{
+				m_moving = m_moving->parentWidget();
+				if(m_moving->parentWidget() && m_moving->parentWidget()->isA("QTabWidget"))
 						m_moving = m_moving->parentWidget();
-				}
+				//}
 				kdDebug() << "composed widget  " << m_moving->name() << endl;
 			}
 
@@ -242,10 +243,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			if(mev->state() == Qt::LeftButton)
 			{
-				if(!m_toplevel && m_moving == m_container)
-					break;
-				if(m_moving->parentWidget() && m_moving->parentWidget()->inherits("QWidgetStack"))
-					break;
+				QWidget *w = m_moving;
+				if(!m_toplevel && w == m_container)
+					return false;
+				if((!m_moving) || (!m_moving->parentWidget()) || (m_moving->parentWidget()->inherits("QWidgetStack")))
+					return true;
 				int gridX = Form::gridX();
 				int gridY = Form::gridY();
 
@@ -659,6 +661,7 @@ Container::createGridLayout()
 
 Container::~Container()
 {
+	kdDebug() << " Container being deleted this == " << name() << endl;
 	if(m_container)
 		m_container->removeEventFilter(this);
 }

@@ -22,6 +22,7 @@
 #define FORMEDITORCONTAINER_H
 
 #include <qobject.h>
+#include <qguardedptr.h>
 #include <qptrlist.h>
 
 class QEvent;
@@ -127,7 +128,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		// moving etc.
 		QPoint		m_grab;
-		QWidget		*m_moving;
+		QGuardedPtr<QWidget>	m_moving;
 		bool		m_move;
 
 		//inserting

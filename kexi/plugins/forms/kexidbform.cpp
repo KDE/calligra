@@ -137,7 +137,7 @@ KexiDBForm::storeNewData(const KexiDB::SchemaData& sdata)
 	kdDebug() << "KexiDBForm::storeNewData(): new id:" << s->id() << endl;
 
 	m_id = s->id();
-	
+
 	parentDialog()->setId(s->id());
 	storeData();
 	return s;
