@@ -501,6 +501,7 @@ void KoStyleManager::renameStyle(const QString &theText) {
     // rename only in the GUI, not even in the underlying objects (save() does it).
     kdDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
     m_styleCombo->changeItem( theText, index );
+    m_inheritCombo->changeItem( theText, index+1 );
     m_styleOrder[index]=theText;
     kdDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
     m_stylesList->changeItem( theText, index );
