@@ -122,10 +122,10 @@ KoTemplateChooseDia::~KoTemplateChooseDia() {
 
 /*================================================================*/
 
-KoTemplateChooseDia::ReturnType choose(const QString& templateType, KInstance* global, QString &file,
-				       const KoTemplateChooseDia::DialogType &dialogType=KoTemplateChooseDia::Everything,
-				       bool hasCancel=true, const QString &importFilter=QString::null,
-				       const QString &mimeType=QString::null) {
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(const QString& templateType, KInstance* global, QString &file,
+				       const KoTemplateChooseDia::DialogType &dialogType,
+				       bool hasCancel, const QString &importFilter,
+				       const QString &mimeType) {
     bool res = false;
     KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", templateType, global, importFilter,
 							mimeType, hasCancel, dialogType );
@@ -156,7 +156,7 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::getReturnType() {
 }
 
 KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() {
-    return d->m_dialogType; 
+    return d->m_dialogType;
 }
 
 /*================================================================*/
@@ -379,7 +379,7 @@ void KoTemplateChooseDia::chooseFile()
 }
 
 void KoTemplateChooseDia::tabsChanged( const QString & ) {
-    if ( !d->m_firstTime ) openTemplate(); d->m_firstTime = false; 
+    if ( !d->m_firstTime ) openTemplate(); d->m_firstTime = false;
 }
 
 void MyIconCanvas::loadDir( const QString &dirname, const QString &filter )
