@@ -369,6 +369,27 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
         } \
 }
 
+bool KoOasisStyles::saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
+{
+    //TODO
+    return false;
+}
+
+void KoOasisStyles::parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
+{
+    kdDebug()<<"parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
+    do
+    {
+        if ( !saveOasisKlocaleTimeFormat( elementWriter, format, text ) )
+        {
+            text += format[0];
+            format = format.remove( 0, 1 );
+        }
+    }
+    while ( format.length() > 0 );
+    addTextNumber( text, elementWriter );
+}
+
 bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
 {
     bool changed = false;
@@ -567,8 +588,11 @@ void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & 
         }
         else
         {
-            text += format[0];
-            format = format.remove( 0, 1 );
+            if ( !saveOasisKlocaleTimeFormat( elementWriter, format, text ) )
+            {
+                text += format[0];
+                format = format.remove( 0, 1 );
+            }
         }
     }
     while ( format.length() > 0 );

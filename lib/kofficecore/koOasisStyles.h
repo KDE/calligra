@@ -81,6 +81,8 @@ private:
     void importDataStyle( const QDomElement& parent );
     static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
     static void parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
+    static bool saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
+    static void parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
 
     KoOasisStyles( const KoOasisStyles & ); // forbidden
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
