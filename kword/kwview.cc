@@ -1404,6 +1404,7 @@ void KWView::editDeleteFrame()
 void KWView::deleteFrame( bool _warning )
 {
     QList<KWFrame> frames=m_doc->getSelectedFrames();
+    ASSERT( frames.count() == 1 );
     if( frames.count() != 1)
         return;
     KWFrame *theFrame = frames.at(0);
@@ -3026,8 +3027,8 @@ void KWView::frameSelectedChanged()
             if ( okForDelete && m_doc->processingType() == KWDocument::WP )
                 okForDelete = it.current()->getFrameSet() != m_doc->getFrameSet( 0 );
         }
-        actionEditDelFrame->setEnabled( okForDelete );
-        actionEditCut->setEnabled( okForDelete );
+        actionEditDelFrame->setEnabled( okForDelete && nbFrame==1);
+        actionEditCut->setEnabled( okForDelete && nbFrame==1);
     } else
     {
         actionEditDelFrame->setEnabled( false );
