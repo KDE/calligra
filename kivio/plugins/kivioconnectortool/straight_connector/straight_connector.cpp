@@ -36,6 +36,7 @@
 #include <qcolor.h>
 #include <qpixmap.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
 
 #include "straight_connector.xpm"
 
@@ -97,7 +98,7 @@ KivioStraightConnector::~KivioStraightConnector()
     // FIXME: THe parents destructor gets called right?
 }
 
-void KivioStraightConnector::setStartPoint( float x, float y )
+void KivioStraightConnector::setStartPoint( double x, double y )
 {
     m_pStart->setPosition( x, y, false );
     m_pStart->disconnect();
@@ -110,18 +111,18 @@ void KivioStraightConnector::setStartPoint( float x, float y )
     }
 }
 
-void KivioStraightConnector::setEndPoint( float x, float y )
+void KivioStraightConnector::setEndPoint( double x, double y )
 {
     m_pEnd->setPosition( x, y, false );
     m_pEnd->disconnect();
 }
 
-KivioCollisionType KivioStraightConnector::checkForCollision( KivioPoint *p, float threshold )
+KivioCollisionType KivioStraightConnector::checkForCollision( KivioPoint *p, double threshold )
 {
-    const float end_thresh = 4.0f;
+    const double end_thresh = 4.0f;
 
-    float px = p->x();
-    float py = p->y();
+    double px = p->x();
+    double py = p->y();
 
     KivioConnectorPoint *pPoint;
 
@@ -176,63 +177,58 @@ KivioStencil *KivioStraightConnector::duplicate()
 
 void KivioStraightConnector::paint( KivioIntraStencilData *pData )
 {
-    KivioPainter *painter = pData->painter;
-    float scale = pData->scale;
-    float x1, y1, x2, y2;
-    float vecX, vecY;
-    float startCut, endCut;
-    float len;
+  KivioPainter *painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
+  double x1, y1, x2, y2;
+  double vecX, vecY;
+  double len;
 
 
-    painter->setFGColor( m_pLineStyle->color() );
-    painter->setLineWidth( m_pLineStyle->width() * pData->scale );
+  painter->setFGColor( m_pLineStyle->color() );
+  painter->setLineWidth(zoomHandler->zoomItY(m_pLineStyle->width()));
 
-    x1 = m_pStart->x() * scale;
-    x2 = m_pEnd->x() * scale;
+  x1 = zoomHandler->zoomItX(m_pStart->x());
+  x2 = zoomHandler->zoomItX(m_pEnd->x());
 
-    y1 = m_pStart->y() * scale;
-    y2 = m_pEnd->y() * scale;
-
-
-    // Calculate the direction vector from start -> end
-    vecX = m_pEnd->x() - m_pStart->x();
-    vecY = m_pEnd->y() - m_pStart->y();
-
-    // Normalize the vector
-    len = sqrt( vecX*vecX + vecY*vecY );
-    if( len )
-    {
-        vecX /= len;
-        vecY /= len;
-
-        // The amount we should hack off each end of the line
-        startCut = m_startAH->cut() * scale;
-        endCut = m_endAH->cut() * scale;
-
-        // Move the endpoints by the cuts
-        x1 += vecX * startCut;
-        y1 += vecY * startCut;
-
-        x2 -= vecX * endCut;
-        y2 -= vecY * endCut;
-    }
+  y1 = zoomHandler->zoomItY(m_pStart->y());
+  y2 = zoomHandler->zoomItY(m_pEnd->y());
 
 
-    // Draw the line
-    painter->drawLine( x1, y1, x2, y2 );
+  // Calculate the direction vector from start -> end
+  vecX = m_pEnd->x() - m_pStart->x();
+  vecY = m_pEnd->y() - m_pStart->y();
+
+  // Normalize the vector
+  len = sqrt( vecX*vecX + vecY*vecY );
+  if( len )
+  {
+    vecX /= len;
+    vecY /= len;
+
+    // Move the endpoints by the cuts
+    x1 += vecX * zoomHandler->zoomItX(m_startAH->cut());
+    y1 += vecY * zoomHandler->zoomItY(m_startAH->cut());
+
+    x2 -= vecX * zoomHandler->zoomItX(m_endAH->cut());
+    y2 -= vecY * zoomHandler->zoomItY(m_endAH->cut());
+  }
 
 
-    // Now draw the arrow heads
-    if( len )
-    {
-        painter->setBGColor( m_pFillStyle->color() );
+  // Draw the line
+  painter->drawLine( x1, y1, x2, y2 );
 
-        m_startAH->paint( painter, m_pStart->x(), m_pStart->y(), -vecX, -vecY, scale );
-        m_endAH->paint( painter, m_pEnd->x(), m_pEnd->y(), vecX, vecY, scale );
-    }
 
-    // Text
-    drawText(pData);
+  // Now draw the arrow heads
+  if( len )
+  {
+    painter->setBGColor( m_pFillStyle->color() );
+
+    m_startAH->paint(painter, m_pStart->x(), m_pStart->y(), -vecX, -vecY, zoomHandler->zoomedResolutionY());
+    m_endAH->paint(painter, m_pEnd->x(), m_pEnd->y(), vecX, vecY, zoomHandler->zoomedResolutionY());
+  }
+
+  // Text
+  drawText(pData);
 }
 
 void KivioStraightConnector::paintOutline( KivioIntraStencilData *pData )

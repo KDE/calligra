@@ -36,6 +36,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
 
 KivioLayer::KivioLayer( KivioPage *pPage )
     :m_pStencilList(NULL)
@@ -282,7 +283,7 @@ QDomElement KivioLayer::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoint , float zoom )
+void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoint , KoZoomHandler* zoom )
 {
     KivioStencil *pStencil = m_pStencilList->first();
     KivioIntraStencilData data;
@@ -290,7 +291,7 @@ void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoin
     painter.setFGColor( QColor(0,0,0) );
 
     data.painter = &painter;
-    data.scale = zoom;
+    data.zoomHandler = zoom;
 
     while( pStencil )
     {
@@ -302,31 +303,33 @@ void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoin
 
 void KivioLayer::printContent( KivioPainter& painter )
 {
-    KivioStencil *pStencil = m_pStencilList->first();
-    KivioIntraStencilData data;
+  KivioStencil *pStencil = m_pStencilList->first();
+  KivioIntraStencilData data;
+  KoZoomHandler zoomHandler;
+  zoomHandler.setZoomAndResolution(100, 600, 600); // FIXME: Hmmm... resolution sucks ;)
 
-    painter.setFGColor( QColor(0,0,0) );
+  painter.setFGColor( QColor(0,0,0) );
 
-    data.painter = &painter;
-    data.scale = 1.0f;
-    data.printing = true;
+  data.painter = &painter;
+  data.zoomHandler = &zoomHandler;
+  data.printing = true;
 
-    while( pStencil )
-    {
-        pStencil->paint( &data );
+  while( pStencil )
+  {
+      pStencil->paint( &data );
 
-        pStencil = m_pStencilList->next();
-    }
+      pStencil = m_pStencilList->next();
+  }
 }
 
-void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint, float zoom )
+void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint, KoZoomHandler* zoom )
 {
     KivioIntraStencilData data;
 
     painter.setFGColor( QColor(0,0,0) );
 
     data.painter = &painter;
-    data.scale = zoom;
+    data.zoomHandler = zoom;
 
     KivioStencil *pStencil = m_pStencilList->first();
     while( pStencil )
@@ -337,14 +340,14 @@ void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, boo
     }
 }
 
-void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, bool, QPoint, float zoom )
+void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, bool, QPoint, KoZoomHandler* zoom )
 {
     KivioIntraStencilData data;
 
     painter.setFGColor( QColor(0,0,0) );
 
     data.painter = &painter;
-    data.scale = zoom;
+    data.zoomHandler = zoom;
 
     KivioStencil *pStencil = m_pStencilList->first();
     while( pStencil )

@@ -57,7 +57,7 @@ protected:
     virtual bool loadCustom( const QDomElement & );
     virtual bool loadProperties( const QDomElement & );
     virtual bool loadTargets( const QDomElement & );
-    
+
     virtual void copyBasicInto( KivioBaseTargetStencil * );
 
 public:
@@ -75,8 +75,8 @@ public:
     virtual QColor fgColor();
     virtual void setFGColor( QColor c );
 
-    virtual void setLineWidth( float l );
-    virtual float lineWidth();
+    virtual void setLineWidth( double l );
+    virtual double lineWidth();
 
 
 
@@ -150,7 +150,7 @@ public:
     //
     ///////////////////////////////
     // This attempts to connect based on position
-    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );
+    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
 
     // This attempts to connect based on a targetID.  This should  ***ONLY*** be used
     // right after a load

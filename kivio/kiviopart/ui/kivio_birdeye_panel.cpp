@@ -145,10 +145,11 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
 void KivioBirdEyePanel::updateView()
 {
+  // FIXME: This whole function needs fixing!
   QSize s1 = canvas->size();
   QSize s2;
   KoPageLayout pl = m_pView->activePage()->paperLayout();
-  
+
   if (m_bPageOnly) {
     int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
     int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
@@ -192,7 +193,7 @@ void KivioBirdEyePanel::updateView()
   }
 
   kpainter.painter()->translate(px0, py0);
-  m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, zoom, false);
+//  m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, zoom, false);
   kpainter.stop();
 
   updateVisibleArea();

@@ -135,15 +135,15 @@ void ConnectorTool::connector(QRect)
 
 void ConnectorTool::mousePress( QMouseEvent *e )
 {
-    if(e->button() == RightButton)
-    {
-        controller()->activateDefault();
-        return;
-    }
-    if( startRubberBanding( e ) )
-    {
-        m_mode = stmDrawRubber;
-    }
+  if(e->button() == RightButton)
+  {
+    controller()->activateDefault();
+    return;
+  }
+  if( startRubberBanding( e ) )
+  {
+    m_mode = stmDrawRubber;
+  }
 }
 
 
@@ -152,37 +152,40 @@ void ConnectorTool::mousePress( QMouseEvent *e )
  */
 bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 {
-    KivioDoc* doc = m_pView->doc();
-    KivioPage* pPage = m_pCanvas->activePage();
-    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
-    if (!ss)
-        return false;
+  KivioDoc* doc = m_pView->doc();
+  KivioPage* pPage = m_pCanvas->activePage();
+  KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
 
-    startPoint = m_pCanvas->snapToGrid(m_pCanvas->mapFromScreen( e->pos() ));
+  if (!ss) {
+    kdDebug() << "ConnectorTool: Failed to find StencilSpawner!" << endl;
+    return false;
+  }
 
-    // Create the stencil
-    m_pStencil = (KivioStraightConnector*)ss->newStencil();
+  startPoint = m_pCanvas->snapToGrid(m_pCanvas->mapFromScreen( e->pos() ));
 
-    // Unselect everything, add the stencil to the page, and select it
-    pPage->unselectAllStencils();
-    pPage->addStencil(m_pStencil);
-    pPage->selectStencil(m_pStencil);
+  // Create the stencil
+  m_pStencil = (KivioStraightConnector*)ss->newStencil();
 
-    // Get drag info ready
-    m_pDragData = new KivioCustomDragData();
-    m_pDragData->page = pPage;
-    m_pDragData->x = startPoint.x();
-    m_pDragData->y = startPoint.y();
-    m_pDragData->id = kctCustom + 2;
+  // Unselect everything, add the stencil to the page, and select it
+  pPage->unselectAllStencils();
+  pPage->addStencil(m_pStencil);
+  pPage->selectStencil(m_pStencil);
 
-    m_pStencil->setStartPoint(startPoint.x() + 10.0f, startPoint.y() + 10.0f);
-    m_pStencil->setEndPoint(startPoint.x(), startPoint.y());
-    m_pStencil->customDrag(m_pDragData);
+  // Get drag info ready
+  m_pDragData = new KivioCustomDragData();
+  m_pDragData->page = pPage;
+  m_pDragData->x = startPoint.x();
+  m_pDragData->y = startPoint.y();
+  m_pDragData->id = kctCustom + 2;
+
+  m_pStencil->setStartPoint(startPoint.x() + 10.0f, startPoint.y() + 10.0f);
+  m_pStencil->setEndPoint(startPoint.x(), startPoint.y());
+  m_pStencil->customDrag(m_pDragData);
 
 
-    m_pCanvas->repaint();
-    m_pCanvas->setCursor(*m_pConnectorCursor2);
-    return true;
+  m_pCanvas->repaint();
+  m_pCanvas->setCursor(*m_pConnectorCursor2);
+  return true;
 }
 
 void ConnectorTool::mouseMove( QMouseEvent * e )

@@ -277,12 +277,12 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     painter.setPen(m_pDoc->grid().color);
 
     QPoint p0 = mapToScreen(p);
-    
+
     while (p0.x() < x) {
       p.rx() += dxy.width();
       p0 = mapToScreen(p);
     }
-    
+
     while (p0.x() <= w) {
       painter.drawLine(p0.x(),y,p0.x(),h);
 
@@ -292,12 +292,12 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
     p.setCoords(0, 0);
     p0 = mapToScreen(p);
-    
+
     while (p0.x() > w) {
       p.rx() -= dxy.width();
       p0 = mapToScreen(p);
     }
-    
+
     while (p0.x() >= x) {
       painter.drawLine(p0.x(),y,p0.x(),h);
 
@@ -307,12 +307,12 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
     p.setCoords(0, 0);
     p0 = mapToScreen(p);
-    
+
     while (p0.y() < y) {
       p.ry() += dxy.height();
       p0 = mapToScreen(p);
     }
-    
+
     while (p0.y() <= h) {
       painter.drawLine(x,p0.y(),w,p0.y());
 
@@ -322,12 +322,12 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
     p.setCoords(0, 0);
     p0 = mapToScreen(p);
-    
+
     while (p0.y() > h) {
       p.ry() -= dxy.height();
       p0 = mapToScreen(p);
     }
-    
+
     while (p0.y() >= y) {
       painter.drawLine(x,p0.y(),w,p0.y());
 
@@ -366,8 +366,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   kpainter.start( m_buffer );
   kpainter.painter()->translate( -m_iXOffset, -m_iYOffset );
   kpainter.painter()->translate( 0, 0 );
-  m_pDoc->paintContent(kpainter, rect, false, page, QPoint(0, 0), m_pView->zoomHandler()
-    ->zoomedResolutionY(), true);
+  m_pDoc->paintContent(kpainter, rect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
   kpainter.stop();
 
   paintGuides(false);
@@ -517,7 +516,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
 {
   if(!m_pDoc->isReadWrite())
     return;
-    
+
   if(m_pView->isShowGuides())
   {
     m_pView->setMousePos(e->pos().x(),e->pos().y());
@@ -578,7 +577,7 @@ KoPoint KivioCanvas::mapFromScreen( const QPoint & pos )
   int x = pos.x() + m_iXOffset;
   int y = pos.y() + m_iYOffset;
   double xf = m_pView->zoomHandler()->unzoomItX(x);
-  double yf = m_pView->zoomHandler()->unzoomItX(y);
+  double yf = m_pView->zoomHandler()->unzoomItY(y);
 
   KoPoint p(xf, yf);
   return p;
@@ -675,7 +674,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
     m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.scale = m_pView->zoomHandler()->zoomedResolutionY();
+    m_dragStencilData.zoomHandler = m_pView->zoomHandler();
 
     // Draw the outline of the stencil
     m_pDragStencil->paintOutline( &m_dragStencilData );
@@ -689,56 +688,53 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
  */
 void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
 {
-   bool snappedX, snappedY;
+  bool snappedX, snappedY;
 
-    QPoint pos = p;
-    QPoint p2 = pos;
+  // Translate the painter so that 0,0 means where the page starts on the canvas
+  unclippedSpawnerPainter->painter()->save();
+  unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
 
-    // Translate the painter so that 0,0 means where the page starts on the canvas
-    unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
-
-    // Undraw the old outline
-    if( oldRectValid )
-    {
-        m_pDragStencil->paintOutline( &m_dragStencilData );
-    }
-
-    // Map the new point from screenspace to page space
-    KoPoint orig = mapFromScreen(p2);
-    KoPoint qp = snapToGrid( orig );
-
-    // First snap to screen
-    qp = snapToGrid(qp);
-    m_pDragStencil->setPosition( qp.x(), qp.y() );
-
-    // Now snap to the guides
-    qp.setCoords(orig.x() + m_pDragStencil->w(), orig.y() + m_pDragStencil->h());
-    qp = snapToGuides(qp, snappedX, snappedY);
-    
-    if(snappedX) {
-       m_pDragStencil->setX(qp.x() - m_pDragStencil->w());
-    }
-    
-    if(snappedY) {
-       m_pDragStencil->setY(qp.y() - m_pDragStencil->h());
-    }
-
-    qp.setCoords(orig.x(), orig.y());
-    qp = snapToGuides(qp, snappedX, snappedY);
-    
-    if(snappedX) {
-       m_pDragStencil->setX(qp.x());
-    }
-    
-    if(snappedY) {
-       m_pDragStencil->setY(qp.y());
-    }
-
-    // Redraw the new outline
-    oldRectValid = true;
+  // Undraw the old outline
+  if( oldRectValid )
+  {
     m_pDragStencil->paintOutline( &m_dragStencilData );
-    unclippedSpawnerPainter->painter()->restore();
+  }
+
+  // Map the new point from screenspace to page space
+  KoPoint orig = mapFromScreen(p);
+  KoPoint qp = snapToGrid( orig );
+
+  // First snap to screen
+  qp = snapToGrid(qp);
+  m_pDragStencil->setPosition( qp.x(), qp.y() );
+
+  // Now snap to the guides
+  qp.setCoords(orig.x() + m_pDragStencil->w(), orig.y() + m_pDragStencil->h());
+  qp = snapToGuides(qp, snappedX, snappedY);
+
+  if(snappedX) {
+    m_pDragStencil->setX(qp.x() - m_pDragStencil->w());
+  }
+
+  if(snappedY) {
+    m_pDragStencil->setY(qp.y() - m_pDragStencil->h());
+  }
+
+  qp.setCoords(orig.x(), orig.y());
+  qp = snapToGuides(qp, snappedX, snappedY);
+
+  if(snappedX) {
+    m_pDragStencil->setX(qp.x());
+  }
+
+  if(snappedY) {
+    m_pDragStencil->setY(qp.y());
+  }
+
+  // Redraw the new outline
+  oldRectValid = true;
+  m_pDragStencil->paintOutline( &m_dragStencilData );
+  unclippedSpawnerPainter->painter()->restore();
 
 }
 
@@ -1031,7 +1027,7 @@ void KivioCanvas::drawSelectedStencilsXOR()
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
     m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.scale = m_pView->zoomHandler()->zoomedResolutionY();
+    m_dragStencilData.zoomHandler = m_pView->zoomHandler();
 
     KivioStencil *pStencil = activePage()->selectedStencils()->first();
     while( pStencil )
@@ -1057,7 +1053,7 @@ void KivioCanvas::drawStencilXOR( KivioStencil *pStencil )
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
     m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.scale = m_pView->zoomHandler()->zoomedResolutionY();
+    m_dragStencilData.zoomHandler = m_pView->zoomHandler();
 
     pStencil->paintOutline( &m_dragStencilData );
 
@@ -1192,7 +1188,7 @@ KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
     float four = m_pView->zoomHandler()->unzoomItX(4);
     KivioGuideLines *pGuides = activePage()->guideLines();
     KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
-    
+
     if(pData)
     {
       snappedY = true;
@@ -1200,7 +1196,7 @@ KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
     }
 
     pData = pGuides->findVertical( point.x(), four );
-    
+
     if(pData)
     {
       snappedX = true;
@@ -1234,7 +1230,7 @@ void KivioCanvas::guideLinesTimerTimeout()
   if (!storedCursor) {
     storedCursor = new QCursor(cursor());
   }
-  
+
   setCursor(sizeAllCursor);
 }
 

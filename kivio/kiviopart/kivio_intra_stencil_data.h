@@ -20,6 +20,7 @@
 #define KIVIO_INTRA_STENCIL_DATA_H
 
 class KivioPainter;
+class KoZoomHandler;
 
 class KivioIntraStencilData
 {
@@ -30,7 +31,8 @@ public:
     float mx, my;
     float oldMX, oldMY;
     float unsnapMX, unsnapMY;
-    float scale;
+//     float scale;
+    KoZoomHandler* zoomHandler;
 
     bool printing;
 

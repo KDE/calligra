@@ -26,6 +26,6 @@ install-data-local:
 	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
 	$(LN_S) $(DESTDIR)$(kde_moduledir)/libstraight_connector.so $(DESTDIR)$(stencildir)/straight_connector.ksp
 
-uninstall-data-local:
+uninstall-local:
 	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
 

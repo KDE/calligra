@@ -30,6 +30,7 @@ class KivioIntraStencilData;
 class KivioLineStyle;
 class KivioPainter;
 class KivioShape;
+class KoZoomHandler;
 
 class KivioSMLStencil : public KivioStencil
 {
@@ -44,8 +45,8 @@ protected:
     // Offsets and scale which get reused in between
     // various drawing routines.  To save time and
     // stack space, we keep them around in the class
-    float _scale, _xoff, _yoff;
-
+    double _xoff, _yoff;
+    KoZoomHandler* m_zoomHandler;
 
 // Drawing routines
 protected:
@@ -95,8 +96,8 @@ protected:
 public:
     KivioSMLStencil();
     virtual ~KivioSMLStencil();
-    
-    
+
+
     virtual bool loadXML( const QDomElement & );
     virtual QDomElement saveXML( QDomDocument & );
 
@@ -113,8 +114,8 @@ public:
     virtual QColor bgColor();
     virtual void setFGColor(QColor);
     virtual void setBGColor(QColor);
-    virtual void setLineWidth(float);
-    virtual float lineWidth();
+    virtual void setLineWidth(double);
+    virtual double lineWidth();
 
     virtual void setTextColor( QColor );
     virtual void setTextFont( const QFont & );
@@ -130,9 +131,9 @@ public:
 
     virtual QFont textFont();
 
-    virtual KivioCollisionType checkForCollision( KivioPoint *, float );
+    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
 
-    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );
+    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
 
     virtual void updateGeometry();

@@ -55,6 +55,7 @@ class KCommandHistory;
 class QPainter;
 class KPrinter;
 class KCommand;
+class KoZoomHandler;
 
 #define MIME_TYPE "application/x-kivio"
 
@@ -115,7 +116,7 @@ class KivioDoc : public KoDocument
     bool isLoading()const { return m_bLoading; }
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, KoZoomHandler*, bool );
 
     void printContent( KPrinter& prn );
     bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );

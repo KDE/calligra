@@ -55,14 +55,14 @@ public:
 
     virtual void updateGeometry();
     virtual KivioStencil *duplicate();
-    virtual KivioCollisionType checkForCollision( KivioPoint *pPoint, float );
+    virtual KivioCollisionType checkForCollision( KivioPoint *pPoint, double );
     virtual int resizeHandlePositions();
 
     virtual void paint( KivioIntraStencilData * );
     virtual void paintOutline( KivioIntraStencilData * );
     virtual void paint( KivioIntraStencilData * , bool outlined);
     virtual void paintConnectorTargets( KivioIntraStencilData * );
-    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *p, float threshHold );
+    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *p, double threshHold );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *p, int targetID );
 
     virtual int generateIds( int );
@@ -73,8 +73,8 @@ public:
     virtual void setBGColor( QColor );
     virtual QColor bgColor();
 
-    virtual void setLineWidth( float );
-    virtual float lineWidth();
+    virtual void setLineWidth( double );
+    virtual double lineWidth();
 
     // FOnt stuff
     virtual QColor textColor();
@@ -96,7 +96,7 @@ public:
 protected:
     PyObject *vars, *globals;
     QString resizeCode; // python code to be runed when resize
-    float old_x, old_y, old_w, old_h;
+    double old_x, old_y, old_w, old_h;
 
     virtual void rescaleShapes( PyObject * ); // find recursive for x,y,w,h in object( dict or list ) and update them
 

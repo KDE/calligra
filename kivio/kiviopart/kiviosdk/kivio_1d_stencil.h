@@ -24,12 +24,12 @@ class Kivio1DStencil : public KivioStencil
 {
 protected:
     QPtrList <KivioConnectorPoint> *m_pConnectorPoints;
-    
+
     KivioConnectorPoint *m_pStart, *m_pEnd;
     KivioConnectorPoint *m_pLeft, *m_pRight;
     KivioConnectorPoint *m_pTextConn;
 
-    float m_connectorWidth;
+    double m_connectorWidth;
     bool m_needsWidth;
     bool m_needsText;
 
@@ -40,7 +40,7 @@ protected:
     // Utility routines
     bool boolAllTrue( bool *, int );
     bool boolContainsFalse( bool *, int );
-    
+
     virtual QDomElement createRootElement( QDomDocument & );
 
     virtual bool saveCustom( QDomElement &, QDomDocument & );
@@ -85,19 +85,19 @@ public:
 
 
     // line width functions
-    virtual void setLineWidth( float f );
-    virtual float lineWidth();
+    virtual void setLineWidth( double f );
+    virtual double lineWidth();
 
 
     // position functions
-    virtual void setX( float );
-    virtual void setY( float );
-    virtual void setPosition( float, float );
+    virtual void setX( double );
+    virtual void setY( double );
+    virtual void setPosition( double, double );
 
 
     // required for connector tool
-    virtual void setStartPoint( float, float );
-    virtual void setEndPoint( float, float );
+    virtual void setStartPoint( double, double );
+    virtual void setEndPoint( double, double );
 
 
     // painting functions
@@ -108,7 +108,7 @@ public:
 
 
     // collision detection
-    virtual KivioCollisionType checkForCollision( KivioPoint *, float );
+    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
 
 
     // custom dragging
@@ -117,7 +117,7 @@ public:
 
     // geometry management
     virtual void updateGeometry();
-    virtual void updateConnectorPoints( KivioConnectorPoint *, float, float );
+    virtual void updateConnectorPoints( KivioConnectorPoint *, double, double );
 
 
     // file i/o routines

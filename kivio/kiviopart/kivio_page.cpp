@@ -43,6 +43,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <koUnit.h>
+#include <kozoomhandler.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -310,55 +311,44 @@ bool KivioPage::setPageName( const QString& name, bool init )
  * An important note is that layers are drawn first to last.  So the last layer is the
  * most visible.
  */
-void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom, bool drawHandles )
+void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool transparent,
+  QPoint p0, KoZoomHandler* zoom, bool drawHandles )
 {
-    KivioLayer *pLayer = m_lstLayers.first();
-    while( pLayer )
+  KivioLayer *pLayer = m_lstLayers.first();
+  while( pLayer )
+  {
+      if( pLayer->visible() )
+      {
+          pLayer->paintContent( painter, rect, transparent, p0, zoom );
+      }
+
+      pLayer = m_lstLayers.next();
+  }
+
+  // Now the second iteration - connection targets
+  // Only draw targets if the zoom is higher than a certain value
+  if( zoom->zoom() >= 50 )
+  {
+    if( drawHandles )
     {
-        if( pLayer->visible() )
-        {
-            pLayer->paintContent( painter, rect, transparent, p0, zoom );
+      m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
+      pLayer = m_lstLayers.first();
+      while( pLayer )
+      {
+        if( pLayer->connectable() ) {
+          pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
         }
 
         pLayer = m_lstLayers.next();
+      }
     }
+  }
 
-
-
-    // Now the second iteration - connection targets
-    // Only draw targets if the zoom is higher than a certain value
-    if( zoom >= 0.5 )
-    {
-       if( drawHandles )
-       {
-	  m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-	  pLayer = m_lstLayers.first();
-	  while( pLayer )
-	  {
-	     if( pLayer->connectable() )
-		pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-
-	     pLayer = m_lstLayers.next();
-	  }
-       }
-    }
-
-
-    // Now the third iteration - selection handles
-    if( drawHandles )
-    {
-       m_pCurLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
-    }
-    /*
-    pLayer = m_lstLayers.first();
-    while( pLayer )
-    {
-        pLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
-
-        pLayer = m_lstLayers.next();
-    }
-    */
-
+  // Now the third iteration - selection handles
+  if( drawHandles )
+  {
+    m_pCurLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
+  }
 }
 
 void KivioPage::printContent( KivioPainter& painter )
@@ -377,32 +367,36 @@ void KivioPage::printContent( KivioPainter& painter )
 
 void KivioPage::printSelected( KivioPainter& painter )
 {
-   KivioStencil *pStencil;
-   KivioIntraStencilData data;
+  KivioStencil *pStencil;
+  KivioIntraStencilData data;
+  KoZoomHandler zoomHandler;
+  zoomHandler.setZoomAndResolution(100, 600, 600); // FIXME: Hmmm... resolution sucks ;)
 
-   data.painter = &painter;
-   data.scale = 1.0f;
-   data.printing = true;
+  data.painter = &painter;
+  data.zoomHandler = &zoomHandler;
+  data.printing = true;
 
-   KivioLayer *pLayer = m_lstLayers.first();
-   while( pLayer )
-   {
-      if( pLayer->visible()==true )
+  KivioLayer *pLayer = m_lstLayers.first();
+
+  while( pLayer )
+  {
+    if( pLayer->visible()==true )
+    {
+      pStencil = pLayer->firstStencil();
+
+      while( pStencil )
       {
-	 pStencil = pLayer->firstStencil();
-	 while( pStencil )
-	 {
-	    if( isStencilSelected(pStencil)==true )
-	    {
-	       pStencil->paint(&data);
-	    }
+        if( isStencilSelected(pStencil)==true )
+        {
+          pStencil->paint(&data);
+        }
 
-	    pStencil = pLayer->nextStencil();
-	 }
+        pStencil = pLayer->nextStencil();
       }
+    }
 
-      pLayer = m_lstLayers.next();
-   }
+    pLayer = m_lstLayers.next();
+  }
 }
 
 

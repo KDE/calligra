@@ -51,6 +51,7 @@
 #include "kivio_stencil.h"
 
 #include <kdebug.h>
+#include <kozoomhandler.h>
 
 /**
  * Default constructor.
@@ -90,12 +91,12 @@ QColor KivioBaseConnectorStencil::fgColor()
     return m_pLineStyle->color();
 }
 
-void KivioBaseConnectorStencil::setLineWidth( float f )
+void KivioBaseConnectorStencil::setLineWidth( double f )
 {
     m_pLineStyle->setWidth(f);
 }
 
-float KivioBaseConnectorStencil::lineWidth()
+double KivioBaseConnectorStencil::lineWidth()
 {
     return m_pLineStyle->width();
 }
@@ -114,9 +115,9 @@ QColor KivioBaseConnectorStencil::bgColor()
 /////////////////////////////////
 // Position functions
 /////////////////////////////////
-void KivioBaseConnectorStencil::setX( float x )
+void KivioBaseConnectorStencil::setX( double x )
 {
-    float dx = x - m_x;
+    double dx = x - m_x;
 
     m_x += dx;
 
@@ -133,9 +134,9 @@ void KivioBaseConnectorStencil::setX( float x )
     m_x = x;
 }
 
-void KivioBaseConnectorStencil::setY( float y )
+void KivioBaseConnectorStencil::setY( double y )
 {
-    float dy = y - m_y;
+    double dy = y - m_y;
 
     m_y += dy;
 
@@ -151,10 +152,10 @@ void KivioBaseConnectorStencil::setY( float y )
     m_y = y;
 }
 
-void KivioBaseConnectorStencil::setPosition( float x, float y )
+void KivioBaseConnectorStencil::setPosition( double x, double y )
 {
-    float dx = x - m_x;
-    float dy = y - m_y;
+    double dx = x - m_x;
+    double dy = y - m_y;
 
     m_x += dx;
     m_y += dy;
@@ -178,7 +179,7 @@ void KivioBaseConnectorStencil::setPosition( float x, float y )
 /////////////////////////////
 // Connection tool functions
 /////////////////////////////
-void KivioBaseConnectorStencil::setStartPoint( float /*x*/, float /*y*/ )
+void KivioBaseConnectorStencil::setStartPoint( double /*x*/, double /*y*/ )
 {
     /* Derived class must implement this function */
     // m_start.setPosition( x, y, false );
@@ -186,7 +187,7 @@ void KivioBaseConnectorStencil::setStartPoint( float /*x*/, float /*y*/ )
 }
 
 
-void KivioBaseConnectorStencil::setEndPoint( float /*x*/, float /*y*/ )
+void KivioBaseConnectorStencil::setEndPoint( double /*x*/, double /*y*/ )
 {
     /* Derived class must implement this function */
     // m_end.setPosition( x, y, false );
@@ -211,36 +212,36 @@ void KivioBaseConnectorStencil::paintConnectorTargets( KivioIntraStencilData * )
 
 void KivioBaseConnectorStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 {
-    // Handle Width
-    const float HW = 6.0f;
-    const float HWP1 = HW+1.0f;
+  // Handle Width
+  const double HW = 6.0f;
+  const double HWP1 = HW+1.0f;
 
-    // Handle Width Over 2
-    const float HWo2 = HW/2.0f;
+  // Handle Width Over 2
+  const double HWo2 = HW/2.0f;
 
-    // Stencil data
-    float scale = pData->scale;
-    KivioPainter *painter = pData->painter;
-    float x1, y1;
+  // Stencil data
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
+  KivioPainter *painter = pData->painter;
+  double x1, y1;
 
-    painter->setLineWidth(1.0f);
-    painter->setFGColor(QColor(0,0,0));
+  painter->setLineWidth(1.0f);
+  painter->setFGColor(QColor(0,0,0));
 
-    KivioConnectorPoint *p = m_pConnectorPoints->first();
-    while( p )
-    {
-        x1 = p->x() * scale - HWo2;
-        y1 = p->y() * scale - HWo2;
+  KivioConnectorPoint *p = m_pConnectorPoints->first();
+  while( p )
+  {
+    x1 = zoomHandler->zoomItX(p->x()) - HWo2;
+    y1 = zoomHandler->zoomItY(p->y()) - HWo2;
 
-        if( p->target() )
-            painter->setBGColor(QColor(200,0,0));
-        else
-            painter->setBGColor(QColor(0,200,0));
+    if( p->target() )
+        painter->setBGColor(QColor(200,0,0));
+    else
+        painter->setBGColor(QColor(0,200,0));
 
-        painter->fillRect( x1, y1, HWP1, HWP1 );
+    painter->fillRect( x1, y1, HWP1, HWP1 );
 
-        p = m_pConnectorPoints->next();
-    }
+    p = m_pConnectorPoints->next();
+  }
 }
 
 
@@ -248,7 +249,7 @@ void KivioBaseConnectorStencil::paintSelectionHandles( KivioIntraStencilData *pD
 ///////////////////////////////
 // Collision detection
 ///////////////////////////////
-KivioCollisionType KivioBaseConnectorStencil::checkForCollision( KivioPoint *, float )
+KivioCollisionType KivioBaseConnectorStencil::checkForCollision( KivioPoint *, double )
 {
     /* Derived class must implement this */
     return kctNone;
@@ -270,8 +271,8 @@ KivioCollisionType KivioBaseConnectorStencil::checkForCollision( KivioPoint *, f
  */
 void KivioBaseConnectorStencil::customDrag( KivioCustomDragData *pData )
 {
-    float _x = pData->x;
-    float _y = pData->y;
+    double _x = pData->x;
+    double _y = pData->y;
     int id = pData->id;
 
     KivioConnectorPoint *p;
@@ -323,7 +324,7 @@ void KivioBaseConnectorStencil::customDrag( KivioCustomDragData *pData )
  */
 void KivioBaseConnectorStencil::updateGeometry()
 {
-    float minX, minY, maxX, maxY;
+    double minX, minY, maxX, maxY;
 
     minX = 1000000000000.0f;
     minY = minX;

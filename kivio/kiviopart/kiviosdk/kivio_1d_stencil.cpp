@@ -56,9 +56,7 @@
 
 #include <kdebug.h>
 #include <math.h>
-
-
-
+#include <kozoomhandler.h>
 
 /**
  * Default constructor.
@@ -124,12 +122,12 @@ QColor Kivio1DStencil::fgColor()
     return m_pLineStyle->color();
 }
 
-void Kivio1DStencil::setLineWidth( float f )
+void Kivio1DStencil::setLineWidth( double f )
 {
     m_pLineStyle->setWidth(f);
 }
 
-float Kivio1DStencil::lineWidth()
+double Kivio1DStencil::lineWidth()
 {
     return m_pLineStyle->width();
 }
@@ -148,9 +146,9 @@ QColor Kivio1DStencil::bgColor()
 /////////////////////////////////
 // Position functions
 /////////////////////////////////
-void Kivio1DStencil::setX( float x )
+void Kivio1DStencil::setX( double x )
 {
-    float dx = x - m_x;
+    double dx = x - m_x;
 
     m_x += dx;
 
@@ -167,9 +165,9 @@ void Kivio1DStencil::setX( float x )
     m_x = x;
 }
 
-void Kivio1DStencil::setY( float y )
+void Kivio1DStencil::setY( double y )
 {
-    float dy = y - m_y;
+    double dy = y - m_y;
 
     m_y += dy;
 
@@ -185,10 +183,10 @@ void Kivio1DStencil::setY( float y )
     m_y = y;
 }
 
-void Kivio1DStencil::setPosition( float x, float y )
+void Kivio1DStencil::setPosition( double x, double y )
 {
-    float dx = x - m_x;
-    float dy = y - m_y;
+    double dx = x - m_x;
+    double dy = y - m_y;
 
     m_x += dx;
     m_y += dy;
@@ -212,10 +210,10 @@ void Kivio1DStencil::setPosition( float x, float y )
 /////////////////////////////
 // Connection tool functions
 /////////////////////////////
-void Kivio1DStencil::setStartPoint( float x, float y )
+void Kivio1DStencil::setStartPoint( double x, double y )
 {
-   float oldX = m_pStart->x();
-   float oldY = m_pStart->y();
+   double oldX = m_pStart->x();
+   double oldY = m_pStart->y();
 
    m_pStart->setPosition(x, y, false);
    m_pStart->disconnect();
@@ -224,10 +222,10 @@ void Kivio1DStencil::setStartPoint( float x, float y )
 }
 
 
-void Kivio1DStencil::setEndPoint( float x, float y )
+void Kivio1DStencil::setEndPoint( double x, double y )
 {
-   float oldX = m_pEnd->x();
-   float oldY = m_pEnd->y();
+   double oldX = m_pEnd->x();
+   double oldY = m_pEnd->y();
 
    m_pEnd->setPosition(x, y, false);
    m_pEnd->disconnect();
@@ -235,21 +233,21 @@ void Kivio1DStencil::setEndPoint( float x, float y )
    updateConnectorPoints(m_pEnd, oldX, oldY);
 }
 
-void Kivio1DStencil::updateConnectorPoints( KivioConnectorPoint *p, float /*oldX*/, float /*oldY*/ )
+void Kivio1DStencil::updateConnectorPoints( KivioConnectorPoint *p, double /*oldX*/, double /*oldY*/ )
 {
    // If p is the start or end, we need to adjust the width connectors
    if( p == m_pStart || p == m_pEnd )
    {
-      float vx = m_pStart->x() - m_pEnd->x();
-      float vy = m_pStart->y() - m_pEnd->y();
-      float len = sqrt( vx*vx + vy*vy );
-      float midX = (m_pStart->x() + m_pEnd->x())/2.0f;
-      float midY = (m_pStart->y() + m_pEnd->y())/2.0f;
+      double vx = m_pStart->x() - m_pEnd->x();
+      double vy = m_pStart->y() - m_pEnd->y();
+      double len = sqrt( vx*vx + vy*vy );
+      double midX = (m_pStart->x() + m_pEnd->x())/2.0f;
+      double midY = (m_pStart->y() + m_pEnd->y())/2.0f;
 
       vx /= len;
       vy /= len;
 
-      float d = m_connectorWidth/2.0f;
+      double d = m_connectorWidth/2.0f;
 
       m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
       m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
@@ -276,54 +274,55 @@ void Kivio1DStencil::paintConnectorTargets( KivioIntraStencilData * )
 
 void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 {
-    KivioPainter *painter = pData->painter;
-    float x1, y1, scale;
-    int flag;
+  KivioPainter *painter = pData->painter;
+  double x1, y1;
+  int flag;
 
-    scale = pData->scale;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
 
-    KivioConnectorPoint *p = m_pConnectorPoints->first();
-    while( p )
+  KivioConnectorPoint *p = m_pConnectorPoints->first();
+  while( p )
+  {
+    // If we don't need width connectors and we are on a width connector,
+    // ignore it.
+    x1 = zoomHandler->zoomItX(p->x());
+    y1 = zoomHandler->zoomItY(p->y());
+
+    flag = (p->target()) ? KivioPainter::cpfConnected : 0;
+
+    if( p==m_pTextConn )
     {
-       // If we don't need width connectors and we are on a width connector,
-       // ignore it.
-       x1 = p->x() * scale;
-       y1 = p->y() * scale;
-
-       flag = (p->target()) ? KivioPainter::cpfConnected : 0;
-
-       if( p==m_pTextConn )
-       {
-	  if( m_needsText==true )
-	  {
-	     painter->drawHandle( x1, y1, 0 );
-	  }
-       }
-       else if( p==m_pLeft || p==m_pRight )
-       {
-	  if( m_needsWidth==true )
-	  {
-	     painter->drawHandle( x1, y1, 0 );
-	  }
-       }
-       else if( p==m_pStart )
-       {
-	  painter->drawHandle( x1, y1, KivioPainter::cpfStart | flag );
-       }
-       else if( p==m_pEnd )
-       {
-	  painter->drawHandle( x1, y1, KivioPainter::cpfEnd | flag );
-       }
-       else
-       {
-	  if( p->connectable() )
-	     painter->drawHandle( x1, y1, KivioPainter::cpfConnectable | flag );
-	  else
-	     painter->drawHandle( x1, y1, flag );
-       }
-
-        p = m_pConnectorPoints->next();
+      if( m_needsText==true )
+      {
+        painter->drawHandle( x1, y1, 0 );
+      }
     }
+    else if( p==m_pLeft || p==m_pRight )
+    {
+      if( m_needsWidth==true )
+      {
+        painter->drawHandle( x1, y1, 0 );
+      }
+    }
+    else if( p==m_pStart )
+    {
+      painter->drawHandle( x1, y1, KivioPainter::cpfStart | flag );
+    }
+    else if( p==m_pEnd )
+    {
+      painter->drawHandle( x1, y1, KivioPainter::cpfEnd | flag );
+    }
+    else
+    {
+      if( p->connectable() ) {
+        painter->drawHandle( x1, y1, KivioPainter::cpfConnectable | flag );
+      } else {
+        painter->drawHandle( x1, y1, flag );
+      }
+    }
+
+    p = m_pConnectorPoints->next();
+  }
 }
 
 
@@ -331,7 +330,7 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 ///////////////////////////////
 // Collision detection
 ///////////////////////////////
-KivioCollisionType Kivio1DStencil::checkForCollision( KivioPoint *, float )
+KivioCollisionType Kivio1DStencil::checkForCollision( KivioPoint *, double )
 {
     /* Derived class must implement this */
 
@@ -354,14 +353,14 @@ KivioCollisionType Kivio1DStencil::checkForCollision( KivioPoint *, float )
  */
 void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
 {
-    float _x = pData->x;
-    float _y = pData->y;
+    double _x = pData->x;
+    double _y = pData->y;
     int id = pData->id;
-    float oldX, oldY;
+    double oldX, oldY;
     bool doneSearching = false;
     bool foundConnection = false;
 
-    float oldStencilX, oldStencilY;
+    double oldStencilX, oldStencilY;
 
 
 
@@ -436,16 +435,16 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
     else if( (id == kctCustom+3 || id == kctCustom+4) &&
              (m_needsWidth==true) )
     {
-       float vx = m_pStart->x() - m_pEnd->x();
-       float vy = m_pStart->y() - m_pEnd->y();
-       float len = sqrt( vx*vx + vy*vy );
-       float midX = (m_pStart->x() + m_pEnd->x())/2.0f;
-       float midY = (m_pStart->y() + m_pEnd->y())/2.0f;
+       double vx = m_pStart->x() - m_pEnd->x();
+       double vy = m_pStart->y() - m_pEnd->y();
+       double len = sqrt( vx*vx + vy*vy );
+       double midX = (m_pStart->x() + m_pEnd->x())/2.0f;
+       double midY = (m_pStart->y() + m_pEnd->y())/2.0f;
 
        vx /= len;
        vy /= len;
 
-       float d = shortestDistance( m_pStart, m_pEnd, (id==kctCustom+3) ? m_pLeft : m_pRight );
+       double d = shortestDistance( m_pStart, m_pEnd, (id==kctCustom+3) ? m_pLeft : m_pRight );
 
        m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
        m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
@@ -468,7 +467,7 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
  */
 void Kivio1DStencil::updateGeometry()
 {
-    float minX, minY, maxX, maxY;
+    double minX, minY, maxX, maxY;
 
     minX = 1000000000000.0f;
     minY = minX;
@@ -856,29 +855,29 @@ void Kivio1DStencil::copyBasicInto( Kivio1DStencil *pStencil )
 
 void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 {
-   float scale = pData->scale;
-   KivioPainter *painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
+  KivioPainter *painter = pData->painter;
 
-   int tf;
-   float _x, _y, _w, _h;
-   QRect boundRect;
+  int tf;
+  double _x, _y, _w, _h;
+  QRect boundRect;
 
-   _x = m_pTextConn->x() * scale;
-   _y = m_pTextConn->y() * scale;
-   _w = 10000000.0f;
-   _h = 10000000.0f;
+  _x = zoomHandler->zoomItX(m_pTextConn->x());
+  _y = zoomHandler->zoomItY(m_pTextConn->y());
+  _w = 10000000.0f;
+  _h = 10000000.0f;
 
-   QFont f = m_pTextStyle->font();
+  QFont f = m_pTextStyle->font();
 
-   f.setPointSize( f.pointSize() * scale);
-   painter->setFont(f);
-   painter->setTextColor(m_pTextStyle->color());
+  f.setPointSize(zoomHandler->layoutUnitToFontSize(f.pointSize(), pData->printing));
+  painter->setFont(f);
+  painter->setTextColor(m_pTextStyle->color());
 
 
-   tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
+  tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
 
-   boundRect = painter->boundingRect( (int)_x, (int)_y, (int)_w, (int)_h, tf, m_pTextStyle->text() );
+  boundRect = painter->boundingRect( (int)_x, (int)_y, (int)_w, (int)_h, tf, m_pTextStyle->text() );
 
-   painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
+  painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
 }
 

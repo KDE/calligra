@@ -103,11 +103,11 @@ class KivioStencil
 {
 protected:
     // Dimensions, size
-    float m_x, m_y, m_w, m_h;    
-    
+    double m_x, m_y, m_w, m_h;
+
     // The spawner that created this stencil
-    KivioStencilSpawner *m_pSpawner;    
-    
+    KivioStencilSpawner *m_pSpawner;
+
 
     // Indicates if this stencil is selected
     bool m_selected;
@@ -115,30 +115,30 @@ protected:
     // The protection bits of the stencil
     QBitArray *m_pProtection;
     QBitArray *m_pCanProtect;
-    
+
 public:
     KivioStencil();
     virtual ~KivioStencil();
 
     virtual KivioStencil *duplicate() { return NULL; }
-    
-    
-    virtual float x() { return m_x; }
-    virtual void setX( float f ) { m_x=f; updateGeometry(); }
-    
-    virtual float y() { return m_y; }
-    virtual void setY( float f ) { m_y=f; updateGeometry(); }
-    
-    virtual float w() { return m_w; }
-    virtual void setW( float f ) { if( f > 0 ) { m_w=f;  updateGeometry(); } }
-    
-    virtual float h() { return m_h; }
-    virtual void setH( float f ) { if( f > 0 ) { m_h=f;  updateGeometry(); } }
+
+
+    virtual double x() { return m_x; }
+    virtual void setX( double f ) { m_x=f; updateGeometry(); }
+
+    virtual double y() { return m_y; }
+    virtual void setY( double f ) { m_y=f; updateGeometry(); }
+
+    virtual double w() { return m_w; }
+    virtual void setW( double f ) { if( f > 0 ) { m_w=f;  updateGeometry(); } }
+
+    virtual double h() { return m_h; }
+    virtual void setH( double f ) { if( f > 0 ) { m_h=f;  updateGeometry(); } }
 
     virtual KivioRect rect();
 
-    virtual void setPosition( float f1, float f2 ) { m_x=f1; m_y=f2;  updateGeometry(); }
-    virtual void setDimensions( float f1, float f2 ) { m_w=f1; m_h=f2;  updateGeometry(); }
+    virtual void setPosition( double f1, double f2 ) { m_x=f1; m_y=f2;  updateGeometry(); }
+    virtual void setDimensions( double f1, double f2 ) { m_w=f1; m_h=f2;  updateGeometry(); }
 
     virtual QColor fgColor() { return QColor(0,0,0); }
     virtual void setFGColor( QColor ) { ; }
@@ -148,8 +148,8 @@ public:
 
     virtual KivioFillStyle *fillStyle() { return NULL; }
 
-    virtual void setLineWidth( float ) { ; }
-    virtual float lineWidth() { return 1.0f; }
+    virtual void setLineWidth( double ) { ; }
+    virtual double lineWidth() { return 1.0f; }
 
     // FOnt stuff
     virtual QColor textColor() { return QColor(0,0,0); }
@@ -176,7 +176,7 @@ public:
     virtual void paintConnectorTargets( KivioIntraStencilData * );
     virtual void paintSelectionHandles( KivioIntraStencilData * );
 
-    virtual KivioCollisionType checkForCollision( KivioPoint *, float );
+    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
     virtual void customDrag( KivioCustomDragData * );
 
 
@@ -186,7 +186,7 @@ public:
     virtual bool isSelected() { return m_selected; }
     virtual void select() { m_selected = true; }
     virtual void unselect() { m_selected = false; }
-    virtual void subSelect( const float &, const float & ) { ; }
+    virtual void subSelect( const double &, const double & ) { ; }
 
     virtual QBitArray *protection() { return m_pProtection; }
     virtual QBitArray *canProtect() { return m_pCanProtect; }
@@ -195,15 +195,15 @@ public:
     virtual QPtrList<KivioStencil>* groupList() { return NULL; }
 
     virtual void updateGeometry();
-    virtual void updateConnectorPoints(KivioConnectorPoint *, float oldX, float oldY);
+    virtual void updateConnectorPoints(KivioConnectorPoint *, double oldX, double oldY);
 
     // This attempts to connect based on position
-    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );
-    
+    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
+
     // This attempts to connect based on a targetID.  This should  ***ONLY*** be used
     // right after a load
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
-    
+
     virtual void searchForConnections( KivioPage * );
 
     virtual int generateIds( int );
@@ -213,18 +213,18 @@ public:
 
     /****** ARROW HEAD STUFF *******/
     virtual void setStartAHType( int ) { ; }
-    virtual void setStartAHWidth( float ) { ; }
-    virtual void setStartAHLength( float ) { ; }
+    virtual void setStartAHWidth( double ) { ; }
+    virtual void setStartAHLength( double ) { ; }
     virtual void setEndAHType( int ) { ; }
-    virtual void setEndAHWidth( float ) { ; }
-    virtual void setEndAHLength( float ) { ; }
+    virtual void setEndAHWidth( double ) { ; }
+    virtual void setEndAHLength( double ) { ; }
 
     virtual int startAHType() { return 0; }
-    virtual float startAHWidth() { return 0.0f; }
-    virtual float startAHLength() { return 0.0f; }
+    virtual double startAHWidth() { return 0.0f; }
+    virtual double startAHLength() { return 0.0f; }
     virtual int endAHType() { return 0; }
-    virtual float endAHWidth() { return 0.0f; }
-    virtual float endAHLength() { return 0.0f; }
+    virtual double endAHWidth() { return 0.0f; }
+    virtual double endAHLength() { return 0.0f; }
 
 };
 

@@ -27,6 +27,7 @@ KivioPage *page;
 #include <qcolor.h>
 #include <kdebug.h>
 #include <math.h>
+#include <kozoomhandler.h>
 
 #include "py_kivio.h"
 
@@ -256,8 +257,8 @@ void KivioPyStencil::updateGeometry()
     while( pTarget && pOriginal && i<size )
     {
         PyObject *target = PyList_GetItem( targets, i );
-        float x = getDoubleFromDict( target,"x");
-        float y = getDoubleFromDict( target,"y");
+        double x = getDoubleFromDict( target,"x");
+        double y = getDoubleFromDict( target,"y");
 
         pTarget  ->setPosition( x, y );
         pOriginal->setPosition( x, y );
@@ -401,109 +402,116 @@ void KivioPyStencil::paintOutline( KivioIntraStencilData *d )
 
 void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
 {
+  KoZoomHandler* zoomHandler = d->zoomHandler;
 
-   float scale = d->scale;
+  PyObject *shapes = PyDict_Values( PyDict_GetItemString( vars, "shapes" ) );
 
-   PyObject *shapes = PyDict_Values( PyDict_GetItemString( vars, "shapes" ) );
-   if ( !shapes )
-         return;
+  if ( !shapes ) {
+    return;
+  }
 
-   int size = PyList_Size( shapes );
+  int size = PyList_Size( shapes );
 
-   for ( int i=0; i<size; i++ ) {
-       PyObject *shape = PyList_GetItem( shapes, i );
-       if ( !PyDict_Check(shape) )
-         continue;
+  for ( int i=0; i<size; i++ ) {
+    PyObject *shape = PyList_GetItem( shapes, i );
+    if ( !PyDict_Check(shape) )
+      continue;
 
-       int fill = KivioFillStyle::kcsNone;
+    int fill = KivioFillStyle::kcsNone;
 
-       // if style dosn't defined for shape, applay default for stencil
-       setStyle( d, PyDict_GetItemString( vars, "style" ) , fill );
-       setStyle( d, shape, fill );
+    // if style dosn't defined for shape, applay default for stencil
+    setStyle( d, PyDict_GetItemString( vars, "style" ) , fill );
+    setStyle( d, shape, fill );
 
-       if ( isSelected() )
-         setStyle( d, PyDict_GetItemString( shape, "selected" ) , fill );
+    if ( isSelected() )
+      setStyle( d, PyDict_GetItemString( shape, "selected" ) , fill );
 
-       if ( outlined )
-          fill = KivioFillStyle::kcsNone;
+    if ( outlined )
+        fill = KivioFillStyle::kcsNone;
 
-       QString stype = getStringFromDict( shape, "type" );
-       stype = stype.lower();
+    QString stype = getStringFromDict( shape, "type" );
+    stype = stype.lower();
 
-       double x = getDoubleFromDict(shape,"x")*scale;
-       double y = getDoubleFromDict(shape,"y")*scale;
-       double w = getDoubleFromDict(shape,"w")*scale;
-       double h = getDoubleFromDict(shape,"h")*scale;
-       double x2 = getDoubleFromDict(shape,"x2")*scale;
-       double y2 = getDoubleFromDict(shape,"y2")*scale;
+    double x = zoomHandler->zoomItX(getDoubleFromDict(shape,"x"));
+    double y = zoomHandler->zoomItY(getDoubleFromDict(shape,"y"));
+    double w = zoomHandler->zoomItX(getDoubleFromDict(shape,"w"));
+    double h = zoomHandler->zoomItY(getDoubleFromDict(shape,"h"));
+    double x2 = zoomHandler->zoomItX(getDoubleFromDict(shape,"x2"));
+    double y2 = zoomHandler->zoomItY(getDoubleFromDict(shape,"y2"));
 
-       // get points list
-       QPtrList<KivioPoint> points;
-       points.setAutoDelete(true);
-       PyObject *pyPoints = PyDict_GetItemString( shape, "points" );
-       if ( pyPoints && PyList_Check(pyPoints) ) {
-          int size = PyList_Size(pyPoints);
-          for ( int i=0; i<size; i++ ) {
-             PyObject *pyPoint = PyList_GetItem(pyPoints,i);
-             double x = getDoubleFromDict(pyPoint,"x")*scale;
-             double y = getDoubleFromDict(pyPoint,"y")*scale;
-             points.append( new KivioPoint( x, y, KivioPoint::kptNormal ) );
-          }
-       }
-
-
-       if ( stype == "rectangle" ) {
-          if (fill)
-            d->painter->fillRect( x, y, w, h );
-          else
-            d->painter->drawRect( x, y, w, h );
-       }
-
-       if ( stype == "textbox" ) {
-          int tf = vTextAlign() | hTextAlign();
-
-          QFont f = textFont();
-          f.setPointSize( f.pointSize() * scale );
-
-          d->painter->setFont( f );
-          QString text = getStringFromDict(shape,"text");
-          if ( !text.isEmpty() )
-            d->painter->drawText( x, y, w, h, tf | Qt::WordBreak, text );
-       }
-
-       if ( stype == "arc" ) {
-          double a1 = getDoubleFromDict(shape,"a1");
-          double a2 = getDoubleFromDict(shape,"a2");
-          d->painter->drawArc(x,y,w,h,a1,a2);
-       }
-
-       if ( stype == "roundrect" ) {
-          double rx = getDoubleFromDict(shape,"rx")*scale;
-          double ry = getDoubleFromDict(shape,"ry")*scale;
-          if (fill)
-            d->painter->fillRoundRect( x, y, w, h, rx, ry );
-          else
-            d->painter->drawRoundRect( x, y, w, h, rx, ry );
-       }
-
-       if ( stype == "linearray" ) {
-          d->painter->drawLineArray(&points);
-       }
-
-       if ( stype == "ellipse" ) {
-          if (fill)
-            d->painter->fillEllipse( x, y, w, h );
-          else
-            d->painter->drawEllipse( x, y, w, h );
-       }
-   }
-
-    KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
-    while( pTarget )
-    {
-        pTarget ->paintOutline( d );
-        pTarget = m_pConnectorTargets->next();
+    // get points list
+    QPtrList<KivioPoint> points;
+    points.setAutoDelete(true);
+    PyObject *pyPoints = PyDict_GetItemString( shape, "points" );
+    if ( pyPoints && PyList_Check(pyPoints) ) {
+      int size = PyList_Size(pyPoints);
+      for ( int i=0; i<size; i++ ) {
+        PyObject *pyPoint = PyList_GetItem(pyPoints,i);
+        double x = zoomHandler->zoomItX(getDoubleFromDict(pyPoint,"x"));
+        double y = zoomHandler->zoomItY(getDoubleFromDict(pyPoint,"y"));
+        points.append( new KivioPoint( x, y, KivioPoint::kptNormal ) );
+      }
     }
+
+
+    if ( stype == "rectangle" ) {
+      if (fill)
+        d->painter->fillRect( x, y, w, h );
+      else
+        d->painter->drawRect( x, y, w, h );
+    }
+
+    if ( stype == "textbox" ) {
+      int tf = vTextAlign() | hTextAlign();
+
+      QFont f = textFont();
+      f.setPointSizeFloat( zoomHandler->layoutUnitToFontSize(f.pointSize(), d->printing) );
+
+      d->painter->setFont( f );
+      QString text = getStringFromDict(shape,"text");
+
+      if ( !text.isEmpty() ) {
+        d->painter->drawText( x, y, w, h, tf | Qt::WordBreak, text );
+      }
+    }
+
+    if ( stype == "arc" ) {
+      double a1 = getDoubleFromDict(shape,"a1");
+      double a2 = getDoubleFromDict(shape,"a2");
+      d->painter->drawArc(x,y,w,h,a1,a2);
+    }
+
+    if ( stype == "roundrect" ) {
+      double rx = zoomHandler->zoomItX(getDoubleFromDict(shape,"rx"));
+      double ry = zoomHandler->zoomItY(getDoubleFromDict(shape,"ry"));
+
+      if (fill) {
+        d->painter->fillRoundRect( x, y, w, h, rx, ry );
+      } else {
+        d->painter->drawRoundRect( x, y, w, h, rx, ry );
+      }
+    }
+
+    if ( stype == "linearray" ) {
+      d->painter->drawLineArray(&points);
+    }
+
+    if ( stype == "ellipse" ) {
+      if (fill) {
+        d->painter->fillEllipse( x, y, w, h );
+      } else {
+        d->painter->drawEllipse( x, y, w, h );
+      }
+    }
+  }
+
+  KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
+
+  while( pTarget )
+  {
+    pTarget->paintOutline( d );
+    pTarget = m_pConnectorTargets->next();
+  }
 }
 
 
@@ -564,10 +572,10 @@ QString KivioPyStencil::getStringFromDict( PyObject *dict, const char *key )
 }
 
 
-KivioCollisionType KivioPyStencil::checkForCollision( KivioPoint *pPoint, float )
+KivioCollisionType KivioPyStencil::checkForCollision( KivioPoint *pPoint, double )
 {
-    float px = pPoint->x();
-    float py = pPoint->y();
+    double px = pPoint->x();
+    double py = pPoint->y();
 
     if( !(px < m_x + m_w &&
          px >= m_x &&
@@ -609,32 +617,32 @@ int KivioPyStencil::resizeHandlePositions()
  */
 void KivioPyStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 {
-    QPixmap *targetPic;
-    KivioPainter *painter;
-    float x, y;
+  QPixmap *targetPic;
+  KivioPainter *painter;
+  double x, y;
 
-    // We don't draw these if we are selected!!!
-    if( isSelected() )
-      return;
+  // We don't draw these if we are selected!!!
+  if( isSelected() )
+    return;
 
-    // Obtain the graphic used for KivioConnectorTargets
-    targetPic = KivioConfig::config()->connectorTargetPixmap();
+  // Obtain the graphic used for KivioConnectorTargets
+  targetPic = KivioConfig::config()->connectorTargetPixmap();
 
 
-    float _scale = pData->scale;
-    painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
+  painter = pData->painter;
 
-    KivioConnectorTarget *pTarget;
-    pTarget = m_pConnectorTargets->first();
-    while( pTarget )
-    {
-        x = pTarget->x() * _scale;
-        y = pTarget->y() * _scale;
+  KivioConnectorTarget *pTarget;
+  pTarget = m_pConnectorTargets->first();
+  while( pTarget )
+  {
+    x = zoomHandler->zoomItX(pTarget->x());
+    y = zoomHandler->zoomItY(pTarget->y());
 
-        painter->drawPixmap( x-3, y-3, *targetPic );
+    painter->drawPixmap( x-3, y-3, *targetPic );
 
-        pTarget = m_pConnectorTargets->next();
-    }
+    pTarget = m_pConnectorTargets->next();
+  }
 }
 
 /**
@@ -644,12 +652,12 @@ void KivioPyStencil::paintConnectorTargets( KivioIntraStencilData *pData )
  * stencil with-in a given threshhold.  If it finds it, it will connect
  * the point to it, and return the target of the connection.
  */
-KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, float threshHold )
+KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, double threshHold )
 {
-    float px = p->x();
-    float py = p->y();
+    double px = p->x();
+    double py = p->y();
 
-    float tx, ty;
+    double tx, ty;
 
     KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
     while( pTarget )
@@ -726,67 +734,86 @@ int KivioPyStencil::generateIds( int nextAvailable )
 
 void KivioPyStencil::setStyle( KivioIntraStencilData *d, PyObject *s, int &fillStyle )
 {
-    if ( !s )
-        return;
+  if ( !s )
+    return;
 
-    if ( !PyDict_Check(s) )
-        return;
+  if ( !PyDict_Check(s) )
+    return;
 
-    KivioPainter *p = d->painter;
-    double scale = d->scale;
+  KivioPainter *p = d->painter;
+  KoZoomHandler* zoomHandler = d->zoomHandler;
 
+  PyObject *color = PyDict_GetItemString(s,"color");
 
-    PyObject *color = PyDict_GetItemString(s,"color");
-    if ( color ) {
-        QColor c = readColor(color);
-        if ( c.isValid() )
-            p->setFGColor(c);
+  if ( color ) {
+    QColor c = readColor(color);
+
+    if ( c.isValid() ) {
+      p->setFGColor(c);
+    }
+  }
+
+  color = PyDict_GetItemString(s,"bgcolor");
+
+  if ( color ) {
+    QColor c = readColor(color);
+
+    if ( c.isValid() ) {
+      p->setBGColor(c);
+    }
+  }
+
+  color = PyDict_GetItemString(s,"textcolor");
+
+  if ( color ) {
+    QColor c = readColor(color);
+
+    if ( c.isValid() ) {
+      p->setTextColor(c);
+    }
+  }
+
+  PyObject *lineWidth = PyDict_GetItemString(s,"linewidth");
+
+  if ( lineWidth ) {
+    double lw = getDoubleFromDict(s,"linewidth");
+    p->setLineWidth( zoomHandler->zoomItY(lw) );
+  }
+
+  PyObject *o_fillStyle = PyDict_GetItemString(s,"fillstyle");
+
+  if ( o_fillStyle ) {
+    QString sfill = getStringFromDict(s,"fillstyle");
+
+    if ( sfill == "solid" ) {
+      fillStyle = KivioFillStyle::kcsSolid;
     }
 
-    color = PyDict_GetItemString(s,"bgcolor");
-    if ( color ) {
-        QColor c = readColor(color);
-        if ( c.isValid() )
-            p->setBGColor(c);
+    if ( sfill == "none" ) {
+      fillStyle = KivioFillStyle::kcsNone;
+    }
+  }
+
+  QString  sfont = getStringFromDict(s,"font");
+  double fontSize = zoomHandler->layoutUnitToFontSize((int)getDoubleFromDict(s,"fontsize"), d->printing);
+
+  if ( !sfont.isEmpty() ) {
+    if (!fontSize) {
+      fontSize = zoomHandler->layoutUnitToFontSize(12, d->printing);
     }
 
-    color = PyDict_GetItemString(s,"textcolor");
-    if ( color ) {
-        QColor c = readColor(color);
-        if ( c.isValid() )
-            p->setTextColor(c);
+    QFont f;
+    f.setPointSizeFloat(fontSize);
+    f.setFamily(sfont);
+    p->setFont(f);
+  } else {
+    if (fontSize) {
+      QFont f;
+      f.setPointSizeFloat(fontSize);
+      f.setFamily("times");
+      p->setFont(f);
     }
-
-    PyObject *lineWidth = PyDict_GetItemString(s,"linewidth");
-    if ( lineWidth ) {
-        float lw = getDoubleFromDict(s,"linewidth");
-        p->setLineWidth( lw*scale );
-    }
-
-
-    PyObject *o_fillStyle = PyDict_GetItemString(s,"fillstyle");
-    if ( o_fillStyle ) {
-        QString sfill = getStringFromDict(s,"fillstyle");
-        if ( sfill == "solid" )
-            fillStyle = KivioFillStyle::kcsSolid;
-
-        if ( sfill == "none" )
-            fillStyle = KivioFillStyle::kcsNone;
-    }
-
-    QString  sfont = getStringFromDict(s,"font");
-    int      fontSize = int(getDoubleFromDict(s,"fontsize")*scale);
-
-    if ( !sfont.isEmpty() ) {
-        if ( !fontSize )
-            fontSize = int( 12*scale );
-        p->setFont( QFont( sfont, fontSize ) );
-    }
-    else {
-        if ( fontSize )
-            p->setFont( QFont( "times", fontSize ) );
-    }
-
+  }
 }
 
 QColor KivioPyStencil::readColor( PyObject *color )
@@ -872,7 +899,7 @@ void KivioPyStencil::setTextColor( QColor c )
 }
 
 
-float KivioPyStencil::lineWidth()
+double KivioPyStencil::lineWidth()
 {
     PyObject *lw = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "linewidth" );
     if ( lw )
@@ -881,7 +908,7 @@ float KivioPyStencil::lineWidth()
     return 1.0;
 }
 
-void KivioPyStencil::setLineWidth( float w )
+void KivioPyStencil::setLineWidth( double w )
 {
     PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "linewidth"  , Py_BuildValue("f",w ) ) ;
 }
@@ -906,7 +933,7 @@ QString KivioPyStencil::text()
 
 void KivioPyStencil::setTextFont( const QFont &f )
 {
-    float fs = f.pointSizeFloat();
+    double fs = f.pointSizeFloat();
     QString family = f.family();
 
     int bold     = f.bold();

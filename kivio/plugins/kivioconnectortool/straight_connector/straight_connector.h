@@ -48,10 +48,10 @@ public:
     KivioStraightConnector();
     virtual ~KivioStraightConnector();
 
-    virtual void setStartPoint( float, float );
-    virtual void setEndPoint( float, float );
+    virtual void setStartPoint( double, double );
+    virtual void setEndPoint( double, double );
 
-    virtual KivioCollisionType checkForCollision( KivioPoint *, float );
+    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
 
     virtual KivioStencil* duplicate();
 
@@ -63,18 +63,18 @@ public:
 
 
     virtual void setStartAHType( int i )        { m_startAH->setType(i); }
-    virtual void setStartAHWidth( float f )     { m_startAH->setWidth(f); }
-    virtual void setStartAHLength( float f )    { m_startAH->setLength(f); }
+    virtual void setStartAHWidth( double f )     { m_startAH->setWidth(f); }
+    virtual void setStartAHLength( double f )    { m_startAH->setLength(f); }
     virtual void setEndAHType( int i )          { m_endAH->setType(i); }
-    virtual void setEndAHWidth( float f )       { m_endAH->setWidth(f); }
-    virtual void setEndAHLength( float f )      { m_endAH->setLength(f); }
+    virtual void setEndAHWidth( double f )       { m_endAH->setWidth(f); }
+    virtual void setEndAHLength( double f )      { m_endAH->setLength(f); }
 
     virtual int startAHType()                   { return m_startAH->type(); }
-    virtual float startAHWidth()                { return m_startAH->width(); }
-    virtual float startAHLength()               { return m_startAH->length(); }
+    virtual double startAHWidth()                { return m_startAH->width(); }
+    virtual double startAHLength()               { return m_startAH->length(); }
     virtual int endAHType()                     { return m_endAH->type(); }
-    virtual float endAHWidth()                  { return m_endAH->width(); }
-    virtual float endAHLength()                 { return m_endAH->length(); }
+    virtual double endAHWidth()                  { return m_endAH->width(); }
+    virtual double endAHLength()                 { return m_endAH->length(); }
 
 };
 

@@ -25,6 +25,8 @@
 #include "kivio_rect.h"
 #include "kivio_stencil.h"
 
+#include <kozoomhandler.h>
+
 KivioStencil::KivioStencil()
     : m_pSpawner(NULL),
       m_pProtection(NULL),
@@ -97,69 +99,69 @@ void KivioStencil::paintConnectorTargets( KivioIntraStencilData * )
 
 void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 {
-    float newX, newY, newW, newH;
+  double newX, newY, newW, newH;
 
-    // Handle Width
-    //const float HW = 6.0f;
-    //const float HWP1 = HW+1.0f;
+  // Handle Width
+  //const double HW = 6.0f;
+  //const double HWP1 = HW+1.0f;
 
-    // Handle Width Over 2
-    //const float HWo2 = HW/2.0f;
+  // Handle Width Over 2
+  //const double HWo2 = HW/2.0f;
 
-    float scale = pData->scale;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
 
-    KivioPainter *painter = pData->painter;
+  KivioPainter *painter = pData->painter;
 
-    newX = m_x * scale;
-    newY = m_y * scale;
-    newW = m_w * scale;
-    newH = m_h * scale;
+  newX = zoomHandler->zoomItX(m_x);
+  newY = zoomHandler->zoomItY(m_y);
+  newW = zoomHandler->zoomItX(m_w);
+  newH = zoomHandler->zoomItY(m_h);
 
-    // top left, top right, bottom left, bottom right
-    if( m_pProtection->at( kpWidth ) ||
-	m_pProtection->at( kpHeight ) )
-    {
-       painter->drawHandle( newX,                newY,               KivioPainter::cpfLock );
-       painter->drawHandle( newX + newW,         newY,               KivioPainter::cpfLock );
-       painter->drawHandle( newX,                newY + newH,        KivioPainter::cpfLock );
-       painter->drawHandle( newX + newW,         newY + newH,        KivioPainter::cpfLock );
-    }
-    else
-    {
-       painter->drawHandle( newX,                newY,               0 );
-       painter->drawHandle( newX + newW,         newY,               0 );
-       painter->drawHandle( newX,                newY + newH,        0 );
-       painter->drawHandle( newX + newW,         newY + newH,        0 );
-    }
+  // top left, top right, bottom left, bottom right
+  if( m_pProtection->at( kpWidth ) ||
+    m_pProtection->at( kpHeight ) )
+  {
+    painter->drawHandle( newX,                newY,               KivioPainter::cpfLock );
+    painter->drawHandle( newX + newW,         newY,               KivioPainter::cpfLock );
+    painter->drawHandle( newX,                newY + newH,        KivioPainter::cpfLock );
+    painter->drawHandle( newX + newW,         newY + newH,        KivioPainter::cpfLock );
+  }
+  else
+  {
+    painter->drawHandle( newX,                newY,               0 );
+    painter->drawHandle( newX + newW,         newY,               0 );
+    painter->drawHandle( newX,                newY + newH,        0 );
+    painter->drawHandle( newX + newW,         newY + newH,        0 );
+  }
 
-    // Top/bottom
-    if( m_pProtection->at( kpHeight ) ||
-	m_pProtection->at( kpAspect ) )
-    {
-       painter->drawHandle( newX + newW/2.0f,    newY,               KivioPainter::cpfLock );
-       painter->drawHandle( newX + newW/2.0f,    newY + newH,        KivioPainter::cpfLock );
-    }
-    else
-    {
-       painter->drawHandle( newX + newW/2.0f,    newY,               0 );
-       painter->drawHandle( newX + newW/2.0f,    newY + newH,        0 );
-    }
+  // Top/bottom
+  if( m_pProtection->at( kpHeight ) ||
+    m_pProtection->at( kpAspect ) )
+  {
+    painter->drawHandle( newX + newW/2.0f,    newY,               KivioPainter::cpfLock );
+    painter->drawHandle( newX + newW/2.0f,    newY + newH,        KivioPainter::cpfLock );
+  }
+  else
+  {
+    painter->drawHandle( newX + newW/2.0f,    newY,               0 );
+    painter->drawHandle( newX + newW/2.0f,    newY + newH,        0 );
+  }
 
-       // left, right
-    if( m_pProtection->at( kpWidth ) ||
-	m_pProtection->at( kpAspect ) )
-    {
-       painter->drawHandle( newX,                newY + newH/2.0f,   KivioPainter::cpfLock );
-       painter->drawHandle( newX + newW,         newY + newH/2.0f,   KivioPainter::cpfLock );
-    }
-    else
-    {
-       painter->drawHandle( newX,                newY + newH/2.0f,   0 );
-       painter->drawHandle( newX + newW,         newY + newH/2.0f,   0 );
-    }
+    // left, right
+  if( m_pProtection->at( kpWidth ) ||
+    m_pProtection->at( kpAspect ) )
+  {
+    painter->drawHandle( newX,                newY + newH/2.0f,   KivioPainter::cpfLock );
+    painter->drawHandle( newX + newW,         newY + newH/2.0f,   KivioPainter::cpfLock );
+  }
+  else
+  {
+    painter->drawHandle( newX,                newY + newH/2.0f,   0 );
+    painter->drawHandle( newX + newW,         newY + newH/2.0f,   0 );
+  }
 }
 
-KivioCollisionType KivioStencil::checkForCollision( KivioPoint *, float )
+KivioCollisionType KivioStencil::checkForCollision( KivioPoint *, double )
 {
     return kctNone;
 }
@@ -177,7 +179,7 @@ void KivioStencil::updateGeometry()
 {
 }
 
-KivioConnectorTarget *KivioStencil::connectToTarget( KivioConnectorPoint *, float )
+KivioConnectorTarget *KivioStencil::connectToTarget( KivioConnectorPoint *, double )
 {
     return NULL;
 }
@@ -196,7 +198,7 @@ void KivioStencil::searchForConnections( KivioPage * )
 {
 }
 
-void KivioStencil::updateConnectorPoints(KivioConnectorPoint *, float, float)
+void KivioStencil::updateConnectorPoints(KivioConnectorPoint *, double, double)
 {
    // Default to just calling updateGeometry
    updateGeometry();

@@ -28,7 +28,7 @@ class KivioPage;
 class KivioPainter;
 class KivioPoint;
 class DCOPObject;
-
+class KoZoomHandler;
 class QDomElement;
 
 #include "kivio_stencil.h"
@@ -81,9 +81,12 @@ public:
     KivioStencil *checkForStencil( KivioPoint *, int *, float, bool );
 
     void printContent( KivioPainter& painter );
-    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom );
-    void paintConnectorTargets( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom );
-    void paintSelectionHandles( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0,
+      KoZoomHandler* zoom );
+    void paintConnectorTargets( KivioPainter& painter, const QRect& rect, bool transparent,
+      QPoint p0, KoZoomHandler* zoom );
+    void paintSelectionHandles( KivioPainter& painter, const QRect& rect, bool transparent,
+      QPoint p0, KoZoomHandler* zoom );
 
     KivioStencil *firstStencil() { return m_pStencilList->first(); }
     KivioStencil *nextStencil() { return m_pStencilList->next(); }

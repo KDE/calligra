@@ -50,6 +50,7 @@ class DCOPObject;
 
 class KivioPainter;
 class KPrinter;
+class KoZoomHandler;
 
 #define BORDER_SPACE 1
 
@@ -107,7 +108,7 @@ class KivioPage : public QObject
     KoPageLayout paperLayout()const { return m_pPageLayout; }
     void setPaperLayout(const KoPageLayout&);
 
-    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
     void printContent( KivioPainter& painter );
     void printSelected( KivioPainter& painter );
 
@@ -172,7 +173,7 @@ class KivioPage : public QObject
 
     void sig_PageHidden(KivioPage *_page);
     void sig_PageShown(KivioPage *_page);
-    
+
     void sig_pageLayoutChanged(const KoPageLayout&);
 
   protected:

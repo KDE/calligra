@@ -18,6 +18,8 @@
  */
 #include "kivio_intra_stencil_data.h"
 
+#include <kozoomhandler.h>
+
 #include "kivio_painter.h"
 
 KivioIntraStencilData::KivioIntraStencilData()
@@ -25,9 +27,10 @@ KivioIntraStencilData::KivioIntraStencilData()
     mx = my = 0.0f;
     oldMX = oldMY = 0.0f;
     unsnapMX = unsnapMY = 0.0f;
-    scale = 1.0f;
+//     scale = 1.0f;
+    zoomHandler = 0;
 
-    painter = NULL;
+    painter = 0;
 
     printing = false;
 }

@@ -70,19 +70,19 @@ public:
 
 
     // line width functions
-    virtual void setLineWidth( float f );
-    virtual float lineWidth();
+    virtual void setLineWidth( double f );
+    virtual double lineWidth();
 
 
     // position functions
-    virtual void setX( float );
-    virtual void setY( float );
-    virtual void setPosition( float, float );
+    virtual void setX( double );
+    virtual void setY( double );
+    virtual void setPosition( double, double );
 
 
     // required for connector tool
-    virtual void setStartPoint( float, float );
-    virtual void setEndPoint( float, float );
+    virtual void setStartPoint( double, double );
+    virtual void setEndPoint( double, double );
 
 
     // painting functions
@@ -93,7 +93,7 @@ public:
 
 
     // collision detection
-    virtual KivioCollisionType checkForCollision( KivioPoint *, float );
+    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
 
 
     // custom dragging

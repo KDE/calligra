@@ -13,6 +13,8 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_text_style.h"
 
+#include <kozoomhandler.h>
+
 KivioBaseTargetStencil::KivioBaseTargetStencil()
     : KivioStencil()
 {
@@ -50,12 +52,12 @@ void KivioBaseTargetStencil::setFGColor( QColor c )
     m_pLineStyle->setColor(c);
 }
 
-void KivioBaseTargetStencil::setLineWidth( float l )
+void KivioBaseTargetStencil::setLineWidth( double l )
 {
     m_pLineStyle->setWidth(l);
 }
 
-float KivioBaseTargetStencil::lineWidth()
+double KivioBaseTargetStencil::lineWidth()
 {
     return m_pLineStyle->width();
 }
@@ -160,33 +162,32 @@ void KivioBaseTargetStencil::paintOutline( KivioIntraStencilData * )
 
 void KivioBaseTargetStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 {
-    QPixmap *targetPic;
-    KivioPainter *painter;
-    float scale;
-    float x, y;
+  QPixmap *targetPic;
+  KivioPainter *painter;
+  double x, y;
 
-    // We don't draw these if we are selected!!!
-    if( isSelected() == true )
-      return;
+  // We don't draw these if we are selected!!!
+  if( isSelected() == true )
+    return;
 
-    // Obtain the graphic used for KivioConnectorTargets
-    targetPic = KivioConfig::config()->connectorTargetPixmap();
+  // Obtain the graphic used for KivioConnectorTargets
+  targetPic = KivioConfig::config()->connectorTargetPixmap();
 
 
-    scale = pData->scale;
-    painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
+  painter = pData->painter;
 
-    KivioConnectorTarget *pTarget;
-    pTarget = m_pTargets->first();
-    while( pTarget )
-    {
-        x = pTarget->x() * scale;
-        y = pTarget->y() * scale;
+  KivioConnectorTarget *pTarget;
+  pTarget = m_pTargets->first();
+  while( pTarget )
+  {
+    x = zoomHandler->zoomItX(pTarget->x());
+    y = zoomHandler->zoomItY(pTarget->y());
 
-        painter->drawPixmap( x-3, y-3, *targetPic );
+    painter->drawPixmap( x-3, y-3, *targetPic );
 
-        pTarget = m_pTargets->next();
-    }
+    pTarget = m_pTargets->next();
+  }
 }
 
 
@@ -391,12 +392,12 @@ void KivioBaseTargetStencil::updateGeometry()
 // Target Routines
 //
 //////////////////////////////////////////////////////////////////////////////
-KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoint *p, float threshHold)
+KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoint *p, double threshHold)
 {
-    float px = p->x();
-    float py = p->y();
+    double px = p->x();
+    double py = p->y();
 
-    float tx, ty;
+    double tx, ty;
 
     KivioConnectorTarget *pTarget = m_pTargets->first();
     while( pTarget )

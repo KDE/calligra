@@ -65,7 +65,7 @@ protected:
       stmNone,
       stmDrawRubber
   };
-    
+
 private:
   // Flag to indicate that we are drawing a rubber band
   int m_mode;

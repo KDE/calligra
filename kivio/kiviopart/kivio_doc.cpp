@@ -74,6 +74,7 @@
 #include <koStoreDevice.h>
 #include <KIvioDocIface.h>
 #include <kcommand.h>
+#include <kozoomhandler.h>
 
 //using namespace std;
 
@@ -314,7 +315,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   QString us = kivio.attribute("units","mm");
   bool isInt = false;
   int u = us.toInt(&isInt);
-  
+
   if(!isInt) {
     setUnits(KoUnit::unit(us));
   } else {
@@ -449,7 +450,7 @@ void KivioDoc::paintContent( QPainter&, const QRect&, bool /*transparent*/, doub
 //  paintContent(painter,rect,transparent,page);
 }
 
-void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, float zoom, bool drawHandles )
+void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
 {
   if ( isLoading() )
     return;
