@@ -663,11 +663,7 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 void KSpreadDlgFormula::slotShowFunction( const QString& function )
 {
     KSpreadFunctionDescription* desc = m_repo.function( function );
-    if ( !desc )
-    {
-	m_browser->setText( "" );
-	return;
-    }
+    if ( !desc ) return;
 
     // select the category
     QString category = desc->group();
@@ -713,6 +709,8 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
 	lst = m_repo.functionNames();
     else
 	lst = m_repo.functionNames( category );
+
+    kdDebug(36001)<<"category: "<<category<<" ("<<lst.count()<<"functions)" << endl;
 
     functions->clear();
     functions->insertStringList( lst );
