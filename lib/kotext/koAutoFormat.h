@@ -81,7 +81,7 @@ public:
     /**
      * Called by edit widget when a call a competion
      */
-    void doAutoCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
+    void doCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
 
 
     bool doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch );
@@ -125,7 +125,7 @@ public:
 
     void configAutoNumberStyle( bool b );
 
-    void configAutoCompletion( bool b );
+    void configCompletion( bool b );
 
     void configAppendSpace( bool b);
 
@@ -175,8 +175,8 @@ public:
     bool getConfigAutoNumberStyle() const
     { return m_useAutoNumberStyle; }
 
-    bool getConfigAutoCompletion() const
-    { return m_autoCompletion; }
+    bool getConfigCompletion() const
+    { return m_completion; }
 
     bool getConfigAppendSpace() const
     { return m_completionAppendSpace; }
@@ -277,7 +277,7 @@ private:
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
     bool m_useBulletStyle, m_autoChangeFormat, m_autoReplaceNumber;
     bool m_useAutoNumberStyle;
-    bool m_autoCompletion;
+    bool m_completion;
     bool m_completionAppendSpace;
     bool m_addCompletionWord;
     bool m_includeTwoUpperLetterException;

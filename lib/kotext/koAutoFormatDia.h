@@ -96,7 +96,6 @@ protected:
     void setupTab2();
     void setupTab3();
     void setupTab4();
-    void setupTab5();
 
     void refreshEntryList();
 
@@ -104,22 +103,18 @@ protected:
     void initTab2();
     void initTab3();
     void initTab4();
-    void initTab5();
 
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;
     QWidget *tab4;
-    QWidget *tab5;
 
     QCheckBox *cbTypographicSimpleQuotes, *cbTypographicDoubleQuotes,*cbUpperCase, *cbUpperUpper, *cbDetectUrl,
-        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle, *cbAllowAutoCompletion, *cbAppendSpace, *cbAddCompletionWord;
+        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle;
     QPushButton *pbDoubleQuote1, *pbDoubleQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDoubleDefault,
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
-    QPushButton *pbRemoveCompletionEntry;
-    QPushButton *pbSaveCompletionEntry;
 
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
@@ -131,13 +126,9 @@ protected:
     QChar bulletStyle;
     KoAutoFormat m_autoFormat; // The copy we're working on
     KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
-    QStringList m_listCompletion; // The copy of the completion items - don't use m_autoFormat.getCompletion()!
 
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
-    QListBox *m_lbListCompletion;
-    KIntNumInput *m_minWordLength;
-    KIntNumInput *m_maxNbWordCompletion;
 
 protected slots:
     virtual void slotOk();
@@ -163,10 +154,36 @@ protected slots:
     void chooseBulletStyle();
     void defaultBulletStyle();
 
+    void slotResetConf();
+
+};
+
+class KoCompletionDia : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    KoCompletionDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat );
+protected slots:
+    virtual void slotOk();
     void slotRemoveCompletionEntry();
     void slotCompletionWordSelected( const QString & );
     void slotSaveCompletionEntry();
     void slotResetConf();
+    bool applyConfig();
+
+protected:
+    void setup();
+
+    KoAutoFormat m_autoFormat; // The copy we're working on
+    KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
+    QStringList m_listCompletion; // The copy of the completion items - don't use m_autoFormat.getCompletion()!
+    QCheckBox *cbAllowCompletion, *cbAppendSpace, *cbAddCompletionWord;
+    QPushButton *pbRemoveCompletionEntry;
+    QPushButton *pbSaveCompletionEntry;
+    QListBox *m_lbListCompletion;
+    KIntNumInput *m_minWordLength;
+    KIntNumInput *m_maxNbWordCompletion;
 
 };
 #endif

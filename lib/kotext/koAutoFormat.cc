@@ -57,7 +57,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_autoChangeFormat(false),
       m_autoReplaceNumber(false),
       m_useAutoNumberStyle(false),
-      m_autoCompletion(false),
+      m_completion(false),
       m_completionAppendSpace(false),
       m_addCompletionWord(true),
       m_includeTwoUpperLetterException(false),
@@ -95,7 +95,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_autoChangeFormat( format.m_autoChangeFormat ),
       m_autoReplaceNumber( format.m_autoReplaceNumber ),
       m_useAutoNumberStyle( format.m_useAutoNumberStyle ),
-      m_autoCompletion( format.m_autoCompletion ),
+      m_completion( format.m_completion ),
       m_completionAppendSpace( format.m_completionAppendSpace ),
       m_addCompletionWord( format.m_addCompletionWord ),
       m_includeTwoUpperLetterException( format.m_includeTwoUpperLetterException ),
@@ -179,8 +179,8 @@ void KoAutoFormat::readConfig()
                                   && !end.isEmpty();
 
 
-    config.setGroup( "AutoCompletion" );
-    m_autoCompletion = config.readBoolEntry( "AutoCompletion", false );
+    config.setGroup( "completion" );
+    m_completion = config.readBoolEntry( "completion", false );
 
     m_completionAppendSpace = config.readBoolEntry( "CompletionAppendSpace", false );
     m_minCompletionWordLength = config.readUnsignedNumEntry( "CompletionMinWordLength", 5 );
@@ -279,8 +279,8 @@ void KoAutoFormat::saveConfig()
 
     config.writeEntry( "AutoNumberStyle", m_useAutoNumberStyle );
 
-    config.setGroup( "AutoCompletion" );
-    config.writeEntry( "AutoCompletion", m_autoCompletion );
+    config.setGroup( "completion" );
+    config.writeEntry( "completion", m_completion );
     config.writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
     config.writeEntry( "CompletionMinWordLength", m_minCompletionWordLength);
     config.writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
@@ -372,9 +372,9 @@ QString KoAutoFormat::getWordAfterSpace(KoTextParag *parag, int index)
 
 }
 
-void KoAutoFormat::doAutoCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
+void KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
 {
-    if( m_autoCompletion )
+    if( m_completion )
     {
         QString lastWord = getLastWord(parag, index+1);
         QString word=m_listCompletion->makeCompletion( lastWord.lower() );
@@ -413,7 +413,7 @@ void KoAutoFormat::autoFormatIsActive()
                           m_convertUpperCase ||
                           m_autoReplaceNumber ||
                           m_autoChangeFormat ||
-                          m_autoCompletion ||
+                          m_completion ||
                           m_typographicDoubleQuotes.replace ||
                           m_typographicSimpleQuotes.replace ||
        m_entries.count()!=0;
@@ -1160,9 +1160,9 @@ void KoAutoFormat::configAutoNumberStyle( bool b )
     m_useAutoNumberStyle = b;
 }
 
-void KoAutoFormat::configAutoCompletion( bool b )
+void KoAutoFormat::configCompletion( bool b )
 {
-    m_autoCompletion = b;
+    m_completion = b;
 }
 
 void KoAutoFormat::configAppendSpace( bool b)

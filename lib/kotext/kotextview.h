@@ -156,7 +156,7 @@ public slots:
 
     void openLink();
 
-    void autoCompletion();
+    void completion();
 
 protected slots:
     /** Start a drag */
@@ -175,7 +175,7 @@ protected:
     virtual void doAutoFormat( KoTextCursor* /*cursor*/, KoTextParag * /*parag*/,
                                int /*index*/, QChar /*ch*/ ) { }
 
-    virtual void doAutoCompletion( KoTextCursor* /*textEditCursor*/, KoTextParag */*parag*/, int /*index*/ ) { }
+    virtual void doCompletion( KoTextCursor* /*textEditCursor*/, KoTextParag */*parag*/, int /*index*/ ) { }
 
     //return true if we are a doubleSpace
     virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,
