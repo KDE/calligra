@@ -34,6 +34,7 @@
 
 #include "blowfish.h"
 #include "cbc.h"
+#include "sha1.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -118,6 +119,7 @@ int rc;
 
     BlowFish cipher;
     CipherBlockChain cbc(&cipher);
+    SHA1 sha1;
 
     char thekey[512];
 
@@ -143,7 +145,7 @@ int rc;
     inf.open(IO_ReadOnly);
 
     // This is bad.  We don't have a buffer big enough for this anyways.
-    if (blocksize > 2048) {
+    if (blocksize > 2048 || !sha1.readyToGo()) {  // lets piggy back this error
        QApplication::setOverrideCursor(Qt::arrowCursor);
        KMessageBox::error(NULL,
                   i18n("There was an internal error preparing the cipher."),
@@ -211,6 +213,10 @@ int rc;
        rc = inf.readBlock(tp, blocksize - shortness);
        READ_ERROR_CHECK();
 
+       if (sha1.process(tp, rc) != rc) {
+            // FIXME: HASH ERROR
+       }
+
        // if we ran out of data already (!?!?) append random data.
        cursize += rc;
        shortness = blocksize - (cursize % blocksize);
@@ -238,6 +244,10 @@ int rc;
        rc = inf.readBlock(p, 4096);
        READ_ERROR_CHECK();
 
+       if (sha1.process(p, rc) != rc) {
+            // FIXME: HASH ERROR
+       }
+
        cursize = rc;
 
        if (rc != 4096) {
@@ -248,6 +258,16 @@ int rc;
              shortness--;
           }
        }
+    }
+
+    const unsigned char *res = sha1.getHash();
+ 
+    if (res) {
+       for (int i = 0; i < 20; i++) {
+          printf("%.2X", *res++);
+          if (i>0 && (i-1)%2 == 0) printf(" ");
+       }
+       printf("\n");
     }
 
     return true;

@@ -69,6 +69,11 @@ int SHA1::reset() {
 }
 
 
+int SHA1::size() {
+return _hashlen;
+}
+
+
 SHA1::~SHA1() {
 
 }

@@ -29,6 +29,11 @@ class SHA1 {
      virtual ~SHA1();
 
      /*
+      *  The number of bits in the hash generated.
+      */
+     virtual int size();
+
+     /*
       *  True if all settings are good and we are ready to hash.
       */
      virtual bool readyToGo();

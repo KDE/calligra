@@ -19,8 +19,9 @@
 
 #include <config.h>
 
-#include <cbc.h>
-#include <blowfish.h>
+#include "cbc.h"
+#include "blowfish.h"
+#include "sha1.h"
 
 #include <kocryptdefs.h>
 
@@ -118,6 +119,7 @@ QFile outf(fileOut);
 
     BlowFish cipher;
     CipherBlockChain cbc(&cipher);
+    SHA1 sha1;
     char thekey[512];
 
     // FIXME: make a better hash here.
@@ -137,7 +139,7 @@ QFile outf(fileOut);
     if (cbc.blockSize() > 0) blocksize = cbc.blockSize();
 
     // This is bad.  We don't have a buffer big enough for this anyways.
-    if (blocksize > 2048) {
+    if (blocksize > 2048 || !sha1.readyToGo()) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
        KMessageBox::error(NULL, 
                   i18n("There was an internal error in the cipher code."),
@@ -243,11 +245,13 @@ QFile outf(fileOut);
     // Empty out this remaining block that we read in
     if (remaining > 0) {
       if (remaining > fsize) {
+        sha1.process(&(p[blocksize-remaining]), fsize);
         rc = outf.writeBlock(&(p[blocksize-remaining]), fsize);
         WRITE_ERROR_CHECK((int)fsize);
         remaining -= fsize;
         fsize = 0;
       } else {
+        sha1.process(&(p[blocksize-remaining]), remaining);
         rc = outf.writeBlock(&(p[blocksize-remaining]), remaining);
         WRITE_ERROR_CHECK((int)remaining);
         fsize -= remaining;
@@ -264,11 +268,12 @@ QFile outf(fileOut);
 
       if (fsize >= (unsigned int)blocksize) {
          fsize -= blocksize;
+         sha1.process(p, blocksize);
          rc = outf.writeBlock(p, blocksize);
          WRITE_ERROR_CHECK(blocksize);
          continue;
       } else {
-         // Hash will eventually be verified here
+         sha1.process(p, fsize);
          rc = outf.writeBlock(p, fsize);
          WRITE_ERROR_CHECK((int)fsize);
          fsize = 0;
@@ -276,6 +281,15 @@ QFile outf(fileOut);
     }
 
     // FIXME: check the filesize and the hash to make sure it was successful
+    const unsigned char *res = sha1.getHash();
+ 
+    if (res) {
+       for (int i = 0; i < 20; i++) {
+          printf("%.2X", *res++);
+          if (i>0 && (i-1)%2 == 0) printf(" ");
+       }
+       printf("\n");
+    }
 
     return true;
 }
