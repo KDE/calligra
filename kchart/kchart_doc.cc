@@ -240,7 +240,7 @@ void KChartDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix )
   {
     line_t l;
     for ( int x = 0; x < matrix.columns; x++ )
-      l.push_back( matrix.matrix[ y * matrix.columns + x ] );
+      l.push_back( matrix.matrix[ (int)(y * matrix.columns + x) ] );
     m_table.data.push_back( l );
   }
 
