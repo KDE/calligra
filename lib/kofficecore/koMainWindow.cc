@@ -326,9 +326,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     {
         // Default size
 #if KDE_IS_VERSION(3,1,90)
-	const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
+        const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
 #else
-	const int deskWidth = QApplication::desktop()->width();
+        const int deskWidth = QApplication::desktop()->width();
 #endif
         if (deskWidth > 1100) // very big desktop ?
             resize( 1000, 800 );
@@ -1170,7 +1170,7 @@ void KoMainWindow::print(bool quick) {
 
 void KoMainWindow::slotFilePrint()
 {
-	print(false);
+    print(false);
 }
 
 void KoMainWindow::slotFilePrintPreview()
@@ -1236,21 +1236,21 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
   if (rootDocument())
-    applyMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+      applyMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
   KXMLGUIFactory *factory = guiFactory();
 
   // Check if there's an active view
   if( !d->m_activeView )
-  	return;
+      return;
 
   // This gets plugged in even for embedded views
   factory->plugActionList(d->m_activeView, "view_closeallviews",
-			  d->m_veryHackyActionList);
+                          d->m_veryHackyActionList);
 
   // This one only for root views
   if(d->m_rootViews.findRef(d->m_activeView)!=-1)
     factory->plugActionList(d->m_activeView, "view_split",
-			    d->m_splitViewActionList );
+                            d->m_splitViewActionList );
   plugActionList( "toolbarlist", d->m_toolbarList );
 }
 
@@ -1332,7 +1332,7 @@ void KoMainWindow::slotCloseAllViews() {
         }
         // not embedded -> destroy the document and all shells/views ;)
         else
-	    setRootDocument( 0L );
+            setRootDocument( 0L );
         close();  // close this window (and quit the app if necessary)
     }
     d->m_forQuit=false;
