@@ -17,14 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-/*
+/* Philipp
 This class defines a pointer map to all cells, which makes access to them more performant
 and additionally limits memory consumption.
 
 In detail: The class defines 2 cluster, where the second cluster (LEVEL2) is a matrix for
-single cells, while the first cluster (LEVEL1) is a matrix to handle the matrices of LEVEL1.
+single cells, while the first cluster (LEVEL1) is a matrix to handle the matrices of LEVEL2.
 On initialization, one LEVEL1 matrix is generated only.
-Each time, a cell stores something, this class checks if for the given column and row if a
+Each time, a cell stores something, this class checks if for the given column and row a
 matrix of LEVEL2 is already initialized and in case not generates it on the fly.
 This helps to reduce the memory usage to only consum one pointer matrix for LEVEL1 and all
 matrices of LEVEL2 that are necessary.
@@ -37,7 +37,7 @@ is in total 2^15^2 cells.
 It can be changed easily to different sizes, but it should be more senseful to have a small LEVEL1,
 as in most cases only one/two entries in LEVEL1 will be used.
 
-There are 2 special classes to store pointers for column and row formats.
+There are 2 additional special classes to store pointers for column and row formats.
 
 Future enhancements:
 To reduce memory consumption, it should be possible to enhance the functionality by

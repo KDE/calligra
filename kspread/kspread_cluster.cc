@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include <stdlib.h>
 
 #include <kdebug.h>
@@ -142,7 +161,7 @@ void KSpreadCluster::insert( KSpreadCell* cell, int x, int y )
 
 	for( int a = 0; a < KSPREAD_CLUSTER_LEVEL2; ++a )
 	    for( int b = 0; b < KSPREAD_CLUSTER_LEVEL2; ++b )
-	    cl[ b * KSPREAD_CLUSTER_LEVEL2 + a ] = 0;
+		cl[ b * KSPREAD_CLUSTER_LEVEL2 + a ] = 0;
     }
 
     if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] )
@@ -189,7 +208,7 @@ void KSpreadCluster::remove( int x, int y )
 	    m_first = c->nextCell();
         if(c->isForceExtraCells())
         {
-                    c->forceExtraCells(c->column(),c->row(),0,0);
+	    c->forceExtraCells(c->column(),c->row(),0,0);
         }
 	delete c;
     }
@@ -630,7 +649,7 @@ KSpreadColumnCluster::KSpreadColumnCluster()
     m_cluster = (ColumnLayout***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( ColumnLayout** ) );
 
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
-	    m_cluster[ x ] = 0;
+	m_cluster[ x ] = 0;
 }
 
 KSpreadColumnCluster::~KSpreadColumnCluster()
@@ -930,7 +949,7 @@ KSpreadRowCluster::~KSpreadRowCluster()
 	    m_cluster[ x ] = 0;
 	}
     }
-	
+
     if ( m_autoDelete )
     {
 	RowLayout* cell = m_first;
