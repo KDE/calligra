@@ -9,3 +9,4 @@ METASOURCES = AUTO
 
 kopaintertest_SOURCES = koPainterTest.cc
 kopaintertest_LDFLAGS = $(all_libraries)
+kopaintertest_LDADD = ../libkopainter.la
