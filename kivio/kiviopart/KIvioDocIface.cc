@@ -58,10 +58,36 @@ void KIvioDocIface::setShowGrid( bool b )
     d.isShow = b;
     doc->setGrid(d);
     doc->updateButton();
+    doc->setModified( true );
 }
 
 bool KIvioDocIface::showGrid() const
 {
     KivioGridData d = doc->grid();
     return d.isShow;
+}
+
+int KIvioDocIface::undoRedoLimit() const
+{
+    return doc->undoRedoLimit();
+}
+
+void KIvioDocIface::setUndoRedoLimit(int val)
+{
+    doc->setUndoRedoLimit( val );
+}
+
+void KIvioDocIface::snapToGrid( bool b )
+{
+    KivioGridData d = doc->grid();
+    d.isSnap = b;
+    doc->setGrid(d);
+    doc->updateButton();
+    doc->setModified( true );
+}
+
+bool KIvioDocIface::isSnapToGrid() const
+{
+    KivioGridData d = doc->grid();
+    return d.isSnap;
 }

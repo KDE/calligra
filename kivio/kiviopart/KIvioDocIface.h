@@ -40,6 +40,10 @@ k_dcop:
     void saveConfig();
     void setShowGrid( bool b );
     bool showGrid() const;
+    int undoRedoLimit() const;
+    void setUndoRedoLimit(int val);
+    void snapToGrid( bool b );
+    bool isSnapToGrid() const;
 private:
     KivioDoc *doc;
 
