@@ -27,6 +27,7 @@
 #include <qmap.h>
 #include <qptrlist.h>
 #include <qptrdict.h>
+#include <qbitarray.h>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -73,16 +74,23 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 added to query's tables list if it is not present there (see tables()).
 		 Field bust have its table assigned. 
 		 */
-		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
+		virtual KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
 
+		//! \return field's \a number visibility. By default field is visible.
+		bool isFieldVisible(uint number) const;
+
+		//! Sets field's \a number visibility to \a v.
+		void setFieldVisible(uint number, bool v);
+
+#if 0
 		//! \return field's visibility. By default field is visible.
 		bool isFieldVisible(KexiDB::Field *f) const;
 
 		//! Sets field's visibility.
 		void setFieldVisible(KexiDB::Field *f, bool v);
-
+#endif
 		/*! Adds \a asterisk at the and of field list. */
-		FieldList& addAsterisk(QueryAsterisk *asterisk);
+		FieldList& addAsterisk(QueryAsterisk *asterisk, bool visible = true);
 
 //		int id() { return m_id; }
 //		Field::List::iterator fields() { return m_fields.begin(); }
@@ -155,7 +163,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! QuerySchema::fields() returns vector of fields used in the query, but 
 		 in a case when there are asterisks defined for the query,
 		 it does not expand QueryAsterisk objects to field lists but return asterisk as-is.
-		 This could be inconvenient when you need just full expanede list of fields,
+		 This could be inconvenient when you need just full expanded list of fields,
 		 so this method does the work for you. 
 
 		 Note: You should assign the resulted vector in your space - it will be shared 
@@ -216,7 +224,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		QMap<Field*, QString> m_aliases;
 
 		/*! Used to store visibility flag for every field */
-		QPtrDict<Field> m_visibility;
+		QBitArray m_visibility;
+//		QPtrDict<Field> m_visibility;
 
 		/*! List of asterisks defined for this query  */
 		Field::List m_asterisks;

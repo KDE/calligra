@@ -902,21 +902,25 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 
 	QString sql;
 	Field::List *fields = querySchema.fields();
-	for (Field *f = fields->first(); f; f = fields->next()) {
-		if (sql.isEmpty())
-			sql = "SELECT ";
-		else
-			sql += ", ";
-		if (f->isQueryAsterisk()) {
-			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
-				sql += (f->table()->name() + ".*");
-			else //all-tables *
-				sql += "*";
-		}
-		else {
-			if (!f->table()) //sanity check
-				return QString::null;
-			sql += (f->table()->name() + "." + f->name());
+	uint number = 0;
+	for (Field *f = fields->first(); f; f = fields->next(), number++) {
+		if (querySchema.isFieldVisible(number)) {
+			if (sql.isEmpty())
+				sql = "SELECT ";
+			else
+				sql += ", ";
+
+			if (f->isQueryAsterisk()) {
+				if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
+					sql += (f->table()->name() + ".*");
+				else //all-tables *
+					sql += "*";
+			}
+			else {
+				if (!f->table()) //sanity check
+					return QString::null;
+				sql += (f->table()->name() + "." + f->name());
+			}
 		}
 	}
 	sql += " FROM ";

@@ -402,8 +402,10 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		return;
 	}
 
-	for( uint i=0; i<m_fieldCount; i++, col++ ) {
-		KexiDB::Field *f = m_fieldsExpanded->at(i);
+	for( uint i=0, j=0; i<m_fieldCount; i++, col++, j++ ) {
+		while (!m_query->isFieldVisible(j))
+			j++;
+		KexiDB::Field *f = m_fieldsExpanded->at(j);
 		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
 		if (!*col)

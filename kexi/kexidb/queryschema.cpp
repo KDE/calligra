@@ -32,6 +32,7 @@ QuerySchema::QuerySchema()
 	, SchemaData(KexiDB::QueryObjectType)
 //	, m_conn(0)
 	, m_parent_table(0)
+	, m_visibility(64)
 {
 	init();
 }
@@ -41,6 +42,7 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	, SchemaData(KexiDB::QueryObjectType)
 //	, m_conn(0)
 	, m_parent_table(tableSchema)
+	, m_visibility(64)
 {
 	init();
 	assert(m_parent_table);
@@ -72,6 +74,7 @@ void QuerySchema::init()
 	m_fieldsExpanded=0;
 	m_fieldsOrder=0;
 	m_pkeyFieldsOrder=0;
+	m_visibility.fill(false);
 }
 
 void QuerySchema::clear()
@@ -92,12 +95,15 @@ void QuerySchema::clear()
 		delete m_pkeyFieldsOrder;
 		m_pkeyFieldsOrder=0;
 	}
+	m_visibility.fill(false);
 }
 
-KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
+KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
 {
 	if (!field)
 		return *this;
+	if (fieldCount()>=m_visibility.size())
+		m_visibility.resize(m_visibility.size()*2);
 	if (m_fieldsExpanded) {
 		delete m_fieldsExpanded;
 		m_fieldsExpanded = 0;
@@ -122,11 +128,23 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 		if (m_tables.findRef(field->table())==-1)
 			m_tables.append(field->table());
 	}
-	//visible by default
-	setFieldVisible(field, true);
+//	//visible by default
+//	setFieldVisible(field, true);
+	m_visibility.setBit(fieldCount()-1, visible);
 	return *this;
 }
 
+bool QuerySchema::isFieldVisible(uint number) const
+{
+	return m_visibility.testBit(number);
+}
+
+void QuerySchema::setFieldVisible(uint number, bool v)
+{
+	m_visibility.setBit(number, v);
+}
+
+#if 0
 bool QuerySchema::isFieldVisible(KexiDB::Field *f) const
 {
 	return m_visibility[f]!=0;
@@ -139,15 +157,16 @@ void QuerySchema::setFieldVisible(KexiDB::Field *f, bool v)
 		return;
 	m_visibility.insert(f, f);
 }
+#endif
 
-FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk)
+FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 {
 	if (!asterisk)
 		return *this;
 	//make unique name
 	asterisk->m_name = (asterisk->table() ? asterisk->table()->name() + ".*" : "*") 
 		+ QString::number(asterisks()->count());
-	return addField(asterisk);
+	return addField(asterisk, visible);
 }
 
 Connection* QuerySchema::connection()
@@ -238,12 +257,13 @@ Field::Vector QuerySchema::fieldsExpanded(QValueList<bool> *detailedVisibility)
 	Field::List list;
 	int i = 0;
 	Field *f;
-	for (f = m_fields.first(); f; f = m_fields.next()) {
+	int fieldNumber = 0;
+	for (f = m_fields.first(); f; f = m_fields.next(), fieldNumber++) {
 		if (f->isQueryAsterisk()) {
 			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
 				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
-					m_detailedVisibility += isFieldVisible(f);
+					m_detailedVisibility += isFieldVisible(fieldNumber);
 					list.append(ast_f);
 				}
 			}
@@ -253,14 +273,14 @@ Field::Vector QuerySchema::fieldsExpanded(QValueList<bool> *detailedVisibility)
 					Field::List *tab_fields = table->fields();
 					for (Field *tab_f = tab_fields->first(); tab_f; tab_f = tab_fields->next()) {
 //! \todo (js): perhaps not all fields should be appended here
-						m_detailedVisibility += isFieldVisible(f);
+						m_detailedVisibility += isFieldVisible(fieldNumber);
 						list.append(tab_f);
 					}
 				}
 			}
 		}
 		else {
-			m_detailedVisibility += isFieldVisible(f);
+			m_detailedVisibility += isFieldVisible(fieldNumber);
 			list.append(f);
 		}
 	}
