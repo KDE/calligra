@@ -94,6 +94,7 @@ k_dcop:
     void saveClipart();
 
     void insertFile();
+    void tableStylist();
 
 private:
     KWView *view;

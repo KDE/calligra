@@ -291,3 +291,8 @@ void KWordViewIface::insertFile()
 {
     view->insertFile();
 }
+
+void KWordViewIface::tableStylist()
+{
+    view->tableStylist();
+}
