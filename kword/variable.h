@@ -49,6 +49,7 @@ public:
     KWPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KWDocument *doc );
 
     virtual void recalc();
+    virtual void setVariableSubType( short int type);
  private:
     KWDocument *m_doc;
 };

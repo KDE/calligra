@@ -66,6 +66,13 @@ void KWPgNumVariable::recalc()
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()
 }
 
+void KWPgNumVariable::setVariableSubType( short int type)
+{
+    m_subtype=type;
+    setVariableFormat((m_subtype == KWPgNumVariable::VST_CURRENT_SECTION) ? m_doc->variableFormatCollection()->format("STRING") : m_doc->variableFormatCollection()->format("NUMBER"));
+}
+
+
 /******************************************************************/
 /* Class: KWMailMergeVariable                                  */
 /******************************************************************/
