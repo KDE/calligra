@@ -1250,12 +1250,12 @@ RangeList Formula::getDependencies () const
   //TODO: use parsed formula instead, when cell/range references are supported
   Tokens t = tokens();
   
-  if (!tokens.valid())
+  if (!t.valid())
     return rl;   //return empty list if the tokens aren't valid
   
-  for( unsigned i = 0; i < tokens.count(); i++ )
+  for( unsigned i = 0; i < t.count(); i++ )
   {
-    Token token = tokens[i];
+    Token token = t[i];
     Token::Type tokenType = token.type();
     
     //parse each cell/range and put it to our RangeList
