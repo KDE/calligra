@@ -43,13 +43,13 @@ namespace KexiPart
 	class DataSource;
 	class PartPrivate;
 
-/*! Official (registered) type IDs like for objects like table, query, form... */
+/*! Official (registered) type IDs for objects like table, query, form... */
 enum ObjectTypes {
 	TableObjectType = 1, //like in KexiDB::ObjectTypes
 	QueryObjectType = 2, //like in KexiDB::ObjectTypes
 	FormObjectType = 3,
 	ReportObjectType = 4,
-	LastObjectType = 4 //ALWAYS UPDATE THIS
+	LastObjectType = 4, //ALWAYS UPDATE THIS
 
 	UserObjectType = 100 //external types
 };

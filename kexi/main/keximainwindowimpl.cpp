@@ -2656,7 +2656,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 
 		//temp. hack: avoid problems with autonumber
 		// see http://bugs.kde.org/show_bug.cgi?id=89381
-		int p_id = KexiDB::LastObjectType+1; //min is == 3+1
+		int p_id = KexiPart::LastObjectType+1; //min is == 3+1
 		if (project()->dbConnection()->querySingleNumber("SELECT max(p_id) FROM kexi__parts", p_id))
 			p_id++;
 

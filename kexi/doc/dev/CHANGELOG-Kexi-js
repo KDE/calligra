@@ -388,6 +388,7 @@ CCMAIL: dkite@shaw.ca
 Core
 - KexiProperty - added 'fixed' flag for 'list' types
  (the flag is used in Property Editor in most cases)
+- KexiPart::ObjectTypes introduced
 
 2004-12-20
 SQLite Drivers (2 and 3)
