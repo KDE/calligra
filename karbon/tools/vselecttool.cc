@@ -310,16 +310,18 @@ VSelectTool::updateStatusBar() const
 void
 VSelectTool::mouseDragShiftPressed()
 {
-	draw();
-
-	recalc();
-
-	draw();
+	m_lock = true;
 }
 
 void
 VSelectTool::mouseDragShiftReleased()
 {
+	m_lock = false;
+}
+
+void
+VSelectTool::mouseDragCtrlPressed()
+{
 	draw();
 
 	recalc();
@@ -328,15 +330,13 @@ VSelectTool::mouseDragShiftReleased()
 }
 
 void
-VSelectTool::mouseDragCtrlPressed()
-{
-	m_lock = true;
-}
-
-void
 VSelectTool::mouseDragCtrlReleased()
 {
-	m_lock = false;
+	draw();
+
+	recalc();
+
+	draw();
 }
 
 void
@@ -425,7 +425,7 @@ VSelectTool::recalc()
 				m_s2 = 1;
 			}
 
-			if( shiftPressed() )
+			if( ctrlPressed() )
 				m_s1 = m_s2 = kMax( m_s1, m_s2 );
 			cmd = new VScaleCmd( 0L, m_sp, m_s1, m_s2 );
 		}
