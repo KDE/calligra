@@ -9,7 +9,6 @@ usr/lib/kde3/sml_connector.*
 usr/lib/kde3/straight_connector.*
 usr/lib/kivio.*
 usr/share/applnk/Office/kivio.desktop
-usr/share/apps/kivio
 usr/share/doc/kde/HTML/en/kivio/*.bz2
 usr/share/doc/kde/HTML/en/kivio/*.docbook
 usr/share/doc/kde/HTML/en/kivio/*.png

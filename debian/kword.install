@@ -59,6 +59,7 @@ usr/lib/kde3/libwpexport.so
 usr/lib/kde3/libwpimport.la
 usr/lib/kde3/libwpimport.so
 usr/share/applnk/Office/kword.desktop
+usr/share/apps/konqueror/servicemenus/kword_konqi.desktop
 usr/share/apps/kword
 usr/share/doc/kde/HTML/en/kword/*.bz2
 usr/share/doc/kde/HTML/en/kword/*.docbook
@@ -93,4 +94,5 @@ usr/share/services/kword_wml_export.desktop
 usr/share/services/kword_wml_import.desktop
 usr/share/services/kword_wp_export.desktop
 usr/share/services/kword_wp_import.desktop
+usr/share/services/kwordpart.desktop
 ../kword.xpm usr/share/pixmaps

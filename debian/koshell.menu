@@ -1,9 +1,9 @@
 ?package(koshell):\
-	needs=x11\
-	section=Apps/Tools\
+	needs="x11"\
+	section="Apps/Tools"\
 	hints="KDE"\
 	kderemove="1"\
 	title="KOffice Workspace"\
 	longtitle="KOffice Workspace (Office Suite)"\
-	command=koshell
+	command="/usr/bin/koshell"
 

@@ -55,7 +55,7 @@
  ## The executable
 --- koffice/kpresenter/Makefile.am	2002/07/14 12:31:37	1.200
 +++ koffice/kpresenter/Makefile.am	2002/09/08 00:33:40
-@@ -56,7 +56,7 @@ libkpresenterpart_la_METASOURCES = AUTO
+@@ -60,7 +60,7 @@ libkpresenterpart_la_METASOURCES = AUTO
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kpresenter.la
  kpresenter_la_SOURCES = main.cc

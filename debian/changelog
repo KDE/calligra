@@ -1,3 +1,113 @@
+koffice (1:1.3.5-3) unstable; urgency=low
+
+  * Included the full GFDL text in debian/copyright, since all of the docbook
+    documentation is under this license.
+  * Removed the build-depends on libmysqlclient-dev, which is no longer
+    necessary.
+
+ -- Ben Burton <bab@debian.org>  Sat, 26 Mar 2005 10:47:17 +1100
+
+koffice (1:1.3.5-2) unstable; urgency=high
+
+  * Yet another xpdf security fix.  This time a buffer overflow has been
+    fixed relating to an invalid key length (closes: #291245).  See the
+    following URLs for further information:
+    - http://www.koffice.org/security/advisory-20050120-1.txt
+    - http://www.kde.org/info/security/advisory-20050120-1.txt
+    References: CAN-2005-0064, DSA-648
+  * Added CAN and DSA reference numbers to the previous changelog entry
+    for easier tracking.
+
+ -- Ben Burton <bab@debian.org>  Sat, 22 Jan 2005 01:48:18 +1100
+
+koffice (1:1.3.5-1) unstable; urgency=high
+
+  * New upstream bugfix release.
+  * More xpdf security fixes.  A new integer overflow vulnerability in
+    KWord's PDF import filter has been fixed (as a patch on top of the
+    upstream 1.3.5 release).  See the following URLs for further information:
+    - http://kde.org/areas/koffice/security/2004_xpdf_integer_overflow_2.php
+    - http://kde.org/info/security/advisory-20041223-1.txt
+    References: CAN-2004-1125, DSA-619
+  * Added README.MimeType to most binary packages to explain how to fix
+    the missing MimeType error by running kbuildsycoca (closes: #288950).
+
+ -- Ben Burton <bab@debian.org>  Mon, 17 Jan 2005 20:57:22 +1100
+
+koffice (1:1.3.4-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Modified the xpdf security fixes from 1.3.3-3 to use a more robust style
+    of testing that does not depend upon the level of compiler optimisation
+    (thanks to Martin Schulze).
+
+ -- Ben Burton <bab@debian.org>  Wed, 27 Oct 2004 20:27:33 +1000
+
+koffice (1:1.3.3-3) unstable; urgency=critical
+
+  * Security upload.
+  * Fixes integer overflows in KWord's PDF import filter.  This patch forms
+    part of the KDE security advisory (2004-10-21, CAN-2004-0888) relating to
+    vulnerabilities inherited from the xpdf code.
+
+ -- Ben Burton <bab@debian.org>  Mon, 25 Oct 2004 20:11:56 +1000
+
+koffice (1:1.3.3-2) unstable; urgency=medium
+
+  * Tightened shlibs files, since the library interface has changed
+    since 1.3.0 (closes: #268366).
+  * Build-conflicts with autoconf2.13, since admin/Makefile.common does not
+    operate correctly in its presence.
+
+ -- Ben Burton <bab@debian.org>  Fri, 22 Oct 2004 08:04:16 +1000
+
+koffice (1:1.3.3-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Build-depends on libpaper-dev for xpdf filters.
+  * Made koffice suggest koffice-i18n (closes: #272754).  As of 1.3.3,
+    all koffice-i18n-<lang> packages provide koffice-i18n accordingly.
+  * Gnumeric export is fixed (closes: #200313).
+  * Karbon no longer locks up when importing an EPS graphic containing
+    %ALDBoundingBox (closes: #242454).
+
+ -- Ben Burton <bab@debian.org>  Sun, 17 Oct 2004 19:19:03 +1000
+
+koffice (1:1.3.2-2) unstable; urgency=medium
+
+  * Rebuilt against libtiff4.
+  * Build-depends on libtiff4-dev.
+
+ -- Ben Burton <bab@debian.org>  Mon,  2 Aug 2004 10:09:55 +1000
+
+koffice (1:1.3.2-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+  * Split kivio out into kivio + kivio-data (closes: #233383).
+  * Change conflicts + replaces to just replaces where appropriate.
+
+ -- Ben Burton <bab@debian.org>  Sun, 11 Jul 2004 11:46:52 +1000
+
+koffice (1:1.3.1-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+  * Built against newer imagemagick (closes: #246623).
+  * Made koffice-libs/kformula recommend/depend on latex-xft-fonts, which
+    provides mathematical fonts that the formula editor can use.  Also
+    patched the kformula part to make these fonts the default.
+  * Changed kword menu hint from "WordProcessors" to "Word processors"
+    (closes: #246209).
+  * Spellchecker configuration is now fixed (closes: #221256, #227568).
+
+ -- Ben Burton <bab@debian.org>  Sun,  9 May 2004 11:33:00 +1000
+
+koffice (1:1.3.0-2) unstable; urgency=low
+
+  * Built against KDE 3.2.
+  * No longer installs mimetypes required for KDE 3.1 (closes: #236503).
+
+ -- Ben Burton <bab@debian.org>  Sun,  7 Mar 2004 21:37:44 +1100
+
 koffice (1:1.3.0-1) unstable; urgency=low
 
   * New upstream release (1.3-final).

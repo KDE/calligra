@@ -27,6 +27,7 @@ usr/lib/kde3/libqproimport.la
 usr/lib/kde3/libqproimport.so
 usr/lib/kspread.*
 usr/share/applnk/Office/kspread.desktop
+usr/share/apps/konqueror/servicemenus/kspread_konqi.desktop
 usr/share/apps/kspread
 usr/share/icons/crystalsvg/16x16/apps/kspread.png
 usr/share/icons/crystalsvg/32x32/apps/kspread.png
@@ -46,6 +47,7 @@ usr/share/services/kspread_latex_export.desktop
 usr/share/services/kspread_opencalc_export.desktop
 usr/share/services/kspread_opencalc_import.desktop
 usr/share/services/kspread_qpro_import.desktop
+usr/share/services/kspreadpart.desktop
 usr/share/doc/kde/HTML/en/kspread/*.bz2
 usr/share/doc/kde/HTML/en/kspread/*.docbook
 usr/share/doc/kde/HTML/en/kspread/*.png

@@ -12,4 +12,5 @@ usr/share/doc/kde/HTML/en/kchart/common
 usr/share/icons/crystalsvg/16x16/apps/kchart.png
 usr/share/icons/crystalsvg/32x32/apps/kchart.png
 usr/share/icons/crystalsvg/48x48/apps/kchart.png
+usr/share/services/kchartpart.desktop
 ../kchart.xpm usr/share/pixmaps
