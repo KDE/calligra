@@ -87,7 +87,7 @@ private:
 
     // Color for number.
 
-    QColor colorForNumber(QString number, int defaultcolor);
+    QColor colorForNumber(QString number, int defaultcolor, bool defaultWhite = false);
 
     // Number format codes.
 

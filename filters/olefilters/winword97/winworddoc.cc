@@ -705,7 +705,7 @@ void WinWordDoc::gotTableEnd(
             QColor brcRight = colorForNumber(QString::number(row.rgtc[x].brcRight.ico), -1);
             QColor brcTop = colorForNumber(QString::number(row.rgtc[x].brcTop.ico), -1);
             QColor brcBottom = colorForNumber(QString::number(row.rgtc[x].brcBottom.ico), -1);
-            QColor backGround = colorForNumber(QString::number(row.rgshd[x].icoBack), 8);
+            QColor backGround = colorForNumber(QString::number(row.rgshd[x].icoBack), 8, true);
 
             cell.append(
                 QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\"") +
@@ -759,12 +759,13 @@ void WinWordDoc::gotTableRow(
     m_table.insert(i, newRow);
 }
 
-QColor WinWordDoc::colorForNumber(QString number, int defaultcolor)
+QColor WinWordDoc::colorForNumber(QString number, int defaultcolor, bool defaultWhite)
 {
     switch(number.toInt())
     {
 	case 0:
-	    return QColor("white");
+	    if(defaultWhite)
+		return QColor("white");
 	case 1:
 	    return QColor("black");
 	case 2:
