@@ -617,6 +617,7 @@ void KPresenterView::toolsAutoform()
     afChoose = new AFChoose( this, i18n( "Autoform-Choose" ) );
     afChoose->resize( 400, 300 );
     afChoose->setCaption( i18n( "KPresenter - Insert an Autoform" ) );
+
     QObject::connect( afChoose, SIGNAL( formChosen( const QString & ) ),
 		      this, SLOT( afChooseOk( const QString & ) ) );
     QObject::connect( afChoose, SIGNAL( afchooseCanceled()),
@@ -2092,6 +2093,7 @@ void KPresenterView::objectSelectedChanged()
     actionTextBold->setEnabled(isText);
     actionTextItalic->setEnabled(isText);
     actionTextUnderline->setEnabled(isText);
+    actionEditFind->setEnabled(isText);
 
     state=state || isText;
     actionEditCopy->setEnabled(state);
