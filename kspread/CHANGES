@@ -882,6 +882,13 @@ cell A1 : 10
 
 2000-08-11-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
-Bug Fix : 
+Bug Fix :
 Now when you dissociate cells, extrawidth=0
 extraheight=0.
+
+2000-08-13-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+Bug fix :
+selected an area and press Enter, so you moved
+into this area
+=>now it reworks

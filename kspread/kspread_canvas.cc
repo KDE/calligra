@@ -379,7 +379,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   gotoLocation( _cell.pos.x(), _cell.pos.y(), table );
 }
 
-void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select,bool /*move_into_area*/ )
+void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select,bool move_into_area )
 {
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
   //  " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
@@ -432,9 +432,20 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 
   if ( !make_select )
   {
-      // if ( selection.left() != 0 && !move_into_area)
+       //if ( selection.left() != 0 && !move_into_area)
       // activeTable()->unselect();
-    activeTable()->setMarker( QPoint( x, y ) );
+      /*
+
+      */
+      if ( selection.left() != 0 && !move_into_area)
+        activeTable()->setMarker( QPoint( x, y ) );
+      else if(selection.left() != 0 && move_into_area)
+        activeTable()->setSelection(selection,QPoint( x, y ),this);
+      else
+        activeTable()->setMarker( QPoint( x, y ) );
+      /*
+      */
+    //activeTable()->setMarker( QPoint( x, y ) );
   }
   else
   {
@@ -1797,7 +1808,9 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
             // b) the exact opposite of a)
             // c) One of its edges used to show the marker but does no longer
             if ( ( new_sel.contains( p ) ^ old_sel.contains( p ) ) ||   // a) and b)
-                 ( ( old_border & new_border ) != old_border ) )        // c)
+                 ( ( old_border & new_border ) != old_border )        // c)
+                 ||new_marker.contains(QPoint(x,y))||old_marker.contains(QPoint(x,y)))
+
             {
                 cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
             }
