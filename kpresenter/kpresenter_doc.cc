@@ -967,10 +967,10 @@ void KPresenterDoc::createHeaderFooter()
     //add header/footer to sticky page
     KoRect pageRect=m_stickyPage->getPageRect();
     _header->setOrig(pageRect.topLeft());
-    _header->setSize(pageRect.width(),20); //80 why not ?
+    _header->setSize(pageRect.width(),20);
 
-    _footer->setOrig(pageRect.left(),pageRect.bottom()-80);
-    _footer->setSize(pageRect.width(),20); //80 why not ?
+    _footer->setOrig(pageRect.left(),pageRect.bottom()-20);
+    _footer->setSize(pageRect.width(),20);
 
     m_stickyPage->appendObject(_header);
     m_stickyPage->appendObject(_footer);
