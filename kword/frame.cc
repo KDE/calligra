@@ -1594,6 +1594,8 @@ void KWGroupManager::recalcCols()
       x = getFrameSet(0,i)->getFrame(0)->right() + 3;
     }
 
+
+  // Reggie: this has to be improved!
   QList<int> ws;
   ws.setAutoDelete(true);
 
@@ -1602,25 +1604,23 @@ void KWGroupManager::recalcCols()
 
   for (unsigned int i = 0;i < rows;i++)
     {
-      {
-	for (unsigned int j = 0;j < cols;j++)
-	  {
-	    Cell *cell = getCell(i,j);
-	    if (cell->cols != 1)
-	      {	
-		if (cell->cols > 0)
-		  {
-		    int w = 0;
-		    for (unsigned int k = 0;k < cell->cols;k++)
-		      w += *ws.at(k);
-		
-		    cell->frameSet->getFrame(0)->setWidth(w + (cell->cols - 2) * 2 + 2);
-		  }
-	      }
-	  }
-      }
-    }
-}
+      for (unsigned int j = 0;j < cols;j++)
+	{
+	  Cell *cell = getCell(i,j);
+	  if (cell->cols != 1)
+	    {	
+	      if (cell->cols > 0)
+		{
+		  int w = 0;
+		  for (unsigned int k = 0;k < cell->cols;k++)
+		    w += *ws.at(k + cell->col);
+		  
+		  cell->frameSet->getFrame(0)->setWidth(w + (cell->cols - 2) * 2 + 2);
+		}
+	    }	
+	}	
+    }	
+}	
 
 /*================================================================*/
 void KWGroupManager::recalcRows(QPainter &_painter)
@@ -1724,6 +1724,34 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 		c->frameSet->delFrame(1);
 	      else
 		break;
+	    }
+	}
+    }
+
+  // Reggie: this has to be improved
+  QList<int> hs;
+  hs.setAutoDelete(true);
+
+  for (unsigned int i = 0;i < rows;i++)
+    hs.append(new int(getFrameSet(i,0)->getFrame(0)->height()));
+
+  for (unsigned int i = 0;i < cols;i++)
+    {
+      for (unsigned int j = 0;j < rows;j++)
+	{
+	  Cell *cell = getCell(j,i);
+	  if (cell->rows != 1)
+	    {	
+	      if (cell->rows > 0)
+		{
+		  int h = 0;
+		  for (unsigned int k = 0;k < cell->rows;k++)
+		    h += *hs.at(k + cell->row);
+		  
+		  debug("expanded %d/%d",cell->row,cell->col);
+		  
+		  cell->frameSet->getFrame(0)->setHeight(h + (cell->rows - 2) * 2 + 2);
+		}
 	    }
 	}
     }
@@ -2029,7 +2057,7 @@ void KWGroupManager::ungroup()
 }
 
 /*================================================================*/
-bool KWGroupManager::joinCells()
+bool KWGroupManager::joinCells(QPainter &_painter)
 {
   enum Orientation {Vertical,Horizontal};
 
@@ -2073,6 +2101,8 @@ bool KWGroupManager::joinCells()
 	    int tmpCol = col;
 	    while (cell && cell->frameSet->getFrame(0)->isSelected())
 	      {
+		if (cell->rows > 1 || cell->cols > 1)
+		  return false;
 		_cells.insert(0,cell);
 		if (--tmpCol >= 0)
 		  cell = getCell(row,tmpCol);
@@ -2085,6 +2115,8 @@ bool KWGroupManager::joinCells()
 	    tmpCol = col + 1;
 	    while (cell && cell->frameSet->getFrame(0)->isSelected())
 	      {
+		if (cell->rows > 1 || cell->cols > 1)
+		  return false;
 		_cells.append(cell);
 		if (++tmpCol <= cols - 1)
 		  cell = getCell(row,tmpCol);
@@ -2098,6 +2130,8 @@ bool KWGroupManager::joinCells()
 	    int tmpRow = row;
 	    while (cell && cell->frameSet->getFrame(0)->isSelected())
 	      {
+		if (cell->rows > 1 || cell->cols > 1)
+		  return false;
 		_cells.insert(0,cell);
 		if (--tmpRow >= 0)
 		  cell = getCell(tmpRow,col);
@@ -2110,6 +2144,8 @@ bool KWGroupManager::joinCells()
 	    tmpRow = row + 1;
 	    while (cell && cell->frameSet->getFrame(0)->isSelected())
 	      {
+		if (cell->rows > 1 || cell->cols > 1)
+		  return false;
 		_cells.append(cell);
 		if (++tmpRow <= rows - 1)
 		  cell = getCell(tmpRow,col);
@@ -2140,11 +2176,13 @@ bool KWGroupManager::joinCells()
 	  {
 	    Cell *cell = _cells.first();
 	    cell->rows = _cells.count();
+	    debug("cell %d/%d, rows: %d",cell->row,cell->col,cell->rows);
 	    for (cell = _cells.next();cell != 0;cell = _cells.next())
 	      {
 		cell->frameSet->setVisible(false);
 		cell->rows = 0;
 	      }
+	    recalcRows(_painter);
 	  } break;
 	}
 

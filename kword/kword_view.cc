@@ -1271,9 +1271,12 @@ void KWordView::tableJoinCells()
     QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
   else
     {
-      if (!grpMgr->joinCells())
+      QPainter painter;
+      painter.begin(gui->getPaperWidget());
+      if (!grpMgr->joinCells(painter))
 	QMessageBox::critical(0L,i18n("Error"),i18n("You have to select some cells which are next to each other\n"
 						    "to be able to join them"),i18n("OK"));
+      painter.end();
     }
 
   sendFocusEvent();

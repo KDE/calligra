@@ -986,3 +986,9 @@ Reggie, 26.3.1999:
 ------------------
 - Joining table cells in horizontal direction works quite well now
   (at least it doesn't crash anymore and resizes correctly :-)
+
+Reggie, 27.3.1999:
+------------------
+- Implemented joining table cells in vertical direction
+  (only the auto-resize of vertical joined table cells screws
+   up a table a bit - will fix it)

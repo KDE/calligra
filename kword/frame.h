@@ -438,7 +438,7 @@ public:
 
   bool isActive() { return active; }
 
-  bool joinCells();
+  bool joinCells(QPainter &_painter);
 
 protected:
   QList<Cell> cells;
