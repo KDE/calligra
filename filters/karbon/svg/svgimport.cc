@@ -521,6 +521,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		else if( b.tagName() == "path" )
 		{
 			VComposite *path = new VComposite( &m_document );
+			path->clear();
 			parsePath( path, b );
 			obj = path;
 		}
