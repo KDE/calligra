@@ -44,11 +44,8 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
 
 KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
 {
-    if( m_pSpawners )
-    {
-        delete m_pSpawners;
-        m_pSpawners = NULL;
-    }
+    delete m_pSpawners;
+    m_pSpawners = NULL;
     kdDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted" << endl;
 }
 
@@ -192,14 +189,14 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
     {
       origTitle = XmlReadString( nodeElement, "data", dir );
     }
-  
+
     node = node.nextSibling();
   }
 
   if(title.isEmpty()) {
     title = i18n( "Stencils", origTitle.utf8() );
   }
-  
+
   return title;
 }
 
@@ -279,14 +276,14 @@ QString KivioStencilSpawnerSet::readDescription(const QString& dir)
     {
       origDesc = nodeElement.text();
     }
-  
+
     node = node.nextSibling();
   }
 
   if(description.isEmpty() && !origDesc.isEmpty()) {
     description = i18n( "Stencils", origDesc.utf8() );
   }
-  
+
   return description;
 }
 
