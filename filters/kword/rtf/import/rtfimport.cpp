@@ -1055,7 +1055,7 @@ void RTFImport::insertTableCell( RTFProperty * )
  */
 void RTFImport::insertTableRow( RTFProperty * )
 {
-    if (textState->frameSets.count())
+    if (!textState->frameSets.isEmpty())
     {
 	RTFTableRow row = state.tableRow;
 	row.frameSets = textState->frameSets;
@@ -1096,6 +1096,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	{
 	    row.height = 1;
 	}
+        // ### TODO: use ConstIterator
 	for (uint k=0; k < row.cells.count(); k++)
 	{
 	    if ((row.cells[k].x - lx) < 1)
@@ -1105,6 +1106,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	}
 	if (row.left < 0)
 	{
+            // ### TODO: use ConstIterator
 	    for (uint k=0; k < row.cells.count(); k++)
 	    {
 		row.cells[k].x -= row.left;
@@ -1721,6 +1723,7 @@ void RTFImport::parseField( RTFProperty * )
 	    {
 		QString hrefName = QString::null;
 
+                // Use ConstIterator
 		for (uint i=1; i < list.count(); i++)
 		{
 		    if (list[i] == "\\l")
@@ -2401,6 +2404,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
     // Tabulators
     if (!layout.tablist.isEmpty())
     {
+        // ### TODO: use ConstIterator
 	for (uint i=0; i < layout.tablist.count(); i++)
 	{
 	    const RTFTab &tab = layout.tablist[i];
@@ -2432,6 +2436,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     RTFFormat *format = &state.format;
     int s = state.layout.style;
 
+    // ### TODO: use ConstIterator
     for (uint k=0; k < styleSheet.count(); k++)
     {
 	if (styleSheet[k].layout.style == s)
@@ -2452,6 +2457,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     // Insert character formatting
     bool hasFormats = false;
 
+    // ### TODO: use ConstIterator
     for (uint i=0; i < textState->formats.count(); i++)
     {
 	if (textState->formats[i].id != 1 ||
@@ -2496,6 +2502,7 @@ void RTFImport::finishTable()
     insertTableRow();
 
     // Calculate maximum horizontal extents
+    // ### TODO: use ConstIterator
     for (uint i=0; i < textState->rows.count(); i++)
     {
 	RTFTableRow &row = textState->rows[i];
@@ -2507,6 +2514,7 @@ void RTFImport::finishTable()
     }
 
     // Force rectangular table (fill gaps with empty cells)
+    // ### TODO: use ConstIterator
     for (uint i=0; i < textState->rows.count(); i++)
     {
 	RTFTableRow &row = textState->rows[i];
@@ -2524,6 +2532,7 @@ void RTFImport::finishTable()
 	    emptyCell.x = right;
 	    row.cells << emptyCell;
 	}
+        // ### TODO: use ConstIterator
 	for (uint k=0; k < row.cells.count(); k++)
 	{
 	    if (!cellx.contains( row.cells[k].x ))
@@ -2536,6 +2545,7 @@ void RTFImport::finishTable()
     }
 
     // Sort vertical cell boundaries
+    // ### TODO: use ConstIterator
     for (uint k=0; k < cellx.count(); k++)
     {
 	for (uint l=k+1; l < cellx.count(); l++)
@@ -2551,6 +2561,7 @@ void RTFImport::finishTable()
     int y1 = 0;
 
     // Store cell frame and table information
+    // ### TODO: use ConstIterator
     for (uint i=0; i < textState->rows.count(); i++)
     {
 	RTFTableRow &row = textState->rows[i];
