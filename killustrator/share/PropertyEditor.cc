@@ -54,8 +54,10 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
 
   leftArrows = rightArrows = 0L;
   roundnessSlider = 0L;
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 3; i++) {
     ellipseKind[i] = 0L;
+    textAlign[i] = 0L;
+  }
 
   document = doc;
   haveObjects = ! document->selectionIsEmpty ();
@@ -320,6 +322,37 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     roundnessSlider->setSteps (10, 50);
     roundnessSlider->move (80, 140);
   }
+  else if (haveTextObjects) {
+    label = new QLabel (w);
+    label->setAlignment (AlignLeft | AlignVCenter);
+    label->setText (i18n ("Alignment:"));
+    label->move (10, 140);
+
+    QButtonGroup *group = new QButtonGroup (w);
+    group->move (80, 140);
+
+    KIconLoader* loader = kapp->getIconLoader ();
+
+    textAlign[0] = new QPushButton (group);
+    textAlign[0]->setToggleButton (true);
+    textAlign[0]->setPixmap (loader->loadIcon ("tleftalign.xpm"));
+    textAlign[0]->setGeometry (0, 0, 
+				 BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    textAlign[1] = new QPushButton (group);
+    textAlign[1]->setToggleButton (true);
+    textAlign[1]->setPixmap (loader->loadIcon ("tcenteralign.xpm"));
+    textAlign[1]->setGeometry (1 * BUTTON_WIDTH, 0,
+				 BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    textAlign[2] = new QPushButton (group);
+    textAlign[2]->setToggleButton (true);
+    textAlign[2]->setPixmap (loader->loadIcon ("trightalign.xpm"));
+    textAlign[2]->setGeometry (2 * BUTTON_WIDTH, 0, 
+				 BUTTON_WIDTH, BUTTON_HEIGHT);
+    group->adjustSize ();
+    group->setExclusive (true);
+  }
   w->adjustSize ();
   return w;
 }
@@ -333,14 +366,12 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Color:"));
-//  label->setFixedHeight (label->sizeHint ().height ());
   label->move (10, 20);
   
   fillColorField = new ColorComboBox (w);
   fillColorField->setColor (white);
   fillColorField->move (80, 20);
 
-  //  w->resize (200, 200);
   w->adjustSize ();
   return w;
 }
@@ -363,12 +394,10 @@ void PropertyEditor::applyPressed () {
     oinfo.color = penColorField->getColor ();
     oinfo.style = (PenStyle) penStyleField->currentItem ();
     if (leftArrows != 0L && rightArrows != 0L) {
-      //      oinfo.ckind = GObject::OutlineInfo::Custom_Line;
       oinfo.startArrowId = leftArrows->currentItem ();
       oinfo.endArrowId = rightArrows->currentItem ();
     }
     else if (ellipseKind[0] != 0L) {
-    //      oinfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
       if (ellipseKind[1]->isOn ())
 	oinfo.shape = GObject::OutlineInfo::ArcShape;
       else if (ellipseKind[2]->isOn ())
@@ -377,12 +406,10 @@ void PropertyEditor::applyPressed () {
 	oinfo.shape = GObject::OutlineInfo::DefaultShape;
     }
     else if (roundnessSlider != 0L) {
-      //      oinfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
       oinfo.roundness = roundnessSlider->value ();
     }
     oinfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |
                 GObject::OutlineInfo::Width | GObject::OutlineInfo::Custom;
-    //    object->setOutlineInfo (oinfo);
 
     // Fill
     GObject::FillInfo finfo;
@@ -390,7 +417,6 @@ void PropertyEditor::applyPressed () {
     finfo.color = fillColorField->getColor ();
     finfo.style = SolidPattern;
     finfo.mask = GObject::FillInfo::Color | GObject::FillInfo::Style;
-    //    object->setFillInfo (finfo);
 
     SetPropertyCmd* cmd = 0L;
 
@@ -398,8 +424,14 @@ void PropertyEditor::applyPressed () {
     if (haveObjects) {
       if (haveTextObjects) {
 	GText::TextInfo tinfo;
-	tinfo.mask = GText::TextInfo::Font;
+	tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
 	tinfo.font = fontSelector->font ();
+	if (textAlign[0]->isOn ())
+	  tinfo.align = GText::TextInfo::AlignLeft;
+	else if (textAlign[1]->isOn ())
+	  tinfo.align = GText::TextInfo::AlignCenter;
+	else if (textAlign[2]->isOn ())
+	  tinfo.align = GText::TextInfo::AlignRight;
 	cmd = new SetPropertyCmd (document, oinfo, finfo, tinfo);
       }
       else 
@@ -483,7 +515,19 @@ void PropertyEditor::readProperties () {
       // Font tab
       if (object->isA ("GText")) {
 	GText* tobj = (GText *) object;
-	fontSelector->setFont (tobj->getFont ());
+	GText::TextInfo tInfo = tobj->getTextInfo ();
+	fontSelector->setFont (tInfo.font);
+	switch (tInfo.align) {
+	case GText::TextInfo::AlignCenter:
+	  textAlign[1]->setOn (true);
+	  break;
+	case GText::TextInfo::AlignRight:
+	  textAlign[2]->setOn (true);
+	  break;
+	default:
+	  textAlign[0]->setOn (true);
+	  break;
+	}
       }
     }
     else {

@@ -44,9 +44,12 @@ class GText : public GObject {
 public:
 
   struct TextInfo {
-    enum { Font = 1 };
+    enum { Font = 1, Align = 2 };
     unsigned int mask;
     QFont font;
+    enum Alignment { 
+      AlignLeft, AlignCenter, AlignRight 
+    } align;
   };
 
   static void setDefaultTextInfo (const TextInfo& ti);
@@ -80,7 +83,7 @@ public:
   void setText (const QString& s);
   QString getText () const;
   
-  const QFont& getFont () const { return font; }
+  const QFont& getFont () const { return textInfo.font; }
   void setFont (const QFont& f);
 
   virtual const char* typeName ();
@@ -102,9 +105,10 @@ private:
   Coord opos;
   int cursx, cursy;
   QList<QString> text;
-  QFont font;
+  TextInfo textInfo;
   QFontMetrics *fm;
   bool cursorActive;
+  int max_width;
 
   static TextInfo defaultTextInfo;
 };

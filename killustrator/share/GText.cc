@@ -37,6 +37,8 @@ GText::TextInfo GText::defaultTextInfo;
 void GText::setDefaultTextInfo (const TextInfo& ti) {
   if (ti.mask & TextInfo::Font)
     defaultTextInfo.font = ti.font;
+  if (ti.mask & TextInfo::Align)
+    defaultTextInfo.align = ti.align;
 }
 
 GText::TextInfo GText::getDefaultTextInfo () {
@@ -44,18 +46,22 @@ GText::TextInfo GText::getDefaultTextInfo () {
 }
 
 GText::GText () {
-  font = defaultTextInfo.font;
-  fm = new QFontMetrics (font);
+  //  font = defaultTextInfo.font;
+  textInfo = defaultTextInfo;
+  fm = new QFontMetrics (textInfo.font);
   cursx = cursy = 0;
+  max_width = 0;
   cursorActive = false;
   text.setAutoDelete (true);
   text.append (new QString (""));
 }
 
 GText::GText (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  font = defaultTextInfo.font;
-  fm = new QFontMetrics (font);
+  //  font = defaultTextInfo.font;
+  textInfo = defaultTextInfo;
+  fm = new QFontMetrics (textInfo.font);
   cursx = cursy = 0;
+  max_width = 0;
   cursorActive = false;
   text.setAutoDelete (true);
   text.append (new QString (""));
@@ -68,15 +74,18 @@ GText::GText (const list<XmlAttribute>& attribs) : GObject (attribs) {
       opos.x ((*first).floatValue ());
     else if (attr == "y")
       opos.y ((*first).floatValue ());
+    else if (attr == "align")
+      textInfo.align = (TextInfo::Alignment) ((*first).intValue ());
     first++;
   }
 
 }
 
 GText::GText (const GText& obj) : GObject (obj) {
-  font = obj.font;
+  //  font = obj.font;
+  textInfo = obj.textInfo;
   opos = obj.opos;
-  fm = new QFontMetrics (font);
+  fm = new QFontMetrics (textInfo.font);
   cursx = cursy = 0;
   cursorActive = false;
   text.setAutoDelete (true);
@@ -87,14 +96,17 @@ GText::GText (const GText& obj) : GObject (obj) {
 }
 
 void GText::setTextInfo (const TextInfo& tinfo) {
+  if (tinfo.mask & TextInfo::Align)
+    textInfo.align = tinfo.align;
   if (tinfo.mask & TextInfo::Font)
     setFont (tinfo.font);
 }
 
 GText::TextInfo GText::getTextInfo () const {
   TextInfo tinfo;
-  tinfo.mask = TextInfo::Font;
-  tinfo.font = font;
+  tinfo.mask = TextInfo::Font | TextInfo::Align;
+  tinfo.font = textInfo.font;
+  tinfo.align = textInfo.align;
   return tinfo;
 }
 
@@ -107,14 +119,21 @@ void GText::draw (Painter& p, bool) {
             outlineInfo.style);
   p.save ();
   p.setPen (pen);
-  p.setFont (font);
+  p.setFont (textInfo.font);
   p.setWorldMatrix (tmpMatrix, true);
 
   QListIterator<QString> it (text);
   float y = opos.y () + fm->ascent ();
   for (; it.current (); ++it) {
-    QPoint pos ((int) opos.x (), (int) y);
-    p.drawText (pos, (const char *) *(it.current ()));
+    const char* s = *(it.current ());
+    int ws = fm->width (s);
+    int xoff = 0;
+    if (textInfo.align == TextInfo::AlignCenter)
+      xoff = (max_width - ws) / 2;
+    else if (textInfo.align == TextInfo::AlignRight)
+      xoff = max_width - ws;
+    QPoint pos ((int) opos.x () + xoff, (int) y);
+    p.drawText (pos, s);
     y += fm->height ();
   }
   if (cursorActive) {
@@ -168,9 +187,10 @@ void GText::writeToPS (ostream &os) {
     }
     os << ")";
   }
-  const char* fontName = GDocument::getPSFont (font);
-  os << " ] " << opos.x () << ' ' << opos.y () << " /_"
-     << &fontName[1] << ' ' << font.pointSize () 
+  const char* fontName = GDocument::getPSFont (textInfo.font);
+  os << " ] " << opos.x () << ' ' << opos.y () << ' '
+     << (int) textInfo.align << " /_"
+     << &fontName[1] << ' ' << textInfo.font.pointSize () 
      << " DrawText\n";
 }
 
@@ -310,9 +330,9 @@ void GText::updateCursor (const Coord& p) {
 }
 
 void GText::setFont (const QFont& f) {
-  font = f;
+  textInfo.font = f;
   if (fm) delete fm;
-  fm = new QFontMetrics (font);
+  fm = new QFontMetrics (textInfo.font);
   calcBoundingBox ();
   emit changed ();
 }
@@ -326,7 +346,7 @@ void GText::calcBoundingBox () {
     width = width > ws ? width : ws;
     height += fm->height ();
   }
-
+  max_width = width;
   calcUntransformedBoundingBox (opos, Coord (opos.x () + width, opos.y ()),
 				Coord (opos.x () + width, opos.y () + height),
 				Coord (opos.x (), opos.y () + height));
@@ -347,6 +367,7 @@ void GText::restoreState (GOState* state) {
   GTextState *s = (GTextState *) state;
 #endif
   setFont (s->info.font);
+  textInfo.align = s->info.align;
   setText (s->tstring);
   GObject::restoreState (state);
 }
@@ -358,7 +379,8 @@ void GText::initState (GOState* state) {
 #else
   GTextState *s = (GTextState *) state;
 #endif
-  s->info.font = font;
+  s->info.font = textInfo.font;
+  s->info.align = textInfo.align;
   s->tstring = getText ();
 }
   
@@ -371,13 +393,14 @@ void GText::writeToXml (XmlWriter& xml) {
   writePropertiesToXml (xml);
   xml.addAttribute ("x", opos.x ());
   xml.addAttribute ("y", opos.y ());
+  xml.addAttribute ("align", (int) textInfo.align);
   xml.closeTag (false);
 
   xml.startTag ("font", false);
-  xml.addAttribute ("face", font.family ());
-  xml.addAttribute ("point-size", font.pointSize ());
-  xml.addAttribute ("weight", font.weight ());
-  if (font.italic ())
+  xml.addAttribute ("face", textInfo.font.family ());
+  xml.addAttribute ("point-size", textInfo.font.pointSize ());
+  xml.addAttribute ("weight", textInfo.font.weight ());
+  if (textInfo.font.italic ())
     xml.addAttribute ("italic", 1);
 
   xml.closeTag (false);

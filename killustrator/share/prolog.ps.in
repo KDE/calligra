@@ -217,9 +217,10 @@
   1000 mul
 } bind def
 
-/DrawText { % [ line1 ... linen] xpos ypos font size
+/DrawText { % [ line1 ... linen] xpos ypos align font size
   /fsize exch def
   /fname exch def
+  /align exch def
   /ypos exch def
   /xpos exch def
   /text exch def
@@ -227,6 +228,11 @@
   fsize scalefont
   setfont
   /fheight FontHeight def
+  /len 0 def              % maximale Zeilenlaenge
+  0 1 text length 1 sub { % fuer jede Zeile
+    text exch get stringwidth pop % Zeilenlaenge
+    dup len gt { /len exch def } { pop } ifelse
+  } for
   SOCol
   % Transformationsmatrix fuer Spiegelung
   0 ypos neg matrix translate
@@ -240,7 +246,20 @@
     fheight mul ypos      % y-Position ermitteln
     exch sub fheight sub
     xpos exch moveto      % auf Anfangspunkt positionieren
-    text exch get show    % String ausgeben
+    text exch get dup     % String besorgen
+    stringwidth pop       % Laenge ermitteln
+    align 0 eq {          % Ausrichtung: links
+      pop
+    }
+    {
+      align 1 eq {        % Ausrichtung: zentriert
+        len exch sub 2 div 0 rmoveto
+      }
+      {                   % Ausrichtung: rechts
+        len exch sub 0 rmoveto
+      } ifelse
+    } ifelse
+    show                  % String ausgeben
   } for
   setmatrix
 } bind def

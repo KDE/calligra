@@ -79,6 +79,7 @@ private:
   KCombo* penStyleField;
   KCombo *leftArrows, *rightArrows;
   QPushButton *ellipseKind[3];
+  QPushButton *textAlign[3];
   KSlider* roundnessSlider;
 
   // Fill Tab
