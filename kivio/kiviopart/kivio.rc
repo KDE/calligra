@@ -62,7 +62,8 @@
    <Separator/>
  </Menu>
  <Menu name="Tools"><text>&amp;Tools</text>
- <Action name="addStencilSet"/>
+   <Action name="addStencilSet"/>
+   <Separator/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Separator group="settings_show"/>

@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +47,7 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   connect(m_zoomAction,SIGNAL(activated()),SLOT(zoomActivated()));
   connect(m_panAction,SIGNAL(activated()),SLOT(handActivated()));
   connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
+  connect(m_panAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
   m_pPlus = new KAction( i18n("Zoom Plus"), "viewmag+", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
   m_pPlus->setWhatsThis(i18n("You can zoom in on the document by pressing this button."));
@@ -100,38 +102,39 @@ void ZoomTool::processEvent(QEvent* e)
 {
   KivioCanvas* canvas = view()->canvasWidget();
   
-  if ( !m_bHandMode )
-    switch (e->type()) {
+  if(!m_bHandMode) {
+    switch(e->type()) {
       case QEvent::KeyPress:
-        if (!m_bLockKeyboard) {
+        if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Key_Shift)) {
           m_pCurrent = m_pMinus;
           canvas->setCursor(*m_pMinusCursor);
         }
         break;
       case QEvent::KeyRelease:
-        if (!m_bLockKeyboard) {
+        if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Key_Shift)) {
           m_pCurrent = m_pPlus;
           canvas->setCursor(*m_pPlusCursor);
         }
         break;
       case QEvent::MouseButtonPress:
-        if ( m_pCurrent == m_pMinus ) {
-          m_pCurrent->activate();
-        } else {
-          if( ((QMouseEvent*)e)->button()==RightButton )
-          {
-            showPopupMenu( ((QMouseEvent*)e)->globalPos() );
-          }
-          else
-          {
+      {
+        QMouseEvent* me = static_cast<QMouseEvent*>(e);
+        
+        if(me->button() == LeftButton) {
+          if(m_pCurrent == m_pMinus) {
+            m_pCurrent->activate();
+          } else {
             m_bLockKeyboard = true;
             m_bDrawRubber = true;
-            canvas->startRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+            canvas->startRectDraw(me->pos(), KivioCanvas::Rubber);
           }
+        } else {
+          showPopupMenu(me->globalPos());
         }
         break;
+      }
       case QEvent::MouseButtonRelease:
-        if(m_pCurrent != m_pMinus) {
+        if(m_pCurrent == m_pPlus && m_bDrawRubber) {
           canvas->endRectDraw();
           m_bDrawRubber = false;
           m_bLockKeyboard = false;
@@ -139,17 +142,18 @@ void ZoomTool::processEvent(QEvent* e)
         }
         break;
       case QEvent::MouseMove:
-        if (m_bDrawRubber)
-          canvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+        if (m_bDrawRubber) {
+          canvas->continueRectDraw(static_cast<QMouseEvent*>(e)->pos(), KivioCanvas::Rubber);
+        }
         break;
       default:
         break;
     }
-  else
-    switch (e->type()) {
+  } else {
+    switch(e->type()) {
       case QEvent::MouseButtonPress:
         isHandMousePressed = true;
-        mousePos = ((QMouseEvent*)e)->pos();
+        mousePos = static_cast<QMouseEvent*>(e)->pos();
         break;
       case QEvent::MouseButtonRelease:
         isHandMousePressed = false;
@@ -157,7 +161,7 @@ void ZoomTool::processEvent(QEvent* e)
       case QEvent::MouseMove:
         if (isHandMousePressed) {
           canvas->setUpdatesEnabled(false);
-          QPoint newPos = ((QMouseEvent*)e)->pos();
+          QPoint newPos = static_cast<QMouseEvent*>(e)->pos();
           mousePos -= newPos;
           canvas->scrollDx(-mousePos.x());
           canvas->scrollDy(-mousePos.y());
@@ -168,6 +172,7 @@ void ZoomTool::processEvent(QEvent* e)
       default:
         break;
     }
+  }
 }
 
 void ZoomTool::setActivated(bool a)
@@ -195,6 +200,8 @@ void ZoomTool::zoomActivated()
   m_bHandMode = false;
   m_bDrawRubber = false;
   m_bLockKeyboard = false;
+  m_zoomAction->setChecked(true);
+  m_panAction->setChecked(false);
 }
 
 void ZoomTool::handActivated()
@@ -202,6 +209,8 @@ void ZoomTool::handActivated()
   view()->canvasWidget()->setCursor(*m_handCursor);
   m_bHandMode = true;
   isHandMousePressed = false;
+  m_zoomAction->setChecked(false);
+  m_panAction->setChecked(true);
 }
 
 void ZoomTool::zoomPlus()
@@ -291,7 +300,7 @@ void ZoomTool::zoomPage()
 void ZoomTool::showPopupMenu(const QPoint& p )
 {
   if(!m_pMenu) {
-    m_pMenu = static_cast<KPopupMenu*>(factory()->container("ZoomPopup", view()));
+    m_pMenu = static_cast<KPopupMenu*>(factory()->container("ZoomPopup", this));
   }
   
   if(m_pMenu) {
