@@ -130,12 +130,14 @@ bool KoPictureClipart::load(QIODevice* io)
     // Second, create the original clipart
     kdDebug(30003) << "Trying to load clipart... (Size:" << d->m_rawData.size() << ")" << endl;
     QBuffer buffer(d->m_rawData);
+    buffer.open(IO_ReadWrite);
+    bool check = true;
     if (d->m_extension=="svg")
     {
         if (!d->m_clipart.load(&buffer, "svg"))
         {
             kdWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)" << endl;
-            return false;
+            check = false;
         }
     }
     else
@@ -143,10 +145,11 @@ bool KoPictureClipart::load(QIODevice* io)
         if (!d->m_clipart.load(&buffer, NULL))
         {
             kdWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)" << endl;
-            return false;
+            check = false;
         }
     }
-    return true;
+    buffer.close();
+    return check;
 }
 
 bool KoPictureClipart::save(QIODevice* io)
@@ -166,6 +169,15 @@ bool KoPictureClipart::loadQPicture(QPicture& picture)
 
     d = new KoPictureClipartPrivate(picture);
     return true;
+}
+
+void KoPictureClipart::setRawData( QIODevice* io )
+{
+    if ( d ) {
+        io->open( IO_ReadOnly );
+        d->m_rawData = io->readAll();
+        io->close();
+    }
 }
 
 QSize KoPictureClipart::getOriginalSize(void) const

@@ -102,6 +102,8 @@ public:
 
     virtual void setSize(const QSize& size);
 
+    void setRawData( QIODevice* io );
+
 protected:
     QPixmap getPixmap(QImage& image);
     /**

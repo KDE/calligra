@@ -144,6 +144,7 @@ bool KoPicture::loadWmf(QIODevice* io)
         bool check = false;
         if (picture.load(&buffer,NULL)) {
             check = picClip->loadQPicture(picture);
+            picClip->setRawData( &buffer );
             m_base->setExtension("wmf");
         }
         buffer.close();
@@ -162,6 +163,7 @@ bool KoPicture::loadWmf(QIODevice* io)
         {
             wmf.paint(&picture);
             check = picClip->loadQPicture(picture);
+            picClip->setRawData( &buffer );
             m_base->setExtension("wmf");
         }
         buffer.close();
