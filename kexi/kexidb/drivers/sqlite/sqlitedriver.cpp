@@ -31,9 +31,11 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-K_EXPORT_COMPONENT_FACTORY(kexidb_sqlitedriver, KGenericFactory<KexiDB::SQLiteDriver>( "kexidb_sqlitedriver" ));
+//K_EXPORT_COMPONENT_FACTORY(kexidb_sqlitedriver, KGenericFactory<KexiDB::SQLiteDriver>( "kexidb_sqlitedriver" ));
 
 using namespace KexiDB;
+
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite, "sqlite" );
 
 //! driver specific private data
 class KexiDB::SQLiteDriverPrivate 

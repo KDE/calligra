@@ -29,6 +29,7 @@ namespace KexiDB {
 class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 {
 	Q_OBJECT
+	KEXIDB_DRIVER
 
 	public:
 		MySqlDriver(QObject *parent, const char *name, const QStringList &args=QStringList());

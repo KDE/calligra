@@ -21,12 +21,12 @@
 
 using namespace KexiDB;
 
-int KexiDB::majorVersion()
+int KexiDB::versionMajor()
 {
 	return KEXIDB_VERSION_MAJOR;
 }
 
-int KexiDB::minorVersion()
+int KexiDB::versionMinor()
 {
 	return KEXIDB_VERSION_MINOR;
 }

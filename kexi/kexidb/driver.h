@@ -147,9 +147,14 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if this driver's implementation is valid. 
 		 Just few constriants are checked to ensure that driver 
 		 developer didn't forget about something. 
-		 This method is called automatically on Conenction::connect(),
+		 This method is called automatically on createConnection(),
 		 and proper error message is set properly on any error. */
-		bool isValid();
+		virtual bool isValid();
+	
+		//! driver's static version information, it is automatically implemented
+		//! in implementation using KEXIDB_DRIVER macro (see driver_p.h)
+		virtual int versionMajor() const = 0;
+		virtual int versionMinor() const = 0;
 
 	protected:
 		/*! For reimplemenation: creates and returns connection object 
@@ -228,6 +233,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 };
 
 } //namespace KexiDB
+
+//! driver's static version information, automatically impemented for KexiDB drivers
+//! put this into Driver class declaration just like Q_OBJECT macro
+#define KEXIDB_DRIVER \
+	public: \
+	virtual int versionMajor() const; \
+	virtual int versionMinor() const;
 
 #endif
 

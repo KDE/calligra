@@ -33,6 +33,7 @@ class DriverManager;
 class KEXI_DB_EXPORT pqxxSqlDriver : public Driver
 {
 	Q_OBJECT
+	KEXIDB_DRIVER
 
 	public:
 		pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args = QStringList() );

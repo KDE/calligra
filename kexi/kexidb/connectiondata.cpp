@@ -30,7 +30,10 @@ using namespace KexiDB;
 
 class ConnectionData::Private {
 public:
-	Private() {}
+	Private() { 
+		dummy=false;
+	}
+	bool dummy : 1;
 };
 
 /*================================================================*/
@@ -43,10 +46,10 @@ ConnectionData::ConnectionData()
 }
 
 ConnectionData::ConnectionData(const ConnectionData& cd)
-: d(new ConnectionData::Private())
 {
-	*this = cd;
-	*d = *cd.d;
+	*this = cd;//copy data members
+	d = new ConnectionData::Private();
+//todo: copy d contents if not empty	*d = *cd.d;
 }
 
 ConnectionData::~ConnectionData()

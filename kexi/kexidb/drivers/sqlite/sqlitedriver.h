@@ -43,6 +43,7 @@ class SQLiteDriverPrivate;
 class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 {
 	Q_OBJECT
+	KEXIDB_DRIVER
 
 	public:
 		SQLiteDriver( QObject *parent, const char *name, const QStringList &args = QStringList() );

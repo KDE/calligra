@@ -24,7 +24,7 @@
 
 /*! KexiDB implementation version.
  In external code: do not use this to get library version information:
- use KexiDB::majorVersion() and KexiDB::minorVersion() instead to get real version.
+ use KexiDB::versionMajor() and KexiDB::versionMinor() instead to get real version.
 */
 #define KEXIDB_VERSION_MAJOR 1
 #define KEXIDB_VERSION_MINOR 0
@@ -43,10 +43,10 @@ namespace KexiDB {
 #define KexiDBDrvWarning kdWarning(44001)
 
 //! returns KexiDB version info (most significant part)
-int KEXI_DB_EXPORT majorVersion();
+int KEXI_DB_EXPORT versionMajor();
 
 //! returns KexiDB version info (least significant part)
-int KEXI_DB_EXPORT minorVersion();
+int KEXI_DB_EXPORT versionMinor();
 
 /*! Object types set like table or query. */
 enum ObjectTypes {

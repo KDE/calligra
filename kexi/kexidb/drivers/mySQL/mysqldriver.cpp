@@ -39,9 +39,11 @@ Boston, MA 02111-1307, USA.
 #include <kexidb/driver_p.h>
 
 
-K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriver>( "kexidb_mysqldriver" ))
+//K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriver>( "kexidb_mysqldriver" ))
 
 using namespace KexiDB;
+
+KEXIDB_DRIVER_INFO( MySqlDriver, mysql, "mysql" );
 
 MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &args) : Driver(parent, name,args)
 {

@@ -85,11 +85,22 @@ Driver::~Driver()
 
 bool Driver::isValid()
 {
-	QString not_init = i18n("not initialized for \"%1\" driver.").arg(name());
-	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
-		setError(ERR_INVALID_DRIVER_IMPL, QString("DriverBehaviour::ROW_ID_FIELD_NAME ") + not_init);
+	clearError();
+	if (KexiDB::versionMajor() != versionMajor()) {
+		setError(ERR_INCOMPAT_DRIVER_VERSION, 
+		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.")
+		.arg(name()).arg(versionMajor()).arg(KexiDB::versionMajor()));
 		return false;
 	}
+		
+	QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n").arg(name());
+	QString not_init = i18n("not initialized for  driver.");
+	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
+		setError(ERR_INVALID_DRIVER_IMPL, inv_impl
+			+ QString("DriverBehaviour::ROW_ID_FIELD_NAME ") + not_init);
+		return false;
+	}
+	
 	return true;
 }
 
@@ -105,6 +116,9 @@ const QPtrList<Connection> Driver::connectionsList() const
 Connection *Driver::createConnection( ConnectionData &conn_data )
 {
 	clearError();
+	if (!isValid())
+		return 0;
+	
 	if (m_isFileDriver) {
 		if (conn_data.fileName().isEmpty()) {
 			setError(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );

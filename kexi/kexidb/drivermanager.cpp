@@ -141,7 +141,14 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	}
 
 //	KLibLoader *libLoader = KLibLoader::self();
+
 	KService::Ptr ptr= *(m_services_lcase.find(name.lower()));
+
+	KLibrary *drv_lib = KLibLoader::self()->library( ptr->library().latin1() );
+	KexiDBDbg << "drv_lib = "<< (long)drv_lib <<" " << endl;
+	if (drv_lib) {
+		KexiDBDbg << drv_lib->hasSymbol("versionMajor") <<endl;
+	}
 
 	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,

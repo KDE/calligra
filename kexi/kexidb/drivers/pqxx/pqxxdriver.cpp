@@ -30,9 +30,11 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-K_EXPORT_COMPONENT_FACTORY(kexidb_pqxxsqldriver, KGenericFactory<KexiDB::pqxxSqlDriver>( "kexidb_pqxxsqldriver" ));
+//K_EXPORT_COMPONENT_FACTORY(kexidb_pqxxsqldriver, KGenericFactory<KexiDB::pqxxSqlDriver>( "kexidb_pqxxsqldriver" ));
 
 using namespace KexiDB;
+
+KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql, "pqxxsql" );
 
 pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )
