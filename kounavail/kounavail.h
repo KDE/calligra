@@ -27,6 +27,7 @@ class KoUnavailPart : public KoDocument
     Q_OBJECT
     Q_PROPERTY( QCString mimetype READ nativeFormatMimeType WRITE setMimeType )
     Q_PROPERTY( QString unavailReason READ unavailReason WRITE setUnavailReason )
+    Q_PROPERTY( QString realURL READ realURL WRITE setRealURL )
 public:
     KoUnavailPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0 );
 
@@ -36,6 +37,7 @@ public:
 
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
+    virtual bool saveChildren( KoStore* /*_store*/, const QString& /*_path*/ ) { return true; }
 
     /** This is called by KoDocumentChild::save */
     virtual QCString nativeFormatMimeType() const { return m_mimetype; }
@@ -45,8 +47,16 @@ public:
     enum UnavailReason { DocumentNotFound, HandlerNotFound };
     /** This is called by KoDocumentChild::createUnavailDocument */
     void setUnavailReason( const QString& reason ) { m_reason = reason; }
-    // stupid moc
+    // stupid moc - I want a write-only property !
     QString unavailReason() const { return m_reason; }
+    /** This is called by KoDocumentChild::createUnavailDocument
+     * Note the trick: we directly modify the URL of the document,
+     * the one returned by KPart's url()
+     */
+    void setRealURL( const QString& u ) { m_url = u; }
+    // stupid moc again
+    QString realURL() const { return m_url.url(); }
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
