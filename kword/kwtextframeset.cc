@@ -57,6 +57,7 @@
 #include <kdebugclasses.h>
 #endif
 #include <assert.h>
+
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
 //#define DEBUG_FORMATS
@@ -967,11 +968,15 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 #define kdDebugBody(area) if ( frameSetInfo() == FI_BODY ) kdDebug(area)
 
 // Helper for adjust*. There are 3 ways to use this method.
-// marginLeft and marginRight set -> determination of left and right margins for adjustMargins
-// marginRight set -> determination of right margin for adjustRMargin
-// breakBegin, breakEnd, and paragLeftMargin set -> check whether we should jump over some frames
+// 1) marginLeft and marginRight set -> determination of left and right margins for adjustMargins
+// 2) marginRight set -> determination of right margin for adjustRMargin
+// 3) breakBegin, breakEnd set -> check whether we should jump over some frames
 //                                                  [when there is not enough space besides them]
-void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* pageWidth,
+// reqMinWidth is the width that the formatter wants to use (current char/item)
+// validHeight is set to the height where marginLeft/marginRight applies (TODO)
+void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
+                                 int* marginLeft, int* marginRight, int* pageWidth,
+                                 int* validHeight,
                                  int* breakBegin, int* breakEnd, KoTextParag* parag )
 {
     // paragLeftMargin will be used as the minimum width needed for the parag,
@@ -994,15 +999,21 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     if ( marginLeft ) { assert( marginRight ); assert( pageWidth ); }
 #endif
     KoPoint pt;
-    // The +h in here is a little hack, for the case where this line is going to
+    // The +h in here is a hack, for the case where this line is going to
     // be moved down by formatVertically. We anticipate, and look at the bottom of the
     // line rather than the top of it, in order to find the bottom frame (the one
     // in which we'll end up). See TODO file for a real solution.
-    KWFrame * theFrame = internalToDocument( QPoint(0, yp+h), pt );
+    // ## This hack breaks layouting of a big char in two connected frames where
+    // the first one is very small (we don't notice the width being too small)
+    int yUsedForFrame = yp + h;
+    // Workaround: look at bottom in adjustMargins, look at top in formatVertically
+    if ( breakBegin )
+        yUsedForFrame = yp;
+    KWFrame * theFrame = internalToDocument( QPoint(0, yUsedForFrame), pt );
     if (!theFrame)
     {
 #ifdef DEBUG_MARGINS
-        kdDebug(32002) << "  getMargins: internalToDocument returned frame=0L for yp+h=" << yp+h << " ->aborting with 0 margins" << endl;
+        kdDebug(32002) << "  getMargins: internalToDocument returned frame=0L for y=" << yUsedForFrame << " ->aborting with 0 margins" << endl;
 #endif
         // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
         // Abort then, no need to return precise values
@@ -1013,6 +1024,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
         kdDebugBody(32002) << "  getMargins: internalToDocument returned frame=" << *theFrame
                            << " and pt=" << pt.x() << "," << pt.y() << endl;
 #endif
+    if ( validHeight )
+        *validHeight = h; // TODO
+
     // Everything from there is in layout units
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
@@ -1082,7 +1096,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                         kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
 #endif
                         // If the available space is too small, give up on it
-                        if ( to - from < m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin )
+                        if ( to - from < reqMinWidth + paragLeftMargin )
                         {
 #ifdef DEBUG_MARGINS
                             kdDebugBody(32002) << "   smaller than minimum=" << m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin << endl;
@@ -1139,11 +1153,14 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     }
 }
 
-void KWTextFrameSet::adjustMargins( int yp, int h, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag )
+void KWTextFrameSet::adjustMargins( int yp, int h, int reqMinWidth, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag )
 {
-    getMargins( yp, h, &leftMargin, &rightMargin, &pageWidth, 0L, 0L, parag );
+    int validHeight; // currently ignored (TODO)
+    getMargins( yp, h, reqMinWidth, &leftMargin, &rightMargin, &pageWidth, &validHeight, 0L, 0L, parag );
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "KWTextFrameSet::adjustMargins marginLeft=" << marginLeft << endl;
+    kdDebugBody(32002) << "KWTextFrameSet::adjustMargins(yp=" << yp << " h=" << h << " reqMinWidth=" << reqMinWidth << " returning"
+                       << " leftMargin=" << leftMargin << " rightMargin=" << rightMargin
+                       << " valid from " << yp << " to " << yp+validHeight << endl;
 #endif
 }
 
@@ -1349,7 +1366,8 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     // leave no space by their side for any text (e.g. most tables)
     int breakBegin = 0;
     int breakEnd = 0;
-    getMargins( yp, hp, 0L, 0L, 0L, &breakBegin, &breakEnd, parag );
+    int reqMinWidth = parag->string()->at( 0 ).width;
+    getMargins( yp, hp, reqMinWidth, 0L, 0L, 0L, 0L, &breakBegin, &breakEnd, parag );
     if ( breakEnd )
     {
         kdDebug(32002) << "KWTextFrameSet("<<getName()<<")::formatVertically no-space case. breakBegin=" << breakBegin
