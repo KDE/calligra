@@ -151,13 +151,21 @@ void KChartLegendConfigPage::init()
     title->setText(_params->legendTitleText());
     legendTitleColor->setColor(_params->legendTitleTextColor());
     legendTextColor->setColor(_params->legendTextColor());
+
     titleLegend=_params->legendTitleFont();
+    titleLegendIsRelative = _params->legendTitleFontUseRelSize();
+    if( titleLegendIsRelative )
+        titleLegend.setPointSize( _params->legendTitleFontRelSize() );
+
     textLegend=_params->legendFont();
+    legentTextIsRelative= _params->legendFontUseRelSize();
+    if(legentTextIsRelative)
+        textLegend.setPointSize(_params->legendFontRelSize());
 }
 
 void KChartLegendConfigPage::changeTitleLegendFont()
 {
-    if (KFontDialog::getFont( titleLegend,false,this ) == QDialog::Rejected )
+    if (KFontDialog::getFont( titleLegend,false,this, true,&titleLegendIsRelative ) == QDialog::Rejected )
         return;
 }
 
@@ -194,14 +202,11 @@ void KChartLegendConfigPage::apply()
     _params->setLegendTitleTextColor(legendTitleColor->color());
     _params->setLegendTextColor(legendTextColor->color());
 
-    if(_params->legendTitleFont()!=titleLegend)
-    {
-        //used real size font.
-        _params->setLegendTitleFont(titleLegend,true);
-    }
-    if(_params->legendFont()!=textLegend)
-    {
-        //used real size font.
-        _params->setLegendFont(textLegend,true);
-    }
+    _params->setLegendTitleFont(titleLegend,!titleLegendIsRelative);
+    if( titleLegendIsRelative )
+        _params->setLegendTitleFontRelSize(titleLegend.pointSize());
+    _params->setLegendFont(textLegend,!legentTextIsRelative);
+    if( legentTextIsRelative)
+        _params->setLegendFontRelSize(textLegend.pointSize());
+
 }

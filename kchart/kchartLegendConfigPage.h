@@ -33,6 +33,7 @@ private:
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
+    bool titleLegendIsRelative, legentTextIsRelative;
 };
 
 #endif
