@@ -1409,7 +1409,11 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<draw:image draw:name=\"" << anchor.picture.key.filename() << "\"";
     *m_streamOut << " draw:style-name=\"Graphics\""; // ### TODO: should be an automatic "graphic" style name instead
+#if 1
+    *m_streamOut << " text:anchor-type=\"as-char\"";
+#else
     *m_streamOut << " text:anchor-type=\"paragraph\"";
+#endif
     *m_streamOut << " svg:height=\"" << height << "pt\" svg:width=\"" << width << "pt\"";
     *m_streamOut << " draw:z-index=\"0\" xlink:href=\"#" << ooName << "\"";
     *m_streamOut << " xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"";
@@ -2089,7 +2093,7 @@ void OOWriterWorker::declareFont(const QString& fontName)
 {
     if (fontName.isEmpty())
         return;
-        
+
     if (m_fontNames.find(fontName)==m_fontNames.end())
     {
         QString props;
