@@ -18,25 +18,31 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qcheckbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 #include <qpushbutton.h>
 
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "kis_dlg_preferences.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
 {
-	// Layout
+  // Layout
   QGridLayout* grid = new QGridLayout( this, 2, 1, 7, 15);
 
   // checkbutton
   m_saveOnExit = new QCheckBox( i18n( "Save and restore dialog geometries" ), this );
   grid->addWidget( m_saveOnExit, 0, 0 );
+
+  // only for testing it
+  KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, QString::null, 10, true, this );
+  grid->addWidget( i, 1, 0 );
 }
 
 bool GeneralTab::saveOnExit()
@@ -86,22 +92,19 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
   grid->setRowStretch( 2, 1 );
 }
 
-PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name, WFlags /*f*/ )
-	: QTabDialog( parent, name, true )
+PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
+  : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
 {
-  setCaption( i18n( "Preferences" ) );
+  QVBox *vbox;
 
-  m_general = new GeneralTab( this );
-  addTab( m_general, i18n( "General") );
+  vbox = addVBoxPage( i18n( "General") );
+  m_general = new GeneralTab( vbox );
 
-  m_directories = new DirectoriesTab( this );
-  addTab( m_directories, i18n( "Directories") );
+  vbox = addVBoxPage( i18n( "Directories") );
+  m_directories = new DirectoriesTab( vbox );
 
-  m_undoRedo = new UndoRedoTab( this );
-  addTab( m_undoRedo, i18n( "Undo/redo") );
-
-  setOkButton();
-  setCancelButton();
+  vbox = addVBoxPage( i18n( "Undo/redo") );
+  m_undoRedo = new UndoRedoTab( vbox );
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -119,10 +122,3 @@ void PreferencesDialog::editPreferences()
 }
 
 #include "kis_dlg_preferences.moc"
-
-
-
-
-
-
-

@@ -22,7 +22,8 @@
 #define __preferencesdlg_h__
 
 #include <qwidget.h>
-#include <qtabdialog.h>
+
+#include <kdialogbase.h>
 
 class QLineEdit;
 class QCheckBox;
@@ -73,7 +74,7 @@ public:
 /**
  *  Preferences dialog of KImageShop
  */
-class PreferencesDialog : public QTabDialog
+class PreferencesDialog : public KDialogBase
 {
   Q_OBJECT
 
@@ -83,8 +84,8 @@ public:
 
 protected:
 
-	PreferencesDialog( QWidget *_parent = 0, const char *_name = 0, WFlags f = 0 );
-	~PreferencesDialog();
+  PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
+  ~PreferencesDialog();
 
 private:
 
@@ -94,6 +95,3 @@ private:
 };
 
 #endif
-
-
-
