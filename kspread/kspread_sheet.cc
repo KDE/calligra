@@ -6419,6 +6419,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", d->name );
+    table.setAttribute( "layoutDirection", (d->layoutDirection == RightToLeft) ? "rtl" : "ltr" );
     table.setAttribute( "columnnumber", (int)d->showColumnNumber);
     table.setAttribute( "borders", (int)d->showPageBorders);
     table.setAttribute( "hide", (int)d->hide);
@@ -7668,6 +7669,25 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         d->doc->setErrorMessage( i18n("Invalid document. Table name is empty.") );
         return false;
     }
+    
+    bool detectDirection = true;
+    d->layoutDirection = LeftToRight;
+    QString layoutDir = table.attribute( "layoutDirection" );
+    if( !layoutDir.isEmpty() )
+    {
+        if( layoutDir == "rtl" )
+        {
+           detectDirection = false;
+           d->layoutDirection = RightToLeft;
+        }
+        else if( layoutDir == "ltr" )
+        {
+           detectDirection = false;
+           d->layoutDirection = LeftToRight;
+        }
+    }
+    if( detectDirection )
+       checkContentDirection( d->name );
 
     /* older versions of KSpread allowed all sorts of characters that
        the parser won't actually understand.  Replace these with '_'
@@ -7960,8 +7980,6 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       else
         d->password = QCString( "" );
     }
-
-    checkContentDirection( d->name );
 
     return true;
 }
@@ -8290,8 +8308,6 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool /*makeUndo
 
     d->doc->changeAreaTableName( old_name, name );
     emit sig_nameChanged( this, old_name );
-
-    checkContentDirection( name );
 
     setName(name.utf8());
     (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->tableNameHasChanged();
