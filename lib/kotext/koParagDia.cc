@@ -261,7 +261,7 @@ void KoCounterStyleWidget::numStyleChanged() {
     styleBuffer = 999;
     StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
     emit changeStyle( sr->style() );
-
+    m_counter.setStyle( sr->style() );
     bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
