@@ -740,6 +740,16 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 }
 
 void
+VKoPainter::drawNode( const KoPoint& p, int width )
+{
+	moveTo( KoPoint( p.x() - width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
+	lineTo( KoPoint( p.x() + width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
+	lineTo( KoPoint( p.x() + width / m_zoomFactor, p.y() + width / m_zoomFactor ) );
+	lineTo( KoPoint( p.x() - width / m_zoomFactor, p.y() + width / m_zoomFactor ) );
+	lineTo( KoPoint( p.x() - width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
+}
+
+void
 VKoPainter::drawImage( const QImage &image )
 {
 	// set up world matrix

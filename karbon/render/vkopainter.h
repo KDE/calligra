@@ -62,6 +62,8 @@ public:
     virtual void newPath();
     virtual void fillPath();
     virtual void strokePath();
+	// helper
+	virtual void drawNode( const KoPoint& p, int width);
 
 	// pen + brush
 	virtual void setPen( const VStroke & );

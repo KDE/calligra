@@ -64,6 +64,8 @@ public:
 	virtual void newPath() = 0;
 	virtual void strokePath() = 0;
 	virtual void fillPath() = 0;
+	// helper
+	virtual void drawNode( const KoPoint& , int ) {}
 
 	// pen + brush
 	virtual void setPen( const VStroke & ) = 0;

@@ -78,32 +78,6 @@ VComposite::~VComposite()
 {
 }
 
-//TODO: better move this into vpainter?
-static void
-drawNode( VPainter* painter, const KoPoint& p, int width, double zoomFactor )
-{
-	painter->moveTo(
-		KoPoint(
-			p.x() - width / zoomFactor,
-			p.y() - width / zoomFactor ) );
-	painter->lineTo(
-		KoPoint(
-			p.x() + width / zoomFactor,
-			p.y() - width / zoomFactor ) );
-	painter->lineTo(
-		KoPoint(
-			p.x() + width / zoomFactor,
-			p.y() + width / zoomFactor ) );
-	painter->lineTo(
-		KoPoint(
-			p.x() - width / zoomFactor,
-			p.y() + width / zoomFactor ) );
-	painter->lineTo(
-		KoPoint(
-			p.x() - width / zoomFactor,
-			p.y() - width / zoomFactor ) );
-}
-
 void
 VComposite::draw( VPainter* painter, const KoRect* rect ) const
 {
@@ -192,7 +166,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 			painter->setPen( Qt::NoPen );
 			painter->setBrush( Qt::yellow );
 
-			drawNode( painter, center, 2, zoomFactor );
+			painter->drawNode( center, 2 );
 
 			painter->fillPath();
 		}
@@ -258,7 +232,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 						( jtr.current()->ctrlPoint1Selected() ||
 						  jtr.current()->prev()->knotSelected() ) )
 					{
-						drawNode( painter, jtr.current()->ctrlPoint1(), 3, zoomFactor );
+						painter->drawNode( jtr.current()->ctrlPoint1(), 3 );
 						painter->setBrush( Qt::blue.light() );
 						painter->fillPath();
 					}
@@ -275,7 +249,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 						jtr.current()->ctrlPoint2Selected() ||
 						jtr.current()->knotSelected() )
 					{
-						drawNode( painter, jtr.current()->ctrlPoint2(), 3, zoomFactor );
+						painter->drawNode( jtr.current()->ctrlPoint2(), 3 );
 
 						painter->setBrush( Qt::blue.light() );
 						painter->fillPath();
@@ -289,7 +263,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 				// Draw knot:
 				painter->newPath();
 
-				drawNode( painter, jtr.current()->knot(), 3, zoomFactor );
+				painter->drawNode( jtr.current()->knot(), 3 );
 
 				if( jtr.current()->knotSelected() )
 				{
@@ -311,7 +285,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 			painter->setPen( Qt::NoPen );
 			painter->setBrush( Qt::blue.light() );
 
-			drawNode( painter, boundingBox().center(), 3, zoomFactor );
+			painter->drawNode( boundingBox().center(), 3 );
 
 			painter->fillPath();
 		}
