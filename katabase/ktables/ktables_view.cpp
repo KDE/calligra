@@ -333,7 +333,6 @@ bool KtablesView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr p_factor
 
 bool KtablesView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr p_mbar )
 {
-  KStdAccel stdAccel;
   kdebug( KDEBUG_INFO, 0, "bool KtablesView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )" );
 
   if( CORBA::is_nil( p_mbar ) )
@@ -353,15 +352,15 @@ bool KtablesView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr p_mbar )
 
   text = i18n( "Cu&t" );
   pix = OPICON( "editcut" );
-  m_idMenuEdit_cut = m_vMenuEdit->insertItem6( pix, text, this, "cutSelection", stdAccel.cut(), -1, -1 );
+  m_idMenuEdit_cut = m_vMenuEdit->insertItem6( pix, text, this, "cutSelection", KStdAccel::key(KStdAccel::Cut), -1, -1 );
 
   text = i18n( "&Copy" ) ;
   pix = OPICON( "editcopy" );
-  m_idMenuEdit_copy = m_vMenuEdit->insertItem6( pix, text,this, "copySelection", stdAccel.copy(), -1, -1 );
+  m_idMenuEdit_copy = m_vMenuEdit->insertItem6( pix, text,this, "copySelection", KStdAccel::key(KStdAccel::Copy), -1, -1 );
 
   text = i18n( "&Paste" ) ;
   pix = OPICON( "editpaste" );
-  m_idMenuEdit_paste = m_vMenuEdit->insertItem6( pix, text, this, "paste", stdAccel.paste(), -1, -1 );
+  m_idMenuEdit_paste = m_vMenuEdit->insertItem6( pix, text, this, "paste", KStdAccel::key(KStdAccel::Paste), -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 

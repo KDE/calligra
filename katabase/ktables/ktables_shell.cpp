@@ -97,7 +97,6 @@ void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
 
   ///////////////////////////////////////////////////////////////////
   // menuBar entry file_menu
-  KStdAccel stdAccel;
 
 //CORBA::WString_var text;
 //OpenPartsUI::Pixmap_var pix
@@ -113,20 +112,20 @@ void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
 
   text = i18n("&New");
   pix = BarIcon("filenew");
-  m_idMenuFile_New = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileNew() ), stdAccel.openNew() );
+  m_idMenuFile_New = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileNew() ), KStdAccel::key(KStdAccel::New) );
 
   text = i18n("&Open...");
   pix = BarIcon( "fileopen" );
-  m_idMenuFile_Open = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileOpen() ), stdAccel.open() );
+  m_idMenuFile_Open = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileOpen() ), KStdAccel::key(KStdAccel::Open) );
 
   text = i18n("&Close");
-  m_idMenuFile_Close = m_pFileMenu->insertItem( text, this, SLOT( slotFileClose() ), stdAccel.close() );
+  m_idMenuFile_Close = m_pFileMenu->insertItem( text, this, SLOT( slotFileClose() ), KStdAccel::key(KStdAccel::Close) );
 
   m_pFileMenu->insertSeparator();
 
   text = i18n("&Save");
   pix = BarIcon( "fileclose" );
-  m_idMenuFile_Save =  m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileSave() ), stdAccel.save() );
+  m_idMenuFile_Save =  m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileSave() ), KStdAccel::key(KStdAccel::Save) );
 
   text = i18n("Save &As...");
   m_idMenuFile_SaveAs = m_pFileMenu->insertItem( text, this, SLOT( slotFileSaveAs() ) );
@@ -135,12 +134,12 @@ void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
 
   text = i18n("&Print...");
   pix = BarIcon( "fileprint" );
-  m_idMenuFile_Print = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFilePrint() ), stdAccel.print() );
+	m_idMenuFile_Print = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFilePrint() ), KStdAccel::key(KStdAccel::Print) );
 
   m_pFileMenu->insertSeparator();
 
   text = i18n("E&xit");
-  m_idMenuFile_Quit = m_pFileMenu->insertItem( text, this, SLOT( slotFileQuit() ), stdAccel.quit() );
+  m_idMenuFile_Quit = m_pFileMenu->insertItem( text, this, SLOT( slotFileQuit() ), KStdAccel::key(KStdAccel::Quit) );
 
   text = i18n( "&File" );
   if( bInsertFileMenu )
