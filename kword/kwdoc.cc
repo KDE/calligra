@@ -1359,7 +1359,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     fs->load( framesetElem );
                     fs->setFrameInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
-                    addFrameSet( fs );
+                    frames.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
 
                     // Old file format had autoCreateNewFrame as a frameset attribute,
                     // and our templates still use that.
