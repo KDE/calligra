@@ -27,6 +27,7 @@
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
+#include <koFilterManager.h>
 
 #include <kspread_map.h>
 #include <kspread_sheet.h>
@@ -129,19 +130,43 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
     return KoFilter::NotImplemented;
   }
 
-  CSVExportDialog expDialog( 0 );
-  expDialog.fillTable( ksdoc->map() );
+  CSVExportDialog *expDialog = 0;
+  if (!m_chain->manager()->getBatchMode())
+  {
+    expDialog= new CSVExportDialog( 0 );
+    
+    if (!expDialog)
+    {
+      kdError(30501) << "Dialog has not been created! Aborting!" << endl;
+      return KoFilter::StupidError;
+    }
+    expDialog->fillTable( ksdoc->map() );
 
-  if ( !expDialog.exec() )
-    return KoFilter::UserCancelled;
+    if ( !expDialog->exec() )
+    {
+      delete expDialog;
+      return KoFilter::UserCancelled;
+    }
+  }
 
-  QTextCodec* codec = expDialog.getCodec();
-  if ( !codec )
-    return KoFilter::StupidError;
-
+  QTextCodec* codec = 0;
   QChar csvDelimiter;
+  if (expDialog)
+  {
+	codec = expDialog->getCodec();
+	if ( !codec )
+	{
+	  delete expDialog;
+	  return KoFilter::StupidError;
+	}
+	csvDelimiter = expDialog->getDelimiter();
+  }
+  else
+  {
+    codec = QTextCodec::codecForName("UTF-8");
+    csvDelimiter = ',';
+  }
 
-  csvDelimiter = expDialog.getDelimiter();
 
   // Now get hold of the table to export
   // (Hey, this could be part of the dialog too, choosing which table to export....
@@ -150,15 +175,22 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
 
   bool first = true;
   QString str;
-  QChar textQuote = expDialog.getTextQuote();
+  QChar textQuote;
+  if (expDialog)
+    textQuote = expDialog->getTextQuote();
+  else
+    textQuote = '"';
 
-  if ( expDialog.exportSelectionOnly() )
+  if ( expDialog && expDialog->exportSelectionOnly() )
   {
     kdDebug(30501) << "Export as selection mode" << endl;
     KSpreadView const * const view = static_cast<KSpreadView*>(ksdoc->views().getFirst());
 
     if ( !view ) // no view if embedded document
+    {
+      delete expDialog;
       return KoFilter::StupidError;
+    }
 
     KSpreadSheet const * const sheet = view->activeTable();
 
@@ -196,17 +228,21 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
     {
       KSpreadSheet const * const sheet = it.current();
 
-      if ( !expDialog.exportTable( sheet->tableName() ) )
+      if (expDialog && !expDialog->exportTable( sheet->tableName() ) )
       {
         continue;
       }
 
-      if ( !first || expDialog.printAlwaysTableDelimiter() )
+      if ( !first || ( expDialog && expDialog->printAlwaysTableDelimiter() ) )
       {
         if ( !first)
           str += m_eol;
-
-        QString name( expDialog.getTableDelimiter() );
+	
+	QString name;
+	if (expDialog)
+	  name = expDialog->getTableDelimiter();
+	else
+	  name = "********<SHEETNAME>********";
         const QString tname( i18n("<SHEETNAME>") );
         int pos = name.find( tname );
         if ( pos != -1 )
@@ -268,6 +304,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   {
     kdError(30501) << "Unable to open output file!" << endl;
     out.close();
+    delete expDialog;
     return KoFilter::StupidError;
   }
 
@@ -277,6 +314,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   outStream << str;
 
   out.close();
+  delete expDialog;
   return KoFilter::OK;
 }
 

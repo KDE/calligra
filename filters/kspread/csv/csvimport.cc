@@ -29,6 +29,7 @@
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
+#include <koFilterManager.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_sheet.h>
@@ -100,9 +101,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     QByteArray inputFile( in.readAll() );
     in.close();
 
-    CSVDialog *dialog = new CSVDialog(0L, inputFile, csv_delimiter);
-    if (!dialog->exec())
-        return KoFilter::UserCancelled;
+    CSVDialog *dialog = new CSVDialog(0L, inputFile, csv_delimiter );
+    if (!m_chain->manager()->getBatchMode() && !dialog->exec())
+	  return KoFilter::UserCancelled;
     inputFile.resize( 0 ); // Release memory (input file content)
 
     ElapsedTime t( "Filling data into document" );
