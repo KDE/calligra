@@ -366,6 +366,66 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
         }
 
+        // slide transition
+        if (m_styleStack.hasAttribute("presentation:transition-style"))
+        {
+            QDomElement bgPage = doc.createElement("PAGE");
+            QDomElement pgEffect = doc.createElement("PGEFFECT");
+
+            const QString effect = m_styleStack.attribute("presentation:transition-style");
+            kdDebug() << "Transition name: " << effect << endl;
+            int pef;        // PEF_NONE
+
+            if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
+                pef=14;
+            else if (effect=="horizontal-stripes" || effect=="horizontal-lines") // PEF_BLINDS_HOR
+                pef=13;
+            else if (effect=="spiralin-left" || effect=="spiralin-right"
+                     || effect== "spiralout-left" || effect=="spiralout-right") // PEF_SURROUND1
+                pef=11;
+            else if (effect=="fade-from-upperleft") // PEF_STRIPS_RIGHT_DOWN
+                pef=39;
+            else if (effect=="fade-from-upperright") // PEF_STRIPS_LEFT_DOWN
+                pef=37;
+            else if (effect=="fade-from-lowerleft") // PEF_STRIPS_RIGHT_UP
+                pef=38;
+            else if (effect=="fade-from-lowerright") // PEF_STRIPS_LEFT_UP
+                pef=36;
+            else if (effect=="fade-from-top") // PEF_COVER_DOWN
+                pef=19;
+            else if (effect=="fade-from-bottom") // PEF_COVER_UP
+                pef=21;
+            else if (effect=="fade-from-left") // PEF_COVER_RIGHT
+                pef=25;
+            else if (effect=="fade-from-right") // PEF_COVER_LEFT
+                pef=23;
+            else if (effect=="fade-to-center") // PEF_CLOSE_ALL
+                pef=3;
+            else if (effect=="fade-from-center") // PEF_OPEN_ALL
+                pef=6;
+            else if (effect=="open-vertical") // PEF_OPEN_HORZ; really, no kidding ;)
+                pef=4;
+            else if (effect=="open-horizontal") // PEF_OPEN_VERT
+                pef=5;
+            else if (effect=="close-vertical") // PEF_CLOSE_HORZ
+                pef=1;
+            else if (effect=="close-horizontal") // PEF_CLOSE_VERT
+                pef=2;
+            else if (effect=="dissolve") // PEF_DISSOLVE; perfect hit ;)
+                pef=35;
+            else if (effect=="horizontal-checkerboard") // PEF_CHECKBOARD_ACROSS
+                pef=17;
+            else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
+                pef=18;
+            else         // we choose a random transition instead of the unsupported ones ;)
+                pef=-1;
+
+            pgEffect.setAttribute("value", pef);
+
+            bgPage.appendChild(pgEffect);
+            backgroundElement.appendChild(bgPage);
+        }
+
         // set the pagetitle
         QDomElement titleElement = doc.createElement( "Title" );
         titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
