@@ -610,7 +610,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with the OpenOffice.org version '%1'. This filter was written for version for 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
-        message.arg( docElement.attribute( "office:version" ) );
+        message = message.arg( docElement.attribute( "office:version" ) );
         if ( KMessageBox::warningYesNo( 0, message, i18n( "Unsupported document version" ) ) == KMessageBox::No )
           return false;
       }
