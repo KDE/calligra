@@ -413,3 +413,23 @@ bool KWordDocIface::configIgnoreDoubleSpace() const
 {
     return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
 }
+
+bool KWordDocIface::configRemoveSpaceBeginEndLine() const
+{
+    return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
+}
+
+bool KWordDocIface::configUseBulletSyle() const
+{
+    return doc->getAutoFormat()->getConfigUseBulletSyle();
+}
+
+void KWordDocIface::setConfigRemoveSpaceBeginEndLine( bool _space)
+{
+    doc->getAutoFormat()->configRemoveSpaceBeginEndLine(_space);
+}
+
+void KWordDocIface::setConfigUseBulletStyle( bool _ubs)
+{
+    doc->getAutoFormat()->configUseBulletStyle(_ubs);
+}
