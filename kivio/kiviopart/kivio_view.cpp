@@ -127,6 +127,7 @@
 #include "kivioglobal.h"
 #include "kivio_config.h"
 #include "kivioaddstencilsetpanel.h"
+#include "kiviostencilsetinstaller.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -502,6 +503,9 @@ void KivioView::setupActions()
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
+  
+  (void) new KAction(i18n("Install Stencil Set..."), 0, this,
+    SLOT(installStencilSet()), actionCollection(), "installStencilSet");
 }
 
 void KivioView::initActions()
@@ -2128,6 +2132,12 @@ void KivioView::removeStatusBarProgress()
     delete m_statusBarProgress;
     m_statusBarProgress = 0;
   }
+}
+
+void KivioView::installStencilSet()
+{
+  Kivio::StencilSetInstaller dlg(this);
+  dlg.exec();
 }
 
 #include "kivio_view.moc"

@@ -67,12 +67,9 @@
  <Menu name="settings"><text>&amp;Settings</text>
    <Separator group="settings_show"/>
    <Action name="options" group="settings_configure"/>
+   <Action name="installStencilSet" group="settings_configure"/>
  </Menu>
 </MenuBar>
-<ToolBar name="mainToolBar" fullWidth="false"><text>File</text>
-  <Separator/>
-  <Action name="addStencilSet"/>
-</ToolBar>
 <ToolBar name="EditToolBar" fullWidth="false"><text>Edit</text>
   <Action name="koffice_undo"/>
   <Action name="koffice_redo"/>
@@ -108,6 +105,8 @@
   <Action name="textVAlignSub"/>
 </ToolBar>
 <ToolBar name="ToolsToolBar" fullWidth="false"><text>Tools</text>
+  <Action name="addStencilSet"/>
+  <Separator/>
 </ToolBar>
 <Menu name="menupage_popup">
   <Action name="renamePage"/>

@@ -271,6 +271,8 @@ class KivioView : public KoView
     void arrowHeadFormat();
 
     void clipboardDataChanged();
+    
+    void installStencilSet();
 
   protected:
     void setupActions();
