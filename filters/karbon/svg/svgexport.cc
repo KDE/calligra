@@ -208,6 +208,10 @@ SvgExport::getGradient( const VGradient& grad )
 		*m_defs << "y1=\"" << grad.origin().y() << "\" ";
 		*m_defs << "x2=\"" << grad.vector().x() << "\" ";
 		*m_defs << "y2=\"" << grad.vector().y() << "\" ";
+		if( grad.repeatMethod() == VGradient::reflect )
+			*m_defs << "spreadMethod=\"reflect\" ";
+		else if( grad.repeatMethod() == VGradient::repeat )
+			*m_defs << "spreadMethod=\"repeat\" ";
 		*m_defs << ">" << endl;
 
 		// color stops
