@@ -82,6 +82,17 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
   }
 }
 
+
+bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter )
+{
+    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    for( ; it.current(); ++it )
+    {
+        it.current()->saveOasis( xmlWriter );
+    }
+    return true;
+}
+
 QDomElement KSpreadMap::save( QDomDocument& doc )
 {
   QDomElement mymap = doc.createElement( "map" );

@@ -583,9 +583,9 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoStoreDevice dev( store );
     KoXmlWriter xmlWriter( &dev, "office:document-content" );
 
-    //todo fixme just add a element for testing saving maindoc.xml
+    //todo fixme just add a element for testing saving content.xml
     xmlWriter.startElement( "office:body" );
-
+    d->workbook->saveOasis( xmlWriter );
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element
     xmlWriter.endDocument();

@@ -30,6 +30,7 @@ class DCOPObject;
 
 class QDomElement;
 class QDomDocument;
+class KoXmlWriter;
 
 #include <qcstring.h>
 #include <qptrlist.h>
@@ -57,6 +58,8 @@ public:
   virtual ~KSpreadMap();
 
   QDomElement save( QDomDocument& doc );
+    bool saveOasis( KoXmlWriter & xmlWriter );
+
     bool loadOasis( const QDomElement& mymap, KoOasisStyles& oasisStyles );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );

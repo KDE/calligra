@@ -6905,6 +6905,11 @@ QString KSpreadSheet::translateOpenCalcPoint( const QString & str )
     return range;
 }
 
+bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter )
+{
+    return true;
+}
+
 bool KSpreadSheet::loadXML( const QDomElement& table )
 {
     bool ok = false;

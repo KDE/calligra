@@ -57,6 +57,7 @@ class KPrinter;
 #include <qwidget.h>
 #include <qdragobject.h>
 #include <koOasisStyles.h>
+#include <koxmlwriter.h>
 
 #define BORDER_SPACE 1
 
@@ -280,6 +281,8 @@ public:
     virtual bool loadXML( const QDomElement& );
 
     virtual bool loadOasis( const QDomElement& table, const KoOasisStyles& oasisStyles );
+
+    virtual bool saveOasis( KoXmlWriter & xmlWriter );
 
     /**
      * Saves a children
