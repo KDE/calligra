@@ -632,7 +632,7 @@ void GPage::updateSelection()
   KoRect r = mSelBox;
   updateHandle();
   r = r.unite(mSelBox);
-  document()->emitChanged(r, true);  
+  document()->emitChanged(r, true);
 }
 
 void GPage::changePaintStyles(const KoColor &c)

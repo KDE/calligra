@@ -63,11 +63,11 @@ void ScaleCmd::execute()
   m3.translate(xback, yback);
 
   TransformationCmd::execute();
-
   for(unsigned int i = 0; i < objects.count(); i++)
   {
     objects[i]->transform(m1);
     objects[i]->transform(m2);
     objects[i]->transform(m3, true);
   }
+  document()->activePage()->updateSelection();
 }

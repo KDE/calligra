@@ -498,6 +498,8 @@ void Canvas::updateRegion(const KoRect &r, bool handle)
 void Canvas::propagateMouseEvent(QMouseEvent *e)
 {
   emit mousePositionChanged(e->x(), e->y());
+  //TODO Zoom
+  emit coordsChanged(static_cast<double>(e->x() - mXOffset) / zoomFactor(), static_cast<double>(e->y() - mYOffset) / zoomFactor());
 
   if(e->button() == RightButton && e->type() == QEvent::MouseButtonPress)
   {

@@ -119,6 +119,7 @@ private slots:
   void changeSelection();
 
   void slotZoomFactorChanged();
+  void slotCoordsChanged(double x, double y);
 
   void slotCopy();
   void slotPaste();
@@ -178,9 +179,10 @@ private:
   KPopupMenu *rulerMenu;
 
   /* Status bar */
-  
+
+  QLabel *mSBCoords;  
   QLabel *mSBState;
-  
+
   /* Panels */
   LayerPanel   *mLayerPanel;
   PaintPanel   *mPaintPanel;

@@ -54,7 +54,7 @@ GObject::GObject(const QDomElement &element)
   //transform(toMatrix(element.namedItem("matrix").toElement()), false);
 }
 
-GObject::GObject(const GObject& obj)
+GObject::GObject(const GObject &obj)
 {
   mId = mCurId;
   mCurId++;
@@ -138,15 +138,19 @@ void GObject::initTmpMatrix()
 void GObject::transform(const QWMatrix &m, bool update)
 {
   tMatrix = tMatrix * m;
-  iMatrix = tMatrix.invert();
-  initTmpMatrix();
-  calcBoundingBox();
+  if(update)
+  {
+    iMatrix = tMatrix.invert();
+    initTmpMatrix();
+    calcBoundingBox();
+  }
 }
 
 void GObject::ttransform(const QWMatrix &m, bool update)
 {
   tmpMatrix = tmpMatrix * m;
-  calcBoundingBox();
+  if(update)
+    calcBoundingBox();
 }
   
 bool GObject::contains(const KoPoint &p)

@@ -88,6 +88,7 @@ signals:
   void offsetXChanged(int v);
   void offsetYChanged(int v);
   void mousePositionChanged(int x, int y);
+  void coordsChanged(double x, double y);
 
   void rmbAtSelection(int x, int y);
   void backSpaceCalled();

@@ -2,8 +2,10 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo.nl)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,8 +24,8 @@
 
 */
 
-#ifndef BrushCells_h_
-#define BrushCells_h_
+#ifndef __BrushCells_h__
+#define __BrushCells_h__
 
 #include <qtable.h>
 #include <qbrush.h>
@@ -34,15 +36,14 @@ class QPixmap;
 
 class BrushCells : public QTable
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    BrushCells (QWidget *parent = 0L, const QColor &colour = Qt::black,
-                const char *name = 0);
-    ~BrushCells ();
+  BrushCells(QWidget *parent = 0L, const QColor &colour = Qt::black, const char *name = 0);
+  ~BrushCells ();
 
-    virtual QSize sizeHint() const { return QSize(200, 120); }
-    virtual QSize minimumSizeHint() const { return QSize(200, 120); }
-    virtual QSizePolicy sizePolicy() const { return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); }
+/*  virtual QSize sizeHint() const { return QSize(160, 120); }
+    virtual QSize minimumSizeHint() const { return QSize(160, 120); }
+    virtual QSizePolicy sizePolicy() const { return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); }*/
 
     Qt::BrushStyle brushStyle ();
     void selectBrush (Qt::BrushStyle style);

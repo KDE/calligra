@@ -103,6 +103,7 @@ KontourView::~KontourView()
   // Delete GUI
   delete hRuler;
   delete vRuler;
+  delete mSBCoords;
   delete mSBState;
 }
 
@@ -193,12 +194,12 @@ void KontourView::setupActions()
 
   /* Effects menu */
 
-  new KAction( i18n("&Blend..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
+  new KAction(i18n("&Blend..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
 
   /* Settings menu */
 
   m_options = KStdAction::preferences(this, SLOT(slotOptions()), actionCollection(), "options");
-  
+
   changeSelection();
 }
 
@@ -286,17 +287,22 @@ void KontourView::setupCanvas()
   layout->addMultiCellLayout(tabLayout, 2, 2, 0, 1);
 
   KStatusBar * sb = statusBar();
+  mSBCoords = 0L;
   mSBState = 0L;
   if(sb)
   {
+    mSBCoords = new KStatusBarLabel(QString::null, 0, sb);
     mSBState = new KStatusBarLabel(QString::null, 0, sb);
+    mSBCoords->setMinimumWidth(100);
     mSBState->setMinimumWidth(300);
+    addStatusBarItem(mSBCoords, 0);
     addStatusBarItem(mSBState, 0);
   }
 
   connect(mCanvas, SIGNAL(rmbAtSelection(int,int)), this, SLOT(popupForSelection()));
   connect(mCanvas, SIGNAL(mousePositionChanged(int, int)), hRuler, SLOT(updatePointer(int, int)));
   connect(mCanvas, SIGNAL(mousePositionChanged(int, int)), vRuler, SLOT(updatePointer(int, int)));
+  connect(mCanvas, SIGNAL(coordsChanged(double, double)), SLOT(slotCoordsChanged(double, double)));
 
   connect(mCanvas, SIGNAL(offsetXChanged(int)), hRuler, SLOT(updateOffset(int)));
   connect(mCanvas, SIGNAL(offsetYChanged(int)), vRuler, SLOT(updateOffset(int)));
@@ -684,6 +690,12 @@ void KontourView::slotZoomFactorChanged()
   m_viewZoom->setCurrentItem(8);
   m_zoomIn->setEnabled(zoom != Kontour::maxZoomFactor);
   m_zoomOut->setEnabled(zoom != Kontour::minZoomFactor);
+}
+
+void KontourView::slotCoordsChanged(double x, double y)
+{
+  if(mSBCoords)
+    mSBCoords->setText(QString("%1:%2").arg(x, 0, 'f', 1).arg(y, 0, 'f', 1));
 }
 
 /*******************[Actions]*******************/

@@ -2,8 +2,10 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo.nl)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,17 +24,16 @@
 
 */
 
-#include <BrushCells.h>
+#include "BrushCells.h"
 
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <qpixmap.h>
 
-#define CELL_WIDTH  50
-#define CELL_HEIGHT 30
+#include "kontour_global.h"
 
-BrushCells::BrushCells (QWidget *parent, const QColor &color, const char *name)
-  : QTable(parent, name)
+BrushCells::BrushCells(QWidget *parent, const QColor &color, const char *name):
+QTable(parent, name)
 {
   hide();
   setSelectionMode(QTable::Single);
@@ -41,8 +42,8 @@ BrushCells::BrushCells (QWidget *parent, const QColor &color, const char *name)
   setNumCols(4);
   for(int i=0;i < 4;i++)
   {
-    setColumnWidth(i, CELL_WIDTH);
-    setRowHeight(i, CELL_HEIGHT);
+    setColumnWidth(i, Kontour::brushCellWidth);
+    setRowHeight(i, Kontour::brushCellHeight);
   }
   setLeftMargin(0);
   setTopMargin(0);
@@ -53,32 +54,35 @@ BrushCells::BrushCells (QWidget *parent, const QColor &color, const char *name)
   show();
 }
 
-BrushCells::~BrushCells () {
+BrushCells::~BrushCells()
+{
 }
 
 void BrushCells::setColor(const QColor &color)
 {
  brushPixmaps.clear();
- for (int i = 0; i < 14; i++) {
-    QPixmap *pix=new QPixmap(CELL_WIDTH, CELL_HEIGHT);
+ for(int i = 0; i < 14; i++)
+ {
+    QPixmap *pix = new QPixmap(Kontour::brushCellWidth, Kontour::brushCellHeight);
     pix->fill(Qt::white);
     QPainter p;
-    p.begin (pix);
+    p.begin(pix);
     p.setPen(Qt::black);
-    QBrush brush(color, (Qt::BrushStyle) (i + 1));
-    qDrawShadeRect (&p, 0, 0, CELL_WIDTH, CELL_HEIGHT,
-                    colorGroup(), true, 1, 1, &brush);
+    QBrush brush(color, (Qt::BrushStyle)(i + 1));
+    qDrawShadeRect(&p, 0, 0, Kontour::brushCellWidth, Kontour::brushCellHeight, colorGroup(), true, 1, 1, &brush);
     p.end();
     brushPixmaps.append(pix);
  }
 }
 
-int BrushCells::cellWidth (int) {
-  return CELL_WIDTH;
+int BrushCells::cellWidth(int)
+{
+  return Kontour::brushCellWidth;
 }
 
-int BrushCells::cellHeight (int) {
-  return CELL_HEIGHT;
+int BrushCells::cellHeight(int)
+{
+  return Kontour::brushCellHeight;
 }
 
 void BrushCells::paintCell(QPainter *p, int row, int col, const QRect &cr, bool selected,
@@ -89,7 +93,7 @@ void BrushCells::paintCell(QPainter *p, int row, int col, const QRect &cr, bool 
   {
     p->drawPixmap (0, 0, *brushPixmaps.at(pos));
     if(currentBrush == pos) {
-      qDrawShadeRect (p, 0, 0, CELL_WIDTH - 1, CELL_HEIGHT - 1,
+      qDrawShadeRect (p, 0, 0, Kontour::brushCellWidth - 1, Kontour::brushCellHeight - 1,
                       colorGroup (), false, 1, 1, 0L);
     }
   }
@@ -124,7 +128,4 @@ void BrushCells::selectBrush (Qt::BrushStyle style) {
   repaint ();
 }
 
-#undef CELL_HEIGHT
-#undef CELL_WIDTH
-
-#include <BrushCells.moc>
+#include "BrushCells.moc"

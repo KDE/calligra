@@ -28,6 +28,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "GDocument.h"
+#include "GPage.h"
 #include "GObject.h"
 
 TranslateCmd::TranslateCmd(GDocument *aGDoc, double x, double y):
@@ -45,4 +47,5 @@ void TranslateCmd::execute()
   TransformationCmd::execute();
   for(unsigned int i = 0; i < objects.count(); i++)
     objects[i]->transform(m, true);
+  document()->activePage()->updateSelection();
 }

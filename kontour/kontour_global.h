@@ -36,6 +36,8 @@ namespace Kontour
   const double maxZoomFactor = 100.0;
   const double pi = 3.14159265358979323846;
   const double minGridDistance = 6.0;
+  const int brushCellWidth = 40;
+  const int brushCellHeight = 30;
 
   enum Position{ HPos_Top = 1, HPos_Right = 2, HPos_Bottom = 4, HPos_Left = 8, HPos_Center = 16 };
   

@@ -483,6 +483,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
 void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, bool permanent)
 {
   KoRect origbox = page->boundingBoxForSelection();
+  origbox = origbox.normalize();
   KoRect newbox(origbox);
   double sx = 1;
   double sy = 1;
@@ -496,12 +497,14 @@ void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, b
   if(mask & Kontour::HPos_Top)
     newbox.setTop(newbox.top() + dy);
 
-  kdDebug() << "DX = " << dx << endl;
+  kdDebug() << "**********" << endl;
+
+/*  kdDebug() << "DX = " << dx << endl;
   kdDebug() << "DY = " << dy << endl;
   kdDebug() << "old width = " << origbox.width() << endl;
   kdDebug() << "old height = " << origbox.height() << endl;
   kdDebug() << "new width = " << newbox.width() << endl;
-  kdDebug() << "new height = " << newbox.height() << endl;
+  kdDebug() << "new height = " << newbox.height() << endl;*/
 
 /*  KoRect sbox = canvas->snapScaledBoxToGrid (newbox, mask);*/
 //  sx = sbox.width() / origbox.width();
@@ -523,7 +526,7 @@ void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, b
   }
   else
   {
-    double xoff = origbox.x();
+/*    double xoff = origbox.x();
     double yoff = origbox.y();
     double xback = xoff;
     double yback = yoff;
@@ -542,7 +545,8 @@ void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, b
       (*it)->ttransform(m1);
       (*it)->ttransform(m2);
       (*it)->ttransform(m3, true);
-    }
+    }*/
+    page->updateSelection();
   }
 
   QString msgbuf = i18n("Scale");
@@ -552,6 +556,7 @@ void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, b
   msgbuf += QString::number(sy * 100.0, 'f', 3);
   msgbuf += QString(" %]");
   toolController()->view()->setStatus(msgbuf);
+  kdDebug() << "**********" << endl;
 }
 
 void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permanent)
