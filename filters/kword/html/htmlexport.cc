@@ -508,10 +508,12 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassE
     attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
     ProcessAttributes (myNode, attrProcessingList);
 
+    // Do not process <STYLES>, that is the job of the function ProcessDocTagStylesOnly
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
+    // Do not process <STYLES>, that is the job of the function processDocTagStylesOnly
     tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
@@ -574,7 +576,7 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
     // let parse the buffer just read from the file
     qDomDocumentIn.setContent(byteArrayIn);
 
-    QDomNode docNodeIn = qDomDocumentIn.documentElement ();
+    QDomElement docNodeIn = qDomDocumentIn.documentElement ();
 
     //Now all is ready to write to a file
     QFile fileOut (filenameOut);
@@ -634,7 +636,8 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
-    streamOut << getStyleElement(); //Includes an end of line at the end if it is not empty.
+    // Make now the <style> element if needed
+    streamOut << processDocTagStylesOnly(docNodeIn); // Includes an end of line at the end if it is not empty.
 
     streamOut << "</head>" << endl;
 

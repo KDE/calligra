@@ -20,8 +20,57 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "ExportTagProcessing.h"
 #include "ExportFilterBase.h"
 #include "ExportFilterFullPower.h"
+
+QString ClassExportFilterHtmlFullPower::escapeCssIdentifier(const QString& strText) const
+{
+    // Reference: section 4.1.3 of the CSS2 recommendation
+    // NOTE: when we need to escape, we choose the numerical CSS escape as it is encoding neutral.
+
+    QString strReturn;
+
+    for (uint i=0; i<strText.length(); i++)
+    {
+        const QChar ch=strText[i];
+        if (((ch>='a') && (ch<='z'))
+            || ((ch>='A') && (ch<='Z')))
+        {
+            strReturn+=ch;
+        }
+        else if (((ch>='0') && (ch<='9'))
+            || (ch=='-'))
+        {
+            if (i=0)
+            {
+                // A digit or a hyphen is not allowed as first character of an identifier
+                //  therefore we must escape it
+                strReturn+='\\'; // start escape
+                strReturn+=QString::number(ch.unicode(),16);
+                strReturn+=' '; // end escape (the space is not part of the following text!)
+            }
+            else
+            {
+                strReturn+=ch;
+            }
+        }
+        else if (ch>=QChar(161))
+        {
+            // Any Unicode character greater or egual to 161 is allowed too, even at start.
+            // FIXME: what if the encoding does not support this character? (Would need to be escaped too!)
+            strReturn+=ch;
+        }
+        else
+        {
+            // We have a non-acceptable character, so escape it!
+            strReturn+='\\'; // start escape
+            strReturn+=QString::number(ch.unicode(),16);
+            strReturn+=' '; // end escape (the space is not part of the following text!)
+        }
+    }
+    return strReturn;
+}
 
 void ClassExportFilterHtmlFullPower::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
@@ -158,27 +207,6 @@ void ClassExportFilterHtmlFullPower::ProcessParagraphData ( QString &paraText, V
             outputText+="</span>";
         }
     }
-}
-
-QString ClassExportFilterHtmlFullPower::getStyleElement(void)
-{
-    QString str;
-    str="<style type=\"text/css\">\n";
-    str+="<!--\n"; //Put the style under comments to increase the compatibility with old browsers
-    str+="BODY { background-color: #FFFFFF }\n";
-    str+="-->\n";
-    str+="</style>\n";
-    return str;
-}
-
-QString ClassExportFilterXHtmlFullPower::getStyleElement(void)
-{
-    //NOTE: in XHTML 1.0, you cannot put the style definition into HTML comments
-    QString str;
-    str="<style type=\"text/css\">\n";
-    str+="BODY { background-color: #FFFFFF }\n"; //BODY in upper case or in lower case?
-    str+="</style>\n";
-    return str;
 }
 
 QString ClassExportFilterHtmlFullPower::getBodyOpeningTagExtraAttributes(void) const
@@ -386,3 +414,37 @@ QString ClassExportFilterHtmlFullPower::getParagraphElement(const QString& strTa
     strElement+=">\n";
     return strElement;
 }
+
+QString ClassExportFilterHtmlFullPower::processDocTagStylesOnly(QDomElement myNode)
+{
+    QString strReturn;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    strReturn+="<style type=\"text/css\">\n";
+    if (!isXML())
+    {
+        // Put the style under comments to increase the compatibility with old browsers
+        // However in XHTML 1.0, you cannot put the style definition into HTML comments
+        strReturn+="<!--\n";
+    }
+    strReturn+="BODY { background-color: #FFFFFF }\n";
+
+    // We are only interested in <STYLES> for now!
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, strReturn, this);
+
+    if (!isXML())
+    {
+        strReturn+="-->\n";
+    }
+    strReturn+="</style>\n";
+
+    return strReturn;
+}
+

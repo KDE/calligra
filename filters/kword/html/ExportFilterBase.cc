@@ -20,6 +20,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qdom.h>
+
 #include "ExportFilterBase.h"
 
 // NOTE: ClassExportFilterBase::filter is still in htmlexport.cc
@@ -54,11 +56,6 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
 bool ClassExportFilterBase::isXML(void) const
 {
     return false;
-}
-
-QString ClassExportFilterBase::getStyleElement(void)
-{
-    return QString::null; //Default is no style
 }
 
 QString ClassExportFilterBase::getHtmlOpeningTagExtraAttributes(void) const
@@ -139,3 +136,9 @@ QString ClassExportFilterBase::getBeforeBodyClosingTag(void) const
     // We need nothing special before the </body> tag
     return QString::null;
 }
+
+QString ClassExportFilterBase::processDocTagStylesOnly(QDomElement myNode)
+{
+    return QString::null;
+}
+

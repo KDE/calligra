@@ -158,7 +158,7 @@ class ClassExportFilterBase
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
-        virtual QString getStyleElement(void);
+        virtual QString processDocTagStylesOnly(QDomElement myNode);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)=0;
         virtual QString getAfterBodyOpeningTag(void) const;

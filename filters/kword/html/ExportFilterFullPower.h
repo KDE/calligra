@@ -37,9 +37,11 @@ class ClassExportFilterHtmlFullPower : public ClassExportFilterBase
     public: //virtual
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
-        virtual QString getStyleElement(void);
+        virtual QString processDocTagStylesOnly(QDomElement myNode);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
+    protected:
+        QString escapeCssIdentifier(const QString& strText) const;
 };
 
 //
@@ -53,7 +55,6 @@ class ClassExportFilterXHtmlFullPower : public ClassExportFilterHtmlFullPower
         virtual ~ClassExportFilterXHtmlFullPower (void) {}
     public: //virtual
         virtual bool isXML(void) const {return true;}
-        virtual QString getStyleElement(void);
 };
 
 #endif /* EXPORTFILTERFULLPOWER_H */

@@ -160,27 +160,6 @@ void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, Value
     }
 }
 
-QString ClassExportFilterHtmlStyle::getStyleElement(void)
-{
-    QString str;
-    str="<style type=\"text/css\">\n";
-    str+="<!--\n"; //Put the style under comments to increase the compatibility with old browsers
-    str+="BODY { background-color: #FFFFFF }\n";
-    str+="-->\n";
-    str+="</style>\n";
-    return str;
-}
-
-QString ClassExportFilterXHtmlStyle::getStyleElement(void)
-{
-    //NOTE: in XHTML 1.0, you cannot put the style definition into HTML comments
-    QString str;
-    str="<style type=\"text/css\">\n";
-    str+="BODY { background-color: #FFFFFF }\n"; //BODY in upper case or in lower case?
-    str+="</style>\n";
-    return str;
-}
-
 QString ClassExportFilterHtmlStyle::getBodyOpeningTagExtraAttributes(void) const
 {
     return QString::null;
@@ -399,4 +378,29 @@ QString ClassExportFilterHtmlStyle::getBeforeBodyClosingTag(void) const
     // Close the additional <div> element, we have needed for compatibility
     //  with AbiWord CVS 2001-08-21
     return "</div>\n";
+}
+
+QString ClassExportFilterHtmlStyle::processDocTagStylesOnly(QDomElement myNode)
+{
+    QString strReturn;
+
+    strReturn+="<style type=\"text/css\">\n";
+
+    if (!isXML())
+    {
+        // Put the style under comments to increase the compatibility with old browsers
+        // However in XHTML 1.0, you cannot put the style definition into HTML comments
+        strReturn+="<!--\n";
+    }
+
+    strReturn+="BODY { background-color: #FFFFFF }\n";
+
+    if (!isXML())
+    {
+        strReturn+="-->\n";
+    }
+
+    strReturn+="</style>\n";
+
+    return strReturn;
 }
