@@ -42,7 +42,8 @@ we want to have in the 1.0 release:
 BUGS
 
 - Selection tools don't get redrawed when they need to (except for rectangle select now)
+- opacity is totally broken, it sort of almost works for a white background, but nothing else
 - Paint offset causes mispaint
-- Select Ellipse Tool is broken
 - Save in tool propeties does not work
+- New for modified document does not give error
 
