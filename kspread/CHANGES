@@ -1,5 +1,6 @@
 since 1.3
 =========
+- fix bug #101926: kspread never prints the grid
 - Implement save/load Oasis format
 - Allow to sort without respect case
 - allow editing/removing of links

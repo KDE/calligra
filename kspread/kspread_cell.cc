@@ -2040,8 +2040,10 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( !isObscuringForced() )
     paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
 
-  // 2. Paint the default borders unless we are painting on a printer.
-  if ( painter.device()->devType() != QInternal::Printer )
+  // 2. Paint the default borders if we are on screen or if we are printing
+  //    and the checkbox to do this is checked.
+  if ( painter.device()->devType() != QInternal::Printer
+       || m_pTable->print()->printGrid())
     paintDefaultBorders( painter, rect, cellRect, cellRef,
 			 paintBorderRight, paintBorderBottom,
                          paintBorderLeft,  paintBorderTop,
