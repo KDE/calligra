@@ -1063,6 +1063,7 @@ void KWCanvas::mrCreateTable()
             }
             grpMgr->setName( _name );
             doc->addGroupManager( grpMgr );
+            doc->addFrameSet( grpMgr );
             for ( unsigned int i = 0; i < m_table.rows; i++ ) {
                 for ( unsigned int j = 0; j < m_table.cols; j++ ) {
                     KWTableFrameSet::Cell *_frameSet = new KWTableFrameSet::Cell( grpMgr, i, j );

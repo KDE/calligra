@@ -1157,11 +1157,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setVisible( FALSE );
     }
 
-    for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
-        if ( getGroupManager( i )->isActive() )
-            getGroupManager( i )->init();
-    }
-
     KWChild *ch = 0L;
     for ( ch = m_lstChildren.first(); ch != 0; ch = m_lstChildren.next() ) {
         KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
@@ -2033,6 +2028,18 @@ KWFrameSet * KWDocument::getFrameSet( unsigned int mx, unsigned int my )
         }
     }
 
+    // For now this is a duplicate for the groupmanager list, but the groupmanager list
+    // will probably be removed shortly, so the following is not needed then anymore..
+    for (unsigned i=0; i<grpMgrs.count(); i++) {
+        KWFrameSet *frameSet = grpMgrs.at(i);
+        if ( frameSet->contains( mx, my ) ) {
+            if ( !frameSet->isVisible() )
+                continue;
+            return frameSet;
+        }
+    }
+
+
     return 0L;
 }
 
@@ -2433,6 +2440,7 @@ void KWDocument::delGroupManager( KWGroupManager *g, bool deleteit )
 
 void KWDocument::addFrameSet( KWFrameSet *f )
 {
+kdDebug() << "addFrameSet" << endl;
   frames.append(f);
   //updateAllFrames();
   setModified( true );

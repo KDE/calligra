@@ -64,7 +64,6 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
         Cell *cell = new Cell( this, *original.m_cells.at( i ) );
     }
     m_doc->addGroupManager( this );
-    init();
 }
 
 /*================================================================*/
@@ -172,16 +171,6 @@ void KWTableFrameSet::init( unsigned int x, unsigned int y, unsigned int width, 
                 y + i * (frameHeight + tableCellSpacing), baseWidth, baseHeight );
         }
     }
-
-    for ( unsigned int k = 0; k < m_cells.count(); k++ )
-        doc->addFrameSet( m_cells.at( k ) );
-}
-
-/*================================================================*/
-void KWTableFrameSet::init()
-{
-    for ( unsigned int k = 0; k < m_cells.count(); k++ )
-        doc->addFrameSet( m_cells.at( k ) );
 }
 
 /*================================================================*/
@@ -474,6 +463,17 @@ void KWTableFrameSet::recalcRows()
                     KWTextFrameSet *newFrameSet = dynamic_cast<KWTextFrameSet*>( cell );
                     KWTextFrameSet *baseFrameSet = dynamic_cast<KWTextFrameSet*>( getCell( 0, i ) );
                     //newFrameSet->assign( baseFrameSet );
+
+                    newFrameSet->getFrame(0)->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
+                    newFrameSet->getFrame(0)->setLeftBorder( baseFrameSet->getFrame( 0 )->getLeftBorder2() );
+                    newFrameSet->getFrame(0)->setRightBorder( baseFrameSet->getFrame( 0 )->getRightBorder2() );
+                    newFrameSet->getFrame(0)->setTopBorder( baseFrameSet->getFrame( 0 )->getTopBorder2() );
+                    newFrameSet->getFrame(0)->setBottomBorder( baseFrameSet->getFrame( 0 )->getBottomBorder2() );
+                    newFrameSet->getFrame(0)->setBLeft( baseFrameSet->getFrame( 0 )->getBLeft() );
+                    newFrameSet->getFrame(0)->setBRight( baseFrameSet->getFrame( 0 )->getBRight() );
+                    newFrameSet->getFrame(0)->setBTop( baseFrameSet->getFrame( 0 )->getBTop() );
+                    newFrameSet->getFrame(0)->setBBottom( baseFrameSet->getFrame( 0 )->getBBottom() );
+
                     newFrameSet->getFrame(0)->setHeight(baseFrameSet->getFrame(0)->height());
                 }
                 cell->getFrame( 0 )->moveTopLeft( QPoint( cell->getFrame( 0 )->x(), y ) );
@@ -481,6 +481,7 @@ void KWTableFrameSet::recalcRows()
                 if(cell->m_row + cell->m_rows -1 == j) {
                     nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
                 }
+                cell->getFrame(0)->updateResizeHandles();
             }
         }
     }
@@ -635,30 +636,43 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
     QValueList<int> colStart;
     QRect r = getBoundingRect();
 
+    bool needFinetune=false;
+    unsigned int copyFromRow=_idx-1;
+    if(_recalc) copyFromRow=0;
+
+    // build a list of colStart positions.
     for ( i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
-        if ( cell->m_row == 0 ) {
-            for( int rowspan=cell->m_cols; rowspan>0; rowspan--)
-                colStart.append(cell->getFrame( 0 )->width() / cell->m_cols );
+        if ( cell->m_row == copyFromRow ) {
+            if(cell->m_cols>1) {
+                needFinetune=true;
+                colStart.append(cell->getFrame( 0 )->left());
+            } else {
+                for( int rowspan=cell->m_cols; rowspan>0; rowspan--) 
+{
+                colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
+}
+            }
         }
         if ( cell->m_row >= _idx ) cell->m_row++;
     }
 
-    for( unsigned int col = 0; col < colStart.count(); col++) {
-        for ( i = 0; i < m_cells.count(); i++ ) {
-            if(m_cells.at(i)->m_col == col) {
-                colStart[col]=m_cells.at(i)->getFrame(0)->left();
-                break;
+    if(needFinetune) {
+        for( unsigned int col = 0; col < colStart.count(); col++) {
+            for ( i = 0; i < m_cells.count(); i++ ) {
+                if(m_cells.at(i)->m_col == col) {
+                    colStart[col]=m_cells.at(i)->getFrame(0)->left();
+                    break;
+                }
             }
         }
     }
 
     colStart.append(r.right());
 
-    QList<KWTextFrameSet> nCells;
+    QList<KWTableFrameSet::Cell> nCells;
     nCells.setAutoDelete( false );
 
-    int ww = 0;
     for ( i = 0; i < getCols(); i++ ) {
         int tmpWidth= colStart[i+1] - colStart[i]-tableCellSpacing;
         if((i+1)==getCols())
@@ -667,34 +681,24 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
-        Cell *_frameSet = new Cell( this, _idx, i );
-        _frameSet->setIsRemoveableHeader( isAHeader );
-        _frameSet->addFrame( frame );
+        Cell *newCell = new Cell( this, _idx, i );
+        newCell->setIsRemoveableHeader( isAHeader );
+        newCell->addFrame( frame );
 
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
 #if 0
         if ( anchored ) {
-            KWFrame *newFrame = _frameSet->getFrame( 0 );
+            KWFrame *newFrame = newCell->getFrame( 0 );
 
             if (newFrame)
                 newFrame->moveBy( -origin.x(), -origin.y() );
         }
 #endif
 
-        nCells.append( _frameSet );
-        ww += colStart[ i ] + 2;
+        nCells.append( newCell );
 
-        if(isAHeader) {
-            // copy behav from row0
-            Cell *cell = getCell(0,i);
-            _frameSet->getFrame(0)->setWidth(cell->getFrame(0)->width());
-            if(cell->m_cols>1) {
-                getCell(_idx,i)->m_cols= cell->m_cols;
-                i+=getCell(0,i)->m_cols -1 ;
-            }
-        }
-
+        newCell->m_cols = getCell(copyFromRow,i)->m_cols;
     }
 
     m_rows = ++_rows;
@@ -702,13 +706,11 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
     for ( i = 0; i < nCells.count(); i++ ) {
         KWUnit u;
         u.setMM( 1 );
-        doc->addFrameSet( nCells.at( i ) );
         KWFrame *frame = nCells.at( i )->getFrame( 0 );
         frame->setBLeft( u );
         frame->setBRight( u );
         frame->setBTop( u );
         frame->setBBottom( u );
-
     }
 
 
@@ -761,7 +763,6 @@ void KWTableFrameSet::insertCol( unsigned int _idx )
     for ( i = 0; i < nCells.count(); i++ ) {
         KWUnit u;
         u.setMM( 1 );
-        doc->addFrameSet( nCells.at( i ) );
         KWFrame *frame = nCells.at( i )->getFrame( 0 );
         frame->setBLeft( u );
         frame->setBRight( u );
@@ -795,7 +796,6 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
         Cell *cell = m_cells.at(i);
         if ( row >= cell->m_row  && row < cell->m_row + cell->m_rows) { // cell is indeed in row
             if(cell->m_rows == 1) { // lets remove it
-                doc->delFrameSet( m_cells.at( i ) );
                 m_cells.remove( i );
                 i--;
             } else { // make cell span rowspan less rows
@@ -836,7 +836,6 @@ void KWTableFrameSet::deleteCol( unsigned int col )
         Cell *cell = m_cells.at(i);
         if ( col >= cell->m_col  && col < cell->m_col + cell->m_cols) { // cell is indeed in col
             if(cell->m_cols == 1) { // lets remove it
-                doc->delFrameSet( m_cells.at( i ) );
                 m_cells.remove( i );
                 i--;
             } else { // make cell span colspan less cols
@@ -938,7 +937,6 @@ bool KWTableFrameSet::joinCells() {
         for(unsigned int j=rowBegin; j<=rowEnd;j++) {
             Cell *cell = getCell(j,i);
             if(cell && cell!=firstCell) {
-                doc->delFrameSet( cell );
                 m_cells.remove(cell);
             }
         }
@@ -1031,7 +1029,6 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
                     aFrame->moveBy( -origin.x(), -origin.y() );
             }
 #endif
-            doc->addFrameSet(lastFrameSet);
 
             lastFrameSet->m_rows = 1;
             lastFrameSet->m_cols = 1;
@@ -1174,7 +1171,6 @@ void KWTableFrameSet::validate()
                         newFrame->moveBy( -origin.x(), -origin.y() );
                 }
 #endif
-                doc->addFrameSet(_frameSet);
                 _frameSet->m_rows = 1;
                 _frameSet->m_cols = 1;
             }
@@ -1182,7 +1178,7 @@ void KWTableFrameSet::validate()
     }
     unsigned int bottom = getCell(m_rows-1,0)->getFrame(0)->bottom();
     while (! misplacedCells.isEmpty()) {
-        // append cell at botom of table.
+        // append cell at bottom of table.
         Cell *cell = misplacedCells.take(0);
         cell->getFrame(0)->setWidth(getBoundingRect().width());
         cell->getFrame(0)->moveBy( getBoundingRect().left() -
@@ -1196,6 +1192,13 @@ void KWTableFrameSet::validate()
         m_cells.append(cell);
     }
 }
+
+bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
+kdDebug() << "contains: " << mx << ", " << my << ": " << getBoundingRect().contains(mx,my) << endl;
+    return getBoundingRect().contains(mx,my);
+}
+
+
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )

@@ -102,8 +102,6 @@ public:
     void init( unsigned int x, unsigned int y,
                unsigned int width, unsigned int height,
                KWTblCellSize wid, KWTblCellSize hei );
-    /** announce all frames to the document */
-    void init();
     /** resize and position all cells */
     void recalcCols();
     void recalcRows();
@@ -182,6 +180,9 @@ public:
 
     /** Prerender the whole table to resize the table cells so all text will fit. */
     void preRender();
+
+    /** returns true if we have a cell occupying that position */
+    bool contains( unsigned int mx, unsigned int my );
 
     QString anchorType();
     QString anchorInstance();
