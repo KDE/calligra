@@ -9,6 +9,8 @@
 //
 //   For more information see at the file COPYING in this package
 
+#include <iostream.h>
+
 #include "layer.h"
 #include "misc.h"
 #include "canvas.h"
@@ -240,6 +242,21 @@ void Canvas::compositeImage(QRect r)
 	convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
       }
   TIME_END("compositeImage");
+
+  cerr << "Michael : need an update" << endl;
+
+  if( !views.isEmpty() )
+  {
+    CanvasView *current = views.first();
+ 
+    while( current )
+    {
+      cerr << "Michael : update" << endl;
+
+      current->repaint( false );
+      current = views.next();
+    }
+  }
 }
 
 void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLay,
