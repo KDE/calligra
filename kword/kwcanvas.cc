@@ -1669,6 +1669,7 @@ void KWCanvas::pasteFrames()
             fs->finalize();
         }
     }
+    m_doc->processImageRequests();
     m_doc->repaintAllViews();
     //we can't know what type of frame is pasted
     //so refresh all type in docstruct
