@@ -191,51 +191,63 @@ void SetBackCmd::execute()
 {
 
     if ( !takeGlobal ) {
-	m_page->setBackColor( backColor1, backColor2, bcType,
-			   unbalanced, xfactor, yfactor );
-	m_page->setBackType(  backType );
-	m_page->setBackView(  backView );
-	m_page->setBackPixmap( backPix );
-	doc->restoreBackground( m_page );
+        m_page->setBackColor( backColor1, backColor2, bcType,
+                              unbalanced, xfactor, yfactor );
+        m_page->setBackType( backType );
+        m_page->setBackView( backView );
+        m_page->setBackPixmap( backPix );
+        doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
- 	    it.current()->setBackColor(  backColor1, backColor2, bcType,
-			       unbalanced, xfactor, yfactor );
-	    it.current()->setBackType( backType );
-	    it.current()->setBackView( backView );
-	    it.current()->setBackPixmap(  backPix );
+            it.current()->setBackColor( backColor1, backColor2, bcType,
+                                        unbalanced, xfactor, yfactor );
+            it.current()->setBackType( backType );
+            it.current()->setBackView( backView );
+            it.current()->setBackPixmap( backPix );
             doc->restoreBackground(it.current());
         }
 
     }
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
 void SetBackCmd::unexecute()
 {
     if ( !takeGlobal ) {
-	m_page->setBackColor(  oldBackColor1, oldBackColor2, oldBcType,
-			   oldUnbalanced, oldXFactor, oldYFactor );
-	m_page->setBackType( oldBackType );
-	m_page->setBackView(  oldBackView );
-	m_page->setBackPixmap(  oldBackPix );
-	doc->restoreBackground( m_page );
+        m_page->setBackColor( oldBackColor1, oldBackColor2, oldBcType,
+                               oldUnbalanced, oldXFactor, oldYFactor );
+        m_page->setBackType( oldBackType );
+        m_page->setBackView( oldBackView );
+        m_page->setBackPixmap( oldBackPix );
+        doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
- 	    it.current()->setBackColor(  oldBackColor1, oldBackColor2, oldBcType,
-			       oldUnbalanced, oldXFactor, oldYFactor );
-	    it.current()->setBackType( oldBackType );
-	    it.current()->setBackView( oldBackView );
-	    it.current()->setBackPixmap(  oldBackPix );
+            it.current()->setBackColor( oldBackColor1, oldBackColor2, oldBcType,
+                                        oldUnbalanced, oldXFactor, oldYFactor );
+            it.current()->setBackType( oldBackType );
+            it.current()->setBackView( oldBackView );
+            it.current()->setBackPixmap( oldBackPix );
             doc->restoreBackground(it.current());
         }
     }
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /******************************************************************/
