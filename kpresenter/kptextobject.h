@@ -35,6 +35,7 @@ class KoTextView;
 class KoTextObject;
 class KPTextView;
 class KCommand;
+class Page;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -85,6 +86,7 @@ public:
 
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 
+    KPTextView * createKPTextView( Page * );
 
 
 protected:
@@ -129,7 +131,7 @@ class KPTextView : public KoTextView
 {
 Q_OBJECT
 public:
-    KPTextView( KPTextObject * txtObj );
+    KPTextView( KPTextObject * txtObj, Page *_page );
     virtual ~KPTextView(){};
     KoTextView * textView() { return this; }
 
@@ -169,6 +171,7 @@ protected:
     virtual void pgDownKeyPressed();
 
     KPTextObject *m_textobj;
+    Page *m_page;
 };
 
 

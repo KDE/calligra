@@ -520,7 +520,7 @@ void KPresenterView::insertClipart()
 /*==============================================================*/
 void KPresenterView::toolsMouse()
 {
-    if ( !( (KToggleAction*)actionToolsMouse )->isChecked() )
+    if ( !actionToolsMouse ->isChecked() )
 	return;
     page->setToolEditMode( TEM_MOUSE, false );
     //page->deSelectAllObj();
@@ -529,7 +529,7 @@ void KPresenterView::toolsMouse()
 /*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
 {
-    if ( !( (KToggleAction*)actionToolsLine )->isChecked() )
+    if ( !actionToolsLine->isChecked() )
 	return;
     page->setToolEditMode( INS_LINE, false );
     page->deSelectAllObj();
@@ -538,7 +538,7 @@ void KPresenterView::toolsLine()
 /*===================== insert rectangle ========================*/
 void KPresenterView::toolsRectangle()
 {
-    if ( !( (KToggleAction*)actionToolsRectangle )->isChecked() )
+    if ( !actionToolsRectangle->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_RECT, false );
@@ -547,7 +547,7 @@ void KPresenterView::toolsRectangle()
 /*===================== insert circle or ellipse ================*/
 void KPresenterView::toolsCircleOrEllipse()
 {
-    if ( !( (KToggleAction*)actionToolsCircleOrEllipse )->isChecked() )
+    if ( !actionToolsCircleOrEllipse->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_ELLIPSE, false );
@@ -556,7 +556,7 @@ void KPresenterView::toolsCircleOrEllipse()
 /*==============================================================*/
 void KPresenterView::toolsPie()
 {
-    if ( !( (KToggleAction*)actionToolsPie )->isChecked() )
+    if ( !actionToolsPie->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_PIE, false );
@@ -565,7 +565,7 @@ void KPresenterView::toolsPie()
 /*==============================================================*/
 void KPresenterView::toolsDiagramm()
 {
-    if ( !( (KToggleAction*)actionToolsDiagramm )->isChecked() )
+    if ( !actionToolsDiagramm->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_DIAGRAMM, false );
@@ -583,7 +583,7 @@ void KPresenterView::toolsDiagramm()
 /*==============================================================*/
 void KPresenterView::toolsTable()
 {
-    if ( !( (KToggleAction*)actionToolsTable )->isChecked() )
+    if ( !actionToolsTable->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_TABLE, false );
@@ -601,7 +601,7 @@ void KPresenterView::toolsTable()
 /*==============================================================*/
 void KPresenterView::toolsFormula()
 {
-    if ( !( (KToggleAction*)actionToolsFormula )->isChecked() )
+    if ( !actionToolsFormula->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_FORMULA, false );
@@ -619,7 +619,7 @@ void KPresenterView::toolsFormula()
 /*===================== insert a textobject =====================*/
 void KPresenterView::toolsText()
 {
-    if ( !( (KToggleAction*)actionToolsText )->isChecked() )
+    if ( !actionToolsText->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( INS_TEXT, false );
@@ -628,7 +628,7 @@ void KPresenterView::toolsText()
 /*===============================================================*/
 void KPresenterView::toolsAutoform()
 {
-    if ( !( (KToggleAction*)actionToolsAutoform )->isChecked() )
+    if ( !actionToolsAutoform->isChecked() )
 	return;
     page->deSelectAllObj();
     page->setToolEditMode( TEM_MOUSE, false );
@@ -1224,7 +1224,7 @@ void KPresenterView::screenSkip()
 /*===============================================================*/
 void KPresenterView::sizeSelected()
 {
-    tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
+    tbFont.setPointSize( actionTextFontSize ->fontSize() );
     page->setTextPointSize( tbFont.pointSize() );
     page->setFocus();
     kdDebug(33001) << "sizeSelected() " << tbFont.pointSize() << endl;
@@ -1233,7 +1233,7 @@ void KPresenterView::sizeSelected()
 /*===============================================================*/
 void KPresenterView::fontSelected()
 {
-    tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
+    tbFont.setFamily( actionTextFontFamily->currentText() );
     page->setTextFamily( tbFont.family() );
     page->setFocus();
     kdDebug(33001) << "fontSelected() " << tbFont.family() << endl;
@@ -1288,7 +1288,7 @@ void KPresenterView::textColor()
 /*===============================================================*/
 void KPresenterView::textAlignLeft()
 {
-    if ( !( (KToggleAction*)actionTextAlignLeft )->isChecked() )
+    if ( !actionTextAlignLeft->isChecked() )
 	return;
     tbAlign = Qt::AlignLeft;
     page->setTextAlign( tbAlign );
@@ -1297,7 +1297,7 @@ void KPresenterView::textAlignLeft()
 /*===============================================================*/
 void KPresenterView::textAlignCenter()
 {
-    if ( !( (KToggleAction*)actionTextAlignCenter )->isChecked() )
+    if ( !actionTextAlignCenter->isChecked() )
 	return;
     tbAlign = Qt::AlignHCenter;
     page->setTextAlign( Qt::AlignHCenter );
@@ -1306,7 +1306,7 @@ void KPresenterView::textAlignCenter()
 /*===============================================================*/
 void KPresenterView::textAlignRight()
 {
-    if ( !( (KToggleAction*)actionTextAlignRight )->isChecked() )
+    if ( !actionTextAlignRight->isChecked() )
 	return;
     tbAlign = Qt::AlignRight;
     page->setTextAlign( Qt::AlignRight );
@@ -1344,12 +1344,12 @@ void KPresenterView::mtextFont()
 	fontChanged( tmpFont );
 	tbFont = tmpFont;
 	page->setTextFont( tbFont );
-	( (KFontAction*)actionTextFontFamily )->blockSignals( true );
-	( (KFontAction*)actionTextFontFamily )->setFont( tbFont.family() );
-	( (KFontAction*)actionTextFontFamily )->blockSignals( false );
-	( (KFontSizeAction*)actionTextFontSize )->blockSignals( true );
-	( (KFontSizeAction*)actionTextFontSize )->setFontSize( tbFont.pointSize() );
-	( (KFontSizeAction*)actionTextFontSize )->blockSignals( false );
+	actionTextFontFamily->blockSignals( true );
+	actionTextFontFamily->setFont( tbFont.family() );
+	actionTextFontFamily->blockSignals( false );
+	actionTextFontSize->blockSignals( true );
+	actionTextFontSize->setFontSize( tbFont.pointSize() );
+	actionTextFontSize->blockSignals( false );
     }
 #endif
 }
@@ -1976,49 +1976,49 @@ void KPresenterView::setupActions()
     actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", Key_F5,
 					  this, SLOT( toolsMouse() ),
 					  actionCollection(), "tools_mouse" );
-    ( (KToggleAction*)actionToolsMouse )->setExclusiveGroup( "tools" );
-    ( (KToggleAction*)actionToolsMouse )->setChecked( true );
+    actionToolsMouse->setExclusiveGroup( "tools" );
+    actionToolsMouse->setChecked( true );
 
     actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
 					 this, SLOT( toolsLine() ),
 					 actionCollection(), "tools_line" );
-    ( (KToggleAction*)actionToolsLine )->setExclusiveGroup( "tools" );
+    actionToolsLine->setExclusiveGroup( "tools" );
 
     actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
 					      Key_F7, this, SLOT( toolsRectangle() ),
 					      actionCollection(), "tools_rectangle" );
-    ( (KToggleAction*)actionToolsRectangle )->setExclusiveGroup( "tools" );
+    actionToolsRectangle->setExclusiveGroup( "tools" );
 
     actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ),
 						    "circle", Key_F8,
 						    this, SLOT( toolsCircleOrEllipse() ),
 						    actionCollection(), "tools_circle" );
-    ( (KToggleAction*)actionToolsCircleOrEllipse )->setExclusiveGroup( "tools" );
+    actionToolsCircleOrEllipse->setExclusiveGroup( "tools" );
 
     actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", Key_F9,
 					this, SLOT( toolsPie() ),
 					actionCollection(), "tools_pie" );
-    ( (KToggleAction*)actionToolsPie )->setExclusiveGroup( "tools" );
+    actionToolsPie->setExclusiveGroup( "tools" );
 
     actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Key_F10,
 					 this, SLOT( toolsText() ),
 					 actionCollection(), "tools_text" );
-    ( (KToggleAction*)actionToolsText )->setExclusiveGroup( "tools" );
+    actionToolsText->setExclusiveGroup( "tools" );
 
     actionToolsAutoform = new KToggleAction( i18n( "&Autoform" ), "autoform",
 					     Key_F11, this, SLOT( toolsAutoform() ),
 					     actionCollection(), "tools_autoform" );
-    ( (KToggleAction*)actionToolsAutoform )->setExclusiveGroup( "tools" );
+    actionToolsAutoform->setExclusiveGroup( "tools" );
 
     actionToolsDiagramm = new KToggleAction( i18n( "&Diagram" ), "frame_chart", Key_F12,
 					   this, SLOT( toolsDiagramm() ),
 					   actionCollection(), "tools_diagramm" );
-    ( (KToggleAction*)actionToolsDiagramm )->setExclusiveGroup( "tools" );
+    actionToolsDiagramm->setExclusiveGroup( "tools" );
 
     actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", 0,
 					   this, SLOT( toolsTable() ),
 					   actionCollection(), "tools_table" );
-    ( (KToggleAction*)actionToolsTable )->setExclusiveGroup( "tools" );
+    actionToolsTable->setExclusiveGroup( "tools" );
 
     actionToolsObject = new KoPartSelectAction( i18n( "&Object..." ), "frame_query",
                                                     this, SLOT( toolsObject() ),
@@ -2032,12 +2032,12 @@ void KPresenterView::setupActions()
 
     actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
 					      actionCollection(), "text_fontsize" );
-    connect( ( ( KFontAction* )actionTextFontSize ), SIGNAL( activated( const QString & ) ),
+    connect(actionTextFontSize, SIGNAL( activated( const QString & ) ),
 	     this, SLOT( sizeSelected() ) );
 
     actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0,
 					      actionCollection(), "text_fontfamily" );
-    connect( ( ( KFontAction* )actionTextFontFamily ), SIGNAL( activated( const QString & ) ),
+    connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
 	     this, SLOT( fontSelected() ) );
 
     actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
@@ -2063,18 +2063,18 @@ void KPresenterView::setupActions()
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
 				       this, SLOT( textAlignLeft() ),
 				       actionCollection(), "text_alignleft" );
-    ( (KToggleAction*)actionTextAlignLeft )->setExclusiveGroup( "align" );
-    ( (KToggleAction*)actionTextAlignLeft )->setChecked( true );
+    actionTextAlignLeft->setExclusiveGroup( "align" );
+    actionTextAlignLeft->setChecked( true );
 
     actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Key_C,
 					 this, SLOT( textAlignCenter() ),
 					 actionCollection(), "text_aligncenter" );
-    ( (KToggleAction*)actionTextAlignCenter )->setExclusiveGroup( "align" );
+    actionTextAlignCenter->setExclusiveGroup( "align" );
 
     actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Key_R,
 					this, SLOT( textAlignRight() ),
 					actionCollection(), "text_alignright" );
-    ( (KToggleAction*)actionTextAlignRight )->setExclusiveGroup( "align" );
+    actionTextAlignRight->setExclusiveGroup( "align" );
 
 #if 0
     actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enum_list", 0,
@@ -2289,8 +2289,8 @@ void KPresenterView::setupActions()
 					     actionCollection(), "screen_penwidth" );
     QStringList lst;
     lst << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
-    ( ( KSelectAction* )actionScreenPenWidth )->setItems( lst );
-    connect( ( ( KSelectAction* )actionScreenPenWidth ), SIGNAL( activated( const QString & ) ),
+    actionScreenPenWidth->setItems( lst );
+    connect( actionScreenPenWidth, SIGNAL( activated( const QString & ) ),
 	     this, SLOT( screenPenWidth( const QString & ) ) );
 
      // ----------------- colorbar(Brush and Pen) action
@@ -2692,21 +2692,21 @@ void KPresenterView::fontChanged( const QFont &font )
     tbFont.setUnderline( font.underline() );
     tbFont.setPointSize( font.pointSize() );
 
-    ( (KToggleAction*) actionTextFontFamily )->blockSignals( true );
-    ( (KFontAction*) actionTextFontFamily )->setFont( tbFont.family() );
-    ( (KToggleAction*) actionTextFontFamily )->blockSignals( false );
-    ( (KToggleAction*) actionTextFontSize )->blockSignals( true );
-    ( (KFontSizeAction*) actionTextFontSize )->setFontSize( tbFont.pointSize() );
-    ( (KToggleAction*) actionTextFontSize )->blockSignals( false );
-    ( (KToggleAction*) actionTextBold )->blockSignals( true );
-    ( (KToggleAction*) actionTextBold )->setChecked( tbFont.bold() );
-    ( (KToggleAction*) actionTextBold )->blockSignals( false );
-    ( (KToggleAction*) actionTextItalic )->blockSignals( true );
-    ( (KToggleAction*) actionTextItalic )->setChecked( tbFont.italic() );
-    ( (KToggleAction*) actionTextItalic )->blockSignals( false );
-    ( (KToggleAction*) actionTextUnderline )->blockSignals( true );
-    ( (KToggleAction*) actionTextUnderline )->setChecked( tbFont.underline() );
-    ( (KToggleAction*) actionTextUnderline )->blockSignals( false );
+    actionTextFontFamily->blockSignals( true );
+    actionTextFontFamily->setFont( tbFont.family() );
+    actionTextFontFamily->blockSignals( false );
+    actionTextFontSize->blockSignals( true );
+    actionTextFontSize->setFontSize( tbFont.pointSize() );
+    actionTextFontSize->blockSignals( false );
+    actionTextBold->blockSignals( true );
+    actionTextBold->setChecked( tbFont.bold() );
+    actionTextBold->blockSignals( false );
+    actionTextItalic->blockSignals( true );
+    actionTextItalic->setChecked( tbFont.italic() );
+    actionTextItalic->blockSignals( false );
+    actionTextUnderline->blockSignals( true );
+    actionTextUnderline->setChecked( tbFont.underline() );
+    actionTextUnderline->blockSignals( false );
 }
 
 /*====================== color changed ==========================*/
@@ -2723,18 +2723,18 @@ void KPresenterView::alignChanged( int align )
     if ( align != tbAlign ) {
 	tbAlign = align;
 	if ( ( align & AlignLeft ) == AlignLeft ) {
-	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( true );
-	    ( (KToggleAction*)actionTextAlignLeft )->setChecked( true );
-	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( false );
+	    actionTextAlignLeft->blockSignals( true );
+	    actionTextAlignLeft->setChecked( true );
+	    actionTextAlignLeft->blockSignals( false );
 	} else if ( ( align & AlignHCenter ) == AlignHCenter ||
 		    ( align & AlignCenter ) == AlignCenter ) {
-	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( true );
-	    ( (KToggleAction*)actionTextAlignCenter )->setChecked( true );
-	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( false );
+	    actionTextAlignCenter->blockSignals( true );
+	    actionTextAlignCenter->setChecked( true );
+	    actionTextAlignCenter->blockSignals( false );
 	} else if ( ( align & AlignRight ) == AlignRight ) {
-	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( true );
-	    ( (KToggleAction*)actionTextAlignRight )->setChecked( true );
-	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( false );
+	    actionTextAlignRight->blockSignals( true );
+	    actionTextAlignRight->setChecked( true );
+	    actionTextAlignRight->blockSignals( false );
 	}
     }
 }
@@ -2756,9 +2756,9 @@ void KPresenterView::screenPenColor()
 	QPen p = kPresenterDoc()->presPen();
 	p.setColor( c );
 	kPresenterDoc()->setPresPen( p );
-	( (KColorAction*)actionScreenPenColor )->blockSignals( true );
-	( (KColorAction*)actionScreenPenColor )->setColor( c );
-	( (KColorAction*)actionScreenPenColor )->blockSignals( false );
+	actionScreenPenColor->blockSignals( true );
+	actionScreenPenColor->setColor( c );
+	actionScreenPenColor->blockSignals( false );
     }
 }
 
@@ -3187,34 +3187,34 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 {
     switch ( toolEditMode ) {
     case TEM_MOUSE:
-	( (KToggleAction*)actionToolsMouse )->setChecked( true );
+	actionToolsMouse->setChecked( true );
 	break;
     case INS_LINE:
-	( (KToggleAction*)actionToolsLine )->setChecked( true );
+	actionToolsLine->setChecked( true );
 	break;
     case INS_RECT:
-	( (KToggleAction*)actionToolsRectangle )->setChecked( true );
+	actionToolsRectangle->setChecked( true );
 	break;
     case INS_ELLIPSE:
-	( (KToggleAction*)actionToolsCircleOrEllipse )->setChecked( true );
+	actionToolsCircleOrEllipse->setChecked( true );
 	break;
     case INS_PIE:
-	( (KToggleAction*)actionToolsPie )->setChecked( true );
+	actionToolsPie->setChecked( true );
 	break;
     case INS_DIAGRAMM:
-	( (KToggleAction*)actionToolsDiagramm )->setChecked( true );
+	actionToolsDiagramm->setChecked( true );
 	break;
     case INS_TABLE:
-	( (KToggleAction*)actionToolsTable )->setChecked( true );
+	actionToolsTable->setChecked( true );
 	break;
     case INS_FORMULA:
-	( (KToggleAction*)actionToolsFormula )->setChecked( true );
+	actionToolsFormula->setChecked( true );
 	break;
     case INS_TEXT:
-	( (KToggleAction*)actionToolsText )->setChecked( true );
+	actionToolsText->setChecked( true );
 	break;
     case INS_AUTOFORM:
-	( (KToggleAction*)actionToolsAutoform )->setChecked( true );
+	actionToolsAutoform->setChecked( true );
 	break;
     }
 }
@@ -3563,6 +3563,47 @@ void KPresenterView::insertLink()
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
     }
+}
+
+void KPresenterView::showFormat( const KoTextFormat &currentFormat )
+{
+    actionTextFontFamily->setFont( currentFormat.font().family() );
+    actionTextFontSize->setFontSize( currentFormat.font().pointSize() );
+    actionTextBold->setChecked( currentFormat.font().bold());
+    actionTextItalic->setChecked( currentFormat.font().italic() );
+    actionTextUnderline->setChecked( currentFormat.font().underline());
+    actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
+
+/*
+    QColor col=currentFormat.textBackgroundColor();
+    actionBackgroundColor->setEnabled(true);
+    actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
+    actionBackgroundColor->setText(i18n("Text Background Color"));
+*/
+    actionTextColor->setCurrentColor( currentFormat.color() );
+
+    switch(currentFormat.vAlign())
+      {
+      case QTextFormat::AlignSuperScript:
+	{
+	  actionFormatSub->setChecked( false );
+	  actionFormatSuper->setChecked( true );
+	  break;
+	}
+      case QTextFormat::AlignSubScript:
+	{
+	  actionFormatSub->setChecked( true );
+	  actionFormatSuper->setChecked( false );
+	  break;
+	}
+      case QTextFormat::AlignNormal:
+      default:
+	{
+	  actionFormatSub->setChecked( false );
+	  actionFormatSuper->setChecked( false );
+	  break;
+	}
+      }
 }
 
 #include <kpresenter_view.moc>

@@ -2749,10 +2749,13 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
     kptextobject->setSelected( true );
     if ( !text.isEmpty() && _view ) {
 #if 0
-	kptextobject->textObjectView()->clear();
-	kptextobject->textObjectView()->setText( text );
-	kptextobject->textObject()->document()->setFontToAll( _view->currFont() );
-	kptextobject->textObject()->document()->setColorToAll( _view->currColor() );
+        if(kptextobject->textObjectView())
+        {
+            kptextobject->textObjectView()->clear();
+            kptextobject->textObjectView()->setText( text );
+            kptextobject->textObject()->document()->setFontToAll( _view->currFont() );
+            kptextobject->textObject()->document()->setColorToAll( _view->currColor() );
+        }
 #endif
     }
 

@@ -140,6 +140,8 @@ public:
 
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
+    KPresenterView * getView(){return view;}
+
 public slots:
     void exitEditMode();
 

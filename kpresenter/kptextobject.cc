@@ -47,7 +47,7 @@
 #include <qfont.h>
 
 #include "kptextobject.moc"
-
+#include "page.h"
 
 using namespace std;
 
@@ -92,9 +92,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
                                                    new KoTextFormatCollection( doc->defaultFont() ));
 
     m_textobj = new KoTextObject( textdoc, doc->standardStyle());
-
-    // ## This should only be done when editing a textobject in a given view
-    m_textobjview = new KPTextView( this );
+    m_textobjview=0;
 
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
@@ -569,10 +567,15 @@ void KPTextObject::slotRepaintChanged()
     emit repaintChanged( this );
 }
 
-KPTextView::KPTextView( KPTextObject * txtObj )
+KPTextView * KPTextObject::createKPTextView( Page * _page )
+{
+    return new KPTextView( this, _page );
+}
+
+KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     : KoTextView( txtObj->textObject() )
 {
-
+    m_page=_page;
     m_textobj=txtObj;
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
@@ -623,10 +626,10 @@ void KPTextView::startDrag()
 }
 
 
-void KPTextView::showFormat( KoTextFormat */*format*/ )
+void KPTextView::showFormat( KoTextFormat *format )
 {
     kdDebug()<<"KPTextView::showFormat( KoTextFormat *format )\n";
-    //todo
+    m_page->getView()->showFormat( *format );
 }
 
 void KPTextView::pgUpKeyPressed()

@@ -52,6 +52,12 @@ class TKSelectColorAction;
 class KoPartSelectAction;
 
 class KoCharSelectDia;
+class KoTextFormat;
+
+class KFontSizeAction;
+class KColorAction;
+class KSelectAction;
+class KFontAction;
 
 class PageBase : public QWidget
 {
@@ -95,6 +101,8 @@ public:
     virtual void print( KPrinter &printer );
 
     KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
+
+    void showFormat( const KoTextFormat &format );
 
 signals:
     void currentPageChanged( int );
@@ -514,24 +522,24 @@ private:
     KAction *actionInsertPicture;
     KAction *actionInsertClipart;
 
-    KAction *actionToolsMouse;
-    KAction *actionToolsLine;
-    KAction *actionToolsRectangle;
-    KAction *actionToolsCircleOrEllipse;
-    KAction *actionToolsPie;
-    KAction *actionToolsText;
-    KAction *actionToolsAutoform;
-    KAction *actionToolsDiagramm;
-    KAction *actionToolsTable;
-    KAction *actionToolsFormula;
+    KToggleAction *actionToolsMouse;
+    KToggleAction *actionToolsLine;
+    KToggleAction *actionToolsRectangle;
+    KToggleAction *actionToolsCircleOrEllipse;
+    KToggleAction *actionToolsPie;
+    KToggleAction *actionToolsText;
+    KToggleAction *actionToolsAutoform;
+    KToggleAction *actionToolsDiagramm;
+    KToggleAction *actionToolsTable;
+    KToggleAction *actionToolsFormula;
     KoPartSelectAction *actionToolsObject;
 
     KAction *actionTextFont;
-    KAction *actionTextFontSize;
-    KAction *actionTextFontFamily;
-    KAction *actionTextAlignLeft;
-    KAction *actionTextAlignCenter;
-    KAction *actionTextAlignRight;
+    KFontSizeAction *actionTextFontSize;
+    KFontAction *actionTextFontFamily;
+    KToggleAction *actionTextAlignLeft;
+    KToggleAction *actionTextAlignCenter;
+    KToggleAction *actionTextAlignRight;
     KAction *actionTextTypeEnumList;
     KAction *actionTextTypeUnsortList;
     KAction *actionTextTypeNormalText;
@@ -540,9 +548,9 @@ private:
     KAction *actionTextSettings;
     KAction *actionTextExtentCont2Height;
     KAction *actionTextExtendObj2Cont;
-    KAction *actionTextBold;
-    KAction *actionTextItalic;
-    KAction *actionTextUnderline;
+    KToggleAction *actionTextBold;
+    KToggleAction *actionTextItalic;
+    KToggleAction *actionTextUnderline;
     KToggleAction *actionFormatStrikeOut;
     KAction *actionTextInsertPageNum;
 
@@ -584,8 +592,8 @@ private:
     KAction *actionScreenNext;
     KAction *actionScreenLast;
     KAction *actionScreenSkip;
-    KAction *actionScreenPenColor;
-    KAction *actionScreenPenWidth;
+    KColorAction *actionScreenPenColor;
+    KSelectAction *actionScreenPenWidth;
 
     KAction *actionColorBar;
     KAction *actionExtraDefaultTemplate;
