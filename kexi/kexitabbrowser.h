@@ -37,7 +37,7 @@ class KMultiTabBar;
 class KexiBrowser;
 
 //class KexiTabBrowser : public KexiDialogBase
-class KexiTabBrowser : public KToolBar
+class KexiTabBrowser : public QDockWindow 
 {
 	Q_OBJECT
 

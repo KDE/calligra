@@ -23,7 +23,6 @@
 #include <klistview.h>
 #include <klocale.h>
 #include "kmultitabbar.h"
-#include <ktoolbar.h>
 
 #include <qtabwidget.h>
 #include <qlayout.h>
@@ -38,15 +37,13 @@
 #include <kexiview.h>
 
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
-	: KToolBar(view->mainWindow(), name, false, false)
-//	: KexiDialogBase(view,parent, name)
+	: QDockWindow(view->mainWindow(), name)
 {
-	view->mainWindow()->moveDockWindow(this, DockLeft);
-	setTitle(i18n("Project"));
+	setCaption(i18n("Project"));
 	m_project = view->project();
 	
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser()" << endl;
-	QGridLayout *layout = new QGridLayout(this);
+	QBoxLayout *layout = boxLayout();
 
 	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
 	m_tabBar->setPosition(KMultiTabBar::Left);
@@ -56,11 +53,11 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 
 	m_activeTab = -1;
 
-	m_db = new KexiBrowser(view,this, KexiBrowser::SectionDB);
-	m_tables = new KexiBrowser(view,this, KexiBrowser::SectionTable);
-	m_forms = new KexiBrowser(view,this, KexiBrowser::SectionForm);
-	m_queries = new KexiBrowser(view,this, KexiBrowser::SectionQuery);
-	m_reports = new KexiBrowser(view,this, KexiBrowser::SectionReport);
+	m_db = new KexiBrowser(view,m_stack, KexiBrowser::SectionDB);
+	m_tables = new KexiBrowser(view,m_stack, KexiBrowser::SectionTable);
+	m_forms = new KexiBrowser(view,m_stack, KexiBrowser::SectionForm);
+	m_queries = new KexiBrowser(view,m_stack, KexiBrowser::SectionQuery);
+	m_reports = new KexiBrowser(view,m_stack, KexiBrowser::SectionReport);
 
 	addBrowser(m_db, "db",i18n("Database project"));
 	addBrowser(m_tables, "tables",i18n("Tables"));
@@ -68,10 +65,12 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	addBrowser(m_queries, "queries",i18n("Queries"));
 	addBrowser(m_reports, "reports",i18n("Reports"));
 
-	layout->addWidget(m_tabBar,	0,	0);
-	layout->addWidget(m_stack,	0,	1);
-	layout->setColStretch(1, 1);
-	//registerAs(ToolWindow);
+	layout->addWidget(m_tabBar);
+	layout->addWidget(m_stack);
+	
+	setResizeEnabled(true);
+	
+	view->mainWindow()->moveDockWindow(this, DockLeft);
 
 	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser(): connecting to " << kexiProject() << endl;
