@@ -6424,6 +6424,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     // Draw the children
     //
     QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
+    QRect contentRectPart;
     for( ; it.current(); ++it )
     {
         QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
@@ -6441,9 +6442,13 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
             _painter.translate( -view.left()+_childOffset.x(), -view.top()+_childOffset.y() );
 
+            //print only the visible part of the children
+            contentRectPart = bound.intersect( view );
+            contentRectPart.moveBy( -bound.x(), -bound.y() );
+            
             it.current()->transform( _painter );
             it.current()->document()->paintEverything( _painter,
-                                                       it.current()->contentRect(),
+                                                       contentRectPart,
                                                        it.current()->isTransparent() );
             _painter.restore();
         }
