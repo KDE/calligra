@@ -42,31 +42,25 @@ void KWAnchor::setFormat( KoTextFormat* format )
     m_frameset->setAnchorFormat( format, m_frameNum );
 }
 
-void KWAnchor::move( int x, int y )
+void KWAnchor::finalize()
 {
     if ( m_deleted )
         return;
 
-    // This test isn't enough. paragy may have changed. Or anything else
-    // It's up to moveFloatingFrame to check if it really moved.
-    //if ( x != xpos || y != ypos )
-
     int paragy = paragraph()->rect().y();
-    xpos = x;
-    ypos = y;
-    kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
+    kdDebug() << this << " KWAnchor::finalize " << x() << "," << y() << " paragy=" << paragy << endl;
 
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
-    if ( fs->internalToDocument( QPoint( x, y+paragy ), dPoint ) )
+    if ( fs->internalToDocument( QPoint( x(), y()+paragy ), dPoint ) )
     {
-        //kdDebug(32001) << "KWAnchor::move moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
+        //kdDebug(32001) << "KWAnchor::finalize moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
         // Move the frame to position nPoint.
         m_frameset->moveFloatingFrame( m_frameNum, dPoint );
     } else
     {
         // This can happen if the page hasn't been created yet
-        kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
+        kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x() << ", " << y()+paragy << endl;
     }
 }
 
@@ -83,6 +77,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
         kdDebug() << "rectifying position to " << x << "," << y << endl;
         move( x, y );
+        finalize();
     }
 
     // The containing text-frameset.
@@ -271,9 +266,3 @@ void KWAnchor::save( QDomElement &parentElem )
     anchorElem.setAttribute( "instance", m_frameset->getName() );
 }
 
-bool KWAnchor::ownLine() const
-{
-    return false;
-    //commented out, since it prevents multiple tables on the same line, alignment etc.
-    //return m_frameset->type() == FT_TABLE;
-}

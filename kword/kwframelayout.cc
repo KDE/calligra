@@ -1,6 +1,7 @@
 #include "kwframelayout.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
+#include <qtimer.h>
 
 #define DEBUG_FRAMELAYOUT
 
@@ -39,6 +40,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
     }
 #endif
     double ptColumnWidth = doc->ptColumnWidth();
+    bool mainTextFrameResized = false;
 
     // The main loop is: "for each page". We lay out each page separately.
     for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
@@ -106,15 +108,23 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
 #endif
                 if ( frameNum < mainTextFrameSet->getNumFrames() ) {
                     // Resize existing frame
-                    mainTextFrameSet->frame( frameNum )->setRect( rect );
+                    KWFrame* frame = mainTextFrameSet->frame( frameNum );
+                    bool resized = (rect != *frame);
+                    if ( resized ) {
+                        frame->setRect( rect );
+                        frame->updateRulerHandles();
+                        mainTextFrameResized = true;
+                    }
                 } else {
                     // Create new frame
                     KWFrame * frame = new KWFrame( mainTextFrameSet, rect.x(), rect.y(), rect.width(), rect.height() );
                     mainTextFrameSet->addFrame( frame );
                     Q_ASSERT( frameNum == mainTextFrameSet->getNumFrames()-1 );
+                    mainTextFrameResized = true;
                 }
+
             }
-        }
+        } // if mainTextFrameSet
     }
 
     // Final cleanup: delete all frames after m_currentFrame in each frameset
@@ -132,6 +142,13 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
 #endif
             fs->delFrame( fs->getNumFrames() - 1 );
         }
+    }
+
+    if ( mainTextFrameResized ) {
+        doc->updateAllFrames();
+        // Not right now, this could be called during formatting...
+        QTimer::singleShot( 0, doc, SLOT( invalidate() ) );
+        //doc->invalidate();
     }
 }
 

@@ -293,11 +293,9 @@ void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, 
     drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, textColor );
 }
 
-void KWFootNoteVariable::move( int x, int y )
+void KWFootNoteVariable::finalize()
 {
-    KoVariable::move( x, y );
-
-    Q_ASSERT( m_frameset ); // hmm, 0 when pasting...
+    Q_ASSERT( m_frameset );
     if (!m_frameset )
         return;
     Q_ASSERT( !m_frameset->isDeleted() );
@@ -308,10 +306,11 @@ void KWFootNoteVariable::move( int x, int y )
     int paragy = paragraph()->rect().y();
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
-    //kdDebug(32001) << "KWFootNoteVariable::move (LU) " << QPoint( x, paragy + y + height ) << endl;
-    KWFrame* containingFrame = fs->internalToDocument( QPoint( x, paragy + y + height ), dPoint );
+    kdDebug(32001) << "KWFootNoteVariable::finalize position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
+    KWFrame* containingFrame = fs->internalToDocument( QPoint( x(), paragy + y() + height ), dPoint );
     if ( containingFrame )
     {
+        kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNum() << endl;
         // Ok, the (bottom of the) footnote variable is at dPoint.
         m_pageNum = containingFrame->pageNum(); // and at page m_pageNum
 
@@ -392,3 +391,4 @@ void KWFootNoteVariable::setDeleted( bool del )
     // Does this compress? Probably not.
     QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
 }
+

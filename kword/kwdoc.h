@@ -418,9 +418,6 @@ public:
     /** calls layout() on all framesets  */
     void layout();
 
-    /** calls invalidate() on all framesets  */
-    void invalidate();
-
     /** call by undo/redo frame border => update all button border frame **/
     void refreshFrameBorderButton();
 
@@ -576,6 +573,9 @@ public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
     void slotRepaintAllViews() { repaintAllViews( false ); }
     void slotRepaintVariable();
+
+    /** calls invalidate() on all framesets  */
+    void invalidate();
 
 protected slots:
     void slotDocumentRestored();

@@ -132,8 +132,7 @@ public:
     void setNumDisplay( int val );
     int numDisplay() const { return m_numDisplay; }
 
-    // Called whenever this item is being moved by the text formatter
-    virtual void move( int x, int y );
+    virtual void finalize();
 
     // The page this var is on
     int pageNum() const { return m_pageNum; }
@@ -141,8 +140,9 @@ public:
     virtual void setDeleted( bool del );
 
     void formatedNote();
+
 protected:
-    QString applyStyle(  );
+    QString applyStyle();
 
 private:
     KWDocument *m_doc;

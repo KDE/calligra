@@ -54,13 +54,12 @@ public:
     /** Return the size of the item, i.e. the size of the frame (zoomed) */
     QSize size() const;
 
-    /* overloaded methods, see lib/kotext/kotextdocument.h for docu*/
+    /* overloaded methods, see lib/kotext/kotextcustomitem.h for docu*/
     virtual void resize();
-    virtual void move( int x, int y );
+    virtual void finalize();
 
     /* overloaded methods, see qrichtext_p.h for docu*/
     virtual Placement placement() const { return PlaceInline; }
-    virtual bool ownLine() const;
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }
     virtual int ascent() const;
