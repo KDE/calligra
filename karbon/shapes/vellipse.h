@@ -32,13 +32,26 @@ public:
 		cut,
 		arc
 	};
+	VEllipse( VObject* parent, VState state = edit );
 	VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height,
 		VEllipseType type = full, double startAngle = 0, double endAngle = 0 );
 
 	virtual QString name() const;
+
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
+
+protected:
+	void init();
+
 private:
 	VEllipseType m_type;
+	KoPoint m_center;
+	double m_rx;
+	double m_ry;
+	double m_startAngle;
+	double m_endAngle;
 };
 
 #endif

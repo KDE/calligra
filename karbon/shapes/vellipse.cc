@@ -22,20 +22,36 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <vglobal.h>
+#include <qdom.h>
+
+VEllipse::VEllipse( VObject* parent, VState state ) : VComposite( parent, state )
+{
+}
 
 VEllipse::VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height,
 		VEllipseType type, double startAngle, double endAngle )
-	: VComposite( parent ), m_type( type )
+	: VComposite( parent ), m_type( type ), m_startAngle( startAngle ), m_endAngle( endAngle )
 {
 	setDrawCenterNode();
 
+	m_rx = width / 2.0;
+	m_ry = height / 2.0;
+	m_center.setX( topLeft.x() + m_rx );
+	m_center.setY( topLeft.y() + m_ry );
+
+	init();
+}
+
+void
+VEllipse::init()
+{
 	// to radials
-	uint nsegs = ( endAngle - startAngle ) / 90.0;
-	int i = startAngle / 90.0;
-	double origEndAngle = endAngle;
-	startAngle = VGlobal::pi_2 * ( startAngle / 90.0 );
-	endAngle   = VGlobal::pi_2 * ( endAngle / 90.0 );
+	uint nsegs = ( m_endAngle - m_startAngle ) / 90.0;
+	int i = m_startAngle / 90.0;
+	double origEndAngle = m_endAngle;
+	double startAngle = VGlobal::pi_2 * ( m_startAngle / 90.0 );
+	double endAngle   = VGlobal::pi_2 * ( m_endAngle / 90.0 );
 	// Create (half-)unity circle with topLeft at (0|0):
 	double currentAngle = -startAngle - VGlobal::pi_2;
 	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
@@ -78,8 +94,8 @@ VEllipse::VEllipse( VObject* parent,
 
 	// Translate and scale:
 	QWMatrix m;
-	m.translate( topLeft.x(), topLeft.y() );
-	m.scale( width, height );
+	m.translate( m_center.x() - m_rx, m_center.y() - m_ry );
+	m.scale( 2.0 * m_rx, 2.0 * m_ry );
 
 	VTransformCmd cmd( 0L, m );
 	cmd.visit( *this );
@@ -90,5 +106,67 @@ VEllipse::name() const
 {
 	QString result = VObject::name();
 	return !result.isEmpty() ? result : i18n( "Ellipse" );
+}
+
+void
+VEllipse::save( QDomElement& element ) const
+{
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "ELLIPSE" );
+		element.appendChild( me );
+
+		VObject::save( me );
+
+		QString d;
+		saveSvgPath( d );
+		me.setAttribute( "d", d );
+
+		me.setAttribute( "cx", m_center.x() );
+		me.setAttribute( "cy", m_center.y() );
+
+		me.setAttribute( "rx", m_rx );
+		me.setAttribute( "ry", m_ry );
+
+		me.setAttribute( "start-angle", m_startAngle );
+		me.setAttribute( "end-angle", m_endAngle );
+
+		if( m_type == cut )
+			me.setAttribute( "kind", "cut" );
+		else if( m_type == section )
+			me.setAttribute( "kind", "section" );
+		else if( m_type == arc )
+			me.setAttribute( "kind", "arc" );
+		else
+			me.setAttribute( "kind", "full" );
+	}
+}
+
+void
+VEllipse::load( const QDomElement& element )
+{
+	setState( normal );
+
+	VObject::load( element );
+
+	m_rx = element.attribute( "rx" ).toDouble(),
+	m_ry = element.attribute( "ry" ).toDouble(),
+
+	m_center.setX( element.attribute( "cx" ).toDouble() );
+	m_center.setY( element.attribute( "cy" ).toDouble() );
+
+	m_startAngle = element.attribute( "start-angle" ).toDouble();
+	m_endAngle = element.attribute( "end-angle" ).toDouble();
+
+	if( element.attribute( "kind" ) == "cut" )
+		m_type = cut;
+	else if( element.attribute( "kind" ) == "section" )
+		m_type = section;
+	else if( element.attribute( "kind" ) == "arc" )
+		m_type = arc;
+	else
+		m_type = full;
+
+	init();
 }
 

@@ -27,6 +27,7 @@
 #include <koRect.h>
 
 #include "vcomposite.h"
+#include "shapes/vellipse.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -182,6 +183,12 @@ VGroup::load( const QDomElement& element )
 				VComposite* composite = new VComposite( this );
 				composite->load( e );
 				append( composite );
+			}
+			else if( e.tagName() == "ELLIPSE" )
+			{
+				VEllipse* ellipse = new VEllipse( this );
+				ellipse->load( e );
+				append( ellipse );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
