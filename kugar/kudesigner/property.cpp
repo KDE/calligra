@@ -18,6 +18,7 @@
 #include <qwidget.h>
 
 #include "propertywidgets.h"
+#include "propertyeditor.h"
 #include "property.h"
 
 Property::Property(int type, QString name, QString description, QString value):
@@ -77,7 +78,7 @@ void Property::setDescription(QString description)
     m_description = description;
 }
 
-QWidget *Property::editorOfType()
+QWidget *Property::editorOfType(const PropertyEditor *editor)
 {
     PSpinBox *s;
     PLineEdit *l;
@@ -89,35 +90,29 @@ QWidget *Property::editorOfType()
     switch (type())
     {
         case IntegerValue:
-            s = new PSpinBox(0, 10000, 1, 0);
-            s->setValue(value());
+            s = new PSpinBox(editor, name(), value(), 0, 10000, 1, 0);
             return s;
 
         case Color:
-            c = new PColorCombo(0);
-            c->setValue(value());
+            c = new PColorCombo(editor, name(), value(), 0);
             return c;
 
         case FontName:
-            f = new PFontCombo(0);
-            f->setValue(value());
+            f = new PFontCombo(editor, name(), value(), 0);
             return f;
 
         case Symbol:
-            y = new PSymbolCombo(0);
-            y->setValue(value());
+            y = new PSymbolCombo(editor, name(), value(), 0);
             return y;
 
         case LineStyle:
-            i = new PLineStyle(0);
-            i->setValue(value());
+            i = new PLineStyle(editor, name(), value(), 0);
             return i;
 
         case ValueFromList:
         case StringValue:
         default:
-            l = new PLineEdit(0);
-            l->setValue(value());
+            l = new PLineEdit((PropertyEditor *)editor, name(), value(), (QWidget*)0);
             return l;
     }
     return 0;
@@ -136,14 +131,13 @@ void DescriptionProperty::setCorrespList(std::map<QString, QString> list)
     correspList = list;
 }
 
-QWidget *DescriptionProperty::editorOfType()
+QWidget *DescriptionProperty::editorOfType(const PropertyEditor *editor)
 {
     switch (type())
     {
         case ValueFromList:
-            PComboBox *b = new PComboBox(&correspList, false, 0, 0);
-            b->setValue(value());
+            PComboBox *b = new PComboBox(editor, name(), value(), &correspList, false, 0, 0);
             return b;
     }
-    return Property::editorOfType();;
+    return Property::editorOfType(editor);
 }

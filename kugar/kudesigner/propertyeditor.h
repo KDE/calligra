@@ -42,10 +42,16 @@ public:
 public slots:
     void populateProperties(std::map<QString, PropPtr> *v_props);
     void clearProperties();
+
+    void emitPropertyChange(QString name, QString newValue);
             
 private:
     QTable *table;
     std::map<QString, PropPtr> *props;
+
+signals:
+    /** property name, new property value */
+    void propertyChanged(QString name, QString newValue);
 };
 
 #endif

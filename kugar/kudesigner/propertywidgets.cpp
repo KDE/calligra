@@ -20,43 +20,96 @@
  
 #include <qlayout.h>
 #include <qdialog.h>
- 
+
+#include "propertyeditor.h" 
 #include "propertywidgets.h"
+
+//class PLineEdit
+
+PLineEdit::PLineEdit ( const PropertyEditor *editor, const QString pname, const QString value, QWidget * parent, const char * name ):
+    QLineEdit(parent, name)
+{
+    setValue(value, false);
+    setPName(pname);
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
+}
 
 QString PLineEdit::value() const
 {
     return text();
 }
 
-void PLineEdit::setValue(const QString value)
+void PLineEdit::setValue(const QString value, bool emitChange)
 {
     setText(value);
+    if (emitChange)
+        emit propertyChanged(pname(), value);
 }
 
+void PLineEdit::updateProperty(const QString& val)
+{
+    emit propertyChanged(pname(), val);
+}
+
+//class PSpinBox
+
+PSpinBox::PSpinBox ( const PropertyEditor *editor, const QString pname, const QString value, QWidget * parent, const char * name ):
+    QSpinBox(parent, name)
+{
+    setValue(value, false);
+    setPName(pname);
+    connect(this, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
+}
+
+PSpinBox::PSpinBox ( const PropertyEditor *editor, const QString pname, const QString value, int minValue, int maxValue, int step, QWidget * parent, const char * name ):
+    QSpinBox(minValue, maxValue, step, parent, name)
+{
+    setPName(pname);
+    setValue(value, false);
+    connect(this, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
+}
 
 QString PSpinBox::value() const
 {
     return cleanText();
 }
 
-void PSpinBox::setValue(const QString value)
+void PSpinBox::setValue(const QString value, bool emitChange)
 {
     QSpinBox::setValue(value.toInt());
+    if (emitChange)
+        emit propertyChanged(pname(), value);
 }
 
+void PSpinBox::updateProperty(int val)
+{
+    emit propertyChanged(pname(), QString("%1").arg(val));
+}
 
-PComboBox::PComboBox ( std::map<QString, QString> *v_corresp, QWidget * parent, const char * name):
+//class PComboBox
+
+PComboBox::PComboBox ( const PropertyEditor *editor, const QString pname, const QString value, std::map<QString, QString> *v_corresp, QWidget * parent, const char * name):
     QComboBox(parent, name), corresp(v_corresp)
 {
     fillBox();
+    setValue(value, false);
+    setPName(pname);
+    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
-PComboBox::PComboBox ( std::map<QString, QString> *v_corresp,  bool rw, QWidget * parent, const char * name):
+PComboBox::PComboBox ( const PropertyEditor *editor, const QString pname, const QString value, std::map<QString, QString> *v_corresp,  bool rw, QWidget * parent, const char * name):
         QComboBox(rw, parent, name), corresp(v_corresp)
 {
     fillBox();
+    setValue(value, false);
+    setPName(pname);
+    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
-
 
 void PComboBox::fillBox()
 {
@@ -73,22 +126,42 @@ QString PComboBox::value() const
     return (*it).second;
 }
 
-void PComboBox::setValue(const QString value)
+void PComboBox::setValue(const QString value, bool emitChange)
 {
     if (!value.isNull())
-        setCurrentText(r_corresp[value]);    
+    {
+        setCurrentText(r_corresp[value]);
+        if (emitChange)
+            emit propertyChanged(pname(), value);
+    }
 }
 
-PFontCombo::PFontCombo (QWidget *parent, const char *name):
+void PComboBox::updateProperty(int val)
+{
+    emit propertyChanged(pname(), value());
+}
+
+
+//class PFontCombo
+
+PFontCombo::PFontCombo (const PropertyEditor *editor, const QString pname, const QString value, QWidget *parent, const char *name):
     KFontCombo(parent, name)
 {
-    setEditable(false);    
+    setEditable(false);
+    setPName(pname);
+    setValue(value, false);
+    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
-PFontCombo::PFontCombo (const QStringList &fonts, QWidget *parent, const char *name):
+PFontCombo::PFontCombo (const PropertyEditor *editor, const QString pname, const QString value, const QStringList &fonts, QWidget *parent, const char *name):
     KFontCombo(fonts, parent, name)
 {
     setEditable(false);
+    setValue(value, false);
+    setPName(pname);
+    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
 QString PFontCombo::value() const
@@ -96,30 +169,53 @@ QString PFontCombo::value() const
     return currentFont();
 }
 
-void PFontCombo::setValue(const QString value)
+void PFontCombo::setValue(const QString value, bool emitChange)
 {
-    setCurrentFont(value);    
+    setCurrentFont(value);
+    if (emitChange)
+        emit propertyChanged(pname(), value);
 }
 
-PColorCombo::PColorCombo(QWidget *parent, const char *name):
+void PFontCombo::updateProperty(int val)
+{
+    emit propertyChanged(pname(), value());
+}
+
+
+//class PColorCombo
+
+PColorCombo::PColorCombo(const PropertyEditor *editor, const QString pname, const QString value, QWidget *parent, const char *name):
     KColorCombo(parent, name)
 {
-    
+    setValue(value);
+    setPName(pname);
+    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
 QString PColorCombo::value() const
 {
-    return QString("%1,%2,%3").arg(color().red(), color().green(), color().blue());
+    return QString("%1,%2,%3").arg(color().red()).arg(color().green()).arg(color().blue());
 }
 
-void PColorCombo::setValue(const QString value)
+void PColorCombo::setValue(const QString value, bool emitChange)
 {
     setColor(QColor(value.section(',', 0, 0).toInt(),
         value.section(',', 1, 1).toInt(),
         value.section(',', 2, 2).toInt()));
+    if (emitChange)
+        emit propertyChanged(pname(), value);
 }
 
-PSymbolCombo::PSymbolCombo(QWidget *parent, const char *name):
+void PColorCombo::updateProperty(int val)
+{
+    emit propertyChanged(pname(), value());
+}
+
+
+//class PSymbolCombo
+
+PSymbolCombo::PSymbolCombo(const PropertyEditor *editor, const QString pname, const QString value, QWidget *parent, const char *name):
     QWidget(parent, name)
 {
     l = new QHBoxLayout(this);
@@ -131,6 +227,10 @@ PSymbolCombo::PSymbolCombo(QWidget *parent, const char *name):
     l->addWidget(pbSelect);
 
     connect(pbSelect, SIGNAL(clicked()), this, SLOT(selectChar()));
+    setValue(value);
+    setPName(pname);
+    connect(edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
 QString PSymbolCombo::value() const
@@ -141,11 +241,13 @@ QString PSymbolCombo::value() const
         return "";
 }
 
-void PSymbolCombo::setValue(const QString value)
+void PSymbolCombo::setValue(const QString value, bool emitChange)
 {
     if (!(value.isNull()))
     {
         edit->setText(QChar(value.toInt()));
+        if (emitChange)
+            emit propertyChanged(pname(), value);
     }
 }
 
@@ -156,12 +258,12 @@ void PSymbolCombo::selectChar()
 
     KCharSelect *select = new KCharSelect(dia, "select_char");
     dv->addWidget(select);
-    
+
     QHBoxLayout *dh = new QHBoxLayout(dv, 6);
     QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
     QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
     QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    
+
     connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));
     connect(pbCancel, SIGNAL(clicked()), dia, SLOT(reject()));
 
@@ -171,7 +273,7 @@ void PSymbolCombo::selectChar()
 
     if (!(edit->text().isNull()))
         select->setChar(edit->text().at(0));
-    
+
     if (dia->exec() == QDialog::Accepted)
     {
         edit->setText(select->chr());
@@ -179,7 +281,16 @@ void PSymbolCombo::selectChar()
     delete dia;
 }
 
-PLineStyle::PLineStyle(QWidget *parent, const char *name):
+void PSymbolCombo::updateProperty(const QString& val)
+{
+    emit propertyChanged(pname(), val);
+}
+
+
+
+//class PLineStyle
+
+PLineStyle::PLineStyle(const PropertyEditor *editor, const QString pname, const QString value, QWidget *parent, const char *name):
     QComboBox(parent, name)
 {
     const char *nopen[]={
@@ -222,7 +333,7 @@ PLineStyle::PLineStyle(QWidget *parent, const char *name):
     "................................................",
     "................................................",
     "................................................",
-    "................................................"};  
+    "................................................"};
     insertItem(QPixmap(solid));
 
     const char *dash[]={
@@ -291,6 +402,10 @@ PLineStyle::PLineStyle(QWidget *parent, const char *name):
     "................................................"};
     insertItem(QPixmap(dashdotdot));
 
+    setValue(value, false);
+    setPName(pname);
+    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
 QString PLineStyle::value() const
@@ -298,14 +413,32 @@ QString PLineStyle::value() const
     return QString("%1").arg(currentItem());
 }
 
-void PLineStyle::setValue(const QString value)
+void PLineStyle::setValue(const QString value, bool emitChange)
 {
-    if (value == "0") { setCurrentItem(0); return; };
-    if (value == "1") { setCurrentItem(1); return; };
-    if (value == "2") { setCurrentItem(2); return; };
-    if (value == "3") { setCurrentItem(3); return; };
-    if (value == "4") { setCurrentItem(4); return; };
-    if (value == "5") { setCurrentItem(5); return; };
+    if (value == "0") { setCurrentItem(0);         if (emitChange)
+            emit propertyChanged(pname(), value);
+ return; };
+    if (value == "1") { setCurrentItem(1);         if (emitChange)
+            emit propertyChanged(pname(), value);
+ return; };
+    if (value == "2") { setCurrentItem(2);         if (emitChange)
+            emit propertyChanged(pname(), value);
+ return; };
+    if (value == "3") { setCurrentItem(3);         if (emitChange)
+            emit propertyChanged(pname(), value);
+ return; };
+    if (value == "4") { setCurrentItem(4);         if (emitChange)
+            emit propertyChanged(pname(), value);
+ return; };
+    if (value == "5") { setCurrentItem(5);          if (emitChange)
+            emit propertyChanged(pname(), value);
+ return; };
 }
+
+void PLineStyle::updateProperty(int val)
+{
+    emit propertyChanged(pname(), value());
+}
+
 
 #include "propertywidgets.moc"

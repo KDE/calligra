@@ -89,6 +89,9 @@ be unchecked. */
       for the selected items. */
   void selectionMade(std::map<QString, PropPtr > *v_props);
   void selectionClear();
+
+public slots:
+    void updateProperty(QString name, QString value);
 };
 
 #endif

@@ -64,7 +64,7 @@ void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props)
 
         table->setText(row-1, 0, (*it).first);
 
-        QWidget *w = (*it).second->editorOfType();
+        QWidget *w = (*it).second->editorOfType(this);
         table->setCellWidget(row-1, 1, w);
     }
 }
@@ -75,6 +75,12 @@ void PropertyEditor::clearProperties()
     delete props;
     props = 0;
     table->setNumRows(0);
+}
+
+void PropertyEditor::emitPropertyChange(QString name, QString newValue)
+{
+    qWarning("editor: assign %s to %s", name.latin1(), newValue.latin1());
+    emit propertyChanged(name, newValue);
 }
 
 #include "propertyeditor.moc"

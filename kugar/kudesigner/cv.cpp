@@ -504,4 +504,17 @@ void ReportCanvas::unselectItem(CanvasBox *it)
     it->setSelected(false);
 }
 
+
+void ReportCanvas::updateProperty(QString name, QString value)
+{
+    CanvasBox *b;
+    for (b = selected.first(); b; b = selected.next())
+    {
+        b->props[name]->setValue(value);
+        b->hide();
+        b->show();
+    }
+//    canvas()->update();
+}
+
 #include "cv.moc"

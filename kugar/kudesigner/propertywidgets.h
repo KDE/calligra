@@ -27,41 +27,56 @@
 #include <kfontcombo.h>
 #include <kcolorcombo.h>
 
+class PropertyEditor;
+
 class PropertyWidget{
 public:
+    virtual ~PropertyWidget() {}
+    
     virtual QString value() const = 0;
-    virtual void setValue(const QString value)=0;
+    virtual void setValue(const QString value, bool emitChange=true) = 0;
+
+    virtual QString pname() const { return m_name; }
+    virtual void setPName(const QString pname) { m_name = pname; }
+private:
+    QString m_name;
 };
 
-class PLineEdit: public QLineEdit, PropertyWidget{
+class PLineEdit: public QLineEdit, public PropertyWidget{
+    Q_OBJECT
 public:
-    PLineEdit ( QWidget * parent, const char * name = 0 ):
-        QLineEdit(parent, name) {};
-    PLineEdit ( const QString & contents, QWidget * parent, const char * name = 0 ):
-        QLineEdit(contents, parent, name) {};
+    PLineEdit ( const PropertyEditor *editor, QString name, QString value, QWidget * parent, const char * name = 0 );
 
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(const QString &val);
 };
 
 class PSpinBox: public QSpinBox, PropertyWidget{
+    Q_OBJECT
 public:
-    PSpinBox ( QWidget * parent = 0, const char * name = 0 ):
-        QSpinBox(parent, name) {}
-    PSpinBox ( int minValue, int maxValue, int step = 1, QWidget * parent = 0, const char * name = 0 ):
-        QSpinBox(minValue, maxValue, step, parent, name) {}
+    PSpinBox ( const PropertyEditor *editor, const QString name, const QString value, QWidget * parent = 0, const char * name = 0 );
+    PSpinBox ( const PropertyEditor *editor, const QString name, const QString value, int minValue, int maxValue, int step = 1, QWidget * parent = 0, const char * name = 0 );
 
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(int val);
 };
 
 class PComboBox: public QComboBox, PropertyWidget{
+    Q_OBJECT
 public:
-    PComboBox ( std::map<QString, QString> *v_corresp, QWidget * parent = 0, const char * name = 0 );
-    PComboBox ( std::map<QString, QString> *v_corresp,  bool rw, QWidget * parent = 0, const char * name = 0 );
+    PComboBox ( const PropertyEditor *editor, const QString name, const QString value, std::map<QString, QString> *v_corresp, QWidget * parent = 0, const char * name = 0 );
+    PComboBox ( const PropertyEditor *editor, const QString name, const QString value, std::map<QString, QString> *v_corresp,  bool rw, QWidget * parent = 0, const char * name = 0 );
  
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
 
 private:
     /** map<description, value>*/
@@ -71,23 +86,37 @@ private:
 
 protected:
     virtual void fillBox();
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(int val);
 };
 
 class PFontCombo: public KFontCombo, PropertyWidget{
+    Q_OBJECT
 public:
-    PFontCombo (QWidget *parent, const char *name=0);
-    PFontCombo (const QStringList &fonts, QWidget *parent, const char *name=0);
+    PFontCombo (const PropertyEditor *editor, const QString name, const QString value, QWidget *parent, const char *name=0);
+    PFontCombo (const PropertyEditor *editor, const QString name, const QString value, const QStringList &fonts, QWidget *parent, const char *name=0);
 
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(int val);
 };
 
 class PColorCombo: public KColorCombo, PropertyWidget{
+    Q_OBJECT
 public:
-    PColorCombo(QWidget *parent, const char *name = 0);
-    
+    PColorCombo(const PropertyEditor *editor, const QString name, const QString value, QWidget *parent, const char *name = 0);
+
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(int val);
 };
 
 class QHBoxLayout;
@@ -95,10 +124,10 @@ class QHBoxLayout;
 class PSymbolCombo: public QWidget, PropertyWidget{
     Q_OBJECT
 public:
-    PSymbolCombo(QWidget *parent = 0, const char *name = 0);
+    PSymbolCombo(const PropertyEditor *editor, const QString name, const QString value, QWidget *parent = 0, const char *name = 0);
 
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
 
 public slots:
     void selectChar();
@@ -107,15 +136,24 @@ private:
     QLineEdit *edit;
     QPushButton *pbSelect;
     QHBoxLayout *l;
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(const QString &val);
 };
 
 
 class PLineStyle: public QComboBox, PropertyWidget{
+    Q_OBJECT
 public:
-    PLineStyle(QWidget *parent = 0, const char *name = 0);
+    PLineStyle(const PropertyEditor *editor, const QString name, const QString value, QWidget *parent = 0, const char *name = 0);
 
     virtual QString value() const;
-    virtual void setValue(const QString value);
+    virtual void setValue(const QString value, bool emitChange=true);
+signals:
+    void propertyChanged(QString name, QString newValue);
+private slots:
+    void updateProperty(int val);
 };
 
 #endif

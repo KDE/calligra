@@ -327,6 +327,7 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*) ), pe,
         	    SLOT( populateProperties(std::map<QString, PropPtr >*) ));
 	        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
+    		connect(pe, SIGNAL(propertyChanged(QString, QString)), rc, SLOT(updateProperty(QString, QString)));
 	    }
 
 

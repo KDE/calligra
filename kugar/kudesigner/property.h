@@ -20,6 +20,7 @@
 
 class QWidget;
 class QString;
+class PropertyEditor;
 
 /**
   *@author Alexander Dymo
@@ -81,7 +82,7 @@ public:
     QString description() const;
     void setDescription(QString description);
 
-    virtual QWidget *editorOfType();
+    virtual QWidget *editorOfType(const PropertyEditor *editor);
 
 protected:
     int m_type;
@@ -103,7 +104,7 @@ public:
     void setCorrespList(std::map<QString, QString> list);
     std::map<QString, QString> correspList;
 
-    virtual QWidget *editorOfType();
+    virtual QWidget *editorOfType(const PropertyEditor *editor);
 };
 
 
