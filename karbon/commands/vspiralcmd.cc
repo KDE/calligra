@@ -34,7 +34,7 @@ VSpiralCmd::VSpiralCmd( VDocument *doc,
 VObject*
 VSpiralCmd::createPath()
 {
-	VPath* path = new VPath();
+	VPath* path = new VPath( 0L );
 
 	VFill fill;
 	fill.setFillRule( fillrule_winding );

@@ -5,13 +5,38 @@
 
 #include <qdom.h>
 
+#include "vobject.h"
 #include "vstroke.h"
 
-VStroke::VStroke( float width, const VLineCap cap, const VLineJoin join,
+
+VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJoin join,
 			float miterLimit )
-	: m_type( stroke_stroke ), m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
-		m_miterLimit( miterLimit )
 {
+	m_parent = parent;
+	m_type = stroke_stroke;
+	m_lineWidth = width;
+	m_lineCap = cap;
+	m_lineJoin = join;
+	m_miterLimit = miterLimit;
+}
+
+VStroke::VStroke( const VStroke& stroke )
+{
+	m_parent = stroke.m_parent;
+	m_type = stroke.m_type;
+	m_lineWidth = stroke.m_lineWidth;
+	m_lineCap = stroke.m_lineCap;
+	m_lineJoin = stroke.m_lineJoin;
+	m_miterLimit = stroke.m_miterLimit;
+}
+
+void
+VStroke::setLineWidth( float width )
+{
+	m_lineWidth = width;
+
+	if( m_parent )
+		m_parent->invalidateBoundingBox();
 }
 
 void

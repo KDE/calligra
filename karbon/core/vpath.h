@@ -28,7 +28,7 @@ typedef QPtrListIterator<VSegmentList> VSegmentListListIterator;
 class VPath : public VObject
 {
 public:
-	VPath( VObject* parent = 0L );
+	VPath( VObject* parent, VState state = state_normal );
 	VPath( const VPath& path );
 	virtual ~VPath();
 
@@ -107,7 +107,6 @@ public:
 	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
-	virtual bool isInside( const KoRect& rect ) const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

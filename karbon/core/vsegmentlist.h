@@ -25,7 +25,7 @@ class VSegmentList : public VObject
 friend class VSegmentListIterator;
 
 public:
-	VSegmentList( VObject* parent = 0L );
+	VSegmentList( VObject* parent );
 	VSegmentList( const VSegmentList& list );
 	virtual ~VSegmentList();
 

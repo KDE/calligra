@@ -19,7 +19,7 @@ VRectangleCmd::VRectangleCmd( VDocument *doc,
 VObject*
 VRectangleCmd::createPath()
 {
-	VPath* path = new VPath();
+	VPath* path = new VPath( 0L );
 
 	path->moveTo( KoPoint( m_tlX, m_tlY ) );
 	path->lineTo( KoPoint( m_brX, m_tlY ) );

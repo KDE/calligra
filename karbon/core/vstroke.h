@@ -37,6 +37,7 @@ enum VLineJoin
 
 
 class QDomElement;
+class VObject;
 
 /**
  * Manages stroke properties.
@@ -47,11 +48,16 @@ class QDomElement;
  * Default is black solid outline of width 1 with miter join, butt cap
  * style and no dashes.
  */
+
 class VStroke
 {
 public:
-	VStroke( float width = 1.0, const VLineCap cap = cap_butt,
+	VStroke( VObject* parent = 0L, float width = 1.0, const VLineCap cap = cap_butt,
 			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
+	VStroke( const VStroke& stroke );
+
+	void setParent( VObject* parent ) { m_parent = parent; }
+	VObject* parent() { return m_parent; }
 
 	VStrokeType type() const { return m_type; }
 	void setType( VStrokeType type ) { m_type = type; }
@@ -59,14 +65,14 @@ public:
 	const VColor& color() const { return m_color; }
 	void setColor( const VColor& color ) { m_color = color; }
 
-	double lineWidth() const { return m_lineWidth; }
-	void setLineWidth( const double width ) { m_lineWidth = width; }
+	float lineWidth() const { return m_lineWidth; }
+	void setLineWidth( float width );
 
 	VLineCap lineCap() const { return m_lineCap; }
-	void setLineCap( const VLineCap cap ) { m_lineCap = cap; }
+	void setLineCap( VLineCap cap ) { m_lineCap = cap; }
 
 	VLineJoin lineJoin() const { return m_lineJoin; }
-	void setLineJoin( const VLineJoin join ) { m_lineJoin = join; }
+	void setLineJoin( VLineJoin join ) { m_lineJoin = join; }
 
 	float miterLimit() const { return m_miterLimit; }
 	void setMiterLimit( float limit ) { m_miterLimit = limit; }
@@ -81,6 +87,8 @@ public:
 	void load( const QDomElement& element );
 
 private:
+	VObject* m_parent;
+
 	VStrokeType m_type;
 
 	VColor m_color;

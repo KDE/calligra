@@ -83,18 +83,6 @@ VGroup::boundingBox() const
 	return m_boundingBox;
 }
 
-bool
-VGroup::isInside( const KoRect& rect ) const
-{
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current() ; ++itr )
-		if( itr.current()->isInside( rect ) )
-			return true;
-
-	return false;
-}
-
 VGroup*
 VGroup::clone() const
 {

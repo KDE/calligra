@@ -50,7 +50,7 @@ VRoundRectCmd::VRoundRectCmd( VDocument *doc,
 VObject*
 VRoundRectCmd::createPath()
 {
-	VPath* path = new VPath();
+	VPath* path = new VPath( 0L );
 
 	path->moveTo( KoPoint( m_tlX, m_tlY - m_edgeR ) );
 	path->arcTo(

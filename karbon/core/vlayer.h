@@ -24,7 +24,7 @@ class QDomElement;
 class VLayer : public VGroup
 {
 public:
-	VLayer( VObject* parent = 0L, VState state = state_normal );
+	VLayer( VObject* parent, VState state = state_normal );
 	VLayer( const VLayer& layer );
 
 	virtual ~VLayer();

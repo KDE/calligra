@@ -23,7 +23,7 @@ VDocument::VDocument()
 
 	// create a layer. we need at least one:
 	m_layers.setAutoDelete( true );
-	m_layers.append( new VLayer() );
+	m_layers.append( new VLayer( this ) );
 	m_activeLayer = m_layers.getLast();
 }
 
@@ -135,7 +135,7 @@ VDocument::loadXML( const QDomElement& doc )
 
 			if( e.tagName() == "LAYER" )
 			{
-				VLayer* layer = new VLayer();
+				VLayer* layer = new VLayer( this );
 				layer->load( e );
 				insertLayer( layer );
 			}

@@ -39,7 +39,7 @@ enum VState
 class VObject
 {
 public:
-	VObject( VObject* parent = 0L, VState state = state_normal );
+	VObject( VObject* parent, VState state = state_normal );
 	VObject( const VObject& obj );
 
 	virtual ~VObject();
@@ -90,19 +90,6 @@ public:
 		if( m_parent )
 			m_parent->invalidateBoundingBox();
 	}
-
-	/**
-	 * Tests whether this object is inside or intersects the given rectangle.
-	 * Default is false, each VObject derivative has to implement
-	 * this method.
-	 *
-	 * @param rect the rectangle to test against.
-	 * @param zoomFactor 
-	 * @return true indicates one or more segments intersects or is inside rect,
-	 * false otherwise.
-	 */
-	virtual bool isInside( const KoRect& /*rect*/ ) const
-		{ return false; }
 
 	void setParent( VObject* parent ) { m_parent = parent; }
 	VObject* parent() { return m_parent; }

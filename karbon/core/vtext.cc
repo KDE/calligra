@@ -87,7 +87,8 @@ FT_Outline_Funcs OutlineMethods =
 
 #endif // HAVE_FREETYPE
 
-VText::VText()
+VText::VText( VObject* parent, VState state )
+	: VObject( parent, state )
 {
 }
 
@@ -104,7 +105,7 @@ VText::VText( KarbonView *view, const QFont &font, const QString &text )
 }
 
 VText::VText( const VText& text )
-	: VObject(), m_text( text.m_text )
+	: VObject( text ), m_text( text.m_text )
 {
 	// copy glyphs
 	VObjectListIterator itr = text.m_glyphs;

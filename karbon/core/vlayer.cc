@@ -98,7 +98,7 @@ VLayer::objectsWithinRect( const KoRect& rect ) const
 	for ( ; itr.current(); ++itr )
 	{
 		if( itr.current()->state() != state_deleted &&
-			itr.current()->isInside( rect ) )
+			itr.current()->boundingBox().intersects( rect ) )
 		{
 			list.append( itr.current() );
 		}
@@ -156,19 +156,19 @@ VLayer::load( const QDomElement& element )
 
 			if( e.tagName() == "PATH" )
 			{
-				VPath* path = new VPath();
+				VPath* path = new VPath( this );
 				path->load( e );
 				append( path );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
-				VGroup* grp = new VGroup();
+				VGroup* grp = new VGroup( this );
 				grp->load( e );
 				append( grp );
 			}
 			else if( e.tagName() == "TEXT" )
 			{
-				/*VText* text = new VText();
+				/*VText* text = new VText( this );
 				text->load( e );
 				append( text );*/
 			}

@@ -25,7 +25,7 @@ VSinusCmd::VSinusCmd( VDocument *doc,
 VObject*
 VSinusCmd::createPath()
 {
-	VPath* path = new VPath();
+	VPath* path = new VPath( 0L );
 
 	KoPoint p1;
 	KoPoint p2;

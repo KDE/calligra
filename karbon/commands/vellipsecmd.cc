@@ -43,7 +43,7 @@ VObject*
 VEllipseCmd::createPath()
 {
 	// first create (half-)unity circle around origin (0,0):
-	VPath* path = new VPath();
+	VPath* path = new VPath( 0L );
 	path->moveTo( KoPoint( -0.5, 0.0 ) );
 	path->arcTo( KoPoint(-0.5,  0.5 ), KoPoint( 0.0,  0.5 ), 0.5 );
 	path->arcTo( KoPoint( 0.5,  0.5 ), KoPoint( 0.5,  0.0 ), 0.5 );

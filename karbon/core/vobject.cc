@@ -22,7 +22,14 @@ VObject::VObject( VObject* parent, VState state )
 
 VObject::VObject( const VObject& obj )
 {
-	m_stroke = obj.m_stroke ? new VStroke( *obj.m_stroke ) : new VStroke;
+	if( obj.m_stroke )
+	{
+		m_stroke = new VStroke( *obj.m_stroke );
+		m_stroke->setParent( this );
+	}
+	else
+		new VStroke( this );
+
 	m_fill = obj.m_fill ? new VFill( *obj.m_fill ) : new VFill;
 
 	m_parent = obj.m_parent;
@@ -41,7 +48,7 @@ void
 VObject::setStroke( const VStroke& stroke )
 {
 	if( !m_stroke )
-		m_stroke = new VStroke();
+		m_stroke = new VStroke( this );
 
 	*m_stroke = stroke;
 }
@@ -69,7 +76,7 @@ void
 VObject::load( const QDomElement& element )
 {
 	if( !m_stroke )
-		m_stroke = new VStroke();
+		m_stroke = new VStroke( this );
 
 	if( !m_fill )
 		m_fill = new VFill();

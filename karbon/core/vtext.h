@@ -20,7 +20,7 @@ class KarbonView;
 class VText : public VObject
 {
 public:
-	VText();
+	VText( VObject* parent, VState state = state_normal );
 	VText( KarbonView *view, const QFont &font );
 	VText( KarbonView *view, const QFont &font, const QString& text );
 	VText( const VText& text );

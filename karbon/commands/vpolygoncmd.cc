@@ -30,7 +30,7 @@ VPolygonCmd::VPolygonCmd( VDocument *doc,
 VObject*
 VPolygonCmd::createPath()
 {
-	VPath* path = new VPath();
+	VPath* path = new VPath( 0L );
 
 	// we start at m_angle + VGlobal::pi_2:
 	KoPoint p(

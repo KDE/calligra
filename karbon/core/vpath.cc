@@ -13,13 +13,14 @@
 #include "vpainter.h"
 #include "vpath.h"
 #include "vsegment.h"
+#include "vstroke.h"
 #include "vvisitor.h"
 
 #include <kdebug.h>
 
 
-VPath::VPath( VObject* parent )
-	: VObject( parent )
+VPath::VPath( VObject* parent, VState state )
+	: VObject( parent, state )
 {
 	m_segmentLists.setAutoDelete( true );
 
@@ -353,34 +354,17 @@ VPath::boundingBox() const
 			m_boundingBox |= itr.current()->boundingBox();
 		}
 
+		// take line width into account:
+		m_boundingBox.setCoords(
+			m_boundingBox.left()   - stroke()->lineWidth(),
+			m_boundingBox.top()    - stroke()->lineWidth(),
+			m_boundingBox.right()  + stroke()->lineWidth(),
+			m_boundingBox.bottom() + stroke()->lineWidth() );
+
 		m_boundingBoxIsInvalid = false;
 	}
 
 	return m_boundingBox;
-}
-
-bool
-VPath::isInside( const KoRect& rect ) const
-{
-// TODO: this is only a temporary solution:
-return rect.intersects( boundingBox() );
-/*
-	KoRect rect( qrect.topLeft() * zoomFactor, qrect.bottomRight() * zoomFactor );
-
-	VPathBounding bb;
-	QPtrListIterator<VSegmentList> itr( m_segmentLists );
-	for( itr.toFirst(); itr.current(); ++itr )
-	{
-		// check first for boundingbox interferance:
-		if( rect.intersects( itr.current()->boundingBox() ) )
-		{
-			if( bb.intersects( qrect, zoomFactor, *( itr.current() ) ) )
-				return true;
-		}
-	}
-
-	return false;
-*/
 }
 
 VPath*
@@ -423,7 +407,7 @@ VPath::load( const QDomElement& element )
 
 			if( child.tagName() == "SEGMENTS" )
 			{
-				VSegmentList sl;
+				VSegmentList sl( this );
 				sl.load( child );
 				combineSegmentList( sl );
 			}
