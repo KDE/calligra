@@ -9,6 +9,7 @@
 #include <qvaluelist.h>
 
 #include "vcolor.h"
+#include "vdashpattern.h"
 
 
 enum VStrokeType{
@@ -51,14 +52,7 @@ public:
 	float miterLimit() const { return m_miterLimit; }
 	void setMiterLimit( float limit ) { m_miterLimit = limit; }
 
-	// dashes:
-	const QValueList<float>& dashArray() const { return m_dashArray; }
-	void setDashArray( const QValueList<float>& array )
-		{ m_dashArray = array; }
-
-	// dash offset:
-	float dashOffset() const { return m_dashOffset; }
-	void setDashOffset( float offset ) { m_dashOffset = offset; }
+	VDashPattern& dashPattern() { return m_dashPattern; }
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
@@ -69,8 +63,7 @@ private:
 	VLineCap m_lineCap;
 	VLineJoin m_lineJoin;
 	float m_miterLimit;
-	QValueList<float> m_dashArray;
-	float m_dashOffset;
+	VDashPattern m_dashPattern;
 };
 
 #endif

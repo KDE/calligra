@@ -10,11 +10,8 @@
 VStroke::VStroke( float width, const VLineCap cap, const VLineJoin join,
 			float miterLimit )
 	: m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
-		m_miterLimit( miterLimit ), m_dashOffset( 0.0 )
+		m_miterLimit( miterLimit )
 {
-	/*float f = 5;
-	m_dashArray.append( f );
-	m_dashArray.append( f );*/
 }
 
 void
@@ -31,6 +28,9 @@ VStroke::save( QDomElement& element ) const
 
 	// save color:
 	m_color.save( me );
+
+	// save dashpattern:
+	m_dashPattern.save( me );
 }
 
 void
@@ -76,6 +76,10 @@ VStroke::load( const QDomElement& element )
 			if( e.tagName() == "COLOR" )
 			{
 				m_color.load( e );
+			}
+			else if( e.tagName() == "DASHPATTERN" )
+			{
+				m_dashPattern.load( e );
 			}
 		}
 	}

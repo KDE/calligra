@@ -6,6 +6,7 @@ noinst_LTLIBRARIES = libkarboncore.la
 noinst_HEADERS = \
 	vcanvas.h \
 	vcolor.h \
+	vdashpattern.h \
 	vfill.h \
 	vglobal.h \
 	vgradient.h \
@@ -24,6 +25,7 @@ noinst_HEADERS = \
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
 	vcolor.cc \
+	vdashpattern.cc \
 	vfill.cc \
 	vgradient.cc \
 	vlayer.cc \

@@ -377,15 +377,15 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
-		if( m_stroke->dashArray().count() > 0 )
+		if( m_stroke->dashPattern().array().count() > 0 )
 		{
 			// there are dashes to be rendered
 			ArtVpathDash dash;
-			dash.offset = m_stroke->dashOffset() * ratio;
-			dash.n_dash = m_stroke->dashArray().count();
+			dash.offset = m_stroke->dashPattern().offset() * ratio;
+			dash.n_dash = m_stroke->dashPattern().array().count();
 			double *dashes = new double[ dash.n_dash ];
 			for( int i = 0; i < dash.n_dash; i++ )
-				dashes[i] = m_stroke->dashArray()[i] * ratio;
+				dashes[i] = m_stroke->dashPattern().array()[i] * ratio;
 
 			dash.dash = dashes;
 			// get the dashed VPath and use that for the stroke render operation
