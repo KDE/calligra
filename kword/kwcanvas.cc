@@ -49,6 +49,13 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     m_mousePressed = false;
     m_imageDrag = false;
     m_frameInline = false;
+
+    //used by insert picture dialogbox
+    m_picture.pictureInline = false;
+    m_picture.keepRatio = true;
+
+
+
     m_frameInlineType=FT_TABLE;
     m_viewMode = viewMode;
     cmdMoveFrame=0L;

@@ -121,7 +121,7 @@ public:
         MM_CREATE_PART = 7
     };
     void setMouseMode( MouseMode _mm );
-    MouseMode mouseMode() { return m_mouseMode; }
+    MouseMode mouseMode()const { return m_mouseMode; }
 
     void insertPicture( const QString &filename, bool isClipart, QSize pixmapSize, bool _keepRatio );
     void insertPart( const KoDocumentEntry &entry );
@@ -151,6 +151,12 @@ public:
 
     QString tableTemplateName()const { return m_table.tableTemplateName;}
     void setTableTemplateName(const QString &_name) { m_table.tableTemplateName=_name;}
+
+    void setPictureInline( bool _inline) { m_picture.pictureInline = _inline;}
+    bool pictureInline() const { return m_picture.pictureInline; }
+
+    void setPictureKeepRatio( bool _keep) { m_picture.keepRatio = _keep;}
+    bool pictureKeepRatio() const { return m_picture.keepRatio; }
 
     void createTable( unsigned int rows, unsigned int cols,
                       int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
@@ -324,6 +330,12 @@ private:
         NoteType noteType;
         KWFootNoteVariable::Numbering numberingType;
     } m_footEndNote;
+
+    struct
+    {
+        bool pictureInline;
+        bool keepRatio;
+    }m_picture;
 };
 
 #endif

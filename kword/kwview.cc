@@ -2709,9 +2709,13 @@ void KWView::insertPicture()
 {
     if ( actionToolsCreatePix->isChecked() )
     {
-        KWInsertPicDia dia( this );
+        KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio() );
         if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
+        {
             insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize(),dia.keepRatio() );
+            m_gui->canvasWidget()->setPictureInline( dia.makeInline());
+            m_gui->canvasWidget()->setPictureKeepRatio( dia.keepRatio() );
+        }
         else
             showMouseMode( KWCanvas::MM_EDIT );
     }

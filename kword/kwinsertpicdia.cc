@@ -106,7 +106,7 @@ private:
 
 //////////////
 
-KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
+KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, const char *name )
     : KDialogBase( Plain, i18n("Insert Picture"), Ok|Cancel, Ok, parent, name, true )
 {
     setInitialSize( QSize(400, 300) );
@@ -134,7 +134,8 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     grid->setRowStretch( 3, 10 );
     grid->setColStretch( 0, 1 );
     grid->setColStretch( 1, 10 );
-    m_cbKeepRatio->setChecked(true);
+    m_cbKeepRatio->setChecked(_keepRatio);
+    m_cbInline->setChecked( _inline );
     enableButtonOK( false );
     setFocus();
     slotChooseImage(); // save the user time, directly open the dialog
@@ -164,7 +165,6 @@ void KWInsertPicDia::slotChooseImage()
             m_type = IPD_IMAGE;
             enableButtonOK( true );
             m_cbKeepRatio->setEnabled( true );
-            m_cbKeepRatio->setChecked( true );
         }
     } else if ( result == SelectClipart )
     {

@@ -29,7 +29,7 @@ class KWInsertPicDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWInsertPicDia( QWidget *parent, const char *name = 0 );
+    KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, const char *name = 0 );
 
     // IPD = InsertPicDia :)
     enum { IPD_IMAGE = 0, IPD_CLIPART };

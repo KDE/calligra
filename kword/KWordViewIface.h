@@ -108,6 +108,12 @@ k_dcop:
     void insertFile(const QString & path);
     void createFrameStyle();
 
+    void setPictureInline( bool _inline);
+    bool pictureInline() const;
+
+    void setPictureKeepRatio( bool _keep);
+    bool pictureKeepRatio() const;
+
 private:
     KWView *view;
 

@@ -337,3 +337,24 @@ void KWordViewIface::createFrameStyle()
 {
     view->createFrameStyle();
 }
+
+void KWordViewIface::setPictureInline( bool _inline)
+{
+    view->getGUI()->canvasWidget()->setPictureInline( _inline);
+}
+
+bool KWordViewIface::pictureInline() const
+{
+    return view->getGUI()->canvasWidget()->pictureInline();
+}
+
+void KWordViewIface::setPictureKeepRatio( bool _keep)
+{
+    view->getGUI()->canvasWidget()->setPictureKeepRatio( _keep);
+}
+
+bool KWordViewIface::pictureKeepRatio() const
+{
+    return view->getGUI()->canvasWidget()->pictureKeepRatio();
+}
+
