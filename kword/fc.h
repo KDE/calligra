@@ -31,9 +31,10 @@ public:
 
     KWFormatContext( KWordDocument *_doc, unsigned int _frameSet );
 
-    bool operator>( const KWFormatContext &fc );
-    bool operator<( const KWFormatContext &fc );
-
+    bool operator>( const KWFormatContext &fc ) const;
+    bool operator<( const KWFormatContext &fc ) const;
+    bool operator==( const KWFormatContext &fc ) const;
+    
     void init( KWParag *_parag, bool _fromStart = true,
                int _frame = -1, int _page = -1 );
     void enterNextParag();

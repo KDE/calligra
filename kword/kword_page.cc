@@ -1858,7 +1858,7 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
     painter.setClipRect( e->rect() );
 
     QRegion r( e->rect() );
-    
+
     if ( !_setErase )
 	_erase = e->erased();
     _setErase = FALSE;
@@ -1870,7 +1870,7 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
     drawBorders( painter, e->rect(), _erase && !_resizing, &r );
     // #### hack for now
     drawBorders( painter, e->rect(), _erase && !_resizing, 0 );
-    
+
     int cf = currFrameSet == -1 ? fc->getFrameSet() - 1 : currFrameSet;
 
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
@@ -2085,14 +2085,12 @@ bool KWPage::kContinueSelection( QKeyEvent *e )
     if ( e->key() == Key_Shift || ( e->state() & ShiftButton ) && ( e->key() == Key_Left || e->key() == Key_Right ||
 								    e->key() == Key_Up || e->key() == Key_Down ) )
 	continueSelection = TRUE;
-    else
-    {
+    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() ) {
 	doc->setSelection( FALSE );
 	doc->drawSelection( painter, contentsX(), contentsY() );
 	painter.end();
 	if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
-	     e->key() == Key_Enter || e->ascii() >= 32 )
-	{
+	     e->key() == Key_Enter || e->ascii() >= 32 ) {
 	    doc->deleteSelectedText( fc );
 	    recalcCursor();
 	    if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return || e->key() == Key_Enter )
@@ -2149,8 +2147,7 @@ bool KWPage::kRight( QKeyEvent *e, int , int , KWParag *, KWTextFrameSet * )
 				     fc->getParag()->getParagLayout()->getTopBorder(),
 				     fc->getParag()->getParagLayout()->getBottomBorder() );
 
-    if ( continueSelection || e->state() & ShiftButton )
-    {
+    if ( continueSelection || e->state() & ShiftButton ) {
 	continueKeySelection();
 	return FALSE;
     }
@@ -2174,8 +2171,7 @@ bool KWPage::kLeft( QKeyEvent *e, int , int , KWParag *, KWTextFrameSet * )
 				     fc->getParag()->getParagLayout()->getTopBorder(),
 				     fc->getParag()->getParagLayout()->getBottomBorder() );
 
-    if ( continueSelection || e->state() & ShiftButton )
-    {
+    if ( continueSelection || e->state() & ShiftButton ) {
 	continueKeySelection();
 	return FALSE;
     }
@@ -2199,8 +2195,7 @@ bool KWPage::kUp( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
 				     fc->getParag()->getParagLayout()->getTopBorder(),
 				     fc->getParag()->getParagLayout()->getBottomBorder() );
 
-    if ( continueSelection || e->state() & ShiftButton )
-    {
+    if ( continueSelection || e->state() & ShiftButton ) {
 	continueKeySelection();
 	return FALSE;
     }
@@ -2224,8 +2219,7 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
 				     fc->getParag()->getParagLayout()->getTopBorder(),
 				     fc->getParag()->getParagLayout()->getBottomBorder() );
 
-    if ( continueSelection || e->state() & ShiftButton )
-    {
+    if ( continueSelection || e->state() & ShiftButton ) {
 	continueKeySelection();
 	return FALSE;
     }
@@ -2242,33 +2236,27 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
     _format = *( ( KWFormat* )fc );
     unsigned int tmpTextPos = fc->getTextPos();
 
-    if ( fc->isCursorAtParagEnd() )
-    {
+    if ( fc->isCursorAtParagEnd() ) {
 	frameSet->insertParag( fc->getParag(), I_AFTER );
 	fc->setTextPos( 0 );
 	recalcPage( 0L );
 	if ( e->state() & ControlButton ) fc->getParag()->getNext()->setHardBreak( TRUE );
 	fc->init( fc->getParag()->getNext(), e->state() & ControlButton );
-    }
-    else if ( fc->isCursorAtParagStart() )
-    {
+    } else if ( fc->isCursorAtParagStart() ) {
 	KWParag *oldFirst = frameSet->getFirstParag();
 	frameSet->insertParag( fc->getParag(), I_BEFORE );
 	fc->setTextPos( 0 );
 	recalcPage( 0L );
 	if ( e->state() & ControlButton ) fc->getParag()->setHardBreak( TRUE );
 	fc->init( fc->getParag(), oldFirst != frameSet->getFirstParag() || e->state() & ControlButton );
-    }
-    else
-    {
+    } else {
 	bool _insert = fc->isCursorAtLineStart();
 	frameSet->splitParag( fc->getParag(), tmpTextPos );
 	fc->setTextPos( 0 );
 	recalcPage( 0L );
 	if ( ( e->state() & ControlButton ) && !_insert ) fc->getParag()->getNext()->setHardBreak( TRUE );
 	fc->init( fc->getParag()->getNext(), ( e->state() & ControlButton ) && !_insert );
-	if ( _insert )
-	{
+	if ( _insert ) {
 	    frameSet->insertParag( fc->getParag(), I_BEFORE );
 	    fc->setTextPos( 0 );
 	    recalcPage( 0L );
@@ -2292,8 +2280,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 
     if ( oldPage != (int)fc->getPage() )
 	gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
-    if ( oldParag != fc->getParag() && fc->getParag() )
-    {
+    if ( oldParag != fc->getParag() && fc->getParag() ) {
 	gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName() );
 	setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
 	setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
@@ -2310,17 +2297,14 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
     if ( doc->getProcessingType() == KWordDocument::DTP && oldFrame != (int)fc->getFrame() )
 	setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
 
-    if ( pln != fc->getParag()->getParagLayout()->getName() )
-    {
+    if ( pln != fc->getParag()->getParagLayout()->getName() ) {
 	format = fc->getParag()->getParagLayout()->getFormat();
 	fc->apply( format );
-    }
-    else
+    } else
 	fc->apply( _format );
     gui->getView()->setFormat( *( ( KWFormat* )fc ) );
 
-    if ( scrolled )
-    {
+    if ( scrolled ) {
 	KWParag *rp = fc->getParag();
 	if ( rp->getPrev() )
 	    rp = rp->getPrev();
@@ -2346,8 +2330,7 @@ bool KWPage::kDelete( QKeyEvent *, int, int, KWParag *, KWTextFrameSet *frameSet
     unsigned int lineEndPos;
     bool exitASAP = TRUE;
 
-    if ( !del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext() )
-    {
+    if ( !del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext() ) {
 	KWParag *p = fc->getParag()->getNext();
 	int ptYStart = fc->getParag()->getPTYStart();
 	int startPage = fc->getParag()->getStartPage();
@@ -2358,21 +2341,17 @@ bool KWPage::kDelete( QKeyEvent *, int, int, KWParag *, KWTextFrameSet *frameSet
 	frameSet->deleteParag( fc->getParag() );
 	if ( p ) fc->init( p, FALSE );
 	exitASAP = FALSE;
-    }
-    else if ( !del && fc->getParag()->getTextLen() > 0 )
-    {
+    } else if ( !del && fc->getParag()->getTextLen() > 0 ) {
 	frameSet->joinParag( fc->getParag(), fc->getParag()->getNext() );
 	exitASAP = FALSE;
     }
 
     lineEndPos = fc->getLineEndPos();
 
-    if ( !fc->isCursorInFirstLine() )
-    {
+    if ( !fc->isCursorInFirstLine() ) {
 	goNext = TRUE;
 	fc->cursorGotoPrevLine();
-    }
-    else
+    } else
 	fc->makeLineLayout();
 
     repaintKeyEvent1( frameSet, TRUE, exitASAP );
@@ -2395,14 +2374,12 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
     if ( fc->isCursorAtLineStart() && fc->isCursorAtParagStart() && fc->getParag() == frameSet->getFirstParag() )
 	return TRUE;
 
-    if ( fc->isCursorAtLineStart() && !fc->isCursorAtParagStart() )
-    {
+    if ( fc->isCursorAtLineStart() && !fc->isCursorAtParagStart() ) {
 	fc->cursorGotoLeft();
 
 	if ( oldPage != (int)fc->getPage() )
 	    gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
-	if ( oldParag != fc->getParag() && fc->getParag() )
-	{
+	if ( oldParag != fc->getParag() && fc->getParag() ) {
 	    gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName() );
 	    setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
 	    setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
@@ -2431,19 +2408,15 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
     unsigned int lineEndPos;
     bool exitASAP = TRUE;
 
-    if ( !del && fc->getParag()->getTextLen() == 0 )
-    {
+    if ( !del && fc->getParag()->getTextLen() == 0 ) {
 	KWParag *p = fc->getParag()->getPrev();
 	frameSet->deleteParag( fc->getParag() );
-	if ( p )
-	{
+	if ( p ) {
 	    fc->init( p, FALSE );
 	    tmpTextPos = p->getTextLen();
 	}
 	exitASAP = FALSE;
-    }
-    else if ( !del && fc->getParag()->getTextLen() > 0 )
-    {
+    } else if ( !del && fc->getParag()->getTextLen() > 0 ) {
 	KWParag *p = fc->getParag()->getPrev();
 	frameSet->joinParag( fc->getParag()->getPrev(), fc->getParag() );
 	if ( p ) fc->init( p, FALSE );
@@ -2453,12 +2426,10 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
 
     lineEndPos = fc->getLineEndPos();
 
-    if ( !fc->isCursorInFirstLine() )
-    {
+    if ( !fc->isCursorInFirstLine() ) {
 	goNext = TRUE;
 	fc->cursorGotoPrevLine();
-    }
-    else
+    } else
 	fc->makeLineLayout();
 
     repaintKeyEvent1( frameSet, TRUE, exitASAP );
@@ -2469,23 +2440,17 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
 
     if ( recalc && goNext )
 	recalcCursor( FALSE, tmpTextPos );
-    else
-    {
-	if ( !joined )
-	{
-	    if ( !del )
-	    {
+    else {
+	if ( !joined ) {
+	    if ( !del ) {
 		fc->init( fc->getParag(), FALSE );
 		fc->cursorGotoLineStart();
 		while ( paraLen > fc->getLineEndPos() )
 		    fc->cursorGotoNextLine();
 		fc->cursorGotoPos( paraLen );
-	    }
-	    else
+	    } else
 		fc->cursorGotoPos( tmpTextPos );
-	}
-	else
-	{
+	} else {
 	    fc->init( fc->getParag(), FALSE );
 	    fc->cursorGotoLineStart();
 	    while ( paraLen > fc->getLineEndPos() )
@@ -2513,8 +2478,7 @@ bool KWPage::kTab( QKeyEvent *, int, int, KWParag *, KWTextFrameSet *frameSet )
 
     if ( tmpTextPos + 1 <= fc->getLineEndPos() )
 	fc->cursorGotoPos( tmpTextPos + 1 );
-    else
-    {
+    else {
 	fc->cursorGotoNextLine();
 	fc->cursorGotoPos( tmpTextPos + 1 );
     }
@@ -2536,8 +2500,7 @@ bool KWPage::kDefault( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet *frameS
     fc->getParag()->setFormat( fc->getTextPos(), e->text().length(), format );
     fc->makeLineLayout();
 
-    if ( e->ascii() == ' ' && !fc->isCursorInFirstLine() )
-    {
+    if ( e->ascii() == ' ' && !fc->isCursorInFirstLine() ) {
 	fc->cursorGotoPrevLine();
 	fc->makeLineLayout();
 	isPrev = TRUE;
@@ -2552,8 +2515,7 @@ bool KWPage::kDefault( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet *frameS
 
     if ( tmpTextPos + e->text().length() <= fc->getLineEndPos() )
 	fc->cursorGotoPos( tmpTextPos + e->text().length() );
-    else
-    {
+    else {
 	fc->cursorGotoNextLine();
 	fc->cursorGotoPos( tmpTextPos + e->text().length() );
     }
@@ -2568,7 +2530,7 @@ bool KWPage::kDefault( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet *frameS
 void KWPage::keyPressEvent( QKeyEvent *e )
 {
 #define STOP { stopProcessKeyEvent(); return; }
-
+    
     if ( mouseMode != MM_EDIT || e->key() == Key_Control )
 	return;
 
@@ -2942,7 +2904,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 	_painter.fillRect( region->boundingRect(), Qt::white );
 	_painter.restore();
     }
-    
+
     _painter.setPen( red );
 
     for ( int k = 0; k < doc->getPages(); k++ ) {
