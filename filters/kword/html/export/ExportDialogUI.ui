@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ExportDialogUI</class>
 <comment>Export dialog for KWord's HTML export filter</comment>
 <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
@@ -75,7 +75,7 @@
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>1</hsizetype>
+                            <hsizetype>3</hsizetype>
                             <vsizetype>5</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
@@ -83,7 +83,7 @@
                     </property>
                 </widget>
                 <spacer row="2" column="2">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer2</cstring>
                     </property>
                     <property name="orientation">
@@ -113,7 +113,7 @@
             </grid>
         </widget>
         <spacer row="3" column="0">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer1</cstring>
             </property>
             <property name="orientation">
@@ -154,7 +154,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>TabFocus</enum>
+                        <enum>NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>L&amp;ight: Convert to strict (X)HTML</string>
@@ -171,7 +171,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>TabFocus</enum>
+                        <enum>NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>&amp;Basic: Convert to transitional (X)HTML</string>

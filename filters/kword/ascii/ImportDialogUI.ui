@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ImportDialogUI</class>
 <comment>Export dialog for KWord's HTML export filter</comment>
 <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
@@ -10,7 +10,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>404</width>
+            <width>430</width>
             <height>255</height>
         </rect>
     </property>
@@ -86,7 +86,7 @@
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>1</hsizetype>
+                            <hsizetype>3</hsizetype>
                             <vsizetype>5</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
