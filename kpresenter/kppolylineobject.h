@@ -36,7 +36,7 @@ class KPPolylineObject : public KPObject
 {
 public:
     KPPolylineObject();
-    KPPolylineObject( const KoPointArray &_points, const QSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    KPPolylineObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPPolylineObject() {}
 
     KPPolylineObject &operator=( const KPPolylineObject & );
@@ -68,7 +68,7 @@ protected:
     void updatePoints( double _fx, double _fy );
 
     KoPointArray origPoints, points;
-    QSize origSize;
+    KoSize origSize;
     QPen pen;
     LineEnd lineBegin, lineEnd;
 };

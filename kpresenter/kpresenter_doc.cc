@@ -1724,6 +1724,7 @@ void KPresenterDoc::movePage( int from, int to )
     deletePage( from );
     insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
     selectPage( to, wasSelected );
+    selectPage( to, wasSelected );
 }
 
 void KPresenterDoc::copyPage( int from, int to )

@@ -43,7 +43,7 @@ KPCubicBezierCurveObject::KPCubicBezierCurveObject()
 
 /*================== overloaded constructor ======================*/
 KPCubicBezierCurveObject::KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints,
-                                                    const QSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+                                                    const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPObject(), pen( _pen )
 {
     controlPoints = KoPointArray( _controlPoints );
@@ -119,7 +119,7 @@ int KPCubicBezierCurveObject::load(const QDomElement &element)
         origControlPoints = controlPoints;
         allPoints = getCubicBezierPointsFrom( controlPoints );
         origAllPoints = allPoints;
-        origSize = ext.toQSize();
+        origSize = ext;
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();

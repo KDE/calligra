@@ -19,7 +19,7 @@
 
 #include <kpfreehandobject.h>
 #include <kpresenter_utils.h>
-#include <kozoomhandler.h>
+#include <kozoomhandler.h>²
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>
@@ -42,7 +42,7 @@ KPFreehandObject::KPFreehandObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPFreehandObject::KPFreehandObject(  const KoPointArray &_points, const QSize &_size, const QPen &_pen,
+KPFreehandObject::KPFreehandObject(  const KoPointArray &_points, const KoSize &_size, const QPen &_pen,
                                      LineEnd _lineBegin, LineEnd _lineEnd )
     : KPObject(), pen( _pen )
 {
@@ -113,7 +113,7 @@ int KPFreehandObject::load( const QDomElement &element )
             ++index;
         }
         origPoints = points;
-        origSize = ext.toQSize();
+        origSize = ext;
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();

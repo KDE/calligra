@@ -42,7 +42,7 @@ KPPolylineObject::KPPolylineObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPPolylineObject::KPPolylineObject(  const KoPointArray &_points, const QSize &_size, const QPen &_pen,
+KPPolylineObject::KPPolylineObject(  const KoPointArray &_points, const KoSize &_size, const QPen &_pen,
                                      LineEnd _lineBegin, LineEnd _lineEnd )
     : KPObject(), pen( _pen )
 {
@@ -113,7 +113,7 @@ int KPPolylineObject::load(const QDomElement &element)
             ++index;
         }
         origPoints = points;
-        origSize = ext.toQSize();
+        origSize = ext;
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();

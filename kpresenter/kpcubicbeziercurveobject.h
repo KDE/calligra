@@ -23,7 +23,7 @@
 #include <qpointarray.h>
 #include "koPointArray.h"
 #include <kpobject.h>
-
+#include <koSize.h>
 #define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
@@ -36,7 +36,7 @@ class KPCubicBezierCurveObject : public KPObject
 {
 public:
     KPCubicBezierCurveObject();
-    KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const QSize & _size,
+    KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
                               const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPCubicBezierCurveObject() {}
 
@@ -72,7 +72,7 @@ protected:
 
     KoPointArray origControlPoints, controlPoints;
     KoPointArray origAllPoints, allPoints;
-    QSize origSize;
+    KoSize origSize;
     QPen pen;
     LineEnd lineBegin, lineEnd;
 };

@@ -36,7 +36,7 @@ class KPFreehandObject : public KPObject
 {
 public:
     KPFreehandObject();
-    KPFreehandObject( const KoPointArray &_points, const QSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    KPFreehandObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPFreehandObject() {}
 
     KPFreehandObject &operator=( const KPFreehandObject & );
@@ -68,7 +68,7 @@ protected:
     void updatePoints( double _fx, double _fy );
 
     KoPointArray origPoints, points;
-    QSize origSize;
+    KoSize origSize;
     QPen pen;
     LineEnd lineBegin, lineEnd;
 };

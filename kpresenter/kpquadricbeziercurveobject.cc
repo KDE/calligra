@@ -43,7 +43,7 @@ KPQuadricBezierCurveObject::KPQuadricBezierCurveObject()
 
 /*================== overloaded constructor ======================*/
 KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints,
-                                                        const QSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+                                                        const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPObject(), pen( _pen )
 {
     controlPoints = KoPointArray( _controlPoints );
@@ -52,7 +52,7 @@ KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_con
     allPoints = KoPointArray( _allPoints );
     origAllPoints = KoPointArray( _allPoints );
 
-    origSize = KoSize::fromQSize(_size);
+    origSize = _size;
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
 }

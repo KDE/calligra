@@ -43,7 +43,7 @@ KPPolygonObject::KPPolygonObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const QSize &_size, const QPen &_pen, const QBrush &_brush,
+KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
                                   FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor,
                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
@@ -146,7 +146,7 @@ int KPPolygonObject::load( const QDomElement &element )
             ++index;
         }
         origPoints = points;
-        origSize = ext.toQSize();
+        origSize = ext;
     }
     return offset;
 }
@@ -362,7 +362,7 @@ void KPPolygonObject::drawPolygon()
 
     points = tmpPoints;
     origPoints = points;
-    origSize = ext.toQSize();
+    origSize = ext;
 
     if ( fillType == FT_GRADIENT && gradient ) {
         redrawPix = true;

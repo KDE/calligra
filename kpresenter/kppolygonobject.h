@@ -35,7 +35,7 @@ class KPPolygonObject : public KP2DObject
 {
 public:
     KPPolygonObject();
-    KPPolygonObject( const KoPointArray &_points, const QSize &_size, const QPen &_pen, const QBrush &_brush,
+    KPPolygonObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
                      FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor,
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
@@ -75,7 +75,7 @@ protected:
     void drawPolygon();
 
     KoPointArray origPoints, points;
-    QSize origSize;
+    KoSize origSize;
     bool checkConcavePolygon;
     int cornersValue;
     int sharpnessValue;

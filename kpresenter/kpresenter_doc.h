@@ -138,7 +138,7 @@ public:
 
     // get - set options for editmodi
     QColor txtBackCol() const { return _txtBackCol; }
-    void setTxtBackCol( QColor c ) { _otxtBackCol = _txtBackCol; _txtBackCol = c; }
+    void setTxtBackCol( const QColor &c ) { _otxtBackCol = _txtBackCol; _txtBackCol = c; }
 
     // get - set roundedness
     unsigned int getRndX() const { return _xRnd; }

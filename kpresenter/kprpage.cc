@@ -1011,7 +1011,7 @@ void KPrPage::insertAutoform( const KoRect &r, const QPen &pen, const QBrush &br
 void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,
                                     LineEnd lb, LineEnd le )
 {
-    QSize size( r.width(), r.height() );
+    KoSize size( r.width(), r.height() );
     KPFreehandObject *kpfreehandobject = new KPFreehandObject( points, size, pen, lb, le );
     kpfreehandobject->setOrig( r.x(), r.y() );
     kpfreehandobject->setSize( r.width(), r.height() );
@@ -1024,7 +1024,7 @@ void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const
 void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,
                                     LineEnd lb, LineEnd le )
 {
-    QSize size( r.width(), r.height() );
+    KoSize size( r.width(), r.height() );
     KPPolylineObject *kppolylineobject = new KPPolylineObject( points, size, pen, lb, le );
     kppolylineobject->setOrig( r.x(), r.y() );
     kppolylineobject->setSize( r.width(), r.height() );
@@ -1038,7 +1038,7 @@ void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const
 void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,
                                             LineEnd lb, LineEnd le )
 {
-    QSize size( r.width(), r.height() );
+    KoSize size( r.width(), r.height() );
 
     KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject( points, allPoints, size, pen, lb, le );
     kpQuadricBezierCurveObject->setOrig( r.x(), r.y() );
@@ -1053,7 +1053,7 @@ void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPoin
 void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,
                                             LineEnd lb, LineEnd le )
 {
-    QSize size( r.width(), r.height() );
+    KoSize size( r.width(), r.height() );
 
     KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject( points, allPoints, size, pen, lb, le );
     kpCubicBezierCurveObject->setOrig( r.x(), r.y() );
@@ -1070,7 +1070,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
                                    const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
                                    bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
-    QSize size( r.width(), r.height() );
+    KoSize size( r.width(), r.height() );
 
     KPPolygonObject *kpPolygonObject = new KPPolygonObject( points, size, pen, brush, ft,
                                                             g1, g2, gt, unbalanced, xfactor, yfactor,
