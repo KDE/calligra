@@ -45,9 +45,15 @@ public:
     QDateTime creationDate( void ) const;
     /// Get the "modification" date/time
     QDateTime modificationDate( void ) const;
+    /**
+     * Get a document property 
+     * \param name name of the property
+     * \param oldName alternative name of the property (in old KWord syntax)
+     */
+    QString getProperty( const QString& name, const QString& oldName = QString::null ) const;
 protected:
-    /// Get one of the document property
-    QString getProperty( const QString& name ) const;
+    /// Get a document property \internal
+    QString getPropertyInternal( const QString& name ) const;
 public:
     QMap<QString, QString> m_documentProperties;
     QValueList<KWord13Layout> m_styles;

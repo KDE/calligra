@@ -114,7 +114,22 @@ void KWord13Document::xmldump( QIODevice* io )
     iostream << "</kworddocument>\n";
 }
 
-QString KWord13Document::getProperty( const QString& name ) const
+QString KWord13Document::getProperty( const QString& name, const QString& oldName ) const
+{
+    const QString result ( getPropertyInternal( name ) );
+    
+    if ( result.isEmpty() && !oldName.isEmpty() )
+    {
+        // The result is empty result and we have an old name, so try the old name
+        return getPropertyInternal( oldName );
+    }
+    else
+    {
+        return result;
+    }
+}
+
+QString KWord13Document::getPropertyInternal( const QString& name ) const
 {
     QMap<QString,QString>::ConstIterator it ( m_documentProperties.find( name ) );
     if ( it == m_documentProperties.end() )
@@ -130,7 +145,7 @@ QString KWord13Document::getProperty( const QString& name ) const
 
 QDateTime KWord13Document::lastPrintingDate( void ) const
 {
-    const QString strDate( getProperty( "VARIABLESETTINGS:lastPrintingDate" ) );
+    const QString strDate( getPropertyInternal( "VARIABLESETTINGS:lastPrintingDate" ) );
     
     QDateTime dt;
     
@@ -148,7 +163,7 @@ QDateTime KWord13Document::lastPrintingDate( void ) const
 
 QDateTime KWord13Document::creationDate( void ) const
 {
-    const QString strDate( getProperty( "VARIABLESETTINGS:creationDate" ) );
+    const QString strDate( getPropertyInternal( "VARIABLESETTINGS:creationDate" ) );
     
     QDateTime dt;
     
@@ -166,7 +181,7 @@ QDateTime KWord13Document::creationDate( void ) const
 
 QDateTime KWord13Document::modificationDate( void ) const
 {
-    const QString strDate( getProperty( "VARIABLESETTINGS:modificationDate" ) );
+    const QString strDate( getPropertyInternal( "VARIABLESETTINGS:modificationDate" ) );
     
     QDateTime dt;
     

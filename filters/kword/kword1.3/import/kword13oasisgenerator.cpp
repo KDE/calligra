@@ -328,6 +328,90 @@ void KWord13OasisGenerator::writeStartOfFile(const QString& type)
     zipWriteData(">\n");
 }
 
+void KWord13OasisGenerator::writeStylesXml( void )
+{
+    if (!m_zip && !m_kwordDocument)
+        return;
+
+    zipPrepareWriting("styles.xml");
+
+    writeStartOfFile("styles");
+
+    // ### TODO writeFontDeclaration();
+
+    // ### TODO zipWriteData(m_styles);
+
+    zipWriteData(" <office:automatic-styles>\n");
+    zipWriteData("  <style:page-master style:name=\"pm1\">\n"); // ### TODO: verify if style name is unique
+
+    zipWriteData( "   <style:properties" );
+    zipWriteData( " style:page-usage=\"all\"" ); // ### TODO: check
+
+    zipWriteData(" fo:page-width=\"");
+    zipWriteData( m_kwordDocument->getProperty( "PAPER:width", "PAPER:ptWidth" ) );
+    zipWriteData("pt\" fo:page-height=\"");
+    zipWriteData( m_kwordDocument->getProperty( "PAPER:height", "PAPER:ptHeight" ) );
+    zipWriteData("pt\" ");
+
+    zipWriteData("style:print-orientation=\"");
+    if ( m_kwordDocument->getProperty( "PAPER:orientation" ) == "1" )
+    {
+        zipWriteData("landscape");
+    }
+    else
+    {
+        zipWriteData("portrait");
+    }
+
+    zipWriteData("\" fo:margin-top=\"");
+    zipWriteData( m_kwordDocument->getProperty( "PAPERBORDERS:top", "PAPERBORDERS:ptTop" ) );
+    zipWriteData("pt\" fo:margin-bottom=\"");
+    zipWriteData( m_kwordDocument->getProperty( "PAPERBORDERS:bottom", "PAPERBORDERS:ptBottom" ) );
+    zipWriteData("pt\" fo:margin-left=\"");
+    zipWriteData( m_kwordDocument->getProperty( "PAPERBORDERS:left", "PAPERBORDERS:ptLeft" ) );
+    zipWriteData("pt\" fo:margin-right=\"");
+    zipWriteData( m_kwordDocument->getProperty( "PAPERBORDERS:right", "PAPERBORDERS:ptRight" ) );
+    zipWriteData("pt\" style:first-page-number=\"");
+#if 1
+    // ### TODO
+    zipWriteData( "1" );
+#else
+    zipWriteData(QString::number(m_varSet.startingPageNumber));
+#endif
+    zipWriteData( "\">\n" );
+
+    const int columns = m_kwordDocument->getProperty( "PAPER:columns" ).toInt();
+    if ( columns > 1 )
+    {
+        zipWriteData( "    <style:columns" );
+        zipWriteData( " fo:column-count=\"" );
+        zipWriteData( QString::number( columns ) );
+        zipWriteData( "\" fo:column-gap=\"" );
+        zipWriteData( m_kwordDocument->getProperty( "PAPER:columnspacing", "PAPER:ptColumnspc" ) );
+        zipWriteData( "pt\">\n" );
+
+        for (int i=0; i < columns; ++i)
+        {
+            zipWriteData( "     <style:column style:rel-width=\"1*\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>\n" );
+        }
+
+        zipWriteData( "    </style:columns>\n" );
+    }
+
+    zipWriteData("   </style:properties>\n");
+    zipWriteData("  </style:page-master>\n");
+    zipWriteData(" </office:automatic-styles>\n");
+
+    zipWriteData(" <office:master-styles>\n");
+    zipWriteData("  <style:master-page style:name=\"Standard\" style:page-master-name=\"pm1\" />\n");
+    zipWriteData(" </office:master-styles>\n");
+
+    zipWriteData( "</office:document-styles>\n" );
+
+    zipDoneWriting();
+}
+
+
 void KWord13OasisGenerator::writeContentXml(void)
 {
     if (!m_zip)

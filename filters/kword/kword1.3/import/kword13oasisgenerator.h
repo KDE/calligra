@@ -49,6 +49,7 @@ protected: // ZIP methods
     bool zipWriteData(const QCString& cstr);
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
     void writeStartOfFile( const QString& type );
+    void writeStylesXml( void );
     void writeContentXml( void );
     void writeMetaXml( void );
 protected:
