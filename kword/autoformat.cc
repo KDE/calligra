@@ -78,8 +78,8 @@ void KWAutoFormat::readConfig()
     }
     buildMaxLen();
 
-    if(config->hasKey( "Exception" ) )
-        exception=config->readListEntry( "Exception" );
+    if(config->hasKey( "UpperCaseExceptions" ) )
+        upperCaseExceptions=config->readListEntry( "UpperCaseExceptions" );
 
     m_configRead = true;
 }
@@ -104,7 +104,7 @@ void KWAutoFormat::saveConfig()
     config->writeEntry( "Find", find );
     config->writeEntry( "Replace", replace );
 
-    config->writeEntry( "Exception",exception );
+    config->writeEntry( "UpperCaseExceptions",upperCaseExceptions );
 
     config->sync();
 }
@@ -134,7 +134,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
     {
         QString text=getLastWord(parag,index);
         text=text+".";
-        m_dontUpper=(exception.findIndex(text)!=-1);
+        m_dontUpper=(upperCaseExceptions.findIndex(text)!=-1);
         kdDebug()<<"m_dontUpper :"<<m_dontUpper<<endl;
     }
     // Auto-correction happens when pressing space, tab, CR etc.

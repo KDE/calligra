@@ -118,9 +118,9 @@ public:
     { m_entries = other.m_entries; }
 
     void copyListException( const QStringList & _list)
-	{ exception=_list;}
+	{ upperCaseExceptions=_list;}
 
-    QStringList listException() {return exception;}
+    QStringList listException() {return upperCaseExceptions;}
 
     // Read/save config ( into kwordrc )
     void readConfig();
@@ -149,7 +149,7 @@ private:
 
     typedef QMap< QString, KWAutoFormatEntry > KWAutoFormatEntryMap;
     KWAutoFormatEntryMap m_entries;
-    QStringList exception;
+    QStringList upperCaseExceptions;
     int m_maxlen;
 };
 

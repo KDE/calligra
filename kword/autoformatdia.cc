@@ -158,7 +158,7 @@ void KWAutoFormatDia::setupTab3()
     exceptionLine = new QLineEdit( tab3 );
     grid->addWidget(exceptionLine,1,0);
 
-    QLabel *lab=new QLabel(i18n("Don't upper lettre after these word.(Word with a point a the end)"),tab3);
+    QLabel *lab=new QLabel(i18n("Don't upper lettre after these word.(Word with a point at the end)"),tab3);
     grid->addMultiCellWidget(lab,0,0,0,1);
 
     pbAddException=new QPushButton(i18n("Add"),tab3);
