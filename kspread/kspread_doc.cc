@@ -124,6 +124,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bShowRowHeader=true;
   m_iIndentValue=10;
   m_EMoveTo=Bottom;
+  m_bShowError=false;
 }
 
 bool KSpreadDoc::initDoc()

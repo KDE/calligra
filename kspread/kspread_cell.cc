@@ -406,8 +406,8 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   lst.setAutoDelete( TRUE );
   KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strAction, lst );
   // Did a syntax error occur ?
-  if ( context.exception() )
-  {
+  if ( context.exception() && m_pTable->doc()->getShowMessageError())
+  {                       
     QString tmp(i18n("Error in cell %1\n\n"));
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString( context );
@@ -418,8 +418,8 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   KSContext& context2 = m_pTable->doc()->context();
   if ( !m_pTable->doc()->interpreter()->evaluate( context2, code, m_pTable ) )
       // Print out exception if any
-      if ( context2.exception() )
-      {
+      if ( context2.exception() &&m_pTable->doc()->getShowMessageError())
+      {                   
           QString tmp(i18n("Error in cell %1\n\n"));
           tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
           tmp += context2.exception()->toString( context2 );
@@ -1903,10 +1903,13 @@ bool KSpreadCell::makeFormular()
     m_dValue = 0.0;
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
-    QString tmp(i18n("Error in cell %1\n\n"));
-    tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-    tmp += context.exception()->toString( context );
-    KMessageBox::error( (QWidget*)0L, tmp);
+    if(m_pTable->doc()->getShowMessageError())
+        {                     
+        QString tmp(i18n("Error in cell %1\n\n"));
+        tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+        tmp += context.exception()->toString( context );
+        KMessageBox::error( (QWidget*)0L, tmp);
+        }
     return false;
   }
 
@@ -2035,8 +2038,8 @@ bool KSpreadCell::calc( bool _makedepend )
       m_bLayoutDirtyFlag = true;
       DO_UPDATE;
       // Print out exception if any
-      if ( context.exception() )
-      {
+      if ( context.exception() && m_pTable->doc()->getShowMessageError())
+      {                       
         QString tmp(i18n("Error in cell %1\n\n"));
         tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
         tmp += context.exception()->toString( context );

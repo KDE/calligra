@@ -520,6 +520,7 @@ void KSpreadView::initialPosition()
 
     slotUpdateView( activeTable() );
     m_bLoading =true;
+    m_pDoc->setShowMessageError(true);
 }
 
 void KSpreadView::updateEditWidget()

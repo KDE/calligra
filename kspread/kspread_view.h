@@ -167,6 +167,8 @@ public:
     */
     void refreshView();
 
+    bool isLoading() {return m_bLoading;}
+
 public slots:
     void initialPosition();
     /**

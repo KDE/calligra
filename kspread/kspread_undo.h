@@ -37,12 +37,12 @@ class RowLayout;
 
 struct rowSize {
 int rowNumber;
-int rowHeight;
+double rowHeight;
 };
 
 struct columnSize {
 int columnNumber;
-int columnWidth;
+double columnWidth;
 };
 
 struct textOfCell {

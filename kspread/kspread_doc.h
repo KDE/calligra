@@ -295,6 +295,12 @@ public:
   MoveTo getMoveToValue() {return m_EMoveTo;}
   void setMoveToValue(MoveTo _moveTo) {m_EMoveTo=_moveTo;}
 
+  /**
+  * Show or not error message
+  */
+  void setShowMessageError(bool _show) {   m_bShowError=_show;}
+  bool getShowMessageError() { return  m_bShowError;}
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -527,6 +533,9 @@ protected:
   int m_iIndentValue;
 
   MoveTo m_EMoveTo;
+
+
+  bool m_bShowError;
 };
 
 #endif

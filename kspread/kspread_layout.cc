@@ -1713,7 +1713,7 @@ bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
     if ( !ok ) return false;
 
     // Validation
-    if ( m_fHeight < 1 )
+    if ( m_fHeight < 0 )
     {
 	kdDebug(36001) << "Value height=" << m_fHeight << " out of range" << endl;
 	return false;
@@ -1890,7 +1890,7 @@ bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
     if ( !ok ) return false;
 
     // Validation
-    if ( m_fWidth < 1 )
+    if ( m_fWidth < 0 )
     {
 	kdDebug(36001) << "Value width=" << m_fWidth << " out of range" << endl;
 	return false;
