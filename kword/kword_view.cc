@@ -2173,67 +2173,67 @@ void KWordView::frameBackColor()
 /*================================================================*/
 void KWordView::formulaPower()
 {
-    gui->getPaperWidget()->insertFormulaChar( POWER );
+    gui->getPaperWidget()->insertFormulaChar( Box::POWER );
 }
 
 /*================================================================*/
 void KWordView::formulaSubscript()
 {
-    gui->getPaperWidget()->insertFormulaChar( SUB );
+    gui->getPaperWidget()->insertFormulaChar( Box::SUB );
 }
 
 /*================================================================*/
 void KWordView::formulaParentheses()
 {
-    gui->getPaperWidget()->insertFormulaChar( PAREN );
+    gui->getPaperWidget()->insertFormulaChar( Box::PAREN );
 }
 
 /*================================================================*/
 void KWordView::formulaAbsValue()
 {
-    gui->getPaperWidget()->insertFormulaChar( ABS );
+    gui->getPaperWidget()->insertFormulaChar( Box::ABS );
 }
 
 /*================================================================*/
 void KWordView::formulaBrackets()
 {
-    gui->getPaperWidget()->insertFormulaChar( BRACKET );
+    gui->getPaperWidget()->insertFormulaChar( Box::BRACKET );
 }
 
 /*================================================================*/
 void KWordView::formulaFraction()
 {
-    gui->getPaperWidget()->insertFormulaChar( DIVIDE );
+    gui->getPaperWidget()->insertFormulaChar( Box::DIVIDE );
 }
 
 /*================================================================*/
 void KWordView::formulaRoot()
 {
-    gui->getPaperWidget()->insertFormulaChar( SQRT );
+    gui->getPaperWidget()->insertFormulaChar( Box::SQRT );
 }
 
 /*================================================================*/
 void KWordView::formulaIntegral()
 {
-    gui->getPaperWidget()->insertFormulaChar( INTEGRAL );
+    gui->getPaperWidget()->insertFormulaChar( Box::INTEGRAL );
 }
 
 /*================================================================*/
 void KWordView::formulaMatrix()
 {
-    gui->getPaperWidget()->insertFormulaChar( MATRIX );
+    gui->getPaperWidget()->insertFormulaChar( Box::MATRIX );
 }
 
 /*================================================================*/
 void KWordView::formulaLeftSuper()
 {
-    gui->getPaperWidget()->insertFormulaChar( LSUP );
+    gui->getPaperWidget()->insertFormulaChar( Box::LSUP );
 }
 
 /*================================================================*/
 void KWordView::formulaLeftSub()
 {
-    gui->getPaperWidget()->insertFormulaChar( LSUB );
+    gui->getPaperWidget()->insertFormulaChar( Box::LSUB );
 }
 
 /*================================================================*/
