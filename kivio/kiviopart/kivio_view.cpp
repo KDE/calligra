@@ -1040,7 +1040,6 @@ void KivioView::setFontFamily( const QString &str )
 
     QFont f;
     KMacroCommand * macro = 0L;
-    bool createMacro = false;
     while( pStencil )
     {
         f = pStencil->textFont();
@@ -1679,7 +1678,7 @@ void KivioView::exportPage()
 
 void KivioView::openPopupMenuMenuPage( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
      static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
 }
