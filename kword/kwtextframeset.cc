@@ -2612,7 +2612,12 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     updateUI( true, true );
 
     if( canvas->gui() && canvas->gui()->getHorzRuler())
-        canvas->gui()->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+    {
+        if ( !textobj->protectContent() )
+            canvas->gui()->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+        else
+            canvas->gui()->getHorzRuler()->changeFlags(0);
+    }
 
 }
 
@@ -2876,11 +2881,13 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
         }
         }
     }
+    kdDebug()<<" ddddddddddddddddddddddddddddddddddddd\n";
     textView()->handleKeyPressEvent( e );
 }
 
 void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
 {
+    kdDebug()<<" void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )***************\n";
     textView()->handleKeyReleaseEvent( e );
 }
 
