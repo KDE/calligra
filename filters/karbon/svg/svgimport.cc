@@ -188,10 +188,10 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 	}
 	else
 	{
-		kdDebug() << "before ; " << value << endl;
+		//kdDebug() << "before ; " << value << endl;
 		if( m_gc.current() )
 			value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
-		kdDebug() << "after ; " << value << endl;
+		//kdDebug() << "after ; " << value << endl;
 	}
 	return value;
 }
@@ -283,7 +283,7 @@ SvgImport::parseGradient( const QDomElement &e )
 	gradhelper.gradient.clearStops();
 	gradhelper.gradient.setRepeatMethod( VGradient::none );
 
-	QString href = e.attribute( "xlink:href" );
+	QString href = e.attribute( "xlink:href" ).mid( 1 );
 	if( !href.isEmpty() )
 	{
 		//kdDebug() << "Indexing with href : " << href.latin1() << endl;
@@ -355,21 +355,21 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 			{
 				// adjust to bbox
 				KoRect bbox = obj->boundingBox();
-				kdDebug() << "bbox x : " << bbox.x() << endl;
-				kdDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
-				kdDebug() << gc->fill.gradient().origin().x() << endl;
-				kdDebug() << gc->fill.gradient().vector().x() << endl;
+				//kdDebug() << "bbox x : " << bbox.x() << endl;
+				//kdDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
+				//kdDebug() << gc->fill.gradient().origin().x() << endl;
+				//kdDebug() << gc->fill.gradient().vector().x() << endl;
 				double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 				double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 				gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
 				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
 				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
 				gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-				kdDebug() << offsety << endl;
-				kdDebug() << gc->fill.gradient().origin().x() << endl;
-				kdDebug() << gc->fill.gradient().origin().y() << endl;
-				kdDebug() << gc->fill.gradient().vector().x() << endl;
-				kdDebug() << gc->fill.gradient().vector().y() << endl;
+				//kdDebug() << offsety << endl;
+				//kdDebug() << gc->fill.gradient().origin().x() << endl;
+				//kdDebug() << gc->fill.gradient().origin().y() << endl;
+				//kdDebug() << gc->fill.gradient().vector().x() << endl;
+				//kdDebug() << gc->fill.gradient().vector().y() << endl;
 			}
 			gc->fill.gradient().transform( m_gradients[ key ].gradientTransform );
 			gc->fill.gradient().transform( gc->matrix );
