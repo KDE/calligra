@@ -316,19 +316,19 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
 
     ellipseKind[0] = new QPushButton (group);
     ellipseKind[0]->setToggleButton (true);
-    ellipseKind[0]->setPixmap (loader->loadIcon ("ellipse1.xpm"));
+    ellipseKind[0]->setPixmap (UserIcon ("ellipse1"));
     ellipseKind[0]->setGeometry (0, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     ellipseKind[1] = new QPushButton (group);
     ellipseKind[1]->setToggleButton (true);
-    ellipseKind[1]->setPixmap (loader->loadIcon ("ellipse2.xpm"));
+    ellipseKind[1]->setPixmap (UserIcon ("ellipse2"));
     ellipseKind[1]->setGeometry (1 * BUTTON_WIDTH, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     ellipseKind[2] = new QPushButton (group);
     ellipseKind[2]->setToggleButton (true);
-    ellipseKind[2]->setPixmap (loader->loadIcon ("ellipse3.xpm"));
+    ellipseKind[2]->setPixmap (UserIcon ("ellipse3"));
     ellipseKind[2]->setGeometry (2 * BUTTON_WIDTH, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
     group->adjustSize ();
@@ -362,19 +362,19 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
 
     textAlign[0] = new QPushButton (group);
     textAlign[0]->setToggleButton (true);
-    textAlign[0]->setPixmap (loader->loadIcon ("tleftalign.xpm"));
+    textAlign[0]->setPixmap (UserIcon ("tleftalign"));
     textAlign[0]->setGeometry (0, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     textAlign[1] = new QPushButton (group);
     textAlign[1]->setToggleButton (true);
-    textAlign[1]->setPixmap (loader->loadIcon ("tcenteralign.xpm"));
+    textAlign[1]->setPixmap (UserIcon ("tcenteralign"));
     textAlign[1]->setGeometry (1 * BUTTON_WIDTH, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     textAlign[2] = new QPushButton (group);
     textAlign[2]->setToggleButton (true);
-    textAlign[2]->setPixmap (loader->loadIcon ("trightalign.xpm"));
+    textAlign[2]->setPixmap (UserIcon ("trightalign"));
     textAlign[2]->setGeometry (2 * BUTTON_WIDTH, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
     group->adjustSize ();

@@ -377,21 +377,21 @@ void KIllustrator::initToolBars () {
   /* main toolbar */
   toolbar = new KToolBar (this);
 
-  toolbar->insertButton (loader->loadIcon ("filenew2.xpm"), ID_FILE_NEW, true,
+  toolbar->insertButton (MainBarIcon ("filenew2"), ID_FILE_NEW, true,
 			 i18n ("New Document"));
-  toolbar->insertButton (loader->loadIcon ("fileopen.xpm"), ID_FILE_OPEN, true,
+  toolbar->insertButton (MainBarIcon ("fileopen"), ID_FILE_OPEN, true,
 			 i18n ("Open Document"));
-  toolbar->insertButton (loader->loadIcon ("filefloppy.xpm"), ID_FILE_SAVE,
+  toolbar->insertButton (MainBarIcon ("filefloppy"), ID_FILE_SAVE,
 			 true, i18n ("Save Document"));
   toolbar->insertSeparator ();
-  toolbar->insertButton (loader->loadIcon ("fileprint.xpm"), ID_FILE_PRINT,
+  toolbar->insertButton (MainBarIcon ("fileprint"), ID_FILE_PRINT,
 			 true, i18n ("Print Document"));
   toolbar->insertSeparator ();
-  toolbar->insertButton (loader->loadIcon ("editcopy.xpm"), ID_EDIT_COPY, true,
+  toolbar->insertButton (MainBarIcon ("editcopy"), ID_EDIT_COPY, true,
 			 i18n ("Copy"));
-  toolbar->insertButton (loader->loadIcon ("editpaste.xpm"), ID_EDIT_PASTE,
+  toolbar->insertButton (MainBarIcon ("editpaste"), ID_EDIT_PASTE,
 			 true, i18n ("Paste"));
-  toolbar->insertButton (loader->loadIcon ("editcut.xpm"), ID_EDIT_CUT, true,
+  toolbar->insertButton (MainBarIcon ("editcut"), ID_EDIT_CUT, true,
 			 i18n ("Cut"));
   toolbar->insertSeparator ();
 
@@ -426,55 +426,55 @@ void KIllustrator::initToolBars () {
 #else
   KRadioGroup* toolGroup = new KRadioGroup (toolPalette);
 #endif
-  toolPalette->insertButton (loader->loadIcon ("selecttool.xpm"),
+  toolPalette->insertButton (UserIcon ("selecttool"),
 			     ID_TOOL_SELECT, true, i18n ("Selection Mode"));
   toolPalette->setToggle (ID_TOOL_SELECT);
   toolGroup->addButton (ID_TOOL_SELECT);
 
-  toolPalette->insertButton (loader->loadIcon ("pointtool.xpm"),
+  toolPalette->insertButton (UserIcon ("pointtool"),
 			     ID_TOOL_EDITPOINT, true, i18n ("Edit Point"));
   toolPalette->setToggle (ID_TOOL_EDITPOINT);
   toolGroup->addButton (ID_TOOL_EDITPOINT);
 
-  toolPalette->insertButton (loader->loadIcon ("freehandtool.xpm"),
+  toolPalette->insertButton (UserIcon ("freehandtool"),
 			     ID_TOOL_FREEHAND, true,
 			     i18n ("Create Freehand Line"));
   toolPalette->setToggle (ID_TOOL_FREEHAND);
   toolGroup->addButton (ID_TOOL_FREEHAND);
 
-  toolPalette->insertButton (loader->loadIcon ("linetool.xpm"),
+  toolPalette->insertButton (UserIcon ("linetool"),
 			     ID_TOOL_LINE, true, i18n ("Create Polyline"));
   toolPalette->setToggle (ID_TOOL_LINE);
   toolGroup->addButton (ID_TOOL_LINE);
 
-  toolPalette->insertButton (loader->loadIcon ("beziertool.xpm"),
+  toolPalette->insertButton (UserIcon ("beziertool"),
 			     ID_TOOL_BEZIER, true,
 			     i18n ("Create Bezier Curve"));
   toolPalette->setToggle (ID_TOOL_BEZIER);
   toolGroup->addButton (ID_TOOL_BEZIER);
 
-  toolPalette->insertButton (loader->loadIcon ("recttool.xpm"),
+  toolPalette->insertButton (UserIcon ("recttool"),
 			     ID_TOOL_RECTANGLE, true,
 			     i18n ("Create Rectangle"));
   toolPalette->setToggle (ID_TOOL_RECTANGLE);
   toolGroup->addButton (ID_TOOL_RECTANGLE);
 
-  toolPalette->insertButton (loader->loadIcon ("polygontool.xpm"),
+  toolPalette->insertButton (UserIcon ("polygontool"),
 			     ID_TOOL_POLYGON, true, i18n ("Create Polygon"));
   toolPalette->setToggle (ID_TOOL_POLYGON);
   toolGroup->addButton (ID_TOOL_POLYGON);
 
-  toolPalette->insertButton (loader->loadIcon ("ellipsetool.xpm"),
+  toolPalette->insertButton (UserIcon ("ellipsetool"),
 			     ID_TOOL_ELLIPSE, true, i18n ("Create Ellipse"));
   toolPalette->setToggle (ID_TOOL_ELLIPSE);
   toolGroup->addButton (ID_TOOL_ELLIPSE);
 
-  toolPalette->insertButton (loader->loadIcon ("texttool.xpm"),
+  toolPalette->insertButton (UserIcon ("texttool"),
 			     ID_TOOL_TEXT, true, i18n ("Create Text"));
   toolPalette->setToggle (ID_TOOL_TEXT);
   toolGroup->addButton (ID_TOOL_TEXT);
 
-  toolPalette->insertButton (loader->loadIcon ("zoomtool.xpm"),
+  toolPalette->insertButton (UserIcon ("zoomtool"),
 			     ID_TOOL_ZOOM, true, i18n ("Zoom In"));
   toolPalette->setToggle (ID_TOOL_ZOOM);
   toolGroup->addButton (ID_TOOL_ZOOM);
@@ -525,19 +525,19 @@ void KIllustrator::initToolBars () {
 #else
   KRadioGroup* toolGroup2 = new KRadioGroup (editPointToolbar);
 #endif
-  editPointToolbar->insertButton (loader->loadIcon ("moveNode.xpm"),
+  editPointToolbar->insertButton (UserIcon ("moveNode"),
 			     ID_TOOL_EP_MOVE, true, i18n ("Move Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_MOVE);
   toolGroup2->addButton (ID_TOOL_EP_MOVE);
-  editPointToolbar->insertButton (loader->loadIcon ("newNode.xpm"),
+  editPointToolbar->insertButton (UserIcon ("newNode"),
 			     ID_TOOL_EP_ADD, true, i18n ("Insert Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_ADD);
   toolGroup2->addButton (ID_TOOL_EP_ADD);
-  editPointToolbar->insertButton (loader->loadIcon ("deleteNode.xpm"),
+  editPointToolbar->insertButton (UserIcon ("deleteNode"),
 			     ID_TOOL_EP_DEL, true, i18n ("Remove Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_DEL);
   toolGroup2->addButton (ID_TOOL_EP_DEL);
-  editPointToolbar->insertButton (loader->loadIcon ("split.xpm"),
+  editPointToolbar->insertButton (UserIcon ("split"),
 			     ID_TOOL_EP_SPLIT, true, i18n ("Split Line"));
   editPointToolbar->setToggle (ID_TOOL_EP_SPLIT);
   toolGroup2->addButton (ID_TOOL_EP_SPLIT);

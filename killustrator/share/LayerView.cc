@@ -51,9 +51,9 @@ LayerView::LayerView (QWidget *parent, const char *name)
   KIconLoader* loader = kapp->getIconLoader ();
 #endif
 
-  pixmaps[0] = loader->loadIcon ("eye.xpm");
-  pixmaps[1] = loader->loadIcon ("freehandtool.xpm");
-  pixmaps[2] = loader->loadIcon ("fileprint.xpm");
+  pixmaps[0] = UserIcon ("eye");
+  pixmaps[1] = UserIcon ("freehandtool");
+  pixmaps[2] = BarIcon ("fileprint");
   setMinimumSize (3 * CELL1_WIDTH + CELL2_WIDTH, 4 * CELL_HEIGHT);
   setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
   setFrameStyle (QFrame::Panel | QFrame::Sunken);

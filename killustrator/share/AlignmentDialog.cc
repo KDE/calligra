@@ -116,20 +116,20 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
 
   valignButton[0] = new QPushButton (group);
   valignButton[0]->setToggleButton (true);
-  valignButton[0]->setPixmap (loader->loadIcon ("atop.xpm"));
+  valignButton[0]->setPixmap (UserIcon ("atop"));
   valignButton[0]->setGeometry (20, 30,
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
 
   valignButton[1] = new QPushButton (group);
   valignButton[1]->setToggleButton (true);
-  valignButton[1]->setPixmap (loader->loadIcon ("avcenter.xpm"));
+  valignButton[1]->setPixmap (UserIcon ("avcenter"));
   valignButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT,
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
   valignButton[2] = new QPushButton (group);
   valignButton[2]->setToggleButton (true);
-  valignButton[2]->setPixmap (loader->loadIcon ("abottom.xpm"));
+  valignButton[2]->setPixmap (UserIcon ("abottom"));
   valignButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT,
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
@@ -145,19 +145,19 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
 
   halignButton[0] = new QPushButton (group);
   halignButton[0]->setToggleButton (true);
-  halignButton[0]->setPixmap (loader->loadIcon ("aleft.xpm"));
+  halignButton[0]->setPixmap (UserIcon ("aleft"));
   halignButton[0]->setGeometry (20, 30, BUTTON_WIDTH,
 				BUTTON_HEIGHT);
 
   halignButton[1] = new QPushButton (group);
   halignButton[1]->setToggleButton (true);
-  halignButton[1]->setPixmap (loader->loadIcon ("ahcenter.xpm"));
+  halignButton[1]->setPixmap (UserIcon ("ahcenter"));
   halignButton[1]->setGeometry (20 + BUTTON_WIDTH, 30,
                            BUTTON_WIDTH, BUTTON_HEIGHT);
 
   halignButton[2] = new QPushButton (group);
   halignButton[2]->setToggleButton (true);
-  halignButton[2]->setPixmap (loader->loadIcon ("aright.xpm"));
+  halignButton[2]->setPixmap (UserIcon ("aright"));
   halignButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH,
                            30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
@@ -208,25 +208,25 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
 
   vdistButton[0] = new QPushButton (group);
   vdistButton[0]->setToggleButton (true);
-  vdistButton[0]->setPixmap (loader->loadIcon ("dtop.xpm"));
+  vdistButton[0]->setPixmap (UserIcon ("dtop"));
   vdistButton[0]->setGeometry (20, 30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 
   vdistButton[1] = new QPushButton (group);
   vdistButton[1]->setToggleButton (true);
-  vdistButton[1]->setPixmap (loader->loadIcon ("dvcenter.xpm"));
+  vdistButton[1]->setPixmap (UserIcon ("dvcenter"));
   vdistButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT,
 			       BUTTON_WIDTH, BUTTON_HEIGHT);
 
   vdistButton[2] = new QPushButton (group);
   vdistButton[2]->setToggleButton (true);
-  vdistButton[2]->setPixmap (loader->loadIcon ("dvdist.xpm"));
+  vdistButton[2]->setPixmap (UserIcon ("dvdist"));
   vdistButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT,
 			       BUTTON_WIDTH, BUTTON_HEIGHT);
 
   vdistButton[3] = new QPushButton (group);
   vdistButton[3]->setToggleButton (true);
-  vdistButton[3]->setPixmap (loader->loadIcon ("dbottom.xpm"));
+  vdistButton[3]->setPixmap (UserIcon ("dbottom"));
   vdistButton[3]->setGeometry (20, 30 + 3 * BUTTON_HEIGHT,
 			       BUTTON_WIDTH, BUTTON_HEIGHT);
 
@@ -243,25 +243,25 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
 
   hdistButton[0] = new QPushButton (group);
   hdistButton[0]->setToggleButton (true);
-  hdistButton[0]->setPixmap (loader->loadIcon ("dleft.xpm"));
+  hdistButton[0]->setPixmap (UserIcon ("dleft"));
   hdistButton[0]->setGeometry (20, 30, BUTTON_WIDTH,
 				BUTTON_HEIGHT);
 
   hdistButton[1] = new QPushButton (group);
   hdistButton[1]->setToggleButton (true);
-  hdistButton[1]->setPixmap (loader->loadIcon ("dhcenter.xpm"));
+  hdistButton[1]->setPixmap (UserIcon ("dhcenter"));
   hdistButton[1]->setGeometry (20 + BUTTON_WIDTH, 30,
                            BUTTON_WIDTH, BUTTON_HEIGHT);
 
   hdistButton[2] = new QPushButton (group);
   hdistButton[2]->setToggleButton (true);
-  hdistButton[2]->setPixmap (loader->loadIcon ("dhdist.xpm"));
+  hdistButton[2]->setPixmap (UserIcon ("dhdist"));
   hdistButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH,
 			       30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   hdistButton[3] = new QPushButton (group);
   hdistButton[3]->setToggleButton (true);
-  hdistButton[3]->setPixmap (loader->loadIcon ("dright.xpm"));
+  hdistButton[3]->setPixmap (UserIcon ("dright"));
   hdistButton[3]->setGeometry (20 + 3 * BUTTON_WIDTH,
                            30, BUTTON_WIDTH, BUTTON_HEIGHT);
 

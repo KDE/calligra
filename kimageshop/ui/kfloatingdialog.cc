@@ -135,8 +135,8 @@ void KFloatingDialog::readSettings()
 
       KIconLoader iconLoader("kwm");
 
-      *(m_pActivePm) = iconLoader.loadIcon("activetitlebar");
-      *(m_pInactivePm) = iconLoader.loadIcon("inactivetitlebar");
+      *(m_pActivePm) = BarIcon("activetitlebar");
+      *(m_pInactivePm) = BarIcon("inactivetitlebar");
 
       if (m_pInactivePm->size() == QSize(0,0))
 		*m_pInactivePm = *m_pActivePm;

@@ -1214,33 +1214,33 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   top=new KSpreadBorderButton(this,"top");
   top->setGeometry(98,70,25,25);
-  loadIcon("bordertop.png",top);
+  loadIcon("bordertop",top);
   bottom=new KSpreadBorderButton(this,"bottom");
   bottom->setGeometry(98,165,25,25);
-  loadIcon("borderbottom.png",bottom);
+  loadIcon("borderbottom",bottom);
   left=new KSpreadBorderButton(this,"left");
   left->setGeometry(25,115,25,25);
-  loadIcon("borderleft.png",left);
+  loadIcon("borderleft",left);
   right=new KSpreadBorderButton(this,"right");
   right->setGeometry(165,115,25,25);
-  loadIcon("borderright.png",right);
+  loadIcon("borderright",right);
 
   fallDiagonal=new KSpreadBorderButton(this,"fall");
   fallDiagonal->setGeometry(25,70,25,25);
-  loadIcon("borderfall.png",fallDiagonal);
+  loadIcon("borderfall",fallDiagonal);
   goUpDiagonal=new KSpreadBorderButton(this,"go");
   goUpDiagonal->setGeometry(165,70,25,25);
-  loadIcon("borderup.png",goUpDiagonal);
+  loadIcon("borderup",goUpDiagonal);
 
   vertical=new KSpreadBorderButton(this,"vertical");
   vertical->setGeometry(165,165,25,25);
 
-  loadIcon("bordervertical.png",vertical);
+  loadIcon("bordervertical",vertical);
 
 
   horizontal=new KSpreadBorderButton(this,"horizontal");
   horizontal->setGeometry(25,165,25,25);
-  loadIcon("borderhorizontal.png",horizontal);
+  loadIcon("borderhorizontal",horizontal);
 
   tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
   tmpQGroupBox->setGeometry( 15 , 220, 115, 50 );
@@ -1250,30 +1250,30 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   outline=new KSpreadBorderButton(this,"outline");
   outline->setGeometry(95,240,25,25);
-  loadIcon("borderoutline.png",outline);
+  loadIcon("borderoutline",outline);
 
   remove=new KSpreadBorderButton(this,"remove");
   remove->setGeometry(25,240,25,25);
-  loadIcon("borderremove.png",remove);
+  loadIcon("borderremove",remove);
 
   all=new KSpreadBorderButton(this,"all");
   all->setGeometry(60,240,25,25);
 
   if((dlg->oneRow==true)&&(dlg->oneCol==false))
         {
-        loadIcon("bordervertical.png",all);
+        loadIcon("bordervertical",all);
         }
   else if((dlg->oneRow==false)&&(dlg->oneCol==true))
         {
-        loadIcon("borderhorizontal.png",all);
+        loadIcon("borderhorizontal",all);
         }
   else if((dlg->oneRow==false)&&(dlg->oneCol==false))
         {
-         loadIcon("borderinside.png",all);
+         loadIcon("borderinside",all);
         }
   else
         {
-        loadIcon("borderinside.png",all);
+        loadIcon("borderinside",all);
         all->setEnabled(false);
         }
 
@@ -1615,16 +1615,15 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 void CellLayoutPageBorder::loadIcon( QString _pix,KSpreadBorderButton *_button)
 {
-QString img=KSpreadFactory::global()->dirs()->findResource( "toolbar", _pix );
-QPixmap pix( img );
-if ( pix.isNull() )
+    QPixmap pix = UserIcon(_pix, KSpreadFactory::global() );
+    if ( pix.isNull() )
     {
 	QString str( i18n( "Could not load image %1" ) );
-	str = str.arg( img );
+	str = str.arg( _pix );
 	QMessageBox::critical( this, i18n("KSpread Error"), str );
 	return;
     }
-_button->setPixmap( pix );
+    _button->setPixmap( pix );
 }
 
 

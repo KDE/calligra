@@ -312,12 +312,12 @@ QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
 
   horizMirror = new QPushButton (group);
   horizMirror->setToggleButton (true);
-  horizMirror->setPixmap (loader->loadIcon ("hmirror.xpm"));
+  horizMirror->setPixmap (UserIcon ("hmirror"));
   horizMirror->setGeometry (20, 20, 40, 40);
 
   vertMirror = new QPushButton (group);
   vertMirror->setToggleButton (true);
-  vertMirror->setPixmap (loader->loadIcon ("vmirror.xpm"));
+  vertMirror->setPixmap (UserIcon ("vmirror"));
   vertMirror->setGeometry (65, 20, 40, 40);
 
   group->adjustSize ();
