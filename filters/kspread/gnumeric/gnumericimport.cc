@@ -635,7 +635,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         date.setYMD( y, m, d );
       }
       else
-        date = kspread_cell->valueDate();
+        date = kspread_cell->value().asDate();
 
       KSpreadFormat::FormatType type;
       switch( i )
@@ -701,7 +701,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         time = GnumericDate::getTime( content );
       }
       else
-        time = kspread_cell->valueTime();
+        time = kspread_cell->value().asTime();
 
       KSpreadFormat::FormatType type;
       switch( i )
