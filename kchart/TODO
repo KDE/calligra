@@ -58,7 +58,7 @@ Item								   Prio Status
 * Miscellaneous fixes
   + Make setting of line width nicer / more well-placed		     S1 ----
   + Tooltips & What's this help all over the program?		     S1 ----
-  + Remove the predefined bar chart?				      2 ----
+  + Remove the predefined bar chart?				      2 DONE
       Issue: What is an empty chart document?
   + Include me in Authors					      2	DONE
   + Can HiLo charts be made thicker than one pixel? No.		      3 DONE
