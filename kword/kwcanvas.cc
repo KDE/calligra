@@ -433,7 +433,10 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     }
     m_hotSpot = docPoint - m_boundingRect.topLeft();
     if(frameindexMove.count()!=0)
+    {
+        delete cmdMoveFrame;
         cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+    }
 
     viewport()->setCursor( m_doc->getMouseCursor( nPoint, e && e->state() & ControlButton ) );
 
