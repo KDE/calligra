@@ -83,7 +83,7 @@ public:
    *
    *  @return the element containing the "object" tag.
    */
-  virtual QDomElement save( QDomDocument& doc );
+  virtual QDomElement save( QDomDocument& doc, bool uppercase=false );
 
   /**
    *  Parses the "object" tag. This does NOT mean creating the child documents.
@@ -95,7 +95,7 @@ public:
    *  @ref KoDocument::loadChildren, respectively from your implementation
    *  of these methods.
    */
-  virtual bool load( const QDomElement& element );
+  virtual bool load( const QDomElement& element, bool uppercase=false );
 
   /**
    *  Actually loads the document from the disk/net or from the store,

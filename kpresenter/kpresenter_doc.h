@@ -67,11 +67,6 @@ public:
     KPresenterDoc* parent() { return (KPresenterDoc*)parent(); }
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
-
-    // We don't use the KoDocumentChild methods here, because we
-    // have uppercase tags in KPresenter :}
-    bool loadXML( const QDomElement &element );
-    QDomElement saveXML( QDomDocument& doc );
 };
 
 /*****************************************************************/

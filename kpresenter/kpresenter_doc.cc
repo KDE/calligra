@@ -106,73 +106,6 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
     return 0L;
 }
 
-bool KPresenterChild::loadXML( const QDomElement &element )
-{
-    if ( element.hasAttribute( "url" ) )
-        m_tmpURL = element.attribute("url");
-    if ( element.hasAttribute("mime") )
-        m_tmpMimeType = element.attribute("mime");
-
-    if ( m_tmpURL.isEmpty() )
-    {
-        kdDebug() << "Empty 'url' attribute in OBJECT" << endl;
-        return false;
-    }
-    if ( m_tmpMimeType.isEmpty() )
-    {
-        kdDebug() << "Empty 'mime' attribute in OBJECT" << endl;
-        return false;
-    }
-
-   bool brect = false;
-    QDomElement e = element.firstChild().toElement();
-    for( ; !e.isNull(); e = e.nextSibling().toElement() )
-    {
-        if ( e.tagName() == "RECT" )
-        {
-            brect = true;
-            int x, y, w, h;
-            x=y=w=h=0;
-            if ( e.hasAttribute( "x" ) )
-                x = e.attribute( "x" ).toInt(&brect);
-            if ( e.hasAttribute( "y" ) )
-                y = e.attribute( "y" ).toInt(&brect);
-            if ( e.hasAttribute( "w" ) )
-                w = e.attribute( "w" ).toInt(&brect);
-            if ( e.hasAttribute( "h" ) )
-                h = e.attribute( "h" ).toInt(&brect);
-            m_tmpGeometry = QRect(x, y, w, h);
-            setGeometry( m_tmpGeometry );
-        }
-    }
-
-    if ( !brect )
-    {
-        kdDebug() << "Missing RECT in OBJECT" << endl;
-        return false;
-    }
-
-    return true;
-}
-
-
-QDomElement KPresenterChild::saveXML( QDomDocument& doc )
-{
-    if (document()==0)
-        return QDomElement();
-
-    QDomElement object=doc.createElement("OBJECT");
-    object.setAttribute("url", document()->url().url());
-    object.setAttribute("mime", document()->nativeFormatMimeType());
-    QDomElement rect=doc.createElement("RECT");
-    rect.setAttribute( "x", geometry().left() );
-    rect.setAttribute( "y", geometry().top() );
-    rect.setAttribute( "w", geometry().width() );
-    rect.setAttribute( "h", geometry().height() );
-    object.appendChild(rect);
-    return object;
-}
-
 /******************************************************************/
 /* class KPresenterDoc						  */
 /******************************************************************/
@@ -405,7 +338,7 @@ QDomDocument KPresenterDoc::saveXML()
             {
                 QDomElement embedded=doc.createElement("EMBEDDED");
                 KPresenterChild* curr = (KPresenterChild*)chl.current();
-                embedded.appendChild(curr->saveXML( doc ));
+                embedded.appendChild(curr->save(doc, true));
                 QDomElement settings=doc.createElement("SETTINGS");
                 for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
                     kpobject = _objectList->at( i );
@@ -699,7 +632,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
             QDomElement object=elem.namedItem("OBJECT").toElement();
             if(!object.isNull()) {
-                ch->loadXML(object);
+                ch->load(object, true);  // true == uppercase
                 r = ch->geometry();
                 insertChild( ch );
                 kppartobject = new KPPartObject( ch );

@@ -69,9 +69,6 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
-    virtual bool load( const QDomElement &attribs );
-    virtual QDomElement save( QDomDocument &doc );
-
 protected:
     KWDocument *m_pKWordDoc;
 

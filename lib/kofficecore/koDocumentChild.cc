@@ -104,7 +104,7 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
   return document()->hitTest( p, m );
 }
 
-bool KoDocumentChild::load( const QDomElement& element )
+bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
 {
     if ( element.hasAttribute( "url" ) )
         m_tmpURL = element.attribute("url");
@@ -126,7 +126,7 @@ bool KoDocumentChild::load( const QDomElement& element )
     QDomElement e = element.firstChild().toElement();
     for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
-        if ( e.tagName() == "rect" )
+        if ( e.tagName() == "rect" || ( uppercase && e.tagName() == "RECT" ) )
         {
             brect = true;
             int x, y, w, h;
@@ -140,6 +140,7 @@ bool KoDocumentChild::load( const QDomElement& element )
             if ( e.hasAttribute( "h" ) )
                 h = e.attribute( "h" ).toInt(&brect);
             m_tmpGeometry = QRect(x, y, w, h);
+            setGeometry(m_tmpGeometry);
         }
     }
 
@@ -203,13 +204,13 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
   return res;
 }
 
-QDomElement KoDocumentChild::save( QDomDocument& doc )
+QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
 {
     assert( document() );
-    QDomElement e = doc.createElement( "object" );
+    QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
     e.setAttribute( "url", document()->url().url() );
     e.setAttribute( "mime", document()->nativeFormatMimeType() );
-    QDomElement rect = doc.createElement( "rect" );
+    QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
     rect.setAttribute( "x", geometry().left() );
     rect.setAttribute( "y", geometry().top() );
     rect.setAttribute( "w", geometry().width() );
