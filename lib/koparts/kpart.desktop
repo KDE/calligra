@@ -1,4 +1,14 @@
 [Desktop Entry]
+Type=ServiceType
 X-KDE-ServiceType=KPart
 Comment=KDE Component
+Comment[ca]=Component KDE
+Comment[cs]=Komponenta KDE
+Comment[da]=KDE komponent
+Comment[de]=KDE-Komponente
+Comment[fi]=KDE Komponentti
 Comment[fr]=Composant KDE
+Comment[hu]=KDE komponens
+Comment[ja]=KDEコンポーネント
+Comment[no]=KDE-komponent
+Comment[no_NY]=KDE-komponent
