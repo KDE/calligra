@@ -95,7 +95,8 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
 
     parent->installEventFilter( this );
 
-    (void)new KAction( i18n("Calculator"), "kspreadcalc", 0, actionCollection(), "kspreadcalc");
+    (void)new KAction( i18n("Calculator"), "kspreadcalc", 0, this, SLOT( showCalculator() ),
+                       actionCollection(), "kspreadcalc");
 }
 
 void Calculator::showCalculator()
