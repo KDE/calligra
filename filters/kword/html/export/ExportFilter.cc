@@ -734,13 +734,13 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
         return false;
     }
 
-    kdDebug(30503) << "Charset used: " << getCodec()->name() << endl;
-
     if (!getCodec())
     {
         kdError(30503) << "Could not create QTextCodec! Aborting" << endl;
         return false;
     }
+
+    kdDebug(30503) << "Charset used: " << getCodec()->name() << endl;
 
     m_streamOut->setCodec( getCodec() );
 
