@@ -889,31 +889,35 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
 
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    QGridLayout *grid = new QGridLayout(grp,8,2,15,7);
+    QGridLayout *grid = new QGridLayout(grp,9,2,15,7);
+
+    int fHeight = grp->fontMetrics().height();
+    grid->addRowSpacing( 0, fHeight/2 ); // groupbox title
+
     grp->setRadioButtonExclusive( TRUE );
     number=new QRadioButton(i18n("Number"),grp);
-    grid->addWidget(number,0,0);
+    grid->addWidget(number,1,0);
 
     percent=new QRadioButton(i18n("Percent"),grp);
-    grid->addWidget(percent,1,0);
+    grid->addWidget(percent,2,0);
 
     money=new QRadioButton(i18n("Money"),grp);
-    grid->addWidget(money,2,0);
+    grid->addWidget(money,3,0);
 
     scientific=new QRadioButton(i18n("Scientific"),grp);
-    grid->addWidget(scientific,3,0);
+    grid->addWidget(scientific,4,0);
 
     fraction=new QRadioButton(i18n("Fraction"),grp);
-    grid->addWidget(fraction,4,0);
+    grid->addWidget(fraction,5,0);
 
     date=new QRadioButton(i18n("Date format"),grp);
-    grid->addWidget(date,5,0);
+    grid->addWidget(date,6,0);
 
     time=new QRadioButton(i18n("Time format"),grp);
-    grid->addWidget(time,6,0);
+    grid->addWidget(time,7,0);
 
     textFormat=new QRadioButton(i18n("Text"),grp);
-    grid->addWidget(textFormat,7,0);
+    grid->addWidget(textFormat,8,0);
 
     QGroupBox *box2 = new QGroupBox( grp, "Box");
     box2->setTitle(i18n("Preview"));
@@ -922,10 +926,10 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     exampleLabel=new QLabel(box2);
     grid3->addWidget(exampleLabel,0,1);
 
-    grid->addMultiCellWidget(box2,6,7,1,1);
+    grid->addMultiCellWidget(box2,7,8,1,1);
 
     listFormat=new QListBox(grp);
-    grid->addMultiCellWidget(listFormat,0,5,1,1);
+    grid->addMultiCellWidget(listFormat,1,6,1,1);
     layout->addWidget(grp);
 
     /* *** */
@@ -2225,25 +2229,28 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
 
   box1 = new QGroupBox( this, "Box1");
   box1->setTitle(i18n("Requested Font"));
-  QGridLayout *grid2 = new QGridLayout(box1,6,3,15,7);
+  QGridLayout *grid2 = new QGridLayout(box1,7,3,15,7);
+  int fHeight = box1->fontMetrics().height();
+  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
+
   family_label = new QLabel(box1,"family");
   family_label->setText(i18n("Family:"));
-  grid2->addWidget(family_label,0,0);
+  grid2->addWidget(family_label,1,0);
 
   size_label = new QLabel(box1,"size");
   size_label->setText(i18n("Size:"));
-  grid2->addWidget(size_label,0,2);
+  grid2->addWidget(size_label,1,2);
 
   weight_label = new QLabel(box1,"weight");
   weight_label->setText(i18n("Weight:"));
-  grid2->addWidget(weight_label,2,1);
+  grid2->addWidget(weight_label,3,1);
 
   QLabel *tmpQLabel = new QLabel( box1, "Label_1" );
   tmpQLabel->setText( i18n("Text color:") );
-  grid2->addWidget(tmpQLabel,4,1);
+  grid2->addWidget(tmpQLabel,5,1);
 
   textColorButton = new KColorButton( box1, "textColor" );
-  grid2->addWidget(textColorButton,5,1);
+  grid2->addWidget(textColorButton,6,1);
 
   connect( textColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetTextColor( const QColor & ) ) );
@@ -2252,7 +2259,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
 
   style_label = new QLabel(box1,"style");
   style_label->setText(i18n("Style:"));
-  grid2->addWidget(style_label,0,1);
+  grid2->addWidget(style_label,1,1);
 
   family_combo = new QListBox( box1, "Family" );
 
@@ -2285,13 +2292,13 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
         family_combo->setCurrentItem(0);
    }
 
-  grid2->addMultiCellWidget(family_combo,2,5,0,0);
+  grid2->addMultiCellWidget(family_combo,3,6,0,0);
 
   connect( family_combo, SIGNAL(highlighted(const QString &)),
            SLOT(family_chosen_slot(const QString &)) );
 
   searchFont=new KLineEdit(box1);
-  grid2->addWidget(searchFont,1,0);
+  grid2->addWidget(searchFont,2,0);
   searchFont->setCompletionMode(KGlobalSettings::CompletionAuto  );
   searchFont->setCompletionObject( &listFont,true );
 
@@ -2308,7 +2315,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
 
 
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(size_combo,1,2);
+  grid2->addWidget(size_combo,2,2);
   connect( size_combo, SIGNAL(activated(const QString &)),
            SLOT(size_chosen_slot(const QString &)) );
   connect( size_combo ,SIGNAL( textChanged(const QString &)),
@@ -2320,7 +2327,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
   weight_combo->insertItem( i18n("Bold") );
 
   weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(weight_combo,3,1);
+  grid2->addWidget(weight_combo,4,1);
   connect( weight_combo, SIGNAL(activated(const QString &)),
            SLOT(weight_chosen_slot(const QString &)) );
 
@@ -2328,19 +2335,19 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
   style_combo->insertItem( "", 0 );
   style_combo->insertItem( i18n("Roman") );
   style_combo->insertItem( i18n("Italic"), 2 );
-  grid2->addWidget(style_combo,1,1);
+  grid2->addWidget(style_combo,2,1);
   style_combo->setInsertionPolicy(QComboBox::NoInsertion);
   connect( style_combo, SIGNAL(activated(const QString &)),
            SLOT(style_chosen_slot(const QString &)) );
 
   strike = new QCheckBox(i18n("Strike out"),box1);
-  grid2->addWidget(strike,5,2);
+  grid2->addWidget(strike,6,2);
   strike->setChecked(dlg->strike);
   connect( strike, SIGNAL( clicked()),
            SLOT(strike_chosen_slot()) );
 
   underline = new QCheckBox(i18n("Underline"),box1);
-  grid2->addWidget(underline,3,2);
+  grid2->addWidget(underline,4,2);
   underline->setChecked(dlg->underline);
   connect( underline, SIGNAL( clicked()),
            SLOT(underline_chosen_slot()) );
@@ -2350,35 +2357,36 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
 
   box1 = new QGroupBox(this, "Box2");
   box1->setTitle(i18n("Actual Font"));
-  grid2 = new QGridLayout(box1,2,4,15,7);
+  grid2 = new QGridLayout(box1,4,5,15,7);
+  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
   actual_family_label = new QLabel(box1,"afamily");
   actual_family_label->setText(i18n("Family:"));
-  grid2->addWidget(actual_family_label,0,0);
+  grid2->addWidget(actual_family_label,1,0);
 
   actual_family_label_data = new QLabel(box1,"afamilyd");
-  grid2->addWidget(actual_family_label_data,0,1);
+  grid2->addWidget(actual_family_label_data,1,1);
 
   actual_size_label = new QLabel(box1,"asize");
   actual_size_label->setText(i18n("Size:"));
-  grid2->addWidget(actual_size_label,1,0);
+  grid2->addWidget(actual_size_label,2,0);
 
   actual_size_label_data = new QLabel(box1,"asized");
-  grid2->addWidget(actual_size_label_data,1,1);
+  grid2->addWidget(actual_size_label_data,2,1);
 
   actual_weight_label = new QLabel(box1,"aweight");
   actual_weight_label->setText(i18n("Weight:"));
-  grid2->addWidget(actual_weight_label,2,0);
+  grid2->addWidget(actual_weight_label,3,0);
 
   actual_weight_label_data = new QLabel(box1,"aweightd");
-  grid2->addWidget(actual_weight_label_data,2,1);
+  grid2->addWidget(actual_weight_label_data,3,1);
 
   actual_style_label = new QLabel(box1,"astyle");
   actual_style_label->setText(i18n("Style:"));
-  grid2->addWidget(actual_style_label,3,0);
+  grid2->addWidget(actual_style_label,4,0);
 
   actual_style_label_data = new QLabel(box1,"astyled");
-  grid2->addWidget(actual_style_label_data,3,1);
+  grid2->addWidget(actual_style_label_data,4,1);
 
 
   example_label = new QLabel(box1,"examples");
@@ -2389,7 +2397,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
   example_label->setLineWidth( 1 );
   example_label->setText(i18n("Dolor Ipse"));
   //  example_label->setAutoResize(true);
-  grid2->addMultiCellWidget(example_label,0,3,2,3);
+  grid2->addMultiCellWidget(example_label,1,4,2,3);
   connect(this,SIGNAL(fontSelected( const QFont&  )),
           this,SLOT(display_example( const QFont&)));
 
@@ -2653,15 +2661,17 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"),this);
     grp->setRadioButtonExclusive( TRUE );
 
-    QGridLayout *grid2 = new QGridLayout(grp,3,2,15,7);
+    QGridLayout *grid2 = new QGridLayout(grp,4,2,15,7);
+    int fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     standard = new QRadioButton( i18n("Standard"), grp );
-    grid2->addWidget(standard,1,0);
+    grid2->addWidget(standard,2,0);
     left = new QRadioButton( i18n("Left"), grp );
-    grid2->addWidget(left,0,1);
+    grid2->addWidget(left,1,1);
     center = new QRadioButton( i18n("Center"), grp );
-    grid2->addWidget(center,1,1);
+    grid2->addWidget(center,2,1);
     right = new QRadioButton( i18n("Right"), grp );
-    grid2->addWidget(right,2,1);
+    grid2->addWidget(right,3,1);
     grid3->addWidget(grp,0,0);
 
     if(dlg->alignX==KSpreadCell::Left)
@@ -2678,13 +2688,15 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grp = new QButtonGroup( i18n("Vertical"),this);
     grp->setRadioButtonExclusive( TRUE );
 
-    grid2 = new QGridLayout(grp,3,1,15,7);
+    grid2 = new QGridLayout(grp,4,1,15,7);
+    fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     top = new QRadioButton( i18n("Top"), grp );
-    grid2->addWidget(top,0,0);
+    grid2->addWidget(top,1,0);
     middle = new QRadioButton( i18n("Middle"), grp );
-    grid2->addWidget(middle,1,0);
+    grid2->addWidget(middle,2,0);
     bottom = new QRadioButton( i18n("Bottom"), grp );
-    grid2->addWidget(bottom,2,0);
+    grid2->addWidget(bottom,3,0);
     grid3->addWidget(grp,0,1);
 
     if(dlg->alignY==KSpreadCell::Top)
@@ -2696,27 +2708,31 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     grp = new QButtonGroup( i18n("Text Option"),this);
     //grp->setRadioButtonExclusive( false );
-    grid2 = new QGridLayout(grp,2,1,15,7);
+    grid2 = new QGridLayout(grp,3,1,15,7);
+    fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     multi = new QCheckBox( i18n("Go to line automatically"),grp);
 
-    grid2->addWidget(multi,0,0);
+    grid2->addWidget(multi,1,0);
     multi->setChecked(dlg->bMultiRow);
 
     vertical = new QCheckBox( i18n("Vertical text"),grp);
-    grid2->addWidget(vertical,1,0);
+    grid2->addWidget(vertical,2,0);
     vertical->setChecked(dlg->bVerticalText);
 
     grid3->addWidget(grp,1,0);
 
     grp = new QButtonGroup( i18n("Rotation"),this);
 
-    grid2 = new QGridLayout(grp,1,1,15,7);
+    grid2 = new QGridLayout(grp,2,1,15,7);
+    fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
     angleRotation->setLabel(i18n("Angle:"));
     angleRotation->setRange(-90, 90, 1);
     angleRotation->setSuffix(" °");
 
-    grid2->addWidget(angleRotation,0,0);
+    grid2->addWidget(angleRotation,1,0);
     grid3->addWidget(grp,1,1);
     if(dlg->textRotation!=0)
       {
@@ -2725,30 +2741,38 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
       }
 
     grp = new QButtonGroup( i18n("Merge Cells"),this);
-    grid2 = new QGridLayout(grp,1,1,15,7);
+    grid2 = new QGridLayout(grp,2,1,15,7);
+
+    fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
+
     mergeCell=new QCheckBox(i18n("Merge cells"),grp);
     mergeCell->setChecked(dlg->isMerged);
     mergeCell->setEnabled(!dlg->oneCell && ((!dlg->isRowSelected) && (!dlg->isColumnSelected)));
-    grid2->addWidget(mergeCell,0,0);
+    grid2->addWidget(mergeCell,1,0);
     grid3->addWidget(grp,2,0);
 
     grp = new QButtonGroup( i18n("Indent"),this);
-    grid2 = new QGridLayout(grp,1,1,15,7);
+    grid2 = new QGridLayout(grp,2,1,15,7);
+    fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     indent = new KDoubleNumInput( grp );
     indent->setRange( KoUnit::ptToUnit( 0.0, dlg->getTable()->doc()->getUnit() ),
                       KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit() ),
                       KoUnit::ptToUnit( 10.0, dlg->getTable()->doc()->getUnit()) );
     indent->setValue ( KoUnit::ptToUnit( dlg->indent, dlg->getTable()->doc()->getUnit() ) );
-    grid2->addWidget(indent,0,0);
+    grid2->addWidget(indent,1,0);
     grid3->addWidget(grp,2,1);
 
     grp = new QButtonGroup( i18n("Size of Cell"),this);
-    grid2 = new QGridLayout(grp,2,4,15,7);
+    grid2 = new QGridLayout(grp,3,4,15,7);
+    fHeight = grp->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     QLabel *tmpLabel=new QLabel(grp,"label");
     tmpLabel->setText(i18n("Width:"));
-    grid2->addWidget(tmpLabel,0,0);
+    grid2->addWidget(tmpLabel,1,0);
 
     width = new KDoubleNumInput( grp );
     width->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit() ),
@@ -2762,16 +2786,16 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     if( dlg->isRowSelected )
         width->setEnabled(false);
 
-    grid2->addWidget(width,0,1);
+    grid2->addWidget(width,1,1);
     defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::ptToUnit( 60, dlg->getTable()->doc()->getUnit())).arg(dlg->getTable()->doc()->getUnitName()),grp);
     if( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
-    grid2->addMultiCellWidget(defaultWidth,1,1,0,1);
+    grid2->addMultiCellWidget(defaultWidth,2,2,0,1);
 
     tmpLabel=new QLabel(grp,"label1");
     tmpLabel->setText(i18n("Height:"));
-    grid2->addWidget(tmpLabel,0,2);
+    grid2->addWidget(tmpLabel,1,2);
 
     height=new KDoubleNumInput( grp );
     height->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit() ),
@@ -2785,13 +2809,13 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     if( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    grid2->addWidget(height,0,3);
+    grid2->addWidget(height,1,3);
 
     defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::ptToUnit(  20 , dlg->getTable()->doc()->getUnit())).arg(dlg->getTable()->doc()->getUnitName()),grp);
     if( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
-    grid2->addMultiCellWidget(defaultHeight,1,1,2,3);
+    grid2->addMultiCellWidget(defaultHeight,2,2,2,3);
 
     grid3->addMultiCellWidget(grp,3,3,0,1);
 
@@ -3159,15 +3183,17 @@ void CellFormatPageBorder::InitializeGrids()
     { {0,0}, {0,1},{0,2} };
   /***********************/
 
-
   /* set up a layout box for most of the border setting buttons */
   tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
   tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Border") );
   tmpQGroupBox->setAlignment( AlignLeft );
-  grid2 = new QGridLayout(tmpQGroupBox,5,5,15,7);
+  grid2 = new QGridLayout(tmpQGroupBox,6,5,15,7);
+  int fHeight = tmpQGroupBox->fontMetrics().height();
+  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
+
   area=new KSpreadBorder(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
-  grid2->addMultiCellWidget(area,1,3,1,3);
+  grid2->addMultiCellWidget(area,2,4,1,3);
   area->setBackgroundColor( colorGroup().base() );
 
   /* initailize the buttons that are in this box */
@@ -3176,7 +3202,7 @@ void CellFormatPageBorder::InitializeGrids()
     borderButtons[i] = new KSpreadBorderButton(tmpQGroupBox,
                                                borderButtonNames[i]);
     loadIcon(borderButtonIconNames[i], borderButtons[i]);
-    grid2->addWidget(borderButtons[i], borderButtonPositions[i][0],
+    grid2->addWidget(borderButtons[i], borderButtonPositions[i][0] + 1,
                      borderButtonPositions[i][1]);
   }
 
@@ -3229,7 +3255,9 @@ void CellFormatPageBorder::InitializeGrids()
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,6,2,15,7);
+  grid2 = new QGridLayout(tmpQGroupBox,7,2,15,7);
+  fHeight = tmpQGroupBox->fontMetrics().height();
+  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
   char name[] = "PatternXX";
   Q_ASSERT(NUM_BORDER_PATTERNS < 100);
@@ -3240,7 +3268,7 @@ void CellFormatPageBorder::InitializeGrids()
     name[8] = '0' + (i+1) % 10;
     pattern[i] = new KSpreadPatternSelect( tmpQGroupBox, name );
     pattern[i]->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(pattern[i], i % 5, i / 5);
+    grid2->addWidget(pattern[i], i % 5 + 1, i / 5);
     /* this puts them in the pattern:
        1  6
        2  7
@@ -3251,11 +3279,11 @@ void CellFormatPageBorder::InitializeGrids()
   }
 
   color = new KColorButton (tmpQGroupBox, "PushButton_1" );
-  grid2->addWidget(color,6,1);
+  grid2->addWidget(color,7,1);
 
   QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
   tmpQLabel->setText( i18n("Color:") );
-  grid2->addWidget(tmpQLabel,6,0);
+  grid2->addWidget(tmpQLabel,7,0);
 
   /* tack on the 'customize' border pattern selector */
   QGridLayout *grid3 = new QGridLayout( 2, 2, 7 );
@@ -3283,7 +3311,7 @@ void CellFormatPageBorder::InitializeGrids()
   style->insertItem(paintFormatPixmap(SolidLine),4);
   style->setBackgroundColor( colorGroup().background() );
 
-  grid2->addMultiCell(grid3,5,5,0,1);
+  grid2->addMultiCell(grid3,6,6,0,1);
   grid->addMultiCellWidget(tmpQGroupBox,0,3,1,1);
 
   /* Now the preview box is put together */
@@ -3293,12 +3321,12 @@ void CellFormatPageBorder::InitializeGrids()
   tmpQGroupBox->setAlignment( AlignLeft );
 
   grid2 = new QGridLayout(tmpQGroupBox,1,1,14,7);
-
-
+  fHeight = tmpQGroupBox->fontMetrics().height();
+  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
   preview = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_preview" );
   preview->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  grid2->addWidget(preview,0,0);
+  grid2->addWidget(preview,1,0);
 
   grid->addWidget(tmpQGroupBox,4,1);
 }
@@ -4339,67 +4367,70 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( AlignLeft );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,7,3,15,7);
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,8,3,15,7);
+    int fHeight = tmpQGroupBox->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
+
 
     brush1 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_1" );
     brush1->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush1,0,0);
+    grid2->addWidget(brush1,1,0);
 
     brush2 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_2" );
     brush2->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush2,0,1);
+    grid2->addWidget(brush2,1,1);
 
     brush3 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_3" );
     brush3->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush3,0,2);
+    grid2->addWidget(brush3,1,2);
 
     brush4 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_4" );
     brush4->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush4,1,0);
+    grid2->addWidget(brush4,2,0);
 
     brush5 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_5" );
     brush5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush5,1,1);
+    grid2->addWidget(brush5,2,1);
 
     brush6 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_6" );
     brush6->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush6,1,2);
+    grid2->addWidget(brush6,2,2);
 
     brush7 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_7" );
     brush7->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush7,2,0);
+    grid2->addWidget(brush7,3,0);
 
     brush8 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_8" );
     brush8->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush8,2,1);
+    grid2->addWidget(brush8,3,1);
 
     brush9 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_9" );
     brush9->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush9,2,2);
+    grid2->addWidget(brush9,3,2);
 
     brush10 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_10" );
     brush10->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush10,3,0);
+    grid2->addWidget(brush10,4,0);
 
     brush11 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_11" );
     brush11->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush11,3,1);
+    grid2->addWidget(brush11,4,1);
 
     brush12 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_12" );
     brush12->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush12,3,2);
+    grid2->addWidget(brush12,4,2);
 
     brush13 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_13" );
     brush13->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush13,4,0);
+    grid2->addWidget(brush13,5,0);
 
     brush14 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_14" );
     brush14->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush14,4,1);
+    grid2->addWidget(brush14,5,1);
 
     brush15 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_15" );
     brush15->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(brush15,4,2);
+    grid2->addWidget(brush15,5,2);
 
     QGridLayout *grid3 = new QGridLayout( 1, 2 );
     color = new KColorButton (tmpQGroupBox, "ColorButton_1" );
@@ -4409,7 +4440,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     tmpQLabel->setText( i18n("Color:") );
     grid3->addWidget(tmpQLabel,0,0);
 
-    grid2->addMultiCell(grid3,5,5,0,2);
+    grid2->addMultiCell(grid3,6,6,0,2);
 
     grid3 = new QGridLayout( 1, 3 );
 
@@ -4437,7 +4468,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
              this, SLOT( slotNotAnyColor(  ) ) );
     b_notAnyColor=false;
 
-    grid2->addMultiCell(grid3,6,6,0,2);
+    grid2->addMultiCell(grid3,7,7,0,2);
 
     grid->addMultiCellWidget(tmpQGroupBox,0,3,0,0);
 
@@ -4446,11 +4477,13 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
     tmpQGroupBox->setAlignment( AlignLeft );
 
-    grid2 = new QGridLayout(tmpQGroupBox,1,1,14,4);
+    grid2 = new QGridLayout(tmpQGroupBox,2,1,14,4);
+    fHeight = tmpQGroupBox->fontMetrics().height();
+    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
     current->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(current,0,0);
+    grid2->addWidget(current,1,0);
     grid->addWidget( tmpQGroupBox,4,0);
 
     connect( brush1, SIGNAL( clicked( KSpreadBrushSelect* ) ),
