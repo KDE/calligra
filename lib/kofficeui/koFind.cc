@@ -83,8 +83,8 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_find = new KHistoryCombo(true, m_findGrp);
     m_find->setMaxCount(10);
     m_find->setDuplicatesEnabled(false);
-    m_regExp = new QCheckBox(i18n("Use patterns"), m_findGrp);
-    m_regExpItem = new QPushButton(i18n("Insert Pattern"), m_findGrp);
+    m_regExp = new QCheckBox(i18n("&Use patterns"), m_findGrp);
+    m_regExpItem = new QPushButton(i18n("&Insert Pattern"), m_findGrp);
     m_regExpItem->setEnabled(false);
     m_findExtension = new QWidget(m_findGrp);
 
@@ -106,8 +106,8 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_replace = new KHistoryCombo(true, m_replaceGrp);
     m_replace->setMaxCount(10);
     m_replace->setDuplicatesEnabled(false);
-    m_backRef = new QCheckBox(i18n("&Use placeholders"), m_replaceGrp);
-    m_backRefItem = new QPushButton(i18n("Insert Placeholder"), m_replaceGrp);
+    m_backRef = new QCheckBox(i18n("Us&e placeholders"), m_replaceGrp);
+    m_backRefItem = new QPushButton(i18n("Insert Place&holder"), m_replaceGrp);
     m_backRefItem->setEnabled(false);
     m_replaceExtension = new QWidget(m_replaceGrp);
 
