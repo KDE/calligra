@@ -1240,7 +1240,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
   if ( !_only_left && !_only_top && m_bgColor != white )
   {
     _painter.setBackgroundColor( m_bgColor );
-    _painter.eraseRect( _tx, _ty, cl->width() - 1, rl->height() - 1 );
+    _painter.eraseRect( _tx, _ty, cl->width(), rl->height() );
   }
   
 //   if (m_bgColor != white)
@@ -1260,10 +1260,10 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
     if ( m_leftBorderPen.style() == NoPen )
       pen = _grid_pen;
     else
-      pen.setStyle( m_leftBorderPen.style() );
+      pen = QPen( m_leftBorderPen );
     _painter.setPen( pen );
-    int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
-    _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + rl->height() - 1 );
+    int dx = 0;//int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
+    _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + rl->height() );
   }
   if ( !_only_left )
   {
@@ -1273,10 +1273,10 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
     if ( m_topBorderPen.style() == NoPen )
       pen = _grid_pen;
     else
-      pen.setStyle( m_topBorderPen.style() );
+      pen = QPen( m_topBorderPen );
     _painter.setPen( pen );
-    int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );    
-    _painter.drawLine( _tx, _ty + dy, _tx + cl->width() - 1, _ty + dy );
+    int dy = 0;//(int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );    
+    _painter.drawLine( _tx, _ty + dy, _tx + cl->width() , _ty + dy );
   }
     
   if ( !_only_top && !_only_left )

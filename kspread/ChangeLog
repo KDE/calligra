@@ -1,3 +1,7 @@
+6.2.1999 - Reggie:
+------------------
+- Fixes for drawing cell borders and cell backgrounds in KoPrintExt
+
 22.1.1999 - Reggie:
 -------------------
 - Fix for glibc2 systems in lex.l
