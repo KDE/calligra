@@ -550,15 +550,23 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 // hence finding a proper x with the table object
                 KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(e->pos().y())  );
                 if (cell)
+                {
                     table->selectRow( cell->getRow() );
+                    curTable = table;
+                    emit frameSelectedChanged();
+                }
             }
             else
             { // in position to select a COLUMN
               // here the cursor is on top of the table. the x is ok, but the y is not.
                 KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(e->pos().x()), table->topWithoutBorder()  );
                 if (cell)
+                {
                     table->selectCol( cell->getColumn() );
-    }
+                    curTable = table;
+                    emit frameSelectedChanged();
+                }
+            }
         }
         m_scrollTimer->start( 50 );
     }
