@@ -15,7 +15,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
-	kpbackground.cc kpclipartcollection.cc kpgradient.cc \
+	kpbackground.cc kpgradient.cc \
 	kpgradientcollection.cc \
 	gotopage.cc \
 	kpresenter_factory.cc \
@@ -24,7 +24,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterPageIface.skel KPresenterPageIface.cc \
 	sidebar.cc \
-	insertpagedia.ui generalconfig.ui kpimage.cc \
+	insertpagedia.ui generalconfig.ui \
 	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
 	kprtextdocument.cc kpfreehandobject.cc kppolylineobject.cc \
 	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc \
@@ -73,8 +73,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
-		kpbackground.h kpclipartcollection.h kpgradient.h \
-		kpimage.h kpgradientcollection.h \
+		kpbackground.h kpgradient.h kpgradientcollection.h \
 		gotopage.h webpresentation.h \
 		kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
