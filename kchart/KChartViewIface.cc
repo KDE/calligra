@@ -63,3 +63,23 @@ void KChartViewIface::configureLegend()
 {
     view->slotConfigLegend();
 }
+
+void KChartViewIface::updateGuiTypeOfChart()
+{
+    view->updateGuiTypeOfChart();
+}
+
+void KChartViewIface::saveConfig()
+{
+    view->saveConfig();
+}
+
+void KChartViewIface::loadConfig()
+{
+    view->loadConfig();
+}
+
+void KChartViewIface::defaultConfig()
+{
+    view->defaultConfig();
+}

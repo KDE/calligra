@@ -43,6 +43,11 @@ k_dcop:
     virtual void configureColor();
     virtual void configureLegend();
 
+    virtual void updateGuiTypeOfChart();
+
+    virtual void saveConfig();
+    virtual void loadConfig();
+    virtual void defaultConfig();
 
 private:
     KChartView *view;
