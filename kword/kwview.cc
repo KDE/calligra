@@ -5885,6 +5885,13 @@ void KWView::importStyle()
     }
     KWImportStyleDia dia( m_doc, lst, this, 0L );
     if ( dia.exec() ) {
+        QPtrList<KWStyle>list(dia.listOfStyleImported());
+        QPtrListIterator<KWStyle> style(  list );
+        for ( ; style.current() ; ++style )
+        {
+            m_doc->styleCollection()->addStyleTemplate(style.current());
+        }
+        m_doc->updateAllStyleLists();
     }
 }
 
