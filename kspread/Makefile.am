@@ -12,6 +12,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_autofill.cc kspread_interpreter.cc \
 	kspread_functions_math.cc kspread_functions_conversion.cc \
+	kspread_functions_information.cc  \
 	kspread_functions_logic.cc kspread_functions_financial.cc \
 	kspread_functions_trig.cc kspread_functions_datetime.cc \
 	kspread_functions_statistical.cc kspread_functions_text.cc \

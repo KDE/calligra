@@ -666,7 +666,6 @@ static const functionEntry funcTab[] = {
   // compatibility with KSpread < 1.2
   // somehow should marked "obsolete" in the manual
   { "not", kspreadfunc_not },
-  { "if", kspreadfunc_if },
   { "ENT", kspreadfunc_INT },
   { "DECHEX", kspreadfunc_dec2hex },
   { "DECBIN", kspreadfunc_dec2bin },
