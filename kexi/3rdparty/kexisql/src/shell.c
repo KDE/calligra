@@ -487,6 +487,7 @@ static void set_table_name(struct callback_data *p, const char *zName){
 */
 static int dump_callback(void *pArg, int nArg, char **azArg, char **azCol){
   struct callback_data *p = (struct callback_data *)pArg;
+  struct callback_data d2;
   if( nArg!=3 ) return 1;
   fprintf(p->out, "%s;\n", azArg[2]);
   if( strcmp(azArg[1],"table")==0 ){
@@ -494,7 +495,6 @@ static int dump_callback(void *pArg, int nArg, char **azArg, char **azCol){
 	if (verboseDump)
 		fprintf(stderr, "%%%d\n", (++curObjects * 100 / nObjects));
 /* \js */
-    struct callback_data d2;
     d2 = *p;
     d2.mode = MODE_Insert;
     d2.zDestTable = 0;
@@ -582,7 +582,6 @@ static int do_meta_command(char *zLine, struct callback_data *p){
   char *azArg[50];
 
 /* js */
-  const char *pzTail;
   sqlite_vm *pVm;
   char *errMsg;
 	int ncolumns; /* OUT: Number of columns in result */
@@ -634,13 +633,14 @@ static int do_meta_command(char *zLine, struct callback_data *p){
   if( c=='d' && strncmp(azArg[0], "dump", n)==0 ){
     char *zErrMsg = 0;
     open_db(p);
+
 /* js */
 if (SQLITE_OK!=sqlite_compile(p->db, "SELECT COUNT(1) FROM sqlite_master",
 0, &pVm, &errMsg)) {
 	fprintf(stderr, "%s\n", errMsg);
 	exit(1);
 }
-if (SQLITE_ROW!=sqlite_step( pVm,  ncolumns, &pazValue, &pazColName )) {
+if (SQLITE_ROW!=sqlite_step( pVm, &ncolumns, &pazValue, &pazColName )) {
 	exit(1);
 }
 nObjects = atoi(pazValue[0]);
