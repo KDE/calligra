@@ -608,9 +608,9 @@ bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 }
 
 
-static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
-                               void            (*processor) (QDomNode, void *, KWEFKWordLeader *),
-                               KWEFKWordLeader  *leader )
+static bool ProcessStoreFile ( QIODevice* subFile,
+    void (*processor) (QDomNode, void *, KWEFKWordLeader *),
+    KWEFKWordLeader* leader)
 {
     QDomDocument qDomDocumentIn;
 
@@ -618,7 +618,7 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
     int errorLine;
     int errorColumn;
 
-    if ( !qDomDocumentIn.setContent (byteArrayIn, &errorMsg, &errorLine, &errorColumn) )
+    if ( !qDomDocumentIn.setContent (subFile, &errorMsg, &errorLine, &errorColumn) )
     {
         kdError (30508) << "Parsing Error! Aborting! (in ProcessStoreFile)" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
@@ -695,8 +695,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         return KoFilter::StupidError;
     }
 
-    QByteArray byteArrayIn;
-
     KoStoreDevice* subFile;
 
     subFile=chain->storageFile("documentinfo.xml",KoStore::Read);
@@ -707,11 +705,9 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     }
     else if ( subFile->open ( IO_ReadOnly ) )
     {
-        byteArrayIn = subFile->readAll();
-        subFile->close ();
-
         kdDebug (30508) << "Processing Document Info..." << endl;
-        ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, this);
+        ProcessStoreFile (subFile, ProcessDocumentInfoTag, this);
+        subFile->close ();
     }
     else
     {
@@ -729,10 +725,9 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     }
     else if ( subFile->open ( IO_ReadOnly ) )
     {
-        byteArrayIn = subFile->readAll();
-        subFile->close ();
         kdDebug (30508) << "Processing root document..." << endl;
-        ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
+        ProcessStoreFile (subFile, ProcessDocTag, this);
+        subFile->close ();
     }
     else
     {
