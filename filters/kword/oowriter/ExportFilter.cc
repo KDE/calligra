@@ -132,34 +132,74 @@ bool OOWriterWorker::zipWriteData(const QString& str)
     return zipWriteData(str.utf8());
 }
 
+void OOWriterWorker::writeStartOfFile(const QString& type)
+{
+    const bool noType=type.isEmpty();
+    zipWriteData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+
+    zipWriteData("<!DOCTYPE office:document");
+    if (!noType)
+    {
+        zipWriteData("-");
+        zipWriteData(type);
+    }
+    zipWriteData(" PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\"");
+    zipWriteData(" \"office.dtd\"");
+    zipWriteData(">\n");
+
+    zipWriteData("<office:document");
+    if (!noType)
+    {
+        zipWriteData("-");
+        zipWriteData(type);
+    }
+    // The name spaces used by OOWriter (those not used by this filter are commented out)
+    zipWriteData(" xmlns:office=\"http://openoffice.org/2000/office\"");
+    zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
+    zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
+    zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
+    // zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
+    zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
+    zipWriteData(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
+    //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
+    zipWriteData(" xmlns:svg=\"http://www.w3.org/2000/svg\"");
+    //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
+    //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
+    //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
+    zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
+    zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
+
+    zipWriteData(" office:class=\"text\" office:version=\"1.0\"");
+
+    zipWriteData(">\n");
+}
+
 void OOWriterWorker::writeStylesXml(void)
 {
     if (!m_zip)
         return;
 
-    zipPrepareWriting("styles.xml");    
-        
-    zipWriteData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    zipWriteData("<!DOCTYPE office:document-styles>\n");
-    zipWriteData("<office:document-styles>\n");
+    zipPrepareWriting("styles.xml");
 
-    zipWriteData( " <office:fonts-decls>\n");
+    writeStartOfFile("styles");
+
+    zipWriteData( " <office:font-decls>\n");
     for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
     {
         zipWriteData("  <style:font-decl style:name=\"");
         zipWriteData(escapeOOText(*it));
         zipWriteData("\" fo:font-family=\"");
         zipWriteData(escapeOOText(*it));
-        // ### TODO: pitch
-        zipWriteData("\" />\n");
+        // ### TODO: correct font pitch pitch
+        zipWriteData("\" style:font-pitch=\"variable\" />\n");
     }
-    zipWriteData(" </office:fonts-decls>\n");
-    
+    zipWriteData(" </office:font-decls>\n");
+
     zipWriteData(m_styles);
 
-    zipWriteData(" <style:automatic-styles>\n");
-    zipWriteData("  <style:page-master-name style:name=\"pm1\">\n");
-    
+    zipWriteData(" <office:automatic-styles>\n");
+    zipWriteData("  <style:page-master style:name=\"pm1\">\n");
+
     zipWriteData("   <style:properties ");
 
     zipWriteData(" fo:page-width=\"");
@@ -177,7 +217,7 @@ void OOWriterWorker::writeStylesXml(void)
     {
         zipWriteData("portrait");
     }
-    
+
     zipWriteData("\" fo:margin-top=\"");
     zipWriteData(QString::number(m_paperBorderTop));
     zipWriteData("pt\" fo:margin-bottom=\"");
@@ -187,16 +227,16 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData("pt\" fo:margin-right=\"");
     zipWriteData(QString::number(m_paperBorderRight));
     zipWriteData("pt\"/>\n");
-    
-    zipWriteData("  </style:page-master-name>\n");
-    zipWriteData(" </style:automatic-styles>\n");
-    
-    zipWriteData(" <style:master-styles>\n");
+
+    zipWriteData("  </style:page-master>\n");
+    zipWriteData(" </office:automatic-styles>\n");
+
+    zipWriteData(" <office:master-styles>\n");
     zipWriteData("  <style:master-page style:name=\"Standard\" style:page-master-name=\"pm1\" />\n");
-    zipWriteData(" </style:master-styles>\n");
-        
+    zipWriteData(" </office:master-styles>\n");
+
     zipWriteData( "</office:document-styles>\n" );
-    
+
     zipDoneWriting();
 }
 
@@ -205,14 +245,11 @@ void OOWriterWorker::writeContentXml(void)
     if (!m_zip)
         return;
 
-    zipPrepareWriting("content.xml");    
-        
-    zipWriteData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    zipWriteData("<!DOCTYPE office:document-content>\n");
-    zipWriteData("<office:document-content>\n");
+    zipPrepareWriting("content.xml");
 
-    
-    zipWriteData( " <office:fonts-decls>\n");
+    writeStartOfFile("content");
+
+    zipWriteData( " <office:font-decls>\n");
     for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
     {
         zipWriteData("  <style:font-decl style:name=\"");
@@ -222,7 +259,7 @@ void OOWriterWorker::writeContentXml(void)
         // ### TODO: pitch
         zipWriteData("\" />\n");
     }
-    zipWriteData(" </office:fonts-decls>\n");
+    zipWriteData(" </office:font-decls>\n");
     
     zipWriteData(m_styles);
     
@@ -252,14 +289,14 @@ bool OOWriterWorker::doOpenDocument(void)
 {
     kdDebug(30518)<< "OOWriterWorker::doOpenDocument" << endl;
 
-    *m_streamOut << "<office:body>\n";
+    *m_streamOut << " <office:body>\n";
 
     return true;
 }
 
 bool OOWriterWorker::doCloseDocument(void)
 {
-    *m_streamOut << "</office:body>\n";
+    *m_streamOut << " </office:body>\n";
     return true;
 }
 
@@ -753,23 +790,23 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 
     QString props=layoutToCss(styleLayout,layout,false);
 
-    *m_streamOut << "<text:p";
+    *m_streamOut << "  <text:p ";
     if (!style.isEmpty())
     {
-        *m_streamOut << " text:style-name=\"" << EscapeXmlText(style,true,true) << "\"";
+        *m_streamOut << "text:style-name=\"" << EscapeXmlText(style,true,true) << "\" ";
     }
     *m_streamOut << props;
     if (layout.pageBreakBefore)
     {
         // We have a page break before the paragraph
-        *m_streamOut << " fo:page-break-before=\"page\"";
+        *m_streamOut << "fo:page-break-before=\"page\" ";
     }
     if (layout.pageBreakAfter)
     {
         // We have a page break after the paragraph
-        *m_streamOut << " fo:page-break-after=\"page\"";
+        *m_streamOut << "fo:page-break-after=\"page\" ";
     }
-    *m_streamOut << ">";  //Warning(AbiWord): No trailing white space or else it's in the text!!!
+    *m_streamOut << ">";
 
 
     processParagraphData(paraText, layout.formatData.text, paraFormatDataList);
@@ -795,6 +832,7 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
 
     m_styles += " style:name=\"" + EscapeXmlText(layout.styleName,true,true) + "\"";
     m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
+    m_styles += " style:family=\"paragraph\" style:class=\"text\"";
     m_styles += ">";
 #if 0
     if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
@@ -849,23 +887,24 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
         return true;
     
         
-    zipPrepareWriting("meta.xml");
-    
     m_docInfo=docInfo;
-    
-    zipWriteData("<office:document-meta>\n");
+
+    zipPrepareWriting("meta.xml");
+
+    writeStartOfFile("meta");
+
     zipWriteData(" <office:meta>\n");
-    
+
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     zipWriteData("  <meta:generator>KWord Export Filter");
 
     QString strVersion("$Revision$");
     // Remove the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    zipWriteData(strVersion.mid(10).replace('$',""));
+    zipWriteData(strVersion.mid(10).remove('$'));
 
     zipWriteData("</meta:generator>\n");
-    
+
     if (!m_docInfo.title.isEmpty())
     {
         zipWriteData("  <dc:title>");
@@ -876,19 +915,19 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     {
         zipWriteData("  <dc:description>");
         zipWriteData(escapeOOText(m_docInfo.abstract));
-        zipWriteData("</dc:description>\n");    
+        zipWriteData("</dc:description>\n");
     }
-    
+
     QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
     zipWriteData("  <dc:date>");
     zipWriteData(escapeOOText(now.toString(Qt::ISODate)));
     zipWriteData("</dc:date>\n");
-    
+
     zipWriteData(" </office:meta>\n");
     zipWriteData("</office:document-meta>\n");
-     
+
     zipDoneWriting();
-    
+
     return true;
 }
 

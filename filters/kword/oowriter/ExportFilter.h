@@ -94,6 +94,7 @@ private:
     void declareFont(const QString& fontName);
     void writeContentXml(void);
     void writeStylesXml(void);
+    void writeStartOfFile(const QString& type);
 private: // ZIP methids
     bool zipPrepareWriting(const QString& name);
     bool zipDoneWriting(void);
