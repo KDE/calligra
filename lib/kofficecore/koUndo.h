@@ -138,7 +138,13 @@ private:
 
 signals:
 
-  void undoRedoChanged( QString, QString );
+  /**
+   *  This signal is emitted when the names of the undo and redo commands changed.
+   *
+   *  @param _undo New text of the actual undo command.
+   *  @param _redo New text of the actual redo command.
+   */
+  void undoRedoChanged( const QString& _undo, const QString& _redo );
 };
 
 #endif // __koffice_undo_h__
