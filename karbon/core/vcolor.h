@@ -7,9 +7,9 @@
 #define __VCOLOR_H__
 
 #include <qstring.h>
+#include <qcolor.h>
 
 class QDomElement;
-class QColor;
 
 /**
  * This class keeps track of color properties.
@@ -31,6 +31,7 @@ public:
 	};
 
 	VColor();
+	VColor( const QRgb & );
 
 	/// color values in all color spaces range from 0.0 to 1.0
 	void pseudoValues( int& v1, int& v2, int& v3 ) const;
