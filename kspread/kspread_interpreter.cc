@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <float.h>
 #include <klocale.h>
 #include <kapp.h>
 #include <qdatetime.h>
@@ -117,6 +118,21 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     makeDepends( context, node->branch4(), m, t, depends );
   if ( node->branch5() )
     makeDepends( context, node->branch5(), m, t, depends );
+}
+
+/*********************************************************************
+ *
+ * Helper function to avoid problems with rounding floating point
+ * values. Idea for this kind of solution taken from Openoffice.
+ *
+ *********************************************************************/
+
+static bool approx_equal (double a, double b)
+{
+  if ( a == b )
+    return TRUE;
+  double x = a - b;
+  return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
 }
 
 /*********************************************************************
@@ -291,8 +307,10 @@ static bool kspreadfunc_ceil( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
-
-  context.setValue( new KSValue( ceil( args[0]->doubleValue() ) ) );
+  if (approx_equal(floor(args[0]->doubleValue()),args[0]->doubleValue()))
+    context.setValue( new KSValue(args[0]->doubleValue()));
+  else
+    context.setValue( new KSValue( ceil( args[0]->doubleValue() ) ) );
 
   return true;
 }
@@ -2539,7 +2557,7 @@ static bool kspreadfunc_roundup( KSContext& context )
         }
   // This is not correct solution for problem with floating point numbers and probably
   // will fail in platforms where float and double lenghts are same.
-  if (floor((float)(args[0]->doubleValue()*pow(10.0,digits))) == (float)(args[0]->doubleValue()*pow(10.0,digits)))
+  if (approx_equal(floor(args[0]->doubleValue()*pow(10,digits)), args[0]->doubleValue()*pow(10,digits)))
       result = args[0]->doubleValue();
   else
       result=floor(args[0]->doubleValue()*pow(10,digits)+1)/pow(10,digits);
@@ -3766,7 +3784,7 @@ static bool kspreadfunc_delta( KSContext& context )
     return false;
   if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
     return false;
-  if(args[0]->doubleValue()==args[1]->doubleValue())
+  if(approx_equal(args[0]->doubleValue(), args[1]->doubleValue()))
         result=1;
   else
         result=0;
@@ -3791,6 +3809,8 @@ static bool kspreadfunc_even( KSContext& context )
         sign=-1;
         val=-val;
         }
+  if (approx_equal(val, floor(val)))
+    val = floor(val);
  double valsup=ceil( val );
  if(fmod(valsup,2.0)==0)
         {
@@ -3825,6 +3845,8 @@ static bool kspreadfunc_odd( KSContext& context )
         sign = -1;
         val = -val;
         }
+  if (approx_equal(val, floor(val)))
+    val = floor(val);
   valsup = ceil(val);
   if (fmod(valsup, 2.0) == 1)
         {
