@@ -11,7 +11,7 @@ libkexipropertyeditor_la_SOURCES = \
 
 libkexipropertyeditor_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexipropertyeditor_la_LIBADD = $(LIB_KIO) \
-	../../core/libkexicore.la
+	../../core/libkexicore.la ../libkexiextendedwidgets.la
 
 libkexipropertyeditor_la_METASOURCES = AUTO
 
