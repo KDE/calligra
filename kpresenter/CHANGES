@@ -3,6 +3,9 @@ Changes after KPresenter 1.3 beta 2
 Fixes:
 - KPR 'forgets' solid line attribute of text frames (#61343)
 - fix pasting text objects screwing UTF-8 text
+- snap to Grid function aligns relatively, not absolutely (#56181)
+- when cutting&pasting a vertically centred text frame,
+  the vertical position changes (#61330)
 
 Changes:
 - grid, snap to grid are on now by default, with a finer step of 5mm
