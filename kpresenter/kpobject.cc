@@ -607,11 +607,23 @@ DCOPObject* KPObject::dcopObject()
 
 void KPObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
 {
+    // Translate clipRegion in device coordinates
+    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
+    QRegion devReg;
+    QMemArray<QRect>rs = clipRegion.rects();
+    rs.detach();
+    for ( uint i = 0 ; i < rs.size() ; ++i )
+    {
+        //kdDebug() << "KWDocument::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
+        rs[i] = painter->xForm( rs[i] );
+    }
+    devReg.setRects( rs.data(), rs.size() );
+
     QRegion region = painter->clipRegion();
     if ( region.isEmpty() )
-        region = clipRegion;
+        region = devReg;
     else
-        region.unite( clipRegion );
+        region.unite( devReg );
 
     painter->setClipRegion( region );
 }
