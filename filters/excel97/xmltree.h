@@ -12,6 +12,7 @@
 #include <qarray.h>
 #include <qqueue.h>
 #include <qobject.h>
+#include <qintdict.h>
 
 const int BIFF_5_7 = 0x0500;
 const int BIFF_8 = 0x0600;
@@ -217,7 +218,7 @@ private:
       bCharSet,
       reserved,
       cch;
-    char* rgch;
+    QString rgch;
   };
 
   struct xf_rec {
@@ -234,12 +235,9 @@ private:
   
   Q_UINT16 biff;
   QDomDocument *root;
-  QArray<format_rec*> formats;
-  QArray<font_rec*> fonts;
-  QArray<xf_rec*> xfs;
-  QQueue<format_rec> formats_q;
-  QQueue<font_rec> fonts_q;
-  QQueue<xf_rec> xfs_q;
+  QIntDict<xf_rec> xfs;
+  QIntDict<font_rec> fonts;
+  QIntDict<format_rec> formats;
   QQueue<QDomElement> tables;
   QDomElement doc, paper, map, *table;
 };

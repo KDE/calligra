@@ -72,9 +72,7 @@ const QDomElement XMLTree::getFont(Q_UINT16 xf)
 
   if (fontid > 3)
     fontid--;
-  QString s = QString::fromLatin1(fonts[fontid]->rgch, 
-				  fonts[fontid]->cch);
-  font.setAttribute("family", s);
+  font.setAttribute("family", fonts[fontid]->rgch);
   font.setAttribute("pt", fonts[fontid]->dyHeight / 20);
   font.setAttribute("weight", fonts[fontid]->bls / 8);
   if ((fonts[fontid]->grbit & 0x02) == 2) 
@@ -87,11 +85,42 @@ const QDomElement XMLTree::getFont(Q_UINT16 xf)
 
 const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 {
-  Q_UINT16 formatid = xfs[xf]->ifmt;
+  int align, pos, precision = -1;
+
+  QString s;
   QDomElement format = root->createElement("FORMAT");
 
-  int align = (xfs[xf]->info2 & 0x07) == 0 ? 4 :  xfs[xf]->info2 & 0x07;
+  align = (xfs[xf]->info2 & 0x07) == 0 ? 4 :  xfs[xf]->info2 & 0x07;
   format.setAttribute("align", align); // kspread doesn't support align=0
+
+  if (xfs[xf]->ifmt == 0)
+    s = "General";
+  else {
+    s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
+			    formats[xfs[xf]->ifmt]->cch);
+
+    if ((pos = s.find("0.0")) != -1) {
+      pos += 3;
+      precision += 2;
+      while (s.mid(pos++, 1) == "0") 
+	precision++;
+    }
+  }
+  format.setAttribute("precision", precision);
+
+  if (s.find("DM", 0, false) != -1) {
+    format.setAttribute("postfix", "DM");
+    format.setAttribute("faktor", 1);
+  }
+  if (s.find("%", 0, false) != -1) {
+    format.setAttribute("postfix", "%");
+    format.setAttribute("faktor", 100);
+  }
+  if (s.find("General", 0, false) != -1) {
+    format.setAttribute("faktor", 1);
+  }
+
+  // need to add float and floatcolor
 
   return format;
 }
@@ -344,20 +373,6 @@ bool XMLTree::_edg(Q_UINT16 size, QDataStream& body)
 
 bool XMLTree::_eof(Q_UINT16 size, QDataStream& body)
 {
-  int it;
-  static int count;
-  
-  if (count++ == 0) {
-    formats.resize(formats_q.count());
-    for (it = 0; it < formats.size(); it++)
-      formats[it] = formats_q.dequeue();
-    fonts.resize(fonts_q.count());
-    for (it = 0; it < fonts.size(); it++)
-      fonts[it] = fonts_q.dequeue();
-    xfs.resize(xfs_q.count());
-    for (it = 0; it < xfs.size(); it++)
-      xfs[it] = xfs_q.dequeue();
-  }
   return true;
 }
 
@@ -413,12 +428,30 @@ bool XMLTree::_fngroupname(Q_UINT16 size, QDataStream& body)
 
 bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
 {
+  int i;
+  static int count;
+  QChar *c;
+  Q_UINT8 lsb, msb;
+
   font_rec *f = new font_rec;
   body >> f->dyHeight >> f->grbit >> f->icv >> f->bls >> f->sss;
   body >> f->uls >> f->bFamily >> f->bCharSet >> f->reserved >> f->cch;
-  f->rgch = new char[f->cch];
-  body.readRawBytes(f->rgch, f->cch);
-  fonts_q.enqueue(f);
+  if (biff == BIFF_5_7) {
+    for (i = 0; i < f->cch; i++) { 
+      body >> lsb;
+      c = new QChar(lsb, 0);
+      f->rgch += *c;
+    }
+  }
+  else if (biff == BIFF_8) {
+    body >> lsb;
+    for (i = 0; i < f->cch; i++) { 
+      body >> lsb >> msb;
+      c = new QChar(lsb, msb);
+      f->rgch += *c;
+    }
+  }
+  fonts.insert(count++, f);
 
   return true;
 }
@@ -446,12 +479,12 @@ bool XMLTree::_footer(Q_UINT16 size, QDataStream& body)
 
 bool XMLTree::_format(Q_UINT16 size, QDataStream& body)
 {
-  Q_UINT16 skip;
+  Q_UINT16 id;
   format_rec *f = new format_rec;
-  body >> skip >> f->cch;
+  body >> id >> f->cch;
   f->rgch = new char[f->cch];
   body.readRawBytes(f->rgch, f->cch);
-  formats_q.enqueue(f);
+  formats.insert(id, f);
 
   return true;
 }
@@ -1191,10 +1224,12 @@ bool XMLTree::_xct(Q_UINT16 size, QDataStream& body)
 
 bool XMLTree::_xf(Q_UINT16 size, QDataStream& body)
 {
+  static int count;
+
   xf_rec *x = new xf_rec;
   body >> x->ifnt >> x->ifmt >> x->info1 >> x->info2 >> x->info3;
   body >> x->info4 >> x->info5 >> x->info6 >> x->info7;
-  xfs_q.enqueue(x);
+  xfs.insert(count++, x);
 
   return true;
 }
