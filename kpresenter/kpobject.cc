@@ -1673,24 +1673,24 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
                 //FIXME
                 if ( draw->attributeNS( KoXmlNS::draw, "style", QString::null )=="rect" )
                 {
-                    if ( draw->attribute( "draw:dots1" )=="1" &&
-                         draw->attribute( "draw:dots2" )=="1" &&
-                         draw->attribute( "draw:dots1-length" )=="0.508cm" &&
-                         draw->attribute( "draw:dots2-length" )=="0.508cm" &&
+                    if ( draw->attributeNS( KoXmlNS::draw, "dots1", QString::null )=="1" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2", QString::null )=="1" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots1-length", QString::null )=="0.508cm" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2-length", QString::null )=="0.508cm" &&
                          draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.508cm" )
                         pen.setStyle( Qt::DashLine );
-                    else if ( draw->attribute( "draw:dots1" )=="1" &&
+                    else if ( draw->attributeNS( KoXmlNS::draw, "dots1", QString::null )=="1" &&
                               draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.257cm" )
                         pen.setStyle(Qt::DotLine );
-                    else if ( draw->attribute( "draw:dots1" )=="1" &&
-                         draw->attribute( "draw:dots2" )=="1" &&
-                         draw->attribute( "draw:dots1-length" )=="0.051cm" &&
-                         draw->attribute( "draw:dots2-length" )=="0.254cm" &&
+                    else if ( draw->attributeNS( KoXmlNS::draw, "dots1", QString::null )=="1" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2", QString::null )=="1" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots1-length", QString::null )=="0.051cm" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2-length", QString::null )=="0.254cm" &&
                          draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.127cm" )
                         pen.setStyle(Qt::DashDotLine );
-                    else if ( draw->attribute( "draw:dots1" )=="1" &&
-                         draw->attribute( "draw:dots2" )=="2" &&
-                         draw->attribute( "draw:dots1-length" )=="0.203cm" &&
+                    else if ( draw->attributeNS( KoXmlNS::draw, "dots1", QString::null )=="1" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2", QString::null )=="2" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots1-length", QString::null )=="0.203cm" &&
                          draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.203cm" )
                         pen.setStyle(Qt::DashDotDotLine );
                     else
