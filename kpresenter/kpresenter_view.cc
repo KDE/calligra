@@ -2770,6 +2770,9 @@ void KPresenterView::skipToPage( int num )
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
     yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
+    //(Laurent) deselect object when we change page.
+    //otherwise you can change object properties on other page
+    page->deSelectAllObj();
     page->repaint( FALSE );
 }
 
