@@ -320,6 +320,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
                                        KoZoomHandler* zoomHandler, bool drawCursor,
                                        KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
 {
+    if ( cw <= 0 || ch <= 0 ) { Q_ASSERT( cw > 0 ); Q_ASSERT( ch > 0 ); return; }
 #ifdef DEBUG_PAINTING
     kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
