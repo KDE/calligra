@@ -600,6 +600,7 @@ void KSpreadView::initialPosition()
     //init toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_tableFormat->setEnabled(false);
+    m_mergeCell->setEnabled(false);
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
@@ -644,43 +645,28 @@ void KSpreadView::updateEditWidget()
     m_underline->setChecked( cell->textFontUnderline( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
     m_strikeOut->setChecked( cell->textFontStrike( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
-    if ( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Left )
-        m_alignLeft->setChecked( TRUE );
-    else if ( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Right )
-        m_alignRight->setChecked( TRUE );
-    else if ( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Center )
-        m_alignCenter->setChecked( TRUE );
-    else
-    {
-        m_alignLeft->setChecked( FALSE );
-        m_alignRight->setChecked( FALSE );
-        m_alignCenter->setChecked( FALSE );
-    }
+    m_alignLeft->setChecked( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Left );
+    m_alignRight->setChecked( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Right );
+    m_alignCenter->setChecked(cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Center );
 
-    if ( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Top )
-        m_alignTop->setChecked( TRUE );
-    else if ( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Middle )
-        m_alignMiddle->setChecked( TRUE );
-    else if ( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Bottom )
-        m_alignBottom->setChecked( TRUE );
+    m_alignTop->setChecked( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Top );
+    m_alignMiddle->setChecked( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Middle );
+    m_alignBottom->setChecked( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Bottom );
 
     m_verticalText->setChecked( cell->verticalText( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     m_multiRow->setChecked( cell->multiRow( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    if( cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Percentage )
-        m_percent->setChecked( TRUE );
-    else
-        m_percent->setChecked( FALSE );
 
-    if( cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Money )
-        m_money->setChecked( TRUE );
-    else
-        m_money->setChecked( FALSE );
+    bool state=cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Percentage ;
+    m_percent->setChecked( state );
 
-    if( cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
-        m_removeComment->setEnabled( FALSE );
-    else
-        m_removeComment->setEnabled( TRUE );
+    state=cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Money;
+    m_money->setChecked( state );
+
+    state= cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty();
+    m_removeComment->setEnabled( state );
+
+    m_decreaseIndent->setEnabled(cell->getIndent(m_pCanvas->markerColumn(), m_pCanvas->markerRow())>0);
 
     m_toolbarLock = FALSE;
 }
@@ -2067,10 +2053,10 @@ void KSpreadView::slotPopupDeleteChild()
     if ( !m_popupChildObject || !m_popupChildObject->table() )
 	return;
     int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove this embedded document.\nDo you want to continue?"),i18n("Delete embedded document"));
-    if ( ret == 3 )
+    if ( ret == KMessageBox::Yes )
         {
-        m_popupChildObject->table()->deleteChild( m_popupChildObject );
-        m_popupChildObject = 0;
+            m_popupChildObject->table()->deleteChild( m_popupChildObject );
+            m_popupChildObject = 0;
         }
 }
 
@@ -2731,7 +2717,7 @@ void KSpreadView::removeTable()
     KNotifyClient::beep();
     int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove table"));
 
-    if ( ret == 3 )
+    if ( ret == KMessageBox::Yes )
     {
         if ( m_pCanvas->editor() )
         {
@@ -2774,7 +2760,7 @@ void KSpreadView::slotAddTable( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateView( KSpreadTable *_table )
 {
-    // qDebug("void KSpreadView::slotUdateView( KSpreadTable *_table )\n");
+    // kdDebug()<<"void KSpreadView::slotUdateView( KSpreadTable *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2796,7 +2782,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
 
 void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
 {
-    // qDebug("void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n");
+    // kdDebug()<<"void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2807,7 +2793,7 @@ void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
 {
-    // qDebug("void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )\n");
+    // kdDebug("void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2844,9 +2830,15 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     // in KSpreadView::slotUnselect
     if ( (n.left() == 0 && n.top() == 0)
     ||n.right() ==0x7FFF ||n.bottom()==0x7FFF)
+    {
         m_tableFormat->setEnabled( FALSE );
+        m_mergeCell->setEnabled(false);
+    }
     else
+    {
         m_tableFormat->setEnabled( TRUE );
+        m_mergeCell->setEnabled(true);
+    }
 
     if( n.top()!=0 &&n.bottom()==0x7FFF)
         {
@@ -3089,6 +3081,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     // Unselect the action which only works on a selection
     // with mutiple cells.
     m_tableFormat->setEnabled( FALSE );
+    m_mergeCell->setEnabled(false);
 
     m_pCanvas->updateSelection( _old, _table->marker() );
     m_pVBorderWidget->update();

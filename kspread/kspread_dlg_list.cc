@@ -90,12 +90,23 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
+  connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
   init();
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
   if(list->count()<=2)
     m_pRemove->setEnabled(false);
   resize( 600, 250 );
+
+}
+
+
+void KSpreadList::slotTextClicked(QListBoxItem*)
+{
+    //we can't remove the two first item
+    bool state=list->currentItem()>1;
+    m_pRemove->setEnabled(state);
+    m_pModify->setEnabled(state);
 
 }
 
@@ -147,17 +158,20 @@ void KSpreadList::init()
 
 void KSpreadList::slotDoubleClicked(QListBoxItem *)
 {
-  QString tmp=list->currentText();
-  entryList->setText("");
-  QStringList result=result.split(", ",tmp);
-  int index=0;
-  for ( QStringList::Iterator it = result.begin(); it != result.end();++it )
-    {
-      entryList->insertLine((*it),index);
-      index++;
-    }
-  entryList->setEnabled(true);
-  m_pModify->setEnabled(true);
+    //we can't modify the two first item
+    if(list->currentItem()<2)
+        return;
+    QString tmp=list->currentText();
+    entryList->setText("");
+    QStringList result=result.split(", ",tmp);
+    int index=0;
+    for ( QStringList::Iterator it = result.begin(); it != result.end();++it )
+        {
+            entryList->insertLine((*it),index);
+            index++;
+        }
+    entryList->setEnabled(true);
+    m_pModify->setEnabled(true);
 }
 
 void KSpreadList::slotAdd()
@@ -181,7 +195,7 @@ void KSpreadList::slotAdd()
   entryList->setText("");
   entryList->setEnabled(false);
   entryList->setFocus();
-  m_pRemove->setEnabled(true);
+  slotTextClicked(0L);
 }
 
 void KSpreadList::slotNew()

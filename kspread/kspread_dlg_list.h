@@ -40,7 +40,8 @@ public:
 public slots:
   void slotOk();
   void slotClose();
-  void slotDoubleClicked(QListBoxItem *);  
+  void slotDoubleClicked(QListBoxItem *);
+  void slotTextClicked(QListBoxItem*);
   void slotRemove();
   void slotAdd();
   void slotNew();
