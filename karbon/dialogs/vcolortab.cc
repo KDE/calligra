@@ -56,9 +56,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addMultiCellWidget( mSelector, 0, 2, 1, 1 );
 
 	//Reference
-	QGroupBox* groupbox = new QGroupBox( 2, Vertical, i18n("Reference" ), mRGBWidget );
-	new QLabel( i18n("Old:"), groupbox );
-	new QLabel( i18n("New:"), groupbox );
+	QGroupBox* groupbox = new QGroupBox( 2, Vertical, i18n( "Reference" ), mRGBWidget );
+	new QLabel( i18n( "Old:" ), groupbox );
+	new QLabel( i18n( "New:" ), groupbox );
 	mOldColor = new KColorPatch( groupbox );
 	mColorPreview = new KColorPatch( groupbox );
 
@@ -70,23 +70,23 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
-	QGroupBox* cgroupbox = new QGroupBox( 3, Vertical, i18n("Components"), mRGBWidget );
+	QGroupBox* cgroupbox = new QGroupBox( 3, Vertical, i18n( "Components" ), mRGBWidget );
 
 	//--->RGB
-	new QLabel( i18n("R:"), cgroupbox );
-	new QLabel( i18n("G:"), cgroupbox );
-	new QLabel( i18n("B:"), cgroupbox );
+	new QLabel( i18n( "R:" ), cgroupbox );
+	new QLabel( i18n( "G:" ), cgroupbox );
+	new QLabel( i18n( "B:" ), cgroupbox );
 	mRed = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
 	mGreen = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
-	mBlue = new KIntSpinBox( 0, 255, 1, 0, 0,cgroupbox );
+	mBlue = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
-	new QLabel( i18n("Hue:", "H:"), cgroupbox );
-	new QLabel( i18n("Saturation:", "S:"), cgroupbox );
-	new QLabel( i18n("Value:", "V:"), cgroupbox );
+	new QLabel( i18n( "Hue:", "H:" ), cgroupbox );
+	new QLabel( i18n( "Saturation:", "S:" ), cgroupbox );
+	new QLabel( i18n( "Value:", "V:" ), cgroupbox );
 	mHue = new KIntSpinBox( 0, 359, 1, 0, 0, cgroupbox );
 	mSaturation = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
 	mValue = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
@@ -96,7 +96,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addWidget( cgroupbox, 1, 2 );
 
 	//--->Opacity
-	QGroupBox* ogroupBox = new QGroupBox( 1, Vertical, i18n("Opacity"), mRGBWidget );
+	QGroupBox* ogroupBox = new QGroupBox( 1, Vertical, i18n( "Opacity" ), mRGBWidget );
 	mOpacity = new KIntNumInput( 100, ogroupBox );
 	mOpacity->setRange( 0, 100, 1, true );
 	mOpacity->setValue( c.opacity() * 100.0 );
@@ -107,7 +107,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 
 	mainLayout->activate();
 
-	addTab( mRGBWidget, i18n("RGB") );
+	addTab( mRGBWidget, i18n( "RGB" ) );
 
 	mRed->setValue( color.red() );
 	mGreen->setValue( color.green() );

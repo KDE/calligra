@@ -284,7 +284,7 @@ void VConfigMiscPage::apply()
 void VConfigMiscPage::slotDefault()
 {
 	m_undoRedo->setValue( 30 );
-        m_unit->setCurrentItem( 0 );
+	m_unit->setCurrentItem( 0 );
 
 }
 
@@ -317,7 +317,7 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	m_autoSave->setSpecialValueText( i18n( "No auto save" ) );
 	m_autoSave->setSuffix( i18n( "min" ) );
 
-	m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings );
+	m_createBackupFile = new QCheckBox( i18n( "Create Backup File" ), gbDocumentSettings );
 	m_createBackupFile->setChecked( m_oldBackupFile );
 }
 

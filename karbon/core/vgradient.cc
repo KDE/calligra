@@ -33,7 +33,7 @@ int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCol
 {
 	float r1 = ( (VColorStop*)item1 )->rampPoint;
 	float r2 = ( (VColorStop*)item2 )->rampPoint;
-	
+
 	return ( r1 == r2 ? 0 : r1 < r2 ? -1 : 1 );
 } // VGradient::VColorStopList::compareItems
 
@@ -78,12 +78,12 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 
 	if ( this == &gradient )
 		return *this;
-		
+
 	m_origin       = gradient.m_origin;
 	m_vector       = gradient.m_vector;
 	m_type         = gradient.m_type;
 	m_repeatMethod = gradient.m_repeatMethod;
-	
+
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
 	for( unsigned int i = 0; i < cs.count(); i++ )
@@ -110,7 +110,7 @@ VGradient::clearStops()
 void
 VGradient::addStop( const VColorStop& colorStop )
 {
-	 m_colorStops.inSort( new VColorStop( colorStop ) );
+	m_colorStops.inSort( new VColorStop( colorStop ) );
 } // VGradient::addStop
 
 void
@@ -122,7 +122,7 @@ VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 	// Clamping between 0.0 and 1.0
 	midPoint = midPoint < 0.0 ? 0.0 : midPoint;
 	midPoint = midPoint > 1.0 ? 1.0 : midPoint;
-	
+
 	m_colorStops.inSort( new VColorStop( rampPoint, midPoint, color ) );
 }
 
