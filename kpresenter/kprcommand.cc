@@ -255,6 +255,8 @@ RotateCmd::RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, 
 
     addAngle = _addAngle;
 
+    m_page = doc->findSideBarPage( _objects );
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
@@ -283,6 +285,12 @@ void RotateCmd::execute()
     }
     doc->updateRuler();
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -292,6 +300,12 @@ void RotateCmd::unexecute()
         objects.at(i)->rotate( oldRotate.at( i )->angle );
     doc->updateRuler();
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /******************************************************************/
@@ -1748,6 +1762,8 @@ ResizeCmd::ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize
 {
     object = _object;
     doc = _doc;
+    m_page = doc->findSideBarPage( object );
+
     object->incCmdRef();
 }
 
@@ -1777,6 +1793,12 @@ void ResizeCmd::execute()
     }
     doc->repaint( oldRect );
     doc->repaint( object );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -1807,6 +1829,12 @@ void ResizeCmd::unexecute( bool _repaint )
     if ( _repaint ) {
 	doc->repaint( oldRect );
 	doc->repaint( object );
+    }
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 }
 

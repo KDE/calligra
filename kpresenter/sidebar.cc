@@ -226,17 +226,19 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
     // Find icon
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() )
     {
+/*      Commented out until only the visible objects are updated
         if ( sticky ) {
             it->setPixmap(getSlideThumb( pagecnt ));
             pagecnt++;
         }
         else {
+*/
             if ( it->text().toInt() == pagenr + 1 )
             {
                 it->setPixmap(getSlideThumb( pagenr ));
                 return;
             }
-       }
+//       }
     }
     if ( ! sticky )
         kdWarning() << "Item for page " << pagenr << " not found" << endl;

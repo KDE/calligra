@@ -2533,12 +2533,51 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     emit pageNumChanged();
 }
 
-void KPresenterDoc::updateSideBarItem(int pgNum)
+KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
+{
+    if ( object->isSticky() ) {
+        kdDebug(33001) << "Object is on sticky page" << endl;
+        return stickyPage();
+    } 
+    for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
+        QPtrList<KPObject> list( page->objectList() );
+        if ( list.findRef( object ) != -1 ) {
+            kdDebug(33001) << "Object is on page " << m_pageList.findRef(page) + 1 << endl;
+            return page;
+        }
+    }
+    kdDebug(33001) << "Object not found on a page" << endl;
+    return 0L;
+}
+
+KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
+{
+    //todo
+    KPObject *object;
+    for ( object = objects.first(); object; object=objects.next() ) {
+        if ( object->isSticky() ) {
+            kdDebug(33001) << "A Object is on the sticky page" << endl;
+            return stickyPage();
+        } 
+    }
+    object = objects.first();
+    for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
+        QPtrList<KPObject> list( page->objectList() );
+        if ( list.findRef( object ) != -1 ) {
+            kdDebug(33001) << "The Objects are on page " << m_pageList.findRef(page) + 1 << endl;
+            return page;
+        }
+    }
+    kdDebug(33001) << "Objects not found on a page" << endl;
+    return 0L;
+}
+
+void KPresenterDoc::updateSideBarItem(int pgNum, bool sticky )
 {
     // Update the views
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum );
+        static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum, sticky );
 }
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ )

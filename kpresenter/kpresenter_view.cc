@@ -4768,11 +4768,11 @@ void KPresenterView::updateSideBar()
     }
 }
 
-void KPresenterView::updateSideBarItem( int pagenr )
+void KPresenterView::updateSideBarItem( int pagenr, bool sticky )
 {
     //kdDebug(33001) << "KPresenterView::updateSideBarItem " << pagenr << endl;
     if (sidebar)
-        sidebar->updateItem( pagenr );
+        sidebar->updateItem( pagenr, sticky );
 }
 
 void KPresenterView::addSideBarItem( int pos )

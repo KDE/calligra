@@ -296,7 +296,7 @@ public slots:
     /**
      * Update a given item in the sidebar
      */
-    void updateSideBarItem( int pagenr );
+    void updateSideBarItem( int pagenr, bool sticky = false );
     void addSideBarItem( int pos );
     void moveSideBarItem( int oldPos, int newPos );
     void removeSideBarItem( int pos );

@@ -315,7 +315,9 @@ public:
     void addRemovePage( int pos, bool addPage );
     void movePageTo( int oldPos, int newPos );
 
-    void updateSideBarItem(int pgNum);
+    void updateSideBarItem( int pgNum, bool sticky = false );
+    KPrPage * findSideBarPage(KPObject *object);
+    KPrPage * findSideBarPage(QPtrList<KPObject> &objects);
 
     void emitSigChangedActivePage(KPrPage *page) {sig_changeActivePage(page );}
 

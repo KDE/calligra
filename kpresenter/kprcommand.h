@@ -176,6 +176,7 @@ protected:
     float newAngle;
     //necessary for duplicate object, we can duplicated and add angle.
     bool addAngle;
+    KPrPage *m_page;
 
 };
 
@@ -199,6 +200,7 @@ protected:
     KoSize r_diff;
     KPObject *object;
     KPresenterDoc *doc;
+    KPrPage *m_page;
 
 };
 
