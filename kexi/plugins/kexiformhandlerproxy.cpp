@@ -17,13 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpixmap.h>
-
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <klineeditdlg.h>
-
 #include "kexiformhandlerproxy.h"
 #include "kexiformhandler.h"
 #include "kexiformhandleritem.h"
@@ -31,9 +24,24 @@
 #include "kexiformbase.h"
 #include "kexidatasourcedlg.h"
 
+#include <qpixmap.h>
+
+#include <kdebug.h>
+#include <klocale.h>
+#include <klineeditdlg.h>
+#include <kaction.h>
+
+
 KexiFormHandlerProxy::KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view)
  : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
 {
+        (void) new KAction(i18n("Create &Form..."), 0,
+                this,SLOT(slotCreate()), actionCollection(), "formpart_create");
+
+        setXMLFile("kexiformpartui.rc");
+
+        view->insertChildClient(this);
+
 	m_formHandler = handler;
 }
 

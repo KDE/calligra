@@ -84,15 +84,17 @@ KexiTablePart::itemPixmap()
 void
 KexiTablePart::getTables()
 {
-	QStringList tables = kexiProject()->db()->tables();
+	m_tableNames.clear;
+	m_tableNames = kexiProject()->db()->tables();
 	ItemList *list=items();
 	list->clear();
 
-	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
+	for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
 	{
 		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
 		list->insert(*it,new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
 	}
+
 
 	emit itemListChanged(this);
 }
@@ -119,6 +121,21 @@ KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params
         }
 	return m_record;
 
+}
+
+QStringList KexiTablePart::fields(const QString& identifier)
+{
+	return kexiProject()->db()->getColumns(identifier);
+}
+
+QStringList KexiTablePart::datasets()
+{
+	return m_tableNames;
+}
+
+QStringList KexiTablePart::datasetNames()
+{
+	return m_tableNames;
 }
 
 

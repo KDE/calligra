@@ -51,11 +51,14 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 
 		void				getTables();
 
-        	virtual QStringList datasets(){}
-	        virtual QStringList fields(const QString& identifier){}
+        	virtual QStringList datasets();
+		virtual QStringList datasetNames();
+	        virtual QStringList fields(const QString& identifier);
 	        virtual KexiDBRecord *records(const QString& identifier,Parameters params);
-        	virtual ParameterList parameters(const QString &identifier){};
+        	virtual ParameterList parameters(const QString &identifier){}
 
+	private:
+		QStringList m_tableNames;
 };
 
 #endif

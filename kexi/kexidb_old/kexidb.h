@@ -76,6 +76,8 @@ class KexiDB : public QObject
 
 		virtual KexiDBTableStruct	getStructure(const QString& table);
 
+		QStringList			getColumns(const QString& table);
+
 		virtual unsigned long		affectedRows();
 
 		void appendManager(KexiDBInterfaceManager *m);

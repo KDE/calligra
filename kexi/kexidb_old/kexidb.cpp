@@ -182,6 +182,24 @@ KexiDB::getStructure(const QString&)
 	return KexiDBTableStruct();
 }
 
+
+QStringList
+KexiDB::getColumns(const QString& table)
+{
+	QStringList res;
+	KexiDBTableStruct tmp=getStructure(table);
+	for (KexiDBField *f=tmp.first();f;f=tmp.next())
+	{
+		res.append(f->name());
+	}
+	tmp.setAutoDelete(true);
+	tmp.clear();
+
+	return res;
+}
+
+
+
 KexiDB::~KexiDB()
 {
 }
