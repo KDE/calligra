@@ -195,13 +195,16 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 			int shadowDx = int( m_shadowDistance * cos( m_shadowAngle / 360. * 6.2832 ) );
 			int shadowDy = int( m_shadowDistance * sin( m_shadowAngle / 360. * 6.2832 ) );
 		
+			VTransformCmd trafo( 0L, QWMatrix() );
 			for( itr.toFirst(); itr.current(); ++itr )
 			{
-//				itr.current()->transform( QWMatrix( 1, 0, 0, 1, shadowDx, shadowDy ) );
+				trafo.setMatrix( QWMatrix( 1, 0, 0, 1, shadowDx, shadowDy ) );
+				trafo.visit( *( itr.current() ) );
 				itr.current()->setFill( VFill( color ) );
 				itr.current()->setStroke( VStroke( color ) );
 				itr.current()->draw( painter );
-//				itr.current()->transform( QWMatrix( 1, 0, 0, 1, -shadowDx, -shadowDy ) );
+				trafo.setMatrix( QWMatrix( 1, 0, 0, 1, -shadowDx, -shadowDy ) );
+				trafo.visit( *( itr.current() ) );
 			}
 		}
 
@@ -508,7 +511,6 @@ VText::traceText()
 		x += dx;
 		VTransformCmd trafo( 0L, QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
 		trafo.visit( *composite );
-//		composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
 
 		// Step 2: find the position where to draw.
 		//   3 possibilities: before, on, and after the basePath...
@@ -544,7 +546,6 @@ VText::traceText()
 
 		// Step 3: transform glyph and append it. That's it, we've got
 		// text following a path. Really easy, isn't it ;) ?
-//		composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
 		trafo.setMatrix( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
 		trafo.visit( *composite );
 		composite->setState( state() );
