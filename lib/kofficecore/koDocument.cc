@@ -1510,7 +1510,11 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
         d->lastErrorMessage = i18n( "Could not find %1" ).arg( filename );
         return false;
     }
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
 
+#if 0 // this was a test, but it leads to spurious whitespace text nodes between indented tags
     QXmlInputSource source( store->device() );
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
@@ -1524,10 +1528,10 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
     reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", TRUE );
     //reader.setUndefEntityInAttrHack(true);
 
-    // Error variables for QDomDocument::setContent
-    QString errorMsg;
-    int errorLine, errorColumn;
     if ( !doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn ) )
+#else
+    if ( !doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
+#endif
     {
         kdError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
