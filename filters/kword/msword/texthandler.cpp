@@ -53,7 +53,8 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      m_previousLSID( 0 ), m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
+      m_previousLSID( 0 ),
+      m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
       m_currentTable( 0L ),
       m_bInParagraph( false ),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
@@ -719,10 +720,6 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
     {
         const wvWare::Word97::PAP& pap = paragraphProperties.pap();
         counterElement.setAttribute( "start", listInfo->startAt() );
-        if ( listInfo->startAtOverridden() ||
-             ( m_previousLSID != 0 && m_previousLSID != listInfo->lsid() ) )
-            counterElement.setAttribute( "restart", "true" );
-        m_previousLSID = listInfo->lsid(); // update the ID
 
         int depth = pap.ilvl; /*both are 0 based*/
         // Heading styles don't set the ilvl, but must have a depth coming
@@ -797,6 +794,13 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         {
             kdWarning() << "Not supported: counter text without the depth in it:" << Conversion::string(text).string() << endl;
         }
+
+        if ( listInfo->startAtOverridden() ||
+             ( m_previousLSID != 0 && m_previousLSID != listInfo->lsid() ) )
+            counterElement.setAttribute( "restart", "true" );
+        if ( numberingType == 1 )
+            m_previousLSID = listInfo->lsid(); // update the ID
+
         // listInfo->alignment() is not supported in KWord
         // listInfo->isLegal() hmm
         // listInfo->notRestarted() [by higher level of lists] not supported
