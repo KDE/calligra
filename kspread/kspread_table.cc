@@ -4080,7 +4080,10 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
         cell->updateChart();
         }
     m_pDoc->setModified( true );
-    refreshMergedCell();
+
+    if(!isLoading())
+        refreshMergedCell();
+
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );

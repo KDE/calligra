@@ -433,7 +433,12 @@ void KSpreadView::initialPosition()
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
+        {
         tbl->recalc(true);
+        tbl->refreshMergedCell();
+        }
+
+    slotUpdateView( activeTable() );
     m_bLoading =true;
 }
 
