@@ -3139,12 +3139,15 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state && m_canvas->haveASelectedGroupObj());
-    actionExtraAlignObjLeft->setEnabled(state &&  !headerfooterselected);
-    actionExtraAlignObjCenterH->setEnabled(state &&  !headerfooterselected);
-    actionExtraAlignObjRight->setEnabled(state &&  !headerfooterselected);
-    actionExtraAlignObjTop->setEnabled(state && !headerfooterselected);
-    actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected);
-    actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected);
+
+    bool canMove = m_canvas->canMoveOneObject();
+
+    actionExtraAlignObjLeft->setEnabled(state &&  !headerfooterselected && canMove);
+    actionExtraAlignObjCenterH->setEnabled(state &&  !headerfooterselected&& canMove);
+    actionExtraAlignObjRight->setEnabled(state &&  !headerfooterselected && canMove);
+    actionExtraAlignObjTop->setEnabled(state && !headerfooterselected && canMove);
+    actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected && canMove);
+    actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected && canMove );
     actionEditDelete->setEnabled(state);
     actionExtraRaise->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
     actionExtraLower->setEnabled(state && m_canvas->numberOfObjectSelected()==1);

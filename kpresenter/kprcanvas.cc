@@ -7258,3 +7258,8 @@ void KPrCanvas::alignObjBottom()
     else
         delete macro;
 }
+
+bool KPrCanvas::canMoveOneObject() const
+{
+    return (m_activePage->canMoveOneObject() || stickyPage()->canMoveOneObject());
+}

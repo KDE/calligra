@@ -3693,3 +3693,17 @@ KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)
     }
     return boundingRect;
 }
+
+bool KPrPage::canMoveOneObject()
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        //don't test header/footer all the time sticky
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        if(it.current()->isSelected()&& !it.current()->isProtect())
+            return true;
+    }
+    return false;
+}

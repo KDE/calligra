@@ -264,6 +264,8 @@ public:
     void alignObjCenterV();
     void alignObjBottom();
 
+    bool canMoveOneObject()const;
+
 public slots:
     void exitEditMode();
 

@@ -265,6 +265,8 @@ public:
 
     void reactivateBgSpellChecking(bool refreshTextObj);
 
+    bool canMoveOneObject();
+
 protected:
 
 private:
