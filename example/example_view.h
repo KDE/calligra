@@ -23,7 +23,7 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
 private:
-    KAction* m_cut;
+    //KAction* m_cut;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include <qpainter.h>
 #include <qiconset.h>
 #include <kaction.h>
+#include <kstdaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -13,8 +14,10 @@ ExampleView::ExampleView( ExamplePart* part, QWidget* parent, const char* name )
 {
     setInstance( ExampleFactory::global() );
     setXMLFile( "example.rc" );
-    m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
-			 actionCollection(), "cut");
+    KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
+    // Note: Prefer KStdAction::* to any custom action if possible.
+    //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
+    //			 actionCollection(), "cut");
 }
 
 void ExampleView::paintEvent( QPaintEvent* ev )
@@ -39,7 +42,7 @@ void ExampleView::updateReadWrite( bool /*readwrite*/ )
 
 void ExampleView::cut()
 {
-    kdDebug(31000) << "CUT called" << endl;
+    kdDebug(31000) << "ExampleView::cut(): CUT called" << endl;
 }
 
 #include "example_view.moc"

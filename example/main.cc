@@ -20,7 +20,6 @@
 #include <koApplication.h>
 #include <koDocument.h>
 #include <koMainWindow.h>
-#include <koQueryTypes.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -39,7 +38,7 @@ int main( int argc, char **argv )
     KCmdLineArgs::init( argc, argv, ExampleFactory::aboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;
-    
+
     app.start(); // parses command line args, create initial docs and shells
     app.exec();
     return 0;
