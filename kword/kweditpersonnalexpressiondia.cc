@@ -60,14 +60,16 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     grid->addWidget(m_addGroup,1,2);
     connect(m_addGroup,SIGNAL(clicked ()),this,SLOT(slotAddGroup()));
 
-
+    m_delGroup=new QPushButton(i18n("Delete Group"),page);
+    grid->addWidget(m_delGroup,2,2);
+    connect(m_delGroup,SIGNAL(clicked ()),this,SLOT(slotDelGroup()));
 
     m_addExpression=new QPushButton(i18n("Add new expression"),page);
-    grid->addWidget(m_addExpression,2,2);
+    grid->addWidget(m_addExpression,3,2);
     connect(m_addExpression,SIGNAL(clicked ()),this,SLOT(slotAddExpression()));
 
     m_delExpression=new QPushButton(i18n("Delete expression"),page);
-    grid->addWidget(m_delExpression,3,2);
+    grid->addWidget(m_delExpression,4,2);
     connect(m_delExpression,SIGNAL(clicked ()),this,SLOT(slotDelExpression()));
 
     loadFile();
@@ -98,6 +100,7 @@ void KWEditPersonnalExpression::loadFile()
 void KWEditPersonnalExpression::initCombobox()
 {
     QStringList lst;
+    m_typeExpression->clear();
     list::Iterator it;
     for( it = listExpression.begin(); it != listExpression.end(); ++it )
         lst<<it.key();
@@ -202,8 +205,26 @@ void KWEditPersonnalExpression::slotAddGroup()
         m_listOfExpression->clear();
         m_addExpression->setEnabled(true);
         m_delExpression->setEnabled(true);
+        m_delGroup->setEnabled(true);
 
     }
+}
+
+void KWEditPersonnalExpression::slotDelGroup()
+{
+    QString group=m_typeExpression->currentText();
+    if(group.isEmpty())
+        return;
+    listExpression.remove( group );
+    m_typeExpression->removeItem(m_typeExpression->currentItem());
+    m_typeExpression->setCurrentItem(0 );
+    slotExpressionActivated( m_typeExpression->currentText() );
+    m_listOfExpression->clear();
+    bool state=(m_typeExpression->count()>0);
+    m_addExpression->setEnabled(state);
+    m_delExpression->setEnabled(state);
+    m_delGroup->setEnabled(state);
+
 }
 
 void KWEditPersonnalExpression::saveFile()

@@ -32,28 +32,32 @@ class KWEditPersonnalExpression : public KDialogBase
     Q_OBJECT
 public:
     KWEditPersonnalExpression( QWidget *parent, const char *name );
+
+protected:
     void init(const QString& filename );
     void loadFile();
     void initCombobox();
     void saveFile();
-protected:
-    QComboBox *m_typeExpression;
-    QListBox *m_listOfExpression;
-    QPushButton *m_addExpression;
-    QPushButton *m_addGroup;
-    QPushButton *m_delExpression;
+
 
 protected slots:
     void slotExpressionActivated(const QString &_text );
     void slotAddExpression();
     void slotDelExpression();
     void slotAddGroup();
-    
+    void slotDelGroup();
+
     virtual void slotOk();
 
  private:
     typedef QMap<QString,QStringList> list; 
     list listExpression;
+    QComboBox *m_typeExpression;
+    QListBox *m_listOfExpression;
+    QPushButton *m_addExpression;
+    QPushButton *m_addGroup;
+    QPushButton *m_delGroup;
+    QPushButton *m_delExpression;
 };
 
 #endif

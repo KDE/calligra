@@ -439,6 +439,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     eSpacing->setMaxLength( 2 );
     eSpacing->setEchoMode( QLineEdit::Normal );
     eSpacing->setFrame( true );
+    eSpacing->setEnabled(false);
     connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
     spacingGrid->addWidget( eSpacing, 1, 1 );
 
