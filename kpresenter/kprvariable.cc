@@ -36,6 +36,8 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     KoVariable *var=0L;
     if(type ==VT_PGNUM)
     {
+        kdDebug()<<" subtype == KoPgNumVariable::VST_CURRENT_SECTION :"<<(subtype == KoPgNumVariable::VST_CURRENT_SECTION)<<endl;
+        kdDebug()<<" varFormat :"<<varFormat<<endl;
         if ( !varFormat )
             varFormat = (subtype == KoPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
         var = new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );
@@ -55,15 +57,11 @@ KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVari
 
 void KPrPgNumVariable::recalc()
 {
-    if ( m_subtype == VST_PGNUM_CURRENT )
-    {
-        //see KPTextObject::recalcPageNum( KPresenterDoc *doc )
-    }
-    else
+    if ( m_subtype == VST_PGNUM_TOTAL )
     {
         m_varValue = QVariant( m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1);
+        resize();
     }
-    resize();
 }
 
 void KPrPgNumVariable::setVariableSubType( short int type)
