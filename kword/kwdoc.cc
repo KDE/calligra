@@ -130,7 +130,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_autoFormat = new KWAutoFormat(this);
 
     m_commandHistory = new KCommandHistory( actionCollection(), false );
+#if KDE_VERSION >= 220 // kdelibs >= 2.2 only
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
+#endif
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
     m_formulaDocument = new KFormulaDocument(actionCollection(), m_commandHistory);
@@ -1660,7 +1662,9 @@ void KWDocument::removeView( KoView *_view )
 
 void KWDocument::addShell( KoMainWindow *shell )
 {
+#if KDE_VERSION >= 220 // kdelibs >= 2.2 only
     connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
+#endif
     KoDocument::addShell( shell );
 }
 
