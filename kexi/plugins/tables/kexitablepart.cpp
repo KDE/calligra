@@ -95,7 +95,7 @@ KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item)
 	if(!c)
 		return 0;
 
-	KexiDataTable *t = new KexiDataTable(win, QString("%1 - %2").arg(item.name()).arg(instanceName()), c);
+	KexiDataTable *t = new KexiDataTable(win, c); //QString("%1 - %2").arg(item.name()).arg(instanceName()), c);
 	return t;
 }
 
