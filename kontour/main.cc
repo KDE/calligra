@@ -36,11 +36,12 @@ int main( int argc, char **argv )
     KCmdLineArgs::init( argc, argv, newKIllustratorAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KGlobal::locale()->insertCatalogue("killustrator"); // use killustrator.pot
-
     KoApplication app;
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kontour" );
+
+    KGlobal::locale()->insertCatalogue("killustrator"); // use killustrator.pot
+
 
     if (!app.start())
        return 1;
