@@ -945,7 +945,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 } else if ( kpobject->getType() == OT_TEXT ) {
                     if ( state )
                         deSelectAllObj();
+                    KPTextObject *obj=dynamic_cast<KPTextObject *>(kpobject);
                     selectObj( kpobject );
+                    if ( obj )
+                        m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
                     m_view->openPopupMenuTextObject(pnt);
                 } else if ( kpobject->getType() == OT_PIE ) {
                     if ( state )

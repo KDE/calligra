@@ -559,7 +559,7 @@ public:
     void updatePageParameter();
 
     void setZoomRect( const QRect & rect, bool drawRubber );
-
+    void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 protected slots:
     // dialog slots
     void backOk( bool );

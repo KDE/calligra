@@ -6542,6 +6542,22 @@ void KPresenterView::alignVerticalCenter()
         actionAlignVerticalCenter->setChecked(true);
 }
 
+void KPresenterView::changeVerticalAlignmentStatus(VerticalAlignmentType _type )
+{
+    switch( _type )
+    {
+    case KP_CENTER:
+        actionAlignVerticalCenter->setChecked( true );
+        break;
+    case KP_TOP:
+        actionAlignVerticalTop->setChecked( true);
+        break;
+    case KP_BOTTOM:
+        actionAlignVerticalBottom->setChecked( true );
+        break;
+    }
+
+}
 
 
 #include <kpresenter_view.moc>
