@@ -1,6 +1,7 @@
 // helper stuff for the engine
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <qpoint.h>
 #include "engine.h"

@@ -25,20 +25,111 @@
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
 
+// retrieve the value of a cell
+//#define CELLVALUE( row, col ) data.cell( (row), (col) ).value.doubleValue()
+
+// check whether a cell has a value
+//#define CELLEXISTS( row, col ) data.cell( (row), (col) ).exists
+
+class kchartEngine {
+public:
+  KChartParameters* params;
+  KChartData* data;
+  QPainter *p;
+  int imagewidth;
+  int imageheight;  
+  int doLabels();
+  int minmaxValues( int num_points,
+		  int num_sets,
+		  float *uvol,
+		  float &highest, 
+		  float &lowest,
+		  float &vhighest,
+		  float &vlowest);
+  int out_graph();
+
+  int compute_yintervals();
+
+  inline bool CELLEXISTS( int row, int col ) {
+    return  data->cell(row,col).exists;
+  };
+  inline double CELLVALUE(int row, int col) {
+    return data->cell(row,col).value.doubleValue();
+  }
+  
+private:
+  int num_sets;
+  int num_points;
+  int graphwidth;
+  int grapheight;
+  float	xorig, yorig, vyorig;
+  float	yscl;
+  float	vyscl;
+  float	xscl;
+  float vhighest;
+  float	vlowest;
+  float	highest;
+  float	lowest;
+  float	ylbl_interval;
+  int num_lf_xlbls;
+  int xdepth_3Dtotal;
+  int ydepth_3Dtotal;
+  int xdepth_3D;		// affects PX()
+  int ydepth_3D;		// affects PY() and PV()
+  int hlf_barwdth;		// half bar widths
+  int hlf_hlccapwdth;		// half cap widths for HLC_I_CAP and DIAMOND
+  int annote_len, annote_hgt;
+
+  /* args */
+  int			setno;				// affects PX() and PY()
+  // PENDING(kalle) Get rid of this
+  float		*uvol;
+#define MAXNUMPOINTS 100
+  QColor BGColor, LineColor, PlotColor, GridColor, VolColor;
+  QColor ExtVolColor[100];
+  //  QColor ExtVolColor[num_points];  
+  QColor ThumbDColor, ThumbLblColor, ThumbUColor;
+    // ArrowDColor,ArrowUColor,
+  QColor AnnoteColor;
+  //  QColor ExtColor[num_sets][num_points];
+  QColor ExtColor[100][100];
+  // shade colors only with 3D
+  //	intExtColorShd[threeD?1:num_sets][threeD?1:num_points]; // compiler limitation
+  QColor ExtColorShd[100][100];
+  //  QColor ExtColorShd[num_sets][num_points];
+  bool hasxlabels;
+  //  QPointArray volpoly( 4 );
+
+  int init();
+};
+
+kchartEngine keng;
 
 
-int doLabels( short imagewidth,         // no check for an output device that's too small to fit
+int out_graph( short imagewidth,         // no check for an output device that's too small to fit
 	   short imageheight,        // needed info (labels, etc), could core dump
 	   QPainter* p,	             // paint into this painter
 	   KChartParameters* params, // the parameters of the chart
-	   const KChartData& data) {
+	   const KChartData& data
+	   )
+{
+  // temporary stuff for initializing the engine
+  keng.params = params;
+  keng.data = &data;
+  keng.p = p;
+  keng.imagewidth = imagewidth;
+  keng.imageheight = imageheight;
+  return keng.out_graph();
+}
+
+int kchartEngine::doLabels() {
   // Finally, the x labels are taken from the first row
-  QArray<QString> xlbl( data.cols() );
+  QArray<QString> xlbl( data->cols() );
 #ifdef NOXLABELSFORNOW
-  debug( "Creating xlbl with %d entries", data.cols() );
-  for( int labels = 0; labels < data.cols(); labels++ ) {
+  debug( "Creating xlbl with %d entries", data->cols() );
+  for( int labels = 0; labels < data->cols(); labels++ ) {
     debug( "Retrieving value at position %d", labels );
-    const KChartValue& cellval = data.cell( 0, labels );
+    const KChartValue& cellval = data->cell( 0, labels );
     debug( "type of field %d in row 0 is %s", labels, QVariant::typeToName( cellval.value.type() ).latin1() );
     if( !cellval.exists ) {
       debug( "No value for x label in col %d", labels );
@@ -59,11 +150,9 @@ int doLabels( short imagewidth,         // no check for an output device that's 
   debug( "labels read" );
 };
 
-int minmaxValues( short imagewidth,      
-		  short imageheight,      
-		  QPainter* p,	           
-		  KChartParameters* params, 
-		  const KChartData& data,
+
+
+int kchartEngine::minmaxValues( 
 		  int num_points,
 		  int num_sets,
 		  float *uvol,
@@ -151,85 +240,70 @@ int minmaxValues( short imagewidth,
     qDebug( "done requested_* computation" );
 }
 
+int kchartEngine::init() {
+  // initializations
+  yscl = 0.0;
+  vyscl = 0.0;
+  xscl = 0.0;
+  vhighest = -MAXFLOAT;
+  vlowest  = MAXFLOAT;
+  highest  = -MAXFLOAT;
+  lowest   = MAXFLOAT;
+  ylbl_interval  = 0.0;
+  num_lf_xlbls   = 0;
+  xdepth_3Dtotal = 0;
+  ydepth_3Dtotal = 0;
+  xdepth_3D      = 0;	       
+  ydepth_3D      = 0;	 
+  hlf_barwdth	   = 0;		
+  hlf_hlccapwdth = 0;	
+  annote_len     = 0;
+  annote_hgt     = 0;
+  setno = 0;
+  hasxlabels = false;
+  
 
 
+  // For now, we are assuming that the data is in columns with no labels at all
+  // Ergo, num_sets is the number of rows
+  num_sets = data->rows();
 
-int out_graph( short imagewidth,         // no check for an output device that's too small to fit
-	   short imageheight,        // needed info (labels, etc), could core dump
-	   QPainter* p,	             // paint into this painter
-	   KChartParameters* params, // the parameters of the chart
-	   const KChartData& data
-	   )
-{
-	// For now, we are assuming that the data is in columns with no labels at all
-	
-	// Ergo, num_sets is the number of rows
-        int num_sets = data.rows();
+  // No data sets left -> bail out
+  if( num_sets < 1 ) {
+    debug( "No data" );
+    return -1;
+  }
 
-	// No data sets left -> bail out
-	if( num_sets < 1 ) {
-		debug( "No data" );
-		return -1;
-	}
+  // And num_points is the number of columns
+  num_points = data->cols();
+ 
+}
 
-	// And num_points is the number of columns
-	int num_points = data.cols();
 
-	int i, j, k;
-	
-	
-	// Does it have xlabels at all?
-	bool hasxlabels = false;
-	// doLabels(imagewidth, imageheight, p, params, data);
+int kchartEngine::compute_yintervals() {
+}
 
-    int			graphwidth;
-    int			grapheight;
-    //  gdImagePtr	im;
-    // gdImagePtr	bg_img = NULL;
+/*************************************************************/
+//
+//  Out graph
+//
+/*************************************************************/
+int kchartEngine::out_graph() {
 
-    float		xorig, yorig, vyorig;
-    float		yscl     = 0.0;
-    float		vyscl    = 0.0;
-    float		xscl     = 0.0;
-    float		vhighest = -MAXFLOAT;
-    float		vlowest  = MAXFLOAT;
-    float		highest  = -MAXFLOAT;
-    float		lowest   = MAXFLOAT;
-    QPointArray volpoly( 4 );
+  int i,j,k;
+
+
+  if (init()== -1) {
+    return -1;
+  }
+  doLabels();
 
     char		num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
-
-    char		do_bar = ( params->type == KCHARTTYPE_3DBAR ||					// offset X objects to leave
-				   params->type == KCHARTTYPE_BAR );					//  room at X(0) and X(n)
     //  i.e., not up against Y axes
-    char		do_ylbl_fractions = 							// %f format not given, or
+    char		do_ylbl_fractions =   // %f format not given, or
 		( params->ylabel_fmt.isEmpty() ||					//  format doesn't have a %,g,e,E,f or F
 		  params->ylabel_fmt.length() == strcspn(params->ylabel_fmt,"%geEfF") );
-    float		ylbl_interval  = 0.0;
-    int			num_lf_xlbls   = 0;
-    int			xdepth_3Dtotal = 0;
-    int			ydepth_3Dtotal = 0;
-    int			xdepth_3D      = 0;		// affects PX()
-    int			ydepth_3D      = 0;		// affects PY() and PV()
-    int			hlf_barwdth	   = 0;		// half bar widths
-    int			hlf_hlccapwdth = 0;		// half cap widths for HLC_I_CAP and DIAMOND
-    int			annote_len     = 0,
-		annote_hgt     = 0;
 
-    /* args */
-    int			setno = 0;				// affects PX() and PY()
-
-	// PENDING(kalle) Get rid of this
-    float		*uvol;
-
-    QColor BGColor, LineColor, PlotColor, GridColor, VolColor,
-		ExtVolColor[num_points], ThumbDColor, ThumbLblColor, ThumbUColor,
-		//				ArrowDColor,	
-		//				ArrowUColor,
-		AnnoteColor, ExtColor[num_sets][num_points];
-    // shade colors only with 3D
-    //	int			ExtColorShd[threeD?1:num_sets][threeD?1:num_points]; // compiler limitation
-    QColor ExtColorShd[num_sets][num_points];
 
     /* idiot checks */
     if( imagewidth <= 0 || imageheight <=0 || !p  )
@@ -251,7 +325,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 
 
     /* ----- highest & lowest values ----- */
-    minmaxValues(imagewidth, imageheight, p, params, data, num_points, num_sets, uvol,
+    keng.minmaxValues(num_points, num_sets, uvol,
 		 highest, lowest, vhighest, vlowest);
 
 
@@ -345,17 +419,22 @@ int out_graph( short imagewidth,         // no check for an output device that's
 			}
 			cerr << "Here it is still ok!\n";
 			/* one "space" interval above + below */
-			for( i=1; i<NUM_YPOINTS; ++i )
+			int jumpout_value = NUM_YPOINTS-1;
+			for(int i=1; i<NUM_YPOINTS; ++i ) {
 				// if( ypoints[i] > ylbl_interval )
 				//	break;
 				if( (highest-lowest)/ypoints[i] < ((float)max_num_ylbls-(1.0+1.0))
-					* (float)params->ylabel_density/100.0 )
-					break;
+				    * (float)params->ylabel_density/100.0 ) {
+				  jumpout_value = i;
+				  break;
+				}
+			}
 			/* gotta go through the above loop to catch the 'tweeners :-| */
-			
 			ylbl_interval = params->requested_yinterval != -MAXDOUBLE &&
-				params->requested_yinterval > ypoints[i-1]?	  params->requested_yinterval:
-				ypoints[i-1];
+			  params->requested_yinterval > ypoints[jumpout_value-1] ? 
+			  params->requested_yinterval:
+			  ypoints[jumpout_value-1];
+			// FIXME: This seems to be a total mess: != ???
 	
 			/* perform floating point remainders */
 			/* gonculate largest interval-point < lowest */
@@ -394,6 +473,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 				cerr << "Too long, way yoo long" << maxcount << "\n";
 			} while( (tmp_highest += ylbl_interval) <= highest && (maxcount++ < 100)); // BL.
 			cout << "Uff, this was dangerous!\n";
+
 			ylabel_wth = longest_ylblen * params->yAxisFontWidth();
 			highest = params->requested_ymax==-MAXDOUBLE? tmp_highest:
 				MAX( params->requested_ymax, highest );
@@ -432,7 +512,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 
 		/* ----- scale to gif size ----- */
 		/* offset to 0 at lower left (where it should be) */
-		xscl = (float)(graphwidth-xdepth_3Dtotal) / (float)(num_points + (do_bar?2:0));
+		xscl = (float)(graphwidth-xdepth_3Dtotal) / (float)(num_points + (params->do_bar()?2:0));
 		yscl = -((float)grapheight) / (float)(highest-lowest);
 		if( params->do_vol() ) {
 			float	hilow_diff = vhighest-vlowest==0.0? 1.0: vhighest-vlowest;
@@ -473,12 +553,12 @@ int out_graph( short imagewidth,         // no check for an output device that's
     PlotColor = params->PlotColor;
     GridColor = params->GridColor;
     if( params->do_vol() ) {
-		VolColor = params->VolColor;
-		for( i=0; i<num_points; ++i )
-			if( params->ExtVolColor.count() )
-				ExtVolColor[i] = params->ExtVolColor.color( i );
-			else
-				ExtVolColor[i] = VolColor;
+      VolColor = params->VolColor;
+      for(int i=0; i<num_points; ++i )
+	if( params->ExtVolColor.count() )
+	  ExtVolColor[i] = params->ExtVolColor.color( i );
+	else
+	  ExtVolColor[i] = VolColor;
     }
     //	ArrowDColor    = gdImageColorAllocate( im, 0xFF,    0, 0 );
     //	ArrowUColor    = gdImageColorAllocate( im,    0, 0xFF, 0 );
@@ -519,28 +599,28 @@ int out_graph( short imagewidth,         // no check for an output device that's
 #endif
     }
     qDebug("Color settings coming!");
-    for( j=0; j<num_sets; ++j )
-		for( i=0; i<num_points; ++i )
-			if( params->ExtColor.count() ) {			
-			  cerr << "Ext color\n";
-			  // changed by me, BL
-			  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
-			  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
-			  ExtColor[j][i]            = ext_clr;
-			  if( params->threeD() )
-			    ExtColorShd[j][i]     = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
-			}
-			else if( params->SetColor.count() ) {
-				QColor set_clr = params->SetColor.color( j );
-				ExtColor[j][i]     = QColor( set_clr );
-				if( params->threeD() )
-					ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
-			}
-			else {
-				ExtColor[j][i]     = PlotColor;
-				if( params->threeD() )
-					ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
-			}
+    for(int j=0; j<num_sets; ++j )
+      for(int i=0; i<num_points; ++i )
+	if( params->ExtColor.count() ) {			
+	  cerr << "Ext color\n";
+	  // changed by me, BL
+	  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
+	  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
+	  ExtColor[j][i]            = ext_clr;
+	  if( params->threeD() )
+	    ExtColorShd[j][i]     = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
+	}
+	else if( params->SetColor.count() ) {
+	  QColor set_clr = params->SetColor.color( j );
+	  ExtColor[j][i]     = QColor( set_clr );
+	  if( params->threeD() )
+	    ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
+	}
+	else {
+	  ExtColor[j][i]     = PlotColor;
+	  if( params->threeD() )
+	    ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
+	}
 			
 
     // PENDING(kalle) Do some sophisticated things that involve QPixmap::createHeuristicMask
@@ -597,7 +677,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		/* step from lowest to highest puting in labels and grid at interval points */
 		/* since now "odd" intervals may be requested, try to step starting at 0,   */
 		/* if lowest < 0 < highest                                                  */
-		for( i=-1; i<=1; i+=2 ) { // -1, 1
+		for(int i=-1; i<=1; i+=2 ) { // -1, 1
 			if( i == -1 )	
 				if( lowest >= 0.0 ) //	all pos plotting
 					continue;
@@ -649,7 +729,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 					p->setPen( GridColor );
 					p->drawLine( x1, y1, x2, y2 );		// depth for 3Ds
 					p->setPen( GridColor );
-					p->drawLine( x2, y2, PX(num_points-1+(do_bar?2:0)), y2 );
+					p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), y2 );
 					setno = 0;											// set back to foremost
 				}
 				
@@ -713,13 +793,13 @@ int out_graph( short imagewidth,         // no check for an output device that's
 				num_sets:
 					1; // backmost
 					p->setPen( GridColor );
-					p->drawLine( PX(num_points-1+(do_bar?2:0)), PY(tmp_y),
-								 PX(num_points-1+(do_bar?2:0))+3, PY(tmp_y) );
+					p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(tmp_y),
+								 PX(num_points-1+(params->do_bar()?2:0))+3, PY(tmp_y) );
 					if( atof(vylbl) == 0.0 )									/* rounding can cause -0 */
 						strcpy( vylbl, "0" );
 					p->setPen( label2color );
 					p->setFont( params->yAxisFont() );
-					p->drawText( PX(num_points-1+(do_bar?2:0))+6,
+					p->drawText( PX(num_points-1+(params->do_bar()?2:0))+6,
 								 PY(tmp_y)-params->yAxisFontHeight()/2,
 								 vylbl );
 					setno = 0;
@@ -737,7 +817,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		num_sets:
 			1;			// backmost
 			p->setPen( GridColor );
-			p->drawLine( PX(0), PY(lowest), PX(num_points-1+(do_bar?2:0)), PY(lowest) );
+			p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
 			setno = 0;											// set back to foremost
 		}
 	
@@ -774,7 +854,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 			 --setno ) {
 			p->setPen( GridColor );
 			p->drawLine( PX(0), PY(lowest), PX(0), PY(highest) );
-			p->drawLine( PX(0), PY(lowest), PX(num_points-1+(do_bar?2:0)), PY(lowest) );
+			p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
 		}
 		setno = 0;
     }
@@ -793,7 +873,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		x2 = PX(0);		y2 = PY(0);								// w/ new setno
 		p->setPen( LineColor );
 		p->drawLine( x1, y1, x2, y2 );			// depth for 3Ds
-		p->drawLine( x2, y2, PX(num_points-1+(do_bar?2:0)), y2 );
+		p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), y2 );
 		setno = 0;												// set back to foremost
     }
 
@@ -808,11 +888,11 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		QColor labelcolor = params->XLabelColor== Qt::black ?
 			LineColor: params->XLabelColor;
 	
-		for( i=0; i<num_points+(do_bar?2:0); ++i )
-			if( (i%(1+num_points/num_xlbls) == 0) ||					// # x labels are regulated
+		for(int i=0; i<num_points+(params->do_bar()?2:0); ++i ) {
+		  if( (i%(1+num_points/num_xlbls) == 0) ||   // labels are regulated
 				(num_xlbls >= num_points)         ||
 				GDC_xlabel_spacing == MAXSHORT ) {
-				int	xi = do_bar? i-1: i;
+				int xi = params->do_bar()? i-1: i;
 		
 				if( params->grid ) {
 					int	x1, x2, y1, y2;
@@ -863,6 +943,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 					}
 				  */
 			}
+		}
     }
 
     /* ----- solid poly region (volume) ----- */
@@ -881,210 +962,214 @@ int out_graph( short imagewidth,         // no check for an output device that's
 							 0, 0,
 							 ExtVolColor[0],
 							 ExtVolColor[0] );
-			for( i=1; i<num_points-1; ++i )
+			for(i=1; i<num_points-1; ++i ) {
 				if( uvol[i] != GDC_NOVALUE )
-					draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
-								 PV(0), PV(uvol[i]),
-								 0, 0,
-								 ExtVolColor[i],
-								 ExtVolColor[i] );
-			if( uvol[i] != GDC_NOVALUE )
-				draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
-							 PV(0), PV(uvol[i]),
-							 0, 0,
-							 ExtVolColor[i],
-							 ExtVolColor[i] );
+				  draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
+					       PV(0), PV(uvol[i]),
+					       0, 0,
+					       ExtVolColor[i],
+					       ExtVolColor[i] );
+			}
+			if (uvol[i] != GDC_NOVALUE) {
+			  draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
+				       PV(0), PV(uvol[i]),
+				       0, 0,
+				       ExtVolColor[i],
+				       ExtVolColor[i] );
+			}
 		} else if( params->type == KCHARTTYPE_COMBO_HLC_AREA   ||
 				   params->type == KCHARTTYPE_COMBO_LINE_AREA  ||
 				   params->type == KCHARTTYPE_3DCOMBO_LINE_AREA||
 				   params->type == KCHARTTYPE_3DCOMBO_HLC_AREA )
-			for( i=1; i<num_points; ++i )
-				if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
-					draw_3d_area( p, PX(i-1), PX(i),
-								  PV(0), PV(uvol[i-1]), PV(uvol[i]),
-								  0, 0,
-								  ExtVolColor[i],
-								  ExtVolColor[i] );
+		  for(int i=1; i<num_points; ++i ) {
+		    if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
+		      draw_3d_area( p, PX(i-1), PX(i),
+				    PV(0), PV(uvol[i-1]), PV(uvol[i]),
+				    0, 0,
+				    ExtVolColor[i],
+				    ExtVolColor[i] );
+		  }
 		setno = 0;
     }		// volume polys done
 
     if( params->annotation && params->threeD() ) {		/* back half of annotation line */
-		int	x1 = PX(params->annotation->point+(do_bar?1:0)),
-			y1 = PY(lowest);
-		setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
+      int	x1 = PX(params->annotation->point+(params->do_bar()?1:0)),
+	y1 = PY(lowest);
+      setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
     num_sets:
-		1; // backmost
-		p->setPen( AnnoteColor );
-		p->drawLine( x1, y1, PX(params->annotation->point+(do_bar?1:0)), PY(lowest) );
-		p->drawLine( PX(params->annotation->point+(do_bar?1:0)), PY(lowest),
-					 PX(params->annotation->point+(do_bar?1:0)), PY(highest)-2 );
-		setno = 0;
+      1; // backmost
+      p->setPen( AnnoteColor );
+      p->drawLine( x1, y1, PX(params->annotation->point+(params->do_bar()?1:0)), PY(lowest) );
+      p->drawLine( PX(params->annotation->point+(params->do_bar()?1:0)), PY(lowest),
+		   PX(params->annotation->point+(params->do_bar()?1:0)), PY(highest)-2 );
+      setno = 0;
     }
-
+    
     /* ---------- start plotting the data ---------- */
     switch( params->type ) {
     case KCHARTTYPE_3DBAR:					/* depth, width, y interval need to allow for whitespace between bars */
     case KCHARTTYPE_BAR:
 		/* --------- */
-		switch( params->stack_type ) {
-		case KCHARTSTACKTYPE_DEPTH:
-			for( setno=num_sets-1; setno>=0; --setno )		// back sets first   PX, PY depth
-				for( i=0; i<num_points; ++i )
-					if( CELLEXISTS( setno, i ) )
-						draw_3d_bar( p, PX(i+(do_bar?1:0))-hlf_barwdth, PX(i+(do_bar?1:0))+hlf_barwdth,
-									 PY(0), PY( CELLVALUE( setno, i )),
-									 xdepth_3D, ydepth_3D,
-									 ExtColor[setno][i],
-									 params->threeD()? ExtColorShd[setno][i]: ExtColor[setno][i] );
-			setno = 0;
-			break;
-			
-		case KCHARTSTACKTYPE_LAYER:
-			{
-				float	lasty[num_points];
-				j = 0;
+      switch( params->stack_type ) {
+      case KCHARTSTACKTYPE_DEPTH:
+	for( setno=num_sets-1; setno>=0; --setno )		// back sets first   PX, PY depth
+	  for(int i=0; i<num_points; ++i ) {
+	    if( CELLEXISTS( setno, i ) )
+	      draw_3d_bar( p, PX(i+(params->do_bar()?1:0))-hlf_barwdth, PX(i+(params->do_bar()?1:0))+hlf_barwdth,
+			   PY(0), PY( CELLVALUE( setno, i )),
+			   xdepth_3D, ydepth_3D,
+			   ExtColor[setno][i],
+			   params->threeD()? ExtColorShd[setno][i]: ExtColor[setno][i] );
+	  }
+	setno = 0;
+	break;
+	
+      case KCHARTSTACKTYPE_LAYER:
+	{
+	  float	lasty[num_points];
+	  j = 0;
 				//				for( i=0; i<num_points; ++i )
 				//					if( CELLEXISTS( j, i ) ) {
 				//						lasty[i] = CELLVALUE( j, i );
-				//						draw_3d_bar( im, PX(i+(do_bar?1:0))-hlf_barwdth, PX(i+(do_bar?1:0))+hlf_barwdth,
+				//						draw_3d_bar( im, PX(i+(params->do_bar()?1:0))-hlf_barwdth, PX(i+(params->do_bar()?1:0))+hlf_barwdth,
 				//										 PY(0), PY(CELLVALUE( j, i )),
 				//										 xdepth_3D, ydepth_3D,
 				//										 ExtColor[j][i],
 				//										 params->threeD()? ExtColorShd[j][i]: ExtColor[j][i] );
 				//						}
-				for( i=0; i<num_points; ++i ) {
-					struct BS	barset[num_sets];
-					float		lasty_pos = 0.0;
-					float		lasty_neg = 0.0;
-					int			k;
-					
-					for( j=0, k=0; j<num_sets; ++j ) {
-						if( CELLEXISTS( j, i ) ) {
-							if( CELLVALUE( j, i ) < 0.0 ) {
-								barset[k].y1 = lasty_neg;
-								barset[k].y2 = CELLVALUE( j, i ) + lasty_neg;
-								lasty_neg    = barset[k].y2;
-							} else {
-								barset[k].y1 = lasty_pos;
-								barset[k].y2 = CELLVALUE( j, i ) + lasty_pos;
-								lasty_pos    = barset[k].y2;
-							}
-							barset[k].clr   = ExtColor[j][i];
-							barset[k].shclr = params->threeD()? ExtColorShd[j][i]: ExtColor[j][i];
-							++k;
-						}
-					}
-					qsort( barset, k, sizeof(struct BS), barcmpr );
-					
-					for( j=0; j<k; ++j ) {
-						draw_3d_bar( p,
-									 PX(i+(do_bar?1:0))-hlf_barwdth, PX(i+(do_bar?1:0))+hlf_barwdth,
-									 PY(barset[j].y1), PY(barset[j].y2),
-									 xdepth_3D, ydepth_3D,
-									 barset[j].clr,
-									 barset[j].shclr );
-					}
-				}
-			}
-			break;
-			
-		case KCHARTSTACKTYPE_BESIDE:
-			{												// h/.5, h/1, h/1.5, h/2, ...
-				int	new_barwdth = (int)( (float)hlf_barwdth / ((float)num_sets/2.0) );
-				for( i=0; i<num_points; ++i )
-					for( j=0; j<num_sets; ++j )
-						if( CELLEXISTS( j, i ) )
-							draw_3d_bar( p, PX(i+(do_bar?1:0))-hlf_barwdth+new_barwdth*j+1,
-										 PX(i+(do_bar?1:0))-hlf_barwdth+new_barwdth*(j+1),
-										 PY(0), PY(CELLVALUE( j, i )),
-										 xdepth_3D, ydepth_3D,
-										 ExtColor[j][i],
-										 params->threeD()? ExtColorShd[j][i]: ExtColor[j][i] );
-			}
-			break;
+	  for( i=0; i<num_points; ++i ) {
+	    struct BS	barset[num_sets];
+	    float		lasty_pos = 0.0;
+	    float		lasty_neg = 0.0;
+	    int			k;
+	    
+	    for( j=0, k=0; j<num_sets; ++j ) {
+	      if( CELLEXISTS( j, i ) ) {
+		if( CELLVALUE( j, i ) < 0.0 ) {
+		  barset[k].y1 = lasty_neg;
+		  barset[k].y2 = CELLVALUE( j, i ) + lasty_neg;
+		  lasty_neg    = barset[k].y2;
+		} else {
+		  barset[k].y1 = lasty_pos;
+		  barset[k].y2 = CELLVALUE( j, i ) + lasty_pos;
+		  lasty_pos    = barset[k].y2;
 		}
-		break;
+		barset[k].clr   = ExtColor[j][i];
+		barset[k].shclr = params->threeD()? ExtColorShd[j][i]: ExtColor[j][i];
+		++k;
+	      }
+	    }
+	    qsort( barset, k, sizeof(struct BS), barcmpr );
+	    
+	    for( j=0; j<k; ++j ) {
+	      draw_3d_bar( p,
+			   PX(i+(params->do_bar()?1:0))-hlf_barwdth, PX(i+(params->do_bar()?1:0))+hlf_barwdth,
+			   PY(barset[j].y1), PY(barset[j].y2),
+			   xdepth_3D, ydepth_3D,
+			   barset[j].clr,
+			   barset[j].shclr );
+	    }
+	  }
+	}
+	break;
+	
+      case KCHARTSTACKTYPE_BESIDE:
+	{												// h/.5, h/1, h/1.5, h/2, ...
+	  int	new_barwdth = (int)( (float)hlf_barwdth / ((float)num_sets/2.0) );
+	  for( i=0; i<num_points; ++i )
+	    for( j=0; j<num_sets; ++j )
+	      if( CELLEXISTS( j, i ) )
+		draw_3d_bar( p, PX(i+(params->do_bar()?1:0))-hlf_barwdth+new_barwdth*j+1,
+			     PX(i+(params->do_bar()?1:0))-hlf_barwdth+new_barwdth*(j+1),
+			     PY(0), PY(CELLVALUE( j, i )),
+			     xdepth_3D, ydepth_3D,
+			     ExtColor[j][i],
+			     params->threeD()? ExtColorShd[j][i]: ExtColor[j][i] );
+	}
+	break;
+      }
+      break;
 	
     case KCHARTTYPE_LINE:
     case KCHARTTYPE_COMBO_LINE_BAR:
     case KCHARTTYPE_COMBO_LINE_AREA:
-		for( j=num_sets-1; j>=0; --j )
-			for( i=1; i<num_points; ++i )
-				if( CELLEXISTS(j,i-1) && CELLEXISTS(j,i-1) ) {
-					p->setPen( ExtColor[j][i] );
-					p->drawLine( PX(i-1), PY(CELLVALUE( j, i-1 )), PX(i), PY(CELLVALUE( j, i )) );
-					p->drawLine( PX(i-1), PY(CELLVALUE(j,i-1))+1, PX(i), PY(CELLVALUE(j,i))+1 );
-				} else {
-					if( CELLEXISTS(j,i-1) ) {
-						p->setPen( ExtColor[j][i] );
-						p->drawPoint( PX(i-1), PY(CELLVALUE(j,i-1)) );
-					}
-					if( CELLEXISTS(j,i) ) {
-						p->setPen( ExtColor[j][i] );
-						p->drawPoint( PX(i), PY(CELLVALUE(j,i)) );
-					}
-				}
-		break;
-	
+      for( j=num_sets-1; j>=0; --j )
+	for( i=1; i<num_points; ++i )
+	  if( CELLEXISTS(j,i-1) && CELLEXISTS(j,i-1) ) {
+	    p->setPen( ExtColor[j][i] );
+	    p->drawLine( PX(i-1), PY(CELLVALUE( j, i-1 )), PX(i), PY(CELLVALUE( j, i )) );
+	    p->drawLine( PX(i-1), PY(CELLVALUE(j,i-1))+1, PX(i), PY(CELLVALUE(j,i))+1 );
+	  } else {
+	    if( CELLEXISTS(j,i-1) ) {
+	      p->setPen( ExtColor[j][i] );
+	      p->drawPoint( PX(i-1), PY(CELLVALUE(j,i-1)) );
+	    }
+	    if( CELLEXISTS(j,i) ) {
+	      p->setPen( ExtColor[j][i] );
+	      p->drawPoint( PX(i), PY(CELLVALUE(j,i)) );
+	    }
+	  }
+      break;
+      
     case KCHARTTYPE_3DLINE:
     case KCHARTTYPE_3DCOMBO_LINE_BAR:
     case KCHARTTYPE_3DCOMBO_LINE_AREA:
 		{
-			int	y1[num_sets],
-				y2[num_sets];
-	
-			for( i=1; i<num_points; ++i ) {
-				if( params->stack_type == KCHARTSTACKTYPE_DEPTH ) {
-					for( j=num_sets-1; j>=0; --j )
-						if( CELLEXISTS(j,i-1) &&
-							CELLEXISTS(j,i) ) {
-							setno = j;
-							y1[j] = PY(CELLVALUE(j,i-1));
-							y2[j] = PY(CELLVALUE(j,i));
-			
-							draw_3d_line( p,
-										  PY(0),
-										  PX(i-1), PX(i),
-										  &(y1[j]), &(y2[j]),
-										  xdepth_3D, ydepth_3D,
-										  1,
-										  &(ExtColor[j][i]),
-										  &(ExtColorShd[j][i]) );
-							setno = 0;
-						}
-				}
-				else if( params->stack_type == KCHARTSTACKTYPE_BESIDE ||
-						 params->stack_type == KCHARTSTACKTYPE_SUM ) {			// all same plane
-					int		set;
-					QColor clr[num_sets], clrshd[num_sets];
-					float	usey1 = 0.0,
-						usey2 = 0.0;
-					for( j=0,set=0; j<num_sets; ++j )
-						if( CELLEXISTS(j,i-1) &&
-							CELLEXISTS(j,i) ) {
-							if( params->stack_type == KCHARTSTACKTYPE_SUM ) {
-								usey1 += CELLVALUE(j,i-1);
-								usey2 += CELLVALUE(j,i);
-							} else {
-								usey1 = CELLVALUE(j,i-1);
-								usey2 = CELLVALUE(j,i);
-							}
-							y1[set]     = PY(usey1);
-							y2[set]     = PY(usey2);
-							clr[set]    = ExtColor[j][i];
-							clrshd[set] = ExtColorShd[j][i];	/* fred */
-							++set;
-						}
-					draw_3d_line( p,
-								  PY(0),
-								  PX(i-1), PX(i),
-								  y1, y2,
-								  xdepth_3D, ydepth_3D,
-								  set,
-								  clr,
-								  clrshd );
-				}
+		  int	y1[num_sets],
+		    y2[num_sets];
+		  
+		  for( i=1; i<num_points; ++i ) {
+		    if( params->stack_type == KCHARTSTACKTYPE_DEPTH ) {
+		      for( j=num_sets-1; j>=0; --j )
+			if( CELLEXISTS(j,i-1) &&
+			    CELLEXISTS(j,i) ) {
+			  setno = j;
+			  y1[j] = PY(CELLVALUE(j,i-1));
+			  y2[j] = PY(CELLVALUE(j,i));
+			  
+			  draw_3d_line( p,
+					PY(0),
+					PX(i-1), PX(i),
+					&(y1[j]), &(y2[j]),
+					xdepth_3D, ydepth_3D,
+					1,
+					&(ExtColor[j][i]),
+					&(ExtColorShd[j][i]) );
+			  setno = 0;
 			}
+		    }
+		    else if( params->stack_type == KCHARTSTACKTYPE_BESIDE ||
+			     params->stack_type == KCHARTSTACKTYPE_SUM ) {			// all same plane
+		      int		set;
+		      QColor clr[num_sets], clrshd[num_sets];
+		      float	usey1 = 0.0,
+			usey2 = 0.0;
+		      for( j=0,set=0; j<num_sets; ++j )
+			if( CELLEXISTS(j,i-1) &&
+			    CELLEXISTS(j,i) ) {
+			  if( params->stack_type == KCHARTSTACKTYPE_SUM ) {
+			    usey1 += CELLVALUE(j,i-1);
+			    usey2 += CELLVALUE(j,i);
+			  } else {
+			    usey1 = CELLVALUE(j,i-1);
+			    usey2 = CELLVALUE(j,i);
+			  }
+			  y1[set]     = PY(usey1);
+			  y2[set]     = PY(usey2);
+			  clr[set]    = ExtColor[j][i];
+			  clrshd[set] = ExtColorShd[j][i];	/* fred */
+			  ++set;
+			}
+		      draw_3d_line( p,
+				    PY(0),
+				    PX(i-1), PX(i),
+				    y1, y2,
+				    xdepth_3D, ydepth_3D,
+				    set,
+				    clr,
+				    clrshd );
+		    }
+		  }
 		}
 		break;
 	
@@ -1367,7 +1452,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		for( i=0; i<params->num_scatter_pts; ++i ) {
 			int		hlf_scatterwdth = (int)( (float)(PX(2)-PX(1))
 											 * (((float)(((params->scatter)+i)->width)/100.0)/2.0) );
-			int	scat_x = PX( ((params->scatter)+i)->point + (do_bar?1:0) ),
+			int	scat_x = PX( ((params->scatter)+i)->point + (params->do_bar()?1:0) ),
 				scat_y = PY( ((params->scatter)+i)->val );
 	
 			if( ((params->scatter)+i)->point >= num_points ||				// invalid point
@@ -1380,7 +1465,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 				ct.setPoint( 0, scat_x, scat_y );
 				ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y + hlf_scatterwdth );
 				ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y + hlf_scatterwdth );
-				if( !do_bar )
+				if( !params->do_bar() )
 					if( ((params->scatter)+i)->point == 0 )
 						ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
 					else
@@ -1394,7 +1479,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 				ct.setPoint( 0, scat_x, scat_y );
 				ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y - hlf_scatterwdth );
 				ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y - hlf_scatterwdth );
-				if( !do_bar )
+				if( !params->do_bar() )
 					if( ((params->scatter)+i)->point == 0 )
 						ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
 					else
@@ -1478,10 +1563,10 @@ int out_graph( short imagewidth,         // no check for an output device that's
     /*  after plotting so the outline covers any plot lines */
     if( params->border ) {
 		p->setPen( LineColor );
-		p->drawLine( PX(0), PY(lowest), PX(num_points-1+(do_bar?2:0)), PY(lowest) );
+		p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
 
 		setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-		p->drawLine( PX(0), PY(highest), PX(num_points-1+(do_bar?2:0)),  PY(highest) );
+		p->drawLine( PX(0), PY(highest), PX(num_points-1+(params->do_bar()?2:0)),  PY(highest) );
 		setno = 0;
     }
     if( params->border ) {
@@ -1489,7 +1574,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 	
 		x1 = PX(0);
 		y1 = PY(highest);
-		x2 = PX(num_points-1+(do_bar?2:0));
+		x2 = PX(num_points-1+(params->do_bar()?2:0));
 		y2 = PY(lowest);
 		p->setPen( LineColor );
 		p->drawLine( x1, PY(lowest), x1, y1 );
@@ -1500,9 +1585,9 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		// if( !params->grid || do_vol || params->thumbnail )					// grid leaves right side Y open
 		{
 			p->setPen( LineColor );
-			p->drawLine( x2, y2, PX(num_points-1+(do_bar?2:0)), PY(lowest) );
-			p->drawLine( PX(num_points-1+(do_bar?2:0)), PY(lowest),
-						 PX(num_points-1+(do_bar?2:0)), PY(highest) );
+			p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
+			p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(lowest),
+						 PX(num_points-1+(params->do_bar()?2:0)), PY(highest) );
 		}
 		setno = 0;
     }
@@ -1510,7 +1595,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
     if( params->shelf && params->threeD() &&								/* front of 0 shelf */
 		( (lowest < 0.0 && highest > 0.0) ||
 		  (lowest < 0.0 && highest > 0.0) ) ) {
-		int	x2 = PX( num_points-1+(do_bar?2:0) ),
+		int	x2 = PX( num_points-1+(params->do_bar()?2:0) ),
 			y2 = PY( 0 );
 	
 		p->setPen( LineColor );
@@ -1519,12 +1604,12 @@ int out_graph( short imagewidth,         // no check for an output device that's
 			1;				// backmost
 		// depth for 3Ds
 		p->setPen( LineColor );
-		p->drawLine( x2, y2, PX(num_points-1+(do_bar?2:0)), PY(0) );
+		p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(0) );
 		setno = 0;												// set back to foremost
     }
 
     if( params->annotation ) {			/* front half of annotation line */
-		int		x1 = PX(params->annotation->point+(do_bar?1:0)),
+		int		x1 = PX(params->annotation->point+(params->do_bar()?1:0)),
 			y1 = PY(highest);
 		int		x2;
 		// front line
@@ -1532,12 +1617,12 @@ int out_graph( short imagewidth,         // no check for an output device that's
 		p->drawLine( x1, PY(lowest)+1, x1, y1 );
 		if( params->threeD() ) { // on back plane
 			setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-			x2 = PX(params->annotation->point+(do_bar?1:0));
+			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
 			// prspective line
 			p->setPen( AnnoteColor );
 			p->drawLine( x1, y1, x2, PY(highest) );
 		} else { // for 3D done with back line
-			x2 = PX(params->annotation->point+(do_bar?1:0));
+			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
 			p->setPen( AnnoteColor );
 			p->drawLine( x1, y1, x1, y1-2 );
 		}

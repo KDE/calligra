@@ -1,11 +1,6 @@
 
 // these are the things horribly scattered around
 
-// retrieve the value of a cell
-#define CELLVALUE( row, col ) data.cell( (row), (col) ).value.doubleValue()
-
-// check whether a cell has a value
-#define CELLEXISTS( row, col ) data.cell( (row), (col) ).exists
 
 
 #define HIGHSET		0
