@@ -178,6 +178,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     effectList->insertItem( i18n( "Strips Left-Down" ) );
     effectList->insertItem( i18n( "Strips Right-Up" ) );
     effectList->insertItem( i18n( "Strips Right-Down" ) );
+    effectList->insertItem( i18n( "Melting" ) );
     effectList->insertItem( i18n( "Random Transition" ) );
     effectList->setCurrentItem( static_cast<int>( pageEffect ) );
 

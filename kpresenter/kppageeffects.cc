@@ -1195,6 +1195,49 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
     } break;
 
+    // Melting
+    case PEF_MELTING:
+    {
+        KRandomSequence random;
+
+        unsigned count = 32;
+        int delta[32];
+        for( unsigned i = 0; i < count; i++ )
+          delta[i]= 0;
+
+        _steps = hsteps * 10;
+
+        unsigned strip_width = (width + count-1) / count;
+        unsigned rn = 10 * height / _steps;
+
+        for ( _h = 0 ; _step < _steps ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = _step * height/ _steps;
+                _h = _h > height ? height : _h;
+
+                for( unsigned k = 0; k < count; k++ )
+                {
+                  unsigned x = k * width / count;
+                  delta[k] += ( 1+ random.getLong( rn ) );
+                  if( delta[k] > height ) delta[k] = height;
+                  if( delta[k] <= height )
+                  {
+                     bitBlt( canv, x, 0, &_pix2, x, 0, strip_width, delta[k] );
+                     bitBlt( canv, x, delta[k], &_pix1, x, 0, strip_width, height - delta[k] );
+                  }
+                }
+
+                _time.restart();
+            }
+            if( _h >= height ) break;
+        }
+
+    } break;
+
     // Random (just pick up one of the above effect)
     case PEF_RANDOM:
     case PEF_LAST_MARKER:

@@ -170,7 +170,8 @@ enum PageEffect {
     PEF_STRIPS_LEFT_DOWN = 37,
     PEF_STRIPS_RIGHT_UP = 38,
     PEF_STRIPS_RIGHT_DOWN = 39,
-    PEF_LAST_MARKER = 40, // only marker, don't use this !
+    PEF_MELTING = 40,
+    PEF_LAST_MARKER = 41, // only marker, don't use this !
     PEF_RANDOM = -1
 };
 
