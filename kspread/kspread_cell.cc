@@ -4985,7 +4985,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         kdDebug()<<" style :"<<style<<endl;
         KoStyleStack styleStack;
         styleStack.push( *style );
-        styleStack.setTypeProperties( "cell" );
+        styleStack.setTypeProperties( "table-cell" );
         loadOasisStyleProperties( styleStack, oasisStyles );
         loadOasisConditional( style );
     }

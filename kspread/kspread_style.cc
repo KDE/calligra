@@ -123,7 +123,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     kdDebug()<<"void KSpreadStyle::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;
     KoStyleStack styleStack;
     styleStack.push( element );
-    styleStack.setTypeProperties( "cell" );
+    styleStack.setTypeProperties( "table-cell" );
     QString str;
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {

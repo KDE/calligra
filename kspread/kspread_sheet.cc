@@ -7048,7 +7048,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     KoStyleStack styleStack;
-    styleStack.setTypeProperties("cell"); //style for column is cell format
+    styleStack.setTypeProperties("table-cell"); //style for column is cell format
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
         //todo load cell attribute default into this column
@@ -7064,7 +7064,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         }
     }
 
-    styleStack.setTypeProperties("column");
+    styleStack.setTypeProperties("table-column");
     if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
@@ -7122,7 +7122,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
     double height = -1.0;
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
-    styleStack.setTypeProperties( "row" );
+    styleStack.setTypeProperties( "table-row" );
     int backupRow = rowIndex;
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
