@@ -18,7 +18,7 @@
 	<KivioConnectorTarget  x="5" y="2.5"/>
 	
 	<Dimensions w="5" h="5" defaultAspect="1"/>
-	<KivioShape type="Ellipse" name="Connector" x="0" w="5" y="0" h="5"/>
+	<KivioShape type="Ellipse" name="Connector" x="0" w="5" y="0" h="5">
 		<KivioFillStyle colorStyle="1" color="#000000"/>
 	</KivioShape>
 </KivioShapeStencil>
