@@ -486,7 +486,7 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawS
 void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHandler) const
 {
     double sx = 0, sy = 0;
-    double shadowDir=_zoomHandler->zoomItX((double)shadowDistance); // ######## ????????
+    double shadowDir=_zoomHandler->zoomItX(shadowDistance); // ######## ????????
     // The above looks wrong (DF).
     // If shadowDistance is in pixels, it has to be unzoomed, not zoomed.
     // But that's not good anyway, we don't want a constant number of pixels.
@@ -799,6 +799,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
     // Draw the shadow if any
     if ( shadowDistance > 0 )
     {
+        _painter->save();
         QPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush tmpBrush( brush );
@@ -822,6 +823,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
 
         pen = tmpPen;
         brush = tmpBrush;
+        _painter->restore();
     }
 
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
