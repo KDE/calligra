@@ -38,7 +38,7 @@ KisShell::KisShell( const char* name )
   m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
 
   m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), ID_STATUSBAR_INFOTEXT );
-  
+
   setStatusBar( m_pStatusBar );
 }
 
@@ -50,7 +50,7 @@ QString KisShell::nativeFormatName() const {
   return i18n("KImageShop");
 }
 
-KoDocument* KisShell::createDoc()
+KoDocument* KisShell::createDoc() const
 {
     return new KisDoc;
 }

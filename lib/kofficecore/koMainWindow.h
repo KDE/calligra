@@ -187,7 +187,7 @@ protected:
     /**
      * Create a new empty document.
      */
-    virtual KoDocument* createDoc() = 0;
+    virtual KoDocument* createDoc() const = 0;
 
     /**
      * Load the desired document and show it.

@@ -40,7 +40,7 @@ QString KWordShell::nativeFormatName() const
   return i18n("KWord");
 }
 
-KoDocument* KWordShell::createDoc()
+KoDocument* KWordShell::createDoc() const
 {
     return new KWordDocument;
 }

@@ -27,7 +27,7 @@
 KSpreadShell::KSpreadShell( const char* name )
     : KoMainWindow( 0L, name )
 {
-  setInstance( KSpreadFactory::global(), false ); 
+  setInstance( KSpreadFactory::global(), false );
 }
 
 KSpreadShell::~KSpreadShell()
@@ -39,7 +39,7 @@ QString KSpreadShell::nativeFormatName() const
   return i18n("KSpread");
 }
 
-KoDocument* KSpreadShell::createDoc()
+KoDocument* KSpreadShell::createDoc() const
 {
     return new KSpreadDoc;
 }

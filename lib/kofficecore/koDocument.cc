@@ -880,4 +880,14 @@ void KoDocument::removeShell( KoMainWindow *shell )
   d->m_shells.removeRef( shell );
 }
 
+const KoMainWindow *KoDocument::firstShell()
+{
+    return d->m_shells.first();
+}
+
+const KoMainWindow *KoDocument::nextShell()
+{
+    return d->m_shells.next();
+}
+
 #include <koDocument.moc>

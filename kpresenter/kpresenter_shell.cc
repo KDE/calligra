@@ -40,7 +40,7 @@ QString KPresenterShell::nativeFormatName() const
   return i18n("KPresenter");
 }
 
-KoDocument* KPresenterShell::createDoc()
+KoDocument* KPresenterShell::createDoc() const
 {
     return new KPresenterDoc( 0, "Document" );
 }

@@ -36,7 +36,7 @@ public slots:
     void slotFilePrint();
 
 protected:
-    virtual KoDocument* createDoc();
+    virtual KoDocument* createDoc() const;
 };
 
 #endif

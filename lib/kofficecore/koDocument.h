@@ -404,6 +404,9 @@ public:
    */
   void removeShell( KoMainWindow *shell );
 
+  virtual const KoMainWindow *firstShell();
+  virtual const KoMainWindow *nextShell();
+
   // Hmm, name clash with the other @save. We want to give access to parent's save()
   virtual bool save() { return KParts::ReadWritePart::save(); }
 

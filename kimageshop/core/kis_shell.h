@@ -49,7 +49,7 @@ public slots:
 
 protected:
 
-  virtual KoDocument* createDoc();
+  virtual KoDocument* createDoc() const;
   virtual bool openDocument( const KURL & url );
 
 private:
@@ -57,4 +57,4 @@ private:
   KStatusBar *m_pStatusBar;
 };
 
-#endif // __kimageshop_shell_h__ 
+#endif // __kimageshop_shell_h__

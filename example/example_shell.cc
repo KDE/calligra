@@ -30,7 +30,7 @@ ExampleShell::~ExampleShell()
 {
 }
 
-KoDocument* ExampleShell::createDoc()
+KoDocument* ExampleShell::createDoc() const
 {
     return new ExamplePart;
 }

@@ -41,7 +41,7 @@ void GraphiteShell::slotFilePrint() {
     // Don't forget to change the global resolution!
 }
 
-KoDocument *GraphiteShell::createDoc() {
+KoDocument *GraphiteShell::createDoc() const {
     return new GraphitePart;
 }
 #include <graphiteshell.moc>

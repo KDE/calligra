@@ -45,7 +45,7 @@ public slots:
     void slotHelpAbout();
 
 protected:
-    virtual KoDocument* createDoc();
+    virtual KoDocument* createDoc() const;
 };
 
 #endif

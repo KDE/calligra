@@ -36,8 +36,8 @@ QString KChartShell::nativeFormatName() const
 {
   return i18n("KChart");
 }
- 
-KoDocument* KChartShell::createDoc()
+
+KoDocument* KChartShell::createDoc() const
 {
     return new KChartPart;
     /*

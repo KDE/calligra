@@ -36,7 +36,7 @@ public:
     QString nativeFormatName() const;
 
 protected:
-    virtual KoDocument* createDoc();
+    virtual KoDocument* createDoc() const;
 };
 
 #endif

@@ -211,7 +211,6 @@ KoMainWindow::~KoMainWindow()
     delete d->m_splitter;
     d->m_splitter=0L;
     delete d;
-    kdDebug(30003) << "leaving KoMainWindow::~KoMainWindow()" << endl;
 }
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
@@ -313,7 +312,16 @@ bool KoMainWindow::openDocument( const KURL & url )
     m_recent->addURL( url );
     KoDocument* doc = rootDocument();
 	
-    KoDocument* newdoc = createDoc();
+    // get the real root document
+    while(doc && doc->isEmbedded())
+      doc = dynamic_cast<KoDocument*>(doc->parent());
+
+    KoDocument *newdoc;
+    if(doc) {
+      const KoMainWindow *shell=doc->firstShell();
+      if(shell)
+        newdoc=shell->createDoc();
+    }
     if ( !newdoc || !newdoc->openURL( url ) )
     {
 	delete newdoc;
@@ -330,14 +338,14 @@ bool KoMainWindow::openDocument( const KURL & url )
         // Open in a new shell
         // (Note : could create the shell first and the doc next for this
         // particular case, that would give a better user feedback...)
-        KoMainWindow *s = newdoc->createShell();
+	KoMainWindow *s = newdoc->createShell();
         s->show();
         s->setRootDocument( newdoc );
     }
     else
     {
         // We had no document, set the new one
-        setRootDocument( newdoc );
+	setRootDocument( newdoc );
     }
     return true;
 }
@@ -436,7 +444,16 @@ void KoMainWindow::slotFileNew()
 {
     KoDocument* doc = rootDocument();
 
-    KoDocument* newdoc = createDoc();
+    // get the real root document
+    while(doc && doc->isEmbedded())
+      doc = dynamic_cast<KoDocument*>(doc->parent());
+
+    KoDocument *newdoc;
+    if(doc) {
+      const KoMainWindow *shell=doc->firstShell();
+      if(shell)
+        newdoc=shell->createDoc();
+    }
     if ( !newdoc || !newdoc->initDoc() )
     {
 	delete newdoc;
@@ -575,7 +592,6 @@ void KoMainWindow::slotHelpAbout()
 
 void KoMainWindow::slotSplitView() {
 
-    kdDebug(30003) << "KoMainWindow::slotSplitView() called" << endl;
     d->m_splitted=true;
     d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
     d->m_rootViews.current()->show();
@@ -592,8 +608,6 @@ void KoMainWindow::slotCloseAllViews() {
 
 
 void KoMainWindow::slotRemoveView() {
-
-    kdDebug(30003) << "KoMainWindow::slotRemoveView() called" << endl;
 
     KoView *view;
     if(d->m_rootViews.findRef(d->m_activeView)!=-1)
@@ -615,8 +629,6 @@ void KoMainWindow::slotRemoveView() {
 }
 
 void KoMainWindow::slotSetOrientation() {
-
-    kdDebug(30003) << "KoMainWindow::slotSetOrientation() called" << endl;
     d->m_splitter->setOrientation(static_cast<Qt::Orientation>
 				  (d->m_orientation->currentItem()));
 }

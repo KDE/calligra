@@ -38,7 +38,7 @@ QString KIllustratorShell::nativeFormatName() const
   return i18n("KIllustrator");
 }
 
-KoDocument* KIllustratorShell::createDoc()
+KoDocument* KIllustratorShell::createDoc() const
 {
     return new KIllustratorDocument;
 }
