@@ -5293,7 +5293,8 @@ void KWView::spellCheckerDone( const QString & )
             KMessageBox::information(this,
                                      i18n("SpellCheck selection finished."),
                                      i18n("Spell checking"));
-
+            m_doc->setReadWrite(true);
+            clearSpellChecker();
         }
         else
         {
