@@ -53,6 +53,9 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
   QString pixdir = kapp->kde_datadir();
   pmFirst.load(pixdir + "/koffice/pics/koRulerFirst.xpm");
   pmLeft.load(pixdir + "/koffice/pics/koRulerLeft.xpm");
+  currTab = -1;
+
+  tabList.setAutoDelete(false);
 }
 
 /*================================================================*/
@@ -189,21 +192,25 @@ void KoRuler::drawTabs(QPainter &_painter)
 	{
 	case T_LEFT:
 	  {
+	    ptPos -= 4;
 	    _painter.drawLine(ptPos + 4,height() - 4,ptPos + 20 - 4,height() - 4);
 	    _painter.drawLine(ptPos + 5,4,ptPos + 5,height() - 4);
 	  } break;
 	case T_CENTER:
 	  {
+	    ptPos -= 10;
 	    _painter.drawLine(ptPos + 4,height() - 4,ptPos + 20 - 4,height() - 4);
 	    _painter.drawLine(ptPos + 20 / 2,4,ptPos + 20 / 2,height() - 4);
 	  } break;
 	case T_RIGHT:
 	  {
+	    ptPos -= 16;
 	    _painter.drawLine(ptPos + 4,height() - 4,ptPos + 20 - 4,height() - 4);
 	    _painter.drawLine(ptPos + 20 - 5,4,ptPos + 20 - 5,height() - 4);
 	  } break;
 	case T_DEC_PNT:
 	  {
+	    ptPos -= 10;
 	    _painter.drawLine(ptPos + 4,height() - 4,ptPos + 20 - 4,height() - 4);
 	    _painter.drawLine(ptPos + 20 / 2,4,ptPos + 20 / 2,height() - 4);
 	    _painter.fillRect(ptPos + 20 / 2 + 2,height() - 9,3,3,black);
@@ -342,38 +349,41 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 	  p.end();
 	}
     }
+  else if (action == A_TAB)
+    {
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+	  p.end();
+	}
+    }
   else if (tabChooser && (flags & F_TABS) && tabChooser->getCurrTabType() != 0)    {
       KoTabulator *_tab = new KoTabulator;
-      int ptDiff = 0;
       switch (tabChooser->getCurrTabType())
 	{
 	case KoTabChooser::TAB_LEFT:
-	  {
-	    _tab->type = T_LEFT;
-	    ptDiff = 4;
-	  } break;
+	  _tab->type = T_LEFT;
+	  break;
 	case KoTabChooser::TAB_CENTER:
-	  {
-	    _tab->type = T_CENTER;
-	    ptDiff = 10;
-	  } break;
+	  _tab->type = T_CENTER;
+	  break;
 	case KoTabChooser::TAB_RIGHT:
-	  {
-	    _tab->type = T_RIGHT;
-	    ptDiff = 16;
-	  } break;
+	  _tab->type = T_RIGHT;
+	  break;
 	case KoTabChooser::TAB_DEC_PNT:
-	  {
-	    _tab->type = T_DEC_PNT;
-	    ptDiff = 10;
-	  } break;
+	  _tab->type = T_DEC_PNT;
+	  break;
 	default: break;
 	}
-      _tab->ptPos = e->x() + diffx - ptDiff;
-      _tab->mmPos = POINT_TO_MM(e->x() + diffx - ptDiff);
+      _tab->ptPos = e->x() + diffx;
+      _tab->mmPos = POINT_TO_MM(e->x() + diffx);
 
       tabList.append(_tab);
-      emit tabListChanged(tabList);
+      emit tabListChanged(&tabList);
       repaint(false);
     }
 }
@@ -452,6 +462,24 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
       i_first = _tmp;
       emit newFirstIndent(POINT_TO_MM(i_first));
     }
+  else if (action == A_TAB)
+    {
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+	  p.end();
+	}
+      if (tabList.at(currTab)->ptPos < layout.ptLeft || tabList.at(currTab)->ptPos > layout.ptWidth - (layout.ptRight + layout.ptLeft) ||
+	  e->y() < 0 || e->y() > height())
+	tabList.remove(currTab);
+
+      emit tabListChanged(&tabList);
+      repaint(false);
+    }
 }
 
 /*================================================================*/
@@ -507,6 +535,22 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		  {
 		    setCursor(ArrowCursor);
 		    action = A_LEFT_INDENT;
+		  }
+	      }
+	    if (flags & F_TABS)
+	      {
+		int pos;
+		currTab = -1;
+		for (unsigned int i = 0;i < tabList.count();i++)
+		  {
+		    pos = tabList.at(i)->ptPos - diffx;
+		    if (mx > pos - 5 && mx < pos + 5)
+		      {
+			setCursor(sizeHorCursor);
+			action = A_TAB;
+			currTab = i;
+			break;
+		      }
 		  }
 	      }
 	  }
@@ -604,6 +648,24 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      repaint(false);
 		    }
 		} break;
+	      case A_TAB:
+		{
+		  if (canvas)
+		    {
+		      QPainter p;
+		      p.begin(canvas);
+		      p.setRasterOp(NotROP);
+		      p.setPen(QPen(black,1,SolidLine));
+		      p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+		      tabList.at(currTab)->ptPos += (e->x() - oldMx);
+		      tabList.at(currTab)->mmPos = POINT_TO_MM(tabList.at(currTab)->ptPos);
+		      p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+		      p.end();
+		      oldMx = e->x();
+		      oldMy = e->y();
+		      repaint(false);
+		    }
+		} break;
 	      default: break;
 	      }
 	  }
@@ -688,9 +750,34 @@ void KoRuler::mouseDoubleClickEvent(QMouseEvent*)
   if ((tabChooser && (flags & F_TABS) && tabChooser->getCurrTabType() != 0))
     {
       tabList.remove(tabList.count() - 1);
-      emit tabListChanged(tabList);
+      emit tabListChanged(&tabList);
       repaint(false);
     }
 
   emit openPageLayoutDia(); 
 }
+
+/*================================================================*/
+void KoRuler::setTabList(QList<KoTabulator>* _tabList)
+{ 
+  tabList.setAutoDelete(true);
+  tabList.clear(); 
+  tabList.setAutoDelete(false);
+  for (unsigned int i = 0;i < _tabList->count();i++)
+    {
+      KoTabulator *t = new KoTabulator;
+      t->type = _tabList->at(i)->type;
+      t->mmPos = _tabList->at(i)->mmPos;
+      t->ptPos = _tabList->at(i)->ptPos;
+      tabList.append(t);
+    }
+  repaint(false); 
+}
+
+
+
+
+
+
+
+

@@ -85,15 +85,18 @@ public:
   void setFirstIndent(int _first)
     { i_first = cMM_TO_POINT(_first); repaint(false); }
 
+  void setTabList(QList<KoTabulator>* _tabList);
+
+
 signals:
   void newPageLayout(KoPageLayout);
   void newLeftIndent(int);
   void newFirstIndent(int);
   void openPageLayoutDia();
-  void tabListChanged(QList<KoTabulator>);
+  void tabListChanged(QList<KoTabulator>*);
 
 protected:
-  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM,A_LEFT_INDENT,A_FIRST_INDENT};
+  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM,A_LEFT_INDENT,A_FIRST_INDENT,A_TAB};
 
   void drawContents(QPainter *_painter)
     { if (orientation == HORIZONTAL) drawHorizontal(_painter); else drawVertical(_painter); }
@@ -127,6 +130,7 @@ protected:
   QPixmap pmFirst,pmLeft;
   KoTabChooser *tabChooser;
   QList<KoTabulator> tabList;
+  int currTab;
   
 };
 
