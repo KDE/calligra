@@ -427,6 +427,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( slotRefreshLocale()));
     viewZoom(QString::number(m_pDoc->zoom()) );
 
+    QStringList list = m_viewZoom->items();
+    QString zoomStr = QString::number(m_pDoc->zoom() ) + '%';
+    m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+
 }
 
 
