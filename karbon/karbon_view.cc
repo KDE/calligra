@@ -103,7 +103,10 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_status->setAlignment( AlignLeft | AlignVCenter );
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
-
+	
+	//Create Color Manager
+	m_ColorManager = new VColorDlg( this );
+	
 	if( shell() )
 	{
 		setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -617,8 +620,7 @@ KarbonView::setLineWidth()
 void
 KarbonView::viewColorManager()
 {
-	VColorDlg dialog( this );
-	dialog.show();
+	m_ColorManager->show();
 }
 
 void

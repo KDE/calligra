@@ -28,6 +28,7 @@ class VTool;
 class VToolContainer;
 class VWhirlPinchDlg;
 class TKUFloatSpinBoxAction;
+class VColorDlg;
 
 
 class KarbonView : public KoView
@@ -175,6 +176,7 @@ private:
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VPolygonizeDlg* m_polygonizeDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
+	VColorDlg* m_ColorManager;
 
 	//toolbox
 	KSharedPtr< VToolContainer > m_toolbox;
