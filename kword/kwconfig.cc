@@ -228,6 +228,9 @@ void ConfigureSpellPage::apply()
 
 void ConfigureSpellPage::slotDefault()
 {
+#ifdef HAVE_LIBKSPELL2
+    m_spellConfigWidget->slotDefault();
+#endif
 }
 
 ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )

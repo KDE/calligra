@@ -395,6 +395,9 @@ void configureSpellPage::apply()
 
 void configureSpellPage::slotDefault()
 {
+#ifdef HAVE_LIBKSPELL2
+    m_spellConfigWidget->slotDefault();
+#endif
 }
 
 configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, char *name )
