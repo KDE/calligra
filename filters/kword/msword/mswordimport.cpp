@@ -53,7 +53,11 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     QDomElement framesetsElem;
     prepareDocument( mainDocument, framesetsElem );
 
-    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, framesetsElem );
+    QDomDocument documentInfo;
+    documentInfo.appendChild (documentInfo.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, documentInfo, framesetsElem );
+
     if ( !document.hasParser() )
         return KoFilter::WrongFormat;
     if ( !document.parse() )
@@ -71,7 +75,17 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     QCString cstr = mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
     out->writeBlock( cstr, cstr.length() );
+    out->close();
 
+    out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+    if ( !out ) {
+	return KoFilter::StorageCreationError;
+    }
+    
+    cstr = documentInfo.toCString();
+    out->writeBlock( cstr, cstr.length() );
+    out->close();
+    
     kdDebug() << "######################## MSWordImport::convert done ####################" << endl;
     return KoFilter::OK;
 }

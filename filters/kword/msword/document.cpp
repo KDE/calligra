@@ -20,6 +20,7 @@
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
+#include "associatedstrings.h"
 
 #include <koGlobal.h>
 #include <kdebug.h>
@@ -33,8 +34,9 @@
 #include <klocale.h>
 
 
-Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement )
-    : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
+Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement )
+    : m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
+      m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ), m_textHandler( 0 ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ),
       m_headerFooters( 0 ), m_bodyFound( false ),
@@ -49,6 +51,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setTextHandler( m_textHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
+        processAssociatedStrings();
     }
 }
 
@@ -100,6 +103,39 @@ void Document::finishDocument()
         paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
         paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
     }
+}
+
+void Document::processAssociatedStrings() {
+    wvWare::AssociatedStrings strings( m_parser->associatedStrings() );
+
+    QDomElement infodoc = m_documentInfo.createElement( "document-info" );
+    QDomElement author = m_documentInfo.createElement( "author" );
+    QDomElement fullname = m_documentInfo.createElement( "full-name" );
+    QDomElement title = m_documentInfo.createElement( "title" );
+    QDomElement about = m_documentInfo.createElement( "about" );
+
+    m_documentInfo.appendChild(infodoc);
+
+    if ( !strings.author().isNull()) {
+	fullname.appendChild(
+	    m_documentInfo.createTextNode(
+		Conversion::string (
+		    strings.author()
+		    ).string()));
+	author.appendChild(fullname);
+	infodoc.appendChild(author);
+    }
+
+    if ( !strings.title().isNull()) {
+	title.appendChild(
+	    m_documentInfo.createTextNode(
+		Conversion::string (
+		    strings.title()
+		    ).string()));
+	about.appendChild(title);
+	infodoc.appendChild(about);
+    }
+
 }
 
 void Document::processStyles()

@@ -40,7 +40,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement );
+    Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement );
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -81,9 +81,11 @@ protected slots:
 
 private:
     void processStyles();
+    void processAssociatedStrings();
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend );
 
     QDomDocument& m_mainDocument;
+    QDomDocument& m_documentInfo;
     QDomElement& m_framesetsElement;
     KWordReplacementHandler* m_replacementHandler;
     KWordTextHandler* m_textHandler;
