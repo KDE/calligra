@@ -951,6 +951,8 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     if ( d->m_specialOutputFlag == SaveAsOASIS )
     {
         kdDebug(30003) << "Saving to OASIS format" << endl;
+        // Tell KoStore not to touch the file names
+        store->disallowNameExpansion();
         // Prepare manifest file - in memory
         QByteArray manifestData;
         QBuffer manifestBuffer( manifestData );
