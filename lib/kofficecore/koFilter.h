@@ -54,6 +54,10 @@ public:
      * (filtered) file to the disk. It's not very fast (because of all
      * the tmp files, but it's easy and your filter doesn't rely on internals
      * of the app.
+     *
+     * Override this method to implement export filters, and import filters
+     * which do not support embedded objects.
+     *
      * @param fileIn    The name of the file to filter (input file)
      * @param fileOut   Save the converted stuff to that file (output file)
      * @param from      Mimetype of the input
@@ -66,12 +70,14 @@ public:
                         const QString &config=QString::null);
 
     /**
-     * This method takes a file as input and outputs a file. As opposed to the
-     * "traditional way" of filtering this method should be used to filter embedded
-     * documents. Use this only if you really know what you're doing.
+     * This method takes a file as input and outputs a file. Override this
+     * method to implement import filters which support embedded objects.
+     *
      * @param fileIn    The name of the file to filter (input file)
      * @param fileOut   Save the converted stuff to that file (output file)
-     * @param prefixOut The current position in the storage
+     * @param prefixOut The name used for this object (fileOut) in the tar
+     *                  storage Use this as the prefix to name embedded
+     *                  objects.
      * @param from      Mimetype of the input
      * @param to        Mimetype of the output
      * @param config    A String which can be used to pass configure information (see HOWTO)
