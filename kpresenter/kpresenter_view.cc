@@ -3630,7 +3630,7 @@ void KPresenterView::skipToPage( int num )
     m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(currPg));
     if ( notebar ) {
         kdDebug() << "Current Page: " << currPg << endl;
-        QString text = m_pKPresenterDoc->pageList().at(currPg)->getNoteText( );
+        QString text = m_pKPresenterDoc->pageList().at(currPg)->noteText( );
         notebar->setCurrentNoteText( text );
     }
     refreshPageButton();

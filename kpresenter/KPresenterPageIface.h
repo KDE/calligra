@@ -35,7 +35,7 @@ public:
 
 k_dcop:
     virtual DCOPRef object( int num );
-
+    virtual DCOPRef selectedObject();
     virtual DCOPRef textObject( int num );
 
     virtual int numTextObject() const;

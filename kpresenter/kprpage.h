@@ -49,12 +49,12 @@ public:
 
     KPresenterDoc * kPresenterDoc() const {return m_doc; }
 
-    QString getManualTitle()const;
+    QString manualTitle()const;
     void insertManualTitle(const QString & title);
     QString pageTitle( const QString &_title ) const;
 
     void setNoteText( const QString &_text );
-    QString getNoteText( )const;
+    QString noteText( )const;
 
     const QPtrList<KPObject> & objectList() const { return m_objectList;}
 
@@ -215,8 +215,8 @@ private:
     QPtrList<KPObject> m_objectList;
     KPresenterDoc *m_doc;
     KPBackGround *kpbackground;
-    QString manualTitle;
-    QString noteText;
+    QString m_manualTitle;
+    QString m_noteText;
     DCOPObject *dcop;
     bool m_selectedSlides;
 

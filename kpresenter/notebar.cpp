@@ -46,7 +46,7 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
     int currentPageNum = view->getCurrentPresPage(); // 1 base.
     QString text=QString::null;
     if( currentPageNum!=-1)
-        text= doc->pageList().at(currentPageNum - 1)->getNoteText( );
+        text= doc->pageList().at(currentPageNum - 1)->noteText( );
     textEdit->setText( text );
 
     connect( textEdit, SIGNAL( textChanged() ),
@@ -160,7 +160,7 @@ QString NoteBar::getAllNoteTextForPrinting()
             allText += QString("\n\n");
 
         allText += i18n( "Page Note %1:\n" ).arg( pageCount );
-        allText += doc->pageList().at(i)->getNoteText();
+        allText += doc->pageList().at(i)->noteText();
 
         firstText = false;
         ++pageCount;

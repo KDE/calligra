@@ -66,8 +66,8 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
     kpbackground= new KPBackGround( this );
     //create object list for each page.
     m_objectList.setAutoDelete( false );
-    manualTitle=QString::null;
-    noteText=QString::null;
+    m_manualTitle=QString::null;
+    m_noteText=QString::null;
     m_selectedSlides=true;
     //dcopObject();
 
@@ -2841,21 +2841,21 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 }
 
 
-QString KPrPage::getManualTitle()const
+QString KPrPage::manualTitle()const
 {
-    return manualTitle;
+    return m_manualTitle;
 }
 
 void KPrPage::insertManualTitle(const QString & title)
 {
-    manualTitle=title;
+    m_manualTitle=title;
 }
 
 QString KPrPage::pageTitle( const QString &_title ) const
 {
     // If a user sets a title with manual, return it.
-    if ( !manualTitle.isEmpty() )
-        return manualTitle;
+    if ( !m_manualTitle.isEmpty() )
+        return m_manualTitle;
 
     QPtrList<KPTextObject> objs;
 
@@ -2897,13 +2897,13 @@ QString KPrPage::pageTitle( const QString &_title ) const
 
 void KPrPage::setNoteText(  const QString &_text )
 {
-    noteText=_text;
+    m_noteText=_text;
     m_doc->setModified(true);
 }
 
-QString KPrPage::getNoteText(  )const
+QString KPrPage::noteText(  )const
 {
-    return noteText;
+    return m_noteText;
 }
 
 void KPrPage::makeUsedPixmapList()

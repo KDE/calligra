@@ -42,6 +42,17 @@ DCOPRef KPresenterPageIface::textObject( int num )
     return DCOPRef();
 }
 
+//return a reference to selected object
+DCOPRef KPresenterPageIface::selectedObject( )
+{
+    KPObject * obj=m_page->getSelectedObj();
+    if(obj)
+        return DCOPRef( kapp->dcopClient()->appId(),
+                        obj->dcopObject()->objId() );
+    return DCOPRef();
+}
+
+
 int KPresenterPageIface::numTextObject() const
 {
     return m_page->numTextObject();
@@ -58,7 +69,7 @@ DCOPRef KPresenterPageIface::object( int num )
 
 QString KPresenterPageIface::manualTitle()const
 {
-    return m_page->getManualTitle();
+    return m_page->manualTitle();
 }
 
 void KPresenterPageIface::insertManualTitle(const QString & title)
@@ -80,7 +91,7 @@ void KPresenterPageIface::setNoteText( const QString &_text )
 
 QString KPresenterPageIface::noteText( )const
 {
-    return m_page->getNoteText();
+    return m_page->noteText();
 }
 
 unsigned int KPresenterPageIface::objNums() const

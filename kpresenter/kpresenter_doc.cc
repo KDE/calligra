@@ -584,14 +584,14 @@ QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {
             QDomElement title=doc.createElement("Title");
-            title.setAttribute("title", m_pageList.at(i)->getManualTitle());
+            title.setAttribute("title", m_pageList.at(i)->manualTitle());
             titles.appendChild(title);
         }
     }
     else
     { // Only current page title.
         QDomElement title=doc.createElement("Title");
-        title.setAttribute("title", m_pageList.at(saveOnlyPage)->getManualTitle());
+        title.setAttribute("title", m_pageList.at(saveOnlyPage)->manualTitle());
         titles.appendChild(title);
     }
     return titles;
@@ -606,13 +606,13 @@ QDomElement KPresenterDoc::saveNote( QDomDocument &doc )
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {
             QDomElement note=doc.createElement("Note");
-            note.setAttribute("note", m_pageList.at(i)->getNoteText( ));
+            note.setAttribute("note", m_pageList.at(i)->noteText( ));
             notes.appendChild(note);
         }
     }
     else { // Only current page note.
         QDomElement note=doc.createElement("Note");
-        note.setAttribute("note", m_pageList.at(saveOnlyPage)->getNoteText( ));
+        note.setAttribute("note", m_pageList.at(saveOnlyPage)->noteText( ));
         notes.appendChild(note);
     }
 
@@ -1472,7 +1472,7 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
     _orastY = _rastY;
     _rastX = rx;
     _rastY = ry;
-    if ( _replace ) 
+    if ( _replace )
       replaceObjs();
 }
 

@@ -207,3 +207,44 @@ void KPresenterDocIface::setPresentationDuration( bool pd )
 {
     doc->setPresentationDuration(pd);
 }
+
+bool KPresenterDocIface::spInfinitLoop() const
+{
+    return doc->spInfinitLoop();
+}
+
+bool KPresenterDocIface::spManualSwitch() const
+{
+    return doc->spManualSwitch();
+}
+
+void KPresenterDocIface::setInfinitLoop( bool il )
+{
+    doc->setInfinitLoop(il);
+}
+
+void KPresenterDocIface::setManualSwitch( bool ms )
+{
+    doc->setManualSwitch(ms);
+}
+
+void KPresenterDocIface::setHeader( bool b )
+{
+    doc->setHeader(b);
+}
+
+void KPresenterDocIface::setFooter( bool b )
+{
+    doc->setFooter(b);
+}
+
+void KPresenterDocIface::initConfig()
+{
+    doc->initConfig();
+}
+
+void KPresenterDocIface::saveConfig()
+{
+    doc->saveConfig();
+}
+
