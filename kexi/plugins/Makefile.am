@@ -1,4 +1,4 @@
-kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la
+kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la kexihandler_relation.la
 
 kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp kexialtertable.cpp
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
@@ -8,6 +8,11 @@ kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquery
 				kexiquerydesignerguieditor.cpp
 kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_query_la_LIBADD = ../core/libkexicore.la ../datatable/libkexidatatable.la ../widget/libkexiextendedwidgets.la
+
+kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerproxy.cpp kexirelationview.cpp \
+				kexirelationviewtable.cpp
+kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexihandler_relation_la_LIBADD = ../core/libkexicore.la
 
 SUBDIRS = .
 
