@@ -90,7 +90,13 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
 {
 
     QPtrList<TableStructureRow> columnList;
-    TableStructureRow myRow;
+    //const TableStructureRow* myRow;
+    int mySize;
+    bool myKey;
+    bool myAllowNull;
+    DataType myType;
+    QString myName;
+    QString myDefault;
 
     QDomNode myTableNode = myKDBNode->documentElement().namedItem("STRUCTURE");
 
@@ -118,28 +124,29 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
      const QString* columnDefault = new QString(myElement.attribute("defaultvalue"));
      const QString* columnAllowsNull = new QString(myElement.attribute("allownull"));
 
-     myRow.primary_key = columnIsInKey;
-     myRow.name = columnName->latin1();
-//     myRow.type = columnType;
-     if(columnType = "int") {
-		myRow.type = t_int;
+     myKey = columnIsInKey;
+     myName = columnName->latin1();
+     if(columnType->latin1() == "int") {
+		myType = t_int;
        }
-     elseif(columnType = "char") {
-		myRow.type = t_char;
+     else if(columnType->latin1() == "char") {
+		myType = t_char;
        }
-     elseif(columnType = "varchar") {
-		myRow.type = t_vchar;
+     else if(columnType->latin1() == "varchar") {
+		myType = t_vchar;
        }
-     elseif(columnType = "float") {
-		myRow.type = t_float;
+     else if(columnType->latin1() == "float") {
+		myType = t_float;
        }
      else {
-		myRow.type = t_boolen;
+		myType = t_boolen;
        }
-     myRow.size = columnSize->toInt();
-     myRow.Default = columnDefault->latin1();
-     myRow.allow_null = columnAllowsNull;
-     columnList.append(<const TableStructureRow*>myRow);
+     mySize = columnSize->toInt();
+     myDefault = columnDefault->latin1();
+     myAllowNull = columnAllowsNull;
+     TableStructureRow myRow1 = { myKey, myName, myType, mySize, myDefault, myAllowNull };
+     const TableStructureRow* myRow = &myRow1;
+     columnList.append(myRow);
 
     while(!myTableWalker.isNull()) {
       myElement = myTableWalker.toElement();
@@ -150,15 +157,32 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
       columnDefault = new QString(myElement.attribute("defaultvalue"));
       columnAllowsNull = new QString(myElement.attribute("allownull"));
 
-      columnList.append(columnIsInKey);
-      columnList.append(columnName);
-      columnList.append(columnType);
-      columnList.append(columnSize);
-      columnList.append(columnDefault);
-      columnList.append(columnAllowsNull);
+     myKey = columnIsInKey;
+     myName = columnName->latin1();
+     if(columnType->latin1() == "int") {
+		myType = t_int;
+       }
+     else if(columnType->latin1() == "char") {
+		myType = t_char;
+       }
+     else if(columnType->latin1() == "varchar") {
+		myType = t_vchar;
+       }
+     else if(columnType->latin1() == "float") {
+		myType = t_float;
+       }
+     else {
+		myType = t_boolen;
+       }
+     mySize = columnSize->toInt();
+     myDefault = columnDefault->latin1();
+     myAllowNull = columnAllowsNull;
+     TableStructureRow myRow1 = { myKey, myName, myType, mySize, myDefault, myAllowNull };
+     const TableStructureRow* myRow = &myRow1;
+     columnList.append(myRow);
 
-       myTableWalker = myTableWalker.nextSibling();
-        }
+      myTableWalker = myTableWalker.nextSibling();
+       }
 
     kdDebug() << "columnList contains " << columnList.count() << " items." << endl;
 
