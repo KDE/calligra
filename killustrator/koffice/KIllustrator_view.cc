@@ -425,7 +425,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEdit->setFullWidth (false);
 
   tmp = kapp->kde_datadir ().copy ();
-  tmp += "/kpresenter/toolbar/undo.xpm";
+  tmp += "/koffice/toolbar/undo.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
   m_idEditUndo = 
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_UNDO, SIGNAL (clicked ()), 
@@ -433,7 +433,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   //  m_vToolBarEdit->setItemEnabled (ID_EDIT_UNDO, false);
   
   tmp = kapp->kde_datadir ().copy ();
-  tmp += "/kpresenter/toolbar/redo.xpm";
+  tmp += "/koffice/toolbar/redo.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
   m_idEditRedo = 
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_REDO, SIGNAL (clicked ()), 
