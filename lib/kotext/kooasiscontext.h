@@ -123,7 +123,7 @@ public:
     /// Constructor
     /// @param mainStyles
     /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
-    KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode );
+    KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode = Store );
 
 
     KoGenStyles& mainStyles() { return m_mainStyles; }

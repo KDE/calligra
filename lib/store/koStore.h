@@ -62,6 +62,7 @@ public:
 
   /**
    * Create a store for any kind of QIODevice: file, memory buffer...
+   * KoStore will take care of opening the QIODevice.
    * This method doesn't support the Directory store!
    */
   static KoStore* createStore( QIODevice *device, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );

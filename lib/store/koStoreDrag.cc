@@ -21,7 +21,7 @@
 
 QCString KoStoreDrag::mimeType( const char* nativeMimeType )
 {
-    return QCString(nativeMimeType) + "-selection";
+    return QCString(nativeMimeType); // + "-selection"; removed for OASIS
 }
 
 KoStoreDrag::KoStoreDrag( const char* nativeMimeType, QWidget *dragSource, const char *name )

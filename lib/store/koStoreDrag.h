@@ -29,7 +29,7 @@
  * created on the "sending" side (dragging or copying). The "receiving"
  * side (dropping or pasting) only uses provides()/canDecode() and encodedData().
  *
- * To create the data in memory, create a QBuffer on a QByteArray,
+ * To create the data in memory, create a QBuffer,
  * then KoStore::createStore( theBuffer, .... ), save the
  * data into the store and delete it. Finally, call setEncodedData().
  */
