@@ -1094,10 +1094,17 @@ void RTFImport::insertHexSymbol( RTFProperty * )
         textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
     }
 
-    const char tmpch[2] = {token.value, '\0'};
+    // Be careful, the value gicen in \' could be only one part of a multi-byte character.
+    // So it cannot be assumed that it will result in one character.
+    char tmpch[2] = {token.value, '\0'};
 
-    // TODO: Is it always a single character?
-    insertUTF8( textCodec->toUnicode( tmpch ).at( 0 ).unicode() );
+    char *tk = token.text;
+    token.type = RTFTokenizer::PlainText;
+    token.text = tmpch;
+
+    (this->*destination.destproc)(0L);
+
+    token.text = tk;
 }
 
 /**
