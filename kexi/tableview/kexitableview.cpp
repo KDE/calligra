@@ -1728,7 +1728,7 @@ KPopupMenu* KexiTableView::popup() const
 
 void KexiTableView::showContextMenu(QPoint pos)
 {
-	if (!d->contextMenuEnabled)
+	if (!d->contextMenuEnabled || d->pContextMenu->count()<1)
 		return;
 	if (pos==QPoint(-1,-1)) {
 		pos = viewport()->mapToGlobal( QPoint( columnPos(d->curCol), rowPos(d->curRow) + d->rowHeight ) );
