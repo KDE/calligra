@@ -296,6 +296,8 @@ public:
 
     QStringList manualTitleList;
 
+    void initConfig();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );

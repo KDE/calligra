@@ -120,6 +120,8 @@ void configureInterfacePage::apply()
 
     config->setGroup( "Interface" );
     if( rastX != oldRastX || rastY != oldRastX ) {
+        config->writeEntry( "RastX", rastX );
+        config->writeEntry( "RastY", rastY );
         doc->setRasters( rastX, rastY, true );
         doc->repaint( false );
     }
@@ -169,6 +171,8 @@ void configureColorBackground::apply()
     QColor _col = bgColor->color();
     KPresenterDoc * doc = m_pView->kPresenterDoc();
     if( oldBgColor != _col ) {
+        config->setGroup( "KPresenter Color" );
+        config->writeEntry( "BackgroundColor", _col );
         doc->setTxtBackCol( _col );
         doc->replaceObjs();
         doc->repaint( false );

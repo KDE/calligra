@@ -182,6 +182,24 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 	dcopObject();
 }
 
+void KPresenterDoc::initConfig()
+{
+    KConfig* config = KPresenterFactory::global()->config();
+    if( config->hasGroup("Interface") ) {
+        config->setGroup( "Interface" );
+        setAutoSave( config->readNumEntry( "AutoSave",defaultAutoSave()  ));
+        _rastX = config->readNumEntry( "RastX", 10 );
+        _rastY = config->readNumEntry( "RastY", 10 );
+    }
+
+    QColor oldBgColor = Qt::white;
+    if(  config->hasGroup( "KPresenter Color" ) ) {
+        config->setGroup( "KPresenter Color" );
+        setTxtBackCol(config->readColorEntry( "BackgroundColor", &oldBgColor ));
+    }
+    replaceObjs();
+}
+
 /*==============================================================*/
 DCOPObject* KPresenterDoc::dcopObject()
 {
@@ -518,6 +536,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	ignoreSticky = TRUE;
     }
     setModified(false);
+    initConfig();
     return b;
 }
 
