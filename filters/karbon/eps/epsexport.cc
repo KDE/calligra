@@ -48,7 +48,7 @@
 #include "vtext.h"
 
 
-//Define level1 operators:
+// Define PostScript level1 operators.
 static char l1_newpath		= 'N';
 static char l1_closepath	= 'C';
 static char l1_moveto		= 'm';
@@ -56,7 +56,7 @@ static char l1_curveto		= 'c';
 static char l1_lineto		= 'l';
 static char l1_stroke		= 's';
 static char l1_fill			= 'f';
-static char l1_eofill		= 'e';
+//static char l1_eofill		= 'e';
 static char l1_setlinewidth	= 'w';
 static char l1_setdash		= 'd';
 static char l1_setrgbcolor	= 'r';
@@ -104,7 +104,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 	KoFilter::ConversionStatus status = KoFilter::OK;
 
-	// Ask questions about PS level etc:
+	// Ask questions about PS level etc.
 	EpsExportDlg* dialog = new EpsExportDlg();
 
 	QApplication::setOverrideCursor( Qt::arrowCursor );
@@ -141,7 +141,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	}
 	else
 	{
-		// Dialog cancelled:
+		// Dialog cancelled.
 		status = KoFilter::UserCancelled;
 	}
 
@@ -154,20 +154,20 @@ EpsExport::convert( const QCString& from, const QCString& to )
 void
 EpsExport::visitVDocument( VDocument& document )
 {
-	// Select all objects:
+	// Select all objects.
 	document.selection()->append();
 
-	// Get the bounding box of all selected objects:
+	// Get the bounding box of all selected objects.
 	const KoRect& rect = document.selection()->boundingBox();
 
-	// Print a header:
+	// Print a header.
 	*m_stream <<
 		"%!PS-Adobe-3.0 EPSF-3.0\n"
 		"%%BoundingBox: " <<
-		// Round down:
+		// Round down.
 			qRound( rect.left()   - 0.5 ) << " " <<
 			qRound( rect.top()    - 0.5 ) << " " <<
-		// Round up:
+		// Round up.
 			qRound( rect.right()  + 0.5 ) << " " <<
 			qRound( rect.bottom() + 0.5 ) << "\n" <<
 		"%%HiResBoundingBox: " <<
@@ -178,11 +178,11 @@ EpsExport::visitVDocument( VDocument& document )
 		"%%Creator: Karbon14 EPS Exportfilter 0.5"
 	<< endl;
 
-	// We dont need the selection anymore:
+	// We dont need the selection anymore.
 	document.selection()->clear();
 
 
-	// Process document info:
+	// Process document info.
 	KoStoreDevice* storeIn;
 	storeIn = m_chain->storageFile( "documentinfo.xml", KoStore::Read );
 
@@ -197,7 +197,7 @@ EpsExport::visitVDocument( VDocument& document )
 		KoDocumentInfoAuthor* authorPage =
 			static_cast<KoDocumentInfoAuthor*>( docInfo.page( "author" ) );
 
-		// Get creation date/time aka "now":
+		// Get creation date/time = "now".
 		QDateTime now( QDateTime::currentDateTime() );
 
 		*m_stream <<
@@ -208,7 +208,7 @@ EpsExport::visitVDocument( VDocument& document )
 	}
 
 
-	// Print operator definitions:
+	// Print operator definitions.
 	*m_stream <<
 		"\n"
 		"/" << l1_newpath		<< " {newpath} def\n"
@@ -225,10 +225,10 @@ EpsExport::visitVDocument( VDocument& document )
 		"/" << l1_grestore		<< " {grestore} def\n"
 	<< endl;
 
-	// Export layers:
+	// Export layers.
 	VVisitor::visitVDocument( document );
 
-	// Finished:
+	// Finished.
 	*m_stream <<
 		"%%EOF"
 	<< endl;
@@ -237,6 +237,8 @@ EpsExport::visitVDocument( VDocument& document )
 void
 EpsExport::visitVComposite( VComposite& composite )
 {
+	*m_stream << l1_newpath << "\n";
+
 	VVisitor::visitVComposite( composite );
 
 	getFill( *composite.fill() );
@@ -248,10 +250,9 @@ EpsExport::visitVComposite( VComposite& composite )
 void
 EpsExport::visitVPath( VPath& path )
 {
-	*m_stream << l1_newpath << "\n";
-
-	// Export segments:
+	// Export segments.
 	VPathIterator itr( path );
+
 	for( ; itr.current(); ++itr )
 	{
 		switch( itr.current()->type() )
@@ -304,10 +305,10 @@ EpsExport::visitVText( VText& text )
 void
 EpsExport::getStroke( const VStroke& stroke )
 {
-	// Solid stroke:
+	// Solid stroke.
 	if( stroke.type() == VStroke::solid )
 	{
-		// dash pattern:
+		// Dash pattern.
 		*m_stream << "[";
 
 		const QValueList<float>&
@@ -323,7 +324,7 @@ EpsExport::getStroke( const VStroke& stroke )
 
 		getColor( stroke.color() );
 
-		// setlinewidth, stroke:
+		// "setlinewidth", "stroke".
 		*m_stream <<
 			" " << stroke.lineWidth() <<
 			" " << l1_setlinewidth <<
@@ -341,19 +342,19 @@ EpsExport::getStroke( const VStroke& stroke )
 void
 EpsExport::getFill( const VFill& fill )
 {
-	// Solid fill:
+	// Solid fill.
 	if( fill.type() == VFill::solid )
 	{
-		// gsave:
+		// "gsave".
 		*m_stream << l1_gsave << " ";
 
-		// setrgbcolor:
+		// "setrgbcolor".
 		getColor( fill.color() );
 
-		// fill, grestore:
+		// "fill", "grestore".
 		*m_stream << " " << l1_fill << " " << l1_grestore << "\n";
 	}
-	// Gradient:
+	// Gradient.
 	else if( fill.type() == VFill::grad )
 	{
 		if( m_psLevel == 3 )
