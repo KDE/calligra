@@ -63,7 +63,7 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
 
 WidgetFactory::~WidgetFactory()
 {
-	
+
 }
 
 KLineEdit*
@@ -168,6 +168,12 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 	// paint event for container edited (eg button group)
 	else if((ev->type() == QEvent::Paint) && m_editor && (obj == m_widget))
 		return m_container->eventFilter(obj, ev);
+	// click outside editor --> cancel editing
+	else if((ev->type() == QEvent::MouseButtonPress) && m_editor && (obj == m_widget)) {
+		Container *cont = m_container;
+		resetEditor();
+		return cont->eventFilter(obj, ev);
+	}
 
 	QWidget *w = m_editor ? m_editor : (QWidget *)m_widget;
 
@@ -195,9 +201,9 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 	else if(ev->type() == QEvent::ContextMenu)
 		return true;
 
-	if(obj == m_widget)
-		return m_container->eventFilter(obj, ev);
-	else
+//	if(obj == m_widget)
+//		return m_container->eventFilter(obj, ev);
+//	else
 		return false;
 }
 
