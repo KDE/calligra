@@ -3521,7 +3521,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     for( it=list.begin();it!=list.end();++it)
     {
       i=(*it);
-
+      kdDebug()<<" i :" <<i<<endl;
         progress.setProgress( ++j );
         kapp->processEvents();
 

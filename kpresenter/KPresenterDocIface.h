@@ -62,7 +62,7 @@ k_dcop:
 
     virtual void setDisplayLink(bool b);
     virtual bool displayLink();
-
+    virtual bool insertNewPage(int pos );
 private:
     KPresenterDoc *doc;
 

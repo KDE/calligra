@@ -170,3 +170,12 @@ QString KPresenterDocIface::customVariableValue(const QString & varname)const
         return doc->getVariableCollection()->getVariableValue( varname );
     return QString::null;
 }
+
+bool KPresenterDocIface::insertNewPage(int pos )
+{
+  if( pos < 0 || pos > doc->getPageNums()-1 )
+    pos=doc->getPageNums()-1;
+  int ret= doc->insertNewPage( i18n("Insert New Page"), pos, IP_AFTER, false, QString::null );
+  bool state = (ret !=-1);
+  return state;
+}
