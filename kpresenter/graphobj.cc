@@ -15,6 +15,8 @@
 
 #include "graphobj.h"
 #include "graphobj.moc"
+#include <math.h>
+#define RAD_FACTOR 180.0 / M_PI
 
 /******************************************************************/
 /* class GraphObj                                                 */
@@ -26,6 +28,8 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
 {
   QFileInfo fi(fName);
 
+  lineBegin = L_NORMAL;
+  lineEnd = L_NORMAL;
   objType = _objType;
   lineType = LT_HORZ;
   rectType = RT_NORM;
@@ -121,6 +125,8 @@ void GraphObj::setFileName(QString fn)
 void GraphObj::save(ostream& out)
 {
   out << indent << "<LINETYPE value=\"" << lineType << "\"/>" << endl;
+  out << indent << "<LINEBEGIN value=\"" << lineBegin << "\"/>" << endl;
+  out << indent << "<LINEEND value=\"" << lineEnd << "\"/>" << endl;
   out << indent << "<RECTTYPE value=\"" << rectType << "\"/>" << endl;
   out << indent << "<PEN red=\"" << oPen.color().red() << "\" green=\"" << oPen.color().green()
       << "\" blue=\"" << oPen.color().blue() << "\" width=\"" << oPen.width()
@@ -150,6 +156,9 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   string tag;
   string name;
 
+  setLineBegin(L_NORMAL);
+  setLineEnd(L_NORMAL);
+
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -166,6 +175,30 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	}
       
+      // lineBegin
+      else if (name == "LINEBEGIN")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		lineBegin = (LineEnd)atoi((*it).m_strValue.c_str());
+	    }
+	}
+ 
+      // lineEnd
+      else if (name == "LINEEND")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		lineEnd = (LineEnd)atoi((*it).m_strValue.c_str());
+	    }
+	}
+
       // rectType
       else if (name == "RECTTYPE")
 	{
@@ -328,17 +361,111 @@ void GraphObj::paintObj(QPainter *painter)
 	switch (lineType)
 	  {
 	  case LT_HORZ:
-	    painter->drawLine(ox,oy + oh / 2,ox + ow,oy + oh / 2);
-	    break;
+	    {
+	      QSize diff1(0,0),diff2(0,0);
+	      int _w = oPen.width();
+	      
+	      if (lineBegin != L_NORMAL)
+		diff1 = getBoundingSize(lineBegin,_w);
+	      
+	      if (lineEnd != L_NORMAL)
+		diff2 = getBoundingSize(lineEnd,_w);
+
+	      if (lineBegin != L_NORMAL)
+		drawFigure(lineBegin,painter,QPoint(diff1.width() / 2,oh / 2),oPen.color(),_w,180.0);
+
+	      if (lineEnd != L_NORMAL)
+		drawFigure(lineEnd,painter,QPoint(ow - diff2.width() / 2,oh / 2),oPen.color(),_w,0.0);
+
+	      painter->setPen(oPen);
+	      painter->drawLine(ox + diff1.width() / 2,oy + oh / 2,ox + ow - diff2.width() / 2,oy + oh / 2);
+	    } break;
 	  case LT_VERT:
-	    painter->drawLine(ox + ow / 2,oy,ox + ow / 2,oy + oh);
-	    break;
+	    {
+	      QSize diff1(0,0),diff2(0,0);
+	      int _w = oPen.width();
+	      
+	      if (lineBegin != L_NORMAL)
+		diff1 = getBoundingSize(lineBegin,_w);
+	      
+	      if (lineEnd != L_NORMAL)
+		diff2 = getBoundingSize(lineEnd,_w);
+
+	      if (lineBegin != L_NORMAL)
+		drawFigure(lineBegin,painter,QPoint(ow / 2,diff1.width() / 2),oPen.color(),_w,270.0);
+
+	      if (lineEnd != L_NORMAL)
+		drawFigure(lineEnd,painter,QPoint(ow / 2,oh - diff2.width() / 2),oPen.color(),_w,90.0);
+
+	      painter->setPen(oPen);
+	      painter->drawLine(ox + ow / 2,oy + diff1.width() / 2,ox + ow / 2,oy + oh - diff2.width() / 2);
+	    } break;
 	  case LT_LU_RD:
-	    painter->drawLine(ox,oy,ox + ow,oy + oh);
-	    break;
+	    {
+	      QSize diff1(0,0),diff2(0,0);
+	      int _w = oPen.width();
+
+ 	      if (lineBegin != L_NORMAL)
+ 		diff1 = getBoundingSize(lineBegin,_w);
+	      
+ 	      if (lineEnd != L_NORMAL)
+ 		diff2 = getBoundingSize(lineEnd,_w);
+
+	      QPoint pnt1(0,0),pnt2(ow,oh);
+	      float angle;
+
+	      angle = getAngle(pnt1,pnt2);
+
+ 	      if (lineBegin != L_NORMAL)
+		{
+		  painter->resetXForm();
+		  painter->translate(diff1.height() / 2,diff1.width() / 2);
+		  drawFigure(lineBegin,painter,QPoint(0,0),oPen.color(),_w,angle);
+		}
+ 	      if (lineEnd != L_NORMAL)
+		{
+		  painter->resetXForm();
+		  painter->translate(ow - diff2.height() / 2,oh - diff2.width() / 2);
+		  drawFigure(lineEnd,painter,QPoint(0,0),oPen.color(),_w,angle - 180);
+		}
+
+	      painter->resetXForm();
+	      painter->setPen(oPen);
+	      painter->drawLine(ox + diff1.height() / 2,oy + diff1.width() / 2,ox + ow - diff2.height() / 2,oy + oh - diff2.width() / 2);
+	    } break;
 	  case LT_LD_RU:
-	    painter->drawLine(ox,oy + oh,ox + ow,oy);
-	    break;
+	    {
+	      QSize diff1(0,0),diff2(0,0);
+	      int _w = oPen.width();
+
+ 	      if (lineBegin != L_NORMAL)
+ 		diff1 = getBoundingSize(lineBegin,_w);
+	      
+ 	      if (lineEnd != L_NORMAL)
+ 		diff2 = getBoundingSize(lineEnd,_w);
+
+	      QPoint pnt1(0,oh),pnt2(ow,0);
+	      float angle;
+
+	      angle = getAngle(pnt1,pnt2);
+
+ 	      if (lineBegin != L_NORMAL)
+		{
+		  painter->resetXForm();
+		  painter->translate(diff1.height() / 2,oh - diff1.width() / 2);
+		  drawFigure(lineBegin,painter,QPoint(0,0),oPen.color(),_w,angle);
+		}
+ 	      if (lineEnd != L_NORMAL)
+		{
+		  painter->resetXForm();
+		  painter->translate(ow - diff2.height() / 2,diff2.width() / 2);
+		  drawFigure(lineEnd,painter,QPoint(0,0),oPen.color(),_w,angle - 180);
+		}
+
+	      painter->resetXForm();
+	      painter->setPen(oPen);
+	      painter->drawLine(ox + diff1.height() / 2,oy + oh - diff1.width() / 2,ox + ow - diff2.height() / 2,oy + diff2.width() / 2);
+	    } break;
 	  }
       } break;
     case OT_RECT: /* rectangle */
@@ -383,7 +510,15 @@ void GraphObj::paintObj(QPainter *painter)
 		  }
 		pntArray2.setPoint(i,px,py);
 	      }
-	    painter->drawPolygon(pntArray2);
+
+	    if (pntArray2.size() > 0)
+	      {
+		if (pntArray2.at(0) == pntArray2.at(pntArray2.size() - 1))
+		  painter->drawPolygon(pntArray2);
+		else
+		  painter->drawPolyline(pntArray2);
+	      }
+
 	    if (isVisible())
 	      {
 		// paint hot-points
@@ -460,8 +595,43 @@ QString GraphObj::toPixString(QString _filename)
     return QString();
 }
 
+/*===================== get angle ================================*/
+float GraphObj::getAngle(QPoint p1,QPoint p2)
+{
+  float angle = 0.0;
 
+  if (p1.x() == p2.x()) 
+    {
+      if (p1.y() < p2.y())
+	angle = 270.0;
+      else
+	angle = 90.0;
+    }
+  else
+    {
+      float x1, x2, y1, y2;
+      
+      if (p1.x() <= p2.x()) 
+	{
+	  x1 = p1.x(); y1 = p1.y();
+	  x2 = p2.x(); y2 = p2.y();
+	}
+      else 
+	{
+	  x2 = p1.x(); y2 = p1.y();
+	  x1 = p2.x(); y1 = p2.y();
+	}
 
+    float m = -(y2 - y1) / (x2 - x1);
+    angle = atan(m) * RAD_FACTOR;
 
+    if (p1.x() < p2.x()) 
+      angle = 180.0 - angle;
+    else 
+      angle = -angle;
+    }
+
+  return angle;
+}
 
 

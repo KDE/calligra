@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*========================== convert string to pixmap ============*/
 QPixmap string_to_pixmap(const char *_pixmap)
 {
     if ( _pixmap == 0L || _pixmap[0] == 0 )
@@ -77,6 +78,7 @@ QPixmap string_to_pixmap(const char *_pixmap)
     return QPixmap( list );
 }
 
+/*========================== load a pixmap =======================*/
 QString load_pixmap(const char *_file)
 {
     FILE *f = fopen( _file, "r" );
@@ -104,6 +106,7 @@ QString load_pixmap(const char *_file)
     return str;
 }
 
+/*= load pixmap saved in KPresenter's native format - make valid =*/
 QString load_pixmap_native_format(const char *_file)
 {
     FILE *f = fopen( _file, "r" );
@@ -138,4 +141,76 @@ QString load_pixmap_native_format(const char *_file)
     fclose( f );
     
     return str;
+}
+
+/*========================== draw a figure =======================*/
+void drawFigure(LineEnd figure,QPainter* painter,QPoint coord,QColor color,int _w,float angle)
+{
+  painter->setPen(NoPen);
+  painter->setBrush(NoBrush);
+
+  switch (figure)
+    {
+    case L_SQUARE:
+      {
+	int _h = _w;
+	if (_h % 2 == 0) _h--;
+	painter->save();
+	painter->translate(coord.x(),coord.y());
+	painter->rotate(angle);
+	painter->scale(1,1);
+	painter->fillRect(-3 - _w / 2,-3 - _h / 2,6 + _w,6 + _h,color);
+	painter->restore();
+      } break;
+    case L_CIRCLE:
+      {
+	painter->save();
+	painter->translate(coord.x(),coord.y());
+	painter->setBrush(color);
+	painter->drawEllipse(-3 - _w / 2,-3 - _w / 2,6 + _w,6 + _w);
+	painter->restore();
+      } break;
+    case L_ARROW:
+      {
+  	QPoint p1(-5 - _w / 2,-3 - _w / 2);
+  	QPoint p2(5 + _w / 2,0);
+  	QPoint p3(-5 - _w / 2,3 + _w / 2);
+	QPointArray pArray(3);
+	pArray.setPoint(0,p1);
+	pArray.setPoint(1,p2);
+	pArray.setPoint(2,p3);
+	
+	painter->save();
+	painter->translate(coord.x(),coord.y());
+	painter->rotate(angle);
+	painter->scale(1,1);
+	painter->setBrush(color);
+	painter->drawPolygon(pArray);
+	painter->restore();
+      } break;
+    default: break;
+    }
+}
+
+/*================== get bounding with of figure =================*/
+QSize getBoundingSize(LineEnd figure,int _w)
+{
+  switch (figure)
+    {
+    case L_SQUARE:
+      {
+	int _h = _w;
+	if (_h % 2 == 0) _h--;
+	return QSize(6 + _w + 4,6 + _h + 4);
+      } break;
+    case L_CIRCLE:
+      return QSize(6 + _w + 4,6 + _w + 4);
+      break;
+    case L_ARROW:
+	return QSize(10 + _w + 4,6 + _w + 4);
+	break;
+    default: break;
+    }
+
+  return QSize(0,0);
 }

@@ -473,6 +473,8 @@ protected:
   // default pen and brush
   QPen pen;
   QBrush brush;
+  LineEnd lineBegin;
+  LineEnd lineEnd;
 
   // the page
   Page *page;

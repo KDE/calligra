@@ -76,7 +76,7 @@ module KPresenter
       oneway void textNormalText();
     };
   
-  interface KPresenterDocument : OPParts::Document
+  interface KPresenterDocument : OPParts::Document, OPParts::Print
     {
     };
 

@@ -31,6 +31,7 @@
 #include <qpntarry.h>
 #include <qfileinf.h>
 #include <qregexp.h>
+#include <qsize.h>
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -80,6 +81,10 @@ public:
   void setRnds(int rx,int ry) {xRnd = rx; yRnd = ry;}
   int getRndX() {return xRnd;}
   int getRndY() {return yRnd;}
+  void setLineBegin(LineEnd lb) {lineBegin = lb;}
+  LineEnd getLineBegin() {return lineBegin;}
+  void setLineEnd(LineEnd le) {lineEnd = le;}
+  LineEnd getLineEnd() {return lineEnd;}
 
   // save - load
   void save(ostream&);
@@ -94,6 +99,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent*);
   void mouseMoveEvent(QMouseEvent*);
   QString toPixString(QString _filename);
+  float getAngle(QPoint,QPoint);
 
 private:
 
@@ -113,6 +119,7 @@ private:
   QWinMetaFile wmf;
   QString pix_data;
   QString pix_data_native;
+  LineEnd lineBegin,lineEnd;
 
 };
 #endif //GRAPHOBJ_H

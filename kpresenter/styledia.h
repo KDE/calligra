@@ -28,8 +28,12 @@
 #include <qbrush.h>
 #include <qpainter.h>
 #include <qcolor.h>
+#include <qsize.h>
 
 #include <kcolordlg.h>
+
+#include "global.h"
+#include "kpresenter_utils.h"
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -54,6 +58,8 @@ public:
   // set values
   void setPen(QPen _pen) {pen.operator=(_pen); repaint(true);}    
   void setBrush(QBrush _brush) {brush.operator=(_brush); repaint(true);}
+  void setLineBegin(LineEnd lb) {lineBegin = lb; repaint(true);}
+  void setLineEnd(LineEnd le) {lineEnd = le; repaint(true);}
 
 protected:
 
@@ -65,11 +71,12 @@ private:
   int paintType;
   QPen pen;
   QBrush brush;
+  LineEnd lineBegin,lineEnd;
 
 };
 
 /******************************************************************/
-/* class InfoDia                                                  */
+/* class StyleDia                                                 */
 /******************************************************************/
 
 class StyleDia : public QDialog
@@ -85,24 +92,29 @@ public:
   // set values
   void setPen(QPen _pen);                        
   void setBrush(QBrush _brush);
+  void setLineBegin(LineEnd lb);
+  void setLineEnd(LineEnd le);
 
   // get values
   QPen getPen() {return pen;}
   QBrush getBrush() {return brush;}
+  LineEnd getLineBegin() {return lineBegin;}
+  LineEnd getLineEnd() {return lineEnd;}
 
 private:
 
   // dialog objects
   QButtonGroup *penFrame,*brushFrame;  
   QPushButton *choosePCol,*chooseBCol;
-  QLabel *penStyle,*brushStyle,*penWidth;
-  QComboBox *choosePStyle,*chooseBStyle,*choosePWidth;
+  QLabel *penStyle,*brushStyle,*penWidth,*llineBegin,*llineEnd;
+  QComboBox *choosePStyle,*chooseBStyle,*choosePWidth,*clineBegin,*clineEnd;
   QPushButton *okBut,*applyBut,*cancelBut;
   PBPreview *penPrev,*brushPrev;
 
   // pen and brush
   QBrush brush;   
   QPen pen;
+  LineEnd lineBegin,lineEnd;
 
 private slots:
 
@@ -112,6 +124,8 @@ private slots:
   void changePStyle(int item); 
   void changeBStyle(int item);
   void changePWidth(int item); 
+  void changeLineBegin(int item);
+  void changeLineEnd(int item);
   void styleDone() {emit styleOk();} 
 
 signals:

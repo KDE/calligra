@@ -64,6 +64,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
   brush.operator=(QBrush(white,SolidPattern));
+  lineBegin = L_NORMAL;
+  lineEnd = L_NORMAL;
   setMouseTracking(true);
   m_bShowGUI = true;
   m_bRectSelection = false;
@@ -336,6 +338,8 @@ void KPresenterView_impl::extraPenBrush()
   styleDia->setMinimumSize(styleDia->width(),styleDia->height());
   styleDia->setPen(m_pKPresenterDoc->getPen(pen));
   styleDia->setBrush(m_pKPresenterDoc->getBrush(brush));
+  styleDia->setLineBegin(m_pKPresenterDoc->getLineBegin(lineBegin));
+  styleDia->setLineEnd(m_pKPresenterDoc->getLineEnd(lineEnd));
   styleDia->setCaption(klocale->translate(i18n("KPresenter - Pen and Brush")));
   QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
   styleDia->show();
@@ -1093,16 +1097,19 @@ void KPresenterView_impl::afChooseOk(const char* c)
   QString fileName(afDir + "/kpresenter/autoforms/" + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
   
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertAutoform(pen,brush,(const char*)fileName,xOffset,yOffset);
+  m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,(const char*)fileName,xOffset,yOffset);
 }
 
 /*=========== take changes for style dialog =====================*/
 void KPresenterView_impl::styleOk()
 {
-  if (!m_pKPresenterDoc->setPenBrush(styleDia->getPen(),styleDia->getBrush(),xOffset,yOffset))
+  if (!m_pKPresenterDoc->setPenBrush(styleDia->getPen(),styleDia->getBrush(),styleDia->getLineBegin(),
+				     styleDia->getLineEnd(),xOffset,yOffset))
     {
       pen.operator=(styleDia->getPen());
       brush.operator=(styleDia->getBrush());
+      lineBegin = styleDia->getLineBegin();
+      lineEnd = styleDia->getLineEnd();
     }
 }
 
@@ -1229,28 +1236,28 @@ void KPresenterView_impl::alignChanged(TxtParagraph::HorzAlign align)
 void KPresenterView_impl::insertLineH()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_HORZ,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_HORZ,xOffset,yOffset);
 }
 
 /*======================= insert line (|) =======================*/
 void KPresenterView_impl::insertLineV()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_VERT,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_VERT,xOffset,yOffset);
 }
 
 /*======================= insert line (\) =======================*/
 void KPresenterView_impl::insertLineD1()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_LU_RD,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LU_RD,xOffset,yOffset);
 }
 
 /*======================= insert line (/) =======================*/
 void KPresenterView_impl::insertLineD2()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_LD_RU,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LD_RU,xOffset,yOffset);
 }
 
 /*===================== insert normal rect  =====================*/
@@ -1271,28 +1278,28 @@ void KPresenterView_impl::insertRoundRect()
 void KPresenterView_impl::insertLineHidl()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_HORZ,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_HORZ,xOffset,yOffset);
 }
 
 /*======================= insert line (|) =======================*/
 void KPresenterView_impl::insertLineVidl()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_VERT,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_VERT,xOffset,yOffset);
 }
 
 /*======================= insert line (\) =======================*/
 void KPresenterView_impl::insertLineD1idl()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_LU_RD,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LU_RD,xOffset,yOffset);
 }
 
 /*======================= insert line (/) =======================*/
 void KPresenterView_impl::insertLineD2idl()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertLine(pen,LT_LD_RU,xOffset,yOffset);
+  m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LD_RU,xOffset,yOffset);
 }
 
 /*===================== insert normal rect  =====================*/

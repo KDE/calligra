@@ -1683,7 +1683,7 @@ PageEffect KPresenterDocument_impl::getPageEffect(unsigned int pageNum)
 }
 
 /*===================== set pen and brush ========================*/
-bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,int diffx,int diffy)
+bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,int diffx,int diffy)
 {
   bool ret = false;
   unsigned int i;
@@ -1700,8 +1700,10 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,int diffx,int di
 		{
 		  objPtr->graphObj->setObjPen(pen);
 		  objPtr->graphObj->setObjBrush(brush);
+		  objPtr->graphObj->setLineBegin(lb);
+		  objPtr->graphObj->setLineEnd(le);
 		  repaint(objPtr->ox,objPtr->oy,
-			  objPtr->ow,objPtr->oh,TRUE);
+			  objPtr->ow,objPtr->oh,false);
 		  ret = true;
 		}
 	    }      
@@ -1786,6 +1788,42 @@ QPen KPresenterDocument_impl::getPen(QPen pen)
   return pen;
 }
 
+/*========================= get line begin ========================*/
+LineEnd KPresenterDocument_impl::getLineBegin(LineEnd lb)
+{
+  if (!_objList.isEmpty())
+    {
+      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+	{
+	  if (_objList.at(i)->isSelected)
+	    {
+	      objPtr = _objList.at(i);
+	      if (objPtr->objType == OT_LINE || objPtr->objType == OT_AUTOFORM)
+		return objPtr->graphObj->getLineBegin();
+	    }      
+	}
+    }
+  return lb;
+}
+
+/*========================= get line end =========================*/
+LineEnd KPresenterDocument_impl::getLineEnd(LineEnd le)
+{
+  if (!_objList.isEmpty())
+    {
+      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+	{
+	  if (_objList.at(i)->isSelected)
+	    {
+	      objPtr = _objList.at(i);
+	      if (objPtr->objType == OT_LINE || objPtr->objType == OT_AUTOFORM)
+		return objPtr->graphObj->getLineEnd();
+	    }      
+	}
+    }
+  return le;
+}
+
 /*========================= get brush =============================*/
 QBrush KPresenterDocument_impl::getBrush(QBrush brush)
 {
@@ -1818,7 +1856,7 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 	      _objList.take(i);
 	      _objList.append(objPtr);
 	      repaint(objPtr->ox,objPtr->oy,
-		      objPtr->ow,objPtr->oh,TRUE);
+		      objPtr->ow,objPtr->oh,false);
 	    
 	    }
 	}      
@@ -1985,7 +2023,7 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 }
 
 /*===================== insert a line ===========================*/
-void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diffy)
+void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
 {
   _objNums++;
   objPtr = new PageObjects;
@@ -2000,6 +2038,8 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diff
   objPtr->graphObj->setObjPen(pen);
   objPtr->graphObj->setLineType(lt);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+  objPtr->graphObj->setLineBegin(lb);
+  objPtr->graphObj->setLineEnd(le);
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
@@ -2088,7 +2128,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
 }
 
 /*======================= insert an autoform ====================*/
-void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *fileName,int diffx,int diffy)
+void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,const char *fileName,int diffx,int diffy)
 {
   _objNums++;
   objPtr = new PageObjects;
@@ -2102,6 +2142,8 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *f
   objPtr->graphObj = new GraphObj(0,"graphObj",OT_AUTOFORM,QString(fileName));
   objPtr->graphObj->setObjPen(pen);
   objPtr->graphObj->setObjBrush(brush);
+  objPtr->graphObj->setLineBegin(lb);
+  objPtr->graphObj->setLineEnd(le);
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
@@ -2257,7 +2299,7 @@ void KPresenterDocument_impl::deleteObjs()
 	      changed = true;
 	    }
 	}
-      if (changed) repaint(true);
+      if (changed) repaint(false);
       reArrangeObjs();
     }      
 }
@@ -2326,11 +2368,21 @@ void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
 
 		  clipStr += "[GRAPHOBJ]";
 		  
+		  clipStr += "[LINE_BEGIN]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getLineBegin());
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[LINE_END]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getLineEnd());
+		  clipStr += str;
+		  clipStr += "}";
+
 		  clipStr += "[LINE_TYPE]{";
 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineType());
 		  clipStr += str;
 		  clipStr += "}";
-		  
+
 		  clipStr += "[RECT_TYPE]{";
 		  sprintf(str,"%d",(int)objPtr->graphObj->getRectType());
 		  clipStr += str;
@@ -2498,6 +2550,10 @@ void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 		    objPtr->effect2 = (Effect2)atoi(value);
 		  else if (tag == "LINE_TYPE" && objPtr && objPtr->graphObj)
 		    objPtr->graphObj->setLineType((LineType)atoi(value));
+		  else if (tag == "LINE_BEGIN" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setLineBegin((LineEnd)atoi(value));
+		  else if (tag == "LINE_END" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setLineEnd((LineEnd)atoi(value));
 		  else if (tag == "RECT_TYPE" && objPtr && objPtr->graphObj)
 		    objPtr->graphObj->setRectType((RectType)atoi(value));
 		  else if (tag == "PEN_WIDTH" && objPtr && objPtr->graphObj)

@@ -41,6 +41,7 @@ enum Effect {EF_NONE = 0,EF_COME_RIGHT = 1,EF_COME_LEFT = 2,EF_COME_TOP = 3,EF_C
 enum Effect2 {EF2_NONE = 0,EF2T_PARA = 1};
 enum PageEffect {PEF_NONE = 0,PEF_CLOSE_HORZ = 1,PEF_CLOSE_VERT = 2,PEF_CLOSE_ALL = 3,PEF_OPEN_HORZ = 4,PEF_OPEN_VERT = 5,\
 		 PEF_OPEN_ALL = 6};
+enum LineEnd {L_NORMAL,L_ARROW,L_SQUARE,L_CIRCLE};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;

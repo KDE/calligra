@@ -284,8 +284,12 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	    default:
 	      {
 		if (objPtr->objType != OT_CLIPART)
-		  painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
-
+		  {
+		    r = painter->viewport();
+		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+					 r.width(),r.height());
+		  }
+	      
 		if (objPtr->objType == OT_CLIPART)
 		  {
 		    r = painter->viewport();
@@ -297,10 +301,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 
 		objPtr->objPic->play(painter);
 	      
-		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
-
-		if (objPtr->objType == OT_CLIPART)
-		  painter->setViewport(r);
+		painter->setViewport(r);
 
 		painter->resetXForm();
 	      } break;
@@ -2241,8 +2242,12 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	  }
 
 	if (_objPtr->objType != OT_CLIPART)
-	  p.translate((float)_objPtr->ox - (float)diffx() + (float)_x,(float)_objPtr->oy - (float)diffy() + (float)_y);
-	
+	  {
+	    r = p.viewport();
+	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+			  r.width(),r.height());
+	  }	
+
 	if (_objPtr->objType == OT_CLIPART)
 	  {
 	    r = p.viewport();
@@ -2257,8 +2262,7 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	if (_w != 0 || _h != 0)
 	  p.setClipping(false);
 
-	if (_objPtr->objType == OT_CLIPART)
-	  p.setViewport(r);
+	p.setViewport(r);
 	
 	p.resetXForm();
       } break;

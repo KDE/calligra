@@ -38,13 +38,27 @@ void PBPreview::paintEvent(QPaintEvent*)
   painter.begin(this);
   if (paintType == 0)
     {
+      QSize diff1(0,0),diff2(0,0);
+      int _w = pen.width();
+
+      if (lineBegin != L_NORMAL)
+	diff1 = getBoundingSize(lineBegin,_w);
+
+      if (lineEnd != L_NORMAL)
+	diff2 = getBoundingSize(lineEnd,_w);
+
+      if (lineBegin != L_NORMAL)
+	drawFigure(lineBegin,&painter,QPoint(diff1.width() / 2,height() / 2),pen.color(),_w,180.0);
+
+      if (lineEnd != L_NORMAL)
+	drawFigure(lineEnd,&painter,QPoint(width() - diff2.width() / 2,height() / 2),pen.color(),_w,0.0);
+
       painter.setPen(pen);
-      painter.drawLine(0,height()/2,width(),height()/2);
-    }
+      painter.drawLine(diff1.width() / 2,height()/2,width() - diff2.width() / 2,height()/2);
+   }
   else
-    {
-      painter.fillRect(0,0,width(),height(),brush);
-    }
+    painter.fillRect(0,0,width(),height(),brush);
+
   painter.end();
 }
 
@@ -54,7 +68,7 @@ void PBPreview::paintEvent(QPaintEvent*)
 
 /*==================== constructor ===============================*/
 StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
-  :QDialog(parent,name,true)
+  : QDialog(parent,name,true)
 {
   int butW,butH;
 
@@ -108,8 +122,36 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 
   pen.operator=(QPen(black,1,SolidLine));
   
+  llineBegin = new QLabel(penFrame);
+  llineBegin->setText(i18n("Choose line begin:"));
+  llineBegin->move(choosePCol->x(),choosePWidth->y()+choosePWidth->height()+20);
+  llineBegin->resize(llineBegin->sizeHint());
+
+  clineBegin = new QComboBox(false,penFrame,"lineBegin");
+  clineBegin->move(choosePCol->x(),llineBegin->y()+llineBegin->height()+10);
+  clineBegin->resize(clineBegin->sizeHint());
+  clineBegin->insertItem("Normal");
+  clineBegin->insertItem("Arrow");
+  clineBegin->insertItem("Square");
+  clineBegin->insertItem("Circle");
+  connect(clineBegin,SIGNAL(activated(int)),this,SLOT(changeLineBegin(int)));
+
+  llineEnd = new QLabel(penFrame);
+  llineEnd->setText(i18n("Choose line end:"));
+  llineEnd->move(choosePCol->x(),clineBegin->y()+clineBegin->height()+20);
+  llineEnd->resize(llineEnd->sizeHint());
+
+  clineEnd = new QComboBox(false,penFrame,"lineEnd");
+  clineEnd->move(choosePCol->x(),llineEnd->y()+llineEnd->height()+10);
+  clineEnd->resize(clineEnd->sizeHint());
+  clineEnd->insertItem("Normal");
+  clineEnd->insertItem("Arrow");
+  clineEnd->insertItem("Square");
+  clineEnd->insertItem("Circle");
+  connect(clineEnd,SIGNAL(activated(int)),this,SLOT(changeLineEnd(int)));
+
   penPrev = new PBPreview(penFrame,"penPrev",0);
-  penPrev->move(choosePCol->x(),choosePWidth->y()+choosePWidth->height()+20);
+  penPrev->move(choosePCol->x(),clineEnd->y()+clineEnd->height()+20);
   penPrev->resize(choosePCol->width(),25);
   penPrev->setPen(pen);
 
@@ -246,6 +288,22 @@ void StyleDia::setBrush(QBrush _brush)
     }
 }
 
+/*======================== set line beginning =====================*/
+void StyleDia::setLineBegin(LineEnd lb)
+{
+  lineBegin = lb;
+  penPrev->setLineBegin(lineBegin);
+  clineBegin->setCurrentItem((int)lineBegin);
+}
+
+/*======================== set line end ===========================*/
+void StyleDia::setLineEnd(LineEnd le)
+{
+  lineEnd = le;
+  penPrev->setLineEnd(lineEnd);
+  clineEnd->setCurrentItem((int)lineEnd);
+}
+
 /*====================== change pen-color =========================*/
 void StyleDia::changePCol()
 {
@@ -311,11 +369,24 @@ void StyleDia::changeBStyle(int item)
   brushPrev->setBrush(brush);
 }
 
-/*====================== change pwn-width =========================*/
+/*====================== change pen-width =========================*/
 void StyleDia::changePWidth(int item)
 {
   pen.setWidth(item+1);
   penPrev->setPen(pen);
 }
 
+/*====================== change line beginning ====================*/
+void StyleDia::changeLineBegin(int item)
+{
+  lineBegin = (LineEnd)item;
+  penPrev->setLineBegin(lineBegin);
+}
+
+/*====================== change line end ==========================*/
+void StyleDia::changeLineEnd(int item)
+{
+  lineEnd = (LineEnd)item;
+  penPrev->setLineEnd(lineEnd);
+}
 

@@ -206,7 +206,7 @@ public:
   void setBackClip(unsigned int,const char*);
   void setBPicView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
-  bool setPenBrush(QPen,QBrush,int,int);
+  bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,int,int);
   void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);
   BackView getBPicView(unsigned int);
@@ -218,6 +218,8 @@ public:
   PageEffect getPageEffect(unsigned int);
   QPen getPen(QPen);
   QBrush getBrush(QBrush);
+  LineEnd getLineBegin(LineEnd);
+  LineEnd getLineEnd(LineEnd);
 
   // raise and lower objs
   void raiseObjs(int,int);
@@ -228,11 +230,11 @@ public:
   void insertClipart(const char*,int,int);
   void changePicture(const char*,int,int);
   void changeClipart(const char*,int,int);
-  void insertLine(QPen,LineType,int,int);
+  void insertLine(QPen,LineEnd,LineEnd,LineType,int,int);
   void insertRectangle(QPen,QBrush,RectType,int,int);
   void insertCircleOrEllipse(QPen,QBrush,int,int);
   void insertText(int,int);
-  void insertAutoform(QPen,QBrush,const char*,int,int);
+  void insertAutoform(QPen,QBrush,LineEnd,LineEnd,const char*,int,int);
   
   // get list of pages and objects
   QList<Background> *pageList() {return &_pageList;}

@@ -89,7 +89,15 @@ void DrawWidget::createPixmap(const char *fileName)
 	}
       pntArray2.setPoint(i,px,py);
     }
-  painter->drawPolygon(pntArray2);
+
+  if (pntArray2.size() > 0)
+    {
+      if (pntArray2.at(0) == pntArray2.at(pntArray2.size() - 1))
+	painter->drawPolygon(pntArray2);
+      else
+	painter->drawPolyline(pntArray2);
+    }
+
   painter->end();
   aWidth = aw;
   aHeight = ah;
@@ -139,7 +147,16 @@ void DrawWidget::paintEvent(QPaintEvent*)
 	}
       pntArray2.setPoint(i,px,py);
     }
-  painter->drawPolygon(pntArray2);
+
+  if (pntArray2.size() > 0)
+    {
+      if (pntArray2.at(0) == pntArray2.at(pntArray2.size() - 1))
+	painter->drawPolygon(pntArray2);
+      else
+	painter->drawPolyline(pntArray2);
+    }
+
   painter->resetXForm();
   painter->end();
 } 
+

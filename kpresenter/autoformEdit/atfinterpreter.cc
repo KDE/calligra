@@ -24,9 +24,9 @@
 ATFInterpreter::ATFInterpreter(QObject* parent=0,const char* name=0)
   : QObject(parent,name)
 {
-  coordList.setAutoDelete(true);
-  lines.setAutoDelete(true);
-  pointList.setAutoDelete(true);
+  //coordList.setAutoDelete(true);
+  //lines.setAutoDelete(true);
+  //pointList.setAutoDelete(true);
 }
 
 /*======================= destrcutor =============================*/
@@ -248,30 +248,31 @@ void ATFInterpreter::insertPoint(int index,bool pos)
   // pos == true  => insert after index
   // pos == false => insert before index
   
-  CoordStruct coord1;
-  CoordStruct coord2;
-  AttribStruct attrib;
+  CoordStruct *coord1 = new CoordStruct;
+  CoordStruct *coord2 = new CoordStruct;
+  AttribStruct *attrib = new AttribStruct;
 
   pntPtr = new PointStruct;
-  coord1.a = "a=0";
-  coord1.b = "b=0";
-  coord1.c = "c=0";
-  coord1.d = "d=0";
-  coord1.e = "e=0";
-  coord1.f = "f=0";
-  coord1.result = "result=a";
-  pntPtr->x = coord1;
-  coord2.a = "a=0";
-  coord2.b = "b=0";
-  coord2.c = "c=0";
-  coord2.d = "d=0";
-  coord2.e = "e=0";
-  coord2.f = "f=0";
-  coord2.result = "result=a";
-  pntPtr->y = coord2;
-  attrib.isVariable = "v=0";
-  attrib.pwDiv = "p=1";
-  pntPtr->attrib = attrib;
+  
+  coord1->a = qstrdup("a=0");
+  coord1->b = qstrdup("b=0");
+  coord1->c = qstrdup("c=0");
+  coord1->d = qstrdup("d=0");
+  coord1->e = qstrdup("e=0");
+  coord1->f = qstrdup("f=0");
+  coord1->result = qstrdup("result=a");
+  pntPtr->x = *coord1;
+  coord2->a = qstrdup("a=0");
+  coord2->b = qstrdup("b=0");
+  coord2->c = qstrdup("c=0");
+  coord2->d = qstrdup("d=0");
+  coord2->e = qstrdup("e=0");
+  coord2->f = qstrdup("f=0");
+  coord2->result = qstrdup("result=a");
+  pntPtr->y = *coord2;
+  attrib->isVariable = qstrdup("v=0");
+  attrib->pwDiv = qstrdup("p=1");
+  pntPtr->attrib = *attrib;
 
   if (index > 0 && (unsigned int)index <= pointList.count())
     {
@@ -291,7 +292,7 @@ void ATFInterpreter::insertPoint(int index,bool pos)
 /*=========================== delete point =======================*/
 void ATFInterpreter::deletePoint(int pnt)
 {
-  if (!pointList.isEmpty())
+  if (!pointList.isEmpty() && pnt < pointList.count())
     {
       pointList.remove(pnt);
       if (!pointList.isEmpty())
@@ -603,6 +604,7 @@ void ATFInterpreter::makeLines()
 	  lines.append("POINT {");
 	  lines.append("");
 	  lines.append("  X {"); 
+
 	  if (!pntPtr->x.a.isEmpty())
 	    lines.append(qstrdup(stretch(pntPtr->x.a)));
 	  else
