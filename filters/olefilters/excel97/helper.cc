@@ -903,6 +903,14 @@ static const sExcelFunction ExcelFunctions[] =
 
 static const sExcelFunction *ExcelFunction(Q_UINT16 nIndex)
 {
+	// Scan lookup table for operation.
+	for(unsigned int i = 0; ExcelFunctions[i].name; i++)
+	{
+		if(ExcelFunctions[i].index == nIndex)
+			return &ExcelFunctions[i];
+	}
+
+	/* EEK
     int first = 0;
     int last = (sizeof(ExcelFunctions) / sizeof(ExcelFunctions[0])) - 1;
 	
@@ -917,6 +925,7 @@ static const sExcelFunction *ExcelFunction(Q_UINT16 nIndex)
         else
             return pCurr;
     }
+	*/
 	
     return 0;
 }
