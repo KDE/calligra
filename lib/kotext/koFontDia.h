@@ -58,6 +58,7 @@ protected slots:
     void slotFontChanged(const QFont &);
     void slotChangeColor();
     void slotChangeBackGroundColor();
+
 private:
     KFontChooser *m_chooseFont;
     QCheckBox *m_underline;
@@ -91,6 +92,10 @@ public:
 
 protected slots:
     void slotReset();
+    virtual void slotApply();
+    virtual void slotOk();
+signals:
+     void apply();
 
 private:
     KoFontChooser * m_chooser;
