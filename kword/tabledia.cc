@@ -129,9 +129,10 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     preview->setBackgroundColor( white );
     grid->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
-    // Checkbox for floating/fixed location. The default is floating.
+    // Checkbox for floating/fixed location. The default is [will be] floating.
     cbIsFloating = new QCheckBox( i18n( "The table is floating" ), tab1 );
-    cbIsFloating->setChecked( true );
+    cbIsFloating->setEnabled(false);
+    //cbIsFloating->setChecked( true );
 
     grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
 
