@@ -1,7 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
-	$(KOTEXT_INCLUDES) $(all_includes) -I$(top_srcdir)/kword
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula $(KOTEXT_INCLUDES) -I$(top_srcdir)/kword $(all_includes)
 
 kde_module_LTLIBRARIES = libkwserialletter_classic.la
 

@@ -1,7 +1,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
-	$(KOTEXT_INCLUDES) $(all_includes) -I$(top_srcdir)/kword
+	$(KOTEXT_INCLUDES) -I$(top_srcdir)/kword $(all_includes)
 
 kde_module_LTLIBRARIES = libkwserialletter_qtsqldb.la libkwserialletter_qtsqldb_power.la
 
