@@ -49,10 +49,9 @@
 #include <kprinter.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <assert.h>
 #include <qdatetime.h>
-#include <klocale.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -66,7 +65,7 @@
 #include <qpen.h>
 
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kpopupmenu.h>
 #include <kmenubar.h>
 #include <kiconloader.h>

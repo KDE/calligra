@@ -24,7 +24,7 @@
 #include <kbuttonbox.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlistview.h>
@@ -288,7 +288,7 @@ void AddSpawnerSetDlg::loadSet( QListView */*pListView*/, QListViewItem *pParent
 {
     QDir rootDir( rootDirStr );
     QListViewItem *pSetItem;
-    
+
     rootDir.setFilter( QDir::Dirs );
     rootDir.setSorting( QDir::Name );
 

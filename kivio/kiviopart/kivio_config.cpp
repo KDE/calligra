@@ -27,7 +27,7 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 KivioOptions::KivioOptions()
 {
@@ -149,7 +149,7 @@ static const char * connectorTarget_xpm[] = {
 "  .+.  ",
 " .+.+. ",
 ".+. .+.",
-" .   . "}; 
+" .   . "};
 
 
 
@@ -214,7 +214,7 @@ KivioConfig::KivioConfig( const QString &fileName )
 	   kdDebug() << "KivioConfig::KivioConfig() - loaded background" << endl;
         }
     }
-    
+
     m_pConnectorTargetPixmap = new QPixmap( (const char **)connectorTarget_xpm);
     m_pLockPixmap = new QPixmap( (const char **)lock_xpm);
 
@@ -240,7 +240,7 @@ KivioConfig::~KivioConfig()
         delete m_pStencilBGPixmap;
         m_pStencilBGPixmap = NULL;
     }
-    
+
     if( m_pConnectorTargetPixmap )
     {
         delete m_pConnectorTargetPixmap;

@@ -2,7 +2,7 @@
 #include "kivio_text_style.h"
 #include <qdom.h>
 #include <qpainter.h>
-#include <kglobalsettings.h>
+#include <koGlobal.h>
 
 KivioTextStyle::KivioTextStyle()
 {
@@ -12,7 +12,7 @@ KivioTextStyle::KivioTextStyle()
     m_vTextAlign = Qt::AlignVCenter;
     m_isHtml = false;
     //m_font = QFont("times",12);
-    m_font = KGlobalSettings::generalFont();
+    m_font = KoGlobal::defaultFont();
 }
 
 KivioTextStyle::~KivioTextStyle()

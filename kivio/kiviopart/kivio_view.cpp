@@ -45,7 +45,7 @@
 #include <kdialogbase.h>
 #include <kaction.h>
 #include <kcolorbutton.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstdaccel.h>
@@ -1030,7 +1030,7 @@ void KivioView::updateToolBars()
     pStencil = m_pActivePage->selectedStencils()->first();
     if( !pStencil )
     {
-	m_setFontFamily->setFont( KGlobalSettings::generalFont().family() );
+	m_setFontFamily->setFont( KoGlobal::defaultFont().family() );
         m_setFontSize->setFontSize( 12 );
         m_setBold->setChecked( false );
         m_setItalics->setChecked( false );

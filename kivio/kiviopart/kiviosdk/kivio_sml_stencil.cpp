@@ -39,7 +39,7 @@
 #include <qbrush.h>
 #include <qcolor.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
+#include <koGlobal.h>
 #include <math.h>
 
 /**
@@ -1565,7 +1565,7 @@ QFont KivioSMLStencil::textFont()
     }
 
     //return QFont("times",12);
-    return KGlobalSettings::generalFont();
+    return KoGlobal::defaultFont();
 }
 
 

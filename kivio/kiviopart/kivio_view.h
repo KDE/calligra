@@ -69,7 +69,7 @@ class QStringList;
 class QButton;
 
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qframe.h>
 
 #include <koView.h>

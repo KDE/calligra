@@ -27,7 +27,7 @@
 #include "qdrawutil.h"
 
 #include <ktoolbar.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 TKUnitsAction::TKUnitsAction(QObject* parent, const char* name)
 : TKSelectAction(parent,name)

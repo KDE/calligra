@@ -27,7 +27,7 @@
 #include <qregexp.h>
 #include <qpoint.h>
 #include <qcursor.h>
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qbuffer.h>
 #include <qmessagebox.h>
 #include <qclipboard.h>

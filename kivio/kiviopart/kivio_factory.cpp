@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kiconloader.h>
 
 #include "kivio_config.h"

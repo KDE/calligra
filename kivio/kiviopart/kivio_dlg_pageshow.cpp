@@ -22,13 +22,13 @@
 #include "kivio_tabbar.h"
 #include "kivio_page.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <qstrlist.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 
 KivioPageShow::KivioPageShow( KivioView* parent, const char* name )

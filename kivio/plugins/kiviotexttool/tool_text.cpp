@@ -20,7 +20,7 @@
 
 #include <qcursor.h>
 #include <kiconloader.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include "kivio_view.h"

@@ -26,7 +26,7 @@
 #include "qdrawutil.h"
 
 #include <ktoolbar.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 /**********************************************************************************************/
 
