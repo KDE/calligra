@@ -40,8 +40,8 @@ VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QW
 	m_width = new KoUnitDoubleComboBox( this, 0.0, 1000.0 );
 	m_width->setValueInUnit( 100.0, KoUnit::U_PT );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
-	m_height->setValueInUnit( 100.0, KoUnit::U_MM );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	//m_height->setValueInUnit( 100.0, KoUnit::U_MM );
 	refreshUnit();
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );

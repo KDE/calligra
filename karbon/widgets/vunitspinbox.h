@@ -42,7 +42,7 @@ private:
 class KoUnitDoubleBase
 {
 public:
-	KoUnitDoubleBase( unsigned int precision ) : m_precision( precision ) {}
+	KoUnitDoubleBase( KoUnit::Unit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
 	virtual ~KoUnitDoubleBase() {}
 
 	virtual void changeValue( double ) = 0;
@@ -57,16 +57,16 @@ public:
 
 protected:
 	friend class KoUnitDoubleValidator;
-	KoUnitDoubleValidator *m_validator;
-	unsigned int m_precision;
-	KoUnit::Unit m_unit;
+	KoUnitDoubleValidator	*m_validator;
+	KoUnit::Unit			m_unit;
+	unsigned int			m_precision;
 };
 
 class KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
 	KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-					 unsigned int precision = 2, const char *name = 0 );
+					KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
@@ -75,7 +75,7 @@ public:
 class KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
 public:
-	KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
+	KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
@@ -94,7 +94,7 @@ private:
 class KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
 public:
-	KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
+	KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );

@@ -68,8 +68,8 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 	return result;
 }
 
-KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, unsigned int precision, const char *name )
-	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( precision )
+KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
+	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision )
 {
 	m_validator = new KoUnitDoubleValidator( this, this );
 	QSpinBox::setValidator( m_validator );
@@ -93,8 +93,8 @@ KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 }
 
 
-KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: KLineEdit( parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
+KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
+	: KLineEdit( parent, name ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
@@ -135,8 +135,8 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 
 
 
-KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: KComboBox( true, parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
+KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
+	: KComboBox( true, parent, name ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	lineEdit()->setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
