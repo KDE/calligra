@@ -13,7 +13,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	presstructview.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
-	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
+	kpautoformobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
 	kpbackground.cc kpgradient.cc \
 	kpgradientcollection.cc \
@@ -74,7 +74,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		presstructview.h \
 		confpiedia.h confrectdia.h  searchdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
-		kpautoformobject.h kpclipartobject.h kptextobject.h \
+		kpautoformobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
 		kpbackground.h kpgradient.h kpgradientcollection.h \
 		gotopage.h webpresentation.h \

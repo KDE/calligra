@@ -24,7 +24,6 @@
 #include <kprectobject.h>
 #include <kpellipseobject.h>
 #include <kpautoformobject.h>
-#include <kpclipartobject.h>
 #include <kptextobject.h>
 #include <kppixmapobject.h>
 #include <kppieobject.h>
@@ -193,19 +192,13 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         kpautoformobject->setOrig(kpautoformobject->getOrig().x(),objOffset);
                         objects.append( kpautoformobject );
                     } break;
-                    case OT_CLIPART: {
-                        KPClipartObject *kpclipartobject = new KPClipartObject( doc->getPictureCollection() );
-                        objOffset = kpclipartobject->load(current);
-                        kpclipartobject->setOrig(kpclipartobject->getOrig().x(),objOffset);
-                        kpclipartobject->reload();
-                        objects.append( kpclipartobject );
-                    } break;
                     case OT_TEXT: {
                         KPTextObject *kptextobject = new KPTextObject( doc );
                         objOffset = kptextobject->load(current);
                         kptextobject->setOrig(kptextobject->getOrig().x(),objOffset);
                         objects.append( kptextobject );
                     } break;
+                    case OT_CLIPART:
                     case OT_PICTURE: {
                         KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPictureCollection() );
                         objOffset = kppixmapobject->load(current);

@@ -134,8 +134,7 @@ public:
     QPtrList<KPrPage>& pageList() { return m_pageList;}
 
     void insertPixmapKey( KoPictureKey key );
-    void insertClipartKey( KoPictureKey key );
-
+    
     void insertObjectInPage(double offset, KPObject *_obj);
 
     void setGridValue( double rx, double ry, bool _replace = true );

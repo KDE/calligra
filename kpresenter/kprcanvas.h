@@ -173,7 +173,6 @@ public:
 
     void setMouseSelectedObject(bool b);
 
-    bool haveASelectedClipartObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
     bool haveASelectedPixmapObj() const;
@@ -203,8 +202,6 @@ public:
     void insertPie( const QRect& );
     KPTextObject* insertTextObject( const QRect& );
     void insertPicture( const QRect &_r );
-    void insertClipart( const QRect &_r );
-    void changeClipart( const QString &file );
     void changePicture( const QString & filename );
 
     int numberOfObjectSelected() const;
@@ -309,7 +306,6 @@ public:
     void closeObject(bool _close);
     void layout();
     void alignVertical( VerticalAlignmentType _type );
-    void saveClip();
     void savePicture();
 
 public slots:
@@ -325,7 +321,6 @@ public slots:
     void shadowObjs();
 
     void chPic();
-    void chClip();
     void picViewOriginalSize();
     void picViewOrig640x480();
     void picViewOrig800x600();

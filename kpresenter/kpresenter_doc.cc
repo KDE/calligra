@@ -24,7 +24,6 @@
 #include <kprectobject.h>
 #include <kpellipseobject.h>
 #include <kpautoformobject.h>
-#include <kpclipartobject.h>
 #include <kptextobject.h>
 #include <kprtextdocument.h>
 #include <kppixmapobject.h>
@@ -1456,30 +1455,6 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 else
                     insertObjectInPage(offset, kpautoformobject);
             } break;
-            case OT_CLIPART: {
-                KPClipartObject *kpclipartobject = new KPClipartObject( getPictureCollection() );
-                offset=kpclipartobject->load(obj);
-                if ( sticky && !ignoreSticky)
-                {
-                    m_stickyPage->appendObject(kpclipartobject);
-                    kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
-                    kpclipartobject->setSticky(sticky);
-                }
-                else if ( m_pageWhereLoadObject && paste) {
-                    kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this , m_pageWhereLoadObject);
-                    macro->addCommand( insertCmd );
-                    kpclipartobject->reload();
-                    createMacro=true;
-                }
-                else if( m_pageWhereLoadObject &&!paste)
-                {
-                    m_pageWhereLoadObject->appendObject(kpclipartobject);
-                    kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
-                }
-                else
-                    insertObjectInPage(offset, kpclipartobject);
-            } break;
             case OT_TEXT: {
                 KPTextObject *kptextobject = new KPTextObject( this );
                 offset=kptextobject->load(obj);
@@ -1503,6 +1478,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 else
                     insertObjectInPage(offset, kptextobject);
             } break;
+            case OT_CLIPART:
             case OT_PICTURE: {
                 KPPixmapObject *kppixmapobject = new KPPixmapObject( getPictureCollection() );
                 offset=kppixmapobject->load(obj);
@@ -2744,12 +2720,6 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 }
 
 void KPresenterDoc::insertPixmapKey( KoPictureKey key )
-{
-    if ( !usedPictures.contains( key ) )
-        usedPictures.append( key );
-}
-
-void KPresenterDoc::insertClipartKey( KoPictureKey key )
 {
     if ( !usedPictures.contains( key ) )
         usedPictures.append( key );

@@ -25,7 +25,6 @@
 #include <kprectobject.h>
 #include <kpellipseobject.h>
 #include <kpautoformobject.h>
-#include <kpclipartobject.h>
 #include <kptextobject.h>
 #include <kppixmapobject.h>
 #include <kppieobject.h>
@@ -382,16 +381,10 @@ QPen KPrPage::getPen( const QPen &pen ) const
                     return kpobject->getPen();
             }
             break;
-	    case OT_PICTURE:
+            case OT_CLIPART:
+            case OT_PICTURE:
             {
                 KPPixmapObject*kpobject=dynamic_cast<KPPixmapObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
-	    case OT_CLIPART:
-            {
-                KPClipartObject*kpobject=dynamic_cast<KPClipartObject*>( it.current() );
                 if(kpobject)
                     return kpobject->getPen();
             }
@@ -638,6 +631,7 @@ QBrush KPrPage::getBrush( const QBrush &brush )const
 	    }
 
 	    break;
+	  case OT_CLIPART:
 	  case OT_PICTURE:
 	    {
 	      KPPixmapObject*obj=dynamic_cast<KPPixmapObject*>( it.current() );
@@ -645,13 +639,6 @@ QBrush KPrPage::getBrush( const QBrush &brush )const
 		return obj->getBrush();
 	    }
 
-	    break;
-	  case OT_CLIPART:
-	    {
-	      KPClipartObject*obj=dynamic_cast<KPClipartObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
 	    break;
 	  case OT_TEXT:
 	    {
@@ -1604,25 +1591,6 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
     return moveByCmd2;
 }
 
-
-
-void KPrPage::insertClipart( const QString &filename )
-{
-    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( filename ).getKey();
-    kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
-
-    KPClipartObject *kpclipartobject = new KPClipartObject(m_doc->getPictureCollection() , key );
-    double x=(m_doc->zoomHandler()->unzoomItX(10)/m_doc->getGridX())*m_doc->getGridX();
-    double y=(m_doc->zoomHandler()->unzoomItY(10)/m_doc->getGridY())*m_doc->getGridY();
-    kpclipartobject->setOrig( x, y);
-    kpclipartobject->setSize( m_doc->zoomHandler()->unzoomItX(150), m_doc->zoomHandler()->unzoomItY(150) );
-    kpclipartobject->setSelected( true );
-
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, m_doc,this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
-}
-
 KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( m_doc );
@@ -1747,21 +1715,12 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 }
             }
             break;
+            case OT_CLIPART:
             case OT_PICTURE:
             {
                 KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
-                }
-            }
-            break;
-            case OT_CLIPART:
-            {
-                KPClipartObject *obj=dynamic_cast<KPClipartObject*>( kpobject );
-                if(obj)
-                {
-
                     ptmp->pen = QPen( obj->getPen() );
                 }
             }
@@ -1995,25 +1954,10 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
                 }
             }
             break;
+            case OT_CLIPART:
             case OT_PICTURE:
             {
                 KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
-            case OT_CLIPART:
-            {
-                KPClipartObject *obj=dynamic_cast<KPClipartObject*>( kpobject );
                 if(obj)
                 {
                     btmp->brush = QBrush( obj->getBrush() );
@@ -2153,12 +2097,9 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
                 flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                 break;
             case OT_CLIPART:
-                flags |= StyleDia::SdPen | StyleDia::SdBrush | StyleDia::SdGradient;
-                flags |= StyleDia::SdOther; // Misisng in OT_PICTURE
-                break;
             case OT_PICTURE:
                 flags |= StyleDia::SdPen | StyleDia::SdPicture | StyleDia::SdBrush ;
-                //flags |= StyleDia::SdGradient; // ### FIXME: it crashes for OT_PICTURE
+                flags |= StyleDia::SdGradient;
                 break;
             case OT_AUTOFORM:
             {
@@ -2481,6 +2422,7 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gType = obj->getGType();
                 }
 	    } break;
+	    case OT_CLIPART:
 	    case OT_PICTURE: {
                 KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
                 if(obj)
@@ -2495,17 +2437,6 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
             case OT_CLOSED_LINE: {
                 KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
                 if( obj ) {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-	    } break;
-	    case OT_CLIPART: {
-                KPClipartObject *obj=dynamic_cast<KPClipartObject*>( kpobject );
-                if(obj)
-                {
                     btmp->brush = QBrush( obj->getBrush() );
                     btmp->fillType = obj->getFillType();
                     btmp->gColor1 = obj->getGColor1();
@@ -2589,30 +2520,6 @@ void KPrPage::changePicture( const QString & filename )
     }
 }
 
-void KPrPage::changeClipart( const QString & filename )
-{
-    // filename has been chosen in KPresenterView with a filedialog,
-    // so we know it exists
-    KoPicture clipart = m_doc->getPictureCollection()->loadPicture( filename );
-
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->isSelected()&& it.current()->getType()==OT_CLIPART)
-        {
-            KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
-            if (obj )
-            {
-                ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change Clipart" ),obj,obj->getKey(),clipart.getKey(), m_doc);
-                chgClipCmd->execute();
-                m_doc->addCommand( chgClipCmd );
-            }
-	    break;
-	}
-    }
-}
-
-
 void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
     KoPictureKey key = m_doc->getPictureCollection()->loadPicture( filename ).getKey();
@@ -2656,22 +2563,6 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc, this );
     insertCmd->execute();
 
-    m_doc->addCommand( insertCmd );
-}
-
-void KPrPage::insertClipart( const QString &_file, const KoRect &_rect )
-{
-    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( _file ).getKey();
-    kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
-
-    KPClipartObject *kpclipartobject = new KPClipartObject( m_doc->getPictureCollection() , key );
-
-    kpclipartobject->setOrig( _rect.x(), _rect.y() );
-    kpclipartobject->setSize( _rect.width(), _rect.height() );
-    kpclipartobject->setSelected( true );
-
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, m_doc, this );
-    insertCmd->execute();
     m_doc->addCommand( insertCmd );
 }
 
@@ -2836,20 +2727,15 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
     for ( ; it.current() ; ++it )
     {
         // Pictures and cliparts have been loaded from the store, we can now
-        // get the pixmap/picture from the collection, and set it in the image/clipart object
-        if ( it.current()->getType() == OT_PICTURE ) {
+        // get the picture from the collection, and set it in the image/clipart object
+        if ( ( it.current()->getType() == OT_PICTURE )
+            || ( it.current()->getType() == OT_CLIPART ) ) {
             if ( _clean || m_objectList.findRef( it.current() ) > lastObj )
             {
                 KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current());
                 if(obj)
                     obj->reload();
             }
-        }
-        else if ( it.current()->getType() == OT_CLIPART )
-        {
-            KPClipartObject*obj=dynamic_cast<KPClipartObject*>( it.current() );
-            if(obj)
-                obj->reload();
         }
         else if ( it.current()->getType() == OT_TEXT )
         {
@@ -2870,15 +2756,11 @@ void KPrPage::completeLoadingForGroupObject( KPObject *_obj )
     if ( _groupObj ) {
         QPtrListIterator<KPObject> it( _groupObj->objectList() );
         for ( ; it.current(); ++it ) {
-            if ( it.current()->getType() == OT_PICTURE ) {
+            if ( ( it.current()->getType() == OT_PICTURE )
+                || ( it.current()->getType() == OT_CLIPART ) ) {
                 KPPixmapObject *_pixObj = static_cast<KPPixmapObject*>( it.current() );
                 if ( _pixObj )
                     _pixObj->reload();
-            }
-            else if ( it.current()->getType() == OT_CLIPART ) {
-                KPClipartObject *_clipartObj = static_cast<KPClipartObject*>( it.current() );
-                if ( _clipartObj )
-                    _clipartObj->reload();
             }
             else if ( it.current()->getType() == OT_TEXT ) {
                 KPTextObject *_textObj=  static_cast<KPTextObject*>( it.current() );
@@ -2992,10 +2874,7 @@ void KPrPage::makeUsedPixmapList()
    {
        if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
        {
-           if( it.current()->getType()==OT_PICTURE)
-               m_doc->insertPixmapKey(dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
-           else
-               m_doc->insertClipartKey(dynamic_cast<KPClipartObject*>( it.current())->getKey());
+            m_doc->insertPixmapKey(dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
        }
        else if ( it.current()->getType() == OT_GROUP )
            makeUsedPixmapListForGroupObject( it.current() );
@@ -3012,10 +2891,9 @@ void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )
     if ( _groupObj ) {
         QPtrListIterator<KPObject> it( _groupObj->objectList() );
         for ( ; it.current(); ++it ) {
-            if ( it.current()->getType() == OT_PICTURE )
+            if ( ( it.current()->getType() == OT_PICTURE )
+                || ( it.current()->getType() == OT_CLIPART ) )
                 m_doc->insertPixmapKey( dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
-            else if ( it.current()->getType() == OT_CLIPART )
-                m_doc->insertClipartKey( dynamic_cast<KPClipartObject*>( it.current() )->getKey() );
             else if ( it.current()->getType() == OT_GROUP )
                 makeUsedPixmapListForGroupObject( it.current() );  // recursion
         }
@@ -3126,17 +3004,6 @@ bool KPrPage::isOneObjectSelected() const
     return false;
 }
 
-bool KPrPage::haveASelectedClipartObj() const
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->isSelected() && it.current()->getType() == OT_CLIPART)
-            return true;
-    }
-    return false;
-}
-
 bool KPrPage::haveASelectedPartObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -3161,7 +3028,9 @@ bool KPrPage::haveASelectedPixmapObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it ) {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        if ( it.current()->isSelected() && 
+            ( ( it.current()->getType() == OT_PICTURE )
+            || ( it.current()->getType() == OT_CLIPART ) ) )
             return true;
     }
     return false;
@@ -3190,7 +3059,9 @@ bool KPrPage::chPic( KPresenterView *_view)
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        if ( it.current()->isSelected() &&
+            ( ( it.current()->getType() == OT_PICTURE )
+            || ( it.current()->getType() == OT_CLIPART ) ) )
         {
 	  KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
 	  if( obj)
@@ -3203,48 +3074,15 @@ bool KPrPage::chPic( KPresenterView *_view)
     return false;
 }
 
-bool KPrPage::chClip(KPresenterView *_view)
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
-        {
-	  KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
-	  if(obj)
-	    {
-	      _view->changeClipart( obj->getFileName() );
-	      return true;
-	    }
-        }
-    }
-    return false;
-}
-
-bool KPrPage::saveClip(KPresenterView *_view) const
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
-        {
-	  KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
-	  if(obj)
-	    {
-	      _view->saveClipart( obj );
-	      return true;
-	    }
-        }
-    }
-    return false;
-}
-
 bool KPrPage::savePicture( KPresenterView *_view ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        if ( it.current()->isSelected() &&
+            ( ( it.current()->getType() == OT_PICTURE )
+            || ( it.current()->getType() == OT_CLIPART ) ) )
+
         {
 	  KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
 	  if( obj)
@@ -3556,7 +3394,9 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
   QPtrListIterator<KPObject> it( m_objectList );
   for ( ; it.current() ; ++it )
   {
-      if ( it.current()->isSelected()&& it.current()->getType()==OT_PICTURE )
+      if ( it.current()->isSelected()&& 
+            ( ( it.current()->getType() == OT_PICTURE )
+            || ( it.current()->getType() == OT_CLIPART ) ) )
       {
           obj=(KPPixmapObject*)it.current();
           break;

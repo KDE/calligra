@@ -91,11 +91,6 @@ void KPresenterViewIface::insertPicture()
     view->insertPicture();
 }
 
-void KPresenterViewIface::insertClipart()
-{
-    view->insertClipart();
-}
-
 void KPresenterViewIface::toolsMouse()
 {
     view->toolsMouse();
@@ -596,11 +591,6 @@ void KPresenterViewIface::createStyleFromSelection()
 void KPresenterViewIface::closeObject()
 {
     view->closeObject();
-}
-
-void KPresenterViewIface::saveClipart()
-{
-    view->saveClipart();
 }
 
 void KPresenterViewIface::savePicture()

@@ -129,7 +129,6 @@
 #include <kostyle.h>
 #include "kprstylemanager.h"
 #include "kppixmapobject.h"
-#include "kpclipartobject.h"
 #include <koCommentDia.h>
 
 #include "kprhelplinedia.h"
@@ -740,48 +739,6 @@ void KPresenterView::savePicture( KPPixmapObject* obj )
 {
     QString oldFile=obj->getFileName();
     KoPicture picture(obj->picture());
-    savePicture(oldFile, picture);
-}
-
-void KPresenterView::insertClipart()
-{
-    m_canvas->setToolEditMode( INS_CLIPART );
-    m_canvas->deSelectAllObj();
-
-    KFileDialog fd( QString::null, KoPictureFilePreview::clipartPattern(), 0, 0, true );
-    fd.setCaption( i18n( "Insert Clipart" ) );
-    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
-
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
-
-    if( url.isEmpty() || !url.isValid() )
-    {
-        m_canvas->setToolEditMode( TEM_MOUSE, false );
-        return;
-    }
-
-    QString file;
-    if ( !KIO::NetAccess::download( url, file ) )
-    {
-        m_canvas->setToolEditMode( TEM_MOUSE, false );
-        return;
-    }
-
-    if ( !file.isEmpty() )
-        m_canvas->activePage()->setInsClipartFile( file );
-}
-
-void KPresenterView::saveClipart()
-{
-    m_canvas->saveClip();
-}
-
-void KPresenterView::saveClipart( KPClipartObject* obj )
-{
-    QString oldFile=obj->getFileName();
-    KoPicture picture(obj->clipart());
     savePicture(oldFile, picture);
 }
 
@@ -2679,10 +2636,6 @@ void KPresenterView::setupActions()
 				       this, SLOT( insertPicture() ),
 				       actionCollection(), "insert_picture" );
 
-    actionInsertClipart = new KAction( i18n( "&Clipart..." ), "clipart", Key_F4,
-				       this, SLOT( insertClipart() ),
-				       actionCollection(), "insert_clipart" );
-
     // ----------------- tools actions
 
     actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", Key_F5,
@@ -3117,9 +3070,6 @@ void KPresenterView::setupActions()
 //     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 // 				       this, SLOT( extraPenBrush() ),
 // 				       actionCollection(), "object_properties" );
-    actionChangeClipart =new KAction( i18n( "&Change Clipart..." ), "clipart", 0,
-				       this, SLOT( extraChangeClip() ),
-				       actionCollection(), "change_clipart" );
     actionRenamePage=new KAction(i18n( "&Rename Page..." ),0,this,
                      SLOT( renamePageTitle() ),
                      actionCollection(), "rename_page" );
@@ -3399,9 +3349,6 @@ void KPresenterView::setupActions()
                                     this, SLOT( savePicture() ),
                                     actionCollection(), "save_picture");
 
-    actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
-                                    this, SLOT( saveClipart() ),
-                                    actionCollection(), "save_clipart");
     actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
                                                  this, SLOT( autoSpellCheck() ),
                                                  actionCollection(), "tool_auto_spellcheck" );
@@ -3462,7 +3409,7 @@ void KPresenterView::objectSelectedChanged()
     actionEditDelete->setEnabled(state&&!headerfooterselected);
     actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
-    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedClipartObj()
+    actionExtraShadow->setEnabled(state
                                   && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
 
     actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
@@ -4053,28 +4000,6 @@ void KPresenterView::changePicture( const QString & filename )
 
     if ( !file.isEmpty() && (file!=filename))
       m_canvas->changePicture( file );
-}
-
-/*====================== change clipart =========================*/
-void KPresenterView::changeClipart( const QString & filename )
-{
-    KFileDialog fd( filename, KoPictureFilePreview::clipartPattern(), 0, 0, true );
-    fd.setCaption(i18n("Select new Clipart"));
-    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
-
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
-
-    if( url.isEmpty() || !url.isValid() )
-        return;
-
-    QString file;
-    if (!KIO::NetAccess::download( url, file ))
-        return;
-
-    if ( !file.isEmpty() && (file!=filename) )
-        m_canvas->changeClipart( file );
 }
 
 /*====================== resize event ===========================*/
@@ -4915,11 +4840,6 @@ void KPresenterView::viewShowNoteBar()
         notebar->show();
 }
 
-void KPresenterView::extraChangeClip()
-{
-    m_canvas->chClip();
-}
-
 void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
@@ -4978,14 +4898,6 @@ void KPresenterView::openPopupMenuPieObject( const QPoint & _point )
         return;
      static_cast<QPopupMenu*>(factory()->container("piemenu_popup",this))->popup(_point);
 }
-
-void KPresenterView::openPopupMenuClipObject(const QPoint & _point)
-{
-    if(!koDocument()->isReadWrite() )
-        return;
-     static_cast<QPopupMenu*>(factory()->container("clipmenu_popup",this))->popup(_point);
-}
-
 
 void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
 {

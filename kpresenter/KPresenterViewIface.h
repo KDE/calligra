@@ -52,7 +52,6 @@ k_dcop:
     // insert menu
     virtual void insertPage();
     virtual void insertPicture();
-    virtual void insertClipart();
     virtual void insertSpecialChar();
     virtual void insertLink();
     virtual void insertComment();
@@ -179,7 +178,6 @@ k_dcop:
 
     virtual void closeObject();
 
-    void saveClipart();
     void savePicture();
     void insertFile();
     void importStyle();

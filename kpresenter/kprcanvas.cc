@@ -40,7 +40,6 @@
 #include <kpresenter_view.h>
 #include <qwmf.h>
 #include <kpbackground.h>
-#include <kpclipartobject.h>
 #include <kppixmapobject.h>
 #include <kpfreehandobject.h>
 #include <kpcubicbeziercurveobject.h>
@@ -942,14 +941,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 		QPoint pnt = QCursor::pos();
 		mousePressed = false;
                 bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
-                if ( kpobject->getType() == OT_PICTURE ) {
+                if ( ( kpobject->getType() == OT_PICTURE )
+                    || ( kpobject->getType() == OT_CLIPART ) ) {
                     deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPicObject(pnt);
-                } else if ( kpobject->getType() == OT_CLIPART ) {
-                    deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuClipObject(pnt);
                 } else if ( kpobject->getType() == OT_TEXT ) {
                     if ( state )
                         deSelectAllObj();
@@ -1505,12 +1501,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         if ( !m_pointArray.isNull() )
             insertPolygon( m_pointArray );
         break;
-    case INS_PICTURE: {
-        if ( !insRect.isNull() ) insertPicture( insRect );
-        setToolEditMode( TEM_MOUSE );
-    } break;
+    case INS_PICTURE:
     case INS_CLIPART: {
-        if ( !insRect.isNull() ) insertClipart( insRect );
+        if ( !insRect.isNull() ) insertPicture( insRect );
         setToolEditMode( TEM_MOUSE );
     } break;
     case INS_CLOSED_FREEHAND: {
@@ -2498,23 +2491,6 @@ void KPrCanvas::chPic()
     stickyPage()->chPic(m_view);
 }
 
-/*======================= change clipart  ========================*/
-void KPrCanvas::chClip()
-{
-    bool state=m_activePage->chClip( m_view);
-    if( state)
-        return;
-    stickyPage()->chClip(m_view);
-}
-
-void KPrCanvas::saveClip()
-{
-    bool state=m_activePage->saveClip( m_view);
-    if( state)
-        return;
-    stickyPage()->saveClip(m_view);
-}
-
 void KPrCanvas::savePicture()
 {
     bool state=m_activePage->savePicture( m_view);
@@ -2987,12 +2963,6 @@ void KPrCanvas::printRTDebug( int info )
         kpTxtObj->textObject()->printRTDebug( info );
 }
 #endif
-
-bool KPrCanvas::haveASelectedClipartObj() const
-{
-    return m_activePage->haveASelectedClipartObj() ||
-	stickyPage()->haveASelectedClipartObj();
-}
 
 bool KPrCanvas::haveASelectedPartObj() const
 {
@@ -4557,23 +4527,6 @@ void KPrCanvas::insertPicture( const QRect &_r )
 }
 
 /*================================================================*/
-void KPrCanvas::insertClipart( const QRect &_r )
-{
-    QRect r( _r );
-    r.moveBy( diffx(), diffy() );
-    KoRect rect = m_view->zoomHandler()->unzoomRect( r );
-    QString file = m_activePage->insClipartFile();
-
-    QCursor c = cursor();
-    setCursor( waitCursor );
-    if ( !file.isEmpty() ) {
-        m_activePage->insertClipart( file, rect );
-        m_activePage->setInsClipartFile( QString::null );
-    }
-    setCursor( c );
-}
-
-/*================================================================*/
 void KPrCanvas::insertClosedLine( const KoPointArray &_pointArray )
 {
     KoPointArray points( _pointArray );
@@ -5849,13 +5802,6 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
         int x=m_view->zoomHandler()->zoomItX(m_boundingRect.right())-(m_view->zoomHandler()->zoomItX(visiblePage.right()+tmpdiffy));
         m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+x);
     }
-}
-
-
-void KPrCanvas::changeClipart( const QString &file )
-{
-    m_activePage->changeClipart( file );
-    m_view->kPresenterDoc()->stickyPage()->changeClipart( file );
 }
 
 void KPrCanvas::changePicture( const QString & filename )

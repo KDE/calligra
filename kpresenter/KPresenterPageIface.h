@@ -100,7 +100,6 @@ k_dcop:
     virtual bool isSlideSelected();
     virtual void slideSelected(bool _b);
     virtual void changePicture( const QString & );
-    virtual void changeClipart( const QString & );
 
     //return -1 if there is not a rndY or rndX defined
     virtual int rndY() const;
@@ -118,14 +117,12 @@ k_dcop:
     DCOPRef insertLineD2( int x,int y, int h, int w, bool rev );
     DCOPRef insertTextObject( int x,int y, int h, int w );
     DCOPRef insertPicture( const QString & file,int x,int y, int h, int w );
-    DCOPRef insertClipart( const QString & file,int x,int y, int h, int w );
 
     void deSelectAllObj();
 
     bool oneObjectTextExist() const ;
     bool isOneObjectSelected() const;
 
-    bool haveASelectedClipartObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
     void rotateAllObjSelected(float _newAngle);

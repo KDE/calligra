@@ -134,7 +134,14 @@ double KPPixmapObject::load(const QDomElement &element)
     else {
         // try to find a PIXMAP tag if the KEY is not available...
         e=element.namedItem("PIXMAP").toElement();
-        if(!e.isNull()) {
+        if (e.isNull()) {
+            // try to find a FILENAME tag (old cliparts...)
+            e=element.namedItem("FILENAME").toElement();
+            if(!e.isNull()) {
+                // Loads from the disk directly (unless it's in the collection already?)
+                image = imageCollection->loadPicture( e.attribute("filename") );
+            }
+        } else {
             bool openPic = true;
             QString _data;
             QString _fileName;

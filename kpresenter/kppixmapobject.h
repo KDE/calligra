@@ -25,12 +25,14 @@
 #include <kpobject.h>
 #include <koPictureCollection.h>
 #include <koSize.h>
-class KPGradient;
+
 class QPixmap;
 
 /******************************************************************/
 /* Class: KPPixmapObject                                          */
 /******************************************************************/
+
+// ### TODO in KOffice 1,3: rename the class to a better name (for example KPPictureObject)
 
 class KPPixmapObject : public KP2DObject
 {
@@ -101,7 +103,6 @@ protected:
 
     KoPictureCollection *imageCollection;
     KoPicture image;
-    KPGradient *gradient;
 
     PictureMirrorType mirrorType;
     int depth;

@@ -181,11 +181,8 @@ public:
     void slotRepaintVariable();
     void recalcPageNum();
     void changePicture( const QString & filename );
-    void changeClipart( const QString & filename );
     void insertPicture( const QString &, int _x = 10, int _y = 10 );
-    void insertClipart( const QString & );
     void insertPicture( const QString &_file, const KoRect &_rect );
-    void insertClipart( const QString &_file, const KoRect &_rect );
 
     void enableEmbeddedParts( bool f );
     void deletePage( );
@@ -226,10 +223,8 @@ public:
     void slideSelected(bool _b){m_selectedSlides=_b;}
 
     void setInsPictureFile( const QString &_file ) { m_pictureFile = _file; }
-    void setInsClipartFile( const QString &_file ) { m_clipartFile = _file; }
 
     QString insPictureFile() const { return m_pictureFile; }
-    QString insClipartFile() const { return m_clipartFile; }
 
     void deSelectAllObj();
     void deSelectObj( KPObject *kpobject );
@@ -237,7 +232,6 @@ public:
 
     bool oneObjectTextExist() const ;
     bool isOneObjectSelected() const;
-    bool haveASelectedClipartObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
     bool haveASelectedPixmapObj() const;
@@ -245,7 +239,6 @@ public:
     KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const;
     KoRect getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc) const;
     bool chPic( KPresenterView *_view);
-    bool chClip(KPresenterView *_view);
 
     //return command when we move object
     KCommand *moveObject(KPresenterView *_view, int diffx,int diffy);
@@ -274,7 +267,6 @@ public:
     bool canMoveOneObject() const;
     KCommand *alignVertical( VerticalAlignmentType _type );
     void changeTabStopValue ( double _tabStop );
-    bool saveClip( KPresenterView *_view ) const;
     bool savePicture( KPresenterView *_view ) const;
     bool findTextObject( KPObject *obj );
     KPObject *nextTextObject(KPTextObject *obj);
@@ -295,6 +287,5 @@ private:
     bool m_selectedSlides;
 
     QString m_pictureFile;
-    QString m_clipartFile;
 };
 #endif //KPRPAGE_H

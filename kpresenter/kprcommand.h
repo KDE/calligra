@@ -40,7 +40,6 @@ class KPObject;
 class KPPixmapObject;
 class KPGroupObject;
 class KPresenterView;
-class KPClipartObject;
 class KoParagLayout;
 class KPrPage;
 class KoCustomVariable;
@@ -202,27 +201,6 @@ protected:
     KPresenterDoc *doc;
     KPrPage *m_page;
 
-};
-
-/******************************************************************/
-/* Class: ChgClipCmd                                              */
-/******************************************************************/
-
-class ChgClipCmd : public KNamedCommand
-{
-public:
-    ChgClipCmd( const QString &_name, KPClipartObject *_object, KoPictureKey _oldName,
-                KoPictureKey _newName, KPresenterDoc *_doc );
-    ~ChgClipCmd();
-
-    virtual void execute();
-    virtual void unexecute();
-
-protected:
-
-    KPClipartObject *object;
-    KPresenterDoc *doc;
-    KoPictureKey oldKey, newKey;
 };
 
 /******************************************************************/

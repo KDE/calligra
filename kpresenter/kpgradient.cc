@@ -21,6 +21,7 @@
 #include <qpainter.h>
 #include <kpixmapeffect.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <kozoomhandler.h>
 
 /******************************************************************/
@@ -140,4 +141,23 @@ const QPixmap& KPGradient::pixmap() const
     if ( m_bDirty )
         const_cast<KPGradient *>(this)->paint();
     return m_pixmap;
+}
+
+void KPGradient::setSize( const QSize& _size )
+{
+    kdDebug() << "KPGradient::setSize" << endl;
+#if 1
+    if (true) {
+#elif 0
+    QSize oldSize=size();
+    kdDebug() << "Old size " << oldSize << endl;
+    if ( oldSize != _size ) {
+#else
+    if ( size() != _size ) {
+#endif
+        kdDebug() << "Resizing gradient..." << endl;
+        m_pixmap.resize( _size );
+        kdDebug() << "Gradient resized!" << endl;
+        m_bDirty = true;
+    }
 }

@@ -71,7 +71,6 @@ class KPrCanvas;
 class KoFontDia;
 class KoParagDia;
 class KPPixmapObject;
-class KPClipartObject;
 
 class PageBase : public QWidget
 {
@@ -137,7 +136,6 @@ public:
     void updateGridButton();
     void savePicture( const QString& oldName, KoPicture& picture);
     void savePicture( KPPixmapObject* obj );
-    void saveClipart( KPClipartObject* obj );
 
     void insertFile(const QString &path);
     void configureSpellChecker();
@@ -181,7 +179,6 @@ public slots:
     void insertPage();
     void insertPicture();
     void insertPicture(const QString &file);
-    void insertClipart();
     void insertSpecialChar();
 
     // tools menu
@@ -311,7 +308,6 @@ public slots:
 
     void objectSelectedChanged();
 
-    void extraChangeClip();
     void renamePageTitle();
 
     void picViewOriginalSize();
@@ -407,7 +403,6 @@ public slots:
     void alignVerticalCenter();
 
 
-    void saveClipart();
     void savePicture();
     void autoSpellCheck();
 
@@ -429,7 +424,6 @@ public:
 
     // properties
     void changePicture( const QString & );
-    void changeClipart( const QString & );
 
     KPrCanvas* getCanvas() const { return m_canvas;}
 
@@ -527,7 +521,6 @@ public:
     void openPopupMenuRectangleObject( const QPoint & _point );
     void openPopupMenuGraphMenu(const QPoint & _point );
     void openPopupMenuPieObject( const QPoint & _point );
-    void openPopupMenuClipObject(const QPoint & _point);
     void openPopupMenuSideBar(const QPoint & _point);
     void openPopupMenuPicObject(const QPoint & _point);
     void openPopupMenuPolygonObject( const QPoint &_point );
@@ -831,7 +824,6 @@ private:
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;
-    KAction *actionInsertClipart;
 
     KToggleAction *actionToolsMouse;
     KToggleAction *actionToolsRotate;
@@ -939,7 +931,6 @@ private:
     KAction *actionResizeTextObject;
     KAction *actionExtendObjectHeight;
     KAction *actionObjectProperties;
-    KAction *actionChangeClipart;
 
     KAction *actionRenamePage;
 
@@ -1022,7 +1013,6 @@ private:
 
     KAction *actionCreateStyleFromSelection;
 
-    KAction *actionSaveClipart;
     KAction *actionSavePicture;
 
     KAction *actionSaveBackgroundPicture;

@@ -20,7 +20,6 @@
 #include <kpresenter_doc.h>
 #include <kprcommand.h>
 #include <kpbackground.h>
-#include <kpclipartobject.h>
 #include <kpgroupobject.h>
 
 
@@ -306,40 +305,6 @@ void RotateCmd::unexecute()
         int pos=doc->pageList().findRef(m_page);
         doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
-}
-
-/******************************************************************/
-/* Class: ChgClipCmd                                              */
-/******************************************************************/
-
-/*======================== constructor ===========================*/
-ChgClipCmd::ChgClipCmd( const QString &_name, KPClipartObject *_object, KoPictureKey _oldKey,
-                        KoPictureKey _newKey, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), oldKey( _oldKey ), newKey( _newKey )
-{
-    object = _object;
-    doc = _doc;
-    object->incCmdRef();
-}
-
-/*======================== destructor ============================*/
-ChgClipCmd::~ChgClipCmd()
-{
-    object->decCmdRef();
-}
-
-/*======================== execute ===============================*/
-void ChgClipCmd::execute()
-{
-    object->setClipart( newKey );
-    doc->repaint( object );
-}
-
-/*====================== unexecute ===============================*/
-void ChgClipCmd::unexecute()
-{
-    object->setClipart( oldKey );
-    doc->repaint( object );
 }
 
 /******************************************************************/
@@ -1071,16 +1036,9 @@ void PenCmd::applyPen(KPObject *kpobject, Pen *tmpPen)
             doc->repaint( obj );
 	}
     } break;
+    case OT_CLIPART:
     case OT_PICTURE: {
         KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-        if(obj)
-	{
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-	}
-    } break;
-    case OT_CLIPART: {
-        KPClipartObject* obj=dynamic_cast<KPClipartObject*>( kpobject );
         if(obj)
 	{
             obj->setPen( tmpPen->pen );
@@ -1318,23 +1276,9 @@ void BrushCmd::applyBrush(KPObject *kpobject, Brush *tmpBrush)
             doc->repaint( obj );
 	}
     } break;
+    case OT_CLIPART:
     case OT_PICTURE: {
         KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-        if(obj)
-	{
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-	}
-    } break;
-    case OT_CLIPART: {
-        KPClipartObject* obj=dynamic_cast<KPClipartObject*>( kpobject );
         if(obj)
 	{
             obj->setBrush( tmpBrush->brush );

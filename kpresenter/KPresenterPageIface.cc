@@ -511,11 +511,6 @@ void KPresenterPageIface::changePicture( const QString & filename )
     m_page->changePicture(filename);
 }
 
-void KPresenterPageIface::changeClipart( const QString & filename )
-{
-    m_page->changeClipart(filename);
-}
-
 //create a rectangle and return a dcop reference!
 DCOPRef KPresenterPageIface::insertRectangle(int x,int y, int h, int w)
 {
@@ -580,14 +575,6 @@ DCOPRef KPresenterPageIface::insertPicture( const QString & file,int x,int y, in
     m_page->setInsPictureFile(file);
     KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
     view->getCanvas()->insertPicture( QRect(x,y,h,w));
-    return selectedObject();
-}
-
-DCOPRef KPresenterPageIface::insertClipart( const QString & file,int x,int y, int h, int w )
-{
-    m_page->setInsClipartFile(file);
-    KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
-    view->getCanvas()->insertClipart( QRect(x,y,h,w));
     return selectedObject();
 }
 
@@ -664,11 +651,6 @@ bool KPresenterPageIface::isOneObjectSelected() const
     return m_page->isOneObjectSelected();
 }
 
-
-bool KPresenterPageIface::haveASelectedClipartObj() const
-{
-    return m_page->haveASelectedClipartObj();
-}
 
 bool KPresenterPageIface::haveASelectedPartObj() const
 {
