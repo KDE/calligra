@@ -733,6 +733,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
         KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
         KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
+        m_bHasEndNotes = false; // will be set to true if we find any endnote
 
         // Lookup the various header / footer framesets into the variables above
         // [Done in all cases, in order to hide unused framesets]

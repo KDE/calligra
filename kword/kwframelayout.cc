@@ -385,7 +385,13 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // The last frame before the first endnote, is in auto-extend mode
         if ( m_doc->hasEndNotes() ) {
             KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
-            lastMainFrame->setFrameBehavior( KWFrame::AutoExtendFrame );
+            if ( lastMainFrame->frameBehavior() != KWFrame::AutoExtendFrame )
+            {
+                lastMainFrame->setFrameBehavior( KWFrame::AutoExtendFrame );
+                // make sure it gets resized
+                if ( mainTextFrameResized == -1 )
+                    mainTextFrameResized = lastMainFrame->pageNum();
+            }
         }
     }
 

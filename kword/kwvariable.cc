@@ -334,17 +334,20 @@ void KWFootNoteVariable::formatedNote()
 {
     if ( m_numberingType == Auto )
     {
-        m_varValue = QVariant(applyStyle( ));
+        m_varValue = QVariant(applyStyle());
     }
 }
 
-QString KWFootNoteVariable::applyStyle(  )
+QString KWFootNoteVariable::applyStyle()
 {
     KWVariableSettings* settings = static_cast<KWVariableSettings*>(m_varColl->variableSetting());
     KoParagCounter tmpCounter = (m_noteType == FootNote) ? settings->footNoteCounter() : settings->endNoteCounter();
 
     QString tmp;
-    int val = m_numDisplay+ tmpCounter.startNumber()-1;
+    int val = m_numDisplay + tmpCounter.startNumber()-1;
+    Q_ASSERT( val >= 0 );
+    if ( val < 0 ) // let's not go into makeRomanNumber with a negative number :}
+        return i18n("ERROR");
     switch ( tmpCounter.style() )
     {
     case KoParagCounter::STYLE_NUM:
@@ -386,7 +389,8 @@ QString KWFootNoteVariable::text(bool realValue)
 void KWFootNoteVariable::setNumDisplay( int val )
 {
     m_numDisplay = val;
-    formatedNote();
+    if ( val != -1 ) // -1 is used to 'invalidate so that renumberFootNotes recalcs'
+        formatedNote();
 }
 
 QString KWFootNoteVariable::fieldCode()

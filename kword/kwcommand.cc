@@ -2058,19 +2058,21 @@ void KWChangeFootNoteParametersCommand::unexecute()
 void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParameter _param )
 {
     m_var->setNoteType( _param.noteType );
-
     m_var->setNumberingType( _param.numberingType );
     m_var->setManualString( _param.manualString );
-    m_var->resize();
-    m_var->frameSet()->setCounterText( m_var->text() );
-    m_var->setNumDisplay( -1 );
+    m_var->setNumDisplay( -1 ); // force renumberFootNotes to recalc
     KWTextFrameSet * frameset = dynamic_cast<KWTextFrameSet *>( m_doc->frameSet( 0 ));
+    Q_ASSERT( frameset );
     if ( frameset)
         frameset->renumberFootNotes();
 
-    m_var->paragraph()->invalidate(0);
-    m_var->paragraph()->setChanged( true );
-    m_doc->slotRepaintVariable();
+    // Re-layout the footnote/endnote frame
+    KWFrame* footNoteFrame = m_var->frameSet()->frame( 0 );
+    int framePage = footNoteFrame->pageNum();
+    m_doc->recalcFrames( framePage, -1 );
+
+    // Repaint
+    m_doc->delayedRepaintAllViews();
 }
 
 
