@@ -194,7 +194,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
 
     slides = new QButtonGroup( 1, Qt::Horizontal, this );
-    slides->setCaption( i18n( "Show slides in presentation" ) );
+    slides->setCaption( i18n( "Show Slides in Presentation" ) );
 
     slidesAll = new QRadioButton( i18n( "&All slides" ), slides );
     slidesCurrent = new QRadioButton( i18n( "&Current slide" ), slides );

@@ -757,8 +757,8 @@ void KoDateVariable::load( QDomElement& elem )
 QStringList KoDateVariable::actionTexts()
 {
     QStringList lst;
-    lst << i18n( "Current date (fixed)" );
-    lst << i18n( "Current date (variable)" );
+    lst << i18n( "Current Date (fixed)" );
+    lst << i18n( "Current Date (variable)" );
     // TODO add date created, date printed, date last modified( BR #24242 )
     return lst;
 }
@@ -851,8 +851,8 @@ void KoTimeVariable::load( QDomElement& elem )
 QStringList KoTimeVariable::actionTexts()
 {
     QStringList lst;
-    lst << i18n( "Current time (fixed)" );
-    lst << i18n( "Current time (variable)" );
+    lst << i18n( "Current Time (fixed)" );
+    lst << i18n( "Current Time (variable)" );
     // TODO add time created, time printed, time last modified( BR #24242 )
     return lst;
 }
@@ -1153,13 +1153,13 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Email" );
     lst << i18n( "Company Name" ); // is "Name" necessary ?
     lst << i18n( "Directory and File Name" );
-    lst << i18n( "File Name without extension" );
+    lst << i18n( "File Name Without Extension" );
     lst << i18n( "Telephone");
     lst << i18n( "Fax");
     lst << i18n( "Country");
     lst << i18n( "Document Title" );
     lst << i18n( "Document Abstract" );
-    lst << i18n( "Postal code" );
+    lst << i18n( "Postal Code" );
     lst << i18n( "City" );
     lst << i18n( "Street" );
     return lst;

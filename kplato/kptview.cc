@@ -50,14 +50,14 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
 	    this, SLOT(slotSelectionChanged(QListViewItem *)));
 
     // The menu items
-    new KAction("Edit main project...", "edit_project", 0, this,
+    new KAction("Edit Main Project...", "edit_project", 0, this,
 		SLOT(slotEditProject()), actionCollection(), "edit_project");
-    new KAction("Add subproject...", "add_sub_project", 0, this,
+    new KAction("Add Subproject...", "add_sub_project", 0, this,
 		SLOT(slotAddSubProject()), actionCollection(),
 		"add_sub_project");
-    new KAction("Add task...", "add_task", 0, this,
+    new KAction("Add Task...", "add_task", 0, this,
 		SLOT(slotAddTask()), actionCollection(), "add_task");
-    new KAction("Add milestone...", "add_milestone", 0, this,
+    new KAction("Add Milestone...", "add_milestone", 0, this,
 		SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
 }
 

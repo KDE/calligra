@@ -24,7 +24,7 @@ KChartBarConfigDialog::KChartBarConfigDialog( KChartParams* params,
     // Fill pages with values
     //defaults();
 
-    setCaption( i18n( "Configuration of bar charts" ) );
+    setCaption( i18n( "Configuration of Bar Charts" ) );
 }
 
 

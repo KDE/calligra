@@ -513,7 +513,7 @@ void KWView::setupActions()
     addVariableActions( VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null );
 
     actionInsertVariable->popupMenu()->insertSeparator();
-    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), 0,
                                     this, SLOT( refreshAllVariable() ),
                                     actionCollection(), "refresh_all_variable" );
     actionRefreshAllVariable->setToolTip( i18n( "Update all variables to current values." ) );
@@ -2102,7 +2102,7 @@ void KWView::changeZoomMenu( int zoom )
     if(zoom>0)
     {
 	if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
-	    lst << i18n( "Zoom to width" );
+	    lst << i18n( "Zoom to Width" );
         if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
             lst << i18n( "Zoom to Whole Page" );
 
@@ -2685,7 +2685,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |
                                      KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS | KoParagDia::PD_SHADOW, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()));
-        m_paragDlg->setCaption( i18n( "Paragraph settings" ) );
+        m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
         KWParagLayout lay = static_cast<KWTextParag *>(edit->cursor()->parag())->paragLayout();

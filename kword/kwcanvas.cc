@@ -1140,7 +1140,7 @@ void KWCanvas::mrCreateText()
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frame->setNewFrameBehavior(KWFrame::Reconnect);
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
-        frameDia.setCaption(i18n("Connect frame"));
+        frameDia.setCaption(i18n("Connect Frame"));
         frameDia.exec();
 	checkCurrentTextEdit(frame->frameSet());
     }
