@@ -140,30 +140,72 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
     painter.drawPixmap( x + sx, y + sy, m_cachedPixmap, sx, sy, sw, sh );
 }
 
+bool KoPictureEps::extractPostScriptStream( void )
+// Note: it changes m_rawData, we cannot do anything of the preview.
+{
+    kdDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
+    QDataStream data( m_rawData, IO_ReadOnly );
+    data.setByteOrder( QDataStream::LittleEndian );
+    Q_UINT32 offset, length;
+    data >> offset;
+    data >> length;
+    if ( !length )
+    {
+        kdError(30003) << "Length of PS stream is zero!" << endl;
+        return false;
+    }
+    if ( offset+length>m_rawData.size() )
+    {
+        kdError(30003) << "Data stream of the EPSF file is longer than file: " << offset << "+" << length << ">" << m_rawData.size() << endl;
+        return false;
+    }
+    QByteArray ps;
+    ps.duplicate( m_rawData.data()+offset, length );
+    m_rawData=ps;
+    return true;
+}
+
 bool KoPictureEps::load(QIODevice* io, const QString& /*extension*/)
 {
     kdDebug(30003) << "KoPictureEps::load" << endl;
     // First, read the raw data
     m_rawData=io->readAll();
 
+    if (m_rawData.isNull())
+    {
+        kdError(30003) << "No data was loaded!" << endl;
+        return false;
+    }
+
+    if ( ( m_rawData[0]==char(0xc5) ) && ( m_rawData[1]==char(0xd0) )
+        && ( m_rawData[2]==char(0xd3) ) && ( m_rawData[3]==char(0xc6) ) )
+    {
+        // We have a so-called "MS-DOS EPS file", we have to extract the PostScript stream
+        if (!extractPostScriptStream()) // Changes m_rawData
+            return false;
+    }
+
     QTextStream stream(m_rawData, IO_ReadOnly);
     QString lineBox;
+    QString line( stream.readLine() );
+    kdDebug(30003) << "Header: " << line << endl;
+    if (!line.startsWith("%!"))
+    {
+        kdError(30003) << "Not a PostScript file!" << endl;
+        return false;
+    }
     QRect rect;
     for(;;)
     {
-        QString line( stream.readLine() );
+        line=stream.readLine();
         kdDebug(30003) << "Checking line: " << line << endl;
         if (line.startsWith("%%BoundingBox:"))
         {
             lineBox=line;
             break;
         }
-        else if (line.startsWith("%%"))
-            continue;
-        else if (line.startsWith("%!"))
-            continue;
-        else
-            break;
+        else if (!line.startsWith("%%"))
+            break; // Not a EPS comment anymore, so abort as we are not in the EPS header anymore
     }
     if (lineBox.isEmpty())
     {

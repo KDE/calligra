@@ -166,6 +166,11 @@ bool KoPictureShared::loadTmp(QIODevice* io)
     {
         strExtension="eps";
     }
+    else if ((array[0]==char(0xc5)) && (array[1]==char(0xd0)) && (array[2]==char(0xd3)) && (array[3]==char(0xc6)))
+    {
+        // So called "MS-DOS EPS file"
+        strExtension="eps";
+    }
     else
     {
         kdDebug(30003) << "Cannot identify the type of temp file!"

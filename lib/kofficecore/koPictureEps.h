@@ -85,6 +85,7 @@ public:
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
+    bool extractPostScriptStream( void );
 
 private:
     QByteArray m_rawData;
