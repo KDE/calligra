@@ -270,7 +270,7 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
     lu posX = getChildPosition( context, pos );
     lu height = getHeight();
 
-    lu unit = context.ptToLayoutUnit( 1 );
+    lu unit = context.ptToLayoutUnitPt( 1 );
 
     // Here are those evil constants that describe the cursor size.
 
@@ -357,7 +357,7 @@ lu SequenceElement::getChildPosition( const ContextStyle& context, uint child )
             return children.at(child-1)->getX() + children.at(child-1)->getWidth();
         }
         else {
-            return context.ptToLayoutUnit( 2 );
+            return context.ptToLayoutUnitPt( 2 );
         }
     }
 }
@@ -1007,7 +1007,7 @@ void NameSequence::calcCursorSize( const ContextStyle& context,
 {
     inherited::calcCursorSize( context, cursor, smallCursor );
     LuPoint point = widgetPos();
-    lu unit = context.ptToLayoutUnit( 1 );
+    lu unit = context.ptToLayoutUnitPt( 1 );
     cursor->addCursorSize( LuRect( point.x()-unit, point.y()-unit,
                                    getWidth()+2*unit, getHeight()+2*unit ) );
 }
@@ -1018,7 +1018,7 @@ void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
     LuPoint point = widgetPos();
     painter.setPen( QPen( context.getEmptyColor(),
                           context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
-    lu unit = context.ptToLayoutUnit( 1 );
+    lu unit = context.ptToLayoutUnitPt( 1 );
     painter.drawRect( context.layoutUnitToPixelX( point.x()-unit ),
                       context.layoutUnitToPixelY( point.y()-unit ),
                       context.layoutUnitToPixelX( getWidth()+2*unit ),

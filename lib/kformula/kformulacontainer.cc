@@ -211,8 +211,8 @@ void Container::recalc()
 
     emit formulaChanged( context.layoutUnitToPixelX( rootElement()->getWidth() ),
                          context.layoutUnitToPixelY( rootElement()->getHeight() ) );
-    emit formulaChanged( context.layoutUnitToPt( rootElement()->getWidth() ),
-                         context.layoutUnitToPt( rootElement()->getHeight() ) );
+    emit formulaChanged( context.layoutUnitPtToPt( rootElement()->getWidth() ),
+                         context.layoutUnitPtToPt( rootElement()->getHeight() ) );
     emit cursorMoved( activeCursor() );
 }
 

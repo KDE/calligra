@@ -260,31 +260,31 @@ void View::wheelEvent( QWheelEvent* event )
 void View::mousePressEvent( QMouseEvent* event, const PtPoint& pos )
 {
     const ContextStyle& context = contextStyle();
-    mousePressEvent( event, context.ptToLayoutUnit( pos ) );
+    mousePressEvent( event, context.ptToLayoutUnitPt( pos ) );
 }
 
 void View::mouseReleaseEvent( QMouseEvent* event, const PtPoint& pos )
 {
     const ContextStyle& context = contextStyle();
-    mouseReleaseEvent( event, context.ptToLayoutUnit( pos ) );
+    mouseReleaseEvent( event, context.ptToLayoutUnitPt( pos ) );
 }
 
 void View::mouseDoubleClickEvent( QMouseEvent* event, const PtPoint& pos )
 {
     const ContextStyle& context = contextStyle();
-    mouseDoubleClickEvent( event, context.ptToLayoutUnit( pos ) );
+    mouseDoubleClickEvent( event, context.ptToLayoutUnitPt( pos ) );
 }
 
 void View::mouseMoveEvent( QMouseEvent* event, const PtPoint& pos )
 {
     const ContextStyle& context = contextStyle();
-    mouseMoveEvent( event, context.ptToLayoutUnit( pos ) );
+    mouseMoveEvent( event, context.ptToLayoutUnitPt( pos ) );
 }
 
 void View::wheelEvent( QWheelEvent* event, const PtPoint& pos )
 {
     const ContextStyle& context = contextStyle();
-    wheelEvent( event, context.ptToLayoutUnit( pos ) );
+    wheelEvent( event, context.ptToLayoutUnitPt( pos ) );
 }
 
 

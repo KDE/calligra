@@ -145,7 +145,7 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 
 lu ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return ptToLayoutUnit( baseSize*getReductionFactor( tstyle ) );
+    return ptToLayoutUnitPt( baseSize*getReductionFactor( tstyle ) );
 }
 
 lu ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
@@ -182,7 +182,7 @@ lu ContextStyle::getQuadSpace( TextStyle tstyle ) const
 
 lu ContextStyle::getBaseSize() const
 {
-    return ptToLayoutUnit( baseSize );
+    return ptToLayoutUnitPt( baseSize );
 }
 
 void ContextStyle::setBaseSize( pt size )
@@ -198,17 +198,17 @@ void ContextStyle::setBaseSize( pt size )
 
 lu ContextStyle::getLineWidth() const
 {
-    return ptToLayoutUnit( lineWidth );
+    return ptToLayoutUnitPt( lineWidth );
 }
 
 lu ContextStyle::getEmptyRectWidth() const
 {
-    return ptToLayoutUnit( emptyRectWidth );
+    return ptToLayoutUnitPt( emptyRectWidth );
 }
 
 lu ContextStyle::getEmptyRectHeight() const
 {
-    return ptToLayoutUnit( emptyRectHeight );
+    return ptToLayoutUnitPt( emptyRectHeight );
 }
 
 
@@ -255,7 +255,7 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 void ContextStyle::setup()
 {
     //double size = getBaseSize();
-    lu size = ptToLayoutUnit( baseSize );
+    lu size = ptToLayoutUnitPt( baseSize );
     textStyleValues[ displayStyle      ].setup( getSymbolFont(), size, 1. );
     textStyleValues[ textStyle         ].setup( getSymbolFont(), size, 1. );
     textStyleValues[ scriptStyle       ].setup( getSymbolFont(), size, .7 );
