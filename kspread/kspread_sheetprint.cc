@@ -23,6 +23,7 @@
 #include "kspread_doc.h"
 #include "kspread_undo.h"
 
+#include "commands.h"
 #include <koDocumentInfo.h>
 
 #include <kmessagebox.h>
@@ -374,7 +375,7 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
         bottomRight.setX( bottomRight.x()
                           + m_pSheet->columnFormat( x )->dblWidth() );
     for ( int y = regionTop; y <= regionBottom; ++y )
-        bottomRight.setY( bottomRight.y() 
+        bottomRight.setY( bottomRight.y()
                           + m_pSheet->rowFormat( y )->dblHeight() );
     KoRect rect( topLeft, bottomRight );
 
@@ -393,12 +394,12 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
             bool paintBordersRight = false;
             bool paintBordersLeft = false;
             bool paintBordersTop = false;
-            
+
             QPen rightPen  = cell->effRightBorderPen( x, y );
             QPen leftPen   = cell->effLeftBorderPen( x, y );
             QPen bottomPen = cell->effBottomBorderPen( x, y );
             QPen topPen    = cell->effTopBorderPen( x, y );
-            
+
             // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
             // of the cell on the left or if the cell on the right is not painted. In the latter case get
             // the pen that is of more "worth"
@@ -473,7 +474,7 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
             cell->paintCell( rect, painter, NULL,
                              KoPoint( xpos, ypos ), QPoint( x, y ),
                              paintBordersRight, paintBordersBottom,
-                             paintBordersLeft, paintBordersTop, 
+                             paintBordersLeft, paintBordersTop,
                              rightPen, bottomPen, leftPen, topPen );
 
             xpos += col_lay->dblWidth();
@@ -877,25 +878,20 @@ void KSpreadSheetPrint::definePrintRange( KSpreadSelection* selectionInfo )
 {
     if ( !selectionInfo->singleCellSelection() )
     {
-        if ( !m_pDoc->undoLocked() )
-        {
-             KSpreadUndoAction* undo = new KSpreadUndoDefinePrintRange( m_pSheet->doc(), m_pSheet );
-             m_pDoc->addCommand( undo );
-        }
-
+        KCommand* command = new DefinePrintRangeCommand( m_pSheet );
+        m_pDoc->addCommand( command );
         setPrintRange( selectionInfo->selection() );
+        command->execute();
     }
 }
 
 void KSpreadSheetPrint::resetPrintRange ()
 {
-    if ( !m_pDoc->undoLocked() )
-    {
-         KSpreadUndoAction* undo = new KSpreadUndoDefinePrintRange( m_pSheet->doc(), m_pSheet );
-         m_pDoc->addCommand( undo );
-    }
 
+    KCommand* command = new DefinePrintRangeCommand( m_pSheet );
+    m_pDoc->addCommand( command );
     setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
+    command->execute();
 }
 
 void KSpreadSheetPrint::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )

@@ -816,47 +816,6 @@ void KSpreadUndoPaperLayout::redo()
 }
 
 
-/****************************************************************************
- *
- * KSpreadUndoDefinePrintRange
- *
- ***************************************************************************/
-
-KSpreadUndoDefinePrintRange::KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadSheet *_table )
-    : KSpreadUndoAction( _doc )
-{
-    name=i18n("Set Page Layout");
-    m_tableName = _table->tableName();
-
-    m_printRange = _table->print()->printRange();
-}
-
-KSpreadUndoDefinePrintRange::~KSpreadUndoDefinePrintRange()
-{
-}
-
-void KSpreadUndoDefinePrintRange::undo()
-{
-    KSpreadSheet* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoLock();
-    m_printRangeRedo = table->print()->printRange();
-    table->print()->setPrintRange( m_printRange );
-    doc()->undoUnlock();
-}
-
-void KSpreadUndoDefinePrintRange::redo()
-{
-    KSpreadSheet* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoLock();
-    table->print()->setPrintRange( m_printRangeRedo );
-    doc()->undoUnlock();
-}
 
 
 /****************************************************************************

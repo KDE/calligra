@@ -329,22 +329,6 @@ protected:
 };
 
 
-class KSpreadUndoDefinePrintRange : public KSpreadUndoAction
-{
-public:
-    KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadSheet *_table );
-    virtual ~KSpreadUndoDefinePrintRange();
-
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    QString m_tableName;
-    QRect m_printRange;
-    QRect m_printRangeRedo;
-};
-
-
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:
