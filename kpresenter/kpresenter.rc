@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="92">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="94">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -7,8 +7,8 @@
   <Action name="extra_defaulttemplate"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
@@ -180,8 +180,8 @@
   <Action name="extra_webpres"/>
 </ToolBar>
 <ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>

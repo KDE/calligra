@@ -24,7 +24,7 @@ class KPresenterView;
 class DCOPObject;
 class KCommand;
 class KMacroCommand;
-class KCommandHistory;
+class KoCommandHistory;
 class KoZoomHandler;
 class KoAutoFormat;
 class KoUnit;
@@ -56,6 +56,7 @@ class KoTextParag;
 #include <koUnit.h>
 #include <kozoomhandler.h>
 #include <kostyle.h>
+#include <kocommandhistory.h>
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -399,7 +400,7 @@ public:
         { m_spellListIgnoreAll = _lst;}
 
     void clearIgnoreWordAll( );
-    KCommandHistory * commandHistory()const { return m_commandHistory; }
+    KoCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
     void updateObjectSelected();
     void layout(KPObject *kpobject);
@@ -538,7 +539,7 @@ protected:
     QString m_tempFileInClipboard;
     bool ignoreSticky;
 
-    KCommandHistory * m_commandHistory;
+    KoCommandHistory * m_commandHistory;
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;

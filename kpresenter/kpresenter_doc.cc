@@ -87,6 +87,7 @@
 #include "notebar.h"
 #include "kprbgspellcheck.h"
 #include <kglobalsettings.h>
+#include <kocommandhistory.h>
 
 using namespace std;
 
@@ -269,7 +270,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
-    m_commandHistory = new KCommandHistory( actionCollection(),  false ) ;
+    m_commandHistory = new KoCommandHistory( actionCollection(),  false ) ;
     initConfig();
 
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
