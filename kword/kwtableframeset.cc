@@ -2884,7 +2884,8 @@ KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_CELL>::operator++()
 			m_col = m_table->getCell(m_row, m_col)->colAfter();
 		}
 
-	} while( ! (m_cell = m_table->getCell(m_row,m_col))->isFirstGridPosnFast(m_row,m_col));
+		m_cell = m_table->getCell(m_row,m_col);
+	} while( m_cell && !m_cell->isFirstGridPosnFast(m_row,m_col) );
 
 	return ret;
 }

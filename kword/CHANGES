@@ -1,6 +1,7 @@
 Changes after KWord 1.3 rc (1.2.94)
 ===================================
 - Fixed crash in table operations (#66349)
+- Fixed crash in table iterator
 - Fixed "edit frameset" for tables in doc structure panel (#67084)
 
 Changes after KWord 1.3 beta4
