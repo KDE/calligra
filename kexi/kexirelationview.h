@@ -72,7 +72,6 @@ class KexiRelationView : public QScrollView
 		void		drawSource(QPainter *p, RelationSource src);
 		void		drawConnection(QPainter *p, SourceConnection *conn, bool paint=true);
 
-//		void		contentsMousePressEvent(QMouseEvent *ev);
 		void		contentsMouseReleaseEvent(QMouseEvent *ev);
 		void		contentsMouseMoveEvent(QMouseEvent *ev);
 

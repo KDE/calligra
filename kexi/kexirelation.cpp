@@ -136,7 +136,7 @@ KexiRelation::projectRelations()
 		con.srcTable = sourceTable.text();
 		con.srcField = sourceField.text();
 		con.rcvTable = targetTable.text();
-		con.rcvField = targetTable.text();
+		con.rcvField = targetField.text();
 		list->append(con);
 	}
 	
@@ -178,7 +178,10 @@ KexiRelation::storeRelations(RelationList relations, KoStore *store)
 		QDomText tTargetField = domDoc.createTextNode((*it).rcvField);
 		targetField.appendChild(tTargetField);
 		
-		kdDebug() << "KexiRelationView::storeRelatoins(): " << (*it).rcvField << endl;
+		kdDebug() << "KexiRelationView::storeRelatoins() srcTable: " << (*it).srcTable << endl;
+		kdDebug() << "KexiRelationView::storeRelatoins() srcField: " << (*it).srcField << endl;
+		kdDebug() << "KexiRelationView::storeRelatoins() rcvTable: " << (*it).rcvTable << endl;
+		kdDebug() << "KexiRelationView::storeRelatoins() rcvField: " << (*it).rcvField << endl;
 	}
 
 	QByteArray data = domDoc.toCString();

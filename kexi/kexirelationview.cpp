@@ -296,17 +296,21 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 	viewport()->setAcceptDrops(true);
 	setDropVisualizer(false);
 
+	addColumn("", 0);
 	addColumn("fields");
 	setResizeMode(QListView::LastColumn);
+//	setResizeMode(QListView::AllColumns);
 	header()->hide();
 
-	setSorting(-1, true); // disable sorting
+	setSorting(1, true); // disable sorting
 
+	int order=0;
 	for(QStringList::Iterator it = m_fieldList.begin(); it != m_fieldList.end(); it++)
 	{
-		KListViewItem *i = new KListViewItem(this, (*it));
+		KListViewItem *i = new KListViewItem(this, QString::number(order), (*it));
 		i->setDragEnabled(true);
 		i->setDropEnabled(true);
+		order++;
 	}
 	
 //	setDragEnabled
@@ -317,7 +321,7 @@ int
 KexiRelationViewTable::globalY(QString item)
 {
 	kdDebug() << "KexiRelationViewTable::globalY() looking up " << item << endl;
-	QListViewItem *i = findItem(item, 0);
+	QListViewItem *i = findItem(item, 1);
 	if(i)
 	{
 		int y=itemRect(i).y() + (itemRect(i).height() / 2);
@@ -332,7 +336,7 @@ KexiRelationViewTable::dragObject()
 	qDebug("KexiRelationViewTable::dragObject()");
 	if(selectedItem())
 	{
-		KexiFieldMetaDrag *drag = new KexiFieldMetaDrag(QCString(selectedItem()->text(0).latin1()), this, "metaDrag");
+		KexiFieldMetaDrag *drag = new KexiFieldMetaDrag(QCString(selectedItem()->text(1).latin1()), this, "metaDrag");
 		return drag;
 	}
 
@@ -362,7 +366,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		QString srcTable = sourceTable->table();
 		QString srcField(ev->encodedData("kexi/field"));
 
-		QString rcvField = recever->text(0);
+		QString rcvField = recever->text(1);
 
 		SourceConnection s;
 		s.srcTable = srcTable;

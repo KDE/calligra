@@ -22,6 +22,9 @@
 #include <klocale.h>
 #include <kaction.h>
 
+#include <ktexteditor/editorchooser.h>
+#include <ktexteditor/highlightinginterface.h>
+
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesigner.h"
 
@@ -50,8 +53,7 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 			m_actionSQL->disconnect(o);
 			m_actionView->disconnect(o);
 		}
-	
-	private:
+
 		KToggleAction *m_actionEdit;
 		KToggleAction *m_actionSQL;
 		KToggleAction *m_actionView;
@@ -65,11 +67,30 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
 	setCaption(i18n("Query"));
 	registerAs(DocumentWindow);
 
-	KexiQueryDesignerGuiEditor *editor = new KexiQueryDesignerGuiEditor(this);
-	editor->show();
+	m_editor = new KexiQueryDesignerGuiEditor(this);
+	
+	m_sqlDoc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
+	m_sqlView = m_sqlDoc->createView(this, 0L);
+
+	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_sqlDoc);
+	for(uint i=0; i < hl->hlModeCount(); i++)
+	{
+		if(hl->hlModeName(i) == "SQL")
+		{
+			hl->setHlMode(i);
+			break;
+		}
+		i++;
+	}
+
+	m_editor->show();
+	m_sqlView->hide();
+
+//	activateActions();
 
 	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(editor, 0, 0);
+	g->addWidget(m_editor,	0, 0);
+	g->addWidget(m_sqlView,	0, 0);
 }
 
 KXMLGUIClient *KexiQueryDesigner::guiClient()
@@ -94,16 +115,28 @@ void KexiQueryDesigner::deactivateActions()
 void
 KexiQueryDesigner::slotEditState()
 {
+	m_editor->show();
+	m_sqlView->hide();
+
+	m_editGUIClient->m_actionView->setChecked(false);
+	m_editGUIClient->m_actionSQL->setChecked(false);
 }
 
 void
 KexiQueryDesigner::slotSQLState()
 {
+	m_editGUIClient->m_actionEdit->setChecked(false);
+	m_editGUIClient->m_actionView->setChecked(false);
+
+	m_editor->hide();
+	m_sqlView->show();
 }
 
 void
 KexiQueryDesigner::slotViewState()
 {
+	m_editGUIClient->m_actionEdit->setChecked(false);
+	m_editGUIClient->m_actionSQL->setChecked(false);
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()

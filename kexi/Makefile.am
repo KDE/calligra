@@ -2,7 +2,7 @@ bin_PROGRAMS = kexi
 
 kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceSDI.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationview.cpp kexiformbase.cpp kexicomboboxtableedit.cpp kexitableedit.cpp
 
-kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
+kexi_LDADD   = $(LIB_KPARTS) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
 
 SUBDIRS = kexiDB formeditor . interfaces pics setupWizard
 
@@ -10,7 +10,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Office/
-	$(INSTALL_DATA) $(srcdir)/kexi.desktop $(kde_appsdir)/Applications/kexi.desktop
+	$(INSTALL_DATA) $(srcdir)/kexi.desktop $(kde_appsdir)/Office/kexi.desktop
 #	$(mkinstalldirs) $(kde_servicetypesdir)/
 #	$(INSTALL_DATA) $(srcdir)/kexiinterface.desktop $(kde_servicetypesdir)/kexiinterface.desktop
 #	$(mkinstalldirs) $(kde_servicedir)

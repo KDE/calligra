@@ -20,9 +20,13 @@
 #ifndef KEXIQUERYDESIGNER_H
 #define KEXIQUERYDESIGNER_H
 
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
+
 #include <kexidialogbase.h>
 
 class KAction;
+class KexiQueryDesignerGuiEditor;
 
 class KexiQueryDesigner : public KexiDialogBase
 {
@@ -32,18 +36,22 @@ class KexiQueryDesigner : public KexiDialogBase
 		KexiQueryDesigner(QWidget *parent, const char *name=0);
 		~KexiQueryDesigner();
 		
-		virtual KXMLGUIClient *guiClient();
-		virtual void deactivateActions();
-		virtual void activateActions();
+		virtual KXMLGUIClient	*guiClient();
+		virtual void		deactivateActions();
+		virtual void		activateActions();
 	private:
-		class EditGUIClient;
-		friend class EditGUIClient;
-		static EditGUIClient *m_editGUIClient;
+		class			EditGUIClient;
+		friend class		EditGUIClient;
+		static EditGUIClient	*m_editGUIClient;
+		
+		KexiQueryDesignerGuiEditor *m_editor;
+		KTextEditor::Document	*m_sqlDoc;
+		KTextEditor::View	*m_sqlView;
 
 	protected slots:
-		void	slotEditState();
-		void	slotSQLState();
-		void	slotViewState();
+		void			slotEditState();
+		void			slotSQLState();
+		void			slotViewState();
 };
 
 #endif
