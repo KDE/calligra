@@ -58,14 +58,6 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
     karbondoc.setAttribute( "syntaxVersion", 0.1 );
     outdoc.appendChild( karbondoc );
 
-    QDomElement paper = outdoc.createElement( "PAPER" );
-    karbondoc.appendChild( paper );
-    double defaultWidth = KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM );
-    double defaultHeight = KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM );
-    paper.setAttribute( "width", defaultWidth );
-    paper.setAttribute( "height", defaultHeight );
-    paper.setAttribute( "unit", KoUnit::unitName(KoUnit::U_MM) );
-
     QDomElement layer = outdoc.createElement( "LAYER" );
     karbondoc.appendChild( layer );
     layer.setAttribute( "name", "Layer" );
@@ -75,7 +67,8 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 
 // Do the conversion stuff here. For notes how to get the input/output
     // locations please refer to koffice/lib/kofficecore/koFilterChain.h
-
+	
+	convert();
 
     //return KoFilter::NotImplemented; // Change to KoFilter::OK if the conversion
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
