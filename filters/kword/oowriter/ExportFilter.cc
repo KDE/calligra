@@ -241,7 +241,9 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(QString::number(m_paperBorderLeft));
     zipWriteData("pt\" fo:margin-right=\"");
     zipWriteData(QString::number(m_paperBorderRight));
-    zipWriteData("pt\"/>\n");
+    zipWriteData("pt\" style:first-page-number=\"");
+    zipWriteData(QString::number(m_varSet.startingPageNumber));
+    zipWriteData("\"/>\n");
 
     zipWriteData("  </style:page-master>\n");
     zipWriteData(" </office:automatic-styles>\n");
@@ -1137,6 +1139,9 @@ bool OOWriterWorker::doVariableSettings(const VariableSettingsData& vs)
 
 void OOWriterWorker::declareFont(const QString& fontName)
 {
+    if (fontName.isEmpty())
+        return;
+        
     if (m_fontNames.find(fontName)==m_fontNames.end())
     {
         QString props;
