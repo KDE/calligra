@@ -53,7 +53,7 @@ void KoShadowPreview::drawContents( QPainter* painter )
     QFont font(KoGlobal::defaultFont().family(), 30, QFont::Bold);
     QFontMetrics fm( font );
 
-    QString text = "KOffice"; // i18n?
+    const QString text ( i18n ( "Test string for shadow dialog", "KOffice") ); 
     QRect br = fm.boundingRect( text );
     int x = ( width() - br.width() ) / 2;
     int y = ( height() - br.height() ) / 2 + br.height();
@@ -94,6 +94,7 @@ KoTextShadowWidget::KoTextShadowWidget( QWidget * parent, const char * name )
     QLabel *ldistance = new QLabel( i18n( "&Distance (pt):" ), shadowBox );
     grid2->addWidget(ldistance,2,0);
 
+    // ### TODO: use KoUnitDoubleSpinBox instead
     distance = new QSpinBox( 0, 20, 1, shadowBox );
     distance->setSuffix(i18n("pt"));
     ldistance->setBuddy( distance );
