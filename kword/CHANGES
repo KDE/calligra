@@ -19,6 +19,7 @@ Brand new formula widget (with doc/view design, zoom support etc.)
 
 Other new features:
  - Real bullets instead of using characters as bullets.
+ - Line-level breaking of paragraphs at end of frame/page
  - Right margin for a paragraph.
  - Undo/redo fully working (all text operations, but also frame operations etc.)
  

@@ -137,7 +137,8 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
 
 void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
-    //kdDebug(32002) << "KWTextFrameSet::drawContents drawCursor=" << drawCursor << endl;
+    //kdDebug(32002) << "KWTextFrameSet::drawContents drawCursor=" << drawCursor << " onlyChanged=" << onlyChanged
+    //               << " resetChanged=" << resetChanged << endl;
     //if ( !cursorVisible )
     //drawCur = FALSE;
     if ( !textdoc->firstParag() )
@@ -175,14 +176,19 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->translate( frameRect.left(), frameRect.top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
-                QTextParag * lastDrawn = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
+                QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
+                QTextParag * lastDrawn = lastFormatted->prev(); // tricky, see QTextDocument::draw
+                if ( onlyChanged && resetChanged && lastDrawn->rect().bottom() > r.bottom() )
+                {
+                  lastDrawn->setChanged( true ); // This paragraph has a bit in the next frame too !
+                }
 
                 // NOTE: QTextView sets m_lastFormatted to lastDrawn here
                 // But when scrolling up, this causes to reformat a lot of stuff for nothing.
                 // And updateViewArea takes care of formatting things before we even arrive here.
 
-                // Blank area under the last paragraph
-                if ( (lastDrawn == textdoc->lastParag() || !m_lastFormatted) && !onlyChanged)
+                // Blank area under the very last paragraph
+                if ( lastFormatted == textdoc->lastParag() && !onlyChanged)
                 {
                     int docHeight = textdoc->height();
                     QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
@@ -202,7 +208,6 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 {
     // This redraws the paragraph where the cursor is
 
-    cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
     QListIterator<KWFrame> frameIt( frameIterator() );
     int totalHeight = 0;
     bool drawn = false;
@@ -233,6 +238,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             QRegion reg = frameClipRegion( p, frame, clip );
             if ( !reg.isEmpty() )
             {
+                cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
                 p->save();
 
                 p->setClipRegion( reg );
@@ -379,28 +385,33 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
             else // Line-level breaking
             {
                 QMap<int, QTextParagLineStart*>& lineStarts = parag->lineStartList();
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow parag " << parag->paragId() << ". lineStarts has " << lineStarts.count() << " items" << endl;
+
                 int dy = 0;
-                // Note that we can't use parag->lines() here, it loops !
-                for ( int l = 0; lineStarts.find( l ) != lineStarts.end() ; ++l )
+                int line = 0;
+                QMap<int, QTextParagLineStart*>::Iterator it = lineStarts.begin();
+                for ( ; it != lineStarts.end() ; ++it, ++line )
                 {
-                    QTextParagLineStart * ls = lineStarts[l];
+                    QTextParagLineStart * ls = it.data();
                     ASSERT( ls );
                     int y = parag->rect().y() + ls->y;
-                    kdDebug() << "KWTextFrameSet::adjustFlow line " << l << " ls->y=" << ls->y << " ls->h=" << ls->h
+                    kdDebug(32002) << "KWTextFrameSet::adjustFlow parag " << parag->paragId() << " line " << line << " ls->y=" << ls->y << " ls->h=" << ls->h
                               << " y=" << y << " bottom=" << bottom << endl;
                     if ( !dy )
+                    {
                         if ( y < bottom && y + ls->h > bottom )
                         {
-                            if ( l == 0 ) // First line ? It's like a paragraph breaking then
+                            if ( line == 0 ) // First line ? It's like a paragraph breaking then
                             {
-                                kdDebug() << "KWTextFrameSet::adjustFlow first line -> parag break" << endl;
+                                kdDebug(32002) << "KWTextFrameSet::adjustFlow first line -> parag break" << endl;
                                 yp = bottom;
                                 break;
                             }
                             dy = bottom - y;
-                            kdDebug() << "KWTextFrameSet::adjustFlow breaking at line " << l << " dy=" << dy << endl;
+                            kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking at line " << line << " dy=" << dy << endl;
                             ls->y = bottom - parag->rect().y();
                         }
+                    }
                     else
                         ls->y += dy;
                 }
@@ -430,19 +441,8 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
     /*KWFrame * frame = */internalToContents( parag->rect().bottomLeft(), cPoint );
     QRect r = parag->rect();
     ASSERT( cPoint.y() > r.bottom() );
-    kdDebug() << "KWTextFrameSet::eraseAfter height of fillRect: " << cPoint.y() - r.bottom() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::eraseAfter height of fillRect: " << cPoint.y() - r.bottom() << endl;
     p->fillRect( r.x(), r.y(), r.width(), cPoint.y() - r.bottom(), cg.brush( QColorGroup::Base ) );
-    /*
-    int topBoder = doc->topBorder();
-    int bottomBoder = doc->tottomBorder();
-    int pageHeight = doc->paperHeight() - topBoder - bottomBoder;
-    int paperHeight = doc->paperHeight();
-    int num = py / paperHeight;
-    int top = num * paperHeight;
-    py += parag->rect().height();
-    p->fillRect( doc->leftBorder(), py, doc->paperWidth() - doc->leftBorder() - doc->rightBorder(),
-		 top + topBoder + pageHeight - py, gb.brush( QColorGroup::Base ) );
-    */
 }
 
 #if 0

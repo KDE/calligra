@@ -2847,6 +2847,7 @@ void KWDocument::printDebug() {
                                            "first footer", "odd footers", "even footers", "footnote", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
+    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Horizontal Space", "ERROR" };
 
     KWDocument * doc = this; // this code was in another class :)
     kdDebug() << "----------------------------------------"<<endl;
@@ -2878,6 +2879,7 @@ void KWDocument::printDebug() {
             KWFrame * frame = frameIt.current();
             kdDebug() << " +-- Frame " << j << " of "<< frameset->getNumFrames() << "    (" << frame << ")" << endl;
             kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
+            kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
             kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;
             kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
             kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
