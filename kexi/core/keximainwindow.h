@@ -89,6 +89,13 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 */
 		KexiRelationPart	*relationPart();
 
+		/*! Generates ID for private "document" like Relations window.
+		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
+		 Private means that the object is not stored as-is in the project but is somewhat 
+		 generated and in most cases there is at most one unique instance document of such type (part).
+		 To generate this ID, just app-wide internal counter is used. */
+		int generatePrivateDocID();
+
 	public slots:
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 

@@ -118,6 +118,8 @@ class KexiMainWindow::Private
 		QWidget *focus_before_popup;
 		KexiRelationPart *relationPart;
 
+		int privateDocIDCounter; //!< counter: ID for private "document" like Relations window
+
 		bool block_KMdiMainFrm_eventFilter : 1;
 	Private()
 		: dialogs(401)
@@ -132,6 +134,7 @@ class KexiMainWindow::Private
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
 		relationPart=0;
+		privateDocIDCounter=0;
 	}
 };
 
@@ -1408,6 +1411,10 @@ bool KexiMainWindow::removeObject( KexiPart::Item *item )
 	return true;
 }
 
+int KexiMainWindow::generatePrivateDocID()
+{
+	return --d->privateDocIDCounter;
+}
 
 
 #include "keximainwindow.moc"

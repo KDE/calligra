@@ -38,7 +38,7 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
 
 KexiActionProxy::~KexiActionProxy()
 {
-//	delete m_signal_parent; //this will delete all signals
+	m_host->takeActionProxyFor(m_receiver);
 }
 
 void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)

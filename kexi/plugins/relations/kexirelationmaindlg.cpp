@@ -34,7 +34,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
 {
 	kdDebug() << "KexiRelationMainDlg()" << endl;
 	setIcon(SmallIcon("relation"));
-	setDocID(0xdeadbeef);
+	setDocID( win->generatePrivateDocID() );
 
 	m_view = new KexiRelationDialog(this, win);
 

@@ -112,6 +112,10 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! \return action proxy for object \a o, or NULL if this object has no plugged shared actions. */
 		KexiActionProxy* actionProxyFor(QObject *o) const;
 
+		/*! Like actionProxyFor(), but takes the proxy from the host completely.
+		 This is called by KExiActionProxy on its destruction. */
+		KexiActionProxy* takeActionProxyFor(QObject *o);
+
 	private:
 		/*! Helper function for createSharedAction(). */
 		KAction* createSharedActionInternal( KAction *action );

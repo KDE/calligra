@@ -126,6 +126,11 @@ KexiActionProxy* KexiSharedActionHost::actionProxyFor(QObject *o) const
 	return d->actionProxies[ o ];
 }
 
+KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
+{
+	return d->actionProxies.take( o );
+}
+
 bool KexiSharedActionHost::acceptsSharedActions(QObject *o)
 {
 	return false;
