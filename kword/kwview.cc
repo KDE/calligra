@@ -5760,20 +5760,29 @@ void KWView::switchModeView()
     if ( m_gui->getHorzRuler())
     {
         m_gui->getHorzRuler()->setPageLayoutMenuItemEnabled( state );
-        if ( state )
-            m_gui->getHorzRuler()->changeFlags( m_gui->getHorzRuler()->flags() & ~(KoRuler::F_NORESIZE) );
+        if ( !koDocument()->isReadWrite())
+            m_gui->getHorzRuler()->changeFlags( KoRuler::F_NORESIZE );
         else
-            m_gui->getHorzRuler()->changeFlags( m_gui->getHorzRuler()->flags() | KoRuler::F_NORESIZE );
+        {
+            if ( state )
+                m_gui->getHorzRuler()->changeFlags( m_gui->getHorzRuler()->flags() & ~(KoRuler::F_NORESIZE) );
+            else
+                m_gui->getHorzRuler()->changeFlags( m_gui->getHorzRuler()->flags() | KoRuler::F_NORESIZE );
+        }
     }
     if ( m_gui->getVertRuler() )
     {
         m_gui->getVertRuler()->setPageLayoutMenuItemEnabled( state );
-        if ( state )
-            m_gui->getVertRuler()->changeFlags( m_gui->getVertRuler()->flags() & ~(KoRuler::F_NORESIZE) );
+        if ( !koDocument()->isReadWrite())
+            m_gui->getVertRuler()->changeFlags( KoRuler::F_NORESIZE );
         else
-            m_gui->getVertRuler()->changeFlags( m_gui->getVertRuler()->flags() | KoRuler::F_NORESIZE );
+        {
+            if ( state )
+                m_gui->getVertRuler()->changeFlags( m_gui->getVertRuler()->flags() & ~(KoRuler::F_NORESIZE) );
+            else
+                m_gui->getVertRuler()->changeFlags( m_gui->getVertRuler()->flags() | KoRuler::F_NORESIZE );
 
-
+        }
     }
 
     if ( isTextMode )
