@@ -644,6 +644,7 @@ void KoMainWindow::slotLoadCompleted()
         // particular case, that would give a better user feedback...)
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
+        newdoc->removeShell( this );
         s->setRootDocument( newdoc );
     }
     else

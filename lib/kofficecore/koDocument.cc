@@ -277,7 +277,7 @@ KoDocument::~KoDocument()
     delete d;
     s_documentList->removeRef(this);
     // last one?
-    if(s_documentList->count()==0) {
+    if(s_documentList->isEmpty()) {
         delete s_documentList;
         s_documentList=0;
     }
@@ -1844,11 +1844,16 @@ QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
 
 void KoDocument::addShell( KoMainWindow *shell )
 {
-    d->m_shells.append( shell );
+    if ( d->m_shells.findRef( shell ) == -1 )
+    {
+        //kdDebug(30003) << "addShell: shell " << (void*)shell << " added to doc " << this << endl;
+        d->m_shells.append( shell );
+    }
 }
 
 void KoDocument::removeShell( KoMainWindow *shell )
 {
+    //kdDebug(30003) << "removeShell: shell " << (void*)shell << " removed from doc " << this << endl;
     d->m_shells.removeRef( shell );
 }
 
