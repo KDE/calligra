@@ -1,0 +1,158 @@
+/***************************************************************************
+ * pythonextension.h
+ * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * You should have received a copy of the GNU Library General Public License
+ * along with this program; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ ***************************************************************************/
+
+#ifndef KROSS_PYTHON_EXTENSION_H
+#define KROSS_PYTHON_EXTENSION_H
+
+#include <Python.h>
+//#include "CXX/Config.hxx"
+#include "CXX/Objects.hxx"
+#include "CXX/Extensions.hxx"
+
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qvaluelist.h>
+#include <qvaluevector.h>
+#include <qmap.h>
+#include <qvariant.h>
+
+#include "../main/config.h"
+#include "../api/object.h"
+#include "../api/list.h"
+#include "../api/class.h"
+
+namespace Kross { namespace Python {
+
+    /**
+     * The PythonExtension is a wrapper-object to let C++ and
+     * Python interact together.
+     * Instances of this class are used everytime if we send
+     * or got something to/from python.
+     */
+    class PythonExtension : public Py::PythonExtension<PythonExtension>
+    {
+        public:
+
+            /**
+             * Constructor.
+             *
+             * \param object The \a Kross::Api::Object object
+             *        this instance is the wrapper for.
+             */
+            explicit PythonExtension(Kross::Api::Object* object);
+
+            /**
+             * Destructor.
+             */
+            virtual ~PythonExtension();
+
+            virtual Py::Object getattr(const char*);
+            virtual Py::Object getattr_methods(const char*);
+
+            Kross::Api::Object* getObject();
+
+            //virtual Py::Object repr() { return Py::String(m_object->getName().latin1()); }
+            //virtual Py::Object str() { return Py::String(m_object->getName().latin1()); }
+            //virtual int print(FILE *, int) {}
+
+        private:
+            Kross::Api::Object* m_object;
+            QString m_methodname;
+
+            /**
+             * Converts a \a Py::Tuple into a \a Kross::Api::List.
+             *
+             * \param tuple The Py::Tuple to convert.
+             * \return The to a Kross::Api::List converted Py::Tuple.
+             */
+            static Kross::Api::List* toObject(const Py::Tuple& tuple);
+
+            /**
+             * Converts a \a Py::Object into a \a Kross::Api::Object.
+             *
+             * \param object The Py::Object to convert.
+             * \return The to a Kross::Api::Object converted Py::Object.
+             */
+            static Kross::Api::Object* toObject(const Py::Object& object);
+
+            /**
+             * Converts a QString to a Py::Object. If
+             * the QString isNull() then Py::None() will
+             * be returned.
+             *
+             * \param s The QString to convert.
+             * \return The to a Py::String converted QString.
+             */
+            static Py::Object toPyObject(const QString& s);
+
+            /**
+             * Converts a QStringList to a Py::List.
+             *
+             * \param list The QStringList to convert.
+             * \return The to a Py::List converted QStringList.
+             */
+            static Py::List toPyObject(QStringList list);
+
+            /**
+             * Converts a QMap to a Py::Dict.
+             *
+             * \param map The QMap to convert.
+             * \return The to a Py::Dict converted QMap.
+             */
+            static Py::Dict toPyObject(QMap<QString, QVariant> map);
+
+            /**
+             * Converts a QValueList to a Py::List.
+             *
+             * \param list The QValueList to convert.
+             * \return The to a Py::List converted QValueList.
+             */
+            static Py::List toPyObject(QValueList<QVariant> list);
+
+            /**
+             * Converts a QVariant to a Py::Object.
+             *
+             * \param variant The QVariant to convert.
+             * \return The to a Py::Object converted QVariant.
+             */
+            static Py::Object PythonExtension::toPyObject(const QVariant& variant);
+
+            /**
+             * Converts a \a Kross::Api::Object to a Py::Object.
+             *
+             * \param object The Kross::Api::Object to convert.
+             * \return The to a Py::Object converted Kross::Api::Object.
+             */
+            static Py::Object toPyObject(Kross::Api::Object* object);
+
+            /**
+             * Callback function called from within python. This
+             * function acts as call redirector. The \a m_dynamic_methods
+             * and \a m_static_methods are used to forward the calling
+             * to the correct method or throw an \a Py::Exception if
+             * something went wrong.
+             *
+             * \param args The methodarguments.
+             * \return Returnvalue of the methodcall.
+             */
+            Py::Object _call_(const Py::Tuple&);
+    };
+
+}}
+
+#endif
