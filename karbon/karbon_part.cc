@@ -36,7 +36,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
 	initConfig();
-	initUnit();
 
 	if( name )
 		dcopObject();
@@ -71,6 +70,7 @@ KarbonPart::initDoc()
 
 	if( result == KoTemplateChooseDia::Empty )
 	{
+            	initUnit();
 		return true;
 	}
 	else if( result == KoTemplateChooseDia::File )
@@ -95,11 +95,17 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
 	QDomElement root = document.documentElement();
 	QDomElement paper = root.namedItem( "PAPER" ).toElement();
+        QString unitName="mm";
 	if( !paper.isNull() )
 	{
 		m_pageLayout.ptWidth = paper.attribute( "width", "0.0" ).toDouble();
 		m_pageLayout.ptHeight = paper.attribute( "height", "0.0" ).toDouble();
+                if ( paper.hasAttribute("unit"))
+                {
+                    unitName = paper.attribute("unit");
+                }
 	}
+        setUnit(KoUnit::unit( unitName ));
 	return m_doc.loadXML( root );
 }
 
@@ -114,6 +120,8 @@ KarbonPart::saveXML()
 	QDomElement paper = doc.createElement( "PAPER" );
 	paper.setAttribute( "width", m_pageLayout.ptWidth );
 	paper.setAttribute( "height", m_pageLayout.ptHeight );
+        paper.setAttribute( "unit", KoUnit::unitName(getUnit()) );
+
 	me.appendChild( paper );
 
 	m_doc.save( me );
