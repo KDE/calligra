@@ -821,40 +821,19 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
 {
     dlg = _dlg;
-
-    bTextColorUndefined = !dlg->bTextColor;
     bBgColorUndefined = !dlg->bBgColor;
 
 
     QLabel *tmpQLabel;
-
-    tmpQLabel = new QLabel( this, "Label_1" );
-    tmpQLabel->setGeometry( 20, 20, 100, 30 );
-    tmpQLabel->setText( i18n("Text Color") );
-
-
-
-
-
-    textColorButton = new KColorButton( this, "ComboBox_1" );
-    textColorButton->setGeometry( 20, 50, 100, 30 );
-
-
-    connect( textColorButton, SIGNAL( changed( const QColor & ) ),
-             this, SLOT( slotSetTextColor( const QColor & ) ) );
-
     tmpQLabel = new QLabel( this, "Label_2" );
     tmpQLabel->setGeometry( 140, 20, 120, 30 );
     tmpQLabel->setText( i18n("Background Color") );
 
-
     bgColorButton = new KColorButton( this, "ComboBox_3" );
     bgColorButton->setGeometry( 140, 50, 100, 30 );
 
-
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
-
 
     tmpQLabel = new QLabel( this, "Label_3" );
     tmpQLabel->setGeometry( 20, 100, 120, 30 );
@@ -902,12 +881,6 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     else if ( dlg->eStyle == KSpreadCell::ST_Undef )
       styleButton->setCurrentItem( idStyleUndef );
 
-    if ( dlg->bTextColor )
-	textColor = dlg->textColor;
-    else
-	textColor = colorGroup().text();
-    textColorButton->setColor( textColor );
-
     if ( dlg->bBgColor )
 	bgColor = dlg->bgColor;
     else
@@ -919,8 +892,6 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
 
 void CellLayoutPageMisc::apply( KSpreadCell *_obj )
 {
-    if ( !bTextColorUndefined )
-	_obj->setTextColor( textColor );
     if ( !bBgColorUndefined )
 	_obj->setBgColor( bgColor );
     if ( styleButton->currentItem() == idStyleNormal )
@@ -941,11 +912,6 @@ void CellLayoutPageMisc::slotStyle( int _i )
     actionText->setEnabled( false );
 }
 
-void CellLayoutPageMisc::slotSetTextColor( const QColor &_color )
-{
-textColor=_color;
-}
-
 void CellLayoutPageMisc::slotSetBackgroundColor( const QColor &_color )
 {
 bgColor =_color;
@@ -957,11 +923,13 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 {
   dlg = _dlg;
 
+  bTextColorUndefined = !dlg->bTextColor;
+
   QVBoxLayout* grid = new QVBoxLayout( this, 6 );
 
   box1 = new QGroupBox( this, "Box1");
   box1->setTitle(i18n("Requested Font"));
-  QGridLayout *grid2 = new QGridLayout(box1,3,4,15,7);
+  QGridLayout *grid2 = new QGridLayout(box1,6,3,15,7);
   family_label = new QLabel(box1,"family");
   family_label->setText(i18n("Family:"));
   grid2->addWidget(family_label,0,0);
@@ -972,11 +940,23 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   weight_label = new QLabel(box1,"weight");
   weight_label->setText(i18n("Weight:"));
-  grid2->addWidget(weight_label,1,0);
+  grid2->addWidget(weight_label,2,1);
+
+  QLabel *tmpQLabel = new QLabel( box1, "Label_1" );
+  tmpQLabel->setText( i18n("Text Color") );
+  grid2->addWidget(tmpQLabel,4,1);
+
+  textColorButton = new KColorButton( box1, "textColor" );
+  grid2->addWidget(textColorButton,5,1);
+
+  connect( textColorButton, SIGNAL( changed( const QColor & ) ),
+             this, SLOT( slotSetTextColor( const QColor & ) ) );
+
+
 
   style_label = new QLabel(box1,"style");
   style_label->setText(i18n("Style:"));
-  grid2->addWidget(style_label,1,2);
+  grid2->addWidget(style_label,0,1);
 
   family_combo = new QComboBox( box1, "Family" );
   family_combo->insertItem( "", 0 );
@@ -986,7 +966,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   family_combo->insertItem( "Symbol" );
 
   family_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(family_combo,0,1);
+  grid2->addWidget(family_combo,1,0);
 
   connect( family_combo, SIGNAL(activated(const QString &)),
 	   SLOT(family_chosen_slot(const QString &)) );
@@ -1000,7 +980,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   size_combo->insertStringList( lst );
 
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(size_combo,0,3);
+  grid2->addWidget(size_combo,1,2);
   connect( size_combo, SIGNAL(activated(const QString &)),
 	   SLOT(size_chosen_slot(const QString &)) );
 
@@ -1010,7 +990,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   weight_combo->insertItem( i18n("bold") );
 
   weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(weight_combo,1,1);
+  grid2->addWidget(weight_combo,3,1);
   connect( weight_combo, SIGNAL(activated(const QString &)),
 	   SLOT(weight_chosen_slot(const QString &)) );
 
@@ -1018,19 +998,19 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   style_combo->insertItem( "", 0 );
   style_combo->insertItem( i18n("roman") );
   style_combo->insertItem( i18n("italic"), 2 );
-  grid2->addWidget(style_combo,1,3);
+  grid2->addWidget(style_combo,1,1);
   style_combo->setInsertionPolicy(QComboBox::NoInsertion);
   connect( style_combo, SIGNAL(activated(const QString &)),
 	   SLOT(style_chosen_slot(const QString &)) );
 
   strike = new QCheckBox(i18n("Strike out"),box1);
-  grid2->addWidget(strike,2,1);
+  grid2->addWidget(strike,5,2);
   strike->setChecked(dlg->strike);
   connect( strike, SIGNAL( clicked()),
 	   SLOT(strike_chosen_slot()) );
 
   underline = new QCheckBox(i18n("Underline"),box1);
-  grid2->addWidget(underline,2,3);
+  grid2->addWidget(underline,3,2);
   underline->setChecked(dlg->underline);
   connect( underline, SIGNAL( clicked()),
 	   SLOT(underline_chosen_slot()) );
@@ -1091,9 +1071,15 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   this->resize( 400, 400 );
 }
 
+void CellLayoutPageFont::slotSetTextColor( const QColor &_color )
+{
+textColor=_color;
+}
 
 void CellLayoutPageFont::apply( KSpreadCell *_obj )
 {
+    if ( !bTextColorUndefined )
+	_obj->setTextColor( textColor );
     if ( size_combo->currentItem() != 0 )
 	_obj->setTextFontSize( selFont.pointSize() );
     if ( family_combo->currentItem() != 0 )
@@ -1193,6 +1179,12 @@ void CellLayoutPageFont::setCombos()
  QComboBox* combo;
  int number_of_entries;
  bool found;
+
+ if ( dlg->bTextColor )
+	textColor = dlg->textColor;
+ else
+        textColor = colorGroup().text();
+ textColorButton->setColor( textColor );
 
  // Needed to initialize this font
  selFont = dlg->textFont;

@@ -771,3 +771,4 @@ bug fix
 setMultirow(bool), multiRow(), setVerticalText(bool), verticalText()
 setPrefix(),prefix(),setPostfix(),postfix(),setAlign(),align()
 setAlignY(),align(),getFormatNumber(),  setFormatNumber()
+-Improved a little kspread_dlg_layout->Font

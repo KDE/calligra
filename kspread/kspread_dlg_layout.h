@@ -1,11 +1,11 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -115,7 +115,7 @@ private slots:
     void      underline_chosen_slot();
     void      strike_chosen_slot();
     void      display_example(const QFont &font);
-
+    void slotSetTextColor( const QColor &_color );
 
 private:
 
@@ -149,6 +149,9 @@ private:
     QCheckBox* strike;
     QCheckBox* underline;
     CellLayoutDlg *dlg;
+    QColor textColor;
+    bool bTextColorUndefined;
+    KColorButton *textColorButton;
 };
 
 class CellLayoutPageMisc : public QWidget
@@ -161,15 +164,15 @@ public:
 
 public slots:
     void slotStyle( int );
-    void slotSetTextColor( const QColor &_color );
+    //void slotSetTextColor( const QColor &_color );
     void slotSetBackgroundColor( const QColor &_color );
 protected:
-    QColor textColor;
-    bool bTextColorUndefined;
+    //QColor textColor;
+    //bool bTextColorUndefined;
     QColor bgColor;
     bool bBgColorUndefined;
 
-    KColorButton *textColorButton;
+    //KColorButton *textColorButton;
     KColorButton *bgColorButton;
 
     QComboBox* styleButton;
