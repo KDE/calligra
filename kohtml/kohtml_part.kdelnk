@@ -5,6 +5,7 @@ Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
 Comment[da]=KOfiice HTML-fremviser
 Comment[fr]=Visualiseur de fichiers HTML de KOffice
+Comment[no]=KOffice HTML-viser
 Comment[pt_BR]=Visualizador HTML do KOffice
 Comment[ru]=Просмотрщик HTML для KOffice
 Comment[sk]=PrehliadaХ HTML z balМka KOffice
