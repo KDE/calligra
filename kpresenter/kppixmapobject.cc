@@ -294,7 +294,7 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
     if ( styleStack.hasAttribute( "draw:contrast" ) )
     {
         QString str( styleStack.attribute( "draw:contrast" ) );
-        str = str.remove( "%" );
+        str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CONTRAST;
         val = ( int )( 255.0 *val/100.0 );
@@ -303,7 +303,7 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
     if ( styleStack.hasAttribute( "draw:red" ) && styleStack.attribute( "draw:red" ) != "0%" )
     {
         QString str( styleStack.attribute( "draw:red" ) );
-        str = str.remove( "%" );
+        str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
@@ -312,7 +312,7 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
     if ( styleStack.hasAttribute( "draw:green" ) && styleStack.attribute( "draw:green" ) != "0%" )
     {
         QString str( styleStack.attribute( "draw:green" ) );
-        str = str.remove( "%" );
+        str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
@@ -321,7 +321,7 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
     if ( styleStack.hasAttribute( "draw:blue" ) && styleStack.attribute( "draw:blue" ) != "0%" )
     {
         QString str( styleStack.attribute( "draw:blue" ) );
-        str = str.remove( "%" );
+        str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
@@ -330,7 +330,7 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
     if ( styleStack.hasAttribute( "draw:luminance" ) )
     {
        QString str( styleStack.attribute( "draw:luminance" ) );
-       str = str.remove( "%" );
+       str = str.remove( '%' );
        bright = str.toInt();
     }
 
