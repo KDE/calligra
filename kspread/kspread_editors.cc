@@ -18,7 +18,6 @@ KSpreadCellEditor::KSpreadCellEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 {
   m_pCell = _cell;
   m_pCanvas = _parent;
-
   setFocusPolicy( QWidget::StrongFocus );
 }
 
@@ -155,7 +154,6 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
     // Only interested in QLineEdit
     if ( o != m_pEdit )
         return FALSE;
-
     if ( e->type() == QEvent::FocusOut )
     {
         canvas()->setLastEditorWithFocus( KSpreadCanvas::CellEditor );

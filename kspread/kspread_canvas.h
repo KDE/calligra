@@ -271,6 +271,7 @@ public:
      */
     void replace( const QPoint &_marker, QString _find, QString _replace, long options );
 
+    virtual bool focusNextPrevChild( bool );
 
 public slots:
     void slotScrollVert( int _value );
@@ -298,7 +299,9 @@ private:
     virtual void chooseMousePressEvent( QMouseEvent* _ev );
     virtual void chooseMouseReleaseEvent( QMouseEvent* _ev );
     virtual void chooseMouseMoveEvent( QMouseEvent* _ev );
-
+    
+    virtual bool eventFilter( QObject *o, QEvent *e );
+    
     KSpreadHBorder* hBorderWidget();
     KSpreadVBorder* vBorderWidget();
     QScrollBar* horzScrollBar();

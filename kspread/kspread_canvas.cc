@@ -278,8 +278,33 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   choose_visible = false;
   setFocus();
-
+  installEventFilter( this );
   (void)new KSpreadToolTip( this );
+}
+
+bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
+{
+    kdDebug()<<"KSpreadCanvas::eventFilter( QObject *o, QEvent *e )\n";
+    if ( !o || !e )
+        return TRUE;
+    switch ( e->type() )
+    {
+    case QEvent::AccelOverride:
+    {
+        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        if (keyev->key()==Key_Tab && !m_pEditor)
+        {
+            keyPressEvent ( keyev );
+            return true;
+        }
+    }
+    }
+    return false;
+}
+
+bool KSpreadCanvas::focusNextPrevChild( bool )
+{
+    return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
 QPoint KSpreadCanvas::marker() const
@@ -1624,7 +1649,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       case Key_Right:
-
+      case Key_Tab:
 	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
