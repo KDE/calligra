@@ -1844,10 +1844,9 @@ void KPTextView::drawCursor( bool b )
 
 QPoint KPTextView::cursorPosition( const QPoint & pos )
 {
-    QPoint tmp(pos);
-    kdDebug()<<" pos.x() :"<<pos.x()<<" pos.y() "<<pos.y()<<endl;
-    QWMatrix m;
 #if 0
+    QPoint tmp(pos);
+    QWMatrix m;
     m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getSize().width() / 2.0), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getSize().height() /  2.0) );
     m.rotate( kpTextObject()->getAngle() );
 
@@ -1858,7 +1857,6 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
      tmp = m * pos;
 
      kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
-#endif
 
     KoRect br = KoRect( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
     double pw = br.width();
@@ -1878,8 +1876,10 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
 
      kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 
+#endif
 
-    QPoint iPoint=tmp - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
+
+    QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
     return iPoint;
 }
