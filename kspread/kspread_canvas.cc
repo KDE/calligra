@@ -144,11 +144,15 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
                                       QButton *cancelButton, QButton *okButton )
   : QLineEdit( _parent, "KSpreadEditWidget" )
 {
+  Q_ASSERT(m_pCanvas != NULL);
   m_pCanvas = _canvas;
   // Those buttons are created by the caller, so that they are inserted
   // properly in the layout - but they are then managed here.
   m_pCancelButton = cancelButton;
   m_pOkButton = okButton;
+
+  installEventFilter(m_pCanvas);
+
   if ( !m_pCanvas->doc()->isReadWrite() )
     setEnabled( false );
   else
@@ -160,7 +164,6 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
   }
   setEditMode( false ); // disable buttons
 }
-
 
 void KSpreadEditWidget::showEditWidget(bool _show)
 {
@@ -320,23 +323,26 @@ KSpreadCanvas::~KSpreadCanvas()
 
 bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
 {
-    if ( !o || !e )
-        return TRUE;
-    switch ( e->type() )
+  /* this canvas event filter acts on events sent to the line edit as well
+     as events to this filter itself.
+  */
+  if ( !o || !e )
+    return TRUE;
+  switch ( e->type() )
+  {
+  case QEvent::KeyPress:
+  {
+    QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+    if (keyev->key()==Key_Tab)
     {
-    case QEvent::AccelOverride:
-    {
-        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-        if (keyev->key()==Key_Tab && !m_pEditor)
-        {
-            keyPressEvent ( keyev );
-            return true;
-        }
+      keyPressEvent ( keyev );
+      return true;
     }
-    default:
-      break;
-    }
-    return false;
+  }
+  default:
+    break;
+  }
+  return false;
 }
 
 bool KSpreadCanvas::focusNextPrevChild( bool )
