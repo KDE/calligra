@@ -842,7 +842,7 @@ public:
 private slots:
 
     void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );
-    void replace( const QString &newText, int index, int replacedLength, const QRect &cellRect );
+    void replace( const QString &newText, int index, int replacedLength,int searchWordLenght, const QRect &cellRect );
 
 signals:
     void sig_updateView( KSpreadTable *_table );

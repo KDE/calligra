@@ -2185,8 +2185,8 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
         &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
         this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
     QObject::connect(
-        &dialog, SIGNAL( replace( const QString &, int, int, const QRect & ) ),
-        this, SLOT( replace( const QString &, int, int, const QRect & ) ) );
+        &dialog, SIGNAL( replace( const QString &, int, int,int, const QRect & ) ),
+        this, SLOT( replace( const QString &, int, int,int, const QRect & ) ) );
 
     // Now do the replacing...
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2224,7 +2224,7 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
 }
 
 // Used by replace() logic to modify a cell.
-void KSpreadTable::replace( const QString &newText, int /*index*/, int /*replacedLength*/, const QRect &cellRect )
+void KSpreadTable::replace( const QString &newText, int /*index*/, int /*replacedLength*/, int /*searchWordLenght*/,const QRect &cellRect )
 {
     // Which cell was this again?
     KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
