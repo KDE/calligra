@@ -167,7 +167,9 @@ QString KoPictureImage::getMimeType(const QString& extension) const
 {
     QString fileName("/tmp/temp.");
     fileName+=extension;
-    QString mimetype=KMimeType::findByURL(fileName,0,true,true)->name();
+    // Find the mimetype only by the extension, not by file content (as the file is empty!)
+    const QString mimetype( KMimeType::findByPath( fileName, 0 ,true )->name() );
+    // ### TODO: use KMimeType::findByContent (but then the mimetype probably need to be cached)
     kdDebug(30003) << "Image is mime type: " << mimetype << endl;
     return mimetype;
 }
