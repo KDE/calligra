@@ -741,7 +741,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize, cellComment, objects;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -838,7 +838,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     QString str;
 
     KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
-    KSpreadCanvas * canvas;
+    KSpreadCanvas * canvas=0L;
     QString activeTableName;
     if (view)
     {
@@ -953,6 +953,9 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
         cells = gnumeric_doc.createElement("gmr:Cells");
         sheet.appendChild(cells);
+
+        objects = gnumeric_doc.createElement("gmr:Objects");
+        sheet.appendChild(objects);
 
         merged = gnumeric_doc.createElement("gmr:MergedRegions");
         bool mergedCells = false; // if there are no merged cells in this sheet, don't write an
@@ -1144,7 +1147,17 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                         merged.appendChild(merge);
                     }
                     // ---
+                    if ( !cell->comment( currentcolumn, currentrow ).isEmpty() )
+                    {
+                        //<gmr:CellComment Author="" Text="cvbcvbxcvb&#10;cb&#10;xc&#10;vbxcv&#10;" ObjectBound="A1" ObjectOffset="0 0 0 0" ObjectAnchorType="17 16 17 16" Direction="17"/>
+                        cellComment = gnumeric_doc.createElement("gmr:CellComment");
+                        cellComment.setAttribute( "Text", cell->comment( currentcolumn, currentrow ) );
+                        QString sCell=QString( "%1%2" ).arg( KSpreadCell::columnName(currentcolumn ) ).arg( currentrow );
 
+                        cellComment.setAttribute("ObjectBound", sCell );
+                        objects.appendChild(cellComment);
+
+                    }
                     QDomElement gnumeric_cell = gnumeric_doc.createElement("gmr:Cell");
                     QDomElement cell_style;
 
