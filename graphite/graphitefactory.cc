@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 Werner Trobin <wtrobin@mandrakesoft.com>
+   Copyright (C) 2000 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -68,7 +68,7 @@ KAboutData* GraphiteFactory::aboutData() {
     KAboutData *aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
 					 version, description, KAboutData::License_GPL,
 					 "(c) 2000, Werner Trobin");
-    aboutData->addAuthor("Werner Trobin", 0, "wtrobin@mandrakesoft.com");
+    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
     return aboutData;
 }
 
