@@ -587,6 +587,10 @@ public:
     // Once we're done with this info, get rid of it
     void deleteInitialEditingInfo();
 
+    bool cursorInProtectedArea()const;
+    void setCursorInProtectedArea( bool b );
+
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -720,7 +724,7 @@ private:
     bool m_repaintAllViewsPending;
     bool m_bAllowAutoFormat;
     bool m_bShowScrollBar;
-
+    bool m_cursorInProtectectedArea;
     /// The document that is used by all formulas
     KFormula::Document* m_formulaDocument;
 

@@ -162,3 +162,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Ability to save an image from a document to the disk
 - Cursor position is saved into the file, to restore it when reopening the document
 - The "text" view mode is finally operationnal.
+- Add option "Enable cursor in protected text object"

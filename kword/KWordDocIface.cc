@@ -626,3 +626,14 @@ void KWordDocIface::setPtTabStopValue ( double _tabStop )
 {
     doc->setTabStopValue (_tabStop );
 }
+
+bool KWordDocIface::cursorInProtectedArea()const
+{
+    return doc->cursorInProtectedArea();
+}
+
+void KWordDocIface::setCursorInProtectedArea( bool b )
+{
+    doc->setCursorInProtectedArea(b);
+}
+

@@ -115,6 +115,7 @@ private:
     int m_oldStartingPage;
     KIntNumInput* m_variableNumberOffset;
     KDoubleNumInput *m_tabStopWidth;
+    QCheckBox *m_cursorInProtectedArea;
 };
 
 class KWConfig : public KDialogBase

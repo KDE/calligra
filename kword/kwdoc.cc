@@ -184,6 +184,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bAllowAutoFormat = true;
     m_pgUpDownMovesCaret = false;
     m_bShowScrollBar = true;
+    m_cursorInProtectectedArea=true;
 
     m_lastViewMode="ModeNormal";
 
@@ -315,6 +316,7 @@ void KWDocument::initConfig()
       config->setGroup( "Interface" );
       setGridY(config->readDoubleNumEntry("GridY",10.0));
       setGridX(config->readDoubleNumEntry("GridX",10.0));
+      setCursorInProtectedArea( config->readBoolEntry( "cursorInProtectArea", true ));
       // Config-file value in mm, default 10 pt
       double indent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
       setIndentValue(indent);
@@ -3610,5 +3612,16 @@ void KWDocument::deleteInitialEditingInfo()
     delete m_initialEditing;
     m_initialEditing = 0L;
 }
+
+bool KWDocument::cursorInProtectedArea()const
+{
+    return m_cursorInProtectectedArea;
+}
+
+void KWDocument::setCursorInProtectedArea( bool b )
+{
+    m_cursorInProtectectedArea=b;
+}
+
 
 #include "kwdoc.moc"

@@ -185,6 +185,9 @@ k_dcop:
     double ptTabStopValue() const;
     void setPtTabStopValue ( double _tabStop );
 
+    bool cursorInProtectedArea()const;
+    void setCursorInProtectedArea( bool b );
+
 private:
     KWDocument *doc;
 

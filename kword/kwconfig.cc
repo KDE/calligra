@@ -647,6 +647,13 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_oldTabStopWidth = doc->tabStopValue();
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
+    QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
+    gbDocumentCursor->setMargin( 10 );
+    gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
+
+    m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
+    m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
+
 
 }
 
@@ -670,6 +677,14 @@ KCommand *ConfigureDefaultDocPage::apply()
         doc->setAutoSave(autoSaveVal*60);
         oldAutoSaveValue=autoSaveVal;
     }
+
+    bool state = m_cursorInProtectedArea->isChecked();
+    if ( state != doc->cursorInProtectedArea() )
+    {
+        config->writeEntry( "cursorInProtectArea", state );
+        doc->setCursorInProtectedArea( state );
+    }
+
 
     KMacroCommand * macroCmd=0L;
     int newStartingPage=m_variableNumberOffset->value();
@@ -702,6 +717,7 @@ void ConfigureDefaultDocPage::slotDefault()
    columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
    autoSave->setValue(KoDocument::defaultAutoSave()/60);
    m_variableNumberOffset->setValue(1);
+   m_cursorInProtectedArea->setChecked(true);
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

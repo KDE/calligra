@@ -1875,6 +1875,9 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
     // Edit the frameset under the mouse, if any
     if ( fs && !m_currentFrameSetEdit )
     {
+        KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
+        if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
+            return false;
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
         // Display page number in statusbar.
         gui()->getView()->updatePageInfo();
