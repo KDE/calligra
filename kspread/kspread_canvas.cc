@@ -569,9 +569,6 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   if ( !m_pEditor )
     m_pView->updateEditWidget();
   updatePosWidget();
-
-   //XIM Position
-   setMicroFocusHint(xpos, ypos, 0, 16);
 }
 
 void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool make_select )
@@ -2449,6 +2446,11 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     }
 
     painter.end();
+    // XIM Position
+    int xpos_xim, ypos_xim;
+    xpos_xim = table->columnPos( markerColumn(), this );
+    ypos_xim = table->rowPos( markerRow(), this );
+    setMicroFocusHint(xpos_xim, ypos_xim, 0, 16);
 }
 
 //---------------------------------------------
