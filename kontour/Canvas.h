@@ -33,9 +33,11 @@
 
 class KontourView;
 class KoPainter;
-class GObject;
 class QScrollBar;
 
+namespace Kontour {
+
+class GObject;
 class Canvas : public QWidget
 {
   Q_OBJECT
@@ -136,5 +138,7 @@ private:
   int mTmpHorizHelpline;
   int mTmpVertHelpline;
 };
+};
+using namespace Kontour;
 
 #endif

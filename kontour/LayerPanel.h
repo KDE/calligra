@@ -29,11 +29,14 @@
 #include <qlistview.h>
 #include <qdockwindow.h>
 
+class QPushButton;
+class QGridLayout;
+
+namespace Kontour
+{
 class GDocument;
 class GPage;
 class GLayer;
-class QPushButton;
-class QGridLayout;
 
 class TreeItem : public QListViewItem
 {
@@ -120,5 +123,7 @@ private:
   QPushButton *mNewButton;
   QPushButton *mDeleteButton;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -31,6 +31,7 @@
 #include <qpoint.h>
 #include <qrect.h>
 
+namespace Kontour {
 class ZoomTool : public Tool
 {
   Q_OBJECT
@@ -47,5 +48,7 @@ private:
   QPoint p1;
   QRect r;
 };
+};
+using namespace Kontour;
 
 #endif

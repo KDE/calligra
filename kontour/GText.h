@@ -28,10 +28,12 @@
 
 #include "GObject.h"
 
-class GTextState;
 class QFontMetrics;
 class QWMatrix;
 
+namespace Kontour
+{
+class GTextState;
 class GText : public GObject
 {
   Q_OBJECT
@@ -126,4 +128,6 @@ private:
 
   static TextInfo defaultTextInfo;*/
 
+};
+using namespace Kontour;
 #endif

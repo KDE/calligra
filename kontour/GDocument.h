@@ -35,10 +35,12 @@
 #include "GStyleList.h"
 
 class KontourDocument;
-class GPage;
 class QDomDocument;
 class QDomElement;
 class KoRect;
+
+namespace Kontour {
+class GPage;
 
 class GDocument : public QObject
 {
@@ -188,5 +190,7 @@ private:
   int mCurPageNum;
   bool mUpdateCanvas;                  // update canvas
 };
+};
+using namespace Kontour;
 
 #endif

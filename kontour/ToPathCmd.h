@@ -28,6 +28,7 @@
 
 #include "Command.h"
 
+namespace Kontour {
 class GObject;
 class GPath;
 
@@ -44,5 +45,7 @@ private:
   QPtrList<GObject> objects;
   QPtrList<GPath> paths;
 };
+};
+using namespace Kontour;
 
 #endif

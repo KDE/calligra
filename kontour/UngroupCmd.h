@@ -26,6 +26,7 @@
 #ifndef UngroupCmd_h_
 #define UngroupCmd_h_
 /*
+namespace Kontour {
 #include <Command.h>
 
 class GDocument;
@@ -48,5 +49,7 @@ private:
     };
     QPtrList<GPair> groups;
 };
+};
+using namespace Kontour;
 */
 #endif

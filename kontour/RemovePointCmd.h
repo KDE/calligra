@@ -28,6 +28,7 @@
 #include <Command.h>
 #include <GPolygon.h>
 
+namespace Kontour {
 class GDocument;
 class GPolyline;
 
@@ -47,5 +48,8 @@ private:
   Coord point;
   GPolygon::Kind kind;
 };
+
+};
+using namespace Kontour;
 
 #endif

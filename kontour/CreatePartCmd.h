@@ -27,6 +27,8 @@
 
 #include <Command.h>
 
+namespace Kontour
+{
 class GDocument;
 class GObject;
 
@@ -43,5 +45,6 @@ private:
   GDocument* document;
   QPtrList<GObject> objects;
 };
-
+};
+using namespace Kontour;
 #endif

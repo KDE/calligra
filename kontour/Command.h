@@ -30,9 +30,11 @@
 #include <qptrvector.h>
 #include <qmemarray.h>
 
+class QWMatrix;
+
+namespace Kontour {
 class GDocument;
 class GObject;
-class QWMatrix;
 
 class Command : public KNamedCommand
 {
@@ -59,5 +61,7 @@ protected:
   QPtrVector<GObject> objects;
   QMemArray<QWMatrix> states;
 };
+};
+using namespace Kontour;
 
 #endif

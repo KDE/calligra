@@ -27,6 +27,7 @@
 
 #include <Command.h>
 
+namespace Kontour {
 class GDocument;
 class GText;
 
@@ -43,5 +44,7 @@ private:
   GText* object;
   GObject *oldPath, *newPath;
 };
+};
+using namespace Kontour;
 
 #endif

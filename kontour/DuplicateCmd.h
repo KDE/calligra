@@ -27,7 +27,8 @@
 #define __DuplicateCmd_h__
 
 #include "Command.h"
-
+namespace Kontour
+{
 class GDocument;
 class GObject;
 
@@ -50,5 +51,7 @@ private:
   static bool repeatCmd;            // repeat command with given offsets
   static double repOffX, repOffY;   // offset for repetition
 };
+};
+using namespace Kontour;
 
 #endif

@@ -37,6 +37,8 @@
 class QDomDocument;
 class QDomElement;
 class KoPainter;
+namespace Kontour
+{
 class GPath;
 class GLayer;
 class GOState;
@@ -247,5 +249,7 @@ protected:
 
   static unsigned int mCurId;     // ID for new objects
 };
+};
+using namespace Kontour;
 
 #endif

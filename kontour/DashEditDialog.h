@@ -26,10 +26,12 @@
 #define __DashEditDialog_h__
 
 #include <kdialogbase.h>
+class QSpinBox;
 
 class KontourView;
+namespace Kontour
+{
 class GDocument;
-class QSpinBox;
 
 class DashEditDialog : public KDialogBase
 {
@@ -48,5 +50,7 @@ private:
   KontourView      *mView;
   GDocument        *mGDoc;
 };
+};
+using namespace Kontour;
 
 #endif

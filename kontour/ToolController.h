@@ -33,6 +33,8 @@
 class KontourView;
 class QEvent;
 
+namespace Kontour {
+
 class ToolController : public QObject
 {
   Q_OBJECT
@@ -60,5 +62,8 @@ private:
   QPtrList<Tool> tools;
   Tool *mActiveTool;
 };
+};
+
+using namespace Kontour;
 
 #endif

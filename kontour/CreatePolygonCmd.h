@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 class GPolygon;
 
 class CreatePolygonCmd : public Command
@@ -42,5 +44,7 @@ public:
 private:
   GPolygon *object;
 };
+};
+using namespace Kontour;
 
 #endif

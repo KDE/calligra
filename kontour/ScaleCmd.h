@@ -29,6 +29,7 @@
 #include "Command.h"
 #include <koRect.h>
 
+namespace Kontour {
 class ScaleCmd : public TransformationCmd
 {
 public:
@@ -41,5 +42,7 @@ private:
   int hmask;
   KoRect box;
 };
+};
+using namespace Kontour;
 
 #endif

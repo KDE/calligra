@@ -30,6 +30,8 @@
 
 #include "kontour_view.h"
 
+using namespace Kontour;
+
 ToolController::ToolController(KontourView *aView)
 {
   mActiveTool = 0L;

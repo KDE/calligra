@@ -28,6 +28,7 @@
 
 #include "Tool.h"
 
+namespace Kontour {
 class GPage;
 class Canvas;
 
@@ -49,5 +50,8 @@ protected:
 
 private:
 };
+};
+
+using namespace Kontour;
 
 #endif

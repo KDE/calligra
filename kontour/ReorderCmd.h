@@ -31,6 +31,7 @@
 #include <qptrvector.h>
 #include <qmemarray.h>
 
+namespace Kontour {
 class GDocument;
 
 class ReorderCmd : public Command
@@ -48,5 +49,6 @@ private:
   QMemArray<unsigned int> oldpos;
   ReorderPosition position;
 };
-
+};
+using namespace Kontour;
 #endif

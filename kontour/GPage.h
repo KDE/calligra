@@ -33,13 +33,14 @@
 #include "Handle.h"
 
 class KoPainter;
-class GDocument;
-class GLayer;
-class GObject;
 class QDomDocument;
 class QDomElement;
 class KoColor;
-
+namespace Kontour
+{
+class GDocument;
+class GLayer;
+class GObject;
 class GPage : public QObject
 {
   Q_OBJECT
@@ -154,5 +155,7 @@ private:
   KoRect                      mSBox;
   Handle                      mHandle;
 };
+};
+using namespace Kontour;
 
 #endif

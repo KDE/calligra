@@ -29,6 +29,8 @@
 #include "GObject.h"
 #include <qptrlist.h>
 
+namespace Kontour
+{
 class GGroup : public GObject
 {
   Q_OBJECT
@@ -59,5 +61,7 @@ public:
 private:
   QPtrList<GObject> members;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -32,10 +32,12 @@ class KComboBox;
 class QColor;
 class KColorButton;
 class QCheckBox;
-class UnitBox;
 class KoPageLayoutDia;
 class KontourView;
+
+namespace Kontour {
 class GDocument;
+class UnitBox;
 
 class OptionsDialog : public KDialogBase
 {
@@ -104,5 +106,7 @@ private:
   UnitBox *hspinbox, *vspinbox;
   KColorButton *cbutton;
 };
+};
+using namespace Kontour;
 
 #endif

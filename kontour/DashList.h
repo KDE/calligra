@@ -28,6 +28,8 @@
 #include <qdict.h>
 
 class KoDash;
+namespace Kontour
+{
 //class QDomDocument;
 //class QDomElement;
 
@@ -42,5 +44,7 @@ public:
 private:
   QDict<KoDash>    list;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -28,10 +28,14 @@
 #include <Coord.h>
 #include <GObject.h>
 
-class KIllustratorFrame;
-class KIllustratorChild;
+This file is not compiled.
+
+class KIllustratorChild; !!!!!!!!
 class KIllustratorView;
 class QPainter;
+
+namespace Kontour
+{
 
 class GPart : public GObject
 {
@@ -66,5 +70,7 @@ private:
   KIllustratorChild *child;
   QRect initialGeom, oldGeom;
 };
+};
+using namespace Kontour;
 
 #endif

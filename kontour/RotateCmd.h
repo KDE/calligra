@@ -29,6 +29,7 @@
 #include "Command.h"
 #include <koPoint.h>
 
+namespace Kontour {
 class RotateCmd : public TransformationCmd
 {
 public:
@@ -40,5 +41,7 @@ private:
   KoPoint rcenter;
   double angle;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -27,6 +27,7 @@
 
 #include "Tool.h"
 
+namespace Kontour {
 class GPath;
 
 class PathTool : public Tool
@@ -45,5 +46,7 @@ private:
   Mode           mode;
   State          state;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -30,6 +30,7 @@
 #include <qstrlist.h>
 
 class KontourView;
+namespace Kontour {
 class GDocument;
 
 class TabBar : public QWidget {
@@ -140,5 +141,7 @@ protected:
      */
 //    int m_autoScroll;
 };
+};
+using namespace Kontour;
 
 #endif

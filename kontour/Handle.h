@@ -29,8 +29,11 @@
 #include <koPoint.h>
 #include <koRect.h>
 
-class GPage;
 class KoPainter;
+
+namespace Kontour
+{
+class GPage;
 
 class Handle
 {
@@ -61,5 +64,8 @@ private:
   bool mShow;
   bool mEmpty;
 };
+};
+
+using namespace Kontour;
 
 #endif

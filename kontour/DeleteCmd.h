@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 class GDocument;
 class GObject;
 
@@ -48,5 +50,7 @@ private:
   };
   QPtrList<MyPair> objects;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 class GText;
 
 class CreateTextCmd : public Command
@@ -42,5 +44,8 @@ public:
 private:
   GText *object;
 };
+};
+
+using namespace Kontour;
 
 #endif

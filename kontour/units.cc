@@ -29,6 +29,7 @@
 
 #include <klocale.h>
 
+namespace Kontour {
 /*
  * Functions for converting Point <-> Inch <-> Millimeter
  * <-> Pica <-> Centimetre  <-> Didot <-> Cicero
@@ -166,3 +167,4 @@ QString unitToString(MeasurementUnit unit)
   else
     return i18n("cicero");
 }
+};

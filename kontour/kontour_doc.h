@@ -35,7 +35,10 @@ class KontourDocument;
 class KontourView;
 class KoDocumentEntry;
 class KoStore;
+namespace Kontour {
 class GDocument;
+};
+using namespace Kontour;
 class QDomDocument;
 
 class KontourChild : public KoDocumentChild

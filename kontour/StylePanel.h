@@ -28,7 +28,6 @@
 
 class KontourView;
 class QTabWidget;
-class GStyle;
 class KComboBox;
 class KoColor;
 class KoColorChooser;
@@ -37,6 +36,8 @@ class QCheckBox;
 class QSpinBox;
 class QButtonGroup;
 
+namespace Kontour {
+class GStyle;
 class OutlinePanel : public QDockWindow
 {
   Q_OBJECT
@@ -95,5 +96,7 @@ private:
   KoColorChooser  *mPaintPanel;
   KoIconChooser   *mBitmapPanel;
 };
+};
+using namespace Kontour;
 
 #endif

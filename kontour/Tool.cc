@@ -33,6 +33,8 @@
 #include "kontour_factory.h"
 #include "ToolController.h"
 
+using namespace Kontour;
+
 ToolSelectAction::ToolSelectAction(QObject *parent, const char *name):
 KActionMenu("",parent,name)
 {

@@ -28,6 +28,8 @@
 
 #include "GObject.h"
 
+namespace Kontour
+{
 class GOval : public GObject
 {
   Q_OBJECT
@@ -66,5 +68,7 @@ private:
   double      mAngle;             // Arc angle
   KoPoint     segPoint[2];        //
 };
+};
+using namespace Kontour;
 
 #endif

@@ -28,6 +28,7 @@
 #include <koQueryTrader.h>
 #include <Tool.h>
 
+namespace Kontour {
 class Canvas;
 class GDocument;
 class Coord;
@@ -56,5 +57,7 @@ private:
 
   bool validEntry;
 };
+};
+using namespace Kontour;
 
 #endif

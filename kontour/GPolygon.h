@@ -28,6 +28,8 @@
 
 #include "GObject.h"
 
+namespace Kontour
+{
 class GPolygon : public GObject
 {
   Q_OBJECT
@@ -59,5 +61,8 @@ private:
   double mARadius;
   double mBRadius;
 };
+};
+
+using namespace Kontour;
 
 #endif

@@ -38,6 +38,8 @@ class KoVectorPath;
  *
  */
  
+namespace Kontour
+{
 class GSegment
 {
 public:
@@ -188,5 +190,8 @@ private:
   QPtrList<GSegment>    segments;
   KoVectorPath         *mVP;
 };
+};
+
+using namespace Kontour;
 
 #endif

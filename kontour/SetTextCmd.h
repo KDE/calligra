@@ -27,6 +27,7 @@
 
 #include <Command.h>
 
+namespace Kontour {
 class GDocument;
 class GText;
 
@@ -46,5 +47,7 @@ private:
   GOState* state;
   QString text;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour {
+
 enum HorizAlignment
 {
   HAlign_None, HAlign_Left, HAlign_Center, HAlign_Right
@@ -51,5 +53,8 @@ private:
   bool center;
   bool snap;
 };
+
+};
+using namespace Kontour;
 
 #endif

@@ -30,6 +30,8 @@
 #include <qobject.h>
 #include <kxmlguiclient.h>
 
+namespace Kontour {
+
 class ToolController;
 
 class ToolSelectAction : public KActionMenu
@@ -82,5 +84,7 @@ private:
   ToolController *mToolController;
   QString mId;
 };
+};
+using namespace Kontour;
 
 #endif

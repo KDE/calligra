@@ -30,6 +30,8 @@
 class QDomDocument;
 class QDomElement;
 class KoFill;
+namespace Kontour
+{
 
 /* Class for drawing style */
 
@@ -88,5 +90,7 @@ private:
   KoFill      *mFill;
   int          mFillOpacity;
 };
+};
+using namespace Kontour;
 
 #endif

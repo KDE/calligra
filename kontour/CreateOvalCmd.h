@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 class GOval;
 
 class CreateOvalCmd : public Command
@@ -42,5 +44,7 @@ public:
 private:
   GOval *object;
 };
+};
+using namespace Kontour;
 
 #endif

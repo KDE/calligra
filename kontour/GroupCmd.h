@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 class GObject;
 class GGroup;
 
@@ -44,5 +46,8 @@ private:
   GGroup *group;
   QPtrList<GObject> objects;
 };
+};
+
+using namespace Kontour;
 
 #endif

@@ -34,6 +34,8 @@ class QPushButton;
 class QCheckBox;
 class QRadioButton;
 
+namespace Kontour {
+
 class AlignmentPanel : public QDockWindow
 {
   Q_OBJECT
@@ -53,5 +55,8 @@ private:
   QRadioButton       *sbutton;
   QRadioButton       *pbutton;
 };
+
+};
+using namespace Kontour;
 
 #endif

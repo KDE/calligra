@@ -32,6 +32,7 @@
 class QPixmap;
 class KontourDocument;
 
+namespace Kontour {
 class Ruler : public QFrame
 {
   Q_OBJECT
@@ -94,5 +95,7 @@ private:
   QPixmap *bg;
   QPixmap *mNums;
 };
+};
+using namespace Kontour;
 
 #endif

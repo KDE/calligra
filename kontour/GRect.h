@@ -28,6 +28,8 @@
 
 #include "GObject.h"
 
+namespace Kontour
+{
 class GRect : public GObject
 {
   Q_OBJECT
@@ -59,5 +61,8 @@ private:
   double      mXRoundness;      // Rectangle roundness
   double      mYRoundness;      // Rectangle roundness
 };
+};
+
+using namespace Kontour;
 
 #endif

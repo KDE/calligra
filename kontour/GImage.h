@@ -32,6 +32,7 @@ class QImage;
 class QDomElement;
 class KURL;
 
+namespace Kontour {
 class GImage : public GObject
 {
   Q_OBJECT
@@ -59,5 +60,7 @@ public:
 private:
   QImage *mImage;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -28,6 +28,7 @@
 
 class QString;
 
+namespace Kontour {
 enum MeasurementUnit
 {
   UnitPoint, UnitMillimeter, UnitInch, UnitPica, UnitCentimeter,
@@ -51,5 +52,7 @@ double cvtPtToUnit(MeasurementUnit unit, double value);
 double cvtUnitToPt(MeasurementUnit unit, double value);
 
 QString unitToString(MeasurementUnit unit);
+};
+using namespace Kontour;
 
 #endif

@@ -28,6 +28,7 @@
 
 #include "Tool.h"
 
+namespace Kontour {
 class OvalTool : public Tool
 {
   Q_OBJECT
@@ -44,5 +45,7 @@ private:
   QPoint p1;
   QRect r;
 };
+};
+using namespace Kontour;
 
 #endif

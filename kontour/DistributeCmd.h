@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 enum HorizDistribution
 {
   HDistrib_None, HDistrib_Left, HDistrib_Center, HDistrib_Distance, HDistrib_Right
@@ -55,5 +57,8 @@ private:
   VertDistribution vDistrib;
   DistributionMode mode;
 };
+};
+
+using namespace Kontour;
 
 #endif

@@ -32,6 +32,7 @@
 class KComboBox;
 class KDoubleNumInput;
 
+namespace Kontour {
 class UnitBox : public QHBox
 {
   Q_OBJECT
@@ -71,5 +72,7 @@ private:
 
   static MeasurementUnit defaultUnit;
 };
+};
+using namespace Kontour;
 
 #endif

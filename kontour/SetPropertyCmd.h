@@ -31,6 +31,7 @@
 #include <qptrvector.h>
 #include <qmemarray.h>
 
+namespace Kontour {
 class SetPropertyCmd : public Command
 {
 public:
@@ -133,5 +134,7 @@ public:
 private:
   KoColor color;
 };
+};
+using namespace Kontour;
 
 #endif

@@ -31,6 +31,8 @@ class QDomDocument;
 class QDomElement;
 class QStringList;
 
+namespace Kontour {
+
 class GStyle;
 class GStyleList
 {
@@ -58,5 +60,7 @@ private:
   int       mCur;
   GStyle   *mStyle;          //current style
 };
+};
+using namespace Kontour;
 
 #endif

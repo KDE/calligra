@@ -29,11 +29,14 @@
 #include <qobject.h>
 #include <qptrlist.h>
 
-class GPage;
-class GObject;
-class QString;
 class QDomDocument;
 class QDomElement;
+class QString;
+
+namespace Kontour
+{
+class GPage;
+class GObject;
 
 class GLayer : public QObject
 {
@@ -112,5 +115,8 @@ private:
   QPtrList<GObject> contents;  // the list of objects
   GPage *mPage;
 };
+};
+
+using namespace Kontour;
 
 #endif

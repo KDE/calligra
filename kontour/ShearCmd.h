@@ -29,6 +29,7 @@
 #include "Command.h"
 #include <koPoint.h>
 
+namespace Kontour {
 class ShearCmd : public TransformationCmd
 {
 public:
@@ -40,5 +41,7 @@ private:
   KoPoint rcenter;
   double sx, sy;
 };
+};
+using namespace Kontour;
 
 #endif

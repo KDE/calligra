@@ -29,6 +29,7 @@
 #include "Tool.h"
 #include <koPoint.h>
 
+namespace Kontour {
 class GPage;
 class Canvas;
 
@@ -65,5 +66,7 @@ private:
   int prevcoord;
   int mask;
 };
+};
+using namespace Kontour;
 
 #endif

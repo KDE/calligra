@@ -28,6 +28,7 @@
 
 #include <Command.h>
 
+namespace Kontour {
 class GImage;
 
 class CreateImageCmd : public Command
@@ -42,5 +43,7 @@ public:
 private:
   GImage *object;
 };
+};
+using namespace Kontour;
 
 #endif

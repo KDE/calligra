@@ -28,6 +28,7 @@
 
 #include "Command.h"
 
+namespace Kontour {
 class GObject;
 
 class MoveNodeCmd : public Command
@@ -45,5 +46,7 @@ private:
   double          xoff;
   double          yoff;
 };
+};
+using namespace Kontour;
 
 #endif

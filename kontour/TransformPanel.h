@@ -30,6 +30,7 @@ class QPushButton;
 class QTabWidget;
 class QSpinBox;
 
+namespace Kontour {
 class TransformPanel : public QDockWindow
 {
   Q_OBJECT
@@ -65,5 +66,7 @@ private:
   bool          mTRelative : 1;
   bool          mRRelative : 1;
 };
+};
+using namespace Kontour;
 
 #endif

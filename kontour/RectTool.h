@@ -30,6 +30,8 @@
 #include <qpoint.h>
 #include <qrect.h>
 
+namespace Kontour {
+
 class RectTool : public Tool
 {
   Q_OBJECT
@@ -57,5 +59,7 @@ private:
   bool mFill:1;
   bool mSquare:1;
 };
+};
+using namespace Kontour;
 
 #endif

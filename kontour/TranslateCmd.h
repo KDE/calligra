@@ -28,6 +28,7 @@
 
 #include "Command.h"
 
+namespace Kontour {
 class TranslateCmd : public TransformationCmd
 {
 public:
@@ -38,5 +39,7 @@ public:
 private:
   double dx, dy;
 };
+};
+using namespace Kontour;
 
 #endif

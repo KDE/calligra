@@ -28,6 +28,8 @@
 #include "Tool.h"
 #include <kurl.h>
 
+namespace Kontour
+{
 class InsertImageTool : public Tool
 {
   Q_OBJECT
@@ -40,5 +42,7 @@ public:
 private:
   KURL url;
 };
+};
+using namespace Kontour;
 
 #endif

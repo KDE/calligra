@@ -28,6 +28,8 @@
 
 #include "Command.h"
 
+namespace Kontour
+{
 class GRect;
 
 class CreateRectCmd : public Command
@@ -42,5 +44,8 @@ public:
 private:
   GRect *object;
 };
+};
+
+using namespace Kontour;
 
 #endif

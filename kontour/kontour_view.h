@@ -34,17 +34,24 @@
 #include "units.h"
 
 class KontourDocument;
+class QDockArea;
+class QSplitter;
+class QLabel;
+class QHBoxLayout;
+class KToggleAction;
+class KSelectAction;
+class KPopupMenu;
+class QButton;
+class QScrollBar;
+class DCOPObject;
+class KoColor;
+
+namespace Kontour {
 class GDocument;
 class Canvas;
 class Ruler;
 class TabBar;
-class QSplitter;
-class QLabel;
-class QHBoxLayout;
 class ToolController;
-class KToggleAction;
-class KSelectAction;
-class KPopupMenu;
 class SelectTool;
 class EditPointTool;
 class ZoomTool;
@@ -54,18 +61,15 @@ class OvalTool;
 class PolygonTool;
 class TextTool;
 class InsertImageTool;
-class QDockArea;
-class QButton;
-class QScrollBar;
 class LayerPanel;
 class PaintPanel;
 class OutlinePanel;
 class TransformPanel;
 class AlignmentPanel;
 class Command;
-class KoColor;
 class GStyle;
-class DCOPObject;
+};
+using namespace Kontour;
 
 class KontourView : public KoView
 {

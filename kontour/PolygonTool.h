@@ -29,6 +29,7 @@
 #include "Tool.h"
 #include <koPoint.h>
 
+namespace Kontour {
 class GPolygon;
 
 class PolygonTool : public Tool
@@ -61,5 +62,7 @@ private:
   enum Type{Polygon, Star};
   Type type;
 };
+};
+using namespace Kontour;
 
 #endif

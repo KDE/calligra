@@ -29,9 +29,10 @@
 #include "Tool.h"
 #include <koPoint.h>
 
+namespace Kontour {
 class GPage;
-class Canvas;
 class GObject;
+class Canvas;
 
 class EditPointTool : public Tool
 {
@@ -59,5 +60,8 @@ private:
   KoPoint      mStartPoint;
   KoPoint      mLastPoint;
 };
+
+};
+using namespace Kontour;
 
 #endif
