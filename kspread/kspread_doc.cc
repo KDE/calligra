@@ -282,6 +282,7 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
+    emit sigProgress( 0 );
   m_bLoading = TRUE;
 
   // <spreadsheet>
@@ -298,6 +299,8 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   QDomElement locale = spread.namedItem( "locale" ).toElement();
   if ( !locale.isNull() )
       m_locale.load( locale );
+
+  emit sigProgress( 5 );
 
   m_refs.clear();
   //<areaname >
@@ -354,7 +357,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
     setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
   }
-
+  emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
   m_pMap->tableList().clear(); // it's set to autoDelete
 
@@ -372,7 +375,9 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       m_bLoading = false;
       return false;
   }
+  emit sigProgress( 90 );
   initConfig();
+  emit sigProgress(-1);
   return true;
 }
 
