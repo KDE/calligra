@@ -376,7 +376,7 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
 
     // If the Blip is not in this drawing file, process it "manually".
 
-    if (data.foDelay)
+    if (data.cRef && data.foDelay)
     {
         QByteArray bytes;
         bytes.setRawData(m_delayStream + data.foDelay, data.size);
@@ -557,7 +557,7 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
     while (length + complexLength < (int)byteOperands)
     {
         operands >> option.opcode.info >> option.value;
-        length += 4;
+        length += 6;
 
         // Defer processing of complex options.
 
