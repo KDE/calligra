@@ -10,6 +10,7 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
     numPic=0;
     numPart=0;
     success=false; // later -> true;
+    fileCreated=false;
 
     docfile=new KLaola(fileIn);
     if(!docfile->isOk())
@@ -17,6 +18,7 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
     else {
         fileOut=new KTar(fileOutName);
         fileOut->open(IO_WriteOnly);
+        fileCreated=true;
 
         if(fileOutName.right(4)==".tgz")
             fileOutName.truncate(fileOutName.length()-4);
@@ -46,10 +48,11 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
 
 OLEFilter::~OLEFilter() {
 
-    fileOut->close();
-    delete fileOut;
-    fileOut=0L;
-
+    if(fileCreated) {
+        fileOut->close();
+        delete fileOut;
+        fileOut=0L;
+    }
     if(docfile) {
         delete docfile;
         docfile=0L;

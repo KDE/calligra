@@ -25,6 +25,7 @@ public:
     OLEFilter(const myFile &in, const QString &nameOut, const IN i, const OUT o);
     ~OLEFilter();
 
+    const bool isOk() {return success;}
     const bool filter();            // manages the filtering process
 
 protected slots:
@@ -52,5 +53,6 @@ private:
     KLaola *docfile;                 // used to split up the OLE-file
     KTar *fileOut;                   // used to create output-file
     bool success;                    // everything ok?
+    bool fileCreated;                // did we create output file?
 };
 #endif // OLEFILTER_H

@@ -112,8 +112,9 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
 
     QString str;
 
-    if(myOLEFilter->filter()) {
+    if(myOLEFilter->isOk() && myOLEFilter->filter()) {
         // OK :)
+        // Note: "shortcut" evaluation!
     }
     else {
         // Ohh, something went wrong...
