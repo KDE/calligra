@@ -215,7 +215,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
     double val = KoUnit::ptToUnit( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
-    indent->setRange(0.1, 50, 0.1);
+    indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
     indent->setPrecision(1);
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
@@ -496,10 +496,10 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     KoRect rect = doc->stickyPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()),  tmpQGroupBox);
     grid->addWidget(lab ,0,0);
-
+    KoUnit::Unit unit = doc->getUnit();
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
-    resolutionX->setValue( KoUnit::ptToUnit( doc->getGridX(), doc->getUnit() ) );
-    resolutionX->setRange( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()), 1, false);
+    resolutionX->setValue( KoUnit::ptToUnit( doc->getGridX(), unit ) );
+    resolutionX->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width() , unit), KoUnit::ptToUnit(1, unit ), false);
 
     grid->addWidget(resolutionX ,1,0);
 
@@ -507,8 +507,8 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid->addWidget(lab ,2,0);
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
-    resolutionY->setValue( KoUnit::ptToUnit( doc->getGridY(), doc->getUnit() ) );
-    resolutionY->setRange( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()), 1, false);
+    resolutionY->setValue( KoUnit::ptToUnit( doc->getGridY(), unit ) );
+    resolutionY->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width() , unit), KoUnit::ptToUnit( 1,unit ), false);
 
     grid->addWidget(resolutionY , 3,0);
 
