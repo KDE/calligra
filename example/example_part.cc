@@ -51,7 +51,8 @@ QDomDocument ExamplePart::saveXML()
 }
 
 
-void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
+void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
+                                double /*zoomX*/, double /*zoomY*/ )
 {
     // ####### handle transparency
 
