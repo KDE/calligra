@@ -377,6 +377,7 @@ void KoStyleManager::addStyle() {
     }
     else
         m_currentStyle = new KoStyle( str );
+    m_currentStyle->setFollowingStyle( m_currentStyle ); // #45868
 
     noSignals=true;
     m_origStyles.append(0L);
