@@ -126,7 +126,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         if (ch!=' ')
         {
             // The next character is not a space anymore
-            if (spaceNumber>1)
+            if ( spaceNumber > 0 )
             {
                 strReturn+="<text:s text:c=\"";
                 strReturn+=QString::number(spaceNumber);
@@ -209,7 +209,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         }
     }
 
-    if (spaceNumber>1)
+    if ( spaceNumber > 0 )
     {
         // The last characters were spaces
         strReturn+="<text:s text:c=\"";
