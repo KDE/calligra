@@ -1102,7 +1102,7 @@ KarbonView::initActions()
 #endif
 	connect( m_capStyle, SIGNAL(clicked()), this, SLOT(slotCapStyleClicked()) );
 
-	if( !m_strokeFillPreview )
+	if( shell() && !m_strokeFillPreview )
 	{
 		m_strokeFillPreview = new VStrokeFillPreview( m_part, mainWindow()->toolBar( "Toolbox" ) );
 		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ),
