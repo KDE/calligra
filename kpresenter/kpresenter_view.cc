@@ -27,7 +27,6 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <qfiledialog.h>
 #include <assert.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
@@ -418,7 +417,7 @@ void KPresenterView::editHeaderFooter()
 void KPresenterView::insertPage()
 {
     InsertPageDia dia( this, 0, TRUE );
-    QString templ = getenv( "HOME" );
+    QString templ = QString::fromLocal8Bit( getenv( "HOME" ) );
     templ += "/.default.kpr";
     if ( !QFile::exists( templ ) ) {
 	dia.radioDifferent->setChecked( TRUE );
@@ -441,14 +440,6 @@ void KPresenterView::insertPicture()
     page->deSelectAllObj();
 
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, true );
-    fd.setPreviewMode( false, true );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-#else
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Insert Picture"));
     //fd.setPreviewMode( false, true );
@@ -468,7 +459,6 @@ void KPresenterView::insertPicture()
     }
 
     file = url.path();
-#endif
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
@@ -482,14 +472,7 @@ void KPresenterView::insertClipart()
     page->setToolEditMode( TEM_MOUSE );
     page->deSelectAllObj();
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
-    fd.setPreviewMode( false, true );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-#else
+
     KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
     //fd.setPreviewMode( false, true );
@@ -509,7 +492,6 @@ void KPresenterView::insertClipart()
     }
 
     file = url.path();
-#endif
 
     if ( !file.isEmpty() )
 	m_pKPresenterDoc->insertClipart( file, xOffset, yOffset );
@@ -654,8 +636,10 @@ void KPresenterView::toolsObject()
     page->setToolEditMode( TEM_MOUSE, false );
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart();
-    if ( pe.isEmpty() )
+    if ( pe.isEmpty() ) {
+	page->setToolEditMode( TEM_MOUSE );	
 	return;
+    }
 
     page->setToolEditMode( INS_OBJECT );
     page->setPartEntry( pe );
@@ -887,7 +871,7 @@ void KPresenterView::extraCreateTemplate()
 
 void KPresenterView::extraDefaultTemplate()
 {
-    QString file = getenv( "HOME" );
+    QString file = QString::fromLocal8Bit( getenv( "HOME" ) );
     file += "/.default.kpr";\
     m_pKPresenterDoc->savePage( file, currPg );
 }
@@ -902,13 +886,10 @@ void KPresenterView::extraWebPres()
     QString config = QString::null;
     if ( KMessageBox::questionYesNo( this,
 	   i18n( "Do you want to load a configuration which should be used for this\n"
-		 "Web-Presentation, which you have already saved earlier?" ),
-	   i18n( "Create Web-Presentation" ) ) == KMessageBox::Yes )
+		 "HTML Presentation, which you have already saved earlier?" ),
+	   i18n( "Create HTML Presentation" ) ) == KMessageBox::Yes )
     {
-#ifdef USE_QFD
-	config = QFileDialog::getOpenFileName( QString::null, "KPresenter Web-Presentation (*.kpweb)" );
-#else
-	url = KFileDialog::getOpenURL( QString::null, "*.kpweb|KPresenter Web-Presentation (*.kpweb)" );
+	url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
 
 	if( url.isEmpty() )
 	  return;
@@ -920,7 +901,6 @@ void KPresenterView::extraWebPres()
 	}
 
 	config = url.path();
-#endif
     }
 
     KPWebPresentationWizard::createWebPresentation( config, m_pKPresenterDoc, this );
@@ -1026,8 +1006,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
     if ( page && !presStarted ) {
 	// disable screensaver
-	QString pidFile;
-	pidFile = getenv( "HOME" );
+	QString pidFile = QString::fromLocal8Bit( getenv( "HOME" ) );
 	pidFile += "/.kss.pid";
 	FILE *fp;
 	if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
@@ -1109,8 +1088,7 @@ void KPresenterView::screenStop()
 	page->setMouseTracking( true );
 	page->setBackgroundColor( white );
 	// start screensaver again
-	QString pidFile;
-	pidFile = getenv( "HOME" );
+	QString pidFile = QString::fromLocal8Bit( getenv( "HOME" ) );
 	pidFile += "/.kss.pid";
 	FILE *fp;
 	if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
@@ -1934,7 +1912,7 @@ void KPresenterView::setupActions()
 					     this, SLOT( extraAlignObjBottom() ),
 					     actionCollection(), "extra_alignbottom" );
 
-    actionExtraBackground = new KAction( i18n( "Page Bac&kground..." ), 0,
+    actionExtraBackground = new KAction( i18n( "Page Bac&kground..." ), "background", 0,
 					 this, SLOT( extraBackground() ),
 					 actionCollection(), "extra_background" );
 
@@ -2058,9 +2036,6 @@ void KPresenterView::setupActions()
 					  SLOT( penChosen( const QColor & ) ),
 					  colorList,
 					  actionCollection(), "colorbar" );
-
-
-
 }
 
 /*=========== take changes for backgr dialog =====================*/
@@ -2288,7 +2263,7 @@ void KPresenterView::scrollV( int value )
     if ( !presStarted ) {
 	int yo = yOffset;
 
-	yOffset = 	kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg + value;
+	yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg + value;
 	page->scroll( 0, yo - yOffset );
 
 	if ( v_ruler )
@@ -2403,14 +2378,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     QFileInfo fileInfo( filename );
 
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, true );
-    fd.setPreviewMode( false, true );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-#else
+
     KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Select new Picture"));
     //fd.setPreviewMode( false, true );
@@ -2418,7 +2386,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	url = fd.selectedURL();
+      url = fd.selectedURL();
 
     if( url.isEmpty() )
       return;
@@ -2430,9 +2398,9 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     }
 
     file = url.path();
-#endif
 
-    if ( !file.isEmpty() ) m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
+    if ( !file.isEmpty() ) 
+      m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
 }
 
 /*====================== change clipart =========================*/
@@ -2441,14 +2409,6 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     QFileInfo fileInfo( filename );
     QString file;
 
-#ifdef USE_QFD
-    QFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
-    fd.setPreviewMode( false, true );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-#else
     KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
     //fd.setPreviewMode( false, true );
@@ -2468,7 +2428,6 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     }
 
     file = url.path();
-#endif
 
     if ( !file.isEmpty() )
 	m_pKPresenterDoc->changeClipart( file, xOffset, yOffset );
@@ -2982,4 +2941,3 @@ void KPresenterView::viewShowSideBar()
     else
         sidebar->show();
 }
-
