@@ -24,6 +24,7 @@
 
 #include <qdict.h>
 #include <qdom.h>
+#include "stylestack.h"
 
 class OoWriterImport : public KoFilter
 {
@@ -37,6 +38,7 @@ public:
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
+    QDomElement parseList( QDomDocument& doc, const QDomElement& list );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
     void createDocumentInfo( QDomDocument &docinfo );
@@ -44,12 +46,15 @@ private:
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
+    void fillStyleStack( const QDomElement& object );
+    void addStyles( const QDomElement* style );
     double toPoint( QString &value );
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
 
     QDict<QDomElement>   m_styles;
+    StyleStack m_styleStack;
 
 };
 

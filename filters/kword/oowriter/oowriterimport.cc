@@ -171,115 +171,76 @@ void OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, int to
     parentFramesetElem.appendChild( frameElementOut );
 }
 
-
+// Very related to OoImpressImport::openFile()
 KoFilter::ConversionStatus OoWriterImport::openFile()
 {
-  KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
+    KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
 
-  kdDebug() << "Store created" << endl;
+    kdDebug() << "Store created" << endl;
 
-  if ( !store )
-  {
-    kdWarning() << "Couldn't open the requested file." << endl;
-    return KoFilter::FileNotFound;
-  }
+    if ( !store )
+    {
+        kdWarning() << "Couldn't open the requested file." << endl;
+        return KoFilter::FileNotFound;
+    }
 
-  kdDebug() << "Trying to open content.xml" << endl;
-  if ( !store->open( "content.xml" ) )
-  {
-    kdWarning() << "This file doesn't seem to be a valid OpenWrite file" << endl;
+    kdDebug() << "Trying to open content.xml" << endl;
+    if ( !store->open( "content.xml" ) )
+    {
+        kdWarning() << "This file doesn't seem to be a valid OpenWrite file" << endl;
+        delete store;
+        return KoFilter::WrongFormat;
+    }
+
+    QDomDocument styles;
+    m_content.setContent( store->device() );
+    store->close();
+
+    //kdDebug()<<" m_content.toCString() :"<<m_content.toCString()<<endl;
+    kdDebug() << "file content.xml loaded " << endl;
+
+    if ( store->open( "styles.xml" ) )
+    {
+        styles.setContent( store->device() );
+        store->close();
+
+        //kdDebug()<<" styles.toCString() :"<<styles.toCString()<<endl;
+        kdDebug() << "file containing styles loaded" << endl;
+    }
+    else
+        kdWarning() << "Style definitions do not exist!" << endl;
+
+    if ( store->open( "meta.xml" ) )
+    {
+        m_meta.setContent( store->device() );
+        store->close();
+
+        kdDebug() << "File containing meta definitions loaded" << endl;
+    }
+    else
+        kdWarning() << "Meta definitions do not exist!" << endl;
+
+    if ( store->open( "settings.xml" ) )
+    {
+        m_settings.setContent( store->device() );
+        store->close();
+
+        kdDebug() << "File containing settings loaded" << endl;
+    }
+    else
+        kdWarning() << "Settings do not exist!" << endl;
+
     delete store;
-    return KoFilter::WrongFormat;
-  }
-  kdDebug() << "Opened" << endl;
 
-  QDomDocument styles;
-  QCString totalString;
-  char tempData[1024];
+    emit sigProgress( 10 );
 
-  Q_LONG size = store->read( &tempData[0], 1023 );
-  while ( size > 0 )
-  {
-    QCString tempString( tempData, size + 1);
-    totalString += tempString;
+    if ( !createStyleMap( styles ) )
+        return KoFilter::UserCancelled;
 
-    size = store->read( &tempData[0], 1023 );
-  }
-
-  m_content.setContent( totalString );
-  totalString = "";
-  store->close();
-  kdDebug()<<" m_content.toCString() :"<<m_content.toCString()<<endl;
-  kdDebug() << "file content.xml loaded " << endl;
-
-  if ( store->open( "styles.xml" ) )
-  {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    styles.setContent( totalString );
-    totalString = "";
-    store->close();
-    kdDebug()<<" styles.toCString() :"<<styles.toCString()<<endl;
-    kdDebug() << "file containing styles loaded" << endl;
-  }
-  else
-    kdWarning() << "Style definitions do not exist!" << endl;
-
-  if ( store->open( "meta.xml" ) )
-  {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    m_meta.setContent( totalString );
-    totalString = "";
-    store->close();
-    kdDebug() << "File containing meta definitions loaded" << endl;
-  }
-  else
-    kdWarning() << "Meta definitions do not exist!" << endl;
-
-  if ( store->open( "settings.xml" ) )
-  {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    m_settings.setContent( totalString );
-    totalString = "";
-    store->close();
-    kdDebug() << "File containing settings loaded" << endl;
-  }
-  else
-    kdWarning() << "Settings do not exist!" << endl;
-
-  delete store;
-
-  emit sigProgress( 10 );
-
-  if ( !createStyleMap( styles ) )
-      return KoFilter::UserCancelled;
-
-  return KoFilter::OK;
+    return KoFilter::OK;
 }
 
+// Very related to OoImpressImport::createDocumentInfo
 void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 {
     docinfo.appendChild( docinfo.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -320,7 +281,7 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 #endif
     docinfo.appendChild(doc);
 
-    kdDebug()<<" meta-info :"<<m_meta.toCString()<<endl;
+    //kdDebug()<<" meta-info :"<<m_meta.toCString()<<endl;
 }
 
 bool OoWriterImport::createStyleMap( const QDomDocument & styles )
@@ -460,28 +421,89 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   return true;
 }
 
-void OoWriterImport::insertStyles( const QDomElement& element )
+// Perfect copy of OoImpressImport::insertStyles
+void OoWriterImport::insertStyles( const QDomElement& styles )
 {
-  if ( element.isNull() )
-    return;
-
-  QDomNode n = element.firstChild();
-
-  while( !n.isNull() )
-  {
-    QDomElement e = n.toElement();
-    if ( e.isNull() || !e.hasAttribute( "style:name" ) )
+    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-      n = n.nextSibling();
-      continue;
+        QDomElement e = n.toElement();
+
+        if ( !e.hasAttribute( "style:name" ) )
+            continue;
+
+        QString name = e.attribute( "style:name" );
+        m_styles.insert( name, new QDomElement( e ) );
+        //kdDebug() << "Style: '" << name << "' loaded " << endl;
+    }
+}
+
+void OoWriterImport::fillStyleStack( const QDomElement& object )
+{
+    // find all styles associated with an object and push them on the stack
+    // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
+    if ( object.hasAttribute( "text:style-name" ) )
+        addStyles( m_styles[object.attribute( "text:style-name" )] );
+}
+
+void OoWriterImport::addStyles( const QDomElement* style )
+{
+    // this function is necessary as parent styles can have parents themself
+    if ( style->hasAttribute( "style:parent-style-name" ) )
+        addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
+
+    m_styleStack.push( *style );
+}
+
+// Exact copy of OoImpressImport::parseList
+QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list )
+{
+    //kdDebug() << k_funcinfo << "parsing list"<< endl;
+
+    bool isOrdered;
+    if ( list.tagName() == "text:ordered-list" )
+        isOrdered = true;
+    else
+        isOrdered = false;
+
+    // take care of nested lists
+    QDomElement e;
+    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
+    {
+        e = n.toElement();
+        QString name = e.tagName();
+        if ( name == "text:unordered-list" )
+        {
+            isOrdered = false;
+            // parse the list-properties
+            fillStyleStack( e );
+        }
+        else if ( name == "text:ordered-list" )
+        {
+            isOrdered = true;
+            // parse the list-properties
+            fillStyleStack( e );
+        }
+        if ( name == "text:p" )
+            break;
     }
 
-    QString name = e.attribute( "style:name" );
-    kdDebug() << "Style: '" << name << "' loaded " << endl;
-    m_styles.insert( name, new QDomElement( e ) );
+    QDomElement p = parseParagraph( doc, e );
 
-    n = n.nextSibling();
-  }
+    QDomElement counter = doc.createElement( "COUNTER" );
+    counter.setAttribute( "numberingtype", 0 );
+    counter.setAttribute( "depth", 0 );
+
+    if ( isOrdered )
+        counter.setAttribute( "type", 1 );
+    else
+        counter.setAttribute( "type", 10 );
+
+    // Don't 'appendChild()'! Text elements have to be the last children of the
+    // paragraph element otherwise kpresenter will cut off the last character of
+    // every item!
+    p.insertBefore( counter, QDomNode() );
+
+    return p;
 }
 
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
