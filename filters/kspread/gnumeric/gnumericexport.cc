@@ -433,7 +433,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
     // The indentation in GNumeric is an integer value. In KSpread, it's a double.
     // Save the double anyway, makes it even better when importing the document back in KSpread.
-    cell_style.setAttribute("Indent", QString::number(cell->getIndent(currentcolumn,currentrow)));
+    cell_style.setAttribute("Indent", QString::number(-1*cell->getIndent(currentcolumn,currentrow)));
 
     cell_style.setAttribute("Locked", !cell->notProtected(currentcolumn,currentrow));
 

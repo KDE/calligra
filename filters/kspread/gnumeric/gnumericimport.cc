@@ -1264,10 +1264,11 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             }
           }
 
-          // TODO: merged cells
-
-		  //rotate works just with pango >= 1.8.0
-		  //Rotation="-41"
+          if ( style_element.hasAttribute( "Rotation" ) )
+          {
+              int rot = style_element.attribute( "Rotation" ).toInt();
+              kspread_cell->setAngle( -1* rot );
+          }
           if (style_element.hasAttribute("Indent"))
           {
             double indent = style_element.attribute("Indent").toDouble();
