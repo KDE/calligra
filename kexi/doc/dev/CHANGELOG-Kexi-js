@@ -321,7 +321,27 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 	-backgroundOrigin property should have 'ParentOrigin' as default 
 	 (not it's as in QtDesigner, and it's not intuitive)
-
+RENAME IN FORMS:
+ -s/Spacer/Spring/
+ -s/A spacer widget to fill in blanks/A spring to place between widgets/
+ -s/A simple push button to execute a command/A simple push button to execute actions
+ -we need to find a better name for 'listview'
+ -(for Frame): s/A very simple container/A simple container with a frame
+ -(Stack widget): s/A container with multiple pages/A container with a stack of pages
+ -s/HBox/Horizontal Box ?
+ -s/VBox/Vertical Box ?
+ -s/Grid/Grid Box
+ -s/A widget with this name already exists. Please choose another name or rename 
+this widget before./A widget with this name already exists. Please choose another name or rename existing widget.
+ -s/Set the current style to view./Set the current view style.
+ -app name: s/A KDE KPart Application/
+ -s/&Name :/&Name:/
+ -s/&Size :/&Size:/
+ -s/Edit Pixmap Collection : %1/Edit Pixmap Collection: %1/
+ -s/Do you really want/Do you want
+ -"<qt>Do you really want to remove <b>%1</b> from %2 ?</qt>" -impossible 
+   to effectively translate
+ 
 TODO:
 add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
 
