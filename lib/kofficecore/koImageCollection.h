@@ -44,6 +44,9 @@ public:
      */
     KoImage insertImage( const KoImageKey &key, const QImage &image );
 
+    /** Idem for the "raw data" case, see KoImage */
+    KoImage insertImage( const KoImageKey &key, const QByteArray &rawData );
+
     /**
      * Load an image from a file (and insert into the collection).
      * The modification date of the file is checked, to create the key

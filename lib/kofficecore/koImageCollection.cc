@@ -34,14 +34,22 @@ KoImage KoImageCollection::findImage( const KoImageKey &key ) const
 KoImage KoImageCollection::insertImage( const KoImageKey &key, const QImage &image )
 {
     KoImage res = findImage( key );
-
     if ( res.isNull() )
     {
         res = KoImage( key, image );
-
-        res = insert( key, res ).data(); // why not just insert(key,res) ?
+        res = insert( key, res ).data();
     }
+    return res;
+}
 
+KoImage KoImageCollection::insertImage( const KoImageKey &key, const QByteArray &rawData )
+{
+    KoImage res = findImage( key );
+    if ( res.isNull() )
+    {
+        res = KoImage( key, rawData );
+        res = insert( key, res ).data();
+    }
     return res;
 }
 
@@ -54,12 +62,27 @@ KoImage KoImageCollection::loadImage( const QString &fileName )
     KoImage i = findImage( key );
     if ( i.isNull() )
     {
-        //kdDebug(30003) << " building image " << endl;
-        QImage img( fileName );
-        if ( !img.isNull() )
-            i = insertImage( key, img );
+        if ( fileName.endsWith( ".eps" ) )
+        {
+            QFile file( fileName );
+            if ( file.open( IO_ReadOnly ) )
+            {
+                QByteArray rawData = file.readAll();
+                if ( !rawData.isNull() )
+                    i = insertImage( key, rawData );
+                file.close();
+            } else
+                kdWarning(30003) << "Couldn't open from " << fileName << endl;
+        }
         else
-            kdWarning(30003) << "Couldn't build QImage from " << fileName << endl;
+        {
+            //kdDebug(30003) << " building image " << endl;
+            QImage img( fileName );
+            if ( !img.isNull() )
+                i = insertImage( key, img );
+            else
+                kdWarning(30003) << "Couldn't build QImage from " << fileName << endl;
+        }
     }
     return i;
 }
@@ -81,11 +104,18 @@ void KoImageCollection::saveToStore( KoStore *store, QValueList<KoImageKey> keys
 
             if ( store->open( storeURL ) ) {
                 KoStoreDevice dev( store );
-                QImageIO io;
-                io.setIODevice( &dev );
-                io.setImage( image.image() );
-                io.setFormat( format.latin1() );
-                io.write();
+                QByteArray rawData = image.rawData();
+                if ( rawData.isNull() )
+                {
+                    QImageIO io;
+                    io.setIODevice( &dev );
+                    io.setImage( image.image() );
+                    io.setFormat( format.latin1() );
+                    io.write();
+                } else {
+                    // open+close code not necessary with KoStoreDevice
+                    dev.writeBlock( rawData.data(), rawData.size() );
+                }
                 store->close();
             }
         }
@@ -149,32 +179,41 @@ void KoImageCollection::readFromStore( KoStore * store, const StoreMap & storeMa
             u = prefix + it.key().toString();
         }
 
-        QImage img;
-
-        if ( store->open( u ) ) {
-            KoStoreDevice dev( store );
-            QImageIO io( &dev, 0 );
-            if( ! io.read() )
-                // okay - has to be a funky - old xpm in a very old kpr file...
-                // Don't ask me why this is needed...
-                img = QImage( store->read( store->size() ) );
-            else
-                img = io.image();
-
+        if ( u.endsWith( ".eps" ) && store->open( u ) )
+        {
+            QByteArray data = store->read( store->size() );
             store->close();
-        } else {
-            u.prepend( "file:" );
+            if ( !data.isNull() )
+                insertImage( it.key(), data );
+        }
+        else
+        {
+            QImage img;
+
             if ( store->open( u ) ) {
                 KoStoreDevice dev( store );
                 QImageIO io( &dev, 0 );
-                io.read( );
-                img = io.image();
+                if( ! io.read() )
+                    // okay - has to be a funky - old xpm in a very old kpr file...
+                    // Don't ask me why this is needed...
+                    img = QImage( store->read( store->size() ) );
+                else
+                    img = io.image();
 
                 store->close();
-            }
-        }
+            } else {
+                u.prepend( "file:" );
+                if ( store->open( u ) ) {
+                    KoStoreDevice dev( store );
+                    QImageIO io( &dev, 0 );
+                    io.read( );
+                    img = io.image();
 
-        if ( !img.isNull() )
-            insertImage( it.key(), img );
+                    store->close();
+                }
+            }
+            if ( !img.isNull() )
+                insertImage( it.key(), img );
+        }
     }
 }

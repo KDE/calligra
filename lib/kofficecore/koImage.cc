@@ -21,7 +21,12 @@
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <assert.h>
+#include <qapplication.h>
 #include <qpainter.h>
+#include <qbuffer.h>
+#include <kdebug.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 class KoImagePrivate : public QShared
 {
@@ -30,6 +35,7 @@ public:
     KoImage m_originalImage;
     KoImageKey m_key;
     mutable QPixmap m_cachedPixmap;
+    QByteArray m_rawData; // for EPS images
 };
 
 
@@ -42,6 +48,22 @@ KoImage::KoImage( const KoImageKey &key, const QImage &image )
 {
     d = new KoImagePrivate;
     d->m_image = image.copy();
+    d->m_key = key;
+}
+
+KoImage::KoImage( const KoImageKey &key, const QByteArray &rawData )
+{
+    d = new KoImagePrivate;
+    d->m_rawData = rawData;
+    d->m_key = key;
+}
+
+KoImage::KoImage( const KoImageKey &key, const QByteArray &rawData, const QImage &image )
+{
+    //kdDebug() << "KoImage::KoImage ctor size:" << image.width() << "x" << image.height() << endl;
+    d = new KoImagePrivate;
+    d->m_image = image.copy();
+    d->m_rawData = rawData;
     d->m_key = key;
 }
 
@@ -75,7 +97,23 @@ KoImage &KoImage::operator=( const KoImage &_other )
 QImage KoImage::image() const
 {
     if ( !d) return QImage();
+    // On-demand loading of image from raw data
+    if ( d->m_image.isNull() && !d->m_rawData.isNull() )
+    {
+        QBuffer buffer( d->m_rawData );
+        buffer.open( IO_ReadOnly );
+        QImageIO io( &buffer, 0 );
+        //io.setParameters( QString::number( width ) + ':' + QString::number( height ) );
+        io.read();
+        /*const_cast<KoImage *>(this)->*/d->m_image = io.image();
+    }
     return d->m_image;
+}
+
+QByteArray KoImage::rawData() const
+{
+    if ( !d ) return QByteArray();
+    return d->m_rawData;
 }
 
 QPixmap KoImage::pixmap() const
@@ -83,7 +121,7 @@ QPixmap KoImage::pixmap() const
     if ( !d ) return QPixmap();
 
     if ( d->m_cachedPixmap.isNull() )
-        d->m_cachedPixmap = d->m_image; // automatic conversion using assignment operator
+        d->m_cachedPixmap = image(); // automatic conversion using assignment operator
     return d->m_cachedPixmap;
 }
 
@@ -96,12 +134,14 @@ KoImageKey KoImage::key() const
 
 bool KoImage::isNull() const
 {
-    return d == 0 || d->m_image.isNull();
+    return d == 0 || ( d->m_image.isNull() && d->m_rawData.isNull() );
 }
 
 QSize KoImage::size() const
 {
     if ( !d ) return QSize();
+
+    // ### empty size in case of rawdata passed and not loaded yet. Is that ok?
 
     return d->m_image.size();
 }
@@ -109,6 +149,8 @@ QSize KoImage::size() const
 QSize KoImage::originalSize() const
 {
     if ( !d ) return QSize();
+
+    // ### empty size in case of rawdata passed.
 
     KoImage originalImage;
 
@@ -120,28 +162,64 @@ QSize KoImage::originalSize() const
     return originalImage.size();
 }
 
-KoImage KoImage::scale( const QSize &size ) const
+KoImage KoImage::scale( const QSize &size, bool fastMode /*=false*/ ) const
 {
     if ( !d )
         return *this;
+    //kdDebug() << "KoImage::scale " << size.width() << "x" << size.height() << " fastMode=" << fastMode << endl;
 
-    KoImage originalImage;
+    // Slow mode can be very slow, especially at high zoom levels -> configurable
+    static int s_useSlowResizeMode = -1; // unset
+    if ( s_useSlowResizeMode == -1 )
+    {
+        KConfigGroup group( KGlobal::config(), "KOfficeImage" );
+        s_useSlowResizeMode = group.readNumEntry( "HighResolution", 1 );
+    }
 
-    if ( !d->m_originalImage.isNull() )
-        originalImage = d->m_originalImage;
+    if ( d->m_rawData.isNull() || fastMode || s_useSlowResizeMode == 0 )
+    {
+        KoImage originalImage;
+
+        if ( !d->m_originalImage.isNull() )
+            originalImage = d->m_originalImage;
+        else
+            originalImage = *this;
+
+        if ( originalImage.size() == size )
+            return originalImage;
+
+        QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
+
+        KoImage result( d->m_key, scaledImg );
+        assert( result.d );
+        result.d->m_originalImage = originalImage;
+        result.d->m_rawData = d->m_rawData;
+        return result;
+    }
     else
-        originalImage = *this;
-
-    if ( originalImage.size() == size )
-        return originalImage;
-
-    QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
-
-    KoImage result( d->m_key, scaledImg );
-    assert( result.d );
-    result.d->m_originalImage = originalImage;
-
-    return result;
+    {
+        //kdDebug() << "KoImage::scale loading from raw data" << endl;
+        QApplication::setOverrideCursor( Qt::waitCursor );
+        QBuffer buffer( d->m_rawData );
+        buffer.open( IO_ReadOnly );
+        QImageIO io( &buffer, 0 );
+        QCString params;
+        params.setNum( size.width() );
+        params += ':';
+        QCString height;
+        height.setNum( size.height() );
+        params += height;
+        io.setParameters( params );
+        io.read();
+        QImage img = io.image();
+        if ( img.size() != size ) // this can happen due to rounding problems
+        {
+            img = img.scale( size );
+            //kdDebug() << "fixing size to " << size.width() << "x" << size.height() << endl;
+        }
+        QApplication::restoreOverrideCursor();
+        return KoImage( d->m_key, d->m_rawData, img );
+    }
 }
 
 void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh )
@@ -149,6 +227,7 @@ void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int 
     if ( !d )
         return;
     QSize currentSize = size();
+    //kdDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
     if ( currentSize.width() == 0 || currentSize.height() == 0 )
         return;
     if ( width == 0 || height == 0 )
@@ -171,6 +250,7 @@ void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int 
 
     } else {
         QSize screenSize( width, height );
+        //kdDebug() << "KoImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
         if ( screenSize != currentSize )
             *this = scale( screenSize );
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap

@@ -143,6 +143,12 @@ public:
     KoImage( const KoImageKey &key, const QImage &image );
 
     /**
+     * Constructs a KoImage object from the given key and
+     * raw data. This is currently used for EPS files only.
+     */
+    KoImage( const KoImageKey &key, const QByteArray &rawData );
+
+    /**
      * Copy constructor.
      */
     KoImage( const KoImage &other );
@@ -161,6 +167,11 @@ public:
      * Retrieve the stored QImage object.
      */
     QImage image() const;
+
+    /**
+     * Retrieve the raw data for the image. Only used for saving.
+     */
+    QByteArray rawData() const;
 
     /**
      * Retrieve a pixmap representation of the stored image.
@@ -195,8 +206,9 @@ public:
      * a new KoImage object for it.
      * Note that KoImage is intelligent enough to always scale from the
      * very original image, to provide best scaling quality.
+     * In the EPS case, real full-scale scaling
      */
-    KoImage scale( const QSize &size ) const;
+    KoImage scale( const QSize &size, bool fastMode = false ) const;
 
     /**
      * Draw the image in a painter.
@@ -206,7 +218,7 @@ public:
      * The parameters @p width, @p height define the desired size for the image
      * Note that the image is being scaled to that size using scale() - except when printing.
      * This avoids scaling the image at each paint event.
-     * 
+     *
      * The other parameters are very similar to QPainter::drawPixmap :
      * (@p x, @p y) define the position in the painter,
      * (@p sx, @p sy) specify the top-left point in pixmap that is to be drawn. The default is (0, 0).
@@ -216,6 +228,8 @@ public:
     void draw( QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
 private:
+    // Construct with raw data and image resulting from loading it.
+    KoImage( const KoImageKey &key, const QByteArray &rawData, const QImage& image );
     KoImagePrivate *d;
 };
 
