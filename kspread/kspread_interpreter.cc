@@ -476,6 +476,41 @@ static bool kspreadfunc_sum( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_sumsq_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      result += ((*it)->doubleValue()*(*it)->doubleValue());
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_sumsq( KSContext& context )
+{
+  double result = 0.0;
+  bool b = kspreadfunc_sumsq_helper( context, context.value()->listValue(), result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+
 static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& inter)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -2327,6 +2362,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "cos", new KSValue( new KSBuiltinFunction( module, "cos", kspreadfunc_cos ) ) );
   module->addObject( "sin", new KSValue( new KSBuiltinFunction( module, "sin", kspreadfunc_sin ) ) );
   module->addObject( "sum", new KSValue( new KSBuiltinFunction( module, "sum", kspreadfunc_sum ) ) );
+  module->addObject( "sumsq", new KSValue( new KSBuiltinFunction( module, "sumsq", kspreadfunc_sumsq ) ) );
   module->addObject( "sqrt", new KSValue( new KSBuiltinFunction( module, "sqrt", kspreadfunc_sqrt ) ) );
   module->addObject( "fabs", new KSValue( new KSBuiltinFunction( module, "fabs", kspreadfunc_fabs ) ) );
   module->addObject( "floor", new KSValue( new KSBuiltinFunction( module, "floor", kspreadfunc_floor ) ) );

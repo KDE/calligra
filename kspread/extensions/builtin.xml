@@ -865,6 +865,38 @@
     </Function>
 
     <Function>
+      <Name>sumsq</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The sumsq() function calculates the sum of all the square of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5)</Text>
+	<Syntax>sumsq( values; values; ... )</Syntax>
+	<Example>sumsq(12;5;7) equals 218</Example>
+	<Example>sumsq(12.5;2) equals 173</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>max</Name>
       <Type>Float</Type>
       <Parameter optional="true">
