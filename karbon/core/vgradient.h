@@ -50,6 +50,13 @@ public:
 	void setSpreadMethod( VGradientSpreadMethod spreadMethod ) { m_spreadMethod = spreadMethod; }
 
 	QValueList<VColorStop>& colorStops() { return m_colorStops; }
+	void addStop( const VColor &color, float rampPoint );
+
+	KoPoint origin() const { return m_origin; }
+	void setOrigin( const KoPoint &origin ) { m_origin = origin; }
+
+	KoPoint vector() const { return m_vector; }
+	void setVector( const KoPoint &vector ) { m_vector = vector; }
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );

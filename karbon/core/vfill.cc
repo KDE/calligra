@@ -10,6 +10,11 @@
 VFill::VFill()
 	: m_type( fill_none ), m_fillRule( fillrule_evenOdd )
 {
+	/*m_gradient.addStop( VColor( Qt::red.rgb() ), 0.0 );
+	m_gradient.addStop( VColor( Qt::yellow.rgb() ), 1.0 );
+	m_gradient.setOrigin( KoPoint( 0, 0 ) );
+	m_gradient.setVector( KoPoint( 0, 50 ) );
+	m_gradient.setSpreadMethod( gradient_spread_reflect );*/
 }
 
 void
