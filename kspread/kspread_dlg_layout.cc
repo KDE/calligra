@@ -1470,14 +1470,14 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   family_combo = new QListBox( box1, "Family" );
 
-  QStringList listFont;
+  QStringList tmpListFont;
   QFontDatabase *fontDataBase = new QFontDatabase();
-  listFont = fontDataBase->families();
+  tmpListFont = fontDataBase->families();
 
-  family_combo->insertStringList( listFont);
-   selFont = dlg->textFont;
+  listFont.setItems(tmpListFont);
 
-
+  family_combo->insertStringList( tmpListFont);
+  selFont = dlg->textFont;
 
    if ( dlg->bTextFontFamily )
    {
@@ -1498,10 +1498,18 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
         family_combo->setCurrentItem(0);
    }
 
-  grid2->addMultiCellWidget(family_combo,1,5,0,0);
+  grid2->addMultiCellWidget(family_combo,2,5,0,0);
 
   connect( family_combo, SIGNAL(highlighted(const QString &)),
            SLOT(family_chosen_slot(const QString &)) );
+
+  searchFont=new KLineEdit(box1);
+  grid2->addWidget(searchFont,1,0);
+  searchFont->setCompletionMode(KGlobalSettings::CompletionAuto  );
+  searchFont->setCompletionObject( &listFont,true );
+
+  connect(searchFont, SIGNAL( textChanged( const QString & )),
+          this,SLOT(slotSearchFont(const QString &)));
 
   size_combo = new QComboBox( true, box1, "Size" );
   QStringList lst;
@@ -1605,6 +1613,15 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   this->resize( 400, 400 );
 }
+
+void CellLayoutPageFont::slotSearchFont(const QString &_text)
+{
+QString result;
+result=listFont.makeCompletion( _text );
+if(!result.isNull())
+        family_combo->setCurrentItem(family_combo->index(family_combo->findItem(result)));
+}
+
 
 void CellLayoutPageFont::slotSetTextColor( const QColor &_color )
 {

@@ -45,6 +45,8 @@
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
 #include <knuminput.h>
+#include <kcompletion.h>
+#include <klineedit.h>
 
 class CellLayoutDlg;
 class KSpreadTable;
@@ -116,7 +118,8 @@ private slots:
     void      underline_chosen_slot();
     void      strike_chosen_slot();
     void      display_example(const QFont &font);
-    void slotSetTextColor( const QColor &_color );
+    void      slotSetTextColor( const QColor &_color );
+    void      slotSearchFont(const QString &);
 
 private:
 
@@ -154,6 +157,8 @@ private:
     QColor textColor;
     bool bTextColorUndefined;
     KColorButton *textColorButton;
+    KLineEdit *searchFont;
+    KCompletion listFont;
 };
 
 class CellLayoutPageMisc : public QWidget
