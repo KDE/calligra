@@ -280,9 +280,8 @@ void KPTView::slotProjectCalendar() {
     if (dia->exec()) {
         KMacroCommand *cmd = dia->buildCommand();
         if (cmd) {
-            kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
-            cmd->execute();
-            getPart()->addCommand(cmd);
+            //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            getPart()->addCommand(cmd); //also executes
         }
     }
     delete dia;
@@ -319,11 +318,10 @@ void KPTView::slotAddSubTask() {
 		if (currNode)
         {
             KMacroCommand *m = dia->buildCommand();
-            m->execute();
+            m->execute(); // do changes to task
             delete m;
             KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(getProject(), node, currNode, i18n("Add subtask"));
-            cmd->execute();
-            getPart()->addCommand(cmd);
+            getPart()->addCommand(cmd); // add task to project
     		slotUpdate(true);
 			return;
 	    }
@@ -343,11 +341,10 @@ void KPTView::slotAddTask() {
 		if (currNode)
         {
             KMacroCommand *m = dia->buildCommand();
-            m->execute();
+            m->execute(); // do changes to task
             delete m;
             KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getProject(), node, currNode, i18n("Add task"));
-            cmd->execute();
-            getPart()->addCommand(cmd);
+            getPart()->addCommand(cmd); // add task to project
     		slotUpdate(true);
 			return;
 	    }
@@ -372,11 +369,10 @@ void KPTView::slotAddMilestone() {
 		if (currNode)
         {
             KMacroCommand *m = dia->buildCommand();
-            m->execute();
+            m->execute(); // do changes to task
             delete m;
             KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getProject(), node, currNode, i18n("Add milestone"));
-            cmd->execute();
-            getPart()->addCommand(cmd);
+            getPart()->addCommand(cmd); // add task to project
     		slotUpdate(true);
 			return;
 	    }
@@ -435,7 +431,6 @@ void KPTView::slotOpenNode() {
             if (dia->exec()) {
                 KMacroCommand *m = dia->buildCommand();
                 if (m) {
-                    m->execute();
                     getPart()->addCommand(m);
                     slotUpdate(true);
                 }
@@ -471,7 +466,6 @@ void KPTView::slotDeleteTask()
 	KPTNode* task = currentTask();
 
     KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(task, i18n("Delete task"));
-    cmd->execute();
     getPart()->addCommand(cmd);
 
 	// display the changes

@@ -60,7 +60,7 @@ public:
 
     bool loadOasis(const QDomDocument &, KoOasisStyles &, KoStore *) { return false; }
 
-    void addCommand(KCommand * cmd);
+    void addCommand(KCommand * cmd, bool execute=true);
     
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);

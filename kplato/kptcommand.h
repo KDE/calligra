@@ -21,11 +21,10 @@
 #define KPTCOMMAND_H
 
 #include "kptnode.h"
+#include "kptproject.h"
 
 #include <kcommand.h>
-
 class QString;
-class KPTProject;
 class KPTCalendar;
 
 class KPTCalendarAddCmd : public KNamedCommand
@@ -36,7 +35,10 @@ public:
     void unexecute();
 
 private:
+    KPTProject m_project;
     KPTCalendar *m_cal;
+    KPTNode *m_position;
+    bool m_added;
 };
 
 class KPTCalendarDeleteCmd : public KNamedCommand
@@ -57,8 +59,11 @@ public:
     void execute();
     void unexecute();
 
-private:
+protected:
+    KPTProject m_project;
     KPTNode *m_node;
+    KPTNode *m_position;
+    bool m_added;
 };
 
 class KPTNodeDeleteCmd : public KNamedCommand
@@ -76,12 +81,14 @@ class KPTTaskAddCmd : public KPTNodeAddCmd
 {
 public:
     KPTTaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name=0);
+    void execute();
 };
 
 class KPTSubtaskAddCmd : public KPTNodeAddCmd
 {
 public:
     KPTSubtaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name=0);
+    void execute();
 };
 
 

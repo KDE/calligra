@@ -189,6 +189,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
     emit sigProgress(-1);
 
     m_commandHistory->clear();
+    m_commandHistory->documentSaved();
     setModified( false );
     return true;
 }
@@ -215,6 +216,7 @@ QDomDocument KPTPart::saveXML() {
 
 
 void KPTPart::slotDocumentRestored() {
+    //kdDebug()<<k_funcinfo<<endl;
     setModified(false);
 }
 
@@ -238,13 +240,14 @@ void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
 }
 
 
-void KPTPart::addCommand( KCommand * cmd )
+void KPTPart::addCommand(KCommand * cmd, bool execute)
 {
-    m_commandHistory->addCommand( cmd, false );
-    setModified( true );
+    m_commandHistory->addCommand(cmd, execute);
 }
 
 void KPTPart::slotCommandExecuted() {
+    //kdDebug()<<k_funcinfo<<endl;
+    setModified(true);
     m_view->slotUpdate(false); // Update views, don't calculate (?)
 }
 

@@ -26,21 +26,26 @@
 
 
 KPTCalendarAddCmd::KPTCalendarAddCmd(KPTProject &project,KPTCalendar *cal, QString name)
-    : KNamedCommand(name) {
-    m_cal = cal;
-    project.addCalendar(cal);
+    : KNamedCommand(name),
+      m_project(project),
+      m_cal(cal),
+      m_added(false) {
     cal->setDeleted(true);  
-    kdDebug()<<k_funcinfo<<cal->name()<<endl;
+    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
 }
 
 void KPTCalendarAddCmd::execute() {
+    if (!m_added) {
+        m_project.addCalendar(m_cal);
+        m_added = true;
+    }
     m_cal->setDeleted(false);
-    kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
 void KPTCalendarAddCmd::unexecute() {
     m_cal->setDeleted(true);
-    kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
 KPTCalendarDeleteCmd::KPTCalendarDeleteCmd(KPTCalendar *cal, QString name)
@@ -59,7 +64,10 @@ void KPTCalendarDeleteCmd::unexecute() {
 
 KPTNodeAddCmd::KPTNodeAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name)
     : KNamedCommand(name),
-      m_node(node) {
+      m_project(project),
+      m_node(node),
+      m_position(position),
+      m_added(false) {
     node->setDeleted(true);
 }
 
@@ -88,13 +96,27 @@ void KPTNodeDeleteCmd::unexecute() {
 
 KPTTaskAddCmd::KPTTaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name)
     : KPTNodeAddCmd(project, node, position, name) {
-    project.addTask(node, position);
 }
 
+void KPTTaskAddCmd::execute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (!m_added) {
+        m_project.addTask(m_node, m_position);
+        m_added = true;
+    }
+    KPTNodeAddCmd::execute();
+}
 
 KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name)
-    : KPTNodeAddCmd(project, node, position, name) {
-    project.addSubTask(node, position);
+    : KPTNodeAddCmd(project, node, position, name) {   
+}
+
+void KPTSubtaskAddCmd::execute() {
+    if (!m_added) {
+        m_project.addSubTask(m_node, m_position);
+        m_added = true;
+    }
+    KPTNodeAddCmd::execute();
 }
 
 
