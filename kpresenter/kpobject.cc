@@ -193,6 +193,34 @@ void KPObject::loadOasis(const QDomElement &element)
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+#if 0
+    QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
+    if (!origSoundEff.isNull())
+    {
+        QString soundUrl = storeSound(origSoundEff, sound, doc);
+
+        if (!soundUrl.isNull())
+        {
+            QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
+            pseElem.setAttribute("appearSoundEffect", 1);
+            pseElem.setAttribute("appearSoundFileName", soundUrl);
+
+        }
+    }
+
+    e=element.namedItem("APPEARSOUNDEFFECT").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("appearSoundEffect"))
+            appearSoundEffect = static_cast<bool>(e.attribute("appearSoundEffect").toInt());
+        if(e.hasAttribute("appearSoundFileName"))
+            a_fileName = e.attribute("appearSoundFileName");
+    }
+    else {
+        appearSoundEffect = false;
+        a_fileName = QString::null;
+    }
+
+#endif
 }
 
 double KPObject::load(const QDomElement &element) {

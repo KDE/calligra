@@ -196,6 +196,25 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     return page;
 }
 
+void KPBackGround::loadOasis( const KoStyleStack &styleStack )
+{
+    // background
+    kdDebug()<<"void KPBackGround::loadOasis( const KoStyleStack &styleStack )**********************************\n";
+    if ( styleStack.hasAttribute( "draw:fill" ) )
+    {
+        kdDebug()<<" fill page \n";
+        const QString fill = styleStack.attribute( "draw:fill" );
+        kdDebug()<<" type :"<<fill<<endl;
+        if ( fill == "solid" )
+        {
+            kdDebug()<<"solid \n";
+            setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
+            setBackColorType(BCT_PLAIN);
+            setBackType(BT_COLOR);
+        }
+    }
+}
+
 void KPBackGround::load( const QDomElement &element )
 {
     QDomElement e=element.namedItem("BACKTYPE").toElement();

@@ -57,13 +57,14 @@ class KOSpellConfig;
 #include <koPageLayoutDia.h>
 
 #include "global.h"
-
+#include <koStyleStack.h>
 #include <koPictureCollection.h>
 #include "kpgradientcollection.h"
 #include <koUnit.h>
 #include <kozoomhandler.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
 #include <kocommandhistory.h>
+
 class KoDocumentEntry;
 class KPTextObject;
 class StyleDia;
@@ -211,7 +212,7 @@ class KPresenterDoc : public KoDocument
 
     // stuff for screen-presentations
     /**
-     * return the list of steps for the selected page 
+     * return the list of steps for the selected page
      * where objects appear/disappear.
      */
     QValueList<int> getPageEffectSteps( unsigned int );
@@ -531,6 +532,9 @@ protected:
 
     void saveUsedSoundFileToStore( KoStore *_store, QStringList _list );
     void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
+    void addStyles( const QDomElement* style, KoOasisStyles& oasisStyles );
+    void fillStyleStack( const QDomElement& object, KoOasisStyles& oasisStyles );
+
 
     // ************ variables ************
 
@@ -627,6 +631,7 @@ private:
     bool  m_bInsertDirectCursor;
     QString m_globalLanguage;
     bool m_bGlobalHyphenation;
+    KoStyleStack m_styleStack;
 };
 
 #endif

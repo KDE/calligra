@@ -978,10 +978,19 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
     {
         dp = drawPage.toElement();
+        m_styleStack.clear(); // remove all styles
+        fillStyleStack( dp, oasisStyles );
+        m_styleStack.save();
+
         kdDebug ()<<"insert new page "<<endl;
         KPrPage *newpage=new KPrPage(this);
         m_pageList.insert( pos,newpage);
         m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+        if ( m_styleStack.hasAttribute( "draw:fill" )
+             || m_styleStack.hasAttribute( "presentation:transition-style" ))
+        {
+            m_pageList.at(pos)->background()->loadOasis(m_styleStack);
+        }
 
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
@@ -991,6 +1000,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             QString name = o.tagName();
             int offset = dp.attribute( "draw:id" ).toInt();
             kdDebug()<<" object offset :"<<offset<<endl;
+            m_styleStack.save();
             if ( name == "draw:text-box" ) // textbox
             {
             }
@@ -1043,9 +1053,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             else
             {
                 kdDebug() << "Unsupported object '" << name << "'" << endl;
+                m_styleStack.restore();
                 continue;
             }
+            m_styleStack.restore();
         }
+        m_styleStack.restore();
     }
 
     //todo load format
@@ -1065,6 +1078,32 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return true;
 }
+
+void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisStyles&oasisStyles )
+{
+    // find all styles associated with an object and push them on the stack
+    if ( object.hasAttribute( "presentation:style-name" ) )
+        addStyles( oasisStyles.styles()[object.attribute( "presentation:style-name" )], oasisStyles );
+
+    if ( object.hasAttribute( "draw:style-name" ) )
+        addStyles( oasisStyles.styles()[object.attribute( "draw:style-name" )], oasisStyles );
+
+    if ( object.hasAttribute( "draw:text-style-name" ) )
+        addStyles( oasisStyles.styles()[object.attribute( "draw:text-style-name" )],oasisStyles );
+
+    if ( object.hasAttribute( "text:style-name" ) )
+        addStyles( oasisStyles.styles()[object.attribute( "text:style-name" )], oasisStyles );
+}
+
+void KPresenterDoc::addStyles( const QDomElement* style, KoOasisStyles&oasisStyles )
+{
+    // this function is necessary as parent styles can have parents themself
+    if ( style->hasAttribute( "style:parent-style-name" ) )
+        addStyles( oasisStyles.styles()[style->attribute( "style:parent-style-name" )], oasisStyles );
+
+    m_styleStack.push( *style );
+}
+
 
 bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
