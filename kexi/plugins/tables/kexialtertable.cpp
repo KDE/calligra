@@ -227,7 +227,7 @@ KexiAlterTable::initView()
 	l->addWidget(m_fieldTable, 2, 0);
 	l->addWidget(m_propList, 3, 0);
 
-	connect(m_fieldTable, SIGNAL(itemChanged(KexiTableItem*, int)), SLOT(changeShownField(KexiTableItem*, int)));
+	connect(m_fieldTable, SIGNAL(itemSelected(KexiTableItem*)), SLOT(changeShownField(KexiTableItem*)));
 	kdDebug() << "Ready." << endl;
 }
 
@@ -253,14 +253,14 @@ KexiAlterTable::getFields()
 }
 
 void
-KexiAlterTable::changeShownField(KexiTableItem*, int)
+KexiAlterTable::changeShownField(KexiTableItem* i)
 {
 	KexiDBField* field = m_tableFields.first();
 	bool found = false;
 
 	while(field && !found)
 	{
-		if(field->name() == m_fieldTable->itemAt(m_fieldTable->currentRow())->getText(0))
+		if(field->name() == i->getText(0))
 		{
 			found = true;
 		}
@@ -276,7 +276,7 @@ KexiAlterTable::changeShownField(KexiTableItem*, int)
 	}
 
 	m_nameItem->setValue(field->name());
-	m_datatypeItem->setValue(field->sqlType());
+	m_datatypeItem->setValue(field->sqlType() - 1);
 	m_lengthItem->setValue(field->length());
 	m_requiredItem->setValue(QVariant(field->not_null(), 1));
 	m_defaultItem->setValue(field->defaultValue());

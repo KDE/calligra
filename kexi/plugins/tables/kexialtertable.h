@@ -69,7 +69,7 @@ class KexiAlterTable : public KexiDialogBase
 		void getFields();
 
 	protected slots:
-		void changeShownField(KexiTableItem* i, int);
+		void changeShownField(KexiTableItem* i);
 
 	private:
 		QString m_table;
