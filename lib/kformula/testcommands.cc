@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include <kapplication.h>
