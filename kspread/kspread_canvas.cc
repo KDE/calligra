@@ -1,3 +1,23 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1999 - 2003 The KSpread Team
+                             www.koffice.org/kspread
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "kspread_util.h"
 #include "kspread_editors.h"
@@ -699,7 +719,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  doc()->emitEndOperation( KSpreadDoc::Paint, area );
+  doc()->emitEndOperation( area );
 }
 
 void KSpreadCanvas::slotScrollVert( int _value )
@@ -752,7 +772,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   activeTable()->enableScrollBarUpdates( true );
 
-  doc()->emitEndOperation( KSpreadDoc::Paint, area );
+  doc()->emitEndOperation( area );
 }
 
 void KSpreadCanvas::slotMaxColumn( int _max_column )
@@ -1365,7 +1385,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
             QPoint(right_col, bottom_row) );
   m_pView->m_pDoc->emitBeginOperation( false );
   table->setRegionPaintDirty( vr );
-  m_pView->m_pDoc->emitEndOperation( KSpreadDoc::Paint, vr );
+  m_pView->m_pDoc->emitEndOperation( vr );
 }
 
 void KSpreadCanvas::focusInEvent( QFocusEvent* )
@@ -1699,7 +1719,7 @@ void KSpreadCanvas::processEnterKey(QKeyEvent* event)
      direction, not extends the selection
   */
   QRect r( moveDirection( direction, false ) );
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, r );
+  m_pDoc->emitEndOperation( r );
 }
 
 void KSpreadCanvas::processArrowKey( QKeyEvent *event)
@@ -1739,7 +1759,7 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
   }
   
   QRect r( moveDirection( direction, makingSelection ) );
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, r );
+  m_pDoc->emitEndOperation( r );
 }
 
 void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
@@ -1760,7 +1780,7 @@ void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
 }
 
 bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
@@ -1816,7 +1836,7 @@ bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
 
     if ( selectionInfo()->marker() == destination )
     {
-      m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( destination, destination ) );
+      m_pDoc->emitEndOperation( QRect( destination, destination ) );
       return false;
     }
 
@@ -1843,7 +1863,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
     if ( m_pEditor->inherits("KSpreadTextEditor") )
       QApplication::sendEvent( m_pEditWidget, event );
     // TODO: What to do for a formula editor ?
-    m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( marker, marker ) );
+    m_pDoc->emitEndOperation( QRect( marker, marker ) );
     return false;
   }
   else
@@ -1861,7 +1881,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
     QPoint destination( col, marker.y() );
     if ( destination == marker )
     {
-      m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( destination, destination ) );
+      m_pDoc->emitEndOperation( QRect( destination, destination ) );
       return false;
     }
 
@@ -1884,7 +1904,7 @@ bool KSpreadCanvas::processPriorKey(QKeyEvent *event)
   QPoint destination(marker.x(), QMAX(1, marker.y() - 10));
   if ( destination == marker )
   {
-    m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( destination, destination ) );
+    m_pDoc->emitEndOperation( QRect( destination, destination ) );
     return false;
   }
 
@@ -1908,7 +1928,7 @@ bool KSpreadCanvas::processNextKey(QKeyEvent *event)
 
   if ( marker == destination )
   {
-    m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( destination, destination ) );
+    m_pDoc->emitEndOperation( QRect( destination, destination ) );
     return false;
   }
 
@@ -1934,7 +1954,7 @@ void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
   return;
 }
 
@@ -1957,7 +1977,7 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
   return;
 }
 
@@ -1982,7 +2002,7 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
   return;
 }
 
@@ -2018,7 +2038,7 @@ void KSpreadCanvas::processOtherKey(QKeyEvent *event)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
 
   return;
 }
@@ -2232,7 +2252,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
   if ( marker == destination )
   {
-    m_pDoc->emitEndOperation( KSpreadDoc::Paint, QRect( destination, destination ) );    
+    m_pDoc->emitEndOperation( QRect( destination, destination ) );    
     return false;
   }
 
@@ -2335,7 +2355,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     return;
     break;
   }
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, table->visibleRect( this ) );
+  m_pDoc->emitEndOperation( table->visibleRect( this ) );
   return;
 }
 
@@ -2498,7 +2518,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           break;
 
          default:
-           m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+           m_pDoc->emitEndOperation( rect );
           return false;
         } // switch
 
@@ -2553,13 +2573,13 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+         m_pDoc->emitEndOperation( rect );
         return false;
       }
       table->emit_updateRow( rw, r );
     }
 
-    m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+    m_pDoc->emitEndOperation( rect );
     return true;
   }
 
@@ -2621,7 +2641,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           break;
 
          default:
-           m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+           m_pDoc->emitEndOperation( rect );
           return false;
         }
         cell = table->getNextCellDown( c, cell->row() );
@@ -2676,12 +2696,12 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+         m_pDoc->emitEndOperation( rect );
          return false;
       }
       table->emit_updateColumn( cw, c );
     }
-    m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+    m_pDoc->emitEndOperation( rect );
     return true;
   }
 
@@ -2749,14 +2769,14 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+         m_pDoc->emitEndOperation( rect );
         return false;
       } // switch
     } // for left .. right
   } // for top .. bottom
   _ev->accept();
 
-  m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
+  m_pDoc->emitEndOperation( rect );
   return true;
 }
 
@@ -3394,7 +3414,7 @@ void KSpreadCanvas::paintUpdates()
   double leftPos = activeTable()->dblColumnPos(range.left());
 
   KoPoint dblCorner = KoPoint( leftPos  - xOffset(),
-                               topPos - yOffset());
+                               topPos - yOffset() );
 
   int x;
   int y;
@@ -3402,9 +3422,9 @@ void KSpreadCanvas::paintUpdates()
   int right  = range.right();
   int bottom = range.bottom();
 
-  for ( x = range.left(); x <= right; x++ )
+  for ( x = range.left(); x <= right; ++x )
   {
-    for ( y = range.top(); y <= bottom; y++ )
+    for ( y = range.top(); y <= bottom; ++y )
     {
       if ( activeTable()->cellIsPaintDirty( QPoint( x, y ) ) )
       {

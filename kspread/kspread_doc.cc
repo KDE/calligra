@@ -845,8 +845,8 @@ void KSpreadDoc::paintUpdates()
   ElapsedTime et( "KSpreadDoc::paintUpdates" );
 
   QPtrListIterator<KoView> it( views() );
-  KSpreadView* view = NULL;
-  KSpreadSheet* table = NULL;
+  KSpreadView  * view  = NULL;
+  KSpreadSheet * table = NULL;
 
   for (; it.current(); ++it )
   {
@@ -1395,10 +1395,9 @@ void KSpreadDoc::emitEndOperation()
    }
 }
 
-void KSpreadDoc::emitEndOperation( Task task, QRect const & rect )
+void KSpreadDoc::emitEndOperation( QRect const & rect )
 {
   ElapsedTime et( "*KSpreadDoc::emitEndOperation - 2 -*" );
-  KSpreadSheet * t = 0;
   CellBinding  * b = 0;
   m_numOperations--;
 
@@ -1412,33 +1411,15 @@ void KSpreadDoc::emitEndOperation( Task task, QRect const & rect )
   m_numOperations = 0;
   m_bDelayCalculation = false;
 
-  if ( task == Paint )
   {
-    {
-      ElapsedTime etm( "Updating active table..." );
-      m_activeTable->updateCellArea( rect );
-    }
-
-    ElapsedTime etm2( "Sub: Updating cellbindings..." );
-    for ( b = m_activeTable->firstCellBinding(); b != 0; b = m_activeTable->nextCellBinding() )
-    {
-      b->cellChanged( 0 );
-    }
+    ElapsedTime etm( "Updating active table..." );
+    m_activeTable->updateCellArea( rect );
   }
-  else
+  
+  ElapsedTime etm2( "Sub: Updating cellbindings..." );
+  for ( b = m_activeTable->firstCellBinding(); b != 0; b = m_activeTable->nextCellBinding() )
   {
-    // TODO...
-    for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
-    {
-      ElapsedTime etm( "Updating table..." );
-      t->update();
-      
-      ElapsedTime etm2( "Sub: Updating cellbindings..." );
-      for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
-      {
-        b->cellChanged(NULL);
-      }
-    }
+    b->cellChanged( 0 );
   }
 
   {

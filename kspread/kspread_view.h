@@ -820,6 +820,7 @@ private:
   void adjustActions( KSpreadSheet const * const table,
                       KSpreadCell const * const cell );
   bool checkChangeRecordPassword();
+  void endOperation( QRect const & rect );
 
 };
 

@@ -743,10 +743,11 @@ void KSpreadSheet::setCalcDirtyFlag()
 
 void KSpreadSheet::recalc()
 {
-  m_pDoc->emitBeginOperation(true);
-  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
+  //  m_pDoc->emitBeginOperation(true);
+  //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   setCalcDirtyFlag();
-  m_pDoc->emitEndOperation();
+  //  m_pDoc->emitEndOperation();
+  emit sig_updateView( this );
 }
 
 /*
@@ -1010,7 +1011,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
   KSpreadSheet::SelectionType result;
 
   m_pDoc->emitBeginOperation();
-//  m_pDoc->setCalculationDelay();
+  // m_pDoc->setCalculationDelay();
 
   // create cells in rows if complete columns selected
   KSpreadCell * cell;
@@ -1147,7 +1148,8 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
     result = CellRegion;
   }
 
-  m_pDoc->emitEndOperation();
+  //  m_pDoc->emitEndOperation();
+  emit sig_updateView( this );
 
   if (worker.emit_signal)
   {
@@ -1876,12 +1878,13 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
       }
     }
   }
-  doc()->emitEndOperation();
-
+  //  doc()->emitEndOperation();
+  emit sig_updateView( this );
 }
 
 
-struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA {
+struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA 
+{
     bool b;
     SetSelectionPercentWorker( bool _b ) : b( _b ) { }
 
@@ -3525,7 +3528,8 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
     }
   } // for (d = ...; ...; ++d)
 
-  doc()->emitEndOperation();
+  //  doc()->emitEndOperation();
+  emit sig_updateView( this );
 }
 
 void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
@@ -3876,7 +3880,8 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
       swapCells( key1, d, key1, bestY, copyFormat );
     }
   } // for (d = ...; ...; ++d)
-  doc()->emitEndOperation();
+  // doc()->emitEndOperation();
+  emit sig_updateView( this );
 }
 
 // from - to - copyFormat
@@ -5267,15 +5272,16 @@ void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
 	QString _text = QApplication::clipboard()->text();
         doc()->emitBeginOperation();
 	pasteTextPlain( _text, pasteArea);
-        doc()->emitEndOperation();
+        emit sig_updateView( this );
+        // doc()->emitEndOperation();
 	return;
     }
     else
         return;
     doc()->emitBeginOperation();
     paste( b, pasteArea, makeUndo, sp, op, insert, insertTo, pasteFC );
-    doc()->emitEndOperation();
-
+    emit sig_updateView( this );
+    // doc()->emitEndOperation();
 }
 
 void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
@@ -5808,7 +5814,7 @@ void KSpreadSheet::mergeCells( const QRect &area, bool makeUndo)
   cell->forceExtraCells( topLeft.x(), topLeft.y(),
                          area.width() - 1, area.height() - 1);
 
-  if(getAutoCalc())
+  if ( getAutoCalc() )
     recalc();
 
   emit sig_updateView( this, area );
@@ -6567,7 +6573,7 @@ void KSpreadSheet::updateCellArea( const QRect &cellArea )
   if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
     return;
 
-  setRegionPaintDirty(cellArea);
+  setRegionPaintDirty( cellArea );
 }
 
 void KSpreadSheet::updateCell( KSpreadCell */*cell*/, int _column, int _row )
@@ -6803,9 +6809,9 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
         return TRUE;
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
-    for( ; it.current(); ++it )
+    for ( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
-    if(makeUndo)
+    if ( makeUndo )
     {
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
@@ -6814,7 +6820,7 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
         }
     }
 
-    m_pDoc->changeAreaTableName(old_name, name);
+    m_pDoc->changeAreaTableName( old_name, name );
     emit sig_nameChanged( this, old_name );
 
     checkContentDirection( name );
@@ -6834,7 +6840,8 @@ void KSpreadSheet::updateLocale()
       QString _text = c->text();
       c->setDisplayText( _text, false/* no recalc deps for each, done independently */ );
   }
-  m_pDoc->emitEndOperation();
+  emit sig_updateView( this );
+  //  m_pDoc->emitEndOperation();
 }
 
 KSpreadCell* KSpreadSheet::getFirstCellColumn(int col) const
@@ -6912,7 +6919,7 @@ void KSpreadSheet::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-void KSpreadSheet::setRegionPaintDirty(QRect const & region)
+void KSpreadSheet::setRegionPaintDirty( QRect const & region )
 {
   QValueList<QRect>::iterator it  = m_paintDirtyList.begin();
   QValueList<QRect>::iterator end = m_paintDirtyList.end();
@@ -6925,7 +6932,7 @@ void KSpreadSheet::setRegionPaintDirty(QRect const & region)
     ++it;
   }
 
-  m_paintDirtyList.append(region);
+  m_paintDirtyList.append( region );
 }
 
 void KSpreadSheet::clearPaintDirtyData()

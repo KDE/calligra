@@ -85,8 +85,6 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
 
 public:
-  enum Task { Paint, Layout, Content };
-
   KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KSpreadDoc();
 
@@ -364,9 +362,8 @@ public:
   /**
    * s.a. difference does only specified tasks and thats why it improves performance
    * significantly. rect normally are the visible cells/the cells that need to be updated. 
-   * When the Task is "Content" it is the changed rect.
    */
-  void emitEndOperation( Task task, QRect const & rect );
+  void emitEndOperation( QRect const & rect );
 
   bool delayCalculation();
 
