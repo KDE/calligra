@@ -38,6 +38,8 @@ public:
   SelectionTool (CommandHistory* history);
   ~SelectionTool() { delete cursor; }
 
+  enum ScaleType { None, Proporcional};
+
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
   virtual void activate (GDocument* doc, Canvas*);
   virtual void deactivate (GDocument*, Canvas*);
@@ -46,7 +48,7 @@ public:
 
   void rotate (GDocument* doc, float dx, float dy, float xp, float yp,
                bool permanent = false);
-  void scale (GDocument* doc, Canvas* canvas, int mask, float dx, float dy,
+  void scale (GDocument* doc, Canvas* canvas, int mask, float dx, float dy, int type = 0,
               bool permanent = false);
   void shear (GDocument* doc, int mask, float dx, float dy,
               bool permanent = false);

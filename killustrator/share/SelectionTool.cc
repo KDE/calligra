@@ -216,7 +216,13 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
           xoff = -xoff;
       }
     }
-    scale (doc, canvas, oldmask, xoff, yoff, true);
+    if(oldmask == (Handle::HPos_Left | Handle::HPos_Bottom) ||
+	     oldmask == (Handle::HPos_Left | Handle::HPos_Top) ||
+	     oldmask == (Handle::HPos_Right | Handle::HPos_Bottom) ||
+	     oldmask == (Handle::HPos_Right | Handle::HPos_Top))
+     scale (doc, canvas, oldmask, xoff, yoff, 1, true);
+    else
+     scale (doc, canvas, oldmask, xoff, yoff, 0, true);
   }
   else if (state == S_Translate) {
     state = S_Pick;
@@ -430,7 +436,13 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
                 xoff = -xoff;
             }
           }
-          scale (doc, canvas, oldmask, xoff, yoff);
+	  if(oldmask == (Handle::HPos_Left | Handle::HPos_Bottom) ||
+	     oldmask == (Handle::HPos_Left | Handle::HPos_Top) ||
+	     oldmask == (Handle::HPos_Right | Handle::HPos_Bottom) ||
+	     oldmask == (Handle::HPos_Right | Handle::HPos_Top))
+           scale (doc, canvas, oldmask, xoff, yoff, 1);
+          else
+           scale (doc, canvas, oldmask, xoff, yoff, 0);
           break;
         }
       case S_Translate:
@@ -739,7 +751,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
 }
 
 void SelectionTool::scale (GDocument* doc, Canvas* canvas,
-                           int mask, float dx, float dy,
+                           int mask, float dx, float dy, int type,
                            bool permanent) {
   Rect& r = origbox;
   Rect newbox (origbox);
@@ -760,6 +772,8 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
   sx = sbox.width () / origbox.width ();
   sy = sbox.height () / origbox.height ();
 
+  if(type == 1)
+   sx = sy;
   if (mask & Handle::HPos_Left) {
     xback = r.left () + r.width () * (1 - sx);
   }
