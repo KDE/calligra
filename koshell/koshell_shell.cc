@@ -82,6 +82,10 @@ KoShellWindow::KoShellWindow()
 
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
+
+  // Not implemented yet
+  actionCollection()->action("view_split")->setEnabled(false);
+  actionCollection()->action("view_splitter_orientation")->setEnabled(false);
 }
 
 KoShellWindow::~KoShellWindow()
@@ -99,7 +103,7 @@ KoShellWindow::~KoShellWindow()
   }
   m_lstPages.clear();
 
-  setRootDocumentDirect( 0L ); // prevent our parent destructor from doing stupid things
+  setRootDocumentDirect( 0L, QList<KoView>() ); // prevent our parent destructor from doing stupid things
 }
 
 QString KoShellWindow::nativeFormatName() const
@@ -146,12 +150,14 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
   // and with 0L after they have all been removed.
   // We use setRootDocumentDirect to switch the 'root doc' known by KoMainWindow.
 
-  setRootDocumentDirect( doc );
-
   if ( doc )
   {
     doc->addShell( this );
     KoView *v = doc->createView( m_pFrame );
+    QList<KoView> views;
+    views.append(v);
+    setRootDocumentDirect( doc, views );
+
     v->show();
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
@@ -171,6 +177,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     switchToPage( m_lstPages.fromLast() );
   } else
   {
+    setRootDocumentDirect( 0L, QList<KoView>() );
     m_activePage = m_lstPages.end();
     KoMainWindow::updateCaption();
   }
@@ -272,7 +279,9 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   // Make it active (GUI etc.)
   partManager()->setActivePart( (*m_activePage).m_pDoc, v );
   // Change current document
-  setRootDocumentDirect( (*m_activePage).m_pDoc );
+  QList<KoView> views;
+  views.append(v);
+  setRootDocumentDirect( (*m_activePage).m_pDoc, views );
   // Fix caption
   updateCaption();
 }
@@ -341,13 +350,24 @@ void KoShellWindow::closeDocument()
 
 bool KoShellWindow::queryClose()
 {
+  // Save current doc and views
+  QList<KoView> currentViews;
+  KoDocument * currentDoc = 0L;
+  if (m_activePage != m_lstPages.end())
+  {
+      currentDoc = (*m_activePage).m_pDoc;
+      currentViews.append((*m_activePage).m_pView);
+  }
+
   // This one is called by slotFileQuit and by the X button.
   // We have to check for unsaved docs...
   bool ok = true;
   QValueList<Page>::Iterator it = m_lstPages.begin();
   for( ; it != m_lstPages.end(); ++it )
   {
-    setRootDocumentDirect( (*it).m_pDoc );
+    // This is quite a HACK
+    // We should ask ourselves, to get a better dialog box
+    setRootDocumentDirect( (*it).m_pDoc, QList<KoView>() );
     // Test if we can close this doc
     if ( !KoMainWindow::queryClose() )
     {
@@ -355,8 +375,9 @@ bool KoShellWindow::queryClose()
       break; // abort
     }
   }
-  // Restore current doc
-  setRootDocumentDirect( m_activePage == m_lstPages.end() ? 0L : (*m_activePage).m_pDoc );
+
+  // Restore current doc and views
+  setRootDocumentDirect( currentDoc, currentViews );
   return ok;
 }
 
