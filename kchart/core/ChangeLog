@@ -1,0 +1,4 @@
+Thu May 28 01:31:52 1998  Torben Weis  <weis@localhost>
+
+	* KChartData.cpp (setXValue): Changed QString& to const char*
+

@@ -21,7 +21,7 @@ public:
   KChartData( int datasets );
   ~KChartData();
 
-  void setXValue( uint pos, const QString& value );
+  void setXValue( uint pos, const char* value );
   QString xValue( uint pos ) const;
   void setYValue( uint dataset, uint pos, double value );
   double yValue( uint dataset, uint pos ) const;

@@ -37,7 +37,7 @@ KChartData::~KChartData()
 
 }
 
-void KChartData::setXValue( uint pos, const QString& value )
+void KChartData::setXValue( uint pos, const char* value )
 {
   // Resize the array if necessary.
   uint oldsize = xdata->size();
