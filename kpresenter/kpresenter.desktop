@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KPresenter
 Name[da]=Præsenterer
+Name[eo]=Prezentanto
 Name[hu]=KElõadó
 Name[is]=Varpi
 Name[pt]=Apresentações
@@ -14,6 +15,7 @@ Comment[ca]=El programa de presentacions de Reggie
 Comment[cs]=Reggieho presentaèní software
 Comment[da]=Reggies præsentationsprogram
 Comment[de]=Reggies Präsentationsprogramm
+Comment[eo]=Prezenta¼o-programo
 Comment[es]=El Software de Presentación de Reggie
 Comment[fi]=Reggien esitysohjelma
 Comment[fr]=Logiciel de PréAO de Reggie
@@ -32,6 +34,6 @@ MimeType=application/x-kpresenter
 X-KDE-RepoIds=IDL:KPresenter/DocumentFactory:1.0#KPresenter
 X-KDE-ActivationMode=shared
 Type=OpenPart
-Icon=kpresenter.xpm
-MiniIcon=kpresenter.xpm
+Icon=lo-kpresenter.png
+MiniIcon=mini-kpresenter.png
 ServiceTypes=KOfficeDocument

@@ -1,5 +1,5 @@
 
-pics_DATA =  kautoformedit.xpm 
+pics_DATA =  kautoformedit.png 
 picsdir = $(kde_datadir)/kpresenter/pics
 
 KDE_ICON = kpresenter
