@@ -1,3 +1,9 @@
+koffice (2.0-20000524-1.0) experimental; urgency=low
+ 
+  * more upstream fixes
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 24 May 2000 04:15:00 -0700
+
 koffice-cvs (2.0-20000521-1.0) experimental; urgency=low
  
   * more upstream fixes
