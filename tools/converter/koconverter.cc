@@ -161,7 +161,15 @@ int main( int argc, char **argv )
         QApplication::setOverrideCursor( Qt::waitCursor );
         bool ok = convert( uIn, inputMimetype->name(), uOut, outputMimetype->name(), batch );
         QApplication::restoreOverrideCursor();
-        return ok ? 0 : 2;
+        if ( ok )
+        {
+            return 0;
+        }
+        else
+        {
+            kdError() << i18n("*** The conversion failed! ***") << endl;
+            return 2;
+        }
     }
 
     KCmdLineArgs::usage(i18n("Two arguments required"));
