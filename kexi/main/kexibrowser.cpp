@@ -179,7 +179,7 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 	if (bit->item()) {
 		pm = m_itemPopup;
 		//update popup title
-		QString title_text = bit->text(0);
+		QString title_text = bit->text(0).stripWhiteSpace();
 		KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
 		KexiPart::Part* par_part = 0;
 		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceName().isEmpty()) {

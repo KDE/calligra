@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
@@ -37,13 +39,17 @@
 #include <kexitableviewdata.h>
 #include <kexidragobjects.h>
 #include "kexiquerydocument.h"
+#include "kexidialogbase.h"
+#include "kexidatatable.h"
 
 #include "widget/relations/kexirelationwidget.h"
+
+#define MAX_FIELDS 101 //nice prime number
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
-	setDirty(true);
+//	setDirty(true);
 	m_conn = mainWin->project()->dbConnection();
 	m_doc = doc;
 
@@ -55,38 +61,78 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	if(p)
 		p->createWidget(s, win);*/
 
+	m_dataTable = new KexiDataTable(mainWin, s, "guieditor_dataTable", false);
+	m_dataTable->tableView()->setSpreadSheetMode();
+	m_dataTable->tableView()->addDropFilter("kexi/field");
+	addActionProxyChild(m_dataTable);
+
 	m_data = new KexiTableViewData();
 	initTable();
+	m_dataTable->tableView()->setData(m_data);
+	m_dataTable->tableView()->adjustColumnWidthToContents(-1);
+
 	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
-	m_table = new KexiTableView(m_data, s, "designer");
+//	m_table = new KexiTableView(m_data, s, "designer");
 	QVBoxLayout *l = new QVBoxLayout(this);
 	l->addWidget(s);
-	m_table->addDropFilter("kexi/field");
 
-	connect(m_table, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
-	m_table->setNavigatorEnabled(false);
+	connect(m_dataTable->tableView(), SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	restore();
+}
+
+KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
+{
 }
 
 void
 KexiQueryDesignerGuiEditor::initTable()
 {
-	KexiDB::Field *f = new KexiDB::Field(i18n("Table"), KexiDB::Field::Text);
-	KexiTableViewColumn *col = new KexiTableViewColumn(*f);
-	m_data->addColumn(col);
+	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Field"), KexiDB::Field::Enum);
+	m_data->addColumn(col1);
 
-	KexiDB::Field *f2 = new KexiDB::Field(i18n("Field"), KexiDB::Field::Text);
-	KexiTableViewColumn *col2 = new KexiTableViewColumn(*f2);
+	KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Table"), KexiDB::Field::Enum);
 	m_data->addColumn(col2);
 
-	KexiDB::Field *f3 = new KexiDB::Field(i18n("Shown"), KexiDB::Field::Boolean);
-	f3->setDefaultValue(QVariant(true));
-	KexiTableViewColumn *col3 = new KexiTableViewColumn(*f3);
+	KexiTableViewColumn *col3 = new KexiTableViewColumn(i18n("Visible"), KexiDB::Field::Boolean);
 	m_data->addColumn(col3);
 
-	KexiDB::Field *f4 = new KexiDB::Field(i18n("Condition"), KexiDB::Field::Text);
-	KexiTableViewColumn *col4 = new KexiTableViewColumn(*f4);
+	KexiDB::Field *f = new KexiDB::Field(i18n("Totals"), KexiDB::Field::Enum);
+	QValueVector<QString> totalsTypes;
+	totalsTypes.append( i18n("Group by") );
+	totalsTypes.append( i18n("Sum") );
+	totalsTypes.append( i18n("Average") );
+	totalsTypes.append( i18n("Min") );
+	totalsTypes.append( i18n("Max") );
+	//todo: more like this
+	f->setEnumHints(totalsTypes);
+	KexiTableViewColumn *col4 = new KexiTableViewColumn(*f);
 	m_data->addColumn(col4);
+
+	f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
+	QValueVector<QString> sortTypes;
+	sortTypes.append( i18n("Ascending") );
+	sortTypes.append( i18n("Descending") );
+	sortTypes.append( i18n("No sorting") );
+	f->setEnumHints(sortTypes);
+	KexiTableViewColumn *col5 = new KexiTableViewColumn(*f);
+	m_data->addColumn(col5);
+
+	KexiTableViewColumn *col6 = new KexiTableViewColumn(i18n("Criteria"), KexiDB::Field::Text);
+	m_data->addColumn(col6);
+
+//	KexiTableViewColumn *col7 = new KexiTableViewColumn(i18n("Or"), KexiDB::Field::Text);
+//	m_data->addColumn(col7);
+
+	const int columns = m_data->columnsCount();
+	for (int i=0; i<MAX_FIELDS; i++) {
+//		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
+//		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
+//		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
+//		m_fields.insert(i, buff);
+		KexiTableItem *item = new KexiTableItem(columns);//3 empty fields
+		m_data->append(item);
+	}
+
 }
 
 KexiRelationWidget *KexiQueryDesignerGuiEditor::relationView() const
@@ -108,7 +154,7 @@ KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 	m_data->append(item);
 
 	//TODO: this should deffinitly not go here :)
-	m_table->updateContents();
+//	m_table->updateContents();
 
 	setDirty(true);
 }
@@ -175,32 +221,57 @@ KexiQueryDesignerGuiEditor::restore()
 	if(!m_doc || !m_doc->schema())
 		return;
 
-	m_table->clearData();
+	m_dataTable->tableView()->clearData();
 	KexiDB::Field::Vector flist = m_doc->schema()->fieldsExpanded();
 	for(unsigned int i=0; i < flist.count(); i++)
 	{
-		addRow(flist.at(i)->table()->name(), flist.at(i)->name());
+//		m_dataTable->tableView()->addRow(flist.at(i)->table()->name(), flist.at(i)->name());
 	}
 }
 
 bool
-KexiQueryDesignerGuiEditor::beforeSwitchTo(int)
+KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled)
 {
-	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << endl;
+	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
 	//update the pointer :)
-	schema();
-	return true;
+	if (mode==Kexi::DesignViewMode) {
+		//todo
+	}
+	else if (mode==Kexi::DataViewMode) {
+		if (!dirty() && parentDialog()->neverSaved()) {
+			cancelled=true;
+			KMessageBox::information(this, i18n("Cannot switch to data view, because query design is empty.\n"
+				"First, please create your design.") );
+			return true;
+		}
+		return true;
+	}
+	else if (mode==Kexi::TextViewMode) {
+		//todo
+		return true;
+	}
+
+//	schema();
+	return false;
 }
 
 bool
-KexiQueryDesignerGuiEditor::afterSwitchFrom(int)
+KexiQueryDesignerGuiEditor::afterSwitchFrom(int /*mode*/, bool &/*cancelled*/)
 {
-	restore();
+//	restore();
 	return true;
 }
 
-KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
+
+KexiDB::SchemaData*
+KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 {
+	return 0;
+}
+
+bool KexiQueryDesignerGuiEditor::storeData()
+{
+	return true;
 }
 
 #include "kexiquerydesignerguieditor.moc"

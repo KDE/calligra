@@ -217,13 +217,6 @@ TODO: win32: Fix saving config files via KConfig (now the files are ugly overwri
 
 TODO: add toolbar for toggling views (design-textedit-dataview)
 
-TABLE VIEW TODO:
-- fix not-db-aware mode
-- add SpreadSheet mode (eg. for alter table, and query editor)
-- add support for enums (combo boxes)
-- shrink viewport area after each row removing (so scrollbars can be updated)
-- add cursor moving on Tab, Shift+Tab keys
-
 TODO:
 - KMdiChildArea::getCaptionColors - change to KGlobalSettings::inactiveTextColor(), etc.
   (for win32 - reimpl. KGlobalSettings::inactiveTextColor() with code from getCaptionColors())
@@ -263,10 +256,17 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
  * other types- by default: just move cursor to editor
 
 Detailed TODO for Beta3:
-1. Finish Startup Framework (see above: MOST RECENT TODO)
-2. Make alter table GUI (and KexiDB layer) workable
-3. Make all 3 query views workable (@ GUI and KexiDB layer)
-4. Make database relations workable (@ GUI and KexiDB layer)
+ 1. Finish Startup Framework (see above: MOST RECENT TODO)
++2. Make alter table GUI (and KexiDB layer) workable
+ 3. Make all 3 query views workable (@ GUI and KexiDB layer)
+ 4. Make database relations workable (@ GUI and KexiDB layer)
+
+TODO: fix lucijan's hack, with part loading (29 feb)
+--- koffice/kexi/core/kexipartinfo.h  #1.9:1.10
+@@ -92,4 +92,5 @@ class KEXICORE_EXPORT Info
+                 friend class Manager;
+                 friend class KexiProject;
++                friend class KexiMainWindowImpl;
 
 === Import/Export Framework TODO ===
 -KEXIDB: add lower level functions like: "getting table names list", "getting table schema",
@@ -287,7 +287,8 @@ Detailed TODO for Beta3:
 -use one and multi-key relations from kexidb
 
 === Table View TODO ====
--add a function for moving rows
+- add a function for moving rows
+- extended support for enums (combo boxes)
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -297,7 +298,6 @@ Detailed TODO for Beta3:
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
 -save schema changes before switching to "view mode"
 
-
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
 - double editor should be klineedit with doublevalidator, not spinbox
@@ -306,18 +306,32 @@ Detailed TODO for Beta3:
 	at http://freshmeat.net/screenshots/41728/
 -KexiProperty: make it really shared (using QShared?)
 
-TODO: fix lucijan's hack, with part loading (29 feb)
---- koffice/kexi/core/kexipartinfo.h  #1.9:1.10
-@@ -92,4 +92,5 @@ class KEXICORE_EXPORT Info
-                 friend class Manager;
-                 friend class KexiProject;
-+                friend class KexiMainWindowImpl;
+==== Query GUI Designer TODO: ======
+- add tables dropping from the browser
+- add a dialog for inserting multiple tables a time
+- reuse KexiDataTable
+- make actions work
+- fix connections drawing
+- make "table" field work as combo
+- make "field" field work as combo
+- add "sort" field (as combo)
+- make "1" and "inf" signs a bit larger
+
 
 TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
 CC_MAIL: dkite@shaw.ca
+
+2004-03-25
+KexiTableView
+	- adjustColumnWidthToContents(-1) now mean that all columns' width is adjusted
+	- after calling adjustColumnWidthToContents(), editor width is updated, if needed
+	- setSpreadsheetMode() added
+KexiQueryDesignerGuiEditor
+	- spreadsheet-like mode set
+	- more columns added: totals & sum
 
 2004-03-24
 Main Window
@@ -327,7 +341,6 @@ Main Window
 	- previous 'view mode' toggle action is checked back properly after cancelled switch
 Table View
 	- fixed editing initializing with 'removeOld' mode
-
 Alter Table Dialog
 	- Temporary workaround:
 	 if data is dirty and table schema was saved before --user is asked 

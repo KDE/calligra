@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,11 +21,13 @@
 #ifndef KEXIQUERYDESIGNERGUIEDITOR_H
 #define KEXIQUERYDESIGNERGUIEDITOR_H
 
+#include <qguardedptr.h>
+
 #include <kexiviewbase.h>
 
 class KexiMainWindow;
 class KexiTableViewData;
-class KexiTableView;
+class KexiDataTable;
 class KexiRelationWidget;
 
 namespace KexiPart
@@ -55,18 +58,21 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void			initTable();
 		void			addRow(const QString &tbl, const QString &field);
 		void			restore();
-		virtual bool		beforeSwitchTo(int mode);
-		virtual bool		afterSwitchFrom(int mode);
+		virtual bool beforeSwitchTo(int mode, bool &cancelled);
+		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+		virtual bool storeData();
 
 	protected slots:
 		void			slotDropped(QDropEvent *ev);
 
 	private:
-		KexiTableViewData	*m_data;
-		KexiTableView		*m_table;
-		KexiDB::Connection	*m_conn;
+		KexiTableViewData *m_data;
+		KexiDataTable *m_dataTable;
+		QGuardedPtr<KexiDB::Connection> m_conn;
 		KexiRelationWidget *m_relations;
-		KexiQueryDocument	*m_doc;
+		KexiQueryDocument *m_doc;
 };
 
 #endif
