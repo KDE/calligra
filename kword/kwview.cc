@@ -2926,9 +2926,36 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
 
         }
 
-        // Apply reasonable limits
-        width = kMin( width, widthLimit );
-        height = kMin( height, heightLimit );
+        if ( _keepRatio && ((width > widthLimit) || (height > heightLimit)) )
+        {
+            // size too big => adjust the size and keep ratio
+            float ratioX = (float)width / widthLimit;
+            float ratioY = (float)height / heightLimit;
+            float ratioPicture = (float)width / height;
+
+            if ( ratioPicture == 0 )  // unlikely
+            {
+                width = widthLimit;
+                height = heightLimit;
+            }
+            else
+                if ( ratioX > ratioY )  // restrict width and calculate height
+                {
+                    width = widthLimit;
+                    height = widthLimit/ratioPicture;
+                }
+                else   // restrict height and calculate width
+                {
+                    width = heightLimit*ratioPicture;
+                    height = heightLimit;
+                }
+        }
+        else
+        {
+            // Apply reasonable limits
+            width = kMin( width, widthLimit );
+            height = kMin( height, heightLimit );
+        }
 
         fsInline = frameset;
         KWFrame *frame = new KWFrame ( fsInline, 0, 0, width, height );
