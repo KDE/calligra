@@ -20,6 +20,7 @@
 
 #include <kdebug.h>
 #include <koIconChooser.h>
+#include <kglobal.h>
 
 #include <qpainter.h>
 #include <qcursor.h>
@@ -98,10 +99,14 @@ void KoIconChooser::addItem(KoIconItem *item)
 
 bool KoIconChooser::removeItem(KoIconItem *item)
 {
+  int index = mIconList.find(item);
   bool ok = mIconList.remove(item);
   if( ok )
   {
     mItemCount--;
+    // select same cell as deleted cell, or new last cell if we deleted
+    // last cell.
+    setCurrentItem(itemAt(kMin(index, mItemCount - 1)));
     calculateCells();
   }
   return ok;
