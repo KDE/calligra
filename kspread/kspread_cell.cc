@@ -609,16 +609,19 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     // Free all obscured cells.
     //
-    for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
-	for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
-	    if ( x != m_iColumn || y != m_iRow )
-	    {
-		KSpreadCell *cell = m_pTable->cellAt( x, y );
-		cell->unobscure();
-	    }
+    if ( !m_bForceExtraCells )
+    {
+	for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
+	    for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
+		if ( x != m_iColumn || y != m_iRow )
+	        {
+		    KSpreadCell *cell = m_pTable->cellAt( x, y );
+		    cell->unobscure();
+		}
 
-    m_iExtraXCells = 0;
-    m_iExtraYCells = 0;
+	m_iExtraXCells = 0;
+	m_iExtraYCells = 0;
+    }
 
     /**
      * RichText
@@ -1006,51 +1009,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Some space for the little button of the combo box
     if ( m_style == ST_Select )
-	w -= 16;
-
-    // Determine the alignment
-    /* int a = m_eAlign;
-    if ( a == KSpreadCell::Undefined )
-    {
-	if ( m_bValue  || m_bDate || m_bTime )
-	    a = KSpreadCell::Right;
-	else
-	    a = KSpreadCell::Left;
-    }
-    
-    if( m_pTable->getShowFormular() )
-	a = KSpreadCell::Left;
-    
-    // Offset for alignment
-    switch( a )
-    {
-    case KSpreadCell::Left:
-	m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-	break;
-    case KSpreadCell::Right:
-	m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
-	break;
-    case KSpreadCell::Center:
-	m_iTextX = ( w - m_iOutTextWidth ) / 2;
-	break;
-    }
-    */
-    
-    // Free all obscured cells if we are not forced to abscure them
-    /* if ( !m_bForceExtraCells )
-    {
-	for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
-	    for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
-		if ( x != m_iColumn || y != m_iRow )
-	        {
-		    KSpreadCell *cell = m_pTable->cellAt( x, y );
-		    cell->unobscure();
-		}
-
-	m_iExtraXCells = 0;
-	m_iExtraYCells = 0;
-    }
-    */
+	w -= 16;    
     
     // Do we need to break the line into multiple lines and are we allowed to
     // do so?
