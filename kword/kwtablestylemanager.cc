@@ -51,7 +51,7 @@ KWTableStylePreview::KWTableStylePreview( const QString& title, const QString& t
     m_zoomHandler = new KoZoomHandler;
     QFont font = KoGlobal::defaultFont();
     font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( font.pointSize() ) );
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font ));
+    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor() ));
     KoTextParag * parag = m_textdoc->firstParag();
     parag->insert( 0, text );
 }
@@ -644,11 +644,11 @@ void KWTableStyleManager::updateAllStyleCombos()
     // Problems:
     // - 1. Count is the same, but the user has delete the same number as he added
     // - 2. Old name is not in new list, old index is wrong index in new list
-    if ( ( static_cast<unsigned int>(m_style->count())!=m_doc->styleCollection()->styleList().count() ) && 
+    if ( ( static_cast<unsigned int>(m_style->count())!=m_doc->styleCollection()->styleList().count() ) &&
             ( m_style->listBox()->findItem( oldS ) ) ) {
         oldSindex = m_style->listBox()->index( m_style->listBox()->findItem( oldS ) );
     }
-    if ( ( static_cast<unsigned int>(m_frameStyle->count())!=m_doc->frameStyleCollection()->frameStyleList().count() ) && 
+    if ( ( static_cast<unsigned int>(m_frameStyle->count())!=m_doc->frameStyleCollection()->frameStyleList().count() ) &&
             ( m_frameStyle->listBox()->findItem( oldFS ) ) ) {
         oldFSindex = m_frameStyle->listBox()->index( m_frameStyle->listBox()->findItem( oldFS ) );
     }

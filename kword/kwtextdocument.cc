@@ -30,7 +30,7 @@ KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection 
 }
 
 KWTextDocument::KWTextDocument( KoZoomHandler * zoomHandler )
-    : KoTextDocument( zoomHandler, new KoTextFormatCollection( QFont("helvetica") /*unused*/ ), 0L, false ),
+    : KoTextDocument( zoomHandler, new KoTextFormatCollection( QFont("helvetica") /*unused*/, QColor() ), 0L, false ),
       m_textfs( 0 )
 {
     init();
