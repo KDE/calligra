@@ -21,6 +21,7 @@
 
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
+#include "kspread_util.h"
 #include "kspread_value.h"
 
 #include "valuecalc.h"
@@ -1091,46 +1092,6 @@ void Formula::compile( const Tokens& tokens ) const
   }
 }
 
-RangeList Formula::getDependencies () const
-{
-  RangeList rl;
-  //nothing if we don't have a cell to work with
-  if (!d->cell)
-    return rl;
-  KSpreadSheet *sheet = d->cell->sheet();
-  
-  //perform lexical analysis
-  //TODO: use parsed formula instead, when cell/range references are supported
-  Tokens t = tokens();
-  
-  if (!t.valid())
-    return rl;   //return empty list if the tokens aren't valid
-  
-  for( unsigned i = 0; i < t.count(); i++ )
-  {
-    Token token = t[i];
-    Token::Type tokenType = token.type();
-    
-    //parse each cell/range and put it to our RangeList
-    if (tokenType == Token::Cell)
-    {
-      QString text = token.text();
-      KSpreadPoint cell (text, sheet->map(), sheet);
-      if (cell.isValid())
-        rl.cells.push_back (cell);
-    }
-    else if (tokenType == Token::Range)
-    {
-      QString text = token.text();
-      KSpreadRange range (text, sheet->map(), sheet);
-      if (range.isValid())
-        rl.ranges.push_back (range);
-    }
-  }
-  
-  //return the result
-  return rl;
-}
 
 // Evaluates the formula, returns the result.
 

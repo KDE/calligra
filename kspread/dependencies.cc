@@ -548,20 +548,45 @@ QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range
 
 RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
 {
-  RangeList rl;
   KSpreadCell *c = cell.cell();
   if (!c->isFormula())
-    return rl;   //not a formula -> no dependencies
+    return RangeList();   //not a formula -> no dependencies
+
+  QString expr = c->text();
+  kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<
+    expr << "\"" << endl;
 
   //TODO: when the new parser is in use, KSpreadCell will hold a Formula
   //instance, hence we'll be able to use that one directly
-  Formula formula (di, c);
-  formula.setExpression (c->text());
+  Tokens tokens = Formula::scan( expr );  
+
+  //return empty list if the tokens aren't valid
+  if (!tokens.valid())
+    return RangeList();   
   
-  kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<
-    c->text() << "\"" << endl;
-  //now that we have the formula, we ask it to give us the dependencies
-  rl = formula.getDependencies ();
+  RangeList rl;
+  for( unsigned i = 0; i < tokens.count(); i++ )
+  {
+    Token token = tokens[i];
+    Token::Type tokenType = token.type();
+    
+    //parse each cell/range and put it to our RangeList
+    if (tokenType == Token::Cell)
+    {
+      QString text = token.text();
+      KSpreadPoint cell (text, sheet->map(), sheet);
+      if (cell.isValid())
+        rl.cells.push_back (cell);
+    }
+    else if (tokenType == Token::Range)
+    {
+      QString text = token.text();
+      KSpreadRange range (text, sheet->map(), sheet);
+      if (range.isValid())
+        rl.ranges.push_back (range);
+    }
+  }
+  
   return rl;
 }
 

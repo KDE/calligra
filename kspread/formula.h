@@ -24,7 +24,6 @@
 #include <qvaluevector.h>
 
 #include "kspread_cell.h"
-#include "kspread_util.h"
 #include "kspread_value.h"
 
 class KLocale;
@@ -285,10 +284,6 @@ class Formula : public DocBase
      */     
     static Tokens scan( const QString& expr );
 
-    /** return dependencies of this expression
-    @param sheet  default sheet of references with no sheet information */
-    RangeList getDependencies () const;
-    
     /**
      * Returns an assembler dump of the formula.
      * Should be used only to assist debugging.
