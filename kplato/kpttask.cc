@@ -191,7 +191,7 @@ const KPTDuration& KPTTask::expectedDuration(const KPTDateTime &start) {
  }
 
 void KPTTask::calculateDuration(const KPTDateTime &start) {
-    kdDebug()<<k_funcinfo<<m_name<<"  --------->>>>"<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<"  --------->>>>"<<endl;
     m_resourceError = false;
     m_duration = KPTDuration::zeroDuration;
     if (m_effort->type() == KPTEffort::Type_WorkBased) {
@@ -211,7 +211,7 @@ void KPTTask::calculateDuration(const KPTDateTime &start) {
 
     // TODO: handle risc
 
-    kdDebug()<<k_funcinfo<<m_name<<"="<<m_duration.toString(KPTDuration::Format_Day)<<"  <<<----"<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<"="<<m_duration.toString(KPTDuration::Format_Day)<<"  <<<----"<<endl;
 }
 
 KPTResourceGroupRequest *KPTTask::resourceGroupRequest(KPTResourceGroup *group) const {

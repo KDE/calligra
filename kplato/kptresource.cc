@@ -317,12 +317,12 @@ void KPTResource::saveAppointments(QDomElement &element) const {
 
 // the amount of effort we can do within the duration
 KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &duration) const {
-    kdDebug()<<k_funcinfo<<start.date().toString()<<" for duration "<<duration.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<start.date().toString()<<" for duration "<<duration.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration e;
     if (m_calendar)
         e = (m_calendar->effort(start, duration) * m_units)/100;
     
-    kdDebug()<<k_funcinfo<<"e="<<e.toString(KPTDuration::Format_Day)<<" ("<<m_units<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"e="<<e.toString(KPTDuration::Format_Day)<<" ("<<m_units<<")"<<endl;
     return e;
 }
 
@@ -440,7 +440,7 @@ bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
     //kdDebug()<<k_funcinfo<<endl;
     int id  = element.attribute("resource-id").toInt();
     if (!(m_resource = project->resource(id))) {
-        kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<id<<endl;
+        //kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<id<<endl;
         return false;
     }
     m_units  = element.attribute("units").toInt();
@@ -534,7 +534,7 @@ int KPTResourceGroupRequest::units() const {
     for (; it.current(); ++it) {
         units += it.current()->units();
     }
-    kdDebug()<<k_funcinfo<<"units="<<units<<endl;
+    //kdDebug()<<k_funcinfo<<"units="<<units<<endl;
     return units;
 }
 
@@ -546,13 +546,13 @@ int KPTResourceGroupRequest::workUnits() const {
     for (; it.current(); ++it) {
         units += it.current()->workUnits();
     }
-    kdDebug()<<k_funcinfo<<"units="<<units<<endl;
+    //kdDebug()<<k_funcinfo<<"units="<<units<<endl;
     return units;
 }
 
 //TODO: handle uspecific resources
 KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KPTDuration &effort) {
-    kdDebug()<<k_funcinfo<<"effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<"effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration dur = effort; // have to start somewhere
     KPTDuration down = dur/2;
     KPTDuration up = dur;
@@ -566,32 +566,24 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KP
             e += it.current()->resource()->effort(start, dur);
             
         }
-        kdDebug()<<k_funcinfo<<"now e["<<i<<"]: "
-                    <<e.toString()
-                    <<" match: "<<effort.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<"now e["<<i<<"]: "<<e.toString()<<" match: "<<effort.toString()<<endl;
         // TODO: we need to make this smarter
         if (e.isCloseTo(effort)) {
             match = true;
         } else {
             if (e > effort) {
                 dur -= down;
-                kdDebug()<<k_funcinfo<<"down["<<i<<"]: "
-                    <<down.toString(KPTDuration::Format_Day)
-                    <<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
+                //kdDebug()<<k_funcinfo<<"down["<<i<<"]: "<<down.toString(KPTDuration::Format_Day)<<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
                 up = down/2;
                 down = up;
             } else {
                 dur += up;
-                kdDebug()<<k_funcinfo<<"up["<<i<<"]: "
-                    <<up.toString(KPTDuration::Format_Day)
-                    <<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
+                //kdDebug()<<k_funcinfo<<"up["<<i<<"]: "<<up.toString(KPTDuration::Format_Day)<<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
             }
         }
     }
     if (!match) {
-        kdError()<<k_funcinfo<<"Could not match effort."
-                 <<" Want: "<<effort.toString(KPTDuration::Format_Day)
-                 <<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
+        kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
     }
     m_start = start;
     m_duration = dur;
@@ -599,7 +591,7 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KP
 }
 
 void KPTResourceGroupRequest::makeAppointments(KPTTask *task) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         it.current()->makeAppointment(m_start, m_duration, task);
@@ -655,7 +647,7 @@ int KPTResourceRequestCollection::units() const {
     QPtrListIterator<KPTResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         units += it.current()->units();
-        kdDebug()<<k_funcinfo<<" Group: "<<it.current()->group()->name()<<" now="<<units<<endl;
+        //kdDebug()<<k_funcinfo<<" Group: "<<it.current()->group()->name()<<" now="<<units<<endl;
     }
     return units;
 }
@@ -676,7 +668,7 @@ int KPTResourceRequestCollection::workUnits() const {
 // the amount of resources requested for each group.
 // "Material type" of resourcegroups does not (atm) affect the duration.
 KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &start, const KPTDuration &effort) {
-    kdDebug()<<k_funcinfo<<"start="<<start.toString()<<" effort="<<effort.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<"start="<<start.toString()<<" effort="<<effort.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration dur;
     int units = workUnits();
     if (units == 0)
@@ -697,7 +689,7 @@ KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &start, con
 }
 
 void KPTResourceRequestCollection::makeAppointments(KPTTask *task) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         it.current()->makeAppointments(task);

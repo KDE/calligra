@@ -114,7 +114,7 @@ KPTDuration KPTCalendarDay::effort(const QTime &start, const QTime &end) {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     KPTDuration eff;
     if (m_state != KPTMap::Working) {
-        kdDebug()<<k_funcinfo<<"Non working day"<<endl;
+        //kdDebug()<<k_funcinfo<<"Non working day"<<endl;
         return eff;
     }
     QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
@@ -130,7 +130,7 @@ KPTDuration KPTCalendarDay::effort(const QTime &start, const QTime &end) {
                 dtEnd.setTime(it.current()->second);
             }
             eff += dtEnd - dtStart;
-            kdDebug()<<k_funcinfo<<dtStart.time().toString()<<" - "<<dtEnd.time().toString()<<"="<<eff.toString(KPTDuration::Format_Day)<<endl;
+            //kdDebug()<<k_funcinfo<<dtStart.time().toString()<<" - "<<dtEnd.time().toString()<<"="<<eff.toString(KPTDuration::Format_Day)<<endl;
         }
     }
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
@@ -406,7 +406,7 @@ bool KPTCalendar::hasParent(KPTCalendar *cal) {
 }
 
 KPTDuration KPTCalendar::effort(const QDate &date, const QTime &start, const QTime &end) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     KPTDuration eff;
     if (start == end)
         return eff;
@@ -452,14 +452,14 @@ KPTDuration KPTCalendar::effort(const KPTDateTime &start, const KPTDuration &dur
              eff += effort(date, QTime(), end.time());
         //kdDebug()<<k_funcinfo<<": eff now="<<eff.toString(KPTDuration::Format_Day)<<endl;
     }
-    kdDebug()<<k_funcinfo<<start.date().toString()<<"- "<<end.date().toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<start.date().toString()<<"- "<<end.date().toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
     return eff;
 }
 
 #ifndef NDEBUG
 void KPTCalendarDay::printDebug(QCString indent) {
     QString s[] = {"None", "Non-working", "Working"};
-    kdDebug()<<indent<<" "<<m_date<<" = "<<s[m_state]<<endl;
+    //kdDebug()<<indent<<" "<<m_date<<" = "<<s[m_state]<<endl;
     if (m_state == KPTMap::Working) {
         indent += "  ";
         QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
@@ -470,7 +470,7 @@ void KPTCalendarDay::printDebug(QCString indent) {
     
 }
 void KPTCalendarWeekdays::printDebug(QCString indent) {
-    kdDebug()<<indent<<"Weekdays ------"<<endl;
+    //kdDebug()<<indent<<"Weekdays ------"<<endl;
     QPtrListIterator<KPTCalendarDay> it = m_weekdays;
     for (char c='0'; it.current(); ++it) {
         it.current()->printDebug(indent + "  Day " + c++ + ": ");
@@ -479,15 +479,15 @@ void KPTCalendarWeekdays::printDebug(QCString indent) {
 }
 void KPTCalendarWeeks::printDebug(QCString indent) {
     QCString s[] = {"None", "Non-working", "Working"};
-    kdDebug()<<indent<<" Weeks ------"<<endl;
+    //kdDebug()<<indent<<" Weeks ------"<<endl;
     indent += "  ";
     KPTWeekMap::iterator it;
     for (it = m_weeks.begin(); it != m_weeks.end(); ++it) {
-        kdDebug()<<indent<<" Week: "<<it.key()<<" = "<<s[it.data()]<<endl;
+        //kdDebug()<<indent<<" Week: "<<it.key()<<" = "<<s[it.data()]<<endl;
     }
 }
 void KPTCalendar::printDebug(QCString indent) {
-    kdDebug()<<indent<<"KPTCalendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
+    //kdDebug()<<indent<<"KPTCalendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
     if (m_parent) kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
     m_weekdays->printDebug(indent + "  ");
     m_weeks->printDebug(indent + "  ");
