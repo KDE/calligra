@@ -42,6 +42,7 @@
 #include <ktip.h>
 #include <kstandarddirs.h>
 #include <kpushbutton.h>
+#include <ktextbrowser.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -173,9 +174,12 @@ class KexiMainWindowImpl::Private
 		//! on dialog removing
 		bool insideCloseDialog : 1;
 
-		//! Used in several places to show tip dialog at startup (only once per session)
+		//! Used in several places to show info dialog at startup (only once per session)
 		//! before displaying other stuff
-		bool showTipDialogOnStartup : 1;
+		bool showImportantInfoOnStartup : 1;
+
+		//! Used sometimes to block showErrorMessage()
+		bool disableErrorMessages : 1;
 
 	Private()
 		: dialogs(401)
@@ -196,7 +200,8 @@ class KexiMainWindowImpl::Private
 		forceDialogClosing=false;
 		insideCloseDialog=false;
 		createMenu=0;
-		showTipDialogOnStartup=true;
+		showImportantInfoOnStartup=true;
+		disableErrorMessages=false;
 //		last_checked_mode=0;
 	}
 	~Private() {
@@ -449,8 +454,12 @@ KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
 
 	//HELP MENU
+#if 0//js: todo reenable later
 	KStdAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
 		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
+#endif
+	new KAction(i18n("Important information"), "", 0,
+		this, SLOT(slotImportantInfo()), actionCollection(), "help_show_important_info");
 
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 //	 actionCollection(), "kexi_settings");
@@ -545,7 +554,7 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 {
 	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
 	if (!projectData) {
-		tipOfTheDay(true);
+		importantInfo(true);
 //<TEMP>
 		//some connection data
 		KexiDB::ConnectionData *conndata;
@@ -624,7 +633,15 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 	openProject(projectData);
 
 	//show if wasn't show yet
-	tipOfTheDay(true);
+	importantInfo(true);
+}
+
+static QString internalReason(KexiDB::Object *obj)
+{
+	const QString &s = obj->errorMsg();
+	if (s.isEmpty())
+		return s;
+	return QString("<br>(%1) ").arg(i18n("reason:")+" <i>"+s+"</i>");
 }
 
 bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
@@ -643,6 +660,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 	Kexi::recentProjects().addProjectData( projectData );
 	invalidateActions();
 
+	d->disableErrorMessages = true;
+
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
 	for (QValueList<KexiProjectData::ObjectInfo>::Iterator it = projectData->autoopenObjects.begin();
@@ -651,33 +670,45 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 		KexiProjectData::ObjectInfo info = *it;
 		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].lower().latin1() );
 		if (!i) {
+			not_found_msg += "<li>";
 			if (!info["name"].isEmpty())
-				not_found_msg += (info["name"] + " - ");
+				not_found_msg += (QString("\"") + info["name"] + "\" - ");
 			if (info["action"]=="new")
 				not_found_msg += i18n("cannot create object - ");
-			not_found_msg += (i18n("unknown object type \"%1\"").arg(info["type"])+"<br>");
+			not_found_msg += (i18n("unknown object type \"%1\"").arg(info["type"])+
+				internalReason(&Kexi::partManager())+"<br></li>");
 			continue;
 		}
 		if (info["action"]=="new") {
-			if (!newObject( i ))
-				not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+"<br>");
+			if (!newObject( i )) {
+				not_found_msg += "<li>";
+				not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+
+					internalReason(d->prj)+"<br></li>");
+			}
 			continue;
 		}
 
 		KexiPart::Item *item = d->prj->item(i, info["name"]);
 
 		if (!item) {
-			not_found_msg += ( info["name"] + " - " + i18n("object not found") +"<br>" );
+			not_found_msg += "<li>";
+			not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("object not found")+
+				internalReason(d->prj)+"<br></li>" );
 			continue;
 		}
 		if (!openObject(item, info["action"]=="design" ? Kexi::DesignViewMode : Kexi::DataViewMode)) {
-			not_found_msg += ( info["name"] + " - " + i18n("cannot open object") +"<br>" );
+			not_found_msg += "<li>";
+			not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
+				internalReason(d->prj)+"<br></li>" );
 			continue;
 		}
 	}
+	d->disableErrorMessages = false;
+
 	if (!not_found_msg.isEmpty())
 		showErrorMessage(i18n("You have requested selected objects to be opened automatically on startup. Several objects cannot be opened."),
-			not_found_msg );
+			QString("<ul>%1</ul>").arg(not_found_msg) );
+
 
 	updateAppCaption();
 
@@ -1243,6 +1274,8 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 //		d->last_checked_mode = d->actions_for_view_modes[ d->curDialog->currentViewMode() ];
 	invalidateViewModeActions();
 	invalidateActions();
+	if (dlg)
+		dlg->setFocus();
 }
 
 bool
@@ -1601,6 +1634,8 @@ void KexiMainWindowImpl::slotViewTextMode()
 void
 KexiMainWindowImpl::showErrorMessage(const QString &title, const QString &details)
 {
+	if (d->disableErrorMessages)
+		return;
 	QString msg = title;
 	if (title.isEmpty())
 		msg = i18n("Unknown error");
@@ -2139,14 +2174,19 @@ void KexiMainWindowImpl::slotMdiModeHasBeenChangedTo(KMdi::MdiMode)
 	activeWindowChanged(activeWindow());
 }
 
-void KexiMainWindowImpl::slotTipOfTheDayAction()
+void KexiMainWindowImpl::slotTipOfTheDay()
 {
-	tipOfTheDay(false);
+	//todo
 }
 
-void KexiMainWindowImpl::tipOfTheDay(bool onStartup)
+void KexiMainWindowImpl::slotImportantInfo()
 {
-	if (onStartup && !d->showTipDialogOnStartup)
+	importantInfo(false);
+}
+
+void KexiMainWindowImpl::importantInfo(bool onStartup)
+{
+	if (onStartup && !d->showImportantInfoOnStartup)
 		return;
 
 	QString key = QString("showImportantInfo %1").arg(KEXI_VERSION_STRING);
@@ -2158,12 +2198,26 @@ void KexiMainWindowImpl::tipOfTheDay(bool onStartup)
 		if (!d->config->hasKey("RunOnStart"))
 			d->config->writeEntry("RunOnStart",true);
 
-		KTipDialog tipDialog(new KTipDatabase(locate("data", QString("kexi/tips"))), 0);
+		QString lang = KGlobal::locale()->language();
+		QString fname = locate("data", QString("kexi/readme_")+lang);
+		if (fname.isEmpty())//back to default 
+			fname = locate("data", "kexi/readme_en");
+		KTipDialog tipDialog(new KTipDatabase(""), 0);
 		tipDialog.setCaption(i18n("Important information"));
 		QObjectList *l = tipDialog.queryList( "KPushButton" );//hack: hide <- -> buttons
 		int i=0;
 		for (QObjectListIt it( *l ); it.current() && i<2; ++it, i++ )
 			static_cast<KPushButton*>(it.current())->hide();
+		QFile f(fname);
+		if ( f.open( IO_ReadOnly ) ) {
+			QTextStream ts(&f);
+			ts.setCodec( KGlobal::locale()->codecForEncoding() );
+			QTextBrowser *tb = Kexi::findFirstChild<KTextBrowser>(&tipDialog,"KTextBrowser");
+			if (tb) {
+				tb->setText( QString("<qt>%1</qt>").arg(ts.read()) );
+			}
+			f.close();
+		}
 
 		tipDialog.adjustSize();
 		QRect desk = QApplication::desktop()->screenGeometry( QApplication::desktop()->screenNumber(this) );
@@ -2179,7 +2233,7 @@ void KexiMainWindowImpl::tipOfTheDay(bool onStartup)
 	//write our settings back
 	d->config->setGroup("Startup");
 	d->config->writeEntry(key,show);
-	d->showTipDialogOnStartup = false;
+	d->showImportantInfoOnStartup = false;
 }
 
 
