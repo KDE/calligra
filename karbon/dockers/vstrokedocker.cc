@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <koMainWindow.h>
 
-#include <tkfloatspinbox.h>
+#include "vunitspinbox.h"
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -50,12 +50,9 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	mainLayout->addWidget( widthLabel, 0, 0 );
-	m_setLineWidth = new TKUFloatSpinBox( mainWidget );
-	m_setLineWidth->setDecimals(1);
-	m_setLineWidth->setMinValue(0.0);
-	m_setLineWidth->setLineStep(0.5);
+	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
-	connect( m_setLineWidth, SIGNAL( valueChanged( float ) ), this, SLOT( widthChanged() ) ); 
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	
 	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
 	mainLayout->addWidget( capLabel, 1, 0 );

@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-#include "tkfloatspinbox.h"
+#include "vunitspinbox.h"
 #include "vselecttoolbar.h"
 
 VSelectToolBar::VSelectToolBar( QWidget* parent, const char* name ) : KToolBar( parent, name )
@@ -32,21 +32,21 @@ VSelectToolBar::VSelectToolBar( QWidget* parent, const char* name ) : KToolBar( 
 	setCaption( i18n( "Object Properties" ) );
 	QLabel *x_label = new QLabel( i18n( "X:" ), this );
 	insertWidget( 0, x_label->width(), x_label );
-	m_x = new TKUFloatSpinBox( this );
+	m_x = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	insertWidget( 1, m_x->width(), m_x );
 	QLabel *y_label = new QLabel( i18n( "Y:" ), this );
 	insertWidget( 2, y_label->width(), y_label );
-	m_y = new TKUFloatSpinBox( this );
+	m_y = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	insertWidget( 3, m_y->width(), m_y );
 	
 	insertSeparator( 4 );
 	QLabel *w_label = new QLabel( i18n( "Width:" ), this );
 	insertWidget( 5, w_label->width(), w_label );
-	m_width = new TKUFloatSpinBox( this );
+	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	insertWidget( 6, m_width->width(), m_width );
 	QLabel *h_label = new QLabel( i18n( "Height:" ), this );
 	insertWidget( 7, h_label->width(), h_label );
-	m_height = new TKUFloatSpinBox( this );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	insertWidget( 8, m_height->width(), m_height );
 	
 }

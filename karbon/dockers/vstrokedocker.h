@@ -26,7 +26,7 @@
 class QHButtonGroup;
 class QWidget;
 
-class TKUFloatSpinBox;
+class KoUnitDoubleSpinBox;
 
 class KoMainWindow;
 class KarbonView;
@@ -48,7 +48,7 @@ private:
 	QWidget *mainWidget;
 	KarbonPart *m_part;
 	KarbonView *m_view;
-	TKUFloatSpinBox *m_setLineWidth;
+	KoUnitDoubleSpinBox *m_setLineWidth;
 
 private slots:
 	void slotCapChanged( int ID );

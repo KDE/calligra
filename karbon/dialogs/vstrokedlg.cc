@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <tkfloatspinbox.h>
+#include "vunitspinbox.h"
 
 #include "karbon_part.h"
 #include "vcolor.h"
@@ -49,10 +49,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	leftLayout->addWidget ( widthLabel );
-	m_setLineWidth = new TKUFloatSpinBox( mainWidget );
-	m_setLineWidth->setDecimals(1);
-	m_setLineWidth->setMinValue(0.0);
-	m_setLineWidth->setLineStep(0.5);
+	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	leftLayout->addWidget ( m_setLineWidth );
 
 	//Dashing ->

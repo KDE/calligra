@@ -31,7 +31,7 @@ class KoMainWindow;
 class KoView;
 
 class KarbonPart;
-class TKUFloatSpinBox;
+class KoUnitDoubleSpinBox;
 class VReference;
 
 enum ButtonChoice { tr_Duplicate, tr_Apply };
@@ -47,8 +47,8 @@ public:
 private:
 	QCheckBox* mRelative;
 	QVButtonGroup* mButtonGroup;
-	TKUFloatSpinBox* mHSpinBox;
-	TKUFloatSpinBox* mVSpinBox;
+	KoUnitDoubleSpinBox* mHSpinBox;
+	KoUnitDoubleSpinBox* mVSpinBox;
 	VReference* mReference;
 };
 
@@ -61,9 +61,9 @@ public:
 private:
 	QCheckBox* mRelative;
 	QVButtonGroup* mButtonGroup;
-	TKUFloatSpinBox* mAngle;
-	TKUFloatSpinBox* mHSpinBox;
-	TKUFloatSpinBox* mVSpinBox;
+	KoUnitDoubleSpinBox* mAngle;
+	KoUnitDoubleSpinBox* mHSpinBox;
+	KoUnitDoubleSpinBox* mVSpinBox;
 	VReference* mReference;
 };
 
@@ -75,8 +75,8 @@ public:
 	VShearWidget( QWidget* parent = 0L );
 private:
 	QVButtonGroup* mButtonGroup;
-	TKUFloatSpinBox* mHSpinBox;
-	TKUFloatSpinBox* mVSpinBox;
+	KoUnitDoubleSpinBox* mHSpinBox;
+	KoUnitDoubleSpinBox* mVSpinBox;
 	VReference* mReference;
 };
 
@@ -89,8 +89,8 @@ public:
 private:
 	QCheckBox* mRelative;
 	QVButtonGroup* mButtonGroup;
-	TKUFloatSpinBox* mHSpinBox;
-	TKUFloatSpinBox* mVSpinBox;
+	KoUnitDoubleSpinBox* mHSpinBox;
+	KoUnitDoubleSpinBox* mVSpinBox;
 	VReference* mReference;
 };
 

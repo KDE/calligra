@@ -26,7 +26,7 @@
 
 #include <ktoolbar.h>
 
-class TKUFloatSpinBox;
+class KoUnitDoubleSpinBox;
 
 class VSelectToolBar : public KToolBar
 {
@@ -34,12 +34,12 @@ class VSelectToolBar : public KToolBar
 public:
 	VSelectToolBar( QWidget* parent = 0L, const char* name = 0L );
 	~VSelectToolBar();
-	
+
 private:
-	TKUFloatSpinBox *m_x;
-	TKUFloatSpinBox *m_y;
-	TKUFloatSpinBox *m_width;
-	TKUFloatSpinBox *m_height;
+	KoUnitDoubleSpinBox *m_x;
+	KoUnitDoubleSpinBox *m_y;
+	KoUnitDoubleSpinBox *m_width;
+	KoUnitDoubleSpinBox *m_height;
 };
 
 #endif

@@ -24,12 +24,13 @@
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qvbuttongroup.h>
+#include <qlabel.h>
 
 #include <klocale.h>
 #include <koMainWindow.h>
 #include <koView.h>
 
-#include <tkfloatspinbox.h>
+#include "vunitspinbox.h"
 
 #include "karbon_part.h"
 #include "vreference.h"
@@ -44,14 +45,8 @@ VTranslateWidget::VTranslateWidget( QWidget* parent ) : QWidget ( parent )
 	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Position:" ), this );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
-	mHSpinBox = new TKUFloatSpinBox( groupBox );
-	mHSpinBox->setDecimals(2);
-	mHSpinBox->setMinValue(0.00);
-	mHSpinBox->setLineStep(1.00);
-	mVSpinBox = new TKUFloatSpinBox( groupBox );
-	mVSpinBox->setDecimals(2);
-	mVSpinBox->setMinValue(0.00);
-	mVSpinBox->setLineStep(1.00);
+	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
+	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
 	mainLayout->addWidget( groupBox );
 	
 	mRelative = new QCheckBox( i18n( "Relative position" ), this );
@@ -80,20 +75,14 @@ VRotateWidget::VRotateWidget( QWidget* parent ) : QWidget ( parent )
 	new QLabel( i18n( "Angle:" ), groupBox );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
-	mAngle = new TKUFloatSpinBox( groupBox );
+	/*mAngle = new KoUnitDoubleSpinBox( groupBox, -359.99, 359.99, 1.0 );
 	mAngle->setDecimals(2);
 	mAngle->setMinValue( -359.99 );
 	mAngle->setMaxValue( 359.99 );
 	mAngle->setLineStep(1.00);
-	mAngle->setSuffix( i18n( "deg" ) );
-	mHSpinBox = new TKUFloatSpinBox( groupBox );
-	mHSpinBox->setDecimals(2);
-	mHSpinBox->setMinValue(0.00);
-	mHSpinBox->setLineStep(1.00);
-	mVSpinBox = new TKUFloatSpinBox( groupBox );
-	mVSpinBox->setDecimals(2);
-	mVSpinBox->setMinValue(0.00);
-	mVSpinBox->setLineStep(1.00);
+	mAngle->setSuffix( i18n( "deg" ) );*/
+	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
+	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
 	mainLayout->addWidget( groupBox );
 	
 	mRelative = new QCheckBox( i18n( "Relative center" ), this );
@@ -121,14 +110,8 @@ VShearWidget::VShearWidget( QWidget* parent ) : QWidget ( parent )
 	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Shear:" ), this );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
-	mHSpinBox = new TKUFloatSpinBox( groupBox );
-	mHSpinBox->setDecimals(2);
-	mHSpinBox->setMinValue(0.00);
-	mHSpinBox->setLineStep(1.00);
-	mVSpinBox = new TKUFloatSpinBox( groupBox );
-	mVSpinBox->setDecimals(2);
-	mVSpinBox->setMinValue(0.00);
-	mVSpinBox->setLineStep(1.00);
+	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
+	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
 	mainLayout->addWidget( groupBox );
 	
 	mReference = new VReference( this );
@@ -152,14 +135,8 @@ VScaleWidget::VScaleWidget( QWidget* parent ) : QWidget ( parent )
 	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Size:" ), this );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
-	mHSpinBox = new TKUFloatSpinBox( groupBox );
-	mHSpinBox->setDecimals(2);
-	mHSpinBox->setMinValue(0.00);
-	mHSpinBox->setLineStep(1.00);
-	mVSpinBox = new TKUFloatSpinBox( groupBox );
-	mVSpinBox->setDecimals(2);
-	mVSpinBox->setMinValue(0.00);
-	mVSpinBox->setLineStep(1.00);
+	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
+	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
 	mainLayout->addWidget( groupBox );
 	
 	mRelative = new QCheckBox( i18n( "Non-proportional" ), this );
