@@ -43,7 +43,7 @@ KexiDSWelcome::KexiDSWelcome(KexiDataSourceWizard *parent)
 	useWizard->setChecked(true);
 
 	QSpacerItem *spacer = new QSpacerItem(320, 220);
-	QCheckBox *dontShow = new QCheckBox(i18n("Don't show this Wizard again"), this);
+	QCheckBox *dontShow = new QCheckBox(i18n("Do not show this Wizard again"), this);
 
 	QGridLayout *g = new QGridLayout(this);
 

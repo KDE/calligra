@@ -39,7 +39,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("QTabWidget");
 	wTabWidget->setName(i18n("Tab Widget"));
-	wTabWidget->setDescription(i18n("An widget to display multiple pages using tabs"));
+	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	m_classes.append(wTabWidget);
 
 	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
