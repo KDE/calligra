@@ -104,10 +104,48 @@ static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader*
         kdDebug(30520) << "<HARDBRK frame=\"1\"> found" << endl;
 }
 
+
+static void InsertBookmarkFormatData (const int pos, const QString& name, const bool start,
+    ValueListFormatData &paraFormatDataList)
+{
+    ValueListFormatData::Iterator  paraFormatDataIt;
+
+    FormatData book( start ? 1001 : 1002 , pos, 0 );
+    book.variable.m_text = name;
+
+    for (paraFormatDataIt = paraFormatDataList.begin ();
+        paraFormatDataIt != paraFormatDataList.end ();
+        paraFormatDataIt++)
+    {
+        if ( pos <= (*paraFormatDataIt).pos )
+        {
+            paraFormatDataList.insert ( paraFormatDataIt, book );
+            return;
+
+        }
+        if ( ( pos > (*paraFormatDataIt).pos ) && ( pos < (*paraFormatDataIt).pos + (*paraFormatDataIt).len ) )
+        {
+            // Somewhere in the middle, we have to split the FormatData
+            FormatData split ( *paraFormatDataIt );
+            //const int oldlen = (*paraFormatDataIt).len;
+            split.len = pos - (*paraFormatDataIt).pos;
+            (*paraFormatDataIt).len -= split.len;
+            (*paraFormatDataIt).pos = pos;
+            paraFormatDataList.insert ( paraFormatDataIt, split );
+            paraFormatDataList.insert ( paraFormatDataIt, book );
+            return;
+        }
+    }
+
+    // Still here? So we need to put the bookmark here:
+    paraFormatDataList.append ( book );
+}
+
+
 void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
 {
     const uint paraCount = m_paraCountMap[ m_currentFramesetName ];
-    
+
     QValueList<Bookmark>::ConstIterator it;
     for (it = m_bookmarkList.begin(); it != m_bookmarkList.end(); ++it )
     {
@@ -115,13 +153,17 @@ void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
         {
             continue;
         }
-        if ( (*(it)).m_startparag == paraCount )
-        {
-            kdDebug(30520) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
-        }
+        // As we always insert before, make first endings, then startings (problem is zero-length bookmark)
         if ( (*(it)).m_endparag == paraCount )
         {
             kdDebug(30520) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
+            InsertBookmarkFormatData( (*(it)).m_cursorIndexEnd, (*(it)).m_name, false, paraData.formattingList);
+
+        }
+        if ( (*(it)).m_startparag == paraCount )
+        {
+            kdDebug(30520) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
+            InsertBookmarkFormatData( (*(it)).m_cursorIndexStart, (*(it)).m_name, true, paraData.formattingList);
         }
     }
 }

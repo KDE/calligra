@@ -1131,6 +1131,14 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
             {
                 processAnchor(paraText, formatLayout, (*paraFormatDataIt));
             }
+            else if ( 1001 == (*paraFormatDataIt).id )
+            {
+                *m_streamOut << "<kword:book-start value=\""<< (*paraFormatDataIt).variable.m_text <<"\"/>"; // ### FIXME
+            }
+            else if ( 1002 == (*paraFormatDataIt).id )
+            {
+                *m_streamOut << "<kword:book-end value=\""<< (*paraFormatDataIt).variable.m_text <<"\"/>"; // ### FIXME
+            }
         }
     }
 }
