@@ -374,7 +374,6 @@ void Page::mousePressEvent( QMouseEvent *e )
 
                     firstX = e->x();
                     firstY = e->y();
-
                     if ( (int)objectList()->count() - 1 >= 0 ) {
                         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- ) {
                             kpobject = objectList()->at( i );
@@ -397,7 +396,10 @@ void Page::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
 
                     if ( overObject ) {
-                        selectObj( kpobject );
+                        if(!kpobject->isSelected())
+                            selectObj( kpobject );
+                        else if(kpobject->isSelected() &&  (e->state() & ShiftButton))
+                            deSelectObj(kpobject);
                         modType = MT_NONE;
                         raiseObject();
                     } else {

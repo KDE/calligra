@@ -1046,7 +1046,7 @@ void KPresenterView::screenConfigPages()
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageSoundEffect(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageSoundFileName() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
-    QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );    
+    QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->exec();
 
     QObject::disconnect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
@@ -4042,7 +4042,7 @@ void KPresenterView::formatParagraph()
         KoParagDia *paragDia = new KoParagDia( this, "",
                                                KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                                KoParagDia::PD_BORDERS |
-                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_pKPresenterDoc->getUnit()/*,edit->textFrameSet()->getFrame(0)->width()*/ );
+                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_pKPresenterDoc->getUnit(),-1/*todo*/,false );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
