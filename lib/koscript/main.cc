@@ -1,35 +1,51 @@
 #include "koscript.h"
 
 #include <kapp.h>
+#include <klocale.h>
+#include <kcmdlineargs.h>
 #include <dcopclient.h>
 #include <qstring.h>
 #include <stdio.h> /* for printf */
+#include <stdlib.h>
 #include <qdir.h>
+
+static KCmdLineOptions options[] =
+{
+  { "+script", I18N_NOOP("Script to run."), 0 },
+  { "+-- [options]", I18N_NOOP("Options to pass to the script."), 0 },
+  { 0, 0, 0 }
+};
 
 int main( int argc, char** argv )
 {
-    qDebug("..... Process started");
+  const char *appName = (argc > 1) ? argv[1] : "kscript";
+  KCmdLineArgs::init(argc, argv, appName, 
+  	I18N_NOOP("KDE Script interpreter."),
+  	"2.0.0");
 
-  if ( argc < 2 )
+  KCmdLineArgs::addCmdLineOptions(options);
+
+  KApplication app;
+
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+  
+  if (args->count() < 1)
   {
-    printf("Syntax: kscript <script> [command line arguments]\n");
-    return 0;
+     fprintf(stderr, i18n("You must specify a script.\n").local8Bit());
+     exit(1);
   }
-
-  KApplication app( argc, argv, argv[1] );
-
-  kapp->dcopClient()->attach();
-  kapp->dcopClient()->registerAs( argv[1] );
+  
+  kapp->dcopClient()->registerAs( args->arg(0) );
 
   qDebug("..... KScript started");
   {
-      QStringList args;
-      for( int i = 2; i < argc; ++i )
-	  args.append( argv[i] );
+      QStringList argList;
+      for( int i = 1; i < args->count(); ++i )
+	  argList.append( args->arg(i) );
 
       KSInterpreter script;
       script.addSearchPath( QDir::currentDirPath() );
-      QString ex = script.runScript( argv[1], args );
+      QString ex = script.runScript( args->arg(0), argList );
       if ( !ex.isEmpty() )
 	  printf("%s\n",ex.ascii());
   }
