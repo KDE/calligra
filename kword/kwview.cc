@@ -1082,7 +1082,7 @@ void KWView::editDeleteFrame()
 {
     int result;
     result = KMessageBox::warningContinueCancel(this,                                                i18n("Do you want to delete this frame?"),
-                                                i18n("Delete Row"),
+                                                i18n("Delete Frame"),
                                                 i18n("&Delete"));
     if (result == KMessageBox::Continue)
         gui->canvasWidget()->deleteFrame();
