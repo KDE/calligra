@@ -29,19 +29,15 @@
 #include "kformulawidget.h"
 
 
-FormulaCursor::FormulaCursor(KFormulaWidget* w, FormulaElement* element)
-        : widget(w)
+FormulaCursor::FormulaCursor(FormulaElement* element)
+        : selectionFlag(false), linearMovement(false), hasChangedFlag(true)
 {
-    selectionFlag = false;
-    linearMovement = false;
     setTo(element, 0);
 }
 
 void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
 {
-    if (widget != 0) {
-        widget->tellCursorChanged(this);
-    }
+    hasChangedFlag = true;
     current = element;
     cursorPos = cursor;
     if ((mark == -1) && selectionFlag) {
@@ -56,17 +52,13 @@ void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
 
 void FormulaCursor::setPos(int pos)
 {
-    if (widget != 0) {
-        widget->tellCursorChanged(this);
-    }
+    hasChangedFlag = true;
     cursorPos = pos;
 }
 
 void FormulaCursor::setMark(int mark)
 {
-    if (widget != 0) {
-        widget->tellCursorChanged(this);
-    }
+    hasChangedFlag = true;
     markPos = mark;
 }
 
@@ -563,7 +555,7 @@ bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QList<BasicElement>& 
  */
 FormulaCursor::CursorData* FormulaCursor::getCursorData()
 {
-    return new CursorData(widget, current, cursorPos, markPos,
+    return new CursorData(current, cursorPos, markPos,
                           selectionFlag, linearMovement);
 }
 
@@ -573,15 +565,12 @@ FormulaCursor::CursorData* FormulaCursor::getCursorData()
  */
 void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
 {
-    widget = data->widget;
     current = data->current;
     cursorPos = data->cursorPos;
     markPos = data->markPos;
     selectionFlag = data->selectionFlag;
     linearMovement = data->linearMovement;
-    if (widget != 0) {
-        widget->tellCursorChanged(this);
-    }
+    hasChangedFlag = true;
 }
 
 

@@ -63,9 +63,9 @@ KFormulaContainer::~KFormulaContainer()
 }
 
 
-FormulaCursor* KFormulaContainer::createCursor(KFormulaWidget* widget)
+FormulaCursor* KFormulaContainer::createCursor()
 {
-    return new FormulaCursor(widget, rootElement);
+    return new FormulaCursor(rootElement);
 }
 
 
@@ -268,6 +268,12 @@ void KFormulaContainer::addGenericLowerIndex()
     if (symbol != 0) {
         addGenericIndex(cursor, symbol->getLowerIndex());
     }
+    else {
+        IndexElement* index = cursor->getActiveIndexElement();
+        if (index != 0) {
+            addGenericIndex(cursor, index->getLowerRight());
+        }
+    }
 }
 
 /**
@@ -286,6 +292,12 @@ void KFormulaContainer::addGenericUpperIndex()
         if (root != 0) {
             addGenericIndex(cursor, root->getIndex());
         }
+        else {
+            IndexElement* index = cursor->getActiveIndexElement();
+            if (index != 0) {
+                addGenericIndex(cursor, index->getUpperRight());
+            }
+        }
     }
 }
 
@@ -301,6 +313,7 @@ void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr i
     else {
         index->moveToIndex(cursor, BasicElement::afterCursor);
         cursor->setSelection(false);
+        emit cursorMoved(cursor);
     }
 }
 

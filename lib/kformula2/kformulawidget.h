@@ -70,11 +70,6 @@ public:
      */
     void setReadOnly(bool ro) { readOnly = ro; }
 
-    /**
-     * Gets called from the cursor just before it changes.
-     */
-    void tellCursorChanged(FormulaCursor* c);
-    
 signals:
 
     /**
@@ -95,8 +90,26 @@ public slots:
 
 protected slots:
 
+    /**
+     * The cursor has been moved by the container.
+     * We need to repaint if it was ours.
+     */
+    void slotCursorMoved(FormulaCursor* cursor);
+
+    /**
+     * The formula has changed and needs to be redrawn.
+     */
     void slotFormulaChanged(int width, int height);
+
+    /**
+     * A new formula has been loaded.
+     */
     void slotFormulaLoaded(FormulaElement*);
+
+    /**
+     * There is an element that will disappear from the tree.
+     * our cursor must not be inside it.
+     */
     void slotElementWillVanish(BasicElement*);
 
 protected:
@@ -112,21 +125,35 @@ protected:
     virtual void focusInEvent(QFocusEvent* event);
     virtual void focusOutEvent(QFocusEvent* event);
 
+    /**
+     * Convert Qt style key state modifiers to local
+     * movement flags.
+     */
     MoveFlag movementFlag(int state);
 
     void hideCursor();
     void showCursor();
 
+    /**
+     * The document we show.
+     */
     KFormulaContainer* getDocument() { return document; }
 
+    /**
+     * Our cursor.
+     */
     FormulaCursor* getCursor() { return cursor; }
     
 private:
 
+    /**
+     * Tell everybody that our cursor has changed if so.
+     */
     void emitCursorChanged();
 
     /**
-     * Whether you can see the cursor.
+     * Whether you can see the cursor. This has to be kept
+     * in sync with reality.
      */
     bool cursorVisible;
 
@@ -141,7 +168,14 @@ private:
      */
     bool readOnly;
 
+    /**
+     * The char to be used for the default left bracket.
+     */
     char leftBracket;
+
+    /**
+     * The char to be used for the default right bracket.
+     */
     char rightBracket;
     
     KFormulaContainer* document;

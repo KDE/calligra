@@ -46,8 +46,10 @@ KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const ch
             this, SLOT(slotFormulaLoaded(FormulaElement*)));
     connect(document, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
+    connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
+            this, SLOT(slotCursorMoved(FormulaCursor*)));
 
-    cursor = document->createCursor(this);
+    cursor = document->createCursor();
 
     setFocusPolicy(QWidget::StrongFocus);
     setBackgroundMode(QWidget::PaletteBase);
@@ -65,14 +67,6 @@ KFormulaWidget::~KFormulaWidget()
 QPoint KFormulaWidget::getCursorPoint() const 
 {
     return cursor->getCursorPoint();
-}
-
-
-void KFormulaWidget::tellCursorChanged(FormulaCursor* c)
-{
-    if (cursor == c) {
-        cursorHasChanged = true;
-    }
 }
 
 
@@ -261,6 +255,13 @@ void KFormulaWidget::slotFormulaLoaded(FormulaElement* formula)
     cursor->formulaLoaded(formula);
 }
 
+void KFormulaWidget::slotCursorMoved(FormulaCursor* c)
+{
+    if (c == cursor) {
+        update();
+    }
+}
+
 void KFormulaWidget::slotElementWillVanish(BasicElement* element)
 {
     cursor->elementWillVanish(element);
@@ -377,7 +378,8 @@ void KFormulaWidget::showCursor()
 
 void KFormulaWidget::emitCursorChanged()
 {
-    if (cursorHasChanged) {
+    if (cursor->hasChanged() || cursorHasChanged) {
+        cursor->clearChangedFlag();
         cursorHasChanged = false;
         emit cursorChanged(cursorVisible, cursor->isSelection());
     }

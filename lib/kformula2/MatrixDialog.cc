@@ -78,5 +78,3 @@ void MatrixDialog::setWidth(int value)
 {
     w = value;
 }
-
-#include "MatrixDialog.moc"

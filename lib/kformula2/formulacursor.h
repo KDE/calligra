@@ -26,7 +26,6 @@
 
 class FormulaElement;
 class IndexElement;
-class KFormulaWidget;
 class RootElement;
 class SymbolElement;
 
@@ -52,15 +51,24 @@ public:
      * Creates a cursor and puts is at the beginning
      * of the formula.
      *
-     * @param widget the widget the cursor belongs to. This might be 0.
      * @param element the formula the cursor point to. This must not be 0.
      */
-    FormulaCursor(KFormulaWidget* widget, FormulaElement* element);
+    FormulaCursor(FormulaElement* element);
 
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
     int getMark() const { return markPos; }
 
+    /**
+     * Tells whether the cursor has changed since last cleaning.
+     */
+    bool hasChanged() const { return hasChangedFlag; }
+
+    /**
+     * Resets the cursor's change flag. The widget calls this
+     * if it has drawn the cursor.
+     */
+    void clearChangedFlag() { hasChangedFlag = false; }
     
     /**
      * Returns wether we are in selection mode.
@@ -75,7 +83,7 @@ public:
     /**
      * Sets the selection mode.
      */
-    void setSelection(bool selection) { selectionFlag = selection; }
+    void setSelection(bool selection) { selectionFlag = selection; hasChangedFlag = true; }
 
 
     /**
@@ -250,16 +258,15 @@ public:
      */
     class CursorData {
         friend class FormulaCursor;
-        KFormulaWidget* widget;
         BasicElement* current;
         int cursorPos;
         int markPos;
         bool selectionFlag;
         bool linearMovement;
 
-        CursorData(KFormulaWidget* w, BasicElement* c,
+        CursorData(BasicElement* c,
                    int pos, int mark, bool selection, bool linear)
-            : widget(w), current(c), cursorPos(pos), markPos(mark),
+            : current(c), cursorPos(pos), markPos(mark),
               selectionFlag(selection), linearMovement(linear) {}
     };
 
@@ -327,11 +334,6 @@ private:
 
     
     /**
-     * The widget the cursor belongs to.
-     */
-    KFormulaWidget* widget;
-    
-    /**
      * The element the cursor is inside right now.
      */
     BasicElement* current;
@@ -369,6 +371,13 @@ private:
      * each time the cursor is drawn.
      */
     QPoint cursorPoint;
+
+    /**
+     * Tells whether the cursor has been changed. This is set
+     * by any of the setSomething methods. It's used by the
+     * widget the cursor belongs to.
+     */
+    bool hasChangedFlag;
 };
 
 

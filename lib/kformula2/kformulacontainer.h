@@ -69,7 +69,7 @@ public:
      * formula. The cursor gets no messages if the formula changes
      * so use this with care!
      */
-    FormulaCursor* createCursor(KFormulaWidget* widget);
+    FormulaCursor* createCursor();
 
     /**
      * Gets called just before the child is removed from
@@ -147,6 +147,12 @@ public:
 signals:
 
     /**
+     * The cursor has been moved but the formula hasn't been
+     * changed. The view that own the cursor needs to know this.
+     */
+    void cursorMoved(FormulaCursor* cursor);
+    
+    /**
      * The formula has changed and needs to be redrawn.
      */
     void formulaChanged(int width, int height);
@@ -190,14 +196,44 @@ public slots:
     void addSum()      { addSymbol(Sum); }
 
     void addMatrix(int rows, int columns);
+
+    /**
+     * Asks for a matrix size and inserts it.
+     */
     void addMatrix(QWidget* parent);
 
+    /**
+     * Adds the lower left index of the current IndexElement.
+     * Creates and inserts an IndexElement if there is non.
+     */
     void addLowerLeftIndex();
+
+    /**
+     * Adds the upper left index of the current IndexElement.
+     * Creates and inserts an IndexElement if there is non.
+     */
     void addUpperLeftIndex();
+
+    /**
+     * Adds the lower right index of the current IndexElement.
+     * Creates and inserts an IndexElement if there is non.
+     */
     void addLowerRightIndex();
+
+    /**
+     * Adds the upper right index of the current IndexElement.
+     * Creates and inserts an IndexElement if there is non.
+     */
     void addUpperRightIndex();
 
+    /**
+     * Adds a lower index to the current element if possible.
+     */
     void addGenericLowerIndex();
+
+    /**
+     * Adds an upper index to the current element if possible.
+     */
     void addGenericUpperIndex();
     
     void remove(BasicElement::Direction = BasicElement::beforeCursor);
