@@ -243,7 +243,9 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 		KexiPropertyBuffer *buf = d->buffers->at(r);
 		if (buf) {
 			QString tableName = (*buf)["table"].value().toString();
-			if (sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName )) {
+			if (sortedTableNames.end() == qFind( sortedTableNames.begin(), 
+				sortedTableNames.end(), tableName ))
+			{
 				//table not found: mark this line for later remove
 				rowsToDelete += r;
 			}
@@ -254,18 +256,22 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 	//update 'table' and 'field' columns
 	d->tablesColumnData->deleteAllRows();
 	d->fieldColumnData->deleteAllRows();
-//	d->tablesColumnData->clear();
-//	d->fieldColumnData->clear();
 
-	for (QStringList::const_iterator it = sortedTableNames.constBegin(); it!=sortedTableNames.constEnd(); ++it) {
+	KexiTableItem *item = new KexiTableItem(2);
+	(*item)[0]="*";
+	(*item)[1]="*";
+	d->fieldColumnData->append( item );
+
+	for (QStringList::const_iterator it = sortedTableNames.constBegin(); 
+		it!=sortedTableNames.constEnd(); ++it)
+	{
 		//table
 		KexiDB::TableSchema *table = d->relations->tables()->find(*it)->table();
-//	for (TablesDictIterator it(*d->relations->tables());it.current();++it) {
-		KexiTableItem *item = new KexiTableItem(2);
+		item = new KexiTableItem(2);
 		(*item)[0]=table->name();
 		(*item)[1]=(*item)[0];
 		d->tablesColumnData->append( item );
-		//field
+		//fields
 		item = new KexiTableItem(2);
 		(*item)[0]=table->name()+".*";
 		(*item)[1]=(*item)[0];
@@ -288,7 +294,7 @@ KexiRelationWidget *KexiQueryDesignerGuiEditor::relationView() const
 void
 KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 {
-	kdDebug() << "KexiQueryDesignerGuiEditor::addRow(" << tbl << ", " << field << ")" << endl;
+	kexipluginsdbg << "KexiQueryDesignerGuiEditor::addRow(" << tbl << ", " << field << ")" << endl;
 	KexiTableItem *item = new KexiTableItem(0);
 
 //	 = QVariant(tbl);
@@ -346,34 +352,37 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		KexiPropertyBuffer *buf = d->buffers->at(i);
 		if (buf) {
 			QString tableName = (*buf)["table"].value().toString().stripWhiteSpace();
+			QString fieldName = (*buf)["field"].value().toString();
+			bool fieldVisible = (*buf)["visible"].value().toBool();
 			if (tableName.isEmpty()) {
 				//expresion?
 				//TODO
 			}
+			else if (tableName=="*") {
+				//all tables asterisk
+				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
+				if (fieldVisible)
+					fieldsFound = true;
+				continue;
+			}
 			else {
 				KexiDB::TableSchema *t = d->conn->tableSchema(tableName);
-				if (!t) {
-					kdWarning() << "query designer: NO TABLE '" << (*buf)["table"].value().toString() << "'" << endl;
-					continue;
-				}
-				QString fieldName = (*buf)["field"].value().toString();
-				bool fieldVisible = (*buf)["visible"].value().toBool();
-				if (fieldName=="*") {
-					//all tables asterisk
-					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
-					fieldsFound = true;
-				}
-				else if (fieldName.find(".*")!=-1) {
+				if (fieldName.find(".*")!=-1) {
 					//single-table asterisk: <tablename> + ".*" + number
 					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
 				} else {
+					if (!t) {
+						kexipluginswarn << "query designer: NO TABLE '" << (*buf)["table"].value().toString() << "'" << endl;
+						continue;
+					}
 					KexiDB::Field *f = t->field( fieldName );
 					if (!f) {
-						kdWarning() << "query designer: NO FIELD '" << fieldName << "'" << endl;
+						kexipluginswarn << "query designer: NO FIELD '" << fieldName << "'" << endl;
 						continue;
 					}
 					temp->query->addField(f, fieldVisible);
-					fieldsFound = true;
+					if (fieldVisible)
+						fieldsFound = true;
 				}
 			}
 		}
@@ -390,7 +399,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 tristate
 KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 {
-	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
+	kexipluginsdbg << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
 	if (mode==Kexi::DesignViewMode) {
 		//todo
 		return true;
@@ -697,9 +706,13 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 	QString key;
 //	if (!alias.isEmpty())
 //		key=alias+": ";
-	if (!tableName.isEmpty())
-		key = (tableName+".");
-	key += fieldName;
+	if (tableName=="*")
+		key="*";
+	else {
+		if (!tableName.isEmpty())
+			key = (tableName+".");
+		key += fieldName;
+	}
 	(*newItem)[0]=key;
 	(*newItem)[1]=tableName;
 	(*newItem)[2]=QVariant(true,1);//visible
