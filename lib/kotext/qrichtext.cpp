@@ -2330,16 +2330,19 @@ bool KoTextDocument::removeSelection( int id )
     bool inSelection = FALSE;
     sel.swapped = FALSE;
     for ( ;; ) {
-	if ( c.parag() == sel.startCursor.parag() )
+	if ( !hadStart && c.parag() == sel.startCursor.parag() )
 	    hadStart = TRUE;
-	if ( c.parag() == sel.endCursor.parag() )
+	if ( !hadEnd && c.parag() == sel.endCursor.parag() )
 	    hadEnd = TRUE;
 
-	if ( inSelection &&
-	     ( c == sel.endCursor && hadStart || c == sel.startCursor && hadEnd ) )
-	     leftSelection = TRUE;
-	else if ( !leftSelection && !inSelection && ( c.parag() == sel.startCursor.parag() || c.parag() == sel.endCursor.parag() ) )
+        if ( !leftSelection && !inSelection && ( c.parag() == sel.startCursor.parag() || c.parag() == sel.endCursor.parag() ) )
 	    inSelection = TRUE;
+
+	if ( inSelection &&
+	     ( c == sel.endCursor && hadStart || c == sel.startCursor && hadEnd ) ) {
+	     leftSelection = TRUE;
+             inSelection = FALSE;
+        }
 
 	bool noSelectionAnymore = leftSelection && !inSelection && !c.parag()->hasSelection( id ) && c.atParagEnd();
 
