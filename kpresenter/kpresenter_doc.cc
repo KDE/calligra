@@ -3280,7 +3280,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
     QString _template;
 
     if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-				       QString::null, 
+				       QString::null,
 				       KoTemplateChooseDia::OnlyTemplates,
 				       "kpresenter_template") != KoTemplateChooseDia::Cancel ) {
 	QFileInfo fileInfo( _template );
