@@ -984,7 +984,6 @@ MsWord::MsWord(
 
     readStyles();
     readFonts();
-    //readAssociatedStrings();
     readListStyles();
 }
 
@@ -1191,7 +1190,6 @@ void MsWord::readAssociatedStrings()
     const U8 *ptr = m_tableStream + m_fib.fcSttbfAssoc; //lcbSttbfAssoc.
 
     // Failsafe for simple documents.
-
     if (!m_fib.lcbSttbfAssoc)
     {
         kdDebug(s_area) << "MsWord::getAssociatedStrings: no data " << endl;
@@ -1210,6 +1208,8 @@ void MsWord::readAssociatedStrings()
     m_subject = data.strings[ibstAssocSubject];
     m_author = data.strings[ibstAssocAuthor];
     m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
+
+    gotDocumentInformation(m_author, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, m_title, QString::null);
 }
 
 // Create a cache of information about fonts. The information is indexed by font code.

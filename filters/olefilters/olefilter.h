@@ -54,6 +54,21 @@ public:
     virtual bool supportsEmbedding() { return true; }
 
 protected slots:
+    // This slot saves the document informations to the KOffice tar storage.
+    void slotSaveDocumentInformation(
+        const QString &fullName,
+        const QString &title,
+        const QString &company,
+        const QString &email,
+        const QString &telephone,
+        const QString &fax,
+        const QString &postalCode,
+        const QString &country,
+        const QString &city,
+	const QString &street,
+	const QString &docTitle,
+	const QString &docAbstract);
+    
     // This slot saves an embedded Picture to the KOffice tar storage.
     void slotSavePic(
         const QString &nameIN,

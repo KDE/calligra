@@ -246,7 +246,6 @@ void Powerpoint::invokeHandler(
                 " operands: " << bytes << endl;
 
         // Skip data we cannot use.
-
         skip(bytes, operands);
     }
     else
@@ -277,7 +276,7 @@ bool Powerpoint::parse(
     // We should have a complete list of slide persistent references.
 
     m_pass = PASS_GET_SLIDE_CONTENTS;
-    kdError(s_area) << "TOTAL LIDES XXXXXX: " << m_slides.count() << endl;
+    kdError(s_area) << "TOTAL SLIDES XXXXXX: " << m_slides.count() << endl;
     unsigned i;
 
     for (i = 0; i < m_slides.count(); i++)

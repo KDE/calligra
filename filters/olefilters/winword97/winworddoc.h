@@ -52,6 +52,20 @@ public:
 
 signals:
     // See olefilter.h for information
+    void signalSaveDocumentInformation(
+        const QString &fullName,
+        const QString &title,
+        const QString &company,
+        const QString &email,
+        const QString &telephone,
+        const QString &fax,
+        const QString &postalCode,
+        const QString &country,
+        const QString &city,
+        const QString &street,
+	const QString &docTitle,
+	const QString &docAbstract);
+
     void signalSavePic(
         const QString &nameIN,
         QString &storageId,
@@ -107,6 +121,19 @@ private:
     QString generateFormats(
         Attributes &attributes);
 
+    void gotAuthorAndDocumentInformation(
+        const QString &fullName,
+        const QString &title,
+        const QString &company,
+        const QString &email,
+        const QString &telephone,
+        const QString &fax,
+        const QString &postalCode,
+        const QString &country,
+        const QString &city,
+        const QString &street,
+	const QString &docTitle,
+	const QString &docAbstract);
     void gotError(
         const QString &text);
     void gotParagraph(

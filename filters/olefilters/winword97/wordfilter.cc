@@ -34,6 +34,14 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
         this,
         SIGNAL(signalPart(const char *, QString &, QString &)));
 
+    // Hook up the document info support.
+
+    connect(
+        myDoc,
+        SIGNAL(signalSaveDocumentInformation(const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &)),
+        this,
+        SIGNAL(signalSaveDocumentInformation(const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &)));
+
     // Hook up the embedded picture support.
 
     connect(

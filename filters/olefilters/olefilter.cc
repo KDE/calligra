@@ -26,6 +26,7 @@ DESCRIPTION
 #include <excelfilter.h>
 #include <koFilterManager.h>
 #include <koQueryTrader.h>
+#include <koDocumentInfo.h>
 #include <ktempfile.h>
 #include <myfile.h>
 #include <olefilter.h>
@@ -165,6 +166,51 @@ void OLEFilter::slotSavePart(
     }
     //storageId = QFile::encodeName(id);
     storageId = (id);
+}
+void OLEFilter::slotSaveDocumentInformation(
+    const QString &fullName,
+    const QString &title,
+    const QString &company,
+    const QString &email,
+    const QString &telephone,
+    const QString &fax,
+    const QString &postalCode,
+    const QString &country,
+    const QString &city,
+    const QString &street,
+    const QString &docTitle,
+    const QString &docAbstract)
+{
+    KoDocumentInfo *info = new KoDocumentInfo();
+    KoDocumentInfoAuthor *author = static_cast<KoDocumentInfoAuthor *>(info->page("author"));
+    KoDocumentInfoAbout *about = static_cast<KoDocumentInfoAbout *>(info->page("about"));
+    author->setFullName(fullName);
+    author->setTitle(title);
+    author->setCompany(company);
+    author->setEmail(email);
+    author->setTelephone(telephone);
+    author->setFax(fax);
+    author->setCountry(postalCode);
+    author->setPostalCode(country);
+    author->setCity(city);
+    author->setStreet(street);
+    about->setTitle(docTitle);
+    about->setTitle(docAbstract);
+
+    QString id = m_path + "/documentinfo.xml";
+
+    if(!store->open(id))
+    {
+	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not open KoStore!" << endl;
+    	return;
+    }
+
+    QString data = info->save().toString();
+    int length = data.utf8().length();
+    
+    if(!store->write(data.utf8(), length))
+	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not write to KoStore!" << endl;
+    store->close();
 }
 
 void OLEFilter::slotSavePic(
@@ -457,6 +503,11 @@ file.close();
 }
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {
+    QObject::connect(
+        *myFilter,
+        SIGNAL(signalSaveDocumentInformation(const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &)),
+        this,
+        SLOT(slotSaveDocumentInformation(const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &)));
 
     QObject::connect(
         *myFilter,

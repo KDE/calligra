@@ -98,6 +98,23 @@ QString Document::getFont(unsigned fc)
     return info.family();
 }
 
+void Document::gotDocumentInformation(
+    const QString &fullName,
+    const QString &title,
+    const QString &company,
+    const QString &email,
+    const QString &telephone,
+    const QString &fax,
+    const QString &postalCode,
+    const QString &country,
+    const QString &city,
+    const QString &street,
+    const QString &docTitle,
+    const QString &docAbstract)
+{
+    gotAuthorAndDocumentInformation(fullName, title, company, email, telephone, fax, postalCode, country, city, street, docTitle, docAbstract);
+}
+
 void Document::gotParagraph(
     const QString &text,
     const PAP &pap,
@@ -175,6 +192,8 @@ void Document::gotTableRow(
 
 void Document::parse()
 {
+    readAssociatedStrings();
+
     m_tableNumber = 0;
     m_characterPosition = 0;
     m_imageNumber = 0;

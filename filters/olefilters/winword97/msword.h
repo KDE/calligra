@@ -307,6 +307,19 @@ public:
     typedef QArray<CHPX> CHPXarray;
 
 protected:
+    virtual void gotDocumentInformation(
+        const QString &fullName,
+	const QString &title,
+	const QString &company,
+	const QString &email,
+	const QString &telephone,
+	const QString &fax,
+	const QString &postalCode,
+	const QString &country,
+	const QString &city,
+	const QString &street,
+	const QString &docTitle,
+	const QString &docAbstract) = 0;
     virtual void gotParagraph(
         const QString &text,
         const PAP &pap,
@@ -375,6 +388,10 @@ protected:
         QString *names;
     } m_styles;
 
+    // Get the metadata for the file.
+
+    void readAssociatedStrings();
+
 protected:
     // Error handling and reporting support.
     static const int s_area = 30513;
@@ -440,10 +457,6 @@ private:
     QString m_tableText[64];
     PAP m_tableStyle[64];
     CHPXarray m_tableRuns[64];
-
-    // Get the metadata for the file.
-
-    void readAssociatedStrings();
 
     // Get the styles in the style sheet into the cache.
 
