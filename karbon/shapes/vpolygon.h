@@ -26,7 +26,8 @@ class VPolygon : public VComposite
 {
 public:
 	VPolygon( VObject* parent, VState state = edit );
-	//VPolygon( VObject* parent, const QString &points  );
+	VPolygon( VObject* parent, const QString &points,
+		const KoPoint& topLeft, double width, double height );
 
 	virtual QString name() const;
 
@@ -37,6 +38,9 @@ protected:
 	void init();
 
 private:
+	KoPoint m_topLeft;
+	double m_width;
+	double m_height;
 	QString m_points;
 };
 

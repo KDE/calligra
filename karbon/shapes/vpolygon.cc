@@ -25,17 +25,19 @@
 #include "vpolygon.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
+#include <koUnit.h>
 
 VPolygon::VPolygon( VObject* parent, VState state ) 
 	: VComposite( parent, state )
 {
 }
 
-/*VPolygon::VPolygon( VObject* parent, const QString &points ) 
-	: VComposite( parent ), m_points( points )
+VPolygon::VPolygon( VObject* parent, const QString &points,
+		const KoPoint& topLeft, double width, double height )
+	: VComposite( parent ), m_points( points ), m_topLeft( topLeft ), m_width( width), m_height( height )
 {
 	init();
-}*/
+}
 
 void
 VPolygon::init()
@@ -58,6 +60,12 @@ VPolygon::init()
 			lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
 	}
 	close();
+
+	QWMatrix m;
+	m.translate( m_topLeft.x(), m_topLeft.y() );
+
+	VTransformCmd cmd( 0L, m );
+	cmd.visit( *this );
 }
 
 QString
@@ -77,6 +85,12 @@ VPolygon::save( QDomElement& element ) const
 
 		VObject::save( me );
 
+		me.setAttribute( "x", m_topLeft.x() );
+		me.setAttribute( "y", m_topLeft.y() );
+
+		me.setAttribute( "width", QString("%1pt").arg( m_width ) );
+		me.setAttribute( "height", QString("%1pt").arg( m_height ) );
+
 		me.setAttribute( "points", m_points );
 
 		writeTransform( me );
@@ -94,6 +108,12 @@ VPolygon::load( const QDomElement& element )
 			VObject::load( list.item( i ).toElement() );
 
 	m_points = element.attribute( "points" );
+
+	m_width  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
+	m_height = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
+
+	m_topLeft.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
+	m_topLeft.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
 
 	init();
 
