@@ -571,6 +571,90 @@ class KWChangeCustomVariableValue : public KNamedCommand
     KoCustomVariable *m_var;
 };
 
+class KWChangeFieldVariableSubType : public KNamedCommand
+{
+ public:
+    KWChangeFieldVariableSubType( const QString &name, KWDocument *_doc, short int _oldValue, short int _newValue, KWFieldVariable *var);
+    ~KWChangeFieldVariableSubType();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    short int newValue;
+    short int oldValue;
+    KWFieldVariable *m_var;
+};
+
+class KWChangeTimeVariableSubType : public KNamedCommand
+{
+ public:
+    KWChangeTimeVariableSubType( const QString &name, KWDocument *_doc, short int _oldValue, short int _newValue, KWTimeVariable *var);
+    ~KWChangeTimeVariableSubType();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    short int newValue;
+    short int oldValue;
+    KWTimeVariable *m_var;
+};
+
+class KWChangeTimeVariableFormat : public KNamedCommand
+{
+ public:
+    KWChangeTimeVariableFormat( const QString &name, KWDocument *_doc, const QString _oldValue, const QString _newValue, KWTimeVariable *var);
+    ~KWChangeTimeVariableFormat();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    QString newValue;
+    QString oldValue;
+    KWTimeVariable *m_var;
+};
+
+class KWChangeDateVariableSubType : public KNamedCommand
+{
+ public:
+    KWChangeDateVariableSubType( const QString &name, KWDocument *_doc, short int _oldValue, short int _newValue, KWDateVariable *var);
+    ~KWChangeDateVariableSubType();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    short int newValue;
+    short int oldValue;
+    KWDateVariable *m_var;
+};
+
+class KWChangeDateVariableFormat : public KNamedCommand
+{
+ public:
+    KWChangeDateVariableFormat( const QString &name, KWDocument *_doc, const QString _oldValue, const QString _newValue, KWDateVariable *var);
+    ~KWChangeDateVariableFormat();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    QString newValue;
+    QString oldValue;
+    KWDateVariable *m_var;
+};
+
+class KWChangePgNumVariableValue : public KNamedCommand
+{
+ public:
+    KWChangePgNumVariableValue( const QString &name, KWDocument *_doc, short int _oldValue, short int _newValue, KWPgNumVariable *var);
+    ~KWChangePgNumVariableValue();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    short int newValue;
+    short int oldValue;
+    KWPgNumVariable *m_var;
+};
+
 class KWChangeLinkVariable : public KNamedCommand
 {
  public:

@@ -20,6 +20,7 @@
 #ifndef variable_h
 #define variable_h
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qasciidict.h>
@@ -58,19 +59,30 @@ class KWVariableCollection : public KoVariableCollection
  public:
     KWVariableCollection(KWVariableSettings *_settings);
     virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
+    QPtrList<KAction> variableActionList();
+
+ private:
+    KWDocument *m_doc;
 };
 
 /**
  * "current page number" and "number of pages" variables
  */
-class KWPgNumVariable : public KoPgNumVariable
+class KWPgNumVariable : public QObject, public KoPgNumVariable
 {
+    Q_OBJECT
 public:
     KWPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KWDocument *doc );
 
     virtual void recalc();
     virtual void setVariableSubType( short int type);
- private:
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+
+private:
     KWDocument *m_doc;
 };
 
@@ -153,6 +165,68 @@ private:
     Numbering m_numberingType;
     int m_num;
     int m_numDisplay;
+};
+
+/**
+ * Any variable that is a string, and whose value is automatically
+ * determined - as opposed to custom variables whose value is
+ * entered by the user
+ */
+class KWFieldVariable : public QObject, public KoFieldVariable
+{
+    Q_OBJECT
+public:
+    KWFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc );
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+
+private:
+    KWDocument *m_doc;
+
+};
+
+/**
+ * Date-related variables
+ */
+class KWDateVariable : public QObject, public KoDateVariable
+{
+    Q_OBJECT
+public:
+    KWDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KWDocument *_doc );
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+    void slotChangeFormat();
+
+private:
+    KWDocument *m_doc;
+
+};
+
+/**
+ * Time-related variables
+ */
+class KWTimeVariable : public QObject, public KoTimeVariable
+{
+
+    Q_OBJECT
+public:
+    KWTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KWDocument *_doc );
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+    void slotChangeFormat();
+
+private:
+    KWDocument *m_doc;
+
 };
 
 #endif

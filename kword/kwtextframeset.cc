@@ -3293,8 +3293,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
         QPopupMenu * popup = view->popupMenu("variable_popup");
         Q_ASSERT(popup);
         if (popup)
-            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
-
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)    
     }
     else
     {

@@ -222,9 +222,9 @@ public:
     KoVariableSettings *variableSetting(){return m_variableSettings;}
 
     void setVariableSelected(KoVariable * var);
+    KoVariable *selectedVariable() {return m_varSelected;}
 
-    QPtrList<KAction> variableActionList();
-
+    virtual QPtrList<KAction> variableActionList();
 
  signals:
     void repaintVariable();
@@ -322,12 +322,29 @@ public:
      */
     virtual short int variableSubType(short int menuNumber){ return menuNumber; }
 
+    /**
+     * Build list of menu actions
+     * Reimplement for all variables that has an action list
+     */
+    virtual QPtrList<KAction> actionList() {return QPtrList<KAction>();}
+
 protected:
     /** Variable should reimplement this to implement saving. */
     virtual void saveVariable( QDomElement &parentElem ) = 0;
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
     QVariant m_varValue;
+
+    typedef QMap<KAction *, int> SubTextMap;
+    SubTextMap m_subTextMap;
+
+    struct subFormatDef {
+        QString translatedString;
+        QString format;
+    };
+    typedef QMap<KAction *, subFormatDef> SubFormatMap;
+    SubFormatMap m_subFormatMap;
+
     class Private;
     Private *d;
 };
@@ -355,6 +372,10 @@ public:
     virtual QStringList subTypeText();
     virtual QStringList subTypeFormat();
     virtual void setVariableSubType( short int type){m_subtype=type;}
+    /**
+     * Returns the date format string with prefix "DATE"
+     */
+    static QCString formatStr();
 
 protected:
     short int m_subtype;
@@ -384,6 +405,10 @@ public:
     virtual QStringList subTypeText();
     virtual QStringList subTypeFormat();
     virtual void setVariableSubType( short int type){m_subtype=type;}
+    /**
+     * Returns the time format string with prefix "TIME"
+     */
+    static QCString formatStr();
 
 protected:
     short int m_subtype;
@@ -459,6 +484,7 @@ public:
 
     virtual QStringList subTypeText();
     virtual void setVariableSubType( short int type){m_subtype=type;}
+    virtual short int variableSubType(){return m_subtype;}
 
 protected:
     short int m_subtype;

@@ -18,11 +18,14 @@
 */
 
 #include "kwvariable.h"
+#include "kwvariable.moc"
+
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"
 #include <koVariable.h>
 #include "mailmerge.h"
 #include "kwdoc.h"
+#include "kwcommand.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -77,7 +80,7 @@ KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting)
 
 KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
 {
-    KWDocument *m_doc=static_cast<KWDocument*>(doc);
+    KWDocument *m_doc = static_cast<KWDocument *>(doc);
     switch(type) {
     case VT_PGNUM:
         if ( !varFormat )
@@ -89,9 +92,28 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
         if ( !varFormat )
             varFormat =  coll->format("STRING");
         return new KWFootNoteVariable( textdoc, varFormat, this, m_doc );
+    case VT_FIELD:
+        if ( !varFormat )
+            varFormat =  coll->format("STRING");
+        return new KWFieldVariable( textdoc, subtype, varFormat, this, m_doc );
+    case VT_DATE:
+    case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
+        if ( !varFormat )
+            varFormat =  coll->format( KoDateVariable::formatStr() );
+        return new KWDateVariable( textdoc, subtype, varFormat, this, m_doc );
+    case VT_TIME:
+    case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
+        if ( !varFormat )
+            varFormat =  coll->format( KoTimeVariable::formatStr() );
+        return new KWTimeVariable( textdoc, subtype, varFormat, this, m_doc );
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc );
     }
+}
+
+QPtrList<KAction> KWVariableCollection::variableActionList()
+{
+    return selectedVariable()->actionList();
 }
 
 /******************************************************************/
@@ -118,6 +140,46 @@ void KWPgNumVariable::setVariableSubType( short int type)
     setVariableFormat((m_subtype == KWPgNumVariable::VST_CURRENT_SECTION) ? m_doc->variableFormatCollection()->format("STRING") : m_doc->variableFormatCollection()->format("NUMBER"));
 }
 
+QPtrList<KAction> KWPgNumVariable::actionList()
+{
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    QStringList list = subTypeText();
+    QStringList::ConstIterator it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            KAction * act = new KAction( (*it));
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
+
+            m_subTextMap.insert( act, i );
+            listAction.append( act );
+        }
+    }
+
+    return listAction;
+}
+
+void KWPgNumVariable::slotChangeSubType()
+{
+    KAction * act = (KAction *)(sender());
+    SubTextMap::Iterator it = m_subTextMap.find( act );
+    if ( it == m_subTextMap.end() )
+        kdWarning() << "Action not found in m_subTextMap." << endl;
+    else // if ( m_subtype != variableSubType(*it) )
+    {
+        short int oldvalue = m_subtype;
+        setVariableSubType( variableSubType(*it) );
+        KWChangePgNumVariableValue *cmd=new KWChangePgNumVariableValue(
+                                                i18n( "Change Page Number Variable" ),
+                                                m_doc, oldvalue, m_subtype, this );
+        m_doc->addCommand(cmd);
+        paragraph()->invalidate( 0 );
+        paragraph()->setChanged( true );
+        m_doc->recalcVariables(VT_PGNUM);
+
+    }
+}
 
 /******************************************************************/
 /* Class: KWMailMergeVariable                                  */
@@ -410,5 +472,248 @@ double KWFootNoteVariable::varY() const
         // This can happen if the page hasn't been created yet
         //kdDebug(32001) << "KWFootNoteVariable::pageNum internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
         return 0;
+    }
+}
+
+/******************************************************************/
+/* Class: KWFieldVariable                                         */
+/******************************************************************/
+KWFieldVariable::KWFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc )
+    : KoFieldVariable( textdoc, subtype, varFormat, _varColl ,_doc ),
+      m_doc(_doc)
+
+{
+}
+
+QPtrList<KAction> KWFieldVariable::actionList()
+{
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    QStringList list = subTypeText();
+    QStringList::ConstIterator it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            KAction * act = new KAction( (*it));
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
+
+            m_subTextMap.insert( act, i );
+            listAction.append( act );
+        }
+    }
+
+    return listAction;
+}
+
+void KWFieldVariable::slotChangeSubType()
+{
+    KAction * act = (KAction *)(sender());
+    SubTextMap::Iterator it = m_subTextMap.find( act );
+    if ( it == m_subTextMap.end() )
+        kdWarning() << "Action not found in m_subTextMap." << endl;
+    else // if ( m_subtype != variableSubType(*it) )
+    {
+        short int oldvalue = m_subtype;
+        setVariableSubType( variableSubType(*it) );
+        KWChangeFieldVariableSubType *cmd=new KWChangeFieldVariableSubType(
+                                                i18n( "Change Field Variable" ),
+                                                m_doc, oldvalue, m_subtype, this );
+        m_doc->addCommand(cmd);
+        paragraph()->invalidate( 0 );
+        paragraph()->setChanged( true );
+        m_doc->recalcVariables(VT_FIELD);
+
+    }
+}
+
+/******************************************************************/
+/* Class: KWDateVariable                                         */
+/******************************************************************/
+KWDateVariable::KWDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc )
+    : KoDateVariable( textdoc, subtype, varFormat, _varColl ),
+      m_doc(_doc)
+
+{
+}
+
+QPtrList<KAction> KWDateVariable::actionList()
+{
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    QStringList list = subTypeText();
+    QStringList::ConstIterator it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            KAction * act = new KAction( (*it));
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
+
+            m_subTextMap.insert( act, i );
+            listAction.append( act );
+        }
+    }
+    list=subTypeFormat();
+    it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if( i == 0)
+            listAction.append( new KActionSeparator() );
+
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            subFormatDef v;
+            QDate ct=QDate::currentDate();
+            if((*it)==i18n("Locale").lower())
+                v.translatedString=KGlobal::locale()->formatDate( ct );
+            else
+                v.translatedString=ct.toString(*it);
+            v.format=*it;
+
+            KAction * act = new KAction(v.translatedString);
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeFormat()) );
+            m_subFormatMap.insert( act, v );
+            listAction.append( act );
+        }
+    }
+
+    return listAction;
+}
+
+void KWDateVariable::slotChangeSubType()
+{
+    KAction * act = (KAction *)(sender());
+    SubTextMap::Iterator it = m_subTextMap.find( act );
+    if ( it == m_subTextMap.end() )
+        kdWarning() << "Action not found in m_subTextMap." << endl;
+    else // if ( m_subtype != variableSubType(*it) )
+    {
+        short int oldvalue = m_subtype;
+        setVariableSubType( variableSubType(*it) );
+        KWChangeDateVariableSubType *cmd=new KWChangeDateVariableSubType(
+                                                i18n( "Change Date Variable Type" ),
+                                                m_doc, oldvalue, m_subtype, this );
+        m_doc->addCommand(cmd);
+        paragraph()->invalidate( 0 );
+        paragraph()->setChanged( true );
+        m_doc->recalcVariables(VT_DATE);
+
+    }
+}
+
+void KWDateVariable::slotChangeFormat()
+{
+    KAction * act = (KAction *)(sender());
+    SubFormatMap::Iterator it = m_subFormatMap.find( act );
+    if ( it == m_subFormatMap.end() )
+        kdWarning() << "Action not found in m_subTextMap." << endl;
+    else
+    {
+        KoVariableDateFormat *frm = static_cast<KoVariableDateFormat *>(variableFormat());
+        QString oldvalue = frm->m_strFormat;
+        frm->m_strFormat = (*it).format;
+        KWChangeDateVariableFormat *cmd=new KWChangeDateVariableFormat(
+                                                i18n( "Change Date Variable Format" ),
+                                                m_doc, oldvalue, frm->m_strFormat, this );
+        m_doc->addCommand(cmd);
+        paragraph()->invalidate( 0 );
+        paragraph()->setChanged( true );
+        m_doc->recalcVariables(VT_DATE);
+
+    }
+}
+
+/******************************************************************/
+/* Class: KWTimeVariable                                         */
+/******************************************************************/
+KWTimeVariable::KWTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc )
+    : KoTimeVariable( textdoc, subtype, varFormat, _varColl ),
+      m_doc(_doc)
+
+{
+}
+
+QPtrList<KAction> KWTimeVariable::actionList()
+{
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    QStringList list = subTypeText();
+    QStringList::ConstIterator it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            KAction * act = new KAction( (*it));
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
+
+            m_subTextMap.insert( act, i );
+            listAction.append( act );
+        }
+    }
+    list=subTypeFormat();
+    it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if( i == 0)
+            listAction.append( new KActionSeparator() );
+
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            subFormatDef v;
+            QTime ct=QTime::currentTime();
+            if((*it)==i18n("Locale").lower())
+                v.translatedString=KGlobal::locale()->formatTime( ct );
+            else
+                v.translatedString=ct.toString(*it);
+            v.format=*it;
+
+            KAction * act = new KAction(v.translatedString);
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeFormat()) );
+            m_subFormatMap.insert( act, v );
+            listAction.append( act );
+        }
+    }
+
+    return listAction;
+}
+
+void KWTimeVariable::slotChangeSubType()
+{
+    KAction * act = (KAction *)(sender());
+    SubTextMap::Iterator it = m_subTextMap.find( act );
+    if ( it == m_subTextMap.end() )
+        kdWarning() << "Action not found in m_subTextMap." << endl;
+    else // if ( m_subtype != variableSubType(*it) )
+    {
+        short int oldvalue = m_subtype;
+        setVariableSubType( variableSubType(*it) );
+        KWChangeTimeVariableSubType *cmd=new KWChangeTimeVariableSubType(
+                                                i18n( "Change Time Variable Type" ),
+                                                m_doc, oldvalue, m_subtype, this );
+        m_doc->addCommand(cmd);
+        paragraph()->invalidate( 0 );
+        paragraph()->setChanged( true );
+        m_doc->recalcVariables(VT_TIME);
+
+    }
+}
+
+void KWTimeVariable::slotChangeFormat()
+{
+    KAction * act = (KAction *)(sender());
+    SubFormatMap::Iterator it = m_subFormatMap.find( act );
+    if ( it == m_subFormatMap.end() )
+        kdWarning() << "Action not found in m_subTextMap." << endl;
+    else
+    {
+        KoVariableTimeFormat *frm = static_cast<KoVariableTimeFormat *>(variableFormat());
+        QString oldvalue = frm->m_strFormat;
+        frm->m_strFormat = (*it).format;
+        KWChangeTimeVariableFormat *cmd=new KWChangeTimeVariableFormat(
+                                                i18n( "Change Time Variable Format" ),
+                                                m_doc, oldvalue, frm->m_strFormat, this );
+        m_doc->addCommand(cmd);
+        paragraph()->invalidate( 0 );
+        paragraph()->setChanged( true );
+        m_doc->recalcVariables(VT_TIME);
+
     }
 }

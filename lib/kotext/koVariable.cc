@@ -547,143 +547,12 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_DATE:
         case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         {
-            //varFormat = coll->format( "DATE" );
-            KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
-            DateFormatWidget* widget=new DateFormatWidget(dialog);
-            int count=0;
-            dialog->setMainWidget(widget);
-            KConfig config( "kofficerc" );
-            bool selectLast=false;
-            if( config.hasGroup("Date format history") )
-            {
-                config.setGroup("Date format history");
-                int noe=config.readNumEntry("Number Of Entries", 5);
-                for(int i=0;i<noe;i++)
-                {
-                    QString num, tmpString;
-                    num.setNum(i);
-                    tmpString=config.readEntry("Last Used"+num);
-                    if(tmpString.compare(i18n("Locale"))==0)
-                    {
-                        if(i==0) selectLast = true;
-                        continue;
-                    }
-                    if(stringList.contains(tmpString))
-                        continue;
-                    if(!tmpString.isEmpty())
-                    {
-                        stringList.append(tmpString);
-                        count++;
-                    }
-                }
-
-            }
-            if(!stringList.isEmpty())
-	      {
-                widget->combo1->insertItem("---");
-		widget->combo1->insertStringList(stringList);
-	      }
-
-
-            if(selectLast) {
-                QComboBox *combo= widget->combo1;
-                combo->setCurrentItem(combo->count() -1);
-                widget->updateLabel();
-            }
-
-            if(dialog->exec()==QDialog::Accepted)
-            {
-                if ( widget->resultString() == i18n("Locale") )
-                    string = "locale"; // untranslated form
-                else
-                    string=widget->resultString().utf8();
-            }
-            else
-            {
-                return 0;
-            }
-            config.setGroup("Date format history");
-            stringList.remove(string);
-            stringList.prepend(string);
-            for(int i=0;i<=count;i++)
-            {
-                QString num;
-                num.setNum(i);
-                config.writeEntry("Last Used"+num, stringList[i]);
-            }
-            config.sync();
-            delete dialog;
-            varFormat = coll->format( QCString("DATE")
-                + "0" // no support for short locale dates yet - TODO
-                + string );
-            break;
+            varFormat = coll->format( KoDateVariable::formatStr() );
         }
-        case VT_TIME: 
+        case VT_TIME:
         case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
         {
-            KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
-            TimeFormatWidget* widget=new TimeFormatWidget(dialog);
-            dialog->setMainWidget(widget);
-            KConfig config( "kofficerc" );
-            int count=0;
-            bool selectLast=false;
-            if( config.hasGroup("Time format history") )
-            {
-                config.setGroup("Time format history");
-                int noe=config.readNumEntry("Number Of Entries", 5);
-                for(int i=0;i<noe;i++)
-                {
-                    QString num, tmpString;
-                    num.setNum(i);
-                    tmpString=config.readEntry("Last Used"+num);
-                    if(tmpString.compare(i18n("Locale"))==0)
-                    {
-                        if(i==0) selectLast = true;
-                        continue;
-                    }
-                    if(stringList.contains(tmpString))
-                        continue;
-                    if(!tmpString.isEmpty())
-                    {
-                        stringList.append(tmpString);
-                        count++;
-                    }
-                }
-            }
-            if(!stringList.isEmpty())
-	      {
-                widget->combo1->insertItem("---");
-                widget->combo1->insertStringList(stringList);
-	      }
-            if(selectLast) {
-                QComboBox *combo= widget->combo1;
-                combo->setCurrentItem(combo->count() -1);
-            }
-
-            if(dialog->exec()==QDialog::Accepted)
-            {
-                if ( widget->resultString() == i18n("Locale") )
-                    string = "locale"; // untranslated form
-                else
-                    string=widget->resultString().utf8();
-            }
-            else
-            {
-                return 0;
-            }
-            config.setGroup("Time format history");
-            stringList.remove(string);
-            stringList.prepend(string);
-            for(int i=0;i<=count;i++)
-            {
-                QString num;
-                num.setNum(i);
-                config.writeEntry("Last Used"+num, stringList[i]);
-            }
-            config.sync();
-            delete dialog;
-            varFormat = coll->format( "TIME"+string );
-            break;
+            varFormat = coll->format( KoTimeVariable::formatStr() );
         }
         case VT_PGNUM:
             varFormat = coll->format( "NUMBER" );
@@ -830,6 +699,77 @@ QStringList KoDateVariable::subTypeFormat()
     return listDateFormat;
 }
 
+QCString KoDateVariable::formatStr()
+{
+    QCString string;
+    QStringList stringList;
+    KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
+    DateFormatWidget* widget=new DateFormatWidget(dialog);
+    int count=0;
+    dialog->setMainWidget(widget);
+    KConfig config( "kofficerc" );
+    bool selectLast=false;
+    if( config.hasGroup("Date format history") )
+    {
+        config.setGroup("Date format history");
+        int noe=config.readNumEntry("Number Of Entries", 5);
+        for(int i=0;i<noe;i++)
+        {
+            QString num, tmpString;
+            num.setNum(i);
+            tmpString=config.readEntry("Last Used"+num);
+            if(tmpString.compare(i18n("Locale"))==0)
+            {
+                if(i==0) selectLast = true;
+                continue;
+            }
+            if(stringList.contains(tmpString))
+                continue;
+            if(!tmpString.isEmpty())
+            {
+                stringList.append(tmpString);
+                count++;
+            }
+        }
+
+    }
+    if(!stringList.isEmpty())
+    {
+        widget->combo1->insertItem("---");
+        widget->combo1->insertStringList(stringList);
+    }
+    if(selectLast) {
+        QComboBox *combo= widget->combo1;
+        combo->setCurrentItem(combo->count() -1);
+        widget->updateLabel();
+    }
+
+    if(dialog->exec()==QDialog::Accepted)
+    {
+        if ( widget->resultString() == i18n("Locale") )
+            string = "locale"; // untranslated form
+        else
+            string=widget->resultString().utf8();
+    }
+    else
+    {
+        return 0;
+    }
+    config.setGroup("Date format history");
+    stringList.remove(string);
+    stringList.prepend(string);
+    for(int i=0;i<=count;i++)
+    {
+        QString num;
+        num.setNum(i);
+        config.writeEntry("Last Used"+num, stringList[i]);
+    }
+    config.sync();
+    delete dialog;
+    return QCString(QCString("DATE")
+                    + QCString("0") // no support for short locale dates yet - TODO
+                    + string );
+}
 
 /******************************************************************/
 /* Class: KoTimeVariable                                          */
@@ -911,6 +851,75 @@ QStringList KoTimeVariable::subTypeFormat()
     listTimeFormat<<i18n("hh:mm:ss AP");
     listTimeFormat<<i18n("mm:ss.zzz");
     return listTimeFormat;
+}
+
+QCString KoTimeVariable::formatStr()
+{
+    QCString string;
+    QStringList stringList;
+    KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
+    TimeFormatWidget* widget=new TimeFormatWidget(dialog);
+    dialog->setMainWidget(widget);
+    KConfig config( "kofficerc" );
+    int count=0;
+    bool selectLast=false;
+    if( config.hasGroup("Time format history") )
+    {
+        config.setGroup("Time format history");
+        int noe=config.readNumEntry("Number Of Entries", 5);
+        for(int i=0;i<noe;i++)
+        {
+            QString num, tmpString;
+            num.setNum(i);
+            tmpString=config.readEntry("Last Used"+num);
+            if(tmpString.compare(i18n("Locale"))==0)
+            {
+                if(i==0) selectLast = true;
+                continue;
+            }
+            if(stringList.contains(tmpString))
+                continue;
+            if(!tmpString.isEmpty())
+            {
+                stringList.append(tmpString);
+                count++;
+            }
+        }
+    }
+    if(!stringList.isEmpty())
+    {
+        widget->combo1->insertItem("---");
+        widget->combo1->insertStringList(stringList);
+    }
+    if(selectLast)
+    {
+        QComboBox *combo= widget->combo1;
+        combo->setCurrentItem(combo->count() -1);
+    }
+
+    if(dialog->exec()==QDialog::Accepted)
+    {
+        if ( widget->resultString() == i18n("Locale") )
+            string = "locale"; // untranslated form
+        else
+            string=widget->resultString().utf8();
+    }
+    else
+    {
+        return 0;
+    }
+    config.setGroup("Time format history");
+    stringList.remove(string);
+    stringList.prepend(string);
+    for(int i=0;i<=count;i++)
+    {
+        QString num;
+        num.setNum(i);
+        config.writeEntry("Last Used"+num, stringList[i]);
+    }
+    config.sync();
+    delete dialog;
+    return QCString("TIME"+string );
 }
 
 /******************************************************************/

@@ -26,6 +26,7 @@
 #include "kwtableframeset.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
+#include "koVariable.h"
 #include <kotextobject.h>
 
 #include <kdebug.h>
@@ -1466,6 +1467,181 @@ void KWChangeCustomVariableValue::unexecute()
     m_var->setValue(oldValue);
     m_doc->recalcVariables( VT_CUSTOM );
 }
+
+KWChangeFieldVariableSubType::KWChangeFieldVariableSubType( const QString &name, KWDocument *_doc,
+                        short int _oldValue, short int _newValue,
+                        KWFieldVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangeFieldVariableSubType::~KWChangeFieldVariableSubType()
+{
+}
+
+void KWChangeFieldVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_FIELD );
+}
+
+void KWChangeFieldVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_FIELD );
+}
+
+KWChangeDateVariableSubType::KWChangeDateVariableSubType( const QString &name, KWDocument *_doc,
+                        short int _oldValue, short int _newValue,
+                        KWDateVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangeDateVariableSubType::~KWChangeDateVariableSubType()
+{
+}
+
+void KWChangeDateVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_DATE );
+}
+
+void KWChangeDateVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_DATE );
+}
+
+KWChangeDateVariableFormat::KWChangeDateVariableFormat( const QString &name, KWDocument *_doc,
+                        const QString _oldValue, const QString _newValue,
+                        KWDateVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangeDateVariableFormat::~KWChangeDateVariableFormat()
+{
+}
+
+void KWChangeDateVariableFormat::execute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = newValue;
+    m_doc->recalcVariables( VT_DATE );
+}
+
+void KWChangeDateVariableFormat::unexecute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
+    m_doc->recalcVariables( VT_DATE );
+}
+
+KWChangeTimeVariableSubType::KWChangeTimeVariableSubType( const QString &name, KWDocument *_doc,
+                        short int _oldValue, short int _newValue,
+                        KWTimeVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangeTimeVariableSubType::~KWChangeTimeVariableSubType()
+{
+}
+
+void KWChangeTimeVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_TIME );
+}
+
+void KWChangeTimeVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_TIME );
+}
+
+KWChangeTimeVariableFormat::KWChangeTimeVariableFormat( const QString &name, KWDocument *_doc,
+                        const QString _oldValue, const QString _newValue,
+                        KWTimeVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangeTimeVariableFormat::~KWChangeTimeVariableFormat()
+{
+}
+
+void KWChangeTimeVariableFormat::execute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = newValue;
+    m_doc->recalcVariables( VT_TIME );
+}
+
+void KWChangeTimeVariableFormat::unexecute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
+    m_doc->recalcVariables( VT_TIME );
+}
+
+KWChangePgNumVariableValue::KWChangePgNumVariableValue( const QString &name, KWDocument *_doc,
+                        short int _oldValue, short int _newValue,
+                        KWPgNumVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangePgNumVariableValue::~KWChangePgNumVariableValue()
+{
+}
+
+void KWChangePgNumVariableValue::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_PGNUM );
+}
+
+void KWChangePgNumVariableValue::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_PGNUM );
+}
+
 
 KWChangeLinkVariable::KWChangeLinkVariable( const QString &name, KWDocument *_doc,const QString & _oldHref, const QString & _newHref, const QString & _oldLink,const QString &_newLink, KoLinkVariable *var):
     KNamedCommand(name),
