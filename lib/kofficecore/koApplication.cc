@@ -115,7 +115,6 @@ void KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    kdDebug() << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
 }
 
 #include <koApplication.moc>

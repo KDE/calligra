@@ -271,7 +271,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
 
 KoDocument* KoMainWindow::createDoc() const
 {
-    QCString mimetype=KoDocument::readNativeFormatMimeType();
+    QCString mimetype=rootDocument()->nativeFormatMimeType();
     KoDocumentEntry entry=KoDocumentEntry::queryByMimeType(mimetype);
     return entry.createDoc();
 }
