@@ -37,6 +37,7 @@ namespace KPlato
 class KPTView;
 class KPTProject;
 class KPTResource;
+class KPTNode;
 
 class KPTResourceGroup;
 class KPTResource;
@@ -62,9 +63,12 @@ class ResourceItemPrivate;
 
     void print(KPrinter &printer);
 
+    KPTNode *currentNode() const { return m_currentNode; }
+    
 public slots:
     void resSelectionChanged(QListViewItem *item);
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
+    void appListMenuRequested(QListViewItem * item, const QPoint & pos, int);
 
 private:
     void drawResources(QListViewItem *parent, KPTResourceGroup *group);
@@ -76,6 +80,8 @@ private:
     ResourceItemPrivate *m_selectedItem;
     QListView *resList;
     QListView *appList;
+    
+    KPTNode *m_currentNode;
 
 };
 

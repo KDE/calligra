@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::KPTTaskAppointmentsView</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>598</width>
-            <height>207</height>
+            <width>972</width>
+            <height>354</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KPTTaskAppointmentsView</string>
     </property>
     <grid>
         <property name="name">
@@ -41,7 +44,10 @@
                 </widget>
                 <widget class="QTabWidget" row="4" column="0" rowspan="1" colspan="8">
                     <property name="name">
-                        <cstring>tabWidget1</cstring>
+                        <cstring>appTab</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
                     <widget class="QWidget">
                         <property name="name">
@@ -50,11 +56,14 @@
                         <attribute name="title">
                             <string>&amp;Appointments</string>
                         </attribute>
-                        <grid>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="KListView" row="0" column="0">
+                            <property name="margin">
+                                <number>2</number>
+                            </property>
+                            <widget class="KListView">
                                 <column>
                                     <property name="text">
                                         <string>Resource</string>
@@ -90,7 +99,18 @@
                                 </column>
                                 <column>
                                     <property name="text">
-                                        <string>Duration</string>
+                                        <string>End Date</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Effort</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -135,14 +155,14 @@
                                 <property name="name">
                                     <cstring>m_appList</cstring>
                                 </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>50</height>
-                                    </size>
+                                <property name="itemMargin">
+                                    <number>2</number>
+                                </property>
+                                <property name="rootIsDecorated">
+                                    <bool>true</bool>
                                 </property>
                             </widget>
-                        </grid>
+                        </hbox>
                     </widget>
                 </widget>
                 <widget class="KLineEdit" row="0" column="5" rowspan="1" colspan="3">
@@ -290,6 +310,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>m_taskName</tabstop>
     <tabstop>m_responsible</tabstop>
@@ -299,7 +321,7 @@
     <tabstop>m_workToDate</tabstop>
     <tabstop>m_workDeviation</tabstop>
     <tabstop>m_totalWork</tabstop>
-    <tabstop>tabWidget1</tabstop>
+    <tabstop>appTab</tabstop>
     <tabstop>m_completion</tabstop>
 </tabstops>
 <includes>
@@ -314,7 +336,7 @@
 </forwards>
 <slots>
     <slot>clear()</slot>
-    <slot>draw( KPlato::KPTTask * task )</slot>
+    <slot>draw( KPTTask * task )</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>

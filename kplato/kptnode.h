@@ -294,8 +294,6 @@ public:
     virtual int plannedWork(QDateTime &/*dt*/) { return 0; }
     virtual int actualWork() { return 0; }
 
-    virtual QPtrList<KPTAppointment> appointments(const KPTNode *node);
-    
     virtual void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks) = 0;
     virtual KPTDateTime calculateForward(int /*use*/) = 0;
     virtual KPTDateTime calculateBackward(int /*use*/) = 0;
@@ -354,6 +352,20 @@ public:
 
     virtual bool useDateOnly();
 
+    QPtrList<KPTAppointment> &appointments() { return m_appointments; }
+
+    KPTAppointment *findAppointment(KPTResource *resource);
+    int numAppointments() const { return m_appointments.count(); }
+    /// Adds appointment to this node only (not to resource)
+    virtual bool addAppointment(KPTAppointment *appointment);
+    /// Adds appointment to both this node and resource
+    virtual void addAppointment(KPTResource *resource, KPTDateTime &start, KPTDateTime &end, double load=100);
+    
+    /// removes appoinrment and deletes it (independent of setAutoDelete)
+    void removeAppointment(KPTAppointment *appointment);
+    /// removes appointment without deleting it (independent of setAutoDelete)
+    void takeAppointment(KPTAppointment *appointment);
+    
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
@@ -429,6 +441,8 @@ protected:
     QDate m_dateOnlyStartDate;
     QDate m_dateOnlyEndDate;
     KPTDuration m_dateOnlyDuration;
+ 
+    QPtrList<KPTAppointment> m_appointments;
  
  private:
     void init();

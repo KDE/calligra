@@ -64,6 +64,10 @@ KPTNode::~KPTNode() {
     while ((rel = m_dependChildNodes.getFirst())) {
         delete rel;
     }
+    KPTAppointment *a;
+    while (a = m_appointments.getFirst()) {
+        delete a;
+    }
 }
 
 void KPTNode::init() {
@@ -372,14 +376,6 @@ KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
     return dur;
 }
 
-QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
-    QPtrList<KPTAppointment> a;
-    if (m_parent) {
-        a = m_parent->appointments(node);
-    }
-    return a;
-}
-
 void KPTNode::makeAppointments() {
     QPtrListIterator<KPTNode> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
@@ -611,8 +607,54 @@ void KPTNode::setEndTime(KPTDateTime endTime) {
     kdDebug()<<k_funcinfo<<endTime.toString()<<" start date="<<m_dateOnlyStartDate.toString()<<" end date="<<m_dateOnlyEndDate.toString()<<endl;
 }
 
+KPTAppointment *KPTNode::findAppointment(KPTResource *resource) {
+    QPtrListIterator<KPTAppointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        if (it.current()->resource() == resource)
+            return it.current();
+    }
+    return 0;
+}
 
-////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
+bool KPTNode::addAppointment(KPTAppointment *appointment) {
+    if (m_appointments.findRef(appointment) != -1) {
+        kdError()<<k_funcinfo<<"Appointment allready exists"<<endl;
+        return false;
+    }
+    m_appointments.append(appointment);
+    return true;
+        
+}
+
+void KPTNode::addAppointment(KPTResource *resource, KPTDateTime &start, KPTDateTime &end, double load) {
+    KPTAppointment *a = findAppointment(resource);
+    if (a != 0) {
+        a->addInterval(start, end, load);
+        return;
+    }
+    a = new KPTAppointment(resource, this, start, end, load);
+    if (resource->addAppointment(a)) {
+        m_appointments.append(a);
+    } else {
+        delete a;
+    }
+}
+
+void KPTNode::removeAppointment(KPTAppointment *appointment) {
+    takeAppointment(appointment);
+    delete appointment;
+}
+
+void KPTNode::takeAppointment(KPTAppointment *appointment) {
+    int i = m_appointments.findRef(appointment);
+    if (i != -1) {
+        m_appointments.take(i);
+        appointment->resource()->takeAppointment(appointment);
+    }
+}
+
+
+//////////////////////////   KPTEffort   /////////////////////////////////
 
 KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
   m_expectedEffort = e;

@@ -25,8 +25,8 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
+#include <klistview.h>
 
-#include <qlistview.h>
 #include <qtabwidget.h>
 #include <qpopupmenu.h>
 
@@ -49,14 +49,25 @@ public:
     KPTResource *resource;
 };
 
+class NodeItemPrivate : public QListViewItem {
+public:
+    NodeItemPrivate(KPTNode *n, QListView *parent)
+        : QListViewItem(parent, n->name()),
+        node(n) {}
+
+    KPTNode *node;
+};
+
 KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
     : QSplitter(parent, "Resource view"),
     m_mainview(view),
-    m_selectedItem(0)
+    m_selectedItem(0),
+    m_currentNode(0)
 {
     setOrientation(QSplitter::Vertical);
 
-    resList = new QListView(this, "Resource list");
+    resList = new KListView(this, "Resource list");
+    resList->setItemMargin(2);
     resList->setRootIsDecorated(true);
     resList->addColumn(i18n("Name"));
     resList->addColumn(i18n("Type"));
@@ -72,18 +83,21 @@ KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
 
     QTabWidget *app = new QTabWidget(this);
 
-    appList = new QListView(app, "Appointments view");
+    appList = new KListView(app, "Appointments view");
+    appList->setItemMargin(2);
+    appList->setRootIsDecorated(true);
     appList->addColumn(i18n("Task"));
-    appList->addColumn(i18n("Responsible"));
     appList->addColumn(i18n("Start Date"));
     appList->addColumn(i18n("End Date"));
-    appList->addColumn(i18n("Duration"));
-    appList->setColumnAlignment(4, AlignRight);
+    appList->addColumn(i18n("Effort"));
+    appList->setColumnAlignment(3, AlignRight);
 
     app->addTab(appList, i18n("Appointments"));
 
     connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
-    connect(resList, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
+    connect(resList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
+
+    connect(appList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(appListMenuRequested(QListViewItem*, const QPoint&, int)));
 }
 
 void KPTResourceView::zoom(double zoom)
@@ -160,13 +174,22 @@ void KPTResourceView::drawAppointments(KPTResource *resource)
     //kdDebug()<<k_funcinfo<<"Appointments for resource: "<<resource->name()<<endl;
     QPtrListIterator<KPTAppointment> it(resource->appointments());
     for (; it.current(); ++it) {
-        KPTTask *t = it.current()->task();
-        if (t) {
-            KPTDuration *dur = t->getExpectedDuration();
-            QListViewItem *item = new QListViewItem(appList,
-               t->name(), t->leader(), it.current()->startTime().date().toString(), (it.current()->startTime()+it.current()->duration()).date().toString(),
-               it.current()->duration().toString(KPTDuration::Format_Hour)); // FIXME
-            delete dur;
+        KPTTask *t = dynamic_cast<KPTTask*>(it.current()->node());
+        if (t == 0) continue;
+
+        QListViewItem *item = new NodeItemPrivate(t, appList);
+        int i = 1;
+        item->setText(i++, it.current()->startTime().date().toString());
+        item->setText(i++, it.current()->endTime().date().toString());
+        item->setText(i++, it.current()->effort().toString(KPTDuration::Format_Hour)); // FIXME
+            
+        QPtrListIterator<KPTAppointmentInterval> ait = it.current()->intervals();
+        for (; ait.current(); ++ait) {
+            new QListViewItem(item, "",
+                ait.current()->startTime().date().toString(),
+                ait.current()->endTime().date().toString(),
+                ait.current()->effort().toString(KPTDuration::Format_Hour)); // FIXME
+            
         }
     }
 }
@@ -186,6 +209,22 @@ void KPTResourceView::popupMenuRequested(QListViewItem * item, const QPoint & po
         else
             kdDebug()<<k_funcinfo<<"No menu!"<<endl;
     }
+}
+
+void KPTResourceView::appListMenuRequested(QListViewItem * item, const QPoint & pos, int)
+{
+    NodeItemPrivate *nitem = dynamic_cast<NodeItemPrivate *>(item);
+    if (nitem == 0) {
+        return;
+    }
+    m_currentNode = nitem->node;
+    QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+    if (menu)
+    {
+        int id = menu->exec(pos);
+        //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+    } else
+        kdDebug()<<k_funcinfo<<"No menu!"<<endl;
 }
 
 void KPTResourceView::print(KPrinter &printer) {

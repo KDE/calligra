@@ -87,6 +87,7 @@ KPTNodeDeleteCmd::KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name)
     if (m_parent)
         m_index = m_parent->findChildNode(node);
     m_mine = false;
+    m_appointments.setAutoDelete(true);
 }
 KPTNodeDeleteCmd::~KPTNodeDeleteCmd() {
     if (m_mine)
@@ -95,9 +96,13 @@ KPTNodeDeleteCmd::~KPTNodeDeleteCmd() {
 void KPTNodeDeleteCmd::execute() {
     if (m_parent) {
         //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        QPtrListIterator<KPTAppointment> it = m_node->appointments();
+        for (; it.current(); ++it) {
+            it.current()->detach();
+            m_appointments.append(it.current());
+        }
         m_parent->delChildNode(m_node, false/*take*/);
         m_mine = true;
-        if (m_part)
         if (m_part)
             m_part->setCommandType(1);
     }
@@ -106,6 +111,10 @@ void KPTNodeDeleteCmd::unexecute() {
     if (m_parent) {
         //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         m_parent->insertChildNode(m_index, m_node);
+        KPTAppointment *a;
+        for (a = m_appointments.first(); a != 0; m_appointments.take()) {
+            a->attach();
+        }
         m_mine = false;
         if (m_part)
             m_part->setCommandType(1);
@@ -746,18 +755,29 @@ KPTRemoveResourceCmd::KPTRemoveResourceCmd(KPTPart *part, KPTResourceGroup *grou
     : KPTAddResourceCmd(part, group, resource, name) {
 
     m_mine = false;
-    m_list = m_resource->requests();
+    m_requests = m_resource->requests();
+    
+    m_appointments.setAutoDelete(true);
 }
 void KPTRemoveResourceCmd::execute() {
-    QPtrListIterator<KPTResourceRequest> it = m_list;
+    QPtrListIterator<KPTResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->takeResourceRequest(it.current());
         //kdDebug()<<"Remove request for"<<it.current()->resource()->name()<<endl;
     }
+    QPtrListIterator<KPTAppointment> ait = m_resource->appointments();
+    for (; ait.current(); ++ait) {
+        ait.current()->detach();
+        m_appointments.append(ait.current());
+    }
     KPTAddResourceCmd::unexecute();
 }
 void KPTRemoveResourceCmd::unexecute() {
-    QPtrListIterator<KPTResourceRequest> it = m_list;
+    KPTAppointment *a;
+    for (a = m_appointments.first(); a != 0; m_appointments.take()) {
+        a->attach();
+    }
+    QPtrListIterator<KPTResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->addResourceRequest(it.current());
         //kdDebug()<<"Add request for "<<it.current()->resource()->name()<<endl;

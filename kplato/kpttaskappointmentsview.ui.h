@@ -57,29 +57,28 @@ void KPTTaskAppointmentsView::draw(KPTTask *task)
     m_workToDate->setText(QString("%1").arg(task->plannedWork(dt)));
     m_totalWork->setText(QString("%1").arg(task->plannedWork()));
 
-    KPTProject *p = dynamic_cast<KPTProject *>(task->projectNode());
-    if (!p) {
-        kdError()<<k_funcinfo<<"Task: '"<<task->name()<<"' has no project"<<endl;
-        return;
-    }
-    QPtrListIterator<KPTResourceGroup> it(p->resourceGroups());
+    QPtrListIterator<KPTAppointment> it(task->appointments());
     for (; it.current(); ++it) {
-        QPtrListIterator<KPTResource> rit(it.current()->resources());
-        for (; rit.current(); ++rit) {
-            KPTResource *r = rit.current();
-            QPtrListIterator<KPTAppointment> ait(rit.current()->appointments());
-            for (; ait.current(); ++ait) {
-                if (ait.current()->task() == task) {
-                    QListViewItem *item = new QListViewItem(m_appList, r->name());
-                    item->setText(1, r->typeToString());
-                    item->setText(2, ait.current()->startTime().date().toString(ISODate));
-                    item->setText(3, ait.current()->duration().toString(KPTDuration::Format_Hour));
-                    item->setText(4, KGlobal::locale()->formatMoney(r->normalRate()));
-                    item->setText(5, KGlobal::locale()->formatMoney(r->overtimeRate()));
-                    item->setText(6, KGlobal::locale()->formatMoney(r->fixedCost()));
-                }
-            }
+        KPTResource *r = it.current()->resource();
+        QListViewItem *item = new QListViewItem(m_appList, r->name());
+ int i = 1;
+        item->setText(i++, r->typeToString());
+        item->setText(i++, it.current()->startTime().date().toString(ISODate));
+        item->setText(i++, it.current()->endTime().date().toString(ISODate));
+        item->setText(i++, it.current()->effort().toString(KPTDuration::Format_Hour));
+        item->setText(i++, KGlobal::locale()->formatMoney(r->normalRate()));
+        item->setText(i++, KGlobal::locale()->formatMoney(r->overtimeRate()));
+        item->setText(i++, KGlobal::locale()->formatMoney(r->fixedCost()));
+        QPtrListIterator<KPTAppointmentInterval> ait = it.current()->intervals();
+        for (; ait.current(); ++ait) {
+            QListViewItem *sub = new QListViewItem(item, "");
+     i = 1;
+            sub->setText(i++, "");
+            sub->setText(i++, ait.current()->startTime().date().toString(ISODate));
+            sub->setText(i++, ait.current()->endTime().date().toString(ISODate));
+            sub->setText(i++, ait.current()->effort().toString(KPTDuration::Format_Hour));
         }
+        
     }
 }
 

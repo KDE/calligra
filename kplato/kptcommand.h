@@ -80,6 +80,7 @@ private:
     KPTNode *m_parent;
     int m_index;
     bool m_mine;
+    QPtrList<KPTAppointment> m_appointments;
 };
 
 class KPTTaskAddCmd : public KNamedCommand
@@ -481,7 +482,8 @@ public:
     void unexecute();
 
 private:
-    QPtrList<KPTResourceRequest> m_list;
+    QPtrList<KPTResourceRequest> m_requests;
+    QPtrList<KPTAppointment> m_appointments;
 };
 
 class KPTModifyResourceNameCmd : public KNamedCommand

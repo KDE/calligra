@@ -93,8 +93,6 @@ public:
     KPTResourceGroup *takeResourceGroup(KPTResourceGroup *resource)
         { return m_resourceGroups.take(m_resourceGroups.findRef(resource)); }
 
-    QPtrList<KPTAppointment> appointments(const KPTTask *task);
-
     bool addTask( KPTNode* task, KPTNode* position );
     bool addSubTask( KPTNode* task, KPTNode* position );
     bool canIndentTask(KPTNode* node);
@@ -122,8 +120,6 @@ public:
      * Returns the actually reported cost for this project
      */
     virtual double actualCost();
-
-    QPtrList<KPTAppointment> appointments(const KPTNode *node);
 
     KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
     const QPtrList<KPTCalendar> &calendars() const { return m_calendars; }

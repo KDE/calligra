@@ -289,7 +289,7 @@ bool KPTProject::load(QDomElement &element) {
             } else if (e.tagName() == "appointment") {
                 // Load the appointments. Resources and tasks must allready loaded
                 KPTAppointment *child = new KPTAppointment();
-                if (! child->load(e, *this)) {
+                if (!child->loadXML(e, *this)) {
                     // TODO: Complain about this
                     kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
                     delete child;
@@ -617,22 +617,6 @@ double KPTProject::actualCost() {
         c += it.current()->actualCost();
     }
     return c;
-}
-
-QPtrList<KPTAppointment> KPTProject::appointments(const KPTNode *node) {
-    //kdDebug()<<k_funcinfo<<endl;
-    QPtrList<KPTAppointment> a;
-    QPtrListIterator<KPTResourceGroup> rit(m_resourceGroups);
-    for(; rit.current(); ++rit) {
-        // hmmm, isn't it a better way?
-        QPtrList<KPTAppointment> list = rit.current()->appointments(node);
-        QPtrListIterator<KPTAppointment> it(list);
-        for (; it.current(); ++it) {
-            //kdDebug()<<k_funcinfo<<"Adding appointment"<<endl;
-            a.append(it.current());
-        }
-    }
-    return a;
 }
 
 void KPTProject::addCalendar(KPTCalendar *calendar) {

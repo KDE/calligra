@@ -121,10 +121,6 @@ class KPTResourceGroup {
           bool load(QDomElement &element);
           void save(QDomElement &element);
 
-         /**
-         * Return a list of appointments made for the @param task
-         */
-          QPtrList<KPTAppointment> appointments(const KPTNode *node) const;
           void clearAppointments();
           void saveAppointments(QDomElement &element) const;
 
@@ -177,128 +173,136 @@ class KPTResourceGroup {
   */
 
 class KPTResource {
-    public:
+public:
 
-        KPTResource(KPTProject *project);
-        KPTResource(KPTResource *resource) { copy(resource); }
-        ~KPTResource();
+    KPTResource(KPTProject *project);
+    KPTResource(KPTResource *resource) { copy(resource); }
+    virtual ~KPTResource();
 
-        QString id() const { return m_id; }
-        bool setId(QString id);
-        void generateId();
-        static KPTResource *find(const QString id);
+    QString id() const { return m_id; }
+    bool setId(QString id);
+    void generateId();
+    static KPTResource *find(const QString id);
 
-        enum Type { Type_Work, Type_Material };
-        void setType(Type type) { m_type = type; }
-        void setType(const QString &type);
-        Type type() const { return m_type; }
-        QString typeToString() const;
+    enum Type { Type_Work, Type_Material };
+    void setType(Type type) { m_type = type; }
+    void setType(const QString &type);
+    Type type() const { return m_type; }
+    QString typeToString() const;
 
-        void setName(QString n) {m_name=n;}
-        const QString &name() const {return m_name;}
+    void setName(QString n) {m_name=n;}
+    const QString &name() const {return m_name;}
 
-        void setInitials(QString initials) {m_initials=initials;}
-        const QString &initials() const {return m_initials;}
+    void setInitials(QString initials) {m_initials=initials;}
+    const QString &initials() const {return m_initials;}
 
-        void setEmail(QString email) {m_email=email;}
-        const QString &email() const {return m_email;}
+    void setEmail(QString email) {m_email=email;}
+    const QString &email() const {return m_email;}
 
-        void copy(KPTResource *resource);
+    void copy(KPTResource *resource);
 
-        //TODO: calendar stuff
-        void setAvailableFrom(QTime af) {m_availableFrom=af;}
-        const QTime &availableFrom() const {return m_availableFrom;}
-        void setAvailableUntil(QTime au) {m_availableUntil=au;}
-        const QTime &availableUntil() const {return m_availableUntil;}
+    //TODO: calendar stuff
+    void setAvailableFrom(QTime af) {m_availableFrom=af;}
+    const QTime &availableFrom() const {return m_availableFrom;}
+    void setAvailableUntil(QTime au) {m_availableUntil=au;}
+    const QTime &availableUntil() const {return m_availableUntil;}
 
-        void addWorkingHour(QTime from, QTime until);
-        QPtrList<QTime> workingHours() { return m_workingHours; }
+    void addWorkingHour(QTime from, QTime until);
+    QPtrList<QTime> workingHours() { return m_workingHours; }
 
-        KPTDateTime *getFirstAvailableTime(KPTDateTime after = KPTDateTime());
-        KPTDateTime *getBestAvailableTime(KPTDuration duration);
-        KPTDateTime *getBestAvailableTime(const KPTDateTime after, const KPTDuration duration);
+    KPTDateTime *getFirstAvailableTime(KPTDateTime after = KPTDateTime());
+    KPTDateTime *getBestAvailableTime(KPTDuration duration);
+    KPTDateTime *getBestAvailableTime(const KPTDateTime after, const KPTDuration duration);
 
-        bool load(QDomElement &element);
-        void save(QDomElement &element);
+    bool load(QDomElement &element);
+    void save(QDomElement &element);
 
-        QPtrList<KPTAppointment> &appointments() { return m_appointments; }
-        /**
-         * Return a list of appointments made for the @task
-         */
-        QPtrList<KPTAppointment> appointments(const KPTNode *node) const;
-
-        bool isAvailable(KPTTask *task);
-        void addAppointment(KPTAppointment *a);
-        void clearAppointments();
-        void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task);
-        void saveAppointments(QDomElement &element) const;
-
-        void setOverbooked(bool on) { m_overbooked = on; }
-        bool isOverbooked() const { return m_overbooked; }
-
-        double normalRate() const { return cost.normalRate; }
-        void setNormalRate(double rate) { cost.normalRate = rate; }
-        double overtimeRate() const { return cost.overtimeRate; }
-        void setOvertimeRate(double rate) { cost.overtimeRate = rate; }
-        double fixedCost() const { return cost.fixed; }
-        void setFixedCost(double value) { cost.fixed = value; }
-
-        /**
-         * Return available units in percent
-         */
-        int units() const { return m_units; }
-        /**
-         * Set available units in percent
-         */
-        void setUnits(int units) { m_units = units; }
-
-        KPTProject *project() const { return m_project; }
-
-        KPTCalendar *calendar() const;
-        KPTCalendar *calendar(const QString id) const;
-        void setCalendar(KPTCalendar *calendar) { m_calendar = calendar; }
+    /// removes appoinrment and deletes it (independent of setAutoDelete)
+    void removeAppointment(KPTAppointment *appointment);
+    /// removes appointment without deleting it (independent of setAutoDelete)
+    void takeAppointment(KPTAppointment *appointment);
     
-        /**
-         * Used to clean up requests when the resource is deleted.
-         */
-        void registerRequest(const KPTResourceRequest *request)
-            { m_requests.append(request); }
-        void unregisterRequest(const KPTResourceRequest *request)
-            { m_requests.removeRef(request); }
-        const QPtrList<KPTResourceRequest> &requests() const
-            { return m_requests; }
-            
-        KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
+    ///Return the list of appointments
+    QPtrList<KPTAppointment> &appointments() { return m_appointments; }
+    
+    KPTAppointment *findAppointment(KPTNode *node);
+    int numAppointments() const { return m_appointments.count(); }
+    /// Adds appointment to this resource only (not to node)
+    virtual bool addAppointment(KPTAppointment *appointment);
+    /// Adds appointment to both this resource and node
+    virtual void addAppointment(KPTNode *node, KPTDateTime &start, KPTDateTime &end, double load=100);
+    
+    void clearAppointments();
+    bool isAvailable(KPTTask *task);
+    void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task);
+    void saveAppointments(QDomElement &element) const;
 
-        KPTDateTime availableAfter(const KPTDateTime &time);
-        KPTDateTime availableBefore(const KPTDateTime &time);
+    void setOverbooked(bool on) { m_overbooked = on; }
+    bool isOverbooked() const { return m_overbooked; }
+
+    double normalRate() const { return cost.normalRate; }
+    void setNormalRate(double rate) { cost.normalRate = rate; }
+    double overtimeRate() const { return cost.overtimeRate; }
+    void setOvertimeRate(double rate) { cost.overtimeRate = rate; }
+    double fixedCost() const { return cost.fixed; }
+    void setFixedCost(double value) { cost.fixed = value; }
+
+    /**
+     * Return available units in percent
+     */
+    int units() const { return m_units; }
+    /**
+     * Set available units in percent
+     */
+    void setUnits(int units) { m_units = units; }
+
+    KPTProject *project() const { return m_project; }
+
+    KPTCalendar *calendar() const;
+    KPTCalendar *calendar(const QString id) const;
+    void setCalendar(KPTCalendar *calendar) { m_calendar = calendar; }
+
+    /**
+     * Used to clean up requests when the resource is deleted.
+     */
+    void registerRequest(const KPTResourceRequest *request)
+        { m_requests.append(request); }
+    void unregisterRequest(const KPTResourceRequest *request)
+        { m_requests.removeRef(request); }
+    const QPtrList<KPTResourceRequest> &requests() const
+        { return m_requests; }
         
-    private:
-        KPTProject *m_project;
-        QPtrList<KPTAppointment> m_appointments; // TODO: Move appointments to KPTProject ????
-        QString m_id; // unique id
-        QString m_name;
-        QString m_initials;
-        QString m_email;
-        QTime m_availableFrom;
-        QTime m_availableUntil;
-        QPtrList<QTime> m_workingHours;
+    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
 
-        int m_units; // avalable units in percent
-        bool m_overbooked;
+    KPTDateTime availableAfter(const KPTDateTime &time);
+    KPTDateTime availableBefore(const KPTDateTime &time);
 
-        Type m_type;
+private:
+    KPTProject *m_project;
+    QPtrList<KPTAppointment> m_appointments;
+    QString m_id; // unique id
+    QString m_name;
+    QString m_initials;
+    QString m_email;
+    QTime m_availableFrom;
+    QTime m_availableUntil;
+    QPtrList<QTime> m_workingHours;
 
-        struct Cost {
-            double normalRate;
-            double overtimeRate;
-            double fixed;
-        } cost;
+    int m_units; // avalable units in percent
+    bool m_overbooked;
 
-        KPTCalendar *m_calendar;
-        QPtrList<KPTResourceRequest> m_requests;
-        
-        static QDict<KPTResource> resourceIdDict;
+    Type m_type;
+
+    struct Cost {
+        double normalRate;
+        double overtimeRate;
+        double fixed;
+    } cost;
+
+    KPTCalendar *m_calendar;
+    QPtrList<KPTResourceRequest> m_requests;
+    
+    static QDict<KPTResource> resourceIdDict;
         
 public:
 #ifndef NDEBUG
@@ -306,65 +310,118 @@ public:
 #endif
 };
 
+
+class KPTAppointmentInterval {
+public:
+    KPTAppointmentInterval();
+    KPTAppointmentInterval(KPTDateTime &start, KPTDateTime end, double load=100);
+    ~KPTAppointmentInterval();
+    
+    void set(KPTDateTime &start, KPTDateTime &end, double load=100);
+    void set(KPTDateTime &start, KPTDuration &duration, double load=100);
+    
+    KPTDuration effort() const { return (m_end - m_start) * m_load / 100; }
+    KPTDuration effort(const KPTDateTime &start, const KPTDateTime end) const;
+    KPTDuration effort(const KPTDateTime &time, bool upto) const;
+    
+    bool loadXML(QDomElement &element);
+    void saveXML(QDomElement &element) const;
+    
+    KPTDateTime startTime() const { return m_start; }
+    KPTDateTime endTime() const { return m_end; }
+    double load() const { return m_load; }
+
+private:
+    KPTDateTime m_start;
+    KPTDateTime m_end;
+    double m_load; //percent
+};
+
 /**
-  * A resource (@ref KPTResource) can be scheduled to be used at any time, this is represented
-  * internally with KPTAppointments
+  * A resource (@ref KPTResource) can be scheduled to be used at any time, 
+  * this is represented internally with KPTAppointments
+  * There is one KPTAppointment per resource-task pair.
+  * An appointment can be devided into several intervals, represented with
+  * a list of KPTAppointmentIntervals
   */
+
 class KPTAppointment {
-    public:
-        KPTAppointment() {}
-        KPTAppointment(KPTDateTime startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode=0);
-        ~KPTAppointment();
+public:
+    KPTAppointment();
+    KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDateTime end, double load);
+    KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDuration duration, double load);
+    ~KPTAppointment();
 
-        // get/set member values.
-        const KPTDateTime &startTime() const { return m_startTime; }
-        void setStartTime(KPTDateTime st) { m_startTime=st; }
+    // get/set member values.
+    KPTNode *node() const { return m_node; }
+    void setNode(KPTNode *n) { m_node = n; }
 
-        const KPTDuration &duration() const { return m_duration; }
-        void setDuration(KPTDuration d) { m_duration=d; }
+    KPTResource *resource() const { return m_resource; }
+    void setResource(KPTResource *r) { m_resource = r; }
 
-        KPTTask *task() const { return m_task; }
-        void setTask(KPTTask *t) { m_task = t; }
+    KPTDateTime startTime() const;
+    KPTDateTime endTime() const;
+    
+    const KPTDuration &repeatInterval() const {return m_repeatInterval;}
+    void setRepeatInterval(KPTDuration ri) {m_repeatInterval=ri;}
 
-        KPTResource *resource() const { return m_resource; }
-        void setResource(KPTResource *r) { m_resource = r; }
+    int repeatCount() const { return m_repeatCount; }
+    void setRepeatCount(int rc) { m_repeatCount=rc; }
 
-        const KPTDuration &repeatInterval() const {return m_repeatInterval;}
-        void setRepeatInterval(KPTDuration ri) {m_repeatInterval=ri;}
+    void deleteAppointmentFromRepeatList(KPTDateTime time);
+    void addAppointmentToRepeatList(KPTDateTime time);
 
-        int repeatCount() const { return m_repeatCount; }
-        void setRepeatCount(int rc) { m_repeatCount=rc; }
+    bool isBusy(const KPTDateTime &start, const KPTDateTime &end);
 
-        void deleteAppointmentFromRepeatList(KPTDateTime time);
-        void addAppointmentToRepeatList(KPTDateTime time);
+    /// attach appointment to resource and node
+    bool attach();
+    /// detach appointment from resource and node
+    void detach();
+    
+    void addInterval(KPTAppointmentInterval *a);
+    void addInterval(KPTDateTime &start, KPTDateTime &end, double load=100);
+    void addInterval(KPTDateTime &start, KPTDuration &duration, double load=100);
+    
+     QPtrList<KPTAppointmentInterval> &intervals() { return m_intervals; }
 
-        bool isBusy(const KPTDateTime &start, const KPTDateTime &end);
+    /// Returns the total effort for this appointment
+    KPTDuration effort() const;
+    /// Returns the effort from start to end
+    KPTDuration effort(const KPTDateTime &start, const KPTDateTime &end) const;
+    /// Returns the effort from start for the duration
+    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
+    /// Returns the effort from time onwards
+    KPTDuration effortFrom(const KPTDateTime &time) const;
+    /// Returns the effort upto time
+    KPTDuration effortUpto(const KPTDateTime &time) const;
+    /// Returns the effort on the date
+    KPTDuration effort(const QDate &date) const;
 
-        bool load(QDomElement &element, KPTProject &project);
-        void save(QDomElement &element);
+    bool loadXML(QDomElement &element, KPTProject &project);
+    void saveXML(QDomElement &element) const;
 
-        /**
-         * Calculates the total planned cost for this appointment
-         */
-        double cost();
-        /**
-         * Calculates the planned cost up to date @param dt
-         */
-        double cost(const KPTDateTime &dt);
+    /**
+     * Calculates the total planned cost for this appointment
+     */
+    double cost();
+    /**
+     * Calculates the planned cost up to date @param dt
+     */
+    double cost(const KPTDateTime &dt);
 
-        int work();
-        int work(const KPTDateTime &dt);
+    int work();
+    int work(const KPTDateTime &dt);
 
-    private:
-        KPTDateTime m_startTime;
-        KPTDuration m_duration;
-        KPTTask *m_task;
-        KPTResource *m_resource;
-        KPTDuration m_repeatInterval;
-        int m_repeatCount;
-        QPtrList<KPTDuration> m_extraRepeats;
-        QPtrList<KPTDuration> m_skipRepeats;
+private:
+    KPTNode *m_node;
+    KPTResource *m_resource;
+    KPTDuration m_repeatInterval;
+    int m_repeatCount;
+    QPtrList<KPTDuration> m_extraRepeats;
+    QPtrList<KPTDuration> m_skipRepeats;
 
+    QPtrList<KPTAppointmentInterval> m_intervals;
+    
 #ifndef NDEBUG
 public:
         void printDebug(QString ident);

@@ -167,23 +167,6 @@ void KPTResourceGroup::saveAppointments(QDomElement &element) const {
     }
 }
 
-QPtrList<KPTAppointment> KPTResourceGroup::appointments(const KPTNode *node) const {
-    //kdDebug()<<k_funcinfo<<endl;
-    QPtrList<KPTAppointment> a;
-    QPtrListIterator<KPTResource> rit(m_resources);
-    for ( ; rit.current(); ++rit ) {
-        // hmmm, isn't it a better way?
-        QPtrList<KPTAppointment> list = rit.current()->appointments(node);
-        QPtrListIterator<KPTAppointment> it(list);
-        for (; it.current(); ++it) {
-            //kdDebug()<<k_funcinfo<<"Adding appointment"<<endl;
-            a.append(it.current());
-        }
-    }
-    //kdDebug()<<k_funcinfo<<"Now have: "<<a.count()<<" appointments"<<endl;
-    return a;
-}
-
 void KPTResourceGroup::clearAppointments() {
     QPtrListIterator<KPTResource> it(m_resources);
     for (; it.current(); ++it) {
@@ -230,6 +213,7 @@ KPTResource::~KPTResource() {
         it.current()->setResource(0); // avoid the request to mess with my list
         it.current()->parent()->removeResourceRequest(it.current()); // deletes the request
     }
+    clearAppointments();
 }
 
 bool KPTResource::setId(QString id) {
@@ -385,26 +369,60 @@ bool KPTResource::isAvailable(KPTTask *task) {
     return !busy;
 }
 
-QPtrList<KPTAppointment> KPTResource::appointments(const KPTNode *node) const {
-    //kdDebug()<<k_funcinfo<<endl;
-    QPtrList<KPTAppointment> a;
-    QPtrListIterator<KPTAppointment> it(m_appointments);
-    for ( ; it.current(); ++it ) {
-        if (it.current()->task() == node) {
-            a.append(it.current());
-            //kdDebug()<<k_funcinfo<<"Appointment added, resource="<<name()<<" node="<<node->name()<<endl;
-        }
+KPTAppointment *KPTResource::findAppointment(KPTNode *node) {
+    QPtrListIterator<KPTAppointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        if (it.current()->node() == node)
+            return it.current();
     }
-    return a;
+    return 0;
+}
+
+bool KPTResource::addAppointment(KPTAppointment *appointment) {
+    if (m_appointments.findRef(appointment) != -1) {
+        kdError()<<k_funcinfo<<"Appointment allready exists"<<endl;
+        return false;
+    }
+    m_appointments.append(appointment);
+    return true;
+        
+}
+
+void KPTResource::addAppointment(KPTNode *node, KPTDateTime &start, KPTDateTime &end, double load) {
+    KPTAppointment *a = findAppointment(node);
+    if (a != 0) {
+        a->addInterval(start, end, load);
+        return;
+    }
+    a = new KPTAppointment(this, node, start, end, load);
+    if (node->addAppointment(a)) {
+        m_appointments.append(a);
+    } else {
+        delete a;
+    }
 }
 
 
-void KPTResource::addAppointment(KPTAppointment *a) {
-    m_appointments.append(a);
+void KPTResource::removeAppointment(KPTAppointment *appointment) {
+    takeAppointment(appointment);
+    delete appointment;
 }
+
+void KPTResource::takeAppointment(KPTAppointment *appointment) {
+    int i = m_appointments.findRef(appointment);
+    if (i != -1) {
+        m_appointments.take(i);
+        if (appointment->node())
+            appointment->node()->takeAppointment(appointment);
+    }
+}
+
+
 
 void KPTResource::clearAppointments() {
-    m_appointments.clear();
+    KPTAppointment *a;
+    while ((a = m_appointments.getFirst()))
+        delete a;
 }
 
 void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) {
@@ -426,9 +444,7 @@ void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPT
         QPair<KPTDateTime, KPTDateTime> i = cal->interval(time, end);
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
-        KPTAppointment *a = new KPTAppointment(i.first, i.second - i.first, this, task);
-        m_appointments.append(a);
-        //kdDebug()<<i.first.toString()<<" to "<<i.second.toString()<<": Made appointment"<<endl;
+        addAppointment(task, i.first, i.second);
         time = i.second;
     }
 }
@@ -437,7 +453,7 @@ void KPTResource::saveAppointments(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<KPTAppointment> it(m_appointments);
     for ( ; it.current(); ++it ) {
-        it.current()->save(element);
+        it.current()->saveXML(element);
     }
 }
 
@@ -469,16 +485,135 @@ KPTDateTime KPTResource::availableBefore(const KPTDateTime &time) {
     return t;
 }
 
-KPTAppointment::KPTAppointment(KPTDateTime startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
-    m_startTime=startTime;
-    m_duration=duration;
-    m_task=taskNode;
-    m_resource=resource;
+//////
+
+KPTAppointmentInterval::KPTAppointmentInterval() {
+    m_load = 100.0; 
+}
+KPTAppointmentInterval::KPTAppointmentInterval(KPTDateTime &start, KPTDateTime end, double load) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_start = start; 
+    m_end = end; 
+    m_load = load; 
+}
+KPTAppointmentInterval::~KPTAppointmentInterval() {
+    //kdDebug()<<k_funcinfo<<endl;
+}
+
+KPTDuration KPTAppointmentInterval::effort(const KPTDateTime &start, const KPTDateTime end) const {
+    if (start >= m_end && end <= m_start) {
+        return KPTDuration::zeroDuration;
+    }
+    KPTDateTime s = (start > m_start ? start : m_start);
+    KPTDateTime e = (end < m_end ? end : m_end);
+    return (e - s) * m_load / 100;
+}
+
+KPTDuration KPTAppointmentInterval::effort(const KPTDateTime &time, bool upto) const {
+    if (upto) {
+        if (time <= m_start) {
+            return KPTDuration::zeroDuration;
+        }
+        KPTDateTime e = (time < m_end ? time : m_end);
+        return (e - m_start) * m_load / 100;
+    }
+    // from time till end
+    if (time >= m_end) {
+        return KPTDuration::zeroDuration;
+    }
+    KPTDateTime s = (time > m_start ? time : m_start);
+    return (m_end - s) * m_load / 100;
+}
+
+bool KPTAppointmentInterval::loadXML(QDomElement &element) {
+    //kdDebug()<<k_funcinfo<<endl;
+    bool ok;
+    m_start = KPTDateTime::fromString(element.attribute("start"));
+    m_end = KPTDateTime::fromString(element.attribute("end"));
+    m_load = element.attribute("load", "100").toDouble(&ok);
+    if (!ok) m_load = 100;
+    return m_start.isValid() && m_end.isValid();
+}
+void KPTAppointmentInterval::saveXML(QDomElement &element) const {
+    QDomElement me = element.ownerDocument().createElement("interval");
+    element.appendChild(me);
+
+    me.setAttribute("start", m_start.toString());
+    me.setAttribute("end", m_end.toString());
+    me.setAttribute("load", m_load);
+}
+//////
+
+KPTAppointment::KPTAppointment() 
+    : m_extraRepeats(), m_skipRepeats() {
+    m_resource=0;
+    m_node=0;
     m_repeatInterval=KPTDuration();
     m_repeatCount=0;
+
+    m_intervals.setAutoDelete(true);
+}
+
+KPTAppointment::KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDateTime end, double load) 
+    : m_extraRepeats(), m_skipRepeats() {
+    
+    m_node = node;
+    m_resource = resource;
+    m_repeatInterval = KPTDuration();
+    m_repeatCount = 0;
+
+    addInterval(start, end, load);
+
+    m_intervals.setAutoDelete(true);
+}
+
+KPTAppointment::KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDuration duration, double load) 
+    : m_extraRepeats(), m_skipRepeats() {
+    
+    m_node = node;
+    m_resource = resource;
+    m_repeatInterval = KPTDuration();
+    m_repeatCount = 0;
+
+    addInterval(start, duration, load);
+    
+    m_intervals.setAutoDelete(true);
 }
 
 KPTAppointment::~KPTAppointment() {
+    detach();
+}
+
+void KPTAppointment::addInterval(KPTAppointmentInterval *a) {
+    //kdDebug()<<k_funcinfo<<m_resource->name()<<" to "<<m_node->name()<<endl;
+    m_intervals.append(a);
+}
+void KPTAppointment::addInterval(KPTDateTime &start, KPTDateTime &end, double load) {
+    addInterval(new KPTAppointmentInterval(start, end, load));
+}
+void KPTAppointment::addInterval(KPTDateTime &start, KPTDuration &duration, double load) {
+    KPTDateTime e = start+duration;
+    addInterval(start, e, load);
+}
+
+KPTDateTime KPTAppointment::startTime() const {
+    KPTDateTime t;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        if (!t.isValid() || t > it.current()->startTime())
+            t = it.current()->startTime();
+    }
+    return t;
+}
+
+KPTDateTime KPTAppointment::endTime() const {
+    KPTDateTime t;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        if (!t.isValid() || t < it.current()->endTime())
+            t = it.current()->endTime();
+    }
+    return t;
 }
 
 void KPTAppointment::deleteAppointmentFromRepeatList(KPTDateTime time) {
@@ -488,75 +623,154 @@ void KPTAppointment::addAppointmentToRepeatList(KPTDateTime time) {
 }
 
 bool KPTAppointment::isBusy(const KPTDateTime &start, const KPTDateTime &end) {
-    KPTDateTime finish(m_startTime + m_duration);
-    return !(start > finish || end < m_startTime);
+    return false;
 }
 
-bool KPTAppointment::load(QDomElement &element, KPTProject &project) {
+bool KPTAppointment::loadXML(QDomElement &element, KPTProject &project) {
     //kdDebug()<<k_funcinfo<<endl;
     m_resource = project.resource(element.attribute("resource-id"));
     if (m_resource == 0) {
         kdError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id")<<endl;
         return false;
     }
-    m_task = dynamic_cast<KPTTask *>(KPTNode::find(element.attribute("task-id")));
-    if (m_task == 0) {
+    m_node = KPTNode::find(element.attribute("task-id"));
+    if (m_node == 0) {
         kdError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
         return false;
     }
-    m_startTime = KPTDateTime::fromString(element.attribute("start"));
-    m_duration = KPTDuration::fromString(element.attribute("duration"));
 
-    m_resource->addAppointment(this);
-    //kdDebug()<<k_funcinfo<<m_resource->name()<<" to task: "<<m_task->name()<<endl;
-    return true;
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+            if (e.tagName() == "interval") {
+            KPTAppointmentInterval *a = new KPTAppointmentInterval();
+                if (a->loadXML(e)) {
+                    addInterval(a);
+                } else {
+                    kdError()<<k_funcinfo<<"Could not load interval"<<endl;
+                    delete a;
+                }
+            }
+        }
+    }
+    if (m_intervals.isEmpty()) {
+        return false; 
+    }
+    return attach();
 }
 
-void KPTAppointment::save(QDomElement &element) {
+void KPTAppointment::saveXML(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("appointment");
     element.appendChild(me);
 
+    if (m_intervals.isEmpty()) {
+        return; // shouldn't happen
+    }
     me.setAttribute("resource-id", m_resource->id());
-    me.setAttribute("task-id", m_task->id());
-    me.setAttribute("start", m_startTime.toString());
-    me.setAttribute("duration", m_duration.toString());
+    me.setAttribute("task-id", m_node->id());
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        it.current()->saveXML(me);
+    }
 }
 
-// TODO: calendar stuff
 double KPTAppointment::cost() {
-    return m_duration.hours()/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
+    return work()/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
 }
 
 double KPTAppointment::cost(const KPTDateTime &dt) {
-    if (dt < m_startTime)
-        return 0;
-
-    KPTDuration dur;
-    if (dt >= m_startTime + m_duration)
-        dur = m_duration;
-    else
-        dur = dt - m_startTime;
-
-    return dur.hours()/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
+   return work(dt)/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
 }
 
 int KPTAppointment::work() {
-    return m_duration.hours(); /*FIXME*/
+    return effort().hours();
 }
 
+// upto dt
 int KPTAppointment::work(const KPTDateTime &dt) {
-    if (dt < m_startTime)
-        return 0;
-
-    KPTDuration dur;
-    if (dt >= m_startTime + m_duration)
-        dur = m_duration;
-    else
-        dur = dt - m_startTime;
-
+    KPTDuration dur = effortUpto(dt);
     return dur.hours(); /*FIXME*/
 }
 
+bool KPTAppointment::attach() { 
+    if (m_resource && m_node) {
+        m_resource->addAppointment(this);
+        m_node->addAppointment(this);
+        return true;
+    }
+    kdWarning()<<k_funcinfo<<"Failed: "<<(m_resource ? "" : "resource=0 ") 
+                                       <<(m_node ? "" : "node=0")<<endl;
+    return false;
+}
+
+void KPTAppointment::detach() {
+    if (m_resource) {
+        m_resource->takeAppointment(this); // takes from node also
+    }
+    if (m_node) {
+        m_node->takeAppointment(this); // to make it robust
+    }
+}
+
+// Returns the total effort for this appointment
+KPTDuration KPTAppointment::effort() const {
+    KPTDuration d;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort();
+    }
+    return d;
+}
+// Returns the effort from start to end
+KPTDuration KPTAppointment::effort(const KPTDateTime &start, const KPTDateTime &end) const {
+    KPTDuration d;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(start, end);
+    }
+    return d;
+}
+// Returns the effort from start for the duration
+KPTDuration KPTAppointment::effort(const KPTDateTime &start, const KPTDuration &duration) const {
+    KPTDuration d;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(start, start+duration);
+    }
+    return d;
+}
+// Returns the effort upto time / from time 
+KPTDuration KPTAppointment::effortFrom(const KPTDateTime &time) const {
+    KPTDuration d;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(time, false);
+    }
+    return d;
+}
+// Returns the effort upto time
+KPTDuration KPTAppointment::effortUpto(const KPTDateTime &time) const {
+    KPTDuration d;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(time, true);
+    }
+    return d;
+}
+// Returns the effort on the date
+KPTDuration KPTAppointment::effort(const QDate &date) const {
+    KPTDuration d;
+    KPTDateTime s(date, QTime());
+    KPTDateTime e(date.addDays(1), QTime());
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(s, e);
+    }
+    return d;
+}
+
+/////////   KPTRisk   /////////
 KPTRisk::KPTRisk(KPTNode *n, KPTResource *r, RiskType rt) {
     m_node=n;
     m_resource=r;
@@ -943,10 +1157,14 @@ void KPTResource::printDebug(QString indent)
 
 void KPTAppointment::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Appointment to task: "<<m_task->name()<<endl;
+    kdDebug()<<indent<<"  + Appointment to task: "<<m_node->name()<<endl;
     indent += "  !";
-    kdDebug()<<indent<<"      From: "<<m_startTime.toString()<<endl;
-    kdDebug()<<indent<<"  Duration: "<<m_duration.toString()<<endl;
+    QPtrListIterator<KPTAppointmentInterval> it = intervals();
+    for (; it.current(); ++it) {
+        kdDebug()<<indent<<it.current()->startTime().toString()<<endl;
+        kdDebug()<<indent<<it.current()->endTime().toString()<<endl;
+        kdDebug()<<indent<<it.current()->load()<<endl;
+    }
 }
 
 void KPTResourceGroupRequest::printDebug(QString indent)

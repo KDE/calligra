@@ -445,6 +445,9 @@ KPTNode *KPTView::currentTask()
 	else if (m_tab->visibleWidget() == m_pertview) {
 		task = m_pertview->currentNode();
 	}
+	else if (m_tab->visibleWidget() == m_resourceview) {
+		task = m_resourceview->currentNode();
+	}
 	if ( 0 != task ) {
 		return task;
 	}

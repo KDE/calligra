@@ -189,6 +189,7 @@ bool KPTTask::load(QDomElement &element) {
     m_resourceError = element.attribute("resource-error", "0").toInt();
     m_resourceError = element.attribute("resource-overbooked", "0").toInt();
     m_resourceError = element.attribute("scheduling-conflict", "0").toInt();
+    m_notScheduled = element.attribute("not-scheduled", "0").toInt();
     
     // Load the project children
     QDomNodeList list = element.childNodes();
@@ -270,6 +271,7 @@ void KPTTask::save(QDomElement &element)  {
     me.setAttribute("resource-error",m_resourceError);
     me.setAttribute("resource-overbooked",m_resourceOverbooked);
     me.setAttribute("scheduling-conflict",m_schedulingError);
+    me.setAttribute("not-scheduled",m_notScheduled);
 
     m_effort->save(me);
 
@@ -301,8 +303,7 @@ double KPTTask::plannedCost() {
             c += it.current()->plannedCost();
         }
     } else {
-        QPtrList<KPTAppointment> list = appointments(this);
-        QPtrListIterator<KPTAppointment> it(list);
+        QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
             c += it.current()->cost();
         }
@@ -319,8 +320,7 @@ double KPTTask::plannedCost(QDateTime &dt) {
             c += it.current()->plannedCost(dt);
         }
     } else {
-        QPtrList<KPTAppointment> list = appointments(this);
-        QPtrListIterator<KPTAppointment> it(list);
+        QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
             c += it.current()->cost(KPTDateTime(dt)); //FIXME
         }
@@ -351,8 +351,7 @@ int KPTTask::plannedWork()  {
             w += it.current()->plannedWork();
         }
     } else {
-        QPtrList<KPTAppointment> a = appointments(this);
-        QPtrListIterator<KPTAppointment> it(a);
+        QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
             if (it.current()->resource()->type() == KPTResource::Type_Work) { // hmmm. show only work?
                 w += it.current()->work();
@@ -372,8 +371,7 @@ int KPTTask::plannedWork(QDateTime &dt)  {
             w += it.current()->plannedWork(dt);
         }
     } else {
-        QPtrList<KPTAppointment> a = appointments(this);
-        QPtrListIterator<KPTAppointment> it(a);
+        QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
             w += it.current()->work(KPTDateTime(dt)); //FIXME
         }
