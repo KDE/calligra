@@ -158,7 +158,7 @@
                     <string>1</string>
                 </property>
                 <property name="text">
-                    <string>Page size</string>
+                    <string>Page Size</string>
                 </property>
                 <property name="pixmap">
                     <pixmap></pixmap>
@@ -178,7 +178,7 @@
                     <string>2</string>
                 </property>
                 <property name="text">
-                    <string>Page grid</string>
+                    <string>Page Grid</string>
                 </property>
                 <property name="pixmap">
                     <pixmap></pixmap>
@@ -217,7 +217,7 @@
                         <string>4</string>
                     </property>
                     <property name="text">
-                        <string>Horizontal guides</string>
+                        <string>Horizontal Guides</string>
                     </property>
                     <property name="pixmap">
                         <pixmap></pixmap>
@@ -237,7 +237,7 @@
                         <string>5</string>
                     </property>
                     <property name="text">
-                        <string>Vertical guides</string>
+                        <string>Vertical Guides</string>
                     </property>
                     <property name="pixmap">
                         <pixmap></pixmap>
@@ -257,7 +257,7 @@
                         <string>6</string>
                     </property>
                     <property name="text">
-                        <string>All guides</string>
+                        <string>All Guides</string>
                     </property>
                     <property name="pixmap">
                         <pixmap></pixmap>
@@ -319,7 +319,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>TextLabel1</string>
+                <string>Select Category</string>
             </property>
         </widget>
         <widget class="QWidgetStack" row="2" column="1">
