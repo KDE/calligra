@@ -1,0 +1,68 @@
+
+Hi folks,
+
+I have (somewhat reticently) uploaded the canvas widget I have been working on
+in my spare time.
+
+The files are in the CVS under koffice/kimageshop/canvas and contain a test
+Makefile and program which demonstrate some of the features of the widget.
+
+DISCLAIMERS
+ - It is work in progress
+ - You *will* have to modify the local Makefile to get it to work for you
+   not autoconf yet
+ - Painting into a layer with an alpha channel is broken
+ - The "test images" will be replaced in the future (at the moment they have
+   some useful features (other than visual appeal))
+ - The classes are not tidy - I haven't decided what needs to be
+   public/protected etc.
+ - I have been learning a lot about the best way of implementing memory
+   management and packing and I expect to rewrite most of this code in the
+   near future.
+ - Lots of optimizations are possible but I am holding off doing these
+   (especially the case based ones) until I decide on a final implementation.
+   So don't panic about speed.
+ - I WILL tidy it up and the API will change (the basics should stay the same
+   though)
+
+No frills test program
+ - layers can be selected and turned on and off via the layerlist
+   (anyone want to make a nice layer dialog with the relevant signals and
+   slots? Also need better eye and link icons)
+ - dragging in the image will drag the selected layer
+ - Ctrl-clicking in the image will paint into the current layer
+
+A lot of stuff has been designed but not implemented yet - other colour
+spaces, zooming, faster repainting, various caching schemes.
+
+Fast Visual
+  Check out canvas::setUpVisual() and change the "if (false" to "if (true"
+  to see if you can use my fast version of convertFromImage(...) (called
+  canvas::convertImageToPixmap(...). On my machine I get a speedup of 2x
+  (wrt QT's version) for 32bpp and 3x for 16bpp (Linux intel). This might
+  crap out if your machine has a different endianness. Play and code.
+
+Planned changes
+ - At the moment the canvas class is a qwidget. I plan to make another class 
+   canvasView which handles the display of the widget. That way we can have
+   multiple views of the same canvas
+
+What we need
+ - Toolbar (signals, slots, blah blah blah)
+ - Palettes - brushes, colour, layer
+ - Style (copy the good, ditch the bad and invent some thing stylish and new)
+
+I'd like the toolbar and palettes to be based on a palettes class so it can
+have a thinner title bar and do nice things like hiding at appropriate
+times. Screen real estate is vital in image processing programs so try
+not to waste space.
+
+I suggest using QImage as an internal image format until the canvas
+stuff settles down (yes, that means RGBA for the moment).
+
+
+Enjoy,
+
+Andrew Richards
+A.Richards@phys.canterbury.ac.nz
+

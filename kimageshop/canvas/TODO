@@ -1,0 +1,5 @@
+- replace BIGNUM with BIG_TILE_MULT
+- disallow negative coordinates in channels - move the layer wrt the
+     canvas instead
+- check that the imageRect is correctly updated when a new point above or
+     to the left of the layer
