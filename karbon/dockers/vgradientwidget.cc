@@ -50,7 +50,7 @@ static unsigned char colorStop_bits[] =
 };
 
 VGradientWidget::VGradientWidget( VGradient*& gradient, QWidget* parent, const char* name )
-		: QWidget( parent, name ), m_lpgradient(&gradient)
+		: QWidget( parent, name ), m_lpgradient( &gradient )
 {  
 	setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 105, 35 );
@@ -64,122 +64,122 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 {
 	QBitmap bitmap;
 	
-	bitmap = QBitmap(5, 8, colorStop_bits, true);
-	bitmap.setMask(bitmap);
+	bitmap = QBitmap( 5, 8, colorStop_bits, true );
+	bitmap.setMask( bitmap );
 	p.setPen( color.toQColor() );
 	p.drawPixmap( x - 2, 1, bitmap );
 	
-	bitmap = QBitmap(7, 8, colorStopBorder_bits, true);
-	bitmap.setMask(bitmap);
+	bitmap = QBitmap( 7, 8, colorStopBorder_bits, true );
+	bitmap.setMask( bitmap );
 	p.setPen( Qt::black );
 	p.drawPixmap( x - 3, 1, bitmap );
 } // VGradientWidget::paintColorStop
 
-void VGradientWidget::paintMidPoint( QPainter& p, int x)
+void VGradientWidget::paintMidPoint( QPainter& p, int x )
 {
-	QBitmap bitmap(5, 8, midPoint_bits, true);
+	QBitmap bitmap( 5, 8, midPoint_bits, true );
 	p.setPen( Qt::black );
 	p.drawPixmap( x - 2, 1, bitmap );
 } // VGradientWidget::paintMidPoint
 
 void VGradientWidget::paintEvent( QPaintEvent* )
 {
-	VKoPainter gp(this, width(), height());
+	VKoPainter gp( this, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
-	VGradient gradient(**m_lpgradient);
+	VGradient gradient( **m_lpgradient );
 	gradient.setType( VGradient::linear );
-	gradient.setOrigin( KoPoint(2, 2) );
-	gradient.setVector( KoPoint(width()-3, 2) );
-	gp.moveTo( KoPoint(2, 2) );
-	gp.lineTo( KoPoint(2, height()-16) );
-	gp.lineTo( KoPoint(width()-2, height()-16) );
-	gp.lineTo( KoPoint(width()-2, 2) );
-	gp.lineTo( KoPoint(2, 2) );
+	gradient.setOrigin( KoPoint( 2, 2 ) );
+	gradient.setVector( KoPoint( width() - 3, 2 ) );
+	gp.moveTo( KoPoint( 2, 2 ) );
+	gp.lineTo( KoPoint( 2, height() - 16 ) );
+	gp.lineTo( KoPoint( width() - 2, height() - 16 ) );
+	gp.lineTo( KoPoint( width() - 2, 2 ) );
+	gp.lineTo( KoPoint( 2, 2 ) );
 	VFill fill;
 	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath("karbon.png", KIcon::Small) );
+	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
 	fill.setType( VFill::patt );
-	gp.setBrush(fill);
+	gp.setBrush( fill );
 	gp.fillPath();
 	fill.gradient() = gradient;
 	fill.setType( VFill::grad );
-	gp.setBrush(fill);
+	gp.setBrush( fill );
 	gp.fillPath();
 	gp.end();
 	
-	QPainter p(this);
+	QPainter p( this );
 	
-	p.setPen(colorGroup().light());
-	p.moveTo(1, height()-17);
-	p.lineTo(1, 1);
-	p.lineTo(width()-1, 1);
-	p.lineTo(width()-1, height()-1);
-	p.lineTo(1, height()-1);
-	p.moveTo(2, height()-2);
-	p.lineTo(width()-2, height()-1);
-	p.lineTo(width()-2, height()-14);
-	p.moveTo(1, height()-15);
-	p.lineTo(width()-2, height()-15);
-	p.moveTo(width()-2, height()-2);
-	p.moveTo(2, height()-2);
-	p.setPen(colorGroup().dark());
-	p.moveTo(0, height()-1);
-	p.lineTo(0, 0);
-	p.lineTo(width()-1, 0);
-	p.moveTo(width()-2, 2);
-	p.lineTo(width()-2, height()-16);
-	p.lineTo(2, height()-16);    
-	p.moveTo(1, height()-14);
-	p.lineTo(width()-1, height()-14);
-	p.moveTo(width()-2, height()-13);
-	p.lineTo(1, height()-13);
-	p.lineTo(1, height()-2);
-	p.fillRect(2, height()-12, width()-4, 10, colorGroup().background());
+	p.setPen( colorGroup().light() );
+	p.moveTo( 1, height()-17 );
+	p.lineTo( 1, 1 );
+	p.lineTo( width() - 1, 1 );
+	p.lineTo( width() - 1, height() - 1 );
+	p.lineTo( 1, height() - 1 );
+	p.moveTo( 2, height() - 2 );
+	p.lineTo( width() - 2, height() - 1 );
+	p.lineTo( width() - 2, height() - 14 );
+	p.moveTo( 1, height() - 15 );
+	p.lineTo( width() - 2, height() - 15 );
+	p.moveTo( width() - 2, height() - 2 );
+	p.moveTo( 2, height() - 2 );
+	p.setPen( colorGroup().dark() );
+	p.moveTo( 0, height() - 1 );
+	p.lineTo( 0, 0 );
+	p.lineTo( width() - 1, 0 );
+	p.moveTo( width() - 2, 2 );
+	p.lineTo( width() - 2, height() - 16 );
+	p.lineTo( 2, height() - 16 );    
+	p.moveTo( 1, height() - 14 );
+	p.lineTo( width() - 1, height() - 14 );
+	p.moveTo( width() - 2, height() - 13 );
+	p.lineTo( 1, height() - 13 );
+	p.lineTo( 1, height() - 2 );
+	p.fillRect( 2, height() - 12, width() - 4, 10, colorGroup().background() );
 	
-	p.setClipRect(2, height()-12, width()-4, 10);
-	p.translate(2, height()-12);
-	int w = width()-5;  
+	p.setClipRect( 2, height() - 12, width() - 4, 10 );
+	p.translate( 2, height() - 12 );
+	int w = width() - 5;  
 	
-	QPtrList<VColorStop>& colorStops = (*m_lpgradient)->m_colorStops;
-	if (colorStops.count()>1)
+	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
+	if ( colorStops.count() > 1 )
 	{
 		VColorStop* stop, *nextstop;
-		for (stop = colorStops.first(), nextstop = colorStops.next(); 
+		for ( stop = colorStops.first(), nextstop = colorStops.next(); 
 				nextstop; stop = nextstop, nextstop = colorStops.next() )
 		{
-			paintColorStop( p, (int)(stop->rampPoint * w), stop->color);
-			paintMidPoint( p, (int)((stop->rampPoint + (nextstop->rampPoint - stop->rampPoint)*stop->midPoint) * w) );
+			paintColorStop( p, (int)( stop->rampPoint * w ), stop->color );
+			paintMidPoint( p, (int)(( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * w ) );
 		}
-		paintColorStop( p, (int)(stop->rampPoint * w), stop->color);
+		paintColorStop( p, (int)( stop->rampPoint * w ), stop->color );
 	}
 } // VGradientWidget::paintEvent
 
 void VGradientWidget::mousePressEvent( QMouseEvent* e )
 {
-	if (!( (e->y() > height()-14) && (e->y() < height()-2) && (e->x() > 2) && (e->x() < width()-3) ))
+	if ( !( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 3 ) ) )
 		return;
 	
-	QPtrList<VColorStop>& colorStops = (*m_lpgradient)->m_colorStops;
+	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
 
 	currentPoint = 0;
 	
 	int i = colorStops.count() - 1;
 	int r, m;
 	VColorStop* stop, *nextstop = 0;
-	for (stop = colorStops.last(); i >= 0; i--, stop = colorStops.prev())
+	for ( stop = colorStops.last(); i >= 0; i--, stop = colorStops.prev() )
 	{
-		r = stop->rampPoint*(width()-4);
-		if (nextstop)
+		r = stop->rampPoint * ( width() - 4 );
+		if ( nextstop )
 		{
-			m = (stop->rampPoint+(nextstop->rampPoint - stop->rampPoint)*stop->midPoint)*(width()-4);
-			if ( (e->x()+2 > m-4) && (e->x()+2 < m+4) )
+			m = ( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * ( width() - 4 );
+			if ( ( e->x() + 2 > m - 4 ) && ( e->x() + 2 < m + 4 ) )
 			{
 				currentPoint = 2*i + 2;
 				return;
 			}
 		}
-		if ( (e->x()+2 > r-5) && (e->x()+2 < r+5) )
+		if ( ( e->x() + 2 > r - 5 ) && ( e->x() + 2 < r + 5 ) )
 		{
 			currentPoint = 2*i + 1;
 			return;
@@ -193,9 +193,9 @@ void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
 {
 	if ( e->button() == Qt::RightButton )
 	{
-		if ( (e->y() > height()-14) && (e->y() < height()-2) && (e->x() > 2) && (e->x() < width()-1) && (currentPoint%2 == 1) )
+		if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) && ( currentPoint % 2 == 1 ) )
 		{
-			(*m_lpgradient)->m_colorStops.remove( currentPoint/2 );
+			( *m_lpgradient )->m_colorStops.remove( currentPoint / 2 );
 			update();
 			emit changed();
 		}
@@ -204,22 +204,22 @@ void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
 
 void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 {
-	if ( (e->y() > height()-14) && (e->y() < height()-2) && (e->x() > 2) && (e->x() < width()-1) )
+	if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
 	{
-		if ( currentPoint%2 == 1 )
+		if ( currentPoint % 2 == 1 )
 		{
-			VColorDlg* d = new VColorDlg( (*m_lpgradient)->m_colorStops.at(currentPoint/2)->color, this->topLevelWidget() );
+			VColorDlg* d = new VColorDlg( ( *m_lpgradient )->m_colorStops.at( currentPoint / 2 )->color, this->topLevelWidget() );
 			d->exec();
-			(*m_lpgradient)->m_colorStops.at(currentPoint/2)->color = d->color();
+			( *m_lpgradient )->m_colorStops.at( currentPoint / 2 )->color = d->color();
 			delete d;
 			update();
 			emit changed();
 		}
 		else if ( currentPoint == 0 )
 		{
-			VColorDlg* d = new VColorDlg( (*m_lpgradient)->m_colorStops.at(0)->color, this->topLevelWidget() );
+			VColorDlg* d = new VColorDlg( ( *m_lpgradient )->m_colorStops.at( 0 )->color, this->topLevelWidget() );
 			d->exec();
-			(*m_lpgradient)->addStop( d->color(), (float)(e->x()-2) / (width()-4), 0.5 );
+			( *m_lpgradient )->addStop( d->color(), (float)( e->x() - 2 ) / ( width() - 4 ), 0.5 );
 			delete d;
 		}
 	}
@@ -227,17 +227,17 @@ void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 
 void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 {
-	QPtrList<VColorStop>& colorStops = (*m_lpgradient)->m_colorStops;
+	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
 	
-	if ( (e->y() > height()-14) && (e->y() < height()-2) && (e->x() > 2) && (e->x() < width()-1) )
+	if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
 	{
-		if ( currentPoint%2 == 1 )
+		if ( currentPoint % 2 == 1 )
 		{
 			int x = e->x();
 				// Clip the color stop between to others.
-			x = QMIN( x, (currentPoint < (colorStops.count()-1)*2 ? colorStops.at(currentPoint/2 + 1)->rampPoint*(width()-4)+2 : width()-3 ) );
-			x = QMAX( x, (currentPoint > 1 ? colorStops.at(currentPoint/2 - 1)->rampPoint*(width()-4)+2 : 2 ) );
-			colorStops.at(currentPoint/2)->rampPoint = (float)(x-2) / (width()-4);
+			x = QMIN( x, ( currentPoint < ( colorStops.count() - 1 ) * 2 ? colorStops.at( currentPoint / 2 + 1 )->rampPoint * ( width() - 4 ) + 2 : width() - 3 ) );
+			x = QMAX( x, ( currentPoint > 1 ? colorStops.at( currentPoint / 2 - 1 )->rampPoint * ( width() - 4 ) + 2 : 2 ) );
+			colorStops.at( currentPoint / 2 )->rampPoint = (float)( x - 2 ) / ( width() - 4 );
 			update();
 			emit changed();
 		}
@@ -245,9 +245,9 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 		{
 			int x = e->x();
 				// Clip the mid point between to ramp points.
-			x = QMIN( x, colorStops.at(currentPoint/2)->rampPoint*(width()-4)+2 );
-			x = QMAX( x, colorStops.at(currentPoint/2 - 1)->rampPoint*(width()-4)+2 );
-			colorStops.at(currentPoint/2 - 1)->midPoint = (((float)(x-2))/(width()-4) - (colorStops.at(currentPoint/2 - 1)->rampPoint)) / (colorStops.at(currentPoint/2)->rampPoint - colorStops.at(currentPoint/2 - 1)->rampPoint);
+			x = QMIN( x, colorStops.at( currentPoint / 2 )->rampPoint * ( width() - 4 ) + 2 );
+			x = QMAX( x, colorStops.at( currentPoint / 2 - 1 )->rampPoint * ( width() - 4 ) + 2 );
+			colorStops.at( currentPoint / 2 - 1 )->midPoint = ( ( (float)( x-2 ) ) / ( width() - 4 ) - ( colorStops.at( currentPoint / 2 - 1 )->rampPoint ) ) / ( colorStops.at( currentPoint / 2 )->rampPoint - colorStops.at( currentPoint / 2 - 1 )->rampPoint );
 			update();
 			emit changed();
 		}

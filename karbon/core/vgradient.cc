@@ -23,8 +23,8 @@
 
 int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
 {
-	float r1 = ((VColorStop*)item1)->rampPoint;
-	float r2 = ((VColorStop*)item2)->rampPoint;
+	float r1 = ( (VColorStop*)item1 )->rampPoint;
+	float r2 = ( (VColorStop*)item2 )->rampPoint;
 	
 	return ( r1 == r2 ? 0 : r1 < r2 ? -1 : 1 );
 } // VGradient::VColorStopList::compareItems
@@ -32,7 +32,7 @@ int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCol
 VGradient::VGradient( VGradientType type )
 	: m_type( type )
 {
-	m_colorStops.setAutoDelete(true);
+	m_colorStops.setAutoDelete( true );
 
 	// set up dummy gradient
 	VColor color;
@@ -58,11 +58,11 @@ VGradient::VGradient( const VGradient& gradient )
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
 	for ( int i = 0; i < cs.count(); i++ )
-		m_colorStops.append( new VColorStop(*cs[i]) );
+		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
 } // VGradient::VGradient
 
-VGradient& VGradient::operator=(const VGradient& gradient)
+VGradient& VGradient::operator=( const VGradient& gradient )
 {
 	if ( this == &gradient )
 		return *this;
@@ -75,7 +75,7 @@ VGradient& VGradient::operator=(const VGradient& gradient)
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
 	for ( int i = 0; i < cs.count(); i++ )
-		m_colorStops.append( new VColorStop(*cs[i]) );
+		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
 
 	return *this;	
@@ -84,8 +84,8 @@ VGradient& VGradient::operator=(const VGradient& gradient)
 const QPtrVector<VColorStop> VGradient::colorStops() const
 { 
 	QPtrVector<VColorStop>* v = new QPtrVector<VColorStop>();
-	m_colorStops.toVector(v);
-	v->setAutoDelete(false);
+	m_colorStops.toVector( v );
+	v->setAutoDelete( false );
 	return *v; 
 } // VGradient::colorStops()
 
@@ -98,7 +98,7 @@ VGradient::clearStops()
 void
 VGradient::addStop( const VColorStop& colorStop )
 {
-	 m_colorStops.inSort( new VColorStop(colorStop) );
+	 m_colorStops.inSort( new VColorStop( colorStop ) );
 } // VGradient::addStop
 
 void
@@ -111,7 +111,7 @@ VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 	midPoint = midPoint < 0.0 ? 0.0 : midPoint;
 	midPoint = midPoint > 1.0 ? 1.0 : midPoint;
 	
-	m_colorStops.inSort( new VColorStop(rampPoint, midPoint, color) );
+	m_colorStops.inSort( new VColorStop( rampPoint, midPoint, color ) );
 }
 
 void VGradient::removeStop( const VColorStop& colorstop )
@@ -133,7 +133,7 @@ VGradient::save( QDomElement& element ) const
 
 	// save stops
 	VColorStop* colorstop;
-	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>(m_colorStops);
+	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
 	for( colorstop = colorStops.first(); colorstop; colorstop = colorStops.next() )
 	{
 		QDomElement stop = element.ownerDocument().createElement( "COLORSTOP" );

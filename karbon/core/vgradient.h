@@ -104,10 +104,10 @@ public:
 	void transform( const QWMatrix& m );
 
 protected:
-	VColorStopList m_colorStops;
+	VColorStopList        m_colorStops;
   
 private:
-	VGradientType m_type;
+	VGradientType         m_type;
 	VGradientRepeatMethod m_repeatMethod;
 
 	// coordinates:
