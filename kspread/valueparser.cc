@@ -29,6 +29,11 @@ ValueParser::ValueParser( KLocale* locale ) : parserLocale( locale )
 {
 }
 
+KLocale* ValueParser::locale()
+{
+  return parserLocale;
+}
+
 void ValueParser::parse (const QString& str, KSpreadCell *cell)
 {
   FormatType format = cell->formatType();
