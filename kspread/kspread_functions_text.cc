@@ -174,6 +174,17 @@ bool kspreadfunc_dollar( KSContext& context )
     if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
       decimals = args[1]->intValue(); 
 
+  // if decimals < 0, number is rounded 
+  if( decimals < 0 )
+  {
+    decimals = -decimals;
+    value = floor( value/pow(10.0,decimals)+0.5 ) * pow(10.0,decimals);
+    decimals = 0;
+  }
+
+  // do round, because formatMoney doesn't
+  value = floor( value * pow(10.0,decimals)+0.5) / pow(10.0,decimals) ;
+
   QString result = KGlobal::locale()->formatMoney( value, QString::null, decimals );
   context.setValue( new KSValue( result ) );
   return true;
