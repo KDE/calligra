@@ -208,12 +208,12 @@ don't put a </?xml...> at the end of the file!).
 <!--    Contains general attributes variables. Has no children.
 
         Attributes:
-            number_offset:     define variable offset.
+            startingPageNumber:     to the starting page number.
 -->
 <!ELEMENT VARIABLESETTINGS
     EMPTY>
 <!ATTLIST VARIABLESETTINGS
-    processing CDATA #REQUIRED>
+    startingPageNumber CDATA #REQUIRED>
 
 <!--    Container that has a number of FRAMESET children.
 -->

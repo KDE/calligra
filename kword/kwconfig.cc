@@ -41,6 +41,7 @@
 #include "kwviewmode.h"
 #include <float.h>
 #include <koVariable.h>
+#include <knumvalidator.h>
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
@@ -385,11 +386,13 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
                 "memory") );
 
+    QLabel *varLabel= new QLabel(i18n("Variable number offset:"),gbMiscGroup);
+
     KWDocument * doc = m_pView->kWordDocument();
     m_oldVariableOffset=doc->getVariableCollection()->variableSetting()->numberOffset();
-    m_variableNumberOffset=new KIntNumInput(m_oldVariableOffset,gbMiscGroup);
-    m_variableNumberOffset->setLabel(i18n("Variable number offset:"));
-    m_variableNumberOffset->setRange(0,100,1);
+    m_variableNumberOffset=new QLineEdit(gbMiscGroup);
+    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
+    m_variableNumberOffset->setText(QString::number(m_oldVariableOffset));
 }
 
 void ConfigureMiscPage::apply()
@@ -420,10 +423,10 @@ void ConfigureMiscPage::apply()
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
     }
-    int newVarOffset=m_variableNumberOffset->value();
+    int newVarOffset=m_variableNumberOffset->text().toInt();
     if(newVarOffset!=m_oldVariableOffset)
     {
-        doc->getVariableCollection()->variableSetting()->setNumberOffset(m_variableNumberOffset->value());
+        doc->getVariableCollection()->variableSetting()->setNumberOffset(newVarOffset);
         doc->recalcVariables( VT_PGNUM );
     }
 }
