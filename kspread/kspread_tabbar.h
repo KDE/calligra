@@ -114,12 +114,12 @@ public:
     /**
      * @return the name of all visible tables.
      */
-    QStringList listshow(){return  tabsList;}
+    QStringList listshow()const{return  tabsList;}
     /**
      * @return the name of all hidden tables.
      */
-    QStringList listhide(){return  tablehide;}
-    
+    QStringList listhide()const{return  tablehide;}
+
 signals:
     /**
      * Emitted if the active tab changed. This will cause the
@@ -128,9 +128,9 @@ signals:
     void tabChanged( const QString& _text );
 
 public slots:
-    void slotRename( );	
+    void slotRename( );
 
-protected slots:    
+protected slots:
     /**
      * Opens a dialog to rename active tab.
      */
@@ -194,11 +194,11 @@ protected:
      * If no tab is being moved this value is 0.
      */
     int m_moveTab;
-	
+
     /**
      * Indicates whether a tab is being moved using the mouse and in which
      * direction.
-     */ 	
+     */
     int m_moveTabFlag;
 
     /**
