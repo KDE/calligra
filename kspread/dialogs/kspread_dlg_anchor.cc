@@ -208,6 +208,8 @@ QString internetAnchor::link() const
   QString str = l_internet->text();
   
   if( str.find( "http://" )==-1 )
+  if( str.find( "https://" )==-1 )
+  if( str.find( "ftp://" )==-1 )
     str.prepend( "http://" );
     
   return str;  
