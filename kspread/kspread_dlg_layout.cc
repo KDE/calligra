@@ -1254,9 +1254,9 @@ KSpreadBord::KSpreadBord( QWidget *parent, const char *_name )
 {
 }
 
+
 #define OFFSETX 5
 #define OFFSETY 5
-
 void KSpreadBord::paintEvent( QPaintEvent *_ev )
 {
   QFrame::paintEvent( _ev );
@@ -1527,11 +1527,11 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
     style=new QComboBox(tmpQGroupBox);
     grid2->addWidget(style,0,1);
-    style->insertItem(*paintFormatPixmap(DotLine,1) , 0 );
-    style->insertItem(*paintFormatPixmap(DashLine,1) , 1 );
-    style->insertItem(*paintFormatPixmap(DashDotLine,1) , 2 );
-    style->insertItem(*paintFormatPixmap(DashDotDotLine,1) , 3 );
-    style->insertItem(*paintFormatPixmap(SolidLine,1) , 4);
+    style->insertItem(*paintFormatPixmap(DotLine),0 );
+    style->insertItem(*paintFormatPixmap(DashLine) ,1);
+    style->insertItem(*paintFormatPixmap(DashDotLine),2 );
+    style->insertItem(*paintFormatPixmap(DashDotDotLine),3  );
+    style->insertItem(*paintFormatPixmap(SolidLine),4);
 
 
     customize = new KSpreadPatternSelect( tmpQGroupBox, "Frame_18" );
@@ -1791,11 +1791,7 @@ switch(index)
 	}
 }
 
-void CellLayoutPageBorder::slotChangeSize(int index)
-{
-}
-
-QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style,int /*width*/)
+QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
 {
     QPixmap *pixmap = new QPixmap( style->width(), 14 );
     QPainter painter;

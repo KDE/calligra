@@ -281,7 +281,7 @@ public:
 
     void applyOutline( int _left, int _top, int _right, int _bottom );
     void invertState(KSpreadBorderButton *_button);
-    QPixmap* paintFormatPixmap(PenStyle _style,int width);
+    QPixmap* paintFormatPixmap(PenStyle _style);
 public slots:
     void changeState(KSpreadBorderButton *_this);
     void preselect( KSpreadBorderButton *_this);
@@ -290,8 +290,8 @@ public slots:
     void slotUnselect2( KSpreadPatternSelect *_select );
     void loadIcon( QString pix,KSpreadBorderButton *_button);
     void slotPressEvent(QMouseEvent *_ev);
-    void slotChangeStyle(int index);
-    void slotChangeSize(int index);
+    void slotChangeStyle(int );
+
 protected:
     KSpreadPatternSelect *selectedPattern;
     KSpreadBorderButton *top;
