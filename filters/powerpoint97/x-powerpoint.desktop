@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=MimeType
+MimeType=application/x-powerpoint97
+Icon=unknown.xpm
+Patterns=*.ppt;*.PPT;
+Comment=MS PowerPoint 97 File
+Comment[de]=MS PowerPoint 97 Datei
+DefaultApp=kpresenter

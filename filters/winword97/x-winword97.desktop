@@ -1,0 +1,22 @@
+[Desktop Entry]
+MimeType=application/x-winword97
+Comment=MS WinWord97 Document
+Comment[cs]=Dokument programu MS WinWord97
+Comment[da]=MS WinWord97 dokument
+Comment[de]=MS WinWord97-Dokument
+Comment[eo]=MS WinWord97-dokumento
+Comment[es]=Documento MS WinWord97
+Comment[fr]=Document MS WinWord97
+Comment[hu]=MS WinWord97 Dokumentum
+Comment[is]=MS WinWord97-skjal
+Comment[ja]=MS WinWord97•…•≠•Â•·•Û•»
+Comment[no]=MS WinWord97-dokument
+Comment[pl]=Dokument MS Worda97
+Comment[pt_BR]=Documento MS WinWord97
+Comment[ro]=Document Ón format MS WinWord97
+Comment[ru]=‰œÀ’Õ≈Œ‘ MS WinWord97
+Comment[sk]=MS WinWord97 dokument
+DefaultApp=kword
+Icon=txt.xpm
+Type=MimeType
+Patterns=*.doc;*.DOC;

@@ -1,0 +1,26 @@
+
+INCLUDES = -I. -I./winword97 $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
+           $(all_includes) $(MICO_INCLUDES)
+LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+LDADD = ./winword97/libwinword97.la $(LIB_KOFFICECORE)
+
+####### Files
+
+SUBDIRS = winword97
+
+bin_PROGRAMS = ole_filter
+
+ole_filter_SOURCES = main.cc olefilter.cc klaola.cc
+
+noinst_HEADERS = main.h olefilter.h klaola.h
+
+METASOURCES = main.moc olefilter.moc
+
+#datasdir = $(kde_datadir)/koffice/filter
+
+####### Build rules
+
+messages:
+#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot
+
+main.cc: main.h
