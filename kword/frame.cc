@@ -549,12 +549,12 @@ QDomElement KWFrameSet::save( QDomDocument &doc )
 /*================================================================*/
 bool KWFrameSet::load( QDomElement& element )
 {
-     init();
+    init();
 
-     KWParag *last = 0L;
+    KWParag *last = 0L;
 
-     QDomElement f = element.firstChild().toElement();
-     for( ; !f.isNull(); f = f.nextSibling().toElement() ) {
+    QDomElement f = element.firstChild().toElement();
+    for( ; !f.isNull(); f = f.nextSibling().toElement() ) {
 	 KWFrame rect;
 	 KWParagLayout::Border l, r, t, b;
 	 float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
@@ -650,23 +650,23 @@ bool KWFrameSet::load( QDomElement& element )
 	     bpt = f.attribute( "border-bottom-pt" ).toInt();
 	 if ( f.hasAttribute( "border-bottom-inch" ) )
 	     binch = f.attribute( "border-bottom-inch" ).toInt();
-     }
-     KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
+    }
+    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
 				    rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
-     _frame->setLeftBorder( l );
-     _frame->setRightBorder( r );
-     _frame->setTopBorder( t );
-     _frame->setBottomBorder( b );
-     _frame->setBackgroundColor( QBrush( c ) );
-     _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
-     _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
-     _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
-     _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
-     frames.append( _frame );
+    _frame->setLeftBorder( l );
+    _frame->setRightBorder( r );
+    _frame->setTopBorder( t );
+    _frame->setBottomBorder( b );
+    _frame->setBackgroundColor( QBrush( c ) );
+    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+    frames.append( _frame );
      
-     updateCounters();
+    updateCounters();
      
-     return true;
+    return true;
 }
 
 /*================================================================*/
