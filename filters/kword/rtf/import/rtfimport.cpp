@@ -1863,6 +1863,17 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.setAttribute( "value", vertAlign );
 	    node.closeNode( "VERTALIGN" );
 	}
+	if (!baseFormat || format.fmt.caps != baseFormat->caps)
+	{
+	    node.addNode( "FONTATTRIBUTE" );
+            QCString fontattr;
+            if ( format.fmt.caps )
+                fontattr="uppercase";
+            else
+                fontattr="none";
+	    node.setAttribute( "value", fontattr );
+	    node.closeNode( "FONTATTRIBUTE" );
+	}
 	if (!baseFormat)
 	{
 	    node.addNode( "CHARSET" );
