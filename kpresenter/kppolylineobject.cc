@@ -66,7 +66,7 @@ double KPPolylineObject::load(const QDomElement &element)
     return KPPointObject::load( element );
 }
 
-bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( "draw:polyline" );
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
@@ -74,7 +74,7 @@ bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter )
     //KPObject::saveOasis( xmlWriter );
     kdDebug()<<"bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     saveOasisPosObject(xmlWriter );
-    KPPointObject::saveOasis( xmlWriter );
+    KPPointObject::saveOasis( xmlWriter, mainStyles );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     xmlWriter.endElement();

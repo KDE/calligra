@@ -160,7 +160,7 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter )
+bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( "draw:image" );
     saveOasisPosObject(xmlWriter );

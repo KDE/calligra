@@ -140,7 +140,7 @@ KoSize KPEllipseObject::getRealSize() const {
     return size;
 }
 
-bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
     saveOasisPosObject(xmlWriter );

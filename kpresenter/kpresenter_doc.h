@@ -26,6 +26,7 @@
 #include <config.h>
 #endif
 
+class KoGenStyles;
 class KPresenterView;
 class DCOPObject;
 class KCommand;

@@ -79,7 +79,7 @@ public:
         { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
 
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );

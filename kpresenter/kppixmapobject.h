@@ -72,7 +72,7 @@ public:
         { return i18n("Picture"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasisImage( KoXmlWriter &xmlWriter );
+    virtual bool saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
 
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);

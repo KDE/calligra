@@ -72,7 +72,7 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( "draw:rect" );
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style

@@ -80,7 +80,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext& context, QDomElement *animation);
-    virtual bool saveOasis( KoXmlWriter &xmlWriter );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
 
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,

@@ -93,7 +93,7 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     QString listOfPoint;
     int maxX=0;

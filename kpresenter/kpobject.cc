@@ -188,7 +188,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     //we don't have a simple object
     return true;

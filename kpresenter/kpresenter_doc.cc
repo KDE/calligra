@@ -64,6 +64,7 @@
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
+#include <koGenStyles.h>
 #include <koFilterManager.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
@@ -905,7 +906,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     if ( !store->open( "content.xml" ) )
         return false;
-
+    //just for compile
+    KoGenStyles mainStyles;
     KoStoreDevice dev( store );
     KoXmlWriter xmlWriter( &dev, "office:document-content" );
     xmlWriter.startElement( "office:body" );
@@ -913,7 +915,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
-        m_pageList.at( i )->saveOasisPage( store, xmlWriter, ( i+1 ) );
+        m_pageList.at( i )->saveOasisPage( store, xmlWriter, ( i+1 ),mainStyles );
     }
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element

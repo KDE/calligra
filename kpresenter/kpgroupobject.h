@@ -70,7 +70,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
     virtual void loadOasisGroupObject( KPresenterDoc *doc, int pos, KPrPage * newpage, QDomNode &element, KoOasisContext & context, QDomElement *animation);
-    virtual bool saveOasis(KoXmlWriter &xmlWriter);
+    virtual bool saveOasis(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );

@@ -76,7 +76,7 @@ DCOPObject* KPPolygonObject::dcopObject()
     return dcop;
 }
 
-bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( "draw:polygon" );
     kdDebug()<<"bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";

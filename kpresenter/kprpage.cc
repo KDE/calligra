@@ -57,6 +57,7 @@
 #include <kostyle.h>
 #include <kovariable.h>
 #include <korichtext.h>
+#include <koGenStyles.h>
 #include <qbuffer.h>
 #include <qregexp.h>
 #include <koxmlwriter.h>
@@ -95,7 +96,7 @@ DCOPObject* KPrPage::dcopObject()
 }
 
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage /*add style*/ )
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
@@ -108,7 +109,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        it.current()->saveOasis( xmlWriter );
+        it.current()->saveOasis( xmlWriter,mainStyles );
     }
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();

@@ -83,7 +83,7 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
     saveOasisPosObject(xmlWriter );
