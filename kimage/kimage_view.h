@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kimage_gui_h__
 #define __kimage_gui_h__
@@ -24,7 +24,7 @@
 #include <qwidget.h>
 
 #include <kprocess.h>
- 
+
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <openparts_ui.h>
@@ -60,7 +60,7 @@ public:
   void viewCentered();
   void viewInfoImage();
   void viewBackgroundColor();
-    
+
   void transformRotateRight();
   void transformRotateLeft();
   void transformRotateAngle();
@@ -73,7 +73,7 @@ public:
   void transformZoomHalf();
   void transformZoomMax();
   void transformZoomMaxAspect();
-    
+
   void extrasRunGimp();
   void extrasRunXV();
   void extrasRunCommand();
@@ -91,7 +91,7 @@ protected:
   enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
 
   virtual void init();
-  virtual bool event( const char* _event, const CORBA::Any& _value );
+  virtual bool event( const QCString & _event, const CORBA::Any& _value );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
   virtual void newView();
@@ -153,11 +153,11 @@ protected:
   OpenPartsUI::Menu_var m_vMenuHelp;
   long int m_idMenuHelp_About;
   long int m_idMenuHelp_Using;
-    
+
 private:
   QPoint m_zoomFactor;
   QString m_tmpFile;
-  KImageDoc* m_pDoc;  
+  KImageDoc* m_pDoc;
   QPixmap m_pixmap;
   DrawMode m_drawMode;
   int m_centerMode;

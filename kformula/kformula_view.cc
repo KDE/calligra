@@ -37,7 +37,7 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
 {
     setWidget( this );
     widget()->setFocusPolicy( QWidget::StrongFocus );
-    
+
     OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
     setBackgroundColor( white );
@@ -151,7 +151,7 @@ CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
     return id;
 }
 
-bool KFormulaView::event( const char* _event, const CORBA::Any& _value )
+bool KFormulaView::event( const QCString & _event, const CORBA::Any& _value )
 {
     cerr << "CALLED" << endl;
 

@@ -95,8 +95,8 @@ KIllustratorFrame::KIllustratorFrame (KIllustratorView* view,
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 				    KIllustratorDocument* doc) :
-    QWidget (parent, name), KoViewIf (doc), 
-    OPViewIf (doc), KIllustrator::View_skel () 
+    QWidget (parent, name), KoViewIf (doc),
+    OPViewIf (doc), KIllustrator::View_skel ()
 {
   setWidget (this);
   OPPartIf::setFocusPolicy (OpenParts::Part::ClickFocus);
@@ -205,7 +205,7 @@ void KIllustratorView::setupPopups () {
   objMenu->insertItem (i18n ("Back One"), this, SLOT (arrangeOneBackSlot ()));
 }
 
-bool KIllustratorView::event (const char* _event, const CORBA::Any& _value) {
+bool KIllustratorView::event ( const QCString &_event, const CORBA::Any& _value) {
   EVENT_MAPPER (_event, _value);
 
   MAPPING (OpenPartsUI::eventCreateMenuBar,
@@ -427,7 +427,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 
   m_vToolBarTools = factory->create (OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarTools->setFullWidth (false);
-  OpenPartsUI::Pixmap_var pix = 
+  OpenPartsUI::Pixmap_var pix =
     OPUIUtils::convertPixmap (BarIcon("selecttool"));
   QString toolTip = i18n ("Selection Mode") ;
   m_idSelectionTool =

@@ -32,7 +32,7 @@ class KFormulaView : public QWidget,
 
     // IDL
     virtual void newView();
-    virtual CORBA::Boolean printDlg();   
+    virtual CORBA::Boolean printDlg();
 public slots:
     // Document signals
     void modifyMatrix(QString str);
@@ -44,7 +44,7 @@ protected:
     // C++
     virtual void init();
     // IDL
-    virtual bool event( const char* _event, const CORBA::Any& _value );
+    virtual bool event( const QCString & _event, const CORBA::Any& _value );
     // C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
@@ -71,18 +71,18 @@ protected:
     CORBA::Long m_idMenuView_FontToolbar;
     CORBA::Long m_idMenuView_TypeToolbar;
     CORBA::Long m_idMenuView_TextToolbar;
-    
+
     OpenPartsUI::Menu_var m_vMenuElement;
-    OpenPartsUI::Menu_var m_vMenuElement_AddIndex;    
+    OpenPartsUI::Menu_var m_vMenuElement_AddIndex;
     CORBA::Long m_idMenuElement_AddIndex_TL;
     CORBA::Long m_idMenuElement_AddIndex_BL;
     CORBA::Long m_idMenuElement_AddIndex_TR;
     CORBA::Long m_idMenuElement_AddIndex_BR;
 
     OpenPartsUI::Menu_var m_vMenuElement_AddElement;
-    CORBA::Long m_idMenuElement_AddElement_T;  // text    
+    CORBA::Long m_idMenuElement_AddElement_T;  // text
     CORBA::Long m_idMenuElement_AddElement_R;  // root
-    CORBA::Long m_idMenuElement_AddElement_F;  // fraction 
+    CORBA::Long m_idMenuElement_AddElement_F;  // fraction
     CORBA::Long m_idMenuElement_AddElement_V;  // vertSpace
     CORBA::Long m_idMenuElement_AddElement_B;  // bracket
     CORBA::Long m_idMenuElement_AddElement_I;  // integral
@@ -109,9 +109,9 @@ protected:
     CORBA::Long m_idMenuElement_Matrix_RemCol;
     OpenPartsUI::Menu_var m_vMenuElement_Fraction;
     CORBA::Long m_idMenuElement_Fraction_VA;  //Vert Allign
-    CORBA::Long m_idMenuElement_Fraction_VA_U; 
-    CORBA::Long m_idMenuElement_Fraction_VA_D; 
-    CORBA::Long m_idMenuElement_Fraction_VA_M; 
+    CORBA::Long m_idMenuElement_Fraction_VA_U;
+    CORBA::Long m_idMenuElement_Fraction_VA_D;
+    CORBA::Long m_idMenuElement_Fraction_VA_M;
     CORBA::Long m_idMenuElement_Fraction_HA;  //Horiz Allign
     CORBA::Long m_idMenuElement_Fraction_HA_C;
     CORBA::Long m_idMenuElement_Fraction_HA_L;
@@ -125,12 +125,12 @@ protected:
     CORBA::Long m_idMenuElement_Color;
     CORBA::Long m_idMenuElement_Remove;
     OpenPartsUI::Menu_var m_vMenuFormula;
-    CORBA::Long m_idMenuFormula_Color;    
-    CORBA::Long m_idMenuFormula_Font;    
+    CORBA::Long m_idMenuFormula_Color;
+    CORBA::Long m_idMenuFormula_Font;
 
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_Using;
-  
+
     OpenPartsUI::ToolBar_var m_vToolBarFormula;
     OpenPartsUI::ToolBar_var m_vToolBarFont;
     OpenPartsUI::ToolBar_var m_vToolBarType;

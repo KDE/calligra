@@ -72,7 +72,7 @@ KformEditorView::KformEditorView( QWidget* _parent, const char* _name, KformEdit
 KformEditorView::~KformEditorView()
 {
   kdebug( KDEBUG_INFO, 0, "KformEditorView::~KformEditorView() %li", _refcnt() );
- 
+
   cleanUp();
 }
 
@@ -162,7 +162,7 @@ void KformEditorView::cleanUp()
   {
     return;
   }
-  
+
   kdebug( KDEBUG_INFO, 0, "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
@@ -192,7 +192,7 @@ KformEditorDoc* KformEditorView::doc()
   return m_pDoc;
 }
 
-bool KformEditorView::event( const char* _event, const CORBA::Any& _value )
+bool KformEditorView::event( const QCString &_event, const CORBA::Any& _value )
 {
   EVENT_MAPPER( _event, _value );
 
@@ -344,7 +344,7 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   text = i18n( "&Undo" ) ;
   pix = OPICON( "undo" );
-  m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_U, -1, -1 ); 
+  m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_U, -1, -1 );
 
   text = i18n( "&Redo" ) ;
   pix = OPICON( "redo" );
@@ -486,7 +486,7 @@ void KformEditorView::editUndo()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Undo" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -506,7 +506,7 @@ void KformEditorView::editCut()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Cut widgets" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -516,7 +516,7 @@ void KformEditorView::editCopy()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Copy widgets" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -526,7 +526,7 @@ void KformEditorView::editPaste()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Paste widgets" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -536,7 +536,7 @@ void KformEditorView::editFormSize()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Change form size" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -546,7 +546,7 @@ void KformEditorView::editBackground()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Change background" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 
@@ -571,7 +571,7 @@ void KformEditorView::insertButton()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Insert Button" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -581,7 +581,7 @@ void KformEditorView::insertLabel()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Insert Label" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -591,7 +591,7 @@ void KformEditorView::insertLineEdit()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Insert LineEdit" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -601,7 +601,7 @@ void KformEditorView::insertListBox()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Insert ListBox" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -611,7 +611,7 @@ void KformEditorView::insertCheckBox()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Insert CheckBox" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -621,7 +621,7 @@ void KformEditorView::alignmentFitViewToForm()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Fit view to form" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -631,7 +631,7 @@ void KformEditorView::alignmentCenter()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Center the selected widgets" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -641,7 +641,7 @@ void KformEditorView::alignmentLeft()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Position the selected widgets to left" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -651,7 +651,7 @@ void KformEditorView::alignmentHorizontalCenter()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Position the selected widgets to horizontal center" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -661,7 +661,7 @@ void KformEditorView::alignmentRight()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Position the selected widgets to right" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -671,7 +671,7 @@ void KformEditorView::alignmentTop()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Position the selected widgets to top" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -681,7 +681,7 @@ void KformEditorView::alignmentVerticalCenter()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Position the selected widgets to vertical center" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -691,7 +691,7 @@ void KformEditorView::alignmentBottom()
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
     QString text = i18n ( "Position the selected widgets to bottom" ) ;
- 
+
     m_vStatusBar->changeItem( text, 1 );
   }
 }
@@ -746,7 +746,7 @@ void KformEditorView::slotClick( WidgetWrapper* _widget )
     emit unselectAll();
 
     m_primaryWidget = _widget;
-    m_primaryWidget->slotSelectPrimary(); 
+    m_primaryWidget->slotSelectPrimary();
     m_countSelectedWidgets = 1;
   }
   else if( ( m_countSelectedWidgets > 1 ) &&

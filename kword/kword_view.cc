@@ -507,7 +507,7 @@ void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Bor
 }
 
 /*===============================================================*/
-bool KWordView::event( const char* _event, const CORBA::Any& _value )
+bool KWordView::event( const QCString &_event, const CORBA::Any& _value )
 {
     EVENT_MAPPER( _event, _value );
 
@@ -673,7 +673,7 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
 {
     int pos = styleList.findIndex( _styleName );
 
-    if ( pos == -1 ) 
+    if ( pos == -1 )
 	return;
 
     if ( !CORBA::is_nil( m_vToolBarText ) )
@@ -2629,7 +2629,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
     m_vToolBarFrame->enable( OpenPartsUI::Hide );
 
-    
+
     // TOOLBAR Formula
     m_vToolBarFormula = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
     m_vToolBarFormula->setFullWidth( FALSE );
@@ -2692,7 +2692,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
     m_vToolBarFormula->enable( OpenPartsUI::Hide );
 //     m_vToolBarFormula->setBarPos( OpenPartsUI::Floating );
-    
+
     updateStyle( "Standard" );
     setFormat( format, FALSE );
     gui->getPaperWidget()->forceFullUpdate();

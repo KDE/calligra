@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -103,7 +103,7 @@ class KIllustratorView : public QWidget, public MainView,
 			 virtual public KIllustrator::View_skel {
   Q_OBJECT
 public:
-  KIllustratorView (QWidget* parent, const char* name = 0L, 
+  KIllustratorView (QWidget* parent, const char* name = 0L,
 		    KIllustratorDocument* doc = 0L);
   ~KIllustratorView ();
 
@@ -189,7 +189,7 @@ public:
 
 protected:
   void init ();
-  bool event (const char* _event, const CORBA::Any& _value);
+  bool event (const QCString & _event, const CORBA::Any& _value);
   bool mappingCreateMenubar (OpenPartsUI::MenuBar_ptr menubar);
   bool mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr factory);
 
@@ -227,25 +227,25 @@ protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuInsert;
   long int m_idMenuEdit_Undo, m_idMenuEdit_Redo,
-    m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste, 
-    m_idMenuEdit_Duplicate, m_idMenuEdit_Delete, m_idMenuEdit_SelectAll, 
+    m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste,
+    m_idMenuEdit_Duplicate, m_idMenuEdit_Delete, m_idMenuEdit_SelectAll,
     m_idMenuEdit_InsertObject, m_idMenuEdit_Properties;
 
   /* Menu: Edit->Insert */
-  long int m_idMenuInsert_Object, m_idMenuInsert_Clipart, 
+  long int m_idMenuInsert_Object, m_idMenuInsert_Clipart,
     m_idMenuInsert_Bitmap;
 
   /* Menu: View */
   OpenPartsUI::Menu_var m_vMenuView;
-  long int m_idMenuView_Outline, 
+  long int m_idMenuView_Outline,
     m_idMenuView_Normal, m_idMenuView_Ruler, m_idMenuView_Grid,
     m_idMenuView_Helplines, m_idMenuView_Layers;
 
   /* Menu: Layout */
   OpenPartsUI::Menu_var m_vMenuLayout;
-  long int m_idMenuLayout_InsertPage, 
-    m_idMenuLayout_RemovePage, m_idMenuLayout_GotoPage, 
-    m_idMenuLayout_PageLayout, 
+  long int m_idMenuLayout_InsertPage,
+    m_idMenuLayout_RemovePage, m_idMenuLayout_GotoPage,
+    m_idMenuLayout_PageLayout,
     m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid,
     m_idMenuLayout_SetupHelplines, m_idMenuLayout_AlignToHelplines;
 
@@ -253,10 +253,10 @@ protected:
   OpenPartsUI::Menu_var m_vMenuArrange;
   OpenPartsUI::Menu_var m_vMenuTransform;
   long int m_idMenuTransform_Position,
-    m_idMenuTransform_Dimension, m_idMenuTransform_Rotation, 
-    m_idMenuTransform_Mirror, m_idMenuArrange_Align, 
-    m_idMenuArrange_ToFront, m_idMenuArrange_ToBack, 
-    m_idMenuArrange_1Forward, m_idMenuArrange_1Back, 
+    m_idMenuTransform_Dimension, m_idMenuTransform_Rotation,
+    m_idMenuTransform_Mirror, m_idMenuArrange_Align,
+    m_idMenuArrange_ToFront, m_idMenuArrange_ToBack,
+    m_idMenuArrange_1Forward, m_idMenuArrange_1Back,
     m_idMenuArrange_Group, m_idMenuArrange_Ungroup,
     m_idMenuArrange_TextAlongPath;
   /* Menu: Extras */

@@ -128,7 +128,7 @@ void KImageView::cleanUp()
   {
     return;
   }
-  
+
   kdebug( KDEBUG_INFO, 0, "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
@@ -149,7 +149,7 @@ KImageDoc* KImageView::doc()
   return m_pDoc;
 }
 
-bool KImageView::event( const char* _event, const CORBA::Any& _value )
+bool KImageView::event( const QCString & _event, const CORBA::Any& _value )
 {
   EVENT_MAPPER( _event, _value );
 
@@ -235,7 +235,7 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   m_vToolBarEdit->enable(OpenPartsUI::Hide);
   m_vToolBarEdit->setBarPos(OpenPartsUI::Floating);
   m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
-  m_vToolBarEdit->enable(OpenPartsUI::Show);                                         
+  m_vToolBarEdit->enable(OpenPartsUI::Show);
 
   return true;
 }
@@ -366,7 +366,7 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // Extras
   text =  i18n( "&Extras" ) ;
   _menubar->insertMenu( text, m_vMenuExtras, -1, -1 );
-  
+
   text =  i18n( "Run &Gimp" ) ;
   m_idMenuExtras_RunGimp = m_vMenuExtras->insertItem( text, this, "extrasRunGimp", 0 );
 
@@ -375,7 +375,7 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   text =  i18n( "Run &Command..." ) ;
   m_idMenuExtras_RunCommand = m_vMenuExtras->insertItem( text, this, "extrasRunCommand", 0 );
-                            
+
   return true;
 }
 
@@ -423,7 +423,7 @@ void KImageView::editImportImage()
   if( file.isNull() )
   {
     return;
-  }  
+  }
   if( !m_pDoc->openDocument( file, 0L ) )
   {
     QString tmp;
@@ -509,7 +509,7 @@ void KImageView::viewInfoImage()
   }
 
   QString tmp;
-  
+
   QMessageBox::information( this, i18n( "Image information" ),
     tmp.sprintf( "X-Size : %i\nY-Size : %i\nColor depth : %i\n" + m_pDoc->m_strImageFormat,
     m_pixmap.size().width(),
@@ -524,7 +524,7 @@ void KImageView::viewZoomFactor()
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
-  KZoomFactorDialog dlg( NULL, "KImage" ); 
+  KZoomFactorDialog dlg( NULL, "KImage" );
   if( dlg.getValue( m_zoomFactor ) != QDialog::Accepted )
   {
     return;
@@ -553,7 +553,7 @@ void KImageView::viewBackgroundColor()
   KColorDialog dlg;
   QColor color;
 
-  dlg.getColor( color );  
+  dlg.getColor( color );
   setBackgroundColor( color );
   QWidget::update();
 }
@@ -598,13 +598,13 @@ void KImageView::transformRotateAngle()
   kdebug( KDEBUG_INFO, 0, "Rotate Angle" );
 
   int angle = 0;
-  KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter angle:" ) ); 
+  KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter angle:" ) );
 
   if( dlg.getValue( angle ) != QDialog::Accepted )
     return;
   if( angle == 0 )
     return;
-    
+
   QWMatrix matrix;
   matrix.rotate( angle );
   m_pDoc->transformImage( matrix );
@@ -652,7 +652,7 @@ void KImageView::transformZoomFactor()
 
   QWMatrix matrix;
   int factor = (int)(matrix.m11() * 100 );
-  KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter Zoom factor (100 = 1x):" ) ); 
+  KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter Zoom factor (100 = 1x):" ) );
   if( dlg.getValue( factor ) != QDialog::Accepted )
     return;
   if( ( factor <= 0 ) || ( factor == 100 ) )
@@ -761,7 +761,7 @@ void KImageView::slotCommandExecuted( KProcess* )
 void KImageView::executeCommand( KProcess& proc )
 {
   // TODO
-  // Funktionsaufruf: es wird Prozeß ausgeführt  
+  // Funktionsaufruf: es wird Prozeß ausgeführt
   m_pDoc->m_executeCommand = true;
 
   kdebug( KDEBUG_INFO, 0, "starting process" );
@@ -865,7 +865,7 @@ void KImageView::paintEvent( QPaintEvent * )
   {
     return;
   }
-  
+
   QPainter painter;
 
   painter.begin( this );

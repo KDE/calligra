@@ -257,7 +257,7 @@ KSpread::Book_ptr KSpreadView::book()
   return m_pDoc->book();
 }
 
-bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
+bool KSpreadView::event( const QCString & _event, const CORBA::Any& _value )
 {
   EVENT_MAPPER( _event, _value );
 
@@ -698,7 +698,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarMath->setFullWidth(false);
-  
+
   OpenPartsUI::WStrList math;
   math.append( "sum" );
   math.append( "cos" );
@@ -707,7 +707,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_idComboMath = m_vToolBarMath->insertCombo( math, 1, false, SIGNAL( activated( const QString & ) ), this,
 					       "formulaselection", true, i18n( "Formula"),
 					       80,-1, OpenPartsUI::AtBottom );
-  
+
   m_vToolBarMath->enable( OpenPartsUI::Show );
 
     //formula Toolbar

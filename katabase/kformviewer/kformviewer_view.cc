@@ -70,7 +70,7 @@ KformViewerView::KformViewerView( QWidget* _parent, const char* _name, KformView
     cerr << "KFormViewer: Inserting child" << endl;
 
     QWidget* obj = (*it)->create( this );
-    
+
     if( obj )
     {
       QScrollView::addChild( obj );
@@ -129,7 +129,7 @@ void KformViewerView::cleanUp()
   {
     return;
   }
-  
+
   kdebug( KDEBUG_INFO, 0, "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
@@ -150,7 +150,7 @@ KformViewerDoc* KformViewerView::doc()
   return m_pDoc;
 }
 
-bool KformViewerView::event( const char* _event, const CORBA::Any& _value )
+bool KformViewerView::event( const QCString &_event, const CORBA::Any& _value )
 {
   EVENT_MAPPER( _event, _value );
 
@@ -163,7 +163,7 @@ bool KformViewerView::event( const char* _event, const CORBA::Any& _value )
 }
 
 #define TEXT( text ) Q2C( i18n( text ) )
- 
+
 #define MENU( menu, text ) _menubar->insertMenu( TEXT( text ), menu, -1, -1 );
 #define ITEM1( id, menu, text, func ) id = menu->insertItem( TEXT( text ), this, func, 0 );
 #define ITEM2( id, menu, text, func, key ) id = menu->insertItem4( TEXT( text ), this, func, key, -1, -1 );
@@ -173,7 +173,7 @@ bool KformViewerView::event( const char* _event, const CORBA::Any& _value )
 
 #define TOOLBAR( bar ) bar = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 #define BUTTON1( id, bar, pix, num, func, text ) id = bar->insertButton2( OPICON( pix ), num, SIGNAL( clicked() ), this, func, true, TEXT( text ), -1 );
-#define TB_SEPARATOR( bar ) bar->insertSeparator( -1 );                 
+#define TB_SEPARATOR( bar ) bar->insertSeparator( -1 );
 
 bool KformViewerView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
@@ -251,9 +251,9 @@ void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety
   if( m_pDoc && !m_pDoc->isEmpty() )
   {
     // Begrenzung des Formulars zeichnen
-    p->drawRect( 10 - offsetx, 10 - offsety, 
+    p->drawRect( 10 - offsetx, 10 - offsety,
                   m_pDoc->getFormWidth() - 5 - offsetx, m_pDoc->getFormHeight() - 5 - offsety);
-  }                                                                                                 
+  }
 }
 */
 
