@@ -111,7 +111,8 @@ Changes after KWord-1.1
 WYSIWYG branch merged in. All text layout is done at 1440 DPI now, and
 doesn't depend on the zoom, nor on the screen or printer resolution anymore.
 
-Soft hyphens (manually inserted with Ctrl+'-')
+Soft hyphens (inserted with Ctrl+'-')
+Non-breakable-spaces (inserted with Ctrl+' ' or menuitem)
 Support for hyperlinks, for text background color (marker).
 Improved handling of tabulators in ruler.
 Auto-hide mouse cursor while typing.
