@@ -83,10 +83,10 @@ KoTextView::~KoTextView()
     delete d;
 }
 
-void KoTextView::terminate()
+void KoTextView::terminate(bool removeselection)
 {
     textObject()->clearUndoRedoInfo();
-    if ( textDocument()->removeSelection( QTextDocument::Standard ) )
+    if ( removeselection && textDocument()->removeSelection( QTextDocument::Standard ) )
         textObject()->selectionChangedNotify();
     hideCursor();
 }

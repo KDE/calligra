@@ -58,7 +58,8 @@ public:
     virtual ~KoTextView();
 
     /** Call this before deleting */
-    void terminate();
+    /** don't remove selection when we made dnd between different frame*/
+    void terminate(bool removeselection=true);
 
     KoTextObject * textObject() const { return m_textobj; }
     QTextCursor * cursor() const { return m_cursor; }
