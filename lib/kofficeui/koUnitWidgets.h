@@ -113,12 +113,33 @@ signals:
 private slots:
 	void slotActivated( int );
 
-private:
+protected:
 	double m_value;
 	double m_lower;
 	double m_upper;
 };
 
+class KoUnitDoubleSpinComboBox : public QWidget
+{
+Q_OBJECT
+public:
+	KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+
+	void insertItem( double, int index = -1 );
+	void updateValue( double );
+	double value() const;
+
+signals:
+	 void valueChanged(double);
+
+private slots:
+	void slotUpClicked();
+	void slotDownClicked();
+
+private:
+	KoUnitDoubleComboBox *m_combo;
+	double m_step;
+};
 
 #endif
 

@@ -20,6 +20,8 @@
 #include "koUnitWidgets.moc"
 #include <kglobal.h>
 #include <klocale.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
 
 KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name )
 : KDoubleValidator( parent, name ), m_base( base )
@@ -201,5 +203,58 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 	}
 	else
 		return QComboBox::eventFilter( o, ev );
+}
+
+KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
+	: QWidget( parent ), m_step( step )
+{
+	QGridLayout *layout = new QGridLayout( this, 2, 3 );
+	//layout->setMargin( 2 );
+	QPushButton *up = new QPushButton( "+", this );
+	//up->setFlat( true );
+	up->setMaximumHeight( 15 );
+	up->setMaximumWidth( 15 );
+	layout->addWidget( up, 0, 0 );
+	connect( up, SIGNAL( clicked() ), this, SLOT( slotUpClicked() ) );
+
+	QPushButton *down = new QPushButton( "-", this );
+	down->setMaximumHeight( 15 );
+	down->setMaximumWidth( 15 );
+	layout->addWidget( down, 1, 0 );
+	connect( down, SIGNAL( clicked() ), this, SLOT( slotDownClicked() ) );
+
+	m_combo = new KoUnitDoubleComboBox( this, lower, upper, value, unit, precision, name );
+	connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
+	layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
+}
+
+void
+KoUnitDoubleSpinComboBox::slotUpClicked()
+{
+	m_combo->changeValue( m_combo->value() + m_step );
+}
+
+void
+KoUnitDoubleSpinComboBox::slotDownClicked()
+{
+	m_combo->changeValue( m_combo->value() - m_step );
+}
+
+void
+KoUnitDoubleSpinComboBox::insertItem( double value, int index )
+{
+	m_combo->insertItem( value, index );
+}
+
+void
+KoUnitDoubleSpinComboBox::updateValue( double value )
+{
+	m_combo->updateValue( value );
+}
+
+double
+KoUnitDoubleSpinComboBox::value() const
+{
+	return m_combo->value();
 }
 
