@@ -34,19 +34,13 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 	setProperty("section", QVariant("RemoteDB"));
 	setProperty("caption", QVariant(i18n("Authentication")));
 
-	//cool pic
-	QLabel *lPic = new QLabel("", this);
-	lPic->setPixmap(*wpic);
-	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-
 	//labels
-	QLabel *lUser = new QLabel(i18n("User:"), this);
-	QLabel *lPassword = new QLabel(i18n("Password:"), this);
+	QLabel *lUser = new QLabel(i18n("User:"), m_contents);
+	QLabel *lPassword = new QLabel(i18n("Password:"), m_contents);
 
 	//inputfields
-	m_userEdit = new KLineEdit(this);
-	m_passwordEdit = new KLineEdit(this);
+	m_userEdit = new KLineEdit(m_contents);
+	m_passwordEdit = new KLineEdit(m_contents);
 	m_passwordEdit->setEchoMode(QLineEdit::Password);
 
 	m_savePassChk = new QCheckBox(i18n("Save password"), this);
@@ -57,14 +51,15 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 	setProperty("savePassword", QVariant(m_savePassChk->isChecked()));
 
 	//layout
-	QGridLayout *g = new QGridLayout(this);
-	g->addMultiCellWidget(lPic,     0,      3,      0,      0);
-	g->addWidget(lUser,             0,      1);
-	g->addWidget(lPassword,         1,      1);
-	g->addWidget(m_userEdit,            0,      2);
-	g->addWidget(m_passwordEdit,        1,      2);
-	g->addWidget(m_savePassChk,        2,      2);
+	QGridLayout *g = new QGridLayout(m_contents);
+	g->addWidget(lUser,             0,      0);
+	g->addWidget(lPassword,         1,      0);
+	g->addWidget(m_userEdit,            0,      1);
+	g->addWidget(m_passwordEdit,        1,      1);
+	g->addWidget(m_savePassChk,        2,      1);
 	g->setSpacing(KDialog::spacingHint());
+	g->setRowStretch(3, 1);
+	g->setColStretch(2, 1);
 
 	connect(m_userEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotUserChanged(const QString &)));
 	connect(m_passwordEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotPassChanged(const QString &)));

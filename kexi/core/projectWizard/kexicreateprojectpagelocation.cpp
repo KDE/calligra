@@ -37,56 +37,45 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 	setProperty("section", QVariant("RemoteDB"));
 	setProperty("caption", QVariant(i18n("Database Location")));
 
-	//cool pic
-	QLabel *lPic = new QLabel("", this);
-	lPic->setPixmap(*wpic);
-	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-
 	//widgets
-	QRadioButton *localRBtn = new QRadioButton(i18n("Local"), this);
-	QRadioButton *remoteRBtn = new QRadioButton(i18n("Remote"), this);
+	QRadioButton *localRBtn = new QRadioButton(i18n("Local"), m_contents);
+	QRadioButton *remoteRBtn = new QRadioButton(i18n("Remote"), m_contents);
 
-	QCheckBox* customSockChk = new QCheckBox(i18n("Custom socket:"), this);
-	m_sock = new KLineEdit(this);
+	m_customSockChk = new QCheckBox(i18n("Custom socket:"), m_contents);
+	m_sock = new KLineEdit(m_contents);
 	m_sock->setEnabled(false);
 
-	QLabel *lHost = new QLabel(i18n("Host:"), this);
-	m_host = new KLineEdit(this);
-//	QCheckBox *customPortChk = new QCheckBox(i18n("Custom port:"), this);
-	QLabel *lPort = new QLabel(i18n("Port:"), this);
-	m_port = new QSpinBox(0, 9999, 1, this);
+	m_lHost = new QLabel(i18n("Host:"), m_contents);
+	m_host = new KLineEdit(m_contents);
+	m_lPort = new QLabel(i18n("Port:"), m_contents);
+	m_port = new QSpinBox(0, 65535, 1, m_contents);
 	m_port ->setSpecialValueText(i18n("default port"));	
 	m_port->setEnabled(false);
 
 	//buttongroup hinting
-	QButtonGroup* selectBGrp = new QButtonGroup(this);
+	QButtonGroup* selectBGrp = new QButtonGroup(m_contents);
 	selectBGrp->hide();
 	selectBGrp->insert(localRBtn);
 	selectBGrp->insert(remoteRBtn);
 	
 	// layout
-	QGridLayout *m = new QGridLayout(0);
+	QGridLayout *m = new QGridLayout(m_contents);
 	m->addMultiCellWidget(localRBtn,	0,	0,	0,	2);
-	m->addWidget(customSockChk,		1,	1);
+	m->addWidget(m_customSockChk,		1,	1);
 	m->addWidget(m_sock,			1,	2);
 	m->addMultiCellWidget(remoteRBtn,	2,	2,	0,	2);
-	m->addWidget(lHost,			3,	1);
+	m->addWidget(m_lHost,			3,	1);
 	m->addWidget(m_host,			3,	2);
-//	m->addWidget(customPortChk,		4,	1);
-	m->addWidget(lPort,			4,	1);
+	m->addWidget(m_lPort,			4,	1);
 	m->addWidget(m_port,			4,	2);
 	m->setSpacing(KDialog::spacingHint());
-	
-	QGridLayout *g = new QGridLayout(this);
-	g->addMultiCellWidget(lPic,		0,	1,	0,	0);
-	g->addLayout(m,		0,	1);
-	g->setSpacing(KDialog::spacingHint());
-	
+	m->setRowStretch(5, 1);
+	m->setColStretch(3, 1);
+
 	//Connections
 	connect(localRBtn, SIGNAL(toggled(bool)), this, SLOT(slotSetLocal(bool)));
-	connect(customSockChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomSock(bool)));
-//	connect(customPortChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomPort(bool)));
+	connect(m_customSockChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomSock(bool)));
+//	connect(m_customPortChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomPort(bool)));
 	connect(m_host, SIGNAL(textChanged(const QString &)), this, SLOT(slotHostChanged(const QString &)));
 	connect(m_port, SIGNAL(valueChanged(const QString &)), this, SLOT(slotPortChanged(const QString &)));
 	connect(m_sock, SIGNAL(textChanged(const QString &)), this, SLOT(slotSockChanged(const QString &)));
@@ -94,7 +83,7 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 	// Default values
 	localRBtn->setChecked(true);
 //	customPortChk->setChecked(false);
-	customSockChk->setChecked(false);
+	slotUseCustomSock(false);
 }
 
 KexiCreateProjectPageLocation::~KexiCreateProjectPageLocation()
@@ -133,7 +122,7 @@ KexiCreateProjectPageLocation::slotUseCustomSock(bool b)
 	}
 }
 
-void
+/*void
 KexiCreateProjectPageLocation::slotUseCustomPort(bool b)
 {
 	m_port->setEnabled(b);
@@ -145,15 +134,20 @@ KexiCreateProjectPageLocation::slotUseCustomPort(bool b)
 	{
 		slotPortChanged("0");
 	}
-}
+}*/
 
 void
 KexiCreateProjectPageLocation::slotSetLocal(bool b)
 {
 	m_sock->setEnabled(b);
+	m_customSockChk->setEnabled(b);
+	if (b)
+		slotUseCustomSock(m_customSockChk->isOn());
 
 	m_host->setEnabled(!b);
 	m_port->setEnabled(!b);
+	m_lHost->setEnabled(!b);
+	m_lPort->setEnabled(!b);
 
 	if(b)
 	{

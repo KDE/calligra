@@ -34,29 +34,25 @@ Boston, MA 02111-1307, USA.
 KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
 {
-	QLabel *lPic = new QLabel("", this);
-	lPic->setPixmap(*wpic);
-	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
+	QLabel *lEngine = new QLabel(i18n("Driver: "), m_contents);
 
-	QLabel *lEngine = new QLabel(i18n("Driver: "), this);
-
-	m_engine = new KComboBox(this);
+	m_engine = new KComboBox(m_contents);
 	connect(m_engine, SIGNAL(activated(const QString &)), this, SLOT(slotActivated(const QString &)));
 
-	m_summery = new KTextBrowser(this);
+	m_summary = new KTextBrowser(m_contents);
 
-	QGridLayout *g = new QGridLayout(this);
-	g->addMultiCellWidget(lPic,	0,	1,	0,	0);
-	g->addWidget(lEngine,		0,	1);
-	g->addWidget(m_engine,		0,	2);
-	g->addMultiCellWidget(m_summery,1,	1,	1,	2);
+	QGridLayout *g = new QGridLayout(m_contents);
+	g->addWidget(lEngine,		0,	0);
+	g->addWidget(m_engine,		0,	1);
+	g->addMultiCellWidget(m_summary,1,	1,	0,	1);
 	g->setSpacing(KDialog::spacingHint());
 
 	fill();
 
 	setProperty("section", QVariant("Both"));
 	setProperty("caption", QVariant(i18n("Engine")));
+
+	m_engine->setFocus();
 }
 
 void
@@ -74,19 +70,19 @@ KexiCreateProjectPageEngine::fill()
 		setProperty("continue", QVariant(true));
 	}
 
-	fillSummery();
+	fillSummary();
 }
 
 void
-KexiCreateProjectPageEngine::fillSummery()
+KexiCreateProjectPageEngine::fillSummary()
 {
-	QString engineSummery = project()->manager()->driverInfo(m_engine->currentText())->comment();
-	QString userSummery = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummery);
+	QString engineSummary = project()->manager()->driverInfo(m_engine->currentText())->comment();
+	QString userSummary = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummary);
 
 
 	if(!m_engine->currentText().isEmpty())
 	{
-		m_summery->setText(userSummery);
+		m_summary->setText(userSummary);
 	}
 
 	QVariant location = project()->manager()->driverInfo(m_engine->currentText())->property("X-Kexi-Location");
@@ -98,7 +94,7 @@ KexiCreateProjectPageEngine::slotActivated(const QString &engine)
 {
 	setProperty("engine", QVariant(engine));
 	setProperty("continue", QVariant(true));
-	fillSummery();
+	fillSummary();
 }
 
 KexiCreateProjectPageEngine::~KexiCreateProjectPageEngine()

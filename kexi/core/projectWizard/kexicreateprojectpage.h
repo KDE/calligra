@@ -26,6 +26,8 @@ Boston, MA 02111-1307, USA.
 
 class KexiCreateProject;
 class KexiProject;
+class QLabel;
+class QGridLayout;
 
 typedef QMap<QString, QVariant> DataMap;
 
@@ -45,8 +47,11 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPage : public QWidget
 	protected:
 		DataMap	m_data;
 		KexiProject *project();
-	private:
+
 		KexiProject *m_project;
+		QLabel *m_lPic;
+		QWidget *m_contents;
+		QGridLayout *m_grid;
 	signals:
 		void valueChanged(KexiCreateProjectPage *, QString &);
 		void acceptPage();

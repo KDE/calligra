@@ -46,44 +46,44 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
  : KexiCreateProjectPage(parent, wpic, name),m_kcp(parent)
 {
 	//cool picture ;)
-	QLabel *lPic = new QLabel("", this);
+/*	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
 	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
-
+*/
 	//default properties
 	setProperty("section", QVariant("RemoteDB"));
 	setProperty("caption", QVariant(i18n("Select Database")));
 
 	//existing databases radiobutton
-	m_existingRBtn = new QRadioButton(i18n("Select from existing databases:"), this);
+	m_existingRBtn = new QRadioButton(i18n("Select from existing databases:"), m_contents);
 	m_existingRBtn->setChecked(true);
 
 	//existing databases list
-	m_databases = new KListView(this);
+	m_databases = new KListView(m_contents);
 	m_databases->addColumn(i18n("Database"));
 	connect(m_databases, SIGNAL(selectionChanged()), this, SLOT(slotDatabaseChanged()));
 	connect(m_databases, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotDatabaseDoubleClicked(QListViewItem*)));
 	connect(m_existingRBtn, SIGNAL(toggled(bool)), m_databases, SLOT(setEnabled(bool)));
 
 	//new database radiobutton
-	m_newRBtn = new QRadioButton(i18n("Create new database:"), this);
+	m_newRBtn = new QRadioButton(i18n("Create new\ndatabase:"), m_contents);
 	m_newRBtn->setChecked(false);
 	connect(m_newRBtn, SIGNAL(toggled(bool)), this, SLOT(slotModeChanged(bool)));
 
 	//new database lineedit
-	m_newEdit = new KLineEdit(this);
+	m_newEdit = new KLineEdit(m_contents);
 	m_newEdit->setEnabled(false);
 	connect(m_newRBtn, SIGNAL(toggled(bool)), m_newEdit, SLOT(setEnabled(bool)));
 	connect(m_newEdit, SIGNAL(textChanged(const QString&)), this, SLOT(slotDatabaseChanged()));
 
 	//layout once again...
-	QHBoxLayout *g = new QHBoxLayout(this);
-	g->addWidget(lPic);
-	g->setSpacing(KDialog::spacingHint());
+//	QHBoxLayout *g = new QHBoxLayout(m_contents);
+//	g->addWidget(lPic);
+//	g->setSpacing(KDialog::spacingHint());
 
 	//input widgets layout
-	QVBoxLayout *iv = new QVBoxLayout(g);
+	QVBoxLayout *iv = new QVBoxLayout(m_contents);
 	iv->addWidget(m_existingRBtn);
 	iv->addWidget(m_databases);
 	iv->setSpacing(KDialog::spacingHint());
@@ -95,7 +95,7 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	nh->setSpacing(KDialog::spacingHint());
 
 	//buttongroup
-	QButtonGroup* selectBGrp = new QButtonGroup(this);
+	QButtonGroup* selectBGrp = new QButtonGroup(m_contents);
 	selectBGrp->hide();
 	selectBGrp->insert(m_existingRBtn);
 	selectBGrp->insert(m_newRBtn);

@@ -36,10 +36,10 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPageEngine : public KexiCreateProjec
 
 	protected:
 		void		fill();
-		void		fillSummery();
+		void		fillSummary();
 
 		KComboBox	*m_engine;
-		KTextBrowser	*m_summery;
+		KTextBrowser	*m_summary;
 
 	protected slots:
 		void		slotActivated(const QString &);

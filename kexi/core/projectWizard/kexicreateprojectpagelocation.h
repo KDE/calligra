@@ -24,6 +24,7 @@ Boston, MA 02111-1307, USA.
 
 class QSpinBox;
 class KLineEdit;
+class QCheckBox;
 
 class KEXIPRJWIZARD_EXPORT KexiCreateProjectPageLocation : public KexiCreateProjectPage
 {
@@ -37,13 +38,16 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPageLocation : public KexiCreateProj
 		KLineEdit*	m_sock;
 		KLineEdit*	m_host;
 		QSpinBox*	m_port;
+		QLabel *m_lHost, *m_lPort;
+		QCheckBox* m_customSockChk;
+
 
 	protected slots:
 		void slotHostChanged(const QString & t);
 		void slotSockChanged(const QString & t);
 		void slotPortChanged(const QString & t);
 		void slotUseCustomSock(bool b);
-		void slotUseCustomPort(bool b);
+//		void slotUseCustomPort(bool b);
 		void slotSetLocal(bool b);
 };
 

@@ -30,8 +30,10 @@
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateprojectpagefile.h"
 #include <kexiprojecthandler.h>
-
 #include <kgenericfactory.h>
+
+#include <kapplication.h>
+#include <kiconloader.h>
 
 //#include "kexitabbrowser.h"
 #include "kexicreateproject.h"
@@ -44,6 +46,7 @@ KexiCreateProject::KexiCreateProject(QObject *project,const char* name, const QS
 {
 	m_project=KEXIPROJECT(project);
 	setCaption(i18n("Create Project"));
+	setIcon(kapp->iconLoader()->loadIcon("filenew", KIcon::Toolbar) );
 	m_wpic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
 	m_pageEngine = new KexiCreateProjectPageEngine(this, m_wpic, "page_engine");
 	addItem(m_pageEngine, i18n("Engine"));

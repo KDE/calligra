@@ -21,10 +21,28 @@ Boston, MA 02111-1307, USA.
 #include "kexicreateprojectpage.h"
 #include "kexicreateprojectpage.moc"
 
+#include <kdialog.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
 KexiCreateProjectPage::KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name) 
-	: QWidget(parent, name),m_project(parent->project())
+	: QWidget(parent, name)
+	,m_project(parent->project())
+	,m_lPic( new QLabel("", this, "m_lPic") )
 {
 	m_loaded = false;
+
+	m_lPic->setPixmap(*wpic);
+	m_lPic->setPaletteBackgroundColor(white);
+	m_lPic->setAlignment(AlignTop);
+	m_lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	m_lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
+
+	m_contents = new QWidget(this, "m_contents");
+
+	m_grid = new QGridLayout(this, 1, 2, 0, KDialog::spacingHint() );
+	m_grid->addWidget(m_lPic, 0, 0);
+	m_grid->addWidget(m_contents, 0, 1);
 
 	parent->registerPage(this);
 }
