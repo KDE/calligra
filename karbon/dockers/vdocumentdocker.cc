@@ -471,10 +471,16 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 			VObject *obj = objectItem->object();
 
-			if( col == 1 )
+			if( col == 1 ) // set visibility
 			{
 				obj->setState( obj->state() == VObject::hidden ? VObject::normal : VObject::hidden );
 				objectItem->update();
+				m_view->part()->repaintAllViews();
+			}
+			else if( obj->state() != VObject::hidden ) // select only obj
+			{
+				m_document->selection()->clear();
+				m_document->selection()->append( obj );
 				m_view->part()->repaintAllViews();
 			}
 		}
@@ -525,7 +531,7 @@ VLayersTab::raiseLayer()
 	{
 		VLayer *layer = layerItem->layer();
 		if( layer && m_document->canRaiseLayer( layer ) )
-			VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
+			cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
 			                                layerItem->layer(), VLayerCmd::raiseLayer );
 	}
 	else
