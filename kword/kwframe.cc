@@ -785,7 +785,7 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     // of existing documents, only editing (and only KWord has this kind of option until now).
     NewFrameBehavior defaultNfb = frameSet()->isHeaderOrFooter() ? Copy : NoFollowup;
     if ( m_newFrameBehavior != defaultNfb ) {
-        const char* value;
+        const char* value = "none";
         if ( m_newFrameBehavior == Reconnect )
             value = "followup";
         else if ( m_newFrameBehavior == Copy )
