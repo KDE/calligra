@@ -10,29 +10,35 @@
  * modified by Reginald Stadlbauer <reggie@kde.org> *
  ****************************************************/
 
+
 #ifndef TABLE_H
 #define TABLE_H
+
+
 #include <qttableview.h>
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qstringlist.h>
 
+
 class SheetTable : public QtTableView
 {
     Q_OBJECT
+
 public:
     //SheetTable( QWidget *parent=0, const char *name=0 );
     SheetTable( int cols, int rows, QWidget *parent=0, int flags = -1,
 		 const char *name=0, bool _editable = true );
     ~SheetTable();
-    int tWidth() { return totalWidth() + extraW; } 
-    int tHeight() { return totalHeight() + extraH; }
 
-    int numColsVisible() { return lastColVisible() - leftCell() + 1; }
-    int numRowsVisible() { return lastRowVisible() - topCell() + 1; }
+    int tWidth()           { return totalWidth()  + extraW; } 
+    int tHeight()          { return totalHeight() + extraH; }
+
+    int numColsVisible()   { return lastColVisible() - leftCell() + 1; }
+    int numRowsVisible()   { return lastRowVisible() - topCell()  + 1; }
     void setText( int row, int col, QString, bool paint = TRUE );
 
-  bool hasValue(int,int);
+    bool hasValue(int, int);
 
 public slots:
     void showText( int row, int col, QString s) { setText( row, col, s); }
@@ -51,26 +57,30 @@ signals:
 protected:
     virtual void paintCell( QPainter *p, int row, int col );
     virtual void mousePressEvent( QMouseEvent * );    
+
 protected slots:
-    void scrollHorz(int);
-    void scrollVert(int);
-    void setInputText(QString);
+    void  scrollHorz(int);
+    void  scrollVert(int);
+    void  setInputText(QString);
 
 private:
-    int extraW;
-    int extraH;
-    QStringList table;
-    int index( int r, int c ) { return c+r*numCols(); }
+    int          index( int row, int col )   { return row * numCols() + col; }
+    void         placeInput();
 
-    QLineEdit *input;
-    int inRow;
-    int inCol;
-    bool inCol_inRow_initialization;
-    void placeInput();
+private:
+    int          extraW;
+    int          extraH;
+    QStringList  table;
+
+    QLineEdit   *input;
+    int          inRow;
+    int          inCol;
+    bool         inCol_inRow_initialization;
 
     friend class Sheet; //###
 
-    bool editable;
+    bool         editable;
 };
+
 
 #endif

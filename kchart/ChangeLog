@@ -1,3 +1,9 @@
+2004-11-16  Inge Wallin  <inge@lysator.liu.se>
+
+	Cleanup.
+	* kchartDataEditor.{h,cc}: Remove one constructor.
+	* table.h (class SheetTable): Reformatting for nicer looking code.
+
 2004-11-05  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 90895: save config is not needed

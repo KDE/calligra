@@ -12,8 +12,10 @@ class kchartDataEditor : public KDialog
 {
     Q_OBJECT
 public:
+#if 0
     kchartDataEditor();
-    kchartDataEditor(QWidget* parent);
+#endif
+    kchartDataEditor(QWidget* parent = 0);
     void setData(KoChart::Data* dat);
     void getData(KoChart::Data* dat);
     void getLegend(KChartParams* params);

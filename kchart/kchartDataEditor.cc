@@ -6,6 +6,7 @@
 #include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
 
+#if 0
 kchartDataEditor::kchartDataEditor() :
     KDialog(0,"KChart Data Editor",true)
 {
@@ -18,6 +19,8 @@ kchartDataEditor::kchartDataEditor() :
     setMinimumSize(size());
 
 }
+#endif
+
 
 kchartDataEditor::kchartDataEditor(QWidget* parent) :
     KDialog(parent,"KChart Data Editor",true)
