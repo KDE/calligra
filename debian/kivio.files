@@ -26,5 +26,5 @@ usr/lib/libkiviozoomtool.so
 usr/lib/libkiviozoomtool.la
 usr/lib/libkivioselecttool.so
 usr/lib/libkivioselecttool.la
-usr/bin/kiviopart
-usr/share/man/man1/kiviopart*
+usr/bin/kivio
+usr/share/man/man1/kivio*
