@@ -145,6 +145,8 @@ public:
     KCommand *dropEvent( KoTextObject *tmp,KoTextCursor dropCursor, bool dropInSameObj);
 
     void removeComment();
+    void copyTextOfComment();
+
     KoStyle * createStyleFromSelection(const QString & name);
 
 public slots:

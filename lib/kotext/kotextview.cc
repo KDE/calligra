@@ -1226,6 +1226,25 @@ KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, boo
     return macroCmd;
 }
 
+
+void KoTextView::copyTextOfComment()
+{
+    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+    if(ch->isCustom())
+    {
+        KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());
+        if( var )
+        {
+            KURL::List lst;
+            lst.append( var->note() );
+            QApplication::clipboard()->setSelectionMode(true);
+            QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
+            QApplication::clipboard()->setSelectionMode(false);
+            QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+        }
+    }
+}
+
 void KoTextView::removeComment()
 {
     KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
