@@ -71,6 +71,7 @@ private:
     QString m_currentTableName;
     int m_row;
     int m_column;
+    wvWare::SharedPtr<const wvWare::Word97::TAP> m_tap;
 };
 
 #endif // TABLEHANDLER_H

@@ -48,7 +48,7 @@ void KWordTableHandler::tableEnd()
     // Warning: if doing more here, check that it's still ok to call this from the ctor
 }
 
-void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> /*tap*/ )
+void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
 {
     kdDebug() << k_funcinfo << endl;
     if ( m_row == -2 )
@@ -59,6 +59,7 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     Q_ASSERT( !m_currentTableName.isEmpty() );
     m_row++;
     m_column = -1;
+    m_tap = tap;
 }
 
 void KWordTableHandler::tableRowEnd()
@@ -68,9 +69,37 @@ void KWordTableHandler::tableRowEnd()
 
 void KWordTableHandler::tableCellStart()
 {
+    Q_ASSERT( m_tap );
+    if ( !m_tap )
+        return;
     m_column++;
-    kdDebug() << k_funcinfo << " row=" << m_row << " column=" << m_column << endl;
-    emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, 1 /*TODO*/, m_currentTableName );
+    int nbCells = m_tap->itcMac;
+    Q_ASSERT( m_column < nbCells );
+    if ( m_column >= nbCells )
+        return;
+
+    // Get table cell descriptor
+    const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
+
+    // Check for merged cells
+    int colSize = 1;
+    if ( tc.fFirstMerged )
+    {
+        // This cell is the first one of a series of merged cells ->
+        // we want to find out its size.
+        int i = m_column + 1;
+        while ( i < nbCells && m_tap->rgtc[ i ].fMerged ) {
+            ++colSize;
+            ++i;
+        }
+    }
+    if ( tc.fVertRestart )
+    {
+        // Vertical merging is much harder to implement....
+        // ##### How do I find out the TAP of the rows below?
+    }
+    kdDebug() << k_funcinfo << " row=" << m_row << " column=" << m_column << " colSize=" << colSize << endl;
+    emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, colSize, m_currentTableName );
 }
 
 void KWordTableHandler::tableCellEnd()

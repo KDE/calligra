@@ -202,9 +202,11 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     m_paragraphProperties = paragraphProperties;
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     m_currentStyle = 0;
-    if ( paragraphProperties )
+    if ( paragraphProperties ) // Always set when called by wv2. But not set when called by tableStart.
+    {
         m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
-    Q_ASSERT( m_currentStyle );
+        Q_ASSERT( m_currentStyle );
+    }
     paragLayoutBegin();
     // If the style's format includes shadowtext, then we need a <SHADOW> tag
     // in the parag layout
