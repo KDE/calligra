@@ -8,13 +8,8 @@
 
 #include <kdialogbase.h>
 
-class QColor;
-class QSpinBox;
-class KHSSelector;
-class KGradientSelector;
-class KColorPatch;
 class KarbonPart;
-class KIntNumInput;
+class VColorTab;
 
 class VFillDlg : public KDialogBase
 {
@@ -24,31 +19,14 @@ public:
 	VFillDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 private:
-	QWidget* mRGBWidget;
-	KHSSelector* mColorSelector;
-	QSpinBox* mRed;
-	QSpinBox* mGreen;
-	QSpinBox* mBlue;
-	QSpinBox* mHue;
-	QSpinBox* mSaturation;
-	QSpinBox* mValue;
-	KIntNumInput* mOpacity;
-	KGradientSelector* mSelector;
-	KColorPatch* mOldColor;
-	KColorPatch* mColorPreview;
+	VColorTab* m_colortab;
 	KarbonPart *m_part;
 
 signals:
 	void fillChanged( const VFill & );
 
 private slots:
-	void slotUpdateFromRGBSpinBoxes();
-	void slotUpdateFromHSVSpinBoxes();
 	void slotApplyButtonPressed();
-	void slotUpdate(QColor *color = 0L);
-    void slotVChanged( int );
-	void slotHSChanged( int, int );
 };
-
 #endif
 

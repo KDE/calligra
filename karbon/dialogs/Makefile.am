@@ -14,6 +14,7 @@ noinst_HEADERS = \
 	vconfiguredlg.h \
 	vellipsedlg.h \
 	vfilldlg.h \
+	vcolortab.h \
 	vflattendlg.h \
 	vgradientdlg.h \
 	vinsertknotsdlg.h \
@@ -34,6 +35,7 @@ libkarbondialogs_la_SOURCES = \
 	vconfiguredlg.cc \
 	vellipsedlg.cc \
 	vfilldlg.cc \
+	vcolortab.cc \
 	vflattendlg.cc \
 	vgradientdlg.cc \
 	vinsertknotsdlg.cc \
