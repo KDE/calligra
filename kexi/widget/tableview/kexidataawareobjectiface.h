@@ -28,7 +28,7 @@
 #define KEXIDATAAWAREOBJECTINTERFACE_H
 
 #include <kdebug.h>
-#include <kexitableviewdata.h>
+#include "kexitableviewdata.h"
 
 class QObject;
 class KPopupMenu;
