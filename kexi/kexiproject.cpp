@@ -32,18 +32,35 @@
 
 #include <qpainter.h>
 #include <koTemplateChooseDia.h>
+#include "KexiProjectIface.h"
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+    dcop = 0;
     setInstance( KexiFactory::global(), false );
-	kdDebug()<<"creating KexDB instance"<<endl;
-        m_db = new KexiDB(this);
-        m_formManager=new KexiFormManager(this);
-        m_url = "";
+    kdDebug()<<"creating KexDB instance"<<endl;
+    m_db = new KexiDB(this);
+    m_formManager=new KexiFormManager(this);
+    m_url = "";
+    if ( name )
+        dcopObject();
 
 }
+
+KexiProject::~KexiProject()
+{
+    delete dcop;
+}
+
+DCOPObject* KexiProject::dcopObject()
+{
+    if ( !dcop )
+        dcop = new KexiProjectIface( this );
+    return dcop;
+}
+
 
 bool KexiProject::initDoc()
 {

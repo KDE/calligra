@@ -23,6 +23,7 @@
 #include <kexiformmanager.h>
 
 class KexiDoc;
+class DCOPObject;
 
 struct FileReference
 {
@@ -52,7 +53,8 @@ class KexiProject : public KoDocument
 public:
     KexiProject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
                  const char* name = 0, bool singleViewMode = false );
-
+    ~KexiProject();
+    virtual DCOPObject* dcopObject();
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE,
                  double zoomX = 1.0, double zoomY = 1.0 );
 
@@ -105,7 +107,7 @@ private:
         bool            m_dbAvaible;
         References      m_fileReferences;
         Groups          m_refGroups;
-
+    DCOPObject *dcop;
 
 };
 

@@ -19,13 +19,14 @@ KexiFormManager::~KexiFormManager()
 
 QStringList KexiFormManager::forms() const
 {
+    return QStringList();
 }
 
 bool KexiFormManager::rename(const QString& oldName, const QString& newName)
 {
 	Item *item=m_forms.take(oldName);
 	if (!item) return false;
-	if (m_forms[newName]==0) 
+	if (m_forms[newName]==0)
 	{
 		m_forms.insert(newName,item);
 		return true;
