@@ -462,7 +462,7 @@ QDomDocument KPresenterDoc::saveXML()
             {
                 QDomElement embedded=doc.createElement("EMBEDDED");
                 KPresenterChild* curr = (KPresenterChild*)chl.current();
-                embedded.appendChild(curr->save( doc ));
+                embedded.appendChild(curr->saveXML( doc ));
                 QDomElement settings=doc.createElement("SETTINGS");
                 for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
                     kpobject = _objectList->at( i );
@@ -767,10 +767,6 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	if ( name == "EMBEDDED" ) {
 	    parser.parseTag( tag, name, lst );
-	    // huh? testing iterators? >;p (Werner)
-	    //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    //for( ; it != lst.end(); ++it ) {
-	    //}
 	    KPresenterChild *ch = new KPresenterChild( this );
 	    KPPartObject *kppartobject = 0L;
 	    QRect r;
