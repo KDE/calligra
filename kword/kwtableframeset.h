@@ -120,8 +120,8 @@ public:
     void setBoundingRect( KoRect rect );
 
     /** resize and position all cells */
-    void recalcCols();
-    void recalcRows();
+    void recalcCols(int _col=-1,int _row=-1);
+    void recalcRows(int _col=-1,int _row=-1);
 
     /** returns the number of rows */
     unsigned int getRows() { return m_rows; }

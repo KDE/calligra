@@ -157,12 +157,18 @@ bool KWTableFrameSet::isTableHeader( Cell *cell )
 }
 
 /*================================================================*/
-void KWTableFrameSet::recalcCols()
+void KWTableFrameSet::recalcCols(int _col,int _row)
 {
     unsigned int row=0,col=0;
     if(! m_cells.isEmpty() ) {
         //get selected cell
-        isOneSelected(row,col);
+        if(_col!=-1 && _row!=-1)
+        {
+            row=(unsigned int)_row;
+            col=(unsigned int)_col;
+        }
+        else
+            isOneSelected(row,col);
         // ** check/set sizes of frames **
         // we assume only left or only right pos has changed.
         // check if leftCoordinate is same as rest of tableRow
@@ -289,7 +295,7 @@ void KWTableFrameSet::recalcCols()
 }
 
 /*================================================================*/
-void KWTableFrameSet::recalcRows()
+void KWTableFrameSet::recalcRows(int _col, int _row)
 {
     // remove automatically added headers
     for ( unsigned int j = 0; j < m_rows; j++ ) {
@@ -301,7 +307,14 @@ void KWTableFrameSet::recalcRows()
     m_hasTmpHeaders = false;
     // check/set sizes of frames
     unsigned int row=0,col=0;
-    if(! m_cells.isEmpty() && isOneSelected(row,col)) {
+    if(!m_cells.isEmpty() /*&& isOneSelected(row,col)*/) {
+        if(_col!=-1 && _row!=-1)
+        {
+            row=(unsigned int)_row;
+            col=(unsigned int)_col;
+        }
+        else
+            isOneSelected(row,col);
         // check if topCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
         Cell *cell;

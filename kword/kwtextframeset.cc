@@ -1214,11 +1214,20 @@ void KWTextFrameSet::formatMore()
                             m_doc->recalcFrames();
                         }
 
+                        KWTableFrameSet *table = theFrame->getFrameSet()->getGroupManager();
+                        if (table)
+                        {
+                            KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
+                            table->recalcCols(cell->m_col,cell->m_row);
+                            table->recalcRows(cell->m_col,cell->m_row);
+                            table->updateTempHeaders();
+                        }
                         if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == Reconnect) {
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                             // fall through to AutoCreateNewFrame
                         } else {
                             m_doc->frameChanged( theFrame );
+
                             updateFrames();
                             break;
                         }
