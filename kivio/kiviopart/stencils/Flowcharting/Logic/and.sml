@@ -32,4 +32,5 @@
 		<KivioPoint x="00.0" y="00.0" type="bezier"/> 
 		<KivioPoint x="20.0" y="00.0" type="bezier"/>
 	</KivioShape>	
+	<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="40.0" h="50.0" />
 </KivioShapeStencil>

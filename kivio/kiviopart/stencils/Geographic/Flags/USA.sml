@@ -12,7 +12,6 @@
 <AutoUpdate data="off"/>
 </KivioSMLStencilSpawnerInfo>
 <Dimensions w="165.500" h="99.400" defaultAspect="0.75"/>
-<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="165.500" h="99.400" />
 <KivioShape type="Rectangle" name="Rectangle1" x="0.100" y="0.100" w="165.300" h="99.200">
 	<KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#000000" />
 	<KivioFillStyle colorStyle="1" color="#ffffff" />
@@ -799,4 +798,5 @@
 	<KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#000000" />
 	<KivioFillStyle colorStyle="1" color="#ffffff" />
 </KivioShape>
+<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="165.500" h="99.400" />
 </KivioShapeStencil>

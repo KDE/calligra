@@ -99,5 +99,5 @@
 <KivioPoint x="130" y="133.75"/>
 <KivioPoint x="130" y="131.25"/>
 </KivioShape>
+<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="200.0" h="150.0" />
 </KivioShapeStencil>
-

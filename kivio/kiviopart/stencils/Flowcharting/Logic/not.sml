@@ -19,4 +19,5 @@
 	
 	<Dimensions w="10" h="10" defaultAspect="1"/>
 	<KivioShape type="Ellipse" name="Connector" x="0" w="10" y="0" h="10"/>
-</KivioShapeStencil>    
+	<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="10" h="10" />
+</KivioShapeStencil>

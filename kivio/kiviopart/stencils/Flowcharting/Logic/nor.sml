@@ -35,5 +35,5 @@
 		<KivioPoint x="20" y="10" type="bezier"/> 
 	</KivioShape>
 	<KivioShape type="Ellipse" name="Connector" x="15" y="00" w="10" h="10"/>
-   
-   </KivioShapeStencil>
+	<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="40.0" h="60.0" />
+</KivioShapeStencil>

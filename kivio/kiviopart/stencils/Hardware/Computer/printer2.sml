@@ -112,5 +112,5 @@
         <KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#000000" />
         <KivioFillStyle colorStyle="1" color="#e0e0e0" />
 </KivioShape>
+<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="111.94875" h="101.9175" />
 </KivioShapeStencil>
-

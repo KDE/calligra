@@ -21,4 +21,5 @@
 	<KivioShape type="Ellipse" name="Connector" x="0" w="5" y="0" h="5">
 		<KivioFillStyle colorStyle="1" color="#000000"/>
 	</KivioShape>
+	<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="5" h="5" />
 </KivioShapeStencil>
