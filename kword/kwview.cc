@@ -3452,7 +3452,7 @@ void KWView::slotHRulerDoubleClicked()
     bool state = (mode!="ModeText");
     if ( !state )
         return;
-    if ( m_gui->getHorzRuler()->flags() & KoRuler::F_TABS )
+    if ( (m_gui->getHorzRuler()->flags() & KoRuler::F_TABS)&&currentTextEdit() )
         formatParagraph();
     else
         formatPage();
