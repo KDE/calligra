@@ -3281,5 +3281,12 @@ void KPresenterDoc::configureSpellChecker()
     }
 }
 
+void KPresenterDoc::updateRulerInProtectContentMode()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updateRulerInProtectContentMode();
+}
+
 
 #include <kpresenter_doc.moc>

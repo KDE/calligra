@@ -353,6 +353,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
         setZoom( 100, true );
         slotUpdateRuler();
         initGui();
+        m_pKPresenterDoc->updateZoomRuler();
     }
 
 
@@ -5874,7 +5875,7 @@ void KPresenterView::slotUpdateRuler()
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())
             {
-                int flags = (KoRuler::F_INDENTS | KoRuler::F_TABS);
+                int flags = txtobj->isProtectContent ? 0: (KoRuler::F_INDENTS | KoRuler::F_TABS);
                 if( getHRuler()->flags()!= flags )
                 {
                     getHRuler()->changeFlags(flags);
@@ -7225,6 +7226,19 @@ void KPresenterView::testAndCloseAllTextObjectProtectedContent()
 void KPresenterView::updateBgSpellCheckingState()
 {
     actionAllowBgSpellCheck->setChecked( m_pKPresenterDoc->backgroundSpellCheckEnabled() );
+}
+
+
+void KPresenterView::updateRulerInProtectContentMode()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit && getHRuler()) {
+        if ( !edit->kpTextObject()->isProtectContent() )
+            getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+        else
+            getHRuler()->changeFlags(0);
+        getHRuler()->repaint();
+    }
 }
 
 

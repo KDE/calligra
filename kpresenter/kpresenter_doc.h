@@ -134,7 +134,7 @@ public:
     QPtrList<KPrPage>& pageList() { return m_pageList;}
 
     void insertPixmapKey( KoPictureKey key );
-    
+
     void insertObjectInPage(double offset, KPObject *_obj);
 
     void setGridValue( double rx, double ry, bool _replace = true );
@@ -412,6 +412,7 @@ public:
     void configureSpellChecker();
 
     void loadPictureMap ( QDomElement& domElement );
+    void updateRulerInProtectContentMode();
 
 public slots:
     void movePage( int from, int to );

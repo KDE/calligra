@@ -140,6 +140,7 @@ public:
     void insertFile(const QString &path);
     void configureSpellChecker();
     void testAndCloseAllTextObjectProtectedContent();
+    void updateRulerInProtectContentMode();
 signals:
     void currentPageChanged( int );
 

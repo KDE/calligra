@@ -2570,12 +2570,15 @@ void KPrProtectContentCommand::execute()
 {
     objects->setProtectContent( protectContent );
     doc->updateObjectSelected();
+    doc->updateRulerInProtectContentMode();
+
 }
 
 void KPrProtectContentCommand::unexecute()
 {
     objects->setProtectContent( !protectContent );
     doc->updateObjectSelected();
+    doc->updateRulerInProtectContentMode();
 }
 
 KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPresenterDoc *_doc )
