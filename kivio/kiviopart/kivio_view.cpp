@@ -55,6 +55,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kstatusbar.h>
+#include <kcombobox.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -82,10 +83,9 @@
 #include "kivio_config.h"
 
 #include "tkcoloractions.h"
-#include "kivio_lineendsaction.h"
-#include "tkfloatspinboxaction.h"
-#include "tk2floatspinboxaction.h"
-#include "tkcombobox.h"
+//#include "tkfloatspinboxaction.h"
+//#include "tk2floatspinboxaction.h"
+//#include "tkcombobox.h"
 #include "tooldockmanager.h"
 #include "tooldockbase.h"
 
@@ -121,6 +121,7 @@
 #include "kivio_command.h"
 #include "kiviostencilsetaction.h"
 #include <qiconview.h>
+#include "kivio_lineendspix.h"
 
 
 
@@ -480,13 +481,15 @@ void KivioView::setupActions()
   connect(m_viewZoom, SIGNAL(activated(const QString&)), SLOT(viewZoom(const QString&)));
   changeZoomMenu();
 
-  // FIXME: Port to KOffice!
-  m_setEndArrow = new LineEndsAction( false, actionCollection(), "endArrowHead" );
-  m_setStartArrow = new LineEndsAction( true, actionCollection(), "startArrowHead" );
-
+  m_setEndArrow = new KComboBox(false, this);
+  m_setStartArrow = new KComboBox(false, this);
+  new KWidgetAction(m_setEndArrow, i18n("End Arrowhead"), 0, 0, 0, actionCollection(), "endArrowHead");
+  new KWidgetAction(m_setStartArrow, i18n("Start Arrowhead"), 0, 0, 0, actionCollection(), "startArrowHead");
+  loadArrowHeads(m_setEndArrow, true);
+  loadArrowHeads(m_setStartArrow, false);
   connect( m_setEndArrow, SIGNAL(activated(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setStartArrow, SIGNAL(activated(int)), SLOT(slotSetStartArrow(int)));
-
+/*
   m_setEndArrowSize = new TKSizeAction(actionCollection(), "endArrowSize");
   m_setStartArrowSize = new TKSizeAction(actionCollection(), "startArrowSize");
 
@@ -495,7 +498,7 @@ void KivioView::setupActions()
 
   connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setStartArrowSize, SLOT(setUnit(int)) );
   connect( m_setStartArrowSize, SIGNAL(activated()), SLOT(slotSetStartArrowSize()));
-
+*/
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
@@ -1271,8 +1274,8 @@ void KivioView::updateToolBars()
         m_setStartArrow->setCurrentItem(0);
         m_setEndArrow->setCurrentItem(0);
 
-        m_setStartArrowSize->setSize(10.0, 10.0);
-        m_setEndArrowSize->setSize(10.0, 10.0);
+//        m_setStartArrowSize->setSize(10.0, 10.0);
+//        m_setEndArrowSize->setSize(10.0, 10.0);
     }
     else
     {
@@ -1299,8 +1302,8 @@ void KivioView::updateToolBars()
         m_setStartArrow->setCurrentItem( pStencil->startAHType() );
         m_setEndArrow->setCurrentItem( pStencil->endAHType() );
 
-        m_setStartArrowSize->setSize( pStencil->startAHWidth(), pStencil->startAHLength() );
-        m_setEndArrowSize->setSize( pStencil->endAHWidth(), pStencil->endAHLength() );
+//        m_setStartArrowSize->setSize( pStencil->startAHWidth(), pStencil->startAHLength() );
+//        m_setEndArrowSize->setSize( pStencil->endAHWidth(), pStencil->endAHLength() );
     }
 
     m_pProtectionPanel->updateCheckBoxes();
@@ -1370,7 +1373,7 @@ void KivioView::slotSetStartArrowSize()
       return;
 
     float w,h;
-    m_setStartArrowSize->size(w,h);
+//    m_setStartArrowSize->size(w,h);
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of Begin Arrow"));
     bool createMacro = false;
     while( pStencil )
@@ -1400,7 +1403,7 @@ void KivioView::slotSetEndArrowSize()
       return;
 
     float w,h;
-    m_setEndArrowSize->size(w,h);
+//    m_setEndArrowSize->size(w,h);
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of End Arrow"));
     bool createMacro = false;
     while( pStencil )
@@ -1921,6 +1924,46 @@ void KivioView::showZoom(int z)
   QStringList list = m_viewZoom->items();
   QString zoomStr = QString::number(z) + '%';
   m_viewZoom->setCurrentItem(list.findIndex(zoomStr));
+}
+
+void KivioView::loadArrowHeads(KComboBox* combo, bool inverted)
+{
+  QBitmap mask;
+  QPixmap pixAll(lineends);
+  int tw = combo->fontMetrics().width(" 99:");
+
+  if (inverted) {
+    QPixmap tpix(pixAll.width(),pixAll.height());
+    QPainter tp(&tpix);
+    tp.scale(-1,1);
+    tp.drawPixmap(-pixAll.width()+1,0,pixAll);
+    tp.end();
+    pixAll = tpix;
+  }
+
+  QPixmap pix(pixAll.width() + tw + 3, 17);
+  QPainter p(&pix, combo);
+  int cindex = 0;
+
+  // insert item "0: None"
+  pix.fill(white);
+  p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
+  p.drawText(tw+3,0,pix.width()-tw-3,pix.height(),AlignLeft|AlignVCenter,i18n("no line end", "None"));
+  mask = pix;
+  pix.setMask(mask);
+  combo->insertItem(pix,cindex++);
+
+  for (int y = 0; y < pixAll.height(); y += 17 ) {
+    pix.fill(white);
+    p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
+    p.drawPixmap(tw+3,0,pixAll,0,y,pix.width(),pix.height());
+
+    mask = pix;
+    pix.setMask(mask);
+    combo->insertItem(pix,cindex++);
+  }
+
+  p.end();
 }
 
 #include "kivio_view.moc"

@@ -56,17 +56,13 @@ class KToggleAction;
 class KSelectColorAction;
 class KActionMenu;
 
-
-class LineEndsAction;
-
-class TKSizeAction;
-
 class QStringList;
 class QButton;
 class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
 class KoUnitDoubleSpinBox;
+class KComboBox;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -245,6 +241,7 @@ class KivioView : public KoView
   protected:
     void setupActions();
     void initActions();
+    void loadArrowHeads(KComboBox* combo, bool inverted);
 
     virtual void updateReadWrite( bool readwrite );
 
@@ -281,14 +278,10 @@ class KivioView : public KoView
     KivioParagraphAction *m_setHTextAlignment;
     KivioParagraphAction *m_setVTextAlignment;
 
-    LineEndsAction *m_setStartArrow;
-    LineEndsAction *m_setEndArrow;
+    KComboBox *m_setStartArrow;
+    KComboBox *m_setEndArrow;
 
     KoUnitDoubleSpinBox *m_setLineWidth;
-
-    TKSizeAction *m_setEndArrowSize;
-    TKSizeAction *m_setStartArrowSize;
-
 
     QStringList m_lineWidthList;
 
