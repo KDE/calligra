@@ -28,6 +28,7 @@ class QGrid;
 class KDoubleNumInput;
 
 class KarbonPart;
+class KarbonView;
 class TKUFloatSpinBox;
 
 // Small panel displaying selected object(s) geometry. Can be used for quick numerical modifications of objects
@@ -36,7 +37,7 @@ class VObjectDlg : public QDockWindow
 	Q_OBJECT
 
 public:
-	VObjectDlg( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
+	VObjectDlg( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
 	virtual ~VObjectDlg();
 	void enable();
 	void disable();
@@ -46,6 +47,7 @@ public:
 private:
 	QGrid *mainLayout;
 	KarbonPart *m_part;
+	KarbonView *m_view;
 	KDoubleNumInput *m_X;
 	KDoubleNumInput *m_Y;
 	KDoubleNumInput *m_Width;
@@ -58,7 +60,7 @@ private slots:
 	void yChanged( double y );
 	void widthChanged( double width );
 	void heightChanged( double height );
-	void lineWidthChanged( double width );
+	void lineWidthChanged( float width );
 	void rotationChanged( double angle );
 };
 

@@ -32,6 +32,7 @@
 #include <tkfloatspinbox.h>
 
 #include "karbon_part.h"
+#include "karbon_view.h"
 
 #include "vobjectdlg.h"
 #include "vtransformcmd.h"
@@ -154,8 +155,8 @@ static const char *stroke_xpm[] = {
 "XXXXXXXXXXXXXXXX"
 };
 
-VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
-	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part )
+VObjectDlg::VObjectDlg( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
+	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Geometry Panel" ) );
 	setCloseMode( QDockWindow::Always );
@@ -196,7 +197,7 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	connect (m_Y, SIGNAL( valueChanged( double ) ), this, SLOT( yChanged ( double ) ) );                                                                                    
 	connect (m_Width, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged ( double ) ) );
 	connect (m_Height, SIGNAL( valueChanged( double ) ), this, SLOT( heightChanged ( double ) ) );
-	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( lineWidthChanged( double ) ) );
+	connect( m_setLineWidth, SIGNAL( valueChanged( float ) ), this, SLOT( lineWidthChanged( float ) ) );
 	connect (m_Rotation, SIGNAL( valueChanged( double ) ), this, SLOT( rotationChanged ( double ) ) );
 	
 	setWidget( mainLayout );
@@ -280,8 +281,9 @@ VObjectDlg::heightChanged( double height )
 }
 
 void
-VObjectDlg::lineWidthChanged ( double width )
+VObjectDlg::lineWidthChanged ( float width )
 {
+	//m_view->setLineWidth( width );
 	m_part->addCommand( new VStrokeLineWidthCmd( &m_part->document(), width ), true );
 }
 
