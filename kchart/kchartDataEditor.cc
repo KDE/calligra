@@ -17,6 +17,8 @@ namespace KChart
 {
 
 
+#define COLUMNWIDTH  80
+
 kchartDataEditor::kchartDataEditor(QWidget* parent) :
     KDialogBase(parent, "dataeditor", true, i18n("KChart Data Editor"), 
 		KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
@@ -106,7 +108,7 @@ void kchartDataEditor::setData( KoChart::Data* dat )
     m_table->setNumRows(rowsCount + 1);
     m_table->setNumCols(colsCount + 1);
 
-    for (unsigned int row = 0; row < rowsCount; row++)
+    for (unsigned int row = 0; row < rowsCount; row++) {
         for (unsigned int col = 0; col < colsCount; col++) {
             kdDebug(35001) << "Set dialog cell for " << row << "," << col << endl;
             KoChart::Value t = dat->cell(row,col);
@@ -127,6 +129,12 @@ void kchartDataEditor::setData( KoChart::Data* dat )
                     ; // nothing on purpose
             }
         }
+    }
+
+    for (unsigned int col = 1; col < colsCount + 1; col++) 
+      m_table->setColumnWidth(col, COLUMNWIDTH);
+
+    kdDebug(35001) << "Column width: " << m_table->columnWidth(1) << endl;
 }
 
 

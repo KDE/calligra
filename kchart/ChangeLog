@@ -1,5 +1,8 @@
-2005-03-09    <ingwa@dhcp-254-144.lkpg.cendio.se>
+2005-03-09  Inge Wallin  <inge@lysator.liu.se>
 
+	Experiment with visual appearance of the new data editor
+	* kchartDataEditor.cc (setData): Set column widths to 80.
+	
 	Fix bug introduced by patch to fix bug 14971: Axes label handling
 	in connection with KSpread was broken.
 	* kchart_part.cc (setData): set m_rowLabels and m_colLabels
@@ -25,7 +28,7 @@
 	* kchart_view.cc (edit): call new methods above in data editor,
 	and don't call old methods setLegend, getLegend, setXLabel, etc.
 
-2005-03-07    <inge@lysator.liu.se>
+2005-03-07  Inge Wallin  <inge@lysator.liu.se>
 
 	Start on bug 14971: kchart data import should flip X & Y data.
 	* kchart_part.{h,cc} (KChartAuxiliary): New struct.
