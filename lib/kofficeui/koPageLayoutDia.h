@@ -33,22 +33,26 @@
 #include <krestrictedline.h>
 
 // paper formats (mm)
-#define PG_A3_WIDTH          297.0
-#define PG_A3_HEIGHT         420.0
-#define PG_A4_WIDTH          210.0
-#define PG_A4_HEIGHT         297.0
-#define PG_A5_WIDTH          148.0
-#define PG_A5_HEIGHT         210.0
-#define PG_US_LETTER_WIDTH   216.0
-#define PG_US_LETTER_HEIGHT  279.0
-#define PG_US_LEGAL_WIDTH    216.0
-#define PG_US_LEGAL_HEIGHT   356.0
-#define PG_SCREEN_WIDTH      240.0
-#define PG_SCREEN_HEIGHT     180.0
+#define PG_A3_WIDTH             297.0
+#define PG_A3_HEIGHT            420.0
+#define PG_A4_WIDTH             210.0
+#define PG_A4_HEIGHT            297.0
+#define PG_A5_WIDTH             148.0
+#define PG_A5_HEIGHT            210.0
+#define PG_B5_WIDTH             182.0
+#define PG_B5_HEIGHT            257.0
+#define PG_US_LETTER_WIDTH      216.0
+#define PG_US_LETTER_HEIGHT     279.0
+#define PG_US_LEGAL_WIDTH       216.0
+#define PG_US_LEGAL_HEIGHT      356.0
+#define PG_US_EXECUTIVE_WIDTH   191.0
+#define PG_US_EXECUTIVE_HEIGHT  254.0
+#define PG_SCREEN_WIDTH         240.0
+#define PG_SCREEN_HEIGHT        180.0
 
 // enums
 enum KoTabs {FORMAT_AND_BORDERS = 1,HEADER_AND_FOOTER = 2};
-enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6};
+enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
 enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
 enum KoUnit {PG_MM = 0,PG_CM = 1,PG_INCH = 2};
 

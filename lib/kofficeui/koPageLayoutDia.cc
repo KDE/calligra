@@ -203,6 +203,8 @@ void KoPageLayoutDia::setupTab1()
   cpgFormat->insertItem(i18n("US Legal"));
   cpgFormat->insertItem(i18n("Screen"));
   cpgFormat->insertItem(i18n("Custom"));
+  cpgFormat->insertItem(i18n("DIN B5"));
+  cpgFormat->insertItem(i18n("US Executive"));
   cpgFormat->resize(cpgFormat->sizeHint());
   formatGrid->addWidget(cpgFormat,1,0);
   connect(cpgFormat,SIGNAL(activated(int)),this,SLOT(formatChanged(int)));
@@ -663,6 +665,16 @@ void KoPageLayoutDia::formatChanged(int _format)
 	  {
 	    w = PG_SCREEN_WIDTH;
 	    h = PG_SCREEN_HEIGHT;
+	  } break;
+	case PG_DIN_B5:
+	  {
+	    w = PG_B5_WIDTH;
+	    h = PG_B5_HEIGHT;
+	  } break;
+	case PG_US_EXECUTIVE:
+	  {
+	    w = PG_US_EXECUTIVE_WIDTH;
+	    h = PG_US_EXECUTIVE_HEIGHT;
 	  } break;
 	}
       if (layout.orientation == PG_LANDSCAPE)
