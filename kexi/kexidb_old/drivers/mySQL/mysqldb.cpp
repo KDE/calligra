@@ -76,7 +76,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 {
 	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
 
-	if(socket == "")
+	if(socket.isEmpty())
 	{
 		QStringList sockets;
 		sockets.append("/var/lib/mysql/mysql.sock");
@@ -410,7 +410,7 @@ MySqlDB::createDefinition(const QString& /*field*/, KexiDBField::ColumnType dtyp
 		qstr += " UNSIGNED";
 	}
 
-	if(defaultVal != "")
+	if(!defaultVal.isEmpty())
 	{
 		qstr += " DEFAULT " + defaultVal;
 	}

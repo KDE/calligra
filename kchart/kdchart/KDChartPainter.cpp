@@ -1362,8 +1362,7 @@ throw( KDChartNotEnoughSpaceException )
         findLegendTexts( data );
 
         bool hasLegendTitle = false;
-        if ( params()->legendTitleText() != QString::null &&
-             params()->legendTitleText() != "" )
+        if ( !params()->legendTitleText().isEmpty() )
             hasLegendTitle = true;
 
         int legendTitleWidth = 0;

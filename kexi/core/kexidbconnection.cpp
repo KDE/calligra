@@ -165,7 +165,7 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 //	QDomElement savePassElement = rootElement.namedItem("savePassword").toElement();
 
 	KexiDB::DBType type = KexiDB::NoDB;
-	if(locationElement.text() == "")
+	if(locationElement.text().isEmpty())
 	{
 		type = KexiDB::RemoteDB;
 	}

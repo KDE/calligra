@@ -146,7 +146,7 @@ bool
 KexiDataTable::executeQuery(const QString &queryStatement)
 {
 	kdDebug() << "KexiDataTable::executeQuery(): executing query: '" << queryStatement << "'" << endl;
-	if(queryStatement == "")
+	if(queryStatement.isEmpty())
 		return false;
 
 	try

@@ -87,7 +87,7 @@ bool KivioShape::loadXML( const QDomElement &e )
     m_shapeData.setName( name );
     m_shapeData.setShapeType( (KivioShapeData::KivioShapeType)XmlReadInt( e, "shapeType", -1 ));
 
-    if( m_shapeData.name() == "" ||
+    if( m_shapeData.name().isEmpty() ||
         m_shapeData.shapeType() == -1 )
     {
        kdWarning() << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;

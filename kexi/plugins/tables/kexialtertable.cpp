@@ -213,7 +213,7 @@ KexiAlterTable::changeTable()
 
 	if(i->isInsertItem())
 	{
-		if(i->getValue(0).toString() != "" && i->getValue(1).toInt() != 0)
+		if(!i->getValue(0).toString().isEmpty() && i->getValue(1).toInt() != 0)
 		{
 			kdDebug() << "Create new field!" << endl;
 			ok = kexiProject()->db()->createField(*field, m_tableFields, m_create);

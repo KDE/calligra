@@ -278,7 +278,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     {
         QString id = XmlReadString( node.toElement(), "id", "" );
 
-        if( id == "" )
+        if( id.isEmpty() )
         {
 	   kdDebug() << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found, it contains no id!" << endl;
         }

@@ -69,7 +69,7 @@ KexiCreateProjectPageEngine::fill()
 		m_engine->insertItem(*it);
 	}
 
-	if(m_engine->currentText() != "")
+	if(!m_engine->currentText().isEmpty())
 	{
 		setProperty("engine", QVariant(m_engine->currentText()));
 		setProperty("continue", QVariant(true));
@@ -85,7 +85,7 @@ KexiCreateProjectPageEngine::fillSummery()
 	QString userSummery = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummery);
 
 
-	if(m_engine->currentText() != "")
+	if(!m_engine->currentText().isEmpty())
 	{
 		m_summery->setText(userSummery);
 	}

@@ -170,7 +170,7 @@ KivioShape *KivioSMLStencil::locateShape( const QString &name )
 {
     KivioShape *pShape;
 
-    if( name == "" )
+    if( name.isEmpty() )
         return NULL;
 
     pShape = m_pShapeList->first();

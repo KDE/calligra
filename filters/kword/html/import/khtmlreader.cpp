@@ -336,7 +336,7 @@ KHTMLReader::~KHTMLReader(){
 
 bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
         QString s=e.getAttribute("align").string();
-        if (s != "") {
+        if (!s.isEmpty()) {
               _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
         }
         return true;
@@ -425,7 +425,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  	int has_borders=false;
 	QColor bgcolor=parsecolor("#FFFFFF");
  	DOM::Element table_body=e.firstChild();
- 	if (table_body.getAttribute("bgcolor").string() != "")
+ 	if (!table_body.getAttribute("bgcolor").string().isEmpty())
  	       bgcolor=parsecolor(table_body.getAttribute("bgcolor").string());
  	if ((e.getAttribute("border").string().toInt() > 0))
  		has_borders=true;
@@ -436,14 +436,14 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  	if (rows.tagName().string().lower() == "tr") {
 
  	    QColor obgcolor=bgcolor;
- 	    if (rows.getAttribute("bgcolor").string() != "")
+ 	    if (!rows.getAttribute("bgcolor").string().isEmpty())
  	       	bgcolor=parsecolor(rows.getAttribute("bgcolor").string());
 
  		ncol=0;
  		for (DOM::Element cols=rows.firstChild();!cols.isNull();cols=cols.nextSibling()) {
  		        if (cols.tagName().string().lower() == "td") {
  		             QColor bbgcolor=bgcolor;
-		 	    if (cols.getAttribute("bgcolor").string() != "")
+		 	    if (!cols.getAttribute("bgcolor").string().isEmpty())
  	       			bgcolor=parsecolor(cols.getAttribute("bgcolor").string());
 
 			    	pushNewState();
@@ -508,7 +508,7 @@ bool KHTMLReader::parse_font(DOM::Element e) {
 	// fixme don't hardcode 12 font size ...
 	QString face=e.getAttribute("face").string();
         QColor color=parsecolor("#000000");
-        if (e.getAttribute("color").string() != "")
+        if (!e.getAttribute("color").string().isEmpty())
         	color=parsecolor(e.getAttribute("color").string());
         QString size=e.getAttribute("size").string();
         int isize=-1;

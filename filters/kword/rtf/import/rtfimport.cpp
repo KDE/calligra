@@ -1331,7 +1331,7 @@ void RTFImport::parseField( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
-	if (fldinst != "")
+	if (!fldinst.isEmpty())
 	{
 	    DomNode node;
 	    QStringList list = QStringList::split( ' ', fldinst );
@@ -1547,7 +1547,7 @@ void RTFImport::parseFldinst( RTFProperty * )
 
 void RTFImport::parseFldrslt( RTFProperty * )
 {
-    if (fldinst == "")
+    if (fldinst.isEmpty())
     {
 	if (token.type == RTFTokenizer::OpenGroup)
 	{
