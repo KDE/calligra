@@ -46,6 +46,12 @@ public:
   KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification = "" );
 
   /**
+   * Creates a tar store on a given i/o device.
+   * This can be used to read/write a koffice document from/to a QByteArray, for instance.
+   */
+  KoStore( QIODevice *dev, Mode mode );
+
+  /**
    * Destroys the store (i.e. closes the file on the hard disk)
    */
   ~KoStore();
@@ -139,6 +145,8 @@ protected:
       NAMING_VERSION_2_1,
       NAMING_VERSION_2_2
   } m_namingVersion;
+
+  void init( Mode _mode );
 
   Mode m_mode;
 

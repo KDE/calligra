@@ -34,10 +34,6 @@
 
 KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
-  m_bIsOpen = false;
-  m_mode = _mode;
-  m_stream = 0L;
-
   kdDebug(s_area) << "KoStore Constructor filename = " << _filename
     << " mode = " << int(_mode) << endl;
 
@@ -47,15 +43,30 @@ KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIde
   m_pTar = new KTarGz( _filename );
 #endif
 
-  m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
-
-  if ( m_bGood && _mode == Read )
-      m_bGood = m_pTar->directory() != 0;
+  init( _mode ); // open the targz file and init some vars
 
 #if KDE_VERSION >= 220 // we have the new KTar
   if ( m_bGood && _mode == Write )
       m_pTar->setOrigFileName( appIdentification );
 #endif
+}
+
+KoStore::KoStore( QIODevice *dev, Mode mode )
+{
+  m_pTar = new KTarGz( dev );
+  init( mode );
+}
+
+void KoStore::init( Mode _mode )
+{
+  m_bIsOpen = false;
+  m_mode = _mode;
+  m_stream = 0L;
+
+  m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
+
+  if ( m_bGood && _mode == Read )
+      m_bGood = m_pTar->directory() != 0;
 
   // Assume new style names.
   m_namingVersion = NAMING_VERSION_2_2;
@@ -65,8 +76,7 @@ KoStore::~KoStore()
 {
   m_pTar->close();
   delete m_pTar;
-  if ( m_stream )
-    delete m_stream;
+  delete m_stream;
 }
 
 // See the specification for details of what this function does.
