@@ -193,7 +193,7 @@ Py::Object PythonExtension::toPyObject(const QString& s)
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QString)") << endl;
 #endif
-    return s.isNull() ? Py::None() : Py::String(s.latin1());
+    return s.isNull() ? Py::String() : Py::String(s.latin1());
 }
 
 Py::List PythonExtension::toPyObject(QStringList list)
