@@ -5203,6 +5203,33 @@ void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
             currentCellStyle.addProperty( "style:print-content", "false");
         }
     }
+    bool hideAll = false;
+    bool hideFormula = false;
+    bool isNotProtected = false;
+    if ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
+        hideAll = isHideAll( column(), row() );
+
+    if ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
+        hideFormula = isHideFormula( column(), row() );
+    if ( hasProperty( KSpreadFormat::PNotProtected ) || !hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
+        isNotProtected = notProtected( column(), row() );
+
+    if ( hideAll )
+        currentCellStyle.addProperty( "style:cell-protect", "hidden-and-protected" );
+    else
+    {
+        if ( isNotProtected && !hideFormula )
+            currentCellStyle.addProperty( "style:cell-protect", "none" );
+        else
+        {
+            if ( isNotProtected && hideFormula )
+                currentCellStyle.addProperty( "style:cell-protect", "formula-hidden" );
+            else if ( hideFormula )
+                currentCellStyle.addProperty( "style:cell-protect", "protected formula-hidden" );
+            else if ( !isNotProtected )
+                currentCellStyle.addProperty( "style:cell-protect", "protected" );
+        }
+    }
 #if 0
     if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
         cs.left  = leftBorderPen( col, row );
@@ -5215,15 +5242,6 @@ void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 
     if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
         cs.bottom  = bottomBorderPen( col, row );
-
-    if ( hasProperty( KSpreadFormat::PNotProtected ) || !hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
-        cs.notProtected = notProtected( col, row );
-
-    if ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
-        cs.hideAll = isHideAll( col, row );
-
-    if ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
-        cs.hideFormula = isHideFormula( col, row );
 #endif
 }
 

@@ -6471,7 +6471,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         kdDebug()<<" style :"<<style<<endl;
         if ( style )
         {
-            QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+            QDomElement properties( style->namedItem( "style:table-properties" ).toElement() );
             if ( !properties.isNull() )
             {
                 if ( properties.hasAttribute( "table:display" ) )
