@@ -17,8 +17,35 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
     else {
         fileOut=new KTar(fileOutName);
         fileOut->open(IO_WriteOnly);
-        fileOut->writeDir("testOLE.kwd", "koffice", "users");  // too lazy for "playing"
-                                                               // with Strings now
+
+        if(fileOutName.right(4)==".tgz")
+            fileOutName.truncate(fileOutName.length()-4);
+        else if(fileOutName.right(7)==".tar.gz")
+            fileOutName.truncate(fileOutName.length()-7);
+
+        QString tmp;
+        QChar c;
+        int i=1;
+
+        c=fileOutName[fileOutName.length()];
+
+        while(c!='/') {
+            c=fileOutName[fileOutName.length()-i];
+            ++i;
+            tmp.prepend(static_cast<char>(c));
+        }
+        if(tmp.isEmpty())
+            tmp="/nix";
+
+        dir=tmp.right(tmp.length()-1);
+
+        tmp=dir;
+        dir+='/';
+
+        fileOut->writeDir(tmp, "koffice", "users");
+
+        kdebug(KDEBUG_INFO, 31000, (const char*)tmp);
+        kdebug(KDEBUG_INFO, 31000, (const char*)dir);
     }
 }
 
@@ -42,12 +69,12 @@ const bool OLEFilter::filter() {
 void OLEFilter::slotSavePic(const char *data, const char *type,
                             const unsigned int size, char *nameOUT) {
 
-    QString name, finalName;
+    QString name;
 
     name+="pic";
 
     name+=QString::number(numPic);
-    numPic++;
+    ++numPic;
     name+='.';
     name+=type;
 
@@ -55,11 +82,9 @@ void OLEFilter::slotSavePic(const char *data, const char *type,
     strncpy(nameOUT, (const char*)name, name.length());
     nameOUT[name.length()]='\0';
 
-    finalName+=fileOutName;
-    finalName+='/';
-    finalName+=name;
+    name.prepend(dir);
 
-    fileOut->writeFile(finalName, "koffice", "users", size, data);
+    fileOut->writeFile(name, "koffice", "users", size, data);
 }
 
 void OLEFilter::slotPart(const char *, char *) {

@@ -36,7 +36,8 @@ private:
     void convert(const QString &name);   // do the real work, recursively
 
     myFile fileIn;                   // will hopefully be changed, soon (to filename only)
-    QString fileOutName;             // name of the output file
+    QString fileOutName;             // path+name of the output file
+    QString dir;                     // name of the main dir in the tgz-file
     QMap<QString, QString> partMap;  // all part-names in the OLE-file
                                      // "mapped" to the real ones (in the KTar-struct)
     IN in;                           // which file type?
