@@ -600,70 +600,8 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
         drawPage.setAttribute( "draw:id", m_currentPage );
         drawPage.setAttribute( "draw:master-page-name", m_masterPageStyle );
 
-        // I am not sure if objects are always stored sorted so I parse all
-        // of them to find the ones belonging to a certain page.
-        for ( QDomNode object = objects.firstChild(); !object.isNull();
-              object = object.nextSibling() )
-        {
-            QDomElement o = object.toElement();
+        appendObjects( doccontent, objects, drawPage );
 
-            QDomElement orig = o.namedItem( "ORIG" ).toElement();
-            float y = orig.attribute( "y" ).toFloat();
-
-            if ( y < m_pageHeight * ( m_currentPage - 1 ) ||
-                 y >= m_pageHeight * m_currentPage )
-                continue; // object not on current page
-
-            switch( o.attribute( "type" ).toInt() )
-            {
-            case 0: // image
-                appendPicture( doccontent, o, drawPage );
-                break;
-            case 1: // line
-                appendLine( doccontent, o, drawPage );
-                break;
-            case 2: // rectangle
-                appendRectangle( doccontent, o, drawPage );
-                break;
-            case 3: // circle, ellipse
-                appendEllipse( doccontent, o, drawPage );
-                break;
-            case 4: // textbox
-                appendTextbox( doccontent, o, drawPage );
-                break;
-            case 5:
-                kdDebug()<<" autoform not implemented\n";
-                break;
-            case 6:
-                kdDebug()<<" clipart not implemented\n";
-                break;
-            case 8: // pie, chord, arc
-                appendEllipse( doccontent, o, drawPage, true );
-                break;
-            case 9: //part
-                kdDebug()<<" part object not implemented \n";
-                break;
-            case 10:
-                appendGroupObject( doccontent, o, drawPage );
-                break;
-            case 11:
-                kdDebug()<<" free hand not implemented\n";
-                break;
-            case 12: // polyline
-                appendPolyline( doccontent, o, drawPage );
-                break;
-            case 13: //OT_QUADRICBEZIERCURVE = 13
-            case 14: //OT_CUBICBEZIERCURVE = 14
-                //todo
-                // "draw:path"
-                break;
-            case 15: // polygon
-            case 16: // close polygone
-                appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
-                break;
-            }
-            ++m_objectIndex;
-        }
         QDomElement noteElement = note.toElement();
         appendNote( doccontent, noteElement, drawPage );
         body.appendChild( drawPage );
@@ -671,13 +609,83 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     }
 }
 
+
+void OoImpressExport::appendObjects(QDomDocument & doccontent, QDomNode &objects, QDomElement &drawPage)
+{
+    // I am not sure if objects are always stored sorted so I parse all
+    // of them to find the ones belonging to a certain page.
+    for ( QDomNode object = objects.firstChild(); !object.isNull();
+          object = object.nextSibling() )
+    {
+        QDomElement o = object.toElement();
+
+        QDomElement orig = o.namedItem( "ORIG" ).toElement();
+        float y = orig.attribute( "y" ).toFloat();
+
+        if ( y < m_pageHeight * ( m_currentPage - 1 ) ||
+             y >= m_pageHeight * m_currentPage )
+            continue; // object not on current page
+
+        switch( o.attribute( "type" ).toInt() )
+        {
+        case 0: // image
+            appendPicture( doccontent, o, drawPage );
+            break;
+        case 1: // line
+            appendLine( doccontent, o, drawPage );
+            break;
+        case 2: // rectangle
+            appendRectangle( doccontent, o, drawPage );
+            break;
+        case 3: // circle, ellipse
+            appendEllipse( doccontent, o, drawPage );
+            break;
+        case 4: // textbox
+            appendTextbox( doccontent, o, drawPage );
+            break;
+        case 5:
+            kdDebug()<<" autoform not implemented\n";
+            break;
+        case 6:
+            kdDebug()<<" clipart not implemented\n";
+            break;
+        case 8: // pie, chord, arc
+            appendEllipse( doccontent, o, drawPage, true );
+            break;
+        case 9: //part
+            kdDebug()<<" part object not implemented \n";
+            break;
+        case 10:
+            appendGroupObject( doccontent, o, drawPage );
+            break;
+        case 11:
+            kdDebug()<<" free hand not implemented\n";
+            break;
+        case 12: // polyline
+            appendPolyline( doccontent, o, drawPage );
+            break;
+        case 13: //OT_QUADRICBEZIERCURVE = 13
+        case 14: //OT_CUBICBEZIERCURVE = 14
+            //todo
+            // "draw:path"
+            break;
+        case 15: // polygon
+        case 16: // close polygone
+            appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
+            break;
+        }
+        ++m_objectIndex;
+    }
+
+}
+
 void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     kdDebug()<<" group not implemented \n";
-#if 0
     QDomElement groupElement = doc.createElement( "draw:g" );
+    QDomNode objects = source.namedItem( "OBJECTS" );
+    appendObjects( doc, objects, groupElement);
     target.appendChild( groupElement );
-#endif
 }
 
 void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
