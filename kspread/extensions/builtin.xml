@@ -56,7 +56,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The acos() function returns the arc cosine in radians and the value is mathematically defined to be between 0 and PI(inclusive).</Text>
+	<Text>The acos() function returns the arc cosine in radians and the value is mathematically defined to be 0 to PI (inclusive).</Text>
 	<Syntax>acos(Float)</Syntax>
 	<Example>acos(0.8) equals 0.6435011</Example>
 	<Example>acos(0) equals 1.57079633</Example>
@@ -71,7 +71,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The asin() function returns the arc sine in radians and the value is mathematically defined to be between -PI/2 and PI/2 (inclusive).</Text>
+	<Text>The asin() function returns the arc sine in radians and the value is mathematically defined to be -PI/2 to PI/2 (inclusive).</Text>
 	<Syntax>asin(Float)</Syntax>
 	<Example>asin(0.8) equals 0.92729522</Example>
 	<Example>asin(0) equals 0</Example>
@@ -86,7 +86,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The atan() function returns the arc tangent in radians and the value is mathematically defined to be between -PI/2 and PI/2 (inclusive).</Text>
+	<Text>The atan() function returns the arc tangent in radians and the value is mathematically defined to be -PI/2 to PI/2 (inclusive).</Text>
 	<Syntax>atan(Float)</Syntax>
 	<Example>atan(0.8) equals 0.67474094</Example>
 	<Example>atan(0) equals 0</Example>
@@ -149,7 +149,7 @@
 	<Text>The acosh() function calculates the inverse hyperbolic cosine of x. That is the value whose hyperbolic cosine is x. If x is less than 1.0, acosh() returns not-a-number (NaN) and errno is set.</Text>
 	<Syntax>acosh(Float)</Syntax>
 	<Example>acosh(5) equals 2.29243167</Example>
-	<Example>acosh(0) equals nan</Example>
+	<Example>acosh(0) equals NaN</Example>
       </Help>
     </Function>
 
@@ -161,7 +161,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The asinh() function  calculates the inverse hyperbolic sine of x; that is the value whose hyperbolic sine is x.</Text>
+	<Text>The asinh() function calculates the inverse hyperbolic sine of x; that is the value whose hyperbolic sine is x.</Text>
 	<Syntax>asinh(Float)</Syntax>
 	<Example>asinh(0.8) equals 0.73266826</Example>
 	<Example>asinh(0) equals 0</Example>
@@ -192,7 +192,7 @@
       </Parameter>
       <Help>
 	<Text>This function calculates the arc tangent of the two variables x and y. It is similar to calculating the arc tangent of y/x, except that the signs of both arguments are used to determine the quadrant of the result.</Text>
-	<Syntax>atan2( value; value )</Syntax>
+	<Syntax>atan2(value; value)</Syntax>
 	<Example>atan2(0.5;1.0) equals 1.107149</Example>
 	<Example>atan2(-0.5;2.0) equals 1.815775</Example>
       </Help>
@@ -206,7 +206,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>This function transforms a radian angle to degree angle.</Text>
+	<Text>This function transforms a radian angle to a degree angle.</Text>
 	<Syntax>degree(Float)</Syntax>
 	<Example>degree(0.78) equals 44.69</Example>
 	<Example>degree(1) equals 57.29</Example>
@@ -221,7 +221,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>This function transforms a degree angle to radian angle.</Text>
+	<Text>This function transforms a degree angle to a radian angle.</Text>
 	<Syntax>radian(Float)</Syntax>
 	<Example>radian(75) equals 1.308</Example>
 	<Example>radian(90) equals 1.5707</Example>
@@ -232,7 +232,7 @@
       <Name>PI</Name>
       <Type>Float</Type>
       <Help>
-	<Text>The PI() function returns the PI value.</Text>
+	<Text>The PI() function returns the value of PI.</Text>
 	<Syntax>PI()</Syntax>
 	<Example>PI() equals 3.141592654...</Example>
       </Help>
@@ -251,7 +251,7 @@
       </Parameter>
       <Help>
 	<Text>The DEC2BIN() function returns the value formatted as a binary number.</Text>
-	<Syntax>DEC2BIN( value )</Syntax>
+	<Syntax>DEC2BIN(value)</Syntax>
 	<Example>DEC2BIN(12) returns "1100"</Example>
 	<Example>DEC2BIN(55) returns "110111"</Example>
       </Help>
@@ -266,7 +266,7 @@
       </Parameter>
       <Help>
 	<Text>The DEC2HEX() function returns the value formatted as a hexadecimal number.</Text>
-	<Syntax>DEC2HEX( value )</Syntax>
+	<Syntax>DEC2HEX(value)</Syntax>
 	<Example>DEC2HEX(12) returns "c"</Example>
 	<Example>DEC2HEX(55) returns "37"</Example>
       </Help>
@@ -281,7 +281,7 @@
       </Parameter>
       <Help>
 	<Text>The DEC2OCT() function returns the value formatted as an octal number.</Text>
-	<Syntax>DEC2OCT( value )</Syntax>
+	<Syntax>DEC2OCT(value)</Syntax>
 	<Example>DEC2OCT(12) returns "14"</Example>
 	<Example>DEC2OCT(55) returns "67"</Example>
       </Help>
@@ -296,7 +296,7 @@
       </Parameter>
       <Help>
 	<Text>The OCT2BIN() function returns the value formatted as a binary number.</Text>
-	<Syntax>OCT2BIN( value )</Syntax>
+	<Syntax>OCT2BIN(value)</Syntax>
 	<Example>OCT2BIN("12") returns "1010"</Example>
 	<Example>OCT2BIN("55") returns "101101"</Example>
       </Help>
@@ -311,8 +311,8 @@
       </Parameter>
       <Help>
 	<Text>The OCT2DEC() function returns the value formatted as a decimal number.</Text>
-	<Syntax>OCT2DEC( value )</Syntax>
-	<Example>OCT2DEC("12") returns  10 </Example>
+	<Syntax>OCT2DEC(value)</Syntax>
+	<Example>OCT2DEC("12") returns 10 </Example>
 	<Example>OCT2DEC("55") returns 45 </Example>
       </Help>
     </Function>
@@ -325,8 +325,8 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The OCT2HEX() function returns the value formatted as an hexadecimal number.</Text>
-	<Syntax>OCT2HEX( value )</Syntax>
+	<Text>The OCT2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>OCT2HEX(value)</Syntax>
 	<Example>OCT2HEX("12") returns "a"</Example>
 	<Example>OCT2HEX("55") returns "2d"</Example>
       </Help>
@@ -341,7 +341,7 @@
       </Parameter>
       <Help>
 	<Text>The BIN2DEC() function returns the value formatted as a decimal number.</Text>
-	<Syntax>BIN2DEC( value )</Syntax>
+	<Syntax>BIN2DEC(value)</Syntax>
 	<Example>BIN2DEC("1010") returns 10 </Example>
 	<Example>BIN2DEC("11111") returns 31 </Example>
       </Help>
@@ -355,9 +355,9 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The BIN2OCT() function returns the value formatted as a octal number.</Text>
-	<Syntax>BIN2OCT( value )</Syntax>
-	<Example>BIN2OCT("1010") returns  "12" </Example>
+	<Text>The BIN2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>BIN2OCT(value)</Syntax>
+	<Example>BIN2OCT("1010") returns "12" </Example>
 	<Example>BIN2OCT("11111") returns "37" </Example>
       </Help>
     </Function>
@@ -370,8 +370,8 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The BIN2HEX() function returns the value formatted as an hexadecimal number.</Text>
-	<Syntax>BIN2HEX( value )</Syntax>
+	<Text>The BIN2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>BIN2HEX(value)</Syntax>
 	<Example>BIN2HEX("1010") returns "a"</Example>
 	<Example>BIN2HEX("11111") returns "1f"</Example>
       </Help>
@@ -386,7 +386,7 @@
       </Parameter>
       <Help>
 	<Text>The HEX2DEC() function returns the value formatted as a decimal number.</Text>
-	<Syntax>HEX2DEC( value )</Syntax>
+	<Syntax>HEX2DEC(value)</Syntax>
 	<Example>HEX2DEC("a") returns 10 </Example>
 	<Example>HEX2DEC("37") returns 55 </Example>
       </Help>
@@ -400,9 +400,9 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The HEX2OCT() function returns the value formatted as a octal number.</Text>
-	<Syntax>HEX2OCT( value )</Syntax>
-	<Example>HEX2OCT("a") returns  "12" </Example>
+	<Text>The HEX2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>HEX2OCT(value)</Syntax>
+	<Example>HEX2OCT("a") returns "12" </Example>
 	<Example>HEX2OCT("37") returns "67" </Example>
       </Help>
     </Function>
@@ -416,7 +416,7 @@
       </Parameter>
       <Help>
 	<Text>The HEX2BIN() function returns the value formatted as a binary number.</Text>
-	<Syntax>HEX2BIN( value )</Syntax>
+	<Syntax>HEX2BIN(value)</Syntax>
 	<Example>HEX2BIN("a") returns "1010"</Example>
 	<Example>HEX2BIN("37") returns "110111"</Example>
       </Help>
@@ -435,7 +435,7 @@
       </Parameter>
       <Help>
 	<Text>The POLR() function returns the radius corresponding to the position of a point in a cartesian landmark.</Text>
-	<Syntax>POLR( X;Y )</Syntax>
+	<Syntax>POLR(X;Y)</Syntax>
 	<Example>POLR(12;12) returns 16.9705</Example>
 	<Example>POLR(12;0) returns 12</Example>
       </Help>
@@ -454,7 +454,7 @@
       </Parameter>
       <Help>
 	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartesian landmark.</Text>
-	<Syntax>POLA( X;Y )</Syntax>
+	<Syntax>POLA(X;Y)</Syntax>
 	<Example>POLA(12;12) returns 16.9705</Example>
 	<Example>POLA(12;0) returns 0.7853</Example>
             <Example>POLA(0;12) returns 1.5707</Example>
@@ -474,7 +474,7 @@
       </Parameter>
       <Help>
 	<Text>The CARX() function returns the X position corresponding to the position of a point in a polar landmark.</Text>
-	<Syntax>CARX( Radius;Angle )</Syntax>
+	<Syntax>CARX(Radius;Angle)</Syntax>
 	<Example>CARX(12;1.5707) returns 0</Example>
 	<Example>CARX(12;0) returns 12</Example>
       </Help>
@@ -488,8 +488,8 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-        <Text>The DECSEX() function converts a double value to time value.</Text>
-        <Syntax>DECSEX( double )</Syntax>
+        <Text>The DECSEX() function converts a double value to a time value.</Text>
+        <Syntax>DECSEX(double)</Syntax>
         <Example>DECSEX(1.6668) returns 1:40 </Example>
         <Example>DECSEX(7.8) returns 7:47</Example>
       </Help>
@@ -499,20 +499,20 @@
       <Name>SEXDEC</Name>
       <Type>Double</Type>
       <Parameter>
-	<Comment>Hour</Comment>
+	<Comment>Hours</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Parameter>
-	<Comment>Minute</Comment>
+	<Comment>Minutes</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Parameter>
-	<Comment>Second</Comment>
+	<Comment>Seconds</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-        <Text>The SEXDEC() function returns decimal value. You can also give a time value.</Text>
-        <Syntax>SEXDEC( time value ) or SEXDEC(hour,minute,second)</Syntax>
+        <Text>The SEXDEC() function returns a decimal value. You can also supply a time value.</Text>
+        <Syntax>SEXDEC(time value) or SEXDEC(hours,minutes,seconds)</Syntax>
         <Example>SEXDEC(1;5;7) returns 1.0852778 </Example>
         <Example>DECSEX("8:05") returns 8.08333333</Example>
       </Help>
@@ -531,7 +531,7 @@
       </Parameter>
       <Help>
         <Text>The CARY() function returns the Y position corresponding to the position of a point in a polar landmark.</Text>
-        <Syntax>CARY( Radius;Angle )</Syntax>
+        <Syntax>CARY(Radius;Angle)</Syntax>
         <Example>CARY(12;1.5707) returns 12</Example>
         <Example>CARY(12;0) returns 0</Example>
       </Help>
@@ -546,7 +546,7 @@
       </Parameter>
       <Help>
         <Text>The ROMAN() function returns the number in roman format. Number should be positive and entire.</Text>
-        <Syntax>ROMAN( Number )</Syntax>
+        <Syntax>ROMAN(Number)</Syntax>
         <Example>ROMAN(99) returns "XCIX"</Example>
         <Example>ROMAN(-55) returns "Err"</Example>
       </Help>
@@ -574,9 +574,9 @@
       </Parameter>
       <Help>
 	<Text>The dayOfYear() function returns the number of the day in the year (1...365).</Text>
-	<Syntax>dayOfYear( year; month; date )</Syntax>
+	<Syntax>dayOfYear(year; month; date)</Syntax>
 	<Example>dayOfYear(2000;12;1) returns 336</Example>
-	<Example>dayOfYear(2000;2;29) return 60</Example>
+	<Example>dayOfYear(2000;2;29) returns 60</Example>
       </Help>
     </Function>
 
@@ -597,7 +597,7 @@
       </Parameter>
       <Help>
 	<Text>The date() function returns the date formatted with local parameters.</Text>
-	<Syntax>date( year; month; date )</Syntax>
+	<Syntax>date(year; month; date)</Syntax>
 	<Example>date(2000;5;5) returns Friday 05 May 2000</Example>
       </Help>
     </Function>
@@ -619,7 +619,7 @@
       </Parameter>
       <Help>
 	<Text>The time() function returns the time formatted with local parameters.</Text>
-	<Syntax>time( hours; minutes; seconds )</Syntax>
+	<Syntax>time(hours; minutes; seconds)</Syntax>
 	<Example>time(10;2;2) returns 10:02:02</Example>
       </Help>
     </Function>
@@ -632,8 +632,8 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The hours() function returns the value of hour in a time expression.</Text>
-	<Syntax>hours( time)</Syntax>
+	<Text>The hours() function returns the value of the hours in a time expression.</Text>
+	<Syntax>hours(time)</Syntax>
 	<Example>hours("10:5:2") returns 10</Example>
       </Help>
     </Function>
@@ -678,7 +678,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The function daysInYear() returns number of days in the given year.</Text>
+	<Text>The function daysInYear() returns the number of days in the given year.</Text>
 	<Syntax>daysInYear(year)</Syntax>
 	<Example>daysInYear(2000) returns 366</Example>
       </Help>
@@ -692,7 +692,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The function weeksInYear() returns number of weeks in the given year.</Text>
+	<Text>The function weeksInYear() returns the number of weeks in the given year.</Text>
 	<Syntax>weeksInYear(year)</Syntax>
 	<Example>weeksInYear(2000) returns 52</Example>
       </Help>
@@ -706,13 +706,13 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The minutes() function returns the value of minute in a time expression.</Text>
-	<Syntax>minutes( time)</Syntax>
+	<Text>The minutes() function returns the value of the minutes in a time expression.</Text>
+	<Syntax>minutes(time)</Syntax>
 	<Example>minutes("10:5:2") returns 5</Example>
       </Help>
     </Function>
 
-    <Function>	  
+    <Function>
      <Name>seconds</Name>
       <Type>Int</Type>
       <Parameter>
@@ -720,8 +720,8 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The seconds() function returns the value of second in a time expression.</Text>
-	<Syntax>seconds( time)</Syntax>
+	<Text>The seconds() function returns the value of the seconds in a time expression.</Text>
+	<Syntax>seconds(time)</Syntax>
 	<Example>seconds("10:5:2") returns 2</Example>
       </Help>
     </Function>
@@ -734,8 +734,8 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The day() function returns name of day of the week (1..7). In some countries the first day of the week is Monday, while in others the first day of the week is Sunday.</Text>
-	<Syntax>day( weekday )</Syntax>
+	<Text>The day() function returns the name of the day of the week (1..7). In some countries the first day of the week is Monday, while in others the first day of the week is Sunday.</Text>
+	<Syntax>day(weekday)</Syntax>
 	<Example>day(1) returns Monday (if the week starts on Monday)</Example>
       </Help>
     </Function>
@@ -748,8 +748,8 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The month() function returns name of the month (1...12).</Text>
-	<Syntax>month( number )</Syntax>
+	<Text>The month() function returns the name of the month (1...12).</Text>
+	<Syntax>month(number)</Syntax>
 	<Example>month(5) returns May</Example>
       </Help>
     </Function>
@@ -811,9 +811,9 @@
       </Parameter>
       <Help>
 	<Text>The EXACT() function returns True if these two strings are equal. Otherwise, it returns False.</Text>
-	<Syntax>EXACT( string1; string2 )</Syntax>
-	<Example>EXACT( "Koffice"; "Koffice" ) returns True</Example>
-        <Example>EXACT( "kspread"; "Koffice" ) returns False</Example>
+	<Syntax>EXACT(string1; string2)</Syntax>
+	<Example>EXACT("KOffice"; "KOffice") returns True</Example>
+        <Example>EXACT("KSpread"; "KOffice") returns False</Example>
       </Help>
     </Function>
 
@@ -830,9 +830,9 @@
       </Parameter>
       <Help>
 	<Text>The find() function searches a substring. This function returns True if this substring exists. Otherwise, it returns False.</Text>
-	<Syntax>find( haystack; needle )</Syntax>
-	<Example>find( "Kof"; "Koffice" ) returns True</Example>
-	<Example>find( "kspread"; "Koffice") returns False</Example>
+	<Syntax>find(haystack; needle)</Syntax>
+	<Example>find("KOf"; "KOffice") returns True</Example>
+	<Example>find("KSpread"; "KOffice") returns False</Example>
       </Help>
     </Function>
 
@@ -852,11 +852,11 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The mid() function returns a substring that contains the len characters of this string, starting at position index.</Text>
-	<Syntax>mid( text; position; length )</Syntax>
-	<Syntax>mid( text; position )</Syntax>
-	<Example>mid( "Koffice"; 2; 3 ) returns "ffi"</Example>
-	<Example>mid( "Koffice"; 2 ) returns "ffice"</Example>
+	<Text>The mid() function returns a substring that contains 'length' characters of the string, starting at 'position' index.</Text>
+	<Syntax>mid(text; position; length)</Syntax>
+	<Syntax>mid(text; position)</Syntax>
+	<Example>mid("KOffice"; 2; 3) returns "ffi"</Example>
+	<Example>mid("KOffice"; 2) returns "ffice"</Example>
       </Help>
     </Function>
 
@@ -869,9 +869,9 @@
       </Parameter>
       <Help>
 	<Text>The len() function returns the length of the string.</Text>
-	<Syntax>len( text )</Syntax>
-	<Example>len( "hello" ) returns 5</Example>
-	<Example>len( "kspread" ) returns 7</Example>
+	<Syntax>len(text)</Syntax>
+	<Example>len("hello") returns 5</Example>
+	<Example>len("KSpread") returns 7</Example>
       </Help>
     </Function>
 
@@ -899,9 +899,9 @@
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>The join() function returns string which is the concatenation of the strings passed as parameters.</Text>
-	<Syntax>join( values; values; ... )</Syntax>
-	<Example>join( "kspread"; "koffice"; "kde" ) returns "kspreadkofficekde"</Example>
+	<Text>The join() function returns a string which is the concatenation of the strings passed as parameters.</Text>
+	<Syntax>join(value; value; ...)</Syntax>
+	<Example>join("KSpread"; "KOffice"; "KDE") returns "KSpreadKOfficeKDE"</Example>
       </Help>
     </Function>
 
@@ -917,10 +917,10 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The right() function returns a substring that contains the len rightmost characters of the string. The whole string is returned if len exceeds the length of the string.</Text>
-	<Syntax>right( text; len )</Syntax>
+	<Text>The right() function returns a substring that contains the 'length' rightmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Syntax>right(text; length)</Syntax>
 	<Example>right("hello";2) returns "lo"</Example>
-	<Example>right("kspread";10) returns "kspread"</Example>
+	<Example>right("KSpread";10) returns "KSpread"</Example>
       </Help>
     </Function>
 
@@ -936,10 +936,10 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The left() function returns a substring that contains the len leftmost characters of the string. The whole string is returned if len exceeds the length of the string.</Text>
-	<Syntax>left( text; len )</Syntax>
-	<Example>left( "hello"; 2 ) returns "he"</Example>
-	<Example>left( "kspread"; 10 ) returns "kspread"</Example>
+	<Text>The left() function returns a substring that contains the 'length' leftmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Syntax>left(text; length)</Syntax>
+	<Example>left("hello"; 2) returns "he"</Example>
+	<Example>left("KSpread"; 10) returns "KSpread"</Example>
       </Help>
     </Function>
 
@@ -956,8 +956,8 @@
       </Parameter>
       <Help>
 	<Text>The REPT() function repeats the first parameter as often as told by the second parameter.</Text>
-	<Syntax>REPT( text; count )</Syntax>
-	<Example>REPT( "kspread"; 3 ) returns "kspreadkspreadkspread"</Example>
+	<Syntax>REPT(text; count)</Syntax>
+	<Example>REPT("KSpread"; 3) returns "KSpreadKSpreadKSpread"</Example>
       </Help>
     </Function>
 
@@ -970,9 +970,9 @@
       </Parameter>
       <Help>
 	<Text>The upper() function converts a string to upper case.</Text>
-	<Syntax>upper( text )</Syntax>
-	<Example>upper( "hello" ) returns "HELLO"</Example>
-	<Example>upper( "HELLO" ) returns "HELLO"</Example>
+	<Syntax>upper(text)</Syntax>
+	<Example>upper("hello") returns "HELLO"</Example>
+	<Example>upper("HELLO") returns "HELLO"</Example>
       </Help>
     </Function>
 
@@ -985,9 +985,9 @@
       </Parameter>
       <Help>
 	<Text>The lower() function converts a string to lower case.</Text>
-	<Syntax>lower( text )</Syntax>
-	<Example>lower( "hello" ) returns "hello"</Example>
-	<Example>lower( "HELLO" ) returns "hello"</Example>
+	<Syntax>lower(text)</Syntax>
+	<Example>lower("hello") returns "hello"</Example>
+	<Example>lower("HELLO") returns "hello"</Example>
       </Help>
     </Function>
 
@@ -1008,7 +1008,7 @@
       </Parameter>
       <Help>
 	<Text>The pow(x,y) function returns the value of x raised to the power of y.</Text>
-	<Syntax>pow( value; value )</Syntax>
+	<Syntax>pow(value; value)</Syntax>
 	<Example>pow(1.2;3.4) equals 1.8572</Example>
 	<Example>pow(2;3) equals 8</Example>
       </Help>
@@ -1027,7 +1027,7 @@
       </Parameter>
       <Help>
 	<Text>The DELTA() function returns 1 if x equals y, otherwise returns 0.</Text>
-	<Syntax>DELTA( value; value )</Syntax>
+	<Syntax>DELTA(value; value)</Syntax>
 	<Example>DELTA(1.2;3.4) returns 0</Example>
 	<Example>DELTA(3;3) returns 1</Example>
       </Help>
@@ -1043,7 +1043,7 @@
       </Parameter>
       <Help>
 	<Text>The EVEN() function returns the number rounded up to the nearest even integer.</Text>
-	<Syntax>EVEN( value  )</Syntax>
+	<Syntax>EVEN(value)</Syntax>
 	<Example>EVEN(1.2) returns 2</Example>
 	<Example>EVEN(2) returns 2</Example>
       </Help>
@@ -1058,7 +1058,7 @@
       </Parameter>
       <Help>
 	<Text>The ODD() function returns the number rounded up to the nearest odd integer.</Text>
-	<Syntax>ODD( value  )</Syntax>
+	<Syntax>ODD(value)</Syntax>
 	<Example>ODD(1.2) returns 3</Example>
 	<Example>ODD(2) returns 3</Example>
       </Help>
@@ -1078,7 +1078,7 @@
       </Parameter>
       <Help>
 	<Text>The MOD() function returns the remainder after division. If the second parameter is null the function returns #DIV/0.</Text>
-	<Syntax>MOD( value; value )</Syntax>
+	<Syntax>MOD(value; value)</Syntax>
 	<Example>MOD(12;5) returns 2</Example>
 	<Example>MOD(5;5) returns 0</Example>
       </Help>
@@ -1093,7 +1093,7 @@
       </Parameter>
       <Help>
 	<Text>This function returns -1 if the number is negative 0 if the number is null and 1 if the number is positive.</Text>
-	<Syntax>sign( value )</Syntax>
+	<Syntax>sign(value)</Syntax>
 	<Example>sign(5) equals 1</Example>
 	<Example>sign(0) equals 0</Example>
 	<Example>sign(-5) equals -1</Example>
@@ -1109,7 +1109,7 @@
       </Parameter>
       <Help>
 	<Text>This function multiplies each value by -1.</Text>
-	<Syntax>INV( Value )</Syntax>
+	<Syntax>INV(Value)</Syntax>
 	<Example>INV(-5) equals 5</Example>
 	<Example>INV(5) equals -5</Example>
 	<Example>INV(0) equals 0</Example>
@@ -1141,7 +1141,7 @@
       </Parameter>
       <Help>
 	<Text>This function returns the count of integer or floating arguments passed.</Text>
-	<Syntax>count( Value;Value;Value... )</Syntax>
+	<Syntax>count(Value;Value;Value...)</Syntax>
 	<Example>count(-5;"kspread";2) returns 2</Example>
 	<Example>count(5) returns 1</Example>
       </Help>
@@ -1187,7 +1187,7 @@
       </Parameter>
       <Help>
 	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
-	<Syntax>sum( values; values; ... )</Syntax>
+	<Syntax>sum(values; values; ...)</Syntax>
 	<Example>sum(12;5;7) equals 24</Example>
 	<Example>sum(12.5;2) equals 14.5</Example>
       </Help>
@@ -1218,7 +1218,7 @@
       </Parameter>
       <Help>
 	<Text>The sumsq() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
-	<Syntax>sumsq( values; values; ... )</Syntax>
+	<Syntax>sumsq(values; values; ...)</Syntax>
 	<Example>sumsq(12;5;7) equals 218</Example>
 	<Example>sumsq(12.5;2) equals 173</Example>
       </Help>
@@ -1250,7 +1250,7 @@
       </Parameter>
       <Help>
 	<Text>The max() function returns the largest value given in the parameters.</Text>
-	<Syntax>max( values; values; ... )</Syntax>
+	<Syntax>max(values; values; ...)</Syntax>
 	<Example>max(12;5;7) returns 12</Example>
 	<Example>max(12.5;2) returns 12.5</Example>
       </Help>
@@ -1281,7 +1281,7 @@
       </Parameter>
       <Help>
 	<Text>The min() function returns the smallest value given in the parameters.</Text>
-	<Syntax>min( values; values; ... )</Syntax>
+	<Syntax>min(values; values; ...)</Syntax>
 	<Example>min(12;5;7) returns 5</Example>
 	<Example>min(12.5;2) returns 2</Example>
       </Help>
@@ -1312,7 +1312,7 @@
       </Parameter>
       <Help>
 	<Text>The multiply() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5).</Text>
-	<Syntax>multiply( values; values; ... )</Syntax>
+	<Syntax>multiply(values; values; ...)</Syntax>
 	<Example>multiply(12;5;7) equals 420</Example>
 	<Example>multiply(12.5;2) equals 25</Example>
       </Help>
@@ -1327,7 +1327,7 @@
       </Parameter>
       <Help>
 	<Text>The sqrt() function returns the non-negative square root of x. If x is negative, "nan" is returned.</Text>
-	<Syntax>sqrt( x )</Syntax>
+	<Syntax>sqrt(x)</Syntax>
 	<Example>sqrt(9) equals 3</Example>
 	<Example>sqrt(-9) equals "nan"</Example>
       </Help>
@@ -1342,7 +1342,7 @@
       </Parameter>
       <Help>
 	<Text>The ln() function returns the natural logarithm of x.</Text>
-	<Syntax>ln( x )</Syntax>
+	<Syntax>ln(x)</Syntax>
 	<Example>ln(0.8) equals -0.22314355</Example>
 	<Example>ln(0) equals -inf</Example>
       </Help>
@@ -1361,7 +1361,7 @@
       </Parameter>
       <Help>
 	<Text>The LOGn() function returns the logarithm of x on base n.</Text>
-	<Syntax>LOGn( value ; base )</Syntax>
+	<Syntax>LOGn(value ; base)</Syntax>
 	<Example>LOGn(12;10) equals 1.07918125</Example>
 	<Example>LOGn(12;2) equals 3.5849625</Example>
       </Help>
@@ -1380,7 +1380,7 @@
       </Parameter>
       <Help>
 	<Text>The SQRTn() function returns the non-negative square n of x.</Text>
-	<Syntax>SQRTn( x,n )</Syntax>
+	<Syntax>SQRTn(x,n)</Syntax>
 	<Example>SQRTn(9;2) equals 3</Example>
       </Help>
     </Function>
@@ -1394,7 +1394,7 @@
       </Parameter>
       <Help>
 	<Text>The CUR() function returns the non-negative square 3 of x.</Text>
-	<Syntax>CUR( x )</Syntax>
+	<Syntax>CUR(x)</Syntax>
 	<Example>CUR(27) equals 3</Example>
       </Help>
     </Function>
@@ -1408,7 +1408,7 @@
       </Parameter>
       <Help>
 	<Text>The log() function returns the base-10 logarithm of x.</Text>
-	<Syntax>log( x )</Syntax>
+	<Syntax>log(x)</Syntax>
 	<Example>log(0.8) equals -0.09691001</Example>
 	<Example>log(0) equals -inf.</Example>
       </Help>
@@ -1423,7 +1423,7 @@
       </Parameter>
       <Help>
 	<Text>The exp() function returns the value of e (the base of natural logarithms) raised to the power of x.</Text>
-	<Syntax>exp( x )</Syntax>
+	<Syntax>exp(x)</Syntax>
 	<Example>exp(9) equals 8 103.08392758</Example>
 	<Example>exp(-9) equals 0.00012341</Example>
       </Help>
@@ -1438,7 +1438,7 @@
       </Parameter>
       <Help>
 	<Text>The ceil() function rounds x upwards to the nearest integer, returning that value as a double.</Text>
-	<Syntax>ceil( x )</Syntax>
+	<Syntax>ceil(x)</Syntax>
 	<Example>ceil(12.5) equals 13</Example>
 	<Example>ceil(-12.5) equals -12</Example>
       </Help>
@@ -1453,7 +1453,7 @@
       </Parameter>
       <Help>
 	<Text>The floor() function rounds x downwards to the nearest integer, returning that value as a double.</Text>
-	<Syntax>floor( x )</Syntax>
+	<Syntax>floor(x)</Syntax>
 	<Example>floor(12.5) equals 12</Example>
 	<Example>floor(-12.5) equals -13</Example>
       </Help>
@@ -1468,7 +1468,7 @@
       </Parameter>
       <Help>
 	<Text>The fabs() function returns the absolute value of the floating-point number x.</Text>
-	<Syntax>fabs( x )</Syntax>
+	<Syntax>fabs(x)</Syntax>
 	<Example>fabs(12.5) equals 12.5</Example>
 	<Example>fabs(-12.5) equals 12.5</Example>
       </Help>
@@ -1483,7 +1483,7 @@
       </Parameter>
       <Help>
 	<Text>The INT() function returns the integer part of the value.</Text>
-	<Syntax>INT( x )</Syntax>
+	<Syntax>INT(x)</Syntax>
 	<Example>INT(12.55) equals 12</Example>
 	<Example>INT(15) equals 15</Example>
       </Help>
@@ -1531,7 +1531,7 @@
       </Parameter>
       <Help>
 	<Text>The ROUNDUP(value;[digits]) function returns the round up of value. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
-	<Syntax>ROUNDUP( value; [digits] )</Syntax>
+	<Syntax>ROUNDUP(value; [digits])</Syntax>
 	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
 	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
                 <Example>ROUNDUP(-1.252) equals -1</Example>
@@ -1551,7 +1551,7 @@
       </Parameter>
       <Help>
 	<Text>The ROUNDDOWN(value;[digits]) function returns the round down of value. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
-	<Syntax>ROUNDDOWN( value; [digits] )</Syntax>
+	<Syntax>ROUNDDOWN(value; [digits])</Syntax>
 	<Example>ROUNDDOWN(1.252;2) equals 1.25</Example>
 	<Example>ROUNDDOWN(-1.252;2) equals -1.26</Example>
 	<Example>ROUNDDOWN(-1.252) equals -2</Example>
@@ -1571,7 +1571,7 @@
       </Parameter>
       <Help>
 	<Text>The COMPLEX(real,imag) returns a complex number of form x+yi.</Text>
-	<Syntax>COMPLEX( real; imag )</Syntax>
+	<Syntax>COMPLEX(real; imag)</Syntax>
 	<Example>COMPLEX(1.2;3.4) returns "1.2+3.4i"</Example>
 	<Example>COMPLEX(0;-1) returns "-i"</Example>
       </Help>
@@ -1586,7 +1586,7 @@
       </Parameter>
       <Help>
 	<Text>The IMAGINARY(string) returns the imaginary coefficient of a complex.</Text>
-	<Syntax>IMAGINARY(string )</Syntax>
+	<Syntax>IMAGINARY(string)</Syntax>
 	<Example>IMAGINARY("1.2+3.4i") returns 3.4</Example>
 	<Example>IMAGINARY("1.2") returns 0 </Example>
       </Help>
@@ -1601,7 +1601,7 @@
       </Parameter>
       <Help>
 	<Text>The IMREAL(string) returns the real coefficient of a complex.</Text>
-	<Syntax>IMREAL(string )</Syntax>
+	<Syntax>IMREAL(string)</Syntax>
 	<Example>IMREAL("1.2+3.4i") returns 1.2</Example>
 	<Example>IMREAL("1.2i") returns 0 </Example>
       </Help>
@@ -1616,7 +1616,7 @@
       </Parameter>
       <Help>
 	<Text>The IMCOS(string) returns the cosine of a complex number.</Text>
-	<Syntax>IMCOS(string )</Syntax>
+	<Syntax>IMCOS(string)</Syntax>
 	<Example>IMCOS("1+i") returns "0.83373-0.988898i"</Example>
 	<Example>IMCOS("12i") returns 81 377.4 </Example>
       </Help>
@@ -1631,7 +1631,7 @@
       </Parameter>
       <Help>
 	<Text>The IMSIN(string) function returns the sine of a complex number.</Text>
-	<Syntax>IMSIN(string )</Syntax>
+	<Syntax>IMSIN(string)</Syntax>
 	<Example>IMSIN("1+i") returns "1.29846+0.634964i"</Example>
 	<Example>IMSIN("1.2") returns -0.536573 </Example>
       </Help>
@@ -1646,7 +1646,7 @@
       </Parameter>
       <Help>
 	<Text>The IMEXP(string) returns the exponential of a complex number.</Text>
-	<Syntax>IMEXP(string )</Syntax>
+	<Syntax>IMEXP(string)</Syntax>
 	<Example>IMEXP("2-i") returns "3.99232-6.21768i"</Example>
 	<Example>IMEXP("12i") returns "0.843854-0.536573i" </Example>
       </Help>
@@ -1661,7 +1661,7 @@
       </Parameter>
       <Help>
 	<Text>The IMLN(string) returns the natural logarithm of a complex number.</Text>
-	<Syntax>IMLN(string )</Syntax>
+	<Syntax>IMLN(string)</Syntax>
 	<Example>IMLN("3-i") returns "1.15129-0.321751i"</Example>
 	<Example>IMLN("12") returns 2.48491 </Example>
       </Help>
@@ -1676,7 +1676,7 @@
       </Parameter>
       <Help>
 	<Text>The IMSQRT(string) returns the square root of a complex number.</Text>
-	<Syntax>IMSQRT(string )</Syntax>
+	<Syntax>IMSQRT(string)</Syntax>
 	<Example>IMSQRT("1+i") returns "1.09868+0.45509i"</Example>
 	<Example>IMSQRT("1.2i") returns "0.774597+0.774597i" </Example>
       </Help>
@@ -1695,7 +1695,7 @@
       </Parameter>
       <Help>
 	<Text>The IMPOWER(string) returns a complex number raised to a power.</Text>
-	<Syntax>IMPOWER(string )</Syntax>
+	<Syntax>IMPOWER(string)</Syntax>
 	<Example>IMPOWER("4-i";2) returns "15-8i"</Example>
 	<Example>IMPOWER("1.2";2) returns 1.44 </Example>
       </Help>
@@ -1727,7 +1727,7 @@
       </Parameter>
       <Help>
 	<Text>The IMSUM() returns the sum of several complex numbers of form x+yi.</Text>
-	<Syntax>IMSUM( values; value; ... )</Syntax>
+	<Syntax>IMSUM(values; value; ...)</Syntax>
 	<Example>IMSUM(1.2;"3.4+5i") returns "4.6+5i"</Example>
 	<Example>IMSUM(1.2;"1i") returns "1.2+i"</Example>
       </Help>
@@ -1758,7 +1758,7 @@
       </Parameter>
       <Help>
 	<Text>The IMDIV() returns the division of several complex numbers of form x+yi.</Text>
-	<Syntax>IMDIV( values; value; ... )</Syntax>
+	<Syntax>IMDIV(values; value; ...)</Syntax>
 	<Example>IMDIV(1.2;"3.4+5i") returns "0.111597-0.164114i"</Example>
 	<Example>IMDIV("12+i";"12-i") returns "0.986207+0.16551i"</Example>
       </Help>
@@ -1790,7 +1790,7 @@
       </Parameter>
       <Help>
 	<Text>The IMSUB() returns the difference of several complex numbers of form x+yi.</Text>
-	<Syntax>IMSUB( values; value; ... )</Syntax>
+	<Syntax>IMSUB(values; value; ...)</Syntax>
 	<Example>IMSUB(1.2;"3.4+5i") returns "-2.2-5i"</Example>
 	<Example>IMSUB(1.2;"1i") returns "1.2-i"</Example>
       </Help>
@@ -1821,7 +1821,7 @@
       </Parameter>
       <Help>
 	<Text>The IMPRODUCT() returns the product of several complex numbers of form x+yi.</Text>
-	<Syntax>IMPRODUCT( values; value; ... )</Syntax>
+	<Syntax>IMPRODUCT(values; value; ...)</Syntax>
 	<Example>IMPRODUCT(1.2;"3.4+5i") returns "4.08+6i"</Example>
 	<Example>IMPRODUCT(1.2;"1i") returns "+1.2i"</Example>
       </Help>
@@ -1836,7 +1836,7 @@
       </Parameter>
       <Help>
 	<Text>The IMCONJUGATE(complex number) returns the conjugate of a complex number of form x+yi.</Text>
-	<Syntax>IMCONJUGATE( complex number )</Syntax>
+	<Syntax>IMCONJUGATE(complex number)</Syntax>
 	<Example>IMCONJUGATE("1.2+5i") returns "1.2-5i"</Example>
 	<Example>IMCONJUGATE("-i") returns "i"</Example>
                 <Example>IMCONJUGATE("12") returns "12"</Example>
@@ -1852,7 +1852,7 @@
       </Parameter>
       <Help>
 	<Text>The IMARGUMENT(complex number) returns the argument of a complex number of form x+yi.</Text>
-	<Syntax>IMARGUMENT( complex number )</Syntax>
+	<Syntax>IMARGUMENT(complex number)</Syntax>
 	<Example>IMARGUMENT("1.2+5i") returns 0.6072</Example>
 	<Example>IMARGUMENT("-i") returns -1.57079633 </Example>
         <Example>IMARGUMENT("12") returns "#Div/0"</Example>
@@ -1868,7 +1868,7 @@
       </Parameter>
       <Help>
 	<Text>The IMABS(complex number) returns the norm of a complex number of form x+yi.</Text>
-	<Syntax>IMABS( complex number )</Syntax>
+	<Syntax>IMABS(complex number)</Syntax>
 	<Example>IMABS("1.2+5i") returns 5.1419</Example>
 	<Example>IMABS("-i") returns 1</Example>
                 <Example>IMABS("12") returns 12</Example>
@@ -1905,7 +1905,7 @@
       </Parameter>
       <Help>
 	<Text>The AND() function returns True if all the values are true, otherwise returns False.</Text>
-	<Syntax>AND( values; values; ... )</Syntax>
+	<Syntax>AND(values; values; ...)</Syntax>
 	<Example>AND(True;True;True) returns True</Example>
 	<Example>AND(True;False) returns False</Example>
       </Help>
@@ -1936,7 +1936,7 @@
       </Parameter>
       <Help>
 	<Text>The OR() function returns True if at least one of the values is true, otherwise returns False.</Text>
-	<Syntax>OR( values; values; ... )</Syntax>
+	<Syntax>OR(values; values; ...)</Syntax>
 	<Example>OR(False;False;False) returns False</Example>
 	<Example>OR(True;False) returns True</Example>
       </Help>
@@ -1967,7 +1967,7 @@
       </Parameter>
       <Help>
 	<Text>The NAND() function returns True if at least one value is not true, otherwise returns False.</Text>
-	<Syntax>NAND( values; values; ... )</Syntax>
+	<Syntax>NAND(values; values; ...)</Syntax>
 	<Example>NAND(True;False;False) returns True</Example>
 	<Example>NAND(True;True) returns False</Example>
       </Help>
@@ -1998,7 +1998,7 @@
       </Parameter>
       <Help>
 	<Text>The NOR() function returns True if all the values given as parameters are of type bool and have the value false. Otherwise it returns False.</Text>
-	<Syntax>NOR( values; values; ... )</Syntax>
+	<Syntax>NOR(values; values; ...)</Syntax>
 	<Example>NOR(True;False;False) returns False</Example>
 	<Example>NOR(False;False) returns True</Example>
       </Help>
@@ -2013,7 +2013,7 @@
       </Parameter>
       <Help>
 	<Text>The NOT() function returns True if the value is False and returns False if the value is True.</Text>
-	<Syntax>NOT( bool )</Syntax>
+	<Syntax>NOT(bool)</Syntax>
 	<Example>NOT(False) returns True</Example>
 	<Example>NOT(True) returns False</Example>
       </Help>
@@ -2036,7 +2036,7 @@
       </Parameter>
       <Help>
 	<Text>The IF() function is a conditional function. This function returns the second parameter if the condition is True, otherwise it returns the third parameter.</Text>
-	<Syntax>IF( condition; if_true; if_false )</Syntax>
+	<Syntax>IF(condition; if_true; if_false)</Syntax>
 	<Example>A1=4; A2=6; IF(A1>A2;5;3) returns 3</Example>
       </Help>
     </Function>
@@ -2050,7 +2050,7 @@
       </Parameter>
       <Help>
 	<Text>The ISLOGIC() function returns True if the parameter is a bool value otherwise returns False.</Text>
-	<Syntax>ISLOGIC( x )</Syntax>
+	<Syntax>ISLOGIC(x)</Syntax>
 	<Example>ISLOGIC(A1>A2) returns True</Example>
 	<Example>ISLOGIC(12) returns False</Example>
       </Help>
@@ -2065,7 +2065,7 @@
       </Parameter>
       <Help>
 	<Text>The ISNUM() function returns True if the parameter is a numerical value otherwise it returns False.</Text>
-	<Syntax>ISNUM( x )</Syntax>
+	<Syntax>ISNUM(x)</Syntax>
 	<Example>ISNUM(12) returns True</Example>
 	<Example>ISNUM(hello) returns False</Example>
       </Help>
@@ -2080,7 +2080,7 @@
       </Parameter>
       <Help>
 	<Text>The ISTIME() function returns True if the parameter is a time value otherwise it returns False.</Text>
-	<Syntax>ISTIME( x )</Syntax>
+	<Syntax>ISTIME(x)</Syntax>
 	<Example>ISTIME("12:05") returns True</Example>
 	<Example>ISTIME(hello) returns False</Example>
       </Help>
@@ -2095,7 +2095,7 @@
       </Parameter>
       <Help>
 	<Text>The ISDATE() function returns True if the parameter is a date value otherwise it returns False</Text>
-	<Syntax>ISDATE( x )</Syntax>
+	<Syntax>ISDATE(x)</Syntax>
 	<Example>ISDATE("2000-2-2") returns True</Example>
 	<Example>ISDATE(hello) returns False</Example>
       </Help>
@@ -2112,7 +2112,7 @@
       </Parameter>
       <Help>
 	<Text>The ISTEXT() function returns True if the parameter is a string and otherwise returns False</Text>
-	<Syntax>ISTEXT( x )</Syntax>
+	<Syntax>ISTEXT(x)</Syntax>
 	<Example>ISTEXT(12) returns False</Example>
 	<Example>ISTEXT("hello") returns True</Example>
       </Help>
@@ -2127,7 +2127,7 @@
       </Parameter>
       <Help>
 	<Text>The ISNOTTEXT() function returns True if the parameter is not a string and otherwise returns False</Text>
-	<Syntax>ISNOTTEXT( x )</Syntax>
+	<Syntax>ISNOTTEXT(x)</Syntax>
 	<Example>ISNOTTEXT(12) returns True</Example>
 	<Example>ISNOTTEXT("hello") returns False</Example>
       </Help>
@@ -2142,7 +2142,7 @@
       </Parameter>
       <Help>
 	<Text>The ISODD() function returns True if the number is odd and otherwise returns False.</Text>
-	<Syntax>ISODD( x )</Syntax>
+	<Syntax>ISODD(x)</Syntax>
 	<Example>ISODD(12) returns False</Example>
 	<Example>ISODD(-7) returns True</Example>
       </Help>
@@ -2157,7 +2157,7 @@
       </Parameter>
       <Help>
 	<Text>The ISEVEN() function returns True if the number is even and otherwise returns False.</Text>
-	<Syntax>ISEVEN( x )</Syntax>
+	<Syntax>ISEVEN(x)</Syntax>
 	<Example>ISEVEN(12) returns True</Example>
 	<Example>ISEVEN(-7) returns False</Example>
       </Help>
@@ -2185,7 +2185,7 @@
       </Parameter>
       <Help>
 	<Text>The BINO function returns the binomial distribution. The first parameter is the number of trials, the second parameter is the number of successes, and the third is the probability of success. The number of trials should be greater than the number of successes and the probability should be smaller or equal to 1.</Text>
-	<Syntax>BINO( trials; success; prob_of_success )</Syntax>
+	<Syntax>BINO(trials; success; prob_of_success)</Syntax>
 	<Example>BINO(12;9;0.8) returns 0.236223201</Example>
       </Help>
     </Function>
@@ -2280,7 +2280,7 @@
       </Parameter>
       <Help>
 	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trials, the second parameter is the number of failures, and the third is the probability of failure. The number of trials should be bigger than the number of failures and the probability should be smaller or equal to 1.</Text>
-	<Syntax>INVBINO( trials; failure; prob_of_failure )</Syntax>
+	<Syntax>INVBINO(trials; failure; prob_of_failure)</Syntax>
 	<Example>INVBINO(12;3;0.2) returns 0.236223201</Example>
       </Help>
     </Function>
@@ -2298,7 +2298,7 @@
       </Parameter>
       <Help>
 	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of elements to choose. Both parameters should be positive and the first parameter should not be less than the second, the function returns an error otherwise.</Text>
-	<Syntax>COMBIN( total; choosen )</Syntax>
+	<Syntax>COMBIN(total; choosen)</Syntax>
 	<Example>COMBIN(12;5) returns 792</Example>
 	<Example>COMBIN(5;5) returns 1</Example>
       </Help>
@@ -2317,7 +2317,7 @@
       </Parameter>
       <Help>
 	<Text>The PERMUT() function returns the number of permutations. The first parameter is the number of elements, and the second parameter is the number of elements used in the permutation.</Text>
-	<Syntax>PERMUT( total; permutated )</Syntax>
+	<Syntax>PERMUT(total; permutated)</Syntax>
 	<Example>PERMUT(8;5) equals 6720</Example>
 	<Example>PERMUT(1;1) equals 1</Example>
       </Help>
@@ -2348,7 +2348,7 @@
       </Parameter>
       <Help>
 	<Text>The average() function calculates the average of all the values given as parameters. You can calculate the average of a range average(A1:B5) or a list of values like average(12;5;12.5).</Text>
-	<Syntax>average( values; values; ... )</Syntax>
+	<Syntax>average(values; values; ...)</Syntax>
 	<Example>average(12;5;7) equals 8</Example>
 	<Example>average(12.5;2) equals 7.25</Example>
       </Help>
@@ -2379,7 +2379,7 @@
       </Parameter>
       <Help>
 	<Text>The variance() function calculates the variance of each parameter which are members of a population.</Text>
-	<Syntax>variance( values; values; ... )</Syntax>
+	<Syntax>variance(values; values; ...)</Syntax>
 	<Example>variance(12;5;7) equals 8.666...</Example>
 	<Example>variance(15;80;3) equals 1144.22...</Example>
       </Help>
@@ -2410,7 +2410,7 @@
       </Parameter>
       <Help>
 	<Text></Text>
-	<Syntax>stddev( values; values; ... )</Syntax>
+	<Syntax>stddev(values; values; ...)</Syntax>
       </Help>
     </Function>
 
@@ -2434,9 +2434,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FV() function returns the future value of an investment, given the yield and the time elapsed. If you have $1000 in a bank account earning 8% interest, after two years you will have FV( 1000; 0.08; 2 ) or $1166.40.</Text>
-	<Syntax>FV( present value; yield; periods )</Syntax>
-	<Example>FV( 1000; 0.08; 2 ) equals 1166.40</Example>
+	<Text>The FV() function returns the future value of an investment, given the yield and the time elapsed. If you have $1000 in a bank account earning 8% interest, after two years you will have FV(1000; 0.08; 2) or $1166.40.</Text>
+	<Syntax>FV(present value; yield; periods)</Syntax>
+	<Example>FV(1000; 0.08; 2) equals 1166.40</Example>
       </Help>
     </Function>
 
@@ -2456,9 +2456,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The PV() function returns the present value of an investment -- the value today of a sum of money in the future, given the rate of interest or inflation. For example if you need $1166.40 for your new computer and you want to buy it in two years while earning 8% interest, you need to start with PV( 1166.4; 0.08; 2 ) or $1000.</Text>
-	<Syntax>PV( future value; rate; periods )</Syntax>
-	<Example>PV( 1166.4; 0.08; 2 ) equals 1000</Example>
+	<Text>The PV() function returns the present value of an investment -- the value today of a sum of money in the future, given the rate of interest or inflation. For example if you need $1166.40 for your new computer and you want to buy it in two years while earning 8% interest, you need to start with PV(1166.4; 0.08; 2) or $1000.</Text>
+	<Syntax>PV(future value; rate; periods)</Syntax>
+	<Example>PV(1166.4; 0.08; 2) equals 1000</Example>
       </Help>
     </Function>
 
@@ -2478,9 +2478,9 @@
 	<Type>Float</Type>
       </Parameter>
      <Help>
-	<Text>The PV_annuity() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_annuity( 50000; 0.05; 20 ) or $623,111. This function assumes that payments are made at the end of each period.</Text>
-	<Syntax>PV_annuity( amount; interest; periods )</Syntax>
-	<Example>PV_annuity( 1000; 0.05; 5 ) equals 4329.48</Example>
+	<Text>The PV_annuity() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_annuity(50000; 0.05; 20) or $623,111. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>PV_annuity(amount; interest; periods)</Syntax>
+	<Example>PV_annuity(1000; 0.05; 5) equals 4329.48</Example>
       </Help>
     </Function>
 
@@ -2500,9 +2500,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FV_annuity() function returns the future value of a stream of payments given the amount of the payment, the interest rate and the number of periods. For example: If you receive $500 per year for 20 years, and invest it at 8%, the total after 20 years will be FV_annuity( 500; 0.08; 20 ) or $22,880.98. This function assumes that payments are made at the end of each period.</Text>
-	<Syntax>FV_annuity( amount; interest; periods )</Syntax>
-	<Example>FV_annuity( 1000; 0.05; 5 ) equals 5525.63</Example>
+	<Text>The FV_annuity() function returns the future value of a stream of payments given the amount of the payment, the interest rate and the number of periods. For example: If you receive $500 per year for 20 years, and invest it at 8%, the total after 20 years will be FV_annuity(500; 0.08; 20) or $22,880.98. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>FV_annuity(amount; interest; periods)</Syntax>
+	<Example>FV_annuity(1000; 0.05; 5) equals 5525.63</Example>
       </Help>
     </Function>
 
@@ -2526,9 +2526,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.  For example: $5000 at 12% interest compounded quarterly for 5 years will become compound( 5000; 0.12; 4; 5 ) or $9030.56.</Text>
-	<Syntax>compound( initial; interest; periods; periods_per_year )</Syntax>
-	<Example>compound( 5000; 0.12; 4; 5 ) equals 9030.56</Example>
+	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.  For example: $5000 at 12% interest compounded quarterly for 5 years will become compound(5000; 0.12; 4; 5) or $9030.56.</Text>
+	<Syntax>compound(initial; interest; periods; periods_per_year)</Syntax>
+	<Example>compound(5000; 0.12; 4; 5) equals 9030.56</Example>
       </Help>
     </Function>
 
@@ -2549,8 +2549,8 @@
       </Parameter>
       <Help>
 	<Text>The continuous() function calculates the return on continuously compounded interest, given the principal, nominal rate and time in years. For example: $1000 earning 10% for 1 year becomes continuous(1000;.1;1) or $1105.17.</Text>
-	<Syntax>continuous( principal; interest; years )</Syntax>
-	<Example>continuous( 1000; 0.1; 1 ) equals 1105.17</Example>
+	<Syntax>continuous(principal; interest; years)</Syntax>
+	<Example>continuous(1000; 0.1; 1) equals 1105.17</Example>
       </Help>
     </Function>
 
@@ -2567,8 +2567,8 @@
       </Parameter>
       <Help>
 	<Text>The effective() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of effective(.08;12) or 8.3%.</Text>
-	<Syntax>effective( nominal; periods )</Syntax>
-	<Example>effective( 0.08; 12 ) equals 0.083</Example>
+	<Syntax>effective(nominal; periods)</Syntax>
+	<Example>effective(0.08; 12) equals 0.083</Example>
       </Help>
     </Function>
 
@@ -2585,8 +2585,8 @@
       </Parameter>
       <Help>
 	<Text>The nominal() function calculates the nominal (stated) interest rate for an effective (annualized) interest rate compounded at given intervals. For example: to earn 8% on an account compounded monthly, you need a return of nominal(.08;12) or 7.72%.</Text>
-	<Syntax>nominal( effective; periods )</Syntax>
-	<Example>nominal( 0.08; 12 ) equals 0.0772</Example>
+	<Syntax>nominal(effective; periods)</Syntax>
+	<Example>nominal(0.08; 12) equals 0.0772</Example>
       </Help>
     </Function>
 
@@ -2606,9 +2606,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The zero_coupon() function calculates the value of a zero-coupon (pure discount) bond. For example: if the interest rate is 10%, a $1000 bond that matures in 20 years is worth zero_coupon( 1000; .1; 20) or $148.64.</Text>
-	<Syntax>zero_coupon( face value; rate; years )</Syntax>
-	<Example>zero_coupon( 1000; .1; 20) equals 148.64</Example>
+	<Text>The zero_coupon() function calculates the value of a zero-coupon (pure discount) bond. For example: if the interest rate is 10%, a $1000 bond that matures in 20 years is worth zero_coupon(1000; .1; 20) or $148.64.</Text>
+	<Syntax>zero_coupon(face value; rate; years)</Syntax>
+	<Example>zero_coupon(1000; .1; 20) equals 148.64</Example>
       </Help>
     </Function>
 
@@ -2636,9 +2636,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The level_coupon() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth level_coupon( 1000; .13; 2; 4; .1) or $1096.95.</Text>
-	<Syntax>zero_coupon( face value; rate; years )</Syntax>
-	<Example>level_coupon( 1000; .13; 2; 4; .1) equals 1096.95</Example>
+	<Text>The level_coupon() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth level_coupon(1000; .13; 2; 4; .1) or $1096.95.</Text>
+	<Syntax>zero_coupon(face value; rate; years)</Syntax>
+	<Example>level_coupon(1000; .13; 2; 4; .1) equals 1096.95</Example>
       </Help>
     </Function>
 

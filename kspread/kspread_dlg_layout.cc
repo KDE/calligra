@@ -1157,12 +1157,12 @@ void CellLayoutPageFloat::slotChangeState()
         {
             precision->setEnabled(false);
             listFormat->setEnabled(true);
-            list+=i18n("Demis 1/2");
+            list+=i18n("Halves 1/2");
             list+=i18n("Quarters 1/4");
-            list+=i18n("Eighths 1/8");
-            list+=i18n("Sixteenths 1/16");
-            list+=i18n("Tenths 1/10");
-            list+=i18n("Hundredth 1/100");
+            list+=i18n("Eighth's 1/8");
+            list+=i18n("Sixteenth's 1/16");
+            list+=i18n("Tenth's 1/10");
+            list+=i18n("Hundredth's 1/100");
             list+=i18n("One digit 5/9");
             list+=i18n("Two digits 15/22");
             list+=i18n("Three digits 153/652");
@@ -2408,7 +2408,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grp = new QButtonGroup( i18n("Text option"),this);
     //grp->setRadioButtonExclusive( false );
     grid2 = new QGridLayout(grp,2,1,15,7);
-    multi = new QCheckBox( i18n("Goto line automatically"),grp);
+    multi = new QCheckBox( i18n("Go to line automatically"),grp);
 
     grid2->addWidget(multi,0,0);
     multi->setChecked(dlg->bMultiRow);

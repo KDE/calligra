@@ -618,7 +618,7 @@ void KSpreadTabBar::hideTable()
 {
     if ( tabsList.count() ==  1)
     {
-        KMessageBox::error( this, i18n("You cannot hide the last table visible.") );
+        KMessageBox::error( this, i18n("You cannot hide the last visible table.") );
         return;
     }
     else

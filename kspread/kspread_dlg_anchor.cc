@@ -130,7 +130,7 @@ internetAnchor::internetAnchor( KSpreadView* _view,QWidget *parent , char *name 
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Adress internet:"));
+  tmpQLabel->setText(i18n("Internet Address:"));
   l_internet = new QLineEdit( this );
 
   lay2->addWidget(l_internet);

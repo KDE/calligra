@@ -26,7 +26,7 @@ KSpreadOsziDlg::KSpreadOsziDlg( KSpreadView* view, const char* name )
     : QDialog( view, name, FALSE )
 {
     m_view = view;
-    setCaption(i18n("Osciloscope"));
+    setCaption(i18n("Oscilloscope"));
     QVBoxLayout* lay = new QVBoxLayout( this, 6 ,6 );
     QHBoxLayout* hbox = new QHBoxLayout( lay, 6 );
     // lay->addLayout( hbox );
@@ -145,7 +145,7 @@ void KSpreadOsziDlg::slotCalc()
 	KMessageBox::error( this, i18n("No table specified in DataY") );
 	return;
     }
-	
+
     KSpreadPoint result1( m_resultCell1->text(), m_view->doc()->map() );
     if ( !result1.isValid() )
     {
@@ -154,7 +154,7 @@ void KSpreadOsziDlg::slotCalc()
     }
     if ( result1.table == 0 )
     {
-	KMessageBox::error( this, i18n("No table specifiedin ResultX") );
+	KMessageBox::error( this, i18n("No table specified in ResultX") );
 	return;
     }
 

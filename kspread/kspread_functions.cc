@@ -51,7 +51,7 @@ static QString toString( KSpreadParameterType type, bool range = FALSE )
 	case KSpread_Boolean:
 	    return i18n("A range of truth values (TRUE or FALSE)" );
 	case KSpread_Float:
-	    return i18n("A range of A floating point values (like 1.3, 0.343, 253 )" );
+	    return i18n("A range of floating point values (like 1.3, 0.343, 253 )" );
 	case KSpread_Any:
 	    return i18n("A range of any kind of values");
 	}

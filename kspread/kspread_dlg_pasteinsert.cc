@@ -46,7 +46,7 @@ KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,co
   lay1->addWidget(grp);
   rb1 = new QRadioButton( i18n("Move towards right"), grp );
   rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
-  setCaption( i18n("Paste with inserting cell(s)") );
+  setCaption( i18n("Paste inserting cell(s)") );
   rb1->setChecked(true);
 
   KButtonBox *bb = new KButtonBox( this );

@@ -303,11 +303,11 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(showTabBar);
   showTabBar->setChecked(tabbar);
 
-  showFormulaBar =new QCheckBox(i18n("Show formula bar"),tmpQGroupBox);
+  showFormulaBar =new QCheckBox(i18n("Show formula toolbar"),tmpQGroupBox);
   lay1->addWidget(showFormulaBar);
   showFormulaBar->setChecked(formulaBar);
 
-  showStatusBar =new QCheckBox(i18n("Show status bar"),tmpQGroupBox);
+  showStatusBar =new QCheckBox(i18n("Show statusbar"),tmpQGroupBox);
   lay1->addWidget(showStatusBar);
   showStatusBar->setChecked(statusBar);
 
@@ -793,13 +793,13 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   grid1->addWidget(defaultOrientationPage,3,0);
 
   label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default page unit:"));
+  label->setText(i18n("Default page units:"));
   grid1->addWidget(label,4,0);
   defaultUnit=new QComboBox( tmpQGroupBox);
   listType.clear();
-  listType=i18n( "Millimeters ( mm )" ) ;
-  listType+=i18n( "Points ( pt )" ) ;
-  listType+=i18n( "Inches ( in )" );
+  listType=i18n( "Millimeters (mm)" ) ;
+  listType+=i18n( "Points (pt)" ) ;
+  listType+=i18n( "Inches (in)" );
   defaultUnit->insertStringList(listType);
   defaultUnit->setCurrentItem(0);
   grid1->addWidget(defaultUnit,5,0);

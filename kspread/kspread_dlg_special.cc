@@ -59,7 +59,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
 
     rb5 = new QRadioButton( i18n("Overwrite"), grp );
     rb6 = new QRadioButton( i18n("Addition"), grp );
-    rb7 = new QRadioButton( i18n("Substraction"), grp );
+    rb7 = new QRadioButton( i18n("Subtraction"), grp );
     rb8 = new QRadioButton( i18n("Multiplication"), grp );
     rb9 = new QRadioButton( i18n("Division"), grp );
     rb5->setChecked(true);

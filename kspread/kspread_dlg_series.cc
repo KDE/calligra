@@ -154,7 +154,7 @@ else
                 {
                 if(linear->isChecked() &&step->text().toInt() ==0)
                 {
-                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than 0.\n"
+                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than zero.\n"
                 "Otherwise the linear series is infinite!") );
                 step->setFocus();
                 }
@@ -181,7 +181,7 @@ else
                 }
         else
                 {
-                KMessageBox::error( this, i18n("Step is negative !") );
+                KMessageBox::error( this, i18n("Step is negative!") );
                 }
         }
 }

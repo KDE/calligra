@@ -87,7 +87,7 @@ void KSpreadinsert::slotOk()
 	if( insRem == Insert )
         {
 	    if ( !m_pView->activeTable()->shiftRow( rect ) )
-		KMessageBox::error( this, i18n("The row is full. Can not move cells to the right.") );
+		KMessageBox::error( this, i18n("The row is full. Cannot move cells to the right.") );
 	}
 	else if( insRem == Remove )
         {
@@ -99,7 +99,7 @@ void KSpreadinsert::slotOk()
 	if( insRem == Insert )
         {
 	    if ( !m_pView->activeTable()->shiftColumn( rect ) )
-		KMessageBox::error( this, i18n("The column is full. Can not move cells towards the bottom.") );
+		KMessageBox::error( this, i18n("The column is full. Cannot move cells towards the bottom.") );
 	}
 	else if( insRem == Remove )
         {
@@ -111,7 +111,7 @@ void KSpreadinsert::slotOk()
 	if( insRem == Insert )
         {
 	    if ( !m_pView->activeTable()->insertRow( rect.top(),(rect.bottom()-rect.top() ) ) )
-		KMessageBox::error( this, i18n("The row is full. Can not move cells to the right.") );
+		KMessageBox::error( this, i18n("The row is full. Cannot move cells to the right.") );
 	}
 	else if( insRem == Remove )
         {
@@ -123,7 +123,7 @@ void KSpreadinsert::slotOk()
 	if( insRem == Insert )
         {
 	    if ( !m_pView->activeTable()->insertColumn( rect.left(),(rect.right()-rect.left() )) )
-		KMessageBox::error( this, i18n("The column is full. Can not move cells towards the bottom.") );
+		KMessageBox::error( this, i18n("The column is full. Cannot move cells towards the bottom.") );
 	}
 	else if( insRem == Remove )
         {
