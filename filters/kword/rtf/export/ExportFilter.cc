@@ -522,7 +522,7 @@ if (layout.counter.style)
         {
             markup += lookupFont("\\pnf", layout.formatData.text.fontName);
         }
-        
+
         markup += "}";
 }    
 
@@ -1346,7 +1346,11 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         }
     }
 
-    if (force || (formatOrigin.underline!=formatData.underline))
+    if ( force
+        || ( formatOrigin.underline != formatData.underline )
+        || ( formatOrigin.underlineValue != formatData.underlineValue )
+        || ( formatOrigin.underlineStyle != formatData.underlineStyle )
+        || ( formatOrigin.underlineWord != formatData.underlineWord ) )
     {
         if ( formatData.underline )
         {
@@ -1390,7 +1394,10 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         }
     }
 
-    if (force || (formatOrigin.strikeout!=formatData.strikeout))
+    if ( force
+        || ( formatOrigin.strikeout != formatData.strikeout )
+        || ( formatOrigin.strikeoutType != formatData.strikeoutType )
+        )
     {
         if ( formatData.strikeout )
         {
