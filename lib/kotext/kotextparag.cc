@@ -418,8 +418,9 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
 
 
-    int startXpix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
-    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startXpix << endl;
+    // Calculate startX in pixels (using the xadj value of the corresponding char)
+    int startX_pix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
+    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startX_pix << endl;
     //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
     //          << " h(PIX)=" << zh->layoutUnitToPixelY( lastY, h ) << " lastY(PIX)=" << zh->layoutUnitToPixelY( lastY ) << endl;
 
@@ -428,9 +429,9 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
 
     if ( lastFormat->textBackgroundColor().isValid() )
-        painter.fillRect( startXpix, lastY_pix, bw, h_pix, lastFormat->textBackgroundColor() );
+        painter.fillRect( startX_pix, lastY_pix, bw, h_pix, lastFormat->textBackgroundColor() );
 
-    drawParagStringInternal( painter, s, start, len, startXpix,
+    drawParagStringInternal( painter, s, start, len, startX_pix,
                              lastY_pix, baseLine_pix,
                              bw, // Note that bw is already in pixels (see QTextParag::paint)
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
@@ -457,8 +458,10 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
         }
     }
 
-    drawFormattingChars( painter, s, start, len, startX,
-                         lastY, baseLine, bw, h, drawSelections,
+    drawFormattingChars( painter, s, start, len,
+                         startX, lastY, baseLine, h,
+                         startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
+                         drawSelections,
                          lastFormat, i, selectionStarts,
                          selectionEnds, cg, rightToLeft );
 
@@ -467,7 +470,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 // Copied from QTextParag
 // (we have to copy it here, so that color & font changes don't require changing
 // a local copy of the text format)
-// And we have to keep it separate from drawParagString to avoid s/startX/startXpix/ etc.
+// And we have to keep it separate from drawParagString to avoid s/startX/startX_pix/ etc.
 void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,

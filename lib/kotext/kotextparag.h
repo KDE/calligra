@@ -154,10 +154,11 @@ protected:
                                   KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh );
 
-    /** Hook for KWTextParag. Default implementation does nothing. */
-    virtual void drawFormattingChars( QPainter &, const QString &, int, int, int,
-                                      int , int, int, int, bool,
-                                      QTextFormat *, int, const QMemArray<int> &,
+    /** Hook for KWTextParag. Default implementation does nothing. See KWTextParag for params meaning */
+    virtual void drawFormattingChars( QPainter &, const QString &, int, int, // start, len
+                                      int, int, int, int, // startX, lastY, baseLine, h,
+                                      int, int, int, int, int, // startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
+                                      bool, KoTextFormat *, int, const QMemArray<int> &,
                                       const QMemArray<int> &, const QColorGroup &, bool ) { }
 protected:
     QStyleSheetItem * m_item;
