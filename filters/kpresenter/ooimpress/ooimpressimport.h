@@ -30,20 +30,20 @@
  *  This class implements a stack for the different styles of an object.
  *
  *  There can be several styles that are valid for one object. For example
- *  a page has a style 'dp1' and a textobject on that page has styles 'pr3'
- *  and 'P7' and a paragraph in that textobject has styles 'P1' and 'T3'.
+ *  a textobject on a page has styles 'pr3' and 'P7' and a paragraph in
+ *  that textobject has styles 'P1' and 'T3'. And some styles even have
+ *  parent-styles...
  *
  *  If you want to know if there is, for example,  the attribute 'fo:font-family'
- *  for this paragraph, you have to look into style 'T3', 'P1', 'P7' and 'dp1'.
+ *  for this paragraph, you have to look into style 'T3', 'P1', 'P7' and 'pr3'.
  *  When you find this attribute in one style you have to stop processing the list
  *  and take the found attribute for this object.
  *
  *  This is what this class does. You can push styles on the stack while walking
  *  through the xml-tree to your object and then ask the stack if any of the styles
  *  provides a certain attribute. The stack will search from top to bottom, i.e.
- *  in our example from 'T3' to 'dp1' and return the first occurrence of the wanted
- *  attribute. If it cannot find the attribute in the stack then it will look for
- *  attribute in the default-style (if set) and return it.
+ *  in our example from 'T3' to 'pr3' and return the first occurrence of the wanted
+ *  attribute.
  *
  *  So this is some sort of inheritance where the styles on top of the stack overwrite
  *  the same attribute of a lower style on the stack.
