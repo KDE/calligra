@@ -331,6 +331,7 @@ private:
     bool allInOne;
     int listMult;
     int oldListMult;
+    int oldLineSpacing, oldParagSpacing;
     TextSettings txtSettings;
     int marg;
     KPresenterDoc *kpr_doc;

@@ -682,7 +682,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     }
 
     settings.lineSpacing = lineSpacing;
-    settings.paragSpacing = paragSpacing;
+    settings.paragSpacing = QMAX( ktextobject.document()->paragSpacing(), paragSpacing );
     ktextobject.document()->setTextSettings( settings );
     ktextobject.updateCurrentFormat();
 }

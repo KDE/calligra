@@ -3521,6 +3521,8 @@ void KTextEditDocument::zoom( float f )
     oldListMult = listMult;
     listMult = (int)( (float)listMult * ( f - f / 5.0 ) );
     formatCollection()->zoom( f );
+    oldLineSpacing = lineSpacing();
+    oldParagSpacing = paragSpacing();
     invalidate();
 }
 
@@ -3528,6 +3530,8 @@ void KTextEditDocument::unzoom()
 {
     listMult = oldListMult;
     formatCollection()->unzoom();
+    setLineSpacing( oldLineSpacing );
+    setParagSpacing( oldParagSpacing );
     invalidate();
 }
 
