@@ -1,0 +1,102 @@
+Index: Catalog.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/xpdf/Catalog.cc,v
+retrieving revision 1.1
+diff -u -p -r1.1 Catalog.cc
+--- Catalog.cc	23 Nov 2002 14:15:14 -0000	1.1
++++ Catalog.cc	30 Oct 2004 16:34:49 -0000
+@@ -12,6 +12,7 @@
+ #pragma implementation
+ #endif
+ 
++#include <limits.h>
+ #include <stddef.h>
+ #include "gmem.h"
+ #include "Object.h"
+@@ -63,6 +64,12 @@ Catalog::Catalog(XRef *xrefA) {
+   }
+   pagesSize = numPages0 = obj.getInt();
+   obj.free();
++  if ((unsigned) pagesSize >= INT_MAX / sizeof(Page *) ||
++      (unsigned) pagesSize >= INT_MAX / sizeof(Ref)) {
++    error(-1, "Invalid 'pagesSize'");
++    ok = gFalse;
++    return;
++  }
+   pages = (Page **)gmalloc(pagesSize * sizeof(Page *));
+   pageRefs = (Ref *)gmalloc(pagesSize * sizeof(Ref));
+   for (i = 0; i < pagesSize; ++i) {
+@@ -190,6 +197,11 @@ int Catalog::readPageTree(Dict *pagesDic
+       }
+       if (start >= pagesSize) {
+ 	pagesSize += 32;
++        if ((unsigned) pagesSize >= INT_MAX / sizeof(Page *) ||
++            (unsigned) pagesSize >= INT_MAX / sizeof(Ref)) {
++          error(-1, "Invalid 'pagesSize' parameter.");
++          goto err3;
++        }
+ 	pages = (Page **)grealloc(pages, pagesSize * sizeof(Page *));
+ 	pageRefs = (Ref *)grealloc(pageRefs, pagesSize * sizeof(Ref));
+ 	for (j = pagesSize - 32; j < pagesSize; ++j) {
+Index: XRef.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/xpdf/XRef.cc,v
+retrieving revision 1.1
+diff -u -p -r1.1 XRef.cc
+--- XRef.cc	23 Nov 2002 14:15:14 -0000	1.1
++++ XRef.cc	30 Oct 2004 16:34:53 -0000
+@@ -12,6 +12,7 @@
+ #pragma implementation
+ #endif
+ 
++#include <limits.h>
+ #include <stdlib.h>
+ #include <stddef.h>
+ #include <string.h>
+@@ -76,6 +77,12 @@ XRef::XRef(BaseStream *strA, GString *ow
+ 
+   // trailer is ok - read the xref table
+   } else {
++    if ((unsigned) size >= INT_MAX / sizeof(XRefEntry)) {
++      error(-1, "Invalid 'size' inside xref table.");
++      ok = gFalse;
++      errCode = errDamaged;
++      return;
++    }
+     entries = (XRefEntry *)gmalloc(size * sizeof(XRefEntry));
+     for (i = 0; i < size; ++i) {
+       entries[i].offset = 0xffffffff;
+@@ -267,6 +274,10 @@ GBool XRef::readXRef(Guint *pos) {
+     // table size
+     if (first + n > size) {
+       newSize = size + 256;
++      if ((unsigned) newSize >= INT_MAX / sizeof(XRefEntry)) {
++        error(-1, "Invalid 'newSize'");
++        goto err2;
++      }
+       entries = (XRefEntry *)grealloc(entries, newSize * sizeof(XRefEntry));
+       for (i = size; i < newSize; ++i) {
+ 	entries[i].offset = 0xffffffff;
+@@ -410,6 +421,10 @@ GBool XRef::constructXRef() {
+ 	    if (!strncmp(p, "obj", 3)) {
+ 	      if (num >= size) {
+ 		newSize = (num + 1 + 255) & ~255;
++	        if ((unsigned) newSize >= INT_MAX / sizeof(XRefEntry)) {
++	          error(-1, "Invalid 'obj' parameters.");
++	          return gFalse;
++	        }
+ 		entries = (XRefEntry *)
+ 		            grealloc(entries, newSize * sizeof(XRefEntry));
+ 		for (i = size; i < newSize; ++i) {
+@@ -431,6 +446,11 @@ GBool XRef::constructXRef() {
+     } else if (!strncmp(p, "endstream", 9)) {
+       if (streamEndsLen == streamEndsSize) {
+ 	streamEndsSize += 64;
++        if ((unsigned) streamEndsSize >= INT_MAX / sizeof(int)) {
++          error(-1, "Invalid 'endstream' parameter.");
++          return gFalse;
++        }
++
+ 	streamEnds = (Guint *)grealloc(streamEnds,
+ 				       streamEndsSize * sizeof(int));
+       }

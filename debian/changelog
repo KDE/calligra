@@ -1,3 +1,49 @@
+koffice (1:1.3.4-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Modified the xpdf security fixes from 1.3.3-3 to use a more robust style
+    of testing that does not depend upon the level of compiler optimisation
+    (thanks to Martin Schulze).
+
+ -- Ben Burton <bab@debian.org>  Wed, 27 Oct 2004 20:27:33 +1000
+
+koffice (1:1.3.3-3) unstable; urgency=critical
+
+  * Security upload.
+  * Fixes integer overflows in KWord's PDF import filter.  This patch forms
+    part of the KDE security advisory (2004-10-21, CAN-2004-0888) relating to
+    vulnerabilities inherited from the xpdf code.
+
+ -- Ben Burton <bab@debian.org>  Mon, 25 Oct 2004 20:11:56 +1000
+
+koffice (1:1.3.3-2) unstable; urgency=medium
+
+  * Tightened shlibs files, since the library interface has changed
+    since 1.3.0 (closes: #268366).
+  * Build-conflicts with autoconf2.13, since admin/Makefile.common does not
+    operate correctly in its presence.
+
+ -- Ben Burton <bab@debian.org>  Fri, 22 Oct 2004 08:04:16 +1000
+
+koffice (1:1.3.3-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Build-depends on libpaper-dev for xpdf filters.
+  * Made koffice suggest koffice-i18n (closes: #272754).  As of 1.3.3,
+    all koffice-i18n-<lang> packages provide koffice-i18n accordingly.
+  * Gnumeric export is fixed (closes: #200313).
+  * Karbon no longer locks up when importing an EPS graphic containing
+    %ALDBoundingBox (closes: #242454).
+
+ -- Ben Burton <bab@debian.org>  Sun, 17 Oct 2004 19:19:03 +1000
+
+koffice (1:1.3.2-2) unstable; urgency=medium
+
+  * Rebuilt against libtiff4.
+  * Build-depends on libtiff4-dev.
+
+ -- Ben Burton <bab@debian.org>  Mon,  2 Aug 2004 10:09:55 +1000
+
 koffice (1:1.3.2-1) unstable; urgency=low
 
   * New upstream bugfix release.

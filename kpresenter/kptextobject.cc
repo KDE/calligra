@@ -888,14 +888,15 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
             style = doc->styleCollection()->findStyle( styleName );
             if (!style)
             {
-                kdError(33001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
+                kdError(33001) << "Cannot find style \"" << styleName << "\" specified in paragraph - using Standard" << endl;
                 style = doc->styleCollection()->findStyle( "Standard" );
             }
             //else kdDebug(33001) << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
         }
         else
         {
-            kdError(33001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
+	    // Happens with old templates, so not a kdError
+            kdDebug(33001) << "Missing NAME tag in paragraph - using Standard" << endl;
             style = doc->styleCollection()->findStyle( "Standard" );
         }
         Q_ASSERT(style);

@@ -1008,7 +1008,36 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
     QDomNode lineend = e.namedItem( "LINEEND" );
     QDomNode gradient = e.namedItem( "GRADIENT" );
     QDomNode shadow = e.namedItem( "SHADOW" );
+    QDomNode textObject = e.namedItem( "TEXTOBJ" );
+    if ( !textObject.isNull() )
+    {
+        QDomElement textObjectElement = textObject.toElement();
+        if ( textObjectElement.hasAttribute( "verticalAlign" ) )
+        {
+            m_textAlignment = textObjectElement.attribute("verticalAlign");
+            if ( m_textAlignment == "center" )
+                m_textAlignment = "middle";
+        }
+        if ( textObjectElement.hasAttribute( "bleftpt" ) )
+        {
+            m_textMarginLeft = QString( "%1pt" ).arg( textObjectElement.attribute( "bleftpt" ) );
+        }
+        if ( textObjectElement.hasAttribute( "bbottompt" ) )
+        {
+            m_textMarginBottom = QString( "%1pt" ).arg( textObjectElement.attribute( "bbottompt" ) );
+        }
+        if ( textObjectElement.hasAttribute( "btoppt" ) )
+        {
+            m_textMarginTop = QString( "%1pt" ).arg( textObjectElement.attribute( "btoppt" ) );
+        }
+        if ( textObjectElement.hasAttribute( "brightpt" ) )
+        {
+            m_textMarginRight = QString( "%1pt" ).arg( textObjectElement.attribute( "brightpt" ) );
+        }
+    }
+    kdDebug()<<" alignment :"<<m_textAlignment<<endl;
 
+	
     m_name = QString( "gr%1" ).arg( index );
     if ( !pen.isNull() )
     {
@@ -1040,6 +1069,23 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
         {
             m_fill = "hatch";
             m_fill_hatch_name = styleFactory->createHatchStyle( style, m_fill_color );
+        }
+        else if ( style >= 2 && style <= 8 )
+        {
+            if ( style == 2 )
+                m_transparency = "94%";
+            else if ( style == 3 )
+                m_transparency = "88%";
+            else if ( style == 4 )
+                m_transparency = "63%";
+            else if ( style == 5 )
+                m_transparency = "50%";
+            else if ( style == 6 )
+                m_transparency = "37%";
+            else if ( style == 7 )
+                m_transparency = "12%";
+            else if ( style == 8 )
+                m_transparency = "6%";
         }
     }
     else if ( !gradient.isNull() )
@@ -1232,7 +1278,20 @@ void GraphicStyle::toXML( QDomDocument & doc, QDomElement & e ) const
         properties.setAttribute( "draw:marker-end-width", m_marker_end_width );
     if ( m_fill_gradient_name != QString::null )
         properties.setAttribute( "draw:fill-gradient-name", m_fill_gradient_name );
+    if ( m_transparency != QString::null )
+        properties.setAttribute( "draw:transparency", m_transparency );
 
+    if ( m_textMarginLeft != QString::null )
+        properties.setAttribute( "fo:padding-left", m_textMarginLeft );
+    if ( m_textMarginBottom != QString::null )
+        properties.setAttribute( "fo:padding-bottom", m_textMarginBottom );
+    if ( m_textMarginTop != QString::null )
+        properties.setAttribute( "fo:padding-top", m_textMarginTop );
+    if ( m_textMarginRight != QString::null )
+        properties.setAttribute( "fo:padding-right", m_textMarginRight );
+
+    if ( m_textAlignment != QString::null )
+        properties.setAttribute( "draw:textarea-vertical-align", m_textAlignment );
     style.appendChild( properties );
     e.appendChild( style );
 }
@@ -1270,7 +1329,13 @@ bool GraphicStyle::operator==( const GraphicStyle & graphicStyle ) const
              m_marker_start_width == graphicStyle.m_marker_start_width &&
              m_marker_end == graphicStyle.m_marker_end &&
              m_marker_end_width == graphicStyle.m_marker_end_width &&
-             m_fill_gradient_name == graphicStyle.m_fill_gradient_name );
+             m_fill_gradient_name == graphicStyle.m_fill_gradient_name &&
+             m_transparency == graphicStyle.m_transparency &&
+             m_textMarginBottom == graphicStyle.m_textMarginBottom &&
+             m_textMarginTop == graphicStyle.m_textMarginTop &&
+             m_textMarginLeft == graphicStyle.m_textMarginLeft &&
+             m_textMarginRight == graphicStyle.m_textMarginRight &&
+	     m_textAlignment == graphicStyle.m_textAlignment );
 }
 
 ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )

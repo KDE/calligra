@@ -40,6 +40,10 @@ OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & 
     , m_currentPage( 0 )
     , m_objectIndex( 0 )
     , m_pageHeight( 0 )
+    , m_activePage( 0 )
+    , m_gridX( -1.0 )
+    , m_gridY( -1.0 )
+    , m_snapToGrid( false )
     , m_pictureIndex( 0 )
     , m_storeinp( 0L )
     , m_storeout( 0L )
@@ -116,6 +120,25 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     //kdDebug() << "content :" << contentString << endl;
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
+
+    QDomDocument settings( impl.createDocumentType( "office:document-content",
+                                                   "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
+                                                   "office.dtd" ) );
+
+    createDocumentSettings( settings );
+
+    // store document content
+    if ( !m_storeout->open( "settings.xml" ) )
+    {
+        kdWarning() << "Couldn't open the file 'settings.xml'." << endl;
+        return KoFilter::CreationError;
+    }
+
+    QCString settingsString = settings.toCString();
+    //kdDebug() << "content :" << settingsString << endl;
+    m_storeout->write( settingsString , settingsString.length() );
+    m_storeout->close();
+
 
     QDomDocument styles( impl.createDocumentType( "office:document-styles",
                                                   "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
@@ -287,6 +310,78 @@ void OoImpressExport::createDocumentStyles( QDomDocument & docstyles )
     docstyles.appendChild( content );
 }
 
+void OoImpressExport::createDocumentSettings( QDomDocument & docsetting )
+{
+    docsetting.appendChild( docsetting.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+    QDomElement setting = docsetting.createElement( "office:document-settings" );
+    setting.setAttribute( "xmlns:office", "http://openoffice.org/2000/office");
+    setting.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
+    setting.setAttribute( "office:class", "presentation" );
+    setting.setAttribute( "office:version", "1.0" );
+
+    QDomElement begin = docsetting.createElement( "office:settings" );
+
+    QDomElement configItem = docsetting.createElement("config:config-item-set" );
+    configItem.setAttribute( "config:name", "view-settings" );
+
+    QDomElement mapIndexed = docsetting.createElement( "config:config-item-map-indexed" );
+    mapIndexed.setAttribute("config:name", "Views" );
+    configItem.appendChild( mapIndexed );
+
+    //<config:config-item-map-indexed config:name="Views">
+
+    QDomElement mapItem = docsetting.createElement("config:config-item-map-entry" );
+
+    QDomElement attribute =  docsetting.createElement("config:config-item" );
+    attribute.setAttribute( "config:name", "SnapLinesDrawing" );
+    attribute.setAttribute( "config:type", "string" );
+    attribute.appendChild( docsetting.createTextNode( m_helpLine ) );
+    mapItem.appendChild( attribute );
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">H5983V700V10777H4518V27601P50000,9000P8021,2890</config:config-item>
+
+    attribute =  docsetting.createElement("config:config-item" );
+    attribute.setAttribute( "config:name", "IsSnapToGrid" );
+    attribute.setAttribute( "config:type", "boolean" );
+    attribute.appendChild( docsetting.createTextNode( m_snapToGrid ? "true" : "false" ) );
+    mapItem.appendChild( attribute );
+
+    if (  m_gridX >=0 )
+    {
+        attribute =  docsetting.createElement("config:config-item" );
+        attribute.setAttribute( "config:name", "GridFineWidth" );
+        attribute.setAttribute( "config:type", "int" );
+        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMM( ( m_gridX )  )*100 ) ) ) );
+        mapItem.appendChild( attribute );
+    }
+
+    if ( m_gridY >=0 )
+    {
+        attribute =  docsetting.createElement("config:config-item" );
+        attribute.setAttribute( "config:name", "GridFineHeight" );
+        attribute.setAttribute( "config:type", "int" );
+        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMM( ( m_gridY )  )*100 ) ) ) );
+        mapItem.appendChild( attribute );
+    }
+
+    attribute =  docsetting.createElement("config:config-item" );
+    attribute.setAttribute( "config:name", "SelectedPage" );
+    attribute.setAttribute( "config:type", "short" );
+    attribute.appendChild( docsetting.createTextNode( QString::number( m_activePage ) ) );
+    mapItem.appendChild( attribute );
+
+
+    mapIndexed.appendChild( mapItem );
+
+    begin.appendChild( configItem );
+
+    setting.appendChild( begin );
+
+
+    docsetting.appendChild( setting );
+
+}
+
 void OoImpressExport::createDocumentContent( QDomDocument & doccontent )
 {
     doccontent.appendChild( doccontent.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -306,6 +401,7 @@ void OoImpressExport::createDocumentContent( QDomDocument & doccontent )
     content.setAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
     content.setAttribute( "xmlns:form", "http://openoffice.org/2000/form" );
     content.setAttribute( "xmlns:script", "http://openoffice.org/2000/script" );
+    content.setAttribute( "xmlns:presentation", "http://openoffice.org/2000/presentation" );
     content.setAttribute( "office:class", "presentation" );
     content.setAttribute( "office:version", "1.0" );
 
@@ -356,6 +452,11 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     entry = docmanifest.createElement( "manifest:file-entry" );
     entry.setAttribute( "manifest:media-type", "text/xml" );
     entry.setAttribute( "manifest:full-path", "meta.xml" );
+    manifest.appendChild( entry );
+
+    entry = docmanifest.createElement( "manifest:file-entry" );
+    entry.setAttribute( "manifest:media-type", "text/xml" );
+    entry.setAttribute( "manifest:full-path", "settings.xml" );
     manifest.appendChild( entry );
 
     docmanifest.appendChild( manifest );
@@ -411,6 +512,51 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
     kdDebug()<<" void OoImpressExport::createPictureList( QDomNode &pictures ) \n";
 }
 
+void OoImpressExport::createAttribute( QDomNode &attributeValue )
+{
+    QDomElement elem = attributeValue.toElement();
+    if(elem.hasAttribute("activePage"))
+        m_activePage=elem.attribute("activePage").toInt();
+    if(elem.hasAttribute("gridx"))
+        m_gridX = elem.attribute("gridx").toDouble();
+    if(elem.hasAttribute("gridy"))
+        m_gridY = elem.attribute("gridy").toDouble();
+    if(elem.hasAttribute("snaptogrid"))
+        m_snapToGrid = (bool)elem.attribute("snaptogrid").toInt();
+}
+
+void OoImpressExport::createHelpLine( QDomNode &helpline )
+{
+    helpline = helpline.firstChild();
+    QDomElement helplines;
+    for( ; !helpline.isNull(); helpline = helpline.nextSibling() )
+    {
+        if ( helpline.isElement() )
+        {
+            helplines = helpline.toElement();
+            if ( helplines.tagName()=="Vertical" )
+            {
+                int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
+                m_helpLine+="V"+QString::number( tmpX );
+            }
+            else if ( helplines.tagName()=="Horizontal" )
+            {
+                int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
+                m_helpLine+="H"+QString::number( tmpY );
+            }
+            else if ( helplines.tagName()=="HelpPoint" )
+            {
+                QString str( "P%1,%2" );
+                int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("posX").toDouble()  )*100 );
+                int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("posY").toDouble() )*100 );
+                m_helpLine+=str.arg( QString::number( tmpX ) ).arg( QString::number( tmpY ) );
+            }
+        }
+    }
+    //kdDebug()<<"m_helpLine :"<<m_helpLine<<endl;
+}
+
+
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
 {
     QDomNode doc = m_maindoc.namedItem( "DOC" );
@@ -423,7 +569,16 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode objects = doc.namedItem( "OBJECTS" );
     QDomNode pictures = doc.namedItem( "PICTURES" );
     QDomNode sounds = doc.namedItem( "SOUNDS" );
+    QDomNode helpline = doc.namedItem( "HELPLINES" );
+    QDomNode attributeValue = doc.namedItem( "ATTRIBUTES" );
+
     QDomNode bgpage = background.firstChild();
+
+    createPictureList( pictures );
+
+    createHelpLine( helpline );
+
+    createAttribute( attributeValue );
 
     // store the paper settings
     QDomElement p = paper.toElement();
@@ -448,75 +603,90 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
         drawPage.setAttribute( "draw:style-name", ps );
         drawPage.setAttribute( "draw:id", m_currentPage );
         drawPage.setAttribute( "draw:master-page-name", m_masterPageStyle );
+        appendObjects( doccontent, objects, drawPage );
 
-        // I am not sure if objects are always stored sorted so I parse all
-        // of them to find the ones belonging to a certain page.
-        for ( QDomNode object = objects.firstChild(); !object.isNull();
-              object = object.nextSibling() )
-        {
-            QDomElement o = object.toElement();
-
-            QDomElement orig = o.namedItem( "ORIG" ).toElement();
-            float y = orig.attribute( "y" ).toFloat();
-
-            if ( y < m_pageHeight * ( m_currentPage - 1 ) ||
-                 y >= m_pageHeight * m_currentPage )
-                continue; // object not on current page
-
-            switch( o.attribute( "type" ).toInt() )
-            {
-            case 0: // image
-                appendPicture( doccontent, o, drawPage );
-                break;
-            case 1: // line
-                appendLine( doccontent, o, drawPage );
-                break;
-            case 2: // rectangle
-                appendRectangle( doccontent, o, drawPage );
-                break;
-            case 3: // circle, ellipse
-                appendEllipse( doccontent, o, drawPage );
-                break;
-            case 4: // textbox
-                appendTextbox( doccontent, o, drawPage );
-                break;
-            case 5:
-                kdDebug()<<" autoform not implemented\n";
-                break;
-            case 6:
-                kdDebug()<<" clipart not implemented\n";
-                break;
-            case 8: // pie, chord, arc
-                appendEllipse( doccontent, o, drawPage, true );
-                break;
-            case 9: //part
-                kdDebug()<<" part object not implemented \n";
-                break;
-            case 10:
-                kdDebug()<<" group not implemented \n";
-                break;
-            case 11:
-                kdDebug()<<" free hand not implemented\n";
-                break;
-            case 12: // polyline
-                appendPolyline( doccontent, o, drawPage );
-                break;
-            case 13: //OT_QUADRICBEZIERCURVE = 13
-            case 14: //OT_CUBICBEZIERCURVE = 14
-                //todo
-                // "draw:path"
-                break;
-            case 15: // polygon
-            case 16: // close polygone
-                appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
-                break;
-            }
-            ++m_objectIndex;
-        }
 
         body.appendChild( drawPage );
         m_currentPage++;
     }
+}
+
+void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target )
+{
+    kdDebug()<<" group not implemented \n";
+    QDomElement groupElement = doc.createElement( "draw:g" );
+    QDomNode objects = source.namedItem( "OBJECTS" );
+    appendObjects( doc, objects, groupElement);
+    target.appendChild( groupElement );
+}
+
+void OoImpressExport::appendObjects(QDomDocument & doccontent, QDomNode &objects, QDomElement &drawPage)
+{
+    // I am not sure if objects are always stored sorted so I parse all
+    // of them to find the ones belonging to a certain page.
+    for ( QDomNode object = objects.firstChild(); !object.isNull();
+          object = object.nextSibling() )
+    {
+        QDomElement o = object.toElement();
+
+        QDomElement orig = o.namedItem( "ORIG" ).toElement();
+        float y = orig.attribute( "y" ).toFloat();
+
+        if ( y < m_pageHeight * ( m_currentPage - 1 ) ||
+             y >= m_pageHeight * m_currentPage )
+            continue; // object not on current page
+
+        switch( o.attribute( "type" ).toInt() )
+        {
+        case 0: // image
+            appendPicture( doccontent, o, drawPage );
+            break;
+        case 1: // line
+            appendLine( doccontent, o, drawPage );
+            break;
+        case 2: // rectangle
+            appendRectangle( doccontent, o, drawPage );
+            break;
+        case 3: // circle, ellipse
+            appendEllipse( doccontent, o, drawPage );
+            break;
+        case 4: // textbox
+            appendTextbox( doccontent, o, drawPage );
+            break;
+        case 5:
+            kdDebug()<<" autoform not implemented\n";
+            break;
+        case 6:
+            kdDebug()<<" clipart not implemented\n";
+            break;
+        case 8: // pie, chord, arc
+            appendEllipse( doccontent, o, drawPage, true );
+            break;
+        case 9: //part
+            kdDebug()<<" part object not implemented \n";
+            break;
+        case 10:
+            appendGroupObject( doccontent, o, drawPage );
+            break;
+        case 11:
+            kdDebug()<<" free hand not implemented\n";
+            break;
+        case 12: // polyline
+            appendPolyline( doccontent, o, drawPage );
+            break;
+        case 13: //OT_QUADRICBEZIERCURVE = 13
+        case 14: //OT_CUBICBEZIERCURVE = 14
+            //todo
+            // "draw:path"
+            break;
+        case 15: // polygon
+        case 16: // close polygone
+            appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
+            break;
+        }
+        ++m_objectIndex;
+    }
+
 }
 
 
@@ -852,15 +1022,30 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     float y1 = orig.attribute( "y" ).toFloat();
     float x2 = size.attribute( "width" ).toFloat();
     float y2 = size.attribute( "height" ).toFloat();
-    float type = linetype.attribute( "value" ).toInt();
+    int type = 0;
+	if(!linetype.isNull() )
+		type = linetype.attribute( "value" ).toInt();
     y1 -= m_pageHeight * ( m_currentPage - 1 );
     x2 += x1;
     y2 += y1;
 
     target.setAttribute( "draw:id",  QString::number( m_objectIndex ) );
-    target.setAttribute( "svg:x1", StyleFactory::toCM( orig.attribute( "x" ) ) );
-    target.setAttribute( "svg:x2", QString( "%1cm" ).arg( KoUnit::toCM( x2 ) ) );
-    if ( type == 3 ) // from left bottom to right top
+    QString xpos1 = StyleFactory::toCM( orig.attribute( "x" ) );
+    QString xpos2 = QString( "%1cm" ).arg( KoUnit::toCM( x2 ) );
+	
+	if ( type == 0 )
+	{
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
+	}
+    else if ( type == 1 )
+    {
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2) ) );
+        xpos1 = QString( "%1cm" ).arg( KoUnit::toCM( x1/2.0 ) );
+        xpos2 = xpos1;
+    }
+	else if ( type == 3 ) // from left bottom to right top
     {
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
@@ -870,6 +1055,10 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
     }
+
+    target.setAttribute( "svg:x1", xpos1 );
+    target.setAttribute( "svg:x2", xpos2 );
+
 
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )

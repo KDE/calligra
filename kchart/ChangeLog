@@ -1,0 +1,6 @@
+2004-10-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 55603: Pressing Enter in Data Editor doesn't update any
+	changes.	
+	* sheetdlg.cc (SheetDlg): Make the OK button the default.
+

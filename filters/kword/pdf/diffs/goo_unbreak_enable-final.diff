@@ -1,0 +1,114 @@
+Index: xpdf/goo/GHash.h
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GHash.h,v
+retrieving revision 1.2
+retrieving revision 1.2.2.1
+diff -u -3 -p -r1.2 -r1.2.2.1
+--- xpdf/goo/GHash.h	13 Jan 2003 14:51:16 -0000	1.2
++++ xpdf/goo/GHash.h	21 Oct 2004 20:32:51 -0000	1.2.2.1
+@@ -11,10 +11,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma interface
+-#endif
+-
+ #include "gtypes.h"
+ 
+ class GString;
+Index: xpdf/goo/GHash.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GHash.cc,v
+retrieving revision 1.2
+retrieving revision 1.2.2.1
+diff -u -3 -p -r1.2 -r1.2.2.1
+--- xpdf/goo/GHash.cc	13 Jan 2003 14:51:16 -0000	1.2
++++ xpdf/goo/GHash.cc	21 Oct 2004 20:32:51 -0000	1.2.2.1
+@@ -8,10 +8,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma implementation
+-#endif
+-
+ #include "gmem.h"
+ #include "GString.h"
+ #include "GHash.h"
+Index: xpdf/goo/GString.h
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GString.h,v
+retrieving revision 1.2
+retrieving revision 1.2.2.1
+diff -u -3 -p -r1.2 -r1.2.2.1
+--- xpdf/goo/GString.h	13 Jan 2003 14:51:16 -0000	1.2
++++ xpdf/goo/GString.h	21 Oct 2004 20:32:51 -0000	1.2.2.1
+@@ -13,10 +13,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma interface
+-#endif
+-
+ #include <string.h>
+ 
+ class GString {
+Index: xpdf/goo/GList.h
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GList.h,v
+retrieving revision 1.1
+retrieving revision 1.1.2.1
+diff -u -3 -p -r1.1 -r1.1.2.1
+--- xpdf/goo/GList.h	23 Nov 2002 14:15:14 -0000	1.1
++++ xpdf/goo/GList.h	21 Oct 2004 20:32:51 -0000	1.1.2.1
+@@ -11,10 +11,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma interface
+-#endif
+-
+ #include "gtypes.h"
+ 
+ //------------------------------------------------------------------------
+Index: xpdf/goo/GList.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GList.cc,v
+retrieving revision 1.1
+retrieving revision 1.1.2.1
+diff -u -3 -p -r1.1 -r1.1.2.1
+--- xpdf/goo/GList.cc	23 Nov 2002 14:15:14 -0000	1.1
++++ xpdf/goo/GList.cc	21 Oct 2004 20:32:51 -0000	1.1.2.1
+@@ -8,10 +8,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma implementation
+-#endif
+-
+ #include <string.h>
+ #include "gmem.h"
+ #include "GList.h"
+Index: xpdf/goo/GString.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GString.cc,v
+retrieving revision 1.1
+retrieving revision 1.1.2.1
+diff -u -3 -p -r1.1 -r1.1.2.1
+--- xpdf/goo/GString.cc	23 Nov 2002 14:15:14 -0000	1.1
++++ xpdf/goo/GString.cc	21 Oct 2004 20:32:51 -0000	1.1.2.1
+@@ -10,10 +10,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma implementation
+-#endif
+-
+ #include <stdlib.h>
+ #include <stddef.h>
+ #include <string.h>

@@ -3,6 +3,7 @@ usr/lib/kde3/libkformulapart.*
 usr/lib/kformulamain.*
 usr/share/applnk/Office/kformula.desktop
 usr/share/apps/kformula
+usr/share/apps/konqueror/servicemenus/kformula_konqi.desktop
 usr/share/doc/kde/HTML/en/kformula/*.bz2
 usr/share/doc/kde/HTML/en/kformula/*.docbook
 usr/share/doc/kde/HTML/en/kformula/*.png

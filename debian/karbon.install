@@ -42,6 +42,7 @@ usr/lib/kde3/libwmfimport.la
 usr/lib/kde3/libwmfimport.so
 usr/share/applnk/Office/karbon.desktop
 usr/share/apps/karbon
+usr/share/apps/konqueror/servicemenus/karbon_konqi.desktop
 usr/share/icons/crystalsvg/16x16/apps/karbon.png
 usr/share/icons/crystalsvg/32x32/apps/karbon.png
 usr/share/icons/crystalsvg/48x48/apps/karbon.png

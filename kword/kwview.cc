@@ -2056,7 +2056,7 @@ void KWView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        KoStyle *tmp = m_doc->styleCollection()->findStyle( lst[ i]);
+        KoStyle *tmp = m_doc->styleCollection()->styleAt( i );
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2075,6 +2075,8 @@ void KWView::updateStyleList()
             act->setExclusiveGroup( "styleListAction" );
             actionFormatStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No style found for " << *it << endl;
     }
 }
 
@@ -2124,7 +2126,7 @@ void KWView::updateFrameStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWFrameStyle *tmp = m_doc->frameStyleCollection()->findFrameStyle( lst[ i]);
+        KWFrameStyle *tmp = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2144,6 +2146,8 @@ void KWView::updateFrameStyleList()
             act->setExclusiveGroup( "frameStyleList" );
             actionFrameStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No frame style found for " << *it << endl;
     }
 }
 
@@ -2194,7 +2198,7 @@ void KWView::updateTableStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWTableStyle *tmp = m_doc->tableStyleCollection()->findTableStyle( lst[ i]);
+        KWTableStyle *tmp = m_doc->tableStyleCollection()->tableStyleAt( i );
         if ( tmp)
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2214,6 +2218,8 @@ void KWView::updateTableStyleList()
             act->setGroup( "tableStyleList" );
             actionTableStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No table style found for " << *it << endl;
     }
 }
 
@@ -4665,6 +4671,14 @@ void KWView::slotCounterStyleSelected()
             // else the suffix remains the default, '.'
             // TODO save this setting, to use the last one selected in the dialog?
             // (same for custom bullet char etc.)
+
+            // 68927: restart numbering, by default, if last parag wasn't numbered
+            // (and if we're not applying this to a selection)
+            if ( currentTextEdit() && !currentTextEdit()->textFrameSet()->hasSelection() ) {
+                KoTextParag* parag = currentTextEdit()->cursor()->parag();
+                if ( parag->prev() && !parag->prev()->counter() )
+                    c.setRestartCounter(true);
+            }
         }
 
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();

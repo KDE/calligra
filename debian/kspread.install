@@ -27,6 +27,7 @@ usr/lib/kde3/libqproimport.la
 usr/lib/kde3/libqproimport.so
 usr/lib/kspread.*
 usr/share/applnk/Office/kspread.desktop
+usr/share/apps/konqueror/servicemenus/kspread_konqi.desktop
 usr/share/apps/kspread
 usr/share/icons/crystalsvg/16x16/apps/kspread.png
 usr/share/icons/crystalsvg/32x32/apps/kspread.png
