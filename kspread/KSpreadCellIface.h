@@ -28,7 +28,11 @@ k_dcop:
     virtual QString textColor()const ;
     virtual void setComment(const QString &_comment);
     virtual void setAngle(int angle);
-    virtual int angle() const ; 
+    virtual int angle() const ;
+    virtual void setVerticalText(bool _vertical);
+    virtual bool verticalText() const ;
+    virtual void setMultiRow(bool _multi);
+    virtual bool multiRow() const;
 
 private:
     QPoint m_point;

@@ -28,7 +28,7 @@ void KSpreadCellIface::setText( const QString& text )
 void KSpreadCellIface::setComment( const QString& comment )
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setComment( comment +"\n");
+    cell->setComment( comment);
     cell->update();
 }
 
@@ -105,4 +105,31 @@ int  KSpreadCellIface::angle() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getAngle();
+}
+
+void KSpreadCellIface::setVerticalText(bool _vertical)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setVerticalText(_vertical);
+    cell->update();
+}
+
+bool KSpreadCellIface::verticalText() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->verticalText();
+}
+
+
+void KSpreadCellIface::setMultiRow(bool _multi)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setMultiRow(_multi);
+    cell->update();
+}
+
+bool KSpreadCellIface::multiRow() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->multiRow();
 }

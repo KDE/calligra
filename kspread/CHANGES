@@ -27,7 +27,7 @@ Add new functions :
 	-Text : EXACT, RIGHT, LEFT, JOIN ,LEN, STXT
 
 1999-09-15 -Montel laurent <montell@club-internet.fr>
------------------------------------------------------		
+-----------------------------------------------------
 -Add new dialogBox kspread_dlg_anchor now you can create Anchor
 -Add currencySymbol so now when you click on Money button it adds
 symbol of your land but I test it on american language so I don't know
@@ -38,12 +38,12 @@ It give the number of parameters etc ...
 -fixbug
 
 1999-09-16 -Montel laurent <montell@club-internet.fr>
------------------------------------------------------	
+-----------------------------------------------------
 -Now Kspread_dlg_create works ,you can select with mouse.
 -MouseDoubleClick on canvas call layout_dlg.
 
 1999-09-17 -Montel laurent <montell@club-internet.fr>
------------------------------------------------------	
+-----------------------------------------------------
 -Cleanup in kspread_dlg_create
 -Improved Kspread_dlg_create. Now if you choose a function in a cell
 and you unselect it, when you close kspread_dlg_create, cell is recreating.
@@ -127,7 +127,7 @@ Torben weis has installed posibility to make script in kspread.
 You can test it :
 	- execute kspread &
 	- kscript example15.ks
-	
+
 We can write in a specific table, create new table change name ...
 
 thanks .
@@ -143,7 +143,7 @@ Summary 1999-11-02 ->1999-11-11
 
 Torben weis has installed a new dialogbox for choose a table format
 	=>2 styles of table.
-And bug fix	
+And bug fix
 thanks.
 
 
@@ -754,3 +754,18 @@ you must write 12:15:08 am (save in international format)
 -Now you write 11:5am, 11:5 am, 11:5:5 am 11:5:5am
 kspread test all this string and recognize a time format.
 -Now there is completion mode. For the moment completion mode is automatic.
+
+Summary 2000-07-09 ->2000-07-12
+Torben is come back!
+Torben add time and date support in kscript
+=>you can write : in cell A1 : 2000-2-2
+cell B1 : =A1+2
+        =>result : 2000-2-4
+Improved undo
+bug fix
+
+
+2000-07-12-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Add new script functions :
+setMultirow(bool), multiRow(), setVerticalText(bool), verticalText()
