@@ -933,15 +933,15 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         tmp.appendChild( orientation );
 
         header = gnumeric_doc.createElement( "gmr:Header" );
-        header.setAttribute( "Left", table->print()->headLeft() );
-        header.setAttribute( "Middle", table->print()->headMid() );
-        header.setAttribute( "Right", table->print()->headRight() );
+        header.setAttribute( "Left", convertVariable(table->print()->headLeft() ) );
+        header.setAttribute( "Middle", convertVariable(table->print()->headMid() ) );
+        header.setAttribute( "Right", convertVariable(table->print()->headRight() ) );
         tmp.appendChild( header );
 
         footer = gnumeric_doc.createElement( "gmr:Footer" );
-        footer.setAttribute( "Left", table->print()->footLeft() );
-        footer.setAttribute( "Middle", table->print()->footMid() );
-        footer.setAttribute( "Right", table->print()->footRight() );
+        footer.setAttribute( "Left", convertVariable( table->print()->footLeft() ) );
+        footer.setAttribute( "Middle", convertVariable( table->print()->footMid() ) );
+        footer.setAttribute( "Right", convertVariable( table->print()->footRight() ));
         tmp.appendChild( footer );
 
         paper = gnumeric_doc.createElement( "gmr:paper" );
@@ -1220,7 +1220,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 }
 
 
-QString convertRefToRange( const QString & table, const QRect & rect )
+QString GNUMERICExport::convertRefToRange( const QString & table, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
@@ -1241,7 +1241,7 @@ QString convertRefToRange( const QString & table, const QRect & rect )
 }
 
 
-QString convertRefToBase( const QString & table, const QRect & rect )
+QString GNUMERICExport::convertRefToBase( const QString & table, const QRect & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
 
@@ -1253,6 +1253,15 @@ QString convertRefToBase( const QString & table, const QRect & rect )
   s += QString::number( bottomRight.y() );
 
   return s;
+}
+
+QString GNUMERICExport::convertVariable( QString headerFooter )
+{
+    headerFooter = headerFooter.replace( "<sheet>", "&[TAB]" );
+    headerFooter = headerFooter.replace( "<date>", "&[DATE]" );
+    headerFooter = headerFooter.replace( "<page>", "&[PAGE]" );
+    headerFooter = headerFooter.replace( "<pages>", "&[PAGES]" );
+    return headerFooter;
 }
 
 #include <gnumericexport.moc>
