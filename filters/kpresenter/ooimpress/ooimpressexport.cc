@@ -571,7 +571,7 @@ void OoImpressExport::appendPolyline( QDomDocument & doc, QDomElement & source, 
     polyline.setAttribute( "draw:style-name", gs );
 
     // set the geometry
-    set2DGeometry( source, polyline );
+    set2DGeometry( source, polyline, false, true /*multipoint*/ );
 
     target.appendChild( polyline );
 }
@@ -586,7 +586,7 @@ void OoImpressExport::appendPolygon( QDomDocument & doc, QDomElement & source, Q
     polygon.setAttribute( "draw:style-name", gs );
 
     // set the geometry
-    set2DGeometry( source, polygon );
+    set2DGeometry( source, polygon, false, true /*multipoint*/ );
 
     target.appendChild( polygon );
 }
@@ -611,7 +611,7 @@ void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, Q
     target.appendChild( ellipse );
 }
 
-void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject )
+void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject, bool multiPoint )
 {
     QDomElement orig = source.namedItem( "ORIG" ).toElement();
     QDomElement size = source.namedItem( "SIZE" ).toElement();
@@ -653,29 +653,56 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
 	QDomElement pieAngle = source.namedItem( "PIEANGLE").toElement();
 	int startangle = 45;
 	if( !pieAngle.isNull() )
-	  {
+        {
 	    startangle = (pieAngle.attribute("value").toInt())/16;
 	    target.setAttribute( "draw:start-angle", startangle);
-	  }
+        }
 	else
-	  {
+        {
 	    //default value take it into kppieobject
 	    target.setAttribute( "draw:start-angle", 45 );
-	  }
+        }
 	QDomElement pieLength = source.namedItem( "PIELENGTH").toElement();
 	if( !pieLength.isNull() )
-	  {
+        {
 	    int value = pieLength.attribute("value").toInt();
 	    value = value /16;
 	    value = value + startangle;
 	    target.setAttribute( "draw:end-angle", value );
-	  }
+        }
 	else
-	  {
+        {
 	    //default value take it into kppieobject
 	    //default is 90° into kpresenter
 	    target.setAttribute( "draw:end-angle", (90+startangle) );
-	  }
+        }
+    }
+    if ( multiPoint )
+    {
+        //loadPoint
+        QDomElement point = source.namedItem( "POINTS" ).toElement();
+        if ( !point.isNull() ) {
+            QDomElement elemPoint = point.firstChild().toElement();
+            unsigned int index = 0;
+            QString listOfPoint;
+            while ( !elemPoint.isNull() ) {
+                if ( elemPoint.tagName() == "Point" ) {
+                    int tmpX = 0;
+                    int tmpY = 0;
+                    if( elemPoint.hasAttribute( "point_x" ) )
+                        tmpX = ( int ) ( KoUnit::toMM( elemPoint.attribute( "point_x" ).toDouble() )*100 );
+                    if( elemPoint.hasAttribute( "point_y" ) )
+                        tmpY = ( int ) ( KoUnit::toMM(elemPoint.attribute( "point_y" ).toDouble() )*100 );
+                    if ( !listOfPoint.isEmpty() )
+                        listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+                    else
+                        listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+                    //points.putPoints( index, 1, tmpX,tmpY );
+                }
+                elemPoint = elemPoint.nextSibling().toElement();
+            }
+            target.setAttribute( "draw:points", listOfPoint );
+        }
     }
 }
 

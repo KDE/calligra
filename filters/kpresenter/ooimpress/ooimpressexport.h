@@ -52,7 +52,7 @@ private:
     void appendLine( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendRectangle( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject = false );
-    void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false );
+    void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false, bool multiPoint = false );
     void setLineGeometry( QDomElement & source, QDomElement & target );
     void appendPolygon( QDomDocument & doc, QDomElement & source, QDomElement & target);
     void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target);
