@@ -259,6 +259,8 @@ protected:
 
     void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor, bool drawSelection, bool doSpecificEffects, const QPtrList<KPObject> & obj);
 
+    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj );
+
     QRect getOldBoundingRect(KPObject *obj);
 
     void drawCurrentPageInPix( QPixmap& );

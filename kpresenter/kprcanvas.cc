@@ -368,6 +368,19 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 
 }
 
+/*================================================================*/
+// This one is used to generate the pixmaps for the HTML presentation,
+// for the pres-structure-dialog, for the sidebar previews, for template icons.
+void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj )
+{
+    QPtrListIterator<KPObject> it( obj );
+    for ( ; it.current(); ++it ) {
+        if ( objectIsAHeaderFooterHidden( it.current() ) )
+            continue;
+        it.current()->draw( painter, m_view->zoomHandler(), false );
+    }
+}
+
 QRect KPrCanvas::getOldBoundingRect(KPObject *obj)
 {
     KoRect oldKoBoundingRect = obj->getBoundingRect(m_view->zoomHandler());
@@ -2293,11 +2306,11 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
 
         tmpObjs.clear();
         //change active page.
-        setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage));
+        setActivePage(m_view->kPresenterDoc()->pageList().at( currPresPage - 1 ) );
         QPtrListIterator<KPObject> oIt( getObjectList() );
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage - 1 );
         currPresStep = *( --presStepList.end() );
 
         if ( m_view->kPresenterDoc()->presentationDuration() )
@@ -2352,7 +2365,12 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum )
     editMode = false;
 
     drawBackground( &p, _pix.rect() );
-    drawObjects( &p, _pix.rect(), false/*no cursor*/, false/*no selected objects*/, false /*no effects*/ );
+
+    //objects in current page
+    drawAllObjectsInPage( &p, m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->objectList() );
+
+    //draw sticky object
+    drawAllObjectsInPage( &p, m_view->kPresenterDoc()->stickyPage()->objectList() );
 
     editMode = _editMode;
     p.end();
