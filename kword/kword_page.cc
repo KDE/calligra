@@ -4248,6 +4248,63 @@ void KWPage::setBottomFrameBorder( KWParagLayout::Border _brd, bool _enable )
     doc->updateAllViews( 0L );
 }
 
+
+/*================================================================*/
+void KWPage::setFrameBorderColor( const QColor &_color )
+{
+    KWFrameSet *frameset = 0L;
+    KWFrame *frame = 0L;
+    QList<KWGroupManager> grpMgrs;
+    grpMgrs.setAutoDelete( FALSE );
+
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        frameset = doc->getFrameSet( i );
+        for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
+            frame = frameset->getFrame( j );
+            if ( frame->isSelected() ) {
+                KWParagLayout::Border _brd;
+                if(frame->getLeftBorder().color!=frame->getBackgroundColor().color()
+                && frame->getLeftBorder().color!=_color
+                && frame->getLeftBorder().ptWidth>0)
+                {
+                        _brd=frame->getLeftBorder();
+                        _brd.color=_color;
+                        frame->setLeftBorder(_brd);
+                }
+                if(frame->getRightBorder().color!=frame->getBackgroundColor().color()
+                &&frame->getRightBorder().color!=_color
+                        && frame->getRightBorder().ptWidth>0)
+                {
+                        _brd=frame->getRightBorder();
+                        _brd.color=_color;
+                        frame->setRightBorder(_brd);
+                }
+                if(frame->getTopBorder().color!=frame->getBackgroundColor().color()
+                &&frame->getTopBorder().color!=_color
+                && frame->getTopBorder().ptWidth>0)
+                {
+                        _brd=frame->getTopBorder();
+                        _brd.color=_color;
+                        frame->setTopBorder(_brd);
+                }
+                if(frame->getBottomBorder().color!=frame->getBackgroundColor().color()
+                && frame->getBottomBorder().color!=_color
+                && frame->getBottomBorder().ptWidth>0)
+                {
+                        _brd=frame->getBottomBorder();
+                        _brd.color=_color;
+                        frame->setBottomBorder(_brd);
+                }
+                if ( frameset->getGroupManager() && grpMgrs.findRef( frameset->getGroupManager() ) == -1 )
+                    grpMgrs.append( frameset->getGroupManager() );
+            }
+        }
+    }
+
+    doc->updateTableHeaders( grpMgrs );
+    doc->updateAllViews( 0L );
+}
+
 /*================================================================*/
 void KWPage::setFrameBackgroundColor( QBrush _color )
 {

@@ -186,15 +186,15 @@ void KWordView::initGui()
     ( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
     ( (KColorAction*)actionFormatColor )->setColor( Qt::black );
     ( (KColorAction*)actionFormatColor )->blockSignals( FALSE );
-    ( (KColorAction*)actionFormatBrdColor )->blockSignals( TRUE );
-    ( (KColorAction*)actionFormatBrdColor )->setColor( Qt::black );
-    ( (KColorAction*)actionFormatBrdColor )->blockSignals( FALSE );
-    ( (KColorAction*)actionFrameBrdColor )->blockSignals( TRUE );
-    ( (KColorAction*)actionFrameBrdColor )->setColor( Qt::black );
-    ( (KColorAction*)actionFrameBrdColor )->blockSignals( FALSE );
-    ( (KColorAction*)actionFrameBackColor )->blockSignals( TRUE );
-    ( (KColorAction*)actionFrameBackColor )->setColor( Qt::white );
-    ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
+    ( (KSelectColorAction*)actionFormatBrdColor )->blockSignals( TRUE );
+    ( (KSelectColorAction*)actionFormatBrdColor )->setColor( Qt::black );
+    ( (KSelectColorAction*)actionFormatBrdColor )->blockSignals( FALSE );
+    ( (KSelectColorAction*)actionFrameBrdColor )->blockSignals( TRUE );
+    ( (KSelectColorAction*)actionFrameBrdColor )->setColor( Qt::black );
+    ( (KSelectColorAction*)actionFrameBrdColor )->blockSignals( FALSE );
+    ( (KSelectColorAction*)actionFrameBackColor )->blockSignals( TRUE );
+    ( (KSelectColorAction*)actionFrameBackColor )->setColor( Qt::white );
+    ( (KSelectColorAction*)actionFrameBackColor )->blockSignals( FALSE );
 
     ( (KSelectAction*)actionViewZoom )->setCurrentItem( 1 );
 
@@ -465,7 +465,7 @@ void KWordView::setupActions()
     actionFormatBrdBottom = new KToggleAction( i18n( "Paragraph Border Bottom" ), "borderbottom", 0,
                                                this, SLOT( textBorderBottom() ),
                                              actionCollection(), "format_brdbottom" );
-    actionFormatBrdColor = new KColorAction( i18n( "Paragraph Border Color" ), KColorAction::FrameColor, 0,
+    actionFormatBrdColor = new KSelectColorAction( i18n( "Paragraph Border Color" ), KColorAction::FrameColor, 0,
                                              this, SLOT( textBorderColor() ),
                                              actionCollection(), "format_brdcolor" );
     actionFormatBrdWidth = new KSelectAction( i18n( "Paragraph Border Width" ), 0,
@@ -502,7 +502,7 @@ void KWordView::setupActions()
     actionFrameBrdBottom = new KToggleAction( i18n( "Frame Border Bottom" ), "borderbottom", 0,
                                                this, SLOT( frameBorderBottom() ),
                                              actionCollection(), "frame_brdbottom" );
-    actionFrameBrdColor = new KColorAction( i18n( "Frame Border Color" ), KColorAction::FrameColor, 0,
+    actionFrameBrdColor = new KSelectColorAction( i18n( "Frame Border Color" ), KColorAction::FrameColor, 0,
                                              this, SLOT( frameBorderColor() ),
                                              actionCollection(), "frame_brdcolor" );
     actionFrameBrdStyle = new KSelectAction( i18n( "Frame Border Style" ), 0,
@@ -518,7 +518,7 @@ void KWordView::setupActions()
     for ( unsigned int i = 0; i < 10; i++ )
         lst << QString( "%1" ).arg( i + 1 );
     ( (KSelectAction*)actionFrameBrdWidth )->setItems( lst );
-    actionFrameBackColor = new KColorAction( i18n( "Frame Background Color" ), KColorAction::BackgroundColor, 0,
+    actionFrameBackColor = new KSelectColorAction( i18n( "Frame Background Color" ), KColorAction::BackgroundColor, 0,
                                              this, SLOT( frameBackColor() ),
                                              actionCollection(), "frame_backcolor" );
 
@@ -2161,11 +2161,7 @@ void KWordView::textBorderBottom()
 /*================================================================*/
 void KWordView::textBorderColor()
 {
-    if ( KColorDialog::getColor( tmpBrd.color ) ) {
-        ( (KColorAction*)actionFormatBrdColor )->blockSignals( TRUE );
-        ( (KColorAction*)actionFormatBrdColor )->setColor( tmpBrd.color );
-        ( (KColorAction*)actionFormatBrdColor )->blockSignals( FALSE );
-    }
+  tmpBrd.color=( (KColorAction*)actionFormatBrdColor )->color();
 }
 
 /*================================================================*/
@@ -2226,11 +2222,10 @@ void KWordView::frameBorderBottom()
 /*================================================================*/
 void KWordView::frameBorderColor()
 {
-    if ( KColorDialog::getColor( frmBrd.color ) ) {
-        ( (KColorAction*)actionFrameBrdColor )->blockSignals( TRUE );
-        ( (KColorAction*)actionFrameBrdColor )->setColor( frmBrd.color );
-        ( (KColorAction*)actionFrameBrdColor )->blockSignals( FALSE );
-    }
+
+        frmBrd.color=( (KColorAction*)actionFrameBrdColor )->color();
+        if ( gui )
+            gui->getPaperWidget()->setFrameBorderColor( frmBrd.color );
 }
 
 /*================================================================*/
@@ -2259,15 +2254,10 @@ void KWordView::frameBorderStyle( const QString &style )
 /*================================================================*/
 void KWordView::frameBackColor()
 {
-    QColor c = backColor.color();
-    if ( KColorDialog::getColor( c ) ) {
-        backColor.setColor( c );
-        ( (KColorAction*)actionFrameBackColor )->blockSignals( TRUE );
-        ( (KColorAction*)actionFrameBackColor )->setColor( c );
-        ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
+
+        backColor=( (KSelectColorAction*)actionFrameBackColor )->color();
         if ( gui )
             gui->getPaperWidget()->setFrameBackgroundColor( backColor );
-    }
 }
 
 /*================================================================*/
@@ -2428,10 +2418,6 @@ void KWordView::setParagBorderValues()
     ( (KSelectAction*)actionFormatBrdStyle )->blockSignals( TRUE );
     ( (KSelectAction*)actionFormatBrdStyle )->setCurrentItem( (int)tmpBrd.style );
     ( (KSelectAction*)actionFormatBrdStyle )->blockSignals( FALSE );
-
-    ( (KColorAction*)actionFormatBrdColor )->blockSignals( TRUE );
-    ( (KColorAction*)actionFormatBrdColor )->setColor( tmpBrd.color );
-    ( (KColorAction*)actionFormatBrdColor )->blockSignals( FALSE );
 }
 
 /*================================================================*/

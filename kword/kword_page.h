@@ -215,6 +215,7 @@ public:
     void setRightFrameBorder( KWParagLayout::Border _brd, bool _enable );
     void setTopFrameBorder( KWParagLayout::Border _brd, bool _enable );
     void setBottomFrameBorder( KWParagLayout::Border _brd, bool _enable );
+    void setFrameBorderColor(const QColor &_color);
     void setFrameBackgroundColor( QBrush _color );
 
     KWGroupManager *getTable();
