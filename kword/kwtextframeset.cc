@@ -3685,8 +3685,14 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
             {
                 if ( singleWord)
                 {
-                    view->plugActionList( "spell_result_action", view->listOfResultOfCheckWord( word ) );
-                    popup = view->popupMenu("text_popup_spell");
+                    QPtrList<KAction> actionCheckSpellList =view->listOfResultOfCheckWord( word );
+                    if ( actionCheckSpellList.count()>0)
+                    {
+                        view->plugActionList( "spell_result_action", actionCheckSpellList );
+                        popup = view->popupMenu("text_popup_spell_with_result");
+                    }
+                    else
+                        popup = view->popupMenu("text_popup_spell");
                 }
                 else
                     popup = view->popupMenu("text_popup");
