@@ -158,7 +158,7 @@ public:
   /**
    * @return the locale which was used for creating this document.
    */
-  KLocale * locale() { return & m_locale; }
+  KLocale * locale();
 
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -190,7 +190,7 @@ public:
    * @return a context that can be used for evaluating formulas.
    *         This function does remove any exception from the context.
    */
-  KSContext & context() { m_context.setException( 0 ); return m_context; }
+  KSContext & context();
 
   /**
    * @return the object that is respnsible for keeping track
@@ -251,10 +251,10 @@ public:
   static QPtrList<KSpreadDoc>& documents();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
-  const QValueList<Reference>  & listArea(){return m_refs;}
+  const QValueList<Reference>  & listArea();
   void removeArea( const QString &name);
 
-  KCompletion & completion(){return listCompletion;}
+  KCompletion & completion();
   void addStringCompletion(const QString & stringCompletion);
 
   void changeAreaTableName(const QString & oldName,const QString &tableName);
@@ -492,29 +492,8 @@ protected:
    */
   void destroyInterpreter();
 
-  /**
-   * This DCOP object represents the document.
-   */
-  DCOPObject* m_dcop;
-
-  /**
-   * This module is used to execute formulas of this table.
-   */
-  KSModule::Ptr m_module;
-  /**
-   * This context is used to execute formulas of this table.
-   */
-  KSContext m_context;
-
-  QPtrList<KSpreadPlugin> m_plugins;
-
   static QPtrList<KSpreadDoc>* s_docs;
   static int s_docId;
-
-  QValueList<Reference> m_refs;
-  KCompletion listCompletion;
-
-  KSpreadLocale m_locale;
 
   /**
   * bool which define if you can show scroolbar

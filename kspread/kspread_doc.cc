@@ -99,6 +99,26 @@ public:
   QPen defaultGridPen;
   QColor pageBorderColor;
 
+  /**
+   * This DCOP object represents the document.
+   */
+  DCOPObject* dcop;
+
+  /**
+   * This module is used to execute formulas of this table.
+   */
+  KSModule::Ptr module;
+  /**
+   * This context is used to execute formulas of this table.
+   */
+  KSContext context;
+
+  QPtrList<KSpreadPlugin> plugins;
+
+  QValueList<Reference> refs;
+  KCompletion listCompletion;
+
+  KSpreadLocale locale;
 };
 
 /*****************************************************************************
@@ -131,7 +151,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
   KSpreadFormat::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
 
-  m_plugins.setAutoDelete( false );
+  d->plugins.setAutoDelete( false );
 
   m_bDelayCalculation = false;
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -151,7 +171,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   }
 
   d->tableId = 1;
-  m_dcop = 0;
+  d->dcop = 0;
   d->isLoading = false;
   m_numOperations = 1; // don't start repainting before the GUI is done...
 
@@ -347,6 +367,27 @@ void KSpreadDoc::changePageBorderColor( const QColor  & _color)
   d->pageBorderColor = _color; 
 }
 
+KLocale *KSpreadDoc::locale()
+{
+  return &d->locale;
+}
+
+KSContext& KSpreadDoc::context()
+{ 
+  d->context.setException( 0 ); 
+  return d->context; 
+}
+
+const QValueList<Reference>  &KSpreadDoc::listArea()
+{
+  return d->refs;
+}
+
+KCompletion& KSpreadDoc::completion()
+{
+  return d->listCompletion;
+}
+
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
@@ -440,10 +481,10 @@ QDomDocument KSpreadDoc::saveXML()
         }
     }
 
-    QDomElement locale = m_locale.save( doc );
-    spread.appendChild( locale );
+    QDomElement dlocale = d->locale.save( doc );
+    spread.appendChild( dlocale );
 
-    if (m_refs.count() != 0 )
+    if (d->refs.count() != 0 )
     {
         QDomElement areaname = saveAreaName( doc );
         spread.appendChild( areaname );
@@ -475,8 +516,8 @@ QDomDocument KSpreadDoc::saveXML()
     defaults.setAttribute( "col-width", KSpreadFormat::globalColWidth() );
     spread.appendChild( defaults );
 
-    KSpreadPlugin * plugin = m_plugins.first();
-    for ( ; plugin != 0; plugin = m_plugins.next() )
+    KSpreadPlugin * plugin = d->plugins.first();
+    for ( ; plugin != 0; plugin = d->plugins.next() )
     {
       QDomElement data( plugin->saveXML( doc ) );
       if ( !data.isNull() )
@@ -534,7 +575,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   // <locale>
   QDomElement locale = spread.namedItem( "locale" ).toElement();
   if ( !locale.isNull() )
-      m_locale.load( locale );
+      d->locale.load( locale );
 
   emit sigProgress( 5 );
 
@@ -555,7 +596,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     KSpreadFormat::setGlobalColWidth( d );
   }
 
-  m_refs.clear();
+  d->refs.clear();
   //<areaname >
   QDomElement areaname = spread.namedItem( "areaname" ).toElement();
   if ( !areaname.isNull())
@@ -729,12 +770,12 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
 void KSpreadDoc::registerPlugin( KSpreadPlugin * plugin )
 {
-  m_plugins.append( plugin );
+  d->plugins.append( plugin );
 }
 
 void KSpreadDoc::deregisterPlugin( KSpreadPlugin * plugin )
 {
-  m_plugins.remove( plugin );
+  d->plugins.remove( plugin );
 }
 
 bool KSpreadDoc::docData( QString const & xmlTag, QDomElement & data )
@@ -809,8 +850,8 @@ void KSpreadDoc::initInterpreter()
   d->interpreter = new KSpreadInterpreter( this );
 
   // Create the module which is used to evaluate all formulas
-  m_module = d->interpreter->module( "kspread" );
-  m_context.setScope( new KSScope( d->interpreter->globalNamespace(), m_module ) );
+  d->module = d->interpreter->module( "kspread" );
+  d->context.setScope( new KSScope( d->interpreter->globalNamespace(), d->module ) );
 
   // Find all scripts
   d->kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.ks", TRUE );
@@ -848,11 +889,11 @@ void KSpreadDoc::initInterpreter()
 
 void KSpreadDoc::destroyInterpreter()
 {
-    m_context.setValue( 0 );
-    m_context.setScope( 0 );
-    m_context.setException( 0 );
+    d->context.setValue( 0 );
+    d->context.setScope( 0 );
+    d->context.setException( 0 );
 
-    m_module = 0;
+    d->module = 0;
 
     d->interpreter = 0;
 }
@@ -1372,7 +1413,7 @@ KSpreadDoc::~KSpreadDoc()
 
   delete d->undoBuffer;
 
-  delete m_dcop;
+  delete d->dcop;
   s_docs->removeRef(this);
   kdDebug(36001) << "alive 1" << endl;
   delete d->workbook;
@@ -1384,10 +1425,10 @@ KSpreadDoc::~KSpreadDoc()
 
 DCOPObject* KSpreadDoc::dcopObject()
 {
-    if ( !m_dcop )
-        m_dcop = new KSpreadDocIface( this );
+    if ( !d->dcop )
+        d->dcop = new KSpreadDocIface( this );
 
-    return m_dcop;
+    return d->dcop;
 }
 
 void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QString & tableName)
@@ -1397,17 +1438,17 @@ void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QStri
   tmp.rect = _rect;
   tmp.table_name = tableName;
   tmp.ref_name = name;
-  m_refs.append( tmp);
+  d->refs.append( tmp);
 }
 
 void KSpreadDoc::removeArea( const QString & name)
 {
   QValueList<Reference>::Iterator it2;
-  for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+  for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).ref_name==name)
                 {
-                m_refs.remove(it2);
+                d->refs.remove(it2);
                 return;
                 }
         }
@@ -1416,7 +1457,7 @@ void KSpreadDoc::removeArea( const QString & name)
 void KSpreadDoc::changeAreaTableName(const QString & oldName,const QString & tableName)
 {
   QValueList<Reference>::Iterator it2;
-  for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+  for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).table_name==oldName)
                    (*it2).table_name=tableName;
@@ -1426,7 +1467,7 @@ void KSpreadDoc::changeAreaTableName(const QString & oldName,const QString & tab
 QRect KSpreadDoc::getRectArea(const QString  &_tableName)
 {
   QValueList<Reference>::Iterator it2;
-  for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+  for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).ref_name==_tableName)
                 {
@@ -1440,7 +1481,7 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
 {
    QDomElement element = doc.createElement( "areaname" );
    QValueList<Reference>::Iterator it2;
-   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
    {
         QDomElement e = doc.createElement("reference");
         QDomElement tabname = doc.createElement( "tabname" );
@@ -1507,8 +1548,8 @@ void KSpreadDoc::loadAreaName( const QDomElement& element )
 
 void KSpreadDoc::addStringCompletion(const QString &stringCompletion)
 {
-  if ( listCompletion.items().contains(stringCompletion) == 0 )
-    listCompletion.addItem( stringCompletion );
+  if ( d->listCompletion.items().contains(stringCompletion) == 0 )
+    d->listCompletion.addItem( stringCompletion );
 }
 
 void KSpreadDoc::refreshInterface()
