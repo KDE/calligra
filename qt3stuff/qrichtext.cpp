@@ -673,7 +673,7 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
     while ( s ) {
 	r = s->rect();
 	r.setWidth( doc ? doc->width() : QWIDGETSIZE_MAX );
-	if ( pos.y() >= r.y() && pos.y() <= r.y() + r.height() || !s->next() )
+	if ( !s->next() || ( pos.y() >= r.y() && pos.y() < s->next()->rect().y() ) )
 	    break;
 	s = s->next();
     }
@@ -688,14 +688,14 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
     int index = 0;
     int i = 0;
     int cy = 0;
-    int ch = 0;
+    //int ch = 0;
     for ( ; i < lines; ++i ) {
 	chr = s->lineStartOfLine( i, &index );
 	cy = s->lineY( i );
-	ch = s->lineHeight( i );
+	//ch = s->lineHeight( i );
 	if ( !chr )
 	    return FALSE;
-	if ( pos.y() >= y + cy && pos.y() <= y + cy + ch )
+	if ( i < lines - 1 && pos.y() >= y + cy && pos.y() <= y + s->lineY( i+1 ) )
 	    break;
     }
     int nextLine;
