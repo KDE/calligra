@@ -60,6 +60,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
 
 	m_defaults = new KPushButton(viewport());
+	m_defaults->setFocusPolicy(QWidget::NoFocus);
 	m_defaults->setPixmap(SmallIcon("reload"));
 	m_defaults->hide();
 	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
