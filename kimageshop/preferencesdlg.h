@@ -16,27 +16,32 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *//
+ */
 
 #ifndef __preferencesdlg_h__
 #define __preferencesdlg_h__
 
 #include <qlineedit.h>
+
 #include <kdialog.h>
 
 /**
  */
-class KImageShopPreferencesDialog : public KDialog
+class PreferencesDialog : public KDialog
 {
-    Q_OBJECT
+  Q_OBJECT
+
 public:
-	KImageShopPreferencesDialog( QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
-	~KImageShopPreferencesDialog();
+
+	PreferencesDialog( QWidget *_parent = 0, const char *_name = 0, WFlags f = 0 );
+	~PreferencesDialog();
 
 	static QString getStr();
 
 private:
-	QLineEdit* m_pLineEdit;
+
+	QLineEdit *m_pLineEdit;
 };
 
 #endif
+

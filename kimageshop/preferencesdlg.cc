@@ -26,43 +26,50 @@
 
 #include "preferencesdlg.h"
 
-KImageShopPreferencesDialog::KImageShopPreferencesDialog( QWidget* parent, const char* name, WFlags f )
+PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name, WFlags f )
 	: KDialog( parent, name, true, f )
 {
 	// Layout
-    QGridLayout* grid = new QGridLayout( this, 5, 5, 7, 15);
+  QGridLayout* grid = new QGridLayout( this, 5, 5, 7, 15);
 
 	// Inputline
 	m_pLineEdit = new QLineEdit( this, "tempDir" );
-    grid->addMultiCellWidget( m_pLineEdit, 1, 1, 0, 4 );	
+  grid->addMultiCellWidget( m_pLineEdit, 1, 1, 0, 4 );	
 
 	// Label
 	QLabel* label = new QLabel( m_pLineEdit, i18n( "Directory for temporary files" ) , this );
 	grid->addWidget( label, 0, 0 );
 	
 	// OK-Button
-    QPushButton* okButton = new QPushButton( this, "OKButton" );
-    okButton->setText( i18n( "&Ok" ) );
-    okButton->setAutoRepeat( false );
-    okButton->setAutoResize( false );
-    okButton->setAutoDefault( true );
-    okButton->setDefault( true );
-    connect( okButton, SIGNAL( clicked() ), this, SLOT( close() ) );
-    grid->addWidget( okButton, 3, 3 );
+  QPushButton *okButton = new QPushButton( this, "OKButton" );
+  okButton->setText( i18n( "&Ok" ) );
+  okButton->setAutoRepeat( false );
+  okButton->setAutoResize( false );
+  okButton->setAutoDefault( true );
+  okButton->setDefault( true );
+  connect( okButton, SIGNAL( clicked() ), this, SLOT( close() ) );
+  grid->addWidget( okButton, 3, 3 );
         
 	// Cancel-Button
+/*
+  QPushButton *cancelButton = new QPushButton( this, "CancelButton" );
+  cancelButton->setText( i18n( "&Cancel" ) );
+  connect( cancelButton, SIGNAL( clicked() ), this, SLOT( close() ) );
+  grid->addWidget( cancelButton, 3, 3 );
+*/
 
+  // layout
 	grid->setRowStretch( 0, 0);
 	grid->setRowStretch( 1, 0);
 	grid->setColStretch( 0, 0);
 	grid->setColStretch( 1, 0);
 }
 
-KImageShopPreferencesDialog::~KImageShopPreferencesDialog()
+PreferencesDialog::~PreferencesDialog()
 {
 }
 
-QString KImageShopPreferencesDialog::getStr()
+QString PreferencesDialog::getStr()
 {
 	QString tmp;
 
