@@ -17,28 +17,34 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kchart_shell_h__
-#define __kchart_shell_h__
-
+#include <koApplication.h>
+#include <koDocument.h>
 #include <koMainWindow.h>
+#include <koQueryTypes.h>
 
-class KChartShell : public KoMainWindow
+#include <kregfactories.h>
+#include <kregistry.h>
+
+int main( int argc, char **argv )
 {
-    Q_OBJECT
-public:
-    KChartShell( QWidget* parent = 0, const char* name = 0 );
-    virtual ~KChartShell();
+    KoApplication app( argc, argv );
 
-    /**
-     * Change these according to your native mimetype.
-     */
-    QString nativeFormatMimeType() const { return "application/x-kchart"; }
-    QString nativeFormatPattern() const { return "*.xmpl"; }
-    QString nativeFormatName() const { return "KChart"; }
+    KRegistry* registry = new KRegistry;
+    registry->load();
+    KRegistry::self()->addFactory( new KServiceTypeFactory );
+    KRegistry::self()->addFactory( new KServiceFactory );
 
-protected:
-    virtual QString configFile() const;
-    virtual KoDocument* createDoc();
-};
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
+    ASSERT( !entry.isEmpty() );
+    KoDocument* doc = entry.createDoc();
+    doc->initDoc();
 
-#endif
+    Shell* shell = doc->createShell();
+    shell->show();
+    app.setMainWidget( shell );
+
+
+    app.exec();
+
+    return 0;
+}

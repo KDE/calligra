@@ -1,0 +1,8 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-kchart
+Comment=KChart
+DefaultApp=KChart
+Icon=unknown
+Type=MimeType
+Patterns=*.xmpl;

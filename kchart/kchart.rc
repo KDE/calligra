@@ -1,0 +1,20 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="cut"/>
+  <Action name="wizard"/>
+  <Action name="edit"/>
+ </Menu>
+ <Menu name="Options"><text>Options</text>
+  <Action name="loadconfig"/>
+  <Action name="saveconfig"/>	
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar>
+  <Action name="cut"/>
+  <Action name="wizard"/>
+  <Action name="edit"/>
+ </ToolBar>
+</ToolBars>
+</QConfig>

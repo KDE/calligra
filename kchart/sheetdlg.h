@@ -24,7 +24,7 @@ class SheetDlg : public QWidget
 {
   Q_OBJECT
 public:
-  SheetDlg( QDialog * parent = 0, const char * name = 0 );
+  SheetDlg( QWidget * parent = 0, const char * name = 0 );
   
   void fillCell(int,int,double);
   void fillX(int,QString);

@@ -18,7 +18,7 @@
 #include <kapp.h>
 #include <klocale.h>
 
-SheetDlg::SheetDlg( QDialog *parent, const char *name )
+SheetDlg::SheetDlg( QWidget *parent, const char *name )
     :QWidget( (QWidget*)parent, name )
 {
   t = new Sheet(this,"Sheet",TABLE_SIZE); 

@@ -1,286 +1,189 @@
-#include <qprinter.h>
+/**
+ * $Id$
+ *
+ * Kalle Dalheimer <kalle@kde.org>
+ */
+
 #include "kchart_view.h"
+#include "kchart_global.h"
+#include "kchart_part.h"
+#include "kchartWizard.h"
 
-#include <kapp.h>
-#include <qmsgbox.h>
-#include <iostream.h>
-#include <stdlib.h>
-#include <qkeycode.h>
-#include <qprndlg.h>
+#include <qpainter.h>
+#include <kaction.h>
+#include <kglobal.h>
 
-#include <opUIUtils.h>
-#include <opMainWindow.h>
-#include <opMainWindowIf.h>
+#include "sheetdlg.h"
 
-#include <koPartSelectDia.h>
-#include <koAboutDia.h>
+QFont *theKChartTinyFont = NULL; 
+QFont *theKChartSmallFont = NULL; 
+QFont *theKChartMediumFont = NULL; 
+QFont *theKChartLargeFont = NULL; 
+QFont *theKChartGiantFont = NULL; 
+// i don't really understand this stuff, but I need it to start 
+// kchart. Probably some intermediate solution
 
-#include "kchart_doc.h"
-#include "kchart_shell.h"
-
-#include <klocale.h>
-#include <kiconloader.h>
-
-#include "KChartWizard.h"
-
-/*****************************************************************************
- *
- * KChartView
- *
- *****************************************************************************/
-
-KChartView::KChartView( QWidget *_parent,
-			      const char */*_name*/, KChartDoc* _doc ) :
-  KoChartView( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KChart::View_skel()
+KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
+    : ContainerView( part, parent, name )
 {
-  setWidget( this );
-
-  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
-
-  m_pDoc = _doc;
-
-  QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
-
-  widget()->setBackgroundColor(Qt::white);
+    m_cut = new KAction( tr("&Cut"), KChartBarIcon("editcut"), 0, this, SLOT( cut() ),
+                         actionCollection(), "cut");
+    m_wizard = new KAction( tr("Customize with &wizard"),
+			    KChartBarIcon("wizard"), 0,
+			    this, SLOT( wizard() ),
+			    actionCollection(), "wizard");
+    m_edit = new KAction( tr("&Edit"), KChartBarIcon("editcut"), 0,
+			 this, SLOT( edit() ),
+                         actionCollection(), "edit");
+    m_loadconfig = new KAction( tr("Load config"), KChartBarIcon("loadconfig"),
+				0,
+				this, SLOT( loadConfig() ),
+				actionCollection(), "loadconfig");
+    m_saveconfig = new KAction( tr("Save config"), KChartBarIcon("saveconfig"),
+				0,
+				this, SLOT( saveConfig() ),
+				actionCollection(), "saveconfig");
+    // initialize the configuration
+    //    loadConfig();
 }
 
-void KChartView::init()
+void KChartView::paintEvent( QPaintEvent* ev )
 {
-  /******************************************************
-   * Menu
-   ******************************************************/
+    QPainter painter;
+    painter.begin( this );
 
-  cerr << "Registering menu as " << id() << endl;
+    // ### TODO: Scaling
 
-  OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
-  if ( !CORBA::is_nil( menu_bar_manager ) )
-    menu_bar_manager->registerClient( id(), this );
-  else
-    cerr << "Did not get a menu bar manager" << endl;
+    // Let the document do the drawing
+    // PENDING(kalle) Do double-buffering if we are a widget
+	part()->paintEverything( painter, ev->rect(), FALSE, this );
 
-  /******************************************************
-   * Toolbar
-   ******************************************************/
-
-  OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
-  if ( !CORBA::is_nil( tool_bar_manager ) )
-    tool_bar_manager->registerClient( id(), this );
-  else
-    cerr << "Did not get a tool bar manager" << endl;
-
-  // Paint something
-  slotUpdateView();
+    painter.end();
 }
 
-KChartView::~KChartView()
+void KChartView::cut()
 {
-  cerr << "KChartView::~KChartView() " << _refcnt() << endl;
-
-  cleanUp();
+    qDebug("CUT called");
 }
 
-void KChartView::cleanUp()
+void KChartView::edit()
 {
-  cerr << "void KChartView::cleanUp() " << endl;
+    qDebug("EDIT called");
+    QDialog *_dlg = new QDialog(0,"SheetDlg",true);
+    SheetDlg *_widget = new SheetDlg(_dlg,"SheetWidget");
+    _widget->setGeometry(0,0,520,400);
+    _widget->show();
+    _dlg->resize(520,400);
+    _dlg->setMaximumSize(_dlg->size());
+    _dlg->setMinimumSize(_dlg->size());
+    
+    // fill cells
+    int col,row;
+    /*
+    double maxY = 0;
+    for (row = 0;row < 4;row++)
+      for (col = 0;col < 4;col++) {
+	_widget->fillCell(row,col,row+col);
+      }
+    _dlg->exec();
+    */
 
-  if ( m_bIsClean )
-    return;
+    KChartData *dat = ((KChartPart*)part())->data();
 
-  cerr << "1b) Unregistering menu and toolbar" << endl;
+    // initialize some data, if there is none
+    if (dat->rows() == 0) {
+      cerr << "Initialize with some data!!!\n";
+      dat->expand(4,4);
+      for (row = 0;row < 2;row++)
+	for (col = 0;col < 2;col++) {
+	  //	  _widget->fillCell(row,col,row+col);
+	  KChartValue t; 
+	  t.exists= true;
+	  t.value.setValue(row+col);
+	  cerr << "Set cell for " << row << "," << col << "\n";
+	  dat->setCell(row,col,t);
+	}
+      //      _dlg->exec();
+    }
 
-  OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
-  if ( !CORBA::is_nil( menu_bar_manager ) )
-    menu_bar_manager->unregisterClient( id() );
+    cerr << "Now display \n";
 
-  OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
-  if ( !CORBA::is_nil( tool_bar_manager ) )
-    tool_bar_manager->unregisterClient( id() );
+    for (row = 0;row != dat->rows();row++)
+      for (col = 0; col !=dat->cols(); col++) {
+	cerr << "Set dialog cell for " << row << "," << col << "\n";
+	KChartValue t = dat->cell(row,col);
+	// fill it in from the part
+	if (t.exists) {
+	  switch(t.value.type()) {
+	  case QVariant::Int:
+	    _widget->fillCell(row, col, t.value.intValue());
+	    break;
+	  case QVariant::String:
+	    cerr << "A string in the table I cannot handle this yet\n";
+	    break;
+	  }
+	}
+      }
+    cerr << "Here comes the dialog!\n";
+    _dlg->exec();
+    cerr << "exec done?\n";
 
-  m_pDoc->removeView( this );
+    /*
+    for (col = 0;(unsigned int)col <= m_pDoc->chartData()->maxPos();col++)
+      _widget->fillX(col,m_pDoc->chartData()->xValue(col));
 
-  KoViewIf::cleanUp();
-}
+    // OK pressed
 
-bool KChartView::event( const QCString &_event, const CORBA::Any& _value )
-{
-    cerr << "Got Event: " << _event << "\n";
-  EVENT_MAPPER( _event, _value );
+  if (_dlg->exec() == QDialog::Accepted)
+    {
+      KChartData *m_pData = new KChartData(_widget->rows());
 
-  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_ptr, mappingCreateMenubar );
-  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_ptr, mappingCreateToolbar );
+      for (col = 0;col < _widget->cols();col++)
+	m_pData->setXValue( col, (const char*)_widget->getX(col));
 
-  END_EVENT_MAPPER;
+      for (row = 0;row < _widget->rows();row++)
+	{
+	  for (col = 0;col < _widget->cols();col++)
+	    {
+	      m_pData->setYValue( row, col, _widget->getCell(row,col) );
+	      maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
+	    }
+	}
 
-  return false;
-}
-
-bool KChartView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
-{
-  cerr << "bool KChartView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
-
-  if ( CORBA::is_nil( _factory ) )
-  {
-    cerr << "Setting to nil" << endl;
-    m_vToolBarEdit = 0L;
-    cerr << "niled" << endl;
-    return true;
-  }
-
-  QString toolTip;
-
-  m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines" ) );
-  toolTip = i18n( "Lines" );
-  m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "modeLines", true, toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( BarIcon( "areas" ) );
-  toolTip = i18n( "Areas" );
-  m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "modeAreas", true, toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( BarIcon( "bars" ) );
-  toolTip = i18n( "3D-Bars" );
-  m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeBars", true, toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( BarIcon( "cakes" ) );
-  toolTip = i18n( "Cakes" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeCakes", true, toolTip, -1 );
-
-  m_vToolBarEdit->enable( OpenPartsUI::Show );
-
-  m_vToolBarEdit->enable(OpenPartsUI::Hide);
-  m_vToolBarEdit->setBarPos(OpenPartsUI::Floating);
-  m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
-  m_vToolBarEdit->enable(OpenPartsUI::Show);
-
-  return true;
-}
-
-bool KChartView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
-{
-  if ( CORBA::is_nil( _menubar ) )
-  {
-    m_vMenuEdit = 0L;
-    return true;
-  }
-
-  QString text;
-
-  // Edit
-  text = i18n( "&Edit" );
-  _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
-
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines" ) );
-  text = i18n("&Lines");
-  m_idMenuEdit_Lines = m_vMenuEdit->insertItem6( pix, text, this, "modeLines", CTRL + Key_L, -1, -1 );
-
-  pix = OPUIUtils::convertPixmap( BarIcon( "areas" ) );
-  text = i18n("&Areas");
-  m_idMenuEdit_Areas = m_vMenuEdit->insertItem6( pix, text, this, "modeAreas", CTRL + Key_A, -1, -1 );
-
-  pix = OPUIUtils::convertPixmap( BarIcon( "bars" ) );
-  text = i18n("&Bars");
-  m_idMenuEdit_Bars = m_vMenuEdit->insertItem6( pix, text, this, "modeBars", CTRL + Key_B, -1, -1 );
-
-  pix = OPUIUtils::convertPixmap( BarIcon( "cakes" ) );
-  text = i18n("&Cakes");
-  m_idMenuEdit_Cakes = m_vMenuEdit->insertItem6( pix, text, this, "modeCakes", CTRL + Key_C, -1, -1 );
-
-  m_vMenuEdit->insertSeparator( -1 );
-
-  text = i18n("&Edit Data...");
-  m_idMenuEdit_Data = m_vMenuEdit->insertItem( text, this, "editData", CTRL + Key_E );
-
-  text = i18n("C&onfigure Chart..." );
-  m_idMenuConfig_Chart = m_vMenuEdit->insertItem( text, this, "configChart", CTRL + Key_O );
-
-  text = i18n("Wizard!" );
-  m_idMenuConfig_Chart = m_vMenuEdit->insertItem( text, this, "wizard", CTRL + Key_O );
-
-  m_vMenuEdit->insertSeparator( -1 );
-
-  text = i18n("&Page Layout") ;
-  m_idMenuEdit_Page = m_vMenuEdit->insertItem( text, this, "pageLayout", CTRL + Key_L );
-
-  return true;
-}
-
-void KChartView::editData()
-{
-  m_pDoc->editData();
-}
-
-
-void KChartView::configChart()
-{
-	m_pDoc->configChart();
-}
-
-
-void KChartView::helpUsing()
-{
-  kapp->invokeHTMLHelp( "kdiagramm/kdiagramm.html", QString::null );
-}
-
-bool KChartView::printDlg()
-{
-  QPrinter prt;
-  if ( QPrintDialog::getPrinterSetup( &prt ) )
-  {
-    m_pDoc->print( &prt );
-  }
-
-  return true;
-}
-
-void KChartView::pageLayout()
-{
-  m_pDoc->paperLayoutDlg();
-}
-
-void KChartView::newView()
-{
-  assert( (m_pDoc != 0L) );
-
-  KChartShell* shell = new KChartShell;
-  shell->show();
-  shell->setDocument( m_pDoc );
-}
-
-void KChartView::modeLines()
-{
-  m_pDoc->setDiaType( KoChart::DT_LINIEN );
-}
-
-void KChartView::modeAreas()
-{
-  m_pDoc->setDiaType( KoChart::DT_AREA );
-}
-
-void KChartView::modeBars()
-{
-  m_pDoc->setDiaType( KoChart::DT_SAEULEN );
-}
-
-void KChartView::modeCakes()
-{
-  m_pDoc->setDiaType( KoChart::DT_KREIS );
+      maxY++;
+       
+      m_pDoc->setChartData(m_pData);
+      m_pDoc->chart().setYMaxValue(maxY);
+      m_pDoc->chart().setYTicksNum(maxY);
+      m_pDoc->chart().repaintChart( this );    
+    } 
+    */
+  
+  // delete dialog
+  delete _widget; _widget = 0;
+  delete _dlg; _dlg = 0;
 }
 
 void KChartView::wizard()
 {
-  //  m_pDoc->showWizard();
-  cerr << "Now creating the wizard!!!\n";
-  KChartWizard *kcwiz = new KChartWizard(m_pDoc, NULL, "KChard Wizard", true);
-  kcwiz->exec();
-  
+    qDebug("Wizard called");
+    kchartWizard *wiz =
+      new kchartWizard((KChartPart*)part(), this, "KChart Wizard", true);
+    qDebug("Executed. Now, display it");
+    wiz->exec();
+    qDebug("Ok, executed...");
 }
 
-void KChartView::slotUpdateView()
-{
-  m_diagramm.setData( m_pDoc->data(), "", KoChart::DAT_NUMMER, m_pDoc->diaType() );
-
-  update();
+void KChartView::saveConfig() {
+    qDebug("Save config...");
+    ((KChartPart*)part())->saveConfig( KGlobal::config() );
 }
+
+void KChartView::loadConfig() {
+    qDebug("Load config...");
+    KGlobal::config()->reparseConfiguration();
+    ((KChartPart*)part())->loadConfig( KGlobal::config() );
+}
+
 
 #include "kchart_view.moc"
