@@ -100,6 +100,19 @@ KParts::PartManager *KoView::partManager() const
   return d->m_manager;
 }
 
+QAction *KoView::action( const QDomElement &element )
+{
+  static QString attrName = QString::fromLatin1( "name" );
+  QString name = element.attribute( attrName );
+
+  QAction *act = KXMLGUIBase::action( name.utf8() );
+
+  if ( !act )
+    act = d->m_doc->KXMLGUIBase::action( name.utf8() );
+
+  return act;
+}
+
 KoDocument *KoView::hitTest( const QPoint &pos )
 {
   if ( selectedChild() && selectedChild()->frameRegion( matrix() ).contains( pos ) )
