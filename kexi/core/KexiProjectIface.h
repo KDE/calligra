@@ -27,7 +27,13 @@
 #include <qstringlist.h>
 class KexiProject;
 
-class KEXICORE_EXPORT KexiProjectIface : public KoDocumentIface
+#ifdef Q_WS_WIN //(js) DIRTY? - it is temporary, to fix dcopidl problems
+# define class class KEXICORE_EXPORT
+#endif
+class KexiProjectIface : public KoDocumentIface
+#ifdef Q_WS_WIN //(js) temporary
+# undef class
+#endif
 {
     K_DCOP
 public:
