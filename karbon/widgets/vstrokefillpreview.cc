@@ -87,6 +87,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
+	return;
 	m_painter->begin();
 	m_painter->clear( paletteBackgroundColor().rgb() );
 
