@@ -380,6 +380,8 @@ bool KoMainWindow::saveDocument( bool saveas )
 		// assume that the pattern ends with .extension
 		QString s( dialog->currentFilter() );
 		QString extension = s.mid( s.find( "." ) );
+		extension = extension.left( extension.find( " " ) );
+
 		newURL.setPath( newURL.path() + extension );
 	    }
 
