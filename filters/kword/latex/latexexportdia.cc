@@ -45,11 +45,11 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 	QWidget *page = new QWidget( this ); 
 	setMainWidget(page);
 	QBoxLayout *mainLayout = new QVBoxLayout(page, 0, spacingHint());
-	styleBox = new QVButtonGroup(i18n("Document Style"), this);
+	styleBox = new QVButtonGroup(i18n("Document Style"), page);
 	mainLayout->addWidget(styleBox);
 
 	/* First part */
-	QBoxLayout *styleLayout = new QVBoxLayout(styleBox);
+	QBoxLayout *styleLayout = new QVBoxLayout(page);
 
 	latexStyleRBtn = new QRadioButton(i18n("Latex style"), styleBox);
 	styleLayout->addWidget(latexStyleRBtn);
@@ -67,7 +67,7 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 	styleLayout->activate();
 
 	/* Second part */
-	langBox = new QVButtonGroup(i18n("Language"), this);
+	langBox = new QVButtonGroup(i18n("Language"), page);
 	mainLayout->addWidget(langBox);
 
 	QBoxLayout *langLayout = new QVBoxLayout(langBox);
@@ -89,7 +89,7 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 	langLayout->activate();
 
 	/* Third part */
-	docBox = new QVButtonGroup(i18n("Document type"), this);
+	docBox = new QVButtonGroup(i18n("Document type"), page);
 	mainLayout->addWidget(docBox);
 
 	QBoxLayout *docLayout = new QVBoxLayout(docBox);
