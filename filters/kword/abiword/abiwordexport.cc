@@ -177,7 +177,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         return false;
     }
 
-    // We only export in UTF-8 (are there AbiWord ports that cannot read UTF-8?)
+    // We only export in UTF-8 (are there AbiWord ports that cannot read UTF-8? Be careful SVG uses UTF-8 too!)
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
     return true;
 }
@@ -211,7 +211,7 @@ bool AbiWordWorker::doOpenDocument(void)
     // AbiWord CVS 2002-02-22 defines other namesapces, which we are not using.
     *m_streamOut << " version=\"\" fileformat=\"1.0\" styles=\"unlocked\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
-    // TODO/FIXME: write as much space as AbiWord does for the following line.
+    // TODO/FIXME: write as much spaces as AbiWord does for the following line.
     *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
     // We have chosen NOT to have the full comment header that AbiWord files normally have.
     *m_streamOut << "\n";
@@ -222,7 +222,7 @@ bool AbiWordWorker::doOpenDocument(void)
     *m_streamOut << "<!-- KWord_Export_Filter_Version =";
 
     QString strVersion("$Revision$");
-    // Eliminate the dollar signs
+    // Remove the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
     *m_streamOut << strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
 
@@ -256,7 +256,7 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
 
     if (!imageIO.write())
     {
-        kdWarning(30506) << "Could not wire converted image! (AbiWordWorker::convertUnknownImage)" << endl;
+        kdWarning(30506) << "Could not write converted image! (AbiWordWorker::convertUnknownImage)" << endl;
         return false;
     }
 
@@ -284,7 +284,7 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
     }
     else
     {
-        // All other imahe types must be converted to PNG
+        // All other image types must be converted to PNG
         //   (yes, even JPEG!)
         strMime="image/png";
         isImageLoaded=convertUnknownImage(koStoreName,image);
@@ -313,7 +313,7 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
 void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& keyName)
 {
     // We must always convert the image to SVG
-    QString strMime="image/svg-xml"; // Yes, it is - not +
+    QString strMime="image/svg-xml"; // Yes, it is -xml not +xml
 
     kdDebug(30506) << "Clipart " << koStoreName << endl;
 
@@ -601,6 +601,13 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
                 // Retrieve text and escape it
                 partialText=escapeAbiWordText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
 
+                // Replace line feeds by line breaks
+                int pos;
+                while ((pos=partialText.find(QChar(10)))>-1)
+                {
+                    partialText.replace(pos,1,"<br/>");
+                }
+
                 if ((*paraFormatDataIt).text.missing)
                 {
                     // It's just normal text, so we do not need a <c> element!
@@ -639,10 +646,12 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
                 }
                 else if (9==(*paraFormatDataIt).variable.m_type)
                 {
-                    // A link (TODO: formating)
+                    // A link
                     *m_streamOut << "<a xlink:href=\""
                         << escapeAbiWordText((*paraFormatDataIt).variable.m_linkName)
-                        << "\"><c>" // In AbiWord, an anchor <a> has always a <c> child
+                        << "\"><c";  // In AbiWord, an anchor <a> has always a <c> child
+                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
+                    *m_streamOut << ">"
                         << escapeAbiWordText((*paraFormatDataIt).variable.m_hrefName)
                         << "</c></a>";
                 }
