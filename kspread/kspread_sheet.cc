@@ -3460,8 +3460,8 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
             if (key2 <= 0)
               continue;
 
-            KSpreadCell * cell22 = cellAt( d, key2 );
-            KSpreadCell * bestCell2 = cellAt( x, key2 );
+            KSpreadCell * cell22 = cellAt( x, key2 );
+            KSpreadCell * bestCell2 = cellAt( bestX, key2 );
 
             if ( cell22->isEmpty() )
             {
@@ -3481,15 +3481,15 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
               continue;
             }
 
-            if ( (order2 == Increase && *cell22 > *bestCell2)
-                 || (order2 == Decrease && *cell22 < *bestCell2) )
+            if ( (order2 == Increase && *cell22 < *bestCell2)
+                 || (order2 == Decrease && *cell22 > *bestCell2) )
             {
               bestCell = cell2;
               bestX = x;
               continue;
             }
-            else if ( (order2 == Increase && *cell22 < *bestCell2)
-                      || (order2 == Decrease && *cell22 > *bestCell2) )
+            else if ( (order2 == Increase && *cell22 > *bestCell2)
+                      || (order2 == Decrease && *cell22 < *bestCell2) )
             {
               // already in right order
               continue;
@@ -3500,8 +3500,8 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
               if (key3 <= 0)
                 continue;
 
-              KSpreadCell * cell23 = cellAt( d, key3 );
-              KSpreadCell * bestCell3 = cellAt( x, key3 );
+              KSpreadCell * cell23 = cellAt( x, key3 );
+              KSpreadCell * bestCell3 = cellAt( bestX, key3 );
 
               if ( cell23->isEmpty() )
               {
@@ -3520,8 +3520,8 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
                 bestX = x;
                 continue;
               }
-              if ( (order3 == Increase && *cell23 > *bestCell3)
-                   || (order3 == Decrease && *cell23 < *bestCell3) )
+              if ( (order3 == Increase && *cell23 < *bestCell3)
+                   || (order3 == Decrease && *cell23 > *bestCell3) )
               {
                 // they are really equal or in the right order
                 // no swap necessary
@@ -3899,7 +3899,7 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
       } // if (firstKey)
 
 
-      // Here we use the operators < and > for cells, which do it all.
+        // Here we use the operators < and > for cells, which do it all.
       if ( (order1 == Increase && *cell2 < *bestCell)
            || (order1 == Decrease && *cell2 > *bestCell) )
       {
@@ -3918,8 +3918,8 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
         // check 2nd key
         if (key2 == 0)
           continue;
-        KSpreadCell * cell22 = cellAt( key2, d );
-        KSpreadCell * bestCell2 = cellAt( key2, y );
+        KSpreadCell * cell22 = cellAt( key2, y );
+        KSpreadCell * bestCell2 = cellAt( key2, bestY );
 
         if ( cell22->isEmpty() )
         {
@@ -3939,15 +3939,15 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
           continue;
         }
 
-        if ( (order2 == Increase && *cell22 > *bestCell2)
-             || (order2 == Decrease && *cell22 < *bestCell2) )
+        if ( (order2 == Increase && *cell22 < *bestCell2)
+             || (order2 == Decrease && *cell22 > *bestCell2) )
         {
           bestCell = cell2;
           bestY = y;
           continue;
         }
-        else if ( (order2 == Increase && *cell22 < *bestCell2)
-                  || (order2 == Decrease && *cell22 > *bestCell2) )
+        else if ( (order2 == Increase && *cell22 > *bestCell2)
+                  || (order2 == Decrease && *cell22 < *bestCell2) )
         {
           continue;
         }
@@ -3956,8 +3956,8 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
           // they are equal, check 3rd key
           if (key3 == 0)
             continue;
-          KSpreadCell * cell23 = cellAt( key3, d );
-          KSpreadCell * bestCell3 = cellAt( key3, y );
+          KSpreadCell * cell23 = cellAt( key3, y );
+          KSpreadCell * bestCell3 = cellAt( key3, bestY );
 
           if ( cell23->isEmpty() )
           {
@@ -3977,8 +3977,8 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
             continue;
           }
 
-          if ( (order3 == Increase && *cell23 > *bestCell3)
-               || (order3 == Decrease && *cell23 < *bestCell3) )
+          if ( (order3 == Increase && *cell23 < *bestCell3)
+               || (order3 == Decrease && *cell23 > *bestCell3) )
           {
             bestCell = cell2;
             bestY = y;
