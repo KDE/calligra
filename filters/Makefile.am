@@ -1,14 +1,10 @@
 
 if compile_filter_KARBON
-if include_KARBON
 KARBONDIR = karbon
-endif
 endif
 
 if compile_filter_KONTOUR
-if include_KARBON
 KONTOURDIR = kontour
-endif
 endif
 
 if include_XSLTFILTERS
