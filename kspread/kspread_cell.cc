@@ -827,7 +827,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             }
             if ( abs1 )
                 erg += "$";
-            erg += util_encodeColumnLabelText(col); //Get column text
+            erg += KSpreadCell::columnName(col); //Get column text
 
             if ( abs2 )
                 erg += "$";
@@ -6138,12 +6138,50 @@ QString KSpreadCell::fullName() const
 
 QString KSpreadCell::name( int col, int row )
 {
-    return util_encodeColumnLabelText( col ) + QString::number( row );
+    return columnName( col ) + QString::number( row );
 }
 
 QString KSpreadCell::fullName( const KSpreadSheet* s, int col, int row )
 {
     return s->tableName() + "!" + name( col, row );
+}
+
+QString KSpreadCell::columnName() const
+{
+    return columnName( d->column );
+}
+
+QString KSpreadCell::columnName( int column )
+{
+    int tmp;
+
+    /* we start with zero */
+    tmp = column - 1;
+
+    if (tmp < 26) /* A-Z */
+        return QString("%1").arg((char) ('A' + tmp));
+
+    tmp -= 26;
+    if (tmp < 26*26) /* AA-ZZ */
+        return QString("%1%2").arg( (char) ('A' + tmp / 26) )
+            .arg( (char) ('A' + tmp % 26) );
+
+    tmp -= 26*26;
+    if (tmp < 26 * 26 * 26 ) /* AAA-ZZZ */
+        return QString("%1%2%3").arg( (char) ('A' + tmp / (26 * 26)) )
+            .arg( (char) ('A' + (tmp / 26) % 26 ) )
+            .arg( (char) ('A' + tmp % 26) );
+
+    tmp -= 26*26*26;
+    if (tmp < 26 * 26 * 26 * 26) /* AAAA-ZZZZ */
+        return QString("%1%2%3%4").arg( (char) ('A' + (tmp / (26 * 26 * 26 )      ) ))
+            .arg( (char) ('A' + (tmp / (26 * 26      ) % 26 ) ))
+            .arg( (char) ('A' + (tmp / (26           ) % 26 ) ))
+            .arg( (char) ('A' + (tmp                   % 26 ) ));
+
+    /* limit is currently 26^4 + 26^3 + 26^2 + 26^1 = 475254 */
+    kdDebug(36001) << "invalid column\n";
+    return QString("@@@");
 }
 
 #include "kspread_cell.moc"

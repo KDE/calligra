@@ -739,6 +739,10 @@ public:
      * @see #fullName
      */
     static QString fullName( const KSpreadSheet *s, int col, int row );
+    
+    QString columnName() const;
+    
+    static QString columnName( int col );
 
     /* descriptions of the flags are just below */
     enum CellFlags{
