@@ -2923,13 +2923,8 @@ void KSpreadCanvas::paintUpdates()
   {
     return;
   }
-  QWMatrix m = m_pView->matrix();
-
   QPainter painter(this);
   painter.save();
-
-  // Do the view transformation.
-  painter.setWorldMatrix( m );
 
   KoRect unzoomedRect = doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
   unzoomedRect.moveBy( xOffset(), yOffset() );
@@ -2964,8 +2959,6 @@ void KSpreadCanvas::paintUpdates()
     dblCorner.setY( topPos );
     dblCorner.setX( dblCorner.x() + activeTable()->columnLayout( x )->dblWidth( this ) );
   }
-
-  painter.restore();
 }
 
 /****************************************************************
