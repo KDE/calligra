@@ -61,7 +61,12 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 
 		uint size() const;
 		KexiPropertyBuffer* currentPropertyBuffer() const;
-		KexiPropertyBuffer* at(uint row) const { return m_buffers[row]; }
+		inline KexiPropertyBuffer* at(uint row) const { return m_buffers[row]; }
+
+		/*! \return buffer assigned for \a item or null it \a item has no 
+		 buffer assigned or it's not owned by assigned table view or
+		 if assigned table view has no data set. */
+		KexiPropertyBuffer* bufferForItem(KexiTableItem& item);
 
 	signals:
 		/*! Emmited when row is deleted. 

@@ -235,5 +235,15 @@ void KexiTableViewPropertyBuffer::slotCellSelected(int, int row)
 	m_view->propertyBufferSwitched();
 }
 
+KexiPropertyBuffer* KexiTableViewPropertyBuffer::bufferForItem(KexiTableItem& item)
+{
+	if (m_currentTVData.isNull())
+		return 0;
+	int idx = m_currentTVData->findRef(&item);
+	if (idx<0)
+		return 0;
+	return m_buffers[idx];
+}
+
 #include "kexitableviewpropertybuffer.moc"
 
