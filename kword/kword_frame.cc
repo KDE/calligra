@@ -473,21 +473,7 @@ void KWFrameSet::addFrame( KWFrame *_frame )
 void KWFrameSet::delFrame( unsigned int _num )
 {
     KWFrame *frm = frames.at( _num ), *f;
-    bool del = true;
-    unsigned int i = 0;
-    for ( f = frames.first(); f != 0; f = frames.next(), i++ ) {
-	if ( f == frm && i != _num ) {
-	    del = false;
-	    break;
-	}
-    }
-
-    if ( !del )
-	frames.take( _num );
-    else
-	frames.remove( _num );
-
-    update();
+    delFrame(frm,true);
 }
 
 /*================================================================*/
@@ -499,6 +485,8 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 
     KWFrame *f;
 
+    // This check is totally irrelevant since we allready check 
+    // for duplicate occurences on addFrame (TZ)
     bool del = true;
     int i = 0;
     for ( f = frames.first(); f != 0; f = frames.next(), i++ ) {
@@ -508,6 +496,7 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 	}
     }
 
+    frm->setFrameSet(0L);
     if ( !del || !remove )
 	frames.take( _num );
     else
