@@ -105,6 +105,8 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const char* name )
 		: VDocker( parent, name ), m_gradient( &gradient )
 {
+	setOrientation( Vertical );
+	
 	m_predefGradients.setAutoDelete( true );
 	
 		// Load the predefined gradients.
