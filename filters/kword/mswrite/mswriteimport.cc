@@ -909,7 +909,7 @@ public:
 			if (lineSpacing != MSWrite::LineSpacing::Single)
 			{
 			#if 1
-				output += "<LINESPACING type=\"at least\" spacingvalue=\"" + QString::number (Twip2Point (lineSpacing)) + "\"/>";
+				output += "<LINESPACING type=\"atleast\" spacingvalue=\"" + QString::number (Twip2Point (lineSpacing)) + "\"/>";
 			#else	// old way
 				output += "<LINESPACING type=\"";
 				switch (lineSpacing)
@@ -924,7 +924,7 @@ public:
 						break;
 					default:
 						kdWarning (30509) << "non-\"standard\" linespacing value: " <<  lineSpacing << endl;
-						output += "at least\" ";
+						output += "atleast\" ";
 						output += "spacingvalue=\"";
 							output += QString::number (Twip2Point (lineSpacing));
 						break;

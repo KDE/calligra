@@ -132,7 +132,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         //kdWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
         // Well let's see if this makes a big difference.
         QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
-        lineSpacing.setAttribute("type", "at least");
+        lineSpacing.setAttribute("type", "atleast");
         lineSpacing.setAttribute("spacingvalue", KoUnit::parseValue(value));
         parentElement.appendChild(lineSpacing);
     }
