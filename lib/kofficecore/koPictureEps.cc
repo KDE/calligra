@@ -113,7 +113,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 #endif
     }
     
-    cmdBuf += " -dNOPAUSE -sDEVICE=png16m "; // Device was formally ppm
+    cmdBuf += " -dSAFER -dPARANOIDSAFER -dNOPAUSE -sDEVICE=png16m "; // Device was formally ppm
     //cmdBuf += "-c 255 255 255 setrgbcolor fill 0 0 0 setrgbcolor";
     cmdBuf += " -";
     cmdBuf += " -c showpage quit";
