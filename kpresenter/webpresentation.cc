@@ -393,19 +393,16 @@ void KPWebPresentation::init()
     }
 
     title = i18n("Slideshow");
-    //LAURENT FIXME
-#if 0
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
     {
         if ( doc->isSlideSelected( i ) )
         {
             SlideInfo info;
             info.pageNumber = i;
-            info.slideTitle = doc->pageTitle( i, i18n( "Slide %1" ).arg( i+1 ) );
+            info.slideTitle = doc->pageList().at(i)->pageTitle( i18n( "Slide %1" ).arg( i+1 ) );
             slideInfos.append( info );
         }
     }
-#endif
     backColor = Qt::white;
     textColor = Qt::black;
     titleColor = Qt::red;
