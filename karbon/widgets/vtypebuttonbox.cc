@@ -145,9 +145,15 @@ VTypeButtonBox::slotButtonPressed( int id )
 }
 
 void
-VTypeButtonBox::slotSetStroke( bool isStroke )
+VTypeButtonBox::setStroke()
 {
-	m_isStrokeManipulator = isStroke;
+	m_isStrokeManipulator = true;
+}
+
+void
+VTypeButtonBox::setFill()
+{
+	m_isStrokeManipulator = false;
 }
 
 void

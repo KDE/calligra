@@ -43,7 +43,8 @@ public:
 
 public slots:
 	void slotButtonPressed( int id );
-	void slotSetStroke( bool isStroke );
+	void setFill();
+	void setStroke();
 
 private:
 	KarbonPart *m_part;
