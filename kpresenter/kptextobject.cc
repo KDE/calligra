@@ -1315,7 +1315,12 @@ void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)
 
 void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint &_pos )
 {
-    handleMouseMoveEvent(e, _pos );
+    if ( textView()->maybeStartDrag( e ) )
+        return;
+    if ( _pos.y() > 0  )
+    {
+        textView()->handleMouseMoveEvent( e,_pos );
+    }
 }
 
 void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
