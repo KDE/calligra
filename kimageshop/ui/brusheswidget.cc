@@ -48,13 +48,12 @@ BrushesWidget::BrushesWidget( QWidget *parent, const char *name )
   QObject::connect( slSpacing, SIGNAL( valueChanged(int) ),
 		    this, SLOT( slotSetBrushSpacing(int) ));
 
-
   // only serves as beautifier for the iconchooser
   frame = new QHBox( this );
   frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
   chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
-
+  
   QList<KisBrush> bList = KisFactory::bServer()->brushes();
   
   for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())

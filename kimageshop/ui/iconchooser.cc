@@ -34,6 +34,7 @@ IconChooser::IconChooser( QWidget *parent, QSize iconSize, const char *name )
 {
   setTableFlags( Tbl_autoVScrollBar | Tbl_clipCellPainting | Tbl_cutCellsH |
 		 Tbl_snapToGrid );
+  QTableView::setBackgroundColor(white);
 
   margin = 2; // a cell is 2 * two pixels larger than an item
   setCellWidth( iconSize.width() + 2*margin );
@@ -197,13 +198,20 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
 
     p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
 
-    if ( row == curRow && col == curCol ) { // highlight current item
-      p->drawRect( 0, 0, cw, ch );
-    }
+    if ( row == curRow && col == curCol )  // highlight current item
+      {
+	p->setPen(blue);
+	p->drawRect( 0, 0, cw, ch );
+      }
+    else
+      {
+	p->setPen(gray);
+	p->drawRect( 0, 0, cw+1, ch+1 );
+      }
   }
 
   else { // empty cell
-    p->fillRect( 0, 0, cellWidth(), cellHeight(), QBrush( bgColor ) );
+    p->fillRect( 0, 0, cellWidth(), cellHeight(), QBrush( white ) );
   }
 }
 

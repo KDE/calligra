@@ -54,10 +54,8 @@ void KisBrush::loadViaQImage(QString file)
       qDebug("Failed to load brush: %s", file.latin1());
     }
 
-  // make sure it's a 8bpp grayscale image
-  if (img.depth() != 8)
-    img = img.convertDepth(8);
-  img = KImageEffect::toGray(img, false);
+  img = img.convertDepth(32);
+  img = KImageEffect::toGray(img, true);
 
   // create pixmap for preview dialog
   m_pPixmap = new QPixmap;
@@ -68,15 +66,13 @@ void KisBrush::loadViaQImage(QString file)
 
   m_pData = new uchar[m_h * m_w];
 
-  uchar *p;
+  uint *p;
 
   for (int h = 0; h < m_h; h++)
     {
-      p = img.scanLine(h);
+      p = (QRgb*)img.scanLine(h);
       for (int w = 0; w < m_w; w++)
-	{
-	  m_pData[m_w * h + w] = 255 - qRed(*((QRgb*)(p+w-2)));
-	}
+	  m_pData[m_w * h + w] = 255 - qGray(*(p+w));
     }
  
   m_valid = true;

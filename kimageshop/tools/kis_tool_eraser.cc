@@ -75,7 +75,7 @@ bool EraserTool::paint(QPoint pos)
   int startx = start.x();
   int starty = start.y();
 
-  QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->width());
+  QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
 
   if (!clipRect.intersects(m_pDoc->getCurrentLayer()->imageExtents()))
     return false;
