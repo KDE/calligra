@@ -871,14 +871,12 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     table->setSelection( selection, this );
     m_pView->updateEditWidget();
     if(table->getAutoCalc()) table->recalc(true);
-    // m_pView->doc()->setModified( TRUE );
   }
   else if ( m_eMouseAction == AutoFill )
   {
     QRect dest = table->selectionRect();
     table->autofill( m_rctAutoFillSrc, dest );
 
-    // m_pView->doc()->setModified( TRUE );
     selection.setCoords( 0, 0, 0, 0 );
     table->setSelection( selection, this );
     m_pView->updateEditWidget();
@@ -2900,7 +2898,6 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
         delete m_lSize;
         m_lSize = 0;
-        m_pView->koDocument()->setModified(true);
     }
 
     m_bSelection = FALSE;
@@ -2935,7 +2932,6 @@ void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
     RowLayout *rl = table->nonDefaultRowLayout( select );
     adjust=QMAX((int)(2.0* m_pCanvas->zoom()),adjust);
     rl->setHeight(adjust,m_pCanvas);
-    m_pView->koDocument()->setModified(true);
   }
 }
 
@@ -3007,7 +3003,6 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
       }
     }
   }
-  m_pView->koDocument()->setModified(true);
 }
 
 void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
@@ -3383,7 +3378,6 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         }
         delete m_lSize;
         m_lSize=0;
-        m_pView->koDocument()->setModified(true);
     }
 
     m_bSelection = FALSE;
@@ -3422,7 +3416,6 @@ void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
 
     adjust = QMAX( (int)(2.0 * m_pCanvas->zoom()), adjust );
     cl->setWidth( adjust, m_pCanvas );
-    m_pView->koDocument()->setModified(true);
   }
 }
 
@@ -3500,7 +3493,6 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
       }
     }
   }
-  m_pView->koDocument()->setModified(true);
 }
 
 void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
