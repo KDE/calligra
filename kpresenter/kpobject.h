@@ -216,7 +216,6 @@ protected:
 
     DCOPObject *dcop;
 
-private:
     static const QString &tagORIG, &attrX, &attrY,
         &tagSIZE, &attrWidth, &attrHeight, &tagSHADOW,
         &attrDistance, &attrDirection, &attrColor, &attrC1,
