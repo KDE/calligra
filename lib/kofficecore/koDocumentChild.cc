@@ -197,8 +197,12 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
     bool res = true;
     if ( doOpenURL )
     {
+        bool internalURL = false;
         if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || KURL::isRelativeURL( m_tmpURL ) )
+        {
             res = document()->loadFromStore( _store, m_tmpURL );
+            internalURL = true;
+        }
         else
         {
             // Reference to an external document. Hmmm...
@@ -222,23 +226,26 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
             }
             else
                 res = document()->openURL( url );
-            if ( !res )
-            {
-                delete d->m_doc;
-                d->m_doc = 0;
-                QString tmpURL = m_tmpURL; // keep a copy, createUnavailDocument will erase it
-                // Not found -> use a kounavail instead
-                res = createUnavailDocument( _store, false /* the URL doesn't exist, don't try to open it */ );
-                if ( res )
-                {
-                    d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
-                    d->m_doc->setProperty( "unavailReason", i18n( "External document not found:\n%1" ).arg( tmpURL ) );
-                }
-                return res;
-            }
-            // Still waiting...
-            QApplication::setOverrideCursor( waitCursor );
         }
+        if ( !res )
+        {
+            delete d->m_doc;
+            d->m_doc = 0;
+            QString tmpURL = m_tmpURL; // keep a copy, createUnavailDocument will erase it
+            // Not found -> use a kounavail instead
+            res = createUnavailDocument( _store, false /* the URL doesn't exist, don't try to open it */ );
+            if ( res )
+            {
+                d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
+                if ( internalURL )
+                    d->m_doc->setProperty( "unavailReason", i18n( "Loading embedded object failed" ) );
+                else
+                    d->m_doc->setProperty( "unavailReason", i18n( "External document not found:\n%1" ).arg( tmpURL ) );
+            }
+            return res;
+        }
+        // Still waiting...
+        QApplication::setOverrideCursor( waitCursor );
     }
 
     m_tmpURL = QString::null;

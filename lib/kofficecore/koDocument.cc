@@ -1161,11 +1161,14 @@ bool KoDocument::loadNativeFormat( const QString & file )
         if ( !loadChildren( store ) )
         {
             kdError(30003) << "ERROR: Could not load children" << endl;
+// Proceed nonetheless
+#if 0
             if ( d->lastErrorMessage.isEmpty() )
                 d->lastErrorMessage = i18n( "Couldn't load embedded objects" );
             delete store;
             QApplication::restoreOverrideCursor();
             return false;
+#endif
         }
         if ( store->open( "documentinfo.xml" ) )
         {
@@ -1215,7 +1218,9 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
     if ( !loadChildren( _store ) )
     {
         kdError(30003) << "ERROR: Could not load children" << endl;
+#if 0
         return false;
+#endif
     }
 
     bool result = completeLoading( _store );
