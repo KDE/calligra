@@ -42,7 +42,7 @@
 
 OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
   oval = NULL;
-  KConfig* config = kapp->getConfig ();
+  KConfig* config = kapp->config ();
   QString oldgroup = config->group ();
 
   config->setGroup ("EllipseTool");
@@ -173,7 +173,7 @@ void OvalTool::aroundFixedCenter (bool flag) {
   if (useFixedCenter != flag) {
     useFixedCenter = flag;
 
-    KConfig* config = kapp->getConfig ();
+    KConfig* config = kapp->config ();
     QString oldgroup = config->group ();
 
     config->setGroup ("EllipseTool");

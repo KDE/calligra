@@ -2712,7 +2712,7 @@ void KWordView::getFonts()
 
     kde_display = kapp->getDisplay();
 
-    bool have_installed = kapp->getKDEFonts( fontList );
+    bool have_installed = kapp->kdeFonts( fontList );
 
     if ( have_installed )
 	return;
