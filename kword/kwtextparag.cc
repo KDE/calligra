@@ -479,6 +479,10 @@ void KWTextParag::load( QDomElement &attributes )
 
 void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 {
+
+    QValueList<int> removeLenList;
+    QValueList<int> removePosList;
+    
     KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
@@ -538,6 +542,10 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );
                         var->recalc();
+                        if(len>1) {
+                            removePosList.append(index+1);
+                            removeLenList.append(len-1);
+                        }
                     }
                     break;
                 }
@@ -569,6 +577,9 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 }
             }
         }
+    }
+    for(unsigned int i=0; i < removeLenList.count(); i++) {
+        remove(*removePosList.at(i), *removeLenList.at(i));
     }
 }
 
