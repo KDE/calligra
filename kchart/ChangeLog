@@ -1,15 +1,21 @@
-2005-03-09  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
-
-	* 
-
 2005-03-09  Inge Wallin  <inge@lysator.liu.se>
 
+	Cleaning
+	* kchart_part.cc (paintContent): break out common code out of an
+	if/else construction.
+	
+	----------------------------------------------------------------
+	
 	More experiments with visual appearance of the data editor
 	* kchartDataEditor.cc (setData): Set size of the table widget to
 	(600,300)
 	
+	----------------------------------------------------------------
+	
 	Experiment with visual appearance of the new data editor
 	* kchartDataEditor.cc (setData): Set column widths to 80.
+	
+	----------------------------------------------------------------
 	
 	Fix bug introduced by patch to fix bug 14971: Axes label handling
 	in connection with KSpread was broken.

@@ -2,73 +2,75 @@ Before release of KOffice 1.4
 -----------------------------
 
 * Bugs
-  - 77839: Program hangs when only one value for pie chart 
+  + 77839: Program hangs when only one value for pie chart 
 	   and value = 0.
-  - 41612: No titles for axes
-  - 100004: Manual should describe stand-alone charting 
+  + 41612: No titles for axes
+  + 100004: Manual should describe stand-alone charting 
             (see below also)
-  - 1001007: Error in reading back axis labels.
-      - Store row and column labels separately in the document		DONE
+  + 101007: Error in reading back axis labels.
+      - Store row and column labels separately in the document		done
+      - Load old type files without separately stored labels.
       - Save / Load row and column labels 
 
+
 * Wishes
-  - 14971: Data in rows or columns					DONE
-      - Store in document						DONE
-      - Save / Load							DONE
-      - Manipulate with GUI						DONE
-      - Paint chart using it						DONE
+  + 14971: Data in rows or columns					DONE
+      - Store in document						done
+      - Save / Load							done
+      - Manipulate with GUI						done
+      - Paint chart using it						done
 
 * Issues with KSpread
-  - Printing: The chart is the size of a thumbnail, and wrongly placed.
-  - Labels are no longer generated correctly.				DONE
+  + Printing: The chart is the size of a thumbnail, and wrongly placed.
+  + Labels are no longer generated correctly.				DONE
 
 * Other fixes
-  - Include me in Authors						DONE
-  - Can HiLo charts be made thicker than one line?  
+  + Include me in Authors						DONE
+  + Can HiLo charts be made thicker than one pixel?  
     New page in config dialog like pie settings?
-  - Tooltips & What's this help?
-  - Remove the predefined bar chart?
-  - Make the settings in Edit->"Page Layout" clearer?
-  - Singular or plural for tooltips, not both.
+  + Tooltips & What's this help?
+  + Remove the predefined bar chart?
+  + Make the settings in Edit->"Page Layout" clearer?
+  + Singular or plural for tooltips, not both.
 
-  - Fix ChangeLog re: bug titles.					DONE
-  - Grep for FIXME and fix the urgent ones.
+  + Fix ChangeLog re: bug titles.					DONE
+  + Grep for FIXME and fix the urgent ones.
 
 * Toolbars
-  - Separate toolbar for chart types (separate from data editor, etc).
-  - Reorder: Group pie chart with ring chart and polar.			DONE
+  + Separate toolbar for chart types (separate from data editor, etc).
+  + Reorder: Group pie chart with ring chart and polar.			DONE
              Group Box&Whiskers with HiLo				DONE
 
 * Icons
-  - Smaller icons for chart subtypes in config dialog.
-  - Wrong images for HiLo subtype icons.
+  + Smaller icons for chart subtypes in config dialog.
+  + Wrong images for HiLo subtype icons.
 
 * Data editor
-  - Make table size handling work.
-  - Make Apply button work.
-  - Smaller column widths?
+  + Make table size handling work.
+  + Make Apply button work.
+  + Smaller column widths?						DONE
 
 * Config dialog
-  - Make Data page work.						DONE
-  - Pie settings at the same place as Subtype?
-  - Check *all* subpages.
+  + Make Data page work.						DONE
+  + Pie settings at the same place as Subtype?
+  + Check *all* subpages.
     - Axes page is ugly.
     - Font page is ugly.
-  - Check handling of defaults.
+  + Check handling of defaults.
 
 * Wizard
-  - Pages:
+  + Pages:
     - "Select Chart Type" page: Reorder like the toolbark		DONE
                                 Black border around selected type?
-  - Make Help button work.
-  - The Back button should be in the same place on all pages.
-  - Subtype page should also have icons for subtypes like config dialog.
-  - Why is Finish button disabled for two pages?
+  + Make Help button work.
+  + The Back button should be in the same place on all pages.
+  + Subtype page should also have icons for subtypes like config dialog.
+  + Why is Finish button disabled for two pages?
 
 * Manual
-  - Describe stand-alone charting.
-  - New screen shots.
-  - Other enhancements?
+  + Describe stand-alone charting.
+  + New screen shots.
+  + Other enhancements?
 
 
 After release of KOffice 1.4

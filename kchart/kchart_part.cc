@@ -139,26 +139,21 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     // Handle data in rows or columns.
     // FIXME: It seems as if the short labels are not generated properly.
+    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    QStringList  longLabels;
+    QStringList  shortLabels;
+
+    longLabels.clear();
+    shortLabels.clear();
     if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
 	// Data is handled in rows.  This is the default.
 
 	// These are efficient so it doesn't matter if we always copy.
 	m_displayData = m_currentData;
 
-	{
-	    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
-	    QStringList        longLabels;
-	    QStringList        shortLabels;
-
-	    longLabels.clear();
-	    shortLabels.clear();
-	    for ( uint col = 0; col < m_currentData.cols(); col++ ) {
-		longLabels  << m_colLabels[col];
-		shortLabels << m_colLabels[col].left( 3 );
-	    }
-	    bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
-	    m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, 
-				     bottomparms );
+	for ( uint col = 0; col < m_currentData.cols(); col++ ) {
+	    longLabels  << m_colLabels[col];
+	    shortLabels << m_colLabels[col].left( 3 );
 	}
 
 	for ( uint row = 0; row < m_currentData.rows(); row++ )
@@ -182,25 +177,16 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	}
 
 	// Transpose labels.
-	{
-	    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
-	    QStringList        longLabels;
-	    QStringList        shortLabels;
-
-	    longLabels.clear();
-	    shortLabels.clear();
-	    for ( uint row = 0; row < m_currentData.rows(); row++ ) {
-		longLabels  << m_rowLabels[row];
-		shortLabels << m_rowLabels[row].left( 3 );
-	    }
-	    bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
-	    m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, 
-				     bottomparms );
+	for ( uint row = 0; row < m_currentData.rows(); row++ ) {
+	    longLabels  << m_rowLabels[row];
+	    shortLabels << m_rowLabels[row].left( 3 );
 	}
 
 	for ( uint col = 0; col < m_currentData.cols(); col++ )
 	    m_params->setLegendText( col, m_colLabels[col] );
     }
+    bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
+    m_params->setAxisParams(KDChartAxisParams::AxisPosBottom, bottomparms);
 
     // Ok, we have now created a data set for display, and params with
     // suitable legends and axis labels.  Now start the real painting.
@@ -211,11 +197,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     // ## TODO: support zooming
 
-    // kdDebug(35001) << "KChartPart::paintContent called, rows = "
-    //                << m_currentData.usedRows() << ", cols = "
-    //                << m_currentData.usedCols() << endl;
-
-    // Need to draw only the document rectangle described in the parameter rect.
+    // We only need to draw the document rectangle "rect".
     KDChart::paint( &painter, m_params, &m_displayData, 0, &rect );
 }
 
