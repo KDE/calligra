@@ -68,7 +68,7 @@ apps_DATA = killustrator.kdelnk
 mimedir = $(kde_mimedir)/application
 mime_DATA = x-killustrator.kdelnk
 
-kde_icon_DATA = killustrator.xpm
+kde_icon_DATA = killustrator.xpm killustrator-doc.xpm killustrator-doc-mini.xpm
 
 datadir = $(kde_datadir)/killustrator
 data_DATA = default.pal

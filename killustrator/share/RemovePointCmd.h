@@ -27,6 +27,7 @@
 
 #include "GDocument.h"
 #include "GPolyline.h"
+#include "GPolygon.h"
 #include "Command.h"
 
 class RemovePointCmd : public Command {
@@ -43,6 +44,7 @@ private:
   GPolyline* obj;
   int index;
   Coord point;
+  GPolygon::Kind kind;
 };
 
 #endif

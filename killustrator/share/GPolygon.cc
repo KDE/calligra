@@ -147,6 +147,13 @@ GPolygon::GPolygon (QList<Coord>& coords) : GPolyline () {
   calcBoundingBox ();
 }
 
+void GPolygon::setKind (GPolygon::Kind k) {
+  if (k != PK_Polygon && points.count () == 4)
+    kind = k;
+  else if (k == PK_Polygon)
+    kind = k;
+}
+
 const char* GPolygon::typeName () {
   if (kind == PK_Polygon)
     return i18n ("Polygon");
@@ -223,6 +230,12 @@ void GPolygon::draw (Painter& p, bool withBasePoints, bool outline) {
   }
   p.setClipping (false);
   p.restore ();
+}
+
+void GPolygon::insertPoint (int idx, const Coord& p, bool update) {
+  if (kind != PK_Polygon) 
+    kind = PK_Polygon;
+  GPolyline::insertPoint (idx, p, update);
 }
 
 bool GPolygon::contains (const Coord& p) {
@@ -545,3 +558,21 @@ bool GPolygon::isValid () {
   else
     return false;
 }
+
+GPolyline* GPolygon::splitAt (unsigned int idx) {
+  // create and return a new line starting with point at #idx
+  if (idx >= 0 && idx < points.count ()) {
+    GPolyline* other = new GPolyline (* ((GPolyline *) this));
+    other->removeAllPoints ();
+    unsigned int i, num = points.count ();
+    for (i = idx; i < num; i++) 
+      other->_addPoint (other->numOfPoints (), *points.at (i));
+    for (i = 0; i <= idx; i++)
+      other->_addPoint (other->numOfPoints (), *points.at (i));
+
+    other->calcBoundingBox ();
+    return other;
+  }
+  return 0L;
+}
+

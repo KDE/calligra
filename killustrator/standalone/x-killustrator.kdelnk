@@ -2,7 +2,7 @@
 [KDE Desktop Entry]
 Type=MimeType
 MimeType=application/x-killustrator
-Icon=killustrator.xpm
+Icon=killustrator-doc.xpm
 Patterns=*.kil;
 DefaultApp=killustrator
 Comment=KIllustrator file

@@ -22,35 +22,26 @@
 
 */
 
-#include "InsertPointCmd.h"
+#ifndef SplitLineCmd_h_
+#define SplitLineCmd_h_
 
-InsertPointCmd::InsertPointCmd (GDocument* doc, GPolyline* o,
-				int idx, float x, float y) 
-  : Command(i18n("Insert Point"))
-{
-  document = doc;
-  obj = o;
-  obj->ref ();
-  index = idx;
-  point = Coord (x, y);
-  if (obj->isA ("GPolygon")) {
-    GPolygon *poly = (GPolygon *) obj;
-    kind = poly->getKind ();
-  }
-}
+#include "GDocument.h"
+#include "GPolyline.h"
+#include "Command.h"
 
-InsertPointCmd::~InsertPointCmd () {
-  obj->unref ();
-}
+class SplitLineCmd : public Command {
+public:
+  SplitLineCmd (GDocument* doc, GPolyline* o, int idx);
 
-void InsertPointCmd::execute () {
-  obj->insertPoint (index, point, true);
-}
+  ~SplitLineCmd ();
 
-void InsertPointCmd::unexecute () {
-  obj->removePoint (index);
-  if (obj->isA ("GPolygon")) {
-    GPolygon *poly = (GPolygon *) obj;
-    poly->setKind (kind);
-  }
-}
+  void execute ();
+  void unexecute ();
+
+private:
+  GDocument* document;
+  GPolyline *obj1, *obj2;
+  int index;
+};
+
+#endif

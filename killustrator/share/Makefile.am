@@ -25,7 +25,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 AddLineSegmentCmd.h EditPointCmd.h \
 		 CreatePolygonCmd.h CreateBezierCmd.h \
 		 RemovePointCmd.h InsertPointCmd.h TextAlongPathCmd.h \
-		 InsertObjCmd.h ShearCmd.h InsertPixmapCmd.h CommandHistory.h \
+		 InsertObjCmd.h ShearCmd.h InsertPixmapCmd.h \
+		 SplitLineCmd.h CommandHistory.h \
 		 FilterInfo.h ExportFilter.h ImportFilter.h \
 		 Ruler.h AboutDialog.h \
 		 qwmf.h wmfstruct.h metafuncs.h version.h \
@@ -62,7 +63,8 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  CreatePolygonCmd.cc CreateBezierCmd.cc \
 			  RemovePointCmd.cc InsertPointCmd.cc \
 			  TextAlongPathCmd.cc InsertPixmapCmd.cc \
-			  InsertObjCmd.cc ShearCmd.cc CommandHistory.cc \
+			  InsertObjCmd.cc ShearCmd.cc \
+			  SplitLineCmd.cc CommandHistory.cc \
 			  FilterInfo.cc ExportFilter.cc \
 			  ImportFilter.cc \
 			  Ruler.cc AboutDialog.cc qwmf.cc \

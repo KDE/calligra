@@ -32,6 +32,10 @@ RemovePointCmd::RemovePointCmd (GDocument* doc, GPolyline* o, int idx)
   obj->ref ();
   index = idx;
   point = obj->getPoint (idx);
+  if (obj->isA ("GPolygon")) {
+    GPolygon *poly = (GPolygon *) obj;
+    kind = poly->getKind ();
+  }
 }
 
 RemovePointCmd::~RemovePointCmd () {
@@ -44,4 +48,8 @@ void RemovePointCmd::execute () {
 
 void RemovePointCmd::unexecute () {
   obj->insertPoint (index, point, true);
+  if (obj->isA ("GPolygon")) {
+    GPolygon *poly = (GPolygon *) obj;
+    poly->setKind (kind);
+  }
 }

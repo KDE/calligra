@@ -32,6 +32,7 @@
 #include "EditPointCmd.h"
 #include "InsertPointCmd.h"
 #include "RemovePointCmd.h"
+#include "SplitLineCmd.h"
 #include "GPolyline.h"
 #include "GBezier.h"
 #include <qkeycode.h>
@@ -74,6 +75,22 @@ EditPointTool::~EditPointTool () {
 
 void EditPointTool::setMode (Mode m) {
   mode = m;
+  switch (m) {
+  case MovePoint:
+    emit modeSelected (i18n ("Move Point"));
+    break;
+  case InsertPoint:
+    emit modeSelected (i18n ("Insert Point"));
+    break;
+  case RemovePoint:
+    emit modeSelected (i18n ("Remove Point"));
+    break;
+  case Split:
+    emit modeSelected (i18n ("Split Line"));
+    break;
+  default:
+    break;
+  }
 }
 
 void EditPointTool::processEvent (QEvent* e, GDocument *doc, 
@@ -167,7 +184,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       // compute the segment of intersection
       int idx = pline->containingSegment (xpos, ypos);
       if (idx != -1) {
-	cout << "insert in segment: " << idx << endl;
+	//	cout << "insert in segment: " << idx << endl;
 	if (obj->isA ("GBezier"))
 	  idx = (idx + 1) * 3;
 	else
@@ -191,6 +208,13 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 	}
       }
     }
+    else if (mode == Split) {
+      if (pointIdx != -1) {
+	GPolyline *pline = (GPolyline *) obj;
+	SplitLineCmd *cmd = new SplitLineCmd (doc, pline, pointIdx);
+	history->addCommand (cmd, true);
+      }
+    }
 
     canvas->setCursor (arrowCursor);
 
@@ -199,6 +223,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 }
 
 void EditPointTool::activate (GDocument* doc, Canvas* canvas) {
+  mode = MovePoint;
   emit modeSelected (i18n ("Edit Point"));
   if (! doc->selectionIsEmpty ()) {
     doc->handle ().show (false);

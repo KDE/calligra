@@ -59,6 +59,7 @@ public:
   bool isRectangle () const;
   bool isFilled () const;
   virtual bool isValid ();
+  virtual void insertPoint (int idx, const Coord& p, bool update = true);
 
   // a shortcut for rectangles and squares
   void setEndPoint (const Coord& p);
@@ -74,6 +75,11 @@ public:
   virtual GObject* clone (const list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
+
+  void setKind (GPolygon::Kind k);
+  GPolygon::Kind getKind () { return kind; }
+
+  virtual GPolyline* splitAt (unsigned int idx);
 
 protected:
   void calcBoundingBox ();

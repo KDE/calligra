@@ -487,17 +487,16 @@ void KIllustrator::initToolBars () {
 			     ID_TOOL_EP_DEL, true, i18n ("Remove Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_DEL);
   toolGroup2->addButton (ID_TOOL_EP_DEL);
-/*
   editPointToolbar->insertButton (loader->loadIcon ("split.xpm"), 
 			     ID_TOOL_EP_SPLIT, true, i18n ("Split Line"));
   editPointToolbar->setToggle (ID_TOOL_EP_SPLIT);
   toolGroup2->addButton (ID_TOOL_EP_SPLIT);
+  /*
   editPointToolbar->insertButton (loader->loadIcon ("joinNodes.xpm"), 
 			     ID_TOOL_EP_JOIN, true, i18n ("Join Lines"));
   editPointToolbar->setToggle (ID_TOOL_EP_JOIN);
   toolGroup2->addButton (ID_TOOL_EP_JOIN);
-*/
-
+  */
   connect (editPointToolbar, SIGNAL (clicked(int)), 
 	   this, SLOT (menuCallback (int)));
   editPointToolbar->enable (KToolBar::Hide);

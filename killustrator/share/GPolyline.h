@@ -67,6 +67,7 @@ public:
   int getNeighbourPoint (const Coord& p);
   unsigned int numOfPoints () const;
   virtual void removePoint (int idx, bool update = true);
+  void removeAllPoints ();
 
   virtual const char* typeName ();
 
@@ -80,9 +81,11 @@ public:
 
   virtual void getPath (vector<Coord>& path);
 
-protected:
+  virtual GPolyline* splitAt (unsigned int idx);
+  virtual void joinWith (GPolyline* other);
   void calcBoundingBox ();
 
+protected:
   float calcArrowAngle (const Coord& p1, const Coord& p2, int direction);
 
   Rect calcEnvelope ();
