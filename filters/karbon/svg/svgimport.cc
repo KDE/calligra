@@ -469,28 +469,28 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "ellipse" )
 		{
-			double rx = b.attribute( "rx" ).toDouble();
-			double ry = b.attribute( "ry" ).toDouble();
-			double left	= b.attribute( "cx" ).toDouble() - ( rx / 2.0 );
-			double top	= b.attribute( "cy" ).toDouble() + ( ry / 2.0 );
+			double rx		= parseUnit( b.attribute( "rx" ) );
+			double ry		= parseUnit( b.attribute( "ry" ) );
+			double left		= parseUnit( b.attribute( "cx" ) ) - ( rx / 2.0 );
+			double top		= parseUnit( b.attribute( "cy" ) ) + ( ry / 2.0 );
 			// Append the ellipse to the document
 			obj = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
 		}
 		else if( b.tagName() == "circle" )
 		{
-			double r = b.attribute( "r" ).toDouble();
-			double left	= b.attribute( "cx" ).toDouble() - ( r / 2.0 );
-			double top	= b.attribute( "cy" ).toDouble() + ( r / 2.0 );
+			double r		= parseUnit( b.attribute( "r" ) );
+			double left		= parseUnit( b.attribute( "cx" ) ) - ( r / 2.0 );
+			double top		= parseUnit( b.attribute( "cy" ) ) + ( r / 2.0 );
 			// Append the ellipse to the document
 			obj = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
 		}
 		else if( b.tagName() == "line" )
 		{
 			VComposite *path = new VComposite( &m_document );
-			double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : b.attribute( "x1" ).toDouble();
-			double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : b.attribute( "y1" ).toDouble();
-			double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : b.attribute( "x2" ).toDouble();
-			double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : b.attribute( "y2" ).toDouble();
+			double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
+			double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
+			double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
+			double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
 			path->moveTo( KoPoint( x1, y1 ) );
 			path->lineTo( KoPoint( x2, y2 ) );
 			obj = path;
