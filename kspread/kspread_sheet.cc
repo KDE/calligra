@@ -464,7 +464,7 @@ QRect KSpreadSheet::visibleRect( KSpreadCanvas const * const _canvas ) const
   }
   x += width;
 
-  return QRect( left, top, right - left, bottom - top );
+  return QRect( left, top, right - left + 1, bottom - top + 1 );
 }
 
 int KSpreadSheet::topRow( double _ypos, double & _top,

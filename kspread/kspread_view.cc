@@ -289,7 +289,7 @@ class KSpreadSpell : public KSpell
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
   : KoView( doc, _parent, _name )
 {
-  ElapsedTime et( "KSpreadView constructor" );
+  //  ElapsedTime et( "KSpreadView constructor" );
 
     m_popupMenuFirstToolId = 0;
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
@@ -1350,7 +1350,7 @@ void KSpreadView::initializeBorderActions()
 
 KSpreadView::~KSpreadView()
 {
-  ElapsedTime el( "~KSpreadView" );
+  //  ElapsedTime el( "~KSpreadView" );
   m_pDoc->increaseNumOperation(); // no paints anymore...
     deleteEditor( true );
     if ( !m_transformToolBox.isNull() )

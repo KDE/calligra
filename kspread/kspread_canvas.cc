@@ -510,7 +510,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
                                   bool extendSelection)
 {
-  kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
+  //  kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
 
   if ( table && (table != activeTable() ))
     m_pView->setActiveTable(table);
@@ -614,7 +614,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
     double minX = 100.0; // less than that, we scroll
     double maxX = unzoomedWidth - 100.0; // more than that, we scroll
 
-    kdDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
+    // kdDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
 
     // do we need to scroll left
     if ( xpos < minX )
@@ -1144,7 +1144,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     }
   }
 
-  kdDebug() << "Clicked in cell " << col << ", " << row << endl;
+  //  kdDebug() << "Clicked in cell " << col << ", " << row << endl;
 
   //you cannot move marker when col > KS_colMax or row > KS_rowMax
   if ( col > KS_colMax || row > KS_rowMax)
@@ -1332,7 +1332,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( !table )
     return;
 
-  ElapsedTime et( "KSpreadCanvas::paintEvent" );
+  // ElapsedTime et( "KSpreadCanvas::paintEvent" );
 
   double dwidth = doc()->unzoomItX( width() );
   KoRect rect = doc()->unzoomRect( _ev->rect() & QWidget::rect() );
@@ -4514,7 +4514,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     if ( table->isRightToLeft() )
     {
       m_iResizedColumn = table->leftColumn( ev_PosX - 1, tmp );
-      kdDebug() << "RColumn: " << m_iResizedColumn << ", PosX: " << ev_PosX << endl;
+      // kdDebug() << "RColumn: " << m_iResizedColumn << ", PosX: " << ev_PosX << endl;
 
       if ( !table->isProtected() )
         paintSizeIndicator( _ev->pos().x(), true );
@@ -4527,7 +4527,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
         paintSizeIndicator( _ev->pos().x(), true );
     }
 
-    kdDebug() << "Column: " << m_iResizedColumn << endl;
+    // kdDebug() << "Column: " << m_iResizedColumn << endl;
   }
   else
   {
