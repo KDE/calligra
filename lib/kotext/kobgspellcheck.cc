@@ -58,20 +58,6 @@ public:
 
 static const int delayAfterMarked = 10;
 
-static QString paragToText( KoTextParag *parag )
-{
-    if ( !parag || !parag->string()->needsSpellCheck() )
-        return QString::null;
-
-    parag->string()->setNeedsSpellCheck( false );
-    if ( parag->length() <= 1 )
-        return QString::null;
-
-    QString str = parag->string()->toString();
-    str.truncate( str.length() - 1 ); // remove trailing space
-    return str;
-}
-
 KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
                                 const char *name )
     : QObject( parent, name )
@@ -221,7 +207,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
     //kdDebug()<<"Para modified pos = "<<pos<<", length = "<< length <<endl;
 #if KDE_VERSION > KDE_MAKE_VERSION(3,3,0)
     if ( length < 10 ) {
-        QString str = paragToText( parag );
+        QString str = parag->string()->stringToSpellCheck();
         Filter filter;
         filter.setBuffer( str );
         filter.setCurrentPosition( pos - 1 );

@@ -47,20 +47,6 @@ public:
     KoTextDocument *lastTxtDocument;
 };
 
-static QString paragToText( KoTextParag *parag )
-{
-    if ( !parag || !parag->string()->needsSpellCheck() )
-        return QString::null;
-
-    parag->string()->setNeedsSpellCheck( false );
-    if ( parag->length() <= 1 )
-        return QString::null;
-
-    QString str = parag->string()->toString();
-    str.truncate( str.length() - 1 ); // remove trailing space
-    return str;
-}
-
 KoSpell::KoSpell( const Broker::Ptr& broker,  QObject *parent,
                   const char *name )
     : BackgroundChecker( broker, parent, name )
@@ -118,7 +104,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
 
     d->parag = parag;
     d->lastTxtDocument = d->parag->textDocument();
-    QString str = paragToText( parag );
+    QString str = parag->string()->stringToSpellCheck();
     Filter filter;
     filter.setBuffer( str );
     Word w = filter.wordAtPosition( pos );
@@ -149,7 +135,7 @@ QString KoSpell::getMoreText()
     bool iteratorAtEnd = d->itr && d->itr->atEnd();
 
     if ( !d->dialog && ( !d->itr || iteratorAtEnd ) ) {
-        QString str = paragToText( d->parag );
+        QString str = d->parag ? d->parag->string()->stringToSpellCheck() : QString::null;
         if ( !str.isEmpty() )
             emit aboutToFeedText();
         return str;

@@ -1370,6 +1370,20 @@ QString KoTextString::toReverseString() const
     return s;
 }
 
+QString KoTextString::stringToSpellCheck()
+{
+    if ( !bNeedsSpellCheck )
+        return QString::null;
+
+    bNeedsSpellCheck = false;
+    if ( length() <= 1 )
+        return QString::null;
+
+    QString str = toString();
+    str.truncate( str.length() - 1 ); // remove trailing space
+    return str;
+}
+
 int KoTextString::nextCursorPosition( int next )
 {
     if ( bidiDirty )

@@ -193,6 +193,8 @@ public:
     static QString toString( const QMemArray<KoTextStringChar> &data );
     QString toReverseString() const;
 
+    QString stringToSpellCheck();
+
     KoTextStringChar &at( int i ) const;
     int length() const;
 
