@@ -128,14 +128,18 @@ void KSpreadSelection::setSelection( const QPoint &newMarker,
   m_marker = newMarker;
   m_anchor = newAnchor;
 
+  QRect newSelection = selection();
+
   const KSpreadCell* cell = table->cellAt(newMarker);
-  if (cell->isObscured() && cell->isObscuringForced())
+  if (!util_isColumnSelected(newSelection) &&
+      !util_isRowSelected(newSelection) &&
+      cell->isObscured() && cell->isObscuringForced())
   {
     cell = cell->obscuringCells().first();
     m_marker = QPoint(cell->column(), cell->row());
   }
 
-  QRect newSelection = selection();
+  newSelection = selection();
 
   /* see if we've actually changed anything */
   if ( newSelection == oldSelection && newMarker == oldMarker &&

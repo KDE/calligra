@@ -913,12 +913,12 @@ void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker,
   double ypos = table->dblRowPos( marker.top() );
 
   double x = table->dblColumnPos( marker.right() );
-  const KSpreadCell *cell = table->cellAt( marker.right(), marker.top() );
-  double tw = cell->dblWidth( marker.right() );
+  const ColumnLayout *columnLayout = table->columnLayout( marker.right() );
+  double tw = columnLayout->dblWidth( );
   double w = ( x - xpos ) + tw;
-  cell = table->cellAt( marker.left(), marker.bottom() );
+  const RowLayout* rowLayout = table->rowLayout( marker.bottom() );
   double y = table->dblRowPos( marker.bottom() );
-  double th = cell->dblHeight( marker.bottom() );
+  double th = rowLayout->dblHeight( );
   double h = ( y - ypos ) + th;
 
   /* left, top, right, bottom */
