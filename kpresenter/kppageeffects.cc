@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2002 Harri Porten <porten@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -524,24 +525,24 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _time.start();
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width/( 2 * _steps ) ) * _step;
-                _w = _w > width / 2 ? width / 2 : _w;
+                _w = width - ( width * _step / _steps );
+                if( _w < 0 ) _w = 0;
                 _h = _w * height / width;
-                _h = _h > height / 2 ? height / 2 : _h;
+                if( _h < 0 ) _h = 0;
 
-                bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, height );
-                bitBlt( canv, width-_w, 0, &_pix2, width-_w, 0, _w, height );
-                bitBlt( canv, 0, 0, &_pix2, 0, 0, width, _h );
-                bitBlt( canv, 0, height-_h, &_pix2, 0, height-_h, width, _h );
+                bitBlt( canv, 0, 0, &_pix2, 0, 0, width, (height-_h)/2 );
+                bitBlt( canv, 0, (height-_h)/2, &_pix2, 0, (height-_h)/2, (width-_w)/2, _h );
+                bitBlt( canv, (width+_w)/2, (height-_h)/2, &_pix2, (width+_w)/2, (height-_h)/2, (width-_w)/2, _h );
+                bitBlt( canv, 0, (height+_h)/2, &_pix2, 0, (height+_h)/2, width, (height-_h)/2 );
                 _time.restart();
             }
-            if( _w >= width/2 ) break;
+            if( _w < 0 ) break;
         }
     } break;
 
@@ -552,22 +553,22 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _time.start();
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width/( 2 * _steps ) ) * _step;
-                _w = _w > width / 2 ? width / 2 : _w;
+                _w = width * _step / _steps;
+                if( _w  > width ) _w = width;
                 _h = _w * height / width;
-                _h = _h > height / 2 ? height / 2 : _h;
+                if( _h  > height ) _h = height;
 
-                bitBlt( canv, width/2-_w, height/2-_h, &_pix2,
-                   width/2-_w, height/2-_h, _w*2, _h*2 );
+                bitBlt( canv, (width-_w)/2, (height-_h)/2, &_pix2,
+                   (width-_w)/2, (height-_h)/2, _w, _h );
                 _time.restart();
             }
-            if( _w >= width/2 ) break;
+            if( _w >= width ) break;
         }
     } break;
 
