@@ -1,5 +1,7 @@
 
 Kexi README
+-----------
+2004-01-18
 
 Currently Kexi does not offer all create/open/save actions.
 To play with the app (considering you have already kexi compiled and installed),
@@ -26,3 +28,11 @@ you need to:
 
 ...or select "db" project file, using "open existing database" action on startup.
 
+
+4. For more information on currently impelmented Kexi command line options, type:
+
+% kexi --help
+
+--
+Have fun, 
+Kexi Team
