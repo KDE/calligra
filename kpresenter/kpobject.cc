@@ -188,11 +188,6 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPObject::saveOasis( KoXmlWriter &/*xmlWriter*/, KoGenStyles& /*mainStyles*/, int /*indexObj*/ )
-{
-    //we don't have a simple object
-    return true;
-}
 
 void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
 {

@@ -96,6 +96,13 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
+bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+{
+    //FIXME !!!!!!!!!!
+    return true;
+}
+
+
 // Deprecated, same as KPPixmapObject::loadPicture
 void KPPixmapObject::loadImage( const QString & fileName )
 {

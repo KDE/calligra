@@ -129,7 +129,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  QDomElement *animation);
 
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) =0;
 
     void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj );
     void saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objectId );

@@ -47,6 +47,7 @@ public:
 
     KPresenterChild *getChild() const { return child; }
     void enableDrawing( bool f ) { _enableDrawing = f; }
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
 public slots:
     void slot_changed( KoChild *_koChild );

@@ -98,6 +98,12 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
     return fragment;
 }
 
+bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+{
+    //FIXME
+    return true;
+}
+
 double KPClosedLineObject::load( const QDomElement &element )
 {
     double offset = KP2DObject::load( element );

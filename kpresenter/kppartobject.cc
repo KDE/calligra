@@ -60,6 +60,12 @@ void KPPartObject::rotate( float _angle )
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
+bool KPPartObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+{
+    //FIXME
+    return true;
+}
+
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                          SelectionMode selectionMode, bool drawContour )
 {
