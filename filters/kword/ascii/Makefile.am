@@ -1,8 +1,8 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-libasciiimport_la_LDFLAGS	= -version-info 1:0:0
-libasciiexport_la_LDFLAGS	= -version-info 1:0:0
+libasciiimport_la_LDFLAGS	= -module -version-info 1:0:0
+libasciiexport_la_LDFLAGS	= -module -version-info 1:0:0
 #libcsvfilter_la_LIBADD = $(LIB_KOFFICECORE)
 
 ####### Files
