@@ -460,7 +460,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 
     QDomElement colElem = doc.createElement( "table:table-column" );
     colElem.setAttribute( "table:style-name", m_styles.columnStyle( cs ) );
-    colElem.setAttribute( "table:default-cell-style-name", "Default" );
+    colElem.setAttribute( "table:default-cell-style-name", "Default" );//todo fixme create style from cell
     if ( hide )
       colElem.setAttribute( "table:visibility", "collapse" );
 

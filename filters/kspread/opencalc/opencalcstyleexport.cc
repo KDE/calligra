@@ -58,7 +58,7 @@ void OpenCalcStyles::writeFontDecl( QDomDocument & doc, QDomElement & fontDecls 
 {
   QFont * f = m_fontList.first();
   while ( f )
-  {  
+  {
     QDomElement fontDecl = doc.createElement( "style:font-decl" );
 
     fontDecl.setAttribute( "style:name", f->family() );
@@ -66,13 +66,13 @@ void OpenCalcStyles::writeFontDecl( QDomDocument & doc, QDomElement & fontDecls 
     fontDecl.setAttribute( "style:font-pitch", ( f->fixedPitch() ? "fixed" : "variable" ) );
 
     // missing:
-    // style:font-charset="x-symbol" style:font-family-generic="swiss" 
+    // style:font-charset="x-symbol" style:font-family-generic="swiss"
     // style:font-style-name= "Bold/Standard/Regular"
-    
+
     fontDecls.appendChild( fontDecl );
 
     f = m_fontList.next();
-  }  
+  }
 }
 
 void OpenCalcStyles::addFont( QFont const & font, bool def )
@@ -192,121 +192,121 @@ QString convertPenToString( QPen const & pen )
 
 void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
-  CellStyle * t = m_cellStyles.first();
-  while ( t )
-  {
-    QDomElement ts = doc.createElement( "style:style" );
-    ts.setAttribute( "style:name", t->name );
-    ts.setAttribute( "style:family", "table-cell" );
-    ts.setAttribute( "style:parent-style-name", "Default" );
-    if ( t->numberStyle.length() > 0 )
-      ts.setAttribute( "style:data-style-name", t->numberStyle );
-
-    QDomElement prop = doc.createElement( "style:properties" );
-
-    if ( t->font.family() != m_defaultFont.family() )
-      prop.setAttribute( "style:font-name", t->font.family() );
-
-    if ( t->font.bold() != m_defaultFont.bold() )
-      prop.setAttribute( "fo:font-weight", ( t->font.bold() ? "bold" : "light" ) );
-
-    prop.setAttribute( "fo:font-size", QString( "%1pt" ).arg( t->font.pointSize() ) );
-
-    if ( t->font.underline() != m_defaultFont.underline() )
+    CellStyle * t = m_cellStyles.first();
+    while ( t )
     {
-      prop.setAttribute( "style:text-underline", ( t->font.underline() ? "single" : "none" ) );
-      if ( t->font.underline() )
-        prop.setAttribute( "style:text-underline-color", "font-color" );
+        QDomElement ts = doc.createElement( "style:style" );
+        ts.setAttribute( "style:name", t->name );
+        ts.setAttribute( "style:family", "table-cell" );
+        ts.setAttribute( "style:parent-style-name", "Default" );
+        if ( t->numberStyle.length() > 0 )
+            ts.setAttribute( "style:data-style-name", t->numberStyle );
+
+        QDomElement prop = doc.createElement( "style:properties" );
+
+        if ( t->font.family() != m_defaultFont.family() )
+            prop.setAttribute( "style:font-name", t->font.family() );
+
+        if ( t->font.bold() != m_defaultFont.bold() )
+            prop.setAttribute( "fo:font-weight", ( t->font.bold() ? "bold" : "light" ) );
+
+        prop.setAttribute( "fo:font-size", QString( "%1pt" ).arg( t->font.pointSize() ) );
+
+        if ( t->font.underline() != m_defaultFont.underline() )
+        {
+            prop.setAttribute( "style:text-underline", ( t->font.underline() ? "single" : "none" ) );
+            if ( t->font.underline() )
+                prop.setAttribute( "style:text-underline-color", "font-color" );
+        }
+
+        if ( t->font.italic() != m_defaultFont.italic() )
+            prop.setAttribute( "fo:font-style", ( t->font.italic() ? "italic" : "none" ) );
+
+        if ( t->font.strikeOut() != m_defaultFont.strikeOut() )
+            prop.setAttribute( "style:text-crossing-out", ( t->font.strikeOut() ? "single-line" : "none" ) );
+
+        if ( t->color.name() != "#000000" )
+            prop.setAttribute( "fo:color", t->color.name() );
+
+        if ( t->bgColor.name() != "#ffffff" )
+            prop.setAttribute( "fo:background-color", t->bgColor.name() );
+
+        if ( t->alignX != KSpreadFormat::Undefined )
+        {
+            QString value;
+            if ( t->alignX == KSpreadFormat::Center )
+                value = "center";
+            else if ( t->alignX == KSpreadFormat::Right )
+                value = "end";
+            else if ( t->alignX == KSpreadFormat::Left )
+                value = "start";
+            prop.setAttribute( "fo:text-align", value );
+        }
+
+        if ( t->alignY != KSpreadFormat::Bottom ) // default in OpenCalc
+            prop.setAttribute( "fo:vertical-align", ( t->alignY == KSpreadFormat::Middle ? "middle" : "top" ) );
+
+        if ( t->indent > 0.0 )
+        {
+            prop.setAttribute( "fo:margin-left", QString( "%1pt" ).arg( t->indent ) );
+            if ( t->alignX == KSpreadFormat::Undefined )
+                prop.setAttribute( "fo:text-align", "start" );
+        }
+
+        if ( t->wrap )
+            prop.setAttribute( "fo:wrap-option", "wrap" );
+
+        if ( t->vertical )
+        {
+            prop.setAttribute( "fo:direction", "ttb" );
+            prop.setAttribute( "style:rotation-angle", "0" );
+        }
+
+        if ( t->angle != 0 )
+            prop.setAttribute( "style:rotation-angle", QString::number( t->angle ) );
+
+        if ( !t->print )
+            prop.setAttribute( "style:print-content", "false" );
+
+        if ( t->hideAll )
+            prop.setAttribute( "style:cell-protect", "hidden-and-protected" );
+        else
+            if ( t->notProtected && !t->hideFormula )
+                prop.setAttribute( "style:cell-protect", "none" );
+            else
+                if ( t->notProtected && t->hideFormula )
+                    prop.setAttribute( "style:cell-protect", "formula-hidden" );
+                else if ( t->hideFormula )
+                    prop.setAttribute( "style:cell-protect", "protected formula-hidden" );
+                else if ( !t->notProtected )
+                    prop.setAttribute( "style:cell-protect", "protected" );
+
+
+        if ( ( t->left == t->right ) && ( t->left == t->top ) && ( t->left == t->bottom ) )
+        {
+            if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
+                prop.setAttribute( "fo:border", convertPenToString( t->left ) );
+        }
+        else
+        {
+            if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
+                prop.setAttribute( "fo:border-left", convertPenToString( t->left ) );
+
+            if ( ( t->right.width() != 0 ) && ( t->right.style() != Qt::NoPen ) )
+                prop.setAttribute( "fo:border-right", convertPenToString( t->right ) );
+
+            if ( ( t->top.width() != 0 ) && ( t->top.style() != Qt::NoPen ) )
+                prop.setAttribute( "fo:border-top", convertPenToString( t->top ) );
+
+            if ( ( t->bottom.width() != 0 ) && ( t->bottom.style() != Qt::NoPen ) )
+                prop.setAttribute( "fo:border-bottom", convertPenToString( t->bottom ) );
+        }
+
+        ts.appendChild( prop );
+        autoStyles.appendChild( ts );
+
+        t = m_cellStyles.next();
     }
-    
-    if ( t->font.italic() != m_defaultFont.italic() )
-      prop.setAttribute( "fo:font-style", ( t->font.italic() ? "italic" : "none" ) );
-    
-    if ( t->font.strikeOut() != m_defaultFont.strikeOut() )
-      prop.setAttribute( "style:text-crossing-out", ( t->font.strikeOut() ? "single-line" : "none" ) );
-    
-    if ( t->color.name() != "#000000" )
-      prop.setAttribute( "fo:color", t->color.name() );
-
-    if ( t->bgColor.name() != "#ffffff" )
-      prop.setAttribute( "fo:background-color", t->bgColor.name() );
-
-    if ( t->alignX != KSpreadFormat::Undefined )
-    {
-      QString value;
-      if ( t->alignX == KSpreadFormat::Center )
-        value = "center";
-      else if ( t->alignX == KSpreadFormat::Right )
-        value = "end";
-      else if ( t->alignX == KSpreadFormat::Left )
-        value = "start";
-      prop.setAttribute( "fo:text-align", value );
-    }
-
-    if ( t->alignY != KSpreadFormat::Bottom ) // default in OpenCalc
-      prop.setAttribute( "fo:vertical-align", ( t->alignY == KSpreadFormat::Middle ? "middle" : "top" ) );
-
-    if ( t->indent > 0.0 )
-    {
-      prop.setAttribute( "fo:margin-left", QString( "%1pt" ).arg( t->indent ) );
-      if ( t->alignX == KSpreadFormat::Undefined )
-        prop.setAttribute( "fo:text-align", "start" );
-    }
-    
-    if ( t->wrap )
-      prop.setAttribute( "fo:wrap-option", "wrap" );
-
-    if ( t->vertical )
-    {
-      prop.setAttribute( "fo:direction", "ttb" );
-      prop.setAttribute( "style:rotation-angle", "0" );
-    }
-
-    if ( t->angle != 0 )
-      prop.setAttribute( "style:rotation-angle", QString::number( t->angle ) );
-
-    if ( !t->print )
-      prop.setAttribute( "style:print-content", "false" );
-
-    if ( t->hideAll )
-      prop.setAttribute( "style:cell-protect", "hidden-and-protected" );
-    else
-    if ( t->notProtected && !t->hideFormula )
-      prop.setAttribute( "style:cell-protect", "none" );
-    else
-    if ( t->notProtected && t->hideFormula )
-      prop.setAttribute( "style:cell-protect", "formula-hidden" );
-    else if ( t->hideFormula )
-      prop.setAttribute( "style:cell-protect", "protected formula-hidden" );
-    else if ( !t->notProtected )
-      prop.setAttribute( "style:cell-protect", "protected" );
-      
-      
-    if ( ( t->left == t->right ) && ( t->left == t->top ) && ( t->left == t->bottom ) )
-    {
-      if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
-        prop.setAttribute( "fo:border", convertPenToString( t->left ) );      
-    }
-    else
-    {
-      if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
-        prop.setAttribute( "fo:border-left", convertPenToString( t->left ) );
-      
-      if ( ( t->right.width() != 0 ) && ( t->right.style() != Qt::NoPen ) )
-        prop.setAttribute( "fo:border-right", convertPenToString( t->right ) );
-      
-      if ( ( t->top.width() != 0 ) && ( t->top.style() != Qt::NoPen ) )
-        prop.setAttribute( "fo:border-top", convertPenToString( t->top ) );
-      
-      if ( ( t->bottom.width() != 0 ) && ( t->bottom.style() != Qt::NoPen ) )
-        prop.setAttribute( "fo:border-bottom", convertPenToString( t->bottom ) );
-    }
-
-    ts.appendChild( prop );
-    autoStyles.appendChild( ts );
-
-    t = m_cellStyles.next();
-  }
 }
 
 void OpenCalcStyles::addColumnStyles( QDomDocument & doc, QDomElement & autoStyles )
@@ -325,9 +325,9 @@ void OpenCalcStyles::addColumnStyles( QDomDocument & doc, QDomElement & autoStyl
 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
-    
+
     t = m_columnStyles.next();
-  }  
+  }
 }
 
 void OpenCalcStyles::addNumberStyles( QDomDocument & doc, QDomElement & autoStyles )
@@ -350,9 +350,9 @@ void OpenCalcStyles::addRowStyles( QDomDocument & doc, QDomElement & autoStyles 
 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
-    
+
     t = m_rowStyles.next();
-  }  
+  }
 }
 
 void OpenCalcStyles::addSheetStyles( QDomDocument & doc, QDomElement & autoStyles )
@@ -370,9 +370,9 @@ void OpenCalcStyles::addSheetStyles( QDomDocument & doc, QDomElement & autoStyle
 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
-    
+
     t = m_sheetStyles.next();
-  }  
+  }
 }
 
 bool SheetStyle::isEqual( SheetStyle const * const t1, SheetStyle const & t2 )
@@ -427,10 +427,10 @@ void CellStyle::copyData( CellStyle const & ts )
 
 bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
 {
-  if ( ( t1->font == t2.font ) && ( t1->numberStyle == t2.numberStyle ) 
-       && ( t1->color == t2.color ) && ( t1->bgColor == t2.bgColor ) 
+  if ( ( t1->font == t2.font ) && ( t1->numberStyle == t2.numberStyle )
+       && ( t1->color == t2.color ) && ( t1->bgColor == t2.bgColor )
        && ( t1->alignX == t2.alignX ) && ( t1->alignY == t2.alignY )
-       && ( t1->indent == t2.indent ) && ( t1->wrap == t2.wrap ) 
+       && ( t1->indent == t2.indent ) && ( t1->wrap == t2.wrap )
        && ( t1->vertical == t2.vertical ) && ( t1->angle == t2.angle )
        && ( t1->print == t2.print ) && ( t1->left == t2.left )
        && ( t1->right == t2.right ) && ( t1->top == t2.top )
@@ -477,7 +477,7 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
   if ( cell->hasProperty( KSpreadFormat::PMultiRow ) || !cell->hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
     cs.wrap   = cell->multiRow( col, row );
 
-  if ( cell->hasProperty( KSpreadFormat::PVerticalText ) 
+  if ( cell->hasProperty( KSpreadFormat::PVerticalText )
        || !cell->hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )
     cs.vertical = cell->verticalText( col, row );
 
