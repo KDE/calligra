@@ -750,6 +750,12 @@ void KWFrameSet::save( QDomElement &parentElem )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
+
+    // Save all the common attributes for framesets.
+    parentElem.setAttribute( "frameType", static_cast<int>( getFrameType() ) );
+    parentElem.setAttribute( "frameInfo", static_cast<int>( frameInfo ) );
+    parentElem.setAttribute( "name", correctQString( m_name ) );
+
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -1176,9 +1182,6 @@ void KWPictureFrameSet::save( QDomElement & parentElem )
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
-    framesetElem.setAttribute( "frameType", static_cast<int>( getFrameType() ) );
-    framesetElem.setAttribute( "frameInfo", static_cast<int>( frameInfo ) );
-
     KWFrameSet::save( framesetElem ); // Save all frames
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
@@ -1436,9 +1439,6 @@ void KWFormulaFrameSet::save(QDomElement& parentElem)
         return;
     QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
     parentElem.appendChild(framesetElem);
-
-    framesetElem.setAttribute("frameType", static_cast<int>(getFrameType()));
-    framesetElem.setAttribute("frameInfo", static_cast<int>(frameInfo));
 
     KWFrameSet::save(framesetElem); // Save all frames
 
