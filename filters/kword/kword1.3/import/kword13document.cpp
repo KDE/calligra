@@ -27,7 +27,7 @@
 #include "kword13layout.h"
 #include "kword13document.h"
 
-KWord13Document::KWord13Document( void )
+KWord13Document::KWord13Document( void ) : m_previewFile( 0 )
 {
     m_normalTextFramesetList.setAutoDelete( true );
     m_tableFramesetList.setAutoDelete( true );
@@ -38,6 +38,7 @@ KWord13Document::KWord13Document( void )
 
 KWord13Document::~KWord13Document( void )
 {
+    delete m_previewFile;
 }
 
 void KWord13Document::xmldump( QIODevice* io )

@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kimageio.h>
+#include <ktempfile.h>
 
 #include <koFilterChain.h>
 #include <koStoreDevice.h>
@@ -122,7 +123,35 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
 
     subFile = m_chain->storageFile( "root", KoStore::Read );
     kdDebug (30520) << "Processing root... " << ((void*) subFile) << endl;
-    if ( ! parseRoot ( subFile, kwordDocument ) )
+    if ( parseRoot ( subFile, kwordDocument ) )
+    {
+        subFile = m_chain->storageFile( "preview.png", KoStore::Read );
+        if ( subFile )
+        {
+            kdDebug(30520) << "Preview found!" << endl;
+            const QByteArray image ( subFile->readAll() );
+            if ( image.isNull() )
+            {
+                kdWarning(30520) << "Loading of preview failed! Ignoring!" << endl;
+            }
+            else
+            {
+                kwordDocument.m_previewFile = new KTempFile( QString::null, ".png" );
+                // ### TODO check KTempFile
+                kwordDocument.m_previewFile->setAutoDelete( true );
+                QFile file( kwordDocument.m_previewFile->name() );
+                // ### TODO: check if file is correctly written
+                file.open( IO_WriteOnly );
+                file.writeBlock( image );
+                file.close();
+            }
+        }
+        else
+        {
+            kdDebug(30520) << "No preview found!" << endl;
+        }
+    }
+    else
     {
         kdWarning(30520) << "Opening root has failed. Trying raw XML file!" << endl;
 

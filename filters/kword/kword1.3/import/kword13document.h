@@ -23,6 +23,7 @@
 #define KWORD_1_3_DOCUMENT_H
 
 class QIODevice;
+class KTempFile;
 
 #include <qstring.h>
 #include <qmap.h>
@@ -68,6 +69,7 @@ public:
     QPtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
     QPtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
     QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
+    KTempFile* m_previewFile;
 };
 
 #endif // KWORD_1_3_DOCUMENT_H
