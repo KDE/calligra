@@ -49,6 +49,8 @@ public:
   int xOffset() const {return mXOffset; }
   int yOffset() const {return mYOffset; }
 
+  QRect onCanvas(const KoRect &r);
+
   void outlineMode(bool flag);
 
   void updateBuf();

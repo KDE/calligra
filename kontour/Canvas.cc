@@ -101,6 +101,20 @@ void Canvas::outlineMode(bool flag)
   }
 }
 
+QRect Canvas::onCanvas(const KoRect &rr)
+{
+  QRect rect;
+  int l = static_cast<int>(rr.left() * zoomFactor()) + mXOffset;
+  int r = static_cast<int>(rr.right() * zoomFactor()) + mXOffset;
+  int t = static_cast<int>(rr.top() * zoomFactor()) + mYOffset;
+  int b = static_cast<int>(rr.bottom() * zoomFactor()) + mYOffset;
+  rect.setLeft(l);
+  rect.setRight(r);
+  rect.setTop(t);
+  rect.setBottom(b);
+  return rect;
+}
+
 void Canvas::updateBuf()
 {
   updateBuf(rect());

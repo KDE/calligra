@@ -79,26 +79,28 @@ void SelectTool::processEvent(QEvent *e)
 
 void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
 {
+  int xpos = e->x();
+  int ypos = e->y();
   bool shiftFlag = e->state() & Qt::ShiftButton;
-  p1.setX(e->x());
-  p1.setY(e->y());
+  p1.setX(xpos);
+  p1.setY(ypos);
   //TODO * zoom factor....
-  double x = e->x() - canvas->xOffset();
-  double y = e->y() - canvas->yOffset();
+  double x = xpos - canvas->xOffset();
+  double y = ypos - canvas->yOffset();
   if(state == S_Init)
   {
     mHL = page->document()->indexOfHorizHelpline(y);
     if(mHL != -1)
     {
       state = S_DragHorizHelpline;
-      prevcoord = e->y();
+      prevcoord = ypos;
       return;
     }
     mHL = page->document()->indexOfVertHelpline(x);
     if(mHL != -1)
     {
       state = S_DragVertHelpline;
-      prevcoord = e->x();
+      prevcoord = xpos;
       return;
     }
     GObject *obj = page->findContainingObject(x, y);
@@ -115,6 +117,24 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
     else
     {
       /* no object */
+      state = S_Rubberband;
+      page->unselectAllObjects();
+    }
+  }
+  else if(state == S_Pick)
+  {
+    QRect r = canvas->onCanvas(page->boundingBoxForSelection());
+    if(r.contains(xpos, ypos))
+    {
+      state = S_Translate;
+      if(ctype != C_Move)
+      {
+        canvas->setCursor(Qt::SizeAllCursor);
+        ctype = C_Move;
+      } 
+    }
+    else
+    {
       state = S_Rubberband;
       page->unselectAllObjects();
     }
@@ -153,6 +173,22 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
     {
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
+    }
+  }
+  else if(state == S_Pick)
+  {
+    if(e->state() & Qt::LeftButton)
+    {
+      QRect r = canvas->onCanvas(page->boundingBoxForSelection());
+      if(r.contains(xpos, ypos))
+      {
+        state = S_Translate;
+        if(ctype != C_Move)
+        {
+          canvas->setCursor(Qt::SizeAllCursor);
+          ctype = C_Move;
+        } 
+      }
     }
   }
   else if(state == S_DragHorizHelpline)
@@ -199,11 +235,6 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
     QPainter p(canvas);
     p.setPen(QPen(blue, 1, Qt::DotLine));
     p.drawRect(r);
-  }
-  else if(state == S_Pick)
-  {
-    if(e->state() & Qt::LeftButton)
-        state = S_Translate;
   }
   else if(state == S_Translate)
   {
@@ -258,10 +289,8 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
         xpos = p1.x();
     }
     translate(page, xpos - p1.x(), ypos - p1.y(), true, true);
-  }
-  else if(state == S_Pick)
-  {
-    state = S_Init;
+    canvas->setCursor(Qt::arrowCursor);
+    ctype = C_Arrow;
   }
 }
 
