@@ -1167,6 +1167,9 @@ void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
             }
             break;
         }
+        case Key_Escape: {
+            m_pToolsController->activateDefault();
+        }break;
     }
 }
 
