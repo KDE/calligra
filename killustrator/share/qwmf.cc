@@ -129,12 +129,12 @@ bool QWinMetaFile::load(const QString &aFileName)
 
   if (!file.exists())
   {
-      kdWarning() << "File " << aFileName << " does not exist" << endl;
+      kdWarning(38000) << "File " << aFileName << " does not exist" << endl;
       return FALSE;
   }
   if (!file.open(IO_ReadOnly))
   {
-      kdWarning() << "Cannot open file " << aFileName << endl;
+      kdWarning(38000) << "Cannot open file " << aFileName << endl;
       return FALSE;
   }
   st.setDevice(&file);
@@ -158,13 +158,13 @@ bool QWinMetaFile::load(const QString &aFileName)
 
     if (mSingleStep)
     {
-        kdDebug() << "WMF Placeable Header ( << " <<  sizeof(pheader) << "): " << endl;
-        kdDebug() << "  key=" << pheader.key << endl;
-        kdDebug() << "  hmf=" << pheader.hmf << endl;
-        kdDebug() << "  bbox=(" << pheader.bbox.left << "; " << pheader.bbox.top << "; "
+        kdDebug(38000) << "WMF Placeable Header ( << " <<  sizeof(pheader) << "): " << endl;
+        kdDebug(38000) << "  key=" << pheader.key << endl;
+        kdDebug(38000) << "  hmf=" << pheader.hmf << endl;
+        kdDebug(38000) << "  bbox=(" << pheader.bbox.left << "; " << pheader.bbox.top << "; "
                   <<  pheader.bbox.right << "; " << pheader.bbox.bottom << ")" << endl;
-        kdDebug() << "  inch=" << pheader.inch << endl;
-        kdDebug() << "  checksum=" << pheader.checksum << " (" << (pheader.checksum==checksum?"ok":"wrong") << ")" << endl;
+        kdDebug(38000) << "  inch=" << pheader.inch << endl;
+        kdDebug(38000) << "  checksum=" << pheader.checksum << " (" << (pheader.checksum==checksum?"ok":"wrong") << ")" << endl;
     }
 
     mCalcBBox = FALSE;
@@ -277,7 +277,7 @@ bool QWinMetaFile::load(const QString &aFileName)
 
     if (i<rdSize)
     {
-        kdDebug() << "file truncated: " << aFileName << endl;
+        kdDebug(38000) << "file truncated: " << aFileName << endl;
       return FALSE;
     }
   }
@@ -340,7 +340,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
     idx = cmd->funcIndex;
     if (idx < 0)
     {
-        kdWarning() << "invalid index " << idx << endl;
+        kdWarning(38000) << "invalid index " << idx << endl;
       continue;
     }
 
@@ -392,7 +392,7 @@ int QWinMetaFile::handleIndex(void) const
   for (i=0; i<MAX_OBJHANDLE; i++)
     if (mObjHandleTab[i]==NULL) return i;
 
-  kdDebug() << "QWinMetaFile error: handle table full !" << endl;
+  kdDebug(38000) << "QWinMetaFile error: handle table full !" << endl;
   return -1;
 }
 
@@ -578,7 +578,7 @@ void QWinMetaFile::polypolygon(short num, short* parm)
     parm += vertices[i]<<1;
     if (mSingleStep)
     {
-        kdDebug() <<*parm << endl;
+        kdDebug(38000) <<*parm << endl;
         fflush(stderr);
         qApp->processEvents(100);
         //      gets(dummy);
@@ -628,7 +628,7 @@ void QWinMetaFile::escape(short /*num*/, short* parm)
   {
     // simply ignore comments
   }
-  else kdDebug() << "QWinMetaFile: unimplemented ESCAPE command " << parm[0] << endl;
+  else kdDebug(38000) << "QWinMetaFile: unimplemented ESCAPE command " << parm[0] << endl;
 }
 
 
@@ -700,7 +700,7 @@ void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
     if (arg>=0 && arg<6) style = hatchedStyleTab[arg];
     else
     {
-        kdDebug() << "QWinMetaFile::createBrushIndirect: invalid hatched brush " << arg << endl;
+        kdDebug(38000) << "QWinMetaFile::createBrushIndirect: invalid hatched brush " << arg << endl;
         style = Qt::SolidPattern;
     }
   }
@@ -708,7 +708,7 @@ void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
     style = styleTab[arg];
   else
   {
-      kdDebug() << "QWinMetaFile::createBrushIndirect: invalid brush " << arg << endl;
+      kdDebug(38000) << "QWinMetaFile::createBrushIndirect: invalid brush " << arg << endl;
       style = Qt::SolidPattern;
   }
   //  debug("createBrushIndirect: %d/%d -> %d", parm[0], parm[3], (short)style);
@@ -730,7 +730,7 @@ void QWinMetaFile::createPenIndirect(short /*num*/, short* parm)
   if (parm[0]>=0 && parm[0]<6) style=styleTab[parm[0]];
   else
   {
-      kdDebug() << "QWinMetaFile::createPenIndirect: invalid pen " << parm[0] << endl;
+      kdDebug(38000) << "QWinMetaFile::createPenIndirect: invalid pen " << parm[0] << endl;
       style = Qt::SolidLine;
   }
   // if (parm[1]<=0) style=NoPen;

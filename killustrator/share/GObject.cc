@@ -97,6 +97,7 @@ GObject::GObject () {
 
 GObject::GObject (const QDomElement &element) {
 
+    kdDebug() << "GObject::GObject" << endl;
     layer = 0L;
     inWork = false;
 
@@ -527,7 +528,7 @@ GObject *KIllustrator::objectFactory(const QDomElement &element) {
             obj = proto->clone (element);
         }
         else
-            kdDebug() << "invalid object type: " << element.tagName() << endl;
+            kdDebug(38000) << "invalid object type: " << element.tagName() << endl;
         return obj;
     }
 }

@@ -400,7 +400,6 @@ void TransformationDialog::rotate (bool onDuplicate) {
   xcenter = horizRotCenter->getValue ();
   ycenter = vertRotCenter->getValue ();
   angle = rotAngle->getValue ();
-  kdDebug() << "xcenter: " << xcenter << " ycenter: " << ycenter << " angle: " << angle << endl;
 
   if (relativeRotCenter->isChecked ()) {
     // the given values are relative to the current bounding box
@@ -512,23 +511,23 @@ void TransformationDialog::update () {
 void TransformationDialog::updateProportionalDimension (float /*value*/) {
   if (proportional->isChecked ()) {
     if (sender () == horizDim) {
-        kdDebug() << "updateProportionalDimension--Horizontal" << endl;
+        kdDebug(38000) << "updateProportionalDimension--Horizontal" << endl;
         if (percent->isChecked ()){
-            kdDebug() << "updateProportionalDimension--Percental" << endl;
+            kdDebug(38000) << "updateProportionalDimension--Percental" << endl;
             vertDim->setValue (horizDim->getValue ());}
         else {
-            kdDebug() << "updateProportionalDimension--Non-Percental" << endl;
+            kdDebug(38000) << "updateProportionalDimension--Non-Percental" << endl;
             float h = horizDim->getValue ();
             vertDim->setValue (h / dimRatio);
         }
     }
     else if (sender () == vertDim) {
-        kdDebug() << "updateProportionalDimension--vertical" << endl;
+        kdDebug(38000) << "updateProportionalDimension--vertical" << endl;
         if (percent->isChecked ()){
-            kdDebug() << "updateProportionalDimension--percental" << endl;
+            kdDebug(38000) << "updateProportionalDimension--percental" << endl;
             horizDim->setValue (vertDim->getValue ());}
         else {
-            kdDebug() << "updateProportionalDimension--non-percental" << endl;
+            kdDebug(38000) << "updateProportionalDimension--non-percental" << endl;
             float v = vertDim->getValue ();
             horizDim->setValue (v * dimRatio);
         }

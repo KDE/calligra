@@ -226,7 +226,7 @@ const GLine *GLine::hit(const QPoint &p) const {
                                m_a.y() - fb - w,
                                ir + 2*fb + w + 1, 2*fb + w + 1 );
         // Don't change the original point!
-        QPoint tmp=p;
+        QPoint tmp(p);
         rotatePoint(tmp, -alpha, m_a);
 
         if(fuzzyZone.contains(tmp))

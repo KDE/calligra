@@ -80,7 +80,7 @@
 #include <koPartSelectDia.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kdebug.h>
+//#include <kdebug.h>
 #include <kcoloractions.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
@@ -100,7 +100,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     // restore default settings
     PStateManager::instance ();
 
-    //kdDebug() << "connect doc" << endl;
+    //kdDebug(38000) << "connect doc" << endl;
     /*
       QObject::connect (m_pDoc,
       SIGNAL (partInserted (KIllustratorChild *, GPart *)),

@@ -577,7 +577,7 @@ bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs
                         obj = proto->clone (child);
                     }
                     else
-                        kdDebug() << "invalid object type: " << child.tagName() << endl;
+                        kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
                 }
                 if (child.tagName() == "group")
                     ((GGroup*)obj)->setLayer (active_layer);
@@ -617,7 +617,7 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
     if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
         return false;
     if( killustrator.attribute("version")!="2") {
-        kdError() << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
+        kdError(38000) << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
         return false;
     }
 

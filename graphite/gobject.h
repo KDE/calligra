@@ -392,24 +392,23 @@ inline const double normalizeDeg(const double &deg) {
 
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const {
 
-    double alpha=angle/2;
+    double alpha=angle/2.0;
     double dx=static_cast<double>(x-center.x());
     double dy=static_cast<double>(y-center.y());
     double r=std::sqrt(dx*dx+dy*dy);
     double s=QABS(2*r*std::sin(alpha));
-    double gamma1=std::asin( QABS(dy)/r );
-    double gamma;
+    double gamma=std::acos( QABS(dy)/r );
+    double beta;
 
     if(dx>=0 && dy>=0)
-        gamma=-gamma1;
+        beta=-gamma-alpha;
     else if(dx<0 && dy>=0)
-        gamma=gamma1+M_PI;
+        beta=-(M_PI-gamma-QABS(alpha));
     else if(dx<0 && dy<0)
-        gamma=M_PI-gamma1;
+        beta=M_PI-gamma+M_PI-alpha;
     else // dx>=0 && dy<0
-        gamma=gamma1;
+        beta=QABS(gamma)+QABS(alpha);
 
-    double beta=gamma+angle+M_PI_2-QABS(alpha);
     y+=Graphite::double2Int(s*std::sin(beta));
     x+=Graphite::double2Int(s*std::cos(beta));
 }
@@ -427,24 +426,23 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const {
 
-    double alpha=angle/2;
+    double alpha=angle/2.0;
     double dx=x-static_cast<double>(center.x());
     double dy=y-static_cast<double>(center.y());
     double r=std::sqrt(dx*dx+dy*dy);
     double s=QABS(2*r*std::sin(alpha));
-    double gamma1=std::asin( QABS(dy)/r );
-    double gamma;
+    double gamma=std::acos( QABS(dy)/r );
+    double beta;
 
     if(dx>=0 && dy>=0)
-        gamma=-gamma1;
+        beta=-gamma-alpha;
     else if(dx<0 && dy>=0)
-        gamma=gamma1+M_PI;
+        beta=-(M_PI-gamma-QABS(alpha));
     else if(dx<0 && dy<0)
-        gamma=M_PI-gamma1;
+        beta=M_PI-gamma+M_PI-alpha;
     else // dx>=0 && dy<0
-        gamma=gamma1;
+        beta=QABS(gamma)+QABS(alpha);
 
-    double beta=gamma+angle+M_PI_2-QABS(alpha);
     y+=s*std::sin(beta);
     x+=s*std::cos(beta);
 }

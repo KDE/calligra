@@ -33,6 +33,7 @@
 #include <qpointarray.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #define DELTA 0.05
 
@@ -129,6 +130,7 @@ GBezier::GBezier () : GPolyline () {
 
 GBezier::GBezier (const QDomElement &element) : GPolyline (element.namedItem("polyline").toElement()) {
 
+    kdDebug() << "GBezier::GBezier" << endl;
     wSegment = -1;
     closed=(element.attribute("closed").toInt()==1);
     computePPoints();

@@ -26,6 +26,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <GCurve.h>
 #include <Arrow.h>
@@ -44,6 +45,7 @@ GPolyline::GPolyline () {
 
 GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
+    kdDebug() << "GPolyline::GPolyline" << endl;
     connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
              SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
@@ -66,6 +68,7 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
             point.y(p.attribute("y").toFloat());
             addPoint(i, point);
             ++i;
+            kdDebug() << "point" << endl;
         }
     }
     calcBoundingBox ();

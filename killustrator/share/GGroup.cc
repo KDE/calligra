@@ -45,7 +45,7 @@ GGroup::GGroup (const QDomElement &element) : GObject (element.namedItem("gobjec
                 obj = proto->clone (child);
             }
             else
-                kdDebug() << "invalid object type: " << child.tagName() << endl;
+                kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
         }
         addObject(obj);
     }

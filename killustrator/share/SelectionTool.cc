@@ -523,7 +523,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
               return;
             }
             else if (selObj->isA ("GPart")) {
-              kdDebug() << "activate part !!!" << endl;
+              kdDebug(38000) << "activate part !!!" << endl;
               state = S_Inactive;
               emit partSelected (selObj);
               return;
@@ -614,7 +614,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
     dy = (shift ? small_step : big_step);
     break;
   case Key_Tab:
-      kdDebug() << "<tab>" << endl;
+      kdDebug(38000) << "<tab>" << endl;
   default:
     break;
   }

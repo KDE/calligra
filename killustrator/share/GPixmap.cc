@@ -40,7 +40,7 @@ GPixmap::GPixmap (const QString &filename) : url (filename) {
     if (pix->isNull ()) {
       delete pix;
       pix = 0L;
-      kdWarning() << "pixmap is null !!!" << endl;
+      kdWarning(38000) << "pixmap is null !!!" << endl;
     }
   }
   if (pix) {

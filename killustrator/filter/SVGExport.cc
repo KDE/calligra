@@ -86,7 +86,7 @@ bool SVGExport::exportToFile (GDocument* doc) {
     }
     QFile file(outputFileName());
     if(!file.open(IO_WriteOnly)) {
-        kdError() << "Could not open the output file: " << outputFileName() << endl;
+        kdError(38000) << "Could not open the output file: " << outputFileName() << endl;
         return false;
     }
     QTextStream s(&file);

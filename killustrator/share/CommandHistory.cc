@@ -109,8 +109,8 @@ QString CommandHistory::getRedoName()
 void CommandHistory::dump () {
   QListIterator<Command> it (history);
   for (it += (index - 1); it.current (); --it)
-    kdDebug() << it.current ()->getName () << endl;
-  kdDebug() << "index = " << index << endl;
+    kdDebug(38000) << it.current ()->getName () << endl;
+  kdDebug(38000) << "index = " << index << endl;
 }
 
 #include <CommandHistory.moc>
