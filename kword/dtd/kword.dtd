@@ -588,12 +588,15 @@ don't put a </?xml...> at the end of the file!).
         If this element isn't specified, the default is to break between lines of a parag.
 
         linesTogether: if "true", all the lines of a given paragraph remain together.
+        hardFrameBreak: if "true", this paragraph is always at the beginning of a frame.
+
         Possible future extension: paragraphsTogether.
 -->
 <!ELEMENT PAGEBREAKING
     EMPTY>
 <!ATTLIST PAGEBREAKING
-    linesTogether CDATA #REQUIRED>
+    linesTogether CDATA #REQUIRED
+    hardFrameBreak CDATA #REQUIRED>
 
 <!--
         The borders can be used on a frame and on a paragraph.
