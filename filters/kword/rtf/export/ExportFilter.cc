@@ -529,7 +529,7 @@ void RTFWorker::writeFontData(void)
 
 void RTFWorker::writeColorData(void)
 {
-    *m_streamOut << "{\\colortbl";
+    *m_streamOut << "{\\colortbl;";
     uint count;
     QValueList<QColor>::ConstIterator it;
     for (count=0, it=m_colorList.begin();
@@ -869,7 +869,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     {
         if ( formatData.fgColor.isValid() )
         {
-            strElement+=lookupColor("\\cf", fontName);
+            strElement+=lookupColor("\\cf", formatData.fgColor);
         }
     }
 
@@ -877,7 +877,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            strElement+=lookupColor("\\cb", fontName);
+            strElement+=lookupColor("\\cb", formatData.bgColor);
         }
     }
 
