@@ -155,6 +155,7 @@ Configurability:
 - personal dictionary (new)
 - list of ignored words when spellchecking (new)
 - go with a per-slide default when inserting a new one (wish #22629)
+- printing of slide notes (wish #56120)
 
 Misc:
 - web presentation: better HTML generation, usability improvement of the wizard (new)
