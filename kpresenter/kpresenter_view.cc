@@ -1668,12 +1668,12 @@ void KPresenterView::createGUI()
 {
     splitter = new QSplitter( this );
 
-    sidebar = new SideBar( splitter, m_pKPresenterDoc );
+    sidebar = new SideBar( splitter, m_pKPresenterDoc, ( KPresenterView* )this );
     connect( sidebar, SIGNAL( movePage( int, int ) ),
 	     m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
     connect( sidebar, SIGNAL( movePage( int, int ) ),
 	     this, SLOT( updateSideBar( int, int ) ) );
-    
+
     // setup page
     pageBase = new PageBase( splitter, this );
     pageBase->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -1702,6 +1702,8 @@ void KPresenterView::createGUI()
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
     sidebar->rebuildItems();
+    sidebar->setCurrentItem( sidebar->firstChild() );
+    sidebar->setSelected( sidebar->firstChild(), TRUE );
 }
 
 /*=============================================================*/

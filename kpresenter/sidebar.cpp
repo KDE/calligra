@@ -3,8 +3,8 @@
 #include <qheader.h>
 #include <qtimer.h>
 
-SideBar::SideBar( QWidget *parent, KPresenterDoc *d )
-    : KListView( parent ), doc( d )
+SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
+    : KListView( parent ), doc( d ), view( v )
 {
     rebuildItems();
     setSorting( -1 );
@@ -15,9 +15,19 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d )
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ),
 	     this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
+    connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
+	     this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
     setAcceptDrops( TRUE );
     setDropVisualizer( TRUE );
     setDragEnabled( TRUE );
+
+    pageMenu = new QPopupMenu();
+    CHECK_PTR( pageMenu );
+    pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
+    pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
+    pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
+    pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
+    pageMenu->setMouseTracking( true );
 }
 
 void SideBar::rebuildItems()
@@ -36,8 +46,6 @@ void SideBar::rebuildItems()
 	item->setText( 1, QString( "%1" ).arg( i + 1 ) );
 	item->setText( 0, title );
     }
-    setCurrentItem( firstChild() );
-    setSelected( firstChild(), TRUE );
 }
 
 void SideBar::itemClicked( QListViewItem *i )
@@ -82,7 +90,7 @@ void SideBar::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newA
     movedItem = i;
     movedAfter = newAfter;
     QTimer::singleShot( 300, this, SLOT( doMoveItems() ) );
-		 
+
 }
 
 void SideBar::doMoveItems()
@@ -91,10 +99,35 @@ void SideBar::doMoveItems()
     int numNow;
     if ( !movedAfter ) {
 	numNow = 0;
-    } else { 
+    } else {
 	numNow = movedAfter->text( 1 ).toInt();
 	if ( numNow > num )
 	    numNow--;
     }
     emit movePage( num, numNow );
+}
+
+void SideBar::pageInsert()
+{
+    view->insertPage();
+}
+
+void SideBar::duplicateCopy()
+{
+    view->editDuplicatePage();
+}
+
+void SideBar::pageDelete()
+{
+    view->editDelPage();
+}
+
+void SideBar::pageDefaultTemplate()
+{
+    view->extraDefaultTemplate();
+}
+
+void SideBar::rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c )
+{
+    pageMenu->popup( pnt );
 }
