@@ -449,7 +449,7 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
 	    if ( format == "JPG" )
 		format = "JPEG";
 	    if ( QImage::outputFormats().find( format.latin1() ) == -1 )
-		format = "BMP";
+		format = "PNG";
 	    QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
 	    if ( !isStoredExtern() )
 		pictureName.prepend( url().url() + "/" );
@@ -553,7 +553,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 	    if ( format == "JPG" )
 		format = "JPEG";
 	    if ( QImage::outputFormats().find( format.latin1() ) == -1 )
-		format = "BMP";
+		format = "PNG";
 
 	    QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
 
