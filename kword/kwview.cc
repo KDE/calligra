@@ -7155,15 +7155,19 @@ QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 #ifdef HAVE_LIBASPELL
     KOSpell *tmpSpell = new KOSpell( m_doc->getKOSpellConfig());
     QStringList lst = tmpSpell->resultCheckWord(word );
+    delete tmpSpell;
     QPtrList<KAction> listAction=QPtrList<KAction>();
-    QStringList::ConstIterator it = lst.begin();
-    for ( int i = 0; it != lst.end() ; ++it, ++i )
+    if ( !lst.contains( word ))
     {
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        QStringList::ConstIterator it = lst.begin();
+        for ( int i = 0; it != lst.end() ; ++it, ++i )
         {
-            KAction * act = new KAction( (*it));
-            connect( act, SIGNAL(activated()),this, SLOT(slotCorrectWord()) );
-            listAction.append( act );
+            if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+            {
+                KAction * act = new KAction( (*it));
+                connect( act, SIGNAL(activated()),this, SLOT(slotCorrectWord()) );
+                listAction.append( act );
+            }
         }
     }
     return listAction;

@@ -3633,6 +3633,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     // Removed previous stuff
     view->unplugActionList( "datatools" );
     view->unplugActionList( "variable_action" );
+    view->unplugActionList( "spell_result_action" );
     view->unplugActionList( "datatools_link" );
 
     // Those lists are stored in the KWView. Grab a ref to them.
@@ -3683,7 +3684,10 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
             else
             {
                 if ( singleWord)
+                {
+                    view->plugActionList( "spell_result_action", view->listOfResultOfCheckWord( word ) );
                     popup = view->popupMenu("text_popup_spell");
+                }
                 else
                     popup = view->popupMenu("text_popup");
             }

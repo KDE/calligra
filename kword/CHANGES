@@ -302,3 +302,4 @@ Changes after KWord-1.2
 - Now we can select specific horizontal line
 - Now we can sort text
 - Use new kospell API
+- Now right button give spell check result
