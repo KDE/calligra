@@ -1014,6 +1014,8 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
 
     ulong cellNumber = 0L;
 
+    QMap<QString,QString> mapCellStyleKeys;
+
     for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
@@ -1025,19 +1027,30 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
             *m_streamOut << "<table:table-row>\n";
         }
 
-        const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Cell", cellNumber ) );
         QString key;
         const QString props ( cellToProperties( (*itCell), key ) );
-        kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
 
-        m_contentAutomaticStyles += "  <style:style";
-        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
-        m_contentAutomaticStyles += " style:family=\"table-cell\"";
-        m_contentAutomaticStyles += ">\n";
-        m_contentAutomaticStyles += "   <style:properties ";
-        m_contentAutomaticStyles += props;
-        m_contentAutomaticStyles += "/>\n";
-        m_contentAutomaticStyles += "  </style:style>\n";
+        QString automaticCellStyle;
+        QMap<QString,QString>::ConstIterator it ( mapCellStyleKeys.find( key ) );
+        if ( it == mapCellStyleKeys.end() )
+        {
+            automaticCellStyle = makeAutomaticStyleName( tableName + ".Cell", cellNumber );
+            mapCellStyleKeys [ key ] = automaticCellStyle;
+            kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            m_contentAutomaticStyles += "  <style:style";
+            m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+            m_contentAutomaticStyles += " style:family=\"table-cell\"";
+            m_contentAutomaticStyles += ">\n";
+            m_contentAutomaticStyles += "   <style:properties ";
+            m_contentAutomaticStyles += props;
+            m_contentAutomaticStyles += "/>\n";
+            m_contentAutomaticStyles += "  </style:style>\n";
+        }
+        else
+        {
+            automaticCellStyle = it.data();
+            kdDebug(30520) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+        }
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
             << escapeOOText( automaticCellStyle) << "\">\n";
