@@ -1122,6 +1122,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
         } else if(elem.tagName()=="VARIABLESETTINGS"){
             getVariableCollection()->variableSetting()->load(document);
+            //by default display real variable value
+            if ( !isReadWrite())
+                getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+
         }
         else if(elem.tagName()=="BACKGROUND") {
             int red=0, green=0, blue=0;
