@@ -39,6 +39,7 @@
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vcanvas.h"
+#include "vlayer.h"
 #include "vdocumentdocker.h"
 
 

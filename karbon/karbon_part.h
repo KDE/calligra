@@ -27,9 +27,7 @@
 #include "karbon_part_base.h"
 #include <koUnit.h>
 
-#include "vcolor.h"
 #include "vdocument.h"
-#include "vlayer.h"
 
 class DCOPObject;
 class KoRect;

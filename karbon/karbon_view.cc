@@ -81,6 +81,7 @@
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
 #include "vcanvas.h"
+#include "vlayer.h"
 #include <kdeversion.h>
 
 // Only for debugging.

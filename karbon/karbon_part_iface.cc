@@ -25,6 +25,7 @@
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
 #include "vselection.h"
+#include "vlayer.h"
 
 
 KarbonPartIface::KarbonPartIface( KarbonPart* part )
