@@ -45,10 +45,12 @@ GradientEditorDialog::GradientEditorDialog( KImageShopDoc *_doc, QWidget *_paren
 
   layout->setColStretch( 1, 0 );
 
-  layout->setRowStretch( 0, 0 );
-  layout->setRowStretch( 1, 0 );
-  layout->setRowStretch( 2, 0 );
-  layout->setRowStretch( 3, 0 );
+//layout->setRowStretch( 0, 0 );
+//layout->setRowStretch( 1, 0 );
+//layout->setRowStretch( 2, 0 );
+//layout->setRowStretch( 3, 0 );
+  layout->setRowStretch( 4, 1 );
+//layout->setRowStretch( 5, 0 );
 
   // reading GIMP gradient filenames
 

@@ -37,6 +37,11 @@ void GradientView::addItem( QColor _leftColor, QColor _rightColor, float _middle
   m_lstGradientItems.append( item );
 }
 
+QSize GradientView::sizeHint() const
+{
+  return QSize( 100, 50 );
+}
+
 void GradientView::paintEvent( QPaintEvent */*_event*/ )
 {
   cout << "GradientView::paintEvent" << endl;

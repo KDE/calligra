@@ -5,6 +5,7 @@
 #include <qwidget.h>
 #include <qcolor.h>
 #include <qpixmap.h>
+#include <qsize.h>
 
 #warning "TODO: convert QColor -> KColor"
 
@@ -27,6 +28,8 @@ public:
   ~GradientView();
 
   void addItem( QColor, QColor, float, float );
+
+  virtual QSize sizeHint() const;
 
 protected:
 
