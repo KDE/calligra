@@ -166,9 +166,9 @@ private:
 	QIntDict<font_rec> fonts;
 	QIntDict<format_rec> formats;
 
-	QQueue<QDomElement> tables;
-	QList<MergeInfo> mergelist;
-	QList<SharedFormula> shrfmlalist;
+	QPtrQueue<QDomElement> tables;
+	QPtrList<MergeInfo> mergelist;
+	QPtrList<SharedFormula> shrfmlalist;
 
 	KLocale m_locale;
 
