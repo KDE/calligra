@@ -22,6 +22,7 @@
 
 #include <qintdict.h>
 #include <qtoolbutton.h>
+#include <qcheckbox.h>
 
 #include <ktextedit.h>
 #include <kdialogbase.h>
@@ -72,7 +73,7 @@ class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
 		KColorCombo  *m_colCombo;
 };
 
-class KFORMEDITOR_EXPORT EditListViewDialog : KDialogBase
+class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 {
 	Q_OBJECT
 
@@ -110,15 +111,16 @@ class KFORMEDITOR_EXPORT EditListViewDialog : KDialogBase
 		QIntDict<QToolButton>  m_buttons;
 };
 
-class KFORMEDITOR_EXPORT TabStopDialog : KDialogBase
+class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 {
 	Q_OBJECT
 
 	public:
-		TabStopDialog(Form *form, QWidget *parent);
-		~TabStopDialog() {;}
+		TabStopDialog(QWidget *parent);
+		virtual ~TabStopDialog() {;}
 
 	public slots:
+		int exec(Form *form);
 		void MoveItemUp();
 		void MoveItemDown();
 		void updateButtons(QListViewItem*);
@@ -128,6 +130,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : KDialogBase
 		enum {BUp = 10, BDown};
 		ObjectTreeView   *m_treeview;
 		QIntDict<QToolButton>  m_buttons;
+		QCheckBox *m_check;
 };
 
 }

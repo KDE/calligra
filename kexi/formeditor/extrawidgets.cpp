@@ -644,13 +644,22 @@ EditListViewDialog::MoveRowDown()
 //////////  The Tab Stop Dialog to edit tab order  ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
-TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
+TabStopDialog::TabStopDialog(QWidget *parent)
 : KDialogBase(parent, "tabstop_dialog", true, i18n("Edit Tab Order"), Ok|Cancel, Ok, false)
 {
 	QFrame *frame = makeMainWidget();
 	QGridLayout *l = new QGridLayout(frame, 2, 2, 0, 6);
-
 	m_treeview = new ObjectTreeView(frame, "tabstops_treeview", true);
+	m_treeview->setItemsMovable(true);
+	m_treeview->setDragEnabled(true);
+	m_treeview->setDropVisualizer(true);
+	m_treeview->setAcceptDrops(true);
+	m_treeview->setFocus();
+	l->addWidget(m_treeview, 0, 0);
+
+	m_treeview->m_form = 0;
+	connect(m_treeview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
+/*moved to exec()
 	m_treeview->m_form = form;
 	m_treeview->setItemsMovable(true);
 	m_treeview->setDragEnabled(true);
@@ -665,10 +674,9 @@ TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
 		form->autoAssignTabStops();
 	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
 		new ObjectTreeViewItem(topItem, it);
+	*/
 
-	connect(m_treeview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
-
-	QVBoxLayout *vbox = new QVBoxLayout(l);
+	QVBoxLayout *vbox = new QVBoxLayout();
 	l->addLayout(vbox, 0, 1);
 	QToolButton *up = new QToolButton(frame);
 	up->setIconSet(BarIconSet("1uparrow"));
@@ -685,19 +693,35 @@ TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
 	connect(down, SIGNAL(clicked()), this, SLOT(MoveItemDown()));
 	vbox->addStretch();
 
-	QCheckBox *check = new QCheckBox(i18n("Handle tab stops automatically"), frame, "tabstops_check");
-	connect(check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
-	check->setChecked(form->autoTabStops());
-	l->addMultiCellWidget(check, 1, 1, 0, 1);
+	m_check = new QCheckBox(i18n("Handle tab stops automatically"), frame, "tabstops_check");
+	connect(m_check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
+	l->addMultiCellWidget(m_check, 1, 1, 0, 1);
 
 	setInitialSize(QSize(400, 250), true);
-	if( exec() == QDialog::Accepted)
+}
+
+int TabStopDialog::exec(Form *form)
+{
+	m_treeview->clear();
+	m_treeview->m_form = form;
+
+	ObjectTreeViewItem *topItem = new ObjectTreeViewItem(m_treeview);
+	topItem->setOpen(true);
+	if(form->autoTabStops())
+		form->autoAssignTabStops();
+	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
+		new ObjectTreeViewItem(topItem, it);
+
+	m_check->setChecked(form->autoTabStops());
+	
+	int r = KDialogBase::exec();
+	if( r == QDialog::Accepted)
 	{
-		form->setAutoTabStops(check->isChecked());
+		form->setAutoTabStops(m_check->isChecked());
 		if(form->autoTabStops())
 		{
 			form->autoAssignTabStops();
-			return;
+			return r;
 		}
 
 		form->tabStops()->clear();
@@ -710,6 +734,7 @@ TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
 			item = (ObjectTreeViewItem*)item->itemBelow();
 		}
 	}
+	return r;
 }
 
 void

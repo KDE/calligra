@@ -661,9 +661,10 @@ FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
 void
 FormManager::editTabOrder()
 {
-	if(!m_active)  return;
-	TabStopDialog *d = new TabStopDialog(m_active, m_active->toplevelContainer()->widget()->topLevelWidget());
-	delete d;
+	if(!m_active)
+		return;
+	TabStopDialog dlg(m_active->toplevelContainer()->widget()->topLevelWidget());
+	dlg.exec(m_active);
 }
 
 void
