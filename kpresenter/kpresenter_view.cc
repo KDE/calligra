@@ -4335,6 +4335,17 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 changed=true;
             }
         }
+
+        if( paragDia->isShadowChanged())
+        {
+            cmd=edit->setShadowCommand( paragDia->shadowDistance(),paragDia->shadowDirection(), paragDia->shadowColor() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+
         if(changed)
             m_pKPresenterDoc->addCommand(macroCommand);
         else

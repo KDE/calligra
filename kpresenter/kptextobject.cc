@@ -279,6 +279,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
 // Assumes the painter is already set up correctly.
 void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
+#if 0
     // HACK: propagate shadow setting from object to paragraphs here (TODO)
     if ( shadowDistance )
     {
@@ -289,7 +290,7 @@ void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* 
             parag = parag->next();
         }
     }
-
+#endif
 
     kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
