@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -166,10 +166,6 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
-
-        // It seems that bzip2-compressed AbiWord files were planned
-        //   but AbiWord CVS 2001-12-15 does not have import and export filters for them anymore.
-        //   We leave this code but leave the .desktop file without bzip2 files
         strMimeType="application/x-bzip2";
     }
     else
@@ -233,12 +229,13 @@ bool AbiWordWorker::doOpenDocument(void)
     // As we do not use xmlns:awml, do we need to define it?
     // *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
     *m_streamOut << " xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
-    // AbiWord CVS 2002-02-22 defines other namesapces, which we are not using.
+    // AbiWord CVS 2002-02-22 defines other namespaces, which we are not using.
     *m_streamOut << " version=\"\" fileformat=\"1.0\" styles=\"unlocked\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
     // TODO/FIXME: write as much spaces as AbiWord does for the following line.
     *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
     // We have chosen NOT to have the full comment header that AbiWord files normally have.
+    // ### TODO: perhaps we should add the comment: do not edit the file
     *m_streamOut << "\n";
 
     // Put the rest of the information in the way AbiWord puts its debug info!
@@ -652,7 +649,7 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
     const double width =anchor.right  - anchor.left;
 
     // TODO: we are only using the filename, not the rest of the key
-    // TODO:  (bad if they are two images of the same name, but of different key)
+    // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<image dataid=\"" << anchor.picture.key.filename() << "\"";
     *m_streamOut << " props= \"height:" << height << "pt;width:" << width << "pt\"";
     *m_streamOut << "/>"; // NO end of line!

@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -519,7 +519,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     framesetElement.appendChild(frameElementOut);
 
     QDomElement element=mainDocument.createElement("PICTURE");
-    element.setAttribute("keepAspectRatio","true"); // Cliparts will be always false in KWord 1.2
+    element.setAttribute("keepAspectRatio","true");
     framesetElement.setAttribute("frameType",2); // Picture
     framesetElement.appendChild(element);
 
@@ -623,7 +623,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     {
         extension=".png";
     }
-    else if (stackItem->strTemp1=="image/jpeg")
+    else if (stackItem->strTemp1=="image/jpeg") // ### FIXME: in fact it does not exist in AbiWord
     {
         extension=".jpeg";
     }
@@ -863,7 +863,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         kwordWidth  = MillimetresToPoints(KoPageFormat::width (kwordFormat,PG_PORTRAIT));
     }
 
-    if ((kwordHeight <= 1.0) || (kwordWidth <=1.0))
+    if ((kwordHeight <= 1.0) || (kwordWidth <= 1.0))
         // At least one of the two values is ridiculous
     {
         kdWarning(30506) << "Page width or height is too small: "
@@ -1437,10 +1437,6 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
-
-        // It seems that bzip2-compressed AbiWord files were planned
-        //   but AbiWord CVS 2001-12-15 does not have export and import filters for them anymore.
-        //   We leave this code but leave the .desktop file without bzip2 files
         strMime="application/x-bzip2";
         kdDebug(30506) << "Compression: bzip2" << endl;
     }
