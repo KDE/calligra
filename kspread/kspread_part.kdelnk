@@ -10,7 +10,6 @@ Name[ru]=ôÁÂÌÉÃÁ
 Name[sv]=Kalkyl
 Exec=kspread.bin --server
 Comment=Torben's Spread Sheet
-Comment[br]=Loger Torben
 Comment[ca]=La fulla de càlcul de Torben
 Comment[cs]=Torbenùv tabulkovı procesor
 Comment[da]=Torbens regneark

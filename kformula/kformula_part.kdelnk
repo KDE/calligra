@@ -11,7 +11,6 @@ Name[sv]=Formler
 Exec=kformula.bin --server
 Icon=kformula.xpm
 Comment=The Formula Editor
-Comment[br]=An aozer reollunioù
 Comment[ca]=L'editor de fórmules
 Comment[cs]=Editor vzorcù
 Comment[da]=Formelskriver

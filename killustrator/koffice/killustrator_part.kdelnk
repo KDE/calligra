@@ -10,7 +10,6 @@ Name[ru]=éÌÌÀÓÔÒÁÔÏÒ
 Name[sv]=Illustrattioner
 Exec=killustrator.bin --server
 Comment=KIllustrator Vector Graphics Application
-Comment[br]=Arload kevregañ sturiadel KIllustrator
 Comment[ca]=Aplicació de gràfics vectorials
 Comment[cs]=Aplikace pro práci s vektorovou grafikou
 Comment[da]=KIllustrator vektorgrafik anvendelse

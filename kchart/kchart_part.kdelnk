@@ -9,7 +9,6 @@ Name[ro]=Chart
 Name[ru]=Á“¡∆…À…
 Exec=kchart.bin --server
 Comment=Kalles Charter
-Comment[br]=Frammluner Kalles
 Comment[ca]=Els gr‡fics de Kalle
 Comment[da]=Kalles graf
 Comment[de]=Kalles Chart

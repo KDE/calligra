@@ -10,7 +10,6 @@ Name[ru]=ğÒÅÚÅÎÔÁÃÉÉ
 Name[sv]=Presentation
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
-Comment[br]=Meziant kinnigadur Reggie
 Comment[ca]=El programa de presentacions de Reggie
 Comment[cs]=Reggieho presentaèní software
 Comment[da]=Reggies præsentationsprogram

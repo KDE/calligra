@@ -17,7 +17,6 @@ Name[ru]=ğÒÏ×ÅÒËÁ ĞÒÁ×ÏĞÉÓÁÎÉÑ
 Name[sv]=Rättstavning
 Exec=spell_tool --server
 Comment=Torben's Spell Tool
-Comment[br]=Benveg difaziañ Torben
 Comment[ca]=L'eina d'ortografia de Torben
 Comment[cs]=Torbenùv nástoj pro kontrolu pravopisu
 Comment[da]=Torbens staveværktøj
