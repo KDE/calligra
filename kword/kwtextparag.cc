@@ -387,7 +387,8 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             if ( start + len == length() )
             {
                 // drawing the end of the parag
-                int w = lastFormat->width('x'); // see KWTextFrameSet::adjustFlow
+                QTextFormat * format = at( length() - 1 )->format();
+                int w = format->width('x'); // see KWTextFrameSet::adjustFlow
                 int size = QMIN( w, h * 3 / 4 );
                 int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
                 // x,y is the bottom right corner of the reversed L
@@ -417,10 +418,12 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                 else if ( ch.c == '\t' )
                 {
                     QTextStringChar &nextch = string()->at(i+1);
-                    //kdDebug() << "tab x=" << ch.x << " next x=" << nextch.x << endl;
-                    int availWidth = nextch.x - ch.x - 1;
+                    int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
+                    //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
+                    //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
+                    int availWidth = nextx - ch.x - 1;
                     int x = ch.x + availWidth / 2;
-                    int size = QMIN( availWidth, lastFormat->width('W') ) / 2; // actually the half size
+                    int size = QMIN( availWidth, ch.format()->width('W') ) / 2; // actually the half size
                     int y = lastY + baseLine - ch.ascent()/2;
                     int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
                     painter.drawLine( x + size, y, x - size, y );
