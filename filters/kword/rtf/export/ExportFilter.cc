@@ -571,7 +571,7 @@ if (layout.counter.style)
 	    }
             else if (4==(*paraFormatDataIt).id)
             {
-                // ### TODO: put dtae/time fields into own method.
+                // ### TODO: put date/time fields into own method.
                 if ( (0==(*paraFormatDataIt).variable.m_type) // date
                     || (2==(*paraFormatDataIt).variable.m_type) ) // time
                 {
@@ -606,10 +606,36 @@ if (layout.counter.style)
                             key += ' ';
                             key += KGlobal::locale()->timeFormat();
                         }
-                        kdDebug(30515) << "KDE format:  " << key << endl;
-                        key=QString::null; // ### FIXME: KControl's key seems to differ from KWord :-(
+                        
+                        kdDebug(30515) << "Locale date in KLocale format:  " << key << endl;
+                        
+                        // KLocale's key differ from KWord
+
+                        // Date
+                        key.replace( "%Y", "yyyy" );    // Year 4 digits
+                        key.replace( "%y", "yy" );      // Year 2 digits
+                        key.replace( "%n", "M" );       // Month 1 digit
+                        key.replace( "%m", "MM" );      // Month 2 digits
+                        key.replace( "%e", "d" );       // Day 1 digit
+                        key.replace( "%d", "dd" );      // Day 2 digits
+                        key.replace( "%b", "MMM" );     // Month 3 letters
+                        key.replace( "%B", "MMMM" );    // Month all letters
+                        key.replace( "%a", "ddd" );     // Day 3 letters
+                        key.replace( "%A", "dddd" );    // Day all letters
+                        // 12h
+                        key.replace( "%p", "am/pm" );   // AM/PM (KLocale knows it only lower case)
+                        key.replace( "%I", "hh" );      // 12 hour 2 digits
+                        key.replace( "%l", "h" );       // 12 hour 1 digits
+                        // 24h
+                        key.replace( "%H", "HH" );      // 24 hour 2 digits
+                        key.replace( "%k", "H" );       // 24 hour 1 digit
+                        // Other times
+                        key.replace( "%M", "mm" );      // minute 2 digits (KLocale knows it with 2 digits)
+                        key.replace( "%S", "ss" );      // second 2 digits (KLocale knows it with 2 digits)
+                        
+                        kdDebug(30515) << "Locale date in RTF format:  " << key << endl;
                     }
-                    if (!key.isEmpty())
+                    else if (!key.isEmpty())
                     {
                         const QRegExp regexp("AP",false); // Not case-sensitive
                         if (regexp.search(key)!=-1)
