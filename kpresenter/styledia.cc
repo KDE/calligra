@@ -811,10 +811,11 @@ void ConfBrushDia::slotGYFactorChanged()
     brushPrev->repaint(false);
 }
 
-StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc,
+StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterView *_view,
                     bool _stickyObj, bool _oneObject, bool _alltextobj )
     : QTabDialog( parent, name, true ),
-      m_doc(_doc),
+      m_doc(_view->kPresenterDoc()),
+      m_view(_view),
       m_confPenDia(0),
       m_confPieDia(0),
       m_confRectDia(0),
@@ -826,7 +827,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc,
       allTextObj(_alltextobj)
 {
     lockUpdate = true;
-    m_canvas = m_doc->firstView()->getCanvas();
+    m_canvas = m_view->getCanvas();
     flags = m_canvas->getPenBrushFlags();
 
     oldProtect=STATE_OFF;
@@ -903,9 +904,9 @@ void StyleDia::styleDone()
 void StyleDia::setupTabPen()
 {
     m_confPenDia = new ConfPenDia(this, 0, flags);
-    m_confPenDia->setPen(m_canvas->getPen(m_doc->firstView()->getPen()));
-    m_confPenDia->setLineBegin(m_canvas->getLineBegin(m_doc->firstView()->getLineBegin()));
-    m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_doc->firstView()->getLineEnd()));
+    m_confPenDia->setPen(m_canvas->getPen(m_view->getPen()));
+    m_confPenDia->setLineBegin(m_canvas->getLineBegin(m_view->getLineBegin()));
+    m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_view->getLineEnd()));
     m_confPenDia->resetConfigChangedValues();
 
     addTab( m_confPenDia, i18n( "Out&line" ) );
@@ -914,14 +915,14 @@ void StyleDia::setupTabPen()
 void StyleDia::setupTabBrush()
 {
     m_confBrushDia = new ConfBrushDia(this, 0, flags);
-    m_confBrushDia->setBrush(m_canvas->getBrush( m_doc->firstView()->getBrush()));
-    m_confBrushDia->setFillType(m_canvas->getFillType(m_doc->firstView()->getFillType()));
-    m_confBrushDia->setGradient(m_canvas->getGColor1(m_doc->firstView()->getGColor1()),
-                                m_canvas->getGColor2(m_doc->firstView()->getGColor2()),
-                                m_canvas->getGType(m_doc->firstView()->getGType()),
-                                m_canvas->getGUnbalanced(m_doc->firstView()->getGUnbalanced()),
-                                m_canvas->getGXFactor(m_doc->firstView()->getGXFactor()),
-                                m_canvas->getGYFactor(m_doc->firstView()->getGYFactor()));
+    m_confBrushDia->setBrush(m_canvas->getBrush( m_view->getBrush()));
+    m_confBrushDia->setFillType(m_canvas->getFillType(m_view->getFillType()));
+    m_confBrushDia->setGradient(m_canvas->getGColor1(m_view->getGColor1()),
+                                m_canvas->getGColor2(m_view->getGColor2()),
+                                m_canvas->getGType(m_view->getGType()),
+                                m_canvas->getGUnbalanced(m_view->getGUnbalanced()),
+                                m_canvas->getGXFactor(m_view->getGXFactor()),
+                                m_canvas->getGYFactor(m_view->getGYFactor()));
     m_confBrushDia->resetConfigChangedValues();
 
     addTab( m_confBrushDia, i18n( "&Fill" ) );
@@ -1091,11 +1092,11 @@ void StyleDia::setupTabGeometry()
 void StyleDia::setupTabPie()
 {
     m_confPieDia = new ConfPieDia( this, "ConfPageDia" );
-    m_confPieDia->setType(m_canvas->getPieType(m_doc->firstView()->getPieType()));
-    m_confPieDia->setAngle(m_canvas->getPieAngle(m_doc->firstView()->getPieAngle()));
-    m_confPieDia->setLength(m_canvas->getPieLength(m_doc->firstView()->getPieLength()));
-    m_confPieDia->setPenBrush(m_canvas->getPen(m_doc->firstView()->getPen()),
-                              m_canvas->getBrush(m_doc->firstView()->getBrush()));
+    m_confPieDia->setType(m_canvas->getPieType(m_view->getPieType()));
+    m_confPieDia->setAngle(m_canvas->getPieAngle(m_view->getPieAngle()));
+    m_confPieDia->setLength(m_canvas->getPieLength(m_view->getPieLength()));
+    m_confPieDia->setPenBrush(m_canvas->getPen(m_view->getPen()),
+                              m_canvas->getBrush(m_view->getBrush()));
     m_confPieDia->resetConfigChangedValues();
 
     addTab( m_confPieDia, i18n( "P&ie" ) );
@@ -1104,11 +1105,11 @@ void StyleDia::setupTabPie()
 void StyleDia::setupTabPolygon()
 {
     m_confPolygonDia = new ConfPolygonDia(this, "ConfPolygonDia");
-    m_confPolygonDia->setCheckConcavePolygon(m_canvas->getCheckConcavePolygon(m_doc->firstView()->getCheckConcavePolygon()));
-    m_confPolygonDia->setCornersValue(m_canvas->getCornersValue(m_doc->firstView()->getCornersValue()));
-    m_confPolygonDia->setSharpnessValue(m_canvas->getSharpnessValue(m_doc->firstView()->getSharpnessValue()));
-    m_confPolygonDia->setPenBrush(m_canvas->getPen(m_doc->firstView()->getPen()),
-                                  m_canvas->getBrush(m_doc->firstView()->getBrush()));
+    m_confPolygonDia->setCheckConcavePolygon(m_canvas->getCheckConcavePolygon(m_view->getCheckConcavePolygon()));
+    m_confPolygonDia->setCornersValue(m_canvas->getCornersValue(m_view->getCornersValue()));
+    m_confPolygonDia->setSharpnessValue(m_canvas->getSharpnessValue(m_view->getSharpnessValue()));
+    m_confPolygonDia->setPenBrush(m_canvas->getPen(m_view->getPen()),
+                                  m_canvas->getBrush(m_view->getBrush()));
     m_confPolygonDia->resetConfigChangedValues();
 
     addTab( m_confPolygonDia, i18n( "P&olygon" ) );
@@ -1117,11 +1118,11 @@ void StyleDia::setupTabPolygon()
 void StyleDia::setupTabPicture()
 {
     m_confPictureDia = new ConfPictureDia( this, "ConfPictureDia");
-    m_confPictureDia->setPictureMirrorType(m_canvas->getPictureMirrorType(m_doc->firstView()->getPictureMirrorType()));
-    m_confPictureDia->setPictureDepth(m_canvas->getPictureDepth(m_doc->firstView()->getPictureDepth()));
-    m_confPictureDia->setPictureSwapRGB(m_canvas->getPictureSwapRGB(m_doc->firstView()->getPictureSwapRGB()));
-    m_confPictureDia->setPictureGrayscal(m_canvas->getPictureGrayscal(m_doc->firstView()->getPictureGrayscal()));
-    m_confPictureDia->setPictureBright(m_canvas->getPictureBright(m_doc->firstView()->getPictureBright()));
+    m_confPictureDia->setPictureMirrorType(m_canvas->getPictureMirrorType(m_view->getPictureMirrorType()));
+    m_confPictureDia->setPictureDepth(m_canvas->getPictureDepth(m_view->getPictureDepth()));
+    m_confPictureDia->setPictureSwapRGB(m_canvas->getPictureSwapRGB(m_view->getPictureSwapRGB()));
+    m_confPictureDia->setPictureGrayscal(m_canvas->getPictureGrayscal(m_view->getPictureGrayscal()));
+    m_confPictureDia->setPictureBright(m_canvas->getPictureBright(m_view->getPictureBright()));
     m_confPictureDia->setPicturePixmap(m_canvas->getPicturePixmap());
 
     addTab( m_confPictureDia, i18n( "Pi&cture" ) );
@@ -1130,10 +1131,10 @@ void StyleDia::setupTabPicture()
 void StyleDia::setupTabRectangle()
 {
     m_confRectDia = new ConfRectDia( this, "ConfRectDia" );
-    m_confRectDia->setRnds(m_canvas->getRndX(m_doc->firstView()->getRndX()),
-                           m_canvas->getRndY(m_doc->firstView()->getRndY()));
-    m_confRectDia->setPenBrush(m_canvas->getPen(m_doc->firstView()->getPen()),
-                               m_canvas->getBrush(m_doc->firstView()->getBrush()));
+    m_confRectDia->setRnds(m_canvas->getRndX(m_view->getRndX()),
+                           m_canvas->getRndY(m_view->getRndY()));
+    m_confRectDia->setPenBrush(m_canvas->getPen(m_view->getPen()),
+                               m_canvas->getBrush(m_view->getBrush()));
     m_confRectDia->resetConfigChangedValues();
 
     addTab( m_confRectDia, i18n( "&Rectangle" ) );

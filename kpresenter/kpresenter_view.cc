@@ -1100,7 +1100,7 @@ void KPresenterView::extraPenBrush()
             canHaveStickyObj = false;
     }
     bool txtObj = (m_canvas->selectedTextObjs().count()> 0 );
-    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, canHaveStickyObj, state,txtObj && state );
+    styleDia = new StyleDia( this, "StyleDia", this, canHaveStickyObj, state,txtObj && state );
 
     if ( state ) {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());

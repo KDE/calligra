@@ -1366,8 +1366,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             setToolEditMode( TEM_MOUSE );
 
             // User-friendlyness: automatically start editing this textobject
-            activePage()->deSelectAllObj();
-            stickyPage()->deSelectAllObj();
             createEditing( kptextobject );
             //setTextBackground( kptextobject );
             //setCursor( arrowCursor );
@@ -1466,9 +1464,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             rectSymetricalObjet();
             KPPartObject *kpPartObject = insertObject( insRect );
             setToolEditMode( TEM_MOUSE );
-
-            activePage()->deSelectAllObj();
-            stickyPage()->deSelectAllObj();
 
             if ( kpPartObject ) {
                 kpPartObject->activate( m_view );
@@ -2440,6 +2435,10 @@ void KPrCanvas::deSelectAllObj()
     m_activePage->deSelectAllObj();
     stickyPage()->deSelectAllObj();
 
+    // set current default pen color and brush color in tool bar
+    m_view->penColorChanged( m_view->getPen() );
+    m_view->brushColorChanged( m_view->getBrush() );
+
     //desactivate kptextview when we switch of page
     if(m_currentTextObjectView)
     {
@@ -3290,7 +3289,6 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
 
-        //tz
         KPBackGround * backtmp=doc->pageList().at( ( *it ) - 1 )->background();
         PageEffect _pageEffect = backtmp->getPageEffect();
 
@@ -3605,7 +3603,6 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
     }
 
     //TODO add global presentation speed
-    //tz m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     m_effectHandler = new EffectHandler( m_step, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     if ( m_effectHandler->doEffect() )
     {

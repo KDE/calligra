@@ -45,6 +45,7 @@ class ConfPolygonDia;
 class ConfPictureDia;
 class KPrCanvas;
 class KPresenterDoc;
+class KPresenterView;
 class KDoubleNumInput;
 
 /******************************************************************/
@@ -209,7 +210,7 @@ public:
         SdAll = SdPen | SdBrush | SdGradient | SdEndBeginLine
     };
 
-    StyleDia( QWidget* parent = 0, const char* name = 0, KPresenterDoc *_doc = 0,
+    StyleDia( QWidget* parent = 0, const char* name = 0, KPresenterView *_view = 0,
               bool _noStickyObj = true, bool _oneObject=true, bool _alltextobj=false );
     ~StyleDia();
 
@@ -271,6 +272,7 @@ private:
     KDoubleNumInput *sml, *smt, *smb, *smr;
 
     KPresenterDoc *m_doc;
+    KPresenterView *m_view;
     KPrCanvas *m_canvas;
     ConfPenDia *m_confPenDia;
     ConfPieDia *m_confPieDia;
