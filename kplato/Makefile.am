@@ -38,9 +38,6 @@ dummy.cc:
 kdelnk_DATA = kplato.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kplato.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rcdir = $(kde_datadir)/kplato
 rc_DATA = kplato.rc
 
