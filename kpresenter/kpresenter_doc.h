@@ -140,6 +140,8 @@ class KPresenterDoc : public KoDocument
     virtual bool completeSaving( KoStore* _store );
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
+
     // load
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, KoStore* store );
     void loadOasisObject( int pos, KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject = 0L);

@@ -920,16 +920,23 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element
     xmlWriter.endDocument();
-    if ( !store->close() )
+    if ( !store->close() ) // done with content.xml
         return false;
 
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
-    //todo add manifest line for style.xml
-#if 0
+    if ( !store->open( "styles.xml" ) )
+        return false;
+
     manifestWriter->addManifestEntry( "style.xml", "text/xml" );
-#endif
+
+    saveOasisDocumentStyles( store, mainStyles );
+
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
+
     if ( saveOnlyPage == -1 )
         emit sigProgress( 90 );
 
@@ -939,8 +946,16 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     setModified( false );
 
-    kdError() << "KPresenterDoc::saveOasis not implemented (for the moment :) )" << endl;
+    // TODO settings.xml
+    // manifestWriter->addManifestEntry( "settings.xml", "text/xml" );
+
     return true;
+}
+
+
+void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
+{
+    //todo
 }
 
 bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, KoStore*store )
