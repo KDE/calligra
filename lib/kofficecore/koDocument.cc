@@ -958,7 +958,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         manifestWriter->startDocument( "manifest:manifest" );
         manifestWriter->startElement( "manifest:manifest" );
         manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
-        // TODO add element for "/" itself (with the oasis mimetype)
+        //TODO manifestWriter->addManifestEntry( "/", ...native oasis mimetype... );
 
         if ( !saveOasis( store, manifestWriter ) )
         {
@@ -973,10 +973,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
                 delete store;
                 return false;
             }
-            manifestWriter->startElement( "manifest:file-entry" );
-            manifestWriter->addAttribute( "manifest:media-type", "text/xml" );
-            manifestWriter->addAttribute( "manifest:full-path", "meta.xml" );
-            manifestWriter->endElement();
+            manifestWriter->addManifestEntry( "meta.xml", "text/xml" );
         }
         else
         {
@@ -992,10 +989,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
                 delete store;
                 return false;
             }
-            manifestWriter->startElement( "manifest:file-entry" );
-            manifestWriter->addAttribute( "manifest:media-type", "image/png" );
-            manifestWriter->addAttribute( "manifest:full-path", "preview.png" );
-            manifestWriter->endElement();
+            manifestWriter->addManifestEntry( "preview.png", "image/png" );
         }
         else
         {

@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <config.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
 #include <qdom.h>
@@ -36,7 +37,6 @@
 KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* name )
     : QObject( parent, name )
 {
-    (void)new KoDocumentInfoLog( this );
     (void)new KoDocumentInfoAuthor( this );
     (void)new KoDocumentInfoAbout( this );
 }
@@ -45,6 +45,7 @@ KoDocumentInfo::~KoDocumentInfo()
 {
 }
 
+// KOffice-1.3 format
 bool KoDocumentInfo::load( const QDomDocument& doc )
 {
     QStringList lst = pages();
@@ -80,7 +81,7 @@ bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
     return true;
 }
 
-
+// KOffice-1.3 format
 QDomDocument KoDocumentInfo::save()
 {
     QDomDocument doc = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
@@ -107,9 +108,8 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
     KoXmlWriter xmlWriter( &dev, "office:document-meta" );
     xmlWriter.startElement( "office:meta" );
 
-    //<meta:generator>OpenOffice.org 1.1.0 (Linux)</meta:generator>
     xmlWriter.startElement( "meta:generator");
-    xmlWriter.addTextNode( "Koffice" ); //todo found a better name for it, perhaps add version
+    xmlWriter.addTextNode( QString( "KOffice %1" ).arg( VERSION ) );
     xmlWriter.endElement();
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
@@ -172,79 +172,6 @@ QString KoDocumentInfo::title() const
 KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* name )
     : QObject( parent, name )
 {
-}
-
-/*****************************************
- *
- * KoDocumentInfoLog
- *
- *****************************************/
-
-KoDocumentInfoLog::KoDocumentInfoLog( KoDocumentInfo* info )
-    : KoDocumentInfoPage( info, "log" )
-{
-}
-
-bool KoDocumentInfoLog::saveOasis( KoXmlWriter &xmlWriter )
-{
-    return true;
-}
-
-bool KoDocumentInfoLog::loadOasis( const QDomNode& /*metaDoc*/ )
-{
-    //todo
-    return true;
-}
-
-bool KoDocumentInfoLog::load( const QDomElement& e )
-{
-    m_newLog = QString::null;
-
-    QDomElement n = e.namedItem( "log" ).firstChild().toElement();
-    for( ; !n.isNull(); n = n.nextSibling().toElement() )
-    {
-        if ( n.tagName() == "text" )
-            m_oldLog = n.text();
-    }
-
-    return true;
-}
-
-QDomElement KoDocumentInfoLog::save( QDomDocument& doc )
-{
-    QString text = m_oldLog;
-    if ( !m_newLog.isEmpty() )
-    {
-        text += "\n";
-        text += m_newLog;
-    }
-
-    QDomElement e = doc.createElement( "log" );
-    QDomElement t = doc.createElement( "text" );
-    e.appendChild( t );
-    t.appendChild( doc.createTextNode( m_newLog ) );
-
-    return e;
-}
-
-void KoDocumentInfoLog::setNewLog( const QString& log )
-{
-    m_newLog = log;
-}
-
-void KoDocumentInfoLog::setOldLog( const QString& log )
-{
-    m_oldLog = log;
-}
-
-QString KoDocumentInfoLog::oldLog() const
-{
-    return m_oldLog;
-}
-
-QString KoDocumentInfoLog::newLog() const
-{
-    return m_newLog;
 }
 
 /*****************************************
@@ -518,6 +445,7 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
      xmlWriter.addTextNode( m_abstract );
      xmlWriter.endElement();
     }
+    // TODO dc:subject
 
     return true;
 }
@@ -529,9 +457,11 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
     {
         m_abstract = e.text();
     }
+    // TODO dc:subject
     return true;
 }
 
+// KOffice-1.3 format
 bool KoDocumentInfoAbout::load( const QDomElement& e )
 {
     QDomElement n = e.namedItem( "about" ).firstChild().toElement();
@@ -546,6 +476,7 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
     return true;
 }
 
+// KOffice-1.3 format
 QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
 {
     QDomElement e = doc.createElement( "about" );

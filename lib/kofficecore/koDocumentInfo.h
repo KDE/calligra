@@ -69,28 +69,6 @@ public:
 
 };
 
-class KoDocumentInfoLog : public KoDocumentInfoPage
-{
-    Q_OBJECT
-public:
-    KoDocumentInfoLog( KoDocumentInfo* info );
-
-    virtual bool load( const QDomElement& e );
-    virtual QDomElement save( QDomDocument& doc );
-    virtual bool loadOasis( const QDomNode& metaDoc );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter );
-
-    void setNewLog( const QString& log );
-    void setOldLog( const QString& log );
-
-    QString oldLog() const;
-    QString newLog() const;
-
-private:
-    QString m_oldLog;
-    QString m_newLog;
-};
-
 class KoDocumentInfoAuthor : public KoDocumentInfoPage
 {
     Q_OBJECT
