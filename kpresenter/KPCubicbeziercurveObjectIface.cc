@@ -19,7 +19,6 @@
 
 #include "KPCubicbeziercurveObjectIface.h"
 #include "kpcubicbeziercurveobject.h"
-//#include "kpobject.h"
 #include <kdebug.h>
 
 #include <kapplication.h>

@@ -649,6 +649,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
         if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
             KPObject*obj = getObjectAt( docPoint );
+            if(objectIsAHeaderFooterHidden(obj))
+                obj=0L;
             if ( obj ) {
                 kpobject = obj;
 		QPoint pnt = QCursor::pos();
