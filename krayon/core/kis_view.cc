@@ -2576,22 +2576,25 @@ void KisView::slotEmbeddImage(const QString &filename)
 */
 int KisView::insert_layer_image(bool newImage, const QString &filename)
 {
-    KURL url(filename);
+	KURL url(filename);
+	QImage fileImage;
 
-    if(filename.isEmpty())
-	url = KFileDialog::getOpenURL( QString::null,
-    	    KisUtil::readFilters(), 0, i18n("Image file for layer") );
+	if(filename.isEmpty())
+		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Image file for layer"));
 
 	if (url.isEmpty())
 		return -1;
 	
-	QImage fileImage;
-
 	if (!fileImage.load(url.path())) {
 		KMimeType::Ptr mt = KMimeType::findByURL(url, 0, true);
 
 		kdDebug() << "Can't create QImage from file" << endl;
 		KMessageBox::error(this, i18n("Could not import file of type\n%1").arg(mt -> name()), i18n("Missing import filter"));
+		return -1;
+	}
+
+	if (fileImage.depth() == 1) {
+		kdDebug() << "No 1 bit images. " << "Where's your 2 bits worth?" << endl;
 		return -1;
 	}
 
@@ -2605,20 +2608,8 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 	   smaller. One bit images are taboo because of bigendian
 	   problems and are rejected */
 
-	if (fileImage.depth() == 1) {
-		kdDebug() << "No 1 bit images. " << "Where's your 2 bits worth?" << endl;
-		return -1;
-	}
-
 	if (fileImage.depth() < 16) {
-		// create a QPixmap from the same file
 		QPixmap filePixmap(url.path());
-
-		// the buffer QPixmap will be created at the default
-		// display depth, at least 16 bit.  We can't use
-		// Krayon on less hardware anyway.  It's not an 8
-		// bit applicaiton.
-
 		QPixmap buffer(filePixmap.width(), filePixmap.height());
 
 		if (!filePixmap.isNull() && !buffer.isNull())
@@ -2636,72 +2627,21 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 	// establish a rectangle the same size as the QImage loaded
 	// from file. This will be used to set the size of the new
 	// KisLayer for the picture and/or a new KisImage
-
-	KisImage* img = m_pDoc->current();
-	QRect layerRect(0, 0, fileImage.width(), fileImage.height());
-	QString layerName(url.fileName());
-
-	// add image from the file as new layer for existing image
-	if(!newImage)
-	{
-		img->addLayer(layerRect, white, false, layerName);
-		uint indx = img->layerList().count() - 1;
-		img->setCurrentLayer(indx);
-		img->setFrontLayer(indx);
-		m_pLayerView->layerTable()->selectLayer(indx);
-
-		m_pLayerView->layerTable()->updateTable();
-		m_pLayerView->layerTable()->updateAllCells();
-	}
-	// add image from file as new image and append to image list
+	if (newImage) 
+		appendToDocImgList(fileImage, url);
 	else
-	{
-		// this creates the new image and appends it to
-		// the image list for the document
-		KisImage *newimg = m_pDoc->newImage(layerName,
-				layerRect.width(), layerRect.height());
-
-		// add background for layer - should this always be white?
-		bgMode bg = bm_White;
-
-		if (bg == bm_White)
-			newimg->addLayer(QRect(0, 0,
-						newimg->width(), newimg->height()),
-					KisColor::white(), false, i18n("background"));
-
-		else if (bg == bm_Transparent)
-			newimg->addLayer(QRect(0, 0,
-						newimg->width(), newimg->height()),
-					KisColor::white(), true, i18n("background"));
-
-		else if (bg == bm_ForegroundColor)
-			newimg->addLayer(QRect(0, 0,
-						newimg->width(), newimg->height()),
-					KisColor::white(), false, i18n("background"));
-
-		else if (bg == bm_BackgroundColor)
-			newimg->addLayer(QRect(0, 0,
-						newimg->width(), newimg->height()),
-					KisColor::white(), false, i18n("background"));
-
-		newimg->markDirty(QRect(0, 0,
-					newimg->width(), newimg->height()));
-
-		m_pDoc->setCurrentImage(newimg);
-	}
+		addHasNewLayer(fileImage, url);
 
 	// copy the image into the layer regardless of whether
 	// a new image or just a new layer was created for it above.
-	if(!m_pDoc->QtImageToLayer(&fileImage, this))
-	{
-		kdDebug(0) << "inset_layer_image: "
-			<< "Can't load image into layer." << endl;
-
+	if (!m_pDoc -> QtImageToLayer(&fileImage, this)) {
+		kdDebug(0) << "inset_layer_image: " << "Can't load image into layer." << endl;
+		
 		// remove empty image
-		if(newImage) remove_current_image_tab();
+		if(newImage) 
+			remove_current_image_tab();
 	}
-	else
-	{
+	else {
 		slotUpdateImage();
 		slotRefreshPainter();
 	}
@@ -3212,6 +3152,45 @@ void KisView::print( KPrinter &printer )
     }
     paint.end ();
     m_pDoc->setImage( tmp_currentImageName );
+}
+
+void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
+{
+	KisImage *img = m_pDoc -> current();
+	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
+	QString layerName(u.fileName());
+	KisImage *newimg = m_pDoc -> newImage(layerName, layerRect.width(), layerRect.height());
+
+	// add background for layer - should this always be white?
+	bgMode bg = bm_White;
+
+	if (bg == bm_White)
+		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
+	else if (bg == bm_Transparent)
+		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), true, i18n("background"));
+	else if (bg == bm_ForegroundColor)
+		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
+	else if (bg == bm_BackgroundColor)
+		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
+
+	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
+	m_pDoc -> setCurrentImage(newimg);
+}
+
+void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
+{
+	KisImage *img = m_pDoc -> current();
+	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
+	QString layerName(u.fileName());
+	uint indx;
+
+	img -> addLayer(layerRect, white, false, layerName);
+	indx = img -> layerList().count() - 1;
+	img -> setCurrentLayer(indx);
+	img -> setFrontLayer(indx);
+	m_pLayerView -> layerTable() -> selectLayer(indx);
+	m_pLayerView -> layerTable() -> updateTable();
+	m_pLayerView -> layerTable() -> updateAllCells();
 }
 
 #include "kis_view.moc"

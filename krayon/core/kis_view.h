@@ -110,7 +110,7 @@ class KisView : public KoView
     int     yScrollOffset() { return m_pVert->value(); }
     void    scrollTo( QPoint p );
 
-    void    insert_layer_image(bool newLayer, const QString &filename = QString::null);
+    int    insert_layer_image(bool newLayer, const QString &filename = QString::null);
     void    save_layer_image(bool mergeLayers);
 
     void 	zoom( int x, int y, float zf );
@@ -276,6 +276,11 @@ class KisView : public KoView
     void setupTabBar();
 
     void activateTool(KisTool*);
+
+private:
+    void appendToDocImgList(QImage& loadedImg, KURL& u);
+    void addHasNewLayer(QImage& loadedImg, KURL& u);
+
              
  private:
 
