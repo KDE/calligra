@@ -655,7 +655,7 @@ void KSpreadDoc::initInterpreter()
   {
     KSContext context;
     if ( !m_pInterpreter->runModule( context, mip.key(), mip.data() ) )
-      QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString() );
+      QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString(), i18n("OK") );
   }
 }
 
