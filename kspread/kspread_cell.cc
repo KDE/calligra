@@ -510,7 +510,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       if ( max_width >= w )
 	ende = true;
     }
-    m_iExtraXCells = right;
+    m_iExtraXCells = c - _col - 1;
     m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
 
     // Occupy the needed extra cells in vertical direction
@@ -595,7 +595,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       if ( max_width >= w )
 	ende = true;
     }
-    m_iExtraXCells = right;
+    m_iExtraXCells = c - _col - 1;
     m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
 
     // Occupy the needed extra cells in vertical direction
