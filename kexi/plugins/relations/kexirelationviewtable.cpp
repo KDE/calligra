@@ -139,6 +139,12 @@ KexiRelationViewTableContainer::mouseReleaseEvent(QMouseEvent *ev)
 	QFrame::mouseMoveEvent(ev);
 }
 
+const QString
+KexiRelationViewTableContainer::table()
+{
+	return m_tableView->table();
+}
+
 KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 {
 }
@@ -331,7 +337,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		s.rcvField = rcvField;
 
 //		m_parent->addConnection(s);
-		m_view->addConnection(s);
+		m_view->addConnection(s, false);
 
 		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
 		ev->accept();

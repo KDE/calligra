@@ -40,6 +40,7 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 		virtual bool				visible();
 
 		virtual void hookIntoView(KexiView *view);
+		virtual QWidget *embeddReadOnly(QWidget *, KexiView *);
 
 		virtual void store (KoStore *){;}
 		virtual void load  (KoStore *){;}

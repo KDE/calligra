@@ -20,9 +20,10 @@
 #ifndef KEXIRELATIONHANDLER_H
 #define KEXIRELATIONHANDLER_H
 
-class QPixmap;
-
 #include "kexiprojecthandler.h"
+
+class QPixmap;
+class QWidget;
 
 class KexiRelationHandler: public KexiProjectHandler
 {
@@ -36,10 +37,11 @@ class KexiRelationHandler: public KexiProjectHandler
 		virtual bool				visible();
 
 
-                virtual void hookIntoView(KexiView *view);
+		virtual void hookIntoView(KexiView *view);
+		virtual QWidget* embeddReadOnly(QWidget *parent, KexiView *v);
 
-                virtual void store (KoStore *){;}
-                virtual void load  (KoStore *){;}
+		virtual void store(KoStore *);
+		virtual void load(KoStore *);
 
 
 		virtual QPixmap				groupPixmap();

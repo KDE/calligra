@@ -207,7 +207,7 @@ MySqlDB::query(QString statement)
 			return true;
 	}
 	throw KexiDBError(0, mysql_error(m_mysql));
-//	return false;
+	return false;
 }
 
 KexiDBResult*

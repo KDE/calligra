@@ -32,19 +32,23 @@
 
 #include "kexitableview.h"
 #include "kexitableitem.h"
+#include "kexiprojecthandler.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiparameterlisteditor.h"
 #include "kexidragobjects.h"
 #include "kexiproject.h"
 #include "kexiview.h"
 #include "kexiaddparamdialog.h"
+#include "kexirelation.h"
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name)
  : QWidget(parent, name)
 {
 	m_db = view->project()->db();
+	m_view = view;
 	m_parent = myparent;
 
+	m_tables = view->project()->handlerForMime("kexi/relation")->embeddReadOnly(this, view);
 //	m_tables = new KexiRelationDialog(view,this, "querytables", true);
 	m_paramList=new KexiParameterListEditor(this);
 	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
@@ -73,9 +77,9 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_insertItem->setInsertItem(true);
 */
 	QGridLayout *g = new QGridLayout(this,2,1);
-//	g->addWidget(m_tables,		0,	0);
-	g->addWidget(m_designTable,	1,	0);
-	g->addWidget(m_paramList, 1,1);
+	g->addMultiCellWidget(m_tables,		0,	0,	0,	1);
+	g->addWidget(m_designTable,		1,	0);
+	g->addWidget(m_paramList,		1,	1);
 }
 
 void KexiQueryDesignerGuiEditor::clear()
@@ -170,7 +174,7 @@ KexiQueryDesignerGuiEditor::slotItemChanged(KexiTableItem *item, int col)
 QString
 KexiQueryDesignerGuiEditor::getQuery()
 {
-#if 0
+
 #warning fixme
 	//yo, let's get ugly :)
 
@@ -230,7 +234,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	JoinFields joinFields;
 
-	RelationList relations = m_tables->view()->getConnections();
+	RelationList relations = m_view->project()->relationManager()->projectRelations();
 
 	QString maxTable;
 	int maxCount = 0;
@@ -332,8 +336,6 @@ KexiQueryDesignerGuiEditor::getQuery()
 	kdDebug() << "KexiQueryDesignerGuiEditor::getQuery() query: " << query << endl;
 
 	return query;
-#endif
-	return QString("");
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor() {

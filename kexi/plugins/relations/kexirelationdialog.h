@@ -42,11 +42,12 @@ class KexiRelationDialog : public KexiDialogBase
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
-
 		KexiRelationView	*view()const { return m_view; }
+		void			chooseTable(QString t);
+
 	public slots:
-		void			slotAddTable();
 		void			slotSave(KoStore *store);
+		void			slotAddTable();
 
 	private:
 		KexiDB			*m_db;

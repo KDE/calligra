@@ -30,6 +30,13 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 	kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
 
 	m_srcTable = srcTbl;
+	if(!srcTbl || !rcvTbl)
+	{
+		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection(): expect sig11" << endl;
+		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << srcTbl << endl;
+		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << rcvTbl << endl;
+	}
+
 	m_rcvTable = rcvTbl;
 	m_srcField = srcFld;
 	m_rcvField = rcvFld;

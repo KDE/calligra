@@ -63,6 +63,7 @@ class KexiProjectHandler : public QObject
 		virtual void hookIntoView(KexiView*)=0;
 		virtual void unhookFromView(KexiView*);		
 
+		virtual QWidget *embeddReadOnly(QWidget *, KexiView *v);
 
 		virtual QPixmap			groupPixmap() = 0;
 		virtual QPixmap			itemPixmap() = 0;

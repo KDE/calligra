@@ -89,7 +89,8 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	private:
 		KexiDB			*m_db;
 
-		KexiRelationDialog	*m_tables;
+		KexiView		*m_view;
+		QWidget			*m_tables;
 		KexiTableView		*m_designTable;
 	        KexiParameterListEditor *m_paramList;
 

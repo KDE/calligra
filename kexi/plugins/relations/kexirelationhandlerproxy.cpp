@@ -74,7 +74,6 @@ KexiRelationHandlerProxy::slotShowRelationEditor()
 {
         KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0);
         krd->show();
-
 }
 
 #include "kexirelationhandlerproxy.moc"

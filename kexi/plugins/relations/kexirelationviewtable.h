@@ -38,6 +38,7 @@ class KexiRelationViewTableContainer : public QFrame
 		~KexiRelationViewTableContainer();
 
 		int			globalY(const QString &field);
+		const QString		table();
 
 	signals:
 		void			moved(KexiRelationViewTableContainer *);

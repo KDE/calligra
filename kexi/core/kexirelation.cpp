@@ -59,6 +59,8 @@ void KexiRelation::decUsageCount()
 RelationList KexiRelation::projectRelations(){return m_relationList;}
 void KexiRelation::updateRelationList(QObject *who,RelationList relationList)
 {
+	kdDebug() << "KexiRelation::updateRelationList" << endl;
+
 	m_undoStack.push(m_relationList);
 	m_relationList=relationList;
 	emit relationListUpdated(who);

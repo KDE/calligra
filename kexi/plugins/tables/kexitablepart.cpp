@@ -97,6 +97,12 @@ KexiTablePart::getTables()
 	emit itemListChanged(this);
 }
 
+QWidget *
+KexiTablePart::embeddReadOnly(QWidget *w, KexiView *v)
+{
+	return 0;
+}
+
 KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)
 {
 	kdDebug()<<"KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;

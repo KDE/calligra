@@ -140,10 +140,10 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 	{
 		m_record = kexiProject()->db()->queryRecord(queryStatement, false);
 	}
-	catch(KexiDBError *err)
+	catch(KexiDBError &err)
 	{
 		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl; 
-		err->toUser(this);
+		err.toUser(this);
 		return false;
 	}
 

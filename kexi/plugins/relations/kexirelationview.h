@@ -33,13 +33,7 @@ class QFrame;
 class KexiRelationViewTable;
 class KexiRelationViewTableContainer;
 class KexiRelation;
-
-/*typedef struct RelationSource
-{
-	QString			table;
-	QRect			geometry;
-	KexiRelationViewTable	*columnView;
-};*/
+class KexiRelationDialog;
 
 typedef QMap<QString, KexiRelationViewTableContainer*> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
@@ -49,7 +43,7 @@ class KexiRelationView : public QScrollView
 	Q_OBJECT
 
 	public:
-		KexiRelationView(QWidget *parent, const char *name=0,KexiRelation* =0);
+		KexiRelationView(KexiRelationDialog *parent, const char *name=0,KexiRelation* =0);
 		~KexiRelationView();
 
 		void		addTable(const QString &table, QStringList columns);
@@ -63,27 +57,20 @@ class KexiRelationView : public QScrollView
 
 	protected slots:
 		void		containerMoved(KexiRelationViewTableContainer *c);
+		void		slotListUpdate(QObject *s);
 
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-//		void		drawSource(QPainter *p, RelationSource src);
-//		void		drawConnection(QPainter *p, SourceConnection *conn, bool paint=true);
-
-//		void		contentsMouseReleaseEvent(QMouseEvent *ev);
-//		void		contentsMouseMoveEvent(QMouseEvent *ev);
-
-//		QRect		recalculateConnectionRect(SourceConnection *conn);
 
 	private:
-		int		m_tableCount;
+		int			m_tableCount;
 
-//		RelationSource	*m_floatingSource;
-
-		TableList	m_tables;
-		RelationList	m_connections;
-		bool		m_readOnly;
-		KexiRelation    *m_relation;
-		ConnectionList	m_connectionViews;
+		KexiRelationDialog	*m_parent;
+		TableList		m_tables;
+		RelationList		m_connections;
+		bool			m_readOnly;
+		KexiRelation    	*m_relation;
+		ConnectionList		m_connectionViews;
 };
 
 #endif

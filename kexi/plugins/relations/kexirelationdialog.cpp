@@ -57,7 +57,7 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	btnAdd->show();
 	connect(btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
-	m_view = new KexiRelationView(this,0,kexiProject()->relationManager());
+	m_view = new KexiRelationView(this, 0, kexiProject()->relationManager());
 	m_view->show();
 
 	connect(kexiProject(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
@@ -66,26 +66,8 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	{
 		for(RelationList::Iterator it = rl.begin(); it != rl.end(); it++)
 		{
-///			m_tableCombo->setCurrentText((*it).srcTable);
-			for(int i=0; i < m_tableCombo->count(); i++)
-			{
-				if(m_tableCombo->text(i) == (*it).srcTable)
-				{
-					m_tableCombo->setCurrentItem(i);
-					slotAddTable();
-				}
-				
-				if(m_tableCombo->text(i) == (*it).rcvTable)
-				{
-					m_tableCombo->setCurrentItem(i);
-					slotAddTable();
-				}
-						
-	}
-//
-//			slotAddTable();
-//			m_tableCombo->setCurrentText((*it).rcvTable);
-//			slotAddTable();
+			chooseTable((*it).srcTable);
+			chooseTable((*it).rcvTable);
 
 			m_view->addConnection((*it),false);
 		}
@@ -127,6 +109,19 @@ KexiRelationDialog::slotAddTable()
 	}
 }
 
+
+void
+KexiRelationDialog::chooseTable(QString t)
+{
+	for(int i=0; i < m_tableCombo->count(); i++)
+	{
+		if(m_tableCombo->text(i) == t)
+		{
+			m_tableCombo->setCurrentItem(i);
+			slotAddTable();
+		}
+	}
+}
 
 void
 KexiRelationDialog::slotSave(KoStore *store)

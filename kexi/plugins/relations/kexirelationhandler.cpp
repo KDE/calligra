@@ -23,6 +23,7 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
+#include "kexirelationdialog.h"
 #include "kexirelationhandler.h"
 #include "kexirelationhandlerproxy.h"
 #include <kparts/genericfactory.h>
@@ -69,6 +70,27 @@ void KexiRelationHandler::hookIntoView(KexiView *view)
         insertIntoViewProxyMap(view,prx);
 }
 
+QWidget *
+KexiRelationHandler::embeddReadOnly(QWidget *parent, KexiView *v)
+{
+	KexiRelationDialog *d = new KexiRelationDialog(v, parent, "embedded-redit", true);
+	kdDebug() << "KexiRelationHandler::embeddReadOnly [" << d << "]" << endl;
+	return d;
+}
+
+void
+KexiRelationHandler::store(KoStore *store)
+{
+	kdDebug() << "KexiRelationHandler::store" << endl;
+	kexiProject()->relationManager()->storeRelations(store);
+}
+
+void
+KexiRelationHandler::load(KoStore *store)
+{
+	kdDebug() << "KexiRelationHandler::load" << endl;
+	kexiProject()->relationManager()->loadRelations(store);
+}
 
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, KGenericFactory<KexiRelationHandler> )
