@@ -67,6 +67,7 @@ protected:
 
 protected slots:
     void slotDocumentRestored();
+    void slotCommandExecuted();
 
 private:
     KPTProject *m_project;

@@ -62,6 +62,7 @@ public:
     void setReportGenerateMenu();
 
 public slots:
+    void slotUpdate(bool calculate);
 
 protected slots:
     void slotEditCut();
@@ -90,7 +91,6 @@ protected slots:
     void slotConnectNode();
 	void slotChanged(QWidget *);
 	void slotChanged();
-	void slotUpdate(bool calculate);
 
     void slotEditResource();
 

@@ -45,6 +45,10 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     m_commandHistory = new KoCommandHistory(actionCollection());
 
     setInstance(KPTFactory::global());
+    
+    connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
+    connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
+    
 }
 
 
@@ -184,6 +188,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
     // do some sanity checking on document.
     emit sigProgress(-1);
 
+    m_commandHistory->clear();
     setModified( false );
     return true;
 }
@@ -204,6 +209,7 @@ QDomDocument KPTPart::saveXML() {
     // Save the project
     m_project->save(doc);
 
+    m_commandHistory->documentSaved();
     return document;
 }
 
@@ -238,5 +244,8 @@ void KPTPart::addCommand( KCommand * cmd )
     setModified( true );
 }
 
+void KPTPart::slotCommandExecuted() {
+    m_view->slotUpdate(false); // Update views, don't calculate (?)
+}
 
 #include "kptpart.moc"
