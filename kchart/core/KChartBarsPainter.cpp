@@ -22,10 +22,10 @@ void KChartBarsPainter::drawData( QPainter* painter )
 {
   int left = 0, right = 0;
 
-  if( ( _overwrite == InFront ) || ( _overwrite == OnTop ) ) {
+  if( ( _chart->_overwrite == InFront ) || ( _chart->_overwrite == OnTop ) ) {
 	// loop over positions
 	for( uint i = 0; i <= _chart->chartData()->maxPos(); i++ ) {
-	  int bottom = _zeropoint;
+	  int bottom = _chart->_zeropoint;
 
 	  // loop over datasets
 	  for( int dataset = 0; dataset < _chart->chartData()->numDatasets(); 
@@ -47,13 +47,13 @@ void KChartBarsPainter::drawData( QPainter* painter )
 								 dataset );
 
 		// calculate left and right of bar
-		int left = xpt.x() - (int)rint( _xstep/2 );
-		int right = xpt.x() + (int)rint( _xstep/2 );
+		int left = xpt.x() - (int)rint( _chart->_xstep/2 );
+		int right = xpt.x() + (int)rint( _chart->_xstep/2 );
 		
 		// calculate new top
 		int t = xpt.y();
-		if( _overwrite == OnTop )
-		  t -= _zeropoint - bottom;
+		if( _chart->_overwrite == OnTop )
+		  t -= _chart->_zeropoint - bottom;
 		xpt.setY( t );
 
 		// draw the bar
@@ -63,7 +63,7 @@ void KChartBarsPainter::drawData( QPainter* painter )
 		  painter->setPen( datacolor );
 		  painter->drawRect( rect );
 		  painter->setBrush( emptybrush );
-		  painter->setPen( _accentcolor );
+		  painter->setPen( _chart->_accentcolor );
 		  painter->drawRect( rect );
 		} else {
 		  QRect rect( QPoint( left, bottom ), QPoint( right, xpt.y() ) );
@@ -71,18 +71,19 @@ void KChartBarsPainter::drawData( QPainter* painter )
 		  painter->setPen( datacolor );
 		  painter->drawRect( rect );
 		  painter->setBrush( emptybrush );
-		  painter->setPen( _accentcolor );
+		  painter->setPen( _chart->_accentcolor );
 		}
 
 		// reset bottom to the top
-		if( _overwrite == OnTop )
+		if( _chart->_overwrite == OnTop )
 		  bottom = xpt.y();
 	  }
 	}
 
 	// redraw the zero axis
-	painter->setPen( _fgcolor );
-	painter->drawLine( _left, _zeropoint, _right, _zeropoint );
+	painter->setPen( _chart->_fgcolor );
+	painter->drawLine( _chart->_left, _chart->_zeropoint, 
+					   _chart->_right, _chart->_zeropoint );
   } else {
 	// loop over the dataset
 	for( int dataset = 0; dataset < _chart->chartData()->numDatasets(); 
@@ -105,22 +106,22 @@ void KChartBarsPainter::drawData( QPainter* painter )
 									_chart->chartData()->yValue( dataset, i ),
 									dataset );
 		// calculate left and right
-		left = coords.x() - _xstep/2 + 
-		  (int)rint( dataset * _xstep / _chart->chartData()->numDatasets() );
-		right = coords.x() - _xstep/2 +
-		  (int)rint( (dataset+1) * _xstep / _chart->chartData()->numDatasets() );
+		left = coords.x() - _chart->_xstep/2 + 
+		  (int)rint( dataset * _chart->_xstep / _chart->chartData()->numDatasets() );
+		right = coords.x() - _chart->_xstep/2 +
+		  (int)rint( (dataset+1) * _chart->_xstep / _chart->chartData()->numDatasets() );
 
 		// and finally draw the bar
 		painter->setBrush( filledbrush );
-		painter->setPen( _accentcolor );
+		painter->setPen( _chart->_accentcolor );
 		if( _chart->chartData()->yValue( dataset, i ) >= 0 ) {
 		  // positive value
 		  QRect rect( QPoint( left, coords.y() ), 
-					  QPoint( right, _zeropoint ) );
+					  QPoint( right, _chart->_zeropoint ) );
 		  painter->drawRect( rect );
 		} else {
 		  // negative value
-		  QRect rect( QPoint( left, _zeropoint ),
+		  QRect rect( QPoint( left, _chart->_zeropoint ),
 					  QPoint( right, coords.y() ) );
 		  painter->drawRect( rect );
 		}
@@ -128,8 +129,8 @@ void KChartBarsPainter::drawData( QPainter* painter )
 	}
 	
 	// redraw the zero axis
-	painter->setPen( _fgcolor );
-	painter->drawLine( left, _zeropoint, right, _zeropoint );
+	painter->setPen( _chart->_fgcolor );
+	painter->drawLine( left, _chart->_zeropoint, right, _chart->_zeropoint );
   }
 }
 

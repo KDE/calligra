@@ -19,10 +19,6 @@ public:
 
   virtual void drawData( QPainter* painter );
   virtual void drawLegendMarker( QPainter* painter, int number, int x, int y );
-  virtual void setLineWidth( int width );
-  virtual int lineWidth() const;
-  virtual void setLineTypes( PenStyle types[], int number );
-  virtual void lineTypes( PenStyle types[], int& number );
 
 private:
   PenStyle chooseLineType( int dataset );

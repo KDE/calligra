@@ -5,15 +5,27 @@
 
 #include <qobject.h>
 #include <qpen.h>
-
-#include "KChartPainter.h"
+#include <qstrlist.h>
+#include <qfont.h>
 
 class QPaintDevice;
 class KChartData;
-class KChartColorArray;
+class KChartPainter;
+
+#include <KChartTypes.h>
+#include <KChartColorArray.h>
 
 class KChart : public QObject
 {
+friend class KChartPainter;
+friend class KChartLinesPainter;
+friend class KChartLinesPointsPainter;
+friend class KChartBarsPainter;
+friend class KChartAreaPainter;
+friend class KChartAxesPainter;
+friend class KChartPointsPainter;
+friend class KChartPiePainter;
+
 	Q_OBJECT
 
 public:
@@ -73,7 +85,7 @@ public:
 	int margin() const;
 
 	void setDataColors( KChartColorArray* colors );
-	KChartColorArray* dataColors() const;
+	const KChartColorArray* dataColors() const;
 
 	void setTickLength( int );
 	int tickLength() const;
@@ -141,6 +153,9 @@ public:
   void setLegendPlacement( LegendPlacement );
   LegendPlacement legendPlacement() const;
 
+  void setLegendFont( QFont font );
+  QFont legendFont() const;
+
   void setAxisLabelColor( QColor color );
   QColor axisLabelColor() const;
 
@@ -166,6 +181,100 @@ private:
   KChartType _charttype;
   KChartPainter* _cp;
   KChartData* _chartdata;
+
+  // This is stuff that used to be in the painters
+  KChartColorArray _datacolors;
+  uint _topmargin;
+  uint _bottommargin;
+  uint _leftmargin;
+  uint _rightmargin;
+
+  uint _top;
+  uint _bottom;
+  uint _left;
+  uint _right;
+
+  QColor _bgcolor;
+  QColor _fgcolor;
+  QColor _textcolor;
+  QColor _labelcolor;
+  QColor _axislabelcolor;
+  QColor _accentcolor;
+
+  QString _title;
+
+  bool _transparency;
+
+  uint _textspacing;
+
+  QFont _titlefont;
+  int _titlefontwidth;
+  int _titlefontheight;
+  double _ymins[2]; // calculated
+  double _ymaxs[2]; // calculated
+  QStrList _legends;
+  QFont _xlabelfont;
+  QFont _ylabelfont;
+  QFont _xaxisfont;
+  QFont _yaxisfont;
+  QFont _legendfont;
+  QString _xlabel;
+  QString _ylabel;
+  QString _y1label;
+  QString _y2label;
+  double _ylabels[2][100]; // PENDING(kalle): Make this dynamic, use STL here
+  int _ticklength;
+  double _ymin; // user-supplied
+  double _y1min; // user-supplied
+  double _y2min; // user-supplied
+  double _ymax; // user-supplied
+  double _y1max; // user-supplied
+  double _y2max; // user-supplied
+  int _yticksnum;
+  int _xlabelskip;
+  int _ylabelskip;
+  int _axisspace;
+  int _legendmarkerheight;
+  int _legendelementheight;
+  int _legendmarkerwidth;
+  int _legendelementwidth;
+  int _legendspacing;
+  int _legendnum; // number of legend entries, computed
+  int _legendcols;
+  int _legendrows;
+  int _legendxsize;
+  int _legendysize;
+  int _legendxstart;
+  int _legendystart;
+  int _textfontwidth;
+  int _textfontheight;
+  int _xlabelfontwidth;
+  int _xlabelfontheight;
+  int _ylabelfontwidth;
+  int _ylabelfontheight;
+  int _ylabelfontheight1;
+  int _ylabelfontheight2;
+  int _xaxisfontwidth;
+  int _xaxisfontheight;
+  int _yaxisfontwidth;
+  int _yaxisfontheight;
+  int _legendfontwidth;
+  int _legendfontheight;
+  LegendPlacement _legendplacement;
+  int _xstep;
+  int _zeropoint;
+  int _ylabellength[2];
+  bool _longticks;
+  bool _xticks;
+  bool _boxaxis;
+  bool _twoaxes;
+  bool _xplotvalues;
+  bool _yplotvalues;
+  OverwriteMode _overwrite;
+  bool _zeroaxis;
+  bool _zeroaxisonly;
+  int _linewidth;
+  QList<PenStyle> _linetypes;
 };
 
 

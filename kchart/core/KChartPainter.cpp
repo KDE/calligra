@@ -15,24 +15,24 @@ KChartPainter::KChartPainter( KChart* chart ) :
   /* Set some defaults */
 
   // margins that will be left empty
-  _topmargin = 0;
-  _bottommargin = 0;
-  _leftmargin = 0;
-  _rightmargin = 0;
+  _chart->_topmargin = 0;
+  _chart->_bottommargin = 0;
+  _chart->_leftmargin = 0;
+  _chart->_rightmargin = 0;
   
   // the colours
-  _bgcolor = white;
-  _fgcolor = darkBlue;
-  _textcolor = darkBlue;
-  _labelcolor = darkBlue;
-  _axislabelcolor = darkBlue;
-  _accentcolor = gray;
+  _chart->_bgcolor = white;
+  _chart->_fgcolor = darkBlue;
+  _chart->_textcolor = darkBlue;
+  _chart->_labelcolor = darkBlue;
+  _chart->_axislabelcolor = darkBlue;
+  _chart->_accentcolor = gray;
 
   // draw in transparent mode?
-  _transparency = false;
+  _chart->_transparency = false;
 
   // pixels for text spacing
-  _textspacing = 8;
+  _chart->_textspacing = 8;
 
   /* Choose a default title font */
   setTitleFont( QFont( "courier", 16 ) );
@@ -55,12 +55,12 @@ bool KChartPainter::checkData()
 
 void KChartPainter::setTitleFont( QFont font )
 {
-  _titlefont = font;
+  _chart->_titlefont = font;
 
   // Compute the metrics once and for all
   QFontMetrics fm( font );
-  _titlefontwidth = fm.width( 'm' );
-  _titlefontheight = fm.height();
+  _chart->_titlefontwidth = fm.width( 'm' );
+  _chart->_titlefontheight = fm.height();
 }
 
 
@@ -71,10 +71,10 @@ QPainter* KChartPainter::setupPaintDev( QPaintDevice* paintdev )
   QPainter* painter = new QPainter( paintdev );
 
   // Set some initial values
-  painter->setPen( _fgcolor );
-  painter->setBackgroundColor( _bgcolor );
+  painter->setPen( _chart->_fgcolor );
+  painter->setBackgroundColor( _chart->_bgcolor );
   // (Other colors to be set when used.)
-  painter->setBackgroundMode( _transparency ? TransparentMode :
+  painter->setBackgroundMode( _chart->_transparency ? TransparentMode :
 							  OpaqueMode );
 
   return painter;
@@ -83,62 +83,8 @@ QPainter* KChartPainter::setupPaintDev( QPaintDevice* paintdev )
 
 QColor KChartPainter::chooseDataColor( int dataset )
 {
-  return _datacolors.color( dataset % _datacolors.count() );
+  return _chart->_datacolors.color( dataset % _chart->_datacolors.count() );
 }
 
 
-
-void KChartPainter::setTitle( const char* titlestring )
-{
-  _title = titlestring;
-}
-
-
-QString KChartPainter::title() const
-{
-  return _title;
-}
-
-
-void KChartPainter::setAxisLabelColor( QColor color )
-{
-  _axislabelcolor = color;
-}
-
-QColor KChartPainter::axisLabelColor() const
-{
-  return _axislabelcolor;
-}
-
-
-void KChartPainter::setDataColors( KChartColorArray* colors )
-{
-  _datacolors = *colors;
-}
-
-
-KChartColorArray* KChartPainter::dataColors() const
-{
-  return new KChartColorArray( _datacolors );
-}
-
-
-void KChartPainter::setLineWidth( int )
-{
-}
-
-int KChartPainter::lineWidth() const
-{
-  return 0;
-}
-
-
-void KChartPainter::setLineTypes( PenStyle [], int )
-{
-}
-
-void KChartPainter::lineTypes( PenStyle [], int& number )
-{
-  number = 0;
-}
 

@@ -88,504 +88,481 @@ void KChart::repaintChart( QPaintDevice* paintdev )
 
 void KChart::setTitle( const char* str )
 {
-  _cp->setTitle( str );
+  _title = str;
 }
 
 
 QString KChart::title() const
 {
-  return _cp->title();
+  return _title;
 }
 
 
 void KChart::setXLabel( const char* str )
 {
-  _cp->setXLabel( str );
+  _xlabel = str;
 }
 
 
 QString KChart::xLabel() const
 {
-  return _cp->xLabel();
+  return _xlabel;
 }
 
 
 void KChart::setYLabel( const char* str )
 {
-  _cp->setYLabel( str );
+  _ylabel = str;
 }
 
 
 QString KChart::yLabel() const
 {
-  return _cp->yLabel();
+  return _ylabel;
 }
 
 void KChart::setY1Label( const char* str )
 {
-  _cp->setY1Label( str );
+  _y1label = str;
 }
 
 QString KChart::y1Label() const
 {
-  return _cp->y1Label();
+  return _y1label;
 }
 
 void KChart::setY2Label( const char* str )
 {
-  _cp->setY2Label( str );
+  _y2label = str;
 }
 
 
 QString KChart::y2Label() const
 {
-  return _cp->y2Label();
+  return _y2label;
 }
 
 
 
 
-void KChart::setTextColor( QColor /* color */ )
+void KChart::setTextColor( QColor color  )
 {
-	fatal( "Sorry, not implemented: KChart::setTextColor\n" );
+  _textcolor = color;
 }
 
 QColor KChart::textColor() const
 {
-	fatal( "Sorry, not implemented: KChart::textColor\n" );
-	return QColor();
+  return _textcolor;
 }
 
 
-void KChart::setTitleFont( QFont /* font */ )
+void KChart::setTitleFont( QFont font )
 {
-	fatal( "Sorry, not implemented: KChart::setTitleFont\n" );
+  _titlefont = font;
 }
 
 QFont KChart::titleFont() const
 {
-	fatal( "Sorry, not implemented: KChart::titleFont\n" );
-	return QFont();
+  return _titlefont;
 }
 
 
-void KChart::setLabelFont( QFont /* font */ )
+void KChart::setLabelFont( QFont font )
 {
-	fatal( "Sorry, not implemented: KChart::setLabelFont\n" );
+  _xlabelfont = font;
+  _ylabelfont = font;
 }
 
 QFont KChart::labelFont() const
 {
-	fatal( "Sorry, not implemented: KChart::labelFont\n" );
-	return QFont();
+  return _xlabelfont;
 }
 
 
-void KChart::setXLabelFont( QFont /* font */ )
+void KChart::setXLabelFont( QFont font  )
 {
-	fatal( "Sorry, not implemented: KChart::setXLabelFont\n" );
+  _xlabelfont = font;
 }
 
 QFont KChart::xLabelFont() const
 {
-	fatal( "Sorry, not implemented: KChart::xLabelFont\n" );
-	return QFont();
+  return _xlabelfont;
 }
 
 
-void KChart::setYLabelFont( QFont /* font */ )
+void KChart::setYLabelFont( QFont font )
 {
-	fatal( "Sorry, not implemented: KChart::setYLabelFont\n" );
+  _ylabelfont = font;
 }
 
 QFont KChart::yLabelFont() const
 {
-	fatal( "Sorry, not implemented: KChart::yLabelFont\n" );
-	return QFont();
+  return _ylabelfont;
 }
 
 
-void KChart::setValueFont( QFont /* font */ )
+void KChart::setValueFont( QFont font  )
 {
-	fatal( "Sorry, not implemented: KChart::setValueFont\n" );
+  fatal( "Sorry, not implemented: KChart::setValueFont\n" );
 }
 
 QFont KChart::valueFont() const
 {
-	fatal( "Sorry, not implemented: KChart::valueFont\n" );
-	return QFont();
+  fatal( "Sorry, not implemented: KChart::valueFont\n" );
+  return QFont();
 }
 
 
-void KChart::setXAxisFont( QFont /* font */ )
+void KChart::setXAxisFont( QFont font  )
 {
-	fatal( "Sorry, not implemented: KChart::setXAxisFont\n" );
+  _xaxisfont = font;
 }
 
 QFont KChart::xAxisFont() const
 {
-	fatal( "Sorry, not implemented: KChart::xAxisFont\n" );
-	return QFont();
+  return _xaxisfont;
 }
 
 
-void KChart::setYAxisFont( QFont /* font */ )
+void KChart::setYAxisFont( QFont font )
 {
-	fatal( "Sorry, not implemented: KChart::setYAxisFont\n" );
+  _yaxisfont = font;
 }
 
 QFont KChart::yAxisFont() const
 {
-	fatal( "Sorry, not implemented: KChart::yAxisFont\n" );
-	return QFont();
+  return _yaxisfont;
 }
 
 
-void KChart::setMargin( int /* margin */ )
+void KChart::setMargin( int margin )
 {
-	fatal( "Sorry, not implemented: KChart::setMargin\n" );
+  _topmargin = margin;
+  _bottommargin = margin;
+  _leftmargin = margin;
+  _rightmargin = margin;
 }
 
 int KChart::margin() const
 {
-	fatal( "Sorry, not implemented: KChart::margin\n" );
-	return 0;
+  fatal( "Sorry, not implemented: KChart::margin\n" );
+  return 0;
 }
 
 
 void KChart::setDataColors( KChartColorArray* colors )
 {
-  _cp->setDataColors( colors );
+  _datacolors = *colors;
 }
 
-KChartColorArray* KChart::dataColors() const
+const KChartColorArray* KChart::dataColors() const
 {
-  return _cp->dataColors();
+  return &_datacolors;
 }
 
 
-void KChart::setTickLength( int )
+void KChart::setTickLength( int length )
 {
-	fatal( "Sorry, not implemented: KChart::setTickLength\n" );
+  _ticklength = length;
 }
 
 int KChart::tickLength() const
 {
-	fatal( "Sorry, not implemented: KChart::tickLength\n" );
-	return 0;
-}
-
-
-void KChart::setXTicksEnabled( bool /* enabled */ )
-{
-	fatal( "Sorry, not implemented: KChart::setXTicksEnabled\n" );
-}
-
-bool KChart::xTicksEnabled() const
-{
-	fatal( "Sorry, not implemented: KChart::xTicksEnabled\n" );
-	return false;
-}
-
-
-void KChart::setYTicksEnabled( bool /* enabled */ )
-{
-	fatal( "Sorry, not implemented: KChart::setYTicksEnabled\n" );
-}
-
-bool KChart::yTicksEnabled() const
-{
-	fatal( "Sorry, not implemented: KChart::yTicksEnabled\n" );
-	return false;
+  return _ticklength;
 }
 
 
 void KChart::setYTicksNum( int ticks )
 {
-  _cp->setYTicksNum( ticks );
+  _yticksnum = ticks;
 }
 
 
 int KChart::yTicksNum() const
 {
-  return _cp->yTicksNum();
+  return _yticksnum;
 }
 
 
 void KChart::setXLabelSkip( int skip )
 {
-  _cp->setXLabelSkip( skip );
+  _xlabelskip = skip;
 }
 
 int KChart::xLabelSkip() const
 {
-  return _cp->xLabelSkip();
+  return _xlabelskip;
 }
 
 
 void KChart::setYLabelSkip( int skip  )
 {
-  _cp->setYLabelSkip( skip );
+  _ylabelskip = skip;
 }
 
 int KChart::yLabelSkip() const
 {
-  return _cp->yLabelSkip();
+  return _ylabelskip;
 }
 
 
-void KChart::setXPlotValues( bool /* plot */ )
+void KChart::setXPlotValues( bool plot )
 {
-	fatal( "Sorry, not implemented: KChart::setXPlotValues\n" );
+  _xplotvalues = plot;
 }
 
 bool KChart::xPlotValues() const
 {
-	fatal( "Sorry, not implemented: KChart::xPlotValues\n" );
-	return false;
+  return _xplotvalues;
 }
 
 
-void KChart::setYPlotValues( bool /* plot */ )
+void KChart::setYPlotValues( bool plot )
 {
-	fatal( "Sorry, not implemented: KChart::setYPlotValues\n" );
+  _yplotvalues = plot;
 }
 
 bool KChart::yPlotValues() const
 {
-	fatal( "Sorry, not implemented: KChart::yPlotValues\n" );
-	return false;
+  return _yplotvalues;
 }
 
 
 void KChart::setYMaxValue( double value )
 {
-  _cp->setYMaxValue( value );
+  _ymaxs[0] = value;
+  _ymaxs[1] = value;
 }
 
 double KChart::yMaxValue() const
 {
-  return _cp->yMaxValue();
+  return _ymaxs[0];
 }
 
 
 void KChart::setYMinValue( double value )
 {
-  _cp->setYMinValue( value );
+  _ymins[0] = value;
+  _ymins[1] = value;
 }
 
 double KChart::yMinValue() const
 {
-  return _cp->yMinValue();
+  return _ymins[0];
 }
 
 void KChart::setY1MaxValue( double value )
 {
-  _cp->setY1MaxValue( value );
+  _ymaxs[0] = value;
 }
 
 double KChart::y1MaxValue() const
 {
-  return _cp->y1MaxValue();
+  return _ymaxs[0];
 }
 
 void KChart::setY1MinValue( double value )
 {
-  _cp->setY1MinValue( value );
+  _ymins[0] = value;
 }
 
 double KChart::y1MinValue() const
 {
-  return _cp->y1MinValue();
+  return _ymins[0];
 }
 
 void KChart::setY2MaxValue( double value )
 {
-  _cp->setY2MaxValue( value );
+  _ymaxs[1] = value;
 }
 
 double KChart::y2MaxValue() const
 {
-  return _cp->y2MaxValue();
+  return _ymaxs[1];
 }
 
 void KChart::setY2MinValue( double value )
 {
-  _cp->setY2MinValue( value );
+  _ymins[1] = value;
 }
 
 double KChart::y2MinValue() const
 {
-  return _cp->y2MinValue();
+  return _ymins[1];
 }
 
 
-void KChart::setAxisSpace( int /* space */ )
+void KChart::setAxisSpace( int space )
 {
-	fatal( "Sorry, not implemented: KChart::setAxisSpace\n" );
+  _axisspace = space;
 }
 
 int KChart::axisSpace() const
 {
-	fatal( "Sorry, not implemented: KChart::axisSpace\n" );
-	return 0;
-}
-
-
-void KChart::setLineType( PenStyle /* linetype */ )
-{
-	fatal( "Sorry, not implemented: KChart::setLineType\n" );
-}
-
-PenStyle KChart::lineType() const
-{
-	fatal( "Sorry, not implemented: KChart::lineType\n" );
-	return SolidLine;
+  return _axisspace;
 }
 
 
 void KChart::setLineWidth( int width )
 {
-  _cp->setLineWidth( width );
+  _linewidth = width;
 }
 
 int KChart::lineWidth() const
 {
-  return _cp->lineWidth();
+  return _linewidth;
 }
 
 
 void KChart::setOverwrite( OverwriteMode over )
 {
-  _cp->setOverwrite( over );
+  _overwrite = over;
 }
 
 
 OverwriteMode KChart::overwrite() const
 {
-  return _cp->overwrite();
+  return _overwrite;
 }
 
 
 void KChart::setTwoAxes( bool twoaxes )
 {
-  _cp->setTwoAxes( twoaxes );
+  _twoaxes = twoaxes;
 }
 
 bool KChart::twoAxes() const
 {
-  return _cp->twoAxes();
+  return _twoaxes;
 }
 
 
 void KChart::setLongTicks( bool longticks )
 {
-  _cp->setLongTicks( longticks );
+  _longticks = longticks;
 }
 
 bool KChart::longTicks() const
 {
-  return _cp->longTicks();
+  return _longticks;
 }
 
 
 void KChart::setLegends( QStrList legends )
 {
-  _cp->setLegends( legends );
+  _legends = legends;
 }
 
 
 QStrList KChart::legends() const
 {
-  return _cp->legends();
+  return _legends;
 }
 
 
 void KChart::setLegendPlacement( LegendPlacement placement )
 {
-  _cp->setLegendPlacement( placement );
+  _legendplacement = placement;
 }
 
 LegendPlacement KChart::legendPlacement() const
 {
-  return _cp->legendPlacement();
+  return _legendplacement;
 }
 
 
 void KChart::setZeroAxisOnly( bool only )
 {
-  _cp->setZeroAxisOnly( only );
+  _zeroaxisonly = only;
 }
 
 bool KChart::zeroAxisOnly() const
 {
-  return _cp->zeroAxisOnly();
+  return _zeroaxisonly;
 }
 
 
 void KChart::setAxisLabelColor( QColor color )
 {
-  _cp->setAxisLabelColor( color );
+  _axislabelcolor = color;
 }
 
 QColor KChart::axisLabelColor() const
 {
-  return _cp->axisLabelColor();
+  return _axislabelcolor;
 }
 
 
 void KChart::setBoxAxis( bool boxaxis )
 {
-  _cp->setBoxAxis( boxaxis );
+  _boxaxis = boxaxis;
 }
 
 bool KChart::boxAxis() const
 {
-  return _cp->boxAxis();
+  return _boxaxis;
 }
 
 
 void KChart::setXTicks( bool xticks )
 {
-  _cp->setXTicks( xticks );
+  _xticks = xticks;
 }
 
 bool KChart::xTicks() const
 {
-  return _cp->xTicks();
+  return _xticks;
 }
 
 
 void KChart::setLineTypes( PenStyle types[], int number )
 {
-  _cp->setLineTypes( types, number );
+  for( int i = 0; i < number; i++ ) {
+	PenStyle* ps = new PenStyle(); // deleted via auto-delete of list
+	*ps = types[i];
+	_linetypes.append( ps );
+  }
 }
 
 void KChart::lineTypes( PenStyle types[], int& number )
 {
-  _cp->lineTypes( types, number );
+  uint i = 0;
+  for( i =  0; i < _linetypes.count(); i++ )
+	types[ i ] = *_linetypes.at( i );
+  number = i;
 }
 
 
 void KChart::setLegendMarkerWidth( int width )
 {
-  _cp->setLegendMarkerWidth( width );
+  _legendmarkerwidth = width;
 }
 
 int KChart::legendMarkerWidth() const
 {
-  return _cp->legendMarkerWidth();
+  return _legendmarkerwidth;
 }
 
 
 void KChart::setLegendMarkerHeight( int height )
 {
-  _cp->setLegendMarkerHeight( height );
+  _legendmarkerheight = height;
 }
 
 int KChart::legendMarkerHeight() const
 {
-  return _cp->legendMarkerHeight();
+  return _legendmarkerheight;
+}
+
+
+void KChart::setLegendFont( QFont font )
+{
+  _legendfont = font;
+}
+
+QFont KChart::legendFont() const
+{
+  return _legendfont;
 }
 
 
