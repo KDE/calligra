@@ -293,7 +293,7 @@ FormatBorder& FormatBorder::operator=( const FormatBorder& border )
 // assign from another alignment
 FormatBorder& FormatBorder::assign( const FormatBorder& border )
 {
-  d->null   = border.isNull();
+  d->null              = border.isNull();
   d->leftBorderStyle   = border.leftBorderStyle();
   d->rightBorderStyle  = border.rightBorderStyle();
   d->topBorderStyle    = border.topBorderStyle();
@@ -314,6 +314,7 @@ unsigned FormatBorder::leftBorderStyle() const
 void FormatBorder::setLeftBorderStyle( unsigned s )
 {
   d->leftBorderStyle = s;
+  d->null = false;
 }
 
 unsigned FormatBorder::rightBorderStyle() const
@@ -324,6 +325,7 @@ unsigned FormatBorder::rightBorderStyle() const
 void FormatBorder::setRightBorderStyle( unsigned s )
 {
   d->rightBorderStyle = s;
+  d->null = false;
 }
 
 unsigned FormatBorder::topBorderStyle() const
@@ -334,6 +336,7 @@ unsigned FormatBorder::topBorderStyle() const
 void FormatBorder::setTopBorderStyle( unsigned s )
 {
   d->topBorderStyle = s;
+  d->null = false;
 }
 
 unsigned FormatBorder::bottomBorderStyle() const
@@ -344,6 +347,7 @@ unsigned FormatBorder::bottomBorderStyle() const
 void FormatBorder::setBottomBorderStyle( unsigned s )
 {
   d->bottomBorderStyle = s;
+  d->null = false;
 }
 
 // helper class for Format class
