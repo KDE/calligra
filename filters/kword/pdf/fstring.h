@@ -32,6 +32,27 @@ namespace PDFImport
 class Data;
 
 //-----------------------------------------------------------------------------
+class Tabulator
+{
+public:
+    enum Alignment { Left = 0, Center, Right, Character };
+    enum Filling { Blank = 0, Dots, Line, Dash, DashDot, DashDotDot };
+
+    Tabulator() : alignment(Left) {}
+
+    QDomElement createElement(Data &data) const;
+
+public:
+    double    pos;
+    Alignment alignment;
+    Filling   filling;
+    QChar     alignmentChar;
+};
+
+inline bool operator <(const Tabulator &t1, const Tabulator &t2)
+{ return t1.pos<t2.pos; }
+
+//-----------------------------------------------------------------------------
 class Block
 {
 public:
@@ -66,12 +87,12 @@ public:
     int charFromEnd(uint dec, uint &blockIndex) const;
 
 public:
-    ParagraphType        type;
-    uint                 frameIndex;
-    double               firstIndent, leftIndent, offset;
-    Align                align;
-    QValueVector<double> tabs;
-    QValueList<Block>    blocks;
+    ParagraphType type;
+    uint          frameIndex;
+    double        firstIndent, leftIndent, offset;
+    Align         align;
+    QValueVector<Tabulator> tabs;
+    QValueList<Block>       blocks;
 
 private:
     QValueList<TextLine *> _lines;

@@ -119,37 +119,45 @@ CharType type(Unicode u)
         if ( offset==OFFSET[i] ) return (CharType)TABLE[i][index];
         if ( offset<OFFSET[i] ) break;
     }
-    if ( u>=0xFB01 && u<=0xFB06 ) return Ligature;
+    if ( u>=0xFB00 && u<=0xFB06 ) return Ligature;
     return Unknown;
 }
 
 //-----------------------------------------------------------------------------
-static const Unicode LIGATURE_DATA[][4] = {
-    { 0xFB01, 0x0066, 0x0069 }, // fi
-    { 0xFB02, 0x0066, 0x006C }, // fl
-    { 0xFB04, 0x0066, 0x0066 }, // ff
-    // 0xFB03, 0xFB04, 0xFB05, 0xFB06 ??
-    // ffl is 0x0066 0x0066 0x006c
-    // ffe ??? (coffee)
-    // ffi ??? (KOffice)
-    { 0x0000, 0x0000, 0x0000 }
+static const Unicode LIGATURE_DATA[][MaxLigatureLength+1] = {
+    { 0xFB00, 0x0066, 0x0066, 0x0000 }, // ff
+    { 0xFB01, 0x0066, 0x0069, 0x0000 }, // fi
+    { 0xFB02, 0x0066, 0x006C, 0x0000 }, // fl
+    { 0xFB03, 0x0066, 0x0066, 0x0069 }, // ffi
+    { 0xFB04, 0x0066, 0x0066, 0x006c }, // ffl
+    // 0xFB05, 0xFB06 ??
+    // latex does not generate a ligature for ffe...
+    { 0x0000, 0x0000, 0x0000, 0x0000 }
 };
 
-bool checkLigature(Unicode u, Unicode &res1, Unicode &res2)
+uint checkLigature(Unicode u, Unicode res[MaxLigatureLength])
 {
-    if ( type(u)!=Ligature ) return false;
+    if ( type(u)==Unknown ) kdDebug(30516) << "unknown char " << u << endl;
+    if ( type(u)!=Ligature ) {
+        res[0] = u;
+        return 1;
+    }
 
     uint i = 0;
     while ( LIGATURE_DATA[i][0]!=0 ) {
         if ( LIGATURE_DATA[i][0]==u ) {
-            res1 = LIGATURE_DATA[i][1];
-            res2 = LIGATURE_DATA[i][2];
-            return true;
+            uint k = 0;
+            for (; k<MaxLigatureLength; k++) {
+                if ( LIGATURE_DATA[i][k+1]==0 ) break;
+                res[k] = LIGATURE_DATA[i][k+1];
+            }
+            return k;
         }
         i++;
     }
-    kdDebug(30516) << "undefined ligature !!" << endl;
-    return false;
+    kdDebug(30516) << "undefined ligature !! " << u <<endl;
+    res[0] = u;
+    return 1;
 }
 
 

@@ -25,8 +25,19 @@
 #include "transform.h"
 
 
-namespace PDFImport
+namespace PDFImport {
+
+//-----------------------------------------------------------------------------
+QDomElement Tabulator::createElement(Data &data) const
 {
+    QDomElement element = data.createElement("TABULATOR");
+    element.setAttribute("type", alignment);
+    element.setAttribute("ptpos", pos);
+    element.setAttribute("filling", filling);
+    if ( alignment==Character )
+        element.setAttribute("alignchar", QString(alignmentChar));
+    return element;
+}
 
 //-----------------------------------------------------------------------------
 Paragraph::Paragraph()
@@ -59,7 +70,7 @@ int Paragraph::findTab(double xMin, const TextLine *line) const
     double dx = xMin - (isFirst(line) ? firstIndent : leftIndent);
     if ( fabs(dx)<epsilon ) return -2;
     for (uint i=0; i<tabs.size(); i++)
-        if ( fabs(xMin-tabs[i])<epsilon ) return i;
+        if ( fabs(xMin-tabs[i].pos)<epsilon ) return i;
     return -1;
 }
 
@@ -67,7 +78,7 @@ uint Paragraph::findNbTabs(uint i, double prevXMax) const
 {
     uint k = 0;
     for (; k<tabs.size(); k++)
-        if ( tabs[k]>prevXMax ) break;
+        if ( tabs[k].pos>prevXMax ) break;
     if ( k>i ) return 0;
     return i-k+1;
 }
@@ -98,16 +109,17 @@ String::String(GfxState *state, double x0, double y0,
 void String::addChar(GfxState *state, double x, double y,
                      double dx, double dy, Unicode u)
 {
-    Unicode res1, res2;
-    if ( checkLigature(u, res1, res2) ) {
-        kdDebug(30516) << "found ligature " << QString(QChar(res1))
-                       << "+" << QString(QChar(res2)) << endl;
-        TextString::addChar(state, x, y, dx/2, dy, res1);
-        TextString::addChar(state, x+dx/2, y, dx/2, dy, res2);
-    } else {
-        TextString::addChar(state, x, y, dx, dy, u);
-        checkCombination(this);
+    Unicode res[MaxLigatureLength];
+    uint nb = checkLigature(u, res);
+    QString sdebug;
+    if ( nb>1 ) sdebug = "found ligature ";
+    double ddx = dx / nb;
+    for (uint i=0; i<nb; i++) {
+        TextString::addChar(state, x + ddx*i, y, ddx, dy, res[i]);
+        if ( nb>1 ) sdebug += QChar(res[i]);
     }
+    if ( nb>1 ) kdDebug(30516) << sdebug << endl;
+    else checkCombination(this);
 }
 
 bool String::checkCombination(TextString *str)

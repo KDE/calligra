@@ -229,11 +229,26 @@ void Page::initParagraph(Paragraph &par) const
 
     QValueList<TextLine *>::const_iterator it;
     for (it = par.lines().begin(); it!=par.lines().end(); ++it) {
+
         // compute tabulations
+        Tabulator tab;
         for (TextBlock *blk = (*it)->blocks; blk; blk = blk->next) {
-            double xMin = blk->xMin - _rects[par.type].left();
-            int res = par.findTab(xMin, *it);
-            if ( res==-1 ) par.tabs.push_back(xMin);
+            // if tabulated text is aligned on right edge: put a tab
+            // on right edge and the tab type will be right aligned...
+            double tabRightAligned = equal(blk->xMax, pright);
+            double dx = (tabRightAligned ? pright : blk->xMin) - pleft;
+            // #### if the tab is just at the frame edge:
+            // the text is sent to next line ???
+            if (tabRightAligned) dx -= 0.1;
+            int res = par.findTab(dx, *it);
+            if ( res==-1 ) {
+                tab.pos = dx;
+                if (tabRightAligned) {
+                    tab.alignment = Tabulator::Right;
+                    kdDebug(30516) << "tabulated text right aligned.." << endl;
+                } else tab.alignment = Tabulator::Left;
+                par.tabs.push_back(tab);
+            }
         }
         qHeapSort2(par.tabs);
 
@@ -278,6 +293,8 @@ void Page::initParagraph(Paragraph &par) const
 
 void Page::fillParagraph(Paragraph &par, double &offset) const
 {
+    const double pleft = _rects[par.type].left();
+    const double pright = _rects[par.type].right();
     par.offset = par.lines().first()->yMin - offset;
 //    kdDebug(30516) << "offset=" << offset
 //                   << " yMin=" << par.lines().first()->yMin
@@ -315,10 +332,8 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
             if ( !hyphen ) {
                 Block b;
                 bool remove = _data.options().smart;
-                if ( remove && par.align!=AlignBlock ) {
-                    double pright = _rects[par.type].right();
+                if ( remove && par.align!=AlignBlock )
                     remove = ( par.rect().right()>0.9*pright );
-                }
                 b.text = (remove ? ' ' : '\n');
                 b.font = static_cast<String *>((*it)->blocks->strings)->font();
                 par.blocks.push_back(b);
@@ -330,23 +345,23 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
         for (TextBlock *blk = (*it)->blocks; blk; blk = blk->next) {
 
             // tabulations
-            double xMin = blk->xMin - _rects[par.type].left();
-            int res = par.findTab(xMin, *it);
+            double tabRightAligned = equal(blk->xMax, pright);
+            double dx = (tabRightAligned ? pright : blk->xMin) - pleft;
+            int res = par.findTab(dx, *it);
             if ( res>=0 ) {
                 if (prevBlk) {
-                    double xMax = prevBlk->xMax - _rects[par.type].left();
+                    double xMax = prevBlk->xMax - pleft;
                     res = par.findNbTabs(res, xMax);
+                    if ( res==0 ) continue;
                 } else res++;
                 // no tabs for first block in AlignCenter and AlignRight
                 // if smart mode
                 if ( prevBlk || !_data.options().smart
                      || (par.align!=AlignCenter && par.align!=AlignRight) ) {
-                    for (uint k=0; k<uint(res); k++) {
-                        Block b;
-                        b.text = '\t';
-                        b.font = static_cast<String *>(blk->strings)->font();
-                        par.blocks.push_back(b);
-                    }
+                    Block b;
+                    b.font = static_cast<String *>(blk->strings)->font();
+                    for (uint k=0; k<(uint)res; k++) b.text += '\t';
+                    par.blocks.push_back(b);
                 }
             }
 
@@ -519,11 +534,7 @@ void Page::dump(const Paragraph &par)
 
     // tabulations
     for (uint k=0; k<par.tabs.size(); k++) {
-        QDomElement element = _data.createElement("TABULATOR");
-        element.setAttribute("type", 0);
-        element.setAttribute("ptpos", par.tabs[k]);
-        element.setAttribute("width", 0);
-        element.setAttribute("filling", 0);
+        QDomElement element = par.tabs[k].createElement(_data);
         layouts.push_back(element);
     }
 

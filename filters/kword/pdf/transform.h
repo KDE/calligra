@@ -68,7 +68,8 @@ namespace PDFImport
 
     CharType type(Unicode);
 
-    bool checkLigature(Unicode, Unicode &res1, Unicode &res2);
+    enum { MaxLigatureLength = 3 };
+    uint checkLigature(Unicode, Unicode res[MaxLigatureLength]);
 
     CharType checkSpecial(Unicode, Unicode &res);
 
