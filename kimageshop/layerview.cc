@@ -77,7 +77,7 @@ void LayerView::init( KImageShopDoc* doc )
     m_eyeIcon = new QPixmap;
     if( !m_eyeIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find eye.xpm" );
-    m_eyeRect = QRect( QPoint( 5,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
+    m_eyeRect = QRect( QPoint( 2,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
   }
   if( !m_linkIcon )
   {
@@ -120,7 +120,7 @@ void LayerView::paintCell( QPainter* _painter, int _row, int )
 {
   if( _row == m_selected )
   {
-    _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, green );
+    _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, blue );
   }
 
   if( m_doc->layerList().at( _row )->isVisible() )
@@ -249,6 +249,7 @@ void LayerView::mousePressEvent( QMouseEvent *_event )
   else if( _event->button() & RightButton )
   {
     // TODO: Should the Layer under the cursor selected when clicking RMB ?
+	// Matthias: IMO it should.
 
     selectLayer( row );
     update_contextmenu( row );

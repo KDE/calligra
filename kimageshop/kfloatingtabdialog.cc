@@ -118,48 +118,6 @@ void KFloatingTabDialog::setSizes()
   
   QSize min(tabs->sizeHint());    /* the minimum required size for the tabbar */
   tabs->resize(min);         /* make sure that the tabbar does not require more space than actually needed. */
-  
-  /*
-  QSize max(QCOORD_MAX,QCOORD_MAX);
-
-  for (i = 0; i < pages.size(); i++)
-	{
-	  // check the actual minimum and maximum sizes
-	  
-	  
-	  if (pages[i]->maximumSize().height() < max.height())
-	    max.setHeight(pages[i]->maximumSize().height());
-	  if (pages[i]->maximumSize().width() < max.width())
-	    max.setWidth( pages[i]->maximumSize().width());
-	  if ( pages[i]->minimumSize().height() > min.height())
-	    min.setHeight( pages[i]->minimumSize().height());
-	  if ( pages[i]->minimumSize().width() > min.width())
-	    min.setWidth( pages[i]->minimumSize().width());
-    }
-  
-  if (max.width() < min.width())
-	max.setWidth(min.width());
-  if (max.height() < min.height())
-	max.setHeight(min.height());
-  
-  // now, apply the calculated size values to all of the pages
-  
-  for( i=0; i<(uint)pages.size(); i++ )
-	{
-	  pages[i]->setMinimumSize(min);
-	  pages[i]->setMaximumSize(max);
-	}
-  
-  setMinimumSize(min.width()+4, min.height()+tabs->height()+4);
-
-  // generate a resizeEvent, if we're visible
-  
-  if(isVisible())
-	{
-	  QResizeEvent r(size(), size());
-	  resizeEvent(&r);
-    }
-  */
 }
 
 void KFloatingTabDialog::setShape(QTabBar::Shape shape)
