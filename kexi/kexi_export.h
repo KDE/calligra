@@ -93,7 +93,7 @@
 
 #ifdef MAKE_KEXI_HAND_TBL_LIB
 # define KEXI_HAND_TBL_EXPORT  KDE_EXPORT
-#elif KDE_MAKE_LIB
+#elif defined(KDE_MAKE_LIB)
 # define KEXI_HAND_TBL_EXPORT  KDE_IMPORT
 #else
 # define KEXI_HAND_TBL_EXPORT //for apps
