@@ -62,7 +62,6 @@
   <Action name="tools_createpix"/>
   <Action name="tools_kspreadtable"/>
   <Action name="tools_part"/>
-  <Separator/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="format_font"/>
