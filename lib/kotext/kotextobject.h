@@ -172,6 +172,8 @@ public:
     QString selectedText( int selectionId = KoTextDocument::Standard ) const {
         return textdoc->selectedText( selectionId );
     }
+    /** returns true if the given selection has any custom item in it */
+    bool selectionHasCustomItems( int selectionId = KoTextDocument::Standard ) const;
 
     /**
      * The main "insert" method, including undo/redo creation/update.

@@ -110,6 +110,31 @@ int KoTextObject::zoomedFontSize( int docFontSize ) const
     return KoTextZoomHandler::ptToLayoutUnitPt( docFontSize );
 }
 
+// A visitor that looks for custom items in e.g. a selection
+class KoHasCustomItemVisitor : public KoParagVisitor // see kotextdocument.h
+{
+public:
+    KoHasCustomItemVisitor() : KoParagVisitor() { }
+    // returns false when cancelled, i.e. an item was _found_, and true if it proceeded to the end(!)
+    virtual bool visit( KoTextParag *parag, int start, int end )
+    {
+        for ( int i = start ; i < end ; ++i )
+        {
+            KoTextStringChar * ch = parag->at( i );
+            if ( ch->isCustom() )
+                return false; // found one -> stop here
+        }
+        return true;
+    }
+};
+
+bool KoTextObject::selectionHasCustomItems( int selectionId ) const
+{
+    KoHasCustomItemVisitor visitor;
+    bool noneFound = textDocument()->visitSelection( selectionId, &visitor );
+    return !noneFound;
+}
+
 void KoTextObject::slotAfterUndoRedo()
 {
     formatMore();

@@ -109,15 +109,16 @@ public:
     void handleKeyPressEvent( QKeyEvent * e );
     void handleKeyReleaseEvent( QKeyEvent * e );
     // iPoint is in Layout Unit pixels
-    void handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint );
+    void handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true );
     void handleMouseMoveEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseReleaseEvent();
-    void handleMouseDoubleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
+    void handleMouseDoubleClickEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseTripleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
     bool maybeStartDrag( QMouseEvent* e );
 
     KoTextCursor selectWordUnderCursor( const KoTextCursor& cursor, int selectionId = KoTextDocument::Standard );
-    KoTextCursor selectParagUnderCursor();
+    KoTextCursor selectParagUnderCursor( const KoTextCursor& cursor, int selectionId = KoTextDocument::Standard, bool copyAndNotify = true );
+    void extendParagraphSelection( const QPoint& iPoint );
 
     QString wordUnderCursor( const KoTextCursor& cursor );
 

@@ -2096,6 +2096,15 @@ void KoTextDocument::selectionEnd( int id, int &paragId, int &index )
     index = sel.swapped ? sel.startCursor.index() : sel.endCursor.index();
 }
 
+bool KoTextDocument::isSelectionSwapped( int id )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return false;
+    KoTextDocumentSelection &sel = *it;
+    return sel.swapped;
+}
+
 KoTextParag *KoTextDocument::selectionStart( int id )
 {
     QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );

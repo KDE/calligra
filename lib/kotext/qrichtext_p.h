@@ -775,6 +775,7 @@ public:
     void setSelectionColor( int id, const QColor &c );
     void setInvertSelectionText( int id, bool b );
     bool hasSelection( int id ) const;
+    bool isSelectionSwapped( int id ); //// kotext
     void setSelectionStart( int id, KoTextCursor *cursor );
     bool setSelectionEnd( int id, KoTextCursor *cursor );
     void selectAll( int id );

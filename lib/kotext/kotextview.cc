@@ -468,29 +468,62 @@ KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int 
     return c2;
 }
 
-KoTextCursor KoTextView::selectParagUnderCursor()
+KoTextCursor KoTextView::selectParagUnderCursor( const KoTextCursor& cursor, int selectionId, bool copyAndNotify )
 {
-    KoTextCursor c1 = *m_cursor;
-    KoTextCursor c2 = *m_cursor;
+    KoTextCursor c1 = cursor;
+    KoTextCursor c2 = cursor;
     c1.setIndex(0);
     c2.setIndex(c1.parag()->string()->length() - 1);
-    textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
-    textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
+    textDocument()->setSelectionStart( selectionId, &c1 );
+    textDocument()->setSelectionEnd( selectionId, &c2 );
+    if ( copyAndNotify )
+    {
+        textObject()->selectionChangedNotify();
+        // Copy the selection.
+        QApplication::clipboard()->setSelectionMode( true );
+        emit copy();
+        QApplication::clipboard()->setSelectionMode( false );
+    }
     return c2;
+}
+
+void KoTextView::extendParagraphSelection( const QPoint& iPoint )
+{
+    hideCursor();
+    KoTextCursor oldCursor = *m_cursor;
+    placeCursor( iPoint );
+
+    bool redraw = FALSE;
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+    {
+        redraw = textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+        if ( textDocument()->isSelectionSwapped( KoTextDocument::Standard ) )
+            m_cursor->setIndex( 0 );
+        else
+            m_cursor->setIndex( m_cursor->parag()->string()->length() - 1 );
+        textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+    }
+    //else // it may be that the initial click was out of the frame
+    //    textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
+
+    if ( redraw )
+        textObject()->selectionChangedNotify( false );
+
+    showCursor();
 }
 
 QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
 {
     selectWordUnderCursor( cursor, KoTextDocument::Temp );
     QString text = textObject()->selectedText( KoTextDocument::Temp );
+    bool hasCustomItems = textObject()->selectionHasCustomItems( KoTextDocument::Temp );
     textDocument()->removeSelection( KoTextDocument::Temp );
-    // ### Not a very precise method of noticing custom items
-    if(text.find(KoTextObject::customItemChar()) == -1)
+    if( !hasCustomItems )
         return text;
     return QString::null;
 }
 
-void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
+void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag )
 {
     mightStartDrag = FALSE;
     hideCursor();
@@ -512,7 +545,7 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
     }
 
     KoTextDocument * textdoc = textDocument();
-    if ( textdoc->inSelection( KoTextDocument::Standard, iPoint ) ) {
+    if ( canStartDrag && textdoc->inSelection( KoTextDocument::Standard, iPoint ) ) {
         mightStartDrag = TRUE;
         m_textobj->emitShowCursor();
         dragStartTimer->start( QApplication::startDragTime(), TRUE );
@@ -536,9 +569,6 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
             redraw = textdoc->setSelectionEnd( KoTextDocument::Standard, m_cursor ) || redraw;
         }
     }
-
-    //for ( int i = 1; i < textdoc->numSelections(); ++i )
-    //    redraw = textdoc->removeSelection( i ) || redraw;
 
     //kdDebug() << "KoTextView::mousePressEvent redraw=" << redraw << endl;
     if ( !redraw ) {
@@ -615,7 +645,7 @@ void KoTextView::handleMouseReleaseEvent()
     m_textobj->emitShowCursor();
 }
 
-void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i/* Currently unused */ )
+void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i )
 {
   //after a triple click it's not a double click but a simple click
   //but as triple click didn't exist it's necessary to do it.
@@ -653,18 +683,14 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
     }
     afterTripleClick= true;
     inDoubleClick = FALSE;
-    *m_cursor = selectParagUnderCursor();
-    textObject()->selectionChangedNotify();
-    // Copy the selection.
-    QApplication::clipboard()->setSelectionMode( true );
-    emit copy();
-    QApplication::clipboard()->setSelectionMode( false );
+    *m_cursor = selectParagUnderCursor( *m_cursor );
     QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(afterTripleClickTimeout()));
 
 }
+
 void KoTextView::afterTripleClickTimeout()
 {
-  afterTripleClick=false;
+    afterTripleClick=false;
 }
 
 
