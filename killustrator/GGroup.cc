@@ -39,7 +39,7 @@ GGroup::GGroup (GDocument *doc, const QDomElement &element)
 :GObject(doc, element.namedItem("gobject").toElement())
 {
 
-   cout<<"********** GGroup::GGroup()"<<endl;
+   kdDebug(38000)<<"********** GGroup::GGroup()"<<endl;
    //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(propagateProperties (GObject::Property, int)));
 
     QDomElement child=element.firstChild().toElement();

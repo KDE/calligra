@@ -485,9 +485,8 @@ void Ruler::drawRuler ()
                   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
                if( s2 && start % 5 == 0 )
                {
-                  //cout<<"start: "<<start<<" toPt: "<<cvtMmToPt(start)<<" *  zoom: "<<zoom<<" - zero: "<<zeroPoint<<" = pos: "<<pos<<endl;
                   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-               };
+               }
                if( s1 )
                   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
                if( start % qRound(step * 10) == 0 )

@@ -543,7 +543,7 @@ QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
 
 GObject *KIllustrator::objectFactory(const QDomElement &element, KIllustratorDocument *doc)
 {
-   cout<<"******** objectFactory"<<endl;
+  kdDebug(38000) << "******** objectFactory" << endl;
     if (element.tagName () == "polyline")
         return new GPolyline (doc->gdoc(),element);
     else if (element.tagName () == "ellipse")
@@ -568,7 +568,6 @@ GObject *KIllustrator::objectFactory(const QDomElement &element, KIllustratorDoc
         return new GPart (doc->gdoc(),doc,element);
 /*    else
     {
-       cout<<"******** objectFactory() calling lookup  "<<element.tagName().latin1()<<endl;
         GObject *obj(0);
         GObject *proto = GObject::lookupPrototype (element.tagName());
         if (proto != 0L) {

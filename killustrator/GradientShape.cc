@@ -24,7 +24,7 @@
 
 #include <GradientShape.h>
 #include <qpainter.h>
-#include <iostream.h>
+#include <kdebug.h>
 
 GradientShape::GradientShape () : isValid (false) {
 }
@@ -46,10 +46,10 @@ void GradientShape::setGradient (const Gradient& g) {
 
 void GradientShape::draw (QPainter& p)
 {
-   cout<<"GShape::draw: box: x: "<<box.x()<<" y: "<<box.y()<<" w: "<<box.width()<<" h: "<<box.height()<<endl;
-   cout<<"region consists of "<<region.rects().count()<<" rects"<<endl;
+   kdDebug(38000)<<"GShape::draw: box: x: "<<box.x()<<" y: "<<box.y()<<" w: "<<box.width()<<" h: "<<box.height()<<endl;
+   kdDebug(38000)<<"region consists of "<<region.rects().count()<<" rects"<<endl;
    if (region.rects().count()>0)
-      cout<<"GShape::draw: region: x: "<<region.rects()[0].x()<<" y: "<<region.rects()[0].y()<<" w: "<<region.rects()[0].width()<<" h: "<<region.rects()[0].height()<<endl;
+      kdDebug(38000)<<"GShape::draw: region: x: "<<region.rects()[0].x()<<" y: "<<region.rects()[0].y()<<" w: "<<region.rects()[0].width()<<" h: "<<region.rects()[0].height()<<endl;
    p.save ();
    p.setClipRegion (region);
    p.setClipping (true);

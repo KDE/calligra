@@ -500,9 +500,6 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 
 void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 {
-#ifdef __GNUC__
-#warning TODO
-#endif
 }
 
 void KIllustratorView::showTransformationDialog( int id )
@@ -667,9 +664,8 @@ void KIllustratorView::activatePart (Tool::ToolID, GObject *obj)
    {
       GPart *part = (GPart *) obj;
       part->activate(this);
-      /*cout << "setFramesToParts ..." << endl;
+      /*
        setFramesToParts ();
-       cout << "part->activate ..." << endl;
        int xoff = 1, yoff = 1;
        if (m_bShowRulers) {
        xoff += 30;
@@ -679,7 +675,6 @@ void KIllustratorView::activatePart (Tool::ToolID, GObject *obj)
        //part->activate (xoff, yoff);
        setFocusProxy (part->getView ());
        QWidget::setFocusPolicy (QWidget::StrongFocus);
-       cout << "setFocus ..." << endl;
        //   part->getView ()->setFocusPolicy (QWidget::StrongFocus);
        //   part->getView ()->setFocus ();*/
    }
@@ -1093,8 +1088,8 @@ void KIllustratorView::slotOptions()
       hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
       vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
       PStateManager::instance()->saveDefaultSettings();
-   };
-};
+   }
+}
 
 void KIllustratorView::slotBrushChosen( const QColor & c )
 {

@@ -24,11 +24,11 @@
 
 #include <PropertyEditor.h>
 
-#include <assert.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcolorbtn.h>
 #include <kfontdialog.h>
+#include <kdebug.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -60,7 +60,6 @@
 #include <BrushCells.h>
 #include <UnitBox.h>
 
-#include <iostream.h>
 
 #define SOLID_BOX    0
 #define PATTERN_BOX  1
@@ -131,20 +130,20 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
    cmdHistory = history;
 
    createInfoWidget(addPage(i18n("Info")));
-   cout<<"afetr createInfoWidget()"<<endl;
+   kdDebug(38000) << "after createInfoWidget()" << endl;
    if (haveLineObjects)
       createOutlineWidget(addPage(i18n("Outline")));
-   cout<<"after createOutlineWidget()"<<endl;
+   kdDebug(38000) << "after createOutlineWidget()" << endl;
    if (haveFillObjects)
       createFillWidget(addPage(i18n("Fill")));
-   cout<<"after createFillWidget()"<<endl;
+   kdDebug(38000) << "after createFillWidget()" << endl;
 
    if (haveTextObjects)
       createFontWidget(addPage(i18n("Font")));
-   cout<<"after createFontWidget()"<<endl;
+   kdDebug(38000) << "after createFontWidget()" << endl;
 
    readProperties ();
-   cout<<"after readProps()"<<endl;
+   kdDebug(38000) << "after readProps()" << endl;
 }
 
 void PropertyEditor::createInfoWidget(QWidget* parent)
