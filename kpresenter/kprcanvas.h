@@ -295,6 +295,8 @@ protected:
     void insertPolyline( const KoPointArray &_pointArray );
     void insertCubicBezierCurve( const KoPointArray &_pointArray );
     void insertPolygon( const KoPointArray &_pointArray );
+    void insertPicture( const QRect &_r );
+    void insertCripart( const QRect &_r );
 
     void selectNext();
     void selectPrev();

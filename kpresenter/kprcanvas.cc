@@ -1010,6 +1010,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_POLYGON:
         if ( !m_pointArray.isNull() ) insertPolygon( m_pointArray );
         break;
+    case INS_PICTURE: {
+        if ( !insRect.isNull() ) insertPicture( insRect );
+        setToolEditMode( TEM_MOUSE );
+    } break;
+    case INS_CLIPART: {
+        if ( !insRect.isNull() ) insertCripart( insRect );
+        setToolEditMode( TEM_MOUSE );
+    } break;
     default: break;
     }
     emit objectSelectedChanged();
@@ -1110,7 +1118,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		oldMy = e->y()+diffy();
 	    } break;
 	    case INS_TEXT: case INS_OBJECT: case INS_TABLE:
-	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM: {
+	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
+            case INS_PICTURE: case INS_CLIPART: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
@@ -3852,6 +3861,40 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
 
     m_pointArray = KoPointArray();
     m_indexPointArray = 0;
+}
+
+/*================================================================*/
+void KPrCanvas::insertPicture( const QRect &_r )
+{
+    QRect r( _r );
+    r.moveBy( diffx(), diffy() );
+    KoRect rect = m_view->zoomHandler()->unzoomRect( r );
+    QString file = m_activePage->getInsPictureFile();
+
+    QCursor c = cursor();
+    setCursor( waitCursor );
+    if ( !file.isEmpty() ) {
+        m_activePage->insertPicture( file, rect );
+        m_activePage->setInsPictureFile( QString::null );
+    }
+    setCursor( c );
+}
+
+/*================================================================*/
+void KPrCanvas::insertCripart( const QRect &_r )
+{
+    QRect r( _r );
+    r.moveBy( diffx(), diffy() );
+    KoRect rect = m_view->zoomHandler()->unzoomRect( r );
+    QString file = m_activePage->getInsClipartFile();
+
+    QCursor c = cursor();
+    setCursor( waitCursor );
+    if ( !file.isEmpty() ) {
+        m_activePage->insertClipart( file, rect );
+        m_activePage->setInsClipartFile( QString::null );
+    }
+    setCursor( c );
 }
 
 /*================================================================*/

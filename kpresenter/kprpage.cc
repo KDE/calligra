@@ -2330,6 +2330,38 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
     m_doc->setModified(true);
 }
 
+void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
+{
+    KPImageKey key = m_doc->getImageCollection()->loadImage( _file ).key();
+    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->getImageCollection() , key );
+
+    kppixmapobject->setOrig( _rect.x(), _rect.y() );
+    kppixmapobject->setSize( _rect.width(), _rect.height() );
+    kppixmapobject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc, this );
+    insertCmd->execute();
+
+    m_doc->addCommand( insertCmd );
+    m_doc->setModified( true );
+}
+
+void KPrPage::insertClipart( const QString &_file, const KoRect &_rect )
+{
+    KPClipartKey key = m_doc->getClipartCollection()->loadClipart( _file ).key();
+    kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
+
+    KPClipartObject *kpclipartobject = new KPClipartObject( m_doc->getClipartCollection() , key );
+
+    kpclipartobject->setOrig( _rect.x(), _rect.y() );
+    kpclipartobject->setSize( _rect.width(), _rect.height() );
+    kpclipartobject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, m_doc, this );
+    insertCmd->execute();
+    m_doc->addCommand( insertCmd );
+}
+
 void KPrPage::enableEmbeddedParts( bool f )
 {
     QPtrListIterator<KPObject> it( m_objectList );

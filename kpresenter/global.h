@@ -188,7 +188,9 @@ enum ToolEditMode {
     INS_POLYLINE = 12,
     INS_QUADRICBEZIERCURVE = 13,
     INS_CUBICBEZIERCURVE = 14,
-    INS_POLYGON = 15
+    INS_POLYGON = 15,
+    INS_PICTURE = 16,
+    INS_CLIPART = 17
 };
 
 // offsets of the effects in the Effect2 enum accoording to a objType

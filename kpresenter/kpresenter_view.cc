@@ -578,69 +578,63 @@ void KPresenterView::insertPage()
 /*====================== insert a picture =======================*/
 void KPresenterView::insertPicture()
 {
-    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->setToolEditMode( INS_PICTURE );
     m_canvas->deSelectAllObj();
 
     //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
 
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
-    fd.setCaption(i18n("Insert Picture"));
+    KFileDialog fd( QString::null, KImageIO::pattern( KImageIO::Reading ), 0, 0, true );
+    fd.setCaption( i18n( "Insert Picture" ) );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();
 
-    if( url.isEmpty() || !url.isValid())
+    if( url.isEmpty() || !url.isValid() )
         return;
 
     QString file;
-    if (!KIO::NetAccess::download( url, file ))
+    if ( !KIO::NetAccess::download( url, file ) )
         return;
 
-    QCursor c = m_canvas->cursor();
-    m_canvas->setCursor( waitCursor );
     if ( !file.isEmpty() )
-        m_canvas->activePage()->insertPicture( file );
-    m_canvas->setCursor( c );
+        m_canvas->activePage()->setInsPictureFile( file );
 }
 
 /*====================== insert a picture (w/o filedialog) =======================*/
 void KPresenterView::insertPicture(const QString &file)
 {
-    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->setToolEditMode( INS_PICTURE );
     m_canvas->deSelectAllObj();
 
-    QCursor c = m_canvas->cursor();
-    m_canvas->setCursor( waitCursor );
     if ( !file.isEmpty() )
-        m_canvas->activePage()->insertPicture( file );
-    m_canvas->setCursor( c );
+        m_canvas->activePage()->setInsPictureFile( file );
 }
 
 /*====================== insert a clipart =======================*/
 void KPresenterView::insertClipart()
 {
-    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->setToolEditMode( INS_CLIPART );
     m_canvas->deSelectAllObj();
 
     KFileDialog fd( QString::null, KoPictureFilePreview::clipartPattern(), 0, 0, true );
-    fd.setCaption(i18n("Insert Clipart"));
+    fd.setCaption( i18n( "Insert Clipart" ) );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();
 
-    if( url.isEmpty() || !url.isValid())
+    if( url.isEmpty() || !url.isValid() )
         return;
 
     QString file;
-    if (!KIO::NetAccess::download( url, file ))
+    if ( !KIO::NetAccess::download( url, file ) )
         return;
 
     if ( !file.isEmpty() )
-        m_canvas->activePage()->insertClipart( file );
+        m_canvas->activePage()->setInsClipartFile( file );
 }
 
 /*==============================================================*/
@@ -784,9 +778,6 @@ void KPresenterView::toolsAutoform()
         m_canvas->deSelectAllObj();
         m_canvas->setToolEditMode( TEM_MOUSE, false );
         if ( afChoose ) {
-            QObject::disconnect( afChoose, SIGNAL( formChosen( const QString & ) ),
-                                 this, SLOT( afChooseOk( const QString & ) ) );
-            afChoose->close();
             delete afChoose;
             afChoose = 0;
         }
@@ -798,7 +789,12 @@ void KPresenterView::toolsAutoform()
                           this, SLOT( afChooseOk( const QString & ) ) );
         QObject::connect( afChoose, SIGNAL( afchooseCanceled()),
                           this,SLOT(slotAfchooseCanceled()));
-        afChoose->show();
+        afChoose->exec();
+
+        QObject::disconnect( afChoose, SIGNAL( formChosen( const QString & ) ),
+                             this, SLOT( afChooseOk( const QString & ) ) );
+        delete afChoose;
+        afChoose = 0;
     }
     else
         actionToolsAutoform->setChecked(true);
@@ -875,6 +871,11 @@ void KPresenterView::toolsConvexOrConcavePolygon()
 /*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
+    if ( styleDia ) {
+        delete styleDia;
+        styleDia = 0;
+    }
+
     styleDia = new StyleDia( this, "StyleDia", m_canvas->activePage()->getPenBrushFlags() );
     styleDia->setPen( m_canvas->activePage()->getPen( pen ) );
     styleDia->setBrush( m_canvas->activePage()->getBrush( brush ) );
@@ -901,6 +902,11 @@ void KPresenterView::extraPenBrush()
 /*===============================================================*/
 void KPresenterView::extraConfigPie()
 {
+    if ( confPieDia ) {
+        delete confPieDia;
+        confPieDia = 0;
+    }
+
     confPieDia = new ConfPieDia( this, "ConfPageDia" );
     confPieDia->setMaximumSize( confPieDia->width(), confPieDia->height() );
     confPieDia->setMinimumSize( confPieDia->width(), confPieDia->height() );
@@ -921,6 +927,11 @@ void KPresenterView::extraConfigPie()
 /*===============================================================*/
 void KPresenterView::extraConfigRect()
 {
+    if ( confRectDia ) {
+        delete confRectDia;
+        confRectDia = 0;
+    }
+
     confRectDia = new ConfRectDia( this, "ConfRectDia" );
     confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
     confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
@@ -946,6 +957,11 @@ void KPresenterView::extraConfigPolygon()
         _checkConcavePolygon = checkConcavePolygon;
         _cornersValue = cornersValue;
         _sharpnessValue = sharpnessValue;
+    }
+
+    if ( confPolygonDia ) {
+        delete confPolygonDia;
+        confPolygonDia = 0;
     }
 
     confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
@@ -982,8 +998,6 @@ void KPresenterView::extraLower()
 void KPresenterView::extraRotate()
 {
     if ( rotateDia ) {
-	QObject::disconnect( rotateDia, SIGNAL( rotateDiaOk() ), this, SLOT( rotateOk() ) );
-	rotateDia->close();
 	delete rotateDia;
 	rotateDia = 0;
     }
@@ -996,7 +1010,11 @@ void KPresenterView::extraRotate()
 	QObject::connect( rotateDia, SIGNAL( rotateDiaOk() ), this, SLOT( rotateOk() ) );
 	rotateDia->setAngle( m_canvas->activePage()->getSelectedObj()->getAngle() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
-	rotateDia->show();
+	rotateDia->exec();
+
+        QObject::disconnect( rotateDia, SIGNAL( rotateDiaOk() ), this, SLOT( rotateOk() ) );
+        delete rotateDia;
+        rotateDia = 0;
     }
 }
 
@@ -1004,8 +1022,6 @@ void KPresenterView::extraRotate()
 void KPresenterView::extraShadow()
 {
     if ( shadowDia ) {
-	QObject::disconnect( shadowDia, SIGNAL( shadowDiaOk() ), this, SLOT( shadowOk() ) );
-	shadowDia->close();
 	delete shadowDia;
 	shadowDia = 0;
     }
@@ -1021,7 +1037,11 @@ void KPresenterView::extraShadow()
 	shadowDia->setShadowDistance( object->getShadowDistance() );
 	shadowDia->setShadowColor( object->getShadowColor() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
-	shadowDia->show();
+	shadowDia->exec();
+
+        QObject::disconnect( shadowDia, SIGNAL( shadowDiaOk() ), this, SLOT( shadowOk() ) );
+        delete shadowDia;
+	shadowDia = 0;
     }
 }
 
@@ -1037,8 +1057,6 @@ void KPresenterView::extraAlignObjs()
 void KPresenterView::extraBackground()
 {
     if ( backDia ) {
-	QObject::disconnect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
-	backDia->close();
 	delete backDia;
 	backDia = 0;
     }
@@ -1057,7 +1075,11 @@ void KPresenterView::extraBackground()
 			   m_canvas->activePage() );
     backDia->setCaption( i18n( "KPresenter - Page Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
-    backDia->show();
+    backDia->exec();
+
+    QObject::disconnect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
+    delete backDia;
+    backDia = 0;
 }
 
 /*===============================================================*/
@@ -1199,6 +1221,11 @@ void KPresenterView::extraPenWidth()
 /*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
+    if ( pgConfDia ) {
+        delete pgConfDia;
+        pgConfDia = 0;
+    }
+
     pgConfDia = new PgConfDia( this, "PageConfig", kPresenterDoc()->spInfinitLoop(),
 			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
 			       m_canvas->activePage()->getPageEffect(),
@@ -1218,15 +1245,21 @@ void KPresenterView::screenConfigPages()
 /*========================== screen presStructView  =============*/
 void KPresenterView::screenPresStructView()
 {
-//     if ( !presStructView ) {
-	m_canvas->deSelectAllObj();
-	m_canvas->setToolEditMode( TEM_MOUSE );
+    if ( presStructView ) {
+        delete presStructView;
+        presStructView = 0;
+    }
+    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->deSelectAllObj();
 
-	presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
-	presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
-	QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
-	presStructView->show();
-//     }
+    presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
+    presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
+    QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
+    presStructView->exec();
+
+    QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
+    delete presStructView;
+    presStructView = 0;
 }
 
 /*===============================================================*/
@@ -3616,16 +3649,20 @@ void KPresenterView::makeRectVisible( QRect _rect )
 /*==============================================================*/
 void KPresenterView::restartPresStructView()
 {
-    QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
-    presStructView->close();
-    delete presStructView;
-    presStructView = 0;
+    if ( presStructView ) {
+        delete presStructView;
+        presStructView = 0;
+    }
     m_canvas->deSelectAllObj();
 
     presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
-    presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
+    presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
     QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
-    presStructView->show();
+    presStructView->exec();
+
+    QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
+    delete presStructView;
+    presStructView = 0;
 }
 
 /*==============================================================*/

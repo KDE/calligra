@@ -157,6 +157,8 @@ public:
     void changeClipart( const QString & filename );
     void insertPicture( const QString &, int _x = 10, int _y = 10 );
     void insertClipart( const QString & );
+    void insertPicture( const QString &_file, const KoRect &_rect );
+    void insertClipart( const QString &_file, const KoRect &_rect );
 
     void enableEmbeddedParts( bool f );
     void deletePage( );
@@ -196,6 +198,12 @@ public:
     bool isSlideSelected()const {return  m_selectedSlides;}
     void slideSelected(bool _b){m_selectedSlides=_b;}
 
+    void setInsPictureFile( const QString &_file ) { m_pictureFile = _file; }
+    void setInsClipartFile( const QString &_file ) { m_clipartFile = _file; }
+
+    QString getInsPictureFile() const { return m_pictureFile; }
+    QString getInsClipartFile() const { return m_clipartFile; }
+
 protected:
 
 private:
@@ -207,5 +215,8 @@ private:
     QString noteText;
     DCOPObject *dcop;
     bool m_selectedSlides;
+
+    QString m_pictureFile;
+    QString m_clipartFile;
 };
 #endif //KPRPAGE_H
