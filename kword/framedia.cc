@@ -853,7 +853,8 @@ void KWFrameDia::setFrameBehaviourInputOff() {
 }
 
 /*================================================================*/
-bool KWFrameDia::applyChanges() {
+bool KWFrameDia::applyChanges() 
+{
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;
     if(frame && frameType==FT_TEXT ) {
 	if ( tab1 ) {
@@ -910,7 +911,7 @@ bool KWFrameDia::applyChanges() {
 
     if (frame && frameType==FT_TEXT) {
 	if ( tab1 ) { 
-	    QString str = lFrameSList->currentItem()->text( 0 );
+	    QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
 	    QString name = QString::null;
 	    if ( str[ 0 ] == '*' ) {
 		str.remove( 0, 1 );
@@ -935,7 +936,7 @@ bool KWFrameDia::applyChanges() {
 	    }
 	    int _num = str.toInt() - 1;
 
-	// delete frame from frameset
+	    // delete frame from frameset
 	    if ( frame->getFrameSet() &&
 		 ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
 		    frame->getFrameSet() == doc->getFrameSet(_num))) {
