@@ -159,12 +159,10 @@ void OLEFilter::convert(const QString &dirname) {
                 storePath[index]=0;
                 resized=true;
             }
-            else {
-                if(docfile->enterDir(node->handle)) {
-                    ++storePath[index];
-                    convert(node->name);  // Go one level deeper <----------
-                    docfile->leaveDir();
-                }
+            if(docfile->enterDir(node->handle)) {
+                ++storePath[index];
+                convert(node->name);  // Go one level deeper <----------
+                docfile->leaveDir();
             }
         }
         else {
