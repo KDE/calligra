@@ -87,7 +87,6 @@ void KDChartPolarPainter::paintData( QPainter* painter,
 
     painter->setClipRect( ourClipRect );
 
-    painter->translate( _dataRect.x(), _dataRect.y() );
 
     uint datasetStart, datasetEnd;
     if(    params()->neverUsedSetChartSourceMode()
@@ -115,6 +114,10 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                          ? maxRow
                          : maxRowMinus1 );
     }
+
+
+    painter->translate( _dataRect.x(), _dataRect.y() );
+
 
     // Number of values: If -1, use all values, otherwise use the
     // specified number of values.
@@ -618,6 +621,8 @@ void KDChartPolarPainter::paintData( QPainter* painter,
         }
         painter->drawPolygon( points );
     }
+
+    painter->translate( -_dataRect.x(), -_dataRect.y() );
 }
 
 

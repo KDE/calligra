@@ -314,6 +314,7 @@ void KChartView::polarChart()
     {
         KDChartParams* params = ((KChartPart*)koDocument())->params();
         params->setChartType( KDChartParams::Polar );
+        params->setPolarChartSubType( KDChartParams::PolarNormal );
         repaint();
     }
     else
