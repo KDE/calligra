@@ -126,6 +126,9 @@ public:
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
   
+  void bgColor(QColor color);
+  QColor bgColor() const { return mBGColor; };
+  
 /*
    Load/Save Page.
 */
@@ -166,6 +169,7 @@ signals:
 
 protected:
   GDocument *doc;
+  QColor mBGColor;                // background color
   bool autoUpdate;
   QString mName;                // page name
   QString filename;

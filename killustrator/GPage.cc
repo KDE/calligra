@@ -72,7 +72,6 @@ doc(adoc),selHandle(adoc)
 
 GPage::~GPage ()
 {
-  kdDebug(0) << "GPage deleted" << endl;
   layers.clear();
   selection.clear();
 }
@@ -83,9 +82,13 @@ void GPage::initialize ()
   pLayout.orientation = PG_PORTRAIT;
   pLayout.mmWidth = PG_A4_WIDTH;
   pLayout.mmHeight = PG_A4_HEIGHT;
-  pLayout.mmLeft = 0; pLayout.mmRight = 0;
-  pLayout.mmTop = 0; pLayout.mmBottom = 0;
+  pLayout.mmLeft = 0;
+  pLayout.mmRight = 0;
+  pLayout.mmTop = 0;
+  pLayout.mmBottom = 0;
   pLayout.unit = PG_MM;
+  
+  mBGColor = white;
 
   // in pt !!
   paperWidth = (int) cvtMmToPt (pLayout.mmWidth);
@@ -530,6 +533,11 @@ void GPage::objectChanged (const Rect& r)
   setModified ();
   if (autoUpdate)
     emit changed (r);
+}
+
+void GPage::bgColor(QColor color)
+{
+  mBGColor = color;
 }
 
 QDomElement GPage::saveToXml (QDomDocument &document)

@@ -82,7 +82,6 @@ void GDocument::initialize ()
   helplinesSnapIsOn = false;
   helplinesAreOn = true;
 
-  mBGColor = white;
   modifyFlag = false;
   filename = i18n("<unnamed>");
 
@@ -365,11 +364,6 @@ bool GDocument::readFromXml (const  QDomDocument &document)
 void GDocument::helplineStatusChanged ()
 {
   emit gridChanged ();
-}
-
-void GDocument::bgColor(QColor color)
-{
-  mBGColor = color;
 }
 
 /****************[Helplines]*****************/

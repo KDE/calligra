@@ -37,6 +37,7 @@
 
 #include "OptionDialog.h"
 #include "GDocument.h"
+#include "GPage.h"
 
 OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::TreeList, i18n("Option"),
@@ -152,7 +153,7 @@ void OptionDialog::createBGWidget(QWidget* parent)
   QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
   QLabel* clabel = new QLabel(i18n("Background Color"), parent);
   bgbutton = new KColorButton(parent);
-  bgbutton->setColor(doc->bgColor());
+  bgbutton->setColor(doc->activePage()->bgColor());
   layout->addWidget(clabel);
   layout->addWidget(bgbutton);
 }
@@ -404,7 +405,7 @@ void OptionDialog::slotApply()
   /*Document settings*/
   
   /*Background*/
-  doc->bgColor(bgbutton->color());
+  doc->activePage()->bgColor(bgbutton->color());
   /*Grid*/
   doc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
   doc->showGrid(sbutton->isOn());

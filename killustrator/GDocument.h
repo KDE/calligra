@@ -91,9 +91,6 @@ public:
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
 
-  void bgColor(QColor color);
-  QColor bgColor() const { return mBGColor; };
-
 //  Grid
   void showGrid (bool flag);
   bool showGrid () const { return gridIsOn; }
@@ -146,8 +143,7 @@ protected:
   KIllustratorDocument *doc;
   QList<GPage> pages;            // the array of all pages
   GPage *active_page;            // the current page
-  QColor mBGColor;                // background color
-
+  
   /*Grid settings*/
   QColor mGridColor;
   float gridx, gridy;

@@ -338,7 +338,7 @@ void Canvas::paintEvent (QPaintEvent* e)
 
    p.save();
    p.translate(m_relativePaperArea.left(),m_relativePaperArea.top());
-   p.fillRect (1, 1, w - 2, h - 2,QBrush(document->bgColor()));
+   p.fillRect (1, 1, w - 2, h - 2,QBrush(document->activePage()->bgColor()));
    p.restore();
    // draw the grid
    if(document->showGrid())
