@@ -945,11 +945,16 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         return false;
     }
     m_syntaxVersion = KWDocument::getAttribute( word, "syntaxVersion", 0 );
-    if ( m_syntaxVersion < CURRENT_SYNTAX_VERSION )
+    if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION )
     {
-        // We can ignore the version mismatch for now. We will actually have to use it
-        // when the syntax is extended in an incompatible manner.
+        int ret = KMessageBox::warningContinueCancel(
+            0, i18n("This document was created with a newer version of KWord (syntax version: %1)\n"
+                    "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
+            i18n("File format mismatch"), i18n("Continue") );
+        if ( ret == KMessageBox::Cancel )
+            return false;
     }
+
     // Looks like support for the old way of naming images internally,
     // see completeLoading.
     value = KWDocument::getAttribute( word, "url", QString::null );
