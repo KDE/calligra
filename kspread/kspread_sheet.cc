@@ -1641,7 +1641,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
       {
         map()->changes()->addChange( this, cell, QPoint( x, y ),
                                      cell->getFormatString( x, y ), 
-                                     cell->text() );
+                                     cell->text(), !cell->isEmpty() );
       }
       cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
       if (mode == Column)

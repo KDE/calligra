@@ -21,9 +21,11 @@
 #define __kspread_dlg_changes__
 
 #include <kdialogbase.h>
+#include <qmap.h>
 #include <qwidget.h>
 
 class KSpreadChanges;
+class ChangeRecord;
 class KSpreadView;
 
 class KComboBox;
@@ -34,6 +36,7 @@ class KPushButton;
 class QCheckBox;
 class QDateTimeEdit;
 class QLineEdit;
+class QListViewItem;
 
 class FilterSettings;
 
@@ -62,11 +65,11 @@ class FilterMain : public QWidget
   void slotAuthorStateChanged( bool );
   void slotCommentStateChanged( bool );
   void slotRangeStateChanged( bool );
-  void slotCommentChanged( QString const & text );
-  void slotAuthorChanged( QString const & text );
-  void slotRangeChanged( QString const & text );
-  void slotFirstTimeChanged( QDateTime const & dt );
-  void slotSecondTimeChanged( QDateTime const & dt );
+  void slotCommentChanged( const QString & text );
+  void slotAuthorChanged( const QString & text );
+  void slotRangeChanged( const QString & text );
+  void slotFirstTimeChanged( const QDateTime & );
+  void slotSecondTimeChanged( const QDateTime & );
 
  private:
   FilterSettings * m_filterSettings;
@@ -138,13 +141,27 @@ class KSpreadAcceptDlg : public KDialogBase
                     const char * name = "KSpreadAcceptDlg" );
   ~KSpreadAcceptDlg();
 
+ private slots:
+  void acceptButtonClicked();
+  void rejectButtonClicked();
+  void listViewSelectionChanged( QListViewItem * );
+
  private:
+  class ItemMap : public QMap<KListViewItem *, KSpreadChanges::ChangeRecord *> {};
+
   KSpreadView        * m_view;
   KSpreadChanges     * m_changes;  
   AcceptRejectWidget * m_dialog;
+  KListViewItem      * m_acceptElement; 
+  KListViewItem      * m_rejectElement;
+  ItemMap              m_itemMap;
 
   void fillList();
   void addChangeRecord( KListViewItem * element, KSpreadChanges::ChangeRecord * record );
+  void makeUnselectable( KListViewItem * item );
+  void applyFlag( KListViewItem * item, KSpreadChanges::ChangeRecord::State state );
+  void applyFlag( KSpreadChanges::ChangeRecord * record, KSpreadChanges::ChangeRecord::State state );
+  void enableButtons( bool mode );
 };
 
 

@@ -69,21 +69,21 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   FilterMainLayout->addWidget( m_commentBox, 4, 0 );
     
   m_authorEdit = new QLineEdit( this, "m_authorEdit" );
-  connect( m_authorEdit, SIGNAL( textChanged( QString ) ),
-           this, SLOT( slotAuthorChanged( QString ) ) );
+  connect( m_authorEdit, SIGNAL( textChanged( const QString & ) ),
+           this, SLOT( slotAuthorChanged( const QString & ) ) );
   FilterMainLayout->addMultiCellWidget( m_authorEdit, 2, 2, 1, 2 );
 
   m_rangeEdit = new QLineEdit( this, "m_rangeEdit" );
-  connect( m_rangeEdit, SIGNAL( textChanged( QString const & ) ),
-           this, SLOT( slotRangeChanged( QString const & ) ) );
+  connect( m_rangeEdit, SIGNAL( textChanged( const QString & ) ),
+           this, SLOT( slotRangeChanged( const QString & ) ) );
   FilterMainLayout->addMultiCellWidget( m_rangeEdit, 3, 3, 1, 2 );
 
   QSpacerItem * spacer = new QSpacerItem( 20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding );
   FilterMainLayout->addItem( spacer, 5, 1 );
 
   m_commentEdit = new QLineEdit( this, "m_commentEdit" );
-  connect( m_commentEdit, SIGNAL( textChanged( QString const & ) ),
-           this, SLOT( slotCommentChanged( QString const & ) ) );
+  connect( m_commentEdit, SIGNAL( textChanged( const QString & ) ),
+           this, SLOT( slotCommentChanged( const QString & ) ) );
   FilterMainLayout->addMultiCellWidget( m_commentEdit, 4, 4, 1, 2 );
 
   m_dateUsage = new KComboBox( FALSE, this, "m_dateUsage" );
@@ -106,16 +106,16 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   m_timeFirst->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)5, 
                                            0, 0, m_timeFirst->sizePolicy().hasHeightForWidth() ) );
   m_timeFirst->setDateTime( QDateTime::currentDateTime() );
-  connect( m_timeFirst, SIGNAL( valueChanged( QDateTime ) ),
-           this, SLOT( slotFirstTimeChanged( QDateTime const & ) ) );
+  connect( m_timeFirst, SIGNAL( valueChanged ( const QDateTime & ) ),
+           this, SLOT( slotFirstTimeChanged( const QDateTime & ) ) );
   layout->addWidget( m_timeFirst );
 
   m_timeSecond = new QDateTimeEdit( this, "m_timeSecond" );
   m_timeSecond->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)5, 
                                             0, 0, m_timeSecond->sizePolicy().hasHeightForWidth() ) );
   m_timeSecond->setDateTime( m_timeFirst->dateTime() );
-  connect( m_timeSecond, SIGNAL( valueChanged( QDateTime ) ),
-           this, SLOT( slotSecondTimeChanged( QDateTime const & ) ) );
+  connect( m_timeSecond, SIGNAL( valueChanged( const QDateTime & ) ),
+           this, SLOT( slotSecondTimeChanged( const QDateTime & ) ) );
   layout->addWidget( m_timeSecond );
   FilterMainLayout->addMultiCellLayout( layout, 0, 1, 2, 2 );
 
@@ -368,17 +368,27 @@ KSpreadAcceptDlg::KSpreadAcceptDlg( KSpreadView * parent, KSpreadChanges * chang
                  KDialogBase::Close, KDialogBase::Close, false ),   
     m_view( parent ),
     m_changes( changes ),
-    m_dialog( new AcceptRejectWidget( &changes->m_filterSettings, this ) )
+    m_dialog( new AcceptRejectWidget( &changes->m_filterSettings, this ) ),
+    m_acceptElement( 0 ),
+    m_rejectElement( 0 )
 {
+  m_changes->m_locked = true;
+
   setCaption( i18n( "Accept or Reject Changes" ) );
   setButtonBoxOrientation( Vertical );
   setMainWidget( m_dialog );
 
   fillList();
+
+  connect( m_dialog->m_acceptButton, SIGNAL( clicked() ), this, SLOT( acceptButtonClicked() ) );
+  connect( m_dialog->m_rejectButton, SIGNAL( clicked() ), this, SLOT( rejectButtonClicked() ) );
+  connect( m_dialog->m_listView, SIGNAL( selectionChanged( QListViewItem * ) ), 
+           this, SLOT( listViewSelectionChanged( QListViewItem * ) ) );
 }
 
 KSpreadAcceptDlg::~KSpreadAcceptDlg()
 {
+  m_changes->m_locked = false;
 }
 
 void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges::ChangeRecord * record )
@@ -388,6 +398,7 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
   QString timestamp;
   QString comment;
   QString newValue;
+  KListViewItem * parent = element;
 
   author    = m_changes->getAuthor( record->m_change->authorID );
   timestamp = m_view->doc()->locale()->formatDateTime( record->m_change->timestamp );
@@ -415,10 +426,16 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
    case KSpreadChanges::ChangeRecord::CELL:
     action = i18n( "Changed content" );
     ch = (KSpreadChanges::CellChange *) record->m_change;
-    comment += i18n( "(Cell %1 changed from '%2' to '%3')" )
-      .arg( cellName )
-      .arg( ch->oldValue.length() > 0 ? ch->oldValue : i18n( "<empty>" ) )
-      .arg( newValue.length() > 0 ? newValue : i18n( "<empty>" ) );
+    if ( record->m_state == KSpreadChanges::ChangeRecord::REJECTED )
+      comment += i18n( "(Cell %1 changed from '%2' to '%3')" )
+        .arg( cellName )
+        .arg( newValue.length() > 0 ? newValue : i18n( "<empty>" ) )
+        .arg( ch->oldValue.length() > 0 ? ch->oldValue : i18n( "<empty>" ) );
+    else
+      comment += i18n( "(Cell %1 changed from '%2' to '%3')" )
+        .arg( cellName )
+        .arg( ch->oldValue.length() > 0 ? ch->oldValue : i18n( "<empty>" ) )
+        .arg( newValue.length() > 0 ? newValue : i18n( "<empty>" ) );
     break;
     
    case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
@@ -444,22 +461,70 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
    case KSpreadChanges::ChangeRecord::DELETETABLE:
     action = i18n( "Deleted table" );
     break;
+
+   case KSpreadChanges::ChangeRecord::MOVE:
+    action = i18n( "Moved content" );
+    break;
   };
+  
+  if ( parent == 0 && record->m_state == KSpreadChanges::ChangeRecord::ACCEPTED )
+    parent = m_acceptElement;
+  else
+  if ( parent == 0 && record->m_state == KSpreadChanges::ChangeRecord::REJECTED )
+    parent = m_rejectElement;
+  else
+  if ( parent != m_acceptElement && record->m_state == KSpreadChanges::ChangeRecord::ACCEPTED )
+  {
+    bool found = false;
+    KListViewItem * i = (KListViewItem *) parent->parent();
+    while ( i )
+    {
+      if ( i == m_acceptElement )
+        found = true;
+
+      i = (KListViewItem *) i->parent();
+    }
+
+    if ( !found )
+      parent = m_acceptElement;
+  }
+  else
+  if ( parent != m_rejectElement && record->m_state == KSpreadChanges::ChangeRecord::REJECTED )
+  {
+    bool found = false;
+    KListViewItem * i = (KListViewItem *) parent->parent();
+    while ( i )
+    {
+      if ( i == m_rejectElement )
+        found = true;
+
+      i = (KListViewItem *) i->parent();
+    }
+
+    if ( !found )
+      parent = m_rejectElement;
+  }
   
   
   KListViewItem * el = 0;
 
-  if ( element == 0 )
+  if ( parent != 0 )
+  {
+    el = new KListViewItem( parent, action,
+                            cellName , author, timestamp,
+                            comment );    
+    parent->setExpandable( true );
+  }
+  else
     el = new KListViewItem( m_dialog->m_listView, action,
                             cellName , author, timestamp,
                             comment );    
-  else
-  {
-    el = new KListViewItem( element, action,
-                            cellName , author, timestamp,
-                            comment );    
-    element->setExpandable( true );
-  }
+
+  if ( ( record->state() == KSpreadChanges::ChangeRecord::ACCEPTED )
+       || ( record->state() == KSpreadChanges::ChangeRecord::REJECTED ) )
+    el->setSelectable( false );
+
+  m_itemMap[ el ] = record;
 
   QPtrListIterator<KSpreadChanges::ChangeRecord> it( record->m_dependants );
   for ( ; it.current(); ++it )
@@ -472,6 +537,12 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
 void KSpreadAcceptDlg::fillList()
 {
   kdDebug() << "Filling list" <<  endl;
+  m_acceptElement = new KListViewItem( m_dialog->m_listView, i18n( " Accepted" ) );
+  m_rejectElement = new KListViewItem( m_dialog->m_listView, i18n( " Rejected" ) );                         
+
+  m_acceptElement->setSelectable( false );
+  m_rejectElement->setSelectable( false );
+
   QPtrListIterator<KSpreadChanges::ChangeRecord> it( m_changes->m_dependancyList );
   for ( ; it.current(); ++it )
   {
@@ -479,6 +550,198 @@ void KSpreadAcceptDlg::fillList()
     addChangeRecord( 0, it.current() );
   }  
   kdDebug() << "Filling list done" <<  endl;
+}
+
+void KSpreadAcceptDlg::makeUnselectable( KListViewItem * item )
+{
+  item->setSelectable( false );
+  KListViewItem * i = (KListViewItem *) item->firstChild();
+  while( i )
+  {
+    makeUnselectable( i );
+    i = (KListViewItem *) i->nextSibling();
+  }
+}
+
+void KSpreadAcceptDlg::applyFlag( KSpreadChanges::ChangeRecord * record, KSpreadChanges::ChangeRecord::State state )
+{
+  record->setState( state );
+
+  QPtrListIterator<KSpreadChanges::ChangeRecord> it( record->m_dependants );
+  for ( ; it.current(); ++it )
+  {
+    if ( state == KSpreadChanges::ChangeRecord::ACCEPTED )
+      state = KSpreadChanges::ChangeRecord::REJECTED;
+    applyFlag( it.current(), state );
+  }
+}
+
+void KSpreadAcceptDlg::applyFlag( KListViewItem * item, KSpreadChanges::ChangeRecord::State state )
+{
+  ItemMap::const_iterator iter = m_itemMap.find( item );
+  if ( iter != m_itemMap.end() )
+  {
+    KSpreadChanges::ChangeRecord * record = iter.data();
+
+    applyFlag( record, state );
+  }
+}
+
+void KSpreadAcceptDlg::acceptButtonClicked()
+{
+  KListView * list     = (KListView *) m_acceptElement->listView();
+  KListViewItem * item = (KListViewItem *) list->selectedItem();
+
+  if ( !item )
+    return;
+
+  enableButtons( false );
+
+  kdDebug() << "AcceptClicked: " << item->text( 0 ) << endl;
+
+  KListViewItem * parent = (KListViewItem *) item->parent();
+
+  if ( parent )
+  {
+    parent->takeItem( item );
+
+    KListViewItem * i = parent;
+    while ( i )
+    {
+      i = (KListViewItem *) i->parent();
+      if ( i )
+        parent = i;
+    }
+    list->takeItem( parent );
+    m_rejectElement->insertItem ( parent );
+  }
+  else
+    list->takeItem( item );
+
+  m_acceptElement->insertItem( item );
+
+  KListViewItem * child = (KListViewItem *) item->firstChild();
+
+  if ( child )
+  {
+    ItemMap::const_iterator iter = m_itemMap.find( child );
+    if ( iter != m_itemMap.end() )
+    {
+      KSpreadChanges::ChangeRecord * record = iter.data();
+
+      switch( record->m_type )
+      {
+       case KSpreadChanges::ChangeRecord::CELL:
+        ((KSpreadChanges::CellChange *) (record->m_change))->cell->setCellText( ((KSpreadChanges::CellChange *) (record->m_change))->oldValue );
+        break;
+        
+       case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
+        break;
+        
+       case KSpreadChanges::ChangeRecord::INSERTROW:
+        break;
+        
+       case KSpreadChanges::ChangeRecord::INSERTTABLE:
+        break;
+        
+       case KSpreadChanges::ChangeRecord::DELETECOLUMN:
+        break;
+        
+       case KSpreadChanges::ChangeRecord::DELETEROW:
+        break;
+        
+       case KSpreadChanges::ChangeRecord::DELETETABLE:
+        break;
+        
+       case KSpreadChanges::ChangeRecord::MOVE:
+        break;
+      }
+    }  
+  }
+  // TODO:  findChilds( m_acceptElement, item );
+
+  makeUnselectable( item );
+  applyFlag( item, KSpreadChanges::ChangeRecord::ACCEPTED );  
+}
+
+void KSpreadAcceptDlg::rejectButtonClicked()
+{
+  KListView * list     = (KListView *) m_acceptElement->listView();
+  KListViewItem * item = (KListViewItem *) list->selectedItem();
+
+  if ( !item )
+    return;
+
+  enableButtons( false );
+
+  if ( item->parent() )
+  {
+    KListViewItem * parent = (KListViewItem *) item->parent();
+    parent->takeItem( item );
+  }
+  else
+    list->takeItem( item );
+
+  m_rejectElement->insertItem( item );
+
+  // TODO:  findChilds( m_rejectElement, item );
+
+  makeUnselectable( item );
+  applyFlag( item, KSpreadChanges::ChangeRecord::REJECTED );
+
+  ItemMap::const_iterator iter = m_itemMap.find( item );
+  if ( iter != m_itemMap.end() )
+  {
+    KSpreadChanges::ChangeRecord * record = iter.data();
+
+    switch( record->m_type )
+    {
+     case KSpreadChanges::ChangeRecord::CELL:
+      ((KSpreadChanges::CellChange *) (record->m_change))->cell->setCellText( ((KSpreadChanges::CellChange *) (record->m_change))->oldValue );
+      break;
+    
+     case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::INSERTROW:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::INSERTTABLE:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::DELETECOLUMN:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::DELETEROW:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::DELETETABLE:
+      break;
+
+     case KSpreadChanges::ChangeRecord::MOVE:
+      break;
+    }
+  }  
+}
+
+void KSpreadAcceptDlg::listViewSelectionChanged( QListViewItem * item )
+{
+  if ( !item )
+    return;
+
+  kdDebug() << "Selected: " << item->text( 0 ) << " | " << item->text( 1 ) << endl;
+  enableButtons( true );
+}
+
+void KSpreadAcceptDlg::enableButtons( bool mode )
+{
+  kdDebug() << "Enabled Buttons: " << mode << ", Protected: " << m_changes->isProtected() << endl;
+  if ( mode && m_changes->isProtected() )
+    return;
+
+  m_dialog->m_acceptButton->setEnabled( mode );
+  m_dialog->m_rejectButton->setEnabled( mode );
+  kdDebug() << "Enabled Buttons: done " << endl;
 }
 
 #include "kspread_dlg_changes.moc"

@@ -3924,7 +3924,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
        return;
      }
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -3939,7 +3939,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
        return;
      }
 
-     QCString hash( "" );
+     QCString hash;
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -3997,7 +3997,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
        return;
      }
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -4013,7 +4013,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
      }
 
 
-     QCString hash( "" );
+     QCString hash;
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -4208,7 +4208,7 @@ void KSpreadView::toggleProtectChanges( bool mode )
        return;
      }
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -4225,7 +4225,10 @@ bool KSpreadView::checkChangeRecordPassword()
   QCString passwd;
   m_pTable->map()->changes()->password( passwd );
   if ( passwd.isNull() || passwd.length() == 0 )
+  {
+    m_pTable->map()->changes()->setProtected( QCString() );
     return true;
+  }
 
   int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect recorded changes" ) );
   if ( result != KPasswordDialog::Accepted )
@@ -4234,7 +4237,7 @@ bool KSpreadView::checkChangeRecordPassword()
     return false;
   }
   
-  QCString hash( "" );
+  QCString hash;
   QString password( passwd );
   if ( password.length() > 0 )
     SHA1::getHash( password, hash );

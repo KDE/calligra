@@ -22,6 +22,7 @@
 
 #include <qcstring.h>
 #include <qdatetime.h>
+#include <qmap.h>
 #include <qobject.h>
 #include <qpoint.h>
 #include <qptrlist.h>
@@ -102,7 +103,7 @@ class KSpreadChanges : public QObject
   bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
 
   void addChange( KSpreadSheet * table, KSpreadCell * cell, QPoint const & point,
-                  QString const & oldFormat, QString const & oldValue );
+                  QString const & oldFormat, QString const & oldValue, bool hasDepandancy = true );
 
   void saveXml( QDomDocument & doc, QDomElement & map );
   bool loadXml( QDomElement const & changes );
@@ -200,17 +201,20 @@ class KSpreadChanges : public QObject
     QPtrList<ChangeRecord> m_dependancies;
   };
 
+  class RecordMap : public QMap<int, ChangeRecord *> {};
+
   friend class KSpreadAcceptDlg;
   friend class KSpreadFilterDlg;
 
   QPtrList<ChangeRecord> m_dependancyList;
-  QPtrList<ChangeRecord> m_changeRecords;
   QPtrList<AuthorInfo>   m_authors;
+  RecordMap              m_changeRecords;
   uint                   m_counter;
   QString                m_name;
   QCString               m_strPassword;
   KSpreadMap *           m_map;
   FilterSettings         m_filterSettings;
+  bool                   m_locked;
 
   int  addAuthor();
   bool loadAuthors( QDomElement const & authors );

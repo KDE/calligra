@@ -66,10 +66,10 @@ void FilterSettings::setShowRejected( bool b )
 
 KSpreadChanges::KSpreadChanges( KSpreadMap * map )
   : m_counter( 0 ),
-    m_map( map )
+    m_map( map ),
+    m_locked( false )
 {
   m_dependancyList.setAutoDelete( false );
-  m_changeRecords.setAutoDelete( true );
   m_authors.setAutoDelete( true );
 
   KConfig * emailCfg = new KConfig( "emaildefaults", true );
@@ -79,6 +79,17 @@ KSpreadChanges::KSpreadChanges( KSpreadMap * map )
 
 KSpreadChanges::~KSpreadChanges()
 {
+  RecordMap::iterator iter = m_changeRecords.begin();
+  RecordMap::iterator end  = m_changeRecords.end();
+  
+  while ( iter != end )
+  {
+    ChangeRecord * record = iter.data();
+
+    delete record;
+
+    ++iter;
+  }
 }
 
 void KSpreadChanges::setProtected( QCString const & hash )
@@ -89,7 +100,7 @@ void KSpreadChanges::setProtected( QCString const & hash )
 void KSpreadChanges::saveXml( QDomDocument & doc, QDomElement & map )
 {
   kdDebug() << "Entering saveXML" << endl;
-  if ( m_changeRecords.first() == 0 )
+  if ( m_changeRecords.size() == 0 )
     return;
 
   QDomElement records = doc.createElement( "tracked-changes" );
@@ -135,10 +146,17 @@ void KSpreadChanges::saveAuthors( QDomDocument & doc, QDomElement & changes )
 void KSpreadChanges::saveChanges( QDomDocument & doc, QDomElement & changes )
 {
   QDomElement records = doc.createElement( "changes" );
-  QPtrListIterator<ChangeRecord> it( m_changeRecords );
-  for ( ; it.current(); ++it )
+
+  RecordMap::iterator iter = m_changeRecords.begin();
+  RecordMap::iterator end  = m_changeRecords.end();
+  
+  while ( iter != end )
   {
-    it.current()->saveXml( doc, records );
+    ChangeRecord * record = iter.data();
+
+    record->saveXml( doc, records );
+
+    ++iter;
   }
   changes.appendChild( records );
 }
@@ -216,7 +234,7 @@ bool KSpreadChanges::loadChanges( QDomElement const & changes )
     ChangeRecord * record = new ChangeRecord();
 
     if ( record->loadXml( e ) )
-      m_changeRecords.append( record );
+      m_changeRecords[ record->id() ] = record;
     else
       delete record;
 
@@ -227,8 +245,11 @@ bool KSpreadChanges::loadChanges( QDomElement const & changes )
 }
 
 void KSpreadChanges::addChange( KSpreadSheet * table, KSpreadCell * cell, QPoint const & point,
-                                QString const & oldFormat, QString const & oldValue )
+                                QString const & oldFormat, QString const & oldValue, bool hasDepandancy )
 {
+  if ( m_locked )
+    return;
+
   ++m_counter;
   CellChange * change  = new CellChange();
   change->authorID     = addAuthor();
@@ -239,17 +260,20 @@ void KSpreadChanges::addChange( KSpreadSheet * table, KSpreadCell * cell, QPoint
 
   ChangeRecord * record = new ChangeRecord( m_counter, ChangeRecord::PENDING, ChangeRecord::CELL,
                                             table, cellRef, change );
-  m_changeRecords.append( record );
+  m_changeRecords[ record->id() ] = record;
 
-  // find records we depend on
-  ChangeRecord * r = 0;
-
-  for ( r = m_dependancyList.last(); r; r = m_dependancyList.prev() )
+  if ( hasDepandancy )
   {
-    if ( r->isDependant( table, cellRef ) )
+    // find records we depend on
+    ChangeRecord * r = 0;
+
+    for ( r = m_dependancyList.last(); r; r = m_dependancyList.prev() )
     {
-      r->addDependant( record, cellRef );
-      return;
+      if ( r->isDependant( table, cellRef ) )
+      {
+        r->addDependant( record, cellRef );
+        return;
+      }
     }
   }
 
