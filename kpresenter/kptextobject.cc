@@ -1193,13 +1193,14 @@ void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
 }
 
 
-void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* )
+void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* abort)
 {
     if( lastFormatted )
     {
         setSize( getRect().width(), m_doc->zoomHandler()->layoutUnitPtToPt(lastFormatted->rect().height())+getRect().height());
-        m_textobj->setLastFormattedParag( 0 );
+        m_textobj->setLastFormattedParag( lastFormatted->prev() );
         m_doc->updateRuler();
+        *abort = true;
     }
 }
 
