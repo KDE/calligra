@@ -35,6 +35,9 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     border = new QCheckBox( i18n( "Border" ), gb1 );
     grid1->addWidget(border,1,0);
 
+    //laurent fix it for the moment kdchart doesn't support it
+    border->setEnabled(false);
+
     xaxis = new QCheckBox( i18n( "X-Axis" ), gb1 );
     grid1->addWidget(xaxis,2,0);
 
