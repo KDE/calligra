@@ -2,7 +2,11 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 METASOURCES = AUTO
 
-noinst_LTLIBRARIES = libkugar.la
+libkugar_la_LIBADD = $(LIB_QT) $(LIB_KDEPRINT)
+
+libkugar_la_LDFLAGS = $(all_libraries) -version-info 1:2 -no-undefined
+
+lib_LTLIBRARIES = libkugar.la
 
 libkugar_la_SOURCES = \
 	mcalcobject.cpp \
@@ -20,7 +24,7 @@ libkugar_la_SOURCES = \
 	mspecialobject.cpp \
 	mutil.cpp
 
-EXTRA_DIST = \
+include_HEADERS = \
 	kugar.h \
 	kugarqt.h \
 	mcalcobject.h \
