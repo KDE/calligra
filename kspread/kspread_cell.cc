@@ -2066,8 +2066,9 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   if ( !isObscuringForced() )
     paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
 
-  paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom,
-                       paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
+  if( painter.device()->devType() != QInternal::Printer )
+    paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom,
+                         paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
 
   /* paint all the cells that this one obscures */
   paintingObscured++;
