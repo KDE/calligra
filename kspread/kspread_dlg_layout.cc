@@ -1169,7 +1169,7 @@ else if(dlg->m_bValue)
                         double q=0;
                         double val2=rint(result);
 
-                        preci=pow(10,(-1*index));
+                        preci=pow((float)10,(-1*index));
                         numerator=rint(result);
                         denominator=1;
                         while(fabs(numerator/denominator-result)>preci)

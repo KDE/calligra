@@ -1419,7 +1419,7 @@ QString KSpreadCell::createFractionFormat(double value)
                         double q=0;
                         double val2=rint(result);
 
-                        precision=pow(10,(-1*index));
+                        precision=pow((float)10,(-1*index));
                         numerator=rint(result);
                         denominator=1;
                         while(fabs(numerator/denominator-result)>precision)
@@ -1793,8 +1793,8 @@ void KSpreadCell::textSize( QPainter &_paint )
     // Rotated text ?
     else if( m_rotateAngle != 0 )
     {
-        m_iOutTextHeight = static_cast<int>(std::cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180))));
-        m_iOutTextWidth = static_cast<int>(std::abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180));
+        m_iOutTextHeight = static_cast<int>(cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180))));
+        m_iOutTextWidth = static_cast<int>(abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180));
         //kdDebug(36001)<<"m_iOutTextWidth"<<m_iOutTextWidth<<"m_iOutTextHeight"<<m_iOutTextHeight<<endl;
     }
     // Vertical text ?
