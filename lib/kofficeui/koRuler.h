@@ -292,6 +292,7 @@ private:
     double applyRtlAndZoom( double value ) const;
     double unZoomItRtl( int pixValue ) const;
     double lineDistance() const;
+    bool willRemoveTab( int y ) const;
 
     KoRulerPrivate *d;
 
