@@ -45,6 +45,7 @@
 #include "kspread_table.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
+#include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_canvas.h"
 

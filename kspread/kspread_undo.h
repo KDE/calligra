@@ -23,15 +23,16 @@
 class KSpreadUndo;
 class KSpreadUndoAction;
 class KSpreadTable;
-
-#include "kspread_doc.h"
-#include "kspread_layout.h"
-#include "kspread_cell.h"
-#include "kspread_table.h"
+class KSpreadLayout;
+class KSpreadCell;
+class KSpreadDoc;
+class ColumnLayout;
+class RowLayout;
 
 #include <qstack.h>
 #include <qstring.h>
 #include <qrect.h>
+#include <qlist.h>
 
 /**
  * Abstract base class. Every undo/redo action must

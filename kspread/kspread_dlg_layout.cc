@@ -25,11 +25,13 @@
 #include "kspread_undo.h"
 #include "kspread_table.h"
 #include "kspread_cell.h"
+#include "kspread_doc.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 
 #include <qlabel.h>
 #include <qpainter.h>
+#include <qlayout.h>
 #include <kcolordlg.h>
 #include <klocale.h>
 #include <kdebug.h>
