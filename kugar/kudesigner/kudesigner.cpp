@@ -406,7 +406,7 @@ void KuDesignerApp::slotFileOpen()
   else
   {	
     KURL url=KFileDialog::getOpenURL(QString::null,
-        i18n("*.kut|Report template files (*.kut)"), this, i18n("Open File..."));
+        i18n("*.kut|Report template files (*.kut)"), this, i18n("Open File"));
     if(!url.isEmpty())
     {
       if (!doc->openDocument(url)) return;
@@ -460,7 +460,7 @@ void KuDesignerApp::slotFileSaveAs()
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
   KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
-        i18n("*|Report template files (*.kut)"), this, i18n("Save as..."));
+        i18n("*|Report template files (*.kut)"), this, i18n("Save As"));
   if(!url.isEmpty())
   {
     doc->saveDocument(url);
@@ -637,7 +637,7 @@ void KuDesignerApp::slotAddPageFooter(){
 /** No descriptions */
 void KuDesignerApp::slotAddDetailHeader(){
     bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(i18n("Add detail header"), i18n("Enter detail level:"),
+    unsigned int level = QInputDialog::getInteger(i18n("Add Detail Header"), i18n("Enter detail level:"),
 				    0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if (doc->canvas()->templ->detailsCount >= level)
@@ -654,7 +654,7 @@ void KuDesignerApp::slotAddDetailHeader(){
 /** No descriptions */
 void KuDesignerApp::slotAddDetail(){
     bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(i18n("Add detail"), i18n("Enter detail level:"),
+    unsigned int level = QInputDialog::getInteger(i18n("Add Detail"), i18n("Enter detail level:"),
 				    0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if ( ((level == 0) && (doc->canvas()->templ->detailsCount == 0))
@@ -673,7 +673,7 @@ void KuDesignerApp::slotAddDetail(){
 /** No descriptions */
 void KuDesignerApp::slotAddDetailFooter(){
     bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(i18n("Add detail footer"), i18n("Enter detail level:"),
+    unsigned int level = QInputDialog::getInteger(i18n("Add Detail Footer"), i18n("Enter detail level:"),
 				    0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if (doc->canvas()->templ->detailsCount >= level)

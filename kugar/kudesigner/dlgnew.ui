@@ -259,7 +259,7 @@
                         <cstring>laPageSize</cstring>
                     </property>
                     <property name="text">
-                        <string>Page Size:</string>
+                        <string>Page size:</string>
                     </property>
                 </widget>
             </grid>
@@ -288,7 +288,7 @@
                         <cstring>laBottom</cstring>
                     </property>
                     <property name="text">
-                        <string>Bottom Margin</string>
+                        <string>Bottom margin:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="1">
@@ -296,7 +296,7 @@
                         <cstring>laLeft</cstring>
                     </property>
                     <property name="text">
-                        <string>Left Margin</string>
+                        <string>Left margin:</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox" row="1" column="1">
@@ -319,7 +319,7 @@
                         <cstring>laRight</cstring>
                     </property>
                     <property name="text">
-                        <string>Right Margin</string>
+                        <string>Right margin:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -327,7 +327,7 @@
                         <cstring>laTop</cstring>
                     </property>
                     <property name="text">
-                        <string>Top Margin</string>
+                        <string>Top margin:</string>
                     </property>
                 </widget>
             </grid>
@@ -368,7 +368,7 @@
                         <cstring>buttonOk</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="accel">
                         <number>0</number>
@@ -385,7 +385,7 @@
                         <cstring>buttonCancel</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                     <property name="accel">
                         <number>0</number>
