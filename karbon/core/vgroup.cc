@@ -28,7 +28,6 @@
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
 #include "shapes/vrectangle.h"
-#include "shapes/vroundrect.h"
 #include "shapes/vsinus.h"
 #include "shapes/vspiral.h"
 #include "shapes/vstar.h"
@@ -197,12 +196,6 @@ VGroup::load( const QDomElement& element )
 			else if( e.tagName() == "RECT" )
 			{
 				VRectangle* rectangle = new VRectangle( this );
-				rectangle->load( e );
-				append( rectangle );
-			}
-			else if( e.tagName() == "ROUNDRECT" )
-			{
-				VRoundRect* rectangle = new VRoundRect( this );
 				rectangle->load( e );
 				append( rectangle );
 			}

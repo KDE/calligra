@@ -25,7 +25,7 @@
 
 #include <karbon_view.h>
 #include <karbon_part.h>
-#include <shapes/vroundrect.h>
+#include <shapes/vrectangle.h>
 #include "vroundrecttool.h"
 #include "koUnitWidgets.h"
 #include <kgenericfactory.h>
@@ -115,7 +115,7 @@ VRoundRectTool::shape( bool interactive ) const
 	if( interactive )
 	{
 		return
-			new VRoundRect(
+			new VRectangle(
 				0L,
 				m_p,
 				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
@@ -124,7 +124,7 @@ VRoundRectTool::shape( bool interactive ) const
 	}
 	else
 		return
-			new VRoundRect(
+			new VRectangle(
 				0L,
 				m_p,
 				m_d1,

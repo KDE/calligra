@@ -23,6 +23,7 @@
 #include <koUnit.h>
 #include <qdom.h>
 #include <kdebug.h>
+#include "vglobal.h"
 
 VRectangle::VRectangle( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -30,10 +31,22 @@ VRectangle::VRectangle( VObject* parent, VState state )
 }
 
 VRectangle::VRectangle( VObject* parent,
-		const KoPoint& topLeft, double width, double height )
-	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height )
+		const KoPoint& topLeft, double width, double height, double edgeRadius )
+	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_edgeRadius( edgeRadius )
 {
 	setDrawCenterNode();
+
+	if( m_edgeRadius < 0.0 )
+		m_edgeRadius = 0.0;
+
+	// Catch case, when radius is larger than width or height:
+	double minimum;
+
+	if( m_edgeRadius > ( minimum = kMin( m_width * 0.5, m_height * 0.5 ) ) )
+	{
+ 		m_edgeRadius = minimum;
+	}
+
 
 	init();
 }
@@ -41,10 +54,30 @@ VRectangle::VRectangle( VObject* parent,
 void
 VRectangle::init()
 {
-	moveTo( m_topLeft );
-	lineTo( KoPoint( m_topLeft.x(),         m_topLeft.y() - m_height ) );
-	lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
-	lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ) );
+	if( m_edgeRadius == 0 )
+	{
+		moveTo( m_topLeft );
+		lineTo( KoPoint( m_topLeft.x(),         m_topLeft.y() - m_height ) );
+		lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
+		lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ) );
+	}
+	else
+	{
+		moveTo(
+			KoPoint( m_topLeft.x(), m_topLeft.y() - m_height + m_edgeRadius ) );
+		arcTo(
+			KoPoint( m_topLeft.x(), m_topLeft.y() - m_height ),
+			KoPoint( m_topLeft.x() + m_edgeRadius, m_topLeft.y() - m_height ), m_edgeRadius );
+		arcTo(
+			KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ),
+			KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height + m_edgeRadius ), m_edgeRadius );
+		arcTo(
+			KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ),
+			KoPoint( m_topLeft.x() + m_width - m_edgeRadius, m_topLeft.y() ), m_edgeRadius );
+		arcTo(
+			KoPoint( m_topLeft.x(), m_topLeft.y() ),
+			KoPoint( m_topLeft.x(), m_topLeft.y() - m_edgeRadius ), m_edgeRadius );
+	}
 	close();
 }
 
@@ -71,6 +104,8 @@ VRectangle::save( QDomElement& element ) const
 		me.setAttribute( "width", QString("%1pt").arg( m_width ) );
 		me.setAttribute( "height", QString("%1pt").arg( m_height ) );
 
+		me.setAttribute( "corner-radius", m_edgeRadius );
+
 		writeTransform( me );
 	}
 }
@@ -90,6 +125,8 @@ VRectangle::load( const QDomElement& element )
 
 	m_topLeft.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
 	m_topLeft.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
+
+	m_edgeRadius  = KoUnit::parseValue( element.attribute( "corner-radius" ) );
 
 	init();
 
