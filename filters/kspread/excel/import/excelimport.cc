@@ -296,8 +296,14 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
           ce.setAttribute( "column", col+1 );
           table.appendChild( ce );
 
-          ce.appendChild( convertFormat( mainDocument, cell->format() ) );
           ce.appendChild( convertValue( mainDocument, cell->value() )  );
+
+          QDomElement fe = convertFormat( mainDocument, cell->format() );
+          if( cell->columnSpan() > 1 )
+            fe.setAttribute( "colspan", cell->columnSpan()-1 );
+          if( cell->rowSpan() > 1 )
+            fe.setAttribute( "rowspan", cell->rowSpan()-1 );
+          ce.appendChild( fe );
 
         }
       }
