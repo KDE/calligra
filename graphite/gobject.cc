@@ -299,7 +299,7 @@ void G2DObjectM9r::createPropertyDialog() {
     QBoxLayout *leftbox=new QVBoxLayout(mainbox, 0, 0);
     mainbox->setStretchFactor(leftbox, 1);
 
-    m_style=new QVButtonGroup(i18n("Fill Style:"), fill);
+    m_style=new QVButtonGroup(i18n("Fill Style"), fill);
     QRadioButton *r=new QRadioButton(i18n("None"), m_style);
     r=new QRadioButton(i18n("Brush"), m_style);
     if(m_gradient)
@@ -313,7 +313,7 @@ void G2DObjectM9r::createPropertyDialog() {
         m_style->setButton(static_cast<int>(gobject()->fillStyle())+1);
     m_style->setExclusive(true);
 
-    QVGroupBox *previewbox=new QVGroupBox(i18n("Preview:"), fill);
+    QVGroupBox *previewbox=new QVGroupBox(i18n("Preview"), fill);
     m_preview=new PWidget(previewbox, this);
     m_preview->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     leftbox->addWidget(previewbox);

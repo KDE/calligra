@@ -34,7 +34,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
     setCaption( i18n("Change Case") );
     QVBox *page = makeVBoxMainWidget();
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case:" ),page );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     m_upperCase=new QRadioButton( i18n("&Uppercase"), grp );

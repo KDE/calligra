@@ -22,7 +22,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 {
   QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
 
-  QButtonGroup* gb = new QButtonGroup( i18n("Legend Position:"), this );
+  QButtonGroup* gb = new QButtonGroup( i18n("Legend Position"), this );
   QGridLayout *grid1 = new QGridLayout(gb,3,3,15,7);
   layout->addWidget(gb,0,0);
 
@@ -57,7 +57,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   gb->setAlignment(Qt::AlignLeft);
 
 
-  gb = new QButtonGroup( i18n("Title:"), this );
+  gb = new QButtonGroup( i18n("Title"), this );
   layout->addWidget(gb,1,0);
 
   QGridLayout *grid2 = new QGridLayout(gb,4,2,15,7);
@@ -68,7 +68,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   title=new QLineEdit(gb);
   grid2->addWidget(title,1,0);
 
-  gb = new QButtonGroup( i18n("Color:"), this );
+  gb = new QButtonGroup( i18n("Color"), this );
   layout->addWidget(gb,0,1);
 
   QGridLayout *grid3 = new QGridLayout(gb,4,2,15,7);
@@ -87,7 +87,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   grid3->addWidget(legendTextColor,3,0);
 
-  gb = new QButtonGroup( i18n("Font:"), this );
+  gb = new QButtonGroup( i18n("Font"), this );
   layout->addWidget(gb,1,1);
 
   QGridLayout *grid4 = new QGridLayout(gb,4,2,15,7);

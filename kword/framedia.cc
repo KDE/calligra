@@ -481,7 +481,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 
     QVBoxLayout *form1Layout = new QVBoxLayout( tab2, 11, 6, "tab2Layout");
 
-    runGroup = new QButtonGroup(  i18n( "Text in other frames will:" ), tab2);
+    runGroup = new QButtonGroup(  i18n( "Text in Other Frames Will" ), tab2);
     runGroup->setColumnLayout(0, Qt::Vertical );
     runGroup->layout()->setSpacing( 6 );
     runGroup->layout()->setMargin( 11 );

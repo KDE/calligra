@@ -40,9 +40,9 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   list=new QListBox(page);
   lay1->addWidget( list );
   if(_type==Column)
-        setCaption( i18n("Name of the Hidden Column:") );
+        setCaption( i18n("Name of the Hidden Column") );
   else if(_type==Row)
-        setCaption( i18n("Number of the Hidden Row:") );
+        setCaption( i18n("Number of the Hidden Row") );
 
   bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
   if(_type==Column)

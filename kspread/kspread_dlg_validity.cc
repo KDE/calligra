@@ -41,7 +41,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     QButtonGroup* tmpQButtonGroup;
     tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_1" );
     tmpQButtonGroup->setFrameStyle( 49 );
-    tmpQButtonGroup->setTitle( i18n("Validity Criteria:") );
+    tmpQButtonGroup->setTitle( i18n("Validity Criteria") );
     QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,KDialogBase::marginHint(),KDialogBase::spacingHint());
 
     QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
@@ -109,7 +109,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
     tmpQButtonGroup = new QButtonGroup( page2, "ButtonGroup_2" );
     tmpQButtonGroup->setFrameStyle( 49 );
-    tmpQButtonGroup->setTitle( i18n("Contents:") );
+    tmpQButtonGroup->setTitle( i18n("Contents") );
     grid1 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
 
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );

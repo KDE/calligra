@@ -33,7 +33,7 @@
                 <cstring>GroupBox1</cstring>
             </property>
             <property name="title">
-                <string>Common xslt Files:</string>
+                <string>Common xslt Files</string>
             </property>
             <vbox>
                 <property name="name">
@@ -74,7 +74,7 @@
                 <cstring>GroupBox2</cstring>
             </property>
             <property name="title">
-                <string>Personal xslt Files:</string>
+                <string>Personal xslt Files</string>
             </property>
             <hbox>
                 <property name="name">

@@ -124,7 +124,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     bbox->addWidget(d->m_remove);
 
     QVBoxLayout *rightbox=new QVBoxLayout(mbox);
-    QGroupBox *pixbox=new QGroupBox(i18n("Picture:"), mainwidget);
+    QGroupBox *pixbox=new QGroupBox(i18n("Picture"), mainwidget);
     rightbox->addWidget(pixbox);
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox, KDialogBase::marginHint(),
                                            KDialogBase::spacingHint());

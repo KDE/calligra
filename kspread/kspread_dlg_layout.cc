@@ -2305,7 +2305,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     else if(dlg->alignY==KSpreadCell::Bottom)
         bottom->setChecked(true);
 
-    grp = new QButtonGroup( i18n("Text option"),this);
+    grp = new QButtonGroup( i18n("Text Option"),this);
     //grp->setRadioButtonExclusive( false );
     grid2 = new QGridLayout(grp,2,1,15,7);
     multi = new QCheckBox( i18n("Go to line automatically"),grp);
@@ -2335,7 +2335,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 	vertical->setEnabled(false);
       }
 
-    grp = new QButtonGroup( i18n("Merge cells"),this);
+    grp = new QButtonGroup( i18n("Merge Cells"),this);
     grid2 = new QGridLayout(grp,1,1,15,7);
     mergeCell=new QCheckBox(i18n("Merge cells"),grp);
     mergeCell->setChecked(dlg->isMerged);
@@ -2351,7 +2351,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(indent,0,0);
     grid3->addWidget(grp,2,1);
 
-    grp = new QButtonGroup( i18n("Size of cell"),this);
+    grp = new QButtonGroup( i18n("Size of Cell"),this);
     grid2 = new QGridLayout(grp,2,4,15,7);
 
     QLabel *tmpLabel=new QLabel(grp,"label");

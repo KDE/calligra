@@ -135,7 +135,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   hdistButton[3]->setToggleButton(true);
   hdistButton[3]->setPixmap(SmallIcon("dright"));
 
-  group = new QVButtonGroup(i18n("Distribute at"), mDistr);
+  group = new QVButtonGroup(i18n("Distribute At"), mDistr);
   layout->addWidget(group, 1, 1);
 
   sbutton = new QRadioButton(i18n("Selection"), group);

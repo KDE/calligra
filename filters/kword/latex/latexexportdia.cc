@@ -100,7 +100,7 @@ void LATEXExportDia::createDialog()
 	langLayout->activate();
 
 	/* Third part */
-	docBox = new QVButtonGroup(i18n("Document type"), page);
+	docBox = new QVButtonGroup(i18n("Document Type"), page);
 	mainLayout->addWidget(docBox);
 
 	QBoxLayout *docLayout = new QVBoxLayout(docBox);
