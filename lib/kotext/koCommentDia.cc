@@ -25,13 +25,18 @@
 #include <qpushbutton.h>
 #include <kglobal.h>
 #include <qdatetime.h>
+#include <qlabel.h>
+#include <kdebug.h>
 
-KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString & _authorName, const char *name )
+KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString & _authorName, const QString &_createNote, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     setCaption( i18n("Edit Comment") );
     authorName = _authorName;
     QVBox *page = makeVBoxMainWidget();
+    kdDebug()<<"_createNote :"<<_createNote<<endl;
+    if ( !_createNote.isEmpty() )
+        new QLabel( _createNote, page );
 
     m_multiLine = new QMultiLineEdit( page );
     m_multiLine->setText( _note );

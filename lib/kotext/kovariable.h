@@ -717,6 +717,10 @@ public:
     QString note() const { return m_varValue.toString(); }
     void setNote( const QString & _note) { m_varValue = QVariant(_note); }
     virtual void recalc();
+
+    QString createdNote() const;
+protected:
+    QDate m_createdNoteDate;
 };
 
 

@@ -6051,7 +6051,8 @@ void KPresenterView::editComment()
                 kdWarning() << "Author information not found in documentInfo !" << endl;
             else
                 authorName = authorPage->fullName();
-            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
+            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName, var->createdNote());
+
             if( commentDia->exec() )
                 var->setNote( commentDia->commentText());
             delete commentDia;

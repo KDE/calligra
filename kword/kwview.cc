@@ -6153,7 +6153,8 @@ void KWView::editComment()
             else
                 authorName = authorPage->fullName();
             QString oldValue = var->note();
-            KoCommentDia *commentDia = new KoCommentDia( this, oldValue, authorName);
+            QString createDate = var->createdNote();
+            KoCommentDia *commentDia = new KoCommentDia( this, oldValue, authorName, createDate);
             if( commentDia->exec() )
             {
                 if ( oldValue != commentDia->commentText())

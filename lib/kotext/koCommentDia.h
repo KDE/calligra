@@ -29,7 +29,7 @@ class KoCommentDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KoCommentDia( QWidget *parent, const QString &_note=QString::null, const QString & _authorName=QString::null, const char *name=0L );
+    KoCommentDia( QWidget *parent, const QString &_note=QString::null, const QString & _authorName=QString::null, const QString &_createNote=QString::null, const char *name=0L );
     QString commentText();
 
 private slots:
