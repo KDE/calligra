@@ -1568,6 +1568,9 @@ void KWParagTabulatorsWidget::newClicked() {
 void KWParagTabulatorsWidget::deleteClicked() {
     int selected = lstTabs->currentItem();
     if (selected < 0) return;
+    noSignals=true;
+    sTabPos->clear();
+    noSignals=false;
     lstTabs->removeItem(selected);
     m_tabList.remove(m_tabList[selected]);
     if(lstTabs->count() >0) {
