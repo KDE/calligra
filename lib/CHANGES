@@ -35,6 +35,9 @@ KoSpell:
 KoWMF:
 - Fixed infinite loop on invalid WMF file
 
+KoShell:
+- Fixed problems (wrong URL etc.) after importing non-native documents (#77574)
+
 Changes after KOffice-1.3-rc1
 =============================
 KOfficeCore:
