@@ -249,6 +249,8 @@ void kisView::setupDialogs()
   m_pGradientEditorDialog->hide();
   //addDialog(m_pGradientEditorDialog);
   connect( m_pGradientEditorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+
+  updateToolbarButtons();
 }
 
 void kisView::setupActions()
