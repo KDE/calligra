@@ -291,7 +291,7 @@ QDomElement KSpreadLayout::save( QDomDocument& doc ) const
     return format;
 }
 
-bool KSpreadLayout::load( const QDomElement& f )
+bool KSpreadLayout::load( const QDomElement& f,PasteMode pm )
 {
     bool ok;
 
@@ -405,6 +405,8 @@ bool KSpreadLayout::load( const QDomElement& f )
     if ( !font.isNull() )
 	setTextFont( toFont(font) );
 
+    if(pm!=NoBorder)
+    {
     QDomElement left = f.namedItem( "left-border" ).toElement();
     if ( !left.isNull() )
     {
@@ -451,6 +453,8 @@ bool KSpreadLayout::load( const QDomElement& f )
 	QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
 	if ( !pen.isNull() )
 	    setGoUpDiagonalPen( toPen(pen) );
+    }
+
     }
 
     if ( f.hasAttribute( "prefix" ) )

@@ -3951,7 +3951,7 @@ void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
         b = mime->encodedData( "application/x-kspread-snippet" );
     else
         return;
-
+    
     paste( b, _marker, sp, op );
 }
 
@@ -4194,7 +4194,7 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
 
         deleteCells( r );
     }
-
+    refreshMergedCell();
     emit sig_updateView( this );
 }
 

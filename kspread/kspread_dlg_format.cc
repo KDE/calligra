@@ -301,7 +301,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	    KSpreadTable* table = m_view->activeTable();
 	    KSpreadLayout* cell = new KSpreadLayout( table );
 
-	    if ( !cell->load( e.namedItem("format").toElement() ) )
+	    if ( !cell->load( e.namedItem("format").toElement(),Normal ) )
 		return false;
 
 	    int row = e.attribute("row").toInt();

@@ -3941,7 +3941,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     QDomElement f = cell.namedItem( "format" ).toElement();
     if ( !f.isNull() && ( pm == Normal || pm == Format || pm == NoBorder ) )
     {
-        if ( !KSpreadLayout::load( f ) )
+        // send pm parameter. Didn't load Borders if pm==NoBorder
+        if ( !KSpreadLayout::load( f,pm ) )
             return false;
 
         if ( f.hasAttribute( "colspan" ) )

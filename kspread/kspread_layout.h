@@ -30,6 +30,8 @@ class QDomDocument;
 #include <qcolor.h>
 #include <qfont.h>
 
+#include "kspread_global.h"
+
 /**
  */
 class KSpreadLayout
@@ -83,7 +85,7 @@ public:
     //
     ////////////////////////////////
 
-    bool load( const QDomElement& f );
+    bool load( const QDomElement& f,PasteMode pm );
     QDomElement save( QDomDocument& doc ) const;
 
     ////////////////////////////////
