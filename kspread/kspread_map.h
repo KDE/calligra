@@ -57,7 +57,7 @@ public:
   virtual ~KSpreadMap();
 
   QDomElement save( QDomDocument& doc );
-    bool loadOasis( const QDomDocument& mymap );
+    bool loadOasis( const QDomElement& mymap );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 

@@ -119,7 +119,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   return mymap;
 }
 
-bool KSpreadMap::loadOasis( const QDomDocument& mymap )
+bool KSpreadMap::loadOasis( const QDomElement& mymap )
 {
     //todo
     return true;
