@@ -1187,8 +1187,6 @@ bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
   content.appendChild( entry );
 
   entry = meta.createElement( "manifest:file-entry" );
-  entry.setAttribute( "manifest:media-type", "" );
-  entry.setAttribute( "manifest:full-path", "Pictures/" );
   content.appendChild( entry );
 
   if ( filesWritten & contentXML )
