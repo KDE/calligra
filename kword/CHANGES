@@ -127,19 +127,14 @@ Rewrite of tables where positioning is much more fool-proof and table-borders ac
 More intelligent table-cell-scaling for cells with mixed text lengths
 
 Add text shadow
-
 Set inline frame where you want. // Hmm? what is meant with this change??
-
 Setting tabs via the rulers is more intuitive.
-
 Add link (internet link/ address mail / file link)
-
 Add dcop interface : now we can insert text, change text format, etc...
-
 Frame z-order ("Raise frame", "Lower frame")
-
 Add support for background spell checking
-
-Add support for manual completion (use CTL+T)
-
+Add support for manual completion (use CTL+E)
 Add support for note
+Can associate key shortcuts to styles
+"Section Title" variable
+
