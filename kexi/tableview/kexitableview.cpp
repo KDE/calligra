@@ -1486,7 +1486,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		if (shortCutPressed( e, "data_save_row")) {
 			kdDebug() << "shortCutPressed!!!" <<endl;
 			acceptRowEdit();
-			e->accept();
 			return;
 		}
 	}
@@ -2257,7 +2256,10 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 
 		// cursor moved to other row: end of row editing
 		if (d->rowEditing && d->curRow != newrow) {
-			acceptRowEdit();
+			if (!acceptRowEdit()) {
+				//accepting failed: cancel setting the cursor
+				return;
+			}
 			//update row number, because number of rows changed
 			newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
 		}
@@ -2333,10 +2335,10 @@ void KexiTableView::removeEditor()
 	viewport()->setFocus();
 }
 
-void KexiTableView::acceptEditor()
+bool KexiTableView::acceptEditor()
 {
 	if (!d->pEditor)
-		return;
+		return true;
 
 	QVariant newval;
 	bool setNull = false;
@@ -2344,7 +2346,7 @@ void KexiTableView::acceptEditor()
 		if (d->pEditor->field()->isNotNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 			removeEditor();
-			return;
+			return true;
 		}
 		else {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET" << endl;
@@ -2357,7 +2359,7 @@ void KexiTableView::acceptEditor()
 			if (d->pEditor->field()->isNotEmpty()) {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 				removeEditor();
-				return;
+				return true;
 			}
 			else {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY VALUE WILL BE SET" << endl;
@@ -2367,7 +2369,7 @@ void KexiTableView::acceptEditor()
 			if (d->pEditor->field()->isNotNull()) {
 				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 				removeEditor();
-				return;
+				return true;
 			}
 			else {
 				kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED" << endl;
@@ -2381,7 +2383,7 @@ void KexiTableView::acceptEditor()
 		|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
 		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
 		removeEditor();
-		return;
+		return true;
 	}
 	if (!setNull) {//get new value 
 		bool ok;
@@ -2389,19 +2391,28 @@ void KexiTableView::acceptEditor()
 		if (!ok) {
 			kdDebug() << "KexiTableView::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
 			removeEditor();
-			return;
+			return true;
 		}
 	}
 
-	//send changes to the backend
-	m_data->updateRowEditBuffer(d->curCol,newval);
+	bool allow = true;
+	emit aboutToChangeItem(d->pCurrentItem, newval, allow);
+	if (allow) {
+		//send changes to the backend
+		m_data->updateRowEditBuffer(d->curCol,newval);
 
-	kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
-	m_data->rowEditBuffer()->debug();
+		kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
+		m_data->rowEditBuffer()->debug();
+	} else {
+		kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeItem() signal" << endl;
+	}
 
-	removeEditor();
-	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, d->pCurrentItem->at(d->curCol));
-	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
+	if (allow) {
+		removeEditor();
+		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, d->pCurrentItem->at(d->curCol));
+		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
+	}
+	return allow;
 }
 
 void KexiTableView::cancelEditor()
@@ -2412,14 +2423,16 @@ void KexiTableView::cancelEditor()
 	removeEditor();
 }
 
-void KexiTableView::acceptRowEdit()
+bool KexiTableView::acceptRowEdit()
 {
 	if (!d->rowEditing)
-		return;
-	acceptEditor();
+		return true;
+	if (!acceptEditor())
+		return false;
 	kdDebug() << "EDIT ROW ACCEPTING..." << endl;
 
 	bool success = false;
+	bool allow = true;
 	const bool inserting = d->newRowEditing;
 //	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
 
@@ -2427,7 +2440,7 @@ void KexiTableView::acceptRowEdit()
 		if (d->newRowEditing) {
 			cancelRowEdit();
 			kdDebug() << "-- NOTHING TO INSERT!!!" << endl;
-			return;
+			return true;
 		}
 		else {
 			success = true;
@@ -2436,31 +2449,43 @@ void KexiTableView::acceptRowEdit()
 	}
 	else {
 		if (d->newRowEditing) {
-			kdDebug() << "-- INSERTING: " << endl;
-			m_data->rowEditBuffer()->debug();
-			success = m_data->saveNewRow(*d->pCurrentItem);
+			emit aboutToInsertRow(d->pCurrentItem, allow);
+			if (allow) {
+				kdDebug() << "-- INSERTING: " << endl;
+				m_data->rowEditBuffer()->debug();
+				success = m_data->saveNewRow(*d->pCurrentItem);
+			}
 		}
 		else {
-			//accept changes for this row:
-			kdDebug() << "-- ACCEPTING: " << endl;
-			m_data->rowEditBuffer()->debug();
-			success = m_data->saveRowChanges(*d->pCurrentItem);
+			emit aboutToUpdateRow(d->pCurrentItem, allow);
+			if (allow) {
+				//accept changes for this row:
+				kdDebug() << "-- UPDATING: " << endl;
+				m_data->rowEditBuffer()->debug();
+				success = m_data->saveRowChanges(*d->pCurrentItem);
+			}
 		}
 	}
 
 	if (!success) {
-		kdDebug() << "EDIT ROW - ERROR!" << endl;
+		if (!allow) {
+			kdDebug() << "INSERT/EDIT ROW - DISALLOWED by signal!" << endl;
+		}
+		else {
+			kdDebug() << "EDIT ROW - ERROR!" << endl;
+		}
 		//js todo: show errors
 	}
 	
-	//editing is finished:
-
-	d->rowEditing = false;
-	d->newRowEditing = false;
-	//indicate on the vheader that we are not editing
-	d->pVerticalHeader->setEditRow(-1);
-	//redraw
-	updateRow(d->curRow);
+	if (allow) {
+		//editing is finished:
+		d->rowEditing = false;
+		d->newRowEditing = false;
+		//indicate on the vheader that we are not editing
+		d->pVerticalHeader->setEditRow(-1);
+		//redraw
+		updateRow(d->curRow);
+	}
 
 	if (success) {
 		kdDebug() << "EDIT ROW ACCEPTED:" << endl;
@@ -2476,7 +2501,10 @@ void KexiTableView::acceptRowEdit()
 		}
 	}
 
-	emit rowEditTerminated(d->curRow);
+	if (allow) {
+		emit rowEditTerminated(d->curRow);
+	}
+	return allow;
 }
 
 void KexiTableView::cancelRowEdit()

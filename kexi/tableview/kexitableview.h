@@ -351,11 +351,13 @@ public slots:
 	void deleteAndStartEditCurrentCell();
 
 	/*! Accepts row editing. All changes made to the editing 
-	 row duing this current session will be accepted. */
-	void acceptRowEdit();
+	 row duing this current session will be accepted. 
+	 \return true is accepting was successfull, false otherwise 
+	 (e.g. when current row contain data that does not meet given constraints). */
+	bool acceptRowEdit();
 
 	/*! Cancels row editing All changes made to the editing 
-	 row duing this current session will be undone. */
+	 row during this current session will be undone. */
 	void cancelRowEdit();
 
 signals:
@@ -365,6 +367,22 @@ signals:
 	void itemReturnPressed(KexiTableItem *, int row, int col);
 	void itemDblClicked(KexiTableItem *, int row, int col);
 	void itemMouseReleased(KexiTableItem *, int row, int col);
+
+	/*! Emitted before change of the single, currently edited cell.
+	 Connect this signal to your slot and set \a allow value to false 
+	 to disallow the change. */
+	void aboutToChangeItem(KexiTableItem *, QVariant newValue, bool& allow);
+
+	/*! Emited before inserting of a new, current row.
+	 Connect this signal to your slot and set \a allow value to false 
+	 to disallow the inserting. */
+	void aboutToInsertRow(KexiTableItem *, bool& allow);
+
+	/*! Emited before changing of an edited, current row.
+	 Connect this signal to your slot and set \a allow value to false 
+	 to disallow the change. */
+	void aboutToUpdateRow(KexiTableItem *, bool& allow);
+
 	void itemChanged(KexiTableItem *, int row, int col);
 	void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
 	void itemDeleteRequest(KexiTableItem *, int row, int col);
@@ -387,7 +405,7 @@ signals:
 protected slots:
 	void columnWidthChanged( int col, int os, int ns );
 	void cancelEditor();
-	virtual void acceptEditor();
+	virtual bool acceptEditor();
 	virtual void boolToggled();
 	void slotUpdate();
 	void sortColumnInternal(int col);

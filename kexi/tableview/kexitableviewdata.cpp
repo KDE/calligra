@@ -61,6 +61,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 		defaultValue,
 		caption, helpText, width);
 
+	isDBAware = false;
 	m_nameOrCaption = field->captionOrName();
 	m_fieldOwned = true;
 	m_readOnly = false;
