@@ -166,7 +166,7 @@ signals:
     void tabChanged( const QString& _text );
 
     /**
-     * Emitted upon mouse double-clicked. This is typically used
+     * Emitted upon mouse right click. This is typically used
      * to popup a context menu.
      */
     void contextMenu( const QPoint& pos );
