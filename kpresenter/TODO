@@ -1,9 +1,14 @@
 BUGS :
 ======
-- Text editor : fix Home, End, ....
+- Text editor : 
+  - fix Home, End (they bring to the beginning/end of the document!)
+  - fix Esc : should exit edit mode (currently inserts non-visible char!)
   - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
     '^' + 'e' = 'e' !
   - selecting several lines : first line gets unselected
+  - enumerated list / unsorted list / normal text : don't work if not in edit mode
+- adding a new page (from template) changes the width & height of the 
+  whole presentation (if different from the one of the template)
 
 MISSING FEATURES :
 ==================
