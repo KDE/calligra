@@ -18,6 +18,7 @@ koffice-libs: shlib-missing-in-control-file libkspelltool.so usr/lib/kde2/libksp
 koffice-libs: shlib-missing-in-control-file liblatexexport.so usr/lib/kde2/liblatexexport.so
 koffice-libs: shlib-missing-in-control-file libmsodimport.so usr/lib/kde2/libmsodimport.so
 koffice-libs: shlib-missing-in-control-file libolefilter.so usr/lib/kde2/libolefilter.so
+koffice-libs: shlib-missing-in-control-file libqproimport.so usr/lib/kde2/libqproimport.so
 koffice-libs: shlib-missing-in-control-file librtfexport.so usr/lib/kde2/librtfexport.so
 koffice-libs: shlib-missing-in-control-file librtfimport.so usr/lib/kde2/librtfimport.so
 koffice-libs: shlib-missing-in-control-file libwmfimport.so usr/lib/kde2/libwmfimport.so
