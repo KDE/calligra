@@ -66,10 +66,25 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	{
 		for(RelationList::Iterator it = rl.begin(); it != rl.end(); it++)
 		{
-			m_tableCombo->setCurrentText((*it).srcTable);
-			slotAddTable();
-			m_tableCombo->setCurrentText((*it).rcvTable);
-			slotAddTable();
+///			m_tableCombo->setCurrentText((*it).srcTable);
+			for(int i=0; i < m_tableCombo->count(); i++)
+			{
+				if(m_tableCombo->text(i) == (*it).srcTable)
+				{
+					m_tableCombo->setCurrentItem(i);
+					slotAddTable();
+				}
+				
+				if(m_tableCombo->text(i) == (*it).rcvTable)
+				{
+					m_tableCombo->setCurrentItem(i);
+					slotAddTable();
+				}
+			}
+//
+//			slotAddTable();
+//			m_tableCombo->setCurrentText((*it).rcvTable);
+//			slotAddTable();
 
 			m_view->addConnection((*it),false);
 		}
@@ -89,13 +104,15 @@ KexiRelationDialog::slotAddTable()
 {
 	if (m_tableCombo->currentItem()!=-1) //(m_tableCombo->count() > 0)
 	{
-		KexiDBRecord *r = m_db->queryRecord("select * from " + m_tableCombo->currentText() + " limit 1");
+		QString tname = m_tableCombo->text(m_tableCombo->currentItem());
+		KexiDBRecord *r = m_db->queryRecord("select * from " + tname + " limit 1");
 		QStringList fields;
 		for(uint i=0; i < r->fieldCount(); i++)
 		{
 			fields.append(r->fieldInfo(i)->name());
 		}
-		m_view->addTable(m_tableCombo->currentText(), fields);
+		m_view->addTable(tname, fields);
+		kdDebug() << "KexiRelationDialog::slotAddTable(): adding table " << tname << endl;
 
 		delete r;
 		int oi=m_tableCombo->currentItem();

@@ -290,6 +290,7 @@ KexiRelationView::addConnection(SourceConnection connection, bool interactive)
 			break;
 		}
 	}
+	kdDebug() << "KexiRelationView::addConnection()" << conn->srcTable << ":" << conn->rcvTable << endl;
 
 	recalculateConnectionRect(conn);
 
