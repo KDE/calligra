@@ -673,7 +673,7 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat )
     return (ret == KMessageBox::Continue);
 }
 
-bool KoMainWindow::saveDocument( bool saveas )
+bool KoMainWindow::saveDocument( bool saveas, bool silent )
 {
     KoDocument* pDoc = rootDocument();
     if(!pDoc)
@@ -885,7 +885,8 @@ bool KoMainWindow::saveDocument( bool saveas )
                     pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
                 }
 
-                pDoc->setTitleModified();
+                if (silent) // don't let the document change the window caption
+                  pDoc->setTitleModified();
             }   // if (wantToSave)  {
             else
                 ret = false;
@@ -1546,41 +1547,47 @@ DCOPObject * KoMainWindow::dcopObject()
 
 void KoMainWindow::slotEmailFile()
 {
-    if (!rootDocument ())
+    if (!rootDocument())
         return;
-
-    if (rootDocument ()->url ().isEmpty () ||
-        rootDocument ()->isModified ())
-    {
-        int result = KMessageBox::questionYesNo (this,
-                        i18n ("You must save this document before sending it.\n"
-                              "Do you want to save it?"),
-                        QString::null,
-                        KStdGuiItem::save (), KStdGuiItem::cancel ());
-
-        if (result == KMessageBox::Yes)
-        {
-            if (!saveDocument ())
-            {
-                // save failed or aborted - don't email
-                return;
-            }
-        }
-        else
-        {
-            // don't want to save - don't email
-            return;
-        }
-    }
 
     // Subject = Document file name
     // Attachment = The current file
     // Message Body = The current document in HTML export? <-- This may be an option.
-    QString fileURL = rootDocument ()->url().url();
-    QString theSubject = rootDocument ()->url().fileName(false);
-    kdDebug(30003) << "(" << fileURL <<")" << endl;
+    QString theSubject;
     QStringList urls;
-    urls.append( fileURL );
+    QString fileURL;
+    if (rootDocument()->url ().isEmpty () ||
+        rootDocument()->isModified())
+    {
+        //Save the file as a temporary file
+        bool const tmp_modified = rootDocument()->isModified();
+        KURL const tmp_url = rootDocument()->url();
+        QCString const tmp_mimetype = rootDocument()->outputMimeType();
+        KTempFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
+        KURL u;
+        u.setPath(tmpfile.name());
+        rootDocument()->setURL(u);
+        rootDocument()->setModified(true);
+        rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
+
+        saveDocument(false, true);
+
+        fileURL = tmpfile.name();
+        theSubject = i18n("Document");
+        urls.append( fileURL );
+
+        rootDocument()->setURL(tmp_url);
+        rootDocument()->setModified(tmp_modified);
+        rootDocument()->setOutputMimeType(tmp_mimetype);
+    }
+    else
+    {
+        fileURL = rootDocument()->url().url();
+        theSubject = i18n("Document - %1").arg(rootDocument()->url().fileName(false));
+        urls.append( fileURL );
+    }
+
+    kdDebug(30003) << "(" << fileURL <<")" << endl;
 
     if (!fileURL.isEmpty())
     {

@@ -303,11 +303,13 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
      *
      * @param saveas if set to TRUE the user is always prompted for a filename
      *
+     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
+     *
      * @return TRUE on success, false on error or cancel
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    virtual bool saveDocument( bool saveas = false );
+    virtual bool saveDocument( bool saveas = false, bool silent = false );
 
     virtual void closeEvent( QCloseEvent * e );
     virtual void resizeEvent( QResizeEvent * e );
