@@ -2346,12 +2346,22 @@ bool KexiTableView::acceptEditor()
 		return true;
 
 	QVariant newval;
+	KexiValidator::Result res = KexiValidator::Ok;
+	QString msg, desc;
 	bool setNull = false;
+//	bool allow = true;
+	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.")
+				.arg(d->pEditor->field()->captionOrName());
+
 	if (d->pEditor->valueIsNull()) {//null value entered
 		if (d->pEditor->field()->isNotNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
-			removeEditor();
-			return true;
+			res = KexiValidator::Error;
+			msg = msg_NOT_NULL;
+			desc = i18n("The column's constraint is declared as NOT NULL.");
+//			allow = false;
+//			removeEditor();
+//			return true;
 		}
 		else {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET" << endl;
@@ -2363,8 +2373,12 @@ bool KexiTableView::acceptEditor()
 		if (d->pEditor->field()->hasEmptyProperty()) {
 			if (d->pEditor->field()->isNotEmpty()) {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
-				removeEditor();
-				return true;
+				res = KexiValidator::Error;
+				msg = msg_NOT_NULL;
+				desc = i18n("The column's constraint is declared as NOT EMPTY.");
+//				allow = false;
+//				removeEditor();
+//				return true;
 			}
 			else {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY VALUE WILL BE SET" << endl;
@@ -2373,8 +2387,12 @@ bool KexiTableView::acceptEditor()
 		else {
 			if (d->pEditor->field()->isNotNull()) {
 				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
-				removeEditor();
-				return true;
+				res = KexiValidator::Error;
+				msg = msg_NOT_NULL;
+				desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
+//				allow = false;
+//				removeEditor();
+//				return true;
 			}
 			else {
 				kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED" << endl;
@@ -2384,40 +2402,53 @@ bool KexiTableView::acceptEditor()
 		}
 	}
 
-	if (!setNull && !d->pEditor->valueChanged()
-		|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
-		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
-		removeEditor();
-		return true;
-	}
-	if (!setNull) {//get new value 
-		bool ok;
-		newval = d->pEditor->value(ok);
-		if (!ok) {
-			kdDebug() << "KexiTableView::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
+	//try to get the value entered:
+	if (res == KexiValidator::Ok) {
+		if (!setNull && !d->pEditor->valueChanged()
+			|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
+			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
 			return true;
 		}
+		if (!setNull) {//get the new value 
+			bool ok;
+			newval = d->pEditor->value(ok);
+			if (!ok) {
+				kdDebug() << "KexiTableView::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
+				res = KexiValidator::Error;
+//js: TODO get detailed info on why d->pEditor->value() failed
+				msg = i18n("Entered value is invalid.");
+//				removeEditor();
+//				return true;
+			}
+		}
+
+		//Check other validation rules:
+		//1. check using validator
+		KexiValidator *validator = m_data->column(d->curCol)->validator();
+		if (validator) {
+			res = validator->check(m_data->column(d->curCol)->field->captionOrName(), 
+				newval, msg, desc);
+		}
 	}
 
-	bool allow = true;
-	//1. check using validator
-	KexiValidator *validator = m_data->column(d->curCol)->validator();
-	if (validator) {
-		QString msg, desc;
-		KexiValidator::Result res = validator->check(m_data->column(d->curCol)->field->captionOrName(), 
-			newval, msg, desc);
-		if (res == KexiValidator::Error) {
-			//js: todo: message!!!
-			allow = false;
-		}
-		else if (res == KexiValidator::Warning) {
-			//js: todo: message!!!
-		}
+	//show the validation result if not OK:
+	if (res == KexiValidator::Error) {
+		//js: todo: message!!!
+		if (desc.isEmpty())
+			KMessageBox::sorry(this, msg);
+		else
+			KMessageBox::detailedSorry(this, msg, desc);
+//		allow = false;
+	}
+	else if (res == KexiValidator::Warning) {
+		//js: todo: message!!!
+		KMessageBox::messageBox(this, KMessageBox::Sorry, msg + "\n" + desc);
 	}
 
-	if (allow) {
+	if (res == KexiValidator::Ok) {
 		//2. check using signal
+		bool allow = true;
 		emit aboutToChangeItem(d->pCurrentItem, newval, allow);
 		if (allow) {
 			//send changes to the backend
@@ -2427,15 +2458,16 @@ bool KexiTableView::acceptEditor()
 			m_data->rowEditBuffer()->debug();
 		} else {
 			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeItem() signal" << endl;
+			res = KexiValidator::Error;
 		}
 	}
 
-	if (allow) {
+	if (res == KexiValidator::Ok) {
 		removeEditor();
 		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, d->pCurrentItem->at(d->curCol));
 		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
 	}
-	return allow;
+	return res == KexiValidator::Ok;
 }
 
 void KexiTableView::cancelEditor()
