@@ -69,6 +69,10 @@ bool KImageDocument::initDoc()
   calcPaperSize();
   m_orientation = PG_PORTRAIT;
 
+  m_drawMode = OriginalSize;
+  m_posMode = LeftTop;
+  m_zoomFactorValue = QPoint( 100, 100 );
+
   return true;
 }
 
@@ -407,16 +411,11 @@ bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
 
   QDomElement drawmode = image.namedItem( "drawmode" ).toElement();
 
-  cout << "Michael : position : " << drawmode.attribute( "position" ).data() << endl;
-  cout << "Michael : size : " << drawmode.attribute( "size" ).data() << endl;
-
   setPositionString( drawmode.attribute( "position" ) );
   setSizeString( drawmode.attribute( "size" ) );
 
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
-
-  if( m_posMode == Center ) cout << "Michael : immernoch centered" << endl;
 
   return true;
 }
@@ -431,9 +430,9 @@ bool KImageDocument::completeLoading( KoStore* _store )
     in >> m_image;
     _store->close();
   }
-  setModified( false );
-  m_bEmpty = false;
+
   emit sigUpdateView();
+
   return true;
 }
 

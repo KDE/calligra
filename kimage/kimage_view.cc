@@ -91,10 +91,7 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   // FIXME: set the user preferred color
   //setBackgroundColor( darkBlue );
 
-  doc()->setDrawMode( KImageDocument::OriginalSize );
-  doc()->setPositionMode( KImageDocument::LeftTop );
-  doc()->setZoomFactor( QPoint( 100, 100 ) );
-  slotUpdateView();
+   slotUpdateView();
 }
 
 void KImageView::paintEvent( QPaintEvent* /* _event */ )
