@@ -80,6 +80,8 @@ class KPresenterView;
 #include "rectvaluecmd.h"
 #include "commandhistory.h"
 
+#include "styledia.h"
+
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
@@ -336,6 +338,8 @@ public:
     { _objectList->setAutoDelete(false); _objectList = _list; _objectList->setAutoDelete(false); }
 
   void hideAllFrames();
+
+  int getPenBrushFlags();
 
 signals:
 

@@ -1286,6 +1286,8 @@ void Page::setupMenus()
   partMenu->insertSeparator();
   partMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
   partMenu->insertSeparator();
+  partMenu->insertItem(ICON("style.xpm"),i18n("&Properties..."),this,SLOT(objProperties()));
+  partMenu->insertSeparator();
   partMenu->insertItem(ICON("effect.xpm"),i18n("&Assign effect..."),this,SLOT(assignEffect()));
   partMenu->insertSeparator();
   partMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu7);

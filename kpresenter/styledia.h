@@ -84,6 +84,9 @@ private:
 /* class StyleDia                                                 */
 /******************************************************************/
 
+static const int SD_PEN = 1;
+static const int SD_BRUSH = 2;
+
 class StyleDia : public QTabDialog
 {
   Q_OBJECT
@@ -91,7 +94,7 @@ class StyleDia : public QTabDialog
 public:
 
   // constructor - destructor
-  StyleDia(QWidget* parent=0,const char* name=0);
+  StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN | SD_BRUSH);
   ~StyleDia();                
 
   // set values

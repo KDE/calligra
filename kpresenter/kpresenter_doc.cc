@@ -202,8 +202,23 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
   // Write "OBJECT" tag for every child
   QListIterator<KPresenterChild> chl(m_lstChildren);
   for(;chl.current();++chl)
-    chl.current()->save( out );
+    {
+      out << otag << "<EMBEDDED>" << endl;
+      
+      chl.current()->save(out);
 
+      out << otag << "<SETTINGS>" << endl;
+      KPObject *kpobject = 0L;
+      for (unsigned int i = 0;i < _objectList->count();i++)
+	{
+	  kpobject = _objectList->at(i);
+	  if (kpobject->getType() == OT_PART && dynamic_cast<KPPartObject*>(kpobject)->getChild() == chl.current())
+	    kpobject->save(out);
+	}
+      out << etag << "</SETTINGS> "<< endl;
+      
+      out << etag << "</EMBEDDED>" << endl;
+    }
   out << etag << "</DOC>" << endl;
     
   setModified(false);
@@ -343,18 +358,50 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
       
-      if (name == "OBJECT")
+      if (name == "EMBEDDED")
 	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
 	  KPresenterChild *ch = new KPresenterChild(this);
-	  ch->load(parser,lst);
-	  QRect r = ch->geometry();
-	  insertChild(ch);
-	  KPPartObject *kppartobject = new KPPartObject(ch);
-	  kppartobject->setOrig(r.x(),r.y());
-	  kppartobject->setSize(r.width(),r.height());
-	  _objectList->append(kppartobject);
-	  emit sig_insertObject(ch,kppartobject);
+	  KPPartObject *kppartobject = 0L;
+
+	  while (parser.open(0L,tag))
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      if (name == "OBJECT")
+		{
+		  ch->load(parser,lst);
+		  QRect r = ch->geometry();
+		  insertChild(ch);
+		  kppartobject = new KPPartObject(ch);
+		  kppartobject->setOrig(r.x(),r.y());
+		  kppartobject->setSize(r.width(),r.height());
+		  _objectList->append(kppartobject);
+		  emit sig_insertObject(ch,kppartobject);
+		}
+	      else if (name == "SETTINGS")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		    }
+		  kppartobject->load(parser,lst);
+		}
+	      else
+		cerr << "Unknown tag '" << tag << "' in EMBEDDED" << endl;    
+	      
+	      if (!parser.close(tag))
+		{
+		  cerr << "ERR: Closing Child" << endl;
+		  return false;
+		}
+	    }
 	}
+	  
       else if (name == "PAPER")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -929,6 +976,17 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
 		ret = true;
 		repaint(kpobject);
 	      } break;
+	    case OT_PART:
+	      {
+		dynamic_cast<KPPartObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPPartObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPPartObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPPartObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPPartObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPPartObject*>(kpobject)->setGType(gt);
+		ret = true;
+		repaint(kpobject);
+	      } break;
 	    default: break;
 	    }
 	}
@@ -1212,6 +1270,9 @@ QPen KPresenterDoc::getPen(QPen pen)
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getPen();
 	      break;
+	    case OT_PART:
+	      return dynamic_cast<KPPartObject*>(kpobject)->getPen();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1302,6 +1363,9 @@ QBrush KPresenterDoc::getBrush(QBrush brush)
 	    case OT_PIE:
 	      return dynamic_cast<KPPieObject*>(kpobject)->getBrush();
 	      break;
+	    case OT_PART:
+	      return dynamic_cast<KPPartObject*>(kpobject)->getBrush();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1333,6 +1397,9 @@ FillType KPresenterDoc::getFillType(FillType ft)
 	      break;
 	    case OT_PIE:
 	      return dynamic_cast<KPPieObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_PART:
+	      return dynamic_cast<KPPartObject*>(kpobject)->getFillType();
 	      break;
 	    default: break;
 	    }
@@ -1366,6 +1433,9 @@ QColor KPresenterDoc::getGColor1(QColor g1)
 	    case OT_PIE:
 	      return dynamic_cast<KPPieObject*>(kpobject)->getGColor1();
 	      break;
+	    case OT_PART:
+	      return dynamic_cast<KPPartObject*>(kpobject)->getGColor1();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1398,6 +1468,9 @@ QColor KPresenterDoc::getGColor2(QColor g2)
 	    case OT_PIE:
 	      return dynamic_cast<KPPieObject*>(kpobject)->getGColor2();
 	      break;
+	    case OT_PART:
+	      return dynamic_cast<KPPartObject*>(kpobject)->getGColor2();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1429,6 +1502,9 @@ BCType KPresenterDoc::getGType(BCType gt)
 	      break;
 	    case OT_PIE:
 	      return dynamic_cast<KPPieObject*>(kpobject)->getGType();
+	      break;
+	    case OT_PART:
+	      return dynamic_cast<KPPartObject*>(kpobject)->getGType();
 	      break;
 	    default: break;
 	    }
@@ -2375,8 +2451,39 @@ void KPresenterDoc::slotUndoRedoChanged(QString _undo,QString _redo)
     }
 }
 
-/*================= count of views ===========================*/
+/*=================== count of views ===========================*/
 int KPresenterDoc::viewCount()
 {
   return m_lstViews.count();
 }
+
+/*==============================================================*/
+int KPresenterDoc::getPenBrushFlags()
+{
+  int flags = 0;
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected()) 
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_LINE: 
+	      flags = flags | SD_PEN;
+	      break;
+	    case OT_AUTOFORM: case OT_RECT: case OT_ELLIPSE: case OT_PIE: case OT_PART:
+	      {
+		flags = flags | SD_PEN;
+		flags = flags | SD_BRUSH;
+	      } break;
+	    default: break;
+	    }
+	}
+    }
+
+  if (flags == 0) flags = SD_PEN | SD_BRUSH;
+  return flags;
+}
+

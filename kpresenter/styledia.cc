@@ -76,7 +76,7 @@ void PBPreview::paintEvent(QPaintEvent*)
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
+StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN | SD_BRUSH)
   : QTabDialog(parent,name,true)
 {
   penFrame = new QWidget(this,"penGrp");
@@ -161,7 +161,10 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 
   choosePCol->resize(penPrev->width(),choosePCol->height());
 
-  addTab(penFrame,i18n("Pen"));
+  if (flags & SD_PEN)
+    addTab(penFrame,i18n("Pen"));
+  else
+    penFrame->hide();
 
   brushFrame = new QWidget(this,"brushGrp");
   QButtonGroup *tmp = new QButtonGroup(brushFrame);
@@ -263,7 +266,10 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   chooseBStyle->move(chooseBStyle->x(),gradients->y());
   brushPrev->move(brushPrev->x(),gPrev->y());
 
-  addTab(brushFrame,i18n("Brush"));
+  if (flags & SD_BRUSH)
+    addTab(brushFrame,i18n("Brush"));
+  else
+    brushFrame->hide();
 
   penFrame->setMinimumSize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
   penFrame->setMaximumSize(penPrev->minimumSize());

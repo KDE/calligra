@@ -24,6 +24,7 @@
 #include <openparts.h>
 
 #include "kpobject.h"
+#include "kpgradient.h"
 
 class KPresenterChild;
 class KPresenterFrame;
@@ -39,13 +40,35 @@ class KPPartObject : public KPObject
 public:
   KPPartObject(KPresenterChild *_child);
 
-  virtual void save(ostream& out) 
-    {;}
-  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst) 
-    {;}
+  virtual void save(ostream& out);
+  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst);
+
+  virtual void setPen(QPen _pen)
+    { pen = _pen; }
+  virtual void setBrush(QBrush _brush)
+    { brush = _brush; }
+  virtual void setFillType(FillType _fillType);
+  virtual void setGColor1(QColor _gColor1)
+    { if (gradient) gradient->setColor1(_gColor1); gColor1 = _gColor1; redrawPix = true; }
+  virtual void setGColor2(QColor _gColor2)
+    { if (gradient) gradient->setColor2(_gColor2); gColor2 = _gColor2; redrawPix = true; }
+  virtual void setGType(BCType _gType)
+    { if (gradient) gradient->setBackColorType(_gType); gType = _gType; redrawPix = true; }
 
   virtual ObjType getType()
     { return OT_PART; }
+  virtual QPen getPen()
+    { return pen; } 
+  virtual QBrush getBrush()
+    { return brush; } 
+  virtual FillType getFillType()
+    { return fillType; }
+  virtual QColor getGColor1()
+    { return gColor1; }
+  virtual QColor getGColor2()
+    { return gColor2; }
+  virtual BCType getGType()
+    { return gType; }
 
   virtual void draw(QPainter *_painter,int _diffx,int _diffy);
 
@@ -67,6 +90,16 @@ public:
 
 protected:
   void paint(QPainter *_painter);
+
+  QPen pen;
+  QBrush brush;
+  QColor gColor1,gColor2;
+  BCType gType;
+  FillType fillType;
+
+  KPGradient *gradient;
+  QPixmap pix;
+  bool redrawPix;
 
   KPresenterFrame *view;
   KPresenterChild *child;

@@ -135,11 +135,6 @@ void KPresenterView::init()
   else
     cerr << "Did not get a tool bar manager" << endl;  
 
-  // Show every embedded object
-//   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
-//   for(;it.current();++it)
-//     slotInsertObject(it.current());
-
   KPObject *kpobject;
   for (unsigned int i = 0;i < m_pKPresenterDoc->objectList()->count();i++)
     {
@@ -618,7 +613,7 @@ void KPresenterView::extraPenBrush()
       delete styleDia;
       styleDia = 0;
     }
-  styleDia = new StyleDia(0,"StyleDia");
+  styleDia = new StyleDia(0,"StyleDia",m_pKPresenterDoc->getPenBrushFlags());
   styleDia->setMaximumSize(styleDia->width(),styleDia->height());
   styleDia->setMinimumSize(styleDia->width(),styleDia->height());
   styleDia->setPen(m_pKPresenterDoc->getPen(pen));
