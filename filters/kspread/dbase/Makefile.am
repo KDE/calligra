@@ -17,4 +17,4 @@ service_DATA = kspread_dbase_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/dbaseimport.pot
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kspreaddbasefilter.pot

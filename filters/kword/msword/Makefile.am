@@ -17,4 +17,4 @@ service_DATA = kword_msword_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/mswordimport.pot
+	$(XGETTEXT) *.cpp -o $(podir)/kwordmswordfilter.pot
