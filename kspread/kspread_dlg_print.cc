@@ -10,6 +10,8 @@
 #include <kconfig.h>
 #include <kapp.h>
 
+#include <koPageLayoutDia.h>
+
 KSpreadPrintDlg::KSpreadPrintDlg( KSpreadView *_view, QWidget* parent, const char* name )
 	: QDialog( parent, name, TRUE ), KSpreadPrintDlgData( this )
 {
@@ -84,19 +86,22 @@ void KSpreadPrintDlg::slotPageSetup()
 void KSpreadPrintDlg::configurePrinter( QPrinter &_printer )
 {
     _printer.setNumCopies( atoi( copies->text() ) );
-    _printer.setOrientation( m_pView->doc()->orientation() );
+    if (m_pView->doc()->orientation() == PG_LANDSCAPE)
+      _printer.setOrientation( QPrinter::Landscape );
+    else
+      _printer.setOrientation( QPrinter::Portrait );
     
     switch( m_pView->doc()->paperFormat() )
     {
-    case KSpreadDoc::A4:
+    case PG_DIN_A4:
 	_printer.setPageSize( QPrinter::A4 );
 	break;
-    case KSpreadDoc::LETTER:
+    case PG_US_LETTER:
 	_printer.setPageSize( QPrinter::Letter );
 	break;
-    case KSpreadDoc::EXECUTIVE:
-	_printer.setPageSize( QPrinter::Executive );
-	break;
+//     case EXECUTIVE:
+// 	_printer.setPageSize( QPrinter::Executive );
+// 	break;
     default:
 	printf("ERROR: Page format not supported by Qt\n");
     }
@@ -117,16 +122,16 @@ void KSpreadPrintDlg::configurePrinter( QPrinter &_printer )
 	QString pap;
 	switch( m_pView->doc()->paperFormat() )
 	{
-	case KSpreadDoc::A4:
+	case PG_DIN_A4:
 	    pap = "a4";
 	    break;
-	case KSpreadDoc::LETTER:
+	case PG_US_LETTER:
 	    pap = "letter";
 	    break;
-	case KSpreadDoc::EXECUTIVE:
-	    pap = "executive";
-	    break;
-	case KSpreadDoc::A5:
+// 	case KSpreadDoc::EXECUTIVE:
+// 	    pap = "executive";
+// 	    break;
+	case PG_DIN_A5:
 	    pap = "a5";
 	    break;
 	default:

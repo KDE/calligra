@@ -4,8 +4,8 @@ INCLUDES = $(all_includes) -I../../lib/kofficeui
 LDFLAGS =  $(all_libraries)
 LDADD =  ../../lib/kofficeui/libkofficeui.la \
 	../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la \
-	-lkdecore -lkdeui -lqt -lm -lXext -lX11 -lkofficeui -lop -lkom \
-	-lkfile -lkfm -lkoml
+	-lkdecore -lkdeui -lqt -lm -lXext -lX11 -lkofficeui -lkofficecore -lop -lkom \
+	-lkfile -lkfm -lkoml $(LIBMICO)
 
 bin_PROGRAMS = kautoformEdit
 

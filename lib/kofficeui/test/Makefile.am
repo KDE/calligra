@@ -1,12 +1,9 @@
 
 INCLUDES	=	-I../kofficeui -I../kofficecore $(all_includes)
 LDFLAGS		=	$(all_libraries)
-LDADD 		=  	../kofficeui/libkofficeui.la \
-	../kofficecore/libkofficecore.la \
-	../koml/libkoml.la -lkom -lop -lkfile -lkfm  -lkdeui \
-	-lkdecore $(LIBMICO) -lqt -lXext -lX11
+LDADD 		=  	-lkofficecore -lkofficeui -lkoml -lkom -lop -lkfile -lkfm -lkdecore -lkdeui $(LIBMICO) -lqt -lXext -lX11
 
-check_PROGRAMS = test
+bin_PROGRAMS = test
 test_SOURCES = test.cc
 DISTCLEANFILES = test.moc
 

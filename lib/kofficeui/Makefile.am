@@ -6,18 +6,18 @@ LIBADD  =       -lkdeui -lkdecore -lqt -lXext -lX11 -ldl
 
 ####### Files
 
-SUBDIRS = pics test
+SUBDIRS = pics
 
 lib_LTLIBRARIES = libkofficeui.la
 
 libkofficeui_la_SOURCES = koAboutDia.cc koPageLayoutDia.cc \
-	koPartSelectDia.cc koPartSelectDia_data.cc
+	koPartSelectDia.cc koPartSelectDia_data.cc koPrintDia.cc
 
 include_HEADERS = koAboutDia.h koPageLayoutDia.h \
-	koPartSelectDia.h koPartSelectDia_data.h
+	koPartSelectDia.h koPartSelectDia_data.h koPrintDia.h
 
 SRCMETA = koAboutDia.moc koPageLayoutDia.moc koPartSelectDia.moc \
-	koPartSelectDia_data.moc
+	koPartSelectDia_data.moc koPrintDia.moc
 
 SUFFIXES = .h .moc
 
@@ -28,4 +28,4 @@ koAboutDia.cc: koAboutDia.moc
 koPageLayoutDia.cc: koPageLayoutDia.moc
 koPartSelectDia.cc: koPartSelectDia.moc
 koPartSelectDia_data.cc: koPartSelectDia_data.moc
-
+koPrintDia.cc: koPrintDia.moc

@@ -78,7 +78,7 @@ bool KSpreadShell_impl::printDlg()
 {
   assert( !CORBA::is_nil( m_vView ) );
 
-  return m_vView->printDlg();
+  //return m_vView->printDlg();
 }
 
 #include "kspread_shell.moc"

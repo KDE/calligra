@@ -1765,12 +1765,20 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
 	    }
 	    else if ( (*it).m_strName == "prefix" )
 	    {
+#ifdef HAVE_MINI_STL
+	      if ( !((*it).m_strValue.size() == 0 ) )
+#else
 	      if ( !((*it).m_strValue.empty() ) )
+#endif
 		m_strPrefix = (*it).m_strValue.c_str();
 	    }
 	    else if ( (*it).m_strName == "postfix" )
 	    {
+#ifdef HAVE_MINI_STL
+	      if ( !((*it).m_strValue.size() == 0) )
+#else
 	      if ( !((*it).m_strValue.empty() ) )
+#endif
 		m_strPostfix = (*it).m_strValue.c_str();
 	    }
 	    else if ( (*it).m_strName == "float" )
