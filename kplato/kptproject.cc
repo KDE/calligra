@@ -65,7 +65,7 @@ KPTDuration *KPTProject::getFloat() {
 void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
     /* Propagate (start) value of first node in list to all nodes in project */
     /* First find the first node with no predecessors values */
-    list<KPTNode*>::iterator curNode;
+    std::list<KPTNode*>::iterator curNode;
     curNode = find_if( nodelist.begin(), nodelist.end(),
 		       no_unvisited( &KPTNode::predecessors ) );
 
@@ -79,7 +79,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
         /* *** we could use (say) a member function pointer *** */
         duration.add( currentNode.effort()->expected() );
         /* Go through arcs from currentNode, propagating values */
-        for( vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
+        for( std::vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
             /* add new nodes if necessary */
             if( (*i)->predecessors.unvisited == (*i)->predecessors.number )
             nodelist.push_back( *i );
@@ -118,7 +118,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
 void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
     /* Propagate (start) value of first node in list to all nodes in project */
     /* First find the first node with no successor values */
-    list<KPTNode*>::iterator curNode;
+    std::list<KPTNode*>::iterator curNode;
     curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors ) ); 
     while(curNode != nodelist.end()) {
         /* at this point curNode will contain the first node from
@@ -126,7 +126,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
         * finish (or latest start) time for currentNode as t */
 
 #ifdef DEBUGPERT
-        for( list<KPTNode*>::const_iterator k = nodelist.begin(); k != nodelist.end(); ++k ) {
+        for( std::list<KPTNode*>::const_iterator k = nodelist.begin(); k != nodelist.end(); ++k ) {
             kdDebug() << (*k)->name().latin1() << " (" << (*k)->successors.unvisited << ")" << endl;;
         }
         kdDebug() << endl;
@@ -141,7 +141,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
         kdDebug() << "*******" << t.toString().latin1() << endl;
 #endif
         /* Go through arcs from currentNode, propagating values */
-        for( vector<KPTNode*>::iterator i = currentNode.predecessors.list.begin(); i != currentNode.predecessors.list.end(); ++i ) {
+        for( std::vector<KPTNode*>::iterator i = currentNode.predecessors.list.begin(); i != currentNode.predecessors.list.end(); ++i ) {
             /* add new nodes if necessary */
             if( (*i)->successors.unvisited == (*i)->successors.number )
                 nodelist.push_back( *i );
@@ -224,7 +224,7 @@ void KPTProject::save(QDomElement &element) const {
 
 
 void KPTProject::pert_cpm() {
-    list<KPTNode*> nodelist;
+    std::list<KPTNode*> nodelist;
     /* Set initial time for nodes to zero */
     KPTDuration time( KPTDuration::zeroDuration );
     set_pert_values( time, &KPTNode::earliestStart );
