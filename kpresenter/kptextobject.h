@@ -157,6 +157,8 @@ protected:
     virtual void pgUpKeyPressed();
 
     virtual void pgDownKeyPressed();
+
+    KPTextObject *m_textobj;
 };
 
 

@@ -206,13 +206,15 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->setMaximumHeight(tool1->maximumHeight());
     htool2->setMinimumHeight(tool1->maximumHeight());
 
+#if 0
+
     connect( doc->header()->textObject(), SIGNAL( currentFontChanged( const QFont & ) ),
              this, SLOT( headerFontChanged( const QFont & ) ) );
     connect( doc->header()->textObject(), SIGNAL( currentColorChanged( const QColor & ) ),
              this, SLOT( headerColorChanged( const QColor & ) ) );
     connect( doc->header()->textObject(), SIGNAL( currentAlignmentChanged( int ) ),
              this, SLOT( headerAlignChanged( int ) ) );
-
+#endif
     // iiiiiiii: I hate such things..
     back->setMinimumWidth( 550 );
 
@@ -330,6 +332,7 @@ void KPFooterHeaderEditor::setupFooter()
 
     ftool2->setMaximumHeight(tool1->maximumHeight());
     ftool2->setMinimumHeight(tool1->maximumHeight());
+#if 0
 
     connect( doc->footer()->textObject(), SIGNAL( currentFontChanged( const QFont & ) ),
              this, SLOT( footerFontChanged( const QFont & ) ) );
@@ -337,7 +340,7 @@ void KPFooterHeaderEditor::setupFooter()
              this, SLOT( footerColorChanged( const QColor & ) ) );
     connect( doc->footer()->textObject(), SIGNAL( currentAlignmentChanged( int ) ),
              this, SLOT( footerAlignChanged( int ) ) );
-
+#endif
     // iiiiiiii: I hate such things..
     back->setMinimumWidth( 550 );
 
@@ -512,6 +515,9 @@ void KPFooterHeaderEditor::headerAlignLeft()
 {
     //doc->header()->textObjectView()->setAlignment( Qt::AlignLeft );
 
+    //todo store command
+    doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+
     htool2->setButton( h_aleft, true );
     htool2->setButton( h_acenter, false );
     htool2->setButton( h_aright, false );
@@ -522,6 +528,9 @@ void KPFooterHeaderEditor::headerAlignCenter()
 {
     //doc->header()->textObjectView()->setAlignment( Qt::AlignCenter );
 
+    //todo store command
+    doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+
     htool2->setButton( h_aleft, false );
     htool2->setButton( h_acenter, true );
     htool2->setButton( h_aright, false );
@@ -531,6 +540,9 @@ void KPFooterHeaderEditor::headerAlignCenter()
 void KPFooterHeaderEditor::headerAlignRight()
 {
     //doc->header()->textObjectView()->setAlignment( Qt::AlignRight );
+
+    //todo store command
+    doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
 
     htool2->setButton( h_aleft, false );
     htool2->setButton( h_acenter, false );
@@ -594,6 +606,9 @@ void KPFooterHeaderEditor::footerAlignLeft()
 {
     //doc->footer()->textObjectView()->setAlignment( Qt::AlignLeft );
 
+    //todo store command
+    doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+
     ftool2->setButton( f_aleft, true );
     ftool2->setButton( f_acenter, false );
     ftool2->setButton( f_aright, false );
@@ -604,6 +619,9 @@ void KPFooterHeaderEditor::footerAlignCenter()
 {
     //doc->footer()->textObjectView()->setAlignment( Qt::AlignCenter );
 
+    //todo store command
+    doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+
     ftool2->setButton( f_aleft, false );
     ftool2->setButton( f_acenter, true );
     ftool2->setButton( f_aright, false );
@@ -613,6 +631,9 @@ void KPFooterHeaderEditor::footerAlignCenter()
 void KPFooterHeaderEditor::footerAlignRight()
 {
     //doc->footer()->textObjectView()->setAlignment( Qt::AlignRight );
+
+    //todo store command
+    doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
 
     ftool2->setButton( f_aleft, false );
     ftool2->setButton( f_acenter, false );

@@ -574,6 +574,8 @@ KoTextDocument * KPTextObject::textDocument() const
 KPTextView::KPTextView( KPTextObject * txtObj )
     : KoTextView( txtObj->textObject() )
 {
+
+    m_textobj=txtObj;
     kdDebug()<<"KPTextView::KPTextView( KPTextObject * txtObj )\n";
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
