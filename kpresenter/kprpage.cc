@@ -3192,6 +3192,9 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
     QPtrListIterator<KPObject> oIt(m_objectList);
     for (; oIt.current(); ++oIt )
     {
+        //don't store header/footer (store in header/footer section)
+        if ( oIt.current()==m_doc->header() || oIt.current()==m_doc->footer())
+            continue;
         if ( oIt.current()->getType() == OT_PART )
             continue;
         QDomElement object=doc.createElement("OBJECT");
