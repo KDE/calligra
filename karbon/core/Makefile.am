@@ -24,8 +24,8 @@ noinst_HEADERS = \
 	vsegment.h \
 	vsegmentlist.h \
 	vsegmenttools.h \
-	vstroke.h \
-	vtext.h
+	vstroke.h
+#	vtext.h
 
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
@@ -43,8 +43,8 @@ libkarboncore_la_SOURCES = \
 	vsegment.cc \
 	vsegmentlist.cc \
 	vsegmenttools.cc \
-	vstroke.cc \
-	vtext.cc
+	vstroke.cc
+#	vtext.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO

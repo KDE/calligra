@@ -12,7 +12,7 @@
 #include "vobject.h"
 #include "vpath.h"
 #include "vgroup.h"
-#include "vtext.h"
+//#include "vtext.h"
 
 #include <kdebug.h>
 

@@ -14,7 +14,6 @@ noinst_HEADERS = \
 	vccmd_sinus.h \
 	vccmd_spiral.h \
 	vccmd_star.h \
-	vccmd_text.h \
 	vccommand.h \
 	vcommand.h \
 	vmcmd_delete.h \
@@ -31,7 +30,6 @@ libkarboncommands_la_SOURCES = \
 	vccmd_sinus.cc \
 	vccmd_spiral.cc \
 	vccmd_star.cc \
-	vccmd_text.cc \
 	vccommand.cc \
 	vcommand.cc \
 	vmcmd_delete.cc \

@@ -19,7 +19,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "karbon_view_iface.h"
-#include "vccmd_text.h"
+//#include "vccmd_text.h"
 #include "vctool_ellipse.h"
 #include "vctool_polygon.h"
 #include "vctool_rectangle.h"
@@ -42,7 +42,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
-#include "vtext.h"
+//#include "vtext.h"
 #include "vtoolcontainer.h"
 
 #include <kdebug.h>
@@ -358,7 +358,7 @@ KarbonView::scaleTool()
 void
 KarbonView::textTool()
 {
-    kdDebug() << "KarbonView::textTool()" << endl;
+    /*kdDebug() << "KarbonView::textTool()" << endl;
 	QFont f;
 
 	f.setFamily( m_setFontFamily->font() );
@@ -367,7 +367,7 @@ KarbonView::textTool()
 	f.setItalic( m_setFontItalic->isChecked() );
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ), true );
+	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ), true );*/
 }
 
 void
