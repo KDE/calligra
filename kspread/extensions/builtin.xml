@@ -2487,6 +2487,37 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>GAMMADIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Cumulated flag</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Calculates the gamma distribution. If the last parameter
+          (cumulated) is 0, it calculates the density function; if it's 1, the
+          distribution is returned. The first three parameters must be positive.
+        </Text>
+        <Syntax>GAMMADIST(number;alpha;beta;cumulated)</Syntax>
+        <Example>GAMMADIST(0.758;0.1;0.35;1) equals 0.995450</Example>
+        <Example>GAMMADIST(0.758;0.1;0.35;0) equals 0.017179</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

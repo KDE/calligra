@@ -13,6 +13,10 @@
 
 #include <kdebug.h>
 
+#ifndef F_PI
+#define F_PI            3.14159265358979323846
+#endif
+
 /***************************************************************
  *
  * Classes which store extra informations in some KSParseNode.
@@ -2065,6 +2069,145 @@ static bool kspreadfunc_gauss(KSContext& context)
   else
     context.setValue( new KSValue(nVal) );
  
+  return true;
+}
+
+//helper for kspreadfunc_gammadist
+static double GammaHelp(double& x, bool& bReflect)
+{
+  double c[6] = {76.18009173, -86.50532033, 24.01409822,
+                 -1.231739516, 0.120858003E-2, -0.536382E-5};
+  if (x >= 1.0)
+    {
+      bReflect = FALSE;
+      x -= 1.0;
+    }
+  else
+    {
+      bReflect = TRUE;
+      x = 1.0 - x;
+    }
+  double s, anum;
+  s = 1.0;
+  anum = x;
+  for (uint i = 0; i < 6; i++)
+    {
+      anum += 1.0;
+      s += c[i]/anum;
+    }
+  s *= 2.506628275;   // sqrt(2*PI)
+  return s;
+}
+
+//helper for kspreadfunc_gammadist
+static double GetGamma(double x)
+{
+  bool bReflect;
+  double G = GammaHelp(x, bReflect);
+  G = pow(x+5.5,x+0.5)*G/exp(x+5.5);
+  if (bReflect)
+    G = F_PI*x/(G*sin(F_PI*x));
+  return G;
+}
+
+//helper for kspreadfunc_gammadist and others
+static double GetGammaDist(double x, double alpha, double beta)
+{
+  if (x == 0.0)
+    return 0.0;
+
+  x /= beta;
+  double gamma = alpha;
+
+  double c = 0.918938533204672741;
+  double d[10] = {
+    0.833333333333333333E-1,
+    -0.277777777777777778E-2,
+    0.793650793650793651E-3,
+    -0.595238095238095238E-3,
+    0.841750841750841751E-3,
+    -0.191752691752691753E-2,
+    0.641025641025641025E-2,
+    -0.295506535947712418E-1,
+    0.179644372368830573,
+    -0.139243221690590111E1
+  };
+
+  double dx = x;
+  double dgamma = gamma;
+  int maxit = 10000;
+
+  double z = dgamma;
+  double den = 1.0;
+  while ( z < 10.0 ) {
+    den *= z;
+    z += 1.0;
+  }
+
+  double z2 = z*z;
+  double z3 = z*z2;
+  double z4 = z2*z2;
+  double z5 = z2*z3;
+  double a = ( z - 0.5 ) * log(z) - z + c;
+  double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
+    d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
+  // double g = exp(a+b) / den;
+
+  double sum = 1.0 / dgamma;
+  double term = 1.0 / dgamma;
+  double cut1 = dx - dgamma;
+  double cut2 = dx * 10000000000.0;
+
+  for ( int i=1; i<=maxit; i++ ) {
+    double ai = i;
+    term = dx * term / ( dgamma + ai );
+    sum += term;
+    double cutoff = cut1 + ( cut2 * term / sum );
+    if ( ai > cutoff ) {
+      double t = sum;
+      // return pow( dx, dgamma ) * exp( -dx ) * t / g;
+      return exp( dgamma * log(dx) - dx - a - b ) * t * den;
+    }
+  }
+  
+  return 1.0;             // should not happen ...
+}
+
+static bool kspreadfunc_gammadist( KSContext& context )
+{
+  //returns the gamma distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 4, "GAMMADIST", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double alpha = args[1]->doubleValue();
+  double beta = args[2]->doubleValue();
+  int kum = args[3]->intValue();  // 0 or 1
+  double result;
+
+  if (x < 0.0  || alpha <= 0.0 || beta <= 0.0)
+    //SetIllegalArgument();
+    //TODO error?
+    return false;
+  else if (kum == 0) {  //density
+    double G = GetGamma(alpha);
+    result = pow(x,alpha-1.0)/exp(x/beta)/pow(beta,alpha)/G;
+  }
+  else
+    result = GetGammaDist(x, alpha, beta);
+
+  context.setValue( new KSValue(result) );
   return true;
 }
 
@@ -4561,6 +4704,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   //statistical stuff
   module->addObject( "GAUSS", new KSValue( new KSBuiltinFunction( module, "GAUSS", kspreadfunc_gauss) ) );
   module->addObject( "PHI", new KSValue( new KSBuiltinFunction( module, "PHI", kspreadfunc_phi) ) );
+  module->addObject( "GAMMADIST", new KSValue( new KSBuiltinFunction( module, "GAMMADIST", kspreadfunc_gammadist) ) );
 
   return module;
 }
