@@ -3,8 +3,8 @@
 <KivioSMLStencilSpawnerInfo>
 <Author data="Kristof Borrey"/>
 <Id data="Luxemburg"/>
-<Description data="Luxemburg"/>
-<Title data="Luxemburg"/>
+<Description data="Luxembourg"/>
+<Title data="Luxembourg"/>
 <Version data="0.1"/>
 <Web data="www.koffice.org"/>
 <Email data="borrey@kde.org"/>

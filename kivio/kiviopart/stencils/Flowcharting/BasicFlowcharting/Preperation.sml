@@ -2,9 +2,9 @@
 <KivioShapeStencil creator="vi">
 	<KivioSMLStencilSpawnerInfo>
 		<Author data="Landshark"/>
-		<Title data="Preperation"/>
+		<Title data="Preparation"/>
 		<Id data="Preperation"/>
-		<Description data="Basic flowcharting preperation shape"/>
+		<Description data="Basic flowcharting preparation shape"/>
 		<Version data="0.1"/>
 		<Web data="www.thekompany.com"/>
 		<Email data="lndshark@speakeasy.net"/>
