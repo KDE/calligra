@@ -7,3 +7,5 @@ kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkiviozoomtool.so.0.0.0 usr/lib/
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkivioconnectortool.so.0.0.0 usr/lib/libkivioconnectortool.so
 # This is inserted by debhelper and is legal.
 kivio: postrm-calls-ldconfig
+# Menu item.
+kivio: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kivio:8

@@ -7,3 +7,5 @@ kspread: shlib-missing-in-control-file libcsvimport.so usr/lib/kde2/libcsvimport
 kspread: shlib-missing-in-control-file libkspreadcalc.so usr/lib/kde2/libkspreadcalc.so
 # This is inserted by debhelper and is legal.
 kspread: postrm-calls-ldconfig
+# Menu item.
+kspread: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kspread:8

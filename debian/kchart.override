@@ -3,3 +3,5 @@ kchart: non-dev-pkg-with-shlib-symlink usr/lib/libkchartpart.so.0.0.0 usr/lib/li
 kchart: non-dev-pkg-with-shlib-symlink usr/lib/kchart.so.0.0.0 usr/lib/kchart.so
 # This is inserted by debhelper and is legal.
 kchart: postrm-calls-ldconfig
+# Menu item.
+kchart: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kchart:8

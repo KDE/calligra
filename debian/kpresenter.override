@@ -3,3 +3,5 @@ kpresenter: non-dev-pkg-with-shlib-symlink usr/lib/libkpresenterpart.so.0.0.0 us
 kpresenter: non-dev-pkg-with-shlib-symlink usr/lib/kpresenter.so.0.0.0 usr/lib/kpresenter.so
 # This is inserted by debhelper and is legal.
 kpresenter: postrm-calls-ldconfig
+# Menu item.
+kpresenter: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kpresenter:8

@@ -3,3 +3,5 @@ kword: non-dev-pkg-with-shlib-symlink usr/lib/libkwordpart.so.0.0.0 usr/lib/libk
 kword: non-dev-pkg-with-shlib-symlink usr/lib/kword.so.0.0.0 usr/lib/kword.so
 # This is inserted by debhelper and is legal.
 kword: postrm-calls-ldconfig
+# Menu item.
+kword: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kword:8

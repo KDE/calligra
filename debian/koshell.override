@@ -2,3 +2,5 @@
 koshell: non-dev-pkg-with-shlib-symlink usr/lib/koshell.so.0.0.0 usr/lib/koshell.so
 # This is inserted by debhelper and is legal.
 koshell: postrm-calls-ldconfig
+# Menu item.
+koshell: menu-item-contains-unknown-tag kderemove /usr/lib/menu/koshell:7
