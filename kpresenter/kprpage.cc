@@ -160,20 +160,18 @@ void KPrPage::copyObjs()
 
     QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
     drag->setEncodedData( doc.toCString() );
+    kdDebug()<<"doc.toCString() :"<<doc.toCString()<<endl;
     QApplication::clipboard()->setData( drag );
 }
 
 void KPrPage::pasteObjs( const QByteArray & data )
 {
     m_doc->deSelectAllObj();
-    m_doc->pasting = true;
-    m_doc->pasteXOffset = 20;
-    m_doc->pasteYOffset = 20;
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
     m_doc->loadPastedObjs( clip_str,this );
-
-    m_doc->pasting = false;
+    m_objectList.last()->moveBy( m_doc->zoomHandler()->unzoomItX(20), m_doc->zoomHandler()->unzoomItY(20) );
+    m_objectList.last()->setSelected( true );
     m_doc->setModified(true);
 }
 

@@ -234,9 +234,6 @@ public:
 
     bool raiseAndLowerObject;
 
-    bool pasting;
-    int pasteXOffset, pasteYOffset;
-
     KoStyle* standardStyle();
 
     void addCommand( KCommand * cmd );

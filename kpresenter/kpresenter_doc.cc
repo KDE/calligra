@@ -187,8 +187,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setPageLayout( _pageLayout );
     _presPen = QPen( red, 3, SolidLine );
     presSpeed = 2;
-    pasting = false;
-    pasteXOffset = pasteYOffset = 0;
     ignoreSticky = TRUE;
     m_pixmapMap = 0L;
     raiseAndLowerObject = false;
@@ -1218,10 +1216,6 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
 #if 0
             if ( objStartY > 0 )
                 _objectList->last()->moveBy( 0, objStartY );
-            if ( pasting ) {
-                _objectList->last()->moveBy( pasteXOffset, pasteYOffset );
-                _objectList->last()->setSelected( true );
-            }
             if ( !ignoreSticky )
                 _objectList->last()->setSticky( sticky );
 #endif
