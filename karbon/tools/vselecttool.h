@@ -77,6 +77,8 @@ private:
 
 	double m_s1;
 	double m_s2;
+	double m_distx;
+	double m_disty;
 	KoPoint m_sp;
 	KoPoint m_current;
 

@@ -215,9 +215,7 @@ VSelectTool::mouseDragRelease()
 	{
 		// Y mirroring
 		KoPoint fp = first();
-		//fp.setY( -fp.y() + view()->canvasWidget()->contentsHeight() );
 		KoPoint lp = last();
-		//lp.setY( -lp.y() + view()->canvasWidget()->contentsHeight() );
 		view()->part()->document().selection()->clear();
 		view()->part()->document().selection()->append(
 			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
@@ -228,18 +226,17 @@ VSelectTool::mouseDragRelease()
 	else if( m_state == moving )
 	{
 		m_state = normal;
-		double distx = last().x() - first().x();
-		double disty = last().y() - first().y();
+		recalc();
 		if( m_lock )
 			view()->part()->addCommand(
 				 new VTranslateCmd(
 					&view()->part()->document(),
-					abs( int( distx ) ) >= abs( int( disty ) ) ? qRound( distx ) : 0,
-					abs( int( distx ) ) <= abs( int( disty ) ) ? qRound( disty ) : 0 ),
+					abs( int( m_distx ) ) >= abs( int( m_disty ) ) ? qRound( m_distx ) : 0,
+					abs( int( m_distx ) ) <= abs( int( m_disty ) ) ? qRound( m_disty ) : 0 ),
 				true );
 		else
 			view()->part()->addCommand(
-				new VTranslateCmd( &view()->part()->document(), qRound( distx ), qRound( disty ) ),
+				new VTranslateCmd( &view()->part()->document(), qRound( m_distx ), qRound( m_disty ) ),
 				true );
 	}
 	else if( m_state == scaling )
@@ -314,13 +311,13 @@ VSelectTool::recalc()
 
 		if( m_state == moving )
 		{
-			double distx = last().x() - first().x();
-			double disty = last().y() - first().y();
+			m_distx = last().x() - first().x();
+			m_disty = last().y() - first().y();
 			if( m_lock )
-				cmd = new VTranslateCmd( 0L, abs( int( distx ) ) >= abs( int( disty ) ) ? distx : 0,
-											 abs( int( distx ) ) <= abs( int( disty ) ) ? disty : 0 );
+				cmd = new VTranslateCmd( 0L, abs( int( m_distx ) ) >= abs( int( m_disty ) ) ? m_distx : 0,
+											 abs( int( m_distx ) ) <= abs( int( m_disty ) ) ? m_disty : 0 );
 			else
-				cmd = new VTranslateCmd( 0L, distx, disty );
+				cmd = new VTranslateCmd( 0L, m_distx, m_disty );
 		}
 		else
 		{
