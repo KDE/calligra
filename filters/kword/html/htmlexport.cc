@@ -358,7 +358,7 @@ class FormatData
 
         bool italic;
         bool underline;
-		bool strikeout;
+        bool strikeout;
 
         bool missing;
     private:
@@ -374,8 +374,8 @@ class FormatData
             verticalAlignment=0;
             italic=false;
             underline=false;
-			strikeout=false;
-            fontName="times";
+            strikeout=false;
+            fontName=QString::null;
             missing=false;
         }
 };
@@ -930,7 +930,7 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
 
             if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only tha layout
+            {   //Format is not issued from KWord. Therefore is only the layout
                 // So it is only the text
                 if (outputText==" ")
                 {//Just a space as text. Therefore we must use a non-breaking space.
@@ -948,10 +948,15 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
             // TODO: replace multiple spaces in non-breaking spaces!
             // Opening elements
 
-            // <font> is always set
-            outputText+="<font face=\"";
-            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
-            outputText+="\"";
+            // <font> is always set - not anymore (DF)
+            QString fontName = (*paraFormatDataIt).fontName;
+            outputText+="<font";
+            if ( !fontName.isEmpty() )
+            {
+                outputText+=" face=\"";
+                outputText+=fontName; // TODO: add alternative font names
+                outputText+="\"";
+            }
             // Give the font size relatively (be kind with people with impered vision)
             // TODO: option to give absolute font sizes
             int size=(*paraFormatDataIt).fontSize;
@@ -1115,7 +1120,7 @@ void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, Val
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
 
             if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only tha layout
+            {   //Format is not issued from KWord. Therefore is only the layout
                 // So it is only the text
                 if (outputText==" ")
                 {//Just a space as text. Therefore we must use a non-breaking space.
@@ -1222,7 +1227,7 @@ void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, Value
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
 
             if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only tha layout
+            {   //Format is not issued from KWord. Therefore is only the layout
                 // So it is only the text
                 if (outputText==" ")
                 {//Just a space as text. Therefore we must use a non-breaking space.
@@ -1242,9 +1247,13 @@ void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, Value
             outputText+="<span style=\"";
 
             // Font name
-            outputText+="font-family: ";
-            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
-            outputText+="; ";
+            QString fontName = (*paraFormatDataIt).fontName;
+            if ( !fontName.isEmpty() )
+            {
+                outputText+="font-family: ";
+                outputText+=fontName; // TODO: add alternative font names
+                outputText+="; ";
+            }
 
             // Font style
             outputText+="font-style: ";
