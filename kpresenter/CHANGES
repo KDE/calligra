@@ -3,3 +3,8 @@ Reggie, 11.1.1999:
 - Added undo/redo command for setting styles (pen, brush, line begin/end, garadients, etc.)
 - All style settings are done using this command now
 - Fixes when using some other commands
+
+Reggie, 16.1.1999:
+------------------
+- Fix for avoiding warnings with egcs1.1.1
+- Fix of a strangebug in KPresenterView::colorToPixString

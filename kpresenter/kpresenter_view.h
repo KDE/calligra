@@ -436,7 +436,7 @@ protected:
   void setupRulers();
 
   // create a pixmapstring from a color
-  char* colorToPixString(QColor);
+  QString colorToPixString(QColor);
   
   // get fonts
   void getFonts();

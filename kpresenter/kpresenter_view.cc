@@ -3703,32 +3703,32 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 }
 
 /*============== create a pixmapstring from a color ============*/
-char* KPresenterView::colorToPixString(QColor c)
+QString KPresenterView::colorToPixString(QColor c)
 {
   int r,g,b;
-  char pix[1500];
-  char line[40];
+  QString pix;
+  QString line;
 
   c.rgb(&r,&g,&b);
 
-  qstrcpy(pix,"/* XPM */\n");
+  pix = "/* XPM */\n";
   
-  strcat(pix,"static char * text_xpm[] = {\n");
+  pix += "static char * text_xpm[] = {\n";
 
-  sprintf(line,"%c 20 20 1 1 %c,\n",34,34);
-  strcat(pix,qstrdup(line));
+  line.sprintf("%c 20 20 1 1 %c,\n",34,34);
+  pix += line.copy();
 
-  sprintf(line,"%c c #%02X%02X%02X %c,\n",34,r,g,b,34);
-  strcat(pix,qstrdup(line));
+  line.sprintf("%c c #%02X%02X%02X %c,\n",34,r,g,b,34);
+  pix += line.copy();
 
-  sprintf(line,"%c                    %c,\n",34,34);
+  line.sprintf("%c                    %c,\n",34,34);
   for (unsigned int i = 1;i <= 20;i++)
-    strcat(pix,qstrdup(line));
+    pix += line.copy();
     
-  sprintf(line,"%c                    %c};\n",34,34);
-  strcat(pix,qstrdup(line));
-  
-  return (char*)&pix;
+  line.sprintf("%c                    %c};\n",34,34);
+  pix += line.copy();
+
+  return QString(pix);
 }
 
 /*===================== load not KDE installed fonts =============*/
