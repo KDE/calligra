@@ -63,7 +63,7 @@ public:
     void setMMParagFootOffset( unsigned int _i) { mmParagFootOffset = _i; }
     void setMMParagHeadOffset( unsigned int _i) { mmParagHeadOffset = _i; }
     void setPTLineSpacing( unsigned int _i) { ptLineSpacing = _i; }
-    void setName( const char* _n) { name = _n; }
+    void setName(QString _n) { name = _n; }
     void setFlow( Flow _f ) { flow = _f; }
     /**
      * Set the text left to the counter.
@@ -91,15 +91,7 @@ public:
      *
      * @see KWFormat
      */
-    void setFollowingParagLayout( const char *_paragname );
-    /**
-     * Sets the parag layout that is used for numbering. For example a theorem
-     * will be numbered like this: Theorem C.N .....    with C=Chapter Counter
-     * and N=Theorem Counter. In this case Chapter is the NumberLikeParag.
-     *
-     * @param _paragname is the name of a valid KWParagLayout.
-     */
-    //void setNumberLikeParagLayout( const char *_paragname );
+    void setFollowingParagLayout(QString _paragname);
 
     void setLeftBorder(Border _brd) { left = _brd; }
     void setRightBorder(Border _brd) { right = _brd; }
@@ -115,15 +107,8 @@ public:
     void setBulletFont(QString _f) { counter.bulletFont = _f; }
     QString getBulletFont() { return counter.bulletFont; }
 
-    //KWParagLayout* getNumberLikeParagLayout() {	return numberLikeParagLayout; }
-    
-    /**
-     * @return a reference to the used format.
-     *
-     * @see KWFormat
-     */
     KWFormat& getFormat() { return format; }
-    const char* getName() { return name.data(); }
+    QString getName() { return name; }
     unsigned int getPTFirstLineLeftIndent() { return MM_TO_POINT(mmFirstLineLeftIndent); }
     unsigned int getPTLeftIndent() { return MM_TO_POINT(mmLeftIndent); }
     unsigned int getPTParagFootOffset() { return MM_TO_POINT(mmParagFootOffset); }
@@ -161,7 +146,7 @@ public:
     /**
      * @return the name of the following parag layout.
      */
-    KWParagLayout* getFollowingParagLayout() { return followingParagLayout; }  
+    QString getFollowingParagLayout() { return followingParagLayout; }  
 
     void save(ostream &out);
     void load(KOMLParser&,vector<KOMLAttrib>&);
@@ -201,7 +186,7 @@ protected:
      *
      * @see KWParagLayout
      */
-    KWParagLayout* followingParagLayout;  
+    QString followingParagLayout;  
     /**
      * This parags name.
      */

@@ -140,6 +140,7 @@ public:
   void setCounter(KWParagLayout::Counter _counter)
     { fc->getParag()->getParagLayout()->setCounter(_counter); }
 
+  void applyStyle(QString _style);
 
   void recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L);
 

@@ -13,89 +13,96 @@
 
 KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
 {
-    prev = _prev;
-    next = _next;
-    paragLayout = new KWParagLayout(_doc,false);
-    *paragLayout = *_paragLayout;
-    document = _doc;
-    frameSet = _frameSet;
-
-    if ( prev )
-	prev->setNext( this );
-    else
-	frameSet->setFirstParag( this );
+  prev = _prev;
+  next = _next;
+  paragLayout = new KWParagLayout(_doc,false);
+  *paragLayout = *_paragLayout;
+  document = _doc;
+  frameSet = _frameSet;
+  
+  if (prev)
+    prev->setNext(this);
+  else
+    frameSet->setFirstParag(this);
     
-    if ( next )
-	next->setPrev( this );
+  if (next)
+    next->setPrev(this);
 
-    startPage = 1;
-    startFrame = 1;
-    endFrame = 1;
-    ptYStart = 0;
-    ptYEnd = 0;
+  startPage = 1;
+  startFrame = 1;
+  endFrame = 1;
+  ptYStart = 0;
+  ptYEnd = 0;
+
+  counterText = "";
 }
 
 KWParag::~KWParag()
 {
 }
 
-void KWParag::updateCounters( KWFormatContext *_format )
+void KWParag::makeCounterText()
 {
-//     if ( paragLayout->getCounterNr() == -1 )
-// 	return;
-    
-//     KWParagLayout *pl = paragLayout->getNumberLikeParagLayout();
+  QString buffer = "";
+  
+  switch (paragLayout->getCounterType())
+    {
+    case KWParagLayout::CT_BULLET:
+      {
+	for (int i = 0;i < paragLayout->getCounterDepth();i++)
+	  buffer += "  ";
 
-//     for ( int i = 0; i < 10; i++ )
-//     {
-// 	counters[i] = _format->getCounter( paragLayout->getCounterNr(), i );
-// 	if ( pl )
-// 	    numberLikeCounters[i] = _format->getCounter( pl->getCounterNr(), i );
-//     }
+	buffer += paragLayout->getCounterBullet();
+      } break;
+    case KWParagLayout::CT_NUM:
+      {
+	buffer = paragLayout->getCounterLeftText().copy();
+	QString tmp;
+	for (int i = 0;i <= paragLayout->getCounterDepth();i++)
+	  {
+	    tmp.sprintf("%d",counterData[i]);
+	    buffer += tmp;
+	    if (i < paragLayout->getCounterDepth())
+	      buffer += ".";
+	  }
+	buffer += paragLayout->getCounterRightText().copy();
+      } break;
+    case KWParagLayout::CT_ALPHAB_L:
+      {
+	buffer = paragLayout->getCounterLeftText().copy();
+	QString tmp;
+	for (int i = 0;i <= paragLayout->getCounterDepth();i++)
+	  {
+	    tmp.sprintf("%c",counterData[i]);
+	    tmp = tmp.lower();
+	    buffer += tmp;
+	    if (i < paragLayout->getCounterDepth())
+	      buffer += ".";
+	  }
+	buffer += paragLayout->getCounterRightText().copy();
+      } break;
+    case KWParagLayout::CT_ALPHAB_U:
+      {
+	buffer = paragLayout->getCounterLeftText().copy();
+	QString tmp;
+	for (int i = 0;i <= paragLayout->getCounterDepth();i++)
+	  {
+	    tmp.sprintf("%c",counterData[i]);
+	    tmp = tmp.upper();
+	    buffer += tmp;
+	    if (i < paragLayout->getCounterDepth())
+	      buffer += ".";
+	  }
+	buffer += paragLayout->getCounterRightText().copy();
+      } break;
+    default: break;
+    }
+  
+  buffer += " ";
+  counterText = buffer.copy();
 }
 
-QString& KWParag::makeCounterText( QString& _str )
-{
-//     char buffer[128];
-    
-//     if ( paragLayout->getCounterLeftText() )
-// 	_str = paragLayout->getCounterLeftText();
-//     else
-// 	_str = "";
-
-//     if ( paragLayout->getNumberLikeParagLayout() )
-//     {
-// 	int depth = paragLayout->getNumberLikeParagLayout()->getCounterDepth();
-// 	for ( int i = 0; i <= depth; i++ )
-// 	{
-// 	    sprintf( buffer, "%i", numberLikeCounters[i] );
-// 	    _str += buffer;
-// 	    if ( i < depth || paragLayout->getCounterDepth() != -1 )
-// 		_str += ".";
-// 	}
-//     }
-
-//     int depth = paragLayout->getCounterDepth();
-//     for ( int i = 0; i <= depth; i++ )
-//     {
-// 	sprintf( buffer, "%i", counters[i] );
-// 	_str += buffer;
-// 	if ( i < depth )
-// 	    _str += ".";
-//     }
-    
-//     if ( paragLayout->getCounterRightText() )
-//     {
-// 	_str += paragLayout->getCounterRightText();
-// 	_str += "   ";
-//     }
-//     else
-// 	_str += "   ";
-
-//     return _str;
-}
-
-void KWParag::insertText( unsigned int _pos, const char *_text)
+void KWParag::insertText( unsigned int _pos,QString _text)
 {
   text.insert( _pos, _text);
 }
@@ -198,3 +205,18 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
+void KWParag::applyStyle(QString _style)
+{
+  if (paragLayout->getName() == _style) return;
+
+  KWParagLayout *tmp = document->findParagLayout(_style);
+
+  if (tmp)
+    {
+      KWParagLayout *pl = new KWParagLayout(document,false);
+      *pl = *tmp;
+      
+      delete paragLayout;
+      paragLayout = pl;
+    }  
+}

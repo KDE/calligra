@@ -93,6 +93,13 @@ public:
   virtual void cleanUp();
 
   enum ProcessingType {WP = 0,DTP = 1};
+  const int U_FONT_FAMILY = 1;
+  const int U_FONT_ALL = 2;
+  const int U_COLOR = 4;
+  const int U_INDENT = 8;
+  const int U_BORDER = 16;
+  const int U_ALIGN = 32;
+  const int U_NUMBERING = 64;
   
 protected:
   virtual bool hasToWriteMultipart();
@@ -195,7 +202,7 @@ public:
    *
    * @see KWUserFont
    */
-  KWUserFont* findUserFont(char* _fontname);
+  KWUserFont* findUserFont(QString _fontname);
 
   /**
    * @return a display font matching the criteriums or 0L if none is found.
@@ -207,7 +214,7 @@ public:
    *
    * @see KWParagLayout
    */
-  KWParagLayout* findParagLayout(const char *_name);
+  KWParagLayout* findParagLayout(QString _name);
 
   KWParag* findFirstParagOfPage(unsigned int _page,unsigned int _frameset);
   KWParag* findFirstParagOfRect(unsigned int _ypos,unsigned int _page,unsigned int _frameset);
@@ -310,6 +317,9 @@ public:
   int getRastX() { return rastX; }
   int getRastY() { return rastY; }
 
+  int getApplyStyleTemplate() { return applyStyleTemplate; }
+  void setApplyStyleTemplate(int _f) { applyStyleTemplate = _f; }
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child);
@@ -382,6 +392,8 @@ protected:
   int rastX,rastY;
 
   bool m_bEmpty;
+
+  int applyStyleTemplate;
 };
 
 #endif

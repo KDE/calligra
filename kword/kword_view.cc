@@ -244,8 +244,6 @@ CORBA::Boolean KWordView::printDlg()
 /*================================================================*/
 void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_page = true )
 {
-  if (_check && format == _format) return;
-
   format = _format;
 
   if (_format.getUserFont()->getFontName())
@@ -461,6 +459,14 @@ void KWordView::setTool(MouseMode _mouseMode)
 	  break;
 	}
     }
+}
+
+/*===============================================================*/
+void KWordView::updateStyle(QString _styleName)
+{
+  styleList.find(_styleName);
+  if (!CORBA::is_nil(m_vToolBarText))
+    m_vToolBarText->setCurrentComboItem(ID_STYLE_LIST,styleList.at());
 }
 
 /*===============================================================*/
@@ -694,8 +700,9 @@ void KWordView::helpAboutKDE()
 }
 
 /*====================== text style selected  ===================*/
-void KWordView::textStyleSelected(const char *size)
+void KWordView::textStyleSelected(const char *style)
 {
+  gui->getPaperWidget()->applyStyle(style);
 }
 
 /*======================= text size selected  ===================*/
@@ -1275,7 +1282,10 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   OpenPartsUI::StrList stylelist;
   stylelist.length(m_pKWordDoc->paragLayoutList.count());
   for (unsigned int i = 0;i < m_pKWordDoc->paragLayoutList.count();i++)
-    stylelist[i] = CORBA::string_dup(m_pKWordDoc->paragLayoutList.at(i)->getName());
+    {
+      styleList.append(QString(m_pKWordDoc->paragLayoutList.at(i)->getName()));
+      stylelist[i] = CORBA::string_dup(m_pKWordDoc->paragLayoutList.at(i)->getName());
+    }
   m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST, false, SIGNAL( activated( const char* ) ),
 						     this, "textStyleSelected", true, i18n("Style"),
 						     200, -1, OpenPartsUI::AtBottom );

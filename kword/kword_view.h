@@ -127,7 +127,7 @@ public:
   virtual void helpAboutKOffice();
   virtual void helpAboutKDE();
 
-  virtual void textStyleSelected(const char *size);
+  virtual void textStyleSelected(const char *style);
   virtual void textSizeSelected(const char *size);
   virtual void textFontSelected(const char *font);
   virtual void textBold();
@@ -164,6 +164,7 @@ public:
   KWordGUI *getGUI() { return gui; }
   void uncheckAllTools();
   void setTool(MouseMode _mouseMode);
+  void updateStyle(QString _styleName);
 
 public slots:
   void slotInsertObject(KWordChild *_child);
@@ -300,7 +301,7 @@ protected:
   // text toolbar values
   QFont tbFont;
   QColor tbColor;
-  QStrList fontList;
+  QStrList fontList,styleList;
 
   KWordGUI *gui;
   bool m_bShowGUI;

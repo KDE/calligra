@@ -184,6 +184,8 @@ public:
   bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
   void setAutoCreateNewFrame(bool _auto) { autoCreateNewFrame = _auto; }
 
+  void updateCounters();
+
 protected:
   virtual void init();
 

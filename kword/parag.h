@@ -104,10 +104,9 @@ public:
      *
      * @return a reference to '_str'
      */
-    QString& makeCounterText( QString& _str );
+    void makeCounterText();
+    QString getCounterText() { return counterText; }
 
-    void updateCounters( KWFormatContext* _format );
-    
     /**
      * Set the paragraph following this one.
      */
@@ -124,7 +123,7 @@ public:
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
     void setPTYEnd( unsigned int _y ) { ptYEnd = _y; }
 
-    void insertText( unsigned int _pos, const char *_text);
+    void insertText( unsigned int _pos,QString _text);
     void insertPictureAsChar(unsigned int _pos,QString _filename);
     void appendText(KWChar *_text,unsigned int _len);
     bool deleteText( unsigned int _pos, unsigned int _len = 1);
@@ -132,6 +131,10 @@ public:
   
     void save(ostream &out);
     void load(KOMLParser&,vector<KOMLAttrib>&);
+
+    int *getCounterData() { return counterData; }
+  
+    void applyStyle(QString _style);
 
 protected:
     /**
@@ -194,10 +197,9 @@ protected:
      */
     unsigned int ptYEnd;
 
-    unsigned short counters[ 10 ];
-    unsigned short numberLikeCounters[ 10 ];
-
     KWTextFrameSet *frameSet;
+    int counterData[16];
+    QString counterText;
 };
 
 #endif

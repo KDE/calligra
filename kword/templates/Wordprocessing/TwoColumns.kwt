@@ -17,7 +17,7 @@
      <FLOW value="0"/>
      <OFFSETS head="0" foot="0"/>
      <INDENTS first="0" left="0"/>
-     <COUNTER type="0" depth="0" bullet="45" start="" numberingtype="0" lefttext="" righttext=""/>
+     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext=""/>
      <LINESPACING value="0"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>

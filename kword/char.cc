@@ -12,7 +12,7 @@
 #include "kword_doc.h"
 #include "frame.h"
 
-KWString::KWString(const char *_str)
+KWString::KWString(QString _str)
 {
   if (_str == 0L)
   {
@@ -73,7 +73,7 @@ void KWString::append(KWChar *_text,unsigned int _len)
     }
 }
 
-void KWString::insert( unsigned int _pos, const char *_text)
+void KWString::insert( unsigned int _pos,QString _text)
 {
   assert( _pos <= _len_ );
  

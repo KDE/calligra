@@ -71,7 +71,7 @@ QString KWFormatCollection::generateKey(const KWFormat &_format)
 	      (_format.getWeight() == QFont::Bold ? 'B' : '*'),
 	      (_format.getItalic() == 1 ? 'I' : '*'),
 	      (_format.getUnderline() == 1 ? 'U' : '*'),
-	      _format.getUserFont()->getFontName(),
+	      _format.getUserFont()->getFontName().data(),
 	      _format.getPTFontSize(),_format.getColor().red(),
 	      _format.getColor().green(),_format.getColor().blue(),
 	      _format.getVertAlign());

@@ -6,7 +6,7 @@ char s_FONT_CCId[]="$Id$";
 #include <qpainter.h>
 #include <qfontmetrics.h>
 
-KWUserFont::KWUserFont( KWordDocument *_doc, const char *_name )
+KWUserFont::KWUserFont(KWordDocument *_doc,QString _name)
 {
     fontName = _name;
     fontName.detach();
@@ -70,7 +70,7 @@ void KWDisplayFont::scaleFont()
   fm = QFontMetrics(*this);
 }
 
-unsigned int KWDisplayFont::getPTWidth( const char *_text )
+unsigned int KWDisplayFont::getPTWidth(QString _text)
 {
   return fm.width(_text);
 }

@@ -79,6 +79,8 @@ KWordDocument::KWordDocument()
   rastX = rastY = 10;
 
   m_bEmpty = true;
+  applyStyleTemplate = 0;
+  applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN;
 }
 
 /*================================================================*/
@@ -288,7 +290,62 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   defaultParagLayout = new KWParagLayout(this);
   defaultParagLayout->setName("Standard");
   defaultParagLayout->setCounterType(KWParagLayout::CT_NONE);
+  defaultParagLayout->setCounterDepth(0);
     
+  KWParagLayout *lay = new KWParagLayout(this);
+  lay->setName("Head 1");
+  lay->setFollowingParagLayout("Standard");
+  lay->setCounterType(KWParagLayout::CT_NUM);
+  lay->setCounterDepth(0);
+  lay->setStartCounter("1");
+  lay->setCounterRightText(".");
+  lay->setNumberingType(KWParagLayout::NT_CHAPTER);
+
+  lay = new KWParagLayout(this);
+  lay->setName("Head 2");
+  lay->setFollowingParagLayout("Standard");
+  lay->setCounterType(KWParagLayout::CT_NUM);
+  lay->setCounterDepth(1);
+  lay->setStartCounter("1");
+  lay->setCounterRightText(".");
+  lay->setNumberingType(KWParagLayout::NT_CHAPTER);
+
+  lay = new KWParagLayout(this);
+  lay->setName("Head 3");
+  lay->setFollowingParagLayout("Standard");
+  lay->setCounterType(KWParagLayout::CT_NUM);
+  lay->setCounterDepth(2);
+  lay->setStartCounter("1");
+  lay->setCounterRightText(".");
+  lay->setNumberingType(KWParagLayout::NT_CHAPTER);
+
+  lay = new KWParagLayout(this);
+  lay->setName("Enumerated List");
+  lay->setFollowingParagLayout("Enumerated List");
+  lay->setCounterType(KWParagLayout::CT_NUM);
+  lay->setCounterDepth(0);
+  lay->setStartCounter("1");
+  lay->setCounterRightText(".");
+  lay->setNumberingType(KWParagLayout::NT_LIST);
+
+  lay = new KWParagLayout(this);
+  lay->setName("Alphabetical List");
+  lay->setFollowingParagLayout("Alphabetical List");
+  lay->setCounterType(KWParagLayout::CT_ALPHAB_L);
+  lay->setCounterDepth(0);
+  lay->setStartCounter("a");
+  lay->setCounterRightText(")");
+  lay->setNumberingType(KWParagLayout::NT_LIST);
+
+  lay = new KWParagLayout(this);
+  lay->setName("Bullet List");
+  lay->setFollowingParagLayout("Bullet List");
+  lay->setCounterType(KWParagLayout::CT_BULLET);
+  lay->setCounterDepth(0);
+  lay->setStartCounter("1");
+  lay->setCounterRightText("");
+  lay->setNumberingType(KWParagLayout::NT_LIST);
+
   pages = 1;
 
   pageColumns.columns = 1; //STANDARD_COLUMNS;
@@ -690,11 +747,11 @@ QPen KWordDocument::setBorderPen(KWParagLayout::Border _brd)
 }
 
 /*================================================================*/
-KWUserFont* KWordDocument::findUserFont(char* _userfontname)
+KWUserFont* KWordDocument::findUserFont(QString _userfontname)
 {
   KWUserFont* font;
   for (font = userFontList.first();font != 0L;font = userFontList.next())
-    if (strcmp(font->getFontName(),_userfontname) == 0)
+    if (font->getFontName() == _userfontname)
       return font;
   
   return 0L;
@@ -715,11 +772,11 @@ KWDisplayFont* KWordDocument::findDisplayFont(KWUserFont* _font,unsigned int _si
 }
 
 /*================================================================*/
-KWParagLayout* KWordDocument::findParagLayout(const char *_name)
+KWParagLayout* KWordDocument::findParagLayout(QString _name)
 {
   KWParagLayout* p;
   for (p = paragLayoutList.first();p != 0L;p = paragLayoutList.next())
-    if (strcmp( p->getName(),_name ) == 0)
+    if (p->getName() == _name)
       return p;
   
   return 0L;
@@ -859,15 +916,17 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
   int plus = 0;
 
   // First line ? Draw the counter ?
-  if ( pos == 0 && lay->getCounterType() != KWParagLayout::CT_NONE )
+  if (pos == 0 && lay->getCounterType() != KWParagLayout::CT_NONE)
     {
-//       KWFormat counterfm(this, _fc );
-//       counterfm.apply( lay->getCounterFormat() );
-//       _painter.setFont( *( counterfm.loadFont( this ) ) );
-//       _painter.setPen( counterfm.getColor() );
+      //_painter.fillRect(_fc.getPTCounterPos() - xOffset,_fc.getPTY(),_fc.getPTCounterWidth(),_fc.getLineHeight(),lightGray);
+      KWFormat counterfm(this,_fc);
+      counterfm.apply(lay->getFormat());
+      if (_fc.getParag()->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET)
+	counterfm.setUserFont(findUserFont(_fc.getParag()->getParagLayout()->getBulletFont()));
+      _painter.setFont(*(counterfm.loadFont(this)));
+      _painter.setPen(counterfm.getColor());
       
-//       _painter.drawText(- xOffset, 
-// 			_fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
+      _painter.drawText(_fc.getPTCounterPos() - xOffset,_fc.getPTY() + _fc.getPTMaxAscender() - yOffset,_fc.getCounterText());
     }
     
   // paint it character for character. Provisionally! !!HACK!!

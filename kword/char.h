@@ -95,7 +95,7 @@ class KWString
 public:
   KWString() 
     { _max_ = 0; _len_ = 0; _data_ = 0L; }
-  KWString(const char* _text);
+  KWString(QString _text);
   KWString(const KWString &_string);
   ~KWString() 
     { free(_data_,_len_); delete [] _data_; }
@@ -105,7 +105,7 @@ public:
   unsigned int max()
     { return _max_; }
   void append(KWChar *_text,unsigned int _len);
-  void insert(unsigned int _pos,const char *_text);
+  void insert(unsigned int _pos,QString _text);
   void insert(unsigned int _pos,const char _c);
   void insert(unsigned int _pos,KWCharImage *_image);
   void resize(unsigned int _size,bool del = true);

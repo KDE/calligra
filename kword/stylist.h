@@ -30,11 +30,12 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <qstrlist.h>
+#include <qcombobox.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
-#include <kfontdialog.h>
 #include <kcolordlg.h>
+#include <kfontdialog.h>
 
 #include "paragdia.h"
 
@@ -54,21 +55,23 @@ public:
 
 protected:
   void setupTab1();
+  void setupTab2();
 
-  QWidget *tab1;
-  QGridLayout *grid1;
+  QWidget *tab1,*tab2;
+  QGridLayout *grid1,*grid2;
   QListBox *lStyleList;
   QPushButton *bEdit,*bDelete,*bAdd,*bUp,*bDown,*bCopy;
   KButtonBox *bButtonBox;
+  QComboBox *cFont,*cColor,*cBorder,*cIndent,*cAlign,*cNumbering;
 
   KWordDocument *doc;
   KWStyleEditor *editor;
   QStrList fontList;
 
 protected slots:
+  void apply();
   void editStyle();
   void editStyle(int) { editStyle(); }
-  void updateStyles();
 
 };
 
@@ -101,6 +104,7 @@ class KWStyleEditor : public QTabDialog
 
 public:
   KWStyleEditor(QWidget *_parent,KWParagLayout *_style,KWordDocument *_doc,QStrList _fontList);
+  ~KWStyleEditor() { delete style; }
 
 protected:
   void setupTab1();
@@ -113,7 +117,7 @@ protected:
   QLabel *lName;
   QLineEdit *eName;
 
-  KWParagLayout *style;
+  KWParagLayout *style,*ostyle;
   KWordDocument *doc;
   KWParagDia *paragDia;
   QStrList fontList;
@@ -129,6 +133,7 @@ protected slots:
   void changeBorders();
   void changeNumbering();
   void paragDiaOk();
+  void apply();
 
 };
 

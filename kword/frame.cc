@@ -307,6 +307,7 @@ void KWTextFrameSet::init()
 //       format->setDefaults(doc);
 //       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
 //     }
+  updateCounters();
 }
 
 /*================================================================*/
@@ -401,6 +402,8 @@ void KWTextFrameSet::deleteParag(KWParag *_parag)
       p2->setNext(p);
       delete _parag;
     }
+
+  updateCounters();
 }
 
 /*================================================================*/
@@ -414,6 +417,8 @@ void KWTextFrameSet::joinParag(KWParag *_parag1,KWParag *_parag2)
   _parag1->appendText(_parag2->getText(),_parag2->getTextLen());
 
   delete _parag2;
+
+  updateCounters();
 }
 
 /*================================================================*/
@@ -431,7 +436,7 @@ void KWTextFrameSet::insertParag(KWParag *_parag,InsertPos _pos)
     {
     case I_AFTER:
       {
-	_new = new KWParag(this,doc,_parag,_next,_parag->getParagLayout());
+	_new = new KWParag(this,doc,_parag,_next,doc->findParagLayout(_parag->getParagLayout()->getFollowingParagLayout()));
 	if (_next) _next->setPrev(_new);
       } break;
     case I_BEFORE:
@@ -441,6 +446,8 @@ void KWTextFrameSet::insertParag(KWParag *_parag,InsertPos _pos)
 	else setFirstParag(_new);
       } break;
     }
+
+  updateCounters();
 }
 
 /*================================================================*/
@@ -456,6 +463,8 @@ void KWTextFrameSet::splitParag(KWParag *_parag,unsigned int _pos)
   if (_next) _next->setPrev(_new);
   
   _new->appendText(_string,len);
+
+  updateCounters();
 }
 
 /*================================================================*/
@@ -554,6 +563,88 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  cerr << "ERR: Closing Child" << endl;
 	  return;
 	}
+    }
+  updateCounters();
+}
+
+/*================================================================*/
+void KWTextFrameSet::updateCounters()
+{
+  KWParag *p = parags;
+
+  int counterData[16],listData[16];
+  unsigned int i = 0;
+  for (i = 0;i < 16;i++)
+    {
+      counterData[i] = -2;
+      listData[i] = -2;
+    }
+
+  while (p)
+    {
+      if (p->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE)
+	{
+	  if (p->getParagLayout()->getNumberingType() == KWParagLayout::NT_CHAPTER)
+	    {
+	      counterData[p->getParagLayout()->getCounterDepth()]++;
+	      for (i = 0;i < 16;i++)
+		{
+		  if (counterData[i] < 0)
+		    {
+		      switch (p->getParagLayout()->getCounterType())
+			{
+			case KWParagLayout::CT_NUM:
+			  counterData[i] = atoi(p->getParagLayout()->getStartCounter());
+			  break;
+			case KWParagLayout::CT_ALPHAB_L:
+			  counterData[i] = p->getParagLayout()->getStartCounter()[0];
+			  break;
+			case KWParagLayout::CT_ALPHAB_U:
+			  counterData[i] = p->getParagLayout()->getStartCounter()[0];
+			  break;
+			default: break;
+			}
+		    }
+		  p->getCounterData()[i] = counterData[i];
+		}
+	      p->makeCounterText();
+	      for (i = p->getParagLayout()->getCounterDepth() + 1;i < 16;i++)
+		counterData[i] = -2;
+	    }
+	  else
+	    {
+	      listData[p->getParagLayout()->getCounterDepth()]++;
+	      for (i = 0;i < 16;i++)
+		{
+		  if (listData[i] < 0)
+		    {
+		      switch (p->getParagLayout()->getCounterType())
+			{
+			case KWParagLayout::CT_NUM:
+			  listData[i] = atoi(p->getParagLayout()->getStartCounter());
+			  break;
+			case KWParagLayout::CT_ALPHAB_L:
+			  listData[i] = p->getParagLayout()->getStartCounter()[0];
+			  break;
+			case KWParagLayout::CT_ALPHAB_U:
+			  listData[i] = p->getParagLayout()->getStartCounter()[0];
+			  break;
+			default: break;
+			}
+		    }
+		  p->getCounterData()[i] = listData[i];
+		}
+	      p->makeCounterText();
+	      for (i = p->getParagLayout()->getCounterDepth() + 1;i < 16;i++)
+		listData[i] = -2;
+	    }
+	}
+      else if (listData[0] != -2)
+	{
+	  for (i = 0;i < 16;i++)
+	    listData[i] = -2;
+    	}
+      p = p->getNext();
     }
 }
 

@@ -520,6 +520,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		    {	  
 		      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
 		    }
 		}
 	      else
@@ -631,6 +632,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
 					fc->getParag()->getParagLayout()->getBottomBorder());
+	gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
       } break;
     case MM_EDIT_FRAME:
       {
@@ -1250,10 +1252,14 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {	  
 	    gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	    gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
 	  }
 	if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
 	  setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 
+	format = fc->getParag()->getParagLayout()->getFormat();
+	gui->getView()->setFormat(*((KWFormat*)fc));
+	fc->apply(format);
 	inKeyEvent = false;
 	return;
 
@@ -1377,6 +1383,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      {	  
 		gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
 	      }
 	    if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
 	      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
@@ -1615,6 +1622,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
     {	  
       gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
       gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
     }
   if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
     setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
@@ -2069,6 +2077,17 @@ void KWPage::newFirstIndent(int _first)
 void KWPage::frameDiaClosed()
 { 
   hiliteFrameSet = -1; 
+  recalcAll = true; 
+  recalcText(); 
+  recalcCursor(); 
+  recalcAll = false; 
+}
+
+/*================================================================*/
+void KWPage::applyStyle(QString _style)
+{
+  fc->getParag()->applyStyle(_style);
+  dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(fc->getFrameSet() - 1))->updateCounters();
   recalcAll = true; 
   recalcText(); 
   recalcCursor(); 

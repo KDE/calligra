@@ -34,9 +34,12 @@ KWStyleManager::KWStyleManager(QWidget *_parent,KWordDocument *_doc,QStrList _fo
   editor = 0L;
 
   setupTab1();
+  setupTab2();
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
+
+  connect(this,SIGNAL(applyButtonPressed()),this,SLOT(apply()));
 }
 
 /*================================================================*/
@@ -80,24 +83,122 @@ void KWStyleManager::setupTab1()
 }
 
 /*================================================================*/
+void KWStyleManager::setupTab2()
+{
+  tab2 = new QWidget(this);
+
+  grid2 = new QGridLayout(tab2,4,2,15,7);
+
+  cFont = new QComboBox(false,tab2);
+  cFont->insertItem(i18n("Don't update Fonts"));
+  cFont->insertItem(i18n("Update Font Families only"));
+  cFont->insertItem(i18n("Update Font Families and Attributes"));
+  cFont->resize(cFont->sizeHint());
+  grid2->addWidget(cFont,0,0);
+
+  cColor = new QComboBox(false,tab2);
+  cColor->insertItem(i18n("Don't update Colors"));
+  cColor->insertItem(i18n("Update Colors"));
+  cColor->resize(cFont->sizeHint());
+  grid2->addWidget(cColor,1,0);
+
+  cIndent = new QComboBox(false,tab2);
+  cIndent->insertItem(i18n("Don't update Indents and Spacing"));
+  cIndent->insertItem(i18n("Update Indents and Spacing"));
+  cIndent->resize(cFont->sizeHint());
+  grid2->addWidget(cIndent,2,0);
+
+  cAlign = new QComboBox(false,tab2);
+  cAlign->insertItem(i18n("Don't update Aligns/Flows"));
+  cAlign->insertItem(i18n("Update Aligns/Flows"));
+  cAlign->resize(cFont->sizeHint());
+  grid2->addWidget(cAlign,0,1);
+
+  cNumbering = new QComboBox(false,tab2);
+  cNumbering->insertItem(i18n("Don't update Numbering"));
+  cNumbering->insertItem(i18n("Update Numbering"));
+  cNumbering->resize(cFont->sizeHint());
+  grid2->addWidget(cNumbering,1,1);
+
+  cBorder = new QComboBox(false,tab2);
+  cBorder->insertItem(i18n("Don't update Borders"));
+  cBorder->insertItem(i18n("Update Borders"));
+  cBorder->resize(cFont->sizeHint());
+  grid2->addWidget(cBorder,2,1);
+
+  grid2->addColSpacing(0,cFont->width());
+  grid2->addColSpacing(1,cAlign->width());
+  grid2->addColSpacing(0,cColor->width());
+  grid2->addColSpacing(1,cNumbering->width());
+  grid2->addColSpacing(0,cIndent->width());
+  grid2->addColSpacing(1,cBorder->width());
+  grid2->setColStretch(0,1);
+  grid2->setColStretch(1,1);
+
+  grid2->addRowSpacing(0,cFont->height());
+  grid2->addRowSpacing(1,cColor->height());
+  grid2->addRowSpacing(2,cIndent->height());
+  grid2->setRowStretch(0,0);
+  grid2->setRowStretch(1,0);
+  grid2->setRowStretch(2,0);
+  grid2->setRowStretch(3,1);
+
+  grid2->activate();
+
+  addTab(tab2,i18n("Update Configuration"));
+
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY)
+    cFont->setCurrentItem(1);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL)
+    cFont->setCurrentItem(2);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_COLOR)
+    cColor->setCurrentItem(1);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_INDENT)
+    cIndent->setCurrentItem(1);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_BORDER)
+    cBorder->setCurrentItem(1);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_ALIGN)
+    cAlign->setCurrentItem(1);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_NUMBERING)
+    cNumbering->setCurrentItem(1);
+}
+
+/*================================================================*/
 void KWStyleManager::editStyle()
 {
   if (editor)
     {
-      disconnect(editor,SIGNAL(updateStyles()),this,SLOT(updateStyles()));
       delete editor;
       editor = 0L;
     }
 
   editor = new KWStyleEditor(0L,doc->paragLayoutList.at(lStyleList->currentItem()),doc,fontList);
   editor->setCaption(i18n("KWord - Stylist"));
-  connect(editor,SIGNAL(updateStyles()),this,SLOT(updateStyles()));
   editor->show();
 }
 
 /*================================================================*/
-void KWStyleManager::updateStyles()
+void KWStyleManager::apply()
 {
+  int f = 0;
+  
+  if (cFont->currentItem() == 1)
+    f = f | KWordDocument::U_FONT_FAMILY;
+  else if (cFont->currentItem() == 2)
+    f = f | KWordDocument::U_FONT_ALL;
+
+  if (cColor->currentItem() == 1)
+    f = f | KWordDocument::U_COLOR;
+  if (cAlign->currentItem() == 1)
+    f = f | KWordDocument::U_ALIGN;
+  if (cBorder->currentItem() == 1)
+    f = f | KWordDocument::U_BORDER;
+  if (cNumbering->currentItem() == 1)
+    f = f | KWordDocument::U_NUMBERING;
+  if (cIndent->currentItem() == 1)
+    f = f | KWordDocument::U_INDENT;
+
+  doc->setApplyStyleTemplate(f);
 }
 
 /******************************************************************/
@@ -140,12 +241,16 @@ KWStyleEditor::KWStyleEditor(QWidget *_parent,KWParagLayout *_style,KWordDocumen
 {
   fontList = _fontList;
   paragDia = 0;
-  style = _style;
+  ostyle = _style;
+  style = new KWParagLayout(_doc,false);
+  *style = *_style;
   doc = _doc;
   setupTab1();
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
+
+  connect(this,SIGNAL(applyButtonPressed()),this,SLOT(apply()));
 }
 
 /*================================================================*/
@@ -167,7 +272,13 @@ void KWStyleEditor::setupTab1()
   eName->setText(style->getName());
   grid2->addWidget(eName,0,1);
 
-  if (style->getName() == QString(i18n("Standard")))
+  if (style->getName() == QString(i18n("Standard")) ||
+      style->getName() == QString(i18n("Head 1")) ||
+      style->getName() == QString(i18n("Head 2")) ||
+      style->getName() == QString(i18n("Head 3")) ||
+      style->getName() == QString(i18n("Enumearted List")) ||
+      style->getName() == QString(i18n("Bullet List")) ||
+      style->getName() == QString(i18n("Alphabetical List")))
     eName->setEnabled(false);
 
   grid2->addRowSpacing(0,lName->height());
@@ -355,4 +466,9 @@ void KWStyleEditor::paragDiaOk()
     }
 
   preview->repaint(true);
+}
+/*================================================================*/
+void KWStyleEditor::apply()
+{ 
+  *ostyle = *style; 
 }

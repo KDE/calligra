@@ -7,7 +7,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true )
+KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true)
   : format(_doc)
 {
     flow = LEFT;
@@ -20,10 +20,9 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true )
     counter.counterBullet = '-';
     counter.counterLeftText = "";
     counter.counterRightText = "";
-    followingParagLayout = this;
-    //numberLikeParagLayout = 0L;
+    followingParagLayout = "Standard";
     ptLineSpacing = 0;
-    counter.startCounter = "";
+    counter.startCounter = "0";
     counter.numberingType = NT_LIST;
     counter.bulletFont = "symbol";
 
@@ -65,43 +64,32 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   counter.counterBullet = _layout.getCounterBullet();
   counter.counterLeftText = qstrdup(_layout.getCounterLeftText());
   counter.counterRightText = qstrdup(_layout.getCounterRightText());
-  followingParagLayout = this;
+  followingParagLayout = _layout.getFollowingParagLayout();
   ptLineSpacing = _layout.getPTLineSpacing();
   counter.startCounter = _layout.getStartCounter();
   counter.numberingType = _layout.getNumberingType();
   counter.bulletFont = _layout.getBulletFont();
+  name = _layout.getName();
 
   left = _layout.getLeftBorder();
   right = _layout.getRightBorder();
   top = _layout.getTopBorder();
   bottom = _layout.getBottomBorder();
 
-  format.setDefaults( document );
+  format = _layout.getFormat();
 
   return *this;
 }
 
-void KWParagLayout::setFollowingParagLayout( const char *_name )
+void KWParagLayout::setFollowingParagLayout(QString _name)
 {
-    KWParagLayout* p = document->findParagLayout( _name );
-    if ( p == 0L )
-	followingParagLayout = this;
-    else
-	followingParagLayout = p;
+  followingParagLayout = _name;
 }
-
-// void KWParagLayout::setNumberLikeParagLayout( const char *_name )
-// {
-//     KWParagLayout* p = document->findParagLayout( _name );
-//     if ( p == 0L )
-// 	numberLikeParagLayout = this;
-//     else
-// 	numberLikeParagLayout = p;
-// }
 
 void KWParagLayout::save(ostream &out)
 {
   out << indent << "<NAME value=\"" << name << "\"/>" << endl;
+  out << indent << "<FOLLOWING name=\"" << followingParagLayout << "\"/>" << endl;
   out << indent << "<FLOW value=\"" << static_cast<int>(flow) << "\"/>" << endl;
   out << indent << "<OFFSETS head=\"" << mmParagHeadOffset << "\" foot=\"" << mmParagFootOffset << "\"/>" << endl;
   out << indent << "<INDENTS first=\"" << mmFirstLineLeftIndent << "\" left=\"" << mmLeftIndent << "\"/>" << endl;
@@ -129,7 +117,7 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     {
       KOMLParser::parseTag(tag.c_str(),_name,lst);
 	      
-      // text
+      // name
       if (_name == "NAME")
 	{
 	  KOMLParser::parseTag(tag.c_str(),_name,lst);
@@ -141,7 +129,19 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	}
 
-      // text
+      // following parag layout
+      if (_name == "FOLLOWING")
+	{
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "name")
+		followingParagLayout = (*it).m_strValue.c_str();
+	    }
+	}
+
+      // flow
       else if (_name == "FLOW")
 	{
 	  KOMLParser::parseTag(tag.c_str(),_name,lst);

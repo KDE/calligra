@@ -17,10 +17,10 @@ class KWordDocument;
 class KWUserFont
 {
  public:
-    KWUserFont( KWordDocument *_doc, const char *_name );
+    KWUserFont( KWordDocument *_doc,QString _name);
     ~KWUserFont();
     
-    const char *getFontName() {	return fontName.data(); }
+    QString getFontName() { return fontName.data(); }
 
     bool operator==(KWUserFont &_font)
     { return _font.getFontName() == fontName; }
@@ -50,7 +50,7 @@ public:
     unsigned int getPTAscender() { return fm.ascent(); }
     unsigned int getPTDescender() { return fm.descent() + 2; }
 
-    unsigned int getPTWidth( const char *_text );
+    unsigned int getPTWidth(QString _text);
     unsigned int getPTWidth( char &_c );
     
     void setPTSize(int _size);

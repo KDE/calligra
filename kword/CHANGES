@@ -369,3 +369,14 @@ Reggie, 19.11.1998:
 Reggie, 20.11.1998:
 -------------------
 - More work on numbering (internal stuff and configuration dialog)
+
+Reggie, 21.11.1998:
+-------------------
+- Worked a lot on numbering - it starts really working now :-)
+
+Reggie, 22.11.1998:
+-------------------
+- Applying style templates works (this means chapter numbering, all types of lists, etc. is possible now :-)
+- Modifying style templates in the stylist works - but the text doesn't get updated at the moment (this will come)
+  The style template stuff starts working now - there are still lots of bugs and problems in it on which I will
+  work tomorrow.
