@@ -395,7 +395,8 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     QDomElement element=doc.createElement(tagTEXT);
     QString tmpFamily, tmpColor, tmpTextBackColor,tmpLinkName,tmpHrefName;
     int tmpPointSize=10;
-    unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false,tmpVerticalAlign=false;
+    unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
+    int tmpVerticalAlign=-1;
 
     tmpFamily=lastFormat->font().family();
     tmpPointSize=KoZoomHandler::layoutUnitToPt( lastFormat->font().pointSize());
@@ -423,7 +424,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
 
     if(!tmpTextBackColor.isEmpty())
         element.setAttribute(attrTextBackColor, tmpTextBackColor);
-    if(tmpVerticalAlign!=Qt::AlignLeft)
+    if(tmpVerticalAlign!=-1)
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
 
     if(!lastFormat->anchorName().isEmpty() && !lastFormat->anchorHref().isEmpty())
@@ -449,7 +450,6 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     lastParag->remove( 0, 1 ); // ?
     int i = 0;
     int listNum = 0;
-    //KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
     int lineSpacing = 0, paragSpacing = 0;
     while ( !e.isNull() ) {
         if ( e.tagName() == tagP ) {
@@ -517,7 +517,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         if ( ( !txt[txt.length()-1].isSpace()  && n.isNull() ) )
                             txt+=' ';
                         lastParag->append( txt );
-                        lastParag->setFormat( i, txt.length(), fm );
+                        lastParag->setFormat( i, txt.length(), fm, false );
+                        //kdDebug()<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
                         i += txt.length();
                     }
                 }
