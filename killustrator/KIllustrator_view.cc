@@ -1292,7 +1292,7 @@ void KIllustratorView::slotZoomFactorChanged(float factor)
    //current zoom value not found in list
    f+='%';
    list<<f;
-   m_viewZoom->setItems(f);
+   m_viewZoom->setItems(list);
    slotViewZoom (f);
    //m_viewZoom->changeItem(8,f);
    //m_viewZoom->setCurrentItem(8);
