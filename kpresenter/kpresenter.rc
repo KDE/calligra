@@ -67,19 +67,23 @@
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
-  <Action name="tools_line"/>
-  <Action name="tools_freehand"/>
-  <Action name="tools_polyline"/>
-  <Action name="tools_quadricbeziercurve"/>
-  <Action name="tools_cubicbeziercurve"/>
-  <Action name="tools_rectangle"/>
-  <Action name="tools_circle"/>
-  <Action name="tools_pie"/>
-  <Action name="tools_polygon"/>
-  <Action name="tools_closed_freehand"/>
-  <Action name="tools_closed_polyline"/>
-  <Action name="tools_closed_quadricbeziercurve"/>
-  <Action name="tools_closed_cubicbeziercurve"/>
+  <Menu name="Insert Line"><text>Line</text>
+    <Action name="tools_line"/>
+    <Action name="tools_freehand"/>
+    <Action name="tools_polyline"/>
+    <Action name="tools_quadricbeziercurve"/>
+    <Action name="tools_cubicbeziercurve"/>
+  </Menu>
+  <Menu name="Insert Shape"><text>Shape</text>
+    <Action name="tools_rectangle"/>
+    <Action name="tools_circle"/>
+    <Action name="tools_pie"/>
+    <Action name="tools_polygon"/>
+    <Action name="tools_closed_freehand"/>
+    <Action name="tools_closed_polyline"/>
+    <Action name="tools_closed_quadricbeziercurve"/>
+    <Action name="tools_closed_cubicbeziercurve"/>
+  </Menu>
  </Menu>
  <Menu name="Extra"><text>F&amp;ormat</text>
   <Action name="tools_mouse"/>
