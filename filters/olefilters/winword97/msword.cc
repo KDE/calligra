@@ -23,7 +23,6 @@
     http://www.wvWare.com).
 */
 
-#include <errno.h>
 #include <kdebug.h>
 #include <msword.h>
 #include <paragraph.h>
@@ -168,7 +167,7 @@ void MsWord::constructionError(unsigned line, const char *reason)
     kdError(s_area) << m_constructionError << endl;
 }
 
-void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::PAPXFKP &style)
+void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::PAPXFKP &style, CHPXarray &chpxs)
 {
     Paragraph paragraph = Paragraph(*this);
 
@@ -400,39 +399,93 @@ void MsWord::Fkp<T1, T2>::startIteration(const U8 *fkp)
     m_i = 0;
 }
 
-void MsWord::getCHPXFKP()
+// Get the character property exceptions for a range of file positions by walking the BTEs.
+// The result is an array of CHPXs which start and end at the given range.
+void MsWord::getChpxs(U32 startFc, U32 endFc, CHPXarray &result)
 {
     // A bin table is a plex of BTEs.
 
     Plex<BTE, 2> btes = Plex<BTE, 2>(this);
-    U32 startFc;
-    U32 endFc;
+    U32 actualStartFc;
+    U32 actualEndFc;
     BTE data;
 
     // Walk the BTEs.
 
     btes.startIteration(m_tableStream + m_fib.fcPlcfbteChpx, m_fib.lcbPlcfbteChpx);
-    while (btes.getNext(&startFc, &endFc, &data))
+    while (btes.getNext(&actualStartFc, &actualEndFc, &data))
     {
-        getCHPX(m_mainStream + (data.pn * 512));
+        getChpxs(m_mainStream + (data.pn * 512), startFc, endFc, result);
+    }
+
+    // Tailor the result array to the caller's request.
+
+    unsigned index = result.size();
+
+    if (index == 0)
+    {
+        kdError(s_area) << "MsWord::getChpxs: cannot find entries for " << startFc << ".." << endFc << endl;
+
+        // Recover by making up a dummy entry.
+
+        CHPX style;
+
+        style.startFc = startFc;
+        style.endFc = endFc;
+        style.data.grpprlBytes = 0;
+        style.data.grpprl = (U8 *)0;
+        result.resize(1);
+        result[1] = style;
+    }
+    else
+    {
+        //kdDebug(s_area) << "using chp from: " << result[0].startFc << ".." << result[index - 1].endFc << endl;
+        result[0].startFc = startFc;
+        result[index - 1].endFc = endFc;
     }
 }
 
-void MsWord::getCHPX(const U8 *fkp)
+// Get the character property exceptions for a range of file positions in an FKP.
+// The result is an array of CHPXs which start and end at the given range.
+void MsWord::getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result)
 {
     // A CHPX FKP contains no extra data, specify a dummy PHE for the template.
 
     Fkp<PHE, CHPXFKP> chpx = Fkp<PHE, CHPXFKP>(this);
 
-    U32 startFc;
-    U32 endFc;
     U8 rgb;
-    CHPXFKP style;
+    CHPX style;
 
     chpx.startIteration(fkp);
-    while (chpx.getNext(&startFc, &endFc, &rgb, NULL, &style))
+    while (chpx.getNext(&style.startFc, &style.endFc, &rgb, NULL, &style.data))
     {
-        //kdDebug(s_area) << "chp from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
+        if (style.endFc <= startFc)
+        {
+            // This one ends before the region of interest.
+
+            continue;
+        }
+        else
+        if (endFc <= style.startFc)
+        {
+            // This one starts after the area of interest...we are done!
+
+            break;
+        }
+
+        // Add this to the result array.
+
+        //kdDebug(s_area) << "found chp from: " << style.startFc << ".." << style.endFc << ": rgb: " << rgb << endl;
+        if (!rgb)
+        {
+            style.data.grpprlBytes = 0;
+            style.data.grpprl = (U8 *)0;
+        }
+
+        unsigned index = result.size();
+
+        result.resize(index + 1);
+        result[index] = style;
     }
 }
 
@@ -487,10 +540,33 @@ void MsWord::getParagraphsFromPapxs(
         while (papx.getNext(&startFc, &endFc, &rgb, &layout, &style))
         {
             QString text;
+            CHPXarray chpxs;
 
             //kdDebug(s_area) << "pap from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
             read(m_fib.lid, m_mainStream + startFc, &text, endFc - startFc, unicode);
-            decodeParagraph(text, layout, style);
+
+            // Get the CHPXs that apply to this paragraph, then bias all the start and end positions
+            // to be relative to the string we just extracted.
+
+            unsigned i;
+
+            getChpxs(startFc, endFc, chpxs);
+            for (i = 0; i < chpxs.size(); i++)
+            {
+                chpxs[i].startFc -= startFc;
+                chpxs[i].endFc -= startFc;
+            }
+
+            // TBD: Now eliminate any deleted text.
+
+            for (i = 0; i < chpxs.size(); i++)
+            {
+                // Paragraph paragraph = Paragraph(*this);
+
+                // paragraph.apply(chpxs[i].data.grpprl, chpxs[i].data.grpprlBytes);
+            }
+
+            decodeParagraph(text, layout, style, chpxs);
         }
     }
 //    else
@@ -651,13 +727,10 @@ void MsWord::getStyles()
                 ", types: " << std.cupx <<
                 endl;
 
-            // If this is a paragraph style, fill it.
+            // Fill the paragraph with its characteristics.
 
-            if (std.sgc == 1)
-            {
-                m_styles[i] = new Paragraph(*this);
-                m_styles[i]->apply(std);
-            }
+            m_styles[i] = new Paragraph(*this);
+            m_styles[i]->apply(std);
         }
         else
         {
@@ -766,7 +839,6 @@ MsWord::MsWord(
     }
     getStyles();
     getListStyles();
-    // TBD: implement char properties: getCHPXFKP();
 }
 
 MsWord::~MsWord()
@@ -884,7 +956,7 @@ void MsWord::parse()
         pieceTable->startIteration(textPlex.ptr, textPlex.byteCount);
         while (pieceTable->getNext(&startFc, &endFc, &data))
         {
-            kdDebug(s_area) << "piece table from: " << startFc << ".." << endFc << endl;
+            kdDebug(s_area) << "piece table from: " << startFc << ".." << endFc << " offset: " << data.fc << endl;
             unicode = ((data.fc & codepage1252mask) != codepage1252mask);
             //unicode = unicode || m_fib.fExtChar;
             if (!unicode)

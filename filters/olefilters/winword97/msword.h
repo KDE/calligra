@@ -32,6 +32,7 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <mswordgenerated.h>
+#include <qarray.h>
 
 class Paragraph;
 
@@ -249,8 +250,17 @@ private:
     static const unsigned s_minWordVersion = 100;
     static const unsigned s_maxWord6Version = 105;
 
-    void getCHPXFKP();
-    void getCHPX(const U8 *fkp);
+    // Character property handling.
+
+    typedef struct
+    {
+        U32 startFc;
+        U32 endFc;
+        CHPXFKP data;
+    } CHPX;
+    typedef QArray<CHPX> CHPXarray;
+    void getChpxs(U32 startFc, U32 endFc, CHPXarray &result);
+    void getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result);
 
     // The text stream contains body text, header, footers, endnotes, footnotes
     // and so on. These routines help walk the text stream.
@@ -273,7 +283,7 @@ private:
 
     // Decode a paragraph into the various types for which we have callbacks.
 
-    void decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style);
+    void decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style, CHPXarray &chpxs);
 
     // Table variables. We store up the paragraphs in a row,
     // and then return the whole lot in one go.
