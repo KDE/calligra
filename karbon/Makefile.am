@@ -56,3 +56,6 @@ noinst_HEADERS = \
 	karbon_part_iface.h \
 	karbon_view.h
 
+messages: rc.cpp
+	$(EXTRACTRC) data/*.rc >> rc.cpp
+	$(XGETTEXT) rc.cpp *.cc */*.cc */*.cpp -o $(podir)/karbon.pot
