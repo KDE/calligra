@@ -723,5 +723,36 @@ protected:
     QDate m_createdNoteDate;
 };
 
+class KoStatisticVariable : public KoVariable
+{
+public:
+    KoStatisticVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
+
+    enum { VST_STATISTIC_NB_WORD = 0, VST_STATISTIC_NB_SENTENCE = 1, VST_STATISTIC_NB_LINES = 2, VST_STATISTIC_NB_CHARACTERE = 3,VST_STATISTIC_NB_FRAME = 4, VST_STATISTIC_NB_EMBEDDED = 5,  VST_STATISTIC_NB_PICTURE = 6, VST_STATISTIC_NB_TABLE = 7 };
+
+    virtual VariableType type() const
+    { return VT_STATISTIC; }
+    static QStringList actionTexts();
+
+    virtual QStringList subTypeText();
+
+    virtual void saveVariable( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+
+    virtual short int subType() const { return m_subtype; }
+
+    virtual void setVariableSubType( short int subtype );
+
+    QString name() const { return m_varValue.toString(); }
+    virtual QString fieldCode();
+
+    QString value() const;
+    void setValue( const QString &v );
+protected:
+    short int m_subtype;
+};
+
 
 #endif

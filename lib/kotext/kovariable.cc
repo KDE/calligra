@@ -2337,3 +2337,187 @@ void KoPageVariable::setSectionTitle( const QString& _title )
     m_varValue = QVariant( title );
 }
 
+
+KoStatisticVariable::KoStatisticVariable( KoTextDocument *textdoc,  short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+    : KoVariable( textdoc, varFormat, _varColl ),
+      m_subtype( subtype )
+{
+}
+
+QStringList KoStatisticVariable::actionTexts()
+{
+    QStringList lst;
+    lst << i18n( "Number of Word" );
+    lst << i18n( "Number of Sentence" );
+    lst << i18n( "Number of Lines" );
+    lst << i18n( "Number of Characteres" );
+    lst << i18n( "Number of Frame" );
+    lst << i18n( "Number of Embedded Object" );
+    lst << i18n( "Number of Picture" );
+    lst << i18n( "Number of Table" );
+    return lst;
+}
+
+void KoStatisticVariable::setVariableSubType( short int subtype )
+{
+    m_subtype = subtype;
+    Q_ASSERT( m_varColl );
+    KoVariableFormatCollection* fc = m_varColl->formatCollection();
+    setVariableFormat(fc->format("NUMBER") );
+}
+
+QStringList KoStatisticVariable::subTypeText()
+{
+    return KoStatisticVariable::actionTexts();
+}
+
+void KoStatisticVariable::saveVariable( QDomElement& varElem )
+{
+    //Now we use oasis format => don't use it.
+}
+
+void KoStatisticVariable::load( QDomElement &elem )
+{
+    //Now we use oasis format
+}
+
+void KoStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    const QString localName( elem.localName() );
+    if ( localName == "object-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_EMBEDDED;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "table-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_TABLE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "picture-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_PICTURE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "word-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_WORD;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "character-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_CHARACTERE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "frame-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_FRAME;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "line-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_LINES;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "character-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_CHARACTERE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "sentence-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_SENTENCE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    //TODO other copy
+}
+
+void KoStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+{
+    switch( m_subtype )
+    {
+    case VST_STATISTIC_NB_EMBEDDED:
+        writer.startElement( "text:object-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_TABLE:
+        writer.startElement( "text:table-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_PICTURE:
+        writer.startElement( "text:picture-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_FRAME:
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:frame-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_WORD:
+        writer.startElement( "text:word-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_SENTENCE:
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:sentence-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_CHARACTERE:
+        writer.startElement( "text:character-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_LINES:
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:line-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    }
+}
+
+QString KoStatisticVariable::fieldCode()
+{
+    if ( m_subtype == VST_STATISTIC_NB_FRAME )
+    {
+        return i18n( "Number of Frame" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_PICTURE )
+    {
+        return i18n( "Number of Picture" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_TABLE )
+    {
+        return i18n( "Number of Table" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_EMBEDDED )
+    {
+        return i18n( "Number of Embedded Object" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_WORD )
+    {
+        return i18n( "Number of Word" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
+    {
+        return i18n( "Number of Sentence" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_LINES )
+    {
+        return i18n( "Number of Lines" );
+    }
+    else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
+    {
+        return i18n( "Number of Characteres" );
+    }
+    else
+        return i18n( "Number of Frame" );
+}
+
+

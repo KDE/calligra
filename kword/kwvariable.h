@@ -167,38 +167,15 @@ private:
 };
 
 
-class KWStatisticVariable : public KoVariable
+class KWStatisticVariable : public KoStatisticVariable
 {
 public:
     KWStatisticVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc );
-    enum { VST_STATISTIC_NB_FRAME = 0, VST_STATISTIC_NB_PICTURE = 1, VST_STATISTIC_NB_TABLE = 2, VST_STATISTIC_NB_EMBEDDED = 3, VST_STATISTIC_NB_WORD = 4, VST_STATISTIC_NB_SENTENCE = 5, VST_STATISTIC_NB_LINES = 6, VST_STATISTIC_NB_CHARACTERE = 7 };
-
-    virtual VariableType type() const
-    { return VT_STATISTIC; }
-    static QStringList actionTexts();
-
-    virtual QStringList subTypeText();
-
-    virtual void saveVariable( QDomElement &parentElem );
-    virtual void load( QDomElement &elem );
-    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
-
-    virtual short int subType() const { return m_subtype; }
-
-    virtual void setVariableSubType( short int subtype );
-
-    QString name() const { return m_varValue.toString(); }
     virtual void recalc();
-    virtual QString fieldCode();
-
     virtual QString text(bool realValue=false);
 
-    QString value() const;
-    void setValue( const QString &v );
 protected:
     KWDocument *m_doc;
-    short int m_subtype;
 };
 
 #endif
