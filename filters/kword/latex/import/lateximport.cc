@@ -28,7 +28,7 @@
 #include "lateximportdia.h"
 
 typedef KGenericFactory<LATEXImport, KoFilter> LATEXImportFactory;
-K_EXPORT_COMPONENT_FACTORY( liblateximport, LATEXImportFactory( "kwordlatexfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkwordlateximport, LATEXImportFactory( "kwordlatexfilter" ) );
 
 
 LATEXImport::LATEXImport(KoFilter *, const char *, const QStringList&) :
@@ -42,14 +42,15 @@ KoFilter::ConversionStatus LATEXImport::convert( const QCString& from, const QCS
     if(from != "text/x-tex" || to != "application/x-kword")
         return KoFilter::NotImplemented;
 
-    KoStore* out = KoStore::createStore(QString(m_chain->outputFile()), KoStore::Write);
-    if(!out || !out->open("root")) {
+    KoStore* out = KoStore::createStore(QString(m_chain->outputFile()),
+				KoStore::Write, "application/x-kword");
+    /*if(!out || !out->open("root")) {
         kdError(30503) << "Unable to open output file!" << endl;
-        delete out;
+				delete out;
         return KoFilter::FileNotFound;
     }
 
-    out->close();
+    out->close();*/
 
     LATEXImportDia* dialog = new LATEXImportDia(out);
     dialog->setInputFile(m_chain->inputFile());

@@ -36,17 +36,20 @@
 #include <lateximportdia.h>
 #include <lateximportdia.moc>
 #include <dcopclient.h>
+#include <ktempfile.h>
+#include <qptrlist.h>
 
 #include "latexparser.h"
 #include "config.h"
 
-//#include "latexgenerator.h"
+#include "generator/kwordgenerator.h"
 
-LATEXImportDia::LATEXImportDia(const KoStore* out, QWidget *parent, const char *name) :
+LATEXImportDia::LATEXImportDia(KoStore* out, QWidget *parent, const char *name) :
 						KDialogBase(parent, name, true, i18n("Latex Import Filter Parameters"),
 									Ok|Cancel),
 						DCOPObject("FilterConfigDia"), _out(out)
 {
+	_out = out;
 	kapp->restoreOverrideCursor();
 	createDialog();
 	if(!kapp->dcopClient()->isRegistered() )
@@ -152,9 +155,10 @@ void LATEXImportDia::slotOk()
 	state();
 	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
 	LatexParser parser(_fileIn);
-	parser.parse();
+	QPtrList<Element>* root = parser.parse();
 	kdDebug() << "---------- generate file -------------" << endl;
-	//LatexGenerator generator(parser.getTree(), _out);
+	KwordGenerator generator(root);
+	generator.convert(_out);
 	kdDebug() << "LATEX FILTER --> END" << endl;
 	reject();
 }

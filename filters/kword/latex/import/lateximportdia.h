@@ -55,19 +55,18 @@ class LATEXImportDia : public KDialogBase, public DCOPObject
 	Q_OBJECT
 	
 	QString _fileIn;
-	QString _fileOut;
 	QByteArray _arrayIn;
-	const KoStore* _out;	/* the zipped file containing all pictures, part, ... */
+	KoStore* _out;	/* the zipped file containing all pictures, part, ... */
 
 	public:
-		LATEXImportDia(const KoStore*, QWidget *parent=0L, const char *name=0L);
+		LATEXImportDia(KoStore*, QWidget *parent=0L, const char *name=0L);
 
 		virtual ~LATEXImportDia() {}
 		void createDialog();
 
 		virtual void state();
 		void setInputFile(QString file)  { _fileIn = file; }
-		void setOutputFile(QString file) { _fileOut = file; }
+		//void setOutputFile(QString file) { _fileOut = file; }
 
 	private:
 		QVButtonGroup* styleBox,       *langBox,        *docBox;

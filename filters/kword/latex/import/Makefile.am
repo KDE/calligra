@@ -1,16 +1,17 @@
-SUBDIRS = parser
+SUBDIRS = parser generator
 
 ####### General stuff
 
-INCLUDES= -I$(srcdir) -I$(srcdir)/parser $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-liblateximport_la_LDFLAGS= $(all_libraries) -module -avoid-version -no-undefined
-liblateximport_la_LIBADD = $(KOFFICE_LIBS) parser/liblatexparser.la
+INCLUDES= -I$(srcdir) -I$(srcdir)/parser -I$(srcdir)/generator $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
+libkwordlateximport_la_LDFLAGS= $(all_libraries) -module -avoid-version -no-undefined
+libkwordlateximport_la_LIBADD = $(KOFFICE_LIBS) parser/liblatexparser.la generator/liblatexgenerator.la
 
 ####### Files
 
-kde_module_LTLIBRARIES = liblateximport.la
+kde_module_LTLIBRARIES = libkwordlateximport.la
 
-liblateximport_la_SOURCES = config.cc lateximport.cc lateximportdia.cc lateximportdia.skel
+libkwordlateximport_la_SOURCES = config.cc lateximport.cc \
+																 lateximportdia.cc lateximportdia.skel
 
 noinst_HEADERS = config.h lateximport.h lateximportdia.h
 
@@ -27,4 +28,4 @@ service_DATA = kword_latex_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordlatexfilter.pot
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordlateximportfilter.pot
