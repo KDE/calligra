@@ -231,7 +231,6 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
         }
         else
             isOneSelected(row,col);
-
         // ** check/set sizes of frames **
         // we assume only left or only right pos has changed.
         // check if leftCoordinate is same as rest of tableRow
@@ -244,7 +243,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
             coordinate = getCell(row, col-1)->getFrame(0)->right() + tableCellSpacing;
         } else { // is leftmost, so lets look at other rows..
             for ( unsigned int i = 0; i < m_rows; i++) {
-                if(i!=row) {
+                if( !(i>=row &&i<=(activeCell->m_rows+activeCell->m_row-1))) {
                     cell=getCell(i,col);
                     if(cell && cell->m_col==col) {
                         coordinate=cell->getFrame(0)->left();
@@ -253,7 +252,6 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
                 }
             }
         }
-
         double postAdjust=0;
         if(coordinate != activeCell->getFrame(0)->left()) { // left pos changed
             // we are now going to move the rest of the cells in this column as well.
@@ -308,7 +306,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
             coordinate=activeCell->getFrame(0)->right();
             bool found=false;
             for ( unsigned int i = 0; i < m_rows; i++) {
-                if(i!=row && (i!=activeCell->m_rows+activeCell->m_row-1)) {
+                if(!((i>=row && i<=(activeCell->m_rows+activeCell->m_row-1)))) {
                     cell=getCell(i,activeCell->m_cols+activeCell->m_col-1);
                     if(cell && cell->m_col+cell->m_cols==activeCell->m_cols+activeCell->m_col) {
                         coordinate=cell->getFrame(0)->right();
@@ -322,7 +320,6 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
                // use the position of the next cell.
                coordinate = getCell(activeCell->m_row, activeCell->m_col + activeCell->m_cols)->getFrame(0)->left() - tableCellSpacing;
             }
-
             if(coordinate != activeCell->getFrame(0)->right()) { // right pos changed.
                 for ( unsigned int i = 0; i < m_rows; i++) {
                     Cell *cell = getCell(i,col);
@@ -393,7 +390,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
         coordinate=activeCell->getFrame(0)->top();
         for ( unsigned int i = 0; i < m_cols; i++) {
 
-            if(i!=col) {
+            if( !(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
                 cell=getCell(row,i);
                 if(cell->m_row==row) {
                     coordinate=cell->getFrame(0)->top();
@@ -445,7 +442,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             // find old coord.
             coordinate=activeCell->getFrame(0)->bottom();
             for ( unsigned int i = 0; i < m_cols; i++) {
-                if(i!=col&& (i!=activeCell->m_col+activeCell->m_cols-1)) {
+                if(!(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
                     cell=getCell(activeCell->m_row+activeCell->m_rows-1,i);
                     if(cell->m_row+cell->m_rows==activeCell->m_row+activeCell->m_rows) {
                         coordinate=cell->getFrame(0)->bottom();
