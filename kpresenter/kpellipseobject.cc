@@ -131,11 +131,23 @@ KoSize KPEllipseObject::getRealSize() const {
 
     if ( angle != 0.0 ) {
       float angInRad = angle * M_PI / 180;
-      size.setWidth( sqrt( pow ( ext.width() * cos( angInRad ), 2) + 
+      size.setWidth( sqrt( pow ( ext.width() * cos( angInRad ), 2) +
                            pow ( ext.height() * sin( angInRad ) ,2 ) ) );
-      size.setHeight( sqrt( pow ( ext.width() * sin( angInRad ), 2) + 
+      size.setHeight( sqrt( pow ( ext.width() * sin( angInRad ), 2) +
                             pow ( ext.height() * cos( angInRad ) ,2 ) ) );
     }
-      
+
     return size;
 }
+
+bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
+    saveOasisPosObject(xmlWriter );
+
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.endElement();
+    return true;
+}
+

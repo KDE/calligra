@@ -56,6 +56,7 @@ public:
         { return i18n("Ellipse"); }
 
     virtual KoSize getRealSize() const;
+    virtual bool saveOasis( KoXmlWriter &xmlWriter );
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler *_zoomHandler,
