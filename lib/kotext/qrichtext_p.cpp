@@ -165,6 +165,8 @@ QTextFormat::QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection
 #ifdef DEBUG_COLLECTION
     qDebug("QTextFormat with font & color & parent (%p), addRef. %p", parent, this);
 #endif
+    if ( fn.pointSize() == -1 ) // font was set with a pixelsize, we need a pointsize!
+        fn.setPointSizeFloat( ( (double)fn.pixelSize() * 72.0 ) / (double)QPaintDevice::x11AppDpiY() );
     ref = 0;
     collection = parent;
     leftBearing = fm.minLeftBearing();

@@ -117,8 +117,9 @@ public:
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
-        Needs to be implemented in the application. @see showFormat */
-    virtual void updateUI( bool updateFormat, bool force = false ) = 0;
+     * The default implementation handles m_currentFormat and calls showCurrentFormat().
+     * If you reimplement, make sure to call KoTextView::updateUI(updateFormat,force); */
+    virtual void updateUI( bool updateFormat, bool force = false );
     virtual void ensureCursorVisible() = 0;
     void showCurrentFormat();
 

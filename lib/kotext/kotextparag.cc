@@ -476,6 +476,10 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
                                    KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh )
 {
+    //kdDebug(32001) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
+    //kdDebug(32001) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
+    //          << " bw=" << bw << " h=" << h << endl;
+
     // 1) Sort out the color
     QColor textColor( lastFormat->color() );
     if ( !textColor.isValid() ) // Resolve the color at this point
