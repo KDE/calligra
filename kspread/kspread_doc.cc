@@ -70,8 +70,8 @@ QList<KSpreadDoc>& KSpreadDoc::documents()
     return *s_docs;
 }
 
-KSpreadDoc::KSpreadDoc( QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parent, name, singleViewMode )
+KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   if ( s_docs == 0 )
       s_docs = new QList<KSpreadDoc>;

@@ -34,8 +34,8 @@ using namespace std;
 
 #include <qpainter.h>
 
-KChartPart::KChartPart( KoDocument* parent, const char* name, bool singleViewMode )
-  : KoDocument( parent, name, singleViewMode ),
+KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
     _params( 0 )
 {
   m_bLoading = false;
@@ -903,6 +903,9 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.32  2000/04/21 06:34:21  wtrobin
+ * qDebug, debug, cerr, cout,... -> kdDebug(35001)
+ *
  * Revision 1.31  2000/04/08 16:43:13  mlaurent
  * Now "Chart Combo*" works
  * Bug fix

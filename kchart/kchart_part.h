@@ -28,7 +28,7 @@ class KChartPart : public KoDocument
 {
     Q_OBJECT
 public:
-    KChartPart( KoDocument* parent = 0, const char* name = 0, bool singleViewMode = false );
+    KChartPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KChartPart();
 
     virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );

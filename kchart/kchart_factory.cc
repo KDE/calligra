@@ -39,11 +39,11 @@ KChartFactory::~KChartFactory()
     }
 }
 
-KParts::Part* KChartFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char *classname, const QStringList & )
+KParts::Part* KChartFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char *classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KChartPart *part = new KChartPart( (KoDocument*)parent, name, !bWantKoDocument );
+    KChartPart *part = new KChartPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       part->setReadWrite( false );

@@ -59,7 +59,7 @@ class KSpreadDoc : public KoDocument
 {
   Q_OBJECT
 public:
-  KSpreadDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+  KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KSpreadDoc();
 
   virtual bool save( ostream&, const char *_format );
