@@ -22,9 +22,12 @@
 #include "kspread_locale.h"
 #include "valueparser.h"
 
+#include <kstaticdeleter.h>
+
 using namespace KSpread;
 
 ValueConverter* ValueConverter::_self = 0;
+static KStaticDeleter<ValueConverter> valueconverter_sd;
 
 ValueConverter::ValueConverter ()
 {
@@ -38,7 +41,7 @@ ValueConverter::~ValueConverter ()
 ValueConverter * ValueConverter::self ()
 {
   if (!_self)
-    _self = new ValueConverter;
+    valueconverter_sd.setObject( _self, new ValueConverter() );
   return _self;
 }
 
