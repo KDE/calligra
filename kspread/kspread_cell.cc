@@ -292,7 +292,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   {
     QString tmp("Error in cell %1\n\n");
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-    tmp += context.exception()->toString();
+    tmp += context.exception()->toString( context );
     QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
     return;
   }
@@ -304,7 +304,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
       {
 	  QString tmp("Error in cell %1\n\n");
 	  tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-	  tmp += context2.exception()->toString();
+	  tmp += context2.exception()->toString( context2 );
 	  QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
       }
 }
@@ -1181,7 +1181,7 @@ bool KSpreadCell::makeFormular()
     DO_UPDATE;
     QString tmp("Error in cell %1\n\n");
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-    tmp += context.exception()->toString();
+    tmp += context.exception()->toString( context );
     QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
     return false;
   }
@@ -1301,7 +1301,7 @@ bool KSpreadCell::calc( bool _makedepend )
       {
 	QString tmp("Error in cell %1\n\n");
 	tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-	tmp += context.exception()->toString();
+	tmp += context.exception()->toString( context );
 	QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
       }
       m_bError = true;
@@ -1347,7 +1347,7 @@ bool KSpreadCell::calc( bool _makedepend )
   {
     m_bValue = false;
     m_bBool = false;
-    m_strFormularOut = context.value()->toString();
+    m_strFormularOut = context.value()->toString( context );
   }
 
   if ( m_style == ST_Select )

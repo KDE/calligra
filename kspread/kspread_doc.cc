@@ -625,7 +625,7 @@ void KSpreadDoc::initInterpreter()
     qDebug("SCRIPT=%s, %s", mip.key().latin1(), mip.data().latin1() );
     KSContext context;
     if ( !m_pInterpreter->runModule( context, mip.key(), mip.data() ) )
-      QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString(), i18n("OK") );
+      QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString( context ), i18n("OK") );
   }
 }
 

@@ -1071,11 +1071,11 @@ static bool kspreadfunc_select_helper( KSContext& context, QValueList<KSValue::P
 	    if ( !kspreadfunc_select_helper( context, (*it)->listValue(), result ) )
 		return false;
 	}
-	else if ( !(*it)->toString().isEmpty() )
+	else if ( !(*it)->toString( context ).isEmpty() )
         {
 	    if ( !result.isEmpty() )
 		result += "\\";
-	    result += (*it)->toString();
+	    result += (*it)->toString( context );
 	}
     }
 
@@ -1183,7 +1183,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "document", new KSValue( new KSBuiltinFunction( module, "document", kspreadfunc_doc ) ) );
   module->addObject( "map", new KSValue( new KSBuiltinFunction( module, "map", kspreadfunc_map ) ) );
   module->addObject( "table", new KSValue( new KSBuiltinFunction( module, "table", kspreadfunc_table ) ) );
-  
+
   return module;
 }
 
