@@ -260,7 +260,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     int hylen = strlen(hyphens);
                     Q_ASSERT( maxlen <= hylen );
                     for ( int hypos = maxlen-1 ; hypos >= 0 ; --hypos )
-                        if ( hyphens[hypos] % 2 ) // odd number -> can break there
+                        if ( ( hyphens[hypos] % 2 ) // odd number -> can break there...
+                               && string->at(hypos + wordStart).format()->hyphenation() ) // ...if the user is ok with that
                         {
                             lineStart->hyphenated = true;
                             lastBreak = hypos + wordStart;
