@@ -1246,66 +1246,112 @@ void PgLayoutCmd::unexecute()
 }
 
 
+PieValueCmd::PieValueCmd( const QString &name, PieValues newValues,
+                          QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                          KPrPage *page, int flags )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_page( page )
+, m_newValues( newValues )
+, m_flags( flags )
+{
+    m_objects.setAutoDelete( false );
+    m_oldValues.setAutoDelete( false );
+
+    addObjects( objects );
+}
+
 PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
                           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
-    : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects ), flags(_flags)
+    : KNamedCommand( _name ), m_oldValues( _oldValues ), m_objects( _objects ), m_flags(_flags)
 {
-    objects.setAutoDelete( false );
-    oldValues.setAutoDelete( false );
-    doc = _doc;
+    m_objects.setAutoDelete( false );
+    m_oldValues.setAutoDelete( false );
+    m_doc = _doc;
     m_page = _page;
-    newValues = _newValues;
+    m_newValues = _newValues;
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 PieValueCmd::~PieValueCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
-    oldValues.setAutoDelete( true );
-    oldValues.clear();
+    m_oldValues.setAutoDelete( true );
+    m_oldValues.clear();
+}
+
+void PieValueCmd::addObjects( const QPtrList<KPObject> &objects )
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.current()->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            KPPieObject *obj = dynamic_cast<KPPieObject*>( it.current() );
+            if( obj )
+            {
+                m_objects.append( obj );
+                obj->incCmdRef();
+
+                PieValues * pieValues = new PieValues;
+                pieValues->pieType = obj->getPieType();
+                pieValues->pieAngle = obj->getPieAngle();
+                pieValues->pieLength = obj->getPieLength();
+                m_oldValues.append( pieValues );
+            }
+        }
+    }
 }
 
 void PieValueCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         KPPieObject* obj=dynamic_cast<KPPieObject*>( it.current() );
         if(obj)
         {
-            if (flags & Type)
-                obj->setPieType( newValues.pieType );
-            if (flags & Angle)
-                obj->setPieAngle( newValues.pieAngle );
-            if (flags & Length)
-                obj->setPieLength( newValues.pieLength );
+            if (m_flags & Type)
+                obj->setPieType( m_newValues.pieType );
+            if (m_flags & Angle)
+                obj->setPieAngle( m_newValues.pieAngle );
+            if (m_flags & Length)
+                obj->setPieLength( m_newValues.pieLength );
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void PieValueCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < m_objects.count(); i++ )
     {
-        KPPieObject* obj=dynamic_cast<KPPieObject*>( objects.at( i ) );
+        KPPieObject* obj=dynamic_cast<KPPieObject*>( m_objects.at( i ) );
         if(obj)
         {
-            obj->setPieType( oldValues.at( i )->pieType );
-            obj->setPieAngle( oldValues.at( i )->pieAngle );
-            obj->setPieLength( oldValues.at( i )->pieLength );
+            obj->setPieType( m_oldValues.at( i )->pieType );
+            obj->setPieAngle( m_oldValues.at( i )->pieAngle );
+            obj->setPieLength( m_oldValues.at( i )->pieLength );
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 

@@ -560,6 +560,9 @@ public:
         All = Type | Angle | Length
     };
 
+    PieValueCmd( const QString &name, PieValues newValues,
+                 QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                 KPrPage *page, int flags = All );
     PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
     ~PieValueCmd();
@@ -568,13 +571,14 @@ public:
     virtual void unexecute();
 
 protected:
+    void addObjects( const QPtrList<KPObject> &objects );
 
-    KPresenterDoc *doc;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
-    QPtrList<PieValues> oldValues;
-    QPtrList<KPObject> objects;
-    PieValues newValues;
-    int flags;
+    QPtrList<PieValues> m_oldValues;
+    QPtrList<KPObject> m_objects;
+    PieValues m_newValues;
+    int m_flags;
 };
 
 class PolygonSettingCmd : public KNamedCommand
