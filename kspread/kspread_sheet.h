@@ -1347,6 +1347,8 @@ private:
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
     int  adjustColumnHelper( KSpreadCell * c, int _col, int _row );
     void checkContentDirection( QString const & name );
+    QString translateOpenCalcPoint( const QString & str );
+
 };
 
 typedef KSpreadSheet KSpreadTable;

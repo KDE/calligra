@@ -6350,6 +6350,16 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
         rowNode = rowNode.nextSibling();
     }
 
+    if ( tableElement.hasAttribute( "table:print-ranges" ) )
+    {
+      // e.g.: Sheet4.A1:Sheet4.E28
+      QString range = tableElement.attribute( "table:print-ranges" );
+      KSpreadRange p( translateOpenCalcPoint( range ) );
+      if ( tableName() == p.tableName )
+        m_pPrint->setPrintRange( p.range );
+    }
+
+
     if ( tableElement.hasAttribute( "table:protected" ) )
     {
       QCString passwd( "" );
@@ -6364,6 +6374,48 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
       m_strPassword = passwd;
     }
     return true;
+}
+
+QString KSpreadSheet::translateOpenCalcPoint( const QString & str )
+{
+    bool inQuote = false;
+
+    int l = str.length();
+    int colonPos = -1;
+    QString range;
+    bool isRange = false;
+    // replace '.' with '!'
+    for ( int i = 0; i < l; ++i )
+    {
+        if ( str[i] == '$' )
+            continue;
+        if ( str[i] == '\'' )
+        {
+            inQuote = !inQuote;
+        }
+        else if ( str[i] == '.' )
+        {
+            if ( !inQuote )
+            {
+                if ( i != 0 && i != (colonPos + 1) ) // no empty table names
+                    range += '!';
+            }
+            else
+                range += '.';
+        }
+        else if ( str[i] == ':' )
+        {
+            if ( !inQuote )
+            {
+                isRange  = true;
+                colonPos = i;
+            }
+            range += ':';
+        }
+        else
+            range += str[i];
+    }
+    return range;
 }
 
 bool KSpreadSheet::loadXML( const QDomElement& table )
