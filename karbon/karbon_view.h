@@ -46,6 +46,7 @@ class VStarTool;
 class VStroke;
 class VTool;
 class VToolContainer;
+class VTransformDlg;
 class VWhirlPinchDlg;
 
 class KarbonView : public KoView
@@ -211,11 +212,12 @@ private:
 	KAction* m_configureAction;
 
 	// dialogs:
+	VColorDlg* m_ColorManager;
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VFlattenDlg* m_flattenDlg;
 	VRoundCornersDlg* m_roundCornersDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
-	VColorDlg* m_ColorManager;
+	VTransformDlg* m_TransformDlg;
 
 	//toolbox
 	KSharedPtr< VToolContainer > m_toolbox;

@@ -49,6 +49,7 @@
 #include "vinsertknotsdlg.h"
 #include "vroundcornersdlg.h"
 #include "vstrokedlg.h"
+#include "vtransformdlg.h"
 #include "vwhirlpinchdlg.h"
 
 #include "karbon_factory.h"
@@ -126,8 +127,9 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
 
-	//Create Color Manager
+	//Create Dockers
 	m_ColorManager = new VColorDlg( m_part, this );
+	m_TransformDlg = new VTransformDlg( m_part, this );
 	
 	if( shell() )
 	{
@@ -148,6 +150,7 @@ KarbonView::~KarbonView()
 	delete( m_roundCornersDlg );
 	delete( m_whirlPinchDlg );
 	delete( m_ColorManager );
+	delete( m_TransformDlg );
 
 	// tools:
 	delete( m_ellipseTool );
@@ -413,6 +416,11 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 void
 KarbonView::objectTrafoTranslate()
 {
+	if (m_TransformDlg->isVisible() == false )
+	{
+		shell()->addDockWindow(m_TransformDlg, DockRight);
+		m_TransformDlg->show();
+	}
 }
 
 void
@@ -790,13 +798,13 @@ KarbonView::initActions()
 		i18n( "&Ungroup Objects" ), 0, QKeySequence("Ctrl+U"), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	new KAction(
-		i18n( "&Translate" ), "translate", 0, this,
+		i18n( "&Translate" ), "14_translate", 0, this,
 		SLOT( objectTrafoTranslate() ), actionCollection(), "object_trafo_translate" );
 	new KAction(
-		i18n( "&Rotate" ), "rotate", 0, this,
+		i18n( "&Rotate" ), "14_rotate", 0, this,
 		SLOT( objectTrafoRotate() ), actionCollection(), "object_trafo_rotate" );
 	new KAction(
-		i18n( "S&hear" ), "shear", 0, this,
+		i18n( "S&hear" ), "14_shear", 0, this,
 		SLOT( objectTrafoShear() ), actionCollection(), "object_trafo_shear" );
 	// object <-----
 
