@@ -218,9 +218,7 @@ public:
         ulong & words, ulong& sentences, ulong & syllables, ulong & lines, bool selected );
 
     /** reimplemented from KoTextFlow, implements flowing around frames etc. */
-    virtual int adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag );
-    /** reimplemented from KoTextFlow, implements flowing around frames etc. */
-    virtual int adjustRMargin( int yp, int h, int margin, int space, KoTextParag* parag );
+    virtual void adjustMargins( int yp, int h, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag );
     /** reimplemented from KoTextParag, adjusts y and returns the shift. */
     virtual int adjustFlow( int y, int w, int h );
 
@@ -306,7 +304,7 @@ protected slots:
 protected:
     void slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted, bool* abort );
     void slotAfterFormattingTooMuchSpace( int bottom, bool* abort );
-    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, KoTextParag* parag );
+    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* pageWidth, int* breakBegin, int* breakEnd, KoTextParag* parag );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     void frameResized( KWFrame *theFrame, bool invalidateLayout );
     double footerHeaderSizeMax( KWFrame *theFrame );
