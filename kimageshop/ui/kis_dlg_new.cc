@@ -66,7 +66,7 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
 	cmode[cm_Indexed] = new QRadioButton( i18n("&Indexed"), cmodeg );
 	cmode[cm_Indexed]->setEnabled(false);
 
-	cmode[cm_Greyscale] = new QRadioButton( i18n("&Greyscale"), cmodeg );
+	cmode[cm_Greyscale] = new QRadioButton( i18n("&Grayscale"), cmodeg );
     cmode[cm_Greyscale]->setEnabled(false);
 
     cmode[cm_RGB] = new QRadioButton( i18n("&RGB"), cmodeg );
