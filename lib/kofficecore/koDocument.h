@@ -30,7 +30,6 @@ class KoDocumentChildPicture;
 #include <koStoreIf.h>
 
 #include <vector>
-#include <string>
 
 #include <qrect.h>
 #include <qpicture.h>
@@ -48,38 +47,19 @@ public:
   virtual void cleanUp();
 
   // IDL
-  /**
-   *  Called from your parent if the root object ( your direct or indirect
-   *  parent ) wants to know about all of its direct and indirect children.
-   *  Usually you wont overload this one. Overload @ref #makeChildListIntern
-   *  if your document supports embedding.
-   *  This function modifies the @ref #m_strURL of the document. It is set to
-   *  '_url' if @ref #url is empty or has the "store" protocol, otherwise
-   *  it is unchanged. That means that externally stored docunents wont
-   *  get another URL.
-   */
-  virtual void makeChildList( KOffice::Document_ptr _root, const char *_url );
-  /**
-   *  Children use this function to register themselves. You must call
-   *  the @ref #makeChildList method of the child to force its registration.
-   */
-  virtual void addToChildList( KOffice::Document_ptr _child, const char *_url );
-
-  // IDL
-  virtual CORBA::Boolean isModified()
-  { return m_bModified; }
+  virtual CORBA::Boolean isModified() { return m_bModified; }
   
   // IDL
   virtual void setURL( const char *_url );
   virtual char* url();
   
   // IDL
-  virtual CORBA::Boolean loadFromURL( const char *_url, const char *_format );
+  virtual CORBA::Boolean loadFromURL( const char *_url );
   virtual CORBA::Boolean loadFromStore( KOStore::Store_ptr _store, const char *_url );
 
   // IDL
   virtual CORBA::Boolean saveToURL( const char *_url, const char *_format );
-  virtual CORBA::Boolean saveToStore( KOStore::Store_ptr _store, const char *_format );
+  virtual CORBA::Boolean saveToStore( KOStore::Store_ptr _store, const char *_format, const char *_path );
 
   // C++
   virtual void setModified( bool _mod = true ) { m_bModified = _mod; }
@@ -129,6 +109,24 @@ protected:
    */
   virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
   /**
+   *  Saves all children. If your document supports embedding, then you have
+   *  to overload this function. An implementation may look like this:
+   *  <PRE>
+   *  int i = 0;
+   *  QListIterator<KWordChild> it( m_lstChildren );
+   *  for( ; it.current(); ++it )
+   *  {
+   *      // set the child document's url to an internal url (ex: "tar:/0/1")
+   *      QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+   *      KOffice::Document_var doc = it.current()->document();
+   *      if ( !doc->saveToStore( _store, 0L, internURL ) )
+   *         return false;
+   *  } 
+   *  return true;
+   *  </PRE>
+   */
+  virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
+  /**
    *  Overload this function if you have to load additional files
    *  from a store. This function is called after @ref #loadXML or
    *  @ref #loadBinary and after @ref #loadChildren have been called.
@@ -141,7 +139,7 @@ protected:
    *  In the implementation, you should prepend the document
    *  url before the filename, so that everything is kept relative
    *  to this document. For instance it will produce urls such as
-   *  store:/1/pictures/picture0.png, if the doc url is store:/1
+   *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
    *  But do this ONLY if the document is stored extern (see @ref #isStoredExtern)
    */
   virtual bool completeSaving( KOStore::Store_ptr /* _store */ )
@@ -151,41 +149,8 @@ protected:
   /**
    *  Saves only an OBJECT tag for this document.
    */
-  virtual bool save( ostream& , const char * )
+  virtual bool save( ostream&, const char* /* _format */ )
   { kdebug( KDEBUG_ERROR, 30003, "KoDocument::save not implemented" ); return false; };
-  /**
-   *  Usually you dont want to overload this function. It saves all
-   *  children which have been registered due to @ref #makeChildListIntern.
-   */
-  virtual bool saveChildren( KOStore::Store_ptr _store );
-  /**
-   *  Called from @ref #makeChildList. This function should call all
-   *  children to register as child by '_root'. If your document
-   *  supports embedding, then you have to overload this function.
-   *  An implementation may look like this:
-   *  <PRE>
-   *  int i = 0;
-   *
-   *  QListIterator<ImageChild> it( m_lstChildren );
-   *  for( ; it.current(); ++it )
-   *  {
-   *    QString tmp;
-   *    tmp.sprintf( "/%i", i++ );
-   *    QString path( _path );
-   *    path += tmp.data();
-   *
-   *    KOffice::Document_var doc = it.current()->document();    
-   *    doc->makeChildList( _doc, path );
-   *  }
-   *  </PRE>
-   */
-  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
-  /**
-   *  Fills @ref #m_lstAllChildren. Usually you wont overload this one.
-   *  If the document is the root document, you must call this function
-   *  before you can save your document.
-   */
-  virtual void makeChildListIntern();
 
   /**
    *  Overload this function with your personal text.
@@ -210,42 +175,9 @@ protected:
 
   /**
    * Return true if url() is a real filename, false if url() is
-   * an internal url in the store, like "store:/..."
+   * an internal url in the store, like "tar:/..."
    */
   virtual bool isStoredExtern();
-
-  /**
-   *  Internal class. Dont use.
-   */
-  class SimpleDocumentChild
-  {
-  public:
-    SimpleDocumentChild( KOffice::Document_ptr _doc, const char *_url )
-    {
-      m_vDoc = KOffice::Document::_duplicate( _doc );
-      m_strURL = _url;
-    }
-    SimpleDocumentChild( const SimpleDocumentChild& _arg )
-    {
-      m_vDoc = const_cast<SimpleDocumentChild&>(_arg).document();
-      m_strURL = const_cast<SimpleDocumentChild&>(_arg).url();
-    }
-    const char* url()
-    { return m_strURL.c_str(); }
-    KOffice::Document_ptr document()
-    { return KOffice::Document::_duplicate( m_vDoc ); }
-    
-  protected:
-    KOffice::Document_var m_vDoc;
-    string m_strURL;
-  };
-  
-  /**
-   *  Holds a list of all direct and indirect children. Call @ref #makeChildList
-   *  to fill this list. By default this list is empty and it is not
-   *  automatically filled if new children are inserted.
-   */
-  list<SimpleDocumentChild> m_lstAllChildren;
 
   QString m_strURL;
   bool m_bModified;
@@ -288,9 +220,9 @@ public:
   virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
   /**
    *  Actually loads the document from the disk/net or from the store,
-   *  depending in @ref #m_strURL
+   *  depending on @ref #m_strURL
    */
-  virtual bool loadDocument( KOStore::Store_ptr, const char *_format );
+  virtual bool loadDocument( KOStore::Store_ptr );
 
   virtual bool isStoredExtern();
   
@@ -311,7 +243,7 @@ protected:
   QRect m_geometry;
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"
-   *  or "store:/table1/2" if it is stored in a koffice store. If this string
+   *  or "tar:/table1/2" if it is stored in a koffice store. If this string
    *  is empty then the document was created from scratch and not saved yet.
    *  Those documents are usually stored in a compound document later.
    */

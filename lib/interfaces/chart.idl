@@ -1,7 +1,7 @@
 #ifndef __chart_idl__
 #define __chart_idl__
 
-#include <kom.idl>
+//#include <kom.idl>
 
 module Chart
 {

@@ -93,7 +93,7 @@ public:
    *
    * @return TRUE on success.
    */
-  virtual bool openDocument( const char* /* _filename */, const char* /* _format */ ) { return false; };
+  virtual bool openDocument( const char* /* _filename */ ) { return false; };
   
   /**
    * Saves the document, asking for a filename if necessary.

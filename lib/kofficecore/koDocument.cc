@@ -18,7 +18,6 @@
 */
 
 #include <fstream>
-#include <strstream>
 
 #include "koDocument.h"
 #include "koStream.h"
@@ -202,12 +201,11 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   return true;
 }
 
-bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_format )
+bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store )
 {
   assert( !m_strURL.isEmpty() );
 
   kdebug( KDEBUG_INFO, 30003, "Trying to load %s", m_strURL.ascii() );
-  //KURL u( m_strURL );
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_strMimeType );
   if ( e.isEmpty() )
@@ -226,7 +224,7 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
   if ( m_strURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
     return m_rDoc->loadFromStore( _store, m_strURL );
 
-  return m_rDoc->loadFromURL( m_strURL, _format );
+  return m_rDoc->loadFromURL( m_strURL );
 }
 
 bool KoDocumentChild::save( ostream& out )
@@ -371,85 +369,14 @@ void KoDocument::cleanUp()
   if ( m_bIsClean )
     return;
 
-  m_lstAllChildren.clear();
-
   OPDocumentIf::cleanUp();
 }
 
-void KoDocument::makeChildList( KOffice::Document_ptr _root, const char *_url )
-{
-  bool is_embedded = true;
-  // Is this document stored extern ?
-  if ( !m_strURL.isEmpty() )
-  {
-    // Do we already use the "store" protocol ?
-    if ( m_strURL.left( STORE_PROTOCOL_LENGTH ) != STORE_PROTOCOL )
-      // No "store" protocol, so we are saved externally
-      is_embedded = false;
-  }
-
-  /*
-    Reggie says : always save the document in the store, no external document.
-    (David)
-  // If not stored extern, we want to embed it and take the suggested name.
-  if ( is_embedded )
-  */
-  
-  {
-  
-    setURL( _url );
-  }
-
-  // Tell our parent about us and our decision regarding the URL
-  _root->addToChildList( this, _url );
-  // Proceed with our children
-  makeChildListIntern( _root, _url );
-}
-
-void KoDocument::makeChildListIntern( KOffice::Document_ptr /* root */, const char * /* _id */)
+bool KoDocument::saveChildren( KOStore::Store_ptr /*_store*/, const char */*_path*/ ) 
 {
   // Lets assume that we do not have children
-  kdebug( KDEBUG_FATAL, 30003, "void Document_impl::makeChildListIntern( OPParts::Document_ptr _root, const char *_id )" );
-  kdebug( KDEBUG_FATAL, 30003, "Not implemented ( not really an error )" );
-}
-
-void KoDocument::makeChildListIntern()
-{
-  m_lstAllChildren.clear();
-
-  makeChildListIntern( this, STORE_PROTOCOL );
-}
-
-void KoDocument::addToChildList( KOffice::Document_ptr _child, const char *_url )
-{
-  m_lstAllChildren.push_back( KoDocument::SimpleDocumentChild( _child, _url ) );
-}
-
-bool KoDocument::saveChildren( KOStore::Store_ptr _store )
-{
-  list<KoDocument::SimpleDocumentChild>::iterator it;
-  for( it = m_lstAllChildren.begin(); it != m_lstAllChildren.end(); ++it )
-  {
-    kdebug( KDEBUG_INFO, 30003, "Saving child %s", it->url() );
-
-    QString u ( it->url() );
-    // Do we have to save this child embedded ?
-    if ( u.left( STORE_PROTOCOL_LENGTH ) != STORE_PROTOCOL )
-    {
-      kdebug( KDEBUG_INFO, 30003, "Skipping %s, it's external", u.latin1());
-    } else
-    {
-      // Save it as child in the document store
-      KOffice::Document_var doc = it->document();
-      if ( !doc->saveToStore( _store, 0L ) )
-        return false;
-
-      kdebug( KDEBUG_INFO, 30003, "Saved child %s", it->url() );
-    }
-  }
-
-  m_lstAllChildren.clear();
-
+  kdebug( KDEBUG_WARN, 30003, "KoDocument::saveChildren( KOStore::Store_ptr, const char * )");
+  kdebug( KDEBUG_WARN, 30003, "Not implemented ( not really an error )" );
   return true;
 }
 
@@ -472,31 +399,20 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
   {
     kdebug( KDEBUG_INFO, 30003, "Saving to store" );
 
-    CORBA::String_var mime = mimeType();
+    //Use this to save to a binary store (deprecated)
+    //KoStore * store = new KoBinaryStore ( u.path(), KOStore::Write );
 
-    KoStore * store;
-    /*
-      Ok, let's go for the TAR format !
+    KoStore * store = new KoTarStore( u.path(), KOStore::Write );
 
-    int i = QMessageBox::information(0L, "KOffice",
-                                     "Select format to use for saving (temporary question, will be removed later)",
-                                     "Binary format (old one, still working)", 
-                                     "Tar format (new one, broken, for testing purposes ONLY)");
-    if (i == 0)
-      store = new KoBinaryStore ( u.path(), KOStore::Write );
-    else // if (i == 1)
-    */
-      store = new KoTarStore( u.path(), KOStore::Write );
-
-    if ( store->bad() )
+    // Save childen first since they might get a new url
+    if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
     {
       delete store;
       return false;
     }
 
-    makeChildListIntern();
-
-    if ( store->open( "root", mime.in() ) )
+    kdebug( KDEBUG_INFO, 30003, "Saving root" );
+    if ( store->open( "root", _format ) )
     {
       ostorestream out( store );
       if ( !save( out, _format ) )
@@ -509,24 +425,10 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
     } else
       return false;
 
-    kdebug( KDEBUG_INFO, 30003, "Saving children" );
-
-    // Lets write all direct and indirect children
-    if ( !saveChildren( store ) )
-    {
-      delete store;
-      return false;
-    }
-
-    if ( !completeSaving( store ) )
-    {
-      delete store;
-      return false;
-    }
-
-    delete store;
-
+    bool ret = completeSaving( store );
     kdebug( KDEBUG_INFO, 30003, "Saving done" );
+    delete store;
+    return ret;
   }
   else
   {
@@ -540,28 +442,23 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
       return false;
     }
 
-    if ( !save( out, _format ) )
-
-      return false;
-    // Lets write all direct and indirect children
-    if ( !saveChildren( 0L ) )
-      return false;
-
-    if ( !completeSaving( 0L ) )
-      return false;
+    return save( out, _format );
   }
-
-  return true;
 }
 
-CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_format )
+CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_format, const char *_path )
 {
   kdebug( KDEBUG_INFO, 30003, "Saving document to store" );
 
-  CORBA::String_var mime = mimeType();
-  CORBA::String_var u = url();
+  // Use the path as the internal url
+  setURL( _path );
 
-  if ( _store->open( u, mime ) )
+  // Save childen first since they might get a new url
+  if ( !saveChildren( _store, _path ) )
+    return false;
+
+  CORBA::String_var u = url();
+  if ( _store->open( u, _format ) )
   {
     ostorestream out( _store );
     if ( !save( out, _format ) )
@@ -569,10 +466,6 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
     out.flush();
     _store->close();
   }
-
-  // Lets write all direct and indirect children
-  if ( !saveChildren( _store ) )
-    return false;
 
   if ( !completeSaving( _store ) )
     return false;
@@ -582,9 +475,9 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
   return true;
 }
 
-CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
+CORBA::Boolean KoDocument::loadFromURL( const char *_url )
 {
-  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s, <> )", _url );
+  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s )", _url );
   KURL u( _url );
   if ( u.isMalformed() )
   {
@@ -605,7 +498,7 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
     return false;
   }
 
-  // Try to find out wether it is a mime multi part file
+  // Try to find out whether it is a mime multi part file
   char buf[5];
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();

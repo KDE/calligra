@@ -14,41 +14,40 @@ module KOffice
 		string url();
 
 		string mimeType();
+                
+                /**
+                 * Load the document from a file
+                 */
+		boolean loadFromURL( in string url );
 
-		boolean loadFromURL( in string url, in string format );
+                /**
+                 * Save the document to a file
+                 * @param format usually the native format, same as mimeType()
+                 */
 		boolean saveToURL( in string url, in string format );
 
 		/**
-		 * This function must load all children, too, in contrast to
-		 * @ref #saveAsMimePart.
+		 * This function must load all children
+                 * @param id internal url, such as tar:/0
 		 */
 		boolean loadFromStore( in KOStore::Store store, in string id );
 
 		/**
-		 * This function does NOT save the children. This would lead
-		 * to children being saved multiple times if they appear as child of different parents.
-		 * For example one image may appear in many places in the document, but it
-		 * should be saved only once.
+		 * This function must save itself and all children
+                 * @param format usually the native format, same as mimeType()
+                 * @param path relative path in the store
 		 */
-		boolean saveToStore( in KOStore::Store store, in string format );
+		boolean saveToStore( in KOStore::Store store, in string format, in string path );
 		
 		/**
 		 * After creating a document you must either use one of the load functions
-		 * or you must initialize the docuemnt using this function. Do NEVER
+		 * or you must initialize the document using this function. Do NEVER
 		 * call this function afterwards and no NEVER call it after you used some of the load functions.
 		 * If the function returns false, you have to destroy the document. It can not be reused.
 		 */
 		boolean initDoc();
 
 		boolean isModified();
-
-		/**
-		 * HACK: Does not prevent duplicate children. If one document
-		 * is subdocument of two different documents, then it will be
-		 * registered twice and saved twice :-(
-		 */
-		void makeChildList( in KOffice::Document root, in string name );
-		void addToChildList( in KOffice::Document child, in string name );
 
 		MainWindow createMainWindow();
 	};

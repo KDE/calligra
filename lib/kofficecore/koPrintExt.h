@@ -57,7 +57,7 @@ protected:
    * <pre>
    * ImageDocument_impl::ImageDocument_impl()
    * {
-   *   ADD_INTERFACE( "IDL:OPParts/Print:1.0" );
+   *   ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
    *   ....
    * }
    * </pre>

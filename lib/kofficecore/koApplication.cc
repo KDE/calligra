@@ -37,7 +37,7 @@ KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
   KGlobal::dirs()->addResourceType("toolbar", 
 	   KStandardDirs::kde_default("data") + "/koffice/pics/");
 
-  // checking wether start the app as server or not
+  // checking whether the app is started as a server
   QStringList::Iterator it;
   if( m_params.find( "--server", "-s", true, it ) )
   {
@@ -52,22 +52,27 @@ KoApplication::~KoApplication()
 
 void KoApplication::start()
 {
+  debug("KoApplication::start()");
   KoMainWindow* pShell;
   QStringList openFiles;
   QString tmpFilename;
 
   if( m_bWithGUI )
   {
+    debug("m_bWithGUI");
     for( uint i = 0; i < m_params.count(); i++ )
     {
       tmpFilename = m_params.get( i );
+      debug("tmpFilename");
       if( tmpFilename.left( 1 ) != "-" )
       {
+        debug("will open tmpFilename");
         openFiles.append( tmpFilename );
       }
     }
     if( openFiles.isEmpty() )
     {
+      debug("no filename supplied");
       pShell = createNewShell();
       if( pShell )
       {
@@ -75,7 +80,7 @@ void KoApplication::start()
         pShell->newDocument();
       }
       else
-        kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloded" );
+        kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloaded" );
     }
     else
     {
@@ -83,14 +88,16 @@ void KoApplication::start()
 
       for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
       {
+        debug("opening %s", (*it).latin1());
         pShell = createNewShell();
         if( pShell )
         {
+          debug("showing %s", (*it).latin1());
           pShell->show();
-          pShell->openDocument( *it, "" );
+          pShell->openDocument( *it );
         }
         else
-          kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloded" );
+          kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloaded" );
       }
     }
   }
