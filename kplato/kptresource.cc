@@ -303,9 +303,10 @@ void KPTResource::clearAppointments() {
 
 void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) {
     //kdDebug()<<k_funcinfo<<task->name()<<": "<<start.toString()<<" dur "<<duration.toString()<<endl;
-    if (!m_calendar)
-        return; // hmmm, what todo?
-        
+    if (!m_calendar) {
+        kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+        return; // FIXME: hmmm, what todo?
+    }
     //TODO: units and moderated by availability, and standard non-working days
     KPTDateTime time = start;
     KPTDateTime end = start+duration;
@@ -487,7 +488,7 @@ void KPTResourceRequest::save(QDomElement &element) {
 }
 
 int KPTResourceRequest::units() const {
-    //kdDebug()<<k_funcinfo<<"units="<<m_units<<endl;
+    //kdDebug()<<k_funcinfo<<m_resource->name()<<": units="<<m_units<<endl;
     return m_units;
 }
 
@@ -597,7 +598,7 @@ int KPTResourceGroupRequest::workUnits() const {
 
 //TODO: handle nonspecific resources
 KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
-    //kdDebug()<<k_funcinfo<<"effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<m_group->name()<<": effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration dur = effort; // have to start somewhere
     KPTDuration down = dur/2;
     KPTDuration up = dur;
@@ -748,7 +749,7 @@ KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &time, cons
     QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         if (it.current()->group()->type() == KPTResourceGroup::Type_Work) {
-            KPTDuration d = it.current()->duration(time, effort*(it.current()->workUnits()/units), backward);
+            KPTDuration d = it.current()->duration(time, (effort*it.current()->workUnits())/units, backward);
             if (d > dur)
                 dur = d;
         } else if (it.current()->group()->type() == KPTResourceGroup::Type_Material) {

@@ -303,7 +303,11 @@ bool KPTNode::isDependChildOf(KPTNode *node) {
 
 KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration effort = m_effort ? m_effort->effort(use) : KPTDuration::zeroDuration;
+    if (!m_effort) {
+        kdError()<<k_funcinfo<<"m_effort = 0"<<endl;
+        return KPTDuration::zeroDuration;
+    }
+    KPTDuration effort = m_effort->effort(use);
     if (effort == KPTDuration::zeroDuration) {
         return KPTDuration::zeroDuration;
     }
