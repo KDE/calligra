@@ -89,3 +89,12 @@ bool KOMLParser::parseTag( const char *, string& name, std::vector<KOMLAttrib>& 
     return TRUE;
 }
 
+QDomNode KOMLParser::currentNode()
+{
+    return m_stack.top();
+}
+
+QDomElement KOMLParser::currentElement()
+{
+    return m_stack.top().toElement();
+}

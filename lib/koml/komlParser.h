@@ -52,6 +52,15 @@ public:
 
     bool parseTag( const char *_tag, string& tagname, std::vector<KOMLAttrib>& _attribs );
 
+    /**
+     * @return the node the parser is currently on.
+     */
+    QDomNode currentNode();
+    /**
+     * @return the node the parser is currently on.
+     */
+    QDomElement currentElement();
+    
 protected:
     QDomDocument m_doc;
     QDomNode m_node;
