@@ -29,8 +29,6 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 
-#include <qpainter.h>
-
 KoUnavailPart::KoUnavailPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name )
     : KoDocument( parentWidget, widgetName, parent, name, false /*singleViewMode*/ )
 {

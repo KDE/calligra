@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qcstring.h>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qdom.h>
 
 #include <koFilter.h>

@@ -13,7 +13,7 @@
 #include <qpicture.h>
 #include <qpaintdevicemetrics.h>
 #include <qsize.h>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qdom.h>
 
 #include "mlineobject.h"
