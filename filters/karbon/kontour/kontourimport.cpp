@@ -97,30 +97,37 @@ void KontourImport::convert()
 		{
 			QDomElement object = b.namedItem( "gobject" ).toElement();
 			QDomElement matrix = object.namedItem( "matrix" ).toElement();
+			/**
+			* Kontour uses a quite different way to display ellipses, so we
+			* need to calculate the values for the Karbon ellipse here
+			*/
 			double left = ( b.attribute( "x" ).toDouble() + matrix.attribute( "dx" ).toInt() ) - ( b.attribute( "rx" ).toDouble() / 2 );
 			double right = left + b.attribute( "rx" ).toDouble();
 			double top = ( b.attribute( "y" ).toDouble() + matrix.attribute( "dy" ).toInt() ) - ( b.attribute( "ry" ).toDouble() / 2 );
 			double bottom = top + b.attribute( "ry" ).toDouble();
 			double height =  top - bottom;
-			double width = right - left; // Needs a check (sven)
+			double width = right - left; 
+			// Append the ellipse to the document
 			m_document.append( new VEllipse( 0L, KoPoint( left, top ),  width, height ) );
 		}
 		else
 		if ( b.tagName() == "polyline" )
 		{
+			/**
+			* Kontour is much simpler because it doesn't support curves, so
+			* we're done with connecting points with lines.
+			*/
 			QDomElement point = b.firstChild().toElement();
 			VComposite *path = new VComposite( &m_document );
 			int x, y;
 			x = point.attribute( "x" ).toInt();
 			y = point.attribute( "y" ).toInt();
-			kdDebug() << "MoveTo: " << "x: " << x << "; y: " << y << endl;
 			path->moveTo( KoPoint( x, y ) );
 			point = point.nextSibling().toElement();
 			for( ; !point.isNull(); point = point.nextSibling().toElement() )
 			{
 				x = point.attribute( "x" ).toInt();
 				y = point.attribute( "y" ).toInt();
-				kdDebug() << "LineTo: " << "x: " << x << "; y: " << y << endl;
 				path->lineTo( KoPoint( x, y ) );
 			}
 			path->close();
