@@ -32,6 +32,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #ifdef HAVE_PATHS_H
 #include <paths.h>
 #endif
