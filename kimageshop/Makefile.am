@@ -1,4 +1,3 @@
-SUBDIRS   = pics
 
 INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
@@ -6,37 +5,34 @@ LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 
 ####### Files
 
-bin_PROGRAMS = kimageshop
+bin_PROGRAMS = kformviewer
 
-kimageshop_SOURCES = \
- kimageshop.cc \
- kimageshop_main.cc \
- kimageshop_shell.cc \
- kimageshop_doc.cc \
- kimageshop_view.cc \
- preferencesdlg.cc \
- zoomfactordlg.cc
+kformviewer_SOURCES = \
+ kformviewer.cc \
+ kformviewer_main.cc \
+ kformviewer_shell.cc \
+ kformviewer_doc.cc \
+ kformviewer_view.cc
 
 noinst_HEADERS = \
- kimageshop.h \
- kimageshop_main.h \
- kimageshop_shell.h \
- kimageshop_doc.h \
- kimageshop_view.h \
- preferencesdlg.h \
- zoomfactordlg.h
+ kformviewer.h \
+ kformviewer_main.h \
+ kformviewer_shell.h \
+ kformviewer_doc.h \
+ kformviewer_view.h
 
 METASOURCES = \
- kimageshop_main.moc \
- kimageshop_shell.moc \
- kimageshop_doc.moc \
- kimageshop_view.moc \
- preferencesdlg.moc \
- zoomfactordlg.moc
+ kformviewer_main.moc \
+ kformviewer_shell.moc \
+ kformviewer_doc.moc \
+ kformviewer_view.moc
 
-idl_DATA = kimageshop.idl
+idl_DATA = kformviewer.idl
 
-kdelnk_DATA = kimageshop.desktop
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
+
+kdelnk_DATA = kformviewer.desktop
+
 kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Implicit rules
@@ -46,16 +42,13 @@ kdelnkdir = $(kde_appsdir)/KOffice
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
 messages:
-	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimageshop.pot
+	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformviewer.pot
 
-kimageshop.h: kimageshop.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(srcdir)/kimageshop.idl
+kformviewer.h: kformviewer.idl $(micodir)/include/CORBA.h
+	$(IDL) $(IDL_FLAGS) $(srcdir)/kformviewer.idl
 
-kimageshop.cc: kimageshop.h
-kimageshop_doc.cc: kimageshop.h
-kimageshop_main.cc: kimageshop.h
-kimageshop_shell.cc: kimageshop.h
-kimageshop_view.cc: kimageshop.h
-preferencesdlg.cc: preferencesdlg.h
-zoomfactordlg.cc: zoomfactordlg.h
-koShell.cc: koShell.h
+kformviewer.cc: kformviewer.h
+kformviewer_doc.cc: kformviewer.h
+kformviewer_main.cc: kformviewer.h
+kformviewer_shell.cc: kformviewer.h
+kformviewer_view.cc: kformviewer.h

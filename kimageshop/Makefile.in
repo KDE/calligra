@@ -1,0 +1,639 @@
+# KDE tags expanded automatically by am_edit
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ../..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+build_alias = @build_alias@
+build_triplet = @build@
+host_alias = @host_alias@
+host_triplet = @host@
+target_alias = @target_alias@
+target_triplet = @target@
+AMTAR = @AMTAR@
+AMTARFLAGS = @AMTARFLAGS@
+AS = @AS@
+CC = @CC@
+CPP = @CPP@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+DLLTOOL = @DLLTOOL@
+DPMSINC = @DPMSINC@
+DPMSLIB = @DPMSLIB@
+GLINC = @GLINC@
+GLLIB = @GLLIB@
+GMSGFMT = @GMSGFMT@
+IDL = @IDL@
+KDE_EXTRA_RPATH = @KDE_EXTRA_RPATH@
+KDE_INCLUDES = @KDE_INCLUDES@
+KDE_LDFLAGS = @KDE_LDFLAGS@
+KDE_RPATH = @KDE_RPATH@
+KDE_USE_FINAL_FALSE = @KDE_USE_FINAL_FALSE@
+KDE_USE_FINAL_TRUE = @KDE_USE_FINAL_TRUE@
+KOFFICECORE_INCLUDES = @KOFFICECORE_INCLUDES@
+KOFFICEUI_INCLUDES = @KOFFICEUI_INCLUDES@
+KOFFICE_INCLUDES = @KOFFICE_INCLUDES@
+KOFFICE_LIBS = @KOFFICE_LIBS@
+KOML_INCLUDES = @KOML_INCLUDES@
+KSTORE_INCLUDES = @KSTORE_INCLUDES@
+LD = @LD@
+LIBCOMPAT = @LIBCOMPAT@
+LIBCRYPT = @LIBCRYPT@
+LIBDL = @LIBDL@
+LIBJPEG = @LIBJPEG@
+LIBMICO = @LIBMICO@
+LIBOBJS = @LIBOBJS@
+LIBPNG = @LIBPNG@
+LIBPTHREAD = @LIBPTHREAD@
+LIBPYTHON = @LIBPYTHON@
+LIBQIMGIO = @LIBQIMGIO@
+LIBSOCKET = @LIBSOCKET@
+LIBTIFF = @LIBTIFF@
+LIBTOOL = @LIBTOOL@
+LIBUCB = @LIBUCB@
+LIBZ = @LIBZ@
+LIB_KAB = @LIB_KAB@
+LIB_KDECORE = @LIB_KDECORE@
+LIB_KDEUI = @LIB_KDEUI@
+LIB_KFILE = @LIB_KFILE@
+LIB_KFM = @LIB_KFM@
+LIB_KFORMULA = @LIB_KFORMULA@
+LIB_KHTML = @LIB_KHTML@
+LIB_KIMGIO = @LIB_KIMGIO@
+LIB_KIO = @LIB_KIO@
+LIB_KOFFICECORE = @LIB_KOFFICECORE@
+LIB_KOFFICEUI = @LIB_KOFFICEUI@
+LIB_KOML = @LIB_KOML@
+LIB_KSTORE = @LIB_KSTORE@
+LIB_MEDIATOOL = @LIB_MEDIATOOL@
+LIB_QT = @LIB_QT@
+LIB_SMB = @LIB_SMB@
+LIB_X11 = @LIB_X11@
+LN_S = @LN_S@
+MAKEINFO = @MAKEINFO@
+MICO_INCLUDES = @MICO_INCLUDES@
+MICO_LDFLAGS = @MICO_LDFLAGS@
+MOC = @MOC@
+MSGFMT = @MSGFMT@
+NM = @NM@
+OBJDUMP = @OBJDUMP@
+PACKAGE = @PACKAGE@
+PAMINC = @PAMINC@
+PAMLIBPATHS = @PAMLIBPATHS@
+PAMLIBS = @PAMLIBS@
+PYTHONINC = @PYTHONINC@
+PYTHONLIB = @PYTHONLIB@
+QT_INCLUDES = @QT_INCLUDES@
+QT_LDFLAGS = @QT_LDFLAGS@
+RANLIB = @RANLIB@
+TOPSUBDIRS = @TOPSUBDIRS@
+USER_INCLUDES = @USER_INCLUDES@
+USER_LDFLAGS = @USER_LDFLAGS@
+USE_NLS = @USE_NLS@
+VERSION = @VERSION@
+XGETTEXT = @XGETTEXT@
+XPMINC = @XPMINC@
+XPMLIB = @XPMLIB@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_INCLUDES = @X_INCLUDES@
+X_LDFLAGS = @X_LDFLAGS@
+all_includes = @all_includes@
+all_libraries = @all_libraries@
+idldir = @idldir@
+interfacedir = @interfacedir@
+kde_appsdir = @kde_appsdir@
+kde_bindir = @kde_bindir@
+kde_cgidir = @kde_cgidir@
+kde_confdir = @kde_confdir@
+kde_datadir = @kde_datadir@
+kde_htmldir = @kde_htmldir@
+kde_icondir = @kde_icondir@
+kde_includes = @kde_includes@
+kde_libraries = @kde_libraries@
+kde_locale = @kde_locale@
+kde_mimedir = @kde_mimedir@
+kde_minidir = @kde_minidir@
+kde_partsdir = @kde_partsdir@
+kde_servicesdir = @kde_servicesdir@
+kde_servicetypesdir = @kde_servicetypesdir@
+kde_sounddir = @kde_sounddir@
+kde_toolbardir = @kde_toolbardir@
+kde_wallpaperdir = @kde_wallpaperdir@
+micodir = @micodir@
+qt_includes = @qt_includes@
+qt_libraries = @qt_libraries@
+x_includes = @x_includes@
+x_libraries = @x_libraries@
+
+
+INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
+LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
+
+####### Files
+
+bin_PROGRAMS = kformviewer
+
+kformviewer_SOURCES = \
+ kformviewer.cc \
+ kformviewer_main.cc \
+ kformviewer_shell.cc \
+ kformviewer_doc.cc \
+ kformviewer_view.cc
+
+
+noinst_HEADERS = \
+ kformviewer.h \
+ kformviewer_main.h \
+ kformviewer_shell.h \
+ kformviewer_doc.h \
+ kformviewer_view.h
+
+
+#>- METASOURCES = \
+#>-  kformviewer_main.moc \
+#>-  kformviewer_shell.moc \
+#>-  kformviewer_doc.moc \
+#>-  kformviewer_view.moc
+
+
+idl_DATA = kformviewer.idl
+idl_HEADERS = kformviewer.h
+
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
+
+kdelnk_DATA = kformviewer.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
+
+####### Implicit rules
+
+####### Build rules
+
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
+mkinstalldirs = $(SHELL) $(top_srcdir)/admin/mkinstalldirs
+CONFIG_HEADER = ../../config.h
+CONFIG_CLEAN_FILES = 
+PROGRAMS =  $(bin_PROGRAMS)
+
+
+DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+CPPFLAGS = @CPPFLAGS@
+LIBS = @LIBS@
+am_kformviewer_OBJECTS =  kformviewer.o kformviewer_main.o \
+kformviewer_shell.o kformviewer_doc.o kformviewer_view.o
+#>- kformviewer_OBJECTS =  $(am_kformviewer_OBJECTS)
+#>+ 4
+@KDE_USE_FINAL_FALSE@kformviewer_OBJECTS = kformviewer.o kformviewer_main.o \
+kformviewer_shell.o kformviewer_doc.o kformviewer_view.o
+@KDE_USE_FINAL_TRUE@kformviewer_OBJECTS = kformviewer.all_cc.o 
+kformviewer_final_OBJECTS = kformviewer.all_cc.o 
+kformviewer_LDADD = $(LDADD)
+kformviewer_DEPENDENCIES = 
+kformviewer_LDFLAGS = 
+CXXFLAGS = @CXXFLAGS@
+CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+DIST_SOURCES =  $(kformviewer_SOURCES)
+DATA =  $(idl_DATA) $(kdelnk_DATA)
+
+HEADERS =  $(idl_HEADERS) $(noinst_HEADERS)
+
+DIST_COMMON =  $(idl_DATA) $(idl_HEADERS) $(kdelnk_DATA) \
+$(noinst_HEADERS) Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+
+GZIP_ENV = --best
+#>- DEP_FILES =  .deps/kformviewer.P .deps/kformviewer_doc.P \
+#>- .deps/kformviewer_main.P .deps/kformviewer_shell.P \
+#>- .deps/kformviewer_view.P
+
+#>+ 5
+DEP_FILES =  .deps/kformviewer.all_cc.P \
+  .deps/kformviewer.P .deps/kformviewer_doc.P \
+.deps/kformviewer_main.P .deps/kformviewer_shell.P \
+.deps/kformviewer_view.P
+SOURCES = $(kformviewer_SOURCES)
+OBJECTS = $(am_kformviewer_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .c .cc .lo .o
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/$(altdir)configure.in $(ACLOCAL_M4) 
+#>- 	cd $(top_srcdir) && $(AUTOMAKE) --gnu katabase/kformviewer/Makefile
+#>+ 2
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu katabase/kformviewer/Makefile
+	cd $(top_srcdir) && perl admin/am_edit katabase/kformviewer/Makefile.in
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-binPROGRAMS:
+
+clean-binPROGRAMS:
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+
+distclean-binPROGRAMS:
+
+maintainer-clean-binPROGRAMS:
+
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f="`echo $$p|sed -e 's/$(EXEEXT)$$//' -e '$(transform)' -e 's/$$/$(EXEEXT)/'`"; \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(bindir)/$$f"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(bindir)/$$f; \
+	  else :; fi; \
+	done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f="`echo $$p|sed -e 's/$(EXEEXT)$$//' -e '$(transform)' -e 's/$$/$(EXEEXT)/'`"; \
+	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
+	  rm -f $(DESTDIR)$(bindir)/$$f; \
+	done
+
+mostlyclean-compile:
+	-rm -f *.o core *.core
+
+clean-compile:
+
+distclean-compile:
+	-rm -f *.tab.c
+
+maintainer-clean-compile:
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+kformviewer.o:
+kformviewer_main.o:
+kformviewer_shell.o:
+kformviewer_doc.o:
+kformviewer_view.o:
+
+kformviewer: $(kformviewer_OBJECTS) $(kformviewer_DEPENDENCIES)
+	@rm -f kformviewer
+	$(CXXLINK) $(kformviewer_LDFLAGS) $(kformviewer_OBJECTS) $(kformviewer_LDADD) $(LIBS)
+.cc.o:
+	$(CXXCOMPILE) -c -o $@ $<
+.cc.lo:
+	$(LTCXXCOMPILE) -c -o $@ $<
+
+install-idlDATA: $(idl_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(idldir)
+	@list='$(idl_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(idldir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(idldir)/$$f; \
+	done
+
+uninstall-idlDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(idl_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(idldir)/$$f"; \
+	  rm -f $(DESTDIR)$(idldir)/$$f; \
+	done
+
+install-kdelnkDATA: $(kdelnk_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(kdelnkdir)
+	@list='$(kdelnk_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(kdelnkdir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(kdelnkdir)/$$f; \
+	done
+
+uninstall-kdelnkDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(kdelnk_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(kdelnkdir)/$$f"; \
+	  rm -f $(DESTDIR)$(kdelnkdir)/$$f; \
+	done
+
+install-idlHEADERS: $(idl_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(idldir)
+	@list='$(idl_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(idldir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(idldir)/$$f; \
+	done
+
+uninstall-idlHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(idl_HEADERS)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(idldir)/$$f"; \
+	  rm -f $(DESTDIR)$(idldir)/$$f; \
+	done
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = katabase/kformviewer
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu katabase/kformviewer/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
+
+-include $(DEP_FILES)
+
+mostlyclean-depend:
+
+clean-depend:
+
+distclean-depend:
+	-rm -rf .deps
+
+maintainer-clean-depend:
+
+%.o: %.cc
+	@echo '$(CXXCOMPILE) -c $<'; \
+	$(CXXCOMPILE) -Wp,-MD,.deps/$(*D)/$(*F).pp -c $<
+	@-cp .deps/$(*D)/$(*F).pp .deps/$(*D)/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*D)/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*D)/$(*F).P; \
+	rm .deps/$(*D)/$(*F).pp
+
+%.lo: %.cc
+	@echo '$(LTCXXCOMPILE) -c $<'; \
+	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*D)/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*D)/$(*F).pp > .deps/$(*D)/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*D)/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*D)/$(*F).P; \
+	rm -f .deps/$(*D)/$(*F).pp
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am: install-binPROGRAMS
+install-exec: install-exec-am
+
+install-data-am: install-idlDATA install-kdelnkDATA install-idlHEADERS
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-binPROGRAMS uninstall-idlDATA \
+		uninstall-kdelnkDATA uninstall-idlHEADERS
+uninstall: uninstall-am
+all-am: Makefile $(PROGRAMS) $(DATA) $(HEADERS)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(idldir) \
+		$(DESTDIR)$(kdelnkdir) $(DESTDIR)$(idldir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
+		mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+#>- clean-am:  clean-binPROGRAMS clean-compile clean-libtool clean-tags \
+#>- 		clean-depend clean-generic mostlyclean-am
+#>+ 2
+clean-am: clean-metasources clean-final   clean-binPROGRAMS clean-compile clean-libtool clean-tags \
+		clean-depend clean-generic mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-binPROGRAMS distclean-compile distclean-libtool \
+		distclean-tags distclean-depend distclean-generic \
+		clean-am
+	-rm -f libtool
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-binPROGRAMS \
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-depend \
+		maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
+maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool uninstall-idlDATA \
+install-idlDATA uninstall-kdelnkDATA install-kdelnkDATA \
+uninstall-idlHEADERS install-idlHEADERS tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir \
+mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all install-strip installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+messages:
+	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformviewer.pot
+
+kformviewer.h: kformviewer.idl $(micodir)/include/CORBA.h
+	$(IDL) $(IDL_FLAGS) $(srcdir)/kformviewer.idl
+
+kformviewer.cc: kformviewer.h
+kformviewer_doc.cc: kformviewer.h
+kformviewer_main.cc: kformviewer.h
+kformviewer_shell.cc: kformviewer.h
+kformviewer_view.cc: kformviewer.h
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:
+
+#>+ 4
+$(srcdir)/kformviewer_shell.cc: kformviewer_shell.moc
+kformviewer_shell.moc: $(srcdir)/kformviewer_shell.h
+	$(MOC) $(srcdir)/kformviewer_shell.h -o kformviewer_shell.moc
+
+#>+ 4
+$(srcdir)/kformviewer_view.cc: kformviewer_view.moc
+kformviewer_view.moc: $(srcdir)/kformviewer_view.h
+	$(MOC) $(srcdir)/kformviewer_view.h -o kformviewer_view.moc
+
+#>+ 4
+$(srcdir)/kformviewer_main.cc: kformviewer_main.moc
+kformviewer_main.moc: $(srcdir)/kformviewer_main.h
+	$(MOC) $(srcdir)/kformviewer_main.h -o kformviewer_main.moc
+
+#>+ 4
+$(srcdir)/kformviewer_doc.cc: kformviewer_doc.moc
+kformviewer_doc.moc: $(srcdir)/kformviewer_doc.h
+	$(MOC) $(srcdir)/kformviewer_doc.h -o kformviewer_doc.moc
+
+#>+ 3
+clean-metasources:
+	-rm -f  kformviewer_shell.moc kformviewer_view.moc kformviewer_main.moc kformviewer_doc.moc
+
+#>+ 5
+force-reedit:
+		cd $(top_srcdir) && $(AUTOMAKE) --gnu katabase/kformviewer/Makefile
+	cd $(top_srcdir) && perl admin/am_edit katabase/kformviewer/Makefile.in
+
+
+#>+ 11
+kformviewer.all_cc.cc: $(srcdir)/Makefile.in $(srcdir)/kformviewer.cc $(srcdir)/kformviewer_main.cc $(srcdir)/kformviewer_shell.cc $(srcdir)/kformviewer_doc.cc $(srcdir)/kformviewer_view.cc  kformviewer_shell.moc kformviewer_view.moc kformviewer_main.moc kformviewer_doc.moc
+	@echo 'creating kformviewer.all_cc.cc ...'; \
+	rm -f kformviewer.all_cc.files kformviewer.all_cc.final; \
+	echo "#define KDE_USE_FINAL 1" >> kformviewer.all_cc.files; \
+	for file in kformviewer.cc kformviewer_main.cc kformviewer_shell.cc kformviewer_doc.cc kformviewer_view.cc ; do \
+	  echo "#include \"$$file\"" >> kformviewer.all_cc.files; \
+	  test ! -f $(srcdir)/$$file || egrep '^#pragma +implementation' $(srcdir)/$$file >> kformviewer.all_cc.final; \
+	done; \
+	cat kformviewer.all_cc.files kformviewer.all_cc.final > kformviewer.all_cc.cc; \
+	rm -f kformviewer.all_cc.final kformviewer.all_cc.files
+
+#>+ 3
+clean-final:
+	-rm -f kformviewer.all_cc.cc
+
+#>+ 2
+final:
+	$(MAKE) kformviewer_OBJECTS="$(kformviewer_final_OBJECTS)" all-am
+#>+ 3
+cvs-clean:
+	$(MAKE) -f $(top_srcdir)/admin/Makefile.common cvs-clean

@@ -77,6 +77,8 @@ AC_SUBST(KOFFICE_INCLUDES)
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
 	Makefile \
+	katabase/Makefile \
+        katabase/kformviewer/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
 	kchart/pics/Makefile \
@@ -95,8 +97,8 @@ AC_OUTPUT( \
 	kohtml/toolbar/Makefile \
 	kimage/Makefile \
 	kimage/pics/Makefile \
-    kimageshop/Makefile \
-    kimageshop/pics/Makefile \
+	kimageshop/Makefile \
+	kimageshop/pics/Makefile \
    	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
 	kpresenter/autoforms/Makefile \
