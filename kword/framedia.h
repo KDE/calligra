@@ -86,6 +86,7 @@ protected:
     bool mayDeleteFrameSet(KWTextFrameSet *fs);
 
     QBrush frameBrushStyle();
+    void calcRatio();
 
 protected slots:
     virtual void slotOk();
@@ -101,7 +102,9 @@ protected slots:
     void enableRunAround();
     void selectExistingFrameset();
     void selectNewFrameset(bool on);
-
+    void slotUpdateWidthForHeight(double height);
+    void slotUpdateHeightForWidth( double width );
+    void slotKeepRatioToggled(bool on);
 private:
     // TAB 1:
     QWidget *tab1;
@@ -154,7 +157,7 @@ private:
     bool frameSetProtectedSize;
     double oldX, oldY, oldW, oldH;
     double oldMarginLeft, oldMarginRight, oldMarginTop, oldMarginBottom;
-
+    double heightByWidthRatio;
     int /*FrameBehavior*/ frameBehavior;
     KoUnit::Unit frameUnits;
     QString oldFrameSetName;

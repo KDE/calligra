@@ -166,6 +166,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
 void KWFrameDia::init() {
 
     tab1 = tab2 = tab3 = tab4 = tab5 = 0;
+    sw = sh = 0L;
     KWFrameSet *fs=0;
     if(frame) {
         fs = frame->frameSet(); // 0 when creating a frame
@@ -236,7 +237,7 @@ void KWFrameDia::init() {
 void KWFrameDia::setupTab1(){ // TAB Frame Options
     //kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
-
+    cbAspectRatio=0L;
     int columns = 0;
     if(frameType == FT_FORMULA || frameType == FT_PICTURE)
         columns = 1;
@@ -282,6 +283,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_PICTURE)
     {
         cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
+        connect( cbAspectRatio, SIGNAL(toggled(bool)),
+	     this, SLOT(slotKeepRatioToggled(bool)));
         bool show=true;
         bool on=true;
         if(frame) {
@@ -901,6 +904,9 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     sw->setValue( 0.0 );
     sw->resize( sw->sizeHint() );
+    connect( sw, SIGNAL(valueChanged(double)),
+	     this, SLOT(slotUpdateHeightForWidth(double)) );
+
     pGrid->addWidget( sw, 4, 0 );
 
     lh = new QLabel( i18n( "Height:" ), grp1 );
@@ -908,6 +914,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     pGrid->addWidget( lh, 3, 1 );
 
     sh = new KDoubleNumInput( grp1 );
+    connect( sh, SIGNAL(valueChanged(double)),
+	     this, SLOT(slotUpdateWidthForHeight(double)) );
 
     sh->setValue( 0.0 );
     sh->resize( sh->sizeHint() );
@@ -1008,6 +1016,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         sy->setValue( KoUnit::ptToUnit( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
         sw->setValue( KoUnit::ptToUnit( frame->width(), doc->getUnit() ) );
         sh->setValue( KoUnit::ptToUnit( frame->height(), doc->getUnit() ) );
+
+        calcRatio();
 
         // userValue leads to some rounding -> store old values from the ones
         // displayed, so that the "change detection" in apply() works.
@@ -1153,6 +1163,34 @@ void KWFrameDia::slotProtectContentChanged( bool b)
         m_inputBottomMargin->setEnabled( !b );
         synchronize->setEnabled( !b);
     }
+}
+
+void KWFrameDia::slotUpdateWidthForHeight(double height)
+{
+    if ( !cbAspectRatio && cbAspectRatio->state() != QButton::NoChange) return;
+    if ( heightByWidthRatio == 0 ) return; // avoid DBZ
+    sw->setValue( height / heightByWidthRatio );
+
+}
+
+void KWFrameDia::slotUpdateHeightForWidth( double width )
+{
+    if ( !cbAspectRatio && cbAspectRatio->state() != QButton::NoChange) return;
+    sh->setValue( width * heightByWidthRatio );
+}
+
+void KWFrameDia::slotKeepRatioToggled(bool on)
+{
+    if ( !on || !sw || !sh) return;
+    calcRatio();
+}
+
+void KWFrameDia::calcRatio()
+{
+    if ( sw->value() == 0 )
+        heightByWidthRatio = 1.0; // arbitrary
+    else
+        heightByWidthRatio = sh->value() / sw->value();
 }
 
 void KWFrameDia::initComboStyleBrush()
