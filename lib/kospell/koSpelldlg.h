@@ -27,7 +27,6 @@ class QLabel;
 class QPushButton;
 class KListBox;
 class KLineEdit;
-class KProgress;
 class QComboBox;
 class QCheckBox;
 
@@ -52,7 +51,6 @@ class KOSpellDlg : public KDialogBase
     class KOSpellDlgPrivate;
     KOSpellDlgPrivate *d;
     KLineEdit *editbox;
-    KProgress *progbar;
     KListBox *listbox;
     QComboBox *language;
     QStringList *sugg;
@@ -61,11 +59,10 @@ class KOSpellDlg : public KDialogBase
     QString word, newword;
     QCheckBox *m_previous;
 
-    bool progressbar;
     int m_indexLanguage;
 public:
     KOSpellDlg (QWidget *parent, const char *name, int indexOfLanguage,
-               bool _progressbar = FALSE, bool _modal = FALSE, bool _autocorrect = false );
+              bool _modal = FALSE, bool _autocorrect = false );
 
     QString replacement () const
         { return newword; }
@@ -84,12 +81,6 @@ public:
     int languageIndex()const { return m_indexLanguage;}
 
     bool previousWord() const;
-
-public slots:
-    /**
-     * Adjust the progress bar to @p p percent.
-     **/
-    void slotProgress (unsigned int p);
 
 protected:
     virtual void closeEvent ( QCloseEvent * e );

@@ -79,7 +79,7 @@ public:
 
 KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
 		KOSpellConfig *_ksc,
-		bool _progressbar, bool _modal,  bool _autocorrect)
+		bool _modal,  bool _autocorrect)
 {
   d=new KOSpellPrivate;
 
@@ -88,7 +88,6 @@ KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
   autocorrect = _autocorrect;
   autoDelete = false;
   modaldlg = _modal;
-  progressbar = _progressbar;
   speller = 0L;
   config = 0L;
   offset = 0;
@@ -158,7 +157,6 @@ KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
   replacelist += ksconfig->replaceAllList();
   texmode=dlgon=FALSE;
   m_status = Starting;
-  progres=10;
   curprog=0;
 
 
@@ -234,7 +232,7 @@ int KOSpell::heightDlg() const { return ksdlg->height(); }
 int KOSpell::widthDlg() const { return ksdlg->width(); }
 
 void
-KOSpell::setUpDialog (bool reallyuseprogressbar)
+KOSpell::setUpDialog ()
 {
     kdDebug()<<" KOSpell::setUpDialog (bool reallyuseprogressbar)*******\n";
     if (ksdlg)
@@ -242,10 +240,8 @@ KOSpell::setUpDialog (bool reallyuseprogressbar)
     initConfig();
 
     //Set up the dialog box
-    ksdlg=new KOSpellDlg (parent, "dialog", KOSpellConfig::indexFromLanguageFileName( ksconfig->dictionary()), progressbar && reallyuseprogressbar, modaldlg, autocorrect );
+    ksdlg=new KOSpellDlg (parent, "dialog", KOSpellConfig::indexFromLanguageFileName( ksconfig->dictionary()),  modaldlg, autocorrect );
     ksdlg->setCaption (caption);
-    connect (this, SIGNAL ( progress (unsigned int) ),
-             ksdlg, SLOT ( slotProgress (unsigned int) ));
 #ifdef Q_WS_X11 // FIXME(E): Implement for Qt/Embedded
     KWin::setIcons (ksdlg->winId(), kapp->icon(), kapp->miniIcon());
 #endif
@@ -359,7 +355,6 @@ void KOSpell::previousWord()
 
 bool KOSpell::check( const QString &_buffer, bool _usedialog )
 {
-
     kdDebug()<<" _buffer:"<<_buffer<<endl;
     origbuffer = _buffer;
     if ( ( totalpos = origbuffer.length() ) == 0 )
@@ -385,7 +380,6 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
     //lastpos is a position in newbuffer (it has offset in it)
     offset=lastlastline=lastpos=lastline=0;
 
-    emitProgress ();
 
     // send first buffer line
     int i = origbuffer.find('\n', 0)+1;
@@ -394,10 +388,7 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
     lastline=i; //the character position, not a line number
 
     if (usedialog)
-    {
-        emitProgress();
         ksdlg->show();
-    }
     else
         ksdlg->hide();
 
@@ -422,7 +413,6 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
     ksdlg->init (word, &sugg);
     emit misspelling (word, sugg, lastpos-word.length()-1 /* -1 for next space*/);
 
-    emitProgress();
     ksdlg->show();
 }
 
@@ -489,7 +479,6 @@ void KOSpell::dialog2 (int result)
         testNextWord = false;
         ksdlg->hide();
         //buffer=newbuffer);
-        emitProgress();
         emit done (newbuffer);
         emit death();
         break;
@@ -545,21 +534,6 @@ void KOSpell::emitDeath()
 #endif
 }
 
-void KOSpell::setProgressResolution (unsigned int res)
-{
-  progres=res;
-}
-
-void KOSpell::emitProgress ()
-{
-  uint nextprog = (uint) (100.*lastpos/(double)totalpos);
-
-  if (nextprog>=curprog)
-    {
-      curprog=nextprog;
-      emit progress (curprog);
-    }
-}
 
 void KOSpell::moveDlg (int x, int y)
 {
@@ -597,7 +571,7 @@ int KOSpell::modalCheck( QString& text, KOSpellConfig* _kcs )
     modalreturn = 0;
     modaltext = text;
 
-    KOSpell* m_spell = new KOSpell(0L, i18n("Spell Checker"), 0 ,_kcs, true, true );
+    KOSpell* m_spell = new KOSpell(0L, i18n("Spell Checker"), 0 ,_kcs,true );
     QObject::connect( m_spell, SIGNAL( death() ),
                       m_spell, SLOT( slotModalSpellCheckerFinished() ) );
     QObject::connect( m_spell, SIGNAL( corrected( const QString &, const QString &, unsigned int ) ),

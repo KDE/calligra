@@ -63,7 +63,7 @@ void ApplicationWindowSpell::slotSpellText()
 {
     if ( m_spell )
         return;
-    m_spell = new KOSpell(this, "test" ,m_spellConfig, true, true, true );
+    m_spell = new KOSpell(this, "test" ,m_spellConfig, true, true);
 
     QObject::connect( m_spell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );

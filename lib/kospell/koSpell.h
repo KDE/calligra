@@ -76,11 +76,10 @@ public:
      * @param receiver    Receiver object for the ready(KSpell *) signal.
      * @param slot        Receiver's slot, will be connected to the ready(KSpell *) signal.
      * @param kcs         Configuration for KSpell.
-     * @param progressbar Indicates if progress bar should be shown.
      * @param modal       Indicates modal or non-modal dialog.
      */
     KOSpell(QWidget *parent, const QString &caption,KOSpellConfig *kcs=0,
-            bool progressbar = TRUE, bool modal = FALSE, bool _autocorrect =FALSE );
+             bool modal = FALSE, bool _autocorrect =FALSE );
 
     /**
      * Returns the status of KSpell.
@@ -225,14 +224,6 @@ public:
      */
     KOSpellConfig ksConfig () const;
 
-    /**
-     * Sets the resolution (in percent) of the @ref progress() signals.
-     *
-     * E.g. @ref setProgressResolution (10) instructs KSpell to send progress
-     *  signals (at most) every 10% (10%, 20%, 30%...).
-     * The default is 10%.
-     */
-    void setProgressResolution (unsigned res);
 
     /**
      * The destructor instructs ISpell/ASpell to write out the personal
@@ -347,11 +338,6 @@ signals:
      */
     void ready(KOSpell *);
 
-    /**
-     * Emitted during a @ref check().
-     * @p i is between 1 and 100.
-     */
-    void progress (unsigned int i);
 
     /**
      * Emitted when @ref check() is done.
@@ -416,7 +402,6 @@ protected:
     bool dlgon;
     bool personaldict;
     bool dialogwillsprocess;
-    bool progressbar;
     bool autoDelete;
     bool modaldlg;
 
@@ -444,15 +429,13 @@ protected:
     unsigned int posinline;
     unsigned int lastlastline;
     unsigned int offset;
-    unsigned int progres;
     unsigned int curprog;
 
     void dialog (const QString & word, QStringList & sugg);
     QString replacement () const { return dlgreplacement; }
 
-    void setUpDialog ( bool reallyusedialogbox = TRUE);
+    void setUpDialog ();
 
-    void emitProgress ();
     bool cleanFputs (const QString & s, bool appendCR=TRUE);
     bool cleanFputsWord (const QString & s, bool appendCR=TRUE);
     bool writePersonalDictionary ();

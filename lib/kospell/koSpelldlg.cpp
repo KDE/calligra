@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <klistbox.h>
 #include <klineedit.h>
-#include <kprogress.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <qcombobox.h>
@@ -40,12 +39,10 @@ KOSpellDlg::KOSpellDlg(
   QWidget * parent,
   const char * name,
   int indexOfLanguage,
-  bool _progressbar,
   bool _modal,
   bool _autocorrect
 )
-  : KDialogBase(parent, name, _modal, i18n("Check spelling"), Help|Cancel|User1, Cancel, true, i18n("&Stop")),
-    progressbar(_progressbar)
+  : KDialogBase(parent, name, _modal, i18n("Check spelling"), Help|Cancel|User1, Cancel, true, i18n("&Stop"))
 {
     QWidget * w = new QWidget(this);
     setMainWidget(w);
@@ -108,22 +105,7 @@ KOSpellDlg::KOSpellDlg(
     buttonBox->layout();
 
     QHBoxLayout * layout = 0L;
-
-    if (progressbar)
-    {
-
-        QVBoxLayout * topLayout = new QVBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
-        layout = new QHBoxLayout(topLayout);
-        progbar = new KProgress (w);
-        topLayout->addWidget(progbar);
-
-    }
-    else
-    {
-
-        layout =
-            new QHBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
-    }
+    layout = new QHBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
 
     QGridLayout * leftGrid = new QGridLayout(layout);
 
@@ -223,13 +205,6 @@ void KOSpellDlg::changeButtonState( QStringList * _sugg )
   }
 }
 
-void KOSpellDlg::slotProgress (unsigned int p)
-{
-  if (!progressbar)
-    return;
-
-  progbar->setValue((int) p);
-}
 
 void KOSpellDlg::textChanged (const QString &)
 {
