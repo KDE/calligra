@@ -7,42 +7,43 @@ module KDB
 {
   enum PROPSTATUS { OK, UNKNOWN, ACCESS_DENIED };
 
-	struct PROP
-	{
-		wstring      wstrName;
-		any          aValue;
-		PROPSTATUS   status;
-	};
+  struct PROP
+  {
+    wstring      wstrName;
+    any          aValue;
+    PROPSTATUS   status;
+  };
 
-	typedef sequence<PROP> PROPSEQ;
+  typedef sequence<PROP> PROPSEQ;
+  
+  enum PROPMODE { READ, WRITE, READWRITE };
 
-	enum PROPMODE { READ, WRITE, READWRITE };
+  struct PROPINFO
+  {
+    wstring      wstrName;
+    string       strType;
+    wstring      wstrDescr;
+    PROPMODE     mode;
+    PROPSTATUS   status;
+  };
+  
+  typedef sequence<PROPINFO> PROPINFOSEQ;
+  
+  interface IDBProperties : KOM::Aggregate {
 
-	struct PROPINFO
-	{
-		wstring      wstrName;
-		string       strType;
-		wstring      wstrDescr;
-		PROPMODE     mode;
-		PROPSTATUS   status;
-	};
+    boolean SetProperty( inout PROP prop );
+    boolean SetPropertySeq( inout PROPSEQ prop_seq );
+    
+    boolean GetProperty( inout PROP prop );
+    boolean GetPropertySeq( inout PROPSEQ prop_seq );
+    void GetAllProperties( out PROPSEQ prop_seq );
+    
+    boolean GetPropertyInfo( inout PROPINFO prop_info );
+    boolean GetPropertyInfoSeq( inout PROPINFOSEQ prop_info_seq );
+    void GetAllPropertyInfos( out PROPINFOSEQ prop_info_seq );
 
-	typedef sequence<PROPINFO> PROPINFOSEQ;
-
-	interface IDBProperties : KOM::Aggregate
-	{
-		boolean SetProperty( inout PROP prop );
-		boolean SetPropertySeq( inout PROPSEQ prop_seq );
-
-		boolean GetProperty( inout PROP prop );
-		boolean GetPropertySeq( inout PROPSEQ prop_seq );
-		void GetAllProperties( out PROPSEQ prop_seq );
-
-		boolean GetPropertyInfo( inout PROPINFO prop_info );
-		boolean GetPropertyInfoSeq( inout PROPINFOSEQ prop_info_seq );
-		void GetAllPropertyInfos( out PROPINFOSEQ prop_info_seq );
-	};
-
+  };
+  
   typedef sequence<octet> HANDLE;
 
   exception KDBError {
@@ -139,28 +140,24 @@ module KDB
   };
 
   typedef string CommandType;
-  typedef IRowset ICommandResult;
 
-  typedef string ParamName;
-  typedef any ParamValue;
+  typedef sequence<wstring> WSTRSEQ;
 
-  typedef sequence<ParamName> ParamNameSeq;
-
-  struct Param {
-    ParamName  name;
-    ParamValue value;
+  struct PARAM {
+    wstring  wstrName;
+    any      aValue;
   };
 
-  typedef sequence<Param> ParamSeq;
+  typedef sequence<PARAM> PARAMSEQ;
 
-  struct ParamInfo {
-    unsigned short ordinal;
-    string         repo_id;
-    ParamName      name;
+  struct PARAMINFO {
+    unsigned short iOrdinal;
+    string         strType;
+    wstring        wstrName;
   };
 
-  typedef sequence<ParamInfo> ParamInfoSeq;
-	typedef sequence<unsigned long> ULongSeq;
+  typedef sequence<PARAMINFO> PARAMINFOSEQ;
+  typedef sequence<unsigned long> ULongSeq;
 
   interface ICommand : KOM::Component,
                        IDBProperties {
@@ -170,7 +167,7 @@ module KDB
       raises ( KDBError );
     CommandType GetCommand()
       raises ( KDBError );
-    ICommandResult Execute( in ParamSeq param_seq )
+    IRowset Execute( in PARAMSEQ param_seq )
       raises ( KDBError );
   };
 
@@ -182,11 +179,11 @@ module KDB
   };
 
   interface ICommandWithParameters : KOM::Base, KOM::Aggregate {
-    ParamInfoSeq GetParameterInfo()
+    PARAMINFOSEQ GetParameterInfo()
       raises ( KDBError );
-    ULongSeq GetParameterOrdinal( in ParamNameSeq param_name_seq )
+    ULongSeq GetParameterOrdinal( in WSTRSEQ param_name_seq )
       raises ( KDBError );
-    void SetParameterInfo( in ParamInfoSeq param_info_seq )
+    void SetParameterInfo( in PARAMINFOSEQ param_info_seq )
       raises ( KDBError );
   };
 
@@ -198,3 +195,5 @@ module KDB
 
 
 #endif
+
+

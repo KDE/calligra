@@ -1,3 +1,3 @@
 
-SUBDIRS = katabasecore katabaseui
+SUBDIRS = katabasecore katabaseui kdb
 
