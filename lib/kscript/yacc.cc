@@ -98,7 +98,7 @@ extern int yylex();
 extern QString idl_lexFile;
 extern int idl_line_no;
 
-void kscriptInitFlex( const char *_code );
+void kscriptInitFlex( const char *_code, int extension );
 
 void yyerror( const char *s )
 {
@@ -107,7 +107,7 @@ void yyerror( const char *s )
 
 
 #line 24 "yacc.yy"
-typedef union 
+typedef union
 {
   QString        *ident;
   KSParseNode    *node;
@@ -2454,8 +2454,8 @@ yyerrhandle:
 #line 1176 "yacc.yy"
 
 
-void kscriptParse( const char *_code )
+void kscriptParse( const char *_code, int extension )
 {
-    kscriptInitFlex( _code );
+    kscriptInitFlex( _code, extension );
     yyparse();
 }

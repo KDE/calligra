@@ -16,7 +16,7 @@ QString toplevelFile;
 int idl_line_no;
 
 // Imported from yacc.yy
-extern void kscriptParse( const char *_code );
+extern void kscriptParse( const char *_code, int extension );
 
 KSParser::KSParser()
 {
@@ -42,12 +42,12 @@ bool KSParser::parse( FILE *inp_file, const char *filename )
   return m_errorMessage.isEmpty();
 }
 
-bool KSParser::parse( const char* code )
+bool KSParser::parse( const char* code, int extension )
 {
   m_errorMessage = "";
   theParser = this;
   idl_line_no = 1;
-  kscriptParse( code );
+  kscriptParse( code, extension );
 
   return m_errorMessage.isEmpty();
 }

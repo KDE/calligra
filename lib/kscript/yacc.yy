@@ -11,7 +11,7 @@ extern int yylex();
 extern QString idl_lexFile;
 extern int idl_line_no;
 
-void kscriptInitFlex( const char *_code );
+void kscriptInitFlex( const char *_code, int extension );
 
 void yyerror( const char *s )
 {
@@ -21,7 +21,7 @@ void yyerror( const char *s )
 %}
 
 
-%union 
+%union
 {
   QString        *ident;
   KSParseNode    *node;
@@ -265,13 +265,13 @@ interface_header
 	    $$ = new KSParseNode( interface_header );
 	    $$->setIdent( $2 );
 	  }
-	| T_INTERFACE T_IDENTIFIER inheritance_spec 
+	| T_INTERFACE T_IDENTIFIER inheritance_spec
           {
 	    $$ = new KSParseNode( interface_header );
 	    $$->setIdent( $2 );
 	    $$->setBranch( 1, $3 );
 	  }
-	; 
+	;
 
 /* The body of an interface. May be empty. */
 interface_body
@@ -300,7 +300,7 @@ interface_exports
 
 /* This rule allows all the stuff an interface can contain */
 interface_export
-	: const_dcl T_SEMICOLON 
+	: const_dcl T_SEMICOLON
           {
 	    $$ = $1;
 	  }
@@ -398,7 +398,7 @@ attr_dcl
 	    $$ = new KSParseNode( t_readonly_attribute, $3 );
 	    $$->setIdent( $4 );
 	  }
-	; 
+	;
 
 /* This rule fits for assignments like "a = 100" */
 assign_expr
@@ -715,19 +715,19 @@ literal
 	    $$ = new KSParseNode( t_boolean_literal );
 	    $$->setBooleanLiteral( false );
 	  }
-	| T_LEFT_SQUARE_BRACKET T_RIGHT_SQUARE_BRACKET 
+	| T_LEFT_SQUARE_BRACKET T_RIGHT_SQUARE_BRACKET
 	  {
 	    $$ = new KSParseNode( t_array_const );
 	  }
-	| T_LEFT_SQUARE_BRACKET array_elements T_RIGHT_SQUARE_BRACKET 
+	| T_LEFT_SQUARE_BRACKET array_elements T_RIGHT_SQUARE_BRACKET
 	  {
 	    $$ = new KSParseNode( t_array_const, $2 );
 	  }
-	| T_LEFT_CURLY_BRACKET T_RIGHT_CURLY_BRACKET 
+	| T_LEFT_CURLY_BRACKET T_RIGHT_CURLY_BRACKET
 	  {
 	    $$ = new KSParseNode( t_dict_const );
 	  }
-	| T_LEFT_CURLY_BRACKET dict_elements T_RIGHT_CURLY_BRACKET 
+	| T_LEFT_CURLY_BRACKET dict_elements T_RIGHT_CURLY_BRACKET
 	  {
 	    $$ = new KSParseNode( t_dict_const, $2 );
 	  }
@@ -877,13 +877,13 @@ class_header
 	    $$ = new KSParseNode( class_header );
 	    $$->setIdent( $2 );
 	  }
-	| T_CLASS T_IDENTIFIER inheritance_spec 
+	| T_CLASS T_IDENTIFIER inheritance_spec
           {
 	    $$ = new KSParseNode( class_header );
 	    $$->setIdent( $2 );
 	    $$->setBranch( 1, $3 );
 	  }
-	; 
+	;
 
 /*85*/
 class_body
@@ -1175,8 +1175,8 @@ loop_body
 	;
 %%
 
-void kscriptParse( const char *_code )
+void kscriptParse( const char *_code, int extension )
 {
-    kscriptInitFlex( _code );
+    kscriptInitFlex( _code, extension );
     yyparse();
 }

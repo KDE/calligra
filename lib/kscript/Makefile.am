@@ -28,7 +28,8 @@ noinst_HEADERS = kscript_eval.h kscript_object.h kscript_class.h kscript_func.h 
 		 kscript_ext_qapplication.h kscript_ext_qt.h kscript_ext_qlineedit.h \
 		 kscript_ext_qcheckbox.h kscript_ext_qrect.h kscript_struct.h kscript_interface.h kscript_proxy.h \
 		 kscript_typecode.h kscript_corbafunc.h kscript_corba.h kscript_ptr.h kscript_ext_qvboxlayout.h \
-		 kscript_ext_qcombobox.h kscript_ext_qbutton.h kscript_ext_qbuttongroup.h kscript_ext_qdialog.h
+		 kscript_ext_qcombobox.h kscript_ext_qbutton.h kscript_ext_qbuttongroup.h kscript_ext_qdialog.h \
+		 kscript_synext.h
 
 kscript_LDADD = ./libkscript.la
 kscript_LDFLAGS = $(KDE_RPATH)

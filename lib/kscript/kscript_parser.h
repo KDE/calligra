@@ -11,7 +11,7 @@ class KSContext;
 extern KSParser *theParser;  // Defined in parser.cc
 extern int yyparse();      // Defined through yacc.y
 
-class KSParser 
+class KSParser
 {
 public:
   KSParser();
@@ -20,7 +20,7 @@ public:
   bool eval( KSContext& );
 
   bool parse( FILE* inp_file, const char *filename = NULL );
-  bool parse( const char* code );
+  bool parse( const char* code, int extension = 0 );
   void setRootNode( KSParseNode *node );
   KSParseNode *getRootNode();
   void parse_error( const char *file, const char *err, int line );

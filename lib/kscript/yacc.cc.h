@@ -1,4 +1,4 @@
-typedef union 
+typedef union
 {
   QString        *ident;
   KSParseNode    *node;

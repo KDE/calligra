@@ -1440,6 +1440,59 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
     return false;
   }
 
+  /**
+   * This is a syntax shortcut. If a function or method returns a object and takes
+   * no arguments, then you can skip the explizit function call.
+   * Instead of map().Table1().B3().setText("Hallo") you can write
+   * map.Table1.B3.setText("Hallo")
+   */
+  if ( l.value()->type() == KSValue::FunctionType || l.value()->type() == KSValue::MethodType )
+  {
+	// Copy l.value to func
+	KSContext func( context );
+	func.setValue( new KSValue( *l.value() ) );
+
+	// Create a list of parameters
+	l.setValue( new KSValue( KSValue::ListType ) );
+
+	// Remove our namespaces
+	KSSubScope* scope = l.scope()->popLocalScope();
+	KSModule* module = l.scope()->popModule();
+
+	bool b;
+	if ( func.value()->type() == KSValue::FunctionType )
+        {
+	    l.scope()->pushModule( l.value()->functionValue()->module() );
+	    // Call the function
+	    b = func.value()->functionValue()->call( l );
+	    l.scope()->popModule();
+	}
+	else if ( func.value()->type() == KSValue::MethodType )
+        {
+	    l.scope()->pushModule( l.value()->methodValue()->module() );
+	    // Call method
+	    b = func.value()->methodValue()->call( l );
+	    l.scope()->popModule();
+	}
+	else
+	    ASSERT( 0 );
+
+	// Resume namespaces
+	l.scope()->pushLocalScope( scope );
+	l.scope()->pushModule( module );
+
+	if ( !b )
+        {
+	    context.setException( l.exception() );
+	    return false;
+	}
+	
+	// Lets have at least a <none> as return value
+	if ( !l.value() )
+	    l.setValue( KSValue::null() );
+  }
+  /** End of Syntax trick ;-) **/
+  
   // Special handling for modules
   if ( l.value()->cast( KSValue::ModuleType ) )
   {

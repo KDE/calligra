@@ -6,12 +6,15 @@
 
 #include "kscript_parsenode.h"
 #include "kscript_types.h"
+#include "kscript_synext.h"
 
 #ifndef KDE_USE_FINAL
 #include "yacc.cc.h"
 #endif
 
 extern int idl_line_no;
+
+static bool s_kspread;
 
 #include <qstring.h>
 
@@ -51,7 +54,7 @@ static KScript::Double ascii_to_longdouble (const char *s)
 static char translate_char( const char *s )
 {
   char c = *s++;
-  
+
   if( c != '\\' )
     return c;
   c = *s++;
@@ -107,11 +110,11 @@ Esc_Sequence            ({Esc_Sequence1}|{Esc_Sequence2}|{Esc_Sequence3})
 Char                    ([^\n\t\"\'\\]|{Esc_Sequence})
 Char_Literal            "'"({Char}|\")"'"
 String_Literal		\"({Char}|"'")*\"
-Float_Literal1		{Digits}"."{Digits}(e|E)("+"|"-")?{Digits}  
+Float_Literal1		{Digits}"."{Digits}(e|E)("+"|"-")?{Digits}
 Float_Literal2		{Digits}(e|E)("+"|"-")?{Digits}
 Float_Literal3          {Digits}"."{Digits}
-Float_Literal4		"."{Digits} 
-Float_Literal5		"."{Digits}(e|E)("+"|"-")?{Digits}  
+Float_Literal4		"."{Digits}
+Float_Literal5		"."{Digits}(e|E)("+"|"-")?{Digits}
 
 /*--------------------------------------------------------------------------*/
 
@@ -147,22 +150,43 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 						  return T_MATCH;
 						}
 
+
 "$"?[A-Z]+"$"?{Digits} {
+			  if ( !s_kspread )
+			  {
+			  	yylval.ident = new QString( yytext );
+			  	return T_IDENTIFIER;
+			  }
                           yylval._str = new QString( yytext );
 			  return T_CELL;
 		       };
 
 [A-Za-z0-9]+"!""$"?[A-Z]+"$"?{Digits} {
+			  if ( !s_kspread )
+			  {
+			  	yylval.ident = new QString( yytext );
+			  	return T_IDENTIFIER;
+			  }
                           yylval._str = new QString( yytext );
 			  return T_CELL;
 		       };
 
 [A-Za-z0-9]+"!""$"?[A-Z]+"$"?{Digits}":""$"?[A-Z]+"$"?{Digits} {
+			  if ( !s_kspread )
+			  {
+			  	yylval.ident = new QString( yytext );
+			  	return T_IDENTIFIER;
+			  }
                           yylval._str = new QString( yytext );
 			  return T_RANGE;
 		       };
 
 "$"?[A-Z]+"$"?{Digits}":""$"?[A-Z]+"$"?{Digits} {
+			  if ( !s_kspread )
+			  {
+			  	yylval.ident = new QString( yytext );
+			  	return T_IDENTIFIER;
+			  }
                           yylval._str = new QString( yytext );
 			  return T_RANGE;
 		       };
@@ -233,7 +257,7 @@ raise			return T_RAISE;
 
 "++"			return T_INCR;
 "--"			return T_DECR;
-"::"			return T_SCOPE; 
+"::"			return T_SCOPE;
 
 
 
@@ -249,7 +273,7 @@ raise			return T_RAISE;
 			  yylval._float = ascii_to_longdouble( yytext );
 			  return T_FLOATING_PT_LITERAL;
 			}
-{Int_Literal}		{ 
+{Int_Literal}		{
 			  yylval._int = ascii_to_longlong( 10, yytext );
 			  return T_INTEGER_LITERAL;
 			}
@@ -278,7 +302,11 @@ raise			return T_RAISE;
 
 %%
 
-void kscriptInitFlex( const char *_code )
+void kscriptInitFlex( const char *_code, int extension )
 {
+   if ( extension == KSCRIPT_EXTENSION_KSPREAD )
+	s_kspread = TRUE;
+   else
+	s_kspread = FALSE;
    yy_switch_to_buffer( yy_scan_string( _code ) );
 }
