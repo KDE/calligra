@@ -415,7 +415,8 @@ private:
     myFile table1Stream;
     myFile dataStream;
 
-    // Word says it never has more than 64 columns in a table. But we allow for more...
+    // Word specification says it never has more than 64 columns in a table.
+    // But it actually allows much more ...
     static const int MAX_TABLE_SIZE = 500;
 
     // Character property handling.

@@ -1239,7 +1239,7 @@ void MsWord::readFonts()
     unsigned i = 0;
     while (ptr < ptr2)
     {
-        ptr += read(ptr, &m_fonts.data[i]);
+	ptr += read(ptr, &m_fonts.data[i]);
         i++;
     }
 }
