@@ -32,6 +32,7 @@
 #include "vlayer.h"
 #include "vstroke.h"
 #include "vvisitor.h"
+#include "vclipgroup.h"
 #ifdef HAVE_KARBONTEXT
 #include "vtext.h"
 #endif
@@ -182,6 +183,12 @@ VGroup::load( const QDomElement& element )
 				VGroup* group = new VGroup( this );
 				group->load( e );
 				append( group );
+			}
+			else if( e.tagName() == "CLIP" )
+			{
+				VClipGroup* grp = new VClipGroup( this );
+				grp->load( e );
+				append( grp );
 			}
 			else if( e.tagName() == "TEXT" )
 			{

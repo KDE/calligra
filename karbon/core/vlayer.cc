@@ -32,6 +32,7 @@
 #include "vvisitor.h"
 #include "vlayer_iface.h"
 #include <kdebug.h>
+#include "vclipgroup.h"
 
 VLayer::VLayer( VObject* parent, VState state )
 	: VGroup( parent, state ), m_selected( true ), m_name( i18n( "Layer" ) )
@@ -165,6 +166,12 @@ VLayer::load( const QDomElement& element )
 			else if( e.tagName() == "GROUP" )
 			{
 				VGroup* grp = new VGroup( this );
+				grp->load( e );
+				append( grp );
+			}
+			else if( e.tagName() == "CLIP" )
+			{
+				VClipGroup* grp = new VClipGroup( this );
 				grp->load( e );
 				append( grp );
 			}
