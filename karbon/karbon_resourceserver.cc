@@ -188,7 +188,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 	while( fi.exists() == true )
 	{
 		filename = KarbonFactory::instance()->dirs()->saveLocation(
-					   "kis_pattern" ) + name + i + ext;
+					   "kis_pattern%1%2%3" ).arg( name ).arg( i ).arg( ext );
 		fi.setFile( filename );
 		kdDebug() << fi.fileName() << endl;
 	}
