@@ -448,6 +448,7 @@ protected:
 
     bool initConfig();
     void changeSpellLanguage( int index );
+    void testIgnoreWord( QString & word );
 
 private slots:
     void slotSpellCheckerCorrected( const QString &, const QString &, unsigned int );

@@ -323,22 +323,7 @@ void KOSpell::nextWord()
             word.append(ch);
         }
         offset+= i - lastpos+1;
-
-        if(d->m_bIgnoreTitleCase && word==word.upper())
-            word ="";
-
-        if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
-        {
-            QString text=word[0]+word.right(word.length()-1).lower();
-            if(text==word)
-                word ="";
-        }
-
-        //We don't take advantage of ispell's ignore function because
-        //we can't interrupt ispell's output (when checking a large
-        //buffer) to add a word to _it's_ ignore-list.
-        if (ignorelist.findIndex(word.lower())!=-1)
-            word ="";
+        testIgnoreWord( word );
     }
     while ( word.isEmpty() && (lastpos+offset < (int)origbuffer.length()-1));
 
@@ -348,9 +333,50 @@ void KOSpell::nextWord()
     }
 }
 
+void KOSpell::testIgnoreWord( QString & word )
+{
+    if(d->m_bIgnoreTitleCase && word==word.upper())
+        word ="";
+
+    if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
+    {
+        QString text=word[0]+word.right(word.length()-1).lower();
+        if(text==word)
+            word ="";
+    }
+
+    //We don't take advantage of ispell's ignore function because
+    //we can't interrupt ispell's output (when checking a large
+    //buffer) to add a word to _it's_ ignore-list.
+    if (ignorelist.findIndex(word.lower())!=-1)
+        word ="";
+
+}
+
 void KOSpell::previousWord()
 {
-    //todo
+    QString word;
+    offset=0;
+    do
+    {
+        int i =0;
+        for ( i = lastpos + offset; i<(int)origbuffer.length();i++)
+        {
+            QChar ch = origbuffer[i];
+            if ( ch.isSpace() || ch.isPunct() )
+                break;
+            word.append(ch);
+        }
+        offset+= i - lastpos+1;
+        testIgnoreWord( word );
+    }
+    while ( word.isEmpty() && (lastpos+offset > 0/*todo fixme !!!!!!!!!!)*/));
+
+    if ( !spellWord( word ))
+    {
+        checkNextWord();
+    }
+
 }
 
 bool KOSpell::check( const QString &_buffer, bool _usedialog )
