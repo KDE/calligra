@@ -188,6 +188,7 @@ void KFormulaDocument::addRootElement()
          {					//It change it into a Root
 	  theActiveElement->substituteElement(newElement = new RootElement(this));
 	  delete theActiveElement;
+          theActiveElement = 0;
 	 }         
         else 
 	 {

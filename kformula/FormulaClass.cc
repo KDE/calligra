@@ -20,6 +20,7 @@ warning("General Settings");
  theFont.setItalic( FALSE ); 
  theColor=black;
 warning("General Font OK");
+ theActiveElement = 0;
 }
 
 void FormulaClass::setActiveElement(BasicElement* c)
