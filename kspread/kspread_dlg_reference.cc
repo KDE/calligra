@@ -66,12 +66,20 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   lay1->addWidget( bb );
 
   QString text;
+  QStringList tableName;
+  QPtrListIterator<KSpreadTable> it2 ( m_pView->doc()->map()->tableList() );
+  for( ; it2.current(); ++it2 )
+  {
+      tableName.append( it2.current()->tableName());
+  }
+
   QValueList<Reference>::Iterator it;
   QValueList<Reference> area = m_pView->doc()->listArea();
   for ( it = area.begin(); it != area.end(); ++it )
   {
     text = (*it).ref_name;
-    m_list->insertItem(text);
+    if ( tableName.contains((*it).table_name ))
+        m_list->insertItem(text);
   }
 
   if ( !m_list->count() )
@@ -208,24 +216,24 @@ void KSpreadreference::slotCancel()
 
 
 
-KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent, 
-                                          const char * name, 
+KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
+                                          const char * name,
                                           QString const & areaname )
   : QDialog( parent, name )
 {
   m_pView = parent;
 
-  resize( 350, 142 ); 
-  setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, 
-                              (QSizePolicy::SizeType)4, 0, 0, 
+  resize( 350, 142 );
+  setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
+                              (QSizePolicy::SizeType)4, 0, 0,
                               sizePolicy().hasHeightForWidth() ) );
   setCaption( i18n( "Edit Area" ) );
   setSizeGripEnabled( TRUE );
-  QGridLayout * KSpreadEditAreaNameLayout 
-    = new QGridLayout( this, 1, 1, 11, 6, "KSpreadEditAreaNameLayout"); 
+  QGridLayout * KSpreadEditAreaNameLayout
+    = new QGridLayout( this, 1, 1, 11, 6, "KSpreadEditAreaNameLayout");
 
-  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
-  QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, 
+  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
+  QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding,
                                           QSizePolicy::Minimum );
   Layout1->addItem( spacer );
 
@@ -271,7 +279,7 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   m_areaName->setText( areaname );
 
   KSpreadEditAreaNameLayout->addWidget( m_areaName, 0, 1 );
-  
+
   QPtrList<KSpreadTable> tableList = m_pView->doc()->map()->tableList();
   for (unsigned int c = 0; c < tableList.count(); ++c)
   {
@@ -328,7 +336,7 @@ void KSpreadEditAreaName::slotOk()
   m_pView->doc()->addAreaName(range.range, m_areaName->text(), m_sheets->currentText() );
 
   KSpreadTable *tbl;
-  
+
   for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
   {
     tbl->refreshChangeAreaName( m_areaName->text() );
