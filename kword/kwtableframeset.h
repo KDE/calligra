@@ -133,6 +133,11 @@ public:
         void setMark() { m_marker = true; }
         bool marked() { return m_marker; }
 
+        /** Overloaded to not clear any preview borders. */
+        void drawContents( QPainter *painter, const QRect & crect,
+                const QColorGroup & cg, bool onlyChanged, bool resetChanged,
+                KWFrameSetEdit * edit, KWViewMode * viewMode );
+
     };
     friend class Cell;
 

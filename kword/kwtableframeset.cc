@@ -2539,6 +2539,23 @@ void KWTableFrameSet::Cell::setZOrder()
     }
 }
 
+void KWTableFrameSet::Cell::drawContents( QPainter * painter, const QRect & crect,
+        const QColorGroup & cg, bool onlyChanged, bool resetChanged,
+        KWFrameSetEdit * edit, KWViewMode * viewMode )
+{
+    bool printing = painter->device()->devType() == QInternal::Printer;
+    bool drawPreviewLines = viewMode && viewMode->drawFrameBorders();
+    QRect cellRect = crect;
+    if(!printing && drawPreviewLines) {
+        // Make sure the clipping is changed so the preview lines (frame borders) are not overwritten.
+        QRect zoomedRect( m_doc->zoomRect(*frame(0)) );
+        QRect innerFrameRect( viewMode->normalToView( zoomedRect ) );
+        innerFrameRect.addCoords(1, 1, -1, -1); // move and shrink
+        cellRect = innerFrameRect.intersect(crect);
+    }
+    KWTextFrameSet::drawContents(painter, cellRect, cg, onlyChanged, resetChanged, edit, viewMode);
+}
+
 KWTableFrameSetEdit::~KWTableFrameSetEdit()
 {
     if ( m_currentCell )
