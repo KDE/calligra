@@ -224,8 +224,8 @@ bool KWDocument::initDoc()
     pageHeaderFooter.ptFooterBodySpacing = 10;
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString _template;
 
@@ -268,8 +268,8 @@ void KWDocument::initEmpty()
     pageHeaderFooter.ptFooterBodySpacing = 10;
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
@@ -764,8 +764,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     pageHeaderFooter.ptFooterBodySpacing = 10;
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
 #if 0
     defaultParagLayout = new KWParagLayout( this );
@@ -889,7 +889,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         if ( __hf.ptHeaderBodySpacing == 0.0 )
             getPointBasedAttribute( __hf, HeaderBodySpacing, paper, "ptHeadBody", 0.0 );
         if ( __hf.ptFooterBodySpacing == 0.0 )
-            getPointBasedAttribute( __hf, HeaderBodySpacing, paper, "ptFootBody", 0.0 );
+            getPointBasedAttribute( __hf, FooterBodySpacing, paper, "ptFootBody", 0.0 );
         if ( __columns.ptColumnSpacing == 0.0 )
             getPointBasedAttribute( __columns, ColumnSpacing, paper, "ptColumnspc", 0.0 );
 
@@ -2775,8 +2775,7 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
     _layout = pageLayout;
     _cl = pageColumns;
     _hf = pageHeaderFooter;
-
-    /*    if ( zoom != 100 ) {
+    /*if ( zoom != 100 ) {
         _layout.ptWidth = zoomIt( _layout.ptWidth );
         _layout.ptHeight = zoomIt( _layout.ptHeight );
         _layout.ptLeft = zoomIt( _layout.ptLeft );
