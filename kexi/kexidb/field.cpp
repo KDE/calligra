@@ -345,10 +345,16 @@ Field::setDefaultValue(const QCString& def)
 			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
+#if (QT_VERSION >= 0x030200) //TMP
 				m_defaultValue = QVariant((Q_LLONG)v);
+#else
+				m_defaultValue = QVariant(); //do not works
+#endif
 			break;
 		}case BigInteger: {//8 bytes
+#ifndef Q_WS_WIN
 #warning fixme
+#endif
 /*
 			Q_LLONG long v = def.toLongLong(&ok);
 //TODO: 2-part decoding
