@@ -2799,8 +2799,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
     QTextCursor start = textdoc->selectionStartCursor( QTextDocument::Standard );
     QTextCursor end = textdoc->selectionEndCursor( QTextDocument::Standard );
 
-    int posStart=0;
-    int posEnd=0;
+    int posStart=start.index();
+    int posEnd=start.index();
     QTextCursor c1( textdoc );
     QTextCursor c2( textdoc );
     QString repl;
@@ -2818,9 +2818,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
                 c2.setParag( start.parag() );
                 c2.setIndex( posEnd );
 
-
-                repl=text.mid(posStart,posEnd-posStart);
-
+                repl=text.mid(posStart-start.index(),posEnd-posStart);
                 textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
                 macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type),
@@ -2842,7 +2840,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
 
         textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
         textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
-        repl=text.mid(posStart,end.index()-posStart);
+        repl=text.mid(posStart-start.index(),end.index()-posStart);
         macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
                                                        QTextDocument::Temp, "" ));
     }
@@ -2864,7 +2862,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
 
                 textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
-                repl=text.mid(posStart,posEnd-posStart);
+                repl=text.mid(posStart-start.index(),posEnd-posStart);
                 macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
                                                        QTextDocument::Temp, "" ));
                 do
@@ -2880,11 +2878,11 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         c1.setParag(start.parag()  );
         c1.setIndex( posStart );
         c2.setParag( start.parag() );
-        c2.setIndex( text.length() );
+        c2.setIndex( text.length()+start.index() );
 
         textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
         textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
-        repl=text.mid(posStart,text.length()-posStart);
+        repl=text.mid(posStart-start.index(),end.index()-posStart);
         macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
                                                        QTextDocument::Temp, "" ));
 
