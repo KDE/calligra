@@ -2,6 +2,7 @@
 #include "kscript_ext_qwidget.h"
 #include "kscript_ext_qapplication.h"
 #include "kscript_ext_qrect.h"
+#include "kscript_ext_qpushbutton.h"
 #include "kscript_value.h"
 #include "kscript_util.h"
 
@@ -15,6 +16,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QWidget", new KSValue( new KSClass_QWidget( module ) ) );
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
   module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
+  module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
 
   return module;
 }

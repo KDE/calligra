@@ -7,7 +7,7 @@ LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS)
 lib_LTLIBRARIES = libkscript.la
 libkscript_la_SOURCES = kscript_proxy.cc kscript_eval.cc kscript_object.cc kscript_class.cc kscript_func.cc kscript_context.cc \
 		  kscript_value.cc kscript_parser.cc kscript_parsenode.cc yacc.cc scanner.cc kscript.cc \
-		  kscript_util.cc kscript_ext_qwidget.cc kscript_ext_qapplication.cc kscript_ext_qt.cc \
+		  kscript_util.cc kscript_ext_qwidget.cc kscript_ext_qpushbutton.cc kscript_ext_qapplication.cc kscript_ext_qt.cc \
 		  kscript_ext_qrect.cc kscript_struct.cc kscript_interface.cc \
 		  kscript_typecode.cc kscript_corbafunc.cc kscript_corba.cc
 
@@ -22,7 +22,7 @@ bin_PROGRAMS = kscript
 kscript_SOURCES = main.cc
 noinst_HEADERS = kscript_eval.h kscript_object.h kscript_class.h kscript_func.h kscript_context.h kscript_value.h \
 		 kscript_parser.h kscript_parsenode.h kscript.h kscript_util.h \
-		 kscript_ext_qwidget.h kscript_ext_qapplication.h kscript_ext_qt.h \
+		 kscript_ext_qwidget.h kscript_ext_qpushbutton.h kscript_ext_qapplication.h kscript_ext_qt.h \
 		 kscript_ext_qrect.cc kscript_struct.h kscript_interface.h kscript_proxy.h \
 		 kscript_typecode.h kscript_corbafunc.h kscript_corba.h kscript_ptr.h
 
