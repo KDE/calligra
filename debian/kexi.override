@@ -6,4 +6,4 @@ kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkexidb.so.0.0.0 usr/lib/libkexid
 kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkexiextendedwidgets.so.0.0.0 usr/lib/libkexiextendedwidgets.so
 kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkformeditor.so.0.0.0 usr/lib/libkformeditor.so
 # Menu item.
-kexi: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kexi:8
+kexi: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kexi:9

@@ -23,4 +23,4 @@ karbon: binary-or-shlib-defines-rpath ./usr/lib/kde3/libwmfimport.so /usr/lib/kd
 # This is inserted by debhelper and is legal.
 karbon: postrm-calls-ldconfig
 # Menu item.
-karbon: menu-item-contains-unknown-tag kderemove /usr/lib/menu/karbon:8
+karbon: menu-item-contains-unknown-tag kderemove /usr/lib/menu/karbon:9

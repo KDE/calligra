@@ -12,4 +12,4 @@ kivio: binary-or-shlib-defines-rpath ./usr/lib/kde3/straight_connector.so /usr/l
 # This is inserted by debhelper and is legal.
 kivio: postrm-calls-ldconfig
 # Menu item.
-kivio: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kivio:8
+kivio: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kivio:9

@@ -3,4 +3,4 @@ kformula: non-dev-pkg-with-shlib-symlink usr/lib/kformulamain.so.0.0.0 usr/lib/k
 # This is inserted by debhelper and is legal.
 kformula: postrm-calls-ldconfig
 # Menu item.
-kformula: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kformula:8
+kformula: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kformula:9

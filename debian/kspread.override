@@ -13,4 +13,4 @@ kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libqproimport.so /usr/lib/
 # This is inserted by debhelper and is legal.
 kspread: postrm-calls-ldconfig
 # Menu item.
-kspread: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kspread:8
+kspread: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kspread:9
