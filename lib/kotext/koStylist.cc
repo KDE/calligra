@@ -379,8 +379,6 @@ void KoStyleManager::moveUpStyle()
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
-    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
-    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
     updateGUI();
 }
 
@@ -412,8 +410,6 @@ void KoStyleManager::moveDownStyle()
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
-    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
-    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
     updateGUI();
 }
 
@@ -496,6 +492,17 @@ void KoStyleManager::renameStyle(const QString &theText) {
     enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
+    m_stylesList->setEnabled( state );
+    if ( state )
+    {
+        m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
+        m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+    }
+    else
+    {
+        m_moveUpButton->setEnabled(false);
+        m_moveDownButton->setEnabled(false);
+    }
 }
 
 /////////////
