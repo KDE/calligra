@@ -24,6 +24,7 @@
 #include <qsize.h>
 #include <qdatetime.h>
 #include <koStyleStack.h>
+#include <koOasisStyles.h>
 
 #include <koPictureCollection.h>
 
@@ -120,7 +121,7 @@ public:
 
     QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
     void load( const QDomElement &element );
-    void loadOasis( const KoStyleStack &styleStack );
+    void loadOasis( const KoStyleStack &styleStack, const KoOasisStyles & styles );
 
 protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );

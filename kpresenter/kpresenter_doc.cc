@@ -989,7 +989,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         if ( m_styleStack.hasAttribute( "draw:fill" )
              || m_styleStack.hasAttribute( "presentation:transition-style" ))
         {
-            m_pageList.at(pos)->background()->loadOasis(m_styleStack);
+            m_pageList.at(pos)->background()->loadOasis( m_styleStack, oasisStyles);
         }
 
         // parse all objects

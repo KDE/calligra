@@ -28,6 +28,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <kozoomhandler.h>
+#include <koUnit.h>
 
 KPRectObject::KPRectObject()
     : KP2DObject()
@@ -76,6 +77,14 @@ void KPRectObject::loadOasis(const QDomElement &element, const KoStyleStack &sty
     kdDebug()<<"void KPRectObject::loadOasis(const QDomElement &element)******************\n";
     KP2DObject::loadOasis(element, styleStack);
     //I don't think that RNDS exist into openoffice
+    if ( element.hasAttribute( "draw:corner-radius" ) )
+    {
+        //todo FIXME, conversion is not good, oo give radius and kpresenter give xRnd and yRnd 0->99
+        double radius = KoUnit::parseValue( element.attribute( "draw:corner-radius" ) );
+        xRnd = radius;
+        yRnd = radius;
+        kdDebug()<<" KPRectObject : radius xRnd :"<<xRnd <<" yRnd :"<<yRnd<<endl;
+    }
 }
 
 double KPRectObject::load(const QDomElement &element)
