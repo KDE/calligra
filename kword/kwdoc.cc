@@ -239,11 +239,11 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool update
     for ( ; fit.current() ; ++fit )
         fit.current()->zoom();
 
+    layout();
+    updateAllFrames();
     if ( updateViews )
     {
         updateAllViewportSizes();
-        updateAllFrames();
-        layout();
         repaintAllViews( true );
     }
 }
