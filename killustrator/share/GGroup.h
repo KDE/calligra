@@ -25,16 +25,12 @@
 #ifndef GGroup_h_
 #define GGroup_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-
 #include <list>
 
-#include "Coord.h"
-#include "GObject.h"
+using std::list;
+
+#include <Coord.h>
+#include <GObject.h>
 
 class GGroup : public GObject {
   Q_OBJECT
@@ -71,4 +67,3 @@ private:
 };
 
 #endif
-

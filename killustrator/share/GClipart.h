@@ -26,18 +26,13 @@
 #define GClipart_h_
 
 #include <qobject.h>
-#include <qcolor.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qpicture.h>
-
 #include <kurl.h>
+#include <GObject.h>
 
-#include "Coord.h"
-#include "GObject.h"
+class QWinMetaFile;
+class QPicture;
+class QPainter;
 
-#include "qwmf.h"
 
 class GClipart : public GObject {
   Q_OBJECT

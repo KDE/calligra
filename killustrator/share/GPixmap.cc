@@ -27,7 +27,7 @@
 
 #include <qdom.h>
 #include <klocale.h>
-#include <kapp.h>
+//#include <kapp.h>
 
 GPixmap::GPixmap () {
   pix = 0L;
@@ -60,10 +60,6 @@ GPixmap::GPixmap (const QDomElement &element) : GObject (element.namedItem("gobj
 	    pix = 0L;
 	}
     }
-    // FIXME (Werner)
-    width=element.attribute("width").toFloat();
-    height=element.attribute("height").toFloat();
-
     if (pix) {
 	// use real pixmap dimension
 	width = pix->width ();
@@ -130,8 +126,6 @@ QDomElement GPixmap::writeToXml (QDomDocument &document) {
     // FIXME (Werner): Let the user decide where to pit the image (intern/extern)
     QDomElement element=document.createElement("pixmap");
     element.setAttribute ("src", (const char *) url.url ());
-    element.setAttribute ("width", width);
-    element.setAttribute ("height", height);
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

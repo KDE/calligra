@@ -21,23 +21,22 @@
 
 */
 
-#include <stdlib.h>
-#include <iostream.h>
-#include <math.h>
-#include <assert.h>
-#ifdef __FreeBSD__
-#include <float.h>
-#else
-#include <values.h>
-#endif
-#include "GBezier.h"
-#include "GBezier.moc"
-#include "GCurve.h"
+//#include <stdlib.h>
+//#include <iostream.h>
+//#include <math.h>
+//#include <assert.h>
+//#ifdef __FreeBSD__
+//#include <float.h>
+//#else
+//#include <values.h>
+//#endif
+#include <GBezier.h>
+#include <GCurve.h>
 
 #include <qdom.h>
 #include <qpointarray.h>
 #include <klocale.h>
- #include <kapp.h>
+//#include <kapp.h>
 
 #define DELTA 0.05
 
@@ -535,10 +534,10 @@ int GBezier::cPoint (int idx) {
 
 QDomElement GBezier::writeToXml (QDomDocument &document) {
 
-    QDomElement berzier=document.createElement("bezier");
-    berzier.setAttribute ("closed", (int) closed);
-    berzier.appendChild(GPolyline::writeToXml(document));
-    return berzier;
+    QDomElement bezier=document.createElement("bezier");
+    bezier.setAttribute ("closed", (int) closed);
+    bezier.appendChild(GPolyline::writeToXml(document));
+    return bezier;
 }
 
 bool GBezier::findNearestPoint (const Coord& p, float max_dist,
@@ -723,3 +722,5 @@ GCurve* GBezier::convertToCurve () const {
   curve->setClosed (closed);
   return curve;
 }
+
+#include <GBezier.moc>

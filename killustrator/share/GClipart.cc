@@ -26,10 +26,10 @@
 #include <qdom.h>
 
 #include <klocale.h>
-#include <kapp.h>
+
 
 GClipart::GClipart () {
-  pic = 0L;
+    pic = 0L;
 }
 
 GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
@@ -46,8 +46,6 @@ GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("go
     else
 	// construct a malformed url
 	url = KURL ();
-    width=element.attribute("width").toFloat();
-    height=element.attribute("height").toFloat();
     calcBoundingBox ();
 }
 
@@ -118,8 +116,6 @@ QDomElement GClipart::writeToXml (QDomDocument &document) {
     // FIXME (Werner): Make this store internal/external depening on the user's wish
     QDomElement element=document.createElement("clipart");
     element.setAttribute ("src", (const char *) url.url ());
-    element.setAttribute ("width", width);
-    element.setAttribute ("height", height);
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

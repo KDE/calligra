@@ -25,9 +25,8 @@
 #include <iostream>
 #include <algorithm>
 #include <cassert>
-#include "GText.h"
-#include "GText.moc"
-#include "GDocument.h"
+#include <GText.h>
+#include <GDocument.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -80,6 +79,15 @@ GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject"
     x=element.attribute("x").toFloat();
     y=element.attribute("y").toFloat();
     textInfo.align=(TextInfo::Alignment)element.attribute("align").toInt();
+
+    QDomElement f = element.namedItem("font").toElement();
+    QFont font = QFont::defaultFont ();
+    font.setFamily(f.attribute("face"));
+    font.setPointSize(f.attribute("point-size").toInt());
+    font.setWeight(f.attribute("weight").toInt());
+    font.setItalic(f.attribute("italic").toInt());
+    setFont (font);
+    setText (element.text()); // Did I already say that I love QDom? :)
 
     if (x != 0.0 || y != 0.0) {
 	tMatrix.translate (x, y);
@@ -588,3 +596,5 @@ void GText::setPathObject (GObject* obj) {
 bool GText::isEmpty () const {
   return (text.empty () || (lines () == 1 && text[0] == ""));
 }
+
+#include <GText.moc>

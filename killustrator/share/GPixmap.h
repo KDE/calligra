@@ -25,17 +25,10 @@
 #ifndef GPixmap_h_
 #define GPixmap_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qpicture.h>
-
 #include <kurl.h>
 
-#include "Coord.h"
-#include "GObject.h"
+#include <Coord.h>
+#include <GObject.h>
 
 class GPixmap : public GObject {
   Q_OBJECT

@@ -22,15 +22,14 @@
 
 */
 
-#include "GCurve.h"
-#include "GCurve.moc"
-#include "GBezier.h"
+#include <GCurve.h>
+#include <GBezier.h>
 #include <qcolor.h>
 #include <kapp.h>
 #include <cassert>
 #include <klocale.h>
 #include <qdom.h>
-#include "version.h"
+#include <version.h>
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier
@@ -98,6 +97,19 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
 }
 
 GSegment::GSegment (Kind sk) : skind (sk), bpoints (4) {
+}
+
+GSegment::GSegment(const QDomElement &element) {
+
+    skind = (GSegment::Kind)element.attribute("kind").toInt();
+    int i=0;
+    Coord p;
+    QDomElement point = element.firstChild().toElement();
+    for( ; !point.isNull() && i<4; point = element.nextSibling().toElement(), ++i ) {
+	p.x(point.attribute("x").toFloat());
+	p.y(point.attribute("y").toFloat());
+	setPoint(i, p);
+    }
 }
 
 const Coord& GSegment::pointAt (int i) const {
@@ -260,8 +272,13 @@ GCurve::GCurve () : GObject () {
 GCurve::GCurve (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
     closed=(element.attribute("closed").toInt()==1);
+    QDomElement segment = element.firstChild().toElement();
+    for( ; !segment.isNull(); segment = segment.nextSibling().toElement() ) {
+	if(segment.tagName()=="seg")
+	    addSegment(GSegment(segment));
+    }
     if (closed)
-	updatePath ();
+	updatePath();
 }
 
 GCurve::GCurve (const GCurve& obj) : GObject (obj) {
@@ -592,3 +609,5 @@ void GCurve::updatePath () {
     last += parray.size ();
   }
 }
+
+#include <GCurve.moc>

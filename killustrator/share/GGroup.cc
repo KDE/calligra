@@ -21,17 +21,16 @@
 
 */
 
-#include <stdlib.h>
-#include <iostream.h>
-#include <math.h>
-#include "GGroup.h"
-#include "GGroup.moc"
+//#include <stdlib.h>
+//#include <iostream.h>
+//#include <math.h>
+#include <GGroup.h>
 
 #include <algorithm>
 
 #include <qdom.h>
 #include <klocale.h>
-#include <kapp.h>
+//#include <kapp.h>
 
 using namespace std;
 
@@ -47,8 +46,13 @@ GGroup::GGroup () {
 }
 
 GGroup::GGroup (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-           SLOT(propagateProperties (GObject::Property, int)));
+
+    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
+	     SLOT(propagateProperties (GObject::Property, int)));
+    QDomElement child=element.firstChild().toElement();
+    for( ; !child.isNull(); child = child.nextSibling().toElement() ) {
+	addObject(KIllustrator::objectFactory(child));
+    }
 }
 
 GGroup::GGroup (const GGroup& obj) : GObject (obj) {
@@ -172,3 +176,5 @@ void GGroup::printInfo () {
     }
     cout << "<<<<<<<<<<<<<<<<<<<<<\n";
 }
+
+#include <GGroup.moc>

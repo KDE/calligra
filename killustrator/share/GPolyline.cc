@@ -21,16 +21,16 @@
 
 */
 
-#include <assert.h>
-#include <stdlib.h>
-#include <iostream.h>
-#include <math.h>
+//#include <assert.h>
+//#include <stdlib.h>
+//#include <iostream.h>
+//#include <math.h>
 #include <GPolyline.h>
 #include <GCurve.h>
 #include <qdom.h>
 
 #include <klocale.h>
-#include <kapp.h>
+//#include <kapp.h>
 
 GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
@@ -56,6 +56,18 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
 	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
     eArrow = (outlineInfo.endArrowId > 0 ?
 	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
+
+    QDomElement p = element.firstChild().toElement();
+    Coord point;
+    int i=0;
+    for( ; !p.isNull(); p = p.nextSibling().toElement() ) {
+	if(p.tagName()=="point") {
+	    point.x(p.attribute("x").toFloat());
+	    point.y(p.attribute("y").toFloat());
+	    addPoint(i, point);
+	    ++i;
+	}
+    }
     calcBoundingBox ();
 }
 

@@ -21,19 +21,18 @@
 
 */
 
-#include <stdlib.h>
-#include <iostream.h>
-#include <math.h>
-#include <assert.h>
-#include "GPolygon.h"
-#include "GPolygon.moc"
-#include "GradientShape.h"
-#include "GCurve.h"
+//#include <stdlib.h>
+//#include <iostream.h>
+//#include <math.h>
+//#include <assert.h>
+#include <GPolygon.h>
+#include <GradientShape.h>
+#include <GCurve.h>
 
 #include <qpointarray.h>
 #include <qdom.h>
 #include <klocale.h>
-#include <kapp.h>
+//#include <kapp.h>
 
 #define Roundness outlineInfo.roundness
 
@@ -610,3 +609,5 @@ GCurve* GPolygon::convertToCurve () const {
   curve->setFillInfo (fillInfo);
   return curve;
 }
+
+#include <GPolygon.moc>

@@ -26,16 +26,16 @@
 #define GOval_h_
 
 #include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qdict.h>
-#include <qlist.h>
+//#include <qcolor.h>
+//#include <qfont.h>
+//#include <qwmatrix.h>
+//#include <qpainter.h>
+//#include <qdatastream.h>
+//#include <qdict.h>
+//#include <qlist.h>
 
-#include "Coord.h"
-#include "GObject.h"
+#include <Coord.h>
+#include <GObject.h>
 
 class GOval : public GObject {
   Q_OBJECT

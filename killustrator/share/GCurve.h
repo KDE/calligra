@@ -26,20 +26,21 @@
 #define GCurve_h_
 
 #include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
+//#include <qcolor.h>
+//#include <qfont.h>
+//#include <qwmatrix.h>
+//#include <qpainter.h>
 #include <list>
 
-#include "Coord.h"
-#include "GObject.h"
+#include <Coord.h>
+#include <GObject.h>
 
 class GSegment {
 public:
   enum Kind { sk_Line, sk_Bezier };
 
-  GSegment (Kind skind);
+  GSegment(Kind skind);
+  GSegment(const QDomElement &element);
 
   const Coord& pointAt (int i) const;
   void setPoint (int i, const Coord& c);

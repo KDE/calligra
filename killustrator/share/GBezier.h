@@ -25,18 +25,18 @@
 #ifndef GBezier_h_
 #define GBezier_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qdict.h>
-#include <qlist.h>
+//#include <qobject.h>
+//#include <qcolor.h>
+//#include <qfont.h>
+//#include <qwmatrix.h>
+//#include <qpainter.h>
+//#include <qdatastream.h>
+//#include <qdict.h>
+//#include <qlist.h>
 
-#include "Coord.h"
-#include "GObject.h"
-#include "GPolyline.h"
+#include <Coord.h>
+//#include <GObject.h>
+#include <GPolyline.h>
 
 class GBezier : public GPolyline {
   Q_OBJECT

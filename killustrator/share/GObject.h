@@ -26,33 +26,20 @@
 #define GObject_h_
 
 #include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qdict.h>
-#include <qlist.h>
+#include <Gradient.h>
+#include <Coord.h>
+#include <GradientShape.h>
+#include <Painter.h>
 
-#include "Gradient.h"
-#include "Coord.h"
-#include "GradientShape.h"
-#include "Painter.h"
-
-#include "version.h"
-
-//#include "xmlutils/XmlWriter.h"
-//#include "xmlutils/XmlElement.h"
+#include <version.h>
 
 #include <map>
 #include <string>
 #include <vector>
-#include <list>
 #include <math.h>
 
-using std::vector;
-using std::list;
 using std::string;
+using std::vector;
 
 #ifndef M_PI // not ANSI C++, so it maybe...
 #define M_PI            3.14159265358979323846  /* pi */
@@ -467,6 +454,7 @@ inline float seg_length (const Coord& c1, const Coord& c2) {
 namespace KIllustrator {
 QDomElement createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document);
 QWMatrix toMatrix(const QDomElement &matrix);
+GObject *objectFactory(const QDomElement &element);
 };
 
 #endif

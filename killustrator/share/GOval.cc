@@ -24,15 +24,14 @@
 #include <stdlib.h>
 #include <iostream.h>
 #include <math.h>
-#include "GOval.h"
-#include "GOval.moc"
-#include "GPolyline.h"
-#include "GCurve.h"
+#include <GOval.h>
+#include <GPolyline.h>
+#include <GCurve.h>
 
 #include <qdom.h>
 #include <qstring.h>
 #include <klocale.h>
-#include <kapp.h>
+//#include <kapp.h>
 
 GOval::GOval (bool cFlag) : circleFlag (cFlag) {
   sAngle = eAngle = 270;
@@ -519,3 +518,5 @@ bool GOval::isValid () {
   return (fabs (sPoint.x () - ePoint.x ()) > 1 ||
 	  fabs (sPoint.y () - ePoint.y ()) > 1);
 }
+
+#include <GOval.moc>

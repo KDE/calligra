@@ -25,18 +25,18 @@
 #ifndef GPolyline_h_
 #define GPolyline_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qdict.h>
-#include <qlist.h>
+//#include <qobject.h>
+//#include <qcolor.h>
+//#include <qfont.h>
+//#include <qwmatrix.h>
+//#include <qpainter.h>
+//#include <qdatastream.h>
+//#include <qdict.h>
+//#include <qlist.h>
 
-#include "Coord.h"
-#include "GObject.h"
-#include "Arrow.h"
+#include <Coord.h>
+#include <GObject.h>
+#include <Arrow.h>
 
 #define NEAR_DISTANCE 4
 

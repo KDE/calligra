@@ -27,17 +27,20 @@
 #include <math.h>
 #include <time.h>
 #include <utility>
-#include "GObject.h"
-#include "GObject.moc"
+#include <GObject.h>
 
-#include "GPolyline.h"
-#include "GPolygon.h"
-#include "GOval.h"
-#include "GText.h"
-#include "GGroup.h"
-#include "GClipart.h"
-#include "GBezier.h"
-#include "Gradient.h"
+#include <GPolyline.h>
+#include <GPolygon.h>
+#include <GOval.h>
+#include <GText.h>
+#include <GGroup.h>
+#include <GClipart.h>
+#include <GBezier.h>
+#include <Gradient.h>
+#include <GPixmap.h>
+#include <GCurve.h>
+
+#include <kdebug.h>
 
 using namespace std;
 
@@ -101,9 +104,8 @@ GObject::GObject (const QDomElement &element) {
 
     outlineInfo.mask = 0;
     fillInfo.mask = 0;
-    tMatrix=KIllustrator::toMatrix(element.namedItem("matrix").toElement());
-    iMatrix = tMatrix.invert ();
-    tmpMatrix = tMatrix;
+    id = (const char*)element.attribute("id");
+    refid = (const char*)element.attribute("ref");
 
     outlineInfo.color = QColor(element.attribute("strokecolor"));
     outlineInfo.mask |= OutlineInfo::Color;
@@ -132,8 +134,9 @@ GObject::GObject (const QDomElement &element) {
     fillInfo.gradient.setStyle ((Gradient::Style) element.attribute("gradstyle").toInt());
     fillInfo.mask |= FillInfo::GradientInfo;
 
-    id = (const char*)element.attribute("id");
-    refid = (const char*)element.attribute("ref");
+    tMatrix=KIllustrator::toMatrix(element.namedItem("matrix").toElement());
+    iMatrix = tMatrix.invert ();
+    tmpMatrix = tMatrix;
 }
 
 GObject::GObject (const GObject& obj) : QObject()
@@ -423,6 +426,8 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
     QDomElement element=document.createElement("gobject");
     if (hasId ())
 	element.setAttribute ("id", (const char *) id);
+    if(hasRefId())
+	element.setAttribute("ref", getRefId());
     element.setAttribute ("strokecolor", outlineInfo.color.name());
     element.setAttribute ("strokestyle", (int) outlineInfo.style);
     element.setAttribute ("linewidth", outlineInfo.width);
@@ -502,3 +507,39 @@ QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
     double dy=matrix.attribute("dy").toDouble();
     return QWMatrix(m11, m12, m21, m22, dx, dy);
 }
+
+GObject *KIllustrator::objectFactory(const QDomElement &element) {
+
+    if (element.tagName () == "polyline")
+	return new GPolyline (element);
+    else if (element.tagName () == "ellipse")
+	return new GOval (element);
+    else if (element.tagName () == "bezier")
+	return new GBezier (element);
+    else if (element.tagName () == "rectangle")
+	return new GPolygon (element, GPolygon::PK_Rectangle);
+    else if (element.tagName () == "polygon")
+	return new GPolygon (element);
+    else if (element.tagName () == "clipart")
+	return new GClipart (element);
+    else if (element.tagName () == "pixmap")
+	return new GPixmap (element);
+    else if (element.tagName () == "curve")
+	return new GCurve (element);
+    else if (element.tagName() == "text")
+	return new GText(element);
+    else if (element.tagName() == "group")
+	return new GGroup (element);
+    else {
+	GObject *obj;
+	GObject *proto = GObject::lookupPrototype (element.tagName());
+	if (proto != 0L) {
+	    obj = proto->clone (element);
+	}
+	else
+	    kdDebug() << "invalid object type: " << element.tagName() << endl;
+	return obj;
+    }
+}
+
+#include <GObject.moc>
