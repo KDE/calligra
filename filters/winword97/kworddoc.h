@@ -11,7 +11,7 @@ class KWordDoc : public QObject {
 public:
     KWordDoc();
     ~KWordDoc();
-    QString &kwdFile();
+    QString kwdFile();
 
 signals:
     void signalFilterError();

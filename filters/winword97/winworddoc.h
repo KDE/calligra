@@ -15,7 +15,7 @@ class WinWordDoc : public QObject {
     Q_OBJECT
 
 public:
-    WinWordDoc(myFile in);
+    WinWordDoc(const QString &mainStream, const QString &tableStream);
     ~WinWordDoc();
 
 signals:
@@ -25,11 +25,8 @@ public slots:
     void slotFilterError();
     
 private:
-    bool getMainStream(KLaola *laola);
-
-    myFile doc;     // raw data
     bool success;
     FIB *fib;
-    unsigned char *mainStream;
+    unsigned char *main, *table;
 };
 #endif // WINWORDDOC_H

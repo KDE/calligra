@@ -8,7 +8,7 @@ KWordDoc::KWordDoc() : QObject() {
 KWordDoc::~KWordDoc() {
 }
 
-QString &KWordDoc::kwdFile() {
+QString KWordDoc::kwdFile() {
     return kwd;
 }
 

@@ -1,14 +1,16 @@
 #include "olefilter.h"
 #include "olefilter.moc"
 
-OLEFilter::OLEFilter(myFile in) : QObject() {
-    wordFilter=new WordFilter(in);
+OLEFilter::OLEFilter(myFile) : QObject() {
 }
 
 OLEFilter::~OLEFilter() {
-    delete wordFilter;
 }
 
-bool OLEFilter::filterIt() {
+bool OLEFilter::filter() {
+    return false;
+}
+
+bool OLEFilter::store() {
     return false;
 }

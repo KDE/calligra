@@ -13,9 +13,11 @@ public:
     OLEFilter(myFile in);
     ~OLEFilter();
 
-    bool filterIt();
+    bool filter();            // manages the filtering process
+    bool store();             // will soon use KTar to store the
+                              // decoded file(s)
 
 private:
-    WordFilter *wordFilter;
+    //WordFilter *wordFilter;
 };
 #endif // OLEFILTER_H
