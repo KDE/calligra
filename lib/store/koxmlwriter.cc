@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <float.h>
 
-static const unsigned int s_indentBufferLength = 100;
+static const size_t s_indentBufferLength = 100;
 
 KoXmlWriter::KoXmlWriter( QIODevice* dev )
     : m_dev( dev )
