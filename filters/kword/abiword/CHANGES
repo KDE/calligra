@@ -1,11 +1,8 @@
-i: import 
-e: export
-i/e: import/export
+=== Post-1.2 ===
+- import/export: support for <metadata>
+- export: file format like AbiWord 1.1.2
+- export: fix bug when font name has an &
+- export: table (just the structure, no colspan, no rowspan)
 
-Post-1.2
-========
-
-- i/e: support for <metadata>
-- e: file format like AbiWord 1.1.2
-- e: fix bug when font name has an &
-- e: table (just the structure, no colspan, no rowspan)
+=== KWord 1.4 Alpha ===
+- export: fix linespacing
