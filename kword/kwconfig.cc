@@ -18,10 +18,6 @@
 */
 
 #include <qgroupbox.h>
-#include "kwconfig.h"
-#include "kwview.h"
-#include "kwunit.h"
-#include "kwdoc.h"
 #include <kiconloader.h>
 #include <qlayout.h>
 #include <kapp.h>
@@ -30,6 +26,11 @@
 #include <qvbox.h>
 #include <kconfig.h>
 #include <qlabel.h>
+
+#include "kwconfig.h"
+#include "kwview.h"
+#include "kwunit.h"
+#include "kwdoc.h"
 
 KWConfig::KWConfig( KWView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
@@ -91,7 +92,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    m_pView->getGUI()->getDocument()->getUnit();
+    KWUnits unit=KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() );
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );
@@ -102,16 +103,16 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     int m_iGridY=10;
     int m_iIndent=10;
     KWUnit tmpIndent;
+    tmpIndent.setMM(10.0);
     if( config->hasGroup("Interface" ))
         {
             config->setGroup( "Interface" );
             m_iGridX=config->readNumEntry("GridX",10);
             m_iGridY=config->readNumEntry("GridY",10);
-            double val=config->readDoubleNumEntry("Indent",10.0);
+            double val=config->readDoubleNumEntry("Indent",POINT_TO_MM(10.0));
             tmpIndent.setPT(val);
-            m_iIndent=(int)tmpIndent.value( KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ) );
         }
-
+    m_iIndent=(int)tmpIndent.value( unit );
     QLabel *text=new QLabel(tmpQGroupBox);
     text->setText(i18n("X grid space"));
     grid1->addWidget(text,0,0);
@@ -128,7 +129,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     grid1->addWidget(gridY,3,0);
 
     QString unitText;
-    switch ( KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ) )
+    switch ( unit )
       {
       case U_MM:
 	unitText=i18n("in Millimeters (mm)");
