@@ -7146,8 +7146,11 @@ void KPresenterView::backgroundPicture()
     case BT_PICTURE:
         mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
         oldFile=m_canvas->activePage()->background()->picture().getKey().filename();
-
-        fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
+        url.setPath(oldFile);
+        if (QDir(url.directory()).exists())
+            fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
+        else
+            fd=new KFileDialog( url.fileName(), QString::null, 0, 0, TRUE );
         fd->setMimeFilter( mimetypes );
         fd->setCaption(i18n("Save Image"));
         if ( fd->exec() == QDialog::Accepted )
@@ -7177,7 +7180,12 @@ void KPresenterView::backgroundPicture()
         oldFile=m_canvas->activePage()->background()->clipart().getKey().filename();
 
         mimetypes = KoPictureFilePreview::clipartMimeTypes();
-        fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
+        url.setPath(oldFile);
+        if (QDir(url.directory()).exists())
+            fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
+        else
+            fd=new KFileDialog( url.fileName(), QString::null, 0, 0, TRUE );
+
         fd->setMimeFilter( mimetypes );
         fd->setCaption(i18n("Save Clipart"));
         if ( fd->exec() == QDialog::Accepted )
