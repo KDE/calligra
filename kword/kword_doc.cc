@@ -697,7 +697,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     lay->setFollowingParagLayout( "Standard" );
     lay->setCounterType( KWParagLayout::CT_NUM );
     lay->setCounterDepth( 0 );
-    lay->setStartCounter( "1" );
+    lay->setStartCounter( 1 );
     lay->setCounterRightText( "." );
     lay->setNumberingType( KWParagLayout::NT_CHAPTER );
     lay->setFormat( f );
@@ -708,7 +708,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     lay->setFollowingParagLayout( "Standard" );
     lay->setCounterType( KWParagLayout::CT_NUM );
     lay->setCounterDepth( 1 );
-    lay->setStartCounter( "1" );
+    lay->setStartCounter( 1 );
     lay->setCounterRightText( "." );
     lay->setNumberingType( KWParagLayout::NT_CHAPTER );
     lay->setFormat( f );
@@ -719,7 +719,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     lay->setFollowingParagLayout( "Standard" );
     lay->setCounterType( KWParagLayout::CT_NUM );
     lay->setCounterDepth( 2 );
-    lay->setStartCounter( "1" );
+    lay->setStartCounter( 1 );
     lay->setCounterRightText( "." );
     lay->setNumberingType( KWParagLayout::NT_CHAPTER );
     lay->setFormat( f );
@@ -729,7 +729,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     lay->setFollowingParagLayout( "Enumerated List" );
     lay->setCounterType( KWParagLayout::CT_NUM );
     lay->setCounterDepth( 0 );
-    lay->setStartCounter( "1" );
+    lay->setStartCounter( 1 );
     lay->setCounterRightText( "." );
     lay->setNumberingType( KWParagLayout::NT_LIST );
 
@@ -738,7 +738,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     lay->setFollowingParagLayout( "Alphabetical List" );
     lay->setCounterType( KWParagLayout::CT_ALPHAB_L );
     lay->setCounterDepth( 0 );
-    lay->setStartCounter( "a" );
+    lay->setStartCounter( 1 );
     lay->setCounterRightText( " )" );
     lay->setNumberingType( KWParagLayout::NT_LIST );
 
@@ -747,7 +747,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     lay->setFollowingParagLayout( "Bullet List" );
     lay->setCounterType( KWParagLayout::CT_BULLET );
     lay->setCounterDepth( 0 );
-    lay->setStartCounter( "1" );
+    lay->setStartCounter( 1 );
     lay->setCounterRightText( "" );
     lay->setNumberingType( KWParagLayout::NT_LIST );
 

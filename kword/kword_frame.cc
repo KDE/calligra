@@ -1143,22 +1143,7 @@ void KWTextFrameSet::updateCounters()
 		counterData[ p->getParagLayout()->getCounterDepth() ]++;
 		for ( i = 0; i < 16; i++ ) {
 		    if ( counterData[ i ] < 0 ) {
-			// Reggie: I (Jost) changed this. I think startCounter should be the same
-			// value, not depending on the numbering type. That caused problems.
-			counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
-			/* switch ( p->getParagLayout()->getCounterType() ) {
-			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L:
-			case KWParagLayout::CT_ROM_NUM_U:
-			    counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
-			    break;
-			case KWParagLayout::CT_ALPHAB_L:
-			    counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() ); // TEST p->getParagLayout()->getStartCounter()[ 0 ].unicode();
-			    break;
-			case KWParagLayout::CT_ALPHAB_U:
-			    counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() ); // TEST p->getParagLayout()->getStartCounter()[ 0 ].unicode();
-			    break;
-			default: break;
-			}*/
+			counterData[ i ] = p->getParagLayout()->getStartCounter();
 		    }
 		    p->getCounterData()[ i ] = counterData[ i ];
 		}
@@ -1183,19 +1168,7 @@ void KWTextFrameSet::updateCounters()
 		}
 		for ( i = 0; i < 16; i++ ) {
 		    if ( listData[ i ] < 0 ) {
-			switch ( p->getParagLayout()->getCounterType() ) {
-			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L:
-			case KWParagLayout::CT_ROM_NUM_U:
-			    listData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
-			    break;
-			case KWParagLayout::CT_ALPHAB_L:
-			    listData[ i ] = p->getParagLayout()->getStartCounter()[ 0 ].unicode();
-			    break;
-			case KWParagLayout::CT_ALPHAB_U:
-			    listData[ i ] = p->getParagLayout()->getStartCounter()[ 0 ].unicode();
-			    break;
-			default: break;
-			}
+		      listData[ i ] = p->getParagLayout()->getStartCounter();
 		    }
 		    p->getCounterData()[ i ] = listData[ i ];
 		}

@@ -48,7 +48,7 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
     counter.counterRightText = "";
     followingParagLayout = "Standard";
     name = _name;
-    counter.startCounter = "0";
+    counter.startCounter = 1; // better than 0;
     counter.numberingType = NT_LIST;
     counter.bulletFont = "symbol";
     counter.customCounterDef = "";
@@ -147,7 +147,7 @@ void KWParagLayout::save( ostream &out )
     out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
     out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
 	<< "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
-	<< correctQString( counter.startCounter ).latin1() << "\" numberingtype=\""
+	<< QString::number(counter.startCounter).latin1() << "\" numberingtype=\""
 	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\""
 	<< correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
 	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\""
@@ -334,7 +334,13 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		else if ( ( *it ).m_strName == "righttext" )
 		    counter.counterRightText = correctQString( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "start" )
-		    counter.startCounter = correctQString( ( *it ).m_strValue.c_str() );
+                {
+                    QString s = QString::fromUtf8(( *it ).m_strValue.c_str());
+                    if ( s[0].isDigit() )
+		      counter.startCounter = atoi( s.latin1() );
+                    else // support for old files (DF)
+		      counter.startCounter = s.lower()[0].latin1() - 'a' + 1;
+                }
 		else if ( ( *it ).m_strName == "numberingtype" )
 		    counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "bulletfont" )

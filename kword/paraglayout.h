@@ -77,7 +77,7 @@ public:
 	QString counterLeftText;
 	QString counterRightText;
 	CounterType counterType;
-	QString startCounter;
+	int startCounter;
 	NumType numberingType;
 	QString bulletFont;
 	QString customCounterDef;
@@ -111,8 +111,8 @@ public:
     void setTopBorder( Border _brd ) { top = _brd; }
     void setBottomBorder( Border _brd ) { bottom = _brd; }
 
-    void setStartCounter( const QString& _s ) { counter.startCounter = _s; }
-    QString getStartCounter() const { return counter.startCounter; }
+    void setStartCounter( int _c ) { counter.startCounter = _c; }
+    int getStartCounter() const { return counter.startCounter; }
 
     void setNumberingType( NumType _t ) { counter.numberingType = _t; }
     NumType getNumberingType() const { return counter.numberingType; }

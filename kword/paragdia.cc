@@ -940,11 +940,13 @@ void KWParagDia::setupTab4()
     ogrid->addWidget( sDepth, 1, 1 );
     connect( sDepth, SIGNAL( valueChanged( int ) ), this, SLOT( depthChanged( int ) ) );
 
-    lStart = new QLabel( i18n( "Start at:" ), gOther );
+    lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gOther );
     lStart->setAlignment( AlignRight | AlignVCenter );
     lStart->resize( lStart->sizeHint() );
     ogrid->addWidget( lStart, 2, 0 );
 
+    // TODO: make this a spinbox or a combo, with values depending on the type
+    // of numbering.
     eStart = new QLineEdit( gOther );
     eStart->resize( eStart->sizeHint() );
     ogrid->addWidget( eStart, 2, 1 );
@@ -1383,7 +1385,7 @@ void KWParagDia::rightTextChanged( const QString & _c )
 /*================================================================*/
 void KWParagDia::startChanged( const QString & _c )
 {
-    counter.startCounter = qstrdup( _c );
+    counter.startCounter = _c.toInt(); // HACK
 }
 
 /*================================================================*/
@@ -1433,7 +1435,9 @@ void KWParagDia::setCounter( KWParagLayout::Counter _counter )
     ecRight->setText( counter.counterRightText );
 
     sDepth->setValue( counter.counterDepth );
-    eStart->setText( counter.startCounter );
+    // What we really need is a combobox filled with values depending on
+    // the type of numbering - or a spinbox. (DF)
+    eStart->setText( QString::number(counter.startCounter) ); // HACK
 }
 
 /*================================================================*/

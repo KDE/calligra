@@ -118,7 +118,7 @@ KWParag::~KWParag()
 /*================================================================*/
 void KWParag::makeCounterText()
 {
-    QString ct = "";
+    QString ct;
 
     if ( paragLayout->getCounterType() == KWParagLayout::CT_CUSTOM )
 	ct = counterTextByCustomDef( paragLayout->getCustomCounterDef() );
@@ -129,8 +129,7 @@ void KWParag::makeCounterText()
 	 paragLayout->getCounterType() != KWParagLayout::CT_BULLET )
 	ct = paragLayout->getCounterLeftText() + ct + paragLayout->getCounterRightText();
 
-    //buffer += " ";
-    counterText = ct.copy();
+    counterText = ct;
 
     makeCounterWidth();
 }
@@ -138,8 +137,8 @@ void KWParag::makeCounterText()
 /*================================================================*/
 QString KWParag::counterTextByCustomDef( const QString& d_ )
 {
-    QString buffer = "";
-    QString partstr = "";
+    QString buffer;
+    QString partstr;
     QString d = d_;
     int pos;
     while( d.length() != 0 ) {
@@ -169,7 +168,7 @@ QString KWParag::counterTextByCustomDef( const QString& d_ )
 /*================================================================*/
 QString KWParag::counterTextByType( KWParagLayout::CounterType ct_ )
 {
-    QString buffer = "";
+    QString buffer;
 
     switch ( ct_ ) {
     case KWParagLayout::CT_BULLET: {
@@ -181,51 +180,36 @@ QString KWParag::counterTextByType( KWParagLayout::CounterType ct_ )
     case KWParagLayout::CT_NUM: {
 	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ ) {
-	    tmp.sprintf( "%d", counterData[ i ] );
+	    tmp.setNum( counterData[ i ] );
 	    buffer += tmp;
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
     } break;
     case KWParagLayout::CT_ROM_NUM_L: {
-	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ ) {
-	    tmp.sprintf( "%s", makeRomanNumber( counterData[ i ] ).lower().data() );
-	    buffer += tmp;
+	    buffer += makeRomanNumber( counterData[ i ] ).lower();
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
     } break;
     case KWParagLayout::CT_ROM_NUM_U: {
-	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ ) {
-	    tmp.sprintf( "%s", makeRomanNumber( counterData[ i ] ).upper().data() );
-	    buffer += tmp;
+	    buffer += makeRomanNumber( counterData[ i ] ).upper();
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
     } break;
     case KWParagLayout::CT_ALPHAB_L: {
-	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ ) {
-	    // counterData now holds the same values, not depending on the numbering
-	    // style. Is the following change okay or will it cause problems on some unicode tables?
-	    // tmp.sprintf( "%c", counterData[ i ] + 16 );
-	    tmp.sprintf( "%c", QChar( 'a' ).unicode() + counterData[i] - 1 );
-	    tmp = tmp.lower();
-	    buffer += tmp;
+	    buffer += 'a' + counterData[i] - 1;
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
     } break;
     case KWParagLayout::CT_ALPHAB_U: {
-	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ ) {
-	    // see above.
-	    // tmp.sprintf( "%c", counterData[ i ] + 16 );
-	    tmp.sprintf( "%c", QChar( 'A' ).unicode() + counterData[i] - 1 );
-	    tmp = tmp.upper();
-	    buffer += tmp;
+	    buffer += 'A' + counterData[i] - 1;
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
@@ -239,13 +223,13 @@ QString KWParag::counterTextByType( KWParagLayout::CounterType ct_ )
 void KWParag::makeCounterWidth()
 {
     QString placeholder = CounterPlaceHolder[ static_cast<int>( paragLayout->getCounterType() ) ];
-    QString str = paragLayout->getCounterLeftText().copy();
-    str += paragLayout->getCounterRightText().copy();
+    QString str = paragLayout->getCounterLeftText();
+    str += paragLayout->getCounterRightText();
 
     for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ )
 	str += placeholder;
 
-    counterWidth = str.copy();
+    counterWidth = str;
 }
 
 /*================================================================*/
