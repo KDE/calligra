@@ -23,4 +23,3 @@ METASOURCES = AUTO
 services_DATA=kwserialletter_qtsqldb_power.desktop
 servicesdir=$(kde_servicesdir)
 
-SUBDIRS = .
