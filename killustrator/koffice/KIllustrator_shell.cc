@@ -165,7 +165,7 @@ void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
     m_pFileMenu->setItemEnabled (m_idMenuFile_Save, true);
     m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, true);
     m_pFileMenu->setItemEnabled (m_idMenuFile_Close, true);
-    m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Print, true);
   }
 
   opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
@@ -182,6 +182,7 @@ bool KIllustratorShell::newDocument () {
 
   m_pDoc = new KIllustratorDocument ();
   if (! m_pDoc->init ()) {
+    releaseDocument();
     cerr << "ERROR: Could not initialize document" << endl;
     return false;
   }
@@ -201,7 +202,7 @@ bool KIllustratorShell::newDocument () {
     m_pFileMenu->setItemEnabled (m_idMenuFile_Save, true);
     m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, true);
     m_pFileMenu->setItemEnabled (m_idMenuFile_Close, true);
-    m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Print, true);
   }
 
   opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
@@ -214,12 +215,10 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
   if (fmt == 0L || *fmt == '\0')
     fmt = "application/x-killustrator";
 
-  /*
   if (m_pDoc && m_pDoc->isEmpty ()) {
     cout << "release document" << endl;
     releaseDocument ();
   }
-  */
   if (m_pDoc && ! m_pDoc->isEmpty ()) {
     KIllustratorShell *shell = new KIllustratorShell ();
     shell->show ();
@@ -245,7 +244,7 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
     m_pFileMenu->setItemEnabled (m_idMenuFile_Save, true);
     m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, true);
     m_pFileMenu->setItemEnabled (m_idMenuFile_Close, true);
-    m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Print, true);
   }
 
   opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
@@ -350,15 +349,11 @@ void KIllustratorShell::slotFileSaveAs () {
 }
 
 void KIllustratorShell::slotFileClose () {
-  if (documentCount () <= 1) {
-    slotFileQuit ();
-    return;
-  }
 
   if (isModified () && ! requestClose ())
     return;
 
-  delete this;
+  releaseDocument();
 }
 
 void KIllustratorShell::slotFileImport () {
@@ -471,6 +466,16 @@ void KIllustratorShell::releaseDocument () {
     CORBA::release (m_pDoc);
   m_pView = 0L;
   m_pDoc = 0L;
+  if( m_pFileMenu )
+  {
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
+  }
+ 
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
 }
 
 KOffice::Document_ptr KIllustratorShell::document()
