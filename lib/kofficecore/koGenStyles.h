@@ -109,17 +109,27 @@ private:
 class KoGenStyle
 {
 public:
-    /// Create an automatic style. Its name will be set by KoGenStyles::lookup()
-    /// @param this is a hook for the application to categorize styles
-    /// E.g. one could use an enum here, with values for automatic styles,
-    /// user styles, page layout, master-page, etc. Ignored when writing out the style.
-    ///
-    /// @param parentName If set, name of the parent style from which this one inherits.
-    KoGenStyle( int type = 0, const QString& parentName = QString::null )
-        : m_type( type ), m_parentName( parentName ) {}
+    /**
+     * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
+     * but first you must define its properties and attributes.
+     *
+     * @param type this is a hook for the application to categorize styles
+     * E.g. one could use an enum here, with values for automatic styles,
+     * user styles, page layout, master-page, etc. Ignored when writing out the style.
+     *
+     * @param familyName The value for style:family, e.g. text, paragraph, graphic etc.
+     * The family is for style:style elements only; number styles and list styles don't have one.
+     *
+     * @param parentName If set, name of the parent style from which this one inherits.
+     */
+    KoGenStyle( int type = 0, const char* familyName = 0, const QString& parentName = QString::null )
+        : m_type( type ), m_familyName( familyName ), m_parentName( parentName ) {}
 
     /// Return the type of this style, as set in the constructor
     int type() const { return m_type; }
+
+    /// Return the family name
+    const char* familyName() const { return m_familyName.data(); }
 
     /// Return the name of style's parent, if set
     QString parentName() const { return m_parentName; }
@@ -129,30 +139,41 @@ public:
         m_properties.insert( propName, propValue );
     }
 
-    /// Add a property which represents a distance, measured in pt
-    /// The number is written out with the highest possible precision
-    /// (unlike QString::number and setNum, which default to 6 digits),
-    /// and the unit name ("pt") is appended to it.
+    /**
+     *  Add a property which represents a distance, measured in pt
+     *  The number is written out with the highest possible precision
+     *  (unlike QString::number and setNum, which default to 6 digits),
+     *  and the unit name ("pt") is appended to it.
+     */
     void addPropertyPt( const QString& propName, double propValue );
 
-    /// Add an attribute to the style
-    /// The difference between property and attributes is a bit oasis-format-specific:
-    /// attributes are for the style element itself, and properties are in the style:properties child element
+    /**
+     *  Add an attribute to the style
+     *  The difference between property and attributes is a bit oasis-format-specific:
+     *  attributes are for the style element itself, and properties are in the style:properties child element
+     */
     void addAttribute( const QString& attrName, const QString& attrValue ) {
         m_attributes.insert( attrName, attrValue );
     }
 
-    /// Write the definition of this style to @p writer, using the OASIS format.
-    /// @param elementName the name of the XML element, e.g. "style:style"
-    /// @param name must come from the collection
-    /// @param closeElement set it to false to be able to add more child elements to the style element
-    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name, bool closeElement = true ) const;
+    /**
+     *  Write the definition of this style to @p writer, using the OASIS format.
+     *  @param elementName the name of the XML element, e.g. "style:style"
+     *  @param name must come from the collection
+     *  @param propertiesElementName the name of the XML element with the style properties,
+     *  e.g. "style:text-properties"
+     *  @param closeElement set it to false to be able to add more child elements to the style element
+     */
+    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name,
+                     const char* propertiesElementName, bool closeElement = true ) const;
 
-    /// QMap requires a complete sorting order.
-    /// Another solution would have been a qdict and a key() here, a la KoTextFormat,
-    /// but the key was difficult to generate.
-    /// Solutions with only a hash value (not representative of the whole data)
-    /// require us to write a hashtable by hand....
+    /**
+     *  QMap requires a complete sorting order.
+     *  Another solution would have been a qdict and a key() here, a la KoTextFormat,
+     *  but the key was difficult to generate.
+     *  Solutions with only a hash value (not representative of the whole data)
+     *  require us to write a hashtable by hand....
+     */
     bool operator<( const KoGenStyle &other ) const {
         if ( m_type != other.m_type ) return m_type < other.m_type;
         if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
@@ -200,9 +221,11 @@ public:
         return true;
     }
 
-    // Note that the copy constructor and assignment operator are allowed.
 private:
+    // Note that the copy constructor and assignment operator are allowed.
+    // Better not use pointers below!
     int m_type;
+    QCString m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_properties;

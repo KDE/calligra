@@ -27,8 +27,7 @@ int main( int, char** ) {
 
     enum { STYLE_USER, STYLE_AUTO, STYLE_OTHER };
 
-    KoGenStyle first( STYLE_AUTO );
-    first.addAttribute( "style:family", "paragraph" );
+    KoGenStyle first( STYLE_AUTO, "paragraph" );
     first.addAttribute( "style:master-page-name", "Standard" );
     first.addProperty( "style:page-number", "0" );
 
@@ -37,8 +36,7 @@ int main( int, char** ) {
     assert( firstName == "A1" ); // it's fine if it's something else, but the koxmlwriter tests require a known name
     assert( first.type() == STYLE_AUTO );
 
-    KoGenStyle second( STYLE_AUTO );
-    second.addAttribute( "style:family", "paragraph" );
+    KoGenStyle second( STYLE_AUTO, "paragraph" );
     second.addAttribute( "style:master-page-name", "Standard" );
     second.addProperty( "style:page-number", "0" );
 
@@ -49,12 +47,11 @@ int main( int, char** ) {
     // Interesting
     //assert( first == second ); // check that operator== works :)
 
-    KoGenStyle third( STYLE_AUTO, secondName ); // inherited style
+    KoGenStyle third( STYLE_AUTO, "paragraph", secondName ); // inherited style
     // We *have* to set the family even in derived styles.
     // But that means we can't implement "diff with parent" in koGenStyles...
     // Hmm, well we'll see. Either it will have an exception, or this needs
     // to be done at the level above.
-    third.addAttribute( "style:family", "paragraph" );
     third.addProperty( "style:margin-left", "1.249cm" );
     assert( third.parentName() == secondName );
 
@@ -74,12 +71,12 @@ int main( int, char** ) {
     assert( coll.styles( STYLE_USER ).count() == 1 );
 
     TEST_BEGIN( 0, 0 );
-    first.writeStyle( &writer, "style:style", firstName );
-    TEST_END( "XML for first/second style", "<!DOCTYPE r>\n<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:properties style:page-number=\"0\"/>\n </style:style>\n</r>\n" );
+    first.writeStyle( &writer, "style:style", firstName, "style:paragraph-properties" );
+    TEST_END( "XML for first/second style", "<!DOCTYPE r>\n<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n </style:style>\n</r>\n" );
 
     TEST_BEGIN( 0, 0 );
-    third.writeStyle( &writer, "style:style", thirdName );
-    TEST_END( "XML for third style", "<!DOCTYPE r>\n<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:properties style:margin-left=\"1.249cm\"/>\n </style:style>\n</r>\n" );
+    third.writeStyle( &writer, "style:style", thirdName, "style:paragraph-properties" );
+    TEST_END( "XML for third style", "<!DOCTYPE r>\n<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n </style:style>\n</r>\n" );
 
 
     fprintf( stderr, "OK\n" );

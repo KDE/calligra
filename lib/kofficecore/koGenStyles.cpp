@@ -75,17 +75,20 @@ QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type ) const
 
 ////
 
-void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name, bool closeElement ) const
+void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement ) const
 {
     writer->startElement( elementName );
     writer->addAttribute( "style:name", name );
     if ( !m_parentName.isEmpty() )
         writer->addAttribute( "style:parent-style-name", m_parentName );
+    // ## maybe get the family from the parent style?
+    if ( !m_familyName.isEmpty() )
+        writer->addAttribute( "style:family", m_familyName );
     QMap<QString, QString>::const_iterator it = m_attributes.begin();
     for ( ; it != m_attributes.end(); ++it )
         writer->addAttribute( it.key().utf8(), it.data().utf8() );
     if ( !m_properties.isEmpty() ) {
-        writer->startElement( "style:properties" );
+        writer->startElement( propertiesElementName );
         it = m_properties.begin();
         for ( ; it != m_properties.end(); ++it )
             writer->addAttribute( it.key().utf8(), it.data().utf8() );
