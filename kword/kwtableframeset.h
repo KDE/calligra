@@ -227,6 +227,8 @@ public:
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     /** Store command for deleting an anchored object */
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
+    KWAnchor * anchor() const { return m_anchor; }
+    virtual KWAnchor * createAnchor( KWTextDocument * textdoc, int frameNum );
 
     virtual bool canRemovePage( int num );
 

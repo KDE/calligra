@@ -401,6 +401,9 @@ public:
     /** Return the frameset in which our anchor is - assuming isFloating() */
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
 
+    /** Create an anchor for the floating frame identified by frameNum (and usually store it) */
+    virtual KWAnchor * createAnchor( KWTextDocument * textdoc, int frameNum );
+
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );

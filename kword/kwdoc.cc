@@ -2509,9 +2509,18 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
         return;
-    KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), this, table );
-    addCommand( cmd );
-    cmd->execute();
+    kdDebug() << "KWDocument::deleteTable floating:" << table->isFloating()
+              << " anchor:" << table->anchor() << endl;
+    if ( table->anchor() )
+    {
+        table->anchorFrameset()->deleteAnchoredFrame( table->anchor() );
+    }
+    else
+    {
+        KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), this, table );
+        addCommand( cmd );
+        cmd->execute();
+    }
 }
 
 void KWDocument::deleteFrame( KWFrame * frame )
@@ -2543,9 +2552,8 @@ void KWDocument::deleteFrame( KWFrame * frame )
     }
     if ( fs->isFloating() )
     {
+        frame->setSelected( false );
         fs->anchorFrameset()->deleteAnchoredFrame( frame->anchor() );
-        frameChanged( 0L );
-        repaintAllViews();
     }
     else
     {

@@ -2014,6 +2014,10 @@ void KWView::tableUngroupTable()
 
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
+
+    if ( table->isFloating() )
+        table->setFixed();
+
     KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
     doc->addCommand( cmd );
     cmd->execute();

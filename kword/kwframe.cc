@@ -369,8 +369,17 @@ void KWFrameSet::setFixed()
     m_anchorTextFs = 0L;
 }
 
+KWAnchor * KWFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
+{
+    KWFrame * frame = getFrame( frameNum );
+    KWAnchor * anchor = new KWAnchor( textdoc, this, frameNum );
+    frame->setAnchor( anchor );
+    return anchor;
+}
+
 void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
+    kdDebug() << "KWFrameSet::createAnchors" << endl;
     ASSERT( m_anchorTextFs );
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
@@ -378,12 +387,10 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
         if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = new KWAnchor( m_anchorTextFs->textDocument(), this,
-                                              getFrameFromPtr( frameIt.current() ) );
+            KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), getFrameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
-                parag->insert( index, QChar('@') /*whatever*/ );
+                parag->insert( index, QChar(' ') );
             parag->setCustomItem( index, anchor, 0 );
-            frameIt.current()->setAnchor( anchor );
         }
     }
     parag->setChanged( true );

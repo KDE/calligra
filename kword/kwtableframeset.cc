@@ -28,6 +28,7 @@ DESCRIPTION
 #include "kwanchor.h"
 #include "kwtableframeset.h"
 #include "kwcanvas.h"
+#include "kwcommand.h"
 #include "kwviewmode.h"
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
@@ -127,26 +128,30 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
 {
-    // TODO, to fix undo after creating an anchored table
-    // For that, we need a KWCreateTableCommand, I think
-    return 0L;
+    return new KWCreateTableCommand( i18n("Create table"), kWordDocument(), this );
 }
 
 KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
 {
-    // Do we really want to delete the whole table with a single 'Del' keystroke ? (honest question)
-    // If yes, implement this method
-    // If not, we need an "allowed to delete" bool in KWAnchor and test for it in KWTextFrameSet.
-    return 0L;
+    return new KWDeleteTableCommand( i18n("Delete table"), kWordDocument(), this );
+}
+
+KWAnchor * KWTableFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
+{
+    // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
+    ASSERT( !m_anchor );
+    m_anchor = new KWAnchor( textdoc, this, frameNum );
+    return m_anchor;
 }
 
 void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
+    kdDebug() << "KWTableFrameSet::createAnchors" << endl;
     // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
     if ( !m_anchor )
     {
         // Anchor this frame, after the previous one
-        m_anchor = new KWAnchor( m_anchorTextFs->textDocument(), this, 0 /*....*/ );
+        createAnchor( m_anchorTextFs->textDocument(), 0 );
         if ( !placeHolderExists )
             parag->insert( index, QChar(' ') );
         parag->setCustomItem( index, m_anchor, 0 );

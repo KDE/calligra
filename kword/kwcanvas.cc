@@ -531,8 +531,9 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     {
         m_insRect = KoRect( 0, 0, edit->frameSet()->getFrame(0)->width()-10, rows * 30 ); // mostly unused anyway
         KWTableFrameSet * table = createTable();
+        doc->addFrameSet( table, false );
         edit->insertFloatingFrameSet( table, i18n("Insert Floating Table") );
-        doc->addFrameSet( table ); // last since it triggers a redraw
+        table->finalize();
         doc->updateAllFrames();
     }
     else

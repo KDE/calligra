@@ -2500,6 +2500,7 @@ void KWTextFrameSet::findPosition( const QPoint &nPoint, QTextParag * & parag, i
 
 void KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
 {
+    kdDebug() << "KWTextFrameSet::deleteAnchoredFrame anchor->index=" << anchor->index() << endl;
     ASSERT( anchor );
     QTextCursor c( textdoc );
     c.setParag( anchor->paragraph() );
@@ -3448,7 +3449,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
     int index = 0;
     bool ownline = false;
     { // the loop will start here :)
-        KWAnchor * anchor = new KWAnchor( textFrameSet()->textDocument(), fs, frameNumber );
+        KWAnchor * anchor = fs->createAnchor( textFrameSet()->textDocument(), frameNumber );
         if ( frameNumber == 0 && anchor->ownLine() && cursor->index() > 0 ) // enforce start of line - currently unused
         {
             kdDebug() << "ownline -> prepending \\n" << endl;
@@ -3458,7 +3459,6 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
         }
         placeHolders += QChar(' ');
         customItemsMap.insert( index, anchor );
-        fs->getFrame(frameNumber)->setAnchor( anchor );
     }
     fs->setAnchored( textFrameSet() );
     textFrameSet()->insert( cursor, m_currentFormat, placeHolders,
