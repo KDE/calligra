@@ -283,7 +283,7 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	QHBoxLayout* buttonLayout;
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-	layout->addLayout( buttonLayout = new QHBoxLayout( layout ), 2, 0 );
+	layout->addLayout( buttonLayout = new QHBoxLayout( this ), 2, 0 );
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 2, 1, 1 );
 	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) ); 
 	buttonLayout->add( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
