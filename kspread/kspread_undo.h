@@ -335,6 +335,22 @@ protected:
     QCString m_data;
 };
 
+class KSpreadUndoConditional : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect );
+    virtual ~KSpreadUndoConditional();
+
+    virtual void undo();
+    virtual void redo();
+    void createListCell( QCString &list, KSpreadTable* table );
+protected:
+    QRect m_selection;
+    QCString m_data;
+    QCString m_dataRedo;
+    QString m_tableName;
+};
+
 class KSpreadUndo
 {
 public:

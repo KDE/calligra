@@ -1177,3 +1177,64 @@ void KSpreadUndoRemoveCellCol::redo()
     doc()->undoBuffer()->unlock();
 }
 
+KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
+    : KSpreadUndoAction( _doc )
+{
+    m_tableName = table->tableName();
+    m_selection = _selection;
+    createListCell( m_data, table );
+
+}
+
+KSpreadUndoConditional::~KSpreadUndoConditional()
+{
+}
+
+void KSpreadUndoConditional::createListCell( QCString &list, KSpreadTable* table )
+{
+    QDomDocument doc = table->saveCellRect( m_selection );
+    // Save to buffer
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
+
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
+    list = buffer.utf8();
+    int len = list.length();
+    char tmp = list[ len - 1 ];
+    list.resize( len );
+    *( list.data() + len - 1 ) = tmp;
+}
+
+void KSpreadUndoConditional::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    createListCell( m_dataRedo, table );
+
+    doc()->undoBuffer()->lock();
+    table->paste( m_data, m_selection.topLeft() );
+    table->recalc( true );
+
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoConditional::redo()
+{
+    doc()->undoBuffer()->lock();
+
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->paste( m_dataRedo, m_selection.topLeft() );
+    table->recalc( true );
+
+    doc()->undoBuffer()->unlock();
+}

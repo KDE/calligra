@@ -628,16 +628,8 @@ void KSpreadView::formulaProduct()
 
 void KSpreadView::tableFormat()
 {
-    QRect r( activeTable()-> selectionRect() );
-    if( r.right() ==0x7FFF ||r.bottom()==0x7FFF)
-    {
-        KMessageBox::error( this, i18n("Area too large!"));
-    }
-    else
-    {
-        KSpreadFormatDlg dlg( this );
-        dlg.exec();
-    }
+    KSpreadFormatDlg dlg( this );
+    dlg.exec();
 }
 
 void KSpreadView::autoSum()
@@ -2396,7 +2388,8 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     // Empty selection ?
     // Activate or deactivate some actions. This code is duplicated
     // in KSpreadView::slotUnselect
-    if ( n.left() == 0 && n.top() == 0 )
+    if ( (n.left() == 0 && n.top() == 0)
+    ||n.right() ==0x7FFF ||n.bottom()==0x7FFF)
         m_tableFormat->setEnabled( FALSE );
     else
         m_tableFormat->setEnabled( TRUE );
