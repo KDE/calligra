@@ -20,7 +20,7 @@ dummy.cc:
 	echo > dummy.cc
 
 
-SUBDIRS = kexiDB formeditor core tableview widget . plugins pics data interfaces
+SUBDIRS = kexiDB formeditor core tableview widget . plugins pics data interfaces filters
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
