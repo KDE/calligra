@@ -519,13 +519,22 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
     QIODevice* io=f->device();
     kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
 
+    if ( ! io->open( IO_ReadOnly ) )
+    {
+        kdWarning(30518) << "Thumbnail could not be opened!" <<endl;
+        delete io;
+        return KoFilter::StupidError;
+    }
+    
     QImageIO imageIO( io, "PNG" );
-    if ( imageIO.read() )
+    if ( ! imageIO.read() )
     {
         kdWarning(30518) << "Thumbnail could not be read!" <<endl;
         delete io;
         return KoFilter::StupidError;
     }
+    
+    io->close();
     
     thumbnail = imageIO.image();
 
