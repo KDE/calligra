@@ -212,13 +212,13 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		if(depth()==0)
 			return;
 
-		p->fillRect(0,0,width, height(), QBrush(backgroundColor()));
-
 		if(isSelected())
 		{
 			p->fillRect(0,0,width, height(), QBrush(cg.highlight()));
 			p->setPen(cg.highlightedText());
 		}
+		else
+			p->fillRect(0,0,width, height(), QBrush(backgroundColor()));
 
 		QFont f = listView()->font();
 		p->save();
@@ -242,6 +242,7 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 {
 	p->eraseRect(0,0,w,h);
 	KListViewItem *item = (KListViewItem*)firstChild();
+//	const bool invertAlternate = parent() && parent()->parent() && ((childCount() % 2) == 0);
 	if(!item)
 		return;
 
@@ -249,7 +250,16 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 	p->translate(0,y);
 	while(item)
 	{
-		p->fillRect(0,0,w, item->height(), QBrush(item->backgroundColor()));
+		/*if (invertAlternate) {
+			if (item->isAlternate())
+				p->fillRect(0,0,w, item->height(), 
+				QBrush(listView()->viewport()->colorGroup().base()));
+			else
+				p->fillRect(0,0,w, item->height(), 
+					QBrush(static_cast<KListView*>(listView())->alternateBackground()));
+		}
+		else*/
+			p->fillRect(0,0,w, item->height(), QBrush(item->backgroundColor()));
 		p->fillRect(-50,0,50, item->height(), QBrush(item->backgroundColor()));
 		p->save();
 		p->setPen( QColor(200,200,200) ); //like in t.v.
