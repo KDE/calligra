@@ -48,6 +48,9 @@ class KWEFKWordLeader : public KWEFBaseClass
         bool doCloseHead(void);
         bool doOpenBody(void);
         bool doCloseBody(void);
+        bool doOpenStyles(void);
+        bool doCloseStyles(void);
+        bool doFullDefineStyle(LayoutData& layout);
     protected: // leader/worker functions
         bool doOpenFile(const QString& filenameOut, const QString& to);
         bool doCloseFile(void);

@@ -48,6 +48,9 @@ class KWEFBaseWorker
         virtual bool doCloseHead(void); // Like HTML's </HEAD>
         virtual bool doOpenBody(void); // Like HTML's <BODY>
         virtual bool doCloseBody(void); // Like HTML's </BODY>
+        virtual bool doOpenStyles(void); // Like HTML's <style>
+        virtual bool doCloseStyles(void); // Like HTML's </style>
+        virtual bool doFullDefineStyle(LayoutData& layout); // Defines a single style
 };
 
 #endif /* KWEF_BASEWORKER_H */

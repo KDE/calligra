@@ -33,6 +33,7 @@
    License version 2.
 */
 
+#include <qfile.h>
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -112,13 +113,33 @@ static void ProcessFramesetsTag ( QDomNode      myNode,
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
+static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
+{
+    kdDebug() << "Entering ProcessStyleTag" << endl;
+
+    AllowNoAttributes (myNode);
+
+    LayoutData layout;
+
+    ProcessLayoutTag(myNode, &layout, outputText, exportFilter);
+
+    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
+    leader->doFullDefineStyle(layout);
+
+    kdDebug() << "Exiting ProcessStyleTag" << endl;
+}
 static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
 {
     AllowNoAttributes (myNode);
 
+    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
+    leader->doOpenStyles();
+
     QValueList<TagProcessing> tagProcessingList;
-    //tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
     ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+    
+    leader->doCloseStyles();
 }
 
 static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter)
@@ -221,6 +242,8 @@ DO_VOID_DEFINITION(doCloseFile)
 DO_VOID_DEFINITION(doAbortFile)
 DO_VOID_DEFINITION(doOpenDocument)
 DO_VOID_DEFINITION(doCloseDocument)
+DO_VOID_DEFINITION(doOpenStyles)
+DO_VOID_DEFINITION(doCloseStyles)
 
 bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
 {
@@ -250,6 +273,14 @@ bool KWEFKWordLeader::doFullPaperFormat(const int format, const double width, co
         return m_worker->doFullPaperFormat(format, width, height, orientation);
     return false;
 }
+
+bool KWEFKWordLeader::doFullDefineStyle(LayoutData& layout)
+{
+    if (m_worker)
+        return m_worker->doFullDefineStyle(layout);
+    return false;
+}
+
 
 bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameOut,
     const QString& from, const QString& to, const QString&)
@@ -283,16 +314,31 @@ bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameO
         kdWarning() << "Unable to open documentinfo.xml sub-file!" << endl;
     }
 
-    if ( !koStoreIn.open ( "root" ) )
-    {
-        // TODO: read a untarred KWord file (useful with koconverter)
-        kdError() << "Unable to open input file!" << endl;
-        doAbortFile();
-        return false;
-    }
+    QByteArray byteArrayIn;
 
-    QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
-    koStoreIn.close ();
+    if ( koStoreIn.open ( "root" ) )
+    {
+        byteArrayIn = koStoreIn.read ( koStoreIn.size () );
+        koStoreIn.close ();
+    }
+    else
+    {
+        // We were not able to open maindoc.xml
+        // But perhaps we have an untarred, uncompressed file
+        //  (it might happen with koconverter)
+        QFile file(filenameIn);
+        if (file.open(IO_ReadOnly))
+        {
+            byteArrayIn = file.readAll();
+            file.close ();
+        }
+        else
+        {
+            kdError() << "Unable to open input file!" << endl;
+            doAbortFile();
+            return false;
+        }
+    }
 
     QDomDocument qDomDocumentIn;
 
