@@ -1536,7 +1536,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 	
     RowLayout *rl = table->nonDefaultRowLayout( m_iResizeAnchor );
     int y = table->rowPos( m_iResizeAnchor, m_pCanvas );
-    if ( _ev->pos().y() < 20 )
+    if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < 20.0 )
+    //_ev->pos().y() < 20 )
       rl->setHeight( 20, m_pCanvas );
     else
       rl->setHeight( _ev->pos().y() - y, m_pCanvas );

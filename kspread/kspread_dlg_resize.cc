@@ -99,7 +99,8 @@ if(tmp.toDouble()!=0)
 	new_size=(int)tmp.toDouble();
 else
 	new_size=tmp.toInt();
-
+if(new_size!=size)
+{
 switch(type)
 	{
 	case resize_row:
@@ -112,6 +113,7 @@ switch(type)
 		cout <<"Err in type_resize\n";
 		break;
 	}
+}
 accept();
 }
 else
