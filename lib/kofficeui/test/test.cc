@@ -5,7 +5,7 @@
 #include "test.h"
 #include "test.moc"
 
-#include <op_app.h>
+#include <opApplication.h>
 
 class MyApp : public OPApplication
 {
