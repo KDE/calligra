@@ -430,15 +430,28 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             {
                 if (0==(*paraFormatDataIt).variable.m_type) // date
                 {
-                   // ### TODO: fixed/variable date, exact custom formats
-                   str += "{\\field{\\*\\fldinst DATE \\\\* MERGEFORMAT }{\\fldrslt ";
-                   str += escapeRtfText((*paraFormatDataIt).variable.m_text);
-                   str += "}}";
+                    // ### TODO: fixed/variable date, exact custom formats
+                    QString key((*paraFormatDataIt).variable.m_key.mid(4));
+                    if (key == "locale")
+                        key = QString::null; // ###TODO
+                    str += "{\\field{\\*\\fldinst DATE ";
+                    if (!key.isEmpty())
+                    {
+                        kdDebug(30515) << "Date format: " << key << endl;
+#if 0
+                        str += "\\@ \"";
+                        str += key;
+                        str += "\" ";
+#endif
+                    }
+                    str += "\\* MERGEFORMAT }{\\fldrslt ";
+                    str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                    str += "}}";
                 }
                 else if (2==(*paraFormatDataIt).variable.m_type) // time
                 {
                    // ### TODO: fixed/variable time, exact custom formats
-                   str += "{\\field{\\*\\fldinst TIME \\\\* MERGEFORMAT }{\\fldrslt ";
+                   str += "{\\field{\\*\\fldinst TIME \\* MERGEFORMAT }{\\fldrslt ";
                    str += escapeRtfText((*paraFormatDataIt).variable.m_text);
                    str += "}}";
                 }
@@ -447,13 +460,13 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     QString strFieldType;
                     if ((*paraFormatDataIt).variable.isPageNumber())
                     {
-                        str += "{\\field{\\*\\fldinst PAGE \\\\* MERGEFORMAT }{\\fldrslt ";
+                        str += "{\\field{\\*\\fldinst PAGE \\* MERGEFORMAT }{\\fldrslt ";
                         str += escapeRtfText((*paraFormatDataIt).variable.m_text);
                         str += "}}";
                     }
                     else if ((*paraFormatDataIt).variable.isPageCount())
                     {
-                        str += "{\\field{\\*\\fldinst NUMPAGES \\\\* MERGEFORMAT }{\\fldrslt ";
+                        str += "{\\field{\\*\\fldinst NUMPAGES \\* MERGEFORMAT }{\\fldrslt ";
                         str += escapeRtfText((*paraFormatDataIt).variable.m_text);
                         str += "}}";
                     }
@@ -478,7 +491,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         str += "{\\field";
                         str += "{\\*\\fldinst ";
                         str +=  rtfField;
-                        str += "  \\\\* MERGEFORMAT }";
+                        str += "  \\* MERGEFORMAT }";
                         str += "{\\fldrslt {";
                         str += value;
                         str += "}}}";
