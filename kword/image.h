@@ -22,9 +22,8 @@
 
 #include <qimage.h>
 #include <qstring.h>
-
+#include <qdom.h>
 #include <qtextstream.h>
-#include <koStream.h>
 
 class KWDocument;
 

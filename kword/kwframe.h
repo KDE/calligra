@@ -28,7 +28,6 @@
 #include <qlist.h>
 
 #include "border.h"
-#include <koStream.h>
 #include <koMainWindow.h>
 
 class KWFrame;

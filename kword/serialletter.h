@@ -30,8 +30,6 @@
 
 #include <qtextstream.h>
 
-#include <koStream.h>
-
 class QListBox;
 class QPushButton;
 class QLineEdit;

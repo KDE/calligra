@@ -77,9 +77,6 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
-    bool load( QDomElement &attribs );
-    bool save( QTextStream & out );
-
 protected:
     KWDocument *m_pKWordDoc;
 

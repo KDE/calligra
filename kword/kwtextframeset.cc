@@ -188,7 +188,7 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
     }
 }
 
-void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, QWidget *w, bool cursorVisible )
+void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible )
 {
     // This redraws the paragraph where the cursor is
 
@@ -221,10 +221,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, QWidget *w, b
 
             QPixmap *pix = 0;
             // cursor->parag()->document()->nextDoubleBuffered = TRUE; ################ we need that only if we have nested items/documents
-            QColorGroup cg=QApplication::palette().active();
-            cg.setBrush(QColorGroup::Base,frame->getBackgroundColor());
+            QColorGroup cg = QApplication::palette().active();
+            cg.setBrush(QColorGroup::Base, frame->getBackgroundColor());
             text->drawParag( p, cursor->parag(), r.x(), r.y(), r.width(), r.height(),
-                             pix, /*w->colorGroup()*/cg, cursorVisible, cursor );
+                             pix, cg, cursorVisible, cursor );
             p->restore();
             drawn = true;
         }
@@ -1999,7 +1999,7 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
     p.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
-    textFrameSet()->drawCursor( &p, cursor, m_canvas, visible );
+    textFrameSet()->drawCursor( &p, cursor, visible );
     cursorVisible = visible;
 }
 

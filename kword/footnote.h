@@ -23,8 +23,6 @@
 #include <qlist.h>
 #include <qpainter.h>
 
-#include <koStream.h>
-
 #include <qtextstream.h>
 
 class KWFootNote;

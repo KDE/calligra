@@ -810,22 +810,17 @@ void KWPictureFrameSet::save( QDomElement & parentElem )
 void KWPictureFrameSet::load( QDomElement &attributes )
 {
     KWFrameSet::load( attributes );
-    if ( !frames.isEmpty() )
-    {
-        KWFrame *_frame = frames.first();
 
-        // <IMAGE>
-        QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
-        if ( !image.isNull() ) {
-            KWImage *_image = new KWImage();
-            _image->load( image, doc );
-            //setFileName( _image->getFilename() );
-            doc->addImageRequest( _image->getFilename(), this );
-            delete _image;
-        } else {
-            kdError(32001) << "Missing IMAGE tag in FRAMESET" << endl;
-        }
-        doc->progressItemLoaded();
+    // <IMAGE>
+    QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
+    if ( !image.isNull() ) {
+        KWImage *_image = new KWImage();
+        _image->load( image, doc );
+        //setFileName( _image->getFilename() );
+        doc->addImageRequest( _image->getFilename(), this );
+        delete _image;
+    } else {
+        kdError(32001) << "Missing IMAGE tag in FRAMESET" << endl;
     }
 }
 

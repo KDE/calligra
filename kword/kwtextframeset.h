@@ -90,7 +90,7 @@ public:
                        QColorGroup &gb, bool onlyChanged,
                        bool drawCursor, QTextCursor *cursor );
 
-    void drawCursor( QPainter *p, QTextCursor *cursor, QWidget *w, bool cursorVisible );
+    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
     void insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text );
     void removeSelectedText( QTextCursor * cursor );

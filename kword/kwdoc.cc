@@ -27,7 +27,6 @@
 #include <qpixmap.h>
 #include <qfileinfo.h>
 
-#include <koStream.h>
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
@@ -96,58 +95,6 @@ KoDocument *KWChild::hitTest( const QPoint &, const QWMatrix & )
 {
   return 0L;
 }
-
-bool KWChild::load( QDomElement &attribs )
-{
-  m_tmpURL = KWDocument::getAttribute( attribs, "url", QString::null );
-  m_tmpMimeType = KWDocument::getAttribute( attribs, "mime", QString::null );
-
-  if ( m_tmpURL.isEmpty() )
-  {
-    kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
-    return false;
-  }
-  else if ( m_tmpMimeType.isEmpty() )
-  {
-    kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
-    return false;
-  }
-
-  bool brect = false;
-
-  // <RECT>
-  QDomElement rect = attribs.namedItem( "RECT" ).toElement();
-  if ( !rect.isNull() )
-  {
-    brect = true;
-    m_tmpGeometry = QRect(
-                        KWDocument::getAttribute( attribs, "x", 0 ),
-                        KWDocument::getAttribute( attribs, "y", 0 ),
-                        KWDocument::getAttribute( attribs, "w", 1 ),
-                        KWDocument::getAttribute( attribs, "h", 1 ) );
-    setGeometry( m_tmpGeometry );
-  }
-
-  if ( !brect )
-  {
-    kdDebug(30003) << "Missing RECT in OBJECT" << endl;
-    return false;
-  }
-
-  return true;
-}
-
-bool KWChild::save( QTextStream& out )
-{
-  assert( document() );
-
-  out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
-      << document()->nativeFormatMimeType() << "\">"
-      << geometry() << "</OBJECT>" << endl;
-
-  return true;
-}
-
 
 /******************************************************************/
 /* Class: KWDocument                                      */
@@ -1010,31 +957,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(10);
 
-    // <EMBEDDED>
-    QDomNodeList listEmbedded = word.elementsByTagName ( "EMBEDDED" );
-    for (item = 0; item < listEmbedded.count(); item++)
-    {
-        QDomElement embedded = listEmbedded.item( item ).toElement();
-        KWChild *ch = new KWChild( this );
-        KWPartFrameSet *fs = 0;
-        QRect r;
-
-        QDomElement object = embedded.namedItem( "OBJECT" ).toElement();
-        if ( !object.isNull() )
-        {
-            ch->load( object );
-            r = ch->geometry();
-            insertChild( ch );
-            fs = new KWPartFrameSet( this, ch );
-            frames.append( fs );
-        }
-        QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
-        if ( !settings.isNull() )
-        {
-            fs->load( settings );
-        }
-    }
-
 #if 0
         else if ( name == "FOOTNOTEMGR" ) {
             parser.parseTag( tag, name, lst );
@@ -1080,6 +1002,37 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             pixmapNames.append( n );
             pixmapKeys.append( k );
         }
+    }
+
+    emit sigProgress(90);
+
+    // <EMBEDDED>
+    QDomNodeList listEmbedded = word.elementsByTagName ( "EMBEDDED" );
+    for (item = 0; item < listEmbedded.count(); item++)
+    {
+        QDomElement embedded = listEmbedded.item( item ).toElement();
+        KWChild *ch = new KWChild( this );
+        KWPartFrameSet *fs = 0;
+        QRect r;
+
+        QDomElement object = embedded.namedItem( "object" ).toElement(); // leave that lowercase, kofficelib writes it out
+        if ( !object.isNull() )
+        {
+            ch->load( object );
+            r = ch->geometry();
+            insertChild( ch );
+            fs = new KWPartFrameSet( this, ch );
+            frames.append( fs );
+            QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
+            if ( !settings.isNull() )
+            {
+                kdDebug() << "KWDocument::loadXML loading embedded object" << endl;
+                fs->load( settings );
+            }
+            else
+                kdError() << "No <SETTINGS> tag in EMBEDDED" << endl;
+        } else
+            kdError() << "No <object> tag in EMBEDDED" << endl;
     }
 
     emit sigProgress(95);
@@ -1629,30 +1582,31 @@ QDomDocument KWDocument::saveXML()
     slDataBase->save( out );
     out << etag << "</SERIALL>" << endl; */
 
+#endif
 
     // Write "OBJECT" tag for every child
     QListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
-        out << otag << "<EMBEDDED>" << endl;
+        QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
+        kwdoc.appendChild( embeddedElem );
 
-        KWChild* curr = (KWChild*)chl.current();
+        KWChild* curr = static_cast<KWChild*>(chl.current());
 
-        curr->save( out );
+        QDomElement objectElem = curr->save( doc );
+        embeddedElem.appendChild( objectElem );
 
-        out << otag << "<SETTINGS>" << endl;
-        for ( unsigned int i = 0; i < frames.count(); i++ ) {
-            KWFrameSet *fs = frames.at( i );
+        QDomElement settingsElem = doc.createElement( "SETTINGS" );
+        embeddedElem.appendChild( settingsElem );
+
+        QListIterator<KWFrameSet> fit = framesetsIterator();
+        for ( ; fit.current() ; ++fit )
+        {
+            KWFrameSet * fs = fit.current();
             if ( fs->getFrameType() == FT_PART &&
                  dynamic_cast<KWPartFrameSet*>( fs )->getChild() == curr )
-                fs->save( out );
+                fs->save( settingsElem );
         }
-        out << etag << "</SETTINGS> "<< endl;
-
-        out << etag << "</EMBEDDED>" << endl;
     }
-
-    out << etag << "</DOC>" << endl;
-#endif
 
     return doc;
 }

@@ -23,8 +23,6 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
-#include <koStream.h>
-
 class KWDocument;
 class KWVariable;
 class KWParag;
