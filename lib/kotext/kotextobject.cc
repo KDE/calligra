@@ -587,6 +587,9 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     int oldLen = undoRedoInfo.text.length();
     KoTextCursor oldCursor = *cursor;
     bool wasChanged = cursor->parag()->hasChanged();
+    int origLine; // the line the cursor was on before the insert
+    oldCursor.parag()->lineStartOfChar( oldCursor.index(), 0, &origLine );
+
     cursor->insert( txt, checkNewLine );  // insert the text
     setLastFormattedParag( checkNewLine && cursor->parag()->prev() ? cursor->parag()->prev() :
                            cursor->parag() );
@@ -623,10 +626,11 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         // We're reverting that, and calling setLineChanged() only.
         Q_ASSERT( cursor->parag() == oldCursor.parag() ); // no newline!
         KoTextParag* parag = cursor->parag();
+	// If the new char led to a new line,
+	// the wordwrap could have changed on the line above
+	// This is why we use origLine and not calling lineStartOfChar here.
         parag->setChanged( false );
-        int line;
-        parag->lineStartOfChar( oldCursor.index(), 0, &line );
-        parag->setLineChanged( line );
+        parag->setLineChanged( origLine );
     }
 
     if ( repaint ) {
