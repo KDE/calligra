@@ -833,7 +833,7 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
         bool heading = paragraph.tagName() == "text:h";
         m_nextItemIsListItem = false;
         const QDomElement listStyle = m_listStyleStack.currentListStyle();
-        const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
+        //const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
         QDomElement counter = doc.createElement( "COUNTER" );
         counter.setAttribute( "numberingtype", heading ? 1 : 0 );
         int level = heading ? paragraph.attribute( "text:level" ).toInt() : m_listStyleStack.level();
