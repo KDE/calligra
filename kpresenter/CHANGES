@@ -18,3 +18,4 @@ Changes after KPresenter 1.1
 - Add support for manual completion (use CTRL + E )
 - Add Help line
 - New transition effect: Blinds, Box In/Out, Checkboard, Cover, Uncover, Dissolve, Random,...
+- Add grid support
