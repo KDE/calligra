@@ -40,9 +40,7 @@ public:
   bool write( const char* _data, unsigned long _len );
   long read( char *_buffer, unsigned long _len );
 
-  char* createFileName();
-
-  void list();
+  // void list();
 
   bool bad() { return m_out.bad(); }
     

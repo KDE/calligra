@@ -30,7 +30,7 @@ KoTarStore::KoTarStore( const char* _filename, KOStore::Mode _mode )
 {
   m_bIsOpen = false;
   m_mode = _mode;
-  m_id = 0;
+  m_stream = 0L;
   
   kdebug( KDEBUG_INFO, 30002, "KoTarStore Constructor filename = %s mode = %d", _filename, _mode);
 
@@ -44,15 +44,9 @@ KoTarStore::~KoTarStore()
   kdebug( KDEBUG_INFO, 30002, "###################### DESTRUCTOR ####################" );
   m_pTar->close();
   delete m_pTar;
+  if ( m_stream )
+    delete m_stream;
 }
-/*
-char* KoTarStore::createFileName()
-{
-  char buffer[ 100 ];
-  sprintf( buffer, "entry%i", m_id++ );
-  return CORBA::string_dup( buffer );
-}
-*/
 
 QString KoTarStore::toExternalNaming( const QString _internalNaming )
 {
@@ -69,35 +63,34 @@ QString KoTarStore::toExternalNaming( const QString _internalNaming )
 
 CORBA::Boolean KoTarStore::open( const char* _name, const char * /*_mime_type*/ )
 {
-  kdebug( KDEBUG_INFO, 30002, "KoTarStore: opening for '%s'", _name);
+  m_sName = toExternalNaming( _name );
+
   if ( m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoTarStore: File is already opened" );
     return false;
   }
     
-  if ( strlen( _name ) > 512 )
+  if ( m_sName.length() > 512 )
   {
-    kdebug( KDEBUG_INFO, 30002, "KoTarStore: Filename %s is too long", _name );
+    kdebug( KDEBUG_INFO, 30002, "KoTarStore: Filename %s is too long", m_sName.latin1() );
     return false;
   }
   
   if ( m_mode == KOStore::Write )
   {
-    if ( m_strFiles.findIndex( _name ) != -1 ) // just check if it's there
+    kdebug( KDEBUG_INFO, 30002, "KoTarStore: opening for writing '%s'", m_sName.latin1());
+    if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
     {
-      kdebug( KDEBUG_INFO, 30002, "KoTarStore: Duplicate filename %s", _name );
+      kdebug( KDEBUG_INFO, 30002, "KoTarStore: Duplicate filename %s", m_sName.latin1() );
       return false;
     }
     
-    m_strFiles.append( _name );
-    m_sName = _name;
+    m_strFiles.append( m_sName );
     m_iSize = 0;
   }
   else if ( m_mode == KOStore::Read )
   { 
-    m_sName = toExternalNaming( _name );
-
     kdebug( KDEBUG_INFO, 30002, "Opening for reading '%s'", m_sName.latin1() );
     
     const KTarEntry * entry = m_pTar->directory()->entry( m_sName );
@@ -113,8 +106,9 @@ CORBA::Boolean KoTarStore::open( const char* _name, const char * /*_mime_type*/ 
     }
     KTarFile * f = (KTarFile *) entry;
     m_byteArray = f->data();
+    // warning, m_byteArray can be bigger than f->data().size() (if a previous file was bigger)
+    // this is why we never use m_byteArray.size()
     m_iSize = f->data().size(); 
-    // it seems m_byteArray might be bigger than f->data().size() (if a previous file was bigger)
     m_readBytes = 0;
   }
   else
@@ -140,8 +134,6 @@ void KoTarStore::close()
   {
     // write the whole bytearray at once into the tar file
   
-    m_sName = toExternalNaming( m_sName );
-
     kdebug( KDEBUG_INFO, 30002, "Writing file %s into TAR archive. size %d.",
           m_sName.latin1(), m_iSize );
     m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() );

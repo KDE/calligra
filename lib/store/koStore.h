@@ -31,6 +31,9 @@ protected: // interface, not real class
 public:
   virtual ~KoStore() {}
 
+  // Note that all those are C++, not IDL. They define additionnal
+  // interface methods for the store, only available locally
+  // (i.e. only the main koDocument instance uses them)
   virtual bool write( const char* _data, unsigned long _len ) = 0L;
   virtual long read( char *_buffer, unsigned long _len ) = 0L;
   virtual bool bad() = 0L;

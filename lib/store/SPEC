@@ -2,7 +2,7 @@
 -                                                                             -
 -   KOffice Storage Format Specification - Version 2.0                        -
 -                                                                             -
--   by Werner, last changed: 990911 by David                                  -
+-   by Werner, last changed: 990913 by David                                  -
 -                                                                             -
 - History :                                                                   -
 -  Version 1.0 : binary store                                                 -
@@ -24,6 +24,7 @@ that generate koffice documents ! :)
 Later, someone will be able to easily write an import filter for any other office-suite
 application out there, either reading the whole tar.gz file, or (for simple documents) by
 accepting XML as input (and then the user can extract the XML file by himself).
+It also generates much smaller files than the old binary store, since everything's gzipped.
 
 1) Name of the KOffice Files:
 As some people suggested using a "tgz"-ending is stupid, I'll drop it :)
@@ -44,12 +45,16 @@ maindoc.xml     -- The main XML file containing the KWord document
 part0.xml                  -- for instance a KSpread embedded table
 part1.xml                  -- say a KDiagramm chart
 part2.xml                  -- why not a KIllustrator drawing
-part2_pictures/
-part2_pictures/picture0.jpg
-part2_pictures/picture1.bmp
+part2/pictures/
+part2/pictures/picture0.jpg
+part2/pictures/picture1.bmp
+part2/cliparts/
+part2/cliparts/clipart0.wmf
 pictures/       -- Pictures embedded in the main KWord document
 pictures/picture0.jpg
 pictures/picture1.bmp
+cliparts/      -- Cliparts embedded in the main KWord document
+cliparts/clipart0.wmf
 ...          
 
 Still TODO for the specification :

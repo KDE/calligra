@@ -127,14 +127,6 @@ unsigned long KoBinaryStore::getULong()
 }
 
 /*
-char* KoBinaryStore::createFileName()
-{
-  char buffer[ 100 ];
-  sprintf( buffer, "entry%i", m_id++ );
-  return CORBA::string_dup( buffer );
-}
-*/
-
 void KoBinaryStore::list()
 {
   cout << "Size\tType\t\tName" << endl;
@@ -152,6 +144,7 @@ void KoBinaryStore::list()
   cout << "--------------------------------------------------------------------" << endl;
   cout << "Total Size: " << size << endl;
 }
+*/
 
 CORBA::Boolean KoBinaryStore::open( const char* _name, const char *_mime_type )
 {

@@ -37,7 +37,8 @@ public:
   virtual ~KoTarStore();
 
   // IDL
-  char* createFileName();
+  virtual void cd( const char* subdir );
+  virtual void cdUp( );
   virtual CORBA::Boolean open( const char* name, const char *_mime_type );
   virtual void close();
   virtual KOStore::Data* read( CORBA::ULong max );
@@ -62,7 +63,9 @@ protected:
   // Store the filenames (with full path inside the archive)  when writing, to avoid duplicates
   QStringList m_strFiles;
 
+  // Current filename (between an open() and a close())
   QString m_sName;
+  // Current size of the file named m_sName
   unsigned long m_iSize;
 
   KTar * m_pTar;
@@ -73,8 +76,6 @@ protected:
   bool m_bGood;
 
   int m_readBytes;
-
-  int m_id;
 };
 
 #endif
