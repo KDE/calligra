@@ -30,9 +30,9 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <koMainWindow.h>
-#include <koView.h>
 
 #include "karbon_part.h"
+#include "karbon_view.h"
 #include "vcolor.h"
 #include "vcolorslider.h"
 #include "vfillcmd.h"
@@ -41,8 +41,8 @@
 
 #include "vcolordocker.h"
 
-VColorDocker::VColorDocker( KarbonPart* part, KoView* parent, const char* /*name*/ )
-	: VDocker( parent->shell() ), m_part ( part )
+VColorDocker::VColorDocker( KarbonPart *part, KarbonView *parent, const char */*name*/ )
+	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Color Manager" ) );
 
@@ -163,11 +163,13 @@ void VColorDocker::buttonClicked( int button_ID )
 	switch( button_ID ) {
 	case Fill:
 		if( m_part )
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
+			m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
+		m_view->selectionChanged();
 		break;
 	case Outline:
 		if( m_part )
-		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
+			m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
+		m_view->selectionChanged();
 		break;
 	}
 }

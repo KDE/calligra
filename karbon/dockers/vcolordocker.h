@@ -28,7 +28,7 @@ class QTabWidget;
 class QWidget;
 class KColorPatch;
 class KoMainWindow;
-class KoView;
+class KarbonView;
 class KarbonPart;
 class KHSSelector;
 class KIntNumInput;
@@ -41,7 +41,7 @@ class VColorDocker : public VDocker
 	Q_OBJECT
 
 public:
-	 VColorDocker( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
+	 VColorDocker( KarbonPart *part, KarbonView *parent = 0L, const char *name = 0L );
   
 private:
 	QWidget *mainWidget;
@@ -67,6 +67,7 @@ private:
 	KIntNumInput *mOpacity;
 	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
+	KarbonView *m_view;
 	
 private slots:
 	void buttonClicked( int button_ID );
