@@ -58,7 +58,7 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 	addPage(m_page1, i18n("Database Location"));
 
 	m_page2 = generatePage2();
-	addPage(m_page2, i18n("Connecting"));
+	addPage(m_page2, i18n("Choose Database"));
 		
 	if(m_cEngine->count() > 0)
 	{
@@ -176,7 +176,7 @@ void KexiCreateProject::engineSelectionChanged(const QString &engineName)
 
 void KexiCreateProject::nextClicked(const QString &pageTitle)
 {
-	if(pageTitle == i18n("Connecting"))
+	if(pageTitle == i18n("Choose Database"))
 	{
 		kdDebug() << "it's time to connect to the db..." << endl;
 		
@@ -185,21 +185,24 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 		Credentials projCred;
 		
 		projCred.host = m_dbHost->text();
-//		projCred.database = m_dbName->text();
-//      projCred.port = <default> // ## Add Port
 		projCred.driver = m_cEngine->currentText();
 		projCred.user = m_dbUser->text();
 		projCred.password = m_dbPass->text();
 		
 		if(kexi->project()->initHostConnection(projCred))
 		{
-//			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
 			QStringList databases = kexi->project()->db()->databases();
 			for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
 			{
 				KListViewItem *i = new KListViewItem(m_databaseList, (*it));
+				m_databaseList->setCurrentItem(i);
 			}
-			kexi->mainWindow()->browser()->generateView();
+			projCred.database = m_databaseList->currentItem()->text(0);
+			if(kexi->project()->initDbConnection(projCred))
+			{
+				kexi->mainWindow()->browser()->generateView();
+			}
+			
 			setFinishEnabled(m_page2, true);
 		}
 		else

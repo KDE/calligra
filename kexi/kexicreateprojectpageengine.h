@@ -17,40 +17,24 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#include "kexidbresult.h"
+#ifndef KEXICREATEPROJECTPAGEENGINE_H
+#define KEXICREATEPROJECTPAGEENGINE_H
 
-#include <qvariant.h>
+#include "kexicreateprojectpage.h"
 
-KexiDBResult::KexiDBResult(QObject *parent) : QObject(parent, 0)
+class KComboBox;
+class KexiCreateProject;
+
+class KexiCreateProjectPageEngine : public KexiCreateProjectPage
 {
-}
+	Q_OBJECT
+	
+	public:
+		KexiCreateProjectPageEngine(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
+		~KexiCreateProjectPageEngine();
 
-QVariant
-KexiDBResult::value(unsigned int)
-{
-	return QVariant();
-}
+	protected:
+		KComboBox	*m_engine;
+};
 
-QVariant
-KexiDBResult::value(QString)
-{
-	return QVariant();
-}
-
-bool
-KexiDBResult::next()
-{
-	return false;
-}
-
-unsigned int
-KexiDBResult::numRows()
-{
-	return 0;
-}
-
-KexiDBResult::~KexiDBResult()
-{
-}
-
-#include "kexidbresult.moc"
+#endif

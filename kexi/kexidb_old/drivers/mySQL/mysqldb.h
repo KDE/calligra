@@ -87,13 +87,13 @@ class MySqlDB : public KexiDB
 		MYSQL		*m_mysql;
 		bool		m_connected;
 		bool		m_connectedDB;
-		const char	*m_host;
-		const char	*m_user;
-		const char	*m_passwd;
-		const char	*m_db;
 		unsigned int    m_port;
 		const char	*m_unix_socket;
 		unsigned int	m_client_flag;
+
+		QString		m_host;
+		QString		m_user;
+		QString		m_password;
 };
 
 #endif

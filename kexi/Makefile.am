@@ -2,8 +2,9 @@ bin_PROGRAMS = kexi
 
 kexi_SOURCES = kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitablerm.cpp  kexitablelist.cpp \
 kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexistore.cpp kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp \
-kexiworkspace.cpp kexiformbase.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp \
-kexiproject.cpp kexiformmanager.cpp
+kexiworkspace.cpp kexiformbase.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp \
+kexiproject.cpp kexiformmanager.cpp \
+kexicreateprojectpageengine.cpp
 
 kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la
 

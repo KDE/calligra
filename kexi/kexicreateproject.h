@@ -29,7 +29,11 @@ class KComboBox;
 class KLineEdit;
 class KListView;
 class KTextBrowser;
-  
+
+/*! this class aims to represent
+    the dirtiest class you ever saw
+ */
+
 class KexiCreateProject : public KWizard  {
    Q_OBJECT
 

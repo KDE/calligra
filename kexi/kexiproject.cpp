@@ -168,6 +168,7 @@ KexiProject::initDbConnection(const Credentials &cred)
 bool 
 KexiProject::initHostConnection(const Credentials &cred)
 {
+	kdDebug() << "KexiProject::initHostConnection" << endl;
 	KexiDB *addDB = m_db->add(cred.driver);
 	if(addDB)
 	{
@@ -186,7 +187,6 @@ KexiProject::initHostConnection(const Credentials &cred)
 	else
 	{
 		m_cred = cred;
-		kexi->mainWindow()->slotProjectModified();
 		return true;
 	}
 }

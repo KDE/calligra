@@ -17,40 +17,34 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#include "kexidbresult.h"
+#ifndef KEXICREATEPROJECTPAGE_H
+#define KEXICREATEPROJECTPAGE_H
 
+#include <qwidget.h>
+#include <qmap.h>
 #include <qvariant.h>
 
-KexiDBResult::KexiDBResult(QObject *parent) : QObject(parent, 0)
-{
-}
+class KexiCreateProject;
 
-QVariant
-KexiDBResult::value(unsigned int)
-{
-	return QVariant();
-}
+typedef QMap<QString, QVariant> DataMap;
 
-QVariant
-KexiDBResult::value(QString)
+class KexiCreateProjectPage : public QWidget
 {
-	return QVariant();
-}
+	Q_OBJECT
 
-bool
-KexiDBResult::next()
-{
-	return false;
-}
+	public:
+		KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
+		~KexiCreateProjectPage();
 
-unsigned int
-KexiDBResult::numRows()
-{
-	return 0;
-}
+		QVariant data(QString property) const;
 
-KexiDBResult::~KexiDBResult()
-{
-}
+	protected:
+		void setProperty(QString property, QVariant data);
 
-#include "kexidbresult.moc"
+		DataMap m_data;
+		
+	signals:
+		void valueChanged(QString, KexiCreateProjectPage *);
+};
+
+#endif

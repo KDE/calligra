@@ -48,15 +48,16 @@ MySqlDB::connect(QString host, QString user, QString password)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password)" << endl;
 	m_mysql = mysql_connect(m_mysql, host.latin1(), user.latin1(), password.latin1());
-	kdDebug() << "MySqlDB::connect(host): errno: " << mysql_errno(m_mysql) << endl;
 	if(mysql_errno(m_mysql) == 0)
 	{
 		m_connected = true;
+		m_host = host;
+		m_user = user;
+		m_password = password;
 		return true;
 	}
 	else
 	{
-		kdDebug() << "MySqlDB::connect(host): error: " << mysql_error(m_mysql) << endl;
 		return false;
 	}
 }
@@ -65,43 +66,41 @@ bool
 MySqlDB::connect(QString host, QString user, QString password, QString db)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
-	MYSQL *nConnect = mysql_connect(m_mysql, host.latin1(), user.latin1(), password.latin1());
-	if(!nConnect)
+	if(m_connected && host == m_host && user == m_user && password == m_password)
 	{
-		kdDebug() << "MySqlDB::connect(db): error: " << mysql_error(m_mysql) << endl;
-		return false;
-	}
-	
-	m_mysql = nConnect;	
-	kdDebug() << "MySqlDB::connect(db): errno: " << mysql_errno(m_mysql) << endl;
-	
-	if(mysql_errno(m_mysql) == 0)
-	{
-		m_connected = true;
+		//simple change to db:
+		query("use "+db);
+		m_connectedDB = true;
 		return true;
 	}
 	else
 	{
-		kdDebug() << "MySqlDB::connect(db): error: " << mysql_error(m_mysql) << endl;
-		return false;
+		if(connect(host, user, password))
+		{
+			query("use "+db);
+			m_connectedDB = true;
+			return true;
+		}
+		
 	}
+
+	return false;
 }
 
 QStringList
 MySqlDB::databases()
 {
+	kdDebug() << "MySqlDB::databases()" << endl;
 	QStringList s;
-	
+
 	query("show databases");
 	KexiDBResult *result = storeResult();
 
 	if(!result)
 		return s;
 
-	kdDebug() << "MysqlDB::databases(): using " << result << endl;
 	while(result->next())
 	{
-		kdDebug() << "MySqlDB::databases(): found: " << result->value(0).toString() << endl;
 		s.append(result->value(0).toString());
 	}
 
@@ -115,23 +114,20 @@ MySqlDB::tables()
 	if(!m_connectedDB)
 		return QStringList();
 
-	kdDebug() << "MySqlDB::tables()" << endl;
 	QStringList s;
-	MYSQL_RES *res = mysql_list_tables(m_mysql, "%");
-	if(!res)
-		return s;
 
-	MySqlResult *result = new MySqlResult(res, this);
+	query("show tables");
+	KexiDBResult *result = storeResult();
+
 	if(!result)
 		return s;
 
 	while(result->next())
 	{
-		kdDebug() << "MySqlDB::tables() inner loop" << endl;
-		s.append(QString::fromLatin1(result->value(0).toString()));
-		kdDebug() << "MySqlDB::tables() found table: " << result->value(0).toString() << endl;
+		s.append(result->value(0).toString());
 	}
-//	delete result;
+
+	delete result;
 	return s;
 }
 
