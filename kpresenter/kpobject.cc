@@ -1079,15 +1079,6 @@ void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & 
         pen = defaultPen();
     if ( styleStack.hasAttribute( "draw:fill" ) )
     {
-
-#if 0
-        QBrush brush;
-        brush.setColor(retrieveColor(element));
-        if(element.hasAttribute(attrStyle))
-            brush.setStyle(static_cast<Qt::BrushStyle>(element.attribute(attrStyle).toInt()));
-        return brush;
-#endif
-
         const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<" fill :"<<fill<<endl;
         QBrush tmpBrush;
@@ -1130,13 +1121,12 @@ void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & 
             // We have to set a brush with brushstyle != no background fill
             // otherwise the properties dialog for the object won't
             // display the preview for the gradient.
-            QDomElement brush = doc.createElement( "BRUSH" );
-            brush.setAttribute( "style", 1 );
-            e.appendChild( brush );
 
-            QDomElement gradient = doc.createElement( "GRADIENT" );
+            tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
+            setBrush( tmpBrush );
+
             QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
-
+            kdDebug()<<" style gradient name :"<<style<<endl;
             QDomElement* draw = m_draws[style];
             if ( draw )
             {
