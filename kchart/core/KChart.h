@@ -91,11 +91,11 @@ public:
 
 public slots:
   void setChartType( KChartType charttype );
-  void setTitle( const char* );
-  void setXLabel( const char* );
-  void setYLabel( const char* );
-  void setY1Label( const char* );
-  void setY2Label( const char* );
+  void setTitle( const QString & );
+  void setXLabel( const QString & );
+  void setYLabel( const QString & );
+  void setY1Label( const QString & );
+  void setY2Label( const QString & );
   void setTextColor( QColor color );
   void setTitleFont( QFont font );
   void setLabelFont( QFont font );

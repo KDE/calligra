@@ -8,24 +8,19 @@
 #include "KChartWizardLabelsLegendPage.h"
 #include "KChartWizardSetupAxesPage.h"
 
-#include <qlined.h>
+#include <qlineedit.h>
 #include <qwidget.h>
+#include <qpushbutton.h>
+
+#include <kglobal.h>
+#include <kiconloader.h>
 
 KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name, 
 							 bool modal, WFlags f ) :
   KWizard( parent, name, modal, f ),
   _chart( chart )
 {
-  // General setup
-  /*
-  setCancelButton();
-  setOkButton();
-  setDefaultButton();
-  setHelpButton();
-  setEnablePopupMenu(true);
-  setEnableArrowButtons(true);
-  setDirectionsReflectsPage(true);
-  */
+  KGlobal::iconLoader()->setIconType( "icon" );
 
   // First page: select the range
   _selectdatapage = new KChartWizardSelectDataPage( this );
@@ -38,7 +33,6 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
   // Third page: select the minor chart type
   _selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, _chart );
   addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
-  //((KChartWizardSelectChartSubTypePage*)selectchartsubtypewidget)->setNumber( page );
 
   // Fourth page: data setup
   _setupdatapage = new KChartWizardSetupDataPage( this, _chart );
@@ -52,7 +46,7 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
   _axespage = new KChartWizardSetupAxesPage( this, _chart );
   addPage( _axespage, i18n( "Setup axes" ) );
 
-  resize( 400, 500 );
+  resize( 620, 380 );
 }
 
 
@@ -66,16 +60,47 @@ KChartWizard::~KChartWizard()
   delete _axespage;
 }
 
+bool KChartWizard::appropriate( QWidget * w ) const
+{
+  if ( w == _selectchartsubtypepage )
+    // Show the sub-type page only if has anything to show
+    return _selectchartsubtypepage->createChildren();
+  else
+    return true;
+}
+
+void KChartWizard::next()
+{
+
+  // Some sort of a hack. We want the chart-subtype-page to get 
+  // dynamically built when it's going to be shown
+  //  if ( currentPage() == _selectcharttypepage )
+  //  _selectchartsubtypepage->createChildren();
+
+  QWizard::next();
+}
+
+void KChartWizard::accept()
+{
+  emit finished();
+  QWizard::accept();
+}
+
+void KChartWizard::reject()
+{
+  emit cancelled();
+  QWizard::reject();
+}
 
 void KChartWizard::setDataArea( QString area )
 {
-  ((KChartWizardSelectDataPage*)_selectdatapage)->rangeED->setText( area );
+  _selectdatapage->rangeED->setText( area );
 }
 
 
 QString KChartWizard::dataArea() const
 {
-  return ((KChartWizardSelectDataPage*)_selectdatapage)->rangeED->text();
+  return _selectdatapage->rangeED->text();
 }
 
 

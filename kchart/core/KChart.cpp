@@ -91,7 +91,7 @@ void KChart::repaintChart( QPaintDevice* paintdev )
 }
 
 
-void KChart::setTitle( const char* str )
+void KChart::setTitle( const QString & str )
 {
   _title = str;
 
@@ -105,7 +105,7 @@ QString KChart::title() const
 }
 
 
-void KChart::setXLabel( const char* str )
+void KChart::setXLabel( const QString & str )
 {
   _xlabel = str;
 
@@ -119,7 +119,7 @@ QString KChart::xLabel() const
 }
 
 
-void KChart::setYLabel( const char* str )
+void KChart::setYLabel( const QString & str )
 {
   _ylabel = str;
 
@@ -132,7 +132,7 @@ QString KChart::yLabel() const
   return _ylabel;
 }
 
-void KChart::setY1Label( const char* str )
+void KChart::setY1Label( const QString & str )
 {
   _y1label = str;
 
@@ -144,7 +144,7 @@ QString KChart::y1Label() const
   return _y1label;
 }
 
-void KChart::setY2Label( const char* str )
+void KChart::setY2Label( const QString & str )
 {
   _y2label = str;
 

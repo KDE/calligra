@@ -29,40 +29,28 @@ public:
   void emitNeedNewData( const char* area, int rowcol, bool firstRowIsLegend,
 						bool firstColIsLabel );
 
+  virtual bool appropriate( QWidget * w ) const;
+
 signals:
   // valid values for rowcol: Row: data is in rows, Col: data is in cols
   void needNewData( const char* area, int rowcol, bool firstRowIsLegend,
 					bool firstColIsLabel );
+  void finished();
+  void cancelled();
+  
+protected slots:
+  virtual void next();
+  virtual void reject();
+  virtual void accept();
 
 private:
-  /*
-  QWidget* selectDataPage() const {
-	return _selectdatapagew;
-  }
-  QWidget* selectChartTypePage() const {
-	return _selectcharttypepage;
-  }
-  QWidget* selectChartSubTypePage() const {
-	return _selectchartsubtypepage;
-  }
-  QWidget* setupDataPage() const {
-	return _setupdatapage;
-  }
-  QWidget* labelsLegendPage() const {
-	return _labelslegendpage;
-  }
-  QWidget* axesPage() const {
-	return _axespage;
-  }
-  */
-
   KChart* _chart;
-  QWidget* _selectdatapage;
-  QWidget* _selectcharttypepage;
-  QWidget* _selectchartsubtypepage;
-  QWidget* _setupdatapage;
-  QWidget* _labelslegendpage;
-  QWidget* _axespage;
+  KChartWizardSelectDataPage* _selectdatapage;
+  KChartWizardSelectChartTypePage* _selectcharttypepage;
+  KChartWizardSelectChartSubTypePage* _selectchartsubtypepage;
+  KChartWizardSetupDataPage* _setupdatapage;
+  KChartWizardLabelsLegendPage* _labelslegendpage;
+  KChartWizardSetupAxesPage* _axespage;
 };
 
 #endif

@@ -59,8 +59,8 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLineEdit* ticklengthED = new QLineEdit( this ); // todo KFloatValidator
   ticklengthED->setGeometry( 340, 90, 40, 30 );
   ticklengthED->setText( QString().setNum(_chart->tickLength()) );
-  connect( ticklengthED, SIGNAL( valueChanged( int ) ),
-		   _chart, SLOT( setTickLength( int ) ) );
+  connect( ticklengthED, SIGNAL( textChanged( const QString & ) ),
+                   this, SLOT( setTickLength( const QString & ) ) );
 
   QLabel* yticksnumLA = new QLabel( i18n( "Number of ticks on Y axis:" ), 
 									this );
@@ -69,8 +69,8 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLineEdit* yticksnumED = new QLineEdit( this ); // todo KFloatValidator
   yticksnumED->setGeometry( 550, 90, 30, 30 );
   yticksnumED->setText( QString().setNum(_chart->yTicksNum()) );
-  connect( yticksnumED, SIGNAL( valueChanged( int ) ),
-		   _chart, SLOT( setYTicksNum( int ) ) );
+  connect( yticksnumED, SIGNAL( textChanged( const QString & ) ),
+		   this, SLOT( setYTicksNum( const QString & ) ) );
 
   QGroupBox* axeslabelsGB = new QGroupBox( i18n( "Axes labelling" ), this );
   axeslabelsGB->setGeometry( 260, 140, 330, 150 );
@@ -88,8 +88,8 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLineEdit* showeveryxED = new QLineEdit( this ); // todo KFloatValidator
   showeveryxED->setGeometry( 340, 190, 20, 30 );
   showeveryxED->setText( QString().setNum(_chart->xLabelSkip()) );
-  connect( showeveryxED, SIGNAL( valueChanged( int ) ),
-		   _chart, SLOT( setXLabelSkip( int ) ) );
+  connect( showeveryxED, SIGNAL( textChanged( const QString & ) ),
+		   this, SLOT( setXLabelSkip( const QString & ) ) );
 
   QLabel* showeveryx2KA = new QLabel( i18n( ". value on X axis" ), this );
   showeveryx2KA->setGeometry( 360, 190, 100, 30 );
@@ -108,8 +108,8 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLineEdit* showeveryyED = new QLineEdit( this ); // todo KFloatValidator
   showeveryyED->setGeometry( 340, 250, 20, 30 );
   showeveryyED->setText( QString().setNum(_chart->yLabelSkip()) );
-  connect( showeveryyED, SIGNAL( valueChanged( int ) ),
-		   _chart, SLOT( setYLabelSkip( int ) ) );
+  connect( showeveryyED, SIGNAL( textChanged( const QString & ) ),
+		   this, SLOT( setYLabelSkip( const QString & ) ) );
 
   QLabel* showeveryy2KA = new QLabel( i18n( ". value on Y axis" ), this );
   showeveryy2KA->setGeometry( 360, 250, 100, 30 );
@@ -120,3 +120,25 @@ KChartWizardSetupAxesPage::~KChartWizardSetupAxesPage()
 {
   _chart->removeAutoUpdate( preview );
 }
+
+void KChartWizardSetupAxesPage::setTickLength( const QString & newValue )
+{
+  _chart->setTickLength( newValue.toInt() );
+}
+
+void KChartWizardSetupAxesPage::setYTicksNum( const QString & newValue )
+{
+  _chart->setYTicksNum( newValue.toInt() );
+}
+
+void KChartWizardSetupAxesPage::setXLabelSkip( const QString & newValue )
+{
+  _chart->setXLabelSkip( newValue.toInt() );
+}
+
+void KChartWizardSetupAxesPage::setYLabelSkip( const QString & newValue ) 
+{
+  _chart->setYLabelSkip( newValue.toInt() );
+}
+  
+#include "KChartWizardSetupAxesPage.moc"

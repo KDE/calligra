@@ -11,23 +11,14 @@
 #include <qobjcoll.h>
 
 #include <kiconloader.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent, KChart* chart ) :
   QWidget( parent ),
-  _chart( chart ),
-  _no( -1 )
+  _chart( chart )
 {
-  connect( parent, SIGNAL( selected( int ) ),
-		   this, SLOT( createChildren( int ) ) );
-
   _charttype = _chart->chartType();
-}
-
-
-void KChartWizardSelectChartSubTypePage::setNumber( int no )
-{
-  _no = no;
 }
 
 
@@ -41,18 +32,14 @@ void KChartWizardSelectChartSubTypePage::chartSubTypeSelected( int type )
   };
 }
 
-
-void KChartWizardSelectChartSubTypePage::createChildren( int no )
+bool KChartWizardSelectChartSubTypePage::createChildren( )
 {
-  /*
-  if( no != _no )
-	return; // that was for another page
-  */
-
   _charttype = _chart->chartType(); // note new chart type
 
   // PENDING(kalle): The pages should be prepared as QWidgets and just
   // put in as needed to avoid recreating them over and over again. 
+  // 
+  // Not sure if we need to do it (eats more memory). (David)
 
   // clear the page
   QObjectList *list = queryList( "QWidget" );
@@ -83,7 +70,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 	_normalbarsPB->setOn( true );
 	_normalbarsPB->show();
 	_typeBG->insert( _normalbarsPB, SideBySide );
-	_normalbarsPB->setPixmap( BarIcon( "chart_normalbars") );
+	_normalbarsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_normalbars") );
 	QLabel* normalbarsLA = new QLabel( i18n( "Normal" ), this );
 	normalbarsLA->show();
 	normalbarsLA->setGeometry( 10, 104, 94, 20 );
@@ -100,7 +87,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 						  barsontopFR->contentsRect().height() );
 	_barsontopPB->show();
 	_typeBG->insert( _barsontopPB, OnTop );
-	_barsontopPB->setPixmap( BarIcon( "chart_barsontop" ) );
+	_barsontopPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_barsontop" ) );
 	QLabel* barsontopLA = new QLabel( i18n( "On Top" ), this );
 	barsontopLA->setGeometry( 104, 104, 94, 20 );
 	barsontopLA->setAlignment( AlignCenter );
@@ -117,7 +104,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 							barsinfrontFR->contentsRect().height() );
 	_barsinfrontPB->show();
 	_typeBG->insert( _barsinfrontPB, InFront );
-	_barsinfrontPB->setPixmap( BarIcon( "chart_barsinfront" ) );
+	_barsinfrontPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_barsinfront" ) );
 	QLabel* barsinfrontLA = new QLabel( i18n( "In Front" ), this );
 	barsinfrontLA->setGeometry( 198, 104, 94, 20 );
 	barsinfrontLA->setAlignment( AlignCenter );
@@ -134,6 +121,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 	nosubtypesLA->adjustSize();
 	nosubtypesLA->move( 10, 10 );
 	nosubtypesLA->show();
+        return false;
   }
   }
 

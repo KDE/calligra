@@ -21,24 +21,24 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
   _xlabelED = new QLineEdit( this );
   _xlabelED->setGeometry( 270, 40, 100, 30 );
-  connect( _xlabelED, SIGNAL( textChanged( const char* ) ),
-		   _chart, SLOT( setXLabel( const char* ) ) );
+  connect( _xlabelED, SIGNAL( textChanged( const QString & ) ),
+		   _chart, SLOT( setXLabel( const QString & ) ) );
   
   QLabel* ylabelLA = new QLabel( i18n( "Y-Label:" ), this );
   ylabelLA->setGeometry( 270, 90, 100, 30 );
 
   _ylabelED = new QLineEdit( this );
   _ylabelED->setGeometry( 270, 120, 100, 30 );
-  connect( _ylabelED, SIGNAL( textChanged( const char* ) ),
-		   _chart, SLOT( setYLabel( const char* ) ) );
+  connect( _ylabelED, SIGNAL( textChanged( const QString & ) ),
+		   _chart, SLOT( setYLabel( const QString & ) ) );
 							 
   QLabel* titleLA = new QLabel( i18n( "Title:" ), this );
   titleLA->setGeometry( 270, 170, 100, 30 );
   
   _titleED = new QLineEdit( this );
   _titleED->setGeometry( 270, 200, 100, 30 );
-  connect( _titleED, SIGNAL( textChanged( const char* ) ),
-		   _chart, SLOT( setTitle( const char* ) ) );
+  connect( _titleED, SIGNAL( textChanged( const QString & ) ),
+		   _chart, SLOT( setTitle( const QString & ) ) );
   
   QButtonGroup* placementBG = new QButtonGroup( i18n( "Legend placement" ), 
 												this );

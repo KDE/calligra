@@ -10,6 +10,7 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+#include <kglobal.h>
 #include <kiconloader.h>
 
 KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* parent, KChart* chart ) :
@@ -28,7 +29,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _barsPB->resize( barsFR->contentsRect().width(), 
 				  barsFR->contentsRect().height() );
   _typeBG->insert( _barsPB, Bars );
-  _barsPB->setPixmap( BarIcon( "chart_bars" ) );
+  _barsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_bars" ) );
   QLabel* barsLA = new QLabel( i18n( "Bars" ), this );
   barsLA->setGeometry( 10, 104, 94, 20 );
   barsLA->setAlignment( AlignCenter );
@@ -42,7 +43,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _linesPB->resize( linesFR->contentsRect().width(), 
 				  linesFR->contentsRect().height() );
   _typeBG->insert( _linesPB, Lines );
-  _linesPB->setPixmap( BarIcon( "chart_lines") );
+  _linesPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_lines") );
   QLabel* linesLA = new QLabel( i18n( "Lines" ), this );
   linesLA->setGeometry( 104, 104, 94, 20 );
   linesLA->setAlignment( AlignCenter );
@@ -56,7 +57,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _pointsPB->resize( pointsFR->contentsRect().width(), 
 				  pointsFR->contentsRect().height() );
   _typeBG->insert( _pointsPB, Points );
-  _pointsPB->setPixmap( BarIcon( "chart_points") );
+  _pointsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_points") );
   QLabel* pointsLA = new QLabel( i18n( "Points" ), this );
   pointsLA->setGeometry( 198, 104, 94, 20 );
   pointsLA->setAlignment( AlignCenter );
@@ -70,7 +71,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _linespointsPB->resize( linespointsFR->contentsRect().width(), 
 				  linespointsFR->contentsRect().height() );
   _typeBG->insert( _linespointsPB, LinesPoints );
-  _linespointsPB->setPixmap( BarIcon( "chart_linespoints") );
+  _linespointsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_linespoints") );
   QLabel* linespointsLA = new QLabel( i18n( "Lines and Points" ), this );
   linespointsLA->setGeometry( 292, 104, 94, 20 );
   linespointsLA->setAlignment( AlignCenter );
@@ -84,7 +85,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _areaPB->resize( areaFR->contentsRect().width(), 
 				  areaFR->contentsRect().height() );
   _typeBG->insert( _areaPB , Area);
-  _areaPB->setPixmap( BarIcon( "chart_area") );
+  _areaPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_area") );
   QLabel* areaLA = new QLabel( i18n( "Areas" ), this );
   areaLA->setGeometry( 10, 218, 94, 20 );
   areaLA->setAlignment( AlignCenter );
@@ -98,7 +99,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _piePB->resize( pieFR->contentsRect().width(), 
 				  pieFR->contentsRect().height() );
   _typeBG->insert( _piePB, Pie );
-  _piePB->setPixmap( BarIcon( "chart_pie") );
+  _piePB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_pie") );
   QLabel* pieLA = new QLabel( i18n( "Pie" ), this );
   pieLA->setGeometry( 104, 218, 94, 20 );
   pieLA->setAlignment( AlignCenter );
@@ -112,7 +113,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _pie3DPB->resize( pie3DFR->contentsRect().width(), 
 				  pie3DFR->contentsRect().height() );
   _typeBG->insert( _pie3DPB, Pie3D );
-  _pie3DPB->setPixmap( BarIcon( "chart_pie3D") );
+  _pie3DPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_pie3D") );
   QLabel* pie3DLA = new QLabel( i18n( "3D Pie" ), this );
   pie3DLA->setGeometry( 198, 218, 94, 20 );
   pie3DLA->setAlignment( AlignCenter );

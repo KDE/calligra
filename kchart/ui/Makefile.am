@@ -24,6 +24,7 @@ noinst_HEADERS = KChartWizardLabelsLegendPage.h KChartWizardSelectDataPage.h \
 
 METASOURCES = KChartWizardSelectChartTypePage.moc \
 		KChartWizardLabelsLegendPage.moc \
+		KChartWizardSetupAxesPage.moc \
 		KChartWizard.moc \
 		KChartWizardSelectChartSubTypePage.moc \
 		KChartWizardSetupDataPage.moc main.moc
@@ -33,10 +34,9 @@ test_SOURCES = main.cpp
 LDFLAGS = $(all_libraries)
 LDADD = libkchartui.la ../core/libkchartcore.la $(LIB_KDEUI)
 
-picsdir = $(kde_toolbardir)
-pics_DATA = chart_area.gif chart_bars.gif chart_barsinfront.gif \
-	chart_barsontop.gif chart_lines.gif chart_linespoints.gif \
-	chart_normalbars.gif chart_pie.gif chart_pie3D.gif \
-	chart_points.gif
+KDE_ICON = lo-chart_area lo-chart_bars lo-chart_barsinfront \
+	lo-chart_barsontop lo-chart_lines lo-chart_linespoints \
+	lo-chart_normalbars lo-chart_pie lo-chart_pie3D \
+	lo-chart_points
 
 

@@ -15,10 +15,8 @@ class KChartWizardSelectChartSubTypePage : public QWidget
 
 public:
   KChartWizardSelectChartSubTypePage( QWidget* parent, KChart* chart );
-  void setNumber( int );
 
-public slots:
-  void createChildren( int no );
+  bool createChildren();
 
 private slots:
   void chartSubTypeSelected( int type );

@@ -4,6 +4,7 @@
 void MyReceiver::showChart()
 {
   KChartWidget* cw = new KChartWidget( wiz->chart() );
+  kapp->setMainWidget(cw);
   cw->resize( 400, 300 );
   cw->show();
 }
@@ -49,9 +50,9 @@ int main(int argc, char **argv)
   a.setMainWidget(wiz);
 
   MyReceiver* rec = new MyReceiver( wiz ) ;
-  QObject::connect( wiz, SIGNAL( okclicked() ), rec, SLOT( showChart() ) );
+  QObject::connect( wiz, SIGNAL( finished() ), rec, SLOT( showChart() ) );
+  QObject::connect( wiz, SIGNAL( cancelled() ), &a, SLOT( quit() ) );
 
-  wiz->adjustSize();
   wiz->show();
   return a.exec();
 }
