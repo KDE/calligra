@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
 
 #include "ExportFilter.h"
@@ -445,6 +446,37 @@ void HtmlCssWorker::closeSpan(const FormatData& format)
     *m_streamOut << "</span>";
 }
 
+bool HtmlCssWorker::doFullPaperFormat(const int format,
+            const double width, const double height, const int orientation)
+{
+    QString strWidth, strHeight, strUnits;
+    KWEFUtil::GetNativePaperFormat(format, strWidth, strHeight, strUnits);
+
+    if ((strWidth.isEmpty())||(strHeight.isEmpty())||(strUnits.isEmpty()))
+    {
+        // page format is unknown, so we need the size information
+        strUnits="pt";
+        strWidth=QString::number(width);
+        strHeight=QString::number(height);
+    }
+    if (orientation==1)
+    {
+        // Landscape, so we must swap the sizes
+        QString strTemp(strWidth);
+        strWidth=strHeight;
+        strHeight=strTemp;
+    }
+
+    m_strPageSize="size: ";
+    m_strPageSize+=strWidth;
+    m_strPageSize+=strUnits;
+    m_strPageSize+=" ";
+    m_strPageSize+=strHeight;
+    m_strPageSize+=strUnits;
+    m_strPageSize+=";";
+    return true;
+}
+
 bool HtmlCssWorker::doOpenStyles(void)
 {
     *m_streamOut << "<style type=\"text/css\">\n";
@@ -473,6 +505,14 @@ bool HtmlCssWorker::doFullDefineStyle(LayoutData& layout)
 
 bool HtmlCssWorker::doCloseStyles(void)
 {
+    if (!m_strPageSize.isEmpty())
+    {
+        *m_streamOut << "@page\n{\n  ";
+        *m_streamOut << m_strPageSize;
+        // TODO: margins
+        *m_streamOut << "\n}\n";
+    }
+
     if (!isXML())
     {
         // Put the style under comment to increase the compatibility with old browsers
@@ -480,6 +520,7 @@ bool HtmlCssWorker::doCloseStyles(void)
         *m_streamOut << "-->\n";
     }
     *m_streamOut << "</style>\n";
+
     return true;
 }
 

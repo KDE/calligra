@@ -35,6 +35,8 @@ public:
     virtual bool doOpenStyles(void); // HTML's <style>
     virtual bool doCloseStyles(void); // HTML's </style>
     virtual bool doFullDefineStyle(LayoutData& layout);
+    virtual bool doFullPaperFormat(const int format,
+        const double width, const double height, const int orientation);
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag, const LayoutData& layout);
@@ -45,6 +47,8 @@ private:
     QString layoutToCss(const LayoutData& layout) const;
     QString escapeCssIdentifier(const QString& strText) const;
     QString textFormatToCss(const TextFormatting& formatData) const;
+private:
+    QString m_strPageSize;
 };
 
 #endif /* EXPORTCSS_H */
