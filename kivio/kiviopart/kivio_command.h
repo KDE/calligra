@@ -294,7 +294,7 @@ protected:
 class KivioChangeLineWidthCommand : public KNamedCommand
 {
 public:
-    KivioChangeLineWidthCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldValue,  int _newValue);
+    KivioChangeLineWidthCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, double _oldValue,  double _newValue);
     ~KivioChangeLineWidthCommand();
 
     virtual void execute();
@@ -303,8 +303,8 @@ public:
 protected:
     KivioPage *m_page;
     KivioStencil *m_stencil;
-    int oldValue;
-    int newValue;
+    double oldValue;
+    double newValue;
 };
 
 class KivioChangeBeginEndArrowCommand : public KNamedCommand

@@ -445,12 +445,13 @@ void KivioChangeStencilColorCommand::unexecute()
 }
 
 
-KivioChangeLineWidthCommand::KivioChangeLineWidthCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldValue,  int _newValue)
+KivioChangeLineWidthCommand::KivioChangeLineWidthCommand( const QString &_name,
+    KivioPage *_page, KivioStencil * _stencil, double _oldValue, double _newValue)
     :KNamedCommand( _name),
-     m_page(_page),
-     m_stencil( _stencil ),
-     oldValue( _oldValue),
-     newValue( _newValue)
+    m_page(_page),
+    m_stencil( _stencil ),
+    oldValue( _oldValue),
+    newValue( _newValue)
 {
 }
 

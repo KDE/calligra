@@ -353,7 +353,6 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
   double oldX, oldY;
   bool doneSearching = false;
   bool foundConnection = false;
-  double oldStencilX, oldStencilY;
   KivioConnectorPoint *p;
 
   // Locate the point specified by id
@@ -911,13 +910,13 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
   KivioPainter *painter = pData->painter;
 
   int tf;
-  double _x, _y, _w, _h;
+  int _x, _y, _w, _h;
   QRect boundRect;
 
   _x = zoomHandler->zoomItX(m_pTextConn->x());
   _y = zoomHandler->zoomItY(m_pTextConn->y());
-  _w = 10000000.0f;
-  _h = 10000000.0f;
+  _w = 10000000;
+  _h = 10000000;
 
   QFont f = m_pTextStyle->font();
 
@@ -928,7 +927,7 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 
   tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
 
-  boundRect = painter->boundingRect( (int)_x, (int)_y, (int)_w, (int)_h, tf, m_pTextStyle->text() );
+  boundRect = painter->boundingRect( _x, _y, _w, _h, tf, m_pTextStyle->text() );
 
   painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
 }

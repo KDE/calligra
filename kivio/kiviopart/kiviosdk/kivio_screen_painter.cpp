@@ -716,10 +716,10 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
                 return;
             }
 
-            controlPoints.setPoint( 0, pPoint->x(), pPoint->y() );
-            controlPoints.setPoint( 1, pPoint2->x(), pPoint2->y() );
-            controlPoints.setPoint( 2, pPoint3->x(), pPoint3->y() );
-            controlPoints.setPoint( 3, pPoint4->x(), pPoint4->y() );
+            controlPoints.setPoint( 0, qRound(pPoint->x()), qRound(pPoint->y()) );
+            controlPoints.setPoint( 1, qRound(pPoint2->x()), qRound(pPoint2->y()) );
+            controlPoints.setPoint( 2, qRound(pPoint3->x()), qRound(pPoint3->y()) );
+            controlPoints.setPoint( 3, qRound(pPoint4->x()), qRound(pPoint4->y()) );
 
             tmpPoints = controlPoints.cubicBezier();
 
@@ -746,8 +746,8 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
                 return;
             }
 
-            tmpPoints.makeArc( pPoint->x(), pPoint->y(), pPoint2->x(), pPoint2->y(),
-                               pPoint3->x(), pPoint3->y() );
+            tmpPoints.makeArc( qRound(pPoint->x()), qRound(pPoint->y()), qRound(pPoint2->x()), qRound(pPoint2->y()),
+                               qRound(pPoint3->x()), qRound(pPoint3->y()) );
 
             for( int j=0; j<int(tmpPoints.size()); j++ )
             {
@@ -824,7 +824,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 || !pPoint4 )
             {
-	       kdDebug() << "drawOpenPath() - incorrect # of bezier points" << endl;
+                kdDebug() << "drawOpenPath() - incorrect # of bezier points" << endl;
                 return;
             }
 
@@ -832,22 +832,22 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
                 pPoint3->pointType() != KivioPoint::kptBezier ||
                 pPoint4->pointType() != KivioPoint::kptBezier )
             {
-	       kdDebug() << "drawOpenPath() - bezier curves must have 4 points" << endl;
+                kdDebug() << "drawOpenPath() - bezier curves must have 4 points" << endl;
                 return;
             }
 
-            controlPoints.setPoint( 0, pPoint->x(), pPoint->y() );
-			controlPoints.setPoint( 1, pPoint2->x(), pPoint2->y() );
-			controlPoints.setPoint( 2, pPoint3->x(), pPoint3->y() );
-			controlPoints.setPoint( 3, pPoint4->x(), pPoint4->y() );
+            controlPoints.setPoint( 0, qRound(pPoint->x()), qRound(pPoint->y()) );
+            controlPoints.setPoint( 1, qRound(pPoint2->x()), qRound(pPoint2->y()) );
+            controlPoints.setPoint( 2, qRound(pPoint3->x()), qRound(pPoint3->y()) );
+            controlPoints.setPoint( 3, qRound(pPoint4->x()), qRound(pPoint4->y()) );
 
-			tmpPoints = controlPoints.cubicBezier();
+            tmpPoints = controlPoints.cubicBezier();
 
-			for( int j=0; j<int(tmpPoints.size()); j++ )
-			{
-			    bPoints.putPoints( pointIndex, 1, tmpPoints.point(j).x(), tmpPoints.point(j).y() );
-			    pointIndex++;
-			}
+            for( int j=0; j<int(tmpPoints.size()); j++ )
+            {
+                bPoints.putPoints( pointIndex, 1, tmpPoints.point(j).x(), tmpPoints.point(j).y() );
+                pointIndex++;
+            }
         } // end pointtype==bezier
         else if( pPoint->pointType() == KivioPoint::kptArc )
         {
@@ -856,18 +856,18 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 )
             {
-	       kdDebug() << "drawOpenPath() - incorrect # of arc points" << endl;
+                kdDebug() << "drawOpenPath() - incorrect # of arc points" << endl;
                 return;
             }
             if( pPoint2->pointType() != KivioPoint::kptArc ||
                 pPoint3->pointType() != KivioPoint::kptArc )
             {
-	       kdDebug() << "drawOpenPath() - Arc points must come in triplets" << endl;
+                kdDebug() << "drawOpenPath() - Arc points must come in triplets" << endl;
                 return;
             }
 
-            tmpPoints.makeArc( pPoint->x(), pPoint->y(), pPoint2->x(), pPoint2->y(),
-                               pPoint3->x(), pPoint3->y() );
+            tmpPoints.makeArc( qRound(pPoint->x()), qRound(pPoint->y()), qRound(pPoint2->x()), qRound(pPoint2->y()),
+                               qRound(pPoint3->x()), qRound(pPoint3->y()) );
 
             for( int j=0; j<int(tmpPoints.size()); j++ )
             {
@@ -877,7 +877,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
         } // end pointtype==arc
         else
         {
-	   kdDebug() << "drawOpenPath() - Unknown point type discovered. WOOO!!!" << endl;
+            kdDebug() << "drawOpenPath() - Unknown point type discovered. WOOO!!!" << endl;
         }
 
         pPoint = pPointList->next();
@@ -939,7 +939,7 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
 
       pLock = KivioConfig::config()->lockPixmap();
 
-      m_pPainter->drawPixmap( x1, y1, *pLock );
+      m_pPainter->drawPixmap( qRound(x1), qRound(y1), *pLock );
       return;
    }
 
@@ -964,24 +964,24 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
 
    // first fill it
 //   m_pPainter->fillRect( x1, y1, HWP1, HWP1, b );
-   m_pPainter->drawRect( x1, y1, HWP1, HWP1 );
+   m_pPainter->drawRect( qRound(x1), qRound(y1), qRound(HWP1), qRound(HWP1) );
 
    // Now put something in it if needed
    if( flags & cpfStart )
    {
-      m_pPainter->drawLine( x, y1+2, x, y1+4 );
-      m_pPainter->drawLine( x1+2, y, x1+4, y );
+      m_pPainter->drawLine( qRound(x), qRound(y1+2), qRound(x), qRound(y1+4) );
+      m_pPainter->drawLine( qRound(x1+2), qRound(y), qRound(x1+4), qRound(y) );
    }
    else if( flags & cpfEnd )
    {
-      m_pPainter->drawLine( x1+2, y1+2, x1+4, y1+4 );
-      m_pPainter->drawLine( x1+2, y1+4, x1+4, y1+2 );
+      m_pPainter->drawLine( qRound(x1+2), qRound(y1+2), qRound(x1+4), qRound(y1+4) );
+      m_pPainter->drawLine( qRound(x1+2), qRound(y1+4), qRound(x1+4), qRound(y1+2) );
    }
    else if( flags & cpfConnectable )
    {
       b.setColor(QColor(0,0,0));
 
-      m_pPainter->fillRect(x-1,y-1,3,3, b);
+      m_pPainter->fillRect(qRound(x-1),qRound(y-1),3,3, b);
    }
 }
 

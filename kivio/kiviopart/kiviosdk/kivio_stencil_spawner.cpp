@@ -61,7 +61,7 @@ KivioStencil *KivioStencilSpawner::newStencil()
     return NULL;
 }
 
-KivioStencil *KivioStencilSpawner::newStencil(const QString& name)
+KivioStencil *KivioStencilSpawner::newStencil(const QString& /*name*/)
 {
     return NULL;
 }
