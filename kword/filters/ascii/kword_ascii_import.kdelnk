@@ -1,0 +1,16 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KWordAsciiFilter
+Exec=kword_ascii.bin --server
+Comment=Reggie's KWord Ascii Filter
+Export=application/x-kword
+ExportDescription=KWord
+Import=text/plain
+ImportDescription=Ascii Filter
+RepoID=IDL:KOffice/FilterFactory:1.0,
+ActivationMode=shared
+Type=OpenPart
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+ServiceType=KOfficeFilter
+
