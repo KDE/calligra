@@ -19,7 +19,7 @@ class KChartBarConfigDialog : public KChartConfigDialog
 
 public:
     KChartBarConfigDialog( KDChartParams* params, 
-                           QWidget* parent );
+                           QWidget* parent,KoChart::Data *dat );
 
 public slots:
     virtual void apply();

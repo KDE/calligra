@@ -174,10 +174,11 @@ void KChartView::wizard()
 
 void KChartView::config()
 {
+  KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
     // open a config dialog depending on the chart type
     KDChartParams* params = ((KChartPart*)koDocument())->params();
 
-    KChartConfigDialog* d = new KChartConfigDialog( params, this );
+    KChartConfigDialog* d = new KChartConfigDialog( params, this,dat );
     connect( d, SIGNAL( dataChanged() ),
              this, SLOT( slotRepaint() ) );
     d->exec();

@@ -29,7 +29,7 @@
 #include "kdchart/KDChartParams.h"
 
 KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
-					QWidget* parent ) :
+					QWidget* parent,KoChart::Data *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),
     _subTypePage( 0 )
