@@ -92,6 +92,8 @@ bool KoPictureWmf::load(const QByteArray& array, const QString& /* extension */)
         kdWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)" << endl;
         return false;
     }
+    m_originalSize = wmf.boundingRect().size();
+    // draw wmf file with relative coordinate
     wmf.play(m_clipart, true);
     
     return true;
@@ -120,7 +122,7 @@ bool KoPictureWmf::saveAsKOffice1Dot1(QIODevice* io, const QString& /* extension
 
 QSize KoPictureWmf::getOriginalSize(void) const
 {
-    return m_clipart.boundingRect().size();
+    return m_originalSize;
 }
 
 QPixmap KoPictureWmf::generatePixmap(const QSize& size, bool /*smoothScale*/)
@@ -133,9 +135,8 @@ QPixmap KoPictureWmf::generatePixmap(const QSize& size, bool /*smoothScale*/)
     p.setBackgroundColor( Qt::white );
     pixmap.fill( Qt::white );
 
-    QRect br = m_clipart.boundingRect();
-    if ( br.width() && br.height() )
-        p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
+    if ( m_originalSize.width() && m_originalSize.height() )
+        p.scale( (double)pixmap.width() / (double)m_originalSize.width(), (double)pixmap.height() / (double)m_originalSize.height() );
     p.drawPicture( m_clipart );
     p.end();
     return pixmap;

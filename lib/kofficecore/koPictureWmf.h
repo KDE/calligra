@@ -108,6 +108,7 @@ protected:
     QPicture m_clipart;
     QByteArray m_rawData;
     QSize m_size;
+    QSize m_originalSize;
 };
 
 #endif /* __koPictureWmf_h__ */
