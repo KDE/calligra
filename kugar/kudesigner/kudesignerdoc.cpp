@@ -365,6 +365,7 @@ void KuDesignerDoc::setDetailFooterAttributes(QDomNode *node)
 
 bool KuDesignerDoc::openDocument(const KURL& url, const char *format /*=0*/)
 {
+    setURL(url);
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile );
   /////////////////////////////////////////////////
