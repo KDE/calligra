@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,11 +18,15 @@
 */
 
 #include "kexi.h"
-
+#include "kexi_p.h"
 #include "kexi_utils.h"
+
+#include <qtimer.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kcursor.h>
 
 using namespace Kexi;
 
@@ -156,3 +160,31 @@ KexiValidator::Result KexiDBObjectNameValidator::internalCheck(
 }
 
 //--------------------------------------------------------------------------------
+
+DelayedCursorHandler::DelayedCursorHandler() {
+	connect(&timer, SIGNAL(timeout()), this, SLOT(show()));
+}
+void DelayedCursorHandler::start() {
+	timer.start(1000, true);
+}
+void DelayedCursorHandler::stop() {
+	timer.stop();
+	QApplication::restoreOverrideCursor();
+}
+void DelayedCursorHandler::show() {
+	QApplication::setOverrideCursor( KCursor::waitCursor() );
+}
+
+DelayedCursorHandler _delayedCursorHandler;
+
+void Kexi::setWaitCursor() {
+	_delayedCursorHandler.start();
+}
+void Kexi::removeWaitCursor() {
+	_delayedCursorHandler.stop();
+}
+
+//--------------------------------------------------------------------------------
+
+#include "kexi_p.moc"
+

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -100,7 +100,11 @@ namespace Kexi
 				QString &message, QString &details);
 			QGuardedPtr<KexiDB::Driver> m_drv;
 	};
-}
+
+	KEXICORE_EXPORT void setWaitCursor();
+	KEXICORE_EXPORT void removeWaitCursor();
+
+}//namespace Kexi
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.

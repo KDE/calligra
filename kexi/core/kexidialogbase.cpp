@@ -248,8 +248,10 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	KexiViewBase *newView = (m_stack->widget(newViewMode) && m_stack->widget(newViewMode)->inherits("KexiViewBase"))
 		? static_cast<KexiViewBase*>(m_stack->widget(newViewMode)) : 0;
 	if (!newView) {
+		Kexi::setWaitCursor();
 		//ask the part to create view for the new mode
 		newView = m_part->createView(m_stack, this, *m_item, newViewMode);
+		Kexi::removeWaitCursor();
 		if (!newView) {
 			//js TODO error?
 			kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
