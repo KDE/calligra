@@ -451,6 +451,10 @@ Tokens Formula::scan( const QString& expr )
   QString tokenText;
   int tokenStart = 0;
   
+  // first character must be equal sign (=)
+  if( ex[0] != '=' )
+    return tokens;
+
   // force a terminator
   ex.append( QChar() );
 
