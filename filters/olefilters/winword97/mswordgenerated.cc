@@ -1376,6 +1376,24 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL OLST *out, unsigned count)
     return bytes;
 } // OLST
 
+unsigned MsWordGenerated::read(const U8 *in, __UNAL METAFILEPICT *out, unsigned count)
+{
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
+    unsigned bytes = 0;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+    for (unsigned i = 0; i < count; i++)
+    {
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 4);
+        out++;
+    }
+    return bytes;
+} // METAFILEPICT
+
 unsigned MsWordGenerated::read(const U8 *in, __UNAL NUMRM *out, unsigned count)
 {
     U32 shifterU32;
@@ -1399,6 +1417,25 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL NUMRM *out, unsigned count)
     }
     return bytes;
 } // NUMRM
+
+unsigned MsWordGenerated::read(const U8 *in, __UNAL OBJHEADER *out, unsigned count)
+{
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
+    unsigned bytes = 0;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+    for (unsigned i = 0; i < count; i++)
+    {
+        bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
+        out++;
+    }
+    return bytes;
+} // OBJHEADER
 
 unsigned MsWordGenerated::read(const U8 *in, __UNAL PGD *out, unsigned count)
 {
@@ -1575,7 +1612,23 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL PICF *out, unsigned count)
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
+        bytes += read(in + bytes, (METAFILEPICT *)(ptr + bytes), 1);
+        bytes += read(in + bytes, (U8 *)(ptr + bytes), 14);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 8);
+        bytes += read(in + bytes, &shifterU16);
+        out->brcl = shifterU16;
+        shifterU16 >>= 4;
+        out->fFrameEmpty = shifterU16;
+        shifterU16 >>= 1;
+        out->fBitmap = shifterU16;
+        shifterU16 >>= 1;
+        out->fDrawHatch = shifterU16;
+        shifterU16 >>= 1;
+        out->fError = shifterU16;
+        shifterU16 >>= 1;
+        bytes += read(in + bytes, (BRC *)(ptr + bytes), 4);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 3);
         out++;
     }
     return bytes;

@@ -1,17 +1,17 @@
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
-
+ 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
     version 2 of the License, or (at your option) any later version.
-
+ 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Library General Public License for more details.
-
+ 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -3004,6 +3004,42 @@ public:
     } __attribute__ ((packed)) OLST;
     static unsigned read(const U8 *in, __UNAL OLST *out, unsigned count=1);
 
+    // Window's (METAFILEPICT)
+    typedef struct METAFILEPICT
+    {
+
+        // Specifies the mapping mode in which the picture is drawn.&nbsp;
+        U16 mm;
+
+        // Specifies the size of the metafile picture for all modes except
+        // the MM_ISOTROPIC and MM_ANISOTROPIC modes. (For more information
+        // about these modes, see the yExt member.) The x-extent specifies
+        // the width of the rectangle within which the picture is drawn. The
+        // coordinates are in units that correspond to the mapping mode.
+        U16 xExt;
+
+        // Specifies the size of the metafile picture for all modes except
+        // the MM_ISOTROPIC and MM_ANISOTROPIC modes. The y-extent specifies
+        // the height of the rectangle within which the picture is drawn. The
+        // coordinates are in units that correspond to the mapping
+        // mode.&nbsp; <p>For MM_ISOTROPIC and MM_ANISOTROPIC modes, which
+        // can be scaled, the xExt and yExt members contain an optional
+        // suggested size in MM_HIMETRIC units. <p>For MM_ANISOTROPIC
+        // pictures, xExt and yExt can be zero when no suggested size is
+        // supplied. For MM_ISOTROPIC pictures, an aspect ratio must be
+        // supplied even when no suggested size is given. (If a suggested
+        // size is given, the aspect ratio is implied by the size.) To give
+        // an aspect ratio without implying a suggested size, set xExt and
+        // yExt to negative values whose ratio is the appropriate aspect
+        // ratio. The magnitude of the negative xExt and yExt values is
+        // ignored; only the ratio is used.
+        U16 yExt;
+
+        // Identifies a memory metafile.
+        U16 hMF;
+    } __attribute__ ((packed)) METAFILEPICT;
+    static unsigned read(const U8 *in, __UNAL METAFILEPICT *out, unsigned count=1);
+
     // Number Revision Mark Data (NUMRM)
     typedef struct NUMRM
     {
@@ -3041,6 +3077,21 @@ public:
         XCHAR xst[32];
     } __attribute__ ((packed)) NUMRM;
     static unsigned read(const U8 *in, __UNAL NUMRM *out, unsigned count=1);
+
+    // Embedded Object properties (OBJHEADER)
+    typedef struct OBJHEADER
+    {
+
+        // length of object (including this header)
+        U32 lcb;
+
+        // length of this header (for future use)
+        U16 cbHeader;
+
+        // Index to clipboard format of object
+        U16 icf;
+    } __attribute__ ((packed)) OBJHEADER;
+    static unsigned read(const U8 *in, __UNAL OBJHEADER *out, unsigned count=1);
 
     // Page Descriptor (PGD)
     typedef struct PGD
@@ -3279,7 +3330,7 @@ public:
         U8 fAutoSpaceDE;
 
         // when 1, auto space FE and numeric characters
-        U8 fAtuoSpaceDN;
+        U8 fAutoSpaceDN;
 
         // font alignment
         //     0 Hanging
@@ -3470,17 +3521,97 @@ public:
         // number of bytes in the PIC (to allow for future expansion).
         U16 cbHeader;
 
-        //
-        U16 mfp_mm;
+        // If a Windows metafile is stored immediately following the PIC
+        // structure, the mfp is a Window's METAFILEPICT structure. When the
+        // data immediately following the PIC is a TIFF filename, mfp.mm ==
+        // 98 If a bitmap is stored after the pic, mfp.mm == 99 <p>When the
+        // PIC describes a bitmap, mfp.xExt is the width of the bitmap in
+        // pixels and mfp.yExt is the height of the bitmap in pixels..
+        METAFILEPICT mfp;
 
-        //
-        U16 mfp_xExt;
+        // Window's bitmap structure when PIC describes a BITMAP (14 bytes).
+        //     Rect for window origin and extents when metafile is stored -- ignored if 0 (8 bytes).
+        U8 bm_rcWinMF[14];
 
-        //
-        U16 mfp_yExt;
+        // horizontal measurement in twips of the rectangle the picture
+        // should be imaged within. when scaling bitmaps, dxaGoal and dyaGoal
+        // may be ignored if the operation would cause the bitmap to shrink
+        // or grow by a non -power-of-two factor
+        U16 dxaGoal;
 
-        //
-        U16 mfp_hMF;
+        // vertical measurement in twips of the rectangle the picture should
+        // be imaged within.
+        U16 dyaGoal;
+
+        // horizontal scaling factor supplied by user expressed in .001%
+        // units.
+        U16 mx;
+
+        // vertical scaling factor supplied by user expressed in .001% units.
+        U16 my;
+
+        // the amount the picture has been cropped on the left in twips. for
+        // all of the Crop values, a positive measurement means the specified
+        // border has been moved inward from its original setting and a
+        // negative measurement means the border has been moved outward from
+        // its original setting.
+        U16 dxaCropLeft;
+
+        // the amount the picture has been cropped on the top in twips.
+        U16 dyaCropTop;
+
+        // the amount the picture has been cropped on the right in twips.
+        U16 dxaCropRight;
+
+        // the amount the picture has been cropped on the bottom in twips.
+        U16 dyaCropBottom;
+
+        // Obsolete, superseded by brcTop, etc. In WinWord 1.x, it was the
+        // type of border to place around picture
+        //     0 single
+        //     1 thick
+        //     2 double
+        //     3 shadow
+        U16 brcl:4;
+
+        // picture consists of a single frame
+        U16 fFrameEmpty:1;
+
+        // ==1, when picture is just a bitmap
+        U16 fBitmap:1;
+
+        // ==1, when picture is an active OLE object
+        U16 fDrawHatch:1;
+
+        // ==1, when picture is just an error message
+        U16 fError:1;
+
+        // bits per pixel
+        //     0 unknown
+        //     1 monochrome
+        //     4 VGA
+        U16 bpp;
+
+        // specification for border above picture
+        BRC brcTop;
+
+        // specification for border to the left of picture
+        BRC brcLeft;
+
+        // specification for border below picture
+        BRC brcBottom;
+
+        // specification for border to the right of picture
+        BRC brcRight;
+
+        // horizontal offset of hand annotation origin
+        U16 dxaOrigin;
+
+        // vertical offset of hand annotation origin
+        U16 dyaOrigin;
+
+        // unused
+        U16 cProps;
     } __attribute__ ((packed)) PICF;
     static unsigned read(const U8 *in, __UNAL PICF *out, unsigned count=1);
 
