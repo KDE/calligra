@@ -70,9 +70,9 @@ k_dcop:
     virtual bool dontCheckUpperWord();
     virtual bool dontCheckTitleCase() const;
     virtual bool showdocStruct() const;
-    virtual bool viewFrameBorders() const; 
+    virtual bool viewFrameBorders() const;
 
-    virtual bool viewFormattingChars() const; 
+    virtual bool viewFormattingChars() const;
     virtual void setViewFormattingChars(bool _b);
 
     virtual void setHeaderVisible( bool );
@@ -84,9 +84,13 @@ k_dcop:
     virtual void recalcAllVariables();
     virtual void recalcVariables(int _var);
     virtual void recalcVariables(const QString &varName);
-    
+
     virtual void setStartingPage(int nb);
     virtual int startingPage();
+
+    virtual void setDisplayLink(bool b);
+    virtual bool displayLink();
+
 private:
     KWDocument *doc;
 
