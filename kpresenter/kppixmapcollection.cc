@@ -54,7 +54,7 @@ QPixmap *KPPixmapDataCollection::insertPixmapData( const Key &key, const QPixmap
 
     QPixmap *image = new QPixmap( img );
 
-    //image->detach();
+    image->detach();
     data.insert( Key( key ), *image );
 
     int ref = 1;
@@ -159,13 +159,13 @@ QPixmap* KPPixmapCollection::findPixmap( Key &key )
     QMap< Key, QPixmap >::Iterator it = pixmaps.begin();
     it = pixmaps.find( key );
 
-    if ( it != pixmaps.end() && it.key() == key ) {
+    if ( it != pixmaps.end() && it.key() == key && !it.data().isNull() ) {
         //printf( "    pixmap found in pixmaps: %s\n", it.key().toString().latin1() );
         addRef( key );
         return &it.data();
     } else {
         QPixmap *img = dataCollection.findPixmapData( key.dataKey );
-        if ( img ) {
+        if ( img && !img->isNull() ) {
             //printf( "    pixmap found in data collection: %s\n", key.dataKey.toString().latin1() );
             dataCollection.addRef( key.dataKey );
             return loadPixmap( *img, key, true );

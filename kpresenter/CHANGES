@@ -385,3 +385,8 @@ Reggie, 20.8.1999:
 ------------------
 - Improved speed of inserting new pages/slides
 - Improved speed of pixmap handling
+
+Reggie, 21.8.1999:
+------------------
+- Make backups before saving
+- Fixed a bug in the pixmap handling

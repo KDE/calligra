@@ -270,7 +270,8 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 	<< "\" ptHeight=\"" << _pageLayout.ptHeight
 	<< "\" mmWidth =\"" << _pageLayout.mmWidth << "\" mmHeight=\"" << _pageLayout.mmHeight
 	<< "\" inchWidth =\"" << _pageLayout.inchWidth << "\" inchHeight=\"" << _pageLayout.inchHeight
-	<< "\" orientation=\"" << static_cast<int>( _pageLayout.orientation ) << "\" unit=\"" << static_cast<int>( _pageLayout.unit ) << "\">" << endl;
+	<< "\" orientation=\"" << static_cast<int>( _pageLayout.orientation ) << "\" unit=\"" << static_cast<int>( _pageLayout.unit ) 
+	<< "\">" << endl;
     out << indent << "<PAPERBORDERS mmLeft=\"" << _pageLayout.mmLeft << "\" mmTop=\"" << _pageLayout.mmTop << "\" mmRight=\""
 	<< _pageLayout.mmRight << "\" mmBottom=\"" << _pageLayout.mmBottom
 	<< "\" ptLeft=\"" << _pageLayout.ptLeft << "\" ptTop=\"" << _pageLayout.ptTop << "\" ptRight=\""
@@ -280,7 +281,8 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << etag << "</PAPER>" << endl;
 
     out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\"" << _rastY
-	<< "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" << endl;
+	<< "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" 
+	<< endl;
     saveBackground( out );
     out << etag << "</BACKGROUND>" << endl;
 
@@ -433,7 +435,9 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 	    QString mime = "image/" + format.lower();
 	    _store->open( u2, mime.lower() );
 	    ostorestream out( _store );
-	    writeImageToStream( out, it.data().convertToImage(), format );
+  	    QPixmap pix( it.data() );
+ 	    pix.detach();
+  	    writeImageToStream( out, pix.convertToImage(), format );
 	    out.flush();
 	    _store->close();
 	}

@@ -15,6 +15,7 @@
 #include <qprinter.h>
 #include <qmsgbox.h>
 #include <qtimer.h>
+#include <qfile.h>
 
 #include "kpresenter_shell.h"
 #include "kpresenter_doc.h"
@@ -32,6 +33,8 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kimgio.h>
+
+#include <stdlib.h>
 
 QList<KPresenterShell>* KPresenterShell::s_lstShells = 0L;
 bool KPresenterShell::previewHandlerRegistered = false;
@@ -258,6 +261,12 @@ bool KPresenterShell::saveDocument( const char *_url, const char *_format )
     if ( _format == 0L || *_format == 0 )
         _format = "application/x-kPresenter";
 
+    if ( QFile::exists( _url ) ) {
+	QString cmd = "cp %1 %2~";
+	cmd = cmd.arg( _url ).arg( _url );
+	system( cmd.latin1() );
+    }
+    
     return m_pDoc->saveToURL( _url, _format );
 }
 
