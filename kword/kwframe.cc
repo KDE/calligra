@@ -61,7 +61,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       // easier to compare this list with the member vars list (compiler ensures order).
       m_sheetSide( AnySide ),
       m_runAround( _ra ),
-      frameBehaviour( AutoCreateNewFrame ),
+      m_frameBehavior( AutoCreateNewFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
       m_runAroundGap( _gap ),
       bleft( 0 ),
@@ -157,7 +157,7 @@ void KWFrame::copySettings(KWFrame *frm)
 
     //
     setBackgroundColor( frm->backgroundColor() );
-    setFrameBehaviour(frm->frameBehavior());
+    setFrameBehavior(frm->frameBehavior());
     setNewFrameBehavior(frm->newFrameBehavior());
     setSheetSide(frm->sheetSide());
     setLeftBorder(frm->leftBorder());
@@ -365,7 +365,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
                           ? frameElem.attribute( "runaroundGap" ).toDouble()
                           : frameElem.attribute( "runaGapPT" ).toDouble();
     m_sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
-    frameBehaviour = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
+    m_frameBehavior = static_cast<FrameBehavior>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
     // Old documents had no "NewFrameBehavior" for footers/headers -> default to Copy.
     NewFrameBehavior defaultValue = headerOrFooter ? Copy : Reconnect;
     // for old document we used the American spelling of newFrameBehavior, so this is for backwards compatibility.
@@ -1246,9 +1246,9 @@ void KWFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPo
         popup->popup( point );
 }
 
-void KWFrameSet::setFrameBehaviour( KWFrame::FrameBehaviour fb ) {
+void KWFrameSet::setFrameBehavior( KWFrame::FrameBehavior fb ) {
     for(KWFrame *f=frames.first();f;f=frames.next())
-        f->setFrameBehaviour(fb);
+        f->setFrameBehavior(fb);
 }
 
 void KWFrameSet::setNewFrameBehavior( KWFrame::NewFrameBehavior nfb ) {
@@ -1283,7 +1283,7 @@ void KWFrameSet::printDebug()
         printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
         kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << endl;
-        kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->frameBehavior() ] << endl;
+        kdDebug() << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
         kdDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
         QColor col = frame->backgroundColor().color();
         kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;

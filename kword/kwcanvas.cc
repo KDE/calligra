@@ -1231,7 +1231,7 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
             KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j, QString::null /*automatic name*/ );
             KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, KWFrame::RA_NO ); // pos and size will be set in setBoundingRect
             cell->addFrame( frame, false );
-            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            frame->setFrameBehavior(KWFrame::AutoExtendFrame);
             frame->setNewFrameBehavior(KWFrame::NoFollowup);
         }
     }

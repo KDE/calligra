@@ -330,7 +330,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grp->insert( rNoShow );
 
         eofGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
-        KWFrame::FrameBehaviour fb;
+        KWFrame::FrameBehavior fb;
         bool show=true;
         if(frame) {
             fb = frame->frameBehavior();
@@ -369,18 +369,18 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
     reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
     if ( rResizeFrame )
-        connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
+        connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     onpGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
     onpGrid->addWidget( reconnect, 1, 0 );
 
     noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
     if ( rResizeFrame )
-        connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
+        connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     onpGrid->addWidget( noFollowup, 2, 0 );
 
     copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
     if ( rResizeFrame )
-        connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOff() ) );
+        connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOff() ) );
     onpGrid->addWidget( copyRadio, 3, 0);
 
     enableOnNewPageOptions();
@@ -415,7 +415,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
             noFollowup->setChecked(true);
         } else {
             copyRadio->setChecked(true);
-            setFrameBehaviourInputOff();
+            setFrameBehaviorInputOff();
         }
     }
 
@@ -1098,13 +1098,13 @@ void KWFrameDia::updateBrushConfiguration()
 }
 
 // Called when "reconnect" or "no followup" is checked
-void KWFrameDia::setFrameBehaviourInputOn() {
+void KWFrameDia::setFrameBehaviorInputOn() {
     if ( tab4 && floating->isChecked() )
         return;
     if( rAppendFrame && rResizeFrame && rNoShow && !rAppendFrame->isEnabled() ) {
-        if(frameBehaviour== KWFrame::AutoExtendFrame) {
+        if(frameBehavior== KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
-        } else if (frameBehaviour== KWFrame::AutoCreateNewFrame) {
+        } else if (frameBehavior== KWFrame::AutoCreateNewFrame) {
             rAppendFrame->setChecked(true);
         } else {
             rNoShow->setChecked(true);
@@ -1116,16 +1116,16 @@ void KWFrameDia::setFrameBehaviourInputOn() {
 }
 
 // Called when "place a copy" is checked
-void KWFrameDia::setFrameBehaviourInputOff() {
+void KWFrameDia::setFrameBehaviorInputOff() {
     if ( tab4 && floating->isChecked() )
         return;
     if( rAppendFrame && rResizeFrame && rNoShow && rAppendFrame->isEnabled() ) {
         if(rResizeFrame->isChecked()) {
-            frameBehaviour=KWFrame::AutoExtendFrame;
+            frameBehavior=KWFrame::AutoExtendFrame;
         } else if ( rAppendFrame->isChecked()) {
-            frameBehaviour=KWFrame::AutoCreateNewFrame;
+            frameBehavior=KWFrame::AutoCreateNewFrame;
         } else {
-            frameBehaviour=KWFrame::Ignore;
+            frameBehavior=KWFrame::Ignore;
         }
         // In "Place a copy" mode, we can't have "create new page if text too long"
         if ( rAppendFrame->isChecked() )
@@ -1320,11 +1320,11 @@ bool KWFrameDia::applyChanges()
             }
         }
 
-        // FrameBehaviour
+        // FrameBehavior
         if ( frameType == FT_TEXT )
         {
             bool update=true;
-            KWFrame::FrameBehaviour fb;
+            KWFrame::FrameBehavior fb;
             if(rResizeFrame->isChecked())
                 fb = KWFrame::AutoExtendFrame;
             else if ( rAppendFrame->isChecked())
@@ -1336,15 +1336,15 @@ bool KWFrameDia::applyChanges()
 
             if(frame)
                 if(cbAllFrames->isChecked() && frame->frameSet())
-                    frame->frameSet()->setFrameBehaviour(fb);
+                    frame->frameSet()->setFrameBehavior(fb);
                 else
-                    frame->setFrameBehaviour(fb);
+                    frame->setFrameBehavior(fb);
             else if(update) {
                 for(KWFrame *f=allFrames.first();f; f=allFrames.next())
                     if(cbAllFrames->isChecked())
-                        f->frameSet()->setFrameBehaviour(fb);
+                        f->frameSet()->setFrameBehavior(fb);
                     else
-                        f->setFrameBehaviour(fb);
+                        f->setFrameBehavior(fb);
             }
         }
 

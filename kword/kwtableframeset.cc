@@ -823,7 +823,7 @@ kdDebug() << "adjusting " << rowPos << " -> " << rowPos + height << endl;
         if(redoFrame.isEmpty())
         {
             theFrame=new KWFrame(0L, 1, 1, 100, 20, KWFrame::RA_NO); // use dummy values here...
-            theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
             theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
         }
         else
@@ -927,7 +927,7 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
         if(redoFrame.isEmpty())
         {
             theFrame=new KWFrame(newCell, 1, 1, width, 20, KWFrame::RA_NO ); // dummy values..
-            theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
         }
         else
         {
@@ -1233,7 +1233,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             {
                 theFrame=firstFrame->getCopy();
                 theFrame->setRunAround( KWFrame::RA_NO );
-                theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
                 theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
                 lastFrameSet->addFrame( theFrame,false );
             }
@@ -1272,8 +1272,8 @@ void KWTableFrameSet::validate()
     for (unsigned int j=0; j < getNumCells() ; j++) {
         KWFrame *theFrame = getCell(j)->frame(0);
         if(theFrame->frameBehavior()==KWFrame::AutoCreateNewFrame) {
-            theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-            kdWarning() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
+            theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
+            kdWarning() << "Table cell property frameBehavior was incorrect; fixed" << endl;
         }
         if(theFrame->newFrameBehavior()!=KWFrame::NoFollowup) {
             kdWarning() << "Table cell property newFrameBehavior was incorrect; fixed" << endl;
@@ -1306,7 +1306,7 @@ void KWTableFrameSet::validate()
                 QString name = m_doc->generateFramesetName( i18n( "1 is table name, 2 is a number", "%1 Auto Added Cell %2" ).arg( getName() ) );
                 Cell *cell = new Cell( this, row, col, name );
                 KWFrame *theFrame = new KWFrame(cell, 10, 10, 20, 20, KWFrame::RA_NO );
-                theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
                 theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
                 cell->addFrame( theFrame,false );
                 cell->m_rows = 1;

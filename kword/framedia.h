@@ -134,7 +134,7 @@ protected:
 
     double oldX, oldY, oldW, oldH;
 
-    int /*FrameBehaviour*/ frameBehaviour;
+    int /*FrameBehavior*/ frameBehavior;
     KoUnit::Unit frameUnits;
     QString oldFrameSetName;
     QBrush newBrushStyle;
@@ -142,8 +142,8 @@ protected:
 protected slots:
     virtual void slotOk();
     void connectListSelected( QListViewItem * );
-    void setFrameBehaviourInputOn();
-    void setFrameBehaviourInputOff();
+    void setFrameBehaviorInputOn();
+    void setFrameBehaviorInputOff();
     void slotFloatingToggled(bool);
     void textNameFrameChanged ( const QString & );
     void updateBrushConfiguration();

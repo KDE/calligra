@@ -690,7 +690,7 @@ void KWDocument::recalcFrames()
                     KWFrame *frame = new KWFrame( evenHeader,ptLeftBorder(), l * ptPaperHeight() + ptTopBorder(),
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                     frame->setNewFrameBehavior( KWFrame::Copy );
                     frame->setCopy( true );
                     evenHeader->addFrame( frame );
@@ -729,7 +729,7 @@ void KWDocument::recalcFrames()
                                                       ptTopBorder(),
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h2 );
-                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                         frame->setNewFrameBehavior( KWFrame::Copy );
                         frame->setCopy( true );
                         oddHeader->addFrame( frame );
@@ -754,7 +754,7 @@ void KWDocument::recalcFrames()
                                                       ptTopBorder(),
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h1 );
-                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                         frame->setNewFrameBehavior( KWFrame::Copy );
                         frame->setCopy( true );
                         evenHeader->addFrame( frame );
@@ -809,7 +809,7 @@ void KWDocument::recalcFrames()
                     KWFrame *frame = new KWFrame( evenHeader, ptLeftBorder(), l * ptPaperHeight() + ptTopBorder(),
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                     frame->setNewFrameBehavior( KWFrame::Copy );
                     frame->setCopy( true );
                     evenHeader->addFrame( frame );
@@ -845,7 +845,7 @@ void KWDocument::recalcFrames()
                                                   ptBottomBorder() - h,
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                     frame->setNewFrameBehavior( KWFrame::Copy );
                     frame->setCopy( true );
                     evenFooter->addFrame( frame );
@@ -881,7 +881,7 @@ void KWDocument::recalcFrames()
                                                       ptBottomBorder() - h2,
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h2 );
-                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                         frame->setNewFrameBehavior( KWFrame::Copy );
                         frame->setCopy( true );
                         oddFooter->addFrame( frame );
@@ -904,7 +904,7 @@ void KWDocument::recalcFrames()
                                                       ptBottomBorder() - h1,
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h1 );
-                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                         frame->setNewFrameBehavior( KWFrame::Copy );
                         frame->setCopy( true );
                         evenFooter->addFrame( frame );
@@ -949,7 +949,7 @@ void KWDocument::recalcFrames()
                                                   ptBottomBorder() - h,
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
                     frame->setNewFrameBehavior( KWFrame::Copy );
                     frame->setCopy( true );
                     evenFooter->addFrame( frame );
@@ -1252,7 +1252,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
-        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
@@ -1263,7 +1263,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
@@ -1274,7 +1274,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
@@ -1286,7 +1286,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
@@ -1298,7 +1298,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
@@ -1310,7 +1310,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
@@ -1324,7 +1324,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             KWFrame *frame = new KWFrame(fs, ptLeftBorder(),
                 i * ptPaperHeight() + ptPaperHeight() - ptTopBorder() - 20,
                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            frame->setFrameBehavior(KWFrame::AutoExtendFrame);
             fs->addFrame( frame );
         }
         frames.append( fs );
@@ -1584,10 +1584,10 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
             // Old file format had autoCreateNewFrame as a frameset attribute
             if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
             {
-                KWFrame::FrameBehaviour behav = static_cast<KWFrame::FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
+                KWFrame::FrameBehavior behav = static_cast<KWFrame::FrameBehavior>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
                 QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
                 for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
-                    frameIt.current()->setFrameBehaviour( behav );
+                    frameIt.current()->setFrameBehavior( behav );
             }
             return fs;
         }

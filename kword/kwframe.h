@@ -106,10 +106,10 @@ public:
 
 
     /** what should happen when the frame is full */
-    enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
+    enum FrameBehavior { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-    FrameBehaviour frameBehavior() { return frameBehaviour; }
-    void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
+    FrameBehavior frameBehavior() { return m_frameBehavior; }
+    void setFrameBehavior( FrameBehavior fb ) { m_frameBehavior = fb; }
 
     /* Frame duplication properties */
 
@@ -204,7 +204,7 @@ public:
 private:
     SheetSide m_sheetSide;
     RunAround m_runAround;
-    FrameBehaviour frameBehaviour;
+    FrameBehavior m_frameBehavior;
     NewFrameBehavior m_newFrameBehavior;
     double m_runAroundGap;
     double bleft, bright, btop, bbottom; // margins
@@ -551,7 +551,7 @@ public:
     void setName( const QString &_name ) { m_name = _name; }
 
     /** set frameBehavior on all frames, see KWFrame for specifics */
-    void setFrameBehaviour( KWFrame::FrameBehaviour fb );
+    void setFrameBehavior( KWFrame::FrameBehavior fb );
 
     /** set newFrameBehavior on all frames, see KWFrame for specifics */
     void setNewFrameBehavior( KWFrame::NewFrameBehavior nfb );
