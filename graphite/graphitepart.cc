@@ -225,16 +225,16 @@ void GraphitePart::setUnit(Graphite::Unit unit) {
     emit unitChanged(unit);
 }
 
-KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
-    return new GraphiteView(this, parent, name);
-}
-
 void GraphitePart::edit_undo() {
     m_history.undo();
 }
 
 void GraphitePart::edit_redo() {
     m_history.redo();
+}
+
+KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
+    return new GraphiteView(this, parent, name);
 }
 
 void GraphitePart::edit_cut() {

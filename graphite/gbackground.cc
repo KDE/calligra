@@ -18,13 +18,14 @@
 */
 
 #include <qdom.h>
+#include <qpopupmenu.h>
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kdebug.h>
 
 #include <gbackground.h>
-
+#include <graphitepart.h>
 
 GBackground::GBackground(const QDomElement &element) :
     GAbstractGroup(element.namedItem(QString::fromLatin1("gabstractgroup")).toElement()) {
@@ -126,14 +127,36 @@ void GBackground::recalculate() const {
 }
 
 
-GBackgroundM9r::GBackgroundM9r(GBackground *background, const Mode &mode, GraphitePart *part,
+GBackgroundM9r::GBackgroundM9r(GBackground *background, const Mode &/*mode*/, GraphitePart *part,
                      GraphiteView *view, const QString &type) :
-    G2DObjectM9r(background, mode, part, view, type, false), m_background(background) {
+    G2DObjectM9r(background, GObjectM9r::Manipulate, part, view, type, false),
+    m_background(background), m_popup(0) {
 }
 
-bool GBackgroundM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ### RMB popup
-    return false;
+GBackgroundM9r::~GBackgroundM9r() {
+    delete m_popup;
+}
+
+bool GBackgroundM9r::mousePressEvent(QMouseEvent *e, QRect &/*dirty*/) {
+
+    if(e->button()==Qt::RightButton) {
+        if(m_popup==0) {
+            m_popup=new QPopupMenu();
+            m_popup->insertItem(BarIcon(QString::fromLatin1("undo")), i18n("&Undo"), document(), SIGNAL(edit_undo()));
+            m_popup->insertItem(BarIcon(QString::fromLatin1("redo")), i18n("&Redo"), document(), SIGNAL(edit_redo()));
+            m_popup->insertItem(i18n("&Properties..."), this, SLOT(showPropertyDialog()));
+        }
+        m_popup->popup(e->pos());
+        return true;
+    }
+    else
+        return false;
+}
+
+bool GBackgroundM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+    showPropertyDialog();
+    // ### repaint, calculate a dirty area
+    return true;
 }
 
 #include <gbackground.moc>

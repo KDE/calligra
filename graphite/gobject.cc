@@ -54,16 +54,14 @@ GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
     KDialogBase(KDialogBase::IconList, i18n("Change Properties"),
                 KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
                 KDialogBase::Ok, view->canvas(), "property dia", true, true),
-    m_object(object), m_mode(mode), m_part(part), // m_firstCall(true),
-    m_pressed(false), m_changed(false), m_created(false), m_type(type),
-    m_line(0L), m_view(view) {
+    m_object(object), m_mode(mode), m_part(part), m_pressed(false),
+    m_changed(false), m_created(false), m_type(type), m_line(0L), m_view(view) {
 
     m_handles=new QList<QRect>;
     m_handles->setAutoDelete(true);
 }
 
 GObjectM9r::~GObjectM9r() {
-
     m_handles->clear();
     delete m_handles;
 }
@@ -73,25 +71,21 @@ void GObjectM9r::draw(QPainter &p) {
 }
 
 void GObjectM9r::slotChanged(const QString &) {
-
     enableButtonApply(true);
     m_changed=true;
 }
 
 void GObjectM9r::slotChanged(int) {
-
     enableButtonApply(true);
     m_changed=true;
 }
 
 void GObjectM9r::slotChanged(const QColor &) {
-
     enableButtonApply(true);
     m_changed=true;
 }
 
 void GObjectM9r::slotOk() {
-
     slotApply();
     KDialogBase::slotOk();
 }
@@ -119,12 +113,16 @@ void GObjectM9r::slotCancel() {
         KDialogBase::slotCancel();
 }
 
+void GObjectM9r::showPropertyDialog() {
+    createPropertyDialog(); // just to be sure
+    exec();
+}
+
 void GObjectM9r::createPropertyDialog() {
 
     if(m_created)
         return;
 
-    // This should set the app icon for the dialog, too... broken?
     m_created=true;
     enableButtonOK(true);
     enableButtonApply(false);
@@ -247,13 +245,11 @@ void G1DObjectM9r::createPropertyDialog() {
 
 
 void G2DObjectM9r::slotChanged(int x) {
-
     updatePage();
     GObjectM9r::slotChanged(x);
 }
 
 void G2DObjectM9r::slotChanged(const QColor &x) {
-
     updatePage();
     GObjectM9r::slotChanged(x);
 }
@@ -287,7 +283,6 @@ void G2DObjectM9r::slotApply() {
 }
 
 void G2DObjectM9r::resizeEvent(QResizeEvent *e) {
-
     updatePage();
     KDialogBase::resizeEvent(e);
 }
@@ -529,7 +524,6 @@ void GObject::setDirty() {
 }
 
 void GObject::setParent(GObject *parent) const {
-
     if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
         m_parent=parent;
 }

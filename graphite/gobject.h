@@ -90,6 +90,7 @@ public:
     void setMode(const Mode &mode) { m_mode=mode; }
 
     const GraphiteView *view() const { return m_view; }
+    const GraphitePart *document() const { return m_part; }
 
     // the handles() contain the handle rects for mouse over stuff afterwards
     virtual void draw(QPainter &p);
@@ -100,7 +101,6 @@ public:
     virtual bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
     virtual bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
 
-    // default impl!
     virtual bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
     virtual bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
 
@@ -119,12 +119,13 @@ protected slots:
     virtual void slotApply();
     virtual void slotCancel();
 
+    virtual void showPropertyDialog();
+
 protected:
     GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
                GraphiteView *view, const QString &type);
 
-    // This menthod returns a property dialog for the object. It
-    // creates a dialog (i.e. adds a few pages to *this). The
+    // This menthod creates a dialog (i.e. adds a few pages to *this). The
     // dialog is cached for further use and destroyed on destrucion
     // of this object.
     // If you decide to override this method make sure that the first
@@ -137,8 +138,6 @@ protected:
     virtual void createPropertyDialog();
 
     bool created() const { return m_created; }
-    //bool firstCall() const { return m_firstCall; }
-    //void setFirstCall(bool firstCall) { m_firstCall=firstCall; }
     QList<QRect> *handles() const { return m_handles; }
 
 private:
@@ -149,7 +148,6 @@ private:
     Mode m_mode;
     GraphitePart *m_part;     // we need that for the history
     QList<QRect> *m_handles;  // contains all the handle rects
-    //bool m_firstCall : 1; // Whether this is the first call for this M9r (no hit test!)
     bool m_pressed;           // mouse button pressed?
     bool m_changed;           // true, if the Apply button is "active"
     bool m_created;           // dia created?

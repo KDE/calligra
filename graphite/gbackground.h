@@ -69,10 +69,15 @@ class GBackgroundM9r : public G2DObjectM9r {
 public:
     GBackgroundM9r(GBackground *background, const Mode &mode, GraphitePart *part,
               GraphiteView *view, const QString &type);
-    virtual ~GBackgroundM9r() {}
+    virtual ~GBackgroundM9r();
+
+    // never draw any handles for the background
+    virtual void draw(QPainter &) {}
 
     // RMB popup on press
     virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
+    // Property dia on DblClick
+    virtual bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
     virtual GObject *gobject() { return m_background; }
 
@@ -81,6 +86,7 @@ private:
     GBackgroundM9r &operator=(GBackgroundM9r &rhs);
 
     GBackground *m_background;
+    QPopupMenu *m_popup;
 };
 
 #endif // gbackground_h

@@ -94,6 +94,9 @@ public:
 public slots:
     void setUnit(Graphite::Unit);
 
+    void edit_undo();
+    void edit_redo();
+
 signals:
     void unitChanged(Graphite::Unit);
     void layoutChanged(const QValueList<FxRect> &diff);
@@ -102,8 +105,6 @@ protected:
     virtual KoView *createViewInstance(QWidget *parent, const char *name);
 
 private slots:
-    void edit_undo();
-    void edit_redo();
     void edit_cut();
 
     void documentRestored();
