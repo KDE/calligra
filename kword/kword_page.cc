@@ -75,16 +75,18 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
       QPainter _painter;
       _painter.begin(this);
       
-      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-      markerIsVisible = false;
-      
       fc->cursorGotoPixelLine(mx,my,_painter);
       fc->cursorGotoPixelInLine(mx,my,_painter);
       
-      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-      markerIsVisible = true;
-      
       _painter.end();
+
+      if (fc->getPTPos() != doc->getSelStart()->getPTPos() ||
+	  fc->getPTY() != doc->getSelStart()->getPTY())
+	{
+	  doc->setSelEnd(*fc);
+	  doc->setSelection(true);
+	  repaint(false);
+	}
     }
 }
 
@@ -92,7 +94,32 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
   mousePressed = true;
-  mouseMoveEvent(e);
+
+  unsigned int mx = e->x() + xOffset;
+  unsigned int my = e->y() + yOffset;
+      
+  QPainter _painter;
+  _painter.begin(this);
+
+  if (doc->has_selection())
+    {
+      doc->drawSelection(_painter,xOffset,yOffset);
+      doc->setSelection(false);
+    }  
+      
+  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+  markerIsVisible = false;
+  
+  fc->cursorGotoPixelLine(mx,my,_painter);
+  fc->cursorGotoPixelInLine(mx,my,_painter);
+      
+  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+  markerIsVisible = true;
+
+  _painter.end();
+
+  doc->setSelStart(*fc);
+  doc->setSelection(false);
 }
 
 /*================================================================*/
@@ -225,6 +252,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   XKeyboardControl kbdc;
   XKeyboardState kbds;
   bool repeat = true;
+  bool continueSelection = false;
 
   // HACK
   XGetKeyboardControl(kapp->getDisplay(),&kbds);
@@ -233,8 +261,35 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
   
   QPainter painter;
-
   painter.begin(this);
+
+  if (doc->has_selection())
+    {
+      if (e->key() == Key_Shift || (e->state() & ShiftButton) && (e->key() == Key_Left || e->key() == Key_Right ||
+								  e->key() == Key_Up || e->key() == Key_Down))
+	continueSelection = true;
+      else 
+	{
+	  doc->setSelection(false);
+	  doc->drawSelection(painter,xOffset,yOffset);
+	  if (e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
+	      e->key() == Key_Enter || e->ascii() >= 32)
+	    {
+	      doc->deleteSelectedText(fc,painter);
+	      painter.end();
+	      recalcCursor();
+	      if (e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return || e->key() == Key_Enter)
+		{
+		  kbdc.auto_repeat_mode = repeat;
+		  XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+		  return;
+		}
+	      else
+		painter.begin(this);
+	    }
+	}
+    }
+
   doc->drawMarker(*fc,&painter,xOffset,yOffset);
   painter.end();
 
@@ -259,27 +314,83 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       } break;
     case Key_Right:
       {
+	if (!doc->has_selection() && e->state() & ShiftButton)
+	  doc->setSelStart(*fc);
+	    
 	fc->cursorGotoRight(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+
+	if (continueSelection || e->state() & ShiftButton)
+	  {
+	    doc->setSelEnd(*fc);
+	    doc->setSelection(true);
+	    painter.end();
+	    repaint(false);
+	    kbdc.auto_repeat_mode = repeat;
+	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    return;
+	  }
       } break;
     case Key_Left:
       {
+	if (!doc->has_selection() && e->state() & ShiftButton)
+	  doc->setSelStart(*fc);
+	    
 	fc->cursorGotoLeft(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+
+	if (continueSelection || e->state() & ShiftButton)
+	  {
+	    doc->setSelEnd(*fc);
+	    doc->setSelection(true);
+	    painter.end();
+	    repaint(false);
+	    kbdc.auto_repeat_mode = repeat;
+	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    return;
+	  }
       } break;
     case Key_Up:
       {
+	if (!doc->has_selection() && e->state() & ShiftButton)
+	  doc->setSelStart(*fc);
+	    
 	fc->cursorGotoUp(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+
+	if (continueSelection || e->state() & ShiftButton)
+	  {
+	    doc->setSelEnd(*fc);
+	    doc->setSelection(true);
+	    painter.end();
+	    repaint(false);
+	    kbdc.auto_repeat_mode = repeat;
+	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    return;
+	  }
       } break;
     case Key_Down:
       {
+	if (!doc->has_selection() && e->state() & ShiftButton)
+	  doc->setSelStart(*fc);
+	    
 	fc->cursorGotoDown(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+
+	if (continueSelection || e->state() & ShiftButton)
+	  {
+	    doc->setSelEnd(*fc);
+	    doc->setSelection(true);
+	    painter.end();
+	    repaint(false);
+	    kbdc.auto_repeat_mode = repeat;
+	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    return;
+	  }
       } break;
     case Key_Return: case Key_Enter:
       {

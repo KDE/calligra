@@ -1,4 +1,4 @@
-Reggie, 9.9.1998:
+eggie, 9.9.1998:
 -----------------
 - Attributes for writing text can be set with the
   toolbar now. So it's possible to write with defferent
@@ -151,3 +151,10 @@ Reggie, 1.10.1998:
 ------------------
 - Cursor style is changing according to the font attribute of the current place
 - Placing the cursor with the mouse works now
+
+Reggie, 2.10.1998:
+------------------
+- Implemented selecting text with the mouse
+- Implemented deleting selected text and replacing
+  selected text with an entered character
+- Implemented selecting text with the keyboard (cursor-keys + Shift)

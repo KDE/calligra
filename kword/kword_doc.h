@@ -240,6 +240,22 @@ public:
 
   void insertPicture(QString _filename,KWPage *_paperWidget);
 
+  void setSelStart(KWFormatContext &_fc) 
+    { selStart = _fc; }
+  KWFormatContext *getSelStart()
+    { return &selStart; }
+  void setSelEnd(KWFormatContext &_fc) 
+    { selEnd = _fc; }
+  KWFormatContext *getSelEnd()
+    { return &selEnd; }
+  void drawSelection(QPainter &_painter,int xOffset,int yOffset);
+  void setSelection(bool _has)
+    { hasSelection = _has; }
+  bool has_selection()
+    { return hasSelection; }
+
+  void deleteSelectedText(KWFormatContext *_fc,QPainter &_painter);
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child);
@@ -300,6 +316,9 @@ protected:
 
   KWFormatCollection formatCollection;
   KWImageCollection imageCollection;
+
+  KWFormatContext selStart,selEnd;
+  bool hasSelection;
 
 };
 

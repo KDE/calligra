@@ -61,7 +61,7 @@ KWordChild::~KWordChild()
 
 /*================================================================*/
 KWordDocument_impl::KWordDocument_impl()
-  : formatCollection(this), imageCollection(this)
+  : formatCollection(this), imageCollection(this), selStart(this), selEnd(this)
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0");
 
@@ -70,6 +70,7 @@ KWordDocument_impl::KWordDocument_impl()
   m_lstChildren.setAutoDelete(true);
 
   m_bModified = false;
+  hasSelection = false;
 }
 
 /*================================================================*/
@@ -493,6 +494,8 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	    }
 	}
     }
+
+  if (hasSelection) drawSelection(_painter,xOffset,yOffset);
   _painter.restore();
 }
 
@@ -645,4 +648,163 @@ void KWordDocument_impl::splitParag(KWParag *_parag,unsigned int _pos)
 void KWordDocument_impl::insertPicture(QString _filename,KWPage *_paperWidget)
 {
   _paperWidget->insertPictureAsChar(_filename);
+}
+
+/*================================================================*/
+void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffset)
+{
+  _painter.setRasterOp(NotROP);
+  _painter.setBrush(black);
+  _painter.setPen(NoPen);
+  
+  KWFormatContext tmpFC2(this);
+  KWFormatContext tmpFC1(this);
+
+  if (selStart.getParag() == selEnd.getParag())
+    {
+      if (selStart.getTextPos() < selEnd.getTextPos())
+	{  
+	  tmpFC1 = selStart;
+	  tmpFC2 = selEnd;
+	}
+      else
+	{
+	  tmpFC1 = selEnd;
+	  tmpFC2 = selStart;
+	}
+    }
+  else
+    {
+      KWParag *parag = getFirstParag();
+      while (parag)
+	{
+	  if (parag == selStart.getParag())
+	    {
+	      tmpFC1 = selStart;
+	      tmpFC2 = selEnd;
+	      break;
+	    }
+	  if (parag == selEnd.getParag())
+	    {
+	      tmpFC2 = selStart;
+	      tmpFC1 = selEnd;
+	      break;
+	    }
+	  parag = parag->getNext();
+	}
+    }
+
+  int _x = 0,_y = 0,_w = 0,_h = 0;
+
+  _x = tmpFC1.getPTPos();
+  _y = tmpFC1.getPTY();
+  _h = tmpFC1.getLineHeight();
+
+  while (!(tmpFC1.getParag() == tmpFC2.getParag() && tmpFC1.getTextPos() == tmpFC2.getTextPos()))
+    {
+      _w = tmpFC1.getPTPos() - _x;
+      tmpFC1.cursorGotoRight(_painter);
+      if (tmpFC1.isCursorAtLineStart())
+	{
+	  _painter.drawRect(_x - xOffset,_y - yOffset,_w,_h);
+	  _x = tmpFC1.getPTPos();
+	  _y = tmpFC1.getPTY();
+	  _h = tmpFC1.getLineHeight();
+	}
+    }
+  _w = tmpFC1.getPTPos() - _x;
+  _painter.drawRect(_x - xOffset,_y - yOffset,_w,_h);
+}
+
+/*================================================================*/
+void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_painter)
+{
+  KWFormatContext tmpFC2(this);
+  KWFormatContext tmpFC1(this);
+
+  if (selStart.getParag() == selEnd.getParag())
+    {
+      if (selStart.getTextPos() < selEnd.getTextPos())
+	{  
+	  tmpFC1 = selStart;
+	  tmpFC2 = selEnd;
+	}
+      else
+	{
+	  tmpFC1 = selEnd;
+	  tmpFC2 = selStart;
+	}
+      
+      tmpFC1.getParag()->deleteText(tmpFC1.getTextPos(),tmpFC2.getTextPos() - tmpFC1.getTextPos());
+      
+      _fc->setTextPos(tmpFC1.getTextPos());
+    
+      KWParag *parag = 0;
+
+      if (_fc->getParag()->getTextLen() == 0)
+	{
+	  if (_fc->getParag()->getNext())
+	    {
+	      parag = _fc->getParag()->getNext();
+	      deleteParag(_fc->getParag());
+	      _fc->init(parag,_painter);
+	    }
+	  else if (_fc->getParag()->getPrev())
+	    {
+	      parag = _fc->getParag()->getPrev();
+	      deleteParag(_fc->getParag());
+	      _fc->init(parag,_painter);
+	    }
+	}
+      _fc->setTextPos(tmpFC1.getTextPos());
+    }
+  else
+    {
+      KWParag *parag = getFirstParag(),*tmpParag = 0;
+      while (parag)
+	{
+	  if (parag == selStart.getParag())
+	    {
+	      tmpFC1 = selStart;
+	      tmpFC2 = selEnd;
+	      break;
+	    }
+	  if (parag == selEnd.getParag())
+	    {
+	      tmpFC2 = selStart;
+	      tmpFC1 = selEnd;
+	      break;
+	    }
+	}
+      tmpFC1.getParag()->deleteText(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos());
+      parag = tmpFC1.getParag()->getNext();
+      while (parag && parag != tmpFC2.getParag())
+	{
+	  tmpParag = parag->getNext();
+	  deleteParag(parag);
+	  parag = tmpParag;
+	}
+      tmpFC2.getParag()->deleteText(0,tmpFC2.getTextPos());
+
+      joinParag(tmpFC1.getParag(),tmpFC2.getParag());
+      _fc->init(tmpFC1.getParag(),_painter);
+      _fc->setTextPos(tmpFC1.getTextPos());
+
+      if (_fc->getParag()->getTextLen() == 0)
+	{
+	  if (_fc->getParag()->getNext())
+	    {
+	      parag = _fc->getParag()->getNext();
+	      deleteParag(_fc->getParag());
+	      _fc->init(parag,_painter);
+	    }
+	  else if (_fc->getParag()->getPrev())
+	    {
+	      parag = _fc->getParag()->getPrev();
+	      deleteParag(_fc->getParag());
+	      _fc->init(parag,_painter);
+	    }
+	}
+      _fc->setTextPos(tmpFC1.getTextPos());
+    }
 }

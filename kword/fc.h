@@ -156,6 +156,7 @@ public:
     unsigned int getLineStartPos() { return lineStartPos; }
     unsigned int getLineEndPos() { return lineEndPos; }
     unsigned int getTextPos() { return textPos; }
+    void setTextPos(unsigned int _pos) { textPos = _pos; }
 
     unsigned short getCounter( unsigned int _counternr, unsigned int _depth );
 
