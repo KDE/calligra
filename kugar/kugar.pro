@@ -2,11 +2,11 @@
 # ------------------------------------------- 
 # Subdir relative project main directory: .
 # Target is a subdirs project 
-
+ 
 TEMPLATE=subdirs
 SUBDIRS += lib \
-           kudesigner_qt \
-           shell_qt 
+  kudesigner_qt \
+  shell_qt 
 MOC_DIR = moc
 OBJECTS_DIR = obj
 UI_DIR = ui

@@ -216,8 +216,8 @@ QString CanvasKugarTemplate::getXml()
     if (pageHeader)
 	result += pageHeader->getXml();
     
-    map<int, DetailBand>::const_iterator it;
-    for (it = details.begin(); it != details.end(); ++it)
+	//map<int, DetailBand>::const_iterator it;
+    for (map<int, DetailBand>::const_iterator it = details.begin(); it != details.end(); ++it)
     {
 	//getting xml from detail header
 	if (it->second.first.first)

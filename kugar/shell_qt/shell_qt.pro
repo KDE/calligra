@@ -12,12 +12,10 @@ CONFIG += release \
           warn_on \
           thread 
 TARGET = kugar 
-win32::INCLUDEPATH = ..\lib 
-unix::INCLUDEPATH = ../lib 
-win32::QMAKE_LIBDIR = ..\lib 
-unix::QMAKE_LIBDIR = ../lib 
-win32::LIBS = ..\libkugar.lib
-unix::LIBS = -lkugar
+INCLUDEPATH = ../lib 
+QMAKE_LIBDIR = ../lib 
+win32::LIBS = libkugarqt.lib
+unix::LIBS = -lkugarqt
 MOC_DIR = moc
 OBJECTS_DIR = obj
 UI_DIR = ui

@@ -1,9 +1,13 @@
 #ifndef CANVBOX_H
 #define CANVBOX_H
 
-#include <map.h>
+#include <map>
 #include <qcanvas.h>
-#include <pair.h>
+/**/
+//#include <pair> 
+#include <utility>
+/**/
+
 #include "canvdefs.h"
 
 class QString;
@@ -15,6 +19,9 @@ class CanvasReportHeader;
 class CanvasReportFooter;
 class CanvasPageHeader;
 class CanvasPageFooter;
+/**/
+using namespace std;
+/**/
 
 class CanvasBox: public QCanvasRectangle{
 public:

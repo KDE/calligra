@@ -29,15 +29,15 @@
 
 #include <qglobal.h>
 
-#if defined(Q_WS_WIN) 
-  #if defined(MAKELIB)
-    #define MY_LIB_EXPORT  __declspec(dllexport)
-  #else
-    #define MY_LIB_EXPORT  __declspec(dllimport)
-  #endif
-#else
+//#if defined(Q_WS_WIN) 
+//  #if defined(MAKELIB)
+//    #define MY_LIB_EXPORT  __declspec(dllexport)
+//  #else
+//    #define MY_LIB_EXPORT  __declspec(dllimport)
+//  #endif
+//#else
   #define MY_LIB_EXPORT
-#endif
+//#endif
 
 class QWidget;
 class QString;

@@ -1,13 +1,17 @@
 #ifndef ITEMOPTS_H
 #define ITEMOPTS_H
-
-#include <map.h>
-#include <pair.h>
+/**/
+#include <map>
+//#include <pair> 
+#include <utility>
 #include "dlgoptions.h"
+/**/
 
 class QString;
 class QStringList;
-
+/**/
+using namespace std;
+/**/
 class dlgItemOptions: public dlgOptions{
     Q_OBJECT
 public:
