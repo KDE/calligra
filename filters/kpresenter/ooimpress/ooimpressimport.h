@@ -64,12 +64,12 @@ public:
      * This is used to keep the styles of an object on the stack and remove only the
      * style of that objects child-objects.
      */
-    void clearMark();
+    void clearMark( uint mark );
 
     /**
      * Set the mark (stores the index of the object on top of the stack).
      */
-    void setMark();
+    void setMark( uint mark );
 
     /**
      * Removes the style on top of the stack.
@@ -79,21 +79,21 @@ public:
     /**
      * Pushs the new style onto the stack.
      */
-    void push(const QDomElement* style);
+    void push( const QDomElement* style );
 
     /**
      * Check if any of the styles on the stack has an attribute called 'name'.
      */
-    bool hasAttribute(const QString& name);
+    bool hasAttribute( const QString& name );
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString attribute(const QString& name);
+    QString attribute( const QString& name );
 
 private:
-    uint m_mark;
+    QMemArray<uint> m_marks;
 
     // We use QPtrList instead of QPtrStack because we need access to all styles
     // not only the top one.

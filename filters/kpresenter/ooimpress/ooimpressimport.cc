@@ -377,7 +377,7 @@ QDomElement OoImpressImport::parseObject( QDomDocument& doc, const QDomElement& 
 
     m_styleStack.clear();
     fillStyleStack( object );
-    m_styleStack.setMark();
+    m_styleStack.setMark( 0 );
 
     // parse the pen- & brush-properties
     QDomElement pen = doc.createElement( "PEN" );
@@ -439,7 +439,7 @@ QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomEleme
 
     m_styleStack.clear();
     fillStyleStack( object );
-    m_styleStack.setMark();
+    m_styleStack.setMark( 0 );
 
     QDomElement pen = doc.createElement( "PEN" );
     objectElement.appendChild( pen );
@@ -476,7 +476,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         }
 
         textObjectElement.appendChild( e );
-        m_styleStack.clearMark(); // remove the styles added by the child-object
+        m_styleStack.clearMark( 0 ); // remove the styles added by the child-object
     }
 
     return textObjectElement;
@@ -542,39 +542,56 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     else
         p.setAttribute( "align", 0 ); // use left aligned as default
 
-    QDomElement text = doc.createElement( "TEXT" );
-    text.appendChild( doc.createTextNode( paragraph.text() ) );
-
-    //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
-
-    // if we have a 'text:span' we add its style to the stack
-    QDomNode textSpan = paragraph.namedItem( "text:span" );
-    if ( !textSpan.isNull() )
-        fillStyleStack( textSpan.toElement() );
-
-    // parse the text-properties
-    if ( m_styleStack.hasAttribute( "fo:color" ) )
-        text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
-    if ( m_styleStack.hasAttribute( "fo:font-family" ) )
-        text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
-    if ( m_styleStack.hasAttribute( "fo:font-size" ) )
-        text.setAttribute( "pointSize", m_styleStack.attribute( "fo:font-size" ).toDouble() );
-    if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
-        if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
-            text.setAttribute( "bold", 1 );
-    if ( m_styleStack.hasAttribute( "fo:font-style" ) )
-        if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
-            text.setAttribute( "italic", 1 );
-    if ( m_styleStack.hasAttribute( "style:text-underline" ) )
+    // parse every childnode of the paragraph
+    for( QDomNode n = paragraph.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        if ( m_styleStack.attribute( "style:text-underline" ) == "single" )
+        QString textData;
+        QDomText t = n.toText();
+        if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
-            text.setAttribute( "underline", 1 );
-            text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
-        }
-    }
+            QDomElement ts = n.toElement();
+            if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
+                continue;                      // elements or even nested test:spans?
 
-    p.appendChild( text );
+            m_styleStack.setMark( 1 ); // we have to remove the spans styles
+            fillStyleStack( ts.toElement() );
+            textData = ts.text();
+        }
+        else
+            textData = t.data();
+
+        QDomElement text = doc.createElement( "TEXT" );
+        text.appendChild( doc.createTextNode( textData ) );
+
+        //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
+
+        // parse the text-properties
+        if ( m_styleStack.hasAttribute( "fo:color" ) )
+            text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
+        if ( m_styleStack.hasAttribute( "fo:font-family" ) )
+            text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
+        if ( m_styleStack.hasAttribute( "fo:font-size" ) )
+            text.setAttribute( "pointSize", m_styleStack.attribute( "fo:font-size" ).toDouble() );
+        if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
+            if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
+                text.setAttribute( "bold", 1 );
+        if ( m_styleStack.hasAttribute( "fo:font-style" ) )
+            if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
+                text.setAttribute( "italic", 1 );
+        if ( m_styleStack.hasAttribute( "style:text-underline" ) )
+        {
+            if ( m_styleStack.attribute( "style:text-underline" ) == "single" )
+            {
+                text.setAttribute( "underline", 1 );
+                text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
+            }
+        }
+
+        if ( n.toElement().tagName() == "text:span" )
+            m_styleStack.clearMark( 1 ); // current node is a text:span, remove its style from the stack
+
+        p.appendChild( text );
+    }
 
     return p;
 }
@@ -647,9 +664,10 @@ void OoImpressImport::fillStyleStack( const QDomElement& object )
 }
 
 StyleStack::StyleStack()
-    : m_mark(0)
+    : m_marks( 5 )
 {
-    m_stack.setAutoDelete(false);
+    m_marks.fill( 0 );
+    m_stack.setAutoDelete( false );
 }
 
 StyleStack::~StyleStack()
@@ -658,20 +676,23 @@ StyleStack::~StyleStack()
 
 void StyleStack::clear()
 {
-    m_mark = 0;
+    m_marks.fill( 0 );
     m_stack.clear();
 }
 
-void StyleStack::clearMark()
+void StyleStack::clearMark( uint mark )
 {
-    uint index;
-    for (index = m_stack.count() - 1; index >= m_mark; --index)
-        m_stack.remove(index);
+    if ( mark > m_marks.size() - 1 )
+        m_marks.resize( mark );
+    for ( uint index = m_stack.count() - 1; index >= m_marks[mark]; --index )
+        m_stack.remove( index );
 }
 
-void StyleStack::setMark()
+void StyleStack::setMark( uint mark )
 {
-    m_mark = m_stack.count();
+    if ( mark > m_marks.size() - 1 )
+        m_marks.resize( mark );
+    m_marks[mark] = m_stack.count();
 }
 
 void StyleStack::pop()
@@ -679,32 +700,32 @@ void StyleStack::pop()
     m_stack.removeLast();
 }
 
-void StyleStack::push(const QDomElement* style)
+void StyleStack::push( const QDomElement* style )
 {
-    m_stack.append(style);
+    m_stack.append( style );
 }
 
-bool StyleStack::hasAttribute(const QString& name)
+bool StyleStack::hasAttribute( const QString& name )
 {
     // TODO: has to be fixed for complex styles like list-styles
-    for (QDomElement *style = m_stack.last(); style; style = m_stack.prev())
+    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
     {
-        QDomElement properties = style->namedItem("style:properties").toElement();
-        if (properties.hasAttribute(name))
+        QDomElement properties = style->namedItem( "style:properties" ).toElement();
+        if ( properties.hasAttribute( name ) )
             return true;
     }
 
     return false;
 }
 
-QString StyleStack::attribute(const QString& name)
+QString StyleStack::attribute( const QString& name )
 {
     // TODO: has to be fixed for complex styles like list-styles
-    for (QDomElement *style = m_stack.last(); style; style = m_stack.prev())
+    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
     {
-        QDomElement properties = style->namedItem("style:properties").toElement();
-        if (properties.hasAttribute(name))
-            return properties.attribute(name);
+        QDomElement properties = style->namedItem( "style:properties" ).toElement();
+        if ( properties.hasAttribute( name ) )
+            return properties.attribute( name );
     }
 
     return QString::null;
