@@ -1332,7 +1332,7 @@ QString KoTextParag::toString( int from, int length ) const
     if ( from == 0 && m_layout.counter )
         str += m_layout.counter->text( this ) + ' ';
     if ( length == -1 )
-        length=this->length()-1;
+        length = this->length() - from;
     for ( int i = from ; i < (length+from) ; ++i )
     {
         KoTextStringChar *ch = at( i );
