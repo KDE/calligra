@@ -30,7 +30,7 @@
 #include <kcommand.h>
 
 KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
-    : KPresenterObjectIface(_textobject),KPresenterObject2DIface(_textobject)
+    : KPresenterObject2DIface(_textobject)
 {
    m_textobject = _textobject;
 }

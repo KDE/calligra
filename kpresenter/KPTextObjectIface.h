@@ -22,14 +22,13 @@
 
 #include <KoDocumentIface.h>
 #include <dcopref.h>
-#include "KPresenterObjectIface.h"
 #include "KPresenterObject2DIface.h"
 #include <qstring.h>
 #include <qcolor.h>
 #include <qfont.h>
 class KPTextObject;
 
-class KPTextObjectIface : virtual public KPresenterObjectIface ,virtual public KPresenterObject2DIface
+class KPTextObjectIface : public KPresenterObject2DIface
 {
     K_DCOP
 public:

@@ -22,12 +22,11 @@
 
 #include <dcopobject.h>
 #include <dcopref.h>
-#include "KPresenterObjectIface.h"
 #include "KPresenterObject2DIface.h"
 
 class KPRectObject;
 
-class KPRectObjectIface : virtual public KPresenterObjectIface,virtual public KPresenterObject2DIface
+class KPRectObjectIface : public KPresenterObject2DIface
 {
     K_DCOP
 public:

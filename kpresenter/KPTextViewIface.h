@@ -27,7 +27,7 @@
 class KPTextView;
 class QString;
 
-class KPTextViewIface :  virtual public KoTextViewIface
+class KPTextViewIface : public KoTextViewIface
 {
     K_DCOP
 public:

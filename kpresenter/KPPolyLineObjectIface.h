@@ -26,7 +26,7 @@
 
 class KPPolylineObject;
 
-class KPPolyLineObjectIface : virtual public KPresenterObjectIface
+class KPPolyLineObjectIface : public KPresenterObjectIface
 {
     K_DCOP
 public:

@@ -27,7 +27,7 @@
 
 class KPQuadricBezierCurveObject;
 
-class KPQuadricBezierCurveObjectIface : virtual public KPresenterObjectIface
+class KPQuadricBezierCurveObjectIface : public KPresenterObjectIface
 {
     K_DCOP
 public:

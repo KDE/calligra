@@ -27,7 +27,7 @@
 #include <dcopclient.h>
 
 KPAutoFormObjectIface::KPAutoFormObjectIface( KPAutoformObject *_obj )
-    : KPresenterObjectIface(_obj),KPresenterObject2DIface(_obj)
+    : KPresenterObject2DIface(_obj)
 {
    obj = _obj;
 }

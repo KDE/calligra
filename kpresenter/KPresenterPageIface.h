@@ -27,7 +27,7 @@
 #include <qcolor.h>
 class KPrPage;
 
-class KPresenterPageIface :  virtual public DCOPObject
+class KPresenterPageIface :public DCOPObject
 {
     K_DCOP
 public:

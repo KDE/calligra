@@ -28,7 +28,7 @@
 #include <qcolor.h>
 class KPresenterDoc;
 
-class KPresenterDocIface : virtual public KoDocumentIface
+class KPresenterDocIface : public KoDocumentIface
 {
     K_DCOP
 public:

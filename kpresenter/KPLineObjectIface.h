@@ -27,7 +27,7 @@
 
 class KPLineObject;
 
-class KPLineObjectIface : virtual public KPresenterObjectIface
+class KPLineObjectIface : public KPresenterObjectIface
 {
     K_DCOP
 public:

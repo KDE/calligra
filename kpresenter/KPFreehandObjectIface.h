@@ -27,7 +27,7 @@
 
 class KPFreehandObject;
 
-class KPFreehandObjectIface : virtual public KPresenterObjectIface
+class KPFreehandObjectIface : public KPresenterObjectIface
 {
     K_DCOP
 public:

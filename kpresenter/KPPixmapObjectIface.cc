@@ -25,7 +25,7 @@
 #include <dcopclient.h>
 
 KPPixmapObjectIface::KPPixmapObjectIface( KPPixmapObject *_obj )
-    : KPresenterObjectIface(_obj),KPresenterObject2DIface(_obj)
+    : KPresenterObject2DIface(_obj)
 {
    obj = _obj;
 }

@@ -30,7 +30,7 @@
 
 class KP2DObject;
 
-class KPresenterObject2DIface : virtual public KPresenterObjectIface
+class KPresenterObject2DIface : public KPresenterObjectIface
 {
     K_DCOP
 public:
