@@ -99,10 +99,7 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 QDomElement KWVariable::save( QDomDocument& doc )
 {
     QDomElement var = doc.createElement( "VARIABLE" );
-
-    QDomElement type = doc.createElement( "TYPE" );
-    var.appendChild( type );
-    type.setAttribute( "type", (int)getType() );
+    var.setAttribute( "type", (int)getType() );
 
     QDomElement pos = doc.createElement( "POS" );
     var.appendChild( pos );
