@@ -1,0 +1,239 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-09-21 21:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: kword_doc.cc:278
+msgid "KWord Error"
+msgstr ""
+
+#: kword_doc.cc:278 kword_shell.cc:94
+msgid "Could not init"
+msgstr ""
+
+#: kword_shell.cc:94
+msgid "KPresenter Error"
+msgstr ""
+
+#: kword_view.cc:338
+msgid "KWord - Paragraph settings"
+msgstr ""
+
+#: kword_view.cc:559
+msgid "No Undo possible"
+msgstr ""
+
+#: kword_view.cc:565
+msgid "No Redo possible"
+msgstr ""
+
+#: kword_view.cc:586
+msgid "&Find..."
+msgstr ""
+
+#: kword_view.cc:588
+msgid "&Replace..."
+msgstr ""
+
+#: kword_view.cc:604
+msgid "&Picture..."
+msgstr ""
+
+#: kword_view.cc:610
+msgid "&Clipart..."
+msgstr ""
+
+#: kword_view.cc:616
+msgid "&Table..."
+msgstr ""
+
+#: kword_view.cc:622
+msgid "&Objects..."
+msgstr ""
+
+#: kword_view.cc:626
+msgid "&Format"
+msgstr ""
+
+#: kword_view.cc:627
+msgid "&Font..."
+msgstr ""
+
+#: kword_view.cc:629
+msgid "&Color..."
+msgstr ""
+
+#: kword_view.cc:631
+msgid "Paragraph..."
+msgstr ""
+
+#: kword_view.cc:633
+msgid "Page..."
+msgstr ""
+
+#: kword_view.cc:636
+msgid "Numbering..."
+msgstr ""
+
+#: kword_view.cc:638
+msgid "&Style..."
+msgstr ""
+
+#: kword_view.cc:642
+msgid "&Extra"
+msgstr ""
+
+#: kword_view.cc:643
+msgid "&Spelling..."
+msgstr ""
+
+#: kword_view.cc:645
+msgid "&Stylist..."
+msgstr ""
+
+#: kword_view.cc:648
+msgid "&Options..."
+msgstr ""
+
+#: kword_view.cc:656
+msgid "&About KWord..."
+msgstr ""
+
+#: kword_view.cc:658
+msgid "&About KOffice..."
+msgstr ""
+
+#: kword_view.cc:660
+msgid "&About KDE..."
+msgstr ""
+
+#: kword_view.cc:722
+msgid "Insert"
+msgstr ""
+
+#: kword_view.cc:730
+msgid "Insert Picture"
+msgstr ""
+
+#: kword_view.cc:738
+msgid "Insert Clipart"
+msgstr ""
+
+#: kword_view.cc:746
+msgid "Insert Table"
+msgstr ""
+
+#: kword_view.cc:753
+msgid "Insert Object"
+msgstr ""
+
+#: kword_view.cc:765
+msgid "Text"
+msgstr ""
+
+#: kword_view.cc:786
+msgid "Font List"
+msgstr ""
+
+#: kword_view.cc:819
+msgid "Underline"
+msgstr ""
+
+#: kword_view.cc:826
+msgid "Color"
+msgstr ""
+
+#: kword_view.cc:836
+msgid "Align Left"
+msgstr ""
+
+#: kword_view.cc:846
+msgid "Align Center"
+msgstr ""
+
+#: kword_view.cc:855
+msgid "Align Right"
+msgstr ""
+
+#: kword_view.cc:864
+msgid "Align Block"
+msgstr ""
+
+#: kword_view.cc:876
+msgid "Enumerated List"
+msgstr ""
+
+#: kword_view.cc:884
+msgid "Unsorted List"
+msgstr ""
+
+#: paragdia.cc:25
+msgid "Preview"
+msgstr ""
+
+#: paragdia.cc:144
+msgid "Indent"
+msgstr ""
+
+#: paragdia.cc:147
+msgid "Left (mm):"
+msgstr ""
+
+#: paragdia.cc:161
+msgid "Right (mm):"
+msgstr ""
+
+#: paragdia.cc:176
+msgid "First Line (mm):"
+msgstr ""
+
+#: paragdia.cc:208
+msgid "Line Spacing"
+msgstr ""
+
+#: paragdia.cc:212
+msgid "0.5 lines"
+msgstr ""
+
+#: paragdia.cc:213
+msgid "1.0 line"
+msgstr ""
+
+#: paragdia.cc:214
+msgid "1.5 lines"
+msgstr ""
+
+#: paragdia.cc:215
+msgid "2.0 lines"
+msgstr ""
+
+#: paragdia.cc:216
+msgid "Custom (pt)"
+msgstr ""
+
+#: paragdia.cc:244
+msgid "Paragraph Space"
+msgstr ""
+
+#: paragdia.cc:247
+msgid "Before (mm):"
+msgstr ""
+
+#: paragdia.cc:261
+msgid "After (mm):"
+msgstr ""
+
+#: paragdia.cc:309
+msgid "Indent and Spacing"
+msgstr ""
