@@ -273,21 +273,10 @@ void KPresenterView::setupPrinter( QPrinter &prt )
     } break;
     }
 
-    switch ( m_pKPresenterDoc->pageLayout().orientation ) {
-    case PG_PORTRAIT: prt.setOrientation( QPrinter::Portrait );
-	break;
-    case PG_LANDSCAPE: prt.setOrientation( QPrinter::Landscape );
-	break;
-    }
-
-    float left_margin = 0.0;
-    float top_margin = 0.0;
-
-    if ( makeLandscape ) {
-	prt.setOrientation( QPrinter::Landscape );
-	left_margin = 28.5;
-	top_margin = 15.0;
-    }
+    if ( m_pKPresenterDoc->pageLayout().orientation == PG_LANDSCAPE || makeLandscape )
+        prt.setOrientation( QPrinter::Landscape );
+    else
+        prt.setOrientation( QPrinter::Portrait );
 }
 
 void KPresenterView::print( QPrinter &prt )
