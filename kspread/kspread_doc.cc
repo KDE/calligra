@@ -680,8 +680,8 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     // if ( !transparent )
     // painter.eraseRect( rect );
 
-    int xpos;
-    int ypos;
+    double xpos;
+    double ypos;
     int left_col = table->leftColumn( rect.x(), xpos );
     int right_col = table->rightColumn( rect.right() );
     int top_row = table->topRow( rect.y(), ypos );
@@ -762,39 +762,31 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const QRect &viewRegion,
     return;
 
   /* get the world coordinates of the upper left corner of the paintRegion */
-  QPoint corner( table->columnPos(paintRegion.left()),
-                 table->rowPos(paintRegion.top()) );
-  QPair<double,double> dblCorner = qMakePair( (double)table->columnPos(paintRegion.left()),
-                                              (double)table->rowPos(paintRegion.top()) );
+  QPair<double,double> dblCorner = qMakePair( table->dblColumnPos(paintRegion.left()),
+                                              table->dblRowPos(paintRegion.top()) );
 
-  QPoint currentCellPos = corner;
   QPair<double,double> dblCurrentCellPos = dblCorner;
 
   for ( int y = paintRegion.top();
-        y <= paintRegion.bottom() && currentCellPos.y() <= viewRegion.bottom();
+        y <= paintRegion.bottom() && (int)dblCurrentCellPos.second <= viewRegion.bottom();
         y++ )
   {
     const RowLayout* row_lay = table->rowLayout( y );
     dblCurrentCellPos.first = dblCorner.first;
-    currentCellPos.setX((int)dblCorner.first);
 
     for ( int x = paintRegion.left();
-          x <= paintRegion.right() && currentCellPos.x() <= viewRegion.right();
+          x <= paintRegion.right() && (int)dblCurrentCellPos.first <= viewRegion.right();
           x++ )
     {
       const ColumnLayout *col_lay = table->columnLayout( x );
       KSpreadCell* cell = table->cellAt( x, y );
 
-      QPoint cellCoordinate( x, y );
-//      QPoint size(int(dblCurrentCellPos.first + col_lay->dblWidth()) - currentCellPos.x(),
-//                  int(dblCurrentCellPos.second + row_lay->dblHeight()) - currentCellPos.y());
-      cell->paintCell( viewRegion, painter, view, currentCellPos, cellCoordinate);
+      QPoint cellRef( x, y );
+      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef );
 
       dblCurrentCellPos.first += col_lay->dblWidth();
-      currentCellPos.setX((int)dblCurrentCellPos.first);
     }
     dblCurrentCellPos.second += row_lay->dblHeight();
-    currentCellPos.setY((int)dblCurrentCellPos.second);
   }
 }
 
@@ -917,23 +909,23 @@ void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker,
                                     const QRect &viewRect, int positions[],
                                     bool paintSides[])
 {
-  int xpos = table->columnPos( marker.left() );
-  int ypos = table->rowPos( marker.top() );
+  double xpos = table->dblColumnPos( marker.left() );
+  double ypos = table->dblRowPos( marker.top() );
 
-  int x = table->columnPos( marker.right() );
+  double x = table->dblColumnPos( marker.right() );
   const KSpreadCell *cell = table->cellAt( marker.right(), marker.top() );
-  int tw = cell->width( marker.right() );
-  int w = ( x - xpos ) + tw;
+  double tw = cell->dblWidth( marker.right() );
+  double w = ( x - xpos ) + tw;
   cell = table->cellAt( marker.left(), marker.bottom() );
-  int y = table->rowPos( marker.bottom() );
-  int th = cell->height( marker.bottom() );
-  int h = ( y - ypos ) + th;
+  double y = table->dblRowPos( marker.bottom() );
+  double th = cell->dblHeight( marker.bottom() );
+  double h = ( y - ypos ) + th;
 
   /* left, top, right, bottom */
-  positions[0] = xpos;
-  positions[1]= ypos;
-  positions[2] = xpos + w;
-  positions[3] = ypos + h;
+  positions[0] = int( xpos );
+  positions[1] = int( ypos );
+  positions[2] = int( xpos + w );
+  positions[3] = int( ypos + h );
 
   /* these vars are used for clarity, the array for simpler function arguments  */
   int left = positions[0];

@@ -334,19 +334,18 @@ RowLayout* KSpreadTable::rowLayout( int _row )
     return m_pDefaultRowLayout;
 }
 
-int KSpreadTable::leftColumn( int _xpos, int &_left,
+int KSpreadTable::leftColumn( int _xpos, double &_left,
                               const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
     {
         _xpos += _canvas->xOffset();
-        _left = -_canvas->xOffset();
+        _left = -(double)_canvas->xOffset();
     }
     else
-        _left = 0;
+        _left = 0.0;
 
     int col = 1;
-    double left = (double)_left;
     double x = columnLayout( col )->dblWidth( _canvas );
     while ( x < _xpos )
     {
@@ -354,15 +353,13 @@ int KSpreadTable::leftColumn( int _xpos, int &_left,
         if ( col > KS_colMax - 1 )
 	{
 	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
-	    _left = (int)left;
 	    return 1;
 	}
-        left += columnLayout( col )->dblWidth( _canvas );
+        _left += columnLayout( col )->dblWidth( _canvas );
         col++;
         x += columnLayout( col )->dblWidth( _canvas );
     }
 
-    _left = (int)left;
     return col;
 }
 
@@ -388,19 +385,18 @@ int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
     return col - 1;
 }
 
-int KSpreadTable::topRow( int _ypos, int & _top,
+int KSpreadTable::topRow( int _ypos, double & _top,
                           const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
     {
         _ypos += _canvas->yOffset();
-        _top = -_canvas->yOffset();
+        _top = (double)-_canvas->yOffset();
     }
     else
         _top = 0;
 
     int row = 1;
-    double top = (double)_top;
     double y = rowLayout( row )->dblHeight( _canvas );
     while ( y < _ypos )
     {
@@ -408,15 +404,13 @@ int KSpreadTable::topRow( int _ypos, int & _top,
         if ( row > KS_rowMax - 1 )
         {
             kdDebug(36001) << "KSpreadTable:topRow: invalid row (row: " << row + 1 << ")" << endl;
-            _top = (int)top;
             return 1;
         }
-        top += rowLayout( row )->dblHeight( _canvas );
+        _top += rowLayout( row )->dblHeight( _canvas );
         row++;
         y += rowLayout( row )->dblHeight( _canvas );
     }
 
-    _top = (int)top;
     return row;
 }
 
@@ -442,7 +436,7 @@ int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
     return row - 1;
 }
 
-int KSpreadTable::columnPos( int _col, const KSpreadCanvas *_canvas ) const
+double KSpreadTable::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) const
 {
     double x = 0.0;
     if ( _canvas )
@@ -453,46 +447,26 @@ int KSpreadTable::columnPos( int _col, const KSpreadCanvas *_canvas ) const
         if ( col > KS_colMax )
 	{
 	    kdDebug(36001) << "KSpreadTable:columnPos: invalid column (col: " << col << ")" << endl;
-            return (int)x;
+            return x;
 	}
 
         x += columnLayout( col )->dblWidth( _canvas );
     }
 
-    return (int)x;
+    return x;
 }
 
-int KSpreadTable::rowPos( int _row, const KSpreadCanvas *_canvas ) const
+int KSpreadTable::columnPos( int _col, const KSpreadCanvas *_canvas ) const
+{
+    return (int)dblColumnPos( _col, _canvas );
+}
+
+
+double KSpreadTable::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
 {
     double y = 0.0;
     if ( _canvas )
       y -= _canvas->yOffset();
-
-/*    _row--; //we need the height until the questioned row, so we need the heights of the previous ones
-    int row = 0;
-    RowLayout *p;
-
-kdDebug(36001) << "row1: " << row << "  y: " << y << endl;
-
-    while ( ( p = m_rows.getNextRowLayoutDown( row ) ) && ( p->row() < _row ) )
-    {
-      y += p->height( _canvas );
-      y += ( p->row() - row - 1 ) * 20;
-kdDebug(36001) << "row (n)): " << row << "   p->row()" << p->row() << "   y: " << y << endl;
-      row = p->row();
-    }
-kdDebug(36001) << "row2: " << row << "  y: " << y << endl;
-
-//    if ( p != NULL )
-    {
-kdDebug(36001) << "arow2: " << row << "  y: " << y << endl;
-//      y += p->height( _canvas );
-kdDebug(36001) << "_row2: " << _row << "  y: " << y << endl;
-      y += ( _row - row ) * 20;
-    }
-kdDebug(36001) << "row3: " << row << "  y: " << y << endl;
-kdDebug(36001) << endl;
-*/
 
     for ( int row = 1 ; row < _row ; row++ )
     {
@@ -500,14 +474,20 @@ kdDebug(36001) << endl;
         if ( row > KS_rowMax )
 	{
 	    kdDebug(36001) << "KSpreadTable:rowPos: invalid row (row: " << row << ")" << endl;
-            return (int)y;
+            return y;
 	}
 
         y += rowLayout( row )->dblHeight( _canvas );
     }
 
-    return (int)y;
+    return y;
 }
+
+int KSpreadTable::rowPos( int _row, const KSpreadCanvas *_canvas ) const
+{
+    return (int)dblRowPos( _row, _canvas );
+}
+
 
 void KSpreadTable::adjustSizeMaxX ( int _x )
 {
@@ -5753,7 +5733,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
     // Now look at the children
     QPtrListIterator<KoDocumentChild> cit( m_pDoc->children() );
-    int dummy;
+    double dummy;
     int i;
     for( ; cit.current(); ++cit )
     {
@@ -6040,7 +6020,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width(), view.height() );
-                cell->paintCell( r, _painter, NULL, QPoint(xpos, ypos), QPoint(x,y));
+                cell->paintCell( r, _painter, NULL, 
+                                 qMakePair( (double)xpos, (double)ypos ), 
+                                 QPoint(x,y) );
 
                 xpos += col_lay->width();
             }
@@ -6073,7 +6055,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width() + xpos, view.height() );
-                cell->paintCell( r, _painter, NULL, QPoint(xpos, ypos), QPoint(x,y));
+                cell->paintCell( r, _painter, NULL, 
+                                 qMakePair( (double)xpos, (double)ypos ), 
+                                 QPoint(x,y));
 
                 xpos += col_lay->width();
             }
@@ -6105,7 +6089,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
-                cell->paintCell( r, _painter, NULL, QPoint(xpos, ypos), QPoint(x,y));
+                cell->paintCell( r, _painter, NULL, 
+                                 qMakePair( (double)xpos, (double)ypos ), 
+                                 QPoint(x,y));
 
                 xpos += col_lay->width();
             }
@@ -6135,7 +6121,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
             cell = cellAt( x, y );
             QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
-            cell->paintCell( r, _painter, NULL, QPoint(xpos, ypos), QPoint(x,y));
+            cell->paintCell( r, _painter, NULL, 
+                             qMakePair( (double)xpos, (double)ypos ), 
+                             QPoint(x,y));
 
             xpos += col_lay->width();
         }
@@ -6939,10 +6927,10 @@ void KSpreadTable::updateCellArea( const QRect &cellArea )
 
   KSpreadCell* cell = cellAt(cellArea.bottomRight());
   // Get the size
-  int left = columnPos( cellArea.left() );
-  int top = rowPos( cellArea.top() );
-  int right = columnPos(cellArea.right()) + cell->extraWidth();
-  int bottom = rowPos(cellArea.bottom()) + cell->extraHeight();
+  double left = dblColumnPos( cellArea.left() );
+  double top = dblRowPos( cellArea.top() );
+  double right = dblColumnPos(cellArea.right()) + cell->extraWidth();
+  double bottom = dblRowPos(cellArea.bottom()) + cell->extraHeight();
 
   // Need to calculate ?
   for (int x = cellArea.left(); x <= cellArea.right(); x++)
@@ -6964,10 +6952,10 @@ void KSpreadTable::updateCellArea( const QRect &cellArea )
 
   // Force redraw
   QPointArray arr( 4 );
-  arr.setPoint( 0, left, top );
-  arr.setPoint( 1, right, top );
-  arr.setPoint( 2, right, bottom );
-  arr.setPoint( 3, left, bottom );
+  arr.setPoint( 0, int( left ),  int( top ) );
+  arr.setPoint( 1, int( right ), int( top ) );
+  arr.setPoint( 2, int( right ), int( bottom ) );
+  arr.setPoint( 3, int( left ),  int( bottom ) );
 
   // ##### Hmmmm, why not draw the cell directly ?
   // That will be faster.

@@ -18,6 +18,7 @@
 #include <qbutton.h>
 #include <qapplication.h>
 #include <qtimer.h>
+#include <float.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
                                                       KSpreadView * _view )
@@ -714,8 +715,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( !table )
     return;
 
-  int xpos = 0;
-  int ypos = 0;
+  double xpos;
+  double ypos;
   int row  = table->topRow( _ev->pos().y(), ypos, this );
   int col  = table->leftColumn( _ev->pos().x(), xpos, this );
 
@@ -729,8 +730,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   // Test whether the mouse is over some anchor
   {
     KSpreadCell *cell = table->visibleCellAt( col, row );
-    QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
-                                       _ev->pos().y() - ypos );
+    QString anchor = cell->testAnchor( _ev->pos().x() - int( xpos ),
+                                       _ev->pos().y() - int( ypos ) );
     if ( !anchor.isEmpty() && anchor != m_strAnchor )
       setCursor( KCursor::handCursor() );
     m_strAnchor = anchor;
@@ -954,7 +955,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   // In which cell did the user click ?
-  int xpos, ypos;
+  double xpos, ypos;
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
@@ -1033,7 +1034,7 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
   if ( !table )
     return;
 
-  int ypos, xpos;
+  double ypos, xpos;
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
@@ -1067,7 +1068,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
     return;
 
 
-  int ypos, xpos;
+  double ypos, xpos;
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
@@ -1125,7 +1126,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 
   //kdDebug(36001) << "Mapped topleft to " << tl.x() << ":" << tl.y() << endl;
 
-  int xpos, ypos;
+  double xpos, ypos;
   int left_col = table->leftColumn( tl.x(), xpos );
   int right_col = table->rightColumn( br.x() );
   int top_row = table->topRow( tl.y(), ypos );
@@ -2391,9 +2392,9 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus)
       m_pEditor = new KSpreadTextEditor( cell, this );
     }
 
-    int w, h;
-    int min_w = cell->width( markerColumn(), this );
-    int min_h = cell->height( markerRow(), this );
+    double w, h;
+    double min_w = cell->dblWidth( markerColumn(), this );
+    double min_h = cell->dblHeight( markerRow(), this );
     if ( cell->isDefault() )
     {
       w = min_w;
@@ -2402,12 +2403,12 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus)
     }
     else
     {
-      w = cell->extraWidth() + 1;
-      h = cell->extraHeight() + 1;
+      w = cell->extraWidth();
+      h = cell->extraHeight();
       //kdDebug(36001) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
     }
-    int xpos = table->columnPos( markerColumn(), this );
-    int ypos = table->rowPos( markerRow(), this );
+    double xpos = table->dblColumnPos( markerColumn(), this );
+    double ypos = table->dblRowPos( markerRow(), this );
     QPalette p = m_pEditor->palette();
     QColorGroup g( p.active() );
     QColor color=cell->textColor( markerColumn(), markerRow() );
@@ -2420,8 +2421,8 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus)
     g.setColor( QColorGroup::Background, color );
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
     m_pEditor->setFont( cell->textFont( markerColumn(), markerRow() ) );
-    m_pEditor->setGeometry( xpos, ypos, w, h );
-    m_pEditor->setMinimumSize( QSize( min_w, min_h ) );
+    m_pEditor->setGeometry( int( xpos ), int( ypos ), int( w ), int( h ) );
+    m_pEditor->setMinimumSize( QSize( int( min_w ), int( min_h ) ) );
     m_pEditor->show();
     //kdDebug(36001) << "FOCUS1" << endl;
     //Laurent 2001-12-05
@@ -2837,34 +2838,34 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   assert( table );
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
-        {
-	    m_pCanvas->deleteEditor( true ); // save changes
-        }
+  {
+    m_pCanvas->deleteEditor( true ); // save changes
+  }
   // Find the first visible row and the y position of this row.
-  int y = 0;
+  double y;
   int row = table->topRow( 0, y, m_pCanvas );
 
   // Did the user click between two rows ?
   while ( y < height() )
   {
-    int h = table->rowLayout( row )->height( m_pCanvas );
+    double h = table->rowLayout( row )->dblHeight( m_pCanvas );
     row++;
     if ( row > KS_rowMax )
 	row = KS_rowMax;
-    if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1
-	&& !(table->rowLayout( row )->isHide()&&row==1) )
+    if ( _ev->pos().y() >= int( y + h ) - 1 && _ev->pos().y() <= int( y + h ) + 1
+	&& !(table->rowLayout( row )->isHide() && row == 1 ) )
       m_bResize = TRUE;
     y += h;
   }
-  int tmp2;
-  int tmpRow=table->topRow( _ev->pos().y() - 1, tmp2, m_pCanvas );
-  if(table->rowLayout(tmpRow  )->isHide()&&tmpRow==1)
+  double tmp2;
+  int tmpRow = table->topRow( _ev->pos().y() - 1, tmp2, m_pCanvas );
+  if( table->rowLayout(tmpRow  )->isHide() && tmpRow == 1 )
       m_bResize = false;
   // So he clicked between two rows ?
   if ( m_bResize )
   {
     // Determine row to resize
-    int tmp;
+    double tmp;
     m_iResizedRow = table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
 
     paintSizeIndicator( _ev->pos().y(), true );
@@ -2873,7 +2874,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   {
     m_bSelection = TRUE;
 
-    int tmp;
+    double tmp;
     int hit_row = table->topRow( _ev->pos().y(), tmp, m_pCanvas );
     if(hit_row > KS_rowMax)
 	return;
@@ -3026,7 +3027,7 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
         {
             RowLayout * rl = table->nonDefaultRowLayout( select );
 
-            if ( rl->dblHeight()==adjust)
+            if ( kAbs( rl->dblHeight() - adjust ) < DBL_EPSILON )
                 return;
         }
 
@@ -3130,29 +3131,29 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
   {
-    int y = 0;
+    double y;
     int row = table->topRow( _ev->pos().y(), y, m_pCanvas );
     if( row > KS_rowMax )
 	return;
 
     QPoint newAnchor = m_pView->selectionInfo()->selectionAnchor();
     QPoint newMarker = m_pView->selectionInfo()->marker();
-    newMarker.setY(row);
-    newAnchor.setY(m_iSelectionAnchor);
+    newMarker.setY( row );
+    newAnchor.setY( m_iSelectionAnchor );
 
     m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
                                             m_pView->activeTable() );
 
     if ( _ev->pos().y() < 0 )
-      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->yOffset() + y );
+      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->yOffset() + int( y ) );
     else if ( _ev->pos().y() > m_pCanvas->height() )
     {
-      if (row < KS_rowMax)
+      if ( row < KS_rowMax )
       {
         RowLayout *rl = table->rowLayout( row + 1 );
-        y = table->rowPos( row + 1, m_pCanvas );
+        y = table->dblRowPos( row + 1, m_pCanvas );
         m_pCanvas->vertScrollBar()->setValue( m_pCanvas->yOffset()
-                                              + y + rl->height( m_pCanvas )
+                                              + int( y + rl->dblHeight( m_pCanvas ) )
                                               - m_pCanvas->height() );
       }
     }
@@ -3160,7 +3161,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   // No button is pressed and the mouse is just moved
   else
   {
-    int tmp;
+    double tmp;
     int tmpRow = table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
     int ypos   = _ev->pos().y();
 
@@ -3256,6 +3257,12 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
 void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 {
+  //Notes on zoom-support from Philipp: 
+  //Scaling here is not good (fonts and AA), so we need a different approach.
+  //As long as the canvas is zoomed with scale, we need to simulate scaling here too.
+  //Scaling means, we have at the end a qRound function.
+  //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
+
   KSpreadTable *table = m_pCanvas->activeTable();
   if ( !table )
     return;
@@ -3275,10 +3282,12 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
   painter.setClipRect( _ev->rect() );
 
-  int ypos;
-  int top_row = table->topRow( _ev->rect().y(), ypos, m_pCanvas );
+  double dblYpos;
+  int top_row = table->topRow( _ev->rect().y(), dblYpos, m_pCanvas );
   int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pCanvas );
-  double dblYpos = (double)ypos;
+  dblYpos = dblYpos / m_pCanvas->zoom(); //unzoom the ypos
+  int scaledHeight;
+  int scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
 
   QFont normalFont = painter.font();
   if (m_pCanvas->zoom() < 1)
@@ -3299,26 +3308,26 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     bool current  = ( !highlighted && y == m_pView->selection().top() );
 
     const RowLayout *row_lay = table->rowLayout( y );
-
-    //The width is the width of a column plus the delta between dblYpos and ypos
-    int height = int( ( dblYpos - ypos ) + row_lay->dblHeight( m_pCanvas ) );
+                                                                    
+    //The height is the height of a column plus the the rest of the double ypos values, rounded because of scaling
+    scaledHeight = qRound( int( dblYpos + row_lay->dblHeight() ) * m_pCanvas->zoom() ) - scaledYpos;
 
     if ( selected )
     {
       QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, height,
+      qDrawShadePanel( &painter, 0, scaledYpos, YBORDER_WIDTH, scaledHeight,
                        colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )
     {
       QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, height,
+      qDrawShadePanel( &painter, 0, scaledYpos, YBORDER_WIDTH, scaledHeight,
                        colorGroup(), true, 1, &fillHighlighted );
     }
     else
     {
       QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, height, colorGroup(), FALSE, 1, &fill );
+      qDrawShadePanel( &painter, 0, scaledYpos, YBORDER_WIDTH, scaledHeight, colorGroup(), FALSE, 1, &fill );
     }
 
     char buffer[ 20 ];
@@ -3334,11 +3343,12 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setFont( boldFont );
     int len = painter.fontMetrics().width(buffer );
     if(!row_lay->isHide())
-        painter.drawText( ( YBORDER_WIDTH-len )/2, ypos +
-                    ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
+        painter.drawText( ( YBORDER_WIDTH-len )/2, scaledYpos +
+                          ( scaledHeight + painter.fontMetrics().ascent() - 
+                            painter.fontMetrics().descent() ) / 2, buffer );
 
-    dblYpos += row_lay->dblHeight( m_pCanvas );
-    ypos = (int)dblYpos;
+    dblYpos += row_lay->dblHeight();
+    scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
   }
   m_pCanvas->updatePosWidget();
   painter.end();
@@ -3379,12 +3389,12 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
   m_bSelection = FALSE;
 
-  int x = 0;
+  double x;
   int col = table->leftColumn( 0, x, m_pCanvas );
 
   while ( x < width() && !m_bResize )
   {
-    int w = table->columnLayout( col )->width( m_pCanvas );
+    double w = table->columnLayout( col )->dblWidth( m_pCanvas );
     col++;
     if ( col > KS_colMax )
 	col = KS_colMax;
@@ -3396,7 +3406,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
   //if col is hide and it's the first column
   //you mustn't resize it.
-  int tmp2;
+  double tmp2;
   int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
   if ( table->columnLayout(tmpCol  )->isHide() && tmpCol == 1)
       m_bResize = false;
@@ -3405,7 +3415,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   if ( m_bResize )
   {
     // Determine the column to resize
-    int tmp;
+    double tmp;
     m_iResizedColumn = table->leftColumn( _ev->pos().x() - /*3*/1, tmp, m_pCanvas );
     paintSizeIndicator( _ev->pos().x(), true );
   }
@@ -3420,7 +3430,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   else
   {
     m_bSelection = TRUE;
-    int tmp;
+    double tmp;
     int hit_col = table->leftColumn( _ev->pos().x(), tmp, m_pCanvas );
     if( hit_col > KS_colMax)
 	return;
@@ -3571,7 +3581,7 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
     if ( _col == -1 )
     {
         ColumnLayout * cl = table->nonDefaultColumnLayout( select );
-        if ( cl->dblWidth() == adjust )
+        if ( kAbs( cl->dblWidth() - adjust ) < DBL_EPSILON )
             return;
 
     }
@@ -3689,7 +3699,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
   else if ( m_bSelection )
   {
-    int x = 0;
+    double x;
     int col = table->leftColumn( _ev->pos().x(), x, m_pCanvas );
     if( col > KS_colMax )
 	return;
@@ -3704,15 +3714,15 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
                                             m_pView->activeTable() );
 
     if ( _ev->pos().x() < 0 )
-      m_pCanvas->horzScrollBar()->setValue( m_pCanvas->xOffset() + x );
+      m_pCanvas->horzScrollBar()->setValue( m_pCanvas->xOffset() + int(x) );
     else if ( _ev->pos().x() > m_pCanvas->width() )
     {
       if ( col < KS_colMax )
       {
         ColumnLayout *cl = table->columnLayout( col + 1 );
-        x = table->columnPos( col + 1, m_pCanvas );
+        x = table->dblColumnPos( col + 1, m_pCanvas );
         m_pCanvas->horzScrollBar()->setValue( m_pCanvas->xOffset() +
-                                            ( x + cl->width( m_pCanvas ) - m_pCanvas->width() ) );
+                                            ( int( x + cl->dblWidth( m_pCanvas ) ) - m_pCanvas->width() ) );
       }
     }
 
@@ -3722,7 +3732,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     //if col is hide and it's the first column
     //you mustn't resize it.
-    int tmp2;
+    double tmp2;
     int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
 
     /* Doesn't work correctly, gets removed if it turns out that the new
@@ -3807,6 +3817,12 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
 void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 {
+  //Notes on zoom-support from Philipp: 
+  //Scaling here is not good (fonts and AA), so we need a different approach.
+  //As long as the canvas is zoomed with scale, we need to simulate scaling here too.
+  //Scaling means, we have at the end a qRound function.
+  //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
+
   KSpreadTable *table = m_pCanvas->activeTable();
 
   if (!table )
@@ -3826,10 +3842,12 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   // bah...took me quite some time to track this one down...
 
   // Determine which columns need painting
-  int xpos;
-  int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pCanvas );
+  double dblXpos;
+  int left_col = table->leftColumn( _ev->rect().x(), dblXpos, m_pCanvas );
   int right_col = table->rightColumn( _ev->rect().right(), m_pCanvas );
-  double dblXpos = (double)xpos;
+  dblXpos = dblXpos / m_pCanvas->zoom(); //unzoom the xpos
+  int scaledWidth;
+  int scaledXpos = qRound( int( dblXpos ) * m_pCanvas->zoom() );
 
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
@@ -3854,24 +3872,25 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     const ColumnLayout *col_lay = table->columnLayout( x );
 
     //The width is the width of a column plus the delta between dblXpos and xpos
-    int width = int( ( dblXpos-xpos ) + col_lay->dblWidth( m_pCanvas ) );
+    scaledWidth = qRound( int( dblXpos + col_lay->dblWidth() ) * m_pCanvas->zoom() ) - scaledXpos;
 
     if ( selected )
     {
       QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT,
+      qDrawShadePanel( &painter, scaledXpos, 0, scaledWidth, XBORDER_HEIGHT,
                        colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )
     {
       QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT,
+      qDrawShadePanel( &painter, scaledXpos, 0, scaledWidth, XBORDER_HEIGHT,
                        colorGroup(), true, 1, &fillHighlighted );
     }
     else
     {
       QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
+      qDrawShadePanel( &painter, scaledXpos, 0, scaledWidth, 
+                       XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
 
     // Reset painter
@@ -3886,7 +3905,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     {
         int len = painter.fontMetrics().width( util_encodeColumnLabelText( x ) );
         if(!col_lay->isHide())
-            painter.drawText( xpos + ( width - len ) / 2,
+            painter.drawText( scaledXpos + ( scaledWidth - len ) / 2,
                   ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
                     painter.fontMetrics().descent() ) / 2,
                     util_encodeColumnLabelText( x ) );
@@ -3896,13 +3915,13 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
         QString tmp;
         int len = painter.fontMetrics().width( tmp.setNum(x) );
         if(!col_lay->isHide())
-            painter.drawText( xpos + ( width - len ) / 2,
+            painter.drawText( scaledXpos + ( scaledWidth - len ) / 2,
                   ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
                     painter.fontMetrics().descent() ) / 2,
                     tmp.setNum(x) );
     }
-    dblXpos += col_lay->dblWidth( m_pCanvas );
-    xpos = (int)dblXpos;
+    dblXpos += col_lay->dblWidth();
+    scaledXpos = qRound( int( dblXpos ) * m_pCanvas->zoom() );
   }
   m_pCanvas->updatePosWidget();
   painter.end();
@@ -3926,7 +3945,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
         return;
 
     // Over which cell is the mouse ?
-    int ypos, xpos;
+    double ypos, xpos;
     int row = table->topRow( p.y(), ypos, m_canvas );
     int col = table->leftColumn( p.x(), xpos, m_canvas );
     KSpreadCell* cell = table->visibleCellAt( col, row );
@@ -3955,7 +3974,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     // Is the cursor over the comment marker (if there is any) then
     // show the comment.
     double zoom = m_canvas->zoom();
-    QRect marker( xpos + u - (int)(6*zoom), ypos -(int)(1*zoom), (int)(7*zoom),(int)( 7*zoom) );
+    QRect marker( int(xpos) + u - (int)(6*zoom), int(ypos) -(int)(1*zoom), (int)(7*zoom),(int)( 7*zoom) );
     if ( marker.contains( p ) )
     {
         tip( marker, comment );

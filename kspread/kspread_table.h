@@ -351,13 +351,13 @@ public:
     KSpreadLayout* defaultLayout() { return m_defaultLayout; };
     const KSpreadLayout* defaultLayout() const { return m_defaultLayout; }
 
-    int topRow( int _ypos, int &_top, const KSpreadCanvas *_canvas = 0L ) const;
+    int topRow( int _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
     int bottomRow( int _ypos, const KSpreadCanvas *_canvas = 0L ) const;
-    int leftColumn( int _xpos, int &_left, const KSpreadCanvas *_canvas = 0L ) const;
+    int leftColumn( int _xpos, double &_left, const KSpreadCanvas *_canvas = 0L ) const;
     int rightColumn( int _xpos, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
-     * @return the left corner of the column.
+     * @return the left corner of the column as int.
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
@@ -365,13 +365,33 @@ public:
      */
     int columnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
     /**
-     * @return the top corner of the row.
+     * @return the left corner of the column as double.
+     * Use this method, when you later calculate other positions depending on this one
+     * to avoid rounding problems
+     *
+     * @param _canvas If not 0 then the returned position is in screen
+     *                coordinates. Otherwise the point (0|0) is in the upper
+     *                left corner of the table.
+     */
+    double dblColumnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
+    /**
+     * @return the top corner of the row as int.
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the table.
      */
     int rowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
+    /**
+     * @return the top corner of the row as double.
+     * Use this method, when you later calculate other positions depending on this one
+     * to avoid rounding problems
+     *
+     * @param _canvas If not 0 then the returned position is in screen
+     *                coordinates. Otherwise the point (0|0) is in the upper
+     *                top corner of the table.
+     */
+    double dblRowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
      * @return the maximum size of the column range

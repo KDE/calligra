@@ -196,13 +196,13 @@ public:
      * @param painter the painter object to paint on
      * @param the view of this data.  This may be NULL, but no selection
      *        will be included with the painting.
-     * @param corner coordinates on the painter where the top left corner
-     *               of the cell should be painted
+     * @param coordinates coordinates on the painter where the top left corner
+     *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
      * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const QRect& rect, QPainter &painter,
-		    KSpreadView* view, const QPoint &corner,
+		    KSpreadView* view, const QPair<double, double> &coordinate,
 		    const QPoint &cellRef, bool drawCursor=true );
 
   /**
@@ -218,16 +218,31 @@ public:
      * @param _col the column this cell is assumed to be in.
      *             This parameter defaults to the return value of @ref #column.
      *
-     * @return the width of this cell
+     * @return the width of this cell as int
      */
     int width( int _col = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
      *
-     * @return the height of this cell
+     * @return the height of this cell as int
      */
     int height( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
+
+    /**
+     * @param _col the column this cell is assumed to be in.
+     *             This parameter defaults to the return value of @ref #column.
+     *
+     * @return the width of this cell as double
+     */
+    double dblWidth( int _col = -1, const KSpreadCanvas *_canvas = 0L ) const;
+
+    /**
+     * @param _row the row this cell is assumed to be in.
+     *
+     * @return the height of this cell as double
+     */
+    double dblHeight( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
      * @reimp
@@ -551,17 +566,17 @@ public:
      */
     bool isForceExtraCells() const;
 
-  /**
-   * @return the number of obscured cells in the horizontal direction as a
-   *         result of cell merging (forced obscuring)
-   */
-  int mergedXCells()const {return m_iMergedXCells; }
+    /**
+     * @return the number of obscured cells in the horizontal direction as a
+     *         result of cell merging (forced obscuring)
+     */
+    int mergedXCells()const {return m_iMergedXCells; }
 
-  /**
-   * @return the number of obscured cells in the vertical direction as a
-   *         result of cell merging (forced obscuring)
-   */
-  int mergedYCells()const {return m_iMergedYCells; }
+    /**
+     * @return the number of obscured cells in the vertical direction as a
+     *         result of cell merging (forced obscuring)
+     */
+    int mergedYCells()const {return m_iMergedYCells; }
 
     /**
      * @return the amount of obscured cells in the horizontal direction
@@ -571,8 +586,8 @@ public:
      * @return the amount of obscured cells in the vertical direction
      */
     int extraYCells() const { return m_iExtraYCells; }
-    int extraWidth() const { return m_iExtraWidth; }
-    int extraHeight() const { return m_iExtraHeight; }
+    double extraWidth() const { return m_dExtraWidth; }
+    double extraHeight() const { return m_dExtraHeight; }
 
     bool isFormula() const { return m_content == Formula; }
 
@@ -864,12 +879,12 @@ private:
      * If a cell overlapps other cells, then we have the cells width stored here.
      * This value does not mean anything unless @ref #m_iExtraXCells is different from 0.
      */
-    int m_iExtraWidth;
+    double m_dExtraWidth;
     /**
      * If a cell overlapps other cells, then we have the cells height stored here.
      * This value does not mean anything unless @ref m_iExtraYCells is different from 0.
      */
-    int m_iExtraHeight;
+    double m_dExtraHeight;
 
     /**
      * A list of @ref KSpreadCell type pointers that obscure this one.
@@ -971,24 +986,32 @@ private:
     static const char* s_dataTypeToString[];
 
   /* helper functions to the paintCell(...) function */
-    void paintCellBorders(QPainter& painter, KSpreadView* view,
-                          QPoint corner, QPoint cellRef);
-    void paintPageBorders(QPainter& painter, KSpreadView* view,
-                          QPoint corner, QPoint cellRef);
-    void paintText(QPainter& painter, KSpreadView* view, QPoint corner,
-                   QPoint cellRef);
-    void paintMoreTextIndicator(QPainter& painter, KSpreadView* view,
-                                QPoint corner, QPoint cellRef);
-    void paintCommentIndicator(QPainter& painter, KSpreadView* view,
-                               QPoint corner, QPoint cellRef);
-    void paintFormulaIndicator(QPainter& painter, KSpreadView* view,
-                               QPoint corner, QPoint cellRef);
-    void paintDefaultBorders(QPainter& painter, KSpreadView* view,
-                             QPoint corner, QPoint cellRef);
-    void paintBackground(QPainter& painter, KSpreadView* view,
-                         QPoint corner, QPoint cellRef, bool selected);
-    void paintObscuredCells(const QRect& rect, QPainter& painter,
-                            KSpreadView* view, QPoint corner, QPoint cellRef);
+    void paintCellBorders( QPainter& painter, KSpreadView* view,
+                           QPoint corner, QPoint cellRef,
+                           int width, int height );
+    void paintPageBorders( QPainter& painter, KSpreadView* view,
+                           QPoint corner, QPoint cellRef,
+                           int width, int height );
+    void paintText( QPainter& painter, KSpreadView* view, 
+                    QPoint corner, QPoint cellRef,
+                    int width, int height );
+    void paintMoreTextIndicator( QPainter& painter, KSpreadView* view,
+                                 QPoint corner, QPoint cellRef,
+                                 int width, int height );
+    void paintCommentIndicator( QPainter& painter, KSpreadView* view,
+                                QPoint corner, QPoint cellRef,
+                                int width, int height );
+    void paintFormulaIndicator( QPainter& painter, KSpreadView* view,
+                                QPoint corner, QPoint cellRef,
+                                int height );
+    void paintDefaultBorders( QPainter& painter, KSpreadView* view,
+                              QPoint corner, QPoint cellRef,
+                              int width, int height );
+    void paintBackground( QPainter& painter, KSpreadView* view,
+                          QPoint corner, QPoint cellRef,
+                          int width, int height, bool selected );
+    void paintObscuredCells( const QRect& rect, QPainter& painter,
+                             KSpreadView* view, QPoint corner, QPoint cellRef );
 
 
   /* helper functions to the makeLayout(...) function */

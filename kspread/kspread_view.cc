@@ -3859,10 +3859,10 @@ void KSpreadView::slotListChoosePopupMenu( )
  if(id==0)
    return;
  RowLayout *rl = m_pTable->rowLayout( m_pCanvas->markerRow());
- int tx = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
- int ty = m_pTable->rowPos(m_pCanvas->markerRow(), m_pCanvas );
- int h = rl->height( m_pCanvas );
- if ( cell->extraYCells())
+ double tx = m_pTable->dblColumnPos( m_pCanvas->markerColumn(), m_pCanvas );
+ double ty = m_pTable->dblRowPos(m_pCanvas->markerRow(), m_pCanvas );
+ double h = rl->dblHeight( m_pCanvas );
+ if ( cell->extraYCells() )
    h = cell->extraHeight();
  ty += h;
 
