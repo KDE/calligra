@@ -2,7 +2,7 @@ Please put your name in "(...)" to the bug/feature you work on or you want to wo
 
 Grave bugs:
 
-#27224: page borders do NOT show real page borders
+#27224: page borders do NOT show real page borders       (Philipp)
 
 
 Crashes:
@@ -33,12 +33,11 @@ Normal bugs
 #35278: wrong interest rate in continuous function
 #36486: currency symbol not displayed in imported excel documents
 #36961: Font properities in cells and arrow keys
-#37006: Extra characters show up when pasting to kspread
 #37237: Kspread 1.1.1 Format bug
 #37601: Errors in KSpread DTD
-#37831: paste problem between kspread/kword 
+#37831: paste problem between kspread/kword                                           (should be equal to 37006 - message sent to submitter -Philipp)
 #38095: Copy Table from KSpread/Paste to Kword or KMail - doesn't work                (Norbert)
-#38218: password protected excel can't be opened 
+#38218: password protected excel can't be opened
 #38494: scientific input in a formula is misinterpreted
 #39525: kspread: change angle is not fully undoable
 #39620: if statments not working with dates
@@ -69,7 +68,7 @@ Wishlist items
 #27522: only the equal sign is accepted as beginning of a formula
 #27553: kspread formula editor entering condition - big usablilty issue
 #27567: kspread can't fit a sheet on nxm pages.
-#27872: Needed auto-increase of cell height, when long dara in cell 
+#27872: Needed auto-increase of cell height, when long dara in cell
 #28194: no matrix manipulation operations
 #28716: improved conditional cell attributes in kspread
 #28906: drag formula only downwards?                           (Norbert)
@@ -83,7 +82,7 @@ Wishlist items
 #32496: Auto complete using alt down-arrow for an ordered selection list
 #33242: pivot tables or view SQL tables             (view SQL tables: Norbert)
 #33389: Freeze window option request                (started but problems with scrollbars: Norbert)
-#33819: kspread sort more than one column 
+#33819: kspread sort more than one column
 #33872: Calculation KSpread + Formula Editor together
 #33875: New Type of Worksheet: Movable Tables
 #34088: Precision of currency is too low or overflow is handled in a strange way
@@ -96,10 +95,10 @@ Wishlist items
 #38739: request: option to scale pages to print to one page
 #38774: Improved word wrapping in KSpread cells
 #38828: no automatic date continuation (maybe not understandable)       (Norbert)
-#39113: Wish: Named areas                  
+#39113: Wish: Named areas
 #39561: no mouse drag and drop of selections
 #39622: select area for print from kspread
-#40037: cell default format should be definend 
+#40037: cell default format should be definend
 #40388: unable to insert an image in a Kspread document
 
 
@@ -110,46 +109,46 @@ Other things: (please add the things you are working on!)
 - inserting data from text files
 - insert data from databases                                    (Norbert)
 - Styles                                                        (Norbert - almost done)
-- "Freeze/Unfreeze Panes", started but had some problems caused by the 
+- "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
 - AutoFormat
 - Script, Script-Editor (like VBA in Excel)
-- Filter, Autofilter
-- Tools->Auditing: 
-	Trace Precedents 
-	Trace Dependants 
-	Trace Error 
+- Filter, Autofilter                                             (Philipp, but will take long, haven't started yet)
+- Tools->Auditing:
+	Trace Precedents
+	Trace Dependants
+	Trace Error
 	Remove all arrows
-- GoalSeek   
-        (You can have an algorithm from me, 
+- GoalSeek
+        (You can have an algorithm from me,
         if you are interested in implementing this -  Norbert)
 - Scenerios
 - Locked areas (for formulas with a matrix as result)
 - Multible Operations (in Excel: "Data"->"Table")
 - more chart types
 - much more formulas (financial,...)
-- printing enhancements (show real page borders, fix preview, printing headers 
+- printing enhancements (show real page borders, fix preview, printing headers (Philipp, haven't started yet)
         on each page, printing a selection only, ...)
-- AutoCompletion/AutoContinuation for dates, times, for values like: 
+- AutoCompletion/AutoContinuation for dates, times, for values like:
         "1,3,4,6", more Excel-like behavior                     (Norbert - almost done)
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas (see below)
 - support "<>" as not equal (in addition to "!=")
 - other bug fixes                               (all, every time)
-- 
+-
 
 
 Named areas:
 
-I would like to ask one thing about "Named areas". In Excel you can assign  
+I would like to ask one thing about "Named areas". In Excel you can assign
 names to cells (you can do this in KSpread, too) like this:
         A       B
 1       45      46
 2
 x=A1, y= B1
 
-Now, I would like to put 
-"=x+y" in A2. This works with Excel but not in KSpread. But it is an important 
+Now, I would like to put
+"=x+y" in A2. This works with Excel but not in KSpread. But it is an important
 feature (I was told :-)
 So if you evaluate "=x+y", 'x' has be replaced by "A1" and 'y' by "B1"
 
