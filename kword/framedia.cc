@@ -76,7 +76,12 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frame = _frame;
-    frameType = frame->getFrameSet() ? frame->getFrameSet()->getFrameType() : (FrameType) -1;
+    KWFrameSet * fs = frame->getFrameSet();
+    KWTableFrameSet *table = fs->getGroupManager();
+    if(table)
+        frameType = table->getFrameType();
+    else
+        frameType = frame->getFrameSet() ? frame->getFrameSet()->getFrameType() : (FrameType) -1;
     doc = 0;
     init();
 }
@@ -115,30 +120,12 @@ void KWFrameDia::init() {
         }
         else if(frameType == FT_TEXT)
         {
-            if(! (frame->getFrameSet() &&
-                  frame->getFrameSet()->getGroupManager()))
-            { // not a table
-                setupTab1();
-                setupTab2();
-                setupTab3();
-            }
-            setupTab4();
-
-            if(frame->getFrameSet() &&
-               frame->getFrameSet()->getGroupManager())
-            { // table
-                grp1->setEnabled(false);
-            }
-            else if(! frame->getFrameSet()) // first creation
-                showPage(2);
-#if 0
             setupTab1();
             setupTab2();
             setupTab3();
             setupTab4();
             if(! frame->getFrameSet()) // first creation
                 showPage(2);
-#endif
         }
         else if(frameType == FT_PICTURE)
         {
