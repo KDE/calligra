@@ -118,6 +118,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     grid->setRowStretch( 3, 10 );
     grid->setColStretch( 0, 1 );
     grid->setColStretch( 1, 10 );
+    enableButtonOK( false );
 }
 
 bool KWInsertPicDia::makeInline() const
@@ -135,6 +136,7 @@ void KWInsertPicDia::slotChooseImage()
         m_filename = file;
         m_type = IPD_IMAGE;
         m_preview->setPixmap( m_filename );
+        enableButtonOK( true );
     }
 }
 
@@ -148,6 +150,7 @@ void KWInsertPicDia::slotChooseClipart()
         m_filename = file;
         m_type = IPD_CLIPART;
         m_preview->setClipart( m_filename );
+        enableButtonOK( true );
     }
 }
 
