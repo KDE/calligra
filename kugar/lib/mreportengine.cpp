@@ -838,4 +838,6 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
   m_needRegeneration=mReportEngine->m_needRegeneration;
   if (m_pageCollection) m_pageCollection->addRef();
 }
+#ifndef PURE_QT
 #include "mreportengine.moc"
+#endif

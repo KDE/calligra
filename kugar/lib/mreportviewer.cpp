@@ -341,4 +341,6 @@ QSize MReportViewer::sizeHint() const
 {
 	return scroller -> sizeHint();
 }
+#ifndef PURE_QT
 #include "mreportviewer.moc"
+#endif

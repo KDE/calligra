@@ -50,4 +50,6 @@ QSizePolicy MPageDisplay::sizePolicy() const
 {
 	return QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 }
+#ifndef PURE_QT
 #include "mpagedisplay.moc"
+#endif
