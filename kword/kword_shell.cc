@@ -350,7 +350,7 @@ void KWordShell::slotFileOpen()
   if (file.isNull())
     return;
 
-  //file = KoFilterManager::self()->import(file,"application/x-kword");
+  file = KoFilterManager::self()->import(file,"application/x-kword");
   if (file.isNull())
     return;
 

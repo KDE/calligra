@@ -36,6 +36,9 @@ idl_HEADERS =  kword.h
 kdelnk_DATA = kword_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
+kdemime_DATA = x-kword.kdelnk
+kdemimedir = $(kde_mimedir)/application
+
 SUBDIRS = toolbar templates filters
 
 ####### Implicit rules

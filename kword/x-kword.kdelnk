@@ -1,0 +1,8 @@
+# KDE Config File
+[KDE Desktop Entry]
+MimeType=application/x-kword
+Comment=KWord
+DefaultApp=KWord
+Icon=txt.xpm
+Type=MimeType
+Patterns=*.kwd;
