@@ -5544,7 +5544,7 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
             _list.setAutoDelete( false );
 
             if ( _kpobject->isSelected() ) {
-                selectedObjectPosition = objectList().find( _kpobject );
+                selectedObjectPosition = objectList().findRef( _kpobject );
                 _list.take( selectedObjectPosition );
                 _list.append( _kpobject );
             }
@@ -5566,7 +5566,7 @@ void KPrCanvas::lowerObject()
 
     if ( kpobject->isSelected() ) {
         _list.take( _list.count() - 1 );
-        if ( objectList().find( kpobject ) != -1 )
+        if ( objectList().findRef( kpobject ) != -1 )
             _list.insert( selectedObjectPosition, kpobject );
     }
     m_activePage->setObjectList( _list );

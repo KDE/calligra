@@ -685,10 +685,9 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentC
                                        QDomDocument &doc,QDomElement &presenter )
 {
     QPtrListIterator<KoDocumentChild> chl( childList );
-    double offset=m_pageList.find(page)*page->getPageRect().height();
-    for( ; chl.current(); ++chl ) {
+    double offset=m_pageList.findRef(page)*page->getPageRect().height();
+    for( ; chl.current(); ++chl )
         saveEmbeddedObject(page, chl.current(),doc,presenter, offset );
-    }
 }
 
 void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDocument &doc,
@@ -1028,7 +1027,7 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
                 kppartobject = 0L;
                 return;
             }
-            int index = m_pageList.find(page);
+            int index = m_pageList.findRef(page);
             int pageIndex = (int)(offset/__pgLayout.ptHeight)+index;
             int newPos=(int)((offset+index*__pgLayout.ptHeight)-pageIndex*__pgLayout.ptHeight);
             kppartobject->setOrig(kppartobject->getOrig().x(),newPos);

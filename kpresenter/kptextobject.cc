@@ -1160,9 +1160,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         element.setAttribute( "distance", layout.shadowDistance );
         element.setAttribute( "direction", layout.shadowDirection );
         if (layout.shadowColor.isValid())
-        {
             element.setAttribute(attrColor, layout.shadowColor.name());
-        }
     }
 }
 
@@ -1185,15 +1183,16 @@ void KPTextObject::recalcPageNum( KPrPage *page )
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
         if ( var && !var->isDeleted()  )
         {
-
             if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
                 var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
             else if ( var->subtype() == KPrPgNumVariable::VST_CURRENT_SECTION )
                 var->setSectionTitle( page->pageTitle("") );
             else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_PREVIOUS )
-                var->setPgNum( QMAX( pgnum -1 , 0) + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+                var->setPgNum( QMAX( pgnum -1 , 0) +
+                               kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
             else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_NEXT )
-                var->setPgNum( QMIN( m_doc->getPageNums(), pgnum +1) + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+                var->setPgNum( QMIN( m_doc->getPageNums(), pgnum +1) +
+                               kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
 
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !

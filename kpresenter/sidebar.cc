@@ -555,7 +555,7 @@ void OutlineSlideItem::setPage( KPrPage* p )
 void OutlineSlideItem::update()
 {
     if( !m_page ) return;
-    int index = m_page->kPresenterDoc()->pageList().find( m_page );
+    int index = m_page->kPresenterDoc()->pageList().findRef( m_page );
     QString title = m_page->pageTitle( i18n( "Slide %1" ).arg( index + 1 ) );
     setText( 0, title );
 
@@ -849,7 +849,7 @@ void Outline::itemClicked( QListViewItem *item )
     {
         KPrPage* page = slideItem->page();
         if( !page ) return;
-        emit showPage( page->kPresenterDoc()->pageList().find( page ) );
+        emit showPage( page->kPresenterDoc()->pageList().findRef( page ) );
     }
 
     // check if we need to show chosen object
@@ -865,7 +865,7 @@ void Outline::itemClicked( QListViewItem *item )
         {
             KPrPage* page = slideItem->page();
             if( !page ) return;
-            emit showPage( page->kPresenterDoc()->pageList().find( page ) );
+            emit showPage( page->kPresenterDoc()->pageList().findRef( page ) );
         }
 
         // select the object, make sure it's visible
@@ -923,12 +923,12 @@ void Outline::doMoveItems()
     OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>(movedItem);
     if( !srcItem ) return;
 
-    int num = doc->pageList().find( srcItem->page() );
+    int num = doc->pageList().findRef( srcItem->page() );
 
     OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(movedAfter);
     if( movedAfter && !dstItem ) return;
 
-    int numNow = movedAfter ? doc->pageList().find( dstItem->page() ) : -1;
+    int numNow = movedAfter ? doc->pageList().findRef( dstItem->page() ) : -1;
     if ( numNow < num ) numNow++;
 
     if(num!=numNow) {

@@ -3499,7 +3499,7 @@ KPObject *KPrPage::nextTextObject(KPTextObject *obj)
 
 bool KPrPage::findTextObject( KPObject *obj )
 {
-    return (m_objectList.find( obj )>=0 );
+    return (m_objectList.findRef( obj )>=0 );
 }
 
 void KPrPage::getAllObjectSelectedList(QPtrList<KPObject> &lst, bool force )
@@ -3515,9 +3515,7 @@ void KPrPage::getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedOb
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
-        {
             embeddedObjects.append( static_cast<KPPartObject *>(it.current())->getChild() );
-        }
     }
 }
 
