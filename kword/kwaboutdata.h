@@ -44,7 +44,7 @@ KAboutData * newKWordAboutData()
     aboutData->addAuthor("Krister Wicksell Eriksson", 0, "krister.wicksell@spray.se");
     aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
     aboutData->addAuthor("Nash Hoogwater", 0, "nrhoogwater@wanadoo.nl");
-    aboutData->addAuthor("Ulrich Kuettler", i18n("KFormula"), "ulrich.kuettler@mailbox.tu-dresden.de");
+    aboutData->addAuthor("Ulrich Kuettler", I18N_NOOP("KFormula"), "ulrich.kuettler@mailbox.tu-dresden.de");
     // TODO: add filter developers
     return aboutData;
 }
