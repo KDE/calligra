@@ -73,6 +73,9 @@ k_dcop:
     virtual void toolsQuadricBezierCurve();
     virtual void toolsCubicBezierCurve();
     virtual void toolsConvexOrConcavePolygon();
+    virtual void toolsRotate();
+    virtual void toolsZoom();
+
 
     // extra menu
     virtual void extraPenBrush();

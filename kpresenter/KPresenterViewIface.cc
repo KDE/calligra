@@ -555,3 +555,13 @@ void KPresenterViewIface::skipToPage( int _num )
     view->skipToPage(_num);
 }
 
+
+void KPresenterViewIface::toolsRotate()
+{
+    view->toolsRotate();
+}
+
+void KPresenterViewIface::toolsZoom()
+{
+    view->toolsZoom();
+}

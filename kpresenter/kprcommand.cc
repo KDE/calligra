@@ -1892,7 +1892,9 @@ void KPrChangeLinkVariable::unexecute()
 }
 
 KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPObject> &_objects,bool sticky, KPrPage*_page, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), m_bSticky(sticky),objects( _objects )
+    : KNamedCommand( _name ),
+      objects( _objects ),
+      m_bSticky(sticky)
 {
     objects.setAutoDelete( false );
     m_doc = _doc;

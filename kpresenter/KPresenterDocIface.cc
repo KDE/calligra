@@ -605,7 +605,7 @@ unsigned int KPresenterDocIface::nbVerticalHelpLine() const
 
 bool KPresenterDocIface::moveHorizontalHelpLine( int index, double newPos)
 {
-    if ( index >= doc->horizHelplines().count() )
+    if ( index >= (int)doc->horizHelplines().count() )
         return false;
     if( newPos < 0 )
         doc->removeHorizHelpline( index );
@@ -617,7 +617,7 @@ bool KPresenterDocIface::moveHorizontalHelpLine( int index, double newPos)
 
 bool KPresenterDocIface::moveVerticalHelpLine( int index, double newPos)
 {
-    if ( index >= doc->vertHelplines().count() )
+    if ( index >= (int)doc->vertHelplines().count() )
         return false;
     if( newPos < 0 )
         doc->removeVertHelpline( index );

@@ -2552,7 +2552,7 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
     for (; it.current(); ++it )
     {
         KPresenterView* view=(KPresenterView*)it.current();
-        if ( view->getNoteBar() && view != exceptView && (view->getCurrPgNum()-1 == page))
+        if ( view->getNoteBar() && view != exceptView && ((int)(view->getCurrPgNum())-1 == page))
             view->getNoteBar()->setCurrentNoteText(text );
     }
 }
