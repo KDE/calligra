@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
 KDE_CXXFLAGS = -fexceptions
 
 METASOURCES = AUTO
