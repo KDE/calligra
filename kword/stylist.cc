@@ -64,7 +64,7 @@
 KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Stylist"),
-                   KDialogBase::Ok | KDialogBase::Cancel /* TODO apply */ )
+                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
 {
     //setWFlags(getWFlags() || WDestructiveClose);
     m_doc = _doc;
@@ -319,6 +319,12 @@ void KWStyleManager::slotOk() {
     save();
     apply();
     KDialogBase::slotOk();
+}
+
+void KWStyleManager::slotApply() {
+    save();
+    apply();
+    KDialogBase::slotApply();
 }
 
 void KWStyleManager::apply() {

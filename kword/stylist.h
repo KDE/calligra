@@ -77,7 +77,7 @@ protected:
 
 protected slots:
     virtual void slotOk();
-    //virtual void slotCancel();
+    virtual void slotApply();
     void switchStyle();
     void switchTabs();
     void addStyle();
