@@ -264,7 +264,7 @@ void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-	it.current()->draw( _painter, _zoomhandler, selectionMode, drawContour );
+        it.current()->draw( _painter, _zoomhandler, selectionMode, drawContour );
 
     KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
 }

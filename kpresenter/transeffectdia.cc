@@ -52,7 +52,7 @@
 #include <kfiledialog.h>
 
 KPEffectPreview::KPEffectPreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view )
-    : QLabel( parent ), doc( _doc ), view( _view ) 
+    : QLabel( parent ), doc( _doc ), view( _view )
 {
     setFrameStyle( StyledPanel | Sunken );
 }
@@ -63,11 +63,11 @@ void KPEffectPreview::setPixmap( const QPixmap& pixmap )
   QRect rect = pixmap.rect();
   int w = rect.width();
   int h = rect.height();
-  if ( w > h ) { 
+  if ( w > h ) {
         w = 297;
         h = 210;
   }
-  else if ( w < h ) { 
+  else if ( w < h ) {
         w = 210;
         h = 297;
   }
@@ -99,7 +99,7 @@ void KPEffectPreview::run( PageEffect effect, PresSpeed speed )
 
 KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
                                     KPresenterDoc *_doc, KPresenterView *_view )
-    : KDialogBase( parent, name, true, "", Ok|Cancel ), 
+    : KDialogBase( parent, name, true, "", Ok|Cancel ),
       doc( _doc ), view( _view ), soundPlayer( 0 )
 {
     enableButtonSeparator( true );
@@ -120,7 +120,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     effectPreview = new KPEffectPreview( rightpart, doc, view );
 
-    int pgnum = view->getCurrPgNum() - 1;  // getCurrPgNum() is 1-based 
+    int pgnum = view->getCurrPgNum() - 1;  // getCurrPgNum() is 1-based
     KPrPage* pg = doc->pageList().at( pgnum );
 
     // pixmap for effect preview
@@ -192,7 +192,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     QWidget* sp = new QWidget( leftpart );
     QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, 2 );
-    speedLayout->setAutoAdd( true );    
+    speedLayout->setAutoAdd( true );
 
     new QLabel( i18n("Slow"), sp );
     speedSlider = new QSlider( 1, 10, 1, 1, Qt::Horizontal, sp );
@@ -206,7 +206,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     QWidget* previewgrp = new QWidget( leftpart );
     QBoxLayout* previewLayout = new QHBoxLayout( previewgrp, 0, 2 );
-    previewLayout->setAutoAdd( true );    
+    previewLayout->setAutoAdd( true );
 
     automaticPreview = new QCheckBox( i18n( "Automatic preview" ), previewgrp );
     automaticPreview->setChecked( true );
@@ -216,13 +216,14 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
         QSizePolicy::Expanding ) );
 
     previewButton = new QPushButton( previewgrp );
-    previewButton->setText( i18n("Preview") );    
-    connect( previewButton, SIGNAL(clicked()), this, SLOT(preview()) ); 
+    previewButton->setText( i18n("Preview") );
+    connect( previewButton, SIGNAL(clicked()), this, SLOT(preview()) );
 
     QFrame* line = new QFrame( leftpart );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     soundFileName = pg->getPageSoundFileName();
+    soundEffect = pg->getPageSoundEffect();
 
     checkSoundEffect = new QCheckBox( i18n( "Sound effect" ), leftpart );
     checkSoundEffect->setChecked( soundEffect );
@@ -231,7 +232,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     QWidget* soundgrp = new QWidget( leftpart );
     QBoxLayout* soundLayout = new QHBoxLayout( soundgrp, 0, 2 );
-    soundLayout->setAutoAdd( true );    
+    soundLayout->setAutoAdd( true );
 
     lSoundEffect = new QLabel( i18n( "File name:" ), soundgrp );
     requester = new KURLRequester( soundgrp );
@@ -244,9 +245,9 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     buttonTestPlaySoundEffect = new QPushButton( soundgrp );
     buttonTestPlaySoundEffect->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
     QToolTip::add( buttonTestPlaySoundEffect, i18n("Play") );
-     
+
     connect( buttonTestPlaySoundEffect, SIGNAL( clicked() ), this, SLOT( playSound() ) );
-    
+
     buttonTestStopSoundEffect = new QPushButton( soundgrp );
     buttonTestStopSoundEffect->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
     QToolTip::add( buttonTestStopSoundEffect, i18n("Stop") );
@@ -292,13 +293,13 @@ void KPTransEffectDia::effectChanged( int index )
 
 void KPTransEffectDia::speedChanged( int value )
 {
-  if( value <= 0 ) value = 1; 
+  if( value <= 0 ) value = 1;
   speed = static_cast<PresSpeed>(value);
 }
 
 void KPTransEffectDia::timeChanged( int value )
 {
-  if( value <= 0 ) value = 1; 
+  if( value <= 0 ) value = 1;
   slideTime = value;
 }
 
@@ -383,7 +384,7 @@ void KPTransEffectDia::playSound()
     soundPlayer->play();
 
     buttonTestPlaySoundEffect->setEnabled( false );
-    buttonTestStopSoundEffect->setEnabled( true ); 
+    buttonTestStopSoundEffect->setEnabled( true );
 }
 
 void KPTransEffectDia::stopSound()
@@ -393,7 +394,7 @@ void KPTransEffectDia::stopSound()
         delete soundPlayer;
         soundPlayer = 0;
 
-        buttonTestPlaySoundEffect->setEnabled( true ); 
+        buttonTestPlaySoundEffect->setEnabled( true );
         buttonTestStopSoundEffect->setEnabled( false );
     }
 }
