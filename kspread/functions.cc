@@ -77,7 +77,8 @@ FunctionRepository* FunctionRepository::s_self = 0;
 FunctionRepository* FunctionRepository::self()
 {
   if( !s_self )
-    s_self = new FunctionRepository();
+    sd.setObject( s_self, new FunctionRepository() );
+    
   return s_self;
 }
 
