@@ -1284,14 +1284,17 @@ TxtParagraph::HorzAlign KTextObject::horzAlign(int p = -1)
 }
 
 /*=================== get QPicture of the obj ====================*/
-QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1)
+QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true)
 {
   QPainter p;
 
   drawPic = true;
   p.begin(&pic);
-  p.setClipping(true);
-  p.setClipRect(_x,_y,_w,_h);
+  if (_clip)
+    {
+      p.setClipping(true);
+      p.setClipRect(_x,_y,_w,_h);
+    }
   ystart = 0;
   
   from = min(from,to);
@@ -1408,7 +1411,9 @@ TxtParagraph* KTextObject::addParagraph()
   wh = new CellWidthHeight;
   wh->wh = 0;
   cellHeights.append(wh);
+  setAutoUpdate(false);
   setNumRows(numRows()+1);
+  setAutoUpdate(true);
 
   return paragraphList.at(paragraphList.count()-1);
 }
@@ -2559,7 +2564,9 @@ void KTextObject::deleteItem(int pos,int line,int para)
 	    {
 	      paragraphList.remove(para);
 	      cellHeights.remove(para);
+	      setAutoUpdate(false);
 	      setNumRows(numRows() - 1);
+	      setAutoUpdate(true);
 	      breakPara = false;
 	    }
 	}
@@ -2673,7 +2680,9 @@ void KTextObject::deleteLine(int line,int para)
 	{
 	  paragraphList.remove(para);
 	  cellHeights.remove(para);
+	  setAutoUpdate(false);
 	  setNumRows(numRows() - 1);
+	  setAutoUpdate(true);
 	  breakPara = false;
 	}
       if (breakPara)
@@ -2693,7 +2702,9 @@ void KTextObject::deleteParagraph(int para)
       txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->paragraphLength());
       paragraphList.remove(para);
       cellHeights.remove(para);
+      setAutoUpdate(false);
       setNumRows(numRows() - 1);
+      setAutoUpdate(true);
       recalc(false);
       repaint(false);
     }  
@@ -2704,18 +2715,21 @@ void KTextObject::deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor)
 {
   // this methode is _VERY_ unefficient and has to be rewritten
 
+  changedParagraphs.clear();
+
   TxtCursor *_cursor = txtCursor;
   txtCursor = 0;
   int diff = _stopCursor->positionAbs() - _startCursor->positionAbs();
 
   txtCursor = _startCursor;
   for (int i = 0;i < diff - 1;i++)
-    kdelete();
+    kdelete(false);
 
   txtCursor = _cursor;
   txtCursor->setPositionAbs(txtCursor->positionAbs() - diff);
   txtCursor->setMaxPosition(textLength());
-
+  
+  recalc(true);
   repaint(false);
 
   changedParagraphs.clear();
@@ -3447,7 +3461,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
   unsigned int scrBar = 0,wid = 0;
   char chr[11];
   int ry;
-  QPixmap *pix;
+  QPixmap pix;
   QPainter *p;
 
   // get pointer to the paragraph, which should be drwan
@@ -3469,9 +3483,9 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	  {
 	    if (!drawPic)
 	      {
-		pix = new QPixmap(xstart,paragraphPtr->height());
-		pix->fill(backgroundColor());
-		p->begin(pix);
+		pix.resize(xstart,paragraphPtr->height());
+		pix.fill(backgroundColor());
+		p->begin(&pix);
 	      }
 
 	    if (objEnumListType.type == NUMBER)
@@ -3489,16 +3503,16 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	    if (!drawPic)
 	      {
 		p->end();
-		painter->drawPixmap(0,y,*pix);
+		painter->drawPixmap(0,y,pix);
 	      }
 	  } break;
 	case UNSORT_LIST:
 	  {
 	    if (!drawPic)
 	      {
-		pix = new QPixmap(xstart,paragraphPtr->height());
-		pix->fill(backgroundColor());
-		p->begin(pix);
+		pix.resize(xstart,paragraphPtr->height());
+		pix.fill(backgroundColor());
+		p->begin(&pix);
 	      }
 
 	    p->setFont(objUnsortListType.font);
@@ -3510,7 +3524,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	    if (!drawPic)
 	      {
 		p->end();
-		painter->drawPixmap(0,y,*pix);
+		painter->drawPixmap(0,y,pix);
 	      }
 	  } break;
 	}
@@ -3531,9 +3545,9 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		{
 		  if (w > 0 && linePtr->height() > 0)
 		    {
-		      pix = new QPixmap(w,linePtr->height());
-		      pix->fill(backgroundColor());
-		      p->begin(pix);
+		      pix.resize(w,linePtr->height());
+		      pix.fill(backgroundColor());
+		      p->begin(&pix);
 		    }
 		}
 
@@ -3611,7 +3625,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	      if (!drawPic && p->isActive())
 		{
 		  p->end();
-		  painter->drawPixmap(xstart,y,*pix);
+		  painter->drawPixmap(xstart,y,pix);
 		}
 	    }
 
@@ -3620,10 +3634,11 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	  x = xstart;
 	  chars = 0;
 	}
+
       if (!drawPic)
 	{ 
 	  delete p;
-	  delete pix;
+	  //delete pix;
 	}
     }
 }
@@ -4118,7 +4133,9 @@ void KTextObject::splitParagraph()
  	  wh = new CellWidthHeight;
  	  wh->wh = 0;
  	  cellHeights.append(wh);
+	  setAutoUpdate(false);
  	  setNumRows(numRows()+1);
+	  setAutoUpdate(true);
 	}
 
       // move cursor forward
@@ -4176,7 +4193,9 @@ void KTextObject::splitParagraph()
   	  wh = new CellWidthHeight;
   	  wh->wh = 0;
   	  cellHeights.append(wh);
+	  setAutoUpdate(false);
   	  setNumRows(numRows()+1);
+	  setAutoUpdate(true);
 	}
 
       // move cursor forward
@@ -4236,8 +4255,10 @@ void KTextObject::splitParagraph()
   wh = new CellWidthHeight;
   wh->wh = 0;
   cellHeights.append(wh);
+  setAutoUpdate(false);
   setNumRows(numRows()+1);
-  
+  setAutoUpdate(true);
+
   // recalculate everything
   recalc(false);
 }
@@ -4265,7 +4286,9 @@ void KTextObject::joinParagraphs(unsigned int p1,unsigned int p2)
   paragraphList.insert(para1n,para1);
 
   cellHeights.remove(para2n);
+  setAutoUpdate(false);
   setNumRows(numRows()-1);
+  setAutoUpdate(true);
 }
 
 /*======================= key backspace ==========================*/
@@ -4308,7 +4331,9 @@ bool KTextObject::kbackspace()
 	{
 	  paragraphList.remove(para);
 	  cellHeights.remove(para);
+	  setAutoUpdate(false);
 	  setNumRows(numRows()-1);
+	  setAutoUpdate(true);
 	  _h = -1;
 	}
     }
@@ -4325,7 +4350,7 @@ bool KTextObject::kbackspace()
 }
 
 /*========================= key delete ===========================*/
-bool KTextObject::kdelete()
+bool KTextObject::kdelete(bool _recalc=true)
 {
   unsigned int i;
   unsigned int para = txtCursor->positionParagraph();
@@ -4366,7 +4391,9 @@ bool KTextObject::kdelete()
 	{
 	  paragraphList.remove(para);
 	  cellHeights.remove(para);
+	  setAutoUpdate(false);
 	  setNumRows(numRows()-1);
+	  setAutoUpdate(true);
 	  _h = -1;
 	}
     }
@@ -4374,7 +4401,8 @@ bool KTextObject::kdelete()
   txtCursor->setMaxPosition(textLength());
       
   // recalculate everything
-  recalc(false);
+  if (_recalc)
+    recalc(false);
 
   if (_h != cellHeight(para) || _h == -1) return true;
   return false;

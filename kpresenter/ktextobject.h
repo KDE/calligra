@@ -1041,7 +1041,7 @@ public:
    * The four integers give the size of the QPicture<br>
    * If presMode is <i>true</i>, you can say that only the paragraphs between from and to are drawn. 
    */
-  QPicture* getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1);
+  QPicture* getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true);
 
   /** 
    * Resize the KTextObject.
@@ -1615,7 +1615,7 @@ protected:
   void joinParagraphs(unsigned int,unsigned int);
 
   bool kbackspace();
-  bool kdelete();
+  bool kdelete(bool _recalc=true);
   
   bool insertChar(char);
 

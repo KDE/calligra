@@ -1776,7 +1776,9 @@ void Page::doObjEffects()
   QList<PageObjects> _objList;
   unsigned int i;
   QTime _time;
-  int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0,x_pos2 = 0,y_pos2 = 0,_step_width,_step_height;
+  int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0;
+  int x_pos2 = kapp->desktop()->width(),y_pos2 = kapp->desktop()->height(),_step_width,_step_height;
+  int w_pos1 = 0,h_pos1;
   bool effects = false;
 
   bitBlt(&screen_orig,0,0,this,0,0,kapp->desktop()->width(),kapp->desktop()->height());
@@ -1795,14 +1797,26 @@ void Page::doObjEffects()
 		case EF_COME_LEFT:
 		  x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
 		  break;
-		case EF_COME_BOTTOM:
+		case EF_COME_TOP:
 		  y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
 		  break;
 		case EF_COME_RIGHT:
 		  x_pos2 = min(x_pos2,objPtr->ox - diffx());
 		  break;
-		case EF_COME_TOP:
+		case EF_COME_BOTTOM:
 		  y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		  break;
+		case EF_WIPE_LEFT:
+		  x_pos1 = max(x_pos1,objPtr->ow);
+		  break;
+		case EF_WIPE_RIGHT:
+		  x_pos1 = max(x_pos1,objPtr->ow);
+		  break;
+		case EF_WIPE_TOP:
+		  y_pos1 = max(y_pos1,objPtr->oh);
+		  break;
+		case EF_WIPE_BOTTOM:
+		  y_pos1 = max(y_pos1,objPtr->oh);
 		  break;
 		}
 	      effects = true;
@@ -1814,16 +1828,16 @@ void Page::doObjEffects()
     {
       _step_width = (int)(((float)20 * kapp->desktop()->width()) / 1000.0);
       _step_height = (int)(((float)20 * kapp->desktop()->height()) / 1000.0);
-      _steps1 = (x_pos1 > y_pos1 ? x_pos1 : y_pos1) / _step_width;
-      _steps2 = (kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
-		 kapp->desktop()->width() - x_pos2 : kapp->desktop()->height() - y_pos2) / _step_height;
+      _steps1 = x_pos1 > y_pos1 ? x_pos1 / _step_width : y_pos1 / _step_height;
+      _steps2 = kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
+	(kapp->desktop()->width() - x_pos2) / _step_width : (kapp->desktop()->height() - y_pos2) / _step_height;
       _time.start();
-      
+
       bool nothingHappens = false;
       for (;;)
 	{
 	  kapp->processEvents();
-	  if (nothingHappens || _step >= _steps1 && _step >= _steps2) break;
+	  if (nothingHappens) break; // || _step >= _steps1 && _step >= _steps2) break;
 	  
 	  if (_time.elapsed() >= 1)
 	    {
@@ -1845,7 +1859,7 @@ void Page::doObjEffects()
 			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
 			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
 			    y_pos1 = 0;
-			    drawObject(objPtr,screen,-x_pos1,y_pos1);
+			    drawObject(objPtr,screen,-x_pos1,y_pos1,0,0,0,0);
 			    if (x_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
@@ -1856,7 +1870,7 @@ void Page::doObjEffects()
 			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
 			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
 			    x_pos1 = 0;
-			    drawObject(objPtr,screen,x_pos1,-y_pos1);
+			    drawObject(objPtr,screen,x_pos1,-y_pos1,0,0,0,0);
 			    if (y_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
@@ -1867,7 +1881,7 @@ void Page::doObjEffects()
 			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
 			    y_pos2 = 0;
-			    drawObject(objPtr,screen,x_pos2,y_pos2);
+			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (x_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
@@ -1878,8 +1892,46 @@ void Page::doObjEffects()
 			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
 			    x_pos2 = 0;
-			    drawObject(objPtr,screen,x_pos2,y_pos2);
+			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (y_pos2 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_WIPE_LEFT:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    w_pos1 = _step_width * (_steps1 - _step) > 0 ? _step_width * (_steps1 - _step) : 0;
+			    drawObject(objPtr,screen,0,0,w_pos1,0,0,0);
+ 			    if (w_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_WIPE_RIGHT:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    w_pos1 = _step_width * (_steps1 - _step) > 0 ? _step_width * (_steps1 - _step) : 0;
+			    x_pos1 = w_pos1;
+			    drawObject(objPtr,screen,0,0,w_pos1,0,x_pos1,0);
+ 			    if (w_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_WIPE_TOP:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    h_pos1 = _step_height * (_steps1 - _step) > 0 ? _step_height * (_steps1 - _step) : 0;
+			    drawObject(objPtr,screen,0,0,0,h_pos1,0,0);
+ 			    if (h_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_WIPE_BOTTOM:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    h_pos1 = _step_height * (_steps1 - _step) > 0 ? _step_height * (_steps1 - _step) : 0;
+			    y_pos1 = h_pos1;
+			    drawObject(objPtr,screen,0,0,0,h_pos1,0,y_pos1);
+ 			    if (h_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    }
@@ -1915,13 +1967,14 @@ void Page::doObjEffects()
 }
 
 /*======================= draw object ============================*/
-void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
+void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,int _h,int _cx,int _cy)
 {
   QPainter p;
   p.begin(screen);
   QRect r = p.viewport();
   int num;
   PicCache *pc;
+  bool _clip = !(_w != 0 || _h != 0);
 
   switch (_objPtr->objType)
     {
@@ -1947,7 +2000,7 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
 		  else
 		    {
 		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
-								 !editMode,subPresStep,subPresStep);
+								 !editMode,subPresStep,subPresStep,_clip);
 		      pc = new PicCache;
 		      pc->pic.setData(_objPtr->objPic->data(),_objPtr->objPic->size());
 		      pc->num = _objPtr->objNum;
@@ -1965,7 +2018,8 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
 		    }
 		  else
 		    {
-		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode);
+		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode,
+								 -1,-1,_clip);
 		      pc = new PicCache;
 		      pc->pic.setData(_objPtr->objPic->data(),_objPtr->objPic->size());
 		      pc->num = _objPtr->objNum;
@@ -1977,13 +2031,30 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
 	  }
 	else
 	  _objPtr->objPic = _objPtr->textObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),
-						   _objPtr->ow,_objPtr->oh,!editMode);
+						   _objPtr->ow,_objPtr->oh,!editMode,-1,-1,_clip);
+	if (_w != 0 || _h != 0)
+	  {
+	    p.setClipping(true);
+	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
+	  }
+
 	p.translate((float)_objPtr->ox - (float)diffx() + (float)_x,(float)_objPtr->oy - (float)diffy() + (float)_y);
+	
 	_objPtr->objPic->play(&p);
+
+	if (_w != 0 || _h != 0)
+	  p.setClipping(false);
+	
 	p.resetXForm();
       } break;
     default:
       {
+	if (_w != 0 || _h != 0)
+	  {
+	    p.setClipping(true);
+	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
+	  }
+
 	if (_objPtr->objType != OT_CLIPART)
 	  p.translate((float)_objPtr->ox - (float)diffx() + (float)_x,(float)_objPtr->oy - (float)diffy() + (float)_y);
 	
@@ -1998,6 +2069,9 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
 	
 	_objPtr->objPic->play(&p);
 	
+	if (_w != 0 || _h != 0)
+	  p.setClipping(false);
+
 	if (_objPtr->objType == OT_CLIPART)
 	  p.setViewport(r);
 	

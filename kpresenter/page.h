@@ -164,7 +164,7 @@ protected:
   void drawPageInPix(QPixmap&,int);
   void changePages(QPixmap,QPixmap,PageEffect);
   void doObjEffects();
-  void drawObject(PageObjects*,QPixmap*,int,int);
+  void drawObject(PageObjects*,QPixmap*,int,int,int,int,int,int);
   int isInPicCache(int,int);
 
   // variables
