@@ -105,25 +105,25 @@ KexiTablePart::getTables()
 }
 
 QWidget *
-KexiTablePart::embeddReadOnly(QWidget *w, KexiView *v)
+KexiTablePart::embeddReadOnly(QWidget */*w*/, KexiView */*v*/)
 {
 	return 0;
 }
 
-KexiDBRecordSet *KexiTablePart::records(QWidget*,const QString& identifier,Parameters params)
+KexiDBRecordSet *KexiTablePart::records(QWidget*,const QString& identifier,Parameters /*params*/)
 {
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): id: "<< identifier << endl;
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
 
 	KexiDBRecordSet *m_record=0;
-        m_record = kexiProject()->db()->queryRecord("select * from " + localIdentifier(identifier), true);
+	m_record = kexiProject()->db()->queryRecord("select * from " + localIdentifier(identifier), true);
 
 	if(!m_record)
 	{
-	        kdDebug() << "KexiTablePart::executeQuery(): db-error" << endl;
-        	kexiProject()->db()->latestError()->toUser(0);
-        	return 0;
+		kdDebug() << "KexiTablePart::executeQuery(): db-error" << endl;
+		kexiProject()->db()->latestError()->toUser(0);
+		return 0;
 	}
 
 	return m_record;
@@ -131,7 +131,7 @@ KexiDBRecordSet *KexiTablePart::records(QWidget*,const QString& identifier,Param
 
 QStringList KexiTablePart::fields(QWidget*,const QString& identifier)
 {
-	return kexiProject()->db()->getColumns(localIdentifier(identifier));
+	return kexiProject()->db()->columns(localIdentifier(identifier));
 }
 
 QStringList KexiTablePart::datasets(QWidget*)

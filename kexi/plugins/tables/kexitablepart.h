@@ -53,13 +53,13 @@ class KEXI_HAND_TBL_EXPORT KexiTablePart : public KexiProjectHandler, public Kex
 
 		void				getTables();
 
-        	virtual QStringList datasets(QWidget*);
+		virtual QStringList datasets(QWidget*);
 		virtual QStringList datasetNames(QWidget*);
-	        virtual QStringList fields(QWidget*,const QString& identifier);
-	        virtual KexiDBRecordSet *records(QWidget*,const QString&
-			identifier,Parameters params);
-        	virtual ParameterList parameters(QWidget*,const QString &identifier)
-				{ return ParameterList(); }
+		virtual QStringList fields(QWidget*,const QString& identifier);
+		virtual KexiDBRecordSet *records(QWidget*,const QString&
+																		 identifier,Parameters params);
+		virtual ParameterList parameters(QWidget*,const QString &/*identifier*/)
+					{ return ParameterList(); }
 
 		KexiTableFilterManager *filters() { return m_filters; }
 

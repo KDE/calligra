@@ -35,26 +35,28 @@ public:
            const QStringList &args=QStringList() );
   ~PgSqlDB();
 
-public slots:
-  QString driverName ();
-
-  QStringList tables ();
-
+  QStringList tableNames ();
   QStringList databases ();
+  QString driverName () const;
+  KexiDBTableStruct structure (const QString&) const;
+  QString nativeDataType (const KexiDBField::ColumnType&) const;
+  const KexiDBTable *const table(const QString&)=0;
 
-  KexiDBRecordSet* queryRecord (QString query, bool buffer = false);
+public slots:
 
-  bool connect (QString host, QString user, QString password, QString socket,
-                QString port);
+  KexiDBRecordSet* queryRecord (const QString &query, bool buffer = false);
 
-  bool connect (QString host, QString user, QString password, QString socket, QString port,
-                QString db, bool create = false);
+  bool connect (const QString &host, const QString &user, const QString &password,
+                const QString &socket, const QString &port);
 
-  bool query (QString statement);
+  bool connect (const QString &host, const QString &user, const QString &password,
+                const QString &socket, const QString &port, const QString &db, bool create = false);
+
+  bool query (const QString &statement);
 
   QString escape (const QString &str);
 
-  QString escape (const QByteArray& str);
+  QString escape (const QByteArray &str);
 
   bool alterField (const QString& table, const QString& field,
                    const QString& newFieldName, KexiDBField::ColumnType dtype,
@@ -73,10 +75,6 @@ public slots:
                     bool createTable = false);
 
   bool createTable (const KexiDBTable& tableDef);
-
-  KexiDBTableStruct getStructure (const QString&);
-
-  QString getNativeDataType (const KexiDBField::ColumnType&);
 
   KexiDBError* latestError();
 

@@ -56,29 +56,33 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 
 //		int		connect(const char *host, const char *user, const char *passwd,
 //					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
-
-	public slots:
-		QString		driverName();
-
-		KexiDBRecordSet	*queryRecord(QString querystatement, bool buffer=false);
-
-		bool		connect(QString host, QString user, QString password, QString socket, QString port);
-		bool		connect(QString host, QString user, QString password, QString socket, QString port,
-			QString db, bool create = false);
-
+		QString		driverName()   const;
 		QStringList	databases();
 		QStringList	tableNames();
+		unsigned long	affectedRows() const;
+		KexiDBTableStruct	structure(const QString& table) const;
+		QString	nativeDataType(const KexiDBField::ColumnType& t) const;
+
+	public slots:
+		KexiDBRecordSet	*queryRecord(const QString& querystatement, bool buffer=false);
+
+		bool		connect(const QString& host, const QString& user, const QString& password,
+										const QString& socket, const QString& port);
+		bool		connect(const QString& host, const QString& user, const QString& password,
+										const QString& socket, const QString& port,
+										const QString& db, bool create = false);
+
 		const KexiDBTable* const table(const QString &name);
 
 		/*!
 		 * execute a query
 		 */
-		bool		query(QString statement);
+		bool		query(const QString& statement);
 
 		/**
 		 * us that function if you don't want to catch exceptions :)
 		 */
-		bool		uhQuery(QString statement);
+		bool		uhQuery(const QString& statement);
 //		int		realQuery(const char *statement, unsigned int length);
 
 		QString		escape(const QString &str);
@@ -105,12 +109,8 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 		MySqlResult	*storeResult();
 		MySqlResult	*useResult();
 
-		unsigned long	affectedRows();
-
 		unsigned long	lastAuto();
 
-		KexiDBTableStruct	getStructure(const QString& table);
-		QString	getNativeDataType(const KexiDBField::ColumnType& t);
 		static KexiDBField::ColumnType getInternalDataType(int t);
 
 	protected:

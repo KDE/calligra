@@ -38,19 +38,19 @@ CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
 }
 
 QString
-CqlDB::driverName()
+CqlDB::driverName() const
 {
 	return QString("cql");
 }
 
 KexiDB::DBType
-CqlDB::dbType()
+CqlDB::dbType() const
 {
 	return LocalDirectoryDB;
 }
 
 bool
-CqlDB::load(QString file, bool)
+CqlDB::load(const QString& file, bool)
 {
 	m_error.clear();
 	char *dir = (char * )file.latin1();
@@ -84,7 +84,7 @@ CqlDB::load(QString file, bool)
 }
 
 QStringList
-CqlDB::tables()
+CqlDB::tableNames()
 {
 	QStringList tables;
 	TableIdList *tlist = m_db->getTableIds("PUBLIC");

@@ -57,12 +57,12 @@ void PgSqlDB::clearResultInfo ()
   }
 }
 
-QString PgSqlDB::driverName()
+QString PgSqlDB::driverName() const
 {
   return QString::fromLatin1 ("pgsql");
 }
 
-KexiDBRecordSet* PgSqlDB::queryRecord (QString, bool)
+KexiDBRecordSet* PgSqlDB::queryRecord (const QString&, bool)
 {
   return 0;
 }
@@ -82,7 +82,7 @@ QStringList  PgSqlDB::databases ()
   return list;
 }
 
-QStringList  PgSqlDB::tables ()
+QStringList  PgSqlDB::tableNames ()
 {
   QStringList list;
 
@@ -97,7 +97,13 @@ QStringList  PgSqlDB::tables ()
   return list;
 }
 
-bool PgSqlDB::query (QString statement)
+const KexiDBTable *const PgSqlDB::table(const QString&)
+{
+  //FIXME: implement
+  return 0;
+}
+
+bool PgSqlDB::query (const QString& statement)
 {
   Q_ASSERT (_dbConn);
 
@@ -156,14 +162,14 @@ QString PgSqlDB::escape (const QByteArray& str)
   return QString(to);
 }
 
-bool PgSqlDB::connect (QString host, QString user, QString password,
-                     QString socket, QString port)
+bool PgSqlDB::connect (const QString &host, const QString &user, const QString &password,
+                     const QString &socket, const QString &port)
 {
   return connect (host, user, password, socket, port, "");
 }
 
-bool PgSqlDB::connect (QString host, QString user, QString password,
-                     QString socket, QString port, QString db, bool create)
+bool PgSqlDB::connect (const QString &host, const QString &user, const QString &password,
+                     const QString &socket, const QString &port, const QString &db, bool create)
 {
   if (_dbConn)
   {
@@ -254,14 +260,14 @@ bool PgSqlDB::createTable (const KexiDBTable& tableDef)
   return false;
 }
 
-KexiDBTableStruct PgSqlDB::getStructure (const QString& table)
+KexiDBTableStruct PgSqlDB::structure (const QString& table) const
 {
-  return KexiDB::getStructure (table);
+  return KexiDB::structure (table);
 }
 
-QString PgSqlDB::getNativeDataType (const KexiDBField::ColumnType& type)
+QString PgSqlDB::nativeDataType (const KexiDBField::ColumnType& type) const
 {
-  return KexiDB::getNativeDataType (type);
+  return QString::null;
 }
 
 #include "pgsqldb.moc"

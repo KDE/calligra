@@ -1,6 +1,8 @@
+// -*- Mode: c++-mode; c-basic-offset: 2; indent-tabs-mode: t; tab-width: 2; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2003   Zack Rusin <zack@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,25 +34,8 @@ KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 	m_encoding = Latin1;
 }
 
-
-bool
-KexiDB::connect(QString, QString, QString, QString, QString)
+KexiDB::~KexiDB()
 {
-	kdDebug() << "KexiDB::connect(host): sorry you are wrong here" << endl;
-	return false;
-}
-
-bool
-KexiDB::connect(QString, QString, QString, QString, QString, QString, bool)
-{
-	kdDebug() << "KexiDB::connect(db): sorry you are wrong here" << endl;
-	return false;
-}
-
-bool
-KexiDB::load(QString, bool persistant)
-{
-	return false;
 }
 
 QStringList
@@ -59,70 +44,20 @@ KexiDB::databases()
 	return QStringList();
 }
 
-KexiDBRecordSet*
-KexiDB::queryRecord(QString, bool)
+KexiDB::DBType
+KexiDB::dbType() const
 {
-	return 0;
+	return NoDB;
 }
 
-
-
 QString
-KexiDB::driverName()
+KexiDB::driverName() const
 {
 	return QString::fromLatin1("NONE");
 }
 
-/*
-QStringList
-KexiDB::tableNames()
+bool KexiDB::createTable(const KexiDBTable& tableDef)
 {
-	return QStringList();
-}
-
-const KexiDBTable *const KexiDB::table(const QString&)
-{
-	return 0;
-}
-
-*/
-
-bool
-KexiDB::query(QString)
-{
-	return false;
-}
-
-QString
-KexiDB::escape(const QString &)
-{
-	return QString::null;
-}
-
-QString
-KexiDB::escape(const QByteArray& str)
-{
-	return QString::null;
-}
-
-bool
-KexiDB::alterField(const QString& /*table*/, const QString& /*field*/, const QString& /*newFieldName*/,
-	KexiDBField::ColumnType /*dtype*/, int /*length*/, int /*precision*/,
-	KexiDBField::ColumnConstraints /*constraints*/, bool /*binary*/, bool /*unsignedType*/,
-	const QString& /*defaultVal*/)
-{
-	return false;
-}
-
-bool
-KexiDB::createField(const QString& /*table*/, const QString& /*field*/, KexiDBField::ColumnType /*dtype*/,
-	int /*length*/, int /*precision*/, KexiDBField::ColumnConstraints /*constraints*/, bool /*binary*/,
-	bool /*unsignedType*/, const QString& /*defaultVal*/)
-{
-	return false;
-}
-
-bool KexiDB::createTable(const KexiDBTable& tableDef) {
 	if (tableDef.fieldCount()<1) return false;
 	KexiDBField f=tableDef.field(0);
 	if (!createField(f,KexiDBTableStruct(),true)) return false;
@@ -136,39 +71,30 @@ bool KexiDB::createTable(const KexiDBTable& tableDef) {
 
 }
 
-bool
-KexiDB::alterField(const KexiDBField& changedField, unsigned int index,
-	KexiDBTableStruct fields)
-{
-	return false;
-}
-
-bool
-KexiDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
-	bool createTable)
-{
-	return false;
-}
-
-
 unsigned long
-KexiDB::affectedRows()
+KexiDB::affectedRows() const
 {
 	return 0;
 }
 
+KexiDBWatcher*
+KexiDB::watcher() const
+{
+	return m_dbwatcher;
+}
+
 KexiDBTableStruct
-KexiDB::getStructure(const QString&)
+KexiDB::structure(const QString&) const
 {
 	return KexiDBTableStruct();
 }
 
 
 QStringList
-KexiDB::getColumns(const QString& table)
+KexiDB::columns(const QString& table) const
 {
 	QStringList res;
-	KexiDBTableStruct tmp=getStructure(table);
+	KexiDBTableStruct tmp=structure(table);
 	for (KexiDBField *f=tmp.first();f;f=tmp.next())
 	{
 		res.append(f->name());
@@ -179,14 +105,10 @@ KexiDB::getColumns(const QString& table)
 	return res;
 }
 
-QString
-KexiDB::getNativeDataType(const KexiDBField::ColumnType& t)
+RelationList
+KexiDB::relations() const
 {
-	return QString::null;
-}
-
-KexiDB::~KexiDB()
-{
+	return m_relations;
 }
 
 const QString
@@ -232,9 +154,15 @@ KexiDB::encode(const QString &v)
 	return v.latin1();
 }
 
-void KexiDB::latestError(KexiDBError **error) {
-    *error=latestError();
+void KexiDB::latestError(KexiDBError **error)
+{
+	*error=latestError();
 }
 
+
+bool KexiDB::load(const QString& /*file*/, bool /*persistant*/ )
+{
+	return false;
+}
 
 #include "kexidb.moc"

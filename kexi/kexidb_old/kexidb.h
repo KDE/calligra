@@ -1,6 +1,8 @@
+// -*- Mode: c++-mode; c-basic-offset: 2; indent-tabs-mode: t; tab-width: 2; -*-
   /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2003   Zack Rusin <zack@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,10 +38,10 @@ class KexiDBError;
 
 typedef struct SourceConnection
 {
-        QString srcTable;
-        QString rcvTable;
-        QString srcField;
-        QString rcvField;
+	QString srcTable;
+	QString rcvTable;
+	QString srcField;
+	QString rcvField;
 } SourceConnection;
 
 typedef QValueList<SourceConnection> RelationList;
@@ -49,113 +51,111 @@ class KEXIDB_EXPORT KexiDB : public QObject
 {
 	Q_OBJECT
 
-	public:
+public:
 
-		enum DBType
-		{
-			NoDB,
-			RemoteDB,
-			LocalDirectoryDB,
-			LocalFileDB
-		};
+	enum DBType
+	{
+		NoDB,
+		RemoteDB,
+		LocalDirectoryDB,
+		LocalFileDB
+	};
 
-		enum Encoding
-		{
-			Latin1,
-			Utf8,
-			Ascii,
-			Local8Bit
-		};
+	enum Encoding
+	{
+		Latin1,
+		Utf8,
+		Ascii,
+		Local8Bit
+	};
 
-		KexiDB(QObject *parent=0, const char *name=0);
-		~KexiDB();
+	KexiDB(QObject *parent=0, const char *name=0);
+	~KexiDB();
 
+	//These two should be const but the reality is that
+	//most current drivers make those a mutators
+	virtual QStringList       databases();
+	virtual QStringList       tableNames()=0;
 
-	public slots:
+	virtual QString           driverName() const;
+	virtual DBType            dbType() const;
+	virtual KexiDBTableStruct	structure(const QString& table) const;
+	virtual QString	          nativeDataType(const KexiDBField::ColumnType& t) const=0;
+	virtual unsigned long		  affectedRows() const;
+	virtual KexiDBWatcher*    watcher() const;
+	virtual const KexiDBTable *const table(const QString&)=0;
+	QStringList			          columns(const QString& table) const;
+	RelationList			        relations() const;
+	/**
+	 * returns the selected encoding
+	 */
+	Encoding encoding() { return m_encoding; }
 
-		//now driver related functions
+public slots:
+	virtual KexiDBRecordSet* queryRecord(const QString& query, bool buffer=false) =0;
 
-		virtual QString driverName();
-		virtual DBType dbType() { return NoDB; }
+	/*! connect to database hope that is ansi-compatible */
+	virtual bool connect(const QString& host, const QString& user, const QString& password,
+											 const QString& socket, const QString& port) =0;
+	virtual bool connect(const QString& host, const QString& user, const QString& password,
+											 const QString& socket, const QString& port,
+											 const QString& db, bool create = false) =0;
+	/*! connect method for file-based databases*/
+	virtual bool load(const QString& file, bool persistant=false);
 
-		virtual KexiDBRecordSet* queryRecord(QString query, bool buffer=false);
-
-		/*! connect to database hope that is ansi-compatible */
-		virtual bool connect(QString host, QString user, QString password, QString socket, QString port);
-		virtual bool connect(QString host, QString user, QString password, QString socket, QString port,
-			QString db, bool create = false);
-		/*! connect method for file-based databases*/
-		virtual bool load(QString file, bool persistant=false);
-
-		/*! hope thats ansi-compatilbe too */
-		virtual QStringList databases();
-		virtual QStringList tableNames()=0;
-		virtual const KexiDBTable *const table(const QString&)=0;
-
-		virtual bool query(QString statement);
-		virtual QString escape(const QString &str);
-		virtual QString escape(const QByteArray& str);
-		virtual bool alterField(const QString& table, const QString& field, const QString& newFieldName,
-			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
-			bool binary, bool unsignedType, const QString& defaultVal);
-		virtual bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
-			int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
-			const QString& defaultVal);
-		virtual bool alterField(const KexiDBField& changedField,
-			unsigned int index, KexiDBTableStruct fields);
-		virtual bool createField(const KexiDBField& newField,
-			KexiDBTableStruct fields, bool createTable = false);
-		/* the createTable method should be overloaded to get betterperformance */
-		virtual bool createTable(const KexiDBTable& tableDef);
-
-		virtual KexiDBTableStruct	getStructure(const QString& table);
-		virtual QString	getNativeDataType(const KexiDBField::ColumnType& t);
-
-		QStringList			getColumns(const QString& table);
-
-		virtual unsigned long		affectedRows();
-		virtual KexiDBWatcher		*watcher() { return m_dbwatcher; }
-
-		virtual bool commitWork() { return false; }
-
-		void setRelations(RelationList r) { m_relations = r; }
-		RelationList			relations() { return m_relations; }
-
-//js:		KexiDBDriver		*m_currentDriver;
-		uint us(int i) { return i; }
-				/*!
-		 *  the last error which occured. The pointer must neither be stored by the caller nor
-		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
-		 */
-		void latestError(KexiDBError **error);
-
-		/**
-		 * forces the db to read out in a special encoding
-		 */
-		virtual void setEncoding(Encoding enc) { m_encoding = enc; }
-
-		/**
-		 * returns the selected encoding
-		 */
-		Encoding encoding() { return m_encoding; }
-
-		const QString decode(const char *);
-		const char *encode(const QString &);
-
-	public:
-		/*!
-		 *  the last error which occured. The pointer must neither be stored by the caller nor
-		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
-		 */
-		virtual KexiDBError *latestError()=0;
+	virtual bool query(const QString& statement)  =0;
+	virtual QString escape(const QString &str)    =0;
+	virtual QString escape(const QByteArray& str) =0;
+	virtual bool alterField(const QString& table, const QString& field, const QString& newFieldName,
+													KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
+													bool binary, bool unsignedType, const QString& defaultVal) =0;
+	virtual bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
+													 int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
+													 const QString& defaultVal) =0;
+	virtual bool alterField(const KexiDBField& changedField,
+													unsigned int index, KexiDBTableStruct fields) = 0;
+	virtual bool createField(const KexiDBField& newField,
+													 KexiDBTableStruct fields, bool createTable = false) = 0;
+	/* the createTable method should be overloaded to get better performance */
+	virtual bool createTable(const KexiDBTable& tableDef);
 
 
-	protected:
+	virtual bool commitWork() { return false; }
 
-		KexiDBInterfaceManager	*m_manager;
-		KexiDBWatcher		*m_dbwatcher;
-		RelationList		m_relations;
-		Encoding		m_encoding;
+	void setRelations(const RelationList& r) { m_relations = r; }
+
+	/*!
+	 *  the last error which occured. The pointer must neither be stored by the caller nor
+	 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
+	 */
+	void latestError(KexiDBError **error);
+
+	/**
+	 * forces the db to read out in a special encoding
+	 */
+	virtual void setEncoding(Encoding enc) { m_encoding = enc; }
+
+
+
+	const QString decode(const char *);
+	const char *encode(const QString &);
+
+public:
+	/*!
+	 *  the last error which occured. The pointer must neither be stored by the caller nor
+	 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
+	 */
+	virtual KexiDBError *latestError()=0;
+
+
+protected:
+
+	KexiDBInterfaceManager	*m_manager;
+	KexiDBWatcher		*m_dbwatcher;
+	RelationList		m_relations;
+	Encoding		m_encoding;
+	class KexiDBPrivate;
+	KexiDBPrivate *d;
 };
 
 #endif

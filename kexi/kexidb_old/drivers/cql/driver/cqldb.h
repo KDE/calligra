@@ -33,18 +33,18 @@ class CqlDB : public KexiDB
 		CqlDB(QObject *parent=0, const char *name="cql", const QStringList &args=QStringList());
 		~CqlDB();
 
-		QString		driverName();
+		QString		driverName() const;
 		KexiDB::DBType	dbType();
 
-		bool		load(QString file, bool persistant=false);
+		bool		load(cobst QString& file, bool persistant=false);
 
-		QStringList	tables();
+		QStringList	tableNames();
 
 		//we should drop that!!!
 		QString		error();
 
-		bool		query(QString statement);
-		KexiDBRecordSet*	queryRecord(QString query, bool buffer=false);
+		bool		query(const QString& statement);
+		KexiDBRecordSet*	queryRecord(const QString& query, bool buffer=false);
 
 		bool alterField(const QString& table, const QString& field,
 			const QString& newFieldName,
@@ -61,13 +61,13 @@ class CqlDB : public KexiDB
 		static KexiDBField::ColumnType getInternalDataType(int t);
 
 		QString createDefinition(const KexiDBField& field);
-		QString getNativeDataType(const KexiDBField::ColumnType& t);
-                virtual KexiDBError *latestError();
+		QString nativeDataType(const KexiDBField::ColumnType& t);
+		virtual KexiDBError *latestError();
 		virtual bool commitWork();
 
 	private:
 		SqlHandle	*m_db;
-                KexiDBError     m_error;
+		KexiDBError     m_error;
 };
 
 #endif

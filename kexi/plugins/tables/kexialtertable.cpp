@@ -125,7 +125,7 @@ KexiAlterTable::getFields()
 	int fc = 0;
 	if(!m_create)
 	{
-		m_tableFields = kexiProject()->db()->getStructure(m_table);
+		m_tableFields = kexiProject()->db()->structure(m_table);
 
 		for(KexiDBField* field = m_tableFields.first(); field; field = m_tableFields.next())
 		{

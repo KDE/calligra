@@ -55,7 +55,7 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiD
 
 
 KexiDBRecordSet*
-MySqlDB::queryRecord(QString querystatement, bool buffer)
+MySqlDB::queryRecord(const QString& querystatement, bool buffer)
 {
 	m_error.setup(0);
 	kdDebug() << "MySqlDB::queryRecord()" << endl;
@@ -82,11 +82,13 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 }
 
 bool
-MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port)
+MySqlDB::connect(const QString& host, const QString& user, const QString& password,
+								 const QString& socket, const QString& port)
 {
 	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
 
-	if(socket.isEmpty())
+	QString msocket = socket;
+	if(msocket.isEmpty())
 	{
 		QStringList sockets;
 		sockets.append("/var/lib/mysql/mysql.sock");
@@ -96,12 +98,12 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
 		{
 			if(QFile(*it).exists())
-				socket = (*it);
+				msocket = (*it);
 		}
 	}
 
 	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0,
-		port.toUInt(), socket.local8Bit(), 0);
+		port.toUInt(), msocket.local8Bit(), 0);
 	if(mysql_errno(m_mysql) == 0)
 	{
 		m_connected = true;
@@ -109,7 +111,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		m_user = user;
 		m_password = password;
 		m_port = port.toUInt();
-		m_socket = socket;
+		m_socket = msocket;
 		return true;
 	}
 	else
@@ -122,7 +124,8 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 }
 
 bool
-MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port, QString db, bool create)
+MySqlDB::connect(const QString& host, const QString& user, const QString& password,
+								 const QString& socket, const QString& port, const QString& db, bool create)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
 	if(m_connected && host == m_host && user == m_user && password == m_password && socket == m_socket
@@ -171,8 +174,8 @@ MySqlDB::databases()
 	kdDebug() << "MySqlDB::databases()" << endl;
 	QStringList s;
 
-	query("show databases");
-	MySqlResult *result = storeResult();
+	const_cast<MySqlDB*>(this)->query("show databases");
+	MySqlResult *result = const_cast<MySqlDB*>(this)->storeResult();
 
 	if(!result)
 		return s;
@@ -211,7 +214,7 @@ MySqlDB::tableNames()
 	m_tableDefs.clear();
 	for(QStringList::const_iterator it=s.begin();it!=s.end();++it) {
 		m_tableDefs.insert((*it),createTableDef(*it));
-	}	
+	}
 
 	return s;
 }
@@ -221,21 +224,22 @@ const KexiDBTable * const MySqlDB::table(const QString& name) {
 }
 
 
-KexiDBTable * MySqlDB::createTableDef(const QString& name) {
+KexiDBTable * MySqlDB::createTableDef(const QString& name)
+{
 	kdDebug()<<"MySQLDB::createTableDef: entered"<<endl;
 
-        if(!m_connectedDB)
-                return 0;
+	if(!m_connectedDB)
+		return 0;
 
 	kdDebug()<<"MySQLDB::createTableDef: connection exists"<<endl;
 
 	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from "+name+" limit 0")<<endl;
 
-        query("select * from "+name+" limit 0");
-        MySqlResult *result = storeResult();
+	query("select * from "+name+" limit 0");
+	MySqlResult *result = storeResult();
 
-        if(!result)
-                return 0;
+	if(!result)
+		return 0;
 
 	kdDebug()<<"MySQLDB::createTableDef: there is a result"<<endl;
 
@@ -243,10 +247,10 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name) {
 
 	KexiDBField *f = 0;
 	int i = 0;
-    while ((f = result->fieldInfo(i++)) != 0)
+	while ((f = result->fieldInfo(i++)) != 0)
 	{
 		t->addField(*f);
-//should we support other unique keys here too ?
+		//should we support other unique keys here too ?
 		if (f->primary_key()) t->addPrimaryKey(f->name());
 		kdDebug()<<"MySQLDB::createTableDef: addField:"<<f->name()<<endl;
 	}
@@ -254,11 +258,10 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name) {
 	delete result;
 
 	return t;
-
 }
 
 bool
-MySqlDB::query(QString statement)
+MySqlDB::query(const QString& statement)
 {
 	m_error.setup(0);
 //	if(!m_connected)
@@ -272,7 +275,7 @@ MySqlDB::query(QString statement)
 }
 
 bool
-MySqlDB::uhQuery(QString statement)
+MySqlDB::uhQuery(const QString& statement)
 {
 	const char *query = statement.latin1();
 	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
@@ -328,13 +331,13 @@ MySqlDB::useResult()
 }
 
 unsigned long
-MySqlDB::affectedRows()
+MySqlDB::affectedRows() const
 {
 	return 0;
 }
 
 QString
-MySqlDB::driverName()
+MySqlDB::driverName() const
 {
 	return QString::fromLatin1("mySQL");
 }
@@ -383,7 +386,7 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 	const QString& defaultVal)
 {
 	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
-	kdDebug() << "MySqlDB::alterField: DataType: " << getNativeDataType(dtype) << "ColumnType: " << dtype << endl;
+	kdDebug() << "MySqlDB::alterField: DataType: " << nativeDataType(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
 	qstr += " " + createDefinition(newFieldName, dtype, length, precision, constraints, binary,
 		unsignedType, defaultVal);
@@ -398,7 +401,7 @@ MySqlDB::createField(const QString& table, const QString& field, KexiDBField::Co
 	bool unsignedType, const QString& defaultVal)
 {
 	kdDebug() << "MySqlDB::createField: Table: " << table << " Field: " << field << endl;
-	kdDebug() << "MySqlDB::createField: DataType: " << getNativeDataType(dtype) << "ColumnType: " << dtype << endl;
+	kdDebug() << "MySqlDB::createField: DataType: " << nativeDataType(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " ADD " + field;
 	qstr += " " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
 
@@ -410,7 +413,7 @@ QString
 MySqlDB::createDefinition(const QString& /*field*/, KexiDBField::ColumnType dtype, int length, int precision,
  KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal)
 {
-	QString qstr = getNativeDataType(dtype);
+	QString qstr = nativeDataType(dtype);
 	bool allowUnsigned = false;
 
 	switch(dtype)
@@ -477,11 +480,11 @@ MySqlDB::createDefinition(const QString& /*field*/, KexiDBField::ColumnType dtyp
 }
 
 KexiDBTableStruct
-MySqlDB::getStructure(const QString& table)
+MySqlDB::structure(const QString& table) const
 {
 	KexiDBTableStruct dbStruct;
 	MYSQL_RES* result= mysql_list_fields(m_mysql, table.local8Bit().data(), 0);
-	kdDebug() << "MySqlDB::getStructure: Get fields..." << endl;
+	kdDebug() << "MySqlDB::structure: Get fields..." << endl;
 
 	if(result)
 	{
@@ -511,7 +514,7 @@ MySqlDB::getStructure(const QString& table)
 }
 
 QString
-MySqlDB::getNativeDataType(const KexiDBField::ColumnType& t)
+MySqlDB::nativeDataType(const KexiDBField::ColumnType& t) const
 {
 	switch(t)
 	{
@@ -610,7 +613,7 @@ MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 	KexiDBTableStruct fields)
 {
 	kdDebug() << "MySqlDB::alterField: Table: " << changedField.table() << " Field: " << fields.at(index)->name() << endl;
-	kdDebug() << "MySqlDB::alterField: DataType: " << getNativeDataType(
+	kdDebug() << "MySqlDB::alterField: DataType: " << nativeDataType(
 		changedField.sqlType()) << "ColumnType: " << changedField.sqlType() << endl;
 	QString qstr = "ALTER TABLE " + changedField.table() + " CHANGE " +
 		fields.at(index)->name() + " " + changedField.name();
@@ -628,10 +631,10 @@ MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 
 bool
 MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
-	bool createTable)
+										 bool createTable)
 {
 	kdDebug() << "MySqlDB::createField: Table: " << newField.table() << " Field: " << newField.name() << endl;
-	kdDebug() << "MySqlDB::createField: DataType: " << getNativeDataType(
+	kdDebug() << "MySqlDB::createField: DataType: " << nativeDataType(
 		newField.sqlType()) << "ColumnType: " << newField.sqlType() << endl;
 	QString qstr;
 
@@ -662,7 +665,7 @@ QString
 MySqlDB::createDefinition(const KexiDBField& field, int index,
 	KexiDBTableStruct fields)
 {
-	QString qstr = getNativeDataType(field.sqlType());
+	QString qstr = nativeDataType(field.sqlType());
 	bool allowUnsigned = false;
 
 	switch(field.sqlType())
