@@ -19,6 +19,8 @@
 
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 
 #include <tableview/kexitableview.h>
 
@@ -30,18 +32,21 @@
 int main(int argc, char* argv[])
 {
 	KApplication app(argc, argv, "tv_test");
+	KGlobal::iconLoader()->addAppDir("kexi");
 
 	KexiTableView tv;
-	app.setMainWidget(&tv);
 
 	KexiTableViewData data;
-	KexiTableViewColumn col;
-	col.type = QVariant::Int; col.caption = "Id"; data.addColumn( col );
-	col.type = QVariant::String; col.caption = "Name"; data.addColumn( col );
-	col.type = QVariant::Int; col.caption = "Age"; data.addColumn( col );
+	KexiDB::Field f1("id",KexiDB::Field::Integer),
+		f2("name",KexiDB::Field::Text),
+		f3("age",KexiDB::Field::Integer);
+	data.addColumn( new KexiTableViewColumn(f1) );
+	data.addColumn( new KexiTableViewColumn(f2) );
+	data.addColumn( new KexiTableViewColumn(f3) );
 
 	tv.setData(&data, false);
 
+	app.setMainWidget(&tv);
 	tv.show();
 
 	return app.exec();
