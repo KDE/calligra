@@ -22,6 +22,8 @@ DESCRIPTION
     This file implements a simplified abstraction of Microsoft Word documents.
 */
 
+//#define FONT_DEBUG
+
 #include <kdebug.h>
 #include <qfontdatabase.h>
 #include <qfontinfo.h>
@@ -51,6 +53,10 @@ Document::~Document()
 QString Document::getFont(unsigned fc)
 {
     QString font = MsWord::getFont(fc).xstzName;
+
+#ifdef FONT_DEBUG
+    kdDebug() << "MS-FONT: " << font << endl;
+#endif
 
     static const unsigned ENTRIES = 6;
     static QString fuzzyLookup[ENTRIES][2] =
@@ -84,6 +90,11 @@ QString Document::getFont(unsigned fc)
     // Use Qt to look up our canonical equivalent of the font name.
     QFont xFont( font );
     QFontInfo info( xFont );
+    
+#ifdef FONT_DEBUG
+    kdDebug() << "QT-FONT: " << info.family() << endl;
+#endif
+    
     return info.family();
 }
 

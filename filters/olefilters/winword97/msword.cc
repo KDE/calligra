@@ -30,6 +30,8 @@
 #include <qtextcodec.h>
 #include <string.h>
 
+//#define CHAR_DEBUG
+
 // We currently only take note of the document's main non-Far Eastern
 // language, and ignore character properties. TBD: remove these restrictions!
 
@@ -69,14 +71,14 @@ QString MsWord::char2unicode(unsigned lid, char c)
     QString result;
 
     if (codec)
-    {
 	result = codec->toUnicode(&c, 1);
-    }
     else
-    {
 	result = '?';
-    }
-    
+
+#ifdef CHAR_DEBUG
+    kdDebug() << "CONVERTED " << c << " TO: " << result << endl;
+#endif    
+
     return result;
 }
 

@@ -674,11 +674,11 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
         case sprmCFBold: // 0x0835
             MsWordGenerated::read(in + bytes, &tmp);
             // TBD: implement access to base chp for >= 128 case!!!
-            if (tmp < 128)
-                m_chp.fBold = tmp == 1;
-            else
+	    if (tmp < 128)
+	        m_chp.fBold = tmp == 1;
+	    else
                 m_chp.fBold = tmp == 128 ? m_chp.fBold : !m_chp.fBold;
-            break;
+	    break;
         case sprmCFItalic: // 0x0836
             MsWordGenerated::read(in + bytes, &tmp);
             // TBD: implement access to base chp for >= 128 case!!!
