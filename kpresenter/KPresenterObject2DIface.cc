@@ -41,3 +41,28 @@ QColor KPresenterObject2DIface::gradientColor2() const
     return obj->getGColor2();
 }
 
+void KPresenterObject2DIface::setGUnbalanced( bool b )
+{
+    obj->setGUnbalanced(b);
+}
+
+void KPresenterObject2DIface::setGXFactor( int f )
+{
+    obj->setGXFactor(f);
+}
+
+void KPresenterObject2DIface::setGYFactor( int f )
+{
+    obj->setGYFactor(f);
+}
+
+int KPresenterObject2DIface::xGradientFactor() const
+{
+    return obj->getGXFactor();
+}
+
+int KPresenterObject2DIface::yGradientFactor() const
+{
+    return obj->getGYFactor();
+}
+

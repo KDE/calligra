@@ -39,6 +39,11 @@ public:
 k_dcop:
     virtual QColor gradientColor1() const;
     virtual QColor gradientColor2() const;
+    virtual void setGUnbalanced( bool b );
+    virtual void setGXFactor( int f );
+    virtual void setGYFactor( int f );
+    virtual int xGradientFactor() const;
+    virtual int yGradientFactor() const;
 
 private:
     KP2DObject *obj;
