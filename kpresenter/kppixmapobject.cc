@@ -328,8 +328,14 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
                           (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
     }
 
-    image.draw( paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
-    pixmap.setMask(pixmap.createHeuristicMask());
+
+    image.draw(paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
+
+    image.setAlphaBuffer(true);
+    QBitmap tmpMask;
+    tmpMask = image.createAlphaMask().scale(size);
+    pixmap.setMask(tmpMask);
+
     paint.end();
     return pixmap;
 }
