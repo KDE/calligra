@@ -454,7 +454,8 @@ protected:
 
     // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
     // in the rectangle delimited by @p crect.
-    QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect, KWViewMode * viewMode );
+    QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
+                             KWViewMode * viewMode, bool onlyChanged );
 
     virtual void deleteAnchors();
     virtual void updateAnchors( bool placeHolderExists = false );

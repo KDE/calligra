@@ -596,7 +596,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             QRect icrect = viewMode->viewToNormal( r );
             icrect.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
 
-            QRegion reg = frameClipRegion( p, frame, crect, viewMode );
+            QRegion reg = frameClipRegion( p, frame, crect, viewMode, onlyChanged );
             if ( !reg.isEmpty() )
             {
                 p->save();
@@ -968,8 +968,9 @@ void KWFrameSet::finalize()
 }
 
 // This determines where to clip the painter to draw the contents of a given frame
-// It clips to the frame, and clips out any "on top" frame.
-QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect, KWViewMode * viewMode )
+// It clips to the frame, and clips out any "on top" frame if onlyChanged=true.
+QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
+                                     KWViewMode * viewMode, bool onlyChanged )
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) );
@@ -980,12 +981,15 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );
-        QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
-        for ( ; fIt != m_framesOnTop.end() ; ++fIt )
+        if ( onlyChanged )
         {
-            QRect r = painter->xForm( viewMode->normalToView( (*fIt).frame->outerRect() ) );
-            //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
-            reg -= r; // subtract
+            QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
+            for ( ; fIt != m_framesOnTop.end() ; ++fIt )
+            {
+                QRect r = painter->xForm( viewMode->normalToView( (*fIt).frame->outerRect() ) );
+                //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+                reg -= r; // subtract
+            }
         }
         return reg;
     } else return QRegion();

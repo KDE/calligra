@@ -309,7 +309,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                              << " topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
               kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;*/
 
-            QRegion reg = frameClipRegion( p, frame, clip, viewMode );
+            QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
             if ( !reg.isEmpty() )
             {
                 cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
