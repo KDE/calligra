@@ -37,14 +37,14 @@ class KWordDocument;
 class KWUserFont
 {
 public:
-    KWUserFont( KWordDocument *_doc, QString _name );
+    KWUserFont( KWordDocument *_doc, const QString& _name );
     ~KWUserFont();
 
-    QString getFontName() { return fontName; }
+    QString getFontName() const { return fontName; }
 
-    bool operator==( const KWUserFont &_font )
+    bool operator==( const KWUserFont &_font ) const
     { return _font.fontName == fontName; }
-    bool operator!=( const KWUserFont &_font )
+    bool operator!=( const KWUserFont &_font ) const
     { return _font.fontName != fontName; }
 
 protected:

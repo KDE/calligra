@@ -32,9 +32,9 @@ char s_FONT_CCId[]="$Id$";
 /******************************************************************/
 
 /*================================================================*/
-KWUserFont::KWUserFont( KWordDocument *_doc, QString _name )
+KWUserFont::KWUserFont( KWordDocument *_doc, const QString& _name )
 {
-    fontName = qstrdup( _name.latin1() );
+    fontName = _name;
 
     document = _doc;
     document->userFontList.append( this );
