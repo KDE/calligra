@@ -120,7 +120,8 @@ IconItem* IconChooser::currentItem()
 void IconChooser::setCurrentItem( IconItem *item )
 {
   int index = iconList.find( item );
-  if ( index != -1 && nCols > 0 ) { // item is avaiable
+
+  if ( index != -1 && nCols > 0 ) { // item is available
     int oldRow = curRow;
     int oldCol = curCol;
 
@@ -155,14 +156,21 @@ void IconChooser::calculateCells()
 
 
 // recalculate the number of items that fit in one row
+// set the current item again after calculating the new grid
 void IconChooser::resizeEvent ( QResizeEvent *e )
 {
-  ASSERT( cellWidth() > 0 );
-  nCols = width() / cellWidth();
-
-  setNumCols( nCols );
-  calculateCells();
   QTableView::resizeEvent( e );
+
+  ASSERT( cellWidth() > 0 );
+  IconItem *item = currentItem();
+  int oldNCols = nCols;
+  nCols = viewWidth() / cellWidth();
+
+  if ( oldNCols != nCols ) {
+    setNumCols( nCols );
+    calculateCells();
+    setCurrentItem( item );
+  }
 }
 
 
