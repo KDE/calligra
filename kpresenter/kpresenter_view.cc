@@ -2198,8 +2198,8 @@ void KPresenterView::setupActions()
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
 
-    KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
-    KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
+    actionEditSearch=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditReplace=KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
 
     actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
 					  this, SLOT( editHeaderFooter() ),
@@ -2822,6 +2822,10 @@ void KPresenterView::objectSelectedChanged()
     }
 
     actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
+
+    state=page->oneObjectTextExist();
+    actionEditSearch->setEnabled(state);
+    actionEditReplace->setEnabled(state);
 
     slotUpdateRuler();
 
@@ -4717,16 +4721,9 @@ void KPresenterView::editFind()
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoSearchDia dialog( page, "find", m_searchEntry,hasSelection );
 
-    QPtrList<KoTextObject>lst;
-    QPtrList<KPObject> *listObj(page->objectList());
-    for ( unsigned int i = 0; i < listObj->count(); i++ ) {
-        if(listObj->at( i )->getType() == OT_TEXT)
-            lst.append(dynamic_cast<KPTextObject*>(listObj->at( i ))->textObject());
-    }
-
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KPrFindReplace( page, &dialog,edit ,lst);
+        m_findReplace = new KPrFindReplace( page, &dialog,edit ,page->objectText());
         doFindReplace();
     }
 }
@@ -4745,19 +4742,13 @@ void KPresenterView::editReplace()
     if (!m_replaceEntry)
         m_replaceEntry = new KoSearchContext();
 
-    QPtrList<KoTextObject>lst;
-    QPtrList<KPObject> *listObj(page->objectList());
-    for ( unsigned int i = 0; i < listObj->count(); i++ ) {
-        if(listObj->at( i )->getType() == OT_TEXT)
-            lst.append(dynamic_cast<KPTextObject*>(listObj->at( i ))->textObject());
-    }
     KPTextView * edit = page->currentTextObjectView();
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
 
     KoReplaceDia dialog( page, "replace", m_searchEntry, m_replaceEntry,hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KPrFindReplace( page, &dialog,edit ,lst);
+        m_findReplace = new KPrFindReplace( page, &dialog,edit ,page->objectText());
         doFindReplace();
     }
 }

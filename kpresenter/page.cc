@@ -4821,4 +4821,27 @@ void Page::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
     m_pointArray = points;
 }
 
+
+QPtrList<KoTextObject> Page::objectText()
+{
+    QPtrList<KoTextObject>lst;
+    QPtrList<KPObject> *listObj(objectList());
+    for ( unsigned int i = 0; i < listObj->count(); i++ ) {
+        if(listObj->at( i )->getType() == OT_TEXT)
+            lst.append(dynamic_cast<KPTextObject*>(listObj->at( i ))->textObject());
+    }
+    return lst;
+}
+
+bool Page::oneObjectTextExist()
+{
+    QPtrList<KPObject> *listObj(objectList());
+    for ( unsigned int i = 0; i < listObj->count(); i++ )
+    {
+        if(listObj->at( i )->getType() == OT_TEXT)
+            return true;
+    }
+    return false;
+}
+
 #include <page.moc>

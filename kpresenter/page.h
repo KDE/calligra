@@ -59,7 +59,7 @@ class QRect;
 class QSize;
 class QPoint;
 class KPresenterSoundPlayer;
-
+class KoTextObject;
 
 class KPTextView;
 
@@ -131,6 +131,10 @@ public:
     void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
 
     void gotoPage( int pg );
+
+
+    QPtrList<KoTextObject> objectText();
+    bool oneObjectTextExist();
 
     bool isOneObjectSelected();
     /** Returns the list of selected text objects */

@@ -707,6 +707,9 @@ private:
     KAction *actionScreenNext;
     KAction *actionScreenLast;
     KAction *actionScreenSkip;
+
+    KAction *actionEditSearch;
+    KAction *actionEditReplace;
     KColorAction *actionScreenPenColor;
     KSelectAction *actionScreenPenWidth;
 
