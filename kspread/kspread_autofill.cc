@@ -395,13 +395,13 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
         for ( int y = src.top(); y <= src.bottom(); y++ )
         {
             int x;
-            QList<KSpreadCell> destList;
+            QPtrList<KSpreadCell> destList;
             for ( x = src.right() + 1; x <= dest.right(); x++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QList<KSpreadCell> srcList;
+            QPtrList<KSpreadCell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
                 srcList.append( cellAt( x, y ) );
-            QList<AutoFillSequence> seqList;
+            QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( x = src.left(); x <= src.right(); x++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
@@ -415,13 +415,13 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
         for ( int x = src.left(); x <= dest.right(); x++ )
         {
             int y;
-            QList<KSpreadCell> destList;
+            QPtrList<KSpreadCell> destList;
             for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QList<KSpreadCell> srcList;
+            QPtrList<KSpreadCell> srcList;
             for ( y = src.top(); y <= src.bottom(); y++ )
                 srcList.append( cellAt( x, y ) );
-            QList<AutoFillSequence> seqList;
+            QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( y = src.top(); y <= src.bottom(); y++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
@@ -431,10 +431,10 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
 
 }
 
-void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList,
-                                 QList<AutoFillSequence>& _seqList )
+void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList,
+                                 QPtrList<AutoFillSequence>& _seqList )
 {
-    QList<AutoFillDeltaSequence> deltaList;
+    QPtrList<AutoFillDeltaSequence> deltaList;
     deltaList.setAutoDelete( TRUE );
 
     // What is the interval (block)? If your table looks like this:

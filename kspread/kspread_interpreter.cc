@@ -62,7 +62,7 @@ private:
 /**
  * Creates dependencies from the parse tree of a formula.
  */
-void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QList<KSpreadDepend>& depends )
+void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QPtrList<KSpreadDepend>& depends )
 {
   KSParseNodeExtra* extra = node->extra();
   if ( !extra )
@@ -4536,7 +4536,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   return false;
 }
 
-KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QList<KSpreadDepend>& depends )
+KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDepend>& depends )
 {
     // Create the parse tree.
     KSParser parser;

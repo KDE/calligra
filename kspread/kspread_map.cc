@@ -103,7 +103,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
     mymap.setAttribute( "markerRow", canvas->markerRow() );
   }
 
-  QListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
   {
     QDomElement e = it.current()->save( doc );
@@ -145,7 +145,7 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
 
 void KSpreadMap::update()
 {
-  QListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
     it.current()->update();
 }
@@ -197,7 +197,7 @@ KSpreadTable* KSpreadMap::previousTable( KSpreadTable* currentTable )
 
 bool KSpreadMap::saveChildren( KoStore* _store, const QString &_path )
 {
-  QListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
@@ -210,7 +210,7 @@ bool KSpreadMap::saveChildren( KoStore* _store, const QString &_path )
 
 bool KSpreadMap::loadChildren( KoStore* _store )
 {
-  QListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
     if ( !it.current()->loadChildren( _store ) )
       return false;

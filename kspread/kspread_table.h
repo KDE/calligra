@@ -41,7 +41,7 @@ class KPrinter;
 #include <koDocumentChild.h>
 
 #include <qpen.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qintdict.h>
 #include <qarray.h>
 #include <qrect.h>
@@ -695,7 +695,7 @@ public:
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
-    bool getCellRectangle( const QRect &_range, QList<KSpreadCell> &_list );
+    bool getCellRectangle( const QRect &_range, QPtrList<KSpreadCell> &_list );
 
     /**
      * A convenience function that finds a table by its name.
@@ -895,7 +895,7 @@ protected:
     /**
      * @see #autofill
      */
-    void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
+    void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList );
 
     KSpreadCluster m_cells;
     KSpreadRowCluster m_rows;
@@ -943,7 +943,7 @@ protected:
      * @see #addCellBinding
      * @see #removeCellBinding
      */
-    QList<CellBinding> m_lstCellBindings;
+    QPtrList<CellBinding> m_lstCellBindings;
 
     /**
      * The label returned by @ref #columnLabel
@@ -968,7 +968,7 @@ protected:
     /**
      * List of all embedded objects.
      */
-    // QList<KSpreadChild> m_lstChildren;
+    // QPtrList<KSpreadChild> m_lstChildren;
 
     int m_id;
 

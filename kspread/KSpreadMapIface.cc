@@ -46,8 +46,8 @@ QStringList KSpreadMapIface::tableNames() const
 {
     QStringList names;
 
-    QList<KSpreadTable>& lst = m_map->tableList();
-    QListIterator<KSpreadTable> it( lst );
+    QPtrList<KSpreadTable>& lst = m_map->tableList();
+    QPtrListIterator<KSpreadTable> it( lst );
     for( ; it.current(); ++it )
         names.append( it.current()->name() );
 
@@ -58,8 +58,8 @@ QValueList<DCOPRef> KSpreadMapIface::tables()
 {
     QValueList<DCOPRef> t;
 
-    QList<KSpreadTable>& lst = m_map->tableList();
-    QListIterator<KSpreadTable> it( lst );
+    QPtrList<KSpreadTable>& lst = m_map->tableList();
+    QPtrListIterator<KSpreadTable> it( lst );
     for( ; it.current(); ++it )
         t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
 

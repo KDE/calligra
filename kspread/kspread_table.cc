@@ -1530,7 +1530,7 @@ bool KSpreadTable::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
          }
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         {
         for(int i=rect.top();i<=rect.bottom();i++)
@@ -1562,7 +1562,7 @@ bool KSpreadTable::shiftColumn( const QRect& rect,bool makeUndo )
          }
 
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowInsert, name() ,(rect.bottom()-rect.top()+1));
@@ -1590,7 +1590,7 @@ void KSpreadTable::unshiftColumn( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 m_cells.unshiftColumn( QPoint(i,rect.top()) );
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowRemove, name(),(rect.bottom()-rect.top()+1) );
@@ -1616,7 +1616,7 @@ void KSpreadTable::unshiftRow( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 m_cells.unshiftRow( QPoint(rect.left(),i) );
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
                 it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadTable::ColumnRemove, name(),(rect.right()-rect.left()+1) );
@@ -1644,7 +1644,7 @@ bool KSpreadTable::insertColumn( int col, int nbCol,bool makeUndo )
                 res=false;
         }
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() ,nbCol+1);
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
@@ -1673,7 +1673,7 @@ bool KSpreadTable::insertRow( int row,int nbRow,bool makeUndo )
                 res=false;
         }
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() ,nbRow+1);
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
@@ -1699,7 +1699,7 @@ void KSpreadTable::removeColumn( int col,int nbCol,bool makeUndo )
         m_columns.removeColumn( col );
         }
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(),nbCol+1 );
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
@@ -1722,7 +1722,7 @@ void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
         m_cells.removeRow( row );
         m_rows.removeRow( row );
         }
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(),nbRow+1 );
     refreshChart(QPoint( 1, row ), true, KSpreadTable::RowRemove);
@@ -4482,7 +4482,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     }
 
     // Now look at the children
-    QListIterator<KoDocumentChild> cit( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> cit( m_pDoc->children() );
     for( ; cit.current(); ++cit )
     {
         QRect bound = cit.current()->boundingRect();
@@ -4572,7 +4572,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             QRect view( columnPos( page_range.left() ), rowPos( page_range.top() ),
                         rect.width(), rect.height() );
 
-            QListIterator<KoDocumentChild> it( m_pDoc->children() );
+            QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
             for( ; it.current(); ++it )
             {
                 QRect bound = it.current()->boundingRect();
@@ -4687,7 +4687,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     //
     // Draw the children
     //
-    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
         QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
@@ -4881,7 +4881,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
         }
     }
 
-    QListIterator<KoDocumentChild> chl( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> chl( m_pDoc->children() );
     for( ; chl.current(); ++chl )
     {
         if ( ((KSpreadChild*)chl.current())->table() == this )
@@ -5015,7 +5015,7 @@ void KSpreadTable::update()
 
 bool KSpreadTable::loadChildren( KoStore* _store )
 {
-    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
         if ( ((KSpreadChild*)it.current())->table() == this )
@@ -5275,9 +5275,9 @@ void KSpreadTable::changeChildGeometry( KSpreadChild *_child, const QRect& _rect
 }
 
 /*
-QListIterator<KSpreadChild> KSpreadTable::childIterator()
+QPtrListIterator<KSpreadChild> KSpreadTable::childIterator()
 {
-  return QListIterator<KSpreadChild> ( m_lstChildren );
+  return QPtrListIterator<KSpreadChild> ( m_lstChildren );
 }
 */
 
@@ -5285,7 +5285,7 @@ bool KSpreadTable::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
         if ( ((KSpreadChild*)it.current())->table() == this )
@@ -5372,7 +5372,7 @@ bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
     if ( init )
         return TRUE;
 
-    QListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
     if(makeUndo)

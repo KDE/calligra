@@ -149,14 +149,14 @@ void KSpreadMacroUndoAction::addCommand(KSpreadUndoAction *command)
 
 void KSpreadMacroUndoAction::undo()
 {
-    QListIterator<KSpreadUndoAction> it(m_commands);
+    QPtrListIterator<KSpreadUndoAction> it(m_commands);
     for ( ; it.current() ; ++it )
         it.current()->undo();
 }
 
 void KSpreadMacroUndoAction::redo()
 {
-    QListIterator<KSpreadUndoAction> it(m_commands);
+    QPtrListIterator<KSpreadUndoAction> it(m_commands);
     for ( ; it.current() ; ++it )
         it.current()->redo();
 }

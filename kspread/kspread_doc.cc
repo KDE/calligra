@@ -63,13 +63,13 @@ using namespace std;
  *
  *****************************************************************************/
 
-QList<KSpreadDoc>* KSpreadDoc::s_docs = 0;
+QPtrList<KSpreadDoc>* KSpreadDoc::s_docs = 0;
 int KSpreadDoc::s_docId = 0;
 
-QList<KSpreadDoc>& KSpreadDoc::documents()
+QPtrList<KSpreadDoc>& KSpreadDoc::documents()
 {
     if ( s_docs == 0 )
-        s_docs = new QList<KSpreadDoc>;
+        s_docs = new QPtrList<KSpreadDoc>;
     return *s_docs;
 }
 
@@ -77,7 +77,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   if ( s_docs == 0 )
-      s_docs = new QList<KSpreadDoc>;
+      s_docs = new QPtrList<KSpreadDoc>;
   s_docs->append( this );
 
   setInstance( KSpreadFactory::global(), false );
@@ -209,7 +209,7 @@ bool KSpreadDoc::saveChildren( KoStore* _store, const QString &_path )
 QDomDocument KSpreadDoc::saveXML()
 {
   //Terminate current cell edition, if any
-  QListIterator<KoView> it( views() );
+  QPtrListIterator<KoView> it( views() );
   for (; it.current(); ++it )
       static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
 
@@ -452,7 +452,7 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 
   calcPaperSize();
 
-  QListIterator<KoView> it( views() );
+  QPtrListIterator<KoView> it( views() );
   for( ;it.current(); ++it )
   {
         KSpreadView *v = static_cast<KSpreadView *>( it.current() );
@@ -691,14 +691,14 @@ void KSpreadDoc::redo()
 
 void KSpreadDoc::enableUndo( bool _b )
 {
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
       static_cast<KSpreadView *>( it.current() )->enableUndo( _b );
 }
 
 void KSpreadDoc::enableRedo( bool _b )
 {
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
       static_cast<KSpreadView *>( it.current() )->enableRedo( _b );
 }

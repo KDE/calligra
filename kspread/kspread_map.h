@@ -30,7 +30,7 @@ class DCOPObject;
 class QDomElement;
 class QDomDocument;
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qintdict.h>
 #include <qobject.h>
@@ -99,7 +99,7 @@ public:
    */
   KSpreadTable* nextTable() { return m_lstTables.next();  }
 
-  QList<KSpreadTable>& tableList() { return m_lstTables; }
+  QPtrList<KSpreadTable>& tableList() { return m_lstTables; }
 
   /**
    * @return amount of tables in this map.
@@ -122,7 +122,7 @@ private:
   /**
    * List of all tables in this map. The list has autodelete turned on.
    */
-  QList<KSpreadTable> m_lstTables;
+  QPtrList<KSpreadTable> m_lstTables;
 
   /**
    * Pointer to the part which holds this map.

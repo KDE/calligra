@@ -26,7 +26,7 @@ class AutoFillSequence;
 
 #include <qarray.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
 class KSpreadCell;
@@ -82,7 +82,7 @@ public:
     void fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block );
 
 protected:
-    QList<AutoFillSequenceItem> sequence;
+    QPtrList<AutoFillSequenceItem> sequence;
 };
 
 class AutoFillDeltaSequence

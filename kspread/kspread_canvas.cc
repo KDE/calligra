@@ -1298,7 +1298,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   QRegion rgn = painter.clipRegion();
   if ( rgn.isEmpty() )
     rgn = QRegion( rect );
-  QListIterator<KoDocumentChild> it( m_pDoc->children() );
+  QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
   for( ; it.current(); ++it )
   {
     if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
@@ -1315,7 +1315,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   painter.restore();
 
   // Draw children
-  // QListIterator<PartChild> it( m_pDoc->children() );
+  // QPtrListIterator<PartChild> it( m_pDoc->children() );
   it.toFirst();
   for( ; it.current(); ++it )
   {
@@ -2213,7 +2213,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     QRegion rgn = painter.clipRegion();
     if ( rgn.isEmpty() )
         rgn = QRegion( QRect( 0, 0, width(), height() ) );
-    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
         if ( ((KSpreadChild*)it.current())->table() == activeTable() &&

@@ -1735,7 +1735,7 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
 
   // Find frame for child
   KSpreadChildFrame *f = 0L;
-  QListIterator<KSpreadChildFrame> it( m_lstFrames );
+  QPtrListIterator<KSpreadChildFrame> it( m_lstFrames );
   for ( ; it.current() && !f; ++it )
     if ( it.current()->child() == _child )
       f = it.current();
@@ -1891,7 +1891,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
 
     QPoint pos2( int(pos.x() / zoom()), int(pos.y() / zoom()) );
 
-    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for (; it.current(); ++it )
     {
         // Is the child document on the visible table ?

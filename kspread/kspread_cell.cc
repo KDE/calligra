@@ -407,7 +407,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     return;
 
   KSContext context;
-  QList<KSpreadDepend> lst;
+  QPtrList<KSpreadDepend> lst;
   lst.setAutoDelete( TRUE );
   KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strAction, lst );
   // Did a syntax error occur ?
@@ -3624,7 +3624,7 @@ void KSpreadCell::updateDepending()
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
 
     // Every cell that references us must set its calc dirty flag
-    QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
     {
         KSpreadCell* c = it.current()->firstCell();
@@ -3634,7 +3634,7 @@ void KSpreadCell::updateDepending()
     }
 
     // Recalculate every cell with calc dirty flag
-    QListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
+    QPtrListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
     for( ; it2.current(); ++it2 )
     {
         KSpreadCell* c = it2.current()->firstCell();
@@ -3929,7 +3929,7 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
   {
     m_bCalcDirtyFlag = TRUE;
 
-    QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+    QPtrListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
     {
         KSpreadCell* c = it.current()->firstCell();

@@ -58,7 +58,7 @@ class KActionMenu;
 
 class DCOPObject;
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpoint.h>
 #include <qguardedptr.h>
 #include <qstringlist.h>
@@ -597,7 +597,7 @@ private:
      QString command;
      KoDataToolInfo info;
    };
-   QList<ToolEntry> m_lstTools;
+   QPtrList<ToolEntry> m_lstTools;
 
    static KSpreadScripts *m_pGlobalScriptsDialog;
    //used to allow to refresh menubar

@@ -33,7 +33,7 @@ class KSParseNode;
 
 
 #include <qpainter.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstrlist.h>
 #include <qdatetime.h>
 
@@ -807,7 +807,7 @@ protected:
      */
     bool m_bCalcDirtyFlag;
 
-    QList<KSpreadDepend> m_lstDepends;
+    QPtrList<KSpreadDepend> m_lstDepends;
 
     /**
      * The value we got from calculation.

@@ -31,8 +31,8 @@ QMap<QString,DCOPRef> KSpreadAppIface::documents()
 {
     QMap<QString,DCOPRef> map;
 
-    QList<KSpreadDoc>& lst = KSpreadDoc::documents();
-    QListIterator<KSpreadDoc> it( lst );
+    QPtrList<KSpreadDoc>& lst = KSpreadDoc::documents();
+    QPtrListIterator<KSpreadDoc> it( lst );
     for( ; it.current(); ++it )
     {
 	map[ QString( it.current()->name() ) ] =
@@ -44,8 +44,8 @@ QMap<QString,DCOPRef> KSpreadAppIface::documents()
 
 DCOPRef KSpreadAppIface::document( const QString& name )
 {
-    QList<KSpreadDoc>& lst = KSpreadDoc::documents();
-    QListIterator<KSpreadDoc> it( lst );
+    QPtrList<KSpreadDoc>& lst = KSpreadDoc::documents();
+    QPtrListIterator<KSpreadDoc> it( lst );
     for( ; it.current(); ++it )
 	if ( name == it.current()->name() )
 	    return DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() );

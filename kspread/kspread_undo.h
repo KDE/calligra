@@ -32,7 +32,7 @@ class RowLayout;
 #include <qstack.h>
 #include <qstring.h>
 #include <qrect.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qvaluelist.h>
 
 struct rowSize {
@@ -110,7 +110,7 @@ public:
     virtual void redo();
 
 protected:
-    QList<KSpreadUndoAction> m_commands;
+    QPtrList<KSpreadUndoAction> m_commands;
 };
 
 class KSpreadUndoRemoveColumn : public KSpreadUndoAction

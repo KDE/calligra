@@ -246,7 +246,7 @@ public:
 
   virtual DCOPObject* dcopObject();
 
-  static QList<KSpreadDoc>& documents();
+  static QPtrList<KSpreadDoc>& documents();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
   const QValueList<Reference>  & listArea(){return m_refs;}
@@ -539,7 +539,7 @@ protected:
 
   //KAction* m_newView; obsolete - done in the libs (Werner)
 
-  static QList<KSpreadDoc>* s_docs;
+  static QPtrList<KSpreadDoc>* s_docs;
   static int s_docId;
 
   QValueList<Reference> m_refs;
