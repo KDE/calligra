@@ -1,5 +1,5 @@
 INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/.. -I$(srcdir)/../tools \
-	-I$(srcdir)/../render $(all_includes) $(LIBFREETYPE_CFLAGS)
+	-I$(srcdir)/../render $(LIBFREETYPE_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libkarboncore.la
 
