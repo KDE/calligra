@@ -1,7 +1,7 @@
 
 INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) -I$(idldir) -g
-LDFLAGS	= -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+	-I../lib/koml $(all_includes) -I$(idldir)
+LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
