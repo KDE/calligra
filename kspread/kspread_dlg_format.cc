@@ -65,7 +65,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
-void KSpreadFormatDlg::slotActivated( int index )
+bool KSpreadFormatDlg::slotActivated( int index )
 {
     QString img = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
