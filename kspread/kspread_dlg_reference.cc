@@ -50,6 +50,9 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 
   setCaption( i18n("Area Name") );
 
+  rangeName=new QLabel(this);
+  lay1->addWidget(rangeName);
+
   m_pRemove=new QPushButton(i18n("Remove"),this);
   lay1->addWidget( m_pRemove );
   //m_pRemove->setEnabled(false);
@@ -77,13 +80,32 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
+  connect( list, SIGNAL(highlighted ( QListBoxItem * ) ),this,SLOT(slotHighlighted(QListBoxItem * )));
+  rangeName->setText(i18n("area:"));
 
-
-  resize( 200, 150 );
+  resize( 250, 200 );
 
 }
 
-
+void KSpreadreference::slotHighlighted(QListBoxItem * )
+{
+  QString tmp=list->text(list->currentItem());
+  QString tmpName;
+  QValueList<Reference>::Iterator it;
+  QValueList<Reference> area=m_pView->doc()->listArea();
+  for ( it = area.begin(); it != area.end(); ++it )
+    {
+      if((*it).ref_name==tmp)
+	{
+	  tmpName=util_rangeName( m_pView->doc()->map()->findTable( (*it).table_name), (*it). rect );
+	  break;
+	}
+    }
+  
+  tmpName=i18n("area: %1").arg(tmpName);
+			   
+  rangeName->setText(tmpName);
+}
 
 void KSpreadreference::slotDoubleClicked(QListBoxItem *)
 {

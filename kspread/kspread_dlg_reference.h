@@ -40,6 +40,7 @@ public slots:
   void slotClose();
   void slotDoubleClicked(QListBoxItem *);
   void slotRemove();
+  void slotHighlighted(QListBoxItem *);
 protected:
   KSpreadView* m_pView;
 
@@ -47,6 +48,7 @@ protected:
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   QPushButton* m_pRemove;
+  QLabel *rangeName;
 };
 
 #endif
