@@ -1502,6 +1502,38 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                 createMacro = true;
             }
         }
+        else if( ch.isSpace())
+        {
+            //a link doesn't have a space
+            //=>m_ignoreUpperCase = false
+            m_ignoreUpperCase=false;
+
+            QString word=getWordAfterSpace(parag,i);
+
+            if ( m_autoChangeFormat && i > 3)
+            {
+                KCommand *cmd =doAutoChangeFormat( cursor, parag,i, word, obj );
+                if ( cmd )
+                {
+                    macro->addCommand( cmd );
+                    createMacro = true;
+                }
+
+            }
+            if ( m_autoDetectUrl && i > 0 )
+            {
+                doAutoDetectUrl( cursor, parag,i, word, obj );
+            }
+            if ( m_autoReplaceNumber )
+            {
+                KCommand *cmd = doAutoReplaceNumber( cursor, parag, i, word, obj );
+                if ( cmd )
+                {
+                    macro->addCommand( cmd );
+                    createMacro = true;
+                }
+            }
+        }
     }
     delete cursor;
     if ( createMacro )
