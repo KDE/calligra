@@ -11,10 +11,11 @@
  * the DTOR. The KOffice part will search for the dialog (via the trader and
  * service stuff) and display it if the user selects the appropriate extension.
  * The user changes the state (e.g. checks a checkbox,...) and selects the
- * file. After the user clicked 'Ok' the status() method will be called.
- * In this method you have to create a XML doc (DomDocument), convert it to a
- * QString [or a QCString?], and return the string. This string will be passed
- * to the CTOR of the filter.
+ * file. After the user clicked 'Ok' the state() method will be called.
+ * In this method you have to create a QString and return it. This string
+ * will be passed to the CTOR of the filter. Of course the format of this
+ * string is up to you, but using XML (QDom/QXML) seems to be a good
+ * choice...
  */
 class KoFilterDialog : public QWidget {
 
@@ -22,7 +23,7 @@ class KoFilterDialog : public QWidget {
 
 public:
     KoFilterDialog(QWidget *parent=0L, QString name=QString::null);
-    virtual ~KoFilterDialog() = 0;
+    virtual ~KoFilterDialog() {}
     virtual const QString state() = 0;
 };
 #endif
