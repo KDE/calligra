@@ -3,7 +3,6 @@
 
 #include <kdialogbase.h>   
 #include "kchart_part.h"
-#include "sheetdlg.h"  
 #include <qstrlist.h>
 
 class QLabel;
