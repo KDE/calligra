@@ -55,11 +55,6 @@ KSpreadConditions::~KSpreadConditions()
   m_condList.clear();
 }
 
-inline KSpreadStyle * KSpreadConditions::matchedStyle() const
-{
-  return m_matchedStyle;
-}
-
 void KSpreadConditions::checkMatches()
 {
   KSpreadConditional condition;

@@ -103,7 +103,7 @@ class KSpreadConditions
   /**
    * returns the style that matches first (or NULL if no condition matches)
    */
-  KSpreadStyle * matchedStyle() const;
+  KSpreadStyle * matchedStyle() const { return m_matchedStyle; }
 
   void checkMatches();
 
