@@ -375,7 +375,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|VARIABLE|TEXTBACKGROUNDCOLOR)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|VARIABLE|TEXTBACKGROUNDCOLOR|LINK)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #IMPLIED
@@ -408,6 +408,12 @@ don't put a </?xml...> at the end of the file!).
     red CDATA #REQUIRED
     green CDATA #REQUIRED
     blue CDATA #REQUIRED>
+
+<!ELEMENT LINK
+    EMPTY>
+<!ATTLIST LINK
+    linkName CDATA #REQUIRED
+    hrefName CDATA #REQUIRED>
 
 <!--
         name is the family name. Don't include fontsizes or bold, that is put in another tag.
