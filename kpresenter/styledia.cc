@@ -21,7 +21,7 @@
 #include <generalconfig.h>
 
 #include <klocale.h>
-#include <kcolordlg.h>
+#include <kcolordialog.h>
 #include <kcolorbutton.h>
 
 #include <qlayout.h>

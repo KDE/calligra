@@ -21,7 +21,7 @@
 #include <kpresenter_doc.h>
 #include <kpresenter_aboutdata.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 
 extern "C"

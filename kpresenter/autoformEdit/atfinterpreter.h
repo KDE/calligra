@@ -21,7 +21,7 @@
 #define ATFINTERP_H
 
 #include <qpointarray.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
 /******************************************************************/

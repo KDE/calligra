@@ -21,7 +21,7 @@
 
 #include "kpresenter_view.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KPresenterViewIface::KPresenterViewIface( KPresenterView *view_ )

@@ -46,7 +46,7 @@
 #include <kpresenter_sound_player.h>
 #include <notebar.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kmimemagic.h>
 #include <kurl.h>
 #include <klocale.h>

@@ -22,7 +22,7 @@
 #include <kpresenter_view.h>
 #include <page.h>
 
-#include <stdlib.h>
+#include <kstandarddirs.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/types.h>
@@ -55,7 +55,7 @@
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
 #include <kimageio.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kprogress.h>
 #include <kstddirs.h>
 #include <kglobal.h>

@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kcombobox.h>
-#include <kcolordlg.h>
+#include <kcolordialog.h>
 #include <kiconloader.h>
 #include <kfontdialog.h>
 

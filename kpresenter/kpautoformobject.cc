@@ -28,7 +28,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include <math.h>

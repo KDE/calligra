@@ -21,7 +21,7 @@
 
 #include "kpbackground.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KPresenterBackgroundIface::KPresenterBackgroundIface( KPBackGround *back_ )

@@ -54,7 +54,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kio/netaccess.h>
 
 #include <kpresenter_view.h>
@@ -64,7 +64,7 @@
 #include <kptextobject.h>
 
 #include <klocale.h>
-#include <kcolordlg.h>
+#include <kcolordialog.h>
 #include <kconfig.h>
 #include <kfontdialog.h>
 #include <kglobal.h>
@@ -90,7 +90,7 @@
 #include <stdlib.h>
 #include <signal.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <KPresenterViewIface.h>
 #include <kpresenter_dlg_config.h>

@@ -22,7 +22,7 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )

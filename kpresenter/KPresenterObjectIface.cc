@@ -21,7 +21,7 @@
 
 #include "kpobject.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KPresenterObjectIface::KPresenterObjectIface( KPObject *obj_ )

@@ -18,7 +18,6 @@
 */
 
 #include <kpresenter_doc.h>
-#include <kptextobject.h>
 #include <kprcommand.h>
 #include <kpbackground.h>
 #include <kpclipartobject.h>
@@ -26,7 +25,6 @@
 
 
 #include <kplineobject.h>
-#include <kprectobject.h>
 #include <kpellipseobject.h>
 #include <kpautoformobject.h>
 

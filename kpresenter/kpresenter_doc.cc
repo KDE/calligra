@@ -44,13 +44,13 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <koGlobal.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kurldrag.h>
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 
 #include <koTemplateChooseDia.h>

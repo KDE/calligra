@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <ksimpleconfig.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kicondialog.h>
 
 #include <kpresenter_factory.h>

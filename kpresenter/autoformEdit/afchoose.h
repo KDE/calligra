@@ -21,7 +21,7 @@
 #define AFCHOOSE_H
 
 #include <qtabdialog.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
 #include <qfileinfo.h>
 
