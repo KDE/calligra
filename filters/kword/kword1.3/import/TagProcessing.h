@@ -59,9 +59,16 @@ class TagProcessing
         TagProcessing ()
         {}
 
-        TagProcessing (QString  n,
-                       void     (*p)(QDomNode, void *, KWEFKWordLeader*),
-                       void    *d) : name (n), processor (p), data (d)
+        TagProcessing (const QString& n,
+                       void (*p)(QDomNode, void *, KWEFKWordLeader*),
+                       void *d) : name (n), processor (p), data (d)
+        {}
+
+        /**
+         * No-op constructor
+         * Avoids a warning that a tag is unknown.
+         */
+        TagProcessing (const QString& _name) : name(_name), processor(0), data(0)
         {}
 
         QString  name;
@@ -83,8 +90,8 @@ void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader );
  * Otherwise you create a list of AttrProcessing elements and pass
  * that to ProcessAttributes () which will go through all attributes
  * it can find, retrieve the value in the datatype defined, and do all
- */ the necessary error handling.
-
+ * the necessary error handling.
+ */
 
 class AttrProcessing
 {
@@ -98,8 +105,45 @@ public:
      * Old constructor (without type checking)
      * Deprecated, do not use for new code
      */
-    AttrProcessing ( QString n, QString t, void *d )
+    AttrProcessing ( const QString& n, const QString& t, void *d )
         : name (n), type (t), data (d) {}
+
+    /**
+     * No-op constructor
+     * This just avoids that a warning is triggered that an attribute is not known
+     */
+    AttrProcessing ( const QString& _name )
+        : name(_name), data(0) {}
+
+    /**
+     * Integer constructor
+     * Get the attribute value as an integer
+     */
+    AttrProcessing ( const QString& _name, int& i )
+        : name(_name), type("int"), data(&i) {}
+
+    /**
+     * Double constructor
+     * Get the attribute value as a double
+     */
+    AttrProcessing ( const QString& _name, double& d )
+        : name(_name), type("double"), data(&d) {}
+
+    /**
+     * Boolean constructor
+     * Get the attribute value as a bool
+     * (The values "yes,", "no", "true", "false", "0" and "1" are supported)
+     */
+    AttrProcessing ( const QString& _name, bool& flag )
+        : name(_name), type("bool"), data(&flag) {}
+
+    /**
+     * String constructor
+     * Get the attribute value as a QString
+     */
+    AttrProcessing ( const QString& _name, QString& str )
+        : name(_name), type("QString"), data(&str) {}
+
 
 public:
     QString   name;
