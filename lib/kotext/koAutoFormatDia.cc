@@ -186,6 +186,8 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
     noSignal=true;
     newEntry = 0L;
     autocorrectionEntryChanged= false;
+    changeLanguage = false;
+
     setupTab1();
     setupTab2();
     setupTab3();
@@ -193,7 +195,6 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
     setInitialSize( QSize(500, 300) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
     noSignal=false;
-    changeLanguage = false;
 }
 
 KoAutoFormatDia::~KoAutoFormatDia()
