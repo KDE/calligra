@@ -554,7 +554,7 @@ void KIllustrator::menuCallback (int item) {
     closeWindow (this);
     break;
   case ID_FILE_PRINT:
-    canvas->printDocument ();
+    canvas->printPSDocument ();
     break;
   case ID_FILE_NEW_WINDOW:
     {
