@@ -119,6 +119,15 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
                                       this, SLOT(addLowerRight()),
                                       actionCollection(), "addlowerright");
 
+    addGenericUpperAction = new KAction(i18n("Add upper index"),
+                                      CTRL + Key_U,
+                                      this, SLOT(addUpperIndex()),
+                                      actionCollection(), "addupperindex");
+    addGenericLowerAction = new KAction(i18n("Add lower index"),
+                                      CTRL + Key_L,
+                                      this, SLOT(addLowerIndex()),
+                                      actionCollection(), "addlowerindex");
+
     mn_indexList = new QPopupMenu();
     mn_indexList->insertItem(BarIcon("index0"),0);
     mn_indexList->insertSeparator();
@@ -162,19 +171,19 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
 
     KToggleAction* actionElement_Text_Bold = new KToggleAction(i18n( "Bold" ),
                                                   "bold",
-                                                  CTRL + Key_B ,
+                                                  0,
                                                   actionCollection(),"textbold");
     connect( actionElement_Text_Bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
 
     KToggleAction* actionElement_Text_Italic = new KToggleAction(i18n( "Italic" ),
                                                    "italic",
-                                                   CTRL + Key_I ,
+                                                   0,
                                                    actionCollection(),"textitalic");
     connect( actionElement_Text_Italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
 
     KToggleAction* actionElement_Text_Under = new KToggleAction(i18n( "Underlined" ),
                                                   "underl",
-                                                  CTRL + Key_U,
+                                                  0,
                                                   actionCollection(),"textunder");
     connect(actionElement_Text_Under, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
@@ -1000,15 +1009,20 @@ void KFormulaView::addLowerRight()
     m_pDoc->getFormula()->addLowerRightIndex();
 }
 
+void KFormulaView::addUpperIndex()
+{
+    m_pDoc->getFormula()->addGenericUpperIndex();
+}
+
+void KFormulaView::addLowerIndex()
+{
+    m_pDoc->getFormula()->addGenericLowerIndex();
+}
+
 void KFormulaView::cursorChanged(bool visible, bool selecting)
 {
     cutAction->setEnabled(visible && selecting);
     copyAction->setEnabled(visible && selecting);
-
-    if (addBracketAction->isEnabled() != visible) {
-        //kdDebug(10001) << "cursorChanged" << endl;
-        setEnabled(visible);
-    }
 
     if (visible) {
         int x = formulaWidget->getCursorPoint().x();

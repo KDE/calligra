@@ -115,6 +115,8 @@ protected slots:
     void addLowerLeft();
     void addUpperRight();
     void addLowerRight();
+    void addUpperIndex();
+    void addLowerIndex();
 
     void cursorChanged(bool visible, bool selecting);
 
@@ -145,6 +147,8 @@ private:
     KAction* addLowerLeftAction;
     KAction* addUpperRightAction;
     KAction* addLowerRightAction;
+    KAction* addGenericUpperAction;
+    KAction* addGenericLowerAction;
     
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;

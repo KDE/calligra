@@ -24,6 +24,8 @@
   <Action name="rootindex"/>
   <Action name="ihigher"/>
   <Action name="ilower"/>
+  <Action name="addupperindex"/>
+  <Action name="addlowerindex"/>
   </Menu>
   <Action name="typeleft"/>
   <Action name="typeright"/>
