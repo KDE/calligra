@@ -176,7 +176,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	if(
 		path.isClosed() &&
 		// Don't touch smooth joins.
-		!path.getLast()->isSmooth( path.current() ) )
+		!path.getLast()->isSmooth( *path.current() ) )
 	{
 		length = path.current()->length();
 
@@ -289,7 +289,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 			path.getFirst()->next()->setType( VSegment::line );
 
 		// Don't touch smooth joins.
-		if( !path.current()->isSmooth( path.getFirst()->next() ) )
+		if( !path.current()->isSmooth( *path.getFirst()->next() ) )
 		{
 			length = path.current()->length();
 

@@ -81,9 +81,14 @@ public:
 	void draw( VPainter* painter ) const;
 
 	VSegmentType type() const
-		{ return m_type; }
+	{
+		return m_type;
+	}
+
 	void setType( VSegmentType type )
-		{ m_type = type; }
+	{
+		m_type = type;
+	}
 
 	VCtrlPointFixing ctrlPointFixing() const
 		{ return m_ctrlPointFixing; }
@@ -204,15 +209,21 @@ public:
 
 	/**
 	 * Returns true if tangent at p3 is exactly parallel to the tangent at
-	 * p0 of the next segment. Returns false if there is no next segment or
-	 * if the current segment is a "begin".
+	 * p0 of the next segment. Returns false if the current segment is a "begin".
 	 */
-	bool isSmooth( const VSegment* next ) const;
+	bool isSmooth( const VSegment& next ) const;
 
 	bool isSmooth() const
 	{
-		return isSmooth( next() );
+		return next()
+			   ? isSmooth( *next() )
+			   : false;
 	}
+
+	/**
+	 * Returns the parameter of the nearest point to the point p on this segment.
+	 */
+	double project( const KoPoint& p ) const;
 
 	/**
 	 * Returns the bounding box.

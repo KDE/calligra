@@ -137,9 +137,9 @@ VSegment::isFlat( double flatness ) const
 
 	if( m_type == curve )
 		return
-			height( m_prev->m_node[2], m_node[0], m_node[2] )
+			height( m_prev->m_node[2], m_node[0], m_node[2] ) / chordLength()
 				< flatness &&
-			height( m_prev->m_node[2], m_node[1], m_node[2] )
+			height( m_prev->m_node[2], m_node[1], m_node[2] ) / chordLength()
 				< flatness;
 
 	return false;
@@ -157,8 +157,12 @@ void
 VSegment::pointDerivatives( double t, KoPoint* p,
 	KoPoint* d1, KoPoint* d2 ) const
 {
-	if( !m_prev || m_type == begin )
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
 		return;
+	}
 
 	// Lines.
 	if( m_type == line )
@@ -252,8 +256,13 @@ VSegment::tangent( double t ) const
 double
 VSegment::length( double t ) const
 {
-	if( !m_prev )
+	if(
+		!m_prev ||
+		m_type == begin ||
+		t == 0.0 )
+	{
 		return 0.0;
+	}
 
 	// Length of a line.
 	if( m_type == line )
@@ -322,8 +331,12 @@ VSegment::length( double t ) const
 double
 VSegment::chordLength() const
 {
-	if( !m_prev )
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
 		return 0.0;
+	}
 
 	return
 		sqrt(
@@ -336,8 +349,12 @@ VSegment::chordLength() const
 double
 VSegment::polyLength() const
 {
-	if( !m_prev )
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
 		return 0.0;
+	}
 
 	return
 		sqrt(
@@ -363,8 +380,13 @@ VSegment::polyLength() const
 double
 VSegment::param( double len ) const
 {
-	if( !m_prev || len == 0.0 )		// We divide by len below.
+	if(
+		len == 0.0 ||		// We divide by len below.
+		!m_prev ||
+		m_type == begin )
+	{
 		return 0.0;
+	}
 
 	// Line.
 	if( m_type == line )
@@ -399,11 +421,10 @@ VSegment::param( double len ) const
 }
 
 bool
-VSegment::isSmooth( const VSegment* next ) const
+VSegment::isSmooth( const VSegment& next ) const
 {
-	// Return false if this segment is a "begin" or if there is no
-	// next segment.
-	if( type() == begin || !next )
+	// Return false if this segment is a "begin".
+	if( type() == begin )
 		return false;
 
 
@@ -412,7 +433,7 @@ VSegment::isSmooth( const VSegment* next ) const
 	KoPoint t2;
 
 	pointTangentNormal( 1.0, 0L, &t1 );
-	next->pointTangentNormal( 0.0, 0L, &t2 );
+	next.pointTangentNormal( 0.0, 0L, &t2 );
 
 
 	// Scalar product.
@@ -420,6 +441,20 @@ VSegment::isSmooth( const VSegment* next ) const
 		return true;
 
 	return false;
+}
+
+double
+VSegment::project( const KoPoint& p ) const
+{
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
+		return 1.0;
+	}
+
+// TODO
+	return 0.0;
 }
 
 KoRect
@@ -467,8 +502,13 @@ VSegment::boundingBox() const
 VSegment*
 VSegment::splitAt( double t )
 {
-	if( !m_prev || m_type == begin )
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
 		return 0L;
+	}
+
 
 	VSegment* segment = new VSegment();
 
@@ -575,8 +615,12 @@ VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
 VSegment*
 VSegment::revert() const
 {
-	if( !m_prev )
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
 		return 0L;
+	}
 
 	VSegment* segment = new VSegment();
 	segment->m_state = m_state;

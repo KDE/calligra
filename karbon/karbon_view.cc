@@ -137,7 +137,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_insertKnotsDlg = new VInsertKnotsDlg();
 
 		m_flattenDlg = new VFlattenDlg();
-		m_flattenDlg->setFlatness( 5.0 );
+		m_flattenDlg->setFlatness( 0.2 );
 
 		m_roundCornersDlg = new VRoundCornersDlg();
 		m_roundCornersDlg->setRadius( 10.0 );

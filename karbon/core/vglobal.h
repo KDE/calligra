@@ -48,7 +48,7 @@ namespace VGlobal
 	/**
 	 * A bezier with this flatness is considered "flat". Used in subdividing.
 	 */
-	const double flatnessTolerance = 0.5;
+	const double flatnessTolerance = 0.01;
 
 	/**
 	 * A tolerance used to approximate bezier lengths. If the relative difference
