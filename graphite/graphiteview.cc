@@ -232,7 +232,7 @@ void GraphiteView::setupActions() {
     file_pageLayout=new KAction(i18n("Page &Layout..."), 0, this, SLOT(openPageLayoutDia()),
                                 actionCollection(), "file_pagelayout");
 
-    m_zoomAction=new KSelectAction(i18n("&Zoom"), 0,
+    m_zoomAction=new KSelectAction(i18n("&Zoom"), KShortcut(),
                                    actionCollection(), "view_zoom");
     connect(m_zoomAction, SIGNAL(activated(const QString &)), this, SLOT(slotViewZoom(const QString &)));
     QStringList lst;
