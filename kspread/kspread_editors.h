@@ -9,6 +9,7 @@ class KSpreadCanvas;
 
 
 class QWidget;
+class QFont;
 
 class KSpreadCellEditor : public QWidget
 {
@@ -20,6 +21,7 @@ public:
     KSpreadCell* cell() { return m_pCell; }
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
+    virtual void setEditorFont(QFont const & font, bool updateSize) = 0;
     virtual QString text() const = 0;
     virtual void setText(QString text) = 0;
     virtual int cursorPosition() const = 0;
@@ -44,6 +46,7 @@ public:
     ~KSpreadTextEditor();
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev );
+    virtual void setEditorFont(QFont const & font, bool updateSize);
     virtual QString text() const;
     virtual void setText(QString text);
     virtual int cursorPosition() const;

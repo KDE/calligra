@@ -4,6 +4,8 @@
 #include "kspread_doc.h"
 
 #include <qapplication.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
 #include <qregexp.h>
 #include <kdebug.h>
 
@@ -53,7 +55,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 
 KSpreadTextEditor::~KSpreadTextEditor()
 {
-    canvas()->endChoose();
+  canvas()->endChoose();
 }
 
 void KSpreadTextEditor::cut()
@@ -74,6 +76,26 @@ void KSpreadTextEditor::copy()
         m_pEdit->copy();
 }
 
+void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
+{
+  if (!m_pEdit)
+    return;
+
+  m_pEdit->setFont(font);
+
+  if (updateSize)
+  {
+    QFontMetrics fm( m_pEdit->font() );
+    int mw = fm.width( m_pEdit->text() ) + fm.width('x');
+    if (mw < width())
+      mw = width();
+    int mh = fm.height();
+    if (mh < height())
+      mh = height();
+    
+    setGeometry(x(), y(), mw, mh);
+  }
+}
 
 void KSpreadTextEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
 {
@@ -82,23 +104,35 @@ void KSpreadTextEditor::slotCompletionModeChanged(KGlobalSettings::Completion _c
 
 void KSpreadTextEditor::slotTextChanged( const QString& t )
 {
-    // if ( canvas->chooseCursorPosition() >= 0 )
-    // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
-    checkChoose();
-
+  // if ( canvas->chooseCursorPosition() >= 0 )
+  // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
+  checkChoose();
+  
   if((cell()->formatType())==KSpreadCell::Percentage)
-        {
-        if((t.length()==1) && t[0].isDigit())
-                {
-                QString tmp=t;
-                tmp=t+"%";
-                m_pEdit->setText(tmp);
-                m_pEdit->setCursorPosition(1);
-                }
-        }
+  {
+    if((t.length()==1) && t[0].isDigit())
+    {
+      QString tmp=t;
+      tmp=t+"%";
+      m_pEdit->setText(tmp);
+      m_pEdit->setCursorPosition(1);
+    }
+  }
+  QFontMetrics fm( m_pEdit->font() );
+  int mw = fm.width( t ) + fm.width('x');
+  int mh = fm.height();
 
-    canvas()->view()->editWidget()->setText( t );
-    // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
+  if (mh < height())
+    mh = height();
+
+  if (mw < width())
+    mw = width();
+
+  setGeometry(x(), y(), mw, mh);
+
+  canvas()->view()->editWidget()->setText( t );
+  
+  // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
 }
 
 void KSpreadTextEditor::checkChoose()

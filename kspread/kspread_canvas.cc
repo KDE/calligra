@@ -2242,9 +2242,18 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   // but only if we are using it (text editor)
   // A bit of a hack - perhaps we should store the editor mode ?
   bool textEditor=true;
+  int newHeight = -1;
+  int row = -1;
   if ( m_pEditor->inherits("KSpreadTextEditor") )
-    m_pEditWidget->setEditMode( false );
-else
+  {
+      if ( m_pEditor->cell()->height() < m_pEditor->height() )
+      {
+          newHeight = m_pEditor->height();
+          row = m_pEditor->cell()->row();
+      }
+      m_pEditWidget->setEditMode( false );
+  }
+  else
     textEditor=false;
 
   QString t = m_pEditor->text();
@@ -2258,6 +2267,10 @@ else
     m_pView->setText( t );
   else
     m_pView->updateEditWidget();
+
+  if (newHeight != -1)
+      m_pView->vBorderWidget()->resizeRow(newHeight, row, true);
+
 
   setFocus();
 }
