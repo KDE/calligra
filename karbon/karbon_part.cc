@@ -75,8 +75,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	m_maxRecentFiles = 10;
 
-	if( name )
-		dcopObject();
+	//if( name )
+        dcopObject();
 }
 
 KarbonPart::~KarbonPart()
