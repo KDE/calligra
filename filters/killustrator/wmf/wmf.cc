@@ -18,19 +18,31 @@
     Boston, MA 02111-1307, USA.
 
 DESCRIPTION
+
+    This is based on code originally written by Stefan Taferner
+    (taferner@kde.org) and also borrows from libwmf (by Martin Vermeer and
+    Caolan McNamara).
 */
 
 #include <kdebug.h>
+#include <math.h>
 #include <qdatastream.h>
 #include <qfile.h>
 #include <qpointarray.h>
 #include <wmf.h>
+
+#define PI (3.14159265358979323846)
 
 Wmf::Wmf(
     unsigned dpi)
 {
     m_dpi = dpi;
     m_objectHandles = new WinObjHandle*[s_maxHandles];
+    m_dc.m_brushColour = 0x808080;
+    m_dc.m_brushStyle = 1;
+    m_dc.m_penColour = 0x808080;
+    m_dc.m_penStyle = 1;
+    m_dc.m_penWidth = 1;
 }
 
 Wmf::~Wmf()
@@ -42,76 +54,12 @@ Wmf::~Wmf()
 //
 //
 
-void Wmf::brushCreateIndirect(
-    S32 /*wordOperands*/,
-    QDataStream &operands)
-{
-    static Qt::BrushStyle hatchedStyleTab[] =
-    {
-        Qt::HorPattern,
-        Qt::FDiagPattern,
-        Qt::BDiagPattern,
-        Qt::CrossPattern,
-        Qt::DiagCrossPattern
-    };
-    static Qt::BrushStyle styleTab[] =
-    {
-        Qt::SolidPattern,
-        Qt::NoBrush,
-        Qt::FDiagPattern,   // hatched
-        Qt::Dense4Pattern,  // should be custom bitmap pattern
-        Qt::HorPattern,     // should be BS_INDEXED (?)
-        Qt::VerPattern,     // should be device-independend bitmap
-        Qt::Dense6Pattern,  // should be device-independend packed-bitmap
-        Qt::Dense2Pattern,  // should be BS_PATTERN8x8
-        Qt::Dense3Pattern   // should be device-independend BS_DIBPATTERN8x8
-    };
-    Qt::BrushStyle style;
-    WinObjBrushHandle *handle = handleCreateBrush();
-    S16 arg;
-    S32 colour;
-    S16 discard;
-
-    operands >> arg >> colour;
-    handle->m_colour = getColour(colour);
-    if (arg == 2)
-    {
-        operands >> arg;
-        if (arg >= 0 && arg < 6)
-        {
-            style = hatchedStyleTab[arg];
-        }
-        else
-        {
-            kdError(s_area) << "createBrushIndirect: invalid hatched brush " << arg << endl;
-            style = Qt::SolidPattern;
-        }
-    }
-    else
-    if (arg >= 0 && arg < 9)
-    {
-        style = styleTab[arg];
-        operands >> discard;
-    }
-    else
-    {
-        kdError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
-        style = Qt::SolidPattern;
-        operands >> discard;
-    }
-    handle->m_style = style;
-}
-
-//
-//
-//
-
 void Wmf::brushSet(
     unsigned colour,
     unsigned style)
 {
-    m_brushColour = colour;
-    m_brushStyle = style;
+    m_dc.m_brushColour = colour;
+    m_dc.m_brushStyle = style;
 }
 
 //
@@ -134,6 +82,46 @@ unsigned short Wmf::calcCheckSum(
 }
 
 //-----------------------------------------------------------------------------
+unsigned Wmf::getColour(
+    S32 colour)
+{
+    unsigned red, green, blue;
+
+    red = colour & 255;
+    green = (colour >> 8) & 255;
+    blue = (colour >> 16) & 255;
+    return (red << 16) + (green << 8) + blue;
+}
+
+void Wmf::genericArc(
+    QString type,
+    QDataStream &operands)
+{
+    QPoint topLeft;
+    QPoint bottomRight;
+    QPoint start;
+    QPoint end;
+
+    topLeft = normalisePoint(operands);
+    bottomRight = normalisePoint(operands);
+    start = normalisePoint(operands);
+    end = normalisePoint(operands);
+
+    // WMF defines arcs with the major and minor axes of an ellipse, and two points.
+    // From each point draw a line to the center of the ellipse: the intercepts define
+    // the ends of the arc.
+
+    QRect ellipse(topLeft, bottomRight);
+    QPoint centre = ellipse.center();
+    double startAngle = atan2(centre.y() - start.y(), centre.x() - start.x());
+    double stopAngle = atan2(centre.y() - end.y(), centre.x() - end.x());
+
+    startAngle = 180 * startAngle / PI;
+    stopAngle = 180 * stopAngle / PI;
+
+    gotEllipse(m_dc, type, centre, ellipse.size() / 2, startAngle, stopAngle);
+}
+
 int Wmf::handleIndex(void) const
 {
     int i;
@@ -147,7 +135,6 @@ int Wmf::handleIndex(void) const
     return -1;
 }
 
-
 //-----------------------------------------------------------------------------
 Wmf::WinObjPenHandle *Wmf::handleCreatePen(void)
 {
@@ -158,7 +145,6 @@ Wmf::WinObjPenHandle *Wmf::handleCreatePen(void)
         m_objectHandles[idx] = handle;
     return handle;
 }
-
 
 //-----------------------------------------------------------------------------
 Wmf::WinObjBrushHandle *Wmf::handleCreateBrush(void)
@@ -187,10 +173,10 @@ void Wmf::handleDelete(int idx)
 
 void Wmf::invokeHandler(
     S16 opcode,
-    S32 wordOperands,
+    U32 wordOperands,
     QDataStream &operands)
 {
-    typedef void (Wmf::*method)(S32 wordOperands, QDataStream &operands);
+    typedef void (Wmf::*method)(U32 wordOperands, QDataStream &operands);
 
     typedef struct
     {
@@ -201,74 +187,74 @@ void Wmf::invokeHandler(
 
     static const opcodeEntry funcTab[] =
     {
-//        { "SETBKCOLOR",           0x0201, &Wmf::setBkColor },
-//        { "SETBKMODE",            0x0102, &Wmf::setBkMode },
-        { "SETMAPMODE",           0x0103, &Wmf::noop },
-//        { "SETROP2",              0x0104, &Wmf::setRop },
+        { "ANIMATEPALETTE",       0x0436, 0 },
+        { "ARC",                  0x0817, &Wmf::opArc },
+        { "BITBLT",               0x0922, 0 },
+        { "CHORD",                0x0830, 0 },
+        { "CREATEBRUSHINDIRECT",  0x02FC, &Wmf::opBrushCreateIndirect },
+        { "CREATEFONTINDIRECT",   0x02FB, 0 },
+        { "CREATEPALETTE",        0x00F7, 0 },
+        { "CREATEPATTERNBRUSH",   0x01F9, 0 },
+        { "CREATEPENINDIRECT",    0x02FA, &Wmf::opPenCreateIndirect },
+        { "CREATEREGION",         0x06FF, 0 },
+        { "DELETEOBJECT",         0x01F0, &Wmf::opObjectDelete },
+        { "DIBBITBLT",            0x0940, 0 },
+        { "DIBCREATEPATTERNBRUSH",0x0142, 0 },
+        { "DIBSTRETCHBLT",        0x0b41, 0 },
+        { "ELLIPSE",              0x0418, &Wmf::opEllipse },
+        { "ESCAPE",               0x0626, &Wmf::opNoop },
+        { "EXCLUDECLIPRECT",      0x0415, 0 },
+        { "EXTFLOODFILL",         0x0548, 0 },
+        { "EXTTEXTOUT",           0x0a32, 0 },
+        { "FILLREGION",           0x0228, 0 },
+        { "FLOODFILL",            0x0419, 0 },
+        { "FRAMEREGION",          0x0429, 0 },
+        { "INTERSECTCLIPRECT",    0x0416, 0 },
+        { "INVERTREGION",         0x012A, 0 },
+        { "LINETO",               0x0213, 0 },
+        { "MOVETO",               0x0214, 0 },
+        { "OFFSETCLIPRGN",        0x0220, 0 },
+        { "OFFSETVIEWPORTORG",    0x0211, 0 },
+        { "OFFSETWINDOWORG",      0x020F, 0 },
+        { "PAINTREGION",          0x012B, 0 },
+        { "PATBLT",               0x061D, 0 },
+        { "PIE",                  0x081A, &Wmf::opPie },
+        { "POLYGON",              0x0324, &Wmf::opPolygon },
+        { "POLYLINE",             0x0325, &Wmf::opPolyline },
+        { "POLYPOLYGON",          0x0538, 0 },
+        { "REALIZEPALETTE",       0x0035, 0 },
+        { "RECTANGLE",            0x041B, &Wmf::opRectangle },
+        { "RESIZEPALETTE",        0x0139, 0 },
+        { "RESTOREDC",            0x0127, 0 },
+        { "ROUNDRECT",            0x061C, 0 },
+        { "SAVEDC",               0x001E, 0 },
+        { "SCALEVIEWPORTEXT",     0x0412, 0 },
+        { "SCALEWINDOWEXT",       0x0410, 0 },
+        { "SELECTCLIPREGION",     0x012C, 0 },
+        { "SELECTOBJECT",         0x012D, &Wmf::opObjectSelect },
+        { "SELECTPALETTE",        0x0234, 0 },
+        { "SETBKCOLOR",           0x0201, 0 },
+        { "SETBKMODE",            0x0102, 0 },
+        { "SETDIBTODEV",          0x0d33, 0 },
+        { "SETMAPMODE",           0x0103, 0 },
+        { "SETMAPPERFLAGS",       0x0231, 0 },
+        { "SETPALENTRIES",        0x0037, 0 },
+        { "SETPIXEL",             0x041F, 0 },
+        { "SETPOLYFILLMODE",      0x0106, &Wmf::opPolygonSetFillMode },
         { "SETRELABS",            0x0105, 0 },
-        { "SETPOLYFILLMODE",      0x0106, &Wmf::polygonSetFillMode },
+        { "SETROP2",              0x0104, 0 },
         { "SETSTRETCHBLTMODE",    0x0107, 0 },
+        { "SETTEXTALIGN",         0x012E, 0 },
         { "SETTEXTCHAREXTRA",     0x0108, 0 },
         { "SETTEXTCOLOR",         0x0209, 0 },
         { "SETTEXTJUSTIFICATION", 0x020A, 0 },
-        { "SETWINDOWORG",         0x020B, &Wmf::windowSetOrg },
-        { "SETWINDOWEXT",         0x020C, &Wmf::windowSetExt },
-        { "SETVIEWPORTORG",       0x020D, 0 },
         { "SETVIEWPORTEXT",       0x020E, 0 },
-        { "OFFSETWINDOWORG",      0x020F, 0 },
-        { "SCALEWINDOWEXT",       0x0410, 0 },
-        { "OFFSETVIEWPORTORG",    0x0211, 0 },
-        { "SCALEVIEWPORTEXT",     0x0412, 0 },
-//        { "LINETO",               0x0213, &Wmf::lineTo },
-//        { "MOVETO",               0x0214, &Wmf::moveTo },
-        { "EXCLUDECLIPRECT",      0x0415, 0 },
-        { "INTERSECTCLIPRECT",    0x0416, 0 },
-        { "ARC",                  0x0817, 0 },
-//        { "ELLIPSE",              0x0418, &Wmf::ellipse },
-        { "FLOODFILL",            0x0419, 0 },
-        { "PIE",                  0x081A, 0 },
-        { "RECTANGLE",            0x041B, 0 },
-        { "ROUNDRECT",            0x061C, 0 },
-        { "PATBLT",               0x061D, 0 },
-//        { "SAVEDC",               0x001E, &Wmf::saveDC },
-        { "SETPIXEL",             0x041F, 0 },
-        { "OFFSETCLIPRGN",        0x0220, 0 },
-        { "TEXTOUT",              0x0521, 0 },
-        { "BITBLT",               0x0922, 0 },
+        { "SETVIEWPORTORG",       0x020D, 0 },
+        { "SETWINDOWEXT",         0x020C, &Wmf::opWindowSetExt },
+        { "SETWINDOWORG",         0x020B, &Wmf::opWindowSetOrg },
         { "STRETCHBLT",           0x0B23, 0 },
-        { "POLYGON",              0x0324, &Wmf::polygon },
-        { "POLYLINE",             0x0325, &Wmf::polyline },
-//        { "ESCAPE",               0x0626, &Wmf::escape },
-//        { "RESTOREDC",            0x0127, &Wmf::restoreDC },
-        { "FILLREGION",           0x0228, 0 },
-        { "FRAMEREGION",          0x0429, 0 },
-        { "INVERTREGION",         0x012A, 0 },
-        { "PAINTREGION",          0x012B, 0 },
-        { "SELECTCLIPREGION",     0x012C, 0 },
-        { "SELECTOBJECT",         0x012D, &Wmf::objectSelect },
-        { "SETTEXTALIGN",         0x012E, 0 },
-        { "CHORD",                0x0830, 0 },
-        { "SETMAPPERFLAGS",       0x0231, 0 },
-        { "EXTTEXTOUT",           0x0a32, 0 },
-        { "SETDIBTODEV",          0x0d33, 0 },
-        { "SELECTPALETTE",        0x0234, 0 },
-        { "REALIZEPALETTE",       0x0035, 0 },
-        { "ANIMATEPALETTE",       0x0436, 0 },
-        { "SETPALENTRIES",        0x0037, 0 },
-//        { "POLYPOLYGON",          0x0538, &Wmf::polypolygon },
-        { "RESIZEPALETTE",        0x0139, 0 },
-        { "DIBBITBLT",            0x0940, 0 },
-        { "DIBSTRETCHBLT",        0x0b41, 0 },
-        { "DIBCREATEPATTERNBRUSH",0x0142, 0 },
         { "STRETCHDIB",           0x0f43, 0 },
-        { "EXTFLOODFILL",         0x0548, 0 },
-        { "DELETEOBJECT",         0x01F0, &Wmf::objectDelete },
-        { "CREATEPALETTE",        0x00F7, 0 },
-        { "CREATEPATTERNBRUSH",   0x01F9, 0 },
-        { "CREATEPENINDIRECT",    0x02FA, &Wmf::penCreateIndirect },
-        { "CREATEFONTINDIRECT",   0x02FB, 0 },
-        { "CREATEBRUSHINDIRECT",  0x02FC, &Wmf::brushCreateIndirect },
-        { "CREATEREGION",         0x06FF, 0 },
+        { "TEXTOUT",              0x0521, 0 },
         { NULL,                   0,      0 }
     };
     unsigned i;
@@ -315,39 +301,25 @@ void Wmf::invokeHandler(
     }
 }
 
-//-----------------------------------------------------------------------------
-void Wmf::objectDelete(
-    S32 /*wordOperands*/,
+
+QPoint Wmf::normalisePoint(
     QDataStream &operands)
 {
-    S16 idx;
+    S16 x;
+    S16 y;
 
-    operands >> idx;
-    handleDelete(idx);
+    operands >> x >> y;
+    return QPoint((x - m_windowOrgX) * m_windowFlipX / m_dpi, (y - m_windowOrgY) * m_windowFlipY / m_dpi);
 }
 
-//-----------------------------------------------------------------------------
-void Wmf::objectSelect(
-    S32 /*wordOperands*/,
+QSize Wmf::normaliseSize(
     QDataStream &operands)
 {
-    S16 idx;
+    S16 width;
+    S16 height;
 
-    operands >> idx;
-    if (idx >= 0 && idx < s_maxHandles && m_objectHandles[idx])
-        m_objectHandles[idx]->apply(*this);
-}
-
-//-----------------------------------------------------------------------------
-unsigned Wmf::getColour(
-    S32 colour)
-{
-    unsigned red, green, blue;
-
-    red = colour & 255;
-    green = (colour >> 8) & 255;
-    blue = (colour >> 16) & 255;
-    return (red << 16) + (green << 8) + blue;
+    operands >> width >> height;
+    return QSize(width / m_dpi, height / m_dpi);
 }
 
 //
@@ -357,6 +329,9 @@ unsigned Wmf::getColour(
 bool Wmf::parse(
     const QString &file)
 {
+    bool isPlaceable;
+    bool isEnhanced;
+
     QFile in(file);
     if (!in.open(IO_ReadOnly))
     {
@@ -364,9 +339,6 @@ bool Wmf::parse(
         in.close();
         return false;
     }
-    m_isPlaceable = false;
-    m_isEnhanced  = false;
-    m_calcBBox    = false;
     for (int i = 0; i < s_maxHandles; i++)
         m_objectHandles[i] = NULL;
 
@@ -381,8 +353,8 @@ bool Wmf::parse(
     //----- Read placeable metafile header
 
     st >> pheader.key;
-    m_isPlaceable = (pheader.key == (S32)APMHEADER_KEY);
-    if (m_isPlaceable)
+    isPlaceable = (pheader.key == (S32)APMHEADER_KEY);
+    if (isPlaceable)
     {
         st >> pheader.hmf;
         st >> pheader.bbox.left;
@@ -394,21 +366,27 @@ bool Wmf::parse(
         st >> pheader.checksum;
         checksum = calcCheckSum(&pheader);
         if (pheader.checksum != checksum)
-            m_isPlaceable = false;
-        m_calcBBox = false;
+            isPlaceable = false;
         m_dpi = (unsigned)((double)pheader.inch / m_dpi);
-        m_boundingBox.setLeft(QMIN(pheader.bbox.left, pheader.bbox.right));
-        m_boundingBox.setTop(QMIN(pheader.bbox.top, pheader.bbox.bottom));
-#define ABS(x) ((x)>=0?(x):-(x))
-        m_boundingBox.setWidth(ABS(pheader.bbox.right - pheader.bbox.left));
-        m_boundingBox.setHeight(ABS(pheader.bbox.bottom - pheader.bbox.top));
+        m_windowOrgX = pheader.bbox.left;
+        m_windowOrgY = pheader.bbox.top;
+        if (pheader.bbox.right > pheader.bbox.left)
+            m_windowFlipX = 1;
+        else
+            m_windowFlipX = -1;
+        if (pheader.bbox.bottom > pheader.bbox.top)
+            m_windowFlipY = 1;
+        else
+            m_windowFlipY = -1;
     }
     else
     {
-        m_calcBBox = true;
         m_dpi = (unsigned)((double)576 / m_dpi);
         in.at(0);
-        m_boundingBox.setRect(0, 0, 0, 0);
+        m_windowOrgX = 0;
+        m_windowOrgY = 0;
+        m_windowFlipX = 1;
+        m_windowFlipY = 1;
     }
 
     //----- Read as enhanced metafile header
@@ -425,8 +403,8 @@ bool Wmf::parse(
     st >> eheader.rclFrame.right;
     st >> eheader.rclFrame.bottom;
     st >> eheader.dSignature;
-    m_isEnhanced = (eheader.dSignature == ENHMETA_SIGNATURE);
-    if (m_isEnhanced) // is it really enhanced ?
+    isEnhanced = (eheader.dSignature == ENHMETA_SIGNATURE);
+    if (isEnhanced) // is it really enhanced ?
     {
         st >> eheader.nVersion;
         st >> eheader.nBytes;
@@ -503,12 +481,124 @@ bool Wmf::parse(
     return true;
 }
 
+void Wmf::opArc(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    genericArc("arc", operands);
+}
+
+void Wmf::opBrushCreateIndirect(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    static Qt::BrushStyle hatchedStyleTab[] =
+    {
+        Qt::HorPattern,
+        Qt::FDiagPattern,
+        Qt::BDiagPattern,
+        Qt::CrossPattern,
+        Qt::DiagCrossPattern
+    };
+    static Qt::BrushStyle styleTab[] =
+    {
+        Qt::SolidPattern,
+        Qt::NoBrush,
+        Qt::FDiagPattern,   // hatched
+        Qt::Dense4Pattern,  // should be custom bitmap pattern
+        Qt::HorPattern,     // should be BS_INDEXED (?)
+        Qt::VerPattern,     // should be device-independend bitmap
+        Qt::Dense6Pattern,  // should be device-independend packed-bitmap
+        Qt::Dense2Pattern,  // should be BS_PATTERN8x8
+        Qt::Dense3Pattern   // should be device-independend BS_DIBPATTERN8x8
+    };
+    Qt::BrushStyle style;
+    WinObjBrushHandle *handle = handleCreateBrush();
+    S16 arg;
+    S32 colour;
+    S16 discard;
+
+    operands >> arg >> colour;
+    handle->m_colour = getColour(colour);
+    if (arg == 2)
+    {
+        operands >> arg;
+        if (arg >= 0 && arg < 6)
+        {
+            style = hatchedStyleTab[arg];
+        }
+        else
+        {
+            kdError(s_area) << "createBrushIndirect: invalid hatched brush " << arg << endl;
+            style = Qt::SolidPattern;
+        }
+    }
+    else
+    if (arg >= 0 && arg < 9)
+    {
+        style = styleTab[arg];
+        operands >> discard;
+    }
+    else
+    {
+        kdError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
+        style = Qt::SolidPattern;
+        operands >> discard;
+    }
+    handle->m_style = style;
+}
+
+void Wmf::opEllipse(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    QPoint topLeft;
+    QPoint bottomRight;
+
+    topLeft = normalisePoint(operands);
+    bottomRight = normalisePoint(operands);
+
+    QRect ellipse(topLeft, bottomRight);
+
+    gotEllipse(m_dc, "full", ellipse.center(), ellipse.size() / 2, 0, 0);
+}
+
+void Wmf::opNoop(
+    U32 wordOperands,
+    QDataStream &operands)
+{
+    skip(wordOperands, operands);
+}
+
+//-----------------------------------------------------------------------------
+void Wmf::opObjectDelete(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    S16 idx;
+
+    operands >> idx;
+    handleDelete(idx);
+}
+
+//-----------------------------------------------------------------------------
+void Wmf::opObjectSelect(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    S16 idx;
+
+    operands >> idx;
+    if (idx >= 0 && idx < s_maxHandles && m_objectHandles[idx])
+        m_objectHandles[idx]->apply(*this);
+}
+
 //
 //
 //
 
-void Wmf::penCreateIndirect(
-    S32 /*wordOperands*/,
+void Wmf::opPenCreateIndirect(
+    U32 /*wordOperands*/,
     QDataStream &operands)
 {
     static Qt::PenStyle styleTab[] =
@@ -544,40 +634,25 @@ void Wmf::penCreateIndirect(
     handle->m_colour = getColour(colour);
 }
 
-//
-//
-//
-
-void Wmf::penSet(
-    unsigned colour,
-    unsigned style,
-    unsigned width)
+void Wmf::opPie(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
 {
-    m_penColour = colour;
-    m_penStyle = style;
-    m_penWidth = width;
+    genericArc("pie", operands);
 }
 
-//
-//
-//
-
-void Wmf::polygonSetFillMode(
-    S32 /*wordOperands*/,
+void Wmf::opPolygonSetFillMode(
+    U32 /*wordOperands*/,
     QDataStream &operands)
 {
     S16 tmp;
 
     operands >> tmp;
-    m_winding = tmp != 0;
+    m_dc.m_winding = tmp != 0;
 }
 
-//
-//
-//
-
-void Wmf::polygon(
-    S32 /*wordOperands*/,
+void Wmf::opPolygon(
+    U32 /*wordOperands*/,
     QDataStream &operands)
 {
     S16 tmp;
@@ -587,18 +662,13 @@ void Wmf::polygon(
 
     for (int i = 0; i < tmp; i++)
     {
-        S16 x;
-        S16 y;
-
-        operands >> x >> y;
-        points.setPoint(i, (x - m_boundingBox.left())/m_dpi, (m_boundingBox.top() - y)/m_dpi);
+        points.setPoint(i, normalisePoint(operands));
     }
-    gotPolygon(m_penColour, m_penStyle, m_penWidth, m_brushColour, m_brushStyle, points);
+    gotPolygon(m_dc, points);
 }
 
-//-----------------------------------------------------------------------------
-void Wmf::polyline(
-    S32 /*wordOperands*/,
+void Wmf::opPolyline(
+    U32 /*wordOperands*/,
     QDataStream &operands)
 {
     S16 tmp;
@@ -608,50 +678,89 @@ void Wmf::polyline(
 
     for (int i = 0; i < tmp; i++)
     {
-        S16 x;
-        S16 y;
-
-        operands >> x >> y;
-        points.setPoint(i, (x - m_boundingBox.left())/m_dpi, (m_boundingBox.top() - y)/m_dpi);
+        points.setPoint(i, normalisePoint(operands));
     }
-    gotPolyline(m_penColour, m_penStyle, m_penWidth, points);
+    gotPolyline(m_dc, points);
 }
 
-//
-//
-//
+void Wmf::opRectangle(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    QPoint topLeft;
+    QSize size;
 
-void Wmf::windowSetOrg(
-    S32 /*wordOperands*/,
+    topLeft = normalisePoint(operands);
+    size = normaliseSize(operands);
+    QRect rect(topLeft, size);
+    QPointArray points(4);
+
+    points.setPoint(0, topLeft);
+    points.setPoint(1, rect.topRight());
+    points.setPoint(2, rect.bottomRight());
+    points.setPoint(3, rect.bottomLeft());
+    gotRectangle(m_dc, points);
+}
+
+void Wmf::opWindowSetOrg(
+    U32 /*wordOperands*/,
     QDataStream &operands)
 {
     S16 top;
     S16 left;
 
     operands >> top >> left;
-//    if (m_calcBBox)
-    {
-        m_boundingBox.setTop(top);
-        m_boundingBox.setLeft(left);
-    }
+    m_windowOrgX = left;
+    m_windowOrgY = top;
 }
 
-//
-//
-//
-
-void Wmf::windowSetExt(
-    S32 /*wordOperands*/,
+void Wmf::opWindowSetExt(
+    U32 /*wordOperands*/,
     QDataStream &operands)
 {
     S16 height;
     S16 width;
 
     operands >> height >> width;
-//    if (m_calcBBox)
+    if (width > 0)
+        m_windowFlipX = 1;
+    else
+        m_windowFlipX = -1;
+    if (height > 0)
+        m_windowFlipY = 1;
+    else
+        m_windowFlipY = -1;
+}
+
+void Wmf::penSet(
+    unsigned colour,
+    unsigned style,
+    unsigned width)
+{
+    m_dc.m_penColour = colour;
+    m_dc.m_penStyle = style;
+    m_dc.m_penWidth = width;
+}
+
+void Wmf::skip(
+    U32 wordOperands,
+    QDataStream &operands)
+{
+    if ((int)wordOperands < 0)
     {
-        m_boundingBox.setHeight(height);
-        m_boundingBox.setWidth(width);
+        kdError(s_area) << "skip: " << (int)wordOperands << endl;
+        return;
+    }
+    if (wordOperands)
+    {
+        U32 i;
+        S16 discard;
+
+        kdDebug(s_area) << "skip: " << wordOperands << endl;
+        for (i = 0; i < wordOperands; i++)
+        {
+            operands >> discard;
+        }
     }
 }
 
@@ -666,4 +775,3 @@ void Wmf::WinObjPenHandle::apply(
 {
     p.penSet(m_colour, m_style, m_width);
 }
-

@@ -24,7 +24,7 @@ DESCRIPTION
     override as required.
 
     This is based on code originally written by Stefan Taferner
-    <taferner@kde.org>.
+    (taferner@kde.org).
 */
 
 #ifndef WMF_H
@@ -49,6 +49,17 @@ public:
     bool parse(
         const QString &file);
 
+    class DrawContext
+    {
+    public:
+        bool m_winding;
+        unsigned m_brushColour;
+        unsigned m_brushStyle;
+        unsigned m_penColour;
+        unsigned m_penStyle;
+        unsigned m_penWidth;
+    };
+
     // Should be protected...
 
     void brushSet(
@@ -62,17 +73,21 @@ public:
 protected:
     // Override to get results of parsing.
 
+    virtual void gotEllipse(
+        const DrawContext &dc,
+        QString type,
+        QPoint topLeft,
+        QSize halfAxes,
+        unsigned startAngle,
+        unsigned stopAngle) = 0;
     virtual void gotPolygon(
-        unsigned penColour,
-        unsigned penStyle,
-        unsigned penWidth,
-        unsigned brushColour,
-        unsigned brushStyle,
+        const DrawContext &dc,
         const QPointArray &points) = 0;
     virtual void gotPolyline(
-        unsigned penColour,
-        unsigned penStyle,
-        unsigned penWidth,
+        const DrawContext &dc,
+        const QPointArray &points) = 0;
+    virtual void gotRectangle(
+        const DrawContext &dc,
         const QPointArray &points) = 0;
 
 private:
@@ -84,6 +99,7 @@ private:
 
     typedef short S16;
     typedef int S32;
+    typedef unsigned int U32;
 
     typedef struct _RECT
     {
@@ -164,19 +180,12 @@ private:
     };
 */
 
-    bool m_isPlaceable;
-    bool m_isEnhanced;
-    bool m_winding;
-    QRect m_boundingBox;
-    QRect m_windowBox;
-    unsigned m_brushColour;
-    unsigned m_brushStyle;
-    unsigned m_penColour;
-    unsigned m_penStyle;
-    unsigned m_penWidth;
-    bool m_useWorldMatrix;
-    bool m_calcBBox;
     int m_dpi;
+    int m_windowOrgX;
+    int m_windowOrgY;
+    int m_windowFlipX;
+    int m_windowFlipY;
+    DrawContext m_dc;
 
     // Windows handle management.
 
@@ -212,64 +221,71 @@ private:
     WinObjHandle **m_objectHandles;
 
     unsigned getColour(S32 colour);
-
+    QPoint normalisePoint(
+        QDataStream &operands);
+    QSize normaliseSize(
+        QDataStream &operands);
+    void genericArc(
+        QString type,
+        QDataStream &operands);
     unsigned short calcCheckSum(
         WmfPlaceableHeader *pheader);
 
     // Opcode handling and Metafile painter methods.
 
+    void skip(
+        U32 wordOperands,
+        QDataStream &operands);
     void invokeHandler(
         S16 opcode,
-        S32 wordOperands,
+        U32 wordOperands,
         QDataStream &operands);
 /*
     // draw multiple polygons
-    void polypolygon(S32 wordOperands, QDataStream &operands);
+    void opPolypolygon(U32 wordOperands, QDataStream &operands);
 */
+    void opArc(U32 wordOperands, QDataStream &operands);
     // create a logical brush
-    void brushCreateIndirect(S32 wordOperands, QDataStream &operands);
-    // create a logical pen
-    void penCreateIndirect(S32 wordOperands, QDataStream &operands);
-
+    void opBrushCreateIndirect(U32 wordOperands, QDataStream &operands);
+    void opEllipse(U32 wordOperands, QDataStream &operands);
+    // do nothing
+    void opNoop(U32 wordOperands, QDataStream &operands);
     // Free object handle
-    void objectDelete(S32 wordOperands, QDataStream &operands);
+    void opObjectDelete(U32 wordOperands, QDataStream &operands);
     // Activate object handle
-    void objectSelect(S32 wordOperands, QDataStream &operands);
-
+    void opObjectSelect(U32 wordOperands, QDataStream &operands);
+    // create a logical pen
+    void opPenCreateIndirect(U32 wordOperands, QDataStream &operands);
+    void opPie(U32 wordOperands, QDataStream &operands);
     // draw polygon
-    void polygon(S32 wordOperands, QDataStream &operands);
+    void opPolygon(U32 wordOperands, QDataStream &operands);
     // set polygon fill mode
-    void polygonSetFillMode(S32 wordOperands, QDataStream &operands);
-
+    void opPolygonSetFillMode(U32 wordOperands, QDataStream &operands);
     // draw series of lines
-    void polyline(S32 wordOperands, QDataStream &operands);
+    void opPolyline(U32 wordOperands, QDataStream &operands);
+    void opRectangle(U32 wordOperands, QDataStream &operands);
     // set window origin
-    void windowSetOrg(S32 wordOperands, QDataStream &operands);
+    void opWindowSetOrg(U32 wordOperands, QDataStream &operands);
     // set window extents
-    void windowSetExt(S32 wordOperands, QDataStream &operands);
+    void opWindowSetExt(U32 wordOperands, QDataStream &operands);
 /*
     // set background pen color
-    void setBkColor(S32 wordOperands, QDataStream &operands);
+    void opsetBkColor(U32 wordOperands, QDataStream &operands);
     // set background pen mode
-    void setBkMode(S32 wordOperands, QDataStream &operands);
+    void opsetBkMode(U32 wordOperands, QDataStream &operands);
     // draw line to coord
-    void lineTo(S32 wordOperands, QDataStream &operands);
+    void oplineTo(U32 wordOperands, QDataStream &operands);
     // move pen to coord
-    void moveTo(S32 wordOperands, QDataStream &operands);
-    // draw ellipse
-    void ellipse(S32 wordOperands, QDataStream &operands);
+    void opmoveTo(U32 wordOperands, QDataStream &operands);
     // Set raster operation mode
-    void setRop(S32 wordOperands, QDataStream &operands);
+    void opsetRop(U32 wordOperands, QDataStream &operands);
     // Escape (enhanced command set)
-    void escape(S32 wordOperands, QDataStream &operands);
+    void opescape(U32 wordOperands, QDataStream &operands);
     // save drawing context
-    void saveDC(S32 wordOperands, QDataStream &operands);
+    void opsaveDC(U32 wordOperands, QDataStream &operands);
     // restore drawing context
-    void restoreDC(S32 wordOperands, QDataStream &operands);
+    void oprestoreDC(U32 wordOperands, QDataStream &operands);
 */
-    // do nothing
-    void noop(S32 /*wordOperands*/, QDataStream &/*operands*/) {}
-
 };
 
 #endif

@@ -40,8 +40,8 @@ WMFImport::~WMFImport()
 const bool WMFImport::filter(
     const QString &fileIn,
     const QString &fileOut,
-    const QString& from,
-    const QString& to,
+    const QString &from,
+    const QString &to,
     const QString &)
 {
     if (to != "application/x-killustrator" || from != "image/x-wmf")
@@ -61,18 +61,15 @@ const bool WMFImport::filter(
 
     if (!parse(fileIn))
         return false;
+    m_text += "</layer>\n";
+    m_text += "</killustrator>\n";
 
     emit sigProgress(100);
 
-    m_text += "</layer>\n";
-    m_text += "</killustrator>\n";
-    //kdDebug(s_area) << "output: " << m_text << endl;
-
-    KoStore out = KoStore(QString(fileOut), KoStore::Write);
+    KoStore out = KoStore(fileOut, KoStore::Write);
     if (!out.open("root"))
     {
-        kdError(s_area) << "Unable to open output file!" << endl;
-        out.close();
+        kdError(s_area) << "Unable to open output file " << fileOut << endl;
         return false;
     }
     QCString cstring = m_text.utf8();
@@ -93,13 +90,35 @@ void WMFImport::pointArray(
     }
 }
 
-//-----------------------------------------------------------------------------
+void WMFImport::gotEllipse(
+    const DrawContext &dc,
+    QString type,
+    QPoint topLeft,
+    QSize halfAxes,
+    unsigned startAngle,
+    unsigned stopAngle)
+{
+    m_text += "<ellipse angle1=\"" + QString::number(startAngle) +
+                "\" angle2=\"" + QString::number(stopAngle) +
+                "\" x=\"" + QString::number(topLeft.x()) +
+                "\" y=\"" + QString::number(topLeft.y()) +
+                "\" kind=\"" + type +
+                "\" rx=\"" + QString::number(halfAxes.width()) +
+                "\" ry=\"" + QString::number(halfAxes.height()) +
+                "\">\n";
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
+                "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
+                "\">\n";
+    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
+    m_text += " </gobject>\n";
+    m_text += "</ellipse>\n";
+}
+
 void WMFImport::gotPolygon(
-    unsigned penColour,
-    unsigned penStyle,
-    unsigned penWidth,
-    unsigned brushColour,
-    unsigned brushStyle,
+    const DrawContext &dc,
     const QPointArray &points)
 {
     QRect bounds = points.boundingRect();
@@ -111,11 +130,11 @@ void WMFImport::gotPolygon(
                 "\" rounding=\"0\">\n";
     m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
     pointArray(points);
-    m_text += " <gobject fillcolor=\"#" + QString::number(brushColour, 16) +
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
                 "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
-                "\" linewidth=\"" + QString::number(penWidth) +
-                "\" strokecolor=\"#" + QString::number(penColour, 16) +
-                "\" strokestyle=\"" + QString::number(penStyle) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
                 "\">\n";
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
     m_text += " </gobject>\n";
@@ -124,21 +143,43 @@ void WMFImport::gotPolygon(
 }
 
 
-//-----------------------------------------------------------------------------
 void WMFImport::gotPolyline(
-    unsigned penColour,
-    unsigned penStyle,
-    unsigned penWidth,
+    const DrawContext &dc,
     const QPointArray &points)
 {
     m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
     pointArray(points);
     m_text += " <gobject fillstyle=\"" + QString::number(1 /*m_winding*/) +
-                "\" linewidth=\"" + QString::number(penWidth) +
-                "\" strokecolor=\"#" + QString::number(penColour, 16) +
-                "\" strokestyle=\"" + QString::number(penStyle) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
                 "\">\n";
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
     m_text += " </gobject>\n";
     m_text += "</polyline>\n";
+}
+
+void WMFImport::gotRectangle(
+    const DrawContext &dc,
+    const QPointArray &points)
+{
+    QRect bounds = points.boundingRect();
+
+    m_text += "<rectangle width=\"" + QString::number(bounds.width()) +
+                "\" x=\"" + QString::number(bounds.x()) +
+                "\" y=\"" + QString::number(bounds.y()) +
+                "\" height=\"" + QString::number(bounds.height()) +
+                "\" rounding=\"0\">\n";
+    m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
+    pointArray(points);
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
+                "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
+                "\">\n";
+    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
+    m_text += " </gobject>\n";
+    m_text += "</polyline>\n";
+    m_text += "</rectangle>\n";
 }
