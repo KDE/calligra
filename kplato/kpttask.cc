@@ -38,6 +38,9 @@ KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
 
     if (m_parent)
         m_leader = m_parent->leader();
+        
+    m_parentProxyRelations.setAutoDelete(true);
+    m_childProxyRelations.setAutoDelete(true);
 }
 
 
@@ -338,26 +341,37 @@ void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<K
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == KPTNode::Type_Summarytask) {
         summarytasks.append(this);
+        // propagate my relations to my children and dependent nodes
+        
+        QPtrListIterator<KPTNode> nodes = m_nodes;
+        for (; nodes.current(); ++nodes) {
+            if (!dependParentNodes().isEmpty()) 
+                nodes.current()->addParentProxyRelations(dependParentNodes());
+            if (!dependChildNodes().isEmpty()) 
+                nodes.current()->addChildProxyRelations(dependChildNodes());
+            nodes.current()->initiateCalculationLists(startnodes, endnodes, summarytasks);
+        }        
     } else {
-        if (numDependChildNodes() == 0) {
+        if (isEndNode()) {
             endnodes.append(this);
             //kdDebug()<<k_funcinfo<<"endnodes append: "<<m_name<<endl;
         }
-        if (numDependParentNodes() == 0) {
+        if (isStartNode()) {
             startnodes.append(this);
             //kdDebug()<<k_funcinfo<<"startnodes append: "<<m_name<<endl;
         }
     }
 }
 
-KPTDateTime KPTTask::calculateForward(int use) {
-    //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (m_visitedForward)
-        return earliestStart + m_durationForward;
-    // First, calculate all predecessors
-    QPtrListIterator<KPTRelation> it = dependParentNodes();
+KPTDateTime KPTTask::calculatePredeccessors(const QPtrList<KPTRelation> &list, int use) {
+    KPTDateTime time;
+    QPtrListIterator<KPTRelation> it = list;
     for (; it.current(); ++it) {
-        KPTDateTime time = it.current()->parent()->calculateForward(use);
+        if (it.current()->parent()->type() == Type_Summarytask) {
+            //kdDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->parent()->name()<<endl;
+            continue; // skip summarytasks
+        }
+        time = it.current()->parent()->calculateForward(use);
         switch (it.current()->timingRelation()) {
             case START_START:
                 time = it.current()->parent()->getEarliestStart() + it.current()->lag();
@@ -371,19 +385,24 @@ KPTDateTime KPTTask::calculateForward(int use) {
                 time += it.current()->lag();
                 break;
         }
-        if (time > earliestStart)
-            earliestStart = time;
+    }
+    return time;
+}
+KPTDateTime KPTTask::calculateForward(int use) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (m_visitedForward)
+        return earliestStart + m_durationForward;
+    // First, calculate all predecessors
+    KPTDateTime time = calculatePredeccessors(dependParentNodes(), use);
+    if (time.isValid() && time > earliestStart) {
+        earliestStart = time;
+    }
+    time = calculatePredeccessors(m_parentProxyRelations, use);
+    if (time.isValid() && time > earliestStart) {
+        earliestStart = time;
     }
     if (type() == KPTNode::Type_Summarytask) {
-        // my subtasks can't start earlier than I
-        moveEarliestStart(earliestStart);
-        // Must calculate all subtasks/earliestStart before I know my own
-        QPtrListIterator<KPTNode> it = childNodeIterator();
-        for (; it.current(); ++it) {
-            it.current()->calculateForward(use);
-        }
-        earliestStart = summarytaskEarliestStart();
-        m_durationForward = summarytaskDurationForward(earliestStart);
+        kdWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     } else if (type() == KPTNode::Type_Task) {
         // Adjust duration to when resource(s) can start work
         if (m_requests) {
@@ -409,14 +428,15 @@ KPTDateTime KPTTask::calculateForward(int use) {
     return earliestStart + m_durationForward;
 }
 
-KPTDateTime KPTTask::calculateBackward(int use) {
-    //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (m_visitedBackward)
-        return latestFinish - m_durationBackward;
-    // First, calculate all successors
-    QPtrListIterator<KPTRelation> it = dependChildNodes();
+KPTDateTime KPTTask::calculateSuccessors(const QPtrList<KPTRelation> &list, int use) {
+    KPTDateTime time;
+    QPtrListIterator<KPTRelation> it = list;
     for (; it.current(); ++it) {
-        KPTDateTime time = it.current()->child()->calculateBackward(use);
+        if (it.current()->child()->type() == Type_Summarytask) {
+            //kdDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->parent()->name()<<endl;
+            continue; // skip summarytasks
+        }
+        time = it.current()->child()->calculateBackward(use);
         switch (it.current()->timingRelation()) {
             case START_START:
                 // I can't start before my successor, so
@@ -430,19 +450,26 @@ KPTDateTime KPTTask::calculateBackward(int use) {
                 time -= it.current()->lag();
                 break;
         }
-        if (time < latestFinish)
-            latestFinish = time;
+    
+    }
+    //kdDebug()<<k_funcinfo<<m_name<<" time="<<time.toString()<<endl;
+    return time;
+}
+KPTDateTime KPTTask::calculateBackward(int use) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (m_visitedBackward)
+        return latestFinish - m_durationBackward;
+    // First, calculate all successors
+    KPTDateTime time = calculateSuccessors(dependChildNodes(), use);
+    if (time.isValid() && time < latestFinish) {
+        latestFinish = time;
+    }
+    time = calculateSuccessors(m_childProxyRelations, use);
+    if (time.isValid() && time < latestFinish) {
+        latestFinish = time;
     }
     if (type() == KPTNode::Type_Summarytask) {
-        // my subtasks can't finish later than I
-        moveLatestFinish(latestFinish);
-        // Must calculate all subtasks before I know my own duration
-        QPtrListIterator<KPTNode> it = childNodeIterator();
-        for (; it.current(); ++it) {
-            it.current()->calculateBackward(use);
-        }
-        latestFinish = summarytaskLatestFinish();
-        m_durationBackward = summarytaskDurationBackward(latestFinish);
+        kdWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     } else if (type() == KPTNode::Type_Task) {
         if (m_requests) {
             // Move to when resource(s) can do (end) work
@@ -463,23 +490,22 @@ KPTDateTime KPTTask::calculateBackward(int use) {
     } else { // ???
         m_durationBackward = KPTDuration::zeroDuration;
     }
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<latestFinish.toString()<<" dur="<<m_durationBackward.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<": latestFinish="<<latestFinish.toString()<<" dur="<<m_durationBackward.toString()<<endl;
     m_visitedBackward = true;
     return latestFinish - m_durationBackward;
 }
 
-
-KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
-    //kdDebug()<<k_funcinfo<<m_name<<" earliest="<<earliest<<endl;
-    if (m_visitedForward)
-        return m_endTime;
-    m_startTime = earliest > earliestStart ? earliest : earliestStart;
-    // First, calculate all predecessors
-    QPtrListIterator<KPTRelation> it = dependParentNodes();
+KPTDateTime KPTTask::schedulePredeccessors(const QPtrList<KPTRelation> &list, int use) {
+    KPTDateTime time;
+    QPtrListIterator<KPTRelation> it = list;
     for (; it.current(); ++it) {
+        if (it.current()->parent()->type() == Type_Summarytask) {
+            //kdDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->parent()->name()<<endl;
+            continue; // skip summarytasks
+        }
         // schedule the predecessors
         KPTDateTime earliest = it.current()->parent()->getEarliestStart();
-        KPTDateTime time = it.current()->parent()->scheduleForward(earliest, use);
+        time = it.current()->parent()->scheduleForward(earliest, use);
         switch (it.current()->timingRelation()) {
             case START_START:
                 time = it.current()->parent()->startTime() + it.current()->lag();
@@ -493,8 +519,27 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
                 time += it.current()->lag();
                 break;
         }
-        if (time > m_startTime)
-            m_startTime = time;
+    }
+    //kdDebug()<<k_funcinfo<<m_name<<" time="<<time.toString()<<endl;
+    return time;
+}
+
+KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
+    //kdDebug()<<k_funcinfo<<m_name<<" earliest="<<earliest<<endl;
+    if (m_visitedForward)
+        return m_endTime;
+    m_startTime = earliest > earliestStart ? earliest : earliestStart;
+    // First, calculate all my own predecessors
+    KPTDateTime time = schedulePredeccessors(dependParentNodes(), use);
+    if (time.isValid() && time > m_startTime) {
+        m_startTime = time;
+        //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<m_startTime<<endl;
+    }
+    // Then my parents
+    time = schedulePredeccessors(m_parentProxyRelations, use);
+    if (time.isValid() && time > m_startTime) {
+        m_startTime = time;
+        //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<m_startTime<<endl;
     }
 
     if(type() == KPTNode::Type_Task) {
@@ -530,42 +575,40 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             m_requests->reserve(m_startTime, m_duration);
         }
     } else if(type() == KPTNode::Type_Milestone) {
+        // milestones generally wants to stick to their dependant parent
+        KPTDateTime time = schedulePredeccessors(dependParentNodes(), use);
+        if (time.isValid() && time < m_endTime) {
+            m_endTime = time;
+        }
+        // Then my parents
+        time = scheduleSuccessors(m_parentProxyRelations, use);
+        if (time.isValid() && time < m_endTime) {
+            m_endTime = time;
+        }
         m_endTime = m_startTime;
         m_duration = KPTDuration::zeroDuration;
     } else if (type() == KPTNode::Type_Summarytask) {
+        //shouldn't come here
         m_endTime = m_startTime;
-        KPTDateTime startTime = latestFinish;
-        KPTDateTime time = m_endTime;
-        QPtrListIterator<KPTNode> it(m_nodes);
-        for (; it.current(); ++it) {
-            // find end time
-            time = it.current()->scheduleForward(m_startTime, use);
-            if (time > m_endTime)
-                m_endTime = time;
-            // now start time
-            time = it.current()->startTime();
-            if (time < startTime)
-                startTime = time;
-        }
-        m_startTime = startTime;
         m_duration = m_endTime - m_startTime;
+        kdWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
     //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
     m_visitedForward = true;
     return m_endTime;
 }
 
-KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
-    //kdDebug()<<k_funcinfo<<m_name<<": latest="<<latest<<endl;
-    if (m_visitedBackward)
-        return m_startTime;
-    m_endTime = latest < latestFinish ? latest : latestFinish;
-    // First, calculate all successors
-    QPtrListIterator<KPTRelation> it = dependChildNodes();
+KPTDateTime KPTTask::scheduleSuccessors(const QPtrList<KPTRelation> &list, int use) {
+    KPTDateTime time;
+    QPtrListIterator<KPTRelation> it = list;
     for (; it.current(); ++it) {
+        if (it.current()->child()->type() == Type_Summarytask) {
+            //kdDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->child()->name()<<endl;
+            continue;
+        }
         // get the successors starttime
         KPTDateTime latest = it.current()->child()->getLatestFinish();
-        KPTDateTime time = it.current()->child()->scheduleBackward(latest, use);
+        time = it.current()->child()->scheduleBackward(latest, use);
         if (it.current()->timingRelation() != FINISH_START) {
             time = it.current()->child()->endTime();
         }
@@ -582,8 +625,23 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
                 time -= it.current()->lag();
                 break;
         }
-        if (time < m_endTime)
-            m_endTime = time;
+   }
+   return time;
+}
+KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
+    //kdDebug()<<k_funcinfo<<m_name<<": latest="<<latest<<endl;
+    if (m_visitedBackward)
+        return m_startTime;
+    m_endTime = latest < latestFinish ? latest : latestFinish;
+    // First, calculate all my own successors
+    KPTDateTime time = scheduleSuccessors(dependChildNodes(), use);
+    if (time.isValid() && time < m_endTime) {
+        m_endTime = time;
+    }
+    // Then my parents
+    time = scheduleSuccessors(m_childProxyRelations, use);
+    if (time.isValid() && time < m_endTime) {
+        m_endTime = time;
     }
 
     if (type() == KPTNode::Type_Task) {
@@ -619,26 +677,23 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             m_requests->reserve(m_startTime, m_duration);
         }
     } else if (type() == KPTNode::Type_Milestone) {
+        // milestones generally wants to stick to their dependant parent
+        KPTDateTime time = schedulePredeccessors(dependParentNodes(), use);
+        if (time.isValid() && time < m_endTime) {
+            m_endTime = time;
+        }
+        // Then my parents
+        time = scheduleSuccessors(m_parentProxyRelations, use);
+        if (time.isValid() && time < m_endTime) {
+            m_endTime = time;
+        }
         m_startTime = m_endTime;
         m_duration = KPTDuration::zeroDuration;
     } else if (type() == KPTNode::Type_Summarytask) {
-        //set limits for children
+        //shouldn't come here
         m_startTime = m_endTime;
-        KPTDateTime time = m_startTime;
-        KPTDateTime end = earliestStart;        
-        QPtrListIterator<KPTNode> it(m_nodes);
-        for (; it.current(); ++it) {
-            // find start time
-            time = it.current()->scheduleBackward(m_endTime, use);
-            if (time < m_startTime)
-                m_startTime = time;
-            // now end time
-            time = it.current()->endTime();
-            if (time > end)
-                end = time;
-        }
-        m_endTime = end;
         m_duration = m_endTime - m_startTime;
+        kdWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
     //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
     m_visitedBackward = true;
@@ -661,17 +716,6 @@ void KPTTask::adjustSummarytask() {
         m_endTime = end;
         m_duration = end - start;
         //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
-    } else if (type() == Type_Milestone && numDependParentNodes() > 0) {
-        KPTDateTime time;
-        KPTDateTime start = earliestStart;
-        QPtrListIterator<KPTRelation> it = dependParentNodes();
-        for (; it.current(); ++it) {
-            // get the predecessors endtime
-            time = it.current()->parent()->endTime();
-            if (time > start)
-                start = time;
-        }
-        m_startTime = m_endTime = start;
     }
 }
 
@@ -756,6 +800,72 @@ KPTDuration KPTTask::calcDuration(const KPTDateTime &time, const KPTDuration &ef
     KPTDuration dur = m_requests->duration(time, effort, backward);
     //kdDebug()<<"calcDuration "<<m_name<<": "<<time.toString()<<" to "<<(time+dur).toString()<<" = "<<dur.toString()<<endl;
     return dur;
+}
+
+void KPTTask::clearProxyRelations() {
+    m_parentProxyRelations.clear();
+    m_childProxyRelations.clear();
+}
+
+void KPTTask::addParentProxyRelations(QPtrList<KPTRelation> &list) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (type() == Type_Summarytask) {
+        // propagate to my children
+        QPtrListIterator<KPTNode> nodes = m_nodes;
+        for (; nodes.current(); ++nodes) {
+            nodes.current()->addParentProxyRelations(list);
+            nodes.current()->addParentProxyRelations(dependParentNodes());
+        }        
+    } else {
+        // add 'this' as child relation to the relations parent
+        QPtrListIterator<KPTRelation> it = list;
+        for (; it.current(); ++it) {
+            it.current()->parent()->addChildProxyRelation(this, it.current());
+            // add a parent relation to myself
+            addParentProxyRelation(it.current()->parent(), it.current());
+        }
+    }
+}
+
+void KPTTask::addChildProxyRelations(QPtrList<KPTRelation> &list) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (type() == Type_Summarytask) {
+        // propagate to my children
+        QPtrListIterator<KPTNode> nodes = m_nodes;
+        for (; nodes.current(); ++nodes) {
+            nodes.current()->addChildProxyRelations(list);
+            nodes.current()->addChildProxyRelations(dependChildNodes());
+        }        
+    } else {
+        // add 'this' as parent relation to the relations child
+        QPtrListIterator<KPTRelation> it = list;
+        for (; it.current(); ++it) {
+            it.current()->child()->addParentProxyRelation(this, it.current());
+            // add a child relation to myself
+            addChildProxyRelation(it.current()->child(), it.current());
+        }
+    }
+}
+
+void KPTTask::addParentProxyRelation(KPTNode *node, const KPTRelation *rel) {
+    if (node->type() != Type_Summarytask) {
+        //kdDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
+        m_parentProxyRelations.append(new KPTProxyRelation(node, this, rel->timingType(), rel->timingRelation(), rel->lag()));
+    }
+}
+
+void KPTTask::addChildProxyRelation(KPTNode *node, const KPTRelation *rel) {
+    if (node->type() != Type_Summarytask) {
+        //kdDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
+        m_childProxyRelations.append(new KPTProxyRelation(this, node, rel->timingType(), rel->timingRelation(), rel->lag()));
+    }
+}
+
+bool KPTTask::isEndNode() const {
+    return m_childProxyRelations.isEmpty() && m_dependChildNodes.isEmpty();
+}
+bool KPTTask::isStartNode() const {
+    return m_parentProxyRelations.isEmpty() && m_dependParentNodes.isEmpty();
 }
 
 #ifndef NDEBUG

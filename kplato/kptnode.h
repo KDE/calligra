@@ -341,6 +341,14 @@ public:
     /// Check if node par can be linked to node child. (Reimplement)
     virtual bool legalToLink(KPTNode *par, KPTNode *child) { return false; }
     
+    virtual bool isEndNode() const;
+    virtual bool isStartNode() const;
+    virtual void clearProxyRelations() {}
+    virtual void addParentProxyRelations(QPtrList<KPTRelation> &list) {}
+    virtual void addChildProxyRelations(QPtrList<KPTRelation> &list) {}
+    virtual void addParentProxyRelation(KPTNode *, const KPTRelation *) {}
+    virtual void addChildProxyRelation(KPTNode *, const KPTRelation *) {}
+
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;

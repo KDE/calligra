@@ -49,7 +49,7 @@ public:
     *  When deleted the relation will remove itself from 
     *  the parent- and child nodes lists
     */
-    ~KPTRelation();
+    virtual ~KPTRelation();
 
     void setTimingType(TimingType );
     TimingType timingType() const { return m_timingType; }
@@ -95,5 +95,15 @@ public:
     void printDebug(QCString indent);
 #endif
 
+};
+
+class KPTProxyRelation : public KPTRelation
+{
+public:
+    KPTProxyRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) 
+    : KPTRelation(parent, child, tt, tr, lag) 
+    {}
+
+    ~KPTProxyRelation() { m_parent = 0; m_child = 0;}
 };
 #endif

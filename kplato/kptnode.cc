@@ -83,7 +83,7 @@ int KPTNode::mapNode(int id, KPTNode *node) {
 
 
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
-    kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
+    //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)
             m_nodes.remove();
@@ -344,6 +344,10 @@ void KPTNode::saveRelations(QDomElement &element) {
     for (; it.current(); ++it) {
         it.current()->save(element);
     }
+    QPtrListIterator<KPTNode> nodes(m_nodes);
+    for ( ; nodes.current(); ++nodes ) {
+        nodes.current()->saveRelations(element);
+    }
 }
 
 void KPTNode::setConstraint(QString &type) {
@@ -384,6 +388,7 @@ QString KPTNode::constraintToString() const {
 
 void KPTNode::propagateEarliestStart(KPTDateTime &time) {
     earliestStart = time;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<earliestStart.toString()<<endl;
     QPtrListIterator<KPTNode> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateEarliestStart(time);
@@ -392,6 +397,7 @@ void KPTNode::propagateEarliestStart(KPTDateTime &time) {
 
 void KPTNode::propagateLatestFinish(KPTDateTime &time) {
     latestFinish = time;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<latestFinish.toString()<<endl;
     QPtrListIterator<KPTNode> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateLatestFinish(time);
@@ -421,6 +427,7 @@ void KPTNode::initiateCalculation() {
     m_visitedBackward = false;
     m_resourceError = false;
     m_resourceOverbooked = false;
+    clearProxyRelations();
     QPtrListIterator<KPTNode> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->initiateCalculation();
@@ -501,6 +508,13 @@ bool KPTNode::legalToLink(KPTNode *node) {
     if (p)
         return p->legalToLink(this, node);
     return false;
+}
+
+bool KPTNode::isEndNode() const {
+    return m_dependChildNodes.isEmpty();
+}
+bool KPTNode::isStartNode() const {
+    return m_dependParentNodes.isEmpty();
 }
 
 

@@ -117,17 +117,9 @@ KPTDateTime KPTProject::calculateForward(int use) {
         // calculate forwards following the child relations
         KPTDateTime finish;
         KPTDateTime time;
-        // First do summarytasks and their children
-        QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
-        for (; summarytasks.current(); ++summarytasks) {
-            time = summarytasks.current()->calculateForward(use);
-            if (!finish.isValid() || time > finish)
-                finish = time;
-        }
-        // Now do the rest of the tasks
         QPtrListIterator<KPTNode> endnodes = m_endNodes;
         for (; endnodes.current(); ++endnodes) {
-            KPTDateTime time = endnodes.current()->calculateForward(use);
+            time = endnodes.current()->calculateForward(use);
             if (!finish.isValid() || time > finish)
                 finish = time;
         }
@@ -146,17 +138,9 @@ KPTDateTime KPTProject::calculateBackward(int use) {
         // calculate backwards following parent relation
         KPTDateTime start;
         KPTDateTime time;
-        // First do summarytasks and their children
-        QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
-        for (; summarytasks.current(); ++summarytasks) {
-            time = summarytasks.current()->calculateBackward(use);
-            if (!start.isValid() || time < start)
-                start = time;
-        }
-        // Now do the rest of the tasks
         QPtrListIterator<KPTNode> startnodes = m_startNodes;
         for (; startnodes.current(); ++startnodes) {
-            KPTDateTime time = startnodes.current()->calculateBackward(use);
+            time = startnodes.current()->calculateBackward(use);
             if (!start.isValid() || time < start)
                 start = time;
         }
@@ -170,34 +154,22 @@ KPTDateTime KPTProject::calculateBackward(int use) {
 
 KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
     resetVisited();
-    // First do summarytasks and their children
-    QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
-    for (; summarytasks.current(); ++summarytasks) {
-        summarytasks.current()->scheduleForward(earliest, use);
-    }
-    // Now do the rest of the tasks
     QPtrListIterator<KPTNode> it(m_endNodes);
     for (; it.current(); ++it) {
         it.current()->scheduleForward(earliest, use);
     }
-    // Fix summarytasks (with milestones)
+    // Fix summarytasks
     adjustSummarytask();
     return m_endTime;
 }
 
 KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
     resetVisited();
-    // First do summarytasks and their children
-    QPtrListIterator<KPTNode> ss(m_summarytasks);
-    for (; ss.current(); ++ss) {
-        ss.current()->scheduleBackward(latest, use);
-    }
-    // Now do the rest of the tasks
     QPtrListIterator<KPTNode> it(m_startNodes);
     for (; it.current(); ++it) {
         it.current()->scheduleBackward(latest, use);
     }
-    // Fix summarytasks (with milestones)
+    // Fix summarytasks
     adjustSummarytask();
     return m_startTime;
 }

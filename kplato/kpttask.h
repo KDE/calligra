@@ -166,6 +166,19 @@ public:
      */
     KPTDuration calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
 
+    void clearProxyRelations();
+    void addParentProxyRelations(QPtrList<KPTRelation> &list);
+    void addChildProxyRelations(QPtrList<KPTRelation> &list);
+    void addParentProxyRelation(KPTNode *node, const KPTRelation *rel);
+    void addChildProxyRelation(KPTNode *node, const KPTRelation *rel);
+    
+    bool isEndNode() const;
+    bool isStartNode() const;
+private:
+    KPTDateTime calculateSuccessors(const QPtrList<KPTRelation> &list, int use);
+    KPTDateTime calculatePredeccessors(const QPtrList<KPTRelation> &list, int use);
+    KPTDateTime scheduleSuccessors(const QPtrList<KPTRelation> &list, int use);
+    KPTDateTime schedulePredeccessors(const QPtrList<KPTRelation> &list, int use);
 private:
     QPtrList<KPTResourceGroup> m_resource;
 
@@ -174,6 +187,9 @@ private:
     KPTDuration m_durationForward;
     KPTDuration m_durationBackward;
 
+    QPtrList<KPTRelation> m_parentProxyRelations;
+    QPtrList<KPTRelation> m_childProxyRelations;
+    
 #ifndef NDEBUG
 public:
     void printDebug(bool children, QCString indent);
