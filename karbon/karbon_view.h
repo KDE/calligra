@@ -31,7 +31,7 @@ class KarbonView : public KoView
 public:
 	KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
 	virtual ~KarbonView();
-	
+
 	virtual DCOPObject* dcopObject();
 
 
@@ -60,12 +60,12 @@ public slots:
 
 	void objectMoveToTop();
 	void objectMoveToBottom();
+	void objectMoveUp();
+	void objectMoveDown();
 
 protected slots:
 
 	// object related operations:
-	void objectMoveUp();
-	void objectMoveDown();
 	void objectTrafoTranslate();
 	void objectTrafoScale();
 	void objectTrafoRotate();
@@ -93,7 +93,7 @@ protected slots:
 	void zoomChanged();
 	void viewColorManager();
 	void refreshView();
-	
+
 	//toolbox dialogs - slots
 	void solidFillClicked();
 	void strokeClicked();

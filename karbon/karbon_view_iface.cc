@@ -74,3 +74,17 @@ void KarbonViewIface::objectMoveToBottom()
   m_view->objectMoveToBottom();
 }
 
+double KarbonViewIface::zoomFactor()const
+{
+    return m_view->zoomFactor();
+}
+
+void KarbonViewIface::objectMoveUp()
+{
+    m_view->objectMoveUp();
+}
+
+void KarbonViewIface::objectMoveDown()
+{
+    m_view->objectMoveDown();
+}

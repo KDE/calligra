@@ -40,8 +40,12 @@ k_dcop:
     void editDeleteSelection();
     void editPurgeHistory();
 
-	void objectMoveToTop();
-	void objectMoveToBottom();
+    void objectMoveToTop();
+    void objectMoveToBottom();
+    void objectMoveUp();
+    void objectMoveDown();
+
+    double zoomFactor()const;
 
 private:
     KarbonView *m_view;
