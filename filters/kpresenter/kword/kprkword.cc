@@ -267,6 +267,16 @@ void KprKword::convert()
                     e.setAttribute( "blue", col.blue() );
                     outFormatElem.appendChild( e );
                 }
+                if ( !textElem.attribute("textbackcolor").isEmpty())
+                {
+                    QColor col;
+                    col.setNamedColor(textElem.attribute( "textbackcolor" ));
+                    QDomElement e = outdoc.createElement("TEXTBACKGROUNDCOLOR");
+                    e.setAttribute( "red", col.red() );
+                    e.setAttribute( "green", col.green() );
+                    e.setAttribute( "blue", col.blue() );
+                    outFormatElem.appendChild( e );
+                }
 
                 if ( !outFormatElem.firstChild().isNull() )
                 {
