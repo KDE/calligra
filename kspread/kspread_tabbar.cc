@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qbitmap.h>
 #include <qmessagebox.h>
 #include <qpntarry.h>
 #include <qstring.h>
@@ -32,20 +31,21 @@
 #include "kspread_table.h"
 #include "kspread_dlg_tabname.h"
 #include "kspread_tabbar.h"
+#include "kspread_map.h"
 
 KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_parent )
 {
     m_pView = _parent;
     m_pPopupMenu = 0L;
 
-	m_pAutoScrollTimer = new QTimer(this);
-	connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
+    m_pAutoScrollTimer = new QTimer(this);
+    connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
 	
     leftTab = 1;
-	m_rightTab = 0;
+    m_rightTab = 0;
     activeTab = 0;
-	m_moveTab = 0;
-	m_autoScroll = 0;
+    m_moveTab = 0;
+    m_autoScroll = 0;
 }
 
 void KSpreadTabBar::addTab( const QString& _text )
@@ -92,29 +92,29 @@ void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
 
     QStringList::Iterator it;
 
-	it = tabsList.at( _from );
-	const QString tabname = *it;
+    it = tabsList.at( _from );
+    const QString tabname = *it;
 	
-	if ( !_before )
-		++_to;
+    if ( !_before )
+	++_to;
 
-	if ( _to > (int)tabsList.count() )
-	{
-		tabsList.append( tabname );
-		tabsList.remove( it );
-	}
-	else if ( _from < _to )
-	{
-		tabsList.insert( tabsList.at( _to ), tabname );
-		tabsList.remove( it );
-	}
-	else
-	{
-		tabsList.remove( it );
-		tabsList.insert( tabsList.at( _to ), tabname );
-	}
+    if ( _to > (int)tabsList.count() )
+    {
+	tabsList.append( tabname );
+	tabsList.remove( it );
+    }
+    else if ( _from < _to )
+    {
+	tabsList.insert( tabsList.at( _to ), tabname );
+	tabsList.remove( it );
+    }
+    else
+    {
+	tabsList.remove( it );
+	tabsList.insert( tabsList.at( _to ), tabname );
+    }
 
-	repaint();	
+    repaint();	
 }
 
 
@@ -204,7 +204,7 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
 
 void KSpreadTabBar::slotRemove( )
 {
-    if ( (m_pView->doc()->map()->count() <= 1)|| (tabsList.count()<=1) )
+    if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
     {
         QApplication::beep();
         QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
@@ -229,10 +229,9 @@ void KSpreadTabBar::slotRename( )
 
 void KSpreadTabBar::slotAdd()
 {
-m_pView->insertNewTable();
-m_pView->editWidget()->setText("");
-m_pView->activeTable()->setHide(false);
-
+    m_pView->insertTable();
+    m_pView->editWidget()->setText("");
+    m_pView->activeTable()->setHide(false);
 }
 
 void KSpreadTabBar::paintEvent( QPaintEvent* )
@@ -291,14 +290,15 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     }
 
 //    if ( active_text != 0L )
-	paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
+    paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
 	
     painter.end();
-	bitBlt( this, 0, 0, &pm );
+    bitBlt( this, 0, 0, &pm );
 }
 
 
-void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive, bool ismovemarked )
+void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
+			      bool isactive, bool ismovemarked )
 {
     QPointArray parr;
     parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1, x+20+text_width,0 );
@@ -361,20 +361,20 @@ void KSpreadTabBar::renameTab()
     QString newName;
 
     KSpreadTable* table = m_pView->activeTable();
-    activeName = table->name();
+    activeName = table->tableName();
 
     KSpreadTableName tndlg( (KSpreadView *)this->parentWidget(), "TableName" , activeName );
     if ( tndlg.exec() )
     {
         if ( ( newName = tndlg.tableName() ) != activeName )
         {
-            table->setName( newName );
+            table->setTableName( newName );
             QStringList::Iterator it = tabsList.find( activeName );
             (*it) = newName;
 	    repaint();
-	    QListIterator<KSpreadTable> it2( table->map()->tableList() );
+	QListIterator<KSpreadTable> it2( table->map()->tableList() );
             for( ; it2.current(); ++it2 )
-		it2.current()->changetab(activeName,newName);
+		it2.current()->changeCellTabName(activeName,newName);
 
         }	
     }
@@ -426,14 +426,14 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 	emit tabChanged( active_text );
     }
 
-	if ( _ev->button() == LeftButton )
-	{
-		m_moveTabFlag = moveTabBefore;
-	}
-	else if ( _ev->button() == RightButton )
-	{
-		openPopupMenu( _ev->globalPos() );
-	}
+    if ( _ev->button() == LeftButton )
+    {
+	m_moveTabFlag = moveTabBefore;
+    }
+    else if ( _ev->button() == RightButton )
+    {
+	openPopupMenu( _ev->globalPos() );
+    }
 }
 
 
@@ -480,86 +480,85 @@ void KSpreadTabBar::slotAutoScroll( )
 
 void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
-	if ( m_moveTabFlag == 0)
+    if ( m_moveTabFlag == 0)
 	return;
 
     QPainter painter;
     painter.begin( this );
 
-	if ( _ev->pos().x() < 0 && leftTab > 1 && m_autoScroll == 0 )
-	{
-		m_autoScroll = autoScrollLeft;
-		m_moveTab = leftTab - 1;
-		scrollLeft();
-		m_pAutoScrollTimer->start( 400 );
+    if ( _ev->pos().x() < 0 && leftTab > 1 && m_autoScroll == 0 )
+    {
+	m_autoScroll = autoScrollLeft;
+	m_moveTab = leftTab - 1;
+	scrollLeft();
+	m_pAutoScrollTimer->start( 400 );
+    }
+    else if ( _ev->pos().x() > size().width() )
+    {
+	int i = tabsList.count();
+	if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
+        {
+	    m_moveTabFlag = moveTabAfter;
+	    m_moveTab = tabsList.count();
+	    repaint( false );
 	}
-	else if ( _ev->pos().x() > size().width() )
-	{
-		int i = tabsList.count();
-		if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
-		{
-			m_moveTabFlag = moveTabAfter;
-			m_moveTab = tabsList.count();
-			repaint( false );
-		}
-		if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
-		{
-			m_autoScroll = autoScrollRight;
-			m_moveTab = leftTab;
-			scrollRight();
-			m_pAutoScrollTimer->start( 400 );
-		}
+	if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
+        {
+	    m_autoScroll = autoScrollRight;
+	    m_moveTab = leftTab;
+	    scrollRight();
+	    m_pAutoScrollTimer->start( 400 );
 	}
-	else // ftf
-	{
-	    int i = 1;
+    }
+    else // ftf
+    {
+	int i = 1;
     	int x = 0;
 
-	    QStringList::Iterator it;
+	QStringList::Iterator it;
     	for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-	    {
-			QFontMetrics fm = painter.fontMetrics();
-			int text_width = fm.width( *it );
+        {
+	    QFontMetrics fm = painter.fontMetrics();
+	    int text_width = fm.width( *it );
 			
-			if ( i >= leftTab )
-			{
+	    if ( i >= leftTab )
+	    {
+		if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
+	        {
+		    if ( m_autoScroll != 0 )
+		    {
+			m_pAutoScrollTimer->stop();
+			m_autoScroll = 0;
+		    }
 
-		    	if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
-		    	{
-					if ( m_autoScroll != 0 )
-					{
-						m_pAutoScrollTimer->stop();
-						m_autoScroll = 0;
-					}
-
-					if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
-					{
-						m_moveTabFlag = moveTabBefore;
-						m_moveTab = i;
-	   					repaint( false );
-					}
-					else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
-					{
-						m_moveTab = 0;
-						repaint( false );
-					}
-				}
-				x += 10 + text_width;
-			}
-			i++;
-	    }
-		--i;
-		
-		if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
-		{
-			if ( activeTab != i && m_moveTabFlag != moveTabAfter )
-			{
-				m_moveTabFlag = moveTabAfter;
-				m_moveTab = i;
-				repaint( false );
-			}
+		    if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
+		    {
+			m_moveTabFlag = moveTabBefore;
+			m_moveTab = i;
+			repaint( false );
+		    }
+		    else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
+		    {
+			m_moveTab = 0;
+			repaint( false );
+		    }
 		}
+		x += 10 + text_width;
+	    }
+	    i++;
 	}
+	--i;
+		
+	if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
+        {
+	    if ( activeTab != i && m_moveTabFlag != moveTabAfter )
+	    {
+		m_moveTabFlag = moveTabAfter;
+		m_moveTab = i;
+		repaint( false );
+	    }
+	}
+    }
     painter.end();
 }
 
@@ -567,9 +566,7 @@ void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
     renameTab();
 }
-
-
-void KSpreadTabBar::hidetable()
+void KSpreadTabBar::hideTable()
 {
 if ( tabsList.count() ==  1)
     {
@@ -580,7 +577,7 @@ else
     {
     KSpreadTable* table = m_pView->activeTable();
     m_pView->activeTable()->setHide(true);
-    QString activeName = table->name();
+    QString activeName = table->tableName();
     removeTab( activeName );
     tablehide.append( activeName );
     m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
@@ -589,7 +586,7 @@ else
     }
 }
 
-void KSpreadTabBar::showtable(const QString& text)
+void KSpreadTabBar::showTable(const QString& text)
 {
 addTab(text);
 tablehide.remove( text );
@@ -597,8 +594,10 @@ tablehide.remove( text );
 emit tabChanged( text);
 m_pView->activeTable()->setHide(false);
 }
+
 void KSpreadTabBar::init(const QString & text)
 {
 tablehide.append( text );
 }
+
 #include "kspread_tabbar.moc"

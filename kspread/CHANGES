@@ -83,63 +83,37 @@ inside so you can add text in this cell.
 -Now you can create a area when you click and press CTRL
 -Add new dialog box for resize column or row
 
-1999-09-24 -Montel laurent<montell@club-internet.fr>
------------------------------------------------------       
--Improved function resize now you can resize a area
-	format->Row->height
-	format->Column->Width
--bugfix
-
-1999-09-25 -Montel laurent<montell@club-internet.fr>
+1999-10-17 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
--Now you can hide different tables
-         format->table->hide
-         format->table->show
-and it's saving.
 
-1999-09-26 -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
--Improved Special paste now you can paste only value.
--You can ajust column when it's text (for the moment Virtual formual
-and QML don't work)
+Torben weis ported kspread to new code (shared libs) and made a good work
+on kspread bugs fix (a lot) and Improved kspread (thanks).
 
-1999-09-27 -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
--Fix bug : Now when you delete a formula it works
--Add ajust for row
 
-1999-09-29 -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
+
+Summary 1999-09-23 ->1999-10-17
+-Now you can clear area
+-You can ajust area
+-Now when you insert or remove column (or row) all is recalcing.
 -Fix bug When you insert and remove column and row (Now it works)
 -When you change name of a table, now all cells which refere to this table
 now text is change to refere to new name.
 -Now when you insert column (row) or remove column (row) and there are cell
 which refere others cells so if these cells are moving so I modifie
 reference.
-
-1999-09-30  -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
--Now when you insert or remove column (or row) all is recalcing.
-
-1999-10-01  -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
 -Now Insert and remove column ( or row) works
 	=>change specific reference according to name table
 	and change in differents tables.
-
-1999-10-03  -Montel laurent<montell@club-internet.fr>
------------------------------------------------------	
--Now you can clear area
--You can ajust area
--bugfix
-
-1999-10-08  -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
--Bug fix
+-Fix bug : Now when you delete a formula it works
 -Now you can create border directly
--Start insert and remove cell (=>move cell at right or bottom)
-
-1999-10-09  -Montel laurent<montell@club-internet.fr>
------------------------------------------------------
 -Now you can insert and remove cell (=>move cell at right or bottom etc..)
 -Refresh dependence when you insert and remove cell
+-Improved Special paste now you can paste only value.
+-Now you can hide different tables and it's saving.
+
+1999-10-17 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bug fix gotoLocation now when you createanchor for going to other
+cell, now it works.
+-Now you can ajust one cell
+

@@ -167,7 +167,6 @@ switch(id)
 
 void KSpreadsort::slotOk()
 {
-int i=0;
 switch(_sort)
 	{
 	case ONLY :
@@ -197,11 +196,11 @@ switch(_sort)
 			{
 			if(!decrease->isChecked())
 				{
-				m_pView->activeTable()->Row(combo->currentItem()+r.top());
+				m_pView->activeTable()->sortByRow(combo->currentItem()+r.top());
 				}
 			else
 				{
-				 m_pView->activeTable()->Row(combo->currentItem()+r.top(),KSpreadTable::Decrease);
+				 m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
 				}
 			
 			}
@@ -209,11 +208,11 @@ switch(_sort)
 			{
 			if(!decrease->isChecked())
 				{
-				m_pView->activeTable()->Column(combo->currentItem()+r.left());
+				m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left());
 				}
 			else
 				{
-				m_pView->activeTable()->Column(combo->currentItem()+r.left(),KSpreadTable::Decrease);
+				m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left(),KSpreadTable::Decrease);
 				}
 			}
 		else
@@ -225,13 +224,13 @@ switch(_sort)
 		cout <<"ERR in _sort\n";
 		break;
 	}
-accept();
+ accept();
 }
 
 
 void KSpreadsort::slotClose()
 {
-reject();
+    reject();
 }
 
 #include "kspread_dlg_sort.moc"

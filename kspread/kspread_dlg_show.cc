@@ -79,7 +79,7 @@ void KSpreadshow::slotOk()
   if(list->currentItem()!=-1)
 	{
 	text=list->text(list->currentItem());
-        m_pView->tabBar()->showtable(text);
+        m_pView->tabBar()->showTable(text);
         }
   accept();
 }

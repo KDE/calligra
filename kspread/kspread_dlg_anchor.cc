@@ -25,6 +25,7 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_table.h"
+
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -32,7 +33,7 @@
 
 
 KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
   marker= _marker;
@@ -65,7 +66,8 @@ KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint
   tmpQLabel->setText(i18n("Cell"));
   l_cell = new QLineEdit( this );
   lay2->addWidget(l_cell,3,0);
-
+  l_cell->setText( "A1" );
+		
   bold=new QCheckBox(i18n("Bold"),this);
   lay2->addWidget(bold,4,0);
   italic=new QCheckBox(i18n("Italic"),this);
@@ -120,7 +122,7 @@ else
 QString KSpreadanchor::create_anchor()
 {
 QString anchor;
-anchor="!<a href=\""+m_pView->activeTable()->name()+"!"+l_cell->text()+"\""+">";
+anchor="!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text()+"\""+">";
 if(bold->isChecked()&&!italic->isChecked())
 	{
 	anchor+="<b>"+text->text()+"</b></a>";

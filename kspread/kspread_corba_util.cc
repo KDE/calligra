@@ -6,6 +6,13 @@
 #undef expr
 #endif
 
+// HACK: For KScript
+// ############### TODO
+extern CORBA::ORB* orb()
+{
+  return 0;
+}
+
 KSpread::Cell util_parseCell( const QString& _str )
 {
   KSpreadPoint c( _str );
@@ -20,7 +27,7 @@ KSpread::Cell util_parseCell( const QString& _str )
   c2.x = c.pos.x();
   c2.y = c.pos.y();
   c2.table = "";
-  
+
   return c2;
 }
 
@@ -46,14 +53,14 @@ KSpread::Cell util_parseCell( const QString& _str, KSpreadMap* _map )
   c2.x = c.pos.x();
   c2.y = c.pos.y();
   c2.table = c.tableName;
-  
+
   return c2;
 }
 
 KSpread::Range util_parseRange( const QString& _str )
 {
   KSpreadRange r( _str );
-  
+
   if ( !r.isValid() )
   {
     KSpread::MalformedExpression exc;
@@ -67,7 +74,7 @@ KSpread::Range util_parseRange( const QString& _str )
   r2.top = r.range.top();
   r2.bottom = r.range.bottom();
   r2.table = "";
-  
+
   return r2;
 }
 
@@ -81,7 +88,7 @@ KSpread::Range util_parseRange( const QString& _str, KSpreadMap*  )
     exc.table = r.tableName;
     mico_throw( exc );
   }
-  
+
   if ( !r.isValid() )
   {
     KSpread::MalformedExpression exc;
@@ -95,6 +102,6 @@ KSpread::Range util_parseRange( const QString& _str, KSpreadMap*  )
   r2.top = r.range.top();
   r2.bottom = r.range.bottom();
   r2.table = r.tableName;
-  
+
   return r2;
 }

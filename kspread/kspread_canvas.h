@@ -42,9 +42,9 @@ public:
 
 public slots:
     void slotAbortEdit();
-    void slotDoneEdit();            
+    void slotDoneEdit();
 
-protected:    
+protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );
     bool active;
     KSpreadView* m_pView;
@@ -63,21 +63,22 @@ class KSpreadCanvas : public QWidget
     friend KSpreadHBorder;
     friend KSpreadVBorder;
     friend KSpreadView;
-  
+
     Q_OBJECT
 public:
     /**
      * The current action associated with the mouse.
      * Default is 'NoAction'.
      */
-    enum MouseActions { NoAction = 0, Mark = 1, ResizeCell = 2, AutoFill = 3, ChildGeometry = 4 };
+    enum MouseActions { NoAction = 0, Mark = 1, ResizeCell = 2, AutoFill = 3 };
+    enum EditorType { CellEditor, FormulaEditor };
     /**
      * The possible actions that we expect the user to do.
      * Usually this is 'Default' and tells us that the user may edit
      * the table. If @ref #action is 'InsertChild' or 'InsertChart' then the user must draw
      * a rectangle in order of telling us where to insert the new child.
      */
-    enum Actions { DefaultAction, InsertChild, InsertChart };
+    enum Actions { DefaultAction, InsertChart };
 
     KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc );
 
@@ -86,48 +87,29 @@ public:
      * be called before any other method on this object may be invoced.
      */
     void init();
-  
-    KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }    
-    KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }    
-    QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }    
-    QScrollBar* vertScrollBar() { return m_pVertScrollBar; }    
-    KSpreadEditWidget* editWidget() { return m_pEditWidget; }
 
-
-    QString editEditor();
-    void setEditor(QString text);
-    int posEditor();
-    void focusEditor();
-    void setPosEditor(int pos);
     void insertFormulaChar(int c);
-    KSpreadCellEditor * pointeur() {return m_pEditor ;}
-    void choose_cell( QMouseEvent * _ev );
-    bool EditorisActivate() {return E_activate;}
-    void setEditorActivate(bool _E_activate) { E_activate= _E_activate;
-    						length_namecell=0;}
+
+    KSpreadCellEditor* editor() { return m_pEditor ; }
+    void chooseCell( QMouseEvent * _ev );
     void setgotohorz(bool _gotohorz){m_gotohorz=_gotohorz;}
     bool isgotohorz(){return m_gotohorz;}
     void setgotovert(bool _gotovert){m_gotovert=_gotovert;}
     bool isgotovert(){return m_gotovert;}
 
     						
-    int choose_markerColumn() { return m_i_chooseMarkerColumn; }
-    int choose_markerRow() { return m_i_chooseMarkerRow; }
-    void set_chooseMarkerColumn( int _c ) {  m_i_chooseMarkerColumn = _c; }
-    void set_chooseMarkerRow( int _r ) {  m_i_chooseMarkerRow = _r;  }
+    int chooseMarkerColumn() { return m_i_chooseMarkerColumn; }
+    int chooseMarkerRow() { return m_i_chooseMarkerRow; }
+    void setChooseMarkerColumn( int _c ) {  m_i_chooseMarkerColumn = _c; }
+    void setChooseMarkerRow( int _r ) {  m_i_chooseMarkerRow = _r;  }
 
 
-    void show_choose_cell(){if(choose_visible==true) {return;}
-    			choose_drawMarker();choose_visible=true;}
-    void hide_choose_cell(){if(choose_visible==false) {return;}
-    			choose_drawMarker();choose_visible=false;}			
+    void showChooseCell(){if(choose_visible==true) {return;}
+    			drawChooseMarker();choose_visible=true;}
+    void hideChooseCell(){if(choose_visible==false) {return;}
+    			drawChooseMarker();choose_visible=false;}			
 
-    void choose_drawMarker( );
-
-    bool choose_visible;
-    int  length_namecell;
-    int  length_text;
-    QString name_tab;
+    void drawChooseMarker( );
 
     QPoint marker() { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
     bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
@@ -136,11 +118,11 @@ public:
     /**
      * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
      */
-    void setMarkerColumn( int _c ) { if ( !m_iMarkerVisible < 1 ) { m_iMarkerColumn = _c; return; } hideMarker(); m_iMarkerColumn = _c; showMarker(); }
+    void setMarkerColumn( int _c );
     /**
      * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
      */
-    void setMarkerRow( int _r ) { if ( !m_iMarkerVisible < 1 ) { m_iMarkerRow = _r; return; } hideMarker(); m_iMarkerRow = _r; showMarker(); }
+    void setMarkerRow( int _r );
     /**
      * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
      * to become visible again.
@@ -167,7 +149,7 @@ public:
      * This is usually called with '_act' equal KSpreadCanvas::InsertChild.
      */
     void setAction( Actions _act, KoDocumentEntry& _entry );
-  
+
     void updateCellRect( const QRect &_rect );
 
     /**
@@ -187,11 +169,29 @@ public:
     KSpreadTable* findTable( const QString& _name );
 
     void gotoLocation( const KSpreadPoint& _cell );
-    enum type_editor{type_cell,type_formula};
-    void create_editor(type_editor=type_cell);
-    void ajustarea();
 
-public slots:  
+    /**
+     * Chooses the correct @ref #EditorType by looking at
+     * the current cells value. By default CellEditor is chosen.
+     */
+    void createEditor();
+    void createEditor( EditorType type );
+    /**
+     * Deletes the current cell editor.
+     *
+     * @see #createEditor
+     * @see #editor
+     */
+    void deleteEditor();
+
+    void startChoose();
+    void endChoose();
+    /**
+    * Ajust a area in height and width
+    */
+    void ajustArea();
+	
+public slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
@@ -199,12 +199,21 @@ public slots:
     void slotMaxRow( int _max_row );
 
 protected:
-    virtual void keyPressEvent ( QKeyEvent* _ev );    
-    virtual void paintEvent ( QPaintEvent* _ev );    
+    virtual void keyPressEvent ( QKeyEvent* _ev );
+    virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent( QMouseEvent*);
+    virtual void focusInEvent( QFocusEvent* );
+    virtual void focusOutEvent( QFocusEvent* );
+
+    KSpreadHBorder* hBorderWidget();
+    KSpreadVBorder* vBorderWidget();
+    QScrollBar* horzScrollBar();
+    QScrollBar* vertScrollBar();
+    KSpreadEditWidget* editWidget() { return m_pEditWidget; }
+
 private:
     /**
      * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
@@ -218,16 +227,17 @@ private:
      * Redraws a single object.
      */
     void drawCell( QPainter &_painter, KSpreadCell *_cell, int _col, int _row );
-    /**
-     * Draw all currently visible objects.
-     */
-    void drawVisibleCells();
+
+    bool choose_visible;
+    int  length_namecell;
+    int  length_text;
+    QString name_tab;
 
     KSpreadView *m_pView;
     KSpreadDoc* m_pDoc;
-  
+
     bool m_bEditDirtyFlag;
-  
+
     /**
      * If the user is dragging around with the mouse then this tells us what he is doing.
      * The user may want to mark cells or he started in the lower right corner
@@ -248,7 +258,7 @@ private:
      * holds informations about which component we should use here.
      */
     KoDocumentEntry m_actionArgument;
-  
+
     /**
      * Used to indicate whether the user started drawing a rubber band rectangle.
      */
@@ -301,11 +311,7 @@ private:
      */
     int m_iYOffset;
 
-    QScrollBar *m_pHorzScrollBar;
-    QScrollBar *m_pVertScrollBar;
-    KSpreadVBorder *m_pVBorderWidget;
-    KSpreadHBorder *m_pHBorderWidget;
-    QLabel *m_pPosWidget;  
+    QLabel *m_pPosWidget;
     KSpreadEditWidget *m_pEditWidget;
     KSpreadCellEditor *m_pEditor;
 
@@ -326,11 +332,19 @@ private:
      */
     int m_iMarkerVisible;
 
-    bool E_activate;
     int m_i_chooseMarkerRow;
     int m_i_chooseMarkerColumn;
     bool m_gotohorz;
     bool m_gotovert;
+
+    /**
+     * Is true if the user is to choose a cell.
+     *
+     * @ref #startChoose
+     * @ref #endChoose
+     * @ref KSpreadAssistant2
+     */
+    bool m_bChoose;
 };
 
 /**
@@ -344,7 +358,7 @@ public:
     void resizeColumn(int resize,int nb=-1);
     void ajustColumn(int _col=-1);
 protected:
-    virtual void paintEvent ( QPaintEvent* _ev ); 
+    virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
@@ -358,14 +372,14 @@ protected:
      * also resize columns by dragging the mouse. This case is not covered by this flag.
      */
     bool m_bSelection;
-    
+
     /**
      * The column over which the user pressed the mouse button.
      * If the user marks columns in the XBorder widget, then this is the initial
      * column on which he pressed the mouse button.
      */
     int m_iSelectionAnchor;
-    
+
     /**
      * Flag that indicates whether the user resizes a column
      * The user may resize columns by dragging the mouse around in th XBorder widget.
@@ -396,7 +410,7 @@ public:
     void resizeRow(int resize,int nb=-1);
     void ajustRow(int _row=-1);
 protected:
-    virtual void paintEvent ( QPaintEvent* _ev ); 
+    virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );

@@ -25,6 +25,8 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_cell.h"
+#include "kspread_table.h"
+
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -65,22 +67,19 @@ KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
 
 void KSpreadgoto::slotOk()
 {
-QString tmp;
-tmp=m_pView->activeTable()->name() + "!" + name_cell->text();
-m_pView->canvasWidget()->hideMarker();
-m_pView->canvasWidget()->setgotohorz(true);
-m_pView->canvasWidget()->setgotovert(true);
-m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
-m_pView->canvasWidget()->showMarker();
+    QString tmp = m_pView->activeTable()->tableName() + "!" + name_cell->text();
+    m_pView->canvasWidget()->hideMarker();
+    m_pView->canvasWidget()->setgotohorz(true);
+    m_pView->canvasWidget()->setgotovert(true);
+    m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
+    m_pView->canvasWidget()->showMarker();
 
-
-accept();
-
+    accept();
 }
 
 void KSpreadgoto::slotClose()
 {
-reject();
+    reject();
 }
 
 

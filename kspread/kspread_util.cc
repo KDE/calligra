@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "kspread_util.h"
 #include "kspread_map.h"
@@ -24,14 +24,16 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <dirent.h>
+#include <stdio.h>
+
 #include <kapp.h>
 
 QString util_columnLabel( int column )
 {
   char buffer[ 100 ];
-  
+
   if ( column <= 26 )
     sprintf( buffer, "%c", 'A' + column - 1 );
   else if ( column <= 26 * 26 )
@@ -40,7 +42,7 @@ QString util_columnLabel( int column )
     strcpy( buffer,"@@@");
 
   return QString( buffer );
-}                           
+}
 
 QString util_cellName( int _col, int _row )
 {
@@ -52,7 +54,7 @@ QString util_cellName( int _col, int _row )
 QString util_cellName( KSpreadTable* table, int _col, int _row )
 {
   QString result( "%1!%2%3" );
-  result = result.arg( table->name() ).arg( util_columnLabel( _col ) ).arg( _row );
+  result = result.arg( table->tableName() ).arg( util_columnLabel( _col ) ).arg( _row );
   return result;
 }
 
@@ -62,16 +64,16 @@ QString util_rangeName( QRect _area )
   result = util_cellName( _area.left(), _area.top() );
   result += ":";
   result += util_cellName( _area.right(), _area.bottom() );
-  
+
   return result;
 }
 
 QString util_rangeName( KSpreadTable *_table, QRect _area )
 {
-  QString result( _table->name() );
+  QString result( _table->tableName() );
   result += "!";
   result += util_rangeName( _area );
-  
+
   return result;
 }
 
@@ -84,13 +86,13 @@ KSpreadPoint::KSpreadPoint( const QString& _str )
 void KSpreadPoint::init( const QString& _str )
 {
   pos.setX( -1 );
-  
+
   if ( _str.isEmpty() )
     return;
-  
+
   uint p = 0;
   uint len = _str.length();
-  
+
   // Fixed ?
   if ( _str[p] == '$' )
   {
@@ -100,7 +102,7 @@ void KSpreadPoint::init( const QString& _str )
   // Malformed ?
   if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
     return;
-  
+
   int x = _str[p++] - 'A' + 1;
   // Malformed ?
   if ( p == len  )
@@ -128,7 +130,7 @@ void KSpreadPoint::init( const QString& _str )
     if ( !isdigit( _str[p++] ) )
       return;
   }
-  
+
   int y = atoi( _str.ascii() + p2 );
 
   pos = QPoint( x, y );
@@ -139,7 +141,7 @@ KSpreadPoint::KSpreadPoint( const QString& _str, KSpreadMap* _map, KSpreadTable*
   uint p = 0;
   int p2 = _str.find( "!" );
   if ( p2 != -1 )
-  {    
+  {
     tableName = _str.left( p2++ );
     table = _map->findTable( tableName );
     p = p2;
@@ -159,7 +161,7 @@ KSpreadRange::KSpreadRange( const QString& _str )
 {
   range.setLeft( -1 );
   table = 0;
-  
+
   int p = _str.find( ":" );
   if ( p == -1 )
     return;
@@ -167,7 +169,7 @@ KSpreadRange::KSpreadRange( const QString& _str )
   KSpreadPoint ul( _str.left( p ) );
   KSpreadPoint lr( _str.mid( p + 1 ) );
   range = QRect( ul.pos, lr.pos );
-  
+
   leftFixed = ul.columnFixed;
   rightFixed = lr.columnFixed;
   topFixed = ul.rowFixed;
@@ -182,14 +184,14 @@ KSpreadRange::KSpreadRange( const QString& _str, KSpreadMap* _map, KSpreadTable*
   int p = 0;
   int p2 = _str.find( "!" );
   if ( p2 != -1 )
-  {    
+  {
     tableName = _str.left( p2++ );
     table = _map->findTable( tableName );
     p = p2;
   }
   else
     table = _table;
-  
+
   int p3 = _str.find( ":", p );
   if ( p3 == -1 )
     return;

@@ -56,7 +56,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   grp->layout();
   lay1->addWidget(grp);
 
-  //don't work for the moment
+
   rb5 = new QRadioButton( i18n("Any"), grp );
   rb6 = new QRadioButton( i18n("Addition"), grp );
   rb7 = new QRadioButton( i18n("Substration"), grp );
@@ -86,7 +86,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
 
 void KSpreadspecial::slotOk()
 {
- KSpreadTable::Special_paste sp;
+ KSpreadTable::PasteMode sp;
  KSpreadTable::Operation op;
 if(rb1->isChecked())
 	{
@@ -110,18 +110,6 @@ if(rb2->isChecked())
 		sp=KSpreadTable::Formula;
 		}
 	}
-if(rb10->isChecked())
-	{
-	if(cb->isChecked())
-		{
-		sp=KSpreadTable::Value_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::Value;
-		}
-	}
-
 if(rb3->isChecked())
 	{
 	if(cb->isChecked())
@@ -131,6 +119,17 @@ if(rb3->isChecked())
 	else
 		{
 		sp=KSpreadTable::Format;
+		}
+	}
+if(rb10->isChecked())
+	{
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::Value_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::Value;
 		}
 	}
 if(rb4->isChecked())
@@ -182,7 +181,7 @@ else if( m_link->isEnabled()==false)
 
 void KSpreadspecial::slotlink()
 {
-KSpreadTable::Special_paste sp;
+KSpreadTable::PasteMode sp;
 if(cb->isChecked())
 		{
 		sp=KSpreadTable::Link_trans;

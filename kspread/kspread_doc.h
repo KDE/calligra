@@ -1,31 +1,39 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_doc_h__
 #define __kspread_doc_h__
 
 class KSpreadDoc;
 class KSpreadInterpreter;
+class KSpreadUndo;
+class KSpreadView;
+class KSpreadMap;
 
-#include <koFrame.h>
+class KoStore;
+
+class View;
+
+class DCOPObject;
+
 #include <koDocument.h>
-#include <koPrintExt.h>
+#include <koPageLayoutDia.h>
 
 #include <iostream.h>
 
@@ -36,77 +44,35 @@ class KSpreadInterpreter;
 // #include <qprinter.h>
 #include <qpen.h>
 
-#include "kspread.h"
-#include "kspread_undo.h"
-#include "kspread_view.h"
-#include "kspread_map.h"
 #include "kspread_interpreter.h"
 
-#include <koPageLayoutDia.h>
-
 #define MIME_TYPE "application/x-kspread"
-#define EDITOR "IDL:KSpread/Document:1.0"
 
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSpreadDoc : public QObject,
-		   virtual public KoDocument,
-		   virtual public KoPrintExt,
-		   virtual public KSpread::Document_skel
+class KSpreadDoc : public KoDocument
 {
   Q_OBJECT
 public:
-  // C++
-  KSpreadDoc();
+  KSpreadDoc( QObject* parent = 0, const char* name = 0 );
   ~KSpreadDoc();
 
-  // C++
   virtual bool save( ostream&, const char *_format );
 
-  // C++
-  virtual bool loadChildren( KOStore::Store_ptr _store ) { return m_pMap->loadChildren( _store ); }
-  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
-  
-  virtual void cleanUp();
+  virtual bool loadChildren( KoStore* _store );
+  virtual bool loadXML( KOMLParser&, KoStore* _store );
 
-  virtual void removeView( KSpreadView* _view );
-
-  // C++
-  virtual KSpreadView* createSpreadView( QWidget* _parent = 0 );
-
-  // IDL
   virtual bool initDoc();
 
-  virtual KSpread::Book_ptr book();
-
-  /**
-   * Wrapper for @ref #createSpreadView
-   */
-  virtual OpenParts::View_ptr createView();
-  
-  virtual void viewList( OpenParts::Document::ViewList & _list );
-  
-  virtual QCString mimeType() { return MIME_TYPE; }
-  
-  virtual bool isModified() { return m_bModified; }
-
-  virtual KOffice::MainWindow_ptr createMainWindow();
-  
-  // C++
-  virtual int viewCount();
-  
-  // C++
-  virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
-  virtual bool isEmpty() { return m_bEmpty; }
-  
-  // C++
+  virtual QCString mimeType() const { return MIME_TYPE; }
+	
   /**
    * @return a pointer to a new KSpreadTable. The KSpreadTable is not added to the map
    *         nor added to the GUI.
    */
   KSpreadTable* createTable();
-  
+
   /**
    * Adds a KSpreadTable to the GUI and makes it active. In addition the KSpreadTable is
    * added to the map.
@@ -115,22 +81,22 @@ public:
    * @see KSpreadMap
    */
   void addTable( KSpreadTable *_table );
-  
+
   KSpreadMap *map() { return m_pMap; }
-  
+
   /**
    * @return the printable width of the paper in millimeters.
    */
   float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }
-  
+
   /**
    * @return the printable height of the paper in millimeters.
    */
   float printableHeight() { return m_paperHeight - m_topBorder - m_bottomBorder; }
-  
+
   float paperHeight() { return m_paperHeight; }
   float paperWidth() { return m_paperWidth; }
-  
+
   /**
    * @return the left border in millimeters
    */
@@ -147,7 +113,7 @@ public:
    * @return the bottom border in millimeters
    */
   float bottomBorder() { return m_bottomBorder; }
-  
+
   /**
    * @return the orientation of the paper.
    */
@@ -156,7 +122,7 @@ public:
    * @return the ascii name of the paper orientation ( like Portrait, Landscape )
    */
   const char* orientationString();
-  
+
   /**
    * @return the paper format.
    */
@@ -165,7 +131,7 @@ public:
    * @return the ascii name of the paper format ( like A4, Letter etc. )
    */
   QString paperFormatString();
-  
+
   /**
    * Changes the paper layout and repaints the currently displayed KSpreadTable.
    */
@@ -176,7 +142,7 @@ public:
    */
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
 		       const char* _paper, const char* _orientation );
-  
+
   QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
   return completeHeading( m_headLeft.data(), _p, _t ); }
   QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
@@ -189,17 +155,17 @@ public:
   return completeHeading( m_footMid.data(), _p, _t ); }
   QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
   return completeHeading( m_footRight.data(), _p, _t ); }
-  
+
   QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.data(); }
   QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.data(); }
   QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.data(); }
   QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.data(); }
   QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.data(); }
   QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
-  
+
   void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
 			const char *_footl, const char *_footm, const char *_footr );
-    
+
   /**
    * @return the KScript Interpreter used by this document.
    */
@@ -240,9 +206,9 @@ public:
    *         of the undo buffer.
    */
   KSpreadUndo *undoBuffer() { return m_pUndoBuffer; }
-  
+
   virtual void printMap( QPainter &_painter );
-  
+
   void enableUndo( bool _b );
   void enableRedo( bool _b );
 
@@ -253,6 +219,14 @@ public:
 
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
+  Shell* createShell();
+  View* createView( QWidget* parent, const char* name );
+
+  void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+  void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
+
+  virtual DCOPObject* dcopObject();
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -260,10 +234,10 @@ public slots:
    * @see KoPageLayoutDia
    */
    void paperLayoutDlg();
-  
+
 signals:
   // Document signals
-  /** 
+  /**
    * Emitted if a new table is added to the document.
    */
   void sig_addTable( KSpreadTable *_table );
@@ -271,8 +245,13 @@ signals:
    * Emitted if all views have to be updated.
    */
   void sig_updateView();
-  
+
 protected:
+    /**
+     * Overloaded from @ref Part.
+     */
+    virtual QString configFile() const;
+	
   /**
    * Needed for the printing extension KOffice::Print
    */
@@ -282,22 +261,22 @@ protected:
   /**
    * Overloaded function of @ref KoDocument.
    */
-  virtual bool completeLoading( KOStore::Store_ptr );
+  virtual bool completeLoading( KoStore* );
 
   /**
    * Overloaded function of @ref KoDocument.
    */
-  virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
-  
+  virtual bool saveChildren( KoStore* _store, const char *_path );
+
   /**
    * @return true if one of the direct children wants to
    *              be saved embedded. If there are no children or if
    *              every direct child saves itself into its own file
    *              then false is returned.
-   * 
+   *
    */
   virtual bool hasToWriteMultipart();
-  
+
   /**
    * Initializes the KScript Interpreter.
    */
@@ -320,7 +299,7 @@ protected:
   /**
    * Replaces macros like <name>, <file>, <date> etc. in the string and
    * returns the modified one.
-   * 
+   *
    * @param _page is the page number for which the heading is produced.
    * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
    */
@@ -335,14 +314,14 @@ protected:
    * Pointer to the map that holds all the tables.
    */
   KSpreadMap *m_pMap;
-  
+
   /**
    * This variable is used to give every KSpreadTable a unique default name.
    *
    * @see #newKSpreadTable
    */
   int m_iTableId;
-  
+
   /**
    * The orientation of the paper.
    */
@@ -351,7 +330,7 @@ protected:
    * Tells about the currently seleced paper size.
    */
   KoFormat m_paperFormat;
-  
+
   /**
    * The paper width in millimeters. Dont change this value, it is calculated by
    * @ref #calcPaperSize from the value @ref #m_paperFormat.
@@ -361,7 +340,7 @@ protected:
    * The paper height in millimeters. Dont change this value, it is calculated by
    * @ref #calcPaperSize from the value @ref #m_paperFormat.
    */
-  float m_paperHeight;    
+  float m_paperHeight;
   /**
    * The left border in millimeters.
    */
@@ -378,7 +357,7 @@ protected:
    * The right border in millimeters.
    */
   float m_bottomBorder;
-  
+
   /**
    * Header string. The string may contains makros. That means
    * it has to be processed before printing.
@@ -409,7 +388,7 @@ protected:
    * it has to be processed before printing.
    */
   QString m_footMid;
-  
+
   /**
    * The URL of the this part. This variable is only set if the @ref #load function
    * had been called with an URL as argument.
@@ -417,18 +396,7 @@ protected:
    * @see #load
    */
   QString m_strFileURL;
-  
-  /**
-   * Indicates whether the user should save the document before deleting it.
-   *
-   * @see #isModified
-   */
-  bool m_bModified;
-  /**
-   * TRUE if the document is empty.
-   */
-  bool m_bEmpty;
-  
+
   /**
    * This variable hold the KScript Interpreter.
    */
@@ -456,12 +424,7 @@ protected:
    * Used for undo.
    */
   KSpreadUndo *m_pUndoBuffer;
-  
-  /**
-   * All views associetaed with this document.
-   */
-  QList<KSpreadView> m_lstViews;
-  
+
   /**
    * TRUE if loading is in process, otherwise FALSE.
    * This flag is used to avoid updates etc. during loading.
@@ -469,6 +432,8 @@ protected:
   bool m_bLoading;
 
   QPen m_defaultGridPen;
+    
+  DCOPObject* m_dcop;
 };
 
 #endif

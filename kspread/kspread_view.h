@@ -41,16 +41,14 @@ class KSpreadChild;
 class KSpreadCell;
 
 class KoDocumentEntry;
-class KoToolEntry;
 
-#include <koFrame.h>
-#include <koView.h>
-#include <opMenu.h>
-#include <opToolBar.h>
-#include <koFrame.h>
-#include <koScanPlugins.h>
-#include <openparts_ui.h>
-#include <datatools.h>
+class KColorAction;
+
+class KAction;
+class KSelectAction;
+class KFontAction;
+class KFontSizeAction;
+class KToggleAction;
 
 #include <qlist.h>
 #include <qscrbar.h>
@@ -58,53 +56,21 @@ class KoToolEntry;
 #include <qbutton.h>
 #include <qpoint.h>
 
-#include "kspread.h"
+#include <container.h>
 
-#ifdef USE_PICTURES
-class KSpreadChildPicture : public KoDocumentChildPicture
-{
-public:
-  KSpreadChildPicture( KSpreadView*, KSpreadChild* );
-  virtual ~KSpreadChildPicture();
-
-protected:
-  KSpreadView *m_pView;
-};
-#endif
-
-class KSpreadChildFrame : public KoFrame
-{
-  Q_OBJECT
-public:
-  KSpreadChildFrame( KSpreadView*, KSpreadChild* );
-
-  KSpreadChild* child() { return m_pChild; }
-  /**
-   * @return the view owning this frame.
-   */
-  KSpreadView* spreadView() { return m_pView; }
-
-protected:
-  KSpreadChild *m_pChild;
-  KSpreadView *m_pView;
-};
-
+#include <koDataTool.h>
 
 /**
  */
-class KSpreadView : public QWidget,
-		    virtual public KoViewIf,
-		    virtual public KSpread::View_skel
+class KSpreadView : public ContainerView
 {
+    friend KSpreadCanvas;
+
     Q_OBJECT
 public:
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
     ~KSpreadView();
 
-    // IDL
-    virtual KSpread::Book_ptr book();
-
-    // C++
     KSpreadCanvas* canvasWidget() { return m_pCanvas; }
     KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }
     KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }
@@ -118,21 +84,16 @@ public:
     void addTable( KSpreadTable *_t );
     void removeTable( KSpreadTable *_t );
     void removeAllTables();
-    void changeTable( const QString& _name );
-    void setTextColor(QColor c );
-    void setbgColor(QColor c );
     void setActiveTable( KSpreadTable *_t );
 
     KSpreadTable* activeTable() { return m_pTable; }
     KSpreadTabBar* tabBar() { return  m_pTabBar;}
 
     void openPopupMenu( const QPoint &_global );
-    void set_bg_color(QColor _bgcolor) { bgColor=_bgcolor;}
-    void set_text_color(QColor _tbcolor) { tbColor=_tbcolor;}
-    void PopupMenuRow(const QPoint & _point ) ;
-    void PopupMenuColumn( const QPoint & _point);
-    QString setRichTextFond(QString type_font);
-    void hide_show_formulatools(bool look);
+    void popupRowMenu(const QPoint & _point ) ;
+    void popupColumnMenu( const QPoint & _point);
+
+    void showFormulaToolBar( bool show );
 
     /**
      * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
@@ -143,29 +104,40 @@ public:
     void enableRedo( bool _b );
 
     /**
-     * Called by @ref KSpreadCanvas if its action is @ref KSpreadCanvas::InsertChart.
+     * Called by @ref KSpreadInsertHandler
      *
      * @param _geometry is the zoomed geometry of the new child.
      */
-    void insertChart( const QRect& _geometry );
+    void insertChart( const QRect& _geometry, KoDocumentEntry& _entry );
     /**
-     * Called by @ref KSpreadCanvas if its action is @ref KSpreadCanvas::InsertObject.
+     * Called by @ref KSpreadInsertHandler
      *
-     * @param _geometry is the zoomed geometry of the new child.
+     * @param _geometry is the geometry of the new child.
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
-    void setFocus( bool mode );
-
-#ifdef USE_PICTURE
-    QListIterator<KSpreadChildPicture> pictures() { return QListIterator<KSpreadChildPicture>( m_lstPictures ); }
-
-    void markChildPicture( KSpreadChildPicture *_pic );
-#endif
-    // IDL
     virtual bool printDlg();
 
-    // IDL Slots
+    QWidget* canvas();
+    void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+
+    /**
+     * Enables/Disables all actions of the formula toolbar.
+     */
+    void enableFormulaToolBar( bool );
+
+    /**
+     * Fills the @ref KSpreadEditWidget with the current cells
+     * content. This function is usually called after the
+     * cursor moved.
+     */
+    void updateEditWidget();
+
+public slots:
+    /**
+     * Action
+     */
+    void transformPart();
     /**
      * Menu Edit->Copy
      */
@@ -181,7 +153,7 @@ public:
     /**
      * Menu Edit->Special Paste
      */
-     void Specialpaste();
+    void specialPaste();
 
     /**
      * Menu Edit->Cell
@@ -200,21 +172,9 @@ public:
      */
     void paperLayoutDlg();
     /**
-     * Menu Edit->Insert->Table
-     */
-    void insertTable();
-    /**
      * Menu Edit->Insert->Object
      */
     void insertObject();
-    /**
-     * Menu Edit->Insert->Image
-     */
-    void insertImage();
-     /**
-     * Menu Edit->Remove->Table
-     */
-     void RemoveTable();
 
 
     /**
@@ -245,7 +205,7 @@ public:
     /**
      * Menu Data
      */
-     void gotocell();
+     void gotoCell();
     /**
      * Menu Data
      */
@@ -253,51 +213,32 @@ public:
     /**
      * Menu Data
      */
-
       void sort();
     /**
      * Menu Data
      */
-      void createanchor();
+      void createAnchor();
     /**
      * Menu Data
      */
-
     void consolidate();
 
     /**
      * Menu Folder
      */
-    void insertNewTable();
-
-    /**
-     * Menu Auto Fill
-     */
-    void autoFill();
+    void insertTable();
      /**
-     * Menu Auto Fill
+     * Menu Folder
      */
-     void resizeheight();
+     void removeTable();
      /**
-     * Menu Format
+     * Menu Folder
      */
-     void resizewidth();
-      /**
-     * Menu Format
-     */
-     void renametable();
+     void hideTable();
      /**
-     * Menu Format
+     * Menu Folder
      */
-     void hidetable();
-     /**
-     * Menu Format
-     */
-     void showtable();
-     /**
-     * Menu Format
-     */
-    void layoutcell();
+     void showTable();
     /**
      * Menu for help menu
      */
@@ -329,19 +270,19 @@ public:
     /**
      * ToolBar
      */
-    void alignLeft();
+    void alignLeft( bool b );
     /**
      * ToolBar
      */
-    void alignRight();
+    void alignRight( bool b );
     /**
      * ToolBar
      */
-    void alignCenter();
+    void alignCenter( bool b );
     /**
      * ToolBar
      */
-    void multiRow();
+    void multiRow( bool b );
 
     /**
      * ToolBar
@@ -364,15 +305,15 @@ public:
     /**
      * ToolBar
      */
-    void fontSizeSelected( const QString &_size );
+    void fontSizeSelected( int size );
     /**
      * ToolBar
      */
-    void bold();
+    void bold( bool b );
     /**
      * ToolBar
      */
-    void italic();
+    void italic( bool b );
 
     /**
      * ToolBar
@@ -394,15 +335,14 @@ public:
      *Toolbar
      */
 
-    void formulaselection( const QString &_math );
+    void formulaSelection( const QString &_math );
 
-    void TextColor();
-    void BackgroundColor();
-    void bordercolor();
-    void sortincr();
-    void sortdecrease();
+    void changeTextColor();
+    void changeBackgroundColor();
+    void sortInc();
+    void sortDec();
 
-
+    void layoutDlg();
     void funct();
     void formulaPower();
     void formulaSubscript();
@@ -417,15 +357,21 @@ public:
     void formulaLeftSub();
     void formulaSum();
     void formulaProduct();
-    void borderbottom();
-    void borderright();
-    void borderleft();
-    void bordertop();
-    void borderoutline();
-    void borderall();
-    void borderremove();
+    void borderBottom();
+    void borderRight();
+    void borderLeft();
+    void borderTop();
+    void borderOutline();
+    void borderAll();
+    void borderRemove();
+    void changeBorderColor();
 
-    virtual void cleanUp();
+    /**
+     * @ref #tabBar is connected to this slot.
+     * When the user selects a new table using the @ref #tabBar this slot
+     * is signaled.
+     */
+    void changeTable( const QString& _name );
 
 protected slots:
     // C++
@@ -453,23 +399,22 @@ protected slots:
      * Popup menu
      */
     void slotDelete();
-    void slotAjust();
-    void slotClear();
-    void slotInsert();
-    void slotRemove();
     /**
      * Popup menu
      */
-    void slotLayoutDlg();
-
-
-
+    void slotAjust();
     /**
-     * @ref #tabBar is connected to this slot.
-     * When the user selects a new table using the @ref #tabBar this slot
-     * is signaled.
+     * Popup menu
      */
-    void slotChangeTable( const QString& _name );
+     void slotClear();
+     /**
+     * Popup menu
+     */
+     void slotInsert();
+     /**
+     * Popup menu
+     */
+     void slotRemove();
     /**
      * Scroll @ref #tabBar.
      */
@@ -497,8 +442,14 @@ protected slots:
 
     void slotResizeColumn();
     void slotResizeRow();
-    void slotAjustColumn();
+    void slotAjustColumn() ;
     void slotAjustRow();
+
+protected slots:
+    void repaintPolygon( const QPointArray& );
+
+    void slotChildSelected( PartChild* ch );
+    void slotChildUnselected( PartChild* );
 
 public slots:
     // Document signals
@@ -514,35 +465,30 @@ public slots:
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
 
-    // KSpreadChildFrame signals
-    void slotChildGeometryEnd( KoFrame* );
-    void slotChildMoveEnd( KoFrame* );
-
-    // IDL
-    virtual unsigned long int leftGUISize();
-    virtual unsigned long int rightGUISize();
-    virtual unsigned long int topGUISize();
-    virtual unsigned long int bottomGUISize();
+    virtual int leftBorder() const;
+    virtual int rightBorder() const;
+    virtual int topBorder() const;
+    virtual int bottomBorder() const;
 
 signals:
     void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
 
 protected:
-    // C++
-    virtual void init();
-    // IDL
-    virtual bool event( const QCString & _event, const CORBA::Any& _value );
-    // C++
-    virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-    virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-    virtual bool mappingToolDone( DataTools::Answer& _answer );
-    virtual bool mappingEventSetText( KSpread::EventSetText& _event );
-    virtual bool mappingEventKeyPressed( KSpread::EventKeyPressed& _event );
-    virtual bool mappingEventChartInserted( KSpread::EventChartInserted& _event );
-
+    bool eventKeyPressed( QKeyEvent* _event );
+	
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
+    virtual QWMatrix matrix() const;
+
+    /**
+     * Activates the formula editor for the current cell.
+     * This function is usually called if the user presses
+     * a button in the formula toolbar.
+     */
+    void activateFormulaEditor();
+
+private:
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 
@@ -563,117 +509,75 @@ protected:
     KSpreadTabBar *m_pTabBar;
     QLabel *m_pPosWidget;
 
-
-    OpenPartsUI::ToolBar_var m_vToolBarEdit;
-    long int m_idButtonEdit_Copy;
-    long int m_idButtonEdit_Paste;
-    long int m_idButtonEdit_Cut;
-    long int m_idButtonEdit_DelRow;
-    long int m_idButtonEdit_DelCol;
-    long int m_idButtonEdit_InsRow;
-    long int m_idButtonEdit_InsCol;
-    OpenPartsUI::ToolBar_var m_vToolBarLayout;
-    long int m_idComboLayout_Font;
-    long int m_idComboLayout_FontSize;
-    long int m_idButtonLayout_Bold;
-    long int m_idButtonLayout_Italic;
-    long int m_idButtonLayout_Money;
-    long int m_idButtonLayout_Percent;
-    long int m_idButtonLayout_Left;
-    long int m_idButtonLayout_Center;
-    long int m_idButtonLayout_Right;
-    long int m_idButtonLayout_MultiRows;
-    long int m_idButtonLayout_PrecMinus;
-    long int m_idButtonLayout_PrecPlus;
-    long int m_idButtonLayout_Chart;
-    long int m_idButtonLayout_Text_Color;
-    long int m_idButtonLayout_bg_Color;
-    long int m_idButtonLayout_sort_incr;
-    long int m_idButtonLayout_sort_decrease;
-    long int m_idButtonLayout_funct;
-    long int m_idButtonLayout_borderbottom;
-    long int m_idButtonLayout_borderright;
-    long int m_idButtonLayout_borderleft;
-    long int m_idButtonLayout_bordertop;
-    long int m_idButtonLayout_borderoutline;
-    long int m_idButtonLayout_borderall;
-    long int m_idButtonLayout_border_Color;
-    long int m_idButtonLayout_borderremove;
-
-    OpenPartsUI::ToolBar_var m_vToolBarFormula;
-    long int m_idButtonFormula_Power;
-    long int m_idButtonFormula_Subscript;
-    long int m_idButtonFormula_Parentheses;
-    long int m_idButtonFormula_AbsValue;
-    long int m_idButtonFormula_Brackets;
-    long int m_idButtonFormula_Fraction;
-    long int m_idButtonFormula_Root;
-    long int m_idButtonFormula_Integral;
-    long int m_idButtonFormula_Matrix;
-    long int m_idButtonFormula_LeftSuper;
-    long int m_idButtonFormula_LeftSub;
-    long m_idButtonFormula_Sum;
-    long m_idButtonFormula_Product;
-
-    OpenPartsUI::Menu_var m_vMenuEdit;
-    long int m_idMenuEdit_Undo;
-    long int m_idMenuEdit_Redo;
-    long int m_idMenuEdit_Cut;
-    long int m_idMenuEdit_Copy;
-    long int m_idMenuEdit_Paste;
-    long int m_idMenuEdit_Cell;
-    long int m_idMenuEdit_Layout;
-    long int m_idMenuEdit_Special;
-
-    OpenPartsUI::Menu_var m_vMenuEdit_Insert;
-    long int m_idMenuEdit_Insert_Table;
-    long int m_idMenuEdit_Insert_Chart;
-    long int m_idMenuEdit_Insert_Image;
-    long int m_idMenuEdit_Insert_Object;
-
-    OpenPartsUI::Menu_var m_vMenuEdit_Remove;
-    long int m_idMenuEdit_Remove_Table;
-
-    OpenPartsUI::Menu_var m_vMenuView;
-    long int m_idMenuView_NewView;
-    long int m_idMenuView_ShowPageBorders;
-    OpenPartsUI::Menu_var m_vMenuData;
-    long int m_idMenuData_Consolidate;
-    long int m_idMenuData_replace;
-    long int m_idMenuData_sort;
-    long int m_idMenuData_goto;
-    long int m_idMenuData_anchor;
-
-
-
-    OpenPartsUI::Menu_var m_vMenuFolder;
-    long int m_idMenuFolder_NewTable;
-
-    OpenPartsUI::Menu_var m_vMenuFormat;
-    long int m_idMenuFormat_AutoFill;
-    OpenPartsUI::Menu_var m_vMenuFormat_ResizeRow;
-    long int m_idMenuFormat_Height;
-    OpenPartsUI::Menu_var m_vMenuFormat_ResizeColumn;
-    long int m_idMenuFormat_Width;
-    long int m_idMenuFormat_Cell;
-
-    OpenPartsUI::Menu_var m_vMenuFormat_Table;
-    long int m_idMenuFormat_Rename;
-    long int m_idMenuFormat_Hide;
-    long int m_idMenuFormat_Show;
-
-    OpenPartsUI::Menu_var m_vMenuScripts;
-    long int m_idMenuScripts_EditGlobal;
-    long int m_idMenuScripts_EditLocal;
-    long int m_idMenuScripts_Reload;
-    long int m_idMenuScripts_Run;
-    OpenPartsUI::Menu_var m_vMenuHelp;
-    long int m_idMenuHelp_About;
-    long int m_idMenuHelp_Using;
-    OpenPartsUI::ToolBar_var m_vToolBarMath ;
-    long int m_idComboMath;
-
-
+    KToggleAction* m_bold;
+    KToggleAction* m_italic;
+    KAction* m_percent;
+    KAction* m_precplus;
+    KAction* m_precminus;
+    KAction* m_money;
+    KToggleAction* m_alignLeft;
+    KToggleAction* m_alignCenter;
+    KToggleAction* m_alignRight;
+    KAction* m_insertPart;
+    KAction* m_transform;
+    KAction* m_copy;
+    KAction* m_paste;
+    KAction* m_cut;
+    KAction* m_specialPaste;
+    KAction* m_editCell;
+    KAction* m_undo;
+    KAction* m_redo;
+    KAction* m_paperLayout;
+    KAction* m_insertTable;
+    KAction* m_removeTable;
+    KAction* m_editGlobalScripts;
+    KAction* m_editLocalScripts;
+    KAction* m_reloadScripts;
+    KAction* m_newView;
+    KAction* m_gotoCell;
+    KAction* m_replace;
+    KAction* m_sort;
+    KAction* m_createAnchor;
+    KAction* m_consolidate;
+    KAction* m_help;
+    KAction* m_insertChart;
+    KToggleAction* m_multiRow;
+    KFontAction* m_selectFont;
+    KFontSizeAction* m_selectFontSize;
+    KAction* m_deleteColumn;
+    KAction* m_deleteRow;
+    KAction* m_insertColumn;
+    KAction* m_insertRow;
+    KAction* m_formulaPower;
+    KAction* m_formulaSubscript;
+    KAction* m_formulaParantheses;
+    KAction* m_formulaAbsValue;
+    KAction* m_formulaBrackets;
+    KAction* m_formulaFraction;
+    KAction* m_formulaRoot;
+    KAction* m_formulaIntegral;
+    KAction* m_formulaMatrix;
+    KAction* m_formulaLeftSuper;
+    KAction* m_formulaLeftSub;
+    KAction* m_formulaSum;
+    KAction* m_formulaProduct;
+    KSelectAction* m_formulaSelection;
+    KAction* m_sortDec;
+    KAction* m_sortInc;
+    KColorAction* m_textColor;
+    KColorAction* m_bgColor;
+    KAction* m_function;
+    KAction* m_cellLayout;
+    KAction* m_hideTable;
+    KAction* m_showTable;
+    KAction* m_borderLeft;
+    KAction* m_borderRight;
+    KAction* m_borderTop;
+    KAction* m_borderBottom;
+    KAction* m_borderAll;
+    KAction* m_borderOutline;
+    KAction* m_borderRemove;
+    KColorAction* m_borderColor;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
@@ -686,9 +590,7 @@ protected:
     QPopupMenu *m_pPopupRow;
     QPopupMenu *m_pPopupColumn;
 
-     QColor tbColor;
-     QColor bgColor;
-     QColor borderColor;
+
 
     /**
      * Tells whether the user modfied the current cell.
@@ -706,19 +608,6 @@ protected:
     KSpreadDoc *m_pDoc;
 
     /**
-     * Tells whether undo is possible right now or not.
-     *
-     * @see #enableUndo
-     */
-    bool m_bUndo;
-    /**
-     * Tells whether redo is possible right now or not.
-     *
-     * @see #enableRedo
-     */
-    bool m_bRedo;
-
-    /**
      * Flags that indicate whether we should display additional
      * GUI stuff like rulers and scrollbars.
      *
@@ -726,24 +615,19 @@ protected:
      */
     bool m_bShowGUI;
 
-    QList<KSpreadChildFrame> m_lstFrames;
-#ifdef USE_PICTURES
-    QList<KSpreadChildPicture> m_lstPictures;
-#endif
-
-  /**
-   * Set to true if the function @ref #init is entered. The start value if false.
-   */
-   bool m_bInitialized;
+    /**
+     * If @ref #updateEditWidget is called it changes some KToggleActions.
+     * That causes them to emit a signal. If this lock is TRUE, then these
+     * signals are ignored.
+     */
+    bool m_toolbarLock;
 
    struct ToolEntry
    {
      QString command;
-     KoToolEntry* entry;
+     KoDataToolInfo info;
    };
    QList<ToolEntry> m_lstTools;
-
-   KoPluginManager *m_pluginManager;
 
    static KSpreadScripts *m_pGlobalScriptsDialog;
 };

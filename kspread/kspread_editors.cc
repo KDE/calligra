@@ -4,6 +4,12 @@
 #include <qlayout.h>
 #include <qapplication.h>
 
+/********************************************
+ *
+ * KSpreadCellEditor
+ *
+ ********************************************/
+
 KSpreadCellEditor::KSpreadCellEditor( KSpreadCell* _cell, QWidget* _parent, const char* _name )
   : QWidget( _parent, _name )
 {
@@ -16,6 +22,11 @@ KSpreadCellEditor::~KSpreadCellEditor()
 {
 }
 
+/********************************************
+ *
+ * KSpreadTextEditor
+ *
+ ********************************************/
 
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, QWidget* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name )
@@ -43,30 +54,25 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent* _ev )
   QApplication::sendEvent( m_pEdit, _ev );
 }
 
-QString KSpreadTextEditor::text()
+QString KSpreadTextEditor::text() const
 {
-  return m_pEdit->text();
+    return m_pEdit->text();
 }
 
 void KSpreadTextEditor::setText(QString text)
 {
-if(m_pEdit !=0)
+    if(m_pEdit !=0)
 	m_pEdit->setText(text);
 }	
 
-int KSpreadTextEditor::cursorPosition()
+int KSpreadTextEditor::cursorPosition() const
 {
-return m_pEdit->cursorPosition();
+    return m_pEdit->cursorPosition();
 }
 
 void KSpreadTextEditor::setCursorPosition(int pos)
 {
- m_pEdit->setCursorPosition(pos);
-}
-
-void KSpreadTextEditor::setFocus()
-{
-m_pEdit->setFocus();
+    m_pEdit->setCursorPosition(pos);
 }
 
 void KSpreadTextEditor::insertFormulaChar(int c)
@@ -86,8 +92,16 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
       QApplication::sendEvent( parent(), e );
       return TRUE;
     }
+    else if ( k->key() == Key_Right )
+    {
+	if ( text().length() > cursorPosition() )
+	    return FALSE;
+	
+	QApplication::sendEvent( parent(), e );
+	return TRUE;	    
+    }
   }
-
+  
   return FALSE;
 }
 
@@ -121,6 +135,7 @@ KSpreadFormulaEditor::~KSpreadFormulaEditor()
 
 void KSpreadFormulaEditor::resizeEvent( QResizeEvent* )
 {
+    qDebug("FORMULA w=%i h=%i", width(), height() );
   m_pEdit->setGeometry( 0, 0, width(), height() );
 }
 
@@ -130,38 +145,33 @@ void KSpreadFormulaEditor::handleKeyPressEvent( QKeyEvent* _ev )
   QApplication::sendEvent( m_pEdit, _ev );
 }
 
-QString KSpreadFormulaEditor::text()
+QString KSpreadFormulaEditor::text() const
 {
-  QString tmp( "*" );
-  tmp += m_pEdit->text();
-  return tmp;
+    QString tmp( "*" );
+    tmp += m_pEdit->text();
+    return tmp;
 }
 
 void KSpreadFormulaEditor::setText(QString text)
 {
-if(m_pEdit !=0)
+    if(m_pEdit !=0)
 	m_pEdit->setText(text);
 }	
-int KSpreadFormulaEditor::cursorPosition()
+int KSpreadFormulaEditor::cursorPosition() const
 {
-// function cursorPosition() no implanted in libkformula
-//m_pEdit->cursorPosition();
-return 0;
+    // function cursorPosition() no implanted in libkformula
+    //m_pEdit->cursorPosition();
+    return 0;
 }
 
-
-void KSpreadFormulaEditor::setFocus()
+void KSpreadFormulaEditor::setCursorPosition( int pos )
 {
-m_pEdit->setFocus();
+    //no implanted
+    //m_pEdit->setCursorPosition(pos);
 }
-void KSpreadFormulaEditor::setCursorPosition(int pos)
+void KSpreadFormulaEditor::insertFormulaChar( int c )
 {
-//no implanted
- //m_pEdit->setCursorPosition(pos);
-}
-void KSpreadFormulaEditor::insertFormulaChar(int c)
-{
-m_pEdit->insertChar( c );
+    m_pEdit->insertChar( c );
 }
 
 bool KSpreadFormulaEditor::eventFilter( QObject* o, QEvent* e )
@@ -184,8 +194,9 @@ bool KSpreadFormulaEditor::eventFilter( QObject* o, QEvent* e )
 
 void KSpreadFormulaEditor::slotSizeHint( QSize _s )
 {
-  int w = QMAX( _s.width(), minimumWidth() );
-  int h = QMAX( _s.height(), minimumHeight() );
-  resize( w, h );
+    int w = QMAX( _s.width(), width() );
+    int h = QMAX( _s.height(), height() );
+    resize( w, h );
 }
+
 #include "kspread_editors.moc"

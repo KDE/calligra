@@ -23,6 +23,12 @@
 #include "kspread_doc.h"
 #include "kspread_shell.h"
 #include "kspread_interpreter.h"
+#include "kspread_map.h"
+#include "kspread_undo.h"
+#include "kspread_view.h"
+#include "kspread_factory.h"
+
+#include "KSpreadDocIface.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -51,14 +57,11 @@
  *
  *****************************************************************************/
 
-KSpreadDoc::KSpreadDoc()
+KSpreadDoc::KSpreadDoc( QObject* parent, const char* name )
+    : KoDocument( parent, name )
 {
-  // The two supported interfaces
-  ADD_INTERFACE( "IDL:KSpread/Document:1.0" );
-  ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
-
   m_iTableId = 1;
-
+  m_dcop = 0;
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
   m_topBorder = 20.0;
@@ -70,7 +73,6 @@ KSpreadDoc::KSpreadDoc()
   m_orientation = PG_PORTRAIT;
   m_pMap = 0L;
   m_bLoading = false;
-  m_bEmpty = true;
 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
@@ -78,17 +80,13 @@ KSpreadDoc::KSpreadDoc()
 
   initInterpreter();
 
-  m_pMap = new KSpreadMap( this );
+  m_pMap = new KSpreadMap( this, "Map" );
 
   m_pUndoBuffer = new KSpreadUndo( this );
-
-  m_bModified = FALSE;
-
-  m_lstViews.setAutoDelete( false );
-
-  // DEBUG: print the IOR
-  QString tmp = opapp_orb->object_to_string( this );
-  cout << "DOC=" << tmp << endl;
+  
+  // Make us scriptable if the document has a name
+  if ( name )
+      dcopObject();
 }
 
 bool KSpreadDoc::initDoc()
@@ -99,67 +97,24 @@ bool KSpreadDoc::initDoc()
   return true;
 }
 
-void KSpreadDoc::cleanUp()
+Shell* KSpreadDoc::createShell()
 {
-  cerr << "CLeanUp KSpreadDoc" << endl;
+    Shell* shell = new KSpreadShell;
+    shell->setRootPart( this );
+    shell->show();
 
-  if ( m_bIsClean )
-    return;
-
-  assert( m_lstViews.count() == 0 );
-
-  if ( m_pMap )
-  {
-    delete m_pMap;
-    m_pMap = 0L;
-  }
-
-  KoDocument::cleanUp();
+    return shell;
 }
 
-KSpread::Book_ptr KSpreadDoc::book()
+View* KSpreadDoc::createView( QWidget* parent, const char* name )
 {
-  return KSpread::Book::_duplicate( m_pMap );
+    KSpreadView* view = new KSpreadView( parent, name, this );
+    addView( view );
+
+    return view;
 }
 
-void KSpreadDoc::removeView( KSpreadView* _view )
-{
-  m_lstViews.removeRef( _view );
-
-  EMIT_EVENT( this, KSpread::Document::eventRemovedView, _view );
-}
-
-KSpreadView* KSpreadDoc::createSpreadView( QWidget* _parent )
-{
-  KSpreadView *p = new KSpreadView( _parent, 0L, this );
-  //p->QWidget::show();
-  m_lstViews.append( p );
-
-  EMIT_EVENT( this, KSpread::Document::eventNewView, p );
-
-  return p;
-}
-
-OpenParts::View_ptr KSpreadDoc::createView()
-{
-  return OpenParts::View::_duplicate( createSpreadView() );
-}
-
-void KSpreadDoc::viewList( OpenParts::Document::ViewList & _list )
-{
-  _list.clear();
-
-  QListIterator<KSpreadView> it( m_lstViews );
-  for( ; it.current(); ++it )
-    _list.append ( OpenParts::View::_duplicate( it.current() ) );
-}
-
-int KSpreadDoc::viewCount()
-{
-  return m_lstViews.count();
-}
-
-bool KSpreadDoc::saveChildren( KOStore::Store_ptr _store, const char *_path )
+bool KSpreadDoc::saveChildren( KoStore* _store, const char *_path )
 {
   return m_pMap->saveChildren( _store, _path );
 }
@@ -193,7 +148,12 @@ bool KSpreadDoc::save( ostream& out, const char* /* format */ )
   return true;
 }
 
-bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+bool KSpreadDoc::loadChildren( KoStore* _store )
+{
+    return m_pMap->loadChildren( _store );
+}
+
+bool KSpreadDoc::loadXML( KOMLParser& parser, KoStore* )
 {
   cerr << "------------------------ LOADING --------------------" << endl;
 
@@ -349,7 +309,7 @@ bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   return true;
 }
 
-bool KSpreadDoc::completeLoading( KOStore::Store_ptr /* _store */ )
+bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 {
   cerr << "------------------------ COMPLETING --------------------" << endl;
 
@@ -359,17 +319,20 @@ bool KSpreadDoc::completeLoading( KOStore::Store_ptr /* _store */ )
 
   cerr << "------------------------ COMPLETION DONE --------------------" << endl;
 
-  m_bModified = false;
+  setModified( FALSE );
 
   return true;
 }
 
 KSpreadTable* KSpreadDoc::createTable()
 {
-  char buffer[ 128 ];
-
-  sprintf( buffer, i18n( "Table%i" ), m_iTableId++ );
-  KSpreadTable *t = new KSpreadTable( this, buffer );
+    // char buffer[ 128 ];
+    // sprintf( buffer, "Table%i", m_iTableId );
+  QString s( i18n("Table%1") );
+  s = s.arg( m_iTableId++ );
+  
+  KSpreadTable *t = new KSpreadTable( m_pMap, 0 /*, buffer */ );
+  t->setTableName( s );
   t->setMap( m_pMap );
   return t;
 }
@@ -378,7 +341,7 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
 {
   m_pMap->addTable( _table );
 
-  m_bModified = TRUE;
+  setModified( TRUE );
 
   emit sig_addTable( _table );
 }
@@ -393,7 +356,7 @@ void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const 
   m_footRight = _footr;
   m_footMid = _footm;
 
-  m_bModified = TRUE;
+  setModified( TRUE );
 }
 
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
@@ -410,7 +373,7 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 
   emit sig_updateView();
 
-  m_bModified = TRUE;
+  setModified( TRUE );
 }
 
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
@@ -743,26 +706,18 @@ void KSpreadDoc::redo()
 void KSpreadDoc::enableUndo( bool _b )
 {
   KSpreadView *v;
-  for( v = m_lstViews.first(); v != 0L; v = m_lstViews.next() )
-    v->enableUndo( _b );
+  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
+      v->enableUndo( _b );
 }
 
 void KSpreadDoc::enableRedo( bool _b )
 {
   KSpreadView *v;
-  for( v = m_lstViews.first(); v != 0L; v = m_lstViews.next() )
-    v->enableRedo( _b );
+  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
+      v->enableRedo( _b );
 }
 
-KOffice::MainWindow_ptr KSpreadDoc::createMainWindow()
-{
-  KSpreadShell* shell = new KSpreadShell;
-  shell->show();
-  shell->setDocument( this );
-
-  return KOffice::MainWindow::_duplicate( shell->koInterface() );
-}
-
+// ########## Torben: What is that good for
 void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
 		       float _scale)
 {
@@ -770,6 +725,7 @@ void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
     m_pMap->draw( _dev, _width, _height, _scale );
 }
 
+// ########## Torben: What is that good for
 void KSpreadDoc::printMap( QPainter & )
 {
   // TODO
@@ -816,14 +772,77 @@ void KSpreadDoc::paperLayoutDlg()
   setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 }
 
+QString KSpreadDoc::configFile() const
+{
+    return readConfigFile( locate( "data", "kspread/kspread.rc", KSpreadFactory::global() ) );
+}
+
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent )
+{
+    KSpreadTable* table = m_pMap->firstTable();
+    if ( !table )
+	return;
+
+    paintContent( painter, rect, transparent, table );
+}
+
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table )
+{
+    if ( isLoading() )
+	return;
+
+    if ( !transparent )
+	painter.eraseRect( rect );
+
+    int xpos;
+    int ypos;
+    int left_col = table->leftColumn( rect.x(), xpos );
+    int right_col = table->rightColumn( rect.right() );
+    int top_row = table->topRow( rect.y(), ypos );
+    int bottom_row = table->bottomRow( rect.bottom() );
+
+    QPen pen;
+    pen.setWidth( 1 );
+    painter.setPen( pen );
+
+    QRect r;
+
+    int left = xpos;
+    for ( int y = top_row; y <= bottom_row; y++ )
+    {
+	RowLayout *row_lay = table->rowLayout( y );
+	xpos = left;
+
+	for ( int x = left_col; x <= right_col; x++ )
+        {
+	    ColumnLayout *col_lay = table->columnLayout( x );
+	
+	    KSpreadCell *cell = table->cellAt( x, y );
+	    cell->paintEvent( 0, rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+	
+	    xpos += col_lay->width();
+	}
+
+	ypos += row_lay->height();
+    }
+}
+
 KSpreadDoc::~KSpreadDoc()
 {
-  cerr << "KSpreadDoc::~KSpreadDoc()" << endl;
-
   destroyInterpreter();
 
   if ( m_pUndoBuffer )
     delete m_pUndoBuffer;
+
+  delete m_dcop;
+}
+
+DCOPObject* KSpreadDoc::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KSpreadDocIface( this );
+
+    return m_dcop;
 }
 
 #include "kspread_doc.moc"

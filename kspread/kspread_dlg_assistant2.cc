@@ -25,6 +25,8 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_tabbar.h"
+#include "kspread_table.h"
+
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -32,7 +34,7 @@
 
 
 KSpreadassistant2::KSpreadassistant2( KSpreadcreate* parent, const char* name)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
 
   m_pCreate=parent;
@@ -40,7 +42,7 @@ KSpreadassistant2::KSpreadassistant2( KSpreadcreate* parent, const char* name)
 
   m_pCreate->hide();
 
-  m_pView->canvasWidget()->setEditorActivate(false);
+  // m_pView->canvasWidget()->setEditorActivate(false);
   setCaption( i18n("Function") );
   QHBoxLayout *lay1 = new QHBoxLayout( this );
   lay1->setMargin( 5 );
@@ -50,7 +52,7 @@ KSpreadassistant2::KSpreadassistant2( KSpreadcreate* parent, const char* name)
   lay1->addWidget(m_pRef);
 
 
-  m_pClose = new QPushButton( i18n("Close"), this );
+  m_pClose = new QPushButton( i18n("Ok"), this );
   lay1->addWidget(m_pClose);
 
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
@@ -58,40 +60,44 @@ KSpreadassistant2::KSpreadassistant2( KSpreadcreate* parent, const char* name)
   connect( m_pView, SIGNAL( sig_selectionChanged( KSpreadTable*, const QRect& ) ),
 	   this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
 
+  m_pView->canvasWidget()->startChoose();
 }
 
+KSpreadassistant2::~KSpreadassistant2()
+{
+    m_pView->canvasWidget()->endChoose();
+}
+				
 void KSpreadassistant2::slotClose()
 {
+    give_range();
+    m_pCreate->show();
 
-give_range();
-m_pCreate->show();
-accept();
+    delete this;
 }
 
 void KSpreadassistant2::give_range()
 {
+    QString _tabname;
+    QString tmp;
+    int p = m_pRef->text().find( "!" );
+    _tabname=m_pRef->text().left(p);
 
-QString _tabname;
-QString tmp;
-int p = m_pRef->text().find( "!" );
-_tabname=m_pRef->text().left(p);
-
-if(m_pCreate->t_name()!=_tabname)
-	{
+    if( m_pCreate->tableName() != _tabname )
+    {
 	//change table
 	tmp= m_pRef->text();
-	}
-else
-	{
+    }
+    else
+    {
 	tmp= m_pRef->text().right(m_pRef->text().length()-(p+1));
-	}
-m_pCreate->setText(tmp);
-	
+    }
+    m_pCreate->setText(tmp);
 }
 
 void KSpreadassistant2::slotSelectionChanged( KSpreadTable* _table, const QRect& _selection )
 {
-QString tmp;
+    QString tmp;
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )
   	{
@@ -99,13 +105,13 @@ QString tmp;
     	int dx=m_pView->canvasWidget()->markerColumn();
     	int dy=m_pView->canvasWidget()->markerRow();
     	tmp=tmp.setNum(dy);
-    	tmp=_table->name()+"!"+util_columnLabel(dx)+tmp;
+    	tmp=_table->tableName()+"!"+util_columnLabel(dx)+tmp;
     	m_pRef->setText(tmp);
   	}
   else
-   	{
-   	if(m_pCreate->Param()==5)
-   		{
+  {
+      if( m_pCreate->paramCount() == 5 )
+      {
    		//When you have 5 params you can add others params
    		//=>creat range
    		QString area = util_rangeName( _table, _selection );
@@ -117,7 +123,7 @@ QString tmp;
   		int dx=_selection.right();
     		int dy=_selection.bottom();
     		tmp=tmp.setNum(dy);
-    		tmp=_table->name()+"!"+util_columnLabel(dx)+tmp;
+    		tmp=_table->tableName()+"!"+util_columnLabel(dx)+tmp;
     		m_pRef->setText(tmp);
   		}
   	}

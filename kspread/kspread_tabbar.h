@@ -79,9 +79,13 @@ public:
      * Open a context menu.
      */
     void openPopupMenu( const QPoint &_global );
-
-    void hidetable();
-    void showtable(const QString& _text);
+    /**
+    * Remove table name to tabList and
+    * put tablename in tablehide
+    * and  Highlights first name in tabList
+    */
+    void hideTable();
+    void showTable(const QString& _text);
     QStringList listshow(){return  tabsList;}
     QStringList listhide(){return  tablehide;}
     void init(const QString & text);
@@ -120,12 +124,10 @@ protected:
      * order of appearance.
      */
     QStringList tabsList;
-
-    /*
+     /*
     * list which contain names of table hide
     */
     QStringList tablehide;
-
 	/**
 	 * Timer that causes the tabbar to scroll when the user drag a tab.
 	 */

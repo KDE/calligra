@@ -99,14 +99,14 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    enum Special_paste { ALL,FORMULA,Format,Wborder,Link,ALL_trans,FORMULA_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
+    enum PasteMode { ALL,FORMULA,Format,Wborder,Link,ALL_trans,FORMULA_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
     enum Operation {Any,Add,Mul,Sub,Div};
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
     virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0,QString name=0  );
 
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,Special_paste sp=ALL,QString name=0,Operation=Any);
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,PasteMode sp=ALL,QString name=0,Operation=Any);
     virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
     /**
      * Copyies the layout from the cell at the position (_column|_row).
@@ -118,7 +118,7 @@ public:
     void copyLayout( KSpreadCell *_cell ) { copyLayout( _cell->column(), _cell->row() ); }
 
 
-    void copyALL( KSpreadCell *cell);
+    void copyAll( KSpreadCell *cell);
     /**
      * Paints the cell.
      */
@@ -285,9 +285,9 @@ public:
      * @return the background color.
      */
     const QColor& bgColor( int _col, int _row );
-    
+
     const QColor& bgColor() { return m_bgColor; }
-    
+
     Style style() { return m_style; }
     QString action() { return m_strAction; }
 
@@ -308,7 +308,13 @@ public:
     double valueDouble() const { return m_dValue; }
     QString valueString();
     void setValue( double _d );
-
+    
+    /* return size of the text*/
+    int textWidth() {return m_iOutTextWidth; }
+    int textHeight() {return m_iOutTextHeight; }
+    int richTextWidth() {return m_richWidth; }
+    int richTextHeight() {return m_richHeight;}
+     
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
      * on all views.
@@ -369,10 +375,11 @@ public:
     /**
      * Causes the layout to be recalculated when the cell is drawn next time.
      * This flag is for example set if the width of the column changes or if
-     * some cell specific layout valued like font or text change.
+     * some cell specific layout value like font or text change.
      */
     virtual void setLayoutDirtyFlag();
-
+    bool layoutDirtyFlag() const { return m_bLayoutDirtyFlag; }
+    
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true ; }
 
@@ -410,7 +417,7 @@ public:
     /**
      * @return TRUE if this cell is obscured by another.
      */
-    bool isObscured() { return ( m_pObscuringCell != 0L ); }
+    bool isObscured() const { return ( m_pObscuringCell != 0L ); }
     /**
      * If obscuring is forced then the marker may never reside on this cell.
      *
@@ -421,11 +428,11 @@ public:
     /**
      * @return the column of the obscuring cell.
      */
-    int obscuringCellsColumn() { return m_iObscuringCellsColumn; }
+    int obscuringCellsColumn() const { return m_iObscuringCellsColumn; }
     /**
      * @return the row of the obscuring cell.
      */
-    int obscuringCellsRow() { return m_iObscuringCellsRow; }
+    int obscuringCellsRow() const { return m_iObscuringCellsRow; }
 
     /**
      * Force the cell to occupy other cells space.
@@ -442,22 +449,18 @@ public:
     /**
      * @return TRUE if the cell is forced to obscure other cells.
      */
-    bool isForceExtraCells() { return m_bForceExtraCells; }
+    bool isForceExtraCells() const { return m_bForceExtraCells; }
     /**
      * @return the amount of obscured cells in the horizontal direction
      */
-    int extraXCells() { return m_iExtraXCells; }
+    int extraXCells() const { return m_iExtraXCells; }
     /**
      * @return the amount of obscured cells in the vertical direction
      */
-    int extraYCells() { return m_iExtraYCells; }
-
-    /* return size of the text*/
-    int textWidth() {return m_iOutTextWidth; }
-    int textHeight() {return m_iOutTextHeight; }
-    int richTextWidth() {return m_richWidth; }
-    int richTextHeight() {return m_richHeight;}
-
+    int extraYCells() const { return m_iExtraYCells; }
+    int extraWidth() const { return m_iExtraWidth; }
+    int extraHeight() const { return m_iExtraHeight; }
+    
     bool isFormular() { return m_content == Formula; }
 
     QString encodeFormular( int _col = -1, int _row = -1 );
@@ -469,11 +472,13 @@ public:
      * @return TRUE if the cell contains a formula that could not
      *         be evaluated. These cells usually appear with "####" on the screen.
      */
-    bool hasError() { return m_bError; }
+    bool hasError() const { return m_bError; }
 
-protected:
-
+    /**
+     * Calculates the layout of the cell.
+     */
     virtual void makeLayout( QPainter &_painter, int _col, int _row );
+    
     /**
      * Parses the formula.
      * Fills @ref #dependList and @ref #formula.
@@ -481,6 +486,8 @@ protected:
      */
     bool makeFormular();
 
+protected:
+    
     /**
      * Cleans up formula stuff.
      * Call this before you store a new formula or to delete the
@@ -651,6 +658,10 @@ protected:
      * A pointer to the decimal separator
      */
     static char decimal_point;
+    
+   /**
+   * size of richText
+   */
     int m_richWidth;
     int m_richHeight;
 };

@@ -24,6 +24,7 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
+#include "kspread_map.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -62,21 +63,20 @@ KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QSt
 
 }
 
-
 void KSpreadTableName::slotOk()
 {
    QString txt = (m_pTableName->text()).stripWhiteSpace();
    if ( txt.isEmpty() )
    {
-      QApplication::beep(); 
+      QApplication::beep();
       QMessageBox::information( this, i18n("Change table name"), i18n("Table name must not be empty."), i18n("OK") );
       return;
    }
-   if ( KSpreadTable *tbl = m_pView->doc()->map()->findTable( txt.ascii() ) )
+   if ( KSpreadTable *tbl = m_pView->doc()->map()->findTable( txt ) )
    {
       if ( tbl != m_pView->activeTable() )
       {
-         QApplication::beep(); 
+         QApplication::beep();
          QMessageBox::information( this, i18n("Change table name"), i18n("A table with this name already exists."), i18n("OK") );
          return;
       }

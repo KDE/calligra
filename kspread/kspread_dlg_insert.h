@@ -34,12 +34,13 @@ class KSpreadinsert : public QDialog
 {
   Q_OBJECT
 public:
-  enum mode { insert,remove};
-  enum type_mode { insertColumn,inserRow,removeRow,removeColumn,insertCellColumn
-  		,insertCellRow,removeCellRow,removeCellColumn};
-  KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,mode _mode );
-  void rafresh(type_mode insertOrRemove);
-  KSpreadTable* table;
+  enum Mode { Insert,Remove};
+  enum Type_mode {insertColumn,inserRow,removeRow,removeColumn,insertCellColumn 
+,insertCellRow,removeCellRow,removeCellColumn};   
+
+KSpreadinsert(KSpreadView* parent, const char* name,const QPoint &_marker,Mode _mode );  
+void refresh(Type_mode insertOrRemove);   
+KSpreadTable* table;
 public slots:
   void slotOk();
   void slotClose();
@@ -53,7 +54,7 @@ protected:
   QRadioButton *rb3;
   QRadioButton *rb4;
   QPoint  marker;
-  mode insRem;
+  Mode insRem;
 };
 
 #endif

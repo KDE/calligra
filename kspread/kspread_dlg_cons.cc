@@ -24,6 +24,7 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
+#include "kspread_table.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -32,7 +33,7 @@
 #include <list>
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
 
@@ -127,7 +128,7 @@ void KSpreadConsolidate::slotOk()
     if ( r.table == 0 )
     {
       r.table = table;
-      r.tableName = table->name();
+      r.tableName = table->tableName();
     }
     ranges.append( r  );
   }
@@ -573,13 +574,13 @@ void KSpreadConsolidate::slotOk()
     // Draw the row description
     int i = 1;
     QStringList::Iterator s = rows.begin();
-    for( ; s != rows.end(); ++s )
+    for( ; s != rows.end(); ++s, ++i )
       table->setText( dy, dx + i, *s );
 
     // Draw the column description
     i = 1;
     s = cols.begin();
-    for( ; s != rows.end(); ++s )
+    for( ; s != cols.end(); ++s, ++i )
       table->setText( dy + i, dx, *s );
 
     // Draw the data

@@ -33,22 +33,22 @@
 
 
 KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
 
-  
+
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
   QHBoxLayout *lay2 = new QHBoxLayout( lay1 );
   lay2->setSpacing( 5 );
-  
+
   type_formula=new QListBox(this);
   lay2->addWidget( type_formula );
   formula=new QListBox(this);
   lay2->addWidget( formula );
-  
+
   setCaption( i18n("Formula") );
 
   exp=new QLabel(this);
@@ -69,13 +69,12 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   type_formula->insertItem(i18n("Analytic"));
   type_formula->insertItem(i18n("Logic"));
   type_formula->insertItem(i18n("Text"));
-  type_formula->insertItem(i18n("Info"));
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
   QObject::connect( formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected_formula(const QString &) ) );
   resize( 350, 300 );
-  
+
 }
 
 
@@ -89,7 +88,7 @@ void KSpreaddlgformula::slotOk()
 
   if ( m_pView->activeTable() != 0L )
     {
-    KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,math );
+    KSpreadcreate* dlg = new KSpreadcreate( m_pView, math );
     dlg->show();
     }
 
@@ -98,18 +97,7 @@ void KSpreaddlgformula::slotOk()
 
 void KSpreaddlgformula::slotClose()
 {
-if ( m_pView->activeTable() != 0L )
-    {
-    if(m_pView->editWidget()->isActivate() )
-	{
-	m_pView->editWidget()->setFocus();
-	}
-    if(m_pView->canvasWidget()->pointeur() != 0)
-  	{
-  	m_pView->canvasWidget()->focusEditor();
-  	}
-    }
-  reject();
+    reject();
 }
 
 void KSpreaddlgformula::slotselected_formula(const QString & string)
@@ -191,16 +179,6 @@ list_text+="EXACT";
 list_text+="STXT";
 list_text+="REPT";
 
-QStringList list_info;
-list_info+="ISLOGIC";
-list_info+="ISNUM";
-list_info+="ISTEXT";
-
-if(string== "Info")
-	{
-	formula->clear();
-	formula->insertStringList(list_info);
-	}
 if(string== "Statistic" )
 	{
 	formula->clear();
@@ -234,7 +212,6 @@ if(string == "All")
 	formula->insertStringList(list_anal);
 	formula->insertStringList(list_text);
 	formula->insertStringList(list_logic);
-	formula->insertStringList(list_info);
 	}		
 }
 

@@ -1,10 +1,6 @@
 #ifndef __kspread_idl__
 #define __kspread_idl__
 
-#include <openparts.idl>
-#include <koffice.idl>
-#include <openparts_ui.idl>
-
 module KSpread
 {
 	interface Table;
@@ -54,91 +50,72 @@ module KSpread
 	interface Book;
 	interface Document;
 
-	interface View : KOffice::View
+	interface View
 	{
-		slot void undo();
-		slot void redo();
-		slot void cutSelection();
-		slot void copySelection();
-		slot void paste();
-		slot void Specialpaste();
-		slot void editCell();
-		slot void paperLayoutDlg();
-		slot void togglePageBorders();
-		slot void newView();
-		slot void insertNewTable();
-		slot void autoFill();
-		slot void editGlobalScripts();
-		slot void editLocalScripts();
-		slot void reloadScripts();
-		slot void runLocalScript();
-		slot void helpUsing();
-		slot void deleteRow();
-		slot void deleteColumn();
-		slot void insertRow();
-		slot void insertColumn();
-		slot void bold();
-		slot void italic();
-		slot void moneyFormat();
-		slot void percent();
-		slot void alignLeft();
-		slot void alignCenter();
-		slot void alignRight();
-		slot void multiRow();
-		slot void precisionMinus();
-		slot void precisionPlus();
-		slot void insertChart();
-		slot void insertTable();
-		slot void insertImage();
-		slot void insertObject();
-		slot void fontSizeSelected( in wstring size );
-		slot void fontSelected( in wstring font );
-		slot void formulaselection( in wstring math );
-		slot void consolidate();
-		slot void gotocell();
-		slot void replace();
-		slot void sort();
-		slot void createanchor();
-		slot void TextColor();
-		slot void BackgroundColor();
-		slot void sortincr();
-		slot void sortdecrease();
-		slot void funct();
-		slot void formulaPower();
-    		slot void formulaSubscript();
-    		slot void formulaParentheses();
-    		slot void formulaAbsValue();
-    		slot void formulaBrackets();
-    		slot void formulaFraction();
-    		slot void formulaRoot();
-    		slot void formulaIntegral();
-    		slot void formulaMatrix();
-    		slot void formulaLeftSuper();
-    		slot void formulaLeftSub();
-		slot void formulaSum();
-		slot void formulaProduct();
-		slot void borderbottom();
-    		slot void borderright();
-    		slot void borderleft();
-    		slot void bordertop();
-    		slot void borderoutline();
-    		slot void borderall();
-		slot void RemoveTable();
-		slot void resizeheight();
-		slot void resizewidth();
-                slot void layoutcell();
-                slot void renametable();
-		slot void hidetable();
-		slot void showtable();
-		slot void bordercolor();
-		slot void borderremove();
-		Book book();
+		 void undo();
+		 void redo();
+		 void cutSelection();
+		 void copySelection();
+		 void paste();
+		 void Specialpaste();
+		 void editCell();
+		 void paperLayoutDlg();
+		 void togglePageBorders();
+		 void newView();
+		 void insertNewTable();
+		 void autoFill();
+		 void editGlobalScripts();
+		 void editLocalScripts();
+		 void reloadScripts();
+		 void runLocalScript();
+		 void helpUsing();
+		 void deleteRow();
+		 void deleteColumn();
+		 void insertRow();
+		 void insertColumn();
+		 void bold();
+		 void italic();
+		 void moneyFormat();
+		 void percent();
+		 void alignLeft();
+		 void alignCenter();
+		 void alignRight();
+		 void multiRow();
+		 void precisionMinus();
+		 void precisionPlus();
+		 void insertChart();
+		 void insertTable();
+		 void insertImage();
+		 void insertObject();
+		 void fontSizeSelected( in wstring size );
+		 void fontSelected( in wstring font );
+		 void formulaselection( in wstring math );
+		 void consolidate();
+		 void gotocell();
+		 void replace();
+		 void sort();
+		 void createanchor();
+		 void TextColor();
+		 void BackgroundColor();
+		 void sortincr();
+		 void sortdecrease();
+		 void funct();
+		 void formulaPower();
+    		 void formulaSubscript();
+    		 void formulaParentheses();
+    		 void formulaAbsValue();
+    		 void formulaBrackets();
+    		 void formulaFraction();
+    		 void formulaRoot();
+    		 void formulaIntegral();
+    		 void formulaMatrix();
+    		 void formulaLeftSuper();
+    		 void formulaLeftSub();
+		 void formulaSum();
+		 void formulaProduct();
+		 void RemoveTable();
 
-		struct EventSelectionChanged
-		{
-			Range range;
-		};
-		const string eventSelectionChanged = "KSpread/View/SelectionChanged";
+		Book book();
 	};
 
 	interface Book
@@ -180,7 +157,7 @@ module KSpread
 		boolean isEmpty( in unsigned long x, in unsigned long y );
 	};
 
-	interface Document : KOffice::Document, KOffice::Print
+	interface Document
 	{
 		Book book();
 
@@ -190,40 +167,6 @@ module KSpread
 		const string eventRemovedView = "KSpread/Document/RemovedView";
 		typedef KSpread::View typeRemovedView;
 	};
-
-	interface DocumentFactory : KOffice::DocumentFactory
-	{
-	};
-
-	struct DataToolsId
-	{
-		unsigned long time;
-		unsigned long column;
-		unsigned long row;
-	};
-
-	struct EventSetText
-	{
-		wstring text;
-	};
-	const string eventSetText = "UserEvent/KSpread/SetText";
-
-	struct EventKeyPressed
-	{
-		long key;
-		long state;
-		long ascii;
-	};
-	const string eventKeyPressed = "UserEvent/KSpread/KeyPressed";
-
-	struct EventChartInserted
-	{
-		long dx;
-		long dy;
-		long width;
-		long height;
-	};
-	const string eventChartInserted = "UserEvent/KSpread/ChartInserted";
 };
 
 #endif

@@ -35,14 +35,14 @@ class KSpreadresize : public QDialog
   Q_OBJECT
 public:
   enum type_resize {resize_column,resize_row};
-  KSpreadresize( KSpreadView* parent, const char* name,type_resize re,int nb=-1);
+  KSpreadresize( KSpreadView* parent, const char* name,type_resize re);
 
   type_resize type;
   int size;
-  int number;
 public slots:
   void slotOk();
   void slotClose();
+
 protected:
   KSpreadView* m_pView;
   QLineEdit* m_pSize;

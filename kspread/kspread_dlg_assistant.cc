@@ -25,10 +25,11 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_tabbar.h"
+#include "kspread_table.h"
+
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
-
 
 
 KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QString _formula)
@@ -37,13 +38,13 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
   m_pView = parent;
 
   formula=_formula;
-  tabname=m_pView->activeTable()->name();
+  tabname=m_pView->activeTable()->tableName();
 
 
   table = m_pView->activeTable();
   dx = m_pView->canvasWidget()->markerColumn();
   dy = m_pView->canvasWidget()->markerRow();
-  m_pView->canvasWidget()->setEditorActivate(false);
+  // m_pView->canvasWidget()->setEditorActivate(false);
 
   setCaption( i18n("Function") );
   QVBoxLayout *lay1 = new QVBoxLayout( this );
@@ -80,7 +81,7 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
 void KSpreadassistant::slotOk()
 {
 
-if(m_pView->activeTable()->name() != tabname)
+if(m_pView->activeTable()->tableName() != tabname)
 	{
 	m_pView->tabBar()->setActiveTab(tabname);
 	
@@ -104,7 +105,7 @@ accept();
 
 void KSpreadassistant::slotClose()
 {
-if(m_pView->activeTable()->name() != tabname)
+if(m_pView->activeTable()->tableName() != tabname)
 	{
 	m_pView->tabBar()->setActiveTab(tabname);
 	m_pView->changeTable( tabname );

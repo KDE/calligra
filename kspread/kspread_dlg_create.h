@@ -6,17 +6,17 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_dlg_create__
 #define __kspread_dlg_create__
@@ -37,24 +37,20 @@ class KSpreadcreate : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadcreate( KSpreadView* parent, const QString _name,QString _formula);
-  void init();
+  KSpreadcreate( KSpreadView* parent, const QString& _name );
+
   QString create_formula();
-  QString make_formula(QString _text,int nb_line);
+  QString make_formula( const QString& _text, int nb_line);
   void setText(QString text);
   KSpreadView *view(){return m_pView;}
   int nb_button(){return button_select;}
 
-  QString t_name(){return tab_name;}
+  QString tableName() const { return m_tableName; }
 
   void set_nbbutton(int nb){ button_select=nb;}
-  int nb_param;
-  int first_element;
-
-  int dx;
-  int dy;
-  int Param(){return nb_param;}
-public slots:
+  int paramCount() const { return nb_param; }
+    
+private slots:
   void slotOk();
   void slotClose();
   void slotFselect();
@@ -63,15 +59,21 @@ public slots:
   void slotFOselect();
   void slotFIselect();
 
-protected:
+private:
+    void init();
+
+    int nb_param;
+  int first_element;
+
+  int dx;
+  int dy;
+
   enum type_create {type_double,type_string,type_logic};
-  enum type_editor { editcell,editwidget};
-  type_editor editor;
+
   QString old_text;
   KSpreadView* m_pView;
   QString name;
-  QString tab_name;
-  QString old_formula;
+  QString m_tableName;
   QLineEdit* f_param;
   QLineEdit* s_param;
   QLineEdit* t_param;

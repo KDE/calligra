@@ -8,8 +8,12 @@
 #include <kscript_parser.h>
 #include <kscript_util.h>
 #include <kscript_func.h>
+#include <kscript_proxy.h>
 
 #include <math.h>
+
+#include <dcopobject.h>
+#include <dcopclient.h>
 
 /***************************************************************
  *
@@ -68,7 +72,7 @@ void makeDepends( KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QList<KSpre
       d->m_iRow = extra->point()->pos.y();
       d->m_iColumn2 = -1;
       d->m_iRow2 = -1;
-      d->m_pTable=extra->point()->table;
+      d->m_pTable = extra->point()->table;
       depends.append( d );
       node->setExtra( extra );
     }
@@ -831,19 +835,19 @@ static bool kspreadfunc_if( KSContext& context )
 	{
  	 context.setValue( new KSValue(args[2]->doubleValue()));
 	}
-   /*else if(KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
+   /* else if(KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
 	{
-          cout <<"booleen :\n";
-           bool toto;
+          cout <<"booleen :\n";*/
+        /*   bool toto;
   	if( args[2]->boolValue()==true)
   		toto=false;
    	else if  (args[2]->boolValue()==false)
    		toto=true;
    	else		
-   		cout <<"Pb in function IF\n";
-  	context.setValue( new KSValue(toto));
-          /*context.setValue( new KSValue(args[2]->boolValue()));*/
-	/*}*/
+   		cout <<"Pb in function IF\n"; */
+  	//context.setValue( new KSValue(toto));
+          //context.setValue( new KSValue(args[2]->boolValue()));
+	//}
     else
     	{
     	cout <<"Pb in function IF\n";
@@ -1045,6 +1049,103 @@ static bool kspreadfunc_isnum( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_cell( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 3, "cell", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
+	return false;
+
+    const QValueList<KSValue::Ptr>& lines = args[0]->listValue();
+    if ( lines.count() < 2 )
+	return FALSE;
+
+    QValueList<KSValue::Ptr>::ConstIterator it = lines.begin();
+    if ( !KSUtil::checkType( context, (*it), KSValue::ListType, true ) )
+	return false;
+    const QValueList<KSValue::Ptr>& line = (*it)->listValue();
+    QValueList<KSValue::Ptr>::ConstIterator it2 = line.begin();
+    int x = 1;
+    ++it;
+    ++it2;
+    for( ; it2 != line.end(); ++it2 )
+    {
+	if ( !KSUtil::checkType( context, (*it2), KSValue::StringType, true ) )
+	    return false;
+	if ( (*it2)->stringValue() == args[1]->stringValue() )
+	    break;
+	++x;
+    }
+    if ( it2 == line.end() )
+	 return FALSE;
+
+    qDebug("x=%i",x);
+    for( ; it != lines.end(); ++it )
+    {
+	const QValueList<KSValue::Ptr>& l = (*it)->listValue();
+	if ( x >= l.count() )
+	    return FALSE;
+	if ( l[0]->stringValue() == args[2]->stringValue() )
+        {
+	    context.setValue( new KSValue( *(l[x]) ) );
+	    return TRUE;
+	}
+    }
+
+    context.setValue( new KSValue( 0.0 ) );
+    return true;
+}
+
+static bool kspreadfunc_select_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
+{
+    QValueList<KSValue::Ptr>::Iterator it = args.begin();
+    QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+    for( ; it != end; ++it )
+    {
+	if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+        {
+	    if ( !kspreadfunc_select_helper( context, (*it)->listValue(), result ) )
+		return false;
+	}
+	else if ( !(*it)->toString().isEmpty() )
+        {
+	    if ( !result.isEmpty() )
+		result += "\\";
+	    result += (*it)->toString();
+	}
+    }
+
+    return true;
+}
+
+static bool kspreadfunc_select( KSContext& context )
+{
+  QString result( "" );
+  bool b = kspreadfunc_select_helper( context, context.value()->listValue(), result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+static bool kspreadfunc_app( KSContext& context )
+{
+    KSpreadDoc* doc = ((KSpreadInterpreter*)context.interpreter())->document();
+
+    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), doc->dcopObject()->objId() ) ) );
+
+    return TRUE;
+}
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -1090,9 +1191,13 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
-  module->addObject( "ISLOGIC", new KSValue( new KSBuiltinFunction( module, "ISLOGIC",kspreadfunc_islogic) ) );
-  module->addObject( "ISTEXT", new KSValue( new KSBuiltinFunction( module, "ISTEXT",kspreadfunc_istext) ) );
-  module->addObject( "ISNUM", new KSValue( new KSBuiltinFunction( module, "ISNUM",kspreadfunc_isnum) ) );
+  module->addObject( "ISLOGIC", new KSValue( new KSBuiltinFunction( module,"ISLOGIC",kspreadfunc_islogic) ) );
+  module->addObject( "ISTEXT", new KSValue( new KSBuiltinFunction( module,"ISTEXT",kspreadfunc_istext) ) );
+  module->addObject( "ISNUM", new KSValue( new KSBuiltinFunction( module,"ISNUM",kspreadfunc_isnum) ) );
+  module->addObject( "cell", new KSValue( new KSBuiltinFunction( module,"cell",kspreadfunc_cell) ) );
+  module->addObject( "select", new KSValue( new KSBuiltinFunction( module,"select",kspreadfunc_select) ) );
+  module->addObject( "Application", new KSValue( new KSBuiltinFunction( module, "Application", kspreadfunc_app ) ) );
+
   return module;
 }
 
@@ -1153,7 +1258,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setException( new KSException( "ErrorInCell", tmp ) );
       return false;
     }
-    
+
     if ( cell->isDefault() )
       context.setValue( new KSValue( 0.0 ) );
     else if ( cell->isValue() )
@@ -1166,11 +1271,13 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setValue( new KSValue( cell->valueString() ) );
     return true;
   }
+  // Parse a range like "A1:B3"
   else if ( node->getType() == t_range )
   {
     KSParseNodeExtraRange* p = (KSParseNodeExtraRange*)extra;
     KSpreadRange* r = p->range();
 
+    // Is it a valid range ?
     if ( !r->isValid() )
     {
       QString tmp( "The expression %1 is not valid" );
@@ -1178,7 +1285,8 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setException( new KSException( "InvalidRangeExpression", tmp ) );
       return false;
     }
-    
+
+    // The range is translated in a list or lists of integers
     KSValue* v = new KSValue( KSValue::ListType );
     for( int y = 0; y < r->range.height(); ++y )
     {

@@ -1,7 +1,0 @@
-Compiling
-=========
-
-First you have to compile and install the corba and koffice libraries.
-
-In addition you need python1.5 installed. By default it is searched
-in /usr/local. Otherwise you must modify the PATH in the Makefile.

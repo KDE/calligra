@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_table_h__
 #define __kspread_table_h__
@@ -35,9 +35,12 @@ class KoDocumentEntry;
 class QWidget;
 class QPainter;
 
+class DCOPObject;
+
 #include <iostream.h>
 #include <komlParser.h>
 #include <komlMime.h>
+
 #include <koDocument.h>
 
 #include <kscript_context.h>
@@ -58,9 +61,6 @@ class QPainter;
 #include "kspread_layout.h"
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
-#include "kspread.h"
-
-#include <chart.h>
 
 /********************************************************************
  *
@@ -77,7 +77,7 @@ class CellBinding : public QObject
 public:
     CellBinding( KSpreadTable *_table, const QRect& _area );
     virtual ~CellBinding();
-    
+
     bool contains( int _x, int _y );
     /**
      * Call this function if one of the cells covered by this binding ( @see #rect )
@@ -86,12 +86,12 @@ public:
      * @param _obj may by 0L. In this case all cells may have changed.
      */
     virtual void cellChanged( KSpreadCell *_obj );
-    
+
     virtual void setIgnoreChanges( bool _ignore ) { m_bIgnoreChanges = _ignore; }
-    
+
     virtual QRect& dataArea() { return m_rctDataArea; }
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
-  
+
 signals:
     void changed( KSpreadCell *_obj );
 
@@ -113,15 +113,14 @@ protected:
 class KSpreadChild : public KoDocumentChild
 {
 public:
-  KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, KOffice::Document_ptr _doc );
-  KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table );
+  KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table, KoDocument* doc, const QRect& geometry );
+  KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table );
   ~KSpreadChild();
-  
-  KSpreadDoc* parent() { return m_pDoc; }
+
+  KSpreadDoc* parent() { return (KSpreadDoc*)parent(); }
   KSpreadTable* table() { return m_pTable; }
 
 protected:
-  KSpreadDoc *m_pDoc;
   KSpreadTable *m_pTable;
 };
 
@@ -132,41 +131,42 @@ protected:
  ********************************************************************/
 
 class ChartChild;
+class KChartPart;
 
 class ChartBinding : public CellBinding
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
 
-  ChartBinding( KSpreadTable *_table, const QRect& _area, ChartChild *_child );
-  virtual ~ChartBinding();
+    ChartBinding( KSpreadTable *_table, const QRect& _area, ChartChild *_child );
+    virtual ~ChartBinding();
 
-  void setChart( Chart::SimpleChart_ptr _chart ) { m_vChart = Chart::SimpleChart::_duplicate( _chart ); }
+    virtual void cellChanged( KSpreadCell *_obj );
 
-  virtual void cellChanged( KSpreadCell *_obj );
-
-protected:
-  ChartChild *m_pChild;
-  Chart::SimpleChart_var m_vChart;
+private:
+    ChartChild* m_child;
 };
 
 class ChartChild : public KSpreadChild
 {
 public:
-  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, KOffice::Document_ptr _doc );
-  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
+  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect );
+    // ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
   ~ChartChild();
 
-  void setChart( Chart::SimpleChart_ptr );
   void setDataArea( const QRect& _data );
   void update();
-  
-  virtual bool loadDocument( KOStore::Store_ptr _store );
-  virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+
+  virtual bool loadDocument( KoStore* _store );
   virtual bool save( ostream& out );
-  
-protected:
+
+  KChartPart* chart();
+
+private:
+  bool loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst );
+
   ChartBinding *m_pBinding;
+  KSpreadTable* m_table;
 };
 
 /********************************************************************
@@ -177,29 +177,20 @@ protected:
 
 /**
  */
-class KSpreadTable : public QObject,
-		     virtual public KSpread::Table_skel
+class KSpreadTable : public QObject
 {
     friend KSpreadCell;
-  
+
     Q_OBJECT
-public:    
-    // C++
-    KSpreadTable( KSpreadDoc *_doc, const char *_name );
+public:
+    enum PasteMode { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
+    enum Operation { Any, Add, Mul, Sub, Div };
+    enum SortingOrder{ Increase, Decrease };
+    enum ChangeRef {ColumnInsert,ColumnRemove,RowInsert,RowRemove};
+
+    KSpreadTable( KSpreadMap *_map, const char *_name );
     ~KSpreadTable();
 
-    // IDL
-    virtual KSpread::Book_ptr book();
-    virtual KSpread::Range* range( unsigned long int left, unsigned long int top,
-				  unsigned long int right, unsigned long int bottom );
-    virtual KSpread::Range* rangeFromString( const QString & str );
-    virtual KSpread::Range* rangeFromCells( const KSpread::Cell& topleft,
-					   const KSpread::Cell& bottomright );
-    virtual KSpread::Cell* cellFromString( const QString & str );
-    virtual void setValue( const KSpread::Cell& cell, double value );
-    virtual void setStringValue( const KSpread::Cell& cell, const QString & value );
-    virtual double value( const KSpread::Cell& cell );
-    virtual QString stringValue( const KSpread::Cell& cell );
     /**
      * Deletes the column '_column' and redraws the table.
      */
@@ -218,35 +209,35 @@ public:
      * inserts a new and empty row. After this the table is redrawn.
      */
     virtual void insertRow( unsigned long int row );
-    virtual void setSelection( const KSpread::Range& sel );
-    virtual KSpread::Range* selection();
-    virtual void copySelection();
-    virtual void cutSelection();
-    virtual void pasteSelection( const KSpread::Cell& cell );
+
     virtual bool isEmpty( unsigned long int x, unsigned long int y );
-  
+
+    /**
+     * @return the name of this table.
+     */
     QString tableName() { return m_strName; }
+    void setTableName( QString _name ) { m_strName = _name; }
 
     // C++
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-    virtual bool loadChildren( KOStore::Store_ptr _store );
- 
-    virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
+    virtual bool loadChildren( KoStore* _store );
+
+    virtual bool saveChildren( KoStore* _store, const char *_path );
     /*
      * @return true if one of the direct children wants to
      *              be saved embedded. If there are no children or if
      *              every direct child saves itself into its own file
      *              then false is returned.
-     * 
+     *
      */
     virtual bool hasToWriteMultipart();
 
     bool isLoading();
-  
+
     /**
      * This event handler is called if the table becomes the active table,
-     * that means that the table becomes visible and may fill the GUIs 
+     * that means that the table becomes visible and may fill the GUIs
      * widget with new values ( for example the @ref EditWindow ) and
      * the table has to hide/show its parts.
      *
@@ -254,7 +245,7 @@ public:
      *                inactive.
      */
     // void activeKSpreadTableEvent( bool _status );
-    
+
     ColumnLayout* columnLayout( int _column );
     /**
      * If no special @ref ColumnLayout exists for this column, then a new one is created.
@@ -304,12 +295,12 @@ public:
     KSpreadCell* nonDefaultCell( int _column, int _row, bool _no_scrollbar_update = false );
 
     KSpreadCell* defaultCell() { return m_pDefaultCell; }
-  
+
     int topRow( int _ypos, int &_top, KSpreadCanvas *_canvas = 0L );
     int bottomRow( int _ypos, KSpreadCanvas *_canvas = 0L );
     int leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas = 0L );
     int rightColumn( int _xpos, KSpreadCanvas *_canvas = 0L );
-    
+
     /**
      * @retrun the left corner of the column.
      *
@@ -332,77 +323,91 @@ public:
      */
     void setCalcDirtyFlag();
     /**
-     * Recalculates the current table. If you want to recalculate EVERYTHING, then 
+     * Recalculates the current table. If you want to recalculate EVERYTHING, then
      * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
      * shure that no invalid values in other tables make you trouble.
      */
     void recalc(bool mdepend=false);
-  
+
     /**
      * Sets the contents of the cell at row,column to text
      */
     void setText( int row, int column, const QString& text );
 
-    /**
-     * @return the name of this table.
-     */
-    QString name() { return m_strName; }
-    void setName( QString _name ) { m_strName = _name; }
-  
-    QRect& selectionRect() { return m_rctSelection; }
+    QRect selectionRect() const { return m_rctSelection; }
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
-      
+
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
 			   signed char _bold = -1, signed char _italic = -1 );
     void setSelectionMoneyFormat( const QPoint &_marker );
     void setSelectionAlign( const QPoint &_marker, KSpreadLayout::Align _align );
     void setSelectionPrecision( const QPoint &_marker, int _delta );
     void setSelectionPercent( const QPoint &_marker );
-    void setSelectionMultiRow( const QPoint &_marker );
+    void setSelectionMultiRow( const QPoint &_marker, bool enable );
 
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
-    enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
-    enum Operation {Any,Add,Mul,Sub,Div};
-    enum Mode_sort{ Increase,Decrease};
-    enum Type_font {bold,italic};
-    enum changeref {columnInsert,columnRemove,rowInsert,rowRemove};
-
-    QString setRichTextFond(QString text,Type_font font);
-
-    void changetab(QString old_name,QString new_name);
-    void changeRef(int pos,changeref ref,QString name);
-    void changeref2(const QPoint &pos,changeref ref,QString name);
-    void paste( const QPoint &_marker,Special_paste=ALL,Operation=Any );
+    void clearSelection(const QPoint &_marker );
+    void paste( const QPoint &_marker,PasteMode=ALL,Operation=Any );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
-    void onlyRow(Mode_sort=Increase);
-    void onlyColumn(Mode_sort=Increase);
-    void Row(int ref_row,Mode_sort=Increase);
-    void Column(int ref_column,Mode_sort=Increase);
-    bool isSort(){return _sort;}
-    void setSort(bool sort) { _sort=sort;}
-    bool isHide(){return table_hide;}
-    void setHide(bool _table_hide){table_hide=_table_hide;}
-    void clearSelection(const QPoint &_marker );
-    int ajustColumn(int _col=-1);
-    int ajustRow(int _row=-1);
-
-    void borderbottom( const QPoint &_marker,QColor _color );
-    void borderright( const QPoint &_marker,QColor _color );
-    void borderleft( const QPoint &_marker,QColor _color );
-    void bordertop( const QPoint &_marker,QColor _color );
-    void borderoutline( const QPoint &_marker,QColor _color );
-    void borderall( const QPoint &_marker,QColor _color );
-    void borderremove( const QPoint &_marker );
-
+    void onlyRow( SortingOrder = Increase );
+    void onlyColumn( SortingOrder = Increase );
+    void sortByRow( int ref_row, SortingOrder = Increase );
+    void sortByColumn( int ref_column, SortingOrder = Increase );
+    bool isSorting() { return m_sort; }
+    void setSort( bool sort ) { m_sort=sort; }
+    /**
+    * Insert or remove =>move cells
+    */
     void insertRightCell(const QPoint &_marker );
     void insertBottomCell(const QPoint &_marker);
     void removeLeftCell(const QPoint &_marker);
     void removeTopCell(const QPoint &_marker);
+    int ajustColumn(const QPoint &_marker,int _col=-1);
+    int ajustRow(const QPoint &_marker,int _row=-1);
+
+    /**
+    * Install borders
+    */
+    void borderLeft( const QPoint &_marker,QColor _color );
+    void borderTop( const QPoint &_marker,QColor _color );
+    void borderOutline( const QPoint &_marker,QColor _color );
+    void borderAll( const QPoint &_marker,QColor _color );
+    void borderRemove( const QPoint &_marker );
+    void borderBottom( const QPoint &_marker,QColor _color );
+    void borderRight( const QPoint &_marker,QColor _color );
+
+
+    /**
+    * Change Name table in a formula
+    * When you change name table Table1 -> Price
+    * for all cell which refere to Table1, this function change name
+    */
+    void changeCellTabName(QString old_name,QString new_name);
+
+    /**
+    * Change name of reference when you insert or remove column or row
+    * For example =Table1!A1 when you insert Column in A1 so
+    * so reference change =Table1!B1
+    */
+
+    void changeNameCellRef(int pos,ChangeRef ref,QString tabname);
+    /**
+    * Change name of reference when you insert or remove column or row
+    * For example =Table1!A1 when you insert Cell in A1 so
+    * so reference change =Table1!B1 it's specific for insert and remove cell
+    */
+    void changeNameCellRef2(const QPoint & pos,ChangeRef ref,QString tabname);
+    bool isHide(){return m_tableHide;}
+
+    /**
+    * change m_tableHide
+    */
+    void setHide(bool _m_tableHide){m_tableHide=_m_tableHide;}
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
@@ -412,21 +417,32 @@ public:
      * For internal use only.
      */
     void setMap( KSpreadMap* _map ) { m_pMap = _map; }
-    
+
     KSpreadDoc* doc() { return m_pDoc; }
     KSpreadMap* map() { return m_pMap; }
-    
+
+    /**
+     * @return a painter for the hidden widget ( @ref #widget ).
+     *
+     * This function is useful while making layouts where you
+     * need some QPainter related functions.
+     */
     QPainter& painter() { return *m_pPainter; }
+    /**
+     * @return a hidden widget.
+     *
+     * @see #painter
+     */
     QWidget* widget() { return m_pWidget; }
-  
+
     /**
      * @return a flag that indicates whether the table should paint the page breaks.
      *
      * @see #setShowPageBorders
      * @see #bShowPageBorders
-     */    
+     */
     bool isShowPageBorders() { return m_bShowPageBorders; }
-    
+
     /**
      * Turns the page break lines on or off.
      *
@@ -453,10 +469,10 @@ public:
      * convert the column from int to ascii format
      * (e.g. 1 -> 'A', 27 -> 'AA' , ...)
      */
-    const char *columnLabel( int _column );         
+    const char *columnLabel( int _column );
 
     void addCellBinding( CellBinding *_bind );
-    void removeCellBinding( CellBinding *_bind );    
+    void removeCellBinding( CellBinding *_bind );
     CellBinding* firstCellBinding() { return m_lstCellBindings.first(); }
     CellBinding* nextCellBinding() { return m_lstCellBindings.next(); }
 
@@ -466,7 +482,7 @@ public:
      * The cells are stored row after row in '_list'.
      */
     bool getCellRectangle( const QRect &_range, QList<KSpreadCell> &_list );
-    
+
     /**
      * A convenience function that finds a table by its name.
      */
@@ -490,12 +506,12 @@ public:
      * @see KSpreadUndoDeleteRow
      */
     void insertRowLayout( RowLayout *_l );
-    
+
     /**
      * @see #paste
      */
-    bool loadSelection( istream& _in, int _xshift, int _yshift,Special_paste = ALL, Operation = Any );
-    
+    bool loadSelection( istream& _in, int _xshift, int _yshift,PasteMode = ALL, Operation = Any );
+
     /**
      * Deletes all cells in the given rectangle.
      * The display is NOT updated by this function.
@@ -530,7 +546,7 @@ public:
     QListIterator<KSpreadChild> childIterator();
 
     void update();
-  
+
     const QColorGroup& colorGroup() { return m_pWidget->colorGroup(); }
 
     int id() { return m_id; }
@@ -545,8 +561,10 @@ public:
      */
     KSContext& context() { m_context.setException( 0 ); return m_context; }
 
+    virtual DCOPObject* dcopObject();
+
     static KSpreadTable* find( int _id );
-  
+
     /**
      * Emits the signal @ref #sig_updateCell and sets the cells @ref KSpreadCell::m_bDisplayDirtyFlag to false.
      */
@@ -567,10 +585,15 @@ signals:
     void sig_removeChild( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
-  
+    /**
+     * Emitted if a certain area of some table has to be redrawn.
+     * That is for example the case when a new child is inserted.
+     */
+    void sig_polygonInvalidated( const QPointArray& );
+
 protected:
     void insertChild( KSpreadChild *_child );
-  
+
     /**
      * Prints the page specified by 'page_range'.
      *
@@ -603,10 +626,10 @@ protected:
     QIntDict<KSpreadCell> m_dctCells;
     QIntDict<RowLayout> m_dctRows;
     QIntDict<ColumnLayout> m_dctColumns;
-    
+
     KSpreadCell* m_pDefaultCell;
     RowLayout* m_pDefaultRowLayout;
-    ColumnLayout* m_pDefaultColumnLayout;    
+    ColumnLayout* m_pDefaultColumnLayout;
 
     /**
      * The name of the table. This name shows in the tab bar on the bottom of the window.
@@ -656,7 +679,7 @@ protected:
     /**
      * Used for @ref #m_pPainter
      */
-    QWidget *m_pWidget; 
+    QWidget *m_pWidget;
 
     /**
      * List of all embedded objects.
@@ -674,12 +697,18 @@ protected:
      */
     int m_iMaxColumn;
     bool m_bScrollbarUpdates;
-  
+
+    /**
+     * Set to TRUE while sorting.
+     */
+    bool m_sort;
+
+    DCOPObject* m_dcop;
+    bool m_tableHide;
+
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
-    bool _sort;
 
-    bool table_hide;
     static QString currency;
 };
 

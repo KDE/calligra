@@ -18,6 +18,6 @@ Comment[ru]=Электронная таблица
 Comment[sk]=KSpread (tabu╣kovЩ kalkulАtor)
 Comment[sv]=Kalkylprogram
 DefaultApp=KSpread
-Icon=txt.xpm
+Icon=kspread.png
 Type=MimeType
 Patterns=*.ksp;
