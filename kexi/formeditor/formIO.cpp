@@ -26,10 +26,11 @@
 #include <qcursor.h>
 #include <qbuffer.h>
 #include <qimage.h>
-#include <qtabwidget.h>
+//#include <qtabwidget.h>
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <qdatetime.h>
+#include <qlabel.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -43,6 +44,8 @@
 #include "spacer.h"
 
 #include "formIO.h"
+
+QDict<QLabel>  *KFormDesigner::FormIO::m_buddies = 0;
 
 //typedef QPtrList<QWidget> QWidgetList;
 
@@ -375,7 +378,8 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, 
 		case QVariant::Bool:
 		{
 			type = parent.createElement("bool");
-			valueE = parent.createTextNode(QString::number(value.toBool()));
+			//valueE = parent.createTextNode(QString::number(value.toBool()));
+			valueE = parent.createTextNode(value.toBool() ? "true" : "false");
 			type.appendChild(valueE);
 			break;
 		}
@@ -613,6 +617,10 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "bool")
 	{
+		if(text == "true")
+			return QVariant(true, 3);
+		else if(text == "false")
+			return QVariant(false, 3);
 		return QVariant(text.toInt(), 3);
 	}
 	else if(type == "number")
@@ -757,6 +765,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 	if((parent.tagName() == "widget") || (parent.tagName() == "UI"))
 		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+
+	// Save the buddy widget for a label
+	if(item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
+		saveProperty(tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->name());
 
 	WidgetLibrary *lib=0;
 	if(item->container())
@@ -961,9 +973,23 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 	if(form->objectTree())
 		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
+	m_buddies = new QDict<QLabel>();
 
 	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);
 
+	QDictIterator<QLabel> it(*m_buddies);
+	for(; it.current(); ++it)
+	{
+		ObjectTreeItem *item = form->objectTree()->lookup(it.currentKey());
+		if(!item || !item->widget())
+		{
+			kdDebug() << "Cannot assign buddy for widget " << it.current()->name() << " to " << it.currentKey() << endl;
+			continue;
+		}
+		it.current()->setBuddy(item->widget());
+	}
+	delete m_buddies;
+	m_buddies = 0;
 	form->setInteractiveMode(true);
 }
 
@@ -987,7 +1013,10 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			      (name == "name"))
 				continue;
 
-			if((name == "margin") && ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")))
+			// We cannot assign the buddy now as the buddy widget may not be created yet
+			if(name == "buddy")
+				m_buddies->insert(readProp(node.firstChild(), w, name).toString(), (QLabel*)w);
+			else if((name == "margin") && ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")))
 			{
 				int margin = readProp(node.firstChild(), w, name).toInt();
 				if(tree->container())

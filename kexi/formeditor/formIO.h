@@ -21,6 +21,7 @@
 #define FORMIO_H
 
 #include <qobject.h>
+#include <qdict.h>
 #include <qstring.h>
 
 class QString;
@@ -29,6 +30,7 @@ class QDomNode;
 class QDomDocument;
 class QDomText;
 class QVariant;
+class QLabel;
 
 namespace KFormDesigner {
 
@@ -131,6 +133,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static void         loadLayout(const QDomElement &el, ObjectTreeItem *tree);
 		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
 		static void         addIncludeFile(const QString &include, QDomDocument &domDoc);
+
+	private:
+		static QDict<QLabel>  *m_buddies;
 };
 
 }

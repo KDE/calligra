@@ -79,6 +79,8 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 
 	protected:
 		virtual void  changeText(const QString &newText);
+		void saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc);
+		void readListItem(QDomElement &node, QListViewItem *parent, KListView *listview);
 
 	private:
 		KFormDesigner::WidgetList		m_classes;

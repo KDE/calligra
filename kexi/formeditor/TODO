@@ -1,5 +1,6 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
+* Automatically set label name to the text
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
@@ -53,3 +54,5 @@
 * Select all widgets when pasted (8/05/04)
 * Handle tab stops (8/05/04)
 * Make ObjectTreeView handle multiple widgets (11/05/04)
+* Manage label buddies using a popup menu (24/05/04)
+* dragging with CTRL key can cause object's copying (25/05/04)

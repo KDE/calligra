@@ -182,13 +182,13 @@ ObjectTreeView::pixmapForClass(const QString &classname)
 }
 
 void
-ObjectTreeView::slotColumnSizeChanged(int column)
+ObjectTreeView::slotColumnSizeChanged(int)
 {
 	setColumnWidth(1, viewport()->width() - columnWidth(0));
 }
 
 void
-ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p)
+ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &)
 {
 	if((list!= this) || !m_form)
 		return;
@@ -274,7 +274,7 @@ ObjectTreeView::addItem(ObjectTreeItem *item)
 	if(!parent)
 		return;
 
-	ObjectTreeViewItem *listitem = loadTree(item, parent);
+	loadTree(item, parent);
 }
 
 void

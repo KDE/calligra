@@ -94,7 +94,7 @@ HBox::HBox(QWidget *parent, const char *name)
 {}
 
 void
-HBox::paintEvent(QPaintEvent *ev)
+HBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
@@ -107,7 +107,7 @@ VBox::VBox(QWidget *parent, const char *name)
 {}
 
 void
-VBox::paintEvent(QPaintEvent *ev)
+VBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
@@ -120,7 +120,7 @@ Grid::Grid(QWidget *parent, const char *name)
 {}
 
 void
-Grid::paintEvent(QPaintEvent *ev)
+Grid::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
@@ -478,7 +478,7 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 }
 
 void
-ContainerFactory::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
+ContainerFactory::saveSpecialProperty(const QString &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
 	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
@@ -493,7 +493,7 @@ ContainerFactory::saveSpecialProperty(const QString &classname, const QString &n
 }
 
 void
-ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
+ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
 	QString name = node.attribute("name");
 	if((name == "title") && (item->parent()->widget()->inherits("QTabWidget")))
@@ -513,13 +513,13 @@ ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 }
 
 QStringList
-ContainerFactory::autoSaveProperties(const QString &classname)
+ContainerFactory::autoSaveProperties(const QString &)
 {
 	return QStringList();
 }
 
 bool
-ContainerFactory::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
+ContainerFactory::showProperty(const QString &classname, QWidget *, const QString &property, bool multiple)
 {
 	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid"))
 	{

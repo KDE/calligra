@@ -20,7 +20,7 @@
 #ifndef KFORMDESIGNEREXTRAWIDGET_H
 #define KFORMDESIGNEREXTRAWIDGET_H
 
-#include <qptrlist.h>
+#include <qintdict.h>
 #include <qtoolbutton.h>
 
 #include <ktextedit.h>
@@ -65,6 +65,7 @@ class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
 		void  slotVerticalAlignmentChanged(VerticalAlignment align);
 
 	private:
+		enum { TBFont = 100, TBColor, TBBold, TBItalic, TBUnder, TBSuper, TBSub, TBLeft = 201, TBCenter, TBRight, TBJustify };
 		KToolBar  *m_toolbar;
 		KTextEdit  *m_edit;
 		KFontCombo  *m_fcombo;
@@ -100,12 +101,13 @@ class KFORMEDITOR_EXPORT EditListViewDialog : KDialogBase
 		void loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent);
 
 	protected:
+		enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
 		KexiPropertyEditor  *m_editor;
 		KexiPropertyBuffer  *m_buffer;
 		QFrame   *m_contents, *m_column;
 		KListBox  *m_listbox;
 		KListView  *m_listview;
-		QPtrList<QToolButton>  m_buttons;
+		QIntDict<QToolButton>  m_buttons;
 };
 
 class KFORMEDITOR_EXPORT TabStopDialog : KDialogBase
@@ -123,8 +125,9 @@ class KFORMEDITOR_EXPORT TabStopDialog : KDialogBase
 		void slotRadioClicked(bool isOn);
 
 	protected:
+		enum {BUp = 10, BDown};
 		ObjectTreeView   *m_treeview;
-		QPtrList<QToolButton>  m_buttons;
+		QIntDict<QToolButton>  m_buttons;
 };
 
 }

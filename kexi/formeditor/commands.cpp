@@ -430,7 +430,7 @@ PasteWidgetCommand::execute()
 	kdDebug() << domDoc.toString() << endl;
 	if(!domDoc.namedItem("UI").hasChildNodes())
 		return;
-	if(domDoc.namedItem("UI").firstChild().nextSibling().isNull())
+	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget")
 	{
 		QDomElement widg = domDoc.namedItem("UI").firstChild().toElement();
 		if(m_point.isNull())

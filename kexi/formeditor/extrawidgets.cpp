@@ -63,42 +63,42 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 	m_toolbar->show();
 
 	m_fcombo = new KFontCombo(m_toolbar);
-	m_toolbar->insertWidget(101, 40, m_fcombo);
+	m_toolbar->insertWidget(TBFont, 40, m_fcombo);
 	connect(m_fcombo, SIGNAL(textChanged(const QString&)), this, SLOT(changeFont(const QString &)));
 
 	m_toolbar->insertSeparator();
 
 	m_colCombo = new KColorCombo(m_toolbar);
-	m_toolbar->insertWidget(102, 30, m_colCombo);
+	m_toolbar->insertWidget(TBColor, 30, m_colCombo);
 	connect(m_colCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
 
-	m_toolbar->insertButton("text_bold", 103, true, i18n("Bold"));
-	m_toolbar->insertButton("text_italic", 104, true, i18n("Italic"));
-	m_toolbar->insertButton("text_under", 105, true, i18n("Underline"));
-	m_toolbar->setToggle(103, true);
-	m_toolbar->setToggle(104, true);
-	m_toolbar->setToggle(105, true);
+	m_toolbar->insertButton("text_bold", TBBold, true, i18n("Bold"));
+	m_toolbar->insertButton("text_italic", TBItalic, true, i18n("Italic"));
+	m_toolbar->insertButton("text_under", TBUnder, true, i18n("Underline"));
+	m_toolbar->setToggle(TBBold, true);
+	m_toolbar->setToggle(TBItalic, true);
+	m_toolbar->setToggle(TBUnder, true);
 	m_toolbar->insertSeparator();
 
-	m_toolbar->insertButton("text_super", 106, true, i18n("Superscript"));
-	m_toolbar->insertButton("text_sub", 107, true, i18n("Subscript"));
-	m_toolbar->setToggle(106, true);
-	m_toolbar->setToggle(107, true);
+	m_toolbar->insertButton("text_super", TBSuper, true, i18n("Superscript"));
+	m_toolbar->insertButton("text_sub", TBSub, true, i18n("Subscript"));
+	m_toolbar->setToggle(TBSuper, true);
+	m_toolbar->setToggle(TBSub, true);
 	m_toolbar->insertSeparator();
 
 	KToolBarRadioGroup *group = new KToolBarRadioGroup(m_toolbar);
-	m_toolbar->insertButton("text_left", 201, true, i18n("Right Align"));
-	m_toolbar->setToggle(201, true);
-	group->addButton(201);
-	m_toolbar->insertButton("text_center", 202, true, i18n("Left Align"));
-	m_toolbar->setToggle(202, true);
-	group->addButton(202);
-	m_toolbar->insertButton("text_right", 203, true, i18n("Centered"));
-	m_toolbar->setToggle(203, true);
-	group->addButton(203);
-	m_toolbar->insertButton("text_block", 204, true, i18n("Justified"));
-	m_toolbar->setToggle(204, true);
-	group->addButton(204);
+	m_toolbar->insertButton("text_left", TBLeft, true, i18n("Right Align"));
+	m_toolbar->setToggle(TBLeft, true);
+	group->addButton(TBLeft);
+	m_toolbar->insertButton("text_center", TBCenter, true, i18n("Left Align"));
+	m_toolbar->setToggle(TBCenter, true);
+	group->addButton(TBCenter);
+	m_toolbar->insertButton("text_right", TBRight, true, i18n("Centered"));
+	m_toolbar->setToggle(TBRight, true);
+	group->addButton(TBRight);
+	m_toolbar->insertButton("text_block", TBJustify, true, i18n("Justified"));
+	m_toolbar->setToggle(TBJustify, true);
+	group->addButton(TBJustify);
 
 	connect(m_toolbar, SIGNAL(toggled(int)), this, SLOT(buttonToggled(int)));
 
@@ -141,33 +141,33 @@ RichTextDialog::buttonToggled(int id)
 
 	switch(id)
 	{
-		case 103: m_edit->setBold(isOn); break;
-		case 104: m_edit->setItalic(isOn); break;
-		case 105: m_edit->setUnderline(isOn); break;
-		case 106:
+		case TBBold: m_edit->setBold(isOn); break;
+		case TBItalic: m_edit->setItalic(isOn); break;
+		case TBUnder: m_edit->setUnderline(isOn); break;
+		case TBSuper:
 		{
-			if(isOn && m_toolbar->isButtonOn(107))
-				m_toolbar->setButton(107, false);
+			if(isOn && m_toolbar->isButtonOn(TBSub))
+				m_toolbar->setButton(TBSub, false);
 			m_edit->setVerticalAlignment(isOn ? QTextEdit::AlignSuperScript : QTextEdit::AlignNormal);
 			break;
 		}
-		case 107:
+		case TBSub:
 		{
-			if(isOn && m_toolbar->isButtonOn(106))
-				m_toolbar->setButton(106, false);
+			if(isOn && m_toolbar->isButtonOn(TBSuper))
+				m_toolbar->setButton(TBSuper, false);
 			m_edit->setVerticalAlignment(isOn ? QTextEdit::AlignSubScript : QTextEdit::AlignNormal);
 			break;
 		}
-		case 201: case 202:
-		case 203: case 204:
+		case TBLeft: case TBCenter:
+		case TBRight: case TBJustify:
 		{
 			if(!isOn)  break;
 			switch(id)
 			{
-				case 201:  m_edit->setAlignment(Qt::AlignLeft); break;
-				case 202:  m_edit->setAlignment(Qt::AlignCenter); break;
-				case 203:  m_edit->setAlignment(Qt::AlignRight); break;
-				case 204:  m_edit->setAlignment(Qt::AlignJustify); break;
+				case TBLeft:  m_edit->setAlignment(Qt::AlignLeft); break;
+				case TBCenter:  m_edit->setAlignment(Qt::AlignCenter); break;
+				case TBRight:  m_edit->setAlignment(Qt::AlignRight); break;
+				case TBJustify:  m_edit->setAlignment(Qt::AlignJustify); break;
 				default: break;
 			}
 		}
@@ -184,18 +184,18 @@ RichTextDialog::cursorPositionChanged(int, int)
 
 	m_fcombo->setCurrentFont(m_edit->currentFont().family());
 	m_colCombo->setColor(m_edit->color());
-	m_toolbar->setButton(103, m_edit->bold());
-	m_toolbar->setButton(104, m_edit->italic());
-	m_toolbar->setButton(105, m_edit->underline());
+	m_toolbar->setButton(TBBold, m_edit->bold());
+	m_toolbar->setButton(TBItalic, m_edit->italic());
+	m_toolbar->setButton(TBUnder, m_edit->underline());
 
 	int id = 0;
 	switch(m_edit->alignment())
 	{
-		case Qt::AlignLeft:    id = 201; break;
-		case Qt::AlignCenter:  id = 202; break;
-		case Qt::AlignRight:   id = 203; break;
-		case Qt::AlignJustify: id = 204; break;
-		default:  id = 201; break;
+		case Qt::AlignLeft:    id = TBLeft; break;
+		case Qt::AlignCenter:  id = TBCenter; break;
+		case Qt::AlignRight:   id = TBRight; break;
+		case Qt::AlignJustify: id = TBJustify; break;
+		default:  id = TBLeft; break;
 	}
 	m_toolbar->setButton(id, true);
 }
@@ -207,20 +207,20 @@ RichTextDialog::slotVerticalAlignmentChanged(VerticalAlignment align)
 	{
 		case QTextEdit::AlignSuperScript:
 		{
-			m_toolbar->setButton(106, true);
-			m_toolbar->setButton(107, false);
+			m_toolbar->setButton(TBSuper, true);
+			m_toolbar->setButton(TBSub, false);
 			break;
 		}
 		case QTextEdit::AlignSubScript:
 		{
-			m_toolbar->setButton(107, true);
-			m_toolbar->setButton(106, false);
+			m_toolbar->setButton(TBSub, true);
+			m_toolbar->setButton(TBSuper, false);
 			break;
 		}
 		default:
 		{
-			m_toolbar->setButton(107, false);
-			m_toolbar->setButton(106, false);
+			m_toolbar->setButton(TBSuper, false);
+			m_toolbar->setButton(TBSub, false);
 		}
 	}
 }
@@ -252,35 +252,35 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	newRow->setIconSet(BarIconSet("edit_add"));
 	newRow->setTextLabel(i18n("&Add Item"), true);
 	vlayout->addWidget(newRow);
-	m_buttons.append(newRow);
+	m_buttons.insert(BNewRow, newRow);
 	connect(newRow, SIGNAL(clicked()), this, SLOT(newRow()));
 
 	QToolButton *newChild = new QToolButton(m_contents);
 	newChild->setIconSet(BarIconSet("1rightarrow"));
 	newChild->setTextLabel(i18n("New &Subitem"), true);
 	vlayout->addWidget(newChild);
-	m_buttons.append(newChild);
+	m_buttons.insert(BNewChild, newChild);
 	connect(newChild, SIGNAL(clicked()), this, SLOT(newChildRow()));
 
 	QToolButton *delRow = new QToolButton(m_contents);
 	delRow->setIconSet(BarIconSet("edit_remove"));
 	delRow->setTextLabel(i18n("&Remove Item"), true);
 	vlayout->addWidget(delRow);
-	m_buttons.append(delRow);
+	m_buttons.insert(BRemRow, delRow);
 	connect(delRow, SIGNAL(clicked()), this, SLOT(removeRow()));
 
 	QToolButton *rowUp = new QToolButton(m_contents);
 	rowUp->setIconSet(BarIconSet("1uparrow"));
 	rowUp->setTextLabel(i18n("Move Item &Up"), true);
 	vlayout->addWidget(rowUp);
-	m_buttons.append(rowUp);
+	m_buttons.insert(BRowUp, rowUp);
 	connect(rowUp, SIGNAL(clicked()), this, SLOT(MoveRowUp()));
 
 	QToolButton *rowDown = new QToolButton(m_contents);
 	rowDown->setIconSet(BarIconSet("1downarrow"));
 	rowDown->setTextLabel(i18n("Move Item &Down"), true);
 	vlayout->addWidget(rowDown);
-	m_buttons.append(rowDown);
+	m_buttons.insert(BRowDown, rowDown);
 	connect(rowDown, SIGNAL(clicked()), this, SLOT(MoveRowDown()));
 	vlayout->addStretch();
 
@@ -299,9 +299,9 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	for(int i = 0; i < listview->columns(); i++)
 	{
 		m_listview->addColumn(listview->columnText(i), listview->columnWidth(i));
-		m_listview->header()->setClickEnabled(listview->header()->isClickEnabled(), i);
-		m_listview->header()->setResizeEnabled(listview->header()->isResizeEnabled(), i);
-		m_listview->header()->setStretchEnabled(listview->header()->isStretchEnabled(), i);
+		m_listview->header()->setClickEnabled(listview->header()->isClickEnabled(i), i);
+		m_listview->header()->setResizeEnabled(listview->header()->isResizeEnabled(i), i);
+		m_listview->header()->setStretchEnabled(listview->header()->isStretchEnabled(i), i);
 		m_listview->setRenameable(i, true);
 	}
 	QListViewItem *item = listview->firstChild();
@@ -335,28 +335,28 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	add->setIconSet(BarIconSet("edit_add"));
 	add->setTextLabel(i18n("&Add Item"), true);
 	vbox->addWidget(add);
-	m_buttons.append(add);
+	m_buttons.insert(BColAdd, add);
 	connect(add, SIGNAL(clicked()), this, SLOT(newItem()));
 
 	QToolButton *remove = new QToolButton(m_column);
 	remove->setIconSet(BarIconSet("edit_remove"));
 	remove->setTextLabel(i18n("&Remove Item"), true);
 	vbox->addWidget(remove);
-	m_buttons.append(remove);
+	m_buttons.insert(BColRem, remove);
 	connect(remove, SIGNAL(clicked()), this, SLOT(removeItem()));
 
 	QToolButton *up = new QToolButton(m_column);
 	up->setIconSet(BarIconSet("1uparrow"));
 	up->setTextLabel(i18n("Move Item &Up"), true);
 	vbox->addWidget(up);
-	m_buttons.append(up);
+	m_buttons.insert(BColUp, up);
 	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
 	QToolButton *down = new QToolButton(m_column);
 	down->setIconSet(BarIconSet("1downarrow"));
 	down->setTextLabel(i18n("Move Item &Down"), true);
 	vbox->addWidget(down);
-	m_buttons.append(down);
+	m_buttons.insert(BColDown, down);
 	connect(down, SIGNAL(clicked()), this, SLOT(MoveItemDown()));
 	vbox->addStretch();
 
@@ -443,8 +443,8 @@ EditListViewDialog::updateItemProperties(QListBoxItem *item)
 		m_editor->setBuffer(m_buffer);
 	}
 
-	m_buttons.at(7)->setEnabled(item->prev());
-	m_buttons.at(8)->setEnabled(item->next());
+	m_buttons[BColUp]->setEnabled(item->prev());
+	m_buttons[BColDown]->setEnabled(item->next());
 }
 
 void
@@ -454,7 +454,7 @@ EditListViewDialog::newItem()
 	m_listview->addColumn(i18n("New Column"));
 	m_listview->setRenameable(m_listview->columns() - 1, true);
 	m_listbox->setCurrentItem(m_listbox->count() - 1);
-	m_buttons.at(6)->setEnabled(true);
+	m_buttons[BColRem]->setEnabled(true);
 }
 
 void
@@ -469,7 +469,7 @@ EditListViewDialog::removeItem()
 	m_listview->removeColumn(current);
 	m_listbox->removeItem(current);
 	if(m_listbox->count() == 0)
-		m_buttons.at(6)->setEnabled(false);
+		m_buttons[BColRem]->setEnabled(false);
 }
 
 void
@@ -529,15 +529,15 @@ EditListViewDialog::updateButtons(QListViewItem *item)
 {
 	if(!item)
 	{
-		for(int i = 1; i < 5; i++)
-			m_buttons.at(i)->setEnabled(false);
+		for(int i = BNewChild; i <= BRowDown; i++)
+			m_buttons[i]->setEnabled(false);
 		return;
 	}
 
-	m_buttons.at(1)->setEnabled(true);
-	m_buttons.at(2)->setEnabled(true);
-	m_buttons.at(3)->setEnabled( (item->itemAbove() && (item->itemAbove()->parent() == item->parent())) );
-	m_buttons.at(4)->setEnabled(item->nextSibling());
+	m_buttons[BNewChild]->setEnabled(true);
+	m_buttons[BRemRow]->setEnabled(true);
+	m_buttons[BRowUp]->setEnabled( (item->itemAbove() && (item->itemAbove()->parent() == item->parent())) );
+	m_buttons[BRowDown]->setEnabled(item->nextSibling());
 }
 
 void
@@ -566,12 +566,19 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 		newItem->moveItem(last);
 	}
 	else
-		newItem->moveItem(listview->lastItem());
+	{
+		QListViewItem *last = listview->firstChild();
+		while(last->nextSibling())
+			last = last->nextSibling();
+		newItem->moveItem(last);
+	}
 
 	for(int i = 0; i < listview->columns(); i++)
 		newItem->setText(i, item->text(i));
 
 	QListViewItem *child = item->firstChild();
+	if(child)
+		newItem->setOpen(true);
 	while(child)
 	{
 		loadChildNodes(listview, child, newItem);
@@ -656,7 +663,7 @@ TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
 	if(form->autoTabStops())
 		form->autoAssignTabStops();
 	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
-		ObjectTreeViewItem *item = new ObjectTreeViewItem(topItem, it);
+		new ObjectTreeViewItem(topItem, it);
 
 	connect(m_treeview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 
@@ -665,7 +672,7 @@ TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
 	QToolButton *up = new QToolButton(frame);
 	up->setIconSet(BarIconSet("1uparrow"));
 	up->setTextLabel(i18n("Move Widget &Up"), true);
-	m_buttons.append(up);
+	m_buttons.insert(BUp, up);
 	vbox->addWidget(up);
 	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
@@ -673,7 +680,7 @@ TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
 	down->setIconSet(BarIconSet("1downarrow"));
 	down->setTextLabel(i18n("Move Widget &Down"), true);
 	vbox->addWidget(down);
-	m_buttons.append(down);
+	m_buttons.insert(BDown, down);
 	connect(down, SIGNAL(clicked()), this, SLOT(MoveItemDown()));
 	vbox->addStretch();
 
@@ -725,21 +732,21 @@ TabStopDialog::updateButtons(QListViewItem *item)
 {
 	if(!item)
 	{
-		m_buttons.at(0)->setEnabled(false);
-		m_buttons.at(1)->setEnabled(false);
+		m_buttons[BUp]->setEnabled(false);
+		m_buttons[BDown]->setEnabled(false);
 		return;
 	}
 
-	m_buttons.at(0)->setEnabled( (item->itemAbove() && (item->itemAbove()->parent() == item->parent())) );
-	m_buttons.at(1)->setEnabled(item->nextSibling());
+	m_buttons[BUp]->setEnabled( (item->itemAbove() && (item->itemAbove()->parent() == item->parent())) );
+	m_buttons[BDown]->setEnabled(item->nextSibling());
 }
 
 void
 TabStopDialog::slotRadioClicked(bool isOn)
 {
 	m_treeview->setEnabled(!isOn);
-	m_buttons.at(0)->setEnabled(!isOn);
-	m_buttons.at(1)->setEnabled(!isOn);
+	m_buttons[BUp]->setEnabled(!isOn);
+	m_buttons[BDown]->setEnabled(!isOn);
 }
 
 }

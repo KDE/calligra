@@ -84,7 +84,7 @@ EventEater::EventEater(QWidget *widget, Container *container)
 }
 
 bool
-EventEater::eventFilter(QObject *o, QEvent *ev)
+EventEater::eventFilter(QObject *, QEvent *ev)
 {
 	if(!m_container)
 		return false;
@@ -178,7 +178,15 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if((mev->state() == ControlButton) || (mev->state() == ShiftButton))
 			{
 				if(m_selected.findRef(m_moving) != -1)
-					unSelectWidget(m_moving);
+				{
+					if(m_form->selectedWidgets()->count() > 1)
+						unSelectWidget(m_moving);
+					else
+					{
+						kdDebug() << "The new insert Rect is " << m_moving->geometry() << endl;
+						m_insertRect = m_moving->geometry();
+					}
+				}
 				else
 					setSelectedWidget(m_moving, true);
 			}
@@ -232,7 +240,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				for(ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next())
 				{
-					//w = it.current()->widget();
 					w = item->widget();
 					if(!w) continue;
 					if(w->geometry().intersects(r) && w != m_container)
@@ -258,6 +265,19 @@ Container::eventFilter(QObject *s, QEvent *e)
 					enable = false;
 				m_form->manager()->createContextMenu((QWidget*)s, this, enable);
 			}
+			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))
+			{
+				m_container->repaint();
+				if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
+				{
+					kdDebug() << "The widget has not been moved. No copying" << endl;
+					return true;
+				}
+
+				m_form->manager()->copyWidget();
+				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(mev->globalPos()));
+				m_form->manager()->pasteWidget();
+			}
 			else if(m_move)
 			{
 				reloadLayout();
@@ -268,7 +288,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::MouseMove:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(s == m_container && m_form->manager()->inserting())
+			if(s == m_container && m_form->manager()->inserting() && mev->state() != ControlButton)
 			{
 				int tmpx,tmpy;
 				int gridX = Form::gridX();
@@ -294,7 +314,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				}
 				return true;
 			}
-			else if(s == m_container && !m_toplevel)
+			else if(s == m_container && !m_toplevel && mev->state() != ControlButton)
 			{
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
@@ -309,7 +329,17 @@ Container::eventFilter(QObject *s, QEvent *e)
 				p.drawRect(r);
 				return true;
 			}
-			if(mev->state() == Qt::LeftButton)
+			if(mev->state() == (Qt::LeftButton|Qt::ControlButton))
+			{
+				QPainter p(m_container);
+				m_container->repaint(); // TODO: find a less cpu consuming solution
+				p.setBrush(QBrush::NoBrush);
+				p.setPen(QPen(m_container->paletteForegroundColor(), 2, Qt::DotLine));
+				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()));
+				p.drawRect(m_insertRect);
+				return true;
+			}
+			else if(mev->state() == Qt::LeftButton)
 			{
 				QWidget *w = m_moving;
 				if(!m_toplevel && w == m_container)
@@ -343,7 +373,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 		}
 		case QEvent::Paint:
 		{
-
 			if(s != m_container)
 				return false;
 			int gridX = Form::gridX();

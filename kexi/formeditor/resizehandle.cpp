@@ -91,7 +91,7 @@ namespace KFormDesigner {
 	}
 
 
-	bool ResizeHandle::eventFilter(QObject *obj, QEvent *ev)
+	bool ResizeHandle::eventFilter(QObject *, QEvent *ev)
 	{
 		if ((ev->type()==QEvent::Move) || (ev->type()==QEvent::Resize))
 		{
@@ -123,9 +123,9 @@ namespace KFormDesigner {
 		int tmph=m_buddy->height();
 		int dummyx=ev->x()-m_x;
 		int dummyy=ev->y()-m_y;
-	        dummyy = (((float)dummyy)/((float)m_dotSpacing)+0.5);
+	        dummyy = (int) (((float)dummyy)/((float)m_dotSpacing)+0.5);
         	dummyy*=m_dotSpacing;
-	        dummyx = (((float)dummyx)/((float)m_dotSpacing)+0.5);
+	        dummyx = (int) (((float)dummyx)/((float)m_dotSpacing)+0.5);
         	dummyx*=m_dotSpacing;
 
 		switch (m_pos)
@@ -174,7 +174,7 @@ namespace KFormDesigner {
 
 	}
 
-	void ResizeHandle::mouseReleaseEvent(QMouseEvent *ev)
+	void ResizeHandle::mouseReleaseEvent(QMouseEvent *)
 	{
 		m_dragging=false;
 	}

@@ -91,7 +91,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the
 		  pasted widgets.
 		 */
-		//void              setInsertPoint(const QPoint &p);
+		void              setInsertPoint(const QPoint &p);
 
 		/*! \return The Form actually active and focused.
 		 */
@@ -148,7 +148,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void pasteWidget();
 
 		void editTabOrder();
-		void ajustWidgetSize();
+		void adjustWidgetSize();
 		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
@@ -169,12 +169,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Used to delayed widgets' deletion (in Container::deleteItem())
 		void deleteWidgetLater( QWidget *w );
 
+	protected slots:
+		void deleteWidgetLaterTimeout();
+		void buddyChoosed(int id);
+
 		void layoutHBox();
 		void layoutVBox();
 		void layoutGrid();
-
-	protected slots:
-		void deleteWidgetLaterTimeout();
 
 	protected:
 		void initForm(Form *form);
@@ -186,6 +187,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void dirty(KFormDesigner::Form *form);
 
 	private:
+		enum { MenuCopy = 201, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, MenuVBox, MenuGrid, MenuNoBuddy = 501 };
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;
 		KexiPropertyEditor	*m_editor;
@@ -198,8 +200,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		QDomDocument		m_domDoc;
 		KPopupMenu		*m_popup;
-		int			m_deleteid, m_cutid, m_copyid;
 		QPoint			m_insertPoint;
+		QGuardedPtr<QWidget>	m_menuWidget;
 
 		bool			m_inserting;
 		QString			m_insertClass;

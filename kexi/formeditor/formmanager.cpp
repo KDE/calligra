@@ -22,6 +22,7 @@
 #include <qworkspace.h>
 #include <qcursor.h>
 #include <qstring.h>
+#include <qlabel.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
@@ -68,16 +69,16 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_popup = new KPopupMenu();
-	m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()), 0, 201);
-	m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()), 0, 202);
-	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()), 203);
-	m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()), 0, 204);
-	m_popup->insertSeparator(205);
+	m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()), 0, MenuCopy);
+	m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()), 0, MenuCut);
+	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()), MenuPaste);
+	m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()), 0, MenuDelete);
+	m_popup->insertSeparator(MenuDelete + 1);
 
-	m_popup->insertItem( i18n("&Lay out horizontally"), this, SLOT(layoutHBox()), 0, 301);
-	m_popup->insertItem( i18n("&Lay out vertically"), this, SLOT(layoutVBox()), 0, 302);
-	m_popup->insertItem( i18n("&Lay out in a grid"), this, SLOT(layoutGrid()), 0, 303);
-	m_popup->insertSeparator(304);
+	m_popup->insertItem( i18n("&Lay out horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
+	m_popup->insertItem( i18n("&Lay out vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
+	m_popup->insertItem( i18n("&Lay out in a grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
+	m_popup->insertSeparator(MenuGrid + 1);
 
 	m_treeview = 0;
 	m_editor = 0;
@@ -432,16 +433,17 @@ FormManager::pasteWidget()
 	KCommand *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
 	activeForm()->addCommand(com, true);
 }
-/*
+
 void
 FormManager::setInsertPoint(const QPoint &p)
 {
 	m_insertPoint = p;
-}*/
+}
 
 void
 FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemove)
 {
+	m_menuWidget = w;
 	QString n = m_lib->displayName(w->className());
 	KPopupMenu *p = new KPopupMenu();
 
@@ -455,23 +457,65 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	else
 		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n, p);
 
-	m_popup->setItemEnabled(204, enableRemove);
-	m_popup->setItemEnabled(202, enableRemove);
-	m_popup->setItemEnabled(201, enableRemove);
+	m_popup->setItemEnabled(MenuCopy, enableRemove);
+	m_popup->setItemEnabled(MenuCut, enableRemove);
+	m_popup->setItemEnabled(MenuDelete, enableRemove);
 
 	bool enableLayout = false;
 	if((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()))
 		enableLayout = true;
 
-	m_popup->setItemEnabled(301, enableLayout);
-	m_popup->setItemEnabled(302, enableLayout);
-	m_popup->setItemEnabled(303, enableLayout);
+	m_popup->setItemEnabled(MenuHBox, enableLayout);
+	m_popup->setItemEnabled(MenuVBox, enableLayout);
+	m_popup->setItemEnabled(MenuGrid, enableLayout);
+
+	int subid;
+	if(w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
+	{
+		KPopupMenu *sub = new KPopupMenu(w);
+		QWidget *buddy = ((QLabel*)w)->buddy();
+
+		sub->insertItem(i18n("No Buddy"), MenuNoBuddy);
+		if(!buddy)
+			sub->setItemChecked(MenuNoBuddy, true);
+		sub->insertSeparator();
+
+		ObjectTreeC *list = container->form()->tabStops();
+		for(ObjectTreeItem *item = list->first(); item; item = list->next())
+		{
+			int index = sub->insertItem(item->name());
+			if(item->widget() == buddy)
+				sub->setItemChecked(index, true);
+		}
+		subid = m_popup->insertItem(i18n("Choose Buddy..."), sub);
+		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
+	}
 
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
 	m_popup->exec(QCursor::pos());
 	m_insertPoint = QPoint();
 
 	m_popup->removeItem(id);
+	m_popup->removeItem(subid);
+}
+
+void
+FormManager::buddyChoosed(int id)
+{
+	if(!m_menuWidget)
+		return;
+	QLabel *label = static_cast<QLabel*>((QWidget*)m_menuWidget);
+
+	if(id == MenuNoBuddy)
+	{
+		label->setBuddy(0);
+		return;
+	}
+
+	ObjectTreeItem *item = activeForm()->objectTree()->lookup(m_popup->text(id));
+	if(!item || !item->widget())
+		return;
+	label->setBuddy(item->widget());
 }
 
 void
@@ -547,7 +591,7 @@ FormManager::editTabOrder()
 }
 
 void
-FormManager::ajustWidgetSize()
+FormManager::adjustWidgetSize()
 {
 	if(!m_active)
 		return;

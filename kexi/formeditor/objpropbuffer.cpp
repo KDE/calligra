@@ -55,7 +55,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 }
 
 void
-ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty &prop)
+ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &prop)
 {
 	if(!m_manager || !m_manager->activeForm() || ! m_manager->activeForm()->objectTree())
 		return;
@@ -122,7 +122,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 }
 
 void
-ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &buff, KexiProperty &prop)
+ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &, KexiProperty &prop)
 {
 	if(!m_multiple)
 		return;

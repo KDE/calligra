@@ -301,6 +301,7 @@ Form::pasteWidget(QDomElement &widg, Container *cont, QPoint pos)
 	Container *container = cont ? cont : activeContainer();
 	if (!container)
 		return;
+
 	fixNames(widg);
 	if(pos.isNull())
 		widg = fixPos(widg);
