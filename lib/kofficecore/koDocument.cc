@@ -673,9 +673,8 @@ bool KoDocument::openFile()
     if ( isReadWrite() )
       m_url = KURL();
     // and remove temp file
-    //if(!importedFile.isEmpty())
-      //unlink( QFile::encodeName(importedFile) );
-kdDebug() << "-- grab it at " << importedFile << endl;
+    if(!importedFile.isEmpty())
+      unlink( QFile::encodeName(importedFile) );
   }
 
   if ( ok && d->m_bSingleViewMode )
