@@ -210,6 +210,18 @@ void PicturePreview::slotBrightValue( int _value )
     repaint();
 }
 
+void PicturePreview::setDepth( int _depth)
+{
+    depth = _depth;
+    repaint();
+}
+
+void PicturePreview::setMirrorType (PictureMirrorType _t)
+{
+    mirrorType = _t;
+    repaint();
+}
+
 /******************************************************************/
 /* class ConfPictureDia                                           */
 /******************************************************************/
@@ -217,12 +229,18 @@ void PicturePreview::slotBrightValue( int _value )
 /*==================== constructor ===============================*/
 ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
                                 int _depth, bool _swapRGB, int _bright, QPixmap _origPixmap )
-    : KDialogBase( parent, name, true )
+    : KDialogBase( parent, name, true ,i18n( "KPresenter - Configure Picture" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
 {
     mirrorType = _mirrorType;
     depth = _depth;
     swapRGB = _swapRGB;
     bright = _bright;
+
+    oldMirrorType = _mirrorType;
+    oldDepth = _depth;
+    oldSwapRGB = _swapRGB;
+    oldBright = _bright;
+
     origPixmap = _origPixmap;
 
     // ------------------------ layout
@@ -250,12 +268,6 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     m_horizontalAndVerticalMirrorPicture = new QRadioButton( i18n( "Horizontal And Vertical Mirror" ), mirrorGroup );
     connect( m_horizontalAndVerticalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotHorizontalAndVerticalMirrorPicture() ) );
 
-    m_normalPicture->setChecked( mirrorType == PM_NORMAL );
-    m_horizontalMirrorPicture->setChecked( mirrorType == PM_HORIZONTAL );
-    m_verticalMirrorPicture->setChecked( mirrorType == PM_VERTICAL );
-    m_horizontalAndVerticalMirrorPicture->setChecked( mirrorType == PM_HORIZONTALANDVERTICAL );
-
-
     QButtonGroup *depthGroup = new QVButtonGroup( i18n( "Depth" ), gSettings );
 
     m_depth0 = new QRadioButton( i18n( "Default Color Mode" ), depthGroup );
@@ -273,17 +285,8 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     m_depth32 = new QRadioButton( i18n( "32 Bit Color Mode" ), depthGroup );
     connect( m_depth32, SIGNAL( clicked() ), this, SLOT( slotPictureDepth32() ) );
 
-
-    m_depth0->setChecked( depth == 0 );
-    m_depth1->setChecked( depth == 1 );
-    m_depth8->setChecked( depth == 8 );
-    m_depth16->setChecked( depth == 16 );
-    m_depth32->setChecked( depth == 32 );
-
-
     m_swapRGBCheck = new QCheckBox( i18n( "Convert from RGB image to BGR image" ), gSettings );
     connect( m_swapRGBCheck, SIGNAL( toggled( bool ) ), this, SLOT( slotSwapRGBPicture( bool ) ) );
-    m_swapRGBCheck->setChecked( swapRGB );
 
 
     m_brightValue = new KIntNumInput( bright, gSettings );
@@ -321,16 +324,42 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
 
     connect( m_brightValue, SIGNAL( valueChanged( int ) ), picturePreview, SLOT( slotBrightValue( int ) ) );
 
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+    slotReset();
 }
 
 /*===================== destructor ===============================*/
 ConfPictureDia::~ConfPictureDia()
 {
     delete picturePreview;
+}
+
+void ConfPictureDia::slotReset()
+{
+    m_depth0->setChecked( oldDepth == 0 );
+    m_depth1->setChecked( oldDepth == 1 );
+    m_depth8->setChecked( oldDepth == 8 );
+    m_depth16->setChecked( oldDepth == 16 );
+    m_depth32->setChecked( oldDepth == 32 );
+
+    depth=oldDepth;
+    picturePreview->setDepth( depth );
+
+    m_normalPicture->setChecked( oldMirrorType == PM_NORMAL );
+    m_horizontalMirrorPicture->setChecked( oldMirrorType == PM_HORIZONTAL );
+    m_verticalMirrorPicture->setChecked( oldMirrorType == PM_VERTICAL );
+    m_horizontalAndVerticalMirrorPicture->setChecked( oldMirrorType == PM_HORIZONTALANDVERTICAL );
+    mirrorType=oldMirrorType;
+    picturePreview->setMirrorType (mirrorType);
+    m_brightValue->setValue( oldBright );
+    m_swapRGBCheck->setChecked( oldSwapRGB );
 }
 
 void ConfPictureDia::slotNormalPicture()

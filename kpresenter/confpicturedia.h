@@ -49,6 +49,8 @@ public:
                     int _dept, bool _swapRGB, int _bright, QPixmap _origPixmap );
     ~PicturePreview() {}
 
+    void setDepth( int depth);
+    void setMirrorType (PictureMirrorType _t);
 public slots:
     void slotNormalPicture();
     void slotHorizontalMirrorPicture();
@@ -101,12 +103,12 @@ protected:
 
     QGroupBox *gSettings;
     PicturePreview *picturePreview;
-
-    PictureMirrorType mirrorType;
-    int depth;
-    bool swapRGB;
-    int bright;
     QPixmap origPixmap;
+
+    PictureMirrorType mirrorType, oldMirrorType;
+
+    int depth, bright, oldDepth, oldBright;
+    bool swapRGB, oldSwapRGB;
 
 protected slots:
     void slotNormalPicture();
@@ -123,6 +125,8 @@ protected slots:
     void slotSwapRGBPicture( bool _on );
 
     void slotBrightValue( int _value );
+
+    void slotReset();
 
     void Apply() { emit confPictureDiaOk(); }
 

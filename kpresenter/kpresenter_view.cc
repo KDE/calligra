@@ -1079,7 +1079,6 @@ void KPresenterView::extraConfigPicture()
     confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _bright, _origPixmap );
     confPictureDia->setMaximumSize( confPictureDia->width(), confPictureDia->height() );
     confPictureDia->setMinimumSize( confPictureDia->width(), confPictureDia->height() );
-    confPictureDia->setCaption( i18n( "KPresenter - Configure Picture" ) );
 
     QObject::connect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
 
