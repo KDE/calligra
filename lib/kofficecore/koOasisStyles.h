@@ -21,10 +21,13 @@ public:
     const QDict<QDomElement>& styles() const { return m_styles; }
 
     /// Contains the sub-set of "user styles", i.e. those from office:styles
-    const QValueVector<QDomElement> &userStyles() const { return m_userStyles; }
+    QValueVector<QDomElement> userStyles() const;
 
     /// @return the default style
     const QDomElement& defaultStyle() const { return m_defaultStyle; }
+
+    /// @return the office:style element
+    const QDomElement& officeStyle() const { return m_officeStyle; }
 
     /// @return all list styles ("text:list-style" elements), hashed by name
     const QDict<QDomElement>& listStyles() const { return m_listStyles; }
@@ -41,8 +44,8 @@ private:
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
     QDict<QDomElement>   m_styles;
-    QValueVector<QDomElement> m_userStyles;
     QDomElement m_defaultStyle;
+    QDomElement m_officeStyle;
 
     QDict<QDomElement>   m_masterPages;
     QDict<QDomElement>   m_listStyles;
