@@ -151,7 +151,7 @@ public:
    */
   static QCString readNativeFormatMimeType( KInstance *instance = 0L );
 
-    static KService::Ptr readNativeService( KInstance *instance = 0L );
+  static KService::Ptr readNativeService( KInstance *instance = 0L );
 
   /**
    * To be preferred when a document exists. It is fast when calling
@@ -160,11 +160,10 @@ public:
    */
   QCString nativeFormatMimeType();
 
-    KService::Ptr nativeService();
+  KService::Ptr nativeService();
 
   /**
    *  Create a new view for the document.
-   *  @see #createShell
    */
   KoView *createView( QWidget *parent = 0, const char *name = 0 );
 
@@ -356,7 +355,7 @@ public:
    * @see #isModified
    */
   virtual void insertChild( const KoDocumentChild *child );
-    
+
   /**
    * @return the list of all children. Do not modify the
    *         returned list.
