@@ -1052,7 +1052,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 kppartobject->setSize( r.width(), r.height() );
                 insertObjectInPage(offset, kppartobject);
             }
-        } else if(elem.tagName()=="PAPER")  {
+        } else if(elem.tagName()=="PAPER" && _clean)  {
             if(elem.hasAttribute("format"))
                 __pgLayout.format=static_cast<KoFormat>(elem.attribute("format").toInt());
             if(elem.hasAttribute("orientation"))
@@ -1119,7 +1119,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if ( _clean )
                 setPageLayout( __pgLayout );
 
-        } else if(elem.tagName()=="VARIABLESETTINGS"){
+        } else if(elem.tagName()=="VARIABLESETTINGS" && _clean){
             getVariableCollection()->variableSetting()->load(document);
             //by default display real variable value
             if ( !isReadWrite())
@@ -1178,7 +1178,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 spellWord=spellWord.nextSibling().toElement();
             }
             m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
-        }else if(elem.tagName()=="ATTRIBUTES") {
+        }else if(elem.tagName()=="ATTRIBUTES" && _clean) {
             if(elem.hasAttribute("activePage"))
                 activePage=elem.attribute("activePage").toInt();
             if(elem.hasAttribute("gridx"))
@@ -3254,12 +3254,10 @@ void KPresenterDoc::insertFile(const QString & file )
         return;
     }
     KMacroCommand *macro = 0L;
-    bool createMacro = false;
     for ( int i = m_insertFilePage; i<(int)m_pageList.count();i++)
     {
         if ( !macro )
             macro = new KMacroCommand( i18n("Insert File"));
-        createMacro = true;
         KPrInsertPageCmd * cmd = new KPrInsertPageCmd( i18n("Insert File"),i, m_pageList.at(i), this ) ;
         macro->addCommand(cmd );
     }
