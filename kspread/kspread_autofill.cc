@@ -106,9 +106,9 @@ AutoFillSequenceItem::AutoFillSequenceItem( const char *_str )
 	month->append( i18n("February") );
 	month->append( i18n("March") );
 	month->append( i18n("April") );
-	month->append( i18n("Mai") );
+	month->append( i18n("May") );
 	month->append( i18n("June") );
-	month->append( i18n("Juli") );
+	month->append( i18n("July") );
 	month->append( i18n("August") );
 	month->append( i18n("September") );
 	month->append( i18n("October") );
