@@ -206,14 +206,12 @@ QPoint KoChild::rotationPoint() const
 
 void KoChild::transform( QPainter &painter )
 {
-    // HACK: QPrinter can not handle clipping.
-    if ( !painter.device()->isExtDev() )
-	setClipRegion( painter, true );
+    setClipRegion( painter, true );
     
-  QWMatrix m = painter.worldMatrix();
-  m = d->m_matrix * m;
-  m.scale( d->m_scaleX, d->m_scaleY );
-  painter.setWorldMatrix( m );
+    QWMatrix m = painter.worldMatrix();
+    m = d->m_matrix * m;
+    m.scale( d->m_scaleX, d->m_scaleY );
+    painter.setWorldMatrix( m );
 }
 
 QRect KoChild::contentRect() const
