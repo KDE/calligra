@@ -3032,4 +3032,11 @@ void KWDocument::updateZoomRuler()
     }
 }
 
+void KWDocument::updateRulerFrameStartEnd()
+{
+    QListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+        it.current()->setFrameStartEnd();
+}
+
 #include "kwdoc.moc"

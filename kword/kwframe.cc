@@ -1819,6 +1819,7 @@ void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
         }
     }
     formulaView->keyPressEvent( event );
+    m_canvas->kWordDocument()->updateRulerFrameStartEnd();
 }
 
 void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
