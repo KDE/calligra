@@ -4,6 +4,7 @@ Fixes:
 - Fixed possible crash in presentation mode if not all slides are shown
 - Fixed take tmp objects for redrawing in effect from the correct page
 - Fixed show the duration for the correct page if not all slides are shown
+- Fixed crash in infinite loop presentation mode when first slide is not shown
 
 Changes:
 - If a page is shown more than once during a presentation add the time for 

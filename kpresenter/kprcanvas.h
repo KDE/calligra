@@ -207,6 +207,12 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     
     void gotoPage( int pg );
 
+    /**
+     * Go to first slide of presentation.
+     * Used in presentation mode.
+     */
+    void presGotoFirstPage();
+
     KPrPage* activePage() const;
     
     bool oneObjectTextExist() const;

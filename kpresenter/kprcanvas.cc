@@ -2098,7 +2098,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                 m_view->autoScreenPresStopTimer();
             slotGotoPage(); break;
         case Key_Home:  // go to first page
-            gotoPage( *m_presentationSlides.begin() );
+            presGotoFirstPage();
             if ( !spManualSwitch() ) {
                 m_view->setCurrentTimer( 1 );
                 setNextPageTimer( true );
@@ -4970,6 +4970,11 @@ void KPrCanvas::gotoPage( int pg )
         setFocus();
         m_view->refreshPageButton();
     }
+}
+
+void KPrCanvas::presGotoFirstPage()
+{
+    gotoPage( *m_presentationSlides.begin() );
 }
 
 KPTextObject* KPrCanvas::kpTxtObj() const
