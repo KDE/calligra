@@ -39,7 +39,7 @@ KisShell::KisShell( const char* name )
 
   m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), ID_STATUSBAR_INFOTEXT );
 
-  setStatusBar( m_pStatusBar );
+  //setStatusBar( m_pStatusBar ); //jwc
 }
 
 KisShell::~KisShell()

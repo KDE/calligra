@@ -20,6 +20,7 @@
 
 #include <kglobalsettings.h>
 #include <kdualcolorbtn.h>
+#include <kdebug.h> //jwc
 
 #include "kis_sidebar.h"
 #include "kis_brushwidget.h"
@@ -29,6 +30,8 @@
 
 KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, name )
 {
+  kdDebug() << "KisSideBar::KisSideBar" << endl; //jwc
+
   m_pTopFrame = new TopFrame(this);
   m_pChooserFrame = new ChooserFrame(this);
   m_pControlFrame = new ControlFrame(this);
@@ -60,6 +63,8 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, n
 
   connect(m_pControlFrame, SIGNAL(activeColorChanged(ActiveColor)), this,
 	  SLOT(slotControlActiveColorChanged(ActiveColor)));
+
+  kdDebug() << "KisSideBar::KisSideBar leaving" << endl; //jwc          
 }
 
 void KisSideBar::resizeEvent ( QResizeEvent * )
@@ -409,7 +414,7 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name ) : QFrame( parent
 
   m_pColorButton = new KDualColorButton(this);
   m_pBrushWidget = new KisBrushWidget(this);
-  m_pPatternWidget = new KisPatternWidget(this);
+  //m_pPatternWidget = new KisPatternWidget(this); //jwc
 
   connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 	  SLOT(slotFGColorSelected(const QColor &)));
@@ -444,14 +449,14 @@ void ControlFrame::slotSetBrush(const KisBrush& b)
 
 void ControlFrame::slotSetPattern(const KisPattern& b)
 {
-  m_pPatternWidget->slotSetPattern(b);
+  //m_pPatternWidget->slotSetPattern(b); //jwc
 }
 
 void ControlFrame::resizeEvent ( QResizeEvent * )
 {
   m_pColorButton->setGeometry( 4, 4, 34, 34 );
   m_pBrushWidget->setGeometry( 42, 4, 34, 34 );
-  m_pPatternWidget->setGeometry( 80, 4, 34, 34 );
+  //m_pPatternWidget->setGeometry( 80, 4, 34, 34 ); //jwc
 }
 
 void ControlFrame::slotSetFGColor(const KisColor& c)

@@ -1,9 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop" version="2">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
-  <Action name="undo"/>
-  <Action name="redo"/>
-  <Separator/>
   <Action name="copy"/>
   <Action name="cut"/>
   <Action name="paste"/>
@@ -55,9 +52,6 @@
  </Menu>
 </MenuBar>
 <ToolBar name="edit" position="top"><Text>Edit</Text>
-  <Action name="undo"/>
-  <Action name="redo"/>
-  <Separator/>
   <Action name="copy"/>
   <Action name="cut"/>
   <Action name="paste"/>

@@ -37,8 +37,10 @@
 #include <kglobal.h>
 #include <kmimetype.h>
 
+#include <koTemplateChooseDia.h> //jwc
+#include <koQueryTrader.h> //jwc
 #include <koStore.h>
-#include <koStoreStream.h>
+//#include <koStoreStream.h> //jwc - nonexistent file
 
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -50,8 +52,10 @@
 #define KIS_DEBUG(AREA, CMD)
 
 KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parentWidget, parent, parent, name, singleViewMode )
-  , m_commands()
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ) //jwc
+
+//  : KoDocument( parentWidget, parent, parent, name, singleViewMode )
+//  , m_commands()
 {
   setInstance( KisFactory::global() );
   m_pCurrent = 0L;
@@ -74,6 +78,45 @@ bool KisDoc::initDoc()
   setCurrentImage(img);
 
   emit imageListUpdated();
+
+// jwc - code for future choose dialog
+#if 0
+  QString templ;
+  KoTemplateChooseDia::ReturnType ret;
+
+  ret = KoTemplateChooseDia::choose (KisFactory::global(),
+                                     templ,
+                                     "application/x-kimageshop", "*.kis",
+                                     i18n("KImageShop"),
+                                     KoTemplateChooseDia::Everything,
+                                     "kimageshop_template");
+                                     
+  if (ret == KoTemplateChooseDia::Template) 
+  {
+    QFileInfo fileInfo (templ);
+    QString fileName (fileInfo.dirPath (true) + "/" +
+                      fileInfo.baseName () + ".kis");
+    // load it
+    bool ok = loadNativeFormat (fileName);
+    setModified (true);
+    return ok;
+  } 
+  else if (ret == KoTemplateChooseDia::File) 
+  {
+    // load it
+    KURL url;
+    url.setPath (templ);
+    bool ok = openURL (url);
+    return ok;
+  } 
+  else if ( ret == KoTemplateChooseDia::Empty )
+  {
+    return true;
+  } 
+  else
+    return false;
+#endif
+  
   return true;
 }
 
@@ -168,6 +211,8 @@ bool KisDoc::completeSaving( KoStore* store )
   if ( !store ) return false;
   if (!m_pCurrent)	return false;
 
+//jwc - nonexistent stream class used, fix later
+#if 0 
   QList<KisLayer> layers = m_pCurrent->layerList();
 
   for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
@@ -186,6 +231,7 @@ bool KisDoc::completeSaving( KoStore* store )
 		  }
 		}
 	}
+#endif        
   return true;
 }
 
@@ -206,15 +252,20 @@ bool KisDoc::load( istream& in, KoStore* store )
   buffer.close();
 
   buffer.open( IO_ReadOnly );
-  QDomDocument doc( &buffer );
+  //QDomDocument doc( &buffer );
+  QByteArray bufferbytearray = buffer.buffer();  //jwc
+  char *bufferdata = bufferbytearray.data(); //jwc    
+  QDomDocument doc( bufferdata );  //jwc
 
-  bool b = loadXML( doc, store );
-
+  //bool b = loadXML( doc, store ); //jwc
+  bool b = loadXML( NULL, doc ); //jwc
+  
   buffer.close();
   return b;
 }
 
-bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
+//bool KisDoc::loadXML( const QDomDocument& doc , KoStore* ) //jwc
+bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc ) //jwc
 {
   if ( doc.doctype().name() != "image" )
 	return false;
@@ -261,7 +312,8 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
 	  return false;
 	}
 
-  KisImage *img = newImage(name, w, h, colorMode, bd);
+  //KisImage *img = newImage(name, w, h, colorMode, bd); //jwc
+  KisImage *img = newImage("Untitled", w, h, colorMode, bd); //jwc  
   if (!img) return false;
 
   img->setAuthor( image.attribute( "author" ));
@@ -303,18 +355,21 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
   img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
   img->markDirty(QRect(0, 0, w, h));
   setCurrentImage(img);
-
+  
+  kdDebug() << "KisDoc::loadXML" << endl; //jwc
   return true;
 }
 
 bool KisDoc::completeLoading( KoStore* )
 {
   // TODO: Load binary image data.
+  kdDebug() << "KisDoc::completeLoading" << endl;  //jwc
   return true;
 }
 
 void KisDoc::setCurrentImage(KisImage *img)
 {
+  kdDebug() << "KisDoc::completeLoading" << endl; //jwc
   if (m_pCurrent)
     {
       // disconnect old current image
@@ -337,10 +392,13 @@ void KisDoc::setCurrentImage(KisImage *img)
   emit imageListUpdated();
   emit layersUpdated();
   emit docUpdated();
+  kdDebug() << "KisDoc::setCurrentImage leaving" << endl; //jwc
 }
 
 void KisDoc::setCurrentImage(const QString& _name)
 {
+  kdDebug() << "KisDoc::completeLoading" << endl; //jwc
+
   KisImage *img = m_Images.first();
 
   while (img)
@@ -352,6 +410,7 @@ void KisDoc::setCurrentImage(const QString& _name)
 	}
       img = m_Images.next();
     }
+   kdDebug() << "KisDoc::setCurrentImage end of func" << endl; //jwc   
 }
 
 QStringList KisDoc::images()
@@ -400,6 +459,8 @@ KisDoc::~KisDoc()
 
 KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , uchar bitDepth )
 {
+  kdDebug() << "KisDoc::newImage" << endl; //jwc
+
   KisImage *img = new KisImage( n, width, height, cm, bitDepth );
   m_Images.append(img);
 
@@ -434,6 +495,8 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
 void KisDoc::slotNewImage()
 {
+  kdDebug() << "KisDoc::slotNewImage" << endl; //jwc
+
   if (!m_pNewDialog)
     m_pNewDialog = new NewDialog();
   m_pNewDialog->show();
@@ -475,11 +538,13 @@ QCString KisDoc::mimeType() const
 KoView* KisDoc::createViewInstance( QWidget* parent, const char* name )
 {
   KisView* view = new KisView( this, parent, name );
-
+//jwc  
+#if 0 
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                     view, SLOT( slotUndoRedoChanged( QString, QString ) ) );
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
                     view, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
+#endif                    
   return view;
 }
 

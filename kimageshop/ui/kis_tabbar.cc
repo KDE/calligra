@@ -356,7 +356,8 @@ void KisTabBar::mousePressEvent( QMouseEvent* _ev )
   int i = 1;
   int x = 0;
   QString text;
-  const char *active_text = 0L;
+  //const char *active_text = 0L; //jwc
+  QString active_text = "";
 
   QStringList::Iterator it;
     for ( it = tabsList.begin(); it != tabsList.end(); ++it )

@@ -137,7 +137,7 @@ void MoveTool::mouseRelease(QMouseEvent *e )
     MoveCommand *moveCommand = new MoveCommand( m_pDoc,
       img->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
 
-    m_pDoc->commandHistory()->addCommand( moveCommand );
+    //m_pDoc->commandHistory()->addCommand( moveCommand ); //jwc
   }
 
   m_dragging = false;

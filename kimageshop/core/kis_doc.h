@@ -26,7 +26,7 @@
 #include <qstringlist.h>
 
 #include <koDocument.h>
-#include <koUndo.h>
+//#include <koUndo.h> //jwc
 
 #include "kis_image.h"
 #include "kis_global.h"
@@ -57,19 +57,19 @@ public:
 
     virtual bool initDoc();
 
-	virtual bool save( ostream&, const char *_format );
-	virtual bool load( istream& in, KoStore* _store );
-	virtual bool loadXML( const QDomDocument& doc, KoStore* store );
-
-	virtual bool completeLoading( KoStore* store );
-	virtual bool completeSaving( KoStore* );
+    virtual bool save( ostream&, const char *_format );
+    virtual bool load( istream& in, KoStore* _store );
+    //virtual bool loadXML( const QDomDocument& doc, KoStore* store ); //jwc
+    virtual bool loadXML( QIODevice *, const QDomDocument & doc ); // jwc
+    virtual bool completeLoading( KoStore* store );
+    virtual bool completeSaving( KoStore* );
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
 	/*
 	 * KOffice undo/redo.
 	 */
-    KoCommandHistory* commandHistory() { return &m_commands; };
+    //KoCommandHistory* commandHistory() { return &m_commands; }; //jwc
 
 	/*
 	 * Use QPainter p to paint a rectangular are of the current image.
@@ -89,7 +89,7 @@ public:
 	/*
 	 * Return apointer to the current image.
 	 */
-	KisImage* current();
+    KisImage* current();
 
 	/*
 	 * Return the name of the current image.
@@ -128,7 +128,7 @@ signals:
 
 protected:
   virtual KoView* createViewInstance( QWidget* parent, const char* name );
-  KoCommandHistory  m_commands;
+  //KoCommandHistory  m_commands; //jwc
   QList <KisImage>  m_Images;
   KisImage         *m_pCurrent;
   NewDialog        *m_pNewDialog;

@@ -269,9 +269,10 @@ void KisView::setupDialogs()
 void KisView::setupActions()
 {
   // edit actions
-
-  m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo");
-  m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo");
+  
+  // jwc - no undo - redo yet
+  //m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo");
+  //m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo");
   m_cut = KStdAction::cut( this, SLOT( cut() ), actionCollection(), "cut");
   m_copy = KStdAction::copy( this, SLOT( copy() ), actionCollection(), "copy");
   m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste");
@@ -404,8 +405,9 @@ void KisView::setupActions()
 
   // disable at startup unused actions
 
-  m_undo->setEnabled( false );
-  m_redo->setEnabled( false );
+  // jwc - no undo - redo yet
+  //m_undo->setEnabled( false );
+  //m_redo->setEnabled( false );
   m_cut->setEnabled( false );
   m_copy->setEnabled( false );
   m_paste->setEnabled( false );
@@ -696,8 +698,6 @@ void KisView::tool_colorpicker()
 
 void KisView::tool_gradient()
 {
-  debug( "Gradient Tool activated" );
-
   activateTool( m_pGradientTool );
 }
 
@@ -709,14 +709,14 @@ void KisView::undo()
 {
     kdDebug() << "UNDO called" << endl;
 
-    m_pDoc->commandHistory()->undo();
+    //m_pDoc->commandHistory()->undo(); //jwc
 }
 
 void KisView::redo()
 {
     kdDebug() << "REDO called" << endl;
 
-    m_pDoc->commandHistory()->redo();
+    //m_pDoc->commandHistory()->redo(); //jwc
 }
 
 void KisView::copy()
@@ -740,10 +740,6 @@ void KisView::paste()
 
 void KisView::zoom( int _x, int _y, float zf )
 {
-  debug( "KisView::zoom" );
-
-  debug( "zoom factor : %f", zf );
-
   if (zf == 0) zf = 1;
 
   setZoomFactor( zf );
@@ -761,8 +757,6 @@ void KisView::zoom( int _x, int _y, float zf )
 
 void KisView::zoom_in( int x, int y )
 {
-  debug( "KisView::zoom_in" );
-
   float zf = zoomFactor();
 
   zf *= 2;
@@ -772,8 +766,6 @@ void KisView::zoom_in( int x, int y )
 
 void KisView::zoom_out( int x, int y )
 {
-  debug( "KisView::zoom_out" );
-
   float zf = zoomFactor();
 
   zf /= 2;
@@ -828,13 +820,10 @@ void KisView::updateToolbarButtons()
 
 void KisView::insert_layer()
 {
-  debug("KisView::insert_layer");
 }
 
 void KisView::insert_layer_image()
 {
-  debug("KisView::insert_layer_image");
-
   KURL url = KFileDialog::getOpenURL( getenv("HOME"),KisUtil::readFilters(),0,i18n("Image file for layer") );
 
   if( !url.isEmpty() )
@@ -1010,6 +999,7 @@ void KisView::slotUndoRedoChanged( QStringList undo, QStringList redo )
 {
   //####### FIXME
 
+#if 0
   if( undo.count() )
   {
     // enable undo action
@@ -1031,6 +1021,9 @@ void KisView::slotUndoRedoChanged( QStringList undo, QStringList redo )
     // disable redo action
     m_redo->setEnabled( false );
   }
+#endif
+
 }
 
 #include "kis_view.moc"
+

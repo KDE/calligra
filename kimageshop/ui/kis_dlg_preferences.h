@@ -62,6 +62,8 @@ private:
 	QLineEdit *m_pLineEdit;
 };
 
+/* jwc - undo-redo not working yet */
+/*
 class UndoRedoTab : public QWidget
 {
   Q_OBJECT
@@ -70,6 +72,7 @@ public:
 
   UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
 };
+*/
 
 /**
  *  Preferences dialog of KImageShop
@@ -91,7 +94,7 @@ private:
 
   GeneralTab     *m_general;
   DirectoriesTab *m_directories;
-  UndoRedoTab    *m_undoRedo;
+  // UndoRedoTab    *m_undoRedo; //jwc
 };
 
 #endif

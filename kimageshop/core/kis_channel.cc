@@ -202,8 +202,8 @@ void KisChannel::allocateRect(QRect newRect)
 			memset(m_tiles[(y * m_xTiles) + x], 255, TILE_SIZE * TILE_SIZE);
       }
 }
-
-
+//jwc
+#if 0 
 bool KisChannel::writeToStore( ostorestream *out)
 {
   if (!out) return false;
@@ -229,3 +229,5 @@ bool  KisChannel::loadFromStore(istorestream *in)
 
   return true;
 }
+#endif
+

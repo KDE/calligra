@@ -61,7 +61,13 @@ KisFactory::KisFactory( QObject* parent, const char* name )
   s_pserver = new KisPluginServer;
   s_rserver = new KisResourceServer;
 
-  KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global));
+  //KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global)); //jwc
+  // jwc - setLogFile() expect char * for not QString
+
+  QString FileName = locateLocal("kis", "kimageshop.log", s_global);  
+  char *latinFileName = FileName.latin1();
+  KisLog::setLogFile(latinFileName);
+  
   log() << "Starting KImageShop" << endl;
 }
 

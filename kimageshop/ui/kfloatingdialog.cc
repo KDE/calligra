@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kiconloader.h>
-#include <kwm.h>
+//#include <kwm.h> // jwc - nonexistent file
 #include <kapp.h>
 
 #include "kfloatingdialog.h"
@@ -211,7 +211,7 @@ void KFloatingDialog::setDocked(bool value)
     {
       m_dockedPos = pos();
       reparent(0, /*WStyle_Customize | WStyle_NoBorder*/0, mapToGlobal(QPoint(0,0)), true);
-      KWM::setDecoration(winId(), KWM::noDecoration);
+      //KWM::setDecoration(winId(), KWM::noDecoration); //jwc
       setActiveWindow();
     }
 }
@@ -413,7 +413,7 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
       else
 		{
 		  QPoint newPos = (QCursor::pos() - m_pos);
-		  KWM::move(winId(), newPos);
+		  //KWM::move(winId(), newPos); //jwc
 		}
     }
   else if (m_resizing)
@@ -444,8 +444,9 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 
       if (m_pParent && m_docked)
 		resize(newSize.x(), newSize.y());
-      else
-		KWM::setGeometry(winId(), QRect(geometry().left(), geometry().top(), newSize.x(), newSize.y()));
+      // jwc - no KWM anymore            
+      //else 
+      //       KWM::setGeometry(winId(), QRect(geometry().left(), geometry().top(), newSize.x(), newSize.y()));
       m_oldSize = QPoint(width(), height());
       qDebug("resize to w %d h %d", newSize.x(), newSize.y());
     }

@@ -81,6 +81,8 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
   grid->setRowStretch( 4, 1 );
 }
 
+//jwc
+#if 0
 UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
   : QWidget( _parent, _name )
 {
@@ -97,6 +99,7 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 
   grid->setRowStretch( 2, 1 );
 }
+#endif
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
   : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
@@ -109,8 +112,8 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
   vbox = addVBoxPage( i18n( "Directories") );
   m_directories = new DirectoriesTab( vbox );
 
-  vbox = addVBoxPage( i18n( "Undo/redo") );
-  m_undoRedo = new UndoRedoTab( vbox );
+  //vbox = addVBoxPage( i18n( "Undo/redo") ); //jwc
+  //m_undoRedo = new UndoRedoTab( vbox ); //jwc
 }
 
 PreferencesDialog::~PreferencesDialog()

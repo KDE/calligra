@@ -24,7 +24,7 @@
 
 #include <qrect.h>
 #include <qpoint.h>
-
+#include <ostream.h> //jwc
 #include "kis_global.h"
 
 class KisChannel
@@ -59,8 +59,8 @@ class KisChannel
   uint lastTileOffsetX();
   uint lastTileOffsetY();
 
-  bool  writeToStore(ostorestream *out);
-  bool  loadFromStore(istorestream *in);
+  //bool  writeToStore(ostorestream *out); //jwc
+  //bool  loadFromStore(istorestream *in); //jwc
   
  protected:
   

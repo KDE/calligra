@@ -39,7 +39,8 @@ QString KisTool::toolName()
 
 void KisTool::optionsDialog()
 {
-  KMessageBox::sorry(0L, i18n("No Options available for this tool."));
+  //KMessageBox::sorry(0L, i18n("No Options available for this tool."));
+  KMessageBox::sorry(NULL, "No Options available for this tool.", "", FALSE);  
 }
 
 void KisTool::setCursor( const QCursor& c )
