@@ -67,12 +67,12 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                     "piechart");
     m_chartpie->setExclusiveGroup( "charttypes" );
 
-    m_chartline = new KToggleAction( i18n("&Line"), "lines3d", 0, this,
+    m_chartline = new KToggleAction( i18n("&Line"), "lines", 0, this,
                                      SLOT( lineChart() ), actionCollection(),
                                      "linechart");
     m_chartline->setExclusiveGroup( "charttypes" );
 
-    m_chartareas = new KToggleAction( i18n("&Areas"), "areas3d", 0, this,
+    m_chartareas = new KToggleAction( i18n("&Areas"), "areas", 0, this,
                                       SLOT( areasChart() ), actionCollection(),
                                       "areaschart");
     m_chartareas->setExclusiveGroup( "charttypes" );
