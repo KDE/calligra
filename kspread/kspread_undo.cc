@@ -1555,7 +1555,8 @@ KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* tabl
     xshift=_xshift;
     yshift=_yshift;
     b_insert=insert;
-    createListCell( m_data, m_lstColumn,m_lstRow,table );
+    if( !b_insert)
+        createListCell( m_data, m_lstColumn,m_lstRow,table );
 
 }
 
@@ -1669,45 +1670,60 @@ void KSpreadUndoCellPaste::undo()
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
     doc()->undoBuffer()->lock();
+
     if(nbCol!=0)
     {
-        QRect rect;
-        rect.setCoords(xshift,1,xshift+nbCol,0x7FFF);
-        table->deleteCells( rect );
-        table->paste( m_data, QPoint(xshift,1) );
-        QValueList<columnSize>::Iterator it2;
-        for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
-        {
-           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
-        }
+        if(!b_insert)
+                {
+                QRect rect;
+                rect.setCoords(xshift,1,xshift+nbCol,0x7FFF);
+                table->deleteCells( rect );
+                table->paste( m_data, QPoint(xshift,1) );
+                QValueList<columnSize>::Iterator it2;
+                for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
+                        {
+                        ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+                        cl->setWidth((*it2).columnWidth);
+                        }
+                }
+        else
+                {
+                table->removeColumn( xshift+1,nbCol-1,false);
+                }
     }
     else if(nbRow!=0)
     {
-        QRect rect;
-        rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
-        table->deleteCells( rect );
-        table->paste( m_data, QPoint(1,yshift) );
-        QValueList<rowSize>::Iterator it2;
-        for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
-        {
-           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
-        }
+        if(!b_insert)
+                {
+                QRect rect;
+                rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+                table->deleteCells( rect );
+                table->paste( m_data, QPoint(1,yshift) );
+                QValueList<rowSize>::Iterator it2;
+                for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
+                        {
+                        RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+                        rw->setHeight((*it2).rowHeight);
+                        }
+                }
+        else
+                {
+                table->removeRow(  yshift+1,nbRow-1);
+                }
     }
     else
     {
     table->deleteCells( m_selection );
     table->paste( m_data,m_selection.topLeft());
     }
-    if(table->getAutoCalc()) table->recalc(true);
+
+    if(table->getAutoCalc())
+        table->recalc(true);
     doc()->undoBuffer()->unlock();
 }
 
 void KSpreadUndoCellPaste::redo()
 {
-    doc()->undoBuffer()->lock();
-
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
@@ -1715,36 +1731,47 @@ void KSpreadUndoCellPaste::redo()
     doc()->undoBuffer()->lock();
     if(nbCol!=0)
     {
+        if( b_insert)
+                {
+                table->insertColumn(  xshift+1,nbCol-1,false);
+                }
         QRect rect;
         rect.setCoords(xshift,1,xshift+nbCol,0X7FFF);
         table->deleteCells( rect );
         table->paste( m_dataRedo, QPoint(xshift,1) );
         QValueList<columnSize>::Iterator it2;
-        for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
-        {
-           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
-        }
+         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+                {
+                ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+                cl->setWidth((*it2).columnWidth);
+                }
+
     }
     else if(nbRow!=0)
     {
+        if( b_insert)
+                {
+                table->insertRow(  yshift+1,nbRow-1);
+                }
+
         QRect rect;
         rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
         table->deleteCells( rect );
         table->paste( m_dataRedo, QPoint(1,yshift) );
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
-        {
-           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
-        }
+                {
+                RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+                 rw->setHeight((*it2).rowHeight);
+                 }
     }
     else
     {
     table->deleteCells( m_selection );
     table->paste( m_dataRedo,m_selection.topLeft());
     }
-    if(table->getAutoCalc()) table->recalc(true);
+    if(table->getAutoCalc())
+        table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }

@@ -289,6 +289,7 @@ protected slots:
      */
     void slotActivateTool( int _id );
     void slotInsert();
+    void slotInsertCellCopy();
     void slotRemove();
 
     /**
@@ -440,6 +441,7 @@ private:
     KAction* m_sort;
     KAction* m_consolidate;
     KAction* m_help;
+    KAction* m_insertCellCopy;
     KToggleAction* m_multiRow;
     KFontAction* m_selectFont;
     KFontSizeAction* m_selectFontSize;

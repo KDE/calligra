@@ -339,6 +339,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "insertCell" );
     m_removeCell = new KAction( i18n("Remove Cell(s) ..."), "removecell", 0, this, SLOT( slotRemove() ),
                                actionCollection(), "removeCell" );
+    m_insertCellCopy = new KAction( i18n("Copy with insertion"), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
+                               actionCollection(), "insertCellCopy" );
     m_cellLayout = new KAction( i18n("Cell Layout..."),"cell_layout", CTRL + Key_L, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
     m_formulaPower = new KAction( i18n("Formula Power"), "rsup", 0, this, SLOT( formulaPower() ),
@@ -1357,7 +1359,8 @@ void KSpreadView::paste()
         return;
 
     m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    if(m_pTable->getAutoCalc()) m_pTable->recalc(true);
+    if(m_pTable->getAutoCalc())
+        m_pTable->recalc(true);
     updateEditWidget();
 }
 
@@ -1369,8 +1372,9 @@ void KSpreadView::specialPaste()
     KSpreadspecial dlg( this, "Special Paste" );
     if( dlg.exec() )
     {
-    if(m_pTable->getAutoCalc()) m_pTable->recalc(true);
-        updateEditWidget();
+    if(m_pTable->getAutoCalc())
+        m_pTable->recalc(true);
+    updateEditWidget();
     }
 }
 
@@ -1866,6 +1870,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_copy->plug( m_pPopupColumn );
     m_paste->plug( m_pPopupColumn );
     m_specialPaste->plug( m_pPopupColumn );
+    m_insertCellCopy->plug( m_pPopupColumn );
     m_pPopupColumn->insertSeparator();
     m_default->plug( m_pPopupColumn );
     m_areaName->plug( m_pPopupColumn );
@@ -1929,6 +1934,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_copy->plug( m_pPopupRow );
     m_paste->plug( m_pPopupRow );
     m_specialPaste->plug( m_pPopupRow );
+    m_insertCellCopy->plug( m_pPopupRow );
     m_pPopupRow->insertSeparator();
     m_default->plug( m_pPopupRow );
     m_areaName->plug( m_pPopupRow );
@@ -1998,6 +2004,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
     m_areaName->plug( m_pPopupMenu );
+    m_insertCellCopy->plug( m_pPopupMenu );
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
     if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
@@ -2173,6 +2180,17 @@ void KSpreadView::slotRemove()
 
     KSpreadinsert dlg( this, "Remove", r,KSpreadinsert::Remove );
     dlg.exec();
+}
+
+void KSpreadView::slotInsertCellCopy()
+{
+     if ( !m_pTable )
+        return;
+
+    m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,true, Normal,OverWrite,true);
+    if(m_pTable->getAutoCalc())
+        m_pTable->recalc(true);
+    updateEditWidget();
 }
 
 void KSpreadView::setAreaName()

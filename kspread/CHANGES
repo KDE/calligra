@@ -1077,3 +1077,7 @@ compatibility with old function you can used against DECHEX, DECOCT, DECBIN
 2000-11-20-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can insert/remove multiple cells
+
+2000-11-21-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Now you can copy and insert in same time (For the moment just for column/row)

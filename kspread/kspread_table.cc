@@ -5715,8 +5715,11 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
         int count = columns.attribute("count").toInt();
         for( int i = 1; i <= count; ++i )
         {
-            m_cells.clearColumn( _xshift + i );
-            m_columns.removeElement( _xshift + i );
+            if(!insert)
+                {
+                m_cells.clearColumn( _xshift + i );
+                m_columns.removeElement( _xshift + i );
+                }
         }
 
         // Insert column layouts
@@ -5828,6 +5831,8 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
                 KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, count, 0, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
+        if(insert)
+                 insertColumn(  _xshift+1,count-1,false);
     return;
     }
 
@@ -5840,6 +5845,8 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
                 KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,count, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
+    if(insert)
+        insertRow(  _yshift+1,count-1,false);
     return;
     }
 
