@@ -6,3 +6,5 @@ koffice-libs: binary-or-shlib-defines-rpath ./usr/lib/kde3/liblateximport.so /us
 koffice-libs: binary-or-shlib-defines-rpath ./usr/lib/kde3/libxsltimport.so /usr/lib
 # This is inserted by debhelper and is legal.
 koffice-libs: postrm-calls-ldconfig
+# Menu item.
+koffice-libs: menu-item-contains-unknown-tag kderemove /usr/lib/menu/koffice-libs:7
