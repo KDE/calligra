@@ -93,7 +93,7 @@ void KWTableFrameSet::updateFrames()
     for (unsigned int i =0; i < m_cells.count(); i++)
     {
         m_cells.at(i)->updateFrames();
-        m_cells.at(i)->layout();
+        m_cells.at(i)->invalidate();
     }
     KWFrameSet::updateFrames();
 }
@@ -1509,7 +1509,7 @@ void KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     }
 }
 
-int KWTableFrameSet::paragraphs() 
+int KWTableFrameSet::paragraphs()
 {
     int paragraphs = 0;
     for (unsigned int i =0; i < m_cells.count(); i++) {
@@ -1518,7 +1518,7 @@ int KWTableFrameSet::paragraphs()
     return paragraphs;
 }
 
-bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, 
+bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
     ulong & sentences, ulong & syllables )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {

@@ -1638,7 +1638,9 @@ void KWTextFrameSet::formatMore()
                             // from here, since it calls formatMore() !
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
-                            m_doc->repaintAllViews();
+                            // Can't call this directly, we might be in a paint event already
+                            //m_doc->repaintAllViews();
+                            QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
                             break;
                         }
 
@@ -1680,7 +1682,9 @@ void KWTextFrameSet::formatMore()
                             // from here, since it calls formatMore() !
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
-                            m_doc->repaintAllViews();
+                            // Can't call this directly, we might be in a paint event already
+                            //m_doc->repaintAllViews();
+                            QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
                             break;
                         }
                     }

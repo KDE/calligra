@@ -518,6 +518,7 @@ signals:
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
+    void slotRepaintAllViews() { repaintAllViews( false ); }
 
 protected slots:
     void slotDocumentRestored();
