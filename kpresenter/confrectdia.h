@@ -70,11 +70,14 @@ public:
 
     void setRnds( int _rx, int _ry );
     void setPenBrush( const QPen &_pen, const QBrush &_brush );
+    void resetConfigChangedValues();
 
     int getRndX() const { return xRnd; }
     int getRndY() const { return yRnd; }
+    int getRectangleConfigChange() const;
 
 protected:
+    bool m_bRndXChanged, m_bRndYChanged;
     QLabel *lRndX, *lRndY;
     KIntNumInput *eRndX, *eRndY;
     QGroupBox *gSettings;

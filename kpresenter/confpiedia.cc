@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <knuminput.h>
+#include <kprcommand.h>
 
 #include <qpen.h>
 #include <qbrush.h>
@@ -86,7 +87,7 @@ void PiePreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
-    : QWidget( parent, name )
+    : QWidget( parent, name ), m_bTypeChanged(false), m_bAngleChanged(false), m_bLengthChanged(false)
 {
   // ------------------------ layout
   QVBoxLayout *layout = new QVBoxLayout( this, 0 );
@@ -141,6 +142,7 @@ ConfPieDia::~ConfPieDia()
 /*================================================================*/
 void ConfPieDia::lengthChanged( int _len )
 {
+    m_bLengthChanged = true;
     len = _len*16;
     piePreview->setLength( len );
 }
@@ -148,6 +150,7 @@ void ConfPieDia::lengthChanged( int _len )
 /*================================================================*/
 void ConfPieDia::angleChanged( int _angle )
 {
+    m_bAngleChanged = true;
     angle = _angle*16;
     piePreview->setAngle( angle );
 }
@@ -155,6 +158,7 @@ void ConfPieDia::angleChanged( int _angle )
 /*================================================================*/
 void ConfPieDia::typeChanged( int _type )
 {
+    m_bTypeChanged = true;
     type = static_cast<PieType>( _type );
     piePreview->setType( type );
 }
@@ -169,6 +173,7 @@ void ConfPieDia::slotReset()
     piePreview->setAngle( oldAngle );
     piePreview->setLength( oldLen );
     piePreview->setType( oldType );
+    resetConfigChangedValues();
 }
 
 void ConfPieDia::setAngle( int _angle )
@@ -200,5 +205,24 @@ void ConfPieDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
     piePreview->setPenBrush( _pen, _brush );
 }
 
+void ConfPieDia::resetConfigChangedValues()
+{
+    m_bTypeChanged = false;
+    m_bAngleChanged = false;
+    m_bLengthChanged = false;
+}
+
+int ConfPieDia::getPieConfigChange() const
+{
+    int flags = 0;
+    if (m_bTypeChanged)
+        flags = flags | PieValueCmd::Type;
+    if (m_bAngleChanged)
+        flags = flags | PieValueCmd::Angle;
+    if (m_bLengthChanged)
+        flags = flags | PieValueCmd::Length;
+
+    return flags;
+}
 
 #include <confpiedia.moc>

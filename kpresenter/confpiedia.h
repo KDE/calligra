@@ -79,15 +79,15 @@ public:
     void setLength( int _len );
     void setType( PieType _type );
     void setPenBrush( const QPen &_pen, const QBrush &_brush );
+    void resetConfigChangedValues();
 
-    int getAngle() const
-    { return angle; }
-    int getLength() const
-    { return len; }
-    PieType getType() const
-    { return type; }
+    int getAngle() const { return angle; }
+    int getLength() const { return len; }
+    PieType getType() const { return type; }
+    int getPieConfigChange() const;
 
 protected:
+    bool m_bTypeChanged, m_bAngleChanged, m_bLengthChanged;
     QLabel *lType, *lAngle, *lLen;
     KIntNumInput *eAngle, *eLen;
     QGroupBox *gSettings;

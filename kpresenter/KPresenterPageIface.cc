@@ -29,6 +29,7 @@
 #include "kprcanvas.h"
 #include <kdebug.h>
 #include <kcommand.h>
+#include <kprcommand.h>
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
     : DCOPObject()
@@ -470,7 +471,7 @@ bool KPresenterPageIface::backUnbalanced()const
 
 bool KPresenterPageIface::setRectSettings( int _rx, int _ry )
 {
-    return m_page->setRectSettings(_rx,_ry);
+    return m_page->setRectSettings(_rx,_ry, RectValueCmd::All);
 }
 
 QString KPresenterPageIface::pageSoundFileName()const

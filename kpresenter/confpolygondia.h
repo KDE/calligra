@@ -82,11 +82,13 @@ public:
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
     int getCornersValue() const { return cornersValue; }
     int getSharpnessValue() const { return sharpnessValue; }
+    int getPolygonConfigChange() const;
 
     void setCheckConcavePolygon(bool _concavePolygon);
     void setCornersValue(int _cornersValue);
     void setSharpnessValue(int _sharpnessValue);
     void setPenBrush( const QPen &_pen, const QBrush &_brush );
+    void resetConfigChangedValues();
 
 protected:
     QRadioButton *m_convexPolygon, *m_concavePolygon;
@@ -97,6 +99,7 @@ protected:
     int cornersValue, oldCornersValue;
     int sharpnessValue, oldSharpnessValue;
     bool checkConcavePolygon, oldCheckConcavePolygon;
+    bool m_bCheckConcaveChanged, m_bCornersChanged, m_bSharpnessChanged;
 
 protected slots:
     void slotConvexPolygon();

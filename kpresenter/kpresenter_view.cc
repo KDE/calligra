@@ -3537,7 +3537,7 @@ void KPresenterView::styleOk()
     if ((confPenDia = styleDia->getConfPenDia()))
     {
         cmd=m_canvas->activePage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
-                                           PenCmd::All, m_canvas->activePage()->objectList());
+                                           confPenDia->getPenConfigChange(), m_canvas->activePage()->objectList());
 
         if(cmd)
         {
@@ -3546,7 +3546,7 @@ void KPresenterView::styleOk()
         }
 
         cmd=stickyPage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
-                                 PenCmd::All, stickyPage()->objectList());
+                                 confPenDia->getPenConfigChange(), stickyPage()->objectList());
 
         if(cmd)
         {
@@ -3561,7 +3561,7 @@ void KPresenterView::styleOk()
                                              confBrushDia->getGColor1(), confBrushDia->getGColor2(),
                                              confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
                                              confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                             m_canvas->activePage()->objectList());
+                                             confBrushDia->getBrushConfigChange(), m_canvas->activePage()->objectList());
 
         if(cmd)
         {
@@ -3573,7 +3573,7 @@ void KPresenterView::styleOk()
                                    confBrushDia->getGColor1(), confBrushDia->getGColor2(),
                                    confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
                                    confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                   stickyPage()->objectList());
+                                   confBrushDia->getBrushConfigChange(), stickyPage()->objectList());
 
         if(cmd)
         {
@@ -3647,7 +3647,8 @@ void KPresenterView::styleOk()
 
     if ((confPieDia = styleDia->getConfPieDia()))
     {
-        cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(), confPieDia->getLength() );
+        cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
+                                                    confPieDia->getLength(), confPieDia->getPieConfigChange() );
 
         if(cmd)
         {
@@ -3655,7 +3656,8 @@ void KPresenterView::styleOk()
             createMacro=true;
         }
 
-        cmd=stickyPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(), confPieDia->getLength() );
+        cmd=stickyPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
+                                          confPieDia->getLength(), confPieDia->getPieConfigChange() );
 
         if(cmd)
         {
@@ -3670,7 +3672,8 @@ void KPresenterView::styleOk()
     {
         cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
                                                         confPolygonDia->getCornersValue(),
-                                                        confPolygonDia->getSharpnessValue() );
+                                                        confPolygonDia->getSharpnessValue(),
+                                                        confPolygonDia->getPolygonConfigChange() );
         if(cmd)
         {
             macro->addCommand(cmd);
@@ -3679,7 +3682,8 @@ void KPresenterView::styleOk()
 
         cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
                                               confPolygonDia->getCornersValue(),
-                                              confPolygonDia->getSharpnessValue() );
+                                              confPolygonDia->getSharpnessValue(),
+                                              confPolygonDia->getPolygonConfigChange() );
         if(cmd)
         {
             macro->addCommand(cmd);
@@ -3714,7 +3718,8 @@ void KPresenterView::styleOk()
 
     if ((confRectDia = styleDia->getConfRectangleDia()))
     {
-        cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+        cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
+                                                     confRectDia->getRectangleConfigChange() );
 
         if(cmd)
         {
@@ -3722,7 +3727,8 @@ void KPresenterView::styleOk()
             createMacro=true;
         }
 
-        cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+        cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
+                                           confRectDia->getRectangleConfigChange() );
 
         if(cmd)
         {

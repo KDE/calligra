@@ -1868,7 +1868,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
 }
 
 KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,
-                              BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject>list )
+                              BCType gt, bool unbalanced, int xfactor, int yfactor, int flags, QPtrList<KPObject>list )
 {
     KPObject *kpobject = 0;
     BrushCmd *brushCmd=0L;
@@ -2063,7 +2063,7 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
                 {
                     obj->selectAllObj();
                     KCommand *cmd2=setBrush(brush, ft, g1, g2, gt, unbalanced,
-                                            xfactor,yfactor, obj->objectList());
+                                            xfactor,yfactor, flags, obj->objectList());
                     obj->deSelectAllObj();
                     if(cmd2)
                     {
@@ -2081,7 +2081,7 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
     }
 
     if ( !_objects.isEmpty() ) {
-        brushCmd = new BrushCmd( i18n( "Apply Styles" ), _oldBrush, _newBrush, _objects, m_doc );
+        brushCmd = new BrushCmd( i18n( "Apply Styles" ), _oldBrush, _newBrush, _objects, m_doc, flags );
         brushCmd->execute();
         cmd->addCommand(brushCmd);
         cmdCreate=true;
@@ -2181,7 +2181,7 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
 }
 
 
-KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len )
+KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len, int flags )
 {
     PieValueCmd *pieValueCmd=0L;
     QPtrList<KPObject> _objects;
@@ -2216,7 +2216,7 @@ KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len )
 
     if ( !_objects.isEmpty() ) {
 	pieValueCmd = new PieValueCmd( i18n( "Change Pie/Arc/Chord Values" ),
-						    _oldValues, _newValues, _objects, m_doc );
+						    _oldValues, _newValues, _objects, m_doc, flags );
 	pieValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -2227,7 +2227,7 @@ KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len )
     return pieValueCmd;
 }
 
-KCommand* KPrPage::setRectSettings( int _rx, int _ry )
+KCommand* KPrPage::setRectSettings( int _rx, int _ry, int flags )
 {
     RectValueCmd *rectValueCmd=0L;
     bool changed=false;
@@ -2265,7 +2265,7 @@ KCommand* KPrPage::setRectSettings( int _rx, int _ry )
 
     if ( !_objects.isEmpty() && changed ) {
 	rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
-						       _newValues, _objects, m_doc );
+						       _newValues, _objects, m_doc, flags );
 	rectValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -2276,7 +2276,7 @@ KCommand* KPrPage::setRectSettings( int _rx, int _ry )
     return rectValueCmd;
 }
 
-KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags )
 {
     bool changed = false;
     PolygonSettingCmd *polygonSettingCmd=0L;
@@ -2314,7 +2314,7 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
 
     if ( !_objects.isEmpty() && changed ) {
         polygonSettingCmd = new PolygonSettingCmd( i18n( "Change Polygon Settings" ), _oldSettings,
-                                                   _newSettings, _objects, m_doc );
+                                                   _newSettings, _objects, m_doc, flags );
         polygonSettingCmd->execute();
     }
     else {

@@ -33,7 +33,7 @@
 #include <koPageLayoutDia.h>
 #include <koparaglayout.h>
 #include <kocommand.h>
-class KPresenterDoc;
+#include <koPoint.h>
 
 class KPresenterDoc;
 class KPTextObject;
@@ -704,7 +704,7 @@ public:
     };
 
     // the flags indicate what has changed
-    enum PolygonConfigChange {
+    enum RectangleConfigChange {
         XRnd = 1,
         YRnd = 2,
         All = XRnd | YRnd

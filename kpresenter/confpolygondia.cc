@@ -31,6 +31,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <kprcommand.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -125,7 +126,7 @@ void PolygonPreview::slotSharpnessValue( int value )
 
 /*==================== constructor ===============================*/
 ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name )
-    : QWidget( parent, name )
+    : QWidget( parent, name ), m_bCheckConcaveChanged(false), m_bCornersChanged(false), m_bSharpnessChanged(false)
 {
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
@@ -189,17 +190,20 @@ void ConfPolygonDia::slotConvexPolygon()
 
 void ConfPolygonDia::slotConcavePolygon()
 {
+    m_bCheckConcaveChanged = true;
     m_sharpness->setEnabled( true );
     checkConcavePolygon = true;
 }
 
 void ConfPolygonDia::slotCornersValue( int value )
 {
+    m_bCornersChanged = true;
     cornersValue = value;
 }
 
 void ConfPolygonDia::slotSharpnessValue( int value )
 {
+    m_bSharpnessChanged = true;
     sharpnessValue = value;
 }
 
@@ -221,7 +225,21 @@ void ConfPolygonDia::slotReset()
     m_sharpness->setEnabled( oldCheckConcavePolygon );
     m_sharpness->setValue( oldSharpnessValue );
     m_corners->setValue( oldCornersValue );
+    resetConfigChangedValues();
     polygonPreview->repaint();
+}
+
+int ConfPolygonDia::getPolygonConfigChange() const
+{
+    int flags = 0;
+    if (m_bCheckConcaveChanged)
+        flags = flags | PolygonSettingCmd::ConcaveConvex;
+    if (m_bCornersChanged)
+        flags = flags | PolygonSettingCmd::Corners;
+    if (m_bSharpnessChanged)
+        flags = flags | PolygonSettingCmd::Sharpness;
+
+    return flags;
 }
 
 void ConfPolygonDia::setCheckConcavePolygon(bool _concavePolygon)
@@ -263,5 +281,11 @@ void ConfPolygonDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
     polygonPreview->setPenBrush( _pen, _brush );
 }
 
-#include <confpolygondia.moc>
+void ConfPolygonDia::resetConfigChangedValues()
+{
+    m_bCheckConcaveChanged = false;
+    m_bCornersChanged = false;
+    m_bSharpnessChanged = false;
+}
 
+#include <confpolygondia.moc>

@@ -98,13 +98,17 @@ public:
     void setPen( const QPen &_pen );
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
+    void resetConfigChangedValues();
 
     QPen getPen()const;
     LineEnd getLineBegin()const;
     LineEnd getLineEnd()const;
+    int getPenConfigChange() const;
 
 private:
     int m_flags;
+    bool m_bLineBeginChanged, m_bLineEndChanged;
+    bool m_bColorChanged, m_bStyleChanged, m_bWidthChanged;
     QPen oldPen;
     LineEnd oldLb;
     LineEnd oldLe;
@@ -115,7 +119,11 @@ private:
 
 private slots:
     void slotReset();
-    void updatePenConfiguration();
+    void slotColorChanged();
+    void slotStyleChanged();
+    void slotWidthChanged();
+    void slotLineBeginChanged();
+    void slotLineEndChanged();
 };
 
 /******************************************************************/
@@ -134,6 +142,7 @@ public:
     void setFillType( FillType ft );
     void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
                       bool _unbalanced, int _xfactor, int _yfactor );
+    void resetConfigChangedValues();
 
     QBrush getBrush()const;
     FillType getFillType() const;
@@ -143,9 +152,12 @@ public:
     bool getGUnbalanced()const;
     int getGXFactor() const;
     int getGYFactor() const;
+    int getBrushConfigChange() const;
 
 private:
     bool oldUnbalanced;
+    bool m_bBrushColorChanged, m_bBrushStyleChanged, m_bFillTypeChanged;
+    bool m_bGColor1Changed, m_bGColor2Changed, m_bGTypeChanged, m_bGUnbalancedChanged;
     int m_flags, oldXfactor, oldYfactor;
     QCheckBox *unbalanced;
     QBrush oldBrush;
@@ -163,7 +175,15 @@ private:
 
 private slots:
     void slotReset();
-    void updateBrushConfiguration();
+    void slotBrushColorChanged();
+    void slotBrushStyleChanged();
+    void slotFillTypeChanged();
+    void slotGColor1Changed();
+    void slotGColor2Changed();
+    void slotGTypeChanged();
+    void slotGUnbalancedChanged();
+    void slotGXFactorChanged();
+    void slotGYFactorChanged();
 };
 
 /******************************************************************/

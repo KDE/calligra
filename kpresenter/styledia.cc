@@ -48,6 +48,7 @@
 #include <koUnit.h>
 #include <knuminput.h>
 #include <kprcanvas.h>
+#include <kprcommand.h>
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -136,7 +137,8 @@ void PBPreview::drawContents( QPainter *painter )
 /******************************************************************/
 
 ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
-    : QWidget( parent, name ), m_flags(flags)
+    : QWidget( parent, name ), m_flags(flags), m_bLineBeginChanged(false), m_bLineEndChanged(false),
+      m_bColorChanged(false), m_bStyleChanged(false), m_bWidthChanged(false)
 {
     QVBoxLayout *layout = new QVBoxLayout( this );
     QHBoxLayout *config = new QHBoxLayout( layout );
@@ -158,7 +160,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
 
     choosePCol = new KColorButton( Qt::black, left );
     connect( choosePCol, SIGNAL( changed( const QColor& ) ),
-	     this, SLOT( updatePenConfiguration() ) );
+	     this, SLOT( slotColorChanged() ) );
 
     l = new QLabel( i18n( "Pen style:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
@@ -171,7 +173,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     choosePStyle->insertItem( i18n( "Dash Dot Dot Line ( -**- )" ) );
     choosePStyle->insertItem( i18n( "No Pen" ) );
     connect( choosePStyle, SIGNAL( activated( int ) ),
-	     this, SLOT( updatePenConfiguration() ) );
+	     this, SLOT( slotStyleChanged() ) );
 
     l = new QLabel( i18n( "Pen width:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
@@ -179,7 +181,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     choosePWidth = new KIntNumInput( 1, left );
     choosePWidth->setRange( 1, 10, 1 );
     connect( choosePWidth, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( updatePenConfiguration() ) );
+	     this, SLOT( slotWidthChanged() ) );
 
     l = new QLabel( i18n( "Line begin:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
@@ -195,7 +197,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clineBegin->insertItem( i18n("Double Line Arrow") );
 
     connect( clineBegin, SIGNAL( activated( int ) ),
-	     this, SLOT( updatePenConfiguration() ) );
+	     this, SLOT( slotLineBeginChanged() ) );
 
     l = new QLabel( i18n( "Line end:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
@@ -210,7 +212,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clineEnd->insertItem( i18n("Double Arrow") );
     clineEnd->insertItem( i18n("Double Line Arrow") );
     connect( clineEnd, SIGNAL( activated( int ) ),
-	     this, SLOT( updatePenConfiguration() ) );
+	     this, SLOT( slotLineEndChanged() ) );
 
     if ( !(m_flags & StyleDia::SdEndBeginLine) )
     {
@@ -256,21 +258,30 @@ void ConfPenDia::setPen( const QPen &_pen )
     }
     choosePWidth->setValue( _pen.width() );
     choosePCol->setColor( _pen.color() );
-    updatePenConfiguration();
+    penPrev->setPen(_pen);
 }
 
 void ConfPenDia::setLineBegin( LineEnd lb )
 {
     oldLb = lb;
     clineBegin->setCurrentItem( (int)lb );
-    updatePenConfiguration();
+    penPrev->setLineBegin(lb);
 }
 
 void ConfPenDia::setLineEnd( LineEnd le )
 {
     oldLe=le;
     clineEnd->setCurrentItem( (int)le );
-    updatePenConfiguration();
+    penPrev->setLineEnd(le);
+}
+
+void ConfPenDia::resetConfigChangedValues()
+{
+    m_bColorChanged = false;
+    m_bStyleChanged = false;
+    m_bWidthChanged = false;
+    m_bLineBeginChanged = false;
+    m_bLineEndChanged = false;
 }
 
 QPen ConfPenDia::getPen() const
@@ -308,19 +319,59 @@ LineEnd ConfPenDia::getLineEnd() const
     return (LineEnd)clineEnd->currentItem();
 }
 
-void ConfPenDia::slotReset()
+int ConfPenDia::getPenConfigChange() const
 {
-    setPen( oldPen );
-    setLineBegin( oldLb );
-    setLineEnd( oldLe );
+    int flags = 0;
+    if (m_bLineEndChanged)
+        flags = flags | PenCmd::LineEnd;
+    if (m_bLineBeginChanged)
+        flags = flags | PenCmd::LineBegin;
+    if (m_bColorChanged)
+        flags = flags | PenCmd::Color;
+    if (m_bStyleChanged)
+        flags = flags | PenCmd::Style;
+    if (m_bWidthChanged)
+        flags = flags | PenCmd::Width;
+
+    return flags;
 }
 
-void ConfPenDia::updatePenConfiguration()
+void ConfPenDia::slotReset()
 {
-    QPen pen = getPen();
-    penPrev->setPen( pen );
-    penPrev->setLineBegin( getLineBegin() );
-    penPrev->setLineEnd( getLineEnd() );
+    setPen(oldPen);
+    setLineBegin(oldLb);
+    setLineEnd(oldLe);
+    resetConfigChangedValues();
+}
+
+void ConfPenDia::slotColorChanged()
+{
+    m_bColorChanged = true;
+    penPrev->setPen(getPen());
+}
+
+void ConfPenDia::slotStyleChanged()
+{
+    m_bStyleChanged = true;
+    penPrev->setPen(getPen());
+}
+
+void ConfPenDia::slotWidthChanged()
+{
+    m_bWidthChanged = true;
+    penPrev->setPen(getPen());
+}
+
+void ConfPenDia::slotLineBeginChanged()
+{
+    m_bLineBeginChanged = true;
+    penPrev->setLineBegin(getLineBegin());
+}
+
+void ConfPenDia::slotLineEndChanged()
+{
+    m_bLineEndChanged = true;
+    penPrev->setLineEnd(getLineEnd());
 }
 
 /******************************************************************/
@@ -328,7 +379,9 @@ void ConfPenDia::updatePenConfiguration()
 /******************************************************************/
 
 ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
-    : QWidget( parent, name ), m_flags(flags)
+    : QWidget( parent, name ), m_bBrushColorChanged(false), m_bBrushStyleChanged(false),
+      m_bFillTypeChanged(false), m_bGColor1Changed(false), m_bGColor2Changed(false),
+      m_bGTypeChanged(false), m_bGUnbalancedChanged(false), m_flags(flags)
 {
     QHBoxLayout *layout = new QHBoxLayout( this );
     layout->setMargin( 5 );
@@ -348,7 +401,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
         cFillType->insertItem( i18n( "Gradient" ) );
 
     connect( cFillType, SIGNAL( activated( int ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotFillTypeChanged() ) );
 
     (void)new QWidget( left );
 
@@ -365,7 +418,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
 
     chooseBCol = new KColorButton( Qt::white, brushConfig );
     connect( chooseBCol, SIGNAL( changed( const QColor & ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotBrushColorChanged() ) );
 
     l = new QLabel( i18n( "Brush style:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
@@ -395,7 +448,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     chooseBStyle->insertItem( i18n( "Diagonal Crossing Lines" ) );
     chooseBStyle->insertItem( i18n( "No Background Fill" ) );
     connect( chooseBStyle, SIGNAL( activated( int ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotBrushStyleChanged() ) );
 
     (void)new QWidget( brushConfig );
 
@@ -408,10 +461,10 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
 
     gradient1 = new KColorButton( red, gradientConfig );
     connect( gradient1, SIGNAL( changed( const QColor & ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotGColor1Changed() ) );
     gradient2 = new KColorButton( green, gradientConfig );
     connect( gradient2, SIGNAL( changed( const QColor & ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotGColor2Changed() ) );
 
     l = new QLabel( i18n( "Gradient style:" ), gradientConfig );
     l->setFixedHeight( l->sizeHint().height() );
@@ -426,25 +479,25 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     gradients->insertItem( i18n( "PipeCross Gradient" ), -1 );
     gradients->insertItem( i18n( "Pyramid Gradient" ), -1 );
     connect( gradients, SIGNAL( activated( int ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotGTypeChanged() ) );
 
     unbalanced = new QCheckBox( i18n( "Unbalanced" ), gradientConfig );
     connect( unbalanced, SIGNAL( clicked() ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotGUnbalancedChanged() ) );
 
     xfactorLabel = new QLabel( i18n( "X-factor:" ), gradientConfig );
     xfactorLabel->setFixedHeight( xfactorLabel->sizeHint().height() );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotGXFactorChanged() ) );
 
-    yfactorLabel = new QLabel( i18n( "Y-factor" ), gradientConfig );
+    yfactorLabel = new QLabel( i18n( "Y-factor:" ), gradientConfig );
     yfactorLabel->setFixedHeight( yfactorLabel->sizeHint().height() );
 
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( updateBrushConfiguration() ) );
+	     this, SLOT( slotGYFactorChanged() ) );
 
     gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
 
@@ -503,14 +556,30 @@ void ConfBrushDia::setBrush( const QBrush &_brush )
 	break;
     }
     chooseBCol->setColor( _brush.color() );
-    updateBrushConfiguration();
+    brushPrev->setBrush(_brush);
 }
 
 void ConfBrushDia::setFillType( FillType ft )
 {
     cFillType->setCurrentItem( (int)ft );
     stack->raiseWidget( (int)ft );
-    updateBrushConfiguration();
+    if (ft == FT_BRUSH)
+    {
+	brushPrev->setPaintType(PBPreview::Brush );
+	brushPrev->setBrush(getBrush());
+	brushPrev->repaint(true);
+    }
+    else
+    {
+	brushPrev->setPaintType(PBPreview::Gradient);
+	gradient->setColor1(getGColor1());
+	gradient->setColor2(getGColor2());
+	gradient->setBackColorType(getGType());
+	gradient->setUnbalanced(getGUnbalanced());
+	gradient->setXFactor(getGXFactor());
+	gradient->setYFactor(getGYFactor());
+	brushPrev->repaint(false);
+    }
 }
 
 void ConfBrushDia::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
@@ -526,9 +595,24 @@ void ConfBrushDia::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
     gradient2->setColor( _c2 );
     gradients->setCurrentItem( (int)_t - 1 );
     unbalanced->setChecked( _unbalanced );
+    xfactorLabel->setEnabled(_unbalanced);
+    yfactorLabel->setEnabled(_unbalanced);
+    xfactor->setEnabled(_unbalanced);
+    yfactor->setEnabled(_unbalanced);
     xfactor->setValue( _xfactor );
     yfactor->setValue( _yfactor );
-    updateBrushConfiguration();
+    brushPrev->repaint(false);
+}
+
+void ConfBrushDia::resetConfigChangedValues()
+{
+    m_bBrushColorChanged = false;
+    m_bBrushStyleChanged = false;
+    m_bFillTypeChanged = false;
+    m_bGColor1Changed = false;
+    m_bGColor2Changed = false;
+    m_bGTypeChanged = false;
+    m_bGUnbalancedChanged = false;
 }
 
 QBrush ConfBrushDia::getBrush() const
@@ -608,35 +692,115 @@ int ConfBrushDia::getGYFactor() const
     return yfactor->value();
 }
 
-void ConfBrushDia::slotReset()
+int ConfBrushDia::getBrushConfigChange() const
 {
-    setBrush( oldBrush );
-    setFillType( oldFillType );
-    setGradient( oldC1, oldC1, oldBCType,oldUnbalanced, oldXfactor, oldYfactor );
+    int flags = 0;
+    if (m_bBrushColorChanged)
+        flags = flags | BrushCmd::BrushColor;
+    if (m_bBrushStyleChanged)
+        flags = flags | BrushCmd::BrushStyle;
+    if (m_bFillTypeChanged)
+        flags = flags | BrushCmd::All;
+    if (m_bGColor1Changed)
+        flags = flags | BrushCmd::GradientColor1;
+    if (m_bGColor2Changed)
+        flags = flags | BrushCmd::GradientColor2;
+    if (m_bGTypeChanged)
+        flags = flags | BrushCmd::GradientType;
+    if (m_bGUnbalancedChanged)
+        flags = flags | BrushCmd::GradientBalanced;
+
+    return flags;
 }
 
-void ConfBrushDia::updateBrushConfiguration()
+void ConfBrushDia::slotReset()
 {
-    bool state =unbalanced->isChecked();
+    setBrush(oldBrush);
+    setFillType(oldFillType);
+    setGradient(oldC1, oldC1, oldBCType,oldUnbalanced, oldXfactor, oldYfactor);
+    resetConfigChangedValues();
+}
+
+void ConfBrushDia::slotBrushColorChanged()
+{
+    m_bBrushColorChanged = true;
+    brushPrev->setBrush(getBrush());
+    brushPrev->repaint(true);
+}
+
+void ConfBrushDia::slotBrushStyleChanged()
+{
+    m_bBrushStyleChanged = true;
+    brushPrev->setBrush(getBrush());
+    brushPrev->repaint(true);
+}
+
+void ConfBrushDia::slotFillTypeChanged()
+{
+    m_bFillTypeChanged = true;
+
+    if (getFillType() == FT_BRUSH)
+    {
+	brushPrev->setPaintType(PBPreview::Brush );
+	brushPrev->setBrush(getBrush());
+	brushPrev->repaint(true);
+    }
+    else
+    {
+	brushPrev->setPaintType(PBPreview::Gradient);
+	gradient->setColor1(getGColor1());
+	gradient->setColor2(getGColor2());
+	gradient->setBackColorType(getGType());
+	gradient->setUnbalanced(getGUnbalanced());
+	gradient->setXFactor(getGXFactor());
+	gradient->setYFactor(getGYFactor());
+	brushPrev->repaint(false);
+    }
+}
+
+void ConfBrushDia::slotGColor1Changed()
+{
+    m_bGColor1Changed = true;
+    gradient->setColor1(getGColor1());
+    brushPrev->repaint(false);
+}
+
+void ConfBrushDia::slotGColor2Changed()
+{
+    m_bGColor2Changed = true;
+    gradient->setColor2(getGColor2());
+    brushPrev->repaint(false);
+}
+
+void ConfBrushDia::slotGTypeChanged()
+{
+    m_bGTypeChanged = true;
+    gradient->setBackColorType(getGType());
+    brushPrev->repaint(false);
+}
+
+void ConfBrushDia::slotGUnbalancedChanged()
+{
+    m_bGUnbalancedChanged = true;
+    bool state = unbalanced->isChecked();
     xfactorLabel->setEnabled(state);
     yfactorLabel->setEnabled(state);
-    xfactor->setEnabled( state );
-    yfactor->setEnabled( state );
+    xfactor->setEnabled(state);
+    yfactor->setEnabled(state);
+    gradient->setUnbalanced(state);
+    brushPrev->repaint(false);
+}
 
-    if ( getFillType() == FT_BRUSH ) {
-	brushPrev->setPaintType( PBPreview::Brush );
-	brushPrev->setBrush( getBrush() );
-	brushPrev->repaint( true );
-    } else {
-	brushPrev->setPaintType( PBPreview::Gradient );
-	gradient->setColor1( getGColor1() );
-	gradient->setColor2( getGColor2() );
-	gradient->setBackColorType( getGType() );
-	gradient->setUnbalanced( getGUnbalanced() );
-	gradient->setXFactor( getGXFactor() );
-	gradient->setYFactor( getGYFactor() );
-	brushPrev->repaint( false );
-    }
+void ConfBrushDia::slotGXFactorChanged()
+{
+    gradient->setXFactor(getGXFactor());
+    brushPrev->repaint(false);
+}
+
+void ConfBrushDia::slotGYFactorChanged()
+{
+    gradient->setYFactor(getGYFactor());
+    brushPrev->repaint(false);
 }
 
 /******************************************************************/
@@ -737,6 +901,7 @@ void StyleDia::setupTabPen()
     m_confPenDia->setPen(m_canvas->getPen(m_doc->getKPresenterView()->getPen()));
     m_confPenDia->setLineBegin(m_canvas->getLineBegin(m_doc->getKPresenterView()->getLineBegin()));
     m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_doc->getKPresenterView()->getLineEnd()));
+    m_confPenDia->resetConfigChangedValues();
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPenDia, SLOT( slotReset() ) );
     addTab( m_confPenDia, i18n( "&Pen" ) );
@@ -753,6 +918,7 @@ void StyleDia::setupTabBrush()
                                 m_canvas->getGUnbalanced(m_doc->getKPresenterView()->getGUnbalanced()),
                                 m_canvas->getGXFactor(m_doc->getKPresenterView()->getGXFactor()),
                                 m_canvas->getGYFactor(m_doc->getKPresenterView()->getGYFactor()));
+    m_confBrushDia->resetConfigChangedValues();
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confBrushDia, SLOT( slotReset() ) );
     addTab( m_confBrushDia, i18n( "&Brush" ) );
@@ -908,6 +1074,7 @@ void StyleDia::setupTabPie()
     m_confPieDia->setLength(m_canvas->getPieLength(m_doc->getKPresenterView()->getPieLength()));
     m_confPieDia->setPenBrush(m_canvas->getPen(m_doc->getKPresenterView()->getPen()),
                               m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
+    m_confPieDia->resetConfigChangedValues();
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPieDia, SLOT( slotReset() ) );
     addTab( m_confPieDia, i18n( "P&ie" ) );
@@ -921,6 +1088,7 @@ void StyleDia::setupTabPolygon()
     m_confPolygonDia->setSharpnessValue(m_canvas->getSharpnessValue(m_doc->getKPresenterView()->getSharpnessValue()));
     m_confPolygonDia->setPenBrush(m_canvas->getPen(m_doc->getKPresenterView()->getPen()),
                                   m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
+    m_confPolygonDia->resetConfigChangedValues();
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPolygonDia, SLOT( slotReset() ) );
     addTab( m_confPolygonDia, i18n( "P&olygon" ) );
@@ -947,6 +1115,7 @@ void StyleDia::setupTabRectangle()
                            m_canvas->getRndY(m_doc->getKPresenterView()->getRndY()));
     m_confRectDia->setPenBrush(m_canvas->getPen(m_doc->getKPresenterView()->getPen()),
                                m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
+    m_confRectDia->resetConfigChangedValues();
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confRectDia, SLOT( slotReset() ) );
     addTab( m_confRectDia, i18n( "&Rectangle" ) );

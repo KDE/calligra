@@ -27,6 +27,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <kprcommand.h>
 
 #include <stdlib.h>
 
@@ -66,7 +67,7 @@ void RectPreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
-    : QWidget( parent, name )
+    : QWidget( parent, name ), m_bRndXChanged(false), m_bRndYChanged(false)
 {
 
     // ------------------------ layout
@@ -114,6 +115,7 @@ ConfRectDia::~ConfRectDia()
 void ConfRectDia::rndXChanged( int _rx )
 {
     xRnd = _rx;
+    m_bRndXChanged = true;
     rectPreview->setRnds( xRnd, yRnd );
 }
 
@@ -121,6 +123,7 @@ void ConfRectDia::rndXChanged( int _rx )
 void ConfRectDia::rndYChanged( int _ry )
 {
     yRnd = _ry;
+    m_bRndYChanged = true;
     rectPreview->setRnds( xRnd, yRnd );
 }
 
@@ -144,6 +147,7 @@ void ConfRectDia::slotReset()
 
     eRndX->setValue( oldXRnd );
     eRndY->setValue( oldYRnd );
+    resetConfigChangedValues();
 }
 
 void ConfRectDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
@@ -151,4 +155,20 @@ void ConfRectDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
     rectPreview->setPenBrush( _pen, _brush );
 }
 
+void ConfRectDia::resetConfigChangedValues()
+{
+    m_bRndXChanged = false;
+    m_bRndYChanged = false;
+}
+
+int ConfRectDia::getRectangleConfigChange() const
+{
+    int flags = 0;
+    if (m_bRndXChanged)
+        flags = flags | RectValueCmd::XRnd;
+    if (m_bRndYChanged)
+        flags = flags | RectValueCmd::YRnd;
+
+    return flags;
+}
 #include <confrectdia.moc>

@@ -134,8 +134,8 @@ public:
     bool getProtectContent(bool prot) const;
 
     KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> list);
-    KCommand* setBrush( const QBrush &brush, FillType ft,const  QColor& g1, const QColor &g2,
-                        BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);
+    KCommand* setBrush( const QBrush &brush, FillType ft,const  QColor& g1, const QColor &g2, BCType gt,
+                        bool unbalanced, int xfactor, int yfactor, int flags, QPtrList<KPObject> list);
 
     QPen getPen( const QPen & pen ) const;
 
@@ -172,9 +172,9 @@ public:
     KCommand *alignObjsBottom(const KoRect &rect= KoRect());
 
     int getPenBrushFlags( QPtrList<KPObject>list ) const;
-    KCommand* setPieSettings( PieType pieType, int angle, int len );
-    KCommand* setRectSettings( int _rx, int _ry );
-    KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    KCommand* setPieSettings( PieType pieType, int angle, int len, int flags );
+    KCommand* setRectSettings( int _rx, int _ry, int flags );
+    KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags );
     KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright );
     KCommand* setBrushColor( const QColor &c, bool fill );
 
