@@ -766,8 +766,8 @@ private:
     KWDocument *m_doc;
     QWidget *m_parent;
     bool m_canceled;
-    QLabel *resultLabelAll[6];
-    QLabel *resultLabelSelected[6];
+    QLabel *resultLabelAll[7];
+    QLabel *resultLabelSelected[7];
 
     void addBox( QFrame *page, QLabel **resultLabel );
     bool calcStats( QLabel **resultLabel, bool selection );

@@ -809,7 +809,7 @@ int KWTextFrameSet::paragraphsSelected()
 }
 
 bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
-    ulong & sentences, ulong & syllables, bool selected )
+    ulong & sentences, ulong & syllables, ulong & lines, bool selected )
 {
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
@@ -845,6 +845,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         bool hasTrailingSpace = true;
         if ( !selected ) {
             s = parag->string()->toString();
+            lines += parag->lines();
         } else {
             if ( parag->hasSelection( 0 ) ) {
                 hasTrailingSpace = false;

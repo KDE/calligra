@@ -278,7 +278,7 @@ public:
     virtual int paragraphs();
     virtual int paragraphsSelected();
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
-        ulong & sentences, ulong & syllables, bool selected );
+        ulong & sentences, ulong & syllables,ulong & lines, bool selected );
 
     virtual void finalize();
 

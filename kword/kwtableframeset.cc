@@ -1948,10 +1948,10 @@ int KWTableFrameSet::paragraphsSelected()
 }
 
 bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
-    ulong & sentences, ulong & syllables, bool selected )
+    ulong & sentences, ulong & syllables, ulong & lines, bool selected )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        if( ! m_cells.at(i)->statistics( progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables, selected ) )
+        if( ! m_cells.at(i)->statistics( progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, selected ) )
         {
             return false;
         }

@@ -211,7 +211,7 @@ public:
     virtual int paragraphsSelected();
     /** Calculate statistics for this frameset */
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
-        ulong & words, ulong& sentences, ulong & syllables, bool selected );
+        ulong & words, ulong& sentences, ulong & syllables, ulong & lines, bool selected );
 
     /** reimplemented from KoTextFlow, implements flowing around frames etc. */
     virtual int adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag );

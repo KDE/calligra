@@ -669,7 +669,7 @@ public:
     virtual int paragraphs() { return 0; }
     virtual int paragraphsSelected() { return 0; }
     virtual bool statistics( QProgressDialog */*progress*/,  ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/,
-        ulong & /*sentences*/, ulong & /*syllables*/, bool /*process only selected */ ) { return true; }
+                             ulong & /*sentences*/, ulong & /*syllables*/, ulong & /*lines*/,  bool /*process only selected */ ) { return true; }
 
     KWDocument* kWordDocument() const { return m_doc; }
 
@@ -928,7 +928,7 @@ public:
     virtual void printDebug();
 #endif
 
-    /** 
+    /**
     *   Delete a frame from the set of frames this frameSet has.
     *   @param num The frameNumber to be removed.
     *   @param remove passing true means that there can not be an undo of the action.
@@ -937,7 +937,7 @@ public:
     void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
 
     void setDeleted( bool on = true );
-        
+
 private:
     KWChild *m_child;
     KWFramePartMoveCommand *m_cmdMoveChild;

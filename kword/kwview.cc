@@ -7007,7 +7007,7 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
 {
     QFrame *pageAll = 0;
     QFrame *pageSelected = 0;
-    for (int i=0; i < 6; ++i) {
+    for (int i=0; i < 7; ++i) {
         resultLabelAll[i] = 0;
         resultLabelSelected[i] = 0;
     }
@@ -7047,10 +7047,11 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
     ulong charsWithoutSpace = 0L;
     ulong words = 0L;
     ulong sentences = 0L;
+    ulong lines = 0L;
     ulong syllables = 0L;
 
     // safety check result labels
-    for (int i=0; i < 6; ++i) {
+    for (int i=0; i < 7; ++i) {
         if ( !resultLabel[i] ) {
             kdDebug() << "Warning: KWStatisticsDiaolog::calcStats result table not initialized." << endl;
             return false;
@@ -7079,7 +7080,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
         // Exclude headers and footers
         if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() ) {
             if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace,
-                                        words, sentences, syllables, selection ) ) {
+                                        words, sentences, syllables, lines, selection ) ) {
                 // someone pressed "Cancel"
                 return false;
             }
@@ -7093,6 +7094,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
     resultLabel[2]->setText( locale->formatNumber( syllables, 0 ) );
     resultLabel[3]->setText( locale->formatNumber( words, 0 ) );
     resultLabel[4]->setText( locale->formatNumber( sentences, 0 ) );
+    resultLabel[5]->setText( locale->formatNumber( lines, 0 ) );
     // add flesch
     double f = calcFlesch( sentences, words, syllables );
     QString flesch;
@@ -7104,7 +7106,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
     } else {
         flesch = flesch_score_string;
     }
-    resultLabel[5]->setText( flesch );
+    resultLabel[6]->setText( flesch );
     return true;
 }
 
@@ -7120,9 +7122,9 @@ double KWStatisticsDialog::calcFlesch( ulong sentences, ulong words, ulong sylla
 void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel )
 {
     // Layout Managers
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 6 );
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
     QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( box, 8, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     // margins
     int fHeight = box->fontMetrics().height();
@@ -7159,10 +7161,16 @@ void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel )
     resultLabel[4] = new QLabel( "", box );
     grid->addWidget( resultLabel[4], 5, 2, 2 );
 
-    QLabel *label6 = new QLabel( i18n( "Flesch reading ease:" ), box );
+    QLabel *label6 = new QLabel( i18n( "Lines:" ), box );
     grid->addWidget( label6, 6, 0, 1 );
-    resultLabel[5] = new QLabel( init, box );
+    resultLabel[5] = new QLabel( "", box );
     grid->addWidget( resultLabel[5], 6, 2, 2 );
+
+
+    QLabel *label7 = new QLabel( i18n( "Flesch reading ease:" ), box );
+    grid->addWidget( label7, 7, 0, 1 );
+    resultLabel[6] = new QLabel( init, box );
+    grid->addWidget( resultLabel[6], 7, 2, 2 );
 
     topLayout->addWidget( box );
 }
