@@ -37,6 +37,7 @@ public:
 private slots:
     void slotCheckAllFiedsFilled();
     void slotSchedulingChanged(int activated);
+	void slotChooseLeader();
 
 signals:
     void obligatedFieldsFilled(bool yes);

@@ -17,21 +17,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kptprojectdialog.h"
-#include "kptproject.h"
-#include "kptresource.h"
-
-#include <kdebug.h>
-
-#include <kdatepicker.h>
+#include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <klocale.h>
 #include <qtextedit.h>
 #include <qlineedit.h>
 #include <qdatetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>
+#include <qtextbrowser.h>
+
+#include <kdatepicker.h>
+#include <klocale.h>
+
+#include <kabc/addressee.h>
+#include <kabc/addresseedialog.h>
+
+#include <kdebug.h>
+
+#include "kptprojectdialog.h"
+#include "kptproject.h"
+#include "kptresource.h"
+
 
 KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
@@ -72,7 +79,7 @@ void KPTProjectDialog::slotSchedulingChanged(int activated) {
     dia->schedulerTime->setEnabled(needDate);
     dia->schedulerDate->setEnabled(needDate);
 
-    QString label = QString("<p><font size=\"4\" color=\"#7797BC\"><b>%1</b></font><br>%2</p>");
+    QString label = QString("<p><font size=\"4\" color=\"#7797BC\"><b>%1</b></font></p><p>%2</p>");
     switch(activated) {
         // TODO please provide nice explenations on this.
         case 0: // ASAP
@@ -106,6 +113,7 @@ KPTProjectDialogImpl::KPTProjectDialogImpl (QWidget *parent) : KPTProjectDialogB
     connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFiedsFilled()) );
     connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFiedsFilled()) );
     connect (schedulerType, SIGNAL(activated( int )), this, SLOT(slotSchedulingChanged( int )) );
+	connect (chooseLeader, SIGNAL(pressed()), this, SLOT(slotChooseLeader()));
 }
 
 void KPTProjectDialogImpl::slotCheckAllFiedsFilled() {
@@ -114,6 +122,14 @@ void KPTProjectDialogImpl::slotCheckAllFiedsFilled() {
 
 void KPTProjectDialogImpl::slotSchedulingChanged(int activated) {
     emit schedulingTypeChanged(activated);
+}
+
+void KPTProjectDialogImpl::slotChooseLeader()
+{
+  KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
+  if (!a.isEmpty()) {
+	  leaderfield->setText(a.fullEmail());
+  }
 }
 
 #include "kptprojectdialog.moc"
