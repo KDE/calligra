@@ -170,7 +170,7 @@ void DomNode::addKey( const QDateTime& dt, const QString& filename, const QStrin
     const QTime time ( dt.time() );
 
     addNode( "KEY" );
-    setAttribute( "filename", CheckAndEscapeXmlText(filename) );
+    setAttribute( QString::fromLatin1("filename"), CheckAndEscapeXmlText(filename) );
     setAttribute( "year", date.year() );
     setAttribute( "month", date.month() );
     setAttribute( "day", date.day() );
@@ -181,7 +181,7 @@ void DomNode::addKey( const QDateTime& dt, const QString& filename, const QStrin
 
     if (!name.isEmpty())
     {
-        setAttribute( "name", CheckAndEscapeXmlText(name) );
+        setAttribute( QString::fromLatin1("name"), CheckAndEscapeXmlText(name) );
     }
     closeNode( "KEY" );
 }
