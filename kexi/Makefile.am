@@ -20,7 +20,7 @@ dummy.cc:
 	echo > dummy.cc
 
 
-SUBDIRS = kexiDB formeditor core tableview widget . plugins pics data interfaces filters
+SUBDIRS = kexidb formeditor core tableview widget . plugins pics data interfaces filters
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop
