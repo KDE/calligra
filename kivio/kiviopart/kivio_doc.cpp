@@ -28,7 +28,6 @@
 #include "kivio_view.h"
 #include "kivio_factory.h"
 #include "export_page_dialog.h"
-#include "kivio_config.h"
 #include "kivio_common.h"
 #include "kivio_group_stencil.h"
 #include "kivio_icon_view.h"
@@ -101,8 +100,6 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   s_docs->append(this);
 
-  m_options = new KivioOptions();
-
   m_pLstSpawnerSets = new QPtrList<KivioStencilSpawnerSet>;
   m_pLstSpawnerSets->setAutoDelete(true);
   m_loadTimer = 0;
@@ -135,6 +132,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   m_units = KoUnit::U_MM;
   m_font = KoGlobal::defaultFont();
+  m_pageLayout = Kivio::defaultPageLayout();
 
   viewItemList = new ViewItemList(this);
 
@@ -228,10 +226,6 @@ QDomDocument KivioDoc::saveXML()
   kivio.appendChild(viewItemsElement);
   viewItemList->save(viewItemsElement);
 
-  QDomElement optionsElement = doc.createElement("Options");
-  kivio.appendChild(optionsElement);
-  m_options->save(optionsElement);
-
   doc.appendChild(kivio);
 
   // Save the list of stencils spawners we have loaded.
@@ -311,7 +305,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
         if( id.isEmpty() )
         {
-	   kdDebug(43000) << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found, it contains no id!" << endl;
+            kdDebug(43000) << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found, it contains no id!" << endl;
         }
         else
         {
@@ -324,7 +318,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
     else if( name == "Options" )
     {
-        m_options->load(node.toElement());
+        // Not used anymore use users default page instead from Settings to create new pages...
     }
     else
     {
@@ -688,8 +682,6 @@ KivioDoc::~KivioDoc()
     }
 
     s_docs->removeRef(this);
-
-    delete m_options;
 }
 
 void KivioDoc::saveConfig()

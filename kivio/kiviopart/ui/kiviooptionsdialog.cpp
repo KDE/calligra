@@ -22,10 +22,10 @@
 #include "kivio_doc.h"
 #include "kivio_page.h"
 #include "kivioglobal.h"
-#include "kivio_config.h"
 #include "kivio_grid_data.h"
 #include "kivio_guidelines.h"
 #include "kivio_canvas.h"
+#include "kivio_settings.h"
 
 #include <klocale.h>
 #include <koApplication.h>
@@ -104,7 +104,7 @@ void KivioOptionsDialog::initPage()
 
   KivioView* view = static_cast<KivioView*>(parent());
   KoUnit::Unit unit = view->doc()->units();
-  m_layout = view->doc()->config()->globalDefaultPageLayout();
+  m_layout = Kivio::defaultPageLayout();
   m_font = view->doc()->defaultFont();
 
   QLabel* unitLbl = new QLabel(i18n("Default &units:"), page);
@@ -308,7 +308,7 @@ void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
   view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
-  view->doc()->config()->setGlobalDefaultPageLayout(m_layout);
+  Kivio::setDefaultPageLayout(m_layout);
   view->doc()->setDefaultFont(m_font);
   view->togglePageMargins(m_marginsChBox->isChecked());
   view->toggleShowRulers(m_rulersChBox->isChecked());
@@ -354,12 +354,14 @@ void KivioOptionsDialog::applyGuides()
 
 void KivioOptionsDialog::defaultPage()
 {
-  m_layout = KoPageLayoutDia::standardLayout();
+  bool defaults = Kivio::Settings::self()->useDefaults(true);
+  m_layout = Kivio::defaultPageLayout();
   m_font = KoGlobal::defaultFont();
   m_unitCombo->setCurrentItem(KoUnit::U_MM);
   setLayoutText(m_layout);
   m_marginsChBox->setChecked(true);
   m_rulersChBox->setChecked(true);
+  Kivio::Settings::self()->useDefaults(defaults);
 }
 
 void KivioOptionsDialog::defaultGrid()
@@ -423,36 +425,22 @@ void KivioOptionsDialog::unitChanged(int u)
 
 void KivioOptionsDialog::slotOk()
 {
-  applyPage();
-  applyGrid();
-  applyGuides();
+  slotApply();
   accept();
 }
 
 void KivioOptionsDialog::slotApply()
 {
-  if(activePageIndex() == m_pageIndex) {
-    applyPage();
-  }
-  if(activePageIndex() == m_gridIndex) {
-    applyGrid();
-  }
-  if(activePageIndex() == m_guidesIndex) {
-    applyGuides();
-  }
+  applyPage();
+  applyGrid();
+  applyGuides();
 }
 
 void KivioOptionsDialog::slotDefault()
 {
-  if(activePageIndex() == m_pageIndex) {
-    defaultPage();
-  }
-  if(activePageIndex() == m_gridIndex) {
-    defaultGrid();
-  }
-  if(activePageIndex() == m_guidesIndex) {
-    defaultGuides();
-  }
+  defaultPage();
+  defaultGrid();
+  defaultGuides();
 }
 
 void KivioOptionsDialog::setMaxHorizSnap(double v)

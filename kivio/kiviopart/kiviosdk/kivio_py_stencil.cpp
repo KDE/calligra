@@ -6,8 +6,8 @@ KivioPage *page;
 KivioView *view;
 #ifdef HAVE_PYTHON
 
+#include "kivioglobal.h"
 #include "kivio_common.h"
-#include "kivio_config.h"
 #include "kivio_connector_point.h"
 #include "kivio_connector_target.h"
 #include "kivio_fill_style.h"
@@ -627,7 +627,7 @@ int KivioPyStencil::resizeHandlePositions()
  */
 void KivioPyStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 {
-  QPixmap *targetPic;
+  QPixmap targetPic;
   KivioPainter *painter;
   double x, y;
 
@@ -636,7 +636,7 @@ void KivioPyStencil::paintConnectorTargets( KivioIntraStencilData *pData )
     return;
 
   // Obtain the graphic used for KivioConnectorTargets
-  targetPic = KivioConfig::config()->connectorTargetPixmap();
+  targetPic = Kivio::connectorTargetPixmap();
 
 
   KoZoomHandler* zoomHandler = pData->zoomHandler;
@@ -649,7 +649,7 @@ void KivioPyStencil::paintConnectorTargets( KivioIntraStencilData *pData )
     x = zoomHandler->zoomItX(pTarget->x());
     y = zoomHandler->zoomItY(pTarget->y());
 
-    painter->drawPixmap( x-3, y-3, *targetPic );
+    painter->drawPixmap( x-3, y-3, targetPic );
 
     pTarget = m_pConnectorTargets->next();
   }

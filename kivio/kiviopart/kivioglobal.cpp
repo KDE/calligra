@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2003-2004 Peter Simonsson <psn@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,12 +18,17 @@
 */
 
 #include "kivioglobal.h"
-#include "kivio_common.h"
 
 #include <qdom.h>
 #include <qpixmap.h>
+#include <qprinter.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+
+#include "kivio_common.h"
+#include "kivio_settings.h"
 
 struct PaperSizeDef {
   const char* title;
@@ -67,7 +72,7 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
     layout.ptRight = XmlReadFloat(e, "marginRight", 0.0);
     layout.ptTop = XmlReadFloat(e, "marginTop", 0.0);
     layout.ptBottom = XmlReadFloat(e, "marginBottom", 0.0);
-    layout.format = KoPageFormat::formatFromString(XmlReadString(e, "format", "A4"));
+    layout.format = KoPageFormat::formatFromString(XmlReadString(e, "format", pageSizeString(KGlobal::locale()->pageSize())));
     layout.orientation = Kivio::orientationFromString(XmlReadString(e, "orientation", "Portrait"));
   }
 
@@ -189,6 +194,110 @@ void Kivio::saveSize(QDomElement& e, const QString& name, const KoSize& size)
 {
   XmlWriteFloat(e, name + "Width", size.width());
   XmlWriteFloat(e, name + "Height", size.height());
+}
+
+QString Kivio::pageSizeString(int pageSize)
+{
+  QString psStr = "A4";
+  
+  switch(pageSize) {
+    case QPrinter::A0:
+      psStr = "A0";
+      break;
+    case QPrinter::A1:
+      psStr = "A1";
+      break;
+    case QPrinter::A2:
+      psStr = "A2";
+      break;
+    case QPrinter::A3:
+      psStr = "A3";
+      break;
+    case QPrinter::A5:
+      psStr = "A5";
+      break;
+    case QPrinter::A6:
+      psStr = "A6";
+      break;
+    case QPrinter::A7:
+      psStr = "A7";
+      break;
+    case QPrinter::A8:
+      psStr = "A8";
+      break;
+    case QPrinter::A9:
+      psStr = "A9";
+      break;
+    case QPrinter::B0:
+      psStr = "B0";
+      break;
+    case QPrinter::B1:
+      psStr = "B1";
+      break;
+    case QPrinter::B10:
+      psStr = "B10";
+      break;
+    case QPrinter::B2:
+      psStr = "B2";
+      break;
+    case QPrinter::B3:
+      psStr = "B3";
+      break;
+    case QPrinter::B4:
+      psStr = "B4";
+      break;
+    case QPrinter::B5:
+      psStr = "B5";
+      break;
+    case QPrinter::B6:
+      psStr = "B6";
+      break;
+    case QPrinter::B7:
+      psStr = "B7";
+      break;
+    case QPrinter::B8:
+      psStr = "B8";
+      break;
+    case QPrinter::B9:
+      psStr = "B9";
+      break;
+    case QPrinter::C5E:
+      psStr = "C5";
+      break;
+    case QPrinter::Comm10E:
+      psStr = "Comm10";
+      break;
+    case QPrinter::DLE:
+      psStr = "DL";
+      break;
+    case QPrinter::Executive:
+      psStr = "Executive";
+      break;
+    case QPrinter::Folio:
+      psStr = "Folio";
+      break;
+    case QPrinter::Ledger:
+      psStr = "Ledger";
+      break;
+    case QPrinter::Legal:
+      psStr = "Legal";
+      break;
+    case QPrinter::Letter:
+      psStr = "Letter";
+      break;
+    case QPrinter::Tabloid:
+      psStr = "Tabloid";
+      break;
+    case QPrinter::Custom:
+      psStr = "Custom";
+      break;
+    case QPrinter::A4:
+    default:
+      psStr = "A4";
+      break;
+  };
+  
+  return psStr;
 }
 
 QPixmap Kivio::arrowHeadPixmap()
@@ -1118,4 +1227,71 @@ QPixmap Kivio::arrowHeadPixmap()
   };
 
   return QPixmap(lineends);
+}
+
+QPixmap Kivio::connectorTargetPixmap()
+{
+  const char * connectorTarget_xpm[] = {
+  "7 7 3 1",
+  "       c None",
+  ".      c #FFFFFF",
+  "+      c #051EFF",
+  " .   . ",
+  ".+. .+.",
+  " .+.+. ",
+  "  .+.  ",
+  " .+.+. ",
+  ".+. .+.",
+  " .   . "};
+  
+  return QPixmap(connectorTarget_xpm);
+}
+
+QPixmap Kivio::lockPixmap()
+{
+  const char * lock_xpm[] = {
+  "10 10 3 1",
+  " 	c None",
+  ".	c #FFFFFF",
+  "+	c #000000",
+  "    ..    ",
+  "   .++.   ",
+  "  .+..+.  ",
+  "  .+..+.  ",
+  " .++++++. ",
+  " .+....+. ",
+  " .+.  .+. ",
+  " .+....+. ",
+  " .++++++. ",
+  "  ......  "};
+  
+  return QPixmap(lock_xpm);
+}
+
+KoPageLayout Kivio::defaultPageLayout()
+{
+  KoPageLayout layout;
+  
+  layout.format = KoPageFormat::formatFromString(Settings::format());
+  layout.orientation = Kivio::orientationFromString(Settings::orientation());
+  layout.ptTop = Settings::borderTop();
+  layout.ptBottom = Settings::borderBottom();
+  layout.ptLeft = Settings::borderLeft();
+  layout.ptRight = Settings::borderRight();
+  layout.ptWidth = Settings::width();
+  layout.ptHeight = Settings::height();
+  
+  return layout;
+}
+
+void Kivio::setDefaultPageLayout(const KoPageLayout& layout)
+{
+  Settings::setFormat(KoPageFormat::formatString(layout.format));
+  Settings::setOrientation(Kivio::orientationString(layout.orientation));
+  Settings::setBorderTop(layout.ptTop);
+  Settings::setBorderBottom(layout.ptBottom);
+  Settings::setBorderLeft(layout.ptLeft);
+  Settings::setBorderRight(layout.ptRight);
+  Settings::setWidth(layout.ptWidth);
+  Settings::setHeight(layout.ptHeight);
 }

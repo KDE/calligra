@@ -25,8 +25,6 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
-#include "kivio_config.h"
-
 extern "C"
 {
   void* init_libkiviopart()
@@ -50,12 +48,6 @@ KivioFactory::~KivioFactory()
   s_aboutData=0;
   delete s_global;
   s_global = 0L;
-
-  // FIXME: Is this the right place to do this?
-  if( KivioConfig::config() )
-  {
-    KivioConfig::deleteConfig();
-  }
 }
 
 KParts::Part* KivioFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
@@ -85,13 +77,6 @@ KInstance* KivioFactory::global()
     s_global->dirs()->addResourceType( "kivio_template", KStandardDirs::kde_default("data") + "kivio/templates/" );
     s_global->dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") + "koffice/toolbar/");
     s_global->iconLoader()->addAppDir("koffice");
-  }
-
-  // FIXME: Is this the place to do it?
-  // Also load the config information here
-  if( KivioConfig::config() == NULL )
-  {
-    KivioConfig::readUserConfig();
   }
 
   return s_global;

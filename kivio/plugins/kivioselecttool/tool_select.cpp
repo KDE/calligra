@@ -613,9 +613,9 @@ void SelectTool::continueResizing(const QPoint &pos)
   double w2 = m_pResizingStencil->w() / 2.0;
   double h2 = m_pResizingStencil->h() / 2.0;
   m.translate(m_pResizingStencil->x(), m_pResizingStencil->y());
-  m.translate(w2, h2);
-  m.rotate(m_pResizingStencil->rotation());
-  m.translate(-w2, -h2);
+  m.translate(m_pResizingStencil->pinPoint().x(), m_pResizingStencil->pinPoint().y());
+  m.rotate(-m_pResizingStencil->rotation());
+  m.translate(-m_pResizingStencil->pinPoint().x(), -m_pResizingStencil->pinPoint().y());
   m.translate(-m_pResizingStencil->x(), -m_pResizingStencil->y());
   m.invert();
   
@@ -736,6 +736,8 @@ void SelectTool::continueResizing(const QPoint &pos)
     case 8: // left
       if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
       {
+        KoPoint pinPoint = m_pResizingStencil->pinPoint();
+        m_pResizingStencil->setPinPoint(KoPoint(pinPoint.x() - (dx / 2.0), pinPoint.y()));
         m_pResizingStencil->setX( sx + dx );
         m_pResizingStencil->setW( sw - dx );
       }

@@ -16,11 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include "kivio_config.h"
+#include "kivioglobal.h"
 #include "kivio_line_style.h"
 #include "kivio_point.h"
 #include "kivio_screen_painter.h"
 
+#include <qimage.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <qsimplerichtext.h>
@@ -818,15 +819,15 @@ void KivioScreenPainter::drawText( int x, int y, int w, int h, int tf, const QSt
 {
     PAINTER_CHECK();
 
-    //m_pPainter->setPen( m_textColor );
-    //m_pPainter->drawText( x, y, w, h, tf, str );
-    QSimpleRichText textArea(str, m_pPainter->font());
+    m_pPainter->setPen( m_textColor );
+    m_pPainter->drawText( x, y, w, h, tf, str );
+/*    QSimpleRichText textArea(str, m_pPainter->font());
     textArea.setWidth(w);
     QColorGroup cg;
     cg.setColor(QColorGroup::Base, m_pFillStyle->color());
     cg.setColor(QColorGroup::Text, m_textColor);
     QBrush b = m_pFillStyle->brush();
-    textArea.draw(m_pPainter, x, y, QRect(0, 0, 0, 0), cg, &b);
+    textArea.draw(m_pPainter, x, y, QRect(0, 0, 0, 0), cg, &b);*/
 }
 
 QRect KivioScreenPainter::boundingRect( int x, int y, int w, int h, int tf, const QString &str )
@@ -848,7 +849,6 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
    QColor fillColor;
    QBrush b;
    QPen p;
-   QPixmap *pLock;
 
    const float HW = 6.0f;
    const float HWP1 = HW+1.0f;
@@ -862,9 +862,7 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
       x1 = x - 4;
       y1 = y - 4;
 
-      pLock = KivioConfig::config()->lockPixmap();
-
-      m_pPainter->drawPixmap( qRound(x1), qRound(y1), *pLock );
+      m_pPainter->drawPixmap( qRound(x1), qRound(y1), Kivio::lockPixmap() );
       return;
    }
 

@@ -121,6 +121,7 @@ class KivioStencil
 
     // Rotation
     int m_rotation;
+    KoPoint m_pinPoint;
 
     // The spawner that created this stencil
     KivioStencilSpawner *m_pSpawner;
@@ -202,7 +203,7 @@ class KivioStencil
     virtual void setText( const QString & ) { ; }
     virtual QString text() { return QString(""); }
 
-    virtual void setRotation(int d) { m_rotation = d; updateGeometry(); }
+    virtual void setRotation(int d);
     virtual int rotation() { return m_rotation; }
 
     virtual KivioStencilSpawner *spawner() { return m_pSpawner; }
@@ -258,6 +259,9 @@ class KivioStencil
 
     virtual void setText(const QString& /*text*/, const QString& /*name*/) { ; }
     virtual QString text(const QString& /*name*/) { return QString(""); }
+    
+    virtual void setPinPoint(const KoPoint& p) { m_pinPoint = p; }
+    virtual KoPoint pinPoint() const { return m_pinPoint; }
 
     /****** ARROW HEAD STUFF *******/
     virtual void setStartAHType( int ) { ; }

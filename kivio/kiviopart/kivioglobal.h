@@ -26,6 +26,7 @@
 
 class QDomElement;
 class QPixmap;
+class QString;
 
 namespace Kivio
 {
@@ -59,11 +60,36 @@ namespace Kivio
    * Save a KoSize to a QDomElement
    */
   void saveSize(QDomElement& e, const QString& name, const KoSize& size);
+  
+  /**
+   * Get the pagesize string from a QPrinter::PageSize value
+   */
+  QString pageSizeString(int pageSize);
 
   /**
    * Returns a pixmap with all arrowheads
    */
   QPixmap arrowHeadPixmap();
+  
+  /**
+   * Returns the connector target pixmap
+   */
+  QPixmap connectorTargetPixmap();
+
+  /**
+   * Returns the lock pixmap
+   */
+  QPixmap lockPixmap();
+
+  /**
+   * Set the default page layout
+   */
+  void setDefaultPageLayout(const KoPageLayout& layout);
+  
+  /**
+   * Get the default page layout
+   */
+  KoPageLayout defaultPageLayout();
 }
 
 #endif

@@ -74,6 +74,7 @@
 #include <koApplication.h>
 #include <kotabbar.h>
 #include <kozoomaction.h>
+#include <koPageLayoutDia.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -85,7 +86,6 @@
 #include "kivio_stencil_spawner.h"
 #include "kivio_zoomaction.h"
 #include "kivio_grid_data.h"
-#include "kivio_config.h"
 
 #include "tkcoloractions.h"
 #include "tooldockmanager.h"
@@ -124,6 +124,7 @@
 #include "kiviostencilformatdlg.h"
 #include "kivioarrowheadformatdlg.h"
 #include "kiviodragobject.h"
+#include "kivioglobal.h"
 
 #include "kolinewidthaction.h"
 #include "kolinestyleaction.h"
@@ -200,12 +201,12 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
 
   // Rulers
-  vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, m_pDoc->config()
-    ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
+  vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, Kivio::defaultPageLayout(),
+    KoRuler::F_HELPLINES, m_pDoc->units());
   vRuler->showMousePos(true);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
-  hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, m_pDoc->config()
-    ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
+  hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, Kivio::defaultPageLayout(),
+    KoRuler::F_HELPLINES, m_pDoc->units());
   hRuler->showMousePos(true);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
@@ -698,7 +699,20 @@ int KivioView::bottomBorder() const
 
 void KivioView::paperLayoutDlg()
 {
-  doc()->config()->paperLayoutSetup(this);
+  KivioPage* page = activePage();
+  KoPageLayout l = page->paperLayout();
+  KoHeadFoot headfoot;
+  int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
+  KoUnit::Unit unit = doc()->units();
+
+  if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
+  {
+    KivioDoc* doc = page->doc();
+    KivioChangeLayoutCommand * cmd = new KivioChangeLayoutCommand(
+      i18n("Change Page Layout"),page ,page->paperLayout(), l);
+    doc->addCommand( cmd );
+    page->setPaperLayout(l);
+  }
 }
 
 void KivioView::removePage()
@@ -1603,7 +1617,8 @@ void KivioView::alignStencilsDlg()
 
 void KivioView::optionsDialog()
 {
-    doc()->config()->setup(this);
+  KivioOptionsDialog dlg(this, "setupDialog");
+  dlg.exec();
 }
 
 void KivioView::toggleStencilGeometry(bool b)

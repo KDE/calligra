@@ -1,6 +1,5 @@
 #include "kivio_base_target_stencil.h"
 #include "kivio_common.h"
-#include "kivio_config.h"
 #include "kivio_connector_point.h"
 #include "kivio_connector_target.h"
 #include "kivio_fill_style.h"

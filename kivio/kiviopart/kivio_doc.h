@@ -27,12 +27,12 @@
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include <koUnit.h>
+#include <koGlobal.h>
 
 class KivioDoc;
 class KivioView;
 class KivioMap;
 class KivioPage;
-class KivioOptions;
 
 class ExportPageDialog;
 class KivioGroupStencil;
@@ -78,8 +78,6 @@ class KivioDoc : public KoDocument
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
 
     virtual bool initDoc();
-
-    KivioOptions* config()const { return m_options; }
 
     virtual QCString mimeType() const { return MIME_TYPE; }
 
@@ -238,7 +236,6 @@ class KivioDoc : public KoDocument
 
     ViewItemList* viewItemList;
 
-    KivioOptions* m_options;
     DCOPObject *dcop;
     KCommandHistory * m_commandHistory;
 

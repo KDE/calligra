@@ -54,7 +54,6 @@
 #include "kivio_doc.h"
 #include "kivio_canvas.h"
 #include "kivio_guidelines.h"
-#include "kivio_config.h"
 #include "kivio_view.h"
 
 #include "kivio_common.h"
@@ -105,7 +104,7 @@ KivioPage::KivioPage( KivioMap *_map, const QString &pageName, const char *_name
     setName( s.data() );
   }
 
-  m_pPageLayout = m_pDoc->config()->defaultPageLayout();
+  m_pPageLayout = Kivio::defaultPageLayout();
   gLines = new KivioGuideLines(this);
 }
 
@@ -910,7 +909,7 @@ void KivioPage::copy()
   KivioDragObject* kdo = new KivioDragObject();
   kdo->setStencilList(m_lstSelection);
   kdo->setStencilRect(getRectForAllSelectedStencils());
-  QApplication::clipboard()->setData(kdo);
+  QApplication::clipboard()->setData(kdo, QClipboard::Clipboard);
 }
 
 void KivioPage::cut()
@@ -956,7 +955,7 @@ void KivioPage::paste(KivioView* view)
   list.setAutoDelete(false);
   KivioDragObject kdo;
 
-  if(kdo.decode(QApplication::clipboard()->data(), list, this)) {
+  if(kdo.decode(QApplication::clipboard()->data(QClipboard::Clipboard), list, this)) {
     unselectAllStencils();
     KivioStencil* stencil = list.first();
 
@@ -1534,7 +1533,7 @@ KoPoint KivioPage::snapToTarget( const KoPoint& p, double thresh, bool& hit )
           }
       }
 
-      retVal = pLayer->snapToTarget(p, 8.0f, hit);
+      retVal = pLayer->snapToTarget(p, thresh, hit);
 
       pLayer = nextLayer();
    }

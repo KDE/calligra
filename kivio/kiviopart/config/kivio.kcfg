@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kiviorc"/>
+  <include>koPageLayoutDia.h</include>
+  <include>kivioglobal.h</include>
+  <include>koGlobal.h</include>
+  <include>kglobal.h</include>
+  <include>klocale.h</include>
+  <group name="DefaultPageLayout">
+    <entry name="Format" type="String">
+      <label>The default page layout.</label>
+      <default code="true">Kivio::pageSizeString(KGlobal::locale()->pageSize())</default>
+    </entry>
+    <entry name="Orientation" type="String">
+      <label>The orientation of the page.</label>
+      <default>Portrait</default>
+    </entry>
+    <entry name="Width" type="Double">
+      <label>The width of the page.</label>
+      <default code="true">KoPageLayoutDia::standardLayout().ptWidth</default>
+    </entry>
+    <entry name="Height" type="Double">
+      <label>The height of the page.</label>
+      <default code="true">KoPageLayoutDia::standardLayout().ptWidth</default>
+    </entry>
+    <entry name="BorderTop" type="Double">
+      <label>The size of the border at the top of the page.</label>
+      <default code="true">KoPageLayoutDia::standardLayout().ptTop</default>
+    </entry>
+    <entry name="BorderBottom" type="Double">
+      <label>The size of the border at the bottom of the page.</label>
+      <default code="true">KoPageLayoutDia::standardLayout().ptBottom</default>
+    </entry>
+    <entry name="BorderLeft" type="Double">
+      <label>The size of the border at the left of the page.</label>
+      <default code="true">KoPageLayoutDia::standardLayout().ptLeft</default>
+    </entry>
+    <entry name="BorderRight" type="Double">
+      <label>The size of the border at the right of the page.</label>
+      <default code="true">KoPageLayoutDia::standardLayout().ptRight</default>
+    </entry>
+  </group>
+</kcfg>

@@ -1,0 +1,5 @@
+File=kivio.kcfg
+NameSpace=Kivio
+ClassName=Settings
+Singleton=true
+Mutators=true

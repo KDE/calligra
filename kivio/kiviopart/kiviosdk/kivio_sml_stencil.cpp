@@ -17,8 +17,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "kivioglobal.h"
 #include "kivio_common.h"
-#include "kivio_config.h"
 #include "kivio_connector_point.h"
 #include "kivio_connector_target.h"
 #include "kivio_fill_style.h"
@@ -813,7 +813,7 @@ void KivioSMLStencil::paint( KivioIntraStencilData *pData )
  */
 void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 {
-  QPixmap *targetPic;
+  QPixmap targetPic;
   KivioPainter *painter;
   int x, y;
 
@@ -823,7 +823,7 @@ void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
   }
 
   // Obtain the graphic used for KivioConnectorTargets
-  targetPic = KivioConfig::config()->connectorTargetPixmap();
+  targetPic = Kivio::connectorTargetPixmap();
 
 
   m_zoomHandler = pData->zoomHandler;
@@ -836,7 +836,7 @@ void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
     x = m_zoomHandler->zoomItX(pTarget->x());
     y = m_zoomHandler->zoomItY(pTarget->y());
 
-    painter->drawPixmap( x-3, y-3, *targetPic );
+    painter->drawPixmap( x-3, y-3, targetPic );
 
     pTarget = m_pConnectorTargets->next();
   }
@@ -2040,9 +2040,9 @@ QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
   
   if(first) {
     return first->shapeData()->name();
-  } else {
-    return QString::null;
   }
+  
+  return QString::null;
 }
 
 void KivioSMLStencil::setText(const QString& text, const QString& name)
@@ -2074,4 +2074,6 @@ QString KivioSMLStencil::text(const QString& name)
 
     pShape = m_pShapeList->next();
   }
+  
+  return QString::null;
 }

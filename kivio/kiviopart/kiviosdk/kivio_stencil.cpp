@@ -16,7 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include "kivio_config.h"
 #include "kivio_custom_drag_data.h"
 #include "kivio_fill_style.h"
 #include "kivio_intra_stencil_data.h"
@@ -231,13 +230,20 @@ void KivioStencil::rotatePainter(KivioIntraStencilData *pData)
 {
   if(m_rotation != 0) {
     QWMatrix m;
-    m.translate(pData->zoomHandler->zoomItX(m_w / 2.0), pData->zoomHandler->zoomItY(m_h / 2.0 ));
+    m.translate(pData->zoomHandler->zoomItX(m_pinPoint.x()), pData->zoomHandler->zoomItY(m_pinPoint.y()));
     m.rotate(m_rotation);
-    m.translate(pData->zoomHandler->zoomItX(-m_w / 2.0), pData->zoomHandler->zoomItY(-m_h / 2.0));
-    pData->painter->setWorldMatrix( m, true );
+    m.translate(pData->zoomHandler->zoomItX(-m_pinPoint.x()), pData->zoomHandler->zoomItY(-m_pinPoint.y()));
+    pData->painter->setWorldMatrix(m, true);
   }
 }
 
 KoRect KivioStencil::calculateBoundingBox()
 {
+}
+
+void KivioStencil::setRotation(int d)
+{
+  m_rotation = d;
+  m_pinPoint.setCoords(m_w / 2.0, m_h / 2.0);
+  updateGeometry();
 }
