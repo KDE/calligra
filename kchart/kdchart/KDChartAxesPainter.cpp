@@ -1230,7 +1230,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                 */
                 // Note: a double that was initialized with 0.0
                 //       is NOT equal a double initialized with 0 !!!
-                if(    MAXDOUBLE == nLow
+                if(    DBL_MAX == nLow
                     || (    ( 0.0 == nHigh || 0 == nHigh )
                          && ( 0.0 == nLow  || 0 == nLow ) ) ) {
                     // qDebug("NO values or all values have ZERO value, showing 0.0 - 1.0 span");

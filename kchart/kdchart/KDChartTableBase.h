@@ -33,23 +33,11 @@
 #include <KDChartData.h>
 
 #ifdef __WINDOWS__
+#define std
+#endif
 #include <float.h>
 #include <limits.h>
 #include <math.h>
-#define MAXDOUBLE DBL_MAX
-#elif defined __APPLE__
-#include <float.h>
-#define MAXDOUBLE DBL_MAX
-#else
-#if defined(__FreeBSD__)
-#include <float.h>
-#define MAXDOUBLE DBL_MAX
-#else
-#include <values.h>
-#endif
-#include <limits.h>
-#include <math.h>
-#endif
 
 #if defined SUN7 || ( defined HP11_aCC && defined HP1100 )
 #define std
@@ -351,7 +339,7 @@ inline double KDChartTableDataBase::minInColumn( uint col ) const
 
 inline double KDChartTableDataBase::maxInRow( uint row ) const
 {
-    double maxValue = KDCHART_MINDOUBLE;
+    double maxValue = DBL_MIN;
     bool bStart = true;
     if ( UINT_MAX > row ) {
         for ( uint col = 0; col < usedCols(); col++ ) {
@@ -372,7 +360,7 @@ inline double KDChartTableDataBase::maxInRow( uint row ) const
 
 inline double KDChartTableDataBase::minInRow( uint row ) const
 {
-    double minValue = MAXDOUBLE;
+    double minValue = DBL_MAX;
     bool bStart = true;
     if ( UINT_MAX > row ) {
         for ( uint col = 0; col < usedCols(); col++ ) {
