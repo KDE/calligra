@@ -14,7 +14,8 @@ noinst_HEADERS = main.h
 
 METASOURCES = main.moc
 
-service_DATA = kword_ascii_import.desktop
+service_DATA = kword_ascii_import.desktop \
+				kword_ascii_export.desktop
 servicedir = $(kde_servicesdir)
 
 datasdir = $(kde_datadir)/koffice/filter

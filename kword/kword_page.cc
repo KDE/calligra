@@ -4535,9 +4535,9 @@ void KWPage::doAutoScroll()
         continueKeySelection();
         continueSelection = false;
 
-        _painter.begin( viewport() );
-        doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
-        _painter.end();
+//         _painter.begin( viewport() );
+//         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
+//         _painter.end();
 
         if ( doc->getProcessingType() == KWordDocument::DTP )
             setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );

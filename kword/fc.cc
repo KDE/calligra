@@ -736,8 +736,8 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
             found = true;
             break;
         }
-//         if ( page > pg )
-//             break;
+        if ( ptY > my + 20 )
+            break;
     }
 
     if ( !found ) ptY -= getLineHeight();

@@ -27,6 +27,9 @@
 #include <klocale.h>
 #include <kapp.h>
 #include <kfiledialog.h>
+#include <kmimetypes.h>
+#include <kmimemagic.h>
+#include <kurl.h>
 
 #include <opMainWindowIf.h>
 #include <opMenuIf.h>
@@ -56,15 +59,15 @@ KWordShell::KWordShell()
 
     if ( !previewHandlerRegistered )
     {
-      QStringList list = kimgio_types();
-      QStringList::ConstIterator it;
-      for (it = list.begin(); it != list.end(); it++) 
-	KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
-      
-      KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
-      KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
-      
-      previewHandlerRegistered = true;
+        QStringList list = kimgio_types();
+        QStringList::ConstIterator it;
+        for (it = list.begin(); it != list.end(); it++)
+            KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
+
+        KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
+        KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
+
+        previewHandlerRegistered = true;
     }
 }
 
@@ -248,11 +251,25 @@ bool KWordShell::saveDocument( const char *_url, const char *_format )
     QString file;
     if ( _url == 0L || *_url == 0 )
     {
-        file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
+        QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+                                                                    "application/x-kword",
+                                                                    "*.kwd", "KWord",
+                                                                    true );
 
+        file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
         if ( file.isNull() )
             return false;
-        _url = file.data();
+
+        KMimeType *t = KMimeType::findByURL( KURL( QString( file ) ), 0, true );
+        if ( t->mimeType() != "application/x-kword" )
+        {
+            m_pDoc->saveToURL( "/tmp/kofficefilter", _format );
+            KoFilterManager::self()->export( "/tmp/kofficefilter", file, "application/x-kword" );
+
+            return true;
+        }
+        
+        _url = file.latin1();
         m_pDoc->setURL( _url );
     }
 
@@ -386,18 +403,18 @@ void KWordShell::slotFileOpen()
     if ( m_pDoc )
         m_pDoc->enableEmbeddedParts( false );
 
-   QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-                               "application/x-kword",
-                               "*.kwd", "KWord",
-                               true );
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+                                                                "application/x-kword",
+                                                                "*.kwd", "KWord",
+                                                                true );
 
-   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-   if ( file.isNull() )
-     return;
+    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+    if ( file.isNull() )
+        return;
 
-   file = KoFilterManager::self()->import( file, "application/x-kword" );
-   if ( file.isNull() )
-     return;
+    file = KoFilterManager::self()->import( file, "application/x-kword" );
+    if ( file.isNull() )
+        return;
 
 //    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 //
