@@ -1,0 +1,28 @@
+
+Kexi README
+
+Currently Kexi does not offer all create/open/save actions.
+To play with the app (considering you have already kexi compiled and installed),
+you need to:
+
+1. Create test program:
+
+% cd tests/newapi/
+% make
+
+(kexidbtest program will be created, not installed though)
+
+
+2. Create database project file with example data:
+
+% cd tests/newapi/
+% ./kexidbtest sqlite tables db
+
+
+3. Run kexi from command line:
+
+% cd tests/newapi/
+% kexi db
+
+...or select "db" project file, using "open existing database" action on startup.
+
