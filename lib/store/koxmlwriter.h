@@ -37,7 +37,7 @@ public:
      * Create a KoXmlWriter instance to write out an XML document into
      * the given QIODevice.
      */
-    KoXmlWriter( QIODevice* dev );
+    KoXmlWriter( QIODevice* dev, int indentLevel = 0 );
     /**
      *  Return an XML writer for saving Oasis XML into the device @p dev,
      *  including the XML processing instruction,
@@ -142,6 +142,14 @@ public:
      */
     void addTextNode( const char* cstr );
 
+    /**
+     * This is quite a special-purpose method, not for everyday use.
+     * It adds a complete element (with its attributes and child elements)
+     * as a child of the current element. The string is supposed to be escaped
+     * for XML already, so it will usually come from another KoXmlWriter.
+     */
+    void addCompleteElement( const char* cstr );
+
     // #### Maybe we want to subclass KoXmlWriter for manifest files.
     /**
      * Special helper for writing "manifest" files
@@ -150,6 +158,12 @@ public:
      * when we add support for encrypting/signing.
      */
     void addManifestEntry( const QString& fullPath, const QString& mediaType );
+
+    /**
+     * @return the current indentation level.
+     * Useful when creating a sub-KoXmlWriter (see addCompleteElement)
+     */
+    int indentLevel() const { return m_tags.size() + m_baseIndentLevel; }
 
 private:
     struct Tag {
@@ -186,10 +200,12 @@ private:
         }
     }
     char* escapeForXML( const char* source ) const;
+    void prepareForChild();
     void init();
 
     QIODevice* m_dev;
     QValueStack<Tag> m_tags;
+    int m_baseIndentLevel;
 
     char* m_indentBuffer; // TODO make it static, but then it needs a KStaticDeleter
     char* m_escapeBuffer; // can't really be static if we want to be thread-safe

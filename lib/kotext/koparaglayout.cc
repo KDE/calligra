@@ -28,6 +28,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <qbuffer.h>
+#include <koxmlwriter.h>
 
 QString* KoParagLayout::shadowCssCompat = 0L;
 
@@ -409,9 +411,9 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
             : Qt::AlignAuto; // default (can't happen unless spec is extended)
     }
 
-    if ( context.styleStack().hasAttribute( "fo:writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
+    if ( context.styleStack().hasAttribute( "style:writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
         // LTR is lr-tb. RTL is rl-tb
-        QString writingMode = context.styleStack().attribute( "fo:writing-mode" );
+        QString writingMode = context.styleStack().attribute( "style:writing-mode" );
         layout.direction = ( writingMode=="rl-tb" || writingMode=="rl" ) ? QChar::DirR : QChar::DirL;
     }
 
@@ -743,11 +745,114 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
 void KoParagLayout::saveOasis( KoGenStyle& gs ) const
 {
     gs.addProperty( "fo:text-align",
-            alignment == Qt::AlignLeft ? "left" :
-            alignment == Qt::AlignRight ? "right" :
-            alignment == Qt::AlignHCenter ? "center" :
-            alignment == Qt::AlignJustify ? "justify" :
-            "start" // i.e. direction-dependent
-        );
+                    alignment == Qt::AlignLeft ? "left" :
+                    alignment == Qt::AlignRight ? "right" :
+                    alignment == Qt::AlignHCenter ? "center" :
+                    alignment == Qt::AlignJustify ? "justify" :
+                    "start" ); // i.e. direction-dependent
+    gs.addProperty( "style:writing-mode", direction == QChar::DirR ? "rl-tb" : "lr-tb" );
+    gs.addPropertyPt( "fo:margin-left", margins[QStyleSheetItem::MarginLeft] );
+    gs.addPropertyPt( "fo:margin-right", margins[QStyleSheetItem::MarginRight] );
+    gs.addPropertyPt( "fo:text-indent", margins[QStyleSheetItem::MarginFirstLine] );
+    gs.addPropertyPt( "fo:margin-top", margins[QStyleSheetItem::MarginTop] );
+    gs.addPropertyPt( "fo:margin-bottom", margins[QStyleSheetItem::MarginBottom] );
+
+    switch ( lineSpacingType ) {
+    case KoParagLayout::LS_SINGLE:
+        gs.addProperty( "fo:line-height", "100%" );
+        break;
+    case KoParagLayout::LS_ONEANDHALF:
+        gs.addProperty( "fo:line-height", "150%" );
+        break;
+    case KoParagLayout::LS_DOUBLE:
+        gs.addProperty( "fo:line-height", "200%" );
+        break;
+    case KoParagLayout::LS_MULTIPLE:
+        gs.addProperty( "fo:line-height", QString::number( lineSpacing * 100.0 ) + '%' );
+        break;
+    case KoParagLayout::LS_FIXED:
+        gs.addPropertyPt( "fo:line-height", lineSpacing );
+        break;
+    case KoParagLayout::LS_CUSTOM:
+        gs.addPropertyPt( "style:line-spacing", lineSpacing );
+        break;
+    case KoParagLayout::LS_AT_LEAST:
+        gs.addPropertyPt( "style:line-height-at-least", lineSpacing );
+        break;
+    }
+
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter tabsWriter( &buffer, 4 ); // indent==4: root,autostyle,style,parag-props
+    tabsWriter.startElement( "style:tab-stops" );
+    KoTabulatorList::ConstIterator it = m_tabList.begin();
+    for ( ; it != m_tabList.end() ; it++ )
+    {
+        tabsWriter.startElement( "style:tab-stop" );
+        tabsWriter.addAttributePt( "style:position", (*it).ptPos );
+
+        switch ( (*it).type ) {
+        case T_LEFT:
+            tabsWriter.addAttribute( "style:type", "left" );
+            break;
+        case T_CENTER:
+            tabsWriter.addAttribute( "style:type", "center" );
+            break;
+        case T_RIGHT:
+            tabsWriter.addAttribute( "style:type", "right" );
+            break;
+        case T_DEC_PNT:  // "alignment on decimal point"
+            tabsWriter.addAttribute( "style:type", "char" );
+            tabsWriter.addAttribute( "style:char", QString( (*it).alignChar ) );
+            break;
+        case T_INVALID: // keep compiler happy, this can't happen
+            break;
+        }
+        switch( (*it).filling ) {
+        case TF_BLANK:
+            tabsWriter.addAttribute( "style:leader-type", "none" );
+            break;
+        case TF_LINE:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "solid" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "_" );
+            break;
+        case TF_DOTS:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dotted" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "." );
+            break;
+        case TF_DASH:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dash" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "_" );
+            break;
+        case TF_DASH_DOT:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dot-dash" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "." );
+            break;
+        case TF_DASH_DOT_DOT:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dot-dot-dash" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "." );
+            break;
+        }
+        if ( (*it).filling != TF_BLANK )
+            tabsWriter.addAttributePt( "style:leader-width", (*it).ptWidth );
+        // If we want to support it, oasis also defines style:leader-color
+        tabsWriter.endElement();
+    }
+    tabsWriter.endElement();
+    buffer.close();
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    gs.addChildElement( "style:tab-stops", elementContents );
+    kdDebug() << k_funcinfo << elementContents << endl;
+
     // TODO finish
 }

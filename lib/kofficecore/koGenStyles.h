@@ -164,10 +164,10 @@ public:
      *  or on the type of style (e.g. page-layout -> page-layout-properties).
      *  (In fact that tag name is the one passed to writeStyle)
      *
-     *  TextPropertyType is always text-properties.
+     *  TextType is always text-properties.
      *  This is because only paragraph styles contain two types of properties
      */
-    enum PropertyType { DefaultType = 0, TextType, N_NumTypes /*internal*/ };
+    enum PropertyType { DefaultType = 0, TextType, ChildElement /*internal*/, N_NumTypes /*internal*/ };
 
     /// Add a property to the style
     void addProperty( const QString& propName, const QString& propValue, PropertyType type = DefaultType ) {
@@ -216,7 +216,33 @@ public:
         m_attributes.insert( attrName, attrValue ? "true" : "false" );
     }
 
+    /**
+     *  Add an attribute which represents a distance, measured in pt
+     *  The number is written out with the highest possible precision
+     *  (unlike QString::number and setNum, which default to 6 digits),
+     *  and the unit name ("pt") is appended to it.
+     */
     void addAttributePt( const QString& attrName, double attrValue );
+
+    /**
+     * Add a child element to the style properties.
+     * What is meant here is that the contents of the QString
+     * will be written out litterally. This means you should use
+     * KoXmlWriter to generate it:
+     * <code>
+     * QBuffer buffer;
+     * buffer.open( IO_WriteOnly );
+     * KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+     * elementWriter.startElement( "..." );
+     * ...
+     * elementWriter.endElement();
+     * QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+     * gs.addChildElement( "...", elementContents );
+     *  </code>
+     */
+    void addChildElement( const QString& elementName, const QString& elementContents ) {
+        m_properties[ChildElement].insert( elementName, elementContents );
+    }
 
     /**
      *  Write the definition of this style to @p writer, using the OASIS format.

@@ -151,12 +151,20 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     }
 
     KoGenStyle::PropertyType i = KoGenStyle::DefaultType;
-    if ( !m_properties[i].isEmpty() ) {
-        writer->startElement( propertiesElementName );
+    if ( !m_properties[i].isEmpty() ||
+         !m_properties[KoGenStyle::ChildElement].isEmpty() ) {
+        writer->startElement( propertiesElementName ); // e.g. paragraph-properties
         it = m_properties[i].begin();
         for ( ; it != m_properties[i].end(); ++it ) {
             if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
                 writer->addAttribute( it.key().utf8(), it.data().utf8() );
+        }
+        i = KoGenStyle::ChildElement;
+        it = m_properties[i].begin();
+        for ( ; it != m_properties[i].end(); ++it ) {
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() ) {
+                writer->addCompleteElement( it.data().utf8() );
+            }
         }
         writer->endElement();
     }
@@ -200,6 +208,11 @@ void KoGenStyle::printDebug() const
     }
     i = TextType;
     kdDebug() << m_properties[i].count() << " text properties." << endl;
+    for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
+        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+    }
+    i = ChildElement;
+    kdDebug() << m_properties[i].count() << " child elements." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
         kdDebug() << "     " << it.key() << " = " << it.data() << endl;
     }

@@ -2169,7 +2169,7 @@ bool KoDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     kdError(30003) << "KoDocument::saveOasis not implemented" << endl;
     d->lastErrorMessage = i18n( "Internal error: saveOasis not implemented" );
-    return true; // for testing
+    return false;
 }
 
 #include "koDocument_p.moc"

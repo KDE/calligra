@@ -22,10 +22,10 @@
 #include <kdebug.h>
 #include <float.h>
 
-static const size_t s_indentBufferLength = 100;
+static const int s_indentBufferLength = 100;
 
-KoXmlWriter::KoXmlWriter( QIODevice* dev )
-    : m_dev( dev )
+KoXmlWriter::KoXmlWriter( QIODevice* dev, int indentLevel )
+    : m_dev( dev ), m_baseIndentLevel( indentLevel )
 {
     init();
 }
@@ -40,7 +40,7 @@ void KoXmlWriter::init()
 }
 
 KoXmlWriter::KoXmlWriter( QIODevice* dev, const char* rootElemName )
-    : m_dev( dev )
+    : m_dev( dev ), m_baseIndentLevel( 0 )
 {
     init();
 
@@ -102,11 +102,8 @@ void KoXmlWriter::endDocument()
     Q_ASSERT( m_tags.isEmpty() );
 }
 
-void KoXmlWriter::startElement( const char* tagName )
+void KoXmlWriter::prepareForChild()
 {
-    Q_ASSERT( tagName != 0 );
-
-    // Tell parent that it has children
     if ( !m_tags.isEmpty() ) {
         Tag& parent = m_tags.top();
         if ( !parent.hasChildren ) {
@@ -119,11 +116,25 @@ void KoXmlWriter::startElement( const char* tagName )
         }
         parent.lastChildIsText = false;
     }
+}
+
+void KoXmlWriter::startElement( const char* tagName )
+{
+    Q_ASSERT( tagName != 0 );
+
+    // Tell parent that it has children
+    prepareForChild();
 
     m_tags.push( Tag( tagName ) );
     writeChar( '<' );
     writeCString( tagName );
     //kdDebug() << k_funcinfo << tagName << endl;
+}
+
+void KoXmlWriter::addCompleteElement( const char* cstr )
+{
+    prepareForChild();
+    writeCString( cstr );
 }
 
 void KoXmlWriter::endElement()
@@ -190,7 +201,8 @@ void KoXmlWriter::addAttributePt( const char* attrName, double value )
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'
-    m_dev->writeBlock( m_indentBuffer, kMin( m_tags.size()+1, s_indentBufferLength ) );
+    m_dev->writeBlock( m_indentBuffer, kMin( indentLevel() + 1,
+                                             s_indentBufferLength ) );
 }
 
 void KoXmlWriter::writeString( const QString& str )
