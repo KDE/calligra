@@ -150,7 +150,7 @@ public:
     /// Load the contents of a frame (i.e. the text)
     void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context );
     /// Load a complete textbox (frame and text)
-    KWFrame* loadOasis( const QDomElement &bodyElem, KoOasisContext& context );
+    KWFrame* loadOasis( const QDomElement& frame, const QDomElement &bodyElem, KoOasisContext& context );
 
     /// Save the contents of a frame (i.e. the text)
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
@@ -300,7 +300,7 @@ public:
     QString copyTextParag( QDomElement & elem, int selectionId );
     bool sortText(sortType type);
 
-    void loadOasisTextBox( const QDomElement& tag, KoOasisContext& context );
+    KWFrame* loadOasisTextBox( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context );
 
 signals:
     /** Tell the Edit object that this frame got deleted */

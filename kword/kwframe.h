@@ -814,8 +814,6 @@ protected:
     /// save the common attributes for the frameset
     void saveCommon( QDomElement &parentElem, bool saveFrames );
 
-    void saveOasisCommon( KoXmlWriter &xmlWriter )const;
-
     /**Determine the clipping rectangle for drawing the contents of @p frame with @p painter
      * in the rectangle delimited by @p crect.
      * This determines where to clip the painter to draw the contents of a given frame
@@ -856,7 +854,7 @@ class KWPictureFrameSet : public KWFrameSet
 public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
     // Used for OASIS loading
-    KWPictureFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& context );
+    KWPictureFrameSet( KWDocument* doc, const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context );
     virtual ~KWPictureFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();
@@ -917,7 +915,7 @@ public:
     virtual bool protectContent() const { return m_protectContent; }
 
 protected:
-    void loadOasis( const QDomElement& tag, KoOasisContext& context );
+    void loadOasis( const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context );
 
     /// The picture
     KoPicture m_picture;

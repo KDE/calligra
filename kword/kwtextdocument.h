@@ -23,6 +23,7 @@
 #include "korichtext.h"
 #include <kotextdocument.h>
 
+class KWFrame;
 class KWTextFrameSet;
 class KoTextFormatCollection;
 class KoTextDocCommand;
@@ -64,6 +65,7 @@ private:
     void loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
                             KoTextCustomItem* & customItem );
     void loadOasisTOC( const QDomElement& tag, KoOasisContext& context, KoTextParag* & lastParagraph, KoStyleCollection* styleColl );
+    KWFrame* loadFrame( const QDomElement& tag, KoOasisContext& context );
 
     KWTextFrameSet * m_textfs;
 };

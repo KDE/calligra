@@ -576,11 +576,18 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     m_paddingTop = KoUnit::parseValue( styleStack.attribute( "fo:padding", "top" ) );
     m_paddingBottom = KoUnit::parseValue( styleStack.attribute( "fo:padding", "bottom" ) );
 
+    // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
+#if 0 // not allowed in the current OASIS spec
     // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
     m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin", "left" ) );
     m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin", "right" ) );
     m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin", "top" ) );
     m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin", "bottom" ) );
+#endif
+    m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin-bottom" ) );
 
 
     // background color (3.11.25)
@@ -646,6 +653,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) const
 {
     writer.startElement( "draw:frame" );
+    writer.addAttribute( "draw:name", frameSet()->getName() ); // ### framesets are named, not frames...
     writer.addAttribute( "draw:style-name", saveOasisFrameStyle( mainStyles ) );
 
     if ( !frameSet()->isFloating() )
@@ -713,12 +721,14 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
             frameStyle.addPropertyPt( "fo:padding-bottom", m_paddingBottom );
     }
 
+#if 0 // not allowed in the current OASIS spec
     if ( m_runAroundLeft != 0 && ( ( m_runAroundLeft == m_runAroundRight )
                                  && ( m_runAroundLeft == m_runAroundTop )
                                  && ( m_runAroundLeft == m_runAroundBottom ) ) )
         frameStyle.addPropertyPt( "fo:margin", m_runAroundLeft );
     else
     {
+#endif
         if ( m_runAroundLeft != 0 )
             frameStyle.addPropertyPt( "fo:margin-left", m_runAroundLeft );
         if ( m_runAroundRight != 0 )
@@ -727,7 +737,9 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
             frameStyle.addPropertyPt( "fo:margin-top", m_runAroundTop );
         if ( m_runAroundBottom != 0 )
             frameStyle.addPropertyPt( "fo:margin-bottom", m_runAroundBottom );
+#if 0 // not allowed in the current OASIS spec
     }
+#endif
 
     //todo add other element !!!!
     if ( runAround() == KWFrame::RA_SKIP )
@@ -1615,16 +1627,6 @@ MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
     return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
 }
 
-//// ######## remove?
-void KWFrameSet::saveOasisCommon( KoXmlWriter &writer ) const
-{
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
-    //todo common element.
-    writer.addAttribute( "draw:name", m_name );
-    //it's not into kwframset but into kwframe
-}
-
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
@@ -2074,13 +2076,13 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
         m_name = name;
 }
 
-KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& context )
+KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context )
     : KWFrameSet( doc ), m_keepAspectRatio( true ), m_finalSize( false )
 {
-    m_name = tag.attribute( "draw:name" );
+    m_name = imageTag.attribute( "draw:name" );
     if ( doc->frameSetByName( m_name ) ) // already exists!
         m_name = doc->generateFramesetName( m_name + " %1" );
-    loadOasis( tag, context );
+    loadOasis( frame, imageTag, context );
 }
 
 KWPictureFrameSet::~KWPictureFrameSet() {
@@ -2231,7 +2233,7 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
 
 }
 
-void KWPictureFrameSet::loadOasis( const QDomElement& tag, KoOasisContext& context )
+void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context )
 {
     const QString href( tag.attribute("xlink:href") );
     if ( !href.isEmpty() && href[0] == '#' )
@@ -2257,8 +2259,8 @@ void KWPictureFrameSet::loadOasis( const QDomElement& tag, KoOasisContext& conte
         m_doc->pictureCollection()->insertPicture( key, m_picture );
 
         context.styleStack().save();
-        context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
-        loadOasisFrame( tag, context );
+        context.fillStyleStack( frame, "draw:style-name" ); // get the style for the graphics element
+        loadOasisFrame( frame, context );
         context.styleStack().restore();
     }
 }

@@ -1174,6 +1174,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
+
+#if 0 // this is wrong - the contents of body is loaded above already
         QDomNode frameElement( body );
         QDomElement fr;
         for ( frameElement = frameElement.firstChild(); !frameElement.isNull(); frameElement = frameElement.nextSibling() )
@@ -1181,8 +1183,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             fr = frameElement.toElement();
             if ( fr.tagName()== "draw:frame"  )
             {
-
-                kdDebug()<<" frame !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
                 QDomNode tmp = fr.namedItem( "draw:text-box" );
                 if ( !tmp.isNull() )
                 {
@@ -1208,6 +1208,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 }
             }
         }
+#endif
     }
 
     // Header/Footer

@@ -1789,7 +1789,7 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
     return framesetElem;
 }
 
-void KWTextFrameSet::loadOasisTextBox( const QDomElement& tag, KoOasisContext& context )
+KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QDomElement& tag, KoOasisContext& context )
 {
     // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
     // we store 'B' -> A, so that when loading B we can add it to A's frameset.
@@ -1799,7 +1799,7 @@ void KWTextFrameSet::loadOasisTextBox( const QDomElement& tag, KoOasisContext& c
     // Hence the framename temporary storage in KWLoadingInfo
 
     KWTextFrameSet* fs = 0;
-    QString frameName = tag.attribute( "draw:name" );
+    QString frameName = frameTag.attribute( "draw:name" );
     QString chainNextName = tag.attribute( "draw:chain-next-name" );
     if ( !chainNextName.isEmpty() ) { // 'B' in the above example
         kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
@@ -1823,11 +1823,11 @@ void KWTextFrameSet::loadOasisTextBox( const QDomElement& tag, KoOasisContext& c
     if ( !fs ) {
         fs = new KWTextFrameSet( m_doc, tag, context );
         m_doc->addFrameSet( fs, false );
-        frame = fs->loadOasis( tag, context );
+        frame = fs->loadOasis( frameTag, tag, context );
     } else { // Adding frame to existing frameset
         context.styleStack().save();
-        context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
-        frame = fs->loadOasisFrame( tag, context );
+        context.fillStyleStack( frameTag, "draw:style-name" ); // get the style for the graphics element
+        frame = fs->loadOasisFrame( frameTag, context );
         context.styleStack().restore();
     }
 
@@ -1836,6 +1836,7 @@ void KWTextFrameSet::loadOasisTextBox( const QDomElement& tag, KoOasisContext& c
     if ( !chainNextName.isEmpty() ) {
         m_doc->loadingInfo()->storeNextFrame( frame, chainNextName );
     }
+    return frame;
 }
 
 void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )
@@ -1843,11 +1844,11 @@ void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisConte
     return m_textobj->loadOasisContent( bodyElem, context, m_doc->styleCollection() );
 }
 
-KWFrame* KWTextFrameSet::loadOasis( const QDomElement &tag, KoOasisContext& context )
+KWFrame* KWTextFrameSet::loadOasis( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context )
 {
     context.styleStack().save();
-    context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
-    KWFrame* frame = loadOasisFrame( tag, context );
+    context.fillStyleStack( frameTag, "draw:style-name" ); // get the style for the graphics element
+    KWFrame* frame = loadOasisFrame( frameTag, context );
 
     // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
     const QCString overflowBehavior = context.styleStack().attribute( "style:overflow-behavior" ).latin1();
@@ -1891,7 +1892,6 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
     // Save first frame with the whole contents
     KWFrame* frame = frames.getFirst();
     frame->startOasisFrame( writer, context.mainStyles() );
-    KWFrameSet::saveOasisCommon( writer ); /// ###
 
     writer.startElement( "draw:text-box" );
     saveOasisContent( writer, context );

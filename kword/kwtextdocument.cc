@@ -97,24 +97,35 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
     m_textfs->kWordDocument()->hasTOC( true );
 }
 
+KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& context )
+{
+    for ( QDomNode child = tag.firstChild(); !child.isNull(); child = child.nextSibling() ) {
+        QDomElement elem = child.toElement();
+        QCString tagName = elem.tagName().latin1();
+        if ( tagName == "draw:text-box" )
+        {
+            kdDebug()<<" append text-box\n";
+            return m_textfs->loadOasisTextBox( tag, elem, context );
+        }
+        else if ( tagName == "draw:image" )
+        {
+            KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, elem, context );
+            m_textfs->kWordDocument()->addFrameSet( fs, false );
+            return fs->frame(0);
+        }
+    }
+    return 0;
+}
+
 bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
                                        KoTextParag* & lastParagraph, KoStyleCollection* styleColl )
 {
-    const QCString tagName( tag.tagName().latin1() );
+    QCString tagName( tag.tagName().latin1() );
     if ( tagName == "draw:frame" )
     {
-        kdWarning(32001) << "Loading of OASIS element draw:frame not implemented yet! Please report this." << endl;
-        // TODO draw:frame is an OASIS change
-        // IIRC this means moving draw:image and draw:text-box
-        // here, being the child element of the draw:frame
-        // and loading the frame attributes from the draw:frame element.
-        return false;
-    }
-    else if ( tagName == "draw:image" )
-    {
-        KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, context );
-        m_textfs->kWordDocument()->addFrameSet( fs, false );
-        return true;
+        KWFrame* frame = loadFrame( tag, context );
+        if ( frame )
+            return true;
     }
 #if 0 // TODO OASIS table:table
     else if ( tagName == "table:table" )
@@ -128,12 +139,6 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
     else if ( tagName == "text:table-of-content" )
     {
         loadOasisTOC( tag, context, lastParagraph, styleColl );
-        return true;
-    }
-    else if ( tagName == "draw:text-box" )
-    {
-        kdDebug()<<" append text-box\n";
-        m_textfs->loadOasisTextBox( tag, context );
         return true;
     }
     return false;
@@ -260,23 +265,17 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
     }
     else // non "text:" tags
     {
-        if ( tagName == "draw:image" )
+        if ( tagName == "draw:frame" )
         {
-            KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, context );
-            m_textfs->kWordDocument()->addFrameSet( fs, false );
-            fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
-            return true;
-        }
-        if ( tagName == "draw:text-box" )
-        {
-            // We don't support multiple frames for inline text-framesets at the moment,
-            // so we don't obey style:chain-next-name
-            // ###### In fact this shows we should inline frames, not framesets, in KWord (!!!!) (big TODO)
-            KWTextFrameSet* fs = new KWTextFrameSet( m_textfs->kWordDocument(), tag, context );
-            m_textfs->kWordDocument()->addFrameSet( fs, false );
-            fs->loadOasis( tag, context );
-            fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
-            return true;
+            KWFrame* frame = loadFrame( tag, context );
+            if ( frame )
+            {
+                KWFrameSet* fs = frame->frameSet();
+                // Hmm, if this is a continuation frame of a non-inline frameset,
+                // it's going to inline the whole frameset...
+                // ###### In fact this shows we should inline frames, not framesets, in KWord (!!!!) (big TODO)
+                fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
+            }
         }
     }
     return false;
