@@ -273,6 +273,8 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
 void KoShellWindow::slotFileNew()
 {
     m_documentEntry = KoPartSelectDia::selectPart( this );
+    if ( m_documentEntry.isEmpty() )
+      return;
     KoDocument* newdoc = m_documentEntry.createDoc();
     if ( !newdoc || !newdoc->initDoc() )
     {
