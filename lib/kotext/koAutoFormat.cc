@@ -69,6 +69,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
       m_typographicDefaultDoubleQuotes(),
+      m_typographicDefaultSimpleQuotes(),
       m_listCompletion( new KCompletion ),
       m_entries(),
       m_superScriptEntries(),
@@ -109,6 +110,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_typographicSimpleQuotes( format.m_typographicSimpleQuotes ),
       m_typographicDoubleQuotes( format.m_typographicDoubleQuotes ),
       m_typographicDefaultDoubleQuotes( format.m_typographicDefaultDoubleQuotes),
+      m_typographicDefaultSimpleQuotes( format.m_typographicDefaultSimpleQuotes),
       m_listCompletion( 0L ), // don't copy it!
       m_entries( format.m_entries ),
       m_superScriptEntries ( format.m_superScriptEntries ),
@@ -170,13 +172,9 @@ void KoAutoFormat::readConfig()
 
     m_typographicDoubleQuotes.replace = config.readBoolEntry( "TypographicQuotesEnabled", false );
 
-    QString begin = config.readEntry( "TypographicSimpleQuotesBegin", "'" );
-    m_typographicSimpleQuotes.begin = begin[0];
-    QString end = config.readEntry( "TypographicSimpleQuotesEnd", "'" );
-    m_typographicSimpleQuotes.end = end[0];
-    m_typographicSimpleQuotes.replace = config.readBoolEntry( "TypographicSimpleQuotesEnabled", false )
-                                  && !begin.isEmpty()
-                                  && !end.isEmpty();
+    QString begin = config.readEntry( "TypographicSimpleQuotesBegin" );
+    QString end = config.readEntry( "TypographicSimpleQuotesEnd" );
+    m_typographicSimpleQuotes.replace = config.readBoolEntry( "TypographicSimpleQuotesEnabled", false );
 
     m_bAutoSuperScript = config.readBoolEntry( "AutoSuperScript", false );
 
@@ -261,6 +259,13 @@ void KoAutoFormat::readConfig()
           m_typographicDefaultDoubleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
           m_typographicDefaultDoubleQuotes.end = nl.item(0).toElement().attribute("end")[0];
       }
+      QDomElement simpleQuote = de.namedItem( "SimpleQuote" ).toElement();
+      if(!simpleQuote.isNull())
+      {
+          QDomNodeList nl = simpleQuote.childNodes();
+          m_typographicDefaultSimpleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
+          m_typographicDefaultSimpleQuotes.end = nl.item(0).toElement().attribute("end")[0];
+      }
     }
 
     if( beginDoubleQuote.isEmpty())
@@ -284,8 +289,33 @@ void KoAutoFormat::readConfig()
         m_typographicDoubleQuotes.end = endDoubleQuote[0];
 
     m_typographicDoubleQuotes.replace = m_typographicDoubleQuotes.replace
-                                  && !beginDoubleQuote.isEmpty()
-                                  && !endDoubleQuote.isEmpty();
+                                  && !m_typographicDoubleQuotes.begin.isNull()
+                                  && !m_typographicDoubleQuotes.end.isNull();
+
+
+    if( begin.isEmpty())
+    {
+        if( m_typographicDefaultSimpleQuotes.begin.isNull())
+            m_typographicSimpleQuotes.begin = QChar('\'');
+        else
+            m_typographicSimpleQuotes.begin = m_typographicDefaultSimpleQuotes.begin;
+    }
+    else
+        m_typographicSimpleQuotes.begin = begin[0];
+
+    if( end.isEmpty() )
+    {
+        if( m_typographicDefaultSimpleQuotes.end.isNull())
+            m_typographicSimpleQuotes.end = QChar('\'');
+        else
+            m_typographicSimpleQuotes.end = m_typographicDefaultSimpleQuotes.end;
+    }
+    else
+        m_typographicSimpleQuotes.end = end[0];
+
+    m_typographicSimpleQuotes.replace = m_typographicSimpleQuotes.replace
+                                  && !m_typographicSimpleQuotes.end.isNull()
+                                  && !m_typographicSimpleQuotes.begin.isNull();
 
 
     xmlFile.close();
@@ -400,6 +430,16 @@ void KoAutoFormat::saveConfig()
     data.setAttribute("end", QString(m_typographicDefaultDoubleQuotes.end));
     doubleQuote.appendChild(data);
     begin.appendChild(doubleQuote);
+
+
+    QDomElement simpleQuote;
+    simpleQuote = doc.createElement("simpleQuote");
+    data = doc.createElement("simplequote");
+    data.setAttribute("begin", QString(m_typographicDefaultSimpleQuotes.begin));
+    data.setAttribute("end", QString(m_typographicDefaultSimpleQuotes.end));
+    simpleQuote.appendChild(data);
+    begin.appendChild(simpleQuote);
+
 
     QFile f(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     if(!f.open(IO_WriteOnly)) {

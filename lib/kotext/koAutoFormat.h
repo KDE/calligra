@@ -150,6 +150,9 @@ public:
     TypographicQuotes getDefaultTypographicDoubleQuotes() const
         { return m_typographicDefaultDoubleQuotes; }
 
+    TypographicQuotes getDefaultTypographicSimpleQuotes() const
+        { return m_typographicDefaultSimpleQuotes; }
+
     bool getConfigUpperCase() const
     { return m_convertUpperCase; }
     bool getConfigUpperUpper() const
@@ -308,6 +311,8 @@ private:
     TypographicQuotes m_typographicDoubleQuotes;
 
     TypographicQuotes m_typographicDefaultDoubleQuotes;
+
+    TypographicQuotes m_typographicDefaultSimpleQuotes;
 
     KCompletion *m_listCompletion;
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;

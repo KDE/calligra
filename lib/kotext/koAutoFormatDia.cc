@@ -733,8 +733,9 @@ void KoAutoFormatDia::chooseSimpleQuote2()
 
 void KoAutoFormatDia::defaultSimpleQuote()
 {
-    pbSimpleQuote1->setText("'");
-    pbSimpleQuote2->setText("'");
+
+    pbSimpleQuote1->setText(m_docAutoFormat->getDefaultTypographicSimpleQuotes().begin);
+    pbSimpleQuote2->setText(m_docAutoFormat->getDefaultTypographicSimpleQuotes().end);
 }
 
 
