@@ -46,6 +46,7 @@ extern "C" {
 
 typedef struct _ArtGradientLinear ArtGradientLinear;
 typedef struct _ArtGradientRadial ArtGradientRadial;
+typedef struct _ArtGradientConical ArtGradientConical;
 typedef struct _ArtGradientStop ArtGradientStop;
 
 typedef enum {
@@ -71,6 +72,16 @@ struct _ArtGradientRadial {
   ArtGradientStop *stops;
 };
 
+struct _ArtGradientConical {
+	double cx, cy;    /* focal point in unit circle coords */
+	double r;         /* focal point in unit circle coords */
+	ArtGradientSpread spread;
+	art_u8 *buf;
+	int n_stops;
+	ArtGradientStop *stops;
+};
+
+
 struct _ArtGradientStop {
   double offset;
   ArtPixMaxDepth color[ART_MAX_CHAN + 1];
@@ -85,6 +96,11 @@ void
 art_karbon_render_gradient_radial (ArtRender *render,
 			    const ArtGradientRadial *gradient,
 			    ArtFilterLevel level);
+
+void
+art_karbon_render_gradient_conical (ArtRender *render,
+          	      const ArtGradientConical *gradient,
+           	      ArtFilterLevel level);
 
 #ifdef __cplusplus
 }

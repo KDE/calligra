@@ -696,6 +696,41 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			art_karbon_render_gradient_radial( render, radial, ART_FILTER_HYPER );
 		}
 	}
+	else if( gradient.type() == VGradient::conic )
+	{
+		ArtGradientConical *conical = new ArtGradientConical();
+
+		// TODO : make variable
+		if( gradient.repeatMethod() == VGradient::none )
+			conical->spread = ART_GRADIENT_PAD;
+		else if( gradient.repeatMethod() == VGradient::repeat )
+			conical->spread = ART_GRADIENT_REPEAT;
+		else if( gradient.repeatMethod() == VGradient::reflect )
+			conical->spread = ART_GRADIENT_REFLECT;
+
+		double cx = gradient.origin().x() * m_zoomFactor;
+		double cy = gradient.origin().y() * m_zoomFactor;
+		cy = m_matrix.m22() * cy + m_matrix.dy();
+		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
+						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) );
+		r *= m_zoomFactor;
+
+		conical->cx = cx;
+		conical->cy = cy;
+		conical->r  = r;
+
+		// get stop array
+		int offsets = -1;
+		conical->stops = buildStopArray( gradient, offsets );
+		conical->n_stops = offsets;
+
+		if( x0 != x1 && y0 != y1 )
+		{
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			art_render_svp( render, svp );
+			art_karbon_render_gradient_conical( render, conical, ART_FILTER_HYPER );
+		}
+	}
 	if( render )
 		art_render_invoke( render );
 }

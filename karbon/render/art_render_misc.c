@@ -36,6 +36,7 @@
 
 typedef struct _ArtImageSourceGradLin ArtImageSourceGradLin;
 typedef struct _ArtImageSourceGradRad ArtImageSourceGradRad;
+typedef struct _ArtImageSourceGradCon ArtImageSourceGradCon;
 
 struct _ArtImageSourceGradLin {
   ArtImageSource super;
@@ -47,6 +48,12 @@ struct _ArtImageSourceGradRad {
   const ArtGradientRadial *gradient;
   double a;
 };
+
+struct _ArtImageSourceGradCon {
+  ArtImageSource super;
+  const ArtGradientConical *gradient;
+};
+
 
 #define EPSILON 1e-6
 
@@ -307,3 +314,90 @@ art_karbon_render_gradient_radial (ArtRender *render,
 
   art_render_add_image_source (render, &image_source->super);
 }
+
+/* Conical */
+
+static void
+art_render_gradient_conical_done (ArtRenderCallback *self, ArtRender *render)
+{
+  art_free (self);
+}
+
+static void
+art_render_gradient_conical_render (ArtRenderCallback *self, ArtRender *render,
+				   art_u8 *dest, int y)
+{
+  ArtImageSourceGradCon *z = (ArtImageSourceGradCon *)self;
+  const ArtGradientConical *gradient = z->gradient;
+  int pixstride = (render->n_chan + 1) * (render->depth >> 3);
+  int x;
+  int x0 = render->x0;
+  int width = render->x1 - x0;
+  int n_stops = gradient->n_stops;
+  ArtGradientStop *stops = gradient->stops;
+  art_u8 *bufp = render->image_buf;
+  double cx = gradient->cx;
+  double cy = gradient->cy;
+  double r = gradient->r;
+  double dx, dy;
+  ArtGradientSpread spread = gradient->spread;
+
+  dy = fabs(y) - fabs(cy);
+
+  for (x = 0; x < width; x++)
+    {
+      double z;
+  	dx = fabs(x0 + x) - fabs(cx);
+
+	z = (fabs(dx) + fabs(dy)) / (r);
+
+    if (spread == ART_GRADIENT_REPEAT)
+	  z = z - floor (z);
+    else if (spread == ART_GRADIENT_REFLECT)
+    {
+	  double tmp;
+
+	  tmp = z - 2 * floor (0.5 * z);
+	  z = tmp > 1 ? 2 - tmp : tmp;
+    }
+
+      art_karbon_render_gradient_setpix (render, bufp, n_stops, stops, z);
+      bufp += pixstride;
+    }
+}
+
+static void
+art_render_gradient_conical_negotiate (ArtImageSource *self, ArtRender *render,
+				      ArtImageSourceFlags *p_flags,
+				      int *p_buf_depth, ArtAlphaType *p_alpha)
+{
+  self->super.render = art_render_gradient_conical_render;
+  *p_flags = 0;
+  *p_buf_depth = render->depth;
+  *p_alpha = ART_ALPHA_PREMUL;
+}
+
+/**
+ * art_render_gradient_radial: Add a radial gradient image source.
+ * @render: The render object.
+ * @gradient: The radial gradient.
+ *
+ * Adds the radial gradient @gradient as the image source for rendering
+ * in the render object @render.
+ **/
+void
+art_karbon_render_gradient_conical (ArtRender *render,
+			    const ArtGradientConical *gradient,
+			    ArtFilterLevel level)
+{
+  ArtImageSourceGradCon *image_source = art_new (ArtImageSourceGradCon, 1);
+
+  image_source->super.super.render = NULL;
+  image_source->super.super.done = art_render_gradient_conical_done;
+  image_source->super.negotiate = art_render_gradient_conical_negotiate;
+
+  image_source->gradient = gradient;
+
+  art_render_add_image_source (render, &image_source->super);
+}
+
