@@ -3,6 +3,8 @@ REAL BUGS:
 -	select first/last segment's knot if one of each other's knot is selected
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
+-	change flatness test in intersection code to a estimation used in gems code. otherwise
+	if the 2 input curves are the same our code runs forever.
 
 TODO:
 -	scratch your head about how to do undo/redo of path operations best like
