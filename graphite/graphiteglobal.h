@@ -151,16 +151,18 @@ struct PageLayout {
 bool operator==(const PageLayout &lhs, const PageLayout &rhs);
 bool operator!=(const PageLayout &lhs, const PageLayout &rhs);
 
+// Create a "diff" of the page sizes to allow flicker free repainting in
+// some simple cases
 QValueList<FxRect> diff(const PageBorders &oldBorders, const PageBorders &newBorders,
              const double &width, const double &height);
 QValueList<FxRect> diff(const PageLayout &oldLayout, const PageLayout &newLayout);
 
 // Small struct to keep track of the mouse state
 struct MouseState {
-    MouseState() : pressed(false), haveToErase(false), oldMX(0), oldMY(0),
+    MouseState() : lbPressed(false), haveToErase(false), oldMX(0), oldMY(0),
         startSelectionX(0), startSelectionY(0) {}
 
-    bool pressed;
+    bool lbPressed;
     bool haveToErase;
     int oldMX, oldMY;
     int startSelectionX;

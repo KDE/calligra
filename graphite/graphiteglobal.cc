@@ -335,7 +335,7 @@ QValueList<FxRect> diff(const PageBorders &oldBorders, const PageBorders &newBor
         // should never happen, but well... we add a very small repaint area here
         // to avoid flicker :)
         list.append(FxRect(0, 0, 1, 1));
-        kdWarning() << "++++++++++ reg.isNull(): ++++++++++" << endl;
+        kdWarning(37001) << "++++++++++ reg.isNull(): ++++++++++" << endl;
     }
     return list;
 }

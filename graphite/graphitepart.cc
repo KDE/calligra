@@ -32,7 +32,7 @@
 #include <gline.h>
 
 // uncomment that to see some more colorls and a line by default
-#define GRAPHITE_TEST 1
+//#define GRAPHITE_TEST 1
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
@@ -214,36 +214,37 @@ void GraphitePart::showPageLayoutDia(QWidget *parent) {
 // cursor effects
 void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
 
-    setGlobalZoom(view->zoom());  // ### really necessary?
-
     GObjectM9r *manager=m_m9rMap[view];
     if(manager) {
+        setGlobalZoom(view->zoom());
         QRect dirty;
         // ### doesn't matter whether it returns true or false?
         manager->mouseMoveEvent(e, dirty);
-        // ### clean up
+        // ### clean up, TODO
         return;
     }
 
-    if(!m_mouse.haveToErase && !m_mouse.pressed)
+    if(!m_mouse.haveToErase && !m_mouse.lbPressed)
         return;
 
-    kdDebug() << "still here" << endl;
-    if(!view)
+    if(!view) {
+        kdWarning(37001) << "Better give me some view to work on." << endl;
         return;
+    }
     QWidget *canvas=view->canvas();
-    if(!canvas || !canvas->isA("GCanvas"))
+    if(!canvas || !canvas->isA("GCanvas")) {
+        kdWarning(37001) << "Huh? What did you do behind my back?" << endl;
         return;
+    }
     QScrollView *scrollview=static_cast<QScrollView*>(canvas);
     QPainter p(scrollview->viewport());
     p.setRasterOp(Qt::NotROP);
 
-    if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
-        p.setPen(QPen(Qt::black, 0, Qt::DashLine));
-    else
-        p.setPen(QPen(Qt::black, 0, Qt::DotLine));
-
     if(m_mouse.haveToErase) {
+        if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
+            p.setPen(QPen(Qt::black, 0, Qt::DashLine));
+        else
+            p.setPen(QPen(Qt::black, 0, Qt::DotLine));
         p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
                    Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
                    Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
@@ -253,12 +254,12 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
 
     m_mouse.oldMX=e->x();
     m_mouse.oldMY=e->y();
-    if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
-        p.setPen(QPen(Qt::black, 0, Qt::DashLine));
-    else
-        p.setPen(QPen(Qt::black, 0, Qt::DotLine));
 
-    if(m_mouse.pressed) {
+    if(m_mouse.lbPressed) {
+        if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
+            p.setPen(QPen(Qt::black, 0, Qt::DashLine));
+        else
+            p.setPen(QPen(Qt::black, 0, Qt::DotLine));
         p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
                    Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
                    Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
@@ -271,7 +272,7 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
 void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
 
     setGlobalZoom(view->zoom());
-    m_mouse.pressed=true;
+    m_mouse.lbPressed=true;
     // test
     m_mouse.startSelectionX=e->x();
     m_mouse.startSelectionY=e->y();
@@ -298,7 +299,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
-    m_mouse.pressed=false;
+    m_mouse.lbPressed=false;
     //kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
     // ### setGlobalZoom()
 }
