@@ -98,6 +98,11 @@ public:
                           // for <iw>: collecting the data (i.e. word to ignore)
                           // for <m>: value of the meta data
                           // for <table>: Number of the table (needed as I18N does not allow adding phrases)
+    /**
+     * for tables (<table>, <cell>): defines the widths of the columns.
+     * Be careful: we are using the shallow copy mechanism of Qt. Use QMemArray::detach when needed to avoid modifying the parents
+     */
+    QMemArray<double> m_doubleArray;
 };
 
 class StackItemStack : public QPtrStack<StackItem>

@@ -118,7 +118,7 @@ private:
         const QXmlAttributes& attributes);
     bool StartElementFoot(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
-    bool StartElementTable(StackItem* stackItem, StackItem* stackCurrent);
+    bool StartElementTable(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes);
     bool StartElementCell(StackItem* stackItem, StackItem* stackCurrent,const QXmlAttributes& attributes);
 private:
     void createDocument(void);
@@ -1106,12 +1106,27 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
 }
 
 // Element <table>
-
-bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCurrent)
+bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCurrent,
+    const QXmlAttributes& attributes)
 {
 #if 1
     // In KWord, inline tables are inside a paragraph.
     // In AbiWord, tables are outside any paragraph.
+
+    QStringList widthList;
+    widthList.split('/', attributes.value("table-column-props"), false);
+    const uint columns = widthList.size();
+    stackItem->m_doubleArray.detach(); // Be sure not to modify parents
+    stackItem->m_doubleArray.resize(columns+1); // All left positions but the last right one
+    stackItem->m_doubleArray[0] = 0.0;
+    QStringList::ConstIterator it;
+    uint i;
+    for ( i=0, it=widthList.begin(); i<columns; ++i, ++it )
+    {
+        kdDebug(30506) << "Column width: " << (*it) << " cooked " << ValueWithLengthUnit(*it) << endl;
+        stackItem->m_doubleArray[i+1] = ValueWithLengthUnit(*it) + stackItem->m_doubleArray[i];
+    }
+    // ### TODO: in case of automatic column widths, we have not any width given by AbiWord
 
     const uint tableNumber(++m_tableGroupNumber);
     const QString tableName(i18n("Table %1").arg(tableNumber));
@@ -1188,6 +1203,15 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     const uint row=abiPropsMap["top-attach"].getValue().toUInt();
     const uint col=abiPropsMap["left-attach"].getValue().toUInt();
 
+    if ( col >= stackItem->m_doubleArray.size() )
+    {
+        // We do not know the right position of this column, so improvise. (### TODO)
+        // We play on the fact that QByteArray uses shallow copies by default.
+        //  (We do want that the change is known at <table> level)
+        stackItem->m_doubleArray.resize( stackItem->m_doubleArray.size() + 1, QGArray::SpeedOptim );
+        stackItem->m_doubleArray[col+1] = stackItem->m_doubleArray[col] + 72; // Try 1 inch
+    }
+
     const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
         .arg(row).arg(col).arg(stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
 
@@ -1205,8 +1229,8 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     framesetsPluralElement.appendChild(framesetElement);
 
     QDomElement frameElementOut(mainDocument.createElement("FRAME"));
-    frameElementOut.setAttribute("left",col*72);
-    frameElementOut.setAttribute("right",col*72+72);
+    frameElementOut.setAttribute( "left", stackItem->m_doubleArray[col] );
+    frameElementOut.setAttribute( "right", stackItem->m_doubleArray[col+1] );
     frameElementOut.setAttribute("top",0);
     frameElementOut.setAttribute("bottom",0);
     frameElementOut.setAttribute("runaround",1);
@@ -1358,7 +1382,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if (name=="table") // No upper-case
     {
-        success=StartElementTable(stackItem,structureStack.current());
+        success=StartElementTable(stackItem,structureStack.current(), attributes);
     }
     else if (name=="cell") // No upper-case
     {
