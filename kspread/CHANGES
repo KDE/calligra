@@ -862,3 +862,8 @@ cell size. =>( ** )
 2000-08-02-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 -Now when you insert/remove column/row/cell and there is a chart you refresh it.
+
+2000-08-04-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Fix a big bug in dependence cell for example =A1+C1
+Now it works correctly.

@@ -664,7 +664,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
     // Set the new selection
     table->setSelection( selection, QPoint( col, row ), this );
-
+    cout <<"selection.right()"<<selection.right()<<"selection.left()"<<selection.left()<<endl;
     // Scroll the table if necessary
     if ( _ev->pos().x() < 0 )
         horzScrollBar()->setValue( xOffset() + xpos );
@@ -826,9 +826,9 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
                     m_rctAutoFillSrc.setCoords( markerColumn(), markerRow(),
                                                 markerColumn(), markerRow() );
                 }
+                m_iMouseStartColumn = QMIN(markerColumn(),selection.left());
+                m_iMouseStartRow = QMIN(markerRow(),selection.top());
 
-                m_iMouseStartColumn = markerColumn();
-                m_iMouseStartRow = markerRow();
             }
             // Resize a cell (dont with the right mouse button) ?
             // But for that to work there must not be a selection.
