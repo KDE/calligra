@@ -467,7 +467,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     mainGrid->addWidget( indentFrame, 0, 0 );
 
     // --------------- End of page /frame ---------------
-    QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at end of frame/page" ), this );
+    QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at End of Frame/Page" ), this );
     QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 4, 1,
                                                       KDialog::marginHint(), KDialog::spacingHint() );
 

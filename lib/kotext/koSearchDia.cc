@@ -66,7 +66,7 @@ void KoSearchContextUI::slotShowOptions()
     m_checkBold = new QCheckBox( i18n( "Bold" ), m_parent );
     m_checkItalic = new QCheckBox( i18n( "Italic" ), m_parent );
     m_checkUnderline = new QCheckBox( i18n( "Underline" ), m_parent );
-    m_checkVertAlign = new QCheckBox( i18n( "Vertical Alignment" ), m_parent );
+    m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), m_parent );
 
     m_familyItem = new QComboBox( true, m_parent );
     m_familyItem->insertStringList( m_ctx->m_family );

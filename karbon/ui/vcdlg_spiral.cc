@@ -40,8 +40,8 @@ VCDlgSpiral::VCDlgSpiral()
 	m_fade = new QLineEdit( 0, group );
 	new QLabel( i18n( "Orientation:" ), group );
 	m_clockwise = new QComboBox( false,group );
-	m_clockwise->insertItem( i18n( "clockwise" ), 0 );
-	m_clockwise->insertItem( i18n( "counter clockwise" ), 1 );
+	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
+	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
 
 	outerbox->addSpacing( 2 );
 

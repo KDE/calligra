@@ -39,7 +39,7 @@
 
 LATEXExportDia::LATEXExportDia(const KoStore* in, QWidget *parent, const char *name) :
     KDialogBase(parent, name, true,
-                i18n("Latex export filter parameters"), Ok|Cancel), _in( in ), DCOPObject("FilterConfigDia")
+                i18n("Latex Export Filter Parameters"), Ok|Cancel), _in( in ), DCOPObject("FilterConfigDia")
 {
 	kapp->restoreOverrideCursor();
 	createDialog();

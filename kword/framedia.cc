@@ -86,7 +86,7 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
  ******************************************************************/
 
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
-    : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
+    : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frame = _frame;
     if(frame==0) {
@@ -104,7 +104,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 
 /* Contructor when the dialog is used on creation of frame */
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameSetType _ft )
-    : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
+    : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frameType=_ft;
     doc = _doc;
@@ -117,7 +117,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     init();
 }
 
-KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
+KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
     frame=0L;
     tab1 = tab2 = tab3 = tab4 = tab5 = 0;
 
@@ -310,7 +310,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_TEXT)
     {
         // AutoCreateNewFrame policy.
-        endOfFrame = new QGroupBox(i18n("If text is too long for frame:"), tab1 );
+        endOfFrame = new QGroupBox(i18n("If Text is too long for Frame"), tab1 );
         grid1->addWidget( endOfFrame, row, 0 );
 
         eofGrid= new QGridLayout (endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
@@ -363,7 +363,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     }
 
     // NewFrameBehavior - now for all type of frames
-    onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
+    onNewPage = new QGroupBox(i18n("On new Page Creation"),tab1);
     grid1->addWidget( onNewPage, row, column );
 
     onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
@@ -424,7 +424,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if( frameType == FT_TEXT )
     {
         row++;
-        sideHeads = new QGroupBox(i18n("SideHead definition"),tab1);
+        sideHeads = new QGroupBox(i18n("SideHead Definition"),tab1);
         sideHeads->setEnabled(false);
         grid1->addWidget(sideHeads, row, 0);
 
@@ -445,8 +445,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         sideAlign->setAutoResize(false);
         sideAlign->insertItem ( i18n("Left"));
         sideAlign->insertItem ( i18n("Right"));
-        sideAlign->insertItem ( i18n("Closest to binding"));
-        sideAlign->insertItem ( i18n("Closest to page edge"));
+        sideAlign->insertItem ( i18n("Closest to Binding"));
+        sideAlign->insertItem ( i18n("Closest to Page Edge"));
         sideAlign->resize(sideAlign->sizeHint());
         sideGrid->addMultiCellWidget(sideAlign,3,3,0,1);
         sideGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
@@ -949,14 +949,14 @@ void KWFrameDia::setupTab5()
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
     grid5->addItem( spacer,row,0 );
 
-    brushStyle->insertItem( i18n( "100% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "94% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "88% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "63% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "50% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "37% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "12% fill Pattern" ) );
-    brushStyle->insertItem( i18n( "6% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "100% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "94% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "88% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "63% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "50% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "37% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "12% Fill Pattern" ) );
+    brushStyle->insertItem( i18n( "6% Fill Pattern" ) );
     brushStyle->insertItem( i18n( "Horizontal Lines" ) );
     brushStyle->insertItem( i18n( "Vertical Lines" ) );
     brushStyle->insertItem( i18n( "Crossing Lines" ) );

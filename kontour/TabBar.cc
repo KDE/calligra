@@ -243,9 +243,9 @@ void TabBar::openPopupMenu( const QPoint &_global )
     delete mPopupMenu;
   mPopupMenu = new QPopupMenu();
 
-  mPopupMenu->insertItem(SmallIcon("item_rename", KontourFactory::global()), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
-  mPopupMenu->insertItem(SmallIcon("item_add", KontourFactory::global()), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
-  mPopupMenu->insertItem(SmallIcon("item_remove", KontourFactory::global()),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
+  mPopupMenu->insertItem(SmallIcon("item_rename", KontourFactory::global()), i18n( "Rename Page..." ), this, SLOT( slotRename() ) );
+  mPopupMenu->insertItem(SmallIcon("item_add", KontourFactory::global()), i18n( "Insert Page" ), this, SLOT( slotAdd() ) );
+  mPopupMenu->insertItem(SmallIcon("item_remove", KontourFactory::global()),i18n( "Remove Page" ), this, SLOT( slotRemove() ) );
   mPopupMenu->popup( _global );
 }
 

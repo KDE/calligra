@@ -28,10 +28,10 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     QGroupBox* gb3 = new QGroupBox( i18n( "Parameter" ), this );
     QGridLayout *grid3 = new QGridLayout(gb3,4,2,15,7);
 
-    pie3d=new QCheckBox(i18n("pie 3D"),gb3);
+    pie3d=new QCheckBox(i18n("Pie 3D"),gb3);
     grid3->addWidget(pie3d,2,0);
 
-    drawShadowColor=new QCheckBox(i18n("Draw Shadow color"),gb3);
+    drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb3);
     grid3->addWidget(drawShadowColor,3,0);
 
     QLabel *label = new QLabel( i18n( "Start" ), gb3 );

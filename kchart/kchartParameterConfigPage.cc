@@ -33,19 +33,19 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(grid,0,0);
 
 
-    xaxis = new QCheckBox( i18n( "X-Axis" ), gb1 );
+    xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
     grid1->addWidget(xaxis,1,0);
 
-    yaxis = new QCheckBox( i18n( "Y-Axis" ), gb1);
+    yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
     grid1->addWidget(yaxis,2,0);
 
-    xlabel = new QCheckBox( i18n( "Has X-Label" ), gb1 );
+    xlabel = new QCheckBox( i18n( "Has X-label" ), gb1 );
     grid1->addWidget(xlabel,3,0);
 
-    yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), gb1 );
+    yaxis2 = new QCheckBox( i18n( "Y-axis2" ), gb1 );
     grid1->addWidget(yaxis2,4,0);
 
-    lineMarker = new QCheckBox( i18n( "Line Marker" ), gb1 );
+    lineMarker = new QCheckBox( i18n( "Line marker" ), gb1 );
     grid1->addWidget(lineMarker,5,0);
 
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );

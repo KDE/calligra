@@ -1927,8 +1927,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   weight_combo = new QComboBox( box1, "Weight" );
   weight_combo->insertItem( "", 0 );
-  weight_combo->insertItem( i18n("normal") );
-  weight_combo->insertItem( i18n("bold") );
+  weight_combo->insertItem( i18n("Normal") );
+  weight_combo->insertItem( i18n("Bold") );
 
   weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
   grid2->addWidget(weight_combo,3,1);
@@ -1937,8 +1937,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   style_combo = new QComboBox( box1, "Style" );
   style_combo->insertItem( "", 0 );
-  style_combo->insertItem( i18n("roman") );
-  style_combo->insertItem( i18n("italic"), 2 );
+  style_combo->insertItem( i18n("Roman") );
+  style_combo->insertItem( i18n("Italic"), 2 );
   grid2->addWidget(style_combo,1,1);
   style_combo->setInsertionPolicy(QComboBox::NoInsertion);
   connect( style_combo, SIGNAL(activated(const QString &)),

@@ -83,18 +83,18 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     cEffect = new QComboBox( false, grp1, "cEffect" );
     cEffect->insertItem( i18n( "No Effect" ) );
-    cEffect->insertItem( i18n( "Come from right" ) );
-    cEffect->insertItem( i18n( "Come from left" ) );
-    cEffect->insertItem( i18n( "Come from top" ) );
-    cEffect->insertItem( i18n( "Come from bottom" ) );
-    cEffect->insertItem( i18n( "Come from right/top" ) );
-    cEffect->insertItem( i18n( "Come from right/bottom" ) );
-    cEffect->insertItem( i18n( "Come from left/top" ) );
-    cEffect->insertItem( i18n( "Come from left/bottom" ) );
-    cEffect->insertItem( i18n( "Wipe from left" ) );
-    cEffect->insertItem( i18n( "Wipe from right" ) );
-    cEffect->insertItem( i18n( "Wipe from top" ) );
-    cEffect->insertItem( i18n( "Wipe from bottom" ) );
+    cEffect->insertItem( i18n( "Come From Right" ) );
+    cEffect->insertItem( i18n( "Come From Left" ) );
+    cEffect->insertItem( i18n( "Come From Top" ) );
+    cEffect->insertItem( i18n( "Come From Bottom" ) );
+    cEffect->insertItem( i18n( "Come From Right/Top" ) );
+    cEffect->insertItem( i18n( "Come From Right/Bottom" ) );
+    cEffect->insertItem( i18n( "Come From Left/Top" ) );
+    cEffect->insertItem( i18n( "Come From Left/Bottom" ) );
+    cEffect->insertItem( i18n( "Wipe From Left" ) );
+    cEffect->insertItem( i18n( "Wipe From Right" ) );
+    cEffect->insertItem( i18n( "Wipe From Top" ) );
+    cEffect->insertItem( i18n( "Wipe From Bottom" ) );
     cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
     upperRow->addWidget(cEffect, 1, 1);
 
@@ -110,7 +110,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     switch ( obj->getType() ) {
     case OT_TEXT: {
-        cEffect2->insertItem( i18n( "Paragraph after paragraph" ) );
+        cEffect2->insertItem( i18n( "Paragraph After Paragraph" ) );
     } break;
     default:
         lEffect2->setEnabled(false);
@@ -144,7 +144,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
 
     // setup the Sound Effect stuff
-    appearSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp1 );
+    appearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp1 );
     appearSoundEffect->setChecked( obj->getAppearSoundEffect() );
     upperRow->addWidget( appearSoundEffect, 4, 0 );
     QWhatsThis::add( appearSoundEffect, i18n("If you use sound effect, please do not select No Effect.") );
@@ -205,18 +205,18 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     cDisappear = new QComboBox( false, grp2, "cDisappear" );
     cDisappear->insertItem( i18n( "No Effect" ) );
-    cDisappear->insertItem( i18n( "Disappear to the right" ) );
-    cDisappear->insertItem( i18n( "Disappear to the left" ) );
-    cDisappear->insertItem( i18n( "Disappear to the top" ) );
-    cDisappear->insertItem( i18n( "Disappear to the bottom" ) );
-    cDisappear->insertItem( i18n( "Disappear to the right/top" ) );
-    cDisappear->insertItem( i18n( "Disappear to the right/bottom" ) );
-    cDisappear->insertItem( i18n( "Disappear to the left/top" ) );
-    cDisappear->insertItem( i18n( "Disappear to the left/bottom" ) );
-    cDisappear->insertItem( i18n( "Wipe to the left" ) );
-    cDisappear->insertItem( i18n( "Wipe to the right" ) );
-    cDisappear->insertItem( i18n( "Wipe to the top" ) );
-    cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Right" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Left" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Top" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Right/Top" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Right/Bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Left/Top" ) );
+    cDisappear->insertItem( i18n( "Disappear to the Left/Bottom" ) );
+    cDisappear->insertItem( i18n( "Wipe to the Left" ) );
+    cDisappear->insertItem( i18n( "Wipe to the Right" ) );
+    cDisappear->insertItem( i18n( "Wipe to the Top" ) );
+    cDisappear->insertItem( i18n( "Wipe to the Bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
 
@@ -236,7 +236,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
 
     // setup the Sound Effect stuff
-    disappearSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp2 );
+    disappearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp2 );
     disappearSoundEffect->setChecked( obj->getDisappearSoundEffect() );
     lowerRow->addWidget( disappearSoundEffect, 3, 0 );
     QWhatsThis::add( disappearSoundEffect, i18n("If you use sound effect, please do not select No Effect.") );

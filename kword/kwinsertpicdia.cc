@@ -118,7 +118,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     grid->addWidget( pbImage, 0, 0 );
     connect( pbImage, SIGNAL( clicked() ), SLOT( slotChooseImage() ) );
 
-    m_cbInline = new QCheckBox( i18n( "Insert Picture Inline" ), page );
+    m_cbInline = new QCheckBox( i18n( "Insert picture inline" ), page );
     grid->addWidget( m_cbInline, 1, 0 );
 
     m_cbKeepRatio= new QCheckBox( i18n("Retain original aspect ratio"),page);

@@ -86,8 +86,8 @@ QDockWindow(QDockWindow::InDock, parent, name)
 
   QGroupBox *box = new QVGroupBox(mAlign);
 
-  gbutton = new QCheckBox(i18n("To Grid"), box);
-  cbutton = new QCheckBox(i18n("Align To Center of Page"), box);
+  gbutton = new QCheckBox(i18n("To grid"), box);
+  cbutton = new QCheckBox(i18n("Align to center of page"), box);
   layout->addWidget(box, 1, 1);
 
   mTab->insertTab(mAlign, i18n("Align"));

@@ -742,7 +742,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
 {
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default parameters"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box, "GroupBox" );
 
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
   grid1->addRowSpacing( 0, KDialog::marginHint()  );

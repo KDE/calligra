@@ -414,7 +414,7 @@ void G2DObjectM9r::createPropertyDialog() {
     grid->setColStretch(3, 10);
 
     wbox->addStretch(10);
-    m_unbalanced=new QCheckBox(i18n("Unbalanced Gradient"), widget);
+    m_unbalanced=new QCheckBox(i18n("Unbalanced gradient"), widget);
     m_unbalanced->setChecked(false);
     wbox->addWidget(m_unbalanced);
     connect(m_unbalanced, SIGNAL(clicked()), this,

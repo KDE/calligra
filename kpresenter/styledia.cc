@@ -322,21 +322,21 @@ void StyleDia::setupTab2()
 
     chooseBStyle = new KComboBox( false, brushConfig, "BStyle" );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "100% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "100% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "94% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "94% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "88% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "88% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "63% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "63% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "50% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "50% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "37% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "37% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "12% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "12% Fill Pattern" ) );
     // xgettext:no-c-format
-    chooseBStyle->insertItem( i18n( "6% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "6% Fill Pattern" ) );
     chooseBStyle->insertItem( i18n( "Horizontal Lines" ) );
     chooseBStyle->insertItem( i18n( "Vertical Lines" ) );
     chooseBStyle->insertItem( i18n( "Crossing Lines" ) );
@@ -421,7 +421,7 @@ void StyleDia::setupTab4()
     layout->setMargin( 5 );
     layout->setSpacing( 5 );
 
-    protect= new QCheckBox( i18n("Protect Size and Position"), tab);
+    protect= new QCheckBox( i18n("Protect size and position"), tab);
     layout->addWidget(protect);
     connect( protect, SIGNAL(clicked ()), this, SLOT(protectChanged()));
 

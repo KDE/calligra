@@ -72,7 +72,7 @@ void KChartFontConfigPage::initList()
     list->insertItem(i18n("Y-Title"));
     list->insertItem(i18n("X-Axis"));
     list->insertItem(i18n("Y-Axis"));
-    list->insertItem(i18n("ALL Axes"));
+    list->insertItem(i18n("All Axes"));
   }
   list->insertItem(i18n("Label"));
   list->setCurrentItem(0);

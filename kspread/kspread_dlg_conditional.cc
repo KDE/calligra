@@ -288,7 +288,7 @@ Conditional KSpreadWidgetconditional::typeOfCondition()
 
 KSpreadconditional::KSpreadconditional( KSpreadView * parent, const char * name,
                                         const QRect & _marker)
-        : KDialogBase( parent, name, TRUE, i18n("Relational cell attributes"),
+        : KDialogBase( parent, name, TRUE, i18n("Relational Cell Attributes"),
                        Ok | Cancel )
 {
   m_pView = parent;

@@ -24,12 +24,12 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   QGridLayout *grid1 = new QGridLayout(gb,3,2,15,7);
   layout->addWidget(gb,0,0);
 
-  bar3d=new QCheckBox(i18n("3D Bar"),gb);
+  bar3d=new QCheckBox(i18n("3D bar"),gb);
   grid1->addWidget(bar3d,0,0);
 
   connect(bar3d, SIGNAL(toggled ( bool )),this,SLOT(slotChange3DParameter(bool)));
 
-  drawShadowColor=new QCheckBox(i18n("Draw Shadow color"),gb);
+  drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb);
   grid1->addWidget(drawShadowColor,1,0);
 
   QLabel *tmpLabel = new QLabel( i18n( "Angle" ), gb );

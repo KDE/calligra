@@ -2349,8 +2349,8 @@ void KPrCanvas::setupMenus()
     presMenu = new QPopupMenu();
     Q_CHECK_PTR( presMenu );
     presMenu->setCheckable( true );
-    PM_SM = presMenu->insertItem( i18n( "&Switching mode" ), this, SLOT( switchingMode() ) );
-    PM_DM = presMenu->insertItem( i18n( "&Drawing mode" ), this, SLOT( drawingMode() ) );
+    PM_SM = presMenu->insertItem( i18n( "&Switching Mode" ), this, SLOT( switchingMode() ) );
+    PM_DM = presMenu->insertItem( i18n( "&Drawing Mode" ), this, SLOT( drawingMode() ) );
     presMenu->insertSeparator();
     presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Page..." ), this, SLOT( slotGotoPage() ) );
     presMenu->insertSeparator();

@@ -54,10 +54,10 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
         m_subScript->setEnabled(false);
         m_superScript->setEnabled(false);
     }
-    m_strikeOut = new QCheckBox(i18n("Strike Out"),grp);
+    m_strikeOut = new QCheckBox(i18n("Strike out"),grp);
     grid->addWidget(m_strikeOut,1,1);
 
-    m_doubleUnderline = new QCheckBox(i18n("Double Underline"),grp);
+    m_doubleUnderline = new QCheckBox(i18n("Double underline"),grp);
     grid->addWidget(m_doubleUnderline,0,2);
 
     m_colorButton = new QPushButton( i18n( "Change Color..." ), grp );

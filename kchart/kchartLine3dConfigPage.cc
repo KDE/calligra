@@ -25,7 +25,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   layout->addWidget(gb,0,0);
 
 
-  line3d=new QCheckBox(i18n("3D Line"),gb);
+  line3d=new QCheckBox(i18n("3D line"),gb);
   grid1->addWidget(line3d,0,0);
 
   connect(line3d, SIGNAL(toggled ( bool )),this,SLOT(slotChange3DParameter(bool)));
@@ -36,7 +36,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   lineWidth=new KIntNumInput(0, gb, 10);
   grid1->addWidget(lineWidth,1,1);
 
-  drawShadowColor=new QCheckBox(i18n("Draw Shadow color"),gb);
+  drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb);
   grid1->addWidget(drawShadowColor,2,0);
 
   tmpLabel = new QLabel( i18n( "Rotation around the X axis in degrees:" ), gb );

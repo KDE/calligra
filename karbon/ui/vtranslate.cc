@@ -40,7 +40,7 @@ VTranslate::VTranslate(QWidget *parent, const char *name)
     unit2 = new QLabel("", this);
     inputlayout->addWidget(unit2, 1, 4);
     mainlayout->addSpacing(5);
-    positionbox = new QCheckBox(i18n("Relative &Position"), this);
+    positionbox = new QCheckBox(i18n("Relative &position"), this);
     mainlayout->addWidget(positionbox);
     mainlayout->addSpacing(5);
     apdbutton = new QPushButton(i18n("&Duplicate"), this);

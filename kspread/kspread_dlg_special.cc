@@ -34,7 +34,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Paste what:" ),page );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Paste What" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);

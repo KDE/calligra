@@ -5001,7 +5001,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |
                                      KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS |KoParagDia::PD_SHADOW , m_pKPresenterDoc->getUnit(),edit->kpTextObject()->getSize().width(),false );
-        m_paragDlg->setCaption( i18n( "Paragraph settings" ) );
+        m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
         KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();

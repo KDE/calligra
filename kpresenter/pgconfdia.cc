@@ -64,7 +64,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), page, "general" );
     general->setFrameStyle( QFrame::Box | QFrame::Sunken );
 
-    infinitLoop = new QCheckBox( i18n( "&Infinite Loop" ), general );
+    infinitLoop = new QCheckBox( i18n( "&Infinite loop" ), general );
     infinitLoop->setChecked( infLoop );
 
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), general );
@@ -75,7 +75,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     speedOfObject->setRange( 1, 10, 1 );
     speedOfObject->setLabel( i18n( "Effect speed of the object and page:" ) );
 
-    presentationDuration = new QCheckBox( i18n( "&Show Presentation Duration" ), general );
+    presentationDuration = new QCheckBox( i18n( "&Show presentation duration" ), general );
     presentationDuration->setChecked( showPresentationDuration );
 
     back->addWidget(general);
@@ -94,19 +94,19 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     grid->addWidget( label2, 1, 0 );
 
     effectCombo = new QComboBox( false, grp );
-    effectCombo->insertItem( i18n( "No effect" ) );
-    effectCombo->insertItem( i18n( "Close horizontal" ) );
-    effectCombo->insertItem( i18n( "Close vertical" ) );
-    effectCombo->insertItem( i18n( "Close from all directions" ) );
-    effectCombo->insertItem( i18n( "Open horizontal" ) );
-    effectCombo->insertItem( i18n( "Open vertical" ) );
-    effectCombo->insertItem( i18n( "Open from all directions" ) );
-    effectCombo->insertItem( i18n( "Interlocking horizontal 1" ) );
-    effectCombo->insertItem( i18n( "Interlocking horizontal 2" ) );
-    effectCombo->insertItem( i18n( "Interlocking vertical 1" ) );
-    effectCombo->insertItem( i18n( "Interlocking vertical 2" ) );
+    effectCombo->insertItem( i18n( "No Effect" ) );
+    effectCombo->insertItem( i18n( "Close Horizontal" ) );
+    effectCombo->insertItem( i18n( "Close Vertical" ) );
+    effectCombo->insertItem( i18n( "Close From All Directions" ) );
+    effectCombo->insertItem( i18n( "Open Horizontal" ) );
+    effectCombo->insertItem( i18n( "Open Vertical" ) );
+    effectCombo->insertItem( i18n( "Open From All Directions" ) );
+    effectCombo->insertItem( i18n( "Interlocking Horizontal 1" ) );
+    effectCombo->insertItem( i18n( "Interlocking Horizontal 2" ) );
+    effectCombo->insertItem( i18n( "Interlocking Vertical 1" ) );
+    effectCombo->insertItem( i18n( "Interlocking Vertical 2" ) );
     effectCombo->insertItem( i18n( "Surround 1" ) );
-    effectCombo->insertItem( i18n( "Fly away 1" ) );
+    effectCombo->insertItem( i18n( "Fly Away 1" ) );
     effectCombo->insertItem( i18n( "Blinds Horizontal" ) );
     effectCombo->insertItem( i18n( "Blinds Vertical" ) );
     effectCombo->insertItem( i18n( "Box In" ) );
@@ -153,7 +153,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
 
     // setup the Sound Effect stuff
-    checkSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp );
+    checkSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp );
     checkSoundEffect->setChecked( soundEffect );
     QWhatsThis::add( checkSoundEffect, i18n("If you use a sound effect, please do not select No Effect.") );
     grid->addWidget( checkSoundEffect, 3, 0 );

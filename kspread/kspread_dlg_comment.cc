@@ -29,7 +29,7 @@
 #include <qpushbutton.h>
 
 KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: KDialogBase( parent, name,TRUE,i18n("Cell comment"),Ok|Cancel )
+	: KDialogBase( parent, name,TRUE,i18n("Cell Comment"),Ok|Cancel )
 {
     m_pView = parent;
     marker= _marker;
