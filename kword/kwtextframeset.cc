@@ -1322,8 +1322,7 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
 void KWTextFrameSet::setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList )
 {
     QTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( QTextDocument::Standard ) /*&&*/
-         /*static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() == margin.pt()*/ /*hack*/ )
+    if ( !textdoc->hasSelection( QTextDocument::Standard ) && static_cast<KWTextParag *>(cursor->parag())->tabList()== tabList /*hack*/ )
         return; // No change needed.
 
     emit hideCursor();
