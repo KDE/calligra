@@ -25,7 +25,7 @@ HTMLExportFactory::~HTMLExportFactory()
     delete s_global;
 }
 
-QObject* HTMLExportFactory::create( QObject* parent, const char* name, const char* )
+QObject* HTMLExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

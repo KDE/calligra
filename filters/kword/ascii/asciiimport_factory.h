@@ -12,7 +12,7 @@ public:
     ASCIIImportFactory( QObject* parent = 0, const char* name = 0 );
     virtual ~ASCIIImportFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject" );
+    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
 

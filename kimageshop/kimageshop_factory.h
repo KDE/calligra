@@ -12,7 +12,7 @@ public:
     KImageShopFactory( QObject* parent = 0, const char* name = 0 );
     ~KImageShopFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject" );
+    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
 

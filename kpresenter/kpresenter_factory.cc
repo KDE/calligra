@@ -56,7 +56,7 @@ KPresenterFactory::~KPresenterFactory()
     delete s_global;
 }
 
-QObject* KPresenterFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* KPresenterFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {

@@ -12,7 +12,7 @@ public:
     KSpreadFactory( QObject* parent = 0, const char* name = 0 );
     ~KSpreadFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* name = "QObject" );
+    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* name = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
 

@@ -24,7 +24,7 @@ ExampleFactory::~ExampleFactory()
     delete s_global;
 }
 
-QObject* ExampleFactory::create( QObject* parent, const char* name, const char* /*classname*/ )
+QObject* ExampleFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {

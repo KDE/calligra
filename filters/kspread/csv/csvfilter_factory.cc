@@ -25,7 +25,7 @@ CSVFilterFactory::~CSVFilterFactory()
     delete s_global;
 }
 
-QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char* )
+QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

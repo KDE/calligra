@@ -32,7 +32,7 @@ KSpreadFactory::~KSpreadFactory()
 {
 }
 
-QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {

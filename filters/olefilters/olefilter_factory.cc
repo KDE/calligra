@@ -25,7 +25,7 @@ OLEFilterFactory::~OLEFilterFactory()
     delete s_global;
 }
 
-QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char* )
+QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

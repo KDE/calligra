@@ -25,7 +25,7 @@ ASCIIExportFactory::~ASCIIExportFactory()
     delete s_global;
 }
 
-QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const char* )
+QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

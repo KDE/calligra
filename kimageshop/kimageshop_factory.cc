@@ -41,7 +41,7 @@ KImageShopFactory::~KImageShopFactory()
   delete s_global;
 }
 
-QObject* KImageShopFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* KImageShopFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {

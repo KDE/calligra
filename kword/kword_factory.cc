@@ -52,7 +52,7 @@ KWordFactory::~KWordFactory()
     delete s_global;
 }
 
-QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {

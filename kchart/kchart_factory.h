@@ -18,7 +18,7 @@ public:
     KChartFactory( QObject* parent = 0, const char* name = 0 );
     virtual ~KChartFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject" );
+    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
 
