@@ -4,9 +4,6 @@ TODO-List:
 
 Bugs; in order or importance:
 
-- Refuse to delete anchor.
-- When deleting table delete anchor
-
 - Implement correct printing of floating tables.
 
 - Frame Run around is the wrong way around.. Framedia does it correct now. 

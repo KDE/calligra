@@ -431,7 +431,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
         if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
         if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
         if(mx-newX1 < minFrameWidth) mx=newX1+minFrameHeight+5;
-        if(mx > ptPaperWidth()) 
+        if(mx > static_cast<int> (ptPaperWidth())) 
             mx = ptPaperWidth();
 
         if(move) newX2=mx;
@@ -1020,8 +1020,9 @@ void KWPage::vmrCreateTable()
 
             if ( useAnchor ) {
                 grpMgr = static_cast<KWGroupManager *>(anchor);
-            }
-            grpMgr = new KWGroupManager( doc );
+            } else
+                grpMgr = new KWGroupManager( doc );
+
             QString _name;
             int numGroupManagers=doc->getNumGroupManagers();
             bool found=true; 
@@ -2445,7 +2446,7 @@ bool KWPage::kPrior( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs 
 	unsigned int newY = fc->getPTY();
 	if(newY <= ptTopBorder())  return FALSE;
 	
-	if(fc->getPTY() >= visibleHeight())
+	if(static_cast<int> (fc->getPTY()) >= visibleHeight())
 	{ 
 		newY = fc->getPTY() - visibleHeight();
 		if(newY <= ptTopBorder()) newY = ptTopBorder(); 
@@ -2711,8 +2712,14 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
         return FALSE;
     }
 
-    unsigned int tmpTextPos = fc->getTextPos() - 1;
+    unsigned int tmpTextPos = fc->getTextPos()-1;
     unsigned int paraLen = ( fc->getParag()->getPrev() ? fc->getParag()->getPrev()->getTextLen() : 0 );
+    KWChar *theString = fc->getParag()->getText();
+    if(fc->getTextPos()!=0 && 
+          theString[tmpTextPos].attrib && 
+          theString[tmpTextPos].attrib->getClassId()==ID_KWCharAnchor) {
+        tmpTextPos--;
+    }
     bool del = fc->getParag()->deleteText( tmpTextPos, 1 );
     bool joined = FALSE;
     bool recalc = FALSE;

@@ -1629,7 +1629,7 @@ bool KWordDocument::saveToStream( QIODevice * dev )
         << pageLayout.inchRight << "\" inchBottom=\"" << pageLayout.inchBottom << "\"/>" << endl;
     out << etag << "</PAPER>" << endl;
     out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>( processingType ) << "\" standardpage=\"" << 1
-        << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
+        << "\" hasHeader=\"" << static_cast<int>(hasHeader()) << "\" hasFooter=\"" << static_cast<int>(hasFooter())
         << "\" unit=\"" << correctQString( getUnit() ) << "\"/>" << endl;
 
     out << otag << "<FOOTNOTEMGR>" << endl;
@@ -3295,6 +3295,7 @@ void KWordDocument::appendPage( unsigned int /*_page*/, bool redrawBackgroundWhe
                         } break;
                     case FT_FORMULA: {  // can never be copied ?
                         } break;
+                    default: {}
                 }
             }
         }

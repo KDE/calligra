@@ -43,17 +43,29 @@
 KWCharAnchor::KWCharAnchor() :
     KWCharAttribute()
 {
+    parent = 0L;
     classId = ID_KWCharAnchor;
     anchored = false;
     origin = QPoint( 0, 0 );
 }
 
+/*================================================================*/
 KWCharAnchor::KWCharAnchor(const KWCharAnchor &original) :
     KWCharAttribute()
 {
+    parent = original.parent;
     classId = ID_KWCharAnchor;
     anchored = original.anchored;
     origin = original.origin;
+}
+
+/*================================================================*/
+KWCharAnchor::~KWCharAnchor() {
+    if(parent) {
+        KWString *p = parent;
+        parent=0L;
+        p->free(this);
+    }
 }
 
 /*================================================================*/
@@ -77,6 +89,12 @@ void KWCharAnchor::setOrigin( QPoint _origin )
     }
     origin = _origin;
 }
+
+/*================================================================*/
+void KWCharAnchor::moveBy(int /*xy */, int /*dy*/ ) {
+    // use alignments stuff to move...
+}
+
 
 /*================================================================*/
 void KWCharAnchor::save( QTextStream &out )
@@ -156,6 +174,16 @@ void KWString::free( KWChar* _data, unsigned int _len )
 {
     for ( unsigned int i = 0; i < _len; ++i )
         freeChar( _data[ i ], doc, allowRemoveFn );
+}
+
+/*================================================================*/
+void KWString::free( KWCharAttribute* attribute)
+{
+    for ( unsigned int i = 0; i < _len_; ++i )
+        if(_data_[i].attrib == attribute) {
+            remove(i,1);
+            break;
+        }
 }
 
 /*================================================================*/
@@ -324,6 +352,7 @@ void KWString::insert( unsigned int _pos, KWCharAnchor *_anchor )
         memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     _data_[ _pos ].c = KWSpecialChar;
+    _anchor->setParent(this);
     _data_[ _pos ].attrib = _anchor;
     cache.insert( _pos, KWSpecialChar );
 }
@@ -779,6 +808,7 @@ KWChar* KWString::copy( KWChar *_data, unsigned int _len )
                 __data[ i ].attrib = f;
             } break;
             case ID_KWCharAnchor: {
+                // do some object introspection here before you copy the data.
                 KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _data[ i ].attrib );
                 KWGroupManager *a = new KWGroupManager( *attrib );
                 __data[ i ].attrib = a;

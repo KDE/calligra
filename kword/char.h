@@ -54,6 +54,7 @@ enum ClassIDs
 /* Class: KWCharAttribute                                         */
 /******************************************************************/
 
+#include <kdebug.h>
 class KWCharAttribute
 {
 public:
@@ -198,9 +199,29 @@ protected:
 class KWCharAnchor : public KWCharAttribute
 {
 public:
+    enum Position { // this is mainly the Y-coord
+        P_TopOfFrame=0,
+        P_TopOfParagraph,
+        P_AboveCurrentLine,
+        P_AtInsertionPoint,
+        P_BelowCurrentLine,
+        P_BottomOfParagraph,
+        P_BottomOfFrame,
+        P_Absolute
+    };
+
+    enum Alignment { // And this the X-coord;
+        A_Left,
+        A_Right,
+        A_Center,
+        A_ClosestToBinding,
+        A_FurtherFromBinding,
+        A_Absolute
+    };
+
     KWCharAnchor();
     KWCharAnchor(const KWCharAnchor &original);
-    virtual ~KWCharAnchor() {}
+    virtual ~KWCharAnchor();
 
     // Is the anchoring logic enabled at this time?
     bool isAnchored() { return anchored; }
@@ -215,9 +236,8 @@ public:
     // to save itself.
     void save( QTextStream&out );
 
-    // Override this function with logic to move the anchored object
-    // when the origin of the anchor is changed.
-    virtual void moveBy( int dx, int dy ) = 0;
+    // Move by will move the anchor according to the positioning variables (check below)
+    void moveBy( int dx, int dy );
 
     // Override these functions to return the text required to identify
     // the type and instance of the anchored object.
@@ -227,21 +247,31 @@ public:
     // Override this function to draw the formatting for the anchored object.
     virtual void viewFormatting( QPainter &painter, int zoom ) = 0;
 
+    // Positioning stuff: 
+    void setAlignment (Alignment lAlignment) { alignment=lAlignment; }
+    Alignment getAlignment () { return alignment; }
+    void setPosition (Position lPosition) { position=lPosition; }
+    Position getPosition () { return position; }
+
+    void setParent (KWString *lParent) { parent= lParent; }
+
 protected:
     QPoint origin;
     bool anchored;
-};
+    Position position;
 
-// Torben: Be prepared for unicode
-// Reggie: Now we support unicode :- ) )
-#define kwchar QChar
+    Alignment alignment;
+
+    // Backpointer 
+    KWString *parent;
+};
 
 struct KWChar
 {
     KWChar() : c(), autoformat( 0L ), attrib( 0L )
     {}
 
-    kwchar c;
+    QChar c;
     KWAutoFormat::AutoformatInfo *autoformat;
     KWCharAttribute* attrib;
 };
@@ -259,6 +289,8 @@ public:
     KWString( const KWString &_string );
     ~KWString()
     { free( _data_, _len_ ); delete [] _data_; }
+
+    void free(KWCharAttribute* attribute);
 
     KWString &operator=( const KWString &_string );
 

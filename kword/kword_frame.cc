@@ -2373,15 +2373,12 @@ void KWGroupManager::recalcCols()
                     }
                 }
             }
-kdDebug () << "a " << found <<  ", " << activeCell->col + activeCell->cols << ", " << cols << endl;
-            if(! found && activeCell->col + activeCell->cols <= cols) { // if we did not find it and we are not on the right edge of the table.
+            if(! found && activeCell->col + activeCell->cols < cols) { // if we did not find it and we are not on the right edge of the table.
                // use the position of the next cell.
                coordinate = getCell(activeCell->row, activeCell->col + activeCell->cols)->frameSet->getFrame(0)->left() - tableCellSpacing;
-kdDebug () << "b" << endl;
             }
 
             if(coordinate != activeCell->frameSet->getFrame(0)->right()) { // right pos changed.
-kdDebug () << "c" << endl;
                 for ( unsigned int i = 0; i < rows; i++) {
                     Cell *cell = getCell(i,col);
                     if(cell != activeCell && cell->row == i) {
