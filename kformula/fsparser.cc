@@ -196,11 +196,20 @@ void PowerNode::buildXML( QDomDocument doc, QDomElement element )
     m_lhs->buildXML( doc, sequence );
     content.appendChild( sequence );
     index.appendChild( content );
-    QDomElement upperRight = doc.createElement( "UPPERRIGHT" );
-    sequence = doc.createElement( "SEQUENCE" );
-    m_rhs->buildXML( doc, sequence );
-    upperRight.appendChild( sequence );
-    index.appendChild( upperRight );
+    if ( m_type == "_" ) {
+        QDomElement lowerRight = doc.createElement( "LOWERRIGHT" );
+        sequence = doc.createElement( "SEQUENCE" );
+        m_rhs->buildXML( doc, sequence );
+        lowerRight.appendChild( sequence );
+        index.appendChild( lowerRight );
+    }
+    else {
+        QDomElement upperRight = doc.createElement( "UPPERRIGHT" );
+        sequence = doc.createElement( "SEQUENCE" );
+        m_rhs->buildXML( doc, sequence );
+        upperRight.appendChild( sequence );
+        index.appendChild( upperRight );
+    }
     element.appendChild( index );
 }
 
@@ -311,6 +320,11 @@ void FunctionNode::buildXML( QDomDocument doc, QDomElement element )
 
         for ( uint i = 0; i < m_args.count(); i++ ) {
             m_args.at( i )->buildXML( doc, sequence );
+            if ( i < m_args.count()-1 ) {
+                QDomElement de = doc.createElement( "TEXT" );
+                de.setAttribute( "CHAR", "," );
+                sequence.appendChild( de );
+            }
         }
 
         content.appendChild( sequence );
@@ -509,6 +523,7 @@ ParserNode* FormulaStringParser::parsePower()
     ParserNode* lhs = parsePrimary();
     for ( ;; ) {
         switch ( currentType ) {
+        case INDEX:
         case POW: {
             QString c = current;
             nextToken();
@@ -670,6 +685,10 @@ QString FormulaStringParser::nextToken()
             pos++; column++;
             currentType = POW;
             return current = "**";
+        case '_':
+            pos++; column++;
+            currentType = INDEX;
+            return current = "_";
         case '(':
             pos++; column++;
             currentType = LP;

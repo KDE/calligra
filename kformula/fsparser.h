@@ -41,7 +41,7 @@ public:
 
 private:
 
-    enum TokenType { NUMBER, NAME, PLUS, SUB, MUL, DIV, POW, LP, RP, LB, RB, ASSIGN, COMMA, OTHER, EOL };
+    enum TokenType { NUMBER, NAME, PLUS, SUB, MUL, DIV, POW, INDEX, LP, RP, LB, RB, ASSIGN, COMMA, OTHER, EOL };
 
     ParserNode* parseAssign();
     ParserNode* parseExpr();
