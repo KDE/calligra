@@ -27,32 +27,18 @@
 #include <kdebug.h>
 #include <ktar.h>
 
-#define ROOTPART "root"
-#define MAINNAME "maindoc.xml"
-
 KoStore::KoStore( const QString & _filename, Mode _mode )
 {
   m_bIsOpen = false;
   m_mode = _mode;
   m_stream = 0L;
 
-  kdDebug(s_area) << "KoStore Constructor filename = " << _filename
-    << " mode = " << int(_mode) << endl;
+  kdDebug(30002) << "KoStore Constructor filename = " << _filename
+		 << " mode = " << int(_mode) << endl;
 
   m_pTar = new KTarGz( _filename );
 
   m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
-
-  // Work out the version of the specification implmented by the naming in
-  // a file opened for reading.
-  m_namingVersion = NAMING_VERSION_2_2;
-  if ( m_mode == Read )
-  {
-    if ( m_pTar->directory()->entry( "part0.xml" ) )
-    {
-      m_namingVersion = NAMING_VERSION_2_1;
-    }
-  }
 }
 
 KoStore::~KoStore()
@@ -63,13 +49,17 @@ KoStore::~KoStore()
     delete m_stream;
 }
 
-// See the specification for details of what this function does.
-QString KoStore::toExternalNaming( const QString & _internalNaming ) const
+QString KoStore::toExternalNaming( const QString & _internalNaming )
 {
   // "root" is the main document, let's save it as "maindoc.xml"
-  if (_internalNaming == ROOTPART)
-    return MAINNAME;
+  if (_internalNaming == "root")
+    return "maindoc.xml";
 
+  /*
+  // tar:/0 is saved as part0.xml
+  // tar:/0/1 is saved as part0/part1.xml
+  // tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
+  */
   if ( _internalNaming.left(5) == "tar:/" )
   {
     QString intern( _internalNaming.mid( 5 ) ); // remove protocol
@@ -81,20 +71,11 @@ QString KoStore::toExternalNaming( const QString & _internalNaming ) const
       result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
       intern = intern.mid( pos + 1 ); // remove the dir we just processed
     }
-
-    // Now process the filename. If the first character is numeric, we have
-    // a main document.
+    // now process the filename
     if ( QChar(intern.at(0)).isDigit() )
-    {
-      if ( m_namingVersion == NAMING_VERSION_2_1)
-        result = result + "part" + intern + ".xml";
-      else
-        result = result + "part" + intern + "/" + MAINNAME;
-    }
+      result = result + "part" + intern + ".xml";
     else
-    {
       result += intern;
-    }
 
     return result;
   }
@@ -108,22 +89,22 @@ bool KoStore::open( const QString & _name )
 
   if ( m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: File is already opened" << endl;
+    kdWarning(30002) << "KoStore: File is already opened" << endl;
     return false;
   }
 
   if ( m_sName.length() > 512 )
   {
-      kdError(s_area) << "KoStore: Filename " << m_sName << " is too long" << endl;
+      kdError(30002) << "KoStore: Filename " << m_sName << " is too long" << endl;
     return false;
   }
 
   if ( m_mode == Write )
   {
-    kdDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'" << endl;
+    kdDebug(30002) << "KoStore: opening for writing '" << m_sName << "'" << endl;
     if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
     {
-      kdWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
+      kdWarning(30002) << "KoStore: Duplicate filename " << m_sName << endl;
       return false;
     }
 
@@ -132,17 +113,17 @@ bool KoStore::open( const QString & _name )
   }
   else if ( m_mode == Read )
   {
-    kdDebug(s_area) << "Opening for reading '" << m_sName << "'" << endl;
+    kdDebug(30002) << "Opening for reading '" << m_sName << "'" << endl;
 
     const KTarEntry * entry = m_pTar->directory()->entry( m_sName );
     if ( entry == 0L )
     {
-      kdWarning(s_area) << "Unknown filename " << m_sName << endl;
+      kdWarning(30002) << "Unknown filename " << m_sName << endl;
       return false;
     }
     if ( entry->isDirectory() )
     {
-      kdWarning(s_area) << m_sName << " is a directory !" << endl;
+      kdWarning(30002) << m_sName << " is a directory !" << endl;
       return false;
     }
     KTarFile * f = (KTarFile *) entry;
@@ -163,11 +144,11 @@ bool KoStore::open( const QString & _name )
 
 void KoStore::close()
 {
-  kdDebug(s_area) << "KoStore: Closing" << endl;
+  kdDebug(30002) << "KoStore: Closing" << endl;
 
   if ( !m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: You must open before closing" << endl;
+    kdWarning(30002) << "KoStore: You must open before closing" << endl;
     return;
   }
 
@@ -175,7 +156,7 @@ void KoStore::close()
   {
     // write the whole bytearray at once into the tar file
 
-    kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
+    kdDebug(30002) << "Writing file " << m_sName << " into TAR archive. size "
 		   << m_iSize << endl;
     m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() );
   }
@@ -191,13 +172,13 @@ QByteArray KoStore::read( unsigned long int max )
 
   if ( !m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: You must open before reading" << endl;
+    kdWarning(30002) << "KoStore: You must open before reading" << endl;
     data.resize( 0 );
     return data;
   }
   if ( m_mode != Read )
   {
-    kdError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
+    kdError(30002) << "KoStore: Can not read from store that is opened for writing" << endl;
     data.resize( 0 );
     return data;
   }
@@ -227,12 +208,12 @@ long KoStore::read( char *_buffer, unsigned long _len )
 {
   if ( !m_bIsOpen )
   {
-    kdError(s_area) << "KoStore: You must open before reading" << endl;
+    kdError(30002) << "KoStore: You must open before reading" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kdError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
+    kdError(30002) << "KoStore: Can not read from store that is opened for writing" << endl;
     return -1;
   }
 
@@ -249,101 +230,16 @@ long KoStore::read( char *_buffer, unsigned long _len )
   return _len;
 }
 
-bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
-{
-  if ( dest == ROOTPART )
-  {
-    kdError(s_area) << "KoStore: cannot embed root part" << endl;
-    return false;
-  }
-
-  // Find the destination directory corresponding to the part to be embedded.
-
-  QString destDir;
-
-  destDir = toExternalNaming( dest );
-  if ( destDir.mid( destDir.length() - sizeof(MAINNAME) + 1 ) == MAINNAME )
-  {
-    destDir = destDir.left( destDir.length() - sizeof(MAINNAME) + 1 );
-  }
-  else
-  {
-    kdError(s_area) << "KoStore: cannot embed to a part called " << destDir << endl;
-    return false;
-  }
-
-  // Find the source directory corresponding to the part to be embedded.
-
-  QString srcDir;
-
-  srcDir = store.toExternalNaming( src );
-  if ( srcDir.mid( srcDir.length() - sizeof(MAINNAME) + 1 ) == MAINNAME )
-  {
-    srcDir = srcDir.left( srcDir.length() - sizeof(MAINNAME) + 1 );
-  }
-  else
-  {
-    kdError(s_area) << "KoStore: cannot embed from a part called " << srcDir << endl;
-    return false;
-  }
-
-  // Now recurse into the embedded part, addings its top level contents to our tar.
-
-  kdDebug(s_area) << "KoStore: embedding " << srcDir << " in " << destDir << endl;
-  const KTarEntry *entry;
-  if ( src == ROOTPART )
-  {
-    entry = store.m_pTar->directory();
-  }
-  else
-  {
-    entry = store.m_pTar->directory()->entry( srcDir );
-  }
-  QStringList entries = dynamic_cast<const KTarDirectory *>( entry )->entries();
-  unsigned i;
-
-  for ( i = 0; i < entries.count(); i++ )
-  {
-    if ( store.m_pTar->directory()->entry( srcDir + entries[i] )->isDirectory() )
-    {
-      if ( embed( destDir + entries[i], store, srcDir + entries[i] ) )
-      {
-        kdDebug(s_area) << "KoStore: embedded " << srcDir << " in " << destDir << endl;
-      }
-      else
-      {
-        break;
-      }
-    }
-    else
-    {
-      if ( ( open( destDir + entries[i] ) && store.open( srcDir + entries[i] ) ) )
-      {
-        kdDebug(s_area) << "KoStore: embedding file " << entries[i] << endl;
-        long length = store.size();
-        write( store.read( length ));
-        store.close();
-        close();
-      }
-      else
-      {
-        break;
-      }
-    }
-  }
-  return i == entries.count();
-}
-
 long KoStore::size() const
 {
   if ( !m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
+    kdWarning(30002) << "KoStore: You must open before asking for a size" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kdWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
+    kdWarning(30002) << "KoStore: Can not get size from store that is opened for writing" << endl;
     return -1;
   }
   return (long) m_iSize;
@@ -362,12 +258,12 @@ bool KoStore::write( const char* _data, unsigned long _len )
 
   if ( !m_bIsOpen )
   {
-    kdError(s_area) << "KoStore: You must open before writing" << endl;
+    kdError(30002) << "KoStore: You must open before writing" << endl;
     return 0L;
   }
   if ( m_mode != Write  )
   {
-    kdError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
+    kdError(30002) << "KoStore: Can not write to store that is opened for reading" << endl;
     return 0L;
   }
 
