@@ -74,7 +74,6 @@
  </Menu>
  <Menu name="frames"><text>Fra&amp;mes</text>
   <Action name="edit_delframe"/>
-  <Action name="edit_reconnect"/>
   <Separator/>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
@@ -223,12 +222,10 @@
 <Menu name="frame_popup">
  <Action name="format_frameset"/>
  <Action name="edit_delframe"/>
- <Action name="edit_reconnect"/>
 </Menu>
 <Menu name="frame_popup_table">
  <Action name="format_frameset"/>
  <Action name="edit_delframe"/>
- <Action name="edit_reconnect"/>
  <Separator/>
  <Action name="table_joincells"/>
  <Action name="table_splitcells"/>

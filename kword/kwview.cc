@@ -281,9 +281,7 @@ void KWView::setupActions()
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
                                       this, SLOT( editDeleteFrame() ),
                                       actionCollection(), "edit_delframe" );
-    actionEditReconnectFrame = new KAction( i18n( "&Reconnect Frame..." ), 0,
-                                            this, SLOT( editReconnectFrame() ),
-                                            actionCollection(), "edit_reconnect" );
+
     actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
                                          this, SLOT( toolsEdit() ),
                                          actionCollection(), "tools_edit" );
@@ -1248,16 +1246,6 @@ void KWView::editDeleteFrame()
                                                     i18n("&Delete"));
     if (result == KMessageBox::Continue)
         gui->canvasWidget()->deleteFrame( theFrame );
-}
-
-void KWView::editReconnectFrame()
-{
-    if ( doc->getFirstSelectedFrame() )
-      gui->canvasWidget()->editReconnectFrame();
-    else // TODO enable/disable the action depending on whether a frame is selected, instead
-        KMessageBox::sorry( this,
-                            i18n("Sorry, you have to select a frame first."),
-                            i18n("Format Frameset"));
 }
 
 void KWView::editCustomVars()
@@ -2618,19 +2606,9 @@ void KWView::updatePopupMenuChangeAction()
             // if frameset 0 disable delete
             if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0))
                 {
-                    actionEditReconnectFrame->setEnabled(false);
                     actionEditDelFrame->setEnabled(false);
                 }
-            else
-                {
-                    actionEditReconnectFrame->setEnabled(true && nbFrame==1);
-                }
         }
-    else
-        actionEditReconnectFrame->setEnabled(false);
-
-    if(gui->canvasWidget()->getCurrentTable())
-        actionEditReconnectFrame->setEnabled(false);
 }
 
 void KWView::openPopupMenuEditFrame( const QPoint & _point )
@@ -2840,7 +2818,6 @@ void KWView::frameSelectedChanged()
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
     actionTableSplitCells->setEnabled( table && (nbFrame==1) );
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
-    actionEditReconnectFrame->setEnabled(false);
     actionEditDelFrame->setEnabled(!currentTextEdit() && (nbFrame==1));
 }
 

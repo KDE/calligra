@@ -141,7 +141,6 @@ public slots:
     void editFind();
     void editReplace();
     void editDeleteFrame();
-    void editReconnectFrame();
     void editCustomVars();
     void editSerialLetterDataBase();
 
@@ -278,7 +277,6 @@ private:
     KAction *actionEditPaste;
     KAction *actionEditSelectAll;
     KAction *actionEditDelFrame;
-    KAction *actionEditReconnectFrame;
     KAction *actionEditCustomVars;
 
     KToggleAction *actionViewPageMode;

@@ -92,7 +92,6 @@ public:
     void setFrameBackgroundColor( const QBrush &backColor );
 
     void editFrameProperties();
-    void editReconnectFrame();
 
     // Mouse press
     void mpEditFrame( QMouseEvent *e, int mx, int my );
