@@ -60,16 +60,21 @@ void KoApplication::start()
         // setMainWidget( shell ); // probably bad idea, says Torben...
     } else {
         QStringList::Iterator it = open.begin();
+        int n = 0;
         for( ; it != open.end(); ++it )
         {
             KoDocument* doc = entry.createDoc( 0 );
-            doc->loadFromURL( *it );
-                
-            Shell* shell = doc->createShell();
-            shell->show();
-            //setMainWidget( shell );
+            if ( doc->loadFromURL( *it ) )
+            {
+              Shell* shell = doc->createShell();
+              shell->show();
+              //setMainWidget( shell );
+              n++;
+            }
         }
-    } 
+        if (n == 0) // no doc, all URLs were malformed
+          ::exit(1);
+    }
 }
 
 KoApplication::~KoApplication()
