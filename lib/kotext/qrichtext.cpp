@@ -3799,14 +3799,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 
 	// check for cursor mark
 	if ( cursor && this == cursor->parag() && i == cursor->index() ) {
-	    curx = chr->x;
-	    if ( !chr->rightToLeft &&
-		 chr->c.isSpace() &&
-		 i > 0 &&
-		 ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify )
-		curx = at( i - 1 )->x + str->width( i - 1 );
-	    if ( chr->rightToLeft )
-		curx += cw;
+	    curx = cursor->x();
 	    curh = h;
 	    cury = cy;
 	    curline = line;
@@ -3851,6 +3844,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		    else if ( i > 1 )
 			x -= str->at(i - 1).d.mark->xoff + str->width( i - 2 );
 		}
+                if ( ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() )
+                    bw += str->at(paintEnd).x - str->at(paintEnd-1).x - str->width(paintEnd-1); // ## correct for RTL ?
 		drawParagString( painter, qstr, paintStart, paintEnd - paintStart + 1, x, lastY,
 				 lastBaseLine, bw, lasth, drawSelections,
 				 lastFormat, i, selectionStarts, selectionEnds, cg, lastDirection );
