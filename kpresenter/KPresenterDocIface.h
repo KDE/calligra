@@ -98,6 +98,12 @@ k_dcop:
     virtual DCOPRef header();
     virtual DCOPRef footer();
 
+    virtual bool backgroundSpellCheckEnabled() const;
+    virtual void enableBackgroundSpellCheck( bool b );
+
+    virtual void startBackgroundSpellCheck();
+    virtual void reactivateBgSpellChecking();
+
 
 private:
     KPresenterDoc *doc;

@@ -317,3 +317,23 @@ DCOPRef KPresenterDocIface::footer()
     else
         return DCOPRef();
 }
+
+bool KPresenterDocIface::backgroundSpellCheckEnabled() const
+{
+    return doc->backgroundSpellCheckEnabled();
+}
+
+void KPresenterDocIface::enableBackgroundSpellCheck( bool b )
+{
+    doc->enableBackgroundSpellCheck(b);
+}
+
+void KPresenterDocIface::startBackgroundSpellCheck()
+{
+    doc->startBackgroundSpellCheck();
+}
+
+void KPresenterDocIface::reactivateBgSpellChecking()
+{
+    doc->reactivateBgSpellChecking();
+}

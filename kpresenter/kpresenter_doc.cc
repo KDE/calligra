@@ -262,12 +262,6 @@ void KPresenterDoc::saveConfig()
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );
-    if( config->hasGroup("KSpell kpresenter" ) )
-    {
-        config->setGroup( "KSpell kpresenter" );
-        config->writeEntry( "SpellCheck", m_bgSpellCheck->backgroundSpellCheckEnabled() );
-    }
-
 }
 
 void KPresenterDoc::initConfig()
