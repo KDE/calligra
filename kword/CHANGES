@@ -144,3 +144,4 @@ New "PageUp/PageDown moves the caret" option, which defaults to false.
 Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 ===================================================
 - Add support for "Apply autoformat"
+- Add support for find/replace with format

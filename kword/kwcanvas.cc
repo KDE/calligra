@@ -774,6 +774,7 @@ void KWCanvas::applyGrid( KoPoint &p )
     // The 1e-10 here is a workaround for some weird division problem.
     // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
     // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
+
     // This is a problem when calling applyGrid twice, we get 1 less than the time before.
     p.setX( static_cast<int>( p.x() / m_doc->gridX() + 1e-10 ) * m_doc->gridX() );
     p.setY( static_cast<int>( p.y() / m_doc->gridY() + 1e-10 ) * m_doc->gridY() );
