@@ -2660,7 +2660,11 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 		success = false;
 		return;
 	}
-	if (!d->prj->renameObject(this, *item, newName)) {
+	enableMessages(false); //to avoid double messages
+	const bool res = d->prj->renameObject(this, *item, newName);
+	enableMessages(true);
+	if (!res) {
+		showErrorMessage( i18n("Renaming object \"%1\" failed.").arg(newName), d->prj );
 		success = false;
 		return;
 	}

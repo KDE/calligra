@@ -127,20 +127,21 @@ bool Transaction::isNull() const
 
 //---------------------------------------------------
 
-TransactionGuard::TransactionGuard( Connection* conn )
- : m_trans( conn->beginTransaction() )
+TransactionGuard::TransactionGuard( Connection& conn )
+ : m_trans( conn.beginTransaction() )
+ , m_doNothing(false)
 {
-	assert(conn);
 }
 
 TransactionGuard::TransactionGuard( const Transaction& trans )
  : m_trans(trans)
+ , m_doNothing(false)
 {
 }
 
 TransactionGuard::~TransactionGuard()
 {
-	if (m_trans.active() && m_trans.connection())
+	if (!m_doNothing && m_trans.active() && m_trans.connection())
 		m_trans.connection()->rollbackTransaction(m_trans);
 }
 
@@ -150,5 +151,10 @@ bool TransactionGuard::commit()
 		return m_trans.connection()->commitTransaction(m_trans);
 	}
 	return false;
+}
+
+void TransactionGuard::doNothing()
+{
+	m_doNothing = true;
 }
 

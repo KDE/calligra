@@ -121,7 +121,7 @@ class KEXI_DB_EXPORT TransactionGuard
 	public:
 		/*! Constructor #1: Starts new transaction constructor for \a connection.
 		 Started transaction handle is available via transaction().*/
-		TransactionGuard( Connection* conn );
+		TransactionGuard( Connection& conn );
 		
 		/*! Constructor #2: Uses already started transaction. */
 		TransactionGuard( const Transaction& trans );
@@ -132,12 +132,16 @@ class KEXI_DB_EXPORT TransactionGuard
 		/*! Comits the guarded transaction. 
 		 It is convenient shortcut to connection->commitTransaction(this->transaction()) */
 		bool commit();
-	
+
+		/*! Makes guarded transaction not guarded, so nothing will be performed on guard's desctruction. */
+		void doNothing();
+
 		/*! Transaction that are controlled by this guard. */
 		const Transaction transaction() const { return m_trans; }
 
 	protected:
 		Transaction m_trans;
+		bool m_doNothing : 1;
 };
 
 } //namespace KexiDB

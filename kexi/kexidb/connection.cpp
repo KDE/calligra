@@ -1354,7 +1354,12 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 	}
 
 	Transaction trans;
-	if (!beginAutoCommitTransaction(trans))
+	//transaction could be already started (e.g. within KexiProject)
+	//--if that's true: do not touch it (especially important for single-transactional drivers)
+	const bool skipTransactions = d->m_default_trans.active();
+	if (skipTransactions)
+		trans = d->m_default_trans;
+	else if (!beginAutoCommitTransaction(trans))
 		return false;
 	TransactionGuard tg(trans);
 
@@ -1378,7 +1383,14 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 	
 //TODO indices, etc.???
 
-	// 3. copy all rows
+	// 3. copy all rows to the new table
+	if (!executeSQL(QString("insert into %1 select * from %2")
+		.arg(escapeIdentifier(tableSchema.name())).arg(escapeIdentifier(oldTableName))))
+	{
+		drv_alterTableName_ERR;
+		return false;
+	}
+
 	// 4. drop old table.
 	if (!drv_dropTable( oldTableName )) {
 		drv_alterTableName_ERR;
@@ -1387,12 +1399,20 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 
 	// 5. Update kexi__objects
 	//TODO
-	if (!executeSQL(QString("UPDATE kexi__objects set o_name=%1 where o_id=%1")
-		.arg(tableSchema.id()))) {
+	if (!executeSQL(QString("update kexi__objects set o_name=%1 where o_id=%2")
+		.arg(m_driver->escapeString(tableSchema.name())).arg(tableSchema.id())))
+	{
 		drv_alterTableName_ERR;
 		return false;
 	}
 
+	//restore old name: it will be changed in alterTableName()!
+	tableSchema.setName(oldTableName);
+
+	if (skipTransactions) {
+		tg.doNothing();
+		return true;
+	}
 	return commitAutoCommitTransaction(trans);
 }
 
@@ -1469,7 +1489,7 @@ bool Connection::beginAutoCommitTransaction(Transaction &trans)
 	// that allow single transaction per connection
 	if (m_driver->d->features & Driver::SingleTransactions) {
 		if (!commitTransaction(d->m_default_trans, true)) 
-			return false; //we have real error
+			return false; //we have a real error
 	}
 	else if (!(m_driver->d->features & Driver::MultipleTransactions)) {
 		return true; //no trans. supported at all - just return

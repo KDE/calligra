@@ -400,6 +400,13 @@ CCMAIL: dkite@shaw.ca
 2004-11-04
 Migration
 - fixed compilation (problems due to curcular libs dependencies)
+KexiDB
+- alterTableName()
+--works better with already started transactions
+--finally works even for SQLite!
+Core
+- Kexi::setWaitCursor(), Kexi::removeWaitCursor() do nothing for non-GUI-aware apps.
+- KexiGUIMessageHandler now calls Kexi::removeWaitCursor()
 
 2004-11-03
 KexiSQLite 2, 3
