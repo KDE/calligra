@@ -28,7 +28,11 @@ Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
 #define MAXDOUBLE DBL_MAX
 #define MINDOUBLE DBL_MIN
 #else
+#if defined(__FreeBSD__)
+#include <float.h>
+#else
 #include <values.h>
+#endif
 #include <limits.h>
 #include <math.h>
 #endif
