@@ -22,8 +22,11 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#ifdef KEXI_KTEXTEDIT
 #include <ktextedit.h>
+#else
 #include <klineedit.h>
+#endif
 #include <kdialogbase.h>
 #include <keditlistbox.h>
 
@@ -36,24 +39,9 @@
 #include "container.h"
 #include "objecttree.h"
 #include "widgetfactory.h"
+#include "utils.h"
 
 using namespace KFormDesigner;
-
-
-static void setRecursiveCursor(QWidget *w, Form *form)
-{
-	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
-	if(tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty()) )
-			return; // if the user has set a cursor for this widget or this is a container, don't change it
-
-	if(w->ownCursor())
-		w->setCursor(Qt::ArrowCursor);
-
-	QObjectList *l = w->queryList( "QWidget" );
-	for(QObject *o = l->first(); o; o = l->next())
-		((QWidget*)o)->setCursor(Qt::ArrowCursor);
-	delete l;
-}
 
 ///// Widget Factory //////////////////////////
 

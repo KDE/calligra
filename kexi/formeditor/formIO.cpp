@@ -45,6 +45,7 @@
 #include "spring.h"
 #include "pixmapcollection.h"
 #include "events.h"
+#include "utils.h"
 
 #include "formIO.h"
 
@@ -874,7 +875,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 	// We save every property in the modifProp list of the ObjectTreeItem
 	QVariantMap *map = new QVariantMap( *(item->modifiedProperties()) );
-	for(QMap<QString,QVariant>::Iterator it = map->begin(); it != map->end(); ++it)
+	QMap<QString,QVariant>::ConstIterator endIt = map->constEnd();
+	for(QMap<QString,QVariant>::ConstIterator it = map->constBegin(); it != endIt; ++it)
 	{
 		QString name = it.key();
 		if((name == QString("hAlign")) || (name == QString("vAlign")) || (name == QString("wordbreak")))
@@ -1097,7 +1099,8 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	QStringList list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
-	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+	QStringList::ConstIterator endIt = list.constEnd();
+	for(QStringList::ConstIterator it = list.constBegin(); it != endIt; ++it)
 		tree->addModifiedProperty(*it, w->property((*it).latin1()));
 
 	if(resetCurrentForm)

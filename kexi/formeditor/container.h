@@ -31,51 +31,12 @@ class QWidget;
 class QLayout;
 typedef QPtrList<QWidget> WidgetList;
 
-// Helper classes for sorting widgets before inserting them in the layout
-class HorWidgetList : public WidgetList
-{
-	public:
-	HorWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->x() < w2->x())
-			return -1;
-		if(w1->x() > w2->x())
-			return 1;
-		return 0; // item1 == item2
-	}
-};
-
-class VerWidgetList : public WidgetList
-{
-	public:
-	VerWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->y() < w2->y())
-			return -10;
-		if(w1->y() > w2->y())
-			return 1;
-		return 0; // item1 == item2
-	}
-};
-
 namespace KFormDesigner {
 
 class Container;
 class WidgetLibrary;
 class ObjectTreeItem;
 class Form;
-
-/*! This helper function install an event filter on \a object and all of its children, directed to \a container.
-  This is necessary to filter events for composed widgets. */
-void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
 
 /**
  * This class is used to filter the events from any widget (and all its subwidgets)

@@ -22,10 +22,9 @@
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qevent.h>
-#include <qcursor.h>
 #include <qvaluevector.h>
 #include <qlayout.h>
-#include <qobjectlist.h>
+#include <qcursor.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -33,6 +32,7 @@
 
 #include <cstdlib> // for abs()
 
+#include "utils.h"
 #include "container.h"
 #include "widgetlibrary.h"
 #include "objecttree.h"
@@ -42,38 +42,6 @@
 #include "events.h"
 
 namespace KFormDesigner {
-
-//// Helper class for event filtering on composed widgets
-
-void installRecursiveEventFilter(QObject *object, QObject *container)
-{
-	if(!object->isWidgetType())
-		return;
-
-	object->installEventFilter(container);
-	if(((QWidget*)object)->ownCursor())
-		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
-
-	if(!object->children())
-		return;
-
-	QObjectList list = *(object->children());
-	for(QObject *obj = list.first(); obj; obj = list.next())
-		installRecursiveEventFilter(obj, container);
-}
-
-void removeRecursiveEventFilter(QObject *object, QObject *container)
-{
-	object->removeEventFilter(container);
-	if(!object->isWidgetType())
-		return;
-	if(!object->children())
-		return;
-
-	QObjectList list = *(object->children());
-	for(QObject *obj = list.first(); obj; obj = list.next())
-		removeRecursiveEventFilter(obj, container);
-}
 
 EventEater::EventEater(QWidget *widget, Container *container)
  : QObject(container)
@@ -814,65 +782,50 @@ Container::createGridLayout()
 
 	// First we need to make sure that two widgets won't be in the same row,
 	// ie that no widget overlap another one
-	for(QWidget *w = vlist->first(); w; w = vlist->next())
+	for(WidgetListIterator it(*vlist); it.current() != 0; ++it)
 	{
-		QWidget *nextw = vlist->next();
-		if(!nextw)
-			break;
-		while((w->y() <= nextw->y()) && (nextw->y() <= w->geometry().bottom()))
-		{
+		QWidget *w = it.current();
+		WidgetListIterator it2 = it;
+
+		for(; it2.current() != 0; ++it2) {
+			QWidget *nextw = it2.current();
+			if((w->y() >= nextw->y()) || (nextw->y() >= w->geometry().bottom()))
+				break;
+
+			if(!w->geometry().intersects(nextw->geometry()))
+				break;
 			// If the geometries of the two widgets intersect each other,
 			// we move one of the widget to the rght or bottom of the other
-			if(w->geometry().intersects(nextw->geometry()))
-			{
-				if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
-					nextw->move(nextw->x(), w->geometry().bottom()+1);
-				else if(nextw->x() >= w->x())
-					nextw->move(w->geometry().right()+1, nextw->y());
-				else
-					w->move(nextw->geometry().right()+1, nextw->y());
-			}
+			if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
+				nextw->move(nextw->x(), w->geometry().bottom()+1);
+			else if(nextw->x() >= w->x())
+				nextw->move(w->geometry().right()+1, nextw->y());
 			else
-				break;
-			nextw = vlist->next();
-			if(!nextw)
-				break;
+				w->move(nextw->geometry().right()+1, nextw->y());
 		}
-		QWidget *widg = vlist->prev();
-		if(!widg)
-			break;
-		// the list current item has to be w
-		while(w->name() != widg->name())
-			widg = vlist->prev();
 	}
 
 	// Then we count the number of rows in the layout, and set their beginnings
-	for(QWidget *w = vlist->first(); w; w = vlist->next())
+	for(WidgetListIterator it(*vlist); it.current() != 0; ++it)
 	{
-		if(!same) // this widget will make a new row
-		{
+		QWidget *w = it.current();
+		WidgetListIterator it2 = it;
+		if(!same) { // this widget will make a new row
 			end = w->geometry().bottom();
 			rows.append(w->y());
 		}
-		// If same == true, it means we are in the same row as prev widget
-		// (so no need to create a new column, and we use)
 
-		QWidget *nextw = vlist->next();
-		if(!nextw)
+		// If same == true, it means we are in the same row as prev widget
+		// (so no need to create a new column)
+		++it2;
+		if(!it2.current())
 			break;
 
+		QWidget *nextw = it2.current();
 		if(nextw->y() >= end)
-		{
-			vlist->prev();
 			same = false;
-		}
-		else
-		{
-			if(same && (nextw->y() >= w->geometry().bottom()))
-				same = false;
-			else
-				same = true;
-			vlist->prev();
+		else {
+			same = !(same && (nextw->y() >= w->geometry().bottom()));
 			if(!same)
 				end = w->geometry().bottom();
 		}
@@ -882,31 +835,24 @@ Container::createGridLayout()
 	end = -10000;
 	same = false;
 	// We do the same thing for the columns
-	for(QWidget *w = hlist->first(); w; w = hlist->next())
+	for(WidgetListIterator it(*hlist); it.current() != 0; ++it)
 	{
-		if(!same)
-		{
+		QWidget *w = it.current();
+		WidgetListIterator it2 = it;
+		if(!same) {
 			end = w->geometry().right();
-			//ncol++;
 			cols.append(w->x());
 		}
 
-		QWidget *nextw = hlist->next();
-		if(!nextw)
+		++it2;
+		if(!it2.current())
 			break;
 
+		QWidget *nextw = it2.current();
 		if(nextw->x() >= end)
-		{
-			hlist->prev();
 			same = false;
-		}
-		else
-		{
-			if(same && (nextw->x() >= w->geometry().right()))
-				same = false;
-			else
-				same = true;
-			hlist->prev();
+		else {
+			same = !(same && (nextw->x() >= w->geometry().right()));
 			if(!same)
 				end = w->geometry().right();
 		}
@@ -918,8 +864,9 @@ Container::createGridLayout()
 	m_layout = (QLayout*)layout;
 
 	// .. and we fill it with widgets
-	for(QWidget *w = vlist->first(); w; w = vlist->next())
+	for(WidgetListIterator it(*vlist); it.current() != 0; ++it)
 	{
+		QWidget *w = it.current();
 		QRect r = w->geometry();
 		uint wcol=0, wrow=0, endrow=0, endcol=0;
 		uint i = 0;

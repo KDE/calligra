@@ -61,6 +61,7 @@
 #include "connectiondialog.h"
 #include "pixmapcollection.h"
 #include "events.h"
+#include "utils.h"
 
 #include "formmanager.h"
 
@@ -152,10 +153,9 @@ FormManager::createActions(KActionCollection *parent)
 	m_style->setItems(styles);
 	m_style->setCurrentItem(0);
 
-	QStringList::ConstIterator it = styles.begin();
-	QStringList::ConstIterator end = styles.end();
+	QStringList::ConstIterator endIt = styles.constEnd();
 	int idx = 0;
-	for (; it != end; ++it, ++idx)
+	for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 	{
 		if ((*it).lower() == currentStyle) {
 			m_style->setCurrentItem(idx);
@@ -388,7 +388,8 @@ FormManager::windowChanged(QWidget *w)
 				const QStringList styles = m_style->items();
 
 				int idx = 0;
-				for (QStringList::ConstIterator it = styles.begin(); it != styles.end(); ++it, ++idx)
+				QStringList::ConstIterator endIt = styles.constEnd();
+				for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 				{
 					if ((*it).lower() == currentStyle) {
 						kdDebug() << "Updating the style to " << currentStyle << endl;
@@ -421,7 +422,8 @@ FormManager::windowChanged(QWidget *w)
 			const QStringList styles = m_style->items();
 
 			int idx = 0;
-			for (QStringList::ConstIterator it = styles.begin(); it != styles.end(); ++it, ++idx)
+			QStringList::ConstIterator endIt = styles.constEnd();
+			for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 			{
 				if ((*it).lower() == currentStyle) {
 					kdDebug() << "Updating the style to " << currentStyle << endl;
@@ -570,24 +572,7 @@ FormManager::copyWidget()
 	if(list->isEmpty())
 		return;
 
-	for(QWidget *w = list->first(); w; w = list->next())
-	{
-		QWidget *widg;
-		// If any widget in the list is a child of this widget, we remove it from the list
-		// to avoid storing twice the same widget
-		for(widg = list->first(); widg; widg = list->next())
-		{
-			if((w != widg) && (w->child(widg->name())))
-			{
-				kdDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
-				list->remove(widg);
-			}
-		}
-
-		widg = list->first();
-		while(widg != w)
-			widg = list->next();
-	}
+	removeChildrenFromList(*list);
 
 	// We clear the current clipboard
 	m_domDoc.setContent(QString(), true);

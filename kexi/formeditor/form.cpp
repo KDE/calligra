@@ -38,6 +38,7 @@
 #include "spring.h"
 #include "pixmapcollection.h"
 #include "events.h"
+#include "utils.h"
 
 #include "form.h"
 
@@ -151,23 +152,7 @@ Form::commonParentContainer(WidgetList *wlist)
 			list->append(w->parentWidget());
 	}
 
-	// For each widget in the list, we check if it is parent of one of the other widget, which we can remove then
-	for(QWidget *w = list->first(); w; w = list->next())
-	{
-		QWidget *widg;
-		for(widg = list->first(); widg; widg = list->next())
-		{
-			if((w != widg) && (w->child(widg->name()))) // == widg is a child of w
-			{
-				kdDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
-				list->remove(widg);
-			}
-		}
-
-		widg = list->first();
-		while(widg != w)
-			widg = list->next();
-	}
+	removeChildrenFromList(*list);
 
 	// one widget remains == the container we are looking for
 	if(list->count() == 1)
@@ -410,10 +395,8 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		QObjectList list = *(w->children());
 		for(QObject *obj = list.first(); obj; obj = list.next())
 		{
-			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus))
-			{
-				if(d->tabstops.findRef(c) == -1)
-				{
+			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
+				if(d->tabstops.findRef(c) == -1) {
 					d->tabstops.append(c);
 					return;
 				}
@@ -442,26 +425,26 @@ Form::autoAssignTabStops()
 
 	/// We automatically sort widget from the top-left to bottom-right corner
 	//! \todo Handle RTL layout (ie form top-right to bottom-left)
-	for(QWidget *w = list.first(); w; w = list.next())
+	for(WidgetListIterator it(list); it.current() != 0; ++it)
 	{
+		QWidget *w = it.current();
 		hlist.append(w);
 
-		QWidget *nextw = list.next();
-		while(nextw && (nextw->y() < (w->y() + 20)))
-		{
+		++it;
+		QWidget *nextw = it.current();
+		while(nextw && (nextw->y() < (w->y() + 20))) {
 			hlist.append(nextw);
-			nextw = list.next();
+			++it; nextw = it.current();
 		}
 		hlist.sort();
 
-		for(QWidget *widg = hlist.first(); widg; widg = hlist.next())
-		{
-			ObjectTreeItem *tree = d->topTree->lookup(widg->name());
+		for(WidgetListIterator it2(hlist); it2.current() != 0; ++it2) {
+			ObjectTreeItem *tree = d->topTree->lookup(it2.current()->name());
 			if(tree)
 				d->tabstops.append(tree);
 		}
 
-		nextw = list.prev();
+		--it;
 		hlist.clear();
 	}
 }

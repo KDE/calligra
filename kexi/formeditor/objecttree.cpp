@@ -211,8 +211,7 @@ ObjectTree::genName(const QString &c)
 	QString name(c + "1");
 	int i = 1;
 
-	while(lookup(name))
-	{
+	while(lookup(name)) {
 		i++;
 		name = name.left(name.length()-1) + QString::number(i);
 	}
