@@ -442,13 +442,13 @@ public:
     void setPgUpDownMovesCaret( bool b ) { m_pgUpDownMovesCaret = b; }
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
-    void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
+    void setDontCheckUpperWord(bool _b);
 
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
-    void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
+    void setDontCheckTitleCase(bool _b);
 
     bool showdocStruct() const {return  m_bShowDocStruct;}
-	void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
+    void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
 
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }

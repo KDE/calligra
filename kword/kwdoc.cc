@@ -3415,4 +3415,17 @@ void KWDocument::changeFootNoteConfig()
     slotRepaintVariable();
 }
 
+void KWDocument::setDontCheckUpperWord(bool _b)
+{
+    m_bDontCheckUpperWord=_b;
+    m_bgSpellCheck->setIgnoreUpperWords( _b);
+}
+
+void KWDocument::setDontCheckTitleCase(bool _b)
+{
+    m_bDontCheckTitleCase=_b;
+    m_bgSpellCheck->setIgnoreTitleCase( _b );
+}
+
+
 #include "kwdoc.moc"
