@@ -26,10 +26,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+#include <kexidb/driver.h>
+#include <kexidb/drivermanager.h>
 #include <kexidb/utils.h>
 
 #include "kexiproject.h"
@@ -37,6 +37,7 @@
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexipart.h"
+#include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
 #include "kexi_utils.h"
@@ -349,7 +350,7 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 	if (part->info()) {
 		KexiPart::ItemDict *dict = m_itemDictsCache[ part->info()->projectPartID() ];
 		if (!(dict && dict->remove( item.identifier() )))
-			m_unstoredItems.remove((item.mime()+" "+item.name()).latin1());//remove temp.
+			m_unstoredItems.remove(item.mime()+" "+item.name().latin1());//remove temp.
 	}
 	return true;
 }
@@ -373,7 +374,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
 			if (it.current()->name().lower()==new_name)
 				break;
 		}
-		if ( !it.current() && !m_unstoredItems[(info->mime()+" "+new_name).latin1()] )
+		if ( !it.current() && !m_unstoredItems[info->mime()+" "+new_name.latin1()] )
 			break;
 	} while (n<1000/*sanity*/);
 
@@ -388,9 +389,62 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
 	item->setName(new_name);
 	item->setCaption(new_caption);
 	item->setNeverSaved(true);
-	m_unstoredItems.insert( (info->mime()+" "+new_name).latin1(), item );
+	m_unstoredItems.insert( item->mime()+" "+item->name().latin1(), item );
 	return item;
 }
+
+bool KexiProject::createObject(KexiDialogBase *dlg)
+{
+	if (!dlg || !dlg->schemaData())
+		return false;
+	KexiPart::ItemDict* dict = items(dlg->part()->info());
+	if (!dict)
+		return false;
+
+/*	//create (temp) schema object and assign information
+	KexiDB::SchemaData sdata(dlg->part()->info()->projectPartID());
+	sdata.setName( dlg->partItem()->name() );
+	sdata.setCaption( dlg->partItem()->caption() );
+	sdata.setDescription( dlg->partItem()->description() );
+
+	part->
+		
+	dlg->saveData(sdata);*/
+//	dlg->storeObjectSchemaData();
+	dlg->storeNewData();
+
+	//item is now stored -move to dict for stored items
+	m_unstoredItems.take( dlg->partItem()->mime()+" "+dlg->partItem()->name().latin1() );
+	dict->insert( dlg->partItem()->identifier(), dlg->partItem() );
+
+
+//	SchemaData *sdata = new KexiDB::SchemaData &
+//	bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
+
+/*
+	KexiDB::TableSchema *ts = m_connection->tableSchema("kexi__objects");
+	if (!ts)
+		return false;
+		
+	KexiDB::FieldList *fl = ts->subList("o_type", "o_name", "o_caption");//TODO: "o_help");
+	if (!fl)
+		return false;
+		
+	if (!m_connection->insertRecord(
+		*fl, QVariant(info->projectPartID()), 
+		QVariant(dlg->name()), QVariant(dlg->caption()) ))
+		return false;
+
+	delete fl;
+
+	KexiPart::Item *it = new KexiPart::Item();
+	it->setIdentifier(project()->dbConnection()->lastInsertedAutoIncValue("o_id", "kexi__objects"));
+	it->setMime(info->mime());
+	it->setName(dlg->name());
+	it->setCaption(dlg->caption());*/
+	return true;
+}
+
 
 #include "kexiproject.moc"
 

@@ -27,7 +27,7 @@
 
 KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name)
  : QObject(parent, type_name.latin1())
-	,QDict<KexiProperty>(101, false)
+	,QAsciiDict<KexiProperty>(101, false)
 	,m_typeName( type_name )
 {
 	setAutoDelete( true );
@@ -39,7 +39,7 @@ KexiPropertyBuffer::~KexiPropertyBuffer()
 }
 
 void
-KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &value)
+KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &value)
 {
 	KexiProperty *prop = find(property);
 	if (!prop)
@@ -84,7 +84,7 @@ KexiPropertyBuffer::add(KexiProperty *property)
 void KexiPropertyBuffer::clear()
 {
 	m_list.clear();
-	QDict<KexiProperty>::clear();
+	QAsciiDict<KexiProperty>::clear();
 }
 
 void KexiPropertyBuffer::debug()

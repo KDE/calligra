@@ -28,7 +28,7 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 	m_ptr = ptr;
 
 	m_groupName = m_ptr->name();
-	m_mime = m_ptr->property("X-Kexi-TypeMime").toString();
+	m_mime = m_ptr->property("X-Kexi-TypeMime").toCString();
 	m_groupIcon = m_ptr->property("X-Kexi-GroupIcon").toString();
 	m_itemIcon = m_ptr->property("X-Kexi-ItemIcon").toString();
 	m_objectName = m_ptr->property("X-Kexi-TypeName").toString();

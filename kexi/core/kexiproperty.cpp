@@ -137,7 +137,7 @@ class KexiProperty::KexiPropertyListData
 
 //===================================================
 
-KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &desc)
+KexiProperty::KexiProperty(const QCString &name, QVariant value, const QString &desc)
 {
 	m_name = name;
 //	m_value = value;
@@ -145,8 +145,8 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &d
 	init(value);
 }
 
-KexiProperty::KexiProperty(const QString &name, const QString &value,
- const QStringList &key_list, const QStringList &name_list,
+KexiProperty::KexiProperty(const QCString &name, const QString &value, 
+ const QStringList &key_list, const QStringList &name_list, 
  const QString &desc)
 {
 	m_name = name;
@@ -425,7 +425,7 @@ QString KexiProperty::valueText() const
 	return m_list->names[ idx ];
 }
 
-void KexiProperty::setChildValue(const QString& childName, const QVariant &v, bool saveOldValue)
+void KexiProperty::setChildValue(const QCString& childName, const QVariant &v, bool saveOldValue)
 {
 	KexiProperty * prop = child(childName);
 	if (!prop) {
@@ -435,7 +435,7 @@ void KexiProperty::setChildValue(const QString& childName, const QVariant &v, bo
 	prop->setValue(v, saveOldValue);
 }
 
-void KexiProperty::updateValueForChild(const QString& childName,
+void KexiProperty::updateValueForChild(const QCString& childName, 
 	const QVariant &v, bool saveOldValue)
 {
 	debug();
@@ -561,7 +561,7 @@ bool KexiProperty::isVisible() const
 	return m_visible;
 }
 
-KexiProperty* KexiProperty::child(const QString& name)
+KexiProperty* KexiProperty::child(const QCString& name)
 {
 	if (!m_children_dict)
 		return 0;
@@ -570,7 +570,7 @@ KexiProperty* KexiProperty::child(const QString& name)
 
 void KexiProperty::debug()
 {
-	QString dbg = "KexiProperty( name='" + m_name + "' desc='" + m_desc
+	QString dbg = "KexiProperty( name='" + QString(m_name) + "' desc='" + m_desc 
 		+ "' val=" + (m_value.isValid() ? m_value.toString() : "<INVALID>");
 	if (!m_oldValue.isValid())
 		dbg += (", oldVal='" + m_oldValue.toString() + "'");

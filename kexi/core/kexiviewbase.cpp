@@ -22,6 +22,9 @@
 #include "keximainwindow.h"
 #include "kexidialogbase.h"
 #include "kexipropertybuffer.h"
+#include "kexiproject.h"
+
+#include <kexidb/connection.h>
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : QWidget(parent, name)
@@ -93,11 +96,41 @@ void KexiViewBase::setDirty(bool set)
 		m_dialog->dirtyChanged();
 }
 
-bool KexiViewBase::saveData()
+/*bool KexiViewBase::saveData()
 {
 	//TODO....
 
 	//finally:
+	setDirty(false);
+	return true;
+}*/
+
+/*virtual*/
+KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)
+{
+	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData(sdata);
+
+	if (!m_mainWin->project()->dbConnection()
+			->storeObjectSchemaData( *new_schema, true /*newObject*/ ))
+	{
+		delete new_schema;
+		new_schema=0;
+	}
+	else {
+		setDirty(false);
+	}
+	return new_schema;
+}
+
+bool KexiViewBase::storeData()
+{
+	if (!m_dialog->schemaData())
+		return false;
+	if (!m_mainWin->project()->dbConnection()
+			->storeObjectSchemaData( *m_dialog->schemaData(), false /*existing object*/ ))
+	{
+		return false;
+	}
 	setDirty(false);
 	return true;
 }

@@ -68,6 +68,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		KexiMainWindow	*mainWin() { return m_parentWindow; }
 
+		//js todo: maybe remove this since it's often the same as partItem()->identifier()?:
 		void	setDocID(int id);
 		int	docID() { return m_docID; }
 //		KInstance *instance();
@@ -125,17 +126,19 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 flag from internal structures that may be changed. */
 		virtual bool dirty() const;
 
-		/*! \return true, if this dialog's contents were never saved.
+		/*! \return true, if this dialog's data were never saved.
 		 If it's true we're usually try to ask a user if the dialog's 
 		 data should be saved somewhere. After dialog construction,
 		 "neverSaved" flag is set to appropriate value.
+		 KexiPart::Item::neverSaved() is reused.
 		*/
-		bool neverSaved();
+		bool neverSaved() const;
 
 		/*! \return property buffer provided by a current view,
 		 or NULL if there is no view set (or the view has no buffer assgned). */
 		KexiPropertyBuffer *propertyBuffer();
 
+		KexiDB::SchemaData* schemaData() const { return m_schemaData; }
 		/*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
 //		QString caption() const;
 
@@ -145,9 +148,19 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		void updateCaption();
 
-		/*! Tells this dialog to save changes to the backend.
+		/*! Tells this dialog to save changes of the existin object
+		 to the backend. \sa storeNewData()
 		 \return true on success. */
-		bool saveData();
+		bool storeData();
+
+		/*! Tells this dialog to create and store data of the new object
+		 to the backend.
+		 Object's schema data has been never stored, 
+		 so it is created automatically, using information obtained 
+		 form part item. On success, part item's ID is updated to new value,
+		 and m_schemaData is set. \sa schemaData().
+		 \return true on success. */
+		bool storeNewData();
 
 	signals:
 		void updateContextHelp();
@@ -185,7 +198,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		KexiPart::Item *m_item;
 		QWidgetStack *m_stack;
 		QString m_origCaption; //helper
-		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
+		KexiDB::SchemaData* m_schemaData;
+//		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
 
 		friend class KexiMainWindow;
 //		friend class KexiMainWindowImpl;

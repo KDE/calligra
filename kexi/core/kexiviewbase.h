@@ -28,6 +28,10 @@ class KexiMainWindow;
 class KexiDialogBase;
 class KexiPropertyBuffer;
 
+namespace KexiDB {
+	class SchemaData;
+}
+
 class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 {
 	Q_OBJECT
@@ -50,11 +54,6 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
 	public slots:
-		/*! Tells this view to save data changes to the backend. 
-		 Called by KexiDialogBase::saveData().
-		 Default implementation does nothing, returns true value.
-		 Reimpelment this for your needs. Should return true on success. */
-		virtual bool saveData();
 
 	signals:
 		//! emitted when the view is about to close
@@ -101,12 +100,41 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 so property editor contents need to be completely replaced. */
 		void propertyBufferSwitched();
 
+		/*! Tells this dialog to create and store data of the new object
+		 pointed by \a sdata on the backend. 
+		 Called by KexiDialogBase::storeNewData().
+		 Default implementation:
+		 - makes a deep copy of \a sdata
+		 - stores object schema data \sdata in 'kexi__objects' internal table
+		   using Connection::storeObjectSchemaData().
+		 Reimpelment this for your needs. 
+		 Requirements: 
+		 - deep copy of \a sdata should be made
+		 - schema data should be created at the backend
+		   using Connection::storeObjectSchemaData() or more specialized 
+		   method. For example, KexiAlterTableDialog 
+		   uses Connection::createTable(TableSchema) for this 
+		   (tableschema is SchemaData subclass) to store more information than 
+		   just a schem adata. You should use such subclasses if needed too.
+		 Should return newly created schema data obejct on success. */
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+
+		/*! Tells this view to store data changes on the backend. 
+		 Called by KexiDialogBase::storeData().
+		 Default implementation:
+		 - makes a deep copy of \a sdata
+		 - stores object schema data \sdata in 'kexi__objects' internal table
+		   using Connection::storeObjectSchemaData().
+		 Reimpelment this for your needs. Should return true on success. 
+		 \sa storeNewData() */
+		virtual bool storeData();
+
 		QString m_defaultIconName;
 
 		KexiMainWindow *m_mainWin;
 
-	private:
 		KexiDialogBase *m_dialog;
+	private:
 		bool m_dirty : 1;
 
 	friend class KexiDialogBase;

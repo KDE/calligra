@@ -41,7 +41,8 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
  , m_origCaption(caption)
- , m_neverSaved(false)
+ , m_schemaData(0)
+// , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
 	m_currentViewMode = 0; //override this!
@@ -200,16 +201,18 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 {
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
 	KexiViewBase *view = selectedView();
-	if (view)
-		view->beforeSwitchTo(viewMode);
 
 	if (m_currentViewMode == viewMode)
 		return true;
 	if (!supportsViewMode(viewMode))
 		return false;
 
-//	KexiViewBase *view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
-//		? static_cast<KexiViewBase*>(m_stack->widget(viewMode)) : 0;
+	if (view)
+		view->beforeSwitchTo(viewMode);
+
+	//get view for viewMode
+	view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
+		? static_cast<KexiViewBase*>(m_stack->widget(viewMode)) : 0;
 	if (!view) {
 		//ask the part to create view for the new mode
 		view = m_part->createView(m_stack, this, *m_item, viewMode);
@@ -301,12 +304,43 @@ void KexiDialogBase::updateCaption()
 	}
 }
 
-bool KexiDialogBase::saveData()
+bool KexiDialogBase::neverSaved() const 
 {
+	return m_item ? m_item->neverSaved() : true;
+}
+
+bool KexiDialogBase::storeNewData()
+{
+	if (!neverSaved())
+		return false;
+	KexiViewBase *v = selectedView();
+	if (m_schemaData)
+		return false; //schema must not exist
+	if (!v)
+		return false;
+	//create schema object and assign information
+	KexiDB::SchemaData sdata(m_part->info()->projectPartID());
+	sdata.setName( m_item->name() );
+	sdata.setCaption( m_item->caption() );
+	sdata.setDescription( m_item->description() );
+
+	m_schemaData = v->storeNewData(sdata);
+	if (!m_schemaData)
+		return false;
+	//new schema data has now ID updated to a unique value 
+	//-assign that to item's identifier
+	m_item->setIdentifier( m_schemaData->id() );
+	return true;
+}
+
+bool KexiDialogBase::storeData()
+{
+	if (neverSaved())
+		return false;
 	KexiViewBase *v = selectedView();
 	if (!v)
-		return true;
-	return v->saveData();
+		return false;
+	return v->storeData() != 0;
 }
 
 #include "kexidialogbase.moc"

@@ -23,7 +23,7 @@
 #define KEXIPROPERTY_H
 
 #include <qvariant.h>
-#include <qdict.h>
+#include <qasciidict.h>
 #include <qguardedptr.h>
 
 class QObject;
@@ -36,7 +36,7 @@ class KexiPropertyBuffer;
     
     Create a property :
     \code
-    property = KexiProperty(name, value); // name is a QString, value is whatever type QVariant supports
+    property = KexiProperty(name, value); // name is a QCString, value is whatever type QVariant supports
     \endcode
     
     There are two exceptions :
@@ -52,7 +52,7 @@ class KexiPropertyBuffer;
 class KEXICORE_EXPORT KexiProperty
 {
 	public:
-		typedef QDict<KexiProperty> Dict;
+		typedef QAsciiDict<KexiProperty> Dict;
 		typedef QPtrList<KexiProperty> List;
 		typedef QPtrListIterator<KexiProperty> ListIterator;
 //		typedef QMap<QString,KexiProperty> Map;
@@ -62,7 +62,7 @@ class KEXICORE_EXPORT KexiProperty
 
 		/*! Creates a simple property with \a name as name, \a value as value 
 		 and \a as i18n'ed description. */
-		KexiProperty(const QString &name, QVariant value, const QString &desc = QString::null);
+		KexiProperty(const QCString &name, QVariant value, const QString &desc = QString::null);
 
 		/*! Creates a list property with \a name as name, \a value as value 
 		  and \a key_list as the list of all possible keys. Value must be one of the keys.
@@ -70,7 +70,7 @@ class KEXICORE_EXPORT KexiProperty
 		  instead of keys.
 		  The user will be able to choose a value from \a key_list.
 		*/
-		KexiProperty(const QString &name, const QString &value, 
+		KexiProperty(const QCString &name, const QString &value, 
 		 const QStringList &key_list, const QStringList &name_list, 
 		 const QString &desc = QString::null);
 
@@ -100,10 +100,10 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty::List* children() const { return m_children_list; }
 
 		/*! \return a child property for \a name, or NULL if there is not property with that name. */
-		KexiProperty *child(const QString& name);
+		KexiProperty *child(const QCString& name);
 
 		//! \return property name.
-		QString		name() const { return m_name; }
+		QCString		name() const { return m_name; }
 
 		//! \return property value.
 		QVariant	value() const;
@@ -188,7 +188,7 @@ class KEXICORE_EXPORT KexiProperty
 
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue), 
 		 but \a v is set for the child named \a childName. */
-		void setChildValue(const QString& childName, const QVariant &v, 
+		void setChildValue(const QCString& childName, const QVariant &v, 
 			bool saveOldValue);
 
 		/*! Internal: Updates this property value using \a v value coming from a child
@@ -198,13 +198,13 @@ class KEXICORE_EXPORT KexiProperty
 		 Example: if Rect.x property is cahnged in the child,
 		 the child calls parent->updateValueForChild("x", value_of_x). 
 		*/
-		void updateValueForChild(const QString& childName, const QVariant &v, 
+		void updateValueForChild(const QCString& childName, const QVariant &v, 
 			bool saveOldValue);
 
 //	private:
 		void init(QVariant value);
 
-		QString		m_name;
+		QCString		m_name;
 		QString		m_desc;
 		QVariant	m_value;
 		QVariant	m_oldValue;

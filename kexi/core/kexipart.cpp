@@ -77,7 +77,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //	QString capt = QString("%1 : %2").arg(item.name()).arg(instanceName());
 	KexiDialogBase *dlg = new KexiDialogBase(win);
 	dlg->m_supportedViewModes = m_supportedViewModes;
-	dlg->m_neverSaved = item.neverSaved();
+//	dlg->m_neverSaved = item.neverSaved();
 //	dlg->m_currentViewMode = viewMode;
 	dlg->m_part = this;
 	dlg->m_item = &item;
@@ -122,6 +122,7 @@ void Part::slotCreate()
 {
 	emit newObjectRequest( m_info );
 }
+
 
 //-------------------------------------------------------------------------
 

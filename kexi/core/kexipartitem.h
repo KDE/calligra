@@ -49,14 +49,17 @@ class KEXICORE_EXPORT Item
 		int identifier() const { return m_id; }
 		void setIdentifier(int id) { m_id = id; }
 
-		QString	mime() const { return m_mime; }
-		void setMime(const QString &mime) { m_mime = mime; }
+		QCString mime() const { return m_mime; }
+		void setMime(const QCString &mime) { m_mime = mime; }
 
-		QString	name() const { return m_name; }
+		QString name() const { return m_name; }
 		void setName(const QString &name) { m_name = name; }
 
-		QString	caption() const { return m_caption; }
+		QString caption() const { return m_caption; }
 		void setCaption(const QString &c) { m_caption = c; }
+
+		QString description() const { return m_desc; }
+		void setDescription(const QString &d) { m_desc = d; }
 
 		/*! \return "neverSaved" flag for this item what mean 
 		 that is used when new item is created in-memory-only,
@@ -71,11 +74,11 @@ class KEXICORE_EXPORT Item
 
 		bool isNull() const { return m_id==0; }
 
-
 	private:
-		QString		m_mime;
-		QString 	m_caption;
+		QCString		m_mime;
 		QString		m_name;
+		QString 	m_caption;
+		QString 	m_desc;
 		int		m_id;
 		bool m_neverSaved : 1;
 };

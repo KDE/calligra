@@ -54,16 +54,16 @@ QString Kexi::string2Identifier(const QString &s)
 		return id;
 //		return "_";
 	id.replace(' ',"_"); 
-	QChar c = id[0].upper();
-	if (!(c>='A' && c<='Z') && c!='_')
+	QChar c = id[0].lower();
+	if (!(c>='a' && c<='z') && c!='_')
 		r="_";
 	r+=id[0];
 	for (uint i=1; i<id.length(); i++) {
-		QChar c = id.at(i).upper();
-		if (!(c>='A' && c<='Z') && !(c>='0' && c<='9') && c!='_')
+		QChar c = id.at(i).lower();
+		if (!(c>='a' && c<='z') && !(c>='0' && c<='9') && c!='_')
 			r+='_';
 		else
-			r+=id.at(i);
+			r+=c;
 	}
 	return r;
 }

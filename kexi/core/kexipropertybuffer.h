@@ -32,7 +32,7 @@
     \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
     \sa KexiProperty to see how to create properties.
 **/
-class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProperty>
+class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::Dict
 {
 	Q_OBJECT
 
@@ -58,7 +58,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 		/* Change the value of property whose key is \a property to \a value.
 		  By default, it only calls KexiProperty::setValue().
 		*/
-		virtual void changeProperty(const QString &property, const QVariant &value);
+		virtual void changeProperty(const QCString &property, const QVariant &value);
 
 		/* A name of this property buffer type, that is usable when
 		 we want to know if two property buffer objects have the same type.

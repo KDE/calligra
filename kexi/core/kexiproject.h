@@ -136,6 +136,16 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 \return newly created part item or NULL on any error. */
 		KexiPart::Item* createPartItem(KexiPart::Info *info);
 
+		/*! Creates object using data provided by \a dlg dialog. 
+		 Dialog's \a item (KexiDialog::partItem()) must not be stored 
+		 (KexiPart::Item::neverStored()==false) and created 
+		 by KexiProject::createPartItem().
+		 Identifier of the item will be updated to a final value 
+		 (stored in the backend), because previously there was temporary one set.
+		 \return true for successfully created object or false on any error. */
+		bool createObject(KexiDialogBase *dlg);
+//		bool createObject(KexiMainWindow *wnd, KexiPart::Item& item);
+
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
 

@@ -47,7 +47,7 @@ class KEXICORE_EXPORT Info
 		/**
 		 * @return the internal mime of this part
 		 */
-		inline QString mime() const { return m_mime; }
+		inline QCString mime() const { return m_mime; }
 
 		/**
 		 * @return the icon for groups
@@ -110,7 +110,7 @@ class KEXICORE_EXPORT Info
 //		Part 			*m_instance;
 
 		QString m_groupName;
-		QString m_mime;
+		QCString m_mime;
 		QString m_groupIcon;
 		QString m_itemIcon;
 		QString m_objectName;
