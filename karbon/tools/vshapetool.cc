@@ -46,19 +46,20 @@ VShapeTool::eventFilter( KarbonView* view, QEvent* event )
 
 		VCommand* cmd = 0L;
 
-		// adjust to real viewport contents instead of raw mouse coords
+		// adjust to real viewport contents instead of raw mouse coords:
 		QPoint p = view->canvasWidget()->viewportToContents( m_p );
 		cmd = createCmd(
-			p.x() / view->zoomFactor(), p.y() / view->zoomFactor(),
-			m_d1 / view->zoomFactor(), m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
+			p.x() / view->zoomFactor(),
+			p.y() / view->zoomFactor(),
+			m_d1 / view->zoomFactor(),
+			m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
 
 		if( cmd )
-			part()->addCommand( cmd );
+			part()->addCommand( cmd, true );
 		else
 		{
 			// erase old object:
 			drawTemporaryObject( view, m_p, m_d1, m_d2 );
-			part()->repaintAllViews();
 		}
 
 		m_isDragging = false;

@@ -116,14 +116,15 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		if( m_state == moving )
 		{
 			m_state = normal;
-			return
+			part()->addCommand(
 				new VMCmdTranslate(
 					part(),
 					part()->selection(),
 					qRound( view->zoomFactor() * lp.x() - fp.x() ),
-					qRound( view->zoomFactor() * lp.y() - fp.y() ) );
+					qRound( view->zoomFactor() * lp.y() - fp.y() ) ),
+				true );
 
-			part()->repaintAllViews();
+//			part()->repaintAllViews();
 		}
 		else
 		{
@@ -138,6 +139,9 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 					qRound( view->zoomFactor() * lp.y() ) ).normalize(),
 				view->zoomFactor(),
 				true );
+				
+			if( part()->selection().count() > 0  )
+				part()->repaintAllViews();
 		}
 
 		m_isDragging = false;

@@ -45,7 +45,7 @@ public:
 	void insertObject( const VObject* object );	// insert a new vobject:
 
 	// insert a command into the undo/redo-history:
-	void addCommand( VCommand* cmd );
+	void addCommand( VCommand* cmd, bool repaint = false );
 
 	// remove all vobjects which are marked "deleted" and clear command-history:
 	void purgeHistory();

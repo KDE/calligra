@@ -223,11 +223,13 @@ KarbonPart::deselectAllObjects()
 }
 
 void
-KarbonPart::addCommand( VCommand* cmd )
+KarbonPart::addCommand( VCommand* cmd, bool repaint  )
 {
 	m_commandHistory->addCommand( cmd );
 	setModified( true );
-	repaintAllViews();
+
+	if( repaint )
+		repaintAllViews();
 }
 
 void
