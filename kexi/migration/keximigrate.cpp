@@ -190,7 +190,7 @@ bool KexiMigrate::progressInitialise() {
 
 		if(drv_getTableSize(*it, size)) {
 			kdDebug() << "KexiMigrate::progressInitialise() - table: " << *it 
-			          << "size: " << size << endl;
+			          << "size: " << (ulong)size << endl;
 			sum += size;
 		} else {
 			success = false;
@@ -198,7 +198,7 @@ bool KexiMigrate::progressInitialise() {
 
 	}
 
-	kdDebug() << "KexiMigrate::progressInitialise() - job size: " << sum << endl;
+	kdDebug() << "KexiMigrate::progressInitialise() - job size: " << (ulong)sum << endl;
 	emit progressPercent(0);
 	progressDone = 0;
 	progressTotal = sum;
@@ -212,9 +212,9 @@ void KexiMigrate::progressDoneRow() {
 	if (progressDone >= progressNextReport) {
 		int percent = (progressDone+1) * 100 / progressTotal;
 		progressNextReport = ((percent + 1) * progressTotal) / 100;
-		kdDebug() << "KexiMigrate::progressDoneRow(): " << progressDone << "/"
-		          << progressTotal << " (" << percent << "%) next report at " 
-		          << progressNextReport << endl;
+		kdDebug() << "KexiMigrate::progressDoneRow(): " << (ulong)progressDone << "/"
+		          << (ulong)progressTotal << " (" << percent << "%) next report at " 
+		          << (ulong)progressNextReport << endl;
 		emit progressPercent(percent);
 	}
 }

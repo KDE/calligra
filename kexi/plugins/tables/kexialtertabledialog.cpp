@@ -227,7 +227,6 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 	}
 	prop = &buf["length"];
 	visible = (fieldType == KexiDB::Field::Text);
-	kdDebug() << buf["subType"].value() << endl;
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		prop->setValue( visible ? KexiDB::Field::defaultTextLength() : 0, false );
