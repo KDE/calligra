@@ -38,30 +38,16 @@ public:
     virtual DCOPObject* dcopObject();
 
     KPFreehandObject &operator=( const KPFreehandObject & );
-    virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
-    virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
 
     virtual ObjType getType() const { return OT_FREEHAND; }
     virtual QString getTypeString() const { return i18n("Freehand"); }
-    virtual LineEnd getLineBegin() const { return lineBegin; }
-    virtual LineEnd getLineEnd() const { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load( const QDomElement &element );
-    virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size )
-        { setSize( _size.width(), _size.height() ); }
-    virtual void flip(bool horizontal );
-    virtual void closeObject(bool close);
-    bool isClosed()const;
-
+    
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );
-
-    void updatePoints( double _fx, double _fy );
-
-    LineEnd lineBegin, lineEnd;
 };
 
 #endif

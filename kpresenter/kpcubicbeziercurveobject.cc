@@ -34,22 +34,18 @@ using namespace std;
 KPCubicBezierCurveObject::KPCubicBezierCurveObject()
     : KPPointObject()
 {
-    lineBegin = L_NORMAL;
-    lineEnd = L_NORMAL;
 }
 
 KPCubicBezierCurveObject::KPCubicBezierCurveObject( const KoPointArray &_controlPoints,
                                                     const KoPointArray &_allPoints,
                                                     const KoSize &_size, const QPen &_pen,
                                                     LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPPointObject( _pen )
+    : KPPointObject( _pen, _lineBegin, _lineEnd )
 {
-    controlPoints = KoPointArray( _controlPoints );
-    points = KoPointArray( _allPoints );
+    points = KoPointArray( _controlPoints );
+    allPoints = KoPointArray( _allPoints );
 
     ext = _size;
-    lineBegin = _lineBegin;
-    lineEnd = _lineEnd;
 }
 
 KPCubicBezierCurveObject &KPCubicBezierCurveObject::operator=( const KPCubicBezierCurveObject & )
@@ -66,69 +62,15 @@ DCOPObject* KPCubicBezierCurveObject::dcopObject()
 
 QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment = KPShadowObject::save( doc,offset );
-    if ( !controlPoints.isNull() ) {
-        QDomElement elemPoints = doc.createElement( "POINTS" );
-        KoPointArray::ConstIterator it;
-        for ( it = controlPoints.begin(); it != controlPoints.end(); ++it ) {
-            QDomElement elemPoint = doc.createElement( "Point" );
-            KoPoint point = (*it);
-            elemPoint.setAttribute( "point_x", point.x() );
-            elemPoint.setAttribute( "point_y", point.y() );
-
-            elemPoints.appendChild( elemPoint );
-        }
-        fragment.appendChild( elemPoints );
-    }
-
-    if ( lineBegin != L_NORMAL )
-        fragment.appendChild( KPObject::createValueElement( "LINEBEGIN", static_cast<int>( lineBegin ), doc ) );
-
-    if ( lineEnd != L_NORMAL )
-        fragment.appendChild( KPObject::createValueElement( "LINEEND", static_cast<int>( lineEnd ), doc ) );
-
-    return fragment;
+    return KPPointObject::save( doc,offset );
 }
 
 double KPCubicBezierCurveObject::load(const QDomElement &element)
 {
-    double offset=KPShadowObject::load( element );
-    QDomElement e = element.namedItem( "POINTS" ).toElement();
-    if ( !e.isNull() ) {
-        QDomElement elemPoint = e.firstChild().toElement();
-        unsigned int index = 0;
-        while ( !elemPoint.isNull() ) {
-            if ( elemPoint.tagName() == "Point" ) {
-                double tmpX = 0;
-                double tmpY = 0;
-                if( elemPoint.hasAttribute( "point_x" ) )
-                    tmpX = elemPoint.attribute( "point_x" ).toDouble();
-                if( elemPoint.hasAttribute( "point_y" ) )
-                    tmpY = elemPoint.attribute( "point_y" ).toDouble();
+    double offset = KPPointObject::load( element );
+    
+    allPoints = getCubicBezierPointsFrom( points );
 
-                controlPoints.putPoints( index, 1, tmpX,tmpY );
-            }
-            elemPoint = elemPoint.nextSibling().toElement();
-            ++index;
-        }
-        points = getCubicBezierPointsFrom( controlPoints );
-    }
-
-    e = element.namedItem( "LINEBEGIN" ).toElement();
-    if( !e.isNull() ) {
-        int tmp = 0;
-        if( e.hasAttribute( "value" ) )
-            tmp = e.attribute( "value" ).toInt();
-        lineBegin = static_cast<LineEnd>( tmp );
-    }
-
-    e = element.namedItem( "LINEEND" ).toElement();
-    if( !e.isNull() ) {
-        int tmp = 0;
-        if( e.hasAttribute( "value" ) )
-            tmp = e.attribute( "value" ).toInt();
-        lineEnd = static_cast<LineEnd>( tmp );
-    }
     return offset;
 }
 
@@ -148,7 +90,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
     }
     _painter->setPen( pen2 );
 
-    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
+    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
     _painter->drawPolyline( pointArray );
 
     if ( lineBegin != L_NORMAL && !drawContour && !isClosed()) {
@@ -192,23 +134,14 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
     }
 }
 
-void KPCubicBezierCurveObject::setSize( double _width, double _height )
-{
-    KoSize origSize( ext );
-    KPObject::setSize( _width, _height );
-
-    double fx = ext.width() / origSize.width();
-    double fy = ext.height() / origSize.height();
-
-    updatePoints( fx, fy );
-}
-
 void KPCubicBezierCurveObject::updatePoints( double _fx, double _fy )
 {
+    KPPointObject::updatePoints( _fx, _fy );
+
     int index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
+    for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
@@ -216,19 +149,7 @@ void KPCubicBezierCurveObject::updatePoints( double _fx, double _fy )
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-    points = tmpPoints;
-
-    index = 0;
-    tmpPoints = KoPointArray();
-    for ( it = controlPoints.begin(); it != controlPoints.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() * _fx;
-        double tmpY = point.y() * _fy;
-
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
-    controlPoints = tmpPoints;
+    allPoints = tmpPoints;
 }
 
 KoPointArray KPCubicBezierCurveObject::getCubicBezierPointsFrom( const KoPointArray &_pointArray )
@@ -296,14 +217,15 @@ KoPointArray KPCubicBezierCurveObject::getCubicBezierPointsFrom( const KoPointAr
 
 void KPCubicBezierCurveObject::flip(bool horizontal )
 {
-    KPObject::flip( horizontal );
+    KPPointObject::flip( horizontal );
+
     KoPointArray tmpPoints;
     int index = 0;
     if ( horizontal )
     {
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
-        for ( it = controlPoints.begin(); it != controlPoints.end(); ++it )
+        for ( it = allPoints.begin(); it != allPoints.end(); ++it )
         {
             KoPoint point = (*it);
             if ( point.y()> horiz )
@@ -312,37 +234,12 @@ void KPCubicBezierCurveObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
             ++index;
         }
-        controlPoints = tmpPoints;
-
-        index=0;
-        for ( it = points.begin(); it != points.end(); ++it )
-        {
-            KoPoint point = (*it);
-            if ( point.y()> horiz )
-                tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
-            else
-                tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
-            ++index;
-        }
-        points = tmpPoints;
     }
     else
     {
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
-        for ( it = controlPoints.begin(); it != controlPoints.end(); ++it )
-        {
-            KoPoint point = (*it);
-            if ( point.x()> vert )
-                tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
-            else
-                tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
-            ++index;
-        }
-        controlPoints = tmpPoints;
-
-        index = 0;
-        for ( it = points.begin(); it != points.end(); ++it )
+        for ( it = allPoints.begin(); it != allPoints.end(); ++it )
         {
             KoPoint point = (*it);
             if ( point.y()> vert )
@@ -351,17 +248,17 @@ void KPCubicBezierCurveObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
             ++index;
         }
-        points = tmpPoints;
-
     }
+
+    allPoints = tmpPoints;
 }
 
 void KPCubicBezierCurveObject::closeObject(bool _close)
 {
-    points = getCloseObject( points, _close, isClosed() );
+    allPoints = getCloseObject( allPoints, _close, isClosed() );
 }
 
 bool KPCubicBezierCurveObject::isClosed()const
 {
-    return ( points.at(0) == points.at(points.count()-1) );
+    return ( allPoints.at(0) == allPoints.at(allPoints.count()-1) );
 }

@@ -42,20 +42,11 @@ public:
     KPQuadricBezierCurveObject &operator=( const KPQuadricBezierCurveObject & );
     virtual DCOPObject* dcopObject();
 
-    virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
-    virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
-
     virtual ObjType getType() const { return OT_QUADRICBEZIERCURVE; }
     virtual QString getTypeString() const { return i18n("Quadric Bezier Curve"); }
-    virtual LineEnd getLineBegin() const { return lineBegin; }
-    virtual LineEnd getLineEnd() const { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-
-    virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size )
-        { setSize( _size.width(), _size.height() ); }
 
     virtual void flip(bool horizontal );
     virtual void closeObject(bool close);
@@ -65,12 +56,11 @@ protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );
 
-    void updatePoints( double _fx, double _fy );
+    virtual void updatePoints( double _fx, double _fy );
 
     KoPointArray getQuadricBezierPointsFrom( const KoPointArray &_pointArray );
 
-    KoPointArray controlPoints;
-    LineEnd lineBegin, lineEnd;
+    KoPointArray allPoints;
 };
 
 #endif

@@ -32,18 +32,14 @@ using namespace std;
 KPFreehandObject::KPFreehandObject()
     : KPPointObject()
 {
-    lineBegin = L_NORMAL;
-    lineEnd = L_NORMAL;
 }
 
 KPFreehandObject::KPFreehandObject( const KoPointArray &_points, const KoSize &_size,
                                     const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPPointObject( _pen )
+    : KPPointObject( _pen, _lineBegin, _lineEnd )
 {
     points = KoPointArray( _points );
     ext = _size;
-    lineBegin = _lineBegin;
-    lineEnd = _lineEnd;
 }
 
 KPFreehandObject &KPFreehandObject::operator=( const KPFreehandObject & )
@@ -60,70 +56,12 @@ DCOPObject* KPFreehandObject::dcopObject()
 
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 {
-    QDomDocumentFragment fragment = KPShadowObject::save( doc, offset );
-    if ( !points.isNull() ) {
-        QDomElement elemPoints = doc.createElement( "POINTS" );
-        KoPointArray::ConstIterator it;
-        for ( it = points.begin(); it != points.end(); ++it ) {
-            QDomElement elemPoint = doc.createElement( "Point" );
-            KoPoint point = (*it);
-            elemPoint.setAttribute( "point_x", point.x() );
-            elemPoint.setAttribute( "point_y", point.y() );
-
-            elemPoints.appendChild( elemPoint );
-        }
-        fragment.appendChild( elemPoints );
-    }
-
-    if ( lineBegin != L_NORMAL )
-        fragment.appendChild( KPObject::createValueElement( "LINEBEGIN", static_cast<int>( lineBegin ), doc ) );
-
-    if ( lineEnd != L_NORMAL )
-        fragment.appendChild( KPObject::createValueElement( "LINEEND", static_cast<int>( lineEnd ), doc ) );
-
-    return fragment;
+    return KPPointObject::save( doc, offset );
 }
 
 double KPFreehandObject::load( const QDomElement &element )
 {
-    double offset=KPShadowObject::load( element );
-
-    QDomElement e = element.namedItem( "POINTS" ).toElement();
-    if ( !e.isNull() ) {
-        QDomElement elemPoint = e.firstChild().toElement();
-        unsigned int index = 0;
-        while ( !elemPoint.isNull() ) {
-            if ( elemPoint.tagName() == "Point" ) {
-                double tmpX = 0;
-                double tmpY = 0;
-                if( elemPoint.hasAttribute( "point_x" ) )
-                    tmpX = elemPoint.attribute( "point_x" ).toDouble();
-                if( elemPoint.hasAttribute( "point_y" ) )
-                    tmpY = elemPoint.attribute( "point_y" ).toDouble();
-
-                points.putPoints( index, 1, tmpX,tmpY );
-            }
-            elemPoint = elemPoint.nextSibling().toElement();
-            ++index;
-        }
-    }
-
-    e = element.namedItem( "LINEBEGIN" ).toElement();
-    if( !e.isNull() ) {
-        int tmp = 0;
-        if( e.hasAttribute( "value" ) )
-            tmp = e.attribute( "value" ).toInt();
-        lineBegin = static_cast<LineEnd>( tmp );
-    }
-
-    e = element.namedItem( "LINEEND" ).toElement();
-    if( !e.isNull() ) {
-        int tmp = 0;
-        if( e.hasAttribute( "value" ) )
-            tmp = e.attribute( "value" ).toInt();
-        lineEnd = static_cast<LineEnd>( tmp );
-    }
-    return offset;
+    return KPPointObject::load( element );
 }
 
 void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
@@ -186,78 +124,4 @@ void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
             }
         }
     }
-}
-
-void KPFreehandObject::setSize( double _width, double _height )
-{
-    KoSize origSize( ext );
-    KPObject::setSize( _width, _height );
-
-    double fx = ext.width() / origSize.width();
-    double fy = ext.height() / origSize.height();
-
-    updatePoints( fx, fy );
-}
-
-void KPFreehandObject::updatePoints( double _fx, double _fy )
-{
-    unsigned int index = 0;
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() * _fx;
-        double tmpY = point.y() * _fy;
-
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
-    points = tmpPoints;
-}
-
-void KPFreehandObject::flip(bool horizontal )
-{
-    KPObject::flip( horizontal );
-    KoPointArray tmpPoints;
-    int index = 0;
-    if ( horizontal )
-    {
-        KoPointArray::ConstIterator it;
-        double horiz = getSize().height()/2;
-        for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
-            if ( point.y()> horiz )
-                tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
-            else
-                tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
-            ++index;
-        }
-
-    }
-    else
-    {
-        KoPointArray::ConstIterator it;
-        double vert = getSize().width()/2;
-        for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
-            if ( point.x()> vert )
-                tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
-            else
-                tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
-            ++index;
-        }
-
-    }
-    points = tmpPoints;
-
-}
-
-void KPFreehandObject::closeObject(bool _close)
-{
-    points = getCloseObject( points, _close, isClosed() );
-}
-
-bool KPFreehandObject::isClosed()const
-{
-    return ( points.at(0) == points.at(points.count()-1) );
 }
