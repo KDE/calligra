@@ -541,6 +541,14 @@ public:
 
     void setTitleModified( const QString caption, bool mod );
 
+    /**
+     * Sets the document URL to empty URL
+     * KParts doesn't allow this, but KOffice apps have e.g. templates
+     * After using loadNativeFormat on a template, one wants
+     * to set the url to KURL()
+     */
+    void resetURL() { m_url = KURL(); m_file = QString::null; }
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes
@@ -625,14 +633,6 @@ protected:
      *  If it is, then the pictures should be saved to tar:/pictures.
      */
     virtual bool completeSaving( KoStore* store );
-
-    /**
-     * Sets the document URL to empty URL
-     * KParts doesn't allow this, but KOffice apps have e.g. templates
-     * After using loadNativeFormat on a template, one wants
-     * to set the url to KURL()
-     */
-    void resetURL() { m_url = KURL(); m_file = QString::null; }
 
     /**
      * Inserts the new child in the list of children and emits the
