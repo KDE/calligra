@@ -1547,7 +1547,7 @@ bool KWFrameDia::applyChanges()
                 }
                 else
                 {
-                    KMessageBox::sorry( this,i18n("Frame will not be resize, because new frame is out of page"));
+                    KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be great than the size of the page."));
                 }
             }
         }
