@@ -1791,7 +1791,7 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
     return layout;
 }
 
-void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context, KoStyleCollection *styleCollection, uint* from )
+void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos )
 {
     // first load layout from style
     KoParagLayout paragLayout = loadParagLayout( context, styleCollection, true );
@@ -1801,10 +1801,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     KoTextFormat *defaultFormat = style() ? &style()->format() : 0L;
     setFormat( document()->formatCollection()->format( defaultFormat ) );
 
-    uint pos = 0;
-    if ( !from ) // i.e. caller doesn't care
-        from = &pos;
-    loadOasisSpan( parent, context, *from );
+    loadOasisSpan( parent, context, pos );
 
     setChanged( true );
     invalidate( 0 );

@@ -146,7 +146,7 @@ public:
     void fixParagWidth( bool viewFormattingChars );
 
     /// Load from XML
-    void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint* from = 0 );
+    void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos );
     /// Save to XML
     /// By default the whole paragraph is saved. from/to allow to save only a portion of it.
     /// The 'from' and 'to' characters are both included.

@@ -65,7 +65,7 @@ KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& context, KoTextParag* & lastParagraph, KoStyleCollection * styleColl )
+void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& context, KoTextParag* & lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph )
 {
     // table-of-content OOo SPEC 7.5 p452
     //fillStyleStack( tag, "text:style-name" ); that's the section style
@@ -84,11 +84,12 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
         QString tagName = t.tagName();
         QDomElement e;
         if ( tagName == "text:index-title" ) {
-            lastParagraph = loadOasisText( t, context, lastParagraph, styleColl ); // recurse again
+            lastParagraph = loadOasisText( t, context, lastParagraph, styleColl, nextParagraph ); // recurse again
         } else if ( tagName == "text:p" ) {
             context.fillStyleStack( t, "text:style-name" );
-            lastParagraph = createParag( this, lastParagraph );
-            lastParagraph->loadOasis( t, context, styleColl );
+            lastParagraph = createParag( this, lastParagraph, nextParagraph );
+            uint pos = 0;
+            lastParagraph->loadOasis( t, context, styleColl, pos );
         } else
             kdWarning() << "OASIS TOC loading: unknown tag " << tagName << " found in text:index-body" << endl;
         context.styleStack().restore();
@@ -118,7 +119,8 @@ KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& cont
 }
 
 bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
-                                       KoTextParag* & lastParagraph, KoStyleCollection* styleColl )
+                                       KoTextParag* & lastParagraph, KoStyleCollection* styleColl,
+                                       KoTextParag* nextParagraph )
 {
     QCString tagName( tag.tagName().latin1() );
     if ( tagName == "draw:frame" )
@@ -138,7 +140,7 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
 #endif
     else if ( tagName == "text:table-of-content" )
     {
-        loadOasisTOC( tag, context, lastParagraph, styleColl );
+        loadOasisTOC( tag, context, lastParagraph, styleColl, nextParagraph );
         return true;
     }
     return false;

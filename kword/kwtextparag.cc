@@ -786,9 +786,9 @@ void KWTextParag::join( KoTextParag *parag )
     KoTextParag::join( parag );
 }
 
-void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& context, KoStyleCollection *styleCollection )
+void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos )
 {
-    KoTextParag::loadOasis( paragElement, context, styleCollection );
+    KoTextParag::loadOasis( paragElement, context, styleCollection, pos );
 
     KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
     QString& currentMasterPageRef = doc->loadingInfo()->m_currentMasterPage;

@@ -79,7 +79,7 @@ public:
     /** Load (from KWord-1.3 XML), optionally using styles from document. */
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
 
-    virtual void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
+    virtual void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos );
 
     virtual void join( KoTextParag *parag );
 protected:

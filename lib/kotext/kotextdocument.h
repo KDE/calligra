@@ -203,8 +203,12 @@ public:
     void clear( bool createEmptyParag = FALSE );
 
     KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
-    KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph = 0 );
-    // Similar to loadOasisText but the first paragraph is inserted after the given cursor
+
+    // For normal loading nextParagraph and pos are 0.
+    KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
+
+    // Similar to loadOasisText but there's no newline inserted before the first paragraph
+    // or after the last one - so it's possible to paste just a few chars.
     KoTextCursor pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl );
     QString copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
 
@@ -342,7 +346,8 @@ protected:
      * @return true if @p tag was handled.
      */
     virtual bool loadOasisBodyTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
-                                   KoTextParag* & /*lastParagraph*/, KoStyleCollection* /*styleColl*/ ) {
+                                   KoTextParag* & /*lastParagraph*/, KoStyleCollection* /*styleColl*/,
+                                   KoTextParag* /*nextParagraph*/ ) {
         return false;
     }
 

@@ -1458,7 +1458,7 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph )
+KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph )
 {
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -1468,16 +1468,15 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
         context.styleStack().save();
         const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
+        uint pos = 0;
         if ( textFoo && tagName == "text:p" ) {  // text paragraph
             context.fillStyleStack( tag, "text:style-name" );
 
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
-            parag->loadOasis( tag, context, styleColl );
+            parag->loadOasis( tag, context, styleColl, pos );
             if ( !lastParagraph )        // First parag
                 setFirstParag( parag );
             lastParagraph = parag;
-            //use signal slot ?
-            //m_doc->progressItemLoaded(); // ## check
         }
         else if ( textFoo && tagName == "text:h" ) // heading
         {
@@ -1502,7 +1501,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
                 restartNumbering = tag.attribute( "text:start-value" ).toInt();
 
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
-            parag->loadOasis( tag, context, styleColl );
+            parag->loadOasis( tag, context, styleColl, pos );
             if ( !lastParagraph )        // First parag
                 setFirstParag( parag );
             lastParagraph = parag;
@@ -1517,8 +1516,6 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
         {
             kdDebug(32500)<<" list \n";
             lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
-            context.styleStack().restore();
-            continue;
         }
         else if ( textFoo && tagName == "text:section" ) // Provisory support (###TODO)
         {
@@ -1531,12 +1528,14 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
             // We don't parse variable-decls since we ignore var types right now
             // (and just storing a list of available var names wouldn't be much use)
         }
-        else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl ) )
+        else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl, nextParagraph ) )
         {
             kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
         }
 
         context.styleStack().restore(); // remove the styles added by the paragraph or list
+        //use signal slot ?
+        //m_doc->progressItemLoaded(); // ## check
     }
     return lastParagraph;
 }
@@ -1601,15 +1600,17 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
 KoTextCursor KoTextDocument::pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl )
 {
     KoTextCursor resultCursor( cursor );
-    if ( cursor.index() == 0 ) {
+    KoTextParag* lastParagraph = cursor.parag();
+    bool removeNewline = false;
+    uint pos = cursor.index();
+    if ( pos == 0 ) {
         // Pasting on an empty paragraph -> respect <text:h> in selected text etc.
-        KoTextParag* lastParagraph = cursor.parag() ? cursor.parag()->prev() : 0;
+        lastParagraph = lastParagraph->prev();
         lastParagraph = loadOasisText( bodyElem, context, lastParagraph, styleColl, cursor.parag() );
         resultCursor.setParag( lastParagraph );
-        resultCursor.setIndex( 0 );
+        resultCursor.setIndex( lastParagraph->length() - 1 );
+        removeNewline = true;
     } else {
-        KoTextParag* lastParagraph = cursor.parag();
-        uint pos = cursor.index();
         // Pasting inside a non-empty paragraph -> append text to it.
         // This loop looks for the *FIRST* paragraph only.
         for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -1617,9 +1618,9 @@ KoTextCursor KoTextDocument::pasteOasisText( const QDomElement &bodyElem, KoOasi
             QDomElement tag = text.toElement();
             if ( tag.isNull() ) continue;
             context.styleStack().save();
-            // Note how we ignore tag.tagName() here.
+            // We mostly ignore tag.tagName() here, unless it's not even a paragraph
             context.fillStyleStack( tag, "text:style-name" );
-            lastParagraph->loadOasis( tag, context, styleColl, &pos );
+            lastParagraph->loadOasis( tag, context, styleColl, pos );
             context.styleStack().restore();
             // Done with first parag, remove it and exit loop
             const_cast<QDomElement &>( bodyElem ).removeChild( tag ); // somewhat hackish
@@ -1631,9 +1632,17 @@ KoTextCursor KoTextDocument::pasteOasisText( const QDomElement &bodyElem, KoOasi
         lastParagraph = loadOasisText( bodyElem, context, lastParagraph, styleColl, lastParagraph->next() );
         if ( lastParagraph != resultCursor.parag() ) // we loaded more paragraphs
         {
+            removeNewline = true;
             resultCursor.setParag( lastParagraph );
-            resultCursor.setIndex( lastParagraph->length() - 1 /* TODO - one parag too many gets created? */ );
+            resultCursor.setIndex( lastParagraph->length() - 1 );
         }
+    }
+    kdDebug() << k_funcinfo << lastParagraph << " (" << (lastParagraph?lastParagraph->paragId():-1) << ")" << endl;
+    // Remove the additional newline that loadOasisText inserted
+    if ( removeNewline && resultCursor.remove() ) {
+        kdDebug() << k_funcinfo << "after remove:" << lastParagraph << " (" << (lastParagraph?lastParagraph->paragId():-1) << ")" << endl;
+        //if ( lastParagraph != resultCursor.parag() && m_lastFormatted == lastParagraph ) // has been deleted
+        //    m_lastFormatted = cursor->parag()->prev();
     }
     return resultCursor;
 }

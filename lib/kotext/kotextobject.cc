@@ -1545,6 +1545,7 @@ void KoTextObject::setViewArea( QWidget* w, int maxY )
 
 void KoTextObject::setLastFormattedParag( KoTextParag *parag )
 {
+    //kdDebug() << k_funcinfo << parag << " (" << ( parag ? QString::number(parag->paragId()) : QString("(null)") ) << ")" << endl;
     if ( !m_lastFormatted || !parag || m_lastFormatted->paragId() >= parag->paragId() ) {
         m_lastFormatted = parag;
     }
@@ -1922,7 +1923,7 @@ void KoTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext
     textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
     setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
 
-    KoTextParag *lastParagraph = textDocument()->loadOasisText( bodyElem, context, 0, styleColl );
+    KoTextParag *lastParagraph = textDocument()->loadOasisText( bodyElem, context, 0, styleColl, 0 );
 
     if ( !lastParagraph )                // We created no paragraph
     {
