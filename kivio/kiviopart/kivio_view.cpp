@@ -227,14 +227,14 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, m_pDoc->config()
     ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
   vRuler->showMousePos(true);
-  vRuler->setMinimumWidth(34);
-  vRuler->setMaximumWidth(34);
+  vRuler->setMinimumWidth(20);
+  vRuler->setMaximumWidth(20);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, m_pDoc->config()
     ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
   hRuler->showMousePos(true);
-  hRuler->setMinimumHeight(34);
-  hRuler->setMaximumHeight(34);
+  hRuler->setMinimumHeight(20);
+  hRuler->setMaximumHeight(20);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
   connect(horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
