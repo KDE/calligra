@@ -236,7 +236,7 @@
             <filter id="kspread_opencalc">
                 <title xml:lang="en_us">OpenCalc</title>
                 <contact href="mailto:nandres@web.de">Norbert Andres</contact>
-                <stat import="planned" export="planned"/>
+                <stat import="twostars" export="planned"/>
             </filter>
         </application>
 
