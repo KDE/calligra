@@ -279,26 +279,24 @@ const int KoFilterManager::findWidget(const QString &ext) const {
 }
 #endif
 
-const QString KoFilterManager::import( const QString & _url, const char *_native_format )
+const QString KoFilterManager::import( const QString & file, const char *_native_format )
 {
-    KURL url( _url );
+    KURL url( file );
 
-    KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
+    KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QCString mimeType;
-    if (t) {
+    if ( t && t->mimeType()!="application/octet-stream" ) {
         kDebugInfo( 30003, "######### FOUND MimeType %s", t->mimeType().data() );
         mimeType = t->mimeType();
     }
     else {
-        kDebugInfo( 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
+        kDebugInfo( 30003, "####### No MimeType found. Setting text/plain" );
         mimeType = "text/plain";
     }
 
     if ( mimeType == _native_format )
     {
-        kDebugInfo( 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
-        assert( url.isLocalFile() );
-        return _url;
+        return file;
     }
 
     QString constr = "Export == '";
@@ -311,6 +309,7 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
     if ( vec.isEmpty() )
     {
         QString tmp = i18n("Could not import file of type\n%1").arg( t->mimeType() );
+        QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
         return "";
     }
@@ -326,9 +325,9 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
 #ifndef USE_QFD
-        ok=filter->filter( QCString(_url), QCString(tempfname), QCString(mimeType), QCString(_native_format), config );
+        ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format), config );
 #else
-        ok=filter->filter( QCString(_url), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
+        ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
 #endif
         delete filter;
         ++i;
@@ -336,14 +335,14 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
     return ok ? tempfname : QString("");
 }
 
-const QString KoFilterManager::prepareExport( const QString & _url, const char *_native_format )
+const QString KoFilterManager::prepareExport( const QString & file, const char *_native_format )
 {
-    exportFile=_url;
+    exportFile=file;
     native_format=_native_format;
 
     KTempFile tempFile; // create with default file prefix, extension and mode
     if (tempFile.status() != 0)
-        return _url;
+        return file;
     tmpFile = tempFile.name();
     prepare=true;
     return tmpFile;
@@ -383,6 +382,7 @@ const bool KoFilterManager::export_() {
     if ( vec.isEmpty() )
     {
         QString tmp = i18n("Could not export file of type\n%1").arg( t->mimeType() );
+        QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing export filter") );
         return false;
     }

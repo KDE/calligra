@@ -189,9 +189,15 @@ public:
   virtual void setModified( bool _mod );
 
   /**
-   *  Retrieves, if the document is empty or not.
+   *  @return true if the document is empty.
    */
-  virtual bool isEmpty() const;
+  virtual bool isEmpty() const { return m_bEmpty; }
+
+  /**
+   *  Sets the document to empty. Used after loading a template
+   *  (which is not empty, but not the user's input).
+   */
+  virtual void setEmpty() { m_bEmpty = true; }
 
   /**
    *  Loads a document from m_file (KParts takes care of downloading

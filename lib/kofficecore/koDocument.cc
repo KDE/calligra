@@ -462,16 +462,22 @@ bool KoDocument::openFile()
 
   QApplication::setOverrideCursor( waitCursor );
 
-
   // Launch a filter if we need one for this url ?
   QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType( instance() ) );
 
-  // The filter, if any, has been applied. It's all native format now.
-  bool loadOk = (!importedFile.isEmpty()) && // Empty = an error occured in the filter
-    loadNativeFormat( importedFile );
+  QApplication::restoreOverrideCursor();
 
-  if (!loadOk)
-    KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
+  // The filter, if any, has been applied. It's all native format now.
+  bool loadOk = !importedFile.isEmpty(); // Empty = an error occured in the filter
+
+  if (loadOk)
+  {
+    if ( !loadNativeFormat( importedFile ) )
+    {
+      loadOk = false;
+      KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
+    }
+  }
 
   if ( importedFile != m_file )
   {
@@ -481,7 +487,6 @@ bool KoDocument::openFile()
     // and remove temp file
     unlink( importedFile.ascii() );
   }
-  QApplication::restoreOverrideCursor();
   return loadOk;
 }
 
@@ -494,7 +499,6 @@ bool KoDocument::loadNativeFormat( const QString & file )
   ifstream in( file );
   if ( !in )
   {
-    kDebugWarning( 30003, QString("Could not open %1").arg( file ) );
     QApplication::restoreOverrideCursor();
     return false;
   }
@@ -550,7 +554,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     if ( !loadChildren( store ) )
     {	
-      kDebugInfo( 30003, "ERROR: Could not load children" );
+      kDebugError( 30003, "ERROR: Could not load children" );
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
@@ -577,7 +581,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 
   if ( !loadChildren( _store ) )
   {	
-    kDebugInfo( 30003, "ERROR: Could not load children" );
+    kDebugError( 30003, "ERROR: Could not load children" );
     return false;
   }
 
@@ -620,15 +624,11 @@ bool KoDocument::isStoredExtern()
 
 void KoDocument::setModified( bool _mod )
 {
+    kdDebug() << "KoDocument::setModified( " << (_mod ? "true" : "false") << ")" << endl;
     KParts::ReadWritePart::setModified( _mod );
 
     if ( _mod )
 	m_bEmpty = FALSE;
-}
-
-bool KoDocument::isEmpty() const
-{
-    return m_bEmpty;
 }
 
 bool KoDocument::loadBinary( istream& , bool, KoStore* )
