@@ -40,6 +40,11 @@ public:
     FormulaElement(KFormulaContainer* container);
 
     /**
+     * Returns the element the point is in.
+     */
+    BasicElement* goToPos(FormulaCursor*, const QPoint& point);
+
+    /**
      * Provide fast access to the rootElement for each child.
      */
     virtual FormulaElement* formula() { return this; }

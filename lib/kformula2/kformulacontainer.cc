@@ -25,7 +25,6 @@
 #include <qstring.h>
 
 #include "bracketelement.h"
-#include "complexelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -33,6 +32,7 @@
 #include "indexelement.h"
 #include "kformulacontainer.h"
 #include "matrixelement.h"
+#include "numberelement.h"
 #include "operatorelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
@@ -114,9 +114,23 @@ cleanRedoStack();
 */
 }
 
+void KFormulaContainer::addNumber(FormulaCursor* cursor, QChar ch)
+{
+    if (cursor->isSelection()) {
+        removeSelection(cursor, BasicElement::beforeCursor);
+    }
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    list.append(new NumberElement(ch));
+    cursor->insert(list);
+    cursor->setSelection(false);
+}
 
 void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
 {
+    if (cursor->isSelection()) {
+        removeSelection(cursor, BasicElement::beforeCursor);
+    }
     QList<BasicElement> list;
     list.setAutoDelete(true);
     list.append(new OperatorElement(ch));
@@ -179,48 +193,131 @@ void KFormulaContainer::addSymbol(FormulaCursor* cursor,
 
 void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
 {
+    if (cursor->isSelection()) {
+        removeSelection(cursor, BasicElement::beforeCursor);
+    }
     MatrixElement* matrix = new MatrixElement(rows, columns);
     cursor->insert(matrix);
     cursor->goInsideElement(matrix);
 }
 
-void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
+void KFormulaContainer::addLowerLeftIndex(FormulaCursor* cursor)
 {
-    ComplexElement* element = cursor->getActiveIndexedElement();
-    if ((element == 0) || !element->mightHaveLowerIndex()) {
+    IndexElement* element = cursor->getActiveIndexElement();
+    if (element == 0) {
         element = new IndexElement;
         cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
+    addIndex(cursor, element->getLowerLeft());
+}
 
-    if (!element->hasLowerIndex()) {
-        SequenceElement* index = new SequenceElement;
-        element->setToLowerIndex(cursor);
-        cursor->insert(index);
-        //cursor->goInsideElement(index);
+void KFormulaContainer::addUpperLeftIndex(FormulaCursor* cursor)
+{
+    IndexElement* element = cursor->getActiveIndexElement();
+    if (element == 0) {
+        element = new IndexElement;
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
-    else {
-        element->moveToLowerIndex(cursor, BasicElement::afterCursor);
+    addIndex(cursor, element->getUpperLeft());
+}
+
+void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
+{
+    IndexElement* element = cursor->getActiveIndexElement();
+    if (element == 0) {
+        element = new IndexElement;
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
+    addIndex(cursor, element->getLowerRight());
 }
 
 void KFormulaContainer::addUpperRightIndex(FormulaCursor* cursor)
 {
-    ComplexElement* element = cursor->getActiveIndexedElement();
-    if ((element == 0) || !element->mightHaveUpperIndex()) {
+    IndexElement* element = cursor->getActiveIndexElement();
+    if (element == 0) {
         element = new IndexElement;
         cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
+    addIndex(cursor, element->getUpperRight());
+}
 
-    if (!element->hasUpperIndex()) {
-        SequenceElement* index = new SequenceElement;
-        element->setToUpperIndex(cursor);
-        cursor->insert(index);
-        //cursor->goInsideElement(index);
+void KFormulaContainer::addRootIndex(FormulaCursor* cursor)
+{
+    RootElement* element = cursor->getActiveRootElement();
+    if (element == 0) {
+        element = new RootElement;
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
-    else {
-        element->moveToUpperIndex(cursor, BasicElement::afterCursor);
+    addIndex(cursor, element->getIndex());
+}
+
+void KFormulaContainer::addSymbolLowerIndex(FormulaCursor* cursor, Artwork::SymbolType type)
+{
+    SymbolElement* element = cursor->getActiveSymbolElement();
+    if (element == 0) {
+        element = new SymbolElement(type);
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
+    }
+    addIndex(cursor, element->getLowerIndex());
+}
+
+void KFormulaContainer::addSymbolUpperIndex(FormulaCursor* cursor, Artwork::SymbolType type)
+{
+    SymbolElement* element = cursor->getActiveSymbolElement();
+    if (element == 0) {
+        element = new SymbolElement(type);
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
+    }
+    addIndex(cursor, element->getUpperIndex());
+}
+
+/**
+ * Just search an element that gets an index. Don't create one
+ * if there is non.
+ */
+void KFormulaContainer::addGenericLowerIndex(FormulaCursor* cursor)
+{
+    SymbolElement* symbol = cursor->getActiveSymbolElement();
+    if (symbol != 0) {
+        addIndex(cursor, symbol->getLowerIndex());
     }
 }
+
+/**
+ * Just search an element that gets an index. Don't create one
+ * if there is non.
+ */
+void KFormulaContainer::addGenericUpperIndex(FormulaCursor* cursor)
+{
+    SymbolElement* symbol = cursor->getActiveSymbolElement();
+    if (symbol != 0) {
+        addIndex(cursor, symbol->getUpperIndex());
+    }
+    else {
+        RootElement* root = cursor->getActiveRootElement();
+        if (root != 0) {
+            addIndex(cursor, root->getIndex());
+        }
+    }
+}
+
+/**
+ * Helper function that inserts the index it was called with.
+ */
+void KFormulaContainer::addIndex(FormulaCursor* cursor, ElementIndexPtr index)
+{
+    if (!index->hasIndex()) {
+        SequenceElement* indexContent = new SequenceElement;
+        index->setToIndex(cursor);
+        cursor->insert(indexContent);
+        //cursor->goInsideElement(indexContent);
+    }
+    else {
+        index->moveToIndex(cursor, BasicElement::afterCursor);
+        cursor->setSelection(false);
+    }
+}
+
 
 void KFormulaContainer::removeSelection(FormulaCursor* cursor,
                                         BasicElement::Direction direction)
@@ -235,6 +332,7 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
     //cursor->normalize(direction);
     cursor->normalize();
 }
+
 
 void KFormulaContainer::undo()
 {

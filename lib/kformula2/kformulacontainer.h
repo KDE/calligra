@@ -26,6 +26,7 @@
 
 #include "artwork.h"
 #include "basicelement.h"
+#include "elementindex.h"
 #include "contextstyle.h"
 #include "formulaelement.h"
 
@@ -102,18 +103,29 @@ signals:
     
 public slots:    
 
-    // There a lot of thing we can do with the formula.
+    // There are a lot of thing we can do with the formula.
     
     void addText(FormulaCursor* cursor, QChar ch);
+    void addNumber(FormulaCursor* cursor, QChar ch);
     void addOperator(FormulaCursor* cursor, QChar ch);
     void addBracket(FormulaCursor* cursor, char left, char right);
     void addFraction(FormulaCursor* cursor);
     void addRoot(FormulaCursor* cursor);
     void addSymbol(FormulaCursor* cursor, Artwork::SymbolType type);
     void addMatrix(FormulaCursor* cursor, int rows, int columns);
+
+    void addLowerLeftIndex(FormulaCursor* cursor);
+    void addUpperLeftIndex(FormulaCursor* cursor);
     void addLowerRightIndex(FormulaCursor* cursor);
     void addUpperRightIndex(FormulaCursor* cursor);
 
+    void addRootIndex(FormulaCursor* cursor);
+    void addSymbolLowerIndex(FormulaCursor* cursor, Artwork::SymbolType type);
+    void addSymbolUpperIndex(FormulaCursor* cursor, Artwork::SymbolType type);
+
+    void addGenericLowerIndex(FormulaCursor* cursor);
+    void addGenericUpperIndex(FormulaCursor* cursor);
+    
     void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
 
     /**
@@ -142,8 +154,12 @@ public slots:
      * Emits a formulaChanged signal if we are dirty.
      */
     void testDirty();
+
     
 private:
+
+    void addIndex(FormulaCursor* cursor, ElementIndexPtr index);
+
     /**
      * Push the command to the undo stack
      */

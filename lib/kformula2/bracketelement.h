@@ -41,6 +41,15 @@ public:
     ~BracketElement();
 
     /**
+     * Sets the cursor and returns the element the point is in.
+     * The handled flag shows whether the cursor has been set.
+     * This is needed because only the innermost matching element
+     * is allowed to set the cursor.
+     */
+    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
+                                  const QPoint& point, const QPoint& parentOrigin);
+
+    /**
      * Calculates our width and height and
      * our children's parentPosition.
      */

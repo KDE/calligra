@@ -20,16 +20,19 @@
 
 #include <qpainter.h>
 
-#include "complexelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "indexelement.h"
+#include "rootelement.h"
 #include "sequenceelement.h"
+#include "symbolelement.h"
 
 
 FormulaCursor::FormulaCursor(FormulaElement* element)
 {
     selectionFlag = false;
     mouseSelectionFlag = false;
+    linearMovement = false;
     setTo(element, 0);
 }
 
@@ -135,6 +138,73 @@ void FormulaCursor::moveEnd(int flag)
 }
 
 
+void FormulaCursor::mousePress(const QPoint& pos, int flags)
+{
+    setSelection(false);
+    FormulaElement* formula = getElement()->formula();
+    formula->goToPos(this, pos);
+    setMark(getPos());
+}
+
+void FormulaCursor::mouseMove(const QPoint& point, int flags)
+{
+    setSelection(true);
+    BasicElement* element = getElement();
+    int mark = getMark();
+
+    FormulaElement* formula = getElement()->formula();
+    formula->goToPos(this, point);
+    BasicElement* newElement = getElement();
+    int pos = getPos();
+
+    BasicElement* posChild = 0;
+    BasicElement* markChild = 0;
+    while (element != newElement) {
+        posChild = newElement;
+        newElement = newElement->getParent();
+        if (newElement == 0) {
+            posChild = 0;
+            newElement = getElement();
+            markChild = element;
+            element = element->getParent();
+        }
+    }
+
+    if (dynamic_cast<SequenceElement*>(element) == 0) {
+        element = element->getParent();
+        element->selectChild(this, newElement);
+    }
+    else {
+        if (posChild != 0) {
+            element->selectChild(this, posChild);
+            pos = getPos();
+        }
+        if (markChild != 0) {
+            element->selectChild(this, markChild);
+            mark = getMark();
+        }
+        if (pos > mark) {
+            if (markChild != 0) {
+                //mark--;
+            }
+        }
+        else {
+            if (posChild != 0) {
+                //pos--;
+            }
+        }
+        setTo(element, pos, mark);
+        //setPos(pos);
+        //setMark(mark);
+    }
+}
+
+void FormulaCursor::mouseRelease(const QPoint&, int flags)
+{
+    //mouseSelectionFlag = false;
+}
+
+
 /**
  * Moves the cursor inside the element. Selection is turned off.
  */
@@ -156,15 +226,6 @@ void FormulaCursor::normalize(BasicElement::Direction direction)
     element->normalize(this, direction);
 }
 
-
-
-// BasicElement* FormulaCursor::getElement()
-// {
-//     if (isInsideParent()) {
-//         return current->getParent();
-//     }
-//     return current;
-// }
 
 /**
  * Inserts the child at the current position.
@@ -221,6 +282,10 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
                                          BasicElement::Direction direction)
 {
     QList<BasicElement> list;
+    // we suppres deletion here to get an error if something
+    // was left in the list.
+    //list.setAutoDelete(true);
+    
     //remove(list, direction);
     getElement()->remove(this, list, direction);
     
@@ -288,44 +353,86 @@ BasicElement* FormulaCursor::getActiveChild(BasicElement::Direction direction)
     return getElement()->getChild(this, direction);
 }
 
-
-/**
- * Returns the IndexElement the cursor is on or 0
- * if there is non.
- */
-ComplexElement* FormulaCursor::getActiveIndexedElement()
+BasicElement* FormulaCursor::getSelectedChild()
 {
     if (isSelection()) {
         if ((getSelectionEnd() - getSelectionStart()) > 1) {
             return 0;
         }
-        BasicElement* child = getActiveChild((getPos() > getMark()) ?
-                                             BasicElement::beforeCursor :
-                                             BasicElement::afterCursor);
-        return child->getComplexElement();
+        return getActiveChild((getPos() > getMark()) ?
+                              BasicElement::beforeCursor :
+                              BasicElement::afterCursor);
     }
     else {
-        BasicElement* child = getActiveChild(BasicElement::beforeCursor);
-        ComplexElement* element = 0;
-        if (child != 0) {
-            element = child->getComplexElement();
-        }
-        if (element == 0) {
-            BasicElement* parent = getElement()->getParent();
-            if (parent == 0) {
-                return 0;
-            }
-            element = parent->getComplexElement();
-            if (element != 0) {
-                SequenceElement* mainChild = element->getMainChild();
-                if ((getElement() != mainChild) ||
-                    (mainChild->countChildren() != getPos())) {
-                    return 0;
-                }
-            }
-        }
-        return element;
+        return getActiveChild(BasicElement::beforeCursor);
     }
+}
+
+/**
+ * Tells whether we currently point to the given elements
+ * main child and to the place behind its last child.
+ */
+bool FormulaCursor::pointsAfterMainChild(BasicElement* element)
+{
+    if (element != 0) {
+        SequenceElement* mainChild = element->getMainChild();
+        return (getElement() == mainChild) && (mainChild->countChildren() == getPos());
+    }
+    return false;
+}
+
+
+/**
+ * Returns the IndexElement the cursor is on or 0
+ * if there is non.
+ */
+IndexElement* FormulaCursor::getActiveIndexElement()
+{
+    IndexElement* element = dynamic_cast<IndexElement*>(getSelectedChild());
+
+    if ((element == 0) && !isSelection()) {
+        element = dynamic_cast<IndexElement*>(getElement()->getParent());
+        if (!pointsAfterMainChild(element)) {
+            return 0;
+        }
+    }
+    return element;
+}
+
+
+/**
+ * Returns the RootElement the cursor is on or 0
+ * if there is non.
+ */
+RootElement* FormulaCursor::getActiveRootElement()
+{
+    RootElement* element = dynamic_cast<RootElement*>(getSelectedChild());
+
+    if ((element == 0) && !isSelection()) {
+        element = dynamic_cast<RootElement*>(getElement()->getParent());
+        if (!pointsAfterMainChild(element)) {
+            return 0;
+        }
+    }
+    return element;
+}
+
+
+/**
+ * Returns the SymbolElement the cursor is on or 0
+ * if there is non.
+ */
+SymbolElement* FormulaCursor::getActiveSymbolElement()
+{
+    SymbolElement* element = dynamic_cast<SymbolElement*>(getSelectedChild());
+
+    if ((element == 0) && !isSelection()) {
+        element = dynamic_cast<SymbolElement*>(getElement()->getParent());
+        if (!pointsAfterMainChild(element)) {
+            return 0;
+        }
+    }
+    return element;
 }
 
 

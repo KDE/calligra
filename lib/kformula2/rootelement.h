@@ -23,7 +23,8 @@
 
 #include <qpoint.h>
 
-#include "complexelement.h"
+#include "basicelement.h"
+#include "elementindex.h"
 
 class SequenceElement;
 
@@ -31,13 +32,22 @@ class SequenceElement;
 /**
  * A nice graphical root.
  */
-class RootElement : public ComplexElement {
+class RootElement : public BasicElement {
 public:
 
     enum { contentPos, indexPos };
 
     RootElement(BasicElement* parent = 0);
     ~RootElement();
+
+    /**
+     * Sets the cursor and returns the element the point is in.
+     * The handled flag shows whether the cursor has been set.
+     * This is needed because only the innermost matching element
+     * is allowed to set the cursor.
+     */
+    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
+                                  const QPoint& point, const QPoint& parentOrigin);
 
     /**
      * Calculates our width and height and
@@ -116,19 +126,17 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
-    bool hasIndex() const { return index != 0; }
-    
-    // ComplexElement
-    
     // Moves the cursor inside the index. The index has to exist.
-    virtual void moveToUpperIndex(FormulaCursor*, Direction);
-    virtual void moveToLowerIndex(FormulaCursor*, Direction) {}
+    void moveToIndex(FormulaCursor*, Direction);
 
     // Sets the cursor to point to the place where the index normaly
     // is. These functions are only used if there is no such index and
     // we want to insert them.
-    virtual void setToUpperIndex(FormulaCursor*);
-    virtual void setToLowerIndex(FormulaCursor*) {}
+    void setToIndex(FormulaCursor*);
+    
+    bool hasIndex() const { return index != 0; }
+
+    ElementIndexPtr getIndex() { return ElementIndexPtr(new RootElementIndex(this)); }
 
     // Tells whether we own those indexes
     virtual bool hasUpperIndex() const { return hasIndex(); }
@@ -140,8 +148,22 @@ public:
    
     virtual QDomElement getElementDom(QDomDocument *doc);
      
-    
 private:
+
+    class RootElementIndex : public ElementIndex {
+    public:
+        RootElementIndex(RootElement* p) : parent(p) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToIndex(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToIndex(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasIndex(); }
+        virtual RootElement* getElement() { return parent; }
+    protected:
+        RootElement* parent;
+    };
+
 
     /**
      * The one below the graph.

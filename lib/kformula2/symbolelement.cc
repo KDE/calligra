@@ -27,11 +27,15 @@
 
 
 SymbolElement::SymbolElement(Artwork::SymbolType type, BasicElement* parent)
-    : ComplexElement(parent), symbol(type)
+    : BasicElement(parent), symbol(type)
 {
     content = new SequenceElement(this);
-    upper = new SequenceElement(this);
-    lower = new SequenceElement(this);
+    //upper = new SequenceElement(this);
+    //upper->setRelativeSize(-2);
+    //lower = new SequenceElement(this);
+    //lower->setRelativeSize(-2);
+    upper = 0;
+    lower = 0;
 }
 
 SymbolElement::~SymbolElement()
@@ -39,6 +43,55 @@ SymbolElement::~SymbolElement()
     delete lower;
     delete upper;
     delete content;
+}
+
+
+BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                     const QPoint& point, const QPoint& parentOrigin)
+{
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
+    if (e != 0) {
+        QPoint myPos(parentOrigin.x() + getX(),
+                     parentOrigin.y() + getY());
+
+        e = content->goToPos(cursor, handled, point, myPos);
+        if (e != 0) {
+            return e;
+        }
+        if (hasLower()) {
+            e = lower->goToPos(cursor, handled, point, myPos);
+            if (e != 0) {
+                return e;
+            }
+        }
+        if (hasUpper()) {
+            e = upper->goToPos(cursor, handled, point, myPos);
+            if (e != 0) {
+                return e;
+            }
+        }
+
+        // the positions after the indexes.
+        //int dx = point.x() - myPos.x();
+        int dy = point.y() - myPos.y();
+        if (dy < symbol.getY()) {
+            if (hasUpper()) {
+                upper->moveLeft(cursor, this);
+                handled = true;
+                return upper;
+            }
+        }
+        else if (dy > symbol.getY()+symbol.getHeight()) {
+            if (hasLower()) {
+                lower->moveLeft(cursor, this);
+                handled = true;
+                return lower;
+            }
+        }
+        
+        return this;
+    }
+    return 0;
 }
 
 
@@ -149,14 +202,15 @@ void SymbolElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveLeft(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
             content->moveLeft(cursor, this);
         }            
         else if (from == content) {
-            if (hasLower()) {
+            if (linear && hasLower()) {
                 lower->moveLeft(cursor, this);
             }
-            else if (hasUpper()) {
+            else if (linear && hasUpper()) {
                 upper->moveLeft(cursor, this);
             }
             else {
@@ -164,7 +218,7 @@ void SymbolElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             }
         }
         else if (from == lower) {
-            if (hasUpper()) {
+            if (linear && hasUpper()) {
                 upper->moveLeft(cursor, this);
             }
             else {
@@ -188,11 +242,12 @@ void SymbolElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveRight(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            if (hasUpper()) {
+            if (linear && hasUpper()) {
                 upper->moveRight(cursor, this);
             }
-            else if (hasLower()) {
+            else if (linear && hasLower()) {
                 lower->moveRight(cursor, this);
             }
             else {
@@ -200,7 +255,7 @@ void SymbolElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             }
         }            
         else if (from == upper) {
-            if (hasLower()) {
+            if (linear && hasLower()) {
                 lower->moveRight(cursor, this);
             }
             else {
@@ -303,6 +358,7 @@ void SymbolElement::insert(FormulaCursor* cursor,
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
+    index->setRelativeSize(-2);
     
     switch (cursor->getPos()) {
     case upperPos:
@@ -435,7 +491,7 @@ void SymbolElement::setToContent(FormulaCursor* cursor)
 }
 
 
-void SymbolElement::moveToUpperIndex(FormulaCursor* cursor, Direction direction)
+void SymbolElement::moveToUpper(FormulaCursor* cursor, Direction direction)
 {
     if (hasUpper()) {
         if (direction == beforeCursor) {
@@ -447,7 +503,7 @@ void SymbolElement::moveToUpperIndex(FormulaCursor* cursor, Direction direction)
     }
 }
 
-void SymbolElement::moveToLowerIndex(FormulaCursor* cursor, Direction direction)
+void SymbolElement::moveToLower(FormulaCursor* cursor, Direction direction)
 {
     if (hasLower()) {
         if (direction == beforeCursor) {

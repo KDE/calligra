@@ -50,8 +50,7 @@ ostream& BasicElement::output(ostream& stream)
 /**
  * Returns the element the point is in.
  */
-BasicElement* BasicElement::isInside(const QPoint& point,
-                                     const QPoint& parentOrigin)
+BasicElement* BasicElement::goToPos(FormulaCursor*, bool&, const QPoint& point, const QPoint& parentOrigin)
 {
     int x = point.x() - (parentOrigin.x() + getX());
     if ((x >= 0) && (x < getWidth())) {

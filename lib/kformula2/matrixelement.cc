@@ -45,6 +45,83 @@ MatrixElement::~MatrixElement()
 }
 
 
+BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                     const QPoint& point, const QPoint& parentOrigin)
+{
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
+    if (e != 0) {
+        QPoint myPos(parentOrigin.x() + getX(),
+                     parentOrigin.y() + getY());
+
+        uint rows = getRows();
+        uint columns = getColumns();
+
+        for (uint r = 0; r < rows; r++) {
+            for (uint c = 0; c < columns; c++) {
+                BasicElement* element = getElement(r, c);
+                e = element->goToPos(cursor, handled, point, myPos);
+                if (e != 0) {
+                    return e;
+                }
+            }
+        }
+
+        // We are in one of those gaps.
+        int dx = point.x() - myPos.x();
+        int dy = point.y() - myPos.y();
+
+        uint row = rows;
+        for (uint r = 0; r < rows; r++) {
+            BasicElement* element = getElement(r, 0);
+            if (element->getY() > dy) {
+                row = r;
+                break;
+            }
+        }
+        if (row == 0) {
+            BasicElement* element = getParent();
+            element->moveLeft(cursor, this);
+            handled = true;
+            return element;
+        }
+        row--;
+        
+        uint column = columns;
+        for (uint c = 0; c < columns; c++) {
+            BasicElement* element = getElement(row, c);
+            if (element->getX() > dx) {
+                column = c;
+                break;
+            }
+        }
+        if (column == 0) {
+            BasicElement* element = getParent();
+            element->moveLeft(cursor, this);
+            handled = true;
+            return element;
+        }
+        column--;
+
+        // Rescan the rows with the actual colums required.
+        row = rows;
+        for (uint r = 0; r < rows; r++) {
+            BasicElement* element = getElement(r, column);
+            if (element->getY() > dy) {
+                row = r;
+                break;
+            }
+        }
+        row--;
+
+        BasicElement* element = getElement(row, column);
+        element->moveLeft(cursor, this);
+        handled = true;
+        return element;
+    }
+    return 0;
+}
+
+
 // drawing
 //
 // Drawing depends on a context which knows the required properties like
@@ -169,13 +246,14 @@ void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             getElement(getRows()-1, getColumns()-1)->moveLeft(cursor, this);
         }
         else {
+            bool linear = cursor->getLinearMovement();
             int row = 0;
             int column = 0;
             if (searchElement(from, row, column)) {
                 if (column > 0) {
                     getElement(row, column-1)->moveLeft(cursor, this);
                 }
-                else if (row > 0) {
+                else if (linear && (row > 0)) {
                     getElement(row-1, getColumns()-1)->moveLeft(cursor, this);
                 }
                 else {
@@ -204,13 +282,14 @@ void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             getElement(0, 0)->moveRight(cursor, this);
         }
         else {
+            bool linear = cursor->getLinearMovement();
             int row = 0;
             int column = 0;
             if (searchElement(from, row, column)) {
                 if (column < getColumns()-1) {
                     getElement(row, column+1)->moveRight(cursor, this);
                 }
-                else if (row < getRows()-1) {
+                else if (linear && (row < getRows()-1)) {
                     getElement(row+1, 0)->moveRight(cursor, this);
                 }
                 else {
@@ -294,7 +373,7 @@ void MatrixElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  */
 void MatrixElement::goInside(FormulaCursor* cursor)
 {
-    getElement(0, 0)->moveRight(cursor, this);
+    getElement(0, 0)->goInside(cursor);
 }
 
 

@@ -59,6 +59,8 @@ public:
 
     QFont getDefaultFont() { return defaultFont; }
 
+    QFont getDefaultSymbolFont() { return defaultSymbolFont; }
+
     int getDistance() { return 5; }
 
     Alignment getMatrixAlignment() { return center; }
@@ -66,6 +68,7 @@ public:
 private:
     
     QFont defaultFont;
+    QFont defaultSymbolFont;
     QColor defaultColor;
 
  

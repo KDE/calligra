@@ -25,7 +25,7 @@
 
 
 IndexElement::IndexElement(BasicElement* parent)
-    : ComplexElement(parent)
+    : BasicElement(parent)
 {
     content = new SequenceElement(this);
 
@@ -73,31 +73,75 @@ ostream& IndexElement::output(ostream& stream)
 /**
  * Returns the element the point is in.
  */
-BasicElement* IndexElement::isInside(const QPoint& point,
-                                     const QPoint& parentOrigin)
+BasicElement* IndexElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                    const QPoint& point, const QPoint& parentOrigin)
 {
-    BasicElement* e = BasicElement::isInside(point, parentOrigin);
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
         QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-        e = content->isInside(point, myPos);
+        e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) return e;
 
         if (hasUpperRight()) {
-            e = upperRight->isInside(point, myPos);
+            e = upperRight->goToPos(cursor, handled, point, myPos);
             if (e != 0) return e;
         }
         if (hasUpperLeft()) {
-            e = upperLeft->isInside(point, myPos);
+            e = upperLeft->goToPos(cursor, handled, point, myPos);
             if (e != 0) return e;
         }
         if (hasLowerRight()) {
-            e = lowerRight->isInside(point, myPos);
+            e = lowerRight->goToPos(cursor, handled, point, myPos);
             if (e != 0) return e;
         }
         if (hasLowerLeft()) {
-            e = lowerLeft->isInside(point, myPos);
+            e = lowerLeft->goToPos(cursor, handled, point, myPos);
             if (e != 0) return e;
         }
+
+        int dx = point.x() - myPos.x();
+        int dy = point.y() - myPos.y();
+
+        // the positions after the left indexes
+        if (dx < content->getX()+content->getWidth()) {
+            if (dy < content->getY()) {
+                if (hasUpperLeft()) {
+                    upperLeft->moveLeft(cursor, this);
+                    handled = true;
+                    return upperLeft;
+                }
+            }
+            else if (dy > content->getY()+content->getHeight()) {
+                if (hasLowerLeft()) {
+                    lowerLeft->moveLeft(cursor, this);
+                    handled = true;
+                    return lowerLeft;
+                }
+            }
+        }
+        // the positions after the left indexes
+        else {
+            if (dy < content->getY()) {
+                if (hasUpperRight()) {
+                    upperRight->moveLeft(cursor, this);
+                    handled = true;
+                    return upperRight;
+                }
+            }
+            else if (dy > content->getY()+content->getHeight()) {
+                if (hasLowerRight()) {
+                    lowerRight->moveLeft(cursor, this);
+                    handled = true;
+                    return lowerRight;
+                }
+            }
+            else {
+                content->moveLeft(cursor, this);
+                handled = true;
+                return content;
+            }
+        }
+        
         return this;
     }
     return 0;
@@ -270,11 +314,12 @@ void IndexElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveLeft(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            if (hasLowerRight()) {
+            if (hasLowerRight() && linear) {
                 lowerRight->moveLeft(cursor, this);
             }
-            else if (hasUpperRight()) {
+            else if (hasUpperRight() && linear) {
                 upperRight->moveLeft(cursor, this);
             }
             else {
@@ -282,7 +327,7 @@ void IndexElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             }
         }            
         else if (from == lowerRight) {
-            if (hasUpperRight()) {
+            if (hasUpperRight() && linear) {
                 upperRight->moveLeft(cursor, this);
             }
             else {
@@ -293,10 +338,10 @@ void IndexElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             content->moveLeft(cursor, this);
         }            
         else if (from == content) {
-            if (hasLowerLeft()) {
+            if (hasLowerLeft() && linear) {
                 lowerLeft->moveLeft(cursor, this);
             }
-            else if (hasUpperLeft()) {
+            else if (hasUpperLeft() && linear) {
                 upperLeft->moveLeft(cursor, this);
             }
             else {
@@ -304,7 +349,7 @@ void IndexElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             }
         }
         else if (from == lowerLeft) {
-            if (hasUpperLeft()) {
+            if (hasUpperLeft() && linear) {
                 upperLeft->moveLeft(cursor, this);
             }
             else {
@@ -328,19 +373,20 @@ void IndexElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveRight(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            if (hasUpperLeft()) {
+            if (hasUpperLeft() && linear) {
                 upperLeft->moveRight(cursor, this);
             }
-            else if (hasLowerLeft()) {
+            else if (hasLowerLeft() && linear) {
                 lowerLeft->moveRight(cursor, this);
             }
             else {
                 content->moveRight(cursor, this);
             }
         }            
-        else if (from == getParent()) {
-            if (hasLowerLeft()) {
+        else if (from == upperLeft) {
+            if (hasLowerLeft() && linear) {
                 lowerLeft->moveRight(cursor, this);
             }
             else {
@@ -351,10 +397,10 @@ void IndexElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             content->moveRight(cursor, this);
         }
         else if (from == content) {
-            if (hasUpperRight()) {
+            if (hasUpperRight() && linear) {
                 upperRight->moveRight(cursor, this);
             }
-            else if (hasLowerRight()) {
+            else if (hasLowerRight() && linear) {
                 lowerRight->moveRight(cursor, this);
             }
             else {
@@ -362,7 +408,7 @@ void IndexElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             }
         }            
         else if (from == upperRight) {
-            if (hasLowerRight()) {
+            if (hasLowerRight() && linear) {
                 lowerRight->moveRight(cursor, this);
             }
             else {
@@ -387,7 +433,10 @@ void IndexElement::moveUp(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == content) {
-            if (hasUpperRight()) {
+            if ((cursor->getPos() == 0) && hasUpperLeft()) {
+                upperLeft->moveLeft(cursor, this);
+            }
+            else if (hasUpperRight()) {
                 upperRight->moveRight(cursor, this);
             }
             else if (hasUpperLeft()) {
@@ -396,7 +445,7 @@ void IndexElement::moveUp(FormulaCursor* cursor, BasicElement* from)
             else {
                 getParent()->moveUp(cursor, this);
             }
-        }            
+        }
         else if ((from == upperLeft) || (from == upperRight)) {
             getParent()->moveUp(cursor, this);
         }            
@@ -421,7 +470,10 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == content) {
-            if (hasLowerRight()) {
+            if ((cursor->getPos() == 0) && hasLowerLeft()) {
+                lowerLeft->moveLeft(cursor, this);
+            }
+            else if (hasLowerRight()) {
                 lowerRight->moveRight(cursor, this);
             }
             else if (hasLowerLeft()) {
@@ -476,6 +528,7 @@ void IndexElement::insert(FormulaCursor* cursor,
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
+    index->setRelativeSize(-2);
     
     switch (cursor->getPos()) {
     case upperLeftPos:

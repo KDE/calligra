@@ -22,7 +22,8 @@
 #define __INDEXELEMENT_H
 
 // Formula include
-#include "complexelement.h"
+#include "basicelement.h"
+#include "elementindex.h"
 
 class SequenceElement;
 
@@ -30,7 +31,7 @@ class SequenceElement;
 /**
  * The element with up to four indexes in the four corners.
  */
-class IndexElement : public ComplexElement {
+class IndexElement : public BasicElement {
 public:
 
     // each index has its own number.
@@ -40,9 +41,13 @@ public:
     ~IndexElement();
     
     /**
-     * Returns the element the point is in.
+     * Sets the cursor and returns the element the point is in.
+     * The handled flag shows whether the cursor has been set.
+     * This is needed because only the innermost matching element
+     * is allowed to set the cursor.
      */
-    virtual BasicElement* isInside(const QPoint& point, const QPoint& parentOrigin);
+    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
+                                  const QPoint& point, const QPoint& parentOrigin);
 
     // drawing
     //
@@ -198,25 +203,12 @@ public:
     void moveToLowerLeft(FormulaCursor* cursor, Direction direction);
     void moveToLowerRight(FormulaCursor* cursor, Direction direction);
 
-
-    // ComplexElement
+    // Generic access to each index.
     
-    // Moves the cursor inside the index. The index has to exist.
-    virtual void moveToUpperIndex(FormulaCursor* cursor, Direction direction)
-        { moveToUpperRight(cursor, direction); }
-    virtual void moveToLowerIndex(FormulaCursor* cursor, Direction direction)
-        { moveToLowerRight(cursor, direction); }
-    
-    // Sets the cursor to point to the place where the index normaly
-    // is. These functions are only used if there is no such index and
-    // we want to insert them.
-    virtual void setToUpperIndex(FormulaCursor* cursor) { setToUpperRight(cursor); }
-    virtual void setToLowerIndex(FormulaCursor* cursor) { setToLowerRight(cursor); }
-
-    // Tells whether we own those indexes
-    virtual bool hasUpperIndex() const { return hasUpperRight(); }
-    virtual bool hasLowerIndex() const { return hasLowerRight(); }
-    
+    ElementIndexPtr getUpperLeft() { return ElementIndexPtr(new UpperLeftIndex(this)); }
+    ElementIndexPtr getLowerLeft() { return ElementIndexPtr(new LowerLeftIndex(this)); }
+    ElementIndexPtr getUpperRight() { return ElementIndexPtr(new UpperRightIndex(this)); }
+    ElementIndexPtr getLowerRight() { return ElementIndexPtr(new LowerRightIndex(this)); }
     
     virtual QDomElement getElementDom(QDomDocument *doc);
         
@@ -225,6 +217,64 @@ public:
 
 private:
 
+    /**
+     * An index that belongs to us.
+     */
+    class IndexElementIndex : public ElementIndex {
+    public:
+        IndexElementIndex(IndexElement* p) : parent(p) {}
+        virtual IndexElement* getElement() { return parent; }
+    protected:
+        IndexElement* parent;
+    };
+
+    // We have a (very simple) type for every index.
+    
+    class UpperLeftIndex : public IndexElementIndex {
+    public:
+        UpperLeftIndex(IndexElement* parent) : IndexElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToUpperLeft(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToUpperLeft(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasUpperLeft(); }
+    };
+
+    class LowerLeftIndex : public IndexElementIndex {
+    public:
+        LowerLeftIndex(IndexElement* parent) : IndexElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToLowerLeft(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToLowerLeft(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasLowerLeft(); }
+    };
+    
+    class UpperRightIndex : public IndexElementIndex {
+    public:
+        UpperRightIndex(IndexElement* parent) : IndexElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToUpperRight(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToUpperRight(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasUpperRight(); }
+    };
+    
+    class LowerRightIndex : public IndexElementIndex {
+    public:
+        LowerRightIndex(IndexElement* parent) : IndexElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToLowerRight(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToLowerRight(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasLowerRight(); }
+    };
+
+    
     /**
      * Sets the cursor to point to the place where the content is.
      * There always is a content so this is not a useful place.

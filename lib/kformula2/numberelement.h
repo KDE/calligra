@@ -18,45 +18,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __OPERATORELEMENT_H
-#define __OPERATORELEMENT_H
+#ifndef __NUMBERELEMENT_H
+#define __NUMBERELEMENT_H
 
 #include "textelement.h"
 
 
 /**
- * An textelement that has spaces before and after the char.
+ * A number. This is a special TextElement as we want
+ * to be able to format our number different.
  */
-class OperatorElement : public TextElement {
+class NumberElement : public TextElement {
 public:
-    OperatorElement(QChar ch);
 
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes(ContextStyle& context, int parentSize);
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw(QPainter& painter, ContextStyle& context, int parentSize, const QPoint& parentOrigin);
-
-    virtual QDomElement getElementDom(QDomDocument *doc);
+    NumberElement(QChar ch, BasicElement* parent = 0);
 
 protected:
 
     virtual QFont getFont(ContextStyle& context);
-    
-private:
-
-    /**
-     * The width that is added to the TextElement's width.
-     */
-    int spaceWidth;
 };
 
-
-#endif // __OPERATORELEMENT_H
+#endif // __NUMBERELEMENT_H

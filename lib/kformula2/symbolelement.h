@@ -22,13 +22,14 @@
 #define __SYMBOLELEMENT_H
 
 #include "artwork.h"
-#include "complexelement.h"
+#include "basicelement.h"
+#include "elementindex.h"
 
 
 /**
  * A symbol is simply a piece of art.
  */
-class SymbolElement : public ComplexElement {
+class SymbolElement : public BasicElement {
 public:
 
     enum { contentPos, upperPos, lowerPos };
@@ -36,6 +37,14 @@ public:
     SymbolElement(Artwork::SymbolType type, BasicElement* parent = 0);
     ~SymbolElement();
 
+    /**
+     * Sets the cursor and returns the element the point is in.
+     * The handled flag shows whether the cursor has been set.
+     * This is needed because only the innermost matching element
+     * is allowed to set the cursor.
+     */
+    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
+                                  const QPoint& point, const QPoint& parentOrigin);
     
     // drawing
     //
@@ -165,26 +174,54 @@ public:
     void setToUpper(FormulaCursor* cursor);
     void setToLower(FormulaCursor* cursor);
 
-    // ComplexElement
-    
     // Moves the cursor inside the index. The index has to exist.
-    virtual void moveToUpperIndex(FormulaCursor*, Direction);
-    virtual void moveToLowerIndex(FormulaCursor*, Direction);
-
-    // Sets the cursor to point to the place where the index normaly
-    // is. These functions are only used if there is no such index and
-    // we want to insert them.
-    virtual void setToUpperIndex(FormulaCursor* cursor) { setToUpper(cursor); }
-    virtual void setToLowerIndex(FormulaCursor* cursor) { setToLower(cursor); }
-
-    // Tells whether we own those indexes
-    virtual bool hasUpperIndex() const { return hasUpper(); }
-    virtual bool hasLowerIndex() const { return hasLower(); }
+    void moveToUpper(FormulaCursor*, Direction);
+    void moveToLower(FormulaCursor*, Direction);
     
+    // Generic access to each index.
+    
+    ElementIndexPtr getUpperIndex() { return ElementIndexPtr(new UpperIndex(this)); }
+    ElementIndexPtr getLowerIndex() { return ElementIndexPtr(new LowerIndex(this)); }
+
     virtual QDomElement getElementDom(QDomDocument *doc);
      
-
 private:
+
+    /**
+     * An index that belongs to us.
+     */
+    class SymbolElementIndex : public ElementIndex {
+    public:
+        SymbolElementIndex(SymbolElement* p) : parent(p) {}
+        virtual SymbolElement* getElement() { return parent; }
+    protected:
+        SymbolElement* parent;
+    };
+
+    // We have a (very simple) type for every index.
+    
+    class UpperIndex : public SymbolElementIndex {
+    public:
+        UpperIndex(SymbolElement* parent) : SymbolElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToUpper(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToUpper(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasUpper(); }
+    };
+
+    class LowerIndex : public SymbolElementIndex {
+    public:
+        LowerIndex(SymbolElement* parent) : SymbolElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToLower(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToLower(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasLower(); }
+    };
+
 
     void setToContent(FormulaCursor* cursor);
     

@@ -48,9 +48,9 @@ ostream& TextElement::output(ostream& stream)
  */
 void TextElement::calcSizes(ContextStyle& context, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = QMAX(parentSize + getRelativeSize(), 10);
     //QFontMetrics fm = context.fontMetrics();
-    QFont font = context.getDefaultFont();
+    QFont font = getFont(context);
     font.setPointSize(mySize);
     QFontMetrics fm(font);
     setWidth(fm.width(character));
@@ -67,10 +67,10 @@ void TextElement::calcSizes(ContextStyle& context, int parentSize)
 void TextElement::draw(QPainter& painter, ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = QMAX(parentSize + getRelativeSize(), 10);
     //context.setupPainter(painter);
     //cerr << "TextElement::draw: " << parentOrigin.x()+getX() << " " << parentOrigin.y()+getY()+baseline << " " << character << "\n";
-    QFont font = context.getDefaultFont();
+    QFont font = getFont(context);
     font.setPointSize(mySize);
     painter.setFont(font);
     painter.setPen(context.getDefaultColor());
@@ -78,7 +78,13 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
                      parentOrigin.y()+getY()+baseline, character);
 }
 
-    
+
+QFont TextElement::getFont(ContextStyle& context)
+{
+    return context.getDefaultFont();
+}
+
+
 // navigation
 // 
 // The elements are responsible to handle cursor movement themselves.

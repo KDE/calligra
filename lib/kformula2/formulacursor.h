@@ -25,8 +25,10 @@
 
 #include "basicelement.h"
 
-class ComplexElement;
 class FormulaElement;
+class IndexElement;
+class RootElement;
+class SymbolElement;
 
 
 /**
@@ -101,11 +103,21 @@ public:
     void moveHome(int flag = NormalMovement);
     void moveEnd(int flag = NormalMovement);
 
+    // how to travel
+    
+    bool getLinearMovement() const { return linearMovement; }
+    void setLinearMovement(bool linear) { linearMovement = linear; }
+    
     /**
      * Moves the cursor inside the element. Selection is turned off.
      */
     void goInsideElement(BasicElement* element);
-    
+
+    // mouse selection
+
+    void mousePress(const QPoint&, int flags);
+    void mouseMove(const QPoint&, int flags);
+    void mouseRelease(const QPoint&, int flags);
     
     /**
      * Inserts the child at the current position.
@@ -196,11 +208,24 @@ public:
 
     
     /**
-     * Returns the ComplexElement the cursor is on or 0
+     * Returns the IndexElement the cursor is on or 0
      * if there is non.
      */
-    ComplexElement* getActiveIndexedElement();
+    IndexElement* getActiveIndexElement();
 
+    /**
+     * Returns the RootElement the cursor is on or 0
+     * if there is non.
+     */
+    RootElement* getActiveRootElement();
+    
+    /**
+     * Returns the SymbolElement the cursor is on or 0
+     * if there is non.
+     */
+    SymbolElement* getActiveSymbolElement();
+    
+    
     // undo/redo support
     
     /**
@@ -256,11 +281,18 @@ private:
     BasicElement* getActiveChild(BasicElement::Direction direction);
 
     /**
-     * Returns wether we are inside the current sequence's parent
-     * rather then inside the sequence itself.
+     * Returns the child that is currently selected.
+     *
+     * Might be 0 is there is no such child. e.g. if there are more
+     * than one element selected.
      */
-    //bool isInsideParent() const { return current->isEmpty() &&
-    //                                  (current->getParent() != 0); }
+    BasicElement* getSelectedChild();
+
+    /**
+     * Tells whether we currently point to the given elements
+     * main child and to the place behind its last child.
+     */
+    bool pointsAfterMainChild(BasicElement*);
     
     /**
      * Sets the selection according to the shift key.
@@ -290,11 +322,17 @@ private:
     int markPos;
 
     /**
-     * Tells wether there is a selection area.
+     * Tells whether there is a selection area.
      * (This is not equal to (markPos != -1).)
      */
     bool selectionFlag;
 
+    /**
+     * Tells whether we want to travel throught all elements by
+     * left and right movement.
+     */
+    bool linearMovement;
+    
     /**
      * Tells wether we are selecting with the mouse at the moment.
      * (Do we really need this?)

@@ -46,6 +46,34 @@ BracketElement::~BracketElement()
 }
 
 
+BasicElement* BracketElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                      const QPoint& point, const QPoint& parentOrigin)
+{
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
+    if (e != 0) {
+        QPoint myPos(parentOrigin.x() + getX(),
+                     parentOrigin.y() + getY());
+        e = content->goToPos(cursor, handled, point, myPos);
+        if (e != 0) {
+            return e;
+        }
+
+        // We are in one of those gaps.
+        int dx = point.x() - myPos.x();
+        int dy = point.y() - myPos.y();
+
+        if ((dx > content->getX()+content->getWidth()) ||
+            (dy > content->getY()+content->getHeight())) {
+            content->moveEnd(cursor);
+            handled = true;
+            return content;
+        }
+        return this;
+    }
+    return 0;
+}
+
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.
@@ -404,7 +432,7 @@ QDomElement BracketElement::getElementDom(QDomDocument *doc)
 
     de.setAttribute("LEFT","(");
     de.setAttribute("RIGHT",")");
-				                                                    return de;
+    return de;
 }
 
 

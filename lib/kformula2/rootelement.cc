@@ -28,17 +28,55 @@
 
 
 RootElement::RootElement(BasicElement* parent)
-    : ComplexElement(parent)
+    : BasicElement(parent)
 {
     content = new SequenceElement(this);
-    //index = 0;
-    index = new SequenceElement(this);
+    index = 0;
+    //index = new SequenceElement(this);
+    //index->setRelativeSize(-2);
 }
 
 RootElement::~RootElement()
 {
     delete index;
     delete content;
+}
+
+
+BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                   const QPoint& point, const QPoint& parentOrigin)
+{
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
+    if (e != 0) {
+        QPoint myPos(parentOrigin.x() + getX(),
+                     parentOrigin.y() + getY());
+
+        e = content->goToPos(cursor, handled, point, myPos);
+        if (e != 0) {
+            return e;
+        }
+        if (hasIndex()) {
+            e = index->goToPos(cursor, handled, point, myPos);
+            if (e != 0) {
+                return e;
+            }
+        }
+
+        //int dx = point.x() - myPos.x();
+        int dy = point.y() - myPos.y();
+
+        // the position after the index
+        if (hasIndex()) {
+            if (dy < index->getHeight()) {
+                index->moveLeft(cursor, this);
+                handled = true;
+                return index;
+            }
+        }
+        
+        return this;
+    }
+    return 0;
 }
 
 
@@ -137,11 +175,12 @@ void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveLeft(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
             content->moveLeft(cursor, this);
         }
         else if (from == content) {
-            if (hasIndex()) {
+            if (linear && hasIndex()) {
                 index->moveLeft(cursor, this);
             }
             else {
@@ -165,8 +204,9 @@ void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveRight(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            if (hasIndex()) {
+            if (linear && hasIndex()) {
                 index->moveRight(cursor, this);
             }
             else {
@@ -248,6 +288,7 @@ void RootElement::insert(FormulaCursor* cursor,
     if (cursor->getPos() == indexPos) {
         index = static_cast<SequenceElement*>(newChildren.take(0));
         index->setParent(this);
+        index->setRelativeSize(-2);
 
         if (direction == beforeCursor) {
             index->moveLeft(cursor, this);
@@ -334,7 +375,7 @@ void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 }
 
 
-void RootElement::moveToUpperIndex(FormulaCursor* cursor, Direction direction)
+void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
 {
     if (hasIndex()) {
         if (direction == beforeCursor) {
@@ -346,7 +387,7 @@ void RootElement::moveToUpperIndex(FormulaCursor* cursor, Direction direction)
     }
 }
 
-void RootElement::setToUpperIndex(FormulaCursor* cursor)
+void RootElement::setToIndex(FormulaCursor* cursor)
 {
     cursor->setTo(this, indexPos);
 }

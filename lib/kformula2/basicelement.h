@@ -62,15 +62,13 @@ public:
     virtual FormulaElement* formula() { return parent->formula(); }
 
     /**
-     * Returns this if we are a complex element that knows how to
-     * handle indexes.
+     * Sets the cursor and returns the element the point is in.
+     * The handled flag shows whether the cursor has been set.
+     * This is needed because only the innermost matching element
+     * is allowed to set the cursor.
      */
-    virtual ComplexElement* getComplexElement() { return 0; }
-    
-    /**
-     * Returns the element the point is in.
-     */
-    virtual BasicElement* isInside(const QPoint& point, const QPoint& parentOrigin);
+    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
+                                  const QPoint& point, const QPoint& parentOrigin);
 
     /**
      * Returns our position inside the widget.

@@ -38,7 +38,7 @@ void OperatorElement::calcSizes(ContextStyle& context, int parentSize)
 {
     TextElement::calcSizes(context, parentSize);
     QFontMetrics fm(context.getDefaultFont());
-    spaceWidth = fm.width(' ');
+    spaceWidth = fm.width('0');
     setWidth(getWidth()+spaceWidth);
 }
 
@@ -53,10 +53,13 @@ void OperatorElement::draw(QPainter& painter, ContextStyle& context, int parentS
                       QPoint(parentOrigin.x()+spaceWidth/2, parentOrigin.y()));
 }
 
+QFont OperatorElement::getFont(ContextStyle& context)
+{
+    return context.getDefaultSymbolFont();
+}
+
 QDomElement OperatorElement::getElementDom(QDomDocument *doc)
 {
 return TextElement::getElementDom(doc);
 }
-
-    
 

@@ -35,6 +35,15 @@ public:
     MatrixElement(int rows, int columns, BasicElement* parent = 0);
     ~MatrixElement();
 
+    /**
+     * Sets the cursor and returns the element the point is in.
+     * The handled flag shows whether the cursor has been set.
+     * This is needed because only the innermost matching element
+     * is allowed to set the cursor.
+     */
+    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
+                                  const QPoint& point, const QPoint& parentOrigin);
+
     // drawing
     //
     // Drawing depends on a context which knows the required properties like

@@ -56,10 +56,10 @@ ostream& SequenceElement::output(ostream& stream)
 /**
  * Returns the element the point is in.
  */
-BasicElement* SequenceElement::isInside(const QPoint& point,
-                                        const QPoint& parentOrigin)
+BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                       const QPoint& point, const QPoint& parentOrigin)
 {
-    BasicElement* e = BasicElement::isInside(point, parentOrigin);
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
         QPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
@@ -67,9 +67,35 @@ BasicElement* SequenceElement::isInside(const QPoint& point,
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
-            e = child->isInside(point, myPos);
-            if (e != 0) return e;
+            e = child->goToPos(cursor, handled, point, myPos);
+            if (e != 0) {
+                if (!handled) {
+                    handled = true;
+                    cursor->setTo(this, children.find(e));
+                }
+                return e;
+            }
         }
+
+        int dx = point.x() - myPos.x();
+        //int dy = point.y() - myPos.y();
+        
+        for (uint i = 0; i < count; i++) {
+            BasicElement* child = children.at(i);
+            if (dx < child->getX()) {
+                if (i > 0) {
+                    cursor->setTo(this, i-1);
+                    handled = true;
+                    return children.at(i-1);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
+        cursor->setTo(this, countChildren());
+        handled = true;
         return this;
     }
     return 0;

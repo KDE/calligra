@@ -18,10 +18,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-
 #include "contextstyle.h"
+#include "numberelement.h"
 
-ContextStyle::ContextStyle()
-    : defaultFont("helvetica"), defaultSymbolFont("symbol"), defaultColor(Qt::black)
+
+NumberElement::NumberElement(QChar ch, BasicElement* parent)
+    : TextElement(ch, parent)
 {
+}
+
+
+QFont NumberElement::getFont(ContextStyle& context)
+{
+    return context.getDefaultSymbolFont();
 }

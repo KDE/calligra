@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
 #include <qpainter.h>
 
 #include "formulacursor.h"
@@ -95,6 +96,18 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             break;
         case ' ':
             break;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            document->addNumber(cursor, ch);
+            break;
         default:
             document->addText(cursor, ch);
         }
@@ -102,13 +115,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
     else {
         int action = event->key();
         int state = event->state();
-	int flag=0;
-
-	if(state & Qt::ControlButton)
-	  flag+=FormulaCursor::WordMovement;
-
-	if(state & Qt::ShiftButton)
-	  flag+=FormulaCursor::SelectMovement;
+	int flag = movementFlag(state);
 
 	switch (action) {
 	case Qt::Key_Left:
@@ -153,12 +160,30 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F8:
             document->redo(cursor);
             break;
-
-	}
+        default:
+            if (state & Qt::ControlButton) {
+                switch (event->key()) {
+                case Qt::Key_AsciiCircum:
+                    document->addUpperLeftIndex(cursor);
+                    break;
+                case Qt::Key_Underscore:
+                    document->addLowerLeftIndex(cursor);
+                    break;
+                case Qt::Key_U:
+                    document->addGenericUpperIndex(cursor);
+                    break;
+                case Qt::Key_L:
+                    document->addGenericLowerIndex(cursor);
+                    break;
+                default:
+                    //cerr << "Key: " << event->key() << endl;
+                    break;
+                }
+            }
+        }
     }
 
     //Is this necessary here ?
-    
     document->testDirty();
 
     cursor->draw(painter);
@@ -166,7 +191,69 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 }
 
 
+void KFormulaWidget::mousePressEvent(QMouseEvent* event)
+{
+    QPainter painter;
+    painter.begin(this);
+    cursor->draw(painter);
+    
+    int flags = movementFlag(event->state());
+    cursor->mousePress(event->pos(), flags);
+
+    cursor->draw(painter);
+    painter.end();
+}
+
+void KFormulaWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    QPainter painter;
+    painter.begin(this);
+    cursor->draw(painter);
+    
+    int flags = movementFlag(event->state());
+    cursor->mouseRelease(event->pos(), flags);
+
+    cursor->draw(painter);
+    painter.end();
+}
+
+void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent* event)
+{
+}
+
+void KFormulaWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    QPainter painter;
+    painter.begin(this);
+    cursor->draw(painter);
+    
+    int flags = movementFlag(event->state());
+    cursor->mouseMove(event->pos(), flags);
+    
+    //document->testDirty();
+
+    cursor->draw(painter);
+    painter.end();
+}
+
+void KFormulaWidget::wheelEvent(QWheelEvent* event)
+{
+}
+
 void KFormulaWidget::formulaChanged()
 {
     update();
+}
+
+int KFormulaWidget::movementFlag(int state)
+{
+    int flag = FormulaCursor::NormalMovement;
+
+    if (state & Qt::ControlButton)
+        flag |= FormulaCursor::WordMovement;
+
+    if (state & Qt::ShiftButton)
+        flag |= FormulaCursor::SelectMovement;
+
+    return flag;
 }

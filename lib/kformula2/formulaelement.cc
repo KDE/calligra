@@ -21,6 +21,7 @@
 #include <qpainter.h>
 
 #include "contextstyle.h"
+#include "formulacursor.h"
 #include "formulaelement.h"
 #include "kformulacontainer.h"
 
@@ -29,6 +30,22 @@ FormulaElement::FormulaElement(KFormulaContainer* container)
     : document(container)
 {
     size = 20;
+}
+
+/**
+ * Returns the element the point is in.
+ */
+BasicElement* FormulaElement::goToPos(FormulaCursor* cursor, const QPoint& point)
+{
+    bool handled = false;
+    BasicElement* element = SequenceElement::goToPos(cursor, handled, point, QPoint());
+    if (element == 0) {
+        //if ((point.x() > getWidth()) || (point.y() > getHeight())) {
+            cursor->setTo(this, countChildren());
+            //}
+            return this;
+    }
+    return element;
 }
 
 void FormulaElement::elementRemoval(BasicElement* child)

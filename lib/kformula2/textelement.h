@@ -21,6 +21,7 @@
 #ifndef __TEXTELEMENT_H
 #define __TEXTELEMENT_H
 
+#include <qfont.h>
 #include <qstring.h>
 
 #include "basicelement.h"
@@ -84,6 +85,10 @@ public:
     
     // debug
     virtual ostream& output(ostream&);
+
+protected:
+
+    virtual QFont getFont(ContextStyle& context);
     
 private:
 

@@ -40,6 +40,45 @@ FractionElement::~FractionElement()
 }
 
 
+BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
+                                       const QPoint& point, const QPoint& parentOrigin)
+{
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
+    if (e != 0) {
+        QPoint myPos(parentOrigin.x() + getX(),
+                     parentOrigin.y() + getY());
+        e = numerator->goToPos(cursor, handled, point, myPos);
+        if (e != 0) {
+            return e;
+        }
+        e = denominator->goToPos(cursor, handled, point, myPos);
+        if (e != 0) {
+            return e;
+        }
+
+        int dx = point.x() - myPos.x();
+        int dy = point.y() - myPos.y();
+
+        // the positions after the numerator / denominator
+        if ((dx > numerator->getX()) &&
+            (dy < numerator->getHeight())) {
+            numerator->moveLeft(cursor, this);
+            handled = true;
+            return numerator;
+        }
+        else if ((dx > denominator->getX()) &&
+                 (dy > denominator->getY())) {
+            denominator->moveLeft(cursor, this);
+            handled = true;
+            return denominator;
+        }
+        
+        return this;
+    }
+    return 0;
+}
+
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.
