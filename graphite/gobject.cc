@@ -358,14 +358,15 @@ void G2DObjectM9r::createPropertyDialog() {
     m_brushStyle=new QComboBox(widget);
     QStringList content;
     // Note: index+1 => fill style (NoBrush is missing!)
-    content << i18n("100% filled (solid)")
-            << i18n("94% filled")
-            << i18n("88% filled")
-            << i18n("63% filled")
-            << i18n("50% filled")
-            << i18n("37% filled")
-            << i18n("12% filled")
-            << i18n("6% filled")
+    // xgettext:no-c-format
+    content << i18n("100% filled (solid)") // xgettext:no-c-format
+            << i18n("94% filled") // xgettext:no-c-format 
+            << i18n("88% filled") // xgettext:no-c-format 
+            << i18n("63% filled") // xgettext:no-c-format 
+            << i18n("50% filled") // xgettext:no-c-format 
+            << i18n("37% filled") // xgettext:no-c-format 
+            << i18n("12% filled") // xgettext:no-c-format 
+            << i18n("6% filled") // xgettext:no-c-format 
             << i18n("Horizontal Lines")
             << i18n("Vertical Lines")
             << i18n("Crossing Lines")
