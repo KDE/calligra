@@ -246,12 +246,12 @@ bool StarWriterImport::parseNodes(QByteArray n)
 
         switch (c) {
             case 'T':
-                if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF)) {
-                    if (!parseGraphics(s)) return false;
-                }
-                else {
+                //if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF)) {
+                //    if (!parseGraphics(s)) return false;
+                //}
+                //else {
                     if (!parseText(s)) return false;
-                }
+                //}
                 break;
             case 'E':
                 if (!parseTable(s)) return false;
