@@ -371,22 +371,10 @@
                 <note xml:lang="en_us">Microsoft Office Drawing</note>
                 <stat import="abandoned" export="none"/>
             </filter>
-            <filter id="kontour_svg">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/svg"/>
-                <title xml:lang="en_us">SVG</title>
-                <note xml:lang="en_us">Scaleable Vector Graphics (W3C)</note>
-                <stat import="abandoned" export="abandoned"/>
-            </filter>
             <filter id="kontour_windraw">
                 <title xml:lang="en_us">WinDraw 3.1</title>
                 <note xml:lang="en_us">Micrografx Windraw 3.1</note>
                 <contact href="mailto:ebartels@nwn.de">Enno Bartels</contact>
-                <stat import="abandoned" export="none"/>
-            </filter>
-            <filter id="kontour_wmf">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/wmf"/>
-                <title xml:lang="en_us">WMF</title>
-                <note xml:lang="en_us">Windows MetaFile</note>
                 <stat import="abandoned" export="none"/>
             </filter>
             <filter id="kontour_xfig">
