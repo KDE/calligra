@@ -34,10 +34,10 @@ public:
     KWordDocIface(  KWDocument *doc_ );
 
 k_dcop:
-    virtual DCOPRef getTextFrameSet( int num );
-    virtual int getNumPages();
-    virtual int getNumFrameSets();
-    virtual unsigned int getColumns();
+    virtual DCOPRef textFrameSet( int num );
+    virtual int numPages();
+    virtual int numFrameSets();
+    virtual unsigned int nbColumns();
 
     //paper
     virtual double ptTopBorder();
@@ -55,11 +55,11 @@ k_dcop:
     virtual double gridY();
     virtual void setGridX(double _gridx);
     virtual void setGridY(double _gridy);
-    virtual QString getUnitName();
-    virtual double getIndentValue();
+    virtual QString unitName();
+    virtual double indentValue();
     virtual void setIndentValue(double _ind);
 
-    virtual int getNbPagePerRow();
+    virtual int nbPagePerRow();
     virtual void setNbPagePerRow(int _nb);
     virtual int defaultColumnSpacing();
     virtual void setDefaultColumnSpacing(int _val);

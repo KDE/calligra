@@ -36,7 +36,7 @@ public:
 k_dcop:
     bool hasSelection() const;
     int numberOfParagraphs();
-    QString getName() const;
+    QString name() const;
     bool isVisible() const;
     bool isFloating() const;
     bool isAHeader() const;

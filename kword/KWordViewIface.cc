@@ -111,7 +111,7 @@ void KWordViewIface::toolsPart()
     view->toolsPart();
 }
 
-double KWordViewIface::getZoom()
+double KWordViewIface::zoom()
 {
     return view->kWordDocument()->zoom();
 }

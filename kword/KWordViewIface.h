@@ -48,9 +48,9 @@ k_dcop:
 
     virtual void insertTable();
     virtual void insertPicture();
-    virtual void toolsPart();	
+    virtual void toolsPart();
 
-    virtual double getZoom();
+    virtual double zoom();
     virtual void setZoom( int zoom);
     virtual void editPersonalExpression();
     virtual void insertLink();

@@ -29,23 +29,23 @@ KWordDocIface::KWordDocIface( KWDocument *doc_ )
    doc = doc_;
 }
 
-DCOPRef KWordDocIface::getTextFrameSet( int num )
+DCOPRef KWordDocIface::textFrameSet( int num )
 {
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->textFrameSet( num)->dcopObject()->objId() );
 }
 
-int KWordDocIface::getNumPages()
+int KWordDocIface::numPages()
 {
     return doc->getPages();
 }
 
-int KWordDocIface::getNumFrameSets()
+int KWordDocIface::numFrameSets()
 {
     return doc->getNumFrameSets();
 }
 
-unsigned int KWordDocIface::getColumns()
+unsigned int KWordDocIface::nbColumns()
 {
     return doc->getColumns();
 }
@@ -115,12 +115,12 @@ void KWordDocIface::setGridY(double _gridy)
     doc->setGridY(_gridy);
 }
 
-QString KWordDocIface::getUnitName()
+QString KWordDocIface::unitName()
 {
     return doc->getUnitName();
 }
 
-double KWordDocIface::getIndentValue()
+double KWordDocIface::indentValue()
 {
     return doc->getIndentValue();
 }
@@ -130,7 +130,7 @@ void KWordDocIface::setIndentValue(double _ind)
     doc->setIndentValue(_ind);
 }
 
-int KWordDocIface::getNbPagePerRow()
+int KWordDocIface::nbPagePerRow()
 {
     return doc->getNbPagePerRow();
 }

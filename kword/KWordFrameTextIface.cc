@@ -40,7 +40,7 @@ int KWordFrameTextIface::numberOfParagraphs()
     return m_frametext->paragraphs();
 }
 
-QString KWordFrameTextIface::getName() const
+QString KWordFrameTextIface::name() const
 {
     return m_frametext->getName();
 }
