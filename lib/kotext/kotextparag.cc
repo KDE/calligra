@@ -345,7 +345,9 @@ int KoTextParag::lineSpacing( int line ) const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     int shadow = QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
-    if ( m_layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
+    if ( m_layout.lineSpacingType == KoParagLayout::LS_SINGLE )
+        return shadow;
+    else if ( m_layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
         return zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() ) + shadow;
     else {
         KoTextParag * that = const_cast<KoTextParag *>(this);
@@ -369,6 +371,21 @@ int KoTextParag::lineSpacing( int line ) const
         else if ( m_layout.lineSpacingType == KoParagLayout::LS_DOUBLE )
         {
             return shadow + (isValid() ? height / 2 : height);
+        }
+        else if ( m_layout.lineSpacingType == KoParagLayout::LS_AT_LEAST )
+        {
+            //todo
+            return shadow ;
+        }
+        else if ( m_layout.lineSpacingType == KoParagLayout::LS_EXACTLY )
+        {
+            //todo
+            return shadow ;
+        }
+        else if ( m_layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
+        {
+            //todo
+            return shadow ;
         }
     }
     kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacingValue() << endl;
