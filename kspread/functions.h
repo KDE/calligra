@@ -73,7 +73,7 @@ private:
 };
 
 
-}; // namespace KSpread
+} // namespace KSpread
 
 
 #endif // KSPREAD_FUNCTIONS
