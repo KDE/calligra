@@ -19,6 +19,11 @@
 
 /**
  * CHANGES
+ * v1.6 to 1.7
+ * Changed the incorrect meta:date to dc:date
+ * Now parse date instead of simply print the ISO date
+ * Fixes bug with keywords, now properly handled
+ * Changed the deprecated upload method to the new one.
  * v1.5 to 1.6
  * Correction for bug 68112: http://bugs.kde.org/show_bug.cgi?id=68112
  * OOo 1.1 does not support garbages in zip files. We now recreate the zip
@@ -61,11 +66,12 @@ static const char * const mimetypes[] =
   0};
 
 static const char * const Advanced[] =
- {"meta:print-date"     , I18N_NOOP("Print Date"),
+ {
   "meta:printed-by"     , I18N_NOOP("Printed By"),
-  "meta:initial-creator", I18N_NOOP("Creator"),
-  "meta:date"		, I18N_NOOP("Date"),
+  "meta:print-date"     , I18N_NOOP("Print Date"),
+  "dc:date"		, I18N_NOOP("Date"),
   "meta:creation-date"  , I18N_NOOP("Creation Date"),
+  "meta:initial-creator", I18N_NOOP("Creator"),
   "meta:generator"	, I18N_NOOP("Generator"),
   "meta:editing-cycles" , I18N_NOOP("Editing Cycles"),
   0};
@@ -73,7 +79,7 @@ static const char * const Advanced[] =
 static const char * dclanguage = "dc:language";
 
 static const char * const Information[] =
- {"dc:title"      , I18N_NOOP("Title")      , 
+ {"dc:title"      , I18N_NOOP("Title")      ,
   "dc:creator"    , I18N_NOOP("Author")     ,
   "dc:description", I18N_NOOP("Description"),
   "dc:subject"    , I18N_NOOP("Subject")    , 
@@ -130,7 +136,7 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
     int i = 0;
     for (i = 0; Information[i]; i+=2){
       item = addItemInfo(group, Information[i], i18n(Information[i+1]),
-		         QVariant::String);
+		      QVariant::String);
       setAttributes(item, KFileMimeTypeInfo::Modifiable);
       switch (i){
 	      case 0:
@@ -152,8 +158,9 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
 
     group = addGroupInfo(info, DocAdvanced, i18n("Document Advanced"));
     for (i = 0; Advanced[i]; i+=2){
+      // I should add the isDate property instead of testing the index, but it works well, who cares ? :-)
       item = addItemInfo(group, Advanced[i], i18n(Advanced[i+1]),
-		         QVariant::String);
+		         (i>1&&i<8)?(QVariant::DateTime):(QVariant::String));
       setHint(item, KFileMimeTypeInfo::Description);
     }
     
@@ -178,14 +185,31 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 	    appendItem(group, Information[i],
 		       stringFromNode(base, Information[i]));
     // Special case for keyword
+    QDomNodeList keywordList = base.elementsByTagName( metakeyword );
+    QString allKeywords;
+    for (uint i = 0; i < keywordList.length(); i++){
+      QDomNode node = keywordList.item(i);
+      if (node.isElement()){
+	if (i>0)
+		allKeywords += ", ";
+	allKeywords += node.toElement().text();
+      }
+    }
     appendItem(group, metakeyword,
-	       stringFromNode(base.namedItem(metakeywords), metakeyword));
+	       allKeywords);
     
     KFileMetaInfoGroup group1 = appendGroup(info, DocAdvanced);
     for (int i = 0; Advanced[i]; i+=2){
 	    QString txt = stringFromNode(base, Advanced[i]);
-	    if (txt != "")
-		    appendItem(group1, Advanced[i], txt);
+	    if (txt != ""){
+		    // A silly method to do it, but efficient
+		    if (i>1 && i<8){
+			    QDateTime dt = QDateTime::fromString( txt, Qt::ISODate );
+			    appendItem(group1, Advanced[i], dt);
+		    }
+		    else
+			    appendItem(group1, Advanced[i], txt);
+	    }
     }
 
     QDomNode dstat = base.namedItem(metadocstat);
@@ -280,11 +304,18 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
   // If we need a meta:keywords container, we create it.
   if (base.namedItem(metakeywords).isNull())
     base.appendChild(doc.createElement(metakeywords));
-    
   QDomNode metaKeyNode = base.namedItem(metakeywords);
-  no_errors = no_errors &&
-    writeTextNode(doc, metaKeyNode, metakeyword,
-		  info[DocumentInfo][metakeyword].value().toString());
+   
+  QDomNodeList childs = doc.elementsByTagName(metakeyword);
+  for (int i = childs.length(); i >= 0; --i){
+	  metaKeyNode.removeChild( childs.item(i) );
+  }
+  QStringList keywordList = QStringList::split(",", info[DocumentInfo][metakeyword].value().toString(), true);
+  for ( QStringList::Iterator it = keywordList.begin(); it != keywordList.end(); ++it ) {
+	QDomElement elem = doc.createElement(metakeyword);
+	metaKeyNode.appendChild(elem);
+	elem.appendChild(doc.createTextNode((*it).stripWhiteSpace()));
+    }
 
   // Now, we store the user-defined data
   QDomNodeList theElements = base.elementsByTagName(metauserdef);
@@ -385,7 +416,9 @@ bool KOfficePlugin::writeMetaData(const QString & path,
 		     text);
     delete current;
     delete m_zip;
-    if (!KIO::NetAccess::upload( tmp_file.name(), KURL(path))){
+    // NULL as third parameter is not good, but I don't know the Window ID
+    // That is only to avoid the deprecated warning at compile time
+    if (!KIO::NetAccess::upload( tmp_file.name(), KURL(path), NULL)){
 	    kdDebug(7034) << "Error while saving " << tmp_file.name() << " as " << path << endl;
 	    return false;
     }
