@@ -242,3 +242,4 @@ void GuidesOnePositionPage::slotSelectAllButton()
   m_pCanvas->updateGuides();
   updateListView(false);
 }
+#include "guides1page.moc"

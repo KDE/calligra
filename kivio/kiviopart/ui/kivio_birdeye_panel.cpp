@@ -215,3 +215,4 @@ void KivioBirdEyePanel::show()
   doAutoResizeMax();
 }
 
+#include "kivio_birdeye_panel.moc"
