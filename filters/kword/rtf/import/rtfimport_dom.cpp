@@ -179,7 +179,7 @@ void DomNode::addKey( const QDateTime& dt, const QString& filename, const QStrin
     setAttribute( "second", time.second() );
     setAttribute( "msec", time.msec() );
 
-    if (name.isEmpty())
+    if (!name.isEmpty())
     {
         setAttribute( "name", CheckAndEscapeXmlText(name) );
     }
