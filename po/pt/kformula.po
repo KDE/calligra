@@ -1,0 +1,102 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kformula\n"
+"POT-Creation-Date: 1998-06-14 17:06+0200\n"
+"PO-Revision-Date: 1998-07-01 00:00+0000\n"
+"Last-Translator: Pedro Morais <EMAIL@ADDRESS>\n"
+
+#: kformula_doc.cc:441
+msgid "Can not delete First Block !!"
+msgstr "Não pode apagar o Primeiro Block !!"
+
+#: kformula_shell.cc:40
+msgid "KFormula Error"
+msgstr "Erro do KFormula"
+
+#: kformula_shell.cc:40
+msgid "Could not init"
+msgstr "Não consegui inicializar"
+
+#: kformula_view.cc:95
+msgid "&New View"
+msgstr "&Nova Vista"
+
+#: kformula_view.cc:102
+msgid "Formula"
+msgstr "Formula"
+
+#: kformula_view.cc:107
+msgid "Add/change to simple text"
+msgstr "Adicionar/modificar para texto simples"
+
+#: kformula_view.cc:112
+msgid "Add/change to root"
+msgstr "Adicionar/modificar para raiz"
+
+#: kformula_view.cc:117
+msgid "Add/change fract line"
+msgstr "Adicionar/modificar fracção"
+
+#: kformula_view.cc:122
+msgid "Add/change vertical space"
+msgstr "Adicionar/modificar espaço vertical"
+
+#: kformula_view.cc:127
+msgid "Add/change a bracket block"
+msgstr "Adicionar/modificar block de parênteses"
+
+#: kformula_view.cc:132
+msgid "Add/change an integral"
+msgstr "Adicionar/modificar um integral"
+
+#: kformula_view.cc:137
+msgid "Add/change a block with symbols"
+msgstr "Adicionar/modificar um bloco com simbolos"
+
+#: kformula_view.cc:147
+msgid "Reduce the font of active block"
+msgstr "Reduzir a fonte do bloco activo"
+
+#: kformula_view.cc:152
+msgid "Enlarge the font of active block"
+msgstr "Aumentar a fonte do bloco activo"
+
+#: kformula_view.cc:157
+msgid "Reduce the font of active block & children"
+msgstr "Reduzir a fonte do block activo & filhos"
+
+#: kformula_view.cc:163
+msgid "Enlarge the font of active block & children"
+msgstr "Aumentar a fonte do bloco activo & filhos"
+
+#: kformula_view.cc:169
+msgid "Reduce the font of active block, children & next blocks"
+msgstr "Reduzir a fonte do block activo, filhos & próximos blocos"
+
+#: kformula_view.cc:175
+msgid "Set greek font"
+msgstr "Modificar fonte grega"
+
+#: kformula_view.cc:181
+msgid "Type"
+msgstr "Tipo"
+
+#: kformula_view.cc:186 kformula_view.cc:211
+msgid "Add exponent"
+msgstr "Adicionar expoente"
+
+#: kformula_view.cc:191
+msgid "Add index"
+msgstr "Adicionar índice"
+
+#: kformula_view.cc:196
+msgid "Add root index"
+msgstr "Adicinar índice da raiz"
+
+#: kformula_view.cc:201
+msgid "Add high limit"
+msgstr "Adicionar limite superior"
+
+#: kformula_view.cc:206
+msgid "Add low limit"
+msgstr "Adicionar limite inferior"

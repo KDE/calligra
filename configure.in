@@ -82,5 +82,6 @@ AC_OUTPUT( \
 	lib/koml/Makefile \
 	po/Makefile \
 	po/de/Makefile \
+	pt/pt/Makefile \
 	po/no/Makefile \
  )
