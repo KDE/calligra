@@ -741,6 +741,56 @@ void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
     }
 }
 
+bool KPTProject::legalToLink(KPTNode *par, KPTNode *child) {
+    //kdDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
+    if (par->isDependChildOf(child)) {
+        return false;
+    }
+    bool legal = true;
+    // see if par/child is related
+    if (par->isParentOf(child) || child->isParentOf(par)) {
+        legal = false;
+    }
+    if (legal)
+        legal = legalChildren(par, child);
+    if (legal)
+        legal = legalParents(par, child);
+    
+    return legal;
+}
+
+bool KPTProject::legalParents(KPTNode *par, KPTNode *child) {
+    bool legal = true;
+    //kdDebug()<<k_funcinfo<<par->name()<<" ("<<par->numDependParentNodes()<<" parents) "<<child->name()<<" ("<<child->numDependChildNodes()<<" children)"<<endl;
+    for (int i=0; i < par->numDependParentNodes() && legal; ++i) {
+        KPTNode *pNode = par->getDependParentNode(i)->parent();
+        if (child->isParentOf(pNode) || pNode->isParentOf(child)) {
+            //kdDebug()<<k_funcinfo<<"Found: "<<pNode->name()<<" is related to "<<child->name()<<endl;
+            legal = false;
+        } else {
+            legal = legalChildren(pNode, child);
+        }
+        if (legal)
+            legal = legalParents(pNode, child);
+    }
+    return legal;
+}
+
+bool KPTProject::legalChildren(KPTNode *par, KPTNode *child) {
+    bool legal = true;
+    //kdDebug()<<k_funcinfo<<par->name()<<" ("<<par->numDependParentNodes()<<" parents) "<<child->name()<<" ("<<child->numDependChildNodes()<<" children)"<<endl;
+    for (int j=0; j < child->numDependChildNodes() && legal; ++j) {
+        KPTNode *cNode = child->getDependChildNode(j)->child();
+        if (par->isParentOf(cNode) || cNode->isParentOf(par)) {
+            //kdDebug()<<k_funcinfo<<"Found: "<<par->name()<<" is related to "<<cNode->name()<<endl;
+            legal = false;
+        } else {
+            legal = legalChildren(par, cNode);
+        }
+    }
+    return legal;
+}
+
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {
 

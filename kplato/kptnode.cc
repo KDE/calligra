@@ -512,6 +512,14 @@ bool KPTNode::moveChildDown(KPTNode* node)
     return true;
 }
 
+bool KPTNode::legalToLink(KPTNode *node) {
+    KPTNode *p = projectNode();
+    if (p)
+        return p->legalToLink(this, node);
+    return false;
+}
+
+
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
 
 KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {

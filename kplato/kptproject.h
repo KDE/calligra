@@ -138,6 +138,9 @@ public:
     KPTStandardWorktime *standardWorktime() { return m_standardWorktime; }
     void addStandardWorktime(KPTStandardWorktime * worktime); //FIXME
 
+    /// Check if node par can be linked to node child.
+    bool legalToLink(KPTNode *par, KPTNode *child);
+
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
@@ -154,6 +157,9 @@ protected:
 
     void initiateCalculation();
     void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks);
+
+    bool legalParents(KPTNode *par, KPTNode *child);
+    bool legalChildren(KPTNode *par, KPTNode *child);
 
 private:
     // we need unique id's for referencing objects when saving/loading

@@ -51,10 +51,6 @@ public:
     int horizontalGap() { return m_horizontalGap; }
     QSize itemSize() { return m_itemSize; }
 
-    bool legalToLink(KPTNode &par, KPTNode &child);
-    bool legalParents(KPTNode *par, KPTNode *child);
-    bool legalChildren(KPTNode *par, KPTNode *child);
-
     void setColumn(int row, int col) { m_rows.at(row)[col] = true; }
 
     void mapNode(KPTPertNodeItem *item);

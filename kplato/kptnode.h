@@ -333,6 +333,12 @@ public:
     KPTNode *childAfter(KPTNode *node);
     bool moveChildUp(KPTNode *node);
     bool moveChildDown(KPTNode *node);
+    
+    /// Check if this node can be linked to node
+    bool legalToLink(KPTNode *node);
+    /// Check if node par can be linked to node child. (Reimplement)
+    virtual bool legalToLink(KPTNode *par, KPTNode *child) { return false; }
+    
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
