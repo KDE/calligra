@@ -990,7 +990,8 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
 #ifndef NDEBUG
 void KWTextParag::printRTDebug( int info )
 {
-    kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
+    kdDebug() << "Paragraph " << this << "   (" << paragId() << ") [changed="
+              << hasChanged() << "] ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
     if ( next() && next()->paragId() != paragId() + 1 )

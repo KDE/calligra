@@ -202,7 +202,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        drawFrameSet( frameset, painter, crect, false, false );
+        drawFrameSet( frameset, painter, crect, false, true );
     }
 
     // Draw the outside of the pages (shadow, gray area)
