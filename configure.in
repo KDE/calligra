@@ -10,7 +10,7 @@ AM_CONFIG_HEADER(config.h)
 AC_CHECK_COMPILERS
 
 if test "$GCC" = "yes"; then
-  CXXFLAGS="$CXXFLAGS -fno-exceptions -fexceptions -O0"
+  CXXFLAGS="$CXXFLAGS"
 fi
 
 AM_INIT_AUTOMAKE(koffice, 0.1)
@@ -53,6 +53,7 @@ AC_OUTPUT(Makefile \
 	kpresenter/toolbar/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
+	kchart/pics/Makefile \
 	kchart/ui/Makefile
 	kchart/pics/Makefile
  )
