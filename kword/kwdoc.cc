@@ -394,8 +394,10 @@ void KWDocument::initConfig()
       setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
       // Default is false for spellcheck, but the spell-check config dialog
       // should write out "true" when the user configures spell checking.
-      m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
-
+      if ( isReadWrite() )
+          m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
+      else
+          m_bgSpellCheck->enableBackgroundSpellCheck( false );
 
   }
 
@@ -453,7 +455,7 @@ void KWDocument::initConfig()
 
 void KWDocument::saveConfig()
 {
-    if ( isEmbedded() )
+    if ( isEmbedded() || !isReadWrite())
         return;
     // Only save the config that is manipulated by the UI directly.
     // The config from the config dialog is saved by the dialog itself.
@@ -1887,6 +1889,10 @@ bool KWDocument::completeLoading( KoStore *_store )
       m_lastViewMode= "ModeNormal";
       m_viewMode = KWViewMode::create( m_lastViewMode, this );
     }
+    //desactivate bgspellchecking
+    //attributes isReadWrite is not placed at the beginning !
+    if ( !isReadWrite())
+        enableBackgroundSpellCheck( false );
     return TRUE;
 }
 
