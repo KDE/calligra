@@ -89,6 +89,7 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 	{
 		painter->setPen( Qt::DotLine );
 		painter->setZoomFactor( 1 );
+		painter->newPath();
 		painter->moveTo( KoPoint( m_fp.x(), m_fp.y() ) );
 		painter->lineTo( KoPoint( m_lp.x(), m_fp.y() ) );
 		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
