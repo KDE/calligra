@@ -374,7 +374,6 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
                        dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
                   {
                       QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-                      kdDebug()<<" internURL :"<<internURL<<endl;
                       if (((KoDocumentChild*)(it.current()))->document()!=0)
                           if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
                               return false;
@@ -2059,15 +2058,6 @@ void KPresenterDoc::updateZoomRuler()
 
 void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
 {
-
-#if 0
-    // Update all fonts
-    QPtrListIterator<KPObject> it( getObjectList() );
-
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-        fit.current()->zoom( forPrint );
-#endif
 #if 0
     if ( updateViews )
     {

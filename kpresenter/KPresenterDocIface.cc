@@ -180,6 +180,15 @@ bool KPresenterDocIface::insertNewPage(int pos )
   return state;
 }
 
+//return false if page number doesn't exist
+bool KPresenterDocIface::selectPage( int page,bool select)
+{
+    if(page <0 || page> doc->getPageNums()-1 )
+        return false;
+    doc->selectPage( page, select );
+    return true;
+}
+
 // return false when we can't remove page
 bool KPresenterDocIface::deletePage( int _page )
 {
@@ -248,3 +257,7 @@ void KPresenterDocIface::saveConfig()
     doc->saveConfig();
 }
 
+QString KPresenterDocIface::selectedForPrinting()
+{
+    return doc->selectedForPrinting();
+}

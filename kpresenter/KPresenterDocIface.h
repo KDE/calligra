@@ -36,6 +36,8 @@ public:
 k_dcop:
     virtual int numPages();
     virtual DCOPRef page( int num );
+    bool selectPage( int page,bool select);
+
     virtual double indentValue();
     virtual void setIndentValue(double _ind);
 
@@ -81,6 +83,7 @@ k_dcop:
     virtual void initConfig();
     virtual void saveConfig();
 
+    virtual QString selectedForPrinting();
 
 private:
     KPresenterDoc *doc;

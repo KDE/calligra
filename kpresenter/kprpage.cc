@@ -798,7 +798,11 @@ PieType KPrPage::getPieType( PieType pieType )
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected()&& it.current()->getType()==OT_PIE)
-	    return dynamic_cast<KPPieObject*>( it.current() )->getPieType();
+        {
+            KPPieObject* obj=dynamic_cast<KPPieObject*>( it.current() );
+            if(obj)
+                return obj->getPieType();
+        }
     }
 
     return pieType;
@@ -824,7 +828,11 @@ int KPrPage::getPieLength( int pieLength )
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected()&& it.current()->getType()==OT_PIE)
-	    return dynamic_cast<KPPieObject*>( it.current() )->getPieLength();
+        {
+            KPPieObject *obj=dynamic_cast<KPPieObject*>( it.current() );
+            if(obj)
+                return obj->getPieLength();
+        }
     }
 
     return pieLength;
@@ -837,7 +845,11 @@ int KPrPage::getPieAngle( int pieAngle )
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected()&&it.current()->getType()==OT_PIE)
-	    return dynamic_cast<KPPieObject*>( it.current() )->getPieAngle();
+        {
+            KPPieObject *obj=dynamic_cast<KPPieObject*>( it.current() );
+            if(obj)
+                return obj->getPieAngle();
+        }
     }
 
     return pieAngle;
@@ -852,8 +864,12 @@ int KPrPage::getRndX( int _rx )
         if(it.current()->isSelected() && it.current()->getType()==OT_RECT)
         {
 	    int tmp;
-	    dynamic_cast<KPRectObject*>( it.current() )->getRnds( _rx, tmp );
-	    return _rx;
+            KPRectObject *obj=dynamic_cast<KPRectObject*>( it.current() );
+            if(obj)
+            {
+                obj->getRnds( _rx, tmp );
+                return _rx;
+            }
 	}
     }
 
@@ -869,8 +885,12 @@ int KPrPage::getRndY( int _ry )
         if(it.current()->isSelected() && it.current()->getType()==OT_RECT)
         {
 	    int tmp;
-	    dynamic_cast<KPRectObject*>( it.current() )->getRnds( tmp, _ry );
-	    return _ry;
+            KPRectObject *obj=dynamic_cast<KPRectObject*>( it.current() );
+            if(obj)
+            {
+                obj->getRnds( tmp, _ry );
+                return _ry;
+            }
 	}
     }
 
@@ -888,16 +908,18 @@ bool KPrPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue
             bool tmp_checkConcavePolygon;
             int tmp_cornersValue;
             int tmp_sharpnessValue;
+            KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( it.current() );
+            if(obj)
+            {
 
-            dynamic_cast<KPPolygonObject*>( it.current() )->getPolygonSettings( &tmp_checkConcavePolygon,
-                                                                            &tmp_cornersValue,
-                                                                            &tmp_sharpnessValue );
-
-            *_checkConcavePolygon = tmp_checkConcavePolygon;
-            *_cornersValue = tmp_cornersValue;
-            *_sharpnessValue = tmp_sharpnessValue;
-
-            return true;
+                obj->getPolygonSettings( &tmp_checkConcavePolygon,
+                                         &tmp_cornersValue,
+                                         &tmp_sharpnessValue );
+                *_checkConcavePolygon = tmp_checkConcavePolygon;
+                *_cornersValue = tmp_cornersValue;
+                *_sharpnessValue = tmp_sharpnessValue;
+                return true;
+            }
         }
     }
 
@@ -2007,13 +2029,18 @@ bool KPrPage::setRectSettings( int _rx, int _ry )
         {
     	    if ( it.current()->isSelected() ) {
 		tmp = new RectValueCmd::RectValues;
-		dynamic_cast<KPRectObject*>( it.current() )->getRnds( tmp->xRnd, tmp->yRnd );
-		_oldValues.append( tmp );
-		_objects.append(it.current() );
-                if(!changed && (tmp->xRnd!=_newValues.xRnd
+                KPRectObject *obj=dynamic_cast<KPRectObject*>( it.current() );
+                if(obj)
+                {
+
+                    obj->getRnds( tmp->xRnd, tmp->yRnd );
+                    _oldValues.append( tmp );
+                    _objects.append(it.current() );
+                    if(!changed && (tmp->xRnd!=_newValues.xRnd
                                 ||tmp->yRnd!=_newValues.yRnd) )
-                    changed=true;
-		ret = true;
+                        changed=true;
+                    ret = true;
+                }
 	    }
 	}
     }
