@@ -427,6 +427,16 @@ bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int ob
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
         }
+        
+        if ( m_appearSpeed == ES_SLOW )
+        {
+            animation.addAttribute( "presentation:speed", "slow" );
+        }
+        else if ( m_appearSpeed == ES_FAST )
+        {
+            animation.addAttribute( "presentation:speed", "fast" );
+        }
+        
         if ( appearTimer!=1 )
         {
             animation.addAttribute( "presentation:animation-delay", saveOasisTimer( appearTimer ) );
@@ -506,6 +516,16 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
         }
+
+        if ( m_appearSpeed == ES_SLOW )
+        {
+            animation.addAttribute( "presentation:speed", "slow" );
+        }
+        else if ( m_appearSpeed == ES_FAST )
+        {
+            animation.addAttribute( "presentation:speed", "fast" );
+        }
+        
         if ( disappearTimer!=1 )
         {
             animation.addAttribute( "presentation:animation-delay", saveOasisTimer( disappearTimer ) );
@@ -576,12 +596,15 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         //add it.
         if ( speed =="medium" )
         {
+            m_appearSpeed = ES_MEDIUM;
         }
         else if ( speed=="slow" )
         {
+            m_appearSpeed = ES_SLOW;
         }
         else if ( speed=="fast" )
         {
+            m_appearSpeed = ES_FAST;
         }
         else
             kdDebug()<<" speed argument is not defined :"<<speed<<endl;
@@ -651,8 +674,25 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
     {
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
+        QString speed = animation->attribute( "presentation:speed" );
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
         disappearStep = tmp->order;
+        
+        if ( speed =="medium" )
+        {
+            m_appearSpeed = ES_MEDIUM;
+        }
+        else if ( speed=="slow" )
+        {
+            m_appearSpeed = ES_SLOW;
+        }
+        else if ( speed=="fast" )
+        {
+            m_appearSpeed = ES_FAST;
+        }
+        else
+            kdDebug()<<" speed argument is not defined :"<<speed<<endl;
+
         if ( animation->hasAttribute("presentation:animation-delay" ) )
         {
             disappearTimer = loadOasisTimer(animation->attribute("presentation:animation-delay" ) );
