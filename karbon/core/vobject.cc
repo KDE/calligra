@@ -21,10 +21,11 @@
 
 #include "vfill.h"
 #include "vobject.h"
+#include "vobject_iface.h"
 #include "vstroke.h"
 
 
-VObject::VObject( VObject* parent, VState state )
+VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
 {
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -50,6 +51,15 @@ VObject::~VObject()
 {
 	delete( m_stroke );
 	delete( m_fill );
+}
+
+DCOPObject *
+VObject::dcopObject()
+{
+    if ( !m_dcop )
+		m_dcop = new VObjectIface( this );
+
+    return m_dcop;
 }
 
 void

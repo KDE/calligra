@@ -20,6 +20,9 @@
 #include "vobject_iface.h"
 #include "vobject.h"
 
+#include <kapplication.h>
+#include <dcopclient.h>
+
 VObjectIface::VObjectIface( VObject* obj )
 	: DCOPObject(), m_object( obj )
 {
@@ -35,5 +38,14 @@ void
 VObjectIface::setState( int state )
 {
 	return m_object->setState( (VObject::VState)state );
+}
+
+DCOPRef
+VObjectIface::parent() const
+{
+	if( !m_object->parent() )
+		return DCOPRef();
+
+	return DCOPRef( kapp->dcopClient()->appId(), m_object->parent()->dcopObject()->objId() );
 }
 

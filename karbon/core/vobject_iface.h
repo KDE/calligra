@@ -45,8 +45,9 @@ k_dcop:
 
 	bool boundingBoxIsInvalid() const;
 	void invalidateBoundingBox();
-	void setParent( VObject* parent ) { m_parent = parent; }
-	VObject* parent() const { return m_parent; }*/
+	void setParent( VObject* parent ) { m_parent = parent; }*/
+
+	DCOPRef parent() const;
 
 	int state() const;
 	void setState( int state );

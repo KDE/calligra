@@ -23,13 +23,14 @@
 
 
 #include <koRect.h>
+#include <dcopobject.h>
 
 class QDomElement;
 class VFill;
 class VPainter;
 class VStroke;
 class VVisitor;
-
+class DCOPObject;
 
 /**
  * The base class for all karbon objects. Every object should
@@ -58,6 +59,8 @@ public:
 	VObject( const VObject& obj );
 
 	virtual ~VObject();
+
+	DCOPObject* dcopObject();
 
 	/**
 	 * Draw the object to a painting device.
@@ -155,6 +158,8 @@ protected:
 
 	VStroke* m_stroke;
 	VFill* m_fill;
+
+	DCOPObject *m_dcop;
 
 private:
 	VObject* m_parent;

@@ -76,7 +76,6 @@ public:
 
 private:
 	QString m_name;     /// id for the layer
-	DCOPObject *dcop;
 };
 
 #endif
