@@ -17,6 +17,7 @@ Comment[no]=Werners KWord Winword97-filter
 Comment[pl]=Filtr KWorda dla plikÛw Worda97 (Wernera)
 Comment[pt_BR]=Filtro do KWord para WinWord97
 Comment[ru]=Ê…Ãÿ‘“ …⁄ WinWord97 Werner'¡
+Comment[sk]=Wernerov KWord Winword97 Filter
 Export=application/x-kword
 ExportDescription=KWord
 Import=text/winword97
