@@ -69,7 +69,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	}
 
 	// draw handle:
-	QPainter qpainter( viewport() );
+	QPainter qpainter( p->device() );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
