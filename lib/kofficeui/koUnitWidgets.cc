@@ -34,49 +34,73 @@ QValidator::State
 KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 {
 
-        kdDebug(30004) << "KoUnitDoubleValidator::validate : " << s << " at " << pos << endl;
-	QValidator::State result = Valid;
-	bool ok = false;
-	double value = m_base->toDouble( s, &ok );
-	double newVal = -1;
-	if( !ok )
-	{
-		if( s.endsWith( "mm" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_MM ), m_base->m_unit );
-		else if( s.endsWith( "cm" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CM ), m_base->m_unit );
-		else if( s.endsWith( "dm" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_DM ), m_base->m_unit );
-		else if( s.endsWith( "in" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_base->m_unit );
-		else if( s.endsWith( "pt" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_base->m_unit );
-		else if( s.endsWith( "dd" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_DD ), m_base->m_unit );
-		else if( s.endsWith( "cc" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CC ), m_base->m_unit );
-		else if( s.endsWith( "pi" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PI ), m_base->m_unit );
-		else if(
-			s.at( pos - 2 ).isDigit() &&
-			(
-				s.endsWith( "m" ) ||
-				s.endsWith( "c" ) ||
-				s.endsWith( "d" ) ||
-				s.endsWith( "i" ) ||
-				s.endsWith( "p" ) ) )
-		{
-			result = Intermediate;
-		}
-		else
-			return KDoubleValidator::validate( s, pos );
-	}
-	if( newVal >= 0.0 )
-	{
-		m_base->changeValue( newVal );
-		s = m_base->getVisibleText( newVal );
-	}
-	return result;
+    kdDebug(30004) << "KoUnitDoubleValidator::validate : " << s << " at " << pos << endl;
+    QValidator::State result = Acceptable;
+
+    QRegExp regexp ("([ a-zA-Z]+)$"); // Letters at end
+    const int res = regexp.search( s );
+    QString number, unit;
+    
+    // ### TODO: are all the QString::stripWhiteSpace really necessary?
+    if ( res > -1 )
+    {
+        number = s.left( res ).stripWhiteSpace();
+        unit = regexp.cap( 1 ).stripWhiteSpace();
+    }
+    else
+    {
+        number = s.stripWhiteSpace();
+    }
+    kdDebug(30004) << "Split:" << number << ":" << unit << ":" << endl;
+    
+    bool ok = false;
+    const double value = m_base->toDouble( number, &ok );
+    double newVal = 0.0;
+    if( ok )
+    {
+        // ### TODO: see if KoUnit has not something similar
+        // ### TODO: long unit names?
+        if ( unit.isEmpty() )
+            newVal = value;
+        else if( unit == "mm"  )
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_MM );
+        else if( unit == "cm" ) 
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_CM );
+        else if( unit == "dm" ) 
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_DM );
+        else if( unit == "in" )
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_INCH );
+        else if( unit == "pt" )
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_PT );
+        else if( unit == "dd" )
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_DD );
+        else if( unit == "cc" )
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_CC );
+        else if( unit == "pi" )
+            newVal = KoUnit::ptFromUnit( value, KoUnit::U_PI );
+        else if( unit.startsWith( "m" ) || unit.startsWith( "c" ) || unit.startsWith( "d" ) || unit.startsWith( "i" ) || unit.startsWith( "p" ) )
+        {
+            kdDebug(30004) << "Intermediate" << endl;    
+            return Intermediate;
+        }
+        else
+        {
+            kdWarning(30004) << "Unknown unit: " << unit << endl;    
+            return Invalid;
+        }
+    }
+    else
+    {
+        kdWarning(30004) << "Not a number: " << number << endl;
+        return Invalid;
+    }
+
+    newVal = KoUnit::ptToUnit( newVal, m_base->m_unit );
+    
+    m_base->changeValue( newVal );
+    s = m_base->getVisibleText( newVal );
+    
+    return result;
 }
 
 
@@ -88,6 +112,7 @@ QString KoUnitDoubleBase::getVisibleText( double value ) const
 double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 {
     QString str2 ( str );
+    kdDebug(30004) << "toDouble:" << str2 << ":" << endl;
     // ### TODO: use KLocale::readNumber
     return str2.replace( ',', "." ).toDouble( ok );
 }
