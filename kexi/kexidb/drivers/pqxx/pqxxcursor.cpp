@@ -162,7 +162,10 @@ else
 //Return the value for a given column for the current record
 QVariant pqxxSqlCursor::value(uint pos)
 {
-	return pValue(pos);
+	if (pos < m_fieldCount)
+		return pValue(pos);
+	else
+		return QVariant();
 }
 
 //==================================================================================
@@ -181,9 +184,22 @@ QVariant pqxxSqlCursor::pValue(uint pos) const
 		return QVariant();
 	}
 
-	KexiDBDrvDbg << "VALUE AT " << pos << " IS: " << (*m_res)[at()][pos].c_str() << endl;
-
-	return QVariant(QString::fromUtf8((*m_res)[at()][pos].c_str()));
+	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(pos) : 0;
+	//from most to least frequently used types:
+	if (!f || f->isTextType())
+	{
+		return QVariant((*m_res)[at()][pos].c_str());
+	}
+	else if (f->isNumericType())
+	{
+		return QVariant((*m_res)[at()][pos].as(int()));
+	}
+	else if (f->isFPNumericType())
+	{
+		return QVariant((*m_res)[at()][pos].as(double()));
+	}
+	
+	return QVariant((*m_res)[at()][pos].c_str());
 }
 
 //==================================================================================
