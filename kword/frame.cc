@@ -1449,7 +1449,9 @@ void KWGroupManager::addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int co
   cell->frameSet = fs;
   cell->row = row;
   cell->col = col;
-
+  cell->rows = 1;
+  cell->cols = 1;
+  
   cells.insert(i,cell);
 }
 

@@ -959,3 +959,9 @@ Reggie, 21.3.1999:
 Reggie, 22.3.1999:
 ------------------
 - Pasting multiple paragraphs with formats works
+
+Reggie, 23.3.1999:
+------------------
+- Changed the toolbar pixmap which shows the text color - much nicer now
+- Fixes in the GUI
+- Started with internals for joining/splitting cells

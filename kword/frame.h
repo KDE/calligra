@@ -378,6 +378,7 @@ public:
   {
     KWFrameSet *frameSet;
     unsigned int row,col;
+    unsigned int rows,cols;
   };
 
   KWGroupManager(KWordDocument *_doc) : showHeaderOnAllPages(true), hasTmpHeaders(false)
@@ -386,7 +387,7 @@ public:
   void addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col);
   KWFrameSet *getFrameSet(unsigned int row,unsigned int col);
   bool getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col);
-  
+
   bool isTableHeader(KWFrameSet *fs);
 
   void init(unsigned int x,unsigned int y,unsigned int width,unsigned int height);
@@ -428,7 +429,7 @@ public:
 
   void updateTempHeaders();
   bool hasTempHeaders() { return hasTmpHeaders; }
-  
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

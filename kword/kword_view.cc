@@ -1910,7 +1910,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   QObject::connect(kapp->clipboard(),SIGNAL(dataChanged()),this,SLOT(clipboardDataChanged()));
   QObject::connect(m_pKWordDoc,SIGNAL(selectionOnOff()),this,SLOT(selectionOnOff()));
-  
+
   return true;
 }
 
@@ -1943,17 +1943,17 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
   // cut
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
-  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, ID_EDIT_CUT, SIGNAL( clicked() ), this, 
+  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, ID_EDIT_CUT, SIGNAL( clicked() ), this,
 						      "editCut", true, i18n("Cut"), -1);
 
   // copy
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, ID_EDIT_COPY, SIGNAL( clicked() ), this, 
+  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, ID_EDIT_COPY, SIGNAL( clicked() ), this,
 						       "editCopy", true, i18n("Copy"), -1);
 
   // paste
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
-  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, ID_EDIT_PASTE, SIGNAL( clicked() ), this, 
+  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, ID_EDIT_PASTE, SIGNAL( clicked() ), this,
 							"editPaste", true, i18n("Paste"), -1);
 
   m_vToolBarEdit->insertSeparator( -1 );
@@ -2371,33 +2371,67 @@ QString KWordView::colorToPixString(QColor c,PType _type)
     {
     case TXT_COLOR:
       {
-	pix += "\" 20 20 3 1 \",\n";
-	
-	pix += "\"  c none \",\n";
-	pix += "\". c black \",\n";
-	line.sprintf("\"+ c #%02X%02X%02X \",\n",r,g,b);
+	pix += "\"20 20 11 1\",\n";
+	pix += "\"h c #c0c000\",\n";
+	pix += "\"g c #808000\",\n";
+	pix += "\"f c #c0c0ff\",\n";
+	pix += "\"a c #000000\",\n";
+	pix += "\"d c #ff8000\",\n";
+	pix += "\". c None\",\n";
+	pix += "\"e c #0000c0\",\n";
+	pix += "\"i c #ffff00\",\n";
+	line.sprintf("\"# c #%02X%02X%02X \",\n",r,g,b);
 	pix += line.copy();
+	pix += "\"b c #c00000\",\n";
+	pix += "\"c c #ff0000\",\n";
+	pix += "\"....................\",\n";
+	pix += "\"....................\",\n";
+	pix += "\"....................\",\n";
+	pix += "\"........#...........\",\n";
+	pix += "\"........#a..........\",\n";
+	pix += "\".......###..........\",\n";
+	pix += "\".......###a.........\",\n";
+	pix += "\"......##aa#.........\",\n";
+	pix += "\"......##a.#a........\",\n";
+	pix += "\".....##a...#........\",\n";
+	pix += "\".....#######a.......\",\n";
+	pix += "\"....##aaaaaa#.......\",\n";
+	pix += "\"....##a.....aaaaaaaa\",\n";
+	pix += "\"...####....#abbccdda\",\n";
+	pix += "\"....aaaa....abbccdda\",\n";
+	pix += "\"............aee##ffa\",\n";
+	pix += "\"............aee##ffa\",\n";
+	pix += "\"............agghhiia\",\n";
+	pix += "\"............agghhiia\",\n";
+	pix += "\"............aaaaaaaa\"};";
+
+//        pix += "\" 20 20 3 1 \",\n";
 	
-	pix += "\"                    \",\n";
-	pix += "\"                    \",\n";
-	pix += "\"  ..............    \",\n";
-	pix += "\"   ............     \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        ..          \",\n";
-	pix += "\"        .++++++++   \",\n";
-	pix += "\"        .++++++++   \",\n";
-	pix += "\"        +++++++++   \",\n";
-	pix += "\"        +++++++++   \",\n";
-	pix += "\"        +++++++++   \",\n";
-	pix += "\"        +++++++++   \",\n";
-	pix += "\"        +++++++++   \",\n";
-	pix += "\"                    \",\n";
-	pix += "\"                    \"};\n";
+//  	pix += "\"  c none \",\n";
+//  	pix += "\". c black \",\n";
+//  	line.sprintf("\"+ c #%02X%02X%02X \",\n",r,g,b);
+//  	pix += line.copy();
+	
+//  	pix += "\"                    \",\n";
+//  	pix += "\"                    \",\n";
+//  	pix += "\"  ..............    \",\n";
+//  	pix += "\"   ............     \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        ..          \",\n";
+//  	pix += "\"        .++++++++   \",\n";
+//  	pix += "\"        .++++++++   \",\n";
+//  	pix += "\"        +++++++++   \",\n";
+//  	pix += "\"        +++++++++   \",\n";
+//  	pix += "\"        +++++++++   \",\n";
+//  	pix += "\"        +++++++++   \",\n";
+//  	pix += "\"        +++++++++   \",\n";
+//  	pix += "\"                    \",\n";
+//  	pix += "\"                    \"};\n";
       } break;
     case FRAME_COLOR:
       {
