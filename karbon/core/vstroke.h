@@ -86,6 +86,9 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
+
+	VStroke& operator=( const VStroke& stroke );
+
 private:
 	VObject* m_parent;
 

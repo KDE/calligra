@@ -22,7 +22,7 @@ VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJ
 
 VStroke::VStroke( const VStroke& stroke )
 {
-	m_parent = stroke.m_parent;
+	// dont copy the parent!
 	m_type = stroke.m_type;
 	m_lineWidth = stroke.m_lineWidth;
 	m_lineCap = stroke.m_lineCap;
@@ -121,5 +121,22 @@ VStroke::load( const QDomElement& element )
 			}
 		}
 	}
+}
+
+
+VStroke&
+VStroke::operator=( const VStroke& stroke )
+{
+	if( this != &stroke )
+	{
+		// dont copy the parent!
+		m_type = stroke.m_type;
+		m_lineWidth = stroke.m_lineWidth;
+		m_lineCap = stroke.m_lineCap;
+		m_lineJoin = stroke.m_lineJoin;
+		m_miterLimit = stroke.m_miterLimit;
+	}
+
+	return *this;
 }
 
