@@ -30,7 +30,6 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
   layout->addWidget( opacity, 0, 1 );
 
   label = new QLabel( opacity, i18n( "Opacity" ), area );
-  label->setBackgroundColor( blue );
   layout->addWidget( label, 0, 0 );
 
   IntegerWidget *offset = new IntegerWidget( 0, 100, area, "offset" );
@@ -40,7 +39,6 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
   layout->addWidget( offset, 1, 1 );
 
   label = new QLabel( offset, i18n( "Offset" ), area );
-  label->setBackgroundColor( yellow );
   layout->addWidget( label, 1, 0 );
 
   BlendChooser *mode = new BlendChooser( area );
@@ -85,10 +83,13 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
 
   layout->setColStretch( 0, 0 );
 
+/*
   layout->setRowStretch( 0, 0 );
   layout->setRowStretch( 1, 0 );
   layout->setRowStretch( 2, 0 );
   layout->setRowStretch( 3, 0 );
+*/
+  layout->setRowStretch( 6, 1 );
 }
 
 GradientDialog::~GradientDialog()

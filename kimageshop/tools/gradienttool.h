@@ -1,5 +1,5 @@
 /*
- *  brushtool.h - part of KImageShop
+ *  gradienttool.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
@@ -24,6 +24,7 @@
 #include <qpoint.h>
 
 #include "tool.h"
+#include "canvasview.h"
 
 class KImageShopDoc;
 class Gradient;
@@ -32,7 +33,7 @@ class GradientTool : public Tool
 {
 public:
 
-  GradientTool( KImageShopDoc *_doc, Gradient *_gradient );
+  GradientTool( KImageShopDoc *_doc, KImageShopView *_view, CanvasView *_view, Gradient *_gradient );
   ~GradientTool();
 
   virtual QCString toolName() { return QCString("GradientTool"); }
@@ -43,10 +44,14 @@ public:
 
 
 protected:
-
-  QPoint   m_dragStart;
-  bool     m_dragging;
-  Gradient *m_gradient;
+ 
+  KImageShopView *m_pView; 
+  CanvasView     *m_pCanvasView;
+  QWidget        *m_helpWidget;
+  QPoint          m_dragStart;
+  QPoint          m_pointEnd;
+  bool            m_dragging;
+  Gradient       *m_gradient;
 };
 
 #endif //__gradienttool_h__

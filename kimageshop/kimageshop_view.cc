@@ -19,6 +19,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdio.h>
+
 #include <qprinter.h>
 #include <qmsgbox.h>
 #include <qkeycode.h>
@@ -412,7 +414,7 @@ void KImageShopView::createGUI()
   m_pZoomTool = new ZoomTool(this);
 
   // create gradient tool
-  m_pGradientTool = new GradientTool( m_pDoc, m_actGradient );
+  m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvasView, m_actGradient );
 
   // create layer dialog
   m_pLayerDialog = new LayerDialog( m_pDoc, this );
@@ -706,7 +708,7 @@ void KImageShopView::slotActivateZoomTool()
 void KImageShopView::slotActivateGradientTool()
 {
   if( !m_pGradientTool )
-    m_pGradientTool = new GradientTool( m_pDoc, m_actGradient );
+    m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvasView, m_actGradient );
 
   m_pTool = m_pGradientTool;
 

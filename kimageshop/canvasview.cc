@@ -18,9 +18,13 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <iostream.h>
+
 #include "canvasview.h"
 
-CanvasView::CanvasView(QWidget *parent) : QWidget(parent)
+CanvasView::CanvasView(QWidget *parent)
+  : QWidget( parent )
+  , m_transWidget( 0 )
 {
   setMouseTracking(true);
 }
@@ -44,6 +48,38 @@ void CanvasView::mouseMoveEvent(QMouseEvent *e)
 void CanvasView::mouseReleaseEvent(QMouseEvent *e)
 {
   emit sigMouseRelease(e);
+}
+
+void CanvasView::resizeEvent( QResizeEvent *_event )
+{
+  QWidget::resizeEvent( _event );
+  if( m_transWidget ) m_transWidget->resize( size() );
+}
+
+QWidget* CanvasView::getTransWidget()
+{
+  cout << "Michael : CanvasView::getTransWidget" << endl;
+
+  if( !m_transWidget )
+  {
+    m_transWidget = new QWidget( this );
+    m_transWidget->resize( size() );
+    m_transWidget->setBackgroundMode( NoBackground );
+    m_transWidget->show();
+  }
+
+  m_transWidget->hide();
+
+  return m_transWidget;
+}
+
+void CanvasView::deleteTransWidget()
+{
+  if( m_transWidget )
+  {
+    delete m_transWidget;
+    m_transWidget = 0;
+  }
 }
 
 #include "canvasview.moc"

@@ -24,7 +24,7 @@
 #include <kfloatingtabdialog.h>
 
 class KImageShopDoc;
-class LayerDialog;
+//class LayerDialog;
 
 #define CELLWIDTH   200
 #define CELLHEIGHT  40

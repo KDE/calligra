@@ -30,18 +30,25 @@ class CanvasView : public QWidget
  public:
   CanvasView(QWidget *parent = 0L);
   ~CanvasView();
-
+  
+  QWidget* getTransWidget();
+  void deleteTransWidget();
+  
  protected:
   virtual void paintEvent(QPaintEvent *);
   virtual void mousePressEvent(QMouseEvent *);
   virtual void mouseMoveEvent(QMouseEvent *);
   virtual void mouseReleaseEvent(QMouseEvent *);
+  virtual void resizeEvent( QResizeEvent * );
 
  signals:
   void sigPaint(QPaintEvent *);
   void sigMousePress(QMouseEvent *);
   void sigMouseMove(QMouseEvent *);
   void sigMouseRelease(QMouseEvent *);
+  
+ private:
+  QWidget* m_transWidget;
 };
 
 #endif
