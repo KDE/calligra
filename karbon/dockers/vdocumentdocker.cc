@@ -28,6 +28,7 @@
 #include <qtabwidget.h>
 #include <qlabel.h>
 #include <qcursor.h>
+#include <qpixmapcache.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -337,11 +338,21 @@ VObjectListViewItem::update()
 	VSelectionDescription selectionDesc;
 	selectionDesc.visit( *m_object );
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
-	if( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked )
-		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "locked.png", KIcon::Small ) ) );
-	else
-		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "unlocked.png", KIcon::Small ) ) );
-	setPixmap( 2, QPixmap( KGlobal::iconLoader()->iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
+	QPixmap pm;
+	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
+	if( !QPixmapCache::find( s, pm ) )
+	{
+		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
+		QPixmapCache::insert( s, pm );
+	}
+	setPixmap( 1, pm );
+	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible.png" : "14_layer_visible.png";
+	if( !QPixmapCache::find( s, pm ) )
+	{
+		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
+		QPixmapCache::insert( s, pm );
+	}
+	setPixmap( 2, pm );
 	setPixmap( 0, preview );
 }
 
