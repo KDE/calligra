@@ -245,14 +245,14 @@ void KoTemplateChooseDia::setupDialog()
         d->m_recent = new QComboBox( d->m_mainwidget, "recent files" );
 
         QString oldGroup;
-        oldGroup=KGlobal::config()->group();
-        KGlobal::config()->setGroup( "RecentFiles" );
+        oldGroup=d->m_global->config()->group();
+        d->m_global->config()->setGroup( "RecentFiles" );
 
         // read file list
         QStringList lst;
         int i=1;
         QString key=QString( "File%1" ).arg( i );
-        QString value=KGlobal::config()->readEntry( key, QString::null );
+        QString value=d->m_global->config()->readEntry( key, QString::null );
         if(value.startsWith("file:"))
             value=value.mid(5);
         QString squeezed=KStringHandler::csqueeze(value);
@@ -261,7 +261,7 @@ void KoTemplateChooseDia::setupDialog()
             d->recentFilesMap.insert(squeezed, value);
             ++i;
             key=QString( "File%1" ).arg( i );
-            value=KGlobal::config()->readEntry( key, QString::null );
+            value=d->m_global->config()->readEntry( key, QString::null );
             if(value.startsWith("file:"))
                 value=value.mid(5);
             squeezed=KStringHandler::csqueeze(value);
@@ -271,7 +271,7 @@ void KoTemplateChooseDia::setupDialog()
         if( lst.isEmpty() )
             lst.append( i18n("No recent files available") );
         d->m_recent->insertStringList( lst );
-        KGlobal::config()->setGroup( oldGroup );
+        d->m_global->config()->setGroup( oldGroup );
 
         row->addWidget(d->m_recent);
         connect( d->m_recent, SIGNAL( activated(int) ), this, SLOT( openRecent() ) );
