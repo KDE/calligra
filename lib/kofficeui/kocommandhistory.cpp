@@ -124,8 +124,8 @@ KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool wi
     }
     else
     {
-        m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection );
-        m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection );
+        m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection, "koffice_undo");
+        m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection, "koffice_redo");
         m_undoPopup = 0L;
         m_redoPopup = 0L;
         d->m_redoListBox = 0L;
