@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KarbonViewIface.h"
+#include "karbon_view_iface.h"
 
 #include "karbon_view.h"
 

@@ -42,7 +42,7 @@
 #include <koMainWindow.h>
 #include <koFontDia.h>
 
-#include "KarbonViewIface.h"
+#include "karbon_view_iface.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
