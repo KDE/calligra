@@ -126,9 +126,9 @@ bool KSpreadDoc::initDoc()
 					"*.ksp", "KSpread", KoTemplateChooseDia::NoTemplates );
 
     if ( ret == KoTemplateChooseDia::File ) {
-        QString fileName(f);
-	KURL::encode( fileName );
-	return openURL( KURL( fileName ) );
+        KURL url;
+        url.setPath(f);
+	return openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	KSpreadTable *t = createTable();
 	m_pMap->addTable( t );
