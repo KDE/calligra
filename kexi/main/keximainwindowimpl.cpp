@@ -2239,6 +2239,11 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 	return true;
 }
 
+tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg)
+{
+	return closeDialog(dlg, true);
+}
+
 tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 {
 	if (!dlg)

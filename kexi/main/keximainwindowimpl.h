@@ -102,7 +102,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 used will be asked if saving should be perforemed.
 		 \return true on successull closing or false on closing error.
 		 If closing was cancelled by user, cancelled is returned. */
-		tristate closeDialog(KexiDialogBase *dlg, bool layoutTaskBar = true);
+		virtual tristate closeDialog(KexiDialogBase *dlg);
+
+		tristate closeDialog(KexiDialogBase *dlg, bool layoutTaskBar);
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
