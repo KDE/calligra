@@ -14,5 +14,5 @@ noinst_HEADERS = wmfimport.h wmfimport_factory.h
 
 METASOURCES = AUTO
 
-service_DATA = killustrator_wmf_import.desktop
+service_DATA = kontour_wmf_import.desktop
 servicedir = $(kde_servicesdir)

@@ -13,7 +13,7 @@ noinst_HEADERS = applixgraphicimport.h applixgraphicimport_factory.h
 
 METASOURCES = AUTO
 
-service_DATA = killustrator_applixgraphic_import.desktop
+service_DATA = kontour_applixgraphic_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
