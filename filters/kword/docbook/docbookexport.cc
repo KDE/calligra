@@ -288,12 +288,6 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
             {
                 case 1:   // texts
                     {
-                    if ( (*formattingIt).text.linkReference.length () )
-                    {
-                        kdError (30507) << "ProcessParagraphData: Link to "
-                                        << (*formattingIt).text.linkReference
-                                        << " not implemented, yet!" << endl;
-                    }
 
                     bool fixedFont = false;
 
@@ -335,6 +329,22 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                     {
                         outputText += "</EMPHASIS>";
                     }
+                    }
+                    break;
+                    
+               case 4:   // variables
+                    if (9 == (*formattingIt).variable.m_type)
+                    {
+                        // A link (TODO: verify the code, as the tags were copied from a XML DocBook file)
+                        outputText += "<ULINK URL=\"";
+                        outputText += EscapeXmlText ( (*formattingIt).variable.m_linkName, true, true );
+                        outputText += "\">";
+                        outputText += EscapeXmlText ( (*formattingIt).variable.m_hrefName );
+                        outputText += "</ULINK>";
+                    }
+                    else
+                    {
+                        outputText += EscapeXmlText ( (*formattingIt).variable.m_text );
                     }
                     break;
 
