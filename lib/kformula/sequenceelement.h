@@ -434,6 +434,8 @@ private:
     bool textSequence;
 
     static ElementCreationStrategy* creationStrategy;
+    
+    int singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
 };
 
 
