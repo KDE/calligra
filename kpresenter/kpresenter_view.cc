@@ -1052,6 +1052,7 @@ void KPresenterView_impl::createGUI()
   setupScreenToolbar();
   setupScrollbars();
   setRanges();
+  setupAccelerators();
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,true);
   m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,true);
  
@@ -2159,9 +2160,9 @@ void KPresenterView_impl::setupMenu()
 						    CORBA::string_dup(i18n("&Delete")),m_idMenuEdit,
 						    this,CORBA::string_dup("editDelete"));
       m_rMenuBar->insertSeparator(m_idMenuEdit);
-      m_idMenuEdit_Find = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Find...")),m_idMenuEdit,
+      m_idMenuEdit_Find = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Find...")),m_idMenuEdit,
 						 this,CORBA::string_dup("editFind"));
-      m_idMenuEdit_FindReplace = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Replace...")),m_idMenuEdit,
+      m_idMenuEdit_FindReplace = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Replace...")),m_idMenuEdit,
 							this,CORBA::string_dup("editFindReplace"));
 
       // view menu
@@ -2937,6 +2938,50 @@ void KPresenterView_impl::setupScrollbars()
   horz->setGeometry(0,widget()->height()-16,widget()->width()-16,16);
 }
 
+/*======================= setup accellerators ==================*/
+void KPresenterView_impl::setupAccelerators()
+{
+  // edit menu
+  m_rMenuBar->setAccel(CTRL + Key_X,m_idMenuEdit_Cut);
+  m_rMenuBar->setAccel(CTRL + Key_C,m_idMenuEdit_Copy);
+  m_rMenuBar->setAccel(CTRL + Key_V,m_idMenuEdit_Paste);
+  m_rMenuBar->setAccel(CTRL + Key_F,m_idMenuEdit_Find);
+  m_rMenuBar->setAccel(CTRL + Key_R,m_idMenuEdit_FindReplace);
+
+  // insert menu
+  m_rMenuBar->setAccel(ALT + Key_N,m_idMenuInsert_Page);
+  m_rMenuBar->setAccel(Key_F1,m_idMenuInsert_Picture);
+  m_rMenuBar->setAccel(Key_F2,m_idMenuInsert_Clipart);
+  m_rMenuBar->setAccel(Key_F3,m_idMenuInsert_LineHorz);
+  m_rMenuBar->setAccel(Key_F4,m_idMenuInsert_LineVert);
+  m_rMenuBar->setAccel(Key_F5,m_idMenuInsert_LineD1);
+  m_rMenuBar->setAccel(Key_F6,m_idMenuInsert_LineD2);
+  m_rMenuBar->setAccel(Key_F7,m_idMenuInsert_RectangleNormal);
+  m_rMenuBar->setAccel(Key_F8,m_idMenuInsert_RectangleRound);
+  m_rMenuBar->setAccel(Key_F9,m_idMenuInsert_Circle);
+  m_rMenuBar->setAccel(Key_F10,m_idMenuInsert_Text);
+  m_rMenuBar->setAccel(Key_F11,m_idMenuInsert_Autoform);
+  m_rMenuBar->setAccel(Key_F12,m_idMenuInsert_Part);
+
+  // extra menu
+  m_rMenuBar->setAccel(CTRL + Key_P,m_idMenuExtra_PenBrush);
+  m_rMenuBar->setAccel(CTRL + Key_Minus,m_idMenuExtra_Lower);
+  m_rMenuBar->setAccel(CTRL + Key_Plus,m_idMenuExtra_Raise);
+  m_rMenuBar->setAccel(ALT + Key_R,m_idMenuExtra_Rotate);
+  m_rMenuBar->setAccel(ALT + Key_S,m_idMenuExtra_Shadow);
+ 
+  // screen menu
+  m_rMenuBar->setAccel(ALT + Key_A,m_idMenuScreen_AssignEffect);
+  m_rMenuBar->setAccel(CTRL + Key_G,m_idMenuScreen_Start);
+  m_rMenuBar->setAccel(Key_Home,m_idMenuScreen_First);
+  m_rMenuBar->setAccel(Key_End,m_idMenuScreen_Last);
+  m_rMenuBar->setAccel(Key_Prior,m_idMenuScreen_Prev);
+  m_rMenuBar->setAccel(Key_Next,m_idMenuScreen_Next);
+
+  // help menu
+  m_rMenuBar->setAccel(CTRL + Key_H,m_idMenuHelp_Contents);
+}
+
 /*===================== set ranges of scrollbars ===============*/
 void KPresenterView_impl::setRanges()
 {
@@ -2944,13 +2989,14 @@ void KPresenterView_impl::setRanges()
     {
       int range;
       
-      vert->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height()+20);
-      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height()+10)*m_pKPresenterDoc->getPageNums()-page->height()+26 < 0 ? 0 :
-	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height()+10)*m_pKPresenterDoc->getPageNums()-page->height()+26;
+      vert->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height() + 20);
+      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height() + 10) * m_pKPresenterDoc->getPageNums() - page->height() + 26 
+	< 0 ? 0 :
+	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height() + 10) * m_pKPresenterDoc->getPageNums() - page->height() + 26;
       vert->setRange(0,range);
-      horz->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width()+36-page->width());
-      range = m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width()+36-page->width() < 0 ? 0 :
-	m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width()+36-page->width();
+      horz->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width() + 36 - page->width());
+      range = m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width() + 36 - page->width() < 0 ? 0 :
+	m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width() + 36 - page->width();
       horz->setRange(0,range);
     }
 }

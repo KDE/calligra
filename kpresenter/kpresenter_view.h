@@ -339,6 +339,7 @@ protected:
   void setupExtraToolbar();
   void setupScreenToolbar();
   void setupScrollbars();
+  void setupAccelerators();
 
   // set scrollbar ranges
   void setRanges();
