@@ -1368,49 +1368,66 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
     }
 }
 
+// "Extend Contents to Object Height"
 KCommand * KPTextObject::textContentsToHeight()
 {
     if (isProtect() )
         return 0L;
 
-    KoTextParag * parag = m_textobj->textDocument()->lastParag();
-    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ))+btop+bbottom;
-    if( getRect().height()> txtHeight )
+    // Count total number of lines and sum up their height (linespacing excluded)
+    KoTextParag * parag = m_textobj->textDocument()->firstParag();
+    int numLines = 0;
+    int textHeightLU = 0;
+    for ( ; parag ; parag = parag->next() )
     {
-        m_doc->repaint(this);
-        KoSize size= KoSize(getRect().width(), txtHeight) - getRect().size();
-        ResizeCmd *cmd = new ResizeCmd( i18n("TextContentsToHeight"), KoPoint( 0,0), size, this, m_doc);
-        return cmd;
+        int lines = parag->lines();
+        numLines += lines;
+        for ( int line = 0 ; line < lines ; ++line )
+        {
+            int y, h, baseLine;
+            parag->lineInfo( line, y, h, baseLine );
+            textHeightLU += h - parag->lineSpacing( line );
+        }
     }
-    return 0L;
+
+    double textHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textHeightLU );
+    double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
+    //kdDebug() << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
+
+    if ( innerHeight() - textHeight < 1e-5 ) // floating-point equality test
+        return 0L; // nothing to do
+    if ( lineSpacing < 0 ) // text object is too small
+        return 0L; // abort
+
+    // Apply the new linespacing to the whole object
+    m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
+    KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing, KoTextDocument::Temp );
+    m_textobj->textDocument()->removeSelection( KoTextDocument::Temp );
+    return cmd;
 }
 
+// "Resize Object to fit Contents"
 KCommand * KPTextObject::textObjectToContents()
 {
     if (isProtect() )
         return 0L;
+    // Calculate max parag width (in case all parags are short, otherwise the width is more or less
+    // the current object's width anyway).
     KoTextParag * parag = m_textobj->textDocument()->firstParag();
-    KoTextParag * lastParag = m_textobj->textDocument()->lastParag();
-    int widthTxt=10;
+    double txtWidth = 10;
     for ( ; parag ; parag = parag->next() )
-    {
-        widthTxt = QMAX( widthTxt, m_doc->zoomHandler()->layoutUnitToPixelX( parag->rect().right() ));
-    }
+        txtWidth = QMAX( txtWidth, m_doc->zoomHandler()->layoutUnitPtToPt( parag->rect().right() ));
 
-    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( lastParag->rect().bottom() ));
-    if( getRect().height()> txtHeight )
+    // Calculate text height
+    int heightLU = m_textobj->textDocument()->height();
+    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( heightLU );
+
+    // Compare with current object's size
+    KoSize sizeDiff = KoSize( txtWidth, txtHeight ) - innerRect().size();
+    if( !sizeDiff.isNull() )
     {
-        m_doc->repaint(this);
-        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight ) - innerRect().size();
-        ResizeCmd *cmd = new ResizeCmd( i18n("Resize Text Contents to Height"), KoPoint( 0,0), size, this, m_doc);
-        return cmd;
-    }
-    else
-    {
-        m_doc->repaint(this);
-        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height()) - innerRect().size();
-        ResizeCmd *cmd = new ResizeCmd( i18n("Resize Text Contents to Height"), KoPoint( 0,0), size, this, m_doc);
-        return cmd;
+        // The command isn't named since it's always put into a macro command.
+        return new ResizeCmd( QString::null, KoPoint( 0, 0 ), sizeDiff, this, m_doc);
     }
     return 0L;
 }

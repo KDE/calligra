@@ -6064,6 +6064,7 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
 
 }
 
+// "Extend Contents to Object Height"
 void KPrCanvas::textContentsToHeight()
 {
     QPtrList<KPTextObject> lst = applicableTextObjects();
@@ -6085,9 +6086,11 @@ void KPrCanvas::textContentsToHeight()
     {
         macro->execute();
         m_view->kPresenterDoc()->addCommand( macro );
+        m_view->kPresenterDoc()->repaint(this);
     }
 }
 
+// "Resize Object to fit Contents"
 void KPrCanvas::textObjectToContents()
 {
     QPtrList<KPTextObject> lst = applicableTextObjects();
@@ -6109,6 +6112,7 @@ void KPrCanvas::textObjectToContents()
     {
         macro->execute();
         m_view->kPresenterDoc()->addCommand( macro );
+        m_view->kPresenterDoc()->repaint(this);
     }
 
 }
