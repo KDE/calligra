@@ -105,12 +105,19 @@ VSelectToolBar::slotHeightChanged( double newval )
 void
 VSelectToolBar::slotSelectionChanged()
 {
-	kdDebug() << "VSelectToolBar::slotSelectionChanged()" << endl;
+	m_x->blockSignals( true );
+	m_y->blockSignals( true );
+	m_width->blockSignals( true );
+	m_height->blockSignals( true );
 	KoRect rect = m_view->part()->document().selection()->boundingBox();
 	m_x->setValue( rect.topLeft().x() );
 	m_y->setValue( rect.topLeft().y() );
 	m_width->setValue( rect.width() );
 	m_height->setValue( rect.height() );
+	m_x->blockSignals( false );
+	m_y->blockSignals( false );
+	m_width->blockSignals( false );
+	m_height->blockSignals( false );
 }
 
 #include "vselecttoolbar.moc"
