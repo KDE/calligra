@@ -478,11 +478,13 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 		gc->stroke.setMiterLimit( params.toFloat() );
 	else if( command == "stroke-dasharray" )
 	{
-		QStringList dashes = QStringList::split( ' ', params );
 		QValueList<float> array;
-	    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
-			array.append( (*it).toFloat() );
-
+		if(params != "none")
+		{
+			QStringList dashes = QStringList::split( ' ', params );
+		    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
+				array.append( (*it).toFloat() );
+		}
 		gc->stroke.dashPattern().setArray( array );
 	}
 	else if( command == "stroke-dashoffset" )
