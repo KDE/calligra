@@ -33,7 +33,7 @@ public:
     int getClassId()
     { return classId; }
     virtual bool operator==( const KWCharAttribute &_attrib )
-    { return classId == const_cast<KWCharAttribute>( _attrib ).getClassId(); }
+    { return classId == static_cast<KWCharAttribute>( _attrib ).getClassId(); }
 
     virtual void save( ostream & ) {}
 
