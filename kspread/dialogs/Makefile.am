@@ -11,7 +11,6 @@ noinst_LTLIBRARIES = \
 	libdialogs.la
 
 libdialogs_la_SOURCES = \
-	kspread_dlg_anchor.cc \
 	kspread_dlg_angle.cc \
 	kspread_dlg_area.cc \
 	kspread_dlg_comment.cc \
@@ -45,7 +44,6 @@ libdialogs_la_SOURCES = \
 	sheet_properties.cc
 
 noinst_HEADERS = \
-	kspread_dlg_anchor.h \
 	kspread_dlg_angle.h \
 	kspread_dlg_area.h \
 	kspread_dlg_comment.h \
