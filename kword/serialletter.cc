@@ -28,7 +28,7 @@
 #include "kwdoc.h"
 #include "serialletter.h"
 #include "serialletter.moc"
-#include "variabledlgs.h"
+#include <koVariableDlgs.h>
 #include <kmainwindow.h>
 #include "defs.h"
 #include <qfile.h>
@@ -60,7 +60,7 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
 	{
 		kdDebug()<<"Found serial letter plugin: "<< (*it)->name()<<endl;
 	}
-	
+
 	if (!pluginOffers.count())
 	{
 		//Sorry no suitable plugins found

@@ -31,8 +31,8 @@
 #include "kwdrag.h"
 #include <koparagcounter.h>
 #include "contents.h"
-#include "variable.h"
-#include "variabledlgs.h"
+#include <koVariable.h>
+#include <koVariableDlgs.h>
 #include "serialletter.h"
 #include <koAutoFormat.h>
 #include <qclipboard.h>
@@ -46,6 +46,7 @@
 #include <kotextformatter.h>
 #include <krun.h>
 #include <kmessagebox.h>
+#include "variable.h"
 
 #include <kdebug.h>
 #include <assert.h>
@@ -2856,9 +2857,9 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
 
 void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
 {
-     KWVariable * var = 0L;
+     KoVariable * var = 0L;
      KWDocument * doc = frameSet()->kWordDocument();
-     var = new KWCustomVariable( textFrameSet(), name, doc->variableFormatCollection()->format( "STRING" ) );
+     var = new KoCustomVariable( textFrameSet()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
      insertVariable( var);
 }
 
@@ -2867,27 +2868,33 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
     KWDocument * doc = frameSet()->kWordDocument();
 
-    KWVariable * var = 0L;
+    KoVariable * var = 0L;
     if ( type == VT_CUSTOM )
     {
         // Choose an existing variable
-        KWVariableNameDia dia( m_canvas, doc->getVariables() );
+        KoVariableNameDia dia( m_canvas, doc->getVariableCollection()->getVariables() );
         if ( dia.exec() == QDialog::Accepted )
-            var = new KWCustomVariable( textFrameSet(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ) );
+            var = new KoCustomVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
     }
     else if ( type == VT_SERIALLETTER )
     {
         KWSerialLetterVariableInsertDia dia( m_canvas, doc->getSerialLetterDataBase() );
         if ( dia.exec() == QDialog::Accepted )
-            var = new KWSerialLetterVariable( textFrameSet(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ) );
+        {
+            var = new KWSerialLetterVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection(),doc );
+        }
+    }
+    else if ( type ==VT_PGNUM)
+    {
+        var = new KWPgNumVariable( textFrameSet()->textDocument(),subtype, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
     }
     else
-        var = KWVariable::createVariable( type, subtype, textFrameSet(), 0L );
+        var = KoVariable::createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc,doc->getVariableCollection());
 
     insertVariable( var );
 }
 
-void KWTextFrameSetEdit::insertVariable( KWVariable *var )
+void KWTextFrameSetEdit::insertVariable( KoVariable *var )
 {
     if ( var )
     {

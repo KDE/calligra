@@ -53,8 +53,8 @@
 #include "splitcellsdia.h"
 #include "stylist.h"
 #include "tabledia.h"
-#include "variable.h"
-#include "variabledlgs.h"
+#include <koVariable.h>
+#include <koVariableDlgs.h>
 #include "koInsertLink.h"
 
 #include <koMainWindow.h>
@@ -401,23 +401,23 @@ void KWView::setupActions()
     actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
                                             actionCollection(), "insert_variable" );
     // The last argument is only needed if a submenu is to be created
-    addVariableActions( VT_FIELD, KWFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
-    addVariableActions( VT_DATE, KWDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
-    addVariableActions( VT_TIME, KWTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
+    addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
+    addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
+    addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
 
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                             actionCollection(), "insert_custom" );
      actionInsertVariable->insert(actionInsertCustom);
      refreshCustomMenu();
 
-    addVariableActions( VT_PGNUM, KWPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
     /*
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
     */
 
 
     // TODO at the moment serial letters don't work correctly
-    addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_SERIALLETTER, KoSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
 
 
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
@@ -767,16 +767,16 @@ void KWView::addVariableActions( int type, const QStringList & texts,
 void KWView::refreshCustomMenu()
 {
     actionInsertCustom->popupMenu()->clear();
-    QPtrListIterator<KWVariable> it( m_doc->getVariables() );
+    QPtrListIterator<KoVariable> it( m_doc->getVariableCollection()->getVariables() );
     KAction * act=0;
     QStringList lst;
     QString varName;
     for ( ; it.current() ; ++it )
     {
-        KWVariable *var = it.current();
+        KoVariable *var = it.current();
         if ( var->type() == VT_CUSTOM )
         {
-            varName=( (KWCustomVariable*) var )->name();
+            varName=( (KoCustomVariable*) var )->name();
             if ( !lst.contains( varName) )
             {
                  lst.append( varName );
@@ -1085,8 +1085,8 @@ void KWView::print( KPrinter &prt )
 
     bool serialLetter = FALSE;
 
-    QPtrList<KWVariable> vars = m_doc->getVariables();
-    KWVariable *v = 0;
+    QPtrList<KoVariable> vars = m_doc->getVariableCollection()->getVariables();
+    KoVariable *v = 0;
     for ( v = vars.first(); v; v = vars.next() ) {
         if ( v->type() == VT_SERIALLETTER ) {
             serialLetter = TRUE;
@@ -1603,7 +1603,7 @@ void KWView::deleteFrame( bool _warning )
 
 void KWView::editCustomVars()
 {
-    KWCustomVariablesDia dia( this, m_doc->getVariables() );
+    KoCustomVariablesDia dia( this, m_doc->getVariableCollection()->getVariables() );
     if(dia.exec())
         m_doc->recalcVariables( VT_CUSTOM );
 }

@@ -21,7 +21,7 @@
 #include "kwdoc.h"
 #include "kwframe.h"
 #include "defs.h"
-#include "kwutils.h"
+#include <koUtils.h>
 
 #include <klocale.h>
 

@@ -39,8 +39,8 @@
 #include <qvbox.h>
 
 #include "kwdoc.h"
-#include "variabledlgs.h"
-#include "kwutils.h"
+#include <koVariableDlgs.h>
+#include <koUtils.h>
 #include "defs.h"
 #include "serialletter_interface.h"
 

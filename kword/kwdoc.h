@@ -41,8 +41,9 @@ class KSpellConfig;
 class KoAutoFormat;
 class KCommand;
 class KCommandHistory;
-class KWVariable;
-class KWVariableFormatCollection;
+class KoVariable;
+class KoVariableFormatCollection;
+class KoVariableCollection;
 
 class DCOPObject;
 
@@ -255,7 +256,7 @@ public:
 
     KWImageCollection *imageCollection() { return &m_imageCollection; }
     KoClipartCollection *clipartCollection() { return &m_clipartCollection; }
-    KWVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
+    KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
 
@@ -330,29 +331,9 @@ public:
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true );
     void loadEmbedded( QDomElement embedded );
 
-    /**
-     * A custom variable (i.e. value set by the user)
-     * was inserted into the text -> register it
-     */
-    void registerVariable( KWVariable *var );
-    /**
-     * A variable was deleted -> unregister it
-     */
-    void unregisterVariable( KWVariable *var );
-    /**
-     * Recalculate all variables of a given type
-     */
     void recalcVariables( int type );
-    /**
-     * Returns the list of all variables. Used by the dialog.
-     */
-    const QPtrList<KWVariable>& getVariables() const {
-        return variables;
-    }
-
-    // For custom variables
-    void setVariableValue( const QString &name, const QString &value );
-    QString getVariableValue( const QString &name ) const;
+    
+    KoVariableCollection *getVariableCollection() {return m_varColl;}
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const { return m_slDataBase; }
     int getSerialLetterRecord() const;
@@ -521,6 +502,7 @@ signals:
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
     void slotRepaintAllViews() { repaintAllViews( false ); }
+    void slotRepaintVariable();
 
 protected slots:
     void slotDocumentRestored();
@@ -592,9 +574,7 @@ private:
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
-    KWVariableFormatCollection *m_varFormatCollection;
-    QPtrList<KWVariable> variables;
-    QMap< QString, QString > varValues;
+    KoVariableFormatCollection *m_varFormatCollection;
     KWSerialLetterDataBase *m_slDataBase;
     int slRecordNum;
 
@@ -627,6 +607,7 @@ private:
     bool m_hasTOC;
 
     QString m_lastModeView;
+    KoVariableCollection *m_varColl;
 };
 
 

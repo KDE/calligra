@@ -22,7 +22,7 @@
 #include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
-#include "variable.h"
+#include <koVariable.h>
 #include <koparagcounter.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -526,9 +526,9 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         int type = typeElem.attribute( "type" ).toInt();
                         QString key = typeElem.attribute( "key" );
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << " key=" << key << endl;
-                        KWVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
+                        KoVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
                         // If varFormat is 0 (no key specified), the default format will be used.
-                        KWVariable * var = KWVariable::createVariable( type, -1, kwTextDocument()->textFrameSet(), varFormat );
+                        KoVariable * var = KoVariable::createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc,doc->getVariableCollection() );
                         var->load( varElem );
                         KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );

@@ -12,12 +12,12 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		kwframe.cc kwtextframeset.cc \
                 kwtableframeset.cc kwtextimage.cc kwanchor.cc \
                 kwdrag.cc kwconfig.cc \
-		searchdia.cc \
-		framedia.cc kwutils.cc \
+		searchdia.cc variable.cc \
+		framedia.cc \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
                 contents.cc stylist.cc \
                 resizehandles.cc kwcommand.cc \
-		variable.cc variabledlgs.cc serialletter.cc \
+		serialletter.cc \
 		kwchangecasedia.cc kweditpersonnalexpressiondia.cc \
 		splitcellsdia.cc kwinsertpicdia.cc \
 		KWordDocIface.skel KWordDocIface.cc \

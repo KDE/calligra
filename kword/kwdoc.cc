@@ -37,9 +37,9 @@
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "defs.h"
-#include "kwutils.h"
+#include <koUtils.h>
 #include <koAutoFormat.h>
-#include "variable.h"
+#include <koVariable.h>
 #include "serialletter.h"
 #include "kwview.h"
 #include "kwviewmode.h"
@@ -181,7 +181,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_pixmapMap = 0L;
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
-    m_varFormatCollection = new KWVariableFormatCollection;
+    m_varFormatCollection = new KoVariableFormatCollection;
+    m_varColl=new KoVariableCollection;
 
     m_slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
@@ -205,7 +206,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     if ( name )
 	dcopObject();
-
+    connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
 }
 
 /*==============================================================*/
@@ -225,6 +226,7 @@ KWDocument::~KWDocument()
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
+    delete m_varColl;
     delete m_varFormatCollection;
     delete m_slDataBase;
     delete dcop;
@@ -2582,26 +2584,18 @@ void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPo
     m_anchorRequests.insert( framesetName, anchorPos );
 }
 
-void KWDocument::registerVariable( KWVariable *var )
-{
-    if ( !var )
-        return;
-    variables.append( var );
-}
-
 
 void KWDocument::refreshMenuCustomVariable()
 {
    emit sig_refreshMenuCustomVariable();
 }
 
-void KWDocument::unregisterVariable( KWVariable *var )
-{
-    variables.take( variables.findRef( var ) );
-}
 
 void KWDocument::recalcVariables( int type )
 {
+    m_varColl->recalcVariables(type);
+    slotRepaintVariable();
+#if 0
     bool update = false;
     QPtrListIterator<KWVariable> it( variables );
     QPtrList<KWTextFrameSet> toRepaint;
@@ -2625,18 +2619,25 @@ void KWDocument::recalcVariables( int type )
     }
     for ( KWTextFrameSet * fs = toRepaint.first() ; fs ; fs = toRepaint.next() )
         slotRepaintChanged( fs );
+#endif
 }
 
-void KWDocument::setVariableValue( const QString &name, const QString &value )
+void KWDocument::slotRepaintVariable()
 {
-    varValues[ name ] = value;
-}
+    QPtrListIterator<KWFrameSet> it = framesetsIterator();
+    for (; it.current(); ++it )
+        if( it.current()->type()==FT_TEXT)
+            slotRepaintChanged( (*it) );
+#if 0
+    KWTextFrameSet * textfs = static_cast<KWTextDocument *>(it.current()->textDocument())->textFrameSet();
+    if ( toRepaint.findRef( textfs ) == -1 )
+        toRepaint.append( textfs );
 
-QString KWDocument::getVariableValue( const QString &name ) const
-{
-    if ( !varValues.contains( name ) )
-        return i18n( "No value" );
-    return varValues[ name ];
+
+    QPtrListIteratorQPtrList<KWTextFrameSet> toRepaint;
+        for ( KWTextFrameSet * fs = toRepaint.first() ; fs ; fs = toRepaint.next() )
+        slotRepaintChanged( fs );
+#endif
 }
 
 int KWDocument::getSerialLetterRecord() const

@@ -33,7 +33,7 @@ class KWDocument;
 class KWViewMode;
 class KAction;
 class KoDataToolInfo;
-class KWVariable;
+class KoVariable;
 class QProgressDialog;
 class KMacroCommand;
 class KWTextDocument;
@@ -285,7 +285,7 @@ public:
     void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor() ); }
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
-    void insertVariable( KWVariable *var);
+    void insertVariable( KoVariable *var);
 
     void insertSpecialChar(QChar _c);
     void insertSoftHyphen();
