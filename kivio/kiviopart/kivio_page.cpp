@@ -111,7 +111,8 @@ DCOPObject* KivioPage::dcopObject()
 
 KivioPage::~KivioPage()
 {
-  delete gLines;
+    kdDebug()<<" KivioPage::~KivioPage()************ :"<<this<<endl;
+    delete gLines;
   s_mapPages->remove(m_id);
   delete m_dcop;
 }

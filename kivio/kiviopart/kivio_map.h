@@ -61,11 +61,6 @@ public:
 
 
   /**
-   * @param _pages becomes removed from the map. This won't delete the page.
-   */
-  void removePage( KivioPage* );
-
-  /**
    * The page named @param _from is being moved to the page @param _to.
    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
    */
@@ -104,6 +99,8 @@ public:
 
 private:
   QPtrList<KivioPage> m_lstPages;
+    QPtrList<KivioPage> m_lstDeletedPages;
+
   KivioDoc* m_pDoc;
     DCOPObject* m_dcop;
 

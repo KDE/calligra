@@ -81,8 +81,6 @@ KivioAddPageCommand::KivioAddPageCommand(const QString &_name, KivioPage *_page)
 
 KivioAddPageCommand::~KivioAddPageCommand()
 {
-    delete m_page;
-    m_page=0L;
 }
 
 void KivioAddPageCommand::execute()
@@ -105,8 +103,6 @@ KivioRemovePageCommand::KivioRemovePageCommand(const QString &_name, KivioPage *
 
 KivioRemovePageCommand::~KivioRemovePageCommand()
 {
-    delete m_page;
-    m_page=0L;
 }
 
 void KivioRemovePageCommand::execute()

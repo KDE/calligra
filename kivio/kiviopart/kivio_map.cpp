@@ -51,23 +51,20 @@ void KivioMap::takePage( KivioPage* page )
 {
     int pos=m_lstPages.findRef(page);
     m_lstPages.take( pos );
+    m_lstDeletedPages.append( page );
 }
 
 void KivioMap::insertPage( KivioPage* page )
 {
-  m_lstPages.append(page);
+    int pos=m_lstDeletedPages.findRef(page);
+    if ( pos != -1 )
+        m_lstDeletedPages.take( pos);
+    m_lstPages.append(page);
 }
 
 void KivioMap::addPage( KivioPage* page )
 {
   m_lstPages.append(page);
-}
-
-void KivioMap::removePage( KivioPage* page )
-{
-  m_lstPages.setAutoDelete(false);
-  m_lstPages.removeRef(page);
-  m_lstPages.setAutoDelete(true);
 }
 
 void KivioMap::movePage( const QString& fromPageName, const QString& toPageName, bool before )
