@@ -55,3 +55,8 @@ Reggie, 10.3.1999:
 Reggie, 23.3.1999:
 ------------------
 - Fix to avoid segfaults on exit when a textobject is activated
+
+Reggie, 29.3.1999:
+------------------
+- Fixed a bug with drawing line begins and ends (arrows, circles, etc.)
+  of quite thick lines - it's still not perfect but much better now.
