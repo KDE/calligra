@@ -225,6 +225,7 @@ protected:
     QListBox *listFormat;
     QLabel *exampleLabel;
     CellLayoutDlg *dlg;
+    bool m_bFormatNumberChanged;
 };
 
 

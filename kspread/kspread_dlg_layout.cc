@@ -947,6 +947,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     slotChangeState();
+    m_bFormatNumberChanged=false;
     this->resize( 400, 400 );
 }
 
@@ -1053,6 +1054,7 @@ else if(time->isChecked())
         else
                 listFormat->setCurrentItem(0);
         }
+m_bFormatNumberChanged=true;
 if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
 else
@@ -1280,6 +1282,7 @@ else
 }
 void CellLayoutPageFloat::makeformat()
 {
+m_bFormatNumberChanged=true;
 QString tmp;
 int p;
 p = (precision->value() == -1) ? 8 : precision->value();
@@ -1525,28 +1528,30 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
         _obj->setPrecision( precision->value() );
 
     switch( format->currentItem() )
+        {
+                case 0:
+                        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
+                        _obj->setFloatColor( KSpreadCell::AllBlack );
+                        break;
+                case 1:
+                        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
+                        _obj->setFloatColor( KSpreadCell::NegRed );
+                        break;
+                case 2:
+                        _obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
+                        _obj->setFloatColor( KSpreadCell::NegRed );
+                        break;
+                case 3:
+                        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
+                        _obj->setFloatColor( KSpreadCell::AllBlack );
+                        break;
+                case 4:
+                        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
+                        _obj->setFloatColor( KSpreadCell::NegRed );
+                        break;
+         }
+    if(m_bFormatNumberChanged)
     {
-    case 0:
-        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-        _obj->setFloatColor( KSpreadCell::AllBlack );
-        break;
-    case 1:
-        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-        _obj->setFloatColor( KSpreadCell::NegRed );
-        break;
-    case 2:
-        _obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
-        _obj->setFloatColor( KSpreadCell::NegRed );
-        break;
-    case 3:
-        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-        _obj->setFloatColor( KSpreadCell::AllBlack );
-        break;
-    case 4:
-        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-        _obj->setFloatColor( KSpreadCell::NegRed );
-        break;
-    }
     _obj->setFaktor(1.0);
     if(number->isChecked())
         _obj->setFormatNumber(KSpreadCell::Number);
@@ -1632,6 +1637,7 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
         _obj->setFormatNumber(KSpreadCell::Money);
     else if(scientific->isChecked())
         _obj->setFormatNumber(KSpreadCell::Scientific);
+    }
 }
 
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
@@ -1673,10 +1679,13 @@ void CellLayoutPageFloat::apply( RowLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
            c->clearProperty(KSpreadCell::PFloatColor);
            c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
-           c->clearProperty(KSpreadCell::PFormatNumber);
-           c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
-           c->clearProperty(KSpreadCell::PFaktor);
-           c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+           if(m_bFormatNumberChanged)
+                {
+                c->clearProperty(KSpreadCell::PFormatNumber);
+                c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
+                c->clearProperty(KSpreadCell::PFaktor);
+                c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+                }
         }
       }
 applyLayout(_obj);
@@ -1716,10 +1725,13 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
            c->clearProperty(KSpreadCell::PFloatColor);
            c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
-           c->clearProperty(KSpreadCell::PFormatNumber);
-           c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
-           c->clearProperty(KSpreadCell::PFaktor);
-           c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+           if(m_bFormatNumberChanged)
+                {
+                c->clearProperty(KSpreadCell::PFormatNumber);
+                c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
+                c->clearProperty(KSpreadCell::PFaktor);
+                c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+                }
         }
       }
       applyLayout(_obj);

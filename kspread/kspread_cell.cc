@@ -4701,10 +4701,32 @@ KSpreadCell::~KSpreadCell()
 bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
 {
   if ( isValue() )
+  {
     if ( cell.isValue() )
       return valueDouble() > cell.valueDouble();
     else
       return false; // numbers are always < than texts
+  }
+  else if(isDate())
+  {
+     if( cell.isDate() )
+        return valueDate() > cell.valueDate();
+     else if (cell.isValue())
+        return true;
+     else
+        return false; //date are always < than texts and time
+  }
+  else if(isTime())
+  {
+     if( cell.isTime() )
+        return valueTime() > cell.valueTime();
+     else if( cell.isDate())
+        return true; //time are always > than date
+     else if( cell.isValue())
+        return true;
+     else
+        return false; //time are always < than texts
+  }
   else
     return valueString().compare(cell.valueString()) > 0;
 }
@@ -4712,10 +4734,32 @@ bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
 bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
 {
   if ( isValue() )
+  {
     if ( cell.isValue() )
       return valueDouble() < cell.valueDouble();
     else
       return true; // numbers are always < than texts
+  }
+  else if(isDate())
+  {
+     if( cell.isDate() )
+        return valueDate() < cell.valueDate();
+     else if( cell.isValue())
+        return false;
+     else
+        return true; //date are always < than texts and time
+  }
+  else if(isTime())
+  {
+     if( cell.isTime() )
+        return valueTime() < cell.valueTime();
+     else if(cell.isDate())
+        return false; //time are always > than date
+     else if( cell.isValue())
+        return false;
+     else
+        return true; //time are always < than texts
+  }
   else
     return valueString().compare(cell.valueString()) < 0;
 }
