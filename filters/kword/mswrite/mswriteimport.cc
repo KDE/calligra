@@ -523,7 +523,7 @@ public:
 		delayOutput (true);
 
 		// footer frameset will be written in writeParaInfoBegin()
-		
+
 		return true;
 	}
 
@@ -614,7 +614,7 @@ public:
 										const MSWrite::OLE *ole,
 										const MSWrite::Image *image)
 	{
-		kdDebug (30509) << "writeParaInfoBegin()" << endl;
+		//kdDebug (30509) << "writeParaInfoBegin()" << endl;
 
 		// reset charInfo counters
 		m_charInfoCountStart = 0;
@@ -623,7 +623,7 @@ public:
 		if (inWhat == Header)
 		{
 			m_isHeaderOnFirstPage = paraProperty->getIsOnFirstPage ();
-	
+
 			if (m_writeHeaderFirstTime)
 			{
 				// dummy header frames
@@ -649,14 +649,14 @@ public:
 				writeTextInternal ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 											m_headerFromTop, m_headerFromTop, m_left, m_right);
-									
+
 				m_writeHeaderFirstTime = false;
 			}
 		}
 		else if (inWhat == Footer)
 		{
 			m_isFooterOnFirstPage = paraProperty->getIsOnFirstPage ();
-				
+
 			if (m_writeFooterFirstTime)
 			{
 				// dummy footer frames
@@ -682,7 +682,7 @@ public:
 				writeTextInternal ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 											m_footerFromTop, m_footerFromTop, m_left, m_right);
-				
+
 				m_writeFooterFirstTime = false;
 			}
 		}
@@ -718,7 +718,7 @@ public:
 				fileInStore += ".wmf";
 			else
 				ErrorAndQuit (MSWrite::Error::InternalError, "unsupported picture type\n");
-			
+
 
 			// indicate anchored image in formatting
 			//
@@ -739,19 +739,26 @@ public:
 			m_objectFrameset += "<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"";
 			m_objectFrameset += imageName;
 			m_objectFrameset += "\" visible=\"1\">";
+
 				m_objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
+
+				const double imageLeft = double (m_left) + Twip2Point (double (image->getIndent ()));
 				m_objectFrameset += " left=\"";
-					m_objectFrameset += QString::number (m_left + Twip2Point (image->getIndent ()));
+					m_objectFrameset += QString::number (imageLeft);
 					m_objectFrameset += "\"";
+
+				const double imageWidth = Twip2Point (double (image->getDisplayedWidth ()));
 				m_objectFrameset += " right=\"";
-					m_objectFrameset += QString::number (double (m_left)
-											+ Twip2Point (double (image->getIndent ()) + image->getDisplayedWidth ()));
+					m_objectFrameset += QString::number (imageLeft + imageWidth - 1);
 					m_objectFrameset += "\"";
+
 				m_objectFrameset += " top=\"";
 					m_objectFrameset += QString::number (m_top);
 					m_objectFrameset += "\"";
+
+				const double imageHeight = Twip2Point (double (image->getDisplayedHeight ()));
 				m_objectFrameset += " bottom=\"";
-					m_objectFrameset += QString::number (double (m_top) + Twip2Point (image->getDisplayedHeight ()));
+					m_objectFrameset += QString::number (double (m_top) + imageHeight - 1);
 					m_objectFrameset += "\"/>";
 
 				m_objectFrameset += "<PICTURE keepAspectRatio=\"false\">";
@@ -760,6 +767,7 @@ public:
 				m_objectFrameset += fileInStore;
 				m_objectFrameset += "\"/>";
 				m_objectFrameset += "</PICTURE>";
+
 			m_objectFrameset += "</FRAMESET>";
 		#ifdef DEBUG_XML_OUTPUT
 			m_objectFrameset += "\n";
@@ -813,12 +821,12 @@ public:
 									const MSWrite::Image *image)
 
 	{
-		kdDebug (30509) << "writeParaInfoEnd()" << endl;
+		//kdDebug (30509) << "writeParaInfoEnd()" << endl;
 
 		if (image)
 		{
 			WRIObject &obj = *m_objectList.begin (false);
-			
+
 			// consistency check: wrote exactly the right amount of data?
 			if (obj.m_dataUpto != obj.m_dataLength)
 				kdWarning (30509) << "obj.dataUpto (" << obj.m_dataUpto
@@ -1052,7 +1060,7 @@ public:
 
 	bool writeCharInfoBegin (const MSWrite::FormatCharProperty * /*charProperty*/)
 	{
-		kdDebug (30509) << "writeCharInfoBegin()" << endl;
+		//kdDebug (30509) << "writeCharInfoBegin()" << endl;
 
 		return true;
 	}
@@ -1061,7 +1069,7 @@ public:
 	bool writeCharInfoEnd (const MSWrite::FormatCharProperty *charProperty,
 						 			const bool = false)
 	{
-		kdDebug (30509) << "writeCharInfoEnd()" << endl;
+		//kdDebug (30509) << "writeCharInfoEnd()" << endl;
 
 		// output type of format information (page number or normal text)
 		m_formatOutput += "<FORMAT id=\"";
