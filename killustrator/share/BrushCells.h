@@ -22,29 +22,34 @@
 
 */
 
-#ifndef UngroupCmd_h_
-#define UngroupCmd_h_
+#ifndef BrushCells_h_
+#define BrushCells_h_
 
-#include <list>
-#include <pair.h>
+#include <qtableview.h>
+#include <qpixmap.h>
+#include <qbrush.h>
 
-#include "GDocument.h"
-#include "GGroup.h"
-#include "GObject.h"
-#include "Command.h"
+#include <vector>
 
-class UngroupCmd : public Command {
+class BrushCells : public QTableView {
+  Q_OBJECT
 public:
-  UngroupCmd (GDocument* doc);
-  ~UngroupCmd ();
+  BrushCells (QWidget *parent = 0L, const char *name = 0);
+  ~BrushCells ();
+  
+  BrushStyle brushStyle ();
+  void selectBrush (BrushStyle style);
 
-  void execute ();
-  void unexecute ();
+protected:
+  virtual int cellWidth (int col);
+  virtual int cellHeight (int row);
+  virtual void paintCell (QPainter *, int row, int col);
+  
+  virtual void mousePressEvent (QMouseEvent *event);
 
 private:
-  GDocument* document;
-  typedef pair<GGroup*, list<GObject*> > GPair;
-  list<GPair> groups;
+  vector<QPixmap> brushPixmaps;
+  int currentBrush;
 };
 
 #endif

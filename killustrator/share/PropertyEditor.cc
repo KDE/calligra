@@ -411,6 +411,8 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   patternColorBttn = new KColorButton (box);
   patternColorBttn->setColor (white);
   patternColorBttn->move (80, 15);
+  brushCells = new BrushCells (box);
+  brushCells->move (10, 60);
 
   // ------ No Fill ------
   box = new QGroupBox (group);
@@ -518,10 +520,12 @@ void PropertyEditor::applyPressed () {
     // Fill
     GObject::FillInfo finfo;
 
-    finfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
-    finfo.color = solidColorBttn->color ();
-    if (fillStyleBttn[SOLID_BOX]->isChecked ())
+    finfo.mask = GObject::FillInfo::FillStyle;
+    if (fillStyleBttn[SOLID_BOX]->isChecked ()) {
       finfo.fstyle = GObject::FillInfo::SolidFill;
+      finfo.color = solidColorBttn->color ();
+      finfo.mask |= GObject::FillInfo::Color;
+    }
     else if (fillStyleBttn[GRADIENT_BOX]->isChecked ()) {
       finfo.fstyle = GObject::FillInfo::GradientFill;
       finfo.gradient = *gradient;
@@ -529,6 +533,12 @@ void PropertyEditor::applyPressed () {
     }
     else if (fillStyleBttn[NOFILL_BOX]->isChecked ())
       finfo.fstyle = GObject::FillInfo::NoFill;
+    else if (fillStyleBttn[PATTERN_BOX]->isChecked ()) {
+      finfo.fstyle = GObject::FillInfo::PatternFill;
+      finfo.pattern = brushCells->brushStyle ();
+      finfo.color = patternColorBttn->color ();
+      finfo.mask |= (GObject::FillInfo::Color | GObject::FillInfo::Pattern);
+    }
     else
       finfo.fstyle = GObject::FillInfo::SolidFill;
 
@@ -646,6 +656,7 @@ void PropertyEditor::readProperties () {
       case GObject::FillInfo::PatternFill:
 	fillStyleBttn[PATTERN_BOX]->setChecked (true);
 	patternColorBttn->setColor (object->getFillColor ());
+	brushCells->selectBrush (object->getFillPattern ());
 	wstack->raiseWidget (PATTERN_BOX);
 	break;
       default:

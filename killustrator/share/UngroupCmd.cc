@@ -33,21 +33,27 @@ UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
     if (o->isA ("GGroup")) {
       GGroup* gobj = (GGroup *) o;
       gobj->ref ();
-      groups.push_back (gobj);
+      list<GObject*> dummy;
+      groups.push_back (GPair (gobj, dummy));
     }
   }
 }
 
 UngroupCmd::~UngroupCmd () {
-    for (list<GGroup*>::iterator it = groups.begin ();
-	 it != groups.end (); it++)
-    (*it)->unref ();
+  for (list<GPair>::iterator it = groups.begin ();
+       it != groups.end (); it++) {
+    it->first->unref ();
+    list<GObject*>& olist = it->second;
+    for (list<GObject*>::iterator it2 = olist.begin ();
+	 it2 != olist.end (); it2++)
+      (*it2)->unref ();
+  }
 }
 
 void UngroupCmd::execute () {
-  for (list<GGroup*>::iterator it = groups.begin ();
-       it != groups.end (); it++) {
-    GGroup *group = *it;
+  for (list<GPair>::iterator it = groups.begin (); it != groups.end (); it++) {
+    GGroup *group = it->first;
+    list<GObject*>& olist = it->second;
 
     int pos = document->findIndexOfObject (group);
     if (pos != -1) {
@@ -64,6 +70,8 @@ void UngroupCmd::execute () {
 	// of the group object
 	document->insertObjectAtIndex (obj, pos + offs);
 	document->selectObject (obj);
+	olist.push_back (obj);
+	obj->ref ();
       }
       // remove the group object
       document->deleteObject (group);
@@ -73,5 +81,23 @@ void UngroupCmd::execute () {
 }
 
 void UngroupCmd::unexecute () {
+  document->setAutoUpdate (false);
+  document->unselectAllObjects ();
+  for (list<GPair>::iterator it = groups.begin (); it != groups.end (); it++) {
+    GGroup *group = it->first;
+    QWMatrix m = group->matrix ().invert ();
+    list<GObject*>& olist = it->second;
+
+    for (list<GObject*>::iterator it2 = olist.begin ();
+	 it2 != olist.end (); it2++) {
+      GObject* obj = *it2;
+      obj->transform (m, true);
+      group->addObject (obj);
+      document->deleteObject (obj);
+    }
+    document->insertObject (group);
+    document->selectObject (group);
+  }
+  document->setAutoUpdate (true);
 }
 

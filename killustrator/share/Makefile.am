@@ -35,7 +35,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 MainView.h PStateManager.h OptionDialog.h \
 		 Preview.h units.h UnitBox.h ScriptDialog.h \
 		 GLayer.h LayerDialog.h LayerView.h \
-		 DocumentInfo.h Gradient.h GradientShape.h
+		 DocumentInfo.h Gradient.h GradientShape.h \
+		 BrushCells.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
@@ -68,7 +69,8 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PStateManager.cc OptionDialog.cc \
 			  Preview.cc units.cc UnitBox.cc ScriptDialog.cc \
 			  GLayer.cc LayerDialog.cc LayerView.cc \
-			  DocumentInfo.cc Gradient.cc GradientShape.cc
+			  DocumentInfo.cc Gradient.cc GradientShape.cc \
+			  BrushCells.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
@@ -88,7 +90,7 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc \
 		ScriptDialog.moc GLayer.moc LayerDialog.moc \
 		LayerView.moc CommandHistory.moc \
-		DocumentInfo.moc
+		DocumentInfo.moc BrushCells.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
 
@@ -152,5 +154,6 @@ GLayer.cc: GLayer.moc
 LayerDialog.cc: LayerDialog.moc
 LayerView.cc: LayerView.moc
 DocumentInfo.cc: DocumentInfo.moc
+BrushCells.cc: BrushCells.moc
 
 

@@ -1,45 +1,12 @@
-Preview #2
-==========
-- Polygon-Tool fuer symmetrische Polygone [07/04/98]
-- rechte Maustaste fuer Toolbuttons [27/03/98]
-- geschlossene Polyline in Polygon umwandeln [08/04/98]
-- fuer Polygon contains () implementieren [07/04/98]
-- dlfcn.h entfernen [27/03/98]
-- AddLineSegmentCmd implementieren [08/04/98]
-- Property-Editor fuer mehrere Objekte und Default-Werte [09/04/98]
-- Statuszeile [10/04/98]
-- Titelzeile [27/03/98]
-- Pfeile [03/04/98]
-- Bezier-Kurven [16/04/98]
-- Punkte veraendern bei Polyline und Polygon [08/04/98]
-- KIllustrator::setFillColor, setOutlineColor - Undo implementieren [09/04/98]
-- automatisches Scrolling bei Verschieben und Zeichnen [10/04/98]
-- Linien-Stile [16/04/98]
+* Undo fuer GroupCmd [10/28/98]
+* Copy/Paste fuer Objekte mit Fuellstilen [10/28/98]
+* Laden/Speichern von Fuellstilen [10/28/98]
+* im Editpoint-Mode nur selektierte Objekte mit basePoints [10/28/98]
+* Undo fuer UngroupCmd [10/28/98]
+* Gradientfuellen fuer abgerundete Rechtecke und Kreissegmente
+* geschlossene Bezierkurven
 
-Version 0.3
-===========
-* Rechtecke abrunden [12/05/98]
-* Kreissegmente [15/05/98]
-* internationalisierte Objekttyp-Bezeichner [15/05/98]
-* Dialog fuer Seitenlayout [16/05/98]
-* Transformationsdialog [18/05/98]
-* Speichern in XML [25/05/98]
-* Anfuegen von Kurvensegmenten an Bezierkurven [25/05/98]
-* EPSF-Export [30/05/98]
-* GIF-Export [30/05/98]
-* Caching der transformieren Koordinaten
-* Pixmap-Kopieren: nur geaenderte Teile
-* STL-Container
-
-Version 0.4
-===========
-* XFIG-Import
-* Dialog fuer Optionen
-* Speichern der Optionen
-
-Version 0.5
-===========
-* Save/Restore fuer Toplevel-Widget (Sessionmanagement)
-* Abbrechen mit ESC in Tools
-* Fuell-Stile
-* Layer
+* Drucken fuer KOffice
+* Clipart-Browser
+* EPS-Export ueber Qt-PostScript-Ausgabe
+* XFig-Import von Splines, Pfeilen und Fuellstilen

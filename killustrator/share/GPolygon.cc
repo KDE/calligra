@@ -451,7 +451,7 @@ void GPolygon::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("y", nr.top ());
   xml.addAttribute ("width", nr.width ());
   xml.addAttribute ("height", nr.height ());
-  xml.addAttribute ("rounding", Roundness);
+  xml.addAttribute ("rounding", (Roundness > 0.1 ? Roundness : 0.0));
 
   if (kind == PK_Polygon) {
     xml.closeTag (false);

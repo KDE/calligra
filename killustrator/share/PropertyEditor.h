@@ -44,6 +44,7 @@
 #include "FontSelector.h"
 #include "CommandHistory.h"
 #include "Gradient.h"
+#include "BrushCells.h"
 
 class PropertyEditor : public QDialog {
   Q_OBJECT
@@ -100,6 +101,7 @@ private:
   QLabel *gradPreview;
   QWidgetStack *wstack;
   Gradient *gradient;
+  BrushCells *brushCells;
 
   // Font Tab
   FontSelector* fontSelector;

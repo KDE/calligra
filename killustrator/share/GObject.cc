@@ -104,20 +104,18 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
       outlineInfo.style = (PenStyle) (*first).intValue ();
     else if (attr == "linewidth")
       outlineInfo.width = (*first).floatValue ();
+    else if (attr == "fillstyle")
+      fillInfo.fstyle = (FillInfo::Style) (*first).intValue ();
     else if (attr == "fillcolor")
       fillInfo.color = (*first).colorValue ();
-    else if (attr == "fillstyle") {
-      // just a temporary hack
-      int fill = (*first).intValue ();
-      if (fill > 1) {
-	fillInfo.fstyle = FillInfo::PatternFill;
-	fillInfo.pattern = (BrushStyle) fill;
-      }
-      else if (fill == 1)
-	fillInfo.fstyle = FillInfo::SolidFill;
-      else
-	fillInfo.fstyle = FillInfo::NoFill;
-    }
+    else if (attr == "fillpattern")
+      fillInfo.pattern = (BrushStyle) (*first).intValue ();
+    else if (attr == "gradcolor1")
+      fillInfo.gradient.setColor1 ((*first).colorValue ());
+    else if (attr == "gradcolor2")
+      fillInfo.gradient.setColor2 ((*first).colorValue ());
+    else if (attr == "gradstyle")
+      fillInfo.gradient.setStyle ((Gradient::Style) (*first).intValue ());
     first++;
   }
 }
@@ -422,8 +420,25 @@ void GObject::writePropertiesToXml (XmlWriter& xml) {
   xml.addAttribute ("strokecolor", outlineInfo.color);
   xml.addAttribute ("strokestyle", (int) outlineInfo.style);
   xml.addAttribute ("linewidth", outlineInfo.width);
-  xml.addAttribute ("fillcolor", fillInfo.color);
   xml.addAttribute ("fillstyle", (int) fillInfo.fstyle);
+  switch (fillInfo.fstyle) {
+  case FillInfo::SolidFill:
+    xml.addAttribute ("fillcolor", fillInfo.color);
+    break;
+  case FillInfo::PatternFill:
+    xml.addAttribute ("fillcolor", fillInfo.color);
+    xml.addAttribute ("fillpattern", (int) fillInfo.pattern);
+    break;
+  case FillInfo::GradientFill:
+    xml.addAttribute ("gradcolor1", fillInfo.gradient.getColor1 ());
+    xml.addAttribute ("gradcolor2", fillInfo.gradient.getColor2 ());
+    xml.addAttribute ("gradstyle", (int) fillInfo.gradient.getStyle ());
+    break;
+  case FillInfo::NoFill:
+  default:
+    // nothing more
+    break;
+  }
 }
 
 void GObject::printInfo () {

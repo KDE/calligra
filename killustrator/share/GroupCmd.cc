@@ -74,4 +74,24 @@ void GroupCmd::execute () {
 }
 
 void GroupCmd::unexecute () {
+  int pos = document->findIndexOfObject (group);
+  if (pos != -1) {
+    document->setAutoUpdate (false);
+    // extract the members of the group
+    const list<GObject*> members = group->getMembers ();
+    list<GObject*>::const_iterator mi = members.begin ();
+    for (int offs = 0; mi != members.end (); mi++, offs++) {
+      GObject* obj = *mi;
+      // transform it according to the group transformation matrix
+      obj->transform (group->matrix (), true);
+      
+      // and insert it into the object list at the former position
+      // of the group object
+      document->insertObjectAtIndex (obj, pos + offs);
+      document->selectObject (obj);
+    }
+    // remove the group object
+    document->deleteObject (group);
+    document->setAutoUpdate (true);
+  }
 }

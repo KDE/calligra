@@ -48,9 +48,12 @@ void PasteCmd::execute () {
     if (::strlen (buf)) {
       istrstream is (buf);
       document->insertFromXml (is, objects);
+      document->unselectAllObjects ();
       for (list<GObject*>::iterator it = objects.begin ();
-	   it != objects.end (); it++)
+	   it != objects.end (); it++) {
 	(*it)->ref ();
+	document->selectObject (*it);
+      }
     }
 }
 
