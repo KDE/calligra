@@ -370,7 +370,7 @@ void KIllustratorView::setupCanvas()
     m_pTabBarLast = newIconButton("arrow_last", false, this);
 //    connect( m_pTabBarLast, SIGNAL(clicked()), m_pTabBar, SLOT(scrollLast()));
 
-    QHBoxLayout* tabLayout = new QHBoxLayout(this);
+    QHBoxLayout* tabLayout = new QHBoxLayout();
     tabLayout->addWidget(m_pTabBarLast);
     tabLayout->addWidget(m_pTabBarLeft);
     tabLayout->addWidget(m_pTabBarRight);
