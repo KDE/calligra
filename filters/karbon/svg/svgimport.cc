@@ -31,6 +31,7 @@
 #include <core/vsegment.h>
 #include <core/vtext.h>
 #include <core/vglobal.h>
+#include <core/vgroup.h>
 #include <qcolor.h>
 #include <qfile.h>
 #include <qregexp.h>
@@ -566,8 +567,10 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	if( dynamic_cast<VComposite *>( obj ) )
 		dynamic_cast<VComposite *>( obj )->setFillRule( gc->fillRule );
 	// stroke scaling
-	gc->stroke.setLineWidth( gc->stroke.lineWidth() * sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
+	double lineWidth = gc->stroke.lineWidth();
+	gc->stroke.setLineWidth( lineWidth * sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
 	obj->setStroke( gc->stroke );
+	gc->stroke.setLineWidth( lineWidth );
 }
 
 void
