@@ -1675,9 +1675,9 @@ void MulRKRecord::setData( unsigned size, const unsigned char* data )
   {
     d->xfIndexes.push_back( readU16( data+i ) );
     unsigned rk = readU32( data+i+2 );
-    bool isInteger; int iv; double fv;
+    bool isInteger = true; int iv = 0; double fv = 0.0;
     decodeRK( rk, isInteger, iv, fv );
-    
+
     d->isIntegers.push_back( isInteger );
     d->intValues.push_back( isInteger ? iv : (int)fv );
     d->floatValues.push_back( !isInteger ? fv : (double)iv );
@@ -1860,12 +1860,12 @@ void RKRecord::setFloat( double f )
 void RKRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 10 ) return;
-  
+
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
 
-  int i; double f;
+  int i = 0; double f = 0.0;
   decodeRK( readU32( data+6 ), d->integer, i, f );
   if( d->integer ) setInteger( i );
   else setFloat( f );
