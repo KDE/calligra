@@ -1,12 +1,8 @@
 #MIN_CONFIG
 
-# KDE_CHECK_MICO()
-# KDE_CHECK_MINI_STL()
+AM_INIT_AUTOMAKE(koffice, "1.1-beta1") 
 
 CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE -DQT_NO_COMPAT -DQT_NO_ASCII_CAST"
-
-idldir="\$(includedir)/idl"
-AC_SUBST(idldir)
 
 AC_CHECK_HEADERS(unistd.h sys/param.h floatingpoint.h paths.h)
 KDE_CHECK_KIMGIO
