@@ -164,6 +164,7 @@ public:
     void recalcPage( KWParag *_p );
 
     int getVertRulerPos();
+    int getHorzRulerPos();
 
     void insertPictureAsChar( QString _filename );
 
@@ -286,7 +287,7 @@ protected slots:
      * Toggle the cursor.
      */
     void blinkCursor();
-    
+
     /**
      * Stop toggling the cursor.
      * @param visible Indicates how the cursor is left behind.
@@ -467,7 +468,7 @@ protected:
     QString pasteLaterMimeType;
     QRect scrollClipRect;
     int scrollDummy;
-    
+
 };
 
 #endif

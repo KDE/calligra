@@ -1330,6 +1330,13 @@ int KWPage::getVertRulerPos()
     return ( -contentsY() + page * ptPaperHeight() );
 }
 
+int KWPage::getHorzRulerPos()
+{
+    int page = fc->getPage() - 1;
+
+    return ( -contentsX() + page * ptPaperWidth() );
+}
+
 /*================================================================*/
 void KWPage::insertPictureAsChar( QString _filename )
 {
@@ -4841,6 +4848,7 @@ void KWPage::contentsWillMove( int, int )
 {
     calcVisiblePages();
     gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
+    gui->getHorzRuler()->setOffset( -getHorzRulerPos(), 0 );
     _scrolled = TRUE;
 }
 
