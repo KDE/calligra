@@ -52,6 +52,8 @@ public:
 	bool eventFilter( QEvent* event );
 
 protected:
+	bool isDragging() { return m_isDragging; }
+
 	virtual void draw(/* VPainter* painter*/ ) {}
 
 	virtual void setCursor() const {}
@@ -110,6 +112,16 @@ protected:
 	 * Cancels all tool operations. This event is invoked when ESC is pressed.
 	 */
 	virtual void cancel() {}
+
+	/**
+	 * Cancels the last tool step (if any). This event is invoked when Backspace is pressed.
+	 */
+	virtual void cancelStep() {}
+
+	/**
+	 * Terminates the current tool drawing (if any). This event is invoked when Enter/Return is pressed.
+	 */
+	virtual void accept() {}
 
 	// Make VTool "abstract":
 	virtual ~VTool() {}

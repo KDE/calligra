@@ -178,11 +178,13 @@ VShapeTool::mouseDragCtrlReleased()
 void
 VShapeTool::cancel()
 {
-	// Erase old object:
-	draw();
-
-	m_isSquare = false;
-	m_isCentered = false;
+		// Erase old object:
+	if ( isDragging() )
+	{
+		draw();
+		m_isSquare = false;
+		m_isCentered = false;
+	}
 }
 
 void

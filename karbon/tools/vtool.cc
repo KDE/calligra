@@ -19,6 +19,7 @@
 */
 
 #include <qevent.h>
+#include <kdebug.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -49,10 +50,11 @@ VTool::eventFilter( QEvent* event )
 
 	setCursor();
 
-
 	// Mouse events:
 	if ( event->type() == QEvent::MouseButtonDblClick )
 	{
+	kdDebug() << event->type() << " " << QEvent::MouseButtonDblClick << " - ";
+
 		mouseButtonDblClick();
 		
 		return true;
@@ -107,13 +109,31 @@ VTool::eventFilter( QEvent* event )
 	{
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
+		kdDebug() << keyEvent->key() << " " << Qt::Key_Enter << " " << Qt::Key_Return;
+
+		// Terminate the current drawing with the Enter-key:
+		if ( ( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return ) && !m_isDragging )
+		{
+			accept();
+
+			return true;
+		}
+		
+		// Terminate the current drawing with the Enter-key:
+		if ( keyEvent->key() == Qt::Key_Backspace && !m_isDragging )
+		{
+			cancelStep();
+
+			return true;
+		}
+		
 		// Cancel dragging with ESC-key:
-		if( keyEvent->key() == Qt::Key_Escape && m_isDragging )
+		if( keyEvent->key() == Qt::Key_Escape )
 		{
 			cancel();
 
 			m_isDragging = false;
-			m_mouseButtonIsDown = true;
+			m_mouseButtonIsDown = false;
 
 			return true;
 		}

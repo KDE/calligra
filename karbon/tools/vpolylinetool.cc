@@ -262,10 +262,9 @@ void VPolylineTool::mouseButtonRelease()
 	draw();
 } // VPolylineTool::mouseButtonRelease
 
-void VPolylineTool::mouseButtonDlbClick()
+void VPolylineTool::mouseButtonDblClick()
 {
-	deactivate();
-	activate();
+	accept();
 } // VPolylineTool::mouseButtonDlbClick()
 
 void VPolylineTool::mouseDrag()
@@ -369,3 +368,37 @@ void VPolylineTool::cancel()
 	
 	bezierPoints.clear();
 } // VPolylineTool::cancel
+
+void VPolylineTool::cancelStep()
+{
+	draw();
+
+	if ( bezierPoints.count() > 6 )
+	{
+		KoPoint p2 = *bezierPoints.last();
+		bezierPoints.removeLast();
+		bezierPoints.removeLast();
+		bezierPoints.removeLast();
+		KoPoint p1 = *bezierPoints.last();
+		bezierPoints.removeLast();
+		bezierPoints.removeLast();
+		bezierPoints.append( new KoPoint( p1 ) );
+		bezierPoints.append( new KoPoint( p1 ) );
+		KoPoint p = p1 - p2;
+		int x = (int)( p.x() * view()->zoom() );
+		int y = (int)( p.y() * view()->zoom() );
+		XWarpPointer( qt_xdisplay(), 0, 0, 0, 0, 0, 0, x, -y );
+	}
+	else
+	{
+		bezierPoints.clear();
+	}
+
+	draw();
+} // VPolylineTool::cancelStep
+
+void VPolylineTool::accept()
+{
+	deactivate();
+	activate();
+} // VPolylineTool::accept

@@ -54,7 +54,7 @@ class VPolylineTool : public VTool
 		virtual void        mouseMove();
 		virtual void        mouseButtonPress();
 		virtual void        mouseButtonRelease();
-		virtual void        mouseButtonDlbClick();
+		virtual void        mouseButtonDblClick();
 		virtual void        mouseDrag();
 		virtual void        mouseDragRelease();
 		virtual void        mouseDragShiftPressed();
@@ -63,6 +63,8 @@ class VPolylineTool : public VTool
 		virtual void        mouseDragCtrlReleased();
 
 		virtual void        cancel();
+		virtual void        cancelStep();
+		virtual void        accept();
 
 			/** The list of this polyline points. */
 		QPtrList<KoPoint>   bezierPoints;
