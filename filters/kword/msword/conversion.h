@@ -68,8 +68,13 @@ namespace Conversion
     // Convert wv2's Header Type to a KWord frameset name
     QString headerTypeToFramesetName( unsigned char type );
 
-    bool isHeader( unsigned char type );
+    // Convert a mask of Header Types to the hType value for KWord
+    int headerMaskToHType( unsigned char mask );
 
+    // Convert a mask of Header Types to the fType value for KWord
+    int headerMaskToFType( unsigned char mask );
+
+    //bool isHeader( unsigned char type );
 };
 
 #endif

@@ -78,8 +78,7 @@ private:
     KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
-    bool m_hasHeader;
-    bool m_hasFooter;
+    unsigned char m_headerFooters; // a mask of HeaderData::Type bits
 };
 
 #endif // DOCUMENT_H

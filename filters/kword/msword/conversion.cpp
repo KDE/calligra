@@ -214,6 +214,7 @@ QString Conversion::headerTypeToFramesetName( unsigned char type )
     return QString::null;
 }
 
+/*
 bool Conversion::isHeader( unsigned char type )
 {
     switch (type) {
@@ -223,4 +224,25 @@ bool Conversion::isHeader( unsigned char type )
         return true;
     }
     return false;
+}
+*/
+
+int Conversion::headerMaskToHType( unsigned char mask )
+{
+    bool hasFirst = ( mask & wvWare::HeaderData::HeaderFirst );
+    bool hasEvenOdd = ( mask & wvWare::HeaderData::HeaderOdd );
+    kdDebug() << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    if ( hasFirst )
+        return hasEvenOdd ? 1 : 2;
+    return hasEvenOdd ? 3 : 0;
+}
+
+int Conversion::headerMaskToFType( unsigned char mask )
+{
+    bool hasFirst = ( mask & wvWare::HeaderData::FooterFirst );
+    bool hasEvenOdd = ( mask & wvWare::HeaderData::FooterOdd );
+    kdDebug() << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    if ( hasFirst )
+        return hasEvenOdd ? 1 : 2;
+    return hasEvenOdd ? 3 : 0;
 }

@@ -35,7 +35,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ),
-      m_hasHeader(false), m_hasFooter(false)
+      m_headerFooters( 0 )
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
@@ -63,8 +63,14 @@ void Document::finishDocument()
     QDomElement element;
     element = m_mainDocument.createElement("ATTRIBUTES");
     element.setAttribute("processing",0); // WP
-    element.setAttribute("hasHeader", m_hasHeader);
-    element.setAttribute("hasFooter", m_hasFooter);
+    char allHeaders = ( wvWare::HeaderData::HeaderEven |
+                        wvWare::HeaderData::HeaderOdd |
+                        wvWare::HeaderData::HeaderFirst );
+    element.setAttribute("hasHeader", m_headerFooters & allHeaders ? 1 : 0 );
+    char allFooters = ( wvWare::HeaderData::FooterEven |
+                        wvWare::HeaderData::FooterOdd |
+                        wvWare::HeaderData::FooterFirst );
+    element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
     element.setAttribute("unit","mm"); // How to figure out the unit to use?
 
     element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
@@ -72,6 +78,17 @@ void Document::finishDocument()
 
     // FOOTNOTESETTING: use nfcFtnRef for the type of counter
     // Hmm there's nfcFtnRef2 too.
+
+    // Done at the end: write the type of headers/footers,
+    // depending on which kind of headers and footers we received.
+    QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
+    Q_ASSERT ( !paperElement.isNull() ); // slotFirstSectionFound should have been called!
+    if ( !paperElement.isNull() )
+    {
+        kdDebug() << k_funcinfo << "m_headerFooters=" << m_headerFooters << endl;
+        paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
+        paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
+    }
 }
 
 void Document::processStyles()
@@ -173,8 +190,6 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
     elementPaper.setAttribute("columns", sep->ccolM1 + 1 );
     elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
-    elementPaper.setAttribute("hType",0); // TODO
-    elementPaper.setAttribute("fType",0); // TODO
     elementPaper.setAttribute("spHeadBody", (double)sep->dyaHdrTop / 20.0);
     elementPaper.setAttribute("spFootBody", (double)sep->dyaHdrBottom / 20.0);
     // elementPaper.setAttribute("zoom",100); // not a doc property in kword
@@ -194,6 +209,18 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
 void Document::startHeader( unsigned char type )
 {
     kdDebug() << k_funcinfo << type << endl;
+    // Werner says the headers are always emitted in the order of the Type enum.
+    // So when HeaderOdd arrives, there are two cases.
+    // * If HeaderEven was sent before, we know we're in the even/odd case.
+    // * If not, the HeaderOdd header will be used for odd and even pages
+    // ..... in which case it needs to be saved as the "Even" header for KWord !!!
+    if ( type == wvWare::HeaderData::HeaderOdd &&
+         ( ( m_headerFooters & wvWare::HeaderData::HeaderEven ) == 0 ) )
+        type = wvWare::HeaderData::HeaderEven;
+    else if ( type == wvWare::HeaderData::FooterOdd &&
+              ( ( m_headerFooters & wvWare::HeaderData::FooterEven ) == 0 ) )
+        type = wvWare::HeaderData::FooterEven;
+
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     framesetElement.setAttribute("frameType",1);
     framesetElement.setAttribute("frameInfo",Conversion::headerTypeToFrameInfo(type));
@@ -204,10 +231,12 @@ void Document::startHeader( unsigned char type )
 
     m_textHandler->setFrameSetElement( framesetElement );
 
-    if ( Conversion::isHeader( type ) )
+    m_headerFooters |= type;
+
+    /*if ( Conversion::isHeader( type ) )
         m_hasHeader = true;
     else
-        m_hasFooter = true;
+        m_hasFooter = true;*/
 }
 
 void Document::endHeader()
