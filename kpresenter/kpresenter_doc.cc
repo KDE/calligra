@@ -170,6 +170,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_defaultFont.setPointSize( m_zoomHandler->ptToLayoutUnitPt( ptSize ) );
 
     m_standardStyle->format().setFont( m_defaultFont );
+
+    /// KPresenter isn't color-scheme aware, it defaults to black on white.
+    m_standardStyle->format().setColor( Qt::black );
     m_zoomHandler = new KoZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
