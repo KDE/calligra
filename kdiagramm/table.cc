@@ -21,7 +21,7 @@
 #include <kapp.h>
 
 SheetTable::SheetTable( int cols, int rows, QWidget *parent,
-			  int flags, const char *name, bool _editable = true )
+			  int flags, const char *name, bool _editable)
     :QTableView(parent,name)
 {
     editable = _editable;

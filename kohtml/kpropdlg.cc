@@ -269,7 +269,7 @@ int  KPropDlg::buttonsEnabled()
 	return ActiveButtons;
 }
 
-void KPropDlg::setButton( int type, const char *text )
+void KPropDlg::setButton( int , const char * )
 {
 }
 

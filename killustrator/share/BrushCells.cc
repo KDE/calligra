@@ -99,3 +99,6 @@ void BrushCells::selectBrush (QT_PRFX::BrushStyle style) {
   currentBrush = (int) style - 1;
   repaint ();
 }
+
+#undef CELL_HEIGHT
+#undef CELL_WIDTH

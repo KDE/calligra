@@ -40,8 +40,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 EllipseConfigDialog.h MyTabCtl.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h
 
-libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
-			  GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
+libkillu_a_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
+			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
 			  GText.cc GGroup.cc Tool.cc PolylineTool.cc \
 			  FreeHandTool.cc \
 			  RectangleTool.cc OvalTool.cc TextTool.cc \
@@ -72,10 +72,10 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
 			  PStateManager.cc OptionDialog.cc \
-			  Preview.cc units.cc UnitBox.cc ScriptDialog.cc \
+			  Preview.cc units.cc UnitBox.cc \
 			  GLayer.cc LayerDialog.cc LayerView.cc \
 			  DocumentInfo.cc Gradient.cc GradientShape.cc \
-			  BrushCells.cc PathTextTool.cc \
+			  BrushCells.cc  \
 			  EllipseConfigDialog.cc MyTabCtl.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc

@@ -29,7 +29,7 @@ void KPropColor::sizeUpdate()
 	button->setFixedHeight( (fontMetrics()).height() + 2 );
 }
 
-void KPropColor::resizeEvent( QResizeEvent *rev )
+void KPropColor::resizeEvent( QResizeEvent * )
 {
 	int w = width()*percentage/100;
 	button->setGeometry( width() - w - 2, 0, w , 100 );

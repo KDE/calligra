@@ -105,7 +105,7 @@ public: // should be protected but cannot
   void restoreDC(short num, short* parms);
 
   // do nothing
-  void noop(short num, short* parms) { }
+  void noop(short, short* ) { }
 
 protected:
   /** Calculate header checksum */

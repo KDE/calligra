@@ -360,3 +360,5 @@ void AlignmentDialog::alignSelection (GDocument* doc,
   }
 }
 
+#undef BUTTON_WIDTH
+#undef BUTTON_HEIGHT

@@ -103,7 +103,7 @@ protected:
    *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
    */
-  virtual bool loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
+  virtual bool loadBinary( istream& , bool /*_randomaccess*/, KOStore::Store_ptr /*_store*/ )
   { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadBinary not implemented" ); return false; };
   /**
    *  This function loads a XML document. It is called by @ref KoDocument#load.

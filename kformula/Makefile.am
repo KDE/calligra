@@ -10,12 +10,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 bin_PROGRAMS = kformula.bin
 
-AM_CXXFLAGS = -ansi -pedantic
-
-kformula_bin_SOURCES =  kformula_view.cc matrixwidget.cc kformula_main.cc \
-	kformula_doc.cc \
-	kformula.cc kformula_shell.cc BasicElement.cc RootElement.cc \
-	TextElement.cc BracketElement.cc FractionElement.cc\
+kformula_bin_SOURCES =  kformula_shell.cc  kformula_view.cc matrixwidget.cc \
+	kformula_main.cc kformula_doc.cc kformula.cc BasicElement.cc \
+	RootElement.cc TextElement.cc BracketElement.cc FractionElement.cc\
 	MatrixElement.cc PrefixedElement.cc formula_container.cc
 
 noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \

@@ -308,8 +308,8 @@ public:
   virtual GOState* saveState ();
   virtual void restoreState (GOState* state);
 
-  virtual int getNeighbourPoint (const Coord& p) { return -1; }
-  virtual void movePoint (int idx, float dx, float dy) {}
+  virtual int getNeighbourPoint (const Coord& ) { return -1; }
+  virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/) {}
 
   /**
    * Draw the object with the given painter.
@@ -319,8 +319,8 @@ public:
    * @param withBasePoints If true, draw the base points of the 
    *                       object.
    */
-  virtual void draw (Painter& p, bool withBasePoints = false,
-		     bool outline = false) {}
+  virtual void draw (Painter& /*p*/, bool /*withBasePoints*/ = false,
+		     bool /*outline*/ = false) {}
 
   /**
    * Test, if the object contains the given point.
@@ -355,7 +355,7 @@ public:
   virtual void printInfo ();
   virtual void calcBoundingBox () = 0;
 
-  virtual void getPath (vector<Coord>& path) {}
+  virtual void getPath (vector<Coord>& /*path*/) {}
 
   virtual GCurve* convertToCurve () const { return 0L; }
 

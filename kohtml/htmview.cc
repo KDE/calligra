@@ -33,8 +33,8 @@
 #include "htmwidget.h"
 #include "kohtml_doc.h"
 
-KMyHTMLView::KMyHTMLView(KoHTMLDoc *doc, QWidget *parent = 0L, const char *name = 0L,
-                         int flags = 0, KMyHTMLView *parent_view = 0L)
+KMyHTMLView::KMyHTMLView(KoHTMLDoc *doc, QWidget *parent, const char *name,
+                         int flags, KMyHTMLView *parent_view)
 :KHTMLView(parent, name, flags, parent_view, (new KMyHTMLWidget(0L, "" )) )
 {
   m_pDoc = doc;
@@ -134,7 +134,7 @@ void KMyHTMLView::begin( const char *url, int dx, int dy )
   KHTMLView::begin( url, dx, dy );
 }
 
-KHTMLView *KMyHTMLView::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)
+KHTMLView *KMyHTMLView::newView(QWidget *parent, const char *name, int flags)
 {
   KMyHTMLView *view = new KMyHTMLView(m_pDoc, parent, name, flags, this);
 

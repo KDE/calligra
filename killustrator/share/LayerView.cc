@@ -196,3 +196,7 @@ void LayerView::lineEditorSlot () {
   lineEditor->hide ();
   repaint ();
 }
+
+#undef CELL_HEIGHT
+#undef CELL1_WIDTH
+#undef CELL2_WIDTH

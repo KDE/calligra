@@ -73,7 +73,7 @@ class KFormulaDoc : public KFormulaContainer,
     /**
      * We dont load any children.
      */
-    virtual bool loadChildren( KOStore::Store_ptr _store ) { return true; }
+    virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
 
     virtual bool save( ostream& out, const char* _format );
 

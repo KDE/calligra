@@ -37,7 +37,7 @@ void KPropRadio::sizeUpdate()
 	setFixedHeight( (radioList->count() + 1) * (h+8) );
 }
 
-void KPropRadio::resizeEvent( QResizeEvent *rev )
+void KPropRadio::resizeEvent( QResizeEvent * )
 {}
 
 void KPropRadio::fontChange( const QFont & )

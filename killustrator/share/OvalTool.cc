@@ -165,7 +165,7 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   return;
 }
 
-void OvalTool::activate (GDocument* doc, Canvas* canvas) {
+void OvalTool::activate (GDocument* , Canvas* canvas) {
   emit modeSelected (i18n ("Create Ellipse"));
 }
 

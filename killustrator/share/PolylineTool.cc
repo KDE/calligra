@@ -275,7 +275,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   return;
 }
 
-void PolylineTool::activate (GDocument* doc, Canvas*) {
+void PolylineTool::activate (GDocument* , Canvas*) {
   emit modeSelected (i18n ("Create Polyline"));
 }
 

@@ -28,8 +28,8 @@
 #include <iostream.h>
 #include <qapplication.h>
 
-KMyHTMLWidget::KMyHTMLWidget(QWidget *parent = 0L, const char *name = 0L,
-                      const char *pixDir = 0L)
+KMyHTMLWidget::KMyHTMLWidget(QWidget *parent, const char *name ,
+                      const char *pixDir)
 :KHTMLWidget(parent, name, pixDir)		
 {
 }		

@@ -81,8 +81,13 @@ QString kFileToString(const char* aFileName, bool aEnsureNL, bool aVerbose)
     return QString::null;
   }
 
+  // TODO: this must work without double allocation
+  char *buffer = new char[len + 1];
   //result.resize(len + (int)aEnsureNL + 1);
-  readLen = file.readBlock((char*)result.data(), len);
+  readLen = file.readBlock(buffer, len);
+  result = buffer;
+  delete [] buffer;
+
   if (aEnsureNL && result[len-1]!='\n')
   {
     result[len++] = '\n';

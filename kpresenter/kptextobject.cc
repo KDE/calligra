@@ -561,7 +561,8 @@ void KPTextObject::saveKTextObject( ostream& out )
 
     out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() ) << "\">" << endl;
     out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
-        << ktextobject.enumListType().before.utf8() << "\" after=\"" << ktextobject.enumListType().after.utf8()
+        << ktextobject.enumListType().before.utf8().data() << "\" after=\"" 
+	<< ktextobject.enumListType().after.utf8().data()
         << "\" start=\"" << ktextobject.enumListType().start << "\" family=\""
         << ktextobject.enumListType().font.family().ascii() << "\" pointSize=\"" << ktextobject.enumListType().font.pointSize()
         << "\" bold=\"" << ktextobject.enumListType().font.bold() << "\" italic=\"" << ktextobject.enumListType().font.italic()
@@ -613,7 +614,7 @@ void KPTextObject::saveKTextObject( ostream& out )
                 out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
                     << txtObj->color().green() << "\" blue=\"" << txtObj->color().blue() << "\"/>" << endl;
                 out << indent << "<VERTALIGN value=\"" << static_cast<int>( txtObj->vertAlign() ) << "\"/>" << endl;
-                out << indent << "<TEXT>" << decode( txtObj->text() ).utf8() << "</TEXT>" << endl;
+                out << indent << "<TEXT>" << decode( txtObj->text() ).utf8().data() << "</TEXT>" << endl;
                 out << etag << "</OBJ>" << endl;
             }
 

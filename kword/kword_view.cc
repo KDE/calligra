@@ -67,6 +67,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <stdlib.h>
+#include <X11/Xlib.h>
 #define DEBUG
 
 /******************************************************************/

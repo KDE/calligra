@@ -81,7 +81,7 @@ void KFormulaDoc::cleanUp()
     KoDocument::cleanUp();
 }
 
-bool KFormulaDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KFormulaDoc::loadXML( KOMLParser& , KOStore::Store_ptr )
 {
     // HACK
     return false;

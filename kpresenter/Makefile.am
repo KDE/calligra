@@ -7,8 +7,8 @@ LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIBQIMGIO) $(LIB
 
 bin_PROGRAMS = kpresenter.bin
 
-kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
-	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc \
+kpresenter_bin_SOURCES = kpresenter_view.cc kpresenter_main.cc \
+	kpresenter_doc.cc kpresenter_shell.cc kpresenter.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	formats.cc qwmf.cc kenumlistdia.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \

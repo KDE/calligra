@@ -359,7 +359,7 @@ void  BasicElement::deleteElement()
 void  BasicElement::save(ostream& out)
 {
     out << "TYPE=" << -1 << " "
-	<< "CONTENT=" << content << " "
+	<< "CONTENT=" << content.utf8().data() << " "
 	<< "NUMERICFONT=" << numericFont << " "
 	<< " >" << endl;
 
@@ -384,7 +384,7 @@ void  BasicElement::save(ostream& out)
     out << "</ELEM>" << endl;
 }
 
-void  BasicElement::load(istream& in)
+void  BasicElement::load(istream& )
 {
 }
 

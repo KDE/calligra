@@ -78,6 +78,9 @@ LayerDialog::LayerDialog (QWidget* parent, const char* name) :
   connect (button, SIGNAL (clicked ()), SLOT (deletePressed ()));
   bbox->addStretch (0.5);
 
+#undef BUTTON_WIDTH
+#undef BUTTON_HEIGHT
+
   bbox->setFixedHeight (bbox->sizeHint ().height ());
   vl->addWidget (bbox);
 

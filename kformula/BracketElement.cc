@@ -258,7 +258,7 @@ void  BracketElement::save(ostream& out)
     out << "</ELEM>" << endl;
 }
 
-void  BracketElement::load(istream& in)
+void  BracketElement::load(istream& )
 {
 }
 
