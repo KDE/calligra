@@ -492,11 +492,13 @@ public:
      * Set whether the next openURL call should show error message boxes in case
      * of errors. This is usually the case, but e.g. not when generating thumbnail
      * previews.
+     * @since 1.4
      */
     void setAutoErrorHandlingEnabled( bool b );
 
     /**
      * Checks whether error message boxes should be shown.
+     * @since 1.4
      */
     bool isAutoErrorHandlingEnabled();
 
