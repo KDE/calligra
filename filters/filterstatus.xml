@@ -99,7 +99,7 @@
     </status>
     <status id="twostars" symbol="**">
         <title xml:lang="en_us">Two Stars</title>
-        <description xml:lang="en_us">The filter generally works although it is not finished, and it may suffer from some unstability.</description>
+        <description xml:lang="en_us">The filter generally works although it is not finished, and it may suffer from some instability.</description>
     </status>
     <status id="onestar" symbol="*">
         <title xml:lang="en_us">One Star</title>
@@ -327,7 +327,7 @@
             </filter>
             <filter id="karbon_svg">
                 <title xml:lang="en_us">SVG</title>
-                <note xml:lang="en_us">Scaleable Vector Graphics (W3C)</note>
+                <note xml:lang="en_us">Scalable Vector Graphics (W3C)</note>
                 <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="karbon_wmf">
