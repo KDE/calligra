@@ -17,7 +17,7 @@
 #ifndef CANVBOX_H
 #define CANVBOX_H
 
-#include <map.h>
+#include <map>
 #include <qcanvas.h>
 #include "canvdefs.h"
 
@@ -35,13 +35,13 @@ class CanvasBox: public QCanvasRectangle{
 public:
     CanvasBox(int x, int y, int width, int height, QCanvas * canvas):
 	    QCanvasRectangle(x, y, width, height, canvas) {}
-    
+
     virtual int rtti() const { return RttiCanvasBox; }
     virtual void draw(QPainter &painter);
     void scale(int scale);
     virtual QString getXml() { return ""; }
-    
-    map<QString, pair<QString, QStringList> > props;
+
+    std::map<QString, std::pair<QString, QStringList> > props;
     /*
       properties format
       map<key_name, pair<key_value, key_description> >
@@ -73,11 +73,11 @@ public:
     virtual int rtti() const { return RttiCanvasBand; }
     virtual QString getXml();
     void arrange(int base, bool destructive = TRUE);
-    
+
     QCanvasItemList items;
 };
 
-typedef pair< pair<CanvasDetailHeader*, CanvasDetailFooter*>, CanvasDetail*>  DetailBand;
+typedef std::pair< std::pair<CanvasDetailHeader*, CanvasDetailFooter*>, CanvasDetail*>  DetailBand;
 
 class CanvasKugarTemplate: public CanvasSection{
 public:
@@ -86,20 +86,20 @@ public:
     virtual int rtti() const { return RttiKugarTemplate; }
     virtual void draw(QPainter &painter);
     void arrangeSections(bool destructive=TRUE);
-    
+
     QString fileName() const { return reportFileName; }
     void setFileName(QString fName) { reportFileName = fName; }
-    
+
     virtual QString getXml();
-    
+
     void removeSection(CanvasBand *section, CanvasDetailHeader **header,
 		       CanvasDetailFooter **footer);
-    
+
     CanvasReportHeader *reportHeader;
     CanvasReportFooter *reportFooter;
     CanvasPageHeader *pageHeader;
     CanvasPageFooter *pageFooter;
-    map<int, DetailBand> details;
+    std::map<int, DetailBand> details;
     unsigned int detailsCount;
 private:
     QString reportFileName;

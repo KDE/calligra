@@ -59,14 +59,14 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
     reportFooter = 0;
     pageHeader = 0;
     pageFooter = 0;
-    
-    pair<QString, QStringList> propValues;
-    
+
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "0";
     propValues.second << i18n("CanvasKugarTemplate", "Page size");
     propValues.second << "int_from_list";
-    propValues.second << "0 - A4" << "1 - B5" << "2 - Letter" 
-	    << "3 - Legal" << "4 - Executive" << "5 - A0" 
+    propValues.second << "0 - A4" << "1 - B5" << "2 - Letter"
+	    << "3 - Legal" << "4 - Executive" << "5 - A0"
 	    << "6 - A1" << "7 - A2" << "8 - A3" << "9 - A5"
 	    << "10 - A6" << "11 - A7" << "12 - A8"
 	    << "13 - A9" << "14 - B0" << "15 - B1" << "16 - B10"
@@ -76,7 +76,7 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
 	    << "28 - Ledger" << "29 - Tabloid" << "30 - NPageSize";
     props["PageSize"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasKugarTemplate", "Page orientation");
     propValues.second << "int_from_list";
@@ -84,25 +84,25 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
     propValues.second << i18n("CanvasKugarTemplate", "1 - Landscape");
     props["PageOrientation"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasKugarTemplate", "Top margin");
     propValues.second << "int";
     props["TopMargin"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasKugarTemplate", "Bottom margin");
     propValues.second << "int";
     props["BottomMargin"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasKugarTemplate", "Left margin");
     propValues.second << "int";
     props["LeftMargin"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasKugarTemplate", "Right margin");
     propValues.second << "int";
@@ -116,8 +116,8 @@ CanvasKugarTemplate::~CanvasKugarTemplate()
 	delete reportHeader;
     if (pageHeader)
 	delete pageHeader;
-    
-    map<int, DetailBand>::const_iterator it;
+
+    std::map<int, DetailBand>::const_iterator it;
     for (it = details.begin(); it != details.end(); ++it)
     {
 	if (it->second.first.first)
@@ -126,7 +126,7 @@ CanvasKugarTemplate::~CanvasKugarTemplate()
 	    delete it->second.second;
 	if (it->second.first.second)
 	    delete it->second.first.second;
-    }    
+    }
     if (pageFooter)
 	delete pageFooter;
     if (reportFooter)
@@ -157,7 +157,7 @@ void CanvasKugarTemplate::draw(QPainter &painter)
 }
 
 /*arrange sections on page automatically*/
-void CanvasKugarTemplate::arrangeSections(bool destructive = TRUE)
+void CanvasKugarTemplate::arrangeSections(bool destructive)
 {
     int base = props["TopMargin"].first.toInt();
     if (reportHeader)
@@ -172,8 +172,8 @@ void CanvasKugarTemplate::arrangeSections(bool destructive = TRUE)
 	base += pageHeader->props["Height"].first.toInt();
 	pageHeader->show();
     }
-    
-    map<int, DetailBand>::const_iterator it;
+
+    std::map<int, DetailBand>::const_iterator it;
     for (it = details.begin(); it != details.end(); ++it)
     {
 	//arranging detail header
@@ -191,7 +191,7 @@ void CanvasKugarTemplate::arrangeSections(bool destructive = TRUE)
 	    it->second.second->show();
 	}
     }
-    map<int, DetailBand>::reverse_iterator itr;
+    std::map<int, DetailBand>::reverse_iterator itr;
     for (itr = details.rbegin(); itr != details.rend(); ++itr)
     {
 	//arranging detail footer
@@ -202,7 +202,7 @@ void CanvasKugarTemplate::arrangeSections(bool destructive = TRUE)
 	    itr->second.first.second->show();
 	}
     }
-    
+
     if (pageFooter)
     {
 	pageFooter->arrange(base, destructive);
@@ -222,19 +222,19 @@ QString CanvasKugarTemplate::getXml()
     QString result = "";
     result += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     result += "<KugarTemplate";
-    for (map<QString, pair<QString, QStringList> >::const_iterator it = props.begin();
+    for (std::map<QString, std::pair<QString, QStringList> >::const_iterator it = props.begin();
         it != props.end(); it++ )
     {
 	result += " " + it->first + "=" + "\"" + it->second.first + "\"";
     }
     result += ">\n";
-    
+
     if (reportHeader)
 	result += reportHeader->getXml();
     if (pageHeader)
 	result += pageHeader->getXml();
-    
-    map<int, DetailBand>::const_iterator it;
+
+    std::map<int, DetailBand>::const_iterator it;
     for (it = details.begin(); it != details.end(); ++it)
     {
 	//getting xml from detail header
@@ -246,14 +246,14 @@ QString CanvasKugarTemplate::getXml()
 	//getting xml from detail footer
 	if (it->second.first.second)
 	    result += it->second.first.second->getXml();
-    }    
+    }
     if (pageFooter)
 	result += pageFooter->getXml();
     if (reportFooter)
 	result += reportFooter->getXml();
-    
+
     result += "</KugarTemplate>\n";
-    
+
     return result;
 }
 
@@ -270,7 +270,7 @@ void CanvasKugarTemplate::removeSection(CanvasBand *section,
 	pageHeader = 0;
     if (section == pageFooter)
 	pageFooter = 0;
-    for (map<int, DetailBand>::iterator i = details.begin(); i != details.end(); i++)
+    for (std::map<int, DetailBand>::iterator i = details.begin(); i != details.end(); i++)
     {
 	if (i->second.second == section)
 	{
@@ -281,7 +281,7 @@ void CanvasKugarTemplate::removeSection(CanvasBand *section,
 	    *footer = i->second.first.second;
 	    i->second.first.second = 0;
 	    detailsCount--;
-	    detailsCount < 0 ? detailsCount = 0 : detailsCount=detailsCount;
+	    detailsCount < 0 ? detailsCount = 0 : detailsCount=detailsCount; // ATTENTION: Always false (unsigned!)
 	}
 	if (i->second.first.first == section)
 	    i->second.first.first = 0;
@@ -291,7 +291,7 @@ void CanvasKugarTemplate::removeSection(CanvasBand *section,
 }
 
 
-//CanvasBand class 
+//CanvasBand class
 
 void CanvasBand::draw(QPainter &painter)
 {
@@ -303,7 +303,7 @@ void CanvasBand::draw(QPainter &painter)
 }
 
 //arrange band and all sublings (items)
-void CanvasBand::arrange(int base, bool destructive=TRUE)
+void CanvasBand::arrange(int base, bool destructive)
 {
     int diff = base - (int)y();
     setY(base);
@@ -320,7 +320,7 @@ void CanvasBand::arrange(int base, bool destructive=TRUE)
 QString CanvasBand::getXml()
 {
     QString result = "";
-    map<QString, pair<QString, QStringList> >::const_iterator it;
+    std::map<QString, std::pair<QString, QStringList> >::const_iterator it;
     for (it = props.begin(); it != props.end(); ++it)
     {
 	result += " " + it->first + "=" + "\"" + it->second.first + "\"";
@@ -348,8 +348,8 @@ CanvasBand::~CanvasBand()
 CanvasReportHeader::CanvasReportHeader(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Report header's height";
     propValues.second << "int";
@@ -375,8 +375,8 @@ QString CanvasReportHeader::getXml()
 CanvasReportFooter::CanvasReportFooter(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Report footer's height";
     propValues.second << "int";
@@ -402,8 +402,8 @@ QString CanvasReportFooter::getXml()
 CanvasPageHeader::CanvasPageHeader(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Page header's height";
     propValues.second << "int";
@@ -429,8 +429,8 @@ QString CanvasPageHeader::getXml()
 CanvasPageFooter::CanvasPageFooter(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Page footer's height";
     propValues.second << "int";
@@ -456,14 +456,14 @@ QString CanvasPageFooter::getXml()
 CanvasDetailHeader::CanvasDetailHeader(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Detail header's height";
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second = "Detail header's level";
     propValues.second << "int";
@@ -491,14 +491,14 @@ QString CanvasDetailHeader::getXml()
 CanvasDetail::CanvasDetail(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Detail height";
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second = "Detail level";
     propValues.second << "int";
@@ -525,14 +525,14 @@ QString CanvasDetail::getXml()
 CanvasDetailFooter::CanvasDetailFooter(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasBand(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "50";
     propValues.second = "Detail footer's height";
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second = "Detail footer's level";
     propValues.second << "int";

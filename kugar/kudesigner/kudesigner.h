@@ -17,7 +17,7 @@
 
 #ifndef KUDESIGNER_H
 #define KUDESIGNER_H
- 
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -25,8 +25,8 @@
 
 // include files for Qt
 
-// include files for KDE 
-#include <kapp.h>
+// include files for KDE
+#include <kapplication.h>
 #include <kmainwindow.h>
 #include <kaccel.h>
 #include <kaction.h>
@@ -66,15 +66,15 @@ class KuDesignerApp : public KMainWindow
     void openDocumentFile(const KURL& url=0);
     /** returns a pointer to the current document connected to the KTMainWindow instance and is used by
      * the View class to access the document object's methods
-     */	
-    KuDesignerDoc *getDocument() const; 	
+     */
+    KuDesignerDoc *getDocument() const;
 
     void enableDocumentActions();
 
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
      * file
-     */ 	
+     */
     void saveOptions();
     /** read general Options again and initialize all variables like the recent file list
      */
@@ -99,7 +99,7 @@ class KuDesignerApp : public KMainWindow
      */
     virtual bool queryClose();
     /** queryExit is called by KTMainWindow when the last window of the application is going to be closed during the closeEvent().
-     * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's	
+     * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's
      * properties.
      * @see KTMainWindow#queryExit
      * @see KTMainWindow#closeEvent
@@ -235,5 +235,5 @@ class KuDesignerApp : public KMainWindow
     KActionCollection *itemsCollection;
     KActionCollection *sectionsCollection;
 };
- 
+
 #endif // KUDESIGNER_H

@@ -31,16 +31,16 @@ void dlgItemOptions::commitProps()
     }
 }
 
-dlgItemOptions::dlgItemOptions(map<QString, pair<QString, QStringList> > *p,
-			       QWidget *parent = 0, const char *name = 0, WFlags f = 0):
+dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList> > *p,
+			       QWidget *parent, const char *name, WFlags f):
 	    dlgOptions(parent, name, f)
-{  
+{
     taProps->setLeftMargin(0);
-	    
+
     //show properties in list view
     props = p;
-    
-    map<QString, pair<QString, QStringList> >::const_iterator i;
+
+    std::map<QString, std::pair<QString, QStringList> >::const_iterator i;
     int j;
     for (i = props->begin(), j = 0; i != props->end(); ++i, ++j)
     {
@@ -48,6 +48,6 @@ dlgItemOptions::dlgItemOptions(map<QString, pair<QString, QStringList> > *p,
 	taProps->setText(j, 0, i->first);
 	taProps->setText(j, 1, i->second.first);
     }
-    
+
     connect(buttonOk, SIGNAL(clicked()), this, SLOT(commitProps()));
 }

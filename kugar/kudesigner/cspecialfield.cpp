@@ -20,16 +20,16 @@
 CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasLabel(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = i18n("CanvasSpecialField", "0");
     propValues.second << i18n("CanvasSpecialField", "Field type to display");
-    propValues.second << "int_from_list"; 
-    propValues.second << i18n("CanvasSpecialField", "0 - Date") 
+    propValues.second << "int_from_list";
+    propValues.second << i18n("CanvasSpecialField", "0 - Date")
 	    << i18n("CanvasSpecialField", "1 - PageNumber");
     props["Type"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "11";
     propValues.second << i18n("CanvasSpecialField", "Date format");
     propValues.second << "int_from_list";
@@ -51,7 +51,7 @@ CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCan
 
 void CanvasSpecialField::draw(QPainter &painter)
 {
-    props["Text"].first = "[" +  
+    props["Text"].first = "[" +
 			  QString(props["Type"].first.toInt()?"PageNo":"Date")
 			  + "]";
     CanvasLabel::draw(painter);

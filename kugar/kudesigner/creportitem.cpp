@@ -67,7 +67,7 @@ void CanvasReportItem::setSectionUndestructive(CanvasBand *section)
 QString CanvasReportItem::getXml()
 {
     QString result = "";
-    map<QString, pair<QString, QStringList> >::const_iterator it;
+    std::map<QString, std::pair<QString, QStringList> >::const_iterator it;
     int i = 1;
     for (it = props.begin(); it != props.end(); ++it)
     {

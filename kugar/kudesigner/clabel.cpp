@@ -21,85 +21,85 @@
 CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasReportItem(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = i18n("CanvasLabel", "Text");
     propValues.second << i18n("CanvasLabel", "Text to display");
-    propValues.second << "string"; 
+    propValues.second << "string";
     props["Text"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = QString("%1").arg(x);
-    propValues.second << i18n("CanvasLabel", "X coordinate concerning to section"); 
-    propValues.second << "int"; 
+    propValues.second << i18n("CanvasLabel", "X coordinate concerning to section");
+    propValues.second << "int";
     props["X"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("CanvasLabel", "Y coordinate concerning to section"); 
-    propValues.second << "int"; 
+    propValues.second << i18n("CanvasLabel", "Y coordinate concerning to section");
+    propValues.second << "int";
     props["Y"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(width);
     propValues.second << i18n("CanvasLabel", "Width");
-    propValues.second << "int"; 
+    propValues.second << "int";
     props["Width"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = QString("%1").arg(height);
     propValues.second << i18n("CanvasLabel", "Height");
-    propValues.second << "int"; 
+    propValues.second << "int";
     props["Height"] = propValues;
-    
+
     propValues.first = "255,255,255";
     propValues.second << i18n("CanvasLabel", "Background color");
-    propValues.second << "color"; 
+    propValues.second << "color";
     props["BackgroundColor"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0,0,0";
     propValues.second << i18n("CanvasLabel", "Text color");
-    propValues.second << "color"; 
+    propValues.second << "color";
     props["ForegroundColor"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0,0,0";
     propValues.second << i18n("CanvasLabel", "Border color");
-    propValues.second << "color"; 
+    propValues.second << "color";
     props["BorderColor"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "1";
     propValues.second << i18n("CanvasLabel", "Border width");
-    propValues.second << "int"; 
+    propValues.second << "int";
     props["BorderWidth"] = propValues;
     propValues.second.clear();
 
     propValues.first = "1";
     propValues.second << i18n("CanvasLabel", "Border style");
-    propValues.second << "int_from_list"; 
+    propValues.second << "int_from_list";
     propValues.second << i18n("CanvasLabel", "0 - No pen")
-	    << i18n("CanvasLabel", "1 - Solid line") 
-	    << i18n("CanvasLabel", "2 - Dash line") 
+	    << i18n("CanvasLabel", "1 - Solid line")
+	    << i18n("CanvasLabel", "2 - Dash line")
 	    << i18n("CanvasLabel", "3 - Dot line")
 	    << i18n("CanvasLabel", "4 - Dash dot line")
-	    << i18n("CanvasLabel", "5 - Dash dot dot line"); 
+	    << i18n("CanvasLabel", "5 - Dash dot dot line");
     props["BorderStyle"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "Times New Roman";
     propValues.second << i18n("CanvasLabel", "Font family");
-    propValues.second << "font"; 
+    propValues.second << "font";
     props["FontFamily"] = propValues;
     propValues.second.clear();
-  
+
     propValues.first = "12";
     propValues.second << i18n("CanvasLabel", "Font size");
-    propValues.second << "int"; 
+    propValues.second << "int";
     props["FontSize"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "50";
     propValues.second << i18n("CanvasLabel", "Font weight");
     propValues.second << "int_from_list";
@@ -110,7 +110,7 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasLabel", "87 - Black");
     props["FontWeight"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasLabel", "Italic font");
     propValues.second << "int_from_list";
@@ -118,7 +118,7 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasLabel", "1 - True");
     props["FontItalic"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasLabel", "Text horizontal alignment");
     propValues.second << "int_from_list";
@@ -127,7 +127,7 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasLabel", "2 - Right");
     props["HAlignment"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "1";
     propValues.second << i18n("CanvasLabel", "Text vertical alignment");
     propValues.second << "int_from_list";
@@ -136,7 +136,7 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasLabel", "2 - Bottom");
     props["VAlignment"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasLabel", "Word wrap");
     propValues.second << "int_from_list";

@@ -14,10 +14,10 @@ kudesigner_SOURCES = canvbox.cpp \
 	cfield.cpp \
 	cv.cpp \
 	clabel.cpp \
-	dlgnew.cpp \
+	dlgnew.ui \
 	kudesignerdoc.cpp \
 	cline.cpp \
-	dlgoptions.cpp \
+	dlgoptions.ui \
 	kudesignerview.cpp
 
 kudesigner_UIFILES = dlgnew.ui \

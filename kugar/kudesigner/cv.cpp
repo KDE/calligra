@@ -33,7 +33,7 @@
 #include "cline.h"
 #include "itemopts.h"
 
-ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent = 0, const char * name = 0, WFlags f = 0):
+ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name, WFlags f):
 	QCanvasView(canvas, parent, name, f)
 {
     selectedItem = 0;
@@ -52,11 +52,11 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
         case MidButton:
 	    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
 	    {
-	        if ((*it)->rtti() > 2000)  
+	        if ((*it)->rtti() > 2000)
 	        {
 		    (*it)->hide();
 		    ((CanvasReportItem *)(*it))->section()->items.remove((*it));
-		    delete (*it); 
+		    delete (*it);
 		    canvas()->update();
 		    break;
 	        }
@@ -93,11 +93,11 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 	    break;
 	case RightButton:
 	    //display editor for report items or sections
-		
+
 	    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
 	    {
 		if ((*it)->rtti() >= 1800) //for my own report items
-		{	
+		{
 		    CanvasBox *l = (CanvasBox*)(*it);
 		    dlgItemOptions *dlgOpts = new dlgItemOptions(&(l->props), this);
 		    dlgOpts->exec();
@@ -139,7 +139,7 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 		//allow user to move any item except for page rectangle
 		for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
 		{
-		    if ((*it)->rtti() > 2001) 
+		    if ((*it)->rtti() > 2001)
 		    {
 			CanvasReportItem *item = (CanvasReportItem *)(*it);
 /*			    if (item->topLeftResizableRect().contains(e->pos()) ||
@@ -166,18 +166,20 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 		resizing = 0;
 		break;
 	    }
+        default:
+            break;
     }
 }
 
 void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     QPoint p = inverseWorldMatrix().map(e->pos());
-    
+
 /*    QCanvasItemList l=canvas()->collisions(p);
   setCursor(QCursor(Qt::ArrowCursor));
     unsetCursor();
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-    { 
+    {
 	if ((*it)->rtti() > 2000)
 	{
 	    CanvasReportItem *item = (CanvasReportItem*)(*it);
@@ -185,7 +187,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 		setCursor(QCursor(Qt::SizeFDiagCursor));
 	}
     }*/
-    
+
     if ( moving )
     {
 	moving->moveBy(p.x() - moving_start.x(),

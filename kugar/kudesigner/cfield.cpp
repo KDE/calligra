@@ -20,14 +20,14 @@
 CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasLabel(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-    
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = i18n("CanvasField", "Field");
     propValues.second << i18n("CanvasField", "Field to display");
-    propValues.second << "string"; 
+    propValues.second << "string";
     props["Field"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0";
     propValues.second << i18n("CanvasField", "Data type");
     propValues.second << "int_from_list";
@@ -38,7 +38,7 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasField", "4 - Currency");
     props["DataType"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "11";
     propValues.second << i18n("CanvasField", "Date format");
     propValues.second << "int_from_list";
@@ -56,13 +56,13 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasField", "11 - dd.mm.yyyy");
     props["DateFormat"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "2";
     propValues.second << i18n("CanvasField", "Number of digits after comma");
-    propValues.second << "int"; 
+    propValues.second << "int";
     props["Precision"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "32";
     propValues.second << i18n("CanvasField", "Currency symbol");
     propValues.second << "int_from_list";
@@ -70,13 +70,13 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 	    << i18n("CanvasField", "36 - '$'");
     props["Currency"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "0,0,0";
     propValues.second << i18n("CanvasField", "Negative value color");
-    propValues.second << "color"; 
+    propValues.second << "color";
     props["NegValueColor"] = propValues;
     propValues.second.clear();
-    
+
     propValues.first = "44";
     propValues.second << i18n("CanvasField", "Comma separator");
     propValues.second << "int_from_list";

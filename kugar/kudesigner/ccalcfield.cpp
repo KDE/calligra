@@ -20,10 +20,10 @@
 CanvasCalculatedField::CanvasCalculatedField(int x, int y, int width, int height, QCanvas * canvas):
 	CanvasField(x, y, width, height, canvas)
 {
-    pair<QString, QStringList> propValues;
-      
+    std::pair<QString, QStringList> propValues;
+
     propValues.first = "1";
-    propValues.second << i18n("CanvasCalculatedField", ""); 
+    propValues.second << i18n("CanvasCalculatedField", "");
     propValues.second << "int_from_list";
     propValues.second << i18n("CanvasCalculatedField", "0 - Count")
 	    << i18n("CanvasCalculatedField", "1 - Sum")
