@@ -272,7 +272,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     // Open output file
-    KoStore* out = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "KOffice application/x-kword\004\006" );
+    KoStore* out = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "application/x-kword" );
 
     if (out->bad())
     {
