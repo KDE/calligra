@@ -58,6 +58,8 @@ DriverManagerInternal::~DriverManagerInternal()
 
 void DriverManagerInternal::slotAppQuits()
 {
+	if (qApp->mainWidget() && qApp->mainWidget()->isVisible())
+	    return; //what a hack! - we give up when app is still there
 	KexiDBDbg << "DriverManagerInternal::slotAppQuits(): let's clear drivers..." << endl;
 	m_drivers.clear();
 }

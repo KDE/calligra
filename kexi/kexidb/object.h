@@ -20,6 +20,8 @@
 #ifndef KEXIDB_OBJECT_H
 #define KEXIDB_OBJECT_H
 
+#include <kexidb/error.h>
+
 #include <qstring.h>
 
 namespace KexiDB {
@@ -85,10 +87,13 @@ class KEXI_DB_EXPORT Object
 		virtual ~Object();
 		
 		/*! Sets the (localized) error code to \a code and message to \a msg. 
-		It is required to set at least nonzero error code \a code, 
-		but also adviced to set descriptive message \a msg.
-		Use this in KexiDB::Object subclasses. */
-		void setError(int code,  const QString &msg = QString::null );
+		 You have to set at least nonzero error code \a code, 
+		 although it is also adviced to set descriptive message \a msg.
+		 Eventually, if you omit all parameters, ERR_OTHER code will be set 
+		 and default message for this will be set.
+		 Use this in KexiDB::Object subclasses to informa the world about your 
+		 object's state. */
+		void setError(int code = ERR_OTHER,  const QString &msg = QString::null );
 
 		/* \overload void setError(int code,  const QString &msg = QString::null )
 		

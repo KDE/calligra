@@ -70,8 +70,10 @@ class KEXI_DB_EXPORT ConnectionData
 		 - "<file>" if file-based driver is assigned but no filename is assigned
 		 - "file: pathto/mydb.kexi" if file-based driver is assigned and 
 		    filename is assigned
+		 
+		 User's name is added if \a addUser is true (the default).
 		*/
-		QString serverInfoString() const;
+		QString serverInfoString(bool addUser = true) const;
 		
 		/*! Port used for remote connection. Default is 0, what means we use don't
 			change database engine's default port. */

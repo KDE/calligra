@@ -20,6 +20,7 @@
 #include <kexidb/object.h>
 #include <kexidb/error.h>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 using namespace KexiDB;
@@ -33,7 +34,10 @@ Object::Object()
 void Object::setError( int code, const QString &msg )
 {
 	m_errno=code;
-	m_errMsg = msg;
+	if (m_errno==ERR_OTHER && msg.isNull())
+		m_errMsg = i18n("Unspecified error encountered");
+	else
+		m_errMsg = msg;
 	m_hasError = code!=ERR_NONE;
 }
 

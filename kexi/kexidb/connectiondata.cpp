@@ -64,7 +64,7 @@ void ConnectionData::setFileName( const QString& fn )
 	}
 }
 
-QString ConnectionData::serverInfoString() const
+QString ConnectionData::serverInfoString(bool addUser) const
 {
 	const QString& i18nFile = i18n("file");
 	
@@ -78,7 +78,7 @@ QString ConnectionData::serverInfoString() const
 			return QString("<")+i18nFile+">";
 	}
 	
-	return (userName.isEmpty() ? QString("") : (userName+"@"))
+	return ( (userName.isEmpty() || !addUser) ? QString("") : (userName+"@"))
 		+ (hostName.isEmpty() ? QString("localhost") : hostName)
 		+ (port!=0 ? (QString(":")+QString::number(port)) : QString::null);
 }
