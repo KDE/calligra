@@ -504,45 +504,7 @@ QDomElement OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem,
 
 KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename, QDomDocument& doc)
 {
-    kdDebug(30518) << "Trying to open " << filename << endl;
-
-    if (!m_zip)
-    {
-        kdError(30518) << "No ZIP file!" << endl;
-        return KoFilter::CreationError; // Should not happen
-    }
-
-    const KArchiveEntry* entry = m_zip->directory()->entry( filename );
-    if (!entry)
-    {
-        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
-        return KoFilter::FileNotFound;
-    }
-    if (entry->isDirectory())
-    {
-        kdWarning(30518) << "Entry " << filename << " is a directory!" << endl;
-        return KoFilter::WrongFormat;
-    }
-    const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    QIODevice* io=f->device();
-    kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
-
-    // Error variables for QDomDocument::setContent
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
-    {
-        kdError(30518) << "Parsing error in " << filename << "! Aborting!" << endl
-            << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
-        delete io;
-        return KoFilter::ParsingError;
-    }
-    delete io;
-
-    kdDebug(30518) << "File " << filename << " loaded and parsed!" << endl;
-
-    return KoFilter::OK;
+    return OoUtils::loadAndParse( filename, doc, m_zip);
 }
 
 KoFilter::ConversionStatus OoWriterImport::openFile()

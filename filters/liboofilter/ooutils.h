@@ -23,10 +23,12 @@
 #define OOUTILS_H
 
 #include <qstring.h>
+#include <koFilterChain.h>
 class QColor;
 class QDomElement;
 class StyleStack;
 class QDomDocument;
+class KZip;
 
 namespace OoUtils
 {
@@ -61,6 +63,7 @@ namespace OoUtils
     void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
 
     void createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo);
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip);
 
 }
 
