@@ -3,12 +3,11 @@ INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/store -I../lib/koffice
 	-I../lib/koml $(all_includes) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
-	../lib/store/libkstore.la \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lkparts -lkpartsui -lkom -lkfile -lkfm $(LIB_KIMGIO) \
         -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	$(LIBSOCKET) -ldl
+	$(LIBSOCKET) -ldl ../lib/store/libkstore.la
 
 ####### Files
 
