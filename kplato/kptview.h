@@ -22,29 +22,29 @@
 
 #include <koView.h>
 
-class KAction;
+
 class KListView;
-class QPaintEvent;
+class QListViewItem;
 
 class KPTPart;
 
-class KPTView : public KoView
-{
+
+class KPTView : public KoView {
     Q_OBJECT
 public:
-    KPTView( KPTPart* part, QWidget* parent = 0, const char* name = 0 );
+    KPTView(KPTPart* part, QWidget* parent=0, const char* name=0);
 
 protected slots:
-    void cut();
+    void slotEditProject();
+    void slotAddSubProject();
+    void slotAddTask();
+    void slotAddMilestone();
+    void slotSelectionChanged(QListViewItem *);
 
 protected:
-//     void paintEvent( QPaintEvent* );
-
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
 private:
-    //KAction* m_cut;
-
     KListView *listview;
 };
 
