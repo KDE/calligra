@@ -329,18 +329,18 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
         	pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
 		if (((KudesignerDoc *)koDocument())->plugin()) {
 			connect(pe,SIGNAL(createPluggedInEditor(QWidget*&,PropertyEditor *,
-				Property*,const CanvasBox *)),
+				Property*,CanvasBox *)),
 				((KudesignerDoc *)koDocument())->plugin(),
 				SLOT(createPluggedInEditor(QWidget*&, PropertyEditor *,
-                                Property*,const CanvasBox *)));
+                                Property*,CanvasBox *)));
 
 			kdDebug()<<"*************Property and plugin have been connected"<<endl;
 		}
 	        shell()->addDockWindow(pe, DockRight);
 	        pe->show();
 	    
-	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*,const CanvasBox*) ), pe,
-        	    SLOT( populateProperties(std::map<QString, PropPtr >*,const CanvasBox*) ));
+	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*,CanvasBox*) ), pe,
+        	    SLOT( populateProperties(std::map<QString, PropPtr >*, CanvasBox*) ));
 	        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
     		connect(pe, SIGNAL(propertyChanged(QString, QString)), rc, SLOT(updateProperty(QString, QString)));
 	    }

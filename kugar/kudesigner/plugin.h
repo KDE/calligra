@@ -36,7 +36,7 @@ public:
 	virtual void newCanvasBox(int type, CanvasBox *cb){;}
 public slots:
     virtual void createPluggedInEditor(QWidget *& retVal, PropertyEditor *editor,
-        Property *property,const CanvasBox *);
+        Property *property,CanvasBox *);
 };
 
 #endif

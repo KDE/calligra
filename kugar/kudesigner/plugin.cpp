@@ -21,4 +21,4 @@
 KuDesignerPlugin::KuDesignerPlugin(QObject *parent, const char *name, const QStringList&):QObject(parent,name){}
 KuDesignerPlugin::~KuDesignerPlugin(){}
 void KuDesignerPlugin::createPluggedInEditor(QWidget *&retVal, PropertyEditor *editor,
-        Property *property,const CanvasBox *cb){}
+        Property *property,CanvasBox *cb){}

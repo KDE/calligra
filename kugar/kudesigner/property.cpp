@@ -91,7 +91,7 @@ void Property::setDescription(QString description)
     m_description = description;
 }
 
-QWidget *Property::editorOfType(PropertyEditor *editor, const CanvasBox* cb)
+QWidget *Property::editorOfType(PropertyEditor *editor, CanvasBox* cb)
 {
     PSpinBox *s;
     PLineEdit *l;

@@ -110,7 +110,7 @@ be unchecked. */
 
   /** Emitted when selection is made, so that property editor can display properties
       for the selected items. */
-  void selectionMade(std::map<QString, PropPtr > *v_props,const CanvasBox*);
+  void selectionMade(std::map<QString, PropPtr > *v_props,CanvasBox*);
   void selectionClear();
 
 public slots:

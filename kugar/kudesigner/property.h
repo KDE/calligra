@@ -92,7 +92,7 @@ public:
     void setCorrespList(std::map<QString, QString> list);
     std::map<QString, QString> correspList;    
     
-    virtual QWidget *editorOfType(PropertyEditor *editor,const CanvasBox *item);
+    virtual QWidget *editorOfType(PropertyEditor *editor, CanvasBox *item);
     bool allowSaving();
 protected:
     int m_type;

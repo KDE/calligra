@@ -42,7 +42,7 @@ public:
     ~PropertyEditor();
 
 public slots:
-    void populateProperties(std::map<QString, PropPtr> *v_props, const CanvasBox *item); //if this should be more generic perhaps void*
+    void populateProperties(std::map<QString, PropPtr> *v_props, CanvasBox *item); //if this should be more generic perhaps void*
     void clearProperties();
 
     void emitPropertyChange(QString name, QString newValue);
@@ -62,7 +62,7 @@ signals:
 #undef signals
 #define signals protected
     void createPluggedInEditor(QWidget *&retVal, PropertyEditor *editor,
-	Property *property, const CanvasBox *cb);
+	Property *property, CanvasBox *cb);
 
 };
 

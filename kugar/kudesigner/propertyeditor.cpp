@@ -51,7 +51,7 @@ PropertyEditor::PropertyEditor( Place p, QWidget * parent, const char * name, WF
 PropertyEditor::~PropertyEditor(){
 }
 
-void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,const CanvasBox* item)
+void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,CanvasBox* item)
 {
     props = v_props;
 
