@@ -5129,10 +5129,25 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
   return true; /* really isn't much of a way for this function to fail */
 }
 
+void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
+{
+    if ( m_strComment )
+    {
+        xmlwriter.startElement( "office:annotation" );
+        QStringList text = QStringList::split( "\n", *m_strComment );
+        for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
+            xmlwriter.startElement( "text:p" );
+            xmlwriter.addTextNode( *it );
+            xmlwriter.endElement();
+        }
+        xmlwriter.endElement();
+    }
+}
 
-bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter )
+bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles )
 {
     xmlwriter.startElement( "table:table-cell" );
+    saveOasisAnnotation( xmlwriter );
     if ( d->value.isBoolean() )
     {
         xmlwriter.addAttribute( "table:value-type", "boolean" );

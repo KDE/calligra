@@ -42,6 +42,7 @@ class QSimpleRichText;
 class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
+class KoGenStyles;
 
 class KSParseNode;
 
@@ -245,7 +246,7 @@ public:
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
-    virtual bool saveOasis( KoXmlWriter& xmlwriter );
+    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles);
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );
@@ -867,6 +868,7 @@ protected:
     void NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending);
 
     void loadOasisValidationCondition( QString &valExpression );
+    void saveOasisAnnotation( KoXmlWriter &xmlwriter );
 
 private:
 
