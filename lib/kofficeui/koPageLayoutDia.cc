@@ -126,16 +126,15 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
     pgPreview = 0;
     pgPreview2 = 0;
 
-    layout = _layout;
-    hf = _hf;
+    m_layout = _layout;
     m_unit = unit;
 
-    cl.columns = 1;
+    m_cl.columns = 1;
 
     enableBorders = true;
 
     if ( tabs & FORMAT_AND_BORDERS ) setupTab1();
-    if ( tabs & HEADER_AND_FOOTER ) setupTab2();
+    if ( tabs & HEADER_AND_FOOTER ) setupTab2( _hf );
 
     retPressed = false;
 
@@ -157,9 +156,8 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
     pgPreview = 0;
     pgPreview2 = 0;
 
-    layout = _layout;
-    hf = _hf;
-    cl = _cl;
+    m_layout = _layout;
+    m_cl = _cl;
     kwhf = _kwhf;
     m_unit = unit;
 
@@ -167,7 +165,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 
     if ( tabs & DISABLE_BORDERS ) enableBorders = false;
     if ( tabs & FORMAT_AND_BORDERS ) setupTab1();
-    if ( tabs & HEADER_AND_FOOTER ) setupTab2();
+    if ( tabs & HEADER_AND_FOOTER ) setupTab2( _hf );
     if ( tabs & COLUMNS ) setupTab3();
     if ( tabs & KW_HEADER_AND_FOOTER ) setupTab4();
 
@@ -190,8 +188,8 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _t
 
     if ( dlg->exec() == QDialog::Accepted ) {
         res = true;
-        if ( _tabs & FORMAT_AND_BORDERS ) _layout = dlg->getLayout();
-        if ( _tabs & HEADER_AND_FOOTER ) _hf = dlg->getHeadFoot();
+        if ( _tabs & FORMAT_AND_BORDERS ) _layout = dlg->layout();
+        if ( _tabs & HEADER_AND_FOOTER ) _hf = dlg->headFoot();
         unit = dlg->unit();
     }
 
@@ -209,9 +207,9 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, KoColu
 
     if ( dlg->exec() == QDialog::Accepted ) {
         res = true;
-        if ( _tabs & FORMAT_AND_BORDERS ) _layout = dlg->getLayout();
-        if ( _tabs & HEADER_AND_FOOTER ) _hf = dlg->getHeadFoot();
-        if ( _tabs & COLUMNS ) _cl = dlg->getColumns();
+        if ( _tabs & FORMAT_AND_BORDERS ) _layout = dlg->layout();
+        if ( _tabs & HEADER_AND_FOOTER ) _hf = dlg->headFoot();
+        if ( _tabs & COLUMNS ) _cl = dlg->columns();
         if ( _tabs & KW_HEADER_AND_FOOTER ) _kwhf = dlg->getKWHeaderFooter();
         unit = dlg->unit();
     }
@@ -238,28 +236,28 @@ KoPageLayout KoPageLayoutDia::standardLayout()
 }
 
 /*====================== get header - footer =====================*/
-KoHeadFoot KoPageLayoutDia::getHeadFoot()
+KoHeadFoot KoPageLayoutDia::headFoot() const
 {
+    KoHeadFoot hf;
     hf.headLeft = eHeadLeft->text();
     hf.headMid = eHeadMid->text();
     hf.headRight = eHeadRight->text();
     hf.footLeft = eFootLeft->text();
     hf.footMid = eFootMid->text();
     hf.footRight = eFootRight->text();
-
     return hf;
 }
 
 /*================================================================*/
-KoColumns KoPageLayoutDia::getColumns()
+const KoColumns& KoPageLayoutDia::columns()
 {
-    cl.columns = nColumns->value();
-    cl.ptColumnSpacing = KoUnit::ptFromUnit( nCSpacing->value(), m_unit  );
-    return cl;
+    m_cl.columns = nColumns->value();
+    m_cl.ptColumnSpacing = KoUnit::ptFromUnit( nCSpacing->value(), m_unit  );
+    return m_cl;
 }
 
 /*================================================================*/
-KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
+const KoKWHeaderFooter& KoPageLayoutDia::getKWHeaderFooter()
 {
     if ( rhFirst->isChecked() && rhEvenOdd->isChecked() )
         kwhf.header = HF_FIRST_EO_DIFF;
@@ -341,7 +339,7 @@ void KoPageLayoutDia::setupTab1()
     epgWidth = new KDoubleNumInput( formatFrame, "Width" );
     lpgWidth->setBuddy( epgWidth );
     formatGrid->addWidget( epgWidth, 1, 1, Qt::AlignLeft | Qt::AlignVCenter );
-    if ( layout.format != PG_CUSTOM )
+    if ( m_layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
     connect( epgWidth, SIGNAL( valueChanged(double) ), this, SLOT( widthChanged() ) );
 
@@ -353,7 +351,7 @@ void KoPageLayoutDia::setupTab1()
     epgHeight = new KDoubleNumInput( formatFrame, "Height" );
     lpgHeight->setBuddy( epgHeight );
     formatGrid->addWidget( epgHeight, 2, 1, Qt::AlignLeft | Qt::AlignVCenter );
-    if ( layout.format != PG_CUSTOM )
+    if ( m_layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
     connect( epgHeight, SIGNAL( valueChanged(double ) ), this, SLOT( heightChanged() ) );
 
@@ -426,7 +424,7 @@ void KoPageLayoutDia::setupTab1()
     if ( !enableBorders ) ebrBottom->setEnabled( false );
 
     // ------------- preview -----------
-    pgPreview = new KoPagePreview( tab1, "Preview", layout );
+    pgPreview = new KoPagePreview( tab1, "Preview", m_layout );
     grid1->addMultiCellWidget( pgPreview, 1, 3, 1, 1 );
 
     // ------------- spacers -----------
@@ -440,7 +438,7 @@ void KoPageLayoutDia::setupTab1()
     grid1->addWidget( spacer2, 4, 1 );
 
     setValuesTab1();
-    updatePreview( layout );
+    updatePreview( m_layout );
 }
 
 /*================= setup values for tab one =====================*/
@@ -451,46 +449,46 @@ void KoPageLayoutDia::setValuesTab1()
         cpgUnit->setCurrentItem( m_unit );
 
     // page format
-    cpgFormat->setCurrentItem( layout.format );
+    cpgFormat->setCurrentItem( m_layout.format );
 
     // orientation
-    if( layout.orientation == PG_PORTRAIT )
+    if( m_layout.orientation == PG_PORTRAIT )
        rbPortrait->setChecked( true );
     else
        rbLandscape->setChecked( true );
 
     setValuesTab1Helper();
 
-    pgPreview->setPageLayout( layout );
+    pgPreview->setPageLayout( m_layout );
 }
 
 void KoPageLayoutDia::setValuesTab1Helper()
 {
-    epgWidth->setValue( KoUnit::ptToUnit( layout.ptWidth, m_unit ) );
+    epgWidth->setValue( KoUnit::ptToUnit( m_layout.ptWidth, m_unit ) );
     epgWidth->setSuffix( KoUnit::unitName( m_unit ) );
 
-    epgHeight->setValue( KoUnit::ptToUnit( layout.ptHeight, m_unit ) );
+    epgHeight->setValue( KoUnit::ptToUnit( m_layout.ptHeight, m_unit ) );
     epgHeight->setSuffix( KoUnit::unitName( m_unit ) );
 
-    ebrLeft->setValue( KoUnit::ptToUnit( layout.ptLeft, m_unit ) );
+    ebrLeft->setValue( KoUnit::ptToUnit( m_layout.ptLeft, m_unit ) );
     ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrLeft->setRange( 0, KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
+    ebrLeft->setRange( 0, KoUnit::ptToUnit( m_layout.ptWidth, m_unit)  );
 
-    ebrRight->setValue( KoUnit::ptToUnit( layout.ptRight, m_unit ) );
+    ebrRight->setValue( KoUnit::ptToUnit( m_layout.ptRight, m_unit ) );
     ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrRight->setRange( 0, KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
+    ebrRight->setRange( 0, KoUnit::ptToUnit( m_layout.ptWidth, m_unit)  );
 
-    ebrTop->setValue( KoUnit::ptToUnit( layout.ptTop, m_unit ) );
+    ebrTop->setValue( KoUnit::ptToUnit( m_layout.ptTop, m_unit ) );
     ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrTop->setRange( 0, KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
+    ebrTop->setRange( 0, KoUnit::ptToUnit( m_layout.ptHeight, m_unit)  );
 
-    ebrBottom->setValue( KoUnit::ptToUnit( layout.ptBottom, m_unit ) );
+    ebrBottom->setValue( KoUnit::ptToUnit( m_layout.ptBottom, m_unit ) );
     ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrBottom->setRange( 0, KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
+    ebrBottom->setRange( 0, KoUnit::ptToUnit( m_layout.ptHeight, m_unit)  );
 }
 
 /*================ setup header and footer tab ===================*/
-void KoPageLayoutDia::setupTab2()
+void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
 {
     QWidget *tab2 = addPage(i18n( "H&eader && Footer" ));
     QGridLayout *grid2 = new QGridLayout( tab2, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -584,7 +582,7 @@ void KoPageLayoutDia::setupTab3()
     nColumns = new QSpinBox( 1, 16, 1, tab3 );
     lColumns->setBuddy( nColumns );
     grid3->addWidget( nColumns, 1, 0 );
-    nColumns->setValue( cl.columns );
+    nColumns->setValue( m_cl.columns );
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
 
     QString str = KoUnit::unitName( m_unit );
@@ -596,12 +594,12 @@ void KoPageLayoutDia::setupTab3()
     lCSpacing->setBuddy( nCSpacing );
     grid3->addWidget( nCSpacing, 3, 0 );
 
-    nCSpacing->setValue( KoUnit::ptToUnit( cl.ptColumnSpacing, m_unit ) );
+    nCSpacing->setValue( KoUnit::ptToUnit( m_cl.ptColumnSpacing, m_unit ) );
     connect( nCSpacing, SIGNAL( valueChanged(double) ),
              this, SLOT( nSpaceChanged( double ) ) );
 
     // ------------- preview -----------
-    pgPreview2 = new KoPagePreview( tab3, "Preview", layout );
+    pgPreview2 = new KoPagePreview( tab3, "Preview", m_layout );
     grid3->addMultiCellWidget( pgPreview2, 0, 4, 1, 1 );
 
     // --------------- main grid ------------------
@@ -618,8 +616,8 @@ void KoPageLayoutDia::setupTab3()
     grid3->addRowSpacing( 3, nCSpacing->height() );
     grid3->setRowStretch( 4, 1 );
 
-    if ( pgPreview ) pgPreview->setPageColumns( cl );
-    pgPreview2->setPageColumns( cl );
+    if ( pgPreview ) pgPreview->setPageColumns( m_cl );
+    pgPreview2->setPageColumns( m_cl );
 }
 
 /*================================================================*/
@@ -716,10 +714,10 @@ void KoPageLayoutDia::setupTab4()
 /*====================== update the preview ======================*/
 void KoPageLayoutDia::updatePreview( const KoPageLayout& )
 {
-    if ( pgPreview ) pgPreview->setPageLayout( layout );
-    if ( pgPreview ) pgPreview->setPageColumns( cl );
-    if ( pgPreview2 ) pgPreview2->setPageLayout( layout );
-    if ( pgPreview2 ) pgPreview2->setPageColumns( cl );
+    if ( pgPreview ) pgPreview->setPageLayout( m_layout );
+    if ( pgPreview ) pgPreview->setPageColumns( m_cl );
+    if ( pgPreview2 ) pgPreview2->setPageLayout( m_layout );
+    if ( pgPreview2 ) pgPreview2->setPageColumns( m_cl );
 }
 
 /*===================== unit changed =============================*/
@@ -727,35 +725,35 @@ void KoPageLayoutDia::unitChanged( int _unit )
 {
     m_unit = static_cast<KoUnit::Unit>( _unit );
     setValuesTab1Helper();
-    updatePreview( layout );
+    updatePreview( m_layout );
 }
 
 /*===================== format changed =============================*/
 void KoPageLayoutDia::formatChanged( int _format )
 {
-    if ( ( KoFormat )_format != layout.format ) {
+    if ( ( KoFormat )_format != m_layout.format ) {
         bool enable = true;
 
-        layout.format = ( KoFormat )_format;
+        m_layout.format = ( KoFormat )_format;
         if ( ( KoFormat )_format != PG_CUSTOM ) enable = false;
         epgWidth->setEnabled( enable );
         epgHeight->setEnabled( enable );
 
-        double w = layout.ptWidth;
-        double h = layout.ptHeight;
-        if ( layout.format != PG_CUSTOM )
+        double w = m_layout.ptWidth;
+        double h = m_layout.ptHeight;
+        if ( m_layout.format != PG_CUSTOM )
         {
-            w = MM_TO_POINT( KoPageFormat::width( layout.format, layout.orientation ) );
-            h = MM_TO_POINT( KoPageFormat::height( layout.format, layout.orientation ) );
+            w = MM_TO_POINT( KoPageFormat::width( m_layout.format, m_layout.orientation ) );
+            h = MM_TO_POINT( KoPageFormat::height( m_layout.format, m_layout.orientation ) );
         }
 
-        layout.ptWidth = w;
-        layout.ptHeight = h;
+        m_layout.ptWidth = w;
+        m_layout.ptHeight = h;
 
-        epgWidth->setValue( KoUnit::ptToUnit( layout.ptWidth, m_unit ) );
-        epgHeight->setValue( KoUnit::ptToUnit( layout.ptHeight, m_unit ) );
+        epgWidth->setValue( KoUnit::ptToUnit( m_layout.ptWidth, m_unit ) );
+        epgHeight->setValue( KoUnit::ptToUnit( m_layout.ptHeight, m_unit ) );
 
-        updatePreview( layout );
+        updatePreview( m_layout );
     }
 }
 
@@ -763,30 +761,30 @@ void KoPageLayoutDia::formatChanged( int _format )
 
 void KoPageLayoutDia::orientationChanged()
 {
-    KoOrientation oldOrientation = layout.orientation;
-    layout.orientation = ( rbPortrait->isChecked() ) ?  PG_PORTRAIT : PG_LANDSCAPE;
+    KoOrientation oldOrientation = m_layout.orientation;
+    m_layout.orientation = ( rbPortrait->isChecked() ) ?  PG_PORTRAIT : PG_LANDSCAPE;
 
     // without this check, width & height would be swapped around (below)
     // even though the orientation has not changed
-    if (layout.orientation == oldOrientation) return;
+    if (m_layout.orientation == oldOrientation) return;
 
-    layout.ptWidth = KoUnit::ptFromUnit( epgWidth->value(), m_unit );
-    layout.ptHeight = KoUnit::ptFromUnit( epgHeight->value(), m_unit );
-    layout.ptLeft = KoUnit::ptFromUnit( ebrLeft->value(), m_unit );
-    layout.ptRight = KoUnit::ptFromUnit( ebrRight->value(), m_unit );
-    layout.ptTop = KoUnit::ptFromUnit( ebrTop->value(), m_unit );
-    layout.ptBottom = KoUnit::ptFromUnit( ebrBottom->value(), m_unit );
+    m_layout.ptWidth = KoUnit::ptFromUnit( epgWidth->value(), m_unit );
+    m_layout.ptHeight = KoUnit::ptFromUnit( epgHeight->value(), m_unit );
+    m_layout.ptLeft = KoUnit::ptFromUnit( ebrLeft->value(), m_unit );
+    m_layout.ptRight = KoUnit::ptFromUnit( ebrRight->value(), m_unit );
+    m_layout.ptTop = KoUnit::ptFromUnit( ebrTop->value(), m_unit );
+    m_layout.ptBottom = KoUnit::ptFromUnit( ebrBottom->value(), m_unit );
 
     // swap dimension and adjust margins
-    qSwap( layout.ptWidth, layout.ptHeight );
-    double tmp = layout.ptTop;
-    layout.ptTop = layout.ptRight;
-    layout.ptRight = layout.ptBottom;
-    layout.ptBottom = layout.ptLeft;
-    layout.ptLeft = tmp;
+    qSwap( m_layout.ptWidth, m_layout.ptHeight );
+    double tmp = m_layout.ptTop;
+    m_layout.ptTop = m_layout.ptRight;
+    m_layout.ptRight = m_layout.ptBottom;
+    m_layout.ptBottom = m_layout.ptLeft;
+    m_layout.ptLeft = tmp;
 
     setValuesTab1();
-    updatePreview( layout );
+    updatePreview( m_layout );
 }
 
 void KoPageLayoutDia::changed(KDoubleNumInput *line, double &pt) {
@@ -802,57 +800,57 @@ void KoPageLayoutDia::changed(KDoubleNumInput *line, double &pt) {
 /*===================== width changed =============================*/
 void KoPageLayoutDia::widthChanged()
 {
-    changed(epgWidth, layout.ptWidth);
-    updatePreview( layout );
+    changed(epgWidth, m_layout.ptWidth);
+    updatePreview( m_layout );
 }
 
 /*===================== height changed ============================*/
 void KoPageLayoutDia::heightChanged()
 {
-    changed(epgHeight, layout.ptHeight);
-    updatePreview( layout );
+    changed(epgHeight, m_layout.ptHeight);
+    updatePreview( m_layout );
 }
 
 /*===================== left border changed =======================*/
 void KoPageLayoutDia::leftChanged()
 {
-    changed(ebrLeft, layout.ptLeft);
-    updatePreview( layout );
+    changed(ebrLeft, m_layout.ptLeft);
+    updatePreview( m_layout );
 }
 
 /*===================== right border changed =======================*/
 void KoPageLayoutDia::rightChanged()
 {
-    changed(ebrRight, layout.ptRight);
-    updatePreview( layout );
+    changed(ebrRight, m_layout.ptRight);
+    updatePreview( m_layout );
 }
 
 /*===================== top border changed =========================*/
 void KoPageLayoutDia::topChanged()
 {
-    changed(ebrTop, layout.ptTop);
-    updatePreview( layout );
+    changed(ebrTop, m_layout.ptTop);
+    updatePreview( m_layout );
 }
 
 /*===================== bottom border changed ======================*/
 void KoPageLayoutDia::bottomChanged()
 {
-    changed(ebrBottom, layout.ptBottom);
-    updatePreview( layout );
+    changed(ebrBottom, m_layout.ptBottom);
+    updatePreview( m_layout );
 }
 
 /*==================================================================*/
 void KoPageLayoutDia::nColChanged( int _val )
 {
-    cl.columns = _val;
-    updatePreview( layout );
+    m_cl.columns = _val;
+    updatePreview( m_layout );
 }
 
 /*==================================================================*/
 void KoPageLayoutDia::nSpaceChanged( double _val )
 {
-    cl.ptColumnSpacing = KoUnit::ptFromUnit( _val, m_unit );
-    updatePreview( layout );
+    m_cl.ptColumnSpacing = KoUnit::ptFromUnit( _val, m_unit );
+    updatePreview( m_layout );
 }
 
 /* Validation when closing. Error messages are never liked, but
@@ -860,14 +858,14 @@ void KoPageLayoutDia::nSpaceChanged( double _val )
   final validation, than preventing them from entering values. */
 void KoPageLayoutDia::slotOk()
 {
-    if ( layout.ptLeft + layout.ptRight > layout.ptWidth )
+    if ( m_layout.ptLeft + m_layout.ptRight > m_layout.ptWidth )
     {
         KMessageBox::error( this,
             i18n("The page width is smaller than the left and right margins."),
                             i18n("Page Layout Problem") );
         return;
     }
-    if ( layout.ptTop + layout.ptBottom > layout.ptHeight )
+    if ( m_layout.ptTop + m_layout.ptBottom > m_layout.ptHeight )
     {
         KMessageBox::error( this,
             i18n("The page height is smaller than the top and bottom margins."),

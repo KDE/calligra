@@ -148,30 +148,31 @@ public:
      */
     static KoPageLayout standardLayout();
 
+    //KDE_DEPRECATED KoPageLayout getLayout() const { return m_layout; }
     /**
      *  Returns the layout
      */
-    KoPageLayout getLayout() const { return layout; }
+    const KoPageLayout& layout() const { return m_layout; }
 
     /**
      *  Returns the header and footer information
      */
-    KoHeadFoot getHeadFoot(); // BIC: make const
+    KoHeadFoot headFoot() const;
 
     /**
      *  Returns the unit
      */
     KoUnit::Unit unit() const { return m_unit; }
 
-protected:
-    KoColumns getColumns();
-    KoKWHeaderFooter getKWHeaderFooter();
+private:
+    const KoColumns& columns();
+    const KoKWHeaderFooter& getKWHeaderFooter();
 
     // setup tabs
     void setupTab1();
     void setValuesTab1();
     void setValuesTab1Helper();
-    void setupTab2();
+    void setupTab2( const KoHeadFoot& hf );
     void setupTab3();
     void setupTab4();
 
@@ -209,9 +210,8 @@ protected:
     QCheckBox *rfEvenOdd;
 
     // layout
-    KoPageLayout layout;
-    KoHeadFoot hf;
-    KoColumns cl;
+    KoPageLayout m_layout;
+    KoColumns m_cl;
     KoKWHeaderFooter kwhf;
 
     KoUnit::Unit m_unit;
