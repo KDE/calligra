@@ -185,7 +185,7 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 			else
 				offset = temp.toFloat();
 			if( !stop.attribute( "stop-color" ).isEmpty() )
-				c = parseColor( "stop-color" );
+				c = parseColor( stop.attribute( "stop-color" ) );
 			else
 			{
 				// try style attr
@@ -398,6 +398,11 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			else
 				m_document.append( group );
 			m_gc.pop();
+			continue;
+		}
+		if( b.tagName() == "defs" )
+		{
+			parseGroup( 0L, b ); 	// try for gradients at least
 			continue;
 		}
 		else if( b.tagName() == "linearGradient" || b.tagName() == "radialGradient" )
