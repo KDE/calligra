@@ -57,7 +57,7 @@ VPathBounding::intersects( const QRect& rect, const double zoomFactor, const VSe
 				return true;
 	}
 
-	// check if rect is completely inside m_pa:
+	// TODO: check if rect is completely inside m_pa:
 
 	return false;
 }

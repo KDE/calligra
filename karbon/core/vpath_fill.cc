@@ -19,6 +19,7 @@ VPathFill::begin_draw( QPainter& painter, const double zoomFactor )
 	m_painter = &painter;
 	m_zoomFactor = zoomFactor;
 	m_hasHoles = false;
+	m_pa.resize( 0 );
 }
 
 void
@@ -46,9 +47,9 @@ VPathFill::end_draw()
 bool
 VPathFill::begin( const KoPoint& p )
 {
-	m_pa.resize( 1 );
+	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint(
-		0,
+		m_pa.size() - 1,
 		qRound( m_zoomFactor * p.x() ),
 		qRound( m_zoomFactor * p.y() ) );
 

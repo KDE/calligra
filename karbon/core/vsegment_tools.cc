@@ -61,19 +61,19 @@ VSegmentTools::linesIntersect(
 	const KoPoint delta_a = a1 - a0;
 	const double det_a = a1.x() * a0.y() - a1.y() * a0.x();
 
-	const double r3 = delta_a.y() * b0.x() - delta_a.x() * b0.y() + det_a;
-	const double r4 = delta_a.y() * b1.x() - delta_a.x() * b1.y() + det_a;
+	const double r_b0 = delta_a.y() * b0.x() - delta_a.x() * b0.y() + det_a;
+	const double r_b1 = delta_a.y() * b1.x() - delta_a.x() * b1.y() + det_a;
 
-	if( r3 != 0.0 && r4 != 0.0 && r3 * r4 > 0.0 )
+	if( r_b0 != 0.0 && r_b1 != 0.0 && r_b0 * r_b1 > 0.0 )
 		return false;
 
 	const KoPoint delta_b = b1 - b0;
 	const double det_b = b1.x() * b0.y() - b1.y() * b0.x();
 
-	const double r1 = delta_b.y() * a0.x() - delta_b.x() * a0.y() + det_b;
-	const double r2 = delta_b.y() * a1.x() - delta_b.x() * a1.y() + det_b;
+	const double r_a0 = delta_b.y() * a0.x() - delta_b.x() * a0.y() + det_b;
+	const double r_a1 = delta_b.y() * a1.x() - delta_b.x() * a1.y() + det_b;
 
-	if( r1 != 0.0 && r2 != 0.0 && r1 * r2 > 0.0 )
+	if( r_a0 != 0.0 && r_a1 != 0.0 && r_a0 * r_a1 > 0.0 )
 		return false;
 
 	return true;
