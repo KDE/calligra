@@ -53,14 +53,15 @@ KPresenterShell::KPresenterShell()
 	
 	QStringList list = KImageIO::types(KImageIO::Reading);
 	QStringList::ConstIterator it;
-	for (it = list.begin(); it != list.end(); it++) 
-	  KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
+	for (it = list.begin(); it != list.end(); it++)
+        KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
     }
 
     if ( s_lstShells == 0L )
         s_lstShells = new QList<KPresenterShell>;
 
     s_lstShells->append( this );
+    interface()->setMaximumToolBarWraps( 1 );
 }
 
 /*================================================================*/

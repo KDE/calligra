@@ -59,7 +59,7 @@ KWordShell::KWordShell()
 
     if ( !previewHandlerRegistered )
     {
-      QStringList list = KImageIO::types(KImageIO::Reading);
+        QStringList list = KImageIO::types(KImageIO::Reading);
         QStringList::ConstIterator it;
         for (it = list.begin(); it != list.end(); it++)
             KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
@@ -69,6 +69,7 @@ KWordShell::KWordShell()
 
         previewHandlerRegistered = true;
     }
+    interface()->setMaximumToolBarWraps( 1 );
 }
 
 /*================================================================*/
@@ -268,7 +269,7 @@ bool KWordShell::saveDocument( const char *_url, const char *_format )
 
             return true;
         }
-        
+
         _url = file.latin1();
         m_pDoc->setURL( _url );
     }
