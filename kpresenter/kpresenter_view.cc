@@ -2990,9 +2990,9 @@ void KPresenterView::setupActions()
              this, SLOT( textStyleSelected( int ) ) );
     updateStyleList();
 
-    actionAllowAutoFormat = new KToggleAction( i18n( "Allow AutoFormat" ), 0,
+    actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
                                              this, SLOT( slotAllowAutoFormat() ),
-                                          actionCollection(), "view_allowAutoFormat" );
+                                          actionCollection(), "enable_autocorrection" );
 
 
     KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), KStdAccel::shortcut(KStdAccel::TextCompletion),

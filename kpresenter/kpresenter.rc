@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="51">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="52">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -37,7 +37,7 @@
   <Separator/>
   <Action name="view_helplines"/>
   <Separator/>
-  <Action name="view_allowAutoFormat"/>
+  <Action name="enable_autocorrection"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_specialchar"/>
