@@ -1106,3 +1106,10 @@ Reggie, 19.4.1999:
 ------------------
 - Made typographic quotes autoformat stuff more efficient
 - Started working on more autoformat stuff
+
+Reggie, 20.4.1999:
+------------------
+- Implemented KWString::utf8() to convert KWStrings to utf8
+- KWord saves and loads now in utf8
+- More work on autoformat (implemented that annoying automatical conversation
+  to uppercase letters :-)

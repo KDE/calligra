@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <DOC author="Reginald Stadlbauer and Torben Weis" email="reggie@kde.org and weis@kde.org" editor="KWord" mime="application/x-kword">
  <PAPER format="1" ptWidth="595" ptHeight="841" mmWidth ="210" mmHeight="297" inchWidth ="8.26772" inchHeight="11.6929" orientation="0" columns="1" ptColumnspc="2" mmColumnspc="1" inchColumnspc="0.0393701" hType="0" fType="0" ptHeadBody="9" ptFootBody="9" mmHeadBody="3.5" mmFootBody="3.5" inchHeadBody="0.137795" inchFootBody="0.137795">
   <PAPERBORDERS mmLeft="10" mmTop="15" mmRight="10" mmBottom="15" ptLeft="28" ptTop="42" ptRight="28" ptBottom="42" inchLeft="0.393701" inchTop="0.590551" inchRight="0.393701" inchBottom="0.590551"/>
@@ -34,7 +34,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
@@ -69,7 +69,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
     </LAYOUT>
@@ -104,7 +104,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
     </LAYOUT>
@@ -139,7 +139,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
     </LAYOUT>
@@ -174,7 +174,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
     </LAYOUT>
@@ -209,7 +209,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
     </LAYOUT>
@@ -244,7 +244,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT> 
+     </FORMAT>
      <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
      <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
     </LAYOUT>
@@ -274,7 +274,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
    <TABULATOR mmpos="63" ptpos="179" inchpos="1.6061e-19" type="0"/>
    <TABULATOR mmpos="128" ptpos="363" inchpos="1.1009e+15" type="0"/>
   </STYLE>
@@ -300,7 +300,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
   </STYLE>
   <STYLE>
    <NAME value="Head 2"/>
@@ -324,7 +324,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
   </STYLE>
   <STYLE>
    <NAME value="Head 3"/>
@@ -348,7 +348,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
   </STYLE>
   <STYLE>
    <NAME value="Enumerated List"/>
@@ -372,7 +372,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
   </STYLE>
   <STYLE>
    <NAME value="Alphabetical List"/>
@@ -396,7 +396,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
   </STYLE>
   <STYLE>
    <NAME value="Bullet List"/>
@@ -420,7 +420,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT> 
+   </FORMAT>
   </STYLE>
  </STYLES>
 </DOC>

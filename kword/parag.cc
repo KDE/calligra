@@ -291,7 +291,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 /*================================================================*/
 void KWParag::save(ostream &out)
 {
-  out << indent << "<TEXT>" << text.decoded().ascii() << "</TEXT>" << endl;
+  out << indent << "<TEXT>" << (const char*)text.utf8() << "</TEXT>" << endl;
   if (info == PI_FOOTNOTE)
     out << indent << "<NAME name=\"" << paragName.ascii() << "\"/>" << endl;
   out << indent << "<INFO info=\"" << static_cast<int>(info) << "\"/>" << endl;
@@ -334,6 +334,8 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	       if (s.simplifyWhiteSpace().length() > 0)
 		 tmp2 = tmp.c_str();
 	     }
+
+	   tmp2 = QString::fromUtf8(tmp2.ascii());
 
 	   if (text.size() == 1 && tmp2.length() > 0) text.remove(0);
 	   text.insert(text.size(),tmp2);

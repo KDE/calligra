@@ -43,7 +43,7 @@ KWAutoFormatEntry::KWAutoFormatEntry()
 
 /*================================================================*/
 KWAutoFormat::KWAutoFormat(KWordDocument *_doc)
-  : typographicQuotes(), enabled(false)
+  : typographicQuotes(), enabled(false), lastWasDotSpace(false), convertUpperCase(true)
 {
   doc = _doc;
   tmpBuffer = 0L;
@@ -55,6 +55,8 @@ void KWAutoFormat::startAutoFormat(KWParag *parag,KWFormatContext *fc)
   if (!enabled)
     return;
 
+  lastWasDotSpace = false;
+  
   tmpBuffer = new KWString(doc);
 }
 
@@ -65,7 +67,7 @@ bool KWAutoFormat::doAutoFormat(KWParag *parag,KWFormatContext *fc)
     return false;
 
   tmpBuffer->append(parag->getKWString()->data()[fc->getTextPos()]);
-  
+
   return false;
 }
 
@@ -74,7 +76,7 @@ void KWAutoFormat::endAutoFormat(KWParag *parag,KWFormatContext *fc)
 {
   if (!enabled)
     return;
-  
+
   if (tmpBuffer)
     delete tmpBuffer;
   tmpBuffer = 0L;
@@ -100,4 +102,29 @@ bool KWAutoFormat::doTypographicQuotes(KWParag *parag,KWFormatContext *fc)
     }
 
   return false;
+}
+
+/*================================================================*/
+bool KWAutoFormat::doUpperCase(KWParag *parag,KWFormatContext *fc)
+{
+  if (!enabled || !convertUpperCase)
+    return false;
+
+  bool converted = false;
+  
+  if (lastWasDotSpace &&
+      parag->getKWString()->data()[fc->getTextPos()].c != QChar('.') &&
+      parag->getKWString()->data()[fc->getTextPos()].c != QChar(' '))
+    {
+      parag->getKWString()->data()[fc->getTextPos()].c.toUpper();
+      converted = true;
+    }
+      
+  if (parag->getKWString()->data()[fc->getTextPos()].c == QChar('.'))
+    lastWasDotSpace = true;
+  else if (parag->getKWString()->data()[fc->getTextPos()].c != QChar('.') &&
+	   parag->getKWString()->data()[fc->getTextPos()].c != QChar(' '))
+    lastWasDotSpace = false;
+
+  return converted;
 }

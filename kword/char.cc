@@ -865,6 +865,18 @@ QString KWString::decoded()
 }
 
 /*================================================================*/
+QCString KWString::utf8(bool _decoded = true)
+{
+  QString str;
+  if (_decoded)
+    str = decoded();
+  else
+    str = toString(0,size());
+
+  return QCString(str.utf8());
+}
+
+/*================================================================*/
 void freeChar(KWChar& _char,KWordDocument *_doc)
 {	
   if (_char.attrib)

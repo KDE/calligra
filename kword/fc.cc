@@ -1031,7 +1031,7 @@ bool KWFormatContext::makeLineLayout(QPainter &_painter,bool _checkIntersects = 
   bool _break = false;
 
   doc->getAutoFormat().startAutoFormat(parag,this);
-  
+
   // Loop until we reach the end of line
   while (!_break && (ptPos < xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
 				       document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
@@ -1050,12 +1050,13 @@ bool KWFormatContext::makeLineLayout(QPainter &_painter,bool _checkIntersects = 
 	  if (textPos == lineStartPos)
 	    lineStartFormat = *this;
 	}
-      
+
       // do the autoformat stuff
       if (c != 0)
 	{
 	  document->getAutoFormat().doTypographicQuotes(parag,this);
 	  document->getAutoFormat().doAutoFormat(parag,this);
+	  document->getAutoFormat().doUpperCase(parag,this);
 	}
 
       // if we will not fit into the line anymore, let us leave the loop

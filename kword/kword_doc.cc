@@ -1277,7 +1277,7 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*================================================================*/
 bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
-  out << "<?xml version=\"1.0\"?>" << endl;
+  out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
   //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org"
       << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;

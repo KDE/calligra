@@ -69,15 +69,17 @@ public:
   bool doAutoFormat(KWParag *parag,KWFormatContext *fc);
   void endAutoFormat(KWParag *parag,KWFormatContext *fc);
   bool doTypographicQuotes(KWParag *parag,KWFormatContext *fc);
-
+  bool doUpperCase(KWParag *parag,KWFormatContext *fc);
+  
   void setEnabled(bool e) { enabled = e; }
   bool isEnabled() { return enabled; }
-  
+
 protected:
   KWordDocument *doc;
   TypographicQuotes typographicQuotes;
   bool enabled;
   KWString *tmpBuffer;
+  bool lastWasDotSpace,convertUpperCase;
   
 };
 

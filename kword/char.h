@@ -10,6 +10,7 @@
 #include <qimage.h>
 #include <qstring.h>
 #include <qregexp.h>
+#include <qcstring.h>
 
 #include <iostream>
 
@@ -216,7 +217,8 @@ public:
   KWordDocument *getDocument() { return doc; }
 
   QString decoded();
-
+  QCString utf8(bool _decoded = true);
+  
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);
