@@ -151,6 +151,69 @@ protected:
     int m_iNbRow;
 };
 
+
+class KSpreadUndoHideColumn : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    virtual ~KSpreadUndoHideColumn();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iColumn;
+    int m_iNbCol;
+};
+
+class KSpreadUndoHideRow : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    virtual ~KSpreadUndoHideRow();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iRow;
+    int m_iNbRow;
+};
+
+class KSpreadUndoShowColumn : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    virtual ~KSpreadUndoShowColumn();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iColumn;
+    int m_iNbCol;
+};
+
+class KSpreadUndoShowRow : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    virtual ~KSpreadUndoShowRow();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iRow;
+    int m_iNbRow;
+};
+
+
+
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:

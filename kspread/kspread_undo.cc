@@ -347,6 +347,172 @@ void KSpreadUndoInsertRow::redo()
     doc()->undoBuffer()->unlock();
 }
 
+
+/****************************************************************************
+ *
+ * KSpreadUndoHideRow
+ *
+ ***************************************************************************/
+
+KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow ) :
+    KSpreadUndoAction( _doc )
+{
+    title=i18n("Hide column(s)");
+    m_tableName = _table->tableName();
+    m_iRow= _row;
+    m_iNbRow=_nbRow;
+}
+
+KSpreadUndoHideRow::~KSpreadUndoHideRow()
+{
+}
+
+void KSpreadUndoHideRow::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->showRow( m_iRow,m_iNbRow );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoHideRow::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideRow( m_iRow,m_iNbRow);
+    doc()->undoBuffer()->unlock();
+}
+
+/****************************************************************************
+ *
+ * KSpreadUndoHideColumn
+ *
+ ***************************************************************************/
+
+KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol ) :
+    KSpreadUndoAction( _doc )
+{
+    title=i18n("Hide column(s)");
+    m_tableName = _table->tableName();
+    m_iColumn= _column;
+    m_iNbCol=_nbCol;
+}
+
+KSpreadUndoHideColumn::~KSpreadUndoHideColumn()
+{
+}
+
+void KSpreadUndoHideColumn::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->showColumn( m_iColumn,m_iNbCol );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoHideColumn::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideColumn( m_iColumn,m_iNbCol);
+    doc()->undoBuffer()->unlock();
+}
+
+/****************************************************************************
+ *
+ * KSpreadUndoShowRow
+ *
+ ***************************************************************************/
+
+KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow ) :
+    KSpreadUndoAction( _doc )
+{
+    title=i18n("Show column(s)");
+    m_tableName = _table->tableName();
+    m_iRow= _row;
+    m_iNbRow=_nbRow;
+}
+
+KSpreadUndoShowRow::~KSpreadUndoShowRow()
+{
+}
+
+void KSpreadUndoShowRow::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideRow( m_iRow,m_iNbRow );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoShowRow::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->showRow( m_iRow,m_iNbRow);
+    doc()->undoBuffer()->unlock();
+}
+
+/****************************************************************************
+ *
+ * KSpreadUndoShowColumn
+ *
+ ***************************************************************************/
+
+KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol ) :
+    KSpreadUndoAction( _doc )
+{
+    title=i18n("Show column(s)");
+    m_tableName = _table->tableName();
+    m_iColumn= _column;
+    m_iNbCol=_nbCol;
+}
+
+KSpreadUndoShowColumn::~KSpreadUndoShowColumn()
+{
+}
+
+void KSpreadUndoShowColumn::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideColumn( m_iColumn,m_iNbCol );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoShowColumn::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->showColumn( m_iColumn,m_iNbCol);
+    doc()->undoBuffer()->unlock();
+}
+
+
 /****************************************************************************
  *
  * KSpreadUndoSetText

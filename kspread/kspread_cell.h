@@ -675,6 +675,9 @@ public:
      */
     virtual bool hasProperty( Properties p ) const;
 
+
+    void freeAllObscuredCells();
+
 protected:
     /**
      * @reimp

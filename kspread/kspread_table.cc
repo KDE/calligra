@@ -2431,6 +2431,12 @@ void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
 void KSpreadTable::hideRow( int _row,int nbRow )
 {
     m_pDoc->setModified( true );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoHideRow *undo = new KSpreadUndoHideRow( m_pDoc, this, _row,nbRow );
+        m_pDoc->undoBuffer()->appendUndo( undo  );
+    }
+
     for(int i=0;i<=nbRow;i++)
         {
         RowLayout *rl=nonDefaultRowLayout(_row+i);
@@ -2443,6 +2449,12 @@ void KSpreadTable::hideRow( int _row,int nbRow )
 void KSpreadTable::showRow( int _row,int nbRow )
 {
     m_pDoc->setModified( true );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoShowRow *undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow );
+        m_pDoc->undoBuffer()->appendUndo( undo  );
+    }
+
     for(int i=0;i<=nbRow;i++)
         {
         RowLayout *rl=nonDefaultRowLayout(_row+i);
@@ -2456,6 +2468,13 @@ void KSpreadTable::showRow( int _row,int nbRow )
 void KSpreadTable::hideColumn( int _col,int nbCol )
 {
    m_pDoc->setModified( true );
+
+   if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoHideColumn *undo = new KSpreadUndoHideColumn( m_pDoc, this, _col,nbCol );
+        m_pDoc->undoBuffer()->appendUndo( undo  );
+    }
+
    for(int i=0;i<=nbCol;i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
@@ -2468,6 +2487,12 @@ void KSpreadTable::hideColumn( int _col,int nbCol )
 void KSpreadTable::showColumn( int _col,int nbCol )
 {
    m_pDoc->setModified( true );
+   if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoShowColumn *undo = new KSpreadUndoShowColumn( m_pDoc, this, _col,nbCol );
+        m_pDoc->undoBuffer()->appendUndo( undo  );
+    }
+
    for(int i=0;i<=nbCol;i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
