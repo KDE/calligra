@@ -256,15 +256,23 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
-		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
-		                                                availableWidth - string->at( i ).x - ( string->isRightToLeft() && lastChr == '\n'? (c - 1)->width: 0 ) );
+		c = &string->at( i ); // The last char in the last line
+                int lineWidth = availableWidth - c->x - ( string->isRightToLeft() && lastChr == '\n'? c->width : 0 );
+                if ( c->c.unicode() == 0xad ) // soft hyphen
+                {
+                    // Recalculate its width, the hyphen will appear finally (important for the parag rect)
+                    c->width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->screenFontMetrics( zh, false ).width( c->c ) );
+                    lineWidth += c->width;
+                }
+		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, lineWidth );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 		lineStart = lineStart2;
 #ifdef DEBUG_FORMATTER
 		qDebug("Breaking at a breakable char (%d). linenr=%d y=%d",i,linenr,y);
 #endif
-		c = &string->at( i + 1 );
+
+		c = &string->at( i + 1 ); // The first char in the new line
 		tmph = c->height();
 		h = tmph;
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4 ) : left;

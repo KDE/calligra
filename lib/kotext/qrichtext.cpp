@@ -3941,29 +3941,36 @@ void KoTextParag::format( int start, bool doMove )
 	delete *it;
 
     KoTextStringChar *c = 0;
-    if ( lineStarts.count() == 1 ) { //&& ( !doc || doc->flow()->isEmpty() ) ) {
-	if ( !string()->isBidi() ) {
-	    c = &str->at( str->length() - 1 );
-	    r.setWidth( c->x + c->width );
-	} else {
-	    r.setWidth( lineStarts[0]->w );
-	}
+    if ( hasBorder() ) ////kotext: border extends to doc width
+    {
+        setWidth( textDocument()->width() - 1 );
     }
-     if ( newLinesAllowed ) {
-	it = lineStarts.begin();
-	int usedw = 0; int lineid = 0;
-	for ( ; it != lineStarts.end(); ++it, ++lineid ) {
-	    usedw = QMAX( usedw, (*it)->w );
+    else
+    {
+        if ( lineStarts.count() == 1 ) { //&& ( !doc || doc->flow()->isEmpty() ) ) {
+            if ( !string()->isBidi() ) {
+                c = &str->at( str->length() - 1 );
+                r.setWidth( c->x + c->width );
+            } else {
+                r.setWidth( lineStarts[0]->w );
+            }
         }
-	if ( r.width() <= 0 ) {
-	    // if the user specifies an invalid rect, this means that the
-	    // bounding box should grow to the width that the text actually
-	    // needs
-	    r.setWidth( usedw );
-	} else {
-            r.setWidth( QMIN( usedw, r.width() ) );
-	}
-     }
+        if ( newLinesAllowed ) {
+            it = lineStarts.begin();
+            int usedw = 0; int lineid = 0;
+            for ( ; it != lineStarts.end(); ++it, ++lineid ) {
+                usedw = QMAX( usedw, (*it)->w );
+            }
+            if ( r.width() <= 0 ) {
+                // if the user specifies an invalid rect, this means that the
+                // bounding box should grow to the width that the text actually
+                // needs
+                r.setWidth( usedw );
+            } else {
+                r.setWidth( QMIN( usedw, r.width() ) );
+            }
+        }
+    }
 
     if ( y != r.height() )
 	r.setHeight( y );
