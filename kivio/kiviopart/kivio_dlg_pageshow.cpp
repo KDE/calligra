@@ -43,7 +43,7 @@ KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
   list=new QListBox(this);
   lay1->addWidget( list );
 
-  setCaption( i18n("Pages hidden") );
+  setCaption( i18n("Hidden pages") );
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
