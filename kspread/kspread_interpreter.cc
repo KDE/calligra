@@ -976,7 +976,7 @@ static bool kspreadfunc_stddev( KSContext& context )
     result=0.0;
     bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
     if(b)
-      context.setValue( new KSValue(sqrt(result/number )) );
+      context.setValue( new KSValue(sqrt(result/((double)(number - 1)) )) );
   }
 
   return b;
