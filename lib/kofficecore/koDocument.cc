@@ -232,6 +232,7 @@ KoDocument::~KoDocument()
     d->m_shells.clear();
 
     delete d->m_dcopObject;
+    delete d->filterManager;
     delete d;
     s_documentList->removeRef(this);
     // last one?
