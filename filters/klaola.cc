@@ -1,5 +1,5 @@
 /*
- * KLoala
+ * KLaola - (c) 1999 Werner Trobin
  *
  * based on "LAOLA file system"
  *          "Structured Storage"
@@ -8,11 +8,12 @@
 
 #include "klaola.h"
 
-KLaola::KLaola(myFile file) {
+KLaola::KLaola(const myFile &file) {
     
     smallBlockDepot=0L;
     bigBlockDepot=0L;
     smallBlockFile=0L;
+    bbd_list=0L;
 
     if( (file.length % 0x200) != 0 ) {
         kdebug(KDEBUG_ERROR, 31000, "Invalid file size!");
@@ -44,6 +45,10 @@ KLaola::~KLaola() {
         delete [] smallBlockFile;
         smallBlockFile=0L;
     }
+    if(bbd_list) {
+        delete [] bbd_list;
+        bbd_list=0L;
+    }
 
     QList<OLETree> *tmpList;
     OLETree *node;
@@ -63,7 +68,7 @@ KLaola::~KLaola() {
     }
 }
 
-QList<OLENode> KLaola::parseRootDir() {
+const QList<OLENode> KLaola::parseRootDir() {
 
     QList<OLENode> tmpOLENodeList;
     QArray<long> tmp;
@@ -80,7 +85,7 @@ QList<OLENode> KLaola::parseRootDir() {
     return tmpOLENodeList;
 }
 
-QList<OLENode> KLaola::parseCurrentDir() {
+const QList<OLENode> KLaola::parseCurrentDir() {
 
     OLENode *node;
     QList<OLETree> *tmpList;
@@ -121,7 +126,7 @@ QList<OLENode> KLaola::parseCurrentDir() {
     return nodeList;
 }
 
-bool KLaola::enterDir(long handle) {
+bool KLaola::enterDir(const long handle) {
 
     QList<OLENode> dir;
     OLENode *node;
@@ -148,11 +153,11 @@ bool KLaola::leaveDir() {
     return false;
 }
 
-QArray<long> KLaola::currentPath() {
+const QArray<long> KLaola::currentPath() const {
     return path;
 }
 
-OLEInfo KLaola::streamInfo(long handle) {
+const OLEInfo KLaola::streamInfo(const long handle) {
 
     OLEInfo *tmp, ret;
 
@@ -175,7 +180,7 @@ OLEInfo KLaola::streamInfo(long handle) {
     return ret;
 }
 
-QString KLaola::stream(long handle) {
+const QString KLaola::stream(const long handle) {
 
     OLEInfo *info;
     QString ret;
@@ -191,6 +196,21 @@ QString KLaola::stream(long handle) {
     ret=p;
 
     delete [] p;
+    return ret;
+}
+
+const QArray<long> KLaola::find(const QString &name) {
+
+    QArray<long> ret(static_cast<int>(0));
+    int i=0;
+
+    for(OLEInfo *p=ppsList.first();p!=0;p=ppsList.next()) {
+        if(p->name==name) {
+            ret.resize(i+1);
+            ret[i]=p->handle;
+            i++;
+        }
+    }
     return ret;
 }
 
@@ -220,7 +240,7 @@ void KLaola::testIt() {
         tmp.setNum(info.size);
         foo+=tmp;
 
-        kdebug(KDEBUG_INFO, 31000, (const char*)foo);
+        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(foo));
     }
 }
 
@@ -235,6 +255,8 @@ bool KLaola::parseHeader() {
     num_of_bbd_blocks=read32(0x2c);
     root_startblock=read32(0x30);
     sbd_startblock=read32(0x3c);
+
+    bbd_list=new unsigned long[num_of_bbd_blocks];
 
     unsigned int i, j;
     for(i=0, j=0;i<num_of_bbd_blocks;++i, j=j+4)
@@ -264,7 +286,7 @@ void KLaola::readRootList() {
     long pos=root_startblock;
     long handle=0;
 
-    while(pos!=-2 && pos>=0 && pos<=(long)maxblock) {
+    while(pos!=-2 && pos>=0 && pos<=static_cast<long>(maxblock)) {
         for(int i=0;i<4;++i, ++handle)
             readPPSEntry((pos+1)*0x200+0x80*i, handle);
 
@@ -294,17 +316,17 @@ void KLaola::readPPSEntry(long pos, long handle) {
 
         info->type=data[pos+0x42];
 
-        info->prev=(long)read32(pos+0x44);
-        info->next=(long)read32(pos+0x48);
-        info->dir=(long)read32(pos+0x4C);
+        info->prev=static_cast<long>(read32(pos+0x44));
+        info->next=static_cast<long>(read32(pos+0x48));
+        info->dir=static_cast<long>(read32(pos+0x4C));
 
-        info->ts1s=(long)read32(pos+0x64);
-        info->ts1d=(long)read32(pos+0x68);
-        info->ts2s=(long)read32(pos+0x6C);
-        info->ts2d=(long)read32(pos+0x70);
+        info->ts1s=static_cast<long>(read32(pos+0x64));
+        info->ts1d=static_cast<long>(read32(pos+0x68));
+        info->ts2s=static_cast<long>(read32(pos+0x6C));
+        info->ts2d=static_cast<long>(read32(pos+0x70));
 
-        info->sb=(long)read32(pos+0x74);
-        info->size=(long)read32(pos+0x78);
+        info->sb=static_cast<long>(read32(pos+0x74));
+        info->size=static_cast<long>(read32(pos+0x78));
 
         ppsList.append(info);
     }
@@ -344,7 +366,7 @@ unsigned char *KLaola::readBBStream(long start) {
 
     tmp=start;
 
-    while(tmp!=-2 && tmp>=0 && tmp<=(long)maxblock) {
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
         ++i;
         tmp=nextBigBlock(tmp);
     }
@@ -355,7 +377,7 @@ unsigned char *KLaola::readBBStream(long start) {
         i=0;
         tmp=start;
 
-        while(tmp!=-2 && tmp>=0 && tmp<=(long)maxblock) {
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
             memcpy(&p[i*0x200], &data[(tmp+1)*0x200], 0x200);
             tmp=nextBigBlock(tmp);
             ++i;
@@ -371,7 +393,7 @@ unsigned char *KLaola::readSBStream(long start) {
 
     tmp=start;
 
-    while(tmp!=-2 && tmp>=0 && tmp<=(long)maxblock) {
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
         ++i;
         tmp=nextSmallBlock(tmp);
     }
@@ -382,7 +404,7 @@ unsigned char *KLaola::readSBStream(long start) {
         i=0;
         tmp=start;
 
-        while(tmp!=-2 && tmp>=0 && tmp<=(long)maxblock) {
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
             memcpy(&p[i*0x40], &smallBlockFile[tmp*0x40], 0x40);
             tmp=nextSmallBlock(tmp);
             ++i;

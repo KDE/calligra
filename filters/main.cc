@@ -67,14 +67,23 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
                     const char *_to) {
 
 
-    // just at the moment!
     if (QString(_to) != "application/x-kword") {
         KOffice::Filter::UnsupportedFormat exc;
         exc.format = CORBA::string_dup(_to);
         mico_throw(exc);
         return;
     }
-    if (QString(_from) != "application/x-winword97") {
+
+    OLEFilter::Document doc;
+    QString from(_from);
+
+    if (from == "application/x-winword97")
+        doc=OLEFilter::Word;
+    else if(from == "application/x-excel97")
+        doc=OLEFilter::Excel;
+    else if(from == "application/x-powerpoint97")
+        doc=OLEFilter::Powerpoint;
+    else {
         KOffice::Filter::UnsupportedFormat exc;
         exc.format = CORBA::string_dup(_from);
         mico_throw(exc);
@@ -92,13 +101,15 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     
     docFile.data=buffer;   // see myfile.h
     docFile.length=len;
-    myOLEFilter=new OLEFilter(docFile);
+    myOLEFilter=new OLEFilter(docFile, doc);
 
     QString str;
 
-    //if(myOLEFilter->filterIt())
-    //    str=myOLEFilter->kwdFile();
-    //else
+    if(myOLEFilter->filter()) {
+        // do some KTar magic here :)
+        // myOLEFilter->store();
+    }
+    else {
         // Ohh, something went wrong...
         // Let's tell the user that this filter is crappy.
 
@@ -152,6 +163,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         "  </FRAMESET>\n"
         "  </FRAMESETS>\n"
         "</DOC>\n";
+    }
     
     QCString cstr=QCString(str.utf8());
 

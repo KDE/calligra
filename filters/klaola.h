@@ -1,5 +1,5 @@
 /*
- * KLoala
+ * KLaola - (c) 1999 Werner Trobin
  *
  * based on "LAOLA file system"
  *          "Structured Storage"
@@ -43,34 +43,35 @@ struct OLENode {
     char type;       // 1=Dir, 2=File/Stream, 5=Root Entry
 };
 
-// For internal use only!
-struct OLETree {
-    long handle;
-    short subtree;
-};
-
 
 class KLaola {
 
 public:
-    KLaola(myFile file);               // see myfile.h!
+    KLaola(const myFile &file);               // see myfile.h!
     ~KLaola();
 
 
-    QList<OLENode> parseRootDir();
-    QList<OLENode> parseCurrentDir();
+    const QList<OLENode> parseRootDir();
+    const QList<OLENode> parseCurrentDir();
 
-    bool enterDir(long handle);
+    bool enterDir(const long handle);
     bool leaveDir();
-    QArray<long> currentPath();
+    const QArray<long> currentPath() const;
 
-    OLEInfo streamInfo(long handle);
-    QString stream(long handle);       // Note: 512 byte blocks!
+    const OLEInfo streamInfo(const long handle);
+    const QString stream(const long handle);       // Note: 512 byte blocks!
+
+    const QArray<long> find(const QString &name);
 
     void testIt();                     // dump some info (similar to "lls"
                                        // of the LAOLA-project), TODO
  
 private:
+    struct OLETree {
+        long handle;
+        short subtree;
+    };
+
     bool parseHeader();
     void readBigBlockDepot();
     void readSmallBlockDepot();
@@ -99,6 +100,6 @@ private:
     unsigned long num_of_bbd_blocks; // number of big block depot blocks
     unsigned long root_startblock;   // Root chain's first big block
     unsigned long sbd_startblock;    // small block depot's first big block
-    unsigned long bbd_list[436]; //array of num_of_bbd_blocks big block numbers
+    unsigned long *bbd_list;  //array of num_of_bbd_blocks big block numbers
 };
 #endif // KLAOLA_H
