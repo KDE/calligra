@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #include "KDChartBarPainter.h"
@@ -196,7 +181,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
         }
 
 
-        uint datasetNum = static_cast < uint > ( abs( ( chartDatasetEnd - chartDatasetStart ) + 1 ) );
+        uint datasetNum = ( chartDatasetEnd - chartDatasetStart ) + 1;
 
         // Number of values: If -1, use all values, otherwise use the
         // specified number of values.
@@ -292,6 +277,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
         // Now actually drawing the bars from left to right
         double valueTotal = 0.0; // Will only be used for percent bars
         for ( int value = 0; value < numValues; value++ ) {
+
             if ( params()->barChartSubType() == KDChartParams::BarPercent )
                 valueTotal = data->colAbsSum( value );
             double lastPositive = 0.0;
@@ -312,7 +298,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
                     double barHeight;
                     if ( params()->barChartSubType() == KDChartParams::BarPercent )
                         //     barHeight = ( cellValue / valueTotal ) * logHeight;
-                        barHeight = ( cellValue / valueTotal )
+                        barHeight =   ( cellValue / valueTotal )
                                     * fabs( zeroXAxisI - logHeight + sideBarHeight );
 
                     else
@@ -327,6 +313,12 @@ void KDChartBarPainter::paintData( QPainter* painter,
                             painter->setBrush( params()->dataColor( dataset ) );
                         else
                             painter->setBrush( NoBrush );
+
+                        // Prepare region for detection of mouse clicks
+                        // and for finding anchor positions of data value texts
+                        QRegion* region = 0;
+                        if ( regions )
+                            region = new QRegion();
 
                         // Start drawing
                         if ( barHeight < 0 ) {
@@ -353,11 +345,9 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 points.setPoint( 4, xpos, yZero + height1 - 3.0 * delta );
                                 painter->drawPolygon( points );
                                 // Don't use points for drawing after this!
-                                if ( regions ) {
+                                if ( region ) {
                                     points.translate( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points );
                                 }
 
                                 QPointArray points2( 6 );
@@ -369,22 +359,18 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 points2.setPoint( 5, xpos, yZero + height1 - 3.75 * delta );
                                 points2.translate( 0, yArrowGap );
                                 painter->drawPolygon( points2 );
-                                if ( regions ) {
+                                if ( region ) {
                                     QPointArray points2cpy( points2 );
                                     points2cpy.translate( _dataRect.x(),
                                                           _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points2cpy ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points2cpy );
                                 }
                                 points2.translate( 0, yArrowGap );
                                 painter->drawPolygon( points2 );
                                 // Don't use points2 for drawing after this!
-                                if ( regions ) {
+                                if ( region ) {
                                     points2.translate( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points2 ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points2 );
                                 }
 
                                 painter->setClipRect( ourClipRect );
@@ -417,10 +403,9 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 painter->drawRect( rect );
 
                                 // Don't use rect for drawing after this!
-                                if ( regions ) {
+                                if ( region ) {
                                     rect.moveBy( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( rect ),
-                                                                            dataset, value ) );
+                                    *region += QRegion( rect );
                                 }
                             }
                         } else {
@@ -449,11 +434,9 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 painter->drawPolygon( points );
 
                                 // Don't use points for drawing after this!
-                                if ( regions ) {
+                                if ( region ) {
                                     points.translate( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points );
                                 }
 
                                 QPointArray points2( 6 );
@@ -465,23 +448,19 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 points2.setPoint( 5, xpos, yZero + height1 - 3.75 * delta );
                                 points2.translate( 0, yArrowGap );
                                 painter->drawPolygon( points2 );
-                                if ( regions ) {
+                                if ( region ) {
                                     QPointArray points2cpy( points2 );
                                     points2cpy.translate( _dataRect.x(),
                                                           _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points2cpy ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points2cpy );
                                 }
                                 points2.translate( 0, yArrowGap );
                                 painter->drawPolygon( points2 );
 
                                 // Don't use points2 for drawing after this!
-                                if ( regions ) {
+                                if ( region ) {
                                     points2.translate( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points2 ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points2 );
                                 }
 
                                 painter->setClipRect( ourClipRect );
@@ -511,11 +490,9 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 painter->drawRect( rect );
 
                                 // Don't use rect for drawing after this
-                                if ( regions ) {
+                                if ( region ) {
                                     rect.moveBy( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( rect ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( rect );
                                 }
                             }
                         }
@@ -540,15 +517,14 @@ void KDChartBarPainter::paintData( QPainter* painter,
                             }
 
                             if ( params()->dataColor( dataset ).isValid() )
-                                painter->setBrush( params()->dataShadow2Color( dataset ) );
+                                painter->setBrush( QBrush( params()->dataShadow2Color( dataset ), params()->shadowPattern() ) );
                             else
                                 painter->setBrush( NoBrush );
                             painter->drawPolygon( points );
-                            if ( regions ) {
+                            if ( region ) {
                                 QPointArray pointscpy( points );
                                 pointscpy.translate( _dataRect.x(), _dataRect.y() );
-                                regions->append( new KDChartDataRegion( QRegion( pointscpy ),
-                                                                        dataset, value ) );
+                                *region += QRegion( pointscpy );
                             }
 
                             // drawing the top, but only for the topmost piece for stacked and percent
@@ -577,18 +553,21 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 if ( barHeight < 0 )
                                     painter->setBrush( black );
                                 else
-                                    painter->setBrush( params()->dataShadow1Color( dataset ) );
+                                    painter->setBrush( QBrush( params()->dataShadow1Color( dataset ), params()->shadowPattern() ) );
                                 if ( !params()->dataColor( dataset ).isValid() )
                                     painter->setBrush( NoBrush ); // override prev. setting
                                 painter->drawPolygon( points );
                                 // Don't use points for drawing after this!
-                                if ( regions ) {
+                                if ( region ) {
                                     points.translate( _dataRect.x(), _dataRect.y() );
-                                    regions->append( new KDChartDataRegion( QRegion( points ),
-                                                                            dataset,
-                                                                            value ) );
+                                    *region += QRegion( points );
                                 }
                             }
+                        }//if ( params()->threeDBars() )
+
+                        if ( regions && region ) {
+                            regions->append( new KDChartDataRegion( *region, dataset, value, chart ) );
+                            delete region;
                         }
                     }// if( dataset >= datasetStart && dataset <= datasetEnd )
 

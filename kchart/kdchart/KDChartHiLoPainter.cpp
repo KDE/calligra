@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #include "KDChartHiLoPainter.h"
@@ -94,8 +79,17 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
     double logHeight = _dataRect.height();
     double logWidth = _dataRect.width();
     double areaWidthP1000 = logWidth / 1000.0;
+
+    // PENDING(khz) Match this to values defined above...   :-(
+    const double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+
     QRect ourClipRect( _dataRect );
     ourClipRect.setHeight( ourClipRect.height() - 1 );
+
+    const QWMatrix & world = painter->worldMatrix();
+    ourClipRect.moveBy( static_cast < int > ( world.dx() ),
+                        static_cast < int > ( world.dy() ) );
+
     painter->setClipRect( ourClipRect );
     painter->translate( _dataRect.x(), _dataRect.y() );
 
@@ -162,7 +156,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                          : maxRowMinus1 );
     }
 
-    uint datasetNum = static_cast < uint > ( abs( ( chartDatasetEnd - chartDatasetStart ) + 1 ) );
+    uint datasetNum = ( chartDatasetEnd - chartDatasetStart ) + 1;
 
     // We need to make sure that we have a certain number of
     // datasets, depending on the sub type to display.
@@ -269,8 +263,15 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
             // Draw the low value, if requested.
             if( params()->hiLoChartPrintLowValues() ) {
                 // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartLowValuesFont() );
+                if ( params()->hiLoChartLowValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartLowValuesFontRelSize()
+                                            * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
                 KDChartTextPiece lowText( QString::number( lowValue ),
-                                          params()->hiLoChartLowValuesFont() );
+                                          theFont );
                 int width = lowText.width();
                 int height = lowText.height();
 
@@ -299,8 +300,15 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
             // Draw the high value, if requested.
             if( params()->hiLoChartPrintHighValues() ) {
                 // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartHighValuesFont() );
+                if ( params()->hiLoChartHighValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartHighValuesFontRelSize()
+                                            * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
                 KDChartTextPiece highText( QString::number( highValue ),
-                                           params()->hiLoChartHighValuesFont() );
+                                           theFont );
                 int width = highText.width();
                 int height = highText.height();
 
@@ -332,8 +340,15 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
             if( params()->hiLoChartPrintOpenValues() &&
                 params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
                 // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartOpenValuesFont() );
+                if ( params()->hiLoChartOpenValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartOpenValuesFontRelSize()
+                                            * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
                 KDChartTextPiece openText( QString::number( openValue ),
-                                           params()->hiLoChartOpenValuesFont() );
+                                           theFont );
                 int width = openText.width();
                 int height = openText.height();
 
@@ -354,8 +369,15 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                   ||
                   params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ) {
                 // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartCloseValuesFont() );
+                if ( params()->hiLoChartCloseValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartCloseValuesFontRelSize()
+                                            * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
                 KDChartTextPiece closeText( QString::number( closeValue ),
-                                           params()->hiLoChartCloseValuesFont() );
+                                           theFont );
                 int width = closeText.width();
                 int height = closeText.height();
 

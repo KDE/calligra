@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #ifndef __KDCHARTAXISPARAMS_H__
@@ -32,6 +17,7 @@
 #include <qtextstream.h>
 #include <qstringlist.h>
 
+#include "KDChartGlobal.h"
 #include "KDChartData.h"
 class KDChartParams;
 
@@ -300,16 +286,21 @@ public:
        These AxisPos values are used to specify which axis' settings are
        to be modified or retrieved, resp.
 
+       \note Use special values \c AxisPosSaggital and \c AxisPosCircular
+       to set delimiter/label/grid parameters for polar charts.
+
        \sa setAxisAreaMode, axisAreaMode, setAxisCalcMode, axisCalcMode
-       \sa setAxisSettings, axisSettings
+       \sa KDChartParams::setAxisParams, KDChartParams::axisParams
     */
 
     // Achtung: Wird AxisPos erweitert, sind auch MAX_AXES
     //          und AxisPosEND zu erhoehen
     enum AxisPos { AxisPosSTART = 0,
 
-                   AxisPosBottom = 0,
-                   AxisPosLeft = 1,
+                   AxisPosBottom         = 0,
+                   AxisPosSaggital            = 0,  //   <-- for POLAR charts
+                   AxisPosLeft           = 1,
+                   AxisPosCircular            = 1,  //   <-- for POLAR charts
                    AxisPosLowerRightEdge = 2,
 
                    AxisPosTop = 3,
@@ -350,8 +341,10 @@ public:
             break;
         case AxisPosLowerRightEdge:
             ret = AxisPosRight;
+            break;
         case AxisPosLowerLeftEdge:
             ret = AxisPosLeft;
+            break;
         case AxisPosBottom2:
             ret = AxisPosBottom;
             break;
@@ -366,8 +359,10 @@ public:
             break;
         case AxisPosLowerRightEdge2:
             ret = AxisPosRight;
+            break;
         case AxisPosLowerLeftEdge2:
             ret = AxisPosLeft;
+            break;
         default: {
                 qDebug( "IMPLEMENTATION ERROR: type missing in KDChartAcisParams::basicAxisPos()" );
                 Q_ASSERT( ret != AxisPos( pos ) );
@@ -1145,7 +1140,7 @@ public:
 
        \param axisLabelsFontRelSize the relative axis font size.
         If this value unequals zero the absolute value is per thousand
-        of of the average value of the printable area height and width
+        of the average value of the printable area height and width
         to be used. This will make the axis look the same even if scaled
         to very different size.
 
@@ -2155,7 +2150,7 @@ public:
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
     friend QTextStream& operator>>( QTextStream& s, KDChartParams& p );
     friend class KDChartParams;
-
+    
 signals:
         /**
            This signal is emitted when any of the chart axis

@@ -5,27 +5,13 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #include <KDChartWidget.h>
 #include <KDChart.h>
 #include <KDChartParams.h>
 #include <KDChartTable.h>
+#include "KDChartWidget.moc"
 
 #include <qpainter.h>
 
@@ -60,6 +46,7 @@ _activeData( false ),
 _mousePressedOnRegion( 0 )
 {
     _dataRegions.setAutoDelete( true );
+    setDoubleBuffered( true );
 }
 
 
@@ -72,17 +59,27 @@ KDChartWidget::~KDChartWidget()
     _dataRegions.clear();
 }
 
+
 void KDChartWidget::paintEvent( QPaintEvent* event )
 {
-    QPainter painter( this );
 #ifdef USE_EXCEPTIONS
     try {
 #endif
-        KDChart::paint( &painter, _params, _data,
-                        _activeData ? &_dataRegions : 0 );
+        if( _doubleBuffered ) {
+            // if double-buffering, paint onto the pixmap and copy
+            // afterwards
+            _buffer.fill( backgroundColor() );
+            QPainter painter( &_buffer );
+            KDChart::paint( &painter, _params, _data, &_dataRegions );
+            bitBlt( this, event->rect().topLeft(), &_buffer, event->rect() );
+        } else {
+            // if not double-buffering, paint directly into the window
+            QPainter painter( this );
+            KDChart::paint( &painter, _params, _data, &_dataRegions );
+        }
 #ifdef USE_EXCEPTIONS
     } catch ( ... ) {
-        ::qDebug( "Exception occurred during chart processing" );
+        ::qDebug( "Exception occurred during chart painting" );
         throw;
     }
 #endif
@@ -117,6 +114,7 @@ void KDChartWidget::mousePressEvent( QMouseEvent* event )
         }
     }
 }
+
 
 /**
    \internal
@@ -154,6 +152,19 @@ void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
     }
 }
 
+
+/**
+   \internal
+*/
+void KDChartWidget::resizeEvent( QResizeEvent* event )
+{
+    // if we use double-buffering, resize the buffer to the new size,
+    // otherwise leave it alone
+    if( _doubleBuffered )
+        _buffer.resize( size() );
+}
+
+
 /**
    If \a active is true, this widget reports mouse presses, releases
    and clicks on the data segments it displays. This can slow down the
@@ -188,4 +199,62 @@ bool KDChartWidget::isActiveData() const
 {
     return _activeData;
 }
-#include "KDChartWidget.moc"
+
+
+/**
+   If \a doublebuffered is true, the widget will double-buffer
+   everything while drawing which reduces flicker a lot, but requires
+   more memory as an off-screen buffer of the same size as the widget
+   needs to be kept around. However, in most cases, it is worth
+   spending the extra memory. Double-buffering is on by
+   default. Turning double-buffering on or off does not trigger a
+   repaint.
+   
+   \param doublebuffered if true, turns double-buffering on, if false,
+   turns double-buffering off
+   \sa isDoubleBuffered
+*/
+void KDChartWidget::setDoubleBuffered( bool doublebuffered ) 
+{
+    _doubleBuffered = doublebuffered;
+    if( doublebuffered ) {
+        // turn double-buffering on
+        // resize the buffer to the size of the widget
+        _buffer.resize( size() );
+    } else {
+        // turn double-buffering off
+        // minimize the buffer so that it does not take any memory
+        _buffer.resize( 0, 0 );
+    }
+}
+
+
+/**
+   Returns whether the widget uses double-buffering for drawing. See
+   \a setDoubleBuffered() for an explanation of double-buffering.
+   
+   \return true if double-buffering is turned on, false otherwise
+*/
+bool KDChartWidget::isDoubleBuffered() const
+{
+    return _doubleBuffered;
+}
+
+
+/**
+    Set an entire new parameter set.
+    (Normally you might prefer modifying the existing parameters
+     rather than specifying a new set.)
+*/
+void KDChartWidget::setParams( KDChartParams* params )
+{
+    _params = params;
+}
+
+/**
+    Set an entire new data table.
+*/
+void KDChartWidget::setData( KDChartTableData* data )
+{
+    _data = data;
+}

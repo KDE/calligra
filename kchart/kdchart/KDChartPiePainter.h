@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #ifndef __KDCHARTPIEPAINTER_H__
@@ -41,21 +26,23 @@ protected:
                             bool paint2nd,
                             KDChartDataRegionList* regions = 0 );
     virtual void drawOnePie( QPainter* painter, KDChartTableData* data,
-                             uint dataset, uint pie, uint threeDPieHeight,
+                             uint dataset, uint pie, uint chart,
+                             uint threeDPieHeight,
                              KDChartDataRegionList* regions = 0 );
     virtual void draw3DEffect( QPainter* painter, const QRect& drawPosition,
-                               uint dataset, uint pie, uint threeDPieHeight,
+                               uint dataset, uint pie, uint chart,
+                               uint threeDPieHeight,
                                bool explode,
-                               KDChartDataRegionList* regions = 0 );
+                               QRegion* region = 0 );
     void drawStraightEffectSegment( QPainter* painter, const QRect& rect,
-                                    uint dataset, uint pie, int
-                                    threeDHeight, int angle,
-                                    KDChartDataRegionList* regions = 0 );
+                                    uint dataset, uint pie, uint chart,
+                                    int threeDHeight, int angle,
+                                    QRegion* region = 0 );
     void drawArcEffectSegment( QPainter* painter, const QRect& rect,
-                               uint dataset, uint pie,
+                               uint dataset, uint pie, uint chart,
                                int threeDHeight, int startAngle,
                                int endAngle,
-                               KDChartDataRegionList* regions = 0 );
+                               QRegion* region = 0 );
 
     virtual QString fallbackLegendText( uint dataset ) const;
     virtual uint numLegendFallbackTexts( KDChartTableData* data ) const;
@@ -63,7 +50,6 @@ protected:
     uint findPieAt( int angle );
     uint findLeftPie( uint pie );
     uint findRightPie( uint pie );
-    QPoint pointOnCircle( const QRect& rect, int angle );
 
     QMemArray < int > _startAngles;
     QMemArray < int > _angleLens;

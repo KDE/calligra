@@ -1,24 +1,8 @@
 // -*- Mode: C++ -*-
 /* $Id$
 
-   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright changes to original version 2001 by Klarälvdalens Datakonsult AB
+Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Licensed for use in KDChart by Klarälvdalens Datakonsult AB.
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 /**
@@ -39,6 +23,10 @@
 #define MAXDOUBLE DBL_MAX
 #define MINDOUBLE DBL_MIN
 #define std
+#elif defined __APPLE__
+#include <float.h>
+#define MAXDOUBLE DBL_MAX
+#define MINDOUBLE DBL_MIN
 #else
 #include <values.h>
 #include <limits.h>
@@ -49,6 +37,7 @@
 #define std
 #endif
 
+#include <KDChartGlobal.h>
 #include <KDChartData.h>
 
 template
@@ -467,6 +456,8 @@ double maxColSum( uint row, uint row2 ) const;
 double minColSum( uint row, uint row2 ) const;
 double colSum( uint col ) const;
 double colAbsSum( uint col ) const;
+double maxRowSum() const;
+double minRowSum() const;
 double rowSum( uint row ) const;
 double rowAbsSum( uint row ) const;
 double maxInColumn( uint col ) const;
@@ -635,6 +626,39 @@ inline double KDChartTableData::colAbsSum( uint col ) const
     }
 
     return sum;
+}
+
+
+inline double KDChartTableData::maxRowSum() const
+{
+    double maxValue = 0.0;
+    bool bStart = true;
+    for ( uint row = 0; row < usedRows(); row++ ) {
+        double rowValue = rowSum( row );
+        if ( bStart ) {
+            maxValue = rowValue;
+            bStart = false;
+        } else
+            maxValue = QMAX( maxValue, rowValue );
+    }
+    return maxValue;
+}
+
+
+inline double KDChartTableData::minRowSum() const
+{
+    double minValue = 0.0;
+    bool bStart = true;
+    for ( uint row = 0; row < usedRows(); row++ ) {
+        double rowValue = rowSum( row );
+        if ( bStart ) {
+            minValue = rowValue;
+            bStart = false;
+        } else
+            minValue = QMIN( minValue, rowValue );
+    }
+
+    return minValue;
 }
 
 

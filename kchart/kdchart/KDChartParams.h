@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #ifndef __KDCHARTPARAMS_H__
@@ -28,9 +13,11 @@
 #include <qapplication.h>
 #include <qfont.h>
 #include <qcolor.h>
+#include <qpen.h>
 #include <qmap.h>
 #include <qobject.h>
 #include <qtextstream.h>
+#include <qsimplerichtext.h>
 #include <qdom.h>
 
 #include <math.h>
@@ -38,6 +25,10 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#include "KDChartGlobal.h"
+#include "KDChartEnums.h"
+#include "KDChartCustomBox.h"
+#include "KDFrame.h"
 #include "KDChartData.h"
 #include "KDChartAxisParams.h"
 
@@ -79,70 +70,615 @@ public:
     static const uint KDCHART_ALL_CHARTS;
     static const uint KDCHART_NO_CHART;
 
+    static const int DATA_VALUE_AUTO_DIGITS;
+
+    static const int SAGGITAL_ROTATION;
+    static const int TANGENTIAL_ROTATION;
+
+    static QColor* const DATA_VALUE_AUTO_COLOR;
+
 
     /** \def KDCHART_DEFAULT_DATETIME_FORMAT
-    \brief The default datetime format is used by methods printing a date
-    and a time when no user defined format was given.
+        \brief The default datetime format is used by methods printing a date
+        and a time when no user defined format was given.
 
-    Time and Date formating is controlled by specifying
-    a QString containing one or more time (or date, resp.) placeholder
-    tags and any number of other text.
-    Each placeholder tag consists of a leading percentage sign and a
-    trailing alphabetic case-signficant character.
+        Time and Date formating is controlled by specifying
+        a QString containing one or more time (or date, resp.) placeholder
+        tags and any number of other text.
+        Each placeholder tag consists of a leading percentage sign and a
+        trailing alphabetic case-signficant character.
 
 
-    <b>Time format tags:<b>
-    \li \%H - The hour according to a 24-hour clock, using two digits (00 to 23).
-    \li \%k - The hour according to a 24-hour clock, using one or two digits (0 to 23).
-    \li \%I - (an UPPERcase i) - The hour according to a 12-hour clock, using two digits (01 to 12).
-    \li \%l - (a LOWERcase L) - The hour according to a 12-hour clock, using one or two digits (1 to 12).
-    \li \%M - The minute using two digits (00 to 59).
-    \li \%S - The second using two digits (00 to 59).
-    \li \%p - Either "am" or "pm" depending on the hour. Useful with %I or %l.
+        <b>Time format tags:<b>
+        \li \%H - The hour according to a 24-hour clock, using two digits (00 to 23).
+        \li \%k - The hour according to a 24-hour clock, using one or two digits (0 to 23).
+        \li \%I - (an UPPERcase i) - The hour according to a 12-hour clock, using two digits (01 to 12).
+        \li \%l - (a LOWERcase L) - The hour according to a 12-hour clock, using one or two digits (1 to 12).
+        \li \%M - The minute using two digits (00 to 59).
+        \li \%S - The second using two digits (00 to 59).
+        \li \%p - Either "am" or "pm" depending on the hour. Useful with %I or %l.
 
-    <b>Date format tags:</b>
-    \li \%Y - The year, using 4 digits.
-    \li \%y - The year, using 2 digits.
-    \li \%m - The month, using 2 digits (01 to 12).
-    \li \%n - The month, using 1 or 2 digits (1 to 12).
-    \li \%B - The name of the month.
-    \li \%b - The abbreviated name of the month.
-    \li \%d - The day, using 2 digits (01 to 31).
-    \li \%e - The day, using 1 or 2 digits (1 to 31).
-    \li \%A - The name of the weekday.
-    \li \%a - The abbreviated name of the weekday.
+        <b>Date format tags:</b>
+        \li \%Y - The year, using 4 digits.
+        \li \%y - The year, using 2 digits.
+        \li \%m - The month, using 2 digits (01 to 12).
+        \li \%n - The month, using 1 or 2 digits (1 to 12).
+        \li \%B - The name of the month.
+        \li \%b - The abbreviated name of the month.
+        \li \%d - The day, using 2 digits (01 to 31).
+        \li \%e - The day, using 1 or 2 digits (1 to 31).
+        \li \%A - The name of the weekday.
+        \li \%a - The abbreviated name of the weekday.
 
-    \sa KDCHART_DEFAULT_DATE_FORMAT, KDCHART_DEFAULT_TIME_FORMAT
-    \sa <br>KDChartParams::setGanttChartPrintStartValues
-    \sa KDChartParams::setGanttChartPrintEndValues
-    \sa KDChartParams::setGanttChartPrintDurations
+        \sa KDCHART_DEFAULT_DATE_FORMAT, KDCHART_DEFAULT_TIME_FORMAT
+        \sa <br>KDChartParams::setGanttChartPrintStartValues
+        \sa KDChartParams::setGanttChartPrintEndValues
+        \sa KDChartParams::setGanttChartPrintDurations
     */
-    #define KDCHART_DEFAULT_DATETIME_FORMAT "%e. %b %Y, %H:%M:%S"
+#define KDCHART_DEFAULT_DATETIME_FORMAT "%e. %b %Y, %H:%M:%S"
     /** \def KDCHART_DEFAULT_DATE_FORMAT
-    \brief The default date format is used by methods printing a date
-    when no user defined date format was given.
+        \brief The default date format is used by methods printing a date
+        when no user defined date format was given.
 
-    Explanation of date and time formating, see \c KDCHART_DEFAULT_DATETIME_FORMAT
+        Explanation of date and time formating, see \c KDCHART_DEFAULT_DATETIME_FORMAT
 
-    \sa KDCHART_DEFAULT_DATETIME_FORMAT
+        \sa KDCHART_DEFAULT_DATETIME_FORMAT
     */
-    #define KDCHART_DEFAULT_DATE_FORMAT "%e. %b %Y"
+#define KDCHART_DEFAULT_DATE_FORMAT "%e. %b %Y"
     /** \def KDCHART_DEFAULT_TIME_FORMAT
-    \brief The default time format is used by methods printing a time when
-    no user defined date format was given.
+        \brief The default time format is used by methods printing a time when
+        no user defined date format was given.
 
-    Explanation of date and time formating, see \c KDCHART_DEFAULT_DATETIME_FORMAT
+        Explanation of date and time formating, see \c KDCHART_DEFAULT_DATETIME_FORMAT
 
-    \sa KDCHART_DEFAULT_DATETIME_FORMAT
+        \sa KDCHART_DEFAULT_DATETIME_FORMAT
     */
-    #define KDCHART_DEFAULT_TIME_FORMAT "%H:%M:%S"
+#define KDCHART_DEFAULT_TIME_FORMAT "%H:%M:%S"
 
 
     /**
-        Our charts may have up to 4 ordinate axes:
-        2 left ones and 2 right ones
+       Our charts may have up to 4 ordinate axes:
+       2 left ones and 2 right ones
     */
-    #define KDCHART_CNT_ORDINATES 4
+#define KDCHART_CNT_ORDINATES 4
+
+#define MAX_POLAR_DELIMS_AND_LABELS_POS 8
+
+
+    /**
+       Specifies the distance between the chart and the left border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingTop, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight, globalLeadingBottom
+    */
+    void setGlobalLeading( int left, int top, int right, int bottom )
+    {
+        _globalLeadingLeft   = left;
+        _globalLeadingTop    = top;
+        _globalLeadingRight  = right;
+        _globalLeadingBottom = bottom;
+        emit changed();
+    }
+    /**
+       Specifies the distance between the chart and the left border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingTop, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight, globalLeadingBottom
+    */
+    void setGlobalLeadingLeft( int leading )
+    {
+        _globalLeadingLeft = leading;
+        emit changed();
+    }
+    /**
+       Specifies the distance between the chart and the upper border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight, globalLeadingBottom
+    */
+    void setGlobalLeadingTop( int leading )
+    {
+        _globalLeadingTop = leading;
+        emit changed();
+    }
+    /**
+       Specifies the distance between the chart and the right border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight, globalLeadingBottom
+    */
+    void setGlobalLeadingRight( int leading )
+    {
+        _globalLeadingRight = leading;
+        emit changed();
+    }
+    /**
+       Specifies the distance between the chart and the lower border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop, setGlobalLeadingRight
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight, globalLeadingBottom
+    */
+    void setGlobalLeadingBottom( int leading )
+    {
+        _globalLeadingBottom = leading;
+        emit changed();
+    }
+    /**
+       Return the distance between the chart and the left border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingTop, globalLeadingRight, globalLeadingBottom
+    */
+    int globalLeadingLeft() const
+    {
+        return _globalLeadingLeft;
+    }
+    /**
+       Return the distance between the chart and the upper border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingRight, globalLeadingBottom
+    */
+    int globalLeadingTop() const
+    {
+        return _globalLeadingTop;
+    }
+    /**
+       Return the distance between the chart and the right border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingBottom
+    */
+    int globalLeadingRight() const
+    {
+        return _globalLeadingRight;
+    }
+    /**
+       Return the distance between the chart and the lower border of the painter area.
+       If \c leading is a negative value it is interpreted as per-mille value of the
+       painter area, the true offset will then be calculated dynamically at drawing time.
+
+       \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop, setGlobalLeadingRight, setGlobalLeadingBottom
+       \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight
+    */
+    int globalLeadingBottom() const
+    {
+        return _globalLeadingBottom;
+    }
+
+
+    /**
+       Stores the frame settings for one of the chart areas:
+       \li frame (consisting of edges, corners, background, shadow)
+       \li distance of frame to inner area
+       \li distance of frame to surrounding parts of the chart
+
+       \sa setSimpleFrame, setFrame, frameSettings
+    */
+    class KDChartFrameSettings
+    {
+    public:
+        /**
+           Constructor. Setting default values.
+        */
+        KDChartFrameSettings()
+        {
+            _frame.clearAll();
+            _outerGapX = 0;
+            _outerGapY = 0;
+            _innerGapX = 0;
+            _innerGapY = 0;
+            _addFrameWidthToLayout = true;
+            _addFrameHeightToLayout = true;
+        }
+        /**
+           Constructor.
+
+           \param outerGap Distance between the frame and the surrounding parts of the chart.
+           \param innerGap Distance between the frame and inner area.
+           \param addFrameWidthToLayout If true, shrink inner area so the area AND its frame will occupy
+           the same space of the chart as the area would occupy if no frame were drawn.
+           If false, the frame is drawn around the area without taking care not to override other
+           content of the chart.
+           \param frame The frame settings to be used for this area. The values of this parameter
+           will be copied into a KDFrame object stored internally in this KDChartFrameSettings so
+           it is save to use the same KDFrame object for specifying the settings of more than one area.
+        */
+        KDChartFrameSettings( const KDFrame& frame,
+                              int            outerGapX,
+                              int            outerGapY,
+                              int            innerGapX,
+                              int            innerGapY,
+                              bool           addFrameWidthToLayout  = true,
+                              bool           addFrameHeightToLayout = true )
+            : _frame( frame ),
+              _outerGapX( outerGapX ),
+              _outerGapY( outerGapY ),
+              _innerGapX( innerGapX ),
+              _innerGapY( innerGapY ),
+              _addFrameWidthToLayout(  addFrameWidthToLayout ),
+              _addFrameHeightToLayout( addFrameHeightToLayout )
+        {}
+        /**
+           Return the KDFrame object used for drawing this areas frame.
+        */
+        const KDFrame& frame() const
+        {
+            return _frame;
+        }
+        /**
+           Return the X-distance between the frame and the inner area.
+        */
+        int innerGapX() const
+        {
+            return _innerGapX;
+        }
+        /**
+           Return the Y-distance between the frame and the inner area.
+        */
+        int innerGapY() const
+        {
+            return _innerGapY;
+        }
+        /**
+           Return the X-distance between the frame and the surrounding parts of the chart.
+        */
+        int outerGapX() const
+        {
+            return _outerGapX;
+        }
+        /**
+           Return the Y-distance between the frame and the surrounding parts of the chart.
+        */
+        int outerGapY() const
+        {
+            return _outerGapY;
+        }
+        /**
+           Return whether the inner area will shrink the area AND its frame will occupy
+           the same space of the chart as the area would occupy if no frame were drawn.
+           If false, the frame is drawn around the area without taking care not to override other
+           content of the chart.
+
+           \sa addFrameHeightToLayout
+        */
+        bool addFrameWidthToLayout() const
+        {
+            return _addFrameWidthToLayout;
+        }
+        /**
+           Return whether the inner area will shrink the area AND its frame will occupy
+           the same space of the chart as the area would occupy if no frame were drawn.
+           If false, the frame is drawn around the area without taking care not to override other
+           content of the chart.
+
+           \sa addFrameWidthToLayout
+        */
+        bool addFrameHeightToLayout() const
+        {
+            return _addFrameHeightToLayout;
+        }
+        /**
+           Destructor. Only defined to have it virtual.
+        */
+        virtual ~KDChartFrameSettings();
+
+
+        /**
+	   Creates a DOM element node that represents a frame settings
+	   object for use in a DOM document.
+
+	   \param document the DOM document to which the node will belong
+	   \param parent the parent node to which the new node will be appended
+	   \param elementName the name of the new node
+	   \param settings the frame settings to be represented
+	*/
+        static void createFrameSettingsNode( QDomDocument& document,
+                                             QDomNode& parent,
+                                             const QString& elementName,
+                                             const KDChartFrameSettings* settings,
+                                             uint areaId );
+
+        /**
+           Reads data from a DOM element node that represents a frame
+           settings object and fills a KDChartFrameSettings object
+           with the data.
+
+           \param element the DOM element to read from
+           \param settings the frame settings object to read the data into
+        */
+        static bool readFrameSettingsNode( const QDomElement& element,
+                                           KDChartFrameSettings& settings,
+                                           uint& areaId );
+
+    private:
+        KDFrame _frame;
+        int     _outerGapX;
+        int     _outerGapY;
+        int     _innerGapX;
+        int     _innerGapY;
+        bool    _addFrameWidthToLayout;
+        bool    _addFrameHeightToLayout;
+    };
+
+
+    /**
+       Specify the frame settings to be used for one of the chart areas.
+
+       The names and the meaning of the areas are explained with the enum AreaName.
+       The KDFrame class is explained in detail here: KDFrame
+       <b>Note however:</b> The \c innerRect settings of this KDFrame will be ignored
+       since position and size of this frame will be calculated dynamically based upon the AreaName!
+
+       \param area The area to be surrounded by a frame.
+       \param outerGap The distance between the frame and the surrounding parts of the chart.
+       \param innerGap The distance between the frame and the inner area.
+       \param addFrameWidthToLayout Specifies whether the inner area will shrink the area AND
+       its frame will occupy the same space of the chart as the area would occupy if no frame
+       were drawn. If false, the frame is drawn around the area without taking care not to
+       override other content of the chart.
+
+       \note An easier way to specify a frame setting is selecting a pre-defined
+       setting using the setSimpleFrame methode.
+
+       \sa setSimpleFrame, frameSettings
+    */
+    void setFrame( uint           area,
+                   const KDFrame& frame,
+                   int            outerGapX,
+                   int            outerGapY,
+                   int            innerGapX,
+                   int            innerGapY,
+                   bool           addFrameWidthToLayout = true,
+                   bool           addFrameHeightToLayout = true )
+    {
+        _areaMap.insert( area, KDChartFrameSettings( frame,
+                                                     outerGapX,
+                                                     outerGapY,
+                                                     innerGapX,
+                                                     innerGapY,
+                                                     addFrameWidthToLayout,
+                                                     addFrameHeightToLayout ) );
+        emit changed();
+    }
+
+
+    /**
+       Select a pre-defined frame setting to be used for one of the chart areas.
+
+       <b>Note however:</b> The \c innerRect settings of this KDFrame will be ignored
+       since position and size of this frame will be calculated dynamically
+       based upon the AreaName!
+
+       \param area The area to be surrounded by a frame.
+       \param outerGap The distance between the frame and the surrounding parts of the chart.
+       \param innerGap The distance between the frame and the inner area.
+       \param addFrameWidthToLayout Specifies whether the inner area will shrink the area AND
+       its frame will occupy the same space of the chart as the area would occupy if no frame
+       were drawn. If false, the frame is drawn around the area without taking care not to
+       override other content of the chart.
+
+       The parameters specifying the pre-defined frame settings are defined here: KDFrame::setSimpleFrame.
+
+       \sa setFrame, frameSettings
+    */
+/*    void setSimpleFrame( uint     area,
+                         int      outerGapX = 0,
+                         int      outerGapY = 0,
+                         int      innerGapX = 0,
+                         int      innerGapY = 0,
+                         bool     addFrameWidthToLayout = true,
+                         bool     addFrameHeightToLayout = true,
+                         KDFrame::SimpleFrame simpleFrame  = KDFrame::FrameFlat,
+                         int                  lineWidth    = 1,
+                         int                  midLineWidth = 0,
+                         QPen                 pen          = QPen(),
+                         QBrush               background   = QBrush( Qt::NoBrush ),
+                         int                  shadowWidth  = 0,
+                         KDFrame::CornerName  sunPos       = KDFrame::CornerTopLeft )
+    {
+        _areaMap.insert( area, KDChartFrameSettings( KDFrame( QRect(0,0,0,0),
+                                                              simpleFrame,
+                                                              lineWidth,
+                                                              midLineWidth,
+                                                              pen,
+                                                              background,
+                                                              0,
+                                                              KDFrame::PixStretched,
+                                                              shadowWidth,
+                                                              sunPos ),
+                                                     outerGapX,
+                                                     outerGapY,
+                                                     innerGapX,
+                                                     innerGapY,
+                                                     addFrameWidthToLayout,
+                                                     addFrameHeightToLayout ) );
+        emit changed();
+    }
+*/
+
+    /**
+       Select a pre-defined frame setting to be used for one of the chart areas.
+
+       <b>Note however:</b> The \c innerRect settings of this KDFrame will be ignored
+       since position and size of this frame will be calculated dynamically
+       based upon the AreaName!
+
+       \param area The area to be surrounded by a frame.
+       \param outerGap The distance between the frame and the surrounding parts of the chart.
+       \param innerGap The distance between the frame and the inner area.
+       \param addFrameWidthToLayout Specifies whether the inner area will shrink the area AND
+       its frame will occupy the same space of the chart as the area would occupy if no frame
+       were drawn. If false, the frame is drawn around the area without taking care not to
+       override other content of the chart.
+
+       The parameters specifying the pre-defined frame settings are defined here: KDFrame::setSimpleFrame.
+
+       \sa setFrame, frameSettings
+    */
+    void setSimpleFrame( uint        area,
+                         int         outerGapX = 0,
+                         int         outerGapY = 0,
+                         int         innerGapX = 0,
+                         int         innerGapY = 0,
+                         bool        addFrameWidthToLayout      = true,
+                         bool        addFrameHeightToLayout     = true,
+                         KDFrame::SimpleFrame    simpleFrame    = KDFrame::FrameFlat,
+                         int                     lineWidth      = 1,
+                         int                     midLineWidth   = 0,
+                         QPen                    pen            = QPen(),
+                         QBrush                  background     = QBrush( Qt::NoBrush ),
+                         const QPixmap*          backPixmap     = 0, // no pixmap
+                         KDFrame::BackPixmapMode backPixmapMode = KDFrame::PixStretched,
+                         int                     shadowWidth    = 0,
+                         KDFrame::CornerName     sunPos         = KDFrame::CornerTopLeft )
+    {
+        _areaMap.insert( area, KDChartFrameSettings( KDFrame( QRect(0,0,0,0),
+                                                              simpleFrame,
+                                                              lineWidth,
+                                                              midLineWidth,
+                                                              pen,
+                                                              background,
+                                                              backPixmap,
+                                                              backPixmapMode,
+                                                              shadowWidth,
+                                                              sunPos ),
+                                                     outerGapX,
+                                                     outerGapY,
+                                                     innerGapX,
+                                                     innerGapY,
+                                                     addFrameWidthToLayout,
+                                                     addFrameHeightToLayout ) );
+        emit changed();
+    }
+
+
+    /**
+       Return the frame settings of one of the chart areas.
+
+       \sa setSimpleFrame, setFrame
+    */
+    const KDChartFrameSettings * frameSettings( uint area, bool& bFound ) const
+    {
+        AreaMap::ConstIterator it;
+        it = _areaMap.find( area );
+        bFound = it != _areaMap.end();
+        if( bFound )
+            return &it.data();
+        else
+            return &_noFrameSettings;
+    }
+
+
+    typedef QMap < uint, KDChartCustomBox > CustomBoxMap;
+
+    /**
+       Add a new custom box to the list of boxes.
+       To remove this box from the list lateron just call removeCustomBox
+       with the index that was returned by insertCustomBox.
+
+       \sa removeCustomBox, removeAllCustomBoxes, customBox, maxCustomBoxIdx
+    */
+    uint insertCustomBox( const KDChartCustomBox & box )
+    {
+        uint max( maxCustomBoxIdx() );
+        uint newIdx( 1 + max );
+        for( uint idx = 0; idx <= max; ++idx ) {
+            if( _customBoxMap.find( idx ) == _customBoxMap.end() ) {
+                newIdx = idx;
+                break;
+            }
+        }
+        _customBoxMap.insert( newIdx, box );
+        emit changed();
+        return newIdx;
+    }
+
+
+    /**
+       Remove a custom box from the list of boxes.
+       Please fill in the index parameter with the value
+       that was returned by insertCustomBox.
+
+       \sa removeAllCustomBoxes, insertCustomBox, customBox, maxCustomBoxIdx
+    */
+    bool removeCustomBox( const uint & idx )
+    {
+        CustomBoxMap::Iterator it;
+        it = _customBoxMap.find( idx );
+        bool bFound = it != _customBoxMap.end();
+        if( bFound )
+            _customBoxMap.remove( it );
+        emit changed();
+        return bFound;
+    }
+
+
+    /**
+       Remove all custom boxes from the list of boxes.
+
+       \sa removeCustomBox, insertCustomBox, customBox, maxCustomBoxIdx
+    */
+    void removeAllCustomBoxes()
+    {
+        emit changed();
+        _customBoxMap.clear();
+    }
+
+
+    /**
+       Retrieve a custom box from the list.
+       You may fill in the index parameter with the value
+       that was returned by insertCustomBox, or you may use a numerical value,
+       e.g. when iterating from zero up to maxCustomBoxIdx().
+
+       \sa insertCustomBox, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
+    */
+    const KDChartCustomBox * customBox( uint box ) const
+    {
+        CustomBoxMap::ConstIterator it;
+        it = _customBoxMap.find( box );
+        if(  _customBoxMap.end() == it )
+            return 0;
+        else
+            return &it.data();
+    }
+
+
+    /**
+       Retrieve the number of custom boxes
+
+       \sa insertCustomBox, removeCustomBox, removeAllCustomBoxes, customBox
+    */
+    uint maxCustomBoxIdx() const
+    {
+        uint cnt( _customBoxMap.count() );
+        if( cnt ) {
+            uint max( cnt-1 );
+            CustomBoxMap::ConstIterator it;
+            for( it = _customBoxMap.begin(); it != _customBoxMap.end(); ++it )
+                if( it.key() > max )
+                    max = it.key();
+            return max;
+        }
+        return 0;
+    }
 
 
     /**
@@ -152,7 +688,7 @@ public:
        \sa setAdditionalChartType, additionalChartType,
        \sa setChartSourceMode
     */
-    enum ChartType { NoType, Bar, Line, Area, Pie, HiLo, Gantt, Ring };
+    enum ChartType { NoType, Bar, Line, Area, Pie, HiLo, Gantt, Ring, Polar };
 
     /**
        Specifies the chart type. The default is bar charts (Bar).
@@ -163,12 +699,25 @@ public:
        axisLabelsTouchEdges back to their default for all bottom and
        top axes.
 
+       \note Calling setChartType() results in changing the default data value
+       texts font settings (i.e. the font size, colour, position, but not the
+       QFont itself) <b>if</b> these parameters were not changed by
+       setPrintDataValues().
+       In order to re-activate this automatical adjustment of font settings
+       even after you have changed them manually you may call
+       setPrintDataValuesWithDefaultFontParams().
+       \li When calling setPrintDataValuesWithDefaultFontParams() <b>before</b> calling setChartType() make sure you set the
+       \c callSetPrintDataValues parameter to \c false.
+       \li When calling setPrintDataValuesWithDefaultFontParams() <b>after</b> calling setChartType() you may set the \c callSetPrintDataValues parameter to \c true
+       <b>or</b> you may call setPrintDataValues() yourself after calling
+       setPrintDataValuesWithDefaultFontParams() to specify additional parameters...
 
        \param chartType the chart type to use
        \sa chartType, ChartType
        \sa setAdditionalChartType, additionalChartType,
        \sa setBarChartSubType, barChartSubType
        \sa setLineChartSubType, lineChartSubType
+       \sa setPolarChartSubType, polarChartSubType
        \sa setChartSourceMode, chartSourceMode
        \sa setAxisLabelsTouchEdges
     */
@@ -194,6 +743,10 @@ public:
                                  bAbscissaAxisLabelsTouchEdges );
         setAxisLabelsTouchEdges( KDChartAxisParams::AxisPosTop2,
                                  bAbscissaAxisLabelsTouchEdges );
+        // activate default data value text settings for this chart type
+        if (    printDataValues( 0 )
+             && printDataValuesWithDefaultFontParams( 0 ) )
+            setPrintDataValues( true, 0 );
         emit changed();
     }
 
@@ -205,6 +758,7 @@ public:
        \sa setAdditionalChartType, additionalChartType,
        \sa setBarChartSubType, barChartSubType
        \sa setLineChartSubType, lineChartSubType
+       \sa setPolarChartSubType, polarChartSubType
        \sa setChartSourceMode, chartSourceMode
     */
     ChartType chartType() const
@@ -214,10 +768,10 @@ public:
 
 
     /**
-    Converts the specified chart type enum to a string representation.
+       Converts the specified chart type enum to a string representation.
 
-    \param type the type enum to convert
-    \return the string representation of the type enum
+       \param type the type enum to convert
+       \return the string representation of the type enum
     */
     static QString chartTypeToString( ChartType type ) {
         switch( type ) {
@@ -237,6 +791,8 @@ public:
             return "Gantt";
         case Ring:
             return "Ring";
+        case Polar:
+            return "Polar";
         default: // should not happen
             return "NoType";
         }
@@ -244,10 +800,10 @@ public:
 
 
     /**
-    Converts the specified string to a chart type enum value.
+       Converts the specified string to a chart type enum value.
 
-    \param string the string to convert
-    \return the chart type enum value
+       \param string the string to convert
+       \return the chart type enum value
     */
     static ChartType stringToChartType( const QString& string ) {
         if( string == "NoType" )
@@ -266,6 +822,8 @@ public:
             return Gantt;
         else if( string == "Ring" )
             return Ring;
+        else if( string == "Polar" )
+            return Polar;
         else // default, should not happen
             return NoType;
     }
@@ -310,6 +868,9 @@ public:
                              KDCHART_ALL_DATASETS,
                              KDCHART_ALL_DATASETS,
                              1 );
+            if (   printDataValues( 1 )
+                && printDataValuesWithDefaultFontParams( 1 ) )
+                setPrintDataValues( true, 1 );
         }
         emit changed();
     }
@@ -427,10 +988,10 @@ public:
                              uint chart = 0 );
 
     /**
-    Converts the specified string to a chart source mode enum value.
+       Converts the specified string to a chart source mode enum value.
 
-    \param string the string to convert
-    \return the chart source mode enum value
+       \param string the string to convert
+       \return the chart source mode enum value
     */
     static SourceMode stringToChartSourceMode( const QString& string ) {
         if( string == "UnknownMode" )
@@ -580,7 +1141,7 @@ public:
        \return the number of values to be shown
        \sa setNumValues
     */
-    uint numValues() const
+    int numValues() const
     {
         return _numValues;
     }
@@ -635,6 +1196,7 @@ public:
     void setShadowBrightnessFactor( double factor )
     {
         _shadowBrightnessFactor = factor;
+        recomputeShadowColors();
         emit changed();
     }
 
@@ -651,6 +1213,36 @@ public:
     double shadowBrightnessFactor() const
     {
         return _shadowBrightnessFactor;
+    }
+
+
+    /**
+       Specifies a filling style for filling the shadow areas in
+       3-dimensional drawings like 3D bar charts. The default is to
+       fill with a solid color, the color is determined with \a
+       setThreeDShadowColors.
+
+       \param style the fill style to use
+       \sa shadowPattern(), setThreeDShadowColors(),
+       threeDShadowColors()
+    */
+    void setShadowPattern( Qt::BrushStyle style ) {
+        _shadowPattern = style;
+        emit changed();
+    }
+
+    /**
+       Returns the filling style used for filling the shadow areas in
+       3-dimensional drawings like 3D bar charts. The default is to
+       fill with a solid color, the fill color can be queried with \a
+       threeDShadowColors().
+
+       \return the fill style used
+       \sa setShadowPattern(), setThreeDShadowColors(),
+       threeDShadowColors()
+    */
+    Qt::BrushStyle shadowPattern() const {
+        return _shadowPattern;
     }
 
 
@@ -709,7 +1301,7 @@ public:
        Specifies the line style of the outlines of data displays. The default
        is a solid line. Warning: On Windows 95/98, the style setting (other
        than NoPen and SolidLine) has no effect for lines with width greater
-       than 1.
+       than 1, due to a bug in the operating system.
 
        \param width the line style to use for the outlines
        \sa outlineDataLineStyle
@@ -747,9 +1339,10 @@ public:
 
 
     /**
-       Specifies whether the engine should draw the sides and tops of 3D effects
-       in shadowed versions of the data colors or in the data colors
-       themselves. Only used with 3D effects in charts that support these.
+       Specifies whether the engine should draw the sides and tops of
+       3D effects in shadowed versions of the data colors (the
+       default) or in the data colors themselves. Only used with 3D
+       effects in charts that support these.
 
        \param shadow true for shadowed colors, false for original colors
        \sa threeDShadowColors
@@ -788,7 +1381,565 @@ public:
     }
 
 
+    /**
+       Specifies if and how a chart will print the data value texts near their respective entries.
+
+       Data value texts will be printed immediately after drawing all of the chart data points
+       (or bars, lines,...) but before drawing the legend and before drawing any custom boxes.
+       If more than one chart ist to be drawn (sharing the same data area) printing of the data
+       text values will take place after drawing all of the last charts data points, this enables
+       us to see the texts even if their respective data representations are covered by the
+       second charts drawings. The same covering/colliding problem might occur with Area charts
+       if one area is (partially) covering another area.
+       In such cases you might either want to specify an appropriate
+       TextLayoutPolicy for getting a better looking result or specify an other text
+       color for data value texts of the second chart since by default the first chart has
+       black texts while the second chart shows its data value texts in dark blue color.
+
+       \note Only used if chartType() is <b>not HiLo or Gantt</b>. To specify printing
+       of data values in a HiLo chart please use setHiLoChartPrintLowValues,
+       setHiLoChartPrintHighValues, setHiLoChartPrintOpenValues,
+       setHiLoChartPrintCloseValues. To specify printing of data values in a
+       Gantt chart please use setGanttChartPrintStartValues,
+       setGanttChartPrintEndValues, setGanttChartPrintDurations.
+
+       Calling <b>setPrintDataValues( false )</b> will <b>deactivate</b> printing of the values.
+
+       Calling setPrintDataValuesWithDefaultFontParams( chart ) will
+       <b>reset</b> the respective font size and colour and position parameters (but not the
+       QFont itself) and <b>activate</b> printing of the values for the \c chart
+       speficied (or for all charts by using \c KDChartParams::KDCHART_ALL_CHARTS, resp.).
+
+       \param active specifies whether the value texts are to be printed or not.
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.  Use the special value KDChartParams::KDCHART_ALL_CHARTS
+       to specify that your settings are to be taken for both charts.
+       \param divPow10 The power of 10 which the data value is to be divided by.
+       A value of 2 means divide by 100, a value of  -3 means multiply by 1000,
+       and 0 (by definition) would result in multiplying by 1.
+       \param digitsBehindComma The number of digits to show behind the comma,
+       to have this calculated automatically just use the default value
+       KDChartParams::DATA_VALUE_AUTO_DIGITS.
+       \param font a Pointer to the font to be used, if zero the default data value
+       texts font will be taken (this is a Times font since small Times digits are
+       clearer than small Helvetica digits).
+
+       Changing of one or more of <b>the following parameters</b> automatically
+       de-activates all future font parameter adjustments that would otherwise
+       take place after each call of setChartType (or setAdditionalChartType, resp.).
+       To re-enable this usefull feature you may call setPrintDataValuesWithDefaultFontParams
+       at any time afterwards...
+
+       \param size (in per mille of the chart width) the dynamic size of
+       the font to be used. If this parameter is zero the size of the
+       \c font is used instead - regardless of the size of the chart!
+       You may use setPrintDataValuesFontRelSize to change this parameter setting
+       without affecting the other ones.
+       \param color the color to be used when printing the values.
+       To have the color calculated automatically - useful when printing
+       inside the bars (or pie slices, areas, ... resp.) - please use
+       \c KDChartParams::DATA_VALUE_AUTO_COLOR instead of a QColor*.
+       You may use setPrintDataValuesColor to change this parameter setting
+       without affecting the other ones.
+
+       The following parameters apply to values less than zero only:
+
+       \param negativePosition The anchor position which the text is to be aligned to.
+       \param negativeAlign The way how the text is to be aligned to the anchor.
+       This must be a reasonable combination of Qt::AlignmentFlags.
+       \param negativeDeltaX The X distance between the <b>anchor point</b> -- specified by
+       \c negativePosition (or \c positivePosition, resp.) -- and the internal <b>alignment
+       point</b> of the text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+       <b>Note: </b> For better compatibility to the dynamic font size this parameter
+       is interpreted as being a per-cent value of the used font height.
+       If greater 0, the X position is increased, if less than 0, it
+       is reduced. Actual font size and thus also this delta value are calculated
+       dynamically before painting based on the size of the chart and the specification
+       made via parameter \c size.
+       \param negativeDeltaY The Y distance between the <b>anchor point</b> -- specified by
+       \c negativePosition (or \c positivePosition, resp.) -- and the internal <b>alignment
+       point</b> of the text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+       <b>Note: </b> For better compatibility to the dynamic font size this parameter
+       is interpreted as being a per-cent value of the used font height.
+       If greater 0, the Y position is increased, if less than 0, it
+       is reduced. Actual font size and thus also this delta value are calculated
+       dynamically before painting based on the size of the chart and the specification
+       made via parameter \c size.
+       \param negativeRotation The amount of degrees (using a circle of 360 degrees) taken to
+       rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
+       There are two special values that you might find usefull for Pie charts or for Ring charts:
+       \c KDChartParams::SAGGITAL_ROTATION and \c KDChartParams::TANGENTIAL_ROTATION both
+       leading to individual calculation of appropriate rotation for each data value.
+       Rotation will be performed around the internal <b>alignment point</b> of the text
+       -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+
+       The following parameters apply to values greater than zero or equal zero:
+
+       \param positivePosition The anchor position which the text is to be aligned to.
+       \param positiveAlign The way how the text is to be aligned to the anchor.
+       This must be a reasonable combination of Qt::AlignmentFlags.
+       \param negativeDeltaX The X distance between the <b>anchor point</b> -- specified by
+       \c negativePosition (or \c positivePosition, resp.) -- and the internal <b>alignment
+       point</b> of the text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+       <b>Note: </b> For better compatibility to the dynamic font size this parameter
+       is interpreted as being a per-cent value of the used font height.
+       If greater 0, the X position is increased, if less than 0, it
+       is reduced. Actual font size and thus also this delta value are calculated
+       dynamically before painting based on the size of the chart and the specification
+       made via parameter \c size.
+       \param positiveDeltaY The Y distance between the <b>anchor point</b> -- specified by
+       \c negativePosition (or \c positivePosition, resp.) -- and the internal <b>alignment
+       point</b> of the text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+       <b>Note: </b> For better compatibility to the dynamic font size this parameter
+       is interpreted as being a per-cent value of the used font height.
+       If greater 0, the Y position is increased, if less than 0, it
+       is reduced. Actual font size and thus also this delta value are calculated
+       dynamically before painting based on the size of the chart and the specification
+       made via parameter \c size.
+       \param positiveRotation The amount of degrees (using a circle of 360 degrees) taken to
+       rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
+       There are two special values that you might find usefull for Pie charts or for Ring charts:
+       \c KDChartParams::SAGGITAL_ROTATION and \c KDChartParams::TANGENTIAL_ROTATION both
+       leading to individual calculation of appropriate rotation for each data value.
+       Rotation will be performed around the internal <b>alignment point</b> of the text
+       -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+
+       \param layoutPolicy The way to handle too narrow space conflicts: what to do if a
+       data text covers a neighboring data text (or a neighboring data area, resp.).
+
+       \sa printDataValues
+       \sa setPrintDataValuesWithDefaultFontParams, printDataValuesWithDefaultFontParams
+       \sa setPrintDataValuesFontRelSize, setPrintDataValuesColor
+       \sa dataValuesDivPow10
+       \sa dataValuesDigitsBehindComma
+       \sa dataValuesFontUseRelSize
+       \sa dataValuesFontRelSize
+       \sa dataValuesFontColor
+       \sa dataValuesAnchorPosition
+       \sa dataValuesAnchorAlign
+       \sa dataValuesAnchorDeltaX
+       \sa dataValuesAnchorDeltaY
+       \sa dataValuesRotation
+       \sa dataValuesLayoutPolicy
+    */
+    void setPrintDataValues( bool active,
+            uint chart = KDCHART_ALL_CHARTS,
+            int divPow10 = 0,
+            int digitsBehindComma = DATA_VALUE_AUTO_DIGITS,
+            QFont* font   = 0,
+            uint size     = UINT_MAX, //  <-- makes us use the *default* font params
+                                      //      BY IGNORING settings of
+                                      //      the following parameters!
+            QColor* color = DATA_VALUE_AUTO_COLOR,
+            KDChartEnums::PositionFlag negativePosition = KDChartEnums::PosCenter,
+            uint negativeAlign    = Qt::AlignCenter,
+            int  negativeDeltaX   =    0,
+            int  negativeDeltaY   =    0,
+            int  negativeRotation =    0,
+            KDChartEnums::PositionFlag positivePosition = KDChartEnums::PosCenter,
+            uint positiveAlign    = Qt::AlignCenter,
+            int  positiveDeltaX   =    0,
+            int  positiveDeltaY   =    0,
+            int  positiveRotation =    0,
+            KDChartEnums::TextLayoutPolicy policy = KDChartEnums::LayoutPolicyRotate );
+
+
+    /**
+       Specifies the color to be used for printing the data value texts.
+
+       This methode is provided for your convenience, to learn how to set the
+       other text parameters please have a look at setPrintDataValues.
+
+       To have the color calculated automatically - useful when printing
+       inside the bars (or pie slices, areas, ... resp.) - please use
+       \c KDChartParams::DATA_VALUE_AUTO_COLOR instead of a QColor*.
+
+       \sa printDataValuesWithDefaultFontParams, setPrintDataValues, dataValuesColor
+       \sa setPrintDataValuesFontRelSize
+    */
+    void setPrintDataValuesColor( uint chart = KDCHART_ALL_CHARTS,
+                                  QColor* color = DATA_VALUE_AUTO_COLOR )
+    {
+        uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
+        PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
+                                                ? &_printDataValuesSettings
+                                                : &_printDataValuesSettings2;
+        for ( uint i = 0; i < count; ++i ) {
+            if ( DATA_VALUE_AUTO_COLOR == color ) {
+                settings->_dataValuesAutoColor            = true;  //  !!!
+                settings->_dataValuesColor = QColor( Qt::black );
+            }
+            else {
+                settings->_dataValuesAutoColor = false;
+                if ( 0 == color )
+                    settings->_dataValuesColor
+                                    = QColor( i ? Qt::darkBlue : Qt::black );
+                else
+                    settings->_dataValuesColor = *color;
+            }
+            if ( 0 < chart )
+                settings = &_printDataValuesSettings2;
+        }
+        emit changed();
+    }
+
+
+    /**
+       Specifies the dynamic font size to be used for printing the data value texts.
+       To change settings for all charts specify \c KDChartParams::KDCHART_ALL_CHARTS
+       as \chart parameter.
+
+       This methode is provided for your convenience, to learn how to set the
+       other text parameters please have a look at setPrintDataValues.
+
+       \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+       \sa setPrintdataValuesColor, dataValuesFontRelSize
+    */
+    void setPrintDataValuesFontRelSize( uint chart, uint size )
+    {
+        uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
+        PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
+                                                ? &_printDataValuesSettings
+                                                : &_printDataValuesSettings2;
+        uint theSize( UINT_MAX == size ? 16 : size );
+        for ( uint i = 0; i < count; ++i ) {
+            settings->_dataValuesUseFontRelSize = ( 0 < theSize );
+            settings->_dataValuesFontRelSize = theSize;
+            if ( 0 < chart )
+                settings = &_printDataValuesSettings2;
+        }
+        emit changed();
+    }
+
+
+    /**
+       Specifies that data value texts are to be printed with
+       default font parameters.
+       Calling this methode results in resetting the respective font
+       size and colour and position parameters but not the QFont itself.
+       By setting \c callSetPrintDataValues to true you select
+       general enabling of text printing, when doing so it is <b>not</b> neccessary
+       to call setPrintDataValues() after calling
+       setPrintDataValuesWithDefaultFontParams().
+
+       \note If you want to call setChartType() after
+       calling setPrintDataValuesWithDefaultFontParams()
+       you should set the \c callSetPrintDataValues parameter to false to
+       prevent setPrintDataValues() from being called twice since it is called
+       internally each time you call setChartType() <b>if</b> the default font params
+       are to be set.
+
+       \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+    */
+    void setPrintDataValuesWithDefaultFontParams( uint chart,
+                                                  bool callSetPrintDataValues = true )
+    {
+        uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
+        PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
+                                                ? &_printDataValuesSettings
+                                                : &_printDataValuesSettings2;
+        for ( uint i = 0; i < count; ++i ) {
+            settings->_printDataValues      = true;
+            settings->_useDefaultFontParams = true;
+            if ( 0 < chart )
+                settings = &_printDataValuesSettings2;
+        }
+        if ( callSetPrintDataValues )
+            setPrintDataValues( true, chart );
+    }
+
+    /**
+       Retrieves whether data value texts are to be printed with
+       non-default font parameters or not - <b>when</b> text printing is active.
+
+       \note You might also want to call printDataValues to see if text printing is active
+       since this default flag remains set in background even when printing has been
+       de-activated.
+
+       \sa setPrintDataValuesWithDefaultFontParams, printDataValues
+    */
+    bool printDataValuesWithDefaultFontParams( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._useDefaultFontParams
+                     : _printDataValuesSettings._useDefaultFontParams;
+    }
+
+    /**
+       Returns whether the data values will be printed near their respective entries.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \return whether the data values will be printed near their respective entries.
+
+       \sa setPrintDataValues
+    */
+    bool printDataValues( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._printDataValues
+            : _printDataValuesSettings._printDataValues;
+    }
+    int dataValuesDivPow10( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._divPow10
+            : _printDataValuesSettings._divPow10;
+    }
+    int dataValuesDigitsBehindComma( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._digitsBehindComma
+            : _printDataValuesSettings._digitsBehindComma;
+    }
+    /**
+       Returns the font to be used for printing the data values
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \returns the font to be used for printing the data values
+
+       \sa setPrintDataValues
+    */
+    QFont dataValuesFont( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._dataValuesFont
+            : _printDataValuesSettings._dataValuesFont;
+    }
+    /**
+       Returns whether the font size to be used for printing the
+       data values is calculated dynamically.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \return whether the font size to be used for printing the
+       data values is calculated dynamically.
+
+       \sa setPrintDataValues, setPrintDataValuesFontRelSize
+    */
+    bool dataValuesUseFontRelSize( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._dataValuesUseFontRelSize
+            : _printDataValuesSettings._dataValuesUseFontRelSize;
+    }
+    /**
+       Returns the relative size (in per mille of the chart width)
+       of font size to be used for printing the
+       data values.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \return the relative size (in per mille of the chart width)
+       of font size to be used for printing the
+       data values.
+
+       \sa setPrintDataValues, setPrintDataValuesFontRelSize
+    */
+    int dataValuesFontRelSize( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._dataValuesFontRelSize
+            : _printDataValuesSettings._dataValuesFontRelSize;
+    }
+    /**
+       Returns the colour of the font to be used for printing the
+       data values.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \return the colour of the font to be used for printing the
+       data values.
+
+       \sa setPrintDataValues, setPrintDataValuesColor
+    */
+    QColor dataValuesColor( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._dataValuesColor
+                     : _printDataValuesSettings._dataValuesColor;
+    }
+    /**
+       Returns whether the font to be used for printing the data values texts
+       shall have automatically calculated colors fitting to their respectivs data representations.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \return whether the font to be used for printing the data values texts
+       shall have automatically calculated colors fitting to their respectivs data representations.
+
+       \sa setPrintDataValues
+    */
+    bool dataValuesAutoColor( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._dataValuesAutoColor
+                     : _printDataValuesSettings._dataValuesAutoColor;
+    }
+    /**
+       Returns the anchor position which the text is to be aligned to.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \param negative If true the return value is only valid for data values less than
+       zero, if false it applies to data values greater or equal to zero.
+
+       \returns the anchor position which the text is to be aligned to in case of
+       the value being less than zero.
+
+       \sa setPrintDataValues
+    */
+    KDChartEnums::PositionFlag dataValuesAnchorPosition( uint chart, bool negative ) const
+    {
+        if ( negative )
+            return chart ? _printDataValuesSettings2._dataValuesAnchorNegativePosition
+                : _printDataValuesSettings._dataValuesAnchorNegativePosition;
+        else
+            return chart ? _printDataValuesSettings2._dataValuesAnchorPositivePosition
+                : _printDataValuesSettings._dataValuesAnchorPositivePosition;
+    }
+    /**
+       Returns the way how the text is to be aligned to the anchor.
+
+       This must be a reasonable combination of Qt::AlignmentFlags.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \param negative If true the return value is only valid for data values less than
+       zero, if false it applies to data values greater or equal to zero.
+
+       \returns the way how the text is to be aligned to the anchor in case of
+       the value being less than zero.
+
+       \sa setPrintDataValues
+    */
+    uint dataValuesAnchorAlign( uint chart, bool negative ) const
+    {
+        if ( negative )
+            return chart ? _printDataValuesSettings2._dataValuesAnchorNegativeAlign
+                : _printDataValuesSettings._dataValuesAnchorNegativeAlign;
+        else
+            return chart ? _printDataValuesSettings2._dataValuesAnchorPositiveAlign
+                : _printDataValuesSettings._dataValuesAnchorPositiveAlign;
+    }
+    /**
+       Returns the X distance between the text and its anchor.
+
+       <b>Note: </b> For better compatibility to the dynamic font size this parameter
+       is <b>always</b> interpreted as being a per-mille value of the logical width of
+       the drawing area. If greater 0, the X position is increased, if less than 0, it
+       is reduced, this is calculated dynamically before painting.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \param negative If true the return value is only valid for data values less than
+       zero, if false it applies to data values greater or equal to zero.
+
+       \returns the X distance between the text and its anchor.
+
+       \sa setPrintDataValues
+    */
+    int dataValuesAnchorDeltaX( uint chart, bool negative ) const
+    {
+        if ( negative )
+            return chart ? _printDataValuesSettings2._dataValuesAnchorNegativeDeltaX
+                : _printDataValuesSettings._dataValuesAnchorNegativeDeltaX;
+        else
+            return chart ? _printDataValuesSettings2._dataValuesAnchorPositiveDeltaX
+                : _printDataValuesSettings._dataValuesAnchorPositiveDeltaX;
+    }
+    /**
+       Returns the Y distance between the text and its anchor.
+
+       <b>Note: </b> For better compatibility to the dynamic font size this parameter
+       is <b>always</b> interpreted as being a per-mille value of the logical width of
+       the drawing area. If greater 0, the Y position is increased, if less than 0, it
+       is reduced, this is calculated dynamically before painting.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \param negative If true the return value is only valid for data values less than
+       zero, if false it applies to data values greater or equal to zero.
+
+       \returns the Y distance between the text and its anchor.
+
+       \sa setPrintDataValues
+    */
+    int dataValuesAnchorDeltaY( uint chart, bool negative ) const
+    {
+        if ( negative )
+            return chart ? _printDataValuesSettings2._dataValuesAnchorNegativeDeltaY
+                : _printDataValuesSettings._dataValuesAnchorNegativeDeltaY;
+        else
+            return chart ? _printDataValuesSettings2._dataValuesAnchorPositiveDeltaY
+                : _printDataValuesSettings._dataValuesAnchorPositiveDeltaY;
+    }
+    /**
+       Returns the amount of degrees (using a circle of 360 degrees) taken to
+       rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \param negative If true the return value is only valid for data values less than
+       zero, if false it applies to data values greater or equal to zero.
+
+       \returns the amount of degrees (using a circle of 360 degrees) taken to
+       rotate the text.
+
+       \sa setPrintDataValues
+    */
+    int dataValuesRotation( uint chart, bool negative ) const
+    {
+        if ( negative )
+            return chart ? _printDataValuesSettings2._dataValuesNegativeRotation
+                : _printDataValuesSettings._dataValuesNegativeRotation;
+        else
+            return chart ? _printDataValuesSettings2._dataValuesPositiveRotation
+                : _printDataValuesSettings._dataValuesPositiveRotation;
+    }
+    /**
+       Returns the way to handle too narrow space conflicts: what to do if a
+       data text covers a neighboring data text (or a neighboring data area, resp.).
+       \note A layout policy different from LayoutJustOverwrite from does not mean
+       that this policy is followed in any case. Rather than giving up when the selected
+       policy does not result in a good layout the program will automatically try the
+       next policy: if LayoutPolicyRotate did not succeed LayoutPolicyShiftVertically
+       will be tried, if this did not succeed either LayoutPolicyShiftHorizontally
+       will be tried.
+
+       \param chart The number of the chart: 0 for the first chart, 1 for
+       the second chart in case there are two charts to be drawn sharing the
+       same data area.
+
+       \returns the way to handle too narrow space conflicts.
+
+       \sa setPrintDataValues
+    */
+    KDChartEnums::TextLayoutPolicy dataValuesLayoutPolicy( uint chart ) const
+    {
+        return chart ? _printDataValuesSettings2._dataValuesLayoutPolicy
+            : _printDataValuesSettings._dataValuesLayoutPolicy;
+    }
+
+
+
     /// END GENERAL
+
 
 
 
@@ -827,10 +1978,10 @@ public:
 
 
     /**
-    Converts the specified bar chart subtype enum to a string representation.
+       Converts the specified bar chart subtype enum to a string representation.
 
-    \param type the type enum to convert
-    \return the string representation of the type enum
+       \param type the type enum to convert
+       \return the string representation of the type enum
     */
     static QString barChartSubTypeToString( BarChartSubType type ) {
         switch( type ) {
@@ -848,10 +1999,10 @@ public:
 
 
     /**
-    Converts the specified string to a bar chart subtype enum value.
+       Converts the specified string to a bar chart subtype enum value.
 
-    \param string the string to convert
-    \return the bar chart subtype enum value
+       \param string the string to convert
+       \return the bar chart subtype enum value
     */
     static BarChartSubType stringToBarChartSubType( const QString& string ) {
         if( string == "BarNormal" )
@@ -976,7 +2127,7 @@ public:
     void setThreeDBarAngle( uint angle )
     {
         if ( angle > 90 )  /* since angle is an uint, we do not need to
-                                        test for < 0 */
+                              test for < 0 */
             return ;
         _threeDBarAngle = angle;
 
@@ -1054,6 +2205,8 @@ public:
        setDatasetGapIsRelative to specify that the \gap
        value is a per mille value of the chart data area width.
 
+       The default is 6 per mille of the data area of the chart.
+
        \param gap the number of pixels between two dataset values.
        \sa datasetGap
        \sa datasetGapIsRelative, setDatasetGapIsRelative
@@ -1115,6 +2268,8 @@ public:
        \note Use negative values for overlaps (which might look strange),
        use \c setValueBlockGapIsRelative to specify that the \gap
        value is a per mille value of the chart data area width.
+
+       The default is 15 per mille of the data area of the chart.
 
        \param gap the number of pixels between each value block.
        \sa valueBlockGap
@@ -1209,10 +2364,10 @@ public:
 
 
     /**
-    Converts the specified string to a line chart subtype enum value.
+       Converts the specified string to a line chart subtype enum value.
 
-    \param string the string to convert
-    \return the line chart subtype enum value
+       \param string the string to convert
+       \return the line chart subtype enum value
     */
     static LineChartSubType stringToLineChartSubType( const QString& string ) {
         if( string == "LineNormal" )
@@ -1227,10 +2382,10 @@ public:
 
 
     /**
-    Converts the specified line chart subtype enum to a string representation.
+       Converts the specified line chart subtype enum to a string representation.
 
-    \param type the type enum to convert
-    \return the string representation of the type enum
+       \param type the type enum to convert
+       \return the string representation of the type enum
     */
     static QString lineChartSubTypeToString( LineChartSubType type ) {
         switch( type ) {
@@ -1249,8 +2404,8 @@ public:
 
     /**
        Specifies whether there should be a marker at each data
-       point. Only used if chartType() == Line. The default is not to
-       draw markers.
+       point. Only used if chartType() == Line and if threeDLines() ==
+       false. The default is not to draw markers.
 
        \param marker true if markers should be drawn
     */
@@ -1262,7 +2417,8 @@ public:
 
     /**
        Returns whether line markers should be drawn at each data
-       point. Only used if chartType() == Line.
+       point. Only used if chartType() == Line and if threeDLines() ==
+       false.
 
        \return true if markers should be drawn.
     */
@@ -1309,15 +2465,19 @@ public:
     */
     LineMarkerStyle lineMarkerStyle( uint dataset ) const
     {
-        return _lineMarkerStyles[ dataset ];
+        if( _lineMarkerStyles.find( dataset ) != _lineMarkerStyles.end() )
+            return _lineMarkerStyles[ dataset ];
+        else
+            return LineMarkerCircle; // default
     }
 
 
     /**
-    Converts the specified line marker style enum to a string representation.
+       Converts the specified line marker style enum to a string
+       representation.
 
-    \param type the type enum to convert
-    \return the string representation of the type enum
+       \param type the type enum to convert
+       \return the string representation of the type enum
     */
     static QString lineMarkerStyleToString( LineMarkerStyle style ) {
         switch( style ) {
@@ -1335,10 +2495,32 @@ public:
 
 
     /**
-    Converts the specified string to a line marker style value.
+       Converts the specified line marker style enum to a localized
+       string representation that can be used for string output.
 
-    \param string the string to convert
-    \return the line marker style enum value
+       \param type the type enum to convert
+       \return the localized string representation of the type enum
+    */
+    static QString lineMarkerStyleToStringTr( LineMarkerStyle style ) {
+        switch( style ) {
+        case LineMarkerSquare:
+            return tr( "Square" );
+        case LineMarkerDiamond:
+            return tr( "Diamond" );
+        case LineMarkerCircle:
+            return tr( "Circle" );
+        default: // should not happen
+            qDebug( "Unknown line marker style" );
+            return tr( "Circle" );
+        }
+    }
+
+
+    /**
+       Converts the specified string to a line marker style value.
+
+       \param string the string to convert
+       \return the line marker style enum value
     */
     static LineMarkerStyle stringToLineMarkerStyle( const QString& string ) {
         if( string == "Square" )
@@ -1351,7 +2533,66 @@ public:
             return LineMarkerCircle;
     }
 
+    
+    /**
+       Converts the specified localized string to a line marker style
+       value.
 
+       \param string the string to convert
+       \return the line marker style enum value
+    */
+    static LineMarkerStyle stringToLineMarkerStyleTr( const QString& string ) {
+        if( string == tr( "Square" ) )
+            return LineMarkerSquare;
+        else if( string == tr( "Diamond" ) )
+            return LineMarkerDiamond;
+        else if( string == tr( "Circle" ) )
+            return LineMarkerCircle;
+        else // default, should not happen
+            return LineMarkerCircle;
+    }
+
+    
+    /**
+       The type of the storage structure for line marker styles. You
+       should normally not need to use this.
+    */
+    typedef QMap<uint,LineMarkerStyle> LineMarkerStyleMap;
+
+    
+    /**
+       Sets a whole map of line marker styles. You can use this for
+       assigning many line marker styles at the same time, but
+       typically it is better to set them individually with \a
+       setLineMarkerStyle().
+       
+       \param map the map of styles
+       \sa lineMarkerStyles(), setLineMarkerStyle()
+    */
+    void setLineMarkerStyles( LineMarkerStyleMap map ) {
+        _lineMarkerStyles = map;
+        // update _maxDatasetLineMarkerStyle
+        uint maxDataset = 0;
+        for( LineMarkerStyleMap::ConstIterator it = _lineMarkerStyles.begin();
+             it != _lineMarkerStyles.end(); ++it )
+            maxDataset = QMAX( maxDataset, it.key() );
+        _maxDatasetLineMarkerStyle = maxDataset;
+    }
+    
+    
+    /**
+       Returns the whole map of line marker styles. You will typically
+       not need this. You can query individual line marker styles by
+       calling \a lineMarkerStyle().
+       
+       \return the map of styles
+       \sa lineMarkerStyle(), setLineMarkerStyles()
+    */
+    LineMarkerStyleMap lineMarkerStyles() const {
+        return _lineMarkerStyles;
+    }
+    
+    
     /**
        Returns the highest dataset for which a line marker style has been
        defined. Not all datasets with a lower number necessarily have
@@ -1392,7 +2633,8 @@ public:
     }
 
     /**
-       Specifies the width for lines in line charts. Default is 1.
+       Specifies the width for lines in line charts. Default is
+       1. Only used if threeDLines() == false.
 
        \param width the new width
        \sa lineWidth
@@ -1416,8 +2658,125 @@ public:
     }
 
 
+  /**
+     Specifies whether lines should be drawn three-dimensionally or
+     not. The default is to draw two-dimensionally. Only used if
+     chartType() == Line.
+
+     \param threeD if true, draw three-dimensionally, otherwise draw
+     two-dimensionally.
+     \sa threeDLines(), setThreeDLineDepth(), threeDLineDepth(),
+     setThreeDLineXRotation(), threeDLineXRotation(),
+     setThreeDLineYRotation(), threeDLineYRotation()
+  */
+  void setThreeDLines( bool threeD ) {
+    _threeDLines = threeD;
+    emit changed();
+  }
+
+
+  /**
+     Returns whether lines are drawn three-dimensionally or not. The
+     default is to draw two-dimensionally. Only used if chartType() ==
+     Line.
+
+     \return true if lines are drawn three-dimensionally, false
+     otherwise.
+     \sa setThreeDLines(), setThreeDLineDepth(), threeDLineDepth(),
+     setThreeDLineXRotation(), threeDLineXRotation(),
+     setThreeDLineYRotation(), threeDLineYRotation()
+  */
+  bool threeDLines() const {
+    return _threeDLines;
+  }
+
+
+  /**
+     Specifies the depth of 3D lines (the "width" in Z
+     direction). Only used if chartType() == Line and threeDLines() ==
+     true. The default is 20 pixels.
+     
+     \param depth the depth in pixels
+     \sa setThreeDLines(), threeDLines(), threeDLineDepth()
+  */
+  void setThreeDLineDepth( int depth ) {
+    _threeDLineDepth = depth;
+    emit changed();
+  }
+
+
+  /**
+     Returns the depth of 3D lines (the "width" in Z direction). Only
+     used if chartType() == Line and threeDLines() == true. The
+     default is 20 pixels.
+
+     \return the depth in pixels
+     \sa setThreeDLines(), threeDLines(), setThreeDLineDepth()
+  */
+  int threeDLineDepth() const {
+    return _threeDLineDepth;
+  }
+
+  /**
+     Specifies the rotation around the X axis in degrees. The value
+     may be between 0 and 90. Only used if chartType() == Line and
+     threeDLines() == true. The default is 30 degrees. If 0 degrees is
+     specified for both the X and the Y rotation, the lines will look
+     like 2D lines.
+
+     \param rotation the rotation in degrees. Must be between 0 and
+     90.
+     \sa setThreeDLines(), threeDLines(), threeDLineXRotation()
+  */
+  void setThreeDLineXRotation( int degrees ) {
+    _threeDLineXRotation = degrees;
+    emit changed();
+  }
+
+
+  /**
+     Returns the rotation around the X axis in degrees. The value may
+     be between 0 and 90. Only used if chartType() == Line and
+     threeDLines() == true. The default is 30 degrees.
+
+     \return the rotation in degrees. Is always between 0 and 90.
+  */
+  int threeDLineXRotation() const {
+    return _threeDLineXRotation;
+  }
+
+
+  /**
+     Specifies the rotation around the Y axis in degrees. The value
+     may be between 0 and 90. Only used if chartType() == Line and
+     threeDLines() == true. The default is 30 degrees. If 0 degrees is
+     specified for both the X and the Y rotation, the lines will look
+     like 2D lines.
+
+     \param rotation the rotation in degrees. Must be between 0 and
+     90.
+     \sa setThreeDLines(), threeDLines(), threeDLineYRotation()
+  */
+  void setThreeDLineYRotation( int degrees ) {
+    _threeDLineYRotation = degrees;
+    emit changed();
+  }
+
+
+  /**
+     Returns the rotation around the X axis in degrees. The value may
+     be between 0 and 90. Only used if chartType() == Line and
+     threeDLines() == true. The default is 30 degrees.
+
+     \return the rotation in degrees. Is always between 0 and 90.
+  */
+  int threeDLineYRotation() const {
+    return _threeDLineYRotation;
+  }
+
+
     /**
-       The line subtype. Only used when chartType == Area
+       The area subtype. Only used when chartType == Area
 
        \sa setAreaChartSubType, areaChartSubType
     */
@@ -1452,10 +2811,10 @@ public:
 
 
     /**
-    Converts the specified area chart subtype enum to a string representation.
+       Converts the specified area chart subtype enum to a string representation.
 
-    \param type the subtype enum to convert
-    \return the string representation of the type enum
+       \param type the subtype enum to convert
+       \return the string representation of the type enum
     */
     static QString areaChartSubTypeToString( AreaChartSubType type ) {
         switch( type ) {
@@ -1473,10 +2832,10 @@ public:
 
 
     /**
-    Converts the specified string to a area chart subtype enum value.
+       Converts the specified string to a area chart subtype enum value.
 
-    \param string the string to convert
-    \return the area chart subtype enum value
+       \param string the string to convert
+       \return the area chart subtype enum value
     */
     static AreaChartSubType stringToAreaChartSubType( const QString& string ) {
         if( string == "AreaNormal" )
@@ -1533,10 +2892,10 @@ public:
 
 
     /**
-    Converts the specified area location enum to a string representation.
+       Converts the specified area location enum to a string representation.
 
-    \param type the location enum to convert
-    \return the string representation of the type enum
+       \param type the location enum to convert
+       \return the string representation of the type enum
     */
     static QString areaLocationToString( AreaLocation type ) {
         switch( type ) {
@@ -1552,10 +2911,10 @@ public:
 
 
     /**
-    Converts the specified string to an area location enum value.
+       Converts the specified string to an area location enum value.
 
-    \param string the string to convert
-    \return the aration location enum value
+       \param string the string to convert
+       \return the aration location enum value
     */
     static AreaLocation stringToAreaLocation( const QString& string ) {
         if( string == "Above" )
@@ -1570,8 +2929,430 @@ public:
 
     /// END LINE/AREA CHART-SPECIFIC
 
+    /// POLAR CHART-SPECIFIC
+    /**
+       The polar subtype. Only used when chartType == Polar
 
-    /// PIE/RING CHART-SPECIFIC
+       \sa setPolarChartSubType, polarChartSubType
+    */
+    enum PolarChartSubType { PolarNormal, PolarStacked, PolarPercent };
+
+    /**
+       Specifies the polar chart subtype. Only used if chartType() ==
+       Polar. The default is PolarNormal.
+
+       \param polarChartSubType the polar chart subtype
+       \sa polarChartSubType, PolarChartSubType, setChartType, chartType
+    */
+    void setPolarChartSubType( PolarChartSubType polarChartSubType )
+    {
+        _polarChartSubType = polarChartSubType;
+        emit changed();
+    }
+
+    /**
+       Returns the polar chart subtype. Only used if chartType() ==
+       Polar.
+
+       \return the polar chart sub type
+       \sa setPolarChartSubType, PolarChartSubType, setChartType, chartType
+    */
+    PolarChartSubType polarChartSubType() const
+    {
+        return _polarChartSubType;
+    }
+
+
+    /**
+       Converts the specified string to a polar chart subtype enum value.
+
+       \param string the string to convert
+       \return the polar chart subtype enum value
+    */
+    static PolarChartSubType stringToPolarChartSubType( const QString& string ) {
+        if( string == "PolarNormal" )
+            return PolarNormal;
+        else if( string == "PolarStacked" )
+            return PolarStacked;
+        else if( string == "PolarPercent" )
+            return PolarPercent;
+        else // should not happen
+            return PolarNormal;
+    }
+
+
+    /**
+       Converts the specified polar chart subtype enum to a string representation.
+
+       \param type the type enum to convert
+       \return the string representation of the type enum
+    */
+    static QString polarChartSubTypeToString( PolarChartSubType type ) {
+        switch( type ) {
+        case PolarNormal:
+            return "PolarNormal";
+        case LineStacked:
+            return "PolarStacked";
+        case LinePercent:
+            return "PolarPercent";
+        default: // should not happen
+            qDebug( "Unknown polar type" );
+            return "PolarNormal";
+        }
+    }
+
+
+    /**
+       Specifies whether there should be a marker at each data
+       point. Only used if chartType() == Polar. The default is not to
+       draw markers.
+
+       \param marker true if markers should be drawn
+    */
+    void setPolarMarker( bool marker )
+    {
+        _polarMarker = marker;
+        emit changed();
+    }
+
+    /**
+       Returns whether polar markers should be drawn at each data
+       point. Only used if chartType() == Polar.
+
+       \return true if markers should be drawn.
+    */
+    bool polarMarker() const
+    {
+        return _polarMarker;
+    }
+
+    /**
+       The available polar marker styles.
+    */
+    enum PolarMarkerStyle { PolarMarkerCircle, PolarMarkerSquare,
+			    PolarMarkerDiamond };
+
+    /**
+       Specifies the polar marker to be used for a dataset. Only used if
+       chartType() == Polar and polarMarker() == true. If you specify a
+       marker for a dataset, but not for a dataset with a lower
+       value, then the marker for the dataset with the lower value
+       will be undefined unless it was previously defined. The default
+       is a circle for the first dataset, a square for the second, a
+       diamond for the third and undefined for all subsequent
+       datasets.
+
+       \param dataset the dataset for which to set the polar marker
+       \param style the style to set for the specified dataset
+       \sa PolarMarkerStyle, polarMarkerStyle
+    */
+    void setPolarMarkerStyle( uint dataset, PolarMarkerStyle style )
+    {
+        _polarMarkerStyles[ dataset ] = style;
+        _maxDatasetPolarMarkerStyle = QMAX( dataset,
+					    _maxDatasetPolarMarkerStyle );
+        emit changed();
+    }
+
+    /**
+       Returns the marker to be used for a dataset. Only used if
+       chartType() == Polar and polarMarker() == true.
+
+       \param dataset the dataset for which to return the polar marker
+       \return the polar marker for the specified data set
+       \sa PolarMarkerStyle, setPolarMarkerStyle
+    */
+    PolarMarkerStyle polarMarkerStyle( uint dataset ) const
+    {
+        if( _polarMarkerStyles.find( dataset ) != _polarMarkerStyles.end() )
+            return _polarMarkerStyles[ dataset ];
+        else
+            return PolarMarkerCircle; // default
+    }
+
+
+    /**
+       Converts the specified polar marker style enum to a string
+       representation.
+
+       \param type the type enum to convert
+       \return the string representation of the type enum
+    */
+    static QString polarMarkerStyleToString( PolarMarkerStyle style ) {
+        switch( style ) {
+        case PolarMarkerSquare:
+            return "Square";
+        case PolarMarkerDiamond:
+            return "Diamond";
+        case PolarMarkerCircle:
+            return "Circle";
+        default: // should not happen
+            qDebug( "Unknown polar marker style" );
+            return "Circle";
+        }
+    }
+
+
+    /**
+       Converts the specified polar marker style enum to a localized
+       string representation that can be used for string output.
+
+       \param type the type enum to convert
+       \return the localized string representation of the type enum
+    */
+    static QString polarMarkerStyleToStringTr( PolarMarkerStyle style ) {
+        switch( style ) {
+        case PolarMarkerSquare:
+            return tr( "Square" );
+        case PolarMarkerDiamond:
+            return tr( "Diamond" );
+        case PolarMarkerCircle:
+            return tr( "Circle" );
+        default: // should not happen
+            qDebug( "Unknown polar marker style" );
+            return tr( "Circle" );
+        }
+    }
+
+
+    /**
+       Converts the specified string to a polar marker style value.
+
+       \param string the string to convert
+       \return the polar marker style enum value
+    */
+    static PolarMarkerStyle stringToPolarMarkerStyle( const QString& string ) {
+        if( string == "Square" )
+            return PolarMarkerSquare;
+        else if( string == "Diamond" )
+            return PolarMarkerDiamond;
+        else if( string == "Circle" )
+            return PolarMarkerCircle;
+        else // default, should not happen
+            return PolarMarkerCircle;
+    }
+
+    
+    /**
+       Converts the specified localized string to a polar marker style
+       value.
+
+       \param string the string to convert
+       \return the polar marker style enum value
+    */
+    static PolarMarkerStyle stringToPolarMarkerStyleTr( const QString& string ) {
+        if( string == tr( "Square" ) )
+            return PolarMarkerSquare;
+        else if( string == tr( "Diamond" ) )
+            return PolarMarkerDiamond;
+        else if( string == tr( "Circle" ) )
+            return PolarMarkerCircle;
+        else // default, should not happen
+            return PolarMarkerCircle;
+    }
+
+
+    /**
+       The type of the storage structure for polar marker styles. You
+       should normally not need to use this.
+    */
+    typedef QMap<uint,PolarMarkerStyle> PolarMarkerStyleMap;
+
+    
+    /**
+       Sets a whole map of polar marker styles. You can use this for
+       assigning many polar marker styles at the same time, but
+       typically it is better to set them individually with \a
+       setPolarMarkerStyle().
+       
+       \param map the map of styles
+       \sa polarMarkerStyles(), setPolarMarkerStyle()
+    */
+    void setPolarMarkerStyles( PolarMarkerStyleMap map ) {
+        _polarMarkerStyles = map;
+        // update _maxDatasetPolarMarkerStyle
+        uint maxDataset = 0;
+        for( PolarMarkerStyleMap::ConstIterator it = _polarMarkerStyles.begin();
+             it != _polarMarkerStyles.end(); ++it )
+            maxDataset = QMAX( maxDataset, it.key() );
+        _maxDatasetPolarMarkerStyle = maxDataset;
+    }
+    
+    
+    /**
+       Returns the whole map of polar marker styles. You will usually
+       not need this. You can query individual polar marker styles by
+       calling \a polarMarkerStyle().
+       
+       \return the map of styles
+       \sa polarMarkerStyle(), setPolarMarkerStyles()
+    */
+    PolarMarkerStyleMap polarMarkerStyles() const {
+        return _polarMarkerStyles;
+    }
+    
+    
+    /**
+       Returns the highest dataset for which a polar marker style has been
+       defined. Not all datasets with a lower number necessarily have
+       a defined polar marker.
+
+       \return the highest dataset with a defined polar marker
+       \sa PolarMarkerStyle, setPolarMarkerStyle, polarMarkerStyle
+    */
+    uint maxDatasetPolarMarkerStyle() const
+    {
+        return _maxDatasetPolarMarkerStyle;
+    }
+
+
+    /**
+       Specifies the sizes of polar markers. Only used if chartType() == Polar
+       and polarMarker() == true. The default is -40 x -40.
+
+       \param size the size of the polar marker in pixels, if negative this is a
+       per mille value of the chart min. size (the chart width or height, depending
+       what is smaller), if positive the value is taken as absolute number of pixels.
+
+       \sa polarMarkerSize
+    */
+    void setPolarMarkerSize( QSize size = QSize( -40, -40 ) )
+    {
+        _polarMarkerSize = size;
+        emit changed();
+    }
+
+    /**
+       Returns the sizes of polar markers. Only used if chartType() ==
+       Polar and polarMarker() == true.
+
+       \return the size of the polar marker in pixels
+       \sa setPolarMarkerSize
+    */
+    QSize polarMarkerSize() const
+    {
+        return _polarMarkerSize;
+    }
+
+    /**
+       Specifies the width for lines in polar charts. Default is -3.
+
+       \param width the new width
+       \sa polarLineWidth
+    */
+    void setPolarLineWidth( int width = -3 )
+    {
+        _polarLineWidth = width;
+        emit changed();
+    }
+
+    /**
+       Returns the line width of the lines in polar charts.
+
+       \return the line width of lines in polar charts
+       \sa setPolarLineWidth
+    */
+    int polarLineWidth() const
+    {
+        return _polarLineWidth;
+    }
+
+
+    /**
+        Specifies the zero degree position in polar charts.
+
+        Use this function to have the zero degree point on a position
+        different from the right side of the circle. Valid parameters
+        are -359..359.
+
+        \sa polarZeroDegreePos
+    */
+    void setPolarZeroDegreePos( int degrees )
+    {
+        _polarZeroDegreePos = degrees;
+    }
+
+    /**
+        Returns the zero degree position in polar charts.
+
+        \sa setPolarZeroDegreePos
+    */
+    int polarZeroDegreePos() const
+    {
+        return _polarZeroDegreePos;
+    }
+
+
+    /**
+        Specifies whether to rotate circular labels in polar charts.
+
+        \sa polarRotateCircularLabels, setPolarDelimsAndLabelsAtPos
+    */
+    void setPolarRotateCircularLabels( bool rotateCircularLabels )
+    {
+        _polarRotateCircularLabels = rotateCircularLabels;
+    }
+
+    /**
+        Returns whether circular labels will be rotated in polar charts.
+
+        \sa setPolarRotateCircularLabels, polarDelimAtPos, polarLabelsAtPos
+    */
+    bool polarRotateCircularLabels() const
+    {
+        return _polarRotateCircularLabels;
+    }
+
+    /**
+        Specifies whether to show circular delimiters and labels at a given
+        position in polar charts.
+
+        \note Value \c KDChartEnums::PosCenter will be ignored.
+
+        \sa setPolarRotateCircularLabels, polarDelimAtPos, polarLabelsAtPos
+    */
+    void setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos,
+                                       bool showDelimiters,
+                                       bool showLabels )
+    {
+        if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos ) {
+            _polarDelimsAndLabels[ pos ].showDelimiters = showDelimiters;
+            _polarDelimsAndLabels[ pos ].showLabels     = showLabels;
+        }
+    }
+
+    /**
+        Returns whether to show circular delimiters at a given
+        position in polar charts.
+
+        \sa polarRotateCircularLabels, setPolarDelimAndLabelsPos, polarLabelsAtPos
+    */
+    bool polarDelimAtPos( KDChartEnums::PositionFlag pos ) const
+    {
+        if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
+            return _polarDelimsAndLabels[ pos ].showDelimiters;
+        else
+            return false;
+    }
+
+    /**
+        Returns whether to show circular labels at a given
+        position in polar charts.
+
+        \sa polarRotateCircularLabels, setPolarDelimAndLabelsPos, polarDelimAtPos
+    */
+    bool polarLabelsAtPos( KDChartEnums::PositionFlag pos ) const
+    {
+        if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
+            return _polarDelimsAndLabels[ pos ].showLabels;
+        else
+            return false;
+    }
+
+  /// END POLAR CHART-SPECIFIC
+
+
+  /// PIE/RING CHART-SPECIFIC
 
     /**
        Specifies whether the pie chart or ring chart should be
@@ -1617,30 +3398,30 @@ public:
 
 
     /**
-    Specifies which values to explode. Explosion of values only
-    happens if setExplode( true ) has been called. Normally, all
-    values are exploded (all values on the outer ring in the case of a
-    ring chart). With this function, you have a finer control about
-    the explosion. You can specify the values that should be exploded
-    by their position. Passing an empty list here turns on explosion
-    for all pies or ring segments (but only if explosion is turned on
-    in general).
+       Specifies which values to explode. Explosion of values only
+       happens if setExplode( true ) has been called. Normally, all
+       values are exploded (all values on the outer ring in the case of a
+       ring chart). With this function, you have a finer control about
+       the explosion. You can specify the values that should be exploded
+       by their position. Passing an empty list here turns on explosion
+       for all pies or ring segments (but only if explosion is turned on
+       in general).
 
-    To repeat: Setting anything here has no effect if setExplode( true )
-    is not called. You can, however, set any values here even if explosion is
-    not turned on; they will be saved in case explosion will be turned on in
-    the future and then be valid automatically.
+       To repeat: Setting anything here has no effect if setExplode( true )
+       is not called. You can, however, set any values here even if explosion is
+       not turned on; they will be saved in case explosion will be turned on in
+       the future and then be valid automatically.
 
-    The explode factor, i.e., the amount with which a segment is moved
-    from the center can either be set for all segments with
-    \a setExplodeFactor() or for individual segments with
-    \a setExplodeFactors(). The default is 10%.
+       The explode factor, i.e., the amount with which a segment is moved
+       from the center can either be set for all segments with
+       \a setExplodeFactor() or for individual segments with
+       \a setExplodeFactors(). The default is 10%.
 
-    \param explodeList the list of positions in the displayed dataset that
-    should be drawn in an exploded position. Pass an empty list here to
-    explode all values.
-    \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
-    explodeValues(), setExplodeFactors(), explodeFactors()
+       \param explodeList the list of positions in the displayed dataset that
+       should be drawn in an exploded position. Pass an empty list here to
+       explode all values.
+       \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
+       explodeValues(), setExplodeFactors(), explodeFactors()
     */
     void setExplodeValues( QValueList<int> explodeList ) {
         _explodeList = explodeList;
@@ -1649,12 +3430,12 @@ public:
 
 
     /**
-    Returns which values are exploded in a pie or ring chart. For a detailed
-    explanation of this feature, please see \a setExplodeValues().
+       Returns which values are exploded in a pie or ring chart. For a detailed
+       explanation of this feature, please see \a setExplodeValues().
 
-    \return the list of values that are exploded
-    \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
-    setExplodeValues()
+       \return the list of values that are exploded
+       \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
+       setExplodeValues()
     */
     QValueList<int> explodeValues() const {
         return _explodeList;
@@ -1662,32 +3443,32 @@ public:
 
 
     /**
-    Specifies the explode factors for each segment in percent,
-    i.e. how much an exploded pie or ring segment is displaced from
-    the center. The factor is given as a double value between 0 and 1;
-    0.1 means 10%. Only used if chartType() == Pie or chartType() ==
-    Ring and explode() == true.
+       Specifies the explode factors for each segment in percent,
+       i.e. how much an exploded pie or ring segment is displaced from
+       the center. The factor is given as a double value between 0 and 1;
+       0.1 means 10%. Only used if chartType() == Pie or chartType() ==
+       Ring and explode() == true.
 
-    Segments that are not contained in the map specified here will
-    have the default explode factor of 10%, if exploding is turned on
-    for them at all. This also means that passing an empty list to
-    this method does not turn off exploding in general; use \a
-    setExplode( false ) for that.
+       Segments that are not contained in the map specified here will
+       have the default explode factor of 10%, if exploding is turned on
+       for them at all. This also means that passing an empty list to
+       this method does not turn off exploding in general; use \a
+       setExplode( false ) for that.
 
-    Note: This method has no immediate effect if setExplode( true )
-    has not been called. It is, however, possible to preset explode
-    factors and then turn on exploding later.
+       Note: This method has no immediate effect if setExplode( true )
+       has not been called. It is, however, possible to preset explode
+       factors and then turn on exploding later.
 
-    Note: Besides giving a segment an explode factor and turning on
-    exploding in general, you also need to specify to explode a
-    certain segment by calling \a setExplodeValues(). This gives maximum
-    flexibility as it allows you to preset explode factors and then
-    explode or not not explode a segment at leisure - at the expense
-    of one more method call.
+       Note: Besides giving a segment an explode factor and turning on
+       exploding in general, you also need to specify to explode a
+       certain segment by calling \a setExplodeValues(). This gives maximum
+       flexibility as it allows you to preset explode factors and then
+       explode or not not explode a segment at leisure - at the expense
+       of one more method call.
 
-    \param factors the list of explode factors
-    \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
-    setExplodeFactor(), explodeFactor(), explodeFactors()
+       \param factors the list of explode factors
+       \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
+       setExplodeFactor(), explodeFactor(), explodeFactors()
     */
     void setExplodeFactors( QMap<int,double> factors ) {
         _explodeFactors = factors;
@@ -1696,12 +3477,12 @@ public:
 
 
     /**
-    Returns the list of explode factors. Each explode factor in the
-    list corresponds to the segment at the same position.
+       Returns the list of explode factors. Each explode factor in the
+       list corresponds to the segment at the same position.
 
-    \return the list of explode factors
-    \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
-    setExplodeFactor(), explodeFactor(), setExplodeFactors()
+       \return the list of explode factors
+       \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
+       setExplodeFactor(), explodeFactor(), setExplodeFactors()
     */
     QMap<int,double> explodeFactors() const {
         return _explodeFactors;
@@ -1874,14 +3655,14 @@ public:
 
 
     /**
-    Specifies whether the ring thickness should be relative to the sum of the
-    values in the dataset that the ring represents. The default is to have all
-    the rings with the same thickness which itself depends on the size of the
-    chart and the number of rings.
+       Specifies whether the ring thickness should be relative to the sum of the
+       values in the dataset that the ring represents. The default is to have all
+       the rings with the same thickness which itself depends on the size of the
+       chart and the number of rings.
 
-    \param relativeThickness if true, ring thickness is relative, if false, it
-    is constant.
-    \sa relativeThickness()
+       \param relativeThickness if true, ring thickness is relative, if false, it
+       is constant.
+       \sa relativeThickness()
     */
     void setRelativeRingThickness( bool relativeThickness ) {
         _relativeRingThickness = relativeThickness;
@@ -1891,12 +3672,12 @@ public:
 
 
     /**
-    Returns whether the ring thickness is relative to the sum of values in the
-    dataset that the ring represents, or whether the ring thickness should be
-    constant.
+       Returns whether the ring thickness is relative to the sum of values in the
+       dataset that the ring represents, or whether the ring thickness should be
+       constant.
 
-    \return true if thickness is relative, false if it is constant
-    \sa setRelativeRingThickness()
+       \return true if thickness is relative, false if it is constant
+       \sa setRelativeRingThickness()
     */
     bool relativeRingThickness() const {
         return _relativeRingThickness;
@@ -1940,10 +3721,10 @@ public:
     }
 
     /**
-    Converts the specified HiLo chart subtype enum to a string representation.
+       Converts the specified HiLo chart subtype enum to a string representation.
 
-    \param type the subtype enum to convert
-    \return the string representation of the type enum
+       \param type the subtype enum to convert
+       \return the string representation of the type enum
     */
     static QString hiLoChartSubTypeToString( HiLoChartSubType type ) {
         switch( type ) {
@@ -1961,10 +3742,10 @@ public:
 
 
     /**
-    Converts the specified string to a HiLo chart subtype enum value.
+       Converts the specified string to a HiLo chart subtype enum value.
 
-    \param string the string to convert
-    \return the HiLo chart subtype enum value
+       \param string the string to convert
+       \return the HiLo chart subtype enum value
     */
     static HiLoChartSubType stringToHiLoChartSubType( const QString& string ) {
         if( string == "HiLoSimple" )
@@ -1979,8 +3760,7 @@ public:
 
     /**
        Specifies if and how a HiLo chart will print the Low
-       values their respective entries. Only used if chartType() ==
-       HiLo
+       values below their respective entries. Only used if chartType() == HiLo
 
        \note <b>setHiLoChartPrintLowValues( false )</b> will
        deactivate printing of Low values.
@@ -2012,8 +3792,7 @@ public:
         if ( font )
             _hiLoChartLowValuesFont = *font;
         else
-            _hiLoChartLowValuesFont = QFont( "helvetica", 8,
-                                             QFont::Normal, false );
+            _hiLoChartLowValuesFont = _defaultFont;
         _hiLoChartLowValuesUseFontRelSize = ( 0 < size );
         _hiLoChartLowValuesFontRelSize = size;
         if ( 0 == color )
@@ -2138,8 +3917,7 @@ public:
         if ( font )
             _hiLoChartHighValuesFont = *font;
         else
-            _hiLoChartHighValuesFont = QFont( "helvetica", 8,
-                                              QFont::Normal, false );
+            _hiLoChartHighValuesFont = _defaultFont;
         _hiLoChartHighValuesUseFontRelSize = ( 0 < size );
         _hiLoChartHighValuesFontRelSize = size;
         if ( 0 == color )
@@ -2255,16 +4033,15 @@ public:
        \sa hiLoChartCloseValuesFontRelSize, HiLoChartCloseValuesFontRelSize
     */
     void setHiLoChartPrintOpenValues( bool active,
-                                       QFont* font = 0,
-                                       uint size = 12,
-                                       QColor* color = 0 )
+                                      QFont* font = 0,
+                                      uint size = 12,
+                                      QColor* color = 0 )
     {
         _hiLoChartPrintOpenValues = active;
         if ( font )
             _hiLoChartOpenValuesFont = *font;
         else
-            _hiLoChartOpenValuesFont = QFont( "helvetica", 8,
-                                               QFont::Normal, false );
+            _hiLoChartOpenValuesFont = _defaultFont;
         _hiLoChartOpenValuesUseFontRelSize = ( 0 < size );
         _hiLoChartOpenValuesFontRelSize = size;
         if ( 0 == color )
@@ -2378,16 +4155,15 @@ public:
        \sa hiLoChartOpenValuesFontRelSize, HiLoChartOpenValuesFontRelSize
     */
     void setHiLoChartPrintCloseValues( bool active,
-                                      QFont* font = 0,
-                                      int size = 12,
-                                      QColor* color = 0 )
+                                       QFont* font = 0,
+                                       int size = 12,
+                                       QColor* color = 0 )
     {
         _hiLoChartPrintCloseValues = active;
         if ( font )
             _hiLoChartCloseValuesFont = *font;
         else
-            _hiLoChartCloseValuesFont = QFont( "helvetica", 8,
-                                              QFont::Normal, false );
+            _hiLoChartCloseValuesFont = _defaultFont;
         _hiLoChartCloseValuesUseFontRelSize = ( 0 < size );
         _hiLoChartCloseValuesFontRelSize = size;
         if ( 0 == color )
@@ -2638,10 +4414,10 @@ public:
     }
 
     /**
-    Converts the specified gantt chart subtype enum to a string representation.
+       Converts the specified gantt chart subtype enum to a string representation.
 
-    \param type the subtype enum to convert
-    \return the string representation of the type enum
+       \param type the subtype enum to convert
+       \return the string representation of the type enum
     */
     static QString ganttChartSubTypeToString( GanttChartSubType type ) {
         switch( type ) {
@@ -2655,10 +4431,10 @@ public:
 
 
     /**
-    Converts the specified string to a Gantt chart subtype enum value.
+       Converts the specified string to a Gantt chart subtype enum value.
 
-    \param string the string to convert
-    \return the Gantt chart subtype enum value
+       \param string the string to convert
+       \return the Gantt chart subtype enum value
     */
     static GanttChartSubType stringToGanttChartSubType( const QString& string ) {
         if( string == "GanttNormal" )
@@ -2716,7 +4492,7 @@ public:
        \sa ganttChartSubType, GanttChartSubType, setChartType, chartType
     */
     void setGanttChartTemporalResolution(
-        GanttChartTemporalResolution resolution )
+                                         GanttChartTemporalResolution resolution )
     {
         _ganttChartTemporalResolution = resolution;
         emit changed();
@@ -2735,11 +4511,11 @@ public:
     }
 
     /**
-    Converts the specified temporal resolution enum to a
-    string representation.
+       Converts the specified temporal resolution enum to a
+       string representation.
 
-    \param type the temporal resolution enum to convert
-    \return the string representation of the type enum
+       \param type the temporal resolution enum to convert
+       \return the string representation of the type enum
     */
     static QString ganttTemporalResolutionToString( GanttChartTemporalResolution type ) {
         switch( type ) {
@@ -2767,10 +4543,10 @@ public:
 
 
     /**
-    Converts the specified string to an temporal resolution enum value.
+       Converts the specified string to an temporal resolution enum value.
 
-    \param string the string to convert
-    \return the temporal resolution enum value
+       \param string the string to convert
+       \return the temporal resolution enum value
     */
     static GanttChartTemporalResolution stringToGanttChartTemporalResolution( const QString& string ) {
         if( string == "Second" )
@@ -2795,128 +4571,6 @@ public:
 
 
     /**
-       The position and alignment of texts to be printed at or
-       inside of Gantt chart bars.
-       Only used when chartType == Gantt
-
-       The following picture shows the different possibilities:
-       \verbatim
-
-                    GanttTopInL      GanttTopC      GanttTopInR
-                   +-------------------------------------------+
-       GanttTopOutL|                                           |GanttTopOutR
-                   |                                           |
-                   |                                           |
-          GanttOutL|GanttInL         GanttInC          GanttInR|GanttOutR
-                   |                                           |
-                   |                                           |
-       GanttBotOutL|                                           |GanttBotOutR
-                   +-------------------------------------------+
-                    GanttBotInL      GanttBotC      GanttBotInR
-
-       \endverbatim
-
-       \sa setGanttChartPrintStartValues
-       \sa setGanttChartPrintEndValues
-       \sa setGanttChartPrintDurationValues
-    */
-    enum GanttChartTextAlign {
-        GanttTopInL, GanttTopC, GanttTopInR,
-        GanttTopOutL, GanttTopOutR,
-        GanttOutL, GanttInL, GanttInC, GanttInR, GanttOutR,
-        GanttBotOutL, GanttBotOutR,
-        GanttBotInL, GanttBotC, GanttBotInR };
-
-
-    /**
-    Converts the specified text align enum to a
-    string representation.
-
-    \param type the text align to convert
-    \return the string representation of the type enum
-    */
-    static QString ganttTextAlignToString( GanttChartTextAlign type ) {
-        switch( type ) {
-        case GanttTopInL:
-            return "TopInL";
-        case GanttTopC:
-            return "TopC";
-        case GanttTopInR:
-            return "TopInR";
-        case GanttTopOutL:
-            return "TopOutL";
-        case GanttTopOutR:
-            return "TopOutR";
-        case GanttOutL:
-            return "OutL";
-        case GanttInL:
-            return "InL";
-        case GanttInC:
-            return "InC";
-        case GanttInR:
-            return "InR";
-        case GanttOutR:
-            return "OutR";
-        case GanttBotOutL:
-            return "BotOutL";
-        case GanttBotOutR:
-            return "BotOutR";
-        case GanttBotInL:
-            return "BotInL";
-        case GanttBotC:
-            return "BotC";
-        case GanttBotInR:
-            return "BotInR";
-        default: // should not happen
-            qDebug( "Unknown Gantt text align" );
-            return "TopInL";
-        }
-    }
-
-
-    /**
-    Converts the specified string to a gantt align enum value.
-
-    \param string the string to convert
-    \return the gantt align enum value
-    */
-    static GanttChartTextAlign stringToGanttChartTextAlign( const QString& string ) {
-        if( string == "TopInL" )
-            return GanttTopInL;
-        else if( string == "TopC" )
-            return GanttTopC;
-        else if( string == "TopInR" )
-            return GanttTopInR;
-        else if( string == "TopOutL" )
-            return GanttTopOutL;
-        else if( string == "TopOutR" )
-            return GanttTopOutR;
-        else if( string == "OutL" )
-            return GanttOutL;
-        else if( string == "InL" )
-            return GanttInL;
-        else if( string == "InC" )
-            return GanttInC;
-        else if( string == "InR" )
-            return GanttInR;
-        else if( string == "OutR" )
-            return GanttOutR;
-        else if( string == "BotOutL" )
-            return GanttBotOutL;
-        else if( string == "BotOutR" )
-            return GanttBotOutR;
-        else if( string == "BotInL" )
-            return GanttBotInL;
-        else if( string == "BotC" )
-            return GanttBotC;
-        else if( string == "BotInR" )
-            return GanttBotInR;
-        else // default, should not happen
-            return GanttTopInL;
-    }
-
-
-    /**
        Specifies if and how a Gantt chart will print the Start Time values
        at or inside of their respective bars.
        Only used if chartType() == Gantt
@@ -2925,7 +4579,9 @@ public:
        printing of Start Time values.
 
        \param active specifies whether the values are to be printed or not.
-       \param align specifies where to print the texts and how to align them.
+       \param position specifies at which edge (or corner, resp.) of the Gantt bar the texts will be printed
+       \param align specifies how to align the texts to the position specified by \c position.
+       To specify this parameter please use a combination of \c Qt::AlignmentFlags.
        \param dtf specifies the format to be used when printing the values.
        \param font specifies a Pointer to the font to be used.
        \param size (in per mille of the chart width) specifies the dynamic size of
@@ -2951,20 +4607,21 @@ public:
        \sa ganttChartDurationsFontRelSize, GanttChartDurationsFontRelSize
     */
     void setGanttChartPrintStartValues( bool active,
-                                        GanttChartTextAlign align = GanttOutL,
-                                        QString dtf = KDCHART_DEFAULT_DATETIME_FORMAT,
-                                        QFont* font = 0,
-                                        int size = 12,
+                                        KDChartEnums::PositionFlag position = KDChartEnums::PosCenterLeft,
+                                        uint    align = Qt::AlignVCenter + Qt::AlignRight,
+                                        QString dtf   = KDCHART_DEFAULT_DATETIME_FORMAT,
+                                        QFont*  font  = 0,
+                                        int     size  = 12,
                                         QColor* color = 0 )
     {
         _ganttChartPrintStartValues = active;
+        _ganttChartStartValuesPos = position;
         _ganttChartStartValuesAlign = align;
         _ganttChartStartValuesDateTimeFormat = dtf;
         if ( font )
             _ganttChartStartValuesFont = *font;
         else
-            _ganttChartStartValuesFont = QFont( "helvetica", 8,
-                                                QFont::Normal, false );
+            _ganttChartStartValuesFont = _defaultFont;
         _ganttChartStartValuesUseFontRelSize = ( 0 < size );
         _ganttChartStartValuesFontRelSize = size;
         if ( 0 == color )
@@ -2991,16 +4648,30 @@ public:
         return _ganttChartPrintStartValues;
     }
     /**
-       Returns where to print the Start Time values and how to align them.
+       Returns where to print the Start Time values.
 
-       \returns where to print the Start Time values and how to align them.
+       \returns where to print the Start Time values.
 
        \sa setGanttChartPrintStartValues
        \sa setGanttChartPrintEndValues
        \sa setGanttChartPrintDurations
        \sa setChartType, chartType
     */
-    GanttChartTextAlign ganttChartStartValuesAlign() const
+    KDChartEnums::PositionFlag ganttChartStartValuesPos() const
+    {
+        return _ganttChartStartValuesPos;
+    }
+    /**
+       Returns how to align the Start Time values.
+
+       \returns how to align the Start Time values.
+
+       \sa setGanttChartPrintStartValues
+       \sa setGanttChartPrintEndValues
+       \sa setGanttChartPrintDurations
+       \sa setChartType, chartType
+    */
+    uint ganttChartStartValuesAlign() const
     {
         return _ganttChartStartValuesAlign;
     }
@@ -3098,7 +4769,9 @@ public:
        printing of End Time values.
 
        \param active specifies whether the values are to be printed or not.
-       \param align specifies where to print the texts and how to align them.
+       \param position specifies at which edge (or corner, resp.) of the Gantt bar the texts will be printed
+       \param align specifies how to align the texts to the position specified by \c position.
+       To specify this parameter please use a combination of \c Qt::AlignmentFlags.
        \param dtf specifies the format to be used when printing the values.
        \param font a Pointer to the font to be used.
        \param size (in per mille of the chart width) the dynamic size of
@@ -3124,20 +4797,21 @@ public:
        \sa ganttChartDurationsFontRelSize, GanttChartDurationsFontRelSize
     */
     void setGanttChartPrintEndValues( bool active,
-                                      GanttChartTextAlign align = GanttOutR,
-                                      QString dtf = KDCHART_DEFAULT_DATETIME_FORMAT,
-                                      QFont* font = 0,
-                                      int size = 12,
+                                      KDChartEnums::PositionFlag position = KDChartEnums::PosCenterRight,
+                                      uint    align = Qt::AlignVCenter + Qt::AlignLeft,
+                                      QString dtf   = KDCHART_DEFAULT_DATETIME_FORMAT,
+                                      QFont*  font  = 0,
+                                      int     size  = 12,
                                       QColor* color = 0 )
     {
         _ganttChartPrintEndValues = active;
+        _ganttChartEndValuesPos = position;
         _ganttChartEndValuesAlign = align;
         _ganttChartEndValuesDateTimeFormat = dtf;
         if ( font )
             _ganttChartEndValuesFont = *font;
         else
-            _ganttChartEndValuesFont = QFont( "helvetica", 8,
-                                              QFont::Normal, false );
+            _ganttChartEndValuesFont = _defaultFont;
         _ganttChartEndValuesUseFontRelSize = ( 0 < size );
         _ganttChartEndValuesFontRelSize = size;
         if ( 0 == color )
@@ -3164,16 +4838,30 @@ public:
         return _ganttChartPrintEndValues;
     }
     /**
-       Returns where to print the End Time values and how to align them.
+       Returns where to print the End Time values.
 
-       \returns where to print the End Time values and how to align them.
+       \returns where to print the End Time values.
+
+       \sa setGanttChartPrintStartValues
+       \sa setGanttChartPrintEndValues
+       \sa setGanttChartPrintDurations
+       \sa setChartType, chartType
+    */
+    KDChartEnums::PositionFlag ganttChartEndValuesPos() const
+    {
+        return _ganttChartEndValuesPos;
+    }
+    /**
+       Returns how to align the End Time values.
+
+       \returns how to align the End Time values.
 
        \sa setGanttChartPrintEndValues
        \sa setGanttChartPrintStartValues
        \sa setGanttChartPrintDurations
        \sa setChartType, chartType
     */
-    GanttChartTextAlign ganttChartEndValuesAlign() const
+    uint ganttChartEndValuesAlign() const
     {
         return _ganttChartEndValuesAlign;
     }
@@ -3271,7 +4959,9 @@ public:
        printing of Durations.
 
        \param active specifies whether the values are to be printed or not.
-       \param align specifies where to print the texts and how to align them.
+       \param position specifies at which edge (or corner, resp.) of the Gantt bar the texts will be printed
+       \param align specifies how to align the texts to the position specified by \c position.
+       To specify this parameter please use a combination of \c Qt::AlignmentFlags.
        \param dtf specifies the format to be used when printing the values.
        \param font a Pointer to the font to be used.
        \param size (in per mille of the chart width) the dynamic size of
@@ -3297,20 +4987,21 @@ public:
        \sa ganttChartDurationsFontRelSize, GanttChartDurationsFontRelSize
     */
     void setGanttChartPrintDurations( bool active,
-                                      GanttChartTextAlign align = GanttInC,
-                                      QString dtf = KDCHART_DEFAULT_DATETIME_FORMAT,
-                                      QFont* font = 0,
-                                      int size = 12,
+                                      KDChartEnums::PositionFlag position = KDChartEnums::PosCenter,
+                                      uint    align = Qt::AlignCenter,
+                                      QString dtf   = KDCHART_DEFAULT_DATETIME_FORMAT,
+                                      QFont*  font  = 0,
+                                      int     size  = 12,
                                       QColor* color = 0 )
     {
         _ganttChartPrintDurations = active;
+        _ganttChartDurationsPos = position;
         _ganttChartDurationsAlign = align;
         _ganttChartDurationsDateTimeFormat = dtf;
         if ( font )
             _ganttChartDurationsFont = *font;
         else
-            _ganttChartDurationsFont = QFont( "helvetica", 8,
-                                              QFont::Normal, false );
+            _ganttChartDurationsFont = _defaultFont;
         _ganttChartDurationsUseFontRelSize = ( 0 < size );
         _ganttChartDurationsFontRelSize = size;
         if ( 0 == color )
@@ -3337,16 +5028,30 @@ public:
         return _ganttChartPrintDurations;
     }
     /**
-       Returns where to print the Durations and how to align them.
+       Returns where to print the Durations.
 
-       \returns where to print the Durations and how to align them.
+       \returns where to print the Durations.
+
+       \sa setGanttChartPrintStartValues
+       \sa setGanttChartPrintEndValues
+       \sa setGanttChartPrintDurations
+       \sa setChartType, chartType
+    */
+    KDChartEnums::PositionFlag ganttChartDurationsPos() const
+    {
+        return _ganttChartDurationsPos;
+    }
+    /**
+       Returns how to align the Durations.
+
+       \returns how to align the Durations.
 
        \sa setGanttChartPrintDurations
        \sa setGanttChartPrintEndValues
        \sa setGanttChartPrintStartValues
        \sa setChartType, chartType
     */
-    GanttChartTextAlign ganttChartDurationsAlign() const
+    uint ganttChartDurationsAlign() const
     {
         return _ganttChartDurationsAlign;
     }
@@ -3460,7 +5165,7 @@ public:
                           LegendBottomRight,
                           LegendBottomRightBottom,
                           LegendBottomRightRight
-                        };
+    };
 
 
     /**
@@ -3490,10 +5195,10 @@ public:
 
 
     /**
-    Converts the specified legend position enum to a string representation.
+       Converts the specified legend position enum to a string representation.
 
-    \param type the legend position enum to convert
-    \return the string representation of the type enum
+       \param type the legend position enum to convert
+       \return the string representation of the type enum
     */
     static QString legendPositionToString( LegendPosition pos ) {
         switch( pos ) {
@@ -3533,16 +5238,16 @@ public:
             return "LegendBottomRightRight";
         default: // should not happen
             qDebug( "Unknown legend position" );
-            return "LegendRight";
+            return "LegendLeft";
         }
     }
 
 
     /**
-    Converts the specified string to a legend position enum value.
+       Converts the specified string to a legend position enum value.
 
-    \param string the string to convert
-    \return the legend position enum value
+       \param string the string to convert
+       \return the legend position enum value
     */
     static LegendPosition stringToLegendPosition( const QString& string ) {
         if( string == "NoLegend" )
@@ -3580,7 +5285,7 @@ public:
         else if( string == "LegendBottomRightRight" )
             return LegendBottomRightRight;
         else // default, should not happen
-            return LegendRight;
+            return LegendLeft;
     }
 
 
@@ -3627,10 +5332,10 @@ public:
     }
 
     /**
-    Converts the specified legend source enum to a string representation.
+       Converts the specified legend source enum to a string representation.
 
-    \param source the legend source enum to convert
-    \return the string representation of the type enum
+       \param source the legend source enum to convert
+       \return the string representation of the type enum
     */
     static QString legendSourceToString( LegendSource source ) {
         switch( source ) {
@@ -3648,10 +5353,10 @@ public:
 
 
     /**
-    Converts the specified string to a legend source enum value.
+       Converts the specified string to a legend source enum value.
 
-    \param string the string to convert
-    \return the legend source enum value
+       \param string the string to convert
+       \return the legend source enum value
     */
     static LegendSource stringToLegendSource( const QString& string ) {
         if( string == "Manual" )
@@ -3687,7 +5392,10 @@ public:
     */
     QString legendText( uint dataset ) const
     {
-        return _legendText[ dataset ];
+        if( _legendText.find( dataset ) != _legendText.end() )
+            return _legendText[ dataset ];
+        else
+            return QString::null;
     }
 
 
@@ -4027,7 +5735,7 @@ public:
     bool axisVisible( uint n ) const
     {
         return n < KDCHART_MAX_AXES ? _axisSettings[ n ].params.axisVisible()
-               : false;
+            : false;
     }
 
     /**
@@ -4063,7 +5771,7 @@ public:
     {
         for ( uint i = 0; i < KDCHART_MAX_AXES; ++i ) {
             if ( _axisSettings[ i ].params.axisVisible()
-                        && _axisSettings[ i ].params.axisShowGrid() )
+                 && _axisSettings[ i ].params.axisShowGrid() )
                 return true;
         }
         return false;
@@ -4097,11 +5805,11 @@ public:
                           uint chart = 0 )
     {
         uint a1 = ( KDCHART_ALL_AXES == n )
-                ? 0
-                : QMIN( n, KDCHART_MAX_AXES-1 );
+                  ? 0
+                  : QMIN( n, KDCHART_MAX_AXES-1 );
         uint a2 = ( KDCHART_ALL_AXES == n )
-                ? KDCHART_MAX_AXES-1
-                : QMIN( n, KDCHART_MAX_AXES-1 );
+                  ? KDCHART_MAX_AXES-1
+                  : QMIN( n, KDCHART_MAX_AXES-1 );
         for( uint i = a1;  i <= a2;  ++i ) {
             _axisSettings[ i ].dataset = dataset;
             _axisSettings[ i ].dataset2 =
@@ -4164,8 +5872,8 @@ public:
        \sa setAxisDataset, axisDataset
     */
     bool chartAxes( uint chart, uint& cnt, Ordinates& axes ) const
-                                //uint& axis1, uint& axis2,
-                                //uint& axis3, uint& axis4 ) const
+        //uint& axis1, uint& axis2,
+        //uint& axis3, uint& axis4 ) const
     {
         cnt = 0;
         for ( uint i2 = 0; i2 < KDCHART_CNT_ORDINATES; ++i2 ) {
@@ -4173,10 +5881,10 @@ public:
         }
         for ( uint i = 0; i < KDCHART_MAX_AXES; ++i ) {
             if (    chart == _axisSettings[ i ].chart
-                 && (    KDChartAxisParams::AxisPosLeft   == i
-                      || KDChartAxisParams::AxisPosRight  == i
-                      || KDChartAxisParams::AxisPosLeft2  == i
-                      || KDChartAxisParams::AxisPosRight2 == i ) ) {
+                    && (    KDChartAxisParams::AxisPosLeft   == i
+                            || KDChartAxisParams::AxisPosRight  == i
+                            || KDChartAxisParams::AxisPosLeft2  == i
+                            || KDChartAxisParams::AxisPosRight2 == i ) ) {
                 for( uint j = 0;  j < KDCHART_CNT_ORDINATES;  ++j ) {
                     if( KDCHART_NO_AXIS == axes[ j ] || axes[ j ] == i ) {
                         if( KDCHART_NO_AXIS == axes[ j ] ) {
@@ -4236,8 +5944,53 @@ public:
     void setAxisLabelsTouchEdges( uint n, bool axisLabelsTouchEdges )
     {
         _axisSettings[ n ].params.setAxisLabelsTouchEdges(
-            axisLabelsTouchEdges );
+                                                          axisLabelsTouchEdges );
         emit changed();
+    }
+
+    /**
+       Specifies whether the axis labels of an axis are to be shown.
+
+       \param axisLabelsVisible if true the labels of this axis will be drawn.
+
+       \sa setAxisLabelsFont
+    */
+    void setAxisLabelsVisible( uint n,
+                               bool axisLabelsVisible )
+    {
+        if ( n < KDCHART_MAX_AXES )
+            _axisSettings[ n ].params.setAxisLabelsVisible( axisLabelsVisible );
+    }
+
+    /**
+       Specifies the axis labels font for one axis.
+
+       \note The font size will be ignored if \c axisLabelsFontSize is not zero,
+       in this case the font size will be calculated dynamically using
+       the value axisLabelsFontSize.
+
+       \param axisLabelsFont the font to be used for the axis' labels.
+       \param axisLabelsFontSize the (fixed or relative) axis font size.
+        If this value is less than zero the absolute value is per thousand
+        of the average value of the printable area height and width
+        to be used. This will make the axis look the same even if scaled
+        to very different size.
+       \param axisLabelsColor the axis labels colour.
+
+       \sa setAxisLabelsVisible
+    */
+    void setAxisLabelsFont( uint n,
+                            QFont axisLabelsFont,
+                            int axisLabelsFontSize,
+                            QColor axisLabelsColor )
+    {
+        if ( n < KDCHART_MAX_AXES ) {
+            bool extraSize = (0 != axisLabelsFontSize);
+            _axisSettings[ n ].params.setAxisLabelsFont( axisLabelsFont, !extraSize );
+            if ( extraSize )
+                _axisSettings[ n ].params.setAxisLabelsFontRelSize( axisLabelsFontSize );
+            _axisSettings[ n ].params.setAxisLabelsColor( axisLabelsColor );
+        }
     }
 
     /**
@@ -4248,13 +6001,13 @@ public:
     void setAxisLabelTextParams( uint n,
                                  bool axisSteadyValueCalc = true,
                                  KDChartData axisValueStart =
-                                     KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                                 KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
                                  KDChartData axisValueEnd =
-                                     KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                                 KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
                                  double axisValueDelta =
-                                     KDChartAxisParams::AXIS_LABELS_AUTO_DELTA,
+                                 KDChartAxisParams::AXIS_LABELS_AUTO_DELTA,
                                  int axisDigitsBehindComma =
-                                     KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS,
+                                 KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS,
                                  int axisMaxEmptyInnerSpan = 67,
                                  KDChartAxisParams::LabelsFromDataRow takeLabelsFromDataRow
                                  = KDChartAxisParams::LabelsFromDataRowNo,
@@ -4263,15 +6016,15 @@ public:
                                  QStringList* axisShortLabelsStringList = 0 )
     {
         _axisSettings[ n ].params.setAxisValues( axisSteadyValueCalc,
-                axisValueStart,
-                axisValueEnd,
-                axisValueDelta,
-                axisDigitsBehindComma,
-                axisMaxEmptyInnerSpan,
-                takeLabelsFromDataRow,
-                labelTextsDataRow,
-                axisLabelStringList,
-                axisShortLabelsStringList );
+                                                 axisValueStart,
+                                                 axisValueEnd,
+                                                 axisValueDelta,
+                                                 axisDigitsBehindComma,
+                                                 axisMaxEmptyInnerSpan,
+                                                 takeLabelsFromDataRow,
+                                                 labelTextsDataRow,
+                                                 axisLabelStringList,
+                                                 axisShortLabelsStringList );
         emit changed();
     }
 
@@ -4300,7 +6053,7 @@ public:
     const KDChartAxisParams& axisParams( uint n ) const
     {
         return n < KDCHART_MAX_AXES ? _axisSettings[ n ].params
-               : _axisSettings[ KDCHART_MAX_AXES ].params;
+            : _axisSettings[ KDCHART_MAX_AXES ].params;
     }
     /// END AXES
 
@@ -4436,7 +6189,7 @@ public:
 
 
         /// end of header sections
-        HdFtPosHeadersEND = 9,
+        HdFtPosHeadersEND = 8,
         /// start of footer sections
         HdFtPosFootersSTART = 9,
 
@@ -4515,10 +6268,77 @@ public:
     */
     QString headerFooterText( uint pos ) const
     {
-    if ( HdFtPosEND >= pos )
-        return _hdFtParams[ pos ]._text;
-    else
-        return QString::null;
+        if ( HdFtPosEND >= pos )
+            return _hdFtParams[ pos ]._text;
+        else
+            return QString::null;
+    }
+
+
+    /**
+       \note This methode for internal use.
+       Return the position and size of one header/footer area.
+       <b>Will return valid data only if called after KDChartPainter::setupGeometry()!</b>
+    */
+    const QRect& headerFooterRect( uint pos ) const
+    {
+        if ( HdFtPosEND >= pos )
+            return _hdFtParams[ pos ].rect();
+        else
+            return _noRect;
+    }
+
+
+    /**
+       Specifies the colour to be used for the header text (or footer text, resp.)
+       of the header/footer section specified by \c pos.
+       The default colour is <b>QColor( Qt::black )</b>.
+
+       \note To learn about the different header (or footer, resp.)
+       sections please see information given at \c HdFtPos enum explanation.
+
+       \param pos the section for which the colour is to be changed
+       \param color the text colour to be used
+       \sa HdFtPos, headerFooterText()
+       \sa setHeaderFooterFont,           headerFooterFont
+       \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+       \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+       \sa setHeader1Text(), header1Text()
+       \sa setHeader2Text(), header2Text()
+       \sa setFooterText(),  footerText()
+    */
+    void setHeaderFooterColor( uint pos, const QColor color )
+    {
+        if ( HdFtPosEND >= pos ) {
+            _hdFtParams[ pos ]._color = color;
+            emit changed();
+        }
+    }
+
+
+    /**
+       Returns the colour used for the header text (or footer text, resp.)
+       of the header/footer section specified by \c pos.
+
+       \note To learn about the different header (or footer, resp.)
+       sections please see information given at \c HdFtPos enum explanation.
+
+       \param pos the section for which to return the text colour
+       \return the text colour
+       \sa HdFtPos, setHeaderFooterText()
+       \sa setHeaderFooterFont,           headerFooterFont
+       \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+       \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+       \sa setHeader1Text(), header1Text()
+       \sa setHeader2Text(), header2Text()
+       \sa setFooterText(),  footerText()
+    */
+    QColor headerFooterColor( uint pos ) const
+    {
+        if ( HdFtPosEND >= pos )
+            return _hdFtParams[ pos ]._color;
+        else
+            return QColor( Qt::black );
     }
 
 
@@ -4608,7 +6428,7 @@ public:
     bool headerFooterFontUseRelSize( uint pos ) const
     {
         if ( HdFtPosEND >= pos )
-        return _hdFtParams[ pos ]._fontUseRelSize;
+            return _hdFtParams[ pos ]._fontUseRelSize;
         else
             return false;
     }
@@ -4638,7 +6458,7 @@ public:
     int headerFooterFontRelSize( uint pos ) const
     {
         if ( HdFtPosEND >= pos )
-        return _hdFtParams[ pos ]._fontRelSize;
+            return _hdFtParams[ pos ]._fontRelSize;
         else
             return 10;
     }
@@ -4996,6 +6816,17 @@ public:
         return _hdFtParams[ HdFtPosFooter ]._font;
     }
 
+
+    /**
+      \internal
+    */
+    void __internalStoreHdFtRect( HdFtPos pos, QRect rect ) // methode WILL BECOME OBSOLETE !!!
+    {
+        if ( HdFtPosEND >= pos )
+            _hdFtParams[ pos ].setRect( rect );
+    }
+
+
     /// END HEADERS/FOOTERS
 
 
@@ -5034,6 +6865,101 @@ public:
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
     friend QTextStream& operator>>( QTextStream& s, KDChartParams& p );
 
+    /**
+       Creates a DOM element node that represents a
+       chart value for use in a DOM document.
+
+       \param doc the DOM document to which the node will belong
+       \param parent the parent node to which the new node will be appended
+       \param elementName the name of the new node
+       \param data the chart value to be represented
+    */
+    static void createChartValueNode( QDomDocument& doc, QDomNode& parent,
+                                      const QString& elementName,
+                                      const KDChartData& data );
+    /**
+	   Creates a DOM element node that represents a color map
+	   for use in a DOM document.
+
+	   \param doc the DOM document to which the node will belong
+	   \param parent the parent node to which the new node will be appended
+	   \param elementName the name of the new node
+	   \param map the color map to be represented
+	*/
+    static void createColorMapNode( QDomDocument& doc, QDomNode& parent,
+                                    const QString& elementName,
+                                    const QMap< uint, QColor >& map );
+    /**
+	   Creates a DOM element node that represents a map of doubles
+	   for use in a DOM document.
+
+	   \param doc the DOM document to which the node will belong
+	   \param parent the parent node to which the new node will be appended
+	   \param elementName the name of the new node
+	   \param map the map of doubles to be represented
+	*/
+    static void createDoubleMapNode( QDomDocument& doc, QDomNode& parent,
+                                     const QString& elementName,
+                                     const QMap< int, double >& map );
+    /**
+	   Creates a DOM element node that represents a font used in a
+           chart for use in a DOM document.
+
+	   \param doc the DOM document to which the node will belong
+	   \param parent the parent node to which the new node will be appended
+	   \param elementName the name of the new node
+	   \param font the font to be resented
+           \param useRelFont the specification whether the font size
+           is relative
+           \param relFont the relative font size
+	*/
+    static void createChartFontNode( QDomDocument& doc, QDomNode& parent,
+                                     const QString& elementName,
+                                     const QFont& font, bool useRelFont,
+                                     int relFont );
+
+    /**
+           Reads data from a DOM element node that represents a color
+           map and fills a color map with the data.
+
+           \param element the DOM element to read from
+           \param map the color map to read the data into
+        */
+    static bool readColorMapNode( const QDomElement& element,
+                                  QMap<uint,QColor>* map );
+    /**
+           Reads data from a DOM element node that represents a double
+           map and fills a double map with the data.
+
+           \param element the DOM element to read from
+           \param map the frame settings object to read the data into
+        */
+    static bool readDoubleMapNode( const QDomElement& element,
+                                   QMap<int,double>* map );
+    /**
+           Reads data from a DOM element node that represents a font
+           uses in a chart and fills the reference parameters
+           with the data.
+
+           \param element the DOM element to read from
+           \param font the represented font
+           \param useRelFont whether the font size is relative
+           \param relFontSize the relative font size
+        */
+    static bool readChartFontNode( const QDomElement& element, QFont& font,
+                                   bool& useRelFont, int& relFontSize );
+
+    /**
+           Reads data from a DOM element node that represents a chart
+           value and fills a KDChartData object with the data.
+
+           \param element the DOM element to read from
+           \param value the chart data object to read the data into
+        */
+    static bool readChartValueNode( const QDomElement& element,
+                                    KDChartData& value );
+
+
 signals:
     /**
        This signal is emitted when any of the chart parameters has changed.
@@ -5042,33 +6968,96 @@ signals:
 
 private:
     /**
-       Specifies the chart type.
+       Recomputes the shadow colors by iterating over all configured
+       data colors and reassigning the data colors with exactly the
+       same values which in turn triggers computation of the shadow
+       colors. Expensive if many data colors are set, but performance
+       is OK for typical cases.
+    */
+    void recomputeShadowColors();
+
+    /**
+       Stores a flag to be used via
+            static QColor* const KDChartParams::DATA_VALUE_AUTO_COLOR
+       only.
+    */
+    static QColor _internalPointer_DataValueAutoColor;
+    /**
+       Stores the distance between the chart and the left border of the painter area.
+    */
+    int _globalLeadingLeft;
+    /**
+       Stores the distance between the chart and the upper border of the painter area.
+    */
+    int _globalLeadingTop;
+    /**
+       Stores the distance between the chart and the left border of the painter area.
+    */
+    int _globalLeadingRight;
+    /**
+       Stores the distance between the chart and the right border of the painter area.
+    */
+    int _globalLeadingBottom;
+
+    /**
+       Stores the chart type.
     */
     ChartType _chartType;
 
     /**
-       Specifies the additional chart type.
+       Stores the additional chart type.
     */
     ChartType _additionalChartType;
 
     /**
-       Specifies how many of the values should be shown. -1 means all
+       Stores how many of the values should be shown. -1 means all
        available values.
     */
     int _numValues;
 
+    /**
+       Stores our default font used for many different purposes.
+    */
+    QFont _defaultFont;
+
+    typedef QMap < uint, KDChartFrameSettings > AreaMap;
+    /**
+       Stores the frame settings for all of the chart areas.
+    */
+    AreaMap _areaMap;
+
+    /**
+       Stores the settings for all of the custom boxes.
+    */
+    CustomBoxMap _customBoxMap;
+
+
+    /**
+       Stores an empty rectangle.
+    */
+    QRect _noRect;
+
+    /**
+       Stores the default frame settings: no border, no corners, no background.
+    */
+    KDFrame _noFrame;
+
+    /**
+       Stores the default area settings: no frame, no inner gap, no outer gap.
+    */
+    KDChartFrameSettings _noFrameSettings;
 
     /**
        Stores the SourceMode and the chart(s) for one dataset.
     */
     class ModeAndChart
     {
-public:
-ModeAndChart() : _mode( UnknownMode ),
-        _chart( KDCHART_NO_CHART )
+    public:
+        ModeAndChart()
+            : _mode( UnknownMode ), _chart( KDCHART_NO_CHART )
         {}
         ModeAndChart( SourceMode mode, uint chart )
-: _mode( mode ), _chart( chart )
+            : _mode( mode ), _chart( chart )
         {}
 
         SourceMode mode() const
@@ -5088,7 +7077,7 @@ ModeAndChart() : _mode( UnknownMode ),
         {
             _chart = chart;
         };
-private:
+    private:
         SourceMode _mode;
         uint _chart;
     };
@@ -5120,9 +7109,16 @@ private:
     /**
        Stores a factor to be used to adjust the
        built-in brightness of shadow colors in
-       3-dimensional drawings like e.g. 3D Bar charts.
+       3-dimensional drawings like e.g. 3D bar charts.
     */
     double _shadowBrightnessFactor;
+
+
+    /**
+       Stores a fill style to be used for filling shadow area in
+       3-dimensional drawings like e.g. 3D bar charts.
+    */
+    Qt::BrushStyle _shadowPattern;
 
     /**
        Specifies whether shadowed colors are used for 3D effects. Only used
@@ -5165,6 +7161,46 @@ private:
        Stores the line style to be used for outlines of data displays.
     */
     PenStyle _outlineDataLineStyle;
+
+
+    /**
+       The following struct stores if and how a chart will print the data values
+       near their respective entries.
+    */
+    struct PrintDataValuesSettings {
+        bool _printDataValues;
+        int _divPow10;
+        int _digitsBehindComma;
+        QFont _dataValuesFont;
+        bool _dataValuesUseFontRelSize;
+        int _dataValuesFontRelSize;
+        QColor _dataValuesColor;
+        bool _dataValuesAutoColor;
+        KDChartEnums::PositionFlag _dataValuesAnchorNegativePosition;
+        uint _dataValuesAnchorNegativeAlign;
+        int _dataValuesAnchorNegativeDeltaX;
+        int _dataValuesAnchorNegativeDeltaY;
+        int _dataValuesNegativeRotation;
+        KDChartEnums::PositionFlag _dataValuesAnchorPositivePosition;
+        uint _dataValuesAnchorPositiveAlign;
+        int _dataValuesAnchorPositiveDeltaX;
+        int _dataValuesAnchorPositiveDeltaY;
+        int _dataValuesPositiveRotation;
+        KDChartEnums::TextLayoutPolicy _dataValuesLayoutPolicy;
+
+        bool _useDefaultFontParams;  // internal flag, do NOT store it!
+    };
+    /**
+       Stores if and how the FIRST chart will print the data values
+       near their respective entries.
+    */
+    PrintDataValuesSettings _printDataValuesSettings;
+    /**
+       Stores if and how the SECOND chart will print the data values
+       near their respective entries, in case two charts are to be
+       drawn sharing the same data area.
+    */
+    PrintDataValuesSettings _printDataValuesSettings2;
 
 
     /**
@@ -5229,12 +7265,36 @@ private:
     LineChartSubType _lineChartSubType;
 
     /**
+       Stores whether 3D lines should be drawn.
+    */
+    bool _threeDLines;
+
+
+  /**
+     Stores the depth of 3D lines.
+  */
+  int _threeDLineDepth;
+
+
+  /**
+     Stores the X rotation of 3D lines.
+  */
+  int _threeDLineXRotation;
+
+
+  /**
+     Stores the Y rotation of 3D lines.
+  */
+  int _threeDLineYRotation;
+
+
+    /**
        Specifies whether line markers should be drawn. Only used when
        chartType() == Line.
     */
     bool _lineMarker;
 
-    QMap < uint, LineMarkerStyle > _lineMarkerStyles;
+    LineMarkerStyleMap _lineMarkerStyles;
 
     /**
        Stores the highest dataset number for which a line marker has been
@@ -5255,7 +7315,6 @@ private:
     */
     uint _lineWidth;
 
-
     /**
        Specifies the area chart subtype. Only used when chartType() ==
        Area
@@ -5270,6 +7329,67 @@ private:
     AreaLocation _areaLocation;
 
 
+    /// POLAR-specific
+    /**
+       Specifies the polar chart subtype. Only used when chartType() ==
+       Polar
+    */
+    PolarChartSubType _polarChartSubType;
+
+    /**
+       Specifies whether polar markers should be drawn. Only used when
+       chartType() == Polar.
+    */
+    bool _polarMarker;
+
+    PolarMarkerStyleMap _polarMarkerStyles;
+
+    /**
+       Stores the highest dataset number for which a polar marker has been
+       defined. Note that if you define a value for a dataset but not for a
+       dataset with a lower number (and there is neither a default value), the
+       polar marker for that dataset with the lower number will be undefined.
+    */
+    uint _maxDatasetPolarMarkerStyle;
+
+    /**
+       Stores the size of the polar markers.
+    */
+    QSize _polarMarkerSize;
+
+
+    /**
+       Stores the line width of lines in polar charts.
+    */
+    int _polarLineWidth;
+
+
+    /**
+        Stores the zero degree position in polar charts.
+    */
+    int _polarZeroDegreePos;
+
+
+    /**
+        Stores whether to rotate circular labels in polar charts.
+    */
+    bool _polarRotateCircularLabels;
+
+    /**
+        Stores whether to show circular delimiters and/or labels
+        at a given position in polar charts.
+    */
+    struct _polarDelimsAndLabelStruct {
+        bool showDelimiters;
+        bool showLabels;
+    };
+
+    /**
+        Stores where to show circular delimiters and labels in polar charts.
+    */
+    _polarDelimsAndLabelStruct _polarDelimsAndLabels[ 1 + MAX_POLAR_DELIMS_AND_LABELS_POS ];
+
+
 
     // PIES/RINGS
     /**
@@ -5278,18 +7398,18 @@ private:
     bool _explode;
 
     /**
-    Stores the default explode factor of pie or ring segments.
+       Stores the default explode factor of pie or ring segments.
     */
     double _explodeFactor;
 
     /**
-    Stores the list of segment-specific explode factors of pie or
-    ring segments.
+       Stores the list of segment-specific explode factors of pie or
+       ring segments.
     */
     QMap<int,double> _explodeFactors;
 
     /**
-    Stores the list of pies or ring segments to explode.
+       Stores the list of pies or ring segments to explode.
     */
     QValueList<int> _explodeList;
 
@@ -5475,9 +7595,13 @@ private:
     */
     bool _ganttChartPrintStartValues;
     /**
-       Stores where to print the Start Time values and how to align them.
+       Stores where to print the Start Time values.
     */
-    GanttChartTextAlign _ganttChartStartValuesAlign;
+    KDChartEnums::PositionFlag _ganttChartStartValuesPos;
+    /**
+       Stores how to align the Start Time values (a combination of \c Qt::AlignmentFlags).
+    */
+    uint _ganttChartStartValuesAlign;
     /**
        Stores the datetime format to be used for printing the
        Start Time values.
@@ -5511,9 +7635,13 @@ private:
     */
     bool _ganttChartPrintEndValues;
     /**
-       Stores where to print the End Time values and how to align them.
+       Stores where to print the End Time values.
     */
-    GanttChartTextAlign _ganttChartEndValuesAlign;
+    KDChartEnums::PositionFlag _ganttChartEndValuesPos;
+    /**
+       Stores how to align the End Time values (a combination of \c Qt::AlignmentFlags).
+    */
+    uint _ganttChartEndValuesAlign;
     /**
        Stores the datetime format to be used for printing the
        End Time values.
@@ -5547,9 +7675,13 @@ private:
     */
     bool _ganttChartPrintDurations;
     /**
-       Stores where to print the Durations and how to align them.
+       Stores where to print the Durations.
     */
-    GanttChartTextAlign _ganttChartDurationsAlign;
+    KDChartEnums::PositionFlag _ganttChartDurationsPos;
+    /**
+       Stores how to align the Durations (a combination of \c Qt::AlignmentFlags).
+    */
+    uint _ganttChartDurationsAlign;
     /**
        Stores the datetime format to be used for printing the
        Durations.
@@ -5701,16 +7833,28 @@ private:
     struct HdFtParams
     {
         QString _text;
+        QColor _color;
         QFont _font;
         bool _fontUseRelSize;
         int _fontRelSize;
         HdFtParams()
         {
-            _font = QFont( "helvetica", 10,
-                           QFont::Normal, false );
+            _color = QColor( Qt::black );
+            _font = QFont( "helvetica", 10, QFont::Normal, false );
             _fontUseRelSize = true;
             _fontRelSize = 8; // per default quite small
         }
+        void setRect( QRect rect )
+        {
+            _rect = rect;
+        }
+        const QRect& rect() const
+        {
+            return _rect;
+        }
+    private:
+        // temporary data that are NOT to be stored within sessions:
+        QRect _rect;
     };
 
     HdFtParams _hdFtParams[ HdFtPosEND + 1 ];

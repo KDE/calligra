@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #ifndef __KDCHARTDATAREGION__
@@ -27,22 +12,47 @@
 
 #include <qregion.h>
 #include <qptrlist.h>
+#include <qpointarray.h>
+
+#include "KDChartGlobal.h"
 
 /*!
   \internal
 */
 struct KDChartDataRegion
 {
-    KDChartDataRegion( QRegion reg, uint r, uint c )
+    KDChartDataRegion( QRegion reg, uint r, uint c, uint ch )
     {
         region = reg;
-        row = r;
-        col = c;
+        row    = r;
+        col    = c;
+        chart  = ch;
+        negative = false; // default value (useful if value is a string)
+        points.resize( 9 );
+        startAngle = 1440;
+        angleLen   =    1;
     }
 
     QRegion region;
+
+    // For rectangular data representation  (bar, line, area, point, ...)
+    // we use the bounding rect of the above declared 'region'.
+    // For curved data representations (pie slice, ring segment, ...)
+    // we store the following additional anchor information:
+
+    QPointArray points;  // stores 9 elements: one for each
+                         // value of KDChartEnums::PositionFlag
+
+    int startAngle; // Note: 5760 makes a full circle, 2880 is left 'corner'.
+    int angleLen;
+
     uint row;
     uint col;
+    // members needed for calculation of data values texts
+    uint chart;
+    QRegion textRegion;  // for the data values text
+    QString text;        // the data values text
+    bool    negative;    // stores whether the data value is less than zero
 };
 
 

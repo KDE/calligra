@@ -5,21 +5,6 @@
   KDChart - a multi-platform charting engine
 
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this library; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
 */
 
 #include <KDChart.h>
@@ -38,6 +23,7 @@
    static method.
 */
 
+KDChartParams* KDChart::oldParams = 0;
 KDChartPainter* KDChart::cpainter = 0;
 KDChartPainter* KDChart::cpainter2 = 0;
 KDChartParams::ChartType KDChart::cpainterType = KDChartParams::NoType;
@@ -52,7 +38,9 @@ KDChartParams::ChartType KDChart::cpainterType2 = KDChartParams::NoType;
    \param data the data that should be displayed as a chart
    \param regions if not null, this points to a
    KDChartDataRegionList that will be filled with the regions
-   of the data segments.
+   of the data segments. This information is needed internally for both
+   recognizing the data segment when reporting mouse clicks and
+   for finding the correct position to draw the respective data value texts.
    \throw KDChartUnknownTypeException if there is no registered
    KDChartPainter subclass for the type specified in \a params. This
    can only happen with user-defined chart types.
@@ -65,11 +53,16 @@ void KDChart::paint( QPainter* painter, KDChartParams* params,
 throw( KDChartUnknownTypeException )
 #endif
 {
-    qDebug( "KDChart::paint()" );
+    // Check whether last call of this methode gave us the same params pointer.
+    // If params changed we must create new painter(s).
+    bool paramsHasChanged = ( params != oldParams );
+    if( paramsHasChanged )
+        oldParams = params;
+
     // Check whether there already is painter and, if that is the
     // case, whether the painter still has the correct type (the chart
     // type might have changed in the meantime).
-    if ( !cpainter || cpainterType != params->chartType() )
+    if ( paramsHasChanged || !cpainter || cpainterType != params->chartType() )
         {
             delete cpainter; /* save, since always 0 if there was not yet
                                 a chart painter */
@@ -81,7 +74,7 @@ throw( KDChartUnknownTypeException )
     // Check whether there already is a 2nd painter and, if that is the
     // case, whether the painter still has the correct type (the
     // additional chart type might have changed in the meantime).
-    if ( !cpainter2 || cpainterType2 != params->additionalChartType() )
+    if ( paramsHasChanged || !cpainter2 || cpainterType2 != params->additionalChartType() )
         {
             delete cpainter2; /* save, since always 0 if there was not yet
                                 a chart painter */
@@ -106,12 +99,16 @@ throw( KDChartUnknownTypeException )
     //       since all axes computations are only done when
     //       the first chart is painted but will be needed for both of course.
     //
-    qDebug( "Before calling painters" );
-    if ( cpainter )   // can be 0 if no exceptions are used
-        cpainter->paint( painter, data, false, regions, rect );
-    if ( cpainter2 )  // can be 0 if no exceptions are used
-        cpainter2->paint( painter, data, true, regions, rect );
-    qDebug( "After calling painters" );
+    bool paintFirst = true;
+    bool paintLast  = ! ( cpainter && cpainter2 );
+    if ( cpainter ) {  // can be 0 if no exceptions are used
+        cpainter->paint( painter, data, paintFirst, paintLast, regions, rect );
+
+        paintFirst = false;
+    }
+    paintLast = true;
+    if ( cpainter2 )   // can be 0 if no exceptions are used
+        cpainter2->paint( painter, data, paintFirst, paintLast, regions, rect );
 }
 
 
@@ -125,6 +122,7 @@ public:
     ~KDChartCleanup()
 {
     delete KDChart::cpainter;
+    KDChart::oldParams = 0;
 }
 };
 
