@@ -174,9 +174,9 @@ static void ProcessColorAttrTag ( QDomNode myNode, void *tagData, KWEFKWordLeade
     int red, green, blue;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "red",   "int", (void *) &red   );
-    attrProcessingList << AttrProcessing ( "green", "int", (void *) &green );
-    attrProcessingList << AttrProcessing ( "blue",  "int", (void *) &blue  );
+    attrProcessingList << AttrProcessing ( "red",   red   );
+    attrProcessingList << AttrProcessing ( "green", green );
+    attrProcessingList << AttrProcessing ( "blue",  blue  );
     ProcessAttributes (myNode, attrProcessingList);
 
     attrValue->setRgb (red, green, blue);
