@@ -820,6 +820,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                 gradient.setAttribute( "color2", draw->attribute( "draw:end-color" ) );
 
                 QString type = draw->attribute( "draw:style" );
+                kdDebug()<<" type !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<type<<endl;
                 if ( type == "linear" )
                 {
                     int angle = draw->attribute( "draw:angle" ).toInt() / 10;
@@ -841,7 +842,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                             break;
                         }
                     }
-
+                    kdDebug()<<"nearAngle :"<<nearAngle<<endl;
                     // nearAngle should now be one of: 0, 45, 90, 135, 180...
                     if ( nearAngle == 0 || nearAngle == 180 )
                         gradient.setAttribute( "type", 1 ); // horizontal
@@ -1150,6 +1151,16 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
             shadow.setAttribute( "color", m_styleStack.attribute( "draw:shadow-color" ) );
 
         e.appendChild( shadow );
+    }
+    if ( m_styleStack.hasAttribute( "draw:size-protect" ) || m_styleStack.hasAttribute("draw:move-protect" ) )
+    {
+        bool b = ( m_styleStack.attribute("draw:size-protect" ) == "true" ) || ( m_styleStack.attribute("draw:move-protect" ) == "true" );
+        if ( b )
+        {
+            QDomElement protect  = doc.createElement( "PROTECT" );
+            protect.setAttribute("state" , b);
+            e.appendChild(protect);
+        }
     }
 }
 
