@@ -23,17 +23,16 @@
 
 #include <qcolor.h>
 
+enum colorModel { INDEXED, RGB, HSV, LAB, CMYK };
+
 class KColor
 {
  public:
-  enum colorModel { RGB, HSV, LAB, CMYK };
 
   KColor();
-  ~KColor();
   KColor(int a, int b, int c,  colorModel m = RGB);
   KColor(int c, int m, int y,  int k);
   KColor(const QColor&);
-  KColor &operator=( const KColor & );
 
   void setRGB (int R, int G, int B);
   void setHSV (int H, int S, int V);
@@ -41,25 +40,27 @@ class KColor
   void setCMYK (int C, int M, int Y, int K);
   void setColor(const QColor&);
 
-  void rgb (int *R, int *G, int *B);
-  void hsv (int *H, int *S, int *V);
-  void lab (int *L, int *a, int *b);
-  void cmyk (int *C, int *M, int *Y, int *K);
-  QColor color();
+  void rgb (int *R, int *G, int *B) const;
+  void hsv (int *H, int *S, int *V) const;
+  void lab (int *L, int *a, int *b) const;
+  void cmyk (int *C, int *M, int *Y, int *K) const;
+  QColor color() const;
 
-  int R();
-  int G();
-  int B();
-  int h();
-  int s();
-  int v();
-  int l();
-  int a();
-  int b();
-  int c();
-  int m();
-  int y();
-  int k();
+  colorModel native() const { return m_native; }
+
+  int R() const;
+  int G() const;
+  int B() const;
+  int h() const;
+  int s() const;
+  int v() const;
+  int l() const;
+  int a() const;
+  int b() const;
+  int c() const;
+  int m() const;
+  int y() const;
+  int k() const;
   
   static void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
   static void RGBtoLAB(int R, int G, int B, int *L, int *a, int *b);
@@ -96,18 +97,32 @@ class KColor
   static const KColor darkYellow();
 
  protected:
-  void calcRGB();
-  void calcHSV();
-  void calcLAB();
-  void calcCMYK();
+  void calcRGB() const;
+  void calcHSV() const;
+  void calcCMYK() const;
+  void calcLAB() const;
+
+  void rgbChanged() const;
+  void hsvChanged() const;
+  void cmykChanged() const;
+  void labChanged() const;
 
  private:
-  int m_R, m_G, m_B;      // RGB
-  int m_C, m_M, m_Y, m_K; // CMYK
-  int m_H, m_S, m_V;      // HSV
-  int m_L, m_a, m_b;      // LAB
+  /*
+   * Mutable to make it possible for const objects to transform the native cModel
+   * in functions like KColor::rgb(...) to the requested.
+   */
+  mutable int m_R, m_G, m_B;      // RGB
+  mutable int m_C, m_M, m_Y, m_K; // CMYK
+  mutable int m_H, m_S, m_V;      // HSV
+  mutable int m_L, m_a, m_b;      // LAB
 
-  colorModel m_nativeModel;
+  mutable bool m_RGBvalid;
+  mutable bool m_HSVvalid;
+  mutable bool m_CMYKvalid;
+  mutable bool m_LABvalid;
+
+  colorModel m_native; 
 };
 
 inline const KColor KColor::white()
