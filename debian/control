@@ -11,7 +11,7 @@ Depends: ${shlibs:Depends}
 Description: KDE Office Suite
  KDE Office Suite
 
-Package: koffice-dev-cvs
+Package: koffice-cvs-dev
 Architecture: any
 Section: devel
 Depends: koffice-cvs (= ${Source-Version}), kdelibs3-cvs-dev

@@ -46,7 +46,7 @@ binary-arch: build
 	dh_clean -k
 	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp
 	perl -w admin/debianrules
-	dh_movefiles -pkoffice-dev-cvs usr/lib/*.a usr/lib/*.so usr/lib/*.la usr/include
+	dh_movefiles -pkoffice-cvs-dev usr/lib/*.a usr/lib/*.so usr/lib/*.la usr/include
 	dh_undocumented
 	dh_installdocs
 	dh_installmenu
