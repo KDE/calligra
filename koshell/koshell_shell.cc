@@ -57,6 +57,8 @@ KoShellWindow::KoShellWindow()
   opToolBar(1)->setBarPos(KToolBar::Left);
 
   m_pKfmFrame = m_pFrame;
+
+  this->resize(550, 400);
 }
 
 KoShellWindow::~KoShellWindow()
