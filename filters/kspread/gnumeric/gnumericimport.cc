@@ -188,11 +188,72 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
   color->setRgb(red, green, blue);
 }
 
+void areaNames( KSpreadDoc * ksdoc, const QString &_name, QString _zone )
+{
+//Sheet2!$A$2:$D$8
+    QString tableName;
+    int pos = _zone.find( '!' );
+    if ( pos != -1 )
+    {
+        tableName = _zone.left( pos );
+        _zone = _zone.right( _zone.length()-pos-1 );
+         pos = _zone.find( ':' );
+        QRect rect;
+        if ( pos != -1 )
+        {
+            QString left = _zone.mid( 1, pos-1 );
+            QString right = _zone.mid( pos+2, _zone.length()-pos-2 );
+            int pos = left.find( '$' );
+
+            rect.setLeft( util_decodeColumnLabelText(left.left(pos ) ) );
+            rect.setTop( left.right( left.length()-pos-1 ).toInt() );
+
+            pos = right.find( '$' );
+            rect.setRight( util_decodeColumnLabelText(right.left(pos ) ) );
+            rect.setBottom( right.right( right.length()-pos-1 ).toInt() );
+       }
+        else
+        {
+            QString left = _zone;
+            int pos = left.find( '$' );
+            int leftPos = util_decodeColumnLabelText(left.left(pos ) );
+            rect.setLeft( leftPos );
+            rect.setRight( leftPos );
+
+            int top = left.right( left.length()-pos-1 ).toInt();
+            rect.setTop( top );
+            rect.setBottom( top );
+        }
+        ksdoc->addAreaName( rect, _name ,tableName);
+    }
+}
+
+
+void set_document_area_names( KSpreadDoc * ksdoc, QDomElement * docElem )
+{
+    QDomNode areaNamesElement = docElem->namedItem( "gmr:Names" );
+    if ( areaNamesElement.isNull() )
+        return;
+    QDomNode areaNameItem = areaNamesElement.namedItem( "gmr:Name" );
+    while ( !areaNameItem.isNull() )
+    {
+        QDomNode gmr_name  = areaNameItem.namedItem("gmr:name");
+        QDomNode gmr_value = areaNameItem.namedItem("gmr:value");
+        QString name = gmr_name.toElement().text();
+        areaNames( ksdoc, name, gmr_value.toElement().text() );
+        areaNameItem = areaNameItem.nextSibling();
+    }
+}
+
+
 
 void set_document_attributes( KSpreadDoc * ksdoc, QDomElement * docElem)
 {
     ksdoc->loadConfigFromFile();
     QDomNode attributes  = docElem->namedItem("gmr:Attributes");
+    if ( attributes.isNull() )
+        return;
+
     QDomNode attributeItem = attributes.namedItem("gmr:Attribute");
     while( !attributeItem.isNull() )
     {
@@ -1436,6 +1497,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
     /* This sets the Document attributes */
     set_document_attributes( ksdoc, &docElem );
+
+    /* This sets the Area Names */
+    set_document_area_names( ksdoc, &docElem );
+
     KSpreadSheet * table;
 
     // This is a mapping of exprID to expressions.
