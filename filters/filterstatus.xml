@@ -103,7 +103,7 @@
     </status>
     <status id="onestar" symbol="*">
         <title xml:lang="en_us">One Star</title>
-        <description xml:lang="en_us">Work has begun on the filter although the code is still at an early stage of development, and may not work properly.</description>
+        <description xml:lang="en_us">Work has begun on the filter although the code is still at an early stage of development, and does not work properly.</description>
     </status>
     <status id="planned" symbol="+">
         <title xml:lang="en_us">Planned</title>
