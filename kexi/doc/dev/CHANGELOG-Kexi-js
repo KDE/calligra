@@ -443,6 +443,7 @@ Startup TODO:
 Migration (Import Project Wizard) TODO:
 - change drivers comboboxes to KexiDBDriverList
   (impl. this one with drv name and description columns)
+- use KexiDB::MessageTitle and KexiDB::MessageHandler for displaying errors
 
 2005-03-03
 - doc/dev/compile_time_options.txt document added
