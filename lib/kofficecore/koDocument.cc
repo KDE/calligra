@@ -160,12 +160,17 @@ KoDocument::~KoDocument()
   }
 
   kdDebug(30003) << "KoDocument::~KoDocument() shells:" << d->m_shells.count() << endl;
+  
+  QListIterator<KoMainWindow> shellIt( d->m_shells );
+  for (; shellIt.current(); ++shellIt )
+    shellIt.current()->setRootDocumentDirect( 0L );
+  
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
   // just to avoid mem leaks
-  while(! d->m_views.isEmpty())
-    d->m_views.remove();
+  //  while(! d->m_views.isEmpty())
+  //    d->m_views.remove();
 
   delete d;
   m_documentList->removeRef(this);

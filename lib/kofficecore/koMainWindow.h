@@ -44,7 +44,7 @@ namespace KParts
 class KoMainWindow : public KParts::MainWindow
 {
     Q_OBJECT
-
+    friend class KoDocument;
 public:
 
     /**
