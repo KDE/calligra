@@ -1194,10 +1194,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 #endif
 
-    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
-    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
-    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(R)", "®" ) );
-    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(r)", "®" ) );
+    // TODO load/save
+    m_autoFormat->addAutoFormatEntry( "(C)", KWAutoFormatEntry( "©" ) );
+    m_autoFormat->addAutoFormatEntry( "(c)", KWAutoFormatEntry( "©" ) );
+    m_autoFormat->addAutoFormatEntry( "(R)", KWAutoFormatEntry( "®" ) );
+    m_autoFormat->addAutoFormatEntry( "(r)", KWAutoFormatEntry( "®" ) );
 
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {

@@ -129,6 +129,9 @@ public:
                  bool checkNewLine, bool removeSelected, const QString & commandName,
                  CustomItemsMap customItemsMap = CustomItemsMap() );
     void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard, const QString & cmdName = QString::null );
+    void replaceSelection( QTextCursor * cursor, const QString & replacement,
+                           int selectionId, const QString & cmdName );
+
     void undo();
     void redo();
     void clearUndoRedoInfo();
@@ -202,6 +205,9 @@ public:
     // The frame that we are currently drawing in drawFrame. Stored here since we can't pass it
     // through QRT's drawing methods. Used by e.g. KWPgNumVariable.
     //KWFrame * currentDrawnFrame() const { return m_currentDrawnFrame; }
+
+    void emitHideCursor() { emit hideCursor(); }
+    void emitShowCursor() { emit showCursor(); }
 
 public slots:
     void formatMore();

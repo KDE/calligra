@@ -1751,7 +1751,7 @@ void KWView::extraSpelling()
 
 void KWView::extraAutoFormat()
 {
-    KWAutoFormatDia dia( this, 0, doc );
+    KWAutoFormatDia dia( this, 0, doc->getAutoFormat() );
     dia.show();
 }
 
@@ -2707,17 +2707,8 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     QTextCursor cursor( fs->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
-    // Remember formatting
-    QTextFormat * format = p->at( pos )->format();
-    format->addRef();
-    // Remove the match
-    fs->removeSelectedText( &cursor, KWTextFrameSet::HighlightSelection );
-    // Insert the replacement
-    // TODO a macro command somehow
-    fs->insert( &cursor, static_cast<KWTextFormat *>(format),
-                corr, true, false,
-                i18n("Insert Replacement") );
-    format->removeRef();
+    fs->replaceSelection( &cursor, corr, KWTextFrameSet::HighlightSelection,
+                          i18n("Correct misspelled word") );
 }
 
 void KWView::spellCheckerDone( const QString & )

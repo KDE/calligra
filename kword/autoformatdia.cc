@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwdoc.h"
 #include "autoformatdia.h"
 #include "autoformatdia.moc"
 #include "autoformat.h"
@@ -44,13 +43,13 @@
 /* Class: KWAutoFormatDia                                         */
 /******************************************************************/
 
-KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc )
+KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWAutoFormat * autoFormat )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
-      doc( _doc ),
-      oBegin( doc->getAutoFormat()->getConfigTypographicQuotes().begin ),
-      oEnd( doc->getAutoFormat()->getConfigTypographicQuotes().end ),
+      oBegin( autoFormat->getConfigTypographicQuotes().begin ),
+      oEnd( autoFormat->getConfigTypographicQuotes().end ),
       quotesChanged( false ),
-      m_autoFormat(*doc->getAutoFormat())
+      m_autoFormat( *autoFormat ),
+      m_docAutoFormat( autoFormat )
 {
     setupTab1();
     setupTab2();
@@ -116,17 +115,17 @@ void KWAutoFormatDia::setupTab2()
     m_pListView = new KListView( tab2 );
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
-    m_pListView->setRenameable( 0, true );
+    m_pListView->setAllColumnsShowFocus( true );
+    /*m_pListView->setRenameable( 0, true );
     m_pListView->setRenameable( 1, true );
     m_pListView->setItemsRenameable( true );
-    m_pListView->setAllColumnsShowFocus( true );
-
     connect( m_pListView, SIGNAL(itemRenamed(QListViewItem *, const QString &, int)),
              SLOT(slotItemRenamed(QListViewItem *, const QString &, int)) );
+    */
 
     QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( m_pListView, it.key(), it.data().getReplace() );
+        ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
 
     QVBox *buttons = new QVBox( tab2 );
     buttons->setSpacing( 5 );
@@ -147,28 +146,28 @@ void KWAutoFormatDia::slotRemoveEntry()
 {
     if(m_pListView->currentItem()!=0)
     {
-        doc->getAutoFormat()->removeAutoFormatEntry(m_pListView->currentItem()->text(0));
+        m_autoFormat.removeAutoFormatEntry(m_pListView->currentItem()->text(0));
         refreshEntryList();
     }
 }
 
 void KWAutoFormatDia::refreshEntryList()
 {
-    QMap< QString, KWAutoFormatEntry >::Iterator it =  doc->getAutoFormat()->firstAutoFormatEntry();
+    QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
     m_pListView->clear();
-    for ( ; it != doc->getAutoFormat()->lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( m_pListView, it.key(), it.data().getReplace() );
+    for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
+        ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
 }
 
-void KWAutoFormatDia::addEntryList(KWAutoFormatEntry &_autoEntry)
+void KWAutoFormatDia::addEntryList(const QString &key, KWAutoFormatEntry &_autoEntry)
 {
-    doc->getAutoFormat()->addAutoFormatEntry( _autoEntry );
+    m_autoFormat.addAutoFormatEntry( key, _autoEntry );
 }
 
-void KWAutoFormatDia::editEntryList(KWAutoFormatEntry &_autoEntry,const QString &_str)
+void KWAutoFormatDia::editEntryList(const QString &key, KWAutoFormatEntry &_autoEntry)
 {
-    doc->getAutoFormat()->removeAutoFormatEntry(_str);
-    doc->getAutoFormat()->addAutoFormatEntry( _autoEntry );
+    m_autoFormat.removeAutoFormatEntry( key );
+    m_autoFormat.addAutoFormatEntry( key, _autoEntry );
 }
 
 void KWAutoFormatDia::slotAddEntry()
@@ -182,9 +181,10 @@ void KWAutoFormatDia::slotAddEntry()
     }
 }
 
-void KWAutoFormatDia::slotItemRenamed(QListViewItem * item, const QString & newText, int column)
+void KWAutoFormatDia::slotItemRenamed(QListViewItem *, const QString & , int )
 {
-
+    // Wow. This need a redesign (we don't have the old key anymore at this point !)
+    // -> inherit QListViewItem and store the KWAutoFormatEntry pointer in it.
 }
 
 void KWAutoFormatDia::slotEditEntry()
@@ -201,29 +201,18 @@ void KWAutoFormatDia::slotEditEntry()
 }
 bool KWAutoFormatDia::applyConfig()
 {
-    // iiiiiiiiigit - that's a hack!
-    if ( quotesChanged )
-    {
-        KWAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
-        tq.replace = false;
-        m_autoFormat.configTypographicQuotes( tq );
-        //m_autoFormat.setEnabled( true );
-        //        doc->recalcWholeText();  // doesn't exist anymore. What should happen here ?
-        //m_autoFormat.setEnabled( false );
-    }
-
+    // First tab
     KWAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
     tq.replace = cbTypographicQuotes->isChecked();
     tq.begin = pbQuote1->text()[ 0 ];
     tq.end = pbQuote2->text()[ 0 ];
-    doc->getAutoFormat()->configTypographicQuotes( tq );
+    m_docAutoFormat->configTypographicQuotes( tq );
 
-    doc->getAutoFormat()->configUpperCase( cbUpperCase->isChecked() );
-    doc->getAutoFormat()->configUpperUpper( cbUpperUpper->isChecked() );
+    m_docAutoFormat->configUpperCase( cbUpperCase->isChecked() );
+    m_docAutoFormat->configUpperUpper( cbUpperUpper->isChecked() );
 
-    doc->getAutoFormat()->setEnabled( true );
-    doc->repaintAllViews();
-    doc->getAutoFormat()->setEnabled( false );
+    // Second tab
+    m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
 
     return true;
 }
@@ -332,11 +321,11 @@ void KWAutoFormatEditDia::slotOk()
        KMessageBox::sorry( 0L, i18n( "An area is empty" ) );
        return;
     }
-    KWAutoFormatEntry tmp=KWAutoFormatEntry(lineEditFind->text(), lineEditReplace->text() );
+    KWAutoFormatEntry tmp = KWAutoFormatEntry( lineEditReplace->text() );
     if(!replaceEntry)
-        parentWidget->addEntryList(tmp);
+        parentWidget->addEntryList(lineEditFind->text(), tmp);
     else
-        parentWidget->editEntryList(tmp,replaceEntryString);
+        parentWidget->editEntryList(replaceEntryString, tmp);
     accept();
 }
 

@@ -23,8 +23,6 @@
 #include <kdialogbase.h>
 #include "autoformat.h"
 
-class KWDocument;
-class KWPage;
 class QPushButton;
 class QCheckBox;
 class QVBox;
@@ -42,9 +40,9 @@ class KWAutoFormatDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc );
-    void addEntryList(KWAutoFormatEntry &_autoEntry);
-    void editEntryList(KWAutoFormatEntry &_autoEntry,const QString &_str);
+    KWAutoFormatDia( QWidget *parent, const char *name, KWAutoFormat * autoFormat );
+    void addEntryList(const QString &key, KWAutoFormatEntry &_autoEntry);
+    void editEntryList(const QString &key, KWAutoFormatEntry &_autoEntry);
 protected:
     bool applyConfig();
     void setupTab1();
@@ -58,11 +56,11 @@ protected:
     KCharSelect *charselect;
     KListView * m_pListView;
 
-    KWDocument *doc;
     QChar oBegin, oEnd;
     bool quotesChanged;
 
-    KWAutoFormat m_autoFormat;
+    KWAutoFormat m_autoFormat; // The copy we're working on
+    KWAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
 protected slots:
     virtual void slotOk();
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);

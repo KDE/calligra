@@ -25,86 +25,58 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-
 class KWDocument;
-//class KWFormatContext;
-//class KWParag;
 class KWTextParag;
-class KWString;
-struct KWChar;
 namespace Qt3 {
-class QTextFormat;
-};
+    class QTextCursor;
+}
 using namespace Qt3;
+class KWTextFrameSetEdit;
+
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
 /******************************************************************/
-
 class KWAutoFormatEntry
 {
 public:
-    KWAutoFormatEntry(const QString& find = QString::null, 
-                      const QString& replace = QString::null);
+    // The text to find is actually the key in KWAutoFormat's map.
+    // What we replace it with is replace().
+    KWAutoFormatEntry(const QString& replace = QString::null)
+        : m_replace( replace ) {}
 
-    void setFind( const QString &str );
-    void setReplace( const QString &str );
-    void setCheckFamily( bool b );
-    void setCheckColor( bool b );
-    void setCheckSize( bool b );
-    void setCheckBold( bool b );
-    void setCheckItalic( bool b );
-    void setCheckUnderline( bool b );
-    void setCheckVertAlign( bool b );
-    void setFamily( const QString &str );
-    void setColor( const QColor &c );
-    void setSize( int size );
-    void setBold( bool b );
-    void setItalic( bool b );
-    void setUnderline( bool b );
-    //void setVertAlign( KWFormat::VertAlign va );
-
-
-    QString getFind() const;
-    QString getReplace() const;
-    bool getCheckFamily() const;
-    bool getCheckColor() const;
-    bool getCheckSize() const;
-    bool getCheckBold() const;
-    bool getCheckItalic() const;
-    bool getCheckUnderline() const;
-    bool getCheckVertAlign() const;
-    QString getFamily() const;
-    QColor getColor() const ;
-    int getSize() const;
-    bool getBold() const;
-    bool getItalic() const;
-    bool getUnderline() const;
-    bool getVertAlign() const;
-
-    bool isValid() const
-    { return !find.isEmpty() && !replace.isEmpty(); }
+    QString replace() const { return m_replace; }
 
 protected:
-    QString find, replace;
-    bool checkFamily, checkColor, checkSize, checkBold, checkItalic, checkUnderline, checkVertAlign;
-    QString family;
-    QColor color;
-    int size;
-    bool bold, italic, underline;
-    //KWFormat::VertAlign vertAlign;
-
+    QString m_replace;
+    // For formatting in the replacement - not implemented yet
+    //KWSearchContext m_formatOptions;
 };
 
 /******************************************************************/
 /* Class: KWAutoFormat						  */
 /******************************************************************/
-
 class KWAutoFormat
 {
 public:
+    /**
+     * There is a single instance of KWAutoFormat per document
+     * (and a temporary one in the auto-format dialog).
+     */
+    KWAutoFormat( KWDocument *_doc );
+
+    /**
+     * Called by KWTextFrameSetEdit when a character (@p ch) has been inserted
+     * into @p parag, at the given @p index.
+     */
+    void doAutoFormat( QTextCursor* cursor, KWTextParag *parag, int index, QChar ch );
+
+    //void setEnabled( bool e ) { m_enabled = e; }
+    //bool isEnabled() { return m_enabled; }
+
+    // Config for the typographic quotes. Used by the dialog.
     struct TypographicQuotes
     {
-	TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( FALSE )
+	TypographicQuotes() : begin( '«' ), end( '»' ), replace( FALSE )
 	{}
 	TypographicQuotes( const TypographicQuotes &t ) {
 	    begin = t.begin;
@@ -122,77 +94,60 @@ public:
 	bool replace;
     };
 
-    enum AutoformatType {AT_TypographicQuotes, AT_UpperCase, AT_UpperUpper};
-
-    struct AutoformatInfo
-    {
-	QChar c;
-	AutoformatType type;
-    };
-
-    KWAutoFormat( KWDocument *_doc );
-                                           
-    void startAutoFormat( KWTextParag *parag, QTextFormat *fc );
-    bool doAutoFormat( KWTextParag *parag,QTextFormat *fc );
-    void endAutoFormat( KWTextParag *parag , QTextFormat *fc );
-    bool doTypographicQuotes( KWTextParag *parag,QTextFormat *fc );
-    bool doUpperCase( KWTextParag *parag, QTextFormat *fc );
-    void doSpellCheck( KWTextParag *parag, QTextFormat *fc );
-
-    void setEnabled( bool e ) { enabled = e; }
-    bool isEnabled() { return enabled; }
-
+    // Configuration (on/off/settings). Called by the dialog.
     void configTypographicQuotes( TypographicQuotes _tq );
     void configUpperCase( bool _uc );
     void configUpperUpper( bool _uu );
 
     TypographicQuotes getConfigTypographicQuotes() const
-    { return typographicQuotes; }
+    { return m_typographicQuotes; }
     bool getConfigUpperCase() const
-    { return convertUpperCase; }
+    { return m_convertUpperCase; }
     bool getConfigUpperUpper() const
-    { return convertUpperUpper; }
+    { return m_convertUpperUpper; }
 
+    // Add/remove entries, called by the dialog
+    void addAutoFormatEntry( const QString &key, const KWAutoFormatEntry &entry ) {
+	m_entries.insert( key, entry );
+	buildMaxLen();
+    }
+
+    void removeAutoFormatEntry( const QString &key ) {
+        m_entries.remove( key );
+	buildMaxLen();
+    }
+
+    // Iterate over the entries. Called by the dialog
+    QMap< QString, KWAutoFormatEntry >::Iterator firstAutoFormatEntry()
+    { return m_entries.begin(); }
+
+    QMap< QString, KWAutoFormatEntry >::Iterator lastAutoFormatEntry()
+    { return m_entries.end(); }
+
+    // Copy all autoformat entries from another KWAutoFormat. Called by the dialog
+    void copyAutoFormatEntries( const KWAutoFormat & other )
+    { m_entries = other.m_entries; }
+
+protected:
+    bool doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
+    void doUpperCase( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
+    void doSpellCheck( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
+    void doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index );
+    void buildMaxLen();
     static bool isUpper( const QChar &c );
     static bool isLower( const QChar &c );
     static bool isMark( const QChar &c );
     static bool isSeparator( const QChar &c );
 
-    void addAutoFormatEntry( const KWAutoFormatEntry &entry ) {
-	entries.insert( entry.getFind(), entry );
-	begins.append( entry.getFind()[ 0 ] );
-	lengths.append( entry.getFind().length() );
-	buildMaxLen();
-    }
+private:
+    KWDocument *m_doc;
 
-    void removeAutoFormatEntry( const QString &key ) {
-	if ( entries.contains( key ) )
-	    entries.remove( key );
-	buildMaxLen();
-    }
+    bool m_enabled;
+    bool m_convertUpperCase, m_convertUpperUpper;
+    TypographicQuotes m_typographicQuotes;
 
-    QMap< QString, KWAutoFormatEntry >::Iterator firstAutoFormatEntry()
-    { return entries.begin(); }
-
-    QMap< QString, KWAutoFormatEntry >::Iterator lastAutoFormatEntry()
-    { return entries.end(); }
-
-protected:
-    void buildMaxLen();
-
-    KWDocument *doc;
-    TypographicQuotes typographicQuotes;
-    bool enabled;
-    KWString *tmpBuffer;
-    QString spBuffer;
-    KWChar *spBegin;
-    bool lastWasDotSpace, convertUpperCase;
-    bool lastWasUpper, convertUpperUpper;
-    QMap< QString, KWAutoFormatEntry > entries;
-    QValueList< QChar > begins;
-    int maxlen;
-    QValueList< int > lengths;
-
+    QMap< QString, KWAutoFormatEntry > m_entries;
+    int m_maxlen;
 };
 
 #endif

@@ -36,6 +36,7 @@
 #include "variable.h"
 #include "variabledlgs.h"
 #include "serialletter.h"
+#include "autoformat.h"
 #include <qclipboard.h>
 #include <qdragobject.h>
 #include <klocale.h>
@@ -1213,7 +1214,13 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
         cursor->splitAndInsertEmptyParag();
         ASSERT( cursor->parag()->prev() );
         if ( cursor->parag()->prev() )
+        {
             setLastFormattedParag( cursor->parag()->prev() );
+            KWAutoFormat * autoFormat = kWordDocument()->getAutoFormat();
+            if ( autoFormat )
+                autoFormat->doAutoFormat( cursor, static_cast<KWTextParag*>(cursor->parag()->prev()),
+                                          cursor->parag()->prev()->length() - 1, '\n' );
+        }
 
         doUpdateCurrentFormat = false;
         KWStyle * style = static_cast<KWTextParag *>( cursor->parag()->prev() )->style();
@@ -2147,6 +2154,63 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
     undoRedoInfo.clear();
 }
 
+void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
+                                       int selectionId, const QString & cmdName )
+{
+    undoRedoInfo.clear();
+    QTextDocument * textdoc = textDocument();
+    emit hideCursor();
+
+    KMacroCommand * macroCmd = new KMacroCommand( cmdName );
+    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+
+    // 'Remove Selected Text' stuff
+    textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
+    undoRedoInfo.text = QString::null;
+
+    int oldLen = undoRedoInfo.text.length();
+    undoRedoInfo.text = textdoc->selectedText( selectionId );
+    QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+    QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
+    readFormats( c1, c2, oldLen, true, true );
+
+    QTextFormat * format = c1.parag()->at( c1.index() )->format(); // Remember formatting
+    format->addRef();
+
+    textdoc->removeSelectedText( selectionId, cursor );
+
+    QTextCommand * cmd = new KWTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+                                                  undoRedoInfo.text.rawData(),
+                                                  CustomItemsMap(), undoRedoInfo.oldParagLayouts );
+    textdoc->addCommand( cmd );
+    undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
+    undoRedoInfo.clear();
+
+    // Insert replacement
+    insert( cursor, static_cast<KWTextFormat *>(format),
+            replacement, true, false, QString::null );
+
+    cmd = new KWTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+                                   undoRedoInfo.text.rawData(),
+                                   CustomItemsMap(), undoRedoInfo.oldParagLayouts );
+    textdoc->addCommand( cmd );
+    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+
+    undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
+    undoRedoInfo.clear();
+
+    format->removeRef();
+
+    kWordDocument()->addCommand( macroCmd );
+
+    setLastFormattedParag( c1.parag() );
+    formatMore();
+    emit repaintChanged( this );
+    emit ensureCursorVisible();
+    emit updateUI();
+    emit showCursor();
+}
+
 void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
                              const QString &txt, bool checkNewLine,
                              bool removeSelected, const QString & commandName,
@@ -2672,14 +2736,22 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
                         break;
                     }*/
                 }
-                // Port to setCounter if we really want that
+                // Port to setCounter if we really want that - and make configurable
                 /*if ( cursor->parag()->style() &&
                      cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayBlock &&
                      cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
                     setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
-                } else {*/
-                    textFrameSet()->insert( cursor, m_currentFormat, e->text(), false, true, i18n("Insert Text") );
-                //}
+                    break;
+                }*/
+                QString text = e->text();
+                textFrameSet()->insert( cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
+
+                KWAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+                if ( autoFormat )
+                    autoFormat->doAutoFormat( cursor, static_cast<KWTextParag*>(cursor->parag()),
+                                              cursor->index() - 1,
+                                              text[ text.length() - 1 ] );
+
                 break;
             }
             // We should use KAccel instead, to make this configurable !
@@ -3622,7 +3694,8 @@ void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const Q
         kdDebug() << "Tool ran. Text is now " << text << endl;
         if ( !textFrameSet()->hasSelection() )
             selectWordUnderCursor();
-        // ### TODO replace selection with 'text'
+        // replace selection with 'text'
+        textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Replace word") );
     }
 
     delete tool;
