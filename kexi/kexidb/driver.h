@@ -46,6 +46,7 @@ class DriverPrivate;
 */
 class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 {
+	Q_OBJECT
 	public:
 		/*! Helpful for retrieving info about driver from using 
 		 KexiDB::DriverManager::driversInfo() without loading driver libraries. */

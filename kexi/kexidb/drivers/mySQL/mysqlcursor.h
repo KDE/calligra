@@ -33,25 +33,25 @@ namespace KexiDB {
 
 class KEXIDB_MYSQL_DRIVER_EXPORT MySqlCursor: public Cursor {
 public:
-	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = 0 );
-	MySqlCursor(Connection* conn, QuerySchema& query, uint options = 0 );
+	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = NoOptions );
+	MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
 	~MySqlCursor();
         virtual bool drv_open(const QString& statement);
         virtual bool drv_close();
         virtual bool drv_moveFirst();
-        virtual bool drv_getNextRecord();
+        virtual void drv_getNextRecord();
         virtual bool drv_getPrevRecord();
-	virtual QVariant value(int);
+	virtual QVariant value(int) const;
 
-	//TODO:
-	virtual QVariant value(int i) const { return QVariant(); }
 
-	//TODO:
-	/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
-	virtual const char ** recordData() const { return 0; }
+        virtual void drv_clearServerResult();
+        virtual void drv_appendCurrentRecordToBuffer();
+        virtual void drv_bufferMovePointerNext();
+        virtual void drv_bufferMovePointerPrev();
+        virtual void drv_bufferMovePointerTo(Q_LLONG to);
+        virtual const char** recordData() const;
+        virtual void storeCurrentRecord(RecordData &data) const;
 
-	//TODO:
-	virtual void storeCurrentRecord(RecordData &data) const {}
 
 private:
 	MYSQL_RES *m_res;	

@@ -113,10 +113,6 @@ QCString MySqlConnection::escapeString(const QCString& str) const {
 	return QCString();//TODO
 }
                 
-void MySqlConnection::escapeString( const QString& str, char *target ) {
-}
-
-
 bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
         KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
 

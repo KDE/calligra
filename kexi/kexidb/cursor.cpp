@@ -366,7 +366,7 @@ bool Cursor::getNextRecord()
 	}
 	else {//we are after last retrieved record: we need to physically fetch next record:
 		if (!m_readAhead) {//we have no record that was read ahead
-			KexiDBDrvDbg<<"==== sqlite_step ===="<<endl;
+			KexiDBDrvDbg<<"==== no prefetched record ===="<<endl;
 			drv_getNextRecord();
 			if (m_result != FetchOK) {//there is no record
 				KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;

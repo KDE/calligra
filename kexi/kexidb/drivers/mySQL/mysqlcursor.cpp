@@ -59,17 +59,9 @@ bool MySqlCursor::drv_open(const QString& statement) {
                 if(mysql_errno(conn->m_mysql) == 0) {
 			m_res= mysql_store_result(conn->m_mysql);
 			m_fieldCount=mysql_num_fields(m_res);
-			m_readAhead=(m_numRows=mysql_num_rows(m_res));
+			m_numRows=mysql_num_rows(m_res);
 			m_at=0;
-/*
-                        MYSQL_RES *res;
-                        res = mysql_use_result(m_mysql);
-                        MYSQL_ROW  row;
-                        while ( (row = mysql_fetch_row(res))!=0) {
-                                //(void) mysql_fetch_lengths(m_res);
-                                list<<QString(row[0]);
-                        }*
-                        mysql_free_result(res);*/
+
 			m_opened=true;
 			m_afterLast=false;
                         return true;
@@ -94,22 +86,23 @@ bool MySqlCursor::drv_moveFirst() {
 	return false; //TODO
 }
        
-bool MySqlCursor::drv_getNextRecord() {
+void MySqlCursor::drv_getNextRecord() {
 	m_row=mysql_fetch_row(m_res);
 	if (m_row) {
 		m_at++;
-		m_beforeFirst=false;
 		m_validRecord=true;
 		m_afterLast=false;
 		m_lengths=mysql_fetch_lengths(m_res);
-		return true;
+		m_result=FetchOK;
+		/*return true;*/
 	} else {
 		m_at=m_numRows+1;
 		m_validRecord = false;
 		m_afterLast = true;
-		return false;	
+		m_result=FetchEnd;
+		/*return false;	*/
 	}
-	return true;
+	/*return true;*/
 }
 
 bool MySqlCursor::drv_getPrevRecord() {
@@ -118,7 +111,6 @@ bool MySqlCursor::drv_getPrevRecord() {
 		m_at--;
 		mysql_data_seek(m_res,m_at-1);
 		m_row=mysql_fetch_row(m_res);
-		m_beforeFirst=false;
 		m_validRecord=true;
 		m_afterLast=false;
 		m_lengths=mysql_fetch_lengths(m_res);
@@ -127,15 +119,41 @@ bool MySqlCursor::drv_getPrevRecord() {
 	m_at=0;
 	m_validRecord=false;
 	m_afterLast=false;
-	m_beforeFirst=true;
 	return false;
 }
 
 
 
-QVariant MySqlCursor::value(int pos) {
+QVariant MySqlCursor::value(int pos) const {
 	if (!m_row) return QVariant();
 	if (pos>=m_fieldCount) return QVariant();
 	if (m_row[pos]==0) return QVariant();
 	return QVariant(QString::fromUtf8((const char*)m_row[pos]));
 }
+
+
+
+void MySqlCursor::drv_clearServerResult() {
+}
+
+void MySqlCursor::drv_appendCurrentRecordToBuffer() {
+}
+
+
+void MySqlCursor::drv_bufferMovePointerNext() {
+}
+
+void MySqlCursor::drv_bufferMovePointerPrev() {
+}
+
+
+void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
+}
+
+
+const char** MySqlCursor::recordData() const {
+}
+
+void MySqlCursor::storeCurrentRecord(RecordData &data) const {
+}
+

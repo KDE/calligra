@@ -53,7 +53,8 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	m_features=CursorForward;
 
 	beh->ROW_ID_FIELD_NAME="_ROWID";//(js): ok??
-	
+	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
+	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
 	m_typeNames[Field::Byte]="UNSIGNED TINYINT";
 	m_typeNames[Field::ShortInteger]="SMALLINT";
 	m_typeNames[Field::Integer]="INT";
@@ -79,8 +80,11 @@ MySqlDriver::drv_createConnection( ConnectionData &conn_data )
         return new MySqlConnection( this, conn_data );
 }
 
-bool MySqlDriver::isSystemDatabaseName(QString &n) const
+bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
 	return n.lower()=="mysql";
 }
 
+bool MySqlDriver::isSystemFieldName( const QString&) const {
+	return false;
+}

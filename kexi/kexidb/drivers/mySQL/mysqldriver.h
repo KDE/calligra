@@ -36,7 +36,7 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 		~MySqlDriver();
 		
 		virtual bool isSystemDatabaseName( const QString &n ) const;
-
+		virtual bool isSystemFieldName( const QString& n ) const;
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 };

@@ -146,11 +146,13 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
 	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
+	int errcode;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
-		this, srv_name.latin1(), QStringList());
+		this, srv_name.latin1(), QStringList(),&errcode);
 
 	if (!drv) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".(%2)")
+				.arg(name).arg(errcode) );
 		return 0;
 	}
 	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
