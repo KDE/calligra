@@ -1480,6 +1480,7 @@ void KoParagCounterWidget::save( KoParagLayout & lay ) {
 KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget * parent, const char * name)
     :KDoubleNumInput ( parent, name )
 {
+    setRange( 0, 9999, 1, false);
 }
 
 void KoTabulatorsLineEdit::keyPressEvent ( QKeyEvent *ke )
