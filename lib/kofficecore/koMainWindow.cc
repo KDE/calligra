@@ -446,7 +446,7 @@ bool KoMainWindow::saveDocument( bool saveas )
             bOk=true;
             if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
-#ifdef HAVE_KDEPRINT // only in kdelibs > 2.1
+#if KDE_VERSION >= 220 // only in kdelibs > 2.1
                 outputFormat=dialog->currentMimeFilter().latin1();
 #endif
             }
@@ -462,7 +462,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 break;
             }
 
-#ifndef HAVE_KDEPRINT // No need to force the extension anymore, with the new kfiledialog stuff
+#if KDE_VERSION < 220 // No need to force the extension anymore, with the new kfiledialog stuff
             if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
                 // assume that the pattern ends with .extension
                 QString s( dialog->currentFilter() );
@@ -488,7 +488,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 KRecentDocument::add(newURL.path(-1));
             else
                 KRecentDocument::add(newURL.url(-1), true);
-#ifdef HAVE_KDEPRINT
+#if KDE_VERSION >= 220
             pDoc->setOutputMimeType( outputFormat );
 #endif
             bool ret = pDoc->saveAs( newURL );

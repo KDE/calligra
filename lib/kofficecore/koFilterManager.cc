@@ -23,6 +23,7 @@
 
 #include <kmimetype.h>
 #include <kurl.h>
+#include <kapp.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -165,12 +166,12 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                      const Direction &direction,
                                      const char *_format,
                                      const QString &
-#ifndef HAVE_KDEPRINT
+#if KDE_VERSION < 220
                                       _native_pattern
 #endif
                                      , const QString &_native_name,
                                      bool
-#ifndef HAVE_KDEPRINT
+#if KDE_VERSION < 220
                                       allfiles
 #endif
                                                ) {
@@ -187,7 +188,7 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     d->config=QString::null;   // reset the config string
 
-#ifdef HAVE_KDEPRINT // kdelibs > 2.1 -> use the nice setMimeFilter
+#if KDE_VERSION >= 220 // kdelibs > 2.1 -> use the nice setMimeFilter
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
 
     QStringList mimes;
