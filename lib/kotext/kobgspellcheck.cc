@@ -43,7 +43,7 @@ using namespace KSpell2;
 #include <qtimer.h>
 #include <qptrdict.h>
 
-#define DEBUG_BGSPELLCHECKING
+//#define DEBUG_BGSPELLCHECKING
 
 class KoBgSpellCheck::Private
 {
@@ -123,8 +123,8 @@ void KoBgSpellCheck::start()
 
 void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, int pos )
 {
-    KoTextParag* parag = d->backSpeller->currentParag();
 #ifdef DEBUG_BGSPELLCHECKING
+    KoTextParag* parag = d->backSpeller->currentParag();
     kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag
                    << " (id=" << parag->paragId() << ", length="
                    << parag->length() << ") pos=" << pos << " length="
