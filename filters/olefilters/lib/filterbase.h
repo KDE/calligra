@@ -56,6 +56,7 @@ signals:
     // Note: might return wrong stream as names are NOT unique!!!
     // (searching only in current dir)
     void signalGetStream(const QString &name, myFile &stream);
+    void sigProgress(int value);
 
 protected slots:
     void slotSavePic(Picture *pic);

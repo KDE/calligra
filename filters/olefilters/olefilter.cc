@@ -275,4 +275,5 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
                      SLOT(slotGetStream(const int &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
                      SLOT(slotGetStream(const QString &, myFile &)));
+    QObject::connect(*myFilter, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
 }
