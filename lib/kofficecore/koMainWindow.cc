@@ -249,17 +249,21 @@ bool KoMainWindow::saveDocument( bool saveas )
                                               _native_format, nativeFormatPattern(),
                                               nativeFormatName(), true);
 #endif
-	QString file;
+	KURL newURL;
 
         //kDebugInfo( 31000, "koMainWindow, nach prepareDialog, vor exec");
 
 	bool bOk = true;
 	do {
 #ifdef USE_QFD
-	    file = QFileDialog::getSaveFileName( QString::null, filter );
+	    QString file = QFileDialog::getSaveFileName( QString::null, filter );
+            if ( file.isNull() )
+                return false;
+            KURL::encode(file);
+            newURL = file;
 #else
             if(dialog->exec()==QDialog::Accepted)
-                file=dialog->selectedURL().url();
+                newURL=dialog->selectedURL();
             else
                 return false;
 
@@ -268,29 +272,35 @@ bool KoMainWindow::saveDocument( bool saveas )
             KoFilterManager::self()->cleanUp();
             delete dialog;
 #endif
-	    if ( file.isNull() )
+	    if ( newURL.isEmpty() )
 		return false;
 
-	    if ( QFileInfo( file ).extension().isEmpty() ) {
+            // HACK - should we add extension() to KURL ?
+	    if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
 		// assume a that the the native patterns ends with .extension
 		QString s( nativeFormatPattern() );
 		QString extension = s.mid( s.find( "." ) );
-		file += extension;
+		newURL.setPath( newURL.path() + extension );
 	    }
 
-	    if ( QFile::exists( file ) ) { // this file exists => ask for confirmation
+            //HACK
+            if ( !url.isLocalFile() ) return false; // only local files
+
+            // Use KIO::stat(newURL) or an async version of it
+	    if ( QFile::exists( url.path() ) ) { // this file exists => ask for confirmation
 		bOk = KMessageBox::questionYesNo( this,
 						  i18n("A document with this name already exists\n"\
 						       "Do you want to overwrite it ?"),
 						  i18n("Warning") ) == KMessageBox::Yes;
 	    }
 	} while ( !bOk );
-	url = file;
+	url = newURL;
 	pDoc->setURL( url );
 	KMimeType::Ptr t = KMimeType::findByURL( url, 0, TRUE );
 	outputMimeType = t->mimeType();
     }
 
+    //HACK
     if ( !url.isLocalFile() ) return false; // only local files
 
     QApplication::setOverrideCursor( waitCursor );
