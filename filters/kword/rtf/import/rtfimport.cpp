@@ -149,6 +149,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"nosupersub",	setEnumProperty,	state.format.vertAlign, RTFFormat::Normal ),
 	PROP(	"Text",		"page",		insertPageBreak,	0L, 0 ),
 	MEMBER(	0L,		"pagebb",	setFlagProperty,	state.layout.pageBB, true ),
+	MEMBER(	0L,		"pgbrk",	setToggleProperty,	state.layout.pageBA, true ),
 	MEMBER(	"@rtf",		"paperh",	setNumericProperty,	paperHeight, 0 ),
 	MEMBER(	"@rtf",		"paperw",	setNumericProperty,	paperWidth, 0 ),
 	PROP(	"Text",		"par",		insertParagraph,	0L, 0 ),
@@ -775,6 +776,7 @@ void RTFImport::setParagraphDefaults( RTFProperty * )
     layout.keep		= false;
     layout.keepNext	= false;
     layout.pageBB	= false;
+    layout.pageBA	= false;
 }
 
 /**
@@ -1976,18 +1978,18 @@ void RTFImport::addLayout( DomNode &node, QCString &name, RTFLayout &layout, boo
     {
         // negative linespace means "exact"
 	node.addNode( "LINESPACING" );
-	node.setAttribute( "type", "custom" );
+	node.setAttribute( "type", "exactly" );
 	node.setAttribute( "spacevalue", -0.05*layout.spaceBetween );
 	node.closeNode( "LINESPACING" );
     }
 
 
-    if (layout.keep || layout.pageBB || frameBreak || layout.keepNext)
+    if (layout.keep || layout.pageBB || layout.pageBA || frameBreak || layout.keepNext)
     {
 	node.addNode( "PAGEBREAKING" );
 	  node.setAttribute( "linesTogether", boolN[layout.keep] );
 	  node.setAttribute( "hardFrameBreak", boolN[layout.pageBB] );
-	  node.setAttribute( "hardFrameBreakAfter", boolN[frameBreak] );
+	  node.setAttribute( "hardFrameBreakAfter", boolN[layout.pageBA] || boolN[frameBreak] );
 	  node.setAttribute( "keepWithNext", boolN[layout.keepNext] );
 	node.closeNode( "PAGEBREAKING" );
     }

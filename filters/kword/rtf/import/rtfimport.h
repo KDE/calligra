@@ -120,7 +120,7 @@ struct RTFLayout
     int spaceBefore, spaceAfter, spaceBetween;
     bool inTable;
     bool keep, keepNext;
-    bool pageBB;
+    bool pageBB, pageBA;
 };
 
 // Character-formatting properties
