@@ -2487,7 +2487,7 @@ void ExcelReader::handleColInfo( ColInfoRecord* record )
 {
   if( !record ) return;
   
-  record->dump( std::cout );  
+  // FIXME do something here !
 }
 
 void ExcelReader::handleDate1904( Date1904Record* record )
