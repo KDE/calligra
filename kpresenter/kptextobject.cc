@@ -293,7 +293,8 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
+        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+                            _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
 
         return;
     }
@@ -308,9 +309,8 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     //_painter->fillRect( clip, Qt::blue );
     _painter->setPen( pen2 );
     if ( !drawingShadow ) {
-        if ( editingTextObj && _painter->device() && _painter->device()->devType() != QInternal::Printer) { // editting text object
+        if ( editingTextObj && _painter->device() && _painter->device()->devType() != QInternal::Printer)  // editting text object
             _painter->setBrush( QBrush( m_doc->txtBackCol(), Qt::SolidPattern ) );
-        }
         else {
             // Handle the rotation, draw the background/border, then call drawText()
             if ( fillType == FT_BRUSH || !gradient ) {
@@ -641,7 +641,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                 else if(tmpAlign==8)
                     lastParag->setAlign(Qt::AlignJustify);
                 else
-                    kdDebug(33001)<<"Error in e.attribute( attrAlign ).toInt()\n";
+                    kdDebug(33001) << "Error in e.attribute( attrAlign ).toInt()" << endl;
             }
 
             // TODO check/convert values
@@ -967,7 +967,6 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     }
 
 
-
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
     if ( !element.isNull() )
         layout.leftBorder = KoBorder::loadBorder( element );
@@ -1167,6 +1166,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
 void KPTextObject::recalcPageNum( KPrPage *page )
 {
     int pgnum=m_doc->pageList().findRef(page);
+
     if ( pgnum==-1 && isSticky())
     {
         if ( m_doc->activePage())
@@ -1529,7 +1529,7 @@ KCommand * KPTextObject::textContentsToHeight()
     double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
     //kdDebug(33001) << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
 
-    if ( KABS( innerHeight() - textHeight ) < 1e-5 ) // floating-point equality test
+    if ( KABS( innerHeight() - textHeight ) < DBL_EPSILON ) // floating-point equality test
         return 0L; // nothing to do
     bool oneLine =(m_textobj->textDocument()->firstParag() == m_textobj->textDocument()->lastParag() && numLines == 1);
     if ( lineSpacing < 0  || oneLine) // text object is too small
@@ -1723,10 +1723,10 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_paragLayout.counter->setNumbering( KoParagCounter::NUM_NONE );
         m_paragLayout.counter->setStyle( KoParagCounter::STYLE_NONE );
     }
+
     if ( m_paragLayout.counter->style() != cstyle || force )
-    {
         m_canvas->getView()->showCounter( * m_paragLayout.counter );
-    }
+
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||
        m_paragLayout.topBorder!=parag->topBorder() ||
@@ -1741,7 +1741,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     }
 
     if ( !parag->style() )
-        kdWarning() << "Paragraph " << parag->paragId() << " has no style" << endl;
+        kdWarning(33001) << "Paragraph " << parag->paragId() << " has no style" << endl;
     else if ( m_paragLayout.style != parag->style() || force )
     {
         m_paragLayout.style = parag->style();
@@ -1758,7 +1758,8 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
         m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft],
                                               m_paragLayout.margins[QStyleSheetItem::MarginFirstLine],
-                                              m_paragLayout.margins[QStyleSheetItem::MarginRight], parag->string()->isRightToLeft() );
+                                              m_paragLayout.margins[QStyleSheetItem::MarginRight],
+                                              parag->string()->isRightToLeft() );
     }
 
     if( m_paragLayout.tabList() != parag->tabList() || force )

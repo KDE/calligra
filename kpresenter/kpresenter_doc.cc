@@ -2700,6 +2700,7 @@ void KPresenterDoc::slotRepaintVariable()
     KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->slotRepaintVariable();
+    m_stickyPage->slotRepaintVariable();
 }
 
 void KPresenterDoc::slotDocumentInfoModifed()
@@ -2855,7 +2856,6 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
     }
 }
 
-
 void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 {
     QValueList<QString> followingStyles;
@@ -2961,7 +2961,6 @@ bool KPresenterDoc::backgroundSpellCheckEnabled() const
 {
     return m_bgSpellCheck->backgroundSpellCheckEnabled();
 }
-
 
 void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
 {

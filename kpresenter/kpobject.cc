@@ -729,10 +729,9 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
 void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                      SelectionMode selectionMode, bool drawContour )
 {
-    if ( selectionMode != SM_NONE &&  !drawContour )
+    if ( selectionMode != SM_NONE && !drawContour )
         paintSelection( _painter, _zoomHandler, selectionMode );
 }
-
 
 QPen KPObject::getPen() const
 {

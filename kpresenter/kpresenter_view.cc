@@ -4328,7 +4328,7 @@ void KPresenterView::setRanges()
 
 void KPresenterView::skipToPage( int num )
 {
-    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 /*|| m_pKPresenterDoc->isEmbedded()*/ || !m_canvas )
+    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || !m_canvas )
         return;
     m_canvas->exitEditMode();
     vert->setValue( 0 );
@@ -4349,6 +4349,9 @@ void KPresenterView::skipToPage( int num )
     m_pKPresenterDoc->repaint( FALSE );
 
     m_pKPresenterDoc->displayActivePage( page );
+
+    m_pKPresenterDoc->recalcPageNum();
+    m_pKPresenterDoc->slotRepaintVariable();
 
     updatePageParameter();
 }
@@ -4751,7 +4754,6 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
     delete separator;
 }
 
-
 void KPresenterView::openPopupMenuObject( const QString & name, const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
@@ -4915,7 +4917,6 @@ void KPresenterView::changeLink()
                 {
                     if( ref != oldhref || link!=oldLinkName)
                     {
-
                         KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change Link"),
                                                                              m_pKPresenterDoc, oldhref,
                                                                              ref, oldLinkName,link, var);
@@ -4927,7 +4928,6 @@ void KPresenterView::changeLink()
         }
     }
 }
-
 
 void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 {
@@ -5124,7 +5124,6 @@ void KPresenterView::spellCheckerIgnoreAll( const QString & word)
     m_pKPresenterDoc->addIgnoreWordAll( word );
 }
 
-
 void KPresenterView::spellCheckerReady()
 {
     for ( unsigned int i = m_spell.spellCurrTextObjNum + 1; i < m_spell.textObject.count(); i++ ) {
@@ -5133,9 +5132,7 @@ void KPresenterView::spellCheckerReady()
         //kdDebug(33001) << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
         QString text = textobj->textDocument()->plainText();
         if ( m_spell.bSpellSelection)
-        {
             text = textobj->textDocument()->selectedText(KoTextDocument::Standard);
-        }
         bool textIsEmpty=true;
         // Determine if text has any non-space character, otherwise there's nothing to spellcheck
         for ( uint i = 0 ; i < text.length() ; ++ i )
@@ -5190,7 +5187,6 @@ void KPresenterView::clearSpellChecker()
     m_spell.bSpellSelection= false;
     m_spell.selectionStartPos = 0;
 }
-
 
 void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
@@ -5348,7 +5344,6 @@ void KPresenterView::configureSpellChecker()
     configDia.exec();
 }
 
-
 void KPresenterView::showCounter( KoParagCounter &c )
 {
     QString styleStr("counterstyle_");
@@ -5396,7 +5391,6 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
         delete m_paragDlg;
         m_paragDlg=0L;
     }
-
 }
 
 void KPresenterView::slotApplyParag()
@@ -5613,9 +5607,8 @@ void KPresenterView::refreshCustomMenu()
                 QCString name = QString("custom-action_%1").arg(i).latin1();
 
                 if ( shortCut.contains( varName ))
-                {
-                    act = new KAction( varName, (shortCut)[varName], this, SLOT( insertCustomVariable() ), actionCollection(), name );
-                }
+                    act = new KAction( varName, (shortCut)[varName], this,
+                                       SLOT( insertCustomVariable() ), actionCollection(), name );
                 else
                     act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
                                        actionCollection(), name );
@@ -5641,7 +5634,6 @@ void KPresenterView::refreshCustomMenu()
     actionEditCustomVarsEdit->setEnabled( state );
     actionInsertCustom->insert( actionEditCustomVarsEdit );
 }
-
 
 void KPresenterView::insertCustomVariable()
 {
@@ -5684,7 +5676,6 @@ void KPresenterView::editCustomVariable()
     }
 }
 
-
 void KPresenterView::editCustomVars()
 {
     KoCustomVariablesDia dia( this, m_pKPresenterDoc->getVariableCollection()->getVariables() );
@@ -5722,7 +5713,6 @@ void KPresenterView::editCustomVars()
         if(macroCommand)
             m_pKPresenterDoc->addCommand(macroCommand);
     }
-
 }
 
 void KPresenterView::insertVariable()
@@ -5733,7 +5723,7 @@ void KPresenterView::insertVariable()
         KAction * act = (KAction *)(sender());
         VariableDefMap::ConstIterator it = m_variableDefMap.find( act );
         if ( it == m_variableDefMap.end() )
-            kdWarning() << "Action not found in m_variableDefMap." << endl;
+            kdWarning(33001) << "Action not found in m_variableDefMap." << endl;
         else
         {
             if ( (*it).type == VT_FIELD )
@@ -5871,7 +5861,6 @@ void KPresenterView::changeCaseOfText()
     }
     delete caseDia;
 }
-
 
 void KPresenterView::editFind()
 {
@@ -6088,7 +6077,7 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
 void KPresenterView::setZoom( int zoom, bool updateViews )
 {
     zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(),
-                                                           QPaintDevice::x11AppDpiY());
+                                         QPaintDevice::x11AppDpiY());
     m_pKPresenterDoc->newZoomAndResolution(updateViews,false);
     m_pKPresenterDoc->updateZoomRuler();
 
@@ -6182,7 +6171,7 @@ void KPresenterView::viewFooter()
     if ( m_pKPresenterDoc->refreshSideBar())
     {
         int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
-        m_pKPresenterDoc->updateSideBarItem(pos,  true/*sticky page*/ );
+        m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
     }
 }
 
@@ -6196,10 +6185,9 @@ void KPresenterView::viewHeader()
     if ( m_pKPresenterDoc->refreshSideBar())
     {
         int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
-        m_pKPresenterDoc->updateSideBarItem(pos,  true/*sticky page*/ );
+        m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
     }
 }
-
 
 void KPresenterView::showStyle( const QString & styleName )
 {
@@ -6662,10 +6650,8 @@ void KPresenterView::addHelpPoint()
     m_pKPresenterDoc->repaint( false );
 }
 
-
 void KPresenterView::openPopupMenuZoom( const QPoint & _point )
 {
-    //for the future or today :)
     if(!koDocument()->isReadWrite() || !factory())
         return;
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
@@ -6748,7 +6734,6 @@ void KPresenterView::zoomAllObject()
     m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
 }
 
-
 void KPresenterView::flipHorizontal()
 {
     m_canvas->flipObject( true );
@@ -6791,7 +6776,8 @@ void KPresenterView::slotObjectEditChanged()
     actionFormatSub->setEnabled(isText);
     actionIncreaseFontSize->setEnabled(isText);
     actionDecreaseFontSize->setEnabled(isText);
-    if ( !m_canvas->applicableTextInterfaces().isEmpty() )
+
+    if ( isText )
     {
         KoTextFormat format =*(m_canvas->applicableTextInterfaces().first()->currentFormat());
         showFormat( format );
@@ -6960,7 +6946,6 @@ bool KPresenterView::switchInOtherPage( const QString & text )
     return true;
 }
 
-
 KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst)
 {
     KMacroCommand *macro = 0L;
@@ -6979,7 +6964,6 @@ KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextOb
     return macro;
 }
 
-
 void KPresenterView::createStyleFromSelection()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
@@ -6988,16 +6972,13 @@ void KPresenterView::createStyleFromSelection()
         QStringList list;
         QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
         for ( ; styleIt.current(); ++styleIt )
-        {
             list.append( styleIt.current()->name() );
-        }
         KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
         if ( dia->exec() )
         {
             KoStyle *style=edit->createStyleFromSelection(dia->nameOfNewStyle());
             m_pKPresenterDoc->styleCollection()->addStyleTemplate( style );
             m_pKPresenterDoc->updateAllStyleLists();
-
         }
         delete dia;
     }
@@ -7090,10 +7071,10 @@ void KPresenterView::importStyle()
 {
     QStringList lst;
     QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+
     for ( ; styleIt.current(); ++styleIt )
-    {
         lst<<styleIt.current()->translatedName();
-    }
+
     KPrImportStyleDia dia( m_pKPresenterDoc, lst, this, 0L );
     if ( dia.exec() ) {
         QPtrList<KoStyle>list(dia.listOfStyleImported());
@@ -7122,7 +7103,6 @@ void KPresenterView::importStyle()
     }
 }
 
-
 void KPresenterView::backgroundPicture()
 {
     switch( m_canvas->activePage()->getBackType())
@@ -7145,14 +7125,12 @@ void KPresenterView::testAndCloseAllTextObjectProtectedContent()
         m_canvas->setToolEditMode( TEM_MOUSE );
         deSelectAllObjects();
     }
-
 }
 
 void KPresenterView::updateBgSpellCheckingState()
 {
     actionAllowBgSpellCheck->setChecked( m_pKPresenterDoc->backgroundSpellCheckEnabled() );
 }
-
 
 void KPresenterView::updateRulerInProtectContentMode()
 {

@@ -3071,7 +3071,6 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
                                    _objects, m_doc,this );
 
     return moveByCmd;
-
 }
 
 void KPrPage::repaintObj()
@@ -3231,9 +3230,8 @@ KPObject * KPrPage::getCursor(const KoPoint &pos )
     QPtrListIterator<KPObject> it( m_objectList );
     KPObject *kpobject = it.toLast();
     while ( kpobject ) {
-        if ( kpobject->contains( pos ) && kpobject->isSelected() ) {
+        if ( kpobject->contains( pos ) && kpobject->isSelected() )
             return kpobject;
-        }
         kpobject = --it;
     }
     return 0L;
