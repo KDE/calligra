@@ -365,12 +365,14 @@ don't put a </?xml...> at the end of the file!).
 
             len:                number of characters after pos for which the
                                 format is used. 1 for all ids except "normal text".
+
+        When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
     (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|ANCHOR|IMAGE)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
-    pos CDATA #REQUIRED
+    pos CDATA #IMPLIED
     len CDATA #IMPLIED>
 
 <!--
