@@ -20,8 +20,8 @@ libkarbonpart_la_SOURCES = \
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = \
 	../../koffice/lib/kofficeui/libkofficeui.la \
-	$(srcdir)/tools/libkarbontools.la \
-	$(srcdir)/core/libkarboncore.la
+	tools/libkarbontools.la \
+	core/libkarboncore.la
 
 libkarbonpart_la_METASOURCES = AUTO
 
