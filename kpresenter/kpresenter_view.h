@@ -411,7 +411,7 @@ public slots:
     void importStyle();
 
     void backgroundPicture();
-
+    void updateBgSpellCheckingState();
 public:
     // create GUI
     virtual void createGUI();

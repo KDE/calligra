@@ -2514,7 +2514,7 @@ KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
     if ( object->isSticky() ) {
         kdDebug(33001) << "Object is on sticky page" << endl;
         return stickyPage();
-    } 
+    }
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
         QPtrList<KPObject> list( page->objectList() );
         if ( list.findRef( object ) != -1 ) {
@@ -2534,7 +2534,7 @@ KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
         if ( object->isSticky() ) {
             kdDebug(33001) << "A Object is on the sticky page" << endl;
             return stickyPage();
-        } 
+        }
     }
     object = objects.first();
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
@@ -2899,6 +2899,10 @@ void KPresenterDoc::startBackgroundSpellCheck()
 void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 {
     m_bgSpellCheck->enableBackgroundSpellCheck(b);
+    QPtrListIterator<KoView> it( views() );
+    for( ; it.current(); ++it )
+        ((KPresenterView*)it.current())->updateBgSpellCheckingState();
+
 }
 
 bool KPresenterDoc::backgroundSpellCheckEnabled() const

@@ -7184,4 +7184,10 @@ void KPresenterView::testAndCloseAllTextObjectProtectedContent()
 
 }
 
+void KPresenterView::updateBgSpellCheckingState()
+{
+    actionAllowBgSpellCheck->setChecked( m_pKPresenterDoc->backgroundSpellCheckEnabled() );
+}
+
+
 #include <kpresenter_view.moc>
