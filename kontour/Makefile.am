@@ -49,6 +49,7 @@ libkontourpart_la_SOURCES = \
 	GStyle.cc \
 	GStyleList.cc \
 	LayerPanel.cc \
+	StylePanel.cc \
 	Tool.cc \
 	ToolController.cc \
 	SelectTool.cc \

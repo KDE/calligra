@@ -54,8 +54,11 @@ class QDockArea;
 class QButton;
 class QScrollBar;
 class LayerPanel;
+class PaintPanel;
+class OutlinePanel;
 class KoColor;
 class KoColorChooser;
+class GStyle;
 class KontourView : public KoView
 {
 Q_OBJECT
@@ -88,6 +91,8 @@ protected:
     virtual void print( KPrinter &printer );
 
 
+signals:
+  void changedStyle(const GStyle &);
 
 private:
   void setupActions();
@@ -108,7 +113,7 @@ private slots:
   void changePaintColor(const KoColor &c);
   void changeFilled(bool filled);
   void changeStroked(bool stroked);
-  void changeLinewidth(int lwidth);
+  void changeLinewidth(unsigned int lwidth);
   void changeSelection();
 
   void slotZoomFactorChanged();
@@ -175,9 +180,9 @@ private:
   QLabel *mSBState;
   
   /* Panels */
-  LayerPanel *mLayerPanel;
-  KoColorChooser *mPaintPanel;
-  KoColorChooser *mOutlinePanel;
+  LayerPanel   *mLayerPanel;
+  PaintPanel   *mPaintPanel;
+  OutlinePanel *mOutlinePanel;
 
   // Actions
   KAction *m_copy;

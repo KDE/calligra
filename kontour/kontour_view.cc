@@ -32,11 +32,6 @@
 #include <qregexp.h>
 #include <qdockwindow.h>
 #include <qdockarea.h>
-#include <qtabwidget.h>
-#include <qcheckbox.h>
-#include <qvgroupbox.h>
-#include <qgrid.h>
-#include <qspinbox.h>
 
 #include <kaction.h>
 #include <kprinter.h>
@@ -67,6 +62,7 @@
 #include "OvalTool.h"
 #include "ZoomTool.h"
 #include "LayerPanel.h"
+#include "StylePanel.h"
 #include "CopyCmd.h"
 #include "CutCmd.h"
 #include "PasteCmd.h"
@@ -332,22 +328,11 @@ void KontourView::setupPanels()
   /* Paint properties panel */
   QDockWindow *win1 = new QDockWindow();
   win1->setResizeEnabled(true);
-  QTabWidget *tab = new QTabWidget(win1, "Tab");
-  tab->setTabShape(QTabWidget::Triangular);
-  //QWidget *paintColor = new QWidget(tab);
-  QGroupBox *paintColor = new QGroupBox(2, Qt::Vertical, tab);
-  QBoxLayout *box = new QBoxLayout(paintColor, QBoxLayout::Down);
-  QCheckBox *filled = new QCheckBox(i18n("filled"), paintColor);
-  connect(filled, SIGNAL(toggled(bool)), this, SLOT(changeFilled(bool)));
-  box->addWidget(filled);
-  mPaintPanel = new KoColorChooser(paintColor);
-  connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
-  box->addWidget(mPaintPanel);
-  tab->insertTab(paintColor, "Color");
-  // TODO : add some content here :)
-  tab->insertTab(new QWidget(tab), "Gradient");
-  tab->insertTab(new QWidget(tab), "Pattern");
-  win1->setWidget(tab);
+  mPaintPanel = new PaintPanel(win1);
+  connect(mPaintPanel, SIGNAL(changeFilled(bool)), this, SLOT(changeFilled(bool)));
+  connect(mPaintPanel, SIGNAL(changePaintColor(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
+  connect(this, SIGNAL(changedStyle(const GStyle &)), mPaintPanel, SLOT(slotStyleChanged(const GStyle &)));
+  win1->setWidget(mPaintPanel);
   win1->setResizeEnabled(false);
   //win1->setCaption(i18n("Paint properties"));
   mRightDock->moveDockWindow(win1);
@@ -355,43 +340,12 @@ void KontourView::setupPanels()
  /* Outline properties panel */
   QDockWindow *win2 = new QDockWindow();
   win2->setResizeEnabled(true);
-  QTabWidget *tab2 = new QTabWidget(win2, "Tab");
-  tab2->setTabShape(QTabWidget::Triangular);
-
-  QVGroupBox *outlineColor = new QVGroupBox(tab);
-  //QBoxLayout *box2 = new QBoxLayout(outlineColor, QBoxLayout::Down);
-  QCheckBox *stroked = new QCheckBox(i18n("stroked"), outlineColor);
-  connect(stroked, SIGNAL(toggled(bool)), this, SLOT(changeStroked(bool)));
-  //box2->addWidget(stroked);
-  mOutlinePanel = new KoColorChooser(outlineColor);
-  connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
-  //box2->addWidget(mOutlinePanel);
-  tab2->insertTab(outlineColor, "Color");
-
-
-  QVGroupBox *outlineStyle = new QVGroupBox(tab);
-  QWidget *lwidth = new QWidget(outlineStyle);
-  QHBoxLayout *lay = new QHBoxLayout(lwidth);
-  QLabel *lwidthText = new QLabel(i18n("Width"), lwidth);
-  lay->addWidget(lwidthText);
-  QSpinBox *lwidthBox = new QSpinBox(0, 100, 1, lwidth);
-  connect(lwidthBox, SIGNAL(valueChanged(int)), this, SLOT(changeLinewidth(int)));
-  lay->addWidget(lwidthBox);
-
-  /*QGrid *join = new QGrid(4, outlineStyle);
-  QLabel *joinText = new QLabel(i18n("Join"), join);
-  KToolBarButton *round = new KToolBarButton("eye", 0, join);
-  KToolBarButton *miter = new KToolBarButton("miter", 1, join);
-  KToolBarButton *bevel = new KToolBarButton("bevel", 2, join);
-
-  QGrid *cap = new QGrid(4, outlineStyle);
-  QLabel *capText = new QLabel(i18n("Cap"), cap);
-  KToolBarButton *cround = new KToolBarButton("cround", 0, cap);
-  KToolBarButton *square = new KToolBarButton("square", 1, cap);
-  KToolBarButton *flat   = new KToolBarButton("flat", 2, cap);*/
-
-  tab2->insertTab(outlineStyle, "Style");
-  win2->setWidget(tab2);
+  mOutlinePanel = new OutlinePanel(win2);
+  connect(mOutlinePanel, SIGNAL(changeStroked(bool)), this, SLOT(changeStroked(bool)));
+  connect(mOutlinePanel, SIGNAL(changeOutlineColor(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
+  connect(mOutlinePanel, SIGNAL(changeLinewidth(unsigned int)), this, SLOT(changeLinewidth(unsigned int)));
+  connect(this, SIGNAL(changedStyle(const GStyle &)), mOutlinePanel, SLOT(slotStyleChanged(const GStyle &)));
+  win2->setWidget(mOutlinePanel);
   win2->setResizeEnabled(false);
   //win1->setCaption(i18n("Outline properties"));
   mRightDock->moveDockWindow(win2);
@@ -637,7 +591,7 @@ void KontourView::changeStroked(bool stroked)
   }
 }
 
-void KontourView::changeLinewidth(int lwidth)
+void KontourView::changeLinewidth(unsigned int lwidth)
 {
   if(activeDocument() && activeDocument()->activePage() &&
       !activeDocument()->activePage()->selectionIsEmpty())
@@ -666,6 +620,7 @@ void KontourView::changeSelection()
     m_duplicate->setEnabled(true);
     // set selection style here
     //mPaintPanel->slotChangeColor(page->getSelection().first()->style().fillColor());
+	emit changedStyle(page->getSelection().first()->style());
   }
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);

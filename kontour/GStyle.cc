@@ -41,7 +41,7 @@ public:
 GStyle::GStyle() : d(new GStylePrivate)
 {
   d->ocolor = KoColor::black();
-  d->lwidth = 5;
+  d->lwidth = 1;
   d->cap    = Qt::RoundCap;
   d->join   = Qt::RoundJoin;
   d->fcolor = KoColor::white();
