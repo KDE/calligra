@@ -898,6 +898,10 @@ void KWTextParag::printRTDebug( int info )
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
+    if ( next() && next()->paragId() != paragId() + 1 )
+        kdWarning() << "Next paragraph " << next() << " has ID " << next()->paragId() << endl;
+    if ( !next() )
+        kdWarning() << "next is 0L" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QVector<QStyleSheetItem> vec = styleSheetItems();

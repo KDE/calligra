@@ -1219,9 +1219,9 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    //kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
-    //               << " to=" << to << " viewsBottom=" << viewsBottom
-    //               << " availableHeight=" << m_availableHeight << endl;
+    kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+                   << " to=" << to << " viewsBottom=" << viewsBottom
+                   << " availableHeight=" << m_availableHeight << endl;
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
@@ -1232,21 +1232,29 @@ void KWTextFrameSet::formatMore()
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
-        //kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
         lastFormatted->format();
         bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
         lastFormatted = lastFormatted->next();
+        kdDebug() << "KWTextFrameSet::formatMore bottom=" << bottom << " lastFormatted=" << lastFormatted << endl;
     }
-    //kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
+    kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. "
+                   << " i=" << i << " to=" << to
+                   << " bottom=" << bottom
+                   << " Setting m_lastFormatted to " << lastFormatted
+                   << endl;
     m_lastFormatted = lastFormatted;
 
     if ( bottom != -1 && ( ( bottom > m_availableHeight ) ||   // this parag is already off page
                            ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) ) // or next parag will be off page
     {
-    if(lastFormatted)
-        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom + lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
-    else
-        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom2=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
+        if(lastFormatted)
+            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space."
+                           << " bottom=" << bottom + lastFormatted->rect().height()
+                           << " m_availableHeight=" << m_availableHeight << endl;
+        else
+            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space."
+                           << " bottom2=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
 
         if ( !frames.isEmpty() )
         {

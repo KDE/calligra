@@ -113,7 +113,9 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         // Recalc all "frames on top" everywhere
         kWordDocument()->updateAllFrames();
         // Draw the table in the new position
-        kWordDocument()->repaintAllViews(true /* ARGL*/);
+        //kWordDocument()->repaintAllViews(true /* ARGL*/);
+        //This leads to crashes. We are called from KWAnchor::draw, inside a paintevent, so
+        //we are not allowed to create a paint event ourselves. KWAnchor draws the table in theory anyway!
     }
 }
 

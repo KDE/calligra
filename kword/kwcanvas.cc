@@ -522,15 +522,14 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 
     // Get the mouse position from QCursor. Trying to get it from KWResizeHandle's
     // mouseMoveEvent leads to the frame 'jumping' because the events are received async.
-    QPoint mousep = mapFromGlobal(QCursor::pos());
-    int mx = mousep.x() + contentsX();
-    int my = mousep.y() + contentsY();
+    QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
+    mousep = m_viewMode->viewToNormal( mousep );
 
     // Apply the grid
     int rastX = doc->gridX();
     int rastY = doc->gridY();
-    mx = ( mx / rastX ) * rastX ;
-    my = ( my / rastY ) * rastY;
+    int mx = ( mousep.x() / rastX ) * rastX ;
+    int my = ( mousep.y() / rastY ) * rastY;
     double x = mx / doc->zoomedResolutionX();
     double y = my / doc->zoomedResolutionY();
 
@@ -569,7 +568,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     }
 
     // Keep copy of old rectangle, for repaint()
-    QRect oldRect = frame->outerRect();
+    QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
 
     frame->setLeft(newLeft);
     frame->setTop(newTop);
@@ -598,7 +597,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     // Move resize handles to new position
     frame->updateResizeHandles();
     // Calculate new rectangle for this frame
-    QRect newRect( frame->outerRect() );
+    QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
     // Repaing only the changed rects (oldRect U newRect)
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
     //doRaster = TRUE;
