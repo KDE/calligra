@@ -19,6 +19,8 @@
 
 #include "ooimpressexport.h"
 
+#include <math.h>
+
 #include <qdom.h>
 #include <qfile.h>
 
