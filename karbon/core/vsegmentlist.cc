@@ -221,7 +221,7 @@ bool
 VSegmentList::arcTo(
 	const KoPoint& p1, const KoPoint& p2, const double r )
 {
-	// parts of this routine are inspired by GNU ghostscript
+	// this routine is inspired by GNU ghostscript.
 
 	if( isClosed() ) return false;
 
@@ -313,13 +313,13 @@ VSegmentList::close()
 void
 VSegmentList::transform( const QWMatrix& m )
 {
-// TODO: optimize this since we have direct access now:
-	VSegmentListIterator itr( *this );
-	for( ; itr.current() ; ++itr )
+	VSegment* segment = m_first;
+	while( segment )
 	{
-		itr.current()->setPoint( 1, itr.current()->point( 1 ).transform( m ) );
-		itr.current()->setPoint( 2, itr.current()->point( 2 ).transform( m ) );
-		itr.current()->setPoint( 3, itr.current()->point( 3 ).transform( m ) );
+		segment->m_point[0] = segment->m_point[0].transform( m );
+		segment->m_point[1] = segment->m_point[1].transform( m );
+		segment->m_point[2] = segment->m_point[2].transform( m );
+		segment = segment->m_next;
 	}
 }
 
@@ -410,7 +410,7 @@ VSegmentList::append( const VSegment* segment )
 void
 VSegmentList::clear()
 {
-	VSegment* current = m_first;
+	VSegment* segment = m_first;
 
 	m_first = m_last = m_current = 0L;
 	m_number = 0;
@@ -420,11 +420,10 @@ VSegmentList::clear()
 		m_iteratorList->notifyClear( false );
 
 	VSegment* prev;
-
-	while( current )
+	while( segment )
 	{
-		prev = current;
-		current = current->m_next;
+		prev = segment;
+		segment = segment->m_next;
 		delete prev;
 	}
 }

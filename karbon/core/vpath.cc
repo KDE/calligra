@@ -4,12 +4,13 @@
 */
 
 #include <qdom.h>
-#include "vpainter.h"
+#include <qpainter.h>
 #include <qwmatrix.h>
 
 #include <koPoint.h>
 #include <koRect.h>
 
+#include "vpainter.h"
 #include "vpath.h"
 #include "vpath_bounding.h"
 
@@ -173,45 +174,25 @@ VPath::draw( VPainter *painter, const QRect& rect,
 		painter->strokePath();
 	}
 
-
-/*
-// TODO: convert the following to Traversers:
-	VSegmentListIterator itr( m_segmentLists );
-
-	if( state() == selected )
+	// draw small boxes for path nodes:
+	if( state() == state_selected )
 	{
-		painter.setRasterOp( Qt::CopyROP );
-		painter.setPen( Qt::NoPen );
-		painter.setBrush( Qt::blue.light() );
-
-		// draw small boxes for path nodes
-		for( itr.toFirst(); itr.current(); ++itr )
-		{
-			// draw boxes:
-			drawBox( painter,
-				qRound( zoomFactor * itr.current()->point( 3 ).x() ),
-				qRound( zoomFactor * itr.current()->point( 3 ).y() ), 3 );
-
-		}
-	}
-	else if( state() == edit )
-	{
-		painter.setRasterOp( Qt::XorROP );
-		painter.setPen( Qt::yellow );
-		painter.setBrush( Qt::NoBrush );
+		QPainter qpainter( painter->device() );
+		qpainter.setRasterOp( Qt::CopyROP );
+		qpainter.setPen( Qt::NoPen );
+		qpainter.setBrush( Qt::blue.light() );
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			// draw boxes:
-			painter.setPen( Qt::black );
-
-			drawBox( painter,
-				qRound( zoomFactor * itr.current()->point( 3 ).x() ),
-				qRound( zoomFactor * itr.current()->point( 3 ).y() ) );
+			VSegmentListIterator jtr( *( itr.current() ) );
+			for( ; jtr.current(); ++jtr )
+			{
+				qpainter.drawRect(
+					qRound( zoomFactor * jtr.current()->point( 3 ).x() ) - 2,
+					qRound( zoomFactor * jtr.current()->point( 3 ).y() ) - 2, 5, 5 );
+			}
 		}
-
 	}
-*/
 
 	painter->restore();
 }
