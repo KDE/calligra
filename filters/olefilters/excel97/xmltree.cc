@@ -48,6 +48,12 @@ const char *AxisText[] =
     "X axis", "Y axis", "Series axis"
 };
 
+const char *LegendLocationText[] =
+{
+    "bottom", "corner", "top", "left", "right",
+    "invalid1", "invalid2", "Not docked"
+};
+
 typedef enum {
     WGT_MODE_MIN		= -2,
     WGT_MODE_HAIRLINE		= -1,
@@ -92,6 +98,18 @@ typedef enum {
     AXIS_MAX			= 3
 } Axis;
 
+typedef enum {
+    LEGEND_LOCATION_BOTTOM	= 0,
+    LEGEND_LOCATION_CORNER	= 1,
+    LEGEND_LOCATION_TOP		= 2,
+    LEGEND_LOCATION_LEFT	= 3,
+    LEGEND_LOCATION_RIGHT	= 4,
+    LEGEND_LOCATION_INVALID1	= 5,
+    LEGEND_LOCATION_INVALID2	= 6,
+    LEGEND_LOCATION_NOT_DOCKED	= 7,
+    LEGEND_LOCATION_MAX		= 8
+} LegendLocation;
+
 const char *palette[65] = {
   "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
   "#ffffff", "#ffffff", "#000000", "#ffffff", "#ff0000", "#00ff00",
@@ -116,6 +134,7 @@ XMLTree::XMLTree() : QObject(),table(0L), fontCount(0), footerCount(0),
     biff = 0;
     date1904 = 0;
     m_streamDepth = 0;
+    m_chartSeriesCount = 0;
     mergelist.setAutoDelete(true);
     
     root = new QDomDocument("spreadsheet");
@@ -1053,9 +1072,9 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
         { "CHART-ATTACHEDLABEL", 0x100c, 0 /* &XMLTree::_chart_attachedlabel */ },
         { "CHART-SERIESTEXT", 0x100d, 0 /* &XMLTree::_chart_seriestext */ },
         { "CHART-CHARTFORMAT", 0x1014, &XMLTree::_chart_chartformat },
-        { "CHART-LEGEND",   0x1015, 0 /* &XMLTree::_chart_legend */ },
+        { "CHART-LEGEND",   0x1015, &XMLTree::_chart_legend },
         { "CHART-SERIESLIST", 0x1016, 0 /* &XMLTree::_chart_serieslist */ },
-        { "CHART-BAR",      0x1017, 0 /* &XMLTree::_chart_bar */ },
+        { "CHART-BAR",      0x1017, &XMLTree::_chart_bar },
         { "CHART-LINE",     0x1018, 0 /* &XMLTree::_chart_line */ },
         { "CHART-PIE",      0x1019, 0 /* &XMLTree::_chart_pie */ },
 	{ "CHART-AREA",     0x101a, 0 /* &XMLTree::_chart_area */ },
@@ -1102,7 +1121,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
         { "CHART-AXCEXT",   0x1062, 0 /* &XMLTree::_chart_axcext */ },
         { "CHART-DAT",      0x1063, 0 /* &XMLTree::_chart_dat */ },
         { "CHART-PLOTGROWTH", 0x1064, &XMLTree::_chart_plotgrowth },
-        { "CHART-SIINDEX",  0x1065, 0 /* &XMLTree::_chart_siindex */ },
+        { "CHART-SIINDEX",  0x1065, &XMLTree::_chart_siindex },
         { "CHART-GELFRAME", 0x1066, 0 /* &XMLTree::_chart_gelframe */ },
         { "CHART-BOPPOPCUSTOM", 0x1067, 0 /* &XMLTree::_chart_boppopcustom */ },
 	{ "CONDFMT",        0x01b0, &XMLTree::_condfmt },
@@ -2047,6 +2066,77 @@ bool XMLTree::_chart_chartformat(Q_UINT32, QDataStream &body)
     return true;
 }
 
+bool XMLTree::_chart_siindex(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 index;
+    
+    body >> index;
+
+    m_chartSeriesCount++;
+    
+    kdDebug(s_area) << "CHART: Series " << m_chartSeriesCount << " is " << index << endl;
+
+    return true;
+}
+
+bool XMLTree::_chart_legend(Q_UINT32, QDataStream &body)
+{
+    Q_UINT32 x, y, w, h;
+    Q_UINT8 tmp;
+    LegendLocation location;
+    
+    body >> x >> y >> w >> h;
+    body >> tmp;
+
+    if(tmp >= LEGEND_LOCATION_MAX || tmp == LEGEND_LOCATION_INVALID1 || tmp == LEGEND_LOCATION_INVALID2)
+    {
+	kdDebug(s_area) << "CHART: The 'tmp' field is higher than LEGEND_LOCATION_MAX-1! (Or == invalid1 or 2) Should never happen!" << endl;
+	return false;
+    }
+    
+    location = (LegendLocation) tmp;
+    
+    kdDebug(s_area) << "CHART: Legend is at " << LegendLocationText[location] << endl;
+    kdDebug(s_area) << "CHART: Legend x,y: " << x / 4000. << "," << y / 4000. << " w,h: " << w / 4000. << "," << h / 4000. << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_bar(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 spaceBetweenBar, spaceBetweenCategories, flags;
+    bool horizontalBar, stacked, asPercentage, hasShadow = false;
+    
+    body >> spaceBetweenBar >> spaceBetweenCategories >> flags;
+
+    horizontalBar = (flags & 0x01) ? true : false;
+    stacked = (flags & 0x02) ? true : false;
+    asPercentage = (flags & 0x04) ? true : false;
+
+    if(horizontalBar)
+	kdDebug(s_area) << "CHART: Horizontal bar!" << endl;
+    else
+	kdDebug(s_area) << "CHART: Vertical bar!" << endl;
+    
+    if(asPercentage)
+	kdDebug(s_area) << "CHART: Stacked Percentage. (" << stacked << " should be = true)" << endl;
+    else if(stacked)
+	kdDebug(s_area) << "CHART: Stacked Percentage values." << endl;
+    else
+	kdDebug(s_area) << "CHART: Overlayed values." << endl;
+	
+    kdDebug(s_area) << "CHART: Space between bars = " << spaceBetweenBar << "% of width!" << endl;
+    kdDebug(s_area) << "CHART: Space between categories = " << spaceBetweenCategories << "% of width!" << endl;
+
+    if(biff >= BIFF_8)
+    {
+	hasShadow = (flags & 0x04) ? true : false;
+	if(hasShadow)
+	    kdDebug(s_area) << "CHART: In 3D Mode!" << endl;
+    }
+    
+    return true;
+}
 
 bool XMLTree::_condfmt(Q_UINT32, QDataStream &)
 {

@@ -114,6 +114,7 @@ private:
   Q_UINT16 biff, date1904;
   unsigned m_streamDepth;
   unsigned m_chartDepth;
+  unsigned m_chartSeriesCount;
 
   QDomDocument *root;
 
@@ -163,6 +164,9 @@ private:
   bool _chart_tick(Q_UINT32 size, QDataStream &body);
   bool _chart_axislineformat(Q_UINT32 size, QDataStream &body);
   bool _chart_chartformat(Q_UINT32 size, QDataStream &body);
+  bool _chart_siindex(Q_UINT32 size, QDataStream &body);
+  bool _chart_legend(Q_UINT32 size, QDataStream &body);
+  bool _chart_bar(Q_UINT32 size, QDataStream &body);
   bool _condfmt(Q_UINT32 size, QDataStream &body);
   bool _codepage(Q_UINT32 size, QDataStream &body);
   bool _colinfo(Q_UINT32 size, QDataStream &body);
