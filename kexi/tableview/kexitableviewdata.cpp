@@ -91,7 +91,7 @@ KexiTableViewColumn::KexiTableViewColumn(
 	init();
 	//setup column's readonly flag: true if this is parent table's field
 	m_readOnly = (query.parentTable()!=f.table());
-	m_visible = query.isFieldVisible(&f);
+//	m_visible = query.isFieldVisible(&f);
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
@@ -197,10 +197,12 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded(&detailedVisibility);
 	KexiTableViewColumn* col;
 	for (i=0;i<vector.count();i++) {
-		KexiDB::Field *f = vector[i];
-		col=new KexiTableViewColumn(*m_cursor->query(), *f);
-		col->setVisible( detailedVisibility[i] );
-		addColumn( col );
+		if (detailedVisibility[i]) {
+			KexiDB::Field *f = vector[i];
+			col=new KexiTableViewColumn(*m_cursor->query(), *f);
+			//col->setVisible( detailedVisibility[i] );
+			addColumn( col );
+		}
 	}
 }
 

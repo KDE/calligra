@@ -24,7 +24,7 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <kexipartdatasource.h>
-#include <kexidb/fieldlist.h>
+#include <kexidb/queryschema.h>
 #include <qmap.h>
 
 class KexiMainWin;
@@ -61,6 +61,7 @@ class KexiQueryPart : public KexiPart::Part
 		{
 			public:
 			TempData(QObject* parent);
+			KexiDB::QuerySchema *query;
 		};
 
 	private:

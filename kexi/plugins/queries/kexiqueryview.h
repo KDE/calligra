@@ -38,7 +38,7 @@ class KexiQueryView : public KexiDataTable
 		~KexiQueryView();
 
 	protected:
-		virtual bool		afterSwitchFrom(int mode);
+		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
 	private:
 		KexiQueryDocument	*m_doc;

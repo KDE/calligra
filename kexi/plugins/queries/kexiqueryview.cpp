@@ -24,17 +24,41 @@
 
 #include "kexiquerydocument.h"
 #include "kexiqueryview.h"
+#include "kexiquerypart.h"
+#include "kexitableview.h"
 
 KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiDataTable(win, parent, name)
 {
 	m_doc = doc;
-	afterSwitchFrom(0);
+	bool c = false;
+	afterSwitchFrom(0, c);
+}
+
+KexiQueryView::~KexiQueryView()
+{
 }
 
 bool
-KexiQueryView::afterSwitchFrom(int)
+KexiQueryView::afterSwitchFrom(int mode, bool &cancelled)
 {
+	if (mode==Kexi::DesignViewMode) {
+		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		if (!temp->query)
+			return false;
+		//we've designed query
+		KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*temp->query);
+		if (!rec) {
+			//todo: error
+			return false;
+		}
+		setData(rec);
+		//TODO: maybe allow writing and inserting for single-table relations?
+		tableView()->setReadOnly( true );
+		tableView()->setInsertingEnabled( false );
+	}
+
+#if 0
 	if (m_doc && m_doc->schema())
 	{
 		KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_doc->schema());
@@ -58,12 +82,10 @@ KexiQueryView::afterSwitchFrom(int)
 
 		m_doc->addHistoryItem(statement, "");
 	}
+#endif
 	return true;
 }
 
-KexiQueryView::~KexiQueryView()
-{
-}
 
 #include "kexiqueryview.moc"
 

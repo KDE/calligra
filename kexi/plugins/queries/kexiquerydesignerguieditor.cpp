@@ -39,6 +39,7 @@
 #include <kexitableviewdata.h>
 #include <kexidragobjects.h>
 #include "kexiquerydocument.h"
+#include "kexiquerypart.h"
 #include "kexidialogbase.h"
 #include "kexidatatable.h"
 #include "kexi_utils.h"
@@ -284,8 +285,6 @@ KexiQueryDesignerGuiEditor::schema()
 		m_doc->schema()->addField(f);
 	}
 
-//	containsRef
-
 	//this is temporary and will later be replaced by a intelligent master-table-finder in
 	//KexiDB::Connection::selectStatement()
 	m_doc->schema()->setParentTable(m_doc->schema()->tables()->first());
@@ -328,6 +327,38 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 		//remember current design in a temporary structure
 		dontStore=true;
 		//TODO
+		//build query
+		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		if (temp->query)
+			temp->query->clear();
+		else
+			temp->query = new KexiDB::QuerySchema();
+
+		for (int i=0; i<(int)m_buffers->size(); i++) {
+			KexiPropertyBuffer *buf = m_buffers->at(i);
+			if (buf) {
+				KexiDB::TableSchema *t = m_conn->tableSchema((*buf)["table"]->value().toString());
+				if (!t) {
+					kdWarning() << "query designer: NO TABLE '" << (*buf)["table"]->value().toString() << "'" << endl;
+					continue;
+				}
+				QString fieldName = (*buf)["field"]->value().toString();
+				bool fieldVisible = (*buf)["visible"]->value().toBool();
+				if (fieldName=="*") {
+					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+				}
+				else {
+					KexiDB::Field *f = t->field( fieldName );
+					if (!f) {
+						kdWarning() << "query designer: NO FIELD '" << fieldName << "'" << endl;
+						continue;
+					}
+					temp->query->addField(f, fieldVisible);
+				}
+			}
+		}
+		//TODO
+		
 		return true;
 	}
 	else if (mode==Kexi::TextViewMode) {
@@ -428,8 +459,8 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		}
 		else {
 			//auto fill 'table' column
-			QString fieldName = newValue.toString(), tableName;
-			tableName = fieldName;
+			QString fieldName = newValue.toString();
+			QString tableName = fieldName;
 			int id = tableName.find('.');
 			if (id>=0)
 				tableName = tableName.left(id);
@@ -441,6 +472,14 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 					tableName, fieldName, true );
 				propertyBufferSwitched();
 			}
+			//update property
+			if (propertyBuffer()) {
+				KexiPropertyBuffer &buf = *propertyBuffer();
+				buf["field"]->setValue(fieldName.mid(id+1));
+				buf["alias"]->setValue(QString::null);
+				buf["caption"]->setValue(QString::null);
+				buf["table"]->setValue(tableName);
+			}
 		}
 	}
 	else if (colnum==1) {//'table'
@@ -451,6 +490,12 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			m_data->updateRowEditBuffer(item, 3, QVariant());//remove totals
 			m_buffers->removeCurrentPropertyBuffer();
 		}
+		//update property
+		if (propertyBuffer()) {
+			KexiPropertyBuffer &buf = *propertyBuffer();
+			buf["table"]->setValue(newValue);
+			buf["caption"]->setValue(QString::null);
+		}
 	}
 	else if (colnum==2) {//'visible'
 		if (!propertyBuffer()) {
@@ -459,6 +504,18 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			m_data->updateRowEditBuffer(item, 3, QVariant(0));//totals
 			propertyBufferSwitched();
 		}
+		if (propertyBuffer()) {
+			KexiPropertyBuffer &buf = *propertyBuffer();
+			buf["visible"]->setValue(newValue);
+		}
+	}
+	else if (colnum==3) {//'criteria'
+		//TODO:
+		//unused yet
+	}
+	else if (colnum==4) {//'totals'
+		//TODO:
+		//unused yet
 	}
 }
 
@@ -489,6 +546,13 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	buff->add(prop = new KexiProperty("alias", QVariant(QString::null), i18n("Alias")) );
 	if (asterisk)
 		prop->setVisible(false);
+
+	buff->add(prop = new KexiProperty("visible", QVariant(true, 4)) );
+	prop->setVisible(false);
+
+/*TODO: 
+	buff->add(prop = new KexiProperty("totals", QVariant(QString::null)) );
+	prop->setVisible(false);*/
 
 	//sorting
 	QStringList slist, nlist;

@@ -296,6 +296,7 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - make "field" field work as combo
 - add "sort" field (as combo)
 - make "1" and "inf" signs a bit larger (scalable)
+- 'criteria' and 'totals' are unused yet
 
 ==== Main window TODO ====
 - show error message if createView() returned 0
@@ -318,6 +319,14 @@ HOT TODO:
 CC_MAIL: dkite@shaw.ca
 
 ===================== Kexi 0.1 Beta 3 =====================
+
+2004-05-01
+KexiDB
+- QuerySchema: 'visible' field's property is now assigned to possition, not to field pointer,
+   because the same field can be added more than one time to a query
+- Connection::selectStatement(): only visible fields are shown
+Query Designer
+- executing (switching to data view mode) is working again!
 
 2004-04-30
 TableView:
