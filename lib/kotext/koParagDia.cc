@@ -93,7 +93,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
 
     spnStart = new KoSpinBox( gStyle );
     spnStart->setMinValue ( 1);
-    grid->addWidget( spnStart, 1, 2);
+    grid->addWidget( spnStart, 2, 2);
 
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
     lDepth->setText( i18n( "Depth" ) );
