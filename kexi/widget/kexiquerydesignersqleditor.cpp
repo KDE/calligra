@@ -21,7 +21,7 @@
 #include "kexiquerydesignersqleditor.h"
 
 //uncomment this to enable Qt-only editor
-#define QT_ONLY_SQL_EDITOR
+//#define QT_ONLY_SQL_EDITOR
 
 //TODO: detect if KTextEditor returned something, if not- force QT_ONLY_SQL_EDITOR option
 
