@@ -217,7 +217,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
         } else if ( localName == "year" ) {
             format += shortForm ? "yy" : "yyyy";
         } else if ( localName == "era" ) {
-            //todo I don't know what is it... (define into oo spec)
+            //TODO I don't know what is it... (define into oo spec)
         } else if ( localName == "week-of-year" || localName == "quarter") {
             // ### not supported in Qt
         } else if ( localName == "hours" ) {
@@ -410,12 +410,12 @@ bool KoOasisStyles::saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QStr
     }
     else if ( format.startsWith( "%I" ) )// ?????
     {
-        //todo hour in 12h
+        //TODO hour in 12h
         changed = true;
     }
     else if ( format.startsWith( "%l" ) )
     {
-        //todo hour in 12h with 1 digit
+        //TODO hour in 12h with 1 digit
         changed = true;
     }
     else if ( format.startsWith( "%M" ) )// mm
@@ -441,7 +441,7 @@ bool KoOasisStyles::saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QStr
     }
     else if ( format.startsWith( "%p" ) )
     {
-        //todo am or pm
+        //TODO am or pm
         addTextNumber( text, elementWriter );
 
         elementWriter.startElement( "number:am-pm" );
@@ -889,9 +889,9 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:fraction" );
-    elementWriter.addAttribute( "min-integer-digits", integer );
-    elementWriter.addAttribute( "min-numerator-digits",numerator );
-    elementWriter.addAttribute( "min-denominator-digits",denominator );
+    elementWriter.addAttribute( "number:min-integer-digits", integer );
+    elementWriter.addAttribute( "number:min-numerator-digits",numerator );
+    elementWriter.addAttribute( "number:min-denominator-digits",denominator );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
@@ -903,6 +903,11 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
 //TODO
 QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format )
 {
+    //<number:percentage-style style:name="N11">
+    //<number:number number:decimal-places="2" number:min-integer-digits="1"/>
+    //<number:text>%</number:text>
+    //</number:percentage-style>
+
     kdDebug()<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
@@ -911,11 +916,18 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
+    int decimalplaces = 0;
+    int integerdigits = 0;
     do
     {
+        //TODO parse value
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
+    elementWriter.startElement( "number:number" );
+    elementWriter.addAttribute( "number:decimal-places", decimalplaces );
+    elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
+    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
@@ -926,19 +938,32 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
 //TODO
 QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format )
 {
+    //<number:number-style style:name="N60">
+    //<number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
+    //</number:number-style>
+
     kdDebug()<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
+    int decimalplace = 0;
+    int integerdigits = 0;
+    int exponentdigits = 0;
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     do
     {
+        //TODO parse value.
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
+    elementWriter.startElement( "number:scientific-number" );
+    elementWriter.addAttribute( "number:decimal-places", decimalplace );
+    elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
+    elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
+    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
@@ -948,6 +973,14 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
 //TODO
 QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format )
 {
+    //<number:currency-style style:name="N107">
+    //<number:text>-</number:text>
+    //<number:number number:decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+    //<number:text> </number:text>
+    //<number:currency-symbol number:language="fr" number:country="FR">€</number:currency-symbol>
+    //<style:map style:condition="value()&gt;=0" style:apply-style-name="N107P0"/>
+    //</number:currency-style>
+
     kdDebug()<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
