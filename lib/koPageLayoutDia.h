@@ -27,6 +27,7 @@
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qpixmap.h>
+#include <qlined.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
@@ -59,6 +60,17 @@ struct KoPageLayout
   double width,height;
   double left,right,top,bottom;
   KoUnit unit;
+};
+
+// structure for header-footer
+struct KoHeadFoot
+{
+  QString headLeft;
+  QString headMid;
+  QString headRight;
+  QString footLeft;
+  QString footMid;
+  QString footRight;
 };
 
 /******************************************************************/
@@ -99,17 +111,18 @@ class KoPageLayoutDia : public QTabDialog
 public:
 
   // constructor - destructor
-  KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoTabs);
+  KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoHeadFoot,int);
   ~KoPageLayoutDia();              
 
   // show page layout dialog
-  static bool pageLayout(KoPageLayout&,KoTabs);
+  static bool pageLayout(KoPageLayout&,KoHeadFoot&,int);
 
   // get a standard page layout
   static KoPageLayout standardLayout();
 
   // should NOT be used by an app - just for internal use!
   KoPageLayout getLayout() {return layout;};
+  KoHeadFoot getHeadFoot();
 
 protected:
 
@@ -129,9 +142,14 @@ protected:
   QComboBox *cpgFormat,*cpgOrientation,*cpgUnit;
   KRestrictedLine *epgWidth,*epgHeight,*ebrLeft,*ebrRight,*ebrTop,*ebrBottom;
   KoPagePreview *pgPreview;
+  QLabel *lHeadLeft,*lHeadMid,*lHeadRight,*lHead;
+  QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
+  QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
+  QLineEdit *eFootLeft,*eFootMid,*eFootRight;
 
   // layout
   KoPageLayout layout;
+  KoHeadFoot hf;
 
   bool retPressed;
 
@@ -139,7 +157,6 @@ private slots:
 
   // take changes
   void Ok() {}                                  
-  void Apply() {} 
 
   // combos
   void unitChanged(int);

@@ -81,13 +81,14 @@ void KoPagePreview::drawContents(QPainter *painter)
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoTabs tabs)
+KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,int tabs)
   : QTabDialog(parent,name,true)
 {
   layout = _layout;
+  hf = _hf;
 
-  if (tabs && FORMAT_AND_BORDERS) setupTab1();
-  if (tabs && HEADER_AND_FOOTER) setupTab2();
+  if (tabs & FORMAT_AND_BORDERS) setupTab1();
+  if (tabs & HEADER_AND_FOOTER) setupTab2();
 
   setCancelButton("Cancel");
   setOkButton("OK");
@@ -103,15 +104,16 @@ KoPageLayoutDia::~KoPageLayoutDia()
 }
 
 /*======================= show dialog ============================*/
-bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoTabs _tabs)
+bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoHeadFoot& _hf,int _tabs)
 {
   bool res = false;
-  KoPageLayoutDia *dlg = new KoPageLayoutDia(0,"PageLayout",_layout,_tabs);
+  KoPageLayoutDia *dlg = new KoPageLayoutDia(0,"PageLayout",_layout,_hf,_tabs);
 
   if (dlg->exec() == QDialog::Accepted)
     {
       res = true;
-      _layout = dlg->getLayout();
+      if (_tabs & FORMAT_AND_BORDERS) _layout = dlg->getLayout();
+      if (_tabs & HEADER_AND_FOOTER) _hf = dlg->getHeadFoot();
     }
 
   delete dlg;
@@ -135,6 +137,19 @@ KoPageLayout KoPageLayoutDia::standardLayout()
   _layout.unit = PG_MM;
 
   return  _layout;
+}
+
+/*====================== get header - footer =====================*/
+KoHeadFoot KoPageLayoutDia::getHeadFoot()
+{
+  hf.headLeft = qstrdup(eHeadLeft->text());
+  hf.headMid = qstrdup(eHeadMid->text());
+  hf.headRight = qstrdup(eHeadRight->text());
+  hf.footLeft = qstrdup(eFootLeft->text());
+  hf.footMid = qstrdup(eFootMid->text());
+  hf.footRight = qstrdup(eFootRight->text());
+
+  return hf;
 }
 
 /*================ setup format and borders tab ==================*/
@@ -428,15 +443,124 @@ void KoPageLayoutDia::setValuesTab1()
 /*================ setup header and footer tab ===================*/
 void KoPageLayoutDia::setupTab2()
 {
-//   tab2 = new QWidget(this);
+  tab2 = new QWidget(this);
 
-//   grid2 = new QGridLayout(tab2,2,2);
+  grid2 = new QGridLayout(tab2,8,3,15,7);
 
-//   tab2->resize(0,0);
-//   tab2->setMaximumSize(size());
-//   tab2->setMinimumSize(size());
+  // ------------- header ---------------
+  lHead = new QLabel("Head line:",tab2);
+  lHead->resize(lHead->sizeHint());
+  grid2->addWidget(lHead,0,0);
 
-//   addTab(tab2,"Header and Footer");
+  lHeadLeft = new QLabel("Left:",tab2);
+  lHeadLeft->resize(lHeadLeft->sizeHint());
+  grid2->addWidget(lHeadLeft,1,0);
+
+  eHeadLeft = new QLineEdit(tab2);
+  eHeadLeft->resize(eHeadLeft->sizeHint());
+  grid2->addWidget(eHeadLeft,2,0);
+  eHeadLeft->setText((const char*)hf.headLeft);
+
+  lHeadMid = new QLabel("Mid:",tab2);
+  lHeadMid->resize(lHeadMid->sizeHint());
+  grid2->addWidget(lHeadMid,1,1);
+
+  eHeadMid = new QLineEdit(tab2);
+  eHeadMid->resize(eHeadMid->sizeHint());
+  grid2->addWidget(eHeadMid,2,1);
+  eHeadMid->setText((const char*)hf.headMid);
+
+  lHeadRight = new QLabel("Right:",tab2);
+  lHeadRight->resize(lHeadRight->sizeHint());
+  grid2->addWidget(lHeadRight,1,2);
+
+  eHeadRight = new QLineEdit(tab2);
+  eHeadRight->resize(eHeadRight->sizeHint());
+  grid2->addWidget(eHeadRight,2,2);
+  eHeadRight->setText((const char*)hf.headRight);
+
+  // ------------- footer ---------------
+  lFoot = new QLabel("\nFoot line:",tab2);
+  lFoot->resize(lFoot->sizeHint());
+  grid2->addWidget(lFoot,3,0);
+
+  lFootLeft = new QLabel("Left:",tab2);
+  lFootLeft->resize(lFootLeft->sizeHint());
+  grid2->addWidget(lFootLeft,4,0);
+
+  eFootLeft = new QLineEdit(tab2);
+  eFootLeft->resize(eFootLeft->sizeHint());
+  grid2->addWidget(eFootLeft,5,0);
+  eFootLeft->setText((const char*)hf.footLeft);
+
+  lFootMid = new QLabel("Mid:",tab2);
+  lFootMid->resize(lFootMid->sizeHint());
+  grid2->addWidget(lFootMid,4,1);
+
+  eFootMid = new QLineEdit(tab2);
+  eFootMid->resize(eFootMid->sizeHint());
+  grid2->addWidget(eFootMid,5,1);
+  eFootMid->setText((const char*)hf.footMid);
+
+  lFootRight = new QLabel("Right:",tab2);
+  lFootRight->resize(lFootRight->sizeHint());
+  grid2->addWidget(lFootRight,4,2);
+
+  eFootRight = new QLineEdit(tab2);
+  eFootRight->resize(eFootRight->sizeHint());
+  grid2->addWidget(eFootRight,5,2);
+  eFootRight->setText((const char*)hf.footRight);
+
+  // --------------- macros ---------------------
+  lMacros1 = new QLabel("\nMacros:",tab2);
+  lMacros1->resize(lMacros1->sizeHint());
+  grid2->addWidget(lMacros1,6,0);
+
+  lMacros2 = new QLabel("<page>,<name>,<file>,<time>,<date>,<author>,<email>",tab2);
+  lMacros2->resize(lMacros2->sizeHint());
+  grid2->addMultiCellWidget(lMacros2,7,7,0,2);
+  
+
+  // --------------- main grid ------------------
+  grid2->addColSpacing(0,lHead->width());
+  grid2->addColSpacing(0,lHeadLeft->width());
+  grid2->addColSpacing(0,eHeadLeft->width());
+  grid2->addColSpacing(1,lHeadMid->width());
+  grid2->addColSpacing(1,eHeadMid->width());
+  grid2->addColSpacing(2,lHeadRight->width());
+  grid2->addColSpacing(2,eHeadRight->width());
+  grid2->addColSpacing(0,lFoot->width());
+  grid2->addColSpacing(0,lFootLeft->width());
+  grid2->addColSpacing(0,eFootLeft->width());
+  grid2->addColSpacing(1,lFootMid->width());
+  grid2->addColSpacing(1,eFootMid->width());
+  grid2->addColSpacing(2,lFootRight->width());
+  grid2->addColSpacing(2,eFootRight->width());
+  grid2->addColSpacing(0,lMacros1->width());
+
+  grid2->addRowSpacing(0,lHead->height());
+  grid2->addRowSpacing(1,lHeadLeft->height());
+  grid2->addRowSpacing(1,lHeadMid->height());
+  grid2->addRowSpacing(1,lHeadRight->height());
+  grid2->addRowSpacing(2,eHeadLeft->height());
+  grid2->addRowSpacing(2,eHeadMid->height());
+  grid2->addRowSpacing(2,eHeadRight->height());
+  grid2->addRowSpacing(3,lFoot->height());
+  grid2->addRowSpacing(4,lFootLeft->height());
+  grid2->addRowSpacing(4,lFootMid->height());
+  grid2->addRowSpacing(4,lFootRight->height());
+  grid2->addRowSpacing(5,eFootLeft->height());
+  grid2->addRowSpacing(5,eFootMid->height());
+  grid2->addRowSpacing(5,eFootRight->height());
+  grid2->addRowSpacing(6,lMacros1->height());
+  grid2->addRowSpacing(7,lMacros2->height());
+
+  grid2->activate();
+  tab2->resize(0,0);
+  tab2->setMaximumSize(tab2->size());
+  tab2->setMinimumSize(tab2->size());
+  
+  addTab(tab2,"Header and Footer");
 }
 
 /*====================== update the preview ======================*/
