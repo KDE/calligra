@@ -67,6 +67,8 @@
 
 #include <kspell.h>
 
+//#define DEBUG_PAGES
+
 #undef getPointBasedAttribute
 #define getPointBasedAttribute(structure, attribute, element, attributeName, defaultValue) \
 do \
@@ -517,7 +519,9 @@ void KWDocument::recalcFrames()
 
         // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
-        kdDebug() << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
+#endif
         // Then from the other frames ( frameset-num > 0 )
         double maxBottom = 0;
         for (int m = getNumFrameSets() - 1; m > 0; m-- )
@@ -527,16 +531,20 @@ void KWDocument::recalcFrames()
             {
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
+#ifdef DEBUG_PAGES
                     kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " " << fs->getName()
                                    << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
+#endif
                     maxBottom = QMAX(maxBottom, fs->getFrame(n)->bottom());
                 }
             }
         }
         int pages2 = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
+#ifdef DEBUG_PAGES
         kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2
                        << " (coming from maxBottom=" << maxBottom << " and ptPaperHeight=" << ptPaperHeight() << ")"
                        << endl;
+#endif
 
         m_pages = QMAX( pages2, m_pages );
         if ( m_pages != oldPages )
@@ -630,7 +638,9 @@ void KWDocument::recalcFrames()
                                                                                  ptRightBorder(), h2 );
                         oddHeader->setCurrent( oddHeader->getCurrent() + 1 );
                     } else {
+#ifdef DEBUG_PAGES
                         kdDebug() << "KWDocument::recalcFrames creating new odd header" << endl;
+#endif
                         KWFrame *frame = new KWFrame( oddHeader, ptLeftBorder(), l * ptPaperHeight() +
                                                       ptTopBorder(),
                                                       ptPaperWidth() - ptLeftBorder() -
@@ -653,7 +663,9 @@ void KWDocument::recalcFrames()
                                                                                    ptRightBorder(), h1 );
                         evenHeader->setCurrent( evenHeader->getCurrent() + 1 );
                     } else {
+#ifdef DEBUG_PAGES
                         kdDebug() << "KWDocument::recalcFrames creating new even header" << endl;
+#endif
                         KWFrame *frame = new KWFrame( evenHeader,ptLeftBorder(), l * ptPaperHeight() +
                                                       ptTopBorder(),
                                                       ptPaperWidth() - ptLeftBorder() -
@@ -667,18 +679,24 @@ void KWDocument::recalcFrames()
             }
             if ( even + 1 < static_cast<int>( evenHeader->getNumFrames() ) ) {
                 int diff = evenHeader->getNumFrames() - even;
+#ifdef DEBUG_PAGES
                 kdDebug() << "KWDocument::recalcFrames deleting " << diff << " even headers" << endl;
+#endif
                 for ( ; diff > 0; diff-- )
                     evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
             }
             if ( odd + 1 < static_cast<int>( oddHeader->getNumFrames() ) ) {
                 int diff = oddHeader->getNumFrames() - odd;
+#ifdef DEBUG_PAGES
                 kdDebug() << "KWDocument::recalcFrames deleting " << diff << " odd headers" << endl;
+#endif
                 for ( ; diff > 0; diff-- )
                     oddHeader->delFrame( oddHeader->getNumFrames() - 1 );
             }
             if ( m_pages == 1 && evenHeader->getNumFrames() > 0 ) {
+#ifdef DEBUG_PAGES
                 kdDebug() << "KWDocument::recalcFrames 1 page, " << evenHeader->getNumFrames() << " frames" << endl;
+#endif
                 // ???
                 for ( unsigned int m = 0; m < evenHeader->getNumFrames(); m++ )
                     evenHeader->getFrame( m )->setRect( 0, ptPaperHeight() + h1,
@@ -1966,7 +1984,9 @@ void KWDocument::repaintAllViews( bool erase )
 void KWDocument::appendPage( /*unsigned int _page*/ )
 {
     int thisPageNum = m_pages-1;
+#ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
+#endif
     m_pages++;
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -1976,8 +1996,9 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
         // don't add tables! A table cell ( frameset ) _must_ not have cells auto-added to them!
         if ( frameSet->type() == FT_TABLE ) continue;
 
-        //kdDebug(32002) << "KWDocument::appendPage looking at frameset " << frameSet->getName() << endl;
-
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "KWDocument::appendPage looking at frameset " << frameSet->getName() << endl;
+#endif
         // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
         // which destroys the iterators -> append the new frames at the end.
         QList<KWFrame> newFrames;
@@ -1990,9 +2011,11 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            /*kdDebug(32002) << "   frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
+#ifdef DEBUG_PAGES
+            kdDebug(32002) << "   frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
             static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
-            kdDebug(32002) << "   frame->getNewFrameBehaviour()==" << newFrameBh[frame->getNewFrameBehaviour()] << endl;*/
+            kdDebug(32002) << "   frame->getNewFrameBehaviour()==" << newFrameBh[frame->getNewFrameBehaviour()] << endl;
+#endif
             if ( (frame->pageNum() == thisPageNum ||
                   (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != KWFrame::AnySide) )
                  &&
@@ -2039,13 +2062,17 @@ bool KWDocument::canRemovePage( int num )
         if ( frameSet->isVisible() && !frameSet->canRemovePage( num ) )
             return false;
     }
+#ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::canRemovePage " << num << "-> TRUE" << endl;
+#endif
     return true;
 }
 
 void KWDocument::removePage( int num )
 {
+#ifdef DEBUG_PAGES
     kdDebug() << "KWDocument::removePage " << num << endl;
+#endif
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -2059,7 +2086,9 @@ void KWDocument::removePage( int num )
             KWFrame * frm = frameIt.current();
             if ( frm->pageNum() == num )
             {
+#ifdef DEBUG_PAGES
                 kdDebug() << "KWDocument::removePage deleting frame " << frm << " (from frameset " << frameSet->getName() << ")" << endl;
+#endif
                 toDelete.append( frm ); // Can't remove the frame here, it screws up the iterator -> toDelete
             }
         }
@@ -2068,7 +2097,9 @@ void KWDocument::removePage( int num )
             frameSet->delFrame( delIt.current(), true );
     }
     m_pages--;
+#ifdef DEBUG_PAGES
     kdDebug() << "KWDocument::removePage -- -> " << m_pages << endl;
+#endif
     emit pageNumChanged();
     recalcVariables( VT_PGNUM );
     recalcFrames();

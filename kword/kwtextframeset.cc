@@ -120,7 +120,7 @@ int KWTextFrameSet::availableHeight() const
 
 KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
-// #define DEBUG_NTI
+#define DEBUG_NTI
     // Find the frame that contains nPoint. To go fast, we look them up by page number.
     int pageNum = nPoint.y() / m_doc->paperHeight();
     QListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
@@ -223,12 +223,19 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
 
 KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const
 {
+//#define DEBUG_ITN
+#ifdef DEBUG_ITN
+    kdDebug() << "KWTextFrameSet::internalToNormalWithHint hintNPoint: " << hintNPoint.x() << "," << hintNPoint.y() << endl;
+#endif
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
         QRect r( 0, frame->internalY(), frameRect.width(), frameRect.height() );
+#ifdef DEBUG_ITN
+        kdDebug() << "ITN: r=" << DEBUGRECT(r) << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+#endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
@@ -236,6 +243,9 @@ KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoi
             int offsetY = frameRect.top() - frame->internalY();
             nPoint.setX( iPoint.x() + offsetX );
             nPoint.setY( iPoint.y() + offsetY );
+#ifdef DEBUG_ITN
+            kdDebug() << "copy: " << frame->isCopy() << " hintNPoint.y()=" << hintNPoint.y() << " nPoint.y()=" << nPoint.y() << endl;
+#endif
             if ( hintNPoint.isNull() || !frame->isCopy() || hintNPoint.y() <= nPoint.y() )
                 return frame;
             // The above test uses hintNPoint only if specified, and if this frame isn't a copy.
@@ -244,8 +254,10 @@ KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoi
 
     // This happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
     // So it doesn't matter much what happens here, we'll redo it anyway.
-    //kdDebug(32002) << "KWTextFrameSet::internalToNormalWithHint " << iPoint.x() << "," << iPoint.y()
-    //               << " not in any frame of " << (void*)this << endl;
+#ifdef DEBUG_ITN
+    kdDebug(32002) << "KWTextFrameSet::internalToNormalWithHint " << iPoint.x() << "," << iPoint.y()
+                   << " not in any frame of " << (void*)this << endl;
+#endif
     nPoint = iPoint; // bah
     return 0L;
 }
@@ -857,6 +869,8 @@ void KWTextFrameSet::updateFrames()
     frames.setAutoDelete( false );
     frames.clear();
     m_availableHeight = 0;
+    int internalY = 0;
+    int lastRealFrameHeight = 0;
     QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
     for ( ; it != sortedFrames.end() ; ++it )
     {
@@ -866,11 +880,17 @@ void KWTextFrameSet::updateFrames()
         ASSERT( frame->pageNum() <= lastPage );
         m_framesInPage[frame->pageNum() - m_firstPage]->append( frame );
 
-        frame->setInternalY( m_availableHeight );
+        if ( !frame->isCopy() )
+            internalY += lastRealFrameHeight;
+
+        frame->setInternalY( internalY );
 
         // Update m_availableHeight with the internal height of this frame - unless it's a copy
         if ( ! ( frame->isCopy() && it != sortedFrames.begin() ) )
-            m_availableHeight += m_doc->zoomItY( frame->height() );
+        {
+            lastRealFrameHeight = m_doc->zoomItY( frame->height() );
+            m_availableHeight += lastRealFrameHeight;
+        }
     }
 
     //kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
@@ -1534,14 +1554,19 @@ void KWTextFrameSet::formatMore()
                     }
 
                     if(difference > 0) {
-                        KWFrame *theFrame = frames.last();
+                        // There's no point in resizing a copy, so go back to the last non-copy frame
+                        KWFrame *theFrame = settingsFrame( frames.last() );
 
                         if ( theFrame->getFrameSet()->isAFooter() )
                         {
 #ifdef DEBUG_FORMAT_MORE
-                            kdDebug(32002) << "KWTextFrameSet::formatMore this is a footer" << endl;
+                            kdDebug(32002) << "KWTextFrameSet::formatMore this is a footer (frame=" << theFrame << ")" << endl;
+                            kdDebug(32002) << "Old top = " << theFrame->top() << endl;
 #endif
-                            theFrame->setTop( theFrame->top() - difference );
+                            theFrame->setTop( theFrame->top() - m_doc->unzoomItY( difference ) );
+#ifdef DEBUG_FORMAT_MORE
+                            kdDebug(32002) << "New top = " << theFrame->top() << endl;
+#endif
 
                             m_doc->recalcFrames();
                             // m_doc->frameChanged( theFrame );
@@ -1553,7 +1578,7 @@ void KWTextFrameSet::formatMore()
                             break;
                         }
 
-                        wantedPosition = difference + theFrame->bottom();
+                        wantedPosition = m_doc->unzoomItY( difference ) + theFrame->bottom();
                         double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
                         pageBottom -= m_doc->ptBottomBorder();
                         double newPosition = QMIN(wantedPosition, pageBottom );
@@ -3263,7 +3288,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
     mightStartDrag = FALSE;
 
     QPoint iPoint;
-    m_currentFrame = textFrameSet()->normalToInternal( nPoint, iPoint );
+    m_currentFrame = textFrameSet()->normalToInternal( nPoint, iPoint, true );
     if ( m_currentFrame )
     {
         mousePos = iPoint;
