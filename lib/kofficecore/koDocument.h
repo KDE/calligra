@@ -34,6 +34,7 @@ using namespace std;
 
 class QDomElement;
 class QDomDocument;
+class QXmlSimpleReader;
 
 class KoStore;
 class KoMainWindow;
@@ -193,6 +194,11 @@ public:
      */
     static QStringList readExtraNativeMimeTypes( KInstance *instance = 0 );
 
+    /**
+     * setup the XML reader, so that we don't have to duplicate the code.
+     */ 
+    static void setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing = false );
+      
     /**
      * To be preferred when a document exists. It is fast when calling
      * it multiple times since it caches the result that @ref #readNativeFormatMimeType

@@ -34,6 +34,8 @@
 #include <kdebug.h>
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
+#include <qxml.h>
+#include <qbuffer.h>
 
 
 KWPasteTextCommand::KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
@@ -250,8 +252,12 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     cursor.setIndex( m_idx );
     c->setParag( firstParag );
     c->setIndex( m_idx );
+    QBuffer buffer( m_data );
+    QXmlInputSource source( &buffer );
+    QXmlSimpleReader reader;
+    KoDocument::setupXmlReader( reader );
     QDomDocument domDoc;
-    domDoc.setContent( m_data );
+    domDoc.setContent( &source, &reader );
     QDomElement content = domDoc.documentElement();
 
     QDomElement body ( content.namedItem( "office:body" ).toElement() );

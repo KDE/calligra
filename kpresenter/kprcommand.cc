@@ -51,6 +51,10 @@
 #include <koSize.h>
 #include <koPoint.h>
 
+#include <qxml.h>
+#include <qbuffer.h>
+
+
 ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
                       QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KNamedCommand( _name ), oldShadow( _oldShadow ), objects( _objects )
@@ -1773,8 +1777,13 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
     cursor.setIndex( m_idx );
     c->setParag( firstParag );
     c->setIndex( m_idx );
+    QBuffer buffer( m_data );
+    QXmlInputSource source( &buffer );
+    QXmlSimpleReader reader;
+    KoDocument::setupXmlReader( reader );
     QDomDocument domDoc;
-    domDoc.setContent( m_data );
+    domDoc.setContent( &source, &reader );
+    
     QDomElement content = domDoc.documentElement();
 
     QDomElement body ( content.namedItem( "office:body" ).toElement() );
@@ -1830,18 +1839,9 @@ KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
 
     cursor.setParag( lastParag );
     cursor.setIndex( m_lastIndex );
-#if 0 //kword specific code
     doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
-    // Delete all custom items
-    KWDeleteCustomItemVisitor visitor;
-    doc->visitSelection( KoTextDocument::Temp, &visitor );
-
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
-    KWTextFrameSet * textFs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
-
-    textFs->renumberFootNotes();
-#endif
     if ( m_idx == 0 ) {
         Q_ASSERT( m_oldParagLayout );
         if ( m_oldParagLayout )

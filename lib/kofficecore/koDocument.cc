@@ -1580,14 +1580,7 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
         QXmlInputSource source( store->device() );
         // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
         QXmlSimpleReader reader;
-        if ( false /*namespaceProcessing*/ ) {
-            reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
-            reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", FALSE );
-        } else {
-            reader.setFeature( "http://xml.org/sax/features/namespaces", FALSE );
-            reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
-        }
-        reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", TRUE );
+        setupXmlReader( reader, false /*namespaceProcessing*/ );
         //reader.setUndefEntityInAttrHack(true);
 
         ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
@@ -2131,6 +2124,21 @@ QStringList KoDocument::readExtraNativeMimeTypes( KInstance *instance ) //static
     if ( !service )
         return QStringList();
     return service->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+}
+
+void KoDocument::setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing )
+{
+    if ( namespaceProcessing )
+    {
+        reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
+        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", FALSE );
+    }
+    else
+    {
+        reader.setFeature( "http://xml.org/sax/features/namespaces", FALSE );
+        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
+    }
+    reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", TRUE );
 }
 
 
