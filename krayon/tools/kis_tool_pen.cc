@@ -77,8 +77,8 @@ void PenTool::setBrush(KisBrush *_brush)
     }
     else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor());
-        m_Cursor = KisCursor::brushCursor();
+        m_pView->kisCanvas()->setCursor(KisCursor::penCursor());
+        m_Cursor = KisCursor::penCursor();
     }
 }
 

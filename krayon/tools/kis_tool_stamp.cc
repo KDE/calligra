@@ -374,32 +374,32 @@ void StampTool::mouseMove(QMouseEvent *e)
     float dist = saved_dist + new_dist;
 
     if ((int)dist < spacing)
-	{
-	    m_dragdist += new_dist;
-	    m_dragStart = pos;
-	    return;
-	}
+    {
+        m_dragdist += new_dist;
+        m_dragStart = pos;
+        return;
+    }
     else
     {
-	    m_dragdist = 0;
-	}
+        m_dragdist = 0;
+    }
 
     dragVec.normalize();
     KisVector step = start;
 
     while (dist >= spacing)
-	{
-	    if (saved_dist > 0)
-	    {
-	       step += dragVec * (spacing-saved_dist);
-	       saved_dist -= spacing;
-	    }
-	    else
-	       step += dragVec * spacing;
+    {
+        if (saved_dist > 0)
+        {
+            step += dragVec * (spacing-saved_dist);
+            saved_dist -= spacing;
+        }
+        else
+            step += dragVec * spacing;
 
-	    QPoint p(qRound(step.x()), qRound(step.y()));
+        QPoint p(qRound(step.x()), qRound(step.y()));
 
-	    if(m_dragging)
+        if(m_dragging)
         {
             /* mouse button is down. Actually draw the
             image into the layer so long as spacing is
@@ -437,9 +437,9 @@ void StampTool::mouseMove(QMouseEvent *e)
              }
         }
 
-	    oldp = p;
+        oldp = p;
         dist -= spacing;
-	}
+    }
 
     if (dist > 0) m_dragdist = dist;
     m_dragStart = pos;

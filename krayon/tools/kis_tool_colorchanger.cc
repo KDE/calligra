@@ -22,6 +22,7 @@
 
 #include "kis_doc.h"
 #include "kis_view.h"
+#include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kis_tool_colorchanger.h"
 #include "kis_dlg_toolopts.h"
@@ -30,7 +31,8 @@
 ColorChangerTool::ColorChangerTool(KisDoc *doc, KisView *view)
   : KisTool(doc, view)
 {
-    m_Cursor = KisCursor::pickerCursor();
+    // set custom cursor.
+    setCursor();
     m_pDoc = doc;
 
     // initialize color changer settings
@@ -219,4 +221,10 @@ void ColorChangerTool::optionsDialog()
             m_pDoc->setModified( true );
         }
     }        
+}
+
+void ColorChangerTool::setCursor()
+{
+    m_pView->kisCanvas()->setCursor( KisCursor::colorChangerCursor() );
+    m_Cursor = KisCursor::colorChangerCursor();
 }

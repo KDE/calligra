@@ -52,6 +52,9 @@ class FillTool : public KisTool
   
     QString toolName() { return QString("Fill Tool"); }
     bool flood(int startX, int startY);
+
+    // set custom cursor.
+    void setCursor();
     
   public slots:
     virtual void mousePress(QMouseEvent*); 

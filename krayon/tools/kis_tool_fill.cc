@@ -22,6 +22,7 @@
 
 #include "kis_doc.h"
 #include "kis_view.h"
+#include "kis_canvas.h"
 #include "kis_framebuffer.h"
 #include "kis_cursor.h"
 #include "kis_tool_fill.h"
@@ -31,7 +32,8 @@
 FillTool::FillTool(KisDoc *doc, KisView *view)
   : KisTool(doc, view)
 {
-    m_Cursor = KisCursor::pickerCursor();
+    // set custom cursor.
+    setCursor();
     m_pDoc = doc;
 
     // initialize filler tool settings
@@ -327,4 +329,10 @@ void FillTool::optionsDialog()
             m_pDoc->setModified( true );
         }
     }    
+}
+
+void FillTool::setCursor()
+{
+    m_pView->kisCanvas()->setCursor( KisCursor::fillerCursor() );
+    m_Cursor = KisCursor::fillerCursor();
 }

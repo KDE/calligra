@@ -3070,6 +3070,25 @@ void KisView::slotSetBrush(KisBrush* b)
         m_pEraserTool->setBrush(b);
 
     m_pSideBar->slotSetBrush(*b);
+
+    // ugly hack :o (Toshitaka)
+    // for current tool cursor.
+    if ( m_pTool == m_pBrushTool )
+        m_pBrushTool->setBrush( b );
+    else if ( m_pTool == m_pPenTool )
+        m_pPenTool->setBrush( b );
+    else if ( m_pTool == m_pAirBrushTool )
+        m_pAirBrushTool->setBrush( b );
+    else if ( m_pTool == m_pEraserTool )
+        m_pEraserTool->setBrush( b );
+    else if ( m_pTool == m_pFillTool )
+        m_pFillTool->setCursor();
+    else if ( m_pTool == m_pColorChangerTool )
+        m_pColorChangerTool->setCursor();
+    else if ( m_pTool == m_pZoomTool )
+        m_pZoomTool->setCursor();
+    else if ( m_pTool == m_pMoveTool )
+        m_pMoveTool->setCursor();
 }
 
 

@@ -58,6 +58,8 @@ public:
   virtual void mouseMove( QMouseEvent *e );
   virtual void mouseRelease(QMouseEvent *e );
 
+  void setCursor();
+
 protected:
 
   QPoint m_dragStart;

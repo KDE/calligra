@@ -23,6 +23,7 @@
 #include <iostream>
 #include "kis_doc.h"
 #include "kis_view.h"
+#include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kis_tool_move.h"
 
@@ -66,7 +67,8 @@ void MoveCommand::moveTo( QPoint _pos )
 MoveTool::MoveTool( KisDoc *doc, KisView *view )
   : KisTool( doc, view )
 {
-    m_Cursor = KisCursor::moveCursor();
+    // set custom cursor.
+    setCursor();
     m_dragging = false;
 }
 
@@ -141,4 +143,10 @@ void MoveTool::mouseRelease(QMouseEvent *e )
 #endif
 
     m_dragging = false;
+}
+
+void MoveTool::setCursor()
+{
+    m_pView->kisCanvas()->setCursor( KisCursor::moveCursor() );
+    m_Cursor = KisCursor::moveCursor();
 }

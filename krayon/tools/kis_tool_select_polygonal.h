@@ -51,6 +51,9 @@ public:
     void start(QPoint p);
     void finish(QPoint p); 
 
+    void setSelectCursor();
+    void setMoveCursor();
+
 protected:
 
     void drawLine( const QPoint&, const QPoint& ); 
@@ -59,6 +62,10 @@ private:
 
     QRect getDrawRect( QPointArray & points );
     QPointArray zoomPointArray( QPointArray & points );
+
+    void setClipImage();
+    void dragSelectImage( QPoint dragPoint );
+    bool pasteClipImage( QPoint pos );
 
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
@@ -75,6 +82,16 @@ private:
     QRect       m_selectRect;
     QPointArray m_pointArray;
     int         m_index;
+
+    QRegion     m_selectRegion;
+    bool        moveSelectArea;
+    bool        dragSelectArea;
+    QPixmap     clipPixmap;
+    QImage      clipImage;
+    QPoint      m_hotSpot, oldDragPoint;
+    QRect       m_imageRect;
+    bool        dragFirst;
+    float       m_dragdist;
 };
 
 #endif //__selecttoolpolygonal_h__

@@ -51,11 +51,18 @@ public:
     void start( QPoint p );
     void finish( QPoint p ); 
 
+    void setSelectCursor();
+    void setMoveCursor();
+
 protected:
 
     void drawLine( const QPoint&, const QPoint& ); 
  
 private:
+
+    void setClipImage();
+    void dragSelectImage( QPoint dragPoint );
+    bool pasteClipImage( QPoint pos );
 
     QRect getDrawRect( QPointArray & points );
     QPointArray zoomPointArray( QPointArray & points );
@@ -75,6 +82,16 @@ private:
     QRect       m_selectRect;
     QPointArray m_pointArray;
     uint        m_index;
+
+    QRegion     m_selectRegion;
+    bool        moveSelectArea;
+    bool        dragSelectArea;
+    QPixmap     clipPixmap;
+    QImage      clipImage;
+    QPoint      m_hotSpot, oldDragPoint;
+    QRect       m_imageRect;
+    bool        dragFirst;
+    float       m_dragdist;
 };
 
 #endif //__selecttoolfreehand_h__

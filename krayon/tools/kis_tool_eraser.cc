@@ -69,8 +69,8 @@ void EraserTool::setBrush(KisBrush *_brush)
     }
     else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor());
-        m_Cursor = KisCursor::brushCursor();
+        m_pView->kisCanvas()->setCursor(KisCursor::eraserCursor());
+        m_Cursor = KisCursor::eraserCursor();
     }
 }
 

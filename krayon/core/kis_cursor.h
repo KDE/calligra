@@ -50,7 +50,13 @@ public:
   static QCursor moveCursor();          // move tool cursor
   static QCursor penCursor();           // pen tool cursor
   static QCursor brushCursor();         // brush tool cursor
+  static QCursor airbrushCursor();      // airbrush tool cursor
+  static QCursor eraserCursor();        // eraser tool cursor
+  static QCursor fillerCursor();        // filler tool cursor
   static QCursor pickerCursor();        // color picker cursor
-  static QCursor selectCursor();        // color picker cursor
+  static QCursor colorChangerCursor();  // color changer tool cursor
+  static QCursor selectCursor();        // select cursor
+  static QCursor zoomCursor();          // zoom tool cursor
+  static QCursor handCursor();          // hand tool cursor
 };
 #endif // __kis_cursor_h__

@@ -29,6 +29,7 @@
 #include "kis_util.h"
 #include "kis_tool_airbrush.h"
 #include "kis_dlg_toolopts.h"
+#include "kis_canvas.h"
 
 
 
@@ -36,7 +37,7 @@ AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
   :KisTool(doc, view)
 {
     m_dragging = false;
-    m_Cursor = KisCursor::brushCursor();
+    m_Cursor = KisCursor::airbrushCursor();
     m_dragdist = 0;
     density = 64;
     m_pDoc = doc;
@@ -86,6 +87,10 @@ void AirBrushTool::setBrush(KisBrush *brush)
         << "brushwidth "   << brushWidth
         << " brushHeight " << brushHeight
         << endl;
+
+    // set custom cursor
+    m_pView->kisCanvas()->setCursor( KisCursor::airbrushCursor() );
+    m_Cursor = KisCursor::airbrushCursor();
 }
 
 
