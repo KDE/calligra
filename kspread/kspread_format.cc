@@ -1509,6 +1509,62 @@ const QColor& KSpreadFormat::goUpDiagonalColor( int col, int row ) const
   return goUpDiagonalPen( col, row ).color();
 }
 
+uint KSpreadFormat::bottomBorderValue( int col, int row ) const
+{
+  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->bottomBorderValue( col, row );
+
+    return 0;
+  }
+
+  return m_pStyle->bottomPenValue();
+}
+
+uint KSpreadFormat::rightBorderValue( int col, int row ) const
+{
+  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->rightBorderValue( col, row );
+
+    return 0;
+  }
+
+  return m_pStyle->rightPenValue();
+}
+
+uint KSpreadFormat::leftBorderValue( int col, int row ) const
+{
+  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->leftBorderValue( col, row );
+
+    return 0;
+  }
+
+  return m_pStyle->leftPenValue();
+}
+
+uint KSpreadFormat::topBorderValue( int col, int row ) const
+{
+  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->topBorderValue( col, row );
+
+    return 0;
+  }
+
+  return m_pStyle->topPenValue();
+}
+
 const QPen& KSpreadFormat::leftBorderPen( int col, int row ) const
 {
   if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )

@@ -3424,15 +3424,14 @@ void KSpreadCanvas::paintUpdates()
         else
           if ( sheet->cellIsPaintDirty( QPoint( x + 1, y ) ) )
           {
-            QPen pen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
             paintBordersRight = true;
-            if ( util_penCompare( rightPen, pen ) < 0 )
-              rightPen = pen;
+            if ( cell->rightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->leftBorderValue( x + 1, y ) )
+              rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
           }
         else
         {
           paintBordersRight = true;          
-          if ( util_penCompare( rightPen, sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) < 0 )
+          if ( cell->rightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->leftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
 
@@ -3443,14 +3442,14 @@ void KSpreadCanvas::paintUpdates()
         else
           if ( sheet->cellIsPaintDirty( QPoint( x, y + 1 ) ) )
           {
-            if ( util_penCompare( bottomPen, sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 ) ) > 0 )
+            if ( cell->bottomBorderValue( x, y ) > sheet->cellAt( x, y + 1 )->topBorderValue( x, y + 1 ) )
               paintBordersBottom = true;
           }
         else
         {
           paintBordersBottom = true;          
 
-          if ( util_penCompare( bottomPen, sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 ) ) < 0 )
+          if ( cell->bottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->topBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
 
@@ -3460,15 +3459,14 @@ void KSpreadCanvas::paintUpdates()
         else
           if ( sheet->cellIsPaintDirty( QPoint( x - 1, y ) ) )
           {
-            QPen pen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
             paintBordersLeft = true;
-            if ( util_penCompare( leftPen, pen ) < 0 )
-              leftPen = pen;
+            if ( cell->leftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->rightBorderValue( x - 1, y ) )
+              leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
           }
         else
         {
           paintBordersLeft = true;          
-          if ( util_penCompare( leftPen, sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) < 0 )
+          if ( cell->leftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->rightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
 
@@ -3478,15 +3476,14 @@ void KSpreadCanvas::paintUpdates()
         else
           if ( sheet->cellIsPaintDirty( QPoint( x, y - 1 ) ) )
           {
-            QPen pen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
             paintBordersTop = true;
-            if ( util_penCompare( topPen, pen ) < 0 )
-              topPen = pen;
+            if ( cell->topBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->bottomBorderValue( x, y - 1 ) )
+              topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
           }
         else
         {
-          paintBordersTop = true;          
-          if ( util_penCompare( topPen, sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) < 0 )
+          paintBordersTop = true;
+          if ( cell->topBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->bottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 

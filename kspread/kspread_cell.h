@@ -351,6 +351,11 @@ public:
     const QPen & effFallDiagonalPen( int col, int row ) const;
     const QColor & effTextColor( int col, int row ) const;
 
+    uint effBottomBorderValue( int col, int row ) const;
+    uint effRightBorderValue( int col, int row ) const;
+    uint effLeftBorderValue( int col, int row ) const;
+    uint effTopBorderValue( int col, int row ) const;
+
     /**
      * @reimp
      */

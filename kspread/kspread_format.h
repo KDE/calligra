@@ -293,6 +293,11 @@ public:
     Qt::BrushStyle backGroundBrushStyle( int col, int row ) const;
     const QColor& backGroundBrushColor(int col, int row ) const;
 
+    virtual uint bottomBorderValue( int col, int row ) const;
+    virtual uint rightBorderValue( int col, int row ) const;
+    virtual uint leftBorderValue( int col, int row ) const;
+    virtual uint topBorderValue( int col, int row ) const;
+
     /**
      * @return the precision of the floating point representation.
      */

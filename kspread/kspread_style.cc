@@ -26,6 +26,16 @@
 
 #include <qdom.h>
 
+static uint calculateValue( QPen const & pen )
+{
+  uint n = pen.color().red() + pen.color().green() + pen.color().blue();
+
+  n += 1000 * pen.width();
+  n += 10000 * (uint) pen.style();
+  
+  return n;
+}
+
 KSpreadStyle::KSpreadStyle()
   : m_parent( 0 ),
     m_type( AUTO ),
@@ -996,11 +1006,13 @@ KSpreadStyle * KSpreadStyle::setRightBorderPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_rightBorderPen = pen;
+    style->m_rightPenValue = calculateValue( pen );
     style->m_featuresSet |= SRightBorder;
     return style;
   }
 
   m_rightBorderPen = pen;
+  m_rightPenValue = calculateValue( pen );
   m_featuresSet |= SRightBorder;
   return this;
 }
@@ -1011,11 +1023,13 @@ KSpreadStyle * KSpreadStyle::setBottomBorderPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_bottomBorderPen = pen;
+    style->m_bottomPenValue = calculateValue( pen );
     style->m_featuresSet |= SBottomBorder;
     return style;
   }
 
   m_bottomBorderPen = pen;
+  m_bottomPenValue = calculateValue( pen );
   m_featuresSet |= SBottomBorder;
   return this;
 }
@@ -1026,11 +1040,13 @@ KSpreadStyle * KSpreadStyle::setLeftBorderPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_leftBorderPen = pen;
+    style->m_leftPenValue = calculateValue( pen );
     style->m_featuresSet |= SLeftBorder;
     return style;
   }
 
   m_leftBorderPen = pen;
+  m_leftPenValue = calculateValue( pen );
   m_featuresSet |= SLeftBorder;
   return this;
 }
@@ -1041,11 +1057,13 @@ KSpreadStyle * KSpreadStyle::setTopBorderPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_topBorderPen = pen;
+    style->m_topPenValue = calculateValue( pen );
     style->m_featuresSet |= STopBorder;
     return style;
   }
 
   m_topBorderPen = pen;
+  m_topPenValue = calculateValue( pen );
   m_featuresSet |= STopBorder;
   return this;
 }
@@ -1704,24 +1722,28 @@ void KSpreadCustomStyle::changeBgColor( QColor const & color )
 void KSpreadCustomStyle::changeRightBorderPen( QPen const & pen )
 {
   m_rightBorderPen = pen;
-  m_featuresSet |= SRightBorder;
+  m_rightPenValue  = calculateValue( pen );
+  m_featuresSet   |= SRightBorder;
 }
  
 void KSpreadCustomStyle::changeBottomBorderPen( QPen const & pen )
 {
   m_bottomBorderPen = pen;
-  m_featuresSet |= SBottomBorder;
+  m_bottomPenValue  = calculateValue( pen );
+  m_featuresSet    |= SBottomBorder;
 }
 
 void KSpreadCustomStyle::changeLeftBorderPen( QPen const & pen )
 {
   m_leftBorderPen = pen;
-  m_featuresSet |= SLeftBorder;
+  m_leftPenValue  = calculateValue( pen );
+  m_featuresSet  |= SLeftBorder;
 }
   
 void KSpreadCustomStyle::changeTopBorderPen( QPen const & pen )
 {
   m_topBorderPen = pen;
+  m_topPenValue  = calculateValue( pen );
   m_featuresSet |= STopBorder;
 }
    

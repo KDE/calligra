@@ -110,6 +110,11 @@ class KSpreadStyle
   bool   hasProperty( Properties p ) const;
   bool   hasFeature( FlagsSet f, bool withoutParent ) const;
 
+  uint bottomPenValue() const { return m_bottomPenValue; }
+  uint rightPenValue() const { return m_rightPenValue; }
+  uint leftPenValue() const { return m_leftPenValue; }
+  uint topPenValue() const { return m_topPenValue; }
+
   QPen    const & pen()             const;
   QColor  const & bgColor()         const;
   QPen    const & rightBorderPen()  const;
@@ -286,6 +291,11 @@ class KSpreadStyle
    * Stores information like: DonPrint, DontShowFormula, Protected...
    */
   uint m_properties;
+
+  uint m_bottomPenValue;
+  uint m_rightPenValue;
+  uint m_leftPenValue;
+  uint m_topPenValue;
 
   bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };

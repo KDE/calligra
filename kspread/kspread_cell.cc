@@ -3674,6 +3674,37 @@ const QPen & KSpreadCell::effFallDiagonalPen( int col, int row ) const
   return KSpreadFormat::fallDiagonalPen( col, row );
 }
 
+uint KSpreadCell::effBottomBorderValue( int col, int row ) const
+{
+  if ( m_conditions && m_conditions->matchedStyle() )
+    return m_conditions->matchedStyle()->bottomPenValue();
+
+  return KSpreadFormat::bottomBorderValue( col, row );
+}
+
+uint KSpreadCell::effRightBorderValue( int col, int row ) const
+{
+  if ( m_conditions && m_conditions->matchedStyle() )
+    return m_conditions->matchedStyle()->rightPenValue();
+
+  return KSpreadFormat::rightBorderValue( col, row );
+}
+
+uint KSpreadCell::effLeftBorderValue( int col, int row ) const
+{
+  if ( m_conditions && m_conditions->matchedStyle() )
+    return m_conditions->matchedStyle()->leftPenValue();
+
+  return KSpreadFormat::leftBorderValue( col, row );
+}
+
+uint KSpreadCell::effTopBorderValue( int col, int row ) const
+{
+  if ( m_conditions && m_conditions->matchedStyle() )
+    return m_conditions->matchedStyle()->topPenValue();
+
+  return KSpreadFormat::topBorderValue( col, row );
+}
 
 ///////////////////////////////////////////
 //
