@@ -7,6 +7,7 @@ libkrossapi_la_SOURCES = \
     variant.cpp \
     list.cpp \
     argument.cpp \
+    script.cpp \
     interpreter.cpp
 
 #dict.cpp

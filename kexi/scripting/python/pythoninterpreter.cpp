@@ -27,8 +27,8 @@
 
 using namespace Kross::Python;
 
-PythonInterpreter::PythonInterpreter()
-    : Kross::Api::Interpreter()
+PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString& interpretername)
+    : Kross::Api::Interpreter(manager, interpretername)
     , tstate(0)
 {
     //kdDebug() << "Py_GetVersion()=" << Py_GetVersion() << " Py_GetPath()=" << Py_GetPath() << endl;
@@ -65,17 +65,6 @@ const QStringList PythonInterpreter::mimeTypes()
     return QStringList() << "text/x-python" << "application/x-python";
 }
 
-bool PythonInterpreter::parseString(QString&)
-{
-    /*TODO
-    For the moment we don't use that function. It would be an idear
-    to use it to extract what functions are avaible.
-    We should spend a separated parse() function anyway to have
-    something similar to execute() to verify the code.
-    */
-    return true;
-}
-
 bool PythonInterpreter::init()
 {
     if(! m_gtstate) {
@@ -96,7 +85,8 @@ bool PythonInterpreter::init()
     }
 
     // Create modules
-    for(QMap<QString, Kross::Api::Object*>::Iterator it = m_modules.begin(); it != m_modules.end(); ++it) {
+    QMap<QString, Kross::Api::Object*> modules = m_manager->getModules();
+    for(QMap<QString, Kross::Api::Object*>::Iterator it = modules.begin(); it != modules.end(); ++it) {
         PythonModule* pythonmodule = new PythonModule(it.key().latin1(), it.data());
         m_pythonmodules.replace(it.key(), pythonmodule);
     }
@@ -122,7 +112,7 @@ bool PythonInterpreter::finesh()
     return true;
 }
 
-bool PythonInterpreter::execute()
+bool PythonInterpreter::execute(const QString& code)
 {
     //TESTCASE
     /*
@@ -143,16 +133,16 @@ bool PythonInterpreter::execute()
     }
     */
 
-    if(! init()) return false;
-    int r = PyRun_SimpleString((char*)getScript().latin1());
+    if(! init() || code.isEmpty()) return false;
+    int r = PyRun_SimpleString((char*)code.latin1());
     return finesh() && r == 0;
 }
 
-Kross::Api::Object* PythonInterpreter::execute(const QString& name, Kross::Api::List* args)
+Kross::Api::Object* PythonInterpreter::execute(const QString& code, const QString& name, Kross::Api::List* args)
 {
-    QString script = getScript();
-    if(script.isEmpty())
-        throw Kross::Api::AttributeException(i18n("No script to execute."));
+    QString scriptcode = code;
+    if(scriptcode.isEmpty())
+        throw Kross::Api::AttributeException(i18n("No scriptcode to execute."));
 
     // Initialize
     if(! init())
@@ -165,7 +155,7 @@ Kross::Api::Object* PythonInterpreter::execute(const QString& name, Kross::Api::
     Py::Dict moduledict = module.getDict();
 
     // Parse the script.
-    PyObject* run = PyRun_String((char*)script.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
+    PyObject* run = PyRun_String((char*)scriptcode.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! run) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
         finesh();

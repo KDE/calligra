@@ -16,6 +16,16 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
+#include "../main/manager.h"
+
+#include "../api/object.h"
+#include "../api/class.h"
+//#include "../api/module.h"
+
+#include "../api/script.h"
+#include "../api/interpreter.h"
+#include "../kexidb/kexidbmodule.h"
+
 #include <qstring.h>
 #include <qfile.h>
 
@@ -24,15 +34,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
-
-#include "../main/manager.h"
-
-#include "../api/object.h"
-#include "../api/class.h"
-//#include "../api/module.h"
-
-#include "../api/interpreter.h"
-#include "../kexidb/kexidbmodule.h"
 
 KApplication *app = 0;
 
@@ -45,6 +46,30 @@ static KCmdLineOptions options[] =
     { 0, 0, 0 }
 };
 
+class TestObject : public QObject
+{
+        Q_OBJECT
+    signals:
+        void testSignal();
+    public slots:
+        void testSlot() {
+            kdDebug() << "TestObject::testSlot called" << endl;
+            emit testSignal();
+        }
+        void testSignalSlot() {
+            kdDebug() << "TestObject::testSignalSlot called" << endl;
+        }
+    public:
+        TestObject() : QObject(app) {
+            kdDebug() << "TestObject::TestObject called" << endl;
+            connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
+        }
+        ~TestObject() {
+            kdDebug() << "TestObject::~TestObject called" << endl;
+        }
+};
+
+/*
 void runInterpreter(const QString& interpretername, const QString& script)
 {
     Kross::Api::Manager* manager = new Kross::Api::Manager();
@@ -67,11 +92,42 @@ void runInterpreter(const QString& interpretername, const QString& script)
             if(! interpreter->execute())
                 kdWarning() << "Interpreter failed to execute script!" << endl;
         }
-
         //TODO garbage collect them too?
         delete module; module = 0;
-        delete interpreter; interpreter = 0;
     }
+    delete manager;
+}
+*/
+
+void runInterpreter(const QString& interpretername, const QString& scriptcode)
+{
+    // Create a manager instance. The manager is used as main entry point
+    // to work with Kross. You should instanciate only one instance and
+    // use it the whole lifetime of your application.
+    Kross::Api::Manager* manager = new Kross::Api::Manager();
+    if(! manager) {
+        kdWarning() << "Failed to create Kross::Api::Manager instance!" << endl;
+        return;
+    }
+
+    // Add modules that should be accessible by scripting. Those
+    // modules are wrappers around functionality you want to be
+    // able to access from within scripts. You don't need to take
+    // care of freeing them cause that will be done by Kross.
+    //manager->addModule( new Kross::KexiDB::TestModule() );
+    manager->addModule( new Kross::KexiDB::KexiDBModule() );
+
+    // To represent a script that shgould be executed Kross uses
+    // the Script container class. You are able to fill them with
+    // what is needed and just execute them.
+    Kross::Api::Script* script = manager->getScript("MyScriptName");
+    //script->enableModule("KexiDB");
+    script->setInterpreter(interpretername);
+    script->setCode(scriptcode);
+    script->execute();
+    //delete script; // not needed cause Kross::Api::Manager will take care of it.
+
+    // Finally free our manager.
     delete manager;
 }
 
@@ -97,16 +153,16 @@ int main(int argc, char **argv)
 
     QFile f(QFile::encodeName(filename));
     if(f.exists() && f.open(IO_ReadOnly)) {
-        QString script = f.readAll();
+        QString scriptcode = f.readAll();
         f.close();
-        runInterpreter(interpretername, script);
+        runInterpreter(interpretername, scriptcode);
 
         /*TODO
         //second execution crashes cause it seems we don't cleaned
         //everything well at this point. Grrr, guess to use KShared
         //wasn't the best design-decision :-/
 
-        runInterpreter(interpretername, script);
+        runInterpreter(interpretername, scriptcode);
         */
     }
     else {

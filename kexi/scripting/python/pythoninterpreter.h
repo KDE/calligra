@@ -26,6 +26,7 @@
 
 #include "../api/object.h"
 #include "../api/interpreter.h"
+#include "../main/manager.h"
 
 namespace Kross { namespace Python {
 
@@ -44,7 +45,7 @@ namespace Kross { namespace Python {
             /**
              * Constructor.
              */
-            PythonInterpreter();
+            PythonInterpreter(Kross::Api::Manager* manager, const QString& interpretername);
 
             /**
              * Destructor.
@@ -64,21 +65,13 @@ namespace Kross { namespace Python {
              * Execute a Python-string.
              * See \see Kross::Api::Interpreter::execute
              */
-            virtual bool execute();
+            virtual bool execute(const QString& code);
 
             /**
              * Execute a function in a Python-string.
              * See \see Kross::Api::Interpreter::execute
              */
-            virtual Kross::Api::Object* execute(const QString& name, Kross::Api::List* args);
-
-        protected:
-
-            /**
-             * Overloaded method to parse a python script string.
-             * See \see Kross::Api::Interpreter::parseString
-             */
-            virtual bool parseString(QString&);
+            virtual Kross::Api::Object* execute(const QString& code, const QString& name, Kross::Api::List* args);
 
         private:
 

@@ -18,12 +18,11 @@
 
 #include "manager.h"
 
-//#include "api/object.h"
 #include "../api/interpreter.h"
-//#include "python/pythonextension.h"
-//#include "python/pythonmodule.h"
 #include "../python/pythoninterpreter.h"
 #include "../kjs/kjsinterpreter.h"
+#include "../api/object.h"
+#include "../api/script.h"
 
 using namespace Kross::Api;
 
@@ -33,10 +32,50 @@ Manager::Manager()
 
 Manager::~Manager()
 {
-    /*
-    for(QMap<QString, Interpreter*>::Iterator it = m_interpreter.begin(); it != m_interpreter.end(); ++it)
-        delete it.data();
-    */
+    for(QMap<QString, Script*>::Iterator sit = m_scripts.begin(); sit != m_scripts.end(); ++sit)
+        delete sit.data();
+    for(QMap<QString, Interpreter*>::Iterator iit = m_interpreter.begin(); iit != m_interpreter.end(); ++iit)
+        delete iit.data();
+    for(QMap<QString, Object*>::Iterator mit = m_modules.begin(); mit != m_modules.end(); ++mit)
+        delete mit.data();
+}
+
+bool Manager::hasModule(const QString& name)
+{
+    return m_modules.contains(name);
+}
+
+Object* Manager::getModule(const QString& name)
+{
+    return m_modules[name];
+}
+
+QMap<QString, Object*> Manager::getModules()
+{
+    return m_modules;
+}
+
+bool Manager::addModule(Object* module)
+{
+    if(! module) {
+        kdWarning() << "Interpreter->addModule(Module*) failed cause Module is NULL" << endl;
+        return false;
+    }
+    if(m_modules.contains(module->getName())) {
+        kdWarning() << QString("Interpreter->addModule(Module*) failed cause there exists already a Module with name '%1'").arg(module->getName()) << endl;
+        return false;
+    }
+    m_modules.replace(module->getName(), module);
+    return true;
+}
+
+Script* Manager::getScript(const QString& scriptname)
+{
+    if(m_scripts.contains(scriptname))
+        return m_scripts[scriptname];
+    Script* script = new Script(this);
+    m_scripts.replace(scriptname, script);
+    return script;
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
@@ -46,9 +85,9 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     Interpreter* interpreter = 0;
 
     if(interpretername == "kjs")
-        interpreter = new Kross::Kjs::KjsInterpreter();
+        interpreter = new Kross::Kjs::KjsInterpreter(this, "kjs");
     else if(interpretername == "python")
-        interpreter = new Kross::Python::PythonInterpreter();
+        interpreter = new Kross::Python::PythonInterpreter(this, "python");
 
     if(interpreter)
         m_interpreter.replace(interpretername, interpreter);

@@ -27,6 +27,9 @@
 
 namespace Kross { namespace Api {
 
+    // Forward declaration.
+    class Manager;
+
     /**
      * Base class for interpreters.
      *
@@ -43,7 +46,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            Interpreter();
+            Interpreter(Manager* manager, const QString& interpretername);
 
             /**
              * Destructor.
@@ -51,50 +54,12 @@ namespace Kross { namespace Api {
             virtual ~Interpreter();
 
             /**
-             * Check if a \a Module with the defined
-             * name is avaible.
+             * Return the name of the interpreter.
              *
-             * \param name The name of the module.
-             * \return true if the module is avaible
-             *         else false.
+             * \return Name of the interpreter, for
+             *         example "python" or "kjs".
              */
-            bool hasModule(const QString& name);
-
-            /**
-             * Return the \a Module with the defined
-             * name.
-             *
-             * \param name The name of the module.
-             * \return The \a Module if there is such a
-             *         module avaible else NULL.
-             */
-            Object* getModule(const QString& name);
-
-            /**
-             * Add a new \a Module to the list of avaible
-             * modules.
-             *
-             * \param module The \a Module to add.
-             * \return true if the module was added
-             *         successfully else false.
-             */
-            bool addModule(Object* module);
-
-            /**
-             * Return the script-string.
-             *
-             * \return The script as string.
-             */
-            const QString& getScript();
-
-            /**
-             * Set the script-string.
-             *
-             * \param script The script as string.
-             * \return true on success else (e.g. on
-             *         parsing-error) false.
-             */
-            bool setScript(const QString& script);
+            const QString& getInterpretername();
 
             /**
              * List of mimetypes this interpreter supports.
@@ -105,48 +70,36 @@ namespace Kross { namespace Api {
             virtual const QStringList mimeTypes() = 0;
 
             /**
-             * Execute a script-string. Use \a setScript to
+             * Execute a scriptcode-string. Use \a setScript to
              * set the string that should be executed via this
              * function.
              *
+             * \param code The scriptcode to execute.
              * \return true if execution was successfully else false.
              */
-            virtual bool execute() = 0;
+            virtual bool execute(const QString& code) = 0;
 
             /**
              * Execute a function in a script-string. This function
              * behaves similar as the one above.
              *
-             * \throw Kross::Api::Exception if execution failed.
+             * \throw Kross::Api::Exception if execution failes.
+             * \param code The scriptcode to execute.
              * \param name The name of the function to execute.
              * \param args The arguments passed to the function as
              *        \a List object.
              * \return A \a Object object representing the returnvalue
              *         of the function call.
              */
-            virtual Kross::Api::Object* execute(const QString& name, Kross::Api::List* args) = 0;
+            virtual Kross::Api::Object* execute(const QString& code, const QString& name, Kross::Api::List* args) = 0;
 
         protected:
-            /// List of avaible modules.
-            QMap<QString, Object*> m_modules;
-            /// The script-string.
-            QString m_script;
+            /// The Manager class this instance is child of.
+            Manager* m_manager;
+            /// Name of this interpreter.
+            QString m_interpretername;
             /// List of mimetypes this interpreter supports.
             QStringList m_mimetypes;
-
-            /**
-             * Parse the as argument passed string. Classes inherited
-             * from this class to implementate an interpreter need to
-             * overload this method. This function got called from
-             * within \a setScript to validate the string.
-             * Interpreter-specific stuff like validating the string
-             * should be done in this method.
-             *
-             * \param s The string to parse. The overloaded method
-             *        is able to change the passed string.
-             * \return true on success else false.
-             */
-            virtual bool parseString(QString& s);
     };
 
 }}

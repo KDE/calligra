@@ -1,5 +1,5 @@
 /***************************************************************************
- * kjsinterpreter.cpp
+ * script.cpp
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
@@ -16,52 +16,59 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "kjsinterpreter.h"
+#include "script.h"
+#include "../api/object.h"
+#include "../api/list.h"
+#include "../main/manager.h"
 
-//#include <kjsembed/kjsembedpart.h>
-//#include <kjs/object.h>
+#include "../api/interpreter.h"
 
-using namespace Kross::Kjs;
+using namespace Kross::Api;
 
-namespace Kross { namespace Kjs {
-
-    class KjsInterpreterPrivate
-    {
-        public:
-            //::KJSEmbed::KJSEmbedPart* kjspart;
-    };
-
-}}
-
-KjsInterpreter::KjsInterpreter(Kross::Api::Manager* manager, const QString& interpretername)
-    : Kross::Api::Interpreter(manager, interpretername)
+Script::Script(Manager* manager)
+    : QObject()
+    , m_manager(manager)
 {
-    d = new KjsInterpreterPrivate();
-    //d->kjspart = new ::KJSEmbed::KJSEmbedPart(0L, "console", this, "krosskjs");
-    //d->kjspart = new ::KJSEmbed::KJSEmbedPart(0L, "console", 0, "krosskjs");
 }
 
-KjsInterpreter::~KjsInterpreter()
+Script::~Script()
 {
-    //delete d->kjspart;
-    delete d;
 }
 
-const QStringList KjsInterpreter::mimeTypes()
+const QString& Script::getCode()
 {
-    return QStringList() << "application/x-javascript";
+    return m_code;
 }
 
-bool KjsInterpreter::execute(const QString&)
+void Script::setCode(const QString& code)
+{
+    m_code = code;
+}
+
+const QString& Script::getInterpreter()
+{
+    return m_interpreter;
+}
+
+void Script::setInterpreter(const QString& interpreter)
+{
+    m_interpreter = interpreter;
+}
+
+bool Script::execute()
+{
+    Interpreter* interpreter = m_manager->getInterpreter(m_interpreter);
+    if(! interpreter) return false;
+    return interpreter->execute(m_code);
+}
+
+const QVariant& execute(const QString& name, const QVariant& args)
 {
     //TODO
-    //d->kjspart->execute(execstring);
-    return false;
 }
 
-Kross::Api::Object* KjsInterpreter::execute(const QString&, const QString&, Kross::Api::List*)
+Kross::Api::Object* execute(const QString& name, Kross::Api::List* args)
 {
     //TODO
-    return 0;
 }
 

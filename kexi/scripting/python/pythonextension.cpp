@@ -325,7 +325,7 @@ Py::Tuple PythonExtension::toPyTuple(Kross::Api::List* list)
 
     uint count = list->count();
     Py::Tuple tuple(count);
-    for(int i = 0; i < count; i++)
+    for(uint i = 0; i < count; i++)
         tuple.setItem(i, toPyObject(list->item(i)));
     return tuple;
 }

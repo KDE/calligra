@@ -17,59 +17,22 @@
  ***************************************************************************/
 
 #include "interpreter.h"
+#include "../main/manager.h"
 
 using namespace Kross::Api;
 
-Interpreter::Interpreter()
+Interpreter::Interpreter(Manager* manager, const QString& interpretername)
+    : m_manager(manager)
+    , m_interpretername(interpretername)
 {
 }
 
 Interpreter::~Interpreter()
 {
-    /*
-    for(QMap<QString, Object*>::Iterator it = m_modules.begin(); it != m_modules.end(); ++it)
-        delete it.data();
-    */
 }
 
-bool Interpreter::hasModule(const QString& name)
+const QString& Interpreter::getInterpretername()
 {
-    return m_modules.contains(name);
+    return m_interpretername;
 }
 
-Object* Interpreter::getModule(const QString& name)
-{
-    return m_modules[name];
-}
-
-bool Interpreter::addModule(Object* module)
-{
-    if(! module) {
-        kdWarning() << "Interpreter->addModule(Module*) failed cause Module is NULL" << endl;
-        return false;
-    }
-    if(m_modules.contains(module->getName())) {
-        kdWarning() << QString("Interpreter->addModule(Module*) failed cause there exists already a Module with name '%1'").arg(module->getName()) << endl;
-        return false;
-    }
-    m_modules.replace(module->getName(), module);
-    return true;
-}
-
-const QString& Interpreter::getScript()
-{
-    return m_script;
-}
-
-bool Interpreter::setScript(const QString& script)
-{
-    QString s = script;
-    bool ok = parseString(s);
-    m_script = ok ? s : QString::null;
-    return ok;
-}
-
-bool Interpreter::parseString(QString&)
-{
-    return false;
-}
