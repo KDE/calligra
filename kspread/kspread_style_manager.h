@@ -48,6 +48,7 @@ class KSpreadStyleManager
   void changeName( QString const & oldName, QString const & newName );
 
   void takeStyle( KSpreadCustomStyle * style );
+  void createBuiltinStyles();
 
   QStringList styleNames() const;
   int count() const { return m_styles.count(); }
@@ -59,8 +60,6 @@ class KSpreadStyleManager
 
   KSpreadCustomStyle * m_defaultStyle;
   Styles               m_styles; // builtin and custom made styles
-
-  void createBuiltinStyles();
 };
 
 #endif

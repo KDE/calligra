@@ -176,6 +176,7 @@ bool KSpreadDoc::initDoc()
 	resetURL();
 	setEmpty();
 	initConfig();
+        m_pStyleManager->createBuiltinStyles();
 	return true;
     }
 

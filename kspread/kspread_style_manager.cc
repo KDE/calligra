@@ -31,8 +31,6 @@ KSpreadStyleManager::KSpreadStyleManager()
 {
   m_defaultStyle->setName( "Default" );
   m_defaultStyle->setType( KSpreadStyle::BUILTIN );
-
-  createBuiltinStyles();
 }
 
 KSpreadStyleManager::~KSpreadStyleManager()
