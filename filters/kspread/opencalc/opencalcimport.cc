@@ -2092,6 +2092,10 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
       layout->setAngle( -a + 1 );
   }
 
+  if ( property.hasAttributeNS( ooNS::fo, "direction" ) )
+  {
+      layout->setVerticalText( true );
+  }
   if ( property.hasAttributeNS( ooNS::fo, "text-align" ) )
   {
     QString s = property.attributeNS( ooNS::fo, "text-align", QString::null );

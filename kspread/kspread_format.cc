@@ -1193,7 +1193,10 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         if ( ok && ( a != 0 ))
             setAngle( -a );
     }
-
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "direction" ) )
+    {
+        setVerticalText( true );
+    }
     if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
         kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;

@@ -107,7 +107,7 @@ class CellStyle
   KSpreadFormat::AlignY alignY;
 };
 
-class ColumnStyle : public Style 
+class ColumnStyle : public Style
 {
  public:
   ColumnStyle() : Style() {}
@@ -116,7 +116,7 @@ class ColumnStyle : public Style
   static bool isEqual( ColumnStyle const * const c1, ColumnStyle const & c2 );
 };
 
-class RowStyle : public Style 
+class RowStyle : public Style
 {
  public:
   RowStyle() : Style() {}
@@ -158,5 +158,7 @@ class OpenCalcStyles
   void addRowStyles( QDomDocument & doc, QDomElement & autoStyles );
   void addSheetStyles( QDomDocument & doc, QDomElement & autoStyles );
 };
+
+
 
 #endif
