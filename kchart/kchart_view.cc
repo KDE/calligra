@@ -55,7 +55,10 @@ void KChartView::paintEvent( QPaintEvent* ev )
 
     // Let the document do the drawing
     // PENDING(kalle) Do double-buffering if we are a widget
-    part()->paintEverything( painter, ev->rect(), FALSE, this );
+    //    part()->paintEverything( painter, ev->rect(), FALSE, this );
+    // paint everything 
+    part()->paintEverything( painter, rect(), FALSE, this );
+
 
     painter.end();
 }
