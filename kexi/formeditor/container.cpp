@@ -277,7 +277,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->addCommand(com, true);
 				return true;
 			}
-			else if(s == m_container && !m_toplevel) // we are drawing a rect to select widgets
+			else if(s == m_container && !m_toplevel && (mev->button() != RightButton) && m_insertRect.isValid()) // we are drawing a rect to select widgets
 			{
 				//finish drawing unclipped selection rectangle: clear the surface
 				if(m_form->formWidget())
@@ -311,6 +311,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 					for(w = list.next(); w; w = list.next())
 						setSelectedWidget(w, true);
 				}
+				m_insertRect = QRect();
+				m_container->repaint();
 				return true;
 			}
 			if(mev->button() == RightButton) // Right-click -> context menu
@@ -386,13 +388,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->formWidget() && (tree->widget() != s))
 					m_form->formWidget()->highlightWidgets(tree->widget(), ((QWidget*)s)/*, p*/);
 			}
-			else if(s == m_container && !m_toplevel && mev->state() != ControlButton && !m_form->manager()->draggingConnection()) // draw the selection rect
+			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->draggingConnection()) // draw the selection rect
 			{
+				if(mev->state() == RightButton)
+					return true;
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
 				int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
 				int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
 				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
+				m_insertRect = r;
 
 				if(m_form->formWidget())
 					m_form->formWidget()->drawRect(r, 1);
