@@ -26,7 +26,6 @@ private:
     KDChartParams* _params;
     KIntNumInput* angle3d;
     KDoubleNumInput* depth;
-    KIntNumInput* bar_width;
 };
 
 #endif

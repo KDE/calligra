@@ -47,7 +47,6 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
   depth->setRange(0, 10, 0.1);
 
   gb->setAlignment(Qt::AlignLeft);
-  grid1->addColSpacing(0,bar_width->width());
   grid1->addColSpacing(0,depth->width());
   grid1->addColSpacing(0,angle3d->width());
   grid1->setColStretch(0,1);
