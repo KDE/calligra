@@ -254,7 +254,7 @@ KoParagLayout & KoStyle::paragLayout()
     return m_paragLayout;
 }
 
-void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )
+void KoStyle::propagateChanges( int paragLayoutFlag, int /*formatFlag*/ )
 {
     if ( !m_parentStyle )
         return;
