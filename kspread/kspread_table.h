@@ -522,6 +522,17 @@ public:
     void changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref,QString tabname);
 
     /**
+     * Update chart when you insert or remove row or column
+     *
+     * @param pos the point of insertion (only one coordinate may be used, depending
+     * on the other paramaters).
+     * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
+     *                        if false, we inserted or removed a cell
+     * @param ref see ChangeRef
+     * @param tabname completes the pos specification by giving the table name
+     */
+    void refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref);
+    /**
      * @return true if this table is hidden
      */
     bool isHidden() { return m_bTableHide; }

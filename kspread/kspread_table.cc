@@ -1742,7 +1742,7 @@ bool KSpreadTable::shiftRow( const QPoint &_marker )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( _marker, false, KSpreadTable::ColumnInsert, name() );
-
+    refreshChart(_marker, false, KSpreadTable::ColumnInsert);
     emit sig_updateView( this );
 
     return res;
@@ -1757,7 +1757,7 @@ bool KSpreadTable::shiftColumn( const QPoint& marker )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( marker, false, KSpreadTable::RowInsert, name() );
-
+    refreshChart(marker, false, KSpreadTable::RowInsert);
     emit sig_updateView( this );
 
     return res;
@@ -1772,7 +1772,7 @@ void KSpreadTable::unshiftColumn( const QPoint& marker )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( marker, false, KSpreadTable::RowRemove, name() );
-
+    refreshChart( marker, false, KSpreadTable::RowRemove );
     emit sig_updateView( this );
 }
 
@@ -1785,7 +1785,7 @@ void KSpreadTable::unshiftRow( const QPoint& marker )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( marker, false, KSpreadTable::ColumnRemove, name() );
-
+    refreshChart( marker, false, KSpreadTable::ColumnRemove );
     emit sig_updateView( this );
 }
 
@@ -1806,7 +1806,7 @@ bool KSpreadTable::insertColumn( int col )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() );
-
+    refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 
@@ -1830,7 +1830,7 @@ bool KSpreadTable::insertRow( int row )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() );
-
+    refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 
@@ -1854,7 +1854,7 @@ void KSpreadTable::removeColumn( int col )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name() );
-
+    refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
@@ -1876,9 +1876,41 @@ void KSpreadTable::removeRow( int row )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name() );
-
+    refreshChart(QPoint( 1, row ), true, KSpreadTable::RowRemove);
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
+}
+
+void KSpreadTable::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref)
+{
+KSpreadCell* c = m_cells.firstCell();
+  for( ;c; c = c->nextCell() )
+  {
+  if((ref==ColumnInsert || ref==ColumnRemove) && fullRowOrColumn
+        && c->column()>=(pos.x()-1))
+        {
+        if(c->updateChart())
+                return;
+        }
+  else if((ref==ColumnInsert || ref==ColumnRemove)&& !fullRowOrColumn
+        && c->column()>=(pos.x()-1) && c->row()==pos.y())
+        {
+        if(c->updateChart())
+                return;
+        }
+  else if((ref==RowInsert|| ref==RowRemove) && fullRowOrColumn
+        && c->row()>=(pos.y()-1))
+        {
+        if(c->updateChart())
+                return;
+        }
+  else if((ref==RowInsert || ref==RowRemove)&& !fullRowOrColumn
+        && c->column()==pos.x() && c->row()>=(pos.y()-1))
+        {
+        if(c->updateChart())
+                return;
+        }
+  }
 }
 
 void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)

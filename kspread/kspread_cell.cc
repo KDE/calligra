@@ -3444,6 +3444,11 @@ void KSpreadCell::updateDepending()
     }
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
 
+    updateChart();
+}
+
+bool KSpreadCell::updateChart()
+{
     // Update a chart for example if it depends on this cell.
     if ( m_iRow != 0 && m_iColumn != 0 )
     {
@@ -3451,9 +3456,14 @@ void KSpreadCell::updateDepending()
 	for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
         {
 	    if ( bind->contains( m_iColumn, m_iRow ) )
-		bind->cellChanged( this );
+                {
+                bind->cellChanged( this );
+                return true;
+                }
 	}
     }
+    return false;
+
 }
 
 void KSpreadCell::checkValue()

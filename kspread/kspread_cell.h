@@ -391,6 +391,8 @@ public:
      */
     void updateDepending();
 
+    bool updateChart();
+
     QString testAnchor( int _x, int _y, QWidget* _canvas );
 
     /**

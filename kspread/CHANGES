@@ -858,3 +858,7 @@ cell size. =>( ** )
 2000-07-31-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 -Now Negative and Positive format works with fraction format and others
+
+2000-08-02-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now when you insert/remove column/row/cell and there is a chart you refresh it.
