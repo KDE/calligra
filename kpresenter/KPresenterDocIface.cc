@@ -685,3 +685,9 @@ void KPresenterDocIface::setPresentationName( const QString &_name )
     doc->setPresentationName( _name );
 }
 
+
+QStringList KPresenterDocIface::presentationList()
+{
+    return doc->presentationList();
+}
+

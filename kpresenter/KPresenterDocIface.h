@@ -206,6 +206,8 @@ k_dcop:
     QString presentationName() const;
     void setPresentationName( const QString &_name );
 
+    QStringList presentationList();
+
 private:
     KPresenterDoc *doc;
 
