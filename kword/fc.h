@@ -252,6 +252,7 @@ protected:
 
     bool compare_formats;
     bool outOfFrame;
+    bool offsetsAdded;
 };
 
 #endif

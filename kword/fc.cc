@@ -32,6 +32,7 @@ KWFormatContext::KWFormatContext(KWordDocument *_doc,unsigned int _frameSet)
   frame = 1;
   compare_formats = true;
   outOfFrame = false;
+  offsetsAdded = false;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -88,9 +89,9 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     // Set the context to the given paragraph
     if ( parag != 0L )
     {
+//       if (isCursorInLastLine() && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
+// 	ptY += getParag()->getParagLayout()->getPTParagFootOffset(); 
       parag->setPTYEnd( ptY + getLineHeight() );
-      if (isCursorInLastLine() && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
-	ptY += getParag()->getParagLayout()->getPTParagFootOffset(); 
       parag = parag->getNext();
       if ( parag == 0L )
       {
@@ -107,8 +108,8 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     parag->setStartFrame( frame );
     parag->setEndFrame( frame );
     // Vertical position ...
-    if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-      ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
+//     if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+//       ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
     parag->setPTYStart( ptY );
 
     // We are at the beginning of our paragraph
@@ -689,7 +690,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     ptMaxDescender = 0;
     ptAscender = 0;
     ptDescender = 0;
-    
+    offsetsAdded = true;
+
     unsigned int tmpPTWidth = 0;
     unsigned int tmpPTAscender;
     unsigned int tmpPTDescender;
@@ -870,6 +872,11 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     else
       ptSpacing = 0;
 
+    offsetsAdded = false;
+    compare_formats = false;
+    apply(*((KWFormat*)this));
+    compare_formats = true;
+
     // Does this line still fit on this frame ?
     if (!document->isPTYInFrame(frameSet - 1,frame - 1,ptY + getLineHeight()))
     {
@@ -971,6 +978,15 @@ void KWFormatContext::apply( KWFormat &_format )
 	ptMaxDescender = max(ptMaxDescender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
       else if (_format.getVertAlign() == KWFormat::VA_SUPER)
 	ptMaxAscender = max(ptMaxAscender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
+
+      if (!offsetsAdded)
+	{
+	  if (isCursorInLastLine()  && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
+	    ptMaxDescender += getParag()->getParagLayout()->getPTParagFootOffset(); 
+	  if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+	    ptMaxAscender += getParag()->getParagLayout()->getPTParagHeadOffset(); 
+	  offsetsAdded = true;
+	}
     }
 }
 
