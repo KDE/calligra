@@ -30,6 +30,7 @@ libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
 	tools/libkarbontools.la \
 	dialogs/libkarbondialogs.la \
+	dockers/libkarbondockers.la \
 	widgets/libkarbonwidgets.la \
 	commands/libkarboncommands.la \
 	render/libvpainter.la \
