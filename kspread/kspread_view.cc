@@ -307,8 +307,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_redo->setEnabled( FALSE );
     m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
 
-    m_preview = new KAction( i18n("Preview..."), 0, this, SLOT( printPreview() ), actionCollection(), "printpreview" );
-    
     m_sortList = new KAction( i18n("Sort lists..."), 0, this, SLOT( sortList() ), actionCollection(), "sortlist" );
 
 
@@ -1638,43 +1636,6 @@ void KSpreadView::insertHyperlink()
 {
   KSpreadLinkDlg dlg( this, "Create Hyperlink" );
   dlg.exec();
-}
-
-void KSpreadView::printPreview()
-{
-  /*********************************/
-  /* kdevelop code */
-  QStringList paths;
-  bool found=false;
-  QString complete_path = getenv("PATH");
-  paths = QStringList::split ( ":", complete_path, FALSE );
-
-  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
-  {
-    if (QFile::exists((*it) + "/" + "ghostview"))
-    {
-      found = true;
-      break;
-    }
-  }
-  if(!found)
-    {
-      KMessageBox::sorry(this,i18n("KSpread uses ghostview for previewing.\nPlease install it."),i18n("Program not found!"));
-      m_preview->setEnabled(false);
-      return;
-    }
-  /******************************/
-
-  QPrinter prt;
-  QString fileDir=QDir::homeDirPath();
-  fileDir+="/tmp/preview.ps";
-  prt.setOutputFileName(fileDir);
-  print(prt);
-  KShellProcess *process = new KShellProcess();
-  *process << "ghostview";
-  *process << fileDir;
-  process->start(KProcess::NotifyOnExit,KProcess::AllOutput);
-
 }
 
 void KSpreadView::print( QPrinter &prt )

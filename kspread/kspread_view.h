@@ -303,8 +303,6 @@ public slots:
     void nextTable();
     void previousTable();
 
-    void printPreview();
-    
     void sortList();
 
 protected slots:
@@ -536,7 +534,6 @@ private:
     KAction* m_gotoCell;
     KAction* m_increaseIndent;
     KAction* m_decreaseIndent;
-    KAction* m_preview;
     KAction* m_sortList;
 
     /**
