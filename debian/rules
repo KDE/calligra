@@ -84,6 +84,7 @@ install-stamp: build
 	$(INSTALL_FILE) doc/kugar/*.html $(kugar_docs)
 	$(INSTALL_FILE) doc/kugar/dataref/*.html $(kugar_docs)/dataref
 	$(INSTALL_FILE) doc/kugar/kugar/*.html $(kugar_docs)/kugar
+	$(INSTALL_FILE) doc/kugar/kugar/*.gif $(kugar_docs)/kugar
 	$(INSTALL_FILE) doc/kugar/templateref/*.html $(kugar_docs)/templateref
 
 	perl -w admin/debianrules cleanup
