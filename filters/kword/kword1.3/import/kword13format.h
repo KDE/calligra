@@ -42,7 +42,7 @@ public:
      *
      * \note The returned pointer MUST NOT be deleted and also it can be NULL!
      */
-    KWord13FormatOneData* getFormatOneData(void);
+    virtual KWord13FormatOneData* getFormatOneData(void);
 public:
     int m_id; ///< Type of format
     int m_pos; ///< Position of format

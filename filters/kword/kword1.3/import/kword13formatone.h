@@ -73,7 +73,7 @@ public:
      *
      * \note The returned pointer MUST NOT be deleted!
      */
-    KWord13FormatOneData* getFormatOneData(void);
+    virtual KWord13FormatOneData* getFormatOneData(void);
 public:
     int m_length; ///< Length of format
     KWord13FormatOneData m_formatOne; ///< Data of children of \<FORMAT id="1"\>

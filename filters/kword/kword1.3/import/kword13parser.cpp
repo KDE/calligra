@@ -174,7 +174,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     if ( m_currentFormat )
     {
         // Delete an eventually already existing paragraph (should not happen)
-        kdWarning(30520) << "Current 'format one' already defined!" << endl;
+        kdWarning(30520) << "Current format already defined!" << endl;
         delete m_currentFormat;
     }
     
@@ -184,13 +184,15 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     if ( id == 1 && ok )
     {
         KWord13FormatOne* one = new KWord13FormatOne;
-        const int length = attributes.value( "length" ).toInt( &ok );
+        const int len = attributes.value( "len" ).toInt( &ok );
         if ( ok )
-            one->m_length = length;
+            one->m_length = len;
         m_currentFormat = one;
     }
     else
     {
+        // ### TODO: provisory
+        stackItem->elementType = ElementTypeIgnore;
         m_currentFormat = new KWord13Format;
         if ( ok )
             m_currentFormat->m_id = id;
@@ -205,6 +207,8 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
         kdWarning(30520) << "Cannot set position of <FORMAT>: " << attributes.value( "pos" ) << endl;
         return false; // Assume parse error!
     }
+    
+    kdDebug(30520) << "<FORMAT id=\"" << id << "\" pos=\"" << pos << "\" len=\"" << attributes.value( "len" ) << "\">" << endl;
         
     return true;    
 }
