@@ -606,6 +606,12 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(), "menu_count");
     connect( m_menuCalcCount, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
     m_menuCalcCount->setExclusiveGroup( "Calc" );
+
+
+    m_menuCalcNone = new KToggleAction( i18n("None"), 0, actionCollection(), "menu_none");
+    connect( m_menuCalcNone, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
+    m_menuCalcNone->setExclusiveGroup( "Calc" );
+
     //
 
     connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
@@ -738,6 +744,9 @@ void KSpreadView::initCalcMenu()
             break;
         case  Count:
             m_menuCalcCount->setChecked(true);
+            break;
+        case  NoneCalc:
+            m_menuCalcNone->setChecked(true);
             break;
         default :
             m_menuCalcSum->setChecked(true);
@@ -3573,20 +3582,22 @@ void KSpreadView::resultOfCalc()
         tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
                            m_pCanvas->markerColumn(), m_pCanvas->markerRow());
     MethodOfCalc tmpMethod=m_pDoc->getTypeOfCalc() ;
-    if( activeTable()->isColumnSelected() )
+    if ( tmpMethod != NoneCalc )
     {
-        KSpreadCell* c = activeTable()->firstCell();
-        for( ;c; c = c->nextCell() )
+        if( activeTable()->isColumnSelected() )
         {
-            int col = c->column();
-            if ( tmpRect.left() <= col && tmpRect.right() >= col
-                 &&!c->isObscuringForced())
+            KSpreadCell* c = activeTable()->firstCell();
+            for( ;c; c = c->nextCell() )
             {
-                if(c->isNumeric())
+                int col = c->column();
+                if ( tmpRect.left() <= col && tmpRect.right() >= col
+                     &&!c->isObscuringForced())
                 {
-                    double val=c->valueDouble();
-                    switch(tmpMethod)
+                    if(c->isNumeric())
                     {
+                        double val=c->valueDouble();
+                        switch(tmpMethod)
+                        {
                         case SumOfNumber:
                             result+=val;
                             break;
@@ -3606,29 +3617,30 @@ void KSpreadView::resultOfCalc()
                                 result=val;
                             break;
                         case Count:
+                        case NoneCalc:
                             break;
                         default:
                             break;
+                        }
+                        nbCell++;
                     }
-                    nbCell++;
                 }
             }
         }
-    }
-    else if( activeTable()->isRowSelected() )
-    {
-        KSpreadCell* c = activeTable()->firstCell();
-        for( ; c; c = c->nextCell() )
+        else if( activeTable()->isRowSelected() )
         {
-            int row = c->row();
-            if ( tmpRect.top() <= row && tmpRect.bottom() >= row
-                 &&!c->isObscuringForced())
+            KSpreadCell* c = activeTable()->firstCell();
+            for( ; c; c = c->nextCell() )
             {
-                if(c->isNumeric())
+                int row = c->row();
+                if ( tmpRect.top() <= row && tmpRect.bottom() >= row
+                     &&!c->isObscuringForced())
                 {
-                    double val=c->valueDouble();
-                    switch(tmpMethod )
+                    if(c->isNumeric())
                     {
+                        double val=c->valueDouble();
+                        switch(tmpMethod )
+                        {
                         case SumOfNumber:
                             result+=val;
                             break;
@@ -3648,26 +3660,27 @@ void KSpreadView::resultOfCalc()
                                 result=val;
                             break;
                         case Count:
+                        case NoneCalc:
                             break;
                         default:
                             break;
+                        }
+                        nbCell++;
                     }
-                    nbCell++;
                 }
             }
         }
-    }
-    else
-    {
-        for (int i=tmpRect.left();i<=tmpRect.right();i++)
-            for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
-            {
-                KSpreadCell *cell = activeTable()->cellAt( i, j );
-                if(!cell->isDefault() && cell->isNumeric())
+        else
+        {
+            for (int i=tmpRect.left();i<=tmpRect.right();i++)
+                for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
                 {
-                    double val= cell->valueDouble();
-                    switch(tmpMethod )
+                    KSpreadCell *cell = activeTable()->cellAt( i, j );
+                    if(!cell->isDefault() && cell->isNumeric())
                     {
+                        double val= cell->valueDouble();
+                        switch(tmpMethod )
+                        {
                         case SumOfNumber:
                             result+=val;
                             break;
@@ -3687,34 +3700,38 @@ void KSpreadView::resultOfCalc()
                                 result=val;
                             break;
                         case Count:
+                        case NoneCalc:
                             break;
                         default:
                             break;
+                        }
+                        nbCell++;
                     }
-                    nbCell++;
                 }
-            }
+        }
     }
-
     QString tmp;
     switch(tmpMethod )
     {
-        case SumOfNumber:
-            tmp=i18n(" Sum: %1").arg(result);
-            break;
-        case Average:
-            result=result/nbCell;
-            tmp=i18n("Average: %1").arg(result);
-            break;
-        case Min:
-            tmp=i18n("Min: %1").arg(result);
-            break;
-        case Max:
-            tmp=i18n("Max: %1").arg(result);
-            break;
-        case Count:
-            tmp=i18n("Count: %1").arg(nbCell);
-            break;
+    case SumOfNumber:
+        tmp=i18n(" Sum: %1").arg(result);
+        break;
+    case Average:
+        result=result/nbCell;
+        tmp=i18n("Average: %1").arg(result);
+        break;
+    case Min:
+        tmp=i18n("Min: %1").arg(result);
+        break;
+    case Max:
+        tmp=i18n("Max: %1").arg(result);
+        break;
+    case Count:
+        tmp=i18n("Count: %1").arg(nbCell);
+        break;
+    case NoneCalc:
+        tmp="";
+        break;
     }
 
     if ( m_sbCalcLabel )
@@ -3754,6 +3771,9 @@ void KSpreadView::menuCalc(bool)
     {
         doc()->setTypeOfCalc(SumOfNumber);
     }
+    else if( m_menuCalcNone->isChecked())
+        doc()->setTypeOfCalc(NoneCalc);
+
     resultOfCalc();
 }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="7">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="8">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
@@ -123,6 +123,7 @@
  <Action name="menu_max"/>
  <Action name="menu_average"/>
  <Action name="menu_count"/>
+ <Action name="menu_none"/>
 </Menu>
 <ToolBar fullWidth="true" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
  <Action name="undo"/>

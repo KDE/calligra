@@ -545,6 +545,7 @@ private:
     KToggleAction* m_menuCalcAverage;
     KToggleAction* m_menuCalcCount;
     KToggleAction* m_menuCalcSum;
+    KToggleAction* m_menuCalcNone;
 
     KoPartSelectAction *m_insertPart;
 

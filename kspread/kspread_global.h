@@ -27,5 +27,5 @@ enum Series { Column,Row,Linear,Geometric };
 namespace KSpread {  // necessary due to QDock* enums (Werner)
 enum MoveTo { Bottom,Left,Top,Right };
 }
-enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count};
+enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc};
 #endif

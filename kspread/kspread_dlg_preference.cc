@@ -481,6 +481,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   listTypeCalc+=i18n("Max");
   listTypeCalc+=i18n("Average");
   listTypeCalc+=i18n("Count");
+  listTypeCalc+=i18n("None");
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
   commentIndicator=new QCheckBox(i18n("Show comment &indicator"),tmpQGroupBox);
@@ -559,6 +560,9 @@ switch( m_pView->doc()->getTypeOfCalc())
                 break;
         case  Count:
 	        typeCalc->setCurrentItem(4);
+                break;
+        case  NoneCalc:
+	        typeCalc->setCurrentItem(5);
                 break;
         default :
                 typeCalc->setCurrentItem(0);
@@ -649,6 +653,10 @@ void miscParameters::apply()
 	case 4:
             tmpMethodCalc=Count;
             break;
+        case 5:
+            tmpMethodCalc=NoneCalc;
+            break;
+
     }
     if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
     {
