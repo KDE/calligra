@@ -481,7 +481,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     viewZoom( QString::number( m_pDoc->zoom() ) );
 
     QStringList list = m_viewZoom->items();
-    QString zoomStr = QString::number(m_pDoc->zoom() ) + '%';
+    QString zoomStr = QString::number(m_pDoc->zoom() ) + '%'; // ### TODO: I18N
     m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 
     m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
@@ -798,7 +798,7 @@ void KSpreadView::initializeGlobalOperationActions()
 
   m_viewZoom->setEditable(true);
 
-  QStringList lst1;
+  QStringList lst1; // ### TODO: I18N
   lst1 << "33%";
   lst1 << "50%";
   lst1 << "60%";
@@ -4502,13 +4502,11 @@ void KSpreadView::viewZoom( const QString & s )
 {
   int oldZoom = m_pDoc->zoom();
 
-  QString z( s );
   bool ok = false;
-  int newZoom;
+  QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+  regexp.search(s);
+  int newZoom=regexp.cap(1).toInt(&ok);
 
-  z = z.replace( "%", "" );
-  z = z.simplifyWhiteSpace();
-  newZoom = z.toInt(&ok);
 //   kdDebug(36001) << "---------viewZoom: " << z << " - " << s << ", newZoom: " << newZoom
 //                  << ", oldZoom " << oldZoom << ", " << zoom() << endl;
 
