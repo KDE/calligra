@@ -176,8 +176,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	viewport()->setUpdatesEnabled( false );
 	KoRect rect( e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height() );
 	VPainter *p = m_view->painterFactory()->painter();
-	if( m_bScrolling )
-	{
+	//if( m_bScrolling )
+	//{
 		// TODO : only update ROIs
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
@@ -204,7 +204,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->resetClipPath();
 		m_bScrolling = false;
 
-	}
+	//}
 	p->blit( rect );
 
 	// draw handle:
