@@ -1023,90 +1023,93 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  getMargins: looking for frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
 #endif
-    // Principle: for every frame on top at this height, we'll move from and to
-    // towards each other. The text flows between 'from' and 'to'
-    QPtrListIterator<KWFrame> fIt( theFrame->framesOnTop() );
-    for ( ; fIt.current() && from < to ; ++fIt )
+    if ( m_doc->viewMode()->shouldAdjustMargins() )
     {
-        if ( (*fIt)->runAround() == KWFrame::RA_BOUNDINGRECT )
+        // Principle: for every frame on top at this height, we'll move from and to
+        // towards each other. The text flows between 'from' and 'to'
+        QPtrListIterator<KWFrame> fIt( theFrame->framesOnTop() );
+        for ( ; fIt.current() && from < to ; ++fIt )
         {
-            KoRect rectOnTop = theFrame->intersect( (*fIt)->runAroundRect() );
-#ifdef DEBUG_MARGINS
-            kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << rectOnTop << endl;
-#endif
-            QPoint iTop, iBottom; // top and bottom of intersection in internal coordinates
-            if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
-                 iTop.y() <= yp + h && // optimization
-                 documentToInternal( rectOnTop.bottomRight(), iBottom ) )
+            if ( (*fIt)->runAround() == KWFrame::RA_BOUNDINGRECT )
             {
+                KoRect rectOnTop = theFrame->intersect( (*fIt)->runAroundRect() );
 #ifdef DEBUG_MARGINS
-                kdDebugBody(32002) << "      in internal coords: " << QRect(iTop,iBottom) << endl;
+                kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << rectOnTop << endl;
 #endif
-                // Look for intersection between yp -- yp+h  and iTop -- iBottom
-                if ( QMAX( yp, iTop.y() ) <= QMIN( yp+h, iBottom.y() ) )
+                QPoint iTop, iBottom; // top and bottom of intersection in internal coordinates
+                if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
+                     iTop.y() <= yp + h && // optimization
+                     documentToInternal( rectOnTop.bottomRight(), iBottom ) )
                 {
 #ifdef DEBUG_MARGINS
-                    kdDebugBody(32002) << "   getMargins iTop=" << iTop.x() << "," << iTop.y()
-                                       << " iBottom=" << iBottom.x() << "," << iBottom.y() << endl;
+                    kdDebugBody(32002) << "      in internal coords: " << QRect(iTop,iBottom) << endl;
 #endif
-                    int availLeft = QMAX( 0, iTop.x() - from );
-                    int availRight = QMAX( 0, to - iBottom.x() );
-#ifdef DEBUG_MARGINS
-                    kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
-                                       << " availRight=" << availRight << endl;
-#endif
-                    bool chooseLeft = false;
-                    switch ( (*fIt)->runAroundSide() ) {
-                    case KWFrame::RA_LEFT:
-                        chooseLeft = true;
-                        break;
-                    case KWFrame::RA_RIGHT:
-                        break; // chooseLeft remains false
-                    case KWFrame::RA_BIGGEST:
-                        chooseLeft = ( availLeft > availRight ); // choose the max
-                    };
-
-                    if ( chooseLeft )
-                        // flow text at the left of the frame
-                        to = QMIN( to, from + availLeft - 1 );  // can only go left -> QMIN
-                    else
-                        // flow text at the right of the frame
-                        from = QMAX( from, to - availRight + 1 ); // can only go right -> QMAX
-
-#ifdef DEBUG_MARGINS
-                    kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
-#endif
-                    // If the available space is too small, give up on it
-                    if ( to - from < m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin )
+                    // Look for intersection between yp -- yp+h  and iTop -- iBottom
+                    if ( QMAX( yp, iTop.y() ) <= QMIN( yp+h, iBottom.y() ) )
                     {
 #ifdef DEBUG_MARGINS
-                        kdDebugBody(32002) << "   smaller than minimum=" << m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin << endl;
+                        kdDebugBody(32002) << "   getMargins iTop=" << iTop.x() << "," << iTop.y()
+                                           << " iBottom=" << iBottom.x() << "," << iBottom.y() << endl;
 #endif
-                        from = to;
-                    }
+                        int availLeft = QMAX( 0, iTop.x() - from );
+                        int availRight = QMAX( 0, to - iBottom.x() );
+#ifdef DEBUG_MARGINS
+                        kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
+                                           << " availRight=" << availRight << endl;
+#endif
+                        bool chooseLeft = false;
+                        switch ( (*fIt)->runAroundSide() ) {
+                        case KWFrame::RA_LEFT:
+                            chooseLeft = true;
+                            break;
+                        case KWFrame::RA_RIGHT:
+                            break; // chooseLeft remains false
+                        case KWFrame::RA_BIGGEST:
+                            chooseLeft = ( availLeft > availRight ); // choose the max
+                        };
 
-                    if ( breakEnd && from == to ) // no-space case
-                    {
-                        if ( !init ) // first time
-                        {
-                            init = true;
-                            *breakBegin = iTop.y();
-                            *breakEnd = iBottom.y();
-                        }
+                        if ( chooseLeft )
+                            // flow text at the left of the frame
+                            to = QMIN( to, from + availLeft - 1 );  // can only go left -> QMIN
                         else
-                        {
-                            *breakBegin = QMIN( *breakBegin, iTop.y() );
-                            *breakEnd = QMAX( *breakEnd, iBottom.y() );
-                        }
+                            // flow text at the right of the frame
+                            from = QMAX( from, to - availRight + 1 ); // can only go right -> QMAX
+
 #ifdef DEBUG_MARGINS
-                        kdDebugBody(32002) << "   getMargins iBottom.y=" << iBottom.y()
-                                           << " breakBegin=" << *breakBegin
-                                           << " breakEnd=" << *breakEnd << endl;
+                        kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
 #endif
-                    }
-                } // else no intersection
-            }// else we got a 0L, or the iTop.y()<=yp+h test didn't work - wrong debug output
-            // kdDebugBody(32002) << "   gerMargins: normalToInternal returned 0L" << endl;
+                        // If the available space is too small, give up on it
+                        if ( to - from < m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin )
+                        {
+#ifdef DEBUG_MARGINS
+                            kdDebugBody(32002) << "   smaller than minimum=" << m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin << endl;
+#endif
+                            from = to;
+                        }
+
+                        if ( breakEnd && from == to ) // no-space case
+                        {
+                            if ( !init ) // first time
+                            {
+                                init = true;
+                                *breakBegin = iTop.y();
+                                *breakEnd = iBottom.y();
+                            }
+                            else
+                            {
+                                *breakBegin = QMIN( *breakBegin, iTop.y() );
+                                *breakEnd = QMAX( *breakEnd, iBottom.y() );
+                            }
+#ifdef DEBUG_MARGINS
+                            kdDebugBody(32002) << "   getMargins iBottom.y=" << iBottom.y()
+                                               << " breakBegin=" << *breakBegin
+                                               << " breakEnd=" << *breakEnd << endl;
+#endif
+                        }
+                    } // else no intersection
+                }// else we got a 0L, or the iTop.y()<=yp+h test didn't work - wrong debug output
+                // kdDebugBody(32002) << "   gerMargins: normalToInternal returned 0L" << endl;
+            }
         }
     }
     if ( marginLeft /*&& marginRight && pageWidth  -- implicit*/ )
@@ -1135,13 +1138,10 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 
 void KWTextFrameSet::adjustMargins( int yp, int h, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag )
 {
-    if ( m_doc->viewMode()->shouldAdjustMargins() )
-    {
-        getMargins( yp, h, &leftMargin, &rightMargin, &pageWidth, 0L, 0L, parag );
+    getMargins( yp, h, &leftMargin, &rightMargin, &pageWidth, 0L, 0L, parag );
 #ifdef DEBUG_MARGINS
-        kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
+    kdDebugBody(32002) << "KWTextFrameSet::adjustMargins marginLeft=" << marginLeft << endl;
 #endif
-    }
 }
 
 // helper for formatVertically
