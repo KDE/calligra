@@ -747,7 +747,14 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if( selectionHandle.contains( QPoint( doc()->zoomItX( ev_PosX + xOffset() ), 
                                         doc()->zoomItY( ev_PosY + yOffset() ) ) ) )
+  {
+    //If the cursor is over the hanlde, than it might be already on the next cell.
+    //Recalculate the cell!
+    col  = table->leftColumn( ev_PosX + xOffset() - doc()->unzoomItX( 2 ), xpos );
+    row  = table->topRow( ev_PosY + yOffset() - doc()->unzoomItY( 2 ), ypos );
+
     setCursor( sizeFDiagCursor );
+  }
   else if ( !m_strAnchor.isEmpty() )
     setCursor( KCursor::handCursor() );
   else
