@@ -1023,6 +1023,7 @@ void KOISpell::check2 (KProcIO *)
       //      kdDebug(30006) << "check2() done" << endl;
       newbuffer.truncate (newbuffer.length()-2);
       emitProgress();
+      NOOUTPUT( check2 );
       emit done (newbuffer);
     }
   recursive = false;
