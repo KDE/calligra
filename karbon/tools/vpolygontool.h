@@ -24,7 +24,7 @@
 
 #include "vshapetool.h"
 
-class KDoubleNumInput;
+class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 
 
@@ -51,8 +51,8 @@ private:
 		void setEdges( uint value );
 
 	private:
-		KDoubleNumInput	*m_radius;
-		KIntSpinBox		*m_edges;
+		KoUnitDoubleSpinBox	*m_radius;
+		KIntSpinBox			*m_edges;
 	};
 
 	VPolygonOptionsWidget* m_optionsWidget;

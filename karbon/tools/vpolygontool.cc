@@ -22,7 +22,7 @@
 #include <qlabel.h>
 
 #include <klocale.h>
-#include <knuminput.h>
+#include <koUnitWidgets.h>
 
 #include "karbon_view.h"
 #include "vpolygon.h"
@@ -32,7 +32,7 @@ VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( QWidget* parent, con
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name )
 {
 	new QLabel( i18n( "Radius:" ), this );
-	m_radius = new KDoubleNumInput( 0, this );
+	m_radius = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5  );
 	new QLabel( i18n( "Edges:" ), this );
 	m_edges = new KIntSpinBox( this );
 	m_edges->setMinValue( 3 );
