@@ -667,6 +667,11 @@ void KSpreadView::initializeGlobalOperationActions()
                                "paperLayout" );
   m_paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));
 
+  m_definePrintRange = new KAction( i18n("Define Print Range"), 0, this,
+                                    SLOT( definePrintRange() ), actionCollection(),
+                                    "definePrintRange" );
+  m_definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
+
   m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this, 
                                   SLOT( createTemplate() ), actionCollection(), "createTemplate" ); 
 }
@@ -3957,6 +3962,11 @@ void KSpreadView::layoutDlg()
 void KSpreadView::paperLayoutDlg()
 {
     m_pTable->paperLayoutDlg();
+}
+
+void KSpreadView::definePrintRange()
+{
+    m_pTable->definePrintRange();
 }
 
 void KSpreadView::multiRow( bool b )

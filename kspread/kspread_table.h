@@ -1467,6 +1467,10 @@ public slots:
      * @see KoPageLayoutDia
      */
     void paperLayoutDlg();
+    /**
+     * Define the print range with the current selection
+     */
+    void definePrintRange();
 
 protected:
 

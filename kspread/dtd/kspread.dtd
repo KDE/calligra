@@ -161,7 +161,6 @@
                 bottom-rect    CDATA #IMPLIED
                 top-rect       CDATA #IMPLIED>
 
-
 <!--	Contains the table data for the various tables.
 
 	Attributes:
@@ -189,7 +188,7 @@
                 formular          show/hide formular
                 lcmode            write on LxCx area selected 
 -->
-<!ELEMENT table (paper|cell|chart|column|row)*>
+<!ELEMENT table (paper|cell|chart|column|row|print-rect)*>
 <!ATTLIST table  name               CDATA #REQUIRED
                  columnnumber       CDATA #REQUIRED
                  borders            CDATA #REQUIRED     
@@ -350,6 +349,21 @@
 <!ELEMENT row format>
 <!ATTLIST row  row  CDATA #REQUIRED
                height   CDATA #REQUIRED>
+
+
+<!--	Describe the print range.
+        Attributes:
+
+         left-rect   value of the left border
+         right-rect  value of the right border
+         bottom-rect value of the bottom border
+         top-rect    value of the top border
+-->
+<!ELEMENT printrange-rect  EMPTY>
+<!ATTLIST printrange-rect  left-rect      CDATA #IMPLIED
+                           right-rect     CDATA #IMPLIED
+                           bottom-rect    CDATA #IMPLIED
+                           top-rect       CDATA #IMPLIED>
 
 
 <!--	Describes an embedded chart.

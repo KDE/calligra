@@ -62,6 +62,7 @@
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
   <Action name="paperLayout"/>
+  <Action name="definePrintRange"/>
   <Separator/>
   <Menu name="Sheet"><text>&amp;Sheet</text>
   <Action name="removeTable"/>

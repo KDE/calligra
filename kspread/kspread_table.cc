@@ -6392,6 +6392,7 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
     borders.setAttribute( "right", rightBorder() );
     borders.setAttribute( "bottom", bottomBorder() );
     paper.appendChild( borders );
+
     QDomElement head = doc.createElement( "head" );
     paper.appendChild( head );
     if ( !headLeft().isEmpty() )
@@ -6432,6 +6433,31 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
       foot.appendChild( right );
       right.appendChild( doc.createTextNode( footRight() ) );
     }
+
+    // print range
+    QDomElement printrange = doc.createElement( "printrange-rect" );
+    int left = m_printRange.left();
+    int right = m_printRange.right();
+    int top = m_printRange.top();
+    int bottom = m_printRange.bottom();
+    //If whole rows are selected, then we store zeros, as KS_colMax may change in future
+    if ( left == 1 && right == KS_colMax )
+    {
+      left = 0;
+      right = 0;
+    }
+    //If whole columns are selected, then we store zeros, as KS_rowMax may change in future
+    if ( top == 1 && bottom == KS_rowMax )
+    {
+      top = 0;
+      bottom = 0;
+    }
+    printrange.setAttribute( "left-rect", left );
+    printrange.setAttribute( "right-rect", right );
+    printrange.setAttribute( "bottom-rect", bottom );
+    printrange.setAttribute( "top-rect", top );
+    table.appendChild( printrange );
+
 
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
@@ -6606,6 +6632,26 @@ bool KSpreadTable::loadXML( const QDomElement& table )
       setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
+      // load print range
+      QDomElement printrange = table.namedItem( "printrange-rect" ).toElement();
+      if ( !printrange.isNull() )
+      {
+        int left = printrange.attribute( "left-rect" ).toInt();
+        int right = printrange.attribute( "right-rect" ).toInt();
+        int bottom = printrange.attribute( "bottom-rect" ).toInt();
+        int top = printrange.attribute( "top-rect" ).toInt();
+        if ( left == 0 ) //whole row(s) selected
+        {
+          left = 1;
+          right = KS_colMax;
+        }
+        if ( top == 0 ) //whole column(s) selected
+        {
+          top = 1;
+          bottom = KS_rowMax;
+        }
+        m_printRange = QRect( QPoint( left, top ), QPoint( right, bottom ) );
+      }
 
     // Load the cells
     QDomNode n = table.firstChild();
@@ -7242,7 +7288,10 @@ void KSpreadTable::paperLayoutDlg()
                     if ( point2.isValid() )
                     {
                         error = false;
-                        m_printRange = QRect( QPoint( point1.pos.x(), point1.pos.y() ), QPoint( point2.pos.x(), point2.pos.y() ) );
+                        m_printRange = QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
+                                                      QMIN( point1.pos.y(), point2.pos.y() ) ),
+                                              QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
+                                                      QMAX( point1.pos.y(), point2.pos.y() ) ) );
                     }
                 }
             }
@@ -7273,6 +7322,13 @@ void KSpreadTable::paperLayoutDlg()
     m_pDoc->setUnit( unit );
 }
 
+void KSpreadTable::definePrintRange ()
+{
+    if ( !singleCellSelection() )
+    {
+        m_printRange=selection();
+    }
+}
 
 void KSpreadTable::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
 {
