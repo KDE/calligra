@@ -1866,7 +1866,7 @@ void KWordView::tableSplitCells()
     } else {
         QPainter painter;
         painter.begin( gui->getPaperWidget() );
-        if ( !grpMgr->splitCell() )
+        if ( !grpMgr->splitCell(1,2) )
         {
             KMessageBox::sorry( this,
                                 i18n("You have to select a joined cell."),

@@ -462,7 +462,6 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
 /*================================================================*/
 void KWPage::vmmCreate( int mx, int my )
 {
-kdDebug() << "KWPage::vmmCreate" << endl;
     mx -= contentsX();
     my -= contentsY();
 
@@ -488,9 +487,6 @@ kdDebug() << "KWPage::vmmCreate" << endl;
             KWGroupManager *grpMgr;
 
             grpMgr = new KWGroupManager( doc );
-            QString _name;
-            _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() ); // TODO change this!! (TZ)
-            grpMgr->setName( _name );
             insertAnchor( grpMgr );
             anchor = grpMgr;
         };
@@ -912,6 +908,7 @@ void KWPage::vmrEditFrame( int mx, int my )
 {
     int frameset=0; 
     KWFrame *frame= doc->getFirstSelectedFrame(frameset);
+    if(!frame) return;
     if ( doc->getProcessingType() == KWordDocument::DTP )
         setRuler2Frame( frame );
     gui->getHorzRuler()->setFrameStart( frame->x() );
@@ -1009,7 +1006,6 @@ void KWPage::vmrCreateFormula()
 /*================================================================*/
 void KWPage::vmrCreateTable()
 {
-kdDebug() << "KWPage::vmrCreateTable" << endl;
     repaintScreen( FALSE );
 
     insRect = insRect.normalize();

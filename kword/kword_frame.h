@@ -59,7 +59,7 @@ enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
 
 const int minFrameWidth=18;
 const int minFrameHeight=20;
-
+const int tableCellSpacing=3;
 /******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/
@@ -509,7 +509,7 @@ public:
     bool isActive() { return active; }
 
     bool joinCells();
-    bool splitCell();
+    bool splitCell(unsigned int intoRows, unsigned int intoCols);
 
     QString anchorType();
     QString anchorInstance();
