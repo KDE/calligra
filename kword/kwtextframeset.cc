@@ -57,6 +57,7 @@
 #include <kdebug.h>
 #include <assert.h>
 #include "kwloadinginfo.h"
+#include <koxmlwriter.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
@@ -1882,10 +1883,16 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
     m_textobj->saveOasisContent( writer, context );
 }
 
-void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context )
 {
     // TODO save the frame stuff
+    writer.startElement( "draw:text-box" );
+
     saveOasisContent( writer, context );
+
+    KWFrameSet::saveOasisCommon( writer );
+
+    writer.endElement();
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )

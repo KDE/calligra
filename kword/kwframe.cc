@@ -45,6 +45,7 @@
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <dcopobject.h>
+#include <koxmlwriter.h>
 
 #include <qpopupmenu.h>
 #include <qdrawutil.h>
@@ -1513,6 +1514,19 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
 MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
 {
     return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
+}
+
+void KWFrameSet::saveOasisCommon( KoXmlWriter &xmlWriter )
+{
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
+    //todo common element.
+    xmlWriter.addAttribute( "draw:name", m_name );
+    //it's not into kwframset but into kwframe
+    //xmlWriter.addAttributePt( "svg:x", left() );
+    //xmlWriter.addAttributePt( "svg:y", top() );
+    //xmlWriter.addAttributePt( "svg:width", right() );
+    //xmlWriter.addAttributePt( "svg:height", bottom() );
 }
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
