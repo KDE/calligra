@@ -14,6 +14,8 @@
 #include "koPageLayoutDia.h"
 #include "koPageLayoutDia.moc"
 
+#include <klocale.h>
+
 /******************************************************************/
 /* class KoPagePreview                                            */
 /******************************************************************/
@@ -90,12 +92,12 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   if (tabs & FORMAT_AND_BORDERS) setupTab1();
   if (tabs & HEADER_AND_FOOTER) setupTab2();
 
-  setCancelButton("Cancel");
-  setOkButton("OK");
+  setCancelButton( i18n( "Cancel" ) );
+  setOkButton( i18n( "Ok" ) );
 
   retPressed = false;
 
-  setCaption("Page Layout");
+  setCaption( i18n( "Page Layout") );
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
 }

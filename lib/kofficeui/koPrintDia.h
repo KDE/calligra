@@ -36,7 +36,7 @@ public:
 
     void configurePrinter( QPrinter &_printer );
     
-    static bool print( QPrinter &_printer );
+    static bool print( QPrinter &_printer, QObject *dest = 0L, const char *slot = 0L );
 
 public slots:
     void slotPaperLayout();
@@ -44,7 +44,7 @@ public slots:
     void slotBrowse();
   
 signals:
-    void sig_paperLayout( KoPrintDia* );
+    void sig_pageLayout();
 };
 
 #endif

@@ -54,6 +54,8 @@ KoPrintDia::KoPrintDia( QWidget* parent, const char* name )
     
     printer->setCurrentItem( 0 );
     slotPrinter( printer->currentText() );
+
+    setCaption( i18n( "Print Dialog") );
 }
 
 void KoPrintDia::slotPrinter( const char *_printer )
@@ -87,7 +89,7 @@ void KoPrintDia::slotPrinter( const char *_printer )
 
 void KoPrintDia::slotPaperLayout()
 {
-  emit sig_paperLayout( this );
+  emit sig_pageLayout();
 }
 
 void KoPrintDia::configurePrinter( QPrinter &_printer )
@@ -259,9 +261,13 @@ void KoPrintDia::slotBrowse()
     fileName->setText( file );
 }
 
-bool KoPrintDia::print( QPrinter &_printer )
+bool KoPrintDia::print( QPrinter &_printer, QObject *dest = 0L, const char *slot = 0L )
 {
   KoPrintDia dlg;
+
+  if ( dest != 0L && slot != 0L )
+    connect( &dlg, SIGNAL( sig_pageLayout() ), dest, slot );
+
   if ( dlg.exec() )
   {
     dlg.configurePrinter( _printer );

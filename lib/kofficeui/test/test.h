@@ -8,10 +8,12 @@
 #include "../koPartSelectDia.h"
 #include "../koAboutDia.h"
 #include "../koPageLayoutDia.h"
+#include "../koPrintDia.h"
 
 #include <qpushbt.h>
 #include <qwidget.h>
 #include <qobject.h>
+#include <qprinter.h>
 
 #include <kapp.h>
 
@@ -32,6 +34,7 @@ public slots:
   void aKAutoformEdit() {KoAboutDia::about(KoAboutDia::KAutoformEdit,"0.0.1");}
   void pgLayout() {KoPageLayoutDia::pageLayout(layout,hf,FORMAT_AND_BORDERS | HEADER_AND_FOOTER);}
   void selectPart() {KoPartSelectDia::selectPart();}
+  void print() {QPrinter prt; KoPrintDia::print( prt );}
 };
 
 #endif

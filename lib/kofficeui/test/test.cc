@@ -20,7 +20,7 @@ public:
 void MyApp::start()
 {
   MyTest *w = new MyTest();
-  w->resize(220,355);
+  w->resize(220,385);
   w->setMaximumSize(w->size());
   w->setMinimumSize(w->size());
   layout = KoPageLayoutDia::standardLayout();
@@ -70,8 +70,13 @@ void MyApp::start()
   selectPart->resize(200,25);
   QObject::connect( selectPart,SIGNAL(clicked()),w,SLOT(selectPart()));
 
+  QPushButton* printBtn = new QPushButton("Print...",w);
+  printBtn->move(10,300);
+  printBtn->resize(200,25);
+  QObject::connect( printBtn,SIGNAL(clicked()),w,SLOT(print()));
+
   QPushButton* quit = new QPushButton("Quit",w);
-  quit->move(10,320);
+  quit->move(10,350);
   quit->resize(200,25);
   QObject::connect( quit,SIGNAL(clicked()), SLOT(quit()));
 

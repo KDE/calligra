@@ -8,10 +8,10 @@ MOC	=	moc
 
 ####### Files
 
-SOURCES =	koAboutDia.cc koPageLayoutDia.cc koPartSelectDia.cc koPartSelectDia_data.cc
-HEADERS =	koAboutDia.h koPageLayoutDia.h koPartSelectDia.h koPartSelectDia_data.h
-OBJECTS =	koAboutDia.o koPageLayoutDia.o koPartSelectDia.o koPartSelectDia_data.o
-SRCMETA =	koAboutDia.moc koPageLayoutDia.moc koPartSelectDia.moc koPartSelectDia_data.moc
+SOURCES =	koAboutDia.cc koPageLayoutDia.cc koPartSelectDia.cc koPartSelectDia_data.cc koPrintDia.cc
+HEADERS =	koAboutDia.h koPageLayoutDia.h koPartSelectDia.h koPartSelectDia_data.h koPrintDia.h
+OBJECTS =	koAboutDia.o koPageLayoutDia.o koPartSelectDia.o koPartSelectDia_data.o koPrintDia.o
+SRCMETA =	koAboutDia.moc koPageLayoutDia.moc koPartSelectDia.moc koPartSelectDia_data.moc koPrintDia.moc
 TARGET	=	libkofficeui.so.$(SOMAJOR).$(SOMINOR)
 
 ####### Library version
@@ -79,69 +79,69 @@ install-exec:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-koAboutDia.o: koAboutDia.h /usr/local/kde/include/kbuttonbox.h
-koAboutDia.o: /usr/local/kde/include/kapp.h /usr/local/kde/include/kconfig.h
-koAboutDia.o: /usr/local/kde/include/kconfigbase.h
-koAboutDia.o: /usr/local/kde/include/kconfigdata.h
-koAboutDia.o: /usr/local/kde/include/kdebug.h
-koAboutDia.o: /usr/local/kde/include/klocale.h /usr/local/kde/include/drag.h
-koAboutDia.o: /usr/include/X11/X.h
+koAboutDia.o: koAboutDia.h /opt/kde/include/kbuttonbox.h
+koAboutDia.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
+koAboutDia.o: /opt/kde/include/kconfigbase.h /opt/kde/include/kconfigdata.h
+koAboutDia.o: /opt/kde/include/kdebug.h /opt/kde/include/klocale.h
+koAboutDia.o: /opt/kde/include/drag.h /usr/include/X11/X.h koAboutDia.moc
 koPageLayoutDia.o: koPageLayoutDia.h /usr/include/stdio.h
-koPageLayoutDia.o: /usr/include/libio.h /usr/include/features.h
-koPageLayoutDia.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-koPageLayoutDia.o: /usr/include/_G_config.h /usr/include/gnu/types.h
-koPageLayoutDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-koPageLayoutDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-koPageLayoutDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-koPageLayoutDia.o: /usr/include/stdio_lim.h /usr/include/stdlib.h
-koPageLayoutDia.o: /usr/include/sys/types.h /usr/include/time.h
-koPageLayoutDia.o: /usr/include/endian.h /usr/include/bytesex.h
-koPageLayoutDia.o: /usr/include/sys/select.h /usr/include/selectbits.h
-koPageLayoutDia.o: /usr/include/alloca.h /usr/local/kde/include/kapp.h
-koPageLayoutDia.o: /usr/local/kde/include/kconfig.h
-koPageLayoutDia.o: /usr/local/kde/include/kconfigbase.h
-koPageLayoutDia.o: /usr/local/kde/include/kconfigdata.h
-koPageLayoutDia.o: /usr/local/kde/include/kdebug.h
-koPageLayoutDia.o: /usr/local/kde/include/klocale.h
-koPageLayoutDia.o: /usr/local/kde/include/drag.h /usr/include/X11/X.h
-koPageLayoutDia.o: /usr/local/kde/include/krestrictedline.h
-koPartSelectDia.o: koPartSelectDia.h /usr/local/kde/include/koScanParts.h
-koPartSelectDia.o: /usr/local/kde/include/op_app.h
-koPartSelectDia.o: /usr/local/kde/include/kom.h
-koPartSelectDia.o: /usr/local/kde/include/kom_app.h
-koPartSelectDia.o: /usr/local/kde/include/kapp.h
-koPartSelectDia.o: /usr/local/kde/include/kconfig.h
-koPartSelectDia.o: /usr/local/kde/include/kconfigbase.h
-koPartSelectDia.o: /usr/local/kde/include/kconfigdata.h
-koPartSelectDia.o: /usr/local/kde/include/kdebug.h
-koPartSelectDia.o: /usr/local/kde/include/klocale.h
-koPartSelectDia.o: /usr/local/kde/include/drag.h /usr/include/X11/X.h
-koPartSelectDia.o: /usr/local/kde/include/topwidget_impl.h
-koPartSelectDia.o: /usr/local/kde/include/controls.h /opt/kde/idl/kom.h
-koPartSelectDia.o: /usr/local/kde/include/component_impl.h
-koPartSelectDia.o: /usr/local/kde/include/base_impl.h
-koPartSelectDia.o: /usr/local/kde/include/kom_var.h
-koPartSelectDia.o: /usr/local/kde/include/control_frame.h
-koPartSelectDia.o: /usr/local/kde/include/control_impl.h
-koPartSelectDia.o: /usr/local/kde/include/kwm.h /usr/include/X11/Xlib.h
-koPartSelectDia.o: /usr/include/sys/types.h /usr/include/features.h
-koPartSelectDia.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-koPartSelectDia.o: /usr/include/gnu/types.h /usr/include/time.h
-koPartSelectDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-koPartSelectDia.o: /usr/include/endian.h /usr/include/bytesex.h
-koPartSelectDia.o: /usr/include/sys/select.h /usr/include/selectbits.h
-koPartSelectDia.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-koPartSelectDia.o: /usr/local/kde/include/part_impl.h
-koPartSelectDia.o: /usr/local/kde/include/parts.h
-koPartSelectDia.o: /usr/local/kde/include/kmenubar.h
-koPartSelectDia.o: /usr/local/kde/include/ktoolbar.h
-koPartSelectDia.o: /usr/local/kde/include/kcombo.h
-koPartSelectDia.o: /usr/local/kde/include/klined.h koPartSelectDia_data.h
-koPartSelectDia_data.o: koPartSelectDia_data.h
-koPartSelectDia_data.o: /usr/local/kde/include/klocale.h
-koPartSelectDia_data.o: /usr/local/kde/include/kapp.h
-koPartSelectDia_data.o: /usr/local/kde/include/kconfig.h
-koPartSelectDia_data.o: /usr/local/kde/include/kconfigbase.h
-koPartSelectDia_data.o: /usr/local/kde/include/kconfigdata.h
-koPartSelectDia_data.o: /usr/local/kde/include/kdebug.h
-koPartSelectDia_data.o: /usr/local/kde/include/drag.h /usr/include/X11/X.h
+koPageLayoutDia.o: /usr/include/libio.h /usr/include/_G_config.h
+koPageLayoutDia.o: /usr/include/sys/cdefs.h /usr/include/stdlib.h
+koPageLayoutDia.o: /usr/include/features.h
+koPageLayoutDia.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
+koPageLayoutDia.o: /usr/include/errno.h /usr/include/linux/errno.h
+koPageLayoutDia.o: /usr/include/asm/errno.h /usr/include/alloca.h
+koPageLayoutDia.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
+koPageLayoutDia.o: /opt/kde/include/kconfigbase.h
+koPageLayoutDia.o: /opt/kde/include/kconfigdata.h /opt/kde/include/kdebug.h
+koPageLayoutDia.o: /opt/kde/include/klocale.h /opt/kde/include/drag.h
+koPageLayoutDia.o: /usr/include/X11/X.h /opt/kde/include/krestrictedline.h
+koPageLayoutDia.o: koPageLayoutDia.moc
+koPartSelectDia.o: koPartSelectDia.h /opt/kde/include/koScanParts.h
+koPartSelectDia.o: /opt/kde/include/op_app.h /opt/kde/include/kom.h
+koPartSelectDia.o: /opt/kde/include/kom_app.h /opt/kde/include/kapp.h
+koPartSelectDia.o: /opt/kde/include/kconfig.h /opt/kde/include/kconfigbase.h
+koPartSelectDia.o: /opt/kde/include/kconfigdata.h /opt/kde/include/kdebug.h
+koPartSelectDia.o: /opt/kde/include/klocale.h /opt/kde/include/drag.h
+koPartSelectDia.o: /usr/include/X11/X.h /opt/kde/include/topwidget_impl.h
+koPartSelectDia.o: /opt/kde/include/controls.h /opt/kde/idl/kom.h
+koPartSelectDia.o: /opt/kde/include/component_impl.h
+koPartSelectDia.o: /opt/kde/include/base_impl.h /opt/kde/include/kom_var.h
+koPartSelectDia.o: /opt/kde/include/control_frame.h
+koPartSelectDia.o: /opt/kde/include/control_impl.h /opt/kde/include/kwm.h
+koPartSelectDia.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
+koPartSelectDia.o: /usr/include/linux/types.h
+koPartSelectDia.o: /usr/include/linux/posix_types.h
+koPartSelectDia.o: /usr/include/asm/posix_types.h /usr/include/asm/types.h
+koPartSelectDia.o: /usr/include/sys/bitypes.h /usr/include/X11/Xfuncproto.h
+koPartSelectDia.o: /usr/include/X11/Xosdefs.h
+koPartSelectDia.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
+koPartSelectDia.o: /opt/kde/include/part_impl.h /opt/kde/include/parts.h
+koPartSelectDia.o: /opt/kde/include/kmenubar.h /opt/kde/include/ktoolbar.h
+koPartSelectDia.o: /opt/kde/include/kcombo.h /opt/kde/include/klined.h
+koPartSelectDia.o: koPartSelectDia_data.h koPartSelectDia.moc
+koPartSelectDia_data.o: koPartSelectDia_data.h /opt/kde/include/klocale.h
+koPartSelectDia_data.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
+koPartSelectDia_data.o: /opt/kde/include/kconfigbase.h
+koPartSelectDia_data.o: /opt/kde/include/kconfigdata.h
+koPartSelectDia_data.o: /opt/kde/include/kdebug.h /opt/kde/include/drag.h
+koPartSelectDia_data.o: /usr/include/X11/X.h koPartSelectDia_data.moc
+koPrintDia.o: koPrintDia.h /usr/include/stdlib.h /usr/include/features.h
+koPrintDia.o: /usr/include/sys/cdefs.h
+koPrintDia.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
+koPrintDia.o: /usr/include/errno.h /usr/include/linux/errno.h
+koPrintDia.o: /usr/include/asm/errno.h /usr/include/alloca.h
+koPrintDia.o: /usr/include/dirent.h /usr/include/gnu/types.h
+koPrintDia.o: /usr/include/sys/types.h /usr/include/linux/types.h
+koPrintDia.o: /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h
+koPrintDia.o: /usr/include/asm/types.h /usr/include/sys/bitypes.h
+koPrintDia.o: /usr/include/linux/limits.h /usr/include/linux/dirent.h
+koPrintDia.o: /usr/include/posix1_lim.h /usr/include/unistd.h
+koPrintDia.o: /usr/include/posix_opt.h /usr/include/confname.h
+koPrintDia.o: /opt/kde/include/kconfig.h /opt/kde/include/kconfigbase.h
+koPrintDia.o: /opt/kde/include/kconfigdata.h /opt/kde/include/kdebug.h
+koPrintDia.o: /opt/kde/include/kapp.h /opt/kde/include/klocale.h
+koPrintDia.o: /opt/kde/include/drag.h /usr/include/X11/X.h
+koPrintDia.o: /opt/kde/include/kfiledialog.h /opt/kde/include/kfileinfo.h
+koPrintDia.o: /usr/include/time.h /usr/include/sys/time.h
+koPrintDia.o: /usr/include/linux/time.h /usr/include/assert.h koPrintDia.moc
