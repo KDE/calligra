@@ -190,6 +190,7 @@ protected:
     void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
     void doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
     void doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
+    void doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 
 private:
     KoDocument *m_doc;

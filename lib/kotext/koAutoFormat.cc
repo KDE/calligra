@@ -278,8 +278,10 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
     if( ch =='\n' )
     {
-        if( (m_removeSpaceBeginEndLine && index > 1) || m_useBulletStyle)
+        if( m_removeSpaceBeginEndLine && index > 1)
             doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
+        if( m_useBulletStyle  && index > 3)
+            doUseBulletStyle(textEditCursor, parag, txtObj );
     }
 
     //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
@@ -547,14 +549,14 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
     }
 }
 
-void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
 {
-    KoTextString *s = parag->string();
-    bool refreshCursor=false;
-    QChar ch = s->at( 0 ).c;
     KoTextDocument * textdoc = parag->textDocument();
     QTextCursor cursor( parag->document() );
-    if( m_useBulletStyle && ch =='*' && (s->at(1).c).isSpace() && parag->string()->length()>3)
+    KoTextString *s = parag->string();
+    QChar ch = s->at( 0 ).c;
+
+    if( m_useBulletStyle && ch =='*' && (s->at(1).c).isSpace())
     {
         KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use bullet style)"));
         cursor.setParag( parag );
@@ -601,25 +603,17 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
         txtObj->emitNewCommand(macroCmd);
     }
 
+}
 
+void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+{
+    KoTextString *s = parag->string();
+    bool refreshCursor=false;
+    QChar ch = s->at( 0 ).c;
+    KoTextDocument * textdoc = parag->textDocument();
+    QTextCursor cursor( parag->document() );
 
-    for ( int i = 0 ; i < parag->string()->length() ; i++ )
-    {
-        QChar ch = s->at( i ).c;
-        if( !ch.isSpace())
-        {
-            if( i == 0 )
-                break;
-            cursor.setParag( parag );
-            cursor.setIndex( 0 );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
-            cursor.setIndex( i );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
-            refreshCursor=true;
-            break;
-        }
-    }
+    KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
     for ( int i = parag->string()->length()-1; i >= 0; --i )
     {
         QChar ch = s->at( i ).c;
@@ -630,20 +624,54 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
             cursor.setParag( parag );
             cursor.setIndex( i+1 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setParag( parag );
             cursor.setIndex( parag->string()->length() );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
+            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
+
+            if(cmd)
+                macroCmd->addCommand(cmd);
+
             refreshCursor=true;
             break;
         }
     }
+
+    s = parag->string();
+
+    for ( int i = 0 ; i < parag->string()->length() ; i++ )
+    {
+        QChar ch = s->at( i ).c;
+        if( !ch.isSpace())
+        {
+            if( i == 0 )
+                break;
+
+            cursor.setParag( parag );
+            cursor.setIndex( 0 );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setParag( parag );
+            cursor.setIndex( i  );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
+
+            if(cmd)
+                macroCmd->addCommand(cmd);
+            refreshCursor=true;
+            break;
+        }
+    }
+
     if( refreshCursor)
     {
+        txtObj->emitNewCommand(macroCmd);
         txtObj->emitHideCursor();
         textEditCursor->setParag( parag->next() );
         //textEditCursor->cursorgotoRight();
         txtObj->emitShowCursor();
     }
+    else
+        delete macroCmd;
 }
 
 bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
