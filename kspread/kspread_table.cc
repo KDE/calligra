@@ -6124,11 +6124,22 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
             int col = left;
             int x = columnLayout( col )->width();
-            while ( x < rect.width() && col <= m_printRange.right() )
+
+            //Check if we have to repeat some columns
+            if ( ( m_printRepeatColumns.first != 0 ) && ( col > m_printRepeatColumns.first ) )
+            {
+                //When we need repeated columns, reservate space for them
+                for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
+                    x += columnLayout( i )->width();
+            }
+
+            //Count the columns which still fit on the page
+            while ( ( x < rect.width() ) && ( col <= m_printRange.right() ) )
             {
                 col++;
                 x += columnLayout( col )->width();
             }
+
             // We want to print at least one column
             if ( col == left )
                 col = left + 1;
@@ -6136,11 +6147,22 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
             int row = top;
             int y = rowLayout( row )->height();
-            while ( y < rect.height() && row <= m_printRange.bottom() )
+
+            //Check if we have to repeat some rows
+            if ( ( m_printRepeatRows.first != 0 ) && ( row > m_printRepeatRows.first ) )
+            {
+                //When we need repeated rows, reservate space for them
+                for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
+                    y += rowLayout( i )->height();
+            }
+
+            //Count the rows, which still fit on the page
+            while ( ( y < rect.height() ) && ( row <= m_printRange.bottom() ) )
             {
                 row++;
                 y += rowLayout( row )->height();
             }
+
             // We want to print at least one row
             if ( row == top )
                 row = top + 1;
@@ -6262,16 +6284,104 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     //
     // Draw the cells.
     //
-    int ypos = 0;
     int xpos;
+    int xpos_Start;
+    int ypos;
+    int ypos_Start;
     KSpreadCell *cell;
     RowLayout *row_lay;
     ColumnLayout *col_lay;
+    
+    //Check if we have to repeat some rows and columns
+    xpos = 0;
+    ypos = 0;
+    xpos_Start = 0;
+    ypos_Start = 0;
+    if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first && 
+         m_printRepeatRows.first != 0    && page_range.top() > m_printRepeatRows.first )
+    {
+        for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
+        {
+            row_lay = rowLayout( y );
+            xpos = 0;
+        
+            for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
+            {
+                col_lay = columnLayout( x );
+
+                cell = cellAt( x, y );
+                QRect r( 0, 0, view.width(), view.height() );
+                cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
+
+                xpos += col_lay->width();
+            }
+
+            ypos += row_lay->height();
+        }
+        ypos_Start = ypos;
+        xpos_Start = xpos;
+    }
+
+    //Check if we have to repeat some rows
+    xpos = xpos_Start;
+    ypos = 0;
+    if ( m_printRepeatRows.first != 0 && page_range.top() > m_printRepeatRows.first )
+    {
+        for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
+        {
+            row_lay = rowLayout( y );
+            xpos = xpos_Start;
+        
+            for ( int x = page_range.left(); x <= page_range.right(); x++ )
+            {
+                col_lay = columnLayout( x );
+
+                cell = cellAt( x, y );
+                QRect r( 0, 0, view.width(), view.height() );
+                cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
+
+                xpos += col_lay->width();
+            }
+
+            ypos += row_lay->height();
+        }
+        ypos_Start = ypos;
+    }
+
+    //Check if we have to repeat some columns
+    xpos = 0;
+    ypos = ypos_Start;
+    if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first )
+    {
+        for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
+        {
+            row_lay = rowLayout( y );
+            xpos = 0;
+        
+            for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
+            {
+                col_lay = columnLayout( x );
+
+                cell = cellAt( x, y );
+                QRect r( 0, 0, view.width(), view.height() );
+                cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
+
+                xpos += col_lay->width();
+            }
+
+            ypos += row_lay->height();
+        }
+        xpos_Start = xpos;
+    }
+
+    //Print the cells
+    xpos = xpos_Start;
+    ypos = ypos_Start;
     for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
     {
         row_lay = rowLayout( y );
-        xpos = 0;
-
+        xpos = xpos_Start;
+        
         for ( int x = page_range.left(); x <= page_range.right(); x++ )
         {
             col_lay = columnLayout( x );
@@ -7848,6 +7958,13 @@ void KSpreadTable::setPrintGrid( bool _printGrid )
 
 void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
 {
+  if ( _printRepeatColumns.first > _printRepeatColumns.second )
+  {
+    int tmp = _printRepeatColumns.first;
+    _printRepeatColumns.first = _printRepeatColumns.second;
+    _printRepeatColumns.second = tmp;
+  }
+
   if ( m_printRepeatColumns == _printRepeatColumns )
     return;
 
@@ -7857,6 +7974,13 @@ void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
 
 void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 {
+  if ( _printRepeatRows.first > _printRepeatRows.second )
+  {
+    int tmp = _printRepeatRows.first;
+    _printRepeatRows.first = _printRepeatRows.second;
+    _printRepeatRows.second = tmp;
+  }
+
   if ( m_printRepeatRows == _printRepeatRows )
     return;
 
