@@ -263,6 +263,7 @@ private:
     QPushButton *bCustom;
     KoSpinBox *spnStart;
     QSpinBox *spnDepth;
+    QSpinBox *spnDisplayLevels;
     QLabel *lStart;
     QLabel *lCustom;
     QCheckBox *cbRestart;
