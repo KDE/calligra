@@ -33,6 +33,7 @@
 #include "vpainterfactory.h"
 #include "vpainter.h"
 #include "vmdlg_solidfill.h"
+#include "vmpanel_color.h"
 #include "vccmd_text.h"
 #include "vtext.h"
 
@@ -41,7 +42,6 @@
 #include <koFontDia.h>
 
 #include "KArbonViewIface.h"
-
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -255,10 +255,10 @@ KarbonView::scaleTool()
 void
 KarbonView::textTool()
 {
-    kdDebug() << "KarbonView::textTool()" << endl;
+    /*kdDebug() << "KarbonView::textTool()" << endl;
 	QFont f;
 
-	KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white );
+	KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white, false );
 	fontDia->exec();
 	int flags = fontDia->changedFlags();
 	//kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
@@ -272,7 +272,7 @@ KarbonView::textTool()
 	delete fontDia;
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ) );
+	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ) );*/
 }
 
 void
@@ -341,6 +341,13 @@ KarbonView::solidFillClicked()
 {
 	VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill( m_part );
 	m_solidFillDialog->show();
+}
+
+void
+KarbonView::viewColorManager()
+{
+	VColorPanel* m_ColorPanel = new VColorPanel ( this );
+	m_ColorPanel->show();
 }
 
 void
@@ -473,21 +480,37 @@ KarbonView::initActions()
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );
+	
+	new KAction(
+		i18n( "&Color Manager" ), "colorman", 0, this,
+		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
 	// view <-----
 
 	m_toolbox = new VToolContainer( this );
-	connect( m_toolbox, SIGNAL(selectToolActivated()),		this, SLOT(selectTool()) );
-	connect( m_toolbox, SIGNAL(scaleToolActivated()),		this, SLOT(scaleTool()) );
-	connect( m_toolbox, SIGNAL(rotateToolActivated()),		this, SLOT(rotateTool()) );
-	connect( m_toolbox, SIGNAL(shearToolActivated()),		this, SLOT(shearTool()) );
-	connect( m_toolbox, SIGNAL(ellipseToolActivated()),	this, SLOT(ellipseTool()) );
-	connect( m_toolbox, SIGNAL(rectangleToolActivated()),	this, SLOT(rectangleTool()) );
-	connect( m_toolbox, SIGNAL(roundRectToolActivated()),	this, SLOT(roundRectTool()) );
-	connect( m_toolbox, SIGNAL(polygonToolActivated()),	this, SLOT(polygonTool()) );
-	connect( m_toolbox, SIGNAL(starToolActivated()),		this, SLOT(starTool()) );
-	connect( m_toolbox, SIGNAL(sinusToolActivated()),		this, SLOT(sinusTool()) );
-	connect( m_toolbox, SIGNAL(spiralToolActivated()),		this, SLOT(spiralTool()) );
-	connect( m_toolbox, SIGNAL(textToolActivated()),		this, SLOT(textTool()) );
+
+	connect( m_toolbox, SIGNAL(selectToolActivated()), this, SLOT(selectTool()) );
+	connect( m_toolbox, SIGNAL(scaleToolActivated()), this, SLOT(scaleTool()) );
+	connect( m_toolbox, SIGNAL(rotateToolActivated()), this, SLOT(rotateTool()) );
+	connect( m_toolbox, SIGNAL(shearToolActivated()), this, SLOT(shearTool()) );
+	connect( m_toolbox, SIGNAL(ellipseToolActivated()), this, SLOT(ellipseTool()) );
+	connect( m_toolbox, SIGNAL(rectangleToolActivated()), this, SLOT(rectangleTool()) );
+	connect( m_toolbox, SIGNAL(roundRectToolActivated()), this, SLOT(roundRectTool()) );
+	connect( m_toolbox, SIGNAL(polygonToolActivated()), this, SLOT(polygonTool()) );
+	connect( m_toolbox, SIGNAL(starToolActivated()), this, SLOT(starTool()) );
+	connect( m_toolbox, SIGNAL(sinusToolActivated()), this, SLOT(sinusTool()) );
+	connect( m_toolbox, SIGNAL(spiralToolActivated()), this, SLOT(spiralTool()) );
+	connect( m_toolbox, SIGNAL(selectToolActivated()), this, SLOT(selectTool()) );
+	connect( m_toolbox, SIGNAL(scaleToolActivated()), this, SLOT(scaleTool()) );
+	connect( m_toolbox, SIGNAL(rotateToolActivated()), this, SLOT(rotateTool()) );
+	connect( m_toolbox, SIGNAL(shearToolActivated()), this, SLOT(shearTool()) );
+	connect( m_toolbox, SIGNAL(ellipseToolActivated()), this, SLOT(ellipseTool()) );
+	connect( m_toolbox, SIGNAL(rectangleToolActivated()), this, SLOT(rectangleTool()) );
+	connect( m_toolbox, SIGNAL(roundRectToolActivated()), this, SLOT(roundRectTool()) );
+	connect( m_toolbox, SIGNAL(polygonToolActivated()), this, SLOT(polygonTool()) );
+	connect( m_toolbox, SIGNAL(starToolActivated()), this, SLOT(starTool()) );
+	connect( m_toolbox, SIGNAL(sinusToolActivated()), this, SLOT(sinusTool()) );
+	connect( m_toolbox, SIGNAL(spiralToolActivated()), this, SLOT(spiralTool()) );
+	connect( m_toolbox, SIGNAL(textToolActivated()), this, SLOT(textTool()) );
 	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();
