@@ -299,7 +299,7 @@ KarbonView::dropEvent( QDropEvent *e )
 
 		if( part() )
 			if( m_strokeFillPreview->strokeIsSelected() )
-				part()->addCommand( new VStrokeCmd( &part()->document(), &realcolor ), true );
+				part()->addCommand( new VStrokeCmd( &part()->document(), realcolor ), true );
 			else
 				part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
 	}

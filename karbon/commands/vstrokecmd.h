@@ -35,7 +35,7 @@ public:
 	VStrokeCmd( VDocument *doc,  const VStroke *, const QString& icon = "14_action" );
 	VStrokeCmd( VDocument *doc, VGradient * );
 	VStrokeCmd( VDocument *doc, VPattern * );
-	VStrokeCmd( VDocument *doc, VColor * );
+	VStrokeCmd( VDocument *doc, const VColor & );
 	VStrokeCmd( VDocument *doc, double );
 	virtual ~VStrokeCmd();
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -115,7 +115,7 @@ VColorDocker::~VColorDocker()
 void VColorDocker::updateCanvas()
 {
 	if ( m_isStrokeDocker && m_part && m_part->document().selection() )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_Color ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), *m_Color ), true );
 	else if( m_part && m_part->document().selection() )
 		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
 }

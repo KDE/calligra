@@ -66,12 +66,12 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, double width )
 	m_stroke.setLineWidth( width );
 }
 
-VStrokeCmd::VStrokeCmd( VDocument *doc, VColor *color )
+VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor &color )
 	: VCommand( doc, i18n( "Stroke Color" ) )
 {
 	m_selection = document()->selection()->clone();
 	m_state = Color;
-	m_stroke.setColor( *color );
+	m_stroke.setColor( color );
 }
 
 VStrokeCmd::~VStrokeCmd()
