@@ -80,11 +80,12 @@ KWFrameSetEdit * KWTableFrameSet::createFrameSetEdit( KWCanvas * canvas )
 
 void KWTableFrameSet::updateFrames()
 {
+/*
     for (unsigned int i =0; i < m_cells.count(); i++)
     {
         m_cells.at(i)->updateFrames();
-    }
-    KWFrameSet::updateFrames();
+    } */
+    KWFrameSet::updateFrames(); 
 }
 
 /*================================================================*/
@@ -723,7 +724,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         Cell *newCell = new Cell( this, _idx, i );
         newCell->m_cols=colSpan;
         newCell->setIsRemoveableHeader( isAHeader );
-        newCell->addFrame( frame );
+        newCell->addFrame( frame, _recalc );
 
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
@@ -1374,7 +1375,6 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
 }
 
 void KWTableFrameSet::zoom() {
-kdDebug() << "zoom table" << endl;
     for (unsigned int i =0; i < m_cells.count(); i++) {
         m_cells.at(i)->zoom();
     }
@@ -1433,6 +1433,11 @@ KWTableFrameSet::Cell::~Cell()
 bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
 {
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
+}
+
+void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) { 
+    getGroupManager()->addFrame(_frame, recalc); 
+    KWTextFrameSet::addFrame(_frame, recalc);
 }
 
 KWTableFrameSetEdit::~KWTableFrameSetEdit()

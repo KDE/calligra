@@ -934,7 +934,7 @@ void KWCanvas::mrCreatePixmap()
         m_insRect = m_insRect.normalize();
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(),
                                      m_insRect.height() );
-        frameset->addFrame( frame );
+        frameset->addFrame( frame, false );
         doc->addFrameSet( frameset );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), doc,  frame) ;
         doc->addCommand(cmd);
@@ -958,7 +958,7 @@ void KWCanvas::mrCreateFormula()
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-        frameset->addFrame( frame );
+        frameset->addFrame( frame, false );
         doc->addFrameSet( frameset );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a formula frame"), doc,  frame) ;
         doc->addCommand(cmd);
@@ -1006,7 +1006,7 @@ void KWCanvas::mrCreateTable()
                 for ( unsigned int j = 0; j < m_table.cols; j++ ) {
                     KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j );
                     KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-                    cell->addFrame( frame );
+                    cell->addFrame( frame, false );
                     frame->setFrameBehaviour(AutoExtendFrame);
                     frame->setNewFrameBehaviour(NoFollowup);
                 }
@@ -1014,7 +1014,6 @@ void KWCanvas::mrCreateTable()
             table->setHeightMode( m_table.height );
             table->setWidthMode( m_table.width );
             table->setBoundingRect( m_insRect );
-            table->recalcRows();
             // Done at the end so that finalize is called
             doc->addFrameSet( table );
         }

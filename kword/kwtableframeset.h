@@ -73,7 +73,7 @@ public:
 
         unsigned int m_row, m_col;
         unsigned int m_rows, m_cols;
-        virtual void addFrame(KWFrame *_frame) { getGroupManager()->addFrame(_frame); KWTextFrameSet::addFrame(_frame); }
+        virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
         bool isAboveOrLeftOf( unsigned row, unsigned col );
     private:
@@ -213,6 +213,7 @@ public:
     virtual void finalize();
 
     virtual void updateFrames();
+
 protected:
     unsigned int m_rows, m_cols;
     KWTblCellSize m_widthMode;

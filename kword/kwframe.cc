@@ -309,14 +309,15 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
 }
 
 /*================================================================*/
-void KWFrameSet::addFrame( KWFrame *_frame )
+void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 {
     if ( frames.findRef( _frame ) != -1 )
         return;
 
     frames.append( _frame );
     _frame->setFrameSet(this);
-    updateFrames();
+    if(recalc) 
+        updateFrames();
 }
 
 /*================================================================*/

@@ -302,9 +302,9 @@ public:
 
     // frame management
     //virtual void addFrame( KWFrame _frame );
-    virtual void addFrame( KWFrame *_frame );
+    virtual void addFrame( KWFrame *_frame, bool recalc = true );
     virtual void delFrame( unsigned int _num );
-    virtual void delFrame( KWFrame *frm, bool remove = TRUE );
+    virtual void delFrame( KWFrame *frm, bool remove = true );
 
     /** retrieve frame from x and y coords (absolute coords) */
     KWFrame *getFrame( int _x, int _y );
