@@ -1314,7 +1314,8 @@ void KWordView::helpAbout()
 			      i18n( "KWord 0.0.1 alpha\n\n"
 				    "( c ) by Torben Weis <weis@kde.org> and \n"
 				    "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
-				    "KWord is under GNU GPL" ) );
+				    "KWord is under GNU GPL" ),
+                              i18n( "OK"));
 }
 
 /*===============================================================*/
