@@ -670,7 +670,9 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QC
 
     if ( !crect.intersects( outerRect ) )
     {
+#ifdef DEBUG_DRAW
         kdDebug() << "KWFrameSet::drawMargins no intersection with " << crect << endl;
+#endif
         return;
     }
     QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
@@ -988,7 +990,7 @@ void KWFrameSet::updateFrames()
     QPtrListIterator<KWFrame> fIt( frameIterator() );
     for ( ; fIt.current(); ++fIt ) {
         fIt.current()->clearFramesOnTop();
-	fIt.current()->clearFramesBelow();
+        fIt.current()->clearFramesBelow();
         int pg = fIt.current()->pageNum();
         m_firstPage = QMIN( m_firstPage, pg );
         lastPage = QMAX( lastPage, pg );
@@ -1077,7 +1079,7 @@ void KWFrameSet::updateFrames()
         int pg = fIt.current()->pageNum();
         Q_ASSERT( pg <= lastPage );
         m_framesInPage[pg - m_firstPage]->append( fIt.current() );
-	fIt.current()->sortFramesBelow();
+        fIt.current()->sortFramesBelow();
     }
 
     if ( isFloating() )
@@ -1164,7 +1166,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 #ifdef DEBUG_DRAW
     kdDebug(32001) << "                    frame=" << frame << " " << *frame << endl;
     kdDebug(32001) << "                    (outer) normalFrameRect=" << normalOuterFrameRect << " frameRect=" << outerFrameRect << endl;
-    kdDebug(32001) << "                    crect=" << crect << " intersec=" << r << " todraw=" << !r.isEmpty() << endl;
+    kdDebug(32001) << "                    crect=" << crect << " intersec=" << outerCRect << " todraw=" << !outerCRect.isEmpty() << endl;
 #endif
     if ( !outerCRect.isEmpty() )
     {
@@ -1200,7 +1202,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         // fcrect is now the portion of the frame to be drawn,
         // in the frame's coordinates and in pixels
 #ifdef DEBUG_DRAW
-        kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
+        kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << outerCRect.x()-fcrect.x() << "," << outerCRect.y()-fcrect.y() << "." << endl;
 #endif
         // not clipping against frame for inline frames -> frameClipRegion uses absolute coordinates.
         QRegion reg = frameClipRegion( painter, frame, innerCRect, viewMode, onlyChanged, !isFloating() );
