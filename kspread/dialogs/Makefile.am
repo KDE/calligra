@@ -14,7 +14,6 @@ libdialogs_la_SOURCES = \
 	kspread_dlg_anchor.cc \
 	kspread_dlg_angle.cc \
 	kspread_dlg_area.cc \
-	kspread_dlg_changes.cc \
 	kspread_dlg_comment.cc \
 	kspread_dlg_conditional.cc \
 	kspread_dlg_cons.cc \
@@ -49,7 +48,6 @@ noinst_HEADERS = \
 	kspread_dlg_anchor.h \
 	kspread_dlg_angle.h \
 	kspread_dlg_area.h \
-	kspread_dlg_changes.h \
 	kspread_dlg_comment.h \
 	kspread_dlg_conditional.h \
 	kspread_dlg_cons.h \
@@ -67,3 +65,4 @@ noinst_HEADERS = \
 	kspread_dlg_preference.h \
 	kspread_dlg_reference.h \
 	kspread_dlg_resize2.h
+
