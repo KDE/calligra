@@ -27,12 +27,13 @@
 
 #include <qpainter.h>
 #include <qdrawutl.h>
+#include <qcolor.h>
 #include <iostream.h>
 
 #define CELL_WIDTH  50
 #define CELL_HEIGHT 30
 
-BrushCells::BrushCells (QWidget *parent, const char *name) 
+BrushCells::BrushCells (QWidget *parent, const QColor &color, const char *name) 
   : QTableView (parent, name) {
   setFrameStyle (QFrame::Panel | QFrame::Sunken);
   setNumRows (3);
@@ -44,7 +45,7 @@ BrushCells::BrushCells (QWidget *parent, const char *name)
     QPainter p;
     p.begin (&pix);
     p.setPen (QT_PRFX::black);
-    QBrush brush (QT_PRFX::black, (QT_PRFX::BrushStyle) (i + 1));
+    QBrush brush (color, (QT_PRFX::BrushStyle) (i + 1));
     //      p.fillRect (0, 0, CELL_WIDTH - 1, CELL_HEIGHT - 1, brush);
     qDrawShadeRect (&p, 0, 0, CELL_WIDTH, CELL_HEIGHT, 
 		    colorGroup (), true, 1, 1, &brush);
@@ -55,6 +56,24 @@ BrushCells::BrushCells (QWidget *parent, const char *name)
 }
 
 BrushCells::~BrushCells () {
+}
+
+void BrushCells::setColor(const QColor &color)
+{
+ brushPixmaps.clear();
+ for (int i = 0; i < 14; i++) {
+    QPixmap pix (CELL_WIDTH, CELL_HEIGHT);
+    pix.fill (white);
+    QPainter p;
+    p.begin (&pix);
+    p.setPen (QT_PRFX::black);
+    QBrush brush (color, (QT_PRFX::BrushStyle) (i + 1));
+    //      p.fillRect (0, 0, CELL_WIDTH - 1, CELL_HEIGHT - 1, brush);
+    qDrawShadeRect (&p, 0, 0, CELL_WIDTH, CELL_HEIGHT, 
+		    colorGroup (), true, 1, 1, &brush);
+    p.end ();
+    brushPixmaps.push_back (pix);
+ }
 }
 
 int BrushCells::cellWidth (int) {

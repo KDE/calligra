@@ -32,14 +32,18 @@
 
 #include <vector>
 
+class QColor;
+
 class BrushCells : public QTableView {
   Q_OBJECT
 public:
-  BrushCells (QWidget *parent = 0L, const char *name = 0);
+  BrushCells (QWidget *parent = 0L, const QColor &colour = QT_PRFX::black,
+              const char *name = 0);
   ~BrushCells ();
   
   QT_PRFX::BrushStyle brushStyle ();
   void selectBrush (QT_PRFX::BrushStyle style);
+  void setColor(const QColor &);
 
 protected:
   virtual int cellWidth (int col);
