@@ -32,7 +32,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2002-13-01</date>
+<date>2002-19-01</date>
 <releaseinfo>1.01.00</releaseinfo>
 
 <abstract>
@@ -459,7 +459,7 @@ that already exist?</para>
 <chapter id="credits">
 <title>Credits and Licenses</title>
 
-<para>&kword; Copyright 1999-2001 by Reginald Stadlbauer
+<para>&kword; Copyright 1999-2002 by Reginald Stadlbauer
 <email>reggie@kde.org</email></para>
 
 <itemizedlist>
@@ -491,7 +491,7 @@ that already exist?</para>
 <listitem><para>Ulrich Kuettler <email>ulrich.kuettler@mailbox.tu-dresden.de</email></para></listitem>
 </itemizedlist>
 
-<para>Documentation by Mike McBride </para>
+<para>Documentation by Mike McBride <email>mpmcbride7@yahoo.com</email> </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
@@ -1513,27 +1513,9 @@ action="simul">&Ctrl;<keycap>Enter</keycap></keycombo></entry>
 </row>
 
 <row>
-<entry align="center"><link linkend="menu-edit-text-mode">Switch to Edit
-Text Mode</link></entry>
-<entry><keycombo action="simul"><keycap>F4</keycap></keycombo></entry>
-</row>
-
-<row>
-<entry align="center"><link linkend="menu-edit-frame-mode">Switch to
-Edit FrameMode</link></entry>
-<entry><keycombo action="simul"><keycap>F5</keycap></keycombo></entry>
-</row>
-
-<row>
 <entry align="center"><link linkend="menu-create-text-frame">Create Text
 Frame</link></entry>
 <entry><keycombo action="simul"><keycap>F6</keycap></keycombo></entry>
-</row>
-
-<row>
-<entry align="center"><link linkend="menu-create-picture-frame">Create
-Picture Frame</link></entry>
-<entry><keycombo action="simul"><keycap>F7</keycap></keycombo></entry>
 </row>
 
 <row>

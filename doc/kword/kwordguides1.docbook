@@ -18,8 +18,8 @@ saved document and printing a docuemnt.</para>
 
 <listitem>
 <para>You can <link linkend="starting-kword">start &kword; from the
-command line</link> by typing<screen><prompt>$</prompt>
-<userinput><command>kword &amp;</command></userinput></screen></para>
+command line</link> by typing<screen><prompt>$</prompt><userinput><command>kword &amp;</command></userinput>
+</screen></para>
 </listitem>
 
 <listitem>
@@ -54,7 +54,7 @@ toolbar.</para>
 
 <itemizedlist spacing="compact">
 <listitem>
-<para><link linkend="new-doc-from-template">Start a New document from a
+<para><link linkend="new-doc-from-template">Start a new document from a
 template</link></para>
 </listitem>
 <listitem>
@@ -100,7 +100,8 @@ first choose your template.</para>
 templates. If you need to review the differences, click <link
 linkend="wp-vs-dtp">here</link>.</para>
 
-<para>You can use the tabs labled Text Oriented and Page Layout to
+<para>You can use the tabs labled <guilabel>Text Oriented</guilabel> and 
+<guilabel>Page Layout</guilabel> to
 display all the available templates of that group.</para>
 
 <para>Once you are on the correct tab, you are shown all the available
@@ -137,6 +138,8 @@ dialog box is revealed.  For more details on this dialog box refer to
 <para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by using the drop-down box
 to the right of the radio button labeled <guilabel>Open a recent document</guilabel>.</para>
 
+<para>Once the filename is selected in this drop down box, click on <guibutton>OK</guibutton> and &kword;
+will load the template.</para>
 
 </sect3>
 <sect3 id="loading-empty-doc">
@@ -185,13 +188,13 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 
 <para>Any of these methods results in the same action by &kword;.</para>
 
-<para>By selecting the <guimenuitem>Save</guimenuitem> command, you are
+<important><para>By selecting the <guimenuitem>Save</guimenuitem> command, you are
 instructing &kword; to save the file under the current filename. You
 will not be given the option to change the filename or its location. If
 you want to change the name of the file, or where it is saved, you must
 select <link linkend="command-save-as"><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save
-As...</guimenuitem></menuchoice></link> from the Menu bar.</para>
+As...</guimenuitem></menuchoice></link> from the Menu bar.</para></important>
 
 <para>If you have not saved this file before, it does not have a
 filename.  &kword; automatically executes the <link
@@ -204,7 +207,17 @@ document.</para>
 
 <para>You can verify that the file was saved, by checking &kword;s title
 bar.  If there are unsaved changes, the titlebar will have
-<emphasis>[modified]</emphasis> in the titlebar.  If the save was
+<emphasis>[modified]</emphasis> in the titlebar.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="saved2.png" format="PNG"/></imageobject>
+<caption><para>The document still has unsaved changes</para></caption>
+</mediaobject>
+</screenshot>
+
+  <para>If the save was
 successful, only the filename will be in the titlebar.  If there is a
 probelm with the save, an error box will appear.</para>
 
@@ -216,19 +229,12 @@ probelm with the save, an error box will appear.</para>
 </mediaobject>
 </screenshot>
 
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="saved2.png" format="PNG"/></imageobject>
-<caption><para>The document still has unsaved changes</para></caption>
-</mediaobject>
-</screenshot>
 
 </sect2>
 
 <sect2 id="command-save-as">
 <title>The Save As.. Command</title>
-
+<sect3 id="command-save-as-general">
 <para>The Save As... command can be invoked 2
 ways:</para>
 
@@ -243,13 +249,15 @@ not yet have a filename.</para>
 </listitem>
 </itemizedlist>
 
-<para>The difference between the <guimenuitem>Save</guimenuitem> and the
+<important><para>The difference between the <guimenuitem>Save</guimenuitem> and the
 <guimenuitem>Save As...</guimenuitem> command, is the <guimenuitem>Save
 As...</guimenuitem> command prompts you for a filename, and lets you
 select a different file format or location.  The
 <guimenuitem>Save</guimenuitem> command simply saves the file in the
-previous location.</para>
-
+previous location.</para></important>
+</sect3>
+<sect3 id="command-save-as-dlg">
+<title>Using the dialog box</title>
 <para>When you select the <guimenuitem>Save As...</guimenuitem>
 function, a dialog appears.</para>
 
@@ -361,7 +369,7 @@ appear.</para>
 allowed to by the permisions listed by the operating system. If you try
 to save outside that area, &kword; will generate an error.</para>
 </note>
-
+</sect3>
 </sect2>
 
 </sect1>

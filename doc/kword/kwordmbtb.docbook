@@ -45,7 +45,7 @@ desktop.</para>
 <sect2 id="hide-toolbar">
 <title>Hiding and Flattening Tool Bars </title>
 
-<para>When you startup &kword;, all the several toolbars are visible.
+<para>When you start &kword; for the first time, all the several toolbars are visible.
 If you don't think you will need a toolbar, and want to reclaim that
 desktop space, you have two options. You can hide the toolbars or you
 can temporarily flatten the toolbars.</para>
@@ -53,7 +53,7 @@ can temporarily flatten the toolbars.</para>
 <sect3>
 <title>Flattening Toolbars</title>
 
-<para>Each toolbar has a stippled area to the left (or on top) of the
+<para>Each toolbar has a striped area to the left (or on top) of the
 toolbar buttons.  By clicking on this area, the toolbar will be
 minimized.</para>
 
@@ -62,7 +62,7 @@ minimized.</para>
 <imagedata fileref="tbmin.png" format="PNG"/></imageobject>
 </mediaobject>
 
-<para>Once a toolbar is flat, this stipled area moves up near the
+<para>Once a toolbar is flat, this striped area moves up near the
 menubar.</para>
 
 <mediaobject>
@@ -86,10 +86,8 @@ button to use this option.</para>
 
 <para>To restore this menu to its original size and position, place the
 mouse cursor over the stipled area near the menu bar, and click with the
-&RMB;.</para>
-
-<para>A small menu will appear at the mouse cursor.  Select
-<guimenuitem>UnFlat</guimenuitem>.</para></note>
+&LMB;.</para>
+</note>
 
 </sect3>
 
@@ -134,42 +132,28 @@ screen.  (You could, for instance, move all the toolbars to the top of
 the screen).  &kword; will shuffle toolbars around, to fit in the most
 compact way at that location.</para>
 
-<para>There are two ways of moving your toolbars:</para>
+<para>There are two ways to move any toolbar.</para>
 
-<procedure>
-<title>Option 1</title>
-<step>
-<para>If you <mousebutton>left</mousebutton> click on the stippled area
-of the toolbar (the same location you used to minimize the tool bar),
-and hold the button down, you can drag the toolbar around the &kword;
-screen.  This allows you to move the toolbars around to suit your
-needs.</para>
-</step>
-</procedure>
+<itemizedlist>
 
-<procedure>
-<title>Option 2</title>
-<step>
-<para>Place the cursor over on the toolbar you want to minimize, and
-click with the <mousebutton>right</mousebutton> mouse button.</para>
-<note><para>The mouse must be on the <quote>background</quote>" of the
-toolbar, not over a button to use this option.</para></note>
-</step>
-<step>
-<para>A small menu will appear at the mouse cursor.  Select
-<guimenuitem>Top</guimenuitem>, <guimenuitem>Bottom</guimenuitem>,
-<guimenuitem>Left</guimenuitem>, or
-<guimenuitem>Right</guimenuitem>.</para>
-</step>
-</procedure>
+<listitem><para>Click on the striped area of the toolbar with the &LMB; 
+and hold the button down.  Drag the toolbar to the desired location.  You will see a rectangular shape 
+indicating the position and orientation of the toolbar.  When at the desired location, release the &LMB;
+and the toolbar will be inserted there.</para>
+<para>or</para></listitem>
 
+<listitem><para>Click on the striped area of the toolbar with the &RMB;. A sub-menu will appear.  Select
+<guimenuitem>Orientation</guimenuitem>. Another small submenu will appear.  
+Select <guimenuitem>Top</guimenuitem>, <guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, 
+or <guimenuitem>Right</guimenuitem>.</para></listitem>
+</itemizedlist>
 </sect2>
 
 <sect2 id="toolbar-options">
 <title>Changing the look of your toolbars</title>
 
 <para>Toolbars can have their buttons displayed different ways.  Below
-are examples of the four options for the "File" toolbar.</para>
+are examples of the four options for the <emphasis>File</emphasis> toolbar.</para>
 
 <informaltable>
 <tgroup cols="2">
@@ -203,17 +187,18 @@ format="PNG"/></imageobject> </inlinemediaobject></entry>
 
 <para>To change the appearance of a toolbar, place the cursor over on
 the toolbar you want to minimize, and click with the
-<mousebutton>right</mousebutton> mouse button.</para>
-
-<note>
-<para>The mouse must be on the toolbar, but not over a button to use
-this option.</para>
-</note>
+&RMB;.</para>
 
 <para>A small menu will appear at the mouse cursor.  Select
-<guilabel>Text position</guilabel>. This will open a submenu, select
+<guimenuitem>Text position</guimenuitem>. This will open a submenu, select
 your preference from the list.</para>
 
+<sect3 id="toolbar-options-size">
+<title>Changing Icon Size</title>
+<para>You can also select the size of the icons by clicking on the 
+toolbar with the &RMB;.  A small submenu will appear.  Select
+<guimenuitem>Icon Size</guimenuitem> and then your preferred icon size.</para>
+</sect3>
 <note>
 <para>Setting the look of one toolbar does not alter the look of another
 toolbar.</para>
@@ -261,7 +246,7 @@ Document</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>N</keycap></keycombo> or clicking
 <inlinemediaobject><imageobject>
-<imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -282,7 +267,7 @@ Saved Document</link>.</para>
 action="simul">&Ctrl;<keycap>O</keycap></keycombo> or clicking
 <inlinemediaobject><imageobject>
 <imagedata fileref="fileopen.png" format="PNG"/>
-</imageobject></inlinemediaobject> are equivalent to using
+</imageobject></inlinemediaobject> is equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -294,7 +279,8 @@ the menubar.</para>
 Recent</guimenuitem></menuchoice></term>
 <listitem>
 <para><action>For opening the most recently edited
-files.</action></para>
+files. Once you have clicked on this option, a list of recently edited files will appear.  
+Select the file you want and &kword; will open the file. </action></para>
 </listitem>
 </varlistentry>
 
@@ -312,7 +298,7 @@ details, see <link linkend="saving">Saving a Document</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>S</keycap></keycombo> or clicking
 <inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG"/>
-</imageobject></inlinemediaobject> are equivalent to
+</imageobject></inlinemediaobject> is equivalent to
 using the menubar. </para> 
 </listitem>
 </varlistentry>
@@ -433,6 +419,17 @@ classification.</para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-send-file">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Send File</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Launches your e-mail client so you can send the current file as an attachment.  The file must have been saved once before this option can be selected.</action></para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-close">
 <menuchoice>
 <shortcut><keycombo
@@ -452,6 +449,8 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-quit">
 <menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
 <guimenu>File</guimenu><guimenuitem>Quit</guimenuitem>
 </menuchoice>
 </term>
@@ -493,14 +492,15 @@ of Undo/Redo, <link linkend="undo-redo">click here</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>Z</keycap></keycombo> or clicking
 <inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/>
-</imageobject></inlinemediaobject> are equivalent to using
+</imageobject></inlinemediaobject> is equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term id="menu-redo">
-<menuchoice>
+<menuchoice><shortcut><keycombo
+action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo></shortcut>
 <guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem>
 </menuchoice>
 </term>
@@ -510,9 +510,11 @@ option is unavailable, the Toolbar will replace
 <guimenuitem>Redo</guimenuitem> with <guimenuitem>No Redo
 Possible</guimenuitem>. For a more thourough discussion of Undo/Redo,
 <link linkend="undo-redo">click here</link>.</para>
-<para>Clicking <inlinemediaobject><imageobject>
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo> 
+or clicking <inlinemediaobject><imageobject>
 <imagedata fileref="redo.png" format="PNG"/>
-</imageobject></inlinemediaobject> are
+</imageobject></inlinemediaobject> is
 equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -537,7 +539,7 @@ action="simul">&Ctrl;<keycap>X</keycap></keycombo> or clicking
 <inlinemediaobject><imageobject>
 <imagedata fileref="editcut.png" format="PNG"/>
 </imageobject></inlinemediaobject>
- are equivalent to using the menubar.</para>
+ is equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
 
@@ -558,7 +560,7 @@ clipboard, <link linkend="clipboard">click here</link>.</para>
  
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>C</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -582,7 +584,7 @@ linkend="clipboard">click here</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>V</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -622,12 +624,15 @@ linkend="search-and-replace">Searching for Text</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>F</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="find.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to
+<inlinemediaobject><imageobject><imagedata fileref="find.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to
 using the menubar.</para></listitem></varlistentry>
 
 <varlistentry>
 <term id="menu-replace">
 <menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
 <guimenu>Edit</guimenu><guimenuitem>Replace</guimenuitem>
 </menuchoice>
 </term>
@@ -636,6 +641,21 @@ using the menubar.</para></listitem></varlistentry>
 others.</action>  The find and replace features of &kword; are covered
 in more detail under <link linkend="replace">Replacing
 Text</link>.</para>
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
+using the menubar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-serial-letter">
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Serial Letter Database</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Create/edit a database of letters for custom numbering.  
+For more information See <link linkend="custom-letter">Using Custom Numbers 
+and Letters</link>.</action></para>
 </listitem>
 </varlistentry>
 
@@ -719,6 +739,32 @@ Views</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Page View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>For more
+information on views, refer to the section entitled <link
+linkend="views">Using Multiple Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Preview View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>For more
+information on views, refer to the section entitled <link
+linkend="views">Using Multiple Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
 <guimenu>View</guimenu><guimenuitem>Formatting Characters</guimenuitem>
 </menuchoice>
 </term>
@@ -742,6 +788,20 @@ to frames.  Normally, &kword; draws a grey line around each frame, so
 that know the borders of the frames.  If you want this option turned
 off, you can select this option.  Selecting this option again will turn
 the borders back on.  </action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Doc Structure</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Clicking on this option toggles the display of the document
+structure window.</action> Selecting this option again will turn
+the window back on.  For more information, refer to the section entitled 
+Document Structure.</para>
 </listitem>
 </varlistentry>
 
@@ -776,34 +836,6 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 </varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>Footnotes</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Selecting this option will cause all bibliographic
-information to be formated as footnotes.</action>  More information on
-Footnotes and Endnotes can be found under <link
-linkend="endnotes-and-footnotes">Endnotes/Footnotes</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>Endnotes</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Selecting this option will cause all bibliographic
-information to be formated as endnotes.</action>  More information on
-Footnotes and Endnotes can be found under <link
-linkend="endnotes-and-footnotes">Endnotes/Footnotes</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term id="menu-zoom">
 <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
@@ -816,11 +848,11 @@ causes the text and pictures to appear larger.  Selecting a zoom value
 smaller than 100 percent will cause the text and pictures to appear
 smaller.</action></para>
 
-<note>
+<important>
 <para>The zoom value does not affect the final output of the text or
 pictures.  This option is intended to help you edit and layout your
 documents.</para>
-</note>
+</important>
 </listitem>
 </varlistentry>
 
@@ -829,43 +861,7 @@ documents.</para>
 
 <sect2 id="insert">
 <title>Insert</title>
-
 <variablelist>
-<varlistentry>
-<term id="menu-insert-picture">
-<menuchoice>
-<shortcut>
-<keycombo action="simul"><keycap>F2</keycap></keycombo>
-</shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Picture Inline</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Insert a picture from a file into the current cursor
-position.</action></para> 
-<para>Typing <keycombo action="simul"><keycap>F2</keycap></keycombo> or
-clicking <inlinemediaobject><imageobject><imagedata fileref="picture.png" format="PNG"/></imageobject></inlinemediaobject>
-are equivalent to using the menubar.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term id="menu-create-formula">
-<menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Insert a formula into the document.</action>  More
-information on formulas in &kword; can be found <link
-linkend="formulas">here</link>.</para> 
-
-<para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
-the menubar.</para>
-</listitem>
-</varlistentry>
-
 <varlistentry>
 <term id="menu-insert-special-character">
 <menuchoice>
@@ -906,20 +902,6 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Footnote or Endnote</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Selecting this option will insert a bibliographic mark
-which will appear as either a footnote or endnote.</action>  More
-information on Footnotes and Endnotes can be found under <link
-linkend="endnotes-and-footnotes">Endnotes/Footnotes</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Table of Contents</guimenuitem>
 </menuchoice>
 </term>
@@ -948,19 +930,29 @@ linkend="variables">Special Variables</link>.</para>
 </varlistentry>
 
 <varlistentry>
-<term id="menu-create-table">
+<term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will allow you to create a table in the current
-cursor location.</action> For more information, please see <link
-linkend="tables">Working with Tables</link>.</para> 
+<para><action>Selecting this option will allow you to insert common phrases.</action>
+The phrases are organised into categories. For information on using and adding expressions
+refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
 
-<para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using the
-menubar.</para>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Links</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to connect text to an external web page, 
+email address or files</action>
+For more information refer to the section entitled 
+<link linkend="expressions">Expressions</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -968,7 +960,7 @@ menubar.</para>
 <term id="menu-create-text-frame">
 <menuchoice>
 <shortcut>
-<keycombo action="simul"><keycap>F6</keycap></keycombo>
+<keycombo action="simul"><keycap>F2</keycap></keycombo>
 </shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem>
 </menuchoice>
@@ -984,20 +976,20 @@ bring up a dialog box with options to connect this text frame to other
 frames in your document.  For more information on this subject, see
 <link linkend="frames">Working with Frames</link>.</para> 
 
-<para>Typing <keycombo action="simul"><keycap>F6</keycap></keycombo> or
+<para>Typing <keycombo action="simul"><keycap>F2</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using the
+fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using the
 menubar.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term id="menu-create-picture-frame">
+<term id="menu-insert-picture">
 <menuchoice>
 <shortcut>
-<keycombo action="simul"><keycap>F7</keycap></keycombo>
+<keycombo action="simul"><keycap>F3</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Create Picture Frame</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Picture</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1016,20 +1008,54 @@ This will create a border which represents the final size of the picture
 in your document.  When you are happy with the size of the picture,
 release the mouse button and the picture will be inserted in your new
 frame.</para>
+<para>Typing <keycombo action="simul"><keycap>F3</keycap></keycombo> or
+clicking <inlinemediaobject><imageobject><imagedata fileref="fpicture.png" 
+format="PNG"/></imageobject></inlinemediaobject>
+is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
 
-<para>Typing <keycombo action="simul"><keycap>F7</keycap></keycombo> or
+<varlistentry>
+<term id="menu-create-formula">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert a formula into the document.</action>  More
+information on formulas in &kword; can be found <link
+linkend="formulas">here</link>.</para> 
+
+<para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="fpicture.png" format="PNG"/></imageobject></inlinemediaobject>
-are equivalent to using the menubar. </para>
+fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are
+is equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-table">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to create a table in the current
+cursor location.</action> For more information, please see <link
+linkend="tables">Working with Tables</link>.</para> 
+
+<para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
+clicking <inlinemediaobject><imageobject><imagedata
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are
+is equivalent to using the
+menubar.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term id="menu-create-part">
 <menuchoice>
-<shortcut>
-<keycombo action="simul"><keycap>F12</keycap></keycombo>
-</shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Object Frame</guimenuitem>
 </menuchoice>
 </term>
@@ -1037,9 +1063,8 @@ are equivalent to using the menubar. </para>
 <para><action>Creates a new frame, and opens a dialog box listing each
 of the &koffice; applications. This will allow you to insert any data
 into your &kword; document.</action></para> 
-<para>Typing <keycombo action="simul"><keycap>F12</keycap></keycombo> or
-clicking <inlinemediaobject><imageobject><imagedata fileref="kpart.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to
+<para>Clicking <inlinemediaobject><imageobject><imagedata fileref="kpart.png"
+format="PNG"/></imageobject></inlinemediaobject> is equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -1050,6 +1075,20 @@ using the menubar. </para>
 
 <sect2 id="format">
 <title>Format</title><variablelist>
+
+<varlistentry>
+<term id="format-default">
+<menuchoice>
+
+<guimenu>Format</guimenu><guimenuitem>Default Format</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action> Automatically changes all formating back to the 
+default settings.</action></para>
+</listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term id="format-font">
@@ -1094,21 +1133,6 @@ using the menubar.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Frame/Framset</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to alter attributes of a selected
-frame(s).</action> You must be in Frame Edit Mode to use this
-function. For more details, go to <link linkend="format-frame">Frame
-Formating</link></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Page</guimenuitem>
 </menuchoice>
 </term>
@@ -1123,7 +1147,7 @@ including size, headers and footers.</action> For more details, go to
 <term>
 <menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;&Alt;<keycap>5</keycap></keycombo>
+<keycombo action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo>
 </shortcut>
 <guimenu>Format</guimenu><guimenuitem>Stylist</guimenuitem>
 </menuchoice>
@@ -1132,7 +1156,7 @@ including size, headers and footers.</action> For more details, go to
 <para><action>Opens a dialog to allow you to format, add and delete
 styles.</action> For more information go to <link
 linkend="styles">Styles</link></para><para>Typing <keycombo
-action="simul">&Ctrl;&Alt;<keycap>5</keycap></keycombo> is equivalent to
+action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo> is equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -1169,6 +1193,20 @@ more information go to <link linkend="formulas">Formulas</link></para>
 
 <variablelist>
 <varlistentry>
+<term id="reconnect-frame">
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Frame/Frameset</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to configure basic formating options for the Frameset.</action> 
+More information on this subject can
+be found in <link linkend="format-frame">Setting properties for frames</link>.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Delete Frame</guimenuitem>
@@ -1177,67 +1215,18 @@ more information go to <link linkend="formulas">Formulas</link></para>
 <listitem>
 <para><action>This will allow you to delete the entire frame, and all of
 the text and objects contained within the frame.  You will be prompted
-before the frame is deleted. This command must be executed while you are
-in frame edit mode.</action></para>
+before the frame is deleted.</action></para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term id="reconnect-frame">
+<term>
 <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Reconnect Frame</guimenuitem>
+<guimenu>Edit</guimenu><guimenuitem>Frame Background Color</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to reconnect the currently selected text frame,
-with another text frame.</action> More information on this subject can
-be found in <link linkend="frames">Working with
-Frames</link>.</para>
-
-<note>
-<para>This command must be executed while you are in frame edit
-mode.</para>
-</note>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term id="menu-edit-text-mode">
-<menuchoice>
-<shortcut>
-<keycombo action="simul"><keycap>F4</keycap></keycombo>
-</shortcut>
-<guimenu>Frames</guimenu><guimenuitem>Edit Text</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Switches you to Edit Text Mode.</action>  For more
-detailed information see <link linkend="frames">Working with
-Frames</link>.</para> 
-<para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
-clicking <inlinemediaobject><imageobject><imagedata
-fileref="textmode.png" format="PNG"/></imageobject></inlinemediaobject>
-are equivalent to using the menubar.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term id="menu-edit-frame-mode">
-<menuchoice>
-<shortcut>
-<keycombo action="simul"><keycap>F5</keycap></keycombo>
-</shortcut>
-<guimenu>Frames</guimenu><guimenuitem>Edit
-Frames</guimenuitem></menuchoice>
-</term>
-<listitem>
-<para><action>Switches you to Frame Edit Mode.</action> For more
-detailed information see <link linkend="frames">Working with
-Frames</link>.</para> 
-<para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
-clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject>
-are equivalent to using the menubar.</para>
+<para><action>This will allow you to change the background color of the current frame.</action></para>
 </listitem>
 </varlistentry>
 
@@ -1376,12 +1365,11 @@ tables, <link linkend="tables">click here</link>.</para>
 <varlistentry>
 <term id="menu-spell">
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spell Checking</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Spelling</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>Will <link linkend="spell-check"><action>spell
-check</action></link> the document.</para> 
+<para>Will <link linkend="spell-check"><action>check the spelling of</action></link> the document.</para> 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
 fileref="spell.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar. </para>
@@ -1391,7 +1379,7 @@ equivalent to using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Extra</guimenu><guimenuitem>Custom Variables</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Custom Variables</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1411,6 +1399,35 @@ For more on Autocorrection, <link linkend="autocorrect">click
 here</link>.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Change Case</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to set the case of all selected text.</action> 
+For more information see <link linkend="change-font-case">
+Automatically Formatting Case</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Edit personal expressions</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This is for adding and editing expressions. </action> 
+For information on using and adding expressions
+refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
+
+
+
 
 </variablelist>
 
@@ -1472,6 +1489,19 @@ visible.</action></para>
 <varlistentry>
 <term>
 <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Show Paragraph
+Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggles whether the Paragraph Toolbar is
+visible.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Show Format
 Toolbar</guimenuitem>
 </menuchoice>
@@ -1504,18 +1534,6 @@ Toolbar</guimenuitem>
 </term>
 <listitem>
 <para><action>Toggles whether the Formula Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show File Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the File Toolbar is
 visible.</action></para>
 </listitem>
 </varlistentry>
@@ -1574,7 +1592,7 @@ linkend="options-kword">here</link></para>
 <keycombo action="simul"><keycap>F1</keycap></keycombo>
 </shortcut>
 <guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>C</accel>ontents</guimenuitem>
+<guimenuitem>KWord Handbook</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para><action>Shows the contents of the documentation.</action></para>
@@ -1637,7 +1655,7 @@ on the internet.</action></para>
 <title>Formatting ToolBar</title>
 
 <para>The Formatting Toolbar consists of 9 buttons.  Each button
-performs a task from the menubar.</para>
+performs a task from the <link linkend="change-font-dialog">format character dialog</link>.</para>
 
 <screenshot>
 <mediaobject>
@@ -1726,10 +1744,11 @@ task from the menubar.  Click on that task for more details. </para>
 <link linkend="menu-create-table">Insert Table</link>
 </entry></row>
 <row><entry>
-<link linkend="menu-create-picture-frame"><inlinemediaobject><imageobject><imagedata fileref="fpicture.png" format="PNG"/></imageobject></inlinemediaobject></link>
+<link linkend="menu-insert-picture"><inlinemediaobject><imageobject><imagedata fileref="fpicture.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
-<link linkend="menu-create-picture-frame">Insert Picture</link>
-</entry></row><row><entry>
+<link linkend="menu-insert-picture">Insert Picture</link>
+</entry></row>
+<row><entry>
 <link linkend="menu-create-text-frame"><inlinemediaobject><imageobject><imagedata fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-create-text-frame">Insert Text Frame</link>
@@ -1832,8 +1851,8 @@ task from the menubar.  Click on that task for more details. </para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Right Text Align Button</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Justify Text Button</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Numbered Text paragraphs</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="decindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Style</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="incindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Style</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="decindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Reduce paragraph indent</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="incindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Increase Paragraph Indent</entry></row>
 </tbody></tgroup>
 </informaltable>
 </sect1>
@@ -1938,9 +1957,9 @@ a task from the menubar.  Click on that task for more details. </para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formllind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Left Index</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formurind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Upper Right Index</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formlrind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Right Index</entry></row>
-<row><entry>Right Facing Characters</entry></row>
-<row><entry>Left Facing Characters</entry></row>
-<row><entry>Special Symbols</entry></row>
+<row><entry></entry><entry>Right Facing Characters</entry></row>
+<row><entry></entry><entry>Left Facing Characters</entry></row>
+<row><entry></entry><entry>Special Symbols</entry></row>
 </tbody></tgroup></informaltable>
 
 </sect1>

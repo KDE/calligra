@@ -6,11 +6,11 @@
 
 <para>&kword;, like most <acronym>GUI</acronym> based programs, divides
 the screen up into several areas. Each area of the screen is used to
-perform a group of similar features .  When you start the &kword;
-screen, it is initially divided into 4 major areas:</para>
+perform a group of similar features.  When you examine the &kword;
+screen, it is divided into 4 major areas:</para>
 
 <orderedlist numeration="arabic">
-<listitem><para><link linkend="kde-frame">The &kde; titlebar</link>
+<listitem><para><link linkend="kde-frame">The &kde; Titlebar</link>
 (which remains at the top of all programs run under
 &kde;).</para></listitem>
 
@@ -29,136 +29,68 @@ Area</link>.</para></listitem>
 <imagedata fileref="screen.png" format="PNG"/></imageobject>
 </mediaobject></screenshot>
 
-<para><emphasis><anchor id="kde-frame"/>The KDE Titlebar.</emphasis></para>
-<para>The &kde; Titlebar surrounds all applications run under &kde;.
-For more information, please see the &kde; User Guide.</para>
-
-<para><emphasis><anchor id="mb"/>The menu bar</emphasis></para>
-
-<para>The Menu Bar provides access to all of &kword;'s functions and
-options.  Each part of the &kword; menu bar is detailed in the section
-entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
-
-<para><emphasis><anchor id="tb"/>The Toolbars</emphasis></para>
-<para>The Tool bars provide shortcuts to commonly used functions.
-&kword; uses 8 tool bars, with similar functions grouped together.</para>
-
-<para><emphasis><anchor id="da"/>The Document Area.</emphasis></para>
-<para>The document area consists of:</para>
-
 <variablelist>
 <varlistentry>
-<term>Horizontal and Vertical Rulers</term>
-<listitem>
-<para>The rulers can be used to help you layout your document.  For more
+<term><emphasis><anchor id="kde-frame"/>The KDE Titlebar.</emphasis></term>
+<listitem><para>The &kde; Titlebar surrounds all applications run under &kde;.
+For more information on the titlebar, please see the &kde; User Guide.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis><anchor id="mb"/>The Menubar</emphasis></term>
+
+<listitem><para>The Menu Bar provides access to all of &kword;'s functions and
+options.  Each part of the &kword; menubar is detailed in the section
+entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis><anchor id="tb"/>The Toolbars</emphasis></term>
+
+<listitem><para>The Toolbars provide shortcuts to commonly used functions.
+&kword; uses 8 tool bars, with similar functions grouped together.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><para><emphasis><anchor id="da"/>The Document Area.</emphasis></para></term>
+
+<listitem><para>The document area consists of:</para></listitem>
+
+
+
+<listitem><para><emphasis>Horizontal and Vertical Rulers</emphasis> -
+The rulers can be used to help you layout your document.  For more
 information on Rulers, see <link linkend="rulers">Using
 Rulers</link>.</para>
 </listitem>
-</varlistentry>
 
-<varlistentry>
-<term>Scroll bar</term>
-<listitem>
-<para>The scroll bars are used to move through a &kword; document
+
+<listitem><para><emphasis>Scrollbars</emphasis> - The scroll bars are used to move through a &kword; document
 quickly.  The &kword; scroll bar functions similar to all scroll bars in
 &kde; or &Windows;.</para>
 </listitem>
-</varlistentry>
 
-<varlistentry>
-<term>Tab Selector</term>
-<listitem>
-<para>This is used to select and place tab stops in your document for
+
+<listitem><para><emphasis>Tab Selector</emphasis> - This is used to select and place tab stops in your document for
 easy formatting.  For more information on tab stops, see the section
 entitled <link linkend="tab-stops">Using Tab Stops</link>.</para>
 </listitem>
-</varlistentry>
 
-<varlistentry>
-<term>Document View</term>
-<listitem>
-<para>This is the area of the screen which is used to enter text.  It
+
+<listitem><para><emphasis>Document View</emphasis> - This is the area of the screen which is used to enter text.  It
 shows you the current status of your document, and allows you to adjust
 frames, select text, and cut and paste text.  </para>
 </listitem>
 </varlistentry>
 </variablelist>
 
-<variablelist>
-<varlistentry>
-<term><link linkend="char-format-toolbar">Format Toolbar</link></term>
-<listitem>
-<para>This toolbar has commonly used features for formatting your text
-and paragraph borders. Features on this toolbar include boldface and
-italic text, superscripted text, and adding a border to your
-paragraph</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="file-toolbar">File Toolbar</link></term>
-<listitem>
-<para>This toolbar is used to load, save, print and start new
-documents</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="insert-toolbar">Insert Toolbar</link></term>
-<listitem>
-<para>This toolbar is used to add new text frames to your document.  You
-can also add graphics, tables or formulas to your document with this
-toolbar.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="basic-edit-toolbar">Edit Toolbar</link></term>
-<listitem>
-<para>This toolbar is for common editing functions such as cut, paste,
-undo, redo, find and spell check</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="paragraph-toolbar">Paragraph Toolbar</link></term>
-<listitem>
-<para>This toolbar is used to insert pictures, clip-art or special
-characters in your document.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="table-edit-toolbar">Table Toolbar</link></term>
-<listitem>
-<para>This toolbar is used to add or remove rows or columns from
-tables.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="border-toolbar">Borders Toolbar</link></term>
-<listitem>
-<para>This toolbar is used to add or remove borders surrounding
-paragraphs.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><link linkend="formula-toolbar">Formula Toolbar</link></term>
-<listitem>
-<para>This toolbar is used to add or remove formulas and their
-components.</para>
-</listitem>
-</varlistentry>
-</variablelist>
 
 </sect1>
 
 <sect1 id="rulers">
 <title>Using Rulers</title>
 
-<para>Along the left and top edges of the Document area, are a
+<para>Along the left and top edges of the document area, are a
 horizontal and a vertical ruler.</para>
 
 <para>These rulers measure from the top left edge of the page. </para>
@@ -205,7 +137,8 @@ linkend="tab-stops">Using Tab Stops</link>.</para>
 <tip>
 <para>To quickly format the page layout, you can right mouse click on
 either ruler.  A small sub menu will appear.  Simply select Page Layout,
-and the Page Layout Dialog box will appear.</para>
+and the <link linkend="page-format">Page Layout Dialog box</link> 
+will appear.</para>
 </tip>
 
 <note> 
