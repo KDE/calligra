@@ -27,10 +27,24 @@ DESCRIPTION
 #ifndef POWERPOINT_H
 #define POWERPOINT_H
 
+
 #include <myfile.h>
 #include <qdatastream.h>
 #include <qptrlist.h>
 #include <qmap.h>
+
+typedef Q_INT32 sint4; // signed 4-byte integral value
+typedef Q_INT16 sint2; // signed 4-byte integral value
+typedef Q_UINT32 uint4; // unsigned 4-byte integral value
+typedef Q_UINT16 uint2; // 2-byte
+typedef Q_INT8 bool1; // 1-byte boolean
+typedef Q_UINT8 ubyte1; // unsigned byte value
+typedef uint2 psrType;
+typedef uint4 psrSize; // each record is preceeded by
+// pssTypeType and pssSizeType.
+typedef uint2 psrInstance;
+typedef uint2 psrVersion;
+typedef uint4 psrReference; // Saved object reference
 
 class Powerpoint
 {
@@ -82,6 +96,7 @@ public:
     static const int s_area = 30512;
 
 private:
+
     myFile m_mainStream;
     unsigned m_documentRef;
     bool m_documentRefFound;
@@ -95,6 +110,40 @@ private:
     unsigned m_textType;
     Slide *m_slide;
     QPtrList<Slide> m_slides;
+
+struct PSR_CurrentUserAtom
+{
+	uint4 size;
+	uint4 magic; // Magic number to ensure this is a PowerPoint file.
+	uint4 offsetToCurrentEdit; // Offset in main stream to current edit field.
+	uint2 lenUserName;
+	uint2 docFileVersion;
+	ubyte1 majorVersion;
+	ubyte1 minorVersion;
+};
+
+struct PSR_UserEditAtom
+{
+	sint4 lastSlideID; // slideID
+	uint4 version; // This is major/minor/build which did the edit
+	uint4 offsetLastEdit; // File offset of last edit
+	uint4 offsetPersistDirectory; // Offset to PersistPtrs for
+	// this file version.
+	uint4 documentRef;
+	uint4 maxPersistWritten; // Addr of last persist ref written to the file (max seen so far).
+	sint2 lastViewType; // enum view type
+};
+
+struct PSR_SSlideLayoutAtom
+{
+	sint4 geom;
+	ubyte1 placeholderId[8];
+};
+
+    PSR_CurrentUserAtom mCurrentUserAtom;
+    PSR_UserEditAtom    mUserEditAtom;
+    PSR_UserEditAtom*   mpLastUserEditAtom;
+    Q_UINT32            mEditOffset;
 
     // Common Header.
 
@@ -134,6 +183,7 @@ private:
         Header &op,
         Q_UINT32 bytes,
         QDataStream &operands);
+    void walkDocument();
 
     void opAnimationInfo(Header &op, Q_UINT32 bytes, QDataStream &operands);
     void opAnimationInfoAtom(Header &op, Q_UINT32 bytes, QDataStream &operands);
@@ -238,6 +288,7 @@ private:
     void opParaFormatAtom(Header &op, Q_UINT32 bytes, QDataStream &operands);
     void opPersistPtrFullBlock(Header &op, Q_UINT32 bytes, QDataStream &operands);
     void opPersistPtrIncrementalBlock(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opPersistPtrIncrementalBlock2(Header &op, Q_UINT32 bytes, QDataStream &operands);
     void opPowerPointStateInfoAtom(Header &op, Q_UINT32 bytes, QDataStream &operands);
     void opPPDrawing(Header &op, Q_UINT32 bytes, QDataStream &operands);
     void opPPDrawingGroup(Header &op, Q_UINT32 bytes, QDataStream &operands);

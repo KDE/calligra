@@ -53,14 +53,18 @@ void PptDoc::gotSlide(
 
         switch (text->type)
         {
-        case 0:
-        case 6:
+        case TITLE_TEXT:
+        case CENTER_TITLE_TEXT:
             ourSlide.title = data.join("\n");
             break;
-        case 2:
+        case NOTES_TEXT:
             ourSlide.notes = data.join("\n");
             break;
-        default:
+	case BODY_TEXT:
+	case OTHER_TEXT:
+	case CENTER_BODY_TEXT:
+	case HALF_BODY_TEXT:
+	case QUARTER_BODY_TEXT:
             for (j = 0; j < data.count(); j++)
             {
                 ourSlide.body.append(data[j]);

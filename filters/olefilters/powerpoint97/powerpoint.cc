@@ -26,6 +26,7 @@ DESCRIPTION
 
 Powerpoint::Powerpoint()
 {
+	mEditOffset = 0;
 }
 
 Powerpoint::~Powerpoint()
@@ -297,18 +298,26 @@ bool Powerpoint::parse(
     // Find the slide references.
 
     m_pass = PASS_GET_SLIDE_REFERENCES;
-    walkRecord(currentUser.length, currentUser.data);
-    walkReference(m_documentRef);
+    kdError(s_area) << "parseing step 1 walkRecord..." << endl;
+    walkRecord(currentUser.length, currentUser.data);//get curren user information
 
+    kdError(s_area) << "parseing step 2 walkReference..." << endl;
+    //for(i = 0; i <= 2; i++)//walk the 2 slide atoms
+    //{
+    //	kdError(s_area) << "ref == :" << i <<endl;
+	//walkReference(i);
+    //}
+    kdError(s_area) << "walking slide list!!!!.." << endl;
+    if(mEditOffset != 0) walk(mEditOffset);
+    else walkDocument();
     // We should have a complete list of slide persistent references.
-
     m_pass = PASS_GET_SLIDE_CONTENTS;
-    kdError(s_area) << "TOTAL SLIDES XXXXXX: " << m_slides.count() << endl;
+    kdError(s_area) << "TOTAL SLIDES XXxx: " << m_slides.count() << endl;
 
     for (i = 0; i < m_slides.count(); i++)
     {
         m_slide = m_slides.at(i);
-        walkReference(m_slide->persistentReference);
+        walkReference(i);
         gotSlide(*m_slide);
     }
     return true;
@@ -362,68 +371,50 @@ void Powerpoint::opCurrentUserAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    struct
-    {
-        Q_UINT32 size;
-        Q_UINT32 magic;                  // Magic number to ensure this is a PowerPoint file.
-        Q_UINT32 offsetToCurrentEdit;    // Offset in main stream to current edit field.
-        Q_UINT16 lenUserName;
-        Q_UINT16 docFileVersion;
-        Q_UINT8 majorVersion;
-        Q_UINT8 minorVersion;
-        Q_UINT16 crap;
-        QString userName;
-        Q_UINT16 release;
-    } data;
+
     const Q_UINT32 MAGIC_NUMBER = (Q_UINT32)(-476987297);
     unsigned i;
 
-    operands >> data.size >> data.magic >> data.offsetToCurrentEdit >>
-        data.lenUserName >> data.docFileVersion >> data.majorVersion >>
-        data.minorVersion;
+    operands >> mCurrentUserAtom.size >> mCurrentUserAtom.magic >> mCurrentUserAtom.offsetToCurrentEdit >>
+        mCurrentUserAtom.lenUserName >> mCurrentUserAtom.docFileVersion >> mCurrentUserAtom.majorVersion >>
+        mCurrentUserAtom.minorVersion;
 
-    // Skip what appears to be junk. TBD: these two bytes are documented to belong
-    // to a Q_UINT32 "release" rather then the Q_UINT16 actually encountered.
-
-    operands >> data.crap;
-    for (i = 0; i < data.lenUserName; i++)
-    {
-        Q_UINT8 tmp;
-
-        operands >> tmp;
-        data.userName += tmp;
-    }
-    operands >> data.release;
-    kdDebug(s_area) << "crap: " << data.crap <<
-        " current user: " << data.userName <<
-        " release: " << data.release << endl;
+    kdDebug(s_area) << "\nPSR_CurrentUserAtom:" <<
+        "\n\tsize: " << mCurrentUserAtom.size <<
+        "\n\tmagic: " << mCurrentUserAtom.magic <<
+        "\n\toffsetToCurrentEdit: " << mCurrentUserAtom.offsetToCurrentEdit <<
+        "\n\tlenUserName: " << mCurrentUserAtom.lenUserName <<
+        "\n\tdocFileVersion: " << mCurrentUserAtom.docFileVersion <<
+        "\n\tmajorVersion: " << mCurrentUserAtom.majorVersion <<
+        "\n\tminorVersion: " << mCurrentUserAtom.minorVersion << endl;
 
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        if (data.size != 20)
+        if (mCurrentUserAtom.size != 20)
         {
-            kdError(s_area) << "invalid size: " << data.size << endl;
+            kdError(s_area) << "invalid size: " << mCurrentUserAtom.size << endl;
         }
-        if (data.magic != MAGIC_NUMBER)
+        if (mCurrentUserAtom.magic != MAGIC_NUMBER)
         {
-            kdError(s_area) << "invalid magic number: " << data.magic << endl;
+            kdError(s_area) << "invalid magic number: " << mCurrentUserAtom.magic << endl;
         }
-        if ((data.docFileVersion != 1012) ||
-            (data.majorVersion != 3) ||
-            (data.minorVersion != 0) ||
-            (data.release < 8) ||
-            (data.release > 10))
+        if ((mCurrentUserAtom.docFileVersion != 1012) ||
+            (mCurrentUserAtom.majorVersion != 3) ||
+            (mCurrentUserAtom.minorVersion != 0))// ||
+           // (data.release < 8) ||
+           // (data.release > 10))
         {
-            kdError(s_area) << "invalid version: " << data.docFileVersion <<
-                "." << data.majorVersion <<
-                "." << data.minorVersion <<
-                "." << data.release << endl;
+            kdError(s_area) << "invalid version: " << mCurrentUserAtom.docFileVersion <<
+                "." << mCurrentUserAtom.majorVersion <<
+                "." << mCurrentUserAtom.minorVersion <<
+                endl;
+                //"." << data.release << endl;
         }
 
         // Now walk main stream starting at current edit point.
 
-        walkRecord(data.offsetToCurrentEdit);
+        walkRecord(mCurrentUserAtom.offsetToCurrentEdit);
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
@@ -661,6 +652,23 @@ void Powerpoint::opOutlineViewInfo(
     walk(bytes, operands);
 }
 
+void Powerpoint::opPersistPtrIncrementalBlock2(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    PSR_UserEditAtom userEdit;
+    Q_INT16 offsetToEdit = mCurrentUserAtom.offsetToCurrentEdit;
+
+    while(0 < offsetToEdit)
+    {
+
+    }
+
+       mpLastUserEditAtom;
+
+}
+
 void Powerpoint::opPersistPtrIncrementalBlock(
     Header & /* op */,
     Q_UINT32 bytes,
@@ -691,12 +699,18 @@ void Powerpoint::opPersistPtrIncrementalBlock(
         //
         operands >> data.header.info;
         length += sizeof(data.header.info);
+	kdDebug(s_area) << "length1: " << length << endl;
+	kdDebug(s_area) << "m_pass: " << m_pass << endl;
+	//kdDebug(s_area) << "PASS_GET_SLIDE_REFERENCES: " << PASS_GET_SLIDE_REFERENCES << endl;
+	kdDebug(s_area) << "data.header.fields.offsetCount: " << data.header.fields.offsetCount << endl;
+
         for (i = 0; i < data.header.fields.offsetCount; i++)
         {
             unsigned reference = data.header.fields.offsetNumber + i;
 
             operands >> data.offset;
             length += sizeof(data.offset);
+	    //kdDebug(s_area) << "length2: " << length << endl;
             switch (m_pass)
             {
             case PASS_GET_SLIDE_REFERENCES:
@@ -705,8 +719,11 @@ void Powerpoint::opPersistPtrIncrementalBlock(
 
                 if (m_persistentReferences.end() == m_persistentReferences.find(reference))
                 {
-                    kdDebug(s_area) << "persistent reference: " << reference <<
-                        ": " << data.offset << endl;
+		    if(reference < 5)
+		    {
+                    	kdDebug(s_area) << "persistent reference: " << reference <<
+                        		   ": " << data.offset << endl;
+	            }
                     m_persistentReferences.insert(reference, data.offset);
                 }
                 else
@@ -714,15 +731,17 @@ void Powerpoint::opPersistPtrIncrementalBlock(
                     // This reference has already been seen! Since the parse proceeds
                     // backwards in time form the most recent edit, I assume this means
                     // that this is an older version of this slide...so just ignore it.
-                    kdDebug(s_area) << "superseded reference: " << reference <<
-                        ": " << data.offset << endl;
+                   // kdDebug(s_area) << "superseded reference: " << reference <<
+                   //     ": " << data.offset << endl;
                 }
                 break;
             case PASS_GET_SLIDE_CONTENTS:
                 break;
             };
         }
-    }
+ 	kdDebug(s_area) << "LEAVING persistant block -- " << endl;
+   }
+
 }
 
 void Powerpoint::opPPDrawing(
@@ -767,6 +786,14 @@ void Powerpoint::opSlideAtom(
     tmp.length = sizeof(data.layout);
     invokeHandler(tmp, tmp.length, operands);
     operands >> data.masterId >> data.notesId >> data.flags;
+
+    kdDebug(s_area) << "\nSlideAtom:" <<
+                       "\n\tmasterId: " << data.masterId <<
+		       "\n\tnotesId: " << data.notesId <<
+		       "\n\tflags: " << data.flags << endl;
+
+    //invokeHandler(tmp, tmp.length, operands);
+
 }
 
 void Powerpoint::opSlideListWithText(
@@ -794,14 +821,24 @@ void Powerpoint::opSlidePersistAtom(
     operands >> data.psrReference >> data.flags >> data.numberTexts >>
         data.slideId >> data.reserved;
 
-    switch (m_pass)
+     kdDebug(s_area) << "\nopSlidePersistAtom: " <<
+    		       "\n\tpsrReference: " << data.psrReference <<
+		       "\n\tflags: " << data.flags <<
+		       "\n\tnumberTexts: " << data.numberTexts <<
+		       "\n\tslideId: " << data.slideId <<
+		       "\n\treserved: " << data.reserved << endl;
+
+   switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        m_slide = new Slide;
-        m_slide->persistentReference = data.psrReference;
-        m_slides.append(m_slide);
-        kdDebug(s_area) << "slide: " << data.psrReference <<
-            " has texts: " << data.numberTexts << endl;
+    	if(data.slideId > 0)//if not master slide.. is there another way to tell???
+	{
+		m_slide = new Slide;
+		m_slide->persistentReference = data.psrReference;
+		m_slides.append(m_slide);
+		kdDebug(s_area) << "slide: " << data.psrReference <<
+		" has texts: " << data.numberTexts << endl;
+	}
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
@@ -836,25 +873,88 @@ void Powerpoint::opSSSlideLayoutAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    struct
-    {
-        Q_UINT32 geom;
-        Q_UINT8 id[8];
-    } data;
+
+    PSR_SSlideLayoutAtom data;
     unsigned i;
 
     operands >> data.geom;
-    for (i = 0; i < sizeof(data.id); i++)
+    for (i = 0; i < sizeof(data.placeholderId); i++)
     {
-        operands >> data.id[i];
+        operands >> data.placeholderId[i];
     }
-}
 
+    kdDebug(s_area) << "\nPSR_SSlideLayoutAtom:" <<
+                       "\n\tgeom: " << data.geom <<
+		       "\n\tplaceholderId[0]: " << data.placeholderId[0] <<
+		       "\n\tplaceholderId[1]: " << data.placeholderId[1] <<
+		       "\n\tplaceholderId[2]: " << data.placeholderId[2] <<
+		       "\n\tplaceholderId[3]: " << data.placeholderId[3] <<
+		       "\n\tplaceholderId[4]: " << data.placeholderId[4] <<
+		       "\n\tplaceholderId[5]: " << data.placeholderId[5] <<
+		       "\n\tplaceholderId[6]: " << data.placeholderId[6] <<
+		       "\n\tplaceholderId[7]: " << data.placeholderId[7] << endl;
+
+}
+//this is where we set bold/italic/etc and paragraph styles
 void Powerpoint::opStyleTextPropAtom(
     Header & /* op */,
     Q_UINT32 bytes,
     QDataStream &operands)
 {
+
+	Q_UINT16 totalLength = 0;
+	Q_UINT16 length = 0;
+	Q_UINT32 style1 = 0;
+	Q_UINT32 style2 = 0;
+	Q_UINT16 style3 = 0;
+	Q_UINT32 BOLD 		= 0x00010000;
+	Q_UINT32 ITALIC		= 0x00020000;
+	Q_UINT32 UNDERLINE 	= 0x00040000;
+
+	//--get the paragraph style?
+	operands >> length >> style1 >> style2;
+	totalLength += 10;
+
+	kdDebug(s_area) << "\nopStyleTextPropAtom1:" <<
+			"\n\tlength: " << length <<
+			"\n\tstyle1: " << style1 <<
+			"\n\tstyle2: " << style2 << endl;
+	//--
+
+	//--get the char styles
+	while(bytes > totalLength)
+	{
+		length = 0;
+		style1 = 0;
+		style2 = 0;
+		style3 = 0;
+
+		operands >> length >> style1;
+		totalLength += 6;
+		if(style1 == 0)
+		{
+			operands >> style3;
+			totalLength += 2;
+		}
+		else
+		{
+			operands >> style2;
+			totalLength += 4;
+		}
+
+		kdDebug(s_area) << "\nopStyleTextPropAtom2:" <<
+				"\n\tlength: " << length <<
+				"\n\tstyle1: " << style1 <<
+				"\n\tstyle2: " << style2 <<
+				"\n\tstyle3: " << style3 << endl;
+		if(style1 & BOLD)
+			kdDebug(s_area) << "BOLD here" << endl;
+		if(style1 & ITALIC)
+			kdDebug(s_area) << "ITALIC here" << endl;
+		if(style1 & UNDERLINE)
+			kdDebug(s_area) << "UNDERLINE here" << endl;
+	}
+	//--
 }
 
 void Powerpoint::opTextBytesAtom(
@@ -872,6 +972,8 @@ void Powerpoint::opTextBytesAtom(
         operands >> tmp;
         data += tmp;
     }
+     kdDebug(s_area) << "\nopTextBytesAtom: " <<
+    		       "\n\tdata: " << data << endl;
 
     SlideText *text;
     switch (m_pass)
@@ -939,6 +1041,9 @@ void Powerpoint::opTextHeaderAtom(
 
     operands >> data.txType;
 
+    kdDebug(s_area) << "\nopTextHeaderAtom:" <<
+    		       "\n\ttxType: " << data.txType << endl;
+    
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
@@ -979,23 +1084,25 @@ void Powerpoint::opUserEditAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    struct
-    {
-        Q_INT32 lastSlideID;
-        Q_UINT32 version;
-        Q_UINT32 offsetLastEdit;         // Offset of previous UserEditAtom. Zero for full save.
-        Q_UINT32 offsetPersistDirectory; // Offset to persist pointers for this file version.
-        Q_UINT32 documentRef;
-        Q_UINT32 maxPersistWritten;
-        Q_INT16 lastViewType;
-    } data;
 
-    operands >> data.lastSlideID  >> data.version >> data.offsetLastEdit >>
-        data.offsetPersistDirectory >> data.documentRef >>
-        data.maxPersistWritten >> data.lastViewType;
+    operands >> mUserEditAtom.lastSlideID  >> mUserEditAtom.version >> mUserEditAtom.offsetLastEdit >>
+        mUserEditAtom.offsetPersistDirectory >> mUserEditAtom.documentRef >>
+        mUserEditAtom.maxPersistWritten >> mUserEditAtom.lastViewType;
+    
+    if(mEditOffset == 0)mEditOffset = mUserEditAtom.offsetLastEdit;
+
+    kdDebug(s_area) << "\nPSR_UserEditAtom:" <<
+                       "\n\tlastSlideID: " << mUserEditAtom.lastSlideID <<
+		       "\n\tversion: " << mUserEditAtom.version <<
+		       "\n\toffsetLastEdit: " << mUserEditAtom.offsetLastEdit <<
+		       "\n\toffsetPersistDirectory: " << mUserEditAtom.offsetPersistDirectory <<
+		       "\n\tdocumentRef: " << mUserEditAtom.documentRef <<
+		       "\n\tmaxPersistWritten: " << mUserEditAtom.maxPersistWritten <<
+		       "\n\tlastViewType: " << mUserEditAtom.lastViewType << endl;
+
     if (!m_documentRefFound)
     {
-        m_documentRef = data.documentRef;
+        m_documentRef = mUserEditAtom.documentRef;
         m_documentRefFound = true;
     }
     switch (m_pass)
@@ -1005,14 +1112,14 @@ void Powerpoint::opUserEditAtom(
         // Gather the persistent references. That should fill the list of
         // references which we then use to look up our document.
 
-        walkRecord(data.offsetPersistDirectory);
+        walkRecord(mUserEditAtom.offsetPersistDirectory);
 
         // Now recursively walk the main OLE stream parsing previous edits.
 
-        if (data.offsetLastEdit)
+        if (mUserEditAtom.offsetLastEdit)
         {
             m_editDepth++;
-            walkRecord(data.offsetLastEdit);
+            walkRecord(mUserEditAtom.offsetLastEdit);
             m_editDepth--;
         }
         break;
@@ -1072,7 +1179,7 @@ void Powerpoint::walk(Q_UINT32 bytes, QDataStream &operands)
 
         // Package the arguments...
 
-        invokeHandler(op, op.length, operands);
+	invokeHandler(op, op.length, operands);
     }
 
     // Eat unexpected data that the caller may expect us to consume.
@@ -1090,10 +1197,44 @@ void Powerpoint::walk(Q_UINT32 mainStreamOffset)
     walk(length, stream);
     a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
 }
+void Powerpoint::walkDocument()
+{
+    QByteArray a;
+    Q_UINT32 mainStreamOffset = 0;
+    Q_UINT32 bytes = m_mainStream.length - mainStreamOffset;
+
+    a.setRawData((const char *)m_mainStream.data + mainStreamOffset, bytes);
+    QDataStream stream(a, IO_ReadOnly);
+    stream.setByteOrder(QDataStream::LittleEndian);
+    //--get tho the slide list
+    Header op;
+    Q_UINT32 length = 0;
+
+    // Stop parsing when there are no more records. Note that we stop as soon
+    // as we cannot get a complete header.
+    while (length + 8 <= bytes && op.type != 1000)//document
+    {
+        stream >> op.opcode.info >> op.type >> op.length;
+
+        // If we get some duff data, protect ourselves.
+        if (length + op.length + 8 > bytes)
+        {
+            op.length = bytes - length - 8;
+        }
+        length += op.length + 8;
+    }
+
+    //--
+    invokeHandler(op, op.length, stream);
+    a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, bytes);
+
+}
 
 void Powerpoint::walkRecord(Q_UINT32 bytes, const unsigned char *operands)
 {
     // First read what should be the next header using one stream.
+
+    kdError(s_area) << "WalkRecord - bytes: " << bytes << endl;
 
     Q_UINT32 length = sizeof(Header);
     QByteArray a;
@@ -1132,5 +1273,7 @@ void Powerpoint::walkReference(Q_UINT32 reference)
         kdDebug(s_area) << "found reference: " << reference <<
             " offset: " << offset << endl;
         walkRecord(offset);
+	kdDebug(s_area) << "****************************" << endl;
+
     }
 }

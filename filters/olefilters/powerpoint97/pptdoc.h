@@ -31,6 +31,16 @@ DESCRIPTION
 #include <qstring.h>
 #include <qstringlist.h>
 
+#define TITLE_TEXT 		0	//title
+#define BODY_TEXT 		1	//body
+#define NOTES_TEXT 		2	//notes
+#define NOTUSED_TEXT 		3	//not used
+#define OTHER_TEXT 		4	//other(test in shape)
+#define CENTER_BODY_TEXT 	5	//center body(subtitle in title slide)
+#define CENTER_TITLE_TEXT 	6	//center title(title in title slide)
+#define HALF_BODY_TEXT 		7	//half body(body in two-column slide)
+#define QUARTER_BODY_TEXT 	8	//quarter body(body in four-body slide)
+
 class myFile;
 
 class PptDoc:
@@ -59,6 +69,7 @@ protected:
         QString title;
         QStringList body;
         QString notes;
+	QString styleRun;
     } Slide;
 
     virtual void gotDrawing(
