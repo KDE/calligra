@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #ifndef __kohtml_view_h__
 #define __kohtml_view_h__
 
@@ -192,29 +196,29 @@ protected:
   
   KHTMLView_Patched *m_pHTMLView;
 
-  int bookmarkId;
+  int m_idBookmarkId;
   map<int,QString*> m_mapBookmarks;
   
-  QString m_vCurrentURL;
+  QString m_strCurrentURL;
   
   bool m_bStackLock;
-  QStack<SavedPage> m_vBackStack;
-  QStack<SavedPage> m_vForwardStack;
+  QStack<SavedPage> m_backStack;
+  QStack<SavedPage> m_forwardStack;
  
   QList<KoHTMLFrame> m_lstFrames;
 
-  QString captionText;
+  QString m_strCaptionText;
 
   // config variables
-  int browserStart;
-  QString homePage;
-  int fontSize;
-  QFont standardFont;
-  QFont fixedFont;
-  QColor bgColor;
-  QColor lnkColor;
-  QColor txtColor;
-  QColor vlnkColor;
+  int m_browserStart;
+  QString m_strHomePage;
+  int m_fontSize;
+  QFont m_standardFont;
+  QFont m_fixedFont;
+  QColor m_bgColor;
+  QColor m_lnkColor;
+  QColor m_txtColor;
+  QColor m_vlnkColor;
 };	
 
 #endif

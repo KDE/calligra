@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #include "kohtml_shell.h"
 #include "kohtml_shell.moc"
 #include "kohtml_doc.h"
@@ -93,7 +97,7 @@ void KoHTMLShell::setDocument(KoHTMLDoc *_doc)
   setRootPart(m_pView->id());
   
   interface()->setActivePart(m_pView->id());
-  
+
   if (m_pFileMenu)
      {
        m_pFileMenu->setItemEnabled(m_idMenuFile_Save, true);
@@ -133,7 +137,7 @@ bool KoHTMLShell::newDocument()
   setRootPart(m_pView->id());
   
   interface()->setActivePart(m_pView->id());
-  
+
   if (m_pFileMenu)
      {
        m_pFileMenu->setItemEnabled(m_idMenuFile_Save, true);

@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #ifndef __kohtml_idl__
 #define __kohtml_idl__
 
@@ -60,8 +64,8 @@ module KoHTML
 
 	interface KoHTMLDocument : KOffice::Document, KOffice::Print
 	{
-	        string getHTMLData();
-		string getURL();
+	        string htmlData();
+		string htmlURL();
 		
                 void openURL(in string url);
 		

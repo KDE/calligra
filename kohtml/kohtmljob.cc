@@ -18,6 +18,9 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
 
 #include "kohtmljob.h"
 #include "kohtmljob.moc"
@@ -35,21 +38,21 @@
 KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url, JobType _jType)
 :KIOJob()
 {
-  topParent = _topParent;
-  parent = _parent;
-  url = _url;    
-  jType = _jType;
-  if (jType == Image) tmpFile = tmpnam(0);
+  m_pTopParent = _topParent;
+  m_pParent = _parent;
+  m_strURL = _url;    
+  m_eJType = _jType;
+  if (m_eJType == Image) m_strTmpFile = tmpnam(0);
   else
    {
-     tmpFile = "";
-     html = "";
-     htmlLen = 0;
+     m_strTmpFile = "";
+     m_strHTML = "";
+     m_htmlLen = 0;
    }     
 
-  K2URL u(url);
+  K2URL u(m_strURL);
   
-  isHTTP = (strcmp("http", u.protocol()) == 0);
+  m_bIsHTTP = (strcmp("http", u.protocol()) == 0);
   
   enableGUI(false);
   
@@ -66,21 +69,21 @@ KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url
 KoHTMLJob::~KoHTMLJob()
 {
   cout << "KoHTMLJob::~KoHTMLJob()" << endl;
-  if (!tmpFile.isEmpty())
-     unlink(tmpFile.data());
+  if (!m_strTmpFile.isEmpty())
+     unlink(m_strTmpFile.data());
 }
   
 void KoHTMLJob::start()
 {
-  if (jType == Image) copy(url.data(), tmpFile.data());
+  if (m_eJType == Image) copy(m_strURL.data(), m_strTmpFile.data());
   else 
     {
-      if (isHTTP)
-         get(url.data());
+      if (m_bIsHTTP)
+         get(m_strURL.data());
       else	 
          {
-	   tmpFile = tmpnam(0);
-	   copy(url.data(), tmpFile.data());
+	   m_strTmpFile = tmpnam(0);
+	   copy(m_strURL.data(), m_strTmpFile.data());
 	 }
     }  
 }
@@ -89,53 +92,53 @@ void KoHTMLJob::slotJobFinished()
 {
   cout << "KoHTMLJob::slotJobFinished()" << endl;
 
-  if (jType == Image) emit jobDone(this, topParent, parent, url.data(), tmpFile.data());
+  if (m_eJType == Image) emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), m_strTmpFile.data());
   else 
     {
-      if (!isHTTP)
+      if (!m_bIsHTTP)
          {
-	   QFile f(tmpFile);
+	   QFile f(m_strTmpFile);
 	   if (f.exists())
 	      {
-	        html = kFileToString(tmpFile);
-	        htmlLen = html.length();
+	        m_strHTML = kFileToString(m_strTmpFile);
+	        m_htmlLen = m_strHTML.length();
 	      }
 	   else
 	      {
-	        html = "";
-		htmlLen = 0;
+	        m_strHTML = "";
+		m_htmlLen = 0;
 	      }      
 	 }
-       emit jobDone(this, topParent, parent, url.data(), html.data(), htmlLen);
+       emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), m_strHTML.data(), m_htmlLen);
      }      
 }
 
 void KoHTMLJob::slotJobRedirection(int id, const char *_url)
 {
-  url = _url;
+  m_strURL = _url;
   start();
 }
 
 void KoHTMLJob::slotJobData(int id, const char *data, int len)
 {
-  assert( jType == HTML );
-  assert( isHTTP );
+  assert( m_eJType == HTML );
+  assert( m_bIsHTTP );
   
   QString tmp(data, len);
-  html += tmp;
-  htmlLen += len;
+  m_strHTML += tmp;
+  m_htmlLen += len;
 }
 
 void KoHTMLJob::slotError(int id, int errid, const char *txt)
 {
-  html = "";
-  htmlLen = 0;
+  m_strHTML = "";
+  m_htmlLen = 0;
 
   QString msg;
-  msg.sprintf(i18n("error while loading:\n%s\nerror message:\n%s"), url.data(), kioErrorString(errid, txt).data());
+  msg.sprintf(i18n("error while loading:\n%s\nerror message:\n%s"), m_strURL.data(), kioErrorString(errid, txt).data());
 
   emit jobError(msg);
 
-  if (jType == Image) emit jobDone(this, topParent, parent, url.data(), 0L);
-  else emit jobDone(this, topParent, parent, url.data(), html.data(), htmlLen);
+  if (m_eJType == Image) emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), 0L);
+  else emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), m_strHTML.data(), m_htmlLen);
 }

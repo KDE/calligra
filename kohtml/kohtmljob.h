@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #ifndef __kohtmljob_h__
 #define __kohtmljob_h__
 
@@ -35,10 +39,10 @@ public:
   
   void start();
   
-  JobType getType() { return jType; }
-  const char *getURL() { return url.data(); }
-  KHTMLView *getParent() { return parent; }
-  KHTMLView *getTopParent() { return topParent; }
+  JobType type() { return m_eJType; }
+  const char *url() { return m_strURL.data(); }
+  KHTMLView *parent() { return m_pParent; }
+  KHTMLView *topParent() { return m_pTopParent; }
   
 signals:  
   void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);
@@ -52,13 +56,13 @@ protected slots:
   void slotError(int id, int errid, const char *txt);
   
 private:
-  KHTMLView *topParent, *parent;
-  QString url;
-  QString tmpFile;
-  JobType jType;
-  QString html;
-  int htmlLen;
-  bool isHTTP;
+  KHTMLView *m_pTopParent, *m_pParent;
+  QString m_strURL;
+  QString m_strTmpFile;
+  JobType m_eJType;
+  QString m_strHTML;
+  int m_htmlLen;
+  bool m_bIsHTTP;
 };
 
 #endif

@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #ifndef __kohtml_shell_h__
 #define __kohtml_shell_h__
 

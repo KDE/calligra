@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #ifndef __kohtml_doc_h__
 #define __kohtml_doc_h__
 
@@ -79,8 +83,8 @@ public:
   KoHTMLDoc();
   ~KoHTMLDoc();
 
-  virtual char *getHTMLData();
-  virtual char *getURL();
+  virtual char *htmlData();
+  virtual char *htmlURL();
   virtual void openURL(const char *_url);
   virtual void feedData(const char *url, const char *data);
 
@@ -180,13 +184,13 @@ private:
   bool m_bLoadError;
   QString m_strErrorMsg;
   
-  QString htmlData;
+  QString m_strHTMLData;
   
-  QString m_vCurrentURL;
+  QString m_strCurrentURL;
 
-  KoHTML::KoHTMLDocument::SaveLoadMode m_vSaveLoadMode;
+  KoHTML::KoHTMLDocument::SaveLoadMode m_eSaveLoadMode;
 
-  KHTMLView_Patched *m_vInternalView;
+  KHTMLView_Patched *m_pInternalView;
 
   QList<KoHTMLView> m_lstViews;
   QList<KoHTMLChild> m_lstChildren;

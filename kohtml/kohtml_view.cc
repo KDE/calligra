@@ -17,6 +17,9 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -66,7 +69,7 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
 
-  captionText = "KoHTML";
+  m_strCaptionText = "KoHTML";
   
   m_pDoc = _doc;
   
@@ -113,16 +116,16 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   m_vDoc->connect("documentStarted", this, "slotDocumentStarted");  
   m_vDoc->connect("documentDone", this, "slotDocumentDone");
 
-  bookmarkId = 111;
+  m_idBookmarkId = 111;
 
   m_bStackLock = false;
-  m_vBackStack.setAutoDelete(false);
-  m_vForwardStack.setAutoDelete(false);
+  m_backStack.setAutoDelete(false);
+  m_forwardStack.setAutoDelete(false);
  
   slotUpdateConfig();
 
-  if (browserStart == 0) slotDocumentContentChanged();
-  else if (browserStart == 1) m_pDoc->openURL(homePage);
+  if (m_browserStart == 0) slotDocumentContentChanged();
+  else if (m_browserStart == 1) m_pDoc->openURL(m_strHomePage);
   
 }
 
@@ -172,11 +175,11 @@ void KoHTMLView::cleanUp()
     delete it2->second;
   m_mapBookmarks.clear();
 
-  m_vBackStack.setAutoDelete(true);
-  m_vBackStack.clear();
+  m_backStack.setAutoDelete(true);
+  m_backStack.clear();
 
-  m_vForwardStack.setAutoDelete(true);
-  m_vForwardStack.clear();
+  m_forwardStack.setAutoDelete(true);
+  m_forwardStack.clear();
   
   KoViewIf::cleanUp();     
 }
@@ -218,10 +221,7 @@ void KoHTMLView::setFocus(CORBA::Boolean mode)
     resizeEvent( 0L );
 
   if ((bool)mode)
-     {
-       m_pHTMLView->setMouseLock(true);
-//       m_vMainWindow->setCaption( captionText );
-     }  
+     m_pHTMLView->setMouseLock(true);
 }
 
 CORBA::Boolean KoHTMLView::printDlg()
@@ -289,10 +289,10 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_vMainToolBar->connect("highlighted", this, "statusCallback");
 
   pix = OPUIUtils::convertPixmap(ICON("back.xpm"));
-  m_idBack = m_vMainToolBar->insertButton2(pix, ID_BACK, SIGNAL(clicked()), this, "slotBack", !m_vBackStack.isEmpty(), i18n("Back"), -1);
+  m_idBack = m_vMainToolBar->insertButton2(pix, ID_BACK, SIGNAL(clicked()), this, "slotBack", !m_backStack.isEmpty(), i18n("Back"), -1);
 
   pix = OPUIUtils::convertPixmap(ICON("forward.xpm"));
-  m_idForward = m_vMainToolBar->insertButton2(pix, ID_FORWARD, SIGNAL(clicked()), this, "slotForward", !m_vForwardStack.isEmpty(), i18n("Forward"), -1);
+  m_idForward = m_vMainToolBar->insertButton2(pix, ID_FORWARD, SIGNAL(clicked()), this, "slotForward", !m_forwardStack.isEmpty(), i18n("Forward"), -1);
 
   pix = OPUIUtils::convertPixmap(ICON("home.xpm"));
   m_idHome = m_vMainToolBar->insertButton2(pix, ID_HOME, SIGNAL(clicked()), this, "slotHome", true, i18n("Home"), -1);
@@ -324,7 +324,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
 
   m_vLocationToolBar->insertTextLabel(i18n("Location : "), -1, -1);
   
-  m_idLocation = m_vLocationToolBar->insertLined(m_pDoc->getURL(), ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, i18n("Current Location"), 70, -1);
+  m_idLocation = m_vLocationToolBar->insertLined(m_pDoc->htmlURL(), ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, i18n("Current Location"), 70, -1);
   m_vLocationToolBar->setItemAutoSized(ID_LOCATION, true);
 
   if (m_bToolBarVisible) 
@@ -420,11 +420,11 @@ void KoHTMLView::pushURLToHistory()
   SavedPage *p = m_pHTMLView->saveYourself();
   if (!p) return;
   
-  m_vBackStack.push(p);
+  m_backStack.push(p);
   
-  m_vForwardStack.setAutoDelete(true);
-  m_vForwardStack.clear();
-  m_vForwardStack.setAutoDelete(false);
+  m_forwardStack.setAutoDelete(true);
+  m_forwardStack.clear();
+  m_forwardStack.setAutoDelete(false);
   
   updateHistory(true, false);
 }
@@ -522,7 +522,7 @@ void KoHTMLView::editCopy()
 
 void KoHTMLView::editHTMLCode()
 {
-  HTMLEditDlg htmlEditDlg(QString(m_pDoc->getHTMLData()));
+  HTMLEditDlg htmlEditDlg(QString(m_pDoc->htmlData()));
   
   if (htmlEditDlg.exec() == QDialog::Accepted)
      m_pDoc->feedData(i18n("meta:/(manually edited code)"), htmlEditDlg.getText());
@@ -606,8 +606,8 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
 
 void KoHTMLView::slotDocumentContentChanged()
 {
-  QString url = m_pDoc->getURL();
-  QString data = m_pDoc->getHTMLData();
+  QString url = m_pDoc->htmlURL();
+  QString data = m_pDoc->htmlData();
 
   KURL u(url);  
 
@@ -650,8 +650,8 @@ void KoHTMLView::slotURLEntered()
 
 void KoHTMLView::addBookmark()
 {
-  QString url = m_pDoc->getURL();
-  QString title = captionText;
+  QString url = m_pDoc->htmlURL();
+  QString title = m_strCaptionText;
   K2URL u(url);
   
   KMimeType::initStatic();
@@ -704,14 +704,14 @@ void KoHTMLView::slotBookmarkSelected( CORBA::Long ID )
 
 void KoHTMLView::slotBack()
 {
-  if (m_vBackStack.isEmpty()) return;
+  if (m_backStack.isEmpty()) return;
   
-  SavedPage *s = m_vBackStack.pop();
+  SavedPage *s = m_backStack.pop();
   SavedPage *p = m_pHTMLView->saveYourself();
   
-  m_vForwardStack.push(p);
+  m_forwardStack.push(p);
   
-  updateHistory(!m_vBackStack.isEmpty(), true);
+  updateHistory(!m_backStack.isEmpty(), true);
 
   m_bStackLock = true; 
   m_pHTMLView->restore(s); 
@@ -722,14 +722,14 @@ void KoHTMLView::slotBack()
 
 void KoHTMLView::slotForward()
 {
-  if (m_vForwardStack.isEmpty()) return;
+  if (m_forwardStack.isEmpty()) return;
   
-  SavedPage *s = m_vForwardStack.pop();
+  SavedPage *s = m_forwardStack.pop();
   SavedPage *p = m_pHTMLView->saveYourself();
   
-  m_vBackStack.push(p);
+  m_backStack.push(p);
   
-  updateHistory(true, !m_vForwardStack.isEmpty());
+  updateHistory(true, !m_forwardStack.isEmpty());
   
   m_bStackLock = true;
   m_pHTMLView->restore(s);
@@ -740,12 +740,12 @@ void KoHTMLView::slotForward()
 
 void KoHTMLView::slotHome()
 {
-  m_pDoc->openURL(homePage);
+  m_pDoc->openURL(m_strHomePage);
 }
 
 void KoHTMLView::slotReload()
 {
-  m_pDoc->openURL(m_pDoc->getURL());
+  m_pDoc->openURL(m_pDoc->htmlURL());
 }
 
 void KoHTMLView::slotStop()
@@ -861,8 +861,8 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 		pix = OPUIUtils::loadPixmap(f);
 	      }
 	    }
-	    menu->insertItem11( pix, name, bookmarkId, -1);
-	    m_mapBookmarks[ bookmarkId++ ] = new QString( url );
+	    menu->insertItem11( pix, name, m_idBookmarkId, -1);
+	    m_mapBookmarks[ m_idBookmarkId++ ] = new QString( url );
 	  }
 	}
       }
@@ -872,9 +872,10 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 
 void KoHTMLView::slotSetCaption(const char *title)
 {
-  captionText = title;
-
-// OPPartIf::setPartCaption(QString(captionText).prepend("KoHTML : "));  
+  if (!m_strCaptionText)
+    return;
+    
+  m_strCaptionText = title;
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)
@@ -947,7 +948,7 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
 
 void KoHTMLView::slotOpenURL()
 {
-  slotOpenURL(0, m_vCurrentURL, LeftButton, 0);
+  slotOpenURL(0, m_strCurrentURL, LeftButton, 0);
 }
 
 void KoHTMLView::slotOpenURLInNewWindow()
@@ -958,7 +959,7 @@ void KoHTMLView::slotOpenURLInNewWindow()
 
   if (!doc->init()) return;
 	    
-  doc->openURL(m_vCurrentURL);
+  doc->openURL(m_strCurrentURL);
 	    
   KoHTMLShell *shell = new KoHTMLShell();
   shell->show();
@@ -971,7 +972,7 @@ void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &co
   
   if (!url) return;
  
-  m_vCurrentURL = url;
+  m_strCurrentURL = url;
 
   menu->insertItem(i18n("Open URL..."), this, SLOT(slotOpenURL()));
   menu->insertItem(i18n("Open URL in new window..."), this, SLOT(slotOpenURLInNewWindow()));
@@ -985,7 +986,7 @@ void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &co
 void KoHTMLView::slotCopyURLtoClipboard()
 {
   QClipboard *clip = QApplication::clipboard();
-  QString text = m_vCurrentURL;
+  QString text = m_strCurrentURL;
   
   if (!strnicmp(text, "mailto:", 7))
      text.remove(0, 7);
@@ -999,15 +1000,15 @@ void KoHTMLView::slotUpdateConfig()
   
   config->setGroup("Personal Settings");
   
-  browserStart = config->readNumEntry("BrowserStart", 0);
-  homePage = config->readEntry("HomePage", "http://www.kde.org/");
+  m_browserStart = config->readNumEntry("BrowserStart", 0);
+  m_strHomePage = config->readEntry("HomePage", "http://www.kde.org/");
 
-  //KConfig doesn't create a proper default entry for homePage, 
+  //KConfig doesn't create a proper default entry for m_strHomePage, 
   //so we do this manually here :-(  
-  if (homePage.isEmpty())
+  if (m_strHomePage.isEmpty())
      {
-       homePage = "http://www.kde.org/"; 
-       config->writeEntry("HomePage", homePage);
+       m_strHomePage = "http://www.kde.org/"; 
+       config->writeEntry("HomePage", m_strHomePage);
        config->sync(); 
      }  
   
@@ -1016,19 +1017,19 @@ void KoHTMLView::slotUpdateConfig()
   QFont helvetica("helvetica");
   QFont courier("courier");
   
-  fontSize = config->readNumEntry("FontSize", 0);
-  standardFont = config->readFontEntry("StandardFont", &helvetica);
-  fixedFont = config->readFontEntry("FixedFont", &courier);
+  m_fontSize = config->readNumEntry("FontSize", 0);
+  m_standardFont = config->readFontEntry("StandardFont", &helvetica);
+  m_fixedFont = config->readFontEntry("FixedFont", &courier);
     
   config->setGroup("Colors");
   
-  bgColor = config->readColorEntry("BackgroundColor", &white);
-  lnkColor = config->readColorEntry("LinkColor", &red);
-  txtColor = config->readColorEntry("TextColor", &black);
-  vlnkColor = config->readColorEntry("VLinkColor", &magenta);
+  m_bgColor = config->readColorEntry("BackgroundColor", &white);
+  m_lnkColor = config->readColorEntry("LinkColor", &red);
+  m_txtColor = config->readColorEntry("TextColor", &black);
+  m_vlnkColor = config->readColorEntry("VLinkColor", &magenta);
 
-  m_pHTMLView->getKHTMLWidget()->setDefaultBGColor(bgColor);
-  m_pHTMLView->getKHTMLWidget()->setDefaultTextColors(txtColor, lnkColor, vlnkColor);  
-  m_pHTMLView->getKHTMLWidget()->setStandardFont(standardFont.family());
-  m_pHTMLView->getKHTMLWidget()->setFixedFont(fixedFont.family());
+  m_pHTMLView->getKHTMLWidget()->setDefaultBGColor(m_bgColor);
+  m_pHTMLView->getKHTMLWidget()->setDefaultTextColors(m_txtColor, m_lnkColor, m_vlnkColor);
+  m_pHTMLView->getKHTMLWidget()->setStandardFont(m_standardFont.family());
+  m_pHTMLView->getKHTMLWidget()->setFixedFont(m_fixedFont.family());
 }

@@ -1,5 +1,4 @@
 /*
-
 	Copyright (C) 1998 Simon Hausmann
                        <tronical@gmx.net>
 
@@ -18,6 +17,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #include "kohtml_doc.h"
 #include "kohtml_doc.moc"
 #include "kohtml_shell.h"
@@ -69,18 +72,18 @@ KoHTMLDoc::KoHTMLDoc()
 
   m_bModified = false;
 
-  m_vSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
+  m_eSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
 
-  htmlData = "";  
-  m_vCurrentURL = "";
+  m_strHTMLData = "";  
+  m_strCurrentURL = "";
   
-  m_vInternalView = new KHTMLView_Patched;
+  m_pInternalView = new KHTMLView_Patched;
   
-  addHTMLView(m_vInternalView);
+  addHTMLView(m_pInternalView);
 
   QObject::connect(this, SIGNAL(contentChanged()),
                          SLOT(slotUpdateInternalView()));
-  QObject::connect(m_vInternalView, SIGNAL(documentDone(KHTMLView *)),
+  QObject::connect(m_pInternalView, SIGNAL(documentDone(KHTMLView *)),
                    this, SLOT(slotDocumentDoneInternal(KHTMLView *)));
   
 }
@@ -88,9 +91,9 @@ KoHTMLDoc::KoHTMLDoc()
 KoHTMLDoc::~KoHTMLDoc()
 {
   cerr << "removing internal view from list" << endl;
-  removeHTMLView(m_vInternalView);
+  removeHTMLView(m_pInternalView);
   cerr << "deleting internal view" << endl;
-  delete m_vInternalView;
+  delete m_pInternalView;
   cerr << "KoHTMLDoc is finished :)" << endl;
 //  cleanUp();
 }
@@ -156,22 +159,22 @@ CORBA::Boolean KoHTMLDoc::init()
   return true;
 }
 
-char *KoHTMLDoc::getHTMLData()
+char *KoHTMLDoc::htmlData()
 {
-  return CORBA::string_dup( htmlData.data() );
+  return CORBA::string_dup( m_strHTMLData.data() );
 }
 
-char *KoHTMLDoc::getURL()
+char *KoHTMLDoc::htmlURL()
 {
-  return CORBA::string_dup( m_vCurrentURL.data() );
+  return CORBA::string_dup( m_strCurrentURL.data() );
 }
 
 void KoHTMLDoc::openURL(const char *_url)
 {
-  m_vCurrentURL = _url;
-  m_vCurrentURL = m_vCurrentURL.stripWhiteSpace();
+  m_strCurrentURL = _url;
+  m_strCurrentURL = m_strCurrentURL.stripWhiteSpace();
   
-  KURL u(m_vCurrentURL);
+  KURL u(m_strCurrentURL);
   
   if (!u.isMalformed())
      {
@@ -180,7 +183,7 @@ void KoHTMLDoc::openURL(const char *_url)
        m_bLoadError = false;
        m_bDocumentDone = false;
      
-       htmlData = "";
+       m_strHTMLData = "";
        
        KoHTMLJob *job = new KoHTMLJob(0L, 0L, u.url(), KoHTMLJob::HTML);
        
@@ -201,8 +204,8 @@ void KoHTMLDoc::openURL(const char *_url)
 void KoHTMLDoc::feedData(const char *url, const char *data)
 {
   documentStarted();
-  m_vCurrentURL = url;
-  htmlData = data;
+  m_strCurrentURL = url;
+  m_strHTMLData = data;
   m_bDocumentDone = true;
   documentDone();
   emit contentChanged();
@@ -242,18 +245,18 @@ void KoHTMLDoc::stopLoading()
 
 KoHTML::KoHTMLDocument::SaveLoadMode KoHTMLDoc::saveLoadMode()
 {
-  return m_vSaveLoadMode;
+  return m_eSaveLoadMode;
 }
 
 void KoHTMLDoc::setSaveLoadMode( KoHTML::KoHTMLDocument::SaveLoadMode mode )
 {
-  m_vSaveLoadMode = mode;
+  m_eSaveLoadMode = mode;
 }
 
 void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len)
 {
   cerr << "void KoHTMLDoc::slotHTMLCodeLoaded(...)" <<endl;
-  htmlData = QString(data, len);
+  m_strHTMLData = QString(data, len);
 
   cerr << "removing job ref" << endl;  
   m_lstJobs.removeRef(job);
@@ -271,7 +274,7 @@ void KoHTMLDoc::slotHTMLLoadError(const char *errMsg)
 
 void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
 {
-  m_vCurrentURL = url;
+  m_strCurrentURL = url;
 }
 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
@@ -282,7 +285,7 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 
   if (_scale != 1.0) painter.translate(_scale, _scale);
   
-  if (m_vCurrentURL.isEmpty())
+  if (m_strCurrentURL.isEmpty())
      {
        const char *msg = i18n("KoHTML: No document loaded!");
        
@@ -305,16 +308,16 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
        int x = v->xOffset();
        int y = v->yOffset();
        
-       m_vInternalView->gotoXY(x, y);
+       m_pInternalView->gotoXY(x, y);
      }
 
   cerr << "void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)" << endl;
 
   cerr << "saving ourselves ;)" << endl;
-  SavedPage *p = m_vInternalView->saveYourself();
+  SavedPage *p = m_pInternalView->saveYourself();
 
   cerr << "drawing" << endl;
-  m_vInternalView->draw(p, &painter, width, height, _scale);
+  m_pInternalView->draw(p, &painter, width, height, _scale);
   
   delete p;
   
@@ -446,7 +449,7 @@ bool KoHTMLDoc::save(ostream &out, const char *format)
 	      << "\" editor=\"" << "KoHTML"
 	      << "\" mime=\"" << MIME_TYPE << "\" >" << endl;
 	      
-  KURL u(m_vCurrentURL);
+  KURL u(m_strCurrentURL);
   out << otag << "<URL>" << u.url() << "</URL>" << endl;
   
   QListIterator<KoHTMLChild> ch(m_lstChildren);
@@ -546,7 +549,7 @@ void KoHTMLDoc::removeHTMLView(KHTMLView *view)
   for (; it.current(); ++it)
       {
         KoHTMLJob *j = it.current();
-	if ((j->getTopParent() == view))
+	if ((j->topParent() == view))
 	   {
 	     m_lstJobs.removeRef(j);
 	     delete j;
@@ -570,9 +573,9 @@ KoHTMLJob *KoHTMLDoc::findJob(KHTMLView *view, const char *url, KoHTMLJob::JobTy
   for (; it.current(); ++it)
       {
         KoHTMLJob *j = it.current();
-	if ((j->getType() == jType) &&
-	    (strcmp(j->getURL(), url) == 0) &&
-	    (j->getParent() == view))
+	if ((j->type() == jType) &&
+	    (strcmp(j->url(), url) == 0) &&
+	    (j->parent() == view))
 	   return j;
       }
       
@@ -699,11 +702,11 @@ void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLVi
        return;
      }
   
-  QString htmlData = kFileToString(filename);
+  QString m_strHTMLData = kFileToString(filename);
   
   parent->begin(url);
   parent->parse();
-  parent->write(htmlData);
+  parent->write(m_strHTMLData);
   parent->end();
   
   m_lstJobs.removeRef(job);
@@ -726,14 +729,14 @@ void KoHTMLDoc::slotImageLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView 
 
 void KoHTMLDoc::slotUpdateInternalView()
 {
-  KURL u(m_vCurrentURL);
+  KURL u(m_strCurrentURL);
   
   m_bDocumentDone = false;
   
-  m_vInternalView->begin(u.url());
-  m_vInternalView->parse();
-  m_vInternalView->write(htmlData);
-  m_vInternalView->end();
+  m_pInternalView->begin(u.url());
+  m_pInternalView->parse();
+  m_pInternalView->write(m_strHTMLData);
+  m_pInternalView->end();
 }
 
 void KoHTMLDoc::slotDocumentDoneInternal(KHTMLView *view)

@@ -18,6 +18,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+//
+// $Id$
+//
+
 #include "kohtml_main.h"
 #include "kohtml_main.moc"
 #include <koIMR.h>
