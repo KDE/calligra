@@ -29,13 +29,15 @@
 #include <qradiobt.h>
 #include <qchkbox.h>
 #include <kspinbox.h>
+#include <ktabctl.h>
 #include "GDocument.h"
 #include "GObject.h"
 #include "CommandHistory.h"
 #include "FloatSpinBox.h"
 #include "UnitBox.h"
+#include "MyTabCtl.h"
 
-class TransformationDialog : public QTabDialog {
+class TransformationDialog : public QDialog {
   Q_OBJECT
 public:
   TransformationDialog (CommandHistory* cmdHist,
@@ -56,6 +58,9 @@ protected:
 private slots:
   void applyPressed ();
   void applyToDuplicatePressed ();
+  void updateProportionalDimension (float value);
+  void slotAbsScale ();
+  void slotPercentScale ();
 
 private:
   void translate (bool onDuplicate);
@@ -63,6 +68,7 @@ private:
   void scale (bool onDuplicate);
   void mirror (bool onDuplicate);
 
+  MyTabCtl *tabCtl;
   QWidget *widgets[4];
   GDocument* document;
   CommandHistory *history;
@@ -83,6 +89,7 @@ private:
   QRadioButton *absolute, *percent;
   UnitBox *horizDim, *vertDim;
   QCheckBox *proportional;
+  float dimRatio, selWidth, selHeight;
 };
 
 #endif

@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,42 +22,17 @@
 
 */
 
-#ifndef FloatSpinBox_h_
-#define FloatSpinBox_h_
+#ifndef MyTabCtl_h
+#define MyTabCtl_h
 
-#include <kspinbox.h>
+#include <ktabctl.h>
 
-class FloatSpinBox : public KSpinBox {
+class MyTabCtl : public KTabCtl {
   Q_OBJECT
 public:
-  FloatSpinBox (QWidget* parent = 0L, const char* name = 0L, 
-                int align = AlignLeft);
-  ~FloatSpinBox ();
-  
-  void setFormatString (const char* fmt);
-  
-  float getValue ();
-  void setValue (float value);
-  
-  void setStep (float step);
-  float getStep () const;
+  MyTabCtl (QWidget *parent = 0, const char *name = 0);
 
-  void setRange (float minVal, float maxVal);
-  void getRange (float& minVal, float& maxVal);
-
-signals:
-  void valueChanged (float v);
-
-public slots:
-  void slotIncrease ();
-  void slotDecrease ();
-
-protected slots:
-  void slotValueChange ();
-
-private:
-  float step, minval, maxval;
-  QString format;
+  void showPage (int id);
 };
 
 #endif

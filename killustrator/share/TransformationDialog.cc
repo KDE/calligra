@@ -48,24 +48,46 @@
 TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
 					    QWidget* parent, 
 					    const char* name) : 
-    QTabDialog (parent, name, false) {
+  QDialog (parent, name, false) {
   document = 0L;
   history = cmdHist;
   setCaption (i18n ("Transform"));
 
-  widgets[0] = createPositionWidget (this);
-  addTab (widgets[0], i18n ("Position"));
+  QVBoxLayout *vl = new QVBoxLayout (this, 2);
 
-  widgets[1] = createDimensionWidget (this);
-  addTab (widgets[1], i18n ("Dimension"));
+  // the tab control 
+  tabCtl = new MyTabCtl (this);
 
-  widgets[2] = createRotationWidget (this);
-  addTab (widgets[2], i18n ("Rotation"));
+  widgets[0] = createPositionWidget (tabCtl);
+  tabCtl->addTab (widgets[0], i18n ("Position"));
 
-  widgets[3] = createMirrorWidget (this);
-  addTab (widgets[3], i18n ("Mirror"));
+  widgets[1] = createDimensionWidget (tabCtl);
+  tabCtl->addTab (widgets[1], i18n ("Dimension"));
 
-  setOkButton (i18n ("Close"));
+  widgets[2] = createRotationWidget (tabCtl);
+  tabCtl->addTab (widgets[2], i18n ("Rotation"));
+
+  widgets[3] = createMirrorWidget (tabCtl);
+  tabCtl->addTab (widgets[3], i18n ("Mirror"));
+
+  vl->addWidget (tabCtl, 1);
+
+  // a separator
+  KSeparator* sep = new KSeparator (this);
+  vl->addWidget (sep);
+
+  // the standard buttons
+  KButtonBox *bbox = new KButtonBox (this);
+  QPushButton *button = bbox->addButton (i18n ("Close"));
+  connect (button, SIGNAL(clicked ()), this, SLOT(accept ()));
+
+  bbox->layout ();
+  bbox->setMinimumSize (bbox->sizeHint () + QSize (20, 20));
+
+  vl->addWidget (bbox);
+
+  vl->activate ();
+
   setMinimumSize (330, 350);
   setMaximumSize (400, 350);
   resize (330, 350);
@@ -137,9 +159,12 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   absolute->setText (i18n ("Absolute"));
   absolute->setChecked (true);
   absolute->move (0, 0);
+  connect (absolute, SIGNAL(clicked ()), this, SLOT(slotAbsScale ()));
+
   percent = new QRadioButton (group);
   percent->setText (i18n ("Percentage"));
   percent->move (0, 25);
+  connect (percent, SIGNAL(clicked ()), this, SLOT(slotPercentScale ()));
   group->adjustSize ();
 
   label = new QLabel (w);
@@ -152,7 +177,8 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   horizDim->setStep (0.1);
   horizDim->setEditable (true);
   horizDim->move (90, 65);
-
+  connect (horizDim, SIGNAL(valueChanged (float)),
+	   this, SLOT(updateProportionalDimension (float)));
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Vertical:"));
@@ -163,6 +189,8 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   vertDim->setStep (0.1);
   vertDim->setEditable (true);
   vertDim->move (90, 95);
+  connect (vertDim, SIGNAL(valueChanged (float)),
+	   this, SLOT(updateProportionalDimension (float)));
 
   proportional = new QCheckBox (w);
   proportional->setText (i18n ("Proportional"));
@@ -521,7 +549,7 @@ void TransformationDialog::setDocument (GDocument* doc) {
 
 void TransformationDialog::showTab (int id) {
   show ();
-  showPage (widgets[id]);
+  tabCtl->showPage (id);
   raise ();
 }
 
@@ -540,10 +568,48 @@ void TransformationDialog::update () {
   absolute->setChecked (true);
   horizDim->setValue (r.width ());
   vertDim->setValue (r.height ());
+  dimRatio = r.width () / r.height ();
+  selWidth = r.width ();
+  selHeight = r.height ();
 
   // rotation
   rotAngle->setValue (90.0);
   horizRotCenter->setValue (r.center ().x ());
   vertRotCenter->setValue (r.center ().y ());
   relativeRotCenter->setChecked (false);
+}
+
+void TransformationDialog::updateProportionalDimension (float value) {
+  if (proportional->isChecked ()) {
+    if (sender () == horizDim) {
+      if (percent->isChecked ()) 
+	vertDim->setValue (horizDim->getValue ());
+      else {
+	float h = horizDim->getValue ();
+	vertDim->setValue (h / dimRatio);
+      }
+    }
+    else if (sender () == vertDim) {
+      if (percent->isChecked ()) 
+	horizDim->setValue (vertDim->getValue ());
+      else {
+	float v = vertDim->getValue ();
+	horizDim->setValue (v * dimRatio);
+      }
+    }
+  }
+}
+
+void TransformationDialog::slotAbsScale () {
+  horizDim->setValue (selWidth);
+  horizDim->enableUnits (true);
+  vertDim->setValue (selHeight);
+  vertDim->enableUnits (true);
+}
+
+void TransformationDialog::slotPercentScale () {
+  horizDim->setValue (100.0);
+  horizDim->enableUnits (false);
+  vertDim->setValue (100.0);
+  vertDim->enableUnits (false);
 }

@@ -38,6 +38,8 @@ UnitBox::UnitBox (QWidget* parent, const char* name) : QWidget (parent, name) {
   unitCombo->setCurrentItem (int (unit = defaultUnit));
   unitCombo->setGeometry (valueBox->width () + 5, 0, 50, valueBox->height ());
   connect (unitCombo, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
+  connect (valueBox, SIGNAL (valueChanged (float)), 
+	   this, SLOT(slotValueChange (float)));
   setMinimumSize (valueBox->width () + unitCombo->width () + 5,
 	          valueBox->height ());
 }
@@ -86,4 +88,14 @@ void UnitBox::unitChanged (int id) {
 
 void UnitBox::setDefaultMeasurementUnit (MeasurementUnit unit) {
   defaultUnit = unit;
+}
+
+void UnitBox::slotValueChange (float f) {
+  // convert the value according current unit
+  float val = cvtUnitToPt (unit, f);
+  emit valueChanged (val);
+}
+
+void UnitBox::enableUnits (bool flag) {
+  unitCombo->setEnabled (flag);
 }

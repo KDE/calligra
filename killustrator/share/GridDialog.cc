@@ -147,7 +147,7 @@ void GridDialog::setSnapToGridOn (bool flag) {
 
 void GridDialog::setDistances (float h, float v) {
   hspinbox->setValue (h);
-  vspinbox->setValue (h);
+  vspinbox->setValue (v);
 }
 
 void GridDialog::setupGrid (Canvas* canvas) {

@@ -38,6 +38,8 @@ FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
 
   connect (this, SIGNAL (valueIncreased ()), SLOT(slotIncrease ()));
   connect (this, SIGNAL (valueDecreased ()), SLOT(slotDecrease ()));
+  connect (_edit, SIGNAL (returnPressed ()), this,
+	   SLOT (slotValueChange ()));
 }
 
 FloatSpinBox::~FloatSpinBox () {
@@ -84,4 +86,8 @@ void FloatSpinBox::slotIncrease () {
 
 void FloatSpinBox::slotDecrease () {
   setValue ((float) getValue () - step);
+}
+
+void FloatSpinBox::slotValueChange () {
+  emit valueChanged (getValue ());
 }

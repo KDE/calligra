@@ -49,11 +49,16 @@ public:
   void getRange (float& minVal, float& maxVal);
 
   void setEditable (bool);
+  void enableUnits (bool flag);
 
   static void setDefaultMeasurementUnit (MeasurementUnit unit);
 
+signals:
+  void valueChanged (float val);
+
 protected slots:
   void unitChanged (int id);
+  void slotValueChange (float f);
 
 private:
   FloatSpinBox *valueBox;
