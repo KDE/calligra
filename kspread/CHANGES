@@ -12,6 +12,7 @@ Bugfixes:
 - Fix cancel add embedded document.
 - Fix mem leak
 - Fix copy/paste attribute.
+- Fix display with special files (offset by 1 pixel).
 
 Until beta2:
 ------------

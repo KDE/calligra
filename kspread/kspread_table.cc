@@ -5994,26 +5994,26 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     //
     // Draw the cells.
     //
-    int xpos;
-    int xpos_Start;
-    int ypos;
-    int ypos_Start;
+    double xpos;
+    double xpos_Start;
+    double ypos;
+    double ypos_Start;
     KSpreadCell *cell;
     RowLayout *row_lay;
     ColumnLayout *col_lay;
 
     //Check if we have to repeat some rows and columns
-    xpos = 0;
-    ypos = 0;
-    xpos_Start = 0;
-    ypos_Start = 0;
+    xpos = 0.0;
+    ypos = 0.0;
+    xpos_Start = 0.0;
+    ypos_Start = 0.0;
     if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first &&
          m_printRepeatRows.first != 0    && page_range.top() > m_printRepeatRows.first )
     {
         for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
         {
             row_lay = rowLayout( y );
-            xpos = 0;
+            xpos = 0.0;
 
             for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
             {
@@ -6021,28 +6021,28 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width(), view.height() );
-                cell->paintCell( r, _painter, NULL,
-                                 qMakePair( (double)xpos, (double)ypos ),
+                cell->paintCell( r, _painter, NULL, 
+                                 qMakePair( xpos, ypos ), 
                                  QPoint(x,y) );
 
-                xpos += col_lay->width();
+                xpos += col_lay->dblWidth();
             }
 
-            ypos += row_lay->height();
+            ypos += row_lay->dblHeight();
         }
         ypos_Start = ypos;
         xpos_Start = xpos;
         //Don't let obscuring cells and children overpaint this area
         clipRegion -= QRegion ( MM_TO_POINT ( leftBorder() ),
                                 MM_TO_POINT ( topBorder() ),
-                                xpos,
-                                ypos );
+                                int( xpos ),
+                                int( ypos ) );
         _painter.setClipRegion( clipRegion );
     }
 
     //Check if we have to repeat some rows
     xpos = xpos_Start;
-    ypos = 0;
+    ypos = 0.0;
     if ( m_printRepeatRows.first != 0 && page_range.top() > m_printRepeatRows.first )
     {
         for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
@@ -6056,33 +6056,33 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width() + xpos, view.height() );
-                cell->paintCell( r, _painter, NULL,
-                                 qMakePair( (double)xpos, (double)ypos ),
+                cell->paintCell( r, _painter, NULL, 
+                                 qMakePair( xpos, ypos ), 
                                  QPoint(x,y));
 
-                xpos += col_lay->width();
+                xpos += col_lay->dblWidth();
             }
 
-            ypos += row_lay->height();
+            ypos += row_lay->dblHeight();
         }
         ypos_Start = ypos;
         //Don't let obscuring cells and children overpaint this area
         clipRegion -= QRegion( MM_TO_POINT ( leftBorder() + xpos_Start ),
                                MM_TO_POINT ( topBorder() ),
-                               xpos - xpos_Start,
-                               ypos );
+                               int( xpos - xpos_Start ),
+                               int( ypos ) );
         _painter.setClipRegion( clipRegion );
     }
 
     //Check if we have to repeat some columns
-    xpos = 0;
+    xpos = 0.0;
     ypos = ypos_Start;
     if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first )
     {
         for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
         {
             row_lay = rowLayout( y );
-            xpos = 0;
+            xpos = 0.0;
 
             for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
             {
@@ -6090,21 +6090,21 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
-                cell->paintCell( r, _painter, NULL,
-                                 qMakePair( (double)xpos, (double)ypos ),
+                cell->paintCell( r, _painter, NULL, 
+                                 qMakePair( xpos, ypos ), 
                                  QPoint(x,y));
 
-                xpos += col_lay->width();
+                xpos += col_lay->dblWidth();
             }
 
-            ypos += row_lay->height();
+            ypos += row_lay->dblHeight();
         }
         xpos_Start = xpos;
         //Don't let obscuring cells and children overpaint this area
         clipRegion -= QRegion( MM_TO_POINT ( leftBorder() ),
                                MM_TO_POINT ( topBorder() + ypos_Start ),
-                               xpos,
-                               ypos - ypos_Start );
+                               int( xpos ),
+                               int( ypos - ypos_Start ) );
         _painter.setClipRegion( clipRegion );
     }
 
@@ -6122,14 +6122,14 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
             cell = cellAt( x, y );
             QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
-            cell->paintCell( r, _painter, NULL,
-                             qMakePair( (double)xpos, (double)ypos ),
-                             QPoint(x,y));
+            cell->paintCell( r, _painter, NULL, 
+                             qMakePair( xpos, ypos ), 
+                             QPoint(x,y) );
 
-            xpos += col_lay->width();
+            xpos += col_lay->dblWidth();
         }
 
-        ypos += row_lay->height();
+        ypos += row_lay->dblHeight();
     }
 
     //
