@@ -24,7 +24,6 @@
 #include "GClipart.h"
 #include "GClipart.moc"
 #include "qwmf.h"
-#include "PSStream.h"
 
 #include <klocale.h>
 #include <kapp.h>

@@ -622,7 +622,35 @@ void PropertyEditor::readProperties () {
       }
       
       // Fill tab
-      solidColorBttn->setColor (object->getFillColor ());
+      switch (object->getFillStyle ()) {
+      case GObject::FillInfo::NoFill:
+	fillStyleBttn[NOFILL_BOX]->setChecked (true);
+	wstack->raiseWidget (NOFILL_BOX);
+	break;
+      case GObject::FillInfo::SolidFill:
+	fillStyleBttn[SOLID_BOX]->setChecked (true);
+	solidColorBttn->setColor (object->getFillColor ());
+	wstack->raiseWidget (SOLID_BOX);
+	break;
+      case GObject::FillInfo::GradientFill:
+	{
+	  Gradient g = object->getFillGradient ();
+	  fillStyleBttn[GRADIENT_BOX]->setChecked (true);
+	  gradColor1Bttn->setColor (g.getColor1 ());
+	  gradColor2Bttn->setColor (g.getColor2 ());
+	  gradStyleCombo->setCurrentItem ((int) g.getStyle ());
+	  wstack->raiseWidget (GRADIENT_BOX);
+	  updateGradient ();
+	}
+	break;
+      case GObject::FillInfo::PatternFill:
+	fillStyleBttn[PATTERN_BOX]->setChecked (true);
+	patternColorBttn->setColor (object->getFillColor ());
+	wstack->raiseWidget (PATTERN_BOX);
+	break;
+      default:
+	break;
+      }
       
       // Font tab
       if (object->isA ("GText")) {

@@ -335,6 +335,9 @@ public:
   virtual void printInfo ();
   virtual void calcBoundingBox () = 0;
 
+  bool workInProgress () const { return inWork; }
+  void setWorkInProgress (bool flag) { inWork = flag; }
+
 signals:
   void changed ();
   void changed (const Rect& r);
@@ -350,16 +353,18 @@ protected:
   void calcUntransformedBoundingBox (const Coord& tleft, const Coord& tright,
 				     const Coord& bright, const Coord& bleft);
   
-  bool sflag;       // object is selected
-  Rect box;         // the bounding box
-  QWMatrix tMatrix;   // transformation matrix
-  QWMatrix tmpMatrix; // temporary transformation matrix
-  QWMatrix iMatrix;   // inverted transformation matrix
-  OutlineInfo outlineInfo;
-  FillInfo fillInfo;
-  unsigned int rcount;
-  GLayer *layer;
-  GradientShape gShape;
+  bool sflag;              // object is selected
+  Rect box;                // the bounding box
+  QWMatrix tMatrix;        // transformation matrix
+  QWMatrix tmpMatrix;      // temporary transformation matrix
+  QWMatrix iMatrix;        // inverted transformation matrix
+  OutlineInfo outlineInfo; // outline attributes
+  FillInfo fillInfo;       // fill attributes
+  unsigned int rcount;     // the reference counter
+  GLayer *layer;           // the layer containing this object
+  GradientShape gShape;    // the shape (clipped pixmap) for gradient fill
+  bool inWork;             // the object is currently manipulated,
+                           // so don't fill it now
 
   static QDict<GObject> prototypes;
 

@@ -71,6 +71,7 @@ GObject::FillInfo GObject::getDefaultFillInfo () {
 GObject::GObject () {
   sflag = false;
   layer = 0L;
+  inWork = false;
 
   outlineInfo = defaultOutlineInfo;
   outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style | 
@@ -88,6 +89,7 @@ GObject::GObject () {
 GObject::GObject (const list<XmlAttribute>& attribs) {
   list<XmlAttribute>::const_iterator first = attribs.begin ();
   layer = 0L;
+  inWork = false;
 
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
@@ -129,6 +131,7 @@ GObject::GObject (const GObject& obj) : QObject()
   tmpMatrix = tMatrix;
   iMatrix = obj.iMatrix;
   layer = obj.layer;
+  inWork = false;
 
   rcount = 1;
 }
@@ -409,9 +412,9 @@ void GObject::initBrush (QBrush& brush) {
 }
 
 void GObject::initPen (QPen& pen) {
-  pen.setColor (outlineInfo.color);
+  pen.setColor (inWork ? black : outlineInfo.color);
   pen.setWidth ((uint) outlineInfo.width);
-  pen.setStyle (outlineInfo.style);
+  pen.setStyle (inWork ? SolidLine : outlineInfo.style);
 }
 
 void GObject::writePropertiesToXml (XmlWriter& xml) {

@@ -101,11 +101,20 @@ void GOval::draw (Painter& p, bool withBasePoints) {
   QBrush brush;
 
   initPen (pen);
-  initBrush (brush);
   p.save ();
   p.setPen (pen);
-  p.setBrush (brush);
   p.setWorldMatrix (tmpMatrix, true);
+
+  if (! workInProgress ()) {
+    initBrush (brush);
+    p.setBrush (brush);
+    if (gradientFill ()) {
+      if (! gShape.valid ())
+	updateGradientShape (p);
+      gShape.draw (p);
+    }
+  }
+
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::DefaultShape:
     p.drawEllipse (sPoint.x (), sPoint.y (),
@@ -352,4 +361,29 @@ void GOval::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("angle2", eAngle);
   xml.addAttribute ("kind", kind[outlineInfo.shape]);
   xml.closeTag (true);
+}
+
+void GOval::updateGradientShape (QPainter& p) {
+  // define the rectangular box for the gradient pixmap 
+  // (in object coordinate system)
+  gShape.setBox (Rect (sPoint, ePoint));
+
+  // define the clipping region
+  QWMatrix matrix = p.worldMatrix ();
+  QRect rect (qRound (sPoint.x ()), qRound (sPoint.y ()),
+	      qRound (ePoint.x () - sPoint.x ()),
+	      qRound (ePoint.y () - sPoint.y ()));
+  switch (outlineInfo.shape) {
+  case GObject::OutlineInfo::DefaultShape:
+    gShape.setRegion (QRegion (matrix.map (rect), QRegion::Ellipse));
+    break;
+  default:
+    break;
+  }
+
+  // update the gradient information
+  gShape.setGradient (fillInfo.gradient);
+
+  // and create a new gradient pixmap
+  gShape.updatePixmap ();
 }

@@ -173,13 +173,16 @@ void GPolygon::draw (Painter& p, bool withBasePoints) {
   p.save ();
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
-  initBrush (brush);
-  p.setBrush (brush);
 
-  if (gradientFill ()) {
-    if (! gShape.valid ())
-      updateGradientShape (p);
-    gShape.draw (p);
+  if (! workInProgress ()) {
+    initBrush (brush);
+    p.setBrush (brush);
+    
+    if (gradientFill ()) {
+      if (! gShape.valid ())
+	updateGradientShape (p);
+      gShape.draw (p);
+    }
   }
 
   num = points.count ();

@@ -46,6 +46,12 @@ struct is_a : public binary_function<GObject*, const char*, bool> {
   }
 };
 
+struct finalize_obj {
+  void operator () (GObject* obj) {
+    obj->setWorkInProgress (false);
+  }
+};
+
 SelectionTool::SelectionTool (CommandHistory *history) : Tool (history) {
   state = S_Init;
 }
@@ -423,25 +429,20 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
 void SelectionTool::translate (GDocument* doc, int dx, int dy, 
 			       bool permanent) {
   if (permanent) {
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+	      finalize_obj ());
     TranslateCmd *cmd = new TranslateCmd (doc, dx, dy);
     history->addCommand (cmd, true);
   }
   else {
     QWMatrix m;
     m.translate (dx, dy);
-#ifdef NO_LAYERS
-    QListIterator<GObject> it = doc->getSelection ();
-    for (; it.current (); ++it) {
-      it.current ()->initTmpMatrix ();
-      it.current ()->ttransform (m, true);
-    }
-#else
     for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
 	 it != doc->getSelection ().end (); it++) {
+      (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m, true);
     }
-#endif
   }
 }
 
@@ -468,6 +469,8 @@ void SelectionTool::rotate (GDocument* doc, int dx, int dy,
   }
 
   if (permanent) {
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+	      finalize_obj ());
     RotateCmd *cmd = new RotateCmd (doc, rotCenter, angle);
     history->addCommand (cmd, true);
   }
@@ -477,23 +480,14 @@ void SelectionTool::rotate (GDocument* doc, int dx, int dy,
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-#ifdef NO_LAYERS    
-    QListIterator<GObject> it (doc->getSelection ());
-    for (; it.current (); ++it) {
-      it.current ()->initTmpMatrix ();
-      it.current ()->ttransform (m1);
-      it.current ()->ttransform (m2);
-      it.current ()->ttransform (m3, true);
-    }
-#else
     for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
 	 it != doc->getSelection ().end (); it++) {
+      (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m1);
       (*it)->ttransform (m2);
       (*it)->ttransform (m3, true);
     }
-#endif
   }
 }
 
@@ -519,6 +513,8 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
   }
 
   if (permanent) {
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+	      finalize_obj ());
     ScaleCmd *cmd = new ScaleCmd (doc, oldmask, sx, sy, r);
     history->addCommand (cmd, true);
   }
@@ -529,25 +525,15 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
     m2.scale (sx, sy);
     m3.translate (xback, yback);
     
-#ifdef NO_LAYERS
-    QListIterator<GObject> it (doc->getSelection ());
-    for (; it.current (); ++it) {
-      it.current ()->initTmpMatrix ();
-      
-      it.current ()->ttransform (m1);
-      it.current ()->ttransform (m2);
-      it.current ()->ttransform (m3, true);
-    }
-#else
     for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
 	 it != doc->getSelection ().end (); it++) {
+      (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       
       (*it)->ttransform (m1);
       (*it)->ttransform (m2);
       (*it)->ttransform (m3, true);
     }
-#endif
   }
 }
 

@@ -68,6 +68,7 @@ public:
   virtual const char* typeName ();
 
 protected:
+  void updateGradientShape (QPainter& p);
   void calcBoundingBox ();
 
   void update_segments ();
