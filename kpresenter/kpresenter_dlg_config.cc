@@ -68,7 +68,7 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("misc", KIcon::SizeMedium) );
     _miscPage=new ConfigureMiscPage(parent, page);
 
-    page = addVBoxPage( i18n("Document"), i18n("Document defaults"),
+    page = addVBoxPage( i18n("Document"), i18n("Document Settings"),
                         BarIcon("documentdefaults", KIcon::SizeMedium) );
 
     _defaultDocPage=new ConfigureDefaultDocPage(parent, page);
@@ -149,11 +149,9 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
     int oldRastX = m_pView->kPresenterDoc()->rastX();
     int oldRastY = m_pView->kPresenterDoc()->rastY();
-    oldAutoSaveValue =  m_pView->kPresenterDoc()->defaultAutoSave()/60;
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
-        oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
         ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
         bShowRuler=config->readBoolEntry("Rulers",true);
@@ -169,13 +167,6 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     showStatusBar->setChecked(oldShowStatusBar);
     lay1->addWidget(showStatusBar);
 
-
-    autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox );
-    autoSave->setRange( 0, 60, 1 );
-    autoSave->setLabel( i18n("Auto save (min):") );
-    autoSave->setSpecialValueText( i18n("No auto save") );
-    autoSave->setSuffix( i18n("min") );
-    lay1->addWidget( autoSave );
 
     eRastX = new KIntNumInput( oldRastX, tmpQGroupBox );
     eRastX->setRange( 1, 400, 1 );
@@ -227,13 +218,6 @@ void configureInterfacePage::apply()
         oldRastY=rastY;
     }
 
-    int autoSaveVal = autoSave->value();
-    if( autoSaveVal != oldAutoSaveValue ) {
-        config->writeEntry( "AutoSave", autoSaveVal );
-        m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
-        oldAutoSaveValue=autoSaveVal;
-    }
-
     double newIndent = KoUnit::ptToUnit( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
     {
@@ -271,7 +255,6 @@ void configureInterfacePage::slotDefault()
 {
     eRastX->setValue( 10 );
     eRastY->setValue( 10 );
-    autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
     double newIndent = KoUnit::ptToUnit( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
@@ -431,11 +414,6 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid->addWidget(varLabel,1,0);
 
     KPresenterDoc* doc = m_pView->kPresenterDoc();
-    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
-    m_variableNumberOffset=new QLineEdit(tmpQGroupBox);
-    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
-    grid->addWidget(m_variableNumberOffset,2,0);
-    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
 
     m_displayLink=new QCheckBox(i18n("Displays link"),tmpQGroupBox);
     grid->addWidget(m_displayLink,3,0);
@@ -478,16 +456,7 @@ void ConfigureMiscPage::apply()
         doc->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
-    int newStartingPage=m_variableNumberOffset->text().toInt();
     KMacroCommand * macroCmd=0L;
-    if(newStartingPage!=m_oldStartingPage)
-    {
-        macroCmd=new KMacroCommand(i18n("Change starting page number"));
-        KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
-        cmd->execute();
-        macroCmd->addCommand(cmd);
-        m_oldStartingPage=newStartingPage;
-    }
     bool b=m_displayLink->isChecked();
     bool b_new=doc->getVariableCollection()->variableSetting()->displayLink();
     if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
@@ -519,7 +488,6 @@ void ConfigureMiscPage::apply()
 void ConfigureMiscPage::slotDefault()
 {
    m_undoRedoLimit->setValue(30);
-   m_variableNumberOffset->setText(QString::number(1));
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
    KPresenterDoc* doc = m_pView->kPresenterDoc();
@@ -535,7 +503,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
-    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document defaults"), box, "GroupBox" );
+    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( 10 );
     gbDocumentDefaults->setInsideSpacing( 5 );
 
@@ -568,6 +536,33 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     fontLayout->addWidget(fontTitle, 0, 0);
     fontLayout->addWidget(fontName, 0, 1);
     fontLayout->addWidget(chooseButton, 0, 2);
+
+
+
+    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
+    gbDocumentSettings->setMargin( 10 );
+    gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
+
+    oldAutoSaveValue =  m_pView->kPresenterDoc()->defaultAutoSave()/60;
+
+    if( config->hasGroup("Interface") ) {
+        config->setGroup( "Interface" );
+        oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
+    }
+
+    autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
+    autoSave->setRange( 0, 60, 1 );
+    autoSave->setLabel( i18n("Auto save (min):") );
+    autoSave->setSpecialValueText( i18n("No auto save") );
+    autoSave->setSuffix( i18n("min") );
+
+    QLabel *varLabel= new QLabel(i18n("Starting page number:"), gbDocumentSettings);
+
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
+    m_variableNumberOffset=new QLineEdit(gbDocumentSettings);
+    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
+    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
 }
 
 void ConfigureDefaultDocPage::apply()
@@ -575,10 +570,30 @@ void ConfigureDefaultDocPage::apply()
     config->setGroup( "Document defaults" );
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     config->writeEntry("DefaultFont",font->toString());
+
+    config->setGroup( "Interface" );
+    int autoSaveVal = autoSave->value();
+    if( autoSaveVal != oldAutoSaveValue ) {
+        config->writeEntry( "AutoSave", autoSaveVal );
+        m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
+        oldAutoSaveValue=autoSaveVal;
+    }
+    int newStartingPage=m_variableNumberOffset->text().toInt();
+    if(newStartingPage!=m_oldStartingPage)
+    {
+        KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
+        cmd->execute();
+        doc->addCommand(cmd);
+        m_oldStartingPage=newStartingPage;
+    }
+
 }
 
 void ConfigureDefaultDocPage::slotDefault()
 {
+    autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
+    m_variableNumberOffset->setText(QString::number(1));
+
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

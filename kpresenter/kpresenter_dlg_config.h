@@ -40,9 +40,7 @@ public:
 private:
     KPresenterView* m_pView;
     KIntNumInput* eRastX,*eRastY;
-    KIntNumInput* autoSave;
     KConfig* config;
-    int oldAutoSaveValue;
     unsigned int oldRastX;
     unsigned int oldRastY;
     int oldNbRecentFiles;
@@ -94,8 +92,6 @@ private:
     KConfig* config;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
-    int m_oldStartingPage;
-    QLineEdit* m_variableNumberOffset;
     QCheckBox* m_displayLink, *m_displayComment;
     KLineEdit * resolutionY, * resolutionX;
 };
@@ -110,10 +106,14 @@ public:
 public slots:
     void selectNewDefaultFont();
 private:
+    int oldAutoSaveValue;
+    int m_oldStartingPage;
     KPresenterView* m_pView;
     KConfig* config;
     QFont *font;
     QLabel *fontName;
+    KIntNumInput* autoSave;
+    QLineEdit* m_variableNumberOffset;
 };
 
 
