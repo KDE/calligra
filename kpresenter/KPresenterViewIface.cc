@@ -607,3 +607,8 @@ void KPresenterViewIface::savePicture()
 {
     view->savePicture();
 }
+
+void KPresenterViewIface::insertFile()
+{
+    view->insertFile();
+}
