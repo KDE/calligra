@@ -1348,10 +1348,9 @@ bool KWTableFrameSet::contains( double mx, double my ) {
         {
             KWTableFrameSet::Cell *cell=m_cells.at(m_pageBoundaries[i] -1);
             //not cell at right
-            if(cell->m_cols+cell->m_col<m_cols-1)
+            if((cell->m_cols+cell->m_col<m_cols-1) || (cell->m_col<m_cols-1) )
                 cell=getCell(cell->m_row, m_cols-1);
             last = cell->getFrame( 0 );
-
         }
         else
             last = first;
