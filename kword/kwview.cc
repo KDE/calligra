@@ -274,12 +274,6 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 KWView::~KWView()
 {
     clearSelection();
-    //delete special char dlg when we close view
-    if ( m_specialCharDlg )
-    {
-        m_specialCharDlg->closeDialog();
-    }
-
     if ( m_findReplace )
     {
         // Abort any find/replace
@@ -362,8 +356,11 @@ void KWView::clearSelection()
     }
 #endif
     delete m_searchEntry;
+    m_searchEntry = 0L;
     delete m_replaceEntry;
-    delete m_specialCharDlg;
+    m_replaceEntry = 0L;
+    if ( m_specialCharDlg )
+        m_specialCharDlg->closeDialog(); // will call slotSpecialCharDlgClosed
 }
 
 
@@ -3171,7 +3168,7 @@ void KWView::slotSpecialCharDlgClosed()
                     this, SLOT(slotSpecialChar(QChar,const QString &)));
         disconnect( m_specialCharDlg, SIGNAL( finished() ),
                     this, SLOT( slotSpecialCharDlgClosed() ) );
-        delete m_specialCharDlg;
+        m_specialCharDlg->deleteLater();
         m_specialCharDlg = 0L;
     }
 }
