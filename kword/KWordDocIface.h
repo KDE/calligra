@@ -167,6 +167,10 @@ k_dcop:
     bool configAutoSuperScript() const;
     void setConfigAutoSuperScript( bool b);
 
+    bool pgUpDownMovesCaret() const;
+    void setPgUpDownMovesCaret( bool b );
+
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();

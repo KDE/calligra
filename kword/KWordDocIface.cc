@@ -578,3 +578,13 @@ void KWordDocIface::setConfigAutoSuperScript( bool b)
 {
     doc->getAutoFormat()->configAutoSuperScript( b );
 }
+
+bool KWordDocIface::pgUpDownMovesCaret() const
+{
+    return doc->pgUpDownMovesCaret();
+}
+
+void KWordDocIface::setPgUpDownMovesCaret( bool b )
+{
+    doc->setPgUpDownMovesCaret( b );
+}
