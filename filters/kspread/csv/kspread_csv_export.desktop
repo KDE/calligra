@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=KSpredCSVExportFilter
+Comment=KSpread CSV Export Filter
+Export=text/x-csv
+ExportDescription=CSV
+Import=application/x-kspread
+ImportDescription=KSpread
+X-KDE-Library=libcsvexport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter

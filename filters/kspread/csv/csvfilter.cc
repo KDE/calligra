@@ -20,6 +20,7 @@
 #include <csvfilter.h>
 #include <csvfilter.moc>
 #include <qmessagebox.h>
+#include <kmessagebox.h>
 
 CSVFilter::CSVFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
@@ -36,7 +37,8 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kDebugError( 31501, "Unable to open input file!");
+        //kDebugError( 31501, "Unable to open input file!");
+        KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
         in.close();
         return false;
     }
