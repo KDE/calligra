@@ -145,3 +145,40 @@ Merged cells
        <text:p>These A1:B1 are merged together</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce3"/>
+
+Cell horizontal alignment: top
+    <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="top"/>
+    </style:style>
+
+Cell horizontal alignment: middle
+    <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="middle"/>
+    </style:style>
+
+Cell horizontal alignment: bottom
+    <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="bottom"/>
+    </style:style>
+
+Cell vertical alignment: top
+    <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:text-align="center" 
+      style:text-align-source="fix" style:repeat-content="none" 
+      fo:margin-left="0in" style:vertical-align="top"/>
+    </style:style>
+
+Cell vertical alignment: middle
+    <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:text-align="center" 
+      style:text-align-source="fix" style:repeat-content="none" 
+      fo:margin-left="0in" style:vertical-align="middle"/>
+    </style:style>
+
+Cell vertical alignment: bottom
+    <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:text-align="center" 
+      style:text-align-source="fix" style:repeat-content="none" 
+      fo:margin-left="0in" style:vertical-align="bottom"/>
+    </style:style>
+     
