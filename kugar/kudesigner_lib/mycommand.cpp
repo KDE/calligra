@@ -382,3 +382,4 @@ void KCommandHistory::virtual_hook( int, void* )
 #ifndef PURE_QT
 #include "kcommand.moc"
 #endif
+#include "mycommand.moc"
