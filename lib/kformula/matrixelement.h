@@ -28,6 +28,8 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
+class MatrixSequenceElement;
+
 /**
  * A matrix.
  */

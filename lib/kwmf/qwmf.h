@@ -28,6 +28,7 @@
 #include <qimage.h>
 #include <qrect.h>
 
+class QBuffer;
 class QString;
 class WmfCmd;
 class WinObjHandle;
