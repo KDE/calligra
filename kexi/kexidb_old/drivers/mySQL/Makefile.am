@@ -10,7 +10,7 @@ keximysqlinterface_la_SOURCES = mysqldb.cpp mysqlfield.cpp mysqlresult.cpp mysql
 
 keximysqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lmysqlclient ../../kexiDB/libkexidb.la
 
-keximysqlinterface_la_LDFLAGS     = -module $(KDE_PLUGIN) $(MYSQL_LIBDIR)
+keximysqlinterface_la_LDFLAGS     = -module $(KDE_PLUGIN) -L$(MYSQL_LIBDIR)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
