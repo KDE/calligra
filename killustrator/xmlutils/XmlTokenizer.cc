@@ -68,6 +68,12 @@ XmlTokenizer::Token XmlTokenizer::nextToken () {
     return last_tok = Tok_EOF;
 
   strm.get (c);
+  if (!is_open) {
+    if (c != '<') {
+      strm.unget ();
+      return last_tok = readText ();
+    }
+  }
   switch (c) {
   case '<':
     is_open = true;
@@ -142,7 +148,6 @@ XmlTokenizer::Token XmlTokenizer::nextToken () {
 	  return last_tok = Tok_Exclam;
       }
       else {
-	cout << "HIER1:" << c << endl;
 	return last_tok = Tok_Invalid;
       }
     }
@@ -179,7 +184,6 @@ XmlTokenizer::Token XmlTokenizer::readSymbol () {
       elem += tolower (c);
     else {
       // Zeichen nicht erlaubt ?
-      cout << "HIER2: " << c << endl;
       return Tok_Invalid;
     }
   }
@@ -248,11 +252,11 @@ XmlTokenizer::Token XmlTokenizer::readText () {
 	if (strm.eof ())
 	  return Tok_EOF;
       }
-      if (s == "&lt;")
+      if (s == "&lt")
 	elem += "<";
-      else if (s == "&gt;")
+      else if (s == "&gt")
 	elem += ">";
-      else if (s == "&amp;")
+      else if (s == "&amp")
 	elem += "&";
     }
     else
@@ -330,6 +334,9 @@ int main (int argc, char** argv) {
       break;
     case XmlTokenizer::Tok_Comment:
       cout << "COMMENT > ";
+      break;
+    case XmlTokenizer::Tok_Text:
+      cout << "TEXT(" << tokenizer.element () << ") ";
       break;
     default:
       cout << "INVALID(" << tok << ")" << endl;
