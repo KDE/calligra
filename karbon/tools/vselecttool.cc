@@ -314,6 +314,18 @@ VSelectTool::mouseDragCtrlReleased()
 }
 
 void
+VSelectTool::cancel()
+{
+	// Erase old object:
+	if ( isDragging() )
+	{
+		draw();
+		m_state = normal;
+		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	}
+}
+
+void
 VSelectTool::recalc()
 {
 	if( m_state == normal )
