@@ -375,6 +375,7 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
 
     bool fix1 = FALSE;
     bool fix2 = FALSE;
+    bool onNumber = false;
     unsigned int pos = 0;
     const unsigned int length = m_strText.length();
 
@@ -397,11 +398,20 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
             }
             if ( pos < length )  // also copy the trailing double quote
                 erg += m_strText[pos++];
+
+            onNumber = false;
+        }
+        else if ( m_strText[pos].isDigit() )
+        {
+          erg += m_strText[pos++];
+          fix1 = fix2 = FALSE;
+          onNumber = true;
         }
         else if ( m_strText[pos] != '$' && !m_strText[pos].isLetter() )
         {
             erg += m_strText[pos++];
             fix1 = fix2 = FALSE;
+            onNumber = false;
         }
         else
         {
@@ -435,7 +445,11 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                     if ( pos != oldPos )
                         row = m_strText.mid(oldPos, pos-oldPos).toInt();
                     // Is it a table name || is it a function name like DEC2HEX
-                    if ( ( m_strText[pos] == '!' ) || m_strText[pos].isLetter() )
+                    /* or if we're parsing a number, this could just be the
+                       exponential part of it  (1.23E4) */
+                    if ( ( m_strText[pos] == '!' ) ||
+                         m_strText[pos].isLetter() ||
+                         onNumber )
                     {
                         erg += tmp;
                         fix1 = fix2 = FALSE;
@@ -468,6 +482,7 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                 erg += tmp;
                 fix1 = FALSE;
             }
+            onNumber = false;
         }
     }
     return erg;
