@@ -1158,9 +1158,9 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
                 }
                 else
                 {
-                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, large , lastY, h);
+                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, zh->pixelToLayoutUnitX(large) , lastY, h);
                     tmpStartX += _parag->at( b )->pixelwidth;
-                    tmpStartX += large;
+                    tmpStartX += zh->pixelToLayoutUnitX(large);
                     large = 0;
                     noSpace = false;
                     noDraw  = false;
@@ -1168,7 +1168,9 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
             }
         }
         if ( noDraw && noSpace )
-            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/ large , lastY, h);
+        {
+            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/zh->pixelToLayoutUnitX(large) , lastY, h);
+        }
     }
 }
 
