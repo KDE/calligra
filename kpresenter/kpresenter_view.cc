@@ -209,7 +209,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     dcopObject(); // build it
 
     m_pKPresenterDoc = 0L;
-
+    m_bDisplayFiedCode=false;
     // init
     backDia = 0;
     afChoose = 0;
@@ -1565,6 +1565,13 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         xOffsetSaved = canvasXOffset();
         yOffsetSaved = canvasYOffset();
+        m_bDisplayFiedCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFiedCode();
+        if ( m_bDisplayFiedCode )
+        {
+            m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+            m_pKPresenterDoc->recalcVariables(  VT_ALL );
+        }
+
         setCanvasXOffset( 0 );
         setCanvasYOffset( 0 );
 
@@ -1629,6 +1636,14 @@ void KPresenterView::screenStop()
         m_canvas->lower();
         setCanvasXOffset( xOffsetSaved );
         setCanvasYOffset( yOffsetSaved );
+
+        if ( m_bDisplayFiedCode )
+        {
+            m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+            m_pKPresenterDoc->recalcVariables(  VT_ALL );
+        }
+
+
 
         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
             setPresentationDuration( m_canvas->presPage() - 1 );

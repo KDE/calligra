@@ -1105,6 +1105,7 @@ private:
     int m_initSwitchPage;
 
     int xOffsetSaved, yOffsetSaved; // saved when going fullscreen
+    bool m_bDisplayFiedCode; //save state before to go to presentation mode
 };
 
 #endif
