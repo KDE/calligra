@@ -610,12 +610,13 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
     bool locale = false;
     switch( m_formatType )
     {
+        //TODO fixme use locale of kspread and not kglobal
     case ShortDate_format:
-        //format;
+        format = KGlobal::locale()->dateFormatShort();
         locale = true;
         break;
     case TextDate_format:
-        //format;
+        format = KGlobal::locale()->dateFormat();
         locale = true;
         break;
     case date_format1:
