@@ -578,7 +578,7 @@ void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
     //QFont f = style.getSymbolFont();
     uchar c = style.symbolTable().character( ch );
     QFont f = style.symbolTable().font( ch );
-    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
+    f.setPointSizeFloat( style.layoutUnitPtToPt( height ) );
     //f.setPointSize( height );
 
     QFontMetrics fm(f);
@@ -611,7 +611,8 @@ bool Artwork::calcEsstixDelimiterSize( const ContextStyle& context,
     QFont f( "esstixseven" );
 
     for ( char i=1; c != 0; ++i ) {
-        f.setPointSizeFloat( context.layoutUnitToFontSize( i*fontSize, false ) );
+        //f.setPointSizeFloat( context.layoutUnitToFontSize( i*fontSize, false ) );
+        f.setPointSizeFloat( context.layoutUnitPtToPt( i*fontSize ) );
         QFontMetrics fm( f );
         LuPixelRect bound = fm.boundingRect( c );
 

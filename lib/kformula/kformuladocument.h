@@ -195,6 +195,11 @@ public:
      */
     void updateConfig();
 
+    /**
+     * Return a kformula DomDocument.
+     */
+    static QDomDocument createDomDocument();
+
 public slots:
 
     void paste();
@@ -272,11 +277,6 @@ private:
      * if there is no such formula.
      */
     Container* newFormula( uint number );
-
-    /**
-     * Return a kformula DomDocument.
-     */
-    QDomDocument createDomDocument();
 
     /**
      * Needs to be called when the first formula is created.

@@ -79,8 +79,8 @@
 </MenuBar>
 
  <ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
   <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>

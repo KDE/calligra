@@ -23,6 +23,7 @@
 #include <klocale.h>
 
 #include <kformuladefs.h>
+#include <kformuladocument.h>
 #include <symboltable.h>
 
 #include "fsparser.h"
@@ -449,14 +450,15 @@ QDomDocument FormulaStringParser::parse()
         error( QString( i18n( "Aborted parsing at %1:%2" ) ).arg( line ).arg( column ) );
     }
 
-    QDomDocument doc("KFORMULA");
-    QDomElement de = doc.createElement("FORMULA");
+    QDomDocument doc = KFormula::Document::createDomDocument();
+    QDomElement root = doc.documentElement();
+    QDomElement de = doc.createElement( "FORMULA" );
     // here comes the current version of FormulaElement
-    de.setAttribute( "VERSION", "4" );
+    //de.setAttribute( "VERSION", "4" );
     head->buildXML( doc, de );
-    doc.appendChild(de);
+    root.appendChild(de);
 
-    kdDebug( KFormula::DEBUGID ) << doc.toString() << endl;
+    kdDebug( 39001 ) << doc.toString() << endl;
     return doc;
 }
 

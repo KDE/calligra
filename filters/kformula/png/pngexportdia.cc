@@ -228,8 +228,11 @@ void PNGExportDia::slotOk()
     //doc->newZoomAndResolution( false, false );
     int width = widthEdit->value();
     int height = heightEdit->value();
-    width = realWidth;
-    height = realHeight;
+//     kdDebug( KFormula::DEBUGID ) << k_funcinfo
+//                                  << "(" << width << " " << height << ")"
+//                                  << endl;
+//     width = realWidth;
+//     height = realHeight;
     QImage image = formula->drawImage( width, height );
     if ( !image.save( _fileOut, "PNG" ) ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "PNG Export Error" ) );
