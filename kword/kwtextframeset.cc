@@ -817,7 +817,7 @@ int KWTextFrameSet::numberOfparagraphLineSelected( KoTextParag *parag)
     KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
     parag->lineStartOfChar( c1.index(), &indexOfLineStart, &lineStart );
 
-    parag->lineStartOfChar( c1.index(), &indexOfLineStart, &lineEnd );
+    parag->lineStartOfChar( c2.index(), &indexOfLineStart, &lineEnd );
     return (lineEnd - lineStart+1);
 }
 
