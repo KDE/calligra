@@ -33,6 +33,7 @@ Package: kformula
 Architecture: any
 Section: x11
 Depends: ${shlibs:Depends}
+Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a formula editor for the KDE Office Suite
  KFormula is a formula editor that provides the basic input facilities
@@ -197,7 +198,6 @@ Description: common libraries and files for the KDE Office Suite
 Package: koffice-dev
 Architecture: any
 Section: devel
-Replaces: kformula
 Depends: koffice-libs (= ${Source-Version}), kdelibs4-dev
 Description: common libraries for KOffice (development files)
  This package provides the development files for the libraries that are
