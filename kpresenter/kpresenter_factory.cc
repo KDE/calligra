@@ -33,7 +33,7 @@
 
 
 static const char* description=I18N_NOOP("KOffice Presentation Tool");
-static const char* version="0.1";
+static const char* version="1.1";
 
 extern "C"
 {
