@@ -338,7 +338,6 @@ VSegment::param( double len ) const
 
 			lengthMid = length( paramMid );
 		}
-
 		return paramMid;
 	}
 

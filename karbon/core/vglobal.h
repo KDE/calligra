@@ -37,7 +37,7 @@ namespace VGlobal
 	 * between chordlength and polylength (length of the controlpolygon) is smaller
 	 * than this value, the length of the bezier is 1/2 chordlength + 1/2 polylength.
 	 */
-	const double lengthTolerance = 0.01;
+	const double lengthTolerance = 0.005;
 
 	/**
 	 * A tolerance used to calculate param t on a segment at a given arc
@@ -45,7 +45,7 @@ namespace VGlobal
 	 * If the relative difference between a length approximation and the given
 	 * length is smaller than this value, they are assumed to be identical.
 	 */
-	const double paramLengthTolerance = 0.01;
+	const double paramLengthTolerance = 0.001;
 
 	/**
 	 * A range for KoPoint::isNear() check, to decide if a KoPoint "is the same"
