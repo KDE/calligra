@@ -836,7 +836,7 @@ FormManager::layoutGrid()
 void
 FormManager::createLayout(int layoutType)
 {
-	QtWidgetList *list = m_active->selectedWidgets();
+	WidgetList *list = m_active->selectedWidgets();
 	// if only one widget is selected (a container), we modify its layout
 	if(list->count() == 1)
 	{

@@ -33,7 +33,7 @@ class KActionCollection;
 class KCommandHistory;
 class KCommand;
 class PixmapCollection;
-typedef QPtrList<QWidget> QtWidgetList;
+typedef QPtrList<QWidget> WidgetList;
 
 namespace KFormDesigner {
 
@@ -111,7 +111,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		Container*		parentContainer(QWidget *w=0);
 
 		//! \return the widget currently selected in this form, or 0 if there is not.
-		QtWidgetList* 		selectedWidgets() {return &m_selected;}
+		WidgetList* 		selectedWidgets() {return &m_selected;}
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list
 		and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
@@ -267,14 +267,14 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! \return The \ref Container which is a parent of all widgets in \a wlist.
 		 Used by \ref activeContainer(), and to find where
 		 to paste widgets when multiple widgets are selected. */
-		ObjectTreeItem*   commonParentContainer(QtWidgetList *wlist);
+		ObjectTreeItem*   commonParentContainer(WidgetList *wlist);
 
 	private:
 		FormManager		*m_manager;
 		QGuardedPtr<Container> m_toplevel;
 		ObjectTree		*m_topTree;
 
-		QtWidgetList		m_selected;
+		WidgetList		m_selected;
 		ResizeHandleSet::Dict m_resizeHandles;
 
 		bool			m_dirty;

@@ -725,7 +725,7 @@ Container::reloadLayout()
 }
 
 void
-Container::createBoxLayout(QtWidgetList *list)
+Container::createBoxLayout(WidgetList *list)
 {
 	QBoxLayout *layout = static_cast<QBoxLayout*>(m_layout);
 

@@ -27,7 +27,7 @@
 
 #include <kcommand.h>
 
-typedef QPtrList<QWidget> QtWidgetList;
+typedef QPtrList<QWidget> WidgetList;
 class QWidget;
 class QRect;
 class QPoint;
@@ -93,7 +93,7 @@ to give the list of widget names (the selected ones), and the
 class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
 {
 	public:
-		AlignWidgetsCommand(int type, QtWidgetList &list, Form *form);
+		AlignWidgetsCommand(int type, WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -113,7 +113,7 @@ class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
 class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
 {
 	public:
-		AdjustSizeCommand(int type, QtWidgetList &list, Form *form);
+		AdjustSizeCommand(int type, WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -169,11 +169,11 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 
 /*! This command is used when creating a layout from some widgets using "Lay out in..." menu item.
  It remembers the old pos of every widget, and takes care of updating ObjectTree too. You need
- to supply a QtWidgetList of the selected widgets. */
+ to supply a WidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 {
 	public:
-		CreateLayoutCommand(int layoutType, QtWidgetList &list, Form *form);
+		CreateLayoutCommand(int layoutType, WidgetList &list, Form *form);
 		CreateLayoutCommand() {;} // for BreakLayoutCommand
 
 		virtual void execute();
@@ -220,11 +220,11 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 };
 
 /*! This command is used when deleting a widget using the "Delete" menu item.
-You need to give a QtWidgetList of the selected widgets. */
+You need to give a WidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 {
 	public:
-		DeleteWidgetCommand(QtWidgetList &list, Form *form);
+		DeleteWidgetCommand(WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -242,7 +242,7 @@ which also updates the clipboard contents. */
 class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 	public:
-		CutWidgetCommand(QtWidgetList &list, Form *form);
+		CutWidgetCommand(WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();

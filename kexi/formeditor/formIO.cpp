@@ -919,7 +919,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	else if(!item->children()->isEmpty()) // hbox or vbox layout
 	{
 		// as we don't save geometry, we need to sort widgets in the right order, not creation order
-		QtWidgetList *list;
+		WidgetList *list;
 		if(layout.tagName() == "hbox")
 			list = new HorWidgetList();
 		else

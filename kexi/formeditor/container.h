@@ -29,10 +29,10 @@
 class QEvent;
 class QWidget;
 class QLayout;
-typedef QPtrList<QWidget> QtWidgetList;
+typedef QPtrList<QWidget> WidgetList;
 
 // Helper classes for sorting widgets before inserting them in the layout
-class HorWidgetList : public QtWidgetList
+class HorWidgetList : public WidgetList
 {
 	public:
 	HorWidgetList() {;}
@@ -49,7 +49,7 @@ class HorWidgetList : public QtWidgetList
 	}
 };
 
-class VerWidgetList : public QtWidgetList
+class VerWidgetList : public WidgetList
 {
 	public:
 	VerWidgetList() {;}
@@ -201,7 +201,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 \a list is a subclass of QObjectList that can sort widgets
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
-		void		createBoxLayout(QtWidgetList *list);
+		void		createBoxLayout(WidgetList *list);
 		/*! Internal function to create a GridLayout.
 		  */
 		void		createGridLayout();

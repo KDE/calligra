@@ -112,10 +112,10 @@ Form::activeContainer()
 }
 
 ObjectTreeItem*
-Form::commonParentContainer(QtWidgetList *wlist)
+Form::commonParentContainer(WidgetList *wlist)
 {
 	ObjectTreeItem *item = 0;
-	QtWidgetList *list = new QtWidgetList();
+	WidgetList *list = new WidgetList();
 
 	// Creates a list of all widget parents
 	for(QWidget *w = wlist->first(); w; w = wlist->next())

@@ -157,7 +157,7 @@ GeometryPropertyCommand::name() const
 
 /////////////////  AlignWidgetsCommand  ////////
 
-AlignWidgetsCommand::AlignWidgetsCommand(int type, QtWidgetList &list, Form *form)
+AlignWidgetsCommand::AlignWidgetsCommand(int type, WidgetList &list, Form *form)
 : KCommand(), m_form(form), m_type(type)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
@@ -175,7 +175,7 @@ AlignWidgetsCommand::execute()
 	QWidget *parentWidget = m_form->selectedWidgets()->first()->parentWidget();
 	int tmpx, tmpy;
 
-	QtWidgetList list;
+	WidgetList list;
 	for(QMap<QString, QPoint>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
@@ -300,7 +300,7 @@ AlignWidgetsCommand::name() const
 
 ///// AdjustSizeCommand ///////////
 
-AdjustSizeCommand::AdjustSizeCommand(int type, QtWidgetList &list, Form *form)
+AdjustSizeCommand::AdjustSizeCommand(int type, WidgetList &list, Form *form)
 : KCommand(), m_form(form), m_type(type)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
@@ -321,7 +321,7 @@ AdjustSizeCommand::execute()
 	int gridY = m_form->gridY();
 	int tmpw=0, tmph=0;
 
-	QtWidgetList list;
+	WidgetList list;
 	for(QMap<QString, QSize>::Iterator it = m_sizes.begin(); it != m_sizes.end(); ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
@@ -605,10 +605,10 @@ InsertWidgetCommand::name() const
 
 /// CreateLayoutCommand ///////////////
 
-CreateLayoutCommand::CreateLayoutCommand(int layoutType, QtWidgetList &list, Form *form)
+CreateLayoutCommand::CreateLayoutCommand(int layoutType, WidgetList &list, Form *form)
  : m_form(form), m_type(layoutType)
 {
-	QtWidgetList *m_list=0;
+	WidgetList *m_list=0;
 	switch(layoutType)
 	{
 		case Container::HBox:
@@ -852,7 +852,7 @@ PasteWidgetCommand::name() const
 
 // DeleteWidgetCommand
 
-DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
+DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
  : KCommand(), m_form(form)
 {
 	m_domDoc = QDomDocument("UI");
@@ -969,7 +969,7 @@ DeleteWidgetCommand::name() const
 
 // CutWidgetCommand
 
-CutWidgetCommand::CutWidgetCommand(QtWidgetList &list, Form *form)
+CutWidgetCommand::CutWidgetCommand(WidgetList &list, Form *form)
  : DeleteWidgetCommand(list, form)
 {}
 
