@@ -1577,6 +1577,7 @@ void Page::restoreBackColor(unsigned int pgNum)
   QPainter *p = new QPainter();
   unsigned int i,sameBackNum = 0;
   bool sameBack = false;
+  bool _delete = true;
 
   for (i = 0;i < pgNum;i++)
     {
@@ -1592,19 +1593,40 @@ void Page::restoreBackColor(unsigned int pgNum)
 
   if (_presFakt > 1.0 && !sameBack)
     {
-      if (!pageList()->at(pgNum)->hasSameCPix)
+      for (i = 0;i < pageList()->count();i++)
+	{
+	  if (i == pgNum) continue;
+	  _delete = pageList()->at(pgNum)->cPix != pageList()->at(i)->cPix;
+	  if (!_delete) break;
+	}
+
+      if (_delete)
 	delete pageList()->at(pgNum)->cPix;
+
       pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1,_presFakt).width(),
 						getPageSize(pgNum+1,_presFakt).height());
-    }
 
+      pageList()->at(pgNum)->hasSameCPix = false;
+    }
+  
   if (!sameBack)
     {
-      //if (!pageList()->at(pgNum)->hasSameCPix && pageList()->at(pgNum)->cPix && _presFakt == 1.0)
-	//delete pageList()->at(pgNum)->cPix;
       if (_presFakt == 1.0)
-	pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1).width(),
-						  getPageSize(pgNum+1).height());
+	{
+	  for (i = 0;i < pageList()->count();i++)
+	    {
+	      if (i == pgNum) continue;
+	      _delete = pageList()->at(pgNum)->cPix != pageList()->at(i)->cPix;
+	      if (!_delete) break;
+	    }
+	  
+	  if (_delete)
+	    delete pageList()->at(pgNum)->cPix;
+	
+	  pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1).width(),
+						    getPageSize(pgNum+1).height());
+	}
+
       p->begin(pageList()->at(pgNum)->cPix);
       drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
 		    pageList()->at(pgNum)->bcType,
@@ -1613,11 +1635,13 @@ void Page::restoreBackColor(unsigned int pgNum)
       p->end();
       delete p;
       pageList()->at(pgNum)->hasSameCPix = false;
+      return;
     }
 
   if (sameBack) 
     {
       pageList()->at(pgNum)->cPix = pageList()->at(sameBackNum)->cPix;
+      pageList()->at(sameBackNum)->hasSameCPix = true;
       pageList()->at(pgNum)->hasSameCPix = true;
     }
 }
@@ -1705,7 +1729,7 @@ void Page::doObjEffects()
   QList<PageObjects> _objList;
   unsigned int i;
   QTime _time;
-  int _step = 0,_steps = 0,x_pos = 0,y_pos = 0;
+  int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0,x_pos2 = 0,y_pos2 = 0;
   bool effects = false;
 
   bitBlt(&screen_orig,0,0,this,0,0,kapp->desktop()->width(),kapp->desktop()->height());
@@ -1719,8 +1743,21 @@ void Page::doObjEffects()
 	  if (objPtr->effect != EF_NONE)
 	    {
 	      _objList.append(objPtr);
-	      x_pos = max(x_pos,objPtr->ox - diffx() + objPtr->ow);
-	      y_pos = max(y_pos,objPtr->oy - diffy() + objPtr->oh);
+	      switch (objPtr->effect)
+		{
+		case EF_FROM_LEFT:
+		  x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
+		  break;
+		case EF_FROM_BOTTOM:
+		  y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
+		  break;
+		case EF_FROM_RIGHT:
+		  x_pos2 = min(x_pos2,objPtr->ox - diffx());
+		  break;
+		case EF_FROM_TOP:
+		  y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		  break;
+		}
 	      effects = true;
 	    }
 	}
@@ -1728,29 +1765,69 @@ void Page::doObjEffects()
   
   if (effects)
     {
-      _steps = (x_pos > y_pos ? x_pos : y_pos) / 16;
+      _steps1 = (x_pos1 > y_pos1 ? x_pos1 : y_pos1) / 16;
+      _steps2 = (kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
+		 kapp->desktop()->width() - x_pos2 : kapp->desktop()->height() - y_pos2) / 16;
       _time.start();
       
+      bool nothingHappens = false;
       for (;;)
 	{
 	  kapp->processEvents();
-	  if (_step == _steps) break;
+	  if (nothingHappens || _step >= _steps1 && _step >= _steps2) break;
 	  
 	  if (_time.elapsed() >= 1)
 	    {
+	      nothingHappens = true;
 	      _step++;
 	      
 	      for (i = 0;i < _objList.count();i++)
 		{
 		  objPtr = _objList.at(i);
+		  int _w =  kapp->desktop()->width() - (objPtr->ox - diffx());
+		  int _h =  kapp->desktop()->height() - (objPtr->oy - diffy());
 		  
 		  switch (objPtr->effect)
 		    {
 		    case EF_FROM_LEFT:
 		      {
-			x_pos = 16 * _step < objPtr->ox - diffx() + objPtr->ow ? objPtr->ox - diffx() + objPtr->ow - 16 * _step : 0;
-			y_pos = 0;
-			drawObject(objPtr,screen,-x_pos,y_pos);
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    x_pos1 = 16 * _step < objPtr->ox - diffx() + objPtr->ow ? objPtr->ox - diffx() + objPtr->ow - 16 * _step : 0;
+			    y_pos1 = 0;
+			    drawObject(objPtr,screen,-x_pos1,y_pos1);
+			    if (x_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_FROM_TOP:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    y_pos1 = 16 * _step < objPtr->oy - diffy() + objPtr->oh ? objPtr->oy - diffy() + objPtr->oh - 16 * _step : 0;
+			    x_pos1 = 0;
+			    drawObject(objPtr,screen,x_pos1,-y_pos1);
+			    if (y_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_FROM_RIGHT:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    x_pos2 = _w - (16 * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ? _w - (16 * _step) : 0;
+			    y_pos2 = 0;
+			    drawObject(objPtr,screen,x_pos2,y_pos2);
+			    if (x_pos2 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_FROM_BOTTOM:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    y_pos2 = _h - (16 * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ? _h - (16 * _step) : 0;
+			    x_pos2 = 0;
+			    drawObject(objPtr,screen,x_pos2,y_pos2);
+			    if (y_pos2 != 0) nothingHappens = false;
+			  }
 		      } break;
 		    }
 		}
@@ -1805,13 +1882,11 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
 	    switch (_objPtr->effect2)
 	      {
 	      case EF2T_PARA:
-		_objPtr->objPic = _objPtr->textObj->getPic(0,0,_objPtr->ox - diffx() + _objPtr->ow,
-							   _objPtr->oy - diffy() + _objPtr->oh,!editMode,
-							   subPresStep,subPresStep);
+		_objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
+							   !editMode,subPresStep,subPresStep);
 		break;
 	      default:
-		_objPtr->objPic = _objPtr->textObj->getPic(0,0,_objPtr->ox - diffx() + _objPtr->ow,
-							   _objPtr->oy - diffy() + _objPtr->oh,!editMode);
+		_objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode);
 	      }
 	  }
 	else

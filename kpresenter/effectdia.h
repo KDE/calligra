@@ -67,3 +67,5 @@ signals:
 };
 
 #endif //EFFECTDIA_H
+
+
