@@ -34,7 +34,7 @@
 #include <qlist.h>
 
 /******************************************************************/
-/* Class: KWParagLayout						  */
+/* Class: KWParagLayout                                           */
 /******************************************************************/
 
 /*================================================================*/
@@ -71,7 +71,7 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
 
     document = _doc;
     if ( _add )
-	document->paragLayoutList.append( this );
+        document->paragLayoutList.append( this );
 
     tabList.setAutoDelete( false );
     specialTabs = false;
@@ -83,7 +83,7 @@ KWParagLayout::~KWParagLayout()
   int index = document->paragLayoutList.findRef(this);
   if (index >= 0)
     document->paragLayoutList.take( index );
-  tabList.setAutoDelete( true ); 
+  tabList.setAutoDelete( true );
 }
 
 /*================================================================*/
@@ -148,30 +148,30 @@ void KWParagLayout::save( QTextStream&out )
     out << indent << "<ILEFT " << leftIndent << "/>" << endl;
     out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
     out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
-	<< "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
-	<< QString::number(counter.startCounter).latin1() << "\" numberingtype=\""
-	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\""
-	<< correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
-	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\""
-	<< correctQString( counter.bulletFont ).latin1() << "\" customdef=\""
-	<< correctQString( counter.customCounterDef ).latin1() << "\" />" << endl;
+        << "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
+        << QString::number(counter.startCounter).latin1() << "\" numberingtype=\""
+        << static_cast<int>( counter.numberingType ) << "\" lefttext=\""
+        << correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
+        << correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\""
+        << correctQString( counter.bulletFont ).latin1() << "\" customdef=\""
+        << correctQString( counter.customCounterDef ).latin1() << "\" />" << endl;
     out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
-	<< left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
+        << left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
     out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
-	<< right.color.blue() << "\" style=\"" << static_cast<int>( right.style ) << "\" width=\"" << right.ptWidth << "\"/>" << endl;
+        << right.color.blue() << "\" style=\"" << static_cast<int>( right.style ) << "\" width=\"" << right.ptWidth << "\"/>" << endl;
     out << indent << "<TOPBORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
-	<< top.color.blue() << "\" style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
+        << top.color.blue() << "\" style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
     out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
-	<< bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style )
-	<< "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
+        << bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style )
+        << "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
     out << otag << "<FORMAT>" << endl;
     format.save( out );
     out << etag << "</FORMAT> " << endl;
 
     for ( unsigned int i = 0; i < tabList.count(); i++ )
-	out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" << tabList.at( i )->ptPos
-	    << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\""
-	    << static_cast<int>( tabList.at( i )->type ) << "\"/>" << endl;
+        out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" << tabList.at( i )->ptPos
+            << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\""
+            << static_cast<int>( tabList.at( i )->type ) << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -179,266 +179,260 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 {
     string tag;
     string _name;
-    unsigned int pt;
-    float mm, inch;
+    double pt, mm, inch;
 
     while ( parser.open( 0L, tag ) ) {
-	parser.parseTag( tag.c_str(), _name, lst );
+        parser.parseTag( tag.c_str(), _name, lst );
 
-	// name
-	if ( _name == "NAME" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "value" )
-		    name = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "FOLLOWING" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "name" )
-		    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "TABULATOR" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    KoTabulator *tab = new KoTabulator;
-	    bool noinch = true;
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "mmpos" )
-		    tab->mmPos = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "ptpos" )
-		    tab->ptPos = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inchpos" ) {
-		    noinch = false;
-		    tab->inchPos = atof( ( *it ).m_strValue.c_str() );
-		}
-		if ( ( *it ).m_strName == "type" )
-		    tab->type = static_cast<KoTabulators>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
-	    tabList.append( tab );
-	} else if ( _name == "FLOW" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "value" )
-		    flow = static_cast<Flow>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	} else if ( _name == "OHEAD" ) {
-	    pt = 0;
-	    mm = inch = 0.0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "pt" )
-		    pt = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "mm" )
-		    mm = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inch" )
-		    inch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    paragHeadOffset.setPT_MM_INCH( pt, mm, inch );
-	} else if ( _name == "OFOOT" ) {
-	    pt = 0;
-	    mm = inch = 0.0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "pt" )
-		    pt = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "mm" )
-		    mm = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inch" )
-		    inch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    paragFootOffset.setPT_MM_INCH( pt, mm, inch );
-	} else if ( _name == "IFIRST" ) {
-	    pt = 0;
-	    mm = inch = 0.0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "pt" )
-		    pt = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "mm" )
-		    mm = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inch" )
-		    inch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    firstLineLeftIndent.setPT_MM_INCH( pt, mm, inch );
-	} else if ( _name == "ILEFT" ) {
-	    pt = 0;
-	    mm = inch = 0.0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "pt" )
-		    pt = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "mm" )
-		    mm = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inch" )
-		    inch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    leftIndent.setPT_MM_INCH( pt, mm, inch );
-	} else if ( _name == "LINESPACE" ) {
-	    pt = 0;
-	    mm = inch = 0.0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "pt" )
-		    pt = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "mm" )
-		    mm = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inch" )
-		    inch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    lineSpacing.setPT_MM_INCH( pt, mm, inch );
-	} else if ( _name == "OFFSETS" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "head" )
-		    paragHeadOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "foot" )
-		    paragFootOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
-	    }
-	} else if ( _name == "INDENTS" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "first" )
-		    firstLineLeftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "left" )
-		    leftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
-	    }
-	} else if ( _name == "LINESPACING" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "value" )
-		    lineSpacing.setPT( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	} else if ( _name == "COUNTER" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "type" )
-		    counter.counterType = static_cast<CounterType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "depth" )
-		    counter.counterDepth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bullet" )
-		    counter.counterBullet = QChar( static_cast<unsigned short>( atoi( ( *it ).m_strValue.c_str() ) ) );
-		else if ( ( *it ).m_strName == "lefttext" )
-		    counter.counterLeftText = correctQString( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "righttext" )
-		    counter.counterRightText = correctQString( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "start" )
+        // name
+        if ( _name == "NAME" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "value" )
+                    name = correctQString( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "FOLLOWING" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "name" )
+                    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "TABULATOR" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            KoTabulator *tab = new KoTabulator;
+            bool noinch = true;
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "mmpos" )
+                    tab->mmPos = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "ptpos" )
+                    tab->ptPos = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "inchpos" ) {
+                    noinch = false;
+                    tab->inchPos = atof( ( *it ).m_strValue.c_str() );
+                }
+                if ( ( *it ).m_strName == "type" )
+                    tab->type = static_cast<KoTabulators>( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+            if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
+            tabList.append( tab );
+        } else if ( _name == "FLOW" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "value" )
+                    flow = static_cast<Flow>( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        } else if ( _name == "OHEAD" ) {
+            pt = mm = inch = 0.0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "pt" )
+                    pt = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "mm" )
+                    mm = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "inch" )
+                    inch = atof( ( *it ).m_strValue.c_str() );
+            }
+            paragHeadOffset.setPT_MM_INCH( pt, mm, inch );
+        } else if ( _name == "OFOOT" ) {
+            pt = mm = inch = 0.0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "pt" )
+                    pt = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "mm" )
+                    mm = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "inch" )
+                    inch = atof( ( *it ).m_strValue.c_str() );
+            }
+            paragFootOffset.setPT_MM_INCH( pt, mm, inch );
+        } else if ( _name == "IFIRST" ) {
+            pt = mm = inch = 0.0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "pt" )
+                    pt = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "mm" )
+                    mm = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "inch" )
+                    inch = atof( ( *it ).m_strValue.c_str() );
+            }
+            firstLineLeftIndent.setPT_MM_INCH( pt, mm, inch );
+        } else if ( _name == "ILEFT" ) {
+            pt = mm = inch = 0.0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "pt" )
+                    pt = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "mm" )
+                    mm = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "inch" )
+                    inch = atof( ( *it ).m_strValue.c_str() );
+            }
+            leftIndent.setPT_MM_INCH( pt, mm, inch );
+        } else if ( _name == "LINESPACE" ) {
+            pt = mm = inch = 0.0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "pt" )
+                    pt = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "mm" )
+                    mm = atof( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "inch" )
+                    inch = atof( ( *it ).m_strValue.c_str() );
+            }
+            lineSpacing.setPT_MM_INCH( pt, mm, inch );
+        } else if ( _name == "OFFSETS" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "head" )
+                    paragHeadOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "foot" )
+                    paragFootOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
+            }
+        } else if ( _name == "INDENTS" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "first" )
+                    firstLineLeftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "left" )
+                    leftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
+            }
+        } else if ( _name == "LINESPACING" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "value" )
+                    lineSpacing.setPT( atof( ( *it ).m_strValue.c_str() ) );
+            }
+        } else if ( _name == "COUNTER" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "type" )
+                    counter.counterType = static_cast<CounterType>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "depth" )
+                    counter.counterDepth = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "bullet" )
+                    counter.counterBullet = QChar( static_cast<unsigned short>( atoi( ( *it ).m_strValue.c_str() ) ) );
+                else if ( ( *it ).m_strName == "lefttext" )
+                    counter.counterLeftText = correctQString( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "righttext" )
+                    counter.counterRightText = correctQString( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "start" )
                 {
                     QString s = QString::fromUtf8(( *it ).m_strValue.c_str());
                     if ( s[0].isDigit() )
-		      counter.startCounter = atoi( s.latin1() );
+                      counter.startCounter = atoi( s.latin1() );
                     else // support for old files (DF)
-		      counter.startCounter = s.lower()[0].latin1() - 'a' + 1;
+                      counter.startCounter = s.lower()[0].latin1() - 'a' + 1;
                 }
-		else if ( ( *it ).m_strName == "numberingtype" )
-		    counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bulletfont" )
-		    counter.bulletFont = correctQString( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "customdef" )
-		    counter.customCounterDef = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "LEFTBORDER" ) {
-	    unsigned int r = 0, g = 0, b = 0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red" ) {
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    left.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "green" ) {
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    left.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "blue" ) {
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    left.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "style" )
-		    left.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    left.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "RIGHTBORDER" ) {
-	    unsigned int r = 0, g = 0, b = 0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red" ) {
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    right.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "green" ) {
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    right.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "blue" ) {
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    right.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "style" )
-		    right.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    right.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "BOTTOMBORDER" ) {
-	    unsigned int r = 0, g = 0, b = 0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red" ) {
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    bottom.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "green" ) {
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    bottom.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "blue" ) {
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    bottom.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "style" )
-		    bottom.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    bottom.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "TOPBORDER" ) {
-	    unsigned int r = 0, g = 0, b = 0;
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "red" ) {
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    top.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "green" ) {
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    top.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "blue" ) {
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    top.color.setRgb( r, g, b );
-		} else if ( ( *it ).m_strName == "style" )
-		    top.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	} else if ( _name == "FORMAT" ) {
-	    parser.parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
-	    format.load( parser, lst, document );
-	} else
-	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in PARAGRAPHLAYOUT" << endl;
+                else if ( ( *it ).m_strName == "numberingtype" )
+                    counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "bulletfont" )
+                    counter.bulletFont = correctQString( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "customdef" )
+                    counter.customCounterDef = correctQString( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "LEFTBORDER" ) {
+            unsigned int r = 0, g = 0, b = 0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red" ) {
+                    r = atoi( ( *it ).m_strValue.c_str() );
+                    left.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "green" ) {
+                    g = atoi( ( *it ).m_strValue.c_str() );
+                    left.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "blue" ) {
+                    b = atoi( ( *it ).m_strValue.c_str() );
+                    left.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "style" )
+                    left.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "width" )
+                    left.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "RIGHTBORDER" ) {
+            unsigned int r = 0, g = 0, b = 0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red" ) {
+                    r = atoi( ( *it ).m_strValue.c_str() );
+                    right.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "green" ) {
+                    g = atoi( ( *it ).m_strValue.c_str() );
+                    right.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "blue" ) {
+                    b = atoi( ( *it ).m_strValue.c_str() );
+                    right.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "style" )
+                    right.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "width" )
+                    right.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "BOTTOMBORDER" ) {
+            unsigned int r = 0, g = 0, b = 0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red" ) {
+                    r = atoi( ( *it ).m_strValue.c_str() );
+                    bottom.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "green" ) {
+                    g = atoi( ( *it ).m_strValue.c_str() );
+                    bottom.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "blue" ) {
+                    b = atoi( ( *it ).m_strValue.c_str() );
+                    bottom.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "style" )
+                    bottom.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "width" )
+                    bottom.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "TOPBORDER" ) {
+            unsigned int r = 0, g = 0, b = 0;
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "red" ) {
+                    r = atoi( ( *it ).m_strValue.c_str() );
+                    top.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "green" ) {
+                    g = atoi( ( *it ).m_strValue.c_str() );
+                    top.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "blue" ) {
+                    b = atoi( ( *it ).m_strValue.c_str() );
+                    top.color.setRgb( r, g, b );
+                } else if ( ( *it ).m_strName == "style" )
+                    top.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "width" )
+                    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+            }
+        } else if ( _name == "FORMAT" ) {
+            parser.parseTag( tag.c_str(), _name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+            }
+            format.load( parser, lst, document );
+        } else
+            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in PARAGRAPHLAYOUT" << endl;
 
-	if ( !parser.close( tag ) ) {
-	    kdError(32001) << "Closing " << tag.c_str() << endl;
-	    return;
-	}
+        if ( !parser.close( tag ) ) {
+            kdError(32001) << "Closing " << tag.c_str() << endl;
+            return;
+        }
     }
 }
 
@@ -452,19 +446,19 @@ void KWParagLayout::setTabList( const QList<KoTabulator> *_tabList )
 
     QListIterator<KoTabulator> it(*_tabList);
     for ( it.toFirst(); it.current(); ++it ) {
-	KoTabulator *t = new KoTabulator;
-	t->type = it.current()->type;
-	t->mmPos = it.current()->mmPos;
-	t->ptPos = it.current()->ptPos;
-	t->inchPos = it.current()->inchPos;
-	tabList.append( t );
-	if ( t->type != T_LEFT ) specialTabs = true;
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->ptPos = it.current()->ptPos;
+        t->inchPos = it.current()->inchPos;
+        tabList.append( t );
+        if ( t->type != T_LEFT ) specialTabs = true;
     }
 }
 
 /*================================================================*/
 bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder,
-				unsigned int &_tabPos, KoTabulators &_tabType )
+                                unsigned int &_tabPos, KoTabulators &_tabType )
 {
     _tabPos = 0;
     _tabType = T_LEFT;
@@ -475,25 +469,25 @@ bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsi
     unsigned int ptPos = 0;
 
     for ( unsigned int i = 0; i < tabList.count(); i++ ) {
-	ptPos = static_cast<int>(tabList.at( i )->ptPos) + _lBorder;
-	if ( ptPos > _ptPos && ptPos < _rBorder && ( _best == -1 ||
-						     ptPos < static_cast<unsigned int>( tabList.at( _best )->ptPos ) ) )
-	    _best = i;
-	if ( ptPos <= _ptPos && ptPos > _lBorder && ( _mostLeft == -1 ||
-						      ptPos < static_cast<unsigned int>( tabList.at( _mostLeft )->ptPos ) ) )
-	    _mostLeft = i;
+        ptPos = static_cast<int>(tabList.at( i )->ptPos) + _lBorder;
+        if ( ptPos > _ptPos && ptPos < _rBorder && ( _best == -1 ||
+                                                     ptPos < static_cast<unsigned int>( tabList.at( _best )->ptPos ) ) )
+            _best = i;
+        if ( ptPos <= _ptPos && ptPos > _lBorder && ( _mostLeft == -1 ||
+                                                      ptPos < static_cast<unsigned int>( tabList.at( _mostLeft )->ptPos ) ) )
+            _mostLeft = i;
     }
 
     if ( _best != -1 ) {
-	_tabPos = static_cast<int>(tabList.at( _best )->ptPos) + _lBorder;
-	_tabType = tabList.at( _best )->type;
-	return true;
+        _tabPos = static_cast<int>(tabList.at( _best )->ptPos) + _lBorder;
+        _tabType = tabList.at( _best )->type;
+        return true;
     }
 
     if ( _mostLeft != -1 ) {
-	_tabPos = static_cast<int>(tabList.at( _mostLeft )->ptPos) + _lBorder;
-	_tabType = tabList.at( _mostLeft )->type;
-	return true;
+        _tabPos = static_cast<int>(tabList.at( _mostLeft )->ptPos) + _lBorder;
+        _tabType = tabList.at( _mostLeft )->type;
+        return true;
     }
 
     return false;

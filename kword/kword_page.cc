@@ -190,10 +190,6 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
             p = p->getNext();
         }
     }
-
-    verticalScrollBar()->setTracking( FALSE );
-    connect( verticalScrollBar(), SIGNAL( sliderMoved( int ) ),
-             this, SLOT( verticalSliderMoved( int ) ) );
 }
 
 KWPage::~KWPage()
@@ -1365,18 +1361,14 @@ void KWPage::recalcCursor( bool _repaint, int _pos, KWFormatContext *_fc )
 }
 
 /*================================================================*/
-int KWPage::getVertRulerPos()
+int KWPage::getVertRulerPos(int y)
 {
-    int page = fc->getPage() - 1;
-
-    return ( -contentsY() + page * ptPaperHeight() );
+    return ( -(y==-1 ? contentsY() : y) + (fc->getPage() - 1) * ptPaperHeight() );
 }
 
-int KWPage::getHorzRulerPos()
+int KWPage::getHorzRulerPos(int x)
 {
-    int page = fc->getPage() - 1;
-
-    return ( -contentsX() + page * ptPaperWidth() );
+    return ( -(x==-1 ? contentsX() : x) );
 }
 
 /*================================================================*/
@@ -4977,13 +4969,11 @@ void KWPage::repaintScreen( int currFS, bool erase )
 }
 
 /*================================================================*/
-void KWPage::contentsWillMove( int , int )
+void KWPage::contentsWillMove( int x , int y )
 {
     calcVisiblePages();
-    gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
-    gui->getHorzRuler()->setOffset( -
-
-                                    getHorzRulerPos(), 0 );
+    gui->getVertRuler()->setOffset( 0, -getVertRulerPos(y) );
+    gui->getHorzRuler()->setOffset( -getHorzRulerPos(x), 0 );
     _scrolled = TRUE;
 }
 
@@ -5327,15 +5317,6 @@ void KWPage::cursorGotoPrevTableCell()
         gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
         format = *( ( KWFormat* )fc );
     }
-}
-
-/*================================================================*/
-void KWPage::verticalSliderMoved( int value )
-{
-   ++scrollDummy;
-    if ( scrollDummy % 2 || value == verticalScrollBar()->minValue() ||
-         value == verticalScrollBar()->maxValue() )
-        setContentsPos( contentsX(), value );
 }
 
 /******************************************************************/

@@ -56,14 +56,14 @@ class KWResizeHandle : public QWidget
 
 public:
     enum Direction {
-	LeftUp = 0,
-	Up,
-	RightUp,
-	Right,
-	RightDown,
-	Down,
-	LeftDown,
-	Left
+        LeftUp = 0,
+        Up,
+        RightUp,
+        Right,
+        RightDown,
+        Down,
+        LeftDown,
+        Left
     };
 
     KWResizeHandle( KWPage *p, Direction d, KWFrame *frm );
@@ -83,7 +83,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWPage						  */
+/* Class: KWPage                                                  */
 /******************************************************************/
 
 class KWPage : public QScrollView
@@ -164,8 +164,8 @@ public:
     void recalcCursor( bool _repaint = true, int _pos = -1, KWFormatContext *_fc = 0L );
     void recalcPage( KWParag *_p );
 
-    int getVertRulerPos();
-    int getHorzRulerPos();
+    int getVertRulerPos(int contentY=-1);
+    int getHorzRulerPos(int contentX=-1);
 
     void insertPictureAsChar( QString _filename );
 
@@ -195,20 +195,20 @@ public:
     void setPartEntry( KoDocumentEntry e ) { partEntry = e; }
 
     bool find( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
-	       bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
+               bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
     bool findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
-		  bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
+                  bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
     void replace( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _addlen );
 
     void removeSelection();
     void addLen() { currFindPos += currFindLen; }
 
     void setTableConfig( unsigned int rows, unsigned int cols,
-			 KWTblCellSize wid, KWTblCellSize hei,
-			 bool isFloating) {
+                         KWTblCellSize wid, KWTblCellSize hei,
+                         bool isFloating) {
         useAnchor = isFloating;
-	trows = rows; tcols = cols;
-	twid = wid; thei = hei;
+        trows = rows; tcols = cols;
+        twid = wid; thei = hei;
     }
 
     void setLeftFrameBorder( KWParagLayout::Border _brd, bool _enable );
@@ -256,8 +256,8 @@ public slots:
     void mmTable()
     { setMouseMode( MM_CREATE_TABLE ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_table, true ); }
     void mmKSpreadTable() {
-	setMouseMode( MM_CREATE_KSPREAD_TABLE ); mmUncheckAll();
-	mm_menu->setItemChecked( mm_create_kspread_table, true );
+        setMouseMode( MM_CREATE_KSPREAD_TABLE ); mmUncheckAll();
+        mm_menu->setItemChecked( mm_create_kspread_table, true );
     }
     void mmFormula()
     { setMouseMode( MM_CREATE_FORMULA ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_formula, true ); }
@@ -269,16 +269,16 @@ public slots:
     void editReconnectFrame();
 
     int tableRows() const {
-	return trows;
+        return trows;
     }
     int tableCols() const {
-	return tcols;
+        return tcols;
     }
     KWTblCellSize tableWidthMode() const {
-	return twid;
+        return twid;
     }
     KWTblCellSize tableHeightMode() const {
-	return thei;
+        return thei;
     }
 
 protected slots:
@@ -299,11 +299,10 @@ protected slots:
      */
     void stopBlinkCursor( bool visible=false );
 
-    void contentsWillMove( int, int );
+    void contentsWillMove( int x, int y );
     void doAutoScroll();
     void formatMore();
     void noInput();
-    void verticalSliderMoved( int value );
 
 protected:
     unsigned int ptLeftBorder();
@@ -335,7 +334,7 @@ protected:
     void mmUncheckAll();
 
     void selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet *_frameset,
-		     KWParag *_parag, bool _select = true );
+                     KWParag *_parag, bool _select = true );
 
     void setRulerFirstIndent( KoRuler *ruler, KWUnit _value );
     void setRulerLeftIndent( KoRuler *ruler, KWUnit _value );
@@ -425,7 +424,7 @@ protected:
     MouseMode mouseMode;
     QPopupMenu *mm_menu, *frame_edit_menu;
     int mm_edit, mm_edit_frame, mm_create_text, mm_create_pix, mm_create_clipart, mm_create_table,
-	mm_create_formula, mm_create_part, mm_create_kspread_table;
+        mm_create_formula, mm_create_part, mm_create_kspread_table;
 
     // Anchor support.
     bool useAnchor;
