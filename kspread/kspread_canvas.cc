@@ -284,7 +284,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
 bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
 {
-    kdDebug()<<"KSpreadCanvas::eventFilter( QObject *o, QEvent *e )\n";
     if ( !o || !e )
         return TRUE;
     switch ( e->type() )
