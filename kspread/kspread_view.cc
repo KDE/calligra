@@ -1623,6 +1623,29 @@ void KSpreadView::insertHyperlink()
 
 void KSpreadView::printPreview()
 {
+  /*********************************/
+  /* kdevelop code */
+  QStringList paths;
+  bool found=false;
+  QString complete_path = getenv("PATH");
+  paths = QStringList::split ( ":", complete_path, FALSE );
+
+  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
+  {
+    if (QFile::exists((*it) + "/" + "ghostview"))
+    {
+      found = true;
+      break;
+    }
+  }
+  if(!found)
+    {
+      KMessageBox::sorry(this,i18n("Kspread used ghostview for preview.\nPlease install it."),i18n("Program not found!"));
+      m_preview->setEnabled(false);
+      return;
+    }
+  /******************************/
+
   QPrinter prt;
   QString fileDir=QDir::homeDirPath();
   fileDir+="/tmp/preview.ps";
