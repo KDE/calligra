@@ -520,12 +520,7 @@ void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep st
     //objects in current page
     drawObjectsPres( painter, page->objectList(), step );
     //draw master page object
-#if MASTERPAGE
-    if ( page->masterPage() )
-        drawObjectsPres( painter, page->masterPage()->objectList(), step );
-#else
     drawObjectsPres( painter, page->masterPage()->objectList(), step );
-#endif
 }
 
 
