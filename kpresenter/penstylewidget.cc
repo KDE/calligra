@@ -243,3 +243,5 @@ void PenStyleWidget::slotLineEndChanged()
 {
     m_ui->pbPreview->setLineEnd( getLineEnd() );
 }
+
+#include "penstylewidget.moc"

@@ -106,3 +106,5 @@ PBPreview::~PBPreview()
 }
 
 
+
+#include "pbpreview.moc"
