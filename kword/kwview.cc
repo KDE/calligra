@@ -2748,32 +2748,27 @@ void KWView::changeZoomMenu( int zoom )
     QString mode;
     if ( m_gui && m_gui->canvasWidget() && m_gui->canvasWidget()->viewMode())
         mode =  m_gui->canvasWidget()->viewMode()->type();
-    bool state = (mode!="ModeText");
 
     QStringList lst;
+    lst << i18n( "Zoom to Width" );
+    if ( mode!="ModeText" )
+    {
+        lst << i18n( "Zoom to Whole Page" );
+    }
+
     if(zoom>0)
     {
-        if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
-            lst << i18n( "Zoom to Width" );
-
-        if ( state )
-        {
-            if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
-                lst << i18n( "Zoom to Whole Page" );
-        }
-
         QValueList<int> list;
-        QString z;
-        int val;
         bool ok;
-        QStringList itemsList = actionViewZoom->items();
-        for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+        const QStringList itemsList ( actionViewZoom->items() );
+        QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+
+        for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
         {
-            z = (*it).replace( QRegExp( "%" ), "" );
-            z = z.simplifyWhiteSpace();
-            val=z.toInt(&ok);
+            regexp.search(*it);
+            const int val=regexp.cap(1).toInt(&ok);
             //zoom : limit inferior=10
-            if(ok && val>9  &&list.contains(val)==0)
+            if(ok && val>9 && list.contains(val)==0)
                 list.append( val );
         }
         //necessary at the beginning when we read config
@@ -2784,16 +2779,11 @@ void KWView::changeZoomMenu( int zoom )
         qHeapSort( list );
 
         for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-            lst.append( (QString::number(*it)+'%') );
+            lst.append( (QString::number(*it)+'%') ); // ### TODO: I18N
     }
     else
     {
-        lst << i18n( "Zoom to Width" );
-        if ( state )
-        {
-            lst << i18n( "Zoom to Whole Page" );
-        }
-
+        // ### TODO: I18N
         lst << "33%";
         lst << "50%";
         lst << "75%";
@@ -2813,7 +2803,7 @@ void KWView::changeZoomMenu( int zoom )
 void KWView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
-    QString zoomStr = QString::number( zoom ) + '%';
+    QString zoomStr = QString::number( zoom ) + '%'; // ### TODO: I18N
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 
@@ -2928,17 +2918,16 @@ void KWView::updateFooter()
 
 void KWView::viewZoom( const QString &s )
 {
-    QString z( s );
     bool ok=false;
     KWCanvas * canvas = m_gui->canvasWidget();
     int zoom = 0;
 
-    if ( z == i18n("Zoom to Width") )
+    if ( s == i18n("Zoom to Width") )
     {
         zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
         ok = true;
     }
-    else if ( z == i18n("Zoom to Whole Page") )
+    else if ( s == i18n("Zoom to Whole Page") )
     {
         double height = m_doc->resolutionY() * m_doc->ptPaperHeight();
         double width = m_doc->resolutionX() * m_doc->ptPaperWidth();
@@ -2948,9 +2937,9 @@ void KWView::viewZoom( const QString &s )
     }
     else
     {
-    	z = z.replace( QRegExp( "%" ), "" );
-    	z = z.simplifyWhiteSpace();
-    	zoom = z.toInt(&ok);
+        QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+        regexp.search(s);
+        zoom=regexp.cap(1).toInt(&ok);
     }
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = m_doc->zoom();
