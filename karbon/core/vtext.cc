@@ -25,6 +25,7 @@
 
 #include "vpath.h"
 #include "vtext.h"
+#include "vtext_iface.h"
 #include "vstroke.h"
 #include "vfill.h"
 #include "vvisitor.h"
@@ -164,6 +165,15 @@ VText::VText( const VText& text )
 VText::~VText()
 {
 }
+
+DCOPObject* VText::dcopObject()
+{
+	if( !m_dcop )
+		m_dcop = new VTextIface( this );
+
+	return m_dcop;
+}
+
 
 void
 VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const

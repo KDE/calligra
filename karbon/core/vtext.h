@@ -59,6 +59,7 @@ public:
 	VText( const QFont &font, const VPath& basePath, Position position, Alignment alignment, const QString& text );
 	VText( const VText& text );
 	virtual ~VText();
+	virtual DCOPObject* dcopObject();
 
 	virtual void setText( const QString& text ) { m_text = text; }
 	virtual const QString& text() { return m_text; }

@@ -31,6 +31,7 @@ noinst_HEADERS = \
 	vvisitor.h \
 	vlayer_iface.h \
 	vtext.h \
+	vtext_iface.h \
 	vclipgroup.h \
 	svgpathparser.h
 
@@ -63,6 +64,8 @@ libkarboncore_la_SOURCES = \
 	vlayer_iface.cc \
 	vlayer_iface.skel \
 	vtext.cc \
+	vtext_iface.cc \
+	vtext_iface.skel \
 	vclipgroup.cc \
 	svgpathparser.cc
 

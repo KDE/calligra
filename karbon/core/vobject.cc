@@ -45,12 +45,14 @@ VObject::VObject( const VObject& obj )
 	m_state = obj.m_state;
 
 	invalidateBoundingBox();
+	m_dcop = 0L;
 }
 
 VObject::~VObject()
 {
 	delete( m_stroke );
 	delete( m_fill );
+	delete m_dcop;
 }
 
 DCOPObject *
