@@ -2553,7 +2553,7 @@ void KSpreadTable::find( const QString &_find, long options, KSpreadCanvas *canv
     else
     {
         // All cells.
-        region.setCoords( 0, 0, m_iMaxColumn, m_iMaxRow );
+        region.setCoords( 1, 1, m_iMaxColumn, m_iMaxRow );
     }
 
     // Create the class that handles all the actual Find stuff, and connect it to its
@@ -2617,7 +2617,7 @@ void KSpreadTable::replace( const QString &_find, const QString &_replace, long 
     else
     {
         // All cells.
-        region.setCoords( 0, 0, m_iMaxRow, m_iMaxColumn );
+        region.setCoords( 1, 1, m_iMaxRow, m_iMaxColumn );
     }
 
     // Create the class that handles all the actual replace stuff, and connect it to its
