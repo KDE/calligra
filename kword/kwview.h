@@ -294,7 +294,7 @@ public slots:
     void spellCheckerFinished( );
 
     void clipboardDataChanged();
-
+    void tabListChanged( QList<KoTabulator>* );
 protected:
     void setupActions();
     void createKWGUI();

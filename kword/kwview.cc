@@ -2514,6 +2514,17 @@ void KWView::paragDiaOk()
 }
 
 /*================================================================*/
+void KWView::tabListChanged( QList<KoTabulator>*_tabList )
+{
+    if(!doc->isReadWrite())
+        return;
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if (!edit)
+        return;
+    edit->setTabList(_tabList);
+}
+
+/*================================================================*/
 void KWView::styleManagerOk()
 {
 }
@@ -2811,10 +2822,12 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
 #if 0
     if ( doc->processingType() == KWDocument::DTP )
         canvas->setRuler2Frame( 0, 0 );
+#endif
 
-    connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), canvas,
+    connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), view,
              SLOT( tabListChanged( QList<KoTabulator>* ) ) );
 
+#if 0
     canvas->forceFullUpdate();
 #endif
 
