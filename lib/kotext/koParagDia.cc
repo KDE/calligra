@@ -49,7 +49,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     noSignals = true;
     styleBuffer = 999;
     QVBoxLayout *vbox = new QVBoxLayout( this,0, 0/*KDialog::marginHint(), KDialog::spacingHint()*/ );
-    gStyle = new QGroupBox( i18n( "Style" ), this, "styleLayout" );
+    gStyle = new QGroupBox( i18n( "St&yle" ), this, "styleLayout" );
     vbox->addWidget( gStyle);
     QGridLayout * grid = new QGridLayout(gStyle, 12, 5, KDialog::marginHint(), KDialog::spacingHint());
     grid->addRowSpacing(0, fontMetrics().height()/2);
@@ -63,21 +63,23 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 
 
     QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
-    lPrefix->setText( i18n( "Prefix text:" ) );
+    lPrefix->setText( i18n( "Pre&fix text:" ) );
     grid->addWidget( lPrefix, 1, 1);
 
     sPrefix = new QLineEdit( gStyle, "sPrefix" );
+    lPrefix->setBuddy( sPrefix );
     grid->addWidget( sPrefix, 1, 2);
 
     QLabel *lSuffix = new QLabel( gStyle, "lSuffix" );
-    lSuffix->setText( i18n( "Suffix text:" ) );
+    lSuffix->setText( i18n( "Suffi&x text:" ) );
     grid->addWidget( lSuffix, 1, 3);
 
     sSuffix = new QLineEdit( gStyle, "sSuffix" );
+    lSuffix->setBuddy( sSuffix );
     grid->addWidget( sSuffix, 1, 4);
 
     lStart = new QLabel( gStyle, "lStart" );
-    lStart->setText( i18n( "Start at:" ) );
+    lStart->setText( i18n( "&Start at:" ) );
     grid->addWidget( lStart, 2, 1);
 
 
@@ -88,10 +90,11 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         spnDepth->hide();
 
     QHBoxLayout *customCharBox = new QHBoxLayout(0, 0, 6);
-    lCustom = new QLabel( i18n( "Custom character:" ), gStyle, "custom char label" );
+    lCustom = new QLabel( i18n( "Custo&m character:" ), gStyle, "custom char label" );
     customCharBox->addWidget( lCustom );
 
     bCustom = new QPushButton( "", gStyle, "bCustom" );
+    lCustom->setBuddy( bCustom );
     customCharBox->addWidget( bCustom );
     connect( bCustom, SIGNAL( clicked() ), this, SLOT( selectCustomBullet() ) );
 
@@ -102,16 +105,18 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 
     spnStart = new KoSpinBox( gStyle );
     spnStart->setMinValue ( 1);
+    lStart->setBuddy( spnStart );
     grid->addWidget( spnStart, 2, 2);
 
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
-    lDepth->setText( i18n( "Depth:" ) );
+    lDepth->setText( i18n( "&Depth:" ) );
+    lDepth->setBuddy( spnDepth );
     if ( displayDepth )
         grid->addWidget( lDepth, 3, 1);
     else
         lDepth->hide();
 
-    cbRestart = new QCheckBox( i18n( "Restart numbering at this paragraph" ), gStyle );
+    cbRestart = new QCheckBox( i18n( "&Restart numbering at this paragraph" ), gStyle );
     grid->addWidget( cbRestart, 5, 1 );
 
     if ( onlyStyleTypeLetter )
@@ -727,30 +732,33 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
         indentGrid->addWidget( lLimit, 1,0 );
     }
 
-    QLabel * lLeft = new QLabel( i18n("Left (%1):").arg(unitName), indentFrame );
+    QLabel * lLeft = new QLabel( i18n("&Left (%1):").arg(unitName), indentFrame );
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 2, 0 );
 
     eLeft = new KDoubleNumInput( indentFrame );
     eLeft->setRange( 0, 9999, 1, false);
+    lLeft->setBuddy( eLeft );
     indentGrid->addWidget( eLeft, 2, 1 );
     connect( eLeft, SIGNAL( valueChanged(double ) ), this, SLOT( leftChanged( double ) ) );
 
-    QLabel * lRight = new QLabel( i18n("Right (%1):").arg(unitName), indentFrame );
+    QLabel * lRight = new QLabel( i18n("&Right (%1):").arg(unitName), indentFrame );
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 3, 0 );
 
     eRight = new KDoubleNumInput( indentFrame );
     eRight->setRange( 0, 9999, 1, false);
+    lRight->setBuddy( eRight );
     indentGrid->addWidget( eRight, 3, 1 );
     connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
 
-    QLabel * lFirstLine = new QLabel( i18n("First line (%1):").arg(unitName), indentFrame );
+    QLabel * lFirstLine = new QLabel( i18n("&First line (%1):").arg(unitName), indentFrame );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 4, 0 );
 
     eFirstLine = new KDoubleNumInput( indentFrame );
     eFirstLine->setRange( -9999, 9999, 1, false);
+    lFirstLine->setBuddy( eFirstLine );
     connect( eFirstLine, SIGNAL( valueChanged( double ) ), this, SLOT( firstChanged( double ) ) );
     indentGrid->addWidget( eFirstLine, 4, 1 );
 
@@ -761,11 +769,11 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     mainGrid->addWidget( indentFrame, 0, 0 );
 
     // --------------- End of page /frame ---------------
-    QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at End of Frame/Page" ), this );
+    QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at &End of Frame/Page" ), this );
     QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 4, 1,
                                                       KDialog::marginHint(), KDialog::spacingHint() );
 
-    cKeepLinesTogether = new QCheckBox( i18n("Keep lines together"),endFramePage);
+    cKeepLinesTogether = new QCheckBox( i18n("&Keep lines together"),endFramePage);
     endFramePageGrid->addWidget( cKeepLinesTogether, 1, 0 );
     cHardBreakBefore = new QCheckBox( i18n("Insert break before paragraph"),endFramePage);
     endFramePageGrid->addWidget( cHardBreakBefore, 2, 0 );
@@ -781,7 +789,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     endFramePage->setEnabled(breakLine);
 
     // --------------- line spacing ---------------
-    QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), this, "spacingFrame" );
+    QGroupBox * spacingFrame = new QGroupBox( i18n( "Line &Spacing" ), this, "spacingFrame" );
     QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 2, 1,
                                                  KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -810,7 +818,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     eSpacing->setEnabled( true );
 
     // --------------- paragraph spacing ---------------
-    QGroupBox * pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), this, "pSpaceFrame" );
+    QGroupBox * pSpaceFrame = new QGroupBox( i18n( "Para&graph Space" ), this, "pSpaceFrame" );
     QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2,
                                                 KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -986,7 +994,7 @@ void KoIndentSpacingWidget::save( KoParagLayout & lay )
 
 QString KoIndentSpacingWidget::tabName()
 {
-    return i18n( "Indent && Spacing" );
+    return i18n( "Indent && S&pacing" );
 }
 
 void KoIndentSpacingWidget::leftChanged( double _val )
@@ -1048,19 +1056,19 @@ KoParagAlignWidget::KoParagAlignWidget( QWidget * parent, const char * name )
     QLabel * lAlign = new QLabel( i18n( "Align:" ), this );
     grid->addWidget( lAlign, 0, 0 );
 
-    rLeft = new QRadioButton( i18n( "Left" ), this );
+    rLeft = new QRadioButton( i18n( "&Left" ), this );
     grid->addWidget( rLeft, 1, 0 );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
 
-    rCenter = new QRadioButton( i18n( "Center" ), this );
+    rCenter = new QRadioButton( i18n( "C&enter" ), this );
     grid->addWidget( rCenter, 2, 0 );
     connect( rCenter, SIGNAL( clicked() ), this, SLOT( alignCenter() ) );
 
-    rRight = new QRadioButton( i18n( "Right" ), this );
+    rRight = new QRadioButton( i18n( "&Right" ), this );
     grid->addWidget( rRight, 3, 0 );
     connect( rRight, SIGNAL( clicked() ), this, SLOT( alignRight() ) );
 
-    rJustify = new QRadioButton( i18n( "Justify" ), this );
+    rJustify = new QRadioButton( i18n( "&Justify" ), this );
     grid->addWidget( rJustify, 4, 0 );
     connect( rJustify, SIGNAL( clicked() ), this, SLOT( alignJustify() ) );
 
@@ -1116,7 +1124,7 @@ int KoParagAlignWidget::align() const
 
 QString KoParagAlignWidget::tabName()
 {
-    return i18n( "Aligns" );
+    return i18n( "Al&ignment" );
 }
 
 void KoParagAlignWidget::alignLeft()
@@ -1160,7 +1168,7 @@ KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
 {
     QGridLayout *grid = new QGridLayout( this, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lStyle = new QLabel( i18n( "Style:" ), this );
+    QLabel * lStyle = new QLabel( i18n( "St&yle:" ), this );
     grid->addWidget( lStyle, 0, 0 );
 
     cStyle = new QComboBox( false, this );
@@ -1170,26 +1178,28 @@ KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
     cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
     cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
     cStyle->insertItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
+    lStyle->setBuddy( cStyle );
     grid->addWidget( cStyle, 1, 0 );
     //connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
-    QLabel * lWidth = new QLabel( i18n( "Width:" ), this );
+    QLabel * lWidth = new QLabel( i18n( "&Width:" ), this );
     grid->addWidget( lWidth, 2, 0 );
 
     cWidth = new QComboBox( false, this );
     for( unsigned int i = 1; i <= 10; i++ )
         cWidth->insertItem(QString::number(i));
+    lWidth->setBuddy( cWidth );
     grid->addWidget( cWidth, 3, 0 );
     //connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
 
-    QLabel * lColor = new QLabel( i18n( "Color:" ), this );
+    QLabel * lColor = new QLabel( i18n( "Co&lor:" ), this );
     grid->addWidget( lColor, 4, 0 );
 
     bColor = new KColorButton( black,
                                 black,
                                 this );
 
-
+    lColor->setBuddy( bColor );
     grid->addWidget( bColor, 5, 0 );
     //connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
 
@@ -1386,7 +1396,7 @@ void KoParagBorderWidget::brdBottomToggled( bool _on )
 
 QString KoParagBorderWidget::tabName()
 {
-    return i18n( "Borders" );
+    return i18n( "&Borders" );
 }
 
 
@@ -1416,12 +1426,12 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
     gNumbering->insert( rNone , KoParagCounter::NUM_NONE);
 
     QRadioButton *rList = new QRadioButton( gNumbering, "rList" );
-    rList->setText( i18n( "List" ) );
+    rList->setText( i18n( "&List" ) );
     gNumbering->insert( rList , KoParagCounter::NUM_LIST);
     numberingGroupLayout->addWidget( rList );
 
     QRadioButton *rChapter = new QRadioButton( gNumbering, "rChapter" );
-    rChapter->setText( i18n( "Chapter" ) );
+    rChapter->setText( i18n( "Chapt&er" ) );
     gNumbering->insert( rChapter , KoParagCounter::NUM_CHAPTER);
     numberingGroupLayout->addWidget( rChapter );
     Form1Layout->addWidget( gNumbering );
@@ -1468,7 +1478,7 @@ void KoParagCounterWidget::slotChangeCustomBullet( const QString & f, QChar c)
 }
 
 QString KoParagCounterWidget::tabName() {
-    return i18n( "Bullets/Numbers" );
+    return i18n( "B&ullets/Numbers" );
 }
 
 void KoParagCounterWidget::numTypeChanged( int nType ) {
@@ -1560,7 +1570,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     editLayout->setMargin( 0 ); //?
 
     gPosition = new QGroupBox( this, "gPosition" );
-    gPosition->setTitle( i18n( "Position" ) );
+    gPosition->setTitle( i18n( "Po&sition" ) );
     gPosition->setColumnLayout(0, Qt::Vertical );
     gPosition->layout()->setSpacing( 0 );
     gPosition->layout()->setMargin( 0 );
@@ -1598,15 +1608,15 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     ButtonGroup1Layout->setMargin( KDialog::marginHint() );
 
     rAlignLeft = new QRadioButton( bgAlign );
-    rAlignLeft->setText( i18n( "Left" ) );
+    rAlignLeft->setText( i18n( "&Left" ) );
     ButtonGroup1Layout->addWidget( rAlignLeft );
 
     rAlignCentre = new QRadioButton( bgAlign );
-    rAlignCentre->setText( i18n( "Center" ) );
+    rAlignCentre->setText( i18n( "C&enter" ) );
     ButtonGroup1Layout->addWidget( rAlignCentre );
 
     rAlignRight = new QRadioButton( bgAlign );
-    rAlignRight->setText( i18n( "Right" ) );
+    rAlignRight->setText( i18n( "&Right" ) );
     ButtonGroup1Layout->addWidget( rAlignRight );
 
     QHBoxLayout* Layout8 = new QHBoxLayout;
@@ -1614,7 +1624,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     Layout8->setMargin( 0 );
 
     rAlignVar = new QRadioButton( bgAlign );
-    rAlignVar->setText( i18n( "On following character: " ) );
+    rAlignVar->setText( i18n( "On followin&g character: " ) );
     Layout8->addWidget( rAlignVar );
 
     sAlignChar = new QLineEdit( bgAlign);
@@ -1641,7 +1651,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     QGridLayout *fillingGrid = new QGridLayout( 0L, 2, 2, 0, KDialog::spacingHint() );
 
     QLabel* TextLabel2 = new QLabel( gTabLeader);
-    TextLabel2->setText( i18n( "Filling:" ) );
+    TextLabel2->setText( i18n( "&Filling:" ) );
     TextLabel2->setAlignment( AlignRight );
     fillingGrid->addWidget( TextLabel2, 0, 0 );
 
@@ -1652,14 +1662,16 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     cFilling->insertItem( i18n( "DashLine" ) );
     cFilling->insertItem( i18n( "DashDotLine" ) );
     cFilling->insertItem( i18n( "DashDotDotLine" ) );
+    TextLabel2->setBuddy( cFilling );
     fillingGrid->addWidget( cFilling, 0, 1 );
 
     QString unitName = KoUnit::unitName( m_unit );
-    QLabel * TextLabel3 = new QLabel( i18n("Width (%1):").arg( unitName ), gTabLeader );
+    QLabel * TextLabel3 = new QLabel( i18n("&Width (%1):").arg( unitName ), gTabLeader );
     TextLabel3->setAlignment( AlignRight );
     fillingGrid->addWidget( TextLabel3, 1, 0 );
 
     eWidth = new KDoubleNumInput( gTabLeader );
+    TextLabel3->setBuddy( eWidth );
     fillingGrid->addWidget( eWidth, 1, 1 );
 
     GroupBox5Layout->addLayout( fillingGrid );
@@ -1674,11 +1686,11 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     Layout4->setMargin( 0 );
 
     bNew = new QPushButton( this);
-    bNew->setText( i18n( "New" ) );
+    bNew->setText( i18n( "&New" ) );
     Layout4->addWidget( bNew );
 
     bDelete = new QPushButton( this);
-    bDelete->setText( i18n( "Delete" ) );
+    bDelete->setText( i18n( "&Delete" ) );
     Layout4->addWidget( bDelete );
 
     bDeleteAll = new QPushButton( this);
@@ -1921,7 +1933,7 @@ void KoParagTabulatorsWidget::save( KoParagLayout & lay ) {
 }
 
 QString KoParagTabulatorsWidget::tabName() {
-    return i18n( "Tabulators" );
+    return i18n( "&Tabulators" );
 }
 
 
@@ -2006,23 +2018,25 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
 
     QGridLayout *grid2 = new QGridLayout( shadow, 4, 2, 2*KDialog::marginHint(), 2*KDialog::spacingHint() );
 
-    QLabel *lcolor = new QLabel( i18n( "Color:" ), shadow );
+    QLabel *lcolor = new QLabel( i18n( "Co&lor:" ), shadow );
     grid2->addWidget(lcolor,0,0);
     color = new KColorButton( black,
                               black,
                               shadow );
+    lcolor->setBuddy( color );
     grid2->addWidget(color,1,0);
     connect( color, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
 
-    QLabel *ldistance = new QLabel( i18n( "Distance (pt):" ), shadow );
+    QLabel *ldistance = new QLabel( i18n( "&Distance (pt):" ), shadow );
     grid2->addWidget(ldistance,2,0);
 
     distance = new QSpinBox( 0, 20, 1, shadow );
     distance->setSuffix(i18n("pt"));
+    ldistance->setBuddy( distance );
     connect( distance, SIGNAL( valueChanged( int ) ), this, SLOT( distanceChanged( int ) ) );
     grid2->addWidget(distance,3,0);
 
-    QLabel *ldirection = new QLabel( i18n( "Direction:" ), shadow );
+    QLabel *ldirection = new QLabel( i18n( "Di&rection:" ), shadow );
     grid2->addWidget(ldirection,0,1);
 
     QGridLayout *grid3 = new QGridLayout( 0L, 3, 3, KDialog::marginHint(), KDialog::spacingHint() );
@@ -2030,6 +2044,7 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
     lu = new QPushButton( shadow );
     grid3->addWidget(lu,0,0);
     lu->setToggleButton( true );
+        ldirection->setBuddy( lu );
     u = new QPushButton( shadow );
     grid3->addWidget(u,0,1);
     u->setToggleButton( true );
@@ -2195,7 +2210,7 @@ void KoParagShadowWidget::display( const KoParagLayout &lay ) {
 }
 
 QString KoParagShadowWidget::tabName() {
-    return i18n( "Shadow" );
+    return i18n( "S&hadow" );
 }
 
 void KoParagShadowWidget::save( KoParagLayout & lay ) {
@@ -2216,33 +2231,33 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
 
     if ( m_flags & PD_SPACING )
     {
-        QVBox * page = addVBoxPage( i18n( "Indent && Spacing" ) );
+        QVBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
         m_indentSpacingWidget = new KoIndentSpacingWidget( unit, breakLine,_frameWidth,page, "indent-spacing" );
     }
     if ( m_flags & PD_ALIGN )
     {
-        QVBox * page = addVBoxPage( i18n( "Aligns" ) );
+        QVBox * page = addVBoxPage( i18n( "Al&ignment" ) );
         m_alignWidget = new KoParagAlignWidget( page, "align" );
     }
     if ( m_flags & PD_BORDERS )
     {
-        QVBox * page = addVBoxPage( i18n( "Borders" ) );
+        QVBox * page = addVBoxPage( i18n( "&Borders" ) );
         m_borderWidget = new KoParagBorderWidget( page, "border" );
     }
     if ( m_flags & PD_NUMBERING )
     {
-        QVBox * page = addVBoxPage( i18n( "Bullets/Numbers" ) );
+        QVBox * page = addVBoxPage( i18n( "B&ullets/Numbers" ) );
         m_counterWidget = new KoParagCounterWidget( disableAll , page, "numbers" );
     }
     if ( m_flags & PD_TABS )
     {
-        QVBox * page = addVBoxPage( i18n( "Tabulators" ) );
+        QVBox * page = addVBoxPage( i18n( "&Tabulators" ) );
         m_tabulatorsWidget = new KoParagTabulatorsWidget( unit,_frameWidth, page, "tabs");
     }
 
     if (m_flags &PD_SHADOW)
     {
-        QVBox * page = addVBoxPage( i18n( "Shadow" ) );
+        QVBox * page = addVBoxPage( i18n( "S&hadow" ) );
         m_shadowWidget=new KoParagShadowWidget( page, "shadow" );
     }
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));

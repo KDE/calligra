@@ -287,7 +287,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
 /*================ setup page size & margins tab ==================*/
 void KoPageLayoutDia::setupTab1()
 {
-    QWidget *tab1 = addPage(i18n( "Page Size && Margins" ));
+    QWidget *tab1 = addPage(i18n( "Page Size && &Margins" ));
 
     QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -322,32 +322,35 @@ void KoPageLayoutDia::setupTab1()
     formatGrid->setColStretch( 1, 1 );
 
     // label page size
-    QLabel *lpgFormat = new QLabel( i18n( "Size:" ), formatFrame );
+    QLabel *lpgFormat = new QLabel( i18n( "&Size:" ), formatFrame );
     formatGrid->addWidget( lpgFormat, 0, 0, Qt::AlignRight | Qt::AlignVCenter );
 
     // combo size
     cpgFormat = new QComboBox( false, formatFrame, "cpgFormat" );
     cpgFormat->insertStringList( KoPageFormat::allFormats() );
+    lpgFormat->setBuddy( cpgFormat );
     formatGrid->addWidget( cpgFormat, 0, 1, Qt::AlignLeft | Qt::AlignVCenter );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
     // label width
-    QLabel *lpgWidth = new QLabel( i18n( "Width:" ), formatFrame );
+    QLabel *lpgWidth = new QLabel( i18n( "&Width:" ), formatFrame );
     formatGrid->addWidget( lpgWidth, 1, 0, Qt::AlignRight | Qt::AlignVCenter );
 
     // linedit width
     epgWidth = new KDoubleNumInput( formatFrame, "Width" );
+    lpgWidth->setBuddy( epgWidth );
     formatGrid->addWidget( epgWidth, 1, 1, Qt::AlignLeft | Qt::AlignVCenter );
     if ( layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
     connect( epgWidth, SIGNAL( valueChanged(double) ), this, SLOT( widthChanged() ) );
 
     // label height
-    QLabel *lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
+    QLabel *lpgHeight = new QLabel( i18n( "&Height:" ), formatFrame );
     formatGrid->addWidget( lpgHeight, 2, 0, Qt::AlignRight | Qt::AlignVCenter );
 
     // linedit height
     epgHeight = new KDoubleNumInput( formatFrame, "Height" );
+    lpgHeight->setBuddy( epgHeight );
     formatGrid->addWidget( epgHeight, 2, 1, Qt::AlignLeft | Qt::AlignVCenter );
     if ( layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
@@ -363,12 +366,12 @@ void KoPageLayoutDia::setupTab1()
     QLabel* lbPortrait = new QLabel( orientFrame );
     lbPortrait->setPixmap( QPixmap( UserIcon( "koPortrait" ) ) );
     lbPortrait->setMaximumWidth( lbPortrait->pixmap()->width() );
-    rbPortrait = new QRadioButton( i18n("Portrait"), orientFrame );
+    rbPortrait = new QRadioButton( i18n("&Portrait"), orientFrame );
 
     QLabel* lbLandscape = new QLabel( orientFrame );
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
     lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
-    rbLandscape = new QRadioButton( i18n("Landscape"), orientFrame );
+    rbLandscape = new QRadioButton( i18n("La&ndscape"), orientFrame );
 
 
     connect( rbPortrait, SIGNAL( clicked() ), this, SLOT( orientationChanged() ) );
@@ -382,33 +385,41 @@ void KoPageLayoutDia::setupTab1()
     marginsLayout->setColStretch( 1, 1 );
 
     // left margin
-    marginsLayout->addWidget( new QLabel( i18n( "Left:" ), marginsFrame ),
+    QLabel* lbLeft = new QLabel( i18n( "&Left" ), marginsFrame );
+    marginsLayout->addWidget( lbLeft,
        0, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
+    lbLeft->setBuddy( ebrLeft );
     marginsLayout->addWidget( ebrLeft, 0, 1 );
     connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    marginsLayout->addWidget( new QLabel( i18n( "Right:" ), marginsFrame ),
+    QLabel* lbRight = new QLabel( i18n( "&Right" ), marginsFrame );
+    marginsLayout->addWidget( lbRight,
        1, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrRight = new KDoubleNumInput( marginsFrame, "Right" );
+    lbRight->setBuddy( ebrRight );
     marginsLayout->addWidget( ebrRight, 1, 1 );
     connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
-    marginsLayout->addWidget( new QLabel( i18n( "Top:" ), marginsFrame ),
+    QLabel* lbTop = new QLabel( i18n( "&Top:" ), marginsFrame );
+    marginsLayout->addWidget( lbTop,
        2, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrTop = new KDoubleNumInput( marginsFrame, "Top" );
+    lbTop->setBuddy( ebrTop );
     marginsLayout->addWidget( ebrTop, 2, 1 );
     connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
-    marginsLayout->addWidget( new QLabel( i18n( "Bottom:" ), marginsFrame ),
+    QLabel* lbBottom = new QLabel ( i18n( "&Bottom:" ), marginsFrame );
+    marginsLayout->addWidget( lbBottom,
        3, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrBottom = new KDoubleNumInput( marginsFrame, "Bottom" );
+    lbBottom->setBuddy( ebrBottom );
     marginsLayout->addWidget( ebrBottom, 3, 1 );
     connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
@@ -480,7 +491,7 @@ void KoPageLayoutDia::setValuesTab1Helper()
 /*================ setup header and footer tab ===================*/
 void KoPageLayoutDia::setupTab2()
 {
-    QWidget *tab2 = addPage(i18n( "Header && Footer" ));
+    QWidget *tab2 = addPage(i18n( "H&eader && Footer" ));
     QGridLayout *grid2 = new QGridLayout( tab2, 8, 6, KDialog::marginHint(), KDialog::spacingHint() );
 
     // ------------- header ---------------
@@ -554,24 +565,26 @@ void KoPageLayoutDia::setupTab2()
 /*================================================================*/
 void KoPageLayoutDia::setupTab3()
 {
-    QWidget *tab3 = addPage(i18n( "Columns" ));
+    QWidget *tab3 = addPage(i18n( "C&olumns" ));
 
     QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel *lColumns = new QLabel( i18n( "Columns:" ), tab3 );
+    QLabel *lColumns = new QLabel( i18n( "Co&lumns:" ), tab3 );
     grid3->addWidget( lColumns, 0, 0 );
 
     nColumns = new QSpinBox( 1, 16, 1, tab3 );
+    lColumns->setBuddy( nColumns );
     grid3->addWidget( nColumns, 1, 0 );
     nColumns->setValue( cl.columns );
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
 
     QString str = KoUnit::unitName( m_unit );
 
-    QLabel *lCSpacing = new QLabel( i18n("Column spacing (%1):").arg(str), tab3 );
+    QLabel *lCSpacing = new QLabel( i18n("Column &spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new KDoubleNumInput( tab3, "" );
+    lCSpacing->setBuddy( nCSpacing );
     grid3->addWidget( nCSpacing, 3, 0 );
 
     nCSpacing->setValue( KoUnit::ptToUnit( cl.ptColumnSpacing, m_unit ) );
@@ -605,10 +618,10 @@ void KoPageLayoutDia::setupTab4()
 {
     QString str = KoUnit::unitName(m_unit);
 
-    QWidget *tab4 = addPage(i18n( "Header && Footer" ));
+    QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QButtonGroup *gHeader = new QButtonGroup( i18n( "Header" ), tab4 );
+    QButtonGroup *gHeader = new QButtonGroup( i18n( "&Header" ), tab4 );
     QGridLayout *headerGrid = new QGridLayout( gHeader, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     rhFirst = new QCheckBox( i18n( "Different header for the first page" ), gHeader );
@@ -636,7 +649,7 @@ void KoPageLayoutDia::setupTab4()
 
     grid4->addWidget( gHeader, 0, 0 );
 
-    QButtonGroup *gFooter = new QButtonGroup( i18n( "Footer" ), tab4 );
+    QButtonGroup *gFooter = new QButtonGroup( i18n( "&Footer" ), tab4 );
     QGridLayout *footerGrid = new QGridLayout( gFooter, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     rfFirst = new QCheckBox( i18n( "Different footer for the first page" ), gFooter );
@@ -664,7 +677,7 @@ void KoPageLayoutDia::setupTab4()
 
     grid4->addWidget( gFooter, 2, 0 );
 
-    QButtonGroup *gFootNote = new QButtonGroup( i18n( "Foot-/Endnote" ), tab4 );
+    QButtonGroup *gFootNote = new QButtonGroup( i18n( "Foot&note/Endnote" ), tab4 ); // why doesn't the accel work??? - Clarence
     QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body (%1):").arg(str), gFootNote );

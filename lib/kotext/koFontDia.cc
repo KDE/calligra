@@ -72,7 +72,7 @@ QColor KoFontChooser::color() const
 void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
 {
     QWidget *page = new QWidget( this );
-    addTab( page, i18n( "Fonts" ) );
+    addTab( page, i18n( "&Fonts" ) );
     QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
     QStringList list;
     KFontChooser::getFontList(list,fontListCriteria);
@@ -83,25 +83,27 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
-    m_superScript = new QRadioButton(i18n("Superscript"),grp);
+    m_superScript = new QRadioButton(i18n("Su&perscript"),grp);
     grid->addWidget(m_superScript,0,0);
 
-    m_subScript = new QRadioButton(i18n("Subscript"),grp);
+    m_subScript = new QRadioButton(i18n("Su&bscript"),grp);
     grid->addWidget(m_subScript,1,0);
 
-    d->m_lRelativeSize = new QLabel ( i18n("Relative size:"), grp);
+    d->m_lRelativeSize = new QLabel ( i18n("Relative &size:"), grp);
     grid->addWidget(d->m_lRelativeSize,0,1);
 
     d->m_relativeSize = new KIntNumInput( grp );
+    d->m_lRelativeSize->setBuddy( d->m_relativeSize );
     grid->addWidget(d->m_relativeSize,0,2);
 
     d->m_relativeSize-> setRange(1, 100, 1,false);
     d->m_relativeSize->setSuffix("%");
 
-    QLabel *lab = new QLabel ( i18n("Offset from baseline:"), grp);
+    QLabel *lab = new QLabel ( i18n("Offse&t from baseline:"), grp);
     grid->addWidget(lab,1,1);
 
     d->m_offsetBaseLine= new KIntNumInput( grp );
+    lab->setBuddy( d->m_offsetBaseLine );
     grid->addWidget(d->m_offsetBaseLine,1,2);
 
     d->m_offsetBaseLine->setRange(-9, 9, 1,false);
@@ -118,10 +120,10 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     grp = new QGroupBox(i18n("Colors"), page);
     lay1->addWidget(grp);
     grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
-    m_colorButton = new QPushButton( i18n( "Change Color..." ), grp );
+    m_colorButton = new QPushButton( i18n( "Change Co&lor..." ), grp );
     grid->addWidget(m_colorButton,0,0);
 
-    m_backGroundColorButton = new QPushButton( i18n( "Change Background Color..." ), grp );
+    m_backGroundColorButton = new QPushButton( i18n( "Change Bac&kground Color..." ), grp );
     grid->addWidget(m_backGroundColorButton,0,1);
 
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
@@ -143,17 +145,18 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
 void KoFontChooser::setupTab2()
 {
     QWidget *page = new QWidget( this );
-    addTab( page, i18n( "Font Effects" ) );
+    addTab( page, i18n( "Font &Effects" ) );
 
     QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
     QGroupBox *grp = new QGroupBox(page);
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 10, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lab = new QLabel( i18n("Underlining:"), grp);
+    QLabel * lab = new QLabel( i18n("&Underlining:"), grp);
     grid->addWidget( lab, 0, 0);
 
     m_underlining = new QComboBox( grp );
+    lab->setBuddy( m_underlining );
     grid->addWidget( m_underlining, 1, 0);
 
     m_underlining->insertStringList( KoTextFormat::underlineStyleList() );
@@ -163,13 +166,14 @@ void KoFontChooser::setupTab2()
     m_underlineType->insertStringList( KoTextFormat::underlineLineStyleList() );
 
 
-    m_underlineColorButton = new QPushButton( i18n( "Change Color..." ), grp );
+    m_underlineColorButton = new QPushButton( i18n( "Change Co&lor..." ), grp );
     grid->addWidget(m_underlineColorButton,1,2);
 
 
-    lab = new QLabel( i18n("Strikethrough:"), grp);
-    grid->addWidget( lab, 2, 0);
+    QLabel * lab2 = new QLabel( i18n("&Strikethrough:"), grp);
+    grid->addWidget( lab2, 2, 0);
     d->m_strikeOut = new QComboBox( grp );
+    lab2->setBuddy( d->m_strikeOut );
     grid->addWidget( d->m_strikeOut, 3, 0);
     d->m_strikeOut->insertStringList( KoTextFormat::strikeOutStyleList() );
 
@@ -178,28 +182,30 @@ void KoFontChooser::setupTab2()
     grid->addWidget( m_strikeOutType, 3, 1);
     m_strikeOutType->insertStringList( KoTextFormat::strikeOutLineStyleList() );
 
-    d->m_shadow= new QCheckBox( i18n("Shadow"), grp);
+    d->m_shadow= new QCheckBox( i18n("S&hadow"), grp);
     grid->addWidget( d->m_shadow, 4, 0);
 
-    d->m_wordByWord = new QCheckBox( i18n("Word by word"), grp);
+    d->m_wordByWord = new QCheckBox( i18n("&Word by word"), grp);
     grid->addWidget( d->m_wordByWord, 5, 0);
 
-    lab = new QLabel( i18n("Attribute:"), grp);
-    grid->addWidget( lab, 6, 0);
+    QLabel * lab3 = new QLabel( i18n("A&ttribute:"), grp);
+    grid->addWidget( lab3, 6, 0);
 
     d->m_fontAttribute = new QComboBox( grp );
+    lab3->setBuddy( d->m_fontAttribute );
     grid->addWidget( d->m_fontAttribute, 7, 0);
 
     d->m_fontAttribute->insertStringList( KoTextFormat::fontAttributeList() );
 
-    lab = new QLabel( i18n("Language:"), grp);
-    grid->addWidget( lab, 8, 0);
+    QLabel * lab4 = new QLabel( i18n("La&nguage:"), grp);
+    grid->addWidget( lab4, 8, 0);
 
     d->m_language = new QComboBox( grp );
     d->m_language->insertStringList( KoGlobal::listOfLanguages() );
+    lab4->setBuddy( d->m_language );
     grid->addWidget( d->m_language, 9, 0 );
 
-    d->m_hyphenation = new QCheckBox( i18n("Auto Hyphenation"), grp );
+    d->m_hyphenation = new QCheckBox( i18n("Auto H&yphenation"), grp );
     grid->addWidget( d->m_hyphenation, 10,0);
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
