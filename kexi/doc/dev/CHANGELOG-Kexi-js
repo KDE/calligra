@@ -269,6 +269,10 @@ Detailed TODO for Beta3:
 3. Make all 3 query views workable (@ GUI and KexiDB layer)
 4. Make database relations workable (@ GUI and KexiDB layer)
 
+=== Import/Export Framework TODO ===
+-KEXIDB: add lower level functions like: "getting table names list", "getting table schema",
+  "getting index schema"
+
 === Combo box editor TODO ====
 -we're completely dropping using regular combobox
 -new layout: a lineedit + dropdown button + popup tableview, when needed
@@ -301,6 +305,29 @@ Detailed TODO for Beta3:
 - text does not fit well inside combobox editor
 - double editor should be klineedit with doublevalidator, not spinbox
 - update parent property (e.g. Rect) on child's change
+- add a hint for propertybuffer to allow properties to be displayed side-by-side
+  e.g. width, height properties ca be displayed this way. See also property editor 
+	at http://freshmeat.net/screenshots/41728/
+
+
+2004-02-26
+Kexi Property Editor
+	-leaveTheSpaceForRevertButton introduced for subeditor class.
+	 This removes confucion when user clicks on a spinbox arrow and it suddenly
+	 moves left.
+	-parent item is updated on children updates
+	-editor position is updated when user collapses or expands a property node
+	-resetting composed property value also resets all children
+Kexi Property Framework
+	-testiong for property change: for date and datetime types we're now comparing 
+	 values using strings, because there can be miliseconds difference in a time;
+	 strings comparison fixed for null strings
+	-resetValue() added to KexiProperty for convenience
+	-for composed properties (like Rect):
+	  * changing property child updates parent value
+	  * setting property unchanged (eg. on resetting) updates parent's 'changed' flag
+	-QSizePolicy-type property helper improved
+	-setValue() renamed to setChildValue() to remove messy overload
 
 2004-02-24
 Table View:
