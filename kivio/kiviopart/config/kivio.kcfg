@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
-  <kcfgfile name="kiviorc"/>
   <include>koPageLayoutDia.h</include>
   <include>kivioglobal.h</include>
   <include>koGlobal.h</include>
@@ -9,6 +8,7 @@
   <include>klocale.h</include>
   <include>qfont.h</include>
   <include>qcolor.h</include>
+  <kcfgfile name="kiviorc"/>
   <group name="DefaultPageLayout">
     <entry name="Format" type="String">
       <label>The default page layout.</label>
