@@ -2,6 +2,8 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include "kotextformatter.h"
 #include "kotextformat.h"
@@ -55,8 +57,10 @@ private:
 KoTextFormatterTest::KoTextFormatterTest()
 {
     zh = new KoZoomHandler;
-    KoTextFormatCollection* fc = new KoTextFormatCollection; // owned by the doc
-    KoTextFormatter* formatter = new KoTextFormatter; // owned by the doc
+    QFont defaultFont( "helvetica", 12 );
+    KoTextFormatCollection* fc = new KoTextFormatCollection( defaultFont, Qt::black, "en_US", false /*no hyphenation*/, 1.0 );
+    KoTextFormatter* formatter = new KoTextFormatter;
+    // fc and formatter are owned by the doc
     doc = new KoTextDocument( zh, fc, formatter );
 }
 
@@ -83,7 +87,7 @@ void KoTextFormatterTest::noHeightTest()
     // Expected result: the formatter 'aborts', i.e. no line-breaking, but still
     // goes over each character to set them all correctly; and usually KWord
     // would create a new page and reformat the paragraph
-    doc->setFlow( new TextFlow( 200, 0 ) ); // 200 is just enough for one char
+    doc->setFlow( new TextFlow( 250, 0 ) ); // 250 is just enough for one char
     doc->clear(true);
     KoTextParag* parag = doc->firstParag();
     parag->append( "abcdefghi" );
@@ -163,6 +167,10 @@ void KoTextFormatterTest::counterAndBigChar()
 int main (int argc, char ** argv)
 {
     KApplication app(argc, argv, "KoTextFormatter test");
+
+    // Don't let locale settings lead to different hyphenation output
+    KGlobal::locale()->setLanguage( QString::fromLatin1( "en_US" ) );
+    KGlobal::locale()->setCountry( QString::fromLatin1( "C" ) );
 
     KoTextFormatterTest test;
     //test.speedTest();
