@@ -18,4 +18,16 @@ class KexiFieldDrag : public QStoredDrag
 
 };
 
+class KexiDataProviderDrag : public QStoredDrag
+{
+        public:
+                KexiDataProviderDrag(const QString& sourceType, const QString& source, 
+		QWidget *parent=0, const char *name=0);
+                ~KexiDataProviderDrag() { };
+
+                static bool canDecode( QDragMoveEvent* e);
+		static bool decode( QDropEvent* e, QString& sourceType, QString& source);
+
+};
+
 #endif

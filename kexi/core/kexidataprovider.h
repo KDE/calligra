@@ -31,6 +31,7 @@ public:
 	KexiDataProvider();
 	virtual ~KexiDataProvider();
 	virtual QStringList datasets()=0;
+	virtual QStringList datasetNames()=0;
 	virtual QStringList fields(const QString& identifier)=0;
 	virtual KexiDBRecord *records(const QString& identifier,Parameters params)=0;
 	virtual ParameterList parameters(const QString &identifier)=0;

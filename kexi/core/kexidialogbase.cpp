@@ -25,7 +25,7 @@
 #include <netwm_def.h>
 #include <kdebug.h>
 
-#include <kocontexthelp.h>
+#include "kexicontexthelp.h"
 
 #include "kexidialogbase.h"
 #include "kexiview.h"

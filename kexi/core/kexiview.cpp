@@ -54,6 +54,8 @@
 #include "kexiproject.h"
 #include "KexiViewIface.h"
 
+#include "kexicontexthelp.h"
+
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)
 {
 	m_project=part;
@@ -133,11 +135,13 @@ void KexiView::initDocBrowser()
 
 void KexiView::initHelper()
 {
-	m_help = new KoContextHelpDocker(mainWindow());
+	m_help=new KexiContextHelp(this,m_workspace,"Context Help");
+
+/*	m_help = new KoContextHelpDocker(mainWindow());
         m_help->setResizeEnabled(true);
         m_help->setCloseMode(QDockWindow::Always);
 //	mainWindow()->moveDockWindow(help,DockLeft);
-	mainWindow()->moveDockWindow(m_help, DockLeft);
+	mainWindow()->moveDockWindow(m_help, DockLeft);*/
 	m_help->setContextHelp(i18n("welcome"), i18n("kexi is based on relational databases. Before you start creating tables you should think about the general <a>database-design</a>."));
 
 }

@@ -33,7 +33,7 @@ class KAction;
 class KToggleAction;
 class KRecentFilesAction;
 
-class KoContextHelpDocker;
+class KexiContextHelp;
 
 class KexiWorkspace;
 class KexiTabBrowser;
@@ -59,7 +59,7 @@ public:
 	KexiTabBrowser* browser()const { return m_browser; };
 	KexiWindowMode windowMode()const { return m_windowMode;};
 
-	KoContextHelpDocker	*help() { return m_help; };
+	KexiContextHelp	*help() { return m_help; }
 
 	KexiProject *project()const ;
 
@@ -86,7 +86,7 @@ protected:
 	KDockWidget		*m_mainDock;
 	QWidget			*m_workspace;
 	KexiTabBrowser	  	*m_browser;
-	KoContextHelpDocker	*m_help;
+	KexiContextHelp		*m_help;
 	KexiWindowMode		m_windowMode;
 
 	KexiDoc			*m_doc;

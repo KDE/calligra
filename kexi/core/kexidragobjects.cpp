@@ -41,3 +41,40 @@ KexiFieldDrag::decode( QDropEvent* e, QString& sourceType, QString& source, QStr
         return false;
 }
 
+
+/// implementation of KexiDataProviderDrag
+              
+KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceType, const QString& source,
+                QWidget *parent, const char *name)
+ : QStoredDrag("kexi/dataprovider", parent, name)
+{
+       QByteArray data;
+       QDataStream stream1(data,IO_WriteOnly);
+       stream1<<sourceType<<source;		
+       setEncodedData(data);
+}
+
+
+bool
+KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
+{
+        return e->provides("kexi/dataprovider");
+}
+
+bool
+KexiDataProviderDrag::decode( QDropEvent* e, QString& sourceType, QString& source)
+{
+	QCString tmp;
+        QByteArray payload = e->data("kexidataprovider");
+        if(payload.size())
+        {
+                e->accept();
+		QDataStream stream1(payload,IO_ReadOnly);
+		stream1>>sourceType;
+		stream1>>source;
+                kdDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceType<<"/"<<source<< endl;
+                return true;
+        }
+        return false;
+}
+
