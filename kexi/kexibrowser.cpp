@@ -223,7 +223,7 @@ void KexiBrowser::slotAlterTable()
 
 void KexiBrowser::slotShowReport()
 {
-	new KexiKugarWrapper(m_view,0,"blah","report");
+//	new KexiKugarWrapper(m_view,0,"blah","report");
 }
 
 void KexiBrowser::slotCreateQuery()
