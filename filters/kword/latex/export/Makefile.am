@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes) $(LIBMAGICK_CPPFLAGS)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(LIBMAGICK_CPPFLAGS) $(all_includes)
 libkwordlatexexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined $(LIBMAGICK_RPATH)
 libkwordlatexexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA) $(LIBMAGICK_LIBS)
 
