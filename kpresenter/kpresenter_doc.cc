@@ -4357,6 +4357,7 @@ void KPresenterDoc::addIgnoreWordAll( const QString & word)
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
     //m_bgSpellCheck->addIgnoreWordAll( word );
+	setModified( true );
 }
 
 void KPresenterDoc::clearIgnoreWordAll( )
