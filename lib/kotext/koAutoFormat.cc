@@ -1543,6 +1543,7 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
     KoTextCursor cursor( parag->document() );
 
     KMacroCommand *macroCmd = 0L;
+    // Cut away spaces at end of paragraph
     for ( int i = parag->string()->length()-1; i >= 0; --i )
     {
         QChar ch = s->at( i ).c;
@@ -1554,7 +1555,7 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
             cursor.setIndex( i+1 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setParag( parag );
-            cursor.setIndex( parag->string()->length() );
+            cursor.setIndex( parag->string()->length() -1); // -1 for the space QtRT always adds at the end.
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
             KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
 
@@ -1570,6 +1571,7 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
 
     s = parag->string();
 
+    // Cut away spaces at start of parag.
     for ( int i = 0 ; i < parag->string()->length() ; i++ )
     {
         QChar ch = s->at( i ).c;
