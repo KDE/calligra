@@ -441,8 +441,9 @@ public:
 
   void emitProgress( int value ) { emit sigProgress( value ); }
 
-  void emitBeginOperation() {emit sigBeginOperation(); }
-  void emitEndOperation() {emit sigEndOperation(); }
+  bool isInOperation();
+  virtual void emitBeginOperation();
+  virtual void emitEndOperation();
 
    /**
    * Return true if url() is a real filename, false if url() is

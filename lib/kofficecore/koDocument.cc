@@ -71,6 +71,7 @@ class KoDocumentPrivate
 public:
     KoDocumentPrivate()
     {
+       m_numOperations = 0;
     }
     ~KoDocumentPrivate()
     {
@@ -95,6 +96,7 @@ public:
     bool modifiedAfterAutosave;
     bool m_bSingleViewMode;
     mutable bool m_changed;
+    int m_numOperations;
 };
 
 // Used in singleViewMode
@@ -833,7 +835,7 @@ bool KoDocument::openFile()
   kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile << endl;
 
   QApplication::restoreOverrideCursor();
-
+   
   bool ok = true;
 
   if (!importedFile.isEmpty()) // Something to load (tmp or native file) ?
@@ -1034,6 +1036,39 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 
   return completeLoading( _store );
 }
+
+bool KoDocument::isInOperation()
+{
+   return d->m_numOperations > 0;
+}
+
+void KoDocument::emitBeginOperation()
+{
+   /* if we're already in an operation, don't send the signal again */
+   if (!isInOperation())
+   {
+      emit sigBeginOperation();
+   }
+   
+   d->m_numOperations++;
+}
+
+void KoDocument::emitEndOperation()
+{
+   d->m_numOperations--;
+   
+   /* don't end the operation till we've cleared all the nested operations */
+   if (d->m_numOperations == 0)
+   {
+      emit sigEndOperation();
+   }
+   else if (d->m_numOperations < 0)
+   /* ignore 'end' calls with no matching 'begin' call */
+   {
+      d->m_numOperations = 0;
+   }
+}
+
 
 bool KoDocument::isStoredExtern()
 {

@@ -311,15 +311,13 @@ public slots:
      * Slot to allow code to signal the beginning of an operation where the screen should
      * not update until it is done (see @ref KoView::endOperation)
      */
-    void beginOperation(); /*BCI: make this a virtual function so functionality can be
-			    * extended */
+    virtual void beginOperation();
    
     /*
      * Slot to allow code to signal the end of an operation where the screen should
      * not have been updating.  So now it will update. (see @ref KoView::beginOperation)
      */
-   void endOperation(); /*BCI: make this a virtual function so functionality can be
-			 * extended */
+   virtual void endOperation();
 
     void slotActionStatusText( const QString &text );
     void slotClearStatusText();
