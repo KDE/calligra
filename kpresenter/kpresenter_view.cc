@@ -4370,8 +4370,8 @@ void KPresenterView::updateObjectStatusBarItem()
       KoSize size = obj->getSize();
       m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 -  (width: %2, height: %3)(%4)" )
                                 .arg(obj->getTypeString())
-                                .arg(KoUnit::ptFromUnit( size.width(), m_pKPresenterDoc->getUnit() ))
-                                .arg(KoUnit::ptFromUnit( size.height(), m_pKPresenterDoc->getUnit() ))
+                                .arg(KoUnit::ptToUnit( size.width(), m_pKPresenterDoc->getUnit() ))
+                                .arg(KoUnit::ptToUnit( size.height(), m_pKPresenterDoc->getUnit() ))
                                 .arg(m_pKPresenterDoc->getUnitName())
                                 );
     }
