@@ -35,7 +35,7 @@
 
 
 VStrokeFillPreview::VStrokeFillPreview(
-	KarbonPart *part, QWidget* parent = 0L, const char* name = 0L )
+	KarbonPart *part, QWidget* parent, const char* name )
 		: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
@@ -52,7 +52,7 @@ VStrokeFillPreview::~VStrokeFillPreview()
 }
 
 void
-VStrokeFillPreview::paintEvent( QPaintEvent* event )
+VStrokeFillPreview::paintEvent( QPaintEvent* /* event */ )
 {
 	bitBlt( this, 0, 0, &m_pixmap, 0, 0, 50, 50 );
 }
@@ -96,21 +96,31 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->setPen( Qt::NoPen );
 	if( s.type() != VStroke::none )
 	{
-		if( s.type() == VStroke::grad )
+		if( s.type() != VStroke::solid )
 		{
 			VFill fill;
-			fill.gradient() = s.gradient();
-			if( s.gradient().type() == VGradient::linear )
+			if( s.type() == VStroke::grad )
 			{
-				fill.gradient().setOrigin( KoPoint( 20, 10 ) );
-				fill.gradient().setVector( KoPoint( 20, 40 ) );
+				fill.gradient() = s.gradient();
+				if( s.gradient().type() == VGradient::linear )
+				{
+					fill.gradient().setOrigin( KoPoint( 20, 10 ) );
+					fill.gradient().setVector( KoPoint( 20, 40 ) );
+				}
+				else if( s.gradient().type() == VGradient::radial )
+				{
+					fill.gradient().setOrigin( KoPoint( 20, 25 ) );
+					fill.gradient().setVector( KoPoint( 20, 40 ) );
+				}
+				fill.setType( VFill::grad );
 			}
-			else if( s.gradient().type() == VGradient::radial )
+			else
 			{
-				fill.gradient().setOrigin( KoPoint( 20, 25 ) );
-				fill.gradient().setVector( KoPoint( 20, 40 ) );
+				fill.pattern() = s.pattern();
+				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
+				fill.pattern().setVector( KoPoint( 20, 40 ) );
+				fill.setType( VFill::patt );
 			}
-			fill.setType( VFill::grad );
 			m_painter->setBrush( fill );
 		}
 		else
@@ -166,19 +176,29 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 
 	if( f.type() != VFill::none )
 	{
-		if( f.type() == VFill::grad )
+		if( f.type() != VFill::solid )
 		{
 			VFill fill;
 			fill = f;
-			if( f.gradient().type() == VGradient::linear )
+			if( f.type() == VFill::grad )
 			{
-				fill.gradient().setOrigin( KoPoint( 30, 20 ) );
-				fill.gradient().setVector( KoPoint( 30, 50 ) );
+				if( f.gradient().type() == VGradient::linear )
+				{
+					fill.gradient().setOrigin( KoPoint( 30, 20 ) );
+					fill.gradient().setVector( KoPoint( 30, 50 ) );
+				}
+				else if( f.gradient().type() == VGradient::radial )
+				{
+					fill.gradient().setOrigin( KoPoint( 30, 35 ) );
+					fill.gradient().setVector( KoPoint( 30, 50 ) );
+				}
 			}
-			else if( f.gradient().type() == VGradient::radial )
+			else
 			{
-				fill.gradient().setOrigin( KoPoint( 30, 35 ) );
-				fill.gradient().setVector( KoPoint( 30, 50 ) );
+				fill.pattern() = f.pattern();
+				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
+				fill.pattern().setVector( KoPoint( 20, 40 ) );
+				fill.setType( VFill::patt );
 			}
 			m_painter->setBrush( fill );
 		}
