@@ -121,12 +121,6 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   m_bStackLock = false;
   m_backStack.setAutoDelete(false);
   m_forwardStack.setAutoDelete(false);
- 
-  slotUpdateConfig();
-
-  if (m_browserStart == 0) slotDocumentContentChanged();
-  else if (m_browserStart == 1) m_pDoc->openURL(m_strHomePage);
-  
 }
 
 KoHTMLView::~KoHTMLView()
@@ -254,6 +248,11 @@ void KoHTMLView::init()
       slotInsertObject(it.current());
       
   m_vMainWindow->setPartCaption( id(), m_strCaptionText );      
+  
+  slotUpdateConfig();
+
+  if (m_browserStart == 0) slotDocumentContentChanged();
+  else if (m_browserStart == 1) m_pDoc->openURL(m_strHomePage);
 }
 
 bool KoHTMLView::event(const char *event, const CORBA::Any &value)

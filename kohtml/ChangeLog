@@ -55,3 +55,8 @@ Wed Jan 13 18:36:53 1999 Simon Hausmann <tronical@gmx.net>
 
         * KoHTML now uses the new window caption handling in OP
 
+Thu Jan 14 22:11:14 1999 Simon Hausmann <tronical@gmx.net>
+
+        * fixes (for example that error dialog now doesn't pop up anymore on startup)
+
+        * rearranged menu
