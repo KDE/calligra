@@ -4888,6 +4888,8 @@ void KSpreadView::refreshView()
   
   d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
   d->hBorderWidget->setMinimumHeight( d->doc->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );  
+  d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+  d->vBorderWidget->setMinimumWidth( d->doc->zoomItX( YBORDER_WIDTH ) );
   
   if( table->layoutDirection() == KSpreadSheet::LeftToRight )
   {

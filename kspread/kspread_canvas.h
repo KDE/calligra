@@ -676,6 +676,8 @@ public:
     void equalizeRow( double resize );
     void updateRows( int from, int to );
 
+    QSize sizeHint() const;
+
 private slots:
     void doAutoScroll();
 
