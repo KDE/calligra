@@ -67,6 +67,8 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRe
   d->m_doc = doc;
   setGeometry( geometry );
   d->m_deleted = false;
+  if ( doc )
+    doc->setStoreInternal( !doc->hasExternURL() );
 }
 
 KoDocumentChild::KoDocumentChild( KoDocument* parent )
@@ -80,6 +82,7 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent )
 
 void KoDocumentChild::setDocument( KoDocument *doc, const QRect &geometry )
 {
+  kdDebug()<<k_funcinfo<<"doc: "<<doc->url().url()<<endl;
   d->m_doc = doc;
   setGeometry( geometry );
 
@@ -205,10 +208,12 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
         {
             res = document()->loadFromStore( _store, m_tmpURL );
             internalURL = true;
+            document()->setStoreInternal( true );
         }
         else
         {
             // Reference to an external document. Hmmm...
+            document()->setStoreInternal( false );
             KURL url( m_tmpURL );
             if ( !url.isLocalFile() )
             {
@@ -240,6 +245,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
             if ( res )
             {
                 d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
+                d->m_doc->setStoreInternal( true );
                 if ( internalURL )
                     d->m_doc->setProperty( "unavailReason", i18n( "Couldn't load embedded object" ) );
                 else
@@ -318,15 +324,7 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
 
 bool KoDocumentChild::isStoredExtern()
 {
-  const KURL & url = document()->url();
-  if ( !url.hasPath() )
-    return false;
-  else if ( url.protocol() == STORE_PROTOCOL )
-    return false;
-  else if ( url.protocol() == INTERNAL_PROTOCOL )
-    return false;
-
-  return true;
+    return document()->isStoredExtern();
 }
 
 KURL KoDocumentChild::url()

@@ -549,6 +549,14 @@ public:
      */
     void resetURL() { m_url = KURL(); m_file = QString::null; }
 
+    /**
+     * Set when you want an external embedded document to be stored internally
+     */
+    void setStoreInternal( bool i );
+    bool storeInternal() const;
+    
+    bool hasExternURL();
+    
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes

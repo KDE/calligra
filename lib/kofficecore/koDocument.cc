@@ -91,7 +91,8 @@ public:
         m_backupFile( true ),
         m_backupPath( QString::null ),
         m_doNotSaveExtDoc( false ),
-        m_current( false )
+        m_current( false ),
+        m_storeInternal( false )
         {}
 
     QPtrList<KoView> m_views;
@@ -120,6 +121,7 @@ public:
     QString m_backupPath;
     bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool m_current;
+    bool m_storeInternal; // Store this doc internally even if url is external
 };
 
 // Used in singleViewMode
@@ -670,7 +672,7 @@ bool KoDocument::isModified()
 {
     if ( KParts::ReadWritePart::isModified() )
     {
-        kdDebug()<<k_funcinfo<<" Modified doc='"<<url().url()<<"'"<<endl;
+        kdDebug()<<k_funcinfo<<" Modified doc='"<<url().url()<<"' extern="<<isStoredExtern()<<endl;
         return true;
     }
     // Then go through internally stored children (considdered to be part of this doc)
@@ -698,7 +700,7 @@ bool KoDocument::saveChildren( KoStore* _store )
         {
             if ( !childDoc->isStoredExtern() )
             {
-                //kdDebug(32001) << "KoDocument::saveChildren internal url:" << childDoc->url().url() << endl;
+                //kdDebug(32001) << "KoDocument::saveChildren internal url: /" << i << endl;
                 if ( !childDoc->saveToStore( _store, QString::number( i++ ) ) )
                     return FALSE;
                 childDoc->setModified( false );
@@ -1385,7 +1387,7 @@ void KoDocument::emitEndOperation()
 
 bool KoDocument::isStoredExtern()
 {
-    return ( !url().protocol().isEmpty() && url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL );
+    return !storeInternal() && hasExternURL();
 }
 
 void KoDocument::setModified( bool mod )
@@ -1458,11 +1460,11 @@ int KoDocument::queryCloseExternalChildren()
             KoDocument *doc = it.current()->document();
             if ( doc )
             {
-                if ( it.current()->isStoredExtern() ) //###TODO: Handle non-native mimetype docs
+                if ( doc->isStoredExtern() ) //###TODO: Handle non-native mimetype docs
                 {
                     if ( doc->isModified() )
                     {
-                        kdDebug()<<k_funcinfo<<" found modified child: "<<doc->url().url()<<endl;
+                        kdDebug()<<k_funcinfo<<" found modified child: "<<doc->url().url()<<" extern="<<doc->isStoredExtern()<<endl;
                         if ( doc->queryCloseDia() == KMessageBox::Cancel )
                             return  KMessageBox::Cancel;
                     }
@@ -1736,6 +1738,23 @@ bool KoDocument::isCurrent() const
 {
     return d->m_current;
 }
+
+bool KoDocument::storeInternal() const
+{
+    return d->m_storeInternal;
+}
+
+void KoDocument::setStoreInternal( bool i )
+{
+    d->m_storeInternal = i;
+    //kdDebug()<<k_funcinfo<<"="<<d->m_storeInternal<<" doc: "<<url().url()<<endl;
+}
+
+bool KoDocument::hasExternURL()
+{
+    return !url().protocol().isEmpty() && url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL;
+}
+
 
 #include "koDocument.moc"
 #include "koDocument_p.moc"
