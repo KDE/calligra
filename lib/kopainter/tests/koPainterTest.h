@@ -23,6 +23,7 @@
 #include <qwidget.h>
 
 class KoPainter;
+class QPaintEvent;
 
 class KoPainterTest : public QWidget
 {
@@ -30,6 +31,9 @@ class KoPainterTest : public QWidget
 public:
    KoPainterTest(QWidget *parent = 0L, const char *name = 0L);
    ~KoPainterTest();
+
+protected:
+  void paintEvent(QPaintEvent *);
 
 private:
   KoPainter *p;

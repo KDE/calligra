@@ -17,25 +17,49 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __ko_flood_h__
-#define __ko_flood_h__
+#ifndef __ko_outline_h__
+#define __ko_outline_h__
 
-#include "koFill.h"
-#include <koColor.h>
+#include "koColor.h"
 
-class KoFlood : public KoFill
+class KoOutline
 {
 public:
-  KoFlood();
-  ~KoFlood();
+  enum Join {JoinMiter, JoinRound, JoinBevel};
+  enum Cap {CapButt, CapRound, CapSquare};
 
-  Type type() const {return Flood; };
+  KoOutline();
 
-  const KoColor &color() const {return mColor; }
-  void color(KoColor &c);
+  const KoColor color() const {return mColor; }
+  void color(KoColor c);
+
+  int opacity() const {return mOpacity; }
+  void opacity(int o);
+
+  double width() const {return mWidth; }
+  void width(double w);
+
+  double dashOffset() const {return mDashOffset; }
+  void dashOffset(double d);
+
+  const QMemArray<double> &dashes() const {return mDashes; }
+  void dashResize(int s);
+  void setDash(int n, double l);
+
+  Join join() const {return mJoin; }
+  void join(Join j);
+
+  Cap cap() const {return mCap; }
+  void cap(Cap c);
 
 private:
   KoColor mColor;
+  int mOpacity;
+  double mWidth;
+  double mDashOffset;
+  QMemArray<double> mDashes;
+  Join mJoin;
+  Cap mCap;
 };
 
 #endif

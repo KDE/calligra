@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (c) 2002 Igor Janssen (rm@linux.ru.net)
+  Copyright (c) 2002 Igor Janssen (rm@kde.org)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,13 @@
 #ifndef __ko_painter_h__
 #define __ko_painter_h__
 
+#define LIBART_COMPILATION
+
 #include <koColor.h>
+#include <support/art_vpath.h>
+
+class KoOutline;
+class KoFill;
 
 class KoPainter
 {
@@ -28,15 +34,35 @@ public:
   KoPainter(int w, int h);
   ~KoPainter();
 
+  QImage *image() const {return mBuffer; }
+
+  void outline(KoOutline *aOutline);
+  void fill(KoFill *aFill);
+
   void resize(int w, int h);
 
   void fillAreaRGB(const QRect &r, const KoColor &c);
-  void drawRectRGB(KoColor &c);
+  void drawRectRGB(const QRect &r, const KoColor &c);
+  void drawHorizLineRGB(const int x1, const int x2, const int y, const KoColor &c);
+  void drawVertLineRGB(const int x, const int y1, const int y2, const KoColor &c);
+
+  void drawLine(double x1, double y1, double x2, double y2)
+;
+  void drawRect(double x, double y, double w, double h, double rx, double ry);
+
+  void blit(QWidget *w);
+
+private:
+  void memset(QRgb *p, int n, QRgb c);
+  void drawVPath(ArtVpath *vec);
 
 private:
   QImage *mBuffer;
   int mWidth;
   int mHeight;
+
+  KoOutline *mOutline;
+  KoFill *mFill;
 };
 
 #endif

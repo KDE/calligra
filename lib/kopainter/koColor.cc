@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-  Copyright (c) 1999 Matthias Elter <me@kde.org>
+  Copyright (c) 1999 Matthias Elter (me@kde.org)
+  Copyright (c) 2001-2002 Igor Janssen (rm@kde.org)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -240,6 +241,15 @@ QString KoColor::name() const
   {
   case cs_RGB:
     s.sprintf("#%02x%02x%02x", R(), G(), B());
+    break;
+  case cs_HSV:
+    s.sprintf("$%02x%02x%02x", H(), S(), V());
+    break;
+  case cs_CMYK:
+    s.sprintf("@%02x%02x%02x", C(), M(), Y(), K());
+    break;
+  case cs_Lab:
+    s.sprintf("*%02x%02x%02x", L(), a(), b());
     break;
   default:
     s.sprintf("#%02x%02x%02x", R(), G(), B());
