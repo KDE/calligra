@@ -639,7 +639,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
     font= new QFont( doc->defaultFont() );
-    font->setPointSize( (int)KoTextZoomHandler::layoutUnitPtToPt( font->pointSize() ) );
 
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);

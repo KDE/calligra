@@ -169,9 +169,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     // Ok, this is KPresenter. A default font of 10 makes no sense. Let's go for 20.
     ptSize = QMAX( 20, ptSize );
 
-    // Zoom its size to layout units
-    m_defaultFont.setPointSize( m_zoomHandler->ptToLayoutUnitPt( ptSize ) );
-
     m_standardStyle->format().setFont( m_defaultFont );
 
     /// KPresenter isn't color-scheme aware, it defaults to black on white.

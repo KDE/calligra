@@ -481,12 +481,10 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
 {
     QString tmpFamily, tmpColor, tmpTextBackColor;
-    int tmpPointSize=10;
     unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
     int tmpVerticalAlign=-1;
 
     tmpFamily=lastFormat->font().family();
-    tmpPointSize=static_cast<int>(KoZoomHandler::layoutUnitPtToPt( lastFormat->font().pointSize()));
     tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
     tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
     tmpUnderline=static_cast<unsigned int>(lastFormat->underline());
@@ -497,7 +495,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         tmpTextBackColor=lastFormat->textBackgroundColor().name();
 
     element.setAttribute(attrFamily, tmpFamily);
-    element.setAttribute(attrPointSize, tmpPointSize);
+    element.setAttribute(attrPointSize, lastFormat->pointSize());
 
     if(tmpBold)
         element.setAttribute(attrBold, tmpBold);
@@ -819,7 +817,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     }
 
     QString color = n.attribute( attrColor );
-    fn.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
+    fn.setPointSize( size );
     fn.setBold( bold );
     fn.setItalic( italic );
     //kdDebug(33001) << "KPTextObject::loadFormat: family=" << fn.family() << " size=" << fn.pointSize() << endl;

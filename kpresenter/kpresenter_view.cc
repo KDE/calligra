@@ -5080,7 +5080,7 @@ void KPresenterView::changeLink()
 void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 {
     actionTextFontFamily->setFont( currentFormat.font().family() );
-    actionTextFontSize->setFontSize( currentFormat.font().pointSize() );
+    actionTextFontSize->setFontSize( currentFormat.pointSize() );
     actionTextBold->setChecked( currentFormat.font().bold());
     actionTextItalic->setChecked( currentFormat.font().italic() );
     actionTextUnderline->setChecked( currentFormat.underline());
@@ -6927,8 +6927,6 @@ void KPresenterView::slotObjectEditChanged()
     if ( !m_canvas->applicableTextInterfaces().isEmpty() )
     {
         KoTextFormat format =*(m_canvas->applicableTextInterfaces().first()->currentFormat());
-        //unzoom font
-        format.setPointSize( (int)KoTextZoomHandler::layoutUnitPtToPt( format.font().pointSize() ) );
         showFormat( format );
         const KoParagLayout * paragLayout=m_canvas->applicableTextInterfaces().first()->currentParagLayoutFormat();
         KoParagCounter counter;
