@@ -2176,9 +2176,18 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 	    break;
 	}
 
-	textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionDelete );
-	clearUndoRedoInfo = FALSE;
+        if ( e->state() & ControlButton )
+        {
+            // Delete a word
+            do {
+                textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionDelete );
+            } while ( !cursor->atParagEnd()
+                      && !cursor->parag()->at( cursor->index() )->c.isSpace() );
+        }
+        else
+            textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionDelete );
 
+       clearUndoRedoInfo = FALSE;
 	break;
     case Key_Backspace:
 	if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
@@ -2201,11 +2210,9 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
                       && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() );
         }
         else
-        {
             textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionBackspace );
-        }
-	clearUndoRedoInfo = FALSE;
 
+       clearUndoRedoInfo = FALSE;
 	break;
     case Key_F16: // Copy key on Sun keyboards
 	copy();
