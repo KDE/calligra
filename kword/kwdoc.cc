@@ -430,13 +430,14 @@ void KWDocument::recalcFrames()
 
         // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
-        // Then from the existing frames in general
+        // Then from the other frames ( frameset-num > 0 )
         double maxBottom = 0;
-        for (int m = getNumFrameSets()-1; m>=0; m--) {
+        for (int m = getNumFrameSets() - 1; m > 0; m-- )
+        {
             KWFrameSet *fs=getFrameSet(m);
             if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() )
             {
-                for (int n = fs->getNumFrames()-1;  n >=0; n--) {
+                for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
                     //    kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
                     maxBottom = QMAX(maxBottom, fs->getFrame(n)->bottom());

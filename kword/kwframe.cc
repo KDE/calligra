@@ -807,11 +807,11 @@ void KWFrameSet::load( QDomElement &attributes )
             b.style = Border::SOLID;
             b.ptWidth = 0;
 
-            QRect rect;
-            rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0 ) );
-            rect.setTop( KWDocument::getAttribute( frameElem, "top", 0 ) );
-            rect.setRight( KWDocument::getAttribute( frameElem, "right", 0 ) );
-            rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0 ) );
+            KoRect rect;
+            rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) );
+            rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) );
+            rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) );
+            rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
             RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", 0 ) );
             double runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                                   ? frameElem.attribute( "runaroundGap" ).toDouble()
