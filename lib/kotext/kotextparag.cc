@@ -445,8 +445,6 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
 
-    if ( localFormat.textBackgroundColor().isValid() )
-        painter.fillRect( startX, lastY, bw, h,localFormat.textBackgroundColor() );
 
     int startXpix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
     //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startXpix << endl;
@@ -456,6 +454,14 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     int lastY_pix = zh->layoutUnitToPixelY( lastY );
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
+
+
+    if ( localFormat.textBackgroundColor().isValid() )
+        painter.fillRect(  startXpix, lastY_pix, bw, h_pix,localFormat.textBackgroundColor() );
+
+
+
+
     QTextParag::drawParagString( painter, s, start, len, startXpix,
                                  lastY_pix, baseLine_pix,
                                  bw, // Note that bw is already in pixels (see QTextParag::paint)
