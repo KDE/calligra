@@ -639,7 +639,22 @@ static bool ProcessStoreFile ( QIODevice* subFile,
     return true;
 }
 
-bool KWEFKWordLeader::loadKoStoreFile(const QString& fileName, QByteArray& array)
+QIODevice* KWEFKWordLeader::getSubFileDevice(const QString& fileName)
+{
+    KoStoreDevice* subFile;
+
+    subFile=m_chain->storageFile(fileName,KoStore::Read);
+
+    if (!subFile)
+    {
+        kdError(30508) << "Could not get a device for sub-file: " << fileName << endl;
+        return NULL;
+    }
+    return subFile;
+}
+
+
+bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
 {
     KoStoreDevice* subFile;
 

@@ -65,6 +65,11 @@ bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
 }
 
 bool KWEFBaseWorker::loadKoStoreFile(const QString& fileName, QByteArray& array)
+{   // DEPRECATED: use loadSubFile
+    return loadSubFile(fileName,array);
+}
+
+bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array)
 // return value:
 //   true if the file is not empty
 //   false if the file is empty or if an error occured
@@ -72,13 +77,23 @@ bool KWEFBaseWorker::loadKoStoreFile(const QString& fileName, QByteArray& array)
     bool flag=false;
     if (m_kwordLeader)
     {
-        flag=m_kwordLeader->loadKoStoreFile(fileName,array);
+        flag=m_kwordLeader->loadSubFile(fileName,array);
     }
     else
     {
-        kdWarning(30508) << "Leader is unknown! (KWEFBaseWorker::loadKoStoreFile)" << endl;
+        kdWarning(30508) << "Leader is unknown! (KWEFBaseWorker::loadSubFile)" << endl;
     }
     return flag;
+}
+
+QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName)
+{
+    if (!m_kwordLeader)
+    {
+        kdWarning(30508) << "Leader is unknown! (KWEFBaseWorker::getSubFileDevice)" << endl;
+        return NULL;
+    }
+    return m_kwordLeader->getSubFileDevice(fileName);
 }
 
 //

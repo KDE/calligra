@@ -24,6 +24,7 @@
 #define KWEF_BASEWORKER_H
 
 #include <qstring.h>
+#include <qiodevice.h>
 
 #include <KWEFStructures.h>
 
@@ -37,7 +38,9 @@ class KWEFBaseWorker
     public:
         void registerKWordLeader(KWEFKWordLeader* leader);
     public: // callbacks to Leader
-        bool loadKoStoreFile(const QString& fileName, QByteArray& array);
+        bool loadKoStoreFile(const QString& fileName, QByteArray& array); // DEPRECATED (use loadSubFile)
+        bool loadSubFile(const QString& fileName, QByteArray& array);
+        QIODevice* getSubFileDevice(const QString& fileName);
     public: // leader/worker functions
         virtual bool doOpenFile (const QString& filenameOut, const QString& to);
         virtual bool doCloseFile (void); // Close file in normal conditions

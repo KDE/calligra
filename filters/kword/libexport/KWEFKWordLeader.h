@@ -23,6 +23,8 @@
 #ifndef KWEF_KWORDLEADER_H
 #define KWEF_KWORDLEADER_H
 
+#include <qiodevice.h>
+
 #include <koFilterChain.h>
 
 #include <KWEFBaseWorker.h>
@@ -41,7 +43,8 @@ class KWEFKWordLeader
         KoFilter::ConversionStatus convert( KoFilterChain* chain,
             const QCString& from, const QCString& to);
     public: // callbacks
-        bool loadKoStoreFile(const QString& fileName, QByteArray& array);
+        bool loadSubFile(const QString& fileName, QByteArray& array);
+        QIODevice* getSubFileDevice(const QString& fileName);
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
         bool doFullDocument (const QValueList<ParaData> &);
