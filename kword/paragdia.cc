@@ -632,7 +632,7 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
         cSpacing->setCurrentItem( 0 );
     else if ( _spacing == KWParagLayout::LS_ONEANDHALF )
         cSpacing->setCurrentItem( 1 );
-    else if ( _spacing = KWParagLayout::LS_DOUBLE )
+    else if ( _spacing == KWParagLayout::LS_DOUBLE )
         cSpacing->setCurrentItem( 2 );
     else
     {
