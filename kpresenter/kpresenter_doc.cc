@@ -2130,9 +2130,9 @@ void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
-	  x -= viewPtr->getDiffX();
-	  y -= viewPtr->getDiffY();
-	  viewPtr->repaint(x,y,w,h,erase);
+	  //x -= viewPtr->getDiffX();
+	  //y -= viewPtr->getDiffY();
+	  viewPtr->repaint(x - viewPtr->getDiffX(),y - viewPtr->getDiffY(),w,h,erase);
 	}
     }
 }
