@@ -961,7 +961,7 @@ void KoTextParag::printRTDebug( int info )
         static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
         if ( tabList.isEmpty() ) {
-            if ( string()->toString().find( '\t' ) )
+            if ( string()->toString().find( '\t' ) != -1 )
                 kdDebug() << "Tab width: " << textDocument()->tabStopWidth() << endl;
         } else {
             KoTabulatorList::Iterator it = tabList.begin();
