@@ -150,7 +150,7 @@ void KugarPart::slotPreferredTemplate(const QString &tpl)
         QString localtpl;
         bool isTemp = false;
 
-        if (url.isMalformed())
+        if (!url.isValid())
         {
             kdDebug() << "mailformed url" << endl;
             if (tpl.find('/') >= 0)

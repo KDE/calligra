@@ -95,7 +95,7 @@ void Report::setReportTemplate(const QString &tpl)
 	QString localtpl;
 	bool isTemp = false;
 
-	if (url.isMalformed())
+	if (!url.isValid())
 	{
 		if (tpl.find('/') >= 0)
 			localtpl = tpl;
