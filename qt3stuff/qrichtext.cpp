@@ -1194,16 +1194,28 @@ void QTextCursor::setDocument( QTextDocument *d )
 QTextDocument::QTextDocument( QTextDocument *p )
     : par( p ), parParag( 0 ), tc( 0 ), tArray( 0 ), tStopWidth( 0 )
 {
+    fCollection = new QTextFormatCollection;
+    init();
+}
+
+QTextDocument::QTextDocument( QTextDocument *p, QTextFormatCollection *c )
+    : par( p ), parParag( 0 ), tc( 0 ), tArray( 0 ), tStopWidth( 0 )
+{
+    fCollection = c;
+    init();
+}
+
+void QTextDocument::init()
+{
 #if defined(PARSER_DEBUG)
     qDebug( debug_indent + "new QTextDocument (%p)", this );
 #endif
-    if ( p )
-	p->insertChild( this );
+    if ( par )
+	par->insertChild( this );
     pProcessor = 0;
     useFC = TRUE;
     pFormatter = 0;
     indenter = 0;
-    fCollection = new QTextFormatCollection;
     fParag = 0;
     txtFormat = Qt::AutoText;
     preferRichText = FALSE;
@@ -1226,8 +1238,8 @@ QTextDocument::QTextDocument( QTextDocument *p )
     buf_pixmap = 0;
     nextDoubleBuffered = FALSE;
 
-    if ( p )
-	withoutDoubleBuffer = p->withoutDoubleBuffer;
+    if ( par )
+	withoutDoubleBuffer = par->withoutDoubleBuffer;
     else
 	withoutDoubleBuffer = FALSE;
 
@@ -1236,7 +1248,7 @@ QTextDocument::QTextDocument( QTextDocument *p )
 
     cx = 0;
     cy = 2;
-    if ( p )
+    if ( par )
 	cx = cy = 0;
     cw = 600;
     vw = 0;
@@ -2068,6 +2080,7 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
 	p = p->next();
     }
 
+    //qDebug("joining paragraphs %d and %d", c1.parag()->paragId(), c2.parag()->paragId());
     c1.parag()->join( c2.parag() );
 }
 
@@ -2397,6 +2410,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
     QPainter painter;
 
     while ( parag ) {
+	//qDebug("draw: formatting %d", parag->paragId());
 	lastFormatted = parag;
 	if ( !parag->isValid() )
 	    parag->format();
@@ -2415,6 +2429,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 		if ( verticalBreak() && flow() )
 		    flow()->draw( p, cx, cy, cw, ch );
 
+		//qDebug("draw: we're past cy+ch=%d returning lastFormatted=%d", cy+ch, parag->paragId());
 		return lastFormatted;
 	    }
 	    parag = parag->next();
@@ -2452,6 +2467,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	flow()->draw( p, cx, cy, cw, ch );
 
     tmpCursor = 0;
+    //qDebug("draw: all done. returning lastFormatted=%d", parag->paragId());
     return lastFormatted;
 }
 
@@ -3002,6 +3018,7 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
 
 QTextParag::~QTextParag()
 {
+    //qDebug("QTextParag::~QTextParag id=%d",paragId());
     delete str;
     if ( doc && p == doc->minwParag ) {
 	doc->minwParag = 0;
@@ -3080,6 +3097,7 @@ void QTextParag::remove( int index, int len )
 
 void QTextParag::join( QTextParag *s )
 {
+    //qDebug("QTextParag::join this=%d with %d",paragId(),s->paragId());
     int oh = r.height() + s->r.height();
     n = s->n;
     if ( n )
@@ -3131,6 +3149,7 @@ void QTextParag::join( QTextParag *s )
 
 void QTextParag::move( int &dy )
 {
+    //qDebug("QTextParag::move paragId=%d dy=%d",paragId(),dy);
     if ( dy == 0 )
 	return;
     changed = TRUE;
@@ -3138,20 +3157,21 @@ void QTextParag::move( int &dy )
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
 	i->ypos += dy;
     if ( p )
-       p->lastInFrame = FALSE;
+	p->lastInFrame = FALSE;
     if ( doc && doc->verticalBreak() ) {
 	const int oy = r.y();
 	int y = oy;
 	doc->flow()->adjustFlow( y, r.width(), r.height(), this, TRUE );
 	if ( oy != y ) {
-           if ( p ) {
-               p->lastInFrame = TRUE;
-               p->setChanged( TRUE );
-           }
+	    if ( p ) {
+		p->lastInFrame = TRUE;
+		p->setChanged( TRUE );
+	    }
 	    int oh = r.height();
 	    r.setY( y );
 	    r.setHeight( oh );
 	    dy += y - oy;
+            //qDebug("QTextParag::move done. paragId=%d dy=%d lastInFrame=true",paragId(),dy);
 	}
     }
 }
@@ -3170,6 +3190,7 @@ void QTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
+    //qDebug("QTextParag::format id=%d invalid, formatting (moving after previous parag)",paragId());
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( doc ) {
@@ -3231,7 +3252,7 @@ void QTextParag::format( int start, bool doMove )
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	QTextParag *s = n;
 	while ( s ) {
-		s->invalidate( 0 );
+	    s->invalidate( 0 );
 	    s->move( dy );
 	    s = s->n;
 	}
@@ -4794,7 +4815,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *f )
  // QTextFormatCollection::setPainter() which breaks printing on
  // windows
     if ( f->isAnchor() ) {
-	lastFormat = new QTextFormat( *f );
+	lastFormat = createFormat( *f );
 	lastFormat->collection = 0;
 	return lastFormat;
     }
@@ -4813,7 +4834,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *f )
 #ifdef DEBUG_COLLECTION
     qDebug( "need '%s', worst case!", f->key().latin1() );
 #endif
-    lastFormat = new QTextFormat( *f );
+    lastFormat = createFormat( *f );
     lastFormat->collection = this;
     cKey.insert( lastFormat->key(), lastFormat );
     return lastFormat;
@@ -4829,7 +4850,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
 	return cres;
     }
 
-    cres = new QTextFormat( *of );
+    cres = createFormat( *of );
     kof = of->key();
     knf = nf->key();
     cflags = flags;
@@ -4893,7 +4914,7 @@ QTextFormat *QTextFormatCollection::format( const QFont &f, const QColor &c )
 	return cachedFormat;
     }
 
-    cachedFormat = new QTextFormat( f, c );
+    cachedFormat = createFormat( f, c );
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
 #ifdef DEBUG_COLLECTION
