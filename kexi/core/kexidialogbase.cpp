@@ -82,6 +82,11 @@ KexiViewBase *KexiDialogBase::selectedView() const
 	return static_cast<KexiViewBase*>(m_stack->visibleWidget());
 }
 
+KexiViewBase *KexiDialogBase::viewForMode(int mode) const
+{
+	return static_cast<KexiViewBase*>( m_stack->widget(mode) );
+}
+
 void KexiDialogBase::addView(KexiViewBase *view)
 {
 	addView(view,0);
@@ -292,12 +297,14 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	if (!newView->afterSwitchFrom(prevViewMode, cancelled)) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl; 
+		m_currentViewMode = prevViewMode;
 		return false;
 	}
 	m_newlySelectedView = 0;
-	if (cancelled)
+	if (cancelled) {
+		m_currentViewMode = prevViewMode;
 		return true;
-	m_currentViewMode = newViewMode;
+	}
 	if (view)
 		takeActionProxyChild( view ); //take current proxy child
 	addActionProxyChild( newView ); //new proxy child
@@ -477,7 +484,7 @@ void KexiDialogBase::activate()
 	KexiViewBase *v = selectedView();
 	if (v)
 		v->updateActions(true);
-	m_parentWindow->invalidateSharedActions(this);
+//js: not neeed??	m_parentWindow->invalidateSharedActions(this);
 }
 
 void KexiDialogBase::deactivate()

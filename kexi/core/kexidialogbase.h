@@ -64,8 +64,12 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		bool isRegistered();
 
-		//! \return currently seelcted view or 0 if there is no current view
+		//! \return currently selected view or 0 if there is no current view
 		KexiViewBase *selectedView() const;
+
+		/*! \return a view for a given \a mode or 0 if there's no such mode available (or opened).
+		 This does not open mode if it's not opened. */
+		KexiViewBase *viewForMode(int mode) const;
 
 		//! Adds \a view for the dialog. It will be the _only_ view (of unspecified mode) for the dialog
 		void addView(KexiViewBase *view);
