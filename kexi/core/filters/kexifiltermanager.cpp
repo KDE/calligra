@@ -99,8 +99,8 @@ bool KexiFilterManager::importFile(unsigned long importType)
 
 	}
 
-	for (QMap<QString,QString>::const_iterator it=mapping.constBegin();
-		it!=mapping.constEnd();++it) {
+	for (QMap<QString,QString>::const_iterator it=mapping.begin();
+		it!=mapping.end();++it) {
 	
 		KMimeType::Ptr mt = KMimeType::mimeType( it.key() );
 		dialogfilter+=mt->patterns().join(" ")+"|"+mt->comment()+"\n";
@@ -111,8 +111,8 @@ bool KexiFilterManager::importFile(unsigned long importType)
 	
 	dialogfilter+="!!!!KEXI_NATIVE_SEPERATOR!!!!|-------\n";
 
-	for (QMap<QString,QString>::const_iterator it=chainMapping.constBegin();
-		it!=chainMapping.constEnd();++it) {
+	for (QMap<QString,QString>::const_iterator it=chainMapping.begin();
+		it!=chainMapping.end();++it) {
 		if (!mapping.contains(it.key())) {
 			mapping.insert(it.key(),it.data());
 		

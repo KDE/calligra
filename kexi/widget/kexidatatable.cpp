@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kactionclasses.h>
+#include <kaction.h>
 #include "koApplication.h"
 
 
