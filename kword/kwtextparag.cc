@@ -256,11 +256,15 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().italic()) );
     }
-    if( !refFormat || curFormat->font().underline() != refFormat->font().underline() )
+    if( !refFormat || curFormat->font().underline() != refFormat->font().underline()
+        || curFormat->doubleUnderline() != refFormat->doubleUnderline() )
     {
         elem = doc.createElement( "UNDERLINE" );
         formatElem.appendChild( elem );
-        elem.setAttribute( "value", static_cast<int>(curFormat->font().underline()) );
+        if ( curFormat->doubleUnderline() )
+            elem.setAttribute( "value", "double" );
+        else
+            elem.setAttribute( "value", static_cast<int>(curFormat->font().underline()) );
     }
     if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() )
     {
@@ -444,8 +448,15 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() )
         font.setItalic( elem.attribute("value").toInt() == 1 );
     elem = formatElem.namedItem( "UNDERLINE" ).toElement();
-    if ( !elem.isNull() )
-        font.setUnderline( elem.attribute("value").toInt() == 1 );
+    if ( !elem.isNull() ) {
+        QString value = elem.attribute("value");
+        if ( value == "0" || value == "1" )
+            font.setUnderline( value.toInt() == 1 );
+        else if ( value == "single" ) // value never used when saving, but why not support it? ;)
+            font.setUnderline( true );
+        else if ( value == "double" )
+            format.setDoubleUnderline( true );
+    }
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
         font.setStrikeOut( elem.attribute("value").toInt() == 1 );

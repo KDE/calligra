@@ -2625,19 +2625,21 @@ void KWView::formatFont()
     QPtrListIterator<KoTextFormatInterface> it( lst );
     QColor col=lst.first()->textBackgroundColor();
     col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+    bool doubleUnderline = lst.first()->currentFormat()->doubleUnderline();
     KoFontDia *fontDia = new KoFontDia( this, "", lst.first()->textFont(),
                                         actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-                                        lst.first()->textColor(), col );
+					doubleUnderline, lst.first()->textColor(), col );
     if (fontDia->exec() )
     {
         int flags = fontDia->changedFlags();
         if ( flags )
         {
-            KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font of frame"));
+            KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font"));
             for ( ; it.current() ; ++it )
             {
                 KCommand *cmd = it.current()->setFontCommand(fontDia->getNewFont(),
                                                              fontDia->getSubScript(), fontDia->getSuperScript(),
+							     fontDia->getDoubleUnderline(),
                                                              fontDia->color(),fontDia->backGroundColor(),
                                                              flags);
                 if (cmd)

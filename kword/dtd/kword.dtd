@@ -485,7 +485,10 @@ don't put a </?xml...> at the end of the file!).
     value CDATA #REQUIRED>
 
 <!-- UNDERLINE
-        Value is either 0 or 1 with 1=true and 0=false
+        Value is either 0 or 1 or single or double
+          0 = no underline
+          1 or single = single underline
+          double = double-underline.
 -->
 <!ELEMENT UNDERLINE
     EMPTY>
