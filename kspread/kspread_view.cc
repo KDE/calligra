@@ -2502,18 +2502,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 
     if ( _ev->state() & ( Qt::ControlButton ) ){
 
-      // Universally reserved spreadsheet navigators known to all professional
-      // spreadsheet users around the world -- Bernd
-
       switch( _ev->key() ){
-      case Key_PageDown:
-
-	nextTable();
-	return;
-
-      case Key_PageUp:
-	previousTable();
-	return;
 
 #ifndef NDEBUG
       case Key_V: // Ctrl+Shift+V to show debug (similar to KWord)
