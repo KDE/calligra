@@ -11,45 +11,36 @@ Missing or incomplete stuff:
 
 Optimations:
 ----------------------------------------
-- Make recalculation of frames (after resizing frames) and calculation of text running around frames much FASTER. Espacially the
-  recalculation of the whole text in these cases is very slow in long docs
+- Make recalculation of frames (after resizing frames) and calculation of text running around 
+  frames much FASTER. Espacially the recalculation of the whole text in these cases is very 
+  slow in long docs
 
 Bugs to fix:
 ----------------------------------------
 - When deleting text, empty pages (frames) are not removed
 - Tables have to be in the textflow of the first frameset (some hack needed here)
 - Do not allow to make frames too small as this can result in an endless loop
-- When moving/resizing tables and the go over multiple pages there are some redraw problems - but nothing really bad :-))
+- When moving/resizing tables and the go over multiple pages there are some redraw problems - 
+  but nothing really bad :-))
 - When a frame grows there are sometimes redraw errors
 - When removing text in a table cell shrink table cells
 
 More bugs:
-- Deleting the first frameset crashes kword (can only be done in DTP)_
-- new page is not shown after a 'addpage'
-- Add getSelectedFrame() to kword_page and replace lots of code with that function.
+- Deleting the first frameset crashes kword (can only be done in DTP)
 - Page Preview image forgets about orientation when changing page size. (always shows  portrait)
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
+  (we have a problem with reference counts in the creation of a new image)
 
-
-
-Add lots of functions to the framedia.cc as a placeholder for future extentions.
-  - SheetSide still has to go in.
 
 Add functionality:
 - Even/odd pages
-- 'copy-frame' behaviour
+ - Add SheetSide config in framedia 
+ - implement copy of 'copy-frames' in appendPage method
 - Sideheads
 - split frame
-- only show frame on [odd|even] pages
-- copy past of picture frames
-
-Look into:
-- placing files external 
-  at the moment a file is created to fit the origional file. This can be used as a 
-  thumb..
-- books 
-  (where there is more then one Kword doc in a book, but they share styletags 
-   and pagenumbers)
+- Frame Run around is the wrong way around.. Framedia does it correct now. 
+  still needs to be done correctly in kword_doc
+- 
 
 Find out if this is done correctly:
   CMYK images are read
@@ -57,6 +48,93 @@ Find out if this is done correctly:
   fonts are included on print
   strange fonts are also included
 
+
+The whole images thing needs to be rethought:
+-----------------------------------------
+Included files (pictures/parts/formula's)
+-----------------------------------------
+- Pictures should never be rescaled if that means that there is image loss at printing time
+- It should be possible to keep files external. Kword should also notice a changed file
+  (preferably at runtime) and reload it.
+
+- In kword we have an image object. 
+- we also have a imageCollection object.
+
+
+Proposal
+--------
+
+On placing a picture or part we get an insert dialog. This dialog could be changed 
+to include a checkbox "keep file external". If changing the file-dia is a problem 
+we could show a dialog just after the file-dia.
+
+On placing the picture in the document we should create a thumbnail on screen at the 
+screensize. This counts for both internal and external pictures. With todays computers 
+I am not really concerned with filesizes anymore, besides; it would probably be about 30k max. 
+They will be saved as:
+ tar:pictures/
+
+The internal pictures should be read into memory and saved to the tar in a dir like
+  tar:raw-pictures/ 
+and
+  tar:raw-parts/
+
+
+When another instance of the same picture/part is placed we should just use
+the same object we allready use. We could consider creating a newly
+scaled thumb if the sizes differ a lot. The raw file will stay untouched.
+ 
+ 
+kofficecore/ImageContainer.cc
+ manages a picture. You can ask it for thumbs, location, the raw file
+ and it has a save function.
+ - ImageContainer(QString filename, bool external);
+    constructor.
+    if filename starts with tar or external is set: store filename.
+    otherwise read raw file in mem.
+ - int getRefCount()
+    keep internal usage count
+ - koImage* getThumb(QSize);
+    look in tar if there was a thumb. Otherwise create one of selected size.
+    note that koImage also does referece checking.
+ - void incCount();
+    for usage count
+ - void decCount();
+    for usage count
+ - koRawImage* getImage();
+    Return the rawimage (in a stream??) either from mem or from disk.
+ - save();
+    well, it saves.
+ 
+kofficecore/PartContainer.cc
+ manages a part. You can as it for location (key), the part and it
+ has a save function
+ - PartContainer
+    constructor
+ - getRefCount
+ - void incCount()
+ - void decCount();
+ - koSomething* getPart();
+ - save();
+ 
+kofficeCore/ImageCollection.cc
+ - ImageCollection();
+ - ImageConatainer* getImage(filename);
+    return imageContainer, if one doesnt exist create it first.
+ - int getCount();
+    return number of images in the collection
+ - void removeImage(filename);
+    remove image from collection
+ - void load();
+    load all imageContainers
+ - void save();
+    save all imageContainers
+ 
+Note that you can not resize an image, just the thumbs.
+Note also that the 'key' is its filename. With full path that makes it http://
+or file:// or tar:// for remote, local, internal storage respectively.
+ 
+Last note: this proposal does not propose any gui/printing issues at all.
 
 Reginald Stadlbauer <reggie@kde.org>
 Thomas Zander <zander@earthling.net>
