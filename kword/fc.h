@@ -1,12 +1,16 @@
 #ifndef line_h
 #define line_h
 
-class KWFormatContext;
-class KWordDocument;
-class KWCharAttribute;
+#include <qregion.h>
 
 #include "format.h"
 #include "parag.h"
+
+class KWFormatContext;
+class KWordDocument;
+class KWCharAttribute;
+class KWFrame;
+class KWFrameSet;
 
 /******************************************************************/
 /* Class: KWFormatContext                                         */
@@ -30,10 +34,12 @@ public:
     enum LayoutError {COLUMN_TOO_TALL, PAPER_HEIGHT_TOO_SMALL, NO_ERROR};
 
     KWFormatContext( KWordDocument *_doc, unsigned int _frameSet );
-
-    bool operator>( const KWFormatContext &fc ) const;
-    bool operator<( const KWFormatContext &fc ) const;
-    bool operator==( const KWFormatContext &fc ) const;
+    KWFormatContext &operator=( const KWFormatContext &fc );
+    virtual ~KWFormatContext() {}
+    
+    virtual bool operator>( const KWFormatContext &fc ) const;
+    virtual bool operator<( const KWFormatContext &fc ) const;
+    virtual bool operator==( const KWFormatContext &fc ) const;
     
     void init( KWParag *_parag, bool _fromStart = TRUE,
                int _frame = -1, int _page = -1 );
@@ -174,8 +180,13 @@ public:
 
     bool selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2 );
 
-    void setFrameSet( unsigned int _frameSet ) { frameSet = _frameSet; }
+    void setFrameSet( unsigned int _frameSet );
+    void setFrame( unsigned int _frame );
 
+    QRegion getEmptyRegion() const {
+	return emptyRegion;
+    }
+    
 protected:
     unsigned int ptTextLen;
     unsigned int ptAscender;
@@ -224,10 +235,6 @@ protected:
      * The paragraph we are currently in.
      */
     KWParag *parag;
-    /**
-     * The document we are in right now.
-     */
-    KWordDocument *document;
 
     LayoutError error;
 
@@ -263,6 +270,11 @@ protected:
     bool outOfFrame;
     bool offsetsAdded;
 
+    QRegion emptyRegion;
+
+    KWFrameSet *pFrameSet;
+    KWFrame *pFrame;
+    
 };
 
 #endif

@@ -17,7 +17,7 @@
 KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color,
 		    KWUserFont *_font, int _font_size, int _weight,
 		    char _italic, char _underline,
-		    VertAlign _vertAlign, char _math, char _direct )
+		    VertAlign _vertAlign )
 {
     doc = _doc;
     color = _color;
@@ -27,8 +27,6 @@ KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color,
     italic = _italic;
     underline = _underline;
     vertAlign = _vertAlign;
-    math = _math;
-    direct = _direct;
     ref = 0;
 }
 
@@ -55,8 +53,6 @@ KWFormat::KWFormat( KWordDocument *_doc, const KWFormat &_format )
     underline = _format.getUnderline();
     vertAlign = _format.getVertAlign();
     color = _format.getColor();
-    math = -1;
-    direct = -1;
     ref = 0;
     doc = _doc;
 }
@@ -71,8 +67,6 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     underline = _format.getUnderline();
     vertAlign = _format.getVertAlign();
     color = _format.getColor();
-    math = -1;
-    direct = -1;
     ref = 0;
     if ( !doc )
 	doc =  _format.doc;
@@ -114,8 +108,6 @@ void KWFormat::setDefaults( KWordDocument *_doc )
     underline = 0;
     color = Qt::black;
     vertAlign = VA_NORMAL;
-    math = -1;
-    direct = -1;
 }
 
 /*================================================================*/

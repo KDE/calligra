@@ -2056,8 +2056,7 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
     KWFrame *tmp;
     QRect frame;
 
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
-    {
+    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameset = getFrameSet( i );
 	if ( !frameset->isVisible() ) 
 	    continue;
@@ -2067,11 +2066,9 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 	     isAWrongHeader( frameset->getFrameInfo(), getHeaderType() ) ||
 	     isAWrongFooter( frameset->getFrameInfo(), getFooterType() ) )
 	    continue;
-	for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ )
-	{
+	for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
 	    bool isRight = true, isBottom = true;
-	    if ( frameset->getGroupManager() )
-	    {
+	    if ( frameset->getGroupManager() ) {
 		unsigned int r, c;
 		frameset->getGroupManager()->getFrameSet( frameset, r, c );
 		if ( r < frameset->getGroupManager()->getRows() - 1 ) isBottom = false;
@@ -2091,15 +2088,13 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 	    _painter.fillRect( QRect( frame.x(), frame.y(), frame.width() - ( isRight ? 1 : 0 ),
 				      frame.height() - ( isBottom ? 1 : 0 ) ), tmp->getBackgroundColor() );
 
-	    if ( tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color() )
-	    {
+	    if ( tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color() ) {
 		QPen p( setBorderPen( tmp->getLeftBorder() ) );
 		_painter.setPen( p );
 		_painter.drawLine( frame.x() + tmp->getLeftBorder().ptWidth / 2, frame.y(),
 				   frame.x() + tmp->getLeftBorder().ptWidth / 2, frame.bottom() + ( isBottom ? 0 : 1 ) );
 	    }
-	    if ( tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color() )
-	    {
+	    if ( tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color() ) {
 		QPen p( setBorderPen( tmp->getRightBorder() ) );
 		_painter.setPen( p );
 		int w = tmp->getRightBorder().ptWidth;
@@ -2108,15 +2103,13 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 		_painter.drawLine( frame.right() - w, frame.y(),
 				   frame.right() - w, frame.bottom() + ( isBottom ? 0 : 1 ) );
 	    }
-	    if ( tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color() )
-	    {
+	    if ( tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color() ) {
 		QPen p( setBorderPen( tmp->getTopBorder() ) );
 		_painter.setPen( p );
 		_painter.drawLine( frame.x(), frame.y() + tmp->getTopBorder().ptWidth / 2,
 				   frame.right() + ( isRight ? 0 : 1 ), frame.y() + tmp->getTopBorder().ptWidth / 2 );
 	    }
-	    if ( tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color() )
-	    {
+	    if ( tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color() ) {
 		QPen p( setBorderPen( tmp->getBottomBorder() ) );
 		_painter.setPen( p );
 		int w = tmp->getBottomBorder().ptWidth;
@@ -2141,8 +2134,7 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
 
     unsigned int diffx1 = 0;
     unsigned int diffx2 = 0;
-    if ( _fc.getItalic() )
-    {
+    if ( _fc.getItalic() ) {
 	diffx1 = static_cast<int>( static_cast<float>( _fc.getLineHeight() ) / 3.732 );
 	diffx2 = 0;
     }
@@ -2160,14 +2152,10 @@ void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
 {
     KWordView *viewPtr;
 
-    if ( !m_lstViews.isEmpty() )
-    {
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-	{
-	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
-	    {
-		if ( viewPtr != _view )
-		{
+    if ( !m_lstViews.isEmpty() ) {
+	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() ) {
+		if ( viewPtr != _view ) {
 		    if ( _clear ) viewPtr->getGUI()->getPaperWidget()->clear();
 		    viewPtr->getGUI()->getPaperWidget()->repaintScreen( false );
 		}
@@ -2853,7 +2841,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 }
 
 /*================================================================*/
-void KWordDocument::appendPage( unsigned int _page, bool redrawBackgroundWhenAppendPage )
+void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenAppendPage*/ )
 {
     pages++;
     QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );

@@ -1421,3 +1421,13 @@ Reggie, 12.8.1999:
 ------------------
 - Fixed more redraw and formatting bugs
 
+
+Reggie, 13.8.1999:
+------------------
+- Big cleanups and some optimations in KWFormat and KWFormatContext
+- We have now always fast access to the empty/drawable region of
+  the frame we are working in through the KWFormatContext
+- Started using QRegions to always clear empty areas correctly
+  (when this QRegion stuff is done most of the remaining redraw errors will
+   be fixed :-)
+

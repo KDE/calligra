@@ -43,7 +43,7 @@ public:
      * @see KWUserFont
      */
     KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-	      char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 );
+	      char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL );
 
     /**
      * Creates a new KWFormat instance. This instance has set all values to
@@ -59,18 +59,20 @@ public:
      */
     KWFormat( KWordDocument *_doc, const KWFormat& _format );
 
-    KWFormat& operator=( const KWFormat& _format );
+    virtual ~KWFormat() {}
+    
+    virtual KWFormat& operator=( const KWFormat& _format );
 
-    bool operator==( const KWFormat & _format ) const;
-    bool operator!=( const KWFormat & _format ) const;
+    virtual bool operator==( const KWFormat & _format ) const;
+    virtual bool operator!=( const KWFormat & _format ) const;
 
-    void apply( const KWFormat &_format );
+    virtual void apply( const KWFormat &_format );
 
     /**
      * @return The color to use. The color may be not valid ( test with <TT>QColor::isValid()</TT>.
      *	       In this case you shoud not use the color returned.
      */
-    const QColor& getColor() const { return color; }
+    QColor getColor() const { return color; }
 
     /**
      * @return The font family to use. The return value may be 0L if the font should not change.
@@ -204,14 +206,6 @@ protected:
      * ( find out with QColor::isValid ) then the color does not change.
      */
     QColor color;
-    /**
-     * 1 to enable math mode, 0 to disable and -1 for no change.
-     */
-    char math;
-    /**
-     * 1 to enable direct mode, 0 to disable and -1 for no change.
-     */
-    char direct;
 
     VertAlign vertAlign;
 

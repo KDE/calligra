@@ -1912,8 +1912,13 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 
     KWFormatContext paintfc( doc, fc->getFrameSet() );
     paintfc = *fc;
+//	####
+//     QRegion emptyRegion = paintfc.getEmptyRegion();
+//     QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
+//     r.setHeight( r.height() - paintfc.getPTY() );
+//     emptyRegion.subtract( r );
     bool bend = FALSE;
-
+    
     unsigned int currFrameNum = paintfc.getFrame() - 1;
     unsigned int ptYEnd = fc->getParag()->getPTYEnd();
     bool lookInCache = paintfc.getParag() == cachedParag;
@@ -1922,9 +1927,27 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
     QStringList tmpCachedLines;
     QStringList::Iterator it = cachedLines.begin();
 
+    KWFrame *frame = frameSet->getFrame( paintfc.getFrame() - 1 );
+    KWFrame *oldFrame = frame;
     while ( !bend ) {
 	bool forceDraw = FALSE;
-	KWFrame *frame = frameSet->getFrame( paintfc.getFrame() - 1 );
+	oldFrame = frame;
+	frame = frameSet->getFrame( paintfc.getFrame() - 1 );
+	
+//	####
+// 	if ( oldFrame != frame ) {
+// 	    painter.save();
+// 	    //emptyRegion.translate( -contentsX(), -contentsY() );
+// 	    painter.setClipRegion( emptyRegion );
+// 	    painter.fillRect( emptyRegion.boundingRect(), QBrush( oldFrame->getBackgroundColor() ) );
+// 	    painter.restore();
+	
+// 	    emptyRegion = paintfc.getEmptyRegion();
+// 	    QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
+// 	    r.setHeight( r.height() - paintfc.getPTY() );
+// 	    emptyRegion.subtract( r );
+// 	}
+	 	
 	if ( paintfc.getParag() != fc->getParag() )
 	    forceDraw = TRUE;
 	if ( paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() &&
@@ -1953,11 +1976,12 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 		drawIt = FALSE;
 	}
 
+	unsigned int li = frame->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() );
+	unsigned int re = frame->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() );
+	// #### emptyRegion.subtract( QRect( _x + li, paintfc.getPTY(), _wid - li - re, paintfc.getLineHeight() ) );
 	if ( drawIt || forceDraw ) {
-	    unsigned int li = frame->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() );
 	    painter.fillRect( _x + li, paintfc.getPTY() - contentsY(),
-			      _wid - li - frame->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
-			      paintfc.getLineHeight(), QBrush( frame->getBackgroundColor() ) );
+			      _wid - li - re, paintfc.getLineHeight(), QBrush( frame->getBackgroundColor() ) );
 	    doc->printLine( paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
 	}
 
@@ -1970,6 +1994,15 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 	if ( paintfc.getPage() > lastVisiblePage )
 	    bend = TRUE;
     }
+
+//	####
+//     if ( frame ) {
+// 	painter.save();
+// 	//emptyRegion.translate( -contentsX(), -contentsY() );
+// 	painter.setClipRegion( emptyRegion );
+// 	painter.fillRect( emptyRegion.boundingRect(), QBrush( frame->getBackgroundColor() ) );
+// 	painter.restore();
+//     }
 
     if ( full && ( int )paintfc.getPTY() + ( int )paintfc.getLineHeight() < frameSet->getFrame( paintfc.getFrame() - 1 )->bottom() &&
 	 !paintfc.getParag()->getNext() ) {
