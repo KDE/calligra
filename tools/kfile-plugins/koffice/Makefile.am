@@ -17,3 +17,6 @@ METASOURCES = AUTO
 
 services_DATA = kfile_koffice.desktop
 servicesdir = $(kde_servicesdir)
+
+messages:
+	$(XGETTEXT) *.cpp -o $(podir)/kfile_koffice.pot
