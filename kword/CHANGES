@@ -150,3 +150,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Add "protect content" feature
 - Add double line boder type
 - Add a dialogbox to resize column in table
+- Add support for frame margins
