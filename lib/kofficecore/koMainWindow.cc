@@ -163,6 +163,7 @@ public:
     m_exportFile = 0;
     m_isImporting = false;
     m_isExporting = false;
+    m_windowSizeDirty = false;
     m_lastExportSpecialOutputFlag = 0;
   }
   ~KoMainWindowPrivate()
@@ -195,6 +196,7 @@ public:
   bool m_splitted;
   bool m_forQuit;
   bool m_firstTime;
+  bool m_windowSizeDirty;
 
   KAction *m_paDocInfo;
   KAction *m_paSave;
@@ -918,12 +920,13 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 void KoMainWindow::closeEvent(QCloseEvent *e) {
     if(queryClose()) {
-        if (settingsDirty() && rootDocument())
+        if (d->m_windowSizeDirty && rootDocument())
         {
             // Save window size into the config file of our instance
             instance()->config()->setGroup( "MainWindow" );
             //kdDebug(30003) << "KoMainWindow::closeEvent -> saveWindowSize" << endl;
             saveWindowSize( instance()->config() );
+            d->m_windowSizeDirty = false;
             // Save toolbar position into the config file of the app, under the doc's instance name
             //kdDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
             saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
@@ -937,7 +940,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
 
 void KoMainWindow::resizeEvent( QResizeEvent * e )
 {
-    setSettingsDirty();
+    d->m_windowSizeDirty = true;
     KParts::MainWindow::resizeEvent( e );
 }
 
