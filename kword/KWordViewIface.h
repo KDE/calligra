@@ -120,7 +120,7 @@ k_dcop:
     void addIgnoreAllWord();
     void addPersonalExpression();
     void insertHorizontalLine();
-
+    void changeHorizontalLine();
 private:
     KWView *view;
 

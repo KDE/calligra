@@ -1184,6 +1184,11 @@ void KWView::setupActions()
     actionInsertHorizontalLine = new KAction( i18n( "Horizontal line..." ), 0,
                                         this, SLOT( insertHorizontalLine() ),
                                         actionCollection(), "insert_horizontal_line" );
+
+    actionChangeHorizontalLine=new KAction( i18n( "Change Horizontal Line..." ),0,
+                                            this, SLOT( changeHorizontalLine() ),
+                                            actionCollection(), "change_horizontal_line" );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -5125,10 +5130,16 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             KWFrameSet *frameSet=frame->frameSet();
-            if(frameSet->type()==FT_PICTURE || frameSet->type()==FT_HORZLINE)
+            if( frameSet->type()==FT_PICTURE )
             {
                 actionList.append(separator);
                 actionList.append(actionChangePicture);
+                actionList.append(actionSavePicture);
+            }
+            else if ( frameSet->type() == FT_HORZLINE )
+            {
+                actionList.append(separator);
+                actionList.append(actionChangeHorizontalLine);
                 actionList.append(actionSavePicture);
             }
             else if(frameSet->isHeaderOrFooter())
@@ -6963,6 +6974,24 @@ void KWView::insertHorizontalLine()
         }
         delete dia;
     }
+}
+
+void KWView::changeHorizontalLine()
+{
+    QString file,oldFile;
+    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWHorzLineFrameSet *frameset = static_cast<KWHorzLineFrameSet *>(frame->frameSet());
+    oldFile=frameset->picture().getKey().filename();
+    KWinsertHorizontalLineDia *dia = new KWinsertHorizontalLineDia( m_doc, this);
+    if ( dia->exec() )
+    {
+        KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change HorizontalLine"), FrameIndex(frame), oldFile, file) ;
+
+        frameset->loadPicture( file );
+        m_doc->frameChanged( frame );
+        m_doc->addCommand(cmd);
+    }
+    delete dia;
 }
 
 /******************************************************************/

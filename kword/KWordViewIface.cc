@@ -391,3 +391,9 @@ void KWordViewIface::insertHorizontalLine()
 {
     view->insertHorizontalLine();
 }
+
+void KWordViewIface::changeHorizontalLine()
+{
+    view->changeHorizontalLine();
+}
+
