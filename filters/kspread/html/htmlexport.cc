@@ -29,7 +29,7 @@
 #include <koDocumentInfo.h>
 
 #include <kspread_map.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 #include <kspread_doc.h>
 
 typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
