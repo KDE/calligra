@@ -35,7 +35,7 @@ void
 VSelectTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Select" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 }
 
 void

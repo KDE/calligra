@@ -33,7 +33,7 @@ void
 VScaleTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Scale" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 }
 
 void
