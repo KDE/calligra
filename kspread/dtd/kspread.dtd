@@ -108,7 +108,7 @@
 
 		name	the name of the table
 -->
-<!ELEMENT TABLE (CELL|CHART|COLUMN)*>
+<!ELEMENT TABLE (CELL|CHART|COLUMN|ROW)*>
 <!ATTLIST TABLE  name    CDATA #REQUIRED>
 
 
@@ -149,7 +149,7 @@
                         format           CDATA #REQUIRED
                         angle            CDATA #REQUIRED
                         brushcolor       CDATA #REQUIRED
-                        indent       CDATA #REQUIRED>
+                        indent           CDATA #REQUIRED>
 
 
 <!--	Describes one column
@@ -159,9 +159,21 @@
 		column	the column number
 		width	the width of the column
 -->
-<!ELEMENT COLUMN EMPTY>
-<!ATTLIST CELL  column  CDATA #REQUIRED
-                width   CDATA #REQUIRED>
+<!ELEMENT COLUMN FORMAT?>
+<!ATTLIST COLUMN  column  CDATA #REQUIRED
+                  width   CDATA #REQUIRED>
+
+
+<!--	Describes one row
+
+		Attributes:
+
+		row	the row number
+		height	the height of the row
+-->
+<!ELEMENT ROW FORMAT?>
+<!ATTLIST ROW  row  CDATA #REQUIRED
+               height   CDATA #REQUIRED>
 
 
 <!--	Describes an embedded chart.
