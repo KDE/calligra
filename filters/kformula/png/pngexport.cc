@@ -54,7 +54,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
 
     KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
-        KMessageBox::error( 0, i18n( "Failed read data." ), i18n( "PNG export error" ) );
+        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG export error" ) );
         return KoFilter::FileNotFound;
     }
 
