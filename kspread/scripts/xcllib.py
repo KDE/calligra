@@ -2,6 +2,9 @@ from math import *
 
 print "Library started"
 
+def weis( x ):
+	return 105.9
+
 def TestMe():
 	return 100.2
 
