@@ -1951,13 +1951,21 @@ void KWCanvas::updateRulerOffsets()
 
 QPoint KWCanvas::pageCorner()
 {
-    int pageNum = 0;
+    // Same code as KWView::slotUpdateRuler
+    KWFrame * frame = 0L;
+    // Use the currently edited (fallback: the first selected) frame
     if( m_currentFrameSetEdit && m_currentFrameSetEdit->currentFrame() )
-        pageNum = m_currentFrameSetEdit->currentFrame()->pageNum();
+        frame = m_currentFrameSetEdit->currentFrame();
+    else
+        frame = m_doc->getFirstSelectedFrame();
+
+    int pageNum = 0;
+    if ( frame )
+        pageNum = frame->pageNum();
     QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
     QPoint cPoint( m_viewMode->normalToView( nPoint ) );
-    kdDebug() << "KWCanvas::rulerPos pagenum=" << pageNum
-    //          << " nPoint=" << nPoint.x() << "," << nPoint.y()
+    kdDebug() << "KWCanvas::rulerPos frame=" << frame << " pagenum=" << pageNum
+              << " nPoint=" << nPoint.x() << "," << nPoint.y()
               << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;
     return cPoint;
 }

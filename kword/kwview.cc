@@ -3226,9 +3226,15 @@ void KWView::slotUpdateRuler()
 {
     // Set the "frame start" in the ruler (tabs are relative to that position)
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+    KWFrame * frame = 0L;
+    // Use the currently edited (fallback: the first selected) frame
     if ( edit && edit->currentFrame() )
+        frame = edit->currentFrame();
+    else
+        frame = m_doc->getFirstSelectedFrame();
+    if ( frame )
     {
-        QRect r = m_doc->zoomRect( *edit->currentFrame() );
+        QRect r = m_doc->zoomRect( *frame );
         r = m_gui->canvasWidget()->viewMode()->normalToView( r );
         // Now we need to make those coordinates relative to the page corner
         QPoint pc = m_gui->canvasWidget()->pageCorner();
@@ -3301,6 +3307,7 @@ void KWView::frameSelectedChanged()
     m_doc->refreshFrameBorderButton();
 
     updateFrameStatusBarItem();
+    slotUpdateRuler();
 }
 
 void KWView::docStructChanged(int _type)

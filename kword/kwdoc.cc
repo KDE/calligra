@@ -2416,12 +2416,14 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
         frame->getFrameSet()->layout();
     }
     repaintAllViewsExcept( view );
+    updateRulerFrameStartEnd();
 }
 
 void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
 {
     //kdDebug() << "KWDocument::framesChanged" << endl;
     updateAllFrames();
+    updateRulerFrameStartEnd();
     QListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
         if ( it.current()->runAround() != KWFrame::RA_NO )

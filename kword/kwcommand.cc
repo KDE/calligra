@@ -795,6 +795,7 @@ void KWFrameMoveCommand::unexecute()
         doc->updateAllFrames();
         if ( needRelayout )
             doc->layout();
+        doc->updateRulerFrameStartEnd();
         doc->repaintAllViews();
     }
 }
