@@ -29,6 +29,9 @@ kudesigner_LDADD = $(LIB_KIO) $(LIB_KDEPRINT)
 appsdir = $(kde_appsdir)/Office
 apps_DATA = kudesigner.desktop
 
+kdemime_DATA = x-kudesigner.desktop
+kdemimedir = $(kde_mimedir)/application
+
 kudesigner_METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/kudesigner
