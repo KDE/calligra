@@ -22,11 +22,12 @@
 #define __VTOOLBOX_H__
 #include <qtoolbutton.h>
 
+#include <ktoolbar.h>
 class QWidget;
 class KarbonPart;
 class VStrokeFillPreview;
 
-class VToolBox : public QToolBar
+class VToolBox : public KToolBar
 {
 	Q_OBJECT
 

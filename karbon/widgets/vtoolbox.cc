@@ -28,6 +28,7 @@
 #include <qpixmap.h>
 
 #include <klocale.h>
+#include <ktoolbar.h>
 #include <kiconloader.h>
 #include <koMainWindow.h>
 #include <kseparator.h>
@@ -39,26 +40,26 @@
 #include "vtoolbox.h"
 #include "vstrokefillpreview.h"
 
-VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) : QToolBar( mainWin )
+VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) : KToolBar( mainWin, name, false, false )
 {
-	setLabel(name);
+	setFullSize(false);
 	buttonGroup = new QButtonGroup(0L);
 	buttonGroup->setExclusive (true);
 
 	QBoxLayout::Direction d=orientation()==Qt::Vertical?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom;
 	QWidget *base= new QWidget(this);
 	columnsLayouter = new QBoxLayout(base, d);
-    columnsLayouter->setSpacing(2);
+	columnsLayouter->setSpacing(2);
 
 	d=orientation()==Qt::Horizontal?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom;
 	left= new QWidget(base);
 	leftLayout = new QBoxLayout(left, d);
-    leftLayout->setSpacing(2);
+	leftLayout->setSpacing(2);
 	columnsLayouter->addWidget(left);
 
 	right= new QWidget(base);
 	rightLayout = new QBoxLayout(right, d);
-    rightLayout->setSpacing(2);
+	rightLayout->setSpacing(2);
 	columnsLayouter->addWidget(right);
 
 	insertLeft=true;
