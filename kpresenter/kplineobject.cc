@@ -68,6 +68,7 @@ QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
     saveOasisMarkerElement( mainStyles, styleobjectauto );
     KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
     saveOasisShadowElement( styleobjectauto );
+    saveOasisObjectProtectStyle( styleobjectauto );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 

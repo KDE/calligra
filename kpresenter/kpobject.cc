@@ -349,7 +349,7 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
     }
 }
 
-void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
+void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto )
 {
     if ( protect )
     {
@@ -427,7 +427,7 @@ bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int ob
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
         }
-        
+
         if ( m_appearSpeed == ES_SLOW )
         {
             animation.addAttribute( "presentation:speed", "slow" );
@@ -436,7 +436,7 @@ bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int ob
         {
             animation.addAttribute( "presentation:speed", "fast" );
         }
-        
+
         if ( appearTimer!=1 )
         {
             animation.addAttribute( "presentation:animation-delay", saveOasisTimer( appearTimer ) );
@@ -525,7 +525,7 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
         {
             animation.addAttribute( "presentation:speed", "fast" );
         }
-        
+
         if ( disappearTimer!=1 )
         {
             animation.addAttribute( "presentation:animation-delay", saveOasisTimer( disappearTimer ) );
@@ -677,7 +677,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         QString speed = animation->attribute( "presentation:speed" );
         kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
         disappearStep = tmp->order;
-        
+
         if ( speed =="medium" )
         {
             m_disappearSpeed = ES_MEDIUM;
@@ -1852,7 +1852,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
         break;
     }
-    saveOasisObjectStyle( styleobjectauto );
+    saveOasisObjectProtectStyle( styleobjectauto );
 
     saveOasisStrokeElement( mainStyles, styleobjectauto );
     saveOasisMarginElement( styleobjectauto );

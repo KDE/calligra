@@ -297,7 +297,7 @@ protected:
                          const QString &rattr="red", const QString &gattr="green",
                          const QString &battr="blue") const;
 
-    void saveOasisObjectStyle( KoGenStyle &styleobjectauto );
+    void saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto );
     void saveOasisShadowElement( KoGenStyle &styleobjectauto );
     virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) {};
 
