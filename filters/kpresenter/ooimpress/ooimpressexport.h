@@ -27,13 +27,14 @@
 #include <koFilter.h>
 
 class QDomElement;
+class KoStore;
 
 class OoImpressExport : public KoFilter
 {
     Q_OBJECT
 public:
     OoImpressExport( KoFilter * parent, const char * name, const QStringList & );
-    virtual ~OoImpressExport() {}
+    virtual ~OoImpressExport();
 
     virtual KoFilter::ConversionStatus convert( const QCString & from,
                                                 const QCString & to );
@@ -73,6 +74,8 @@ private:
     //load from kpresenter file format
     QMap<QString, QString> m_kpresenterPictureLst;
     int m_pictureIndex;
+    KoStore *m_storeinp;
+    KoStore *m_storeout;
 };
 
 #endif
