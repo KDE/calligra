@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="3">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="4">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
@@ -24,8 +24,6 @@
   <Action name="italic"/>
   <Action name="underline"/>
   <Action name="strikeout"/>
-  <Action name="selectFont"/>
-  <Action name="selectFontSize"/>
   <Action name="changeangle"/>
   <Separator/>
   <Action name="percent"/>
