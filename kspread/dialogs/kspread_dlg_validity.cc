@@ -134,8 +134,11 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   grid1->addColSpacing( 0, edit2->width() );
 
   validityList = new QTextEdit( tmpQButtonGroup );
-  grid1->addMultiCellWidget(validityList,2, 4,0, 1);
+  grid1->addMultiCellWidget(validityList,2, 4,1, 1);
 
+  validityLabelList = new QLabel( tmpQButtonGroup, "Label_Label_List" );
+  validityLabelList->setText(i18n("Entries" ));
+  grid1->addWidget(validityLabelList,2,0);
 
   QFrame *page2 = addPage(i18n("&Error Alert"));
 
@@ -220,6 +223,7 @@ void KSpreadDlgValidity::displayOrNotListOfValidity( bool _displayList)
     if ( _displayList )
     {
         validityList->show();
+        validityLabelList->show();
         edit1->hide();
         val_min->hide();
         edit2->hide();
@@ -228,6 +232,7 @@ void KSpreadDlgValidity::displayOrNotListOfValidity( bool _displayList)
     else
     {
         validityList->hide();
+        validityLabelList->hide();
         edit1->show();
         val_min->show();
         edit2->show();
