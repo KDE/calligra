@@ -2,16 +2,20 @@
 [KDE Desktop Entry]
 MimeType=application/x-kpresenter
 Comment=KPresenter
+Comment[af]=KPRESENTER
+Comment[bg]=Презентации
 Comment[da]=KPræsenterer
 Comment[eo]=Prezentilo
 Comment[es]=Documento de KPresenter
 Comment[et]=KPresener
+Comment[fr]=kPresenter
 Comment[is]=Vörpun (kpresenter-skjal)
 Comment[ko]=K프리젠터
 Comment[mk]=K-презентација
 Comment[pt_BR]=Gerador de Apresentações
 Comment[pt]=Apresentações
 Comment[ru]=Презентации
+Comment[sv]=Kpresenter
 Icon=kpresenter
 Type=MimeType
 Patterns=*.kpr;*.kpt;

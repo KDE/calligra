@@ -2,12 +2,15 @@
 [Desktop Entry]
 MimeType=application/x-kformula
 Comment=KFormula
+Comment[af]=KFORMULA
 Comment[eo]=KFormulo
 Comment[es]=Documento de KFormula
+Comment[fr]=Éditeur de formules
 Comment[is]=Formúla
 Comment[ko]=K공식
 Comment[mk]=К-формула
 Comment[pt_BR]=Editor de fórmulas
+Comment[sv]=Kformula
 Type=MimeType
 Patterns=*.kfo;
 [Property::X-KDE-NativeExtension]

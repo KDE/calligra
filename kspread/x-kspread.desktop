@@ -2,12 +2,16 @@
 [Desktop Entry]
 MimeType=application/x-kspread
 Comment=KSpread
+Comment[af]=KSPREAD
+Comment[bg]=Електронна таблица KSpread
 Comment[ca]=Fulla de càlcul
+Comment[cs]=Tabulkový procesor
 Comment[da]=KRegneark
 Comment[de]=KSpread Tabellenkalkulation
 Comment[eo]=Tabelkalkulilo
 Comment[es]=Documento de KSpread
 Comment[fi]=Taulukkolaskentaohjelma
+Comment[fr]=kSpread
 Comment[is]=Tafla (kspread-skjal)
 Comment[it]=Foglio Elettronico
 Comment[ko]=KDE용 스프레드시트
@@ -15,7 +19,8 @@ Comment[oc]=Folha de calcul
 Comment[pl]=Plik arkusza kalkulacyjnego
 Comment[pt]=Folha de cálculo
 Comment[ru]=Электронная таблица KSpread
-Comment[sk]=KSpread (tabuľkový kalkulátor)
+Comment[sk]=KSpread (tabuľkový procesor)
+Comment[sv]=Kspread
 Comment[uk]=Програма створення електронних таблиць KSpread
 Icon=kspread
 Type=MimeType
