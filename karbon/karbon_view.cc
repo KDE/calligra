@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -598,23 +597,32 @@ KarbonView::zoomChanged( const KoPoint &p )
 {
 	double centerX;
 	double centerY;
+	double zoomFactor;
+	bool bOK;
 	if( !p.isNull() )
 	{
 		kdDebug() << "p.x(): " << p.x() << endl;
 		kdDebug() << "p.y(): " << p.y() << endl;
 		centerX = ( p.x() * zoom() ) / double( m_canvas->contentsWidth() );
 		centerY = 1 - ( p.y() * zoom() ) / double( m_canvas->contentsHeight() );
+		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+	}
+	else if( m_zoomAction->currentText() == "  Width" )
+	{
+		centerX = 0.5;
+		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+		zoomFactor = zoom() * double( m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
 	}
 	else
 	{
 		centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
 		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	}
 	kdDebug() << "centerX : " << centerX << endl;
 	kdDebug() << "centerY : " << centerY << endl;
+	//kdDebug() << "zoomFactor : " << zoomFactor << endl;
 
-	bool bOK;
-	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 
 	// above 2000% probably doesnt make sense... (Rob)
 	if( zoomFactor > 20 )
@@ -777,7 +785,8 @@ KarbonView::initActions()
 	<< i18n( "   200%" )
 	<< i18n( "   300%" )
 	<< i18n( "   400%" )
-	<< i18n( "   800%" );
+	<< i18n( "   800%" )
+	<< i18n( "  Width" );
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
