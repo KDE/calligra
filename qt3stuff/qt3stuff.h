@@ -72,6 +72,7 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 #define Q_WS_X11
 #endif
 
+#if 0
     // "handle" type for system objects.
 #if defined(Q_WS_MAC)
     typedef void * HANDLE;
@@ -84,6 +85,7 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 #endif
 #if defined(Q_WS_QWS)
     typedef void* HANDLE;
+#endif
 #endif
 };
 
