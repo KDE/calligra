@@ -229,8 +229,6 @@ private:
   Private *d;
 };
 
-class FormatData;
-
 /**
  * Defines format of cell.
  *
@@ -304,8 +302,8 @@ public:
   Format& apply( const Format& f );
 
 protected:
-  class Data;
-  Data* d; // can't never be 0
+  class Private;
+  Private* d; // can't never be 0
 
 };
 

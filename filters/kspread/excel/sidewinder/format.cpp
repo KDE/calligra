@@ -251,7 +251,7 @@ void FormatAlignment::setAlignY( unsigned ya )
 }
 
 // helper class for Format class
-class Format::Data
+class Format::Private
 {
 public:
     FormatFont font;
@@ -262,7 +262,7 @@ public:
 // create an empty format
 Format::Format()
 {
-  d = new Format::Data;
+  d = new Format::Private;
 }
 
 // destructor
@@ -274,7 +274,7 @@ Format::~Format()
 // copy constructor
 Format::Format( const Format& f )
 {
-  d = new Format::Data;
+  d = new Format::Private;
   assign( f );
 }
 
