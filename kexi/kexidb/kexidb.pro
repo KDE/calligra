@@ -29,6 +29,10 @@ transaction.cpp \
 indexschema.cpp \
 cursor.cpp \
 fieldlist.cpp \
-global.cpp
+global.cpp \
+\
+parser/parser.cpp \
+parser/sqlparser.cpp \
+parser/sqlscanner.cpp
 
 #HEADERS =

@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	QFileInfo info=QFileInfo(argv[0]);
 	prgname = info.baseName().latin1();
 	KInstance instance( prgname );
-	if (argc<=2) {
+	if (argc<=1) {
 		return 0;
 	}
 	QCString drv_name(argv[1]);
@@ -83,6 +83,12 @@ int main(int argc, char **argv)
 				parser->table()->debug();
 				break;
 			}
+			case KexiDB::Parser::OP_Select:
+			{
+				kdDebug() << "Select statement: " << endl;
+				parser->select()->debug();
+				break;
+			}
 			default:
 				kdDebug() << "main(): not implemented in main.cpp" << endl;
 
@@ -90,5 +96,6 @@ int main(int argc, char **argv)
 		}
 		parser->clear();
 	}
+	return 0;
 }
 

@@ -32,7 +32,7 @@ class TableSchema;
 /**
  * parser for sql statements
  */
-class Parser
+class KEXI_DB_EXPORT Parser
 {
 	public:
 		enum OPCode

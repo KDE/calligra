@@ -367,6 +367,10 @@
 #include <string>
 #include <iostream>
 
+#ifdef _WIN32
+# include <malloc.h>
+#endif
+
 #include <qobject.h>
 #include <kdebug.h>
 
