@@ -563,15 +563,6 @@ public:
     KToggleAction* calcAverage;
     KToggleAction* calcCount;
     KToggleAction* calcSum;
-
-    // revision control
-    KToggleAction* recordChanges;
-    KToggleAction* protectChanges;
-    KAction* filterChanges;
-    KAction* acceptRejectChanges;
-    KAction* commentChanges;
-    KAction* mergeDocument;
-
 };
 
 
