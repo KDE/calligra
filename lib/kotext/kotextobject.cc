@@ -33,7 +33,10 @@
 
 struct KoTextObject::KoTextObjectPrivate
 {
-    KoTextObjectPrivate() {}
+    KoTextObjectPrivate() {
+        afterFormattingEmitted = false;
+    }
+    bool afterFormattingEmitted;
 };
 
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle* defaultStyle,
@@ -54,7 +57,7 @@ KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoStyle* defaultStyle,
 
 void KoTextObject::init()
 {
-    d = 0; // replace with d = new KoTextObjectPrivate when needed
+    d = new KoTextObjectPrivate;
     m_availableHeight = -1;
     m_lastFormatted = textdoc->firstParag();
     m_highlightSelectionAdded = false;
@@ -1334,54 +1337,67 @@ void KoTextObject::ensureFormatted( Qt3::QTextParag * parag, bool emitAfterForma
 
 void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
 {
-    if ( !m_lastFormatted /* || !isVisible()*/ || m_availableHeight == -1 )
+    if ( ( !m_lastFormatted && d->afterFormattingEmitted )
+         /* || !isVisible()*/ || m_availableHeight == -1 )
         return;
 
-    int bottom = 0;
-    int to = !sender() ? 2 : 20; // 20 when it comes from the formatTimer
+    if ( !textDocument()->lastParag() )
+        return; // safety test
 
-    int viewsBottom = 0;
-    QMapIterator<QWidget *, int> mapIt = m_mapViewAreas.begin();
-    for ( ; mapIt != m_mapViewAreas.end() ; ++mapIt )
-        viewsBottom = QMAX( viewsBottom, mapIt.data() );
+    int bottom = 0;
+    if ( m_lastFormatted )
+    {
+        d->afterFormattingEmitted = false;
+        int to = !sender() ? 2 : 20; // 20 when it comes from the formatTimer
+
+        int viewsBottom = 0;
+        QMapIterator<QWidget *, int> mapIt = m_mapViewAreas.begin();
+        for ( ; mapIt != m_mapViewAreas.end() ; ++mapIt )
+            viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
 #ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "formatMore " << name()
-                   << " lastFormatted id=" << m_lastFormatted->paragId()
-                   << " lastFormatted's top=" << m_lastFormatted->rect().top()
-                   << " lastFormatted's height=" << m_lastFormatted->rect().height()
-                   << " to=" << to << " viewsBottom=" << viewsBottom
-                   << " availableHeight=" << m_availableHeight << endl;
+        kdDebug(32002) << "formatMore " << name()
+                       << " lastFormatted id=" << m_lastFormatted->paragId()
+                       << " lastFormatted's top=" << m_lastFormatted->rect().top()
+                       << " lastFormatted's height=" << m_lastFormatted->rect().height()
+                       << " to=" << to << " viewsBottom=" << viewsBottom
+                       << " availableHeight=" << m_availableHeight << endl;
 #endif
 #ifdef TIMING_FORMAT
-    if ( m_lastFormatted->prev() == 0 )
-    {
-        kdDebug(32002) << "formatMore " << name() << ". First parag -> starting timer" << endl;
-        m_time.start();
-    }
+        if ( m_lastFormatted->prev() == 0 )
+        {
+            kdDebug(32002) << "formatMore " << name() << ". First parag -> starting timer" << endl;
+            m_time.start();
+        }
 #endif
 
-    // Stop if we have formatted everything or if we need more space
-    // Otherwise, stop formatting after "to" paragraphs,
-    // but make sure we format everything the views need
-    int i;
-    for ( i = 0;
-          m_lastFormatted && bottom + m_lastFormatted->rect().height() <= m_availableHeight &&
- ( i < to || bottom <= viewsBottom ) ; ++i )
+        // Stop if we have formatted everything or if we need more space
+        // Otherwise, stop formatting after "to" paragraphs,
+        // but make sure we format everything the views need
+        int i;
+        for ( i = 0;
+              m_lastFormatted && bottom + m_lastFormatted->rect().height() <= m_availableHeight &&
+                  ( i < to || bottom <= viewsBottom ) ; ++i )
+        {
+#ifdef DEBUG_FORMAT_MORE
+            kdDebug(32002) << "formatMore formatting id=" << m_lastFormatted->paragId() << endl;
+#endif
+            m_lastFormatted->format();
+            bottom = m_lastFormatted->rect().top() + m_lastFormatted->rect().height();
+#ifdef DEBUG_FORMAT_MORE
+            kdDebug() << "formatMore(inside) top=" << m_lastFormatted->rect().top()
+                      << " height=" << m_lastFormatted->rect().height()
+                      << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
+#endif
+            if (!m_lastFormatted->isValid())
+                kdWarning() << "PARAGRAPH " << m_lastFormatted->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
+            m_lastFormatted = m_lastFormatted->next();
+        }
+    }
+    else // formatting was done previously, but not emit afterFormatting
     {
-#ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "formatMore formatting id=" << m_lastFormatted->paragId() << endl;
-#endif
-        m_lastFormatted->format();
-        bottom = m_lastFormatted->rect().top() + m_lastFormatted->rect().height();
-#ifdef DEBUG_FORMAT_MORE
-        kdDebug() << "formatMore(inside) top=" << m_lastFormatted->rect().top()
-                  << " height=" << m_lastFormatted->rect().height()
-                  << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
-#endif
-        if (!m_lastFormatted->isValid())
-            kdWarning() << "PARAGRAPH " << m_lastFormatted->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
-        m_lastFormatted = m_lastFormatted->next();
+        QRect rect = textDocument()->lastParag()->rect();
+        bottom = rect.top() + rect.height();
     }
 #ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "formatMore finished formatting. "
@@ -1392,6 +1408,7 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
 
     if ( emitAfterFormatting )
     {
+        d->afterFormattingEmitted = true;
         bool abort = false;
         emit afterFormatting( bottom, m_lastFormatted, &abort );
         if ( abort )
@@ -1414,8 +1431,8 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
 #endif
 #ifdef TIMING_FORMAT
         //if ( frameSetInfo() == FI_BODY )
-            kdDebug(32002) << "formatMore: " << name() << " all formatted. Took "
-                           << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
+        kdDebug(32002) << "formatMore: " << name() << " all formatted. Took "
+                       << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
 #endif
     }
 }
