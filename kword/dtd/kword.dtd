@@ -138,6 +138,7 @@ don't put a </?xml...> at the end of the file!).
 
             spFootBody:     distance (in pt) between footers and the text body (only in
                             wordprocessing mode).
+            spFootNoteBody: distance ( in pt ) betwwen footnote and text body
 -->
 <!ELEMENT PAPER
     (PAPERBORDERS?)>
@@ -151,7 +152,8 @@ don't put a </?xml...> at the end of the file!).
     hType CDATA #IMPLIED
     fType CDATA #IMPLIED
     spHeadBody CDATA #IMPLIED
-    spFootBody CDATA #IMPLIED>
+    spFootBody CDATA #IMPLIED
+    spFootNoteBody CDATA #IMPLIED>
 
 
 <!--    Describes the margins of the page.

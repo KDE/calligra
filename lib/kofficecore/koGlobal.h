@@ -206,6 +206,7 @@ struct KoKWHeaderFooter
     KoHFType footer;
     double ptHeaderBodySpacing;
     double ptFooterBodySpacing;
+    double ptFootNoteBodySpacing;
 };
 
 

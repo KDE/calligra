@@ -268,7 +268,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
 
     kwhf.ptHeaderBodySpacing = KoUnit::ptFromUnit( nHSpacing->value(), m_unit );
     kwhf.ptFooterBodySpacing = KoUnit::ptFromUnit( nFSpacing->value(), m_unit );
-
+    kwhf.ptFootNoteBodySpacing = KoUnit::ptFromUnit( nFNSpacing->value(), m_unit);
     if ( rfFirst->isChecked() && rfEvenOdd->isChecked() )
         kwhf.footer = HF_FIRST_EO_DIFF;
     else if ( rfFirst->isChecked() )
@@ -680,8 +680,25 @@ void KoPageLayoutDia::setupTab4()
 
     grid4->addWidget( gFooter, 2, 0 );
 
+    QButtonGroup *gFootNote = new QButtonGroup( i18n( "Foot/EndNote" ), tab4 );
+    QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body (%1):").arg(str), gFootNote );
+    lFNSpacing->setAlignment( AlignRight | AlignVCenter );
+    footNoteGrid->addWidget( lFNSpacing, 1, 0 );
+
+    nFNSpacing = new KDoubleNumInput( gFootNote, "" );
+    footNoteGrid->addWidget( nFNSpacing, 1, 1 );
+
+    nFNSpacing->setValue(KoUnit::ptToUnit( kwhf.ptFootNoteBodySpacing, m_unit ) );
+
+    footerGrid->addRowSpacing( 0, KDialog::spacingHint() );
+
+    grid4->addWidget( gFootNote, 3, 0 );
+
     grid4->setRowStretch( 1, 1 ); // between the groupboxes
-    grid4->setRowStretch( 3, 10 ); // bottom
+    grid4->setRowStretch( 2, 1 ); // between the groupboxes
+    grid4->setRowStretch( 4, 10 ); // bottom
 }
 
 /*====================== update the preview ======================*/

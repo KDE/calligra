@@ -373,7 +373,7 @@ public:
 
     void recalcVariables( int type );
 
-    KWVariableCollection *getVariableCollection() {return m_varColl;}
+    KWVariableCollection *getVariableCollection()const {return m_varColl;}
 
     KWMailMergeDataBase *getMailMergeDataBase() const { return m_slDataBase; }
     int getMailMergeRecord() const;
@@ -436,7 +436,7 @@ public:
      * get custom kspell config
      */
     void setKSpellConfig(KSpellConfig _kspell);
-    KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
+    KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
 #ifndef NDEBUG
     void printStyleDebug();
@@ -483,10 +483,10 @@ public:
 
 
     // in pt
-    double indentValue() { return m_indent; }
+    double indentValue()const { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
 
-    int nbPagePerRow() { return m_iNbPagePerRow; }
+    int nbPagePerRow() const{ return m_iNbPagePerRow; }
     void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
@@ -496,7 +496,7 @@ public:
     //QString lastViewMode() const { return m_lastViewMode; }
 
     // in pt
-    double defaultColumnSpacing(){ return m_defaultColumnSpacing ;}
+    double defaultColumnSpacing()const{ return m_defaultColumnSpacing ;}
     void setDefaultColumnSpacing(double _val){ m_defaultColumnSpacing=_val; }
     /**
      * @returns the document for the formulas

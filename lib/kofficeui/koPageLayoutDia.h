@@ -153,17 +153,17 @@ public:
      *  Returns the layout
      */
     KoPageLayout getLayout() { return layout; };
-    
+
     /**
      *  Returns the header and footer information
      */
     KoHeadFoot getHeadFoot();
-    
+
     /**
      *  Returns the unit
      */
     KoUnit::Unit unit() const { return m_unit; }
-    
+
 protected:
     KoColumns getColumns();
     KoKWHeaderFooter getKWHeaderFooter();
@@ -202,6 +202,7 @@ protected:
 
     KDoubleNumInput *nHSpacing;
     KDoubleNumInput *nFSpacing;
+    KDoubleNumInput *nFNSpacing;
     QCheckBox *rhSame_unused; // BIC: remove
     QCheckBox *rhFirst;
     QCheckBox *rhEvenOdd;

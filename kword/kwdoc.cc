@@ -408,6 +408,7 @@ bool KWDocument::initDoc()
     m_pageHeaderFooter.footer = HF_SAME;
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
+    m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
     QString _template;
 
@@ -462,6 +463,7 @@ void KWDocument::initEmpty()
     m_pageHeaderFooter.footer = HF_SAME;
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
+    m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
     QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
@@ -707,7 +709,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
     }
 
 
-    // The frameset order _on screen_ is:
+    // The frameset order _on screen_ is:ptFootNoteBodySpacing
     // Header
     // Main text frame (if WP)
     // Footnote_s_
@@ -725,7 +727,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         int pageNum = -42; //fnfs->footNoteVariable()->pageNum(); // determined by KWFrameLayout
         KWFrameLayout::HeaderFooterFrameset* hff = new KWFrameLayout::HeaderFooterFrameset(
                                      fnfs, pageNum, pageNum,
-                                     m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
+                                     m_pageHeaderFooter.ptFootNoteBodySpacing, // do we need another var?
                                      KWFrameLayout::HeaderFooterFrameset::All );
 
         // With other kind of framesets, the height is simply frame->height.
@@ -837,7 +839,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageHeaderFooter.footer = HF_SAME;
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
-
+    m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
     m_varFormatCollection->clear();
 
     m_pages = 1;
@@ -849,6 +851,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     __hf.footer = HF_SAME;
     __hf.ptHeaderBodySpacing = 10.0;
     __hf.ptFooterBodySpacing = 10.0;
+    __hf.ptFootNoteBodySpacing = 10.0;
 
     QString value;
     QDomElement word = doc.documentElement();
@@ -903,6 +906,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __hf.footer = static_cast<KoHFType>( KWDocument::getAttribute( paper, "fType", 0 ) );
         __hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
         __hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
+        __hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
         __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
         __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
         // Now part of the app config
@@ -918,6 +922,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             __hf.ptHeaderBodySpacing = getAttribute( paper, "ptHeadBody", 0.0 );
         if ( __hf.ptFooterBodySpacing == 0.0 )
             __hf.ptFooterBodySpacing = getAttribute( paper, "ptFootBody", 0.0 );
+        if ( __hf.ptFootNoteBodySpacing == 10.0 )
+            __hf.ptFootNoteBodySpacing = getAttribute( paper, "ptFootNoteBody", 10.0 );
+
         if ( __columns.ptColumnSpacing == 0.0 )
             __columns.ptColumnSpacing = getAttribute( paper, "ptColumnspc", 0.0 );
 
@@ -1675,7 +1682,7 @@ QDomDocument KWDocument::saveXML()
     paper.setAttribute( "fType", static_cast<int>( m_pageHeaderFooter.footer ) );
     paper.setAttribute( "spHeadBody", m_pageHeaderFooter.ptHeaderBodySpacing );
     paper.setAttribute( "spFootBody", m_pageHeaderFooter.ptFooterBodySpacing );
-
+    paper.setAttribute( "spFootNoteBody", m_pageHeaderFooter.ptFootNoteBodySpacing );
     // Now part of the app config
     //paper.setAttribute( "zoom",m_zoom );
 

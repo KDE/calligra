@@ -3031,7 +3031,8 @@ void KWView::formatPage()
             tmpOldLayout._hf.header!=kwhf.header||
             tmpOldLayout._hf.footer!=kwhf.footer||
             tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
-            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing)
+            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing ||
+            tmpOldLayout._hf.ptFootNoteBodySpacing != kwhf.ptFootNoteBodySpacing)
         {
             pageLayout tmpNewLayout;
             tmpNewLayout._pgLayout=pgLayout;
@@ -4897,7 +4898,8 @@ void KWView::configureHeaderFooter()
         if( tmpOldLayout._hf.header!=kwhf.header||
             tmpOldLayout._hf.footer!=kwhf.footer||
             tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
-            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing)
+            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing ||
+            tmpOldLayout._hf.ptFootNoteBodySpacing != kwhf.ptFootNoteBodySpacing)
         {
             pageLayout tmpNewLayout;
             tmpNewLayout._pgLayout=pgLayout;
@@ -5236,10 +5238,6 @@ void KWView::changeFootNoteType()
 void KWView::autoSpellCheck()
 {
     m_doc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
-#if 0
-    m_doc->enableBackgroundSpellCheck( state );
-    m_doc->reactivateBgSpellChecking();
-#endif
 }
 
 /******************************************************************/
