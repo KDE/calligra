@@ -1679,25 +1679,9 @@ void RTFImport::parseField( RTFProperty * )
 	    else if (fieldName == "TIME" || fieldName == "DATE")
 	    {
                 QString strFldinst( QString::fromUtf8(fldinst) );
-#if 1
                 QRegExp regexp("\\\\@\\s*\"(.+)\""); // \@ "Text"
                 regexp.search(strFldinst);
                 QString format(regexp.cap(1));
-#else
-		list = QStringList::split( '\\', strFldinst );
-
-		list[0] = list[0].upper();
-
-		unsigned int j;
-
-		for(j=1;j<list.count();j++)
-		{
-		    if(list[j][0]=='@')
-			break;
-		}
-		int i=list[j].find('"')+1;
-		QString format=list[j].mid(i, list[j].find('"', i)-i);
-#endif
                 kdDebug(30515) << "Date/time field format: " << format << endl;
 		format.replace("am/pm", "ap");
 		format.replace("a/p", "ap"); // Approximation
