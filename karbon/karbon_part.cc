@@ -47,8 +47,7 @@
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 						QObject* parent, const char* name, bool singleViewMode )
-		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-		m_unit( KoUnit::U_MM )
+		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	setInstance( KarbonFactory::instance(), false );
 	m_bShowStatusBar = true;
@@ -143,7 +142,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 	m_pageLayout.ptWidth	= m_doc.width();
 	m_pageLayout.ptHeight	= m_doc.height();
 
-	setUnit( KoUnit::unit( m_doc.unitName() ) );
+	setUnit( m_doc.unit() );
 
 	return success;
 }
@@ -308,7 +307,7 @@ KarbonPart::initUnit()
 	if( config->hasGroup( "Misc" ) )
 	{
 		config->setGroup( "Misc" );
-		m_unit = KoUnit::unit( config->readEntry( "Units", KoUnit::unitName( KoUnit::U_MM ) ) );
+		m_doc.setUnit( KoUnit::unit( config->readEntry( "Units", KoUnit::unitName( KoUnit::U_MM ) ) ) );
 	}
 }
 
@@ -316,7 +315,7 @@ void
 KarbonPart::setUnit( KoUnit::Unit _unit )
 
 {
-	m_unit = _unit;
+	m_doc.setUnit( _unit );
 	QPtrListIterator<KoView> itr( views() );
 
 	for( ; itr.current(); ++itr )

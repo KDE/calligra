@@ -108,12 +108,12 @@ public:
 
 	QString unitName() const
 	{
-		return KoUnit::unitName( m_unit );
+		return KoUnit::unitName( m_doc.unit() );
 	}
 
 	KoUnit::Unit unit() const
 	{
-		return m_unit;
+		return m_doc.unit();
 	}
 
 	void setUnit( KoUnit::Unit _unit );
@@ -138,7 +138,6 @@ private:
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
-	KoUnit::Unit m_unit;
 };
 
 #endif

@@ -21,6 +21,8 @@
 #ifndef VDOCUMENT_H
 #define VDOCUMENT_H
 
+#include <koUnit.h>
+
 #include <qstring.h>
 #include <qptrlist.h>
 
@@ -103,10 +105,10 @@ public:
 	void setHeight( double height ) { m_height = height; m_boundingBox.setHeight( height ); }
 
 
-	const QString& unitName()
-		{ return m_unitName; }
-	void setUnitName( const QString& unitName )
-		{ m_unitName = unitName; }
+	KoUnit::Unit unit() const
+		{ return m_unit; }
+	void setUnit( KoUnit::Unit unit )
+		{ m_unit = unit; }
 
     bool canRaiseLayer( VLayer* layer );
 
@@ -207,11 +209,10 @@ private:
 	/// The selectionMode
 	VSelectionMode m_selectionMode;
 
-
 	/**
-	 * The unit name.
+	 * The unit.
 	 */
-	QString m_unitName;
+	KoUnit::Unit m_unit;
 
 	/**
 	 * The mime type.
@@ -223,7 +224,7 @@ private:
 	QString m_version;
 	/// The editor name.
 	QString m_editor;
-	/// The snytax version.
+	/// The syntax version.
 	QString m_syntaxVersion;
 };
 

@@ -202,7 +202,7 @@ VDocument::save( QDomElement& me ) const
 	me.setAttribute( "syntaxVersion", m_syntaxVersion );
 	me.setAttribute( "width", m_width );
 	me.setAttribute( "height", m_height );
-	me.setAttribute( "unit", m_unitName );
+	me.setAttribute( "unit", KoUnit::unitName( m_unit ) );
 
 	// save objects:
 	VLayerListIterator itr( m_layers );
@@ -243,7 +243,7 @@ VDocument::loadXML( const QDomElement& doc )
 	m_width  = doc.attribute( "width", "800.0" ).toDouble();
 	m_height = doc.attribute( "height", "550.0" ).toDouble();
 
-	m_unitName = doc.attribute( "unit", "mm" );
+	m_unit = KoUnit::unit( doc.attribute( "unit", "mm" ) );
 
 	QDomNodeList list = doc.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
