@@ -44,9 +44,6 @@
 #include <kconfig.h>
 
 QArray<float> Canvas::zoomFactors;
-QString Canvas::psPrologPath = 
-     kapp->kde_datadir () + "/killustrator/prolog.ps";
-QDict<QString> Canvas::fontMap;
 
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent, 
 		const char* name) : QWidget (parent, name) {
@@ -321,62 +318,6 @@ void Canvas::writePSHeader (ostream& os) {
      << endl;
 }
 
-bool Canvas::writePSProlog (ostream& os) {
-  ifstream prolog (psPrologPath);
-  if (!prolog) 
-    return false;
-  
-  char buf[128];
-  while (!prolog.eof ()) {
-    prolog.getline (buf, 128);
-    os << buf << '\n';
-  }
-  return true;
-}
-
-const char* Canvas::getPSFont (const QFont& qfont) {
-  if (fontMap.isEmpty ()) {
-    QString psFontmapPath = kapp->kde_datadir () + "/killustrator/fontmap";
-    ifstream fin ((const char *) psFontmapPath);
-    //    fin.ignore (INT_MAX, '\n');
-    char key[128], value[128], c;
-    while (! fin.eof ()) {
-      fin.get (c);
-      if (c == '#') {
-	// just a comment, ignore the rest of line
-	fin.ignore (INT_MAX, '\n');
-	continue;
-      }
-      else
-	fin.unget ();
-      fin >> key >> value;
-      if (key[0] == '\0')
-	break;
-      fontMap.insert (key, new QString (value));
-    }
-  }
-  QString family = qfont.family ();
-  family = family.lower ();
-  bool italic = qfont.italic ();
-  int weight = qfont.weight ();
-  
-  QString key = family;
-  if (italic)
-    key += ".italic";
-  if (weight >= QFont::Bold)
-    key += ".bold";
-  else if (weight >= QFont::DemiBold)
-    key += ".demibold";
-  else if (weight <= QFont::Light)
-    key += ".light";
-  
-  QString* font = fontMap[key];
-  if (font)
-    return (const char *) *font;
-  else
-    return "/Times-Roman";
-}
-
 void Canvas::printPSDocument () {
   QPrinter pSetup;
   const char* tmpName;
@@ -419,7 +360,7 @@ void Canvas::printPSDocument () {
     }
 
     psStream << "\n%%EndComments" << endl;
-    if (! writePSProlog (psStream)) {
+    if (! GDocument::writePSProlog (psStream)) {
       KMsgBox::message (this, i18n ("Error"), i18n ("Cannot find PS prolog !"),
                         KMsgBox::STOP, i18n ("Abort"));
       return;

@@ -27,7 +27,7 @@
 #include <assert.h>
 #include "GText.h"
 #include "GText.moc"
-#include "Canvas.h"
+#include "GDocument.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -168,7 +168,7 @@ void GText::writeToPS (ostream &os) {
     }
     os << ")";
   }
-  const char* fontName = Canvas::getPSFont (font);
+  const char* fontName = GDocument::getPSFont (font);
   os << " ] " << opos.x () << ' ' << opos.y () << " /_"
      << &fontName[1] << ' ' << font.pointSize () 
      << " DrawText\n";

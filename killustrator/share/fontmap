@@ -20,4 +20,8 @@ newcenturyschoolbook /NewCenturySchlbk
 newcenturyschoolbook.italic /NewCenturySchlbk-Italic
 newcenturyschoolbook.bold /NewCenturySchlbk-Bold
 newcenturyschoolbook.bold.italic /NewCenturySchlbk-BoldItalic
+avantgarde /AvantGarde
+avantgarde.italic /AvantGarde-Oblique
+avantgarde.bold /AvantGarde-Demi
+avantgarde.bold.italic /AvantGarde-DemiOblique
 symbol /Symbol

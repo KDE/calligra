@@ -22,7 +22,6 @@
 
 */
 
-// #include "KIllustrator.h"
 #include "GDocument.h"
 #include "GDocument.moc"
 #include "GObject.h"
@@ -33,8 +32,6 @@
 #include "GBezier.h"
 #include "GClipart.h"
 #include "GGroup.h"
-
-#include "Canvas.h" // for getPSFont !
 
 #include <string>
 #include <iostream.h>
@@ -50,6 +47,10 @@
 // default papersize in mm
 #define PAPER_WIDTH 210.0
 #define PAPER_HEIGHT 298.0
+
+QString GDocument::psPrologPath = 
+     kapp->kde_datadir () + "/killustrator/prolog.ps";
+QDict<QString> GDocument::fontMap;
 
 GDocument::GDocument () {
   initialize ();
@@ -604,9 +605,66 @@ bool GDocument::requiredFonts (set<string>& fonts) {
     if (it.current ()->isA ("GText")) {
       GText* tobj = (GText *) it.current ();
       const QFont& font = tobj->getFont ();
-      fonts.insert (Canvas::getPSFont (font));
+      fonts.insert (getPSFont (font));
     }
   }
   return ! fonts.empty ();
+}
+
+
+const char* GDocument::getPSFont (const QFont& qfont) {
+  if (fontMap.isEmpty ()) {
+    QString psFontmapPath = kapp->kde_datadir () + "/killustrator/fontmap";
+    ifstream fin ((const char *) psFontmapPath);
+    //    fin.ignore (INT_MAX, '\n');
+    char key[128], value[128], c;
+    while (! fin.eof ()) {
+      fin.get (c);
+      if (c == '#') {
+	// just a comment, ignore the rest of line
+	fin.ignore (INT_MAX, '\n');
+	continue;
+      }
+      else
+	fin.unget ();
+      fin >> key >> value;
+      if (key[0] == '\0')
+	break;
+      fontMap.insert (key, new QString (value));
+    }
+  }
+  QString family = qfont.family ();
+  family = family.lower ();
+  bool italic = qfont.italic ();
+  int weight = qfont.weight ();
+  
+  QString key = family;
+  if (italic)
+    key += ".italic";
+  if (weight >= QFont::Bold)
+    key += ".bold";
+  else if (weight >= QFont::DemiBold)
+    key += ".demibold";
+  else if (weight <= QFont::Light)
+    key += ".light";
+
+  QString* font = fontMap[key];
+  if (font)
+    return (const char *) *font;
+  else
+    return "/Times-Roman";
+}
+
+bool GDocument::writePSProlog (ostream& os) {
+  ifstream prolog (psPrologPath);
+  if (!prolog) 
+    return false;
+  
+  char buf[128];
+  while (!prolog.eof ()) {
+    prolog.getline (buf, 128);
+    os << buf << '\n';
+  }
+  return true;
 }
 

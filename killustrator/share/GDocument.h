@@ -104,6 +104,9 @@ public:
 
   bool requiredFonts (set<string>& fonts);
 
+  static const char* getPSFont (const QFont& qfont);
+  static bool writePSProlog (ostream& os);
+
 protected:
   void updateHandle ();
   
@@ -126,6 +129,9 @@ private:
   Rect selBox;
   bool selBoxIsValid;
   KoPageLayout pLayout;
+
+  static QString psPrologPath;
+  static QDict<QString> fontMap;
 };
 
 #endif 

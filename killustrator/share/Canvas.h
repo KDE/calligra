@@ -71,9 +71,6 @@ public:
   void printPSDocument ();
   void writePSHeader (ostream& os);
 
-  static bool writePSProlog (ostream& os);
-  static const char* getPSFont (const QFont& qfont);
-
   void zoomIn (int x, int y);
   void zoomOut ();
 
@@ -129,9 +126,6 @@ private:
   int hGridDistance, vGridDistance;
   bool drawBasePoints;
   static QArray<float> zoomFactors;
-
-  static QString psPrologPath;
-  static QDict<QString> fontMap;
 };
 
 #endif
