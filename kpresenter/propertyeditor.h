@@ -30,6 +30,7 @@ class KPresenterDoc;
 class PenStyleWidget;
 class BrushProperty;
 class RectProperty;
+class PolygonProperty;
 
 class PropertyEditor : public QTabDialog
 {
@@ -49,6 +50,7 @@ private:
     void setupTabPen( bool configureLineEnds );
     void setupTabBrush();
     void setupTabRect();
+    void setupTabPolygon();
     void setupTabGeneral();
 
     GeneralProperty::GeneralValue getGeneralValue();
@@ -60,6 +62,7 @@ private:
     PenStyleWidget *m_penProperty;
     BrushProperty *m_brushProperty;
     RectProperty *m_rectProperty;
+    PolygonProperty *m_polygonProperty;
     GeneralProperty *m_generalProperty;
 
 signals:

@@ -27,6 +27,7 @@
 #include "penstylewidget.h"
 #include "brushproperty.h"
 #include "rectproperty.h"
+#include "polygonproperty.h"
 
 #include <klocale.h>
 
@@ -38,6 +39,7 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
     , m_penProperty( 0 )
     , m_brushProperty( 0 )
     , m_rectProperty( 0 )
+    , m_polygonProperty( 0 )
     , m_generalProperty( 0 )
 {
     setCancelButton( i18n( "&Cancel" ) );
@@ -113,6 +115,26 @@ KCommand * PropertyEditor::getCommand()
             RectValueCmd::RectValues rectValue( m_rectProperty->getRectValues() );
 
             RectValueCmd *cmd = new RectValueCmd( i18n( "Apply Styles" ), m_objects, rectValue, m_doc, m_page, change );
+
+            if ( !macro )
+            {
+                macro = new KMacroCommand( i18n( "Apply Properties" ) );
+            }
+
+            macro->addCommand( cmd );
+        }
+    }
+
+    if ( m_polygonProperty )
+    {
+        int change = m_polygonProperty->getPolygonPropertyChange();
+
+        if ( change )
+        {
+            PolygonSettingCmd::PolygonSettings polygonSettings( m_polygonProperty->getPolygonSettings() );
+
+            PolygonSettingCmd *cmd = new PolygonSettingCmd( i18n("Apply Styles"), polygonSettings,
+                                                            m_objects, m_doc, m_page, change );
 
             if ( !macro )
             {
@@ -225,6 +247,9 @@ void PropertyEditor::setupTabs()
     if ( flags & PtRectangle )
         setupTabRect();
 
+    if ( flags & PtPolygon )
+        setupTabPolygon();
+
     setupTabGeneral();
 }
 
@@ -271,6 +296,20 @@ void PropertyEditor::setupTabRect()
         rectValue.yRnd = m_page->getRndY( 0 );
         m_rectProperty = new RectProperty( this, 0, rectValue );
         addTab( m_rectProperty, i18n( "&Rectangle" ) );
+    }
+}
+
+
+void PropertyEditor::setupTabPolygon()
+{
+    if ( m_polygonProperty == 0 )
+    {
+        PolygonSettingCmd::PolygonSettings polygonSettings;
+        polygonSettings.checkConcavePolygon = m_page->getCheckConcavePolygon( false );
+        polygonSettings.cornersValue = m_page->getCornersValue( 3 );
+        polygonSettings.sharpnessValue = m_page->getSharpnessValue( 0 );
+        m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
+        addTab( m_polygonProperty, i18n("&Polygon" ) );
     }
 }
 
@@ -346,6 +385,10 @@ void PropertyEditor::slotDone()
         m_brushProperty->apply();
     if ( m_rectProperty )
         m_rectProperty->apply();
+    if ( m_polygonProperty )
+        m_polygonProperty->apply();
+    if ( m_generalProperty )
+        m_generalProperty->apply();
 }
 
 #include "propertyeditor.moc"

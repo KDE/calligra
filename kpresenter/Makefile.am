@@ -58,6 +58,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	polygonpreview.cc \
 	brushpropertyui.ui gradientpropertyui.ui brushproperty.cc \
 	generalpropertyui.ui generalproperty.cc \
+	polygonpropertyui.ui polygonproperty.cc \
 	propertyeditor.cc \
 	slidetransitionwidget.ui slidetransitiondia.cc
 
