@@ -914,8 +914,8 @@ bool kspreadfunc_rounddown( KSContext& context )
                 return false;
         digits=args[1]->intValue();
         }
-  result=floor(args[0]->doubleValue()*pow(10.0,digits))/pow(10.0,digits);
-  context.setValue( new KSValue( result) );
+  result=args[0]->doubleValue()*pow(10.0, digits);
+  context.setValue( new KSValue( floor( result )/pow(10.0, digits) ) );
 
   return true;
 }
