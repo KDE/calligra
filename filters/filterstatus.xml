@@ -284,12 +284,12 @@
 
         <application id="kpresenter">
             <title xml:lang="en_us">KPresenter</title>
-            <filter id="kword_magicpoint">
+            <filter id="kpresenter_magicpoint">
                 <title xml:lang="en_us">Magicpoint</title>
                 <contact href="mailto:lukas@kde.org">Lukas Tinkl</contact>
-                <stat import="onestar" export="none"/>
+                <stat import="threestars" export="none"/>
             </filter>
-            <filter id="kword_ooimpress">
+            <filter id="kpresenter_ooimpress">
                 <title xml:lang="en_us">OpenOffice Impress</title>
                 <stat import="onestar" export="none"/>
             </filter>
