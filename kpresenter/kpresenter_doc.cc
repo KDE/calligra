@@ -1331,8 +1331,10 @@ void KPresenterDoc::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTm
         QString tmp;
         QDictIterator<KPrPage> itPage( it.data() ); // See QDictIterator
         for( ; itPage.current(); ++itPage )
-            tmp+=itPage.current()->pageTitle()+",";
-
+        {
+            if ( m_pageList.find(itPage.current() ) != -1 )
+                tmp+=itPage.current()->pageTitle()+",";
+        }
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
         contentTmpWriter.endElement();
     }
