@@ -298,7 +298,7 @@ BoundingBoxExtractor::~BoundingBoxExtractor() {}
 void BoundingBoxExtractor::gotComment (const char *value)
 {
   QString data (value);
-  if (data.find("BoundingBox:")==-1) return;
+  if (data.find("%BoundingBox:")==-1) return;
 
   getRectangle (value, m_llx, m_lly, m_urx, m_ury);
 }
