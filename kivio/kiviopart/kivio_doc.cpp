@@ -132,9 +132,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
     m_pInternalSet->loadFile(*pIt);
   }
 
-  m_units = KoUnit::U_MM;
-  m_font = KoGlobal::defaultFont();
-  m_pageLayout = Kivio::Config::defaultPageLayout();
+  initConfig();
 
   viewItemList = new ViewItemList(this);
 
@@ -339,7 +337,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   //    return false;
   //  }
 
-  QString us = kivio.attribute("units","mm");
+  QString us = kivio.attribute("units", Kivio::Config::unit());
   bool isInt = false;
   int u = us.toInt(&isInt);
 
@@ -687,12 +685,16 @@ KivioDoc::~KivioDoc()
     s_docs->removeRef(this);
 }
 
-void KivioDoc::saveConfig() //TODO: Remove this function
+void KivioDoc::saveConfig()
 {
+  Kivio::Config::writeConfig();
 }
 
-void KivioDoc::initConfig() //TODO: Remove this function
+void KivioDoc::initConfig()
 {
+  m_units = KoUnit::unit(Kivio::Config::unit());
+  m_font = KoGlobal::defaultFont();
+  m_pageLayout = Kivio::Config::defaultPageLayout();
 }
 
 bool KivioDoc::removeSpawnerSet( KivioStencilSpawnerSet *pSet )
@@ -837,10 +839,10 @@ KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stenci
 
 void KivioDoc::setUnits(KoUnit::Unit unit)
 {
-  if (KoUnit::unit(Kivio::Config::unit()) == unit)
+  if (m_units == unit)
     return;
 
-  Kivio::Config::setUnit(KoUnit::unitName(unit));
+  m_units = unit;
   emit unitsChanged(unit);
 }
 

@@ -104,7 +104,7 @@ void KivioOptionsDialog::initPage()
   m_pageIndex = pageIndex(page);
 
   KivioView* view = static_cast<KivioView*>(parent());
-  KoUnit::Unit unit = view->doc()->units();
+  KoUnit::Unit unit = KoUnit::unit(Kivio::Config::unit());
   m_layout = Kivio::Config::defaultPageLayout();
   m_font = Kivio::Config::font();
 
@@ -309,6 +309,7 @@ void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
   view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
+  Kivio::Config::setUnit(KoUnit::unitName(view->doc()->units()));
   Kivio::Config::setDefaultPageLayout(m_layout);
   Kivio::Config::setFont(m_font);
   view->togglePageMargins(m_marginsChBox->isChecked());
@@ -433,7 +434,6 @@ void KivioOptionsDialog::slotApply()
   applyPage();
   applyGrid();
   applyGuides();
-  Kivio::Config::writeConfig();
 }
 
 void KivioOptionsDialog::slotDefault()

@@ -125,7 +125,7 @@ class KivioDoc : public KoDocument
 
     static QPtrList<KivioDoc>& documents();
 
-    KoUnit::Unit units()const { return KoUnit::unit(Kivio::Config::unit()); }
+    KoUnit::Unit units()const { return m_units; }
 
     KivioGridData grid() { return Kivio::Config::grid(); }
 
