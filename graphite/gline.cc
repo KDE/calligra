@@ -190,6 +190,13 @@ void GLine::recalculate() {
 
 const GLine *GLine::hit(const QPoint &p) const {
 
+    QRect fuzzyRect(boundingRect().x()-GraphiteGlobal::self()->fuzzyBorder(),
+                    boundingRect().y()-GraphiteGlobal::self()->fuzzyBorder(),
+                    boundingRect().width()+GraphiteGlobal::self()->fuzzyBorder(),
+                    boundingRect().height()+GraphiteGlobal::self()->fuzzyBorder());
+    if(!fuzzyRect.contains(p))
+        return 0L;
+
     if(p==m_a)
         return this;
     else if(p==m_b)
