@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999,2000 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -125,6 +125,8 @@ list_anal+="multiply";
 list_anal+="ENT";
 list_anal+="PI";
 list_anal+="pow";
+list_anal+="MOD";
+
 
 QStringList list_trig;
 list_trig+="cos";
@@ -144,10 +146,14 @@ list_trig+="radian";
 list_trig+="PERMUT";
 list_trig+="COMBIN";
 list_trig+="fact";
+list_trig+="BINO";
+list_trig+="INVBINO";
 
 QStringList list_logic;
 list_logic+="if";
 list_logic+="not";
+list_logic+="AND";
+list_logic+="OR";
 
 QStringList list_text;
 list_text+="join";

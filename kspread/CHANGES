@@ -305,3 +305,8 @@ Reduce memory to store condition.
 -Now you can show or hide grid
 -Fix bug report by Michael Koch (use KNumInput when you resize column or row)
 -Bug fix
+
+2000-02-20 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new fonctions : AND, OR, MOD, BINO, INVBINO
+ 

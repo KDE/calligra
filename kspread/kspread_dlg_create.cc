@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -467,44 +467,123 @@ void KSpreadcreate::init()
        nb_param=5;
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Text"));
+       tmp_label->setText(i18n("Exp Logic"));
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
 
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Text"));
+       tmp_label->setText(i18n("Exp Logic"));
        s_param = new QLineEdit( this );
        lay1->addWidget(s_param);
   	
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Text"));
+       tmp_label->setText(i18n("Exp Logic"));
        t_param = new QLineEdit( this );
        lay1->addWidget(t_param);
   	
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Text"));
+       tmp_label->setText(i18n("Exp Logic"));
        fo_param = new QLineEdit( this );
        lay1->addWidget(fo_param);
   	
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Text"));
+       tmp_label->setText(i18n("Exp Logic"));
        fi_param = new QLineEdit( this );
        lay1->addWidget(fi_param);
   	
-       exp_funct=m_funcName+"("+"String,String,..."+")";
+       exp_funct=m_funcName+"("+"logic,logic,..."+")";
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label,10,0);
        tmp_label->setText(exp_funct);
-       edit[0]=type_string;
-       edit[1]=type_string;
-       edit[2]=type_string;
-       edit[3]=type_string;
-       edit[4]=type_string;
+       edit[0]=type_logic;
+       edit[1]=type_logic;
+       edit[2]=type_logic;
+       edit[3]=type_logic;
+       edit[4]=type_logic;
    }
+   else if(m_funcName=="AND"||m_funcName=="OR")
+   {
+       nb_param=5;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Exp logic"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Exp logic"));
+       s_param = new QLineEdit( this );
+       lay1->addWidget(s_param);
+  	
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Exp logic"));
+       t_param = new QLineEdit( this );
+       lay1->addWidget(t_param);
+  	
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Exp logic"));
+       fo_param = new QLineEdit( this );
+       lay1->addWidget(fo_param);
+  	
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Exp logic"));
+       fi_param = new QLineEdit( this );
+       lay1->addWidget(fi_param);
+  	
+       exp_funct=m_funcName+"("+"Exp logic,Exp logic,..."+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label,10,0);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_logic;
+       edit[1]=type_logic;
+       edit[2]=type_logic;
+       edit[3]=type_logic;
+       edit[4]=type_logic;
+   }
+   else if(m_funcName=="BINO" || m_funcName=="INVBINO")
+   {
+       nb_param=3;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Number of try"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+  	
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	if(m_funcName=="BINO")
+  		tmp_label->setText(i18n("Number of success"));
+  	else if(m_funcName=="INVBINO")
+	  	tmp_label->setText(i18n("Number of failure"));
+        s_param = new QLineEdit( this );
+  	lay1->addWidget(s_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	if(m_funcName=="BINO")
+	  	tmp_label->setText(i18n("Probabity of success"));
+ 	else if(m_funcName=="INVBINO")
+ 		tmp_label->setText(i18n("Probabity of failure"));	
+	t_param = new QLineEdit( this );
+  	lay1->addWidget(t_param);
+  	exp_funct=m_funcName+"("+"Double,Double,Double"+")";
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(exp_funct);
+   	edit[0]=type_double;
+   	edit[1]=type_double;
+   	edit[2]=type_double;
+
+	}
+
    else if(m_funcName=="STXT")
    {
        nb_param=3;
@@ -534,7 +613,7 @@ void KSpreadcreate::init()
    	edit[1]=type_double;
    	edit[2]=type_double;
    }
-   else if (m_funcName=="pow")
+   else if (m_funcName=="pow" ||m_funcName=="MOD" )
    {
        nb_param=2;
        tmp_label = new QLabel( this);

@@ -772,6 +772,73 @@ static bool kspreadfunc_not( KSContext& context )
   return true;
 }
 
+
+static bool kspreadfunc_or_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_or_helper( context, (*it)->listValue(), first ) )
+	return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
+      first = (first || (*it)->boolValue());
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_or( KSContext& context )
+{
+  bool first = false;
+  bool b = kspreadfunc_or_helper( context, context.value()->listValue(), first );
+
+  if ( b )
+    context.setValue( new KSValue( first ) );
+
+  return b;
+}
+
+static bool kspreadfunc_and_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_and_helper( context, (*it)->listValue(), first ) )
+	return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
+      first = first && (*it)->boolValue();
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_and( KSContext& context )
+{
+  bool first = true;
+  bool b = kspreadfunc_and_helper( context, context.value()->listValue(), first );
+
+  if ( b )
+    context.setValue( new KSValue( first ) );
+
+  return b;
+}
+
+
+
 static bool kspreadfunc_if( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1039,6 +1106,28 @@ static bool kspreadfunc_pow( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_mod( KSContext& context )
+{
+  double result=0;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "MOD",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  result=(int)args[0]->doubleValue() % (int)args[1]->doubleValue();
+  context.setValue( new KSValue(  result  ) );
+
+  return true;
+}
+
+
+
 static bool kspreadfunc_date( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1283,6 +1372,107 @@ static bool kspreadfunc_combin( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_bino( KSContext& context )
+{
+  double result=0;
+  QString tmp;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "BINO",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  
+  tmp="err";
+  if(args[0]->doubleValue()<args[1]->doubleValue())
+          context.setValue( new KSValue(tmp ));
+
+  else if(args[1]->doubleValue()<0)
+          context.setValue( new KSValue(tmp ));
+  
+  // 0<proba<1
+  else if((args[2]->doubleValue()<0)||(args[2]->doubleValue()>1))
+  	  context.setValue( new KSValue(tmp ));
+  else
+        {
+        result=(fact(args[0]->doubleValue(),
+        (args[0]->doubleValue()-args[1]->doubleValue()))
+        /fact(args[1]->doubleValue(),0));
+        //In fact function val must be positive
+
+        if(result==-1)
+                context.setValue( new KSValue(tmp));
+        else
+                {
+              result=result*pow(args[2]->doubleValue(),(int)args[1]->doubleValue())*
+               	pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
+                ((int)args[1]->doubleValue())));
+                context.setValue( new KSValue(result ));
+                }
+        }
+  return true;
+  
+  
+}
+
+
+static bool kspreadfunc_bino_inv( KSContext& context )
+{
+  double result=0;
+  QString tmp;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "INVBINO",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  
+  tmp="err";
+  if(args[0]->doubleValue()<args[1]->doubleValue())
+          context.setValue( new KSValue(tmp ));
+
+  else if(args[1]->doubleValue()<0)
+          context.setValue( new KSValue(tmp ));
+  
+  // 0<proba<1
+  else if((args[2]->doubleValue()<0)||(args[2]->doubleValue()>1))
+  	  context.setValue( new KSValue(tmp ));
+  else
+        {
+        result=(fact(args[0]->doubleValue(),
+        (args[0]->doubleValue()-args[1]->doubleValue()))
+        /fact(args[1]->doubleValue(),0));
+        //In fact function val must be positive
+
+        if(result==-1)
+                context.setValue( new KSValue(tmp));
+        else
+                {
+          result=result*pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
+              (int)args[1]->doubleValue()))*pow(args[2]->doubleValue(),(
+                (int)args[1]->doubleValue()));
+                context.setValue( new KSValue(result ));
+                }
+        }
+  return true;
+  
+  
+}
+
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -1440,6 +1630,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "average", new KSValue( new KSBuiltinFunction( module, "average", kspreadfunc_average ) ) );
   module->addObject( "variance", new KSValue( new KSBuiltinFunction( module, "variance", kspreadfunc_variance) ) );
   module->addObject( "multiply", new KSValue( new KSBuiltinFunction( module, "multiply", kspreadfunc_mult) ) );
+  module->addObject( "OR", new KSValue( new KSBuiltinFunction( module, "OR", kspreadfunc_or) ) );
+    module->addObject( "AND", new KSValue( new KSBuiltinFunction( module, "AND", kspreadfunc_and) ) );
   module->addObject( "stddev", new KSValue( new KSBuiltinFunction( module, "stderr", kspreadfunc_stddev) ) );
   module->addObject( "join", new KSValue( new KSBuiltinFunction( module, "join", kspreadfunc_join) ) );
   module->addObject( "not", new KSValue( new KSBuiltinFunction( module, "not", kspreadfunc_not) ) );
@@ -1463,6 +1655,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "map", new KSValue( new KSBuiltinFunction( module, "map", kspreadfunc_map ) ) );
   module->addObject( "table", new KSValue( new KSBuiltinFunction( module, "table", kspreadfunc_table ) ) );
   module->addObject( "pow", new KSValue( new KSBuiltinFunction( module,"pow",kspreadfunc_pow) ) );
+  module->addObject( "MOD", new KSValue( new KSBuiltinFunction( module,"MOD",kspreadfunc_mod) ) );
   module->addObject( "date", new KSValue( new KSBuiltinFunction( module,"date",kspreadfunc_date) ) );
   module->addObject( "day", new KSValue( new KSBuiltinFunction( module,"day",kspreadfunc_day) ) );
   module->addObject( "month", new KSValue( new KSBuiltinFunction( module,"month",kspreadfunc_month) ) );
@@ -1474,6 +1667,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "fact", new KSValue( new KSBuiltinFunction( module,"fact",kspreadfunc_fact) ) );
   module->addObject( "COMBIN", new KSValue( new KSBuiltinFunction( module,"COMBIN",kspreadfunc_combin) ) );
   module->addObject( "PERMUT", new KSValue( new KSBuiltinFunction( module,"PERMUT",kspreadfunc_arrang) ) );
+  module->addObject( "BINO", new KSValue( new KSBuiltinFunction( module,"BINO",kspreadfunc_bino) ) );
+  module->addObject( "INVBINO", new KSValue( new KSBuiltinFunction( module,"INVBINO",kspreadfunc_bino_inv) ) );
   return module;
 }
 
