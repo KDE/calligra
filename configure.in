@@ -67,6 +67,7 @@ AC_OUTPUT( \
 	killustrator/share/Makefile \
 	killustrator/standalone/Makefile \
 	killustrator/xmlutils/Makefile \
+	kohtml/Makefile \
 	kimage/Makefile \
 	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
