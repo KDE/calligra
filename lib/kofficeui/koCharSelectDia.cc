@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kcharselect.h>
-
+#include <kdebug.h>
 /******************************************************************/
 /* class KoCharSelectDia                                           */
 /******************************************************************/
@@ -65,6 +65,15 @@ void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /
     grid->addRowSpacing( 0, charSelect->height() );
     grid->setRowStretch( 0, 0 );
     charSelect->setFocus();
+}
+
+KoCharSelectDia::~KoCharSelectDia()
+{
+}
+
+void KoCharSelectDia::closeDialog()
+{
+    KDialogBase::close();
 }
 
 bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont )

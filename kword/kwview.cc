@@ -248,7 +248,10 @@ KWView::~KWView()
 {
     clearSelection();
     //delete special char dlg when we close view
-    slotSpecialCharDlgClosed();
+    if ( m_specialCharDlg )
+    {
+        m_specialCharDlg->closeDialog();
+    }
 
     if ( m_findReplace )
     {

@@ -389,7 +389,11 @@ KPresenterView::~KPresenterView()
     delete rb_lbegin;
     delete rb_lend;
     delete dcop;
-    delete m_specialCharDlg;
+    if ( m_specialCharDlg )
+    {
+        m_specialCharDlg->closeDialog();
+    }
+
     delete m_sbPageLabel;
     delete notebar;
     delete m_searchEntry;
