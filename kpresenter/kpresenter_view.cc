@@ -96,7 +96,7 @@
 #include <qrichtext_p.h>
 #include <kotextobject.h>
 #include <kprcommand.h>
-
+#include <koFontDia.h>
 
 #define DEBUG
 
@@ -1305,6 +1305,29 @@ void KPresenterView::textAlignRight()
 /*===============================================================*/
 void KPresenterView::mtextFont()
 {
+    KPTextView *edit=page->currentTextObjectView();
+    if(edit)
+    {
+        QColor col=edit->textBackgroundColor();
+        col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+        KoFontDia *fontDia = new KoFontDia( this, "", edit->textFont(),
+                                            /*actionFormatSub->isChecked()*/false, /*actionFormatSuper->isChecked()*/false,
+                                            edit->textColor(), col );
+        fontDia->exec();
+        int flags = fontDia->changedFlags();
+        kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
+        if ( flags )
+        {
+            // The "change all the format" call
+            edit->setFont(fontDia->getNewFont(),
+                          fontDia->getSubScript(), fontDia->getSuperScript(),
+                          fontDia->color(),fontDia->backGroundColor(),
+                          flags);
+        }
+
+        delete fontDia;
+    }
+#if 0
     QFont tmpFont = tbFont;
 
     if ( KFontDialog::getFont( tmpFont ) ) {
@@ -1318,6 +1341,7 @@ void KPresenterView::mtextFont()
 	( (KFontSizeAction*)actionTextFontSize )->setFontSize( tbFont.pointSize() );
 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( false );
     }
+#endif
 }
 
 /*===============================================================*/
