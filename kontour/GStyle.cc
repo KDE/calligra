@@ -30,6 +30,7 @@ GStyle::GStyle()
 {
   mStroked = true;
   mOutline = new KoOutline;
+  mOutlineOpacity = static_cast<int>(100.0 * static_cast<double>(mOutline->opacity()) / 255.0);
 /*
   d->ftype = NoFill;
   d->fcolor = KoColor::white();
@@ -96,6 +97,16 @@ QDomElement GStyle::writeToXml(QDomDocument &document)
   style.setAttribute("pattern", d->pattern);*/
   return style;
 }
+
+bool GStyle::stroked() const
+{
+  return mStroked;
+}
+
+void GStyle::stroked(bool stroked)
+{
+  mStroked = stroked;
+}
   
 const KoColor &GStyle::outlineColor() const
 {
@@ -109,11 +120,12 @@ void GStyle::outlineColor(const KoColor &c)
 
 int GStyle::outlineOpacity() const
 {
-  return static_cast<int>(100.0 * static_cast<double>(mOutline->opacity()) / 255.0);
+  return mOutlineOpacity;
 }
 
 void GStyle::outlineOpacity(int o)
 {
+  mOutlineOpacity = o;
   mOutline->opacity(static_cast<int>(255.0 * static_cast<double>(o) / 100.0));
 }
 
@@ -153,27 +165,17 @@ void GStyle::fillColor(const KoColor &)
 
 const KoColor &GStyle::fillColor() const
 {
-  return KoColor::black();
+  return KoColor::red();
 }
 
 Qt::BrushStyle GStyle::brushStyle() const
 {
-//  return d->pattern;
+  return Qt::SolidPattern;
 }
 
-void GStyle::brushStyle(Qt::BrushStyle brushStyle)
+void GStyle::brushStyle(Qt::BrushStyle /*brushStyle*/)
 {
 //  d->pattern = brushStyle;
-}
-
-bool GStyle::stroked() const
-{
-//  return d->stroked;
-}
-
-void GStyle::stroked(bool stroked)
-{
-//  d->stroked = stroked;
 }
 
 int GStyle::filled() const
@@ -181,7 +183,7 @@ int GStyle::filled() const
   return 0;
 }
 
-void GStyle::filled(int filled)
+void GStyle::filled(int /*filled*/)
 {
   //d->ftype = filled;
 }

@@ -80,6 +80,7 @@ public:
 
 private:
   bool         mStroked;
+  int          mOutlineOpacity;
   KoOutline   *mOutline;
 };
 

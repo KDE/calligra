@@ -28,6 +28,9 @@
 #include <qdom.h>
 
 #include <klocale.h>
+#include <koVectorPath.h>
+#include <koPainter.h>
+
 #include <kdebug.h>
 #include <stdlib.h> // for abs
 
@@ -341,62 +344,33 @@ QDomElement GPath::writeToXml(QDomDocument &document)
 
 void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
 {
-//  p.save();
-//  p.setWorldMatrix(tmpMatrix, true);
-/*  setPen(&p);
-  setBrush(&p);
-
-  int x;
-  int y;
-  int xc;
-  int yc;
-  int x1;
-  int y1;
-  int x2;
-  int y2;
-  KoPoint c;
+  setPen(p);
+  setBrush(p);
+  KoVectorPath *v = new KoVectorPath;
 
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
     if(s->type() == 'm')
     {
-      c = s->point(0).transform(tmpMatrix);
-      x = static_cast<int>(c.x());
-      y = static_cast<int>(c.y());
+      v->moveTo(s->point(0).x(), s->point(0).y());
     }
     else if(s->type() == 'l')
     {
-      c = s->point(0).transform(tmpMatrix);
-      xc = static_cast<int>(c.x());
-      yc = static_cast<int>(c.y());
-      p.drawLine(x, y, xc, yc);
-      x = xc;
-      y = yc;
+      v->lineTo(s->point(0).x(), s->point(0).y());
     }
     else if(s->type() == 'c')
     {
-      c = s->point(0).transform(tmpMatrix);
-      xc = static_cast<int>(c.x());
-      yc = static_cast<int>(c.y());
-      c = s->point(1).transform(tmpMatrix);
-      x1 = static_cast<int>(c.x());
-      y1 = static_cast<int>(c.y());
-      c = s->point(2).transform(tmpMatrix);
-      x2 = static_cast<int>(c.x());
-      y2 = static_cast<int>(c.y());
-      kdDebug() << "DRAW: x=" << xc << " y=" << yc << " x1" << x1 << " y1=" << y1 << " x2=" << x2 << " y2=" << y2 << endl;
-      QPointArray a(4);
-      a.setPoint(0, x, y);
-      a.setPoint(1, x1, y1);
-      a.setPoint(2, x2, y2);
-      a.setPoint(3, xc, yc);
-      p.drawCubicBezier(a);
-      x = xc;
-      y = yc;
+      v->lineTo(s->point(0).x(), s->point(0).y());
+//      v->bezierTo(s->point(0).x(), s->point(0).y(), s->point(1).x(), s->point(1).y(), s->point(2).x(), s->point(2).y());
     }
   }
-  p.restore();
+  v->end();
+  QWMatrix m;
+  m = m.translate(aXOffset, aYOffset);
+  v->transform(m * tmpMatrix);
+  p->drawVectorPath(v);
+  delete v;
   if(withBasePoints)
   {
     int x;
@@ -409,7 +383,7 @@ void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
       y = static_cast<int>(c.y());
       drawNode(p, x, y, false);
     }
-  }*/
+  }
 }
 
 int GPath::getNeighbourPoint(const KoPoint &point)

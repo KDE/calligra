@@ -82,7 +82,7 @@ void Handle::rotCenter(const KoPoint &p)
   mRotCenter = p;
 }
 
-void Handle::draw(KoPainter *p)
+void Handle::draw(KoPainter *p, int aXOffset, int aYOffset, double zoom)
 {
 /*  if(!mShow)
     return;
@@ -135,18 +135,15 @@ void Handle::draw(KoPainter *p)
   drawArrow(p, static_cast<int>(pos[4].x()) + 4, static_cast<int>(pos[4].y()) - 5, Arrow_Up);
 
   /* Left Bottom arrow */
-/*  p.drawArc(static_cast<int>(pos[6].x()) - 5, static_cast<int>(pos[6].y()) - 15, 20, 20, 2880, 1440);
+//  p.drawArc(static_cast<int>(pos[6].x()) - 5, static_cast<int>(pos[6].y()) - 15, 20, 20, 2880, 1440);
   drawArrow(p, static_cast<int>(pos[6].x()) + 5, static_cast<int>(pos[6].y()) + 4, Arrow_Right);
   drawArrow(p, static_cast<int>(pos[6].x()) - 5, static_cast<int>(pos[6].y()) - 5, Arrow_Up);
 
-  brush = QBrush(Qt::blue);
-  p.setBrush(brush);
   for(int i = 0; i < 8; i++)
   {
-    p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 7, 7);
-    p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 5, 5, brush);
+    //p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 7, 7);
+    p->fillAreaRGB(QRect(static_cast<int>(pos[i].x() - 2 + aXOffset), static_cast<int>(pos[i].y() - 2 + aYOffset), 5, 5), KoColor::blue());
   }
-  p.restore();*/
 }
 
 int Handle::contains(const KoPoint &p)

@@ -45,7 +45,7 @@ public:
   KoPoint rotCenter() const {return mRotCenter; }
   void rotCenter(const KoPoint &p);
 
-  void draw(KoPainter *p);
+  void draw(KoPainter *p, int aXOffset, int aYOffset, double zoom);
   int contains(const KoPoint &p);
 
 private:

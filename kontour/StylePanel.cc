@@ -252,6 +252,17 @@ void OutlinePanel::slotChangeOpacity(int o)
 
 void OutlinePanel::slotChangeColor(const KoColor &c)
 {
+  if(mView->activeDocument()->activePage()->selectionIsEmpty())
+  {
+    mView->activeDocument()->styles()->style()->outlineColor(c);
+  }
+  else
+  {
+    QPtrListIterator<GObject> it(mView->activeDocument()->activePage()->getSelection());
+    for(; it.current(); ++it)
+      (*it)->style()->outlineColor(c);
+  }
+  slotUpdate();
 }
 
 void OutlinePanel::slotChangeLineWidth(int l)

@@ -29,7 +29,7 @@
 #include <qhbox.h>
 #include "units.h"
 
-class QComboBox;
+class KComboBox;
 class KDoubleNumInput;
 
 class UnitBox : public QHBox
@@ -64,7 +64,7 @@ protected slots:
 private:
   KDoubleNumInput *valueBox;
   bool isUnitEnabled;
-  QComboBox *unitCombo;
+  KComboBox *mUnitCombo;
   MeasurementUnit unit;
   double ptMinVal, ptMaxVal; // the minimal and maximal value in points
   double mStep;

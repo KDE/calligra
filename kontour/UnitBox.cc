@@ -25,8 +25,9 @@
 
 #include "UnitBox.h"
 
-#include <qcombobox.h>
 #include <qlayout.h>
+
+#include <kcombobox.h>
 #include <knuminput.h>
 
 MeasurementUnit UnitBox::defaultUnit = UnitPoint;
@@ -41,16 +42,16 @@ QHBox(parent, name)
   valueBox->setPrecision(2);
   valueBox->setRange(ptMinVal, ptMaxVal, mStep);
 
-  unitCombo = new QComboBox(this, "unitCombo");
-  unitCombo->insertItem(unitToString(UnitPoint));
-  unitCombo->insertItem(unitToString(UnitMillimeter));
-  unitCombo->insertItem(unitToString(UnitInch));
-  unitCombo->insertItem(unitToString(UnitPica));
-  unitCombo->insertItem(unitToString(UnitCentimeter));
-  unitCombo->insertItem(unitToString(UnitDidot));
-  unitCombo->insertItem(unitToString(UnitCicero));
-  unitCombo->setCurrentItem(int(unit = defaultUnit));
-  connect(unitCombo, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
+  mUnitCombo = new KComboBox(this, "mUnitCombo");
+  mUnitCombo->insertItem(unitToString(UnitPoint));
+  mUnitCombo->insertItem(unitToString(UnitMillimeter));
+  mUnitCombo->insertItem(unitToString(UnitInch));
+  mUnitCombo->insertItem(unitToString(UnitPica));
+  mUnitCombo->insertItem(unitToString(UnitCentimeter));
+  mUnitCombo->insertItem(unitToString(UnitDidot));
+  mUnitCombo->insertItem(unitToString(UnitCicero));
+  mUnitCombo->setCurrentItem(int(unit = defaultUnit));
+  connect(mUnitCombo, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
   connect(valueBox, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged(double)));
   isUnitEnabled = true;
 }
@@ -135,7 +136,7 @@ void UnitBox::slotValueChanged(double f)
 
 void UnitBox::enableUnits(bool flag)
 {
-  unitCombo->setEnabled(flag);
+  mUnitCombo->setEnabled(flag);
   isUnitEnabled = flag;
 }
 

@@ -207,7 +207,7 @@ void Canvas::updateBuf(const QRect &rect)
   document()->activePage()->drawContents(painter, mXOffset, mYOffset, mWithBasePoints, mOutlineMode);
 
   if(!document()->activePage()->selectionIsEmpty())
-    document()->activePage()->handle().draw(painter);
+    document()->activePage()->handle().draw(painter, mXOffset, mYOffset, zoomFactor());
 /*
   if(mGDoc->showHelplines())
     drawHelplines(p, rect);

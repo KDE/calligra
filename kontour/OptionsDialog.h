@@ -28,7 +28,7 @@
 
 #include <kdialogbase.h>
 
-class QComboBox;
+class KComboBox;
 class QColor;
 class KColorButton;
 class QCheckBox;
@@ -75,7 +75,7 @@ private:
   bool mViewUpdate;
 
   /*General*/
-  QComboBox *unit;
+  KComboBox *unit;
   KColorButton *mWSColorButton;
 
   UnitBox *horiz, *vert;

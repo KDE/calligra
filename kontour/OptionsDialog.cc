@@ -29,9 +29,9 @@
 #include <qlayout.h>
 #include <qvgroupbox.h>
 #include <qhbox.h>
-#include <qcombobox.h>
 #include <qcheckbox.h>
 
+#include <kcombobox.h>
 #include <kcolorbutton.h>
 #include <klocale.h>
 
@@ -79,7 +79,7 @@ void OptionsDialog::createGeneralWidget(QWidget *parent)
   
   QLabel *mUnitLabel = new QLabel(i18n("Unit:"), parent);
   layout->addWidget(mUnitLabel, 0, 0);
-  unit = new QComboBox(parent);
+  unit = new KComboBox(parent);
   unit->insertItem(unitToString(UnitPoint));
   unit->insertItem(unitToString(UnitMillimeter));
   unit->insertItem(unitToString(UnitInch));
