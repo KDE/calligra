@@ -317,6 +317,8 @@ int KoTextFormat::height() const
         int h = refFontMetrics().height()+QABS(offsetFromBaseLine());
         if ( vAlign() == KoTextFormat::AlignSuperScript )
             h += refFontMetrics().height()/2;
+        else if ( vAlign() == KoTextFormat::AlignSubScript )
+            h += refFontMetrics().height()/6;
         //kdDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
         // Then scale to LU
         d->m_refHeight = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
