@@ -123,7 +123,7 @@ void KSpreadresize2::slotOk()
     QRect selection( m_pView->selection() );
 
     double new_size = KoUnit::ptFromUnit( m_pSize2->value()*m_pView->canvasWidget()->zoom(), m_pView->doc()->getUnit() );
-    if ( int( size ) != int( new_size ) )
+    if ( (int( size ) != int( new_size )) ||m_pDefault->isChecked())
     {
         if ( !m_pView->doc()->undoBuffer()->isLocked() )
         {
