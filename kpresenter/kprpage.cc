@@ -3334,3 +3334,22 @@ KPObject * KPrPage::getCursor(const QPoint &pos )
     }
     return obj;
 }
+
+KPObject * KPrPage::getCursor(const KoPoint &pos )
+{
+    KPObject *kpobject=0L;
+    for ( int i = m_objectList.count() - 1; i >= 0; i-- ) {
+        kpobject = m_objectList.at( i );
+        KoSize s = kpobject->getSize();
+        KoPoint pnt = kpobject->getOrig();
+        KoRect rect(pnt.x(), pnt.y() , s.width(), s.height() );
+        if ( rect.contains( pos ) ) {
+            if ( kpobject->isSelected() ) {
+                return kpobject;
+            }
+        }
+    }
+    kpobject=0L;
+    return kpobject;
+}
+

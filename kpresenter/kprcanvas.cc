@@ -1090,20 +1090,23 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE ) {
 	    bool cursorAlreadySet = false;
-	    if ( (int)objectList().count() - 1 >= 0 ) {
-		for ( int i = objectList().count() - 1; i >= 0; i-- ) {
-		    kpobject = objectList().at( i );
-		    KoSize s = kpobject->getSize();
-		    KoPoint pnt = kpobject->getOrig();
-                    KoRect rect(pnt.x(), pnt.y() , s.width(), s.height() );
-                    if ( rect.contains( docPoint ) ) {
-                        if ( kpobject->isSelected() ) {
-			    setCursor( kpobject->getCursor( docPoint, modType ) );
-			    cursorAlreadySet = true;
-			    break;
-			}
-		    }
-		}
+	    if ( (int)objectList().count() - 1 >= 0 || (int)m_view->kPresenterDoc()->stickyPage()->objectList().count() -1>=0 )
+            {
+                kpobject=m_activePage->getCursor(docPoint );
+                if( kpobject)
+                {
+                    setCursor( kpobject->getCursor( docPoint, modType ) );
+                    cursorAlreadySet = true;
+                }
+                else
+                {
+                    kpobject=m_view->kPresenterDoc()->stickyPage()->getCursor(docPoint );
+                    if( kpobject)
+                    {
+                        setCursor( kpobject->getCursor( docPoint, modType ) );
+                        cursorAlreadySet = true;
+                    }
+                }
 	    }
 	    if ( !cursorAlreadySet )
 		setCursor( arrowCursor );
