@@ -338,8 +338,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this, SLOT( mergeCell() ), actionCollection(), "mergecell" );
     m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0, this, SLOT( dissociateCell() ), actionCollection(), "dissociatecell" );
 
-    m_increaseIndent = new KAction( i18n("Increase indent"),"increaseindent" ,0, this, SLOT( increaseIndent() ), actionCollection(), "increaseindent" );
-    m_decreaseIndent = new KAction( i18n("Decrease indent"),"decreaseindent" ,0, this, SLOT( decreaseIndent() ), actionCollection(),"decreaseindent");
+    m_increaseIndent = new KAction( i18n("Increase indent"),"format_increaseindent" ,0, this, SLOT( increaseIndent() ), actionCollection(), "increaseindent" );
+    m_decreaseIndent = new KAction( i18n("Decrease indent"),"format_decreaseindent" ,0, this, SLOT( decreaseIndent() ), actionCollection(),"decreaseindent");
 
     m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
