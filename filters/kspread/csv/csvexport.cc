@@ -148,6 +148,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
 
   if ( expDialog.exportSelectionOnly() )
   {
+    kdDebug(30501) << "Export as selection mode" << endl;
     KSpreadView const * const view = static_cast<KSpreadView*>(ksdoc->views().getFirst());
 
     if ( !view ) // no view if embedded document
@@ -183,6 +184,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   }
   else
   {
+    kdDebug(30501) << "Export as full mode" << endl;
     QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
     for( ; it.current(); ++it )
     {
@@ -215,7 +217,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       // or, cleaner and already sorted, we use KSpreadSheet's API (slower probably, though)
       int iMaxColumn = sheet->maxColumn();
       int iMaxRow    = sheet->maxRow();
-
+      kdDebug(30501) << "Max row x column: " << iMaxRow << " x " << iMaxColumn << endl;
+      
       // this is just a bad approximation which fails for documents with less than 50 rows, but
       // we don't need any progress stuff there anyway :) (Werner)
       int value = 0;
