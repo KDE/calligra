@@ -81,137 +81,117 @@ void KFormulaView::slotModified()
   update();
 }
 
+CORBA::Long KFormulaView::addToolButton (ToolBar_ref toolbar,
+					 const char* pictname,
+					 const char* tooltip,
+					 const char* func) 
+{
+    QString tmp = KApplication::kde_datadir().copy();
+    tmp += "/kformula/pics/";
+    tmp += pictname;
+    
+    QString pix = loadPixmap( tmp );
+   
+    CORBA::Long id = toolbar->insertButton( CORBA::string_dup( pix ), 
+					    CORBA::string_dup(tooltip),
+					    this,
+					    CORBA::string_dup(func));
+    return id;
+}
+
 void KFormulaView::createGUI()
 { 
-  m_vMenuBarFactory = m_vPartShell->menuBarFactory();
-  if ( !CORBA::is_nil( m_vMenuBarFactory ) )
-  {
-    // Menubar
-    m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
-
-    // View
-    m_idMenuView = m_rMenuBar->insertMenu( i18n( "&View" ) );
-
-    m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ), m_idMenuView,
+    m_vMenuBarFactory = m_vPartShell->menuBarFactory();
+    if ( !CORBA::is_nil( m_vMenuBarFactory ) ) {
+	// Menubar
+	m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
+	
+	// View
+	m_idMenuView = m_rMenuBar->insertMenu( i18n( "&View" ) );
+	
+	m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ),
+						       m_idMenuView,
 						       this, "newView" );
-  }
+    }
+    
+    m_vToolBarFactory = m_vPartShell->toolBarFactory();
+    if ( !CORBA::is_nil( m_vToolBarFactory ) ) {
+	
+	m_rToolBarFormula = m_vToolBarFactory->createToolBar( this, i18n( "Formula" ) );
+	
+	m_idButtonFormula_0 = addToolButton(m_rToolBarFormula, "mini-xy.xpm", 
+					    i18n( "Add/change to simple text" ),
+					    "addB0" );
 
-  m_vToolBarFactory = m_vPartShell->toolBarFactory();
-  if ( !CORBA::is_nil( m_vToolBarFactory ) )
-  {
-    m_rToolBarFormula = m_vToolBarFactory->createToolBar( this, i18n( "Formula" ) );
+	m_idButtonFormula_1 = addToolButton(m_rToolBarFormula, "mini-root.xpm", 
+					    i18n( "Add/change to root" ), "addB1" );
 
-    QString tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-xy.xpm";
-    QString pix = loadPixmap( tmp );
-    m_idButtonFormula_0 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change to simple text" ), this, "addB0" );
+	m_idButtonFormula_2 = addToolButton(m_rToolBarFormula, "mini-frac.xpm",
+					    i18n( "Add/change fract line" ), "addB4");
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-root.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFormula_1 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change to root" ), this, "addB1" );
+	m_idButtonFormula_3 = addToolButton(m_rToolBarFormula, "mini-vspace.xpm",
+					    i18n( "Add/change vertical space" ), "addB4bis");
+	
+	
+	m_idButtonFormula_4 = addToolButton(m_rToolBarFormula, "mini-bra.xpm",
+					    i18n( "Add/change a bracket block" ), "addB3" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-frac.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFormula_2 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change fract line" ), this, "addB4" );
+	m_idButtonFormula_5 = addToolButton(m_rToolBarFormula, "mini-integral.xpm",
+					    i18n( "Add/change an integral" ), "addB2" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-vspace.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFormula_3 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change vertical space" ), this, "addB4bis" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-bra.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFormula_4 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change a bracket block" ), this, "addB3" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-integral.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFormula_5 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change an integral" ), this, "addB2" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/mini-symbols.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFormula_6 = m_rToolBarFormula->insertButton( CORBA::string_dup( pix ), i18n( "Add/change a block with symbols" ), this, "addB5" );
-  }
+	m_idButtonFormula_6 = addToolButton(m_rToolBarFormula, "mini-symbols.xpm",
+					    i18n( "Add/change a block with symbols" ), "addB5" );
+    }
 
   if ( !CORBA::is_nil( m_vToolBarFactory ) )
   {
-    m_rToolBarFont = m_vToolBarFactory->createToolBar( this, i18n( "Font" ) );
+      m_rToolBarFont = m_vToolBarFactory->createToolBar( this, i18n( "Font" ) );
 
-    QString tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/reduce.xpm";
-    QString pix = loadPixmap( tmp );
-    m_idButtonFont_0 = m_rToolBarFont->insertButton( CORBA::string_dup( pix ), i18n( "Reduce the font of active block" ), this, "reduce" );
+      m_idButtonFont_0 = addToolButton(m_rToolBarFont, "reduce.xpm",
+				       i18n( "Reduce the font of active block" ), "reduce");
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/enlarge.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFont_1 = m_rToolBarFont->insertButton( CORBA::string_dup( pix ), i18n( "Enlarge the font of active block" ), this, "enlarge" );
+      m_idButtonFont_1 = addToolButton(m_rToolBarFont, "enlarge.xpm",
+				       i18n( "Enlarge the font of active block" ), "enlarge");
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/reduceall.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFont_2 = m_rToolBarFont->insertButton( CORBA::string_dup( pix ), i18n( "Reduce the font of active block & children" ),
-						     this, "reduceRecur" );
+      m_idButtonFont_2 = addToolButton(m_rToolBarFont, "reduceall.xpm",
+				       i18n( "Reduce the font of active block & children" ), "reduceRecur");
+      
+      m_idButtonFont_3 = addToolButton(m_rToolBarFont, "enlargeall.xpm",
+				       i18n( "Enlarge the font of active block & children" ), "enlargeRecur" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/enlargeall.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFont_3 = m_rToolBarFont->insertButton( CORBA::string_dup( pix ), i18n( "Enlarge the font of active block & children" ),
-						     this, "enlargeRecur" );
+      m_idButtonFont_4 = addToolButton(m_rToolBarFont, "enlargenext.xpm",
+				       i18n( "Reduce the font of active block, children & next blocks" ), "enlargeAll");
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/enlargenext.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFont_4 = m_rToolBarFont->insertButton( CORBA::string_dup( pix ), i18n( "Reduce the font of active block, children & next blocks" ),
-						     this, "enlargeAll" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/greek.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFont_5 = m_rToolBarFont->insertButton( CORBA::string_dup( pix ), i18n( "Set greek font" ), this, "setGreek" );
-    m_rToolBarFont->setToggle( m_idButtonFont_5, true );
+      m_idButtonFont_5 = addToolButton(m_rToolBarFont, "greek.xpm",
+				       i18n( "Set greek font" ), "setGreek" );
+      m_rToolBarFont->setToggle( m_idButtonFont_5, true );
   }
   
   if ( !CORBA::is_nil( m_vToolBarFactory ) )
-  {
-    m_rToolBarType = m_vToolBarFactory->createToolBar( this, i18n( "Type" ) );
+      {
+	  m_rToolBarType = m_vToolBarFactory->createToolBar( this, i18n( "Type" ) );
+	  
+	  m_idButtonType_0 = addToolButton(m_rToolBarType, "kformula1-0.xpm", 
+					   i18n( "Add exponent" ), "addCh1" );
 
-    QString tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/kformula1-0.xpm";
-    QString pix = loadPixmap( tmp );
-    m_idButtonType_0 = m_rToolBarType->insertButton( CORBA::string_dup( pix ), i18n( "Add exponent" ), this, "addCh1" );
+	  m_idButtonType_1 = addToolButton(m_rToolBarType, "kformula2-0.xpm", 
+					   i18n( "Add index" ), "addCh2" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/kformula2-0.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonType_1 = m_rToolBarType->insertButton( CORBA::string_dup( pix ), i18n( "Add index" ), this, "addCh2" );
+	  m_idButtonType_2 = addToolButton(m_rToolBarType, "kformula2-1.xpm", 
+					   i18n( "Add root index" ), "addCh2" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/kformula2-1.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonType_2 = m_rToolBarType->insertButton( CORBA::string_dup( pix ), i18n( "Add root index" ), this, "addCh2" );
+	  m_idButtonType_3 = addToolButton(m_rToolBarType, "kformula2-2.xpm", 
+					   i18n( "Add high limit" ), "addCh2" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/kformula2-2.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonType_3 = m_rToolBarType->insertButton( CORBA::string_dup( pix ), i18n( "Add high limit" ), this, "addCh2" );
+	  m_idButtonType_4 = addToolButton(m_rToolBarType, "kformula3-2.xpm", 
+					   i18n( "Add low limit" ), "addCh3" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/kformula3-2.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonType_1 = m_rToolBarType->insertButton( CORBA::string_dup( pix ), i18n( "Add low limit" ), this, "addCh3" );
+	  // TODO check, why two exponents button exist!
+	  m_idButtonType_5 = addToolButton(m_rToolBarType, "kformula2-3.xpm", 
+					   i18n( "Add exponent" ), "addCh2" );
 
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kformula/pics/kformula2-3.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonType_1 = m_rToolBarType->insertButton( CORBA::string_dup( pix ), i18n( "Add exponent" ), this, "addCh2" );
-
-    // TODO insert Line Edit control
-  }  
+	  // TODO insert Line Edit control
+      }  
 }
 
 void KFormulaView::newView()

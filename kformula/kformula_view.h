@@ -38,7 +38,12 @@ public slots:
   
 protected:
   virtual void cleanUp();
-  
+
+  CORBA::Long addToolButton (ToolBar_ref toolbar,
+			     const char* pictname,
+			     const char* tooltip,
+			     const char* func);
+
   void paintEvent( QPaintEvent *_ev );
   void resizeEvent( QResizeEvent *_ev );
 
@@ -70,6 +75,8 @@ protected:
   CORBA::Long m_idButtonType_1;
   CORBA::Long m_idButtonType_2;
   CORBA::Long m_idButtonType_3;
+  CORBA::Long m_idButtonType_4;
+  CORBA::Long m_idButtonType_5;
 };
 
 #endif

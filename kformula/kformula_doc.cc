@@ -56,8 +56,9 @@ bool KFormulaDocument::load( KOMLParser& parser )
 bool KFormulaDocument::save( ostream &out )
 {
   out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org"
-      << "\" editor=\"" << "KFormula" << "\" mime=\"" << MIME_TYPE << "\" >" << endl;
+  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" 
+      << "weis@kde.org" << "\" editor=\"" << "KFormula" 
+      << "\" mime=\"" << MIME_TYPE << "\" >" << endl;
   out << etag << "</DOC>" << endl;
   
   return true;
