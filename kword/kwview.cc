@@ -2623,22 +2623,22 @@ void KWView::insertContents()
 void KWView::formatFont()
 {
     //kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-    if ( lst.isEmpty() )
+    KoTextFormatInterface* textIface = applicableTextInterfaces().first();
+
+    if ( !textIface )
         return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
-    QColor col=lst.first()->textBackgroundColor();
+    QColor col=textIface->textBackgroundColor();
     col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-    bool doubleUnderline = lst.first()->currentFormat()->doubleUnderline();
+    bool doubleUnderline = textIface->currentFormat()->doubleUnderline();
 
     if( m_fontDlg )
     {
         delete m_fontDlg;
         m_fontDlg = 0L;
     }
-    m_fontDlg = new KoFontDia( this, "", lst.first()->textFont(),
+    m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
                                         actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-					doubleUnderline, lst.first()->textColor(), col );
+					doubleUnderline, textIface->textColor(), col );
 
     connect( m_fontDlg, SIGNAL( apply() ),
                  this, SLOT( slotApplyFont() ) );
