@@ -569,13 +569,13 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
        len--;
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
+        str = lastFormat->displayedString( str );
 	if ( lastFormat->vAlign() == KoTextFormat::AlignNormal ) {
             int posY =lastY + baseLine - lastFormat->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
                 posY -=shadowY( zh );
-            str = lastFormat->displayedString( str );
 	    painter.drawText( startX, posY, str, start, len, dir );
 #ifdef BIDI_DEBUG
 	    painter.save();
