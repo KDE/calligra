@@ -40,9 +40,6 @@ extern "C" int kdemain( int argc, char* argv[] )
 	KCmdLineArgs::addCmdLineOptions( options );
 	KoApplication app;
 
-	app.dcopClient()->attach();
-	app.dcopClient()->registerAs( "karbon" );
-
 	if( !app.start() )  // parses command line args, create initial docs and shells
 		return 1;
 

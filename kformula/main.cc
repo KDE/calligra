@@ -37,8 +37,6 @@ extern "C" int kdemain( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs("kformula");
 
     if (!app.start())
         return 1;
