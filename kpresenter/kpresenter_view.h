@@ -88,6 +88,7 @@ class KPPixmapObject;
 class KPresenterDoc;
 class KPrPage;
 class KPTextObject;
+class KoTextIterator;
 
 class KOSpell;
 
@@ -349,7 +350,7 @@ public slots:
     void slotLineBreak();
 
     void extraAutoFormat();
-    void extraSpelling();
+    void slotSpellCheck();
 
 
     void spellCheckerReady();
@@ -756,7 +757,7 @@ protected:
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
-    void spellAddTextObject();
+    QValueList<KoTextObject *> spellAddTextObject() const;
 
     bool switchInOtherPage( const QString & text );
 
@@ -1165,12 +1166,9 @@ private:
     // Spell-checking
     struct {
         KOSpell *kospell;
-        int spellCurrTextObjNum;
-        QPtrList<KPTextObject> textObject;
         KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
-        bool bSpellSelection;
-        int selectionStartPos;
+        KoTextIterator * textIterator;
     } m_spell;
 
     KActionMenu *actionInsertVariable;

@@ -1969,6 +1969,11 @@ void KPTextView::keyReleaseEvent( QKeyEvent *e )
     handleKeyReleaseEvent(e);
 }
 
+bool KPTextView::hasSelection() const
+{
+    return textObject()->hasSelection();
+}
+
 void KPTextView::clearSelection()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )

@@ -251,6 +251,9 @@ public:
     void terminate(bool removeSelection=true);
     void insertComment(const QString &_note);
 
+    /** return true if some text is selected */
+    bool hasSelection() const;
+
 public slots:
     void cut();
     void copy();

@@ -253,6 +253,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     protectContent = FALSE;
     m_canvas = 0L;
     m_spell.kospell = 0;
+    m_spell.textIterator = 0L;
 
     m_autoPresTimerConnected = false;
     m_actionList.setAutoDelete( true );
@@ -369,19 +370,7 @@ KPresenterView::~KPresenterView()
         config->setGroup("Global");
         config->writeEntry("Notebar", notebar->isVisible());
     }
-
-    if(m_spell.kospell)
-    {
-        KPTextObject * objtxt = 0L;
-        if(m_spell.spellCurrTextObjNum !=-1)
-        {
-            objtxt =m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
-            Q_ASSERT( objtxt );
-            if ( objtxt )
-                objtxt->removeHighlight();
-        }
-        delete m_spell.kospell;
-    }
+    clearSpellChecker();
 
     delete rb_oalign;
     delete rb_lbegin;
@@ -2903,7 +2892,7 @@ void KPresenterView::setupActions()
     (void) new KAction( i18n( "Configure &Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
-    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
+    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
 
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
@@ -4792,20 +4781,27 @@ void KPresenterView::extraAutoFormat()
     m_pKPresenterDoc->startBackgroundSpellCheck(); // will do so if enabled
 }
 
-void KPresenterView::extraSpelling()
+void KPresenterView::slotSpellCheck()
 {
+#if 0
     if (m_spell.kospell) return; // Already in progress
+
     m_spell.macroCmdSpellCheck=0L;
     m_spell.replaceAll.clear();
+
     m_spell.bSpellSelection = false;
     m_spell.selectionStartPos=0;
 
     m_pKPresenterDoc->setReadWrite(false); // prevent editing text
+
     m_initSwitchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_switchPage = m_initSwitchPage;
 
     KPTextView *edit=m_canvas->currentTextObjectView();
-    if ( edit && edit->kpTextObject()->textDocument()->hasSelection(KoTextDocument::Standard))
+    int options = 0;
+    QValueList<KoTextObject *> objects;
+
+    if ( edit && edit->kpTextObject()->hasSelection())
     {
         m_spell.spellCurrTextObjNum = -1;
         m_spell.textObject.clear();
@@ -4839,8 +4835,58 @@ void KPresenterView::extraSpelling()
         }
     }
     startKSpell();
+#endif
+    if (m_spell.kospell) return; // Already in progress
+    //m_doc->setReadWrite(false); // prevent editing text - not anymore
+    m_spell.macroCmdSpellCheck = 0L;
+    m_spell.replaceAll.clear();
+    QValueList<KoTextObject *> objects;
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    int options = 0;
+    if ( edit && edit->textObject()->hasSelection() )
+    {
+        objects.append(edit->kpTextObject()->textObject());
+        options = KFindDialog::SelectedText;
+    }
+    else
+    {
+        objects = spellAddTextObject();
+        QPtrList<KPObject> lstObj;
+        stickyPage()->getAllObjectSelectedList(lstObj, true);
+        QPtrListIterator<KPObject> it( lstObj );
+        for ( ; it.current() ; ++it )
+        {
+            if(it.current()->getType()==OT_TEXT)
+            {
+                KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
+                if ( tmp && !tmp->isProtectContent())
+                    objects.append(tmp->textObject());
+            }
+        }
+    }
+    m_spell.textIterator = new KoTextIterator( objects, edit, options );
+    startKSpell();
 }
 
+QValueList<KoTextObject *> KPresenterView::spellAddTextObject() const
+{
+    QValueList<KoTextObject *> lst;
+    QPtrList<KPObject> lstObj;
+    m_canvas->activePage()->getAllObjectSelectedList(lstObj, true);
+    QPtrListIterator<KPObject> it( lstObj );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType()==OT_TEXT)
+        {
+            KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
+            if ( tmp && !tmp->isProtectContent())
+                lst.append( tmp->textObject() );
+        }
+    }
+    return lst;
+}
+
+#if 0
 void KPresenterView::spellAddTextObject()
 {
     m_spell.spellCurrTextObjNum = -1;
@@ -4858,6 +4904,7 @@ void KPresenterView::spellAddTextObject()
         }
     }
 }
+#endif
 
 void KPresenterView::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
 {
@@ -4901,65 +4948,101 @@ void KPresenterView::spellCheckerIgnoreAll( const QString & word)
 
 void KPresenterView::spellCheckerReady()
 {
-    for ( unsigned int i = m_spell.spellCurrTextObjNum + 1; i < m_spell.textObject.count(); i++ ) {
-        KPTextObject *textobj = m_spell.textObject.at( i );
-        m_spell.spellCurrTextObjNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
-        //kdDebug(33001) << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
-        QString text = textobj->textDocument()->plainText();
-        if ( m_spell.bSpellSelection)
-            text = textobj->textDocument()->selectedText(KoTextDocument::Standard);
-        bool textIsEmpty=true;
-        // Determine if text has any non-space character, otherwise there's nothing to spellcheck
-        for ( uint i = 0 ; i < text.length() ; ++ i )
-            if ( !text[i].isSpace() ) {
-                textIsEmpty = false;
-                break;
-            }
-        if(textIsEmpty)
-            continue;
-        text += '\n'; // end of last paragraph
-        text += '\n'; // empty line required by kspell
-        m_spell.kospell->check( text);
-        textobj->textObject()->setNeedSpellCheck(true);
-
-
-        return;
+    kdDebug()<<"void KPresenterView::spellCheckerReady() ******************\n";
+    // Spell-check the next paragraph
+    Q_ASSERT( m_spell.textIterator );
+    if ( !m_spell.textIterator->atEnd() )
+    {
+        bool textIsEmpty = true;
+        QString text;
+        while ( textIsEmpty && !m_spell.textIterator->atEnd() )
+        {
+            text = m_spell.textIterator->currentText();
+            // Determine if text has any non-space character, otherwise there's nothing to spellcheck
+            for ( uint i = 0 ; i < text.length() ; ++ i )
+                if ( !text[i].isSpace() ) {
+                    textIsEmpty = false;
+                    break;
+                }
+            if ( textIsEmpty )
+                ++(*m_spell.textIterator);
+        }
+        if ( !textIsEmpty )
+        {
+            kdDebug() << "Checking " << text << endl;
+            text += '\n'; // end of paragraph
+            text += '\n'; // empty line required by kspell
+            m_spell.kospell->check( text);
+            kdDebug()<<" check :"<<text<<endl;
+            // ??? textfs->textObject()->setNeedSpellCheck(true);
+            return;
+        }
     }
+
+    // Done
+    if ( m_spell.textIterator->options() & KFindDialog::SelectedText )
+    {
+        KMessageBox::information(this,
+                                 i18n("Spellcheck selection finished."),
+                                 i18n("Spell Checking"));
+    }
+
     //kdDebug(33001) << "KPresenterView::spellCheckerReady done" << endl;
     if(!switchInOtherPage(i18n( "Do you want to spellcheck new slide?")))
     {
         // Done
         m_pKPresenterDoc->setReadWrite(true);
-        delete m_spell.kospell;
-        m_spell.kospell=0;
-#if 0
-        m_spell.kspell->cleanUp();
-        delete m_spell.kspell;
-        m_spell.kspell = 0;
-#endif
         clearSpellChecker();
     }
     else
     {
-        spellAddTextObject();
+        QValueList<KoTextObject *> objects;
+        objects = spellAddTextObject();
+        delete m_spell.textIterator;
+        m_spell.textIterator = new KoTextIterator( objects, 0L, 0 );
+
         spellCheckerReady();
     }
 }
 
 void KPresenterView::clearSpellChecker()
 {
+    kdDebug() << "KPresenterView::clearSpellChecker()" << endl;
+    if ( m_spell.kospell ) {
+        m_spell.kospell->cleanUp();
+        delete m_spell.kospell;
+        m_spell.kospell = 0;
+    }
     m_initSwitchPage = -1;
     m_switchPage = -1;
-    m_spell.textObject.clear();
+
+
     if(m_spell.macroCmdSpellCheck)
         m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
     m_spell.macroCmdSpellCheck=0L;
-    m_spell.bSpellSelection= false;
-    m_spell.selectionStartPos = 0;
+
+    m_spell.replaceAll.clear();
+
+    delete m_spell.textIterator;
+    m_spell.textIterator = 0L;
+
 }
 
 void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
+        //kdDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    KoTextParag* parag = m_spell.textIterator->currentParag();
+    Q_ASSERT( textobj );
+    Q_ASSERT( parag );
+    if ( !textobj || !parag ) return;
+    KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
+    Q_ASSERT( textdoc );
+    if ( !textdoc ) return;
+    pos += m_spell.textIterator->currentStartIndex();
+    kdDebug(32001) << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    textdoc->textObject()->highlightPortion( parag, pos, old.length(), m_canvas,true/*repaint*/ );
+#if 0
     //kdDebug(33001) << "KPresenterView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
     Q_ASSERT( textobj );
@@ -4975,36 +5058,59 @@ void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringL
     if ( !p ) return;
     //kdDebug(33001) << "KPresenterView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
     textobj->highlightPortion( p, pos, old.length(), m_canvas, true /*repaint*/ );
+#endif
 }
 
 void KPresenterView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
     //kdDebug(33001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
-    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+    //kdDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    KoTextParag* parag = m_spell.textIterator->currentParag();
     Q_ASSERT( textobj );
-    if ( !textobj ) return;
-    pos += m_spell.selectionStartPos;
-    KoTextParag * p = textobj->textDocument()->firstParag();
-    while ( p && (int)pos >= p->length() )
-    {
-        pos -= p->length();
-        p = p->next();
-    }
-    Q_ASSERT( p );
-    if ( !p ) return;
-    textobj->highlightPortion( p, pos, old.length(), m_canvas, true /*repaint*/ );
-    KoTextCursor cursor( textobj->textDocument() );
-    cursor.setParag( p );
+    Q_ASSERT( parag );
+    if ( !textobj || !parag ) return;
+
+    KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
+    Q_ASSERT( textdoc );
+    if ( !textdoc )
+        return;
+    pos += m_spell.textIterator->currentStartIndex();
+    textdoc->textObject()->highlightPortion( parag, pos, old.length(), m_canvas,true/*repaint*/ );
+
+    KoTextCursor cursor( textdoc );
+    cursor.setParag( parag );
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
-    m_spell.macroCmdSpellCheck->addCommand(textobj->textObject()->replaceSelectionCommand(
-                                               &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
+    m_spell.macroCmdSpellCheck->addCommand(textobj->replaceSelectionCommand(&cursor, corr, KoTextObject::HighlightSelection, QString::null ));
 }
 
 void KPresenterView::spellCheckerDone( const QString & )
 {
+
+    //kdDebug(32001) << "KWView::spellCheckerDone" << endl;
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    Q_ASSERT( textobj );
+    KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
+    Q_ASSERT( textdoc );
+    if ( textdoc )
+        textdoc->textObject()->removeHighlight();
+
+    int result = m_spell.kospell->dlgResult();
+    if ( result != KS_CANCEL && result != KS_STOP )
+    {
+        // Move on to next paragraph
+        ++(*m_spell.textIterator);
+        spellCheckerReady();
+    }
+    else // aborted
+    {
+        clearSpellChecker();
+    }
+
+#if 0
     KPTextObject * textobj = 0L;
     if(m_spell.spellCurrTextObjNum!=-1 )
     {
@@ -5061,27 +5167,52 @@ void KPresenterView::spellCheckerDone( const QString & )
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
     }
+#endif
 }
 
 void KPresenterView::spellCheckerFinished()
 {
-    KOSpell::spellStatus status = m_spell.kospell->status();
-    bool kspellNoConfigured=false;
-#if 0
-
-#ifdef HAVE_LIBASPELL
+    kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
+    bool kspellNotConfigured=false;
     delete m_spell.kospell;
     m_spell.kospell = 0;
     //FIXME
-#else
+#if 0
+    KSpell::spellStatus status = m_spell.kspell->status();
     delete m_spell.kspell;
     m_spell.kspell = 0;
     if (status == KSpell::Error)
-        kspellNoConfigured=true;
+    {
+        kspellNotConfigured=true;
+    }
     else if (status == KSpell::Crashed)
+    {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
+    }
 #endif
-#endif
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    if ( textobj ) {
+        KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
+        if ( textdoc )
+            textdoc->textObject()->removeHighlight();
+    }
+
+    //m_doc->setReadWrite(true);
+    clearSpellChecker();
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if (edit)
+        edit->drawCursor( TRUE );
+    if(kspellNotConfigured)
+        configureSpellChecker();
+
+#if 0
+    KOSpell::spellStatus status = m_spell.kospell->status();
+    bool kspellNoConfigured=false;
+    delete m_spell.kospell;
+    m_spell.kospell = 0;
+
+
+
     KPTextObject * textobj = 0L;
     if( m_spell.spellCurrTextObjNum!=-1 )
     {
@@ -5090,20 +5221,18 @@ void KPresenterView::spellCheckerFinished()
         if ( textobj )
             textobj->removeHighlight();
     }
-    m_spell.textObject.clear();
-    if(m_spell.macroCmdSpellCheck)
-        m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
 
-    m_spell.macroCmdSpellCheck=0L;
+
+    clearSpellChecker();
 
     m_pKPresenterDoc->setReadWrite(true);
-    m_spell.replaceAll.clear();
 
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)
         edit->drawCursor( TRUE );
     if(kspellNoConfigured)
         configureSpellChecker();
+#endif
 }
 
 void KPresenterView::configureSpellChecker()
