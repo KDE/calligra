@@ -18,23 +18,22 @@
 */
 
 #include <qprinter.h>
-#include "kimage_doc.h"
-#include "kimage_shell.h"
+#include <qdatetm.h>
+#include <qpainter.h>
+#include <qrect.h>
+
+#include <kapp.h>
+#include <kimgio.h>
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <komlMime.h>
+
 #include <koStream.h>
 
-#include <fstream>
-#include <string>
-
-#include <unistd.h>
-#include <kapp.h>
-#include <qdatetm.h>
-#include <assert.h>
-#include <kimgio.h>
+#include "kimage_doc.h"
+#include "kimage_shell.h"
 
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388
@@ -643,44 +642,56 @@ void KImageDoc::calcPaperSize()
 
 QString KImageDoc::paperFormatString()
 {
-    switch( m_paperFormat )
-    {
+  QString paperFormatStr;
+  
+  switch( m_paperFormat )
+  {
     case PG_DIN_A5:
-	return QString( "A5" );
+	  paperFormatStr = "A5";
+	  break;
     case PG_DIN_A4:
-	return QString( "A4" );
+	  paperFormatStr = "A4";
+	  break;
     case PG_DIN_A3:
-	return QString( "A3" );
+	  paperFormatStr = "A3";
+	  break;
     case PG_DIN_B5:
-	return QString( "B5" );
+	  paperFormatStr = "B5";
+	  break;
     case PG_US_EXECUTIVE:
-	return QString( "Executive" );
+	  paperFormatStr = "Executive";
+	  break;
     case PG_US_LETTER:
-	return QString( "Letter" );
+	  paperFormatStr = "Letter";
+	  break;
     case PG_US_LEGAL:
-	return QString( "Legal" );
+	  paperFormatStr = "Legal";
+	  break;
     case PG_SCREEN:
-        return QString( "Screen" );
+	  paperFormatStr = "Screen";
+	  break;
     case PG_CUSTOM:
       QString tmp;
       tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
-      return QString( tmp );
-    }
-
-    assert( 0 );
+      paperFormatStr = tmp;
+  }
+  return paperFormatStr;
 }
 
 QString KImageDoc::orientationString()
 {
+  QString orientationStr;
+  
   switch( m_orientation )
-    {
-    case QPrinter::Portrait:
-      return QString( "Portrait" );
-    case QPrinter::Landscape:
-      return QString( "Landscape" );
-    }
-
-  assert( 0 );
+  {
+    case QPrinter::Portrait :
+      orientationStr = "Portrait";
+      break;
+    case QPrinter::Landscape :
+      orientationStr = "Landscape";
+      break;
+  }
+  return orientationStr;
 }
 
 bool KImageDoc::openDocument( const char *_filename, const char *_format )
@@ -722,6 +733,193 @@ void KImageDoc::transformImage( const QWMatrix& matrix )
 
   m_bModified = true;
   m_bEmpty = false;
+}
+
+char* KImageDoc::mimeType()
+{
+  return CORBA::string_dup( MIME_TYPE );
+}
+
+CORBA::Boolean KImageDoc::isModified()
+{
+  return m_bModified;
+}
+
+void KImageDoc::setModified( bool _c )
+{
+  m_bModified = _c;
+  if ( _c )
+  {
+    m_bEmpty = false;
+  }
+}
+
+bool KImageDoc::isEmpty()
+{
+  return m_bEmpty;
+}
+
+float KImageDoc::printableWidth()
+{
+  return m_paperWidth - m_leftBorder - m_rightBorder;
+}
+
+float KImageDoc::printableHeight()
+{
+  return m_paperHeight - m_topBorder - m_bottomBorder;
+}
+
+float KImageDoc::paperHeight()
+{
+  return m_paperHeight;
+}
+
+float KImageDoc::paperWidth()
+{
+  return m_paperWidth;
+}
+  
+float KImageDoc::leftBorder()
+{
+  return m_leftBorder;
+}
+
+float KImageDoc::rightBorder()
+{
+  return m_rightBorder;
+}
+
+float KImageDoc::topBorder()
+{
+  return m_topBorder;
+}
+
+float KImageDoc::bottomBorder()
+{
+  return m_bottomBorder;
+}
+
+KoOrientation KImageDoc::orientation()
+{
+  return m_orientation;
+}
+
+KoFormat KImageDoc::paperFormat()
+{
+  return m_paperFormat;
+}
+
+QString KImageDoc::headLeft( int _p, const char* _t )
+{
+  if( m_headLeft.isNull() )
+  {
+    return "";
+  }
+  return completeHeading( m_headLeft.data(), _p, _t );
+}
+
+QString KImageDoc::headRight( int _p, const char* _t )
+{
+  if( m_headRight.isNull() )
+  {
+    return "";
+  }
+  return completeHeading( m_headRight.data(), _p, _t );
+}
+
+QString KImageDoc::headMid( int _p, const char* _t )
+{
+  if( m_headMid.isNull() )
+  {
+    return "";
+  }
+  return completeHeading( m_headMid.data(), _p, _t );
+}
+
+QString KImageDoc::footLeft( int _p, const char* _t )
+{
+  if( m_footLeft.isNull() )
+  {
+    return "";
+  }
+  return completeHeading( m_footLeft.data(), _p, _t );
+}
+
+QString KImageDoc::footMid( int _p, const char* _t )
+{
+  if( m_footMid.isNull() )
+  {
+    return "";
+  }
+  return completeHeading( m_footMid.data(), _p, _t );
+}
+
+QString KImageDoc::footRight( int _p, const char* _t )
+{
+  if( m_footRight.isNull() )
+  {
+    return "";
+  }
+  return completeHeading( m_footRight.data(), _p, _t );
+}
+
+QString KImageDoc::headLeft()
+{
+  if( m_headLeft.isNull() )
+  {
+    return "";
+  }
+  return m_headLeft.data();
+}
+
+QString KImageDoc::headMid()
+{
+  if( m_headMid.isNull() )
+  {
+    return "";
+  }
+  return m_headMid.data();
+}
+
+QString KImageDoc::headRight()
+{
+  if( m_headRight.isNull() )
+  {
+    return "";
+  }
+  return m_headRight.data();
+}
+
+QString KImageDoc::footLeft()
+{
+  if( m_footLeft.isNull() )
+  {
+    return "";
+  }
+  return m_footLeft.data();
+}
+
+QString KImageDoc::footMid()
+{
+  if( m_footMid.isNull() )
+  {
+    return "";
+  }
+  return m_footMid.data();
+}
+
+QString KImageDoc::footRight()
+{
+  if( m_footRight.isNull() )
+  {
+    return "";
+  }
+  return m_footRight.data();
+}
+
+const QImage& KImageDoc::image()
+{
+  return m_image;
 }
 
 KImageDoc::~KImageDoc()

@@ -18,18 +18,23 @@
 */     
 
 #include <qprinter.h>
+#include <qmsgbox.h>
+
+#include <qtimer.h>
+#include <qstring.h>
+
+#include <klocale.h>
+#include <kfiledialog.h>
+#include <kapp.h>
+#include <klocale.h>
+
+#include <opMainWindowIf.h>
+#include <koAboutDia.h>
+
 #include "kimage_shell.h"
 #include "kimage_doc.h"
 #include "kimage_view.h"
-
-#include <koAboutDia.h>
-#include <klocale.h>
-#include <kfiledialog.h>
-#include <opMainWindowIf.h>
-#include <kapp.h>
-#include <qmsgbox.h>
-#include <klocale.h>
-
+ 
 QList<KImageShell>* KImageShell::s_lstShells = 0L;
 
 KImageShell::KImageShell()

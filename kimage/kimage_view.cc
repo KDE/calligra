@@ -18,15 +18,11 @@
 */
 
 #include <qprinter.h>
-#include "kimage_view.h"
-
-#include <kapp.h>
 #include <qmsgbox.h>
-#include <iostream.h>
-#include <stdlib.h>
 #include <qkeycode.h>
 #include <qprndlg.h>
 #include <qwmatrix.h>
+
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
@@ -36,7 +32,6 @@
 #include <opUIUtils.h>
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>
-
 #include <koPartSelectDia.h>
 #include <koPrintDia.h>
 #include <koAboutDia.h>
@@ -45,10 +40,8 @@
 #include "kintegerinputdialog.h"
 
 #include "kimage_doc.h"
+#include "kimage_view.h"
 #include "kimage_shell.h"
-#include <klocale.h>
-
-bool shit = false;
 
 /*****************************************************************************
  *
@@ -56,8 +49,11 @@ bool shit = false;
  *
  *****************************************************************************/
 
-KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc ) :
-  QWidget( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KImage::View_skel()
+KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc )
+  : QWidget( _parent )
+  , KoViewIf( _doc )
+  , OPViewIf( _doc )
+  , KImage::View_skel()
 {
   setWidget( this );
 
@@ -110,8 +106,10 @@ void KImageView::cleanUp()
   debug( "void KImageView::cleanUp() " );
 
   if ( m_bIsClean )
+  {
     return;
-
+  }
+  
   debug( "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
@@ -376,11 +374,11 @@ void KImageView::helpUsing()
 CORBA::Boolean KImageView::printDlg()
 {
   QPrinter prt;
+
   if( QPrintDialog::getPrinterSetup( &prt ) )
   {
     m_pDoc->print( &prt );
   }
-
   return true;
 }
 
@@ -391,7 +389,7 @@ void KImageView::editPageLayout()
 
 void KImageView::newView()
 {
-  assert( (m_pDoc != 0L) );
+  ASSERT( m_pDoc != 0L );
 
   KImageShell* shell = new KImageShell;
   shell->show();
@@ -404,11 +402,12 @@ void KImageView::newView()
 void KImageView::slotUpdateView()
 {
   if( m_pDoc->image().isNull() )
+  {
     return;
+  }
 
   double dh = (double) height() / (double) m_pDoc->image().height();
   double dw = (double) width() / (double) m_pDoc->image().width();
-
   double d = ( dh < dw ? dh : dw );
 	
   switch ( m_drawMode )
@@ -431,52 +430,52 @@ void KImageView::slotUpdateView()
 void KImageView::viewFitToView()
 {
   if( m_pDoc->image().isNull() )
+  {
     return;
-
+  }
   m_drawMode = 1;
-  
   slotUpdateView();
 }
 
 void KImageView::viewFitWithProportions()
 {
   if( m_pDoc->image().isNull() )
+  {
     return;
-
+  }
   m_drawMode = 2;
-  
   slotUpdateView();
 }
 
 void KImageView::viewOriginalSize()
 {
   if( m_pDoc->image().isNull() )
+  {
     return;
-
+  }
   m_drawMode = 0;
-  
   slotUpdateView();
 }
 
 void KImageView::editEditImage()
 {
   if( m_pDoc->image().isNull() )
+  {
     return;
-
+  }
   QWidget::update();
 }
 
 void KImageView::editImportImage()
 {
-  debug( "import this=%i", (int)this );
+  debug( "import this=%i", (int) this );
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if( file.isNull() )
   {
     return;
-  }
-  
+  }  
   if( !m_pDoc->openDocument( file, 0L ) )
   {
     QString tmp;
@@ -498,8 +497,9 @@ void KImageView::editExportImage()
   QString file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
 
   if( file.isNull() )
+  {
     return;
-
+  }
   if( !m_pDoc->saveDocument( file, 0L ) )
   {
     QString tmp;
@@ -515,7 +515,6 @@ void KImageView::viewInfoImage()
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n( "The document is empty\nNo information available." ), i18n( "OK" ) );
     return;
   }
-
   QMessageBox::information( this, i18n( "Image information" ), i18n( "Infos " ), i18n( "OK" ) );
 }
 
@@ -526,9 +525,7 @@ void KImageView::viewCentered()
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
-
   m_centerMode = 1 - m_centerMode;
-
   slotUpdateView();
 }
 
@@ -545,7 +542,6 @@ void KImageView::transformRotateRight()
   QWMatrix matrix;
   matrix.rotate( 90 );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -562,7 +558,6 @@ void KImageView::transformRotateLeft()
   QWMatrix matrix;
   matrix.rotate( -90 );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -581,14 +576,12 @@ void KImageView::transformRotateAngle()
 
   if( dlg.getValue( angle ) != QDialog::Accepted )
     return;
-
   if( angle == 0 )
     return;
     
   QWMatrix matrix;
   matrix.rotate( angle );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -606,7 +599,6 @@ void KImageView::transformFlipVertical()
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   matrix *= matrix2;
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -625,7 +617,6 @@ void KImageView::transformFlipHorizontal()
   matrix2.rotate( 180 );
   matrix *= matrix2;
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -639,7 +630,6 @@ void KImageView::viewBackgroundColor()
 
   dlg.getColor( color );  
   setBackgroundColor( color );
-
   QWidget::update();
 }
 
@@ -653,18 +643,13 @@ void KImageView::transformZoomFactor()
   QWMatrix matrix;
   int factor = (int)(matrix.m11() * 100 );
   KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter Zoom factor (100 = 1x):" ) ); 
-
   if( dlg.getValue( factor ) != QDialog::Accepted )
     return;
-
   if( ( factor <= 0 ) || ( factor == 100 ) )
     return;
-    
   double val = (double)factor/100;
   matrix.scale( val, val );
-  
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -678,7 +663,6 @@ void KImageView::transformZoomIn10()
   QWMatrix matrix;
   matrix.scale( 1.1, 1.1 );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -692,7 +676,6 @@ void KImageView::transformZoomOut10()
   QWMatrix matrix;
   matrix.scale( 0.9, 0.9 );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -706,7 +689,6 @@ void KImageView::transformZoomDouble()
   QWMatrix matrix;
   matrix.scale( 2.0, 2.0 );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -720,7 +702,6 @@ void KImageView::transformZoomHalf()
   QWMatrix matrix;
   matrix.scale( 0.5, 0.5 );
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -733,7 +714,6 @@ void KImageView::transformZoomMax()
 
   QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -746,7 +726,6 @@ void KImageView::transformZoomMaxAspect()
 
   QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   m_pDoc->transformImage( matrix );
-
   slotUpdateView();
 }
 
@@ -759,7 +738,6 @@ QString KImageView::tmpFilename()
   QString result;
 
   result = "/tmp/kimage_pid.image";
-
   return result;
 }
 
@@ -771,11 +749,8 @@ void KImageView::extrasRunGimp()
   debug( "starting Process" );
 
   KProcess proc;
-
   proc << "gimp";
-
   proc << "/t";
-
   proc.start( KProcess::Block );
 
   debug( "Process ended" );
@@ -789,11 +764,7 @@ void KImageView::extrasRunXV()
   debug( "starting Process" );
 
   KProcess proc;
-
   proc << "xv";
-
-  // proc << "/home/devel/.kderc" << "/home/devel/.kde2rc";
-
   proc.start( KProcess::Block );
 
   debug( "Process ended" );
@@ -808,18 +779,14 @@ void KImageView::extrasRunCommand()
 
   QString command = tmpFilename();
   KInputDialog dlg( this, i18n( "KImage" ), i18n( "Commandline:" ) );
-
   if( dlg.getStr( command ) != QDialog::Accepted )
     return;
 
   debug( "starting Process: " + command );
 
   KProcess proc;
-
   proc << "display";
-
   proc << command;
-
   proc.start( KProcess::Block );
 
   debug( "Process ended" );
@@ -828,7 +795,14 @@ void KImageView::extrasRunCommand()
 void KImageView::resizeEvent( QResizeEvent *_ev )
 {
   if( m_pDoc->isEmpty() )
+  {
     return;
+  }
+}
+
+KImageDoc* KImageView::doc()
+{
+  return m_pDoc;
 }
 
 /**
@@ -837,11 +811,13 @@ void KImageView::resizeEvent( QResizeEvent *_ev )
 void KImageView::paintEvent( QPaintEvent *_ev )
 {
   if( m_pixmap.isNull() )
+  {
     return;
-
+  }
+  
   QPainter painter;
-  painter.begin( this );
 
+  painter.begin( this );
   if( m_centerMode )
   {
     painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
@@ -850,7 +826,6 @@ void KImageView::paintEvent( QPaintEvent *_ev )
   {
     painter.drawPixmap( 0, 0, m_pixmap );
   }
-  
   painter.end();
 }
 

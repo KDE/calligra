@@ -20,92 +20,79 @@
 #ifndef __kimage_gui_h__
 #define __kimage_gui_h__
 
-class KImageView;
-class KImageDoc;
-class KImageShell;
-
+#include <qpixmap.h>
+#include <qwidget.h>
+ 
 #include <koFrame.h>
 #include <koView.h>
+
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <openparts_ui.h>
 
-#include <qpixmap.h>
-#include <qwidget.h>
-
 #include "kimage.h"
 
-/**
- */
+class KImageDoc;
+class KImageShell;
+
 class KImageView : public QWidget,
 		   virtual public KoViewIf,
 		   virtual public KImage::View_skel
 {
-    Q_OBJECT
+  Q_OBJECT
+
 public:
-    KImageView( QWidget *_parent, const char *_name, KImageDoc *_doc );
-    ~KImageView();
+  KImageView( QWidget* _parent, const char* _name, KImageDoc* _doc );
+  ~KImageView();
+  KImageDoc* doc();
 
-    KImageDoc* doc() { return m_pDoc; }
+  void editEditImage();
+  void editImportImage();
+  void editExportImage();
+  void editPageLayout();
+  void editPreferences();
 
-    // IDL
-    void editEditImage();
-    void editImportImage();
-    void editExportImage();
-    void editPageLayout();
-    void editPreferences();
-
-    void viewFitToView();
-    void viewFitWithProportions();
-    void viewOriginalSize();
-    void viewCentered();
-    void viewInfoImage();
-    void viewBackgroundColor();
+  void viewFitToView();
+  void viewFitWithProportions();
+  void viewOriginalSize();
+  void viewCentered();
+  void viewInfoImage();
+  void viewBackgroundColor();
     
-    void transformRotateRight();
-    void transformRotateLeft();
-    void transformRotateAngle();
-    void transformFlipVertical();
-    void transformFlipHorizontal();
-    void transformZoomFactor();
-    void transformZoomIn10();
-    void transformZoomOut10();
-    void transformZoomDouble();
-    void transformZoomHalf();
-    void transformZoomMax();
-    void transformZoomMaxAspect();
+  void transformRotateRight();
+  void transformRotateLeft();
+  void transformRotateAngle();
+  void transformFlipVertical();
+  void transformFlipHorizontal();
+  void transformZoomFactor();
+  void transformZoomIn10();
+  void transformZoomOut10();
+  void transformZoomDouble();
+  void transformZoomHalf();
+  void transformZoomMax();
+  void transformZoomMaxAspect();
     
-    void extrasRunGimp();
-    void extrasRunXV();
-    void extrasRunCommand();
+  void extrasRunGimp();
+  void extrasRunXV();
+  void extrasRunCommand();
 
-    virtual void cleanUp();
+  virtual void cleanUp();
+  CORBA::Boolean printDlg();
 
-    CORBA::Boolean printDlg();
-
-private:
-	QString tmpFilename();
-  
 public slots:
-    // Document signals
-    void slotUpdateView();
+  // Document signals
+  void slotUpdateView();
 
 protected:
-  // C++
   virtual void init();
-  
-  // IDL
   virtual bool event( const char* _event, const CORBA::Any& _value );
-
-  // C++
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-  
   virtual void newView();
   virtual void helpUsing();
-
-  virtual void resizeEvent( QResizeEvent *_ev );
-  virtual void paintEvent( QPaintEvent *_ev );
+  virtual void resizeEvent( QResizeEvent* _ev );
+  virtual void paintEvent( QPaintEvent* _ev );
+  QString tmpFilename();
 
   // edit toolbar
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
@@ -163,8 +150,8 @@ protected:
   CORBA::Long m_idMenuHelp_About;
   CORBA::Long m_idMenuHelp_Using;
     
-  KImageDoc *m_pDoc;  
-
+private:
+  KImageDoc* m_pDoc;  
   QPixmap m_pixmap;
   int m_drawMode;
   int m_centerMode;
