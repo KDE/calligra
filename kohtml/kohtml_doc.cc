@@ -183,21 +183,21 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
   QString url = _url;
   url.stripWhiteSpace();
 
-  K2URL u( url );
+  KURL u( url );
 
   if ( u.isMalformed() )
     return;
 
-  K2URLList l1, l2;
-  K2URL::split( url, l1 );
-  K2URL::split( m_strCurrentURL, l2 );
+  KURLList l1, l2;
+  KURL::split( url, l1 );
+  KURL::split( m_strCurrentURL, l2 );
 
-  string anchor = l1.back().ref();
+  QString anchor = l1.getLast()->ref();
 
-  l1.back().setRef("");
-  l2.back().setRef("");
+  l1.getLast()->setRef("");
+  l2.getLast()->setRef("");
 
-  m_strCurrentURL = u.url().c_str();
+  m_strCurrentURL = u.url();
 
   stopLoading();
 
@@ -206,17 +206,17 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
 
   if ( (!((bool)reload)) && urlcmp( l1, l2 ) )
     {
-      K2URL::decode( anchor );
+      KURL::decode( anchor );
       QListIterator<KMyHTMLView> it( m_lstHTMLViews );
       for (; it.current(); ++it)
-        it.current()->gotoAnchor( anchor.c_str() );
+        it.current()->gotoAnchor( anchor );
     }
   else
     {
       //update all views
       QListIterator<KMyHTMLView> it( m_lstHTMLViews );
       for (; it.current(); ++it)
-        it.current()->openURL( u.url().c_str(), (bool)reload );
+        it.current()->openURL( u.url(), (bool)reload );
 
       documentStarted();
     }
@@ -288,8 +288,8 @@ void KoHTMLDoc::slotHTMLLoadError(KoHTMLJob *job, const char *errMsg)
 
 void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
 {
-  K2URL u( url );
-  m_strCurrentURL = u.url().c_str();
+  KURL u( url );
+  m_strCurrentURL = u.url();
 }
 
 void KoHTMLDoc::slotTimeout()
@@ -676,18 +676,18 @@ void KoHTMLDoc::viewFinished( KMyHTMLView *view )
 
 void KoHTMLDoc::requestImage( KMyHTMLView *view, const char *url, bool reload )
 {
-  K2URLList lst;
-  K2URL::split( view->getKHTMLWidget()->getDocumentURL().url(), lst );
-  K2URL u( lst.back(), url );
-  string dataURL = url;
+  KURLList lst;
+  KURL::split( view->getKHTMLWidget()->getDocumentURL().url(), lst );
+  KURL u( *lst.getLast(), url );
+  QString dataURL = url;
 
-  if ( strcmp( u.protocol(), lst.back().protocol() ) == 0 )
+  if ( strcmp( u.protocol(), lst.getLast()->protocol() ) == 0 )
      {
-       lst.back() = u;
-       K2URL::join( lst, dataURL );
+       *lst.getLast() = u;
+       KURL::join( lst, dataURL );
      }
 
-  KoHTMLJob *job = new KoHTMLJob( view, url, dataURL.c_str(), KoHTMLJob::Image, reload );
+  KoHTMLJob *job = new KoHTMLJob( view, url, dataURL, KoHTMLJob::Image, reload );
 
   QObject::connect( job, SIGNAL(jobData( KoHTMLJob *, const char *, int, bool )),
                     this, SLOT(slotJobData( KoHTMLJob *, const char *, int, bool )));

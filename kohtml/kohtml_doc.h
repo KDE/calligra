@@ -40,7 +40,7 @@ class KoHTMLDoc;
 #include <krect.h>
 
 #include <kurl.h>
-#include <k2url.h>
+#include <kurl.h>
 
 #include <kio_job.h>
 

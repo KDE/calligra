@@ -27,7 +27,7 @@
 
 #include <qobjectlist.h>
 
-#include <k2url.h>
+#include <kurl.h>
 #include <list>
 
 #include "htmwidget.h"
@@ -183,9 +183,9 @@ void KMyHTMLView::feedDocumentData( const char *data, bool eof )
        m_bParsing = true;
        m_lstChildren.clear();
        
-       list<K2URL> lst;
-       K2URL::split( m_strURL, lst );
-       QString burl = lst.back().url().c_str();
+       KURLList lst;
+       KURL::split( m_strURL, lst );
+       QString burl = lst.getLast()->url();
        begin( burl, 0, 0 );
        parse();
      }

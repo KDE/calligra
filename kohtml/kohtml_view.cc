@@ -675,7 +675,7 @@ void KoHTMLView::slotURLEntered()
   else if (url.find("ftp.") == 0)
      url.prepend("ftp://");
      
-  K2URL u(url.data());
+  KURL u(url.data());
   
   if (u.isMalformed())
      {
@@ -695,7 +695,7 @@ void KoHTMLView::addBookmark()
 {
   QString url = m_pDoc->htmlURL();
   QString title = m_strCaptionText;
-  K2URL u(url);
+  KURL u(url);
   
   // KMimeType::initStatic();
   KMimeMagic::initStatic();  
@@ -705,7 +705,7 @@ void KoHTMLView::addBookmark()
   
   
   if (title.isEmpty())
-     title = u.filename().c_str();
+     title = u.filename();
 
   QString p = kapp->localkdedir().data();
   
@@ -812,13 +812,13 @@ void KoHTMLView::slotOpenURLDlg()
   
   if (openURLDlg.exec() == QDialog::Accepted)
      {
-       K2URL url( openURLDlg.url() );
+       KURL url( openURLDlg.url() );
        
        if (!url.isMalformed())
           {
             pushURLToHistory();       
-	    //m_pDoc->openURL( url.url().c_str(), false );
-	    eventOpenURL( url.url().c_str(), false );
+	    //m_pDoc->openURL( url.url(), false );
+	    eventOpenURL( url.url(), false );
 	  }
      }
 }

@@ -30,7 +30,7 @@
 
 #include <qfile.h>
 
-#include <k2url.h>
+#include <kurl.h>
 #include <kio_error.h>
 #include <kapp.h>
 
@@ -46,7 +46,7 @@ KoHTMLJob::KoHTMLJob( KMyHTMLView *_view, const char *_url, const char *_dataURL
   m_strTmpFile = "";
   m_bReload = _reload;
 
-  K2URL u( m_strURL );
+  KURL u( m_strURL );
 
   m_bListDir = false;
     
@@ -60,7 +60,7 @@ KoHTMLJob::KoHTMLJob( KMyHTMLView *_view, const char *_url, const char *_dataURL
   // should we list a directory?
   if ( (m_eJType == HTML) &&
        (strcasecmp("http", u.protocol()) != 0) &&
-       (u.filename( false ).empty()) )
+       (u.filename( false ).isEmpty()) )
      {
        m_bListDir = true;
        
@@ -91,7 +91,7 @@ void KoHTMLJob::start()
 {
   if ( m_bListDir )
     {
-      K2URL u( m_strURL );
+      KURL u( m_strURL );
     
       listDir( m_strDataURL.data() );
 
