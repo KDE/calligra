@@ -1,7 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KoHTML
-Name[is]=HTML sjá
+Name[is]=HTML-sjá
 Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
 Comment[ca]=Visualitzador d'HTML KOffice
@@ -13,7 +13,7 @@ Comment[fi]=KOffice HTML -näyttäjä
 Comment[fr]=Visualiseur HTML de KOffice
 Comment[hr]=Koffice HTML preglednik
 Comment[hu]=KOffice HTML Nézõ
-Comment[is]=kohtml:  HTML sjá KOffice vöndulsins
+Comment[is]=kohtml:  HTML-sjá KOffice-vöndulsins
 Comment[no]=KOffice HTML-viser
 Comment[pl]=Przgl±darka HTML, element KOffice
 Comment[pt]=Visualizador de HTML
