@@ -10,8 +10,7 @@ libkarbonaiimport_la_LDFLAGS = \
 
 INCLUDES = \
 	-I$(srcdir)/.. \
-	-I$(srcdir)/../../../../koffice/lib/kofficecore \
-	-I$(srcdir)/../../../../koffice/lib/kofficeui \
+        $(KOFFICE_INCLUDES) \
 	$(all_includes)
 
 service_DATA = karbon_ai_import.desktop
