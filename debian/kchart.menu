@@ -2,6 +2,7 @@
 	needs=x11\
 	section=Apps/Math\
 	hints="KDE,Graphs"\
+	kderemove="1"\
 	title="KChart"\
 	icon="/usr/share/pixmaps/kchart.xpm"\
 	command=kchart

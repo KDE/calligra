@@ -2,6 +2,7 @@
 	needs=x11\
 	section=Apps/Editors\
 	hints="KDE,WordProcessors"\
+	kderemove="1"\
 	title="KWord"\
 	icon="/usr/share/pixmaps/kword.xpm"\
 	command=kword

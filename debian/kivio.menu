@@ -2,6 +2,7 @@
 	needs=x11\
 	section=Apps/Tools\
 	hints="KDE,Vector"\
+	kderemove="1"\
 	title="Kivio"\
 	icon="/usr/share/pixmaps/kivio.xpm"\
 	command=kivio
