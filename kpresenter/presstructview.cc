@@ -131,7 +131,7 @@ void PVTimeTable::paintCell(QPainter *painter,int row,int col)
 	  if (kpobject->getPresNum() == col)
 	    {
 	      painter->fillRect(0,5,cellWidth(),cellHeight() - 10,green);
-	      painter->drawText((cellWidth() - fm.width(i18n("appear"))) / 2,(cellHeight() - fm.height()) / 2 + fm.ascent(),i18n("apper"));
+	      painter->drawText((cellWidth() - fm.width(i18n("appear"))) / 2,(cellHeight() - fm.height()) / 2 + fm.ascent(),i18n("appear"));
 	    }
 	  else if (kpobject->getPresNum() < col)
 	    {
