@@ -3596,3 +3596,16 @@ void KPrPage::setProtect( bool p )
 {
     //todo
 }
+
+KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)
+{
+    KoRect boundingRect =rect ;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        boundingRect|=it.current()->getBoundingRect(doc->zoomHandler());
+    }
+    return boundingRect;
+}

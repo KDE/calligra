@@ -233,7 +233,7 @@ public:
     bool haveASelectedPixmapObj() const;
 
     KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc);
-
+    KoRect getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc);
     bool chPic( KPresenterView *_view);
     bool chClip(KPresenterView *_view);
 

@@ -250,6 +250,8 @@ public:
 
     KCommand *setProtectObj(bool p);
 
+    KoRect zoomAllObject();
+
 public slots:
     void exitEditMode();
 

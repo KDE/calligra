@@ -6813,3 +6813,12 @@ KCommand *KPrCanvas::setProtectObj(bool p)
     return cmd;
 
 }
+
+KoRect KPrCanvas::zoomAllObject()
+{
+    KoRect objBoundingRect=KoRect();
+
+    objBoundingRect = m_activePage->getBoundingAllObjectRect( objBoundingRect, m_view->kPresenterDoc());
+    objBoundingRect = stickyPage()->getBoundingAllObjectRect( objBoundingRect, m_view->kPresenterDoc());
+    return objBoundingRect;
+}
