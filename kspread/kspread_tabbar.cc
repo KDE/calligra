@@ -24,8 +24,6 @@
 
 #include "kspread_tabbar.h"
 
-#include "kspread_view.h"
-
 #include <qdrawutil.h>
 #include <qpainter.h>
 #include <qstring.h>
@@ -41,8 +39,6 @@ namespace KSpread
 class TabBarPrivate
 {
 public:
-    // the view and the tabbar
-    KSpreadView* view;
     TabBar* tabbar;
 
     // scroll buttons
@@ -220,8 +216,8 @@ void TabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text
     pa.setPoints( 4, rect.x(), rect.y(), rect.x()+10, rect.bottom()-1,
       rect.right()-10, rect.bottom()-1, rect.right(), rect.top() );
 
-    QColor bgcolor = view->colorGroup().background();
-    if( active ) bgcolor = view->colorGroup().base();
+    QColor bgcolor = tabbar->colorGroup().background();
+    if( active ) bgcolor = tabbar->colorGroup().base();
 
     painter.setClipping( true );
     painter.setClipRegion( QRegion( pa ) );
@@ -265,11 +261,10 @@ void TabBarPrivate::updateButtons()
 }
 
 // creates a new tabbar
-TabBar::TabBar( KSpreadView *view, const char* name )
-    : QWidget( view, name, Qt::WResizeNoErase | Qt::WRepaintNoErase )
+TabBar::TabBar( QWidget* parent, const char* name )
+    : QWidget( parent, name, Qt::WResizeNoErase | Qt::WRepaintNoErase )
 {
     d = new TabBarPrivate;
-    d->view = view;
     d->tabbar = this;
     d->readOnly = false;
     d->leftTab = 1;

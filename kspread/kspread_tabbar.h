@@ -28,9 +28,6 @@
 #include <qwidget.h>
 #include <qstringlist.h>
 
-class KSpreadSheet;
-class KSpreadView;
-
 namespace KSpread
 {
 
@@ -56,7 +53,7 @@ public:
     /**
      * Creates a new tabbar.
      */
-    TabBar( KSpreadView *view, const char *name = 0 );
+    TabBar( QWidget* parent = 0, const char *name = 0 );
 
     /**
      * Destroy the tabbar.
