@@ -30,8 +30,10 @@ QpIStream::~QpIStream()
 
 #else
 #include <string.h>
-
+#include <fstream>
 #include <strstream.h>
+
+using namespace std;
 
 QpIStream::QpIStream(const char* pFileName)
    : cIn(0)
@@ -73,7 +75,7 @@ int
 QpIStream::get()
 {
    int lResult;
- 
+
    if( (cIn==0) || cIn->rdstate())
    {
       lResult = EOF;
@@ -91,8 +93,8 @@ QpIStream::get()
 
    return lResult;
 }
- 
-QpIStream& 
+
+QpIStream&
 QpIStream::read(char* pBuf, QP_INT16 pLen)
 {
    if( cIn )
@@ -117,7 +119,7 @@ QpIStream::operator !()
    return ( cIn ? !*cIn : -1 );
 }
 
- 
+
 QpIStream&
 QpIStream::operator >> (QP_INT8 &pI8)
 {
@@ -194,24 +196,24 @@ QpIStream::operator >> (char*& pStr)
 {
    int lIdx=0;
    int lMax=10;
- 
+
    char* lStr = new char[lMax];
- 
+
    while( cIn->get(lStr[lIdx]), lStr[lIdx] != '\0' && cIn->good() )
    {
       if( ++lIdx == lMax )
       {
          lMax += 10;
          char* lNew = new char[lMax];
- 
+
          memcpy(lNew, lStr, lIdx);
          delete [] lStr;
          lStr = lNew;
       }
    }
- 
+
    pStr = lStr;
- 
+
    return *this;
 }
 
