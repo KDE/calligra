@@ -117,6 +117,8 @@ KWordFilter::KWordFilter ():Parser ()
 bool
 KWordFilter::parse (const QString & filename)
 {
+  int frameLeftMargin = 36, frameRightMargin = 36; // quick hack
+
   if (!Parser::parse (filename))
     return FALSE;
 
@@ -126,10 +128,12 @@ KWordFilter::parse (const QString & filename)
   QString text;
   QString layout;
   QString formats;
-  int LeftMargin = 36;
+  int LeftMargin = 0;
   int TopMargin = 36;
-  int RightMargin = 36;
+  int RightMargin = 0;
   int BottomMargin = 36;
+  int LeftMarginAdjust = 0;
+  int RightMarginAdjust = 0;
   Token::Align align = Token::Left;
   double linespace = 1.0;
 
@@ -255,7 +259,9 @@ KWordFilter::parse (const QString & filename)
           layout.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
           layout.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
           layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
-          layout.append( "  <INDENTS />\n" );
+          layout.append( "  <INDENTS left=\"" + QString::number( LeftMargin + LeftMarginAdjust - frameLeftMargin ) + "\"" + 
+                         " right=\"" + QString::number( RightMargin + RightMarginAdjust - frameRightMargin ) + "\"" +
+                         " first=\"0\" />\n" );
           layout.append( "  <OFFSETS />\n" );
           layout.append( "  <PAGEBREAKING />\n" );
           layout.append( "  <COUNTER />\n" );
@@ -315,6 +321,14 @@ KWordFilter::parse (const QString & filename)
           BottomMargin = (int) WPUToPoint( t->value() );
           break;
 
+        case Token::LeftMarginAdjust:
+          LeftMarginAdjust = (int)WPUToPoint( t->value() );
+          break;
+
+        case Token::RightMarginAdjust:
+          RightMarginAdjust = (int)WPUToPoint( t->value() );
+          break;
+
         case Token::Justification:
           align = t->align();
           break;
@@ -348,10 +362,13 @@ KWordFilter::parse (const QString & filename)
   root = "<!DOCTYPE DOC>\n";
   root.append( "<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
 
+  // quick hack, think of something better in the future
+  LeftMargin = RightMargin = 36;
+
   // paper definition
   root.append( "<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n" );
-  root.append( " <PAPERBORDERS left=\"" + QString::number(LeftMargin) +
-               "\" right=\"" + QString::number(RightMargin) +
+  root.append( " <PAPERBORDERS left=\"" + QString::number(frameLeftMargin) +
+               "\" right=\"" + QString::number(frameRightMargin) +
                "\" top=\"" + QString::number(TopMargin) +
                "\" bottom=\"" + QString::number(BottomMargin) + "\" />\n" );
   root.append( "</PAPER>\n" );
