@@ -51,7 +51,7 @@
 #include "kexiprojectdata.h"
 #include "kexi.h"
 #include "kexistatusbar.h"
-#include "kexirelationpart.h"
+#include "kexiinternalpart.h"
 
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
@@ -116,7 +116,7 @@ class KexiMainWindow::Private
 		KMdiToolViewAccessor* navToolWindow;
 
 		QWidget *focus_before_popup;
-		KexiRelationPart *relationPart;
+//		KexiRelationPart *relationPart;
 
 		int privateDocIDCounter; //!< counter: ID for private "document" like Relations window
 
@@ -133,7 +133,7 @@ class KexiMainWindow::Private
 		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
-		relationPart=0;
+//		relationPart=0;
 		privateDocIDCounter=0;
 	}
 };
@@ -1085,11 +1085,14 @@ KexiMainWindow::slotProjectClose()
 
 void KexiMainWindow::slotProjectRelations()
 {
-	KexiRelationPart *p = relationPart();
+	KexiDialogBase *d = KexiInternalPart::createDialogInstance("relation", this);
+	if (d)
+		d->activate();
+/*	KexiRelationPart *p = relationPart();
 	if(!p)
 		return;
-
-	p->createWindow(this);
+	
+	p->createWindow(this);*/
 }
 
 /*
@@ -1197,6 +1200,7 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
 }
 
+/*
 KexiRelationPart *
 KexiMainWindow::relationPart()
 {
@@ -1205,7 +1209,7 @@ KexiMainWindow::relationPart()
 
 	d->relationPart = KParts::ComponentFactory::createInstanceFromLibrary<KexiRelationPart>("kexihandler_relation", this, "prel");
 	return d->relationPart;
-}
+}*/
 
 void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 {

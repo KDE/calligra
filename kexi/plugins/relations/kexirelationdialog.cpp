@@ -35,8 +35,9 @@
 
 //#define TESTING_KexiRelationDialog
 
-KexiRelationDialog::KexiRelationDialog(QWidget *parent, KexiMainWindow *win)
-	: QWidget(parent)
+KexiRelationDialog::KexiRelationDialog(KexiMainWindow *win, QWidget *parent, 
+	const char *name)
+	: QWidget(parent, name)
 {
 	m_conn = win->project()->dbConnection();
 
@@ -73,6 +74,10 @@ KexiRelationDialog::KexiRelationDialog(QWidget *parent, KexiMainWindow *win)
 	for (int i=0;i<(int)m_db->tableNames().count();i++)
 		QTimer::singleShot(100,this,SLOT(slotAddTable()));
 #endif
+}
+
+KexiRelationDialog::~KexiRelationDialog()
+{
 }
 
 void
@@ -113,16 +118,14 @@ KexiRelationDialog::chooseTable(QString t)
 	}
 }
 
+#if 0//js
 void
 KexiRelationDialog::keyPressEvent(QKeyEvent *ev)
 {
 	kdDebug() << "KexiRelationDialog::keyPressEvent()" << endl;
 //	m_relationView->removeSelected();
 }
-
-KexiRelationDialog::~KexiRelationDialog()
-{
-}
+#endif
 
 
 #include "kexirelationdialog.moc"

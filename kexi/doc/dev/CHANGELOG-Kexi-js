@@ -220,6 +220,17 @@ TABLE VIEW TODO:
 - add support for enums (combo boxes)
 - shrink viewport area after each row removing (so scrollbars can be updated)
 
+2004-01-08
+- KexiInternalPart introduced (as generalized KexiRelationPart): 
+  produces internal Kexi dialogs and widgets ON DEMAND
+  (so: KexiRelationPart is removed)
+- Kexi Relations (widget and dialog) is now produced by KexiInternalPart
+- Tables in relation view: sizes fixed
+
+2004-01-07
+- Build fixes for gcc2.95 on kde3.1
+- Relations View: connection and viewtable focusing fixed and some actions added
+
 2004-01-06
 - KexiTableView: 
   -rowEditStarted(int) signal is emitted when row editing is started

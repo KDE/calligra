@@ -152,6 +152,8 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
 
 	connect(c, SIGNAL(moved(KexiRelationViewTableContainer *)), this,
             SLOT(containerMoved(KexiRelationViewTableContainer *)));
+	
+	c->setFocus();
 }
 
 void

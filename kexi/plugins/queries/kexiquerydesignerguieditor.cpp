@@ -29,7 +29,7 @@
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
-#include <kexirelationpart.h>
+#include <kexiinternalpart.h>
 #include <kexitableview.h>
 #include <kexitableitem.h>
 #include <kexitableviewdata.h>
@@ -43,9 +43,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMain
 	m_conn = win->project()->dbConnection();
 
 	QSplitter *s = new QSplitter(Vertical, this);
-	KexiRelationPart *p = win->relationPart();
+	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
+/*	KexiRelationPart *p = win->relationPart();
 	if(p)
-		p->createWidget(s, win);
+		p->createWidget(s, win);*/
 
 	m_data = new KexiTableViewData();
 	initTable();

@@ -46,7 +46,7 @@ class KexiRelationViewTableContainer : public QFrame
 		int			globalY(const QString &field);
 		const QString table();
 
-		virtual QSize sizeHint();
+//		virtual QSize sizeHint();
 		
 		int right() { return x() + width() - 1; }
 		int bottom() { return y() + height() - 1; }
@@ -65,15 +65,15 @@ class KexiRelationViewTableContainer : public QFrame
 		void slotContextMenu(KListView *lv, QListViewItem *i, const QPoint& p);
 
 	protected:
-		virtual void			mouseMoveEvent(QMouseEvent *ev);
-		virtual void			mousePressEvent(QMouseEvent *ev);
-		virtual void			mouseReleaseEvent(QMouseEvent *ev);
+//js		virtual void			mouseMoveEvent(QMouseEvent *ev);
+//js		virtual void			mousePressEvent(QMouseEvent *ev);
+//js		virtual void			mouseReleaseEvent(QMouseEvent *ev);
 
-		bool			m_mousePressed;
-		int			m_bX;
-		int			m_bY;
-		int			m_grabX;
-		int			m_grabY;
+//		bool			m_mousePressed;
+//		int			m_bX;
+//		int			m_bY;
+//		int			m_grabX;
+//		int			m_grabY;
 
 		KexiRelationViewTableContainerHeader *m_tableHeader;
 

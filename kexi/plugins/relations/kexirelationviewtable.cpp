@@ -32,18 +32,17 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kdeversion.h>
+#include <kconfig.h>
 
 #include "kexidb/tableschema.h"
 #include "kexidragobjects.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationview.h"
 
-void getTitleBarColors( const QPalette &pal, 
-	QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG );
-
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t)
  : QFrame(parent,"KexiRelationViewTableContainer" )
-	, m_mousePressed(false)
+//	, m_mousePressed(false)
 {
 	m_parent = parent;
 
@@ -53,13 +52,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 	setFrameStyle( QFrame::WinPanel | QFrame::Raised );
 
-// sorry but at least under linux it looked like a fat german tourist
-// maybe we should find a better way for different estetic ideas :)
-#ifdef Q_WS_WIN
-	QVBoxLayout *lyr = new QVBoxLayout(this,5,1); //js: using Q*BoxLayout is a good idea
-#else
-	QVBoxLayout *lyr = new QVBoxLayout(this,2,1); //js: using Q*BoxLayout is a good idea
-#endif
+	QVBoxLayout *lyr = new QVBoxLayout(this,4,1); //js: using Q*BoxLayout is a good idea
 
 	m_tableHeader = new KexiRelationViewTableContainerHeader(t->name(), this);
 	m_tableHeader->unsetFocus();
@@ -98,6 +91,7 @@ int KexiRelationViewTableContainer::globalY(const QString &field)
 	return m_parent->viewport()->mapFromGlobal(o).y();
 }
 
+#if 0//js
 QSize KexiRelationViewTableContainer::sizeHint()
 {
 #ifdef Q_WS_WIN
@@ -108,9 +102,9 @@ QSize KexiRelationViewTableContainer::sizeHint()
 	s.setWidth(s.width() + 4);
 	s.setHeight(m_tableHeader->height() + s.height());
 #endif
-
 	return s;
 }
+#endif
 
 QSize KexiRelationViewTable::sizeHint()
 {
@@ -125,6 +119,7 @@ kdDebug() << m_table << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.w
 	return s;
 }
 
+#if 0//js: code is already in KexiRelationViewTableContainerHeader...
 void
 KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
 {
@@ -187,6 +182,7 @@ KexiRelationViewTableContainer::mouseReleaseEvent(QMouseEvent *ev)
 	m_mousePressed = false;
 	QFrame::mouseMoveEvent(ev);
 }
+#endif
 
 void KexiRelationViewTableContainer::setFocus()
 {
@@ -223,47 +219,48 @@ KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 //============================================================================
 //BEGIN KexiRelatoinViewTableContainerHeader
 
+//for compat. with KDE <= 3.2
+#if !defined(Q_WS_WIN) && !KDE_IS_VERSION(3,2,90)
+void getCaptionColors( const QPalette &pal, 
+    QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG )
+{
+    QColor def_activeBG = pal.active().highlight();
+    QColor def_activeFG = pal.active().highlightedText();
+    QColor def_inactiveBG = pal.inactive().dark();
+    QColor def_inactiveFG = pal.inactive().brightText();
+
+    if ( QApplication::desktopSettingsAware() ) {
+        //get colors from WM
+        KConfig *cfg = KGlobal::config();
+        cfg->setGroup( "WM" );
+        activeBG = cfg->readColorEntry("activeBackground", &def_activeBG);
+        activeFG = cfg->readColorEntry("activeForeground", &def_activeFG);
+        inactiveBG = cfg->readColorEntry("inactiveBackground", &def_inactiveBG);
+        inactiveFG = cfg->readColorEntry("inactiveForeground", &def_inactiveFG);
+    }
+    else {
+        activeBG = def_activeBG;
+        activeFG = def_activeFG;
+        inactiveBG = def_inactiveBG;
+        inactiveFG = def_inactiveFG;
+    }
+}
+#endif
+
+
 KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
 	const QString& text,QWidget *parent)
 	:QLabel(text,parent),m_dragging(false) 
 {
 	setMargin(1);
 
-	getTitleBarColors( palette(), m_activeBG, m_activeFG, m_inactiveBG, m_inactiveFG );
-
-
-/*	QPalette pal = palette();
-	bool colorsInitialized = FALSE;
-
-#ifdef Q_WS_WIN // ask system properties on windows
-#ifndef SPI_GETGRADIENTCAPTIONS
-#define SPI_GETGRADIENTCAPTIONS 0x1008
+#if defined(Q_WS_WIN) || KDE_IS_VERSION(3,2,90)
+	KMdiChildArea::getCaptionColors( 
+#else
+	getCaptionColors( 
 #endif
-#ifndef COLOR_GRADIENTACTIVECAPTION
-#define COLOR_GRADIENTACTIVECAPTION 27
-#endif
-#ifndef COLOR_GRADIENTINACTIVECAPTION
-#define COLOR_GRADIENTINACTIVECAPTION 28
-#endif
-	if ( QApplication::desktopSettingsAware() ) {
-		//TODO: some day gradient can be added for w98/nt5
-	kdDebug() <<  QColor(qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION))).name() << endl;
-		pal.setColor( QPalette::Active, QColorGroup::Background, qt_colorref2qrgb(GetSysColor(COLOR_ACTIVECAPTION)) );
-		pal.setColor( QPalette::Inactive, QColorGroup::Background, qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION)) );
-		pal.setColor( QPalette::Active, QColorGroup::Foreground, qt_colorref2qrgb(GetSysColor(COLOR_CAPTIONTEXT)) );
-		pal.setColor( QPalette::Inactive, QColorGroup::Foreground, qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTIONTEXT)) );
-	}
-	else
-#endif //Q_WS_WIN
-	{
-		//TODO: check if this is ok under linux:
-		pal.setColor( QPalette::Active, QColorGroup::Background, palette().active().highlight() );
-		pal.setColor( QPalette::Active, QColorGroup::Foreground, palette().active().highlightedText() );
-		pal.setColor( QPalette::Inactive, QColorGroup::Background, palette().inactive().highlight() );
-		pal.setColor( QPalette::Inactive, QColorGroup::Foreground, palette().inactive().highlightedText() );
-	}
-	setPalette( pal );
-*/
+		palette(), m_activeBG, m_activeFG, m_inactiveBG, m_inactiveFG );
+
 	installEventFilter(this);
 }
 
@@ -537,47 +534,6 @@ void KexiRelationViewTableItem::paintFocus ( QPainter * p, const QColorGroup & c
 }
 
 //=====================================================================================
-
-#if defined(Q_WS_WIN)
-#include "qt_windows.h"
-QRgb qt_colorref2qrgb(COLORREF col)
-{
-    return qRgb(GetRValue(col),GetGValue(col),GetBValue(col));
-}
-
-// ask system properties on windows
-#ifndef SPI_GETGRADIENTCAPTIONS
-# define SPI_GETGRADIENTCAPTIONS 0x1008
-#endif
-#ifndef COLOR_GRADIENTACTIVECAPTION
-# define COLOR_GRADIENTACTIVECAPTION 27
-#endif
-#ifndef COLOR_GRADIENTINACTIVECAPTION
-# define COLOR_GRADIENTINACTIVECAPTION 28
-#endif
-#endif
-
-void getTitleBarColors( const QPalette &pal, 
-	QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG )
-{ 
-#if defined(Q_WS_WIN)
-	if ( QApplication::desktopSettingsAware() ) {
-		//TODO: some day gradient can be added for w98/nt5
-		activeBG = qt_colorref2qrgb(GetSysColor(COLOR_ACTIVECAPTION));
-		activeFG = qt_colorref2qrgb(GetSysColor(COLOR_CAPTIONTEXT));
-		inactiveBG = qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION));
-		inactiveFG = qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTIONTEXT));
-	}
-	else
-#endif //Q_WS_WIN
-	{
-		//TODO: this is ok under linux, but maybe there is a way to get colors from WM?
-		activeBG = pal.active().highlight();
-		activeFG = pal.active().highlightedText();
-		inactiveBG = pal.inactive().dark();
-		inactiveFG = pal.inactive().brightText();
-	}
-}
 
 
 #include "kexirelationviewtable.moc"

@@ -36,7 +36,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
 	setIcon(SmallIcon("relation"));
 	setDocID( win->generatePrivateDocID() );
 
-	m_view = new KexiRelationDialog(this, win);
+	m_view = new KexiRelationDialog(win, this);
 
 	QVBoxLayout *g = new QVBoxLayout(this);
 	g->addWidget(m_view);

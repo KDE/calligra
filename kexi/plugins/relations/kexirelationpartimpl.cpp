@@ -24,30 +24,33 @@
 #include <kdebug.h>
 
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args)
- : KexiRelationPart(parent, name, args)
+ : KexiInternalPart(parent, name, args)
 {
-	kdDebug() << "KexiRelationPart()" << endl;
-}
-
-KexiDialogBase *
-KexiRelationPartImpl::createWindow(KexiMainWindow *win)
-{
-	kdDebug() << "KexiRelationPartImpl::createWindow()" << endl;
-	KexiRelationMainDlg *dlg = new KexiRelationMainDlg(win);
-	dlg->show();
-
-	return dlg;
-}
-
-QWidget *
-KexiRelationPartImpl::createWidget(QWidget *parent, KexiMainWindow *win)
-{
-	return new KexiRelationDialog(parent, win);
+	kdDebug() << "KexiRelationPartImpl()" << endl;
 }
 
 KexiRelationPartImpl::~KexiRelationPartImpl()
 {
 }
+
+QWidget *
+KexiRelationPartImpl::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
+ QWidget *parent, const char *objName)
+{
+	return new KexiRelationDialog(mainWin, parent, objName);
+}
+		
+
+KexiDialogBase *
+KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
+{
+	kdDebug() << "KexiRelationPartImpl::createDialog()" << endl;
+	KexiRelationMainDlg *dlg = new KexiRelationMainDlg(mainWin);
+//	dlg->show();
+
+	return dlg;
+}
+
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, KGenericFactory<KexiRelationPartImpl>("relationplugin") )
 

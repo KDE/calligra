@@ -36,7 +36,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiRelationDialog(QWidget *parent, KexiMainWindow *w);
+		KexiRelationDialog(KexiMainWindow *win, QWidget *parent, const char *name=0);
 		~KexiRelationDialog();
 
 		KexiRelationView	*relationView() const { return m_relationView; }
@@ -46,7 +46,9 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public QWidget
 		void			slotAddTable();
 
 	protected:
+#if 0//js
 		virtual void		keyPressEvent(QKeyEvent *ev);
+#endif
 
 	private:
 		QComboBox		*m_tableCombo;
