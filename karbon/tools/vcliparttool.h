@@ -67,7 +67,7 @@ private:
 class VClipartTool : public VTool
 {
 public:
-	VClipartTool( KarbonView* view, const char *, const QStringList & );
+	VClipartTool( KarbonView* view, const char * );
 	~VClipartTool();
 
 	virtual void activate();

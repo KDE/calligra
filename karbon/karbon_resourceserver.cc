@@ -246,8 +246,7 @@ KarbonResourceServer::removeGradient( VGradientListItem* gradient )
 	QFile file( gradient->filename() );
 
 	if( file.remove() )
-		m_gradients->remove
-		( gradient );
+		m_gradients->remove( gradient );
 } // KarbonResourceServer::removeGradient
 
 void

@@ -17,6 +17,7 @@ noinst_HEADERS = \
 	vselectnodestool.h \
 	vselecttool.h \
 	vsheartool.h \
+	vcliparttool.h \
 	vellipsetool.h \
 	vpolygontool.h \
 	vpolylinetool.h \
@@ -35,6 +36,7 @@ libkarbontools_la_SOURCES = \
 	vselectnodestool.cc \
 	vselecttool.cc \
 	vsheartool.cc \
+	vcliparttool.cc \
 	vellipsetool.cc \
 	vpolygontool.cc \
 	vpolylinetool.cc \

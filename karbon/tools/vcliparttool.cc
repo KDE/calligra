@@ -34,13 +34,14 @@
 #include <karbon_resourceserver.h>
 #include <karbon_view.h>
 #include "vcliparttool.h"
+#include <core/vcanvas.h>
 #include <core/vdocument.h>
+#include <core/vgroup.h>
 #include <core/vobject.h>
 #include <core/vselection.h>
 #include <commands/vtransformcmd.h>
 #include <render/vpainterfactory.h>
 #include <render/vpainter.h>
-#include <kgenericfactory.h>
 
 VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent )
 		: QFrame( parent ), m_view( view )
@@ -183,10 +184,7 @@ VClipartWidget::slotButtonClicked( int id )
 	}
 }
 
-typedef KGenericFactory<VClipartTool, KarbonView> ClipartToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_cliparttoolplugin, ClipartToolPluginFactory( "karboncliparttoolplugin" ) );
-
-VClipartTool::VClipartTool( KarbonView* view, const char *name, const QStringList & )
+VClipartTool::VClipartTool( KarbonView* view, const char *name )
 		: VTool( view, name )
 {
 	m_optionsWidget = new VClipartWidget( KarbonFactory::rServer()->cliparts(), view );

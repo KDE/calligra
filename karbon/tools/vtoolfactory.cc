@@ -36,6 +36,7 @@
 #include "vspiraltool.h"
 #include "vstartool.h"
 #include "vtexttool.h"
+#include "vcliparttool.h"
 
 VToolFactory::VToolFactory( KarbonView *view ) 
 {
@@ -52,6 +53,7 @@ VToolFactory::VToolFactory( KarbonView *view )
 	m_spiralTool		= new VSpiralTool( view );
 	m_starTool			= new VStarTool( view );
 	m_textTool			= new VTextTool( view, "" );
+	m_clipartTool		= new VClipartTool( view, "" );
 }
 
 VToolFactory::~VToolFactory()
@@ -69,5 +71,6 @@ VToolFactory::~VToolFactory()
 	delete m_spiralTool;
 	delete m_starTool;
 	delete m_textTool;
+	delete m_clipartTool;
 }
 

@@ -26,6 +26,7 @@ class VSelectNodesTool;
 class VRotateTool;
 class VShearTool;
 
+class VClipartTool;
 class VEllipseTool;
 class VPolygonTool;
 class VPolylineTool;
@@ -56,6 +57,7 @@ private:
 	VSpiralTool			*m_spiralTool;
 	VStarTool			*m_starTool;
 	VTextTool			*m_textTool;
+	VClipartTool		*m_clipartTool;
 };
 
 #endif
