@@ -844,7 +844,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   QRect selectionAnchor;
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
   QRect newCellArea;
-  KSpreadCell* destinationCell = table->cellAt(cell);
+//  KSpreadCell* destinationCell = table->cellAt(cell);
 
   newCellArea = QRect(cell, cell);
 
