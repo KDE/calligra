@@ -37,3 +37,4 @@ Kivio 1.3beta3 -> 1.3beta4
 Kivio 1.3beta4 -> 1.3rc1
 ------------------------
 - Fixed copying text in other codecs then latin1
+- Fixed the size of the stencilbar when loading stencils at start up
