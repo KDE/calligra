@@ -54,6 +54,10 @@ class KEXI_DB_EXPORT DriverBehaviour
 	//! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
 	QString AUTO_INCREMENT_PK_FIELD_OPTION;
 
+	//! "" by default, used as type string for autoinc. field definition
+	//! pgsql defines it as "SERIAL", sqlite defines it as "INTEGER"
+	QString AUTO_INCREMENT_TYPE;
+
 	/*! True if autoincrement field has special definition 
 	 e.g. like "INTEGER PRIMARY KEY" for SQLite.
 	 Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.

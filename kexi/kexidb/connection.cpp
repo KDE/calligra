@@ -732,21 +732,25 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 		else
 			sql += ", ";
 		QString v = escapeIdentifier(field->m_name) + " ";
-		const bool pk = field->isPrimaryKey() || (field->isAutoIncrement() && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
+		const bool autoinc = field->isAutoIncrement();
+		const bool pk = field->isPrimaryKey() || (autoinc && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
 //TODO: warning: ^^^^^ this allows only ont autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
-		if (field->isAutoIncrement() && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
+		if (autoinc && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
 			if (pk)
-				v += m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
+				v += m_driver->beh->AUTO_INCREMENT_TYPE + " " + m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
 			else
-				v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
+				v += m_driver->beh->AUTO_INCREMENT_TYPE + " " + m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
 		}
 		else {
-			v += m_driver->sqlTypeName(field->type());
+			if (autoinc && !m_driver->beh->AUTO_INCREMENT_TYPE.isEmpty())
+				v += m_driver->beh->AUTO_INCREMENT_TYPE;
+			else
+				v += m_driver->sqlTypeName(field->type());
 			if (field->isUnsigned())
 				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
 			if (field->m_length>0)
 				v += QString("(%1)").arg(field->m_length);
-			if (field->isAutoIncrement())
+			if (autoinc)
 				v += (" " + 
 				(pk ? m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION : m_driver->beh->AUTO_INCREMENT_FIELD_OPTION));
 			else
@@ -756,9 +760,9 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			if (!pk && field->isUniqueKey())
 				v += " UNIQUE";
 #ifndef Q_WS_WIN
-#warning IS this ok for all engines?: if (!field->isAutoIncrement() && !field->isPrimaryKey() && field->isNotNull()) 
+#warning IS this ok for all engines?: if (!autoinc && !field->isPrimaryKey() && field->isNotNull()) 
 #endif
-			if (!field->isAutoIncrement() && !pk && field->isNotNull()) 
+			if (!autoinc && !pk && field->isNotNull()) 
 				v += " NOT NULL"; //only add not null option if no autocommit is set
 			if (field->defaultValue().isValid())
 				v += QString(" DEFAULT ") + m_driver->valueToSQL( field, field->m_defaultValue );
