@@ -495,6 +495,45 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
     }
 }
 
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, QDomDocument& doc, KoStore *m_store )
+{
+    kdDebug(30518) << "loadAndParse: Trying to open " << fileName << endl;
+
+    if (!m_store->open(fileName))
+    {
+        kdWarning(30519) << "Entry " << fileName << " not found!" << endl;
+        return KoFilter::FileNotFound;
+    }
+    KoFilter::ConversionStatus convertStatus = loadAndParse( m_store->device(),doc, fileName );
+    m_store->close();
+    return convertStatus;
+
+}
+
+KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, QDomDocument& doc, const QString & fileName)
+{
+    QXmlInputSource source( io );
+    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
+    QXmlSimpleReader reader;
+    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( !doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn ) )
+    {
+        kdError(30519) << "Parsing error in " << fileName << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        return KoFilter::ParsingError;
+    }
+
+    kdDebug(30519) << "File " << fileName << " loaded and parsed!" << endl;
+
+    return KoFilter::OK;
+
+}
+
 KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip)
 {
     kdDebug(30519) << "Trying to open " << filename << endl;
@@ -519,28 +558,9 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDo
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     kdDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
     QIODevice* io = f->device();
-
-    QXmlInputSource source( io );
-    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-    QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
-
-    // Error variables for QDomDocument::setContent
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if ( !doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn ) )
-    {
-        kdError(30519) << "Parsing error in " << filename << "! Aborting!" << endl
-            << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
-        delete io;
-        return KoFilter::ParsingError;
-    }
+    KoFilter::ConversionStatus convertStatus = loadAndParse( io,doc, filename );
     delete io;
-
-    kdDebug(30519) << "File " << filename << " loaded and parsed!" << endl;
-
-    return KoFilter::OK;
+    return convertStatus;
 }
 
 KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_zip )

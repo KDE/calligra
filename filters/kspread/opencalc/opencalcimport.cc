@@ -2810,33 +2810,16 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
 
   kdDebug(30518) << "Trying to open content.xml" << endl;
   QString messageError;
-  if ( !loadAndParse( store, "content.xml", m_content, messageError))
-  {
-    kdWarning(30518) << "This file doesn't seem to be a valid OpenCalc file" << endl;
-    delete store;
-    return KoFilter::WrongFormat;
-  }
+  loadAndParse( m_content, "content.xml", store);
   kdDebug(30518) << "Opened" << endl;
 
   QDomDocument styles;
   kdDebug(30518) << "file content.xml loaded " << endl;
 
-  if ( !loadAndParse( store, "styles.xml", styles, messageError) )
-    kdWarning(30518) << "Style definitions do not exist!" << endl;
+  loadAndParse( styles, "styles.xml", store);
 
-  if ( loadAndParse( store, "meta.xml", m_meta, messageError) )
-  {
-    kdDebug(30518) << "File containing meta definitions loaded" << endl;
-  }
-  else
-    kdWarning(30518) << "Meta definitions do not exist!" << endl;
-
-  if (  loadAndParse( store, "settings.xml", m_settings, messageError) )
-  {
-    kdDebug(30518) << "File containing settings loaded" << endl;
-  }
-  else
-    kdWarning(30518) << "Settings do not exist!" << endl;
+  loadAndParse( m_meta, "meta.xml", store);
+  loadAndParse( m_settings, "settings.xml", store);
 
   delete store;
 
@@ -2848,45 +2831,9 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
   return KoFilter::OK;
 }
 
-bool OpenCalcImport::loadAndParse( KoStore *m_store, const QString& fileName, QDomDocument& doc, QString& errorMessage )
+KoFilter::ConversionStatus OpenCalcImport::loadAndParse( QDomDocument& doc, const QString& fileName,KoStore *m_store )
 {
-    kdDebug(30518) << "loadAndParse: Trying to open " << fileName << endl;
-
-    if (!m_store->open(fileName))
-    {
-        kdWarning(30518) << "Entry " << fileName << " not found!" << endl;
-        errorMessage = i18n( "Could not find %1" ).arg( fileName );
-        return false;
-    }
-    // Error variables for QDomDocument::setContent
-    QString errorMsg;
-    int errorLine, errorColumn;
-
-    // We need to be able to see the space in <text:span> </text:span>, this is why
-    // we activate the "report-whitespace-only-CharData" feature.
-    // Unfortunately this leads to lots of whitespace text nodes in between real
-    // elements in the rest of the document, watch out for that.
-    QXmlInputSource source( m_store->device() );
-    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-    QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
-
-    bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
-    if ( !ok )
-    {
-        kdError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
-                       << " In line: " << errorLine << ", column: " << errorColumn << endl
-                       << " Error message: " << errorMsg << endl;
-        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" )
-                       .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ) );
-    }
-    else
-    {
-        kdDebug(30003) << "File " << fileName << " loaded and parsed" << endl;
-    }
-    //kdDebug()<<" doc.toString() :"<<doc.toString()<<endl;
-    m_store->close();
-    return ok;
+    return OoUtils::loadAndParse( fileName, doc, m_store);
 }
 
 #include "opencalcimport.moc"

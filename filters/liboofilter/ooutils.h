@@ -81,9 +81,13 @@ namespace OoUtils
 
     void createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo);
     KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip);
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc, KoStore *m_store );
 
     /// Load an OASIS thumbnail
     KoFilter::ConversionStatus loadThumbnail( QImage& thumbnail, KZip * m_zip );
+
+    // Internal
+    KoFilter::ConversionStatus loadAndParse(QIODevice* io, QDomDocument& doc, const QString & fileName);
 }
 
 #endif /* OOUTILS_H */

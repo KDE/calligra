@@ -106,7 +106,7 @@ class OpenCalcImport : public KoFilter
     void loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition );
     void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
     void loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition );
-    bool loadAndParse( KoStore *m_store, const QString& fileName, QDomDocument& doc, QString& errorMessage );
+    KoFilter::ConversionStatus loadAndParse( QDomDocument& doc, const QString& fileName,KoStore *m_store );
 
   KoFilter::ConversionStatus openFile();
 };
