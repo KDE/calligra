@@ -193,6 +193,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 void KWParag::save(ostream &out)
 {
   out << indent << "<TEXT>" << text << "</TEXT>" << endl;
+  out << indent << "<HARDBRK frame=\"" << static_cast<int>(hardBreak) << "\"/>" << endl;
   out << otag << "<FORMATS>" << endl;
   text.saveFormat(out);
   out << etag << "</FORMATS>" << endl;
@@ -233,6 +234,18 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 
 	   if (text.size() == 1 && tmp2.length() > 0) text.remove(0);
 	   text.insert(text.size(),tmp2);
+	}
+
+      // hard break
+      else if (name == "HARDBRK")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "frame")
+		hardBreak = static_cast<bool>(atoi((*it).m_strValue.c_str()));
+	    }
 	}
 
       // format

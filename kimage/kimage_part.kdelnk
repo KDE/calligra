@@ -30,4 +30,4 @@ ActivationMode=shared
 Type=OpenPart
 Icon=image.xpm
 MiniIcon=image.xpm
-ServiceType=KOfficeDocumen
+ServiceType=KOfficeDocument
