@@ -94,18 +94,12 @@ private:
 };
 
 
-/*****************************************************************/
-/* class KPresenterView						 */
-/*****************************************************************/
 class KPresenterView : public KoView
 {
     friend class PageBase;
     Q_OBJECT
 
 public:
-
-    // ------ C++ ------
-    // constructor - destructor
     KPresenterView( KPresenterDoc* _doc, QWidget *_parent = 0, const char *_name = 0 );
     ~KPresenterView();
 
@@ -335,7 +329,7 @@ public slots:
     void textSubScript();
     void textSuperScript();
 
-    void slotSpecialChar(QChar , const QString &);
+    void slotSpecialChar(QChar, const QString &);
     void slotSpecialCharDlgClosed();
 
     void insertLink();
@@ -354,9 +348,9 @@ public slots:
     void spellCheckerCorrected( const QString &, const QString &, unsigned int);
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
-    void spellCheckerIgnoreAll( const QString &);
+    void spellCheckerIgnoreAll( const QString & );
     void startKSpell();
-    void spellCheckerReplaceAll( const QString &,  const QString &);
+    void spellCheckerReplaceAll( const QString &, const QString & );
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
 
     void alignChanged( int );
@@ -697,12 +691,7 @@ protected slots:
     void editFindNext();
     void editFindPrevious();
 
-// end of protected slots
 protected:
-
-// ********* functions ***********
-
-// resize event
     virtual void resizeEvent( QResizeEvent* );
     virtual void dragEnterEvent( QDragEnterEvent *e );
     virtual void dragMoveEvent( QDragMoveEvent *e );
@@ -1112,13 +1101,13 @@ private:
 
     // Spell-checking
     struct {
-	KSpell *kspell;
+        KSpell *kspell;
 #ifdef HAVE_LIBASPELL
         KOSpell *kospell;
 #endif
-	int spellCurrTextObjNum;
-	QPtrList<KPTextObject> textObject;
-	KMacroCommand * macroCmdSpellCheck;
+        int spellCurrTextObjNum;
+        QPtrList<KPTextObject> textObject;
+        KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         bool bSpellSelection;
         int selectionStartPos;

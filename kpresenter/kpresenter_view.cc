@@ -194,21 +194,6 @@ static const char * const pagedown_xpm[] = {
 
 /*****************************************************************/
 /* class KPresenterFrame					 */
-/*****************************************************************/
-
-/*======================= constructor ===========================*/
-/* KPresenterFrame::KPresenterFrame( KPresenterView* _view, KPresenterChild* _child )
-    : KoFrame( _view )
-{
-    m_pKPresenterView = _view;
-    m_pKPresenterChild = _child;
-    } */
-
-/*****************************************************************/
-/* class KPresenterView						 */
-/*****************************************************************/
-
-/*======================= constructor ===========================*/
 KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const char *_name )
     : KoView( _doc, _parent, _name )
 {
@@ -317,14 +302,11 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     // Cut and copy are directly connected to the selectionChanged signal
     if ( m_pKPresenterDoc->isReadWrite() )
-    {
         connect( m_canvas, SIGNAL(selectionChanged(bool)),
                  this, SLOT(slotChangeCutState(bool )/*setEnabled(bool)*/) );
-    }
     else
-    {
         actionEditCut->setEnabled( false );
-    }
+
     connect( m_canvas, SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
 
@@ -373,7 +355,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     setAcceptDrops( TRUE );
 }
 
-/*=============================================================*/
 DCOPObject* KPresenterView::dcopObject()
 {
     if ( !dcop )
@@ -382,7 +363,6 @@ DCOPObject* KPresenterView::dcopObject()
     return dcop;
 }
 
-/*======================= destructor ============================*/
 KPresenterView::~KPresenterView()
 {
     delete m_findReplace;
@@ -454,7 +434,6 @@ KPresenterView::~KPresenterView()
         m_specialCharDlg->closeDialog(); // will call slotSpecialCharDlgClosed
 }
 
-/*=========================== file print =======================*/
 void KPresenterView::setupPrinter( KPrinter &prt )
 {
     m_canvas->deSelectAllObj();
@@ -503,7 +482,7 @@ void KPresenterView::print( KPrinter &prt )
     if ( displayFieldCode )
     {
         m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
-        m_pKPresenterDoc->recalcVariables(  VT_ALL );
+        m_pKPresenterDoc->recalcVariables( VT_ALL );
     }
 
     QPaintDeviceMetrics metrics( &prt );
@@ -538,7 +517,6 @@ void KPresenterView::print( KPrinter &prt )
     m_pKPresenterDoc->recalcVariables(  VT_DATE );
 }
 
-/*===============================================================*/
 void KPresenterView::editCut()
 {
     if ( !m_canvas->currentTextObjectView() ) {
@@ -551,18 +529,16 @@ void KPresenterView::editCut()
     }
 }
 
-/*===============================================================*/
 void KPresenterView::editCopy()
 {
     if ( !m_canvas->currentTextObjectView() ) {
         m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->copyObjs();
-    } else {
-        m_canvas->currentTextObjectView()->copy();
     }
+    else
+        m_canvas->currentTextObjectView()->copy();
 }
 
-/*===============================================================*/
 void KPresenterView::editPaste()
 {
     if ( !m_canvas->currentTextObjectView() ) {
@@ -593,14 +569,12 @@ void KPresenterView::editPaste()
     }
 }
 
-/*===============================================================*/
 void KPresenterView::editDelete()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
     m_canvas->deleteObjs();
 }
 
-/*===============================================================*/
 void KPresenterView::editSelectAll()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
@@ -623,13 +597,11 @@ void KPresenterView::editDeSelectAll()
         edit->selectAll(false);
 }
 
-/*===============================================================*/
 void KPresenterView::editCopyPage()
 {
     m_pKPresenterDoc->copyPageToClipboard( currPg );
 }
 
-/*===============================================================*/
 void KPresenterView::editDuplicatePage()
 {
     m_pKPresenterDoc->copyPage( currPg, currPg+1 );
@@ -643,7 +615,6 @@ void KPresenterView::updateSideBarMenu()
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
 }
 
-/*===============================================================*/
 void KPresenterView::editDelPage()
 {
     if ( KMessageBox::questionYesNo( this,
@@ -658,7 +629,6 @@ void KPresenterView::editDelPage()
     updateSideBarMenu();
 }
 
-/*====================== insert a new page ======================*/
 void KPresenterView::insertPage()
 {
     InsertPageDia dia( this, 0, TRUE );
@@ -723,7 +693,6 @@ void KPresenterView::insertPicture(const QString &file)
 
     if ( !file.isEmpty() )
         m_canvas->activePage()->setInsPictureFile( file );
-
 }
 
 void KPresenterView::savePicture()
@@ -752,8 +721,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
         url = fd.selectedURL();
         if( url.isEmpty() )
         {
-            KMessageBox::sorry( this,
-                                i18n("File name is empty"),
+            KMessageBox::sorry( this, i18n("File name is empty"),
                                 i18n("Save Picture"));
             return;
         }
@@ -761,11 +729,10 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
         if ( file.open( IO_ReadWrite ) ) {
             picture.save( &file );
             file.close();
-        } else {
-            KMessageBox::error(this,
-                               i18n("Error during saving"),
-                               i18n("Save Picture"));
         }
+        else
+            KMessageBox::error(this, i18n("Error during saving"),
+                               i18n("Save Picture"));
     }
 }
 
@@ -785,8 +752,6 @@ void KPresenterView::toolsMouse()
     //m_canvas->deSelectAllObj();
 }
 
-
-/*==============================================================*/
 void KPresenterView::toolsRotate()
 {
     if ( actionToolsRotate->isChecked() )
@@ -795,7 +760,6 @@ void KPresenterView::toolsRotate()
         actionToolsRotate->setChecked(true);
 }
 
-/*==============================================================*/
 void KPresenterView::toolsZoom()
 {
     if ( actionToolsZoom->isChecked() )
@@ -826,7 +790,6 @@ void KPresenterView::toolsLinePopup()
     }
 }
 
-/*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
 {
     if ( actionToolsLine->isChecked() )
@@ -859,7 +822,6 @@ void KPresenterView::toolsShapePopup()
     }
 }
 
-/*===================== insert rectangle ========================*/
 void KPresenterView::toolsRectangle()
 {
     if ( actionToolsRectangle->isChecked() )
@@ -873,7 +835,6 @@ void KPresenterView::toolsRectangle()
         actionToolsRectangle->setChecked(true);
 }
 
-/*===================== insert circle or ellipse ================*/
 void KPresenterView::toolsCircleOrEllipse()
 {
     if ( actionToolsCircleOrEllipse->isChecked() )
@@ -887,7 +848,6 @@ void KPresenterView::toolsCircleOrEllipse()
         actionToolsCircleOrEllipse->setChecked(true);
 }
 
-/*==============================================================*/
 void KPresenterView::toolsPie()
 {
     if ( actionToolsPie->isChecked() )
@@ -901,7 +861,6 @@ void KPresenterView::toolsPie()
         actionToolsPie->setChecked(true);
 }
 
-/*==============================================================*/
 void KPresenterView::toolsDiagramm()
 {
     if ( actionToolsDiagramm->isChecked() )
@@ -922,7 +881,6 @@ void KPresenterView::toolsDiagramm()
         actionToolsDiagramm->setChecked(true);
 }
 
-/*==============================================================*/
 void KPresenterView::toolsTable()
 {
     if ( actionToolsTable->isChecked() )
@@ -943,7 +901,6 @@ void KPresenterView::toolsTable()
         actionToolsTable->setChecked(true);
 }
 
-/*==============================================================*/
 void KPresenterView::toolsFormula()
 {
     if ( actionToolsFormula->isChecked() )
@@ -964,7 +921,6 @@ void KPresenterView::toolsFormula()
         actionToolsFormula->setChecked(true);
 }
 
-/*===================== insert a textobject =====================*/
 void KPresenterView::toolsText()
 {
     if ( actionToolsText->isChecked() )
@@ -976,7 +932,6 @@ void KPresenterView::toolsText()
         actionToolsText->setChecked(true);
 }
 
-/*===============================================================*/
 void KPresenterView::toolsAutoform()
 {
     if ( actionToolsAutoform->isChecked() )
@@ -1006,7 +961,6 @@ void KPresenterView::toolsAutoform()
         actionToolsAutoform->setChecked(true);
 }
 
-/*===============================================================*/
 void KPresenterView::toolsObject()
 {
     KoDocumentEntry pe = actionToolsObject->documentEntry();
@@ -1019,7 +973,6 @@ void KPresenterView::toolsObject()
     m_canvas->setPartEntry( pe );
 }
 
-/*==================== insert freehand line =====================*/
 void KPresenterView::toolsFreehand()
 {
     if ( actionToolsFreehand->isChecked() ) {
@@ -1032,7 +985,6 @@ void KPresenterView::toolsFreehand()
         actionToolsFreehand->setChecked(true);
 }
 
-/*====================== insert polyline =======================*/
 void KPresenterView::toolsPolyline()
 {
     if ( actionToolsPolyline->isChecked() ) {
@@ -1045,7 +997,6 @@ void KPresenterView::toolsPolyline()
         actionToolsPolyline->setChecked(true);
 }
 
-/*================ insert quadric bezier curve =================*/
 void KPresenterView::toolsQuadricBezierCurve()
 {
     if ( actionToolsQuadricBezierCurve->isChecked() ) {
@@ -1058,7 +1009,6 @@ void KPresenterView::toolsQuadricBezierCurve()
         actionToolsQuadricBezierCurve->setChecked(true);
 }
 
-/*================= insert cubic bezier curve ==================*/
 void KPresenterView::toolsCubicBezierCurve()
 {
     if ( actionToolsCubicBezierCurve->isChecked() ) {
@@ -1071,7 +1021,6 @@ void KPresenterView::toolsCubicBezierCurve()
         actionToolsCubicBezierCurve->setChecked(true);
 }
 
-/*============== insert convex or concave polygon ===============*/
 void KPresenterView::toolsConvexOrConcavePolygon()
 {
     if ( actionToolsConvexOrConcavePolygon->isChecked() ) {
@@ -1103,7 +1052,6 @@ void KPresenterView::toolsClosedLinePopup()
     }
 }
 
-/*==================== insert closed freehand line =====================*/
 void KPresenterView::toolsClosedFreehand()
 {
     if ( actionToolsClosedFreehand->isChecked() ) {
@@ -1116,7 +1064,6 @@ void KPresenterView::toolsClosedFreehand()
         actionToolsClosedFreehand->setChecked( true );
 }
 
-/*====================== insert closed polyline =======================*/
 void KPresenterView::toolsClosedPolyline()
 {
     if ( actionToolsClosedPolyline->isChecked() ) {
@@ -1129,7 +1076,6 @@ void KPresenterView::toolsClosedPolyline()
         actionToolsClosedPolyline->setChecked( true );
 }
 
-/*================ insert closed quadric bezier curve =================*/
 void KPresenterView::toolsClosedQuadricBezierCurve()
 {
     if ( actionToolsClosedQuadricBezierCurve->isChecked() ) {
@@ -1142,7 +1088,6 @@ void KPresenterView::toolsClosedQuadricBezierCurve()
         actionToolsClosedQuadricBezierCurve->setChecked( true );
 }
 
-/*================= insert closed cubic bezier curve ==================*/
 void KPresenterView::toolsClosedCubicBezierCurve()
 {
     if ( actionToolsClosedCubicBezierCurve->isChecked() ) {
@@ -1155,7 +1100,6 @@ void KPresenterView::toolsClosedCubicBezierCurve()
         actionToolsClosedCubicBezierCurve->setChecked( true );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
     delete styleDia;
@@ -1225,21 +1169,18 @@ void KPresenterView::extraPenBrush()
     styleDia = 0;
 }
 
-/*===============================================================*/
 void KPresenterView::extraRaise()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
     m_canvas->activePage()->raiseObjs(false);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLower()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
     m_canvas->activePage()->lowerObjs(false);
 }
 
-/*===============================================================*/
 void KPresenterView::extraRotate()
 {
     if ( m_canvas->numberOfObjectSelected() > 0 ) {
@@ -1253,7 +1194,6 @@ void KPresenterView::extraRotate()
     }
 }
 
-/*===============================================================*/
 void KPresenterView::extraShadow()
 {
     if ( m_canvas->numberOfObjectSelected() > 0 ) {
@@ -1277,7 +1217,6 @@ void KPresenterView::extraShadow()
     }
 }
 
-/*===============================================================*/
 void KPresenterView::extraAlignObjs()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1285,7 +1224,6 @@ void KPresenterView::extraAlignObjs()
     rb_oalign->popup( pnt );
 }
 
-/*===============================================================*/
 void KPresenterView::extraBackground()
 {
     KPrPage *page=m_canvas->activePage();
@@ -1307,7 +1245,6 @@ void KPresenterView::extraBackground()
     delete backDia;
 }
 
-/*===============================================================*/
 void KPresenterView::extraLayout()
 {
     KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
@@ -1325,13 +1262,12 @@ void KPresenterView::extraLayout()
     }
 }
 
-/*===============================================================*/
 void KPresenterView::extraConfigure()
 {
     KPConfig configDia( this );
     configDia.exec();
 }
-/*===============================================================*/
+
 void KPresenterView::extraCreateTemplate()
 {
     int width = 60;
@@ -1355,7 +1291,6 @@ void KPresenterView::extraDefaultTemplate()
     m_pKPresenterDoc->savePage( file, currPg );
 }
 
-/*===============================================================*/
 void KPresenterView::extraWebPres()
 {
     if ( !allowWebPres )
@@ -1368,9 +1303,7 @@ void KPresenterView::extraWebPres()
                                                      " which will be used for this HTML Presentation?" ),
                                                i18n( "Create HTML Presentation" ) );
     if( ret == KMessageBox::Cancel )
-    {
         return;
-    }
     else if ( ret == KMessageBox::Yes )
     {
         url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
@@ -1390,7 +1323,6 @@ void KPresenterView::extraWebPres()
     KPWebPresentationWizard::createWebPresentation( config, m_pKPresenterDoc, this );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBegin()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1398,7 +1330,6 @@ void KPresenterView::extraLineBegin()
     rb_lbegin->popup( pnt );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEnd()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1406,7 +1337,6 @@ void KPresenterView::extraLineEnd()
     rb_lend->popup( pnt );
 }
 
-/*===============================================================*/
 void KPresenterView::extraGroup()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1414,7 +1344,6 @@ void KPresenterView::extraGroup()
     objectSelectedChanged();
 }
 
-/*===============================================================*/
 void KPresenterView::extraUnGroup()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1422,7 +1351,6 @@ void KPresenterView::extraUnGroup()
     objectSelectedChanged();
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyle()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1430,7 +1358,6 @@ void KPresenterView::extraPenStyle()
     rb_pstyle->popup( pnt );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1438,8 +1365,6 @@ void KPresenterView::extraPenWidth()
     rb_pwidth->popup( pnt );
 }
 
-
-/*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
     delete pgConfDia;
@@ -1455,7 +1380,6 @@ void KPresenterView::screenConfigPages()
 }
 
 
-/*========================== screen transEffect ================= */
 void KPresenterView::screenTransEffect()
 {
     if( transEffectDia ) {
@@ -1476,7 +1400,6 @@ void KPresenterView::screenTransEffect()
     transEffectDia = 0;
 }
 
-/*========================== screen presStructView  =============*/
 void KPresenterView::screenPresStructView()
 {
     delete presStructView;
@@ -1493,7 +1416,6 @@ void KPresenterView::screenPresStructView()
     presStructView = 0;
 }
 
-/*===============================================================*/
 void KPresenterView::screenAssignEffect()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1501,14 +1423,13 @@ void KPresenterView::screenAssignEffect()
     QPtrList<KPObject> objs;
     if ( m_canvas->canAssignEffect( objs ) ) {
         EffectDia *effectDia = new EffectDia( this, "Object Effect", objs, this );
-	effectDia->setCaption( i18n( "Object Effect" ) );
-	if(effectDia->exec())
+        effectDia->setCaption( i18n( "Object Effect" ) );
+        if(effectDia->exec())
             effectOk();
         delete effectDia;
     }
 }
 
-/*========================== screen start =======================*/
 void KPresenterView::screenStart()
 {
     startScreenPres( getCurrPgNum() );
@@ -1627,7 +1548,6 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
     }
 }
 
-/*========================== screen stop ========================*/
 void KPresenterView::screenStop()
 {
     if ( presStarted ) {
@@ -1648,7 +1568,6 @@ void KPresenterView::screenStop()
             m_pKPresenterDoc->recalcVariables(  VT_ALL );
         }
 
-
 //         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
 //             setPresentationDuration( m_canvas->presPage() - 1 );
 
@@ -1660,15 +1579,15 @@ void KPresenterView::screenStop()
         m_canvas->setMouseTracking( true );
         m_canvas->setBackgroundMode( Qt::NoBackground );
 
-	if ( m_screenSaverWasEnabled )
-	{
-        // start screensaver again
-        QByteArray data;
-        QDataStream arg(data, IO_WriteOnly);
-        arg << true;
-        if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-            kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
-	}
+        if ( m_screenSaverWasEnabled )
+        {
+            // start screensaver again
+            QByteArray data;
+            QDataStream arg(data, IO_WriteOnly);
+            arg << true;
+            if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
+                kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
+        }
 
         actionScreenStart->setEnabled( true );
         pageBase->resizeEvent( 0 );
@@ -1682,12 +1601,10 @@ void KPresenterView::screenStop()
     }
 }
 
-/*========================== screen pause =======================*/
 void KPresenterView::screenPause()
 {
 }
 
-/*========================== screen first =======================*/
 void KPresenterView::screenFirst()
 {
     if ( m_canvas->currentTextObjectView() )
@@ -1697,15 +1614,13 @@ void KPresenterView::screenFirst()
     ;
 #endif
     else {
-        if ( !presStarted ) {
+        if ( !presStarted )
             skipToPage( 0 );
-        } else {
+        else
             gotoPresPage( 1 );
-        }
     }
 }
 
-/*========================== screen previous =====================*/
 void KPresenterView::screenPrev()
 {
     if ( m_canvas->currentTextObjectView() )
@@ -1735,12 +1650,11 @@ void KPresenterView::screenPrev()
             m_canvas->resize( desk.width(), desk.height() );
             m_canvas->setFocus();
         }
-    } else {
-        prevPage();
     }
+    else
+        prevPage();
 }
 
-/*========================== screen next ========================*/
 void KPresenterView::screenNext()
 {
     if ( m_canvas->currentTextObjectView() )
@@ -1775,7 +1689,6 @@ void KPresenterView::screenNext()
     }
 }
 
-/*========================== screen last ========================*/
 void KPresenterView::screenLast()
 {
     if ( m_canvas->currentTextObjectView() )
@@ -1786,23 +1699,16 @@ void KPresenterView::screenLast()
 #endif
     else {
         if ( !presStarted )
-        {
             skipToPage( m_pKPresenterDoc->getPageNums() - 1 );
-        }
         else
-        {
-
             gotoPresPage( getNumPresPages() );
-        }
     }
 }
 
-/*========================== screen skip =======================*/
 void KPresenterView::screenSkip()
 {
 }
 
-/*===============================================================*/
 void KPresenterView::sizeSelected( int size )
 {
     tbFont.setPointSize( size );
@@ -1810,7 +1716,6 @@ void KPresenterView::sizeSelected( int size )
     m_canvas->setFocus();
 }
 
-/*===============================================================*/
 void KPresenterView::fontSelected( const QString &fontFamily )
 {
     tbFont.setFamily( fontFamily );
@@ -1843,7 +1748,7 @@ void KPresenterView::textItalic()
 void KPresenterView::textUnderline()
 {
     bool b=actionTextUnderline->isChecked();
-    tbFont.setUnderline(b );
+    tbFont.setUnderline( b );
     m_canvas->setTextUnderline( b );
 }
 
@@ -1869,7 +1774,7 @@ void KPresenterView::textAlignCenter()
     if ( actionTextAlignCenter->isChecked() )
     {
         tbAlign = Qt::AlignCenter;
-        m_canvas->setTextAlign( Qt::AlignCenter );
+        m_canvas->setTextAlign(tbAlign);
     }
     else
          actionTextAlignCenter->setChecked(true);
@@ -1880,7 +1785,7 @@ void KPresenterView::textAlignRight()
     if ( actionTextAlignRight->isChecked() )
     {
         tbAlign = Qt::AlignRight;
-        m_canvas->setTextAlign( Qt::AlignRight );
+        m_canvas->setTextAlign(tbAlign);
     }
     else
         actionTextAlignRight->setChecked(true);
@@ -1892,7 +1797,7 @@ void KPresenterView::textAlignBlock()
     if ( actionTextAlignBlock->isChecked() )
     {
         tbAlign = Qt::AlignJustify;
-        m_canvas->setTextAlign(Qt::AlignJustify);
+        m_canvas->setTextAlign(tbAlign);
     }
     else
         actionTextAlignBlock->setChecked(true);
@@ -2028,13 +1933,12 @@ void KPresenterView::slotCounterStyleSelected()
     }
 
 }
-/*===============================================================*/
+
 void KPresenterView::textDepthPlus()
 {
     m_canvas->setTextDepthPlus();
 }
 
-/*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
     m_canvas->setTextDepthMinus();
@@ -2050,7 +1954,6 @@ void KPresenterView::textObjectToContents()
     m_canvas->textObjectToContents();
 }
 
-/*===============================================================*/
 void KPresenterView::penChosen()
 {
     QColor c = actionPenColor->color();
@@ -2079,9 +1982,7 @@ void KPresenterView::penChosen()
         if(macro)
             m_pKPresenterDoc->addCommand(macro);
         else
-        {
             pen.setColor( c );
-        }
     }
     else
     {
@@ -2090,14 +1991,13 @@ void KPresenterView::penChosen()
     }
 }
 
-/*===============================================================*/
 void KPresenterView::brushChosen()
 {
     QColor c = actionBrushColor->color();
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( !edit )
     {
-	bool fill = true;
+        bool fill = true;
         KMacroCommand *macro= 0L;
         KCommand *cmd=0L;
         cmd=m_canvas->activePage()->setBrushColor( c, fill,m_canvas->activePage()->objectList() );
@@ -2118,104 +2018,89 @@ void KPresenterView::brushChosen()
             m_pKPresenterDoc->addCommand(macro);
         else
         {
-	    if ( fill )
-		brush.setColor( c );
-	    else
-		brush = NoBrush;
-	}
+            if ( fill )
+                brush.setColor( c );
+            else
+                brush = NoBrush;
+        }
     }
     else
     {
-	tbColor = c;
+        tbColor = c;
         m_canvas->setTextBackgroundColor(c);
     }
 }
 
-/*======================= align object left =====================*/
 void KPresenterView::extraAlignObjLeft()
 {
     m_canvas->alignObjLeft();
 }
 
-/*======================= align object center h =================*/
 void KPresenterView::extraAlignObjCenterH()
 {
     m_canvas->alignObjCenterH();
 }
 
-/*======================= align object right ====================*/
 void KPresenterView::extraAlignObjRight()
 {
     m_canvas->alignObjRight();
 }
 
-/*======================= align object top ======================*/
 void KPresenterView::extraAlignObjTop()
 {
     m_canvas->alignObjTop();
 }
 
-/*======================= align object center v =================*/
 void KPresenterView::extraAlignObjCenterV()
 {
     m_canvas->alignObjCenterV();
 }
 
-/*======================= align object bottom ===================*/
 void KPresenterView::extraAlignObjBottom()
 {
     m_canvas->alignObjBottom();
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginNormal()
 {
     setExtraLineBegin(L_NORMAL);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginArrow()
 {
     setExtraLineBegin(L_ARROW);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginRect()
 {
     setExtraLineBegin(L_SQUARE);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginCircle()
 {
     setExtraLineBegin(L_CIRCLE);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginLineArrow()
 {
     setExtraLineBegin( L_LINE_ARROW );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginDimensionLine()
 {
     setExtraLineBegin( L_DIMENSION_LINE );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginDoubleArrow()
 {
     setExtraLineBegin( L_DOUBLE_ARROW );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineBeginDoubleLineArrow()
 {
     setExtraLineBegin( L_DOUBLE_LINE_ARROW );
 }
 
-/*===============================================================*/
 void KPresenterView::setExtraLineBegin(LineEnd lb)
 {
     KPrPage *page=m_canvas->activePage();
@@ -2245,55 +2130,46 @@ void KPresenterView::setExtraLineBegin(LineEnd lb)
         lineBegin = lb;
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndNormal()
 {
     setExtraLineEnd(L_NORMAL);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndArrow()
 {
     setExtraLineEnd(L_ARROW);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndRect()
 {
     setExtraLineEnd(L_SQUARE);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndCircle()
 {
     setExtraLineEnd(L_CIRCLE);
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndLineArrow()
 {
     setExtraLineEnd( L_LINE_ARROW );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndDimensionLine()
 {
     setExtraLineEnd( L_DIMENSION_LINE );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndDoubleArrow()
 {
     setExtraLineEnd( L_DOUBLE_ARROW );
 }
 
-/*===============================================================*/
 void KPresenterView::extraLineEndDoubleLineArrow()
 {
     setExtraLineEnd( L_DOUBLE_LINE_ARROW );
 }
 
-/*===============================================================*/
 void KPresenterView::setExtraLineEnd(LineEnd le)
 {
     KPrPage *page=m_canvas->activePage();
@@ -2323,43 +2199,36 @@ void KPresenterView::setExtraLineEnd(LineEnd le)
         lineEnd = le;
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyleSolid()
 {
     setExtraPenStyle( Qt::SolidLine );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyleDash()
 {
     setExtraPenStyle( Qt::DashLine );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyleDot()
 {
     setExtraPenStyle( Qt::DotLine );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyleDashDot()
 {
     setExtraPenStyle( Qt::DashDotLine );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyleDashDotDot()
 {
     setExtraPenStyle( Qt::DashDotDotLine );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenStyleNoPen()
 {
     setExtraPenStyle( Qt::NoPen );
 }
 
-/*===============================================================*/
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
     KPrPage *page = m_canvas->activePage();
@@ -2390,67 +2259,56 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
         pen = e_pen;
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth1()
 {
     setExtraPenWidth( 1 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth2()
 {
     setExtraPenWidth( 2 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth3()
 {
     setExtraPenWidth( 3 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth4()
 {
     setExtraPenWidth( 4 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth5()
 {
     setExtraPenWidth( 5 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth6()
 {
     setExtraPenWidth( 6 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth7()
 {
     setExtraPenWidth( 7 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth8()
 {
     setExtraPenWidth( 8 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth9()
 {
     setExtraPenWidth( 9 );
 }
 
-/*===============================================================*/
 void KPresenterView::extraPenWidth10()
 {
     setExtraPenWidth( 10 );
 }
 
-/*===============================================================*/
 void KPresenterView::setExtraPenWidth( unsigned int width )
 {
     KPrPage *page=m_canvas->activePage();
@@ -2481,7 +2339,6 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
         pen = e_pen;
 }
 
-/*===============================================================*/
 void KPresenterView::newPageLayout( KoPageLayout _layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
@@ -2502,7 +2359,6 @@ void KPresenterView::updateRuler()
     getVRuler()->setFrameStartEnd( r.top() , r.bottom()/*+m_canvas->diffy()*/ );
 }
 
-/*======================== create GUI ==========================*/
 void KPresenterView::createGUI()
 {
     splitter = new QSplitter( this );
@@ -2564,7 +2420,7 @@ void KPresenterView::createGUI()
     setupRulers();
 
     if ( m_pKPresenterDoc && m_canvas )
-	QObject::connect( m_canvas, SIGNAL( stopPres() ), this, SLOT( stopPres() ) );
+        QObject::connect( m_canvas, SIGNAL( stopPres() ), this, SLOT( stopPres() ) );
 
     if ( sidebar )
     {
@@ -2589,11 +2445,10 @@ void KPresenterView::createGUI()
     }
     KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
     if ( !initPage )
-	m_pKPresenterDoc->pageList().at( 0 ); // first page
+        m_pKPresenterDoc->pageList().at( 0 ); // first page
     skipToPage( m_pKPresenterDoc->pageList().findRef( initPage ) );
 }
 
-/*=============================================================*/
 void KPresenterView::initGui()
 {
     tbColor = Qt::black;
@@ -2637,7 +2492,6 @@ void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     KoView::guiActivateEvent( ev );
 }
 
-/*====================== construct ==============================*/
 void KPresenterView::setupActions()
 {
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
@@ -3388,7 +3242,6 @@ void KPresenterView::setupActions()
     actionZoomAllObject= new KAction( i18n( "Zoom All Objects" ), 0,
                                    this, SLOT( zoomAllObject() ),
                                    actionCollection(), "zoom_all_object" );
-;
 
     actionFlipHorizontal= new KAction( i18n( "Horizontal Flip" ), 0,
                                    this, SLOT( flipHorizontal() ),
@@ -3463,7 +3316,6 @@ void KPresenterView::setupActions()
     actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
                                                    actionCollection(), "add_word_to_dictionary" );
-
 }
 
 void KPresenterView::textSubScript()
@@ -3497,45 +3349,38 @@ void KPresenterView::objectSelectedChanged()
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
         if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
-        {
             headerfooterselected=true;
-        }
         else
-        {
             headerfooterselected=false;
-        }
     }
     actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
     actionEditDelete->setEnabled(state&&!headerfooterselected);
     actionEditCut->setEnabled(state&&!headerfooterselected);
 
-
-
     actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
-    actionExtraShadow->setEnabled(state
-                                  && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
+    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
 
     actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state && m_canvas->haveASelectedGroupObj());
 
-    bool canMove = m_canvas->canMoveOneObject();
+    bool enableAlign = m_canvas->canMoveOneObject() && state && !headerfooterselected;
 
-    actionExtraAlignObjLeft->setEnabled(state &&  !headerfooterselected && canMove);
-    actionExtraAlignObjCenterH->setEnabled(state &&  !headerfooterselected&& canMove);
-    actionExtraAlignObjRight->setEnabled(state &&  !headerfooterselected && canMove);
-    actionExtraAlignObjTop->setEnabled(state && !headerfooterselected && canMove);
-    actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected && canMove);
-    actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected && canMove );
+    actionExtraAlignObjLeft->setEnabled(enableAlign);
+    actionExtraAlignObjCenterH->setEnabled(enableAlign);
+    actionExtraAlignObjRight->setEnabled(enableAlign);
+    actionExtraAlignObjTop->setEnabled(enableAlign);
+    actionExtraAlignObjCenterV->setEnabled(enableAlign);
+    actionExtraAlignObjBottom->setEnabled(enableAlign);
     //actionEditDelete->setEnabled(state);
     int nbobj=m_canvas->numberOfObjectSelected();
     actionDuplicateObj->setEnabled(state && (nbobj>=1));
 
     state = state && (nbobj==1);
     actionExtraArrangePopup->setEnabled(state);
-    actionExtraRaise->setEnabled(state );
-    actionExtraLower->setEnabled(state );
+    actionExtraRaise->setEnabled(state);
+    actionExtraLower->setEnabled(state);
 
     actionExtraBringForward->setEnabled(state);
     actionExtraSendBackward->setEnabled(state);
@@ -3546,11 +3391,10 @@ void KPresenterView::objectSelectedChanged()
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
 
-    actionApplyAutoFormat->setEnabled( m_canvas->oneObjectTextExist());
+    actionApplyAutoFormat->setEnabled(m_canvas->oneObjectTextExist());
     slotObjectEditChanged();
 }
 
-/*=========== take changes for backgr dialog =====================*/
 void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
 {
     KPrPage *page=m_canvas->activePage();
@@ -3574,7 +3418,6 @@ void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
     m_pKPresenterDoc->addCommand( setBackCmd );
 }
 
-/*================== autoform chosen =============================*/
 void KPresenterView::afChooseOk( const QString & c )
 {
     QFileInfo fileInfo( c );
@@ -3592,7 +3435,6 @@ void KPresenterView::slotAfchooseCanceled()
     setTool( TEM_MOUSE );
 }
 
-/*=========== take changes for style dialog =====================*/
 void KPresenterView::styleOk()
 {
     ConfPenDia *confPenDia;
@@ -3892,7 +3734,6 @@ void KPresenterView::styleOk()
     }
 }
 
-/*=================== page configuration ok ======================*/
 void KPresenterView::pgConfOk()
 {
     QValueList<bool> selectedSlides;
@@ -3915,10 +3756,9 @@ void KPresenterView::pgConfOk()
     kPresenterDoc()->addCommand( pgConfCmd );
 }
 
-/*=================== transition effect ok ======================*/
 void KPresenterView::transEffectOk()
 {
-kdDebug() << "======= KPresenterView::transEffectOK\n";
+    //kdDebug(33001) << "======= KPresenterView::transEffectOK\n";
 
     KPrPage *page=m_canvas->activePage();
     TransEffectCmd *transEffectCmd = new TransEffectCmd( i18n( "Slide Transition" ),
@@ -3933,12 +3773,10 @@ kdDebug() << "======= KPresenterView::transEffectOK\n";
     kPresenterDoc()->addCommand( transEffectCmd );
 }
 
-/*=================== effect dialog ok ===========================*/
 void KPresenterView::effectOk()
 {
 }
 
-/*=================== rotate dialog ok ===========================*/
 void KPresenterView::rotateOk()
 {
     float _newAngle=rotateDia->angle();
@@ -3963,7 +3801,6 @@ void KPresenterView::rotateOk()
         kPresenterDoc()->addCommand(macro);
 }
 
-/*=================== shadow dialog ok ==========================*/
 void KPresenterView::shadowOk()
 {
     KMacroCommand *macro=0L;
@@ -3986,21 +3823,17 @@ void KPresenterView::shadowOk()
         kPresenterDoc()->addCommand(macro);
 }
 
-/*================================================================*/
 void KPresenterView::psvClosed()
 {
     QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     presStructView = 0;
 }
 
-
-/*================================================================*/
 unsigned int KPresenterView::getCurrPgNum() const
 {
     return currPg + 1;
 }
 
-/*================== scroll horizontal ===========================*/
 void KPresenterView::scrollH( int value )
 {
     if ( !presStarted ) {
@@ -4010,7 +3843,6 @@ void KPresenterView::scrollH( int value )
     }
 }
 
-/*===================== scroll vertical ==========================*/
 void KPresenterView::scrollV( int value )
 {
     if ( !presStarted ) {
@@ -4020,7 +3852,6 @@ void KPresenterView::scrollV( int value )
     }
 }
 
-/*====================== font changed ===========================*/
 void KPresenterView::fontChanged( const QFont &font )
 {
     tbFont.setFamily( font.family() );
@@ -4036,7 +3867,6 @@ void KPresenterView::fontChanged( const QFont &font )
     actionTextUnderline->setChecked( tbFont.underline() );
 }
 
-/*====================== color changed ==========================*/
 void KPresenterView::colorChanged( const QColor &color )
 {
     tbColor = color;
@@ -4044,7 +3874,6 @@ void KPresenterView::colorChanged( const QColor &color )
     actionTextColor->setCurrentColor( tbColor );
 }
 
-/*====================== align changed ==========================*/
 void KPresenterView::alignChanged( int align )
 {
     if ( align != tbAlign ) {
@@ -4070,7 +3899,6 @@ void KPresenterView::alignChanged( int align )
     }
 }
 
-/*====================== change pciture =========================*/
 void KPresenterView::changePicture( const QString & filename )
 {
     QStringList mimetypes;
@@ -4084,15 +3912,14 @@ void KPresenterView::changePicture( const QString & filename )
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
-      url = fd.selectedURL();
+        url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid())
-      return;
+        return;
 
     m_canvas->changePicture( url );
 }
 
-/*====================== resize event ===========================*/
 void KPresenterView::resizeEvent( QResizeEvent *e )
 {
     if ( !presStarted )
@@ -4148,7 +3975,7 @@ void KPresenterView::reorganize()
                 statusBar()->hide();
         }
 
-	setRanges();
+        setRanges();
     }
     else
     {
@@ -4185,37 +4012,31 @@ void PageBase::resizeEvent( QResizeEvent *e )
     view->reorganize();
 }
 
-/*===============================================================*/
 void KPresenterView::dragEnterEvent( QDragEnterEvent *e )
 {
     QApplication::sendEvent( m_canvas, e );
 }
 
-/*===============================================================*/
 void KPresenterView::dragMoveEvent( QDragMoveEvent *e )
 {
     QApplication::sendEvent( m_canvas, e );
 }
 
-/*===============================================================*/
 void KPresenterView::dragLeaveEvent( QDragLeaveEvent *e )
 {
     QApplication::sendEvent( m_canvas, e );
 }
 
-/*===============================================================*/
 void KPresenterView::dropEvent( QDropEvent *e )
 {
     QApplication::sendEvent( m_canvas, e );
 }
 
-/*===============================================================*/
 void KPresenterView::getPageMouseWheelEvent( QWheelEvent *e )
 {
     QApplication::sendEvent( vert, e );
 }
 
-/*======================= key press event =======================*/
 void KPresenterView::keyPressEvent( QKeyEvent *e )
 {
     if ( e->key() == Key_Delete && !m_canvas->currentTextObjectView() )
@@ -4224,7 +4045,6 @@ void KPresenterView::keyPressEvent( QKeyEvent *e )
         QApplication::sendEvent( m_canvas, e );
 }
 
-/*====================== do automatic screenpresentation ========*/
 void KPresenterView::doAutomaticScreenPres()
 {
     if ( exitPres ) // A user pushed Escape key or clicked "Exit presentation" menu.
@@ -4278,7 +4098,6 @@ void KPresenterView::updateReadWrite( bool readwrite )
 
 }
 
-/*======================== setup popup menus ===================*/
 void KPresenterView::setupPopupMenus()
 {
     QPixmap pixmap;
@@ -4417,7 +4236,6 @@ void KPresenterView::setupPopupMenus()
     actionToolsClosedLinePopup->insert(actionToolsClosedCubicBezierCurve);
 }
 
-/*======================= setup scrollbars =====================*/
 void KPresenterView::setupScrollbars()
 {
     vert = new QScrollBar( QScrollBar::Vertical, pageBase );
@@ -4442,7 +4260,6 @@ void KPresenterView::setupScrollbars()
     connect( pgPrev, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
 }
 
-/*==============================================================*/
 void KPresenterView::setupRulers()
 {
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
@@ -4460,15 +4277,15 @@ void KPresenterView::setupRulers()
     v_ruler->setGeometry( 0, 20, 20, m_canvas->height() );
 
     QObject::connect( h_ruler, SIGNAL( unitChanged( QString ) ),
-		      this, SLOT( unitChanged( QString ) ) );
+                      this, SLOT( unitChanged( QString ) ) );
     QObject::connect( h_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
-		      this, SLOT( newPageLayout( KoPageLayout ) ) );
+                      this, SLOT( newPageLayout( KoPageLayout ) ) );
 
     QObject::connect( h_ruler, SIGNAL( addHelpline( const QPoint &, bool ) ),
-		      this, SLOT( addHelpline( const QPoint &, bool ) ) );
+                      this, SLOT( addHelpline( const QPoint &, bool ) ) );
 
     QObject::connect( h_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
-		      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
+                      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
 
 
     connect( h_ruler, SIGNAL( doubleClicked() ), this,
@@ -4477,31 +4294,28 @@ void KPresenterView::setupRulers()
              SLOT( slotHRulerDoubleClicked(double) ) );
 
     QObject::connect( v_ruler, SIGNAL( unitChanged( QString ) ),
-		      this, SLOT( unitChanged( QString ) ) );
+                      this, SLOT( unitChanged( QString ) ) );
     QObject::connect( v_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
-		      this, SLOT( newPageLayout( KoPageLayout ) ) );
+                      this, SLOT( newPageLayout( KoPageLayout ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
-		      this, SLOT( openPageLayoutDia() ) );
+                      this, SLOT( openPageLayoutDia() ) );
 
     QObject::connect( v_ruler, SIGNAL( addHelpline(const QPoint &, bool ) ),
-		      this, SLOT( addHelpline( const QPoint &, bool ) ) );
+                      this, SLOT( addHelpline( const QPoint &, bool ) ) );
 
     QObject::connect( v_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
-		      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
-
+                      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
 
     connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
     connect( h_ruler, SIGNAL( newRightIndent( double ) ), this, SLOT( newRightIndent( double ) ) );
 }
 
-/*==============================================================*/
 void KPresenterView::unitChanged( QString u )
 {
     m_pKPresenterDoc->setUnit(KoUnit::unit( u ) );
 }
 
-/*===================== set ranges of scrollbars ===============*/
 void KPresenterView::setRanges()
 {
     if ( vert && horz && m_canvas && m_pKPresenterDoc ) {
@@ -4512,7 +4326,6 @@ void KPresenterView::setRanges()
     }
 }
 
-/*==============================================================*/
 void KPresenterView::skipToPage( int num )
 {
     if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 /*|| m_pKPresenterDoc->isEmbedded()*/ || !m_canvas )
@@ -4586,14 +4399,12 @@ void KPresenterView::refreshPageButton()
     actionScreenNext->setEnabled(state);
 }
 
-/*==============================================================*/
 void KPresenterView::makeRectVisible( QRect _rect )
 {
     horz->setValue( _rect.x() );
     vert->setValue( _rect.y() );
 }
 
-/*==============================================================*/
 void KPresenterView::restartPresStructView()
 {
     delete presStructView;
@@ -4610,7 +4421,6 @@ void KPresenterView::restartPresStructView()
     presStructView = 0;
 }
 
-/*==============================================================*/
 void KPresenterView::setTool( ToolEditMode toolEditMode )
 {
     switch ( toolEditMode ) {
@@ -4655,62 +4465,52 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
     }
 }
 
-/*================================================================*/
 void KPresenterView::setRulerMouseShow( bool _show )
 {
     v_ruler->showMousePos( _show );
     h_ruler->showMousePos( _show );
 }
 
-/*================================================================*/
 void KPresenterView::setRulerMousePos( int mx, int my )
 {
     v_ruler->setMousePos( mx, my );
     h_ruler->setMousePos( mx, my );
 }
 
-/*================================================================*/
 void KPresenterView::enableWebPres()
 {
 }
 
-/*================================================================*/
 bool KPresenterView::doubleClickActivation() const
 {
     return true;
 }
 
-/*================================================================*/
 QWidget* KPresenterView::canvas() const
 {
     return m_canvas;
 }
 
-/*================================================================*/
 int KPresenterView::canvasXOffset() const
 {
     return m_canvas->diffx();
 }
 
-/*================================================================*/
 int KPresenterView::canvasYOffset() const
 {
     return m_canvas->diffy();
 }
 
-/*================================================================*/
 void KPresenterView::setCanvasXOffset( int _x )
 {
     m_canvas->setDiffX( _x );
 }
 
-/*================================================================*/
 void KPresenterView::setCanvasYOffset( int _y )
 {
     m_canvas->setDiffY( _y );
 }
 
-/*================================================================*/
 int KPresenterView::getCurrentPresPage() const
 {
     if ( !presStarted )
@@ -4719,7 +4519,6 @@ int KPresenterView::getCurrentPresPage() const
     return m_canvas->presPage();
 }
 
-/*================================================================*/
 int KPresenterView::getCurrentPresStep() const
 {
     if ( !presStarted )
@@ -4728,7 +4527,6 @@ int KPresenterView::getCurrentPresStep() const
     return m_canvas->presStep();
 }
 
-/*================================================================*/
 int KPresenterView::getPresStepsOfPage() const
 {
     if ( !presStarted )
@@ -4737,7 +4535,6 @@ int KPresenterView::getPresStepsOfPage() const
     return m_canvas->numPresSteps();
 }
 
-/*================================================================*/
 int KPresenterView::getNumPresPages() const
 {
     if ( !presStarted )
@@ -4746,7 +4543,6 @@ int KPresenterView::getNumPresPages() const
     return m_canvas->numPresPages();
 }
 
-/*================================================================*/
 float KPresenterView::getCurrentFaktor() const
 {
     if ( !presStarted )
@@ -4755,7 +4551,6 @@ float KPresenterView::getCurrentFaktor() const
     return m_canvas->presFakt();
 }
 
-/*================================================================*/
 bool KPresenterView::gotoPresPage( int pg )
 {
     if ( !presStarted )
@@ -4832,13 +4627,13 @@ void KPresenterView::removeSideBarItem( int pos )
 
 void KPresenterView::updatePageInfo()
 {
-  if (m_sbPageLabel)
+    if (m_sbPageLabel)
     {
-      //m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
-      m_sbPageLabel->setText( QString(" ")+i18n("Slide %1/%2").arg(getCurrPgNum()).arg(m_pKPresenterDoc->getPageNums())+' ' );
+        //m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
+        m_sbPageLabel->setText( QString(" ")+i18n("Slide %1/%2").arg(getCurrPgNum()).arg(m_pKPresenterDoc->getPageNums())+' ' );
 
     }
-  //slotUpdateRuler();
+    //slotUpdateRuler();
 }
 
 void KPresenterView::updateObjectStatusBarItem()
@@ -5222,9 +5017,7 @@ void KPresenterView::extraSpelling()
         KoTextCursor start = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard );
         m_spell.selectionStartPos =start.index();
         for ( int i = 0 ; i < start.parag()->paragId(); i++)
-        {
             m_spell.selectionStartPos += start.parag()->document()->paragAt( i )->string()->length();
-        }
         kdDebug()<<" m_spell.selectionStartPos after :"<<m_spell.selectionStartPos<<endl;
 
     }
@@ -5300,7 +5093,8 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
     QObject::connect( m_spell.kospell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
-    QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
+    QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &, const QString & )),
+                      this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
      spellCheckerReady();
 #else
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
@@ -5310,7 +5104,8 @@ void KPresenterView::startKSpell()
         m_pKPresenterDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
 
     }
-    m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
+    m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ),
+                                 this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
 
 
     m_spell.kspell->setIgnoreUpperWords(m_pKPresenterDoc->dontCheckUpperWord());
@@ -5326,7 +5121,8 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
-    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
+    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &, const QString & )),
+                      this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
 #endif
 }
 
@@ -5484,7 +5280,7 @@ void KPresenterView::spellCheckerDone( const QString & )
             delete m_spell.kospell;
             m_spell.kospell = 0;
 #endif
-             clearSpellChecker();
+            clearSpellChecker();
         }
         else
         {
@@ -5521,13 +5317,9 @@ void KPresenterView::spellCheckerFinished()
     delete m_spell.kspell;
     m_spell.kspell = 0;
     if (status == KSpell::Error)
-    {
         kspellNoConfigured=true;
-    }
     else if (status == KSpell::Crashed)
-    {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
-    }
 #endif
     KPTextObject * textobj = 0L;
     if( m_spell.spellCurrTextObjNum!=-1 )
@@ -5799,9 +5591,7 @@ void KPresenterView::refreshCustomMenu()
     for (; it2 != end; ++it2 )
     {
         if ( !(*it2)->shortcut().toString().isEmpty())
-        {
             shortCut.insert((*it2)->text(), KShortcut( (*it2)->shortcut()));
-        }
         delete *it2;
     }
 
@@ -5831,7 +5621,7 @@ void KPresenterView::refreshCustomMenu()
 
                  if ( shortCut.contains( varName ))
                  {
-                     act = new KAction( varName, (shortCut)[varName], this, SLOT( insertCustomVariable() ),actionCollection(), name );
+                     act = new KAction( varName, (shortCut)[varName], this, SLOT( insertCustomVariable() ), actionCollection(), name );
                  }
                  else
                      act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
@@ -5847,7 +5637,8 @@ void KPresenterView::refreshCustomMenu()
     if(state)
         actionInsertCustom->popupMenu()->insertSeparator();
 
-    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), QString("custom-action_%1").arg(i).latin1() );
+    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(),
+                       QString("custom-action_%1").arg(i).latin1() );
     act->setGroup( "custom-variable-action" );
     actionInsertCustom->insert( act );
 
@@ -5890,7 +5681,8 @@ void KPresenterView::editCustomVariable()
             {
                 if( var->value() != oldvalue )
                 {
-                    KPrChangeCustomVariableValue *cmd=new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_pKPresenterDoc, oldvalue, var->value(), var );
+                    KPrChangeCustomVariableValue *cmd=new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ),
+                                                                                       m_pKPresenterDoc, oldvalue, var->value(), var );
                     m_pKPresenterDoc->addCommand(cmd);
                 }
                 m_pKPresenterDoc->recalcVariables( VT_CUSTOM );
@@ -5924,7 +5716,11 @@ void KPresenterView::editCustomVars()
                 {
                     if(!macroCommand)
                         macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
-                    KPrChangeCustomVariableValue *cmd=new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_pKPresenterDoc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
+                    KPrChangeCustomVariableValue *cmd=
+                        new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ), m_pKPresenterDoc,
+                                                         *(listOldCustomValue.at(i)),
+                                                         ((KoCustomVariable*)it.current())->value(),
+                                                         ((KoCustomVariable*)it.current()));
                     macroCommand->addCommand(cmd);
                 }
                 i++;
@@ -6366,7 +6162,6 @@ void KPresenterView::openThePresentationDurationDialog()
     presDurationDia = 0;
 }
 
-/*================================================================*/
 void KPresenterView::pddClosed()
 {
     presDurationDia = 0;
@@ -6389,29 +6184,28 @@ void KPresenterView::viewFooter()
 {
     bool state=actionViewFooter->isChecked();
     m_pKPresenterDoc->setFooter( state );
-    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header"):i18n("Hide Header") , m_pKPresenterDoc, state ,m_pKPresenterDoc->footer());
+    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header") : i18n("Hide Header"),
+                                                                m_pKPresenterDoc, state, m_pKPresenterDoc->footer());
     m_pKPresenterDoc->addCommand(cmd);
     if ( m_pKPresenterDoc->refreshSideBar())
     {
         int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
         m_pKPresenterDoc->updateSideBarItem(pos,  true/*sticky page*/ );
     }
-
-
 }
 
 void KPresenterView::viewHeader()
 {
     bool state=actionViewHeader->isChecked();
     m_pKPresenterDoc->setHeader( state);
-    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer"):i18n("Hide Footer") , m_pKPresenterDoc,state ,m_pKPresenterDoc->header());
+    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer") : i18n("Hide Footer"),
+                                                                m_pKPresenterDoc, state, m_pKPresenterDoc->header());
     m_pKPresenterDoc->addCommand(cmd);
     if ( m_pKPresenterDoc->refreshSideBar())
     {
         int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
         m_pKPresenterDoc->updateSideBarItem(pos,  true/*sticky page*/ );
     }
-
 }
 
 
@@ -6526,8 +6320,6 @@ void KPresenterView::slotStyleSelected()
         kdDebug(33001) << "KPresenterView::slotStyleSelected " << actionName << endl;
         textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyleShortCut( actionName) );
     }
-
-
 }
 
 void KPresenterView::textStyleSelected( int index )
@@ -6605,9 +6397,7 @@ void KPresenterView::insertComment()
 
     KoCommentDia *commentDia = new KoCommentDia( this, QString::null,authorName );
     if( commentDia->exec() )
-    {
         edit->insertComment(commentDia->commentText());
-    }
     delete commentDia;
 }
 
@@ -6629,9 +6419,7 @@ void KPresenterView::editComment()
                 authorName = authorPage->fullName();
             KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
             if( commentDia->exec() )
-            {
                 var->setNote( commentDia->commentText());
-            }
             delete commentDia;
         }
     }
@@ -6946,7 +6734,6 @@ void KPresenterView::zoomSelectedObject()
 
         m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
-
     }
 }
 
@@ -7063,13 +6850,9 @@ void KPresenterView::slotObjectEditChanged()
             KPObject *obj=m_canvas->getSelectedObj();
             //disable this action when we select a header/footer
             if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
-            {
                 headerfooterselected=true;
-            }
             else
-            {
                 headerfooterselected=false;
-            }
         }
 
         actionEditCut->setEnabled(state&&!headerfooterselected);
@@ -7144,10 +6927,9 @@ void KPresenterView::applyAutoFormat()
     QPtrList<KoTextObject> list=m_canvas->activePage()->allTextObjects();
     QPtrList<KoTextObject> list2=stickyPage()->allTextObjects();
     QPtrListIterator<KoTextObject> it( list2 );
+
     for ( ; it.current() ; ++it )
-    {
         list.append(it.current());
-    }
 
     KCommand * cmd2 = applyAutoFormatToCurrentPage( list );
     if ( cmd2 )
@@ -7247,9 +7029,7 @@ void KPresenterView::viewSnapToGrid()
 void KPresenterView::alignVerticalTop()
 {
     if ( actionAlignVerticalTop->isChecked() )
-    {
         m_canvas->alignVertical(KP_TOP );
-    }
     else
         actionAlignVerticalTop->setChecked(true);
 }
@@ -7257,9 +7037,7 @@ void KPresenterView::alignVerticalTop()
 void KPresenterView::alignVerticalBottom()
 {
     if ( actionAlignVerticalBottom->isChecked() )
-    {
         m_canvas->alignVertical(KP_BOTTOM );
-    }
     else
         actionAlignVerticalBottom->setChecked(true);
 }
@@ -7267,9 +7045,7 @@ void KPresenterView::alignVerticalBottom()
 void KPresenterView::alignVerticalCenter()
 {
     if ( actionAlignVerticalCenter->isChecked() )
-    {
         m_canvas->alignVertical(KP_CENTER );
-    }
     else
         actionAlignVerticalCenter->setChecked(true);
 }
@@ -7452,9 +7228,7 @@ void KPresenterView::addToBookmark()
     {
         KoLinkVariable * var=edit->linkVariable();
         if(var)
-        {
             edit->addBookmarks(var->url());
-        }
     }
 }
 
@@ -7553,7 +7327,7 @@ QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
 {
 #ifdef HAVE_LIBASPELL
     KOSpell *tmpSpell = new KOSpell( m_pKPresenterDoc->getKOSpellConfig());
-    QStringList lst = tmpSpell->resultCheckWord(word );
+    QStringList lst = tmpSpell->resultCheckWord(word);
     delete tmpSpell;
     QPtrList<KAction> listAction=QPtrList<KAction>();
     if ( !lst.contains( word ))
@@ -7564,14 +7338,14 @@ QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
             {
                 KAction * act = new KAction( (*it));
-                connect( act, SIGNAL(activated()),this, SLOT(slotCorrectWord()) );
+                connect( act, SIGNAL(activated()), this, SLOT(slotCorrectWord()) );
                 listAction.append( act );
             }
         }
     }
     return listAction;
 #endif
-
+    Q_UNUSED(word);
     return QPtrList<KAction>();
 }
 
@@ -7582,7 +7356,9 @@ void KPresenterView::slotCorrectWord()
     if ( edit )
     {
         edit->selectWordUnderCursor( *(edit->cursor()) );
-        m_pKPresenterDoc->addCommand( edit->textObject()->replaceSelectionCommand( edit->cursor(), act->text(), KoTextDocument::Standard, i18n("Replace Word") ));
+        m_pKPresenterDoc->addCommand(edit->textObject()->replaceSelectionCommand(
+                                         edit->cursor(), act->text(),
+                                         KoTextDocument::Standard, i18n("Replace Word") ));
     }
 
 }
