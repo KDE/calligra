@@ -391,6 +391,8 @@ void KSpreadSortDlg::slotOrientationChanged(int id)
 
 void KSpreadSortDlg::slotOk()
 {
+  m_pView->doc()->emitBeginOperation( false );
+
   KSpreadSheet * table = m_pView->doc()->map()->findTable( m_outputTable->currentText() );
   if ( !table )
   {
@@ -522,6 +524,8 @@ void KSpreadSortDlg::slotOk()
 
   delete firstKey;
   firstKey = 0L;
+
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 

@@ -2216,10 +2216,9 @@ void KSpreadView::showColumn()
 {
     if ( !m_pTable )
         return;
-    m_pDoc->emitBeginOperation(false);
-    KSpreadShowColRow dlg( this,"showCol",KSpreadShowColRow::Column);
+
+    KSpreadShowColRow dlg( this, "showCol", KSpreadShowColRow::Column );
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::showSelColumns()
@@ -2284,10 +2283,9 @@ void KSpreadView::showRow()
 {
     if ( !m_pTable )
         return;
-    m_pDoc->emitBeginOperation(false);
-    KSpreadShowColRow dlg( this,"showRow",KSpreadShowColRow::Row);
+
+    KSpreadShowColRow dlg( this, "showRow", KSpreadShowColRow::Row );
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::showSelRows()
@@ -2439,18 +2437,14 @@ void KSpreadView::formulaSelection( const QString &_math )
     if ( m_pTable == 0 )
         return;
 
-    m_pDoc->emitBeginOperation(false);
     if( _math == i18n("Others...") )
     {
         insertMathExpr();
-        m_pDoc->emitEndOperation();
         return;
     }
 
-    KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Formula Editor",_math );
+    KSpreadDlgFormula *dlg = new KSpreadDlgFormula( this, "Formula Editor", _math );
     dlg->exec();
-
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::fontSizeSelected( int _size )
@@ -2996,10 +2990,9 @@ void KSpreadView::showTable()
 {
     if ( !m_pTable )
         return;
-    m_pDoc->emitBeginOperation(false);
+
     KSpreadshow dlg( this, "Sheet show");
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::copySelection()
@@ -3067,18 +3060,18 @@ void KSpreadView::specialPaste()
     if ( !m_pTable )
         return;
 
-    m_pDoc->emitBeginOperation(false);
-
     KSpreadspecial dlg( this, "Special Paste" );
     if( dlg.exec() )
     {
       if (m_pTable->getAutoCalc())
+      {
+        m_pDoc->emitBeginOperation(false);
         m_pTable->recalc();
+        m_pDoc->emitEndOperation();
+      }
       resultOfCalc();
       updateEditWidget();
     }
-
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::removeComment()
@@ -3098,16 +3091,18 @@ void KSpreadView::changeAngle()
   if ( !m_pTable )
         return;
 
-  m_pDoc->emitBeginOperation(false);
   KSpreadAngle dlg( this, "Angle" ,
                     QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   if(dlg.exec())
   {
     if( (util_isRowSelected(selection()) == FALSE) &&
         (util_isColumnSelected(selection()) == FALSE) )
-      m_pCanvas->adjustArea(false);
+    {
+      m_pDoc->emitBeginOperation( false );
+      m_pCanvas->adjustArea( false );
+      m_pDoc->emitEndOperation();
+    }
   }
-  m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::setSelectionAngle(int angle)
@@ -3264,10 +3259,8 @@ void KSpreadView::consolidate()
 
 void KSpreadView::sortList()
 {
-  m_pDoc->emitBeginOperation(false);
   KSpreadList dlg(this,"List selection");
   dlg.exec();
-  m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::gotoCell()

@@ -20,6 +20,7 @@
 
 
 #include "kspread_dlg_showColRow.h"
+#include "kspread_doc.h"
 #include "kspread_view.h"
 #include "kspread_sheet.h"
 #include "kspread_util.h"
@@ -104,6 +105,7 @@ void KSpreadShowColRow::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadShowColRow::slotOk()
 {
+  m_pView->doc()->emitBeginOperation( false );
 
   QValueList<int>listSelected;
   for(unsigned int i=0;i<list->count();i++)
@@ -121,6 +123,8 @@ void KSpreadShowColRow::slotOk()
       if(listSelected.count()!=0)
 	m_pView->activeTable()->showRow(0,-1,listSelected);
     }
+
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 

@@ -20,6 +20,7 @@
 #include <kspread_dlg_angle.h>
 #include <kspread_cell.h>
 #include <kspread_view.h>
+#include <kspread_doc.h>
 #include <kspread_sheet.h>
 
 #include <qlayout.h>
@@ -61,7 +62,10 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
 
 void KSpreadAngle::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
     m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
+    m_pView->doc()->emitEndOperation();
+
     accept();
 }
 

@@ -108,7 +108,9 @@ void KSpreadspecial::slotOk()
     if( rb9->isChecked() )
 	op = Div;
 
+    m_pView->doc()->emitBeginOperation( false );
     m_pView->activeTable()->paste( m_pView->selection(), true, sp, op );
+    m_pView->doc()->emitEndOperation();
     accept();
 }
 

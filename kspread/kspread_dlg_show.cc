@@ -22,6 +22,7 @@
 
 #include "kspread_dlg_show.h"
 #include "kspread_view.h"
+#include "kspread_doc.h"
 #include "kspread_tabbar.h"
 #include <qlayout.h>
 #include <klocale.h>
@@ -66,6 +67,8 @@ void KSpreadshow::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadshow::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
+
     QStringList listTable;
 
     for (int i=0; i < list->numRows(); i++)
@@ -76,6 +79,8 @@ void KSpreadshow::slotOk()
         }
     }
     m_pView->tabBar()->showTable(listTable);
+
+    m_pView->doc()->emitEndOperation();
     accept();
 }
 
