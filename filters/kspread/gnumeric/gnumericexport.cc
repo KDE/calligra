@@ -679,6 +679,8 @@ void GNUMERICExport::addAttributeItem(QDomDocument gnumeric_doc, QDomElement att
 
 void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summary, const QString& name, const QString& value)
 {
+    if ( value.isEmpty() )
+        return;
     QDomElement gmr_item, gmr_name, gmr_val_string;
 
     gmr_item = gnumeric_doc.createElement("gmr:Item");
@@ -766,16 +768,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     QDomElement summary =  gnumeric_doc.createElement("gmr:Summary");
     workbook.appendChild(summary);
 
-    if ( !aboutPage->title().isEmpty() )
-        addSummaryItem(gnumeric_doc, summary, "title", aboutPage->title());
-    if ( !authorPage->company().isEmpty() )
-        addSummaryItem(gnumeric_doc, summary, "company", authorPage->company());
-    if ( !authorPage->fullName().isEmpty() )
-        addSummaryItem(gnumeric_doc, summary, "author", authorPage->fullName());
-    if ( !aboutPage->abstract().isEmpty() )
-        addSummaryItem(gnumeric_doc, summary, "comments", aboutPage->abstract());
-    if ( !aboutPage->keywords().isEmpty() )
-        addSummaryItem(gnumeric_doc, summary, "keywords", aboutPage->keywords());
+    addSummaryItem(gnumeric_doc, summary, "title", aboutPage->title());
+    addSummaryItem(gnumeric_doc, summary, "company", authorPage->company());
+    addSummaryItem(gnumeric_doc, summary, "author", authorPage->fullName());
+    addSummaryItem(gnumeric_doc, summary, "comments", aboutPage->abstract());
+    addSummaryItem(gnumeric_doc, summary, "keywords", aboutPage->keywords());
 
     addSummaryItem(gnumeric_doc, summary, "application", "KSpread");
 
