@@ -169,7 +169,7 @@ private slots:
 
 protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
-    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false );
+    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false, bool copyCustomItems = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
     QTextFormat * zoomFormatFont( const QTextFormat * f );
 
@@ -205,7 +205,6 @@ private:
 
         QValueList<KWParagLayout> oldParagLayouts;
         KWParagLayout newParagLayout;
-        QValueList< QVector<QStyleSheetItem> > oldStyles;
     };
     void checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t );
 

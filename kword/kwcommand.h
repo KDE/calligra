@@ -65,7 +65,6 @@ class KWTextDeleteCommand : public QTextDeleteCommand
 {
 public:
     KWTextDeleteCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
-                         const QValueList< QVector<QStyleSheetItem> > &os,
                          const QValueList<KWParagLayout> &oldParagLayouts );
     //KWTextDeleteCommand( QTextParag *p, int idx, const QArray<QTextStringChar> &str );
     QTextCursor *execute( QTextCursor *c );
@@ -81,9 +80,8 @@ class KWTextInsertCommand : public KWTextDeleteCommand
 {
 public:
     KWTextInsertCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
-                         const QValueList< QVector<QStyleSheetItem> > &os,
                          const QValueList<KWParagLayout> &oldParagLayouts )
-        : KWTextDeleteCommand( d, i, idx, str, os, oldParagLayouts ) {}
+        : KWTextDeleteCommand( d, i, idx, str, oldParagLayouts ) {}
     //KWTextInsertCommand( QTextParag *p, int idx, const QArray<QTextStringChar> &str )
     //    : KWTextDeleteCommand( p, idx, str ) {}
     Commands type() const { return Insert; };

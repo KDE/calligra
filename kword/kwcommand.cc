@@ -39,9 +39,11 @@ void KWTextCommand::unexecute()
 
 KWTextDeleteCommand::KWTextDeleteCommand(
     QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
-    const QValueList< QVector<QStyleSheetItem> > &os,
     const QValueList<KWParagLayout> &oldParagLayouts )
-    : QTextDeleteCommand( d, i, idx, str, os, QValueList<QStyleSheetItem::ListStyle>(), QArray<int>() )
+    : QTextDeleteCommand( d, i, idx, str,
+                          QValueList< QVector<QStyleSheetItem> >(),
+                          QValueList<QStyleSheetItem::ListStyle>(),
+                          QArray<int>() )
 {
     // Note that we don't pass aligns and liststyles to QTextDeleteCommand.
     // We'll handle them here, as part of the rest, since they are in the paraglayouts

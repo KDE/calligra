@@ -1042,7 +1042,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
         switch (type) {
             case Insert:
             case Return:
-                cmd = new KWTextInsertCommand( textdoc, id, index, text.rawData(), oldStyles, oldParagLayouts );
+                cmd = new KWTextInsertCommand( textdoc, id, index, text.rawData(), oldParagLayouts );
                 break;
             case Format:
                 cmd = new QTextFormatCommand( textdoc, id, index, eid, eindex, text.rawData(), format, flags );
@@ -1068,7 +1068,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
 	        break;
             case Delete:
             case RemoveSelected:
-                cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), oldStyles, oldParagLayouts );
+                cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), oldParagLayouts );
                 break;
             case Invalid:
                 break;
@@ -1087,7 +1087,6 @@ void KWTextFrameSet::UndoRedoInfo::clear()
     text = QString::null;
     id = -1;
     index = -1;
-    oldStyles.clear();
     oldParagLayouts.clear();
 }
 
@@ -1109,7 +1108,7 @@ bool KWTextFrameSet::UndoRedoInfo::valid() const
 }
 
 // Based on QTextView::readFormats
-void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles )
+void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles, bool copyCustomItems )
 {
     c2.restoreState();
     c1.restoreState();
@@ -1122,7 +1121,6 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
         }
         if ( fillStyles ) {
             undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(c1.parag())->createParagLayout();
-            undoRedoInfo.oldStyles << c1.parag()->styleSheetItems();
         }
     } else {
         int lastIndex = oldLen;
@@ -1156,7 +1154,6 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
             QTextParag *p = c1.parag();
             while ( p ) {
                 undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
-                undoRedoInfo.oldStyles << p->styleSheetItems();
                 if ( p == c2.parag() )
                     break;
                 p = p->next();
@@ -1278,7 +1275,6 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
 {
     undoRedoInfo.clear();
     QTextDocument * textdoc = textDocument();
-    undoRedoInfo.oldStyles.clear();
     undoRedoInfo.oldParagLayouts.clear();
     undoRedoInfo.text = " ";
     undoRedoInfo.index = 1;
@@ -1286,7 +1282,6 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
         QTextParag * p = cursor->parag();
         undoRedoInfo.id = p->paragId();
         undoRedoInfo.eid = p->paragId();
-        undoRedoInfo.oldStyles << p->styleSheetItems();
         undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
     }
     else{
@@ -1296,7 +1291,6 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
         undoRedoInfo.eid = end->paragId();
         for ( ; start && start != end->next() ; start = start->next() )
         {
-            undoRedoInfo.oldStyles << start->styleSheetItems();
             undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(start)->createParagLayout();
             //kdDebug(32001) << "KWTextFrameSet::storeParagUndoRedoInfo storing counter " << static_cast<KWTextParag*>(start)->createParagLayout().counter.counterType << endl;
         }
@@ -1537,7 +1531,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     undoRedoInfo.text = textdoc->selectedText( QTextDocument::Standard );
     QTextCursor c1 = textdoc->selectionStartCursor( QTextDocument::Standard );
     QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
-    readFormats( c1, c2, oldLen, undoRedoInfo.text, TRUE );
+    readFormats( c1, c2, oldLen, undoRedoInfo.text, true, true );
     textdoc->removeSelectedText( QTextDocument::Standard, cursor );
     ensureCursorVisible();
     setLastFormattedParag( cursor->parag() );
