@@ -85,6 +85,10 @@ k_dcop:
     void setConfigSplitCellRows( unsigned int _nb );
     void setConfigSplitCellCols( unsigned int _nb );
 
+    //it can return QString::null if there is any template selected
+    QString configTableTemplateName() const;
+    void setConfigTableTemplateName(const QString &_name);
+
     //return false if there is no frame in document
     bool selectAllFrames();
     bool unSelectAllFrames();

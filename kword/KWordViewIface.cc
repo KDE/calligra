@@ -261,6 +261,16 @@ int KWordViewIface::configSplitCellCols() const
     return (int)view->getGUI()->canvasWidget()->splitCellCols();
 }
 
+QString KWordViewIface::configTableTemplateName() const
+{
+    return view->getGUI()->canvasWidget()->tableTemplateName();
+}
+
+void KWordViewIface::setConfigTableTemplateName(const QString &_name)
+{
+    view->getGUI()->canvasWidget()->setTableTemplateName( _name );
+}
+
 bool KWordViewIface::selectAllFrames()
 {
     return view->getGUI()->canvasWidget()->selectAllFrames(true);
