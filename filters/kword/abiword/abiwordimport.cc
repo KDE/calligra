@@ -1795,9 +1795,15 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
+    if ( !in )
+    {
+        kdError(30506) << "Cannot create device for uncompressing! Aborting!" << endl;
+        return KoFilter::FileNotFound; // ### TODO: better error?
+    }
+    
     if (!in->open(IO_ReadOnly))
     {
-        kdError(30506) << "Cannot open file! Aborting!" << endl;
+        kdError(30506) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
