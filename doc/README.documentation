@@ -12,6 +12,7 @@ Frank Schmidt <Frank-Andreas.Schmidt@sig.siemens.de>
 Jost Schenck <uzsnty@uni-bonn.de>
 Daniel Bungert <drb210@psu.edu>
 Axel Rueweler <axel@rsfvs.schulen-gt.de>
+Pam Roberts <pamroberts@blueyonder.co.uk>
 
 [add yourself here]
 --------------------------------------------------------------
@@ -19,7 +20,7 @@ Tasks:
 KWord		Mike; german transl. Axel
 KPresenter	Krishna
 KIllustrator	Hagen Hoepfner (German version, right now doesn't have time)
-KSpread		Frank
+KSpread		Pam
 KChart		
 KImage		Daniel
 KImageShop
@@ -37,6 +38,7 @@ What if I haven't got CVS access?
 Send it to Mike or Jost. We'll check it in for you. BTW, please
 send us only the parts of the documentation you've written/changed
 as this makes it easier for us to merge your work with our work.
+
 
 
 
