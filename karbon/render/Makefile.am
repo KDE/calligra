@@ -19,6 +19,7 @@ noinst_HEADERS = \
 	art_render_misc.h \
 	art_rgb_svp.h \
 	art_rgb.h \
+	art_rgba_affine.h \
 	vkopainter.h
 
 libvpainter_la_SOURCES = \
@@ -28,6 +29,7 @@ libvpainter_la_SOURCES = \
 	art_render_misc.c \
 	art_rgb_svp.c \
 	art_rgb.c \
+	art_rgba_affine.cc \
 	vkopainter.cc
 
 libvpainter_la_METASOURCES = \

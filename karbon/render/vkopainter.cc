@@ -43,7 +43,7 @@
 #include <libart_lgpl/art_rect_svp.h>
 #include <libart_lgpl/art_pathcode.h>
 #include <libart_lgpl/art_vpath_dash.h>
-#include <libart_lgpl/art_rgb_affine.h>
+#include "art_rgba_affine.h"
 #include "art_render_misc.h"
 #include <libart_lgpl/art_render_svp.h>
 
@@ -899,9 +899,9 @@ VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 	affineresult[3] = m_zoomFactor / affine.m22();
 	affineresult[4] = m_matrix.dx() + affine.dx();
 	affineresult[5] = m_matrix.dy() - affine.dy() - image.height();
-	art_rgb_affine(	m_buffer, 0, 0, m_width, m_height, m_width * 4,
-					image.bits(), image.width(), image.height(), image.width() * 4,
-					affineresult, ART_FILTER_NEAREST, 0L );
+	art_rgba_affine( m_buffer, 0, 0, m_width, m_height, m_width * 4,
+					 image.bits(), image.width(), image.height(), image.width() * 4,
+					 affineresult, ART_FILTER_NEAREST, 0L );
 }
 
 void
