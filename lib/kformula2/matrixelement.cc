@@ -392,11 +392,23 @@ void MatrixElement::goInside(FormulaCursor* cursor)
 
 
 // If there is a main child we must provide the insert/remove semantics.
-// SequenceElement* MatrixElement::getMainChild()
-// {
-//     return content.at(0)->at(0);
-// }
+SequenceElement* MatrixElement::getMainChild()
+{
+    return content.at(0)->at(0);
+}
 
+void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
+{
+    uint rows = getRows();
+    uint columns = getColumns();
+    for (uint r = 0; r < rows; r++) {
+        for (uint c = 0; c < columns; c++) {
+            if (child == getElement(r, c)) {
+                cursor->setTo(this, r*columns+c);
+            }
+        }
+    }
+}
 
 bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column)
 {

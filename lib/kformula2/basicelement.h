@@ -215,7 +215,7 @@ public:
     // If an element has children one has to become the main one.
     
     virtual SequenceElement* getMainChild() { return 0; }
-    virtual void setMainChild(SequenceElement*) {}
+    //virtual void setMainChild(SequenceElement*) {}
     
 
     // editing

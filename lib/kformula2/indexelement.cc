@@ -629,13 +629,13 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 //
 // If an element has children one has to become the main one.
 
-void IndexElement::setMainChild(SequenceElement* child)
-{
-    formula()->elementRemoval(content);
-    content = child;
-    content->setParent(this);
-    formula()->changed();
-}
+// void IndexElement::setMainChild(SequenceElement* child)
+// {
+//     formula()->elementRemoval(content);
+//     content = child;
+//     content->setParent(this);
+//     formula()->changed();
+// }
 
 
 /**

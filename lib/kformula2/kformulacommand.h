@@ -240,6 +240,12 @@ public:
     virtual void execute();
     virtual void unexecute();
 
+    /**
+     * A command might have no effect.
+     * @returns true if nothing happened.
+     */
+    virtual bool isSenseless() { return removedList.isEmpty(); }
+    
 private:
 
     /**

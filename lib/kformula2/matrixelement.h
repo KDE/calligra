@@ -112,7 +112,13 @@ public:
      * We define the Main Child of a matrix to be the first row/column.
      **/
     // If there is a main child we must provide the insert/remove semantics.
-    //virtual SequenceElement* getMainChild();
+    virtual SequenceElement* getMainChild();
+
+    /**
+     * Sets the cursor to select the child. The mark is placed before,
+     * the position behind it.
+     */
+    virtual void selectChild(FormulaCursor*, BasicElement*);
 
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);

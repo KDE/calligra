@@ -311,13 +311,13 @@ SequenceElement* FractionElement::getMainChild()
     return numerator;
 }
 
-void FractionElement::setMainChild(SequenceElement* child)
-{
-    formula()->elementRemoval(numerator);
-    numerator = child;
-    numerator->setParent(this);
-    formula()->changed();
-}
+// void FractionElement::setMainChild(SequenceElement* child)
+// {
+//     formula()->elementRemoval(numerator);
+//     numerator = child;
+//     numerator->setParent(this);
+//     formula()->changed();
+// }
 
 
 /**

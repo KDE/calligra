@@ -357,13 +357,13 @@ SequenceElement* RootElement::getMainChild()
     return content;
 }
 
-void RootElement::setMainChild(SequenceElement* child)
-{
-    formula()->elementRemoval(content);
-    content = child;
-    content->setParent(this);
-    formula()->changed();
-}
+// void RootElement::setMainChild(SequenceElement* child)
+// {
+//     formula()->elementRemoval(content);
+//     content = child;
+//     content->setParent(this);
+//     formula()->changed();
+// }
 
 
 /**

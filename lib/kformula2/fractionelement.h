@@ -111,7 +111,7 @@ public:
     // If an element has children one has to become the main one.
     
     virtual SequenceElement* getMainChild();
-    virtual void setMainChild(SequenceElement*);
+    //virtual void setMainChild(SequenceElement*);
 
     /**
      * Returns wether the element has no more useful
