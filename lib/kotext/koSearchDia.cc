@@ -464,6 +464,12 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
             if (format->color() != m_searchContext->m_color)
                 return false;
         }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::BgColor)
+        {
+            if (format->textBackgroundColor() != m_searchContext->m_backGroungColor)
+                return false;
+        }
+
         if ( m_searchContext->m_optionsMask & KoSearchContext::Italic)
         {
             if ( (!format->font().italic() && (m_searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((m_searchContext->m_options & KoSearchContext::Italic)==0)))
@@ -475,6 +481,18 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
             if ( (!format->font().underline() && (m_searchContext->m_options & KoSearchContext::Underline)) || (format->font().underline() && ((m_searchContext->m_options & KoSearchContext::Underline)==0)))
                 return false;
         }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
+        {
+            if ( (!format->font().strikeOut() && (m_searchContext->m_options & KoSearchContext::StrikeOut)) || (format->font().strikeOut() && ((m_searchContext->m_options & KoSearchContext::StrikeOut)==0)))
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
+        {
+            if ( (!format->doubleUnderline() && (m_searchContext->m_options & KoSearchContext::DoubleUnderLine)) || (format->doubleUnderline() && ((m_searchContext->m_options & KoSearchContext::DoubleUnderLine)==0)))
+                return false;
+        }
+
+
         if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
         {
             if ( format->vAlign() != m_searchContext->m_vertAlign )
@@ -525,6 +543,12 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
             if (format->color() != m_searchContext->m_color)
                 return false;
         }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::BgColor)
+        {
+            if (format->textBackgroundColor() != m_searchContext->m_backGroungColor)
+                return false;
+        }
+
         if ( m_searchContext->m_optionsMask & KoSearchContext::Italic)
         {
             if ( (!format->font().italic() && (m_searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((m_searchContext->m_options & KoSearchContext::Italic)==0)))
@@ -536,6 +560,17 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
             if ( (!format->font().underline() && (m_searchContext->m_options & KoSearchContext::Underline)) || (format->font().underline() && ((m_searchContext->m_options & KoSearchContext::Underline)==0)))
                 return false;
         }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
+        {
+            if ( (!format->font().strikeOut() && (m_searchContext->m_options & KoSearchContext::StrikeOut)) || (format->font().strikeOut() && ((m_searchContext->m_options & KoSearchContext::StrikeOut)==0)))
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
+        {
+            if ( (!format->doubleUnderline() && (m_searchContext->m_options & KoSearchContext::DoubleUnderLine)) || (format->doubleUnderline() && ((m_searchContext->m_options & KoSearchContext::DoubleUnderLine)==0)))
+                return false;
+        }
+
         if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
         {
             if ( format->vAlign() != m_searchContext->m_vertAlign )
@@ -554,13 +589,18 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QGridLayout *m_grid = new QGridLayout( page, 7, 2, 0, 6 );
+    QGridLayout *m_grid = new QGridLayout( page, 10, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size" ), page );
     m_checkColor = new QCheckBox( i18n( "Color" ), page );
+    m_checkBgColor = new QCheckBox( i18n( "BackGroundColor" ), page );
     m_checkBold = new QCheckBox( i18n( "Bold" ), page );
     m_checkItalic = new QCheckBox( i18n( "Italic" ),page );
     m_checkUnderline = new QCheckBox( i18n( "Underline" ), page);
+    m_checkStrikeOut = new QCheckBox( i18n( "StrikeOut" ), page);
+    m_checkDoubleLine = new QCheckBox( i18n( "Double Underline" ), page);
+
+
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), page );
 
     m_familyItem = new QComboBox( true, page );
@@ -578,9 +618,16 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_colorItem = new KColorButton( page );
     m_colorItem->setColor( m_ctx->m_color );
 
+    m_bgColorItem = new KColorButton( page );
+    m_bgColorItem->setColor( m_ctx->m_backGroungColor);
+
+
     m_boldItem = new QCheckBox( i18n( "Bold" ), page );
     m_italicItem = new QCheckBox( i18n( "Italic" ), page );
     m_underlineItem = new QCheckBox( i18n( "Underline" ),page  );
+    m_strikeOutItem = new QCheckBox( i18n( "StrikeOut" ),page  );
+    m_doubleLineItem = new QCheckBox( i18n( "Double Underline" ),page  );
+
 
     m_vertAlignItem = new QComboBox( false, page );
     m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
@@ -591,25 +638,36 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_grid->addWidget( m_checkFamily, 1, 0 );
     m_grid->addWidget( m_checkSize, 2, 0 );
     m_grid->addWidget( m_checkColor, 3, 0 );
-    m_grid->addWidget( m_checkBold, 4, 0 );
-    m_grid->addWidget( m_checkItalic, 5, 0 );
-    m_grid->addWidget( m_checkUnderline, 6, 0 );
-    m_grid->addWidget( m_checkVertAlign, 7, 0 );
+    m_grid->addWidget( m_checkBgColor, 4, 0);
+    m_grid->addWidget( m_checkBold, 5, 0 );
+    m_grid->addWidget( m_checkItalic, 6, 0 );
+    m_grid->addWidget( m_checkUnderline, 7, 0 );
+    m_grid->addWidget( m_checkStrikeOut, 8, 0 );
+    m_grid->addWidget( m_checkDoubleLine, 9, 0 );
+    m_grid->addWidget( m_checkVertAlign, 10, 0 );
+
     m_grid->addWidget( m_familyItem, 1, 1 );
     m_grid->addWidget( m_sizeItem, 2, 1 );
     m_grid->addWidget( m_colorItem, 3, 1 );
-    m_grid->addWidget( m_boldItem, 4, 1 );
-    m_grid->addWidget( m_italicItem, 5, 1 );
-    m_grid->addWidget( m_underlineItem, 6, 1 );
-    m_grid->addWidget( m_vertAlignItem, 7, 1 );
+    m_grid->addWidget( m_bgColorItem, 4, 1);
+    m_grid->addWidget( m_boldItem, 5, 1 );
+    m_grid->addWidget( m_italicItem, 6, 1 );
+    m_grid->addWidget( m_underlineItem, 7, 1 );
+    m_grid->addWidget( m_strikeOutItem, 8, 1 );
+    m_grid->addWidget( m_doubleLineItem, 9, 1 );
+    m_grid->addWidget( m_vertAlignItem, 10, 1 );
 
     // signals and slots connections
     QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkSize, SIGNAL( toggled( bool ) ), m_sizeItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkColor, SIGNAL( toggled( bool ) ), m_colorItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkBgColor, SIGNAL( toggled( bool ) ), m_bgColorItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineItem, SLOT( setEnabled( bool ) ) );
+
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
 
     m_checkFamily->setChecked( m_ctx->m_optionsMask & KoSearchContext::Family );
@@ -621,8 +679,19 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_checkColor->setChecked( m_ctx->m_optionsMask & KoSearchContext::Color );
     m_colorItem->setEnabled(m_checkColor->isChecked());
 
+    m_checkBgColor->setChecked( m_ctx->m_optionsMask & KoSearchContext::BgColor );
+    m_bgColorItem->setEnabled(m_checkBgColor->isChecked());
+
+
     m_checkBold->setChecked( m_ctx->m_optionsMask & KoSearchContext::Bold );
     m_boldItem->setEnabled(m_checkBold->isChecked());
+
+    m_checkStrikeOut->setChecked( m_ctx->m_optionsMask & KoSearchContext::StrikeOut );
+
+    m_strikeOutItem->setEnabled( m_checkStrikeOut->isChecked());
+
+    m_checkDoubleLine->setChecked( m_ctx->m_optionsMask & KoSearchContext::DoubleUnderLine );
+    m_doubleLineItem->setEnabled( m_checkDoubleLine->isChecked());
 
     m_checkItalic->setChecked( m_ctx->m_optionsMask & KoSearchContext::Italic );
     m_italicItem->setEnabled(m_checkItalic->isChecked());
@@ -636,6 +705,9 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_boldItem->setChecked( m_ctx->m_options & KoSearchContext::Bold );
     m_italicItem->setChecked( m_ctx->m_options & KoSearchContext::Italic );
     m_underlineItem->setChecked( m_ctx->m_options & KoSearchContext::Underline );
+    m_strikeOutItem->setChecked( m_ctx->m_options & KoSearchContext::StrikeOut);
+    m_doubleLineItem->setChecked( m_ctx->m_options & KoSearchContext::DoubleUnderLine);
+
 }
 
 void KoFormatDia::ctxOptions( )
@@ -648,6 +720,8 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::Size;
     if ( m_checkColor->isChecked() )
         optionsMask |= KoSearchContext::Color;
+    if ( m_checkBgColor->isChecked() )
+        optionsMask |= KoSearchContext::BgColor;
     if ( m_checkBold->isChecked() )
         optionsMask |= KoSearchContext::Bold;
     if ( m_checkItalic->isChecked() )
@@ -656,6 +730,11 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::Underline;
     if ( m_checkVertAlign->isChecked() )
         optionsMask |= KoSearchContext::VertAlign;
+    if ( m_checkStrikeOut->isChecked() )
+        optionsMask |= KoSearchContext::StrikeOut;
+    if ( m_checkDoubleLine->isChecked() )
+        optionsMask |= KoSearchContext::DoubleUnderLine;
+
 
     if ( m_boldItem->isChecked() )
         options |= KoSearchContext::Bold;
@@ -663,11 +742,17 @@ void KoFormatDia::ctxOptions( )
         options |= KoSearchContext::Italic;
     if ( m_underlineItem->isChecked() )
         options |= KoSearchContext::Underline;
+    if ( m_strikeOutItem->isChecked() )
+        options |= KoSearchContext::StrikeOut;
+    if ( m_doubleLineItem->isChecked() )
+        options |= KoSearchContext::DoubleUnderLine;
+
 
     m_ctx->m_optionsMask = optionsMask;
     m_ctx->m_family = m_familyItem->currentText();
     m_ctx->m_size = m_sizeItem->cleanText().toInt();
     m_ctx->m_color = m_colorItem->color();
+    m_ctx->m_backGroungColor = m_bgColorItem->color();
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
     m_ctx->m_options = options;
 }

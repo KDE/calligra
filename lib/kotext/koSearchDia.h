@@ -62,7 +62,8 @@ public:
         Underline = 32 * KoFindDialog::MinimumUserOption,
         VertAlign = 64 * KoFindDialog::MinimumUserOption,
         StrikeOut = 128 * KoFindDialog::MinimumUserOption,
-        DoubleUnderLine = 256 * KoFindDialog::MinimumUserOption
+        DoubleUnderLine = 256 * KoFindDialog::MinimumUserOption,
+        BgColor = 512 *KoFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
@@ -98,27 +99,6 @@ private:
     bool m_bOptionsShown;
     QPushButton *m_btnShowOptions;
     QWidget *m_parent;
-
-#if 0
-    QWidget *m_parent;
-
-    QPushButton *m_btnShowOptions;
-    QGridLayout *m_grid;
-    QCheckBox *m_checkFamily;
-    QCheckBox *m_checkSize;
-    QCheckBox *m_checkColor;
-    QCheckBox *m_checkBold;
-    QCheckBox *m_checkItalic;
-    QCheckBox *m_checkUnderline;
-    QCheckBox *m_checkVertAlign;
-    QComboBox *m_familyItem;
-    QSpinBox *m_sizeItem;
-    KColorButton *m_colorItem;
-    QCheckBox *m_boldItem;
-    QCheckBox *m_italicItem;
-    QCheckBox *m_underlineItem;
-    QComboBox *m_vertAlignItem;
-#endif
 };
 
 //
@@ -267,16 +247,23 @@ private:
     QCheckBox *m_checkFamily;
     QCheckBox *m_checkSize;
     QCheckBox *m_checkColor;
+    QCheckBox *m_checkBgColor;
     QCheckBox *m_checkBold;
     QCheckBox *m_checkItalic;
     QCheckBox *m_checkUnderline;
     QCheckBox *m_checkVertAlign;
+    QCheckBox *m_checkStrikeOut;
+    QCheckBox *m_checkDoubleLine;
     QComboBox *m_familyItem;
     QSpinBox *m_sizeItem;
     KColorButton *m_colorItem;
+    KColorButton *m_bgColorItem;
     QCheckBox *m_boldItem;
     QCheckBox *m_italicItem;
     QCheckBox *m_underlineItem;
+    QCheckBox *m_strikeOutItem;
+    QCheckBox *m_doubleLineItem;
+
     QComboBox *m_vertAlignItem;
     KoSearchContext *m_ctx;
 };
