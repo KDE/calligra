@@ -2417,17 +2417,19 @@ QRect KSpreadTable::selectionCellMerged(const QRect &_sel)
 {
   KSpreadCell *cell;
   QRect selection(_sel);
+
+  cell = cellAt(selection.left(), selection.top());
   if( isColumnSelected() || isRowSelected() )
     return selection;
-  else if (selection.width() == selection.height() &&
-           selection.width() == 1)
+  else if ( !(cell->isObscured() && cell->isObscuringForced()) &&
+            (cell->extraXCells() + 1) == selection.width() &&
+            (cell->extraYCells() + 1) == selection.height())
   {
     /* if just a single cell is selected, we need to merge even when
        the obscuring isn't forced.  But only if this is the cell that
        is doing the obscuring -- we still want to be able to click on a cell
        that is being obscured.
     */
-    cell = cellAt(selection.left(), selection.top());
     selection.setWidth(cell->extraXCells() + 1);
     selection.setHeight(cell->extraYCells() + 1);
   }
