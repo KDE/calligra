@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="2">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
@@ -54,7 +54,9 @@
   <Action name="insertChart"/>
  </Menu>
  <Menu name="View"><text>&amp;View</text>
-  <Action name="newView"/>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
   <ActionList name="view_split" />
   <Separator />
   <Action name="gotoCell"/>

@@ -420,16 +420,6 @@ void KPresenterView::editHeaderFooter()
     m_pKPresenterDoc->getHeaderFooterEdit()->show();
 }
 
-/*========================= view new view =======================*/
-void KPresenterView::newView()
-{
-    assert( m_pKPresenterDoc );
-
-    KoMainWindow *shell = new KPresenterShell;
-    shell->show();
-    shell->setRootDocument( m_pKPresenterDoc );
-}
-
 /*====================== insert a new page ======================*/
 void KPresenterView::insertPage()
 {
@@ -1707,13 +1697,6 @@ void KPresenterView::setupActions()
     actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
 					  this, SLOT( editHeaderFooter() ),
 					  actionCollection(), "edit_headerfooter" );
-
-    // ---------------- view actions
-
-
-    actionViewNewView = new KAction( i18n( "New View" ), 0,
-				     this, SLOT( newView() ),
-				     actionCollection(), "view_newview" );
 
     // ---------------- insert actions
 

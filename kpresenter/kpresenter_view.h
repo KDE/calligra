@@ -134,9 +134,6 @@ public slots:
     virtual void editFindReplace();
     virtual void editHeaderFooter();
 
-    // view menu
-    virtual void newView();
-
     // insert menu
     virtual void insertPage();
     virtual void insertPicture();
@@ -478,8 +475,6 @@ protected:
     KAction *actionEditFind;
     KAction *actionEditFindReplace;
     KAction *actionEditHeaderFooter;
-
-    KAction *actionViewNewView;
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="2">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -21,6 +21,8 @@
  </Menu>
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
   <ActionList name="view_split"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>

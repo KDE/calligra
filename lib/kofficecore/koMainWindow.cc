@@ -137,6 +137,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "about_kde" );
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
+    d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
+    setView( d->m_splitter );
+
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(new KAction(i18n("Close All Views"), 0, this,
 	SLOT(slotCloseAllViews()), actionCollection(), "view_closeallviews"));
@@ -156,6 +159,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     items << i18n("Vertical")
 	  << i18n("Horizontal");
     d->m_orientation->setItems(items);
+    d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
 
     if ( instance )
@@ -165,9 +169,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KConfig * config = instance ? instance->config() : KGlobal::config();
     m_recent->loadEntries( config );
     config->sync();
-
-    d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
-    setView( d->m_splitter );
 
     buildMainWindowGUI();
 
@@ -575,12 +576,9 @@ void KoMainWindow::slotSplitView() {
 }
 
 void KoMainWindow::slotCloseAllViews() {
-    kdDebug(30003) << "KoMainWindow::slotCloseAllViews() called" << endl;
 
-    if(queryClose(true)){
-    kdDebug(30003) << "KoMainWindow::slotCloseAllViews doing a delete on the doc" << endl;
-       d->m_rootDoc->delayedDestruction();
-    }
+  if(queryClose(true))
+    d->m_rootDoc->delayedDestruction();
 }
 
 
