@@ -1169,19 +1169,22 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
         {
             //kdDebug() << "KWPartFrameSet::drawContents clipregion=" << DEBUGRECT(reg.boundingRect()) << endl;
             painter->save();
-            QRect r = painter->viewport();
             painter->setClipRegion( reg );
-            painter->setViewport( kWordDocument()->zoomItX( frame->x() ), kWordDocument()->zoomItY( frame->y() ),
-                                  r.width(), r.height() );
-            // painter->translate( frame->x(), frame->y() ); // messes up the clip regions
+
+            painter->translate( kWordDocument()->zoomItX( frame->x() ), kWordDocument()->zoomItY( frame->y() ) );
+
+            // We have to define better what the rect that we pass, means. Does it include zooming ? (yes I think)
+            // Does it define the area to be repainted only ? (here it doesn't, really, but it should)
             QRect rframe( 0, 0, kWordDocument()->zoomItX( frames.first()->width() ),
-                          kWordDocument()->zoomItY( frames.first()->height() ) ); // Not sure if applying the zoom here works
+                          kWordDocument()->zoomItY( frames.first()->height() ) );
+            //kdDebug() << "rframe=" << DEBUGRECT( rframe ) << endl;
+
             child->document()->paintEverything( *painter, rframe, true, 0L,
                                                 kWordDocument()->zoomedResolutionX(), kWordDocument()->zoomedResolutionY() );
-            painter->setViewport( r );
+
             painter->restore();
-        }// else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
-    }
+        } //else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
+    } //else kdDebug() << "KWPartFrameSet::drawContents " << this << " onlychanged=true!" << endl;
 }
 
 /*================================================================*/
