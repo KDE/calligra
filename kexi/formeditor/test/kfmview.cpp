@@ -85,7 +85,7 @@ KFMView::KFMView()
 	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), manager, SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
 	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), manager, SLOT(sendWidgetToBack()), actionCollection(), "format_lower");
 
-	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets position"), "alignobjs", actionCollection(), "align_menu");
+	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets position"), "aopos2grid", actionCollection(), "align_menu");
 	alignMenu->insert( new KAction(i18n("To Left"), "aoleft", KShortcut(0), manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
 	alignMenu->insert( new KAction(i18n("To Right"), "aoright", KShortcut(0), manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
 	alignMenu->insert( new KAction(i18n("To Top"), "aotop", KShortcut(0), manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
@@ -169,13 +169,22 @@ KFMView::slotWidgetSelected(Form *form, bool multiple)
 	ENABLE_ACTION("layout_hbox", multiple);
 	ENABLE_ACTION("layout_vbox", multiple);
 	ENABLE_ACTION("layout_grid", multiple);
+
+	KFormDesigner::Container *container = manager->activeForm()->activeContainer();
+	ENABLE_ACTION("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
 }
 
 void
-KFMView::slotFormWidgetSelected(Form *)
+KFMView::slotFormWidgetSelected(Form *form)
 {
 	disableWidgetActions();
 	enableFormActions();
+
+	// Layout actions
+	ENABLE_ACTION("layout_hbox", true);
+	ENABLE_ACTION("layout_vbox", true);
+	ENABLE_ACTION("layout_grid", true);
+	ENABLE_ACTION("break_layout", (form->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
 }
 
 void
@@ -236,6 +245,7 @@ KFMView::disableWidgetActions()
 	ENABLE_ACTION("layout_hbox", false);
 	ENABLE_ACTION("layout_vbox", false);
 	ENABLE_ACTION("layout_grid", false);
+	ENABLE_ACTION("break_layout", false);
 }
 
 KFMView::~KFMView()
