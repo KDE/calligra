@@ -117,3 +117,4 @@ void TestRunner::runTest()
     d->logView->append( i18n("Test finished.") );
   }
 }
+#include "testrunner.moc"
