@@ -253,14 +253,16 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 {
     QString cmd;
     int p;
-
-    QDir( path ).mkdir( path + "/html" );
+    KURL str(  path + "/html"  );
+    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    QDir( path ).mkdir( path + "/pics" );
+    str = path + "/pics";
+    KIO::NetAccess::mkdir( str,( QWidget* )0L );
+    
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
@@ -275,8 +277,9 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
         QString filename = pics[ index ];
         filename += ".png";
         srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
-        desturl.setPath ( path + "/pics/" + filename );
-        KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
+        desturl = path;
+        desturl.addPath( "/pics/" + filename );        
+	KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
         KIO::NetAccess::copy( srcurl, desturl );
         p = progressBar->progress();
         progressBar->setProgress( ++p );
