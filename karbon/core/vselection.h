@@ -93,7 +93,7 @@ public:
 	 * Adds all objects ( selectObjects == true ) or all nodes
 	 * ( selectObjects == false ) within rect to the selection.
 	 */
-	bool append( const KoRect& rect, bool selectObjects = true );
+	bool append( const KoRect& rect, bool selectObjects = true, bool exclusive = true );
 
 	/**
 	 * Removes the reference to the object, not the object itself.

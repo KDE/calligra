@@ -84,7 +84,7 @@ VSelectNodesTool::draw()
 					first().y() - tolerance,
 					2 * tolerance + 1.0,
 					2 * tolerance + 1.0 ).normalize(),
-				false );
+				false, false );
 			m_state = moving;
 			recalc();
 		}

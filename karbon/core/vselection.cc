@@ -99,7 +99,7 @@ VSelection::append( VObject* object )
 }
 
 bool
-VSelection::append( const KoRect& rect, bool selectObjects )
+VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 {
 	bool success = false;
 
@@ -116,7 +116,7 @@ VSelection::append( const KoRect& rect, bool selectObjects )
 
 		for ( ; itr.current(); ++itr )
 		{
-			VSelectNodes op( rect );
+			VSelectNodes op( rect, true, exclusive );
 
 			if( op.visit( *itr.current() ) )
 				success = true;
