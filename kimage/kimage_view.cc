@@ -153,65 +153,76 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("fittoview.xpm") );
+  CORBA::WString_var toolTip = Q2C( i18n( "Fit image to view" ) );
   m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ),
 							this, "viewFitToView", true,
-							i18n( "Fit image to view" ), -1 );
+							toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("fitwithprops.xpm") );
+  toolTip = Q2C( i18n( "Fit to view and keep proportions" ) );
   m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ),
 							this, "viewFitWithProportions",
-							true, i18n( "Fit to view and keep proportions" ), -1 );
+							true, toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("originalsize.xpm") );
+  toolTip = Q2C( i18n( "Keep original image size" ) );
   m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ),
 						       this, "viewOriginalSize", true,
-						       i18n( "Keep original image size" ), -1 );
+						       toolTip, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("mini/unknown.xpm") );
+  toolTip = Q2C( i18n( "Edit image" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 4, SIGNAL( clicked() ),
 							this, "editEditImage", true,
-							i18n( "Edit image" ), -1 );
+							toolTip, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
+  toolTip = Q2C( i18n( "Undo" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "editUndo", true,
-							i18n( "Undo" ), -1 );
+							toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("redo.xpm") );
+  toolTip = Q2C( i18n( "Redo" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "editRedo", true,
-							i18n( "Redo" ), -1 );
+							toolTip, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
+  toolTip = Q2C( i18n( "Edit image" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "editEditImage", true,
-							i18n( "Edit image" ), -1 );
+							toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("areaselect.xpm") );
+  toolTip = Q2C( i18n( "Select Area" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "selectArea", true,
-							i18n( "Select Area" ), -1 );
+							toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("airbrush.xpm") );
+  toolTip = Q2C( i18n( "Airbrush" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "airbrush", true,
-							i18n( "Airbrush" ), -1 );
+							toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("circle.xpm") );
+  toolTip = Q2C( i18n( "Circle" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "circle", true,
-							i18n( "Circle" ), -1 );
+							toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("eraser.xpm") );
+  toolTip = Q2C( i18n( "Eraser" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "eraser", true,
-							i18n( "Eraser" ), -1 );
+							toolTip, -1 );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
@@ -332,7 +343,8 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuTransform_ZoomHalf = m_vMenuTransform->insertItem( text, this, "transformZoomHalf", 0 );
   text = Q2C( i18n("&Max") );
   m_idMenuTransform_ZoomMax = m_vMenuTransform->insertItem( text, this, "transformZoomMax", 0 );
-  m_idMenuTransform_ZoomMaxAspect = m_vMenuTransform->insertItem( i18n("Max/&aspect"), this, "transformZoomMaxAspect", 0 );
+  text = Q2C( i18n("Max/&aspect") );
+  m_idMenuTransform_ZoomMaxAspect = m_vMenuTransform->insertItem( text, this, "transformZoomMaxAspect", 0 );
 
   // Filter
   text = Q2C( i18n( "F&ilter" ) );
