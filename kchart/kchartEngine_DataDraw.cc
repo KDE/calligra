@@ -488,8 +488,8 @@ void kchartEngine::draw3DCombo() {
   QPointArray  poly( 4 );
   int i=0;
   int j=0;
-  for( j=num_hlc_sets-1; j>=0; --j ) {
-
+  for( j=num_hlc_sets-1; j>=0; --j )
+  {
     for( i=1; i<num_points+1; ++i )
       if(((CLOSESET+j*3)<num_sets )&& CELLEXISTS(CLOSESET+j*3,i-1) )
         {

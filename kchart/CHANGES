@@ -101,3 +101,15 @@ But Pb for writing % in label for the moment it's not good
 2000-06-12 - Montel laurent <montell@club-internet.fr>
 ------------------------------------------------------
 -Improved layout manager in kchartwizard
+-Improved hlc* chart
+I wrote to Bruce Verderaime <brv@fred.net> people which created gdchart
+and he explained to me how work these chart
+it's stock exchange chart
+=>So the two first line in edit data represente high and low data
+and the third represente the value at the end of day
+When you used KCHARTTYPE_COMBO_HLC_BAR or KCHARTTYPE_COMBO_HLC_AREA
+or KCHARTTYPE_3DCOMBO_HLC_BAR or KCHARTTYPE_3DCOMBO_HLC_AREA there is
+a fourth value (for creating area or bar ) and a second axis
+(axis Y2 at right)
+Now it works.
+

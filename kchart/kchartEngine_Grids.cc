@@ -91,7 +91,8 @@ void kchartEngine::drawBorder()
 
 }
 
-void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
+void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions)
+{
   // to get rid of this
 
   /* ----- backmost first - grid & labels ----- */
@@ -337,9 +338,9 @@ void kchartEngine::drawYAxisTitle() {
     }
 }
 
-void kchartEngine::draw3DGrids() 
+void kchartEngine::draw3DGrids()
 {
-  for( setno=(params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1) - 1;setno > 0; --setno ) 
+  for( setno=(params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1) - 1;setno > 0; --setno )
   {
     p->setPen( GridColor );
     p->drawLine( PX(0), PY(lowest), PX(0), PY(highest) );
@@ -349,7 +350,7 @@ void kchartEngine::draw3DGrids()
 }
 
 
-void kchartEngine::drawShelfGrids() 
+void kchartEngine::drawShelfGrids()
 {
   int	x1, x2, y1, y2;
   // tics
@@ -451,66 +452,45 @@ void kchartEngine::drawVolumeGrids()
 {
   int i=0;
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
- num_sets:
-  1; // backmost
+ num_sets: 1; // backmost
   if( params->type == KCHARTTYPE_COMBO_HLC_BAR    ||
       params->type == KCHARTTYPE_COMBO_LINE_BAR   ||
       params->type == KCHARTTYPE_3DCOMBO_LINE_BAR ||
       params->type == KCHARTTYPE_3DCOMBO_HLC_BAR ) {
     //if( uvol[0] != GDC_NOVALUE )
-      if(CELLEXISTS( 1, 0 ) )
-      /*draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
-		   PV(0), PV(uvol[0]), 0, 0,
-		   ExtVolColor[0],
-		   ExtVolColor[0] );*/
-       draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
-		   PV(0), PV(CELLVALUE( 1, 0 )), 0, 0,
+      if(CELLEXISTS( 3, 0 ) )
+        draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
+		   PV(0), PV(CELLVALUE( 3, 0 )), 0, 0,
 		   ExtVolColor[0],
 		   ExtVolColor[0] );
      for(i=1; i<num_points-1; ++i )
      {
-     /* if( uvol[i] != GDC_NOVALUE )
+     if( CELLEXISTS( 3, i ) )
 	draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
-		     PV(0), PV(uvol[i]),
-		     0, 0,
-		     ExtVolColor[i],
-		     ExtVolColor[i] );*/
-         if( CELLEXISTS( 1, i ) )
-	draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
-		     PV(0), PV(CELLVALUE( 1, i )),
+		     PV(0), PV(CELLVALUE( 3, i )),
 		     0, 0,
 		     ExtVolColor[i],
 		     ExtVolColor[i] );
-    }
-    /*if (uvol[i] != GDC_NOVALUE) {
+     }
+
+     if (CELLEXISTS( 3, i ))
+     {
       draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
-		   PV(0), PV(uvol[i]),
-		   0, 0,
-		   ExtVolColor[i],
-		   ExtVolColor[i] );
-    }*/
-     if (CELLEXISTS( 1, i )) {
-      draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
-		   PV(0), PV(CELLVALUE( 1, i )),
+		   PV(0), PV(CELLVALUE( 3, i )),
 		   0, 0,
 		   ExtVolColor[i],
 		   ExtVolColor[i] );
     }
-  } else if( params->type == KCHARTTYPE_COMBO_HLC_AREA   ||
+  }
+  else if( params->type == KCHARTTYPE_COMBO_HLC_AREA   ||
 	     params->type == KCHARTTYPE_COMBO_LINE_AREA  ||
 	     params->type == KCHARTTYPE_3DCOMBO_LINE_AREA||
 	     params->type == KCHARTTYPE_3DCOMBO_HLC_AREA )
     for(int i=1; i<num_points; ++i )
         {
-      /*if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
+        if( CELLEXISTS( 3, i-1 ) && CELLEXISTS( 3, i ) )
 	draw_3d_area( p, PX(i-1), PX(i),
-		      PV(0), PV(uvol[i-1]), PV(uvol[i]),
-		      0, 0,
-		      ExtVolColor[i],
-		      ExtVolColor[i] );*/
-        if( CELLEXISTS( 1, i-1 ) && CELLEXISTS( 1, i ) )
-	draw_3d_area( p, PX(i-1), PX(i),
-		      PV(0), PV(CELLVALUE( 1, i-1 )), PV(CELLVALUE(1,i)),
+		      PV(0), PV(CELLVALUE( 3, i-1 )), PV(CELLVALUE(3,i)),
 		      0, 0,
 		      ExtVolColor[i],
 		      ExtVolColor[i] );

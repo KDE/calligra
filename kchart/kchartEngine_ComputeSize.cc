@@ -297,11 +297,28 @@ void kchartEngine::computeMinMaxValues() {
 
   default:
     kdDebug(35001) << "Other stacktype" << endl;
-    for(int i=0; i<num_sets; ++i ) {
+
+    int realValue=num_sets;
+    //when you create a HLC chart there are 3 values
+    //low value, high value and close value
+    //it's a stock exchange chart
+
+    //when you create other HLC chart
+    //you have a another value for create
+    //for example area, bar etc...
+    if(params->has_hlc_sets())
+        {
+        if(params->type ==KCHARTTYPE_3DHILOCLOSE
+        || params->type ==KCHARTTYPE_HILOCLOSE)
+                realValue=3;
+        else
+                realValue=4;
+        }
+
+    for(int i=0; i<realValue; ++i ) {
       for(int j=0; j<num_points; ++j ) {
-	//kdDebug(35001) << "Vor dem crash" << endl;
-	if( CELLEXISTS( i, j ) ) {
-	  //kdDebug(35001) << "nach dem crash" << endl;
+	if( CELLEXISTS( i, j ) )
+        {
 	  highest = QMAX( CELLVALUE( i, j ), highest );
 	  lowest  = QMIN( CELLVALUE( i, j ), lowest );
 	}
@@ -324,17 +341,13 @@ void kchartEngine::computeMinMaxValues() {
   { // for now only one combo set allowed
     // vhighest = 1.0;
     // vlowest  = 0.0;
-
-    //uvol=new float[num_points];
-    //cout <<"Uvol doesn't work !!!!!!!!!!!!!!!!!!!!\n";
     for(int j=0; j<num_points; ++j )
-      if( CELLEXISTS( 1, j ) )
+      if( CELLEXISTS( 3, j ) )
         {
 	/*vhighest = MAX( uvol[j], vhighest );
 	vlowest  = MIN( uvol[j], vlowest );*/
-        vhighest = QMAX( CELLVALUE( 1, j ), vhighest );
-	vlowest  = QMIN( CELLVALUE( 1, j ), vlowest );
-        //cout <<" j: "<<j <<"vhight : "<<vhighest<<"vlowest : " <<vlowest<<endl;
+        vhighest = QMAX( CELLVALUE( 3, j ), vhighest );
+	vlowest  = QMIN( CELLVALUE( 3, j ), vlowest );
         }
     if( vhighest == -MAXFLOAT )// no values
       vhighest = 1.0;// for scaling, need a range
