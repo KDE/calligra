@@ -35,6 +35,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <koFilterChain.h>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -52,19 +53,15 @@ K_EXPORT_COMPONENT_FACTORY( libhtmlexport, HTMLExportFactory( "kwordhtmlexportfi
 // HTMLExport
 //
 
-HTMLExport::HTMLExport(KoFilter *parent, const char *name, const QStringList &) :
-                     KoFilter(parent, name) {
+HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList &) :
+                     KoFilter() {
 }
 
-bool HTMLExport::filter(const QString  &filenameIn,
-                        const QString  &filenameOut,
-                        const QString  &from,
-                        const QString  &to,
-                        const QString  &param )
+KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCString& to )
 {
     if ((from != "application/x-kword") || (to != "text/html"))
     {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     HtmlExportDialog* dialog = new HtmlExportDialog();
@@ -72,13 +69,13 @@ bool HTMLExport::filter(const QString  &filenameIn,
     if (!dialog)
     {
         kdError(30503) << "Dialog has not been created! Aborting!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     if (!dialog->exec())
     {
         kdError(30503) << "Dialog was aborted! Aborting filter!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     HtmlWorker* worker=new HtmlWorker();
@@ -87,7 +84,7 @@ bool HTMLExport::filter(const QString  &filenameIn,
     {
         delete dialog;
         kdError(30503) << "Cannot create Worker! Aborting!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     worker->setXML(dialog->isXHtml());
@@ -101,13 +98,16 @@ bool HTMLExport::filter(const QString  &filenameIn,
     {
         kdError(30503) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
-        return false;
+        return KoFilter::StupidError;
     }
 
-    bool flag=leader->filter(filenameIn,filenameOut,from,to,param);
+    bool flag=leader->filter(m_chain->inputFile(),m_chain->outputFile(),from,to,"");
 
     delete leader;
     delete worker;
 
-    return flag;
+    if ( flag )
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }

@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <koFilterChain.h>
 
 #include <koStore.h>
 
@@ -33,26 +34,27 @@ typedef KGenericFactory<HTMLImport, KoFilter> HTMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kwordhtmlimportfilter" ) );
 
 
-HTMLImport::HTMLImport(KoFilter *parent, const char*name, const QStringList &) :
-                     KoFilter(parent, name) {
+HTMLImport::HTMLImport(KoFilter *, const char*, const QStringList &) :
+                     KoFilter() {
 // 123
 }
 
-bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
-                        const QString& from, const QString& to,
-                        const QString &)
+KoFilter::ConversionStatus HTMLImport::convert( const QCString& from, const QCString& to )
 {
 	if(to!="application/x-kword" || from!="text/html")
-		return false;
+		return KoFilter::NotImplemented;
 
-	KoStore *k= new KoStore(fileOut,KoStore::Write);
+	KoStore *k= new KoStore(m_chain->outputFile(),KoStore::Write);
 	KWDWriter *w= new KWDWriter(k);
 	KHTMLReader h(w);
 	KURL url;
-	url.setPath(fileIn);
+	url.setPath(m_chain->inputFile());
 	bool b= h.filter(url);
 	delete(w);
 	delete(k);
 
-	return b;
+        if ( b )
+            return KoFilter::OK;
+        else
+            return KoFilter::StupidError;
 }
