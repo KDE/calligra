@@ -33,6 +33,7 @@
 #include "kword13parser.h"
 #include "kword13document.h"
 #include "kword13oasisgenerator.h"
+#include "kword13postparsing.h"
 #include "kword13import.h"
 
 typedef KGenericFactory<KWord13Import, KoFilter> KWord13ImportFactory;
@@ -99,6 +100,12 @@ bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
     return true;
 }
 
+bool KWord13Import::postParse( KoStore* store, KWord13Document& doc )
+{
+    KWord13PostParsing post;
+    return post.postParse( store, doc );
+}
+
 KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const QCString& to )
 {
     if ( to != "application/vnd.sun.xml.writer"  // ### TODO: OASIS
@@ -111,7 +118,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
     KImageIO::registerFormats();
 
     KWord13Document kwordDocument;
-#if 1
+    
     const QString fileName( m_chain->inputFile() );
     if ( fileName.isEmpty() )
     {
@@ -202,77 +209,16 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
         }
         file.close();      
     }
-#else
-    KoStoreDevice* subFile;
-
-    subFile = m_chain->storageFile( "documentinfo.xml", KoStore::Read );
-    kdDebug (30520) << "Processing documentinfo... " << ((void*) subFile) << endl;
-    if ( ! parseInfo ( subFile, kwordDocument ) )
-    {
-        kdWarning(30520) << "Opening documentinfo.xml has failed. Ignoring!" << endl;
-    }
-
-    subFile = m_chain->storageFile( "root", KoStore::Read );
-    kdDebug (30520) << "Processing root... " << ((void*) subFile) << endl;
-    if ( parseRoot ( subFile, kwordDocument ) )
-    {
-        subFile = m_chain->storageFile( "preview.png", KoStore::Read );
-        if ( subFile )
-        {
-            kdDebug(30520) << "Preview found!" << endl;
-            const QByteArray image ( subFile->readAll() );
-            if ( image.isNull() )
-            {
-                kdWarning(30520) << "Loading of preview failed! Ignoring!" << endl;
-            }
-            else
-            {
-                kwordDocument.m_previewFile = new KTempFile( QString::null, ".png" );
-                // ### TODO check KTempFile
-                kwordDocument.m_previewFile->setAutoDelete( true );
-                QFile file( kwordDocument.m_previewFile->name() );
-                // ### TODO: check if file is correctly written
-                file.open( IO_WriteOnly );
-                file.writeBlock( image );
-                file.close();
-            }
-        }
-        else
-        {
-            kdDebug(30520) << "No preview found!" << endl;
-        }
-    }
-    else
-    {
-        kdWarning(30520) << "Opening root has failed. Trying raw XML file!" << endl;
-
-        const QString filename( m_chain->inputFile() );
-        if ( filename.isEmpty() )
-        {
-            kdError(30520) << "Could not open document as raw XML! Aborting!" << endl;
-            return KoFilter::StupidError;
-        }
-        else
-        {
-            QFile file( filename );
-            file.open( IO_ReadOnly );
-            if ( ! parseRoot( &file, kwordDocument ) )
-            {
-                kdError(30520) << "Could not process document! Aborting!" << endl;
-                file.close();
-                return KoFilter::StupidError;
-            }
-            file.close();
-        }
-    }
-#endif
-    // ### TODO: do post-parsing data processing (table groups, load pictures...)
     
-#if 1
+    if ( ! postParse( store, kwordDocument ) )
+    {
+        kdError(30520) << "Error during post-parsing! Avorting!" << endl;
+        return  KoFilter::StupidError;
+    }
+    
     // We have finished with the input store/file, so close the store (already done for a raw XML file)
     delete store;
     store = 0;
-#endif
     
     KWord13OasisGenerator generator;
         

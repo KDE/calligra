@@ -19,30 +19,21 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef KWORD_1_3_IMPORT_H
-#define KWORD_1_3_IMPORT_H
+#ifndef KWORD_1_3_POST_PARSING
+#define KWORD_1_3_POST_PARSING
 
-#include <qstring.h>
-#include <qcstring.h>
-
-#include <koFilter.h>
-
-class QIODevice;
 class KoStore;
 class KWord13Document;
 
-class KWord13Import : public KoFilter {
-
-    Q_OBJECT
-
+class KWord13PostParsing
+{
 public:
-    KWord13Import(KoFilter *parent, const char *name, const QStringList &);
-    virtual ~KWord13Import() {}
-
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    KWord13PostParsing::KWord13PostParsing(void);
+    KWord13PostParsing::~KWord13PostParsing(void);
+public:
+    bool postParse( KoStore* store, KWord13Document& doc );
 protected:
-    bool parseInfo( QIODevice* io, KWord13Document& kwordDocument );
-    bool parseRoot( QIODevice* io, KWord13Document& kwordDocument );
-    bool postParse( KoStore* store, KWord13Document& doc );    
+    KWord13Document* m_kwordDocument;
 };
-#endif // KWORD_1_3_IMPORT_H
+
+#endif // KWORD_1_3_POST_PARSING

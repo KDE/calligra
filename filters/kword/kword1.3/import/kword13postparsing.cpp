@@ -19,30 +19,27 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef KWORD_1_3_IMPORT_H
-#define KWORD_1_3_IMPORT_H
+#include <koStore.h>
 
-#include <qstring.h>
-#include <qcstring.h>
+#include "kword13document.h"
+#include "kword13postparsing.h"
 
-#include <koFilter.h>
+KWord13PostParsing::KWord13PostParsing(void) : m_kwordDocument( 0 )
+{
+}
 
-class QIODevice;
-class KoStore;
-class KWord13Document;
+KWord13PostParsing::~KWord13PostParsing(void)
+{
+    delete m_kwordDocument;
+}
 
-class KWord13Import : public KoFilter {
 
-    Q_OBJECT
-
-public:
-    KWord13Import(KoFilter *parent, const char *name, const QStringList &);
-    virtual ~KWord13Import() {}
-
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
-protected:
-    bool parseInfo( QIODevice* io, KWord13Document& kwordDocument );
-    bool parseRoot( QIODevice* io, KWord13Document& kwordDocument );
-    bool postParse( KoStore* store, KWord13Document& doc );    
-};
-#endif // KWORD_1_3_IMPORT_H
+bool KWord13PostParsing::postParse( KoStore* store, KWord13Document& doc )
+{
+    // Do check if it is the same document if clled twice
+    m_kwordDocument = &doc;
+    
+    // ### TODO
+    
+    return 1;
+}
