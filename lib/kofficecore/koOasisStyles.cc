@@ -478,102 +478,103 @@ void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & 
     {
         if ( format.startsWith( "%Y" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "long" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%y" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
+
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%n" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%e" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%b" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%B" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%d" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%a" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else if ( format.startsWith( "%A" ) )
         {
-#if 0
             addTextNumber( text, elementWriter );
+#if 0
             elementWriter.startElement( "number:month" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.addAttribute( "number:textual", "true");
             elementWriter.endElement();
-            format = format.remove( 0, 2 );
 #endif
+            format = format.remove( 0, 2 );
         }
         else
         {

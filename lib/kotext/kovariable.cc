@@ -1111,15 +1111,14 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
          value.lower() == "localedatetime" ||
          value.lower() == "localedatetimeshort" )
     {
-        QDateTime dateTime ( m_varValue.toDateTime() );
         if ( value.lower() == "locale" || value.isEmpty())
-            value =  KGlobal::locale()->formatDate( dateTime.date(), false );
+            value =  KGlobal::locale()->dateFormat();
         else if ( value.lower() == "localeshort" )
-            value = KGlobal::locale()->formatDate( dateTime.date(), true );
+            value = KGlobal::locale()->dateFormatShort();
         else if ( value.lower() == "localedatetime" )
-            value =  KGlobal::locale()->formatDateTime( dateTime, false );
+            value =  QString( "%1 %2" ).arg( KGlobal::locale()->dateFormat() ).arg( KGlobal::locale()->timeFormat() );
         else if ( value.lower() == "localedatetimeshort" )
-            value =  KGlobal::locale()->formatDateTime( dateTime, true );
+            value =  QString( "%1 %2" ).arg( KGlobal::locale()->dateFormatShort() ).arg( KGlobal::locale()->timeFormat() );
         klocaleFormat = true;
     }
     writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisDateStyle(context.mainStyles(), value, klocaleFormat ) );
