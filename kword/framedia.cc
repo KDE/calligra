@@ -499,10 +499,16 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     }
     eFrameSetName = new QLineEdit( row );
     eFrameSetName->setText( oldFrameSetName );
+    connect(eFrameSetName, SIGNAL(textChanged ( const QString & )),this,SLOT(textNameFrameChanged ( const QString & )));
 
     grid3->addWidget( row, 2, 0 );
 
     connectListSelected( lFrameSList->firstChild() );
+}
+
+void KWFrameDia::textNameFrameChanged ( const QString &text )
+{
+    enableButtonOK( !text.isEmpty() );
 }
 
 void KWFrameDia::setupTab4(){ // TAB Geometry

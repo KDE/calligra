@@ -117,6 +117,7 @@ protected slots:
     void setFrameBehaviourInputOn();
     void setFrameBehaviourInputOff();
     void slotFloatingToggled(bool);
+    void textNameFrameChanged ( const QString & );
 };
 
 #endif
