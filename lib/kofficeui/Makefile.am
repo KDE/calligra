@@ -19,7 +19,7 @@ libkofficeui_la_SOURCES = koFind.cc koReplace.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
 	koCharSelectDia.cc koInsertLink.cc koeditpath.cc koSpellConfig.cc kocommandhistory.cpp
 libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
-libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) -lkospell
+libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) ../kospell/libkospell.la
 
 include_HEADERS = koFind.h koReplace.h \
 	koPageLayoutDia.h \
