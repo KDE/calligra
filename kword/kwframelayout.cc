@@ -225,7 +225,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     for ( ; it2.current() ; ++it2 )
         it2.current()->deleteFramesAfterLast( m_doc->getPages() - 1 );
     if ( mainTextFrameSet ) {
-        int lastFrame = m_doc->getPages() - 1 * numColumns + (numColumns-1);
+        int lastFrame = (m_doc->getPages() - 1) * numColumns + (numColumns-1);
         while ( (int)mainTextFrameSet->getNumFrames() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
             kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->getNumFrames() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
