@@ -191,7 +191,7 @@ public:
     {
         NUM_LIST    = 0,   // Numbered as a list item
         NUM_CHAPTER = 1,   // Numbered as a heading
-        NUM_NONE    = 2,   // No counter (-1 would be nicer)
+        NUM_NONE    = 2   // No counter (-1 would be nicer)
     };
 
     enum Style

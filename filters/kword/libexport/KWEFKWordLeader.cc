@@ -529,10 +529,10 @@ KWEFBaseWorker *KWEFKWordLeader::getWorker(void) const
 
 // Short simple definition for methods with void parameter
 #define DO_VOID_DEFINITION(string) \
-    bool KWEFKWordLeader::##string() \
+    bool KWEFKWordLeader::string() \
     {\
         if (m_worker) \
-            return m_worker->##string(); \
+            return m_worker->string(); \
         return false; \
     }
 

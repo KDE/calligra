@@ -68,7 +68,7 @@ bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
 //
 
 #define DO_FALSE_DEFINITION(string) \
-    bool KWEFBaseWorker::##string \
+    bool KWEFBaseWorker::string \
     {\
         kdWarning(30508) << "KWEFBaseWorker::" << #string << " was called (Worker not correctly defined?)" << endl; \
         return false;\
@@ -87,7 +87,7 @@ DO_FALSE_DEFINITION (doFullParagraph(const QString&, const LayoutData&, const Va
 //
 
 #define DO_TRUE_DEFINITION(string) \
-    bool KWEFBaseWorker::##string \
+    bool KWEFBaseWorker::string \
     {\
         return true;\
     }
