@@ -120,9 +120,10 @@ void KSpreadScripts::slotDelete()
     // HACK
     unlink( QFile::encodeName(t2) );
 
-    /* QString t3;
-    t3.sprintf("kfmclient move '%s' trash:/", dir.data() );
-    system( t3.data() ); */
+    /* QString t3 = "kfmclient move";
+    t3 += KProcess::quote(dir);
+    t3 += " trash:/";
+    system( QFile::encodeName(t3) ); */
 
     updateList();
 }
