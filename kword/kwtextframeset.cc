@@ -1346,7 +1346,11 @@ void KWTextFrameSet::zoom( bool forPrint )
                    << " first-char's format:" << textdoc->firstParag()->at(0)->format()
                    << endl;
 #endif
-    QDictIterator<QTextFormat> it( coll->dict() );
+    QDict<QTextFormat> dictCopy( coll->dict() );
+    coll->dict().setAutoDelete( false );
+    coll->dict().clear();
+    coll->dict().setAutoDelete( true );
+    QDictIterator<QTextFormat> it( dictCopy );
     for ( ; it.current() ; ++it ) {
         KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
         ASSERT( format );
@@ -1358,6 +1362,7 @@ void KWTextFrameSet::zoom( bool forPrint )
                            << " to " << format->font().pointSizeFloat() * factor << endl;
 #endif
         format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
+        coll->dict().insert( format->key(), format );
     }
     // Do the same to the default format !
     KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
@@ -1394,7 +1399,11 @@ void KWTextFrameSet::unzoom()
 {
     QTextFormatCollection * coll = textdoc->formatCollection();
 
-    QDictIterator<QTextFormat> it( coll->dict() );
+    QDict<QTextFormat> dictCopy( coll->dict() );
+    coll->dict().setAutoDelete( false );
+    coll->dict().clear();
+    coll->dict().setAutoDelete( true );
+    QDictIterator<QTextFormat> it( dictCopy );
     for ( ; it.current() ; ++it ) {
         KWTextFormat * format = static_cast<KWTextFormat *>(it.current());
         int * oldSize = m_origFontSizes.find( format );
@@ -1409,6 +1418,7 @@ void KWTextFrameSet::unzoom()
 #endif
             format->setPointSizeFloat( *oldSize );
         }
+        coll->dict().insert( format->key(), format );
     }
     KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
     int * oldSize = m_origFontSizes.find( format );
@@ -1446,7 +1456,10 @@ int KWTextFrameSet::docFontSize( QTextFormat * format ) const
         return 0;
     }
     else
+    {
+        //kdDebug() << "KWTextFrameSet::docFontSize : format=" << format << " doc font size=" << *oldSize << endl;
         return *oldSize;
+    }
 }
 
 /*int KWTextFrameSet::docFontSize( float zoomedFontSize ) const
@@ -3359,12 +3372,12 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
         if ( zoomFont ) // The format has an unzoomed font (e.g. setting a style, or a new font size)
         {
             origFontSize = format->font().pointSize();
-            static_cast<KWTextFormat *>(format)->setPointSizeFloat( zoomedFontSize( origFontSize ) );
-            kdDebug(32001) << "KWTextFrameSet::setFormat format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
+            format->setPointSizeFloat( zoomedFontSize( origFontSize ) );
+            //kdDebug(32001) << "KWTextFrameSet::setFormat format " << format << " " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
         }
         else // The format has a zoomed font already (we're only changing bold/italic, or the family, etc.)
         {
-            kdDebug(32001) << "KWTextFrameSet::setFormat font already zoomed,  finding orig size" << endl;
+            //kdDebug(32001) << "KWTextFrameSet::setFormat font already zoomed,  finding orig size" << endl;
             if ( currentFormat->font().pointSizeFloat() == format->font().pointSizeFloat() )
             {
                 // read orig size from previous format, to reuse it.
@@ -3394,10 +3407,12 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
             currentFormat->removeRef();
             currentFormat = static_cast<KWTextFormat *>( textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() ) );
         }
+        //kdDebug() << "KWTextFrameSet::setFormat format=" << format << " found in coll: currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
+        format = currentFormat;
 
         if ( origFontSize > 0 && ! m_origFontSizes.find( currentFormat ) )
         {
-            kdDebug() << "KWTextFrameSet::setFormat inserting entry for " << currentFormat->key() << "  origFontSize=" << origFontSize << endl;
+            //kdDebug() << "KWTextFrameSet::setFormat inserting entry for " << currentFormat->key() << "  origFontSize=" << origFontSize << endl;
             m_origFontSizes.insert( currentFormat, new int( origFontSize ) );
         }
     }
@@ -3412,7 +3427,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
         int eid = c2.parag()->paragId();
         int eindex = c2.index();
         readFormats( c1, c2 ); // read previous formatting info
-        //kdDebug(32001) << "KWTextFrameSet::setFormat undoredo info done" << endl;
+        //kdDebug(32001) << "KWTextFrameSet::setFormat calling textdoc->setFormat " << format->key() << " flags=" << flags << endl;
         textdoc->setFormat( QTextDocument::Standard, format, flags );
         if ( !undoRedoInfo.customItemsMap.isEmpty() )
         {
