@@ -29,15 +29,19 @@ public:
    * Creates a new instance of this class.
    */
   virtual bool constructor( KSParseNode* node, KSContext& context ) = 0;
-  
+
   void allSuperClasses( QValueList<KSValue::Ptr>& );
-  
+
   QString name() const { return m_name; }
-  
+  /**
+   * @return the full name of the class, like this: "qt:QWidget" or "kde:KColorDialog".
+   */
+  QString fullName() const;
+    
   virtual KSScriptObject* createObject( KSClass* c ) = 0;
-  
+
   virtual bool hasSignal( const QString& name ) = 0;
- 
+
 protected:
   QValueList<KSValue::Ptr> m_superClasses;
   KSNamespace m_space;

@@ -6,7 +6,7 @@
 
 #include "kscript_parsenode.h"
 #include "kscript_types.h"
-// #include "kscript_synext.h"
+#include "kscript_synext.h"
 
 #ifndef KDE_USE_FINAL
 #include "yacc.cc.h"
@@ -90,6 +90,50 @@ static char translate_char( const char *s )
   }
 }
 
+static QChar translate_unichar( const QChar *s )
+{
+  QChar c = *s++;
+
+  if( c != '\\' )
+    return c;
+  c = *s++;
+  switch( c.latin1() ) {
+  case 'n':
+    return '\n';
+  case 't':
+    return '\t';
+  case 'v':
+    return '\v';
+  case 'b':
+    return '\b';
+  case 'r':
+    return '\r';
+  case 'f':
+    return '\f';
+  case 'a':
+    return '\a';
+  case '\\':
+    return '\\';
+  case '?':
+    return '\?';
+  case '\'':
+    return '\'';
+  case '"':
+    return '"';
+  default:
+    return c;
+  }
+}
+
+static void translate_string( QString& str )
+{
+	int pos = 0;
+	while( ( pos = str.find( '\\', pos ) ) != -1 )
+	{
+		QChar ch = translate_unichar( str.unicode() + pos );
+		str.replace( pos, 2, &ch, 1 );
+	}
+}
 
 %}
 
@@ -212,14 +256,17 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 "/"			return T_SOLIDUS;
 "%"			return T_PERCENT_SIGN;
 "~"			return T_TILDE;
+"||"			return T_OR;
 "|"			return T_VERTICAL_LINE;
 "^"			return T_CIRCUMFLEX;
 "&"			return T_AMPERSAND;
+"&&"			return T_AND;
 "<="			return T_LESS_OR_EQUAL;
 ">="			return T_GREATER_OR_EQUAL;
 "<"			return T_LESS_THAN_SIGN;
 ">"			return T_GREATER_THAN_SIGN;
 "."			return T_MEMBER;
+"+="			return T_PLUS_ASSIGN;
 
 const			return T_CONST;
 FALSE			return T_FALSE;
@@ -297,6 +344,9 @@ from			return T_FROM;
 {String_Literal}	{
                           QString s( yytext );
                           yylval._str = new QString( s.mid( 1, s.length() - 2 ) );
+			  if ( yylval._str->isNull() )
+				*(yylval._str) = "";
+			  translate_string( *(yylval._str) );
 			  return T_STRING_LITERAL;
 			}
 .                       {

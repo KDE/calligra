@@ -60,19 +60,19 @@ KSException::KSException( const KSValue::Ptr& _type, const KSValue::Ptr& _ptr, i
     m_lines.append( _line );
 }
 
-void KSException::print()
+void KSException::print( KSContext& context )
 {
-  printf("%s\n",toString().ascii());
+  printf("%s\n",toString( context ).ascii());
 }
 
-QString KSException::toString()
+QString KSException::toString( KSContext& context )
 {
   QString out("Exception '%1'\n%3\n");
 
   if ( m_value )
-    out = out.arg( m_type->toString() ).arg( m_value->toString() ).ascii();
+    out = out.arg( m_type->toString( context ) ).arg( m_value->toString( context ) );
   else
-    out = out.arg( m_type->toString() ).arg( "" ).ascii();
+    out = out.arg( m_type->toString( context ) ).arg( "" );
 
   QValueList<int>::ConstIterator it = lines().begin();
   for( ; it != lines().end(); ++it )

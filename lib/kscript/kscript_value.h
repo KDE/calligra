@@ -181,7 +181,7 @@ public:
 
     bool cast( Type );
 
-    QString toString() const;
+    QString toString( KSContext& context );
 
     bool operator==( const KSValue& v ) const;
 

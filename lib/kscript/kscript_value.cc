@@ -565,7 +565,7 @@ bool KSValue::cast( Type _typ )
   return true;
 }
 
-QString KSValue::toString() const
+QString KSValue::toString( KSContext& context )
 {
   switch( typ )
     {
@@ -606,12 +606,12 @@ QString KSValue::toString() const
       {
 	QString tmp( "{ Object %1 { " );
 	tmp = tmp.arg( objectValue()->getClass()->name() );
-	KSNamespace::ConstIterator it2 = objectValue()->instanceNameSpace()->begin();
-	KSNamespace::ConstIterator end = objectValue()->instanceNameSpace()->end();
+	KSNamespace::Iterator it2 = objectValue()->instanceNameSpace()->begin();
+	KSNamespace::Iterator end = objectValue()->instanceNameSpace()->end();
 	for( ; it2 != end; ++it2 )
 	{
 	  QString s("( %1, %2 ), ");
-	  s = s.arg( it2.key() ).arg( it2.data()->toString() );
+	  s = s.arg( it2.key() ).arg( it2.data()->toString( context ) );
 	  tmp += s;
 	}
 	tmp += "} }";
@@ -620,7 +620,6 @@ QString KSValue::toString() const
       break;
     case StructType:
       {
-	KSContext c;
 	QString tmp( "{ Struct %1 { " );
 	tmp = tmp.arg( structValue()->getClass()->name() );
 	const QStringList& lst = structValue()->getClass()->vars();
@@ -628,8 +627,8 @@ QString KSValue::toString() const
 	for( ; it2 != lst.end(); ++it2 )
 	{
 	  QString s("( %1, %2 ), ");
-	  KSValue::Ptr ptr = ((KSStruct*)val.ptr)->member( c, *it2 );
-	  s = s.arg( *it2 ).arg( ptr->toString() );
+	  KSValue::Ptr ptr = ((KSStruct*)val.ptr)->member( context, *it2 );
+	  s = s.arg( *it2 ).arg( ptr->toString( context ) );
 	  tmp += s;
 	}
 	tmp += "} }";
@@ -673,12 +672,12 @@ QString KSValue::toString() const
     case ListType:
       {
 	QString tmp( "[ " );
-	const QValueList<Ptr>* lst = (QValueList<Ptr>*)val.ptr;
-	QValueList<Ptr>::ConstIterator it = lst->begin();
-	QValueList<Ptr>::ConstIterator end = lst->end();
+	QValueList<Ptr>* lst = (QValueList<Ptr>*)val.ptr;
+	QValueList<Ptr>::Iterator it = lst->begin();
+	QValueList<Ptr>::Iterator end = lst->end();
 	for( ; it != end; ++it )
 	{
-	  tmp += (*it)->toString();
+	  tmp += (*it)->toString( context );
 	  tmp += ", ";
 	}
 	tmp += "]";
@@ -688,15 +687,15 @@ QString KSValue::toString() const
     case MapType:
       {
 	QString tmp( "{ " );
-	const QMap<QString,Ptr>* lst = (QMap<QString,Ptr>*)val.ptr;
-	QMap<QString,Ptr>::ConstIterator it = lst->begin();
-	QMap<QString,Ptr>::ConstIterator end = lst->end();
+	QMap<QString,Ptr>* lst = (QMap<QString,Ptr>*)val.ptr;
+	QMap<QString,Ptr>::Iterator it = lst->begin();
+	QMap<QString,Ptr>::Iterator end = lst->end();
 	for( ; it != end; ++it )
 	{
 	  tmp += "( ";
 	  tmp += it.key();
 	  tmp += ", ";
-	  tmp += it.data()->toString();
+	  tmp += it.data()->toString( context );
 	  tmp += " ), ";
 	}
 	tmp += "}";

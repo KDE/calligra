@@ -79,6 +79,9 @@ typedef union
 #define	T_RANGE	327
 #define	T_CELL	328
 #define	T_FROM	329
+#define	T_PLUS_ASSIGN	330
+#define	T_AND	331
+#define	T_OR	332
 
 
 extern YYSTYPE yylval;

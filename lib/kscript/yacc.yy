@@ -104,6 +104,9 @@ void yyerror( const char *s )
 %token <_str> T_RANGE
 %token <_str> T_CELL
 %token T_FROM
+%token T_PLUS_ASSIGN
+%token T_AND
+%token T_OR
 
 %type <node>   definitions
 %type <node>   definition
@@ -155,6 +158,8 @@ void yyerror( const char *s )
 %type <node>   single_catch
 %type <node>   loop_body
 %type <_str>   import_list
+%type <node>   bool_or
+%type <node>   bool_and
 
 %%
 
@@ -306,9 +311,35 @@ scoped_name
 
 /* This rule fits for assignments like "a = 100" */
 assign_expr
-	: equal_expr T_ASSIGN assign_expr
+	: bool_or T_ASSIGN assign_expr
 	  {
 	    $$ = new KSParseNode( assign_expr, $1, $3 );
+	  }
+	| bool_or T_PLUS_ASSIGN assign_expr
+	  {
+	    $$ = new KSParseNode( plus_assign, $1, $3 );
+	  }
+	| bool_or
+	  {
+	    $$ = $1;
+	  }
+	;
+
+bool_or
+	: bool_and T_OR bool_or
+	  {
+	    $$ = new KSParseNode( bool_or, $1, $3 );
+	  }
+	| bool_and
+	  {
+	    $$ = $1;
+	  }
+	;
+
+bool_and
+	: equal_expr T_AND bool_and
+	  {
+	    $$ = new KSParseNode( bool_and, $1, $3 );
 	  }
 	| equal_expr
 	  {

@@ -2,7 +2,6 @@
 #include "kscript_ext_qwidget.h"
 #include "kscript_ext_qdialog.h"
 #include "kscript_ext_qapplication.h"
-// #include "kscript_ext_qrect.h"
 #include "kscript_ext_qlineedit.h"
 #include "kscript_ext_qbutton.h"
 #include "kscript_ext_qcheckbox.h"
@@ -28,7 +27,6 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QWidget", new KSValue( new KSClass_QWidget( module ) ) );
   module->addObject( "QDialog", new KSValue( new KSClass_QDialog( module ) ) );
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
-  // module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
   module->addObject( "QLineEdit", new KSValue( new KSClass_QLineEdit( module ) ) );
   module->addObject( "QButton", new KSValue( new KSClass_QButton( module ) ) );
   module->addObject( "QRadioButton", new KSValue( new KSClass_QRadioButton( module ) ) );
@@ -39,7 +37,9 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
   module->addObject( "QButtonGroup", new KSValue( new KSClass_QButtonGroup( module ) ) );
   module->addObject( "QRect", new KSValue( new KSQt::Rect( module, "QRect" ) ) );
-  
+  module->addObject( "QPoint", new KSValue( new KSQt::Point( module, "QPoint" ) ) );
+  module->addObject( "QSize", new KSValue( new KSQt::Size( module, "QSize" ) ) );
+    
   return module;
 }
 

@@ -155,8 +155,8 @@ public:
   const QValueList<int>& lines() { return m_lines; }
   void addLine( int l ) { if ( m_lines.isEmpty() ) m_lines.append( l ); else if ( m_lines.last() != l ) m_lines.append( l ); }
 
-  QString toString();
-  void print();
+  QString toString( KSContext& context );
+  void print( KSContext& context );
 
   KSValue* type() { return m_type; }
   KSValue* value() { return m_value; }

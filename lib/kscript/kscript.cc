@@ -48,7 +48,7 @@ QString KSInterpreter::runScript( const QString& filename )
   // The "" indicates that this is not a module but
   // a script in its original meaning.
   if ( !runModule( context, "", filename ) )
-    return context.exception()->toString();
+    return context.exception()->toString( context );
 
   return QString::null;
 }

@@ -2,6 +2,7 @@
 #include "kscript_struct.h"
 #include "kscript_util.h"
 #include "kscript_object.h"
+#include "kscript_ext_qstructs.h"
 
 #include <dcopclient.h>
 #include <kapp.h>
@@ -105,7 +106,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
           {
 	      QValueList<KSValue::Ptr>::Iterator begin = v->listValue().begin();
 	      QValueList<KSValue::Ptr>::Iterator end = v->listValue().end();
-	      
+	
 	      QString ret2 = pack( context, str, *begin );
 	      if ( ret2.isEmpty() )
 		  return QString::null;
@@ -129,7 +130,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
           {
 	      QMap<QString,KSValue::Ptr>::Iterator begin = v->mapValue().begin();
 	      QMap<QString,KSValue::Ptr>::Iterator end = v->mapValue().end();
-	      
+	
 	      str << begin.key();
 	      QString ret2 = pack( context, str, begin.data() );
 	      if ( ret2.isEmpty() )
@@ -167,10 +168,20 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
     case KSValue::StructType:
 	{
 	    KSStruct* s = v->structValue();
-	    if ( s->getClass()->name() == "QRect" )
+	    if ( s->getClass()->fullName() == "qt:QRect" )
             {
-		str << KSUtil::toQRect( context, s );
+		str << KSQt::Rect::convert( context, v );
 		return "QRect";
+	    }
+	    if ( s->getClass()->fullName() == "qt:QPoint" )
+            {
+		str << KSQt::Point::convert( context, v );
+		return "QPoint";
+	    }
+	    if ( s->getClass()->fullName() == "qt:QSize" )
+            {
+		str << KSQt::Size::convert( context, v );
+		return "QSize";
 	    }
 	}
 	// TODO: Give error
@@ -257,6 +268,24 @@ KSValue::Ptr KSProxy::unpack( KSContext& context, QDataStream& str, const QCStri
 	for( ; it != lst.end(); ++it )
 	    v->listValue().append( new KSValue( *it ) );
 	return v;
+    }
+    if ( type == "QRect" )
+    {
+	QRect rect;
+	str >> rect;
+	return KSQt::Rect::convert( context, rect );
+    }
+    if ( type == "QSize" )
+    {
+	QSize size;
+	str >> size;
+	return KSQt::Size::convert( context, size );
+    }
+    if ( type == "QPoint" )
+    {
+	QPoint p;
+	str >> p;
+	return KSQt::Point::convert( context, p );
     }
     if ( type.left( 11 ) == "QValueList<" )
     {

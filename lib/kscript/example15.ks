@@ -1,11 +1,3 @@
-struct QRect
-{
-	var x;
-	var y;
-	var width;
-	var height;
-};
-
 main
 {
 	print("-------1");
@@ -24,8 +16,8 @@ main
 	print( name );
 	print( map.tableNames() );
 	r = QRect();
-	r.x = 2;
-	r.y = 2;
+	r.left = 2;
+	r.left = 2;
 	r.width = 3;
 	r.height = 4;
 	table.setSelection( r );

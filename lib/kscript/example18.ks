@@ -36,4 +36,25 @@ main
 	print("10------");
 	print( r4 );
 	print( r4.left, r4.right );
+	print("11------");
+	p = QPoint();
+	print("12------");
+	p2 = QPoint( 5, 6 );
+	print("13------");
+	print( p.isNull(), p2.isNull() );
+	print("14------");
+	print( p, p2 );
+	print("15------");
+	r5 = QRect( 1, 2, 6, 4 );
+	r6 = QRect( QPoint( 3,4 ), QPoint( 5, 9 ) );
+	r7 = QRect( QPoint( 44, 55 ), QSize( 100, 200 ) );
+	print( r5, r6, r7 );
+	print("16------");
+	r7.size = QSize( 122, 133 );
+	print( r7 );
+	print("17------");
+	print( r7.contains( QRect( 50, 60, 10, 10 ) ) );
+	print( r7.contains( QPoint( 44, 55 ) ) );
+	print( r7.contains( QRect( 50, 60, 10, 10 ), TRUE ) );
+	print( r7.contains( QPoint( 44, 55 ), TRUE ) );	
 }

@@ -1,6 +1,8 @@
 #include "kscript_util.h"
 #include "kscript_context.h"
 #include "kscript_struct.h"
+#include "kscript_object.h"
+#include "kscript_class.h"
 
 bool KSUtil::checkArgumentsCount( KSContext& context, uint count, const QString& name, bool fatal )
 {
@@ -25,6 +27,20 @@ bool KSUtil::checkArgumentsCount( KSContext& context, uint count, const QString&
 bool KSUtil::checkType( KSContext& context, KSValue* v, KSValue::Type t, bool fatal )
 {
   if ( !v->cast( t ) )
+  {
+    if ( !fatal )
+      return false;
+
+    castingError( context, v, t );
+    return false;
+  }
+
+  return true;
+}
+
+bool KSUtil::checkType( KSContext& context, const KSValue::Ptr& v, KSValue::Type t, bool fatal )
+{
+  if ( v->type() != t )
   {
     if ( !fatal )
       return false;
@@ -66,20 +82,123 @@ void KSUtil::tooManyArgumentsError( KSContext& context, const QString& methodnam
   context.setException( new KSException( "TooManyArguments", tmp.arg( methodname ), -1 ) );
 }
 
-QRect KSUtil::toQRect( KSContext& context, KSStruct* s )
+bool KSUtil::checkArgs( KSContext& context, const QCString& signature, const QString& method, bool fatal )
 {
-    KSValue::Ptr x = s->member( context, "x" );
-    if ( !x || x->type() != KSValue::IntType )
-	return QRect();
-    KSValue::Ptr y = s->member( context, "y" );
-    if ( !y || y->type() != KSValue::IntType )
-	return QRect();
-    KSValue::Ptr width = s->member( context, "width" );
-    if ( !width || width->type() != KSValue::IntType )
-	return QRect();
-    KSValue::Ptr height = s->member( context, "height" );
-    if ( !height || height->type() != KSValue::IntType )
-	return QRect();
+    // Is the value really a list ?
+    if ( !KSUtil::checkType( context, context.value(), KSValue::ListType, TRUE ) )
+	return FALSE;
+    return KSUtil::checkArgs( context, context.value()->listValue(), signature, method, fatal );
+}
 
-    return QRect( x, y, width, height );
+bool KSUtil::checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args,
+			const QCString& signature, const QString& method, bool fatal )
+{
+    uint done = 0;
+    uint count = args.count();
+    uint len = signature.length();
+    uint pos = 0;
+    while ( pos < len )
+    {
+	// Have seen all parameters and we may skip optional parameters
+	if ( done == count && signature[pos] == '|' )
+	    return TRUE;
+	if ( signature[pos] == '|' )
+	    ++pos;
+	if ( signature[pos] == 'i' )
+        {
+	    if ( !checkType( context, args[done], KSValue::IntType, fatal ) )
+		return FALSE;
+	    ++pos;
+	}
+	else if ( signature[pos] == 'f' )
+        {
+	    if ( !checkType( context, args[done], KSValue::DoubleType, fatal ) )
+		return FALSE;
+	    ++pos;
+	}
+	else if ( signature[pos] == 'b' )
+        {
+	    if ( !checkType( context, args[done], KSValue::BoolType, fatal ) )
+		return FALSE;
+	    ++pos;
+	}
+	else if ( signature[pos] == 's' )
+        {
+	    if ( !checkType( context, args[done], KSValue::StringType, fatal ) )
+		return FALSE;
+	    ++pos;
+	}
+	else if ( signature[pos] == 'c' )
+        {
+	    if ( !checkType( context, args[done], KSValue::CharType, fatal ) )
+		return FALSE;
+	    ++pos;
+	}
+	else if ( signature[pos] == '[' )
+        {
+	    if ( !checkType( context, args[done], KSValue::ListType, fatal ) )
+		return FALSE;
+	    ++pos;
+	    if ( signature[pos] == ']' ) { }
+	    // TODO: check vars in the list
+	}
+	else if ( signature[pos] == '{' )
+        {
+	    if ( !checkType( context, args[done], KSValue::MapType, fatal ) )
+		return FALSE;
+	    ++pos;
+	    if ( signature[pos] == '}' ) { }
+	    // TODO: check vars in the list
+	}
+	else if ( signature[pos] == 'S' )
+        {
+	    if ( !checkType( context, args[done], KSValue::StructType, fatal ) )
+		return FALSE;
+	    ++pos;
+	    uint x = pos;
+	    while( signature[pos] != ';' && signature[pos] != 0 )
+		++pos;
+	    ASSERT( signature[pos] == ';' );
+	    if ( args[done]->structValue()->getClass()->fullName() != signature.mid( x, pos - x ).data() )
+	    {
+		if ( fatal )
+		    castingError( context, args[done]->structValue()->getClass()->fullName(),
+				  signature.mid( x, pos - x ).data() );
+		return FALSE;
+	    }
+	    ++pos;
+	}
+	else if ( signature[pos] == 'O' )
+        {
+	    if ( !checkType( context, args[done], KSValue::ObjectType, fatal ) )
+		return FALSE;
+	    ++pos;
+	    uint x = pos;
+	    while( signature[pos] != ';' && signature[pos] != 0 )
+		++pos;
+	    ASSERT( signature[pos] == ';' );
+	    if ( args[done]->objectValue()->getClass()->fullName() != signature.mid( x, pos - x ).data() )
+	    {
+		if ( fatal )
+		    castingError( context, args[done]->objectValue()->getClass()->fullName(),
+				  signature.mid( x, pos - x ).data() );
+		return FALSE;
+	    }
+	    ++pos;
+	}
+	else
+	    ASSERT( 0 );
+	
+	++done;
+    }
+ 
+    // Too many arguments ?
+    if ( done < count )
+    {
+	if ( fatal )
+	    tooFewArgumentsError( context, method );
+	return FALSE;
+    }
+	    
+    return TRUE;
 }

@@ -93,7 +93,10 @@ typedef enum
   t_raise,
   t_cell,
   t_range,
-  from
+  from,
+  plus_assign,
+  bool_or,
+  bool_and
 } KSParseNodeType;
 
 class KSContext;

@@ -20,7 +20,40 @@ bool KSScriptFunction::isSignal() const
   return false;
 }
 
-bool ksfunc_length( KSContext& context )
+static bool ksfunc_mid( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    uint len = 0xffffffff;
+    if ( KSUtil::checkArgumentsCount( context, 3, "mid", false ) )
+    {
+	if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
+	    len = (uint) args[2]->doubleValue();
+	else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+	    len = (uint) args[2]->intValue();
+	else
+	    return false;
+    }
+    else if ( !KSUtil::checkArgumentsCount( context, 2, "mid", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+
+    if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+	return false;
+    int pos = args[1]->intValue();
+
+    QString tmp = args[0]->stringValue().mid( pos, len );
+    context.setValue( new KSValue(tmp)); 	
+    return true;
+}
+
+/**
+ * Like QString::length for strings.
+ * Returns the length of lists or maps, too.
+ */
+static bool ksfunc_length( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -49,7 +82,10 @@ bool ksfunc_length( KSContext& context )
   return true;
 }
 
-bool ksfunc_toInt( KSContext& context )
+/**
+ * Like QString::toInt
+ */
+static bool ksfunc_toInt( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -77,7 +113,10 @@ bool ksfunc_toInt( KSContext& context )
   return false;
 }
 
-bool ksfunc_toFloat( KSContext& context )
+/**
+ * Like QString::toFloat
+ */
+static bool ksfunc_toFloat( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -105,7 +144,38 @@ bool ksfunc_toFloat( KSContext& context )
   return false;
 }
 
-bool ksfunc_connect( KSContext& context )
+/**
+ * Like QString::arg
+ *
+ * Syntax: arg( string, value )
+ * Syntax: string.arg( value )
+ */
+static bool ksfunc_arg( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 2, "arg", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, TRUE ) )
+	return FALSE;
+
+    QString str = args[0]->stringValue();
+    
+    if ( KSUtil::checkType( context, args[1], KSValue::StringType, FALSE ) )
+	context.setValue( new KSValue( str.arg( args[1]->stringValue() ) ) );
+    else if ( KSUtil::checkType( context, args[1], KSValue::IntType, FALSE ) )
+	context.setValue( new KSValue( str.arg( args[1]->intValue() ) ) );
+    else if ( KSUtil::checkType( context, args[1], KSValue::DoubleType, FALSE ) )
+	context.setValue( new KSValue( str.arg( args[1]->doubleValue() ) ) );
+    else if ( KSUtil::checkType( context, args[1], KSValue::CharType, FALSE ) )
+	context.setValue( new KSValue( str.arg( args[1]->charValue() ) ) );
+    else context.setValue( new KSValue( str.arg( args[1]->toString( context ) ) ) );
+    
+    return TRUE;
+}
+    
+static bool ksfunc_connect( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -131,7 +201,7 @@ bool ksfunc_connect( KSContext& context )
   return true;
 }
 
-bool ksfunc_print( KSContext& context )
+static bool ksfunc_print( KSContext& context )
 {
   // We know that the context always holds a list of parameters
   QValueList<KSValue::Ptr>::Iterator it = context.value()->listValue().begin();
@@ -141,7 +211,7 @@ bool ksfunc_print( KSContext& context )
     cout << endl;
 
   for( ; it != end; ++it )
-    cout << (*it)->toString() << endl;
+    cout << (*it)->toString( context ) << endl;
 
   // context.value()->clear();
   context.setValue( 0 );
@@ -162,7 +232,7 @@ static bool ksfunc_application( KSContext& context )
 	return false;
 
     context.setValue( new KSValue( new KSProxy( args[0]->stringValue().latin1(), args[1]->stringValue().latin1() ) ) );
-    
+
     return TRUE;
 }
 
@@ -173,6 +243,8 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "print", new KSValue( new KSBuiltinFunction( module, "print", ksfunc_print ) ) );
   module->addObject( "connect", new KSValue( new KSBuiltinFunction( module, "connect", ksfunc_connect ) ) );
   module->addObject( "length", new KSValue( new KSBuiltinFunction( module, "length", ksfunc_length ) ) );
+  module->addObject( "arg", new KSValue( new KSBuiltinFunction( module, "arg", ksfunc_arg ) ) );
+  module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", ksfunc_mid ) ) );
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );
   module->addObject( "findApplication", new KSValue( new KSBuiltinFunction( module, "findApplication", ksfunc_application ) ) );

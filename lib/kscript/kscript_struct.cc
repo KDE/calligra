@@ -40,6 +40,11 @@ KSValue::Ptr KSStructClass::member( KSContext& context, const QString& name )
   return it.data();
 }
 
+QString KSStructClass::fullName() const
+{
+    return ( m_module->name() + ":" + m_name );
+}
+
 /***************************************************
  *
  * KSStruct
@@ -121,6 +126,10 @@ bool KSBuiltinStructClass::call( void* object, KSContext& context, const QString
 {
     QMap<QString,Method>::Iterator it = m_methods.find( name );
     ASSERT( it != m_methods.end() );
+
+    if ( !it.data().m_signature.isNull() )
+	if ( !KSUtil::checkArgs( context, it.data().m_signature, name, TRUE ) )
+	    return FALSE;
     
     return it.data().m_method( object, context, context.value()->listValue() );
 }
@@ -163,8 +172,8 @@ KSValue::Ptr KSBuiltinStruct::member( KSContext& context, const QString& name )
 
     // Is it a variable ?
     if ( getClass()->hasVariable( name ) )
-	return( ((KSBuiltinStructClass*)getClass())->property( m_object, name ) );
-    
+	return( ((KSBuiltinStructClass*)getClass())->property( context, m_object, name ) );
+
     QString tmp( "Unknown symbol '%1' in object of struct '%2'" );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
     return 0;

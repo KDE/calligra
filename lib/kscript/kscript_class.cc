@@ -101,3 +101,8 @@ KSValue::Ptr KSClass::member( KSContext& context, const QString& name )
 
   return it.data();
 }
+
+QString KSClass::fullName() const
+{
+    return ( m_name + ":" + m_module->name() );
+}

@@ -90,5 +90,8 @@ extern bool KSEval_t_raise( KSParseNode* node, KSContext& context );
 extern bool KSEval_t_cell( KSParseNode* node, KSContext& context );
 extern bool KSEval_t_range( KSParseNode* node, KSContext& context );
 extern bool KSEval_from( KSParseNode* node, KSContext& context );
+extern bool KSEval_plus_assign( KSParseNode* node, KSContext& context );
+extern bool KSEval_bool_or( KSParseNode* node, KSContext& context );
+extern bool KSEval_bool_and( KSParseNode* node, KSContext& context );
 
 #endif

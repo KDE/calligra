@@ -39,8 +39,20 @@ public:
   void setVariables( const QStringList& l ) { m_vars = l; }
   bool hasVariable( const QString& v ) { return m_vars.contains( v ); }
 
-  const QString name() const { return m_name; }
-
+  /**
+   * @return the name of the class, for example "QRect" or "QPixmap".
+   *
+   * @see #fullName
+   */
+  QString name() const { return m_name; }
+  /**
+   * @return the name of the class with prepended name of the module like this:
+   * "qt:QRect" or "kde:KColorDialog"
+   *
+   * @see #name
+   */
+  QString fullName() const;
+    
   /**
    * When getting a pointer to a KSObject via @ref KSValue::objectValue this function
    * helps to do some dynamic casting.
@@ -87,7 +99,7 @@ public:
    */
   virtual void* object() { return 0; }
   virtual const void* object() const { return 0; }
-    
+
 private:
   KSStructClass* m_class;
   KSNamespace m_space;
@@ -108,6 +120,11 @@ public:
 
     typedef bool (*MethodPtr)( void* object, KSContext&, const QValueList<KSValue::Ptr>& args );
 
+    /**
+     * @param signature is the signature of the method. Passing an empty string here means
+     *                  that the method does not expect any parameter while a null string means
+     *                  that the function will check the arguments itself.
+     */
     void addMethod( const QString& name, MethodPtr func, const QCString& signature );
     bool hasMethod( const QString& ) const;
 
@@ -118,7 +135,7 @@ protected:
      * It can not happen that @p name is not the name of a variable, since @ref KSBuiltinStruct
      * checks wether @p name is really a variable of this struct before calling.
      */
-    virtual KSValue::Ptr property( void* object, const QString& name ) = 0;
+    virtual KSValue::Ptr property( KSContext& context, void* object, const QString& name ) = 0;
     /**
      * If the type does not match the property, you must give an exception.
      * If the property is readonly just return 0 and dont give an exception.
@@ -173,7 +190,7 @@ public:
      */
     void* object();
     const void* object() const;
-    
+
 private:
     void* m_object;
 };
