@@ -857,7 +857,12 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       KSpreadCell* cell = table->cellAt( x, y );
 
       QPoint cellRef( x, y );
-      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef );
+
+      bool paintBordersRight = ( x == paintRegion.right() );
+      bool paintBordersBottom = ( y == paintRegion.bottom() );
+
+      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
+                       cellRef, paintBordersRight, paintBordersBottom, false );
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
     }

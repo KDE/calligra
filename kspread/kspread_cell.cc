@@ -1849,8 +1849,8 @@ bool KSpreadCell::calc(bool delay)
 
 void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
                              KSpreadView* view, const KoPoint &coordinate,
-                             const QPoint &cellRef, bool drawCursor,
-                             PaintCellBorder paintCellBorder )
+                             const QPoint &cellRef, bool paintBorderRight,
+                             bool paintBorderBottom, bool drawCursor )
 {
   if ( testFlag( Flag_PaintingCell ) )
     return;
@@ -1917,13 +1917,13 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
     paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
   }
 
-  paintDefaultBorders( painter, rect, cellRect, cellRef );
+  paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom );
 
   //If we print pages then we disable clipping otherwise borders are cut in the middle at the page borders
   if ( painter.device()->isExtDev() )
     painter.setClipping( false );
 
-  paintCellBorders( painter, rect, cellRect, cellRef, paintCellBorder );
+  paintCellBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom );
 
   if ( painter.device()->isExtDev() )
     painter.setClipping( true );
@@ -1932,10 +1932,10 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
 
   /* paint all the cells that this one obscures */
   paintingObscured++;
-  paintObscuredCells( rect, painter, view, cellRect, cellRef );
+  paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorderRight, paintBorderBottom );
   paintingObscured--;
 
-  paintPageBorders( painter, cellRect, cellRef );
+  paintPageBorders( painter, cellRect, cellRef, paintBorderRight, paintBorderBottom );
 
   /* now print content, if this cell isn't obscured */
   if ( !isObscured() )
@@ -2017,7 +2017,8 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
         painter.save();
 
         obscuringCell->paintCell( rect, painter, view,
-                                  corner, obscuringCellRef );
+                                  corner, obscuringCellRef,
+                                  paintBorderRight, paintBorderBottom );
         painter.restore();
       }
     }
@@ -2060,7 +2061,9 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
 void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      KSpreadView* view,
                                      const KoRect &cellRect,
-                                     const QPoint &cellRef )
+                                     const QPoint &cellRef,
+                                     bool paintBorderRight,
+                                     bool paintBorderBottom )
 {
   // This cell is obscuring other ones? Then we redraw their
   // background and borders before we paint our content there.
@@ -2083,7 +2086,8 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
           KoPoint corner = KoPoint( xpos, ypos );
           cell->paintCell( rect, painter, view,
                            corner,
-                           QPoint( cellRef.x() + x, cellRef.y() + y ) );
+                           QPoint( cellRef.x() + x, cellRef.y() + y ),
+                           paintBorderRight, paintBorderBottom );
         }
         xpos += cl->dblWidth();
       }
@@ -2163,7 +2167,9 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
 
 void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                                        const KoRect &cellRect,
-                                       const QPoint &cellRef )
+                                       const QPoint &cellRef,
+                                       bool paintBorderRight,
+                                       bool paintBorderBottom )
 {
   KSpreadDoc* doc = table()->doc();
 
@@ -2183,16 +2189,14 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
   paintLeft = ( left_pen.style() == Qt::NoPen &&
                 table()->getShowGrid() );
-  paintRight = ( painter.device()->isExtDev() && // Only on printout
-                 right_pen.style() == Qt::NoPen &&
+  paintRight = ( paintBorderRight &&
                  table()->getShowGrid() &&
-                 table()->isOnNewPageX( cellRef.x() + 1 ) );  //Only when last cell on page
+                 right_pen.style() == Qt::NoPen );
   paintTop = ( top_pen.style() == Qt::NoPen &&
                table()->getShowGrid() );
-  paintBottom = ( painter.device()->isExtDev() &&  // Only on printout
-                  bottom_pen.style() == Qt::NoPen &&
+  paintBottom = ( paintBorderBottom &&
                   table()->getShowGrid() &&
-                  table()->isOnNewPageY( cellRef.y() + 1 ) ); //Only when last cell on page
+                  bottom_pen.style() == Qt::NoPen );
 
   QValueList<KSpreadCell*>::const_iterator it = m_ObscuringCells.begin();
   QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
@@ -2457,7 +2461,8 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
 }
 
 void KSpreadCell::paintText( QPainter& painter,
-                             const KoRect &cellRect, const QPoint &cellRef )
+                             const KoRect &cellRect,
+                             const QPoint &cellRef )
 {
   KSpreadDoc* doc = table()->doc();
 
@@ -2681,32 +2686,55 @@ void KSpreadCell::paintText( QPainter& painter,
 
 void KSpreadCell::paintPageBorders( QPainter& painter,
                                     const KoRect &cellRect,
-                                    const QPoint &cellRef )
+                                    const QPoint &cellRef,
+                                    bool paintBorderRight,
+                                    bool paintBorderBottom )
 {
   if ( painter.device()->isExtDev() )
     return;
 
   // Draw page borders
-  if ( m_pTable->isShowPageBorders() &&
-       //Check for the print range
-       cellRef.x() >= table()->printRange().left() &&
-       cellRef.x() <= table()->printRange().right()+1 &&
-       cellRef.y() >= table()->printRange().top() &&
-       cellRef.y() <= table()->printRange().bottom()+1 )
-  {
-    KSpreadDoc* doc = table()->doc();
+  if( m_pTable->isShowPageBorders() )
+  { 
+    if( cellRef.x() >= table()->printRange().left() &&
+        cellRef.x() <= table()->printRange().right()+1 &&
+        cellRef.y() >= table()->printRange().top() &&
+        cellRef.y() <= table()->printRange().bottom()+1 )
+    {
+      KSpreadDoc* doc = table()->doc();
+      if ( m_pTable->isOnNewPageX( cellRef.x() ) && ( cellRef.y() <= table()->printRange().bottom() ) )
+      {
+        painter.setPen( table()->doc()->pageBorderColor() );
+        painter.drawLine( doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.bottom() ) );
+      }
 
-    if ( m_pTable->isOnNewPageY( cellRef.y() ) && ( cellRef.x() <= table()->printRange().right() ) )
-    {
-      painter.setPen( table()->doc()->pageBorderColor() );
-      painter.drawLine( doc->zoomItX( cellRect.x() ),     doc->zoomItY( cellRect.y() ),
-                        doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ) );
-    }
-    if ( m_pTable->isOnNewPageX( cellRef.x() ) && ( cellRef.y() <= table()->printRange().bottom() ) )
-    {
-      painter.setPen( table()->doc()->pageBorderColor() );
-      painter.drawLine( doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
-                        doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.bottom() ) );
+      if ( m_pTable->isOnNewPageY( cellRef.y() ) && ( cellRef.x() <= table()->printRange().right() ) )
+      {
+        painter.setPen( table()->doc()->pageBorderColor() );
+        painter.drawLine( doc->zoomItX( cellRect.x() ),     doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ) );
+      }
+
+      if( paintBorderRight )
+      {
+        if ( m_pTable->isOnNewPageX( cellRef.x()+1 ) && ( cellRef.y() <= table()->printRange().bottom() ) )
+        {
+          painter.setPen( table()->doc()->pageBorderColor() );
+          painter.drawLine( doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ),
+                            doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.bottom() ) );
+        }
+      }
+
+      if( paintBorderBottom )
+      {
+        if ( m_pTable->isOnNewPageY( cellRef.y()+1 ) && ( cellRef.x() <= table()->printRange().right() ) )
+        {
+          painter.setPen( table()->doc()->pageBorderColor() );
+          painter.drawLine( doc->zoomItX( cellRect.x() ),     doc->zoomItY( cellRect.bottom() ),
+                            doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.bottom() ) );
+        }
+      }
     }
   }
 }
@@ -2715,16 +2743,17 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     const KoRect &cellRect,
                                     const QPoint &cellRef,
-                                    PaintCellBorder paintCellBorder )
+                                    bool paintBorderRight,
+                                    bool paintBorderBottom )
 {
   KSpreadDoc* doc = table()->doc();
 
   /* we might not paint some borders if this cell is merged with another in
      that direction */
   bool paintLeft = true;
-  bool paintRight = true;
+  bool paintRight = paintBorderRight;
   bool paintTop = true;
-  bool paintBottom = true;
+  bool paintBottom = paintBorderBottom;
 
   QValueList<KSpreadCell*>::const_iterator it = m_ObscuringCells.begin();
   QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
@@ -2762,7 +2791,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   top_pen.setWidth( top_penWidth );
   bottom_pen.setWidth( bottom_penWidth );
 
-  if ( left_pen.style() != Qt::NoPen && paintLeft)
+  if ( paintLeft && left_pen.style() != Qt::NoPen )
   {
     int top = ( QMAX( 0, -1 + top_penWidth ) ) / 2 +
               ( ( QMAX( 0, -1 + top_penWidth ) ) % 2 );
@@ -2791,7 +2820,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  if ( right_pen.style() != Qt::NoPen && paintRight)
+  if ( paintRight && right_pen.style() != Qt::NoPen )
   {
     int top = ( QMAX( 0, -1 + top_penWidth ) ) / 2 +
               ( ( QMAX( 0, -1 + top_penWidth ) ) % 2 );
@@ -2820,7 +2849,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  if ( top_pen.style() != Qt::NoPen && paintTop)
+  if ( paintTop && top_pen.style() != Qt::NoPen )
   {
     painter.setPen( top_pen );
     //If we are on paper printout, we limit the length of the lines
@@ -2841,7 +2870,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  if ( bottom_pen.style() != Qt::NoPen && paintBottom )
+  if ( paintBottom && bottom_pen.style() != Qt::NoPen )
   {
     painter.setPen( bottom_pen );
     //If we are on paper printout, we limit the length of the lines

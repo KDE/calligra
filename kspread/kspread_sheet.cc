@@ -6044,9 +6044,13 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 KoRect r( 0.0, 0.0, view.width(), view.height() );
+
+                bool paintBordersRight = ( x == m_printRepeatColumns.second );
+                bool paintBordersBottom = ( y == m_printRepeatRows.second );
+
                 cell->paintCell( r, _painter, NULL,
                                  KoPoint( xpos, ypos ),
-                                 QPoint( x, y ) );
+                                 QPoint( x, y ), paintBordersRight, paintBordersBottom );
 
                 xpos += col_lay->dblWidth();
             }
@@ -6079,9 +6083,13 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 KoRect r( 0.0, 0.0, view.width() + xpos, view.height() );
+
+                bool paintBordersRight = ( x == page_range.right() );
+                bool paintBordersBottom = ( y == m_printRepeatRows.second );
+
                 cell->paintCell( r, _painter, NULL,
                                  KoPoint( xpos, ypos ),
-                                 QPoint( x, y ) );
+                                 QPoint( x, y ), paintBordersRight, paintBordersBottom );
 
                 xpos += col_lay->dblWidth();
             }
@@ -6113,9 +6121,13 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
+
+                bool paintBordersRight = ( x == m_printRepeatColumns.second );
+                bool paintBordersBottom = ( y == page_range.bottom() );
+
                 cell->paintCell( r, _painter, NULL,
                                  KoPoint( xpos, ypos ),
-                                 QPoint( x, y ) );
+                                 QPoint( x, y ), paintBordersRight, paintBordersBottom );
 
                 xpos += col_lay->dblWidth();
             }
@@ -6145,9 +6157,13 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
 
             cell = cellAt( x, y );
             KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
+
+            bool paintBordersRight = ( x == page_range.right() );
+            bool paintBordersBottom = ( y == page_range.bottom() );
+
             cell->paintCell( r, _painter, NULL,
                              KoPoint( xpos, ypos ),
-                             QPoint( x, y ) );
+                             QPoint( x, y ), paintBordersRight, paintBordersBottom );
 
             xpos += col_lay->dblWidth();
         }

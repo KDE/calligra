@@ -194,18 +194,6 @@ public:
      */
     void copyAll( KSpreadCell *cell);
 
-    enum PaintCellBorder{
-    /*
-      If we paint a cell, then the background erases even the border of the right and bottom cell,
-      if this border has a width > 1 pixel. To not redraw all borders all the time,
-      we can switch the drawing of the bottom/right border on and off.
-      Top and left border are always drawn.
-     */
-      Paint_NoBorder    = 0,
-      Paint_RightBorder = 1,
-      Paint_LeftBorder  = 2
-    };
-
     /**
      * Paints the cell.
      *
@@ -216,14 +204,16 @@ public:
      * @param coordinates coordinates on the painter where the top left corner
      *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
+     * @param paintBorderRight whether to draw the right border too.
+     * @param paintBorderBottom whether to draw the bottom border too.
      * @param drawCursor whether to draw the cursor and selection or not
-     * @param paintCellBorder whether to draw the right and/or bottom border.
-     *                    Top and left border are always drawn. Defaults to NoBorder.
      */
     void paintCell( const KoRect& rect, QPainter &painter,
                     KSpreadView* view, const KoPoint &coordinate,
-                    const QPoint &cellRef, bool drawCursor = true,
-                    PaintCellBorder paintCellBorder = Paint_NoBorder );
+                    const QPoint &cellRef, 
+                    bool paintBorderRight,
+                    bool paintBorderBottom,
+                    bool drawCursor = true );
 
   /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
@@ -264,10 +254,10 @@ public:
      */
     double dblHeight( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
-  /**
-   * @return a QRect for this cell (i.e., a 1x1 rect)
-   */
-  QRect cellRect();
+    /**
+     * @return a QRect for this cell (i.e., a 1x1 rect)
+     */
+    QRect cellRect();
 
     /**
      * @reimp
@@ -764,10 +754,15 @@ public:
    * a cell to do so by setting this flag. Forcing the cell to have
    * no extra size will disable this flag!
    *
-   * CellTooShort
-   * When it's True displays **
+   * CellTooShortX
+   * When it's True displays ** and/or the red triangle and when the
+   * mouse is over it, the tooltip displays the full value
    * it's true when text size is bigger that cell size
    * and when Align is center or left
+   *
+   * CellTooShortY
+   * When it's True when mouseover it, the tooltip displays the full value
+   * it's true when text size is bigger that cell height
    */
 
 protected:
@@ -1003,9 +998,10 @@ private:
   /* helper functions to the paintCell(...) function */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, const QPoint &cellRef,
-                           PaintCellBorder paintCellBorder = Paint_NoBorder );
+                           bool paintBorderRight, bool paintBorderBottom );
     void paintPageBorders( QPainter& painter, const KoRect &cellRect,
-                           const QPoint &cellRef );
+                           const QPoint &cellRef,
+                           bool paintBorderRight, bool paintBorderBottom );
     void paintText( QPainter& painter, const KoRect &cellRect,
                     const QPoint &cellRef );
     void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect,
@@ -1015,13 +1011,15 @@ private:
     void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect,
                                 QColor &backgroundColor );
     void paintDefaultBorders( QPainter& painter, const KoRect &rect,
-                              const KoRect &cellRect, const QPoint &cellRef );
+                              const KoRect &cellRect, const QPoint &cellRef,
+                              bool paintBorderRight, bool paintBorderBottom );
     void paintBackground( QPainter& painter, const KoRect &cellRect,
                           const QPoint &cellRef, bool selected,
                           QColor &backgroundColor );
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
                              KSpreadView* view, const KoRect &cellRect,
-                             const QPoint &cellRef );
+                             const QPoint &cellRef,
+                             bool paintBorderRight, bool paintBorderBottom );
     void paintCellDiagonalLines( QPainter& painter,
                                  const KoRect &cellRect,
                                  const QPoint &cellRef );

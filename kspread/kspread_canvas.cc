@@ -4,7 +4,6 @@
 #include "kspread_map.h"
 #include "kspread_undo.h"
 #include "kspread_canvas.h"
-
 #include "kspread_doc.h"
 
 #include <kmessagebox.h>
@@ -2964,8 +2963,15 @@ void KSpreadCanvas::paintUpdates()
         cell = activeTable()->cellAt( x, y );
         cell->calc();
         cell->makeLayout( painter, x, y );
+
+        //Paint the right and/or bottom border, when the next cell is not to be painted
+        bool paintBordersRight = ( ( x != KS_colMax ) &&
+                                 ( !activeTable()->cellIsPaintDirty( QPoint( x + 1, y ) ) ) );
+        bool paintBordersBottom = ( ( y != KS_rowMax ) &&
+                                  ( !activeTable()->cellIsPaintDirty( QPoint( x, y + 1 ) ) ) );
+
         cell->paintCell( unzoomedRect, painter, m_pView, dblCorner,
-                         QPoint( x, y ) );
+                         QPoint( x, y ), paintBordersRight, paintBordersBottom );
 
       }
       dblCorner.setY( dblCorner.y() + activeTable()->rowFormat( y )->dblHeight( ) );
