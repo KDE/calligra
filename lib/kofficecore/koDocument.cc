@@ -32,9 +32,6 @@
 #include <koDocumentInfo.h>
 
 #include <koStore.h>
-#include <koBinaryStore.h>
-#include <koTarStore.h>
-#include <koStoreStream.h>
 #include <kio/netaccess.h>
 
 #include <klocale.h>
@@ -56,7 +53,7 @@
 // so let's simply make it "tar:" !
 #define STORE_PROTOCOL "tar:"
 #define STORE_PROTOCOL_LENGTH 4
-// Warning, keep it sync in koTarStore.cc
+// Warning, keep it sync in koStore.cc
 
 QList<KoDocument> *KoDocument::s_documentList=0L;
 
@@ -510,7 +507,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
 {
   kdDebug(30003) << "Saving to store" << endl;
 
-  KoStore* store = new KoTarStore( file, KoStore::Write );
+  KoStore* store = new KoStore( file, KoStore::Write );
 
   // Save childen first since they might get a new url
   if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
@@ -694,17 +691,9 @@ bool KoDocument::loadNativeFormat( const QString & file )
     in.close();
     return res;
   } else
-  { // It's a koffice store (binary or tar.gz)
+  { // It's a koffice store (tar.gz)
     in.close();
-    KoStore * store;
-    if ( strncasecmp( buf, "KS01", 4 ) == 0 )
-    {
-      store = new KoBinaryStore( file, KoStore::Read );
-    }
-    else // new (tar.gz)
-    {
-      store = new KoTarStore( file, KoStore::Read );
-    }
+    KoStore * store = new KoStore( file, KoStore::Read );
 
     if ( store->bad() )
     {

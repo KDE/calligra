@@ -34,7 +34,7 @@
 // so let's simply make it "tar:" !
 #define STORE_PROTOCOL "tar:"
 #define STORE_PROTOCOL_LENGTH 4
-// Warning, keep it sync in koTarStore.cc
+// Warning, keep it sync in koStore.cc
 
 /**********************************************************
  *
