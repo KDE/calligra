@@ -101,6 +101,8 @@ public:
     CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
+    void apply( ColumnLayout *_col );
+    void apply( RowLayout *_row );
 
 signals:
     /**
@@ -168,7 +170,8 @@ public:
     CellLayoutPageMisc( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-
+    void apply( ColumnLayout *_col );
+    void apply( RowLayout *_row );
 public slots:
     void slotStyle( int );
 protected:
@@ -194,6 +197,8 @@ public:
     CellLayoutPageFloat( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
+    void apply( ColumnLayout *_col );
+    void apply( RowLayout *_row );
 
 public slots:
     void slotChangeState();
@@ -227,6 +232,8 @@ public:
     CellLayoutPagePosition( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
+    void apply( ColumnLayout *_col );
+    void apply( RowLayout *_row );
     int getSizeHeight();
     int getSizeWidth();
     bool getMergedCellState();
@@ -390,6 +397,9 @@ public:
     CellLayoutPagePattern( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
+    void apply( ColumnLayout *_col );
+    void apply( RowLayout *_row );
+
     void init();
 public slots:
     void slotUnselect2( KSpreadBrushSelect *_select );

@@ -1372,8 +1372,19 @@ else if(dlg->m_bValue)
         exampleLabel->setText(tmp);
         }
         else
-                exampleLabel->setText("Error");
+                exampleLabel->setText(i18n("Error"));
 }
+
+void CellLayoutPageFloat::apply( ColumnLayout */*_col*/ )
+{
+//todo
+}
+
+void CellLayoutPageFloat::apply( RowLayout */*_row*/ )
+{
+//todo
+}
+
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 {
     if ( postfix->text() != dlg->postfix )
@@ -1570,6 +1581,17 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
 
     this->resize( 400, 400 );
 }
+
+void CellLayoutPageMisc::apply( ColumnLayout */*_col*/ )
+{
+//todo
+}
+
+void CellLayoutPageMisc::apply( RowLayout */*_row*/ )
+{
+//todo
+}
+
 
 void CellLayoutPageMisc::apply( KSpreadCell *_obj )
 {
@@ -1790,6 +1812,17 @@ void CellLayoutPageFont::slotSetTextColor( const QColor &_color )
 {
 textColor=_color;
 }
+
+void CellLayoutPageFont::apply( ColumnLayout */*_col*/ )
+{
+//todo
+}
+
+void CellLayoutPageFont::apply( RowLayout */*_row*/ )
+{
+//todo
+}
+
 
 void CellLayoutPageFont::apply( KSpreadCell *_obj )
 {
@@ -2156,6 +2189,17 @@ else
     vertical->setEnabled(false);
     }
 }
+
+void CellLayoutPagePosition::apply( ColumnLayout */*_col*/ )
+{
+//todo
+}
+
+void CellLayoutPagePosition::apply( RowLayout */*_row */)
+{
+//todo
+}
+
 
 void CellLayoutPagePosition::apply( KSpreadCell *_obj )
 {
@@ -3656,6 +3700,17 @@ void CellLayoutPagePattern::slotUnselect2( KSpreadBrushSelect *_p )
 
     current->setBrushStyle(selectedBrush->getBrushStyle());
 }
+
+void CellLayoutPagePattern::apply( ColumnLayout */*_col*/ )
+{
+//todo
+}
+
+void CellLayoutPagePattern::apply( RowLayout */*_row*/ )
+{
+//todo
+}
+
 
 void CellLayoutPagePattern::apply( KSpreadCell *_obj )
 {
