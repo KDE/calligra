@@ -3548,7 +3548,7 @@ void KPrPage::changeTabStopValue ( double _tabStop )
             KPTextObject *obj = dynamic_cast<KPTextObject *>(it.current());
             if ( obj )
             {
-                obj->textDocument()->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPt( _tabStop ));
+                obj->textDocument()->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPixX( _tabStop ));
                 obj->layout();
                 m_doc->repaint( obj );
             }
