@@ -123,8 +123,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 				new VMCmdTranslate(
 					part(),
 					part()->selection(),
-					qRound( view->zoomFactor() * lp.x() - fp.x() ),
-					qRound( view->zoomFactor() * lp.y() - fp.y() ) ),
+					qRound( lp.x() - fp.x() ),
+					qRound( lp.y() - fp.y() ) ),
 				true );
 
 //			part()->repaintAllViews();

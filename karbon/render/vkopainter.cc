@@ -252,8 +252,11 @@ VKoPainter::setBrush( Qt::BrushStyle style )
 }
 
 void
-VKoPainter::setBrush( const VFill & )
+VKoPainter::setBrush( const VFill &fill )
 {
+	delete m_fill;
+	m_fill =  new VFill;
+	*m_fill = fill;
 }
 
 void

@@ -79,6 +79,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 			}
 		}
 	}
+	m_activeLayer = m_layers.getLast();
 
 	return true;
 }
