@@ -37,22 +37,22 @@
   <Action name="showHelplines"/>
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
+  <Menu name="tools"><text>&amp;Tools</text>
+   <Action name="mouse"/>
+   <Separator/>
+   <Action name="point"/>
+   <Action name="freehand"/>
+   <Action name="line"/>
+   <Action name="bezier"/>
+   <Action name="rectangle"/>
+   <Action name="polygon"/>
+   <Action name="ellipse"/>
+   <Action name="text"/>
+   <Separator/>
+   <Action name="zoom"/>
+  </Menu>
   <Action name="insertBitmap"/>
   <Action name="insertClipart"/>
- </Menu>
- <Menu name="tools"><text>&amp;Tools</text>
-  <Action name="mouse"/>
-  <Separator/>
-  <Action name="point"/>
-  <Action name="freehand"/>
-  <Action name="line"/>
-  <Action name="bezier"/>
-  <Action name="rectangle"/>
-  <Action name="polygon"/>
-  <Action name="ellipse"/>
-  <Action name="text"/>
-  <Separator/>
-  <Action name="zoom"/>
  </Menu>
  <Menu name="layout"><text>&amp;Layout</text>
   <Action name="page"/>
@@ -62,7 +62,7 @@
   <Action name="alignToGrid"/>
   <Action name="alignToHelplines"/>
  </Menu>
- <Menu name="arrange"><text>&amp;Arrange</text>
+ <Menu name="arrange"><text>&amp;Modify</text>
   <Menu name="Transform"><text>&amp;Transform</text>
    <Action name="transformPosition"/>
    <Action name="transformDimension"/>
