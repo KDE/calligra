@@ -79,10 +79,11 @@ public:
     virtual void setGradient(const Gradient &gradient);
     virtual void setPen(const QPen &pen);
 
+protected:
+    virtual void recalculate() const;
+
 private:
     GGroup &operator=(const GGroup &rhs);
-
-    virtual void recalculate() const;
 
     QList<GObject> m_members;
     mutable QListIterator<GObject> *m_iterator;

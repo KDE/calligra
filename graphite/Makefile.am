@@ -11,7 +11,8 @@ lib_LTLIBRARIES = graphite.la libgraphitepart.la
 libgraphitepart_la_SOURCES = graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
     gcanvas.cc gobjectfactory.cc gline.cc \
-    graphiteglobal.cc ggroup.cc gprimitivecmds.cc
+    graphiteglobal.cc ggroup.cc gprimitivecmds.cc \
+    gbackground.cc
 libgraphitepart_la_LDFLAGS = -module -avoid-version -no-undefined
 libgraphitepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 libgraphitepart_la_METASOURCES = AUTO
@@ -30,7 +31,8 @@ dummy.cc:
 noinst_HEADERS =  graphiteglobal.h \
     graphitepart.h graphiteview.h graphitefactory.h \
     gobject.h gcanvas.h gobjectfactory.h \
-    gline.h ggroup.h gprimitivecmds.h
+    gline.h ggroup.h gprimitivecmds.h \
+    gbackground.h
 
 kdelnk_DATA = graphite.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -29,6 +29,7 @@ class KAction;
 class KCommandHistory;
 
 class GraphiteView;
+class GObjectM9r;
 
 class GraphitePart : public KoDocument {
 
@@ -72,6 +73,7 @@ private:
     void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
 
     KCommandHistory *m_history;
+    QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // relate views to m9rs
     // TODO: Do we need isLoading() like in KSpread?
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after

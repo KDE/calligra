@@ -200,6 +200,9 @@ void GGroup::draw(QPainter &p, const QRect &rect, bool toPrinter) {
         recalculate();
 
     // first go and check the boundign rect!
+    if(!rect.intersects(boundingRect()))
+        return;
+
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->draw(p, rect, toPrinter);
