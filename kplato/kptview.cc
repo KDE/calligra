@@ -90,7 +90,10 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 {
     //kdDebug()<<k_funcinfo<<endl;
     setInstance(KPTFactory::global());
-    setXMLFile("kplato.rc");
+    if ( !part->isReadWrite() )
+        setXMLFile("kplato_readonly.rc");
+    else
+        setXMLFile("kplato.rc");
     m_dcop = 0L;
     // build the DCOP object
     dcopObject();
@@ -130,7 +133,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     actionLinkMode = new KToggleAction(i18n("Link Mode"), "link_mode", 0, this,
         SLOT(slotLinkMode()), actionCollection(), "link_mode");
-        
+
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
     actionViewPert = new KAction(i18n("PERT"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
