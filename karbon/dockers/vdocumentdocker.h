@@ -112,6 +112,7 @@ class VObjectListViewItem : public QListViewItem
 public:
 	VObjectListViewItem( QListViewItem* parent, VObject* object );
 
+	VObject* object() { return m_object; }
 	void update();
 
 private:

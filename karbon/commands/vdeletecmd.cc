@@ -34,6 +34,13 @@ VDeleteCmd::VDeleteCmd( VDocument* doc )
 		setName( i18n( "Delete Object" ) );
 }
 
+VDeleteCmd::VDeleteCmd( VDocument* doc, VObject* object )
+	: VCommand( doc, i18n( "Delete Object" ), "editdelete" )
+{
+	m_selection = new VSelection();
+	m_selection->append( object );
+}
+
 VDeleteCmd::~VDeleteCmd()
 {
 	delete( m_selection );

@@ -23,9 +23,7 @@
 
 #include "vcommand.h"
 
-
 class VSelection;
-
 
 /**
  * A class to provide undo/redoable deletion of VObjects.
@@ -35,13 +33,14 @@ class VDeleteCmd : public VCommand
 {
 public:
 	VDeleteCmd( VDocument *part );
+	VDeleteCmd( VDocument *part, VObject *object );
 	virtual ~VDeleteCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 protected:
-	VSelection* m_selection;
+	VSelection	*m_selection;
 };
 
 #endif

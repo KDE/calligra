@@ -42,6 +42,7 @@
 #include "vkopainter.h"
 #include "vlayer.h"
 #include "vlayercmd.h"
+#include "vdeletecmd.h"
 #include "vselection.h"
 #include "vstroke.h"
 #include "vcanvas.h"
@@ -449,17 +450,33 @@ VLayersTab::slotButtonClicked( int ID )
 void
 VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 {
-	if ( item )
+	if( item )
 	{
-		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( item );
-		if( !layerItem ) return;
-		m_document->setActiveLayer( layerItem->layer() );
-		m_document->selection()->clear();
-		if ( col == 1 )
+		VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( item );
+		if( layerItem )
 		{
-			layerItem->layer()->setState( layerItem->layer()->state() == VObject::normal || layerItem->layer()->state() == VObject::normal_locked ? VObject::hidden : VObject::normal );
-			layerItem->update();
-			m_view->part()->repaintAllViews();
+			VLayer *obj = layerItem->layer();
+			m_document->setActiveLayer( layerItem->layer() );
+			m_document->selection()->clear();
+
+			if( col == 1 )
+			{
+				obj->setState( obj->state() == VObject::normal || obj->state() == VObject::normal_locked ? VObject::hidden : VObject::normal );
+				layerItem->update();
+				m_view->part()->repaintAllViews();
+			}
+		}
+		else
+		{
+			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
+			VObject *obj = objectItem->object();
+
+			if( col == 1 )
+			{
+				obj->setState( obj->state() == VObject::normal || obj->state() == VObject::normal_locked ? VObject::hidden : VObject::normal );
+				objectItem->update();
+				m_view->part()->repaintAllViews();
+			}
 		}
 	}
 } // VLayersTab::selectionChanged
@@ -492,7 +509,7 @@ VLayersTab::addLayer()
 	{
 		VLayer* layer = new VLayer( m_document );
 		layer->setName( name );
-		VLayerCmd* cmd = new VLayerCmd( m_document, i18n("Delete Layer"),
+		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Add Layer" ),
 				layer, VLayerCmd::addLayer );
 		m_view->part()->addCommand( cmd, true );
 		updateLayers();
@@ -532,13 +549,25 @@ VLayersTab::lowerLayer()
 void
 VLayersTab::deleteLayer()
 {
-	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
-	if( !layerItem || !layerItem->layer() )
-		return;
-	VLayer *layer = layerItem->layer();
-	VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Delete Layer" ), layer, VLayerCmd::deleteLayer );
-	m_view->part()->addCommand( cmd, true );
-	updateLayers();
+	VCommand *cmd = 0L;
+	VLayerListViewItem* layerItem = dynamic_cast< VLayerListViewItem *>( m_layersListView->selectedItem() );
+	if( layerItem )
+	{
+		VLayer *layer = layerItem->layer();
+		if( layer )
+			cmd = new VLayerCmd( m_document, i18n( "Delete Layer" ), layer, VLayerCmd::deleteLayer );
+	}
+	else
+	{
+		VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
+		if( item )
+			cmd = new VDeleteCmd( m_document, item->object() );
+	}
+	if( cmd )
+	{
+		m_view->part()->addCommand( cmd, true );
+		updateLayers();
+	}
 } // VLayersTab::deleteLayer
 
 void
