@@ -17,9 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h> // FIXME: is this needed ?
-#include <qdatetm.h> // FIXME: what's this ?
 #include <qpainter.h>
+#include <qprinter.h>
 #include <qrect.h>
 
 #include <kstddirs.h>

@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qwmatrix.h>
 
 #include <kaction.h>
