@@ -1,9 +1,15 @@
 #include "img_doc.h"
 
 #include <koIMR.h>
+#include <komlMime.h>
+#include <koStream.h>
 
 #include <kurl.h>
 #include <qmsgbox.h>
+
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
 
 ImageDocument_impl::ImageDocument_impl()
 {
@@ -88,110 +94,187 @@ CORBA::Boolean ImageDocument_impl::export( const char *_url, const char *_format
   return m_imgImage.save( u.path(), _format );
 }
 
-CORBA::Boolean ImageDocument_impl::openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id )
-{
-  return false;
+bool ImageDocument_impl::hasToWriteMultipart()
+{  
+  if ( m_lstChildren.count() == 0 )
+    return false;
+  
+  return true;
 }
 
-CORBA::Boolean ImageDocument_impl::open( const char *_url )
+bool ImageDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
 {
-  KURL u( _url );    
-  if ( u.isMalformed() )
+  cerr << "bool ImageDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict )" << endl;
+  
+  QListIterator<ImageChild> it( m_lstChildren );
+  for( ; it.current(); ++it )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("Ok") );
-    return false;
-  }
-  if ( !u.isLocalFile() )
-  {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
-    return false;
+    cerr << "Loading child" << endl;
+    if ( !it.current()->loadDocument( _dict ) )
+      return false;
   }
 
-  // We assume that this document is empty.
-  QString name( _url );
-  if ( name.right( 4 ) == ".img" )
+  cerr << "Loading done" << endl;
+  
+  return true;
+}
+
+bool ImageDocument_impl::load( KOMLParser& parser )
+{
+  cerr << "bool ImageDocument_impl::load( KOMLParser& parser )" << endl;
+  
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+ 
+  // DOC
+  if ( !parser.open( "DOC", tag ) )
   {
-    /* Store store( _filename, IO_ReadOnly );
-    // TODO: check wether opening was successful
-    OBJECT obj = store.getRootObject();
-    if ( obj == 0 )
-      return false;
+    cerr << "Missing DOC" << endl;
+    return false;
+  }
+  
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for( ; it != lst.end(); it++ )
+  {
+    if ( (*it).m_strName == "mime" )
+    {
+      if ( (*it).m_strValue != "application/x-kimage" )
+      {
+	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	return false;
+      }
+    }
+  }
     
-    if ( !loadFromStore( store, obj ) )
+  // DATA, OBJECT
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+    if ( name == "DATA" )
+    {
+      string data64;
+      if ( !parser.readText( data64 ) )
+      {
+	cerr << "ERROR in readText" << endl;
+	return false;
+      }
+
+      cerr << "GOT TEXT len=" << data64.length() << endl;
+      
+      istrstream strin( data64.c_str() );
+      Base64IStream b64( strin );
+      if ( !load( b64, false ) )
+      {
+	cerr << "ERROR: Loading base64 image" << endl;
+	return false;
+      }
+    }
+    else if ( name == "OBJECT" )
+    {
+      cerr << "OBJECT" << endl;
+      ImageChild *ch = new ImageChild( this );
+      ch->load( parser, lst );
+      insertChild( ch );
+    }
+    else
+      cerr << "Unknown tag '" << tag << "' in DOC" << endl;    
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing DOC" << endl;
       return false;
-      */
-    return true;
+    }
+  }
+
+  return true;
+}
+
+bool ImageDocument_impl::load( istream &in, bool _randomaccess )
+{
+  cerr << "bool ImageDocument_impl::load( istream &in, bool _randomaccess )" << endl;
+  
+  static int counter = 0;
+  
+  if ( !_randomaccess )
+  {
+    cerr << "NO RANDOM ACCESS" << endl;
+    
+    // string data;
+    // Write to random access device ( memory )
+    {
+      char buffer[ 100 ];
+      sprintf( buffer, "/tmp/kimage_%i_%i", (int)getpid(),counter++);
+      ofstream fout( buffer );
+      pump p( in, fout );
+      p.run();
+      fout.close();
+      m_imgImage.load( buffer );
+      // unlink( buffer );
+      // Not implemented in STD C++ lib of egcs :-((
+      /* ostrstream strout( data );
+      pump p( in, strout );
+      p.run(); */
+    }
+    // istrstream in( data );
   }
   else
-  {    
-    if ( !m_imgImage.load( u.path() ) )
-      return false;
-   
-    string url = u.url().data();
+    in >> m_imgImage;
+  
+  return true;
+}
 
-    m_strExternFile = url;
+bool ImageDocument_impl::save( ostream &out )
+{
+  if ( hasToWriteMultipart() )
+  {
+    out << "<?xml version=\"1.0\"?>" << endl;
+    out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KImage"
+	<< "\" mime=\"" << "application/x-kimage" << "\" >" << endl;
+
+    out << "<DATA format=\"image/bmp\">";
+    {
+      Base64OStream b64( out );
+      b64 << m_imgImage;
+    }
+    out << "</DATA>" << endl;
     
-    emit sig_imageModified();
-    return true;
-  }
-}
+    QListIterator<ImageChild> chl( m_lstChildren );
+    for( ; chl.current(); ++chl )
+      chl.current()->save( out );
 
-CORBA::Boolean ImageDocument_impl::saveAsMimePart( const char *_url, const char *_format, const char *_boundary )
-{
-  return false;
-}
-
-CORBA::Boolean ImageDocument_impl::saveAs( const char *_url, const char *_format )
-{
-  KURL u( _url );
-  if ( u.isMalformed() )
-  {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("Ok") );
-    return false;
-  }
-  if ( !u.isLocalFile() )
-  {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
-    return false;
-  }
-
-  string url = u.url().data();
-  if ( url == m_strExternFile )
-  {
-    cout << "No need to save file\n" << endl;
-    return true;
-  }
-  
-  if ( !u.isLocalFile() )
-  {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
-    return false;
-  }
-  
-  if ( strcmp( _format, "img" ) == 0 )
-  {    
-    /* Store store( _filename, IO_WriteOnly );
-    // TODO test wether opening was successful
-    OBJECT obj = saveToStore( store );
-    if ( obj == 0L )
-      return false;
-
-    store.setRootObject( obj );
-    store.setMimeType( MIME_TYPE );
-    store.setEditor( EDITOR );
-    store.release();
-    */
-    return true;
+    out << "</DOC>" << endl;
   }
   else
   {
-    return m_imgImage.save( u.path(), _format );
+    out << m_imgImage;
   }
-
-  cerr << "Unknown file format " << _format << endl;
-  return false;
-}
   
+  return true;
+}
+
+void ImageDocument_impl::makeChildListIntern( OPParts::Document_ptr _doc, const char *_path )
+{
+  cerr << "void ImageDocument_impl::makeChildList( OPParts::Document_ptr _doc, const char *_path )" << endl;
+  
+  int i = 0;
+  
+  QListIterator<ImageChild> it( m_lstChildren );
+  for( ; it.current(); ++it )
+  {
+    QString tmp;
+    tmp.sprintf("/%i", i++ );
+    QString path( _path );
+    path += tmp.data();
+    cerr << "SETTING NAME To " << path.data() << endl;
+    
+    OPParts::Document_var doc = it.current()->document();    
+    doc->makeChildList( _doc, path );
+  }
+}
+
 const QImage& ImageDocument_impl::image()
 {
   return m_imgImage;
@@ -262,11 +345,17 @@ void ImageDocument_impl::insertObject( const QRect& _rect, const char *_server_n
     QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Could not init"), i18n("Ok") );
     return;
   }
-  
+
   ImageChild* ch = new ImageChild( this, _rect, doc );
-  m_lstChildren.append( ch );
+
+  insertChild( ch );
+}
+
+void ImageDocument_impl::insertChild( ImageChild *_child )
+{
+  m_lstChildren.append( _child );
   
-  emit sig_insertObject( ch );
+  emit sig_insertObject( _child );
 }
 
 void ImageDocument_impl::changeChildGeometry( ImageChild *_child, const QRect& _rect )
@@ -288,15 +377,18 @@ QListIterator<ImageChild> ImageDocument_impl::childIterator()
  **********************************************************/
 
 ImageChild::ImageChild( ImageDocument_impl *_img, const QRect& _rect, OPParts::Document_ptr _doc )
+  : KoDocumentChild( _rect, _doc )
 {
   m_pImageDoc = _img;
-  m_rDoc = OPParts::Document::_duplicate( _doc );
-  m_geometry = _rect;
+}
+
+ImageChild::ImageChild( ImageDocument_impl *_img ) : KoDocumentChild()
+{
+  m_pImageDoc = _img;
 }
 
 ImageChild::~ImageChild()
 {
-  m_rDoc = 0L;
 }
 
 #include "img_doc.moc"

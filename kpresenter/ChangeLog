@@ -1,4 +1,16 @@
-Tue May 19 17:05:50 1998  Torben Weis  <weis@localhost>
+Sun May 24 13:22:48 1998  Torben Weis  <weis@kde.org>
+
+	* kpresenter_view.cc (createGUI): Show loaded children upon
+	  creation of a view.
+
+	* kpresenter_doc.cc (loadChildren): Needed for loading children
+	(save): Write OBJECT tag for every child
+	(load): Parse OBJECT tag
+	(makeChildListIntern): Needed for saving children
+	(hasToWriteMultipart): Needed for saving children
+	(insertChild): Needed for loading children
+
+Tue May 19 17:05:50 1998  Torben Weis  <weis@kde.org>
 
 	* kpresenter_doc.cc (saveBackground): Added double quotes around
 	  attributes and solved 0 pointer bug.
@@ -24,7 +36,7 @@ Tue May 19 17:05:50 1998  Torben Weis  <weis@localhost>
 	* page.cc (drawBackColor): added function to draw background with
 	gradeint colors
 
-Thu Apr 30 02:08:41 1998  Torben Weis  <weis@localhost>
+Thu Apr 30 02:08:41 1998  Torben Weis  <weis@kde.org>
 
 	* Makefile (CXXFLAGS): Addes libkofficecore
 

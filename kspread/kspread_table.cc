@@ -2240,14 +2240,8 @@ bool KSpreadTable::hasToWriteMultipart()
   QListIterator<KSpreadChild> it( m_lstChildren );
   for( ; it.current(); ++it )
   {
-    OPParts::Document_var doc = it.current()->document();
-    CORBA::String_var n = doc->id();
-    string s = static_cast<const char*>(n);
-    if ( s.empty() )
-      return true;
-    KURL u( s.c_str() );
-    if ( strcmp( u.protocol(), "mime" ) == 0 )
-      return true;
+    if ( !it.current()->isStoredExtern() )
+      return true;    
   }
 
   return false;
@@ -2267,156 +2261,21 @@ KSpreadTable::~KSpreadTable()
  **********************************************************/
 
 KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc )
-{
-  m_pTable = _table;
-  m_pDoc = _spread;
-  m_rDoc = OPParts::Document::_duplicate( _doc );
-  CORBA::String_var m = m_rDoc->mimeType();
-  m_strMimeType = m;
-  m_geometry = _rect;
-}
-
-KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table )
+  : KoDocumentChild( _rect, _doc )
 {
   m_pTable = _table;
   m_pDoc = _spread;
 }
 
-bool KSpreadChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table ) : KoDocumentChild()
 {
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
-  {
-    if ( (*it).m_strName == "src" )
-    {
-      m_strSource = (*it).m_strValue;
-    }
-    else if ( (*it).m_strName == "mime" )
-    {
-      m_strMimeType = (*it).m_strValue;
-    }
-    else
-      cerr << "Unknown attrib 'OBJECT:" << (*it).m_strName << "'" << endl;
-  }
-
-  if ( m_strSource.empty() )
-  {
-    cerr << "Empty src attribute in OBJECT" << endl;
-    return false;
-  }
-  else if ( m_strMimeType.empty() )
-  {
-    cerr << "Empty mime attribute in OBJECT" << endl;
-    return false;
-  }
-  
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-  
-  bool brect = false;
-  
-  // RECT
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "RECT" )
-    {
-      brect = true;
-      m_geometry = tagToRect( lst );
-    }
-    else
-      cerr << "Unknown tag '" << tag << "' in OBJECT" << endl;
-
-    if ( !parser.close( tag ) )
-    {
-      cerr << "ERR: Closing Child in OBJECT" << endl;
-      return false;
-    }
-  }
-
-  if ( !brect )
-  {
-    cerr << "Missing RECT in OBJECT" << endl;
-    return false;
-  }
-  
-  return true;
+  m_pTable = _table;
+  m_pDoc = _spread;
 }
 
-bool KSpreadChild::loadDocument( OPParts::MimeMultipartDict_ptr _dict )
-{
-  assert( !m_strSource.empty() );
-
-  cout << "Trying to load " << m_strSource << endl;
-  KURL u( m_strSource.c_str() );
-  if ( strcmp( u.protocol(), "mime" ) != 0 )
-  {
-    if ( !loadDocument() )
-    {
-      cerr << "Could not load " << m_strSource << endl;
-      return false;
-    }
-  }
-  else
-  {
-    OPParts::MimeMultipartEntity_var e = _dict->find( m_strSource.c_str() );
-    if ( CORBA::is_nil( e ) )
-    {
-      cerr << "Could not find id '" << m_strSource << "'" << endl;
-      return false;
-    }
-    if ( !loadDocumentAsMimePart( _dict, e ) )
-    {
-      cerr << "Could not load embedded " << m_strSource << endl;
-      return false;
-    }
-  }
-
-  return true;
-}
- 
-bool KSpreadChild::loadDocument()
-{
-  m_rDoc = imr_createDocByMimeType( m_strMimeType.c_str() );
-  if ( CORBA::is_nil( m_rDoc ) )
-  {
-    cerr << "ERROR: Could not create child document" << endl;
-    return false;
-  }
-  m_rDoc->open( m_strSource.c_str() );
-  
-  return true;
-}
-
-bool KSpreadChild::loadDocumentAsMimePart( OPParts::MimeMultipartDict_ptr _dict, OPParts::MimeMultipartEntity_ptr _e )
-{
-  m_rDoc = imr_createDocByMimeType( m_strMimeType.c_str() );
-  if ( CORBA::is_nil( m_rDoc ) )
-  {
-    cerr << "ERROR: Could not create child document with mime type " << m_strMimeType << endl;
-    return false;
-  }
-  CORBA::String_var id = _e->id();
-  m_rDoc->openMimePart( _dict, id );
-  
-  return true;
-}
-
-bool KSpreadChild::save( ostream& out )
-{
-  CORBA::String_var n = m_rDoc->id();
-  CORBA::String_var mime = m_rDoc->mimeType();
-  
-  out << indent << "<OBJECT src=\"" << n << "\" mime=\"" << mime << "\">" << m_geometry << "</OBJECT>" << endl;
-
-  return true;
-}
 
 KSpreadChild::~KSpreadChild()
 {
-  m_rDoc = 0L;
 }
 
 #include "kspread_table.moc"

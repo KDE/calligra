@@ -53,12 +53,19 @@ QPicture* BackPic::getPic()
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild(KPresenterDocument_impl *_kpr,
-				 const QRect& _rect,OPParts::Document_ptr _doc)
+KPresenterChild::KPresenterChild(KPresenterDocument_impl *_kpr, const QRect& _rect,OPParts::Document_ptr _doc)
+  : KoDocumentChild( _rect, _doc )
 {
   m_pKPresenterDoc = _kpr;
   m_rDoc = OPParts::Document::_duplicate(_doc);
   m_geometry = _rect;
+}
+
+/*====================== constructor =============================*/
+KPresenterChild::KPresenterChild( KPresenterDocument_impl *_kpr ) :
+  KoDocumentChild()
+{
+  m_pKPresenterDoc = _kpr;
 }
 
 /*====================== destructor ==============================*/
@@ -162,6 +169,35 @@ void KPresenterDocument_impl::cleanUp()
 }
 
 /*========================== save ===============================*/
+bool KPresenterDocument_impl::hasToWriteMultipart()
+{  
+  QListIterator<KPresenterChild> it( m_lstChildren );
+  for( ; it.current(); ++it )
+  {
+    if ( !it.current()->isStoredExtern() )
+      return true;    
+  }
+  return false;
+}
+
+void KPresenterDocument_impl::makeChildListIntern( OPParts::Document_ptr _doc, const char *_path )
+{
+  int i = 0;
+  
+  QListIterator<KPresenterChild> it( m_lstChildren );
+  for( ; it.current(); ++it )
+  {
+    QString tmp;
+    tmp.sprintf("/%i", i++ );
+    QString path( _path );
+    path += tmp.data();
+    
+    OPParts::Document_var doc = it.current()->document();    
+    doc->makeChildList( _doc, path );
+  }
+}
+
+/*
 bool KPresenterDocument_impl::save(const char *_url)
 {
   KURL u(_url);
@@ -194,6 +230,7 @@ bool KPresenterDocument_impl::save(const char *_url)
     
   return true;
 }
+*/
 
 /*========================== save ===============================*/
 bool KPresenterDocument_impl::save(ostream& out)
@@ -220,6 +257,11 @@ bool KPresenterDocument_impl::save(ostream& out)
 
   out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl; 
   out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl; 
+
+  // Write "OBJECT" tag for every child
+  QListIterator<KPresenterChild> chl( m_lstChildren );
+  for( ; chl.current(); ++chl )
+    chl.current()->save( out );
 
   out << etag << "</DOC>" << endl;
     
@@ -349,6 +391,19 @@ void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
 }
 
 /*========================== load ===============================*/
+bool KPresenterDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
+{
+  QListIterator<KPresenterChild> it( m_lstChildren );
+  for( ; it.current(); ++it )
+  {
+    if ( !it.current()->loadDocument( _dict ) )
+      return false;
+  }
+
+  return true;
+}
+
+/*
 bool KPresenterDocument_impl::load(const char *_url)
 {
   KURL u(_url);
@@ -405,6 +460,7 @@ bool KPresenterDocument_impl::load(const char *_url)
   
   return true;
 }
+*/
 
 /*========================== load ===============================*/
 bool KPresenterDocument_impl::load(KOMLParser& parser)
@@ -431,13 +487,39 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   _txtBackCol.operator=(white);
   _txtSelCol.operator=(lightGray);
       
+  // DOC
+  if ( !parser.open( "DOC", tag ) )
+  {
+    cerr << "Missing DOC" << endl;
+    return false;
+  }
+  
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for( ; it != lst.end(); it++ )
+  {
+    if ( (*it).m_strName == "mime" )
+    {
+      if ( (*it).m_strValue != "application/x-kpresenter" )
+      {
+	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	return false;
+      }
+    }
+  }
 
   // PAPER
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
- 
-      if (name == "PAPER")
+      
+      if ( name == "OBJECT" )
+	{
+	  KPresenterChild *ch = new KPresenterChild( this );
+	  ch->load( parser, lst );
+	  insertChild( ch );
+	}
+      else if (name == "PAPER")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1185,16 +1267,16 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 }
 
 /*========================== open ================================*/
-CORBA::Boolean KPresenterDocument_impl::open(const char *_filename)
+/* CORBA::Boolean KPresenterDocument_impl::open(const char *_filename)
 {
   return load(_filename);;
-}
+} */
 
 /*========================== save as =============================*/
-CORBA::Boolean KPresenterDocument_impl::saveAs(const char *_filename,const char *_format)
+/* CORBA::Boolean KPresenterDocument_impl::saveAs(const char *_filename,const char *_format)
 {
   return save(_filename);
-}
+} */
   
 /*========================= create a view ========================*/
 OPParts::View_ptr KPresenterDocument_impl::createView()
@@ -1256,9 +1338,16 @@ void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _serv
     }
 
   KPresenterChild* ch = new KPresenterChild(this,_rect,doc);
-  m_lstChildren.append(ch);
+
+  insertChild( ch );
+}
+
+/*========================= insert a child object =====================*/
+void KPresenterDocument_impl::insertChild( KPresenterChild *_child )
+{
+  m_lstChildren.append( _child );
   
-  emit sig_insertObject(ch);
+  emit sig_insertObject( _child );
 }
 
 /*======================= change child geometry ==================*/

@@ -45,6 +45,9 @@ bool ImageShell_impl::openDocument( const char *_filename )
   view->setPartShell( this );
   setRootPart( view );
 
+  m_rMenuBar->setItemEnabled( m_idMenuFile_SaveAs, true );
+  m_rToolBarFile->setItemEnabled( m_idButtonFile_Print, true );
+
   return true;
 }
 

@@ -37,7 +37,8 @@ bool KPresenter::KPresenterView::_narrow_helper2( CORBA::Object_ptr _obj )
   if( strcmp( _obj->_repoid(), "IDL:KPresenter/KPresenterView:1.0" ) == 0) {
     return true;
   }
-  for( int _i = 0; _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
+  for( vector<CORBA::Narrow_proto>::size_type _i = 0;
+       _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
     bool _res = (*(*_narrow_helpers)[ _i ])( _obj );
     if( _res )
       return true;
@@ -1040,7 +1041,8 @@ bool KPresenter::KPresenterDocument::_narrow_helper2( CORBA::Object_ptr _obj )
   if( strcmp( _obj->_repoid(), "IDL:KPresenter/KPresenterDocument:1.0" ) == 0) {
     return true;
   }
-  for( int _i = 0; _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
+  for( vector<CORBA::Narrow_proto>::size_type _i = 0;
+       _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
     bool _res = (*(*_narrow_helpers)[ _i ])( _obj );
     if( _res )
       return true;
@@ -1141,7 +1143,8 @@ bool KPresenter::Factory::_narrow_helper2( CORBA::Object_ptr _obj )
   if( strcmp( _obj->_repoid(), "IDL:KPresenter/Factory:1.0" ) == 0) {
     return true;
   }
-  for( int _i = 0; _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
+  for( vector<CORBA::Narrow_proto>::size_type _i = 0;
+       _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
     bool _res = (*(*_narrow_helpers)[ _i ])( _obj );
     if( _res )
       return true;
@@ -1252,396 +1255,440 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
 {
   if( strcmp( _req->op_name(), "editCut" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     editCut();
     return true;
   }
   if( strcmp( _req->op_name(), "editCopy" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     editCopy();
     return true;
   }
   if( strcmp( _req->op_name(), "editPaste" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     editPaste();
     return true;
   }
   if( strcmp( _req->op_name(), "editDelete" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     editDelete();
     return true;
   }
   if( strcmp( _req->op_name(), "editSelectAll" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     editSelectAll();
     return true;
   }
   if( strcmp( _req->op_name(), "newView" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     newView();
     return true;
   }
   if( strcmp( _req->op_name(), "insertPage" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertPage();
     return true;
   }
   if( strcmp( _req->op_name(), "insertPicture" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertPicture();
     return true;
   }
   if( strcmp( _req->op_name(), "insertClipart" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertClipart();
     return true;
   }
   if( strcmp( _req->op_name(), "insertLine" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertLine();
     return true;
   }
   if( strcmp( _req->op_name(), "insertRectangle" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertRectangle();
     return true;
   }
   if( strcmp( _req->op_name(), "insertCircleOrEllipse" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertCircleOrEllipse();
     return true;
   }
   if( strcmp( _req->op_name(), "insertText" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertText();
     return true;
   }
   if( strcmp( _req->op_name(), "insertAutoform" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertAutoform();
     return true;
   }
   if( strcmp( _req->op_name(), "insertObject" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertObject();
     return true;
   }
   if( strcmp( _req->op_name(), "insertLineHidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertLineHidl();
     return true;
   }
   if( strcmp( _req->op_name(), "insertLineVidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertLineVidl();
     return true;
   }
   if( strcmp( _req->op_name(), "insertLineD1idl" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertLineD1idl();
     return true;
   }
   if( strcmp( _req->op_name(), "insertLineD2idl" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertLineD2idl();
     return true;
   }
   if( strcmp( _req->op_name(), "insertNormRectidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertNormRectidl();
     return true;
   }
   if( strcmp( _req->op_name(), "insertRoundRectidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     insertRoundRectidl();
     return true;
   }
   if( strcmp( _req->op_name(), "extraPenBrush" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraPenBrush();
     return true;
   }
   if( strcmp( _req->op_name(), "extraRaise" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraRaise();
     return true;
   }
   if( strcmp( _req->op_name(), "extraLower" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraLower();
     return true;
   }
   if( strcmp( _req->op_name(), "extraRotate" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraRotate();
     return true;
   }
   if( strcmp( _req->op_name(), "extraBackground" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraBackground();
     return true;
   }
   if( strcmp( _req->op_name(), "extraLayout" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraLayout();
     return true;
   }
   if( strcmp( _req->op_name(), "extraOptions" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     extraOptions();
     return true;
   }
   if( strcmp( _req->op_name(), "screenConfigPages" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenConfigPages();
     return true;
   }
   if( strcmp( _req->op_name(), "screenAssignEffect" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenAssignEffect();
     return true;
   }
   if( strcmp( _req->op_name(), "screenStart" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenStart();
     return true;
   }
   if( strcmp( _req->op_name(), "screenStop" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenStop();
     return true;
   }
   if( strcmp( _req->op_name(), "screenPause" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenPause();
     return true;
   }
   if( strcmp( _req->op_name(), "screenFirst" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenFirst();
     return true;
   }
   if( strcmp( _req->op_name(), "screenPrev" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenPrev();
     return true;
   }
   if( strcmp( _req->op_name(), "screenNext" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenNext();
     return true;
   }
   if( strcmp( _req->op_name(), "screenLast" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenLast();
     return true;
   }
   if( strcmp( _req->op_name(), "screenSkip" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenSkip();
     return true;
   }
   if( strcmp( _req->op_name(), "screenFullScreen" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenFullScreen();
     return true;
   }
   if( strcmp( _req->op_name(), "screenPen" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     screenPen();
     return true;
   }
   if( strcmp( _req->op_name(), "helpContents" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     helpContents();
     return true;
   }
   if( strcmp( _req->op_name(), "helpAbout" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     helpAbout();
     return true;
   }
   if( strcmp( _req->op_name(), "helpAboutKOffice" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     helpAboutKOffice();
     return true;
   }
   if( strcmp( _req->op_name(), "helpAboutKDE" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     helpAboutKDE();
     return true;
@@ -1650,11 +1697,12 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
     CORBA::String_var size;
 
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 1, _args );
+    _orbnc()->create_list( 1, _args );
     _args->add( CORBA::ARG_IN );
     _args->item( 0 )->value()->type( CORBA::_tc_string );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     *_args->item( 0 )->value() >>= CORBA::Any::to_string( size, 0 );
     sizeSelected( size );
@@ -1664,11 +1712,12 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
     CORBA::String_var font;
 
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 1, _args );
+    _orbnc()->create_list( 1, _args );
     _args->add( CORBA::ARG_IN );
     _args->item( 0 )->value()->type( CORBA::_tc_string );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     *_args->item( 0 )->value() >>= CORBA::Any::to_string( font, 0 );
     fontSelected( font );
@@ -1676,126 +1725,140 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
   }
   if( strcmp( _req->op_name(), "textBold" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textBold();
     return true;
   }
   if( strcmp( _req->op_name(), "textItalic" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textItalic();
     return true;
   }
   if( strcmp( _req->op_name(), "textUnderline" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textUnderline();
     return true;
   }
   if( strcmp( _req->op_name(), "textColor" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textColor();
     return true;
   }
   if( strcmp( _req->op_name(), "textAlignLeft" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textAlignLeft();
     return true;
   }
   if( strcmp( _req->op_name(), "textAlignCenter" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textAlignCenter();
     return true;
   }
   if( strcmp( _req->op_name(), "textAlignRight" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textAlignRight();
     return true;
   }
   if( strcmp( _req->op_name(), "mtextAlignLeft" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     mtextAlignLeft();
     return true;
   }
   if( strcmp( _req->op_name(), "mtextAlignCenter" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     mtextAlignCenter();
     return true;
   }
   if( strcmp( _req->op_name(), "mtextAlignRight" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     mtextAlignRight();
     return true;
   }
   if( strcmp( _req->op_name(), "mtextFont" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     mtextFont();
     return true;
   }
   if( strcmp( _req->op_name(), "textEnumList" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textEnumList();
     return true;
   }
   if( strcmp( _req->op_name(), "textUnsortList" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textUnsortList();
     return true;
   }
   if( strcmp( _req->op_name(), "textNormalText" ) == 0 ) {
     CORBA::NVList_ptr _args;
-    _orb()->create_list( 0, _args );
+    _orbnc()->create_list( 0, _args );
 
-    _req->params( _args );
+    if (!_req->params( _args ))
+      return true;
 
     textNormalText();
     return true;

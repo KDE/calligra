@@ -23,6 +23,7 @@ class KSpreadDoc;
 #include "kspread_map.h"
 
 #include "koPageLayoutDia.h"
+#include "koDocument.h"
 
 #define MIME_TYPE "application/x-kspread"
 #define EDITOR "IDL:KSpread/Document:1.0"
@@ -31,169 +32,161 @@ class KSpreadDoc;
  * This class holds the data that makes up a spreadsheet.
  */
 class KSpreadDoc : public QObject,
-		   virtual public Document_impl,
+		   virtual public KoDocument,
 		   virtual public KSpread::Document_skel
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    // C++
-    
-    KSpreadDoc();
-    ~KSpreadDoc();
+  // C++
+  KSpreadDoc();
+  ~KSpreadDoc();
 
-    /**
-     * @param _boundary may be 0L, otherwise the document is saved as part of a Mime-Multipart-File.
-     *                  using '_boundary' to mark the end of this document.
-     */
-    virtual bool save( const char *_url, const char *_format, int _mode = ( ios::trunc | ios::out ),
-		       const char* _boundary = 0L );
-    virtual bool save( ostream& );
-    virtual bool load( const char *_url, int _offset = -1, const char *_boundary = 0L );
-    virtual bool load( KOMLParser& );
+  // C++
+  virtual bool save( ostream& );
+
+  // C++
+  virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict ) { return m_pMap->loadChildren( _dict ); }
+  virtual bool load( KOMLParser& );
   
-    virtual void cleanUp();
+  virtual void cleanUp();
 
-    virtual void removeView( KSpreadView* _view );
+  virtual void removeView( KSpreadView* _view );
   
-    // IDL
-    virtual CORBA::Boolean init();
-    virtual CORBA::Boolean open( const char *_filename );
-    virtual CORBA::Boolean openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id );
-    virtual CORBA::Boolean saveAs( const char *_filename, const char *_format );
-    virtual CORBA::Boolean saveAsMimePart( const char *_filename, const char *_format, const char *_boundary );
+  // IDL
+  virtual CORBA::Boolean init();
   
-    virtual OPParts::View_ptr createView();
+  virtual OPParts::View_ptr createView();
   
-    virtual void viewList( OPParts::Document::ViewList*& _list );
+  virtual void viewList( OPParts::Document::ViewList*& _list );
   
-    virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
+  virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
   
-    virtual CORBA::Boolean isModified() { return m_bModified; }
+  virtual CORBA::Boolean isModified() { return m_bModified; }
   
-    // C++
-    /**
-     * @return a pointer to a new KSpreadTable. The KSpreadTable is not added to the map
-     *         nor added to the GUI.
-     */
-    KSpreadTable* createTable();
-    
-    /**
-     * Adds a KSpreadTable to the GUI and makes it active. In addition the KSpreadTable is
-     * added to the map.
-     *
-     * @see KSpreadView
-     * @see KSpreadMap
-     */
-     void addTable( KSpreadTable *_table );
-
-     KSpreadMap *map() { return m_pMap; }
+  // C++
+  /**
+   * @return a pointer to a new KSpreadTable. The KSpreadTable is not added to the map
+   *         nor added to the GUI.
+   */
+  KSpreadTable* createTable();
   
-    /**
-     * @return the printable width of the paper in millimeters.
-     */
-    float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }
-
-    /**
-     * @return the printable height of the paper in millimeters.
-     */
-    float printableHeight() { return m_paperHeight - m_topBorder - m_bottomBorder; }
-
-    float paperHeight() { return m_paperHeight; }
-    float paperWidth() { return m_paperWidth; }
-    
-    /**
-     * @return the left border in millimeters
-     */
-    float leftBorder() { return m_leftBorder; }
-    /**
-     * @return the right border in millimeters
-     */
-    float rightBorder() { return m_rightBorder; }
-    /**
-     * @return the top border in millimeters
-     */
-    float topBorder() { return m_topBorder; }
-    /**
-     * @return the bottom border in millimeters
-     */
-    float bottomBorder() { return m_bottomBorder; }
-    
-    /**
-     * @return the orientation of the paper.
-     */
-    KoOrientation orientation() { return m_orientation; }
-    /**
-     * @return the ascii name of the paper orientation ( like Portrait, Landscape )
-     */
-    const char* orientationString();
-
-    /**
-     * @return the paper format.
-     */
-    KoFormat paperFormat() { return m_paperFormat; }
-    /**
-     * @return the ascii name of the paper format ( like A4, Letter etc. )
-     */
-    QString paperFormatString();
-
-    /**
-     * Changes the paper layout and repaints the currently displayed KSpreadTable.
-     */
-    void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-			 KoFormat _paper, KoOrientation orientation );
-    /**
-     * A convenience function using a string as paper format and orientation.
-     */
-    void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-			 const char* _paper, const char* _orientation );
-
-    QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
-                                    return completeHeading( m_headLeft.data(), _p, _t ); }
-    QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
-                                    return completeHeading( m_headMid.data(), _p, _t ); }
-    QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return "";
-                                    return completeHeading( m_headRight.data(), _p, _t ); }
-    QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return "";
-                                    return completeHeading( m_footLeft.data(), _p, _t ); }
-    QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return "";
-                                    return completeHeading( m_footMid.data(), _p, _t ); }
-    QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
-                                    return completeHeading( m_footRight.data(), _p, _t ); }
-
-    QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.data(); }
-    QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.data(); }
-    QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.data(); }
-    QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.data(); }
-    QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.data(); }
-    QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
-
-    void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-			  const char *_footl, const char *_footm, const char *_footr );
-
-    /**
-     * @return the URL of this part if it has been created from a file ( @ref #load )
-     *         or if it has been saved to a file ( @ref #save ). Otherwise the
-     *         return value is 0L.
-     */
-    const char* url() { return m_strFileURL.data(); }
-
-    virtual void setModified( bool _c ) { m_bModified = _c; }
-
-    KSpreadPythonModule *pythonModule() { return m_pPython; }
-    void reloadScripts();
-    
-    bool editPythonCode();
-    void endEditPythonCode();
-
-    void undo();
-    void redo();
-    KSpreadUndo *undoBuffer() { return m_pUndoBuffer; }
-
-    virtual void printMap( QPainter &_painter );
-
-    void enableUndo( bool _b );
-    void enableRedo( bool _b );
-
+  /**
+   * Adds a KSpreadTable to the GUI and makes it active. In addition the KSpreadTable is
+   * added to the map.
+   *
+   * @see KSpreadView
+   * @see KSpreadMap
+   */
+  void addTable( KSpreadTable *_table );
+  
+  KSpreadMap *map() { return m_pMap; }
+  
+  /**
+   * @return the printable width of the paper in millimeters.
+   */
+  float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }
+  
+  /**
+   * @return the printable height of the paper in millimeters.
+   */
+  float printableHeight() { return m_paperHeight - m_topBorder - m_bottomBorder; }
+  
+  float paperHeight() { return m_paperHeight; }
+  float paperWidth() { return m_paperWidth; }
+  
+  /**
+   * @return the left border in millimeters
+   */
+  float leftBorder() { return m_leftBorder; }
+  /**
+   * @return the right border in millimeters
+   */
+  float rightBorder() { return m_rightBorder; }
+  /**
+   * @return the top border in millimeters
+   */
+  float topBorder() { return m_topBorder; }
+  /**
+   * @return the bottom border in millimeters
+   */
+  float bottomBorder() { return m_bottomBorder; }
+  
+  /**
+   * @return the orientation of the paper.
+   */
+  KoOrientation orientation() { return m_orientation; }
+  /**
+   * @return the ascii name of the paper orientation ( like Portrait, Landscape )
+   */
+  const char* orientationString();
+  
+  /**
+   * @return the paper format.
+   */
+  KoFormat paperFormat() { return m_paperFormat; }
+  /**
+   * @return the ascii name of the paper format ( like A4, Letter etc. )
+   */
+  QString paperFormatString();
+  
+  /**
+   * Changes the paper layout and repaints the currently displayed KSpreadTable.
+   */
+  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
+		       KoFormat _paper, KoOrientation orientation );
+  /**
+   * A convenience function using a string as paper format and orientation.
+   */
+  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
+		       const char* _paper, const char* _orientation );
+  
+  QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
+  return completeHeading( m_headLeft.data(), _p, _t ); }
+  QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
+  return completeHeading( m_headMid.data(), _p, _t ); }
+  QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return "";
+  return completeHeading( m_headRight.data(), _p, _t ); }
+  QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return "";
+  return completeHeading( m_footLeft.data(), _p, _t ); }
+  QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return "";
+  return completeHeading( m_footMid.data(), _p, _t ); }
+  QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
+  return completeHeading( m_footRight.data(), _p, _t ); }
+  
+  QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.data(); }
+  QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.data(); }
+  QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.data(); }
+  QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.data(); }
+  QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.data(); }
+  QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
+  
+  void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
+			const char *_footl, const char *_footm, const char *_footr );
+  
+  /**
+   * @return the URL of this part if it has been created from a file ( @ref #load )
+   *         or if it has been saved to a file ( @ref #save ). Otherwise the
+   *         return value is 0L.
+   */
+  const char* url() { return m_strFileURL.data(); }
+  
+  virtual void setModified( bool _c ) { m_bModified = _c; }
+  
+  KSpreadPythonModule *pythonModule() { return m_pPython; }
+  void reloadScripts();
+  
+  bool editPythonCode();
+  void endEditPythonCode();
+  
+  void undo();
+  void redo();
+  KSpreadUndo *undoBuffer() { return m_pUndoBuffer; }
+  
+  virtual void printMap( QPainter &_painter );
+  
+  void enableUndo( bool _b );
+  void enableRedo( bool _b );
+  
 public slots:
     /**
      * Open a dialog for the "Page Layout".
@@ -208,7 +201,7 @@ signals:
     void sig_updateView();
   
 protected:
-    virtual void KSpreadDoc::makeChildListIntern( OPParts::Document_ptr _root, const char *_path );
+    virtual void makeChildListIntern( OPParts::Document_ptr _root, const char *_path );
   
     /*
      * @return true if one of the direct children wants to
@@ -234,6 +227,8 @@ protected:
      * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
      */
     QString completeHeading( const char *_data, int _page, const char *_KSpreadTable );
+
+    virtual const char* copyright() { return "kspread (c) Torben Weis, <weis@kde.org> 1998"; }
 
     KSpreadMap *m_pMap;
   

@@ -16,6 +16,7 @@
 #include "kpresenter_main.moc"
 #include <string.h>
 #include <factory_impl.h>
+#include <koScanParts.h>
 
 bool g_bWithGUI = true;
 
@@ -40,6 +41,8 @@ KPresenterApp::~KPresenterApp()
 /*=================== start application ==========================*/
 void KPresenterApp::start()
 {
+  koScanParts();
+
   if ( g_bWithGUI )
     {
       KPresenterShell_impl* m_pShell;

@@ -4,6 +4,8 @@
 
 #include <factory_impl.h>
 
+#include <koScanParts.h>
+
 bool g_bWithGUI = true;
 
 // This line creates a new factory class. The class has a function
@@ -51,6 +53,8 @@ ImageApp::~ImageApp()
 
 void ImageApp::start()
 {
+  koScanParts();
+
   // Are we going to create a GUI ?
   if ( g_bWithGUI )
   {

@@ -244,3 +244,68 @@ ostream& operator<< ( ostream& outs, const QImage &_img )
 
   return outs;
 }       
+
+class CPP2QIO : public QIODevice
+{
+public: 
+  CPP2QIO( istream &_in) : m_in( _in )
+  {
+    setType( IO_Direct );
+    setMode( IO_ReadOnly );
+    setState( IO_Open );
+    setStatus( IO_Ok );
+  }
+  ~CPP2QIO() { };
+
+  bool open( int mode ) { return true; }
+  void close() { }
+  void flush() { }
+  bool atEnd() { if ( m_in.eof() ) return true; return false; }
+  bool at() { return m_in.tellg(); }
+  bool at( int _pos ) { m_in.seekg( _pos ); return true; }
+  
+  uint size() const { return 0xffffffff; }
+  int readBlock( char *data, uint len ) { m_in.read( data, len ); return m_in.gcount(); }
+  int writeBlock( const char *data, uint len ) { return -1; }
+  /* int readLine( char *data, uint maxlen )
+  {
+    int len = 0;
+    if ( maxlen > 2 )
+    {
+      m_in.get( data, maxlen - 2 );
+      len = m_in.gcount();
+    }
+    if ( maxlen > 0 )
+    {
+      int c = m_in.get();
+      if ( c != EOF )
+	data[ len++ ] = c;
+      data[ len++ ] = 0;
+    }
+    return len;
+  } */
+  
+  int getch() { int c = m_in.get(); if ( c == EOF ) return -1; return c; }
+  int putch( int _c ) { return -1; }
+  int ungetch( int _c ) { m_in.putback( _c ); return _c; }
+
+protected:
+  istream &m_in;
+};
+
+istream& operator>> ( istream& ins, QImage &_img )
+{
+  CPP2QIO in( ins );
+  QImageIO io( &in, 0 );
+  if ( io.read() )
+    {
+      cerr << "IMAGE ok" << endl;
+      
+      _img = io.image();
+    }
+  
+  else
+    cerr << "ERROR: while loading image from istream" << endl;
+
+  return ins;
+}       

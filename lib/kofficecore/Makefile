@@ -73,7 +73,7 @@ LIBCOMPAT =
 LIBCRYPT = 
 LIBDL = @LIBDL@
 LIBJPEG = @LIBJPEG@
-LIBMICO = -lmico2.0.5 -ldl
+LIBMICO = -lmico2.0.7 -ldl
 LIBOBJS = @LIBOBJS@
 LIBPYTHON = -lpython1.5
 LIBSOCKET = 
@@ -136,8 +136,8 @@ LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la
-libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc
-include_HEADERS = koIMR.h koScanParts.h koStream.h
+libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc koDocument.cc
+include_HEADERS = koIMR.h koScanParts.h koStream.h koDocument.h
 
 SUFFICES = .h .moc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -151,7 +151,8 @@ CPPFLAGS =
 LIBS = 
 libkofficecore_la_LDFLAGS = 
 libkofficecore_la_LIBADD = 
-libkofficecore_la_OBJECTS =  koIMR.lo koScanParts.lo koStream.lo
+libkofficecore_la_OBJECTS =  koIMR.lo koScanParts.lo koStream.lo \
+koDocument.lo
 CXXFLAGS = -O2 -Wall
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
@@ -165,7 +166,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-DEP_FILES =  .deps/koIMR.P .deps/koScanParts.P .deps/koStream.P
+DEP_FILES =  .deps/koDocument.P .deps/koIMR.P .deps/koScanParts.P \
+.deps/koStream.P
 CXXMKDEP = $(CXX) -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 SOURCES = $(libkofficecore_la_SOURCES)
 OBJECTS = $(libkofficecore_la_OBJECTS)

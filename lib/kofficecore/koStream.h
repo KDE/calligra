@@ -36,6 +36,7 @@ ostream& operator<< ( ostream& outs, const QFont &_font );
 QFont tagToFont( vector<KOMLAttrib>& _attribs );
 
 ostream& operator<< ( ostream& outs, const QImage &_img );
+istream& operator>> ( istream& ins, QImage &_img );
 
 #endif
 

@@ -405,11 +405,11 @@ void KSpreadView::createGUI()
 	
     enableUndo( false );
     enableRedo( false );
-
-    KSpreadTable *tbl;
-    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-      addTable( tbl );
   }      
+
+  KSpreadTable *tbl;
+  for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
+    addTable( tbl );
 
   QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
 }
@@ -1256,11 +1256,18 @@ void KSpreadView::slotScrollHorz( int _value )
 {
   if ( m_pTable == 0L )
     return;
+
+  bool b = isMarkerVisible();
+  if ( b )
+    drawMarker();
   
   int dx = xOffset() - _value;
   m_iXOffset = _value;
   m_pCanvasWidget->scroll( dx, 0 );
   m_pHBorderWidget->scroll( dx, 0 );
+
+  if ( b )
+    drawMarker();
 }
 
 void KSpreadView::slotScrollVert( int _value )
@@ -1268,10 +1275,17 @@ void KSpreadView::slotScrollVert( int _value )
   if ( m_pTable == 0L )
     return;
   
+  bool b = isMarkerVisible();
+  if ( b )
+    drawMarker();
+  
   int dy = yOffset() - _value;
   m_iYOffset = _value;
   m_pCanvasWidget->scroll( 0, dy );
   m_pVBorderWidget->scroll( 0, dy );
+
+  if ( b )
+    drawMarker();
 }
 
 /* void KSpreadView::setText( const char *_text )

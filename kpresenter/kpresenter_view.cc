@@ -799,6 +799,11 @@ void KPresenterView_impl::createGUI()
 
   resizeEvent(0L);
 
+  // Show every embedded object
+  QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
+  for( ; it.current(); ++it )
+    slotInsertObject( it.current() );
+
   edeb("...void KPresenterView_impl::createGUI() %i | %i\n",refCount(),_refcnt());
 }
 

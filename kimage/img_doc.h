@@ -3,9 +3,11 @@
 
 class ImageDocument_impl;
 
+#include <koDocument.h>
 #include <document_impl.h>
 #include <view_impl.h>
-// #include <opstore.h>
+
+#include <iostream>
 
 #include "img_view.h"
 
@@ -21,26 +23,21 @@ class ImageDocument_impl;
  * This class is used to hold informations about embedded
  * documents.
  */
-class ImageChild
+class ImageChild : public KoDocumentChild
 {
 public:
   ImageChild( ImageDocument_impl *_img, const QRect& _rect, OPParts::Document_ptr _doc );
+  ImageChild( ImageDocument_impl *_img );
   ~ImageChild();
   
-  const QRect& geometry() { return m_geometry; }
-  OPParts::Document_ptr document() { return OPParts::Document::_duplicate( m_rDoc ); }
   ImageDocument_impl* parent() { return m_pImageDoc; }
-
-  void setGeometry( const QRect& _rect ) { m_geometry = _rect; }
   
 protected:
   ImageDocument_impl *m_pImageDoc;
-  Document_ref m_rDoc;
-  QRect m_geometry;
 };
 
 class ImageDocument_impl : public QObject,
-			   virtual public Document_impl,
+			   virtual public KoDocument,
 			   virtual public KImage::ImageDocument_skel
 {
   Q_OBJECT
@@ -51,20 +48,23 @@ public:
   
 protected:
   virtual void cleanUp();
+
+  virtual bool hasToWriteMultipart();
   
 public:
   // IDL
   virtual CORBA::Boolean init();
-  virtual CORBA::Boolean open( const char *_filename );
-  virtual CORBA::Boolean openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id );
-  virtual CORBA::Boolean saveAs( const char *_filename, const char *_format );
-  virtual CORBA::Boolean saveAsMimePart( const char *_filename, const char *_format, const char *_boundary );
 
   // C++
+  virtual bool load( istream& in, bool _randomaccess );
+  virtual bool load( KOMLParser& parser );
+  virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
+  virtual bool save( ostream& out );
+  
+  // IDL
   virtual CORBA::Boolean import( const char *_filename );
   virtual CORBA::Boolean export( const char *_filename, const char *_format );
   
-  // IDL
   virtual OPParts::View_ptr createView();
 
   virtual void viewList( OPParts::Document::ViewList*& _list );
@@ -141,6 +141,9 @@ signals:
   void sig_fitToWindow( bool _fit );  
 
 protected:
+  virtual void insertChild( ImageChild* );
+  virtual void makeChildListIntern( OPParts::Document_ptr _doc, const char *_path );
+  
   QImage m_imgImage;
   string m_strExternFile;
   

@@ -1,3 +1,8 @@
+Sun May 24 13:22:11 1998  Torben Weis  <weis@localhost>
+
+	* kspread_view.cc (slotScrollHorz): Fixed ugly marker
+	  drawing bug during scrolling.
+
 Mon May  4 13:06:49 1998  Torben Weis  <weis@localhost>
 
 	* kspread_doc.cc (slotChangePaperLayout): Moved Page Layout Dialog

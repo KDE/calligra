@@ -18,12 +18,10 @@ KSpreadApp::~KSpreadApp()
 
 void KSpreadApp::start()
 {
+  koScanParts();
+
   if ( g_bWithGUI )
-  {
-    printf("Started\n");
-    koScanParts();
-    printf("Parsed\n");
-    
+  {    
     m_pShell = new KSpreadShell_impl;
     m_pShell->enableMenuBar();
     m_pShell->PartShell_impl::enableStatusBar();

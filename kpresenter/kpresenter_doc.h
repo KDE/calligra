@@ -40,6 +40,7 @@ class KPresenterView_impl;
 
 #include <koPageLayoutDia.h>
 #include <koIMR.h>
+#include <koDocument.h>
 
 #include <kurl.h>
 
@@ -90,36 +91,29 @@ private:
 /******************************************************************/
 /* class KPresenterChild                                          */
 /******************************************************************/
-class KPresenterChild
+class KPresenterChild : public KoDocumentChild
 {
 public:
 
   // constructor - destructor
-  KPresenterChild(KPresenterDocument_impl *_kpr,const QRect& _rect,OPParts::Document_ptr _doc);
+  KPresenterChild( KPresenterDocument_impl *_kpr,const QRect& _rect,OPParts::Document_ptr _doc );
+  KPresenterChild( KPresenterDocument_impl *_kpr );
   ~KPresenterChild();
   
-  // get geometry, document and parent
-  const QRect& geometry() {return m_geometry;}
-  OPParts::Document_ptr document() {return OPParts::Document::_duplicate(m_rDoc);}
+  // get parent
   KPresenterDocument_impl* parent() {return m_pKPresenterDoc;}
-
-  // set the geometry
-  void setGeometry(const QRect& _rect) {m_geometry = _rect;}
   
 protected:
 
   // parent, document and geometry
   KPresenterDocument_impl *m_pKPresenterDoc;
-  Document_ref m_rDoc;
-  QRect m_geometry;
-
 };
 
 /*****************************************************************/
 /* class KPresenterDocument_impl                                 */
 /*****************************************************************/
 class KPresenterDocument_impl : public QObject,
-				virtual public Document_impl,
+				virtual public KoDocument,
 				virtual public KPresenter::KPresenterDocument_skel
 {
   Q_OBJECT
@@ -136,21 +130,14 @@ public:
   virtual void cleanUp();
   
   // save
-  virtual bool save(const char*);
   virtual bool save(ostream&);
 
   // load
-  virtual bool load(const char*);
   virtual bool load(KOMLParser&);
+  virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
 
   // ------ IDL ------
-  // open - save document
-  virtual CORBA::Boolean open(const char*);
-  virtual CORBA::Boolean saveAs(const char*,const char*);
-
   virtual CORBA::Boolean init() {insertNewPage(0,0); return true;}
-  virtual CORBA::Boolean openMimePart(class OPParts::MimeMultipartDict*,const char*) {return true;}
-  virtual CORBA::Boolean saveAsMimePart(const char*, const char*, const char*) {return true;}
 
   // create a view
   virtual OPParts::View_ptr createView();
@@ -179,7 +166,8 @@ public:
   
   // insert an object
   virtual void insertObject(const QRect&,const char*);
-
+  virtual void insertChild( KPresenterChild *_child );
+  
   // change geomentry of a child
   virtual void changeChildGeometry(KPresenterChild*,const QRect&);
   
@@ -295,6 +283,22 @@ signals:
 protected:
 
   // ************ functions ************
+  /**
+   * Overloaded function from @ref Document_impl. This function is needed for
+   * saving. We must know about every direct and indirect child so that we
+   * can save them all.
+   */
+  virtual void makeChildListIntern( OPParts::Document_ptr _root, const char *_path );  
+  /*
+   * Overloaded function from @ref KoDocument.
+   *
+   * @return true if one of the direct children wants to
+   *              be saved embedded. If there are no children or if
+   *              every direct child saves itself into its own file
+   *              then false is returned.
+   */
+  virtual bool hasToWriteMultipart();
+
   void saveBackground(ostream&);
   void saveObjects(ostream&);
   void saveTxtObj(ostream&,KTextObject*);
