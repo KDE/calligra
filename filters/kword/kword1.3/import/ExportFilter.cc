@@ -1089,7 +1089,58 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     return true;
 }
 
-static uint findColumnWidths( const Table& table, QMemArray<double>& widthArray )
+static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray )
+{
+    bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
+    uint currentColumn = 0;
+    int tryingRow = 1; // We are trying the first row
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell = table.cellList.begin();
+        itCell != table.cellList.end(); ++itCell )
+    {
+        kdDebug(30520) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+
+        if ( (*itCell).row != tryingRow )
+        {
+            if ( uniqueColumns )
+            {
+                 // We had a full row without any horizontally spanned cell, so we have the needed data
+                return currentColumn;
+            }
+            else
+            {
+                // No luck in the previous row, so now try this new one
+                tryingRow = (*itCell).row;
+                uniqueColumns = true;
+                currentColumn = 0;
+            }
+        }
+
+        if ( (*itCell).m_cols > 1 )
+        {
+            // We have a horizontally spanned cell
+            uniqueColumns = false;
+            // Do not waste the time to calculate the width
+            continue;
+        }
+
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left );
+
+        if ( currentColumn >= widthArray.size() )
+            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+
+        widthArray.at( currentColumn ) = width;
+        ++currentColumn;
+    }
+
+    // If we are here, the table is either empty or there is not any row without horizontally spanned cells
+    return 0;
+}
+
+static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widthArray )
+// Get the column widths only by the first row.
+// This is used when all table rows have horizontally spanned cells.
 {
     uint currentColumn = 0;
     QValueList<TableCell>::ConstIterator itCell;
@@ -1129,6 +1180,22 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
+    QMemArray<double> widthArray(4);
+
+    uint numberColumns = getColumnWidths( anchor.table, widthArray );
+
+    if ( numberColumns <= 0 )
+    {
+        // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
+        numberColumns = getFirstRowColumnWidths( anchor.table, widthArray );
+        if ( numberColumns <=0 )
+        {
+            // Still not right? Then it is an error!
+            kdError(30520) << "Cannot get column widths of table " << anchor.key.toString() << endl;
+            return false;
+        }
+    }
+
     kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
 
     *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
@@ -1137,12 +1204,6 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         << "\" table:style-name=\""
         << escapeOOText( automaticTableStyle )
         << "\" >\n";
-
-
-    QMemArray<double> widthArray(4);
-
-    const uint numberColumns = findColumnWidths( anchor.table, widthArray );
-    // ### TODO: check if 0 and give error message!
 
     double tableWidth = 0.0; // total width of table
     uint i; // We need the loop variable 2 times
