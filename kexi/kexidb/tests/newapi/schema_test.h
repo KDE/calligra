@@ -24,9 +24,12 @@
 		t->debug();
 	else
 		kdDebug() << "!cars" << endl;
-
-/* some tests	{
+/*
+// some tests	
+	{
 		KexiDB::Field::ListIterator iter = t->fieldsIterator();
+		KexiDB::Field::List *lst = t->fields();
+		lst->clear();
 		for (;iter.current();++iter) {
 			kdDebug() << "FIELD=" << iter.current()->name() << endl;
 //			iter.current()->setName("   ");

@@ -22,6 +22,7 @@
 #define KEXIDB_TABLE_H
 
 #include <qvaluelist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include <kexidb/fieldlist.h>
@@ -50,13 +51,27 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 //		QStringList primaryKeys() const;
 //		bool hasPrimaryKeys() const;
 		
-//		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
+		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
 		/*! \return list of fields that are primary key of this table.
 		 This method never returns NULL value,
 		 if there is no primary key, empty IndexSchema object is returned.
 		 IndexSchema object is owned by the table schema. */
 		IndexSchema* primaryKey() const;
+
+		/*! Sets table's primary key index to \a pkey. Pass pkey==NULL if you want to unassign
+		 existing primary key ("primary" property of given IndexSchema object will be
+		 cleared then so this index becomes ordinary index, still existing on table indeices list). 
+		 
+		 If table already have primary key assigned, it is unassigned using setPrimaryKey(NULL) call.
+		 
+		 Before assigning as primary key, you should add the index to indices list with addIndex()
+		 (this is not done automatically!).
+		*/
+		void setPrimaryKey(IndexSchema *pkey);
+
+		const IndexSchema::ListIterator indicesIterator() const { return IndexSchema::ListIterator(m_indices); }
+		const IndexSchema::List* indices() { return &m_indices; }
 
 //js		void addPrimaryKey(const QString& key);
 

@@ -49,9 +49,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &l
 	m_driverName = "mySQL";
 	m_isFileDriver=false;
 	m_features=CursorForward;
-	m_typeNames.resize(Field::LastType + 1);
 
-        m_typeNames.resize(Field::LastType + 1);
         m_typeNames[Field::Byte]="UNSIGNED TINYINT";
         m_typeNames[Field::ShortInteger]="SMALLINT";
         m_typeNames[Field::Integer]="INT";

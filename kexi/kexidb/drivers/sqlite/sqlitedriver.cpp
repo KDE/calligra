@@ -53,7 +53,6 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	m_isDBOpenedAfterCreate = true;
 	m_features = SingleTransactions | CursorForward;
 
-	m_typeNames.resize(Field::LastType + 1);
 	m_typeNames[Field::Byte]="Byte";
 	m_typeNames[Field::ShortInteger]="ShortInteger";
 	m_typeNames[Field::Integer]="Integer";

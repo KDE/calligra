@@ -138,32 +138,32 @@ class KEXI_DB_EXPORT Field
 		virtual TableSchema* table() const;
 
 		/*!
-		 *	@returns true if the field is autoincrement (e.g. integer/numeric)
+		 *	@return true if the field is autoincrement (e.g. integer/numeric)
 		 */
 		bool		isAutoIncrement() const { return constraints() & AutoInc; }
 		/*!
-		 *	@returns true if the field is member of primary key
+		 *	@return true if the field is member of single-field primary key
 		 */
 		bool		isPrimaryKey() const { return constraints() & PrimaryKey; }
 		/*!
-		 *	@returns true if the field is an unique key
+		 *	@return true if the field is member of single-field unique key
 		 */
 		bool		isUniqueKey() const { return constraints() & Unique; }
 		/*!
-		 *	@returns true if the field is a foreign key
+		 *	@return true if the field is member of single-field foreign key
 		 */
 		bool		isForeignKey() const { return constraints() & ForeignKey; }
 		/*!
-		 *	@returns true if the field is not allowed to be null
+		 *	@return true if the field is not allowed to be null
 		 */
 		bool		isNotNull() const { return constraints() & NotNull; }
 		/*!
-		 *	@returns the constraints on this field
+		 *	@return the constraints defined for this field
 		 */
 		virtual int		constraints() const;
 
 //js: we have m_table for this		/*!
-//		 *	@returns the table.column that this field references or QString::null if !foreign_key()
+//		 *	@return the table.column that this field references or QString::null if !foreign_key()
 //		 */
 //		virtual QString		references() const;
 

@@ -60,7 +60,7 @@ Field::Field(TableSchema *tableSchema)
 }
 
 Field::Field(const QString& name, enum Type ctype,
- int cconst,int length, int precision, int options,
+ int cconst, int options, int length, int precision,
  QVariant defaultValue)
 	: m_table(0)
 	,m_name(name)

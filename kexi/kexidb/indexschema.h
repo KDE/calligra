@@ -39,6 +39,7 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 {
 	public:
 		typedef QPtrList<IndexSchema> List;
+		typedef QPtrListIterator<IndexSchema> ListIterator;
 
 		/*! Constructs empty index schema object 
 		 that is assigned to \a table, and will be owned by this table.

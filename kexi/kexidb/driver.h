@@ -125,12 +125,20 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! For reimplemenation: creates and returns connection object 
 		 with additional structures specific for a given driver.
 		 Connection object should inherit Connection and have a destructor 
-		 that descructs all allocated specific conenction structures. */
+		 that descructs all allocated driver-dependent connection structures. */
 		virtual Connection *drv_createConnection( ConnectionData &conn_data ) = 0;
 //virtual ConnectionInternal* createConnectionInternalObject( Connection& conn ) = 0;
 
-
-		/*! Used by DriverManager */
+		/*! Used by DriverManager. 
+		 Note for drivers creators: Reimplement this.
+		 In your reimplementation you should initialize:
+		 - m_typeNames - to types accepted by your engine
+		 - m_driverName - to desired name of your driver (not i18n'd)
+		 - m_isFileDriver - to true or false depending if your driver is file-based
+		 - m_features - to combination of selected values from Features enum
+		 
+		 See drivers/mySQL/mysqldriver.cpp for usage example.
+		 */
 		Driver( QObject *parent, const char *name, const QStringList &args = QStringList() );
 
 		QPtrDict<KexiDB::Connection> m_connections;

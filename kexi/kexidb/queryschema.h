@@ -74,6 +74,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! Table that is parent to this query. Only potentially-editable fields 
 		 in this query belong to this table. */
 		TableSchema* parentTable() const;
+
+		void setParentTable(TableSchema *table) { m_parent_table=table; }
 	
 	protected:
 //		/*! Automatically retrieves query schema via connection. */
