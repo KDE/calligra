@@ -23,13 +23,7 @@
 
 /******************************************************************/
 
-#include <qlayout.h>
-#include <qtabwidget.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qpoint.h>
-#include <qobjectlist.h>
-#include <qvgroupbox.h>
+#include "koTemplateChooseDia.h"
 
 #include <klocale.h>
 #include <kdeversion.h>
@@ -40,9 +34,7 @@
 #include <koDocument.h>
 #include <kmainwindow.h>
 
-#include "koTemplateChooseDia.h"
 #include <kdebug.h>
-
 #include <kpushbutton.h>
 #include <kjanuswidget.h>
 #include <kglobalsettings.h>
@@ -50,9 +42,18 @@
 #include <kfileiconview.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
-#include <qapplication.h>
-#include <qtooltip.h>
 #include <kapplication.h>
+#include <kaboutdata.h>
+
+#include <qapplication.h>
+#include <qlayout.h>
+#include <qtabwidget.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qpoint.h>
+#include <qobjectlist.h>
+#include <qvgroupbox.h>
+#include <qtooltip.h>
 
 class MyFileDialog : public KFileDialog
 {
@@ -107,28 +108,29 @@ class MyFileDialog : public KFileDialog
 
 class KoTemplateChooseDiaPrivate {
     public:
-	KoTemplateChooseDiaPrivate(const QCString& templateType, KInstance* global,
-		const QCString &format, const QString &nativePattern,
-		const QString &nativeName,
-		const KoTemplateChooseDia::DialogType &dialogType) :
-	    m_templateType(templateType), m_global(global), m_format(format),
-	m_nativePattern(nativePattern), m_nativeName(nativeName),
-	m_dialogType(dialogType), tree(0L), m_mainwidget(0L)
+	KoTemplateChooseDiaPrivate(const QCString& templateType, KInstance* instance,
+                                   const QCString &format,
+                                   const QString &nativeName,
+                                   const QStringList& extraNativeMimeTypes,
+                                   const KoTemplateChooseDia::DialogType &dialogType) :
+	    m_templateType(templateType), m_instance(instance), m_format(format),
+            m_nativeName(nativeName), m_extraNativeMimeTypes( extraNativeMimeTypes ),
+            m_dialogType(dialogType), tree(0),
+            m_nostartupdlg( false ),
+            m_mainwidget(0), m_nodiag( 0 )
 	{
 	    m_returnType = KoTemplateChooseDia::Empty;
-	    m_nostartupdlg = false;
-	    tree = 0;
-	    m_nodiag = 0;
 	}
 
 	~KoTemplateChooseDiaPrivate() {}
 
 	QCString m_templateType;
-	KInstance* m_global;
+	KInstance* m_instance;
 	QCString m_format;
-	QString m_nativePattern;
 	QString m_nativeName;
-	KoTemplateChooseDia::DialogType m_dialogType;
+        QStringList m_extraNativeMimeTypes;
+
+        KoTemplateChooseDia::DialogType m_dialogType;
 	KoTemplateTree *tree;
 
 	QString m_templateName;
@@ -165,20 +167,22 @@ class KoTemplateChooseDiaPrivate {
 /******************************************************************/
 
 /*================================================================*/
-KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-	const QCString &format, const QString &nativePattern,
-	const QString &nativeName, const DialogType &dialogType,
-	const QCString& templateType) :
-KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
-	KDialogBase::Ok) {
-
+KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
+                                         const QCString &format,
+                                         const QString &nativeName,
+                                         const QStringList &extraNativeMimeTypes,
+                                         const DialogType &dialogType,
+                                         const QCString& templateType) :
+    KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
+                KDialogBase::Ok)
+{
     d = new KoTemplateChooseDiaPrivate(
-	    templateType,
-	    global,
-	    format,
-	    nativePattern,
-	    nativeName,
-	    dialogType);
+        templateType,
+        instance,
+        format,
+        nativeName,
+        extraNativeMimeTypes,
+        dialogType);
 
     QPushButton* ok = actionButton( KDialogBase::Ok );
     QPushButton* cancel = actionButton( KDialogBase::Cancel );
@@ -187,16 +191,15 @@ KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialog
     //enableButtonOK(false);
 
     if (!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
-	d->tree=new KoTemplateTree(templateType, global, true);
+        d->tree = new KoTemplateTree(templateType, instance, true);
 
-    d->m_mainwidget=makeMainWidget();
+    d->m_mainwidget = makeMainWidget();
 
     d->m_templateName = "";
     d->m_fullTemplateName = "";
     d->m_returnType = Cancel;
 
     setupDialog();
-
 }
 
 KoTemplateChooseDia::~KoTemplateChooseDia()
@@ -214,15 +217,43 @@ static bool cancelQuits() {
 
 /*================================================================*/
 // static
-KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
-	const QCString &format, const QString &nativePattern,
-	const QString &nativeName,
-	const KoTemplateChooseDia::DialogType &dialogType,
-	const QCString& templateType,
-	QWidget* parent) {
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
+                                                            const QCString &format,
+                                                            const QString & /*ignored*/,
+                                                            const QString &nativeName,
+                                                            const KoTemplateChooseDia::DialogType &dialogType,
+                                                            const QCString& templateType,
+                                                            QWidget* parent)
+{
+    return choose( instance, file, format, nativeName, QStringList(),
+                   dialogType, templateType, parent );
+}
 
-    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( parent, "Choose", global, format, nativePattern,
-	    nativeName, dialogType, templateType);
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
+                                                            const KoTemplateChooseDia::DialogType &dialogType,
+                                                            const QCString& templateType,
+                                                            QWidget* parent)
+{
+    const QString nativeName = instance->aboutData()->programName();
+    const QCString format = KoDocument::readNativeFormatMimeType( instance );
+    const QStringList extraNativeMimeTypes = KoDocument::readExtraNativeMimeTypes( instance );
+    // Maybe the above two can be combined into one call, for speed:
+    //KoDocument::getNativeMimeTypeInfo( instance, nativeName, extraNativeMimeTypes );
+    return choose( instance, file, format, nativeName, extraNativeMimeTypes,
+                   dialogType, templateType, parent );
+}
+
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
+                                       const QCString &format,
+                                       const QString &nativeName,
+                                       const QStringList& extraNativeMimeTypes,
+                                       const DialogType &dialogType,
+                                       const QCString& templateType,
+                                       QWidget* parent )
+{
+    KoTemplateChooseDia *dlg = new KoTemplateChooseDia(
+        parent, "Choose", instance, format,
+        nativeName, extraNativeMimeTypes, dialogType, templateType );
 
     KoTemplateChooseDia::ReturnType rt = Cancel;
 
@@ -281,14 +312,14 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
         d->m_recent->setSorting( static_cast<QDir::SortSpec>( QDir::Time | QDir::Reversed ) );
         layout->addWidget(d->m_recent,0,0);
 
-        QString oldGroup = d->m_global->config()->group();
-        d->m_global->config()->setGroup( "RecentFiles" );
+        QString oldGroup = d->m_instance->config()->group();
+        d->m_instance->config()->setGroup( "RecentFiles" );
 
         int i = 0;
         QString value;
         do {
                 QString key=QString( "File%1" ).arg( i );
-                value=d->m_global->config()->readPathEntry( key );
+                value=d->m_instance->config()->readPathEntry( key );
                 if ( !value.isEmpty() ) {
                         KURL url(value);
                         KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
@@ -297,7 +328,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                 i++;
         } while ( !value.isEmpty() || i<=10 );
 
-        d->m_global->config()->setGroup( oldGroup );
+        d->m_instance->config()->setGroup( oldGroup );
         d->m_recent->showPreviews();
 
 	connect(d->m_recent, SIGNAL( doubleClicked ( QIconViewItem * ) ),
@@ -323,17 +354,24 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
     //d->m_filedialog->setOperationMode( KFileDialog::Opening);
 
     QObjectList *l = d->m_filedialog->queryList( "QPushButton" );
-    QObjectListIt it( *l );
+    QObjectListIt childit( *l );
     QObject *obj;
-    while ( (obj = it.current()) != 0 ) {
-	++it;
+    while ( (obj = childit.current()) != 0 ) {
+	++childit;
 	((QPushButton*)obj)->hide();
     }
     delete l;
 
     d->m_filedialog->setSizeGripEnabled ( FALSE );
-    d->m_filedialog->setMimeFilter(
-	    KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import ));
+
+    QStringList mimeFilter = KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import );
+    QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
+    for ( QStringList::ConstIterator it = d->m_extraNativeMimeTypes.begin();
+          it != d->m_extraNativeMimeTypes.end(); ++it ) {
+        mimeFilterIt = mimeFilter.insert( mimeFilterIt, *it );
+        ++mimeFilterIt;
+    }
+    d->m_filedialog->setMimeFilter( mimeFilter );
 
     connect(d->m_filedialog, SIGNAL(  okClicked() ),
 	    this, SLOT (  slotOk() ));
@@ -361,7 +399,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     layout->addWidget(d->boxdescription, 1, 0 );
 
     // config
-    KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
+    KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
     int templateNum = grp.readEntry( "TemplateTab" ).toInt();
     QString templateName = grp.readPathEntry( "TemplateName" );
 
@@ -441,7 +479,7 @@ void KoTemplateChooseDia::setupDialog()
 {
 
     QGridLayout *maingrid=new QGridLayout( d->m_mainwidget, 1, 1, 2, 6);
-    KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
+    KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
 
     if (d->m_dialogType == Everything)
     {
@@ -574,7 +612,7 @@ void KoTemplateChooseDia::slotOk()
     if (collectInfo())
     {
 	// Save it for the next time
-	KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
+	KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
 	static const char* const s_returnTypes[] = { 0 /*Cancel ;)*/, "Template", "File", "Empty" };
 	if ( d->m_returnType <= Empty )
 	{

@@ -131,85 +131,92 @@ class KoTemplateChooseDia : public KDialogBase
     Q_OBJECT
 
 public:
-	/**
-	 * The Dialog returns one of these values depending
-	 * on the input of the user.
-	 * Cancel = The user pressed 'Cancel'
-	 * Template = The user selected a template
-	 * File = The user has chosen a file
-	 * Empty = The user selected "Empty document"
-	 */
-	enum ReturnType { Cancel, Template, File, Empty };
-	/**
-	 * To configure the dialog you have to use this enum.
-	 * Everything = Show templates and the rest of the dialog
-	 * OnlyTemplates = Show only the templates
-	 * NoTemplates = Just guess :)
-	 */
-	enum DialogType { Everything, OnlyTemplates, NoTemplates };
+    /**
+     * The Dialog returns one of these values depending
+     * on the input of the user.
+     * Cancel = The user pressed 'Cancel'
+     * Template = The user selected a template
+     * File = The user has chosen a file
+     * Empty = The user selected "Empty document"
+     */
+    enum ReturnType { Cancel, Template, File, Empty };
+    /**
+     * To configure the dialog you have to use this enum.
+     * Everything = Show templates and the rest of the dialog
+     * OnlyTemplates = Show only the templates
+     * NoTemplates = Just guess :)
+     */
+    enum DialogType { Everything, OnlyTemplates, NoTemplates };
 
-	/**
-	 * This is the CTOR to create a dialog
-	 * @param parent parent the parent of the dialog
-	 * @param name the Qt internal name
-	 * @param global the KInstance of your app
-	 * @param format is the mimetype of the app (e.g. application/x-kspread)
-	 * @param nativePattern is the native pattern (e.g. *.ksp)
-	 * @param nativeName is the name of your app (e.g KSpread)
-	 * @param dialogType the type of the dialog
-	 * @param templateType the template type of your application (see kword or
-	 *        kpresenter for details)
-	 *
-	 * @return The return type (see above)
-	 */
-	KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-		const QCString &format="",
-		const QString &nativePattern=QString::null,
-		const QString &nativeName=QString::null,
-		const DialogType &dialogType=Everything,
-		const QCString& templateType="");
-	~KoTemplateChooseDia();
+    ~KoTemplateChooseDia();
 
-	/**
-	 * This is the static method you'll normally use to show the
-	 * dialog.
-	 * @param global the KInstance of your app
-	 * @param file this is the filename which is returned to your app
-	 * More precisely, it's a url (to give to KURL) if ReturnType is File
-	 * and it's a path (to open directly) if ReturnType is Template
-	 *
-	 * @param format is the mimetype of the app (e.g. application/x-kspread)
-	 * @param nativeName is the name of your app (e.g KSpread)
-	 * @param nativePattern is the native pattern (e.g. *.ksp)
-	 * @param dialogType the type of the dialog
-	 * @param templateType the template type of your application (see kword or
-	 *        kpresenter for details)
-	 * @return The return type (see above)
-	 */
-	static ReturnType choose(KInstance* global, QString &file,
-		const QCString &format="",
-		const QString &nativePattern=QString::null,
-		const QString &nativeName=QString::null,
-		const DialogType &dialogType=Everything,
-		const QCString& templateType="",
-		QWidget* parent = 0);
+    /**
+     * This is the static method you'll normally use to show the
+     * dialog.
+     * @param instance the KInstance of your app
+     * The native mimetype is retrieved from the (desktop file of) that instance.
+     * @param file this is the filename which is returned to your app
+     * More precisely, it's a url (to give to KURL) if ReturnType is File
+     * and it's a path (to open directly) if ReturnType is Template
+     *
+     * @param dialogType the type of the dialog
+     * @param templateType the template type of your application (see kword or
+     *        kpresenter for details)
+     * @return The return type (see above)
+     */
+    static ReturnType choose(KInstance* instance, QString &file,
+                             const DialogType &dialogType = Everything,
+                             const QCString& templateType = "",
+                             QWidget* parent = 0);
 
-	/**
-	 * Method to get the current template
-	 */
-	QString getTemplate() const;
-	/**
-	 * Method to get the "full" template (path+template)
-	 */
-	QString getFullTemplate() const;
-	/**
-	 * The ReturnType (call this one after exec())
-	 */
-	ReturnType getReturnType() const;
-	/**
-	 * The dialogType - normally you won't need this one
-	 */
-	DialogType getDialogType() const;
+    /**
+     * Alternate API, in case no KoDocument is available [and for backwards compatibility]
+     * @param instance the KInstance of your app
+     * @param file this is the filename which is returned to your app
+     * More precisely, it's a url (to give to KURL) if ReturnType is File
+     * and it's a path (to open directly) if ReturnType is Template
+     *
+     * @param format is the mimetype of the app (e.g. application/x-kspread)
+     * @param nativeName is the name of your app (e.g KSpread)
+     * @param nativePattern UNUSED
+     * @param dialogType the type of the dialog
+     * @param templateType the template type of your application (see kword or
+     *        kpresenter for details)
+     * @return The return type (see above)
+     */
+    static ReturnType choose(KInstance* instance, QString &file,
+                             const QCString &format,
+                             const QString &nativePattern=QString::null,
+                             const QString &nativeName=QString::null,
+                             const DialogType &dialogType=Everything,
+                             const QCString& templateType="",
+                             QWidget* parent = 0);
+
+    /// Ditto, with extraNativeMimeTypes added
+    static ReturnType choose(KInstance* instance, QString &file,
+                             const QCString &format,
+                             const QString &nativeName,
+                             const QStringList& extraNativeMimeTypes,
+                             const DialogType &dialogType=Everything,
+                             const QCString& templateType="",
+                             QWidget* parent = 0);
+
+    /**
+     * Method to get the current template
+     */
+    QString getTemplate() const;
+    /**
+     * Method to get the "full" template (path+template)
+     */
+    QString getFullTemplate() const;
+    /**
+     * The ReturnType (call this one after exec())
+     */
+    ReturnType getReturnType() const;
+    /**
+     * The dialogType - normally you won't need this one
+     */
+    DialogType getDialogType() const;
 
 protected slots:
     /**
@@ -218,22 +225,42 @@ protected slots:
     virtual void slotOk();
 
 private:
+    /**
+     *
+     * @param parent parent the parent of the dialog
+     * @param name the Qt internal name
+     * @param instance the KInstance of your app
+     * @param format is the mimetype of the app (e.g. application/x-kspread)
+     * @param nativeName is the name of your app (e.g KSpread)
+     * @param dialogType the type of the dialog
+     * @param templateType the template type of your application (see kword or
+     *        kpresenter for details)
+     *
+     * @return The return type (see above)
+     */
+    KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
+                        const QCString &format,
+                        const QString &nativeName,
+                        const QStringList &extraNativeMimeTypes,
+                        const DialogType &dialogType=Everything,
+                        const QCString& templateType="");
 
-	KoTemplateChooseDiaPrivate *d;
+private:
+    KoTemplateChooseDiaPrivate *d;
 
-	QString descriptionText(const QString &name, const QString &description);
-	void setupDialog();
-	void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
-	void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
-	void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
-	bool collectInfo();
-	bool noStartupDlg() const;
+    QString descriptionText(const QString &name, const QString &description);
+    void setupDialog();
+    void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
+    void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
+    void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
+    bool collectInfo();
+    bool noStartupDlg() const;
 
-    private slots:
+private slots:
 
-        void chosen(QIconViewItem *);
-	void currentChanged( QIconViewItem * );
-	void recentSelected( QIconViewItem * );
+    void chosen(QIconViewItem *);
+    void currentChanged( QIconViewItem * );
+    void recentSelected( QIconViewItem * );
 };
 
 #endif
