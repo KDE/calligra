@@ -78,8 +78,9 @@ bool KPTPart::initDoc() {
     } else if (ret == KoTemplateChooseDia::Empty) {
 	// Make a fresh project and let the user enter some info
 	m_project = new KPTProject();
-	m_projectDialog = new KPTProjectDialog(*m_project, m_view);
-	m_projectDialog->exec();
+	// an emty project should be empty
+	// m_projectDialog = new KPTProjectDialog(*m_project, m_view);
+	// m_projectDialog->exec();
 
 	result = true;
     }
