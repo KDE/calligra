@@ -9,19 +9,19 @@
  ***************************************************************************/
 
 #include <qlabel.h>
-#include <klineedit.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <knuminput.h>
 #include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlistbox.h>
-#include <qtextedit.h>
 #include <qobjectlist.h>
 #include <qstring.h>
 
+#include <klineedit.h>
+#include <kpushbutton.h>
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <klistbox.h>
+#include <ktextedit.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -31,11 +31,11 @@
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
-class KFORMEDITOR_EXPORT MyTextEdit : public QTextEdit
+class KFORMEDITOR_EXPORT MyTextEdit : public KTextEdit
 {
 	public:
 		MyTextEdit(const QString &text, QWidget *parent, const char *name, QObject *container)
-		 : QTextEdit(text, QString::null, parent, name)
+		 : KTextEdit(text, QString::null, parent, name)
 		{
 			m_container = container;
 			setReadOnly(true);
@@ -47,7 +47,7 @@ class KFORMEDITOR_EXPORT MyTextEdit : public QTextEdit
 		{
 			bool ok = m_container->eventFilter(this, ev);
 			if(!ok)
-				return QTextEdit::eventFilter(o, ev);
+				return KTextEdit::eventFilter(o, ev);
 			return true;
 		}
 
@@ -98,7 +98,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 
 	KFormDesigner::Widget *wLineEdit = new KFormDesigner::Widget(this);
 	wLineEdit->setPixmap("lineedit");
-	wLineEdit->setClassName("QLineEdit");
+	wLineEdit->setClassName("KLineEdit");
 	wLineEdit->setName(i18n("Line Edit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
@@ -111,8 +111,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wSpacer);
 
 	KFormDesigner::Widget *wPushButton = new KFormDesigner::Widget(this);
-	wPushButton->setPixmap("pushbutton");
-	wPushButton->setClassName("QPushButton");
+	wPushButton->setPixmap("button");
+	wPushButton->setClassName("KPushButton");
 	wPushButton->setName(i18n("Push Button"));
 	wPushButton->setDescription(i18n("A simple push button to execute a command"));
 	m_classes.append(wPushButton);
@@ -140,21 +140,21 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 
 	KFormDesigner::Widget *wComboBox = new KFormDesigner::Widget(this);
 	wComboBox->setPixmap("combo");
-	wComboBox->setClassName("QComboBox");
+	wComboBox->setClassName("KComboBox");
 	wComboBox->setName(i18n("Combo Box"));
 	wComboBox->setDescription(i18n("A combo box widget"));
 	m_classes.append(wComboBox);
 
 	KFormDesigner::Widget *wListBox = new KFormDesigner::Widget(this);
 	wListBox->setPixmap("listbox");
-	wListBox->setClassName("QListBox");
+	wListBox->setClassName("KListBox");
 	wListBox->setName(i18n("List Box"));
 	wListBox->setDescription(i18n("A simple list widget"));
 	m_classes.append(wListBox);
 
 	KFormDesigner::Widget *wTextEdit = new KFormDesigner::Widget(this);
-	wTextEdit->setPixmap("textedit");
-	wTextEdit->setClassName("QTextEdit");
+	wTextEdit->setPixmap("lineedit");
+	wTextEdit->setClassName("KTextEdit");
 	wTextEdit->setName(i18n("Text Editor"));
 	wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
 	m_classes.append(wTextEdit);
@@ -182,13 +182,13 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	if(c == "QLabel")
 		w = new QLabel(i18n("Label"), p, n);
 
-	else if(c == "QLineEdit")
+	else if(c == "KLineEdit")
 	{
-		w = new QLineEdit(p, n);
+		w = new KLineEdit(p, n);
 		w->setCursor(QCursor(Qt::ArrowCursor));
 	}
-	else if(c == "QPushButton")
-		w = new QPushButton(i18n("Button"), p, n);
+	else if(c == "KPushButton")
+		w = new KPushButton(i18n("Button"), p, n);
 
 	else if(c == "QRadioButton")
 		w = new QRadioButton(i18n("Radio Button"), p, n);
@@ -200,13 +200,13 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	{
 		w = new MySpinBox(p, n, container);
 	}
-	else if(c == "QComboBox")
-		w = new QComboBox(p, n);
+	else if(c == "KComboBox")
+		w = new KComboBox(p, n);
 
-	else if(c == "QListBox")
-		w = new QListBox(p, n);
+	else if(c == "KListBox")
+		w = new KListBox(p, n);
 
-	else if(c == "QTextEdit")
+	else if(c == "KTextEdit")
 		w = new MyTextEdit(i18n("Enter your text here"), p, n, container);
 
 	else if(c == "Spacer")
@@ -233,12 +233,12 @@ StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
 		return;
 	}
-	else if(classname == "QLineEdit")
+	else if(classname == "KLineEdit")
 	{
 		menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
 		return;
 	}
-	else if(classname == "QPushButton")
+	else if(classname == "KPushButton")
 	{
 
 	}
@@ -254,13 +254,13 @@ StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	{
 
 	}
-	else if(classname == "QComboBox")
+	else if(classname == "KComboBox")
 	{
 	}
-	else if(classname == "QListBox")
+	else if(classname == "KListBox")
 	{
 	}
-	else if(classname == "QTextEdit")
+	else if(classname == "KTextEdit")
 	{
 	}
 
@@ -271,9 +271,9 @@ void
 StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
-	if(classname == "QLineEdit")
+	if(classname == "KLineEdit")
 	{
-		QLineEdit *lineedit = static_cast<QLineEdit*>(w);
+		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
 		createEditor(lineedit->text(), lineedit, lineedit->geometry(), lineedit->alignment(), true);
 		return;
 	}
@@ -283,9 +283,9 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 		createEditor(label->text(), label, label->geometry(), label->alignment());
 		return;
 	}
-	else if(classname == "QPushButton")
+	else if(classname == "KPushButton")
 	{
-		QPushButton *push = static_cast<QPushButton*>(w);
+		KPushButton *push = static_cast<KPushButton*>(w);
 		QRect r(push->geometry());
 		r.setX(r.x() + 10);
 		r.setY(r.y() + 10);
@@ -311,19 +311,19 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	}
 	else if(classname == "KIntSpinBox")
 	{
-		QSpinBox *spin = static_cast<QSpinBox*>(w);
+		KIntSpinBox *spin = static_cast<KIntSpinBox*>(w);
 		QRect r(spin->geometry());
 		r.setWidth(r.width() - spin->upRect().width());
 		createEditor(spin->text(), spin, r, Qt::AlignRight, true, Qt::PaletteBase);
 		m_editor->setValidator(spin->validator());
 	}
-	else if(classname == "QComboBox")
+	else if(classname == "KComboBox")
 	{
 	}
-	else if(classname == "QListBox")
+	else if(classname == "KListBox")
 	{
 	}
-	else if(classname == "QTextEdit")
+	else if(classname == "KTextEdit")
 	{
 	}
 
@@ -335,7 +335,7 @@ StdWidgetFactory::changeText(const QString &text)
 {
 	QString n = m_widget->className();
 	if(n == "KIntSpinBox")
-		((QSpinBox*)m_widget)->setValue(text.toInt());
+		((KIntSpinBox*)m_widget)->setValue(text.toInt());
 	else
 		changeProperty("text", text, m_container);
 }

@@ -12,15 +12,15 @@
    <Action name="library_widget_QButtonGroup"/>
    <Action name="library_widget_QTabWidget"/>
    <Separator/>
-   <Action name="library_widget_QLineEdit"/>
+   <Action name="library_widget_KLineEdit"/>
    <Action name="library_widget_QLabel"/>
-   <Action name="library_widget_QPushButton"/>
+   <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_QRadioButton"/>
    <Action name="library_widget_QCheckBox"/>
    <Action name="library_widget_KIntSpinBox"/>
-   <Action name="library_widget_QComboBox"/>
-   <Action name="library_widget_QListBox"/>
-   <Action name="library_widget_QTextEdit"/>
+   <Action name="library_widget_KComboBox"/>
+   <Action name="library_widget_KListBox"/>
+   <Action name="library_widget_KTextEdit"/>
    <Action name="library_widget_Spacer"/>
   </Menu>
   <Menu name="Debug">
@@ -34,15 +34,15 @@
  <text>Widgets</text>
    <Action name="library_widget_QButtonGroup"/>
    <Action name="library_widget_QTabWidget"/>
-   <Action name="library_widget_QLineEdit"/>
+   <Action name="library_widget_KLineEdit"/>
    <Action name="library_widget_QLabel"/>
-   <Action name="library_widget_QPushButton"/>
+   <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_QRadioButton"/>
    <Action name="library_widget_QCheckBox"/>
    <Action name="library_widget_KIntSpinBox"/>
-   <Action name="library_widget_QComboBox"/>
-   <Action name="library_widget_QListBox"/>
-   <Action name="library_widget_QTextEdit"/>
+   <Action name="library_widget_KComboBox"/>
+   <Action name="library_widget_KListBox"/>
+   <Action name="library_widget_KTextEdit"/>
    <Action name="library_widget_Spacer"/>
    <ActionList name="undo_actions" />
 </ToolBar>

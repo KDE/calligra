@@ -13,6 +13,7 @@
 #include <qbuttongroup.h>
 
 #include <kapplication.h>
+#include <kiconloader.h>
 #include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -59,6 +60,7 @@ int main(int argc, char **argv)
 
     app.setMainWidget(tab);
 */
+   KGlobal::iconLoader()->addAppDir("kexi");
 
     KFMView *v = new KFMView();
     v->show();
