@@ -114,6 +114,9 @@
 
 #include <koChangeCaseDia.h>
 
+#include <koSearchDia.h>
+#include "searchdia.h"
+
 #define DEBUG
 
 static const char *pageup_xpm[] = {
@@ -199,7 +202,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     yOffset = 0;
     v_ruler = 0;
     h_ruler = 0;
-    searchDialog=0L;
     pen = QPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
     lineBegin = L_NORMAL;
@@ -233,6 +235,10 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_spell.kspell = 0;
     automaticScreenPresFirstTimer = true;
     m_actionList.setAutoDelete( true );
+
+    m_searchEntry = 0L;
+    m_replaceEntry = 0L;
+    m_findReplace = 0L;
 
     m_pKPresenterDoc = _doc;
     // Currently unused (formatting needs a zoom handler, so we use the one in KPresenterDocument)
@@ -325,7 +331,6 @@ KPresenterView::~KPresenterView()
         delete m_spell.kspell;
     }
 
-    delete searchDialog;
     delete presStructView;
     delete rb_oalign;
     delete rb_lbegin;
@@ -336,6 +341,9 @@ KPresenterView::~KPresenterView()
     delete m_specialCharDlg;
     delete m_sbPageLabel;
     delete notebar;
+    delete m_searchEntry;
+    delete m_replaceEntry;
+    delete m_specialCharDlg;
 }
 
 /*=========================== file print =======================*/
@@ -489,19 +497,6 @@ void KPresenterView::editDelPage()
     currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
     skipToPage( currPg );
     actionEditDelPage->setEnabled(  m_pKPresenterDoc->getPageNums() > 1 );
-}
-
-/*===============================================================*/
-void KPresenterView::editFind()
-{
-    if ( !searchDialog ) {
-	searchDialog = new SearchDialog( this, 0, FALSE );
-	connect( searchDialog->buttonFind, SIGNAL( clicked() ),
-		 this, SLOT( search() ) );
-    }
-    searchDialog->lineEdit->setFocus();
-    searchDialog->show();
-    searchDialog->raise();
 }
 
 /*===============================================================*/
@@ -2167,7 +2162,9 @@ void KPresenterView::setupActions()
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
 
-    actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
+
     actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
 					  this, SLOT( editHeaderFooter() ),
 					  actionCollection(), "edit_headerfooter" );
@@ -2763,7 +2760,6 @@ void KPresenterView::objectSelectedChanged()
     bool val=edit && isText;
     actionInsertSpecialChar->setEnabled(val);
     actionInsertLink->setEnabled(val);
-    actionEditFind->setEnabled(val);
     actionFormatParag->setEnabled(val);
     actionInsertVariable->setEnabled(val);
     if(edit)
@@ -3715,21 +3711,6 @@ bool KPresenterView::gotoPresPage( int pg )
     return true;
 }
 
-void KPresenterView::search()
-{
-    if ( !searchDialog )
-	return;
-    KPTextObject *txtObj = page->applicableTextObjects().first();
-    if ( !txtObj )
-	return;
-    // TODO find dialog from kword
-#if 0
-    QString txt = searchDialog->lineEdit->text();
-    if ( !txtObj->find( txt, searchDialog->cs, searchDialog->wo, !searchDialog->back ) )
-	KMessageBox::information( this, i18n( "%1 not found!" ).arg( txt ), i18n( "Find" ) );
-#endif
-}
-
 void KPresenterView::nextPage()
 {
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
@@ -4655,5 +4636,81 @@ void KPresenterView::changeCaseOfText()
     }
     delete caseDia;
 }
+
+
+void KPresenterView::editFind()
+{
+    // Already a find or replace running ?
+    if ( m_findReplace )
+    {
+        m_findReplace->setActiveWindow();
+        return;
+    }
+
+    if (!m_searchEntry)
+        m_searchEntry = new KoSearchContext();
+    KPTextView * edit = page->currentTextObjectView();
+    bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
+    KoSearchDia dialog( page, "find", m_searchEntry,hasSelection );
+
+    QPtrList<KoTextObject>lst;
+    QPtrList<KPObject> *listObj(page->objectList());
+    for ( unsigned int i = 0; i < listObj->count(); i++ ) {
+        if(listObj->at( i )->getType() == OT_TEXT)
+            lst.append(dynamic_cast<KPTextObject*>(listObj->at( i ))->textObject());
+    }
+
+    if ( dialog.exec() == QDialog::Accepted )
+    {
+        m_findReplace = new KPrFindReplace( page, &dialog,edit ,lst);
+        doFindReplace();
+    }
+}
+
+void KPresenterView::editReplace()
+{
+    // Already a find or replace running ?
+    if ( m_findReplace )
+    {
+        m_findReplace->setActiveWindow();
+        return;
+    }
+
+    if (!m_searchEntry)
+        m_searchEntry = new KoSearchContext();
+    if (!m_replaceEntry)
+        m_replaceEntry = new KoSearchContext();
+
+    QPtrList<KoTextObject>lst;
+    QPtrList<KPObject> *listObj(page->objectList());
+    for ( unsigned int i = 0; i < listObj->count(); i++ ) {
+        if(listObj->at( i )->getType() == OT_TEXT)
+            lst.append(dynamic_cast<KPTextObject*>(listObj->at( i ))->textObject());
+    }
+    KPTextView * edit = page->currentTextObjectView();
+    bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
+
+    KoReplaceDia dialog( page, "replace", m_searchEntry, m_replaceEntry,hasSelection );
+    if ( dialog.exec() == QDialog::Accepted )
+    {
+        m_findReplace = new KPrFindReplace( page, &dialog,edit ,lst);
+        doFindReplace();
+    }
+}
+
+void KPresenterView::doFindReplace()
+{
+    KPrFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
+
+    findReplace->proceed();
+
+    bool aborted = findReplace->aborted();
+    delete findReplace;
+    if ( !aborted ) // Only if we still exist....
+        m_findReplace = 0L;
+}
+
+
+
 
 #include <kpresenter_view.moc>

@@ -26,7 +26,6 @@
 #include <koView.h>
 #include <kpresenter_doc.h>
 #include <global.h>
-#include <searchdia.h>
 #include <koRuler.h>
 
 class QPopupMenu;
@@ -63,6 +62,8 @@ class KFontAction;
 class KSpell;
 class KoParagCounter;
 class KActionMenu;
+class KoSearchContext;
+class KPrFindReplace;
 
 class PageBase : public QWidget
 {
@@ -123,8 +124,9 @@ public slots:
     void editCopyPage();
     void editDuplicatePage();
     void editDelPage();
-    void editFind();
     void editHeaderFooter();
+    void editFind();
+    void editReplace();
 
     // view menu
     void viewShowSideBar();
@@ -485,8 +487,6 @@ protected slots:
     void openPageLayoutDia() { extraLayout(); }
     void unitChanged( QString );
 
-    void search();
-
     void doAutomaticScreenPres();
 
     void getPageMouseWheelEvent( QWheelEvent *e );
@@ -522,6 +522,8 @@ protected:
                              KActionMenu * parentMenu, const QString & menuText );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
+    void doFindReplace();
+
 private:
 // ********** variables **********
 
@@ -553,7 +555,6 @@ private:
     KPPresStructView *presStructView;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
-    QGuardedPtr<SearchDialog> searchDialog;
 
     // default pen and brush
     QPen pen;
@@ -605,7 +606,6 @@ private:
     KAction *actionEditSelectAll;
     KAction *actionEditDuplicatePage;
     KAction *actionEditDelPage;
-    KAction *actionEditFind;
     KAction *actionEditHeaderFooter;
 
     KToggleAction *actionViewShowSideBar;
@@ -764,6 +764,10 @@ private:
     };
     typedef QMap<KAction *, VariableDef> VariableDefMap;
     VariableDefMap m_variableDefMap;
+
+    KoSearchContext *m_searchEntry, *m_replaceEntry;
+    KPrFindReplace *m_findReplace;
+
 };
 
 #endif

@@ -5,11 +5,11 @@ bin_SCRIPTS = kprconverter.pl
 
 ## The part
 kde_module_LTLIBRARIES = libkpresenterpart.la
-libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
+libkpresenterpart_la_SOURCES = searchdia.cc notebar.cc backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc  styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
-	kpresenter_utils.cc rotatedia.cc searchdia.ui \
+	kpresenter_utils.cc rotatedia.cc \
 	shadowdia.cc presstructview.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
@@ -25,7 +25,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
 	textdialog.ui sidebar.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
-	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc notebar.cc \
+	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
 	kprtextdocument.cc kpfreehandobject.cc kppolylineobject.cc \
 	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc
 
@@ -53,7 +53,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		global.h kprcommand.h kpresenter_sound_player.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h shadowdia.h presstructview.h \
-		confpiedia.h confrectdia.h \
+		confpiedia.h confrectdia.h  searchdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
