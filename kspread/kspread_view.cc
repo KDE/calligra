@@ -310,13 +310,13 @@ public:
     KToggleAction* alignBottom;
     KToggleAction* wrapText;
     KToggleAction* verticalText;
+    KAction* increaseIndent;
+    KAction* decreaseIndent;
     KAction* changeAngle;
     KToggleAction* percent;
     KAction* precplus;
     KAction* precminus;
     KToggleAction* money;
-    KAction* increaseIndent;
-    KAction* decreaseIndent;
     KAction* upper;
     KAction* lower;
     KAction* firstLetterUpper;
@@ -610,6 +610,79 @@ void ViewPrivate::initActions()
   actions->changeAngle = new KAction( i18n("Change Angle..."),
       0, view, SLOT( changeAngle() ), ac, "changeangle" );
   actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed."));
+
+  actions->percent = new KToggleAction( i18n("Percent Format"), "percent",
+      0, ac, "percent");
+  QObject::connect( actions->percent, SIGNAL( toggled( bool ) ),
+      view, SLOT( percent( bool ) ) );
+  actions->percent->setToolTip(i18n("Set the cell formatting to look like a percentage."));
+
+  actions->precplus = new KAction( i18n("Increase Precision"), "prec_plus",
+      0, view, SLOT( precisionPlus() ), ac, "precplus");
+  actions->precplus->setToolTip(i18n("Increase the decimal precision shown onscreen."));
+
+  actions->precminus = new KAction( i18n("Decrease Precision"), "prec_minus",
+      0, view, SLOT( precisionMinus() ), ac, "precminus");
+  actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen."));
+
+  actions->money = new KToggleAction( i18n("Money Format"), "money",
+      0, ac, "money");
+  QObject::connect( actions->money, SIGNAL( toggled( bool ) ), 
+      view, SLOT( moneyFormat( bool ) ) );
+  actions->money->setToolTip(i18n("Set the cell formatting to look like your local currency."));
+
+  actions->upper = new KAction( i18n("Upper Case"), "fontsizeup",
+      0, view, SLOT( upper() ), ac, "upper" );
+  actions->upper->setToolTip(i18n("Convert all letters to upper case."));
+
+  actions->lower = new KAction( i18n("Lower Case"), "fontsizedown",
+      0, view, SLOT( lower() ), ac, "lower" );
+  actions->lower->setToolTip(i18n("Convert all letters to lower case."));
+
+  actions->firstLetterUpper = new KAction( i18n("Convert First Letter to Upper Case"), "first_letter_upper",
+      0, view, SLOT( firstLetterUpper() ),ac, "firstletterupper" );
+  actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter."));
+
+  actions->bgColor = new TKSelectColorAction( i18n("Background Color"),
+      TKSelectColorAction::FillColor, ac, "backgroundColor", true );
+  QObject::connect(actions->bgColor, SIGNAL( activated() ),
+      view, SLOT( changeBackgroundColor() ) );
+  actions->bgColor->setDefaultColor(QColor());
+  actions->bgColor->setToolTip(i18n("Set the background color."));
+
+  actions->borderLeft = new KAction( i18n("Border Left"), "border_left",
+      0, view, SLOT( borderLeft() ), ac, "borderLeft" );
+  actions->borderLeft->setToolTip(i18n("Set a left border to the selected area."));
+
+  actions->borderRight = new KAction( i18n("Border Right"), "border_right",
+      0, view, SLOT( borderRight() ), ac, "borderRight" );
+  actions->borderRight->setToolTip(i18n("Set a right border to the selected area."));
+
+  actions->borderTop = new KAction( i18n("Border Top"), "border_top",
+      0, view, SLOT( borderTop() ), ac, "borderTop" );
+  actions->borderTop->setToolTip(i18n("Set a top border to the selected area."));
+
+  actions->borderBottom = new KAction( i18n("Border Bottom"), "border_bottom",
+      0, view, SLOT( borderBottom() ), ac, "borderBottom" );
+  actions->borderBottom->setToolTip(i18n("Set a bottom border to the selected area."));
+
+  actions->borderAll = new KAction( i18n("All Borders"), "border_all",
+      0, view, SLOT( borderAll() ), ac, "borderAll" );
+  actions->borderAll->setToolTip(i18n("Set a border around all cells in the selected area."));
+
+  actions->borderRemove = new KAction( i18n("Remove Borders"), "border_remove",
+      0, view, SLOT( borderRemove() ), ac, "borderRemove" );
+  actions->borderRemove->setToolTip(i18n("Remove all borders in the selected area."));
+
+  actions->borderOutline = new KAction( i18n("Border Outline"), ("border_outline"),
+      0, view, SLOT( borderOutline() ), ac, "borderOutline" );
+  actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area."));
+
+  actions->borderColor = new TKSelectColorAction( i18n("Border Color"),
+      TKSelectColorAction::LineColor, ac, "borderColor" );
+  QObject::connect( actions->borderColor, SIGNAL( activated() ),
+      view, SLOT( changeBorderColor() ) );
+  actions->borderColor->setToolTip( i18n( "Select a new border color." ) );
 }
 
 
@@ -758,11 +831,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeGlobalOperationActions();
     initializeCellOperationActions();
     initializeCellPropertyActions();
-    initializeTextFormatActions();
     initializeTableActions();
     initializeSpellChecking();
     initializeRowColumnActions();
-    initializeBorderActions();
 
     QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
     for( ; it.current(); ++it )
@@ -1269,60 +1340,7 @@ void KSpreadView::initializeCellPropertyActions()
                                     actionCollection(), "clearconditional" );
   d->actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting."));
 
-  d->actions->bgColor = new TKSelectColorAction( i18n("Background Color"),
-                                       TKSelectColorAction::FillColor,
-                                       actionCollection(), "backgroundColor",
-                                       true );
-  connect(d->actions->bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
-  d->actions->bgColor->setDefaultColor(QColor());
-  d->actions->bgColor->setToolTip(i18n("Set the background color."));
 
-}
-
-
-void KSpreadView::initializeTextFormatActions()
-{
-  /*******************************/
-  d->actions->percent = new KToggleAction( i18n("Percent Format"), "percent", 0,
-                                 actionCollection(), "percent");
-  connect( d->actions->percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
-  d->actions->percent->setToolTip(i18n("Set the cell formatting to look like a percentage."));
-
-  /*******************************/
-  d->actions->precplus = new KAction( i18n("Increase Precision"), "prec_plus", 0, this,
-                            SLOT( precisionPlus() ), actionCollection(),
-                            "precplus");
-  d->actions->precplus->setToolTip(i18n("Increase the decimal precision shown onscreen."));
-
-  /*******************************/
-  d->actions->precminus = new KAction( i18n("Decrease Precision"), "prec_minus", 0, this,
-                             SLOT( precisionMinus() ), actionCollection(),
-                             "precminus");
-  d->actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen."));
-
-  /*******************************/
-  d->actions->money = new KToggleAction( i18n("Money Format"), "money", 0,
-                               actionCollection(), "money");
-  connect( d->actions->money, SIGNAL( toggled( bool ) ), this,
-           SLOT( moneyFormat( bool ) ) );
-  d->actions->money->setToolTip(i18n("Set the cell formatting to look like your local currency."));
-
-  /*******************************/
-  d->actions->upper = new KAction( i18n("Upper Case"), "fontsizeup", 0, this,
-                         SLOT( upper() ), actionCollection(), "upper" );
-  d->actions->upper->setToolTip(i18n("Convert all letters to upper case."));
-
-  /*******************************/
-  d->actions->lower = new KAction( i18n("Lower Case"), "fontsizedown", 0, this,
-                         SLOT( lower() ), actionCollection(), "lower" );
-  d->actions->lower->setToolTip(i18n("Convert all letters to lower case."));
-
-  /*******************************/
-  d->actions->firstLetterUpper = new KAction( i18n("Convert First Letter to Upper Case"),
-                                    "first_letter_upper" ,0, this,
-                                    SLOT( firstLetterUpper() ),
-                                    actionCollection(), "firstletterupper" );
-  d->actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter."));
 }
 
 void KSpreadView::initializeTableActions()
@@ -1470,52 +1488,6 @@ void KSpreadView::initializeRowColumnActions()
 
 }
 
-
-void KSpreadView::initializeBorderActions()
-{
-  d->actions->borderLeft = new KAction( i18n("Border Left"), "border_left", 0, this,
-                              SLOT( borderLeft() ), actionCollection(),
-                              "borderLeft" );
-  d->actions->borderLeft->setToolTip(i18n("Set a left border to the selected area."));
-
-  d->actions->borderRight = new KAction( i18n("Border Right"), "border_right", 0, this,
-                               SLOT( borderRight() ), actionCollection(),
-                               "borderRight" );
-  d->actions->borderRight->setToolTip(i18n("Set a right border to the selected area."));
-
-  d->actions->borderTop = new KAction( i18n("Border Top"), "border_top", 0, this,
-                             SLOT( borderTop() ), actionCollection(),
-                             "borderTop" );
-  d->actions->borderTop->setToolTip(i18n("Set a top border to the selected area."));
-
-  d->actions->borderBottom = new KAction( i18n("Border Bottom"), "border_bottom", 0, this,
-                                SLOT( borderBottom() ), actionCollection(),
-                                "borderBottom" );
-  d->actions->borderBottom->setToolTip(i18n("Set a bottom border to the selected area."));
-
-  d->actions->borderAll = new KAction( i18n("All Borders"), "border_all", 0, this,
-                             SLOT( borderAll() ), actionCollection(),
-                             "borderAll" );
-  d->actions->borderAll->setToolTip(i18n("Set a border around all cells in the selected area."));
-
-  d->actions->borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0,
-                                this, SLOT( borderRemove() ), actionCollection(),
-                                "borderRemove" );
-  d->actions->borderRemove->setToolTip(i18n("Remove all borders in the selected area."));
-
-  d->actions->borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0,
-                                 this, SLOT( borderOutline() ),
-                                 actionCollection(), "borderOutline" );
-  d->actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area."));
-
-  d->actions->borderColor = new TKSelectColorAction( i18n("Border Color"),
-                                           TKSelectColorAction::LineColor,
-                                           actionCollection(), "borderColor" );
-
-  connect( d->actions->borderColor, SIGNAL(activated()), SLOT(changeBorderColor()) );
-  d->actions->borderColor->setToolTip( i18n( "Select a new border color." ) );
-
-}
 
 KSpreadView::~KSpreadView()
 {

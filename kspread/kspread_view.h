@@ -686,11 +686,9 @@ private:
   void initializeGlobalOperationActions();
   void initializeCellOperationActions();
   void initializeCellPropertyActions();
-  void initializeTextFormatActions();
   void initializeTableActions();
   void initializeSpellChecking();
   void initializeRowColumnActions();
-  void initializeBorderActions();
   void adjustMapActions( bool mode );
   void adjustActions( bool mode );
   void adjustActions( KSpreadSheet const * const table,
