@@ -592,7 +592,10 @@ void KoAutoFormatDia::initTab3()
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
     }
-    autoFormatLanguage->setCurrentText(m_autoFormat.getConfigAutoFormatLanguage( ));
+    if ( m_autoFormat.getConfigAutoFormatLanguage( ).isEmpty() )
+        autoFormatLanguage->setCurrentItem(0);
+    else
+        autoFormatLanguage->setCurrentText(m_autoFormat.getConfigAutoFormatLanguage( ));
 }
 
 void KoAutoFormatDia::setupTab4()
