@@ -28,8 +28,12 @@
 #include <shapes/vpolygon.h>
 #include <commands/vtransformcmd.h>
 #include <core/vpath.h>
+#include <core/vfill.h>
+#include <core/vstroke.h>
 #include <qcolor.h>
 #include <qfile.h>
+
+#define DPI 90
 
 typedef KGenericFactory<KontourImport, KoFilter> KontourImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "karbonkontourimport" ) );
@@ -88,35 +92,35 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 		switch( fillstyle )
 		{
 			case 1:
-					{
-					fill.setType( VFill::solid );
-					QColor c;
-					c.setNamedColor( e.attribute( "fillcolor" ) );
-					VColor color( c );
-					fill.setColor( color );
-					}
-					break;
+			{
+				fill.setType( VFill::solid );
+				QColor c;
+				c.setNamedColor( e.attribute( "fillcolor" ) );
+				VColor color( c );
+				fill.setColor( color );
+			}
+			break;
 			case 4: 
-					{
-					VGradient grad;
-					// set color stops
-					grad.clearStops();
-					QColor c;
-					c.setNamedColor( e.attribute( "gradcolor1" ) );
-					VColor color( c );
-					grad.addStop( color, 0.0, 0.5 );
-					c.setNamedColor( e.attribute( "gradcolor2" ) );
-					VColor color2( c );
-					grad.addStop( color2, 1.0, 0.5 );
-					// set coords
-					KoRect bbox = object->boundingBox();
-					grad.setOrigin( KoPoint( bbox.left(), bbox.y() ) );
-					grad.setVector( KoPoint( bbox.right(), bbox.y() ) );
-					grad.setType( (VGradient::VGradientType)e.attribute( "gradstyle" ).toInt() );
-					fill.setType( VFill::grad );
-					fill.gradient() = grad;
-					}
-					break;
+			{
+				VGradient grad;
+				// set color stops
+				grad.clearStops();
+				QColor c;
+				c.setNamedColor( e.attribute( "gradcolor1" ) );
+				VColor color( c );
+				grad.addStop( color, 0.0, 0.5 );
+				c.setNamedColor( e.attribute( "gradcolor2" ) );
+				VColor color2( c );
+				grad.addStop( color2, 1.0, 0.5 );
+				// set coords
+				KoRect bbox = object->boundingBox();
+				grad.setOrigin( KoPoint( bbox.left(), bbox.y() ) );
+				grad.setVector( KoPoint( bbox.right(), bbox.y() ) );
+				grad.setType( (VGradient::VGradientType)e.attribute( "gradstyle" ).toInt() );
+				fill.setType( VFill::grad );
+				fill.gradient() = grad;
+			}
+			break;
 		}
 		object->setFill( fill );
 	}
@@ -129,13 +133,13 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 			case 0:	stroke.setType( VStroke::none );
 					break;
 			case 1:
-					{
-					QColor c;
-					c.setNamedColor( e.attribute( "strokecolor" ) );
-					VColor color( c );
-					stroke.setColor( color );
-					}
-					break;
+			{
+				QColor c;
+				c.setNamedColor( e.attribute( "strokecolor" ) );
+				VColor color( c );
+				stroke.setColor( color );
+			}
+			break;
 		}
 		float lineWidth = e.attribute( "linewidth" ).toFloat();
 		stroke.setLineWidth( lineWidth );
@@ -149,9 +153,12 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				  matrix.attribute( "m22" ).toDouble(),
 				  matrix.attribute( "dx" ).toDouble(),
 				  matrix.attribute( "dy" ).toDouble() );
-
+	
+	mat.scale( 1, -1 );
+	mat.translate( 0, -m_document.height() );
 	VTransformCmd trafo( 0L, mat );
 	trafo.visit( *object );
+
 }
 
 void
@@ -159,11 +166,24 @@ KontourImport::convert()
 {	
 	QDomElement docElem = inpdoc.documentElement();    	
 	QDomElement lay;
+	double height;
+	double width;
 	if( docElem.attribute( "version" ).toInt() == 2 )
+	{
 		lay = docElem;
+		height = lay.firstChild().namedItem( "layout" ).toElement().attribute( "height" ).toDouble();
+		width = lay.firstChild().namedItem( "layout" ).toElement().attribute( "width" ).toDouble();
+	}
 	else
+	{
 		lay = docElem.namedItem( "page" ).toElement();
+		height = lay.firstChild().toElement().attribute( "height" ).toDouble();
+		width = lay.firstChild().toElement().attribute( "width" ).toDouble();
+	}
 
+	m_document.setHeight( ( ( height / 72.0 ) * DPI ) );
+	m_document.setWidth( ( ( width / 72.0 ) * DPI )  );
+	
 	parseGroup( lay.firstChild().toElement() );
 
 	outdoc = m_document.saveXML();
