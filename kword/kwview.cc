@@ -2431,13 +2431,21 @@ void KWView::viewPreviewMode()
 
 void KWView::changeZoomMenu( int zoom )
 {
+    QString mode;
+    if ( m_gui && m_gui->canvasWidget() && m_gui->canvasWidget()->viewMode())
+        mode =  m_gui->canvasWidget()->viewMode()->type();
+    bool state = (mode!="ModeText");
+
     QStringList lst;
     if(zoom>0)
     {
-	if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
-	    lst << i18n( "Zoom to Width" );
-        if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
-            lst << i18n( "Zoom to Whole Page" );
+        if ( state )
+        {
+            if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
+                lst << i18n( "Zoom to Width" );
+            if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
+                lst << i18n( "Zoom to Whole Page" );
+        }
 
         QValueList<int> list;
         QString z;
@@ -2465,20 +2473,23 @@ void KWView::changeZoomMenu( int zoom )
     }
     else
     {
-          lst << i18n( "Zoom to Width" );
-          lst << i18n( "Zoom to Whole Page" );
-          lst << "33%";
-          lst << "50%";
-          lst << "75%";
-          lst << "100%";
-          lst << "125%";
-          lst << "150%";
-          lst << "200%";
-          lst << "250%";
-          lst << "350%";
-          lst << "400%";
-          lst << "450%";
-          lst << "500%";
+        if ( state )
+        {
+            lst << i18n( "Zoom to Width" );
+            lst << i18n( "Zoom to Whole Page" );
+        }
+        lst << "33%";
+        lst << "50%";
+        lst << "75%";
+        lst << "100%";
+        lst << "125%";
+        lst << "150%";
+        lst << "200%";
+        lst << "250%";
+        lst << "350%";
+        lst << "400%";
+        lst << "450%";
+        lst << "500%";
     }
     actionViewZoom->setItems( lst );
 }
@@ -5538,6 +5549,9 @@ void KWView::switchModeView()
     //otherwise we can edit a footnote frame or header/footer
     if ( !state )
         m_gui->canvasWidget()->editFrameSet( m_doc->frameSet( 0 ));
+    //remove add "zoom to page" not necessary in text mode view
+    changeZoomMenu( m_doc->zoom() );
+    showZoom( m_doc->zoom() );
 
 }
 
