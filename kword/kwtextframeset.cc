@@ -4093,6 +4093,7 @@ QList<KAction> KWTextFrameSetEdit::dataToolActionList()
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
+    KWDocument * doc = frameSet()->kWordDocument();
     QString text;
     if ( textFrameSet()->hasSelection() )
     {
@@ -4108,10 +4109,27 @@ QList<KAction> KWTextFrameSetEdit::dataToolActionList()
         m_singleWord = true;
         m_wordUnderCursor = text;
     }
+
+#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
+    if(doc->dontCheckTitleCase() && text==text.upper())
+    {
+        text="";
+        m_singleWord = false;
+    }
+    else if(doc->dontCheckUpperWord() && text[0]==text[0].upper())
+    {
+        QString tmp=text[0]+text.right(text.length()-1).lower();
+        if(text==tmp)
+        {
+            text="";
+            m_singleWord = false;
+        }
+    }
+#endif
+
     if ( text.isEmpty() ) // Nothing to apply a tool to
         return QList<KAction>();
 
-    KWDocument * doc = frameSet()->kWordDocument();
     // Any tool that works on plain text is relevant
     QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", doc );
 
