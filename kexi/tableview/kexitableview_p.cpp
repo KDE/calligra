@@ -35,6 +35,14 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	pBufferPm = 0;
 	deletionPolicy = KexiTableView::NoDelete;
 	disableDrawContents = false;
+	readOnly = -1; //don't know
+	insertingEnabled = -1; //don't know
+}
+
+KexiTableViewPrivate::~KexiTableViewPrivate()
+{
+	delete pBufferPm;
+	delete pInsertItem;
 }
 
 void KexiTableViewPrivate::clearVariables() {
@@ -45,6 +53,7 @@ void KexiTableViewPrivate::clearVariables() {
 	curCol = -1;
 	pCurrentItem=0;
 	pInsertItem = 0;
+	rowEditing = false;
 //	sortedColumn = -1;
 //	sortOrder = true;
 //	recordIndicator = false;

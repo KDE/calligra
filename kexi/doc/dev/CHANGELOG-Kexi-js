@@ -144,9 +144,20 @@ Jowenn's KexiDataProvider class functionality seems to be something like kexidb 
 
 </RENAME_PROPOSALS>
 
+2003-10-16
+- KexiTableView:
+ - maany repainting, updating, resizing improoved, code simplifications
+ - editing row session introduced: edits for the same row is not accepted until move to another row
+  This allows multiple fields editing before row editing accept.
+
+TODO: append empty row right after start of editing new row (like in MSA), to allow user to move 
+to a next row
+
+
 2003-10-15
 - missing QuerySchema::addAsterisk(QueryAsterisk *asterisk) added
-- KexiDataTable headers and cells repainting improoved
+- KexiTableView headers and cells repainting improoved
+- for mysql driver: beh->ROW_ID_FIELD_NAME="_ROWID", is this ok?
 
 2003-10-14
 - DriverBehaviour::ROW_ID_FIELD_NAME added

@@ -99,10 +99,43 @@ public:
 	QString columnCaption(int colNum) const;
 	void setSorting(int col, bool ascending=true);
 
-	QVariant::Type			columnType(int col) const;
-	QVariant			columnDefault(int col) const;
-	bool				columnEditable(int col) const;
-	inline KexiTableItem		*itemAt(int row) const;
+	QVariant::Type columnType(int col) const;
+	QVariant columnDefault(int col) const;
+	bool columnEditable(int col) const;
+	inline KexiTableItem *itemAt(int row) const;
+	
+	/*! \return true if data represented by this table view 
+	 is not editable using it (it can be editable with other ways although). */
+	virtual bool isReadOnly() const;
+
+	/*! Sets readOnly flag for this table view.
+	 Unless the flag is set, the widget inherits readOnly flag from it's data
+	 structure assigned with setData(). The default value if false.
+	 
+	 This method is useful when you need to switch on the flag indepentently 
+	 from the data structure.
+	 Note: it is not allowed to force readOnly off
+	 when internal data is readOnly - in that case the method does nothing.
+	 You can check internal data flag calling data()->readOnly().
+	*/
+	void setReadOnly(bool set);
+
+	/*! \return true if data inserting is enabled (the default).
+	*/
+	bool isInsertingEnabled() const;
+
+	/*! Sets insertEnabled flag. If true, empty row is available 
+	 at the end of this widget for new entering new data. 
+	 Unless the flag is set, the widget inherits insertingEnabled flag from it's data
+	 structure assigned with setData(). The default value if false.
+
+	 Note: it is not allowed to force insertingEnabled on when internal data 
+	 has insertingEnabled set off - in that case the method does nothing.
+ 	 You can check internal data flag calling data()->insertingEnabled().
+	 
+	 \sa setReadOnly()
+	*/
+	void setInsertingEnabled(bool set);
 
 	int currentColumn() const;
 	int currentRow() const;
@@ -123,7 +156,7 @@ public:
 
 	void		updateCell(int row, int col);
 //	void		updateRow(int row);
-	int		sorting();
+	int			sorting();
 	void		remove(int row);
 	void		remove(KexiTableItem *item, bool moveCursor=true);
 
@@ -158,9 +191,9 @@ public:
 	KexiTableRM	*recordMarker() const;
 	KexiTableRM *verticalHeader() const;
 	
-	void		takeInsertItem();
-	void		setInsertItem(KexiTableItem *i);
-	KexiTableItem	*insertItem() const;
+//	void		takeInsertItem();
+//	void		setInsertItem(KexiTableItem *i);
+//	KexiTableItem	*insertItem() const;
 
 	enum AdditionPolicy
 	{
@@ -236,12 +269,28 @@ protected:
 	*/
 	void	showContextMenu( QPoint pos = QPoint(-1,-1) );
 
+	/*! internal */
+	inline void paintRow(KexiTableItem *item,
+		QPainter *pb, int r, int rowp, int cx, int cy, 
+		int colfirst, int collast, int maxwc,
+		const QColor& baseCol, const QColor& altCol);
+
+	/*! \return true if currently selected row is edited. */
+	bool rowEditing() const;
+
 protected slots:
 	void			columnWidthChanged( int col, int os, int ns );
 	void			cancelEditor();
-	virtual void		acceptEditor();
-	virtual void		boolToggled();
+	virtual void	acceptEditor();
+	virtual void	boolToggled();
 	void			slotUpdate();
+
+	/*! Accepts row editing. All changes made to the editing 
+	 row duing this current session will be accepted. */
+	void acceptRowEdit();
+	/*! Cancels row editing All changes made to the editing 
+	 row duing this current session will be undone. */
+	void cancelRowEdit();
 
 	void			slotAutoScroll();
 

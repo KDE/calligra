@@ -31,14 +31,14 @@
 
 #include "kexitableitem.h"
 
-/*! Single column definition */
+/*! Single column definition. */
 class KexiTableViewColumn {
 	public:
 		KexiTableViewColumn() 
 		: type(QVariant::Invalid)
 		, defaultValue(QVariant())
 		, width(100)
-		, readOnly(true)
+		, readOnly(false)
 		{}
 		~KexiTableViewColumn() 
 		{}
@@ -53,7 +53,9 @@ class KexiTableViewColumn {
 /*! List of column definitions. */
 typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
 
-/*! Re-implements QPtrList to allow configurable sorting.
+typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
+
+/*! Reimplements QPtrList to allow configurable sorting.
 	Original author: Till Busch.
 	Reimplemented by Jaroslaw Staniek.
 
@@ -65,9 +67,6 @@ typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
 
 	\sa QPtrList.
 */
-
-typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
-
 class KEXIDATATABLE_EXPORT KexiTableViewData : public KexiTableViewDataBase
 {
 public: 
@@ -94,6 +93,13 @@ public:
 
 	/*! Columns information */
 	KexiTableViewColumnList columns;
+
+	virtual bool isReadOnly() const { return m_readOnly; }
+	virtual void setReadOnly(bool set) { m_readOnly = set; }
+
+	virtual bool isInsertingEnabled() const { return m_insertingEnabled; }
+	virtual void setInsertingEnabled(bool set) { m_insertingEnabled = set; }
+	
 protected:
 	virtual int compareItems(Item item1, Item item2);
 
@@ -104,6 +110,8 @@ protected:
 	short		m_order;
 	short		m_type;
 	static unsigned short charTable[];
+	bool m_readOnly : 1;
+	bool m_insertingEnabled : 1;
 	
 	int (KexiTableViewData::*cmpFunc)(void *, void *);
 };

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,6 +45,7 @@ public slots:
 	void setCellHeight(int cellHeight);
 	void setCurrentRow(int row);
 
+	/*! Sets 'edit row' flag for \a row. Use row==-1 if you want to switch the flag off. */
 	void setEditRow(int row);
 	void showInsertRow(bool show);
 	void setColor(const QColor &color);
@@ -55,16 +57,16 @@ public slots:
 	void addLabels(int num);
 
 	void clear();
+	int rows() const;
 
 protected:
-	int maxRow() const;
 	virtual void paintEvent(QPaintEvent *e);
 	
 	int	m_rowHeight;
 	int	m_offset;
 	int	m_currentRow;
 	int	m_editRow;
-	int	m_max;
+	int	m_rows;
 	bool m_showInsertRow : 1;
 
 	QColor	m_pointerColor;

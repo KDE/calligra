@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,7 +80,7 @@ KexiTableRM::KexiTableRM(QWidget *parent)
 	m_currentRow=-1;
 	m_editRow=-1;
 	m_pointerColor = QColor(99,0,0);
-	m_max = 0;
+	m_rows = 0;
 	m_showInsertRow = true;//false;
 	
 	getImg(m_penImg, img_pen_data, 0);
@@ -92,36 +93,36 @@ KexiTableRM::~KexiTableRM()
 
 void KexiTableRM::addLabel()
 {
-	m_max++;
+	m_rows++;
 	update();
 }
 
 void KexiTableRM::removeLabel()
 {
-	if (m_max > 0) {
-		m_max--;
+	if (m_rows > 0) {
+		m_rows--;
 		update();
 	}
 }
 
 void KexiTableRM::addLabels(int num)
 {
-	m_max += num;
+	m_rows += num;
 	update();
 }
 
 void KexiTableRM::clear()
 {
-	m_max=0;
+	m_rows=0;
 	update();
 }
 
-int KexiTableRM::maxRow() const
+int KexiTableRM::rows() const
 {
 	if (m_showInsertRow)
-		return m_max +1;
+		return m_rows +1;
 	else
-		return m_max;
+		return m_rows;
 }
 
 void KexiTableRM::paintEvent(QPaintEvent *e)
@@ -129,12 +130,12 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 	QPainter p(this);
 	QRect r(e->rect());
 
-	int first = (r.top()    + m_offset) / m_rowHeight + 1;
-	int last  = (r.bottom() + m_offset) / m_rowHeight + 1;
-	if(last > maxRow())
-		last = maxRow();
+	int first = (r.top()    + m_offset) / m_rowHeight;
+	int last  = (r.bottom() + m_offset) / m_rowHeight;
+	if(last > (m_rows-1+(m_showInsertRow?1:0)))
+		last = m_rows-1+(m_showInsertRow?1:0);
 
-	for(int i=first - 1; i < last; i++)
+	for(int i=first; i <= last; i++)
 	{
 		int y = ((m_rowHeight * i)-m_offset) - 1;
 		QRect r(0, y, width(), m_rowHeight + 1);
@@ -142,13 +143,15 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, colorGroup());
 	}
 
-	if (m_editRow >= first && m_editRow <= (last+1/*+1 for insert row*/)) {
+	if (m_editRow!=-1 && m_editRow >= first && m_editRow <= (last/*+1 for insert row*/)) {
 		//show pen when editing
 		int ofs = m_rowHeight / 4;
 		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+1;
-		p.drawImage((m_rowHeight-m_penImg.width())/2+2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
+		p.drawImage((m_rowHeight-m_penImg.width())/2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
 	}
-	else if(m_currentRow >= first-1 && m_currentRow <= last) {
+	else if (m_currentRow >= first && m_currentRow <= last 
+		&& (!m_showInsertRow || (m_showInsertRow && m_currentRow < last)))/*don't display marker for 'insert' row*/ 
+	{
 		//show marker
 		p.setBrush(colorGroup().foreground());
 		QPointArray points(3);
@@ -161,9 +164,9 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 /*		int half = m_rowHeight / 2;
 		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
 	}
-	if (m_showInsertRow && m_editRow < (last+1)) {
-		//show sign
-		int pos = ((m_rowHeight*(maxRow()-1))-m_offset)+(m_rowHeight-m_plusImg.height())/2;
+	if (m_showInsertRow && m_editRow < last) {
+		//show plus sign
+		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-m_plusImg.height())/2;
 		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
 	}
 	
@@ -224,11 +227,15 @@ void KexiTableRM::setCellHeight(int cellHeight)
 void KexiTableRM::setEditRow(int row)
 {
 	m_editRow = row;
+//TODO: update only needed area!
+	update();
 }
 
 void KexiTableRM::showInsertRow(bool show)
 {
 	m_showInsertRow = show;
+//TODO: update only needed area!
+	update();
 }
 
 void KexiTableRM::setColor(const QColor &newcolor)

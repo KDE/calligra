@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +42,8 @@ KexiTableViewData::KexiTableViewData()
 	, m_key(0)
 	, m_order(1)
 	, m_type(1)
+	, m_readOnly(false)
+	, m_insertingEnabled(true)
 {
 	setAutoDelete(true);
 }
@@ -51,6 +54,8 @@ KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols)
 	, m_key(0)
 	, m_order(1)
 	, m_type(1)
+	, m_readOnly(false)
+	, m_insertingEnabled(true)
 {
 	setAutoDelete(true);
 }

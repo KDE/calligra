@@ -39,6 +39,7 @@ class KexiTableViewPrivate
 	public:
 
 	KexiTableViewPrivate();
+	~KexiTableViewPrivate();
 	void clearVariables();
 
 	bool editOnDoubleClick : 1;
@@ -86,6 +87,17 @@ class KexiTableViewPrivate
 	bool			bgAltering : 1;
 	
 	bool disableDrawContents : 1;
+
+	/*! true if currently selected row is edited */
+	bool rowEditing : 1;
+	
+	/*! 1 if table view is readOnly, 0 if not; 
+	 otherwise the 'readOnly' flag from table views' internal data structure
+	 (KexiTableViewData *KexiTableView::m_data) is used. */
+	int readOnly;
+
+	/*! like for readOnly: 1 if inserting is enabled */
+	int insertingEnabled;
 
 	QColor emptyAreaColor;
 };

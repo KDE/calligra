@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,10 @@ class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 public:
 	KexiTableItem(int numCols);
 //js	KexiTableItem(KexiTableView *tableView);
+
+	/*! Clears exisiting column values and inits new \a numCols 
+	 columns with empty values. */
+	void init(int numCols);
 
 	~KexiTableItem();
 

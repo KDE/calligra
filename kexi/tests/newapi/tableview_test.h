@@ -49,6 +49,7 @@ int tableViewTest()
 	app->setMainWidget(tv);
 
 	tv->show();
+	tv->setFocus();
 
 	return 0;
 }
