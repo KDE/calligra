@@ -1535,6 +1535,16 @@ void KivioPage::setHidePage(bool _hide)
         emit sig_PageShown(this);
 }
 
+void KivioPage::setPaintSelected(bool paint)
+{
+  KivioStencil *pStencil = m_lstSelection.first();
+
+  while( pStencil )
+  {
+    pStencil->setHidden(!paint);
+    pStencil = m_lstSelection.next();
+  }
+}
 
 #include "kivio_page.moc"
 

@@ -136,6 +136,9 @@ class KivioStencil
 
     // Indicates if this stencil is selected
     bool m_selected;
+    
+    // Indicates if the stencil is hidden
+    bool m_hidden;
 
   protected:
     void rotatePainter(KivioIntraStencilData *);
@@ -268,6 +271,9 @@ class KivioStencil
     virtual void addConnectorTarget(const KoPoint&) {}
     
     virtual bool isInRect(const KoRect& rect);
+    
+    virtual void setHidden(bool hide) { m_hidden = hide; }
+    virtual bool hidden() { return m_hidden; }
 
     /****** ARROW HEAD STUFF *******/
     virtual void setStartAHType( int ) { ; }

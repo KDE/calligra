@@ -35,6 +35,8 @@ KivioStencil::KivioStencil()
   m_w = m_h = 72.0f;
 
   m_rotation = 0;
+  
+  m_hidden = false;
 
   m_selected = false;
 

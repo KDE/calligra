@@ -150,6 +150,7 @@ void SelectTool::setActivated(bool a)
     emit activated(this);
   } else if(m_selectAction->isChecked()) {
     m_selectAction->setChecked(false);
+    view()->canvasWidget()->activePage()->setPaintSelected(true);
   }
 }
 
@@ -316,6 +317,7 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
   changeMouseCursor(pos);
   // Set the mode
   m_mode = stmDragging;
+  m_firstTime = true;
   canvas->setEnabled(true);
   return true;
 }
@@ -371,7 +373,7 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
 
   // Create a new painter object
   canvas->beginUnclippedSpawnerPainter();
-  canvas->drawSelectedStencilsXOR();
+  m_firstTime = true;
 
   return true;
 }
@@ -439,7 +441,7 @@ bool SelectTool::startResizing(const QPoint &pos)
 
       // Create a new painter object
       canvas->beginUnclippedSpawnerPainter();
-      canvas->drawStencilXOR( pStencil );
+      m_firstTime = true;
 
       return true;
     }
@@ -510,7 +512,13 @@ void SelectTool::continueDragging(const QPoint &pos, bool ignoreGridGuides)
   double newX, newY;
 
   // Undraw the old stencils
-  canvas->drawSelectedStencilsXOR();
+  if(!m_firstTime) {
+    canvas->drawSelectedStencilsXOR();
+  } else {
+    canvas->activePage()->setPaintSelected(false);
+    canvas->repaint();
+    m_firstTime = false;
+  }
 
   // Translate to the new position
   KoPoint p;
@@ -604,7 +612,13 @@ void SelectTool::continueCustomDragging(const QPoint &pos)
 
 
   // Undraw the old stencils
-  canvas->drawSelectedStencilsXOR();
+  if(!m_firstTime) {
+    canvas->drawStencilXOR(m_pCustomDraggingStencil);
+  } else {
+    m_pCustomDraggingStencil->setHidden(true);
+    canvas->repaint();
+    m_firstTime = false;
+  }
 
 
   // Custom dragging can only occur on one stencil
@@ -612,7 +626,7 @@ void SelectTool::continueCustomDragging(const QPoint &pos)
     m_pCustomDraggingStencil->customDrag( &data );
 
   // Draw the stencils
-  canvas->drawSelectedStencilsXOR();
+  canvas->drawStencilXOR(m_pCustomDraggingStencil);
   view()->updateToolBars();
 }
 
@@ -652,7 +666,13 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
       
   if((dx > 0) || (dy > 0) || (dx < 0) || (dy < 0)) { // Do we really need to redraw?
     // Undraw the old outline
-    canvas->drawStencilXOR( m_pResizingStencil );
+    if(!m_firstTime) {
+      canvas->drawStencilXOR( m_pResizingStencil );
+    } else {
+      m_pResizingStencil->setHidden(true);
+      canvas->repaint();
+      m_firstTime = false;
+    }
   
     double sx = pData->rect.x();
     double sy = pData->rect.y();
@@ -980,6 +1000,7 @@ void SelectTool::endRubberBanding(const QPoint &pos)
 void SelectTool::endDragging(const QPoint&)
 {
   KivioCanvas* canvas = view()->canvasWidget();
+  canvas->activePage()->setPaintSelected(true);
   KMacroCommand *macro=new KMacroCommand( i18n("Move Stencil"));
   KivioStencil *pStencil = canvas->activePage()->selectedStencils()->first();
   KivioSelectDragData *pData = m_lstOldGeometry.first();
@@ -1018,8 +1039,9 @@ void SelectTool::endDragging(const QPoint&)
 void SelectTool::endCustomDragging(const QPoint&)
 {
   KivioCanvas* canvas = view()->canvasWidget();
+  m_pCustomDraggingStencil->setHidden(false);
   m_customDragID = 0;
-  canvas->drawSelectedStencilsXOR();
+  canvas->drawStencilXOR(m_pCustomDraggingStencil);
   KivioStencil *pStencil = canvas->activePage()->selectedStencils()->first();
 
   while( pStencil )
@@ -1037,6 +1059,7 @@ void SelectTool::endCustomDragging(const QPoint&)
 void SelectTool::endResizing(const QPoint&)
 {
   KivioCanvas* canvas = view()->canvasWidget();
+  m_pResizingStencil->setHidden(false);
   KivioResizeStencilCommand * cmd = new KivioResizeStencilCommand( i18n("Resize Stencil"),
     m_pResizingStencil, m_lstOldGeometry.first()->rect, m_pResizingStencil->rect(), view()->activePage());
   canvas->doc()->addCommand( cmd );

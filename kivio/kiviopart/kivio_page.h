@@ -153,6 +153,7 @@ class KivioPage : public QObject
     KoPoint snapToTarget( const KoPoint& p, double thresh, bool& hit );
 
     void setHidePage(bool _hide);
+    
   public slots:
     void deleteSelectedStencils();
     void groupSelectedStencils();
@@ -164,6 +165,8 @@ class KivioPage : public QObject
     void copy();
     void cut();
     void paste(KivioView* view);
+    
+    void setPaintSelected(bool paint = true);
 
   signals:
     void sig_updateView( KivioPage *_page );

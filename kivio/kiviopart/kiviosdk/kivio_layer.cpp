@@ -283,7 +283,8 @@ QDomElement KivioLayer::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoint , KoZoomHandler* zoom )
+void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool, QPoint, 
+  KoZoomHandler* zoom )
 {
     KivioStencil *pStencil = m_pStencilList->first();
     KivioIntraStencilData data;
@@ -295,7 +296,9 @@ void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoin
 
     while( pStencil )
     {
-        pStencil->paint( &data );
+        if(!pStencil->hidden()) {
+          pStencil->paint( &data );
+        }
 
         pStencil = m_pStencilList->next();
     }
@@ -314,7 +317,6 @@ void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
   KivioStencil *pStencil = m_pStencilList->first();
   KivioIntraStencilData data;
   KoZoomHandler zoomHandler;
-  // FIXME: Hmmm... resolution sucks ;)
   zoomHandler.setZoomAndResolution(100, xdpi, ydpi);
 
   painter.setFGColor( QColor(0,0,0) );
@@ -331,7 +333,8 @@ void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
   }
 }
 
-void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint, KoZoomHandler* zoom )
+void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint,
+  KoZoomHandler* zoom )
 {
     KivioIntraStencilData data;
 
@@ -343,7 +346,9 @@ void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, boo
     KivioStencil *pStencil = m_pStencilList->first();
     while( pStencil )
     {
-        pStencil->paintConnectorTargets( &data );
+        if(!pStencil->hidden()) {
+          pStencil->paintConnectorTargets( &data );
+        }
 
         pStencil = m_pStencilList->next();
     }
@@ -361,7 +366,7 @@ void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, boo
     KivioStencil *pStencil = m_pStencilList->first();
     while( pStencil )
     {
-        if( pStencil->isSelected() )
+        if( pStencil->isSelected() && !pStencil->hidden() )
             pStencil->paintSelectionHandles( &data );
 
         pStencil = m_pStencilList->next();

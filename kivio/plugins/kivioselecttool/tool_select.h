@@ -125,6 +125,8 @@ class SelectTool : public Kivio::MouseTool
     KRadioAction* m_selectAction;
     KPopupMenu *m_pMenu;
     QPtrList<KAction> textActionList;
+    
+    bool m_firstTime;
 };
 
 #endif
