@@ -50,12 +50,15 @@ public:
     KWVariableNameDia( QWidget *parent, const QList<KWVariable> &vars );
     QString getName() const;
 
+protected slots:
+    void textChanged ( const QString &_text );
 protected:
     void init();
     void resizeEvent( QResizeEvent *e );
 
     QComboBox *names;
     QVBox *back;
+    QPushButton *ok;
 
 };
 

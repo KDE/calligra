@@ -53,13 +53,14 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, const QList<KWVariable>& 
     setCaption( i18n( "Variable Name" ) );
 
     init();
-
+    ok->setEnabled(false);
     QListIterator<KWVariable> it( vars );
      for ( ; it.current() ; ++it ) {
         KWVariable *var = it.current();
         if ( var->type() == VT_CUSTOM )
             names->insertItem( ( (KWCustomVariable*) var )->name(), -1 );
     }
+
 }
 
 void KWVariableNameDia::init()
@@ -78,11 +79,13 @@ void KWVariableNameDia::init()
 
     KButtonBox *bb = new KButtonBox( back );
     bb->addStretch();
-    QPushButton *ok = bb->addButton( i18n( "&OK"  ) );
+    ok = bb->addButton( i18n( "&OK"  ) );
     ok->setDefault( TRUE );
     QPushButton *cancel = bb->addButton( i18n( "&Cancel"  ) );
     bb->layout();
 
+    connect( names, SIGNAL( textChanged ( const QString & )),
+             this, SLOT( textChanged ( const QString & )));
     connect( ok, SIGNAL( clicked() ),
              this, SLOT( accept() ) );
     connect( cancel, SIGNAL( clicked() ),
@@ -100,6 +103,11 @@ void KWVariableNameDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
+}
+
+void KWVariableNameDia::textChanged ( const QString &_text )
+{
+    ok->setEnabled(!_text.isEmpty());
 }
 
 /******************************************************************
