@@ -30,7 +30,7 @@ public:
     double  doubleVal( int row, int col );
     int  intVal( int row, int col ) { return (int) doubleVal(row,col); }
 
-    
+
     QString     rawText( int row, int col );
     void        setText( int row, int col, QString ); //shallow copy
 
@@ -48,7 +48,7 @@ private:
     Data *current;
     short index; // opt: later const char *
 
-    char get_c();
+    QChar get_c();
     void putback();
 
     Type parseExpr( double & );
@@ -57,9 +57,9 @@ private:
     Type parseRef( double & );
     Type parseNumber( double & );
     Type parseInt( int & );
-    
+
     int idx( int r, int c ) const { return c+r*numCols; }
-    bool isValid( int r, int c ) const 
+    bool isValid( int r, int c ) const
     { return (uint) r < (uint) numRows && (uint) c < (uint) numCols; } //Ugle
 };
 

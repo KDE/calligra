@@ -63,7 +63,7 @@ bool ParsedArray::recalc( int row, int col )
     current = &data[idx(row,col)];
     current->type = parseExpr( current->val );
 
-    return (current->type == Number) && !get_c();
+    return (current->type == Number) && !get_c().unicode();
 }
 
 
@@ -88,7 +88,7 @@ QString ParsedArray::calc( int row, int col, bool *ok )
     current = &data[idx(row,col)];
     current->type = parseExpr( current->val );
 
-    bool done = (current->type == Number) && !get_c();
+    bool done = (current->type == Number) && !get_c().unicode();
 
     if ( ok )
 	*ok = done;
@@ -102,15 +102,15 @@ QString ParsedArray::calc( int row, int col, bool *ok )
 }
 
 
-char ParsedArray::get_c()
+QChar ParsedArray::get_c()
 {
-    while ( index<(int)current->text.length() &&
-	    isspace( QChar(current->text[index]) ) )
+    while ( index<(int)current->text.length() &&  QChar(current->text[index]).isSpace() )
+	    //isspace( QChar(current->text[index]) ) )
 	index++;
 
     if ( index<(int)current->text.length() ) {
 	//debug ("get_c %d,%c,%d", index, contents[index], contents[index]);
-	return QChar(current->text[index++]);
+	return QChar(current->text[index++]).unicode();
     } else {
 	//debug("get_c EOS %d",index);
 	return 0;
@@ -131,9 +131,9 @@ ParsedArray::Type ParsedArray::parseExpr( double &res )
     if ( t != Number )
 	return t;
 
-    char ch;
-    while (( ch = get_c() )){
-	if ( ch != '+' && ch != '-' ) {
+    QChar ch=get_c();
+    while ( ch.unicode() ){
+	if ( ch.unicode() != '+' && ch.unicode() != '-' ) {
 	    putback();
 	    return Number;
 	}
@@ -141,7 +141,7 @@ ParsedArray::Type ParsedArray::parseExpr( double &res )
 	t = parseTerm(x);
 	if ( t != Number )
 	    return String;
-	if ( ch == '+' )
+	if ( ch.unicode() == '+' )
 	    res += x;
 	else
 	    res -= x;
@@ -155,9 +155,9 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
     if ( t != Number )
 	return t;
 
-    char ch;
-    while (( ch = get_c() )){
-	if ( ch != '*' && ch != '/' ) {
+    QChar ch=get_c();
+    while ( ch.unicode() ){
+	if ( ch.unicode() != '*' && ch.unicode() != '/' ) {
 	    putback();
 	    return Number;
 	}
@@ -165,33 +165,36 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
 	t = parseFactor(x);
 	if ( t != Number )
 	    return String;
-	if ( ch == '*' )
+	if ( ch.unicode() == '*' )
 	    res *= x;
 	else
-	    if ( x != 0 )
+                        {
+	        if ( x != 0 )
 		res /= x;
-	    else
-		return Error;
+	        else
+	        	return Error;
+                        }
+          ch=get_c();
     }
     return Number;
 }
 
 ParsedArray::Type ParsedArray::parseFactor( double &res )
 {
-    char ch = get_c();
-    if ( ch == '(' ) {
+    QChar ch = get_c();
+    if ( ch.unicode() == '(' ) {
 	Type t = parseExpr( res );
 	if ( t != Number )
 	    return String;
-	if ( get_c() == ')' )
+	if ( get_c().unicode() == ')' )
 	    return Number;
 	else
 	    return String;
-    } else if ( ch == '-' ) {
+    } else if ( ch.unicode() == '-' ) {
 	Type t = parseExpr(res);
 	res = -res;
 	return t;
-    } else if ( isalpha(ch) ) {
+    } else if ( !isdigit(ch.latin1()) ) {
 	putback();
 	return parseRef(res);
     } else {
@@ -211,13 +214,16 @@ ParsedArray::Type ParsedArray::parseNumber( double &res )
 ParsedArray::Type ParsedArray::parseInt( int &res )
 {
     res = 0;
-    char ch = get_c();
-    if ( !isdigit(ch) )
+    QChar ch = get_c();
+    if ( !isdigit(ch.latin1()) )
 	return String;
-    do {
-	res = res*10 + ch - '0';
-    } while (isdigit(ch=get_c()));
-    if (ch)
+    do
+        {
+        res = res*10 + ch.unicode() - '0';
+        ch = get_c();
+        }
+    while (isdigit(ch.latin1()));
+    if (ch.unicode())
 	putback();
     return Number;
 }
@@ -226,13 +232,13 @@ ParsedArray::Type ParsedArray::parseInt( int &res )
 ParsedArray::Type ParsedArray::parseRef( double &res )
 {
     res = 0;
-    char ch = get_c();
-    if ( !isalpha(ch) )
+    QChar ch = get_c();
+    if ( !isalpha(ch.latin1()) )
 	return String;
-    int col = toupper(ch) - 'A'; // ### could be more general
+    int col = toupper(ch.latin1()) - 'A'; // ### could be more general
     int row = 0;
     if ( parseInt(row) != Number)
 	return String;
     res = doubleVal(row, col);
-    return type(row,col);	
+    return type(row,col);
 }
