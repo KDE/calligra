@@ -227,22 +227,6 @@ bool PgSqlDB::connect (const QString &host, const QString &user, const QString &
   return true;
 }
 
-bool PgSqlDB::alterField (const QString& table, const QString& field,
-                 const QString& newFieldName, KexiDBField::ColumnType dtype,
-                 int length, int precision, KexiDBField::ColumnConstraints constraints,
-                 bool binary, bool unsignedType, const QString& defaultVal)
-{
-  return false;
-}
-
-bool PgSqlDB::createField (const QString& table, const QString& field,
-                  KexiDBField::ColumnType dtype, int length,
-                  int precision, KexiDBField::ColumnConstraints constraints,
-                  bool binary, bool unsignedType, const QString& defaultVal)
-{
-  return false;
-}
-
 bool PgSqlDB::alterField (const KexiDBField& changedField, unsigned int index,
                  KexiDBTableStruct fields)
 {

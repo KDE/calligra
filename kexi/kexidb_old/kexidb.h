@@ -109,12 +109,6 @@ public slots:
 	virtual bool query(const QString& statement)  =0;
 	virtual QString escape(const QString &str)    =0;
 	virtual QString escape(const QByteArray& str) =0;
-	virtual bool alterField(const QString& table, const QString& field, const QString& newFieldName,
-													KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
-													bool binary, bool unsignedType, const QString& defaultVal) =0;
-	virtual bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
-													 int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
-													 const QString& defaultVal) =0;
 	virtual bool alterField(const KexiDBField& changedField,
 													unsigned int index, KexiDBTableStruct fields) = 0;
 	virtual bool createField(const KexiDBField& newField,

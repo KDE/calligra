@@ -88,12 +88,6 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 
 		QString		escape(const QString &str);
 		QString		escape(const QByteArray& str);
-		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
-			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
-			bool binary, bool unsignedType, const QString& defaultVal);
-		bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
-			int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
-			const QString& defaultVal);
 		bool alterField(const KexiDBField& changedField,
 			unsigned int index, KexiDBTableStruct fields);
 		bool createField(const KexiDBField& newField,
