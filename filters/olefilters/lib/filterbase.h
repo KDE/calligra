@@ -17,6 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+// This class is the base class for all the filters (excel97, powerpoint97,
+// winword97)
+// If you want to write a filter you'll have to derive your class from
+// this one.
+
 #ifndef FILTERBASE_H
 #define FILTERBASE_H
 
@@ -27,7 +32,9 @@
 class Picture;
 
 // Attention: The nameOUT Strings are allocated with new[] in the
-// slots!!! Therefore you have to delete [] them!
+//            slots. Therefore you have to delete [] them!
+//            If you call slotGetStream you have to delete [] the
+//            stream.data prt after use!
 class FilterBase : public QObject {
 
     Q_OBJECT
@@ -36,10 +43,13 @@ public:
     FilterBase();
     virtual ~FilterBase() {}
 
+    // Manages the filtering process
     virtual const bool filter();
+    // Use this to get the part
     virtual const QDomDocument * const part() { return &m_part; }
 
 signals:
+    // See olefilter.h for information
     void signalSavePic(Picture *pic);
     void signalPart(const char *nameIN, char **nameOUT);
     void signalGetStream(const long &handle, myFile &stream);
@@ -58,6 +68,7 @@ protected:
     QDomDocument m_part;   // this represents the part (document)
 
 private:
+    // Don't copy or assign me...
     FilterBase(const FilterBase &);
     const FilterBase &operator=(const FilterBase &);
 };

@@ -17,6 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
+// The OLEFilter class is the main filtering class. It manages the
+// correct handling of the input and output file and provides the
+// OLE 2 streams for the real filters (excel97, powerpoint97, winword97)
+
 #ifndef OLEFILTER_H
 #define OLEFILTER_H
 
@@ -53,14 +57,23 @@ public:
                               const QCString& from, const QCString& to);
     
 protected slots:
+    // [TODO] This slot creates a name for a Picture which should be
+    // saved in the KOStore (==KOffice tar storage).
     void slotSavePic(Picture *pic);
+    // Generate a name for a part to store it in the KOffice tar storage
+    // Attention: You'll have to delete [] the nameOUT string!
     void slotPart(const char *nameIN, char **nameOUT);
+    // Get another OLE 2 stream for your filter.
+    // Attention: You'll have to delete [] the stream.data ptr!
     void slotGetStream(const long &handle, myFile &stream);
-    // Note: might return wrong stream as names are NOT unique!!!
-    // (searching only in current dir)
+    // Like above. Note: This method might return the wrong stream
+    // as the stream names are NOT unique in the OLE 2 file!!!
+    // (Therefore it's searching only in the current dir)
+    // Attention: You'll have to delete [] the stream.data ptr!
     void slotGetStream(const QString &name, myFile &stream);
 
 private:
+    // Don't copy or assign me >:)
     OLEFilter(const OLEFilter &);
     const OLEFilter &operator=(const OLEFilter &);
 
@@ -71,8 +84,8 @@ private:
     QArray<unsigned short> storePath;
 
     myFile olefile;
-    int numPic;                      // unique name generation 
-    KLaola *docfile;                 // used to split up the OLE-file
+    int numPic;                      // for the "unique name generation"
+    KLaola *docfile;                 // used to split up the OLE 2 file
     KoTarStore *store;               // KOffice Storage structure
     bool success;
 };

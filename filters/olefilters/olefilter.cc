@@ -57,6 +57,8 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
     }
 
+    // Open the OLE 2 file. [TODO] Is it really the best way to
+    // read all the stuff without buffer?
     olefile.length=in.size();
     olefile.data=new unsigned char[olefile.length];
     in.readBlock((char*)olefile.data, olefile.length);
@@ -80,9 +82,9 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
     }
 
-    storePath.resize(0);
-    partMap.insert("root", "root");
-    convert("root");
+    storePath.resize(0);               // To keep track where we are :)
+    partMap.insert("root", "root");    // Special treatment for the "root" element
+    convert("root");                   // Recursively convert the file
     return success;
 }
 
@@ -90,6 +92,7 @@ void OLEFilter::slotSavePic(Picture *) {
     // we'll use Reggies Collection class here, soon (at least I hope so :)
 }
 
+// Don't forget the delete [] the nameOUT string!
 void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
 
     if(nameIN==0)
@@ -98,16 +101,16 @@ void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
     QMap<QString, QString>::Iterator it=partMap.find(nameIN);
     QString value;
 
-    if(it!=partMap.end())
-        value=partMap[nameIN];
+    if(it!=partMap.end())        // The "key-name" is already here - return the
+        value=partMap[nameIN];   // other one
     else {
-        QString key=QString(nameIN);
-        value="tar:";
+        QString key=QString(nameIN);           // It's not here, yet, so let's
+        value="tar:";                          // generate one...
         for(unsigned int i=0; i<storePath.size(); ++i) {
             value+='/';
             value+=QString::number(static_cast<unsigned int>(storePath[i]));
         }
-        partMap.insert(key, value);
+        partMap.insert(key, value);           // ...and store it
     }
     unsigned int len=value.length();
     *nameOUT=new char[len+1];
@@ -115,12 +118,14 @@ void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
     *(*nameOUT+len)='\0';
 }
 
+// Don't forget the delete [] the stream.data ptr!
 void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
     stream=docfile->stream(handle);
 }
 
 // I can't guarantee that you get the right stream as the names
-// are not unique! (searching only the current dir!)
+// in a OLE 2 file are not unique! (searching only the current dir!)
+// Don't forget the delete [] the stream.data ptr!
 void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 
     QArray<long> handle;
@@ -135,6 +140,7 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
     }
 }
 
+// The recursive method to do all the work
 void OLEFilter::convert(const QString &dirname) {
 
     QList<OLENode> list=docfile->parseCurrentDir();
@@ -143,8 +149,9 @@ void OLEFilter::convert(const QString &dirname) {
     bool resized=false;
     short index=storePath.size()-1;
 
+    // Search for the directories
     for(node=list.first(); node!=0; node=list.next()) {
-        if(node->type==1) {         // it is a dir!
+        if(node->type==1) {         // It is a dir!
             if(!resized) {
                 ++index;
                 storePath.resize(index+1);
@@ -154,12 +161,12 @@ void OLEFilter::convert(const QString &dirname) {
             else
                 ++storePath[index];
             docfile->enterDir(node->handle);
-            convert(node->name);
+            convert(node->name);  // Go one level deeper <----------
             docfile->leaveDir();
         }
         else {
-            onlyDirs=false;
-        }
+            onlyDirs=false;   // To prevent useless looping in the
+        }                     // next loop
     }
 
     if(resized)
@@ -169,6 +176,7 @@ void OLEFilter::convert(const QString &dirname) {
         FilterBase *myFilter=0L;
         node=list.first();
 
+        // Find out the correct file type and create the appropriate filter
         do {
             if(node->name=="WordDocument" || node->name=="1Table" ||
                node->name=="0Table" || node->name=="ObjectPool") {
@@ -176,7 +184,8 @@ void OLEFilter::convert(const QString &dirname) {
                 myFile main, table0, table1, data;
                 QArray<long> tmp;
 
-                kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): WinWord");
+                // WinWord
+                // kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): WinWord");
 
                 main.data=0L;
                 table0.data=0L;
@@ -204,7 +213,7 @@ void OLEFilter::convert(const QString &dirname) {
             }
             else if(node->name=="Workbook") {
                 // Excel
-                kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Excel");
+                // kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Excel");
 
                 myFile workbook;
                 workbook.data=0L;
@@ -215,7 +224,7 @@ void OLEFilter::convert(const QString &dirname) {
             }
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
-                kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Power Point");
+                // kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Power Point");
                 myFilter=new PowerPointFilter();
                 // connect SIGNALs&SLOTs
                 connectCommon(&myFilter);
@@ -225,20 +234,23 @@ void OLEFilter::convert(const QString &dirname) {
         } while(myFilter==0L && node!=0);
 
         if(myFilter==0L) {
-            // unknown
+            // unknown type
             kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): superunknown -> black hole sun ;)");
             myFilter=new FilterBase();
             // connect SIGNALs&SLOTs
             connectCommon(&myFilter);
         }
 
+        // Launch the filtering process...
         success=myFilter->filter();
+        // ...and fetch the file
         const QDomDocument * const part=myFilter->part();
         QBuffer file;
         file.open(IO_WriteOnly);
         QTextStream str(&file);
         str << *part;
         file.close();
+        // Get the name of the part (dirname==key)
         char *tmp=0L;
         slotPart(dirname, &tmp);
         if(!store->open(tmp, "")) {
@@ -246,6 +258,7 @@ void OLEFilter::convert(const QString &dirname) {
             kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Could not open KoTarStore!");
             return;
         }
+        // Write it to the gzipped tar file
         store->write(file.buffer().data(), file.buffer().size());
         store->close();
         delete [] tmp;

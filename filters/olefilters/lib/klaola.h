@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+// KLaola is the class which is used to decode the OLE 2 streams.
+
 #ifndef KLAOLA_H
 #define KLAOLA_H
 
@@ -34,7 +36,7 @@ struct OLEInfo {
     long handle;        // PPS entry number
     QString name;       // Name of the stream
     short nameSize;     // Size of the name
-    char type;          // Type of pps 
+    char type;          // Type of pps
     long prev;          // Last pps
     long next;          // Next pps
     long dir;           // Dir pps
@@ -66,6 +68,7 @@ public:
     const QList<OLENode> parseRootDir();
     const QList<OLENode> parseCurrentDir();
 
+    // Wade through the "file system"
     const bool enterDir(const long &handle);
     const bool leaveDir();
     const QArray<long> currentPath() const;
@@ -73,12 +76,12 @@ public:
     const OLEInfo streamInfo(const long &handle);
     const myFile stream(const long &handle);    // Note: data - 512 byte blocks, but
                                                 // length is set correctly :)
-                                                // make sure that you delete [] the data!
+                                                // Make sure that you delete [] the data!
     const QArray<long> find(const QString &name, const bool onlyCurrentDir=false);
 
     void testIt();                     // dump some info (similar to "lls"
                                        // of the LAOLA-project)
- 
+
 private:
     KLaola(const KLaola &);
     const KLaola &operator=(const KLaola &);
