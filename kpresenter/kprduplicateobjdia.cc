@@ -69,10 +69,12 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, con
     lab=new QLabel(i18n("Move X (%1):").arg(m_doc->getUnitName()), page);
     m_moveX= new KDoubleNumInput( page );
     m_moveX->setRange( 0.0, KoUnit::ptToUnit( pageRect.width(), unit ), KoUnit::ptToUnit( 1, unit ) , false);
+    m_moveX->setValue( KoUnit::ptToUnit( 20.0, unit ) );
 
     lab=new QLabel(i18n("Move Y (%1):").arg(m_doc->getUnitName()), page);
     m_moveY= new KDoubleNumInput( page );
     m_moveY->setRange( 0.0, KoUnit::ptToUnit( pageRect.height(), unit ), KoUnit::ptToUnit( 1, unit ), false);
+    m_moveY->setValue( KoUnit::ptToUnit( 20.0, unit ) );
 
     resize( 200,100 );
 }

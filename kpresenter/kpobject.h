@@ -117,8 +117,8 @@ public:
     virtual void setObjectName( const QString &_objectName )
         { objectName = _objectName; }
     virtual QString getObjectName() const
-        { return objectName; } 
-    
+        { return objectName; }
+
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
@@ -146,7 +146,7 @@ public:
         { return orig; }
     KoRect getRect() const
         { return KoRect( getOrig(), getSize() ); }
-    
+
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;
     KoRect getRealRect() const;
@@ -234,12 +234,12 @@ public:
 
 protected:
     /**
-     * Helper function to caluclate the size and the orig of a point object 
+     * Helper function to caluclate the size and the orig of a point object
      * that might be also rotated.
-     * The size and orig will be changed to the real size and orig in the 
+     * The size and orig will be changed to the real size and orig in the
      * method.
      */
-    static void getRealSizeAndOrigFromPoints( KoPointArray &points, float angle, 
+    static void getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
                                               KoSize &size, KoPoint &orig );
 
     /**
@@ -313,6 +313,11 @@ private:
     KPObject &operator=(const KPObject &rhs);
 };
 
+/**
+ * Base class for objects with a pen and a brush,
+ * and which takes care of painting the shadow in @ref draw
+ * (by calling @ref paint twice)
+ */
 class KPShadowObject : public KPObject
 {
 public:
@@ -339,7 +344,15 @@ public:
                        SelectionMode selectionMode, bool drawContour = FALSE );
 protected:
     /**
-     * This method is to be implemented by all KShadowObjects, to draw themselves.
+     * @ref save() only saves if the pen is different from the default pen.
+     * The default pen can vary depending on the subclass of KPShadowObject
+     * (e.g. it's a black solidline for lines and rects, but it's NoPen
+     * for text objects
+     */
+    virtual QPen defaultPen() const;
+
+    /**
+     * This method is to be implemented by all KPShadowObjects, to draw themselves.
      * @ref draw took care of the shadow and of preparing @p painter for rotation.
      * @ref paint must take care of the gradient itself!
      *

@@ -2960,7 +2960,7 @@ void KPrCanvas::setNewRightIndent(double _rightIndent)
         m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
-void KPrCanvas::setTextCounter(KoParagCounter counter)
+/*void KPrCanvas::setTextCounter(KoParagCounter counter)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
@@ -2977,7 +2977,7 @@ void KPrCanvas::setTextCounter(KoParagCounter counter)
     }
     if ( macroCmd )
         m_view->kPresenterDoc()->addCommand( macroCmd );
-}
+}*/
 
 #ifndef NDEBUG
 void KPrCanvas::printRTDebug( int info )

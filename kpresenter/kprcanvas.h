@@ -108,7 +108,7 @@ public:
     void setNewRightIndent(double _rightIndent);
     void setNewLeftIndent(double _leftIndent);
     void setNewFirstIndent(double _firstIndent);
-    void setTextCounter(KoParagCounter counter);
+    //void setTextCounter(KoParagCounter counter);
     void setTabList( const KoTabulatorList & tabList );
     void setTextBold( bool b );
     void setTextItalic( bool b );
@@ -459,7 +459,7 @@ protected:
 
     void moveHelpPoint( const QPoint & newPos );
     void scrollCanvas(const KoRect& oldPos);
-    
+
     KoRect getAlignBoundingRect() const;
 
 private:

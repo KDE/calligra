@@ -285,10 +285,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
     for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next(),  i++ ) {
         if ( i >= nbNewObject )
             mod++;
-        if ( moveX != 0 || moveY != 0)
-            _tempObj->moveBy( moveX*(double)mod,moveY*(double)mod);
-        else
-            _tempObj->moveBy( 20.0*(double)mod,20.0*(double)mod );
+        _tempObj->moveBy( moveX*(double)mod,moveY*(double)mod);
         _tempObj->setSelected( true );
         if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0))
             m_doc->repaint(_tempObj);

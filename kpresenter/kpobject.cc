@@ -854,7 +854,8 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
 
-    fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
+    if(pen!=defaultPen())
+        fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
     if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
         fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
     return fragment;
@@ -867,7 +868,7 @@ double KPShadowObject::load(const QDomElement &element)
     if(!e.isNull())
         setPen(KPObject::toPen(e));
     else
-        pen.setWidth(1);/*=QPen();*/
+        pen = defaultPen();
     e=element.namedItem(tagBRUSH).toElement();
     if(!e.isNull())
         setBrush(KPObject::toBrush(e));
@@ -923,6 +924,11 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->restore();
 
     KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
+}
+
+QPen KPShadowObject::defaultPen() const
+{
+    return QPen();
 }
 
 KPPointObject::KPPointObject()

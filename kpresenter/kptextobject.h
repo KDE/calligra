@@ -82,7 +82,7 @@ public:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour );
     void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor,
-                bool resetChanged, bool drawingShadow,bool drawContour );
+                bool resetChanged, bool drawContour );
     void paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
                       bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
 
@@ -179,6 +179,7 @@ protected:
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
     void recalcVerticalAlignment();
+    virtual QPen defaultPen() const;
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();

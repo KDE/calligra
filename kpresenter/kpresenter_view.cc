@@ -532,8 +532,10 @@ void KPresenterView::editPaste()
         }
         else if ( data->provides( KoStoreDrag::mimeType("application/x-kpresenter" ) ))
         {
+            // TODO: it would be nice to have no offset when pasting onto a different page...
             m_canvas->activePage()->pasteObjs(
-                data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")));
+                data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")),
+                1, 0.0, 0.0, 0.0, 20.0, 20.0);
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
@@ -4845,7 +4847,7 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 
 void KPresenterView::slotSoftHyphen()
 {
-    KPTextView *edit=m_canvas->currentTextObjectView();
+    KPTextView *edit = m_canvas->currentTextObjectView();
     if ( edit )
         edit->insertSoftHyphen();
 }

@@ -109,7 +109,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
     brush = Qt::NoBrush;
     brush.setColor(QColor());
-    pen = QPen( Qt::black, 1, Qt::NoPen );
+    pen = defaultPen();
     drawEditRect = true;
     drawEmpty = true;
     editingTextObj = false;
@@ -285,11 +285,11 @@ void KPTextObject::shadowCompatibility()
 
 // Standard paint method for KP2DObjects.
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                          bool /*drawingShadow*/, bool drawContour )
+                          bool drawingShadow, bool drawContour )
 {
-    //never draw Shadow.
-    //shadow in text obj is a properties from paragraph
-    paint( _painter, _zoomHandler, false, 0L, true, /*drawingShadow*/false, drawContour );
+    // Never draw shadow (in text objects, it's a character property, not an object property)
+    if ( drawingShadow ) return;
+    paint( _painter, _zoomHandler, false, 0L, true, drawContour );
 }
 
 // Special method for drawing a text object that is being edited
@@ -301,19 +301,18 @@ void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
-    paint( _painter, _zoomHandler, onlyChanged, cursor, resetChanged, false,false );
+    paint( _painter, _zoomHandler, onlyChanged, cursor, resetChanged, false /*not drawContour*/ );
     _painter->restore();
 }
 
 // Common functionality for the above 2 methods
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                           bool onlyChanged, KoTextCursor* cursor, bool resetChanged,
-                          bool drawingShadow,bool drawContour )
+                          bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();
     double pw = pen.width() / 2;
-    drawingShadow=false;
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
@@ -333,32 +332,29 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     //for debug
     //_painter->fillRect( clip, Qt::blue );
     _painter->setPen( pen2 );
-    if ( !drawingShadow ) {
-        if ( editingTextObj && _painter->device() && _painter->device()->devType() != QInternal::Printer)  // editting text object
-            _painter->setBrush( QBrush( m_doc->txtBackCol(), Qt::SolidPattern ) );
-        else {
-            // Handle the rotation, draw the background/border, then call drawText()
-            if ( fillType == FT_BRUSH || !gradient ) {
-                _painter->setBrush( brush );
-            }
-            else {
-                QSize size( _zoomHandler->zoomSize( ext ) );
-                gradient->setSize( size );
-                _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), gradient->pixmap(), 0, 0,
-                                      _zoomHandler->zoomItX( ow - 2 * pw ),
-                                      _zoomHandler->zoomItY( oh - 2 * pw ) );
-            }
+
+    if ( editingTextObj && _painter->device() && _painter->device()->devType() != QInternal::Printer)  // editing text object
+        _painter->setBrush( QBrush( m_doc->txtBackCol(), Qt::SolidPattern ) );
+    else {
+        // Handle the rotation, draw the background/border, then call drawText()
+        if ( fillType == FT_BRUSH || !gradient ) {
+            _painter->setBrush( brush );
         }
-        if ( !editingTextObj || !onlyChanged )
-        {
-            /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
-            // (so that the border gets drawn OUTSIDE of the object area)
-            _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
-                                _zoomHandler->zoomItY( oh - 2 * pw) );
+        else {
+            QSize size( _zoomHandler->zoomSize( ext ) );
+            gradient->setSize( size );
+            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), gradient->pixmap(), 0, 0,
+                                  _zoomHandler->zoomItX( ow - 2 * pw ),
+                                  _zoomHandler->zoomItY( oh - 2 * pw ) );
         }
     }
-    else
-        _painter->setBrush( Qt::NoBrush );
+    if ( !editingTextObj || !onlyChanged )
+    {
+        /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
+        // (so that the border gets drawn OUTSIDE of the object area)
+        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
+                            _zoomHandler->zoomItY( oh - 2 * pw) );
+    }
 
     drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     _painter->restore();
@@ -367,8 +363,8 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     // And now draw the border for text objects.
     // When they are drawn outside of the object, this can be moved to the standard paint() method,
     // so that we don't have to do it while editing the object, maybe.
-    if ( m_doc->firstView() && m_doc->firstView()->getCanvas()->getEditMode()
-         && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
+    if ( m_doc->firstView() && m_doc->firstView()->getCanvas()->getEditMode() &&
+         getDrawEditRect() && getPen().style() == Qt::NoPen )
     {
         _painter->save();
 
@@ -404,7 +400,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     if ( m_doc->backgroundSpellCheckEnabled() && editMode )
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
     if ( !editMode )
-        drawingFlags |=KoTextDocument::DontDrawNoteVariable;
+        drawingFlags |= KoTextDocument::DontDrawNoteVariable;
     if ( m_doc->viewFormattingChars() && editMode )
         drawingFlags |= KoTextDocument::DrawFormattingChars;
 
@@ -1265,27 +1261,29 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
 
 void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
+    // The implementation is very related to KWord's KWTextFrameSet::drawCursor
     KoZoomHandler *zh = m_doc->zoomHandler();
     QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
     if ( angle != 0 )
         rotateObject( p, zh );
-    KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
 
-    QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
+    KoTextParag* parag = cursor->parag();
+    QPoint topLeft = parag->rect().topLeft();         // in QRT coords
     int lineY;
     // Cursor height, in pixels
     int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
     QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
                    topLeft.y() - cursor->totalOffsetY() + lineY );
-    iPoint = zh->layoutUnitToPixel( iPoint ); // ## var name is wrong then
+    // from now on, iPoint will be in pixels
+    iPoint = zh->layoutUnitToPixel( iPoint );
 
     QPoint vPoint = iPoint; // vPoint and iPoint are the same currently
                             // do not simplify this, will be useful with viewmodes.
-    int xadj = parag->at( cursor->index() )->pixelxadj;
-    iPoint.rx() += xadj;
-    vPoint.rx() += xadj;
+    //int xadj = parag->at( cursor->index() )->pixelxadj;
+    //iPoint.rx() += xadj;
+    //vPoint.rx() += xadj;
     // very small clipping around the cursor
     QRect clip( vPoint.x() - 5, vPoint.y() , 10, cursorHeight );
     setupClipRegion( p, clip );
@@ -1297,24 +1295,28 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
     QColorGroup cg = QApplication::palette().active();
     cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
-    // To force the drawing to happen:
-    bool wasChanged = cursor->parag()->hasChanged();
-    int oldLineChanged = cursor->parag()->lineChanged();
-    int line; // line number
-    cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
-    cursor->parag()->setChanged( false ); // not all changed, only from a given line
-    cursor->parag()->setLineChanged( line );
-    //kdDebug(33001) << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
-
     uint drawingFlags = KoTextDocument::DrawSelections;
     if ( m_doc->backgroundSpellCheckEnabled() )
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
+    if ( m_doc->viewFormattingChars() )
+        drawingFlags |= KoTextDocument::DrawFormattingChars;
+
+    // To force the drawing to happen:
+    bool wasChanged = parag->hasChanged();
+    int oldLineChanged = parag->lineChanged();
+    int line; // line number
+    parag->lineStartOfChar( cursor->index(), 0, &line );
+    parag->setChanged( false ); // not all changed, only from a given line
+    parag->setLineChanged( line );
+    //kdDebug(33001) << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
 
     textDocument()->drawParagWYSIWYG(
         p, parag,
-        iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
+        QMAX(0, iPoint.x() - 5), // negative values create problems
+        iPoint.y(), clip.width(), clip.height(),
         pix, cg, m_doc->zoomHandler(),
-        cursorVisible, cursor, drawingFlags );
+        cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
+
     if ( wasChanged )      // Maybe we have more changes to draw, than those in the small cliprect
         cursor->parag()->setLineChanged( oldLineChanged ); // -1 = all
     else
@@ -1584,14 +1586,14 @@ KCommand * KPTextObject::textContentsToHeight()
 // "Resize Object to fit Contents"
 KCommand * KPTextObject::textObjectToContents()
 {
-    if (isProtect() )
+    if ( isProtect() )
         return 0L;
-    // Calculate max parag width (in case all parags are short, otherwise the width is more or less
-    // the current object's width anyway).
+    // Calculate max parag width (in case all parags are short, otherwise - with wrapping -
+    // the width is more or less the current object's width anyway).
     KoTextParag * parag = textDocument()->firstParag();
     double txtWidth = 10;
     for ( ; parag ; parag = parag->next() )
-        txtWidth = QMAX( txtWidth, m_doc->zoomHandler()->layoutUnitPtToPt( parag->rect().right() ));
+        txtWidth = QMAX( txtWidth, m_doc->zoomHandler()->layoutUnitPtToPt( parag->widthUsed() ));
 
     // Calculate text height
     int heightLU = textDocument()->height();
@@ -2344,4 +2346,9 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
     }
     parentElem.appendChild(paragraph);
+}
+
+QPen KPTextObject::defaultPen() const
+{
+    return QPen( Qt::black, 1, Qt::NoPen );
 }
