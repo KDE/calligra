@@ -176,6 +176,8 @@ protected:
     virtual ~KoFilterManager();
 
 private:
+    static const int s_area = 30003;
+
     /**
      *	Get the ID of the QWidget in the Stack which matches this
      *  extension. (internal)

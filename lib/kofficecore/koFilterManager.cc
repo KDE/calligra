@@ -251,10 +251,10 @@ void KoFilterManager::cleanUp() {
             KoFilterDialog *dia=d->originalDialogs.find(id).data();
             if(dia!=0L) {
                 d->config=dia->state();
-                kdDebug(30003) << d->config << endl;
+                kdDebug(s_area) << d->config << endl;
             }
             else
-                kdWarning(30003) << "default dia - no config!" << endl;
+                kdWarning(s_area) << "default dia - no config!" << endl;
         }
     }
 }
@@ -278,11 +278,10 @@ QString KoFilterManager::import( const QString &_file, QString &mimeType,
     // Find the mime type for the file to be imported.
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     if ( t && t->name()!="application/octet-stream" ) {
-        kdDebug(30003) << "Found MimeType " << t->name() << endl;
         mimeType = t->name();
     }
     else {
-        kdError(30003) << "No MimeType found." << endl;
+        kdError(s_area) << "No MimeType found." << endl;
         return QString::null;
     }
 
@@ -315,6 +314,7 @@ QString KoFilterManager::import( const QString &_file, QString &mimeType,
     }
 
     // Return failure.
+    kdError(s_area) << "All filters failed." << endl;
     return QString::null;
 }
 
@@ -328,11 +328,10 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QString mimeType;
     if ( t && t->name()!="application/octet-stream" ) {
-        kdDebug(30003) << "Found MimeType " << t->name() << endl;
         mimeType = t->name();
     }
     else {
-        kdDebug(30003) << "No MimeType found. Setting " << _native_format << endl;
+        kdDebug(s_area) << "No MimeType found. Setting " << _native_format << endl;
         mimeType = QString::fromLatin1(_native_format);
     }
 
@@ -372,7 +371,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
             document->slotProgress(0);
         }
         if(vec[i].implemented.lower()=="file") {
-            //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
+            //kdDebug(s_area) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
             KTempFile tempFile; // create with default file prefix, extension and mode
             if (tempFile.status() != 0)
                 return QString::null;
@@ -384,18 +383,18 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
             tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff
         }
         else if(vec[i].implemented.lower()=="qdom") {
-            //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
+            //kdDebug(s_area) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
             QDomDocument qdoc;
             ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
             if(ok) {
                 ok=document->loadXML(0L,qdoc);
                 if (!ok)
-                  kdWarning(30003) << "loadXML FAILED !" << endl;
+                  kdWarning(s_area) << "loadXML FAILED !" << endl;
                 document->changedByFilter();
             }
         }
         else if(vec[i].implemented.lower()=="kodocument") {
-            //kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
+            //kdDebug(s_area) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
             ok=filter->I_filter( file, document, mimeType, _native_format, d->config);
             if(ok)
                 document->changedByFilter();
@@ -409,6 +408,9 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
     }
     if(ok && vec[i-1].implemented.lower()=="file")
         return tempfname;
+
+    // Return failure.
+    kdError(s_area) << "All filters failed." << endl;
     return QString::null;
 }
 
@@ -423,17 +425,17 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QString mimeType;
     if (t && t->name() != "application/octet-stream") {
-        kdDebug(30003) << "Found MimeType " << t->name() << endl;
+        kdDebug(s_area) << "Found MimeType " << t->name() << endl;
         mimeType = t->name();
     }
     else {
-        kdDebug(30003) << "No MimeType found. Setting " << _native_format << endl;
+        kdDebug(s_area) << "No MimeType found. Setting " << _native_format << endl;
         mimeType = _native_format;
     }
 
     if ( mimeType == _native_format )
     {
-        kdDebug(30003) << "Native format, returning without conversion. " << endl;
+        kdDebug(s_area) << "Native format, returning without conversion. " << endl;
         return file;
     }
 
