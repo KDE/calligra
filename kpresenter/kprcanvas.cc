@@ -720,9 +720,12 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
 
                     if ( overObject ) {
-                        if ( kpobject ) {
+                        if ( kpobject && !(e->state() & ShiftButton)) {
                             selectObj( kpobject );
                             raiseObject( kpobject );
+			}
+                        else if ( kpobject && (e->state() & ShiftButton)) {
+                            deSelectObj( kpobject );
 			}
                     }
                     else {

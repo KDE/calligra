@@ -78,6 +78,7 @@ Bugfixes:
 - Fix group object : allow to change text object attribute, fix load close object etc...
 - Width and height spin boxes in the style dialog are now coupled when
   keep aspect ratio is in effect.
+- Fix unselect object : use right button + shift
 
 Crashes:
 - Fixed crash when we close kword and "special char dialogbox" is not closed
