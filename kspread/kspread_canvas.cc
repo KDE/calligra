@@ -877,7 +877,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
         table->unselect();
 
     // Extending an existing selection with the shift button ?
-    if ( selection.right() != 0x7fff && selection.bottom() != 0x7fff && _ev->state() & ShiftButton )
+    if ( m_pView->koDocument()->isReadWrite() && selection.right() != 0x7fff && selection.bottom() != 0x7fff && _ev->state() & ShiftButton )
     {
         if( col != old_column || row != old_row )
         {
@@ -1263,8 +1263,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
-  bool make_select = ( _ev->state() & ShiftButton ) == ShiftButton &&
-                     ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End );
+  bool make_select = m_pView->koDocument()->isReadWrite() && (( _ev->state() & ShiftButton ) == ShiftButton &&
+                     ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
 
   switch( _ev->key() )
   {

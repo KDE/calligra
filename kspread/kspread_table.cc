@@ -2189,6 +2189,11 @@ bool KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
         if ( !selected )
             r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
+                m_pDoc->undoBuffer()->appendUndo( undo );
+        }
         for ( int x = r.left(); x <= r.right(); x++ )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
@@ -3364,7 +3369,7 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
 
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoClearCell *undo = new KSpreadUndoClearCell( m_pDoc, this, r );
+                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
 

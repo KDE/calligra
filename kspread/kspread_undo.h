@@ -213,11 +213,11 @@ protected:
     QString m_tableName;
 };
 
-class KSpreadUndoClearCell : public KSpreadUndoAction
+class KSpreadUndoChangeAreaTextCell : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoClearCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
-    virtual ~KSpreadUndoClearCell();
+    KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
+    virtual ~KSpreadUndoChangeAreaTextCell();
 
     virtual void undo();
     virtual void redo();
@@ -226,8 +226,8 @@ public:
 
 protected:
     QRect m_rctRect;
-    QValueList<textOfCell> m_lstClearCell;
-    QValueList<textOfCell> m_lstRedoClearCell;
+    QValueList<textOfCell> m_lstTextCell;
+    QValueList<textOfCell> m_lstRedoTextCell;
     QString m_tableName;
 };
 

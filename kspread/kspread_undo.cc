@@ -730,16 +730,16 @@ void KSpreadUndoResizeColRow::redo()
     doc()->undoBuffer()->unlock();
 }
 
-KSpreadUndoClearCell::KSpreadUndoClearCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
+KSpreadUndoChangeAreaTextCell::KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
     KSpreadUndoAction( _doc )
 {
   m_rctRect = _selection;
   m_tableName = _table->name();
 
-  createList( m_lstClearCell, _table );
+  createList( m_lstTextCell, _table );
 }
 
-void KSpreadUndoClearCell::createList( QValueList<textOfCell> &list, KSpreadTable* table )
+void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KSpreadTable* table )
 {
     list.clear();
     for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
@@ -754,11 +754,11 @@ void KSpreadUndoClearCell::createList( QValueList<textOfCell> &list, KSpreadTabl
         }
 }
 
-KSpreadUndoClearCell::~KSpreadUndoClearCell()
+KSpreadUndoChangeAreaTextCell::~KSpreadUndoChangeAreaTextCell()
 {
 }
 
-void KSpreadUndoClearCell::undo()
+void KSpreadUndoChangeAreaTextCell::undo()
 {
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
@@ -766,11 +766,11 @@ void KSpreadUndoClearCell::undo()
 
     doc()->undoBuffer()->lock();
 
-    createList( m_lstRedoClearCell, table );
+    createList( m_lstRedoTextCell, table );
 
 
     QValueList<textOfCell>::Iterator it2;
-    for ( it2 = m_lstClearCell.begin(); it2 != m_lstClearCell.end(); ++it2 )
+    for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
     {
         KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
         if ( (*it2).text.isEmpty() )
@@ -785,7 +785,7 @@ void KSpreadUndoClearCell::undo()
     doc()->undoBuffer()->unlock();
 }
 
-void KSpreadUndoClearCell::redo()
+void KSpreadUndoChangeAreaTextCell::redo()
 {
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
@@ -794,7 +794,7 @@ void KSpreadUndoClearCell::redo()
     doc()->undoBuffer()->lock();
 
     QValueList<textOfCell>::Iterator it2;
-    for ( it2 = m_lstRedoClearCell.begin(); it2 != m_lstRedoClearCell.end(); ++it2 )
+    for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
     {
         KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
         if ( (*it2).text.isEmpty() )
