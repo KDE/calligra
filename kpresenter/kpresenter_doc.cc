@@ -2037,8 +2037,6 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
     for ( ; fit.current() ; ++fit )
         fit.current()->zoom( forPrint );
 #endif
-//update background
-    //updateAllFrames();
 #if 0
     if ( updateViews )
     {
@@ -2046,12 +2044,10 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
         repaintAllViews( true );
     }
 #endif
-    //fixme
-#if 0
+
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         m_pageList.at(i)->background()->restore();
     }
-#endif
 }
 
 #include <kpresenter_doc.moc>

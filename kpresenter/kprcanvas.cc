@@ -1290,7 +1290,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( /*e->pos()*/docPoint ))
+        if(txtObj->contains( docPoint ))
         {
             KoPoint pos = contentsPoint - txtObj->getOrig();
             //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
@@ -4767,7 +4767,8 @@ void KPrCanvas::lowerObject()
 
 void KPrCanvas::playSound( const QString &soundFileName )
 {
-    delete soundPlayer;
+    if(soundPlayer)
+        delete soundPlayer;
     soundPlayer = new KPresenterSoundPlayer( soundFileName );
     soundPlayer->play();
 }

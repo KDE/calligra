@@ -125,7 +125,6 @@ void KPrPage::removeObject( int pos)
 
 void KPrPage::deleteObjs( bool _add )
 {
-    //todo
     QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
 
@@ -2234,11 +2233,11 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
 
 void KPrPage::slotRepaintVariable()
 {
-    KPObject *kpobject;
-    for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() )
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
     {
-	if ( kpobject->getType() == OT_TEXT )
-            m_doc->repaint( kpobject );
+	if ( it.current()->getType() == OT_TEXT )
+            m_doc->repaint( it.current() );
     }
 }
 
