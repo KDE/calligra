@@ -50,6 +50,7 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kprogress.h>
 #include <kdebug.h>
 
 #include <kparts/partmanager.h>
@@ -77,6 +78,8 @@ public:
     m_orientation=0L;
     m_removeView=0L;
     m_toolbarList.setAutoDelete( true );
+    m_firstTime=true;
+    m_progress=0L;
   }
   ~KoMainWindowPrivate()
   {
@@ -90,6 +93,7 @@ public:
   KoView *m_activeView;
 
   QLabel * statusBarLabel;
+  KProgress *m_progress;
 
   QList<KAction> m_splitViewActionList;
   // This additional list is needed, because we don't plug
@@ -104,6 +108,7 @@ public:
   bool bMainWindowGUIBuilt;
   bool m_splitted;
   bool m_forQuit;
+  bool m_firstTime;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -326,11 +331,14 @@ bool KoMainWindow::openDocument( const KURL & url )
     m_recent->addURL( url );
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
+    d->m_firstTime=true;
+    connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     if ( !newdoc || !newdoc->openURL( url ) )
     {
 	newdoc->delayedDestruction();
 	return false;
     }
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
     {
@@ -342,14 +350,14 @@ bool KoMainWindow::openDocument( const KURL & url )
         // Open in a new shell
         // (Note : could create the shell first and the doc next for this
         // particular case, that would give a better user feedback...)
-	KoMainWindow *s = newdoc->createShell();
-        s->show();
-        s->setRootDocument( newdoc );
+       KoMainWindow *s = newdoc->createShell();
+       s->show();
+       s->setRootDocument( newdoc );
     }
     else
     {
         // We had no document, set the new one
-	setRootDocument( newdoc );
+       setRootDocument( newdoc );
     }
     return true;
 }
@@ -450,6 +458,7 @@ void KoMainWindow::slotFileNew()
 {
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
+    connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     if ( !newdoc || !newdoc->initDoc() )
     {
 	newdoc->delayedDestruction();
@@ -467,6 +476,7 @@ void KoMainWindow::slotFileNew()
         s->setRootDocument( newdoc );
 	return;
     }
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     setRootDocument( newdoc );
     return;
 }
@@ -629,6 +639,28 @@ void KoMainWindow::slotSetOrientation() {
 				  (d->m_orientation->currentItem()));
 }
 
+void KoMainWindow::slotProgress(int value) {
+
+    kdDebug() << "progress:" << value << endl;
+    if(value==-1) {
+	delete d->m_progress;
+	d->m_progress=0L;
+	return;
+    }
+    if(d->m_firstTime) {
+	delete d->m_progress;
+	d->m_progress=0L;
+	kdDebug() << "first time" << endl;
+	d->m_progress=new KProgress(statusBar());
+	d->m_progress->setMaximumHeight(statusBar()->height()-4);
+	statusBar()->addWidget( d->m_progress, 0, true );
+	d->m_progress->show();
+	// single shot, 1.5s :)
+	d->m_firstTime=false;
+    }
+    d->m_progress->setValue(value);
+    kapp->processEvents();
+}
 
 void KoMainWindow::buildMainWindowGUI()
 {

@@ -170,6 +170,8 @@ public slots:
      */
     virtual void slotCloseAllViews();
 
+    void slotProgress(int value);
+
 protected:
 
     /**

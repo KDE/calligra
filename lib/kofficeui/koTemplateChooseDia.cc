@@ -190,7 +190,7 @@ void KoTemplateChooseDia::setupDialog()
 	    canvas->show();
 	    canvas->load(group);
 	    canvas->sort();
-            connect( canvas, SIGNAL( executed( QIconViewItem * ) ),
+            connect( canvas, SIGNAL( doubleClicked( QIconViewItem * ) ),
                      this, SLOT( chosen(QIconViewItem *) ) );
             connect( canvas, SIGNAL( currentChanged( QIconViewItem * ) ),
 		     this, SLOT( currentChanged( QIconViewItem * ) ) );

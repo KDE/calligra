@@ -116,6 +116,9 @@ public:
 				const QCString &from, const QCString &to,
 				const QString &config=QString::null);
 
+signals:
+    void sigProgress(int value);
+
 protected:
     KoFilter(KoFilter *parent, QString name);   // only for classes inheriting this one
 

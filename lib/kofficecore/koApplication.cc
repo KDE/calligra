@@ -97,19 +97,20 @@ void KoApplication::start()
             KoDocument* doc = entry.createDoc( 0 );
             if ( doc )
             {
-                // show a shell asap
-                KoMainWindow* shell = doc->createShell();
-                shell->show();
+		// show a shell asap
+		KoMainWindow* shell = doc->createShell();
+		shell->show();
 		// now try to load
-                if ( doc->openURL( args->url(i) ) )
-	        {
+		QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+		if ( doc->openURL( args->url(i) ) ) {
 		    shell->setRootDocument( doc );
 		    n++;
-                } else {
+		    QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+		} else {
 		    // .... if failed
 		    delete shell;
-                }
-            }
+		}
+	    }
         }
         if (n == 0) // no doc, all URLs were malformed
           ::exit(1);

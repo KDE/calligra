@@ -120,6 +120,7 @@ bool KoShellWindow::openDocument( const KURL & url )
 	
   KoDocument* newdoc = m_documentEntry.createDoc();
   bool ret;
+  QObject::connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   if ( !newdoc || !newdoc->openURL( url ) )
   {
       delete newdoc;
@@ -128,6 +129,7 @@ bool KoShellWindow::openDocument( const KURL & url )
       setRootDocument( newdoc );
       ret = true;
   }
+  QObject::disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
   return ret;
 }

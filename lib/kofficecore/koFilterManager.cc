@@ -294,7 +294,9 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
     // just in case that there are more than one filters
     while(i<vec.count() && !ok) {
 	KoFilter* filter = vec[i].createFilter();
-        ASSERT( filter );
+	ASSERT( filter );
+	QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+	document->slotProgress(0);
 
 	if(vec[i].implemented.lower()=="file") {
 	    //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
@@ -325,8 +327,9 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
 	    if(ok)
 		document->changedByFilter();
 	}
-        delete filter;
-        ++i;
+	document->slotProgress(-1);  // remove the bar
+	delete filter;
+	++i;
     }
     if(ok && vec[i-1].implemented.lower()=="file")
 	return QFile::decodeName(tempfname);

@@ -414,6 +414,9 @@ public:
    */
   virtual DCOPObject * dcopObject();
 
+public slots:
+  void slotProgress(int value) { emit sigProgress(value); }
+
 signals:
   /**
    * This signal is emitted, if a direct or indirect child document changes
@@ -424,6 +427,7 @@ signals:
    * passed by the signal.
    */
   void childChanged( KoDocumentChild *child );
+  void sigProgress(int value);
 
 protected:
 

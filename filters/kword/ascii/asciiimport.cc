@@ -81,6 +81,12 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
     str += "</FRAMESETS>\n";
     str += "</DOC>\n";
 
+    // test
+    emit sigProgress(50);
+    sleep(2);
+    emit sigProgress(60);
+    sleep(2);
+
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root")) {
         kdError(30502) << "Unable to open output file!" << endl;
