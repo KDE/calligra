@@ -82,6 +82,9 @@ private:
     void processAnchor ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);
+    void processTextImage ( const QString&,
+        const TextFormatting& formatLayout,
+        const QString& fileName);
     QString textFormatToStyle(const TextFormatting& formatOrigin,
         const TextFormatting& formatData, const bool force, QString& key);
     QString layoutToParagraphStyle(const LayoutData& layoutOrigin,

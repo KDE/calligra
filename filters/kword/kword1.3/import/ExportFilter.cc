@@ -860,6 +860,13 @@ void OOWriterWorker::processAnchor ( const QString&,
     }
 }
 
+void OOWriterWorker::processTextImage ( const QString&,
+    const TextFormatting& /*formatLayout*/,
+    const QString& fileName)
+{
+    kdDebug(30518) << "Text Image " << fileName << endl;
+}
+
 void OOWriterWorker::processParagraphData ( const QString &paraText,
     const TextFormatting& formatLayout,
     const ValueListFormatData &paraFormatDataList)
@@ -875,6 +882,10 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
             if (1==(*paraFormatDataIt).id)
             {
                 processNormalText(paraText, formatLayout, (*paraFormatDataIt));
+            }
+            else if (2==(*paraFormatDataIt).id)
+            {
+                processTextImage(paraText, formatLayout, (*paraFormatDataIt).text.fontName); // The file name is stored as font name
             }
             else if (4==(*paraFormatDataIt).id)
             {

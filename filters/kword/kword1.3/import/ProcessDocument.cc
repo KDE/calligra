@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -478,6 +478,29 @@ static void SubProcessFormatOneTag(QDomNode myNode,
     (*formatDataList) << formatData;
 }
 
+static void SubProcessFormatTwoTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int formatLen,
+    KWEFKWordLeader *leader)
+{
+    if ( (formatPos == -1) )
+    {
+        // We have no position defined
+        kdWarning(30508) << "Missing text image position!" << endl;
+        return;
+    }
+    // In KWord 0.8, the len attribute was not defined
+    if (formatLen == -1)
+        formatLen = 1;
+
+    FormatData formatData(2, formatPos, formatLen);
+    QValueList<TagProcessing> tagProcessingList;
+    // As we cannot have a font, we re-use the fontName to store the filename
+    tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &formatData.text.fontName));
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    (*formatDataList) << formatData;
+}
+
 
 static void SubProcessFormatFourTag(QDomNode myNode,
     ValueListFormatData *formatDataList, int formatPos, int formatLen,
@@ -545,6 +568,11 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     case 1: // regular texts
         {
             SubProcessFormatOneTag(myNode, formatDataList, formatPos, formatLen, leader);
+            break;
+        }
+    case 2: // text image (KWord 0.8)
+        {
+            SubProcessFormatTwoTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
         }
     case 4: // variables

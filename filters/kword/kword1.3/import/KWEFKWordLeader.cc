@@ -909,6 +909,9 @@ static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
     int errorLine;
     int errorColumn;
 
+
+    // ### TODO: KWord's 0.8 contains QChar(1) as placeholder which is not allowed in XML
+    // ### TODO:  for now, Qt seems to allow this character but it may change in future.
     if ( !doc.setContent (subFile, &errorMsg, &errorLine, &errorColumn) )
     {
         kdError (30508) << "Parsing Error! Aborting! (in ParseFile)" << endl
