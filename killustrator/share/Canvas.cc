@@ -30,26 +30,26 @@
 #include <unistd.h>
 #include <limits.h>
 #include <math.h>
+
 #include <qpainter.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
 #include <qcolor.h>
 #include <qdatetime.h>
 #include <qtimer.h>
+#include <qrect.h>
 
-#include <GDocument.h>
-#include <Handle.h>
-#include <ToolController.h>
+
 #include <kconfig.h>
 #include <kapp.h>
 #include <kdebug.h>
 
-#include <GPolyline.h> // for NEAR_DISTANCE
-#include <GLayer.h>
-#include <SelectionTool.h>
-
-//#define oldmXOffset (width() - actualPaperSizePt().width())/2 - xPaper
-//#define newmXOffset
+#include "GDocument.h"
+#include "Handle.h"
+#include "ToolController.h"
+#include "GPolyline.h" // for NEAR_DISTANCE
+#include "GLayer.h"
+#include "SelectionTool.h"
 
 
 Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
@@ -70,6 +70,7 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   vBar->setPageStep(50);
   hBar->setPageStep(50);
   
+  //these connections shall only work when caused by the user
   connect(vBar, SIGNAL(valueChanged(int)), SLOT(scrollY(int)));
   connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
 
@@ -80,10 +81,10 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   buffer = new QPixmap();
-  xPaper = 0;
-  yPaper = 0;
+  //xPaper = 0;
+  //yPaper = 0;
 
-  updateScrollBars();
+  adjustScrollBarRanges2();
   
   helplinesAreOn = helplinesSnapIsOn = false;
   tmpHorizHelpline = tmpVertHelpline = -1;
@@ -112,95 +113,136 @@ Canvas::~Canvas()
 void Canvas::resizeEvent(QResizeEvent *e)
 {
    buffer->resize(size());
-   mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
-   mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
-   updateScrollBars();
-   emit visibleAreaChanged(mXOffset, mYOffset);
+   //at first this one, since the others depend on the scrollbars
+   //this may trigger the signal QScrollBar::valueChanged(), which is connected to
+   //scrollX(), scrollY(), which emit visibleAreaCVhanged(), but the following calls
+   //also chnage the visible areas, and we want to emit the signals only once when we
+   //have finished
+   blockSignals(true);
+   adjustScrollBarRanges2();
+
+   //this one changes
+   adjustVisibleArea3();
+   //and this one too and depends on the visibleArea
+   adjustRelativePaperArea4();
+   blockSignals(false);
+
+   emit visibleAreaChanged(m_relativePaperArea.left(), m_relativePaperArea.top());
+   kdDebug()<<"---- resizeEvent() w: "<<width()<<"  h: "<<height()<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   //we should emit something to tell the outside world that the view has changed
+   //scrollX(hBar->value());
+   //scrollY(vBar->value());
 }
 
-QSize Canvas::actualSize()
-{
-   int w = width() + actualPaperSizePt().width();
-   int h = height() + actualPaperSizePt().height();
-   return QSize(w, h);
-}
-
-QSize Canvas::actualPaperSizePt() const
+//return the rectangle covered by the paper in points
+//upper left corner is always (0,0)
+//it changes only when zooming or changing the paper size
+void Canvas::adjustPaperArea1()
 {
    int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
    int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
-   return QSize(w, h);
-}
+   m_paperArea=QRect(QPoint(0,0),QPoint(w,h));
+};
 
-void Canvas::updateScrollBars()
+//adjust the scrollbars to the current zoom level and canvas size
+void Canvas::adjustScrollBarRanges2()
 {
    //the range of a scrollbar depends on how much of the canvas is not visible
-   /*QSize tmpSize=actualPaperSizePt();
-   int i=tmpSize.width()-width();
+   QRect tmpRect=paperArea();
+   //QSize tmpSize=currentPaperSizePt();
+   int i=tmpRect.right()-width();
    if (i<=0)
       hBar->setRange(0,0);
    else
-      hBar->setRange(0,i);
+      hBar->setRange(-i/2-10,i/2+10);
       //hBar->setRange(-i/2-10,i/2+10);
 
-   i=tmpSize.height()-height();
-   if (i<=0)
-      vBar->setRange(0,0);
-   else
-      vBar->setRange(0,i);*/
-   QSize tmpSize=actualPaperSizePt();
-   int i=tmpSize.width()-width();
-   if (i<=0)
-      hBar->setRange(0,0);
-   else
-      hBar->setRange(-i/2,i/2);
-      //hBar->setRange(-i/2-10,i/2+10);
-
-   i=tmpSize.height()-height();
+   i=tmpRect.bottom()-height();
    if (i<=0)
       vBar->setRange(0,0);
    else
       vBar->setRange(-i/2-10,i/2+10);
-
-   hBar->setValue(hBar->value());
-   vBar->setValue(vBar->value());
 }
 
+
+void Canvas::adjustVisibleArea3()
+{
+   kdDebug()<<"adjustVisibleArea() x: "<<hBar->value()<<" y: "<<vBar->value()<<endl;
+   int xScroll=hBar->value();
+   int yScroll=vBar->value();
+
+   QRect tmpRect=paperArea();
+   int w=tmpRect.width();
+   int h=tmpRect.height();
+
+   int widgetCenterX(width()/2);
+   int widgetCenterY(height()/2);
+
+   //e.g. 600 point widget, 800 point paper, 100 point scroll to the right
+   //gives 400-300-100=0
+   int firstVisX=w/2-widgetCenterX+xScroll;
+   int firstVisY=h/2-widgetCenterY+yScroll;
+
+   m_visibleArea=QRect(QPoint(firstVisX,firstVisY),QSize(width(),height()));
+};
+
+//this one is called when zooming, resizing, scrolling
+//coordinates are relative to the edges of the canvas widgets
+//changes after adjustPaperArea()
+void Canvas::adjustRelativePaperArea4()
+{
+   QRect visRect=visibleArea();
+   QRect paperRect=paperArea();
+   m_relativePaperArea=QRect(QPoint(-visRect.x(),-visRect.y()),
+                             QPoint(+visRect.right()-paperRect.right(),+visRect.bottom()-paperRect.bottom()));
+
+};
+
+
+/*QSize Canvas::currentPaperSizePt() const
+{
+   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
+   int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+   return QSize(w, h);
+}*/
+
+//connected to QScrollBar::valueChanged()
 void Canvas::scrollX(int v)
 {
-   xPaper = v;
-/*   int i=actualPaperSizePt().width()-width();
-   if (i<=0)
-   {
-      mXOffset=-i/2;
-      xPaper=
-   }
-   else
-   {
-      //mXOffset=(-v+hBar->minValue())/zoomFactor+10;
-      mXOffset=-v;
-      kdDebug()<<"Canvas::scrollX: mXOffset: "<<mXOffset<<" v: "<<v<<" minValue: "<<hBar->minValue()<<endl;
-   };*/
-   //mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
-   mXOffset=(width() - actualPaperSizePt().width())/2 - xPaper;
-   repaint();
-   emit visibleAreaChanged(mXOffset,mYOffset);
+   adjustVisibleArea3();
+   adjustRelativePaperArea4();
 
+   //relativePaperArea.left()=(width() - currentPaperSizePt().width())/2 - hBar->value();
+   kdDebug()<<"---- scrollX() w: "<<width()<<"  h: "<<height()<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   repaint();
+   emit visibleAreaChanged(m_relativePaperArea.left(),m_relativePaperArea.top());
 }
  
+//connected to QScrollBar::valueChanged()
 void Canvas::scrollY(int v)
 {
-   yPaper = v;
+   adjustVisibleArea3();
+   adjustRelativePaperArea4();
 
-   mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+   //relativePaperArea.top() = (height() - currentPaperSizePt().height())/2 - vBar->value();
+   kdDebug()<<"---- scrollY() w: "<<width()<<"  h: "<<height()<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
    repaint();
-   emit visibleAreaChanged(mXOffset,mYOffset);
+   emit visibleAreaChanged(m_relativePaperArea.left(),m_relativePaperArea.top());
 }
 
-void Canvas::centerPage()
+void Canvas::center(int x, int y)
 {
-   hBar->setValue(0);
-   vBar->setValue(0);
+   hBar->setValue(x);
+   vBar->setValue(y);
 }
 
 /*
@@ -232,7 +274,7 @@ void Canvas::paintEvent (QPaintEvent* e)
    int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
    int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
    p.setPen(Qt::black);
-   p.translate(mXOffset, mYOffset);
+   p.translate(m_relativePaperArea.left(),m_relativePaperArea.top());
    p.drawRect (0, 0, w, h);
    p.setPen (QPen(Qt::darkGray, 2));
    p.moveTo (w+1, 1);
@@ -271,46 +313,66 @@ void Canvas::calculateSize ()
    //kdDebug()<<"Canvas::calcSize(): width: "<<width()<<" height: "<<height()<<endl;
    buffer->resize(size());
    repaint();
-   emit sizeChanged ();
 }
+
+//centerX and centerY are the coordinates of the unzoomed paper
+//relative to the center of the paper
+void Canvas::setZoomFactor (float factor, int centerX, int centerY)
+{
+   //respect zoom factor
+   centerX*=factor/zoomFactor;
+   centerY*=factor/zoomFactor;
+
+   zoomFactor = factor;
+
+   blockSignals(true);
+
+   adjustPaperArea1();
+   adjustScrollBarRanges2();
+   hBar->setValue(centerX);
+   vBar->setValue(centerY);
+   adjustVisibleArea3();
+   adjustRelativePaperArea4();
+
+   kdDebug()<<"---- setZoomFactor() w: "<<width()<<"  h: "<<height()<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   kdDebug()<<"setZoomFactor(): paperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   // recompute pixmaps of fill areas
+   document->invalidateClipRegions ();
+
+   repaint();
+   blockSignals(false);
+
+   emit visibleAreaChanged(m_relativePaperArea.left(),m_relativePaperArea.top());
+   emit zoomFactorChanged (zoomFactor);
+
+};
 
 void Canvas::setZoomFactor (float factor)
 {
-   zoomFactor = factor;
-   // recompute pixmaps of fill areas
-   document->invalidateClipRegions ();
-   updateScrollBars();
-   mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
-   mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
-   repaint();
-   emit sizeChanged ();
-   emit visibleAreaChanged(mXOffset,mYOffset);
-   //emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
-   emit zoomFactorChanged (zoomFactor);
-/*   kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" actPaperSize.height: "<<actualPaperSizePt().height()<<" yPaper: "<<yPaper<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" xPaper: "<<xPaper<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): paperwidth: "<<document->getPaperWidth()<<" height: "<<document->getPaperHeight()<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): zoom: "<<zoomFactor<<" res: "<<resolution<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): hbar min: "<<hBar->minValue()<<" max: "<<hBar->maxValue()<<" val: "<<hBar->value()<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): vbar min: "<<vBar->minValue()<<" max: "<<vBar->maxValue()<<" val: "<<vBar->value()<<endl;*/
+   //the old center should also become the new center
+   int centerX((m_visibleArea.right()-m_visibleArea.left())/2);
+   int centerY((m_visibleArea.bottom()-m_visibleArea.top())/2);
+   setZoomFactor(factor,centerX, centerY);
 }
 
 void Canvas::setToolController (ToolController* tc)
- {
-  toolController = tc;
- }
+{
+   toolController = tc;
+}
 
 /*******************[Events]*******/
 
 void Canvas::mousePressEvent (QMouseEvent* e)
- {
-  propagateMouseEvent (e);
- }
+{
+   propagateMouseEvent (e);
+}
 
 void Canvas::mouseReleaseEvent (QMouseEvent* e)
- {
-  propagateMouseEvent (e);
- }
+{
+   propagateMouseEvent (e);
+}
 
 void Canvas::mouseMoveEvent (QMouseEvent* e)
  {
@@ -321,8 +383,8 @@ void Canvas::propagateMouseEvent (QMouseEvent *e)
 {
   // transform position of the mouse pointer according to current
   // zoom factor
-  QPoint new_pos (qRound (float(e->x() - mXOffset) / zoomFactor),
-                  qRound (float(e->y() - mYOffset) / zoomFactor));
+  QPoint new_pos (qRound (float(e->x() - m_relativePaperArea.left()) / zoomFactor),
+                  qRound (float(e->y() - m_relativePaperArea.top()) / zoomFactor));
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
   
   emit mousePositionChanged (new_ev.x(), new_ev.y());
@@ -453,7 +515,7 @@ void Canvas::updateRegion (const Rect& reg)
   // compute the clipping region
   QWMatrix m;
   
-  QRect clip = m.map (QRect (int (r.left ()*zoomFactor + mXOffset), int (r.top ()*zoomFactor + mYOffset),
+  QRect clip = m.map (QRect (int (r.left ()*zoomFactor + m_relativePaperArea.left()), int (r.top ()*zoomFactor + m_relativePaperArea.top()),
                              int (r.width ()), int (r.height ())));
    
   //kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
@@ -740,7 +802,7 @@ void Canvas::drawGrid (QPainter& p)
 
    p.save ();
    p.setPen (pen1);
-   h = ((width() - actualPaperSizePt().width())/2 - xPaper) % (int)hd;
+   h = ((width() - m_paperArea.right())/2 - hBar->value()) % (int)hd;
    //cerr<<"grid x: ";
    for (; h < width(); h += hd)
    {
@@ -749,7 +811,7 @@ void Canvas::drawGrid (QPainter& p)
       //cerr<<h<<" ";
    }
    //cerr<<endl;
-   v = ((height() - actualPaperSizePt().height())/2 - yPaper) % (int)vd;
+   v = ((height() - m_paperArea.right())/2 - vBar->value()) % (int)vd;
   
    for (; v < height() ; v += vd)
    {
@@ -833,21 +895,21 @@ void Canvas::drawHelplines (QPainter& p)
   p.setPen (pen);
   QValueList<float>::Iterator i;
   for (i=horizHelplines.begin(); i!=horizHelplines.end(); ++i) {
-    int hi = qRound (*i * zoomFactor) + mYOffset;
+    int hi = qRound (*i * zoomFactor) + m_relativePaperArea.top();
     p.drawLine (0, hi, width(), hi);
   }
   for (i = vertHelplines.begin(); i!=vertHelplines.end(); ++i) {
-    int vi = qRound (*i * zoomFactor) + mXOffset;
+    int vi = qRound (*i * zoomFactor) + m_relativePaperArea.left();
     p.drawLine (vi, 0, vi, height());
   }
 
   if (tmpHorizHelpline != -1) {
-    int hi = qRound (tmpHorizHelpline * zoomFactor) + mYOffset;
+    int hi = qRound (tmpHorizHelpline * zoomFactor) + m_relativePaperArea.top();
     p.drawLine (0, hi, width(), hi);
   }
 
   if (tmpVertHelpline != -1) {
-    int vi = qRound (tmpVertHelpline * zoomFactor) + mXOffset;
+    int vi = qRound (tmpVertHelpline * zoomFactor) + m_relativePaperArea.left();
     p.drawLine (vi, 0, vi, height());
   }
   p.restore ();
@@ -860,12 +922,12 @@ void Canvas::drawTmpHelpline (int x, int y, bool horizH)
   // and add helpline
   if(horizH)
    {
-    pos = float(y - mYOffset) / zoomFactor;
+    pos = float(y - m_relativePaperArea.top()) / zoomFactor;
     tmpHorizHelpline = pos;
    }
   else
    {
-    pos = float(x - mXOffset) / zoomFactor;
+    pos = float(x - m_relativePaperArea.left()) / zoomFactor;
     tmpVertHelpline = pos;
    }
   // it makes no sense to hide helplines yet
@@ -882,12 +944,12 @@ void Canvas::addHelpline (int x, int y, bool horizH)
   // and add helpline
   if (horizH)
    {
-    pos = float(y - mYOffset) / zoomFactor;
+    pos = float(y - m_relativePaperArea.top()) / zoomFactor;
     addHorizHelpline (pos);
    }
   else
    {
-    pos = float(x - mXOffset) / zoomFactor;
+    pos = float(x - m_relativePaperArea.left()) / zoomFactor;
     addVertHelpline (pos);
    }
  }

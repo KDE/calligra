@@ -87,7 +87,7 @@ void ZoomTool::processMouseMoveEvent (QMouseEvent* e)
       painter.save();
       QPen pen(Qt::blue, 1, Qt::DotLine);
       painter.begin(canvas);
-      painter.translate(canvas->xOffset(), canvas->yOffset());
+      painter.translate(canvas->relativePaperArea().left(), canvas->relativePaperArea().top());
       painter.setPen(pen);
       float sfactor = canvas->scaleFactor();
       painter.scale(sfactor, sfactor);

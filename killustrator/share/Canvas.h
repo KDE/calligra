@@ -28,8 +28,9 @@
 
 #include <qwidget.h>
 #include <qvaluelist.h>
-#include <Coord.h>
 #include <qscrollview.h>
+
+#include "Coord.h"
 
 class GDocument;
 class GObject;
@@ -50,16 +51,34 @@ public:
   void setDocument (GDocument* doc);
   GDocument* getDocument () const { return document; };
   
+  void setZoomFactor (float factor, int centerX, int centerY);
   void setZoomFactor (float factor);
   float getZoomFactor () const { return zoomFactor; };
 
   float scaleFactor () const { return resolution * zoomFactor / 72.0; };
   
-  int xOffset () const {return mXOffset; };
-  int yOffset () const {return mYOffset; };
+  //int xOffset () const {return mXOffset; };
+  //int yOffset () const {return mYOffset; };
   
-  void centerPage();
-  
+  //put the given point in the center of the canvas
+  //x and y are relative to the center of the paper
+  void center(int x=0, int y=0);
+
+  //return the rectangle covered by the paper in points on the screen
+  //upper left corner is always (0,0)
+  //it changes only when zooming or chaning the paper size
+  QRect paperArea()             {return m_paperArea;};
+  //return the currently visible rectangle
+  //coordinates are relative to the upper left corner of the paper
+  //it changes when scrolling, zooming, resizing, alex
+  QRect visibleArea()           {return m_visibleArea;};
+
+  //return the coordinates of the paper relative to current canvas size
+  //((-10,-10),(-10,-10)) means that the paper is on every edge
+  //10 points bigger than the current canvas
+  //it changes when scrolling, zooming, resizing and changing the paper size, alex
+  QRect relativePaperArea()     {return m_relativePaperArea;};
+
 /*
   Helplines
 */ 
@@ -108,10 +127,20 @@ public:
   void setOutlineMode (bool flag);
 
 protected:
+  QRect m_paperArea;
+  QRect m_visibleArea;
+  QRect m_relativePaperArea;
+
    //return the size of the canvas with current zoom and resolution in pixels
-  QSize actualSize();
-  QSize actualPaperSizePt() const;
-  void updateScrollBars();
+
+  //QSize currentPaperSizePt() const;
+  //if you call more than one of them, thy should be called in the order
+  //of the prepended numbers, since they depend on each other
+  //(this doesn't mean you have to call all of them), alex
+  void adjustPaperArea1();
+  void adjustScrollBarRanges2();
+  void adjustVisibleArea3();
+  void adjustRelativePaperArea4();
   
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
@@ -132,8 +161,6 @@ protected:
   void addVertHelpline (float pos);
 
 signals:
-  void sizeChanged ();
-  //void gridStatusChanged ();
   void rightButtonAtObjectClicked (int x, int y, GObject *obj);
   void rightButtonAtSelectionClicked (int x, int y);
   void rightButtonClicked (int x, int y);
@@ -168,7 +195,6 @@ private:
   QScrollBar *vBar;
 
   int m_width, m_height;
-  int mXOffset, mYOffset;
   int xPaper, yPaper;
   float resolution;
   float zoomFactor;

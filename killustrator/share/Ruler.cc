@@ -196,13 +196,14 @@ void Ruler::updatePointer (int x, int y) {
   repaint (r1.unite (r2));
 }
 
-void Ruler::updateVisibleArea (int xpos, int ypos) {
-  if (orientation == Horizontal)
-    firstVisible = -xpos;
-  else
-    firstVisible = -ypos;
-  drawRuler ();
-  repaint ();
+void Ruler::updateVisibleArea (int xpos, int ypos)
+{
+   if (orientation == Horizontal)
+      firstVisible = -xpos;
+   else
+      firstVisible = -ypos;
+   drawRuler ();
+   repaint ();
 }
 
 void Ruler::paintEvent (QPaintEvent *e)

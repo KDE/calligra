@@ -355,7 +355,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
     QPen pen (Qt::blue, 1, Qt::DotLine);
     painter.begin (canvas);
     painter.setPen (pen);
-    painter.translate(canvas->xOffset(), canvas->yOffset());
+    painter.translate(canvas->relativePaperArea().left(), canvas->relativePaperArea().top());
     float sfactor = canvas->scaleFactor ();
     painter.scale (sfactor, sfactor);
     Rect selRect (selPoint[0], selPoint[1]);
