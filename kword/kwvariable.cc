@@ -32,6 +32,14 @@
 #include <qtimer.h>
 #include <koxmlwriter.h>
 
+
+
+//TODO saving kwvariablesetting into style.xml
+
+//<text:notes-configuration text:note-class="footnote" text:default-style-name="Footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" text:master-page-name="Footnote" style:num-prefix="vbnvn" style:num-suffix="vbncvbncv" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+//  <text:notes-configuration text:note-class="endnote" text:default-style-name="Endnote" text:citation-style-name="Endnote_20_Symbol" text:citation-body-style-name="Endnote_20_anchor" text:master-page-name="Endnote" style:num-format="i" text:start-value="0"/>
+//  <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+
 KWVariableSettings::KWVariableSettings() : KoVariableSettings()
 {
     m_footNoteCounter.setSuffix( QString::null );
@@ -95,7 +103,6 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
 
 KoVariable *KWVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct,bool _forceDefaultFormat, bool loadFootNote )
 {
-    kdDebug()<<" KoVariable *KWVariableCollection::createVariable****************\n";
     KWDocument *m_doc = static_cast<KWDocument *>(doc);
     KoVariable * var = 0L;
     switch(type) {
@@ -217,7 +224,7 @@ void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& con
     {
         m_doc->addFootNoteRequest( elem.attribute( "text:id" ),this );
         QString str = elem.attribute( "text:note-class" );
-        kdDebug()<<" Foot/EndNote : "<<str<<endl;
+        //kdDebug()<<" Foot/EndNote : "<<str<<endl;
         if ( str == "footnote" )
             m_noteType = FootNote;
         else if ( str == "endnote" )
@@ -231,13 +238,13 @@ void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& con
             m_numberingType = Auto;
         if ( m_numberingType == Auto )
         {
-            kdDebug()<<" automatic \n";
+            //kdDebug()<<" automatic \n";
             m_numDisplay = citation.toElement().text().toInt();
             formatedNote();
         }
         else
         {
-            kdDebug()<<" manual \n";
+            //kdDebug()<<" manual \n";
             m_varValue = QVariant( citation.toElement().text() );
         }
         //TODO load text
