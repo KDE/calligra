@@ -105,6 +105,7 @@ int main(int argc, char** argv)
 		manager->debugError();
 		return 1;
 	}
+	kdDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
 
 //connection data
 //	conn_data.host = "myhost";
