@@ -241,3 +241,13 @@ void KSpreadViewIface::insertFromClipboard()
 {
     m_view->insertFromClipboard();
 }
+
+void KSpreadViewIface::textToColumns()
+{
+    m_view->textToColumns();
+}
+
+void KSpreadViewIface::copyAsText()
+{
+    m_view->copyAsText();
+}

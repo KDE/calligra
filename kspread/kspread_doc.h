@@ -295,8 +295,8 @@ public:
     void takeTable( KSpreadTable * table );
 
     // The user-chosen global unit
-    QString getUnitName() { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit() { return m_unit; }
+    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit()const { return m_unit; }
     void setUnit( KoUnit::Unit _unit );
 
   /**
@@ -520,7 +520,7 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void RetrieveMarkerInfo(QRect marker, KSpreadTable* table, QRect viewRect,
+  void RetrieveMarkerInfo(const QRect &marker, KSpreadTable* table, const QRect &viewRect,
                           int positions[], bool paintSides[]);
 };
 

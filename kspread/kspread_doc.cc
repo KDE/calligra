@@ -132,7 +132,7 @@ bool KSpreadDoc::initDoc()
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f, "application/x-kspread",
-                                       "*.ksp", i18n("KSpread"), 
+                                       "*.ksp", i18n("KSpread"),
                                         KoTemplateChooseDia::Everything, "kspread_template");
 
     if ( ret == KoTemplateChooseDia::File )
@@ -843,8 +843,8 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
 }
 
 
-void KSpreadDoc::RetrieveMarkerInfo(QRect marker, KSpreadTable* table,
-                                    QRect viewRect, int positions[],
+void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker, KSpreadTable* table,
+                                    const QRect &viewRect, int positions[],
                                     bool paintSides[])
 {
   int xpos, ypos, w, h;

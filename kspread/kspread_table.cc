@@ -711,12 +711,12 @@ QRect KSpreadTable::selection() const
   return m_rctSelection;
 }
 
-QPoint KSpreadTable::getCursorPosition()
+QPoint KSpreadTable::getCursorPosition()const
 {
   return m_cursorPosition;
 }
 
-bool KSpreadTable::setCursorPosition(QPoint position)
+bool KSpreadTable::setCursorPosition(const QPoint &position)
 {
   KSpreadCell* cell = cellAt(m_marker);
 
@@ -757,7 +757,7 @@ bool KSpreadTable::singleCellSelection() const
           (m_rctSelection.height() - 1 == cell->extraYCells()));
 }
 
-void KSpreadTable::setSelection( QRect _sel, KSpreadCanvas *canvas )
+void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *canvas )
 {
   Q_ASSERT(_sel.left() != 0);
 
@@ -771,7 +771,7 @@ void KSpreadTable::setSelection( QRect _sel, KSpreadCanvas *canvas )
   }
 }
 
-void KSpreadTable::setSelection( QRect  newSelection, QPoint newMarker,
+void KSpreadTable::setSelection(QRect  newSelection, QPoint newMarker,
                                  KSpreadCanvas */*_canvas*/ )
 {
 
@@ -804,7 +804,7 @@ void KSpreadTable::setSelection( QRect  newSelection, QPoint newMarker,
   emit sig_changeSelection( this, oldSelection, oldMarker );
 }
 
-QRect KSpreadTable::getChooseRect()
+QRect KSpreadTable::getChooseRect()const
 {
   QRect chooseRect;
 
@@ -2118,7 +2118,7 @@ bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
     {
         int left = m_printRange.left();
         int right = m_printRange.right();
-        
+
         for( int i=0; i<=nbCol; i++ )
         {
             if ( left >= col ) left++;
@@ -2172,7 +2172,7 @@ bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
     {
         int top = m_printRange.top();
         int bottom = m_printRange.bottom();
-        
+
         for( int i=0; i<=nbRow; i++ )
         {
             if ( top >= row ) top++;
@@ -2222,7 +2222,7 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
     {
         int left = m_printRange.left();
         int right = m_printRange.right();
-        
+
         for( int i=0; i<=nbCol; i++ )
         {
             if ( left > col ) left--;
@@ -2270,7 +2270,7 @@ void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
     {
         int top = m_printRange.top();
         int bottom = m_printRange.bottom();
-        
+
         for( int i=0; i<=nbRow; i++ )
         {
             if ( top > row ) top--;
@@ -6291,20 +6291,20 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     KSpreadCell *cell;
     RowLayout *row_lay;
     ColumnLayout *col_lay;
-    
+
     //Check if we have to repeat some rows and columns
     xpos = 0;
     ypos = 0;
     xpos_Start = 0;
     ypos_Start = 0;
-    if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first && 
+    if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first &&
          m_printRepeatRows.first != 0    && page_range.top() > m_printRepeatRows.first )
     {
         for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
         {
             row_lay = rowLayout( y );
             xpos = 0;
-        
+
             for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
             {
                 col_lay = columnLayout( x );
@@ -6331,7 +6331,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         {
             row_lay = rowLayout( y );
             xpos = xpos_Start;
-        
+
             for ( int x = page_range.left(); x <= page_range.right(); x++ )
             {
                 col_lay = columnLayout( x );
@@ -6357,7 +6357,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         {
             row_lay = rowLayout( y );
             xpos = 0;
-        
+
             for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
             {
                 col_lay = columnLayout( x );
@@ -6381,7 +6381,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     {
         row_lay = rowLayout( y );
         xpos = xpos_Start;
-        
+
         for ( int x = page_range.left(); x <= page_range.right(); x++ )
         {
             col_lay = columnLayout( x );
@@ -7019,7 +7019,7 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 // ###### Torben: Use this one instead of m_cells.insert()
 void KSpreadTable::insertCell( KSpreadCell *_cell )
 {
-  
+
   m_cells.insert( _cell, _cell->column(), _cell->row() );
 
   if ( m_bScrollbarUpdates )
@@ -7048,7 +7048,7 @@ void KSpreadTable::update()
   }
 }
 
-void KSpreadTable::updateCellArea( QRect cellArea )
+void KSpreadTable::updateCellArea( const QRect &cellArea )
 {
   if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
     return;
@@ -7456,7 +7456,7 @@ void KSpreadTable::paperLayoutDlg()
     KoUnit::Unit unit = m_pDoc->getUnit();
 
     KoPageLayoutDia dlg( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit );
-    
+
     // ------------- options ---------------
     QWidget *tab = dlg.addPage(i18n( "Options" ));
     QGridLayout *grid = new QGridLayout( tab, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -7471,27 +7471,27 @@ void KSpreadTable::paperLayoutDlg()
     QLineEdit *ePrintRange = new QLineEdit( tab );
     grid->addWidget( ePrintRange, 1, 1 );
     ePrintRange->setText( util_rangeName( m_printRange ) );
-    
+
     QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
     grid->addWidget( pRepeatRows, 2, 0 );
 
     QLineEdit *eRepeatRows = new QLineEdit( tab );
     grid->addWidget( eRepeatRows, 2, 1 );
     if ( m_printRepeatRows.first != 0 )
-        eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) + 
-                              ":" + 
+        eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) +
+                              ":" +
                               QString().setNum( m_printRepeatRows.second ) );
-    
+
     QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
     grid->addWidget( pRepeatCols, 3, 0 );
 
     QLineEdit *eRepeatCols = new QLineEdit( tab );
     grid->addWidget( eRepeatCols, 3, 1 );
     if ( m_printRepeatColumns.first != 0 )
-        eRepeatCols->setText( util_encodeColumnLabelText( m_printRepeatColumns.first ) + 
+        eRepeatCols->setText( util_encodeColumnLabelText( m_printRepeatColumns.first ) +
                               ":" +
                               util_encodeColumnLabelText( m_printRepeatColumns.second ) );
-    
+
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pPrintGrid->width() );
     grid->addColSpacing( 0, pPrintRange->width() );
@@ -7509,7 +7509,7 @@ void KSpreadTable::paperLayoutDlg()
     grid->addRowSpacing( 3, pRepeatCols->height() );
     grid->addRowSpacing( 3, eRepeatCols->height() );
     grid->setRowStretch( 4, 1 );
-    
+
     int result = dlg.exec();
     if ( result == QDialog::Accepted )
     {
@@ -7550,7 +7550,7 @@ void KSpreadTable::paperLayoutDlg()
                     }
                 }
             }
-    
+
             if ( error ) KMessageBox::information( 0, i18n( "Print range wrong, changes are ignored." ) );
         }
 
@@ -7575,7 +7575,7 @@ void KSpreadTable::paperLayoutDlg()
                     }
                 }
             }
-    
+
             if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored." ) );
         }
 
@@ -7600,7 +7600,7 @@ void KSpreadTable::paperLayoutDlg()
                     }
                 }
             }
-    
+
             if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored." ) );
         }
         m_pDoc->setModified( true );

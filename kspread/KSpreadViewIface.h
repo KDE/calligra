@@ -66,6 +66,9 @@ k_dcop:
     virtual void insertFromDatabase();
     virtual void insertFromTextfile();
     virtual void insertFromClipboard();
+    virtual void textToColumns();
+    virtual void copyAsText();
+
 
 private:
     KSpreadView* m_view;

@@ -115,7 +115,7 @@ public:
   KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table );
   ~KSpreadChild();
 
-  KSpreadDoc* parent() { return (KSpreadDoc*)parent(); }
+  KSpreadDoc* parent()const { return (KSpreadDoc*)parent(); }
   KSpreadTable* table()const { return m_pTable; }
 
 protected:
@@ -446,7 +446,7 @@ public:
    */
   QRect getSelectionHandleArea(KSpreadCanvas* canvas);
 
-  void setSelection( QRect _rect, KSpreadCanvas *_canvas = 0L );
+  void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
   void setSelection( QRect _rect, QPoint marker,
                      KSpreadCanvas *_canvas = 0L );
 
@@ -470,24 +470,24 @@ public:
    * @return true if the position was valid, false if it wasn't.  In other words,
    *         true if something changed, false if there is no change.
    */
-  bool setCursorPosition(QPoint position);
+  bool setCursorPosition(const QPoint &position);
 
   /**
    * @see setCursorPosition for a description of what the cursor position is
    *
    * You are probably wanting to use marker(), not this function
    */
-  QPoint getCursorPosition();
+  QPoint getCursorPosition()const;
 
 
-  void setChooseAnchor(QPoint chooseAnchor) { m_chooseAnchor = chooseAnchor; }
-  void setChooseMarker(QPoint chooseMarker) { m_chooseMarker = chooseMarker; }
-  void setChooseCursor(QPoint chooseCursor) { m_chooseCursor = chooseCursor; }
+  void setChooseAnchor(const QPoint &chooseAnchor) { m_chooseAnchor = chooseAnchor; }
+  void setChooseMarker(const QPoint &chooseMarker) { m_chooseMarker = chooseMarker; }
+  void setChooseCursor(const QPoint &chooseCursor) { m_chooseCursor = chooseCursor; }
 
-  QRect getChooseRect();
-  QPoint getChooseCursor() { return m_chooseCursor; }
-  QPoint getChooseMarker() { return m_chooseMarker; }
-  QPoint getChooseAnchor() { return m_chooseAnchor; }
+  QRect getChooseRect()const;
+  QPoint getChooseCursor()const { return m_chooseCursor; }
+  QPoint getChooseMarker()const { return m_chooseMarker; }
+  QPoint getChooseAnchor()const { return m_chooseAnchor; }
 
 
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
@@ -710,7 +710,7 @@ public:
      */
     bool getShowFormulaIndicator() const {return m_bShowFormulaIndicator;}
 
-    void setShowFormulaIndicator(bool _showFormulaIndicator) 
+    void setShowFormulaIndicator(bool _showFormulaIndicator)
         {m_bShowFormulaIndicator=_showFormulaIndicator;}
 
     bool getLcMode() const {return m_bLcMode;}
@@ -740,7 +740,7 @@ public:
     void increaseIndent( const QPoint &_marker );
     void decreaseIndent( const QPoint &_marker );
 
-    bool areaIsEmpty() ;
+    bool areaIsEmpty();
 
     void refreshPreference() ;
 
@@ -1029,7 +1029,7 @@ public:
      * rather than calling updateCell(..) on several adjacent cells so there
      * will be one paint event instead of several
      */
-    void updateCellArea(QRect cellArea);
+    void updateCellArea(const QRect &cellArea);
 
   /**
      * Updates every cell on the table
@@ -1389,7 +1389,7 @@ public:
      * Returns the page layout
      */
     KoPageLayout getPaperLayout() const;
-    
+
      /**
      * Changes the paper layout and repaints the currently displayed KSpreadTable.
      */
@@ -1422,18 +1422,18 @@ public:
     QString footRight()const { if ( m_footRight.isNull() ) return ""; return m_footRight; }
 
     /**
-     * Returns the print range. 
+     * Returns the print range.
      * Returns ( QPoint (1, 1), QPoint(KS_colMax, KS_rowMax) ) if nothing is defined
      */
     QRect printRange() const { return m_printRange; }
     /**
-     * Sets the print range. 
+     * Sets the print range.
      * Set it to ( QPoint (1, 1), QPoint(KS_colMax, KS_rowMax) ) to undefine it
      */
     void setPrintRange( QRect _printRange );
 
     /**
-     * Returns the columns, which are printed on each page. 
+     * Returns the columns, which are printed on each page.
      * Returns QPair (0, 0) if nothing is defined
      */
     QPair<int, int> printRepeatColumns() const { return m_printRepeatColumns; }
@@ -1445,7 +1445,7 @@ public:
     void setPrintRepeatColumns( QPair<int, int> _printRepeatColumns );
 
     /**
-     * Returns the rows, which are printed on each page. 
+     * Returns the rows, which are printed on each page.
      * Returns QPair (0, 0) if nothing is defined
      */
     QPair<int, int> printRepeatRows() const { return m_printRepeatRows; }
@@ -1476,7 +1476,7 @@ public:
      * Returns the head and foot line of the print out
      */
     KoHeadFoot getHeadFootLine() const;
-    
+
     /**
      * Sets the head and foot line of the print out
      */
