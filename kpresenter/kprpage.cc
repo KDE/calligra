@@ -467,11 +467,17 @@ QDomElement KPrPage::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
     return page;
 }
 
+QString KPrPage::saveOasisNamePage( int posPage ) const
+{
+    return  ( m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle );
+}
+
 bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter) const
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
-    QString namePage = m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle;
+    QString namePage = saveOasisNamePage(posPage);
+
     xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
     xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
@@ -2316,9 +2322,9 @@ void KPrPage::setBackType( BackType backType )
     m_kpbackground->setBackType( backType );
 }
 
-void KPrPage::setPageEffectSpeed( EffectSpeed pageEffectSpeed ) 
-{ 
-    m_pageEffectSpeed = pageEffectSpeed; 
+void KPrPage::setPageEffectSpeed( EffectSpeed pageEffectSpeed )
+{
+    m_pageEffectSpeed = pageEffectSpeed;
 }
 
 void KPrPage::setPageEffect( PageEffect pageEffect )
@@ -2386,9 +2392,9 @@ BCType KPrPage::getBackColorType() const
     return m_kpbackground->getBackColorType();
 }
 
-EffectSpeed KPrPage::getPageEffectSpeed() const 
-{ 
-    return m_pageEffectSpeed; 
+EffectSpeed KPrPage::getPageEffectSpeed() const
+{
+    return m_pageEffectSpeed;
 }
 
 PageEffect KPrPage::getPageEffect() const

@@ -1332,8 +1332,9 @@ void KPresenterDoc::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTm
         QDictIterator<KPrPage> itPage( it.data() ); // See QDictIterator
         for( ; itPage.current(); ++itPage )
         {
-            if ( m_pageList.find(itPage.current() ) != -1 )
-                tmp+=itPage.current()->pageTitle()+",";
+            int posPage = m_pageList.find(itPage.current() );
+            if ( posPage != -1 )
+                tmp+=itPage.current()->saveOasisNamePage(posPage)+",";
         }
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
         contentTmpWriter.endElement();
@@ -1599,7 +1600,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         startBackgroundSpellCheck();
 #endif
     }
-    updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap );
+    updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
     if ( !settingsDoc.isNull() )
@@ -4485,7 +4486,7 @@ CustomListMap KPresenterDoc::customListSlideShow()
     return listMap;
 }
 
-void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )
+void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOasis )
 {
     m_customListSlideShow.clear();
     CustomListMap::Iterator it;
@@ -4497,12 +4498,25 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )
             for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
             {
                 //kdDebug()<<" insert page name :"<<*itList<<endl;
-                if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
+                if ( loadOasis )
                 {
-                    tmpDict.insert( ( *itList ), m_pageList.at( i ) );
-                    //kdDebug()<<" really insert\n";
-                    break;
+                    if ( m_pageList.at( i )->saveOasisNamePage(i+1)== ( *itList ) )
+                    {
+                        tmpDict.insert( ( *itList ), m_pageList.at( i ) );
+                        //kdDebug()<<" really insert\n";
+                        break;
+                    }
                 }
+                else
+                {
+                    if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
+                    {
+                        tmpDict.insert( ( *itList ), m_pageList.at( i ) );
+                        //kdDebug()<<" really insert\n";
+                        break;
+                    }
+                }
+
             }
         }
         m_customListSlideShow.insert( it.key(), tmpDict );

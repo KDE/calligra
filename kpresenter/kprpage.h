@@ -363,7 +363,7 @@ public:
     void loadOasis( KoOasisContext & context );
 
     QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
-    
+
     bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
     QString saveOasisPageEffect() const;
@@ -374,6 +374,8 @@ public:
     bool hasFooter()const { return m_bHasFooter; }
     void setHeader( bool b );
     void setFooter( bool b );
+
+    QString saveOasisNamePage( int posPage ) const;
 
 private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );

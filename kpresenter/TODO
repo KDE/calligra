@@ -39,7 +39,6 @@ Todo:
 
 
 In Progress:
--> implement custom slide show (save/load/change/add config into dialogbox works)
 -> copy/paste element as oasis format
 	-> copy object (In Progress)
 
@@ -49,6 +48,7 @@ Done:
 	-> copy page 
 	-> create template
 -> Hide/show header/footer by page (allow by oasis format)
+-> implement custom slide show
 
 KPresenter Oasis Format:
 ========================
