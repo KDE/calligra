@@ -82,6 +82,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_bBool = FALSE;
   m_bDate = FALSE;
   m_bTime = FALSE;
+  m_bText = FALSE;
   m_bProgressFlag = FALSE;
   m_bDisplayDirtyFlag = false;
   m_style = ST_Normal;
@@ -343,8 +344,7 @@ bool KSpreadCell::isEmpty() const
 bool KSpreadCell::isText() const
 {
    return (!isFormular() && !isValue() && !valueString().isEmpty()
-         && !isTime() &&!isDate()
-           && content() != KSpreadCell::VisualFormula) ;
+	   && !isTime() &&!isDate() && m_bText);
 }
 
 bool KSpreadCell::isObscuringForced()
@@ -817,7 +817,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     {
         m_strOutText=util_timeFormat( locale(),m_Time, getFormatNumber(column(),row()));
     }
-    else if ( isValue() && getFormatNumber(column(),row())!=Text_format )
+    else if ( isValue() )
     {
         // First get some locale information
         if (!decimal_point)
@@ -925,6 +925,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     else if ( isFormular() )
     {
         m_strOutText = m_strFormularOut;
+    }
+    else if( isText())
+    {
+      m_strOutText = m_strText;
     }
     else
     {
@@ -1577,6 +1581,7 @@ bool KSpreadCell::makeFormular()
     m_bValue = false;
     m_bDate=false;
     m_bTime=false;
+    m_bText=false;
     m_dValue = 0.0;
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
@@ -1613,6 +1618,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
+    m_bText=false;
     m_strFormularOut = "####";
     m_bLayoutDirtyFlag = true;
     if ( m_style == ST_Select )
@@ -1660,6 +1666,7 @@ bool KSpreadCell::calc( bool _makedepend )
               m_bBool = false;
               m_bDate=false;
               m_bTime=false;
+	      m_bText=false;
               m_bProgressFlag = false;
               if ( m_style == ST_Select )
               {
@@ -1685,6 +1692,7 @@ bool KSpreadCell::calc( bool _makedepend )
           m_bBool = false;
           m_bDate = false;
           m_bTime=false;
+	    m_bText=false;
           m_bProgressFlag = false;
           m_bLayoutDirtyFlag = true;
           if ( m_style == ST_Select )
@@ -1712,6 +1720,7 @@ bool KSpreadCell::calc( bool _makedepend )
       m_bBool = false;
       m_bDate =false;
       m_bTime=false;
+      m_bText=false;
       m_bLayoutDirtyFlag = true;
       DO_UPDATE;
       // Print out exception if any
@@ -1743,6 +1752,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
+    m_bText=false;
     //setFormatNumber(Number);
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -1753,10 +1763,11 @@ bool KSpreadCell::calc( bool _makedepend )
     m_dValue = (double)context.value()->intValue();
     m_bError =false;
     m_bValue = true;
+    m_bText = false;
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
-    //setFormatNumber(Number);
+    
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
     m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
@@ -1768,6 +1779,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = true;
     m_bDate =false;
     m_bTime=false;
+    m_bText=false;
     //setFormatNumber(Number);
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     // (David): i18n'ed True and False - hope it's ok
@@ -1781,6 +1793,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=true;
+    m_bText=false;
     m_Time=context.value()->timeValue();
 
     //change format
@@ -1802,7 +1815,8 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = false;
     m_bBool = false;
     m_bDate =true;
-    m_bTime=false;
+    m_bTime =false;
+    m_bText =false;
     m_Date=context.value()->dateValue();
     formatNumber tmpFormat= getFormatNumber(column(),row());
     if( tmpFormat != TextDate
@@ -1824,6 +1838,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
+    m_bText=false;
     // Format the result appropriately
     setFormatNumber(Number);
     m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
@@ -1838,6 +1853,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate=false;
     m_bTime=false;
+    m_bText=true;
     m_strFormularOut = context.value()->toString( context );
     if ( !m_strFormularOut.isEmpty() && m_strFormularOut[0] == '!' )
         {
@@ -3303,6 +3319,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     m_bBool = false;
     m_bDate=false;
     m_bTime=false;
+    m_bText=true;
     m_bLayoutDirtyFlag = true;
     m_content = RichText;
   }
@@ -3603,6 +3620,7 @@ void KSpreadCell::setValue( double _d )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
+    m_bText=false;
     m_dValue = _d;
     m_bLayoutDirtyFlag = true;
     m_content = Text;
@@ -3689,6 +3707,7 @@ void KSpreadCell::checkValue()
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
+    m_bText=false;
     // If the input is empty, we don't have a value
     if ( m_strText.isEmpty() )
     {

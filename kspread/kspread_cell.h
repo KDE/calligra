@@ -790,6 +790,7 @@ protected:
     bool m_bError;
     bool m_bDate;
     bool m_bTime;
+    bool m_bText;
     QDate m_Date;
     QTime m_Time;
     /**
