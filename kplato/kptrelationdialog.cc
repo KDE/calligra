@@ -35,7 +35,7 @@
 
 
 KPTRelationDialog::KPTRelationDialog(KPTRelation *rel, QWidget *p, const char *n)
-    : KDialogBase(Plain, i18n("Edit Relation"), Ok|Cancel|User1, Ok, p, n, true, true)
+    : KDialogBase(Plain, i18n("Edit Relationship"), Ok|Cancel|User1, Ok, p, n, true, true)
 {
     m_relation = rel;
     kdDebug()<<k_funcinfo<<"rel="<<rel<<endl;
@@ -47,7 +47,7 @@ KPTRelationDialog::KPTRelationDialog(KPTRelation *rel, QWidget *p, const char *n
 }
 
 KPTRelationDialog::KPTRelationDialog(KPTNode *parentNode, KPTNode *childNode, QWidget *p, const char *n)
-    : KDialogBase(Plain, i18n("New Relation"), Ok|Cancel, Ok, p, n, true, true)
+    : KDialogBase(Plain, i18n("New Relationship"), Ok|Cancel, Ok, p, n, true, true)
 {
     m_relation = 0;
     m_parent = parentNode;
@@ -76,7 +76,7 @@ void KPTRelationDialog::init()
     layout->addWidget(l, 1, 0);
 
     //layout->addMultiCellWidget(relationType = new QButtonGroup(box), 0, 5, 0, 1);
-    relationType = new QButtonGroup(0, Qt::Vertical, i18n("Relation Type"),page);
+    relationType = new QButtonGroup(0, Qt::Vertical, i18n("Relationship Type"),page);
     relationType->layout()->setSpacing(KDialog::spacingHint());
     relationType->layout()->setMargin(KDialog::marginHint());
     layout->addWidget(relationType, 2, 0);
@@ -126,7 +126,7 @@ void KPTRelationDialog::slotOk()
 {
     QButton *r = relationType->selected();
     if ( r == 0 ) {
-        KMessageBox::sorry(this, i18n("You have to select a relation type"));
+        KMessageBox::sorry(this, i18n("You must select a relationship type"));
 	    return;
     }
     QButton *t = timingType->selected();
