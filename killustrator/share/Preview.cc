@@ -22,9 +22,15 @@
 
 */
 
+#include <qpicture.h>
 #include "Preview.h"
 #include "GDocument.h"
+#include "qwmf.h"
 
+/**
+ * A preview handler for the KFilePreviewDialag that shows
+ * a KIllustrator document.
+ */
 bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 			QString&, QPixmap& pixmap) {
   bool res = false;
@@ -62,6 +68,42 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
     }
 
     delete tmpDoc;
+  }
+  return res;
+}
+
+/**
+ * A preview handler for the KFilePreviewDialag that shows
+ * a WMF object.
+ */
+bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
+			QString&, QPixmap& pixmap) {
+  bool res = false;
+
+  if (fInfo->isFile ()) {
+    QWinMetaFile wmf;
+
+    if (wmf.load ((const char *) fileName)) {
+      QPicture pic;
+      wmf.paint (&pic);                                                     
+
+      pixmap = QPixmap (200, 200);
+      Painter p;
+
+      p.begin (&pixmap);
+      p.setBackgroundColor (white);
+      pixmap.fill (white);
+
+      QRect oldWin = p.window ();
+      QRect vPort = p.viewport ();
+      p.setViewport (0, 0, 200, 200);
+      p.drawPicture (pic);
+      p.setWindow (oldWin);
+      p.setViewport (vPort);
+      p.end ();
+
+      res = true;
+    }
   }
   return res;
 }

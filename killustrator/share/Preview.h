@@ -30,4 +30,7 @@
 bool kilPreviewHandler (const KFileInfo*, const QString fileName,
 			QString&, QPixmap& pixmap);
 
+bool wmfPreviewHandler (const KFileInfo*, const QString fileName,
+			QString&, QPixmap& pixmap);
+
 #endif
