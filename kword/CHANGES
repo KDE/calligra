@@ -663,4 +663,11 @@ Reggie, 14.1.1999:
   a copy of the current paragLayout is assigned to the new parag. 
 - Tables can flow over multiple pages now
 - Saving and Loading tabes works now
-- Destructor doesn'c crash anymore :-)) (at least on my system)
+- Destructor doesn't crash anymore :-)) (at least on my system)
+
+Reggie, 15.1.1999:
+------------------
+- More work on table flowing over multiple pages
+- Some fixes with moving/resizing frames
+- Added dialog for initial table settings and configurating tables (currently only used for initial settings)
+- replacing KNumericSpinBoxes with QSpinBoxes, because QSpinBoxes look much nicer

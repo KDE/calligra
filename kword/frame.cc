@@ -1121,8 +1121,6 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
   unsigned int wid = width / cols - 2;
   unsigned int hei = height / rows - 2;
 
-  debug("h: %d, gh: %d, hh: %d,",hei,rows * hei,height);
-
   KWFrame *frame;
 
   for (unsigned int i = 0;i < rows;i++)

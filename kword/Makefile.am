@@ -15,17 +15,17 @@ kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kw
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
 		formats.cc frame.cc framedia.cc stylist.cc kcharselect.cc kcharselectdia.cc \
-		kword_utils.cc searchdia.cc preview.cc
+		kword_utils.cc searchdia.cc preview.cc tabledia.cc
 
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
 		formats.h frame.h framedia.h stylist.h  kcharselect.h kcharselectdia.h \
-		kword_utils.h searchdia.h preview.h
+		kword_utils.h searchdia.h preview.h tabledia.h
 
 SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_page.moc framedia.moc stylist.moc kcharselect.moc kcharselectdia.moc \
-		searchdia.moc
+		searchdia.moc tabledia.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
@@ -85,5 +85,4 @@ kcharselectdia.cc: kcharselectdia.moc
 kword_utils.cc: kword_utils.h
 stylist.cc: kword.h
 searchdia.cc: searchdia.moc
-
-
+tabledia.cc: tabledia.moc

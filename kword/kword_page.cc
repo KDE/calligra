@@ -250,13 +250,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 				  if (deleteMovingRect)
 				    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
 				  frame->moveBy(mx - oldMx,my - oldMy);
-				  if (frame->x() < 0 || 
-				      frame->y() < getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
-				      static_cast<int>(ptPaperHeight()) ||
-				      frame->right() > static_cast<int>(ptPaperWidth()) || 
-				      frame->bottom() > (getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),
-									     frame->height())) + 1) * 
-				      static_cast<int>(ptPaperHeight()))
+				  if (frame->x() < 0 || frame->right() > static_cast<int>(ptPaperWidth()))
 				    {
 				      if (frameset->getGroupManager())
 					{
@@ -281,9 +275,6 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			    }			      
 			}
 		      
-		      if (frameset->getGroupManager())
-			frameset->getGroupManager()->recalcRows(p);
-
 		      p.end();
 		    }
 		} break;
@@ -291,7 +282,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		{
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
-		  if (frameset < 1) break;
+		  if (frameset < 1 && doc->getProcessingType() == KWordDocument::WP) break;
 		  
 		  QPainter p;
 		  p.begin(this);
@@ -336,10 +327,6 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
 			frame->setHeight(frame->height() - (my - oldMy)); 
 		    }
-
-		  if (doc->getFrameSet(frameset)->getGroupManager())
-		    doc->getFrameSet(frameset)->getGroupManager()->recalcRows(p);
-
 		  p.drawRect(!doc->getFrameSet(frameset)->getGroupManager() ? frame->x() - xOffset : 
 			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().x() - xOffset, 
 			     frame->y() - yOffset,
@@ -395,10 +382,6 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
 			frame->setWidth(frame->width() - (mx - oldMx)); 
 		    }
-
-		  if (doc->getFrameSet(frameset)->getGroupManager())
-		    doc->getFrameSet(frameset)->getGroupManager()->recalcCols();
-
 		  p.drawRect(frame->x() - xOffset,
 			     !doc->getFrameSet(frameset)->getGroupManager() ? frame->y() - yOffset : 
 			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().y() - yOffset,frame->width(),
@@ -411,7 +394,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
 		  if (doc->getFrameSet(frameset)->getFrameInfo() != FI_BODY) break;
-		  if (frameset < 1) break;
+		  if (frameset < 1 && doc->getProcessingType() == KWordDocument::WP) break;
 
 		  QPainter p;
 		  p.begin(this);
@@ -465,7 +448,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
 		  if (doc->getFrameSet(frameset)->getFrameInfo() != FI_BODY) break;
-		  if (frameset < 1) break;
+		  if (frameset < 1 && doc->getProcessingType() == KWordDocument::WP) break;
 
 		  QPainter p;
 		  p.begin(this);
@@ -814,6 +797,15 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MM_EDIT_FRAME:
       {
+	QPainter p;
+	p.begin(this);
+	for (unsigned int i = 0;i < doc->getNumGroupManagers();i++)
+	  {
+	    doc->getGroupManager(i)->recalcRows(p);
+	    doc->getGroupManager(i)->recalcCols();
+	  }
+	p.end();
+
 	unsigned int mx = e->x() + xOffset;
 	unsigned int my = e->y() + yOffset;
 	selectedFrameSet = selectedFrame = -1;

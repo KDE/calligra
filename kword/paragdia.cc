@@ -843,13 +843,10 @@ void KWParagDia::setupTab4()
   lDepth->resize(lDepth->sizeHint());
   ogrid->addWidget(lDepth,1,0);
 
-  sDepth = new KNumericSpinBox(gOther);
-  sDepth->setRange(0,15);
-  sDepth->setEditable(false);
-  sDepth->resize(sDepth->sizeHint().width() / 2,sDepth->sizeHint().height());
+  sDepth = new QSpinBox(0,15,1,gOther);
+  sDepth->resize(sDepth->sizeHint());
   ogrid->addWidget(sDepth,1,1);
-  connect(sDepth,SIGNAL(valueIncreased()),this,SLOT(depthChanged()));
-  connect(sDepth,SIGNAL(valueDecreased()),this,SLOT(depthChanged()));
+  connect(sDepth,SIGNAL(valueChanged(int)),this,SLOT(depthChanged(int)));
 
   lStart = new QLabel(i18n("Start at:"),gOther);
   lStart->setAlignment(AlignRight | AlignVCenter);
@@ -1311,9 +1308,9 @@ void KWParagDia::startChanged(const char* _c)
 }
 
 /*================================================================*/
-void KWParagDia::depthChanged()
+void KWParagDia::depthChanged(int _val)
 {
-  counter.counterDepth = sDepth->getValue();
+  counter.counterDepth = _val;
 }
 
 /*================================================================*/

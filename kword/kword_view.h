@@ -52,6 +52,7 @@ class KWPaintWindow;
 #include "frame.h"
 #include "stylist.h"
 #include "searchdia.h"
+#include "tabledia.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
@@ -365,6 +366,7 @@ protected:
   KWStyleManager *styleManager;
   KSpell *kspell;
   KWSearchDia *searchDia;
+  KWTableDia *tableDia;
 
   KWParag *currParag;
   int currFrameSetNum;

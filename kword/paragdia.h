@@ -33,12 +33,12 @@
 #include <qlineedit.h>
 #include <qstrlist.h>
 #include <qlistbox.h>
+#include <qspinbox.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
 #include <kbuttonbox.h>
 #include <kcolorbtn.h>
-#include <kspinbox.h>
 #include "kcharselectdia.h"
 
 #include <koRuler.h>
@@ -229,7 +229,7 @@ protected:
   QPushButton *bLeft,*bRight,*bTop,*bBottom,*bBullets,*bFont,*bAdd,*bDel,*bModify;
   KWBorderPreview *prev3;
   KColorButton *bColor;
-  KNumericSpinBox *sDepth;
+  QSpinBox *sDepth;
   QButtonGroup *g1,*g2,*g3;
   KWNumPreview *prev4;
   QLineEdit *ecLeft,*ecRight,*eStart;
@@ -268,7 +268,7 @@ protected slots:
   void leftTextChanged(const char*);
   void rightTextChanged(const char*);
   void startChanged(const char*);
-  void depthChanged();
+  void depthChanged(int);
 
 };
 

@@ -2642,10 +2642,8 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 void KWordDocument::updateAllFrames()
 {
   for (unsigned int i = 0;i < getNumFrameSets();i++)
-    {
-      getFrameSet(i)->update();
-    }
-
+    getFrameSet(i)->update();
+  
   QList<KWFrame> _frames;
   QList<KWGroupManager> mgrs;
   QList<KWFrame> del;

@@ -91,6 +91,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   searchEntry = 0L;
   replaceEntry = 0L;
   searchDia = 0L;
+  tableDia = 0L;
 
   m_pKWordDoc = _doc;
 
@@ -853,8 +854,16 @@ void KWordView::toolsClipart()
 /*===============================================================*/
 void KWordView::toolsTable()
 {
-  gui->getPaperWidget()->setTableConfig(7,5);
-  gui->getPaperWidget()->mmTable();
+  if (tableDia)
+    {
+      tableDia->close();
+      delete tableDia;
+      tableDia = 0L;
+    }
+
+  tableDia = new KWTableDia(0,"", gui->getPaperWidget(),7,5);
+  tableDia->setCaption(i18n("KWord - Insert Table"));
+  tableDia->show();
 }
 
 /*===============================================================*/
