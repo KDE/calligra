@@ -31,23 +31,26 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     pie3d=new QCheckBox(i18n("pie 3D"),gb3);
     grid3->addWidget(pie3d,2,0);
 
+    drawShadowColor=new QCheckBox(i18n("Draw Shadow color"),gb3);
+    grid3->addWidget(drawShadowColor,3,0);
+
     QLabel *label = new QLabel( i18n( "Start" ), gb3 );
     label->resize( label->sizeHint() );
     label->setAlignment(Qt::AlignCenter);
-    grid3->addWidget( label,3,0);
+    grid3->addWidget( label,4,0);
 
     angle = new QSpinBox(0, 90, 1, gb3);
     angle->resize(100, angle->sizeHint().height() );
-    grid3->addWidget( angle,4,0);
+    grid3->addWidget( angle,5,0);
 
     label = new QLabel( i18n( "3D-Depth" ), gb3 );
     label->resize( label->sizeHint() );
     label->setAlignment(Qt::AlignCenter);
-    grid3->addWidget( label,5,0);
+    grid3->addWidget( label,6,0);
 
     depth = new QSpinBox(0, 40, 1, gb3);
     depth->resize(100, depth->sizeHint().height() );
-    grid3->addWidget( depth,6,0);
+    grid3->addWidget( depth,7,0);
 
     grid1->addWidget(gb3,0,0);
     connect(pie3d,SIGNAL(toggled ( bool )),this, SLOT(active3DPie(bool)));
@@ -56,6 +59,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
 void KChartParameterPieConfigPage::active3DPie(bool b)
 {
     depth->setEnabled(b);
+    drawShadowColor->setEnabled(b);
 }
 
 void KChartParameterPieConfigPage::init()
@@ -63,11 +67,13 @@ void KChartParameterPieConfigPage::init()
     pie3d->setChecked(_params->threeDPies());
     bool state=_params->threeDPies();
     depth->setEnabled(state);
+    active3DPie(state);
     if( state )	{
         depth->setValue( _params->threeDPieHeight() );
     }
-
+    drawShadowColor->setChecked(_params->threeDShadowColors());
     angle->setValue( _params->pieStart() );
+
 }
 
 
@@ -77,6 +83,6 @@ void KChartParameterPieConfigPage::apply()
      if( _params->threeDPies() )	{
         _params->setThreeDPieHeight( depth->value() );
     }
-
+    _params->setThreeDShadowColors( drawShadowColor->isChecked());
     _params->setPieStart( angle->value() );
 }

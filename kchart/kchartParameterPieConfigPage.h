@@ -27,7 +27,7 @@ public slots:
     void active3DPie(bool b);
 private:
     KChartParams* _params;
-    QCheckBox *pie3d;
+    QCheckBox *pie3d,*drawShadowColor;
     QSpinBox *depth,*angle;
 };
 

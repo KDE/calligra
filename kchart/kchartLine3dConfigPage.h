@@ -27,7 +27,7 @@ private:
     KIntNumInput* angle3dX;
     KIntNumInput* angle3dY;
     KDoubleNumInput* depth;
-    QCheckBox* line3d;
+    QCheckBox* line3d, *drawShadowColor;
 };
 
 #endif

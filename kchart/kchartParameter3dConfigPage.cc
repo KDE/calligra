@@ -86,5 +86,5 @@ void KChartParameter3dConfigPage::apply()
     _params->setThreeDBars(bar3d->isChecked());
     _params->setThreeDBarAngle( angle3d->value() );
     _params->setThreeDBarDepth( depth->value() );
-    _params->setThreeDBarsShadowColors( drawShadowColor->isChecked());
+    _params->setThreeDShadowColors( drawShadowColor->isChecked());
 }
