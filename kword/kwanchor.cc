@@ -22,7 +22,6 @@
 #include "kwdoc.h"
 #include "kwviewmode.h"
 #include <kdebug.h>
-#include <kdeversion.h>
 
 //#define DEBUG_DRAWING
 

@@ -44,7 +44,6 @@
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 #include <dcopobject.h>
 
 #include <qpopupmenu.h>

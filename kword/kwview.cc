@@ -100,7 +100,6 @@ using namespace KSpell2;
 #include <kaccel.h>
 #include <kaccelgen.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <klocale.h>

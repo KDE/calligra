@@ -25,7 +25,6 @@
 #include "kwview.h"
 #include "kwcanvas.h"
 
-#include <kdeversion.h>
 #include <klocale.h>
 
 #include <qlabel.h>

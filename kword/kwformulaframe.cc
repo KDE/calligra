@@ -40,7 +40,6 @@
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 #include <float.h>
 #include "KWordFrameSetIface.h"
 #include <dcopobject.h>

@@ -24,7 +24,6 @@
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include <kdebug.h>
-#include <kdeversion.h>
 
 const unsigned short KWViewMode::s_shadowOffset = 3;
 
