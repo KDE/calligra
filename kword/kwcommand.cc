@@ -22,6 +22,8 @@
 #include "kwcommand.h"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
+#include "kwanchor.h"
+
 #include <qrichtext_p.h>
 #include <kdebug.h>
 
@@ -688,10 +690,13 @@ void KWDeleteFrameCommand::unexecute()
     KWFrame * frame = copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
+    if(frame->anchor())
+        frame->anchor()->setDeleted(false);
 
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
         textfs->formatMore();
+
     m_pDoc->frameChanged( frame );
 }
 
@@ -712,6 +717,9 @@ void KWCreateFrameCommand::execute()
     KWFrame * frame = copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
+
+    if(frame->anchor())
+        frame->anchor()->setDeleted(false);
 
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )

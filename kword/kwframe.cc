@@ -75,6 +75,8 @@ KWFrame::~KWFrame()
     //kdDebug() << "KWFrame::~KWFrame " << this << endl;
     if (selected)
         removeResizeHandles();
+    if(anchor())
+        anchor()->setDeleted(true);
 }
 
 #if 0
@@ -219,6 +221,8 @@ KWFrame *KWFrame::getCopy() {
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
     frm->setPageNum(pageNum());
+    if(anchor())
+        frm->setAnchor(anchor());
     return frm;
 }
 
