@@ -26,6 +26,7 @@ class VInsertKnotsDlg;
 class VPolygonizeDlg;
 class VTool;
 class VToolContainer;
+class VWhirlPinchDlg;
 
 
 class KarbonView : public KoView
@@ -110,6 +111,7 @@ protected slots:
 	// path:
 	void pathInsertKnots();
 	void pathPolygonize();
+	void pathWhirlPinch();
 
 	// view:
 	void viewModeChanged();
@@ -133,7 +135,7 @@ private:
 	KarbonPart* m_part;
 	VCanvas* m_canvas;
 
-	VPainterFactory *m_painterFactory;
+	VPainterFactory* m_painterFactory;
 
 	VTool* m_currentTool;
 
@@ -169,6 +171,7 @@ private:
 	// dialogs:
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VPolygonizeDlg* m_polygonizeDlg;
+	VWhirlPinchDlg* m_whirlPinchDlg;
 
 	//toolbox
 	KSharedPtr< VToolContainer > m_toolbox;

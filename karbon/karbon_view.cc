@@ -37,6 +37,7 @@
 #include "vpolygonizecmd.h"
 #include "vstrokecmd.h"
 //#include "vtextcmd.h"
+#include "vwhirlpinchcmd.h"
 
 // dialogs:
 #include "vcolordlg.h"
@@ -45,6 +46,7 @@
 #include "vinsertknotsdlg.h"
 #include "vpolygonizedlg.h"
 #include "vstrokedlg.h"
+#include "vwhirlpinchdlg.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -79,6 +81,10 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_polygonizeDlg = new VPolygonizeDlg();
 	m_polygonizeDlg->setFlatness( 5.0 );
 
+	m_whirlPinchDlg = new VWhirlPinchDlg();
+	m_whirlPinchDlg->setAngle( 90.0 );
+	m_whirlPinchDlg->setPinch( 0.5 );
+	m_whirlPinchDlg->setRadius( 100.0 );
 
 	// widgets:
 	m_canvas = new VCanvas( this, part );
@@ -111,6 +117,7 @@ KarbonView::~KarbonView()
 	// dialogs:
 	delete( m_insertKnotsDlg );
 	delete( m_polygonizeDlg );
+	delete( m_whirlPinchDlg );
 
 	// widgets:
 	//delete m_toolbox;
@@ -507,6 +514,19 @@ KarbonView::pathPolygonize()
 	}
 }
 
+void
+KarbonView::pathWhirlPinch()
+{
+	if( m_whirlPinchDlg->exec() )
+	{
+		m_part->addCommand( new VWhirlPinchCmd(
+			&m_part->document(),
+			m_whirlPinchDlg->angle(),
+			m_whirlPinchDlg->pinch(),
+			m_whirlPinchDlg->radius() ), true );
+	}
+}
+
 
 void
 KarbonView::viewModeChanged()
@@ -737,6 +757,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Polygonize" ), 0, 0, this,
 		SLOT( pathPolygonize() ), actionCollection(), "path_polygonize" );
+	new KAction(
+		i18n( "&Whirl/Pinch" ), 0, 0, this,
+		SLOT( pathWhirlPinch() ), actionCollection(), "path_whirlpinch" );
 	// path <-----
 
 	// view ----->

@@ -22,7 +22,8 @@ noinst_HEADERS = \
 	vsinusdlg.h \
 	vspiraldlg.h \
 	vstardlg.h \
-	vstrokedlg.h
+	vstrokedlg.h \
+	vwhirlpinchdlg.h
 
 libkarbondialogs_la_SOURCES = \
 	dummy.cc \
@@ -38,7 +39,8 @@ libkarbondialogs_la_SOURCES = \
 	vsinusdlg.cc \
 	vspiraldlg.cc \
 	vstardlg.cc \
-	vstrokedlg.cc
+	vstrokedlg.cc \
+	vwhirlpinchdlg.cc
 
 libkarbondialogs_la_METASOURCES = \
 	AUTO

@@ -1,4 +1,4 @@
--	move vobject::draw() -> vshape?
+-	should all dialogs have a perent ?
 -	mirror coordinate-system so origin is bottom-left
 -	replace VObject::isInside() with a polygonizevisitor in vselectool (lenny)
 -	rotate/scale/shear tool dont work

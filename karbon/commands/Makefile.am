@@ -22,7 +22,8 @@ noinst_HEADERS = \
 	vspiralcmd.h \
 	vstarcmd.h \
 	vstrokecmd.h \
-	vtransformcmd.h
+	vtransformcmd.h \
+	vwhirlpinchcmd.h
 
 libkarboncommands_la_SOURCES = \
 	vcommand.cc \
@@ -40,7 +41,9 @@ libkarboncommands_la_SOURCES = \
 	vspiralcmd.cc \
 	vstarcmd.cc \
 	vstrokecmd.cc \
-	vtransformcmd.cc
+	vtransformcmd.cc \
+	vwhirlpinchcmd.cc
 
 libkarboncommands_la_METASOURCES = \
 	AUTO
+

@@ -58,6 +58,7 @@
 		<text>&amp;Path</text>
 		<Action name="path_insert_knots"/>
 		<Action name="path_polygonize"/>
+		<Action name="path_whirlpinch"/>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>
