@@ -195,7 +195,7 @@ bool WinWordDoc::convert()
         m_body.append(
             "</DOC>\n");
         m_result = m_body.utf8();
-//        kdDebug() << m_result << endl;
+        kdDebug() << m_result << endl;
         m_isConverted = true;
     }
     return m_success;
@@ -225,49 +225,49 @@ void WinWordDoc::encode(QString &text)
 QString WinWordDoc::generateFormat(
     const CHP *chp)
 {
-    QString formatDef;
+    QString format;
 kdError() <<"------ftc="<<chp->ftc<<endl;
 kdError() <<"      ascii="<<chp->ftcAscii<<" fe="<<chp->ftcFE<<" other="<<chp->ftcOther<<endl;
-    formatDef.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
-    formatDef.append("<FONT name=\"");
-    formatDef.append(getFont(chp->ftc));
-    formatDef.append("\"/>\n");
-    formatDef.append("<SIZE value=\"");
+    format.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
+    format.append("<FONT name=\"");
+    format.append(getFont(chp->ftcAscii));
+    format.append("\"/>\n");
+    format.append("<SIZE value=\"");
     // TBD: where should we really get the size?
-    formatDef.append(QString::number(chp->hps / 2));
-    //formatDef.append(QString::number(12));
-    formatDef.append("\"/>\n");
+    format.append(QString::number(chp->hps / 2));
+    //format.append(QString::number(12));
+    format.append("\"/>\n");
     if (chp->fBold)
-        formatDef.append("<WEIGHT value=\"75\"/>\n");
+        format.append("<WEIGHT value=\"75\"/>\n");
     else
-        formatDef.append("<WEIGHT value=\"50\"/>\n");
+        format.append("<WEIGHT value=\"50\"/>\n");
     if (chp->fItalic)
-        formatDef.append("<ITALIC value=\"1\"/>\n");
+        format.append("<ITALIC value=\"1\"/>\n");
     else
-        formatDef.append("<ITALIC value=\"0\"/>\n");
+        format.append("<ITALIC value=\"0\"/>\n");
     if (chp->kul != 0)
-        formatDef.append("<UNDERLINE value=\"1\"/>\n");
+        format.append("<UNDERLINE value=\"1\"/>\n");
     else
-        formatDef.append("<UNDERLINE value=\"0\"/>\n");
+        format.append("<UNDERLINE value=\"0\"/>\n");
     if (chp->iss != 0)
     {
         if (chp->iss == 1)
-            formatDef.append("<VERTALIGN value=\"2\"/>\n");
+            format.append("<VERTALIGN value=\"2\"/>\n");
         else
-            formatDef.append("<VERTALIGN value=\"1\"/>\n");
+            format.append("<VERTALIGN value=\"1\"/>\n");
     }
     else
     {
-        formatDef.append("<VERTALIGN value=\"0\"/>\n");
+        format.append("<VERTALIGN value=\"0\"/>\n");
     }
-    return formatDef;
+    return format;
 }
 
 // Write out the <FORMATS> for each run in a paragraph.
-void WinWordDoc::generateFormats(
+QString WinWordDoc::generateFormats(
     Attributes &attributes)
 {
-    QString formats = "";
+    QString formats;
     Run *run;
 
     formats.append("<FORMATS>\n");
@@ -278,10 +278,11 @@ void WinWordDoc::generateFormats(
         {
             const MsWordGenerated::CHP *chp = static_cast<Format *>(run)->values->getChp();
 
+kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             formats.append("<FORMAT id=\"1\" pos=\"");
             formats.append(QString::number(run->start));
             formats.append("\" len=\"");
-            formats.append(QString::number(run->end - run->start));
+            formats.append(QString::number(run->end - run->start - 1));
             formats.append("\">\n");
             formats.append(generateFormat(chp));
             formats.append("</FORMAT>\n");
@@ -397,7 +398,7 @@ void WinWordDoc::generateFormats(
         run = attributes.runs.next();
     }
     formats.append("</FORMATS>\n");
-    m_body.append(formats);
+    return formats;
 }
 
 void WinWordDoc::gotError(
@@ -421,14 +422,15 @@ void WinWordDoc::gotParagraph(
     encode(xml_friendly);
     m_body.append("<PARAGRAPH>\n<TEXT>");
     m_body.append(xml_friendly);
-    m_body.append("</TEXT>\n"
+    m_body.append("</TEXT>\n");
+    m_body.append(generateFormats(styles));
+    m_body.append(
         " <LAYOUT>\n"
         "  <NAME value=\"");
     m_body.append(m_styles.names[styles.baseStyle.istd]);
     m_body.append("\"/>\n");
     m_body.append(
         " </LAYOUT>\n");
-    generateFormats(styles);
     m_body.append("</PARAGRAPH>\n");
 }
 
@@ -441,7 +443,9 @@ void WinWordDoc::gotHeadingParagraph(
     encode(xml_friendly);
     m_body.append("<PARAGRAPH>\n<TEXT>");
     m_body.append(xml_friendly);
-    m_body.append("</TEXT>\n"
+    m_body.append("</TEXT>\n");
+    m_body.append(generateFormats(styles));
+    m_body.append(
         " <LAYOUT>\n"
         "  <NAME value=\"");
     m_body.append(m_styles.names[styles.baseStyle.istd]);
@@ -453,7 +457,6 @@ void WinWordDoc::gotHeadingParagraph(
 //    m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n");
     m_body.append(
         " </LAYOUT>\n");
-//    generateFormats(styles);
     m_body.append("</PARAGRAPH>\n");
 }
 
@@ -472,7 +475,9 @@ void WinWordDoc::gotListParagraph(
     encode(xml_friendly);
     paragraph.append("<PARAGRAPH>\n<TEXT>");
     paragraph.append(xml_friendly);
-    paragraph.append("</TEXT>\n"
+    paragraph.append("</TEXT>\n");
+    paragraph.append(generateFormats(styles));
+    paragraph.append(
         " <LAYOUT>\n"
         "  <NAME value=\"");
     paragraph.append(m_styles.names[styleIndex]);
@@ -491,7 +496,6 @@ void WinWordDoc::gotListParagraph(
     paragraph.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n");
     paragraph.append(
         " </LAYOUT>\n");
-//    generateFormats(styles);
     paragraph.append("</PARAGRAPH>\n");
 //    kdDebug() << paragraph << endl;
     m_body.append(paragraph);
@@ -684,10 +688,10 @@ void WinWordDoc::gotTableEnd(
             cell.append("\" removeable=\"0\" visible=\"1\">\n"
                 " <FRAME left=\"");
             cellEdge = m_cellEdges[tableNumber - 1]->at(left);
-            cell.append(QString::number(cellEdge));
+            cell.append(QString::number(cellEdge + 1));
             cell.append("\" right=\"");
             cellEdge = m_cellEdges[tableNumber - 1]->at(right);
-            cell.append(QString::number(cellEdge));
+            cell.append(QString::number(cellEdge - 1));
             cell.append("\" top=\"");
             cell.append(QString::number(ROW_SIZE + y * ROW_SIZE));
             cell.append("\" bottom=\"");

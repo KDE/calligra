@@ -104,7 +104,7 @@ private:
     // Convert from Word character format to our own format.
     QString generateFormat(
         const CHP *chp);
-    void generateFormats(
+    QString generateFormats(
         Attributes &attributes);
 
     void gotError(

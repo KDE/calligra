@@ -86,8 +86,11 @@ void Document::createAttributes(
 
         // Initialise the entry with the base style, then apply the deltas.
 
+kdDebug(s_area) << "Document::createAttributes: hps 1: " <<exceptionStyle.getChp()->hps<< endl;
         exceptionStyle.apply(baseStyle);
+kdDebug(s_area) << "Document::createAttributes: hps 2: " <<exceptionStyle.getChp()->hps<< endl;
         exceptionStyle.apply(chpxs[i].data.ptr, chpxs[i].data.count);
+kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp()->hps<< endl;
         chp = exceptionStyle.getChp();
 
         // Check the type of data. If it is a field, then we collect the
