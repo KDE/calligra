@@ -182,7 +182,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
-    m_formulaDocument = new KFormula::KFormulaDocument(actionCollection(), m_commandHistory);
+    m_formulaDocument = new KFormula::Document(actionCollection(), m_commandHistory);
 
     setEmpty();
     setModified(false);
@@ -2761,7 +2761,7 @@ void KWDocument::invalidate()
         it.current()->invalidate();
 }
 
-KFormula::KFormulaDocument* KWDocument::getFormulaDocument()
+KFormula::Document* KWDocument::getFormulaDocument()
 {
     return m_formulaDocument;
 }

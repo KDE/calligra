@@ -49,7 +49,7 @@ class QStringList;
 class QRect;
 
 namespace KFormula {
-    class KFormulaDocument;
+    class Document;
 }
 
 
@@ -448,7 +448,7 @@ public:
     /**
      * @returns the document for the formulas
      */
-    KFormula::KFormulaDocument* getFormulaDocument();
+    KFormula::Document* getFormulaDocument();
 
     void reorganizeGUI();
     //necessary to update resize handle when you change layout
@@ -600,7 +600,7 @@ private:
     //bool m_onlineSpellCheck;
 
     // The document that is used by all formulas
-    KFormula::KFormulaDocument* m_formulaDocument;
+    KFormula::Document* m_formulaDocument;
 
     double m_indent; // in pt
 

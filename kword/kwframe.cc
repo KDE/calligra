@@ -1683,8 +1683,6 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
 }
 
 
-using namespace KFormula;
-
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/
@@ -1863,7 +1861,7 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
         : KWFrameSetEdit(fs, canvas)
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
-    formulaView = new KFormulaView(fs->getFormula());
+    formulaView = new KFormula::View(fs->getFormula());
     //formulaView->setSmallCursor(true);
 
     connect( formulaView, SIGNAL( cursorChanged( bool, bool ) ),
@@ -1966,11 +1964,11 @@ void KWFormulaFrameSetEdit::selectAll()
 
 void KWFormulaFrameSetEdit::moveHome()
 {
-    formulaView->slotMoveHome( WordMovement );
+    formulaView->slotMoveHome( KFormula::WordMovement );
 }
 void KWFormulaFrameSetEdit::moveEnd()
 {
-    formulaView->slotMoveEnd( WordMovement );
+    formulaView->slotMoveEnd( KFormula::WordMovement );
 }
 
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )

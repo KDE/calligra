@@ -30,8 +30,8 @@
 #include "koborder.h"
 
 namespace KFormula {
-    class KFormulaContainer;
-    class KFormulaView;
+    class Container;
+    class View;
 }
 
 class KCommand;
@@ -746,7 +746,7 @@ public:
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom( bool forPrint );
 
-    KFormula::KFormulaContainer* getFormula() const { return formula; }
+    KFormula::Container* getFormula() const { return formula; }
 
     void setChanged() { m_changed = true; }
 
@@ -759,7 +759,7 @@ protected slots:
     void slotFormulaChanged(int width, int height);
 
 private:
-    KFormula::KFormulaContainer* formula;
+    KFormula::Container* formula;
     bool m_changed;
 };
 
@@ -776,7 +776,7 @@ public:
         return static_cast<KWFormulaFrameSet*>(frameSet());
     }
 
-    KFormula::KFormulaView* getFormulaView() const
+    KFormula::View* getFormulaView() const
     {
         return formulaView;
     }
@@ -811,7 +811,7 @@ protected slots:
     void cursorChanged( bool visible, bool selecting );
 
 private:
-    KFormula::KFormulaView* formulaView;
+    KFormula::View* formulaView;
 };
 
 #endif
