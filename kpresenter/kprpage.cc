@@ -1009,7 +1009,7 @@ void KPrPage::insertAutoform( const KoRect &r, const QPen &pen, const QBrush &br
     KPAutoformObject *kpautoformobject = new KPAutoformObject( pen, brush, fileName, lb, le, ft,
 							       g1, g2, gt, unbalanced, xfactor, yfactor );
     kpautoformobject->setOrig( r.x() , r.y()  );
-    kpautoformobject->setSize( r.width(), r.height() );
+    kpautoformobject->setSize( r.width(),r.height() );
     kpautoformobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, m_doc, this );
     insertCmd->execute();
@@ -1022,7 +1022,7 @@ void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const
     KoSize size( r.width(), r.height() );
     KPFreehandObject *kpfreehandobject = new KPFreehandObject( points, size, pen, lb, le );
     kpfreehandobject->setOrig( r.x(), r.y() );
-    kpfreehandobject->setSize( r.width(), r.height() );
+    kpfreehandobject->setSize( size );
     kpfreehandobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, m_doc, this );
     insertCmd->execute();
@@ -1035,7 +1035,7 @@ void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const
     KoSize size( r.width(), r.height() );
     KPPolylineObject *kppolylineobject = new KPPolylineObject( points, size, pen, lb, le );
     kppolylineobject->setOrig( r.x(), r.y() );
-    kppolylineobject->setSize( r.width(), r.height() );
+    kppolylineobject->setSize( size );
     kppolylineobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, m_doc, this );
     insertCmd->execute();
@@ -1050,7 +1050,7 @@ void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPoin
 
     KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject( points, allPoints, size, pen, lb, le );
     kpQuadricBezierCurveObject->setOrig( r.x(), r.y() );
-    kpQuadricBezierCurveObject->setSize( r.width(), r.height() );
+    kpQuadricBezierCurveObject->setSize( size );
     kpQuadricBezierCurveObject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, m_doc,this );
     insertCmd->execute();
@@ -1065,7 +1065,7 @@ void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointA
 
     KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject( points, allPoints, size, pen, lb, le );
     kpCubicBezierCurveObject->setOrig( r.x(), r.y() );
-    kpCubicBezierCurveObject->setSize( r.width(), r.height() );
+    kpCubicBezierCurveObject->setSize( size );
     kpCubicBezierCurveObject->setSelected( true );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, m_doc,this );
@@ -1084,7 +1084,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
                                                             g1, g2, gt, unbalanced, xfactor, yfactor,
                                                             _checkConcavePolygon, _cornersValue, _sharpnessValue );
     kpPolygonObject->setOrig( r.x(), r.y() );
-    kpPolygonObject->setSize( r.width(), r.height() );
+    kpPolygonObject->setSize( size );
     kpPolygonObject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, m_doc, this );
     insertCmd->execute();

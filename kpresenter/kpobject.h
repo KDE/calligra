@@ -295,6 +295,8 @@ public:
     KP2DObject &operator=( const KP2DObject & );
 
     virtual void setSize( double _width, double _height );
+    virtual void setSize( const KoSize & _size )
+    { setSize( _size.width(), _size.height() ); }
     virtual void resizeBy( double _dx, double _dy );
 
     virtual void setPen( const QPen &_pen )
