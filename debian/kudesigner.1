@@ -21,14 +21,8 @@ kudesigner \- a report template designer for Kugar
 .B kudesigner
 [ \fIgeneric-options\fP ]
 [ \fB\-\-print\fP ]
-[ \fIfile\fP ]
+[ \fIfile\fP ... ]
 .SH DESCRIPTION
-This manual page documents briefly the
-.B kudesigner
-command.
-This manual page was written for the Debian GNU/Linux distribution
-because the original program does not have a manual page.
-.PP
 \fBKuDesigner\fP is a tool for creating report templates to use with
 Kugar, the business report maker for KOffice.  Templates (which describe
 the layout of the data within a report) can be created in a visual
@@ -36,12 +30,24 @@ drag-and-drop manner and then saved to file.
 .PP
 This application is part of the KDE Office Suite.
 .SH OPTIONS
+Below are the kudesigner-specific options.
 For a full summary of options, run \fIkudesigner \-\-help\fP.
+.TP
+\fB\-\-print\fP
+Print the given file(s) and exit.
 .SH SEE ALSO
 .BR kugar (1).
 .PP
-The original documentation from the program author
-is available in \fI/usr/share/doc/kugar/\fP.
+Full user documentation for Kugar is available through the KDE Help Centre.
+You can also enter the URL
+\fIhelp:/kugar/\fP
+directly into konqueror or you can run
+`\fIkhelpcenter help:/kugar/\fP'
+from the command-line.
+.PP
+If the KDE Help Centre is not installed then you can install the package
+\fIkoffice-doc-html\fP and read this documentation in HTML format from
+\fI/usr/share/doc/kde/HTML/en/kugar/\fP.
 .SH AUTHOR
 KuDesigner was written by Alexander Dymo <cloudtemple@mksat.net>.
 .br
