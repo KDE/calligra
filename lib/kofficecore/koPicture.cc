@@ -179,19 +179,6 @@ QSize KoPicture::getOriginalSize(void) const
     return QSize(0,0);
 }
 
-QSize KoPicture::getSize(void) const
-{
-    if (m_sharedData)
-        return m_sharedData->getSize();
-    return QSize(0,0);
-}
-
-void KoPicture::setSize(const QSize& size)
-{
-    createSharedData();
-    return m_sharedData->setSize(size);
-}
-
 QPixmap KoPicture::generatePixmap(const QSize& size)
 {
     if (m_sharedData)

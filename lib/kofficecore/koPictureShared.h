@@ -95,10 +95,6 @@ public:
 
     QSize getOriginalSize(void) const;
 
-    QSize getSize(void) const;
-
-    void setSize(const QSize& size);
-
     /**
      * Clear and set the mode of this KoPictureShared
      *
@@ -145,7 +141,6 @@ protected:
 
 protected:
     KoPictureBase* m_base;
-    QSize m_size;
     QString m_extension;
 };
 

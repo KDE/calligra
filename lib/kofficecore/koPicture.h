@@ -99,10 +99,6 @@ public:
 
     QSize getOriginalSize(void) const;
 
-    QSize getSize(void) const;
-
-    void setSize(const QSize& size);
-
     /**
      * Clear and set the mode of this KoPicture
      *

@@ -282,16 +282,6 @@ QSize KoPictureShared::getOriginalSize(void) const
     return QSize(0,0);
 }
 
-QSize KoPictureShared::getSize(void) const
-{
-    return m_size;
-}
-
-void KoPictureShared::setSize(const QSize& size)
-{
-    m_size = size;
-}
-
 QPixmap KoPictureShared::generatePixmap(const QSize& size)
 {
     if (m_base)
