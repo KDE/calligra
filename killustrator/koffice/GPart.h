@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -51,11 +51,11 @@ public:
   GPart (const GPart& p);
 
   ~GPart ();
-  
+
   virtual void draw (Painter& p, bool withBasePoints = false,
 		     bool outline = false);
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);
@@ -71,7 +71,7 @@ public:
   void setParentID (OpenParts::Id _id) { parentID = _id; }
 
   virtual void select (bool flag = false);
-  
+
   virtual void activate (int xoff, int yoff);
   virtual void deactivate ();
 

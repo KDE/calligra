@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -50,7 +50,7 @@ GPart::GPart (const list<XmlAttribute>& attribs) : GObject (attribs) {
   list<XmlAttribute>::const_iterator first = attribs.begin ();
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
-    if (attr == "x") 
+    if (attr == "x")
       x = (*first).intValue ();
     else if (attr == "y")
       y = (*first).intValue ();
@@ -62,7 +62,7 @@ GPart::GPart (const list<XmlAttribute>& attribs) : GObject (attribs) {
       url = (*first).stringValue ();
     else if (attr == "mime")
       mime = (*first).stringValue ();
-    
+
     first++;
   }
   initialGeom = QRect (x, y, w, h);
@@ -81,7 +81,7 @@ GPart::GPart (const GPart& obj) : GObject (obj) {
 GPart::~GPart () {
 }
 
-const char* GPart::typeName () {
+QString GPart::typeName () const {
   return i18n ("Embedded Part");
 }
 
@@ -112,10 +112,10 @@ void GPart::calcBoundingBox () {
     cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
     oldGeom = r;
     child->setGeometry (r);
-    cout << "new part geometry: " << r.x () << ", " << r.y () 
+    cout << "new part geometry: " << r.x () << ", " << r.y ()
 	 << " - " << r.width () << ", " << r.height () << endl;
   }
-  updateBoundingBox (Coord (r.x (), r.y ()), 
+  updateBoundingBox (Coord (r.x (), r.y ()),
 		     Coord (r.right (), r.bottom ()));
 }
 
@@ -142,7 +142,7 @@ void GPart::writeToXml (XmlWriter& xml) {
 }
 
 void GPart::setMainWindow (OpenParts::MainWindow_ptr _mainWindow) {
-  mainWindow = KOffice::MainWindow::_narrow (_mainWindow); 
+  mainWindow = KOffice::MainWindow::_narrow (_mainWindow);
 }
 
 void GPart::activate (int xoff, int yoff) {
