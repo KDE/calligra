@@ -267,3 +267,8 @@ QPixmap KoPictureShared::generatePixmap(const QSize& size, bool smoothScale)
     return QPixmap();
 }
 
+bool KoPictureShared::isClipartAsKOffice1Dot1(void) const
+{   if (m_base)
+        return m_base->isClipartAsKOffice1Dot1();
+    return false;
+}

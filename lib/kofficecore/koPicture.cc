@@ -194,3 +194,10 @@ QPixmap KoPicture::generatePixmap(const QSize& size, bool smoothScale)
         return m_sharedData->generatePixmap(size, smoothScale);
     return QPixmap();
 }
+
+bool KoPicture::isClipartAsKOffice1Dot1(void) const
+{
+    if (m_sharedData)
+        return m_sharedData->isClipartAsKOffice1Dot1();
+    return false;
+}

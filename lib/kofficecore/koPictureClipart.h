@@ -109,6 +109,11 @@ public:
      */
     QString loadWmfFromArray(QPicture picture, const QByteArray& array);
 
+    /**
+     * Helper function for saving
+     * @return true if it is a clipart in KOffice 1.1, false if not
+     */
+    virtual bool isClipartAsKOffice1Dot1(void) const;
 
 protected:
     QPixmap getPixmap(QImage& image);

@@ -132,8 +132,12 @@ void KoPictureCollection::saveToStoreAsKOffice1Dot1(const Type pictureType, KoSt
 
 QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, QValueList<KoPictureKey> keys)
 {
-    QDomElement cliparts = doc.createElement(
-        (pictureType==CollectionClipart)?"CLIPARTS":"PIXMAPS");
+    QString strElementName("PICTURES");
+    if (pictureType==CollectionImage)
+        strElementName="PIXMAPS";
+    else if (pictureType==CollectionClipart)
+        strElementName="CLIPARTS";
+    QDomElement cliparts = doc.createElement( strElementName );
     int counter=0;
     QValueList<KoPictureKey>::Iterator it = keys.begin();
     for ( ; it != keys.end(); ++it )
@@ -154,10 +158,44 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
     return cliparts;
 }
 
-KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmapsElem )
+void KoPictureCollection::saveXMLAsKOffice1Dot1(QDomDocument &doc, QDomElement& parent, QValueList<KoPictureKey> keys)
 {
-    StoreMap map;
+    QDomElement pixmaps = doc.createElement( "PIXMAPS" );
+    QDomElement cliparts = doc.createElement( "CLIPARTS" );
+    parent.appendChild(pixmaps);
+    parent.appendChild(cliparts);
+    int counter=0;
+    QValueList<KoPictureKey>::Iterator it = keys.begin();
+    for ( ; it != keys.end(); ++it )
+    {
+        KoPicture picture = findPicture( *it );
+        if ( picture.isNull() )
+            kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+        else
+        {
+            QString pictureName("error");
+            QDomElement keyElem = doc.createElement( "KEY" );
 
+            if (picture.isClipartAsKOffice1Dot1())
+            {
+                pictureName=getFileName(CollectionClipart, picture, counter);
+                cliparts.appendChild(keyElem);
+            }
+            else
+            {
+                pictureName=getFileName(CollectionImage, picture, counter);
+                pixmaps.appendChild(keyElem);
+            }
+
+            (*it).saveAttributes(keyElem);
+            keyElem.setAttribute("name", pictureName);
+        }
+    }
+    return;
+}
+
+void KoPictureCollection::readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map )
+{
     for(
         QDomElement keyElement = pixmapsElem.firstChild().toElement();
         !keyElement.isNull();
@@ -171,6 +209,13 @@ KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmaps
             map.insert(key, keyElement.attribute("name"));
         }
     }
+}
+
+
+KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmapsElem )
+{
+    StoreMap map;
+    readXML(pixmapsElem, map);
     return map;
 }
 

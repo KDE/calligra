@@ -39,7 +39,7 @@ class KoPictureCollection : public QMap<KoPictureKey, KoPicture>
 {
 public:
     /**
-     * CollectionPicture: collection with mixed pictures (not completely supported)
+     * CollectionPicture: collection with mixed pictures
      * CollectionImage: collection with images only
      * CollectionClipart: collection with cliparts only
      */
@@ -101,6 +101,8 @@ public:
     QDomElement saveXML(const Type pictureType, QDomDocument &doc,
         QValueList<KoPictureKey> keys );
 
+    void saveXMLAsKOffice1Dot1(QDomDocument &doc, QDomElement& parent, QValueList<KoPictureKey> keys);
+
     typedef QMap<KoPictureKey, QString> StoreMap;
     /**
      * Read the <PIXMAPS> or <CLIPARTS> tag, and save the result (key<->store-filename associations)
@@ -110,6 +112,9 @@ public:
      * @param pixmapsElem the <PIXMAPS> or <CLIPARTS> element
      */
     StoreMap readXML( QDomElement &pixmapsElem );
+
+    void readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map );
+
     /**
      * Read all pictures from the store, into this collection
      * The map comes from readXML above, and is used to find which pictures

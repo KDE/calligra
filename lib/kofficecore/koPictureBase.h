@@ -87,6 +87,12 @@ public:
 
     virtual QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
+    /**
+     * Helper function for saving
+     * @return true if it is a clipart in KOffice 1.1, false if not
+     */
+    virtual bool isClipartAsKOffice1Dot1(void) const;
+
 };
 
 #endif /* __koPictureBase_h__ */

@@ -138,6 +138,12 @@ public:
      */
     QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
+    /**
+     * Helper function for saving
+     * @return true if it is a clipart in KOffice 1.1, false if not
+     */
+    bool isClipartAsKOffice1Dot1(void) const;
+
 protected:
     /**
      * @internal

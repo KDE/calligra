@@ -88,3 +88,8 @@ QPixmap KoPictureBase::generatePixmap(const QSize&, bool /*smoothScale*/)
 {
     return QPixmap();
 }
+
+bool KoPictureBase::isClipartAsKOffice1Dot1(void) const
+{
+    return false;
+}

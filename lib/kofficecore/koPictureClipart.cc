@@ -219,3 +219,8 @@ QString KoPictureClipart::loadWmfFromArray(QPicture picture, const QByteArray& a
     buffer.close();
     return extension;
 }
+
+bool KoPictureClipart::isClipartAsKOffice1Dot1(void) const
+{
+    return true;
+}
