@@ -23,7 +23,7 @@
                 syntaxVersion:  Integer version of the syntax. Currently 1.
 		mime:		The MIME type (must always have the value application/x-kspread)
 -->
-<!ELEMENT spreadsheet (locale ,areaname, map)>  
+<!ELEMENT spreadsheet (paper, locale, areaname, map)>  
 <!ATTLIST spreadsheet   author CDATA #IMPLIED
                         email  CDATA #IMPLIED
                         editor CDATA #IMPLIED
@@ -83,7 +83,7 @@
 		right:			the text to appear in the lower right
 -->
 <!ELEMENT foot EMPTY>
-<!ATTLIST foot	left	CDATA #IMPLIED
+<!ATTLIST foot  left    CDATA #IMPLIED
                 center  CDATA #IMPLIED
                 right   CDATA #IMPLIED>
 

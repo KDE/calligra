@@ -217,6 +217,68 @@ QDomDocument KSpreadDoc::saveXML()
   spread.setAttribute( "mime", "application/x-kspread" );
   spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
 
+  /* Backwards compatibility with KSpread < 1.2
+     Looks like a hack, but it saves us to define an export filter for this issue.
+  
+     In KSpread < 1.2, the paper format was per map, since 1.2 it's per sheet.
+     To enable KSpread < 1.2 to open these files, we store the page layout of the first sheet 
+     for the whole map as the map paper layout. */
+  if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+  {
+    KSpreadTable* firstTable = m_pMap->firstTable();
+    
+    QDomElement paper = doc.createElement( "paper" );
+    paper.setAttribute( "format", firstTable->paperFormatString() );
+    paper.setAttribute( "orientation", firstTable->orientationString() );
+    spread.appendChild( paper );
+    QDomElement borders = doc.createElement( "borders" );
+    borders.setAttribute( "left", firstTable->leftBorder() );
+    borders.setAttribute( "top", firstTable->topBorder() );
+    borders.setAttribute( "right", firstTable->rightBorder() );
+    borders.setAttribute( "bottom", firstTable->bottomBorder() );
+    paper.appendChild( borders );
+    QDomElement head = doc.createElement( "head" );
+    paper.appendChild( head );
+    if ( !firstTable->headLeft().isEmpty() )
+    {
+      QDomElement left = doc.createElement( "left" );
+      head.appendChild( left );
+      left.appendChild( doc.createTextNode( firstTable->headLeft() ) );
+    }
+    if ( !firstTable->headMid().isEmpty() )
+    {
+      QDomElement center = doc.createElement( "center" );
+      head.appendChild( center );
+      center.appendChild( doc.createTextNode( firstTable->headMid() ) );
+    }
+    if ( !firstTable->headRight().isEmpty() )
+    {
+      QDomElement right = doc.createElement( "right" );
+      head.appendChild( right );
+      right.appendChild( doc.createTextNode( firstTable->headRight() ) );
+    }
+    QDomElement foot = doc.createElement( "foot" );
+    paper.appendChild( foot );
+    if ( !firstTable->footLeft().isEmpty() )
+    {
+      QDomElement left = doc.createElement( "left" );
+      foot.appendChild( left );
+      left.appendChild( doc.createTextNode( firstTable->footLeft() ) );
+    }
+    if ( !firstTable->footMid().isEmpty() )
+    {
+      QDomElement center = doc.createElement( "center" );
+      foot.appendChild( center );
+      center.appendChild( doc.createTextNode( firstTable->footMid() ) );
+    }
+    if ( !firstTable->footRight().isEmpty() )
+    {
+      QDomElement right = doc.createElement( "right" );
+      foot.appendChild( right );
+      right.appendChild( doc.createTextNode( firstTable->footRight() ) );
+    }
+  }
+  
   QDomElement locale = m_locale.save( doc );
   spread.appendChild( locale );
 
