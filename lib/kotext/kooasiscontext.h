@@ -51,6 +51,8 @@ public:
     ///// List handling
 
     KoListStyleStack& listStyleStack() { return m_listStyleStack; }
+    QString currentListStyleName() const { return m_currentListStyleName; }
+    void setCurrentListStyleName( const QString& s ) { m_currentListStyleName = s; }
 
     /// Used for lists (numbered paragraphs)
     /// @return true on success (a list style was found and pushed)
@@ -67,6 +69,7 @@ private:
     KoStyleStack m_styleStack;
 
     KoListStyleStack m_listStyleStack;
+    QString m_currentListStyleName;
 };
 
 #endif /* KOOASISCONTEXT_H */
