@@ -18,6 +18,7 @@
 */
 
 #include <koKoolBar.h>
+#include <kiconloader.h>
 
 #include <qpainter.h>
 #include <qcolor.h>
@@ -26,8 +27,7 @@
 static int g_koKoolBarId = 0;
 
 KoKoolBar::KoKoolBar( QWidget *_parent, const char *_name ) :
-  QWidget( _parent, _name ), m_iActiveGroup( -1 ), m_pButtonUp( 0L ),
-  m_pButtonDown( 0L )
+  QWidget( _parent, _name ), m_iActiveGroup( -1 )
 {
   m_mapGroups.setAutoDelete( true );
   m_pBox = new KoKoolBarBox( this );
@@ -130,7 +130,7 @@ void KoKoolBar::setActiveGroup( int _grp )
   resizeEvent( 0L );
 }
 
-void KoKoolBar::resizeEvent( QResizeEvent * )
+void KoKoolBar::resizeEvent( QResizeEvent * ev )
 {
   if ( m_iActiveGroup == -1 )
     return;
@@ -181,62 +181,12 @@ void KoKoolBar::resizeEvent( QResizeEvent * )
   {
     m_pBox->show();
     m_pBox->setGeometry( 0, y2, width(), height() - y2 - result * buttonheight );
+    if ( !ev ) // fake event
+      m_pBox->sizeChanged();
   }
   else
     m_pBox->hide();
 
-  if ( m_pBox->needsScrolling() )
-  {
-    if ( m_pButtonUp == 0L )
-    {
-      m_pButtonUp = new QPushButton( this );
-      connect( m_pButtonUp, SIGNAL( clicked() ), this, SLOT( slotUp() ) );
-    }
-    if ( m_pButtonDown == 0L )
-    {
-      m_pButtonDown = new QPushButton( this );
-      connect( m_pButtonDown, SIGNAL( clicked() ), this, SLOT( slotDown() ) );
-    }
-    m_pButtonUp->show();
-    m_pButtonUp->raise();
-    m_pButtonDown->show();
-    m_pButtonDown->raise();
-    m_pButtonUp->setGeometry( width() - 12, height() - result * buttonheight - 2 * 12, 12, 12 );
-    m_pButtonDown->setGeometry( width() - 12, height() - result * buttonheight - 12, 12, 12 );
-    updateScrollButtons();
-  }
-  else
-  {
-    if ( m_pButtonUp )
-      m_pButtonUp->hide();
-    if ( m_pButtonDown )
-      m_pButtonDown->hide();
-  }
-}
-
-void KoKoolBar::updateScrollButtons()
-{
-  if ( m_pBox->isAtTop() )
-    m_pButtonUp->setEnabled( false );
-  else
-    m_pButtonUp->setEnabled( true );
-
-  if ( m_pBox->isAtBottom() )
-    m_pButtonDown->setEnabled( false );
-  else
-    m_pButtonDown->setEnabled( true );
-}
-
-void KoKoolBar::slotUp()
-{
-  m_pBox->scrollUp();
-  updateScrollButtons();
-}
-
-void KoKoolBar::slotDown()
-{
-  m_pBox->scrollDown();
-  updateScrollButtons();
 }
 
 void KoKoolBar::enableItem( int _grp, int _id, bool _enable )
@@ -259,7 +209,8 @@ void KoKoolBar::enableGroup( int _grp, bool _enable )
 }
 
 KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
-  QWidget( _bar ), m_pBar( _bar )
+  QWidget( _bar ), m_pBar( _bar ),
+  m_pButtonUp( 0L ), m_pButtonDown( 0L )
 {
   m_iYOffset = 0;
   m_iYIcon = 0;
@@ -292,7 +243,39 @@ bool KoKoolBarBox::needsScrolling() const
     return true;
 
   /** TODO **/
+  // ??? What's TODO ? :-)  (David)
   return false;
+}
+
+void KoKoolBarBox::resizeEvent( QResizeEvent * )
+{
+  if ( needsScrolling() )
+  {
+    if ( m_pButtonUp == 0L )
+    {
+      m_pButtonUp = new QPushButton( this );
+      m_pButtonUp->setPixmap( QPixmap( UserIcon( "koKoolBarUp" ) ) );
+      connect( m_pButtonUp, SIGNAL( clicked() ), this, SLOT( scrollUp() ) );
+    }
+    if ( m_pButtonDown == 0L )
+    {
+      m_pButtonDown = new QPushButton( this );
+      m_pButtonDown->setPixmap( QPixmap( UserIcon( "koKoolBarDown" ) ) );
+      connect( m_pButtonDown, SIGNAL( clicked() ), this, SLOT( scrollDown() ) );
+    }
+    m_pButtonUp->show();
+    m_pButtonUp->raise();
+    m_pButtonDown->show();
+    m_pButtonDown->raise();
+    updateScrollButtons();
+  }
+  else
+  {
+    if ( m_pButtonUp )
+      m_pButtonUp->hide();
+    if ( m_pButtonDown )
+      m_pButtonDown->hide();
+  }
 }
 
 KoKoolBarItem* KoKoolBarBox::findByPos( int _abs_y ) const
@@ -364,6 +347,7 @@ void KoKoolBarBox::scrollUp()
   m_iYOffset = y;
 
   QWidget::scroll( 0, old - m_iYOffset );
+  updateScrollButtons();
 }
 
 void KoKoolBarBox::scrollDown()
@@ -386,6 +370,24 @@ void KoKoolBarBox::scrollDown()
   m_iYOffset = y;
 
   QWidget::scroll( 0, old - m_iYOffset );
+  updateScrollButtons();
+}
+
+void KoKoolBarBox::updateScrollButtons()
+{
+  if ( isAtTop() )
+    m_pButtonUp->setEnabled( false );
+  else
+    m_pButtonUp->setEnabled( true );
+
+  if ( isAtBottom() )
+    m_pButtonDown->setEnabled( false );
+  else
+    m_pButtonDown->setEnabled( true );
+
+  const int bs = 14; // buttonSize
+  m_pButtonUp->setGeometry( width() - bs, height() - 2 * bs, bs, bs );
+  m_pButtonDown->setGeometry( width() - bs, height() - bs, bs, bs );
 }
 
 void KoKoolBarBox::paintEvent( QPaintEvent * )

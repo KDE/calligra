@@ -99,23 +99,32 @@ public:
 
   void setActiveGroup( KoKoolBarGroup *_grp );
   int maxHeight() const;
+
+  void sizeChanged() { resizeEvent(0L); }
+
+protected slots:
   void scrollUp();
   void scrollDown();
-  bool needsScrolling() const;
-  bool isAtBottom() const;
-  bool isAtTop() const;
 
 protected:
+  virtual void resizeEvent( QResizeEvent *_ev );
   virtual void paintEvent( QPaintEvent *_ev );
   virtual void mousePressEvent( QMouseEvent *_ev )
   { KoKoolBarItem *item = findByPos( _ev->pos().y() + m_iYOffset ); if ( !item ) return; item->press(); }
 
   KoKoolBarItem* findByPos( int _abs_y ) const;
 
+  bool needsScrolling() const;
+  bool isAtBottom() const;
+  bool isAtTop() const;
+  void updateScrollButtons();
+
   KoKoolBar *m_pBar;
   int m_iYOffset;
   int m_iYIcon;
   KoKoolBarGroup *m_pGroup;
+  QPushButton* m_pButtonUp;
+  QPushButton* m_pButtonDown;
 };
 
 class KoKoolBar : public QWidget
@@ -136,21 +145,13 @@ public:
   virtual void enableItem( int _grp, int _id, bool _enable );
   virtual void enableGroup( int _grp, bool _enable );
 
-protected slots:
-  void slotUp();
-  void slotDown();
-
 protected:
   virtual void resizeEvent( QResizeEvent *_ev );
-
-  void updateScrollButtons();
 
   QIntDict<KoKoolBarGroup> m_mapGroups;
 
   int m_iActiveGroup;
   KoKoolBarBox* m_pBox;
-  QPushButton* m_pButtonUp;
-  QPushButton* m_pButtonDown;
 };
 
 #endif
