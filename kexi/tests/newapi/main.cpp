@@ -45,9 +45,9 @@ KApplication *app;
 void usage()
 {
 	kdDebug() << "usage: " << endl;
-	kdDebug() << prgname << " <driver_name> cursors" << endl;
+	kdDebug() << prgname << " <driver_name> cursors <db_name>" << endl;
 	kdDebug() << "  - test for cursors behaviour" << endl;
-	kdDebug() << prgname << " <driver_name> schema" << endl;
+	kdDebug() << prgname << " <driver_name> schema <db_name>" << endl;
 	kdDebug() << "  - test for db schema retrieving" << endl;
 	kdDebug() << prgname << " <driver_name> dbcreation <new_db_name>" << endl;
 	kdDebug() << "  - test for new db creation" << endl;
@@ -111,18 +111,18 @@ int main(int argc, char** argv)
 //	conn_data.password = "mypwd";
 
 //open connection
-	if (test_name == "cursors")
+/*	if (test_name == "cursors")
 		db_name = "mydb";
 	else if (test_name == "schema")
 		db_name = "db";
-	else {
+	else {*/
 		if (argc<=3) {
 			kdDebug() << prgname << ": name for new db?" << endl;
 			usage();
 			return 0;
 		}
 		db_name = QCString(argv[3]);
-	}
+//	}
 	conn_data.setFileName( db_name );
 
 	conn = driver->createConnection(conn_data);

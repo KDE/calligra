@@ -5,13 +5,14 @@ int cursorsTest()
 	if (!conn->databaseExists( db_name )) {
 		if (tablesTest()!=0)
 			return 1;
-		kdDebug() << "DB created"<< endl;
+		kdDebug() << "DB created & filled"<< endl;
 	}
 
-/*	if (!conn->useDatabase( db_name )) {
+	if (!conn->useDatabase( db_name )) {
 		conn->debugError();
 		return 1;
-	}*/
+	}
+	
 	KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
 	kdDebug()<<"executeQuery() = "<<!!cursor<<endl;
 	if (!cursor)

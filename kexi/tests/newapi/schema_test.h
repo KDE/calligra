@@ -1,6 +1,6 @@
 int schemaTest()
 {
-	if (!conn->useDatabase( "db" )) {
+	if (!conn->useDatabase( db_name )) {
 		kdDebug() << conn->errorMsg() << endl;
 		return 1;
 	}

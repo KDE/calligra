@@ -79,6 +79,12 @@ int tablesTest()
 		kdDebug() << " - " << (*it) << endl;
 	}
 
+
+	if (!conn->closeDatabase()) {
+		conn->debugError();
+		return 1;
+	}
+	
 	return 0;
 }
 
