@@ -551,6 +551,44 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
 
 void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e )
 {
+    if ( m_styleStack.hasAttribute( "draw:marker-start" ) )
+    {
+        QDomElement lineBegin = doc.createElement( "LINEBEGIN" );
+        QString type = m_styleStack.attribute( "draw:marker-start" );
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            lineBegin.setAttribute( "value", 1 );
+        else if ( type == "Square" )
+            lineBegin.setAttribute( "value", 2 );
+        else if ( type == "Circle" || type == "Square 45" )
+            lineBegin.setAttribute( "value", 3 );
+        else if ( type == "Line Arrow" )
+            lineBegin.setAttribute( "value", 4 );
+        else if ( type == "Dimension Lines" )
+            lineBegin.setAttribute( "value", 5 );
+        else if ( type == "Double Arrow" )
+            lineBegin.setAttribute( "value", 6 );
+        e.appendChild( lineBegin );
+    }
+    if ( m_styleStack.hasAttribute( "draw:marker-end" ) )
+    {
+        QDomElement lineEnd = doc.createElement( "LINEEND" );
+        QString type = m_styleStack.attribute( "draw:marker-end" );
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            lineEnd.setAttribute( "value", 1 );
+        else if ( type == "Square" )
+            lineEnd.setAttribute( "value", 2 );
+        else if ( type == "Circle" || type == "Square 45" )
+            lineEnd.setAttribute( "value", 3 );
+        else if ( type == "Line Arrow" )
+            lineEnd.setAttribute( "value", 4 );
+        else if ( type == "Dimension Lines" )
+            lineEnd.setAttribute( "value", 5 );
+        else if ( type == "Double Arrow" )
+            lineEnd.setAttribute( "value", 6 );
+        e.appendChild( lineEnd );
+    }
 }
 
 double OoImpressImport::toPoint( QString value )
