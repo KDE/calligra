@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-
+   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
+   
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -33,8 +34,8 @@
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 
-KexiTablePart::KexiTablePart(KexiProject *project)
- : KexiProjectPart(project)
+KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
+ : KexiProjectPart(KEXIPROJECT(project))
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 
@@ -92,5 +93,8 @@ KexiTablePart::getTables()
 
 	emit itemListChanged(this);
 }
+
+
+K_EXPORT_COMPONENT_FACTORY( "kexihandler_table", KGenericFactory<KexiTablePart> );
 
 #include "kexitablepart.moc"

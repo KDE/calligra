@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <kpassdlg.h>
 #include <klocale.h>
+#include <kparts/componentfactory.h>
 
 #include <qpainter.h>
 #include <koTemplateChooseDia.h>
@@ -332,8 +333,9 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 		emit dbAvaible();
 //		emit updateBrowsers();
 		m_dbAvaible = true;
-		new KexiTablePart(this);
-		new KexiQueryPart(this);
+		loadHandlers();
+//		new KexiTablePart(this);
+//		new KexiQueryPart(this);
 		kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
 		return true;
 	}
@@ -434,3 +436,12 @@ KexiProject::fileReferences(const QString &group)
 }
 
 
+void KexiProject::loadHandlers()
+{
+	KTrader::OfferList ol=KTrader::self()->query("Kexi/Handler");
+	for (KTrader::OfferList::ConstIterator it=ol.begin(); it!=ol.end(); ++it)
+	{
+		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectPart>(
+			*it,this,);	
+	}
+}

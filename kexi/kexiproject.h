@@ -112,6 +112,7 @@ private:
 	void saveReferences(QDomDocument&);
 	void loadConnectionSettings(QDomElement&);
 	void loadReferences(QDomElement&);
+	void loadHandlers();
 	KexiDoc*        m_settings;
 	KexiDB*         m_db;
 	KexiFormManager *m_formManager;

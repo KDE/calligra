@@ -1,14 +1,5 @@
 SUBDIRS = .
 
-#install-data-local:
-#	$(mkinstalldirs) $(kde_appsdir)/Office/
-#	$(INSTALL_DATA) $(srcdir)/kexi.desktop $(kde_appsdir)/Office/kexi.desktop
-#	$(mkinstalldirs) $(kde_mimedir)/application/
-#	$(INSTALL_DATA) $(srcdir)/x-kexi.desktop $(kde_mimedir)/application/x-kexi.desktop
-
-#uninstall-local:
-#	rm -f $(kde_appsdir)/Office/kexi.desktop
-#	rm -f $(kde_mimedir)/application/x-kexi.desktop
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
@@ -32,3 +23,9 @@ SUBDIRS = .
 
 rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.rc kexitablepartui.rc
+
+servicetypesdir = $(kde_servicetypesdir)
+servicetypes_DATA=kexihandler.desktop
+
+servicesdir=$(kde_servicesdir)/kexi
+services_DATA=tablehandler.desktop

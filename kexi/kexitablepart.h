@@ -32,7 +32,7 @@ class KexiTablePart : public KexiProjectPart
 	friend class KexiTablePartProxy;
 
 	public:
-		KexiTablePart(KexiProject *project);
+		KexiTablePart(QObject *project,const char *,const QStringList &)
 
 		QString				name();
 		QString				mime();

@@ -31,6 +31,9 @@
 #include "kexiprojectpartitem.h"
 #include "kexiview.h"
 
+#define KEXIPROJECT(obj) (static_cast<KexiProject*>(obj->qt_cast("KexiProject")))
+
+
 class KexiProjectPartItem;
 class KexiProjectPartProxy;
 
