@@ -257,7 +257,7 @@ int KSelectColorAction::plug(QWidget* widget, int index)
     KToolBar *bar = (KToolBar *)widget;
 
     int id_ = KAction::getToolButtonID();
-    bar->insertButton( iconSet().pixmap(), id_, SIGNAL( clicked() ), this,
+    bar->insertButton( iconSet(KIcon::Small).pixmap(), id_, SIGNAL( clicked() ), this,
                        SLOT( slotActivated() ), isEnabled(), plainText(),
                        index );
 

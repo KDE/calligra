@@ -25,7 +25,7 @@
 #include <qvbox.h>
 #include <qwidget.h>
 
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kfontdialog.h>

@@ -141,7 +141,7 @@ void TKSelectColorAction::updatePixmap()
       }
     }
     else if(w->inherits("QPopupMenu") ) {
-        QPixmap pix =iconSet().pixmap(QIconSet::Automatic,QIconSet::Active);
+        QPixmap pix =iconSet(KIcon::Small).pixmap(QIconSet::Automatic,QIconSet::Active);
 	if ( pix.isNull() )
 	    return;
         QPainter p(&pix);

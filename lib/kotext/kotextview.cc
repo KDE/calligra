@@ -156,11 +156,11 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 
     bool clearUndoRedoInfo = TRUE;
 
-    if ( KStdAccel::isEqual( e, KStdAccel::deleteWordBack() ) )
+    if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordBack() )
     {
         deleteWordBack();
         clearUndoRedoInfo = TRUE;
-    } else if ( KStdAccel::isEqual( e, KStdAccel::deleteWordForward() ) )
+    } else if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordForward() )
     {
         deleteWordForward();
         clearUndoRedoInfo = TRUE;

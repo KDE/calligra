@@ -25,7 +25,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "contextstyle.h"
 #include "kformulacontainer.h"

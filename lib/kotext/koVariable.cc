@@ -853,7 +853,7 @@ void KoFieldVariable::recalc()
             kdWarning() << "KoFieldVariable::recalc() called with m_subtype = VST_NONE !" << endl;
             break;
         case VST_FILENAME:
-            m_value = m_doc->url().filename();
+            m_value = m_doc->url().fileName();
             break;
         case VST_DIRECTORYNAME:
             m_value = m_doc->url().directory();
@@ -863,7 +863,7 @@ void KoFieldVariable::recalc()
             break;
         case VST_FILENAMEWITHOUTEXTENSION:
         {
-            QString file=m_doc->url().filename();
+            QString file=m_doc->url().fileName();
             int pos=file.findRev(".");
             if(pos !=-1)
                 m_value=file.mid(0,file.length()-pos-1);

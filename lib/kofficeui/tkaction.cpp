@@ -153,8 +153,8 @@ void TKAction::updateLayout(QWidget* base)
     textLabel->hide();
 
   QPixmap pix;
-  if (hasIconSet())
-    pix = iconSet().pixmap();
+  if (hasIcon())
+    pix = iconSet(KIcon::Small).pixmap();
 
   if (!icon().isEmpty())
     pix = BarIcon(icon());
