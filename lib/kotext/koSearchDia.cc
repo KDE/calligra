@@ -47,7 +47,7 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
 {
     m_bOptionsShown = false;
     m_btnShowOptions = new QPushButton( i18n("Show Formatting Options"), parent );
-    m_btnNoOptions= new QPushButton( i18n("No options"), parent );
+    m_btnNoOptions= new QPushButton( i18n("No Options"), parent );
     connect( m_btnShowOptions, SIGNAL( clicked() ), SLOT( slotShowOptions() ) );
     connect( m_btnNoOptions, SIGNAL( clicked() ), SLOT( slotNoOptions() ) );
 
@@ -610,12 +610,12 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_checkFamily = new QCheckBox( i18n( "Family" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size" ), page );
     m_checkColor = new QCheckBox( i18n( "Color" ), page );
-    m_checkBgColor = new QCheckBox( i18n( "BackGroundColor" ), page );
+    m_checkBgColor = new QCheckBox( i18n( "Background color" ), page );
     m_checkBold = new QCheckBox( i18n( "Bold" ), page );
     m_checkItalic = new QCheckBox( i18n( "Italic" ),page );
     m_checkUnderline = new QCheckBox( i18n( "Underline" ), page);
-    m_checkStrikeOut = new QCheckBox( i18n( "StrikeOut" ), page);
-    m_checkDoubleLine = new QCheckBox( i18n( "Double Underline" ), page);
+    m_checkStrikeOut = new QCheckBox( i18n( "Strikeout" ), page);
+    m_checkDoubleLine = new QCheckBox( i18n( "Double underline" ), page);
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), page );
@@ -636,8 +636,8 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_boldItem = new QCheckBox( i18n( "Bold" ), page );
     m_italicItem = new QCheckBox( i18n( "Italic" ), page );
     m_underlineItem = new QCheckBox( i18n( "Underline" ),page  );
-    m_strikeOutItem = new QCheckBox( i18n( "StrikeOut" ),page  );
-    m_doubleLineItem = new QCheckBox( i18n( "Double Underline" ),page  );
+    m_strikeOutItem = new QCheckBox( i18n( "Strikeout" ),page  );
+    m_doubleLineItem = new QCheckBox( i18n( "Double underline" ),page  );
 
 
     m_vertAlignItem = new QComboBox( false, page );
