@@ -50,7 +50,7 @@ public:
 	VGradientRepeatMethod repeatMethod() const { return m_repeatMethod; }
 	void setRepeatMethod( VGradientRepeatMethod repeatMethod ) { m_repeatMethod = repeatMethod; }
 
-	QValueList<VColorStop>& colorStops() { return m_colorStops; }
+	const QValueList<VColorStop>& colorStops() const { return m_colorStops; }
 	void addStop( const VColor &color, float rampPoint, float midPoint );
 	void clearStops();
 
