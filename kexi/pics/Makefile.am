@@ -5,8 +5,12 @@ kexipics_DATA = cp-wiz.png
 kexipicsdir = $(kde_datadir)/kexi/pics
 
 
-icon_ICON = button button_no test_it db form form_edit forms lineedit business_user urlrequest tabwidget frame \
-	queries query relation report reports state_edit state_sql state_text state_view table tables scripting \
+icon_ICON = button button_no test_it db form_edit lineedit business_user urlrequest tabwidget frame \
+	relation state_edit state_sql state_text state_view scripting \
+	table tables table_newobj \
+	query queries query_newobj \
+	form forms form_newobj \
+	report reports report_newobj \
 	label calculation calculations key navigator_prev navigator_next navigator_first navigator_last \
 	navigator_new check combo groupbox line listbox listview progress radio slider spin mouse_pointer widgetstack dateedit datetimeedit timeedit textedit \
 	pixmaplabel select_item spring signalslot \
