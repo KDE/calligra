@@ -41,6 +41,7 @@ VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* pa
 
 	new QLabel( i18n( "Edge radius:" ), this );
 	m_round = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	refreshUnit();
 
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
