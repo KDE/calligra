@@ -654,10 +654,11 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     QColor col( color );
                     fm = ktextobject.document()->formatCollection()->format( fn, col );
                     QString txt = n.firstChild().toText().data();
+                    n=n.nextSibling().toElement();
                     if ( txt.isEmpty() && lastParag->length() == 0 )
                         txt = ' ';
                     if ( !txt.isEmpty() ) {
-                        if ( !txt[txt.length()-1].isSpace() ) {
+                        if ( (!txt[txt.length()-1].isSpace()  && n.isNull()) || (txt.length()==1 && txt[0].isSpace()) ) {
                             kdWarning() << "Found a TEXT element which doesn't end with a trailing space, adding one." << endl;
                             txt+=' ';
                         }
@@ -666,7 +667,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         i += txt.length();
                     }
                 }
-                n = n.nextSibling().toElement();
+                else
+                    n = n.nextSibling().toElement();
             }
         } else if ( e.tagName() == "UNSORTEDLISTTYPE" ) {
             if ( listNum < 4 ) {
