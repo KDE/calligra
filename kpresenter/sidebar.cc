@@ -39,6 +39,7 @@
 #include "kprcanvas.h"
 #include <qapplication.h>
 #include "kprcommand.h"
+#include <qvalidator.h>
 
 class ThumbToolTip : public QToolTip
 {
@@ -911,17 +912,13 @@ void Outline::renamePageTitle()
     bool ok = false;
     QString activeTitle = item->text( 0 );
     QString newTitle = KLineEditDlg::getText( i18n("Rename Slide"),
-        i18n("Slide title:"), activeTitle, &ok, this );
+        i18n("Slide title:"), activeTitle, &ok, this,
+        // we want to allow empty titles. Empty == automatic.
+        &QRegExpValidator(QRegExp(".*"), 0) );
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
-        if ( (newTitle.stripWhiteSpace()).isEmpty() ) { // Title is empty.
-            KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Slide title cannot be empty."), i18n("Rename Slide") );
-            // Recursion
-            renamePageTitle();
-        }
-        else if ( newTitle != activeTitle ) { // Title changed.
+        if ( newTitle != activeTitle ) { // Title changed.
             KPresenterDoc *doc=view->kPresenterDoc();
             KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),doc, activeTitle, newTitle, page  );
             cmd->execute();
