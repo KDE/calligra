@@ -22,16 +22,14 @@
 
 #include <qdom.h>
 #include <qvaluestack.h>
+#include <qvaluelist.h>
 
-#include <string>
-#include <vector>
-
-using std::string;
+class QString;
 
 struct KOMLAttrib
 {
-    string m_strName;
-    string m_strValue;
+    QString m_strName;
+    QString m_strValue;
 };
 
 class KOMLParser
@@ -45,12 +43,12 @@ public:
      *                every opening tag is matched.
      * @param _tag holds the matched tag.
      */
-    bool open( const char *_search, string& unused );
-    bool close( string& unused );
+    bool open( const QString &_search, QString& unused );
+    bool close( QString& unused );
 
-    bool readText( string& text );
+    bool readText( QString& text );
 
-    bool parseTag( const char *_tag, string& tagname, std::vector<KOMLAttrib>& _attribs );
+    bool parseTag( const QString &_tag, QString& tagname, QValueList<KOMLAttrib>& _attribs );
 
     /**
      * @return the node the parser is currently on.
@@ -60,7 +58,7 @@ public:
      * @return the node the parser is currently on.
      */
     QDomElement currentElement();
-    
+
 protected:
     QDomDocument m_doc;
     QDomNode m_node;

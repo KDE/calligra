@@ -25,7 +25,7 @@ class KPresenterDoc;
 #include "kpobject.h"
 
 /******************************************************************/
-/* Class: KPGroupObject						  */
+/* Class: KPGroupObject                                           */
 /******************************************************************/
 
 class KPGroupObject : public KPObject
@@ -60,16 +60,16 @@ public:
     { return OT_GROUP; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst, KPresenterDoc *doc );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KPresenterDoc *doc );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
     void setUpdateObjects( bool b ) {
-	updateObjs = b;
+        updateObjs = b;
     }
-        
+
     QList<KPObject> getObjects() {
-	return objects;
+        return objects;
     }
 
     virtual void zoom( float _fakt );
@@ -81,10 +81,10 @@ public:
 protected:
     void updateSizes( float fx, float fy );
     void updateCoords( int dx, int dy );
-    
+
     QList<KPObject> objects;
     bool updateObjs;
-    
+
 };
 
 #endif

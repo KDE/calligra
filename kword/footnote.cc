@@ -29,7 +29,6 @@
 #include <klocale.h>
 
 #include <kdebug.h>
-#include <komlMime.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
@@ -216,44 +215,44 @@ void KWFootNoteManager::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
+void KWFootNoteManager::load( KOMLParser &parser, QValueList<KOMLAttrib> &lst )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) ) {
-        parser.parseTag( tag.c_str(), name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, name, lst );
 
         if ( name == "START" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    start = atoi( ( *it ).m_strValue.c_str() );
+                    start = ( *it ).m_strValue.toInt();
             }
         } else if ( name == "FORMAT" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "superscript" )
-                    superscript = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                    superscript = static_cast<bool>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "type" )
-                    noteType = static_cast<NoteType>( atoi( ( *it ).m_strValue.c_str() ) );
+                    noteType = static_cast<NoteType>( ( *it ).m_strValue.toInt() );
             }
         } else if ( name == "FIRSTPARAG" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "ref" )
-                    firstParag = correctQString( ( *it ).m_strValue.c_str() );
+                    firstParag = correctQString( ( *it ).m_strValue );
             }
         }
 
         else
-            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FOOTNOTEMGR" << endl;
+            kdError(32001) << "Unknown tag '" << tag << "' in FOOTNOTEMGR" << endl;
 
         if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag.c_str() << endl;
+            kdError(32001) << "Closing " << tag << endl;
             return;
         }
     }
@@ -452,66 +451,66 @@ void KWFootNote::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst )
+void KWFootNote::load( QString name, QString tag, KOMLParser &parser, QValueList<KOMLAttrib>& lst )
 {
     if ( name == "INTERNAL" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ ) {
-        }
+        parser.parseTag( tag, name, lst );
+        //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        //for( ; it != lst.end(); ++it ) {
+        //}
 
-        while ( parser.open( 0L, tag ) ) {
-            parser.parseTag( tag.c_str(), name, lst );
+        while ( parser.open( QString::null, tag ) ) {
+            parser.parseTag( tag, name, lst );
             if ( name == "PART" ) {
-                parser.parseTag( tag.c_str(), name, lst );
-                vector<KOMLAttrib>::const_iterator it = lst.begin();
+                parser.parseTag( tag, name, lst );
+                QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
 
                 KWFootNoteInternal *part = new KWFootNoteInternal;
 
-                for( ; it != lst.end(); it++ ) {
+                for( ; it != lst.end(); ++it ) {
                     if ( ( *it ).m_strName == "from" )
-                        part->from = atoi( ( *it ).m_strValue.c_str() );
+                        part->from = ( *it ).m_strValue.toInt();
                     else if ( ( *it ).m_strName == "to" )
-                        part->to = atoi( ( *it ).m_strValue.c_str() );
+                        part->to = ( *it ).m_strValue.toInt();
                     else if ( ( *it ).m_strName == "space" )
-                        part->space = correctQString( ( *it ).m_strValue.c_str() );
+                        part->space = correctQString( ( *it ).m_strValue );
                 }
                 parts.append( part );
             } else
-                kdError(32001) << "Unknown tag '" << tag.c_str() << "' in INTERNAL" << endl;
+                kdError(32001) << "Unknown tag '" << tag << "' in INTERNAL" << endl;
 
             if ( !parser.close( tag ) ) {
-                kdError(32001) << "Closing " << tag.c_str() << endl;
+                kdError(32001) << "Closing " << tag << endl;
                 return;
             }
         }
     } else if ( name == "RANGE" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ )
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for( ; it != lst.end(); ++it )
         {
             if ( ( *it ).m_strName == "start" )
-                start = atoi( ( *it ).m_strValue.c_str() );
+                start = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "end" )
-                end = atoi( ( *it ).m_strValue.c_str() );
+                end = ( *it ).m_strValue.toInt();
         }
     } else if ( name == "TEXT" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ )
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for( ; it != lst.end(); ++it )
         {
             if ( ( *it ).m_strName == "before" )
-                before = correctQString( ( *it ).m_strValue.c_str() );
+                before = correctQString( ( *it ).m_strValue );
             else if ( ( *it ).m_strName == "after" )
-                after = correctQString( ( *it ).m_strValue.c_str() );
+                after = correctQString( ( *it ).m_strValue );
         }
     } else if ( name == "DESCRIPT" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ )
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for( ; it != lst.end(); ++it )
         {
             if ( ( *it ).m_strName == "ref" )
-                parag = correctQString( ( *it ).m_strValue.c_str() );
+                parag = correctQString( ( *it ).m_strValue );
         }
     }
 

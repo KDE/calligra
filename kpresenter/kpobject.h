@@ -50,7 +50,7 @@ public:
     KPObject &operator=( const KPObject & );
 
     virtual DCOPObject* dcopObject();
-    
+
     virtual void setSelected( bool _selected )
     { selected = _selected; }
     virtual void rotate( float _angle )
@@ -92,7 +92,7 @@ public:
 
     virtual void save( QTextStream& /*out*/ )
     {; }
-    virtual void load( KOMLParser& /*parser*/, vector<KOMLAttrib>& /*lst*/ )
+    virtual void load( KOMLParser& /*parser*/, QValueList<KOMLAttrib>& /*lst*/ )
     {; }
 
     virtual ObjType getType()

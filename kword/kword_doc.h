@@ -72,7 +72,7 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
-    bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+    bool load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs );
     bool save( QTextStream & out );
 
 protected:
@@ -416,8 +416,8 @@ protected:
     virtual void draw( QPaintDevice*, long int _width, long int _height,
                        float _scale );
 
-    void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
-    void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );
+    void loadFrameSets( KOMLParser&, QValueList<KOMLAttrib>& );
+    void loadStyleTemplates( KOMLParser&, QValueList<KOMLAttrib>& );
 
     void addStyleTemplate( KWParagLayout *pl );
 

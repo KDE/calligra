@@ -35,7 +35,7 @@
 class KPGradient;
 
 /******************************************************************/
-/* Class: KPAutoformObject					  */
+/* Class: KPAutoformObject                                        */
 /******************************************************************/
 
 class KPAutoformObject : public KPObject
@@ -43,8 +43,8 @@ class KPAutoformObject : public KPObject
 public:
     KPAutoformObject();
     KPAutoformObject( QPen _pen, QBrush _brush, QString _filename, LineEnd _lineBegin, LineEnd _lineEnd,
-		      FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
-		      bool _unbalanced, int _xfactor, int _yfactor);
+                      FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
+                      bool _unbalanced, int _xfactor, int _yfactor);
     virtual ~KPAutoformObject()
     { if ( gradient ) delete gradient; }
 
@@ -104,7 +104,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

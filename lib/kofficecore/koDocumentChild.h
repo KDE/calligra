@@ -114,7 +114,7 @@ protected:
    * @return TRUE if the tag could be handled. The default implementation
    *         returns FALSE.
    */
-  virtual bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst2 );
+  virtual bool loadTag( KOMLParser& parser, const QString& tag, QValueList<KOMLAttrib>& lst2 );
 
 protected: // TODO private: when KOML is dead
 

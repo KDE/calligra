@@ -23,7 +23,6 @@
 #include "kword_utils.h"
 
 #include <kdebug.h>
-#include <komlMime.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
@@ -58,39 +57,39 @@ void KWImage::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc )
+void KWImage::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KWordDocument *_doc )
 {
     doc = _doc;
     ref = 0;
 
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) )
+    while ( parser.open( QString::null, tag ) )
     {
-        parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag, name, lst );
 
         // filename
         if ( name == "FILENAME" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
                 {
-                    filename = correctQString( ( *it ).m_strValue.c_str() );
+                    filename = correctQString( ( *it ).m_strValue );
                     QImage::load( filename );
                 }
             }
         }
 
         else
-            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in IMAGE" << endl;
+            kdError(32001) << "Unknown tag '" << tag << "' in IMAGE" << endl;
 
         if ( !parser.close( tag ) )
         {
-            kdError(32001) << "Closing " << tag.c_str() << endl;
+            kdError(32001) << "Closing " << tag << endl;
             return;
         }
     }

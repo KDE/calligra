@@ -106,52 +106,52 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 bool KoDocumentChild::load( const QDomElement& element )
 {
     if ( element.hasAttribute( "url" ) )
-	m_tmpURL = element.attribute("url");
+        m_tmpURL = element.attribute("url");
     if ( element.hasAttribute("mime") )
-	m_tmpMimeType = element.attribute("mime");
+        m_tmpMimeType = element.attribute("mime");
 
     if ( m_tmpURL.isEmpty() )
-    {	
-	kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
-	return false;
+    {
+        kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
+        return false;
     }
     if ( m_tmpMimeType.isEmpty() )
     {
-	kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
-	return false;
+        kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
+        return false;
     }
 
     bool brect = FALSE;
     QDomElement e = element.firstChild().toElement();
     for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
-	if ( e.tagName() == "rect" )
+        if ( e.tagName() == "rect" )
         {
-	    brect = true;
-	    int x, y, w, h;
-	    x=y=w=h=0;
-	    if ( e.hasAttribute( "x" ) )
-		x = e.attribute( "x" ).toInt(&brect);
-	    if ( e.hasAttribute( "y" ) )
-		y = e.attribute( "y" ).toInt(&brect);
-	    if ( e.hasAttribute( "w" ) )
-		w = e.attribute( "w" ).toInt(&brect);
-	    if ( e.hasAttribute( "h" ) )
-		h = e.attribute( "h" ).toInt(&brect);
-	    m_tmpGeometry = QRect(x, y, w, h);
-	}
+            brect = true;
+            int x, y, w, h;
+            x=y=w=h=0;
+            if ( e.hasAttribute( "x" ) )
+                x = e.attribute( "x" ).toInt(&brect);
+            if ( e.hasAttribute( "y" ) )
+                y = e.attribute( "y" ).toInt(&brect);
+            if ( e.hasAttribute( "w" ) )
+                w = e.attribute( "w" ).toInt(&brect);
+            if ( e.hasAttribute( "h" ) )
+                h = e.attribute( "h" ).toInt(&brect);
+            m_tmpGeometry = QRect(x, y, w, h);
+        }
     }
 
     if ( !brect )
     {
-	kdDebug(30003) << "Missing RECT in OBJECT" << endl;
-	return false;
+        kdDebug(30003) << "Missing RECT in OBJECT" << endl;
+        return false;
     }
 
     return true;
 }
 
-bool KoDocumentChild::loadTag( KOMLParser&, const string&, vector<KOMLAttrib>& )
+bool KoDocumentChild::loadTag( KOMLParser&, const QString&, QValueList<KOMLAttrib>& )
 {
     return FALSE;
 }

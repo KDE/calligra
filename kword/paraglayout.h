@@ -144,7 +144,7 @@ public:
     QString getFollowingParagLayout() { return followingParagLayout; }
 
     void save( QTextStream&out );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
+    void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
     Counter getCounter() const { return counter; }
     void setCounter( Counter _counter ) { counter = _counter; }

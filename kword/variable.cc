@@ -24,7 +24,6 @@
 #include "kword_utils.h"
 #include "serialletter.h"
 
-#include <komlMime.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -177,18 +176,18 @@ void KWVariable::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
+void KWVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
 {
     if ( name == "POS" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for ( ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for ( ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "frameSet" )
-                frameSetNum = atoi( ( *it ).m_strValue.c_str() );
+                frameSetNum = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "frame" )
-                frameNum = atoi( ( *it ).m_strValue.c_str() );
+                frameNum = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "pgNum" )
-                pageNum = atoi( ( *it ).m_strValue.c_str() );
+                pageNum = ( *it ).m_strValue.toInt();
         }
     }
 }
@@ -205,16 +204,16 @@ void KWPgNumVariable::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWPgNumVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
+void KWPgNumVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
 {
     KWVariable::load( parser, name, tag, lst );
 
     if ( name == "PGNUM" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for ( ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for ( ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "value" )
-                pgNum = atoi( ( *it ).m_strValue.c_str() );
+                pgNum = ( *it ).m_strValue.toInt();
         }
     }
 }
@@ -249,24 +248,24 @@ void KWDateVariable::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWDateVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
+void KWDateVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
 {
     KWVariable::load( parser, name, tag, lst );
 
     int y, m, d;
 
     if ( name == "DATE" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for ( ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for ( ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "year" )
-                y = atoi( ( *it ).m_strValue.c_str() );
+                y = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "month" )
-                m = atoi( ( *it ).m_strValue.c_str() );
+                m = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "day" )
-                d = atoi( ( *it ).m_strValue.c_str() );
+                d = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "fix" )
-                fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                fix = static_cast<bool>( ( *it ).m_strValue.toInt() );
         }
     }
 
@@ -307,26 +306,26 @@ void KWTimeVariable::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWTimeVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
+void KWTimeVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
 {
     KWVariable::load( parser, name, tag, lst );
 
     int h, m, s, ms;
 
     if ( name == "TIME" ) {
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for( ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "hour" )
-                h = atoi( ( *it ).m_strValue.c_str() );
+                h = ( *it ).m_strValue.toInt();
             else if ((*it).m_strName == "minute")
-                m = atoi( ( *it ).m_strValue.c_str() );
+                m = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "second" )
-                s = atoi( ( *it ).m_strValue.c_str() );
+                s = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "msecond" )
-                ms = atoi( ( *it ).m_strValue.c_str() );
+                ms = ( *it ).m_strValue.toInt();
             else if ( ( *it ).m_strName == "fix" )
-                fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                fix = static_cast<bool>( ( *it ).m_strValue.toInt() );
         }
     }
 
@@ -363,20 +362,20 @@ void KWCustomVariable::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWCustomVariable::load( KOMLParser& parser, string name_, string tag, vector<KOMLAttrib>& lst )
+void KWCustomVariable::load( KOMLParser& parser, QString name_, const QString &tag, QValueList<KOMLAttrib>& lst )
 {
     doc->unregisterVariable( this );
     doc->registerVariable( this );
     recalc();
     KWVariable::load( parser, name_, tag, lst );
     if ( name_ == "CUSTOM" ) {
-        parser.parseTag( tag.c_str(), name_, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for(  ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name_, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for(  ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "name" )
-                name = ( *it ).m_strValue.c_str();
+                name = ( *it ).m_strValue;
             else if ( (*it).m_strName == "value" )
-                setValue( ( *it ).m_strValue.c_str() );
+                setValue( ( *it ).m_strValue );
         }
     }
 }
@@ -424,16 +423,16 @@ void KWSerialLetterVariable::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWSerialLetterVariable::load( KOMLParser& parser, string name_, string tag, vector<KOMLAttrib>& lst )
+void KWSerialLetterVariable::load( KOMLParser& parser, QString name_, const QString &tag, QValueList<KOMLAttrib>& lst )
 {
     recalc();
     KWVariable::load( parser, name_, tag, lst );
     if ( name_ == "SERIALLETTER" ) {
-        parser.parseTag( tag.c_str(), name_, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for (  ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name_, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for (  ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "name" )
-                name = ( *it ).m_strValue.c_str();
+                name = ( *it ).m_strValue;
         }
     }
 }

@@ -127,21 +127,21 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
   return 0L;
 }
 
-bool KPresenterChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+bool KPresenterChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs )
 {
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
+  QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
+  for( ; it != _attribs.end(); ++it )
   {
     if ( (*it).m_strName == "url" )
     {
-      m_tmpURL = (*it).m_strValue.c_str();
+      m_tmpURL = (*it).m_strValue;
     }
     else if ( (*it).m_strName == "mime" )
     {
-      m_tmpMimeType = (*it).m_strValue.c_str();
+      m_tmpMimeType = (*it).m_strValue;
     }
     else
-      kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName.c_str() << "'" << endl;
+      kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName << "'" << endl;
   }
 
   if ( m_tmpURL.isEmpty() )
@@ -155,16 +155,16 @@ bool KPresenterChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
     return false;
   }
 
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
+  QString tag;
+  QValueList<KOMLAttrib> lst;
+  QString name;
 
   bool brect = false;
 
   // RECT
-  while( parser.open( 0L, tag ) )
+  while( parser.open( QString::null, tag ) )
   {
-    parser.parseTag( tag.c_str(), name, lst );
+    parser.parseTag( tag, name, lst );
 
     if ( name == "RECT" )
     {
@@ -173,7 +173,7 @@ bool KPresenterChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       setGeometry( m_tmpGeometry );
     }
     else
-      kdDebug(30003) << "Unknown tag '" << tag.c_str() << "' in OBJECT" << endl;
+      kdDebug(30003) << "Unknown tag '" << tag << "' in OBJECT" << endl;
 
     if ( !parser.close( tag ) )
     {
@@ -624,9 +624,9 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 /*========================== load ===============================*/
 bool KPresenterDoc::loadXML( KOMLParser & parser )
 {
-    string tag;
-    vector<KOMLAttrib> lst;
-    string name;
+    QString tag;
+    QValueList<KOMLAttrib> lst;
+    QString name;
 
     pixmapCollectionKeys.clear();
     pixmapCollectionNames.clear();
@@ -659,40 +659,41 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
     if ( !docAlreadyOpen ) {
         // DOC
         if ( !parser.open( "DOC", tag ) ) {
-            cerr << "Missing DOC" << endl;
+            kdWarning() << "Missing DOC" << endl;
             return false;
         }
 
-        parser.parseTag( tag.c_str(), name, lst );
-        vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ ) {
+        parser.parseTag( tag, name, lst );
+        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+        for( ; it != lst.end(); ++it ) {
             if ( ( *it ).m_strName == "mime" ) {
                 if ( ( *it ).m_strValue != "application/x-kpresenter" ) {
-                    cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
+                    kdError() << "Unknown mime type " << ( *it ).m_strValue << endl;
                     return false;
                 }
             } else if ( ( *it ).m_strName == "url" )
-                urlIntern = KURL( ( *it ).m_strValue.c_str() ).path();
+                urlIntern = KURL( ( *it ).m_strValue ).path();
         }
     }
 
     docAlreadyOpen = false;
 
     // PAPER
-    while ( parser.open( 0L, tag ) ) {
-        parser.parseTag( tag.c_str(), name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, name, lst );
 
         if ( name == "EMBEDDED" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
-            }
+            parser.parseTag( tag, name, lst );
+            // huh? testing iterators? >;p (Werner)
+            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            //for( ; it != lst.end(); ++it ) {
+            //}
             KPresenterChild *ch = new KPresenterChild( this );
             KPPartObject *kppartobject = 0L;
             QRect r;
 
-            while ( parser.open( 0L, tag ) ) {
-                parser.parseTag( tag.c_str(), name, lst );
+            while ( parser.open( QString::null, tag ) ) {
+                parser.parseTag( tag, name, lst );
                 if ( name == "OBJECT" ) {
                     ch->load( parser, lst );
                     r = ch->geometry();
@@ -703,16 +704,17 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
                     _objectList->append( kppartobject );
                     //emit sig_insertObject( ch, kppartobject );
                 } else if ( name == "SETTINGS" ) {
-                    parser.parseTag( tag.c_str(), name, lst );
-                    vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    for( ; it != lst.end(); it++ ) {
-                    }
+                    parser.parseTag( tag, name, lst );
+                    // yeah - let's iterate a little bit - it's fun after all ;) (Werner)
+                    //vector<KOMLAttrib>::const_iterator it = lst.begin();
+                    //for( ; it != lst.end(); it++ ) {
+                    //}
                     kppartobject->load( parser, lst );
                 } else
-                    cerr << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
+                    kdError() << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
 
                 if ( !parser.close( tag ) ) {
-                    cerr << "ERR: Closing Child" << endl;
+                    kdError() << "ERR: Closing Child" << endl;
                     return false;
                 }
             }
@@ -721,132 +723,132 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
                 kppartobject->setSize( r.width(), r.height() );
             }
         } else if ( name == "PAPER" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "format" )
-                    __pgLayout.format = ( KoFormat )atoi( ( *it ).m_strValue.c_str() );
+                    __pgLayout.format = ( KoFormat )( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "orientation" )
-                    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
+                    __pgLayout.orientation = ( KoOrientation )( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "width" ) {
-                    __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-                    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-                    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+                    __pgLayout.mmWidth = ( *it ).m_strValue.toDouble();
+                    __pgLayout.ptWidth = MM_TO_POINT( __pgLayout.mmWidth );
+                    __pgLayout.inchWidth = MM_TO_INCH( __pgLayout.mmWidth );
                 } else if ( ( *it ).m_strName == "height" ) {
-                    __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-                    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-                    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+                    __pgLayout.mmHeight = ( *it ).m_strValue.toDouble();
+                    __pgLayout.ptHeight = MM_TO_POINT( __pgLayout.mmHeight );
+                    __pgLayout.inchHeight = MM_TO_INCH( __pgLayout.mmHeight );
                 }
                 else if ( ( *it ).m_strName == "ptWidth" )
-                    __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                    __pgLayout.ptWidth = ( *it ).m_strValue.toDouble();
                 else if ( ( *it ).m_strName == "inchWidth" )
-                    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
+                    __pgLayout.inchWidth = ( *it ).m_strValue.toDouble();
                 else if ( ( *it ).m_strName == "mmWidth" )
-                    __pgLayout.mmWidth = atof( ( *it ).m_strValue.c_str() );
+                    __pgLayout.mmWidth = ( *it ).m_strValue.toDouble();
                 else if ( ( *it ).m_strName == "ptHeight" )
-                    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
+                    __pgLayout.ptHeight = ( *it ).m_strValue.toDouble();
                 else if ( ( *it ).m_strName == "inchHeight" )
-                    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
+                    __pgLayout.inchHeight = ( *it ).m_strValue.toDouble();
                 else if ( ( *it ).m_strName == "mmHeight" )
-                    __pgLayout.mmHeight = atof( ( *it ).m_strValue.c_str() );
+                    __pgLayout.mmHeight = ( *it ).m_strValue.toDouble();
                 else if ( ( *it ).m_strName == "unit" )
-                    __pgLayout.unit = static_cast<KoUnit>( atoi( ( *it ).m_strValue.c_str() ) );
+                    __pgLayout.unit = static_cast<KoUnit>( ( *it ).m_strValue.toInt() );
                 else
-                    cerr << "Unknown attrib PAPER:'" << ( *it ).m_strName << "'" << endl;
+                    kdError() << "Unknown attrib PAPER:'" << ( *it ).m_strName << "'" << endl;
             }
 
             // PAPERBORDERS, HEAD, FOOT
-            while ( parser.open( 0L, tag ) ) {
-                parser.parseTag( tag.c_str(), name, lst );
+            while ( parser.open( QString::null, tag ) ) {
+                parser.parseTag( tag, name, lst );
                 if ( name == "PAPERBORDERS" ) {
-                    parser.parseTag( tag.c_str(), name, lst );
-                    vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    for( ; it != lst.end(); it++ ) {
+                    parser.parseTag( tag, name, lst );
+                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                    for( ; it != lst.end(); ++it ) {
                         if ( ( *it ).m_strName == "left" ) {
-                            __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
-                            __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                            __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+                            __pgLayout.mmLeft = ( *it ).m_strValue.toDouble();
+                            __pgLayout.ptLeft = MM_TO_POINT( __pgLayout.mmLeft );
+                            __pgLayout.inchLeft = MM_TO_INCH( __pgLayout.mmLeft );
                         } else if ( ( *it ).m_strName == "top" ) {
-                            __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
-                            __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                            __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+                            __pgLayout.mmTop = ( *it ).m_strValue.toDouble();
+                            __pgLayout.ptTop = MM_TO_POINT( __pgLayout.mmTop );
+                            __pgLayout.inchTop = MM_TO_INCH( __pgLayout.mmTop );
                         } else if ( ( *it ).m_strName == "right" ) {
-                            __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
-                            __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                            __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+                            __pgLayout.mmRight = ( *it ).m_strValue.toDouble();
+                            __pgLayout.ptRight = MM_TO_POINT( __pgLayout.mmRight );
+                            __pgLayout.inchRight = MM_TO_INCH( __pgLayout.mmRight );
                         } else if ( ( *it ).m_strName == "bottom" ) {
-                            __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
-                            __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                            __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+                            __pgLayout.mmBottom = ( *it ).m_strValue.toDouble();
+                            __pgLayout.ptBottom = MM_TO_POINT( __pgLayout.mmBottom );
+                            __pgLayout.inchBottom = MM_TO_INCH( __pgLayout.mmBottom );
                         }
                         else if ( ( *it ).m_strName == "ptLeft" )
-                            __pgLayout.ptLeft = atoi( ( *it ).m_strValue.c_str() );
+                            __pgLayout.ptLeft = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "inchLeft" )
-                            __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.inchLeft = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "mmLeft" )
-                            __pgLayout.mmLeft = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.mmLeft = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "ptRight" )
-                            __pgLayout.ptRight = atoi( ( *it ).m_strValue.c_str() );
+                            __pgLayout.ptRight = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "inchRight" )
-                            __pgLayout.inchRight = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.inchRight = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "mmRight" )
-                            __pgLayout.mmRight = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.mmRight = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "ptTop" )
-                            __pgLayout.ptTop = atoi( ( *it ).m_strValue.c_str() );
+                            __pgLayout.ptTop = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "inchTop" )
-                            __pgLayout.inchTop = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.inchTop = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "mmTop" )
-                            __pgLayout.mmTop = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.mmTop = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "ptBottom" )
-                            __pgLayout.ptBottom = atoi( ( *it ).m_strValue.c_str() );
+                            __pgLayout.ptBottom = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "inchBottom" )
-                            __pgLayout.inchBottom = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.inchBottom = ( *it ).m_strValue.toDouble();
                         else if ( ( *it ).m_strName == "mmBottom" )
-                            __pgLayout.mmBottom = atof( ( *it ).m_strValue.c_str() );
+                            __pgLayout.mmBottom = ( *it ).m_strValue.toDouble();
                         else
-                            cerr << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
+                            kdError() << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
                     }
                 } else
-                    cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
+                    kdError() << "Unknown tag '" << tag << "' in PAPER" << endl;
 
                 if ( !parser.close( tag ) ) {
-                    cerr << "ERR: Closing Child" << endl;
+                    kdError() << "ERR: Closing Child" << endl;
                     return false;
                 }
             }
 
         } else if ( name == "BACKGROUND" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "rastX" )
-                    _rastX = atoi( ( *it ).m_strValue.c_str() );
+                    _rastX = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "rastY" )
-                    _rastY = atoi( ( *it ).m_strValue.c_str() );
+                    _rastY = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "xRnd" )
-                    _xRnd = atoi( ( *it ).m_strValue.c_str() );
+                    _xRnd = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "yRnd" )
-                    _yRnd = atoi( ( *it ).m_strValue.c_str() );
+                    _yRnd = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "bred" )
-                    _txtBackCol.setRgb( atoi( ( *it ).m_strValue.c_str() ),
+                    _txtBackCol.setRgb( ( *it ).m_strValue.toInt(),
                                         _txtBackCol.green(), _txtBackCol.blue() );
                 else if ( ( *it ).m_strName == "bgreen" )
-                    _txtBackCol.setRgb( _txtBackCol.red(), atoi( ( *it ).m_strValue.c_str() ),
+                    _txtBackCol.setRgb( _txtBackCol.red(), ( *it ).m_strValue.toInt(),
                                         _txtBackCol.blue() );
                 else if ( ( *it ).m_strName == "bblue" )
                     _txtBackCol.setRgb( _txtBackCol.red(), _txtBackCol.green(),
-                                        atoi( ( *it ).m_strValue.c_str() ) );
+                                        ( *it ).m_strValue.toInt() );
                 else
-                    cerr << "Unknown attrib BACKGROUND:'" << ( *it ).m_strName << "'" << endl;
+                    kdError() << "Unknown attrib BACKGROUND:'" << ( *it ).m_strName << "'" << endl;
             }
             loadBackground( parser, lst );
         } else if ( name == "HEADER" ) {
             if ( _clean || !hasHeader() ) {
-                parser.parseTag( tag.c_str(), name, lst );
-                vector<KOMLAttrib>::const_iterator it = lst.begin();
-                for( ; it != lst.end(); it++ ) {
+                parser.parseTag( tag, name, lst );
+                QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                for( ; it != lst.end(); ++it ) {
                     if ( ( *it ).m_strName == "show" ) {
-                        setHeader( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
+                        setHeader( static_cast<bool>( ( *it ).m_strValue.toInt() ) );
                         headerFooterEdit->setShowHeader( hasHeader() );
                     }
                 }
@@ -854,114 +856,115 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
             }
         } else if ( name == "FOOTER" ) {
             if ( _clean || !hasFooter() ) {
-                parser.parseTag( tag.c_str(), name, lst );
-                vector<KOMLAttrib>::const_iterator it = lst.begin();
-                for( ; it != lst.end(); it++ ) {
+                parser.parseTag( tag, name, lst );
+                QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                for( ; it != lst.end(); ++it ) {
                     if ( ( *it ).m_strName == "show" ) {
-                        setFooter( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
+                        setFooter( static_cast<bool>( ( *it ).m_strValue.toInt() ) );
                         headerFooterEdit->setShowFooter( hasFooter() );
                     }
                 }
                 _footer->load( parser, lst );
             }
         } else if ( name == "OBJECTS" ) {
-            parser.parseTag( tag.c_str(), name, lst );
+            parser.parseTag( tag, name, lst );
             lastObj = _objectList->count() - 1;
             loadObjects( parser, lst );
         } else if ( name == "INFINITLOOP" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    _spInfinitLoop = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                    _spInfinitLoop = static_cast<bool>( ( *it ).m_strValue.toInt() );
             }
         } else if ( name == "PRESSPEED" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    presSpeed = static_cast<PresSpeed>( atoi( ( *it ).m_strValue.c_str() ) );
+                    presSpeed = static_cast<PresSpeed>( ( *it ).m_strValue.toInt() );
             }
         } else if ( name == "MANUALSWITCH" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    _spManualSwitch = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                    _spManualSwitch = static_cast<bool>( ( *it ).m_strValue.toInt() );
             }
         } else if ( name == "PRESSLIDES" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    presentSlides = static_cast<PresentSlides>( atoi( ( *it ).m_strValue.c_str() ) );
+                    presentSlides = static_cast<PresentSlides>( ( *it ).m_strValue.toInt() );
             }
         } else if ( name == "SELSLIDES" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
-            }
+            parser.parseTag( tag, name, lst );
+            // I'm quite sure the iterator works, so I commented that out ;) (Werner)
+            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            //for( ; it != lst.end(); ++it ) {
+            //}
 
-            while ( parser.open( 0L, tag ) ) {
+            while ( parser.open( QString::null, tag ) ) {
                 int nr;
                 bool show;
 
-                parser.parseTag( tag.c_str(), name, lst );
+                parser.parseTag( tag, name, lst );
                 if ( name == "SLIDE" ) {
-                    parser.parseTag( tag.c_str(), name, lst );
-                    vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    for( ; it != lst.end(); it++ ) {
+                    parser.parseTag( tag, name, lst );
+                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                    for( ; it != lst.end(); ++it ) {
                         if ( ( *it ).m_strName == "nr" )
-                            nr = atoi( ( *it ).m_strValue.c_str() );
+                            nr = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "show" )
-                            show = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                            show = static_cast<bool>( ( *it ).m_strValue.toInt() );
                     }
                     selectedSlides.insert( nr, show );
                 } else
-                    cerr << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
+                    kdError() << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
 
                 if ( !parser.close( tag ) ) {
-                    cerr << "ERR: Closing Child" << endl;
+                    kdError() << "ERR: Closing Child" << endl;
                     return false;
                 }
             }
         } else if ( name == "PIXMAPS" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
             }
 
-            while ( parser.open( 0L, tag ) ) {
+            while ( parser.open( QString::null, tag ) ) {
                 KPPixmapDataCollection::Key key;
                 int year, month, day, hour, minute, second, msec;
                 QString n;
 
-                parser.parseTag( tag.c_str(), name, lst );
+                parser.parseTag( tag, name, lst );
                 if ( name == "KEY" ) {
-                    parser.parseTag( tag.c_str(), name, lst );
-                    vector<KOMLAttrib>::const_iterator it = lst.begin();
+                    parser.parseTag( tag, name, lst );
+                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
                     n = QString::null;
-                    for( ; it != lst.end(); it++ ) {
+                    for( ; it != lst.end(); ++it ) {
                         if ( ( *it ).m_strName == "filename" )
-                            key.filename = ( *it ).m_strValue.c_str();
+                            key.filename = ( *it ).m_strValue;
                         else if ( ( *it ).m_strName == "year" )
-                            year = atoi( ( *it ).m_strValue.c_str() );
+                            year = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "month" )
-                            month = atoi( ( *it ).m_strValue.c_str() );
+                            month = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "day" )
-                            day = atoi( ( *it ).m_strValue.c_str() );
+                            day = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "hour" )
-                            hour = atoi( ( *it ).m_strValue.c_str() );
+                            hour = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "minute" )
-                            minute = atoi( ( *it ).m_strValue.c_str() );
+                            minute = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "second" )
-                            second = atoi( ( *it ).m_strValue.c_str() );
+                            second = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "msec" )
-                            msec = atoi( ( *it ).m_strValue.c_str() );
+                            msec = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "name" )
-                            n = ( *it ).m_strValue.c_str();
+                            n = ( *it ).m_strValue;
                         else
-                            cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+                            kdError() << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
                     }
                     key.lastModified.setDate( QDate( year, month, day ) );
                     key.lastModified.setTime( QTime( hour, minute, second, msec ) );
@@ -969,51 +972,51 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
                     pixmapCollectionKeys.append( key );
                     pixmapCollectionNames.append( n );
                 } else
-                    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
+                    kdError() << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
 
                 if ( !parser.close( tag ) ) {
-                    cerr << "ERR: Closing Child" << endl;
+                    kdError() << "ERR: Closing Child" << endl;
                     return false;
                 }
             }
         } else if ( name == "CLIPARTS" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
-            }
+            parser.parseTag( tag, name, lst );
+            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            //for( ; it != lst.end(); ++it ) {
+            //}
 
-            while ( parser.open( 0L, tag ) ) {
+            while ( parser.open( QString::null, tag ) ) {
                 KPClipartCollection::Key key;
                 int year, month, day, hour, minute, second, msec;
                 QString n;
 
-                parser.parseTag( tag.c_str(), name, lst );
+                parser.parseTag( tag, name, lst );
                 if ( name == "KEY" ) {
                     n = QString::null;
-                    parser.parseTag( tag.c_str(), name, lst );
-                    vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    for( ; it != lst.end(); it++ )
+                    parser.parseTag( tag, name, lst );
+                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                    for( ; it != lst.end(); ++it )
                     {
                         if ( ( *it ).m_strName == "filename" )
-                            key.filename = ( *it ).m_strValue.c_str();
+                            key.filename = ( *it ).m_strValue;
                         else if ( ( *it ).m_strName == "year" )
-                            year = atoi( ( *it ).m_strValue.c_str() );
+                            year = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "month" )
-                            month = atoi( ( *it ).m_strValue.c_str() );
+                            month = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "day" )
-                            day = atoi( ( *it ).m_strValue.c_str() );
+                            day = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "hour" )
-                            hour = atoi( ( *it ).m_strValue.c_str() );
+                            hour = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "minute" )
-                            minute = atoi( ( *it ).m_strValue.c_str() );
+                            minute = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "second" )
-                            second = atoi( ( *it ).m_strValue.c_str() );
+                            second = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "msec" )
-                            msec = atoi( ( *it ).m_strValue.c_str() );
+                            msec = ( *it ).m_strValue.toInt();
                         else if ( ( *it ).m_strName == "name" )
-                            n = ( *it ).m_strValue.c_str();
+                            n = ( *it ).m_strValue;
                         else
-                            cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+                            kdError() << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
                     }
                     key.lastModified.setDate( QDate( year, month, day ) );
                     key.lastModified.setTime( QTime( hour, minute, second, msec ) );
@@ -1021,18 +1024,18 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
                     clipartCollectionKeys.append( key );
                     clipartCollectionNames.append( n );
                 } else
-                    cerr << "Unknown tag '" << tag << "' in CLIPARTS" << endl;
+                    kdError() << "Unknown tag '" << tag << "' in CLIPARTS" << endl;
 
                 if ( !parser.close( tag ) ) {
-                    cerr << "ERR: Closing Child" << endl;
+                    kdError() << "ERR: Closing Child" << endl;
                     return false;
                 }
             }
         } else
-            cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;
+            kdError() << "Unknown tag '" << tag << "' in PRESENTATION" << endl;
 
         if ( !parser.close( tag ) ) {
-            cerr << "ERR: Closing Child" << endl;
+            kdError() << "ERR: Closing Child" << endl;
             return false;
         }
     }
@@ -1046,13 +1049,13 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 }
 
 /*====================== load background =========================*/
-void KPresenterDoc::loadBackground( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KPresenterDoc::loadBackground( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) ) {
-        parser.parseTag( tag.c_str(), name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, name, lst );
 
         // page
         if ( name == "PAGE" ) {
@@ -1062,32 +1065,32 @@ void KPresenterDoc::loadBackground( KOMLParser& parser, vector<KOMLAttrib>& lst 
             if ( !selectedSlides.contains( _backgroundList.count() - 1 ) )
                 selectedSlides.insert( _backgroundList.count() - 1, true );
         } else
-            cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
+            kdWarning() << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
 
         if ( !parser.close( tag ) ) {
-            cerr << "ERR: Closing Child" << endl;
+            kdWarning() << "ERR: Closing Child" << endl;
             return;
         }
     }
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bool _paste )
+void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst, bool _paste )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
     ObjType t = OT_LINE;
 
-    while ( parser.open( 0L, tag ) ) {
-        parser.parseTag( tag.c_str(), name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, name, lst );
 
         // object
         if ( name == "OBJECT" ) {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "type" )
-                    t = ( ObjType )atoi( ( *it ).m_strValue.c_str() );
+                    t = ( ObjType )( *it ).m_strValue.toInt();
             }
 
             switch ( t ) {
@@ -1202,10 +1205,10 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
                 _objectList->last()->setSelected( true );
             }
         } else
-            cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;
+            kdWarning() << "Unknown tag '" << tag << "' in OBJECTS" << endl;
 
         if ( !parser.close( tag ) ) {
-            cerr << "ERR: Closing Child" << endl;
+            kdWarning() << "ERR: Closing Child" << endl;
             return;
         }
     }
@@ -3533,22 +3536,22 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
     doc.setContent( in );
     KOMLParser parser( doc );
 
-    string tag;
-    vector<KOMLAttrib> lst;
-    string name;
+    QString tag;
+    QValueList<KOMLAttrib> lst;
+    QString name;
 
     // DOC
     if ( !parser.open( "DOC", tag ) ) {
-        cerr << "Missing DOC" << endl;
+        kdError() << "Missing DOC" << endl;
         return;
     }
 
     bool insertPage = false;
     bool ok = false;
 
-    parser.parseTag( tag.c_str(), name, lst );
-    vector<KOMLAttrib>::const_iterator it = lst.begin();
-    for( ; it != lst.end(); it++ ) {
+    parser.parseTag( tag, name, lst );
+    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+    for( ; it != lst.end(); ++it ) {
         if ( ( *it ).m_strName == "mime" ) {
             if ( ( *it ).m_strValue == "application/x-kpresenter-selection" ) {
                 ok = true;

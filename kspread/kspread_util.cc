@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <stdio.h>
+#include <string>
 
 #include <kapp.h>
 

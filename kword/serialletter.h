@@ -56,14 +56,14 @@ public:
     void removeRecord( int i );
 
     const QMap< QString, QString > &getRecordEntries() const {
-	return sampleRecord;
+        return sampleRecord;
     }
     int getNumRecords() const {
-	return (int)db.count();
+        return (int)db.count();
     }
 
     void save( QTextStream&out );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
+    void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
 protected:
     typedef QMap< QString, QString > DbRecord;
@@ -139,7 +139,7 @@ public:
     void displayRecord( int i );
 
     void setSorting( int, bool increasing = TRUE ) {
-	QListView::setSorting( -1, increasing );
+        QListView::setSorting( -1, increasing );
     }
 
 protected slots:

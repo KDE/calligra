@@ -32,7 +32,7 @@
 #endif
 
 /******************************************************************/
-/* Class: KPPixmapDataCollection				  */
+/* Class: KPPixmapDataCollection                                  */
 /******************************************************************/
 
 /*================================================================*/
@@ -48,21 +48,21 @@ QImage *KPPixmapDataCollection::findPixmapData( const Key &key )
     QMap< Key, QImage >::Iterator it = data.find ( key );
 
     if ( it != data.end() && it.key() == key ) {
-	return &it.data();
+        return &it.data();
     } else {
-	//kdDebug() << "    did NOT find pixmap data" << endl;
-	return 0L;
+        //kdDebug() << "    did NOT find pixmap data" << endl;
+        return 0L;
     }
 }
 
 /*================================================================*/
 QImage *KPPixmapDataCollection::insertPixmapData( const Key &key, const QImage &img )
 {
-    //kdDebug() << "	KPPixmapDataCollection::insertPixmapData( key = " << key.toString() << ", img = " << !img.isNull() << " )" << endl;
+    //kdDebug() << "    KPPixmapDataCollection::insertPixmapData( key = " << key.toString() << ", img = " << !img.isNull() << " )" << endl;
 
     QImage *tmp = findPixmapData( key );
     if ( tmp )
-	return tmp;
+        return tmp;
     QImage *image = new QImage( img );
 
     image->detach();
@@ -76,17 +76,17 @@ QImage *KPPixmapDataCollection::insertPixmapData( const Key &key, const QImage &
 }
 
 /*================================================================*/
-void KPPixmapDataCollection::setPixmapOldVersion( const Key &key, const char *_data )
+void KPPixmapDataCollection::setPixmapOldVersion( const Key &key, const QString &_data )
 {
     if ( data.contains( key ) )
-	return;
+        return;
 
-    QCString s( _data );
+    QCString s(_data.latin1());
     int i = s.find( ( char )1, 0 );
 
     while ( i != -1 ) {
-	s[ i ] = '\"';
-	i = s.find( ( char )1, i + 1 );
+        s[ i ] = '\"';
+        i = s.find( ( char )1, i + 1 );
     }
 
     QImage img;
@@ -98,7 +98,7 @@ void KPPixmapDataCollection::setPixmapOldVersion( const Key &key, const char *_d
 void KPPixmapDataCollection::setPixmapOldVersion( const Key &key )
 {
     if ( data.contains( key ) )
-	return;
+        return;
 
     QImage img( key.filename );
     insertPixmapData( key, img );
@@ -108,14 +108,14 @@ void KPPixmapDataCollection::setPixmapOldVersion( const Key &key )
 void KPPixmapDataCollection::addRef( const Key &key )
 {
     if ( !allowChangeRef )
-	return;
+        return;
 
-//     kdDebug() << "	 KPPixmapDataCollection::addRef( key = " << key.toString() << " )" << endl;
+//     kdDebug() << "    KPPixmapDataCollection::addRef( key = " << key.toString() << " )" << endl;
 
     if ( refs.contains( key ) ) {
-	int ref = refs[ key ];
-	refs[ key ] = ++ref;
-// 	kdDebug() << "    ref: " << refs[ key ] << endl;
+        int ref = refs[ key ];
+        refs[ key ] = ++ref;
+//      kdDebug() << "    ref: " << refs[ key ] << endl;
     }
 }
 
@@ -123,25 +123,25 @@ void KPPixmapDataCollection::addRef( const Key &key )
 void KPPixmapDataCollection::removeRef( const Key &key )
 {
     if ( !allowChangeRef )
-	return;
+        return;
 
-//     kdDebug() << "	 KPPixmapDataCollection::removeRef( key = " << key.toString() << " )" << endl;
+//     kdDebug() << "    KPPixmapDataCollection::removeRef( key = " << key.toString() << " )" << endl;
 
     if ( refs.contains( key ) ) {
-	int ref = refs[ key ];
-	refs[ key ] = --ref;
-// 	kdDebug() << "    ref: " << refs[ key ] << endl;
+        int ref = refs[ key ];
+        refs[ key ] = --ref;
+//      kdDebug() << "    ref: " << refs[ key ] << endl;
 
-	if ( ref == 0 ) {
-	    refs.remove( key );
-	    data.remove( key );
-//  	    kdDebug() << "    remove " << key.toString() << endl;
-	}
+        if ( ref == 0 ) {
+            refs.remove( key );
+            data.remove( key );
+//          kdDebug() << "    remove " << key.toString() << endl;
+        }
     }
 }
 
 /******************************************************************/
-/* Class: KPPixmapCollection					  */
+/* Class: KPPixmapCollection                                      */
 /******************************************************************/
 
 /*================================================================*/
@@ -153,40 +153,40 @@ KPPixmapCollection::~KPPixmapCollection()
 /*================================================================*/
 QPixmap* KPPixmapCollection::findPixmap( Key &key )
 {
-    //kdDebug() << "	 KPPixmapCollection::findPixmap( key = " << key.toString() << " )" << endl;
+    //kdDebug() << "     KPPixmapCollection::findPixmap( key = " << key.toString() << " )" << endl;
 
     if ( key.size == orig_size ) {
-	QImage *i = dataCollection.findPixmapData( key.dataKey );
-	if ( i )
-	    key.size = i->size();
-	else {
-	    QImage img( key.dataKey.filename );
-	    key.size = img.size();
-	}
+        QImage *i = dataCollection.findPixmapData( key.dataKey );
+        if ( i )
+            key.size = i->size();
+        else {
+            QImage img( key.dataKey.filename );
+            key.size = img.size();
+        }
     }
 
-    //kdDebug() << "	   key = " << key.toString() << " )" << endl;
+    //kdDebug() << "       key = " << key.toString() << " )" << endl;
 
     QMap< Key, QPixmap >::Iterator it = pixmaps.begin();
     it = pixmaps.find( key );
 
     if ( it != pixmaps.end() && it.key() == key ) {
-	//kdDebug() << "    pixmap found in pixmaps: " << it.key().toString() << endl;
-	addRef( key );
-	return &it.data();
+        //kdDebug() << "    pixmap found in pixmaps: " << it.key().toString() << endl;
+        addRef( key );
+        return &it.data();
     } else {
-	QImage *img = dataCollection.findPixmapData( key.dataKey );
-	if ( img ) {
-	    //kdDebug() << "	   pixmap found in data collection: " << key.dataKey.toString() << "\n" << endl;
-	    dataCollection.addRef( key.dataKey );
-	    return loadPixmap( *img, key, true );
-	} else {
-	    QImage image( key.dataKey.filename );
+        QImage *img = dataCollection.findPixmapData( key.dataKey );
+        if ( img ) {
+            //kdDebug() << "       pixmap found in data collection: " << key.dataKey.toString() << "\n" << endl;
+            dataCollection.addRef( key.dataKey );
+            return loadPixmap( *img, key, true );
+        } else {
+            QImage image( key.dataKey.filename );
 
-	    //kdDebug() << "	   pixmap not found anywhere\n" << endl;
-	    dataCollection.insertPixmapData( key.dataKey, image );
-	    return loadPixmap( image, key, true );
-	}
+            //kdDebug() << "       pixmap not found anywhere\n" << endl;
+            dataCollection.insertPixmapData( key.dataKey, image );
+            return loadPixmap( image, key, true );
+        }
     }
 }
 
@@ -194,14 +194,14 @@ QPixmap* KPPixmapCollection::findPixmap( Key &key )
 void KPPixmapCollection::addRef( const Key &key )
 {
     if ( !allowChangeRef )
-	return;
+        return;
 
-//     kdDebug() << "	 KPPixmapCollection::addRef( key = " << key.toString() << " )\n" << endl;
+//     kdDebug() << "    KPPixmapCollection::addRef( key = " << key.toString() << " )\n" << endl;
 
     if ( refs.contains( key ) ) {
-	int ref = refs[ key ];
-	refs[ key ] = ++ref;
-// 	kdDebug() << "    ref: " << refs[ key ] << "\n" << endl;
+        int ref = refs[ key ];
+        refs[ key ] = ++ref;
+//      kdDebug() << "    ref: " << refs[ key ] << "\n" << endl;
     }
 
     dataCollection.addRef( key.dataKey );
@@ -211,20 +211,20 @@ void KPPixmapCollection::addRef( const Key &key )
 void KPPixmapCollection::removeRef( const Key &key )
 {
     if ( !allowChangeRef )
-	return;
+        return;
 
-//     kdDebug() << "	 KPPixmapCollection::removeRef( key = " << key.toString() << " )\n" << endl;
+//     kdDebug() << "    KPPixmapCollection::removeRef( key = " << key.toString() << " )\n" << endl;
 
     if ( refs.contains( key ) ) {
-	int ref = refs[ key ];
-	refs[ key ] = --ref;
-// 	kdDebug() << "    ref: " << refs[ key ] << "\n" << endl;
+        int ref = refs[ key ];
+        refs[ key ] = --ref;
+//      kdDebug() << "    ref: " << refs[ key ] << "\n" << endl;
 
-	if ( ref == 0 ) {
-	    refs.remove( key );
-	    pixmaps.remove( key );
-// 	    kdDebug() << "	   remove: " << key.toString() << endl;
-	}
+        if ( ref == 0 ) {
+            refs.remove( key );
+            pixmaps.remove( key );
+//          kdDebug() << "         remove: " << key.toString() << endl;
+        }
     }
 
     dataCollection.removeRef( key.dataKey );
@@ -233,27 +233,27 @@ void KPPixmapCollection::removeRef( const Key &key )
 /*================================================================*/
 QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bool insert )
 {
-    //kdDebug() << "	 KPPixmapCollection::loadPixmap( image = " << !image.isNull() << ", key = " << key.toString() << ", insert = " << insert << " )" << endl;
+    //kdDebug() << "     KPPixmapCollection::loadPixmap( image = " << !image.isNull() << ", key = " << key.toString() << ", insert = " << insert << " )" << endl;
 
     QPixmap *pixmap = new QPixmap;
     pixmap->convertFromImage( image );
 
     if ( !pixmap->isNull() ) {
-	QSize size = key.size;
-	if ( size != pixmap->size() && size != orig_size && pixmap->width() != 0 && pixmap->height() != 0 ) {
-	    QWMatrix m;
-	    m.scale( static_cast<float>( size.width() ) / static_cast<float>( pixmap->width() ),
-		     static_cast<float>( size.height() ) / static_cast<float>( pixmap->height() ) );
-	    *pixmap = pixmap->xForm( m );
-	}
+        QSize size = key.size;
+        if ( size != pixmap->size() && size != orig_size && pixmap->width() != 0 && pixmap->height() != 0 ) {
+            QWMatrix m;
+            m.scale( static_cast<float>( size.width() ) / static_cast<float>( pixmap->width() ),
+                     static_cast<float>( size.height() ) / static_cast<float>( pixmap->height() ) );
+            *pixmap = pixmap->xForm( m );
+        }
     }
 
     if ( insert ) {
-	pixmaps.insert( Key( key ), *pixmap );
-	int ref = 1;
-	refs.insert( Key( key ), ref );
-	return pixmap;
-	return &pixmaps[ key ];
+        pixmaps.insert( Key( key ), *pixmap );
+        int ref = 1;
+        refs.insert( Key( key ), ref );
+        return pixmap;
+        return &pixmaps[ key ];
     }
 
     return pixmap;
@@ -266,10 +266,10 @@ QTextStream& operator<<( QTextStream &out, KPPixmapDataCollection::Key &key )
     QTime time = key.lastModified.time();
 
     out << " filename=\"" << (const char*)key.filename.utf8() << "\" year=\""
-	<< date.year()
-	<< "\" month=\"" << date.month() << "\" day=\"" << date.day()
-	<< "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
-	<< "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";
+        << date.year()
+        << "\" month=\"" << date.month() << "\" day=\"" << date.day()
+        << "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
+        << "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";
 
     return out;
 }
@@ -278,7 +278,7 @@ QTextStream& operator<<( QTextStream &out, KPPixmapDataCollection::Key &key )
 QTextStream& operator<<( QTextStream &out, KPPixmapCollection::Key &key )
 {
     out << key.dataKey << " width=\"" << key.size.width() << "\" height=\""
-	<< key.size.height() << "\" ";
+        << key.size.height() << "\" ";
 
     return out;
 }

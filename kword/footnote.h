@@ -26,7 +26,6 @@
 #include <koStream.h>
 
 #include <qtextstream.h>
-#include <string>
 
 class KWFootNote;
 class KWFormatContext;
@@ -63,7 +62,7 @@ public:
     void setNoteType( NoteType nt ) { noteType = nt; }
 
     void save( QTextStream&out );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
+    void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
 protected:
     void addFootNoteText( KWFootNote *fn );
@@ -76,7 +75,7 @@ protected:
     QString firstParag;
 
     friend class KWFootNote;
-    
+
 };
 
 /******************************************************************/
@@ -120,7 +119,7 @@ public:
     void destroy();
 
     void save( QTextStream&out );
-    void load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst );
+    void load( QString name, QString tag, KOMLParser &parser, QValueList<KOMLAttrib>& lst );
 
 protected:
     void makeText();

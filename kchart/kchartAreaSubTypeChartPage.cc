@@ -18,6 +18,7 @@
 #include <qlabel.h>
 #include <qhgroupbox.h>
 #include <qlayout.h>
+#include <stdlib.h>
 
 KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage(KChartParameters* params,QWidget* parent ) :
   KChartSubTypeChartPage(  params, parent )
@@ -31,7 +32,7 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage(KChartParameters* params,
   subtypeBG->insert( beside, KCHARTSTACKTYPE_BESIDE );
   subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
   connect( subtypeBG, SIGNAL( clicked( int ) ),
-		   this, SLOT( slotChangeSubType( int ) ) );
+                   this, SLOT( slotChangeSubType( int ) ) );
 
   QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
   toplevel->addWidget( exampleGB, 2 );
@@ -44,23 +45,23 @@ void KChartAreaSubTypeChartPage::init()
 {
   // LAYER and PERCENT are for bars only and therefore not configurable here.
   switch((int)_params->stack_type) {
-	case (int)KCHARTSTACKTYPE_DEPTH:
-	  {
-		depth->setChecked(true);
-		break;
-	  }
-	case (int)KCHARTSTACKTYPE_BESIDE:
-	  {
-		beside->setChecked(true);
-		break;
-	  }
-	default:
-	  {
-		kdDebug( 35001 ) << "Error in stack_type" << endl;
-		abort();
-		break;
-	  }
-	}
+        case (int)KCHARTSTACKTYPE_DEPTH:
+          {
+                depth->setChecked(true);
+                break;
+          }
+        case (int)KCHARTSTACKTYPE_BESIDE:
+          {
+                beside->setChecked(true);
+                break;
+          }
+        default:
+          {
+                kdDebug( 35001 ) << "Error in stack_type" << endl;
+                abort();
+                break;
+          }
+        }
 
   slotChangeSubType( _params->stack_type );
 }
@@ -69,11 +70,11 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 {
   switch( type ) {
   case KCHARTSTACKTYPE_DEPTH:
-	exampleLA->setPixmap( UserIcon( "areasubtypedepth" ) );
-	break;
+        exampleLA->setPixmap( UserIcon( "areasubtypedepth" ) );
+        break;
   case KCHARTSTACKTYPE_BESIDE:
-	exampleLA->setPixmap( UserIcon( "areasubtypebeside" ) );
-	break;
+        exampleLA->setPixmap( UserIcon( "areasubtypebeside" ) );
+        break;
   };
 }
 
@@ -82,11 +83,11 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 void KChartAreaSubTypeChartPage::apply()
 {
   if( depth->isChecked() ) {
-	_params->stack_type = KCHARTSTACKTYPE_DEPTH;
+        _params->stack_type = KCHARTSTACKTYPE_DEPTH;
   } else if( beside->isChecked() ) {
-	_params->stack_type = KCHARTSTACKTYPE_BESIDE;
+        _params->stack_type = KCHARTSTACKTYPE_BESIDE;
   } else {
-	kdDebug( 35001 ) << "Error in groupbutton" << endl;
+        kdDebug( 35001 ) << "Error in groupbutton" << endl;
   }
 }
 

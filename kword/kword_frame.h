@@ -298,7 +298,7 @@ public:
     void splitParag( KWParag *_parag, unsigned int _pos );
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
     void updateCounters();
     void updateAllStyles();
@@ -341,7 +341,7 @@ public:
     QString getFileName() { return filename; }
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
 protected:
     KWImage *image;
@@ -374,7 +374,7 @@ public:
     void enableDrawing( bool f ) { _enableDrawing = f; }
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
 protected:
     KWordFrame *frame;
@@ -409,7 +409,7 @@ public:
     virtual void update();
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
     void insertChar( int c );
     void setFormat( const QFont &f, const QColor &c );

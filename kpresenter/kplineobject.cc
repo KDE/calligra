@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <kdebug.h>
 
 #include <math.h>
 #include <iostream>
@@ -78,112 +79,112 @@ void KPLineObject::save( QTextStream& out )
 }
 
 /*========================== load ================================*/
-void KPLineObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KPLineObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) )
+    while ( parser.open( QString::null, tag ) )
     {
-        parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag, name, lst );
 
         // orig
         if ( name == "ORIG" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "x" )
-                    orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
+                    orig.setX( ( *it ).m_strValue.toInt() );
                 if ( ( *it ).m_strName == "y" )
-                    orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
+                    orig.setY( ( *it ).m_strValue.toInt() );
             }
         }
 
         // size
         else if ( name == "SIZE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "width" )
-                    ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                    ext.setWidth( ( *it ).m_strValue.toInt() );
                 if ( ( *it ).m_strName == "height" )
-                    ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+                    ext.setHeight( ( *it ).m_strValue.toInt() );
             }
         }
 
         // disappear
         else if ( name == "DISAPPEAR" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "effect" )
-                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                    effect3 = ( Effect3 )( *it ).m_strValue.toInt();
                 if ( ( *it ).m_strName == "doit" )
-                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                    disappear = ( bool )( *it ).m_strValue.toInt();
                 if ( ( *it ).m_strName == "num" )
-                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
+                    disappearNum = ( *it ).m_strValue.toInt();
             }
         }
 
         // shadow
         else if ( name == "SHADOW" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "distance" )
-                    shadowDistance = atoi( ( *it ).m_strValue.c_str() );
+                    shadowDistance = ( *it ).m_strValue.toInt();
                 if ( ( *it ).m_strName == "direction" )
-                    shadowDirection = ( ShadowDirection )atoi( ( *it ).m_strValue.c_str() );
+                    shadowDirection = ( ShadowDirection )( *it ).m_strValue.toInt();
                 if ( ( *it ).m_strName == "red" )
-                    shadowColor.setRgb( atoi( ( *it ).m_strValue.c_str() ),
+                    shadowColor.setRgb( ( *it ).m_strValue.toInt(),
                                         shadowColor.green(), shadowColor.blue() );
                 if ( ( *it ).m_strName == "green" )
-                    shadowColor.setRgb( shadowColor.red(), atoi( ( *it ).m_strValue.c_str() ),
+                    shadowColor.setRgb( shadowColor.red(), ( *it ).m_strValue.toInt(),
                                         shadowColor.blue() );
                 if ( ( *it ).m_strName == "blue" )
                     shadowColor.setRgb( shadowColor.red(), shadowColor.green(),
-                                        atoi( ( *it ).m_strValue.c_str() ) );
+                                        ( *it ).m_strValue.toInt() );
             }
         }
 
         // effects
         else if ( name == "EFFECTS" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "effect" )
-                    effect = ( Effect )atoi( ( *it ).m_strValue.c_str() );
+                    effect = ( Effect )( *it ).m_strValue.toInt();
                 if ( ( *it ).m_strName == "effect2" )
-                    effect2 = ( Effect2 )atoi( ( *it ).m_strValue.c_str() );
+                    effect2 = ( Effect2 )( *it ).m_strValue.toInt();
             }
         }
         // pen
         else if ( name == "PEN" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "red" )
-                    pen.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), pen.color().green(), pen.color().blue() ) );
+                    pen.setColor( QColor( ( *it ).m_strValue.toInt(), pen.color().green(), pen.color().blue() ) );
                 if ( ( *it ).m_strName == "green" )
-                    pen.setColor( QColor( pen.color().red(), atoi( ( *it ).m_strValue.c_str() ), pen.color().blue() ) );
+                    pen.setColor( QColor( pen.color().red(), ( *it ).m_strValue.toInt(), pen.color().blue() ) );
                 if ( ( *it ).m_strName == "blue" )
-                    pen.setColor( QColor( pen.color().red(), pen.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
+                    pen.setColor( QColor( pen.color().red(), pen.color().green(), ( *it ).m_strValue.toInt() ) );
                 if ( ( *it ).m_strName == "width" )
-                    pen.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                    pen.setWidth( ( *it ).m_strValue.toInt() );
                 if ( ( *it ).m_strName == "style" )
-                    pen.setStyle( ( Qt::PenStyle )atoi( ( *it ).m_strValue.c_str() ) );
+                    pen.setStyle( ( Qt::PenStyle )( *it ).m_strValue.toInt() );
             }
             setPen( pen );
         }
@@ -191,68 +192,68 @@ void KPLineObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         // lineType
         else if ( name == "LINETYPE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    lineType = ( LineType )atoi( ( *it ).m_strValue.c_str() );
+                    lineType = ( LineType )( *it ).m_strValue.toInt();
             }
         }
 
         // lineBegin
         else if ( name == "LINEBEGIN" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    lineBegin = ( LineEnd )atoi( ( *it ).m_strValue.c_str() );
+                    lineBegin = ( LineEnd )( *it ).m_strValue.toInt();
             }
         }
 
         // lineEnd
         else if ( name == "LINEEND" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    lineEnd = ( LineEnd )atoi( ( *it ).m_strValue.c_str() );
+                    lineEnd = ( LineEnd )( *it ).m_strValue.toInt();
             }
         }
 
         // angle
         else if ( name == "ANGLE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    angle = atof( ( *it ).m_strValue.c_str() );
+                    angle = ( *it ).m_strValue.toDouble();
             }
         }
 
         // presNum
         else if ( name == "PRESNUM" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    presNum = atoi( ( *it ).m_strValue.c_str() );
+                    presNum = ( *it ).m_strValue.toInt();
             }
         }
         else
-            cerr << "Unknown tag '" << tag << "' in LINE_OBJECT" << endl;
+            kdError() << "Unknown tag '" << tag << "' in LINE_OBJECT" << endl;
 
         if ( !parser.close( tag ) )
         {
-            cerr << "ERR: Closing Child" << endl;
+            kdError() << "ERR: Closing Child" << endl;
             return;
         }
     }

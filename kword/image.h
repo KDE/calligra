@@ -56,7 +56,7 @@ public:
     { return filename; }
 
     void save( QTextStream&out );
-    void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
+    void load( KOMLParser&, QValueList<KOMLAttrib>&, KWordDocument* );
 
 protected:
     int ref;

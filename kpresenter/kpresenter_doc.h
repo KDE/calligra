@@ -80,7 +80,7 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
-    bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+    bool load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs );
     bool save( QTextStream & out );
 
 };
@@ -355,8 +355,8 @@ protected:
 
     void saveBackground( QTextStream& );
     void saveObjects( QTextStream& );
-    void loadBackground( KOMLParser&, vector<KOMLAttrib>& );
-    void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
+    void loadBackground( KOMLParser&, QValueList<KOMLAttrib>& );
+    void loadObjects( KOMLParser&, QValueList<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
 

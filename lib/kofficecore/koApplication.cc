@@ -31,9 +31,10 @@
 #include <qstringlist.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
+#include <stdlib.h>
 
 KoApplication::KoApplication()
-	: KApplication()
+        : KApplication()
 {
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalogue("koffice");
@@ -76,43 +77,43 @@ void KoApplication::start()
 
     // No argument -> create an empty document
     if (!argsCount) {
-	KoDocument* doc = entry.createDoc( 0, "Document" );
-	if ( !doc )
-	    ::exit(1);
-	KoMainWindow* shell = doc->createShell();
-	shell->show();
-	QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-	if ( doc->initDoc() )
-	    {
-		shell->setRootDocument( doc );
-	    }
-	else
-	    ::exit(1);
-	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        KoDocument* doc = entry.createDoc( 0, "Document" );
+        if ( !doc )
+            ::exit(1);
+        KoMainWindow* shell = doc->createShell();
+        shell->show();
+        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        if ( doc->initDoc() )
+            {
+                shell->setRootDocument( doc );
+            }
+        else
+            ::exit(1);
+        QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
         // Loop through arguments
 
         short int n=0;
         for(int i=0; i < argsCount; i++ )
         {
-	    // For now create an empty document
+            // For now create an empty document
             KoDocument* doc = entry.createDoc( 0 );
             if ( doc )
             {
-		// show a shell asap
-		KoMainWindow* shell = doc->createShell();
-		shell->show();
-		// now try to load
-		QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-		if ( doc->openURL( args->url(i) ) ) {
-		    shell->setRootDocument( doc );
-		    n++;
-		    QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-		} else {
-		    // .... if failed
-		    delete shell;
-		}
-	    }
+                // show a shell asap
+                KoMainWindow* shell = doc->createShell();
+                shell->show();
+                // now try to load
+                QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+                if ( doc->openURL( args->url(i) ) ) {
+                    shell->setRootDocument( doc );
+                    n++;
+                    QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+                } else {
+                    // .... if failed
+                    delete shell;
+                }
+            }
         }
         if (n == 0) // no doc, all URLs were malformed
           ::exit(1);

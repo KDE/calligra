@@ -28,13 +28,14 @@
 #include "kptextobject.h"
 #include "kppixmapobject.h"
 #include "kppieobject.h"
+#include <kdebug.h>
 
 #include <qpainter.h>
 #include <iostream>
-using namespace std;  
+using namespace std;
 
 /******************************************************************/
-/* Class: KPGroupObject						  */
+/* Class: KPGroupObject                                           */
 /******************************************************************/
 
 /*================================================================*/
@@ -125,147 +126,147 @@ void KPGroupObject::save( QTextStream& out )
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count() ; ++i ) {
-	kpobject = objects.at( i );
-	if ( kpobject->getType() == OT_PART )
-	    continue;
-	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
-	kpobject->save( out );
-	out << etag << "</OBJECT>" << endl;
+        kpobject = objects.at( i );
+        if ( kpobject->getType() == OT_PART )
+            continue;
+        out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
+        kpobject->save( out );
+        out << etag << "</OBJECT>" << endl;
     }
 
     out << indent << "</OBJECTS>" << endl;
 }
 
 /*================================================================*/
-void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
-			  KPresenterDoc *doc )
+void KPGroupObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst,
+                          KPresenterDoc *doc )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
     updateObjs = false;
 
-    while ( parser.open( 0L, tag ) ) {
-	parser.parseTag( tag.c_str(), name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, name, lst );
 
-	// orig
-	if ( name == "ORIG" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "x" )
-		    orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "y" )
-		    orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+        // orig
+        if ( name == "ORIG" ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
+                if ( ( *it ).m_strName == "x" )
+                    orig.setX( ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "y" )
+                    orig.setY( ( *it ).m_strValue.toInt() );
+            }
+        }
 
-	// size
-	else if ( name == "SIZE" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "width" )
-		    ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "height" )
-		    ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	} else if ( name == "OBJECTS" ) {
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
+        // size
+        else if ( name == "SIZE" ) {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
+                if ( ( *it ).m_strName == "width" )
+                    ext.setWidth( ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "height" )
+                    ext.setHeight( ( *it ).m_strValue.toInt() );
+            }
+        } else if ( name == "OBJECTS" ) {
+            parser.parseTag( tag, name, lst );
+            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            //for( ; it != lst.end(); ++it ) {
+            //}
 
-	    ObjType t = OT_LINE;
+            ObjType t = OT_LINE;
 
-	    while ( parser.open( 0L, tag ) ) {
-		parser.parseTag( tag.c_str(), name, lst );
+            while ( parser.open( QString::null, tag ) ) {
+                parser.parseTag( tag, name, lst );
 
-		// object
-		if ( name == "OBJECT" ) {
-		    parser.parseTag( tag.c_str(), name, lst );
-		    vector<KOMLAttrib>::const_iterator it = lst.begin();
-		    for( ; it != lst.end(); it++ ) {
-			if ( ( *it ).m_strName == "type" )
-			    t = ( ObjType )atoi( ( *it ).m_strValue.c_str() );
-		    }
+                // object
+                if ( name == "OBJECT" ) {
+                    parser.parseTag( tag, name, lst );
+                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                    for( ; it != lst.end(); ++it ) {
+                        if ( ( *it ).m_strName == "type" )
+                            t = ( ObjType )( *it ).m_strValue.toInt();
+                    }
 
-		    switch ( t ) {
-		    case OT_LINE: {
-			KPLineObject *kplineobject = new KPLineObject();
-			kplineobject->load( parser, lst );
+                    switch ( t ) {
+                    case OT_LINE: {
+                        KPLineObject *kplineobject = new KPLineObject();
+                        kplineobject->load( parser, lst );
 
-			objects.append( kplineobject );
-		    } break;
-		    case OT_RECT: {
-			KPRectObject *kprectobject = new KPRectObject();
-			kprectobject->setRnds( doc->getRndX(), doc->getRndY() );
-			kprectobject->load( parser, lst );
+                        objects.append( kplineobject );
+                    } break;
+                    case OT_RECT: {
+                        KPRectObject *kprectobject = new KPRectObject();
+                        kprectobject->setRnds( doc->getRndX(), doc->getRndY() );
+                        kprectobject->load( parser, lst );
 
-			objects.append( kprectobject );
-		    } break;
-		    case OT_ELLIPSE: {
-			KPEllipseObject *kpellipseobject = new KPEllipseObject();
-			kpellipseobject->load( parser, lst );
+                        objects.append( kprectobject );
+                    } break;
+                    case OT_ELLIPSE: {
+                        KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                        kpellipseobject->load( parser, lst );
 
-			objects.append( kpellipseobject );
-		    } break;
-		    case OT_PIE: {
-			KPPieObject *kppieobject = new KPPieObject();
-			kppieobject->load( parser, lst );
+                        objects.append( kpellipseobject );
+                    } break;
+                    case OT_PIE: {
+                        KPPieObject *kppieobject = new KPPieObject();
+                        kppieobject->load( parser, lst );
 
-			objects.append( kppieobject );
-		    } break;
-		    case OT_AUTOFORM: {
-			KPAutoformObject *kpautoformobject = new KPAutoformObject();
-			kpautoformobject->load( parser, lst );
+                        objects.append( kppieobject );
+                    } break;
+                    case OT_AUTOFORM: {
+                        KPAutoformObject *kpautoformobject = new KPAutoformObject();
+                        kpautoformobject->load( parser, lst );
 
-			objects.append( kpautoformobject );
-		    } break;
-		    case OT_CLIPART: {
-			KPClipartObject *kpclipartobject = new KPClipartObject( doc->getClipartCollection() );
-			kpclipartobject->load( parser, lst );
+                        objects.append( kpautoformobject );
+                    } break;
+                    case OT_CLIPART: {
+                        KPClipartObject *kpclipartobject = new KPClipartObject( doc->getClipartCollection() );
+                        kpclipartobject->load( parser, lst );
 
-			objects.append( kpclipartobject );
-		    } break;
-		    case OT_TEXT: {
-			KPTextObject *kptextobject = new KPTextObject( doc );
-			kptextobject->load( parser, lst );
+                        objects.append( kpclipartobject );
+                    } break;
+                    case OT_TEXT: {
+                        KPTextObject *kptextobject = new KPTextObject( doc );
+                        kptextobject->load( parser, lst );
 
-			objects.append( kptextobject );
-		    } break;
-		    case OT_PICTURE: {
-			KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPixmapCollection() );
-			kppixmapobject->load( parser, lst );
+                        objects.append( kptextobject );
+                    } break;
+                    case OT_PICTURE: {
+                        KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPixmapCollection() );
+                        kppixmapobject->load( parser, lst );
 
-			objects.append( kppixmapobject );
-		    } break;
-		    case OT_GROUP: {
-			KPGroupObject *kpgroupobject = new KPGroupObject();
-			kpgroupobject->load( parser, lst, doc );
+                        objects.append( kppixmapobject );
+                    } break;
+                    case OT_GROUP: {
+                        KPGroupObject *kpgroupobject = new KPGroupObject();
+                        kpgroupobject->load( parser, lst, doc );
 
-			objects.append( kpgroupobject );
-		    } break;
-		    default: break;
-		    }
+                        objects.append( kpgroupobject );
+                    } break;
+                    default: break;
+                    }
 
-		} else
-		    cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;
+                } else
+                    kdError() << "Unknown tag '" << tag << "' in OBJECTS" << endl;
 
-		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
-		    return;
-		}
-	    }
-	
-	
-	} else
-	    cerr << "Unknown tag '" << tag << "' in GROUP_OBJECT" << endl;
+                if ( !parser.close( tag ) ) {
+                    kdError() << "ERR: Closing Child" << endl;
+                    return;
+                }
+            }
 
-	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
+
+        } else
+            kdError() << "Unknown tag '" << tag << "' in GROUP_OBJECT" << endl;
+
+        if ( !parser.close( tag ) ) {
+            kdError() << "ERR: Closing Child" << endl;
+            return;
+        }
     }
 
     updateObjs = true;
@@ -275,14 +276,14 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 void KPGroupObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
     if ( move ) {
-	KPObject::draw( _painter, _diffx, _diffy );
-	return;
+        KPObject::draw( _painter, _diffx, _diffy );
+        return;
     }
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	kpobject = objects.at( i );
-	kpobject->draw( _painter, _diffy, _diffy );
+        kpobject = objects.at( i );
+        kpobject->draw( _painter, _diffy, _diffy );
     }
 
     KPObject::draw( _painter, _diffx, _diffy );
@@ -292,14 +293,14 @@ void KPGroupObject::draw( QPainter *_painter, int _diffx, int _diffy )
 void KPGroupObject::updateSizes( float fx, float fy )
 {
     if ( !updateObjs )
-	return;
+        return;
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	kpobject = objects.at( i );
-	int w = (int)( (float)kpobject->getSize().width() * fx );
-	int h = (int)( (float)kpobject->getSize().height() * fy );
-	kpobject->setSize( w, h );
+        kpobject = objects.at( i );
+        int w = (int)( (float)kpobject->getSize().width() * fx );
+        int h = (int)( (float)kpobject->getSize().height() * fy );
+        kpobject->setSize( w, h );
     }
 }
 
@@ -307,10 +308,10 @@ void KPGroupObject::updateSizes( float fx, float fy )
 void KPGroupObject::updateCoords( int dx, int dy )
 {
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->moveBy( dx, dy );
+        objects.at( i )->moveBy( dx, dy );
 }
 
 /*================================================================*/
@@ -319,10 +320,10 @@ void KPGroupObject::rotate( float _angle )
     KPObject::rotate( _angle );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->rotate( _angle );
+        objects.at( i )->rotate( _angle );
 }
 
 /*================================================================*/
@@ -331,10 +332,10 @@ void KPGroupObject::setShadowDistance( int _distance )
     KPObject::setShadowDistance( _distance );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setShadowDistance( _distance );
+        objects.at( i )->setShadowDistance( _distance );
 }
 
 /*================================================================*/
@@ -343,10 +344,10 @@ void KPGroupObject::setShadowDirection( ShadowDirection _direction )
     KPObject::setShadowDirection( _direction );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setShadowDirection( _direction );
+        objects.at( i )->setShadowDirection( _direction );
 }
 
 /*================================================================*/
@@ -355,10 +356,10 @@ void KPGroupObject::setShadowColor( QColor _color )
     KPObject::setShadowColor( _color );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setShadowColor( _color );
+        objects.at( i )->setShadowColor( _color );
 }
 
 /*================================================================*/
@@ -367,10 +368,10 @@ void KPGroupObject::setEffect( Effect _effect )
     KPObject::setEffect( _effect );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setEffect( _effect );
+        objects.at( i )->setEffect( _effect );
 }
 
 /*================================================================*/
@@ -379,10 +380,10 @@ void KPGroupObject::setEffect2( Effect2 _effect2 )
     KPObject::setEffect2( _effect2 );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setEffect2( _effect2 );
+        objects.at( i )->setEffect2( _effect2 );
 }
 
 /*================================================================*/
@@ -391,10 +392,10 @@ void KPGroupObject::setPresNum( int _presNum )
     KPObject::setPresNum( _presNum );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setPresNum( _presNum );
+        objects.at( i )->setPresNum( _presNum );
 }
 
 /*================================================================*/
@@ -403,10 +404,10 @@ void KPGroupObject::setDisappear( bool b )
     KPObject::setDisappear( b );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setDisappear( b );
+        objects.at( i )->setDisappear( b );
 }
 
 /*================================================================*/
@@ -415,10 +416,10 @@ void KPGroupObject::setDisappearNum( int num )
     KPObject::setDisappearNum( num );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setDisappearNum( num );
+        objects.at( i )->setDisappearNum( num );
 }
 
 /*================================================================*/
@@ -427,10 +428,10 @@ void KPGroupObject::setEffect3( Effect3 _effect3)
     KPObject::setEffect3( _effect3 );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setEffect3( _effect3 );
+        objects.at( i )->setEffect3( _effect3 );
 }
 
 /*================================================================*/
@@ -439,10 +440,10 @@ void KPGroupObject::zoom( float _fakt )
     KPObject::zoom( _fakt );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->zoom( _fakt );
+        objects.at( i )->zoom( _fakt );
 }
 
 /*================================================================*/
@@ -451,10 +452,10 @@ void KPGroupObject::zoomOrig()
     KPObject::zoomOrig();
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->zoomOrig();
+        objects.at( i )->zoomOrig();
 }
 
 /*================================================================*/
@@ -463,10 +464,10 @@ void KPGroupObject::setOwnClipping( bool _ownClipping )
     KPObject::setOwnClipping( _ownClipping );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setOwnClipping( _ownClipping );
+        objects.at( i )->setOwnClipping( _ownClipping );
 }
 
 /*================================================================*/
@@ -475,10 +476,10 @@ void KPGroupObject::setSubPresStep( int _subPresStep )
     KPObject::setSubPresStep( _subPresStep );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->setSubPresStep( _subPresStep );
+        objects.at( i )->setSubPresStep( _subPresStep );
 }
 
 /*================================================================*/
@@ -487,8 +488,8 @@ void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
     KPObject::doSpecificEffects( _specEffects, _onlyCurrStep );
 
     if ( !updateObjs )
-	return;
+        return;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->doSpecificEffects( _specEffects, _onlyCurrStep );
+        objects.at( i )->doSpecificEffects( _specEffects, _onlyCurrStep );
 }

@@ -40,7 +40,6 @@
 #include <kapp.h>
 
 #include <fstream.h>
-#include <string.h>
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
@@ -214,115 +213,114 @@ void KPBackGround::save( QTextStream& out )
 }
 
 /*================================================================*/
-void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KPBackGround::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 {
-    string name;
-    string tag;
+    QString name;
+    QString tag;
 
-
-    while ( parser.open( 0L, tag ) )
+    while ( parser.open( QString::null, tag ) )
     {
-        parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag, name, lst );
 
         // backtype
         if ( name == "BACKTYPE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    setBackType( ( BackType )atoi( ( *it ).m_strValue.c_str() ) );
+                    setBackType( ( BackType )( *it ).m_strValue.toInt() );
             }
         }
 
         // pageEffect
         else if ( name == "PGEFFECT" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    setPageEffect( ( PageEffect )atoi( ( *it ).m_strValue.c_str() ) );
+                    setPageEffect( ( PageEffect )( *it ).m_strValue.toInt() );
             }
         }
 
         // backview
         else if ( name == "BACKVIEW" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    setBackView( ( BackView )atoi( ( *it ).m_strValue.c_str() ) );
+                    setBackView( ( BackView )( *it ).m_strValue.toInt() );
             }
         }
 
         // backcolor 1
         else if ( name == "BACKCOLOR1" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "red" )
-                    setBackColor1( QColor( atoi( ( *it ).m_strValue.c_str() ),
+                    setBackColor1( QColor( ( *it ).m_strValue.toInt(),
                                            backColor1.green(), backColor1.blue() ) );
                 if ( ( *it ).m_strName == "green" )
                     setBackColor1( QColor( backColor1.red(),
-                                           atoi( ( *it ).m_strValue.c_str() ), backColor1.blue() ) );
+                                           ( *it ).m_strValue.toInt(), backColor1.blue() ) );
                 if ( ( *it ).m_strName == "blue" )
                     setBackColor1( QColor( backColor1.red(), backColor1.green(),
-                                           atoi( ( *it ).m_strValue.c_str() ) ) );
+                                           ( *it ).m_strValue.toInt() ) );
             }
         }
 
         // gradient
         else if ( name == "BGRADIENT" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "unbalanced" )
-                    setBackUnbalanced( atoi( ( *it ).m_strValue.c_str() ) );
+                    setBackUnbalanced( ( *it ).m_strValue.toInt() );
                 if ( ( *it ).m_strName == "xfactor" )
-                    setBackXFactor( atoi( ( *it ).m_strValue.c_str() ) );
+                    setBackXFactor( ( *it ).m_strValue.toInt() );
                 if ( ( *it ).m_strName == "yfactor" )
-                    setBackYFactor( atoi( ( *it ).m_strValue.c_str() ) );
+                    setBackYFactor( ( *it ).m_strValue.toInt() );
             }
         }
 
         // backcolor 2
         else if ( name == "BACKCOLOR2" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "red" )
-                    setBackColor2( QColor( atoi( ( *it ).m_strValue.c_str() ),
+                    setBackColor2( QColor( ( *it ).m_strValue.toInt(),
                                            backColor2.green(), backColor2.blue() ) );
                 if ( ( *it ).m_strName == "green" )
                     setBackColor2( QColor( backColor2.red(),
-                                           atoi( ( *it ).m_strValue.c_str() ), backColor2.blue() ) );
+                                           ( *it ).m_strValue.toInt(), backColor2.blue() ) );
                 if ( ( *it ).m_strName == "blue" )
                     setBackColor2( QColor( backColor2.red(), backColor2.green(),
-                                           atoi( ( *it ).m_strValue.c_str() ) ) );
+                                           ( *it ).m_strValue.toInt() ) );
             }
         }
 
         // backColorType
         else if ( name == "BCTYPE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    setBackColorType( ( BCType )atoi( ( *it ).m_strValue.c_str() ) );
+                    setBackColorType( ( BCType )( *it ).m_strValue.toInt() );
             }
         }
 
@@ -331,30 +329,30 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         {
             int year, month, day, hour, minute, second, msec;
 
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "filename" )
-                    key.dataKey.filename = ( *it ).m_strValue.c_str();
+                    key.dataKey.filename = ( *it ).m_strValue;
                 else if ( ( *it ).m_strName == "year" )
-                    year = atoi( ( *it ).m_strValue.c_str() );
+                    year = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "month" )
-                    month = atoi( ( *it ).m_strValue.c_str() );
+                    month = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "day" )
-                    day = atoi( ( *it ).m_strValue.c_str() );
+                    day = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "hour" )
-                    hour = atoi( ( *it ).m_strValue.c_str() );
+                    hour = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "minute" )
-                    minute = atoi( ( *it ).m_strValue.c_str() );
+                    minute = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "second" )
-                    second = atoi( ( *it ).m_strValue.c_str() );
+                    second = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "msec" )
-                    msec = atoi( ( *it ).m_strValue.c_str() );
+                    msec = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "width" )
-                    key.size.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                    key.size.setWidth( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "height" )
-                    key.size.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+                    key.size.setHeight( ( *it ).m_strValue.toInt() );
             }
             key.dataKey.lastModified.setDate( QDate( year, month, day ) );
             key.dataKey.lastModified.setTime( QTime( hour, minute, second, msec ) );
@@ -363,18 +361,18 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         // backpic
         else if ( name == "BACKPIX" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
 
             bool openPic = true;
-            QCString _data;
+            QString _data;
             QString _fileName;
 
-            for( ; it != lst.end(); it++ )
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "data" )
                 {
-                    _data = ( *it ).m_strValue.c_str();
+                    _data = ( *it ).m_strValue;
                     if ( _data.isEmpty() )
                         openPic = true;
                     else
@@ -382,7 +380,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 }
                 else if ( ( *it ).m_strName == "filename" )
                 {
-                    _fileName = ( *it ).m_strValue.c_str();
+                    _fileName = ( *it ).m_strValue;
                     if ( !_fileName.isEmpty() )
                     {
                         if ( int _envVarB = _fileName.find( '$' ) >= 0 )
@@ -410,26 +408,26 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         {
             int year, month, day, hour, minute, second, msec;
 
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "filename" )
-                    clipKey.filename = ( *it ).m_strValue.c_str();
+                    clipKey.filename = ( *it ).m_strValue;
                 else if ( ( *it ).m_strName == "year" )
-                    year = atoi( ( *it ).m_strValue.c_str() );
+                    year = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "month" )
-                    month = atoi( ( *it ).m_strValue.c_str() );
+                    month = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "day" )
-                    day = atoi( ( *it ).m_strValue.c_str() );
+                    day = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "hour" )
-                    hour = atoi( ( *it ).m_strValue.c_str() );
+                    hour = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "minute" )
-                    minute = atoi( ( *it ).m_strValue.c_str() );
+                    minute = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "second" )
-                    second = atoi( ( *it ).m_strValue.c_str() );
+                    second = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "msec" )
-                    msec = atoi( ( *it ).m_strValue.c_str() );
+                    msec = ( *it ).m_strValue.toInt();
             }
             clipKey.lastModified.setDate( QDate( year, month, day ) );
             clipKey.lastModified.setTime( QTime( hour, minute, second, msec ) );
@@ -438,13 +436,13 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         // backclip
         else if ( name == "BACKCLIP" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "filename" )
                 {
-                    QString _fileName = ( *it ).m_strValue.c_str();
+                    QString _fileName = ( *it ).m_strValue;
                     if ( !_fileName.isEmpty() )
                     {
                         if ( int _envVarB = _fileName.find( '$' ) >= 0 )
@@ -462,7 +460,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         }
 
         else
-            cerr << "Unknown tag '" << tag << "' in CLPARTOBJECT" << endl;
+            cerr << "Unknown tag '" << tag.latin1() << "' in CLPARTOBJECT" << endl;
 
         if ( !parser.close( tag ) )
         {

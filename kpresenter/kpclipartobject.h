@@ -29,7 +29,7 @@ class KPGradient;
 class QPicture;
 
 /******************************************************************/
-/* Class: KPClipartObject					  */
+/* Class: KPClipartObject                                         */
 /******************************************************************/
 
 class KPClipartObject : public KPObject
@@ -88,7 +88,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

@@ -286,7 +286,7 @@ public:
     QString toString( bool cached = FALSE );
     QString toString( unsigned int _pos, unsigned int _len, bool cached = FALSE );
     void saveFormat( QTextStream&out );
-    void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
+    void loadFormat( KOMLParser &parser, QValueList<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );

@@ -32,7 +32,7 @@
 #include <qtextstream.h>
 
 /******************************************************************/
-/* Class: KPPixmapDataCollection				  */
+/* Class: KPPixmapDataCollection                                  */
 /******************************************************************/
 
 class KPPixmapDataCollection
@@ -40,52 +40,52 @@ class KPPixmapDataCollection
 public:
     struct Key
     {
-	Key()
-	    : filename(), lastModified()
-	{}
+        Key()
+            : filename(), lastModified()
+        {}
 
-	Key( const QString &fn, const QDateTime &mod )
-	    : filename( fn ), lastModified( mod )
-	{}
-	Key( const Key &key )
-	    : filename( key.filename ), lastModified( key.lastModified )
-	{}
+        Key( const QString &fn, const QDateTime &mod )
+            : filename( fn ), lastModified( mod )
+        {}
+        Key( const Key &key )
+            : filename( key.filename ), lastModified( key.lastModified )
+        {}
 
-	Key &operator=( const Key &key ) {
-	    filename = key.filename;
-	    lastModified = key.lastModified;
-	    return *this;
-	}
+        Key &operator=( const Key &key ) {
+            filename = key.filename;
+            lastModified = key.lastModified;
+            return *this;
+        }
 
-	bool operator==( const Key &key ) const {
-	    return ( key.filename == filename &&
-		     key.lastModified == lastModified );
-	}
+        bool operator==( const Key &key ) const {
+            return ( key.filename == filename &&
+                     key.lastModified == lastModified );
+        }
 
-	bool operator<( const Key &key ) const {
-	    QString s1( key.toString() );
-	    QString s2( toString() );
-	    return ( s1 < s2 );
-	}
+        bool operator<( const Key &key ) const {
+            QString s1( key.toString() );
+            QString s2( toString() );
+            return ( s1 < s2 );
+        }
 
-	QString toString() const {
-	    QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
-	    return QString( s );
-	}
+        QString toString() const {
+            QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
+            return QString( s );
+        }
 
-	QString filename;
-	QDateTime lastModified;
+        QString filename;
+        QDateTime lastModified;
     };
 
     KPPixmapDataCollection()
-	: allowChangeRef( true )
+        : allowChangeRef( true )
     {}
     ~KPPixmapDataCollection();
 
     QImage *findPixmapData( const Key &key );
     QImage *insertPixmapData( const Key &key, const QImage &img );
 
-    void setPixmapOldVersion( const Key &key, const char *_data );
+    void setPixmapOldVersion( const Key &key, const QString &_data );
     void setPixmapOldVersion( const Key &key );
 
     void addRef( const Key &key );
@@ -108,7 +108,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KPPixmapCollection					  */
+/* Class: KPPixmapCollection                                      */
 /******************************************************************/
 
 class KPPixmapCollection
@@ -116,46 +116,46 @@ class KPPixmapCollection
 public:
     struct Key
     {
-	Key()
-	    : dataKey(), size( orig_size )
-	{}
+        Key()
+            : dataKey(), size( orig_size )
+        {}
 
-	Key( const KPPixmapDataCollection::Key &dk, const QSize &sz )
-	    : dataKey( dk ), size( sz )
-	{}
+        Key( const KPPixmapDataCollection::Key &dk, const QSize &sz )
+            : dataKey( dk ), size( sz )
+        {}
 
-	Key( const Key &key )
-	    : dataKey( key.dataKey ), size( key.size )
-	{}
+        Key( const Key &key )
+            : dataKey( key.dataKey ), size( key.size )
+        {}
 
-	Key &operator=( const Key &key ) {
-	    dataKey = key.dataKey;
-	    size = key.size;
-	    return *this;
-	}
+        Key &operator=( const Key &key ) {
+            dataKey = key.dataKey;
+            size = key.size;
+            return *this;
+        }
 
-	bool operator==( const Key &key ) const {
-	    return ( dataKey == key.dataKey &&
-		     size == key.size );
-	}
+        bool operator==( const Key &key ) const {
+            return ( dataKey == key.dataKey &&
+                     size == key.size );
+        }
 
-	bool operator<( const Key &key ) const {
-	    QString s1( key.toString() );
-	    QString s2( toString() );
-	    return s1 < s2;
-	}
+        bool operator<( const Key &key ) const {
+            QString s1( key.toString() );
+            QString s2( toString() );
+            return s1 < s2;
+        }
 
-	QString toString() const {
-	    QString s = QString( "%1_%2_%3" ).arg( dataKey.toString() ).arg( size.width() ).arg( size.height() );
-	    return QString( s );
-	}
+        QString toString() const {
+            QString s = QString( "%1_%2_%3" ).arg( dataKey.toString() ).arg( size.width() ).arg( size.height() );
+            return QString( s );
+        }
 
-	KPPixmapDataCollection::Key dataKey;
-	QSize size;
+        KPPixmapDataCollection::Key dataKey;
+        QSize size;
     };
 
     KPPixmapCollection()
-	: allowChangeRef( true )
+        : allowChangeRef( true )
     { date = QDate::currentDate(); time = QTime::currentTime(); }
     ~KPPixmapCollection();
 

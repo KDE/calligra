@@ -29,7 +29,7 @@ class KPresenterDoc;
 class QDomElement;
 
 /******************************************************************/
-/* Class: KPTextObject						  */
+/* Class: KPTextObject                                            */
 /******************************************************************/
 
 class KPTextObject : public KPObject
@@ -96,7 +96,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

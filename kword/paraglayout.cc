@@ -23,7 +23,6 @@
 #include "kword_utils.h"
 
 #include <kdebug.h>
-#include <komlMime.h>
 
 #include <strstream>
 #include <fstream>
@@ -175,262 +174,262 @@ void KWParagLayout::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 {
-    string tag;
-    string _name;
+    QString tag;
+    QString _name;
     double pt, mm, inch;
 
-    while ( parser.open( 0L, tag ) ) {
-        parser.parseTag( tag.c_str(), _name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, _name, lst );
 
         // name
         if ( _name == "NAME" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    name = correctQString( ( *it ).m_strValue.c_str() );
+                    name = correctQString( ( *it ).m_strValue );
             }
         } else if ( _name == "FOLLOWING" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "name" )
-                    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
+                    followingParagLayout = correctQString( ( *it ).m_strValue );
             }
         } else if ( _name == "TABULATOR" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
             KoTabulator *tab = new KoTabulator;
             bool noinch = true;
-            for( ; it != lst.end(); it++ ) {
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "mmpos" )
-                    tab->mmPos = atof( ( *it ).m_strValue.c_str() );
+                    tab->mmPos = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "ptpos" )
-                    tab->ptPos = atof( ( *it ).m_strValue.c_str() );
+                    tab->ptPos = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "inchpos" ) {
                     noinch = false;
-                    tab->inchPos = atof( ( *it ).m_strValue.c_str() );
+                    tab->inchPos = ( *it ).m_strValue.toDouble();
                 }
                 if ( ( *it ).m_strName == "type" )
-                    tab->type = static_cast<KoTabulators>( atoi( ( *it ).m_strValue.c_str() ) );
+                    tab->type = static_cast<KoTabulators>( ( *it ).m_strValue.toInt() );
             }
             if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
             tabList.append( tab );
         } else if ( _name == "FLOW" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    flow = static_cast<Flow>( atoi( ( *it ).m_strValue.c_str() ) );
+                    flow = static_cast<Flow>( ( *it ).m_strValue.toInt() );
             }
         } else if ( _name == "OHEAD" ) {
             pt = mm = inch = 0.0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "pt" )
-                    pt = atof( ( *it ).m_strValue.c_str() );
+                    pt = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "mm" )
-                    mm = atof( ( *it ).m_strValue.c_str() );
+                    mm = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "inch" )
-                    inch = atof( ( *it ).m_strValue.c_str() );
+                    inch = ( *it ).m_strValue.toDouble();
             }
             paragHeadOffset.setPT_MM_INCH( pt, mm, inch );
         } else if ( _name == "OFOOT" ) {
             pt = mm = inch = 0.0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "pt" )
-                    pt = atof( ( *it ).m_strValue.c_str() );
+                    pt = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "mm" )
-                    mm = atof( ( *it ).m_strValue.c_str() );
+                    mm = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "inch" )
-                    inch = atof( ( *it ).m_strValue.c_str() );
+                    inch = ( *it ).m_strValue.toDouble();
             }
             paragFootOffset.setPT_MM_INCH( pt, mm, inch );
         } else if ( _name == "IFIRST" ) {
             pt = mm = inch = 0.0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "pt" )
-                    pt = atof( ( *it ).m_strValue.c_str() );
+                    pt = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "mm" )
-                    mm = atof( ( *it ).m_strValue.c_str() );
+                    mm = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "inch" )
-                    inch = atof( ( *it ).m_strValue.c_str() );
+                    inch = ( *it ).m_strValue.toDouble();
             }
             firstLineLeftIndent.setPT_MM_INCH( pt, mm, inch );
         } else if ( _name == "ILEFT" ) {
             pt = mm = inch = 0.0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "pt" )
-                    pt = atof( ( *it ).m_strValue.c_str() );
+                    pt = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "mm" )
-                    mm = atof( ( *it ).m_strValue.c_str() );
+                    mm = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "inch" )
-                    inch = atof( ( *it ).m_strValue.c_str() );
+                    inch = ( *it ).m_strValue.toDouble();
             }
             leftIndent.setPT_MM_INCH( pt, mm, inch );
         } else if ( _name == "LINESPACE" ) {
             pt = mm = inch = 0.0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "pt" )
-                    pt = atof( ( *it ).m_strValue.c_str() );
+                    pt = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "mm" )
-                    mm = atof( ( *it ).m_strValue.c_str() );
+                    mm = ( *it ).m_strValue.toDouble();
                 if ( ( *it ).m_strName == "inch" )
-                    inch = atof( ( *it ).m_strValue.c_str() );
+                    inch = ( *it ).m_strValue.toDouble();
             }
             lineSpacing.setPT_MM_INCH( pt, mm, inch );
         } else if ( _name == "OFFSETS" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "head" )
-                    paragHeadOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
+                    paragHeadOffset.setMM( ( *it ).m_strValue.toDouble() );
                 else if ( ( *it ).m_strName == "foot" )
-                    paragFootOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
+                    paragFootOffset.setMM( ( *it ).m_strValue.toDouble() );
             }
         } else if ( _name == "INDENTS" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "first" )
-                    firstLineLeftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
+                    firstLineLeftIndent.setMM( ( *it ).m_strValue.toDouble() );
                 else if ( ( *it ).m_strName == "left" )
-                    leftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
+                    leftIndent.setMM( ( *it ).m_strValue.toDouble() );
             }
         } else if ( _name == "LINESPACING" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "value" )
-                    lineSpacing.setPT( atof( ( *it ).m_strValue.c_str() ) );
+                    lineSpacing.setPT( ( *it ).m_strValue.toDouble() );
             }
         } else if ( _name == "COUNTER" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "type" )
-                    counter.counterType = static_cast<CounterType>( atoi( ( *it ).m_strValue.c_str() ) );
+                    counter.counterType = static_cast<CounterType>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "depth" )
-                    counter.counterDepth = atoi( ( *it ).m_strValue.c_str() );
+                    counter.counterDepth = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "bullet" )
-                    counter.counterBullet = QChar( static_cast<unsigned short>( atoi( ( *it ).m_strValue.c_str() ) ) );
+                    counter.counterBullet = QChar( static_cast<unsigned short>( ( *it ).m_strValue.toInt() ) );
                 else if ( ( *it ).m_strName == "lefttext" )
-                    counter.counterLeftText = correctQString( ( *it ).m_strValue.c_str() );
+                    counter.counterLeftText = correctQString( ( *it ).m_strValue );
                 else if ( ( *it ).m_strName == "righttext" )
-                    counter.counterRightText = correctQString( ( *it ).m_strValue.c_str() );
+                    counter.counterRightText = correctQString( ( *it ).m_strValue );
                 else if ( ( *it ).m_strName == "start" )
                 {
-                    QString s = QString::fromUtf8(( *it ).m_strValue.c_str());
+                    QString s = ( *it ).m_strValue;
                     if ( s[0].isDigit() )
-                      counter.startCounter = atoi( s.latin1() );
+                      counter.startCounter = s.toInt();
                     else // support for old files (DF)
                       counter.startCounter = s.lower()[0].latin1() - 'a' + 1;
                 }
                 else if ( ( *it ).m_strName == "numberingtype" )
-                    counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
+                    counter.numberingType = static_cast<NumType>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bulletfont" )
-                    counter.bulletFont = correctQString( ( *it ).m_strValue.c_str() );
+                    counter.bulletFont = correctQString( ( *it ).m_strValue );
                 else if ( ( *it ).m_strName == "customdef" )
-                    counter.customCounterDef = correctQString( ( *it ).m_strValue.c_str() );
+                    counter.customCounterDef = correctQString( ( *it ).m_strValue );
             }
         } else if ( _name == "LEFTBORDER" ) {
             unsigned int r = 0, g = 0, b = 0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "red" ) {
-                    r = atoi( ( *it ).m_strValue.c_str() );
+                    r = ( *it ).m_strValue.toInt();
                     left.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "green" ) {
-                    g = atoi( ( *it ).m_strValue.c_str() );
+                    g = ( *it ).m_strValue.toInt();
                     left.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "blue" ) {
-                    b = atoi( ( *it ).m_strValue.c_str() );
+                    b = ( *it ).m_strValue.toInt();
                     left.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    left.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                    left.style = static_cast<BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
-                    left.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                    left.ptWidth = ( *it ).m_strValue.toInt();
             }
         } else if ( _name == "RIGHTBORDER" ) {
             unsigned int r = 0, g = 0, b = 0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "red" ) {
-                    r = atoi( ( *it ).m_strValue.c_str() );
+                    r = ( *it ).m_strValue.toInt();
                     right.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "green" ) {
-                    g = atoi( ( *it ).m_strValue.c_str() );
+                    g = ( *it ).m_strValue.toInt();
                     right.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "blue" ) {
-                    b = atoi( ( *it ).m_strValue.c_str() );
+                    b = ( *it ).m_strValue.toInt();
                     right.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    right.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                    right.style = static_cast<BorderStyle>(( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
-                    right.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                    right.ptWidth = ( *it ).m_strValue.toInt();
             }
         } else if ( _name == "BOTTOMBORDER" ) {
             unsigned int r = 0, g = 0, b = 0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "red" ) {
-                    r = atoi( ( *it ).m_strValue.c_str() );
+                    r = ( *it ).m_strValue.toInt();
                     bottom.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "green" ) {
-                    g = atoi( ( *it ).m_strValue.c_str() );
+                    g = ( *it ).m_strValue.toInt();
                     bottom.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "blue" ) {
-                    b = atoi( ( *it ).m_strValue.c_str() );
+                    b = ( *it ).m_strValue.toInt();
                     bottom.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    bottom.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                    bottom.style = static_cast<BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
-                    bottom.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                    bottom.ptWidth = ( *it ).m_strValue.toInt();
             }
         } else if ( _name == "TOPBORDER" ) {
             unsigned int r = 0, g = 0, b = 0;
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
+            parser.parseTag( tag, _name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "red" ) {
-                    r = atoi( ( *it ).m_strValue.c_str() );
+                    r = ( *it ).m_strValue.toInt();
                     top.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "green" ) {
-                    g = atoi( ( *it ).m_strValue.c_str() );
+                    g = ( *it ).m_strValue.toInt();
                     top.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "blue" ) {
-                    b = atoi( ( *it ).m_strValue.c_str() );
+                    b = ( *it ).m_strValue.toInt();
                     top.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    top.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                    top.style = static_cast<BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
-                    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                    top.ptWidth = ( *it ).m_strValue.toInt();
             }
         } else if ( _name == "FORMAT" ) {
-            parser.parseTag( tag.c_str(), _name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ ) {
-            }
+            parser.parseTag( tag, _name, lst );
+            //vector<KOMLAttrib>::const_iterator it = lst.begin();
+            //for( ; it != lst.end(); it++ ) {
+            //}
             format.load( parser, lst, document );
         } else
-            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in PARAGRAPHLAYOUT" << endl;
+            kdError(32001) << "Unknown tag '" << tag << "' in PARAGRAPHLAYOUT" << endl;
 
         if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag.c_str() << endl;
+            kdError(32001) << "Closing " << tag << endl;
             return;
         }
     }

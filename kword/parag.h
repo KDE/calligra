@@ -36,7 +36,7 @@ class KWTextFrameSet;
 class KWordDocument;
 
 /******************************************************************/
-/* Class: KWParag						  */
+/* Class: KWParag                                                 */
 /******************************************************************/
 
 /**
@@ -53,15 +53,15 @@ public:
      *
      * @param _doc the document this paragraph is belonging to.
      * @param _prev a pointer to the previous paragraph or 0L if this one is to become
-     *		    the first one.
+     *              the first one.
      * @param _next a pointer to the next paragraph or 0L if this one is to become
-     *		    the last one.
+     *              the last one.
      * @param _paragLayout the layout to use in this paragraph.
      *
      * @see KWParagraphLayout
      */
     KWParag( KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev,
-	     KWParag* _next, KWParagLayout* _paragLayout, bool useForFirst = true );
+             KWParag* _next, KWParagLayout* _paragLayout, bool useForFirst = true );
     KWParag( const KWParag& _parag );
 
     /**
@@ -81,42 +81,42 @@ public:
     KWParag* getPrev() { return prev; }
     /**
      * @return The page this paragraph starts on. This value is only valid if this paragraph is
-     *	       in front of the last modified paragraph. The value is zoomed.
+     *         in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getStartPage() { return startPage; }
     unsigned int getEndPage() { return endPage; }
     /**
      * @return The column this paragraph starts in. This value is only valid if this paragraph is
-     *	       in front of the last modified paragraph. The value is zoomed.
+     *         in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getStartFrame() { return startFrame; }
     /**
      * @return The column this paragraph ends in. This value is only valid if this paragraph is
-     *	       in front of the last modified paragraph. The value is zoomed.
+     *         in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getEndFrame() { return endFrame; }
     /**
      * @return The y position on the page on which this paragraph starts.
-     *	       This value is only valid if this paragraph is in front of the last modified paragraph.
-     *	       The value is zoomed.
+     *         This value is only valid if this paragraph is in front of the last modified paragraph.
+     *         The value is zoomed.
      */
     unsigned int getPTYStart() { return ptYStart; }
     /**
      * @return The y position on the page on which this paragraph ends.
-     *	       This value is only valid if this paragraph is in front of the last modified paragraph.
-     *	       The value is zoomed.
+     *         This value is only valid if this paragraph is in front of the last modified paragraph.
+     *         The value is zoomed.
      */
     unsigned int getPTYEnd() { return ptYEnd; }
 
     /**
      * @return the size of the text in bytes. This does NOT mean
-     *	       the amount of characters or whatever. The size needed
-     *	       to store pointers to @ref #KWFormat is included for example.
+     *         the amount of characters or whatever. The size needed
+     *         to store pointers to @ref #KWFormat is included for example.
      */
     unsigned int getTextLen() { return text.size(); }
     /**
      * @return a pointer to the memory segment, which holds text paragraphs
-     *	       text.
+     *         text.
      */
     KWChar* getText() { return text.data(); }
     KWChar* getChar( unsigned int _pos ) { assert( _pos < text.size() ); return text.data() + _pos; }
@@ -168,7 +168,7 @@ public:
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format, int flags = KWFormat::All );
 
     void save( QTextStream&out );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
+    void load( KOMLParser&, QValueList<KOMLAttrib>& );
 
     int *getCounterData() { return counterData; }
 
@@ -177,10 +177,10 @@ public:
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs,
-	      bool _wildcard = false );
+              bool _wildcard = false );
     int findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs,
-		 bool _wildcard = false );
+                 bool _wildcard = false );
     void replace( int _pos, int _len, QString _text, KWFormat &_format );
 
     void setHardBreak( bool hb ) { hardBreak = hb; }
@@ -209,7 +209,7 @@ protected:
      * string that defines a counter (syntax a bit similar to LaTeX)
      */
     QString counterTextByCustomDef( const QString& d_ );
-    /** 
+    /**
      * called by makeCounterText and by counterTextByCustomDef. Returns counterText.
      */
     QString counterTextByType( KWParagLayout::CounterType ct_ );

@@ -25,7 +25,7 @@
 class KPGradient;
 
 /******************************************************************/
-/* Class: KPPieObject						  */
+/* Class: KPPieObject                                             */
 /******************************************************************/
 
 class KPPieObject : public KPObject
@@ -33,9 +33,9 @@ class KPPieObject : public KPObject
 public:
     KPPieObject();
     KPPieObject( QPen _pen, QBrush _brush, FillType _fillType,
-		 QColor _gColor1, QColor _gColor2, BCType _gType, PieType _pieType,
-		 int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
-		 bool _unbalanced, int _xfactor, int _yfactor );
+                 QColor _gColor1, QColor _gColor2, BCType _gType, PieType _pieType,
+                 int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
+                 bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPPieObject()
     { if ( gradient ) delete gradient; }
 
@@ -104,7 +104,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

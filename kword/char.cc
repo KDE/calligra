@@ -23,11 +23,9 @@
 #include "font.h"
 #include "defs.h"
 
-#include <string.h>
 #include <assert.h>
 
 #include <kdebug.h>
-#include <komlMime.h>
 #include <koStream.h>
 #include <kword_utils.h>
 
@@ -471,13 +469,13 @@ void KWString::saveFormat( QTextStream&out )
 }
 
 /*================================================================*/
-void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
+void KWString::loadFormat( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) ) {
-        parser.parseTag( tag.c_str(), name, lst );
+    while ( parser.open( QString::null, tag ) ) {
+        parser.parseTag( tag, name, lst );
 
         // format
         if ( name == "FORMAT" ) {
@@ -488,18 +486,18 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
             KWCharImage *_kwimage = 0L;
             KWCharFormat *_kwformat = 0L;
             KWCharTab *_kwtab = 0L;
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
             bool _load = false;
-            for ( ; it != lst.end(); it++ ) {
+            for ( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "id" ) {
-                    _id = static_cast<ClassIDs>( atoi( ( *it ).m_strValue.c_str() ) );
+                    _id = static_cast<ClassIDs>( ( *it ).m_strValue.toInt() );
                     _load = true;
                 }
                 else if ( ( *it ).m_strName == "pos" )
-                    __pos = atoi( ( *it ).m_strValue.c_str() );
+                    __pos = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "len" )
-                    __len = atoi( ( *it ).m_strValue.c_str() );
+                    __len = ( *it ).m_strValue.toInt();
             }
 
             if ( _load ) {
@@ -544,15 +542,15 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                     KWVariable *var = 0L;
                     KWCharVariable *v = 0L;
 
-                    while ( parser.open( 0L, tag ) ) {
-                        parser.parseTag( tag.c_str(), name, lst );
+                    while ( parser.open( QString::null, tag ) ) {
+                        parser.parseTag( tag, name, lst );
 
                         if ( name == "TYPE" ) {
-                            parser.parseTag( tag.c_str(), name, lst );
-                            vector<KOMLAttrib>::const_iterator it = lst.begin();
-                            for ( ; it != lst.end(); it++ ) {
+                            parser.parseTag( tag, name, lst );
+                            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                            for ( ; it != lst.end(); ++it ) {
                                 if ( ( *it ).m_strName == "type" ) {
-                                    vart = static_cast<VariableType>( atoi( ( *it ).m_strValue.c_str() ) );
+                                    vart = static_cast<VariableType>( ( *it ).m_strValue.toInt() );
                                     switch ( vart ) {
                                     case VT_DATE_FIX:
                                         var = new KWDateVariable( _doc );
@@ -597,7 +595,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                                 var->load( parser, name, tag, lst );
                         }
                         if ( !parser.close( tag ) ) {
-                            kdError(32001) << "Closing " << tag.c_str() << endl;
+                            kdError(32001) << "Closing " << tag << endl;
                             return;
                         }
                     }
@@ -606,8 +604,8 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                     KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNote::KWFootNoteInternal>() );
                     KWCharFootNote *v = new KWCharFootNote( fn );
 
-                    while ( parser.open( 0L, tag ) ) {
-                        parser.parseTag( tag.c_str(), name, lst );
+                    while ( parser.open( QString::null, tag ) ) {
+                        parser.parseTag( tag, name, lst );
 
                         if ( name == "FRMAT" && v ) {
                             _format = new KWFormat();
@@ -624,7 +622,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                                 fn->load( name, tag, parser, lst );
                         }
                         if ( !parser.close( tag ) ) {
-                            kdError(32001) << "Closing " << tag.c_str() << endl;
+                            kdError(32001) << "Closing " << tag << endl;
                             return;
                         }
                     }
@@ -632,55 +630,55 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                     doc->getFootNoteManager().insertFootNoteInternal( fn );
                 } break;
                 case ID_KWCharAnchor: {
-                    string attribute = "";
-                    string type = "";
-                    string instance = "";
+                    QString attribute = "";
+                    QString type = "";
+                    QString instance = "";
                     KWCharAnchor *anchor = NULL;
 
-                    while ( parser.open( 0L, tag ) ) {
-                        parser.parseTag( tag.c_str(), name, lst );
+                    while ( parser.open( QString::null, tag ) ) {
+                        parser.parseTag( tag, name, lst );
                         if ( name == "ANCHOR" ) {
-                            parser.parseTag( tag.c_str(), name, lst );
-                            vector<KOMLAttrib>::const_iterator it = lst.begin();
-                            for ( ; it != lst.end(); it++ ) {
-                                attribute = it->m_strName;
+                            parser.parseTag( tag, name, lst );
+                            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                            for ( ; it != lst.end(); ++it ) {
+                                attribute = (*it).m_strName;
                                 if ( attribute == "type" ) {
-                                    type = it->m_strValue;
+                                    type = (*it).m_strValue;
                                 }
                                 else if ( attribute == "instance" ) {
-                                    instance = it->m_strValue;
+                                    instance = (*it).m_strValue;
                                 }
                                 else {
-                                    kdError(32001) << "Unknown " << name.c_str() <<
-                                                " attrib '" << attribute.c_str() << "'" << endl;
+                                    kdError(32001) << "Unknown " << name <<
+                                                " attrib '" << attribute << "'" << endl;
                                 }
                             }
 
                             // Create an anchor object of the right type.
                             if ( type == "grpMgr" ) {
-                                if ( instance != "" ) {
+                                if ( !instance.isEmpty() ) {
                                     KWGroupManager *group = new KWGroupManager( doc );
-                                    group->setName( QString( instance.c_str() ) );
+                                    group->setName( instance );
                                     group->setAnchored( true );
                                     doc->addGroupManager( group );
                                     anchor = group;
                                 }
                                 else {
-                                    kdError(32001) << "Missing " << name.c_str() <<
+                                    kdError(32001) << "Missing " << name <<
                                                 " attrib: instance" << endl;
                                 }
                             }
                             else {
-                                kdError(32001) << "Unknown " << name.c_str() <<
-                                        " attrib value type=" << type.c_str() << endl;
+                                kdError(32001) << "Unknown " << name <<
+                                        " attrib value type=" << type << endl;
                             }
                         }
                         else {
-                            kdError(32001) << "Unknown tag '" << name.c_str() <<
-                                        "' in " << tag.c_str() << endl;
+                            kdError(32001) << "Unknown tag '" << name <<
+                                        "' in " << tag << endl;
                         }
                         if ( !parser.close( tag ) ) {
-                            kdError(32001) << "Closing " << tag.c_str() << endl;
+                            kdError(32001) << "Closing " << tag << endl;
                             return;
                         }
                         }
@@ -699,7 +697,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
         }
 
         if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag.c_str() << endl;
+            kdError(32001) << "Closing " << tag << endl;
             return;
         }
     }
@@ -1044,30 +1042,31 @@ QCString KWString::utf8( bool _decoded )
 void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 {
     if ( _char.attrib ) {
-	switch( _char.attrib->getClassId() ) {
-	case ID_KWCharFormat:
-	case ID_KWCharImage:
-	case ID_KWCharTab:
-	case ID_KWCharVariable:
-	    delete _char.attrib;
-	    break;
-	case ID_KWCharFootNote: {
-	    if ( allowRemoveFn ) {
-		_doc->getFootNoteManager().
-		    removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
-	    }
-	    delete _char.attrib;
-	} break;
-	case ID_KWCharAnchor: {
-            KWGroupManager *gm = (KWGroupManager *)_char.attrib;
-	    delete _char.attrib;
-	} break;
-	default: ; //assert( 0 );
-	}
-	_char.attrib = 0L;
-	if ( _char.autoformat )
-	    delete _char.autoformat;
-	_char.autoformat = 0L;
+        switch( _char.attrib->getClassId() ) {
+        case ID_KWCharFormat:
+        case ID_KWCharImage:
+        case ID_KWCharTab:
+        case ID_KWCharVariable:
+            delete _char.attrib;
+            break;
+        case ID_KWCharFootNote: {
+            if ( allowRemoveFn ) {
+                _doc->getFootNoteManager().
+                    removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+            }
+            delete _char.attrib;
+        } break;
+        case ID_KWCharAnchor: {
+            // huh? (Werner)
+            //KWGroupManager *gm = (KWGroupManager *)_char.attrib;
+            delete _char.attrib;
+        } break;
+        default: ; //assert( 0 );
+        }
+        _char.attrib = 0L;
+        if ( _char.autoformat )
+            delete _char.autoformat;
+        _char.autoformat = 0L;
     }
 }
 

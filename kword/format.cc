@@ -24,7 +24,6 @@
 #include "kword_utils.h"
 
 #include <kdebug.h>
-#include <komlMime.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
@@ -193,39 +192,39 @@ void KWFormat::save( QTextStream&out )
 }
 
 /*================================================================*/
-void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc )
+void KWFormat::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KWordDocument *_doc )
 {
     doc = _doc;
     ref = 0;
 
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) )
+    while ( parser.open( QString::null, tag ) )
     {
-        parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag, name, lst );
 
         // color
         if ( name == "COLOR" )
         {
             unsigned int r = 0, g = 0, b = 0;
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "red" )
                 {
-                    r = atoi( ( *it ).m_strValue.c_str() );
+                    r = ( *it ).m_strValue.toInt();
                     color.setRgb( r, g, b );
                 }
                 else if ( ( *it ).m_strName == "green" )
                 {
-                    g = atoi( ( *it ).m_strValue.c_str() );
+                    g = ( *it ).m_strValue.toInt();
                     color.setRgb( r, g, b );
                 }
                 else if ( ( *it ).m_strName == "blue" )
                 {
-                    b = atoi( ( *it ).m_strValue.c_str() );
+                    b = ( *it ).m_strValue.toInt();
                     color.setRgb( r, g, b );
                 }
             }
@@ -234,82 +233,82 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
         // font
         else if ( name == "FONT" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "name" )
-                    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
+                    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue ) );
             }
         }
 
         // font size
         else if ( name == "SIZE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    ptFontSize = atoi( ( *it ).m_strValue.c_str() );
+                    ptFontSize = ( *it ).m_strValue.toInt();
             }
         }
 
         // weight
         else if ( name == "WEIGHT" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    weight = atoi( ( *it ).m_strValue.c_str() );
+                    weight = ( *it ).m_strValue.toInt();
             }
         }
 
         // italic
         else if ( name == "ITALIC" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    italic = atoi( ( *it ).m_strValue.c_str() );
+                    italic = ( *it ).m_strValue.toInt();
             }
         }
 
         // underline
         else if ( name == "UNDERLINE" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    underline = atoi( ( *it ).m_strValue.c_str() );
+                    underline = ( *it ).m_strValue.toInt();
             }
         }
 
         // vertical alignment
         else if ( name == "VERTALIGN" )
         {
-            parser.parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
             {
                 if ( ( *it ).m_strName == "value" )
-                    vertAlign = static_cast<VertAlign>( atoi( ( *it ).m_strValue.c_str() ) );
+                    vertAlign = static_cast<VertAlign>( ( *it ).m_strValue.toInt() );
             }
         }
 
         else
-            kdError(32001) << "Unknown tag '" << tag.c_str() <<
+            kdError(32001) << "Unknown tag '" << tag <<
                         "' in FORMAT" << endl;
 
         if ( !parser.close( tag ) )
         {
-                kdError(32001) << "Closing " << tag.c_str() << endl;
+                kdError(32001) << "Closing " << tag << endl;
             return;
         }
     }

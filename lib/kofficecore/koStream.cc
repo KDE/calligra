@@ -24,7 +24,7 @@
 #include <qpen.h>
 #include <qfont.h>
 
-#include "koStream.h"
+#include <koStream.h>
 
 QTextStream& operator<< ( QTextStream& outs, const QRect &_rect )
 {
@@ -32,21 +32,21 @@ QTextStream& operator<< ( QTextStream& outs, const QRect &_rect )
   return outs;
 }
 
-QRect tagToRect( vector<KOMLAttrib>& _attribs )
+QRect tagToRect( QValueList<KOMLAttrib>& _attribs )
 {
   QRect r;
 
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end() ; it++ )
+  QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
+  for( ; it != _attribs.end() ; ++it )
   {
     if ( (*it).m_strName == "x" )
-      r.setLeft( atoi( (*it).m_strValue.c_str() ) );
+      r.setLeft( (*it).m_strValue.toInt() );
     else if ( (*it).m_strName == "y" )
-      r.setTop( atoi( (*it).m_strValue.c_str() ) );
+      r.setTop( (*it).m_strValue.toInt() );
     else if ( (*it).m_strName == "w" )
-      r.setWidth( atoi( (*it).m_strValue.c_str() ) );
+      r.setWidth( (*it).m_strValue.toInt() );
     else if ( (*it).m_strName == "h" )
-      r.setHeight( atoi( (*it).m_strValue.c_str() ) );
+      r.setHeight( (*it).m_strValue.toInt() );
   }
 
   return r;
@@ -86,27 +86,27 @@ QTextStream& operator>> ( QTextStream& ins, QColor &_color )
 
 QTextStream& operator<< ( QTextStream& outs, const QPen &_pen )
 {
-  outs << "<PEN style=" << (int)_pen.style() << " width=" << _pen.width() << " color=" << _pen.color() << "/>";
+  outs << "<PEN style=\"" << (int)_pen.style() << "\" width=\"" << _pen.width() << "\" color=\"" << _pen.color() << "\"/>";
 
   return outs;
 }
 
-QPen tagToPen( vector<KOMLAttrib>& _attribs )
+QPen tagToPen( QValueList<KOMLAttrib>& _attribs )
 {
   QPen p;
 
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end() ; it++ )
+  QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
+  for( ; it != _attribs.end() ; ++it )
   {
     if ( (*it).m_strName == "style" )
     {
-      Qt::PenStyle style = (Qt::PenStyle)atoi( (*it).m_strValue.c_str() );
+      Qt::PenStyle style = (Qt::PenStyle)(*it).m_strValue.toInt();
       p.setStyle( style );
     }
     else if ( (*it).m_strName == "width" )
-      p.setWidth( atoi( (*it).m_strValue.c_str() ) );
+      p.setWidth( (*it).m_strValue.toInt() );
     else if ( (*it).m_strName == "color" )
-      p.setColor( strToColor( (*it).m_strValue.c_str() ) );
+      p.setColor( (*it).m_strValue );
   }
 
   return p;
@@ -114,30 +114,30 @@ QPen tagToPen( vector<KOMLAttrib>& _attribs )
 
 QTextStream& operator<< ( QTextStream& outs, const QFont &_font )
 {
-  outs << "<FONT family=\"" << _font.family().ascii() << "\" pt=" << _font.pointSize() << " weight="
+  outs << "<FONT family=\"" << _font.family().ascii() << "\" pt=\"" << _font.pointSize() << "\" weight=\""
        << _font.weight();
   if ( _font.italic() )
-    outs << " italic/>";
+    outs << "\" italic=\"1\"/>";
   else
-    outs << "/>";
+    outs << "\"/>";
 
   return outs;
 }
 
-QFont tagToFont( vector<KOMLAttrib>& _attribs )
+QFont tagToFont( QValueList<KOMLAttrib>& _attribs )
 {
   // QFont f;
   QFont f( "Times", 12 );
 
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end() ; it++ )
+  QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
+  for( ; it != _attribs.end() ; ++it )
   {
     if ( (*it).m_strName == "family" )
-      f.setFamily( (*it).m_strValue.c_str() );
+      f.setFamily( (*it).m_strValue );
     else if ( (*it).m_strName == "pt" )
-      f.setPointSize( atoi( (*it).m_strValue.c_str() ) );
+      f.setPointSize( (*it).m_strValue.toInt() );
     else if ( (*it).m_strName == "weight" )
-      f.setWeight( atoi( (*it).m_strValue.c_str() ) );
+      f.setWeight( (*it).m_strValue.toInt() );
     else if ( (*it).m_strName == "italic" )
       f.setItalic( true );
     else if ( (*it).m_strName == "bold" )

@@ -27,8 +27,6 @@
 #include <komlWriter.h>
 #include <qtextstream.h>
 
-using std::vector;
-
 class QImage;
 class QPicture;
 class QRect;
@@ -38,16 +36,16 @@ class QFont;
 class QString;
 
 QTextStream& operator<< ( QTextStream& outs, const QRect &_rect );
-QRect tagToRect( std::vector<KOMLAttrib>& _attribs );
+QRect tagToRect( QValueList<KOMLAttrib>& _attribs );
 
 QTextStream& operator<< ( QTextStream& outs, const QColor &_rect );
 QTextStream& operator>> ( QTextStream& outs, QColor &_rect );
 QColor strToColor( const char *_buffer );
 
 QTextStream& operator<< ( QTextStream& outs, const QPen &_pen );
-QPen tagToPen( std::vector<KOMLAttrib>& _attribs );
+QPen tagToPen( QValueList<KOMLAttrib>& _attribs );
 
 QTextStream& operator<< ( QTextStream& outs, const QFont &_font );
-QFont tagToFont( std::vector<KOMLAttrib>& _attribs );
+QFont tagToFont( QValueList<KOMLAttrib>& _attribs );
 
 #endif

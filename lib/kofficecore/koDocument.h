@@ -41,8 +41,6 @@ class KoDocumentPrivate;
 class KoDocumentInfo;
 class DCOPObject;
 
-using std::istream;
-using std::ostream;
 
 /**
  *  The KOffice document class

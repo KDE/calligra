@@ -29,13 +29,13 @@
 class QPixmap;
 
 /******************************************************************/
-/* Class: KPPixmapObject					  */
+/* Class: KPPixmapObject                                          */
 /******************************************************************/
 
 class KPPixmapObject : public KPObject
 {
     friend class Page;
-    
+
 public:
     KPPixmapObject( KPPixmapCollection *_pixmapCollection );
     KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified );
@@ -98,7 +98,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

@@ -25,16 +25,14 @@
 
 #include <koStream.h>
 
-#include <string>
-
 class KWordDocument;
 class KWVariable;
 class KWParag;
 
 enum VariableType { VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
-		    VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_NONE };
+                    VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_NONE };
 enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4,
-			  VFT_SERIALLETTER = 5 };
+                          VFT_SERIALLETTER = 5 };
 
 /******************************************************************/
 /* Class: KWVariableFormat                                        */
@@ -197,7 +195,7 @@ public:
     virtual void recalc() {}
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
 protected:
     KWordDocument *doc;
@@ -231,7 +229,7 @@ public:
     long unsigned int getPgNum() const { return pgNum; }
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
 protected:
     long unsigned int pgNum;
@@ -264,7 +262,7 @@ public:
     void setDate( QDate _date ) { date = _date; }
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
 protected:
     QDate date;
@@ -298,7 +296,7 @@ public:
     void setTime( QTime _time ) { time = _time; }
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser&,  QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
 protected:
     QTime time;
@@ -329,7 +327,7 @@ public:
     virtual void recalc();
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
     virtual QString getName() const;
     virtual QString getValue() const;
@@ -364,7 +362,7 @@ public:
     virtual void recalc();
 
     virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
     virtual QString getName() const;
     virtual QString getValue() const;

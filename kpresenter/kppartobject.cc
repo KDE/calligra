@@ -27,11 +27,12 @@
 #include <qwidget.h>
 #include <qpainter.h>
 #include <koDocument.h>
+#include <kdebug.h>
 #include <iostream>
-using namespace std;  
+using namespace std;
 
 /******************************************************************/
-/* Class: KPPartObject						  */
+/* Class: KPPartObject                                            */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
@@ -70,9 +71,9 @@ void KPPartObject::rotate( float _angle )
 
     child->setRotation( _angle );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-			     getOrig().y() + getSize().height() / 2 ) );
+                             getOrig().y() + getSize().height() / 2 ) );
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -83,9 +84,9 @@ void KPPartObject::setSize( int _width, int _height )
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-				     getOrig().y() + getSize().height() / 2 ) );
+                                     getOrig().y() + getSize().height() / 2 ) );
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -95,7 +96,7 @@ void KPPartObject::setOrig( QPoint _point )
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-				     getOrig().y() + getSize().height() / 2 ) );
+                                     getOrig().y() + getSize().height() / 2 ) );
 }
 
 /*======================== draw ==================================*/
@@ -105,7 +106,7 @@ void KPPartObject::setOrig( int _x, int _y )
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-				     getOrig().y() + getSize().height() / 2 ) );
+                                     getOrig().y() + getSize().height() / 2 ) );
 
 }
 
@@ -116,7 +117,7 @@ void KPPartObject::moveBy( QPoint _point )
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-				     getOrig().y() + getSize().height() / 2 ) );
+                                     getOrig().y() + getSize().height() / 2 ) );
 }
 
 /*======================== draw ==================================*/
@@ -126,7 +127,7 @@ void KPPartObject::moveBy( int _dx, int _dy )
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-				     getOrig().y() + getSize().height() / 2 ) );
+                                     getOrig().y() + getSize().height() / 2 ) );
 }
 
 /*======================== draw ==================================*/
@@ -137,9 +138,9 @@ void KPPartObject::resizeBy( int _dx, int _dy )
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-				     getOrig().y() + getSize().height() / 2 ) );
+                                     getOrig().y() + getSize().height() / 2 ) );
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -147,8 +148,8 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
     if ( move )
     {
-	KPObject::draw( _painter, _diffx, _diffy );
-	return;
+        KPObject::draw( _painter, _diffx, _diffy );
+        return;
     }
 
 //     int ox = orig.x() - _diffx;
@@ -166,54 +167,54 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     if ( angle == 0 )
     {
-	child->transform( *_painter );
-		
-	_painter->setPen( Qt::NoPen );
-	_painter->setBrush( brush );
-	if ( fillType == FT_BRUSH || !gradient )
-	    _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-	else
-	    _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        child->transform( *_painter );
 
-	_painter->setPen( pen );
-	_painter->setBrush( Qt::NoBrush );
-	_painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-	paint( _painter );
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+
+        paint( _painter );
     }
     else
     {
-	child->transform( *_painter );
-	
-	/* QRect br = QRect( 0, 0, ow, oh );
-	int pw = br.width();
-	int ph = br.height();
-	QRect rr = br;
-	int yPos = -rr.y();
-	int xPos = -rr.x();
-	rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        child->transform( *_painter );
 
-	QWMatrix m, mtx, m2;
-	mtx.rotate( angle );
-	m.translate( pw / 2, ph / 2 );
-	m2.translate( rr.left() + xPos, rr.top() + yPos );
-	m = m2 * mtx * m;
+        /* QRect br = QRect( 0, 0, ow, oh );
+        int pw = br.width();
+        int ph = br.height();
+        QRect rr = br;
+        int yPos = -rr.y();
+        int xPos = -rr.x();
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	_painter->setWorldMatrix( m ); */
+        QWMatrix m, mtx, m2;
+        mtx.rotate( angle );
+        m.translate( pw / 2, ph / 2 );
+        m2.translate( rr.left() + xPos, rr.top() + yPos );
+        m = m2 * mtx * m;
 
-	_painter->setPen( Qt::NoPen );
-	_painter->setBrush( brush );
+        _painter->setWorldMatrix( m ); */
 
-	if ( fillType == FT_BRUSH || !gradient )
-	    _painter->drawRect(penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-	else
-	    _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
 
-	_painter->setPen( pen );
-	_painter->setBrush( Qt::NoBrush );
-	_painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect(penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-	paint( _painter );
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+
+        paint( _painter );
     }
 
     // _painter->setViewport( r );
@@ -230,7 +231,7 @@ void KPPartObject::paint( QPainter *_painter )
 
     // ######### Torben: Care about zooming
     if ( child && child->document() )
-	child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), true, 0 );
+        child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), true, 0 );
 }
 
 /*================================================================*/
@@ -239,7 +240,7 @@ void KPPartObject::activate( QWidget *_widget, int /*diffx*/, int /*diffy*/ )
     KPresenterView *view = (KPresenterView*)_widget;
     KoDocument* part = child->document();
     if ( !part )
-	return;
+        return;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
 }
@@ -255,12 +256,12 @@ void KPPartObject::deactivate()
     KPObject::setSize( _width, _height );
 
     if ( !zoomed )
-	child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
+        child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
 
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 
     getNewPic = true;
     } */
@@ -271,12 +272,12 @@ void KPPartObject::deactivate()
     KPObject::resizeBy( _dx, _dy );
 
     if ( !zoomed )
-	child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
+        child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
 
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
-	gradient->setSize( getSize() );
+        gradient->setSize( getSize() );
 
     getNewPic = true;
     } */
@@ -302,195 +303,195 @@ void KPPartObject::setFillType( FillType _fillType )
 
     if ( fillType == FT_BRUSH && gradient )
     {
-	delete gradient;
-	gradient = 0;
+        delete gradient;
+        gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-	gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
 }
 
 /*================================================================*/
 void KPPartObject::save( QTextStream& out )
 {
     out << indent << "<EFFECTS effect=\"" << static_cast<int>( effect ) << "\" effect2=\""
-	<< static_cast<int>( effect2 ) << "\"/>" << endl;
+        << static_cast<int>( effect2 ) << "\"/>" << endl;
     out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
-	<< "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-	<< "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
+        << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
+        << "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
     out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
-	<< "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
+        << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
-	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
-	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
-	<< "\" yfactor=\"" << yfactor << "\"/>" << endl;
+        << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
+        << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
+        << static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
+        << "\" yfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
-	<< "\" num=\"" << disappearNum << "\"/>" << endl;
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
-void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KPPartObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 {
-    string tag;
-    string name;
+    QString tag;
+    QString name;
 
-    while ( parser.open( 0L, tag ) )
+    while ( parser.open( QString::null, tag ) )
     {
-	parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag, name, lst );
 
-	// effects
-	if ( name == "EFFECTS" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "effect" )
-		    effect = ( Effect )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "effect2" )
-		    effect2 = ( Effect2 )atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // effects
+        if ( name == "EFFECTS" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect = ( Effect )( *it ).m_strValue.toInt();
+                if ( ( *it ).m_strName == "effect2" )
+                    effect2 = ( Effect2 )( *it ).m_strValue.toInt();
+            }
+        }
 
-	// pen
-	else if ( name == "PEN" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		    pen.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), pen.color().green(), pen.color().blue() ) );
-		if ( ( *it ).m_strName == "green" )
-		    pen.setColor( QColor( pen.color().red(), atoi( ( *it ).m_strValue.c_str() ), pen.color().blue() ) );
-		if ( ( *it ).m_strName == "blue" )
-		    pen.setColor( QColor( pen.color().red(), pen.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
-		if ( ( *it ).m_strName == "width" )
-		    pen.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "style" )
-		    pen.setStyle( ( Qt::PenStyle )atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    setPen( pen );
-	}
+        // pen
+        else if ( name == "PEN" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "red" )
+                    pen.setColor( QColor( ( *it ).m_strValue.toInt(), pen.color().green(), pen.color().blue() ) );
+                if ( ( *it ).m_strName == "green" )
+                    pen.setColor( QColor( pen.color().red(), ( *it ).m_strValue.toInt(), pen.color().blue() ) );
+                if ( ( *it ).m_strName == "blue" )
+                    pen.setColor( QColor( pen.color().red(), pen.color().green(), ( *it ).m_strValue.toInt() ) );
+                if ( ( *it ).m_strName == "width" )
+                    pen.setWidth( ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "style" )
+                    pen.setStyle( ( Qt::PenStyle )( *it ).m_strValue.toInt() );
+            }
+            setPen( pen );
+        }
 
-	// brush
-	else if ( name == "BRUSH" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(), brush.color().blue() ) );
-		if ( ( *it ).m_strName == "green" )
-		    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ), brush.color().blue() ) );
-		if ( ( *it ).m_strName == "blue" )
-		    brush.setColor( QColor( brush.color().red(), brush.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
-		if ( ( *it ).m_strName == "style" )
-		    brush.setStyle( ( Qt::BrushStyle )atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    setBrush( brush );
-	}
+        // brush
+        else if ( name == "BRUSH" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "red" )
+                    brush.setColor( QColor( ( *it ).m_strValue.toInt(), brush.color().green(), brush.color().blue() ) );
+                if ( ( *it ).m_strName == "green" )
+                    brush.setColor( QColor( brush.color().red(), ( *it ).m_strValue.toInt(), brush.color().blue() ) );
+                if ( ( *it ).m_strName == "blue" )
+                    brush.setColor( QColor( brush.color().red(), brush.color().green(), ( *it ).m_strValue.toInt() ) );
+                if ( ( *it ).m_strName == "style" )
+                    brush.setStyle( ( Qt::BrushStyle )( *it ).m_strValue.toInt() );
+            }
+            setBrush( brush );
+        }
 
-	// disappear
-	else if ( name == "DISAPPEAR" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "effect" )
-		    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "doit" )
-		    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "num" )
-		    disappearNum = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )( *it ).m_strValue.toInt();
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )( *it ).m_strValue.toInt();
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = ( *it ).m_strValue.toInt();
+            }
+        }
 
-	// angle
-	else if ( name == "ANGLE" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    angle = atof( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // angle
+        else if ( name == "ANGLE" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    angle = ( *it ).m_strValue.toDouble();
+            }
+        }
 
-	// presNum
-	else if ( name == "PRESNUM" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    presNum = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // presNum
+        else if ( name == "PRESNUM" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    presNum = ( *it ).m_strValue.toInt();
+            }
+        }
 
-	// fillType
-	else if ( name == "FILLTYPE" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    fillType = static_cast<FillType>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    setFillType( fillType );
-	}
+        // fillType
+        else if ( name == "FILLTYPE" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    fillType = static_cast<FillType>( ( *it ).m_strValue.toInt() );
+            }
+            setFillType( fillType );
+        }
 
-	// gradient
-	else if ( name == "GRADIENT" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red1" )
-		    gColor1 = QColor( atoi( ( *it ).m_strValue.c_str() ), gColor1.green(), gColor1.blue() );
-		if ( ( *it ).m_strName == "green1" )
-		    gColor1 = QColor( gColor1.red(), atoi( ( *it ).m_strValue.c_str() ), gColor1.blue() );
-		if ( ( *it ).m_strName == "blue1" )
-		    gColor1 = QColor( gColor1.red(), gColor1.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "red2" )
-		    gColor2 = QColor( atoi( ( *it ).m_strValue.c_str() ), gColor2.green(), gColor2.blue() );
-		if ( ( *it ).m_strName == "green2" )
-		    gColor2 = QColor( gColor2.red(), atoi( ( *it ).m_strValue.c_str() ), gColor2.blue() );
-		if ( ( *it ).m_strName == "blue2" )
-		    gColor2 = QColor( gColor2.red(), gColor2.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "type" )
-		    gType = static_cast<BCType>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "unbalanced" )
-		    unbalanced = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "xfactor" )
-		    xfactor = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "yfactor" )
-		    yfactor = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	    setGColor1( gColor1 );
-	    setGColor2( gColor2 );
-	    setGType( gType );
-	    setGUnbalanced( unbalanced );
-	    setGXFactor( xfactor );
-	    setGYFactor( yfactor );
-	}
+        // gradient
+        else if ( name == "GRADIENT" )
+        {
+            parser.parseTag( tag, name, lst );
+            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+            for( ; it != lst.end(); ++it )
+            {
+                if ( ( *it ).m_strName == "red1" )
+                    gColor1 = QColor( ( *it ).m_strValue.toInt(), gColor1.green(), gColor1.blue() );
+                if ( ( *it ).m_strName == "green1" )
+                    gColor1 = QColor( gColor1.red(), ( *it ).m_strValue.toInt(), gColor1.blue() );
+                if ( ( *it ).m_strName == "blue1" )
+                    gColor1 = QColor( gColor1.red(), gColor1.green(), ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "red2" )
+                    gColor2 = QColor( ( *it ).m_strValue.toInt(), gColor2.green(), gColor2.blue() );
+                if ( ( *it ).m_strName == "green2" )
+                    gColor2 = QColor( gColor2.red(), ( *it ).m_strValue.toInt(), gColor2.blue() );
+                if ( ( *it ).m_strName == "blue2" )
+                    gColor2 = QColor( gColor2.red(), gColor2.green(), ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "type" )
+                    gType = static_cast<BCType>( ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "unbalanced" )
+                    unbalanced = static_cast<bool>( ( *it ).m_strValue.toInt() );
+                if ( ( *it ).m_strName == "xfactor" )
+                    xfactor = ( *it ).m_strValue.toInt();
+                if ( ( *it ).m_strName == "yfactor" )
+                    yfactor = ( *it ).m_strValue.toInt();
+            }
+            setGColor1( gColor1 );
+            setGColor2( gColor2 );
+            setGType( gType );
+            setGUnbalanced( unbalanced );
+            setGXFactor( xfactor );
+            setGYFactor( yfactor );
+        }
 
-	else
-	    cerr << "Unknown tag '" << tag << "' in PART_OBJECT" << endl;
+        else
+            kdError() << "Unknown tag '" << tag << "' in PART_OBJECT" << endl;
 
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
+        if ( !parser.close( tag ) )
+        {
+            kdError() << "ERR: Closing Child" << endl;
+            return;
+        }
     }
 }

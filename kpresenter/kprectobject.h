@@ -26,7 +26,7 @@
 class KPGradient;
 
 /******************************************************************/
-/* Class: KPRectObject						  */
+/* Class: KPRectObject                                            */
 /******************************************************************/
 
 class KPRectObject : public KPObject
@@ -34,8 +34,8 @@ class KPRectObject : public KPObject
 public:
     KPRectObject();
     KPRectObject( QPen _pen, QBrush _brush, FillType _fillType,
-		  QColor _gColor1, QColor _gColor2, BCType _gType, int _xRnd, int _yRnd,
-		  bool _unbalanced, int _xfactor, int _yfactor );
+                  QColor _gColor1, QColor _gColor2, BCType _gType, int _xRnd, int _yRnd,
+                  bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPRectObject()
     { if ( gradient ) delete gradient; }
 
@@ -88,7 +88,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

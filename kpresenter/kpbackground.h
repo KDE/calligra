@@ -40,14 +40,14 @@ class QPicture;
 class DCOPObject;
 
 /******************************************************************/
-/* Class: KPBackGround						  */
+/* Class: KPBackGround                                            */
 /******************************************************************/
 
 class KPBackGround
 {
 public:
     KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
-		  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
+                  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
     virtual ~KPBackGround()
     {; }
 
@@ -113,7 +113,7 @@ public:
     virtual void restore();
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
 protected:
     virtual void drawBackColor( QPainter *_painter );

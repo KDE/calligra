@@ -1,4 +1,6 @@
-#include "komlParser.h"
+#include <komlParser.h>
+#include <qstring.h>
+
 
 KOMLParser::KOMLParser( const QDomDocument& doc )
     : m_doc( doc )
@@ -10,83 +12,79 @@ KOMLParser::~KOMLParser()
 {
 }
 
-bool KOMLParser::open( const char *_search, string& )
+bool KOMLParser::open( const QString &_search, QString& )
 {
     if ( m_node.isNull() )
-	return FALSE;
+        return false;
 
-    if ( !_search )
+    if ( _search.isEmpty() )
     {
-	if ( m_node.isNull() )
-	    return FALSE;
+        m_stack.push( m_node );
+        m_node = m_node.firstChild();
 
-	m_stack.push( m_node );
-	m_node = m_node.firstChild();
-
-	return TRUE;
+        return true;
     }
 
     QDomNode n = m_node;
     do
     {
-	QDomElement e = n.toElement();
-	if ( !e.isNull() && e.tagName() == _search )
+        QDomElement e = n.toElement();
+        if ( !e.isNull() && e.tagName() == _search )
         {
-	    m_stack.push( m_node );
-	    m_node = n.firstChild();
-	
-	    return TRUE;
-	}
-	
-	n = n.nextSibling();
+            m_stack.push( m_node );
+            m_node = n.firstChild();
+
+            return true;
+        }
+
+        n = n.nextSibling();
     } while( !n.isNull() );
 
-    return FALSE;
+    return false;
 }
 
-bool KOMLParser::close( string& )
+bool KOMLParser::close( QString& )
 {
     m_node = m_stack.pop().nextSibling();
-
-    return TRUE;
+    return true;
 }
 
-bool KOMLParser::readText( string& text )
+bool KOMLParser::readText( QString& text )
 {
     QDomText t = m_node.toText();
     if ( t.isNull() )
-	return FALSE;
+        return false;
 
-    text = t.data().utf8();
+    text = t.data();
 
-    return TRUE;
+    return true;
 }
 
-bool KOMLParser::parseTag( const char *, string& name, std::vector<KOMLAttrib>& _attribs )
+bool KOMLParser::parseTag( const QString &, QString& name, QValueList<KOMLAttrib>& _attribs )
 {
-    _attribs.erase( _attribs.begin(), _attribs.end() );
+    _attribs.clear();
 
     QDomElement element = m_stack.top().toElement();
     if ( element.isNull() )
-	return FALSE;
+        return false;
 
-    name = element.tagName().latin1();
+    name = element.tagName();
 
     QDomNamedNodeMap attrs = element.attributes();
     uint len = attrs.length();
     for( uint i = 0; i < len; ++i )
     {
-	QDomAttr a = attrs.item( i ).toAttr();
-	if ( !a.isNull() )
+        QDomAttr a = attrs.item( i ).toAttr();
+        if ( !a.isNull() )
         {
-	    KOMLAttrib attrib;
-	    attrib.m_strName = a.name().latin1();
-	    attrib.m_strValue = a.value().utf8();
-	    _attribs.push_back( attrib );
-	}
+            KOMLAttrib attrib;
+            attrib.m_strName = a.name();
+            attrib.m_strValue = a.value();
+            _attribs.append( attrib );
+        }
     }
 
-    return TRUE;
+    return true;
 }
 
 QDomNode KOMLParser::currentNode()

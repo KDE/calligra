@@ -35,7 +35,7 @@ class KPGradient;
 class QPainter;
 
 /******************************************************************/
-/* Class: KPEllipseObject					  */
+/* Class: KPEllipseObject                                         */
 /******************************************************************/
 
 class KPEllipseObject : public KPObject
@@ -43,8 +43,8 @@ class KPEllipseObject : public KPObject
 public:
     KPEllipseObject();
     KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
-		     QColor _gColor1, QColor _gColor2, BCType _gType,
-		     bool _unbalanced, int _xfactor, int _yfactor );
+                     QColor _gColor1, QColor _gColor2, BCType _gType,
+                     bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPEllipseObject()
     { if ( gradient ) delete gradient; }
 
@@ -93,7 +93,7 @@ public:
     { return yfactor; }
 
     virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

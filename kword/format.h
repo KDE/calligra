@@ -201,7 +201,7 @@ public:
     KWordDocument *getDocument() { return doc; }
 
     void save( QTextStream&out );
-    void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
+    void load( KOMLParser&, QValueList<KOMLAttrib>&, KWordDocument* );
 
 protected:
     /**
