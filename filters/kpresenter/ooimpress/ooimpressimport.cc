@@ -296,8 +296,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
         paperBorderElement.setAttribute( "ptRight", toPoint( properties.attribute( "fo:margin-right" ) ) );
         paperBorderElement.setAttribute( "ptBottom", toPoint( properties.attribute( "fo:margin-bottom" ) ) );
-        paperBorderElement.setAttribute( "ptLeft", toPoint( properties.attribute( "fo:page-left" ) ) );
-        paperBorderElement.setAttribute( "ptTop", toPoint( properties.attribute( "fo:page-top" ) ) );
+        paperBorderElement.setAttribute( "ptLeft", toPoint( properties.attribute( "fo:margin-left" ) ) );
+        paperBorderElement.setAttribute( "ptTop", toPoint( properties.attribute( "fo:margin-top" ) ) );
         paperElement.appendChild( paperBorderElement );
     }
 
@@ -467,11 +467,15 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         // of a slide will show up on the last line of the previous slide.
         double offset = CM_TO_POINT( ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight ) + 1;
 
+        // animations (object effects)
+        m_animations = drawPage.namedItem("presentation:animations").toElement();
+
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
         {
             QDomElement o = object.toElement();
             QString name = o.tagName();
+            QString drawID = o.attribute("draw:id");
 
             QDomElement e;
             if ( name == "draw:text-box" ) // textbox
@@ -484,6 +488,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
                 appendShadow( doc, e );
+                appendObjectEffect(doc, e, o, soundElement);
                 e.appendChild( parseTextBox( doc, o ) );
             }
             else if ( name == "draw:rect" ) // rectangle
@@ -496,6 +501,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
                 appendShadow( doc, e );
+                appendObjectEffect(doc, e, o, soundElement);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
             {
@@ -504,6 +510,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 append2DGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendShadow( doc, e );
+                appendObjectEffect(doc, e, o, soundElement);
 
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
@@ -545,6 +552,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendBrush( doc, e );
                 appendShadow( doc, e );
                 appendLineEnds( doc, e );
+                appendObjectEffect(doc, e, o, soundElement);
             }
             else if (name=="draw:polyline") { // polyline
                 storeObjectStyles(o);
@@ -556,6 +564,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendBrush(doc, e);
                 appendLineEnds(doc, e);
                 //appendShadow(doc, e);
+                appendObjectEffect(doc, e, o, soundElement);
             }
             else if (name=="draw:polygon") { // polygon
                 storeObjectStyles(o);
@@ -567,6 +576,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendBrush(doc, e);
                 //appendLineEnds(doc, e);
                 //appendShadow(doc, e);
+                appendObjectEffect(doc, e, o, soundElement);
             }
             else if ( name == "draw:image" ) // image
             {
@@ -575,6 +585,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e.setAttribute( "type", 0 );
                 append2DGeometry( doc, e, o, (int)offset );
                 appendImage( doc, e, pictureElement, o );
+                appendObjectEffect(doc, e, o, soundElement);
             }
             else if ( name == "presentation:notes" ) // notes
             {
@@ -602,6 +613,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
             objectElement.appendChild( e );
         }
+
+        m_animations.clear();
     }
 
     docElement.appendChild( paperElement );
@@ -668,7 +681,7 @@ void OoImpressImport::appendPen( QDomDocument& doc, QDomElement& e )
             pen.setAttribute( "style", 1 );
         else if ( m_styleStack.attribute( "draw:stroke" ) == "dash" )
         {
-            QString style = m_styleStack.attribute( "draw:stroke-dash" ); // lukas: problem, these names are translated in OOo :-[
+            QString style = m_styleStack.attribute( "draw:stroke-dash" );
             if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
                  style == "Fine Dashed (var)" || style == "Dashed (var)" )
                 pen.setAttribute( "style", 2 );
@@ -707,7 +720,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
             QString style = m_styleStack.attribute( "draw:fill-hatch-name" );
-            if ( style == "Black 0 Degrees" ) // lukas: problem, these names are translated in OOo :-[
+            if ( style == "Black 0 Degrees" )
                 brush.setAttribute( "style", 9 );
             else if ( style == "Black 90 Degrees" )
                 brush.setAttribute( "style", 10 );
@@ -1289,7 +1302,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
                 continue;                      // elements or even nested test:spans?
 
-            fillStyleStack( ts.toElement() );
+            fillStyleStack( ts );
 
             // We do a look ahead to eventually find a text:span that contains
             // only a line-break. If found, we'll add it to the current string
@@ -2147,6 +2160,91 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
     custom.appendChild(variable);
     e.appendChild(custom);
+}
+
+QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
+{
+    if (m_animations.isNull() || !m_animations.hasChildNodes())
+        return QDomNode();
+
+    for (QDomNode node = m_animations.firstChild(); !node.isNull(); node = node.nextSibling())
+    {
+        QDomElement e = node.toElement();
+        if (e.tagName()=="presentation:show-shape" && e.attribute("draw:shape-id")==id)
+            return node;
+    }
+
+    return QDomNode();
+}
+
+void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object,
+                                         QDomElement& sound)
+{
+    QDomElement origEffect = findAnimationByObjectID(object.attribute("draw:id")).toElement();
+
+    if (origEffect.isNull())
+        return;
+
+    QString effect = origEffect.attribute("presentation:effect");
+    QString dir = origEffect.attribute("presentation:direction");
+    int effVal=0;
+
+    if (effect=="fade")
+    {
+        if (dir=="from-right")
+            effVal=10;          // EF_WIPE_RIGHT
+        else if (dir=="from-left")
+            effVal=9;           // EF_WIPE_LEFT
+        else if (dir=="from-top")
+            effVal=11;          // EF_WIPE_TOP
+        else if (dir=="from-bottom")
+            effVal=12;          // EF_WIPE_BOTTOM
+        else
+            return;
+    }
+    else if (effect=="move")
+    {
+        if (dir=="from-right")
+            effVal=1;           // EF_COME_RIGHT
+        else if (dir=="from-left")
+            effVal=2;           // EF_COME_LEFT
+        else if (dir=="from-top")
+            effVal=3;           // EF_COME_TOP
+        else if (dir=="from-bottom")
+            effVal=4;           // EF_COME_BOTTOM
+        else if (dir=="from-upper-right")
+            effVal=5;           // EF_COME_RIGHT_TOP
+        else if (dir=="from-lower-right")
+            effVal=6;           // EF_COME_RIGHT_BOTTOM
+        else if (dir=="from-upper-left")
+            effVal=7;           // EF_COME_LEFT_TOP
+        else if (dir=="from-lower-left")
+            effVal=8;           // EF_COME_LEFT_BOTTOM
+        else
+            return;
+    }
+    else
+        return;                 // sorry, no more supported effects :(
+
+    QDomElement effElem = doc.createElement("EFFECTS");
+    effElem.setAttribute("effect", effVal);
+    e.appendChild(effElem);
+
+    // sound effect
+    QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
+    if (!origSoundEff.isNull())
+    {
+        QString soundUrl = storeSound(origSoundEff, sound, doc);
+
+        if (!soundUrl.isNull())
+        {
+            QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
+            pseElem.setAttribute("appearSoundEffect", 1);
+            pseElem.setAttribute("appearSoundFileName", soundUrl);
+
+            e.appendChild(pseElem);
+        }
+    }
 }
 
 #include "ooimpressimport.moc"

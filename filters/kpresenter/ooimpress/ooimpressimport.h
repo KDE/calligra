@@ -155,6 +155,8 @@ private:
     void appendLineEnds( QDomDocument& doc, QDomElement& e );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
+    QDomNode findAnimationByObjectID(const QString & id);
+    void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 
     double toPoint( QString value, double defaultVal = 0.0 );
     bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
@@ -174,6 +176,7 @@ private:
     QDomDocument    m_meta;
     QDomDocument    m_settings;
     QDict<QDomElement> m_styles, m_draws;
+    QDomElement m_animations;
     StyleStack m_styleStack;
 };
 
