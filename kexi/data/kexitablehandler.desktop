@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=Kexi/Handler
 
+GenericName=Tables
 Name=Tables
 Name[bg]=Таблици
 Name[br]=Taolennoù

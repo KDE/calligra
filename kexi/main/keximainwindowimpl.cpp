@@ -2568,7 +2568,13 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 		if (!fl)
 			return false;
 
-		if (!project()->dbConnection()->insertRecord(*fl, QVariant(info->groupName()), QVariant(info->mime()), QVariant("http://")))
+//		kdDebug() << info->ptr()->genericName() << endl;
+		kdDebug() << info->ptr()->untranslatedGenericName() << endl;
+//		QStringList sl = info->ptr()->propertyNames();
+//		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
+//			kexidbg << *it << " " << info->ptr()->property(*it).toString() <<  endl;
+		if (!project()->dbConnection()->insertRecord(*fl, QVariant(info->ptr()->untranslatedGenericName()), 
+				QVariant(info->mime()), QVariant("http://www.koffice.org/kexi/")))
 			return false;
 
 		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;

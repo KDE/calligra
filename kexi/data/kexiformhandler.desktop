@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=Kexi/Handler
 
+GenericName=Forms
 Name=Forms
 Name[bg]=Формуляри
 Name[ca]=Formularis

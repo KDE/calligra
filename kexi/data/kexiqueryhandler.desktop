@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=Kexi/Handler
 
+GenericName=Queries
 Name=Queries
 Name[bg]=Заявки
 Name[ca]=Consultes
