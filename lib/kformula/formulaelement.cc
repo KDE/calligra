@@ -30,7 +30,7 @@
 KFORMULA_NAMESPACE_BEGIN
 
 FormulaElement::FormulaElement(FormulaDocument* container)
-    : document( container ), baseSize( 0 )
+    : document( container ), baseSize( 18 )
 {
 }
 

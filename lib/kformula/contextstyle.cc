@@ -143,8 +143,11 @@ double ContextStyle::getBaseSize() const
 
 void ContextStyle::setBaseSize( int size )
 {
-    baseSize = unzoomItY( size );
-    setup();
+    double newSize = unzoomItY( size );
+    if ( newSize != baseSize ) {
+        baseSize = newSize;
+        setup();
+    }
 }
 
 
