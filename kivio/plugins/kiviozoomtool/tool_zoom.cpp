@@ -18,7 +18,6 @@
  */
 #include "tool_zoom.h"
 #include "kivio_view.h"
-#include "kivio_view.h"
 #include "kivio_page.h"
 #include "kivio_canvas.h"
 
@@ -29,6 +28,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <ktoolbar.h>
+#include <koMainWindow.h>
 #include <kdebug.h>
 
 #include <qapplication.h>
@@ -179,17 +179,14 @@ void ZoomTool::deactivateGUI( KXMLGUIFactory* )
 void ZoomTool::activate()
 {
   m_pToolBar = (KToolBar*)m_pView->factory()->container("ZoomToolBar",this);
-  if (m_pToolBar)
-    m_pToolBar->show();
-
+  m_pView->shell()->showToolbar("ZoomToolBar",true);
   m_pCurrent = m_pPlus;
 }
 
 void ZoomTool::deactivate()
 {
    kdDebug() << "ZoomTool DeActivate" << endl;
-  if (m_pToolBar)
-   m_pToolBar->hide();
+  m_pView->shell()->showToolbar("ZoomToolBar",false);
 
   m_pCurrent = 0L;
 
