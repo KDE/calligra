@@ -84,7 +84,7 @@ int main(int argc,char **argv)
   formatMngr = new FormatManager();
   
   // Publish our factory
-  KWordAutoLoader loader("IDL:KOffice/DocumentFactory:1.0");
+  KWordAutoLoader loader("IDL:KOffice/DocumentFactory:1.0", "KWord");
 
   // Lets rock
   KWordApp app(argc,argv);
