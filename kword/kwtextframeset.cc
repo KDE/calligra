@@ -808,6 +808,20 @@ int KWTextFrameSet::paragraphsSelected()
     return paragraphs;
 }
 
+int KWTextFrameSet::numberOfparagraphLineSelected( KoTextParag *parag)
+{
+    int indexOfLineStart;
+    int lineStart;
+    int lineEnd;
+    KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+    parag->lineStartOfChar( c1.index(), &indexOfLineStart, &lineStart );
+
+    parag->lineStartOfChar( c1.index(), &indexOfLineStart, &lineEnd );
+    return (lineEnd - lineStart+1);
+}
+
+
 bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
     ulong & sentences, ulong & syllables, ulong & lines, bool selected )
 {
@@ -847,12 +861,15 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
             s = parag->string()->toString();
             lines += parag->lines();
         } else {
-            if ( parag->hasSelection( 0 ) ) {
+            if ( parag->hasSelection( KoTextDocument::Standard ) ) {
                 hasTrailingSpace = false;
                 s = parag->string()->toString();
-                if ( !( parag->fullSelected( 0 ) ) ) {
-                    s = s.mid( parag->selectionStart( 0 ), parag->selectionEnd( 0 ) - parag->selectionStart( 0 ) );
+                if ( !( parag->fullSelected( KoTextDocument::Standard ) ) ) {
+                    s = s.mid( parag->selectionStart( KoTextDocument::Standard ), parag->selectionEnd( KoTextDocument::Standard ) - parag->selectionStart( KoTextDocument::Standard ) );
+                    lines+=numberOfparagraphLineSelected(parag);
                 }
+                else
+                    lines += parag->lines();
             } else {
                 continue;
             }
