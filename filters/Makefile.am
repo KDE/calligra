@@ -1,8 +1,9 @@
 
-INCLUDES = -I$(srcdir) -I$(srcdir)/lib -I$(srcdir)/winword97 -I$(srcdir)/excel97 \
-$(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes) $(MICO_INCLUDES)
+INCLUDES = -I$(srcdir) -I$(srcdir)/lib -I$(srcdir)/winword97 \
+-I$(srcdir)/excel97 $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
+$(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ./lib/libfilterbase.la ./lib/libklaola.la ./lib/libqtext.la \
+LDADD = ./lib/libfilterbase.la ./lib/libklaola.la \
 ./winword97/libwinword97.la ./excel97/libexcel97.la $(LIB_KOFFICECORE)
 
 ####### Files
@@ -15,8 +16,4 @@ ole_filter_SOURCES = main.cc olefilter.cc
 
 noinst_HEADERS = main.h olefilter.h
 
-METASOURCES = main.moc olefilter.moc
-
-####### Build rules
-
-main.cc: main.h
+ole_filter_METASOURCES = main.moc olefilter.moc

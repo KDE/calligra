@@ -35,7 +35,7 @@
 class MyApplication : public KoApplication {
 
     Q_OBJECT
-
+    
 public:
     MyApplication(int &argc,char **argv);
 
