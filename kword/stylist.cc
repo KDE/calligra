@@ -519,7 +519,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     // see also KWNumPreview::drawContents
     painter->save();
     QRect r = contentsRect();
-    //kdDebug() << "KWStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
+    kdDebug() << "KWStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
 
     QRect whiteRect( r.x() + 10, r.y() + 10,
                      r.width() - 20, r.height() - 20 );
@@ -527,15 +527,16 @@ void KWStylePreview::drawContents( QPainter *painter )
     painter->fillRect( whiteRect, cg.brush( QColorGroup::Base ) );
 
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
-    if ( m_textdoc->width() != whiteRect.width() )
+    int widthLU = m_zoomHandler->pixelToLayoutUnitX( whiteRect.width() );
+    if ( m_textdoc->width() != widthLU )
     {
         // For centering to work, and to even get word wrapping when the thing is too big :)
-        m_textdoc->setWidth( whiteRect.width() );
+        m_textdoc->setWidth( widthLU );
         parag->invalidate(0);
     }
 
     parag->format();
-    QRect textRect = parag->rect();
+    QRect textRect = parag->pixelRect();
 
     // Center vertically, but not horizontally, to keep the parag alignment working,
     textRect.moveTopLeft( QPoint( whiteRect.x() + 10,
@@ -545,7 +546,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     painter->setClipRect( textRect.intersect( whiteRect ) );
     painter->translate( textRect.x(), textRect.y() );
 
-    m_textdoc->draw( painter, 0, 0, textRect.width(), textRect.height(), cg );
+    m_textdoc->drawWYSIWYG( painter, 0, 0, textRect.width(), textRect.height(), cg );
     painter->restore();
 }
 
