@@ -22,16 +22,32 @@
 
 #include "koselectaction.h"
 
+/** A line style selection action */
 class KoLineStyleAction : public KoSelectAction
 {
   Q_OBJECT
   public:
+    /** Constructs a KoLineStyleAction with a text and an icon.
+     * @param text The text that will be displayed.
+     * @param icon The dynamically loaded icon that goes with this action.
+     * @param parent This action's parent.
+     * @param name An internal name for this action.
+     */
     KoLineStyleAction(const QString& text, const QString& icon, QObject* parent = 0, const char* name = 0);
+    /** Same as above, but it also connects a slot to the selectionChanged(int) signal.
+     * @param text The text that will be displayed.
+     * @param icon The dynamically loaded icon that goes with this action.
+     * @param receiver The SLOT's parent.
+     * @param slot The SLOT to invoke when a selectionChanged(int) signal is emited.
+     * @param parent This action's parent.
+     * @param name An internal name for this action.
+     */
     KoLineStyleAction(const QString& text, const QString& icon, const QObject* receiver,
       const char* slot, QObject* parent, const char* name = 0);
     ~KoLineStyleAction();
     
   protected:
+    /** Draws and adds each item of the menu. */
     void createMenu();
   
   private:

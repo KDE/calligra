@@ -71,7 +71,7 @@ KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon, c
   
   createMenu();
   
-  connect(this, SIGNAL(newLineWidth(double)), receiver, slot);
+  connect(this, SIGNAL(lineWidthChanged(double)), receiver, slot);
 }
 
 KoLineWidthAction::~KoLineWidthAction()
@@ -124,7 +124,7 @@ void KoLineWidthAction::execute(int index)
 
   if(ok) {
     setCurrentSelection(index);
-    emit newLineWidth(d->m_currentWidth);
+    emit lineWidthChanged(d->m_currentWidth);
   }
 }
 

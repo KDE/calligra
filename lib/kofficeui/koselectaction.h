@@ -24,20 +24,43 @@
 class KPopupMenu;
 class QPoint;
 
+/** An action that provides a menu with items that can be selected.
+ * The main difference between this action and a KSelectAction is that
+ * it is pluged into a toolbar as a dropdown menu and not a combobox.
+ */
 class KoSelectAction : public KAction
 {
   Q_OBJECT
   public:
+    /** Constructs a KoSelectAction with a text and an icon.
+     * @param text The text that will be displayed.
+     * @param icon The dynamically loaded icon that goes with this action.
+     * @param parent This action's parent.
+     * @param name An internal name for this action.
+     */
     KoSelectAction(const QString& text, const QString& icon, QObject* parent = 0, const char* name = 0);
+    /** Same as above, but it also connects a slot to the selectionChanged(int) signal.
+     * @param text The text that will be displayed.
+     * @param icon The dynamically loaded icon that goes with this action.
+     * @param receiver The SLOT's parent.
+     * @param slot The SLOT to invoke when a selectionChanged(int) signal is emited.
+     * @param parent This action's parent.
+     * @param name An internal name for this action.
+     */
     KoSelectAction(const QString& text, const QString& icon, const QObject* receiver,
       const char* slot, QObject* parent, const char* name = 0);
     ~KoSelectAction();
 
+    /** Returns a pointer to the popup menu. */
     KPopupMenu* popupMenu() const;
+    /** Shows the popup menu.
+     * @param global Position at which the popup menu is shown.
+     */
     void popup(const QPoint& global);
   
     virtual int plug(QWidget* widget, int index = -1);
     
+    /** Returns the index of the currently selected item. */
     virtual int currentSelection();
   
   signals:
@@ -45,9 +68,15 @@ class KoSelectAction : public KAction
     void selectionChanged(int);
 
   public slots:
+    /** Set which item that should be selected.
+     * @param index Index of item that should be selected
+     */
     virtual void setCurrentSelection(int index);
   
   protected slots:
+    /** Execute an item. By default it sets the item as selected and emits the selectionChanged signal.
+     * @param index Index of the item that should be executed.
+     */
     virtual void execute(int index);
         
   private:
