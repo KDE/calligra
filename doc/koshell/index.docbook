@@ -55,7 +55,7 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 <chapter id="introduction">
 <title>Introduction</title>
-<para>Sorry, but the documentation for &koshell; was not finished when &kde; was installed on this computer.</para> 
+<para>The documentation for &koshell; was not finished when &kde; was installed on this computer.</para> 
 <para>If you need help, please check <ulink url="http://www.kde.org">The KDE Website</ulink> for updates, or by submitting your question to <ulink url="mailto:kde-user@kde.org">The &kde; User Mailing list</ulink>.</para>
 <para><emphasis>The &kde; Team</emphasis></para>
 
