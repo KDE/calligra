@@ -41,7 +41,7 @@ public:
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Star tool" ); }
 	virtual QString icon() { return "14_star"; }
-	
+
 	virtual VComposite* shape( bool interactive = false ) const;
 
 	void refreshUnit();
@@ -54,6 +54,14 @@ private:
 
 		void refreshUnit();
 
+		int edges() const;
+		double innerRadius() const;
+		double outerRadius() const;
+		void setEdges( int );
+		void setInnerRadius( double );
+		void setOuterRadius( double );
+
+	private:
 		KoUnitDoubleSpinBox	*m_innerR;
 		KoUnitDoubleSpinBox	*m_outerR;
 		KIntSpinBox			*m_edges;

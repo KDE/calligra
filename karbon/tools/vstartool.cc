@@ -35,10 +35,10 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 {
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
-	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 0.0 );
+	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0 );
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
-	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 0.0 );
+	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0 );
 
 	refreshUnit();
 
@@ -50,10 +50,47 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 	setInsideSpacing( 2 );
 }
 
-void VStarTool::VStarOptionsWidget::refreshUnit()
+void
+VStarTool::VStarOptionsWidget::refreshUnit()
 {
 	m_outerR->setUnit( m_part->unit() );
 	m_innerR->setUnit( m_part->unit() );
+}
+
+void
+VStarTool::VStarOptionsWidget::setEdges( int v )
+{
+	m_edges->setValue( v );
+}
+
+void 
+VStarTool::VStarOptionsWidget::setInnerRadius( double v )
+{
+	m_innerR->changeValue( v );
+}
+
+void
+VStarTool::VStarOptionsWidget::setOuterRadius( double v )
+{
+	m_outerR->changeValue( v );
+}
+
+int
+VStarTool::VStarOptionsWidget::edges() const
+{
+	return m_edges->value();
+}
+
+double 
+VStarTool::VStarOptionsWidget::innerRadius() const
+{
+	return m_innerR->value();
+}
+
+double
+VStarTool::VStarOptionsWidget::outerRadius() const
+{
+	return m_outerR->value();
 }
 
 VStarTool::VStarTool( KarbonView* view )
@@ -61,9 +98,7 @@ VStarTool::VStarTool( KarbonView* view )
 {
 	// create config dialog:
 	m_optionsWidget = new VStarOptionsWidget( view->part() );
-	m_optionsWidget->m_outerR->setValue( KoUnit::ptToUnit( 100.0, view->part()->unit() ) );
-	m_optionsWidget->m_innerR->setValue( KoUnit::ptToUnit( 50.0, view->part()->unit() ) );
-	m_optionsWidget->m_edges->setValue( 5 );
+	m_optionsWidget->setEdges( 5 );
 }
 
 void VStarTool::refreshUnit()
@@ -85,9 +120,9 @@ VStarTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->m_outerR->value(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->m_innerR->value(), view()->part()->unit() ),
-				m_optionsWidget->m_edges->value() );
+				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
+				m_optionsWidget->edges() );
 	}
 	else
 		return
@@ -95,9 +130,9 @@ VStarTool::shape( bool interactive ) const
 				0L,
 				m_p,
 				m_d1,
-				KoUnit::ptFromUnit( m_optionsWidget->m_innerR->value(), view()->part()->unit() ) * m_d1 /
-				KoUnit::ptFromUnit( m_optionsWidget->m_outerR->value(), view()->part()->unit() ),
-				m_optionsWidget->m_edges->value(),
+				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ) * m_d1 /
+				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
+				m_optionsWidget->edges(),
 				m_d2 );
 }
 
