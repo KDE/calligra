@@ -173,7 +173,13 @@ KoTemplateCreateDia::~KoTemplateCreateDia() {
 
 void KoTemplateCreateDia::slotSelectionChanged()
 {
-    d->m_remove->setEnabled(d->m_groups->currentItem());
+    const QListViewItem* item = d->m_groups->currentItem();
+    d->m_remove->setEnabled( item );
+    if ( ! item )
+        return;
+    
+    if ( item->depth() > 0 )
+        d->m_name->setText( item->text( 0 ) );
 }
 
 void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstance *instance,
