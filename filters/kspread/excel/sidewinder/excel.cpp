@@ -2284,33 +2284,33 @@ public:
 XFRecord::XFRecord():  Record()
 {
   d = new XFRecord::Private();
-  d->fontIndex = 0;
-  d->formatIndex = 0;
-  d->locked = false;
-  d->formulaHidden = false;
-  d->parentStyle = 0;
+  d->fontIndex           = 0;
+  d->formatIndex         = 0;
+  d->locked              = false;
+  d->formulaHidden       = false;
+  d->parentStyle         = 0;
   d->horizontalAlignment = Left;
-  d->verticalAlignment = VCentered;
-  d->textWrap = false;
-  d->rotationAngle = 0;
-  d->stackedLetters = 0;
-  d->indentLevel = 0;
-  d->shrinkContent = 0;
-  d->leftBorderStyle = 0;
-  d->leftBorderColor = 0;
-  d->rightBorderStyle = 0;
-  d->rightBorderColor = 0;
-  d->topBorderStyle = 0;
-  d->topBorderColor = 0;
-  d->bottomBorderStyle = 0;
-  d->bottomBorderColor = 0;
-  d->diagonalTopLeft = false;
-  d->diagonalBottomLeft = false;
-  d->diagonalStyle = 0;
-  d->diagonalColor = 0;
-  d->fillPattern = 0;
-  d->patternForeColor = 0;
-  d->patternBackColor = 0;
+  d->verticalAlignment   = VCentered;
+  d->textWrap            = false;
+  d->rotationAngle       = 0;
+  d->stackedLetters      = 0;
+  d->indentLevel         = 0;
+  d->shrinkContent       = 0;
+  d->leftBorderStyle     = 0;
+  d->leftBorderColor     = 0;
+  d->rightBorderStyle    = 0;
+  d->rightBorderColor    = 0;
+  d->topBorderStyle      = 0;
+  d->topBorderColor      = 0;
+  d->bottomBorderStyle   = 0;
+  d->bottomBorderColor   = 0;
+  d->diagonalTopLeft     = false;
+  d->diagonalBottomLeft  = false;
+  d->diagonalStyle       = 0;
+  d->diagonalColor       = 0;
+  d->fillPattern         = 0;
+  d->patternForeColor    = 0;
+  d->patternBackColor    = 0;
 }
 
 XFRecord::~XFRecord()
