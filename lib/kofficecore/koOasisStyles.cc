@@ -711,6 +711,15 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
                 text+=format[0];
                 format = format.remove( 0, 1 );
             }
+            //TODO implement loading !
+            else if ( format.startsWith( "MMMMM" ) )
+            {
+                addTextNumber( text, elementWriter );
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:textual", "true");
+                elementWriter.endElement();
+                format = format.remove( 0, 5 );
+            }
             else if ( format.startsWith( "MMMM" ) )
             {
                 addTextNumber( text, elementWriter );
