@@ -174,8 +174,9 @@ class KSpreadSpell : public KSpell
 
       if (tempe > 0)
       {
-        if ((e = parseOneResponse (line, word, sugg)) == 3 // mistake
-            || e == 2) // replace
+        e = parseOneResponse(line, word, sugg);
+        if ( (e == 3) // mistake
+            || (e == 2) ) // replace
         {
           dlgresult =- 1;
 
@@ -272,6 +273,12 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_popupChild = 0;
     m_popupListChoose=0;
     m_spell.kspell = 0;
+    // a few words to ignore when spell checking
+    m_ignoreWord << "KOffice" << "KSpread" << "KWord" << "Konqueror"
+                 << "KMail" << "KPresenter" << "Kivio" << "Kontour"
+                 << "Kugar" << "Krita" << "KChart" << "KPlato"
+                 << "KFormula" << "Karbon" << "Kate" << "Noatun" << "noatun"
+                 << "Kabooble" << "KOrganizer";
 
     m_dcop = 0;
     dcopObject(); // build it
@@ -819,6 +826,9 @@ void KSpreadView::startKSpell()
                                      SLOT( spellCheckerReady() ),
                                      m_pDoc->getKSpellConfig() );
 
+  m_spell.ignoreWord = m_ignoreWord;
+  m_spell.kspell->ksConfig().setIgnoreList(m_spell.ignoreWord);
+
   m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
   m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
 
@@ -933,7 +943,7 @@ void KSpreadView::spellCleanup()
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
 
-  // not supported yet
+  KMessageBox::information( this, i18n( "Spell checking is done." ) );  // not supported yet
   //    if(m_spell.macroCmdSpellCheck)
   //      m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
 }
@@ -1048,7 +1058,7 @@ void KSpreadView::spellCheckerDone( const QString & )
   int result = m_spell.kspell->dlgResult();
 
   // store ignore word
-  m_spell.ignoreWord = m_spell.kspell->ksConfig().ignoreList();
+  m_ignoreWord += m_spell.kspell->ksConfig().ignoreList();
 
   m_spell.kspell->cleanUp();
   delete m_spell.kspell;
@@ -1077,9 +1087,6 @@ void KSpreadView::spellCheckerDone( const QString & )
       }
     }
   }
-
-  if (m_pCanvas)
-    m_pCanvas->setCursor( ArrowCursor );
 
   // Not implemented yet
   //        if(m_spell.macroCmdSpellCheck)
@@ -2061,10 +2068,10 @@ void KSpreadView::specialPaste()
     KSpreadspecial dlg( this, "Special Paste" );
     if( dlg.exec() )
     {
-    if(m_pTable->getAutoCalc())
+      if (m_pTable->getAutoCalc())
         m_pTable->recalc();
-    resultOfCalc();
-    updateEditWidget();
+      resultOfCalc();
+      updateEditWidget();
     }
 }
 

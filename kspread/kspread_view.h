@@ -549,6 +549,7 @@ private:
     KoPartSelectAction *m_insertPart;
 
     // Spell-checking
+    QStringList     m_ignoreWord;
     struct
     {
       KSpreadSpell *   kspell;
