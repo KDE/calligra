@@ -592,7 +592,7 @@ void KWView::setupActions()
                                   actionCollection(), "copy_text_comment");
 
 
-    actionInsertFootEndNote = new KAction( i18n( "&Footnote..." ), 0,
+    actionInsertFootEndNote = new KAction( i18n( "&Footnote/Endnote..." ), 0,
                                            this, SLOT( insertFootNote() ),
                                            actionCollection(), "insert_footendnote" );
     actionInsertFootEndNote->setToolTip( i18n( "Insert a footnote referencing the selected text." ) );
