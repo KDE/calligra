@@ -127,14 +127,15 @@ struct RTFLayout
 struct RTFFormat
 {
     enum VertAlign { Normal = 0, SubScript, SuperScript };
+    enum Underline { UnderlineNone=0, UnderlineSimple, UnderlineThick, UnderlineDouble, UnderlineWordByWord,
+        UnderlineWave, UnderlineDash, UnderlineDot, UnderlineDashDot, UnderlineDashDotDot };
 
     VertAlign vertAlign;
+    Underline underline;
     int font, fontSize, baseline;
     int color, bgcolor;
     int uc;
-    bool underline, bold, italic, strike, striked, hidden, caps, smallCaps;
-    bool underlineDash, underlineDot, underlineDashDot, underlineDashDotDot;
-    bool underlineDouble, underlineThick, underlineWave, underlineWordByWord;
+    bool bold, italic, strike, striked, hidden, caps, smallCaps;
 };
 
 // Style sheet entry
@@ -222,6 +223,7 @@ public:
     void setFlagProperty( RTFProperty *property );
     void setNumericProperty( RTFProperty *property );
     void setEnumProperty( RTFProperty *property );
+    void setUnderlineProperty( RTFProperty *property );
     void setBorderProperty( RTFProperty *property );
     void setBorderStyle( RTFProperty *property );
     void setUpProperty( RTFProperty * );

@@ -212,18 +212,18 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"tx",		insertTabDef,		0L, 0 ),
 	MEMBER(	0L,		"u",		insertUnicodeSymbol,	state.format.uc, 0 ),
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
-	MEMBER(	0L,		"ul",		setToggleProperty,	state.format.underline, 0 ),
-	MEMBER(	0L,		"uld",		setFlagProperty,	state.format.underlineDot, true ),
-	MEMBER(	0L,		"uldash",	setFlagProperty,	state.format.underlineDash, true ),
-	MEMBER(	0L,		"uldashd",	setFlagProperty,	state.format.underlineDashDot, true ),
-	MEMBER(	0L,		"uldashdd",	setFlagProperty,	state.format.underlineDashDotDot, true ),
-	MEMBER(	0L,		"uldb",		setFlagProperty,	state.format.underlineDouble, true ),
-	MEMBER(	0L,		"ulnone",	setFlagProperty,	state.format.underline, false ),
-	MEMBER(	0L,		"ulth",		setFlagProperty,	state.format.underlineThick, true ),
-	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underlineWordByWord, true ),
-	MEMBER(	0L,		"ulwave",	setFlagProperty,	state.format.underlineWave, true ),
-	MEMBER(	0L,		"ulhwave",	setFlagProperty,	state.format.underlineWave, true ),
-	MEMBER(	0L,		"ululdbwave",	setFlagProperty,	state.format.underlineWave, true ),
+	MEMBER(	0L,		"ul",		setUnderlineProperty,	state.format.underline, 0 ),
+	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDouble ),
+	MEMBER(	0L,		"uldash",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDash ),
+	MEMBER(	0L,		"uldashd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDot ),
+	MEMBER(	0L,		"uldashdd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDotDot ),
+	MEMBER(	0L,		"uldb",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDouble ),
+	MEMBER(	0L,		"ulnone",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineNone ),
+	MEMBER(	0L,		"ulth",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineThick ),
+	MEMBER(	0L,		"ulw",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineWordByWord ),
+	MEMBER(	0L,		"ulwave",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineWave ),
+	MEMBER(	0L,		"ulhwave",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineWave ),
+	MEMBER(	0L,		"ululdbwave",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineWave ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
 	MEMBER(	"@pict",	"wbitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
@@ -712,6 +712,21 @@ void RTFImport::setEnumProperty( RTFProperty *property )
     *((int *)(((char *)this) + property->offset)) = property->value;
 }
 
+
+/**
+ * Sets the enumaration value for \ul-type keywords
+ * \ul switches on simple underline
+ * \ul0 switches off all underlines
+ * @param property the property to set
+ */
+void RTFImport::setUnderlineProperty( RTFProperty *property )
+{
+    *((int *)(((char *)this) + property->offset))
+         = (!token.hasParam || token.value != 0)
+         ? RTFFormat::UnderlineSimple : RTFFormat::UnderlineNone;
+}
+
+
 /**
  * Sets the value of a border property specified by token.
  * @param property the property to set
@@ -780,15 +795,7 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.caps		= false;
     format.smallCaps	= false;
 
-    format.underline		= false;
-    format.underlineDash	= false;
-    format.underlineDot		= false;
-    format.underlineDashDot	= false;
-    format.underlineDashDotDot	= false;
-    format.underlineDouble	= false;
-    format.underlineThick	= false;
-    format.underlineWordByWord	= false;
-    format.underlineWave	= false;
+    format.underline		= RTFFormat::UnderlineNone;
 
     // Do not reset format.uc !
 }
@@ -1873,60 +1880,75 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.setAttribute( "value", format.fmt.italic );
 	    node.closeNode( "ITALIC" );
 	}
-        if (!baseFormat || format.fmt.underline != baseFormat->underline
-            || format.fmt.underlineDash != baseFormat->underlineDash
-            || format.fmt.underlineDot != baseFormat->underlineDot
-            || format.fmt.underlineDashDot != baseFormat->underlineDashDot
-            || format.fmt.underlineDashDotDot != baseFormat->underlineDashDotDot
-            || format.fmt.underlineDouble != baseFormat->underlineDouble
-            || format.fmt.underlineThick != baseFormat->underlineThick
-            || format.fmt.underlineWave != baseFormat->underlineWave
-            || format.fmt.underlineWordByWord != baseFormat->underlineWordByWord )
+        if (!baseFormat || format.fmt.underline != baseFormat->underline )
 	{
 	    node.addNode( "UNDERLINE" );
             QCString st,styleline,wordbyword("0");
             st.setNum(format.fmt.underline);
 
-            if ( format.fmt.underlineDash )
+            switch (format.fmt.underline)
             {
-                st="1";
-                styleline="dash";
-            }
-            else if (format.fmt.underlineDot )
-            {
-                st="1";
-                styleline="dot";
-            }
-            else if (format.fmt.underlineDashDot )
-            {
-                st="1";
-                styleline="dashdot";
-            }
-            else if (format.fmt.underlineDashDotDot )
-            {
-                st="1";
-                styleline="dashdotdot";
-            }
-            else if ( format.fmt.underlineDouble )
-            {
-                st="double";
-            }
-            else if (format.fmt.underlineThick )
-            {
-                st="single-bold";
-                styleline="solid";
-            }
-            else if (format.fmt.underlineWordByWord )
-            {
-                st="1";
-                styleline="solid";
-                wordbyword="1";
-            }
-            else if (format.fmt.underlineWave )
-            {
-                st="1";
-                styleline="wave";
-            }
+            case RTFFormat::UnderlineNone:
+            default:
+                {
+                    st="0";
+                    break;
+                }
+            case RTFFormat::UnderlineSimple:
+                {
+                    st="1";
+                    break;
+                }
+            case RTFFormat::UnderlineDouble:
+                {
+                    st="double";
+                    break;
+                }
+            case RTFFormat::UnderlineThick:
+                {
+                    st="single-bold";
+                    styleline="solid";
+                    break;
+                }
+
+            case RTFFormat::UnderlineWordByWord:
+                {
+                    st="1";
+                    styleline="solid";
+                    wordbyword="1";
+                    break;
+                }
+            case RTFFormat::UnderlineDash:
+                {
+                    st="1";
+                    styleline="dash";
+                    break;
+                }
+            case RTFFormat::UnderlineDot:
+                {
+                    st="1";
+                    styleline="dot";
+                    break;
+                }
+            case RTFFormat::UnderlineDashDot:
+                {
+                    st="1";
+                    styleline="dashdot";
+                    break;
+                }
+            case RTFFormat::UnderlineDashDotDot:
+                {
+                    st="1";
+                    styleline="dashdotdot";
+                    break;
+                }
+            case RTFFormat::UnderlineWave:
+                {
+                    st="1";
+                    styleline="wave";
+                    break;
+                }
+            } // end of switch
             node.setAttribute( "value", st );
             node.setAttribute( "wordbyword", wordbyword );
             if ( !styleline.isEmpty() )
