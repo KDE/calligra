@@ -282,12 +282,14 @@ void KChartView::loadConfig() {
     kdDebug(35001) << "Load config..." << endl;
     KGlobal::config()->reparseConfiguration();
     ((KChartPart*)koDocument())->loadConfig( KGlobal::config() );
+    updateGuiTypeOfChart();
     //refresh chart when you load config
     repaint();
 }
 
 void KChartView::defaultConfig() {
     ((KChartPart*)koDocument())->defaultConfig(  );
+    updateGuiTypeOfChart();
     repaint();
 }
 

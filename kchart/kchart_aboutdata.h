@@ -20,6 +20,7 @@ KAboutData * newKChartAboutData()
 					   "http://www.koffice.org/kchart/");
     aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
     aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("Karl-Heinz Zimmer",0, "khz@kde.org");
     return aboutData;
 }
 
