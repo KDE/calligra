@@ -49,7 +49,7 @@ QString MsWord::char2unicode(unsigned lid, char c)
 
         // Find the name of the new code page and open the codec.
         codepage = lid2codepage(lastLid);
-        codec = QTextCodec::codecForName(codepage);
+        codec = QTextCodec::codecForName(QString::fromLatin1(codepage).lower().stripWhiteSpace().latin1());
         if (codec)
         {
             kdDebug(s_area) <<
@@ -70,12 +70,13 @@ QString MsWord::char2unicode(unsigned lid, char c)
 
     if (codec)
     {
-        result = codec->toUnicode(&c, 1);
+	result = codec->toUnicode(&c, 1);
     }
     else
     {
-        result = '?';
+	result = '?';
     }
+
     return result;
 }
 
@@ -270,7 +271,7 @@ void MsWord::decodeParagraph(
                     ptr2 += level.cbGrpprlPapx;
                     ptr2 += level.cbGrpprlChpx;
                     ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-                    ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
+                    ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true, m_fib.nFib);
                 }
             }
         }
@@ -300,7 +301,7 @@ void MsWord::decodeParagraph(
                 ptr2 += level.cbGrpprlPapx;
                 ptr2 += level.cbGrpprlChpx;
                 ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-                ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
+                ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true, m_fib.nFib);
             }
 
             // If this LFOLVL is ours, we are done!
@@ -704,13 +705,12 @@ void MsWord::getParagraphsFromPapxs(
 
             // Read the text we are after, and get the CHPXs that apply to
             // the range of characters.
-
             read(
                 m_fib.lid,
                 m_mainStream + actualStartFc,
                 &text,
                 (actualEndFc - actualStartFc) / (unicode ? 2 : 1),
-                unicode);
+                unicode, m_fib.nFib);
             getChpxs(actualStartFc, actualEndFc, chpxs);
 
             // Adjust the end position to be in character count terms,
@@ -849,7 +849,7 @@ bool MsWord::getPicture(
     {
     case 98:
         pictureType = "tiff";
-        bytes = MsWord::read(m_fib.lid, in, &tiffFilename, true);
+        bytes = MsWord::read(m_fib.lid, in, &tiffFilename, true, m_fib.nFib);
         in += bytes;
         *pictureLength -= bytes;
         *pictureData += bytes;
@@ -1273,7 +1273,7 @@ void MsWord::readListStyles()
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
+            ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true, m_fib.nFib);
         }
     }
 }
@@ -1413,7 +1413,7 @@ void MsWord::Plex<T, word6Size>::startIteration(const U8 *plex, const U32 byteCo
 }
 
 // Read a string, converting to unicode if needed.
-unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool unicode)
+unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool unicode, U16 nFib)
 {
     U16 char16;
     U8 char8;
@@ -1424,24 +1424,32 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     {
         for (unsigned i = 0; i < count; i++)
         {
-            bytes += MsWordGenerated::read(in + bytes, &char16);
-            *out += QChar(char16);
-        }
+	    if (nFib > s_maxWord6Version) 
+	    {
+	    	bytes += MsWordGenerated::read(in + bytes, &char16);
+		*out += QChar(char16);
+	    }
+	    else
+	    {
+		// Office 95 always saved non-unicode
+	        bytes += MsWordGenerated::read(in + bytes, &char8);
+        	*out += char2unicode(lid, char8).latin1();
+	    }
+	}
     }
     else
     {
         for (unsigned i = 0; i < count; i++)
         {
             bytes += MsWordGenerated::read(in + bytes, &char8);
-            //*out += QChar(char2unicode(lid, char8));
-            *out += char2unicode(lid, char8);
-        }
+            *out += char2unicode(lid, char8).utf8();
+	}
     }
     return bytes;
 }
 
 // Read a Pascal string, converting to unicode if needed.
-unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode)
+unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode, U16 nFib)
 {
     unsigned bytes = 0;
 
@@ -1452,7 +1460,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode)
         U16 terminator;
 
         bytes += MsWordGenerated::read(in + bytes, &length);
-        bytes += read(lid, in + bytes, out, length, true);
+        bytes += read(lid, in + bytes, out, length, true, nFib);
         bytes += MsWordGenerated::read(in + bytes, &terminator);
     }
     else
@@ -1461,7 +1469,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode)
         U8 terminator;
 
         bytes += MsWordGenerated::read(in + bytes, &length);
-        bytes += read(lid, in + bytes, out, length, false);
+        bytes += read(lid, in + bytes, out, length, false, nFib);
         bytes += MsWordGenerated::read(in + bytes, &terminator);
     }
     return bytes;
@@ -1568,11 +1576,11 @@ unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out)
     if (offset > 0)
     {
         memset(ptr + baseInFile, 0, offset);
-        bytes += read(m_fib.lid, in + bytes, &out->xstzName, false);
+        bytes += read(m_fib.lid, in + bytes, &out->xstzName, false, m_fib.nFib);
     }
     else
     {
-        bytes += read(m_fib.lid, in + bytes, &out->xstzName, true);
+        bytes += read(m_fib.lid, in + bytes, &out->xstzName, true, m_fib.nFib);
     }
     out->grupx = in + bytes;
 
@@ -1888,7 +1896,7 @@ unsigned MsWord::read(const U8 *in, STTBF *out)
     out->extraData = new const U8 *[out->stringCount];
     for (unsigned i = 0; i < out->stringCount; i++)
     {
-        bytes += read(m_fib.lid, in + bytes, &out->strings[i], unicode);
+        bytes += read(m_fib.lid, in + bytes, &out->strings[i], unicode, m_fib.nFib);
         out->extraData[i] = in + bytes;
         bytes += out->extraDataLength;
     }

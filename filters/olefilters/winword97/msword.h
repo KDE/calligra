@@ -83,12 +83,12 @@ public:
         const U8 *in,
         QString *out,
         unsigned length,
-        bool unicode);
+        bool unicode, U16 nFib);
     static unsigned read(
         U16 lid,
         const U8 *in,
         QString *out,
-        bool unicode);
+        bool unicode, U16 nFib);
 
     typedef struct CHPXFKP
     {
