@@ -1299,7 +1299,7 @@ void KWView::updateReadWrite( bool readwrite )
         // Tools
         actionExtraSpellCheck->setEnabled( true );
         actionAutoFormat->setEnabled( true );
-        actionEditCustomVars->setEnabled( true );
+        //actionEditCustomVars->setEnabled( true );
         actionEditPersonnalExpr->setEnabled( true );
         // Settings
         actionConfigure->setEnabled( true );
