@@ -1579,6 +1579,8 @@ KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
+    QObject::connect( partFrameSet()->getChild(), SIGNAL( changed( KoChild * ) ),
+                      this, SLOT( slotChildChanged() ) );
 }
 
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
@@ -1634,8 +1636,6 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
 
-    QObject::connect( partFrameSet()->getChild(), SIGNAL( changed( KoChild * ) ),
-                      this, SLOT( slotChildChanged() ) );
 }
 
 void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
