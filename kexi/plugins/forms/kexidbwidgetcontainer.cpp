@@ -38,7 +38,7 @@
 KexiDBWidgetContainer::KexiDBWidgetContainer(QWidget *parent, const char *name)
  : KexiDialogBase(static_cast<KexiView*>(parent), parent, name)
 {
-	setCaption(QString(name + i18n(" - From")));
+	setCaption(QString(name + i18n(" - Form")));
 
 	m_rec = 0;
 //	m_gui = new FormGUIClient(0);
