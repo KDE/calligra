@@ -104,6 +104,54 @@ VCanvas::setYMirroring( bool edit )
 	p->setWorldMatrix( mat );
 }
 
+// TODO maybe this belongs in VDocument
+void
+drawPage( VPainter *p )
+{
+#define LEFT   20
+#define RIGHT  600
+#define BOTTOM 20
+#define TOP    830
+
+	p->setPen( Qt::NoPen );
+	p->setBrush( Qt::white );
+	p->newPath();
+	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
+	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
+	p->lineTo( KoPoint( RIGHT, TOP ) );
+	p->lineTo( KoPoint( LEFT,  TOP ) );
+	p->fillPath();
+
+	p->setBrush( Qt::black );
+	p->newPath();
+	p->moveTo( KoPoint( RIGHT,     BOTTOM - 2 ) );
+	p->lineTo( KoPoint( RIGHT + 2, BOTTOM - 2 ) );
+	p->lineTo( KoPoint( RIGHT + 2, TOP ) );
+	p->lineTo( KoPoint( RIGHT,     TOP ) );
+	p->fillPath();
+
+	p->newPath();
+	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
+	p->lineTo( KoPoint( LEFT,  BOTTOM - 2 ) );
+	p->lineTo( KoPoint( RIGHT, BOTTOM - 2 ) );
+	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
+	p->fillPath();
+
+	p->newPath();
+	p->moveTo( KoPoint( LEFT,  TOP ) );
+	p->lineTo( KoPoint( LEFT,  TOP + 1 ) );
+	p->lineTo( KoPoint( RIGHT, TOP + 1 ) );
+	p->lineTo( KoPoint( RIGHT, TOP ) );
+	p->fillPath();
+
+	p->newPath();
+	p->moveTo( KoPoint( LEFT,     BOTTOM - 2 ) );
+	p->lineTo( KoPoint( LEFT + 1, BOTTOM - 2 ) );
+	p->lineTo( KoPoint( LEFT + 1, TOP ) );
+	p->lineTo( KoPoint( LEFT,     TOP ) );
+	p->fillPath();
+}
+
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
@@ -115,7 +163,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		// TODO : only update ROIs
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
-		p->clear( Qt::white );
+		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		/*QWMatrix mat;
 		mat.scale( 1, -1 );
@@ -123,6 +171,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 		p->setWorldMatrix( mat );*/
 		setYMirroring( false );
+		drawPage( p );
 
 		m_part->document().draw( p, &r );
 
@@ -159,7 +208,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 	if( drawVObjects )
 	{
 		p->begin();
-		p->clear( Qt::white );
+		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		/*QWMatrix mat;
 		mat.scale( 1, -1 );
@@ -167,6 +216,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 		p->setWorldMatrix( mat ); */
 		setYMirroring( false );
+		drawPage( p );
 
 		m_part->document().draw( p, &KoRect::fromQRect( rect ) );
 
