@@ -154,6 +154,8 @@ public slots:
 
 	void slotActiveToolChanged( VTool * );
 
+	void showRuler();
+
 protected slots:
 	// Object related operations.
 	void objectTrafoTranslate();
@@ -210,6 +212,7 @@ private:
 	KSelectAction			*m_zoomAction;
 	KSelectAction			*m_viewAction;
 	KAction					*m_configureAction;
+	KToggleAction			*m_showRulerAction;
 	KoContextHelpAction		*m_contextHelpAction;
 	// line width
 	KoUnitDoubleSpinComboBox *m_setLineWidth;

@@ -815,6 +815,9 @@ KarbonView::initActions()
 		i18n( "Align bottom" ), "aobottom", 0, this,
 		SLOT( selectionAlignVerticalBottom() ), actionCollection(), "object_align_vertical_bottom" );
 
+	m_showRulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_show_ruler" );
+	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
+	m_showRulerAction->setChecked( true );
 	m_groupObjects = new KAction(
 						 i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
 						 SLOT( groupSelection() ), actionCollection(), "selection_group" );
@@ -941,6 +944,28 @@ KarbonView::setNumberOfRecentFiles( int number )
 {
 	if( shell() )	// 0L when embedded into konq !
 		shell()->setMaxRecentItems( number );
+}
+
+void
+KarbonView::showRuler()
+{
+	int space = 20;
+	if( m_showRulerAction->isChecked() )
+	{
+		m_horizRuler->show();
+		m_vertRuler->show();
+		m_horizRuler->setGeometry( space, 0, width() - space, space );
+		m_vertRuler->setGeometry( 0, space, space, height() - space );
+		m_canvas->setGeometry( space, space, width() - space, height() - space );
+	}
+	else
+	{
+		m_horizRuler->hide();
+		m_vertRuler->hide();
+		//m_horizRuler->setGeometry( space, 0, width() - space, space );
+		//m_vertRuler->setGeometry( 0, space, space, height() - space );
+		m_canvas->setGeometry( 0, 0, width(), height() );
+	}
 }
 
 void
