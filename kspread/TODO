@@ -57,17 +57,10 @@ Other things: (please add the things you are working on!)
 John
 =======
 
-- Reimplimenting the "obscuring" structure of cells -- there is currently no
-  way to keep track of a cell being obscured by more than one other cell.
-
-- various painting issues.  Cell borders aren't always painted/cleared correctly
-  and the entire canvas painting routines are far too complex.  
-
 - Pulling the cell 'result' into it's own class for future enhancements to 
   calculation precision, new datatypes (matrix?), and cleaner code (KSpreadCell
   is absolutely HUGE)
-  -- I haven't started on this and may not for several weeks so let me know if
-     you want to take this.
+  -- I've started on this now since we pushed the beta back.
 
 Philipp
 =======
