@@ -50,18 +50,20 @@ bool WMFImport::filter(
     m_text = "";
     m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     m_text += "<!DOCTYPE killustrator>\n";
-    m_text += "<killustrator mime=\"application/x-killustrator\" version=\"2\" editor=\"WMF import filter\">\n";
-    m_text += "<head>\n";
-    m_text += "<layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
-    m_text += "<grid dx=\"20\" dy=\"20\" align=\"0\">\n";
-    m_text += "<helplines align=\"0\"/>\n";
-    m_text += "</grid>\n";
-    m_text += "</head>\n";
-    m_text += "<layer>\n";
+    m_text += "<killustrator mime=\"application/x-killustrator\" version=\"3\" editor=\"WMF import filter\">\n";
+    m_text += " <head currentpagenum=\"2\">\n";
+    m_text += "  <grid dx=\"50\" dy=\"50\" align=\"0\">\n";
+    m_text += "   <helplines align=\"0\"/>\n";
+    m_text += "  </grid>\n";
+    m_text += " </head>\n";
+    m_text += " <page id=\"Page 1\">\n";
+    m_text += "  <layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
+    m_text += "  <layer>\n";
 
     if (!parse(fileIn))
         return false;
-    m_text += "</layer>\n";
+    m_text += "  </layer>\n";
+    m_text += " </page>\n";
     m_text += "</killustrator>\n";
 
     emit sigProgress(100);
