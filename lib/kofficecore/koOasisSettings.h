@@ -167,6 +167,8 @@ public:
 
 private:
     friend class Items;
+    friend class IndexedMap;
+    friend class NamedMap;
     const QDomElement m_settingsElement;
     const char* m_configNSURI;
 
