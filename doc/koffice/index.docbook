@@ -1,13 +1,14 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
  <!ENTITY kappname "&koffice;">
+ <!ENTITY package "koffice">
  <!ENTITY % addindex "IGNORE">
  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
 <book lang="&language;">
 <bookinfo>
-<title>KOffice</title>
+<title>&koffice;</title>
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
 <author>
@@ -76,7 +77,7 @@ Jost <email>jost@schenck.de</email>
 <member>&kspread; (a spreadsheet application)</member> 
 <member>&kpresenter; (screen and slide presentations)</member>
 <member>&killustrator; (a vector drawing application)</member>
-<member>&krayon; (a bitmap image editor)</member>
+
 <member>&kformula; (an editor for mathematical formulae)</member>
 <member>&kchart; (a charts/graphs drawing application)</member>
 <member>&kivio; <!-- FIXME --></member>
@@ -118,7 +119,7 @@ This section is not yet written.
 
 </chapter> 
 
-<chapter id="firststeps">
+<chapter id="first-steps">
 <title>First steps in &koffice;</title>
 <para></para>
 </chapter>
@@ -151,11 +152,10 @@ the source code would become impossible to maintain.
 
 <para>
 The alternative to this is KParts. Its philosophy is simple: let every
-application do what it does best. [I think this para needs more
-elaboration -- kt.]
+application do what it does best. 
 </para>
 
-<sect1 id="compounddocs">
+<sect1 id="compound-docs">
 <title>Compound documents with KParts</title>
 
 <para> 
@@ -181,7 +181,7 @@ application in another is called <quote>embedding</quote>.
 </sect1>
 
 
-<sect1 id="kpartstryit">
+<sect1 id="kparts-try-it">
 <title>Using KParts in your document</title>
 
 <para>
@@ -206,10 +206,9 @@ Start a new, blank document. You may want to type some sample text.
 <step>
 <para>
 Chose <guimenuitem>Create KSpread table frame</guimenuitem> from the
-<guimenu>Tools</guimenu> menu. (FIXME: I think this menu structure was
-supposed to be changed). You'll notice that the mouse cursor has changed
-to a cross. This form of the cursor indicates that you are supposed to
-select an area.  
+<guimenu>Tools</guimenu> menu. You'll notice that the mouse cursor has
+changed to a cross. This form of the cursor indicates that you are
+supposed to select an area.
 </para>
 </step> 
 <step>
@@ -300,15 +299,14 @@ STUFF
 
 <sect2><title>How to Get Correct Printout</title>
 
-<para>
-While &koffice; automatically can handle all X11 fonts <emphasis>on
-screen</emphasis>, printout can pose a problem: on most systems,
-printing is done via <application>ghostscript</application>. Now, while
-&koffice; knows the font names used by X Windows, it does normally
+<para> While &koffice; automatically can handle all X11 fonts
+<emphasis>on screen</emphasis>, printout can pose a problem: on most
+systems, printing is done via
+<application>ghostscript</application>. Now, while &koffice; knows the
+font names used by X Windows, it does normally
 <emphasis>not</emphasis> know the font names used by
-ghostscript. &koffice; tries to guess these names, which unfortunately
-doesn't work all of the time.
-</para>
+<application>ghostscript</application>. &koffice; tries to guess these
+names, which unfortunately doesn't work all of the time.  </para>
 
 <para>
 This problem can be solved, although this is not that easy. Actually,
@@ -365,16 +363,15 @@ letters and use certain templates, there is no need for much more
 functionality than saving, loading, printing, &etc;
 </para>
 
-<para>
-Thanks to the <quote>action</quote> concept of &Qt; and &kde;, you can freely customize
-&koffice; menu bars and tool bars. Unfortunately, at the moment, there are no
-easy-to-use dialogs to do this. &koffice; stores its &GUI; configuration in
-&XML; files and you'll have to edit those. Hopefully, this situation will
-change in the future; for now, you'll need some basic knowledge of how
-an &XML; document works (or <acronym>HTML</acronym>, which is a subset
-of &XML;). [The <quote>action</quote> concept needs to be discussed in
-more detail -- kt.] 
-</para>
+<para> Thanks to the <quote>action</quote> concept of &Qt; and &kde;,
+you can freely customize &koffice; menu bars and tool
+bars. Unfortunately, at the moment, there are no easy-to-use dialogs
+to do this. &koffice; stores its &GUI; configuration in &XML; files
+and you'll have to edit those. Hopefully, this situation will change
+in the future; for now, you'll need some basic knowledge of how an
+&XML; document works (or <acronym>HTML</acronym>, which is a subset of
+&XML;). [The <quote>action</quote> concept needs to be discussed in
+more detail -- kt.]  </para>
 
 <para>
 Normally, each &koffice; application has at least two of those &XML;
@@ -433,8 +430,10 @@ Here's a simple example of such an rc-file.
 
 <para>
 For detailed information on the different &koffice; applications, please
-consult their respective manuals.  [FIXME: how do I provide links to
-them? Do we need set-tag?]
+consult their respective manuals.  <!-- (use ulink to help:/appname/ -->
+<!-- for the meantime - it's a hack, but it's the best we have -->
+<!-- presently. [FIXME: how do I provide links to them? Do we --> 
+<!-- need set-tag?] --> 
 </para>
 
 </sect1>
@@ -455,8 +454,7 @@ install &koffice;, news about &koffice; development, screenshots &etc;
 </para></listitem>
 <listitem>
 <para>
-<ulink url="http://www.kde.org">The K Desktop Environment
-(&kde;)</ulink>. The most advanced and absolutely free desktop
+&kde-http;. The most advanced and absolutely free desktop
 environment for unix-like operating systems. &koffice; makes use of the
 &kde; libraries.
 </para></listitem>
@@ -506,46 +504,44 @@ In the &koffice; sources you'll find an example application in the
 <para>
 This manual is copyright by Jost Schenck. It can be distributed
 freely, as long as this copyright notice is included. You may change
-it as long as you send me the changes or commit them to KDE CVS.
-I'll not be liable for anything resulting from the use of this
-manual.
+it as long as you send me the changes or commit them to &kde;
+<acronym>CVS</acronym>.  I'll not be liable for anything resulting
+from the use of this manual.
 </para>
 
 <para>
-The other KOffice manuals are copyrighted by their respective authors.
+The other &koffice; manuals are copyrighted by their respective authors.
 </para>
 
 &underFDL;
 &underGPL;
 
 </chapter>
-
   
 <appendix id="installation">
 <title>Installation</title>
 
-<sect1 id="Requirements">
+<sect1 id="requirements">
 <title>System Requirements</title>
 
 <para>
-In order to install and use KOffice you must have:
+In order to install and use &koffice; you must have:
 </para>
 
 <itemizedlist>
 <listitem><para>
-A functioning Unix system (for example, Linux or BSD)
-with a configured X Window System (for example, XFree86).
+A functioning &UNIX; system (for example, &Linux; or BSD)
+with a configured &X-Window; (for example, XFree86).
 </para></listitem>
 <listitem><para>
-The Qt 2.1 libraries from Troll Tech. See
+The &Qt; 2.1 libraries from Troll Tech. See
 <ulink url="ftp://ftp.troll.no/">ftp://ftp.troll.no/</ulink>
 for more information.
 </para></listitem>
 <listitem><para>
-The K Desktop Environment 2.0 (KDE 2.0). KOffice cannot be compiled
-with earlier versions of KDE. Information on obtaining and installing
-KDE 2.0 can be found at:
-<ulink url="http://www.kde.org">http://www.kde.org.</ulink>
+The K Desktop Environment 2.0 (&kde; 2.0). &koffice; cannot be compiled
+with earlier versions of &kde;. Information on obtaining and installing
+&kde; 2.0 can be found at: &kde-http;
 </para></listitem>
 <listitem><para>
 Permission to install software on your computer. If you are on a
@@ -555,23 +551,23 @@ using a networked computer, check with your administrator first.
 </itemizedlist>
 
 <para>
-Please note that, while you need the KDE 2.0 libraries on your system,
-you can still use KOffice in a different desktop environment (for example,
-KDE 1.1, UDE or GNOME).
+Please note that, while you need the &kde; 2.0 libraries on your system,
+you can still use &koffice; in a different desktop environment (for example,
+&kde; 1.1, UDE or GNOME).
 </para>
 
 <para>
-If you plan on <link linkend="FromSource">compiling KOffice from
+If you plan on <link linkend="from-source">compiling &koffice; from
 source code</link> you will also need:
 </para>
 
 <itemizedlist>
 <listitem><para>
-Automake 1.4 or newer.  This can be downloaded from:
+<command>automake</command> 1.4 or newer.  This can be downloaded from:
 <ulink url="ftp://ftp.gnu.org/pub/gnu/automake/">ftp://ftp.gnu.org/pub/gnu/automake/</ulink>
 </para></listitem>
 <listitem><para>
-Autoconf 2.13 or later.  This can be downloaded from:
+<command>autoconf</command> 2.13 or later.  This can be downloaded from:
 <ulink url="ftp://ftp.gnu.org/pub/gnu/autoconf/">ftp://ftp.gnu.org/pub/gnu/autoconf/</ulink>
 </para></listitem>
 <listitem><para>
@@ -579,7 +575,7 @@ A C++ compiler which supports exceptions (preferably egcs 1.1.x). This can be do
 <ulink url="http://egcs.cygnus.com/">http://egcs.cygnus.com/</ulink>
 </para></listitem>
 <listitem><para>
-Troll Tech's Qt 2.1 development packages. These can be downloaded from
+Troll Tech's &Qt; 2.1 development packages. These can be downloaded from
 <ulink url="ftp://ftp.troll.no/">ftp://ftp.troll.no/</ulink>
 </para></listitem>
 </itemizedlist>
@@ -593,7 +589,7 @@ or install from pre-compiled binary packages.
 <para>
 If you want to obtain the most current binary version of KOffice,
 you can find more information by following this link:
-<link linkend="GettingBinaries">Getting Binary Packages</link>.
+<link linkend="getting-binaries">Getting Binary Packages</link>.
 </para>
 
 <para>
@@ -601,19 +597,18 @@ If pre-compiled binaries are not available for your system, you can download
 the source code and compile it yourself.  Instructions on where to obtain the
 current source code (and what to do with the source code once you have it)
 can be found by following this link:
-<link linkend="GettingSource">Getting the source code</link>.
+<link linkend="getting-source">Getting the source code</link>.
 </para> 
 
-<note><para>
-Please see the <ulink url="http://koffice.kde.org">KOffice homepage</ulink>
-for further details. That is where you can always find the most up-to-date
-information on both source and binary distributions!
-</para></note>
+<note><para> Please see the <ulink
+url="http://koffice.kde.org">&koffice; homepage</ulink> for further
+details. That is where you can always find the most up-to-date
+information on both source and binary distributions!  </para></note>
 
 </sect1>
 
 
-<sect1 id="GettingBinaries">
+<sect1 id="getting-binaries">
 <title>Getting Binary Packages</title>
 
 <para>
@@ -633,78 +628,70 @@ can be found at:
 <ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink>
 </para>
 
-<note><para>
-It is important that you use a binary package which is compatible with your system.
-If you use the Linux operating system and are unable to find a binary package
-at the KOffice web site or one of its mirrors, you may be able to obtain one
-from the website of your distribution.
-</para></note>
+<note><para> It is important that you use a binary package which is
+compatible with your system.  If you use the &Linux; operating system
+and are unable to find a binary package at the &koffice; web site or
+one of its mirrors, you may be able to obtain one from the website of
+your distribution.  </para></note>
 
 </sect1>
 
 
-<sect1 id="FromBinaries">
+<sect1 id="from-binaries">
 <title>From Binary Packages</title>
 
 <para>
 To install &koffice; from precompiled binaries, you should:
 </para>
 
-<orderedlist numeration="arabic">
-<listitem><para>
-Ensure your computer has all of the required software installed and
-in working condition (excluding KOffice of course). You can find the
-system requirements by following this link:
-<link linkend="Requirements">System Requirements</link>.
-</para></listitem>
-<listitem><para>
-Download the KOffice binary into a temporary directory.
-</para></listitem>
-<listitem><para>
-If the filename ends in .rpm (Redhat Package Management file),
-KOffice can be installed with the following command:
-<screen>
-<prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command>
-</screen>
-If the filename ends in .deb (Debian Package file), KOffice can be
-installed with the following command:
-<screen>
-<prompt>$</prompt> <command>dpkg -i <replaceable>filename</replaceable></command>
-</screen>
-If the filename ends in .tar.gz or .tgz (a tarball file), KOffice can be
-installed with the following command:
-<screen>
-<prompt>$</prompt> <command>cd /</command>
-<prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command>
-</screen>
-</para></listitem>
-<listitem><para>
-That's all. KOffice should now be installed on your system.
-</para></listitem>
-</orderedlist>
+<procedure>
+<step>
+<para>Ensure your computer has all of the required software installed
+and in working condition (excluding &koffice; of course). You can find
+the system requirements by following this link: <link
+linkend="requirements">System Requirements</link>.</para></step>
+<step><para>Download the &koffice; binary into a temporary
+directory.</para></step>
+<step><para>If the filename ends in <literal
+role="extension">.rpm</literal> (&RedHat; Package Management file),
+&koffice; can be installed with the following command:
+<screen><prompt>$</prompt>
+<userinput><command>rpm</command><option>-U</option><replaceable>filename</replaceable></userinput></screen>. </para>
+<para>If thefilename ends in <literal role="extension">.deb</literal> (Debian Package file), &koffice; can be installed with the following command:
+<screen><prompt>$</prompt> <userinput><command>dpkg</command><option>-i</option>
+<replaceable>filename</replaceable></userinput></screen>
+</para>
+<para>If the filename ends in <literal
+role="extension">.tar.gz</literal> or <literal
+role="extension">.tgz</literal> (a tarball file), &koffice; can be
+installed with the following commands:</para>
 
-<note><para>
-If you have a graphical front-end for package management, such as
-KPackage or GnoRPM, installed on your system, you may find that more
-convenient to use than a command line. Consult the program's
-documentation to find out how to install with it.
-</para></note>
+<screen>
+<prompt>$</prompt> <userinput><command>cd</command> /</userinput>
+<prompt>$</prompt> <userinput><command>tar</command> <option>-xzvf</option> <replaceable>filename</replaceable></userinput>
+</screen>
+
+</step>
+<step><para>
+That's all. &koffice; should now be installed on your system.
+</para></step>
+</procedure>
+
+<note><para> If you have a graphical front-end for package management,
+such as &kpackage; or <application>GnoRPM</application>, installed on
+your system, you may find that more convenient to use than a command
+line. Consult the program's documentation to find out how to install
+with it.  </para></note>
 
 </sect1>
 
 
-<sect1 id="GettingSource">
+<sect1 id="getting-source">
 <title>Getting Source Code</title>
 
 <para>
 You can download the current source code from:
-</para>
-
-<para>
 <ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink>
-</para>
-
-<para>
 or from one of many mirror sites. The current list of mirror sites
 can be found at:
 </para>
@@ -716,54 +703,46 @@ can be found at:
 </sect1>
 
 
-<sect1 id="FromSource">
+<sect1 id="from-source">
 <title>From Source Code</title>
 
 <para>
-If you want to build KWord from source code, you should:
+If you want to build &kword; from source code, you should:
 </para>
 
-<orderedlist numeration="arabic">
-<listitem><para>
+<procedure>
+<step><para>
 Ensure your computer has all the required software installed and
-in working condition (excluding KOffice of course). You can find
+in working condition (excluding &koffice; of course). You can find
 the system requirements by following this link:
-<link linkend="Requirements">System Requirements</link>.
-</para></listitem>
-<listitem><para>
-Download the KOffice source file (***insert filenames (srpm and tar)
-here***) into a temporary directory.
-</para></listitem>
-<listitem><para>
-If the filename ends in .src.rpm (Redhat Package Management file),
-the source code for KOffice can be installed with:
-<screen>
-<prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command>
-</screen>
-If the filename ends in .src.tar.gz or .src.tgz (a tarball file),
-the source code for KOffice can be installed with:
-<screen>
-<prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command>
-</screen>
-</para></listitem>
-<listitem><para>
-The source code for KOffice should now be installed on your
-system.
-</para></listitem>
-</orderedlist>
+<link linkend="requirements">System Requirements</link>.
+</para></step>
+<step><para>
+Download the &koffice; source file <!-- ***insert filenames (srpm and -->
+<!-- tar) here*** --> into a temporary directory.
+</para></step>
+<step><para>
+If the filename ends in <literal role="extension">.src.rpm</literal>
+(&RedHat; Package Management file), the source code for &koffice; can
+be installed with: 
+<screen><prompt>$</prompt> <userinput><command>rpm</command><option>-U</option><replaceable>filename</replaceable></userinput></screen></para>
 
-<para>
-STUFF
-</para>
+<para>If the filename ends in <literal role="extension">.src.tar.gz</literal> or <literal role="extension">.src.tgz</literal> (a tarball file),
+the source code for &koffice; can be installed with:
+<screen><prompt>$</prompt> <userinput><command>tar</command> <option>-xzvf</option> <replaceable>filename</replaceable></userinput></screen>
+</para></step>
+<step><para>The source code for &koffice; should now be installed on
+your system.</para></step>
+</procedure>
 
 </sect1>
 
 
-<sect1 id="CompilingProblems">
+<sect1 id="compiling-problems">
 <title>Problems with Compilation</title>
 
 <para>
-Problems STUFF
+
 </para>
 
 </sect1>
