@@ -178,7 +178,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
             rowText += endOfParagraph;
             rowText += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
             rowText += m_eol;
-            endOfParagraph += "\\par"; // The problem is that the last paragraph ends with \cell not with \par
+            endOfParagraph = "\\par"; // The problem is that the last paragraph ends with \cell not with \par
         }
         rowText += "\\cell";
         debugCellCurrent ++; // DEBUG
@@ -188,7 +188,6 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
     textBody += "\\row\\pard";  // delimit last row
     textBody += m_eol;
     m_inTable = oldInTable;
-//    m_prefix = QString::null;
 
     return textBody;
 }
