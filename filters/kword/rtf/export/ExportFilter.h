@@ -25,7 +25,6 @@
 
 #include <qvaluestack.h>
 #include <qvaluelist.h>
-#include <qcolor.h>
 #include <qstringlist.h>
 
 #include <KWEFBaseWorker.h>
@@ -81,8 +80,8 @@ private:
     QString lookupFont(const QString& fontName);
     QString lookupColor(const QString& markup, const QColor& color);
     QString lookupStyle(const QString& styleName, LayoutData& returnLayout);
-    QString writeRow(const QString& textCellx, const QString& rowText, const FrameData& frame);
-
+    QString writeRow(const QString& textCellHeader, const QString& rowText, const FrameData& frame);
+    QString writeBorder(const char whichBorder, const int borderWidth, const QColor& color);
 protected:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;

@@ -31,6 +31,7 @@
 #include <qregion.h> // for #include <kdebugclasses.h>
 #include <qimage.h>
 #include <qregexp.h>
+#include <qcolor.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -71,31 +72,31 @@ RTFWorker::RTFWorker():
 {
 }
 
+static QString WritePositiveKeyword(const QString& keyword, const int value)
+{
+    QString str;
+    str += keyword;
+
+    if (value>0) // The value of the keyword cannot be negative
+        str += QString::number( value );
+    else
+        str += '0';
+
+    return str;
+}
+
 #define FULL_TABLE_SUPPORT
 
-QString RTFWorker::writeRow(const QString& textCellx, const QString& rowText, const FrameData& frame)
+QString RTFWorker::writeRow(const QString& textCellHeader, const QString& rowText, const FrameData& frame)
 {
 #ifdef FULL_TABLE_SUPPORT
     QString row;
 
     row += "\\trowd\\trgaph60\\trql";  // start new row
-
-    row += "\\trrh";
-    const int trrh = qRound(PT_TO_TWIP(frame.minHeight));
-    if (trrh>0)
-        row += QString::number(trrh);
-    else
-        row += '0'; // Automatic height
-
-    row += "\\trleft";
-    const int trleft = qRound(PT_TO_TWIP(frame.left) - m_paperMarginLeft);
-    if (trleft>0)
-        row += QString::number(trleft);
-    else
-        row += '0';
-
-    row += "\\trautofit0"; // ### VERIFY
-    row += textCellx;
+    row += WritePositiveKeyword("\\trrh", qRound(PT_TO_TWIP(frame.minHeight)));
+    row += WritePositiveKeyword("\\trleft", qRound(PT_TO_TWIP(frame.left) - m_paperMarginLeft));
+    //row += "\\trautofit0"; // ### VERIFY
+    row += textCellHeader;
     row += " "; // End of keyword
     row += rowText;
 
@@ -103,6 +104,23 @@ QString RTFWorker::writeRow(const QString& textCellx, const QString& rowText, co
 #else
     return QString::null;
 #endif
+}
+
+QString RTFWorker::writeBorder(const char whichBorder, const int borderWidth, const QColor& color)
+{
+    QString str;
+    if (borderWidth > 0)
+    {
+        str += "\\clbrdr"; // Define border
+        str += whichBorder; // t=top, l=left, b=bottom, r=right
+        str += "\\brdrs\\brdrw"; // Single border; thickness
+        str += QString::number(borderWidth);
+        if (color.isValid())
+        {
+            str += lookupColor("\\brdrcf",color);
+        }
+    }
+    return str;
 }
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
@@ -116,7 +134,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     FrameData firstFrameData;
     int debugCellCurrent = 0; //DEBUG
     int debugRowCurrent = 0; //DEBUG
-    QString textCellx; // All \cellx
+    QString textCellHeader; // <celldef>
 
     const bool oldInTable = m_inTable;
     m_inTable = true;
@@ -131,11 +149,11 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         if (rowCurrent!=(*itCell).row)
         {
             rowCurrent = (*itCell).row;
-            m_textBody += writeRow( textCellx, rowText, firstFrameData);
+            m_textBody += writeRow( textCellHeader, rowText, firstFrameData);
             m_textBody += "\\row";
             m_textBody += m_eol;
             rowText = QString::null;
-            textCellx = QString::null;
+            textCellHeader = QString::null;
             firstCellInRow=true;
             debugRowCurrent ++; // DEBUG
             debugCellCurrent = 0; //DEBUG
@@ -151,8 +169,11 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
         kdDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
             << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom << endl;
-        textCellx += "\\cellx";
-        textCellx += QString::number(qRound(PT_TO_TWIP(frame.right)) - m_paperMarginRight); //right border of cell
+        textCellHeader += writeBorder('t',qRound(PT_TO_TWIP(frame.tWidth)),frame.tColor);
+        textCellHeader += writeBorder('l',qRound(PT_TO_TWIP(frame.lWidth)),frame.lColor);
+        textCellHeader += writeBorder('b',qRound(PT_TO_TWIP(frame.bWidth)),frame.bColor);
+        textCellHeader += writeBorder('r',qRound(PT_TO_TWIP(frame.rWidth)),frame.rColor);
+        textCellHeader += WritePositiveKeyword("\\cellx",qRound(PT_TO_TWIP(frame.right) - m_paperMarginRight)); //right border of cell
 #endif
 
         QString endOfParagraph;
@@ -170,12 +191,13 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         debugCellCurrent ++; // DEBUG
 #else
         m_textBody += rowText;
+        m_textBody += "\\par";
         rowText = QString::null;
 #endif
     }
 
 #ifdef FULL_TABLE_SUPPORT
-    m_textBody += writeRow( textCellx, rowText, firstFrameData);
+    m_textBody += writeRow( textCellHeader, rowText, firstFrameData);
     //m_textBody += "\\row";
     //m_textBody += m_eol;
     m_inTable = oldInTable;
