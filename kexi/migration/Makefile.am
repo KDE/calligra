@@ -42,3 +42,5 @@ keximigratetest_LDADD = $(top_builddir)/kexi/migration/libkeximigrate.la \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
 	$(top_builddir)/kexi/main/libkeximain.la \
 	$(top_builddir)/kexi/main/startup/libkeximainstartup.la
+keximigratetest_LDFLAGS = $(KDE_RPATH) $(all_libraries) 
+
