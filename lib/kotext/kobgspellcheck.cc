@@ -35,6 +35,7 @@
 #include <kspell2/broker.h>
 #include <kspell2/dictionary.h>
 #include <kspell2/settings.h>
+#include <kspell2/filter.h>
 using namespace KSpell2;
 
 #include <klocale.h>
@@ -56,6 +57,20 @@ public:
 };
 
 static const int delayAfterMarked = 10;
+
+static QString paragToText( KoTextParag *parag )
+{
+    if ( !parag || !parag->string()->needsSpellCheck() )
+        return QString::null;
+
+    parag->string()->setNeedsSpellCheck( false );
+    if ( parag->length() <= 1 )
+        return QString::null;
+
+    QString str = parag->string()->toString();
+    str.truncate( str.length() - 1 ); // remove trailing space
+    return str;
+}
 
 KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
                                 const char *name )
@@ -203,13 +218,28 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         d->paragCache.insert( parag, parag );
         return;
     }
-    //kdDebug()<<"here 2 "<<endl;
+    //kdDebug()<<"Para modified pos = "<<pos<<", length = "<< length <<endl;
+#if KDE_VERSION > KDE_MAKE_VERSION(3,3,0)
+    if ( length < 10 ) {
+        QString str = paragToText( parag );
+        Filter filter;
+        filter.setBuffer( str );
+        filter.setCurrentPosition( pos - 1 );
+
+
+        for ( Word w = filter.nextWord(); !w.end; w = filter.nextWord() ) {
+            bool misspelling = !d->backSpeller->checkWord( w.word );
+            //kdDebug()<<"Word = \""<< w.word<< "\" , misspelled = "<<misspelling<<endl;
+            markWord( w.word, w.start, misspelling );
+        }
+#else
     if ( length < 3 ) {
         QString word;
         int start;
         bool misspelled = !d->backSpeller->checkWordInParagraph( parag, pos,
                                                                  word, start );
         markWord( word, start, misspelled );
+#endif
     } else {
         d->backSpeller->check( parag );
     }
