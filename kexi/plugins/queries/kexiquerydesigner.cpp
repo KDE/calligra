@@ -48,7 +48,7 @@
 KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &it)
 	: KexiDialogBase(win, it.name())
 {
-	setIcon(SmallIcon("query"));
+//	setIcon(SmallIcon("query"));
 	QVBoxLayout *l = new QVBoxLayout(this);
 
 	m_tab = new QTabWidget(this);
@@ -65,9 +65,9 @@ KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &
 //	m_queryView = new KexiDataTable(m_view, "Query View", "query_view", this, true);
 //	m_view = new KexiDataTable(view, this, "sql", 0, true);
 
-	m_tab->insertTab(m_editor, SmallIcon("state_edit"), i18n("Composer"));
-	m_tab->insertTab(m_sql, SmallIcon("state_sql"), i18n("SQL"));
-	m_tab->insertTab(m_queryView, SmallIcon("table"), i18n("View"));
+	m_tab->addTab(m_editor, SmallIcon("state_edit"), i18n("Composer"));
+	m_tab->addTab(m_sql, SmallIcon("state_sql"), i18n("SQL"));
+	m_tab->addTab(m_queryView, SmallIcon("table"), i18n("View"));
 
 	m_currentView = 0;
 
