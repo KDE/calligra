@@ -21,7 +21,7 @@ public:
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
 	virtual void drawTemporaryObject(
-		KarbonView* view, const QPoint& p, double d1, double d2 );
+		KarbonView* view, const KoPoint& p, double d1, double d2 );
 
 	virtual void showDialog() const;
 

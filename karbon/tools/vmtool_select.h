@@ -32,8 +32,8 @@ private:
 	enum { normal, moving, scaling, rotating } m_state;
 
 	// input (mouse coordinates):
-	QPoint m_fp;
-	QPoint m_lp;
+	KoPoint m_fp;
+	KoPoint m_lp;
 
 	bool m_isDragging;
 };

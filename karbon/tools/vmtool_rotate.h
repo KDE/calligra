@@ -33,9 +33,9 @@ private:
 	static VMToolRotate* s_instance;
 
 	// input (mouse coordinates):
-	QPoint m_fp;
-	QPoint m_lp;
-	QPoint m_sp;
+	KoPoint m_fp;
+	KoPoint m_lp;
+	KoPoint m_sp;
 
 	double m_angle;
 

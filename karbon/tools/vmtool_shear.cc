@@ -67,8 +67,6 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-//	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
-
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
@@ -167,14 +165,12 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		QPoint fp;
-		fp.setX( view->canvasWidget()->viewportToContents( m_fp ).x() );
-		fp.setY( view->canvasWidget()->viewportToContents( m_fp ).y() );
+		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 		part()->addCommand(
 			new VMCmdShear(
 				part(),
-				part()->selection(), fp / view->zoomFactor(), m_s1, m_s2 ),
+				part()->selection(), fp * (1.0 / view->zoomFactor() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

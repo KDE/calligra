@@ -30,7 +30,7 @@ protected:
 
 	// draw the object while it is edited:
 	virtual void drawTemporaryObject(
-		KarbonView* view, const QPoint& p, double d1, double d2 ) = 0;
+		KarbonView* view, const KoPoint& p, double d1, double d2 ) = 0;
 
 private:
 	inline void recalcCoords();
@@ -39,11 +39,11 @@ private:
 	bool m_calcPolar;
 
 	// input (mouse coordinates):
-	QPoint m_fp;
-	QPoint m_lp;
+	KoPoint m_fp;
+	KoPoint m_lp;
 
 	// output:
-	QPoint m_p;
+	KoPoint m_p;
 	double m_d1;
 	double m_d2;
 

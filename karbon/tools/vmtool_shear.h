@@ -33,8 +33,8 @@ private:
 	static VMToolShear* s_instance;
 
 	// input (mouse coordinates):
-	QPoint m_fp;
-	QPoint m_lp;
+	KoPoint m_fp;
+	KoPoint m_lp;
 
 	double m_s1, m_s2;
 

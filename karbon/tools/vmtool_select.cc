@@ -46,7 +46,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+	KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
@@ -122,8 +122,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		// adjust to real viewport contents instead of raw mouse coords:
-		QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
-		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 		if( m_state == moving )
 		{
@@ -132,8 +132,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 				new VMCmdTranslate(
 					part(),
 					part()->selection(),
-					qRound( ( lp.x() - fp.x() ) / view->zoomFactor() ),
-					qRound( ( lp.y() - fp.y() ) / view->zoomFactor() ) ),
+					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoomFactor() ) ),
+					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view->zoomFactor() ) ) ),
 				true );
 
 //			part()->repaintAllViews();

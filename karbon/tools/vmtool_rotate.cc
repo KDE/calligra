@@ -75,10 +75,10 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
 		setCursor( view );
-		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 		KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
-		m_sp = QPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
-		QPoint sp = QPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
+		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
+		KoPoint sp( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.left() - m_sp.x() );
@@ -169,7 +169,7 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdRotate(
 				part(),
-				part()->selection(), m_sp / view->zoomFactor(), m_angle / VGlobal::pi_180 ),
+				part()->selection(), m_sp * (1.0 / view->zoomFactor() ), m_angle / VGlobal::pi_180 ),
 			true );
 
 		m_isDragging = false;

@@ -49,8 +49,8 @@ VMToolHandle::drawBox( QPainter& painter, short index )
 KoRect
 computeRect( double cx, double cy, const double zoomFactor )
 {
-	return KoRect( QPoint( int( cx ) - HANDLE_SIZE /* zoomFactor */, int( cy ) - HANDLE_SIZE /* zoomFactor */ ),
-				  QPoint( int( cx ) + HANDLE_SIZE /* zoomFactor */, int( cy ) + HANDLE_SIZE /* zoomFactor */ ) );
+	return KoRect( KoPoint( cx - HANDLE_SIZE /* zoomFactor */, cy - HANDLE_SIZE /* zoomFactor */ ),
+				  KoPoint( cx + HANDLE_SIZE /* zoomFactor */, cy + HANDLE_SIZE /* zoomFactor */ ) );
 }
 
 void
@@ -94,7 +94,7 @@ VMToolHandle::eventFilter( KarbonView* view, QEvent* event )
 	m_activeNode = NODE_MM;
 
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	QPoint p = view->canvasWidget()->viewportToContents( mouse_event->pos() );
+	KoPoint p = view->canvasWidget()->viewportToContents( QPoint( mouse_event->pos().x(), mouse_event->pos().y() ) );
 	kdDebug() << "p.x() : " << p.x() << endl;
 	kdDebug() << "p.y() : " << p.y() << endl;
 	if( m_nodes[ NODE_LT ].contains( p ) )

@@ -42,7 +42,7 @@ VCToolEllipse::instance( KarbonPart* part )
 
 void
 VCToolEllipse::drawTemporaryObject(
-	KarbonView* view, const QPoint& p, double d1, double d2 )
+	KarbonView* view, const KoPoint& p, double d1, double d2 )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 
