@@ -29,26 +29,23 @@
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qlineedit.h>
+#include <qvaluelist.h>
 
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-
-#include <stdio.h>
-#include <stdlib.h>
 
 /******************************************************************/
 /* class EffectDia                                                */
 /******************************************************************/
 
 /*================================================================*/
-EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objNum, KPresenterView *_view )
-    : QDialog( parent, name, true )
+EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& _objs, KPresenterView *_view )
+    : QDialog( parent, name, TRUE ), objs( _objs )
 {
-    pageNum = _pageNum;
-    objNum = _objNum;
     view = _view;
-
+    KPObject *obj = objs.at( 0 );
+    
     back = new QVBox( this );
     back->setMargin( 10 );
     back->setSpacing( 5 );
@@ -59,7 +56,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     lNum->setAlignment( AlignVCenter );
 
     eNum = new QSpinBox( 0, 100, 1, grp1 );
-    eNum->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum() );
+    eNum->setValue( obj->getPresNum() );
 
     ( void )new QWidget( grp1 );
     ( void )new QWidget( grp1 );
@@ -81,7 +78,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     cEffect->insertItem( i18n( "Wipe from right" ) );
     cEffect->insertItem( i18n( "Wipe from top" ) );
     cEffect->insertItem( i18n( "Wipe from bottom" ) );
-    cEffect->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect() ) );
+    cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
 
     lEffect2 = new QLabel( i18n( "Effect (object specific): " ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
@@ -89,30 +86,27 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     cEffect2 = new QComboBox( false, grp1, "cEffect2" );
     cEffect2->insertItem( i18n( "No Effect" ) );
 
-    switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
-    {
-    case OT_TEXT:
-    {
+    switch ( obj->getType() ) {
+    case OT_TEXT: {
         cEffect2->insertItem( i18n( "Paragraph after paragraph" ) );
     } break;
     default: break;
     }
 
-    if ( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() == EF2_NONE )
-        cEffect2->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() ) );
-    else
-    {
-        switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
+    if ( obj->getEffect2() == EF2_NONE )
+        cEffect2->setCurrentItem( static_cast<int>( obj->getEffect2() ) );
+    else {
+        switch ( obj->getType() )
         {
         case OT_TEXT:
-            cEffect2->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() + TxtObjOffset ) );
+            cEffect2->setCurrentItem( static_cast<int>( obj->getEffect2() + TxtObjOffset ) );
             break;
         default: break;
         }
     }
 
     disappear = new QCheckBox( i18n( "Disappear" ), back );
-    disappear->setChecked( view->kPresenterDoc()->objectList()->at(_objNum)->getDisappear() );
+    disappear->setChecked( obj->getDisappear() );
 
     QGroupBox *grp2 = new QGroupBox( 2, Qt::Horizontal, back );
 
@@ -120,7 +114,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     lDisappear->setAlignment( AlignVCenter );
 
     eDisappear = new QSpinBox( 0, 100, 1, grp2 );
-    eDisappear->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getDisappearNum() );
+    eDisappear->setValue( obj->getDisappearNum() );
 
     lDEffect = new QLabel( i18n( "Effect (disappearing): " ), grp2 );
     lDEffect->setAlignment( AlignVCenter );
@@ -139,7 +133,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     cDisappear->insertItem( i18n( "Wipe to the right" ) );
     cDisappear->insertItem( i18n( "Wipe to the top" ) );
     cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
-    cDisappear->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect3() ) );
+    cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
 
     ( void )new QWidget( back );
 
@@ -170,17 +164,29 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
 /*================================================================*/
 void EffectDia::slotEffectDiaOk()
 {
-    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), eNum->value(),
-                                          ( Effect )cEffect->currentItem(), ( Effect2 )cEffect2->currentItem(),
-                                          disappear->isChecked(), ( Effect3 )cDisappear->currentItem(),
-                                          eDisappear->value(),
-                                          view->kPresenterDoc()->objectList()->at( objNum )->getPresNum(),
-                                          view->kPresenterDoc()->objectList()->at( objNum )->getEffect(),
-                                          view->kPresenterDoc()->objectList()->at( objNum )->getEffect2(),
-                                          view->kPresenterDoc()->objectList()->at( objNum )->getDisappear(),
-                                          view->kPresenterDoc()->objectList()->at( objNum )->getEffect3(),
-                                          view->kPresenterDoc()->objectList()->at( objNum )->getDisappearNum(),
-                                          view->kPresenterDoc()->objectList()->at( objNum ) );
+    QValueList<EffectCmd::EffectStruct> oldEffects;
+    for ( unsigned int i = 0; i < objs.count(); ++i ) {
+	KPObject *o = objs.at( i );
+	EffectCmd::EffectStruct e;
+	e.presNum = o->getPresNum();
+	e.disappearNum = o->getDisappearNum();
+	e.effect = o->getEffect();
+	e.effect2 = o->getEffect2();
+	e.effect3 = o->getEffect3();
+	e.disappear = o->getDisappear();
+	oldEffects << e;
+    }
+    
+    EffectCmd::EffectStruct eff;
+    eff.presNum = eNum->value();
+    eff.disappearNum = eDisappear->value();
+    eff.effect = ( Effect )cEffect->currentItem();
+    eff.effect2 = ( Effect2 )cEffect2->currentItem();
+    eff.effect3 = ( Effect3 )cDisappear->currentItem();
+    eff.disappear = disappear->isChecked();
+
+    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs,
+					  oldEffects, eff );
     effectCmd->execute();
     view->kPresenterDoc()->commands()->addCommand( effectCmd );
     emit effectDiaOk();

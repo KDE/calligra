@@ -921,30 +921,22 @@ void KPresenterView::screenPresStructView()
 /*===============================================================*/
 void KPresenterView::screenAssignEffect()
 {
-    int _pNum, _oNum;
-
-    if ( effectDia )
-    {
+    if ( effectDia ) {
 	QObject::disconnect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
 	effectDia->close();
 	delete effectDia;
 	effectDia = 0;
     }
 
-    if ( page->canAssignEffect( _pNum, _oNum ) && _pNum >= 1 )
-    {
-	effectDia = new EffectDia( this, "Effect", _pNum, _oNum, ( KPresenterView* )this );
+    page->setToolEditMode( TEM_MOUSE );
+    
+    QList<KPObject> objs;
+    if ( page->canAssignEffect( objs ) ) {
+	effectDia = new EffectDia( this, "Effect", objs, this );
 	effectDia->setCaption( i18n( "KPresenter - Assign effects" ) );
 	QObject::connect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
 	effectDia->show();
-	page->deSelectAllObj();
-	page->setToolEditMode( TEM_MOUSE );
-	page->selectObj( _oNum );
-    }
-    else
-	QMessageBox::critical( this, i18n( "KPresenter Error" ),
-			       i18n( "I can't assign an effect. You have to select EXACTLY one object!" ),
-			       i18n( "OK" ) );
+    } 
 }
 
 /*========================== screen start =======================*/
@@ -1206,7 +1198,7 @@ void KPresenterView::textColor()
 {
     if ( KColorDialog::getColor( tbColor ) )
     {
-        OpenPartsUI::Pixmap_var pix = 
+        OpenPartsUI::Pixmap_var pix =
             KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	page->setTextColor( &tbColor );
@@ -1982,7 +1974,7 @@ void KPresenterView::colorChanged( QColor* color )
 {
     if ( color->operator!=( tbColor ) )
     {
-        OpenPartsUI::Pixmap_var pix = 
+        OpenPartsUI::Pixmap_var pix =
             KOUIUtils::colorPixmap( color->rgb(), KOUIUtils::TXT_COLOR );
 	tbColor.setRgb( color->rgb() );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );

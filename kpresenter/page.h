@@ -99,7 +99,7 @@ public:
     void setPresFakt( float f ) {_presFakt = f; }
     float presFakt() {return _presFakt; }
 
-    bool canAssignEffect( int&, int& );
+    bool canAssignEffect( QList<KPObject> &objs );
 
     void keyPressEvent( QKeyEvent *e );
 
@@ -233,7 +233,7 @@ protected:
     bool inEffect, keepRatio;
     double ratio;
     QPixmap buffer;
-    
+
 public slots:
     void chPic();
     void chClip();

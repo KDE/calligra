@@ -17,10 +17,7 @@
 #define EFFECTDIA_H
 
 #include <qdialog.h>
-
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
+#include <qlist.h>
 
 class KPresenterView;
 class QWidget;
@@ -30,6 +27,7 @@ class QPushButton;
 class QCheckBox;
 class QVBox;
 class QResizeEvent;
+class KPObject;
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -42,7 +40,8 @@ class EffectDia : public QDialog
 public:
 
     // constructor - destructor
-    EffectDia( QWidget* parent, const char*, int, int, KPresenterView* );
+    EffectDia( QWidget* parent, const char*, const QList<KPObject> &_objs,
+	       KPresenterView* );
 
 protected:
     void resizeEvent( QResizeEvent *e );
@@ -54,9 +53,9 @@ protected:
     QCheckBox *disappear;
     QVBox *back;
 
-    int objNum, pageNum;
     KPresenterView *view;
-
+    QList<KPObject> objs;
+    
 public slots:
     void slotEffectDiaOk();
 

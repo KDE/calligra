@@ -67,8 +67,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 {
     setWFlags( WResizeNoErase );
 
-    if ( parent )
-    {
+    if ( parent ) {
 	mousePressed = false;
 	modType = MT_NONE;
 	resizeObjNum = -1;
@@ -93,9 +92,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 	inEffect = false;
 	ratio = 0;
 	keepRatio = false;
-    }
-    else
-    {
+    } else {
 	view = 0;
 	hide();
     }
@@ -1764,7 +1761,7 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
     presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
     currPresStep = *presStepList.begin();
     subPresStep = 0;
-    repaint( FALSE );
+    repaint( false );
     setCursor( blankCursor );
 
     view->kPresenterDoc()->getHeaderFooterEdit()->updateSizes();
@@ -1802,7 +1799,7 @@ void Page::stopScreenPresentation()
     goingBack = false;
     currPresPage = 1;
     editMode = true;
-    repaint( FALSE );
+    repaint( false );
     setToolEditMode( toolEditMode );
     tmpObjs.clear();
     setWFlags( WResizeNoErase );
@@ -1949,17 +1946,13 @@ bool Page::pPrev( bool /*manual*/ )
     goingBack = true;
     subPresStep = 0;
 
-    if ( (int)currPresStep > *presStepList.begin() )
-    {
+    if ( (int)currPresStep > *presStepList.begin() ) {
 	QValueList<int>::Iterator it = presStepList.find( currPresStep );
 	currPresStep = *( --it );
 	repaint( false );
 	return false;
-    }
-    else
-    {
-	if ( slideListIterator == slideList.begin() )
-	{
+    } else {
+	if ( slideListIterator == slideList.begin() ) {
 	    presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
 	    currPresStep = *presStepList.begin();
 	    repaint( false );
@@ -1968,8 +1961,7 @@ bool Page::pPrev( bool /*manual*/ )
 	currPresPage = *( --slideListIterator );
 
 	tmpObjs.clear();
-	for ( int j = 0; j < static_cast<int>( objectList()->count() ); j++ )
-	{
+	for ( int j = 0; j < static_cast<int>( objectList()->count() ); j++ ) {
 	    if ( getPageOfObj( j, _presFakt ) == static_cast<int>( currPresPage ) )
 		tmpObjs.append( objectList()->at( j ) );
 	}
@@ -1982,25 +1974,18 @@ bool Page::pPrev( bool /*manual*/ )
     return false;
 }
 
-/*======================== can we assign an effect ? =============*/
-bool Page::canAssignEffect( int &pgNum, int &objNum )
+/*================================================================*/
+bool Page::canAssignEffect( QList<KPObject> &objs )
 {
-    bool ret = false;
-    pgNum = -1; objNum = -1;
     KPObject *kpobject;
 
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-    {
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() )
-	{
-	    if ( ret ) return false;
-	    ret = true;
-	    objNum = i;
-	    pgNum = getPageOfObj( objNum );
-	}
+	    objs.append( kpobject );
     }
-    return ret;
+
+    return !objs.isEmpty();
 }
 
 /*================================================================*/
@@ -2016,8 +2001,7 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
     KPObject *kpobject = 0L;
     int i;
 
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-    {
+    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
 	kpobject->drawSelection( false );
     }
@@ -2399,7 +2383,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 			curr2 += 4;
 			_step = 0;
 		    }
-		    bitBlt( this, _pix2.width() - dx - wid - _w, dy, &_pix2, _pix2.width() - dx - wid - _w, 
+		    bitBlt( this, _pix2.width() - dx - wid - _w, dy, &_pix2, _pix2.width() - dx - wid - _w,
 			    dy, _w, hei );
 		}
 		_time.restart();
@@ -2431,9 +2415,9 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		{
 		    pix3 = QPixmap( _pix1 );
 		    QPixmap pix4( _pix2 );
-		    float dw = static_cast<float>( _step * ( ( pix3.width() - ( pix3.width() / 10 ) ) / 
+		    float dw = static_cast<float>( _step * ( ( pix3.width() - ( pix3.width() / 10 ) ) /
 							     ( 2 * _psteps ) ) );
-		    float dh = static_cast<float>( _step * ( ( pix3.height() - ( pix3.height() / 10 ) ) / 
+		    float dh = static_cast<float>( _step * ( ( pix3.height() - ( pix3.height() / 10 ) ) /
 							     ( 2 * _psteps ) ) );
 
 		    dw *= 2;
@@ -2456,7 +2440,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		if ( _step > _psteps && _step < _psteps * 2 )
 		{
 		    QPixmap pix4( _pix2 );
-		    int yy = ( _pix1.height() - pix3.height() ) / 2 - ( ( ( _pix1.height() - pix3.height() ) / 2 ) / 
+		    int yy = ( _pix1.height() - pix3.height() ) / 2 - ( ( ( _pix1.height() - pix3.height() ) / 2 ) /
 									_psteps ) * ( _step - _psteps );
 
 		    bitBlt( &pix4, ( pix4.width() - pix3.width() ) / 2, yy,
@@ -2470,7 +2454,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		if ( _step > 2 * _psteps && _step < _psteps * 3 )
 		{
 		    QPixmap pix4( _pix2 );
-		    int xx = ( _pix1.width() - pix3.width() ) / 2 - ( ( ( _pix1.width() - pix3.width() ) / 2 ) / 
+		    int xx = ( _pix1.width() - pix3.width() ) / 2 - ( ( ( _pix1.width() - pix3.width() ) / 2 ) /
 								      _psteps ) * ( _step - 2 * _psteps );
 		    int yy = ( ( ( _pix1.height() - pix3.height() ) / 2 ) / _psteps ) * ( _step - 2 * _psteps );
 
@@ -2484,7 +2468,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		{
 		    QPixmap pix4( _pix2 );
 		    int xx = ( ( _pix1.width() - pix3.width() ) / _psteps ) * ( _step - 3 * _psteps );
-		    int yy = ( ( _pix1.height() - pix3.height() ) / 2 ) + 
+		    int yy = ( ( _pix1.height() - pix3.height() ) / 2 ) +
 			     ( ( ( _pix1.height() - pix3.height() ) / 2 ) / _psteps ) * ( _step - 3 * _psteps );
 
 		    bitBlt( &pix4, xx, yy, &pix3, 0, 0, pix3.width(), pix3.height() );

@@ -16,6 +16,9 @@
 #ifndef effectcmd_h
 #define effectcmd_h
 
+#include <qlist.h>
+#include <qvaluelist.h>
+
 #include "command.h"
 #include "global.h"
 
@@ -28,11 +31,16 @@ class KPObject;
 class EffectCmd : public Command
 {
 public:
-    EffectCmd( QString _name, int _presNum, Effect _effect, Effect2 _effect2,
-               bool _disappear, Effect3 _effect3, int _disappearNum,
-               int _oldPresNum, Effect _oldEffect, Effect2 _oldEffect2,
-               bool _oldDisappear, Effect3 _oldEffect3, int _oldDisappearNum,
-               KPObject *_object );
+    struct EffectStruct {
+	int presNum, disappearNum;
+	Effect effect;
+	Effect2 effect2;
+	Effect3 effect3;
+	bool disappear;
+    };
+    
+    EffectCmd( QString _name, const QList<KPObject> &_objs,
+	       const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect ); 
     ~EffectCmd();
 
     virtual void execute();
@@ -41,13 +49,10 @@ public:
 protected:
     EffectCmd()
     {; }
-
-    int presNum, oldPresNum, disappearNum, oldDisappearNum;
-    Effect effect, oldEffect;
-    Effect2 effect2, oldEffect2;
-    Effect3 effect3, oldEffect3;
-    bool disappear, oldDisappear;
-    KPObject *object;
+    
+    QValueList<EffectStruct> oldEffects;
+    EffectStruct newEffect;
+    QList<KPObject> objs;
 
 };
 
