@@ -21,8 +21,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-KoUnitDoubleValidator::KoUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name )
-: KDoubleValidator( parent, name ), m_spin( spin )
+KoUnitDoubleValidator::KoUnitDoubleValidator( VUnitDoubleBase *base, QObject *parent, const char *name )
+: KDoubleValidator( parent, name ), m_base( base )
 {
 }
 
@@ -51,15 +51,14 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 	}
 	if( newVal >= 0.0 )
 	{
-		m_spin->setValue( newVal );
-		s = QString( "%1%2").arg( KGlobal::locale()->formatNumber( newVal, m_spin->precision() ) ).arg( KoUnit::unitName( m_unit ) );
+		m_base->changeValue( newVal );
+		s = QString( "%1%2").arg( KGlobal::locale()->formatNumber( newVal, m_base->m_precision ) ).arg( KoUnit::unitName( m_unit ) );
 	}
 	return result;
 }
 
-
-VUnitDoubleSpinBox::VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, int precision, const char *name )
-	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name )
+VUnitDoubleSpinBox::VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, unsigned int precision, const char *name )
+	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), VUnitDoubleBase( precision )
 {
 	m_validator = new KoUnitDoubleValidator( this, this );
 	setValidator( m_validator );
@@ -73,10 +72,47 @@ VUnitDoubleSpinBox::setValidator( const QValidator *v )
 }
 
 void
+VUnitDoubleSpinBox::changeValue( double val )
+{
+	setValue( val );
+}
+
+void
 VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
 	setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_validator->unit() ), unit ) );
 	m_validator->setUnit( unit );
 	setSuffix( KoUnit::unitName( unit ) );
+}
+
+
+VUnitDoubleLineEdit::VUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
+	: QLineEdit( parent, name ), VUnitDoubleBase( precision ), m_value( value )
+{
+	setAlignment( Qt::AlignRight );
+	m_validator = new KoUnitDoubleValidator( this, this );
+	setValidator( m_validator );
+	changeValue( value );
+}
+
+void
+VUnitDoubleLineEdit::setValidator( const QValidator *v )
+{
+	QLineEdit::setValidator( v );
+}
+
+void
+VUnitDoubleLineEdit::changeValue( double value )
+{
+	setValue( value );
+	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_validator->unit() ) ) );
+}
+
+void
+VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
+{
+	KoUnit::Unit old = m_validator->unit();
+	m_validator->setUnit( unit );
+	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 

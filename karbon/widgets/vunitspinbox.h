@@ -22,14 +22,15 @@
 
 #include <knuminput.h>
 #include <knumvalidator.h>
+#include <qlineedit.h>
 #include <koUnit.h>
 
-class VUnitDoubleSpinBox;
+class VUnitDoubleBase;
 
 class KoUnitDoubleValidator : public KDoubleValidator
 {
 public:
-	KoUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name = 0 );
+	KoUnitDoubleValidator( VUnitDoubleBase *base, QObject *parent, const char *name = 0 );
 
 	virtual	QValidator::State validate( QString &, int & ) const;
 
@@ -37,22 +38,55 @@ public:
 	KoUnit::Unit unit() const { return m_unit; }
 
 private:
-	KoUnit::Unit		m_unit;
-	VUnitDoubleSpinBox	*m_spin;
+	KoUnit::Unit	m_unit;
+	VUnitDoubleBase	*m_base;
 };
 
-class VUnitDoubleSpinBox : public KDoubleSpinBox
+class VUnitDoubleBase
+{
+public:
+	VUnitDoubleBase( unsigned int precision ) : m_precision( precision ) {}
+	virtual ~VUnitDoubleBase() {}
+
+	virtual void changeValue( double ) = 0;
+
+protected:
+	friend class KoUnitDoubleValidator;
+	unsigned int m_precision;
+};
+
+class VUnitDoubleSpinBox : public KDoubleSpinBox, public VUnitDoubleBase
 {
 public:
 	VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-					 int precision = 2, const char *name = 0 );
+					 unsigned int precision = 2, const char *name = 0 );
 
 	virtual void setValidator( const QValidator * );
 	void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
+	virtual void changeValue( double );
+
 private:
 	KoUnitDoubleValidator *m_validator;
 };
+
+class VUnitDoubleLineEdit : public QLineEdit, public VUnitDoubleBase
+{
+public:
+	VUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
+
+	virtual void setValidator( const QValidator * );
+	void setUnit( KoUnit::Unit = KoUnit::U_PT );
+
+	virtual void changeValue( double );
+	void setValue( double value ) { m_value = value; }
+	double value() { return m_value; }
+
+private:
+	KoUnitDoubleValidator *m_validator;
+	double	m_value;
+};
+
 
 #endif
 
