@@ -75,7 +75,7 @@ public:
     bool getSoundEffect(){ return soundEffect; }
     QString getSoundFileName(){ return soundFileName; }
     bool getAutoAdvance(){ return false; } // FIXME !
-    bool getSlideTime(){ return slideTime; }
+    int getSlideTime(){ return slideTime; }
 
 public slots:
 
