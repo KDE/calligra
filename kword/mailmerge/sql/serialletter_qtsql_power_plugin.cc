@@ -95,7 +95,7 @@ void KWQTSQLPowerSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
                 defEnt.setAttribute(QString::fromLatin1("databasename"),databasename);
                 defEnt.setAttribute(QString::fromLatin1("username"),username);
                 def.appendChild(defEnt);
-		
+
 		defEnt=doc.createElement(QString::fromLatin1("QUERY"));
 		defEnt.setAttribute(QString::fromLatin1("value"),query);
 		def.appendChild(defEnt);
@@ -203,7 +203,7 @@ void KWQTSQLPowerMailMergeEditor::slotExecute()
 
 	db->clearSampleRecord();
 	kdDebug()<<QString("Fieldname count %1").arg(cur->count())<<endl;
-	for (int i=0;i<cur->count();i++)
+	for (uint i=0;i<cur->count();i++)
 		db->addSampleRecordEntry(cur->fieldName(i));
 
 	widget->queryresult->setSqlCursor(cur,true,true);
@@ -217,7 +217,7 @@ void KWQTSQLPowerMailMergeEditor::slotTableChanged ( QListBoxItem * item )
 	{
 		if (!db->database) return;
 		QSqlRecord rec=db->database->record(item->text());
-		for (int i=0;i<rec.count();i++)
+		for (uint i=0;i<rec.count();i++)
 		{
 			widget->fields->insertItem(rec.fieldName(i));
 		}
