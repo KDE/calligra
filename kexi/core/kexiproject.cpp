@@ -469,3 +469,6 @@ void KexiProject::loadHandlers()
 	}
 }
 
+void KexiProject::slotImportData()
+{
+}

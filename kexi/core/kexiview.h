@@ -119,6 +119,7 @@ protected slots:
 	void			slotShowProjectProps();
 	void			slotShowSettings();
 
+
 	void			slotSettings();
 
 	void			slotProjectModified();

@@ -113,6 +113,9 @@ public:
 	virtual bool completeLoading( KoStore* store );
 
 
+public slots:
+	void	slotImportData();
+
 signals:
 	void dbAvaible();
 	void saving(KoStore *);

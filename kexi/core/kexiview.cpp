@@ -48,19 +48,23 @@
 #include "kexidbconnection.h"
 
 #include "kexicontexthelp.h"
+#include "kexi_factory.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)
 {
 	m_project=part;
 	m_windowMode=winmode;
-	initActions();
+
 	dcop = 0;
 	m_browser = 0;
 	m_help = 0;
 	m_lastForm = NULL;
 	dcopObject(); // build it
 //	createGUI("kexiui.rc",false);
+
+	setInstance(KexiFactory::global());
 	setXMLFile("kexiui.rc");
+	initActions();
 
 	if(winmode != EmbeddedMode)
 	{
@@ -166,6 +170,11 @@ void KexiView::initActions()
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
+	KAction *actionImport = new KAction(i18n("Import Data..."), "", Key_F34,
+	 actionCollection(), "kexi_importdata");
+	connect(actionImport, SIGNAL(activated()), m_project, SLOT(slotImportData()));
+
+
 	KToggleAction *actionNav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
 	 actionCollection(), "show_nav");
 
@@ -252,6 +261,7 @@ KexiView::slotShowSettings()
 	KexiSettings *s = new KexiSettings(this);
 	s->exec();
 }
+
 
 KexiView::~KexiView(){
 	m_dockWins.setAutoDelete(true);
