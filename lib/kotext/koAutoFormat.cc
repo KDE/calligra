@@ -919,7 +919,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
     {
         bool part=false;
         QString lastWord, word;
-        if (m_completionBox && m_completionBox->isShown() )
+        if (m_completionBox && m_completionBox->isShown() ) //word completion with the tool-tip box
         {
                 word = m_completionBox->text();
                 lastWord = m_completionBox->lastWord();
@@ -930,41 +930,36 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                 for (uint i=1; i <= m_countMaxWords; i++ )
                 {
                         lastWord = getLastWord(i, parag, index+1);
-                        wordlist=m_listCompletion->substringCompletion( lastWord );
-                        if ( !wordlist.isEmpty())
-                                break;
+                        wordlist += m_listCompletion->substringCompletion( lastWord ); //find all completion words that contains lastWord
                 }
-                int maxlength = 0;
-                for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it )
+                uint maxlength = 0;
+                for ( QStringList::ConstIterator it = wordlist.begin(); it != wordlist.end(); ++it ) // several completion words were found
                 {
-                  if ((*it).startsWith(lastWord,false))
+                  if ( (*it).startsWith( lastWord, false ) && new_wordlist.find(*it) == new_wordlist.end() ) //the completion words that begin with lastWord
                   {
-                    if ( (*it).length()>maxlength)
+                    if ( (*it).length() > maxlength )
                       maxlength = (*it).length();
                     new_wordlist.append(*it);
-                    //kdDebug() << "adding word completion:" << *it << endl;
+                    kdDebug() << "adding word completion:" << *it << endl;
                   }
                 }
-                if (new_wordlist.count()==1) //one word
+                if ( new_wordlist.isEmpty() )
+                    return false;
+                if ( new_wordlist.count() == 1 ) // only one completion word was found
                   word = new_wordlist.first();
                 else
                 {
-                  QChar ch;
-                  QStringList::Iterator it;
-                  for (int i=0;i<maxlength;i++)
+                  //we must extract the common part of the completions
+                  for (uint i = 0/*lastWord.length()*/; i<maxlength && !part; i++) //iterate through all completion words
                   {
-                    it = new_wordlist.begin();
-                    ch = (*it).at(i);
-                    for (  ; it != new_wordlist.end(); ++it )
+                    QChar ch = new_wordlist.first().at(i);
+                    for (QStringList::ConstIterator it = new_wordlist.begin(); it != new_wordlist.end(); ++it )
                     {
-                      if ((*it).at(i)!=ch.lower() && (*it).at(i)!=ch.upper())
+                      if ( (*it).at(i).lower() != ch.lower() )
                       {
-                        if(i==0)
-                          return false;
-                        word = (*it).left(i);
-                        //kdDebug() << "set the word completion to:" << word << endl;
-                        part=true; // completion of a part of a word
-                        i=maxlength;
+                        word = (*it).left(i); //the completion word is truncated here
+                        kdDebug() << "set the word completion to:" << word << endl;
+                        part=true; // completion of a part of a word; a space-character after the completion should not be inserted
                         break;
                       }
                     }
