@@ -33,7 +33,7 @@ idl_DATA = kspread.idl
 idl_HEADERS = kspread.h
 
 applnk_DATA = kspread_part.kdelnk
-appdir = $(kde_datadir)/koffice/partlnk
+applnkdir = $(kde_datadir)/koffice/partlnk
 
 SUBDIRS = pics scripts
 

@@ -6,7 +6,7 @@ LDADD =  -lkfile -lkfm -lkdeui -lkdecore -lqt $(LIBMICO) -lXext \
 
 ####### Files
 
-bin_TARGET = img
+bin_PROGRAMS = img
 
 img_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
 noinst_HEADERS = img_main.h img_doc.h img_view.h img.h img_shell.h

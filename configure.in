@@ -44,7 +44,6 @@ AC_OUTPUT(Makefile \
 	kimage/Makefile \
 	kspread/pics/Makefile \
 	kspread/Makefile \
-	kspread/python/Makefile \
 	kspread/scripts/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
