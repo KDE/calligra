@@ -84,18 +84,31 @@ bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
     x2 += x1;
     y2 += y1;
 
-    xmlWriter.addAttributePt( "svg:x1", orig.x() );
-    xmlWriter.addAttributePt( "svg:x2", x2 );
-    if ( lineType == LT_LD_RU ) // from left bottom to right top
+    float xpos1 = orig.x();
+    float xpos2 = x2;
+    switch( lineType )
     {
+    case LT_LD_RU:
         xmlWriter.addAttributePt( "svg:y1", y2 );
         xmlWriter.addAttributePt( "svg:y2", y1 );
-    }
-    else // from left top to right bottom
-    {
+        break;
+    case LT_HORZ:
+        xmlWriter.addAttributePt( "svg:y1", y2/2.0 );
+        xmlWriter.addAttributePt( "svg:y2", y2/2.0  );
+        break;
+    case LT_VERT:
+        xmlWriter.addAttributePt( "svg:y1",  y1 );
+        xmlWriter.addAttributePt( "svg:y2",  y2 );
+        xpos1 = x1/2.0;
+        xpos2 = xpos1;
+        break;
+    case LT_LU_RD:
         xmlWriter.addAttributePt( "svg:y1", y1 );
         xmlWriter.addAttributePt( "svg:y2", y2 );
+        break;
     }
+    xmlWriter.addAttributePt( "svg:x1", xpos1 );
+    xmlWriter.addAttributePt( "svg:x2", xpos2 );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
