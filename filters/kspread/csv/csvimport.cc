@@ -108,14 +108,14 @@ bool CSVFilter::filterImport(const QString &file, KoDocument *document,
             case CSVDialog::TEXT:
                 break;
             case CSVDialog::NUMBER:
-                cell->setFormatNumber(KSpreadCell::Number);
+                cell->setFormatType(KSpreadCell::Number);
                 cell->setPrecision(2);
                 break;
             case CSVDialog::DATE:
-                cell->setFormatNumber(KSpreadCell::ShortDate);
+                cell->setFormatType(KSpreadCell::ShortDate);
                 break;
             case CSVDialog::CURRENCY:
-                cell->setFormatNumber(KSpreadCell::Money);
+                cell->setFormatType(KSpreadCell::Money);
                 break;
             }
         }
