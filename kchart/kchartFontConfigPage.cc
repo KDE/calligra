@@ -16,6 +16,7 @@
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>
+#include <qpainter.h>
 
 #include <kfontdialog.h>
 
@@ -25,6 +26,34 @@ namespace std {}
 using namespace std;
 
 #include "kchart_params.h"
+
+class KChartFontListBoxItem : public QListBoxText
+{
+public:
+    KChartFontListBoxItem( QListBox* lb,  const QString& text = QString::null ) :
+        QListBoxText( lb,  text )  {}
+    KChartFontListBoxItem( const QString& text = QString::null ) :
+        QListBoxText( text )  {}
+
+    void setFont( const QFont& font )  {
+        _font = font;
+        listBox()->repaint();
+    }
+    QFont font() const {
+        return _font;
+    }
+
+protected:
+    void paint( QPainter* painter )  {
+        painter->save();
+        painter->setFont( _font );
+        QListBoxText::paint( painter );
+        painter->restore();
+    }
+
+private:
+    QFont _font;
+};
 
 KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
                                             QWidget* parent, KoChart::Data *dat) :
@@ -52,11 +81,11 @@ void KChartFontConfigPage::initList()
 {
     if( _params->chartType() != KDChartParams::Pie &&
         _params->chartType() != KDChartParams::Ring ) {
-        list->insertItem(i18n("X-Title"));
-        list->insertItem(i18n("Y-Title"));
-        list->insertItem(i18n("X-Axis"));
-        list->insertItem(i18n("Y-Axis"));
-        list->insertItem(i18n("All Axes"));
+        list->insertItem(new KChartFontListBoxItem( i18n("X-Title")));
+        list->insertItem(new KChartFontListBoxItem( i18n("Y-Title")));
+        list->insertItem(new KChartFontListBoxItem( i18n("X-Axis")));
+        list->insertItem(new KChartFontListBoxItem( i18n("Y-Axis")));
+        list->insertItem(new KChartFontListBoxItem( i18n("All Axes")));
     }
     list->insertItem(i18n("Label"));
     list->setCurrentItem(0);
