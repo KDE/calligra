@@ -222,6 +222,9 @@ KoMainWindow::~KoMainWindow()
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
 {
+  if ( d->m_rootDoc == doc )
+    return;
+
   kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   QList<KoView> oldRootViews = d->m_rootViews;
   d->m_rootViews.clear();
