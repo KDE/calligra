@@ -945,7 +945,7 @@ void KSpreadView::initializeTableActions()
                                "removeTable" );
   m_removeTable->setToolTip("Remove the spreadsheet.");
 
-  m_renameTable=new KAction( i18n("Rename Rable..."),0,this,
+  m_renameTable=new KAction( i18n("Rename Table..."),0,this,
                              SLOT( slotRename() ), actionCollection(),
                              "renameTable" );
   m_renameTable->setToolTip("Rename the spreadsheet.");
