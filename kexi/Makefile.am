@@ -4,7 +4,7 @@ kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kex
 
 kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la -lkstore
 
-SUBDIRS = kexiDB . interfaces pics 
+SUBDIRS = kexiDB . interfaces pics setupWizard
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

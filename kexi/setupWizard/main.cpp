@@ -1,9 +1,9 @@
 /***************************************************************************
                           main.cpp  -  description
                              -------------------
-    begin                : Sun Jun  9 12:15:11 CEST 2002
-    copyright            : (C) 2002 by lucijan busch, Joseph Wenninger
-    email                : lucijan@gmx.at, jowenn@kde.org
+    begin                : Thu Oct  23 22:30:00 CEST 2002
+    copyright            : (C) 2002 by Joseph Wenninger
+    email                : jowenn@kde.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,21 +19,17 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kstartupinfo.h>
+#include <kapplication.h>
 
-#include "kexiapplication.h"
-
-#include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbinterfacemanager.h"
+#include "kexisetupwizard.h"
 
 static const char *description =
-	I18N_NOOP("A Database Frontend");
-// INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
+	I18N_NOOP("A Database Frontend Setup Wizard");
 	
 	
 static KCmdLineOptions options[] =
 {
-  { "+[File]", I18N_NOOP("file to open"), 0 },
+  { "startkexi", I18N_NOOP("Start kexi after the wizard has finished"), 0 },
   { 0, 0, 0 }
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
@@ -41,25 +37,15 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 
-	KAboutData aboutData( "kexi", I18N_NOOP("Kexi"),
+	KAboutData aboutData( "kexi", I18N_NOOP("Kexi Setup Wizard"),
 		"0.1", description, KAboutData::License_GPL,
-		"(c) 2002, Lucijan Busch", 0, 0, "lucijan@gmx.at");
-	aboutData.addAuthor("Lucijan Busch","Developer & Maintainer", "lucijan@gmx.at");
-	aboutData.addAuthor("Peter Simonsson","Developer","psn@linux.se");
-	aboutData.addAuthor("Daniel Molkentin","Developer",  "molkentin@kde.org");
-	aboutData.addAuthor("Till Busch", "Buxfixes and Improvements", "till@bux.at");
-	aboutData.addAuthor("Joseph Wenninger", "A lot of work for formeditor, and a lot other stuff", "jowenn@kde.org");
+		"(c) 2002, Joseph Wenninger", 0, 0, "jowenn@kde.org");
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-	KexiApplication app;
-	if (app.exitImmediatly()) {
-		KStartupInfo::appStarted();
-		return 0;
-	}
-
-//	KexiDB *db = new KexiDB(0);
-//	QStringList drivers = db->getDrivers();
-//	db->add("mySQL");
+	KApplication app;
+	KexiSetupWizard *sw=new KexiSetupWizard;
+	app.setMainWidget(sw);
+	sw->show();
 	return app.exec();
 }  
