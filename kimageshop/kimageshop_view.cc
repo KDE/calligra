@@ -300,11 +300,9 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   // view menu
   text = Q2C( i18n( "&View" ) );
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
-  m_vMenuView->setCheckable( true );
 
   text = Q2C( i18n( "&Layer dialog" ) );
   m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
-  m_vMenuEdit->setItemChecked( m_idMenuView_LayerDialog, false );
 
   text = Q2C( i18n( "&Color dialog" ) );
   m_idMenuView_ColorDialog = m_vMenuView->insertItem( text, this, "viewColorDialog", 0 );
@@ -317,6 +315,11 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   text = Q2C( i18n( "&Preferences" ) );
   m_idMenuView_Preferences = m_vMenuView->insertItem( text, this, "viewPreferences", 0 );
 
+  m_vMenuEdit->setCheckable( true );
+  m_vMenuEdit->setItemChecked( m_idMenuView_LayerDialog, true );
+  m_vMenuEdit->setItemChecked( m_idMenuView_ColorDialog, true );
+
+/*
   // image menu
   text = Q2C( i18n( "&Image" ) );
   menubar->insertMenu( text , m_vMenuImage, -1, -1 );
@@ -328,8 +331,7 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   // options menu
   text = Q2C( i18n( "&Options" ) );
   menubar->insertMenu( text , m_vMenuOptions, -1, -1 );
-
-  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateMenubar : DONE" );
+*/
 
   return true;
 }
@@ -340,9 +342,9 @@ void KImageShopView::createGUI()
   m_pCanvasView = new CanvasView(this);
 
   // m_pColorDialog = new ColorDialog(m_pCanvasView);
-  //m_pColorDialog->move(100, 100);
-  //m_pColorDialog->show();
-
+  // m_pColorDialog->move(100, 100);
+  // m_pColorDialog->show();
+  
   // setup GUI
   setupScrollbars();
   setupRulers();
