@@ -594,6 +594,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if((kev->key() == Key_Control) && (m_state == MovingWidget))
 			{
+				if(!m_moving)
+					return true;
 				// we simulate a mouse move event to update screen
 				QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, m_moving->mapFromGlobal(QCursor::pos()), NoButton,
 				LeftButton|ControlButton );
