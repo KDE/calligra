@@ -4158,36 +4158,10 @@ void KWView::openPopupMenuChangeAction( const QPoint & _point )
         popup->popup(_point);
 }
 
-// ### DF: I don't see the purpose of that method. frameSelectedChanged() does this already.
-void KWView::updatePopupMenuChangeAction()
-{
-    KWFrame *frame=m_doc->getFirstSelectedFrame();
-    // Warning, frame can be 0L !
-
-    // if a header/footer etc. Dont show the popup.
-    if(frame && frame->frameSet() && frame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
-        return;
-    actionEditDelFrame->setEnabled(true );
-
-    actionInlineFrame->setEnabled(true);
-
-    // if text frame,
-    if(frame && frame->frameSet() && frame->frameSet()->type() == FT_TEXT)
-        {
-            // if frameset 0 disable delete
-            if(m_doc->processingType()  == KWDocument::WP && frame->frameSet() == m_doc->frameSet(0))
-                {
-                    actionEditDelFrame->setEnabled(false);
-                    actionInlineFrame->setEnabled(false);
-                }
-        }
-}
-
 void KWView::openPopupMenuEditFrame( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    updatePopupMenuChangeAction();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
     {
@@ -4548,17 +4522,16 @@ void KWView::frameSelectedChanged()
         {
             // Check we selected no footer nor header
 
-            bool headerFooter = it.current()->frameSet()->isHeaderOrFooter();
-            bool isMainWPFrame = ( m_doc->processingType() == KWDocument::WP )
-                                   && it.current()->frameSet() == m_doc->frameSet( 0 );
+            bool headerFooterFootNote = it.current()->frameSet()->isHeaderOrFooter() || it.current()->frameSet()->isFootEndNote();
+            bool isMainWPFrame = it.current()->frameSet()->isMainFrameset();
 
-            okForDelete &= !headerFooter;
+            okForDelete &= !headerFooterFootNote;
             okForDelete &= !isMainWPFrame;
 
             // Check we selected a frame we can lower raise.
-            // The header, footer, main frameset and inline frames can't be raised.  (in WP mode)
+            // The header, footer, main frameset, footnotes and inline frames can't be raised.
             // As soon as we find one who we can lower/raise open the option.
-            okForLowerRaise |= !(isMainWPFrame | headerFooter | it.current()->frameSet()->isFloating());
+            okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || it.current()->frameSet()->isFloating());
         }
         actionEditDelFrame->setEnabled( okForDelete );
         actionEditCut->setEnabled( okForDelete );

@@ -143,7 +143,6 @@ public:
 
     void initConfig();
 
-    void updatePopupMenuChangeAction();
     void changeNbOfRecentFiles(int _nb);
 
     void changeZoomMenu( int zoom=-1);
