@@ -1921,6 +1921,19 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
                                  i18n("Insert Picture Inline"),
                                  "SetCursorInsertInlinePicture",true);
 
+    KStatusBar * sb = statusBar();
+    if (sb )
+    {
+        if ( !m_sbFramesLabel )
+        {
+            m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+            addStatusBarItem( m_sbFramesLabel );
+        }
+        if(m_sbFramesLabel)
+            m_sbFramesLabel->setText( i18n("Set cursor where you want insert inline picture.") );
+    }
+
+
 #if 0
         edit->insertFloatingFrameSet( fs, i18n("Insert Picture Inline") );
         fs->finalize(); // done last since it triggers a redraw
@@ -1951,11 +1964,13 @@ void KWView::insertInlinePicture()
         setTool( KWCanvas::MM_EDIT );
         m_doc->refreshDocStructure(Pictures);
         fsInline=0L;
+        updateFrameStatusBarItem();
     }
     else
     {
         delete fsInline;
         fsInline=0L;
+        updateFrameStatusBarItem();
     }
 }
 
