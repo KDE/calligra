@@ -81,6 +81,8 @@ VDrawSelection::visitVPath( VPath &composite )
 
 		for( ; itr.current(); ++itr )
 		{
+			if( (*itr)->isEmpty() )
+				continue;
 			VSubpathIterator jtr( *( itr.current() ) );
 			//++jtr;
 
