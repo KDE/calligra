@@ -29,7 +29,7 @@
  */
 class OperatorElement : public TextElement {
 public:
-    OperatorElement(QChar ch);
+    OperatorElement(QChar ch, BasicElement* parent = 0);
 
     /**
      * Calculates our width and height and

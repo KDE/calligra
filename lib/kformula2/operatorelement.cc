@@ -24,8 +24,8 @@
 #include "operatorelement.h"
 
 
-OperatorElement::OperatorElement(QChar ch)
-    : TextElement(ch)
+OperatorElement::OperatorElement(QChar ch, BasicElement* parent)
+    : TextElement(ch, parent)
 {
 }
 
