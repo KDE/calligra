@@ -26,7 +26,7 @@
 #include <qstringlist.h>
 
 #include <koDocument.h>
-#include "koUndo.h" 
+#include "koUndo.h"
 
 #include <iostream.h>
 #include "kis_global.h"
@@ -68,20 +68,20 @@ public:
     virtual bool initDoc();
 
     virtual QDomDocument saveXML();
-    
-    virtual bool loadXML( QIODevice *, const QDomDocument & doc ); 
+
+    virtual bool loadXML( QIODevice *, const QDomDocument & doc );
 
     virtual bool completeLoading( KoStore* store );
-    
+
     virtual bool completeSaving( KoStore* );
 
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
 	/*
 	 *  Current shell or frame window for this doc.
 	 */
     KoMainWindow* currentShell();
- 
+
 	/*
 	 *  Force a redraw of scrollbars and other widgets in all
      *  shell windows for this document.
@@ -91,7 +91,7 @@ public:
 	/*
 	 * KOffice undo/redo.
 	 */
-    KoCommandHistory* commandHistory() { return &m_commands; }; 
+    KoCommandHistory* commandHistory() { return &m_commands; };
 
 	/*
 	 * Use QPainter p to paint a rectangular are of the current image.
@@ -142,62 +142,62 @@ public:
 	 * Rename an image
 	 */
     void renameImage(QString & oldName, QString & newName);
-    
+
 	/*
 	 *  save current image as Qt image (standard image formats)
-	 */    
+	 */
     bool saveAsQtImage(QString file, bool wholeImage);
 
 	/*
 	 *  needs to go in kis_framebuffer.cc
-	 */    
+	 */
     bool QtImageToLayer(QImage *qimage, KisView *pView);
 
 	/*
 	 *  copy rectangular area of layer to Qt Image
-	 */    
+	 */
     bool LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect);
 
 	/*
 	 *  set selection or clip rectangle for the document
-	 */    
-    bool setClipImage(); 
-    
+	 */
+    bool setClipImage();
+
 	/*
 	 *  get selection or clip image for the document
-	 */    
+	 */
     QImage *getClipImage() { return m_pClipImage; }
 
 	/*
 	 *  delete clip image for the document
-	 */    
-    void removeClipImage(); 
+	 */
+    void removeClipImage();
 
 	/*
 	 *  get currrent selection for document
-	 */    
+	 */
     KisSelection *getSelection() { return m_pSelection; }
-    
+
     /*
 	 *  set selection for document
-	 */    
+	 */
     void setSelection(QRect & r);
-        
+
     /*
-	 *  clear selection for document - 
-	 */    
+	 *  clear selection for document -
+	 */
     void clearSelection();
 
     /*
-	 *  does the document have a selection ? 
-	 */    
+	 *  does the document have a selection ?
+	 */
     bool hasSelection();
-    
+
 	/*
 	 *  get FrameBuffer
-	 */    
+	 */
     KisFrameBuffer *frameBuffer() { return m_pFrameBuffer; }
-    
+
 public slots:
     void slotImageUpdated();
     void slotImageUpdated( const QRect& rect);
@@ -220,9 +220,9 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
     /* undo/redo */
-    KoCommandHistory m_commands; 
-    
-    /* list of images for the document - each document can have multiple 
+    KoCommandHistory m_commands;
+
+    /* list of images for the document - each document can have multiple
     images and each image must have at least one layer. however, a document
     can only have one current image, which is what is loaded and saved -
     the permanent data associated with it. This coresponds to an
@@ -232,7 +232,7 @@ protected:
     KisImage  * m_pCurrent;
     NewDialog * m_pNewDialog;
     QImage    * m_pClipImage;
-    
+
     KisSelection *m_pSelection;
     KisFrameBuffer *m_pFrameBuffer;
 };

@@ -1235,8 +1235,9 @@ KoMainWindow* KisDoc::createShell()
 */
 
 void KisDoc::paintContent( QPainter& painter,
-        const QRect& rect, bool /*transparent*/)
+        const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
+    // TODO support zooming
     if (m_pCurrent)
     {
         m_pCurrent->paintPixmap( &painter, rect );

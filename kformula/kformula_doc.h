@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -43,7 +43,7 @@ class KFormulaDoc;
 class KFormulaDoc : public KoDocument
 {
     Q_OBJECT
-    
+
 public:
 
     KFormulaDoc(QWidget *parentWidget = 0,
@@ -53,8 +53,7 @@ public:
                 bool singleViewMode = false);
     ~KFormulaDoc();
 
-    virtual void paintContent(QPainter& painter,
-                              const QRect& rect, bool transparent = FALSE);
+    virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
     virtual bool initDoc();
 
@@ -63,7 +62,7 @@ public:
 
     KFormulaContainer* getFormula() const { return formula; }
     KFormulaDocument* getDocument() const { return document; }
-    
+
 public slots:
 
     void enlarge();
@@ -79,9 +78,9 @@ protected slots:
 
     void commandExecuted();
     void documentRestored();
-    
+
 protected:
-    
+
     virtual QString configFile() const;
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -91,7 +90,7 @@ private:
      * Our undo stack.
      */
     KCommandHistory* history;
-    
+
     /**
      * The place where all formula related work is done.
      */
