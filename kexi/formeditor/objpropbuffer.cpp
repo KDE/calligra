@@ -481,7 +481,11 @@ ObjectPropertyBuffer::descList(const QStringList &strlist)
 
 	for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
 	{
-		desc += m_propValDesc[*it]; //descForValue(*it);
+		QString n( m_propValDesc[*it] );
+		if (n.isEmpty())
+			desc += *it;
+		else
+			desc += n;
 	}
 	return desc;
 }
