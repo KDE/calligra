@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef koStoreDevice_h
+#define koStoreDevice_h
+
 #include <qiodevice.h>
 #include <koStore.h>
 #include <stdlib.h>
@@ -80,3 +83,5 @@ public:
 protected:
   KoStore * m_store;
 };
+
+#endif
