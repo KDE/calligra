@@ -292,7 +292,8 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool incl
     {
         listLevelWriter.addAttribute( "style:num-prefix", m_prefix );
         listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
-        listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
+        if ( includeLevelAndProperties ) // not for KWVariableSettings
+            listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
         listLevelWriter.addAttribute( "text:start-value", m_startNumber );
         if ( (Style)m_style == STYLE_CUSTOM )
             ; // not implemented
