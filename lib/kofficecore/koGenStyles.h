@@ -156,7 +156,8 @@ public:
            STYLE_NUMERIC_SCIENTIFIC = 11,
            STYLE_NUMERIC_CURRENCY = 12,
 	   STYLE_NUMERIC_TEXT = 13,
-           STYLE_HATCH = 14};
+           STYLE_HATCH = 14,
+           STYLE_GRAPHICAUTO = 15};
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

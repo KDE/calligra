@@ -1101,8 +1101,9 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
 
     if ( featureSet( SBackgroundBrush ) )
     {
-        //TODO FIXME
-        KoOasisStyles::saveOasisFillStyle( style, mainStyles, m_backGroundBrush );
+        QString tmp = saveOasisBackgroundStyle( mainStyles, m_backGroundBrush );
+        if ( !tmp.isEmpty() )
+            style.addProperty("draw:style-name", tmp );
     }
     QString _prefix;
     QString _postfix;
@@ -1118,6 +1119,12 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     return saveOasisStyleNumeric( mainStyles, m_formatType, _prefix, _postfix, _precision );
 }
 
+QString KSpreadStyle::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
+{
+    KoGenStyle styleobjectauto = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+    KoOasisStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
+    return mainStyles.lookup( styleobjectauto, "gr" );
+}
 
 void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
 {

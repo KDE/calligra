@@ -1829,7 +1829,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
     if ( sticky )
         styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
     else
-        styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+        styleobjectauto = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
     switch ( getFillType() )
     {
         case FT_BRUSH:

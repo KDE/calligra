@@ -1151,7 +1151,7 @@ void KPresenterDoc::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyle
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:drawing-page-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_GRAPHICAUTO );
+    styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
@@ -1970,7 +1970,7 @@ void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & 
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        //kdDebug()<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
+        kdDebug()<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
         addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )], context);
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
