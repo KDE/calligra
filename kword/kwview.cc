@@ -5684,7 +5684,6 @@ void KWView::insertFile()
         {
             clipartMap = new QMap<KoPictureKey, QString>( m_doc->clipartCollection()->readXML( clipartsElem ) );
         }
-
         QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
         if ( !framesets.isNull() )
         {
@@ -5703,7 +5702,6 @@ void KWView::insertFile()
                     insertionCursor = *edit->cursor();
                 }
                 KMacroCommand* macroCmd = 0L;
-
                 // Handle the main textframeset special - concatenate the text
                 QDomDocument domDoc( "PARAGRAPHS" );
                 QDomElement paragsElem = domDoc.createElement( "PARAGRAPHS" );
@@ -5727,13 +5725,6 @@ void KWView::insertFile()
                     paragsElem.appendChild( *it );
 
                 //kdDebug() << k_funcinfo << domDoc.toCString() << endl;
-                KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
-
-                if ( cmd ) {
-                    macroCmd = new KMacroCommand( i18n("Insert File") );
-                    macroCmd->addCommand( cmd );
-                }
-
                 // The other framesets
                 framesetElem = framesetElem.nextSibling().toElement();
                 QValueList<QDomElement> framesetsList;
@@ -5744,9 +5735,10 @@ void KWView::insertFile()
                 for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
                 {
                     if ( framesetElem.tagName() == "FRAMESET" )
+                    {
                         framesetsList.append( framesetElem );
+                    }
                 }
-
                 it = framesetsList.begin();
                 end = framesetsList.end();
                 for ( ; it != end ; ++it )
@@ -5768,6 +5760,12 @@ void KWView::insertFile()
                 m_doc->pasteFrames( topElem, macroCmd );
                 m_doc->addCommand( macroCmd );
 
+
+                KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
+                if ( cmd ) {
+                    macroCmd = new KMacroCommand( i18n("Insert File") );
+                    macroCmd->addCommand( cmd );
+                }
             }
         }
         else
