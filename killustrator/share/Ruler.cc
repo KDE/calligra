@@ -60,6 +60,13 @@ Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
   }
 }
 
+Ruler::~Ruler()
+{
+  delete marker;
+  delete bg;
+  delete buffer;
+}
+
 void Ruler::initMarker (int w, int h) {
   QPainter p;
   QPointArray pts (3);
@@ -90,10 +97,9 @@ void Ruler::initMarker (int w, int h) {
 }
 
 void Ruler::recalculateSize (QResizeEvent *) {
-  if (buffer != 0L) {
-    delete buffer;
-    buffer = 0L;
-  }
+
+  delete buffer;
+  buffer = 0L;
 
   /*
   if (! isVisible ())

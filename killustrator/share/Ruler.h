@@ -38,6 +38,7 @@ public:
 
   Ruler (Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
 	 const char* name = 0L);
+  ~Ruler();
 
   MeasurementUnit measurementUnit () const;
   void setMeasurementUnit (MeasurementUnit mu);
