@@ -26,8 +26,7 @@
 #include <kmimetype.h>
 #include <kapp.h>
 #include <kdebug.h>
-#include <koQueryTrader.h>
-#include <koFilter.h>
+#include <koFilterManager.h>
 
 static const KCmdLineOptions options[]=
 {
@@ -37,46 +36,22 @@ static const KCmdLineOptions options[]=
 	{0,0,0}
 };
 
-bool convert( const KURL & uIn, const QString & inputFormat, const KURL & uOut, const QString & outputFormat )
+bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uOut, const QString & outputFormat )
 {
-    QString constr = "'";
-    constr += outputFormat;
-    constr += "' in [X-KDE-Export] and '";
-    constr += inputFormat;
-    constr += "' in [X-KDE-Import]";
-    constr += " and Implemented=='file'"; // can only do file conversions here, no kodoc
-
-    QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
-    if ( vec.isEmpty() )
-    {
-        kdError() << i18n("No available filter to convert from %1 to %2").arg(inputFormat).arg(outputFormat) << endl;
-        return false;
-    }
+    KoFilterManager* manager = new KoFilterManager( uIn.path() );
 
     ProgressObject progressObj;
+    QObject::connect(manager, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
 
-    unsigned int i = 0;
-    bool ok = false;
-    while(i<vec.count() && !ok)
-    {
-        KoFilter* filter = vec[i].createFilter();
-        if ( !filter )
-            kdWarning() << "Couldn't create filter " << vec[i].service()->desktopEntryPath() << endl;
-        else
-        {
-            QObject::connect(filter, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
-            ok = filter->filter( uIn.path(), uOut.path(), inputFormat, outputFormat /*, config*/);
-            progressObj.slotProgress(-1);
-            QObject::disconnect(filter, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
-            delete filter;
-        }
-        i++;
-    }
+    QCString mime( outputFormat.latin1() );
+    KoFilter::ConversionStatus status = manager->exp0rt( uOut.path(), mime );
+    progressObj.slotProgress(-1);
 
-    return ok;
+    delete manager;
+    return status == KoFilter::OK;
 }
 
-void ProgressObject::slotProgress(int progress)
+void ProgressObject::slotProgress(int /*progress*/)
 {
     // Well, we could have a nifty "=====> " progress bar, but with all the
     // debug output, it would be badly messed up :)
