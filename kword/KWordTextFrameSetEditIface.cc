@@ -58,3 +58,19 @@ void KWordTextFrameSetEditIface::insertTOC()
 {
     m_framesetedit->insertTOC();
 }
+
+void KWordTextFrameSetEditIface::cut()
+{
+    m_framesetedit->cut();
+}
+
+void KWordTextFrameSetEditIface::copy()
+{
+    m_framesetedit->copy();
+}
+
+void KWordTextFrameSetEditIface::paste()
+{
+    m_framesetedit->paste();
+}
+

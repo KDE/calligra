@@ -41,6 +41,10 @@ k_dcop:
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertTOC();
+    void cut();
+    void copy();
+    void paste();
+
 private:
     KWTextFrameSetEdit *m_framesetedit;
 
