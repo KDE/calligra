@@ -52,6 +52,7 @@
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
+#include <koMainWindow.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -2525,8 +2526,53 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     else
         m_tableFormat->setEnabled( TRUE );
 
-    m_cellLayout->setEnabled( true );
+    double result=0;
+    QRect tmpRect(n);
+    if(n.left()==0)
+        tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
+                        m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    if(tmpRect.bottom()==0x7FFF)
+        {
 
+        KSpreadCell* c = activeTable()->firstCell();
+        for( ;c; c = c->nextCell() )
+                {
+                int col = c->column();
+                if ( tmpRect.left() <= col && tmpRect.right() >= col
+                        &&!c->isObscuringForced())
+                        {
+                        if(c->isValue())
+                                result+=c->valueDouble();
+                        }
+                }
+        }
+    else if(n.right()==0x7FFF)
+        {
+        KSpreadCell* c = activeTable()->firstCell();
+        for( ; c; c = c->nextCell() )
+                {
+                int row = c->row();
+                if ( tmpRect.top() <= row && tmpRect.bottom() >= row
+                        &&!c->isObscuringForced())
+                        {
+                        if(c->isValue())
+                                result+=c->valueDouble();
+                        }
+                }
+        }
+    else
+        {
+        for (int i=tmpRect.left();i<=tmpRect.right();i++)
+                for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
+                        {
+                        KSpreadCell *cell = activeTable()->cellAt( i, j );
+                        if(!cell->isDefault() && cell->isValue())
+                                result+=cell->valueDouble();
+                        }
+        }
+    KoMainWindow * tmpKo = const_cast<KoMainWindow*>(m_pDoc->firstShell());
+    for ( ; tmpKo ; tmpKo = const_cast<KoMainWindow*>(m_pDoc->nextShell()) )
+        tmpKo->statusBarLabel()->setText(i18n(" Sum : %1").arg(result));
     // Send some event around. This is read for example
     // by the calculator plugin.
     KSpreadSelectionChanged ev( n, activeTable()->name() );
