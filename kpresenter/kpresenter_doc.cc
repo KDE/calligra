@@ -766,6 +766,9 @@ QDomElement KPresenterDoc::saveAttribute( QDomDocument &doc )
     //store first view parameter.
     int activePage=m_pageList.findRef(m_kpresenterView->getCanvas()->activePage());
     attributes.setAttribute("activePage",activePage );
+    attributes.setAttribute("gridx", m_gridX );
+    attributes.setAttribute("gridy", m_gridY );
+    attributes.setAttribute("snaptogrid", (int)m_bSnapToGrid );
     return attributes;
 }
 
@@ -1135,6 +1138,12 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         }else if(elem.tagName()=="ATTRIBUTES") {
             if(elem.hasAttribute("activePage"))
                 activePage=elem.attribute("activePage").toInt();
+            if(elem.hasAttribute("gridx"))
+                m_gridX = elem.attribute("gridx").toDouble();
+            if(elem.hasAttribute("gridy"))
+                m_gridY = elem.attribute("gridy").toDouble();
+            if(elem.hasAttribute("snaptogrid"))
+                m_bSnapToGrid = (bool)elem.attribute("snaptogrid").toInt();
         } else if(elem.tagName()=="PAGETITLES") {
             loadTitle(elem);
         } else if(elem.tagName()=="PAGENOTES") {

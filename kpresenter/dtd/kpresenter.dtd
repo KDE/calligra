@@ -77,11 +77,18 @@
 
         Attributes:
             activePage:     select active page.
+            gridx:          distance between two points in grid (X value )
+            gridy:          distance between two points in grid (Y value )
+            snaptogrid:     0 don't snap to grid 1 snap to grid
+
 -->
 <!ELEMENT ATTRIBUTES
     EMPTY>
 <!ATTLIST ATTRIBUTES
-    activePage CDATA #REQUIRED>
+    activePage CDATA #REQUIRED
+    gridx CDATA #REQUIRED 
+    gridy CDATA #REQUIRED
+    snaptogrid CDATA #REQUIRED>
 
 <!--	Contains all the objects on the pages.
 -->
