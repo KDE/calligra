@@ -6,6 +6,7 @@
 #include <qcursor.h>
 #include <qiconset.h>
 #include <qpainter.h>
+#include <qbuttongroup.h>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -373,9 +374,9 @@ KarbonView::initActions()
 	m_zoomAction->setEditable( true );
 	// zoom <-----
 
-	/*VToolContainer *toolbox;
 	toolbox = new VToolContainer( this );
-	toolbox->show();*/
+	connect(toolbox->btngroup, SIGNAL(clicked(int)), this, SLOT(activateTool(int)));
+	toolbox->show();
 }
 
 void
@@ -392,6 +393,47 @@ KarbonView::eventFilter( QObject* object, QEvent* event )
 		return s_currentTool->eventFilter( this, event );
 	else
 		return false;
+}
+
+void KarbonView::activateTool( int ID )
+{
+	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
+	switch( ID )
+	{
+		case Select:
+			selectTool();
+			break;
+		case Scale:
+			scaleTool();
+			break;
+		case Rotate:
+			rotateTool();
+			break;
+		case Shear:
+			selectTool(); // no shear available yet !!!
+			break;
+		case Ellipse:
+			ellipseTool();
+			break;
+		case Rectangle:
+			rectangleTool();
+			break;
+		case Roundrect:
+			roundRectTool();
+			break;
+		case Polygon:
+			polygonTool();
+			break;
+		case Star:
+			starTool();
+			break;
+		case Sinus:
+			sinusTool();
+			break;
+		case Spiral:
+			spiralTool();
+			break;
+	}
 }
 
 #include "karbon_view.moc"

@@ -18,6 +18,7 @@ class KToggleAction;
 
 class KarbonPart;
 class VTool;
+class VToolContainer;
 
 class KarbonView : public KoView
 {
@@ -36,6 +37,9 @@ public:
 	VCanvas* canvasWidget() { return m_canvas; }
 
 	const double& zoomFactor() { return m_canvas->zoomFactor(); }
+
+public slots:
+	void activateTool( int ID ); //tool chooser
 
 protected slots:
 	// editing:
@@ -100,6 +104,9 @@ private:
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
+
+	//toolbox
+	VToolContainer *toolbox;
 };
 
 #endif

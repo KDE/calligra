@@ -8,10 +8,12 @@
 #include <kstandarddirs.h>
 #include <qtoolbutton.h>
 #include <kdualcolorbutton.h>
+#include <koMainWindow.h>
+#include <koView.h>
 
 #include "vtoolcontainer.h"
 
-VToolContainer::VToolContainer( KarbonView* parent, const char* name )
+VToolContainer::VToolContainer( KoView* parent, const char* name ) : QToolBar( parent->shell() )
 {
 	QToolButton *button;
 	QHBoxLayout *layout = new QHBoxLayout(this, 1);
@@ -90,12 +92,11 @@ VToolContainer::VToolContainer( KarbonView* parent, const char* name )
 	btngroup->setInsideMargin(5);
 	connect(btngroup, SIGNAL(clicked(int)), this, SLOT(slotButton(int)));
 	layout->addWidget(btngroup);
-	//setFixedSize(btngroup->baseSize());
 	layout->activate();
 }
 
 void VToolContainer::slotButton( int ID)
-{ //if ( ! ID = Scale) btngroup(Select)->toggle();
+{
 }
 
 VToolContainer::~VToolContainer() { }

@@ -6,18 +6,21 @@
 #define __VTOOLCONTAINER_H__
 
 #include <qtoolbar.h>
+//#include <koMainWindow.h>
+//#include <koView.h>
 
-class KarbonView;
+class KoMainWindow;
+class KoView;
 class QButtonGroup;
 
 class VToolContainer : public QToolBar
 {
 	Q_OBJECT
 public:
-	VToolContainer( KarbonView* parent = 0L, const char* name = 0L );
+	VToolContainer( KoView* parent = 0L, const char* name = 0L );
 	~VToolContainer();
-private:
 	QButtonGroup *btngroup;
+private:
 	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
 private slots:
 	void slotButton( int ID );
