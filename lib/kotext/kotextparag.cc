@@ -692,6 +692,9 @@ void KoTextParag::copyParagData( KoTextParag *parag )
         // Remove footnote counter text from second parag
         if ( m_layout.counter && m_layout.counter->numbering() == KoParagCounter::NUM_FOOTNOTE )
             setNoCounter();
+        // Do not copy 'restart numbering at this paragraph' option (would be silly)
+        if ( m_layout.counter )
+            m_layout.counter->setRestartCounter(false);
 
         // set parag format to the format of the trailing space of the previous parag
         setFormat( parag->at( parag->length()-1 )->format() );

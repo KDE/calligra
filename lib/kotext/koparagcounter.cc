@@ -208,12 +208,12 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                     break;
                 }
             }
-            else
+/*            else
             {
                 // There is no counter at all.
                 m_cache.number = m_startNumber;
                 break;
-            }
+            }*/
             otherParagraph = otherParagraph->prev();
         }
         break;
