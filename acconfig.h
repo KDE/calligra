@@ -22,3 +22,16 @@
 #undef HAVE_LIBPNG
 
 #undef WITH_SYMBOL_UNDERSCORE
+
+#ifndef HAVE_BOOL
+#define HAVE_BOOL
+typedef int bool;
+#ifdef __cplusplus
+const bool false = 0;
+const bool true = 1;
+#else
+#define false (bool)0;
+#define true (bool)1;
+#endif
+#endif
+
