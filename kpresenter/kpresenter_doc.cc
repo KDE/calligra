@@ -147,6 +147,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _clean = true;
     _spInfinitLoop = false;
     _spManualSwitch = true;
+    _showPresentationDuration = false;
     _rastX = 10;
     _rastY = 10;
     _xRnd = 20;
@@ -453,6 +454,9 @@ QDomDocument KPresenterDoc::saveXML()
     element=doc.createElement("PRESSPEED");
     element.setAttribute("value", static_cast<int>( presSpeed ));
     presenter.appendChild(element);
+    element=doc.createElement("SHOWPRESENTATIONDURATION");
+    element.setAttribute("value", _showPresentationDuration);
+    presenter.appendChild(element);
 
     if ( saveOnlyPage == -1 )
     {
@@ -730,6 +734,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         //__pgLayout.unit = KoUnit::U_MM;
         _spInfinitLoop = false;
         _spManualSwitch = true;
+        _showPresentationDuration = false;
         _rastX = 20;
         _rastY = 20;
         _xRnd = 20;
@@ -915,6 +920,11 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if(_clean) {
                 if(elem.hasAttribute("value"))
                     _spManualSwitch = static_cast<bool>(elem.attribute("value").toInt());
+            }
+        } else if(elem.tagName()=="SHOWPRESENTATIONDURATION") {
+            if(_clean) {
+                if(elem.hasAttribute("value"))
+                   _showPresentationDuration = static_cast<bool>(elem.attribute("value").toInt());
             }
         } else if(elem.tagName()=="PRESSLIDES") {
             if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)

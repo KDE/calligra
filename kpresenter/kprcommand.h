@@ -507,10 +507,10 @@ class PgConfCmd : public KNamedCommand
 public:
     PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoop,
                PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
-               bool _soundEffect, const QString &_fileName,
+               bool _soundEffect, const QString &_fileName, bool _showPresentationDuration,
                bool _oldManualSwitch, bool _oldInfinitLoop,
                PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
-               bool _oldSoundEffect, const QString &_oldFileName,
+               bool _oldSoundEffect, const QString &_oldFileName, bool _oldShowPresentationDuration,
                KPresenterDoc *_doc, KPrPage *_page );
 
     virtual void execute();
@@ -524,6 +524,7 @@ protected:
     int pageTimer, oldPageTimer;
     bool soundEffect, oldSoundEffect;
     QString fileName, oldFileName;
+    bool showPresentationDuration, oldShowPresentationDuration;
     KPrPage *m_page;
     KPresenterDoc *doc;
 

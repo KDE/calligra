@@ -2196,6 +2196,8 @@ bool KPrCanvas::pNext( bool )
 
         changePages( _pix1, _pix2, _pageEffect );
 
+        if ( m_view->kPresenterDoc()->getPresentationDuration() )
+            m_view->setPresentationDuration( currPresPage - 2 );
 
 
         if ( !spManualSwitch() )
@@ -2241,6 +2243,10 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             tmpObjs.append(oIt.current());
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *( --presStepList.end() );
+
+        if ( m_view->kPresenterDoc()->getPresentationDuration() )
+            m_view->setPresentationDuration( currPresPage );
+
         return true;
     }
 
@@ -4148,6 +4154,10 @@ void KPrCanvas::slotGotoPage()
         m_view->setCurrentTimer( 1 );
         setNextPageTimer( true );
     }
+
+    if ( m_view->kPresenterDoc()->getPresentationDuration() )
+        m_view->setPresentationDuration( pg - 1 );
+
 }
 
 /*================================================================*/

@@ -46,6 +46,7 @@
 #include <confpiedia.h>
 #include <confrectdia.h>
 #include <confpolygondia.h>
+#include <presdurationdia.h>
 #include <kppartobject.h>
 #include <textdialog.h>
 #include <sidebar.h>
@@ -205,6 +206,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     confPieDia = 0;
     confRectDia = 0;
     confPolygonDia = 0;
+    presDurationDia = 0;
     v_ruler = 0;
     h_ruler = 0;
     pen = QPen( black, 1, SolidLine );
@@ -1234,7 +1236,8 @@ void KPresenterView::screenConfigPages()
 			       kPresenterDoc()->getPresSpeed(),
 			       m_canvas->activePage()->getPageTimer(),
 			       m_canvas->activePage()->getPageSoundEffect(),
-			       m_canvas->activePage()->getPageSoundFileName() );
+			       m_canvas->activePage()->getPageSoundFileName(),
+                               kPresenterDoc()->getPresentationDuration() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->exec();
@@ -1351,6 +1354,14 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         actionScreenStart->setEnabled( false );
         actionScreenViewPage->setEnabled( false );
 
+        if ( kPresenterDoc()->getPresentationDuration() && pgNum == -1 ) {
+            m_presentationDuration.start();
+            m_presentationTotalDuration.start();
+
+            for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
+                m_presentationDurationList.append( 0 ); // initialization
+        }
+
         if ( !kPresenterDoc()->spManualSwitch() && pgNum == -1 ) {
             continuePres = true;
             exitPres = false;
@@ -1384,6 +1395,10 @@ void KPresenterView::screenStop()
         m_canvas->lower();
         //xOffset = xOffsetSaved;
         //yOffset = yOffsetSaved;
+
+        if ( kPresenterDoc()->getPresentationDuration() )
+            setPresentationDuration( m_canvas->presPage() - 1 );
+
         m_canvas->stopScreenPresentation();
         presStarted = false;
         vert->setEnabled( true );
@@ -1405,6 +1420,11 @@ void KPresenterView::screenStop()
         actionScreenStart->setEnabled( true );
         actionScreenViewPage->setEnabled( true );
         pageBase->resizeEvent( 0 );
+
+        if ( kPresenterDoc()->getPresentationDuration() ) {
+            openThePresentationDurationDialog();
+            m_presentationDurationList.clear();
+        }
     }
 }
 
@@ -2945,6 +2965,7 @@ void KPresenterView::pgConfOk()
 					  pgConfDia->getPageTimer(),
 					  pgConfDia->getPageSoundEffect(),
 					  pgConfDia->getPageSoundFileName(),
+                                          pgConfDia->getPresentationDuration(),
 					  kPresenterDoc()->spManualSwitch(),
 					  kPresenterDoc()->spInfinitLoop(),
 					  m_canvas->activePage()->getPageEffect(),
@@ -2952,6 +2973,7 @@ void KPresenterView::pgConfOk()
 					  m_canvas->activePage()->getPageTimer(),
 					  m_canvas->activePage()->getPageSoundEffect(),
 					  m_canvas->activePage()->getPageSoundFileName(),
+                                          kPresenterDoc()->getPresentationDuration(),
 					  kPresenterDoc(), m_canvas->activePage() );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
@@ -5035,5 +5057,87 @@ KoZoomHandler *KPresenterView::zoomHandler()
 {
     return m_pKPresenterDoc->zoomHandler();
 }
+
+int KPresenterView::getPresentationDuration()
+{
+    return m_presentationDuration.elapsed();
+}
+
+void KPresenterView::setPresentationDuration( int _pgNum )
+{
+    // kdDebug() << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
+    *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
+    restartPresentationDuration();
+}
+
+void KPresenterView::restartPresentationDuration()
+{
+    m_presentationDuration.restart();
+}
+
+void KPresenterView::openThePresentationDurationDialog()
+{
+    QString presentationTotalDurationString = presentationDurationDataFormatChange( m_presentationTotalDuration.elapsed() );
+
+    QStringList presentationDurationStringList;
+    for ( QValueList<int>::Iterator it = m_presentationDurationList.begin(); it != m_presentationDurationList.end(); ++it ) {
+        QString presentationDurationString = presentationDurationDataFormatChange( *it );
+        presentationDurationStringList.append( presentationDurationString );
+    }
+
+    if ( presDurationDia ) {
+        delete presDurationDia;
+        presDurationDia = 0;
+    }
+
+    presDurationDia = new KPPresDurationDia( this, "presDurationDia", kPresenterDoc(), this,
+                                             presentationDurationStringList, presentationTotalDurationString );
+    presDurationDia->setCaption( i18n( "KPresenter - Presentation Duration" ) );
+    QObject::connect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
+    presDurationDia->exec();
+
+    QObject::disconnect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
+    delete presDurationDia;
+    presDurationDia = 0;
+}
+
+/*================================================================*/
+void KPresenterView::pddClosed()
+{
+    QObject::disconnect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
+    presDurationDia = 0;
+}
+
+// change from milliseconds to hh:mm:ss
+QString KPresenterView::presentationDurationDataFormatChange( int _time )
+{
+    int hours, minutes, seconds;
+
+    _time = _time / 1000;
+    if ( _time >= 60 ) {
+        seconds = _time % 60;
+        _time = _time - seconds;
+        _time = _time / 60;
+
+        if ( _time >= 60 ) {
+            minutes = _time % 60;
+            _time = _time - minutes;
+            hours = _time / 60;
+        }
+        else {
+            hours = 0;
+            minutes = _time;
+        }
+    }
+    else {
+        hours = 0;
+        minutes = 0;
+        seconds = _time;
+    }
+
+    QString presentationDurationString = "";
+    return presentationDurationString.sprintf( "%02d:%02d:%02d", hours, minutes, seconds );
+}
+
 
 #include <kpresenter_view.moc>

@@ -52,7 +52,7 @@ public:
     PgConfDia( QWidget* parent, const char* name,
                bool infLoop, bool swMan, int pgNum,
                PageEffect pageEffect, PresSpeed presSpeed, int pageTimer,
-               bool soundEffect, QString fileName );
+               bool soundEffect, QString fileName, bool showPresentationDuration );
     ~PgConfDia();
     bool getInfinitLoop();
     bool getManualSwitch();
@@ -61,13 +61,14 @@ public:
     int getPageTimer();
     bool getPageSoundEffect();
     QString getPageSoundFileName();
+    bool getPresentationDuration();
 
 protected:
     QString getSoundFileFilter();
 
 protected:
     QButtonGroup *general, *page, *slides;
-    QCheckBox *infinitLoop, *manualSwitch;
+    QCheckBox *infinitLoop, *manualSwitch, *presentationDuration;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
     QLabel *label1, *label2, *label3, *lTimer;
     QComboBox *effectCombo;
@@ -87,7 +88,7 @@ public slots:
 
 protected slots:
     void presSlidesChanged( int );
-    void slotManualSwitch(); 
+    void slotManualSwitch();
 
     void effectChanged( int num );
     void soundEffectChanged();

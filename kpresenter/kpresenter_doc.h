@@ -150,8 +150,10 @@ public:
     // get values for screenpresentations
     bool spInfinitLoop() const { return _spInfinitLoop; }
     bool spManualSwitch() const { return _spManualSwitch; }
+    bool getPresentationDuration() const { return _showPresentationDuration; }
     void setInfinitLoop( bool il ) { _spInfinitLoop = il; }
     void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
+    void setPresentationDuration( bool pd ) { _showPresentationDuration = pd; }
 
 
     // size of page
@@ -363,7 +365,7 @@ protected:
     KoPageLayout _pageLayout;
 
     // screenpresentations
-    bool _spInfinitLoop, _spManualSwitch;
+    bool _spInfinitLoop, _spManualSwitch, _showPresentationDuration;
 
     // options
     int _rastX, _rastY;

@@ -11,4 +11,5 @@ Changes after KPresenter 1.1
 - Now kpresenter has real page
 - Limit position/size object to page
 - spell checking/search/find works on all page
+- Add "Show Presentation Duration"
 

@@ -30,7 +30,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc \
 	confpolygondia.cc kppolygonobject.cc notebar.cpp \
 	KPTextObjectIface.skel KPTextObjectIface.cc \
-	KPTextViewIface.skel KPTextViewIface.cc
+	KPTextViewIface.skel KPTextViewIface.cc presdurationdia.cc
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
@@ -68,7 +68,8 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		KPresenterPageIface.h sidebar.h  kpresenter_dlg_config.h \
 		kprvariable.h kprdrag.h notebar.h kprtextdocument.h kpfreehandobject.h \
 		kppolylineobject.h kpquadricbeziercurveobject.h kpcubicbeziercurveobject.h \
-		confpolygondia.h kppolygonobject.h KPTextViewIface.h KPTextObjectIface.h
+		confpolygondia.h kppolygonobject.h KPTextViewIface.h KPTextObjectIface.h \
+		presdurationdia.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

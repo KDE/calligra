@@ -1369,10 +1369,10 @@ void PenBrushCmd::unexecute()
 /*================================================================*/
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoop,
                       PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
-                      bool _soundEffect, const QString &_fileName,
+                      bool _soundEffect, const QString &_fileName, bool _showPresentationDuration,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
-                      bool _oldSoundEffect, const QString &_oldFileName,
+                      bool _oldSoundEffect, const QString &_oldFileName, bool _oldShowPresentationDuration,
                       KPresenterDoc *_doc, KPrPage *_page )
     : KNamedCommand( _name )
 {
@@ -1383,6 +1383,7 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoo
     pageTimer = _pageTimer;
     soundEffect = _soundEffect;
     fileName = _fileName;
+    showPresentationDuration = _showPresentationDuration;
     oldManualSwitch = _oldManualSwitch;
     oldInfinitLoop = _oldInfinitLoop;
     oldPageEffect = _oldPageEffect;
@@ -1390,6 +1391,7 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoo
     oldPageTimer = _oldPageTimer;
     oldSoundEffect = _oldSoundEffect;
     oldFileName = _oldFileName;
+    oldShowPresentationDuration = _oldShowPresentationDuration;
     doc = _doc;
     m_page=_page;
 }
@@ -1404,6 +1406,7 @@ void PgConfCmd::execute()
     m_page->setPageTimer(  pageTimer );
     m_page->setPageSoundEffect(  soundEffect );
     m_page->setPageSoundFileName(  fileName );
+    doc->setPresentationDuration( showPresentationDuration );
 }
 
 /*================================================================*/

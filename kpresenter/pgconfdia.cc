@@ -51,7 +51,8 @@
 /*================================================================*/
 PgConfDia::PgConfDia( QWidget* parent, const char* name,
                       bool infLoop, bool swMan, int pgNum, PageEffect pageEffect,
-                      PresSpeed presSpeed, int pageTimer, bool soundEffect, QString fileName )
+                      PresSpeed presSpeed, int pageTimer, bool soundEffect, QString fileName,
+                      bool showPresentationDuration )
     : KDialogBase( parent, name, true, "",Ok|Cancel )
 {
     soundPlayer = 0;
@@ -73,6 +74,9 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     speedOfObject = new KIntNumInput( presSpeed, general );
     speedOfObject->setRange( 1, 10, 1 );
     speedOfObject->setLabel( i18n( "Effect speed of the object and page:" ) );
+
+    presentationDuration = new QCheckBox( i18n( "&Show Presentation Duration" ), general );
+    presentationDuration->setChecked( showPresentationDuration );
 
     back->addWidget(general);
 
@@ -251,6 +255,11 @@ bool PgConfDia::getPageSoundEffect()
 QString PgConfDia::getPageSoundFileName()
 {
     return requester->url();
+}
+
+bool PgConfDia::getPresentationDuration()
+{
+    return presentationDuration->isChecked();
 }
 
 /*================================================================*/

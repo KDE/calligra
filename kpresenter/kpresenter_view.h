@@ -43,6 +43,7 @@ class KPPresStructView;
 class ConfPieDia;
 class ConfRectDia;
 class ConfPolygonDia;
+class KPPresDurationDia;
 class QToolButton;
 class SideBar;
 class NoteBar;
@@ -450,6 +451,10 @@ public:
     int getCornersValue() { return cornersValue; }
     int getSharpnessValue() { return sharpnessValue; }
 
+    int getPresentationDuration();
+    void setPresentationDuration( int _pgNum );
+    void restartPresentationDuration();
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -464,6 +469,7 @@ protected slots:
     void confPieOk();
     void confRectOk();
     void confPolygonOk();
+    void pddClosed();
 
     // scrolling
     void scrollH( int );
@@ -552,6 +558,9 @@ protected:
 
     bool searchInOtherPage();
 
+    void openThePresentationDurationDialog();
+    QString presentationDurationDataFormatChange( int _time );
+
 private:
 // ********** variables **********
 
@@ -580,6 +589,7 @@ private:
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
     ConfPolygonDia *confPolygonDia;
+    KPPresDurationDia *presDurationDia;
 
     // default pen and brush
     QPen pen;
@@ -782,6 +792,9 @@ private:
     int automaticScreenPresWaitTime;
     bool automaticScreenPresFirstTimer;
     int currentTimer;
+
+    QTime m_presentationDuration, m_presentationTotalDuration;
+    QValueList<int> m_presentationDurationList;
 
     KoCharSelectDia *m_specialCharDlg;
 
