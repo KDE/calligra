@@ -137,7 +137,7 @@ QpFormulaStack::operator [] (int pIdx)
 
 // ------------------------------------------------------------------
 
-static QpFormulaConv gConv[] =
+static const QpFormulaConv gConv[] =
 {
    {0,   QpFormula::floatFunc,       0},
    {1,   QpFormula::ref,             0},
@@ -373,7 +373,7 @@ QpFormula::formula()
    QP_DEBUG("Formula = " << cStack.top() << endl);
    return strcpy(new char[strlen(cStack.top())+1], cStack.top());
 }
- 
+
 void
 QpFormula::formulaStart(const char* pFirstChar)
 {
@@ -429,13 +429,13 @@ QpFormula::floatFuncReal(const char*)
 {
    QP_INT64   lFloat;
    ostrstream lNum;
- 
+
    cFormula >> lFloat;
- 
+
    lNum << lFloat << ends;
- 
+
    cStack.push( lNum.str() );
- 
+
    lNum.rdbuf()->freeze(0);
 }
 
@@ -501,4 +501,4 @@ QpFormula::unaryOperandReal(const char* pOper)
    cStack.bracket( pOper, "" );
 }
 
- 
+

@@ -48,7 +48,7 @@ QpTableList::~QpTableList()
    // don't delete the list of tables
 }
 
- 
+
 void
 QpTableList::table(unsigned pIdx, KSpreadTable* pTable)
 {
@@ -63,7 +63,7 @@ QpTableList::table(unsigned pIdx)
 {
    return (pIdx < cNameCnt ? cTable[pIdx] : 0);
 }
-                                                                                              
+
 
 // ---------------------------------------------------------------
 
@@ -93,7 +93,7 @@ bool QpImport::filterImport(const QString &file
                            ,KoDocument *document
                            ,const QString &from
                            ,const QString &to
-                           ,const QString &config
+                           ,const QString &/*config*/
                            )
 {
     bool bSuccess=true;
@@ -141,7 +141,7 @@ bool QpImport::filterImport(const QString &file
    QpRecFactory            lFactory(lIn);
    QpTableList             lTableNames;
    QP_UINT8                lPageIdx = 0;
- 
+
    QpRec*                  lRec = 0;
    QpRecBop*               lRecBop = 0;
    QpRecIntegerCell*       lRecInt = 0;
@@ -149,7 +149,7 @@ bool QpImport::filterImport(const QString &file
    QpRecFormulaCell*       lRecFormula = 0;
    QpRecLabelCell*         lRecLabel = 0;
    QpRecPageName*          lRecPageName = 0;
- 
+
    do
    {
       field = "";
@@ -189,7 +189,7 @@ bool QpImport::filterImport(const QString &file
             KSpreadFormula lAnswer(*lRecFormula, lTableNames);
 
             char*     lFormula = lAnswer.formula();
- 
+
             field = lFormula;
 
             delete [] lFormula;
@@ -222,7 +222,7 @@ bool QpImport::filterImport(const QString &file
          field.setNum( lRecFloat->value() );
          table->setText( lRecFloat->row()+1, lRecFloat->column()+1, field, false );
          break;
-         
+
       case QpLabelCell:
          lRecLabel = (QpRecLabelCell*)lRec;
          field = "'";
@@ -251,7 +251,7 @@ bool QpImport::filterImport(const QString &file
 
       delete lRec;
       lRec = 0;
-   } while( lIn );                                                                                                          
+   } while( lIn );
 
     emit sigProgress(100);
     return bSuccess;

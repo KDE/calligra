@@ -14,19 +14,19 @@ class QpFormulaStack
 public:
    QpFormulaStack();
    ~QpFormulaStack();
- 
+
    void        bracket(const char* pBefore="(", const char* pAfter=")");
    void        push(const char* pString);
    void        pop(int pCnt=1);
    void        join(int pCnt, const char* pSeparator=",");
    const char* top();
- 
+
    const char* operator [] (int pIdx);
- 
+
 protected:
    int    cIdx;
    int    cMax;
- 
+
    char** cStack;
 };
 
@@ -92,13 +92,13 @@ public:
 protected:
    char*              cArgSeparator;
    QpRecFormulaCell&  cCell;
-   int                cDropLeadingAt;
    QpIStream          cFormula;
    QpIStream          cFormulaRefs;
+   QpFormulaConv*     cReplaceFunc;
    char*              cFormulaStart;
    int                cIdx;
-   QpFormulaConv*     cReplaceFunc;
    QpFormulaStack     cStack;
+   int                cDropLeadingAt;
    QpTableNames&      cTable;
 
    void binaryOperandReal(const char* pOper);
