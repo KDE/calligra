@@ -45,7 +45,7 @@ using namespace std;
 
 /*================================================================*/
 KPGroupObject::KPGroupObject()
-    : KPObject(), objects(), updateObjs( false )
+    : KPObject(), objects( QPtrList<KPObject>() ), updateObjs( false )
 {
     objects.setAutoDelete( false );
 }
@@ -293,10 +293,17 @@ void KPGroupObject::updateSizes( double fx, double fy )
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
+        //kdDebug() << "Group X: " << origTopLeftPointInGroup.x() << "   Group Y: " << origTopLeftPointInGroup.y() << endl;
+        //kdDebug() << "Object X: " << it.current()->getOrigPointInGroup().x() << "   Object Y: " << it.current()->getOrigPointInGroup().y() << endl;
         double _x = ( it.current()->getOrigPointInGroup().x() - origTopLeftPointInGroup.x() ) * fx;
         double _y = ( it.current()->getOrigPointInGroup().y() - origTopLeftPointInGroup.y() ) * fy;
 
-        KoRect origObjectRect = KoRect( KoPoint( it.current()->getOrigPointInGroup().x(), it.current()->getOrigPointInGroup().y() ),it.current()->getOrigSizeInGroup() );
+        //kdDebug() << "X: " << _x << "   Y: " << _y << endl;
+
+        KoRect origObjectRect = KoRect( KoPoint( it.current()->getOrigPointInGroup().x(),
+                                                 it.current()->getOrigPointInGroup().y() ),
+                                        it.current()->getOrigSizeInGroup() );
+
         KoPoint bottomRight = origObjectRect.bottomRight();
         double _bottomRightX = ( bottomRight.x() - origTopLeftPointInGroup.x() ) * fx;
         double _bottomRightY = ( bottomRight.y() - origTopLeftPointInGroup.y() ) * fy;

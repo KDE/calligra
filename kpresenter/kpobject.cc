@@ -182,7 +182,7 @@ double KPObject::load(const QDomElement &element) {
             offset=e.attribute(attrY).toDouble();
             orig.setY(0);
         }
-        origTopLeftPointInGroup = orig;
+        origTopLeftPointInGroup = KoPoint( orig.x(), offset );
     }
     e=element.namedItem(tagSIZE).toElement();
     if(!e.isNull()) {

@@ -67,11 +67,6 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("misc", KIcon::SizeMedium) );
     _miscPage=new ConfigureMiscPage(parent, page);
 
-
-    page = addVBoxPage( i18n("Misc"), i18n("Misc"),
-                        BarIcon("misc", KIcon::SizeMedium) );
-    _miscPage=new ConfigureMiscPage(parent, page);
-
     page = addVBoxPage( i18n("Document"), i18n("Document defaults"),
                         BarIcon("documentdefaults", KIcon::SizeMedium) );
 
