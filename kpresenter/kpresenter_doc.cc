@@ -307,6 +307,8 @@ void KPresenterDoc::setUnit( KoUnit::Unit _unit )
 
 void KPresenterDoc::saveConfig()
 {
+    if ( isEmbedded() )
+        return;
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );

@@ -84,3 +84,17 @@ void KPPixmapObjectIface::loadImage( const QString & fileName )
 {
     obj->loadImage(fileName);
 }
+
+void KPPixmapObjectIface::setPictureMirrorType(const QString & _mirror)
+{
+    if ( _mirror.lower()=="normal")
+        obj->setPictureMirrorType( PM_NORMAL);
+    else if ( _mirror.lower()=="horizontal")
+        obj->setPictureMirrorType( PM_HORIZONTAL );
+    else if ( _mirror.lower()=="vertical")
+        obj->setPictureMirrorType( PM_VERTICAL );
+    else if ( _mirror.lower()=="horizontalandvertical")
+        obj->setPictureMirrorType( PM_HORIZONTALANDVERTICAL );
+    else
+        kdDebug()<<" Error in setPictureMirrorType :"<<_mirror<<endl;
+}

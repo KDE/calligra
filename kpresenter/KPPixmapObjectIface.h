@@ -46,6 +46,7 @@ k_dcop:
     void setSwapRGB(bool swapRGB );
     void setGrayscal( bool grayscal );
     void loadImage( const QString & fileName );
+    void setPictureMirrorType(const QString & _mirror);
 
 private:
     KPPixmapObject *obj;
