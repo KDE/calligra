@@ -157,6 +157,13 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const bool allfiles ) {
 
     QString service;
+    if ( direction == Import )
+        service = "Export == '";
+    else
+        service = "Import == '";
+    service += _format;
+    service += "'";
+    
     d->config=QString::null;   // reset the config string
 
     dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,
