@@ -944,6 +944,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	    table->setMarker( QPoint( col, row ) );
     }
 
+    // Paste operation with the middle button ?
+    if( _ev->button() == MidButton )
+        table->paste( QPoint( markerColumn(), markerRow() ) );
+
     // Update the edit box
     m_pView->updateEditWidget();
 
@@ -956,10 +960,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	QPoint p = mapToGlobal( _ev->pos() );
 	m_pView->openPopupMenu( p );
     }
-
-    // Paste operation with the middle button ?
-    if( _ev->button() == MidButton )
-        table->paste( QPoint( markerColumn(), markerRow() ) );
 }
 
 void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )

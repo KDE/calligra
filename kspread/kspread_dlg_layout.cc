@@ -552,7 +552,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
 
     postfix = new QLineEdit( box, "LineEdit_1" );
-    grid->addWidget(postfix,0,1);
+    grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
     precision->setSpecialValueText(i18n("variable"));
     precision->setRange(-1,8,1,false);
@@ -560,14 +560,14 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addWidget(precision,1,1);
 
     prefix = new QLineEdit( box, "LineEdit_3" );
-    grid->addWidget(prefix,2,1);
+    grid->addWidget(prefix,0,1);
 
     format = new QComboBox( box, "ListBox_1" );
     grid->addWidget(format,0,3);
 
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( box, "Label_1" );
-    grid->addWidget(tmpQLabel,0,0);
+    grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Prefix") );
 
     if ( dlg->postfix.isNull() )
@@ -576,7 +576,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	postfix->setText( dlg->postfix.data() );
 
     tmpQLabel = new QLabel( box, "Label_2" );
-    grid->addWidget(tmpQLabel,2,0);
+    grid->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Postfix") );
 
     tmpQLabel = new QLabel( box, "Label_3" );
@@ -692,7 +692,8 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(time,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
-
+    connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
+    connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     slotChangeState();
     this->resize( 400, 400 );
 }
@@ -706,6 +707,8 @@ void CellLayoutPageFloat::slotChangeState()
 QStringList list;
 listFormat->clear();
 precision->setEnabled(true);
+prefix->setEnabled(true);
+postfix->setEnabled(true);
 if(number->isChecked())
         listFormat->setEnabled(false);
 else if(percent->isChecked())
@@ -725,6 +728,8 @@ else if(scientific->isChecked())
 else if(date->isChecked())
         {
         precision->setEnabled(false);
+        prefix->setEnabled(false);
+        postfix->setEnabled(false);
         listFormat->setEnabled(true);
         list+=KGlobal::locale()->formatDate(QDate::currentDate(),true);
         list+=KGlobal::locale()->formatDate(QDate::currentDate(),false);
@@ -774,6 +779,8 @@ else if(fraction->isChecked())
 else if(time->isChecked())
         {
         precision->setEnabled(false);
+        prefix->setEnabled(false);
+        postfix->setEnabled(false);
         listFormat->setEnabled(true);
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),false);
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),true);
@@ -822,7 +829,6 @@ else if(dlg->m_bTime)
         }
 else if(dlg->m_bValue)
         {
-
         if(number->isChecked())
                 tmp=KGlobal::locale()->formatNumber(dlg->m_value,p );
         else if(money->isChecked())
@@ -938,6 +944,11 @@ else if(dlg->m_bValue)
                                 tmp = tmp.setNum( floor(dlg->m_value+1) );
                         else
                                 tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
+
+                        if ( strcmp( prefix->text(), "########" ) != 0 )
+                                tmp=prefix->text()+" "+tmp;
+                        if ( strcmp( postfix->text(), "########" ) != 0 )
+                                tmp+=" "+postfix->text();
                         }
                 }
                 }
@@ -968,7 +979,12 @@ else if(dlg->m_bValue)
                         tmp.remove(--i,1);
                 }
             }
+        if ( strcmp( prefix->text(), "########" ) != 0 )
+                tmp=prefix->text()+" "+tmp;
+        if ( strcmp( postfix->text(), "########" ) != 0 )
+                tmp+=" "+postfix->text();
         }
+
         exampleLabel->setText(tmp);
         }
         else
@@ -977,11 +993,22 @@ else if(dlg->m_bValue)
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 {
     if ( strcmp( postfix->text(), dlg->postfix.data() ) != 0 )
-	if ( strcmp( postfix->text(), "########" ) != 0 )
-	    _obj->setPostfix( postfix->text() );
+	if ( strcmp( postfix->text(), "########" ) != 0 && postfix->isEnabled())
+        {
+            if( postfix->isEnabled())
+	        _obj->setPostfix( postfix->text() );
+            else
+                _obj->setPostfix( "" );
+        }
     if ( strcmp( prefix->text(), dlg->prefix.data() ) != 0 )
 	if ( strcmp( prefix->text(), "########" ) != 0 )
-	    _obj->setPrefix( prefix->text() );
+        {
+            if(prefix->isEnabled())
+	        _obj->setPrefix( prefix->text() );
+            else
+                _obj->setPrefix( "" );
+
+        }
 
     if ( dlg->precision != precision->value() )
 	_obj->setPrecision( precision->value() );

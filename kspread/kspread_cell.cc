@@ -1004,11 +1004,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 	// Start building the output string with prefix and postfix
 	m_strOutText = "";
-	m_strOutText += prefix( _col, _row );
+        if( !prefix( _col, _row ).isEmpty())
+	        m_strOutText += prefix( _col, _row )+" ";
 
 	m_strOutText += localizedNumber;
 
-	m_strOutText += postfix( _col, _row );
+        if( !postfix( _col, _row ).isEmpty())
+	        m_strOutText += " "+postfix( _col, _row );
 
 	verifyCondition();
 
@@ -3110,6 +3112,9 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bCalcDirtyFlag = true;
     m_bLayoutDirtyFlag= true;
     m_content = Formula;
+    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+        m_eFormatNumber=Number;
     checkFormat(true);
     if ( !m_pTable->isLoading() )
 	if ( !makeFormular() )
@@ -3335,6 +3340,9 @@ void KSpreadCell::checkValue()
     if ( m_bValue )
         {
 	m_dValue = atof( ptext );
+        if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+                m_eFormatNumber=Number;
         return;
         }
     QString tmp;
@@ -3399,6 +3407,10 @@ void KSpreadCell::checkValue()
         return;
         }
     checkFormat();
+    //make default format
+    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+        m_eFormatNumber=Number;
     /* if ( old_value != bValue )
 	displayDirtyFlag = TRUE; */
 }
