@@ -1,5 +1,5 @@
 /* XPM */
-static char * tip_of_day_xpm[] = {
+static const char * tip_of_day_xpm[] = {
 "256 256 11 1",
 " 	c None",
 ".	c #FFF4BF",

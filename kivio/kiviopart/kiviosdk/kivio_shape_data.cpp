@@ -230,7 +230,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         }
         else
         {
-	   kdDebug() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist.";
+	   kdDebug() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);
@@ -259,7 +259,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
     QDomNode node;
     QDomElement ele;
 
-    kdDebug() << "-LOAD KivioShapeData::loadXML()";
+    kdDebug() << "-LOAD KivioShapeData::loadXML()" << endl;
 
     // Maintain backwards compatibility with the eariler betas. They saved
     // fg color and line style in this node.
@@ -275,17 +275,17 @@ bool KivioShapeData::loadXML( const QDomElement &e )
 
         if( nodeName == "KivioLineStyle" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioLineStyle";
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioLineStyle" << endl;
             m_pLineStyle->loadXML( ele );
         }
         else if( nodeName == "KivioFillStyle" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioFillStyle";
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioFillStyle" << endl;
             m_pFillStyle->loadXML( ele );
         }
         else if( nodeName == "KivioTextStyle" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText";
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText" << endl;
             
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
@@ -300,7 +300,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
         }
         else if( nodeName == "KivioText" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText - deprecated";
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText - deprecated" << endl;
 
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
@@ -348,7 +348,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
             } // end if m_shapeType==kstTextBox
             else
             {
-	       kdDebug() << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!";
+	       kdDebug() << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!" << endl;
             }
         }
 

@@ -206,7 +206,7 @@ void KivioIconView::slotDoubleClicked( QIconViewItem *pQtItem )
     
     if( !pItem )
     {
-       kdDebug() << "KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!";
+       kdDebug() << "KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!" << endl;
         return;
     }
     

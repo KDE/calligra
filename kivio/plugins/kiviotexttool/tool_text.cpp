@@ -85,7 +85,7 @@ void TextTool::processEvent( QEvent* e )
 
 void TextTool::activate()
 {
-   kdDebug() << "TextTool activate";
+   kdDebug() << "TextTool activate" << endl;
     m_pCanvas->setCursor(*m_pTextCursor);
     m_mode = stmNone;
     

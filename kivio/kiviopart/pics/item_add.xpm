@@ -1,5 +1,5 @@
 /* XPM */
-static char * add_new_file1_xpm[] = {
+static const char * add_new_file1_xpm[] = {
 "16 16 98 2",
 "  	c None",
 ". 	c #5C5A5A",

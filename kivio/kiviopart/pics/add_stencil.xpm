@@ -1,5 +1,5 @@
 /* XPM */
-static char * add_stencil_xpm[] = {
+static const char * add_stencil_xpm[] = {
 "18 16 7 1",
 " 	c None",
 ".	c #000000",

@@ -76,7 +76,7 @@ KivioConnectorTarget::~KivioConnectorTarget()
         
         while( point )
         {
-	   kdDebug() << "KivioConnectorTarget:: -> diconnecting";
+	   kdDebug() << "KivioConnectorTarget:: -> diconnecting" << endl;
         
             // Disconnect the point.  But tell the point to not call 
             // KivioConnectorTarget::removeConnectorFromList() because it will cause our
@@ -99,7 +99,7 @@ bool KivioConnectorTarget::loadXML( const QDomElement &e )
 {
     if( e.tagName().compare( "KivioConnectorTarget" ) != 0 )
     {
-       kdDebug() << "Attempted to load KivioConnectorTarget from non-KivioConnectorTarget element";
+       kdDebug() << "Attempted to load KivioConnectorTarget from non-KivioConnectorTarget element" << endl;
         return false;
     }
 

@@ -43,7 +43,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
         delete m_pSpawners;
         m_pSpawners = NULL;
     }
-    kdDebug() << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted";
+    kdDebug() << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted" << endl;
 }
 
 

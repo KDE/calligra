@@ -109,7 +109,7 @@ void SelectTool::processEvent( QEvent* e )
 
 void SelectTool::activate()
 {
-   kdDebug() << "SelectTool activate";
+   kdDebug() << "SelectTool activate" << endl;
     m_pCanvas->setCursor(arrowCursor);
     m_mode = stmNone;
 }
@@ -524,7 +524,7 @@ void SelectTool::continueResizing(QPoint pos)
 
     if( !pData )
     {
-       kdDebug() << "SelectTool::continueResizing() - Original geometry not found";
+       kdDebug() << "SelectTool::continueResizing() - Original geometry not found" << endl;
         return;
     }
 
@@ -634,7 +634,7 @@ void SelectTool::continueResizing(QPoint pos)
              break;
 
         default:
-	   kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle;
+	   kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
             break;
     }
 
@@ -916,7 +916,7 @@ void SelectTool::leftDoubleClick( QPoint p )
     Tool *t = controller()->findTool("Text");
     if( !t )
     {
-       kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool";
+       kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
         return;
     }
 

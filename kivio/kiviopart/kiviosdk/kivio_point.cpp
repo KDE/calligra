@@ -139,7 +139,7 @@ bool KivioPoint::loadXML( const QDomElement &e )
 {
     if( e.tagName().compare( "KivioPoint" ) != 0 )
     {
-       kdDebug() << "Attempted to load KivioPoint from non-KivioPoint element";
+       kdDebug() << "Attempted to load KivioPoint from non-KivioPoint element" << endl;
         return false;
     }
 

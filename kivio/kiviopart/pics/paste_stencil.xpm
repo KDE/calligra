@@ -1,7 +1,7 @@
 /* XPM */
 /* Drawn for the K Desktop Environment */
 /* See http://www.kde.org */
-static char*paste_stencil_xpm[]={
+static const char*paste_stencil_xpm[]={
 "16 16 26 1",
 "a c #ffffff",
 "b c #ffcc99",

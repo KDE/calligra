@@ -1,5 +1,5 @@
 /* XPM */
-static char * OffPageRef_xpm[] = {
+static const char * OffPageRef_xpm[] = {
 "32 32 6 1",
 " 	c None",
 ".	c #F8FCF8",

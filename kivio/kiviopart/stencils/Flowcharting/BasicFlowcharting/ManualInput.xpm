@@ -1,5 +1,5 @@
 /* XPM */
-static char * ManualInput_xpm[] = {
+static const char * ManualInput_xpm[] = {
 "32 32 6 1",
 " 	c None",
 ".	c #F8FCF8",

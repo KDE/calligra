@@ -219,7 +219,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   QDomElement kivio = doc.documentElement();
   if ( kivio.attribute( "mime" ) != "application/x-kivio" ) {
-     kdDebug() << "KivioDoc::loadXML() - Invalid mime type";
+     kdDebug() << "KivioDoc::loadXML() - Invalid mime type" << endl;
     m_bLoading = false;
     return false;
   }
@@ -241,7 +241,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
         QString desc = XmlReadString( node.toElement(), "desc", "_!@#$" );
         if( desc == "_!@#$" )
         {
-	   kdDebug() << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found";
+	   kdDebug() << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found" << endl;
         }
         else
         {
@@ -254,7 +254,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
     else
     {
-       kdDebug() << "KivioDoc::loadXML() - Unknown node " <<  name;
+       kdDebug() << "KivioDoc::loadXML() - Unknown node " <<  name << endl;
     }
 
     node = node.nextSibling();
@@ -332,7 +332,7 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
                             else
                             {
 			       kdDebug() << "KivioDoc::loadStencilSpawnerSet() - FAILED TO LOAD STENCIL SPAWNER SET " 
-					 << innerFI->absFilePath();
+					 << innerFI->absFilePath() << endl;
                             }
                             return true;
                         }
@@ -413,7 +413,7 @@ void KivioDoc::printContent( QPrinter &prn )
 
     KivioPage *pPage;
 
-    kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to;
+    kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to << endl;
 
     p.start(&prn);
     for( i=from; i<=to; i++ )
@@ -454,14 +454,14 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( QString dirName )
 
     if( setIsAlreadyLoaded( dirName, desc ) )
     {
-       kdDebug() << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets";
+       kdDebug() << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets" << endl;
         return NULL;
     }
 
     set = new KivioStencilSpawnerSet();
     if( set->loadDir(dirName)==false )
     {
-       kdDebug() << "KivioDoc::addSpawnerSet() - Error loading dir set";
+       kdDebug() << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
         delete set;
         return NULL;
     }
@@ -481,7 +481,7 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSetDuringLoad( QString dirName )
     set = new KivioStencilSpawnerSet();
     if( set->loadDir(dirName)==false )
     {
-       kdDebug() << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set";
+       kdDebug() << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
         delete set;
         return NULL;
     }

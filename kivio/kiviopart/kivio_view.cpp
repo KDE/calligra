@@ -788,7 +788,7 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
     if( !pSpawner )
     {
-       kdDebug() << "KivioView::addSpawnerToStackBar() - NULL pSpawner";
+       kdDebug() << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
         return;
     }
 

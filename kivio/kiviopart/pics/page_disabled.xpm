@@ -1,5 +1,5 @@
 /* XPM */
-static char *magick[] = {
+static const char *magick[] = {
 /* columns rows colors chars-per-pixel */
 "15 11 2 1",
 "  c #c0c0c0",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * Card_xpm[] = {
+static const char * Card_xpm[] = {
 "32 32 6 1",
 " 	c None",
 ".	c #F8FCF8",

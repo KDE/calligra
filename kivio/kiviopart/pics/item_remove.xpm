@@ -1,5 +1,5 @@
 /* XPM */
-static char * remove_view_item_xpm[] = {
+static const char * remove_view_item_xpm[] = {
 "16 16 74 1",
 "J	c None",
 ".	c #FFFAEE",

@@ -281,7 +281,7 @@ void KivioBaseConnectorStencil::customDrag( KivioCustomDragData *pData )
 
     if( !p )
     {
-       kdDebug() << "KivioBaseConnectorStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n";
+       kdDebug() << "KivioBaseConnectorStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n" << endl;
        return;
     }
 

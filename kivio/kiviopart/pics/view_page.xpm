@@ -1,5 +1,5 @@
 /* XPM */
-static char * view_page_xpm[] = {
+static const char * view_page_xpm[] = {
 "16 16 4 1",
 " 	c None",
 ".	c #000000",

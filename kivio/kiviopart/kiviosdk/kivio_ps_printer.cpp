@@ -53,7 +53,7 @@
 // This will convert a QColor element for use with postscript
 #define PS_NORMALIZE_COLOR(x) (float(x)/255.0)
 
-#define PS_CHECK_FP(x) { if( !m_fp ) { kdDebug() << "KivioPSPrinter::" << x << " - null m_fp"; return; } }
+#define PS_CHECK_FP(x) { if( !m_fp ) { kdDebug() << "KivioPSPrinter::" << x << " - null m_fp" << endl; return; } }
 
 KivioPSPrinter::KivioPSPrinter()
     : KivioPainter()
@@ -209,7 +209,7 @@ void KivioPSPrinter::fillEllipse( float x, float y, float w, float h )
 	switch( m_pFillStyle->colorStyle() )
 	{
 		case KivioFillStyle::kcsNone: // hollow
-		   kdDebug() << "KivioPSPrinter::fillEllipse() - Cannot draw a hollow-filled-ellipse. Shape aborted.";
+		   kdDebug() << "KivioPSPrinter::fillEllipse() - Cannot draw a hollow-filled-ellipse. Shape aborted." << endl;
 		   return;
 			
 		case KivioFillStyle::kcsSolid: // filled
@@ -218,7 +218,7 @@ void KivioPSPrinter::fillEllipse( float x, float y, float w, float h )
 			
 		case KivioFillStyle::kcsGradient:
 		default:
-		   kdDebug() << "KivioPrinter::fillEllipse() - Gradient unsupported. Shape aborted.\n";
+		   kdDebug() << "KivioPrinter::fillEllipse() - Gradient unsupported. Shape aborted.\n" << endl;
 		   return;
 	}
 
@@ -265,7 +265,7 @@ void KivioPSPrinter::drawLineArray( QList< KivioPoint > *pList )
 		ePoint = pList->next();
 		if( !ePoint )
 		{
-		   kdDebug() << "KivioPSPrinter::drawLines() - sPoint without ePoint (shape aborted)\n";
+		   kdDebug() << "KivioPSPrinter::drawLines() - sPoint without ePoint (shape aborted)\n" << endl;
 			return;
 		}
 		
@@ -320,7 +320,7 @@ void KivioPSPrinter::drawPolygon( QList< KivioPoint> *pList )
 			
 		case KivioFillStyle::kcsGradient:
 		default:
-		   kdDebug() << "KivioPrinter::drawPolygon() - Gradient unsupported\n";
+		   kdDebug() << "KivioPrinter::drawPolygon() - Gradient unsupported\n" << endl;
 			break;
 	}
 	
@@ -353,7 +353,7 @@ void KivioPSPrinter::drawPolygon( QList< KivioPoint> *pList )
 			
 		case KivioFillStyle::kcsGradient:
 		default:
-		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n";
+		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n" << endl;
 			break;
 	}
 }
@@ -424,7 +424,7 @@ void KivioPSPrinter::drawPolygon( QPointArray &pArray )
 			
 		case KivioFillStyle::kcsGradient:
 		default:
-		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n";
+		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n" << endl;
 		   break;
 	}
 
@@ -457,7 +457,7 @@ void KivioPSPrinter::drawPolygon( QPointArray &pArray )
 			
 		case KivioFillStyle::kcsGradient:
 		default:
-		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n";
+		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n" << endl;
 			break;
 	}
 }

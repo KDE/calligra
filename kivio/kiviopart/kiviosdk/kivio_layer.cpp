@@ -51,7 +51,7 @@ KivioLayer::KivioLayer( KivioPage *pPage )
 
 KivioLayer::~KivioLayer()
 {
-   kdDebug() << "KivioLayer() - In the end there can be only one";
+   kdDebug() << "KivioLayer() - In the end there can be only one" << endl;
 
     if( m_pStencilList )
     {
@@ -97,7 +97,7 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
         title.length() == 0 )
         return NULL;
 
-    kdDebug() << "KivioLayer::loadSMLStencil() " << setName << " " << title;
+    kdDebug() << "KivioLayer::loadSMLStencil() " << setName << " " << title << endl;
 
     // Locate the spawner set
     KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
@@ -126,7 +126,7 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
  */
 KivioStencil *KivioLayer::loadGroupStencil( const QDomElement &stencilE )
 {
-   kdDebug() << "KivioLayer::loadGroupStencil()";
+   kdDebug() << "KivioLayer::loadGroupStencil()" << endl;
 
     KivioGroupStencil *pStencil = new KivioGroupStencil();
 
@@ -151,7 +151,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
         title.length() == 0 )
         return NULL;
 
-    kdDebug() << "KivioLayer::loadPluginStencil() " << setName.ascii() << " " <<  title;
+    kdDebug() << "KivioLayer::loadPluginStencil() " << setName.ascii() << " " <<  title << endl;
     
     // Locate the spawner set
     KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
@@ -186,10 +186,9 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdDebug() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (title=%s set=%s) found",
-		  kdDebug() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (title=" <<
+		  kdWarning() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (title=" <<
 		  XmlReadString( node.toElement(), "title", "" ) << " set=" <<  
-		  XmlReadString( node.toElement(), "setName", "" ) << ") found.";
+		  XmlReadString( node.toElement(), "setName", "" ) << ") found." << endl;
             }
         }
         else if( name == "KivioGroupStencil" )
@@ -201,7 +200,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdDebug() << "KivioLayer::loadXML() - Unable to load KivioGroupStencil";
+	       kdDebug() << "KivioLayer::loadXML() - Unable to load KivioGroupStencil" << endl;
             }
         }
         else if( name == "KivioPluginStencil" )
@@ -213,7 +212,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdDebug() << "KivioLayer - Unable to load KivioPluginStencil";
+	       kdDebug() << "KivioLayer - Unable to load KivioPluginStencil" << endl;
             }
         }
 

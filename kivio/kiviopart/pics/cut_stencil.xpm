@@ -1,5 +1,5 @@
 /* XPM */
-static char*cut_stencil_xpm[]={
+static const char*cut_stencil_xpm[]={
 "16 16 6 1",
 "b c #ffffff",
 "d c #cccccc",

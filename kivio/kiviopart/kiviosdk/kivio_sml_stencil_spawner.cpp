@@ -62,7 +62,7 @@ KivioSMLStencilSpawner::~KivioSMLStencilSpawner()
         m_pTargets = NULL;
     }
 
-    kdDebug() << "* SMLStencilSpawner %s "<< m_pInfo->title() << " deleted";
+    kdDebug() << "* SMLStencilSpawner %s "<< m_pInfo->title() << " deleted" << endl;
 }
 
 QDomElement KivioSMLStencilSpawner::saveXML( QDomDocument &doc )
@@ -84,7 +84,7 @@ bool KivioSMLStencilSpawner::load( const QString &file )
 
     if( f.open( IO_ReadOnly )==false )
     {
-       kdDebug() << "KivioSMLStencilSpawner::load() - Error opening stencil: " << file;
+       kdDebug() << "KivioSMLStencilSpawner::load() - Error opening stencil: " << file << endl;
         return false;
     }
 
@@ -125,7 +125,7 @@ bool KivioSMLStencilSpawner::load( const QString &file )
         }
         else
         {
-	   kdDebug() << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName;
+	   kdDebug() << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName << endl;
         }
         
         node = node.nextSibling();    

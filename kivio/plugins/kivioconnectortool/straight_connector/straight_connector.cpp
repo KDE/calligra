@@ -350,7 +350,7 @@ bool KivioStraightConnector::loadXML( const QDomElement &e )
 
     if( !m_pStart || !m_pEnd )
     {
-       kdDebug() << "KivioStraightConnector::loadXML() - missing m_start or m_end... gonna crash soon";
+       kdDebug() << "KivioStraightConnector::loadXML() - missing m_start or m_end... gonna crash soon" << endl;
         return false;
     }
 
