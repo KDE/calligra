@@ -230,7 +230,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
+    m_undo->setEnabled( FALSE );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
+    m_redo->setEnabled( FALSE );
     m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
     m_insertTable = new KAction( i18n("Insert Table"), 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
@@ -248,8 +250,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Replace..."), 0, this, SLOT( replace() ), actionCollection(), "replace" );
-     m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
-     m_series = new KAction( i18n("Series..."), 0, this, SLOT( series() ), actionCollection(), "series" );
+    m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
+    m_series = new KAction( i18n("Series..."), 0, this, SLOT( series() ), actionCollection(), "series" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_createAnchor = new KAction( i18n("Create Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
@@ -675,8 +677,8 @@ void KSpreadView::updateReadWrite( bool readwrite )
 #ifdef __GNUC_
 #warning TODO
 #endif
-  m_pCancelButton->setEnabled( readwrite );
-  m_pOkButton->setEnabled( readwrite );
+    // m_pCancelButton->setEnabled( readwrite );
+    // m_pOkButton->setEnabled( readwrite );
   m_pEditWidget->setEnabled( readwrite );
 
   QValueList<KAction*> actions = actionCollection()->actions();
@@ -685,6 +687,9 @@ void KSpreadView::updateReadWrite( bool readwrite )
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 
+  m_transform->setEnabled( false );
+  m_redo->setEnabled( false );
+  m_undo->setEnabled( false );
   m_showTable->setEnabled( true );
   m_hideTable->setEnabled( true );
   m_newView->setEnabled( true );
@@ -1363,7 +1368,6 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   if ( m_pTable == 0L )
     return;
 
-  qDebug("SET ACTIVE TABLE");
   m_pTabBar->setActiveTab( _t->tableName() );
 
   m_pVBorderWidget->repaint();
@@ -2110,7 +2114,9 @@ void KSpreadView::alignCenter( bool b )
 	m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
 }
 
-void KSpreadView::moneyFormat(bool b)
+// The bool parameter is skipped since setSelectionMoneyFormat toggles the money
+// format anyway.
+void KSpreadView::moneyFormat(bool)
 {
     if ( m_toolbarLock )
 	return;
@@ -2236,7 +2242,7 @@ void KSpreadView::slotAddTable( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateView( KSpreadTable *_table )
 {
-    qDebug("void KSpreadView::slotUdateView( KSpreadTable *_table )\n");
+    // qDebug("void KSpreadView::slotUdateView( KSpreadTable *_table )\n");
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2247,7 +2253,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
 {
-    qDebug("void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
+    // qDebug("void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2258,7 +2264,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
 
 void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
 {
-    qDebug("void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n");
+    // qDebug("void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n");
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2269,7 +2275,7 @@ void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
 {
-    qDebug("void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )\n");
+    // qDebug("void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )\n");
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2292,7 +2298,7 @@ void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &
 
 void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )
 {
-    qDebug("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QRect &_new %i %i|%i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_new.left(),_new.top(),_new.right(),_new.bottom());
+    // qDebug("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QRect &_new %i %i|%i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_new.left(),_new.top(),_new.right(),_new.bottom());
 
     // Emit a signal for internal use
     emit sig_selectionChanged( _table, _new );
@@ -2328,7 +2334,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 // ############ Not needed any more since the signal it connects to is not needed
 void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, int _col, int _row )
 {
-    qDebug("void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, _col=%i, _row=%i )\n",_col,_row);
+    // qDebug("void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, _col=%i, _row=%i )\n",_col,_row);
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -2346,7 +2352,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     if ( _table != m_pTable )
 	return;
 
-    qDebug("void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect &_old %i %i|%i %i\n",_old.left(),_old.top(),_old.right(),_old.bottom());
+    // qDebug("void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect &_old %i %i|%i %i\n",_old.left(),_old.top(),_old.right(),_old.bottom());
 
     QRect r( _old.x(), _old.y(), _old.width() + 1, _old.height() + 1 );
     m_pCanvas->updateCellRect( r );
@@ -2431,7 +2437,7 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
 
 void KSpreadView::enableFormulaToolBar( bool b )
 {
-    qDebug("TOOLBARS mode=%s", b ? "TRUE" : "FALSE" );
+    // qDebug("TOOLBARS mode=%s", b ? "TRUE" : "FALSE" );
     m_formulaPower->setEnabled( b );
     m_formulaSubscript->setEnabled( b );
     m_formulaParantheses->setEnabled( b );
