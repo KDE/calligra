@@ -139,6 +139,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     viewport()->setBackgroundMode( NoBackground );
 
     repaintScreen( true );
+    setFrameStyle( QFrame::NoFrame );
+    setLineWidth( 0 );
 }
 
 /*================================================================*/

@@ -2913,17 +2913,17 @@ void KWordView::slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf )
 }
 
 /*================================================================*/
-void KWordView::slotUpdateChildGeometry( KWordChild *_child )
+void KWordView::slotUpdateChildGeometry( KWordChild */*_child*/ )
 {
 }
 
 /*================================================================*/
-void KWordView::slotGeometryEnd( KoFrame* _frame )
+void KWordView::slotGeometryEnd( KoFrame* /*_frame*/ )
 {
 }
 
 /*================================================================*/
-void KWordView::slotMoveEnd( KoFrame* _frame )
+void KWordView::slotMoveEnd( KoFrame* /*_frame*/ )
 {
 }
 
