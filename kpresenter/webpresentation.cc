@@ -311,7 +311,7 @@ QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& str
     return EscapeSgmlText( codec, strText, true, false );
 }
 
-void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml, const QString& subtitle)
+void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle)
 {
     QString mimeName ( codec->mimeName() );
     if ( isXML() )
@@ -372,7 +372,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
-        writeStartOfHeader( streamOut, codec,  isXML() , slideInfos[ i ].slideTitle );
+        writeStartOfHeader( streamOut, codec, slideInfos[ i ].slideTitle );
 
         // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
@@ -487,7 +487,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
 
-    writeStartOfHeader( streamOut, codec,  isXML() , i18n("Table of Contents") );
+    writeStartOfHeader( streamOut, codec, i18n("Table of Contents") );
     streamOut << "</head>\n";
 
     streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";

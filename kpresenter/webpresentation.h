@@ -115,7 +115,7 @@ public:
 protected:
     void init();
     QString escapeHtmlText( QTextCodec *codec, const QString& strText ) const;
-    void writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml,
+    void writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec,
                             const QString& subtitle);
 
     KPresenterDoc *doc;
