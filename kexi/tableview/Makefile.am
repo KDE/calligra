@@ -4,20 +4,10 @@ libkexidatatable_la_SOURCES = kexitableedit.cpp kexitableheader.cpp kexitableite
 		kexiinputtableedit.cpp kexiblobtableedit.cpp
 
 
-
-
-
-
-
-
 libkexidatatable_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexidatatable_la_LIBADD = $(LIB_KOFFICEUI) 
 
 SUBDIRS = .
-
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
--DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
--DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT= -DKEXIDATATABLE_EXPORT=
 
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
@@ -44,3 +34,5 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKE
 INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi $(all_includes)
 
 METASOURCES = AUTO
+
+include $(top_srcdir)/kexi/Makefile.global

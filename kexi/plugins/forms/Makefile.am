@@ -6,10 +6,9 @@ kexihandler_form_la_LIBADD = ../../core/libkexicore.la  ../../formeditor/libkfor
 
 SUBDIRS = .
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-
 INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/datatable $(all_includes)
 
 METASOURCES = AUTO
 
+include $(top_srcdir)/kexi/Makefile.global

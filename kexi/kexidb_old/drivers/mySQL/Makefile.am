@@ -10,7 +10,7 @@ keximysqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lmysqlclient ../../libke
 
 keximysqlinterface_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L$(MYSQL_LIBDIR)
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXIDB_EXPORT= -DKDECORE_EXPORT= -DKEXI_MYSQL_IFACE_EXPORT=
 
 kde_services_DATA = keximysqlinterface.desktop
 
+include $(top_srcdir)/kexi/Makefile.global

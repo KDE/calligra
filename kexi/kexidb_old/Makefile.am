@@ -12,7 +12,6 @@ libkexidb_la_SOURCES = kexidbinterfacemanager.cpp kexidbfield.cpp kexidbrecordse
 libkexidb_la_LIBADD = $(LIB_KPARTS)
 libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) --no-undefined
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXIDB_EXPORT=
-
 kde_servicetypes_DATA = kexidbdriver.desktop
 
+include $(top_srcdir)/kexi/Makefile.global

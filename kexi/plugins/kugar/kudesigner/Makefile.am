@@ -8,10 +8,6 @@ kudesigner_kexiplugin_la_LIBADD =  ../../../core/libkexicore.la ../../../../kuga
 
 SUBDIRS = .
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
--DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
--DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT=
-
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
 # kde_sounddir        Where your sounds should go to.
@@ -39,3 +35,4 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 
 METASOURCES = AUTO
 
+include $(top_srcdir)/kexi/Makefile.global

@@ -13,7 +13,7 @@ kexitest_SOURCES = ctest.cpp
 kexitest_LDADD = $(LIB_KPARTS) $(LIB_QT) ../cql/sql/libcql.la kexicqlinterface.la
 kexitest_LDFLAGS = $(all_libraries)
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 kde_services_DATA = kexicqlinterface.desktop
 
+include $(top_srcdir)/kexi/Makefile.global

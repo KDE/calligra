@@ -10,8 +10,5 @@ libkexifilter_la_SOURCES = kexifiltermanager.cpp kexifilter.cpp
 
 libkexifilter_la_LIBADD =
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
--DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
--DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT=
 
-
+include $(top_srcdir)/kexi/Makefile.global

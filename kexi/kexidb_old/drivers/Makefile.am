@@ -8,3 +8,4 @@ endif
 #endif
 
 SUBDIRS = $(mysql_dir) #cql #$(pgsql_dir)
+
