@@ -333,14 +333,14 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(parag->document());
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     // Style of the previous paragraph
-    KWStyle * style = doc->findStyle( parag->styleName() );
+    KWStyle * style = doc->findStyle( parag->styleName(), true );
     // Obey "following style" setting
     bool styleApplied = false;
     if ( style && !style->followingStyle().isEmpty() )
     {
-        KWStyle * newStyle = doc->findStyle( style->followingStyle() );
+        KWStyle * newStyle = doc->findStyle( style->followingStyle(), true );
         if (!newStyle)
-            kdWarning() << "Style " << style->followingStyle() << " not found" << endl;
+            kdWarning() << "Following style " << style->followingStyle() << " not found" << endl;
         else if ( style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
@@ -350,6 +350,9 @@ void KWTextParag::copyParagData( QTextParag *_parag )
             styleApplied = true;
         }
     }
+    else if (!style)
+        kdWarning() << "Paragraph style " << parag->styleName() << " not found" << endl;
+
     // No "following style" setting, or same style -> copy layout & format of previous paragraph
     if (!styleApplied)
     {
