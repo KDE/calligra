@@ -1058,7 +1058,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>S	tandard deviation of the distribution</Comment>
+        <Comment>Standard deviation of the distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
