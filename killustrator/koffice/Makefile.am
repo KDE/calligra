@@ -1,4 +1,4 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I../share -I../
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I../share -I../filter -I../
 
 FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a

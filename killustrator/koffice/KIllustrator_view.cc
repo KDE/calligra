@@ -72,7 +72,11 @@
 #include "InsertClipartCmd.h"
 #include "InsertPixmapCmd.h"
 #include "SetPropertyCmd.h"
-// #include "FilterManager.h"
+#include "FilterManager.h"
+#include "ToCurveCmd.h"
+#include "BlendCmd.h"
+#include "BlendDialog.h"
+#include "OptionDialog.h"
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -83,6 +87,7 @@
 #include <qmessagebox.h>
 #include <qlayout.h>
 #include <unistd.h>
+#include <qfileinfo.h>
 
 #include <koPartSelectDia.h>
 #include <kaction.h>
@@ -134,11 +139,7 @@ KIllustratorView::~KIllustratorView()
 void KIllustratorView::createGUI()
 {
     setupCanvas ();
-    setupPopups ();
-    setUndoStatus (false, false);
-    QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
-		      SLOT(setUndoStatus(bool, bool)));
-
+    
     // File menu
     m_import = new KAction( i18n("Import"), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     m_export = new KAction( i18n("Export"), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
@@ -147,7 +148,7 @@ void KIllustratorView::createGUI()
     // Insert menu
     m_insertBitmap = new KAction( i18n("Insert Bitmap"), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
     m_insertClipart = new KAction( i18n("Insert Clipart"), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
-      
+
     // Edit menu
     m_copy = new KAction( i18n("Copy"), KIBarIcon("editcopy"), 0, this, SLOT( slotCopy() ), actionCollection(), "copy" );
     m_paste = new KAction( i18n("Paste"), KIBarIcon("editpaste"), 0, this, SLOT( slotPaste() ), actionCollection(), "paste" );
@@ -173,20 +174,22 @@ void KIllustratorView::createGUI()
     connect( m_showGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotShowGrid( bool ) ) );
     m_showHelplines = new KToggleAction( i18n("Show Helplines"), 0, actionCollection(), "showHelplines" );
     connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
-      
+
     // Layout menu
     m_page = new KAction( i18n("Page ..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
     m_grid = new KAction( i18n("Grid ..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
     m_helplines = new KAction( i18n("Helplines ..."), 0, this, SLOT( slotHelplined() ), actionCollection(), "helplines" );
-    m_alignToGrid = new KAction( i18n("Align To Grid"), 0, this, SLOT( slotAlignToGrid() ), actionCollection(), "alignToGrid" );
-    m_alignToHelplines = new KAction( i18n("Align To Helplines"), 0, this, SLOT( slotAlignToHelplines() ), actionCollection(), "alignToHelplines" );
-	
+    m_alignToGrid = new KToggleAction( i18n("Align To Grid"), 0, actionCollection(), "alignToGrid" );
+    connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
+    m_alignToHelplines = new KToggleAction( i18n("Align To Helplines"), 0, actionCollection(), "alignToHelplines" );
+    connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
+	    
     // Transform menu
     m_transformPosition = new KAction( i18n("Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
     m_transformDimension = new KAction( i18n("Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
     m_transformRotation = new KAction( i18n("Rotation ..."), 0, this, SLOT( slotTransformRotation() ), actionCollection(), "transformRotation" );
     m_transformMirror = new KAction( i18n("Mirror ..."), 0, this, SLOT( slotTransformMirror() ), actionCollection(), "transformMirror" );
-  
+
     // Arrange menu
     m_distribute = new KAction( i18n("Align/Distribute ..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
     m_toFront = new KAction( i18n("To Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront" );
@@ -200,7 +203,7 @@ void KIllustratorView::createGUI()
 
     // Effects menu
     m_blend = new KAction( i18n("Blend ..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
-    
+
     // Extras menu
     m_options = new KAction( i18n("Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
 
@@ -250,7 +253,7 @@ void KIllustratorView::createGUI()
     m_zoomTool = new KToggleAction( i18n("Zoom Tool"), KIBarIcon("zoomtool"), 0, actionCollection(), "zoomTool" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
-    
+
     // Node Toolbar
     m_moveNode = new KToggleAction( i18n("Move Node "), KIBarIcon("moveNode"), 0, actionCollection(), "moveNode" );
     m_moveNode->setExclusiveGroup( "Node" );
@@ -264,27 +267,37 @@ void KIllustratorView::createGUI()
     m_splitLine = new KToggleAction( i18n("Move Node "), KIBarIcon("split"), 0, actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
-    
+
+    m_selectTool->setChecked( TRUE );
+    m_normal->setChecked( TRUE );
+    m_showRuler->setChecked( TRUE );
+    m_showHelplines->setChecked( TRUE );
+    m_showGrid->setChecked( TRUE );
+
     // Disable node actions
     slotPointTool( FALSE );
+
+    setupPopups ();
+    setUndoStatus (false, false);
+    QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
+		      SLOT(setUndoStatus(bool, bool)));
 }
 
 void KIllustratorView::setupPopups()
 {
-  objMenu = new QPopupMenu ();
-  objMenu->insertItem (i18n ("Copy"), this, SLOT (editCopySlot ()));
-  objMenu->insertItem (i18n ("Cut"), this, SLOT (editCutSlot ()));
-  objMenu->insertSeparator ();
-  objMenu->insertItem (i18n ("Properties..."), this,
-		       SLOT (editPropertiesSlot ()));
-  objMenu->insertSeparator ();
-  objMenu->insertItem (i18n ("Align"), this, SLOT (arrangeAlignSlot ()));
-  objMenu->insertSeparator ();
-  objMenu->insertItem (i18n ("To Front"), this, SLOT (arrangeToFrontSlot ()));
-  objMenu->insertItem (i18n ("To Back"), this, SLOT (arrangeToBackSlot ()));
-  objMenu->insertItem (i18n ("Forward One"), this,
-		       SLOT (arrangeOneForwardSlot ()));
-  objMenu->insertItem (i18n ("Back One"), this, SLOT (arrangeOneBackSlot ()));
+    objMenu = new QPopupMenu ();
+    m_copy->plug( objMenu );
+    m_cut->plug( objMenu );
+    objMenu->insertSeparator ();
+    m_properties->plug( objMenu );
+    objMenu->insertSeparator ();
+    m_distribute->plug( objMenu );
+    objMenu->insertSeparator ();
+    m_distribute->plug( objMenu );
+    m_toFront->plug( objMenu );
+    m_toBack->plug( objMenu );
+    m_forwardOne->plug( objMenu );
+    m_backOne->plug( objMenu );
 }
 
 void KIllustratorView::setupCanvas()
@@ -390,8 +403,8 @@ void KIllustratorView::setupCanvas()
   QObject::connect (insertPartTool, SIGNAL(operationDone ()),
 		    this, SLOT (resetTools ()));
 
-  tcontroller->toolSelected (ID_TOOL_SELECT);
-  m_idActiveTool = ID_TOOL_SELECT;
+  tcontroller->toolSelected( ID_TOOL_SELECT );
+  // m_idActiveTool = ID_TOOL_SELECT;
 
   canvas->setToolController (tcontroller);
   grid->activate ();
@@ -399,40 +412,31 @@ void KIllustratorView::setupCanvas()
   mainWidget = w;
 }
 
+/*
 void KIllustratorView::showCurrentMode (const char* ) {
     //  statusbar->changeItem (msg, 2);
 }
-
-
+*/
+/*
 void KIllustratorView::newView ()
 {
     m_pDoc->createShell();
 }
-
+*/
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
-    // ########## Torben
-    /* if (! CORBA::is_nil (m_vMenuEdit)) {
-    // we do this " " trick to avoid double translation of "Undo" and "Undo "
-    m_vMenuEdit->setItemEnabled (m_idMenuEdit_Undo, undoPossible);
-
-    QString text;
-
+    m_undo->setEnabled( undoPossible );
+    m_redo->setEnabled( redoPossible );
+    
     QString label = i18n ("Undo");
     if (undoPossible)
       label += " " + cmdHistory.getUndoName ();
-    text = label;
-    m_vMenuEdit->changeItemText (text, m_idMenuEdit_Undo);
-
-    m_vMenuEdit->setItemEnabled (m_idMenuEdit_Redo, redoPossible);
+    m_undo->setText( label );
 
     label = i18n ("Redo");
     if (redoPossible)
       label += " " + cmdHistory.getRedoName ();
-
-    text = label;
-    m_vMenuEdit->changeItemText (text, m_idMenuEdit_Redo);
-    } */
+    m_redo->setText( label );
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* )
@@ -473,81 +477,13 @@ void KIllustratorView::showTransformationDialog( int id )
 }
 
 
-bool KIllustratorView::printDlg () {
-  canvas->printDocument ();
-  return true;
+bool KIllustratorView::printDlg()
+{
+    canvas->printDocument ();
+    return true;
 }
 
-void KIllustratorView::editCutSlot () {
-  editCut ();
-}
-
-void KIllustratorView::editCopySlot () {
-  editCopy ();
-}
-
-void KIllustratorView::editPropertiesSlot () {
-  editProperties ();
-}
-
-void KIllustratorView::arrangeAlignSlot () {
-  arrangeAlign ();
-}
-
-void KIllustratorView::arrangeToFrontSlot () {
-  arrangeToFront ();
-}
-
-void KIllustratorView::arrangeToBackSlot () {
-  arrangeToBack ();
-}
-
-void KIllustratorView::arrangeOneForwardSlot () {
-  arrangeOneForward ();
-}
-
-void KIllustratorView::arrangeOneBackSlot () {
-  arrangeOneBack ();
-}
-
-void KIllustratorView::editUndo () {
-  cmdHistory.undo ();
-  //  m_rToolBarTools->setButton (m_idActiveTool, false);
-  //  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
-  resetTools ();
-}
-
-void KIllustratorView::editRedo () {
-  cmdHistory.redo ();
-  //  m_rToolBarTools->setButton (m_idActiveTool, false);
-  //  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
-  resetTools ();
-}
-
-void KIllustratorView::editCut () {
-  cmdHistory.addCommand (new CutCmd (m_pDoc->gdoc()), true);
-}
-
-void KIllustratorView::editCopy () {
-  cmdHistory.addCommand (new CopyCmd (m_pDoc->gdoc()), true);
-}
-
-void KIllustratorView::editPaste () {
-  cmdHistory.addCommand (new PasteCmd (m_pDoc->gdoc()), true);
-}
-
-void KIllustratorView::editSelectAll () {
-  m_pDoc->gdoc()->selectAllObjects ();
-}
-
-void KIllustratorView::editDelete () {
-  cmdHistory.addCommand (new DeleteCmd (m_pDoc->gdoc()), true);
-}
-
-void KIllustratorView::editDuplicate () {
-  cmdHistory.addCommand (new DuplicateCmd (m_pDoc->gdoc()), true);
-}
-
+/*
 void KIllustratorView::editInsertObject ()
 {
     m_pDoc->gdoc()->unselectAllObjects();
@@ -559,148 +495,9 @@ void KIllustratorView::editInsertObject ()
     // ####### Torben
     // tcontroller->toolSelected (m_idActiveTool = ID_TOOL_INSERTPART);
 }
+*/
 
-void KIllustratorView::editInsertClipart () {
-  QString fname = KFilePreviewDialog::getOpenFileName
-    (QString::null, "*.wmf *.WMF | Windows Metafiles", this);
-  if (! fname.isEmpty ()) {
-    InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc->gdoc(),
-						  (const char *) fname);
-    cmdHistory.addCommand (cmd, true);
-  }
-}
-
-void KIllustratorView::editInsertBitmap () {
-  QString fname = KFilePreviewDialog::getOpenFileName
-    (QString::null, "*.gif *.GIF | GIF Images\n"
-     "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
-     "*.png | PNG Images\n"
-     "*.xbm | X11 Bitmaps\n"
-     "*.xpm | X11 Pixmaps",
-     this);
-  if (! fname.isEmpty ()) {
-    InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(),
-						(const char *) fname);
-    cmdHistory.addCommand (cmd, true);
-  }
-}
-
-void KIllustratorView::editProperties () {
-  int result = 1;
-
-  if (m_pDoc->gdoc()->selectionIsEmpty ()) {
-    result = QMessageBox::warning (this, i18n("Warning"),
-				   i18n ("This action will set the default\n"
-					 "properties for new objects !\n"
-					 "Would you like to do it ?"),
-				   i18n ("Yes"), i18n ("No"));
-  }
-  if (result == 0)
-    PropertyEditor::edit (&cmdHistory, m_pDoc->gdoc());
-}
-
-void KIllustratorView::toggleRuler () {
-  m_bShowRulers = !m_bShowRulers;
-  // ##### Torben
-  // m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
-  if (m_bShowRulers) {
-    hRuler->show ();
-    vRuler->show ();
-  }
-  else {
-    hRuler->hide ();
-    vRuler->hide ();
-  }
-  // recalculate layout
-  grid->activate ();
-  resizeEvent (0L);
-}
-
-void KIllustratorView::arrangeAlign () {
-  AlignmentDialog::alignSelection (m_pDoc->gdoc(), &cmdHistory);
-}
-
-void KIllustratorView::arrangeToFront () {
-  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ToFront), true);
-}
-
-void KIllustratorView::arrangeToBack () {
-  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ToBack), true);
-}
-
-void KIllustratorView::arrangeOneForward () {
-  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ForwardOne), true);
-}
-
-void KIllustratorView::arrangeOneBack () {
-  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_BackwardOne), true);
-}
-
-void KIllustratorView::arrangeGroup () {
-  cmdHistory.addCommand (new GroupCmd (m_pDoc->gdoc()), true);
-}
-
-void KIllustratorView::arrangeUngroup () {
-  cmdHistory.addCommand (new UngroupCmd (m_pDoc->gdoc()), true);
-}
-
-void KIllustratorView::arrangeTextAlongPath () {
-    // ####### Torben
-    // tcontroller->toolSelected (m_idActiveTool = ID_TOOL_PATHTEXT);
-}
-
-void KIllustratorView::transformPosition () {
-  showTransformationDialog (0);
-}
-
-void KIllustratorView::transformDimension () {
-  showTransformationDialog (1);
-}
-
-void KIllustratorView::transformRotation () {
-  showTransformationDialog (2);
-}
-
-void KIllustratorView::transformMirror () {
-  showTransformationDialog (3);
-}
-
-void KIllustratorView::toggleGrid () {
-  bool gridIsShown = ! canvas->showGrid ();
-  canvas->showGrid (gridIsShown);
-  // ###### Torben
-  // m_vMenuView->setItemChecked (m_idMenuView_Grid, gridIsShown);
-}
-
-void KIllustratorView::toggleHelplines () {
-  bool linesAreShown = ! canvas->showHelplines ();
-  canvas->showHelplines (linesAreShown);
-  // ###### Torben
-  // m_vMenuView->setItemChecked (m_idMenuView_Helplines, linesAreShown);
-}
-
-void KIllustratorView::setupGrid () {
-  GridDialog::setupGrid (canvas);
-}
-
-void KIllustratorView::alignToGrid () {
-  bool snap = ! canvas->snapToGrid ();
-  canvas->snapToGrid (snap);
-  // ###### Torben
-  // m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
-}
-
-void KIllustratorView::setupHelplines () {
-  HelplineDialog::setup (canvas);
-}
-
-void KIllustratorView::alignToHelplines () {
-  bool snap = ! canvas->alignToHelplines ();
-  canvas->alignToHelplines (snap);
-  // ###### Torben
-  // m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, snap);
-}
-
+/*
 void KIllustratorView::setPenColor (long int id) {
   short int red, green, blue;
   bool fill;
@@ -731,7 +528,8 @@ void KIllustratorView::setPenColor (long int id) {
       GObject::setDefaultOutlineInfo (oInfo);
   }
 }
-
+*/
+/*
 void KIllustratorView::setFillColor (long int id) {
   short int red, green, blue;
   bool fill;
@@ -763,86 +561,9 @@ void KIllustratorView::setFillColor (long int id) {
       GObject::setDefaultFillInfo (fInfo);
   }
 }
+*/
 
-void KIllustratorView::editLayers () {
-  if (!layerDialog)
-    layerDialog = new LayerDialog ();
-  layerDialog->manageDocument (m_pDoc->gdoc());
-  layerDialog->show ();
-}
-
-void KIllustratorView::toolSelection () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_SELECT); */
-}
-
-void KIllustratorView::toolEditPoint () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  toolMovePoint ();
-  m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, true);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Show);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_EDITPOINT); */
-}
-
-void KIllustratorView::toolFreehandLine () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_FREEHAND); */
-}
-
-void KIllustratorView::toolPolyline () {
-      // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_LINE); */
-}
-
-void KIllustratorView::toolBezier () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_BEZIER); */
-}
-
-void KIllustratorView::toolRectangle () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_RECTANGLE); */
-}
-
-void KIllustratorView::toolPolygon () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_POLYGON); */
-}
-
-void KIllustratorView::toolEllipse () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_ELLIPSE); */
-}
-
-void KIllustratorView::toolText () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_TEXT); */
-}
-
-void KIllustratorView::toolZoom () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_ZOOM); */
-}
-
+/*
 void KIllustratorView::configPolygonTool () {
     // ###### Torben
     // tcontroller->configureTool (ID_TOOL_POLYGON);
@@ -852,70 +573,26 @@ void KIllustratorView::configEllipseTool () {
     // ###### Torben
     // tcontroller->configureTool (ID_TOOL_ELLIPSE);
 }
+*/
 
-void KIllustratorView::viewOutline () {
-  canvas->setOutlineMode (true);
-  // ###### Torben
-  // m_vMenuView->setItemChecked (m_idMenuView_Outline, true);
-  // m_vMenuView->setItemChecked (m_idMenuView_Normal, false);
-}
-
-void KIllustratorView::viewNormal () {
-  canvas->setOutlineMode (false);
-  // ###### Torben
-  // m_vMenuView->setItemChecked (m_idMenuView_Outline, false);
-  // m_vMenuView->setItemChecked (m_idMenuView_Normal, true);
-}
-
-void KIllustratorView::setupPage () {
-  KoPageLayout pLayout = m_pDoc->gdoc()->pageLayout ();
-  KoHeadFoot header;
-
-  if (KoPageLayoutDia::pageLayout (pLayout, header,
-				   FORMAT_AND_BORDERS))
-    m_pDoc->gdoc()->setPageLayout (pLayout);
-}
-
+/*
 void KIllustratorView::zoomSizeSelected (const QString & s)
 {
   float value = s.toFloat();
   if (canvas)
     canvas->setZoomFactor (value / 100.0);
 }
+*/
 
 void KIllustratorView::popupForSelection (int, int )
 {
-  objMenu->popup (QCursor::pos ());
+    objMenu->popup( QCursor::pos () );
 }
 
-void KIllustratorView::toolMovePoint ()
+
+void KIllustratorView::resetTools()
 {
-  editPointTool->setMode (EditPointTool::MovePoint);
-  // ###### Torben
-  // m_vToolBarEditPoint->setButton (ID_TOOL_EP_INSERT, false);
-  // m_vToolBarEditPoint->setButton (ID_TOOL_EP_DELETE, false);
-}
-
-void KIllustratorView::toolInsertPoint () {
-  editPointTool->setMode (EditPointTool::InsertPoint);
-  // ###### Torben
-  // m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, false);
-  // m_vToolBarEditPoint->setButton (ID_TOOL_EP_DELETE, false);
-}
-
-void KIllustratorView::toolRemovePoint () {
-  editPointTool->setMode (EditPointTool::RemovePoint);
-  // ###### Torben
-  // m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, false);
-  // m_vToolBarEditPoint->setButton (ID_TOOL_EP_INSERT, false);
-}
-
-void KIllustratorView::resetTools () {
-    // ###### Torben
-    /* m_vToolBarTools->setButton (m_idActiveTool, false);
-  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
-  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_SELECT);
-  m_vToolBarTools->setButton (m_idActiveTool, true); */
+    m_selectTool->setEnabled( TRUE );
 }
 
 // void KIllustratorView::activatePart (GObject *obj) {
@@ -939,19 +616,13 @@ void KIllustratorView::resetTools () {
     } */
 // }
 
-void KIllustratorView::showScripts () {
-  if (!scriptDialog)
-    scriptDialog = new ScriptDialog ();
-  scriptDialog->setActiveDocument (m_pDoc->gdoc());
-  scriptDialog->show ();
-  scriptDialog->loadScripts ();
-}
 
 GDocument* KIllustratorView::activeDocument()
 {
     return m_pDoc->gdoc();
 }
 
+/*
 void KIllustratorView::insertPartSlot( KIllustratorChild *, GPart *)
 {
 }
@@ -959,48 +630,419 @@ void KIllustratorView::insertPartSlot( KIllustratorChild *, GPart *)
 void KIllustratorView::changeChildGeometrySlot(KIllustratorChild *)
 {
 }
+*/
 
-void KIllustratorView::slotImport() { }
-void KIllustratorView::slotExport() { }
-void KIllustratorView::slotInsertBitmap() { }
-void KIllustratorView::slotInsertClipart() { }
-void KIllustratorView::slotCopy() { }
-void KIllustratorView::slotPaste() { }
-void KIllustratorView::slotCut() { }
-void KIllustratorView::slotUndo() { }
-void KIllustratorView::slotRedo() { }
-void KIllustratorView::slotDuplicate() { }
-void KIllustratorView::slotDelete() { }
-void KIllustratorView::slotSelectAll() { }
-void KIllustratorView::slotProperties() { }
-void KIllustratorView::slotOutline( bool ) { }
-void KIllustratorView::slotNormal( bool ) { }
-void KIllustratorView::slotShowRuler( bool ) { }
-void KIllustratorView::slotShowGrid( bool ) { }
-void KIllustratorView::slotShowHelplines( bool ) { }
-void KIllustratorView::slotPage() { }
-void KIllustratorView::slotGrid() { }
-void KIllustratorView::slotHelplines() { }
-void KIllustratorView::slotAlignToGrid() { }
-void KIllustratorView::slotAlignToHelplines() { }
-void KIllustratorView::slotTransformPosition() { }
-void KIllustratorView::slotTransformDimension() { }
-void KIllustratorView::slotTransformRotation() { }
-void KIllustratorView::slotTransformMirror() { }
-void KIllustratorView::slotDistribute() { }
-void KIllustratorView::slotToFront() { }
-void KIllustratorView::slotToBack() { }
-void KIllustratorView::slotForwardOne() { }
-void KIllustratorView::slotBackOne() { }
-void KIllustratorView::slotGroup() { }
-void KIllustratorView::slotUngroup() { }
-void KIllustratorView::slotTextAlongPath() { }
-void KIllustratorView::slotConvertToCurve() { }
-void KIllustratorView::slotBlend() { }
-void KIllustratorView::slotOptions() { }
-void KIllustratorView::slotBrushChosen( const QColor & ) { }
-void KIllustratorView::slotPenChosen( const QColor & ) { }
-void KIllustratorView::slotSelectTool( bool ) { }
+QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
+{
+    const char *defaultExt = 0L;
+    QString extension;
+
+    if (! lastExport.isEmpty ()) {
+	int pos = lastExport.findRev ('.', -1, false);
+	if (pos != -1) {
+	    extension =
+		lastExport.right (lastExport.length () - pos - 1);
+	    defaultExt = (const char *) extension;
+	}
+    }
+    QString filter = filterMgr->exportFilters (defaultExt);
+
+    KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir,
+					(const char *) filter, this,
+					0L, true, false);
+    dlg->setCaption (i18n ("Save As"));
+    if (! lastExport.isEmpty ()) {
+	dlg->setSelection ((const char *) lastExport);
+    }
+    QString filename;
+
+    if (dlg->exec() == QDialog::Accepted) {
+      filename = dlg->selectedFile ();
+      QFileInfo finfo (filename);
+      lastExportDir = finfo.dirPath ();
+    }
+
+    delete dlg;
+
+    return filename;
+}
+
+// ---------------------------------------- actions
+
+void KIllustratorView::slotImport()
+{
+    FilterManager* filterMgr = FilterManager::instance ();
+    QString filter = filterMgr->importFilters ();
+
+    QString fname = KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir,
+							 (const char *) filter, this);
+    if (! fname.isEmpty ())
+    {
+	QFileInfo finfo ((const char *) fname);
+	if (!finfo.isFile () || !finfo.isReadable ())
+	    return;
+
+	lastImportDir = finfo.dirPath ();
+	FilterInfo* filterInfo = filterMgr->findFilter (fname,
+							FilterInfo::FKind_Import);
+	if (filterInfo)
+        {
+	    ImportFilter* filter = filterInfo->importFilter ();
+	    if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
+	    {
+		filter->setInputFileName (fname);
+		filter->importFromFile (m_pDoc->gdoc());
+	    }
+	    else
+		QMessageBox::critical (this, i18n ("KIllustrator Error"),
+				       i18n ("Cannot import from file"), i18n ("OK"));
+	}
+	else
+	    QMessageBox::critical (this, i18n ("KIllustrator Error"),
+				   i18n ("Unknown import format"), i18n ("OK"));
+    }
+    
+    resetTools ();
+}
+
+void KIllustratorView::slotExport()
+{
+    FilterManager* filterMgr = FilterManager::instance ();
+    QString filter = filterMgr->exportFilters ();
+
+    QString fname = getExportFileName (filterMgr);
+
+    if (! fname.isEmpty ())
+    {
+	FilterInfo* filterInfo = filterMgr->findFilter (fname,
+							FilterInfo::FKind_Export);
+
+	if (filterInfo)
+        {
+	    ExportFilter* filter = filterInfo->exportFilter ();
+	    if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
+	    {
+		filter->setOutputFileName (fname);
+		filter->exportToFile (m_pDoc->gdoc());
+		lastExport = fname;
+	    }
+	    else
+		QMessageBox::critical (this, i18n ("KIllustrator Error"),
+				       i18n ("Cannot export to file"), i18n ("OK"));
+	}
+	else
+	    QMessageBox::critical (this, i18n ("KIllustrator Error"),
+				   i18n ("Unknown export format"), i18n ("OK"));
+    }
+    resetTools ();
+}
+
+void KIllustratorView::slotInsertBitmap()
+{
+    QString fname = KFilePreviewDialog::getOpenFileName
+		    ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+							"*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+							"*.png | PNG Images\n"
+							"*.xbm | X11 Bitmaps\n"
+							"*.xpm | X11 Pixmaps"),
+		     this);
+    if (! fname.isEmpty ()) {
+	QFileInfo finfo (fname);
+	lastBitmapDir = finfo.dirPath ();
+	InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(),
+						    (const char *) fname);
+	 cmdHistory.addCommand (cmd, true);
+    }
+}
+
+void KIllustratorView::slotInsertClipart()
+{
+    QString fname = KFilePreviewDialog::getOpenFileName
+		    ((const char *) lastClipartDir,
+		     i18n("*.wmf *.WMF | Windows Metafiles"), this);
+    if ( !fname.isEmpty ())
+    {
+        QFileInfo finfo (fname);
+        lastClipartDir = finfo.dirPath ();
+	InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc->gdoc(),
+						      (const char *) fname);
+	cmdHistory.addCommand (cmd, true);
+    }
+}
+
+void KIllustratorView::slotCopy()
+{
+    cmdHistory.addCommand (new CopyCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotPaste()
+{
+    cmdHistory.addCommand (new PasteCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotCut()
+{
+    cmdHistory.addCommand (new CutCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotUndo()
+{
+    cmdHistory.undo ();
+    resetTools ();
+}
+
+void KIllustratorView::slotRedo()
+{
+    cmdHistory.redo ();
+    resetTools ();
+}
+
+void KIllustratorView::slotDuplicate()
+{
+    cmdHistory.addCommand (new DuplicateCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotDelete()
+{
+    cmdHistory.addCommand (new DeleteCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotSelectAll()
+{
+    m_pDoc->gdoc()->selectAllObjects ();
+}
+
+void KIllustratorView::slotProperties()
+{
+    int result = 0;
+
+    if (m_pDoc->gdoc()->selectionIsEmpty ())
+    {
+	result = QMessageBox::warning (this, i18n("Warning"),
+				       i18n ("This action will set the default\n"
+					     "properties for new objects !\n"
+					     "Would you like to do it ?"),
+				       i18n ("Yes"), i18n ("No"));
+    }
+    if (result == 0)
+	PropertyEditor::edit( &cmdHistory, m_pDoc->gdoc() );
+}
+
+void KIllustratorView::slotOutline( bool )
+{
+    canvas->setOutlineMode (true);
+}
+
+void KIllustratorView::slotNormal( bool )
+{
+    canvas->setOutlineMode (false);
+}
+
+void KIllustratorView::slotShowRuler( bool b )
+{
+    m_bShowRulers = b;
+
+    if (m_bShowRulers)
+    {
+	hRuler->show ();
+	vRuler->show ();
+    }
+    else
+    {
+	hRuler->hide ();
+	vRuler->hide ();
+    }
+    // recalculate layout
+    grid->activate ();
+    resizeEvent (0L);
+}
+
+void KIllustratorView::slotShowGrid( bool b )
+{
+    canvas->showGrid( b );
+}
+
+void KIllustratorView::slotShowHelplines( bool b )
+{
+    canvas->showHelplines( b );
+}
+
+void KIllustratorView::slotPage()
+{
+    KoPageLayout pLayout = m_pDoc->gdoc()->pageLayout ();
+    KoHeadFoot header;
+
+    if (KoPageLayoutDia::pageLayout (pLayout, header, FORMAT_AND_BORDERS))
+	m_pDoc->gdoc()->setPageLayout (pLayout);
+}
+
+void KIllustratorView::slotGrid()
+{
+    GridDialog::setupGrid (canvas);
+}
+
+void KIllustratorView::slotHelplines()
+{
+    HelplineDialog::setup (canvas);
+}
+
+void KIllustratorView::slotAlignToGrid( bool b )
+{
+    canvas->snapToGrid( b );
+}
+
+void KIllustratorView::slotAlignToHelplines( bool b )
+{
+    canvas->alignToHelplines( b );
+}
+
+void KIllustratorView::slotTransformPosition()
+{
+    showTransformationDialog( 0 );
+}
+
+void KIllustratorView::slotTransformDimension()
+{
+    showTransformationDialog( 1 );
+}
+
+void KIllustratorView::slotTransformRotation()
+{
+    showTransformationDialog( 2 );
+}
+
+void KIllustratorView::slotTransformMirror()
+{
+    showTransformationDialog( 3 );
+}
+
+void KIllustratorView::slotDistribute()
+{
+    AlignmentDialog::alignSelection (m_pDoc->gdoc(), &cmdHistory);
+}
+
+void KIllustratorView::slotToFront()
+{
+    cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ToFront), true);
+}
+
+void KIllustratorView::slotToBack()
+{
+    cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ToBack), true);
+}
+
+void KIllustratorView::slotForwardOne()
+{
+    cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ForwardOne), true);
+}
+
+void KIllustratorView::slotBackOne()
+{
+    cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_BackwardOne), true);
+}
+
+void KIllustratorView::slotGroup()
+{
+    cmdHistory.addCommand (new GroupCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotUngroup()
+{
+    cmdHistory.addCommand (new UngroupCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotTextAlongPath()
+{
+    tcontroller->toolSelected (ID_TOOL_PATHTEXT);
+}
+
+void KIllustratorView::slotConvertToCurve()
+{
+    if ( !m_pDoc->gdoc()->selectionIsEmpty() )
+	cmdHistory.addCommand (new ToCurveCmd (m_pDoc->gdoc()), true);
+}
+
+void KIllustratorView::slotBlend()
+{
+    if ( m_pDoc->gdoc()->selectionCount () == 2)
+    {
+	int steps = BlendDialog::getNumOfSteps ();
+	if (steps > 0)
+	    cmdHistory.addCommand (new BlendCmd (m_pDoc->gdoc(), steps), true);
+    }
+}
+
+void KIllustratorView::slotOptions()
+{
+    OptionDialog::setup ();
+}
+
+void KIllustratorView::slotBrushChosen( const QColor & c )
+{
+    // #### Torben: ..... hmmmmm
+    bool fill = TRUE;
+    
+    GObject::OutlineInfo oInfo;
+    oInfo.mask = 0;
+
+    GObject::FillInfo fInfo;
+    fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
+    fInfo.color = c;
+    fInfo.fstyle = fill ? GObject::FillInfo::SolidFill :
+	GObject::FillInfo::NoFill;
+
+    if ( !m_pDoc->gdoc()->selectionIsEmpty () )
+    {
+	SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
+	cmdHistory.addCommand (cmd, true);
+    }
+    else
+    {
+	int result = QMessageBox::warning(this, i18n("Warning"),
+					  i18n ("This action will set the default\n"
+						"properties for new objects !\n"
+						"Would you like to do it ?"),
+					  i18n ("Yes"), i18n ("No"));
+	if (result == 0)
+	    GObject::setDefaultFillInfo (fInfo);
+    }
+}
+
+void KIllustratorView::slotPenChosen( const QColor & c  )
+{
+    // #### Torben: ..... hmmmmm
+    bool fill = TRUE;
+    
+    GObject::OutlineInfo oInfo;
+    oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
+    oInfo.color = c                        ;
+    oInfo.style = fill ? SolidLine : NoPen;
+
+    GObject::FillInfo fInfo;
+    fInfo.mask = 0;
+
+    if (! m_pDoc->gdoc()->selectionIsEmpty () )
+    {
+	SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
+	cmdHistory.addCommand (cmd, true);
+    }
+    else
+    {
+	int result = QMessageBox::warning (this, i18n("Warning"),
+					   i18n ("This action will set the default\n"
+						 "properties for new objects !\n"
+						 "Would you like to do it ?"),
+					   i18n ("Yes"), i18n ("No"));
+	if (result == 0)
+	    GObject::setDefaultOutlineInfo (oInfo);
+    }
+}
+
+void KIllustratorView::slotSelectTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_SELECT );
+}
 
 void KIllustratorView::slotPointTool( bool b )
 {
@@ -1008,19 +1050,91 @@ void KIllustratorView::slotPointTool( bool b )
     m_newNode->setEnabled( b );
     m_deleteNode->setEnabled( b );
     m_splitLine->setEnabled( b );
+    
+    if ( b )
+	slotMoveNode( TRUE );
+
+    tcontroller->toolSelected( ID_TOOL_EDITPOINT );
 }
 
-void KIllustratorView::slotFreehandTool( bool ) { }
-void KIllustratorView::slotLineTool( bool ) { }
-void KIllustratorView::slotBezierTool( bool ) { }
-void KIllustratorView::slotRectTool( bool ) { }
-void KIllustratorView::slotPolygonTool( bool ) { }
-void KIllustratorView::slotEllipseTool( bool ) { }
-void KIllustratorView::slotTextTool( bool ) { }
-void KIllustratorView::slotZoomTool( bool ) { }
-void KIllustratorView::slotMoveNode( bool ) { }
-void KIllustratorView::slotNewNode( bool ) { }
-void KIllustratorView::slotDeleteNode( bool ) { }
-void KIllustratorView::slotSplitLine( bool ) { }
+void KIllustratorView::slotFreehandTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_FREEHAND );
+}
+
+void KIllustratorView::slotLineTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_LINE);
+}
+
+void KIllustratorView::slotBezierTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_BEZIER);
+}
+
+void KIllustratorView::slotRectTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_RECTANGLE );
+}
+
+void KIllustratorView::slotPolygonTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_POLYGON );
+}
+
+void KIllustratorView::slotEllipseTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_ELLIPSE );
+}
+
+void KIllustratorView::slotTextTool( bool b )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_TEXT );
+}
+
+void KIllustratorView::slotZoomTool( bool b  )
+{
+    if ( b )
+	tcontroller->toolSelected( ID_TOOL_ZOOM );
+}
+
+void KIllustratorView::slotMoveNode( bool b )
+{
+    if ( b )
+	editPointTool->setMode (EditPointTool::MovePoint);
+}
+
+void KIllustratorView::slotNewNode( bool b )
+{
+    if ( b )
+	editPointTool->setMode (EditPointTool::InsertPoint);
+}
+
+void KIllustratorView::slotDeleteNode( bool b )
+{
+    if ( b )
+	editPointTool->setMode (EditPointTool::RemovePoint);
+}
+
+void KIllustratorView::slotSplitLine( bool b )
+{
+    if ( b )
+        editPointTool->setMode (EditPointTool::Split);
+}
+
+void KIllustratorView::slotLayers()
+{
+    if (!layerDialog)
+	layerDialog = new LayerDialog ();
+    layerDialog->manageDocument (m_pDoc->gdoc());
+    layerDialog->show ();
+}
 
 #include "KIllustrator_view.moc"

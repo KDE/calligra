@@ -25,6 +25,7 @@
 #include "KIllustrator_doc.h"
 #include "KIllustrator_view.h"
 #include "KIllustrator_shell.h"
+#include "KIllustrator_factory.h"
 
 #include "GDocument.h"
 #include "GPart.h"
@@ -33,6 +34,7 @@
 #include <qmessagebox.h>
 
 #include <klocale.h>
+#include <kstddirs.h>
 
 #include <koQueryTypes.h>
 #include <koStore.h>
@@ -192,12 +194,15 @@ void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, b
 {
     Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width(), (float)rect.height() );
 
+    if ( !transparent )
+	painter.fillRect( rect, white );
     m_gdocument->drawContentsInRegion( painter, r );
 }
 
 QString KIllustratorDocument::configFile() const
 {
-    return readConfigFile( "KIllustrator.rc" );
+    return readConfigFile( locate( "data", "killustrator/KIllustrator.rc", KIllustratorFactory::global() ) );
+    // return readConfigFile( "KIllustrator.rc" );
 }
 
 GDocument* KIllustratorDocument::gdoc()

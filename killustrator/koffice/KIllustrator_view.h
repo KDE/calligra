@@ -75,6 +75,7 @@ class EditPointTool;
 class InsertPartTool;
 class GPart;
 class QGridLayout;
+class FilterManager;
 
 class KAction;
 class KToggleAction;
@@ -98,8 +99,9 @@ public:
      */
     Canvas* getCanvas () { return canvas; }
 
- public slots:
-  void newView ();
+    bool printDlg();
+    
+    /* void newView ();
   bool printDlg ();
 
   void editUndo ();
@@ -168,16 +170,22 @@ public:
 
   void zoomSizeSelected (const QString & s);
 
-  void showScripts ();
+  // void showScripts (); */
 
 protected:
-  void showTransformationDialog (int id);
+    void showTransformationDialog (int id);
 
-  void setupCanvas ();
-  void setupPopups ();
-  void resizeEvent (QResizeEvent*);
+    void setupCanvas ();
+    void setupPopups ();
+    void resizeEvent (QResizeEvent*);
 
 protected slots:
+    void setUndoStatus( bool undoPossible, bool redoPossible );
+    void popupForSelection (int x, int y);
+    void resetTools();
+    QString getExportFileName (FilterManager *filterMgr);
+    
+    /* protected slots:
   void editCutSlot ();
   void editCopySlot ();
   void editPropertiesSlot ();
@@ -193,7 +201,7 @@ protected slots:
   void resetTools ();
 
   void insertPartSlot (KIllustratorChild *child, GPart *part);
-  void changeChildGeometrySlot (KIllustratorChild *child);
+  void changeChildGeometrySlot (KIllustratorChild *child); */
 
 private slots:
     /**
@@ -220,8 +228,8 @@ private slots:
     void slotPage();
     void slotGrid();
     void slotHelplines();
-    void slotAlignToGrid();
-    void slotAlignToHelplines();
+    void slotAlignToGrid( bool );
+    void slotAlignToHelplines( bool );
     void slotTransformPosition();
     void slotTransformDimension();
     void slotTransformRotation();
@@ -253,6 +261,7 @@ private slots:
     void slotNewNode( bool );
     void slotDeleteNode( bool );
     void slotSplitLine( bool );
+    void slotLayers();
     
 protected:
   KIllustratorDocument *m_pDoc;
@@ -274,8 +283,8 @@ protected:
   QGridLayout *grid;
   CommandHistory cmdHistory;
 
-    int m_idActiveTool;
-    
+    // int m_idActiveTool;
+
     KAction* m_import;
     KAction* m_export;
     KAction* m_docInfo;
@@ -299,8 +308,8 @@ protected:
     KAction* m_page;
     KAction* m_grid;
     KAction* m_helplines;
-    KAction* m_alignToGrid;
-    KAction* m_alignToHelplines;
+    KToggleAction* m_alignToGrid;
+    KToggleAction* m_alignToHelplines;
     KAction* m_transformPosition;
     KAction* m_transformDimension;
     KAction* m_transformRotation;
@@ -331,6 +340,10 @@ protected:
     KToggleAction* m_newNode;
     KToggleAction* m_deleteNode;
     KToggleAction* m_splitLine;
+
+    QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
+	    lastExportDir, lastImportDir, lastPaletteDir;
+    QString lastExport;
 };
 
 #endif

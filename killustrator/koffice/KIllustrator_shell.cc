@@ -19,6 +19,10 @@
 
 #include "KIllustrator_shell.h"
 #include "KIllustrator_doc.h"
+#include "KIllustrator_view.h"
+#include "KIllustrator_factory.h"
+
+#include <kstddirs.h>
 
 KIllustratorShell::KIllustratorShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
@@ -31,12 +35,18 @@ KIllustratorShell::~KIllustratorShell()
 
 QString KIllustratorShell::configFile() const
 {
-    return readConfigFile( "KIllustrator_shell.rc" );
+    return readConfigFile( locate( "data", "killustrator/KIllustrator_shell.rc", KIllustratorFactory::global() ) );
+    // return readConfigFile( "KIllustrator_shell.rc" );
 }
 
 KoDocument* KIllustratorShell::createDoc()
 {
     return new KIllustratorDocument;
+}
+
+void KIllustratorShell::slotFilePrint()
+{
+    ((KIllustratorView*)rootView())->printDlg();
 }
 
 #include "KIllustrator_shell.moc"
