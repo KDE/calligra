@@ -330,6 +330,121 @@ void KPresenterPageIface::setPageEffect(const QString &effect )
         kdDebug()<<"Error in setPageEffect\n";
 }
 
+QString KPresenterPageIface::pageEffectString( )const
+{
+    switch(m_page->getPageEffect( ))
+    {
+    case PEF_NONE:
+        return QString("NONE");
+        break;
+    case PEF_CLOSE_HORZ:
+        return QString("CLOSE_HORZ");
+        break;
+    case PEF_CLOSE_VERT:
+        return QString("CLOSE_VERT");
+        break;
+    case PEF_CLOSE_ALL:
+        return QString("CLOSE_ALL");
+        break;
+    case PEF_OPEN_HORZ:
+        return QString("OPEN_HORZ");
+        break;
+    case PEF_OPEN_VERT:
+        return QString("OPEN_VERT");
+        break;
+    case PEF_OPEN_ALL:
+        return QString("OPEN_ALL");
+        break;
+    case PEF_INTERLOCKING_HORZ_1:
+        return QString("INTERLOCKING_HORZ_1");
+        break;
+    case PEF_INTERLOCKING_HORZ_2:
+        return QString("INTERLOCKING_HORZ_2");
+        break;
+    case PEF_INTERLOCKING_VERT_1:
+        return QString("INTERLOCKING_VERT_1");
+        break;
+    case PEF_INTERLOCKING_VERT_2:
+        return QString("INTERLOCKING_VERT_2");
+        break;
+    case PEF_SURROUND1:
+        return QString("SURROUND1");
+        break;
+    case PEF_BLINDS_HOR:
+        return QString("BLINDS_HOR");
+        break;
+    case PEF_BLINDS_VER:
+        return QString("BLINDS_VER");
+        break;
+    case PEF_BOX_IN:
+        return QString("BOX_IN");
+        break;
+    case PEF_BOX_OUT:
+        return QString("BOX_OUT");
+        break;
+    case PEF_CHECKBOARD_ACROSS:
+        return QString("CHECKBOARD_ACROSS");
+        break;
+    case PEF_COVER_DOWN:
+        return QString("COVER_DOWN");
+        break;
+    case PEF_UNCOVER_DOWN:
+        return QString("UNCOVER_DOWN");
+        break;
+    case PEF_COVER_UP:
+        return QString("COVER_UP");
+        break;
+    case PEF_UNCOVER_UP:
+        return QString("UNCOVER_UP");
+        break;
+    case PEF_COVER_LEFT:
+        return QString("COVER_LEFT");
+        break;
+    case PEF_UNCOVER_LEFT:
+        return QString("UNCOVER_LEFT");
+        break;
+    case PEF_COVER_RIGHT:
+        return QString("COVER_RIGHT");
+        break;
+    case PEF_UNCOVER_RIGHT:
+        return QString("UNCOVER_RIGHT");
+        break;
+    case PEF_COVER_LEFT_UP:
+        return QString("COVER_LEFT_UP");
+        break;
+    case PEF_UNCOVER_LEFT_UP:
+        return QString("UNCOVER_LEFT_UP");
+        break;
+    case PEF_COVER_LEFT_DOWN:
+        return QString("COVER_LEFT_DOWN");
+        break;
+    case PEF_UNCOVER_LEFT_DOWN:
+        return QString("UNCOVER_LEFT_DOWN");
+        break;
+    case PEF_COVER_RIGHT_UP:
+        return QString("COVER_RIGHT_UP");
+        break;
+    case PEF_UNCOVER_RIGHT_UP:
+        return QString("UNCOVER_RIGHT_UP");
+        break;
+    case PEF_COVER_RIGHT_DOWN:
+        return QString("COVER_RIGHT_DOWN");
+        break;
+    case PEF_UNCOVER_RIGHT_DOWN:
+        return QString("UNCOVER_RIGHT_DOWN");
+        break;
+    case PEF_DISSOLVE:
+        return QString("DISSOLVE");
+        break;
+    case PEF_RANDOM:
+        return QString("RANDOM");
+        break;
+    default:
+        kdDebug()<<"Page effect not define!!!!!!\n";
+        break;
+    }
+}
+
 bool KPresenterPageIface::backUnbalanced()const
 {
     return (int)m_page->getBackUnbalanced();

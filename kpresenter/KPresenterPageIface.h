@@ -85,6 +85,7 @@ k_dcop:
     virtual QString backPixFilename()const;
     virtual QString backClipFilename()const;
     virtual int pageEffect()const;
+    virtual QString pageEffectString( )const;
     virtual void setPageEffect(const QString & );
 
     virtual bool backUnbalanced()const ;
