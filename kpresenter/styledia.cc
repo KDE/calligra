@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Pen and Brush style Dialog                             */
+/* Module: Pen and Brush style Dialog				  */
 /******************************************************************/
 
 #include "styledia.h"
@@ -19,7 +19,7 @@
 #include <klocale.h>
 
 /******************************************************************/
-/* class Pen and Brush preview                                    */
+/* class Pen and Brush preview					  */
 /******************************************************************/
 
 /*====================== constructor =============================*/
@@ -38,42 +38,37 @@ void PBPreview::paintEvent( QPaintEvent* )
     QPainter painter;
 
     painter.begin( this );
-    if ( paintType == 0 )
-    {
-        QSize diff1( 0, 0 ), diff2( 0, 0 );
-        int _w = pen.width();
+    if ( paintType == 0 ) {
+	QSize diff1( 0, 0 ), diff2( 0, 0 );
+	int _w = pen.width();
 
-        if ( lineBegin != L_NORMAL )
-            diff1 = getBoundingSize( lineBegin, _w );
+	if ( lineBegin != L_NORMAL )
+	    diff1 = getBoundingSize( lineBegin, _w );
 
-        if ( lineEnd != L_NORMAL )
-            diff2 = getBoundingSize( lineEnd, _w );
+	if ( lineEnd != L_NORMAL )
+	    diff2 = getBoundingSize( lineEnd, _w );
 
-        if ( lineBegin != L_NORMAL )
-            drawFigure( lineBegin, &painter, QPoint( diff1.width() / 2, height() / 2 ), pen.color(), _w, 180.0 );
+	if ( lineBegin != L_NORMAL )
+	    drawFigure( lineBegin, &painter, QPoint( diff1.width() / 2, height() / 2 ), pen.color(), _w, 180.0 );
 
-        if ( lineEnd != L_NORMAL )
-            drawFigure( lineEnd, &painter, QPoint( width() - diff2.width() / 2, height() / 2 ), pen.color(), _w, 0.0 );
+	if ( lineEnd != L_NORMAL )
+	    drawFigure( lineEnd, &painter, QPoint( width() - diff2.width() / 2, height() / 2 ), pen.color(), _w, 0.0 );
 
-        painter.setPen( pen );
-        painter.drawLine( diff1.width() / 2, height()/2, width() - diff2.width() / 2, height()/2 );
-    }
-    else if ( paintType == 1 )
-    {
-        painter.fillRect( 0, 0, width(), height(), white );
-        painter.fillRect( 2, 2, width() - 4, height() - 4, brush );
-    }
-    else if ( paintType == 2 && gradient )
-    {
-        gradient->setSize( size() );
-        painter.drawPixmap( 0, 0, *gradient->getGradient() );
+	painter.setPen( pen );
+	painter.drawLine( diff1.width() / 2, height()/2, width() - diff2.width() / 2, height()/2 );
+    } else if ( paintType == 1 ) {
+	painter.fillRect( 0, 0, width(), height(), white );
+	painter.fillRect( 2, 2, width() - 4, height() - 4, brush );
+    } else if ( paintType == 2 && gradient ) {
+	gradient->setSize( size() );
+	painter.drawPixmap( 0, 0, *gradient->getGradient() );
     }
 
     painter.end();
 }
 
 /******************************************************************/
-/* class StyleDia                                                 */
+/* class StyleDia						  */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
@@ -153,9 +148,9 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     choosePCol->resize( penPrev->width(), choosePCol->height() );
 
     if ( flags & SD_PEN )
-        addTab( penFrame, i18n( "Pen" ) );
+	addTab( penFrame, i18n( "Pen" ) );
     else
-        penFrame->hide();
+	penFrame->hide();
 
     brushFrame = new QWidget( this, "brushGrp" );
     QButtonGroup *tmp = new QButtonGroup( brushFrame );
@@ -247,10 +242,30 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     gradients->resize( chooseBStyle->size() );
     connect( gradients, SIGNAL( activated( int ) ), this, SLOT( gcStyle( int ) ) );
 
-    gradient = new KPGradient( red, green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ) );
+    unbalanced = new QRadioButton( i18n( "Unbalanced" ), brushFrame );
+    unbalanced->resize( unbalanced->sizeHint() );
+    unbalanced->move( gradients->x(), gradients->y() + gradients->height() + 20 );
+    connect( unbalanced, SIGNAL( clicked() ),
+	     this, SLOT( rUnbalanced() ) );
+    
+    xfactor = new QSpinBox( -200, 200, 10, brushFrame );
+    xfactor->resize( gradients->width() / 2 - 5, xfactor->sizeHint().height() );
+    xfactor->move( gradients->x(), unbalanced->y() + unbalanced->height() + 10 );
+    connect( xfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( gXFactor( int ) ) );
+    
+    yfactor = new QSpinBox( -200, 200, 10, brushFrame );
+    yfactor->resize( gradients->width() / 2 - 5, yfactor->sizeHint().height() );
+    yfactor->move( xfactor->x() + xfactor->width() + 10 , 
+		   unbalanced->y() + unbalanced->height() + 10 );
+    connect( yfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( gYFactor( int ) ) );
+
+    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ),
+			       FALSE, 100, 100 );
 
     gPrev = new PBPreview( brushFrame, "", 2 );
-    gPrev->move( gradients->x(), gradients->y() + gradients->height() + 20 );
+    gPrev->move( gradients->x(), yfactor->y() + yfactor->height() + 20 );
     gPrev->resize( chooseBCol->width(), 25 );
     gPrev->setGradient( gradient );
 
@@ -260,11 +275,11 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     brushPrev->move( brushPrev->x(), gPrev->y() );
 
     if ( flags & SD_BRUSH )
-        addTab( brushFrame, i18n( "Brush" ) );
+	addTab( brushFrame, i18n( "Brush" ) );
     else
-        brushFrame->hide();
+	brushFrame->hide();
 
-    resize( 400, 400 );
+    resize( 400, 450 );
 
     setCancelButton( i18n( "Cancel" ) );
     setOKButton( i18n( "OK" ) );
@@ -285,8 +300,7 @@ void StyleDia::setPen( QPen _pen )
 {
     pen = _pen;
     penPrev->setPen( pen );
-    switch ( pen.style() )
-    {
+    switch ( pen.style() ) {
     case NoPen: choosePStyle->setCurrentItem( 5 ); break;
     case SolidLine: choosePStyle->setCurrentItem( 0 ); break;
     case DashLine: choosePStyle->setCurrentItem( 1 ); break;
@@ -302,8 +316,7 @@ void StyleDia::setBrush( QBrush _brush )
 {
     brush = _brush;
     brushPrev->setBrush( brush );
-    switch ( brush.style() )
-    {
+    switch ( brush.style() ) {
     case SolidPattern: chooseBStyle->setCurrentItem( 0 ); break;
     case Dense1Pattern: chooseBStyle->setCurrentItem( 1 ); break;
     case Dense2Pattern: chooseBStyle->setCurrentItem( 2 ); break;
@@ -342,30 +355,33 @@ void StyleDia::setLineEnd( LineEnd le )
 /*================================================================*/
 void StyleDia::setFillType( FillType ft )
 {
-    if ( ft == FT_BRUSH )
-    {
-        fillStyle->setChecked( true );
-        fillGradient->setChecked( false );
-        rBrush();
-    }
-    else
-    {
-        fillStyle->setChecked( false );
-        fillGradient->setChecked( true );
-        rGradient();
+    if ( ft == FT_BRUSH ) {
+	fillStyle->setChecked( true );
+	fillGradient->setChecked( false );
+	rBrush();
+    } else {
+	fillStyle->setChecked( false );
+	fillGradient->setChecked( true );
+	rGradient();
     }
 }
 
 /*================================================================*/
-void StyleDia::setGradient( QColor _c1, QColor _c2, BCType _t )
+void StyleDia::setGradient( QColor _c1, QColor _c2, BCType _t, bool _unbalanced, int _xfactor, int _yfactor )
 {
     gradient1->setColor( _c1 );
     gradient2->setColor( _c2 );
     gradients->setCurrentItem( static_cast<int>( _t - 1 ) );
-
+    unbalanced->setChecked( _unbalanced );
+    xfactor->setValue( _xfactor );
+    yfactor->setValue( _yfactor );
+        
     gradient->setColor1( QColor( _c1 ) );
     gradient->setColor2( QColor( _c2 ) );
     gradient->setBackColorType( _t );
+    gradient->setUnbalanced( _unbalanced );
+    gradient->setXFactor( _xfactor );
+    gradient->setYFactor( _yfactor );
     gPrev->setGradient( gradient );
 }
 
@@ -375,10 +391,9 @@ void StyleDia::changePCol()
     QColor currColor;
 
     currColor = pen.color();
-    if ( KColorDialog::getColor( currColor ) )
-    {
-        pen.setColor( currColor );
-        penPrev->setPen( pen );
+    if ( KColorDialog::getColor( currColor ) ) {
+	pen.setColor( currColor );
+	penPrev->setPen( pen );
     }
 }
 
@@ -388,18 +403,16 @@ void StyleDia::changeBCol()
     QColor currColor;
 
     currColor = brush.color();
-    if ( KColorDialog::getColor( currColor ) )
-    {
-        brush.setColor( currColor );
-        brushPrev->setBrush( brush );
+    if ( KColorDialog::getColor( currColor ) ) {
+	brush.setColor( currColor );
+	brushPrev->setBrush( brush );
     }
 }
 
 /*====================== change pen-style =========================*/
 void StyleDia::changePStyle( int item )
 {
-    switch ( item )
-    {
+    switch ( item ) {
     case 5: pen.setStyle( NoPen ); break;
     case 0: pen.setStyle( SolidLine ); break;
     case 1: pen.setStyle( DashLine ); break;
@@ -413,8 +426,7 @@ void StyleDia::changePStyle( int item )
 /*====================== change brush-style =======================*/
 void StyleDia::changeBStyle( int item )
 {
-    switch ( item )
-    {
+    switch ( item ) {
     case 0: brush.setStyle( SolidPattern ); break;
     case 1: brush.setStyle( Dense1Pattern ); break;
     case 2: brush.setStyle( Dense2Pattern ); break;
@@ -482,6 +494,9 @@ void StyleDia::rBrush()
     gradients->setEnabled( false );
     gradient1->setEnabled( false );
     gradient2->setEnabled( false );
+    unbalanced->setEnabled( FALSE );
+    xfactor->setEnabled( FALSE );
+    yfactor->setEnabled( FALSE );
 
     chooseBCol->setEnabled( true );
     chooseBStyle->setEnabled( true );
@@ -493,8 +508,31 @@ void StyleDia::rGradient()
     gradients->setEnabled( true );
     gradient1->setEnabled( true );
     gradient2->setEnabled( true );
-
+    unbalanced->setEnabled( TRUE );
+    xfactor->setEnabled( TRUE );
+    yfactor->setEnabled( TRUE );
+    
     chooseBCol->setEnabled( false );
     chooseBStyle->setEnabled( false );
 }
 
+/*=================================================================*/
+void StyleDia::rUnbalanced()
+{
+    gradient->setUnbalanced( unbalanced->isChecked() );
+    gPrev->setGradient( gradient );
+}
+
+/*=================================================================*/
+void StyleDia::gXFactor( int v )
+{
+    gradient->setXFactor( v );
+    gPrev->setGradient( gradient );
+}
+
+/*=================================================================*/
+void StyleDia::gYFactor( int v )
+{
+    gradient->setYFactor( v );
+    gPrev->setGradient( gradient );
+}

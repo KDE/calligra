@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: pie/arc/chord object (header)                          */
+/* Module: pie/arc/chord object (header)			  */
 /******************************************************************/
 
 #ifndef kppieobject_h
@@ -21,7 +21,7 @@
 class KPGradient;
 
 /******************************************************************/
-/* Class: KPPieObject                                             */
+/* Class: KPPieObject						  */
 /******************************************************************/
 
 class KPPieObject : public KPObject
@@ -29,13 +29,14 @@ class KPPieObject : public KPObject
 public:
     KPPieObject();
     KPPieObject( QPen _pen, QBrush _brush, FillType _fillType,
-                 QColor _gColor1, QColor _gColor2, BCType _gType, PieType _pieType,
-                 int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd );
+		 QColor _gColor1, QColor _gColor2, BCType _gType, PieType _pieType,
+		 int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
+		 bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPPieObject()
     { if ( gradient ) delete gradient; }
 
     KPPieObject &operator=( const KPPieObject & );
-    
+
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 
@@ -60,6 +61,12 @@ public:
     { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
     { lineEnd = _lineEnd; }
+    virtual void setGUnbalanced( bool b )
+    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+    virtual void setGXFactor( int f )
+    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+    virtual void setGYFactor( int f )
+    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
     virtual ObjType getType()
     { return OT_PIE; }
@@ -85,6 +92,12 @@ public:
     { return lineBegin; }
     virtual LineEnd getLineEnd()
     { return lineEnd; }
+    virtual bool getGUnbalanced()
+    { return unbalanced; }
+    virtual int getGXFactor( )
+    { return xfactor; }
+    virtual int getGYFactor()
+    { return yfactor; }
 
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
@@ -102,6 +115,8 @@ protected:
     PieType pieType;
     int p_angle, p_len;
     LineEnd lineBegin, lineEnd;
+    bool unbalanced;
+    int xfactor, yfactor;
 
     KPGradient *gradient;
     bool drawShadow;

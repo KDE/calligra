@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Background (header)                                    */
+/* Module: Background (header)					  */
 /******************************************************************/
 
 #ifndef kpbackground_h
@@ -35,14 +35,14 @@ class KPGradientCollection;
 class QPicture;
 
 /******************************************************************/
-/* Class: KPBackGround                                            */
+/* Class: KPBackGround						  */
 /******************************************************************/
 
 class KPBackGround
 {
 public:
     KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
-                  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
+		  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
     virtual ~KPBackGround()
     {; }
 
@@ -56,14 +56,20 @@ public:
     { removeGradient(); backColor2 = _color; }
     virtual void setBackColorType( BCType _bcType )
     { removeGradient(); bcType = _bcType; }
+    virtual void setBackUnbalanced( bool _unbalanced )
+    { removeGradient(); unbalanced = _unbalanced; }
+    virtual void setBackXFactor( int _xfactor )
+    { removeGradient(); xfactor = _xfactor; }
+    virtual void setBackYFactor( int _yfactor )
+    { removeGradient(); yfactor = _yfactor; }
     void setBackPixmap( const QString &_filename, QDateTime _lastModified );
     virtual void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
     virtual void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
     virtual KPPixmapDataCollection::Key getKey()
     { return key.dataKey; }
-    
-    
+
+
     virtual void setSize( QSize _size )
     { removeGradient(); ext = _size; footerHeight = 0; }
     virtual void setSize( int _width, int _height )
@@ -85,7 +91,13 @@ public:
     { return clipKey.filename; }
     virtual PageEffect getPageEffect()
     { return pageEffect; }
-
+    virtual bool getBackUnbalanced()
+    { return unbalanced; }
+    virtual int getBackXFactor()
+    { return xfactor; }
+    virtual int getBackYFactor()
+    { return yfactor; }
+    
     virtual QSize getSize()
     { return ext; }
 
@@ -110,7 +122,9 @@ protected:
     QColor backColor2;
     BCType bcType;
     PageEffect pageEffect;
-
+    bool unbalanced;
+    int xfactor, yfactor;
+    
     QPixmap *backPix;
     KPPixmapCollection::Key key;
     KPPixmapCollection *pixmapCollection;

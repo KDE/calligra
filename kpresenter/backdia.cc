@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Background Dialog                                      */
+/* Module: Background Dialog					  */
 /******************************************************************/
 
 #include "page.h"
@@ -31,6 +31,7 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qcombo.h>
+#include <qspinbox.h>
 
 #include <qsize.h>
 #include <kcolorbtn.h>
@@ -41,7 +42,7 @@
 #include <stdlib.h>
 
 /******************************************************************/
-/* class ClipPreview                                              */
+/* class ClipPreview						  */
 /******************************************************************/
 
 /*======================= constructor ============================*/
@@ -79,15 +80,15 @@ void ClipPreview::paintEvent( QPaintEvent* )
 }
 
 /******************************************************************/
-/* class BackDia                                                  */
+/* class BackDia						  */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
 BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
-                  QColor backColor1, QColor backColor2, BCType _bcType,
-                  QString backPic, QString backClip,
-                  BackView backPicView )
-    :QDialog( parent, name, true )
+		  QColor backColor1, QColor backColor2, BCType _bcType,
+		  QString backPic, QString backClip,
+		  BackView backPicView, bool _unbalanced, int _xfactor, int _yfactor )
+    : QDialog( parent, name, true )
 {
     int col1 = 20, col2;
     int row1 = 15, row2, butW, butH;
@@ -136,9 +137,28 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     cType->move( 10, color2Choose->y()+color2Choose->height()+20 );
     connect( cType, SIGNAL( activated( int ) ), this, SLOT( selectCType( int ) ) );
 
+    unbalanced = new QRadioButton( i18n( "Unbalanced" ), grp1 );
+    unbalanced->resize( unbalanced->sizeHint() );
+    unbalanced->move( 10, cType->y() + cType->height() + 20 );
+    connect( unbalanced, SIGNAL( clicked() ),
+	     this, SLOT( unbalancedChanged() ) );
+    
+    xfactor = new QSpinBox( -200, 200, 10, grp1 );
+    xfactor->resize( cType->width() / 2 - 5, xfactor->sizeHint().height() );
+    xfactor->move( 10, unbalanced->y() + unbalanced->height() + 10 );
+    connect( xfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( xFactorChanged( int ) ) );
+    
+    yfactor = new QSpinBox( -200, 200, 10, grp1 );
+    yfactor->resize( cType->width() / 2 - 5, yfactor->sizeHint().height() );
+    yfactor->move( xfactor->x() + xfactor->width() + 10 , 
+		   unbalanced->y() + unbalanced->height() + 10 );
+    connect( yfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( yFactorChanged( int ) ) );
+    
     colorPreview = new QLabel( grp1 );
     colorPreview->resize( cType->width(), cType->width() );
-    colorPreview->move( 10, cType->y()+cType->height()+20 );
+    colorPreview->move( 10, xfactor->y() + xfactor->height()+20 );
 
     cType->setCurrentItem( bcType );
 
@@ -146,7 +166,7 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     color2Choose->resize( cType->width(), color2Choose->height() );
 
     grp1->resize( 2*cType->x()+cType->width(),
-                  colorPreview->y()+colorPreview->height()+20 );
+		  colorPreview->y()+colorPreview->height()+20 );
 
     radioPic = new QRadioButton( i18n( "Picture ( Pixel-Graphic )" ), this, "radioPic" );
     radioPic->move( grp1->x()+grp1->width()+20, radioColor->y() );
@@ -177,8 +197,8 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
 
     picChoose = new QPushButton( i18n( "Choose Picture..." ), grp2, "picChoose" );
     picChoose->setGeometry( 10, vTiled->y()+vTiled->height()+20,
-                            vTiled->width()+vCenter->width()+vZoom->width()+20,
-                            picChoose->sizeHint().height() );
+			    vTiled->width()+vCenter->width()+vZoom->width()+20,
+			    picChoose->sizeHint().height() );
     connect( picChoose, SIGNAL( clicked() ), this, SLOT( selectPic() ) );
 
     picPreview = new QLabel( grp2, "picPre" );
@@ -192,10 +212,10 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     if ( backPic ) lPicName->setText( qstrdup( backPic ) );
     else lPicName->setText( i18n( "no picture" ) );
     lPicName->setGeometry( 10, picPreview->y()+picPreview->height()+20,
-                           picChoose->width(), lPicName->sizeHint().height() );
+			   picChoose->width(), lPicName->sizeHint().height() );
 
     grp2->resize( 2*picChoose->x()+picChoose->width(),
-                  lPicName->y()+lPicName->height()+10 );
+		  lPicName->y()+lPicName->height()+10 );
 
     radioClip = new QRadioButton( i18n( "Clipart ( Vector-Graphic )" ), this, "radioClip" );
     radioClip->move( grp2->x()+grp2->width()+20, radioColor->y() );
@@ -222,7 +242,7 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     if ( backClip ) lClipName->setText( qstrdup( backClip ) );
     else lClipName->setText( i18n( "no clipart" ) );
     lClipName->setGeometry( 10, clipPreview->y()+clipPreview->height()+20,
-                            clipChoose->width(), lClipName->sizeHint().height() );
+			    clipChoose->width(), lClipName->sizeHint().height() );
 
     grp3->resize( grp2->width(), lClipName->height()+lClipName->y()+20 );
 
@@ -246,7 +266,7 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     okBut->setDefault( true );
 
     butW = max(cancelBut->sizeHint().width(),
-               max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
+	       max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
     butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );
@@ -270,6 +290,9 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     if ( backType == BT_PICTURE ) radioPic->setChecked( true );
     if ( backType == BT_COLOR ) radioColor->setChecked( true );
     if ( backType == BT_CLIPART ) radioClip->setChecked( true );
+    unbalanced->setChecked( _unbalanced );
+    xfactor->setValue( _xfactor );
+    yfactor->setValue( _yfactor );
 }
 
 /*===================== destructor ===============================*/
@@ -304,7 +327,8 @@ void BackDia::selectCType( int i )
 
     bcType = ( BCType )i;
 
-    KPGradient gradient( color1Choose->color(), color2Choose->color(), bcType, colorPreview->size() );
+    KPGradient gradient( color1Choose->color(), color2Choose->color(), bcType, colorPreview->size(),
+			 unbalanced->isChecked(), xfactor->value(), yfactor->value() );
 
     colorPreview->setPixmap( *gradient.getGradient() );
 }
@@ -343,12 +367,11 @@ void BackDia::openPic( const QString &picName )
     QPixmap pix( picName );
     QWMatrix m;
 
-    if ( !pix.isNull() )
-    {
-        m.scale( static_cast<float>( picPreview->width() ) / pix.width(),
-                 static_cast<float>( picPreview->height() ) / pix.height() );
-        picPreview->setPixmap( pix.xForm( m ) );
-        if ( lPicName ) lPicName->setText( chosenPic );
+    if ( !pix.isNull() ) {
+	m.scale( static_cast<float>( picPreview->width() ) / pix.width(),
+		 static_cast<float>( picPreview->height() ) / pix.height() );
+	picPreview->setPixmap( pix.xForm( m ) );
+	if ( lPicName ) lPicName->setText( chosenPic );
     }
     QApplication::restoreOverrideCursor();
 }
@@ -361,5 +384,15 @@ void BackDia::openClip( const QString &clipName )
     clipPreview->setClipart( clipName );
     if ( lClipName ) lClipName->setText( chosenClip );
     QApplication::restoreOverrideCursor();
+}
+
+int BackDia::getBackXFactor() 
+{ 
+    return xfactor->value(); 
+}
+
+int BackDia::getBackYFactor() 
+{
+    return yfactor->value(); 
 }
 

@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: pixmap object (header)                                 */
+/* Module: pixmap object (header)				  */
 /******************************************************************/
 
 #ifndef kppixmapobject_h
@@ -25,7 +25,7 @@
 class QPixmap;
 
 /******************************************************************/
-/* Class: KPPixmapObject                                          */
+/* Class: KPPixmapObject					  */
 /******************************************************************/
 
 class KPPixmapObject : public KPObject
@@ -58,7 +58,13 @@ public:
     { return key.dataKey.filename; }
     virtual KPPixmapDataCollection::Key getKey()
     { return key.dataKey; }
-    
+    virtual void setGUnbalanced( bool b )
+    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+    virtual void setGXFactor( int f )
+    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+    virtual void setGYFactor( int f )
+    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
+
     void setPixmap( const QString &_filename, QDateTime _lastModified )
     { setPixmap( _filename, _lastModified, orig_size ); }
     void setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size );
@@ -79,6 +85,12 @@ public:
     { return gColor2; }
     virtual BCType getGType()
     { return gType; }
+    virtual bool getGUnbalanced()
+    { return unbalanced; }
+    virtual int getGXFactor( )
+    { return xfactor; }
+    virtual int getGYFactor()
+    { return yfactor; }
 
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
@@ -99,6 +111,8 @@ protected:
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;
+    bool unbalanced;
+    int xfactor, yfactor;
 
 };
 

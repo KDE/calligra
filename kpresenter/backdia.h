@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Background Dialog (header)                             */
+/* Module: Background Dialog (header)				  */
 /******************************************************************/
 
 #ifndef BACKDIA_H
@@ -19,6 +19,8 @@
 #include <qdialog.h>
 #include <qcolor.h>
 #include <qstring.h>
+#include <qradiobutton.h>
+#include <qspinbox.h>
 
 #include "qwmf.h"
 #include "global.h"
@@ -39,9 +41,10 @@ class QComboBox;
 class QPushButton;
 class KColorButton;
 class QButtonGroup;
+class QSpinBox;
 
 /******************************************************************/
-/* class ClipPreview                                              */
+/* class ClipPreview						  */
 /******************************************************************/
 
 class ClipPreview : public QWidget
@@ -73,7 +76,7 @@ private:
 };
 
 /******************************************************************/
-/* class BackDia                                                  */
+/* class BackDia						  */
 /******************************************************************/
 
 class BackDia : public QDialog
@@ -84,10 +87,11 @@ public:
 
     // constructor - destructor
     BackDia( QWidget* parent = 0, const char* name = 0,
-             BackType backType = BT_COLOR, QColor backColor1 = white,
-             QColor backColor2 = white, BCType _bcType = BCT_PLAIN,
-             QString backPic = QString::null, QString backClip = QString::null,
-             BackView backPicView = BV_TILED );
+	     BackType backType = BT_COLOR, QColor backColor1 = white,
+	     QColor backColor2 = white, BCType _bcType = BCT_PLAIN,
+	     QString backPic = QString::null, QString backClip = QString::null,
+	     BackView backPicView = BV_TILED, bool _unbalanced = FALSE,
+	     int _xfactor = 100, int _yfactor = 100);
     ~BackDia();
 
     // get values
@@ -98,19 +102,23 @@ public:
     QString getBackPixFilename() { return chosenPic; }
     QString getBackClipFilename() { return chosenClip; }
     BackView getBackView();
-
+    bool getBackUnbalanced() { return unbalanced->isChecked(); }
+    int getBackXFactor();
+    int getBackYFactor();
+    
 private:
 
     // dialog objects
     QLabel *lPicName, *picPreview, *lClipName, *colorPreview;
     QGroupBox *grp1, *grp2, *grp3;
-    QRadioButton *radioColor, *radioPic, *vTiled, *vCenter, *vZoom, *radioClip;
+    QRadioButton *radioColor, *radioPic, *vTiled, *vCenter, *vZoom, *radioClip, *unbalanced;
     QComboBox *cType;
     QPushButton *okBut, *applyBut, *applyGlobalBut, *cancelBut;
     QPushButton *picChoose, *clipChoose;
     QButtonGroup *buttGrp, *buttGrp2, *buttGrp3;
     KColorButton *color1Choose, *color2Choose;
-
+    QSpinBox *xfactor, *yfactor;
+    
     // values
     QString chosenPic;
     QString chosenClip;
@@ -126,6 +134,10 @@ private slots:
     void openPic( const QString & );
     void openClip( const QString & );
     void colChanged( const QColor& ) { selectCType( bcType ); }
+    void unbalancedChanged() { selectCType( bcType ); }
+    void xFactorChanged( int ) { selectCType( bcType ); }
+    void yFactorChanged( int ) { selectCType( bcType ); }
+    
     void Ok() { emit backOk( false ); }
     void Apply() { emit backOk( false ); }
     void ApplyGlobal() { emit backOk( true ); }

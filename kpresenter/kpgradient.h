@@ -40,7 +40,8 @@ class QPainter;
 class KPGradient
 {
 public:
-    KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size );
+    KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
+		bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPGradient()
     {}
 
@@ -50,14 +51,26 @@ public:
     { return color2; }
     virtual BCType getBackColorType()
     { return bcType; }
-
+    virtual bool getUnbalanced()
+    { return unbalanced; }
+    virtual int getXFactor()
+    { return xFactor; }
+    virtual int getYFactor()
+    { return yFactor; }
+    
     virtual void setColor1( QColor _color )
     { color1 = _color; paint(); }
     virtual void setColor2( QColor _color )
     { color2 = _color; paint(); }
     virtual void setBackColorType( BCType _type )
     { bcType = _type; paint(); }
-
+    virtual void setUnbalanced( bool b )
+    { unbalanced = b; }
+    virtual void setXFactor( int i )
+    { xFactor = i; }
+    virtual void setYFactor( int i )
+    { yFactor = i; }    
+    
     virtual QPixmap* getGradient()
     { return (QPixmap*)&pixmap; }
     virtual QSize getSize()
@@ -80,6 +93,9 @@ protected:
     KPixmap pixmap;
     int refCount;
 
+    bool unbalanced;
+    int xFactor, yFactor;
+    
 };
 
 #endif

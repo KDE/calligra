@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: clipart object (header)                                */
+/* Module: clipart object (header)				  */
 /******************************************************************/
 
 #ifndef kpclipartobject_h
@@ -25,7 +25,7 @@ class KPGradient;
 class QPicture;
 
 /******************************************************************/
-/* Class: KPClipartObject                                         */
+/* Class: KPClipartObject					  */
 /******************************************************************/
 
 class KPClipartObject : public KPObject
@@ -37,7 +37,7 @@ public:
     {}
 
     KPClipartObject &operator=( const KPClipartObject & );
-    
+
     virtual void setFileName( const QString &_filename, QDateTime _lastModified );
     virtual void setPen( QPen _pen )
     { pen = _pen; }
@@ -50,6 +50,12 @@ public:
     { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; redrawPix = true; }
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; redrawPix = true; }
+    virtual void setGUnbalanced( bool b )
+    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+    virtual void setGXFactor( int f )
+    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+    virtual void setGYFactor( int f )
+    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
     void reload()
     { setFileName( key.filename, key.lastModified ); }
@@ -70,6 +76,12 @@ public:
     { return gColor2; }
     virtual BCType getGType()
     { return gType; }
+    virtual bool getGUnbalanced()
+    { return unbalanced; }
+    virtual int getGXFactor( )
+    { return xfactor; }
+    virtual int getGYFactor()
+    { return yfactor; }
 
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
@@ -91,6 +103,8 @@ protected:
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;
+    bool unbalanced;
+    int xfactor, yfactor;
 
     KPGradient *gradient;
     QPixmap pix;

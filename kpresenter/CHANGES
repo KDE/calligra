@@ -344,4 +344,5 @@ Reggie, 31.7.1999:
 --------------
 - Using better gradients and effects from KPixmapEffects
 - Using the new and cool gradients in the demo
+- KPresenter supports now unbalanced gradients too (thanx to KPixmapEffects!!!!)
 

@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Pen and Brush style Dialog (header)                    */
+/* Module: Pen and Brush style Dialog (header)			  */
 /******************************************************************/
 
 #ifndef STYLEDIA_H
@@ -47,7 +47,7 @@
 #endif
 
 /******************************************************************/
-/* class Pen and Brush preview                                    */
+/* class Pen and Brush preview					  */
 /******************************************************************/
 
 class PBPreview : public QWidget
@@ -82,7 +82,7 @@ private:
 };
 
 /******************************************************************/
-/* class StyleDia                                                 */
+/* class StyleDia						  */
 /******************************************************************/
 
 static const int SD_PEN = 1;
@@ -104,18 +104,21 @@ public:
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
     void setFillType( FillType ft );
-    void setGradient( QColor _c1, QColor _c2, BCType _t );
+    void setGradient( QColor _c1, QColor _c2, BCType _t, bool _unbalanced, int _xfactor, int _yfactor );
 
     // get values
-    QPen getPen() {return pen; }
-    QBrush getBrush() {return brush; }
-    LineEnd getLineBegin() {return lineBegin; }
-    LineEnd getLineEnd() {return lineEnd; }
-    FillType getFillType() {if ( fillStyle->isChecked() ) return FT_BRUSH; return FT_GRADIENT; }
-    QColor getGColor1() {return gradient1->color(); }
-    QColor getGColor2() {return gradient2->color(); }
-    BCType getGType() {return static_cast<BCType>( gradients->currentItem() + 1 ); }
-
+    QPen getPen() { return pen; }
+    QBrush getBrush() { return brush; }
+    LineEnd getLineBegin() { return lineBegin; }
+    LineEnd getLineEnd() { return lineEnd; }
+    FillType getFillType() { if ( fillStyle->isChecked() ) return FT_BRUSH; return FT_GRADIENT; }
+    QColor getGColor1() { return gradient1->color(); }
+    QColor getGColor2() { return gradient2->color(); }
+    BCType getGType() { return static_cast<BCType>( gradients->currentItem() + 1 ); }
+    bool getGUnbalanced() { return unbalanced->isChecked(); }
+    int getGXFactor() { return xfactor->value(); }
+    int getGYFactor() { return yfactor->value(); }
+    
 private:
 
     // dialog objects
@@ -123,10 +126,10 @@ private:
     QPushButton *choosePCol, *chooseBCol;
     QLabel *penStyle, *brushStyle, *penWidth, *llineBegin, *llineEnd;
     QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd;
-    QSpinBox *choosePWidth;
+    QSpinBox *choosePWidth, *xfactor, *yfactor;
     QPushButton *okBut, *applyBut, *cancelBut;
     PBPreview *penPrev, *brushPrev, *gPrev;
-    QRadioButton *fillStyle, *fillGradient;
+    QRadioButton *fillStyle, *fillGradient, *unbalanced;
     QComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QLabel *gColors, *gStyle;
@@ -153,6 +156,9 @@ private slots:
     void gcStyle( int item );
     void rBrush();
     void rGradient();
+    void rUnbalanced();
+    void gXFactor( int v );
+    void gYFactor( int v );
     void styleDone() {emit styleOk(); }
 
 signals:

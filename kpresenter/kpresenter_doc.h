@@ -1,15 +1,15 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1998                   */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* KPresenter is under GNU GPL                                    */
+/* KPresenter - (c) by Reginald Stadlbauer 1998			  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* KPresenter is under GNU GPL					  */
 /******************************************************************/
-/* Module: KPresenter Document (header)                           */
+/* Module: KPresenter Document (header)				  */
 /******************************************************************/
 
 #ifndef __kpresenter_doc_h__
@@ -59,7 +59,7 @@ class StyleDia;
 class KPPartObject;
 
 /******************************************************************/
-/* class KPresenterChild                                          */
+/* class KPresenterChild					  */
 /******************************************************************/
 class KPresenterChild : public KoDocumentChild
 {
@@ -81,12 +81,12 @@ protected:
 };
 
 /*****************************************************************/
-/* class KPresenterDoc                                           */
+/* class KPresenterDoc						 */
 /*****************************************************************/
 class KPresenterDoc : public QObject,
-                      virtual public KoDocument,
-                      virtual public KoPrintExt,
-                      virtual public KPresenter::KPresenterDocument_skel
+		      virtual public KoDocument,
+		      virtual public KoPrintExt,
+		      virtual public KPresenter::KPresenterDocument_skel
 {
     Q_OBJECT
 
@@ -165,12 +165,13 @@ public:
     unsigned int objNums() {return _objectList->count(); }
 
     // background
-    void setBackColor( unsigned int, QColor, QColor, BCType );
+    void setBackColor( unsigned int, QColor, QColor, BCType, bool, int, int );
     void setBackPixFilename( unsigned int, QString );
     void setBackClipFilename( unsigned int, QString );
     void setBackView( unsigned int, BackView );
     void setBackType( unsigned int, BackType );
-    bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType );
+    bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType,
+		      bool, int, int );
     bool setLineBegin( LineEnd );
     bool setLineEnd( LineEnd );
     bool setPieSettings( PieType, int, int );
@@ -184,6 +185,9 @@ public:
     QString getBackClipFilename( unsigned int );
     QColor getBackColor1( unsigned int );
     QColor getBackColor2( unsigned int );
+    bool getBackUnbalanced( unsigned int );
+    int getBackXFactor( unsigned int );
+    int getBackYFactor( unsigned int );
     BCType getBackColorType( unsigned int );
     PageEffect getPageEffect( unsigned int );
     QPen getPen( QPen );
@@ -195,6 +199,9 @@ public:
     QColor getGColor2( QColor );
     BCType getGType( BCType );
     PieType getPieType( PieType );
+    bool getGUnbalanced( bool );
+    int getGXFactor( int );
+    int getGYFactor( int );
     int getRndX( int );
     int getRndY( int );
     int getPieLength( int );
@@ -210,12 +217,12 @@ public:
     void changePicture( QString, int, int );
     void changeClipart( QString, int, int );
     void insertLine( QRect, QPen, LineEnd, LineEnd, LineType, int, int );
-    void insertRectangle( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, int, int, int, int );
-    void insertCircleOrEllipse( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, int, int );
+    void insertRectangle( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, int, int, bool ,int, int, int, int );
+    void insertCircleOrEllipse( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, bool ,int, int, int, int );
     void insertPie( QRect, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
-                    BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, int diffx, int diffy );
+		    BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, bool ,int, int, int diffx, int diffy );
     void insertText( QRect, int, int, QString text = QString::null, KPresenterView *_view = 0L );
-    void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType, QString, int, int );
+    void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType, QString, bool ,int, int, int, int );
 
     // get list of pages and objects
     QList<KPBackGround> *backgroundList() {return &_backgroundList; }
@@ -272,13 +279,10 @@ public:
 
     void deSelectAllObj();
 
-    KPPixmapCollection *getPixmapCollection()
-    { return &_pixmapCollection; }
-    KPGradientCollection *getGradientCollection()
-    { return &_gradientCollection; }
+    KPPixmapCollection *getPixmapCollection() { return &_pixmapCollection; }
+    KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
 
-    CommandHistory *commands()
-    { return &_commands; }
+    CommandHistory *commands() { return &_commands; }
 
     void alignObjsLeft();
     void alignObjsCenterH();
@@ -288,10 +292,8 @@ public:
     void alignObjsBottom();
     void replaceObjs();
 
-    PresSpeed getPresSpeed()
-    { return presSpeed; }
-    void setPresSpeed( PresSpeed _presSpeed )
-    { presSpeed = _presSpeed; }
+    PresSpeed getPresSpeed() { return presSpeed; }
+    void setPresSpeed( PresSpeed _presSpeed ) { presSpeed = _presSpeed; }
 
     int getLeftBorder();
     int getTopBorder();
@@ -300,8 +302,7 @@ public:
     void deletePage( int _page, DelPageMode _delPageMode );
     void insertPage( int _page, InsPageMode _insPageMode, InsertPos _insPos );
 
-    void setObjectList( QList<KPObject> *_list )
-    { _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false ); }
+    void setObjectList( QList<KPObject> *_list ) { _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false ); }
 
     int getPenBrushFlags();
 
@@ -354,9 +355,9 @@ protected:
      * Overloaded function from @ref KoDocument.
      *
      * @return true if one of the direct children wants to
-     *              be saved embedded. If there are no children or if
-     *              every direct child saves itself into its own file
-     *              then false is returned.
+     *		    be saved embedded. If there are no children or if
+     *		    every direct child saves itself into its own file
+     *		    then false is returned.
      */
     virtual bool hasToWriteMultipart();
 
@@ -373,8 +374,8 @@ protected:
 
     struct PixCache
     {
-        QString filename;
-        QString pix_string;
+	QString filename;
+	QString pix_string;
     };
 
     // list of views and children

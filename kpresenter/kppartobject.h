@@ -54,6 +54,12 @@ public:
     { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
+    virtual void setGUnbalanced( bool b )
+    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+    virtual void setGXFactor( int f )
+    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+    virtual void setGYFactor( int f )
+    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
     virtual ObjType getType()
     { return OT_PART; }
@@ -69,6 +75,12 @@ public:
     { return gColor2; }
     virtual BCType getGType()
     { return gType; }
+    virtual bool getGUnbalanced()
+    { return unbalanced; }
+    virtual int getGXFactor( )
+    { return xfactor; }
+    virtual int getGYFactor()
+    { return yfactor; }
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
@@ -89,7 +101,7 @@ public:
 
     void setView( KOffice::View_var kv )
     { view = KOffice::View::_narrow( kv ); }
-    
+
 protected:
     void paint( QPainter *_painter );
 
@@ -98,6 +110,8 @@ protected:
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;
+    bool unbalanced;
+    int xfactor, yfactor;
 
     KPGradient *gradient;
     bool _enableDrawing;
@@ -106,7 +120,7 @@ protected:
     KPresenterChild *child;
     OpenParts::Id parentID;
     KOffice::View_var view;
-    
+
     bool getNewPic;
 
 };

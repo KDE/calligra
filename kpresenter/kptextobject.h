@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: text object (header)                                   */
+/* Module: text object (header)					  */
 /******************************************************************/
 
 #ifndef kptextobject_h
@@ -23,7 +23,7 @@
 class KPresenterView;
 
 /******************************************************************/
-/* Class: KPTextObject                                            */
+/* Class: KPTextObject						  */
 /******************************************************************/
 
 class KPTextObject : public KPObject
@@ -34,7 +34,7 @@ public:
     {}
 
     KPTextObject &operator=( const KPTextObject & );
-    
+
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 
@@ -53,6 +53,12 @@ public:
     { drawEditRect = b; }
     virtual void setDrawEmpty( bool b )
     { drawEmpty = b; }
+    virtual void setGUnbalanced( bool b )
+    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+    virtual void setGXFactor( int f )
+    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+    virtual void setGYFactor( int f )
+    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
     virtual ObjType getType()
     { return OT_TEXT; }
@@ -76,6 +82,12 @@ public:
     { return drawEditRect; }
     virtual bool getDrawEmpty()
     { return drawEmpty; }
+    virtual bool getGUnbalanced()
+    { return unbalanced; }
+    virtual int getGXFactor( )
+    { return xfactor; }
+    virtual int getGYFactor()
+    { return yfactor; }
 
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
@@ -103,6 +115,8 @@ protected:
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;
+    bool unbalanced;
+    int xfactor, yfactor;
 
     KPGradient *gradient;
     bool drawEditRect, drawEmpty;

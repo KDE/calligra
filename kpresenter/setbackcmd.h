@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Set Background Command (header)                        */
+/* Module: Set Background Command (header)			  */
 /******************************************************************/
 
 #ifndef setbackcmd_h
@@ -24,17 +24,19 @@
 class KPresenterDoc;
 
 /******************************************************************/
-/* Class: SetBackCmd                                              */
+/* Class: SetBackCmd						  */
 /******************************************************************/
 
 class SetBackCmd : public Command
 {
 public:
     SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, BCType _bcType,
-                QString _backPix, QString _backClip, BackView _backView, BackType _backType,
-                QColor _oldBackColor1, QColor _oldBackColor2, BCType _oldBcType,
-                QString _oldBackPix, QString _oldBackClip, BackView _oldBackView, BackType _oldBackType,
-                bool _takeGlobal, int _currPgNum, KPresenterDoc *_doc );
+		bool _backUnbalanced, int _backXFactor, int _backYFactor,
+		QString _backPix, QString _backClip, BackView _backView, BackType _backType,
+		QColor _oldBackColor1, QColor _oldBackColor2, BCType _oldBcType,
+		bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
+		QString _oldBackPix, QString _oldBackClip, BackView _oldBackView, BackType _oldBackType,
+		bool _takeGlobal, int _currPgNum, KPresenterDoc *_doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -44,11 +46,15 @@ protected:
     {; }
 
     QColor backColor1, backColor2;
+    bool unbalanced;
+    int xfactor, yfactor;
     QString backPix, backClip;
     BCType bcType;
     BackView backView;
     BackType backType;
     QColor oldBackColor1, oldBackColor2;
+    bool oldUnbalanced;
+    int oldXFactor, oldYFactor;
     QString oldBackPix, oldBackClip;
     BCType oldBcType;
     BackView oldBackView;

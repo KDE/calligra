@@ -1,15 +1,15 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1998                   */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* KPresenter is under GNU GPL                                    */
+/* KPresenter - (c) by Reginald Stadlbauer 1998			  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* KPresenter is under GNU GPL					  */
 /******************************************************************/
-/* Module: KPresenter View (header)                               */
+/* Module: KPresenter View (header)				  */
 /******************************************************************/
 
 #ifndef kpresenter_view_h
@@ -65,7 +65,7 @@ class ConfRectDia;
 class SpacingDia;
 
 /******************************************************************/
-/* class KPresenterFrame                                          */
+/* class KPresenterFrame					  */
 /******************************************************************/
 class KPresenterFrame : public KoFrame
 {
@@ -91,11 +91,11 @@ protected:
 };
 
 /*****************************************************************/
-/* class KPresenterView                                          */
+/* class KPresenterView						 */
 /*****************************************************************/
 class KPresenterView : public QWidget,
-                       virtual public KoViewIf,
-                       virtual public KPresenter::KPresenterView_skel
+		       virtual public KoViewIf,
+		       virtual public KPresenter::KPresenterView_skel
 {
     Q_OBJECT
 
@@ -282,15 +282,18 @@ public:
     PieType getPieType() { return pieType; }
     int getPieAngle() { return pieAngle; }
     int getPieLength() { return pieLength; }
-    QPen getPen() {return pen; }
-    QBrush getBrush() {return brush; }
+    QPen getPen() { return pen; }
+    QBrush getBrush() { return brush; }
     LineEnd getLineBegin() {return lineBegin; }
     LineEnd getLineEnd() {return lineEnd; }
     QColor getGColor1() {return gColor1; }
     QColor getGColor2() {return gColor2; }
     BCType getGType() {return gType; }
     FillType getFillType() {return fillType; }
-
+    bool getGUnbalanced() { return gUnbalanced; } 
+    int getGXFactor() { return gXFactor; }
+    int getGYFactor() { return gYFactor; }
+    
     void setTool( ToolEditMode toolEditMode );
 
     int getRndX() { return rndX; }
@@ -300,8 +303,8 @@ public:
     QColor &currColor() { return tbColor; }
 
     void enableWebPres() {
-        m_vToolBarExtra->setItemEnabled( ID_TOOL_WEBPRES, true );
-        m_vMenuExtra->setItemEnabled( m_idMenuExtra_WepPres, true );
+	m_vToolBarExtra->setItemEnabled( ID_TOOL_WEBPRES, true );
+	m_vMenuExtra->setItemEnabled( m_idMenuExtra_WepPres, true );
     }
 
     // create a pixmapstring from a color
@@ -381,43 +384,36 @@ protected slots:
     void stopPres() {continuePres = false; }
 
     // align objs
-    void extraAlignObjLeft()
-    { extraAlignObjLeftidl(); }
-    void extraAlignObjCenterH()
-    { extraAlignObjCenterHidl(); }
-    void extraAlignObjRight()
-    { extraAlignObjRightidl(); }
-    void extraAlignObjTop()
-    { extraAlignObjTopidl(); }
-    void extraAlignObjCenterV()
-    { extraAlignObjCenterVidl(); }
-    void extraAlignObjBottom()
-    { extraAlignObjBottomidl(); }
+    void extraAlignObjLeft() { extraAlignObjLeftidl(); }
+    void extraAlignObjCenterH() { extraAlignObjCenterHidl(); }
+    void extraAlignObjRight() { extraAlignObjRightidl(); }
+    void extraAlignObjTop() { extraAlignObjTopidl(); }
+    void extraAlignObjCenterV() { extraAlignObjCenterVidl(); }
+    void extraAlignObjBottom() { extraAlignObjBottomidl(); }
 
-    // layout
+				// layout
     void newPageLayout( KoPageLayout _layout );
-    void openPageLayoutDia()
-    { extraLayout(); }
+    void openPageLayoutDia() { extraLayout(); }
     void unitChanged( QString );
 
 protected:
 
-    // ********* functions ***********
+// ********* functions ***********
 
-    // C++
+// C++
     virtual bool event( const char* _event, const CORBA::Any& _value );
-    // C++
+// C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
 
-    // resize event
+// resize event
     void resizeEvent( QResizeEvent* );
     virtual void dragEnterEvent( QDragEnterEvent *e );
     virtual void dragMoveEvent( QDragMoveEvent *e );
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
 
-    // GUI
+// GUI
     void setupPopupMenus();
     void setupScrollbars();
     void setupRulers();
@@ -426,17 +422,17 @@ protected:
 
     void doAutomaticScreenPres();
 
-    // ********** variables **********
+// ********** variables **********
 
-    // document
+// document
     KPresenterDoc *m_pKPresenterDoc;
 
-    // flags
+// flags
     bool m_bKPresenterModified;
     bool m_bUnderConstruction;
     bool searchFirst, continuePres, exitPres;
 
-    // edit menu
+// edit menu
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;
     CORBA::Long m_idMenuEdit_Redo;
@@ -451,17 +447,17 @@ protected:
     CORBA::Long m_idMenuEdit_FindReplace;
     CORBA::Long m_idMenuEdit_HeaderFooter;
 
-    // view menu
+// view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
 
-    // insert menu
+// insert menu
     OpenPartsUI::Menu_var m_vMenuInsert;
     CORBA::Long m_idMenuInsert_Page;
     CORBA::Long m_idMenuInsert_Picture;
     CORBA::Long m_idMenuInsert_Clipart;
 
-    // tools menu
+// tools menu
     OpenPartsUI::Menu_var m_vMenuTools;
     CORBA::Long m_idMenuTools_Mouse;
     CORBA::Long m_idMenuTools_Line;
@@ -475,7 +471,7 @@ protected:
     CORBA::Long m_idMenuTools_Formula;
     CORBA::Long m_idMenuTools_Part;
 
-    // text menu
+// text menu
     OpenPartsUI::Menu_var m_vMenuText;
     CORBA::Long m_idMenuText_TFont;
     CORBA::Long m_idMenuText_TColor;
@@ -493,7 +489,7 @@ protected:
     CORBA::Long m_idMenuText_TExtentCont2Height;
     CORBA::Long m_idMenuText_TExtentObj2Cont;
 
-    // extra menu
+// extra menu
     OpenPartsUI::Menu_var m_vMenuExtra;
     CORBA::Long m_idMenuExtra_PenBrush;
     CORBA::Long m_idMenuExtra_Pie;
@@ -514,7 +510,7 @@ protected:
     CORBA::Long m_idMenuExtra_Options;
     CORBA::Long m_idMenuExtra_WepPres;
 
-    // screenpresentation menu
+// screenpresentation menu
     OpenPartsUI::Menu_var m_vMenuScreen;
     CORBA::Long m_idMenuScreen_ConfigPage;
     CORBA::Long m_idMenuScreen_PresStructView;
@@ -542,16 +538,16 @@ protected:
     CORBA::Long m_idMenuScreen_PenW9;
     CORBA::Long m_idMenuScreen_PenW10;
 
-    // help menu
+// help menu
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_Contents;
 
-    // right button popup menus
+// right button popup menus
     QPopupMenu *rb_pen, *rb_pen_width, *rb_oalign, *rb_lbegin, *rb_lend;
 
     int W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, P_COL;
 
-    // edit toolbar
+// edit toolbar
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
     CORBA::Long m_idButtonEdit_Undo;
     CORBA::Long m_idButtonEdit_Redo;
@@ -560,13 +556,13 @@ protected:
     CORBA::Long m_idButtonEdit_Paste;
     CORBA::Long m_idButtonEdit_Delete;
 
-    // insert toolbar
+// insert toolbar
     OpenPartsUI::ToolBar_var m_vToolBarInsert;
     CORBA::Long m_idButtonInsert_Page;
     CORBA::Long m_idButtonInsert_Picture;
     CORBA::Long m_idButtonInsert_Clipart;
 
-    // tools toolbar
+// tools toolbar
     OpenPartsUI::ToolBar_var m_vToolBarTools;
     CORBA::Long m_idButtonTools_Mouse;
     CORBA::Long m_idButtonTools_Line;
@@ -580,7 +576,7 @@ protected:
     CORBA::Long m_idButtonTools_Formula;
     CORBA::Long m_idButtonTools_Part;
 
-    // text toolbar
+// text toolbar
     OpenPartsUI::ToolBar_var m_vToolBarText;
     CORBA::Long m_idComboText_FontSize;
     CORBA::Long m_idComboText_FontList;
@@ -598,7 +594,7 @@ protected:
     CORBA::Long m_idButtonText_DepthMinus;
     CORBA::Long m_idButtonText_Spacing;
 
-    // extra toolbar
+// extra toolbar
     OpenPartsUI::ToolBar_var m_vToolBarExtra;
     CORBA::Long m_idButtonExtra_Style;
     CORBA::Long m_idButtonExtra_Pie;
@@ -612,7 +608,7 @@ protected:
     CORBA::Long m_idButtonExtra_LineEnd;
     CORBA::Long m_idButtonExtra_WebPres;
 
-    // screen toolbar
+// screen toolbar
     OpenPartsUI::ToolBar_var m_vToolBarScreen;
     CORBA::Long m_idButtonScreen_Stop;
     CORBA::Long m_idButtonScreen_Pause;
@@ -625,15 +621,15 @@ protected:
     CORBA::Long m_idButtonScreen_Full;
     CORBA::Long m_idButtonScreen_Pen;
 
-    // color bar
+// color bar
     OpenPartsUI::ColorBar_var m_vColorBar;
 
-    // scrollbars
+// scrollbars
     QScrollBar *vert, *horz;
     int xOffset, yOffset;
     int _xOffset, _yOffset;
 
-    // dialogs
+// dialogs
     BackDia *backDia;
     AFChoose *afChoose;
     StyleDia *styleDia;
@@ -651,7 +647,7 @@ protected:
     ConfRectDia *confRectDia;
     SpacingDia *spacingDia;
 
-    // default pen and brush
+// default pen and brush
     QPen pen;
     QBrush brush;
     LineEnd lineBegin;
@@ -660,14 +656,16 @@ protected:
     BCType gType;
     FillType fillType;
     PieType pieType;
+    bool gUnbalanced;
+    int gXFactor, gYFactor;
     int pieLength, pieAngle;
     int rndX, rndY;
 
-    // the page
+// the page
     Page *page;
     KoRuler *h_ruler, *v_ruler;
 
-    // text toolbar values
+// text toolbar values
     QFont tbFont;
     TxtParagraph::HorzAlign tbAlign;
     QColor tbColor;
@@ -686,7 +684,7 @@ protected:
 
     KPresenterShell *shell;
 
-    // ids
+// ids
     static const int ID_TOOL_MOUSE = 2;
     static const int ID_TOOL_LINE = 3;
     static const int ID_TOOL_RECT = 4;

@@ -44,11 +44,15 @@ KPAutoformObject::KPAutoformObject()
     gType = BCT_GHORZ;
     drawShadow = false;
     redrawPix = false;
+    unbalanced = FALSE;
+    xfactor = 100;
+    yfactor = 100;
 }
 
 /*================== overloaded constructor ======================*/
 KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename, LineEnd _lineBegin, LineEnd _lineEnd,
-				    FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType )
+				    FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
+				    bool _unbalanced, int _xfactor, int _yfactor)
     : KPObject(), pen( _pen ), brush( _brush ), filename( _filename ), gColor1( _gColor1 ), gColor2( _gColor2 ), atfInterp( 0, "" ), pix()
 {
     atfInterp.load( filename );
@@ -58,10 +62,13 @@ KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename,
     fillType = _fillType;
     drawShadow = false;
     redrawPix = true;
+    unbalanced = FALSE;
+    xfactor = 100;
+    yfactor = 100;
 
     if ( fillType == FT_GRADIENT )
     {
-	gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ) );
+	gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ), unbalanced, xfactor, yfactor );
 	redrawPix = true;
 	pix.resize( getSize() );
     }
@@ -122,7 +129,7 @@ void KPAutoformObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-	gradient = new KPGradient( gColor1, gColor2, gType, getSize() );
+	gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
 	redrawPix = true;
 	pix.resize( getSize() );
     }
@@ -157,7 +164,8 @@ void KPAutoformObject::save( ostream& out )
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
 	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
 	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-	<< static_cast<int>( gType ) << "\"/>" << endl;
+	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor 
+	<< "\" xfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
 	<< "\" num=\"" << disappearNum << "\"/>" << endl;
 }
@@ -391,6 +399,12 @@ void KPAutoformObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    gColor2 = QColor( gColor2.red(), gColor2.green(), atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "type" )
 		    gType = static_cast<BCType>( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "unbalanced" )
+		    unbalanced = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "xfactor" )
+		    xfactor = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "yfactor" )
+		    yfactor = atoi( ( *it ).m_strValue.c_str() );
 	    }
 	    setGColor1( gColor1 );
 	    setGColor2( gColor2 );

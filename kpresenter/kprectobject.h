@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: rect object (header)                                   */
+/* Module: rect object (header)					  */
 /******************************************************************/
 
 #ifndef kprectobject_h
@@ -22,7 +22,7 @@
 class KPGradient;
 
 /******************************************************************/
-/* Class: KPRectObject                                            */
+/* Class: KPRectObject						  */
 /******************************************************************/
 
 class KPRectObject : public KPObject
@@ -30,12 +30,13 @@ class KPRectObject : public KPObject
 public:
     KPRectObject();
     KPRectObject( QPen _pen, QBrush _brush, FillType _fillType,
-                  QColor _gColor1, QColor _gColor2, BCType _gType, int _xRnd, int _yRnd );
+		  QColor _gColor1, QColor _gColor2, BCType _gType, int _xRnd, int _yRnd,
+		  bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPRectObject()
     { if ( gradient ) delete gradient; }
 
     KPRectObject &operator=( const KPRectObject & );
-    
+
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 
@@ -52,7 +53,13 @@ public:
     { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
-
+    virtual void setGUnbalanced( bool b )
+    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+    virtual void setGXFactor( int f )
+    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+    virtual void setGYFactor( int f )
+    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
+    
     virtual ObjType getType()
     { return OT_RECT; }
     virtual QPen getPen()
@@ -69,6 +76,12 @@ public:
     { return gColor2; }
     virtual BCType getGType()
     { return gType; }
+    virtual bool getGUnbalanced()
+    { return unbalanced; }
+    virtual int getGXFactor( )
+    { return xfactor; }
+    virtual int getGYFactor()
+    { return yfactor; }
 
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
@@ -84,7 +97,9 @@ protected:
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;
-
+    bool unbalanced;
+    int xfactor, yfactor;
+    
     KPGradient *gradient;
     bool drawShadow;
 
