@@ -663,36 +663,53 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
 {
     // take care of nested lists
     //kdDebug() << k_funcinfo << "parsing list"<< endl;
-    int indentation = 0;
+
+    bool isOrdered;
+    if ( list.tagName() == "text:ordered-list" )
+        isOrdered = true;
+    else
+        isOrdered = false;
+
     QDomElement e;
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
     {
         e = n.toElement();
-        if ( e.tagName() == "text:unordered-list" || e.tagName() == "text:ordered-list" )
+        QString name = e.tagName();
+        if ( name == "text:unordered-list" )
         {
-            indentation += 10;
+            isOrdered = false;
             // parse the list-properties
             fillStyleStack( e );
         }
-        if ( e.tagName() == "text:p" )
+        else if ( name == "text:ordered-list" )
+        {
+            isOrdered = true;
+            // parse the list-properties
+            fillStyleStack( e );
+        }
+        if ( name == "text:p" )
             break;
     }
 
     QDomElement p = parseParagraph( doc, e );
-    if (indentation != 0)
-    {
-        QDomElement indent = doc.createElement( "INDENTS" );
-        indent.setAttribute( "left", MM_TO_POINT( indentation ) ); //lukas: is MM always correct?
-        // percy: MM is correct as I count the number of indentations and take 10mm for every
-        // indentation-level. But we could use the values from the corresponding list-style instead.
-        // See styles L1, L2, L3...
-        p.appendChild( indent );
-    }
 
-    QDomElement counter = doc.createElement( "COUNTER" ); // TODO when styles are done
+    if ( m_styleStack.hasAttribute( "fo:margin-left" ) )
+        if ( toPoint( m_styleStack.attribute( "fo:margin-left" ) ) != 0 )
+        {
+            QDomElement indent = doc.createElement( "INDENTS" );
+            indent.setAttribute( "left", toPoint( m_styleStack.attribute( "fo:margin-left" ) ) );
+            p.appendChild( indent );
+        }
+
+    QDomElement counter = doc.createElement( "COUNTER" );
     counter.setAttribute( "numberingtype", 0 );
-    counter.setAttribute( "type", 10 );
     counter.setAttribute( "depth", 0 );
+
+    if ( isOrdered )
+        counter.setAttribute( "type", 1 );
+    else
+        counter.setAttribute( "type", 10 );
+
     p.appendChild( counter );
 
     return p;
