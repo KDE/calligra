@@ -456,6 +456,37 @@
     </Function>
 
     <Function>
+      <Name>MULTINOMIAL</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Integer values</Comment>
+	<Type range="true">Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Integer values</Comment>
+	<Type range="true">Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Integer values</Comment>
+	<Type range="true">Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Integer values</Comment>
+	<Type range="true">Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Integer values</Comment>
+	<Type range="true">Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The MULTINOMIAL() function returns the multinomial of each number in the parameters. It uses this formula for MULTINOMIAL(a,b,c):</Text>
+        <Text>(a+b+c)! / a!b!c!</Text>
+	<Syntax>MULTINOMIAL(value;value;...)</Syntax>
+	<Example>MULTINOMIAL(3;4;5) equals 27720</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>SQRT</Name>
       <Type>Float</Type>
       <Parameter>

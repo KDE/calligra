@@ -75,6 +75,7 @@ bool kspreadfunc_max( KSContext& context );
 bool kspreadfunc_min( KSContext& context );
 bool kspreadfunc_mod( KSContext& context );
 bool kspreadfunc_mult( KSContext& context );
+bool kspreadfunc_multinomial( KSContext& context );
 bool kspreadfunc_odd( KSContext& context );
 bool kspreadfunc_pow( KSContext& context );
 bool kspreadfunc_quotient( KSContext& context );
@@ -519,6 +520,7 @@ static const functionEntry funcTab[] = {
   { "MIN", kspreadfunc_min },
   { "MOD", kspreadfunc_mod },
   { "MULTIPLY", kspreadfunc_mult },
+  { "MULTINOMIAL", kspreadfunc_multinomial },
   { "ODD", kspreadfunc_odd },
   { "POW", kspreadfunc_pow },
   { "QUOTIENT", kspreadfunc_quotient },

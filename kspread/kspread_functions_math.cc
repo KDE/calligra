@@ -936,6 +936,33 @@ bool kspreadfunc_factdouble( KSContext& context )
   return true;
 }
 
+// Function: MULTINOMIAL
+bool kspreadfunc_multinomial( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  double num = 0, den = 1;
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::IntType, false ) )
+    {
+      int val = (*it)->intValue();
+      if( val < 0 ) return false;
+      num += val;
+      den *= util_fact( val, 0 );
+    }
+  }
+
+  num = util_fact( num, 0 );
+  double result = num / den;
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
 
 // Function: sign
 bool kspreadfunc_sign( KSContext& context )
