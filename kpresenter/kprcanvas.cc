@@ -4216,7 +4216,7 @@ void KPrCanvas::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = currPresPage;
-    pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), _presFakt, slideList, pg, this );
+    pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), slideList, pg, this );
     gotoPage( pg );
 
     if ( !spManualSwitch() ) {

@@ -34,7 +34,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KPGotoPage::KPGotoPage( const KPresenterDoc *doc, float fakt,
+KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
 			const QValueList<int> &slides, int start,
 			QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("Goto Page..."), Ok|Cancel)
@@ -73,11 +73,11 @@ KPGotoPage::KPGotoPage( const KPresenterDoc *doc, float fakt,
 }
 
 /*================================================================*/
-int KPGotoPage::gotoPage( const KPresenterDoc *doc, float fakt,
+int KPGotoPage::gotoPage( const KPresenterDoc *doc,
 			  const QValueList<int> &slides, int start,
 			  QWidget *parent)
 {
-    KPGotoPage dia( doc, fakt, slides, start,parent, 0L );
+    KPGotoPage dia( doc, slides, start,parent, 0L );
     dia.exec();
     dia.resetCursor();
     return dia.page();

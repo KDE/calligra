@@ -36,11 +36,11 @@ class KPresenterDoc;
 class KPGotoPage : public KDialogBase 
 {
 public:
-    KPGotoPage( const KPresenterDoc *doc, float fakt,
+    KPGotoPage( const KPresenterDoc *doc,
 		const QValueList<int> &slides, int start,
 		QWidget *parent = 0L, const char *name = 0L );
 
-    static int gotoPage( const KPresenterDoc *doc, float fakt,
+    static int gotoPage( const KPresenterDoc *doc,
 			 const QValueList<int> &slides, int start,
 			 QWidget *parent = 0L );
 
