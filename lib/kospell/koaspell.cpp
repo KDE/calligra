@@ -548,18 +548,6 @@ KOASpell::~KOASpell ()
     deleteSpellChecker();
 }
 
-// This is always called from the event loop to make
-// sure that the receiver can safely delete the
-// KOASpell object.
-void KOASpell::emitDeath()
-{
-#if 0
-  bool deleteMe = autoDelete; // Can't access object after next call!
-  emit death();
-  if (deleteMe)
-     delete this;
-#endif
-}
 
 void KOASpell::changeSpellLanguage( int index )
 {

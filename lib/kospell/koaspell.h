@@ -68,8 +68,6 @@ protected slots:
     /* All of those signals from KProcIO get sent here. */
     void dialog2 (int dlgresult);
 
-    void emitDeath();
-
 protected:
 
     AspellSpeller * speller;

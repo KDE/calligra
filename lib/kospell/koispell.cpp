@@ -139,7 +139,7 @@ void KOISpell::startIspell()
         *proc << "ispell";
         kdDebug(30006) << "Using ispell" << endl;
         break;
-#if 0
+#if 0 // we don't use apsell binary for the moment..
     case KOS_CLIENT_ASPELL:
         *proc << "aspell";
         kdDebug(30006) << "Using aspell" << endl;
