@@ -21,22 +21,24 @@
 #include <qwmatrix.h>
 #include <qmessagebox.h>
 
-#include <kaction.h>
-#include <kfiledialog.h>
-#include <kcolordlg.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <klineeditdlg.h>
 #include <kdebug.h>
 #include <kimgio.h>
+#include <klocale.h>
+#include <kaction.h>
+#include <kcolordlg.h>
+#include <kiconloader.h>
+#include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <klineeditdlg.h>
+
+#include <kio/netaccess.h>
 
 #include <koPartSelectDia.h>
 #include <koFilterManager.h>
 
-#include "kintegerinputdialog.h"
 #include "zoomfactordlg.h"
 #include "preferencesdlg.h"
+#include "kintegerinputdialog.h"
 
 #include "kimage_doc.h"
 #include "kimage_view.h"
@@ -150,31 +152,31 @@ void KImageView::redo()
 
 void KImageView::editImportImage()
 {
-  QString filter = "*.kim|KImage picture\n" + KImageIO::pattern( KImageIO::Reading );
+  KURL url = KFileDialog::getOpenURL( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ) );
 
   // TODO: use file preview dialog
-  //QString file = KFilePreviewDialog::getOpenFileName( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ), 0 );
+  //KURL url = KFilePreviewDialog::getOpenURL( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ), 0 );
 
-  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-
-  if ( file.isNull() )
+  if( url.isEmpty() )
     return;
 
-  if( !KImageIO::isSupported( KImageIO::mimeType( file ) ) )
-  {
-    file = KoFilterManager::self()->import( file, "application/x-kimage" );
-    if( file.isNull() )
-      return;
-  }
+  QString tempFile;
 
-  if( !doc()->loadFromURL( file ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
-    QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-  }
+  KIO::NetAccess::download( url, tempFile );
 
-  slotUpdateView();
+  if( !KImageIO::isSupported( KImageIO::mimeType( tempFile ) ) )
+  {
+    if( !doc()->loadFromURL( tempFile ) )
+    {
+      QString tmp;
+      tmp.sprintf( i18n( "Could not open\n%s" ), url.path().data() );
+      QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    }
+
+    KIO::NetAccess::removeTempFile( tempFile );
+
+    slotUpdateView();
+  }
 }
 
 void KImageView::editExportImage()

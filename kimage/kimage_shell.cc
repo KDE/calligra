@@ -19,10 +19,11 @@
 
 #include <qmessagebox.h>
 
-#include <kfiledialog.h>
+#include <kimgio.h>
 #include <klocale.h>
 #include <kstddirs.h>
-#include <kimgio.h>
+#include <kfiledialog.h>
+#include <kio/netaccess.h>
 
 #include <koFilterManager.h>
 #include <koApplication.h>
@@ -49,40 +50,29 @@ KoDocument* KImageShell::createDoc()
 
 void KImageShell::slotFileOpen()
 {
-  QString filter = "*.kim|KImage picture\n" + KImageIO::pattern( KImageIO::Reading );
+  KURL url = KFileDialog::getOpenURL( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ) );
 
   // TODO: use file preview dialog
-  //QString file = KFilePreviewDialog::getOpenFileName( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ), 0 );
+  //KURL url = KFilePreviewDialog::getOpenURL( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ), 0 );
 
-  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-
-  if ( file.isNull() )
+  if ( url.isEmpty() )
     return;
 
-  if( !KImageIO::isSupported( KImageIO::mimeType( file ) ) )
-  {
-    file = KoFilterManager::self()->import( file, KoDocument::nativeFormatMimeType() );
-    if( file.isNull() )
-      return;
-  }
+  QString tempFile;
 
-  if( !openDocument( file ) )
+  KIO::NetAccess::download( url, tempFile );
+
+  if( !KImageIO::isSupported( KImageIO::mimeType( tempFile ) ) )
   {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
-    QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    if( !openDocument( tempFile ) )
+    {
+      QString tmp;
+      tmp.sprintf( i18n( "Could not open\n%s" ), url.path().data() );
+      QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    }
+
+    KIO::NetAccess::removeTempFile( tempFile );
   }
 }
 
 #include "kimage_shell.moc"
-
-
-
-
-
-
-
-
-
-
-
