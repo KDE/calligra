@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 
+#include "basicelement.h"
 #include "contextstyle.h"
 #include "formulaelement.h"
 
@@ -84,6 +85,18 @@ signals:
     
 private:
 
+    // There a lot of thing we can do with the formula.
+    
+    void addText(FormulaCursor* cursor, QChar ch);
+    void addLowerRightIndex(FormulaCursor* cursor);
+    void addUpperRightIndex(FormulaCursor* cursor);
+
+    void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
+
+    
+    /**
+     * Emits a formulaChanged signal if we are dirty.
+     */
     void testDirty();
     
     /**

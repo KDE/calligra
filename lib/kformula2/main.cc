@@ -1,6 +1,8 @@
 
-#include <iostream>
+//#include <iostream>
+#include <memory>
 
+#include <qaccel.h>
 #include <qapplication.h>
 #include <qlist.h>
 #include <qpainter.h>
@@ -28,7 +30,7 @@
 
 //     cursor.insert(list);
 
-//     IndexElement* indexElement = cursor.getAktiveIndexElement();
+//     IndexElement* indexElement = cursor.getActiveIndexElement();
 //     if (indexElement != 0) {
 //         //cout << "indexElement != 0\n";
         
@@ -53,9 +55,14 @@ int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     KFormulaContainer container;
-    KFormulaWidget* mw = new KFormulaWidget(&container);
+    auto_ptr<KFormulaWidget> mw(new KFormulaWidget(&container));
     mw->setCaption("Test of the formula engine");
     mw->show();
+
+    QAccel ac(mw.get());
+    ac.insertItem(Qt::CTRL + Qt::Key_Q, 1);
+    ac.connectItem(1, &app, SLOT(quit()));
+
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     return app.exec();
 }

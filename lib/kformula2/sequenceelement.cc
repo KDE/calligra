@@ -213,7 +213,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
         if (cursor->getPos() > 0) {
-            if (cursor->isSelection()) {
+            if (cursor->isSelectionMode()) {
                 cursor->setTo(this, cursor->getPos()-1);
             }
             else {
@@ -233,7 +233,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     else {
         int fromPos = children.find(from);
         cursor->setTo(this, fromPos);
-        if (cursor->isSelection()) {
+        if (cursor->isSelectionMode()) {
             if (!cursor->isMouseMark()) {
                 cursor->setMark(fromPos+1);
             }
@@ -257,7 +257,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     else if (from == this) {
         uint pos = cursor->getPos();
         if (pos < children.count()) {
-            if (cursor->isSelection()) {
+            if (cursor->isSelectionMode()) {
                 cursor->setTo(this, pos+1);
             }
             else {
@@ -277,7 +277,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     else {
         int fromPos = children.find(from);
         cursor->setTo(this, fromPos+1);
-        if (cursor->isSelection()) {
+        if (cursor->isSelectionMode()) {
             if (!cursor->isMouseMark()) {
                 cursor->setMark(fromPos);
             }
@@ -325,7 +325,7 @@ void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  */
 void SequenceElement::moveHome(FormulaCursor* cursor)
 {
-    if (cursor->isSelection()) {
+    if (cursor->isSelectionMode()) {
         BasicElement* element = cursor->getElement();
         if (element != this) {
             while (element->getParent() != this) {
@@ -343,7 +343,7 @@ void SequenceElement::moveHome(FormulaCursor* cursor)
  */
 void SequenceElement::moveEnd(FormulaCursor* cursor)
 {
-    if (cursor->isSelection()) {
+    if (cursor->isSelectionMode()) {
         BasicElement* element = cursor->getElement();
         if (element != this) {
             while (element->getParent() != this) {
@@ -354,6 +354,17 @@ void SequenceElement::moveEnd(FormulaCursor* cursor)
     }
     cursor->setTo(this, children.count());
 }
+
+/**
+ * Sets the cursor inside this element to its start position.
+ * For most elements that is the main child.
+ */
+void SequenceElement::goInside(FormulaCursor* cursor)
+{
+    cursor->setSelection(false);
+    cursor->setTo(this, 0);
+}
+
 
 // children
 
@@ -382,7 +393,8 @@ void SequenceElement::moveEnd(FormulaCursor* cursor)
 
 /**
  * Inserts all new children at the cursor position. Places the
- * cursor according to the direction.
+ * cursor according to the direction. The inserted elements will
+ * be selected.
  *
  * The list will be emptied but stays the property of the caller.
  */
@@ -398,7 +410,10 @@ void SequenceElement::insert(FormulaCursor* cursor,
         children.insert(pos+i, child);
     }
     if (direction == beforeCursor) {
-        cursor->setTo(this, pos+count);
+        cursor->setTo(this, pos+count, pos);
+    }
+    else {
+        cursor->setTo(this, pos, pos+count);
     }
     formula()->changed();
 }
@@ -472,6 +487,7 @@ void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
 
 /**
  * Returns the child at the cursor.
+ * Does not care about the selection.
  */
 BasicElement* SequenceElement::getChild(FormulaCursor* cursor, Direction direction)
 {
@@ -488,5 +504,13 @@ BasicElement* SequenceElement::getChild(FormulaCursor* cursor, Direction directi
         }
     }
     return 0;
+}
+
+/**
+ * Selects all children. The cursor is put behind, the mark before them.
+ */
+void SequenceElement::selectAllChildren(FormulaCursor* cursor)
+{
+    cursor->setTo(this, children.count(), 0);
 }
 

@@ -128,6 +128,24 @@ public:
      */
     virtual void moveDown(FormulaCursor* cursor, BasicElement* from) {}
 
+    /**
+     * Moves the cursor to the first position in this sequence.
+     * (That is before the first child.)
+     */
+    virtual void moveHome(FormulaCursor* cursor) {}
+
+    /**
+     * Moves the cursor to the last position in this sequence.
+     * (That is behind the last child.)
+     */
+    virtual void moveEnd(FormulaCursor* cursor) {}
+
+    /**
+     * Sets the cursor inside this element to its start position.
+     * For most elements that is the main child.
+     */
+    virtual void goInside(FormulaCursor* cursor);
+
     
     // children
 

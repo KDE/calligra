@@ -25,6 +25,7 @@
 
 class FormulaElement;
 class IndexElement;
+class QKeyEvent;
 
 
 /**
@@ -49,12 +50,28 @@ public:
     FormulaCursor(FormulaElement* element);
 
     // where the cursor and the mark are
-    int getPos() const;
+    int getPos() const { return cursorPos; }
     int getMark() const { return markPos; }
 
-    bool isSelection() const { return selectionFlag; }
+    
+    /**
+     * Returns wether we are in selection mode.
+     */
+    bool isSelectionMode() const { return selectionFlag; }
+
+    /**
+     * Returns wether there actually is a selection.
+     */
+    bool isSelection() const { return selectionFlag && (getPos() != getMark()); }
+
+    /**
+     * Sets the selection mode.
+     */
     void setSelection(bool selection) { selectionFlag = selection; }
 
+    /**
+     * To be done later...
+     */
     bool isMouseMark() const { return mouseSelectionFlag; }
 
 
@@ -67,10 +84,19 @@ public:
     
     // simple cursor movement.
     
-    void moveLeft();
-    void moveRight();
-    void moveUp();
-    void moveDown();
+    void moveLeft(QKeyEvent* event);
+    void moveRight(QKeyEvent* event);
+    void moveUp(QKeyEvent* event);
+    void moveDown(QKeyEvent* event);
+
+    void moveHome(QKeyEvent* event);
+    void moveEnd(QKeyEvent* event);
+
+    /**
+     * Moves the cursor inside the element. Selection is turned off.
+     */
+    void goInsideElement(BasicElement* element);
+    
     
     /**
      * Inserts the child at the current position.
@@ -93,15 +119,43 @@ public:
                 BasicElement::Direction = BasicElement::beforeCursor);
 
 
+    /**
+     * Replaces the current selection with the supplied element.
+     * The replaced elements become the new element's main child's content.
+     */
+    void replaceSelectionWith(BasicElement*,
+                              BasicElement::Direction = BasicElement::beforeCursor);
+
+    /**
+     * Replaces the element the cursor points to with its main child's
+     * content.
+     */
+    BasicElement* replaceByMainChildContent(BasicElement::Direction = BasicElement::beforeCursor);
+
+
+    /**
+     * Returns wether the element the cursor points to should be replaced.
+     * Elements are senseless as soon as they only contain a main child.
+     */
+    bool elementIsSenseless();
+    
+    
     // The range that is selected. Makes no sense if there is
     // no selection.
+
     int getSelectionStart() const { return QMIN(getPos(), getMark()); }
     int getSelectionEnd() const { return QMAX(getPos(), getMark()); }
     
+
     /**
      * Sets the cursor to a new position.
-     * This gets called from the SequenceElement that wants
-     * to own the cursor.
+     * This gets called from the element that wants
+     * to own the cursor. It is a mistake to call this if you aren't
+     * an element.
+     *
+     * If you provide a mark >= 0 the selection gets turned on.
+     * If there is a selection and you don't provide a mark the
+     * current mark won't change.
      */
     void setTo(BasicElement* element, int cursor, int mark=-1);
 
@@ -124,7 +178,7 @@ public:
      *
      * Might be 0 is there is no such child.
      */
-    BasicElement* getAktiveChild(BasicElement::Direction direction);
+    BasicElement* getActiveChild(BasicElement::Direction direction);
 
     
     /**
@@ -140,7 +194,7 @@ public:
      * Returns the IndexElement the cursor is on or 0
      * if there is non.
      */
-    IndexElement* getAktiveIndexElement();
+    IndexElement* getActiveIndexElement();
     
 private:
 
@@ -153,6 +207,11 @@ private:
     
     void setPos(int pos);
     void setMark(int mark);
+
+    /**
+     * Sets the selection according to the shift key.
+     */
+    void handleShiftState(int state);
 
     
     /**

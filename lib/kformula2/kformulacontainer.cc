@@ -22,7 +22,6 @@
 #include <qevent.h>
 #include <qstring.h>
 
-#include "basicelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -89,50 +88,120 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
 {
     QChar ch = event->text().at(0);
     if (ch.isPrint()) {
-        QList<BasicElement> list;
-        list.setAutoDelete(true);
-        list.append(new TextElement(ch));
-        cursor->insert(list);
+        int latin1 = ch.latin1();
+        switch (latin1) {
+        case '(':
+        case '[':
+        case '{':
+        case '|':
+        case '/':
+            break;
+        case '^':
+            addUpperRightIndex(cursor);
+            break;
+        case '_':
+            addLowerRightIndex(cursor);
+            break;
+        case ' ':
+            break;
+        default:
+            addText(cursor, ch);
+        }
     }
     else {
         int action = event->key();
         switch (action) {
         case Qt::Key_Left:
-            cursor->moveLeft();
+            cursor->moveLeft(event);
             break;
         case Qt::Key_Right:
-            cursor->moveRight();
+            cursor->moveRight(event);
             break;
         case Qt::Key_Up:
-            cursor->moveUp();
+            cursor->moveUp(event);
             break;
         case Qt::Key_Down:
-            cursor->moveDown();
+            cursor->moveDown(event);
             break;
-        case Qt::Key_BackSpace: {
-            QList<BasicElement> list;
-            list.setAutoDelete(true);
-            cursor->remove(list);
-            cursor->normalize();
-            //list.at(0)->output(cout) << endl;
+        case Qt::Key_BackSpace:
+            removeSelection(cursor, BasicElement::beforeCursor);
             break;
-        }
-        case Qt::Key_Delete: {
-            QList<BasicElement> list;
-            list.setAutoDelete(true);
-            cursor->remove(list, BasicElement::afterCursor);
-            cursor->normalize();
-            //list.at(0)->output(cout) << endl;
+        case Qt::Key_Delete:
+            removeSelection(cursor, BasicElement::afterCursor);
             break;
-        }
         case Qt::Key_Home:
+            cursor->moveHome(event);
+            break;
         case Qt::Key_End:
+            cursor->moveEnd(event);
             break;
         }
     }
     
     testDirty();
 }
+
+
+void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
+{
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    list.append(new TextElement(ch));
+    cursor->insert(list);
+    cursor->setSelection(false);
+}
+
+void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
+{
+    IndexElement* element = cursor->getActiveIndexElement();
+    if (element == 0) {
+        element = new IndexElement;
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
+    }
+
+    if (!element->hasLowerRight()) {
+        SequenceElement* index = new SequenceElement;
+        element->setToLowerRight(cursor);
+        cursor->insert(index);
+        //cursor->goInsideElement(index);
+    }
+    else {
+        element->moveToLowerRight(cursor, BasicElement::afterCursor);
+    }
+}
+
+void KFormulaContainer::addUpperRightIndex(FormulaCursor* cursor)
+{
+    IndexElement* element = cursor->getActiveIndexElement();
+    if (element == 0) {
+        element = new IndexElement;
+        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
+    }
+
+    if (!element->hasUpperRight()) {
+        SequenceElement* index = new SequenceElement;
+        element->setToUpperRight(cursor);
+        cursor->insert(index);
+        //cursor->goInsideElement(index);
+    }
+    else {
+        element->moveToUpperRight(cursor, BasicElement::afterCursor);
+    }
+}
+
+void KFormulaContainer::removeSelection(FormulaCursor* cursor,
+                                        BasicElement::Direction direction)
+{
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    cursor->remove(list, direction);
+    if (cursor->elementIsSenseless()) {
+        BasicElement* element = cursor->replaceByMainChildContent();
+        delete element;
+    }
+    cursor->normalize();
+}
+
 
 void KFormulaContainer::testDirty()
 {

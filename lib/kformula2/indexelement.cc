@@ -266,7 +266,7 @@ void IndexElement::draw(QPainter& painter, ContextStyle& contextStyle,
  */
 void IndexElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelection()) {
+    if (cursor->isSelectionMode()) {
         getParent()->moveLeft(cursor, this);
     }
     else {
@@ -324,7 +324,7 @@ void IndexElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
  */
 void IndexElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelection()) {
+    if (cursor->isSelectionMode()) {
         getParent()->moveRight(cursor, this);
     }
     else {
@@ -382,7 +382,7 @@ void IndexElement::moveRight(FormulaCursor* cursor, BasicElement* from)
  */
 void IndexElement::moveUp(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelection()) {
+    if (cursor->isSelectionMode()) {
         getParent()->moveUp(cursor, this);
     }
     else {
@@ -416,7 +416,7 @@ void IndexElement::moveUp(FormulaCursor* cursor, BasicElement* from)
  */
 void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
-    if (cursor->isSelection()) {
+    if (cursor->isSelectionMode()) {
         getParent()->moveDown(cursor, this);
     }
     else {
@@ -544,6 +544,7 @@ void IndexElement::insert(FormulaCursor* cursor,
     else {
         index->moveRight(cursor, this);
     }
+    cursor->setSelection(false);
     formula()->changed();
 }
 
@@ -678,6 +679,10 @@ BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction direction)
 //     return lowerRight;
 // }
 
+
+// point the cursor to a gap where an index is to be inserted.
+// this makes no sense if there is such an index already.
+
 void IndexElement::setToUpperLeft(FormulaCursor* cursor)
 {
     cursor->setTo(this, upperLeftPos);
@@ -698,43 +703,54 @@ void IndexElement::setToLowerRight(FormulaCursor* cursor)
     cursor->setTo(this, lowerRightPos);
 }
 
+
+// move inside an index that exists already.
+
 void IndexElement::moveToUpperLeft(FormulaCursor* cursor, Direction direction)
 {
-    if (direction == beforeCursor) {
-        upperLeft->moveLeft(cursor, this);
-    }
-    else {
-        upperLeft->moveRight(cursor, this);
+    if (hasUpperLeft()) {
+        if (direction == beforeCursor) {
+            upperLeft->moveLeft(cursor, this);
+        }
+        else {
+            upperLeft->moveRight(cursor, this);
+        }
     }
 }
 
 void IndexElement::moveToUpperRight(FormulaCursor* cursor, Direction direction)
 {
-    if (direction == beforeCursor) {
-        upperRight->moveLeft(cursor, this);
-    }
-    else {
-        upperRight->moveRight(cursor, this);
+    if (hasUpperRight()) {
+        if (direction == beforeCursor) {
+            upperRight->moveLeft(cursor, this);
+        }
+        else {
+            upperRight->moveRight(cursor, this);
+        }
     }
 }
 
 void IndexElement::moveToLowerLeft(FormulaCursor* cursor, Direction direction)
 {
-    if (direction == beforeCursor) {
-        lowerLeft->moveLeft(cursor, this);
-    }
-    else {
-        lowerLeft->moveRight(cursor, this);
+    if (hasLowerLeft()) {
+        if (direction == beforeCursor) {
+            lowerLeft->moveLeft(cursor, this);
+        }
+        else {
+            lowerLeft->moveRight(cursor, this);
+        }
     }
 }
 
 void IndexElement::moveToLowerRight(FormulaCursor* cursor, Direction direction)
 {
-    if (direction == beforeCursor) {
-        lowerRight->moveLeft(cursor, this);
-    }
-    else {
-        lowerRight->moveRight(cursor, this);
+    if (hasLowerRight()) {
+        if (direction == beforeCursor) {
+            lowerRight->moveLeft(cursor, this);
+        }
+        else {
+            lowerRight->moveRight(cursor, this);
+        }
     }
 }
 

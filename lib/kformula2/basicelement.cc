@@ -20,6 +20,7 @@
 
 
 #include "basicelement.h"
+#include "formulacursor.h"
 #include "sequenceelement.h"
 
 
@@ -73,3 +74,15 @@ QPoint BasicElement::widgetPos()
     return QPoint(x, y);
 }
 
+
+/**
+ * Sets the cursor inside this element to its start position.
+ * For most elements that is the main child.
+ */
+void BasicElement::goInside(FormulaCursor* cursor)
+{
+    BasicElement* mainChild = getMainChild();
+    if (mainChild != 0) {
+        mainChild->goInside(cursor);
+    }
+}

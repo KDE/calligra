@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qevent.h>
 #include <qpainter.h>
 
 #include "formulacursor.h"
@@ -37,30 +38,26 @@ void FormulaCursor::setTo(BasicElement* element, int cursor, int mark=-1)
 {
     current = element;
     cursorPos = cursor;
-    if ((mark == -1) && isSelection()) {
+    if ((mark == -1) && selectionFlag) {
         return;
+    }
+    if (mark != -1) {
+        setSelection(true);
     }
     markPos = mark;
 }
 
 
-int FormulaCursor::getPos() const
-{
-//     if (isInsideParent()) {
-//         BasicElement* parent = current->getParent();
-//         return parent->getChildPos(current);
-//     }
-    return cursorPos;
-}
-
-
 void FormulaCursor::setPos(int pos)
 {
+    cursorPos = pos;
 }
 
 void FormulaCursor::setMark(int mark)
 {
+    markPos = mark;
 }
+
 
 void FormulaCursor::draw(QPainter& painter)
 {
@@ -72,28 +69,85 @@ void FormulaCursor::draw(QPainter& painter)
     }
 }
 
-void FormulaCursor::moveLeft()
+
+void FormulaCursor::handleShiftState(int state)
 {
-    BasicElement* element = getElement();
-    element->moveLeft(this, element);
+    if (state & Qt::ShiftButton) {
+        if (!isSelection()) {
+            setMark(getPos());
+            setSelection(true);
+        }
+    }
+    else {
+        setSelection(false);
+    }
 }
 
-void FormulaCursor::moveRight()
+void FormulaCursor::moveLeft(QKeyEvent* event)
 {
     BasicElement* element = getElement();
-    element->moveRight(this, element);
+    int state = event->state();
+    handleShiftState(state);
+    if (state & Qt::ControlButton) {
+        element->moveHome(this);
+    }
+    else {
+        element->moveLeft(this, element);
+    }
 }
 
-void FormulaCursor::moveUp()
+void FormulaCursor::moveRight(QKeyEvent* event)
 {
     BasicElement* element = getElement();
+    int state = event->state();
+    handleShiftState(state);
+    if (state & Qt::ControlButton) {
+        element->moveEnd(this);
+    }
+    else {
+        element->moveRight(this, element);
+    }
+}
+
+void FormulaCursor::moveUp(QKeyEvent* event)
+{
+    BasicElement* element = getElement();
+    int state = event->state();
+    handleShiftState(state);
     element->moveUp(this, element);
 }
 
-void FormulaCursor::moveDown()
+void FormulaCursor::moveDown(QKeyEvent* event)
 {
     BasicElement* element = getElement();
+    int state = event->state();
+    handleShiftState(state);
     element->moveDown(this, element);
+}
+
+void FormulaCursor::moveHome(QKeyEvent* event)
+{
+    BasicElement* element = getElement();
+    int state = event->state();
+    handleShiftState(state);
+    element->formula()->moveHome(this);
+}
+
+void FormulaCursor::moveEnd(QKeyEvent* event)
+{
+    BasicElement* element = getElement();
+    int state = event->state();
+    handleShiftState(state);
+    element->formula()->moveEnd(this);
+}
+
+
+/**
+ * Moves the cursor inside the element. Selection is turned off.
+ */
+void FormulaCursor::goInsideElement(BasicElement* element)
+{
+    element->goInside(this);
 }
 
 
@@ -136,10 +190,72 @@ void FormulaCursor::insert(QList<BasicElement>& children, BasicElement::Directio
     element->insert(this, children, direction);
 }
 
-void FormulaCursor::remove(QList<BasicElement>& children, BasicElement::Direction direction)
+void FormulaCursor::remove(QList<BasicElement>& children,
+                           BasicElement::Direction direction)
 {
     BasicElement* element = getElement();
     element->remove(this, children, direction);
+}
+
+
+/**
+ * Replaces the current selection with the supplied element.
+ * The replaced elements become the new element's main child's content.
+ */
+void FormulaCursor::replaceSelectionWith(BasicElement* element,
+                                         BasicElement::Direction direction)
+{
+    QList<BasicElement> list;
+    remove(list, direction);
+    insert(element, direction);
+    SequenceElement* mainChild = element->getMainChild();
+    if (mainChild != 0) {
+        mainChild->goInside(this);
+        insert(list);
+        BasicElement* parent = element->getParent();
+        if (direction == BasicElement::beforeCursor) {
+            parent->moveRight(this, element);
+        }
+        else {
+            parent->moveLeft(this, element);
+        }
+    }
+}
+
+
+/**
+ * Replaces the element the cursor points to with its main child's
+ * content.
+ */
+BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction direction)
+{
+    QList<BasicElement> childrenList;
+    QList<BasicElement> list;
+    BasicElement* element = getElement();
+    SequenceElement* mainChild = element->getMainChild();
+    if (mainChild != 0) {
+        mainChild->selectAllChildren(this);
+        remove(childrenList);
+    }
+    element->getParent()->moveRight(this, element);
+    setSelection(false);
+    remove(list);
+    insert(childrenList, direction);
+    if (list.count() > 0) {
+        return list.take(0);
+    }
+    return 0;
+}
+
+
+/**
+ * Returns wether the element the cursor points to should be replaced.
+ * Elements are senseless as soon as they only contain a main child.
+ */
+bool FormulaCursor::elementIsSenseless()
+{
+    BasicElement* element = getElement();
+    return element->isSenseless();
 }
 
 
@@ -150,7 +266,7 @@ void FormulaCursor::remove(QList<BasicElement>& children, BasicElement::Directio
  *
  * Might be 0 is there is no such child.
  */
-BasicElement* FormulaCursor::getAktiveChild(BasicElement::Direction direction)
+BasicElement* FormulaCursor::getActiveChild(BasicElement::Direction direction)
 {
     return getElement()->getChild(this, direction);
 }
@@ -160,15 +276,33 @@ BasicElement* FormulaCursor::getAktiveChild(BasicElement::Direction direction)
  * Returns the IndexElement the cursor is on or 0
  * if there is non.
  */
-IndexElement* FormulaCursor::getAktiveIndexElement()
+IndexElement* FormulaCursor::getActiveIndexElement()
 {
-    BasicElement* child = getAktiveChild(BasicElement::beforeCursor);
-    IndexElement* element = 0;
-    if (child != 0) {
-        element = dynamic_cast<IndexElement*>(child);
+    if (isSelection()) {
+        if ((getSelectionEnd() - getSelectionStart()) > 1) {
+            return 0;
+        }
+        BasicElement* child = getActiveChild((getPos() > getMark()) ?
+                                             BasicElement::beforeCursor :
+                                             BasicElement::afterCursor);
+        return dynamic_cast<IndexElement*>(child);
     }
-    if (element == 0) {
-        element = dynamic_cast<IndexElement*>(getElement()->getParent());
+    else {
+        BasicElement* child = getActiveChild(BasicElement::beforeCursor);
+        IndexElement* element = 0;
+        if (child != 0) {
+            element = dynamic_cast<IndexElement*>(child);
+        }
+        if (element == 0) {
+            element = dynamic_cast<IndexElement*>(getElement()->getParent());
+            if (element != 0) {
+                SequenceElement* mainChild = element->getMainChild();
+                if ((getElement() != mainChild) ||
+                    (mainChild->countChildren() != getPos())) {
+                    return 0;
+                }
+            }
+        }
+        return element;
     }
-    return element;
 }

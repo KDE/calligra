@@ -109,14 +109,21 @@ public:
      * Moves the cursor to the first position in this sequence.
      * (That is before the first child.)
      */
-    void moveHome(FormulaCursor* cursor);
+    virtual void moveHome(FormulaCursor* cursor);
 
     /**
      * Moves the cursor to the last position in this sequence.
      * (That is behind the last child.)
      */
-    void moveEnd(FormulaCursor* cursor);
+    virtual void moveEnd(FormulaCursor* cursor);
 
+    /**
+     * Sets the cursor inside this element to its start position.
+     * For most elements that is the main child.
+     */
+    virtual void goInside(FormulaCursor* cursor);
+
+    
     // children
 
     /**
@@ -131,7 +138,8 @@ public:
 
     /**
      * Inserts all new children at the cursor position. Places the
-     * cursor according to the direction.
+     * cursor according to the direction. The inserted elements will
+     * be selected.
      *
      * The list will be emptied but stays the property of the caller.
      */
@@ -151,9 +159,20 @@ public:
 
     /**
      * Returns the child at the cursor.
+     * Does not care about the selection.
      */
     virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
 
+    /**
+     * Returns the number of children we have.
+     */
+    int countChildren() const { return children.count(); }
+
+    /**
+     * Selects all children. The cursor is put behind, the mark before them.
+     */
+    void selectAllChildren(FormulaCursor* cursor);
+    
     //BasicElement* getChildAt(int pos);
 
     // debug
