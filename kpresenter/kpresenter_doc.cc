@@ -1477,7 +1477,6 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
     } else if ( ret == KoTemplateChooseDia::File ) {
         objStartY = 0;
         _clean = true;
-        setModified(true);
         KURL url;
         url.setPath( _template );
         bool ok = openURL( url );
