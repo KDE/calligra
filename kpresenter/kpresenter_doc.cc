@@ -410,8 +410,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
             u2 += "/";
             u2 += it.key().toString();
 
-            QString mime = "image/";
-            mime += QString( QImage::imageFormat( it.key().filename ) );
+            QString mime = "image/bmp";
             _store->open( u2, mime.lower() );
             ostorestream out( _store );
             out << it.data();
@@ -496,6 +495,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     vector<KOMLAttrib> lst;
     string name;
 
+    pixmapCollectionKeys.clear();
+    clipartCollectionKeys.clear();
+    
     //KoPageLayout __pgLayout;
     __pgLayout.unit = PG_MM;
 
