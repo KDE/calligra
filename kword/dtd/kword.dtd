@@ -1166,9 +1166,19 @@ For the QtSQL-power-plugin, the contents of DATASOURCE is
                    2... Author (as saved in documentinfo.xml)
                    3... Email (as saved in documentinfo.xml)
                    4... Company Name (as saved in documentinfo.xml)
-                   [room for more 'author' page info fields]
+                   5... Path filename
+                   6... Filename without extension
+                   7... Telephone
+                   8... Fax
+                   9... Country
                    10.. Document Title (as saved in documentinfo.xml)
                    11.. Document Abstract (as saved in documentinfo.xml)
+                   12.. Postal Code
+                   13.. City
+                   14.. Street
+                   15.. AuthorTitle
+                   16.. Initials
+
 
         value... the value of the field (text)
 -->
