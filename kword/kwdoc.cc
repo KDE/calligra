@@ -130,10 +130,14 @@ const int KWDocument::CURRENT_SYNTAX_VERSION = 3;
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      m_unit( KoUnit::U_CM ),
       m_urlIntern()
 {
     dcop = 0;
+    if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+        m_unit = KoUnit::U_INCH;
+    } else {
+        m_unit = KoUnit::U_CM;
+    }
     m_pages = 1;
     m_loadingInfo = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
@@ -529,13 +533,18 @@ void KWDocument::initUnit()
 {
     //load default unit setting - this is only used for new files (from templates) or empty files
     KConfig *config = KWFactory::global()->config();
+
+    if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+        m_unit = KoUnit::U_INCH;
+    } else {
+        m_unit = KoUnit::U_CM;
+    }
+
     if(config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
         if ( config->hasKey( "Units" ) )
             setUnit( KoUnit::unit( config->readEntry("Units") ) );
-        else
-            setUnit( KoUnit::U_CM );
         setDefaultColumnSpacing( config->readDoubleNumEntry("ColumnSpacing", 3.0) );
     }
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
