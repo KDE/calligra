@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="76">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="77">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -399,7 +399,6 @@
   <Action name="tools_part"/>
 </Menu>
 <Menu name="frame_popup">
- <Action name="format_frameset"/>
  <Action name="edit_delframe"/>
  <Separator/> 
  <Action name="create_framestyle"/>
@@ -418,6 +417,7 @@
  <Action name="edit_copy"/>
  <Action name="edit_paste"/>
  <ActionList name="picture_action"/>
+ <Action name="format_frameset"/>
 </Menu>
 <Menu name="frame_popup_table">
  <Action name="format_frameset"/>
