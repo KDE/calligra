@@ -745,15 +745,10 @@ void KSpreadCanvas::scrollToCell(QPoint location)
 
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
-    double minX = 100.0; // less than that, we scroll
-    double maxX = unzoomedWidth - 100.0; // more than that, we scroll
+    double minX = unzoomedWidth - 100.0; // less than that, we scroll
+    double maxX = 100.0; // more than that, we scroll
 
-    kdDebug() << "rtl: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
-
-    minX = unzoomedWidth - 100.0; // less than that, we scroll
-    maxX = 100.0; // more than that, we scroll
-
-    kdDebug() << "rtl2: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << ", Offset: " << xOffset() << endl;
+    // kdDebug() << "rtl2: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << ", Offset: " << xOffset() << endl;
 
     // do we need to scroll left
     if ( xpos > minX )
@@ -762,8 +757,8 @@ void KSpreadCanvas::scrollToCell(QPoint location)
     //do we need to scroll right
     else if ( xpos < maxX )
     {
-      double horzScrollBarValue = xOffset() + xpos + maxX;
-      double horzScrollBarValueMax = table->sizeMaxX() + unzoomedWidth;
+      double horzScrollBarValue = xOffset() - xpos + maxX;
+      double horzScrollBarValueMax = table->sizeMaxX() - unzoomedWidth;
 
       //We don't want to display any area > KS_colMax widths
       if ( horzScrollBarValue > horzScrollBarValueMax )
