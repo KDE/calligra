@@ -29,6 +29,8 @@
 /******************************************************************/
 /* Class: KWFrameStyleCollection                                  */
 /******************************************************************/
+//necessary to create unique shortcut
+int KWFrameStyleCollection::styleNumber = 0;
 
 KWFrameStyleCollection::KWFrameStyleCollection()
 {
@@ -43,6 +45,24 @@ KWFrameStyleCollection::~KWFrameStyleCollection()
     m_styleList.clear();
     m_deletedStyles.clear();
 }
+
+KWFrameStyle* KWFrameStyleCollection::findStyleShortCut( const QString & _shortCut )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
+        return m_lastStyle;
+
+    QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->shortCutName() == _shortCut ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+    return 0L;
+}
+
 
 KWFrameStyle* KWFrameStyleCollection::findFrameStyle( const QString & _name )
 {
@@ -81,6 +101,8 @@ KWFrameStyle* KWFrameStyleCollection::addFrameStyleTemplate( KWFrameStyle * sty 
         }
     }
     m_styleList.append( sty );
+    sty->setShortCutName( QString("shortcut_framestyle_%1").arg(styleNumber).latin1());
+    styleNumber++;
     return sty;
 }
 
@@ -131,6 +153,7 @@ void KWFrameStyleCollection::updateFrameStyleListOrder( const QStringList &list 
 KWFrameStyle::KWFrameStyle( const QString & name )
 {
     m_name = name;
+    m_shortCut_name = QString::null;
     m_backgroundColor.setColor( Qt::white );
 }
 
@@ -189,6 +212,7 @@ void KWFrameStyle::operator=( const KWFrameStyle &rhs )
 {
     m_name = rhs.m_name;
     m_backgroundColor = rhs.m_backgroundColor;
+    m_shortCut_name = rhs.m_shortCut_name;
     m_borderLeft = rhs.m_borderLeft;
     m_borderRight = rhs.m_borderRight;
     m_borderTop = rhs.m_borderTop;

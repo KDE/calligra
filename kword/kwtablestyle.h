@@ -43,6 +43,8 @@ public:
     const QPtrList<KWTableStyle> & tableStyleList() const { return m_styleList; }
 
     KWTableStyle* findTableStyle( const QString & name );
+    KWTableStyle* findStyleShortCut( const QString & _shortCut );
+
     /**
      * Return style number @p i.
      */
@@ -56,6 +58,7 @@ public:
 private:
     QPtrList<KWTableStyle> m_styleList;
     QPtrList<KWTableStyle> m_deletedStyles;
+    static int styleNumber;
     KWTableStyle *m_lastStyle;
 };
 
@@ -99,8 +102,17 @@ public:
     // STATIC METHODS
     static KWTableStyle *loadStyle( QDomElement & parentElem, KWDocument *_doc, int docVersion=2 );
 
+    QString shortCutName() const {
+        return m_shortCut_name;
+    }
+
+    void setShortCutName( const QString & _shortCut) {
+        m_shortCut_name=_shortCut;
+    }
+
 private:
     QString m_name;
+    QString m_shortCut_name;
     KWStyle *m_style;
     KWFrameStyle *m_frameStyle;
 };

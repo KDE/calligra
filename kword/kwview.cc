@@ -2003,39 +2003,48 @@ void KWView::updateFrameStyleList()
     lstWithAccels = lst;
 #endif
     QMap<QString, KShortcut> shortCut;
-    // Delete previous style actions
-    for ( uint i = 0; ; ++i )
-    {
-        KAction* act = actionCollection()->action( QString("framestyle_%1").arg(i).latin1());
 
-        if ( act )
+
+    KActionPtrList lst2 = actionCollection()->actions("frameStyleList");
+    QValueList<KAction *> actions = lst2;
+    QValueList<KAction *>::ConstIterator it = lst2.begin();
+    QValueList<KAction *>::ConstIterator end = lst2.end();
+    for (; it != end; ++it )
+    {
+        if ( !(*it)->shortcut().toString().isEmpty())
         {
-            if ( !act->shortcut().toString().isEmpty())
-                shortCut.insert( act->name(), KShortcut( act->shortcut()));
-            actionFrameStyleMenu->remove( act );
-            delete act;
+            KWFrameStyle* tmp = m_doc->frameStyleCollection()->findStyleShortCut( (*it)->name() );
+            if ( tmp )
+                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
-        else
-            break; // no gaps. As soon as style_N doesn't exist, we're done
+        actionFrameStyleMenu->remove(*it );
+        delete *it;
     }
+
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        QCString name = QString("framestyle_%1").arg(i).latin1();
-        if ( shortCut.contains(name))
+        KWFrameStyle *tmp = m_doc->frameStyleCollection()->findFrameStyle( lst[ i]);
+        if ( tmp )
         {
-            act = new KToggleAction( (*it),
-                                     (shortCut)[name], this, SLOT( slotFrameStyleSelected() ),
-                                     actionCollection(), name );
+            QCString name = tmp->shortCutName().latin1();
 
+            if ( shortCut.contains(name))
+            {
+                act = new KToggleAction( (*it),
+                                         (shortCut)[name], this, SLOT( slotFrameStyleSelected() ),
+                                         actionCollection(), name );
+
+            }
+            else
+                act = new KToggleAction( (*it),
+                                         0, this, SLOT( slotFrameStyleSelected() ),
+                                         actionCollection(), name );
+            act->setGroup( "frameStyleList" );
+            act->setExclusiveGroup( "frameStyleList" );
+            actionFrameStyleMenu->insert( act );
         }
-        else
-            act = new KToggleAction( (*it),
-                                     0, this, SLOT( slotFrameStyleSelected() ),
-                                     actionCollection(), name );
-        act->setExclusiveGroup( "frameStyleList" );
-        actionFrameStyleMenu->insert( act );
     }
 }
 
@@ -2070,39 +2079,46 @@ void KWView::updateTableStyleList()
 #endif
     QMap<QString, KShortcut> shortCut;
 
-    // Delete previous style actions
-    for ( uint i = 0; ; ++i )
+    KActionPtrList lst2 = actionCollection()->actions("tableStyleList");
+    QValueList<KAction *> actions = lst2;
+    QValueList<KAction *>::ConstIterator it = lst2.begin();
+    QValueList<KAction *>::ConstIterator end = lst2.end();
+    for (; it != end; ++it )
     {
-        KAction* act = actionCollection()->action( QString("tablestyle_%1").arg(i).latin1() );
-        if ( act )
+        if ( !(*it)->shortcut().toString().isEmpty())
         {
-            if ( !act->shortcut().toString().isEmpty())
-                shortCut.insert( act->name(), KShortcut( act->shortcut()));
-            actionTableStyleMenu->remove( act );
-            delete act;
+            KWTableStyle* tmp = m_doc->tableStyleCollection()->findStyleShortCut( (*it)->name() );
+            if ( tmp )
+                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
-        else
-            break; // no gaps. As soon as style_N doesn't exist, we're done
+        actionTableStyleMenu->remove( *it );
+        delete *it;
     }
+
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        QCString name = QString("tablestyle_%1").arg(i).latin1();
-        if ( shortCut.contains(name))
+        KWTableStyle *tmp = m_doc->tableStyleCollection()->findTableStyle( lst[ i]);
+        if ( tmp)
         {
+            QCString name = tmp->shortCutName().latin1();
+            if ( shortCut.contains(name))
+            {
 
-            act = new KToggleAction( (*it),
-                                     (shortCut)[name], this, SLOT( slotTableStyleSelected() ),
-                                     actionCollection(), name );
+                act = new KToggleAction( (*it),
+                                         (shortCut)[name], this, SLOT( slotTableStyleSelected() ),
+                                         actionCollection(), name );
+            }
+            else
+                act = new KToggleAction( (*it),
+                                         0, this, SLOT( slotTableStyleSelected() ),
+                                         actionCollection(), name );
+
+            act->setExclusiveGroup( "tableStyleList" );
+            act->setGroup( "tableStyleList" );
+            actionTableStyleMenu->insert( act );
         }
-        else
-            act = new KToggleAction( (*it),
-                                     0, this, SLOT( slotTableStyleSelected() ),
-                                     actionCollection(), name );
-
-        act->setExclusiveGroup( "tableStyleList" );
-        actionTableStyleMenu->insert( act );
     }
 }
 
@@ -4001,23 +4017,31 @@ void KWView::textStyleSelected( int index )
 void KWView::slotFrameStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "framestyle_" ) )
+    if ( actionName.startsWith( "shortcut_framestyle_" ) )//see kwframestyle.cc
     {
-        QString styleStr = actionName.mid(11);
-        kdDebug() << "KWView::slotFrameStyleSelected " << styleStr << endl;
-        frameStyleSelected( styleStr.toInt() );
+        //kdDebug() << "KWView::slotFrameStyleSelected " << styleStr << endl;
+        frameStyleSelected( m_doc->frameStyleCollection()->findStyleShortCut( actionName) );
     }
 }
 
-// Called by the above, and when selecting a style in the framestyle combobox
 void KWView::frameStyleSelected( int index )
 {
+    frameStyleSelected( m_doc->frameStyleCollection()->frameStyleAt( index ) );
+}
+
+
+// Called by the above, and when selecting a style in the framestyle combobox
+void KWView::frameStyleSelected( KWFrameStyle *_sty )
+{
+    if ( !_sty )
+        return;
+
     if ( m_gui->canvasWidget()->currentFrameSetEdit() )
     {
         KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
         if ( single ) {
 
-            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle to Frame"), single, m_doc->frameStyleCollection()->frameStyleAt( index ) );
+            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle to Frame"), single, _sty );
             if (cmd) {
                 m_doc->addCommand( cmd );
                 cmd->execute();
@@ -4037,7 +4061,7 @@ void KWView::frameStyleSelected( int index )
         for ( ; it.current() ; ++it )
         {
             KWFrame *curFrame = it.current();
-            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle"), curFrame, m_doc->frameStyleCollection()->frameStyleAt( index ) );
+            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle"), curFrame, _sty );
             if (cmd)
                 globalCmd->addCommand( cmd );
         }
@@ -4052,9 +4076,9 @@ void KWView::frameStyleSelected( int index )
     QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
-        if ( styleIt.current()->name() == m_doc->frameStyleCollection()->frameStyleAt( index )->name() ) {
+        if ( styleIt.current()->name() == _sty->name() ) {
             actionFrameStyle->setCurrentItem( pos );
-            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( QString("framestyle_%1").arg(pos).latin1() ));
+            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( styleIt.current()->shortCutName().latin1() ));
             if ( act )
                 act->setChecked( true );
             return;
@@ -4067,23 +4091,29 @@ void KWView::frameStyleSelected( int index )
 void KWView::slotTableStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "tablestyle_" ) )
+    if ( actionName.startsWith( "shortcut_tablestyle_" ) )
     {
-        QString styleStr = actionName.mid(11);
-        kdDebug() << "KWView::slotTableStyleSelected " << styleStr << endl;
-        tableStyleSelected( styleStr.toInt() );
+        tableStyleSelected( m_doc->tableStyleCollection()->findStyleShortCut( actionName) );
     }
 }
 
-// Called by the above, and when selecting a style in the framestyle combobox
 void KWView::tableStyleSelected( int index )
 {
+    tableStyleSelected( m_doc->tableStyleCollection()->tableStyleAt( index ) );
+}
+
+// Called by the above, and when selecting a style in the framestyle combobox
+void KWView::tableStyleSelected( KWTableStyle *_sty )
+{
+    if ( !_sty )
+        return;
+
     if ( m_gui->canvasWidget()->currentFrameSetEdit() )
     {
         KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
         if ( (single) && ( single->frameSet()->type() == FT_TEXT ) )
         {
-            KCommand *cmd =  new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), single, m_doc->tableStyleCollection()->tableStyleAt( index ) );
+            KCommand *cmd =  new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), single, _sty );
             if (cmd) {
                 m_doc->addCommand( cmd );
                 cmd->execute();
@@ -4103,7 +4133,7 @@ void KWView::tableStyleSelected( int index )
         for ( ; ( ( it.current() ) && ( it.current()->frameSet()->type() == FT_TEXT ) ); ++it )
         {
             KWFrame *curFrame = it.current();
-            KCommand *cmd = new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), curFrame, m_doc->tableStyleCollection()->tableStyleAt( index ) );
+            KCommand *cmd = new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), curFrame, _sty );
             if (cmd)
                 globalCmd->addCommand( cmd );
         }
@@ -4118,9 +4148,9 @@ void KWView::tableStyleSelected( int index )
     QPtrListIterator<KWTableStyle> styleIt( m_doc->tableStyleCollection()->tableStyleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
-        if ( styleIt.current()->name() == m_doc->tableStyleCollection()->tableStyleAt( index )->name() ) {
+        if ( styleIt.current()->name() == _sty->name() ) {
             actionTableStyle->setCurrentItem( pos );
-            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( QString("tablestyle_%1").arg(pos).latin1() ));
+            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( styleIt.current()->shortCutName().latin1() ));
             if ( act )
                 act->setChecked( true );
             return;

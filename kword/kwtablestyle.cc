@@ -29,6 +29,8 @@
 /******************************************************************/
 /* Class: KWTableStyleCollection                                  */
 /******************************************************************/
+//necessary to create unique shortcut
+int KWTableStyleCollection::styleNumber = 0;
 
 KWTableStyleCollection::KWTableStyleCollection()
 {
@@ -65,6 +67,22 @@ KWTableStyle* KWTableStyleCollection::findTableStyle( const QString & _name )
     return 0L;
 }
 
+KWTableStyle* KWTableStyleCollection::findStyleShortCut( const QString & _shortCut )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
+        return m_lastStyle;
+
+    QPtrListIterator<KWTableStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->shortCutName() == _shortCut ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+    return 0L;
+}
 
 KWTableStyle* KWTableStyleCollection::addTableStyleTemplate( KWTableStyle * sty )
 {
@@ -82,6 +100,8 @@ KWTableStyle* KWTableStyleCollection::addTableStyleTemplate( KWTableStyle * sty 
         }
     }
     m_styleList.append( sty );
+    sty->setShortCutName( QString("shortcut_tablestyle_%1").arg(styleNumber).latin1());
+    styleNumber++;
     return sty;
 }
 
@@ -132,6 +152,7 @@ void KWTableStyleCollection::updateTableStyleListOrder( const QStringList &list 
 KWTableStyle::KWTableStyle( const QString & name, KWStyle * _style, KWFrameStyle * _frameStyle )
 {
     m_name = name;
+    m_shortCut_name = QString::null;
     m_style = _style;
     m_frameStyle = _frameStyle;
 }
@@ -180,6 +201,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
 void KWTableStyle::operator=( const KWTableStyle &rhs )
 {
     m_name = rhs.m_name;
+    m_shortCut_name = rhs.m_shortCut_name;
     m_style = rhs.pStyle();
     m_frameStyle = rhs.pFrameStyle();
 }

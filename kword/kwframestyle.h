@@ -42,6 +42,7 @@ public:
     const QPtrList<KWFrameStyle> & frameStyleList() const { return m_styleList; }
 
     KWFrameStyle* findFrameStyle( const QString & name );
+    KWFrameStyle* findStyleShortCut( const QString & _shortCut );
     /**
      * Return style number @p i.
      */
@@ -55,6 +56,7 @@ public:
 private:
     QPtrList<KWFrameStyle> m_styleList;
     QPtrList<KWFrameStyle> m_deletedStyles;
+    static int styleNumber;
     KWFrameStyle *m_lastStyle;
 };
 
@@ -110,9 +112,17 @@ public:
 
     // STATIC METHODS
     static KWFrameStyle *loadStyle( QDomElement & parentElem, int docVersion=2 );
+    QString shortCutName() const {
+        return m_shortCut_name;
+    }
+
+    void setShortCutName( const QString & _shortCut) {
+        m_shortCut_name=_shortCut;
+    }
 
 private:
     QString m_name;
+    QString m_shortCut_name;
     QBrush m_backgroundColor;
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 };

@@ -69,6 +69,8 @@ class KoTextParag;
 class KoFontDia;
 class KoParagDia;
 class KWViewMode;
+class KWFrameStyle;
+class KWTableStyle;
 
 /******************************************************************/
 /* Class: KWView						  */
@@ -434,6 +436,8 @@ protected:
     int bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     void textStyleSelected( KoStyle *_sty );
+    void frameStyleSelected( KWFrameStyle *_sty );
+    void tableStyleSelected( KWTableStyle *_sty );
 
 private:
     KWDocument *m_doc;

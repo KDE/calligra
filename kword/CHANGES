@@ -250,6 +250,7 @@ Bugfixes:
 - Fix update ruler tabs when we switch between text object
 - Fix move up/down table/frame style
 - Fix restore shortcut when we remove/add/rename style
+- Fix restore shortcut when we remove/move/add/rename frame/table style
 
 KoText library fixes:
 - Fix move up/down style
