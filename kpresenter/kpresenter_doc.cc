@@ -930,7 +930,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                         if ( nr >= 0 )
                         {
                             //kdDebug(33001) << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
-                            if( nr > (m_pageList.count()-1))
+                            if ( nr > ( (int)m_pageList.count() - 1 ) )
                             {
                                 for (int i=(m_pageList.count()-1); i<nr;i++)
                                     m_pageList.append(new KPrPage(this));
@@ -989,7 +989,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
         {
             //test if there is a page at this index
             //=> don't add new page if there is again a page
-            if(i>(m_pageList.count()-1))
+            if ( i > ( (int)m_pageList.count() - 1 ) )
                 m_pageList.append(new KPrPage(this));
             m_pageList.at(i)->background()->load(page);
             i++;
@@ -1361,7 +1361,7 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
             //=> don't add new page if there is again a page
             if(!m_pageWhereLoadObject)
             {
-                if(i>(m_pageList.count()-1))
+                if ( i > ( (int)m_pageList.count() - 1 ) )
                     m_pageList.append(new KPrPage(this));
                 m_pageList.at(i)->insertManualTitle(title.attribute("title"));
                 i++;
@@ -1385,7 +1385,7 @@ void KPresenterDoc::loadNote( const QDomElement &element )
             //=> don't add new page if there is again a page
             if(!m_pageWhereLoadObject)
             {
-                if(i>(m_pageList.count()-1))
+                if ( i > ( (int)m_pageList.count() - 1 ) )
                     m_pageList.append(new KPrPage(this));
                 m_pageList.at(i)->setNoteText(note.attribute("note"));
                 i++;
@@ -2095,7 +2095,7 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 {
     int page = (int)(offset/__pgLayout.ptHeight);
     int newPos=(int)(offset-page*__pgLayout.ptHeight);
-    if( page > (m_pageList.count()-1))
+    if ( page > ( (int)m_pageList.count()-1 ) )
     {
         for (int i=(m_pageList.count()-1); i<page;i++)
             m_pageList.append(new KPrPage(this));

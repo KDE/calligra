@@ -93,7 +93,7 @@ DCOPObject* KPrPage::dcopObject()
 
 KPObject *KPrPage::getObject(int num)
 {
-    Q_ASSERT(num<m_objectList.count());
+    Q_ASSERT( num < (int)m_objectList.count() );
     return m_objectList.at(num);
 }
 
@@ -190,7 +190,7 @@ void KPrPage::pasteObjs( const QByteArray & data )
 
 KPTextObject * KPrPage::textFrameSet ( unsigned int _num)
 {
-    int i=0;
+    unsigned int i = 0;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -2109,7 +2109,6 @@ int KPrPage::getPenBrushFlags() const
 KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len )
 {
     PieValueCmd *pieValueCmd=0L;
-    KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<PieValueCmd::PieValues> _oldValues;
     PieValueCmd::PieValues _newValues, *tmp;
@@ -2976,11 +2975,9 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 						      _orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
     if ( createUndoRedo )
         return setOptionsCmd;
-    else
-    {
-       delete setOptionsCmd;
-       return 0L;
-    }
+
+    delete setOptionsCmd;
+    return 0L;
 }
 
 

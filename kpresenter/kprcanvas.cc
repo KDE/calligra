@@ -4451,6 +4451,12 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origS
 }
 
 /*================================================================*/
+void KPrCanvas::picViewOrignalSize()
+{
+    picViewOrigHelper( -1, -1 );
+}
+
+/*================================================================*/
 void KPrCanvas::picViewOrig640x480()
 {
   picViewOrigHelper(640, 480);
@@ -4502,9 +4508,15 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
       return;
 
   KoSize pgSize = m_activePage->getPageRect().size();
+
+  if ( x == -1 && y == -1 ) {
+      x = (int)origSize.width();
+      y = (int)origSize.height();
+  }
+
   QSize presSize( x, y );
 
-  scalePixmapToBeOrigIn( origSize, currentSize, pgSize, presSize, obj );
+  scalePixmapToBeOrigIn( currentSize, pgSize, presSize, obj );
 }
 
 /*================================================================*/
@@ -4513,13 +4525,14 @@ void KPrCanvas::picViewOrigFactor()
 }
 
 /*================================================================*/
-void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &/*origSize*/, const KoSize &currentSize,
-                                  const KoSize &pgSize, const QSize &presSize, KPPixmapObject *obj )
+void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
+                                       const QSize &presSize, KPPixmapObject *obj )
 {
     double faktX = (double)presSize.width() / (double)QApplication::desktop()->width();
     double faktY = (double)presSize.height() / (double)QApplication::desktop()->height();
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
+
     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
                                           KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );

@@ -2851,6 +2851,10 @@ void KPresenterView::setupActions()
                      SLOT( renamePageTitle() ),
                      actionCollection(), "rename_page" );
 
+    actionPicOriginalSize = new KAction( i18n( "Original Size" ), 0, this,
+                                         SLOT( picViewOrignalSize() ),
+                                         actionCollection(), "pic_original_size" );
+
     actionPic640x480=new KAction(i18n( "640x480" ),0,this,
                      SLOT( picViewOrig640x480() ),
                      actionCollection(), "pic_640_480" );
@@ -4281,6 +4285,10 @@ void KPresenterView::renamePageTitle()
         sidebar->renamePageTitle();
 }
 
+void KPresenterView::picViewOrignalSize()
+{
+    m_canvas->picViewOrignalSize();
+}
 
 void KPresenterView::picViewOrig640x480()
 {
@@ -4581,7 +4589,7 @@ bool KPresenterView::spellSwitchToNewPage()
     if(m_pKPresenterDoc->pageList().count()==1)
         return false;
     m_spell.currentSpellPage++;
-    if( m_spell.currentSpellPage>=m_pKPresenterDoc->pageList().count())
+    if( m_spell.currentSpellPage>=(int)m_pKPresenterDoc->pageList().count())
         m_spell.currentSpellPage=0;
     if( m_spell.currentSpellPage==m_spell.firstSpellPage)
         return false;
@@ -5201,7 +5209,7 @@ bool KPresenterView::searchInOtherPage()
     if(m_pKPresenterDoc->pageList().count()==1)
         return false;
     m_searchPage++;
-    if( m_searchPage>=m_pKPresenterDoc->pageList().count())
+    if( m_searchPage>=(int)m_pKPresenterDoc->pageList().count())
         m_searchPage=0;
     if( m_searchPage==m_initSearchPage)
         return false;

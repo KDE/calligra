@@ -265,6 +265,7 @@ public slots:
     void extraChangeClip();
     void renamePageTitle();
 
+    void picViewOrignalSize();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();
@@ -757,6 +758,7 @@ private:
 
     KAction *actionRenamePage;
 
+    KAction *actionPicOriginalSize;
     KAction *actionPic640x480;
     KAction *actionPic800x600;
     KAction *actionPic1024x768;

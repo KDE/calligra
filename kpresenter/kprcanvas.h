@@ -211,6 +211,7 @@ public slots:
 
     void chPic();
     void chClip();
+    void picViewOrignalSize();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();
@@ -313,8 +314,8 @@ protected:
     void selectNext();
     void selectPrev();
 
-    void scalePixmapToBeOrigIn( const KoSize &origSize, const KoSize &currentSize,
-                                const KoSize &pgSize, const QSize &presSize, KPPixmapObject *obj );
+    void scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
+                                const QSize &presSize, KPPixmapObject *obj );
     bool getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origSize, KoSize *currentSize );
     void setTextBackground( KPTextObject *obj );
     virtual bool eventFilter( QObject *o, QEvent *e );
