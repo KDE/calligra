@@ -69,7 +69,7 @@ void SpellChecker::slotDone( char *_buffer )
  
   if ( str2 == m_strBuffer )
   {
-    QMessageBox::information( 0L, i18n("Spell checker"), i18n("The text is spelled correctly") );
+    QMessageBox::information( 0L, i18n("Spell Checker"), i18n("The text is spelled correctly") );
   }
   else
   {
