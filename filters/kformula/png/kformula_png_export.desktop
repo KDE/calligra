@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+X-KDE-Export=image/png
+ExportDescription=png
+Icon=
+X-KDE-Import=application/x-kformula
+X-KDE-Weight=1
+ImportDescription=KFormula
+Name=KFormula PNG Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Library=libkfmpngexport
