@@ -822,7 +822,9 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     }
 
     // Frames have moved -> update the "frames on top" lists
-    m_doc->updateAllFrames();
+    //m_doc->updateAllFrames();
+    // Not yet in fact. If we relayout the text everytime it's too slow.
+
     repaintContents( repaintRegion.boundingRect() );
 
     m_gui->getView()->updateFrameStatusBarItem();

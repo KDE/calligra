@@ -352,7 +352,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     if ( lastFormatted == textdoc->lastParag() && !onlyChanged)
     {
         int docHeight = textdoc->height();
-        QRect frameRect = m_currentDrawnCanvas->viewMode()->normalToView( kWordDocument()->zoomRect( *frame ) );
+        QRect frameRect = m_currentViewMode->normalToView( kWordDocument()->zoomRect( *frame ) );
 
         //QListIterator<KWFrame> frameIt( frameIterator() );
         //int totalHeight = 0;
