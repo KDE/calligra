@@ -22,7 +22,7 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include <kpropsdlg.h>
+#include <kpropertiesdialog.h>
 
 class KDialogBase;
 class KoDocumentInfo;
