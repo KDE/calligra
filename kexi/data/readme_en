@@ -3,7 +3,7 @@
 
 <h3>Welcome</h3>
 <p>Kexi is under active development. This document is to keep you informed about state of the project.</p>
-<p>Current Kexi version is <b>Beta3 Pre2</b>.</p>
+<p>Current Kexi version is <b>Beta3</b>.</p>
 
 
 <h3>What's new </h3>
@@ -32,7 +32,8 @@ These are disabled after Kexi installation.
 <ul>
 <li>File-based projects are only supported</li>
 <li>Table designer works only for new designs, altering existing table not available</li>
-<li>Query saving and execution is temporary not available</li>
+<li>Queries: saving, comupting totals, setting criterias is temporary not available. 
+Execution works without joining.</li>
 </ul>
 </p>
 
