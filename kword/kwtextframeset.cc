@@ -115,8 +115,8 @@ QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
     if ( onlyY ) // we only care about Y -> easy, return "we're below the bottom"
         return QPoint( 0, totalHeight );
 
-    kdWarning() << "KWTextFrameSet::contentsToInternal " << p.x() << "," << p.y()
-                << " not in any frame of " << (void*)this << endl;
+    kdDebug(32002) << "KWTextFrameSet::contentsToInternal " << p.x() << "," << p.y()
+                   << " not in any frame of " << (void*)this << endl;
     return p;
 }
 
@@ -138,8 +138,8 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
         totalHeight += frame->height();
     }
 
-    kdWarning() << "KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
-                << " not in any frame of " << (void*)this << endl;
+    kdWarning(32002) << "KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
+                     << " not in any frame of " << (void*)this << endl;
     cPoint = iPoint; // bah
     return 0L;
 }
@@ -158,7 +158,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
         KWFrame *frame = frameIt.current();
         if ( !frame->isValid() )
         {
-            kdDebug() << "KWTextFrameSet::drawContents invalid frame " << frame << endl;
+            kdDebug(32002) << "KWTextFrameSet::drawContents invalid frame " << frame << endl;
             continue;
         }
 
@@ -193,7 +193,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 {
                     int docHeight = text->height();
                     QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
-                    //kdDebug() << this << " Blank area: " << DEBUGRECT(blank) << endl;
+                    //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
                     p->fillRect( blank, gb.brush( QColorGroup::Base ) );
                     // for debugging :)
                     //p->setPen( QPen(Qt::blue, 1, DashLine) );  p->drawRect( blank );
@@ -233,8 +233,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             QPoint cPoint( topLeft.x() + frame->left(), topLeft.y() + frame->top() - totalHeight ); // from QRT to contents
             QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );  // very small clipping around the cursor
 
-            //kdDebug() << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
-            //kdDebug() << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
+            //kdDebug(32002) << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
+            //kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
             QRegion reg = frameClipRegion( p, frame, clip );
             if ( !reg.isEmpty() )
@@ -273,14 +273,14 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::setWidth( int w )
 {
-    //kdDebug() << "KWTextFrameSet " << this << " setWidth " << w << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " setWidth " << w << endl;
     m_width = w;
     QTextFlow::setWidth( w );
 }
 
 int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
-    //kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
     QPoint p;
     (void) internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
     int middle = m_width / 2;
@@ -444,7 +444,7 @@ void KWTextFrameSet::assign( KWTextFrameSet *fs )
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet()
 {
-    kdDebug() << "KWTextFrameSet::~KWTextFrameSet" << endl;
+    //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
     // don't let us delete ourselves
 
     if(doc) doc->delFrameSet(this, false);
@@ -456,9 +456,9 @@ void KWTextFrameSet::updateFrames()
 {
     if ( !frames.isEmpty() )
     {
-        //kdDebug() << "KWTextFrameSet::updateFrames " << this << " setWidth=" << frames.first()->width() << endl;
+        kdDebug(32002) << "KWTextFrameSet::updateFrames " << this << " setWidth=" << frames.first()->width() << endl;
         text->setWidth( frames.first()->width() ); // ## we need support for variable width....
-    } else kdWarning() << "KWTextFrameSet::update no frames" << endl;
+    } else kdWarning(32002) << "KWTextFrameSet::update no frames" << endl;
 
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
@@ -468,16 +468,16 @@ void KWTextFrameSet::updateFrames()
     // sort frames of this frameset into l2 on (page, y coord, x coord)
     QRect pageRect;
     for ( unsigned int i = 0; i < static_cast<unsigned int>( doc->getPages() + 1 ); i++ ) {
-        //kdDebug() << "Page " << i << endl;
+        //kdDebug(32002) << "Page " << i << endl;
         pageRect = QRect( 0, i * doc->ptPaperHeight(), doc->ptPaperWidth(), doc->ptPaperHeight() );
         FrameList *l = new FrameList();
         l->setAutoDelete( false );
         for ( unsigned int j = 0; j < frames.count(); j++ ) {
             if ( frames.at( j )->intersects( pageRect ) ) {
                 frames.at( j )->setPageNum( i );
-                //kdDebug() << "KWTextFrameSet::update appending frame " << frames.at(j) << endl;
+                //kdDebug(32002) << "KWTextFrameSet::update appending frame " << frames.at(j) << endl;
                 l->append( frames.at( j ) );
-                //kdDebug() << "KWTextFrameSet::update removing frame " << j << endl;
+                //kdDebug(32002) << "KWTextFrameSet::update removing frame " << j << endl;
                 frames.remove(j--);
             }
         }
@@ -537,7 +537,7 @@ void KWTextFrameSet::updateFrames()
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
-            //kdDebug() << "KWTextFrameSet::updateFrames adding frame " << frame << endl;
+            //kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame << endl;
             ASSERT( !frames.contains(frame) );
             frames.append( frame );
             m_availableHeight += frame->height();
@@ -551,7 +551,7 @@ void KWTextFrameSet::updateFrames()
         }
     }
     if ( getFrameInfo() == FI_BODY )
-        kdDebug() << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
+        kdDebug(32002) << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames();
@@ -628,13 +628,13 @@ void KWTextFrameSet::load( QDomElement &attributes )
 
     text->setLastParag( lastParagraph );
     m_lastFormatted = text->firstParag();
-    kdDebug() << "KWTextFrameSet::load done" << endl;
+    //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
 
 /*================================================================*/
 void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 {
-    kdDebug() << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
+    kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
     QTextDocument * textdoc = textDocument();
     emit hideCursor();
     KWStyle * style = doc->findStyle( changedStyle, true );
@@ -844,7 +844,7 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    //kdDebug() << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+    //kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
     //          << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
 
     // Stop if we have formatted everything or if we need more space
@@ -854,7 +854,7 @@ void KWTextFrameSet::formatMore()
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
-        //kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        //kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
 	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();
@@ -863,7 +863,7 @@ void KWTextFrameSet::formatMore()
 
     if ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight )
     {
-        kdDebug() << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
+        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
         // especially for tables. TODO.
 
@@ -885,7 +885,7 @@ void KWTextFrameSet::formatMore()
         }
         else
         {
-            kdWarning() << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
+            kdWarning(32002) << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
         }
     }
     else
@@ -901,7 +901,7 @@ void KWTextFrameSet::formatMore()
     else
     {
 	interval = QMAX( 0, interval );
-        //kdDebug() << "KWTextFrameSet::formatMore all formatted" << endl;
+        //kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
     }
 }
 
@@ -912,14 +912,14 @@ void KWTextFrameSet::doChangeInterval()
 
 void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
 {
-    //kdDebug() << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " text->height()=" << text->height() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " text->height()=" << text->height() << endl;
     if ( maxY >= m_availableHeight ) // Speedup
         maxY = m_availableHeight;
     else
         // Convert to internal qtextdoc coordinates
         maxY = contentsToInternal( QPoint(0, maxY), true /* only care for Y */ ).y();
 
-    //kdDebug() << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
     // Update map
     m_mapViewAreas.replace( w, maxY );
 
@@ -965,7 +965,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
             case Invalid:
                 break;
             default:
-                kdDebug() << "KWTextFrameSet::UndoRedoInfo::clear unknown type " << type << endl;
+                kdDebug(32001) << "KWTextFrameSet::UndoRedoInfo::clear unknown type " << type << endl;
         }
 
         if ( cmd )
@@ -973,7 +973,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
             textdoc->addCommand( cmd );
             textfs->kWordDocument()->addCommand( new KWTextCommand( textfs, /*cmd, */name ) );
 	    textfs->kWordDocument()->setModified(true);
-            //kdDebug() << "KWTextFrameSet::UndoRedoInfo::clear New KWTextCommand : " << name << endl;
+            //kdDebug(32001) << "KWTextFrameSet::UndoRedoInfo::clear New KWTextCommand : " << name << endl;
         }
     }
     text = QString::null;
@@ -1143,7 +1143,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     // apply '2' and '3' (format)
     for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
     {
-        kdDebug() << "KWTextFrameSet::applyStyle " << parag->string()->length() << endl;
+        kdDebug(32001) << "KWTextFrameSet::applyStyle " << parag->string()->length() << endl;
         parag->setFormat( 0, parag->string()->length(), newFormat, true );
         parag->setFormat( newFormat ); // set default format (for counter)
     }
@@ -1187,7 +1187,7 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
         {
             undoRedoInfo.oldStyles << start->styleSheetItems();
             undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(start)->createParagLayout();
-            //kdDebug() << "KWTextFrameSet::storeParagUndoRedoInfo storing counter " << static_cast<KWTextParag*>(start)->createParagLayout().counter.counterType << endl;
+            //kdDebug(32001) << "KWTextFrameSet::storeParagUndoRedoInfo storing counter " << static_cast<KWTextParag*>(start)->createParagLayout().counter.counterType << endl;
         }
     }
 }
@@ -1254,8 +1254,8 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
 
 void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin ) {
     QTextDocument * textdoc = textDocument();
-    //kdDebug() << "KWTextFrameSet::setMargin " << m << " to value " << margin.pt() << endl;
-    //kdDebug() << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() << endl;
+    //kdDebug(32001) << "KWTextFrameSet::setMargin " << m << " to value " << margin.pt() << endl;
+    //kdDebug(32001) << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() == margin.pt() /*hack*/ )
         return; // No change needed.
@@ -1293,10 +1293,10 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
 void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, KWUnit spacing )
 {
     QTextDocument * textdoc = textDocument();
-    //kdDebug() << "KWTextFrameSet::setLineSpacing to value " << spacing.pt() << endl;
-    //kdDebug() << "Current spacing is " << static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() << endl;
-    //kdDebug() << "Comparison says " << ( static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() ) << endl;
-    //kdDebug() << "hasSelection " << textdoc->hasSelection( QTextDocument::Standard ) << endl;
+    //kdDebug(32001) << "KWTextFrameSet::setLineSpacing to value " << spacing.pt() << endl;
+    //kdDebug(32001) << "Current spacing is " << static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() << endl;
+    //kdDebug(32001) << "Comparison says " << ( static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() ) << endl;
+    //kdDebug(32001) << "hasSelection " << textdoc->hasSelection( QTextDocument::Standard ) << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() /*...*/ )
         return; // No change needed.
@@ -1439,7 +1439,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
 
 void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &txt, bool checkNewLine, bool removeSelected )
 {
-    kdDebug() << "KWTextFrameSet::insert" << endl;
+    kdDebug(32001) << "KWTextFrameSet::insert" << endl;
     QTextDocument *textdoc = textDocument();
     emit hideCursor();
     if ( textdoc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
@@ -1542,9 +1542,9 @@ void KWTextFrameSet::clearUndoRedoInfo()
     undoRedoInfo.clear();
 }
 
-void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat )
+void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat, bool removeSelected )
 {
-    kdDebug() << "KWTextFrameSet::pasteText" << endl;
+    kdDebug(32001) << "KWTextFrameSet::pasteText" << endl;
     QString t = text;
     // Need to convert CRLF to NL
     QRegExp crlf( QString::fromLatin1("\r\n") );
@@ -1555,15 +1555,15 @@ void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, QTex
             t[ i ] = ' ';
     }
     if ( !t.isEmpty() )
-        insert( cursor, currentFormat, t, true /*checkNewLine*/);
+        insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected );
 }
 
-void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data )
+void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     QTextDocument *textdoc = textDocument();
-    emit hideCursor();
-    if ( textdoc->hasSelection( QTextDocument::Standard ) )
+    if ( removeSelected && textdoc->hasSelection( QTextDocument::Standard ) )
         removeSelectedText( cursor );
+    emit hideCursor();
     m_lastFormatted = cursor->parag()->prev() ?
                       cursor->parag()->prev() : cursor->parag();
 
@@ -1571,7 +1571,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data )
     // Using insert() wouldn't help storing the parag stuff for redo
     KWPasteCommand * cmd = new KWPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
-    doc->addCommand( new KWTextCommand( this, /*cmd, */name ) ); // the wrapper KCommand
+    doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste text") ) ); // the wrapper KCommand
     doc->setModified(true);
     *cursor = *( cmd->execute( cursor ) );
 
@@ -1609,13 +1609,13 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFor
         undoRedoInfo.format = format;
         undoRedoInfo.flags = flags;
         undoRedoInfo.clear();
-        //kdDebug() << "KWTextFrameSet::setFormat undoredo info done" << endl;
+        //kdDebug(32001) << "KWTextFrameSet::setFormat undoredo info done" << endl;
         textdoc->setFormat( QTextDocument::Standard, format, flags );
         emit repaintChanged();
         formatMore();
         emit showCursor();
     }
-    //kdDebug() << "KWTextFrameSet::setFormat currentFormat:" << currentFormat->key() << " new format:" << format->key() << endl;
+    //kdDebug(32001) << "KWTextFrameSet::setFormat currentFormat:" << currentFormat->key() << " new format:" << format->key() << endl;
     if ( currentFormat && currentFormat->key() != format->key() ) {
         currentFormat->removeRef();
         currentFormat = textdoc->formatCollection()->format( format );
@@ -1624,7 +1624,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFor
             currentFormat = textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() );
         }
         emit showCurrentFormat();
-        //kdDebug() << "KWTextFrameSet::setFormat index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
+        //kdDebug(32001) << "KWTextFrameSet::setFormat index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor->index() == cursor->parag()->length() - 1 ) {
             currentFormat->addRef();
             cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
@@ -1667,7 +1667,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
-    kdDebug() << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
+    kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
     textDocument()->removeSelection( QTextDocument::Standard );
     repaintChanged();
     hideCursor();
@@ -1902,7 +1902,7 @@ void KWTextFrameSetEdit::paste()
     {
         QByteArray arr = data->encodedData( MIME_TYPE );
         if ( arr.size() )
-            textFrameSet()->pasteKWord( cursor, QCString(arr) );
+            textFrameSet()->pasteKWord( cursor, QCString(arr), true );
     }
     else
     {
@@ -1910,7 +1910,7 @@ void KWTextFrameSetEdit::paste()
         // In particular it handles charsets (in the mimetype).
         QString text = QApplication::clipboard()->text();
         if ( !text.isEmpty() )
-            textFrameSet()->pasteText( cursor, text, currentFormat );
+            textFrameSet()->pasteText( cursor, text, currentFormat, true );
     }
 }
 
@@ -1925,37 +1925,60 @@ void KWTextFrameSetEdit::cut()
 void KWTextFrameSetEdit::copy()
 {
     if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
-        QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
-        QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
-
-        QString text;
-        QDomDocument domDoc( "PARAGRAPHS" );
-        QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-        domDoc.appendChild( elem );
-        if ( c1.parag() == c2.parag() )
-        {
-            text = c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
-            static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1 );
-        }
-        else
-        {
-            text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
-            static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), -1 );
-            QTextParag *p = c1.parag()->next();
-            while ( p && p != c2.parag() ) {
-                text += p->string()->toString() + "\n";
-                static_cast<KWTextParag *>(p)->save( elem );
-                p = p->next();
-            }
-            text += c2.parag()->string()->toString().left( c2.index() );
-            static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1 );
-        }
-        KWDrag *kd = new KWDrag;
-        kd->setPlain( text );
-        kd->setKWord( domDoc.toCString() );
-        kdDebug() << "KWTextFrameSetEdit::copy " << domDoc.toCString() << endl;
+        KWDrag *kd = newDrag( 0L );
         QApplication::clipboard()->setData( kd );
     }
+}
+
+void KWTextFrameSetEdit::startDrag()
+{
+    mightStartDrag = FALSE;
+    inDoubleClick = FALSE;
+    KWDrag *drag = newDrag( m_canvas->viewport() );
+    if ( !frameSet()->kWordDocument()->isReadWrite() )
+        drag->dragCopy();
+    else {
+        if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
+            //textDocument()->removeSelectedText( QTextDocument::Standard, cursor ); // Hmm, no undo ?
+            textFrameSet()->removeSelectedText( cursor );
+            repaintChanged();
+        }
+    }
+}
+
+KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
+{
+    QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
+    QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
+
+    QString text;
+    QDomDocument domDoc( "PARAGRAPHS" );
+    QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+    domDoc.appendChild( elem );
+    if ( c1.parag() == c2.parag() )
+    {
+        text = c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
+        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1 );
+    }
+    else
+    {
+        text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
+        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), -1 );
+        QTextParag *p = c1.parag()->next();
+        while ( p && p != c2.parag() ) {
+            text += p->string()->toString() + "\n";
+            static_cast<KWTextParag *>(p)->save( elem );
+            p = p->next();
+        }
+        text += c2.parag()->string()->toString().left( c2.index() );
+        static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1 );
+    }
+
+    KWDrag *kd = new KWDrag( parent );
+    kd->setPlain( text );
+    kd->setKWord( domDoc.toCString() );
+    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
+    return kd;
 }
 
 void KWTextFrameSetEdit::ensureCursorVisible()
@@ -1978,17 +2001,6 @@ void KWTextFrameSetEdit::ensureCursorVisible()
         m_canvas->gui()->getView()->updatePageInfo();
     }
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
-}
-
-void KWTextFrameSetEdit::startDrag()
-{
-    mightStartDrag = FALSE;
-    inDoubleClick = FALSE;
-    QDragObject *drag = new QTextDrag( textDocument()->selectedText( QTextDocument::Standard ), m_canvas->viewport() );
-    if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
-	textDocument()->removeSelectedText( QTextDocument::Standard, cursor );
-	repaintChanged();
-    }
 }
 
 void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
@@ -2093,7 +2105,7 @@ void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e )
 {
     emit hideCursor();
-    placeCursor( textFrameSet()->contentsToInternal( e->pos() ), cursor );
+    placeCursor( textFrameSet()->contentsToInternal( e->pos() ) );
     emit showCursor();
     e->acceptAction();
 }
@@ -2104,26 +2116,65 @@ void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
 
 void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
 {
-    e->acceptAction();
-    QString text;
-    int i = -1;
-    while ( ( i = text.find( '\r' ) ) != -1 )
-	text.replace( i, 1, "" );
-    if ( QTextDrag::decode( e, text ) ) {
-	if ( ( e->source() == m_canvas ||
-	       e->source() == m_canvas->viewport() ) &&
-	     e->action() == QDropEvent::Move ) {
-	    textFrameSet()->removeSelectedText( cursor );
-	} else
-        {
+    if ( KWDrag::canDecode( e ) )
+    {
+        e->acceptAction();
+
+        QTextCursor dropCursor( textDocument() );
+        dropCursor.place( textFrameSet()->contentsToInternal( e->pos() ), textDocument()->firstParag() );
+        kdDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
+
+        if ( ( e->source() == m_canvas ||
+               e->source() == m_canvas->viewport() ) &&
+             e->action() == QDropEvent::Move ) {
+
+            if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+            {
+                // Tricky. We don't want to do the placeCursor after removing the selection
+                // (the user pointed at some text with the old selection in place).
+                // However, something got deleted in our parag, dropCursor's index needs adjustment.
+                QTextCursor endSel = textDocument()->selectionEndCursor( QTextDocument::Standard );
+                if ( endSel.parag() == dropCursor.parag() )
+                {
+                    QTextCursor startSel = textDocument()->selectionStartCursor( QTextDocument::Standard );
+                    // Does the selection starts before (other parag or same parag) ?
+                    if ( startSel.parag() != dropCursor.parag() || startSel.index() < dropCursor.index() )
+                    {
+                        // If other -> endSel.parag() will get deleted. The final position is in startSel.parag(),
+                        // where the selection started + how much after the end we are. Make a drawing :)
+                        // If same -> simply move back by how many chars we've deleted. Funny thing is, it's the same formula.
+                        int dropIndex = dropCursor.index();
+                        dropCursor.setParag( startSel.parag() );
+                        // If dropCursor - endSel < 0, selection ends after, we're dropping into selection (no-op)
+                        dropCursor.setIndex( dropIndex - QMIN( endSel.index(), dropIndex ) + startSel.index() );
+                    }
+                    kdDebug(32001) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
+                }
+
+                textFrameSet()->removeSelectedText( cursor );
+            }
+            hideCursor();
+            *cursor = dropCursor;
+            showCursor();
+            kdDebug(32001) << "cursor set back to drop cursor: parag=" << cursor->parag()->paragId() << " index=" << cursor->index() << endl;
+
+        } else
+        {   // drop coming from outside -> forget about current selection
             textDocument()->removeSelection( QTextDocument::Standard );
         }
-        hideCursor();
-        placeCursor( textFrameSet()->contentsToInternal( e->pos() ), cursor );
-        showCursor();
 
-	textFrameSet()->insert( cursor, currentFormat, text,
-                                true /* checkNewLine */, false /* don't remove selected text */ );
+        if ( e->provides( MIME_TYPE ) )
+        {
+            QByteArray arr = e->encodedData( MIME_TYPE );
+            if ( arr.size() )
+                textFrameSet()->pasteKWord( cursor, QCString(arr), false );
+        }
+        else
+        {
+            QString text;
+            if ( QTextDrag::decode( e, text ) )
+                textFrameSet()->pasteText( cursor, text, currentFormat, false );
+        }
     }
 }
 
@@ -2183,14 +2234,11 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
     showCursor();
 }
 
-void KWTextFrameSetEdit::placeCursor( const QPoint &pos, QTextCursor *c /*currently unused*/)
+void KWTextFrameSetEdit::placeCursor( const QPoint &pos )
 {
-    if ( !c )
-	c = cursor;
-
-    c->restoreState();
+    cursor->restoreState();
     QTextParag *s = textDocument()->firstParag();
-    c->place( pos,  s );
+    cursor->place( pos,  s );
     emit updateUI();
 }
 
@@ -2232,7 +2280,7 @@ void KWTextFrameSetEdit::setBold( bool on ) {
     QTextFormat format( *currentFormat );
     format.setBold( on );
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Bold );
-   //kdDebug() << "KWTextFrameSetEdit::setBold new currentFormat " << currentFormat << " " << currentFormat->key() << endl;
+   //kdDebug(32003) << "KWTextFrameSetEdit::setBold new currentFormat " << currentFormat << " " << currentFormat->key() << endl;
 }
 
 void KWTextFrameSetEdit::setItalic( bool on ) {
@@ -2330,7 +2378,7 @@ void KWTextFrameSetEdit::updateUI()
     int i = cursor->index();
     if ( i > 0 )
 	--i;
-    //kdDebug() << "KWTextFrameSet::updateUI currentFormat=" << currentFormat << " " << currentFormat->key() << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+    //kdDebug(32003) << "KWTextFrameSet::updateUI currentFormat=" << currentFormat << " " << currentFormat->key() << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
     if ( currentFormat->key() != cursor->parag()->at( i )->format()->key() && textDocument()->useFormatCollection() ) {
 	if ( currentFormat )
 	    currentFormat->removeRef();

@@ -24,6 +24,7 @@
 #include "kwframe.h"
 #include "kwtextparag.h"
 class KWStyle;
+class KWDrag;
 class KWTextFrameSet;
 
 /**
@@ -98,8 +99,8 @@ public:
     void undo();
     void redo();
     void clearUndoRedoInfo();
-    void pasteKWord( QTextCursor * cursor, const QCString & data );
-    void pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat );
+    void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
+    void pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat, bool removeSelected );
 
     /** Set format changes on selection or current cursor */
     void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags);
@@ -293,8 +294,9 @@ public slots:
     void updateUI();
 
 protected:
-    void placeCursor( const QPoint &pos /* in internal coordinates */, QTextCursor *c = 0 );
+    void placeCursor( const QPoint &pos /* in internal coordinates */ );
     void selectAll( bool select );
+    KWDrag * newDrag( QWidget * parent ) const;
 
 private slots:
     void blinkCursor();

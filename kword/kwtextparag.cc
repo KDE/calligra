@@ -485,7 +485,7 @@ int Counter::width( const KWTextParag *paragraph )
 KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
-    kdDebug() << "KWTextParag::KWTextParag " << this << endl;
+    //kdDebug() << "KWTextParag::KWTextParag " << this << endl;
     m_item = 0L;
     m_leftBorder.ptWidth = 0;
     m_rightBorder.ptWidth = 0;
@@ -930,7 +930,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     // Paragraph's format
     // ## Maybe we should have a "default format" somewhere and
     // pass it instead of 0L, to only save the non-default attributes
-    QDomElement paragFormatElement = saveFormat( doc, paragFormat(), 0L, 0, string()->length() );
+    QDomElement paragFormatElement = saveFormat( doc, paragFormat(), 0L, 0, to - from + 1 );
     layoutElem.appendChild( paragFormatElement );
 
     // TODO TABULATOR
@@ -1033,7 +1033,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
             int index = formatElem.attribute( "pos" ).toInt() + offset;
             int len = formatElem.attribute( "len" ).toInt();
 
-            //kdDebug() << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+            kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
             setFormat( index, len, &f );
         }
     }

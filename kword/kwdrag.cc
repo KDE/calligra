@@ -80,16 +80,3 @@ const char* KWDrag::format( int i ) const
     else return 0;
 }
 
-/*================================================================*/
-bool KWDrag::decode( QMimeSource* e, QString& s )
-{
-    ////// ### Shouldn't the caller have a way to find out which one was used ???
-    QByteArray ba = e->encodedData( MIME_TYPE );
-    if ( ba.size() )
-    {
-        s = QString::fromUtf8( ba.data(), ba.size() );
-        return true;
-    }
-    return QTextDrag::decode(e, s);
-}
-

@@ -310,6 +310,12 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
 
     cursor.insert( text, true );
 
+    // Move cursor to the end
+    c->setParag( firstParag );
+    c->setIndex( m_idx );
+    for ( int i = 0; i < (int)text.length(); ++i )
+        c->gotoRight();
+
     KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
     for (unsigned int item = 0; item < count; item++)
     {
@@ -326,7 +332,9 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
                 {
                     QTextFormat f = parag->loadFormat( formatElem, 0L );
                     QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
-                    parag->setFormat( m_idx, parag->string()->length()-1-m_idx, defaultFormat, TRUE );
+                    // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
+                    int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
+                    parag->setFormat( m_idx, endIndex - m_idx, defaultFormat, TRUE );
                 }
             }
 
@@ -335,19 +343,16 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         else
         {
             parag->loadLayout( paragElem );
+            // Last paragraph: some of the text might be from before the paste
+            int len = (item == count-1) ? c->index() : parag->string()->length();
             // Apply default format
-            parag->setFormat( 0, parag->string()->length(), parag->paragFormat(), TRUE );
+            parag->setFormat( 0, len, parag->paragFormat(), TRUE );
             parag->loadFormatting( paragElem );
         }
         parag->format();
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
     }
-    // Move cursor to the end
-    c->setParag( firstParag );
-    c->setIndex( m_idx );
-    for ( int i = 0; i < (int)text.length(); ++i )
-        c->gotoRight();
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
     return c;

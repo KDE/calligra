@@ -41,7 +41,6 @@ public:
     virtual const char* format( int i ) const;
 
     static bool canDecode( QMimeSource* e );
-    static bool decode( QMimeSource* e, QString& s );
 
 protected:
     //QString plain, html;
