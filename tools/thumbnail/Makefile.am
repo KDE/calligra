@@ -11,5 +11,6 @@ kofficethumbnail_la_SOURCES = kofficecreator.cpp
 kofficethumbnail_la_LIBADD = $(LIB_KOFFICECORE)
 kofficethumbnail_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-kde_services_DATA = clipartthumbnail.desktop kofficethumbnail.desktop otherofficethumbnail.desktop
+# otherofficethumbnail.desktop is currently not installed, as it gives too many problems
+kde_services_DATA = clipartthumbnail.desktop kofficethumbnail.desktop
 
