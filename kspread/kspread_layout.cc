@@ -2408,24 +2408,24 @@ namespace KSpreadCurrency_LNS
     { "$", I18N_NOOP("New Zealand"), I18N_NOOP("Dollar"), "$" },
     { "$", I18N_NOOP("United States"), I18N_NOOP("Dollar"), "$" },
 
-    { "¤", "", "¤", "¤" }, // unspecified 
-    { "¤", I18N_NOOP("Austria"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Finland"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("France"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Germany"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Greece"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Ireland"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Italy"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Luxembourg"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "¤" },
+    { "", "", "", "" }, // unspecified 
+    { "", I18N_NOOP("Austria"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Finland"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("France"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Germany"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Greece"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Ireland"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Italy"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Luxembourg"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "" },
+    { "", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "" },
 
-    { "£", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "£" },
+    { "", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "" },
 
-    { "¥", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "¥" },
+    { "", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "" },
 
     { "AFA", I18N_NOOP("Afganistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFA") },
     { "ALL", I18N_NOOP("Albania"), I18N_NOOP("Lek"), I18N_NOOP("Lek") },
@@ -2441,7 +2441,7 @@ namespace KSpreadCurrency_LNS
     { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Guilder"), I18N_NOOP("AWG") },
     { "AUD", I18N_NOOP("Australia"), I18N_NOOP("Australian Dollar"), I18N_NOOP("AUD") },
     { "EUR", I18N_NOOP("Austria"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
-    { "ATS", I18N_NOOP("Austria"), I18N_NOOP("Schilling"), I18N_NOOP("öS") }, // !
+    { "ATS", I18N_NOOP("Austria"), I18N_NOOP("Schilling"), I18N_NOOP("Ã¶S") },
     { "AZM", I18N_NOOP("Azerbaijan"), I18N_NOOP("Azerbaijanian Manat"), I18N_NOOP("AZM") },
     { "BSD", I18N_NOOP("Bahamas"), I18N_NOOP("Bahamian Dollar"), I18N_NOOP("BSD") },
     { "BHD", I18N_NOOP("Bahrain"), I18N_NOOP("Bahraini Dinar"), I18N_NOOP("BHD") },
@@ -2663,7 +2663,7 @@ namespace KSpreadCurrency_LNS
     { "THB", I18N_NOOP("Thailand"), I18N_NOOP("Baht"), I18N_NOOP("THB") },
     { "XOF", I18N_NOOP("Togo"), I18N_NOOP("CFA Franc BCEAO"), I18N_NOOP("XOF") },
     { "NZD", I18N_NOOP("Tokelau"), I18N_NOOP("New Zealand Dollar"), I18N_NOOP("NZD") },
-    { "TOP", I18N_NOOP("Tonga"), I18N_NOOP("Pa´anga"), I18N_NOOP("TOP") },
+    { "TOP", I18N_NOOP("Tonga"), I18N_NOOP("Pa'anga"), I18N_NOOP("TOP") },
     { "TTD", I18N_NOOP("Trinidad And Tobago"), I18N_NOOP("Trinidad and Tobago Dollar"), I18N_NOOP("TT$") },
     { "TND", I18N_NOOP("Tunisia"), I18N_NOOP("Tunisian Dinar"), I18N_NOOP("TND") },
     { "TRL", I18N_NOOP("Turkey"), I18N_NOOP("Turkish Lira"), I18N_NOOP("TL") },
@@ -2761,12 +2761,12 @@ KSpreadCurrency::KSpreadCurrency(QString const & code, currencyFormat format)
 {
   if ( format == Gnumeric )
   {
-    if ( code.find( '¤' ) != -1 )
-      m_code = "¤";
-    else if ( code.find( '£' ) != -1 )
-      m_code = "£";
-    else if ( code.find( '¥' ) != -1 )
-      m_code = "¥";
+    if ( code.find( '' ) != -1 )
+      m_code = "";
+    else if ( code.find( '' ) != -1 )
+      m_code = "";
+    else if ( code.find( '' ) != -1 )
+      m_code = "";
     else if ( code[0] == '[' && code[1] == '$' ) 
     {
       int n = code.find(']');
