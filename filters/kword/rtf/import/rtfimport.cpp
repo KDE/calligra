@@ -28,8 +28,10 @@
 #include <qvaluelist.h>
 
 #include <kurl.h>
+#include <kmessagebox.h>
 
 #include <koPicture.h>
+#include <koFilterManager.h>
 
 #include "rtfimport.h"
 #include "rtfimport.moc"
@@ -320,7 +322,12 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     QTime debugTime;
     debugTime.start();
-    
+
+    // Are we in batch mode, i.e. non-interactive
+    m_batch=false;
+    if ( m_chain->manager() )
+        m_batch = m_chain->manager()->getBatchMode();
+
     // Open input file
     inFileName = m_chain->inputFile();
     QFile in( inFileName );
@@ -329,6 +336,12 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     {
 	kdError(30515) << "Unable to open input file!" << endl;
 	in.close();
+        if ( !m_batch )
+        {
+            KMessageBox::error( 0L,
+                i18n("The file cannot be loaded, as it cannot be opened!"),
+                i18n("KWord's RTF Import Filter "), 0 );
+        }
 	return KoFilter::FileNotFound;
     }
 
@@ -340,6 +353,12 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     {
 	kdError(30515) << "Not an RTF file" << endl;
 	in.close();
+        if ( !m_batch )
+        {
+            KMessageBox::error( 0L,
+                i18n("The file cannot be loaded, as it does not seem to a RTF document!"),
+                i18n("KWord's RTF Import Filter "), 0 );
+        }
 	return KoFilter::WrongFormat;
     }
 
@@ -347,33 +366,56 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     token.next();
 
-    // ### TODO: user visible error messages
     if (token.type != RTFTokenizer::ControlWord)
     {
 	kdError(30515) << "Wrong document type" << endl;
 	in.close();
+        if ( !m_batch )
+        {
+            KMessageBox::error( 0L,
+                i18n("The document cannot be loaded, as it does not seem to follow the RTF syntax!"),
+                i18n("KWord's RTF Import Filter "), 0 );
+        }
 	return KoFilter::WrongFormat;
     }
 
+    bool force = false; // By default do not force, despite an unknown keyword or version
     if ( !qstrcmp( token.text, "rtf" ) )
     {
         // RTF is normally version 1 but at least Ted uses 0 as version number
         if ( token.value > 1 )
         {
             kdError(30515) << "Wrong RTF version (" << token.value << "); version 0 or 1 expected" << endl;
-            in.close();
-            return KoFilter::WrongFormat;
+            if ( !m_batch )
+            {
+                force = ( KMessageBox::warningYesNo( 0L,
+                    i18n("The RTF (Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion! Do you want to continue?").arg( token.value ),
+                    i18n("KWord's RTF Import Filter ") ) == KMessageBox::Yes );
+            }
+            if ( !force )
+            {
+                in.close();
+                return KoFilter::WrongFormat;
+            }
         }
     }
     else if ( !qstrcmp( token.text, "pwd" ) )
     {
         // PocketWord's PWD format is similar to RTF but has a version number of 2.
-        // ### TODO: should lower version numbers be refused?
-        if ( token.value > 2 )
+        if ( token.value != 2 )
         {
             kdError(30515) << "Wrong PWD version (" << token.value << "); version 2 expected" << endl;
-            in.close();
-            return KoFilter::WrongFormat;
+            if ( !m_batch )
+            {
+                force = ( KMessageBox::warningYesNo( 0L,
+                    i18n("The PWD (PocketWord's Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion! Do you want to continue?").arg( token.value ),
+                    i18n("KWord's RTF Import Filter ") ) == KMessageBox::Yes );
+            }
+            if ( !force )
+            {
+                in.close();
+                return KoFilter::WrongFormat;
+            }
         }
     }
     else if ( !qstrcmp( token.text, "urtf" ) )
@@ -382,15 +424,30 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
         if ( token.value > 1 )
         {
             kdError(30515) << "Wrong URTF version (" << token.value << "); version 0 or 1 expected" << endl;
-            in.close();
-            return KoFilter::WrongFormat;
+            if ( !m_batch )
+            {
+                force = ( KMessageBox::warningYesNo( 0L,
+                    i18n("The URTF (\"Unicode Rich Text Format\") document has an unexpected version number: %1. Continuing might result in an erroneous conversion! Do you want to continue?").arg( token.value ),
+                    i18n("KWord's RTF Import Filter ") ) == KMessageBox::Yes );
+            }
+            if ( !force )
+            {
+                in.close();
+                return KoFilter::WrongFormat;
+            }
         }
     }
     else
     {
-            kdError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf or \\pwd expected" << endl;
-            in.close();
-            return KoFilter::WrongFormat;
+        kdError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf, \\pwd or \\urtf expected" << endl;
+        in.close();
+        if ( !m_batch )
+        {
+            KMessageBox::error( 0L,
+                i18n("The RTF document cannot be loaded, as it has an unexpected first keyword: \\%1!").arg( token.text ),
+                i18n("KWord's RTF Import Filter "), 0 );
+        }
+        return KoFilter::WrongFormat;
     }
 
     table	= 0;

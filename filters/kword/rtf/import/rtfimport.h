@@ -380,9 +380,10 @@ public:
     int flddst; // support for recursive fields
     QString inFileName; // File name of the source file.
 protected:
-    QTextCodec* textCodec; // currently used QTextCodec by the RTF file
-    QTextCodec* utf8TextCodec; // QTextCodec for UTF-8 (used in \u)
+    QTextCodec* textCodec; ///< currently used QTextCodec by the RTF file
+    QTextCodec* utf8TextCodec; ///< QTextCodec for UTF-8 (used in \u)
     QMap<QString,int> debugUnknownKeywords;
+    bool m_batch; ///< Should the filter system be in batch mode (i.e. non-interactive)
 };
 
 #endif
