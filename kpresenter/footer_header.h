@@ -48,6 +48,9 @@ public:
 
     void updateSizes();
 
+    void setShowHeader( bool b );
+    void setShowFooter( bool b );
+    
 protected:
     void setupHeader();
     void setupFooter();

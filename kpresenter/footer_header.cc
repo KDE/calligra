@@ -685,3 +685,15 @@ void KPFooterHeaderEditor::footerAlignChanged( TxtParagraph::HorzAlign ha )
     ftool2->setButton( f_acenter, ha == TxtParagraph::CENTER );
     ftool2->setButton( f_aright, ha == TxtParagraph::RIGHT );
 }
+
+/*================================================================*/
+void KPFooterHeaderEditor::setShowHeader( bool b )
+{
+    showHeader->setChecked( b );
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::setShowFooter( bool b )
+{
+    showFooter->setChecked( b );
+}

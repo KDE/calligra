@@ -369,4 +369,4 @@ Reggie, 15.7.1999:
 ------------------
 - When inserting a new page (template), don't change the page layout
 - Fixes in textobject
-
+- Fixes in headers/footers

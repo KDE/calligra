@@ -764,8 +764,10 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
-		if ( ( *it ).m_strName == "show" )
+		if ( ( *it ).m_strName == "show" ) {
 		    setHeader( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
+		    headerFooterEdit->setShowHeader( hasHeader() );
+		}
 	    }
 	    _header->load( parser, lst );
 	}
@@ -776,8 +778,10 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
-		if ( ( *it ).m_strName == "show" )
+		if ( ( *it ).m_strName == "show" ) {
 		    setFooter( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
+		    headerFooterEdit->setShowFooter( hasFooter() );
+		}
 	    }
 	    _footer->load( parser, lst );
 	}
