@@ -18,10 +18,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef KDE_USE_FINAL // defined in kis_dlg_new.cc
 const int MAXIMAGEWIDTH = 32767;
 const int INITIALWIDTH = 512;
 const int MAXIMAGEHEIGHT = 32767;
 const int INITIALHEIGHT = 512;
+#endif
 
 #include <qbuttongroup.h>
 #include <qpushbutton.h>

@@ -37,6 +37,9 @@
 
 #include "kis_brushchooser.h"
 
+// X11 headers
+#undef Below
+#undef Above
 
 KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
   : QWidget( parent, name )
