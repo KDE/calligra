@@ -65,7 +65,7 @@ public:
     virtual const bool unplugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
 
     // These methods are used to access the object's children
-    // Implemented via QListIterator - Leaf classes don't reimplement
+    // Implemented via QListIterator - Leaf classes don't override
     // that default behavior...
     virtual const GObject *firstChild() { return 0L; }
     virtual const GObject *nextChild() { return 0L; }
@@ -99,7 +99,7 @@ public:
     virtual void moveY(const int &dy) = 0;
     virtual void move(const int &dx, const int &dy) = 0;
     virtual void rotate(const QPoint &center, const double &angle) = 0;
-    virtual void scale(const double &xfactor, const double &yfactor, const QPoint &origin) = 0;
+    virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;
 
     const State state() const { return m_state; }               // what's the current state?
     virtual void setState(const State state) { m_state=state; } // set the state
@@ -183,7 +183,7 @@ public:
 
     virtual const bool keyPressEvent(QKeyEvent */*e*/) { return false; }
     virtual const bool keyReleaseEvent(QKeyEvent */*e*/) { return false; }
-    
+
 private:
     GObjectM9r &operator=(GObjectM9r &rhs);  // no nasty tricks, please :)
 };
