@@ -21,21 +21,26 @@
 #define __preferencesdlg_h__
 
 #include <qlineedit.h>
+
 #include <kdialog.h>
 
 /**
+ *  Preferences dialog for KImageShop
  */
 class KImagePreferencesDialog : public KDialog
 {
     Q_OBJECT
-public:
-	KImagePreferencesDialog( QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
-	~KImagePreferencesDialog();
 
-	static QString getStr();
+public:
+
+  KImagePreferencesDialog( QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
+  ~KImagePreferencesDialog();
+
+  static QString getStr();
 
 private:
-	QLineEdit* m_pLineEdit;
+
+  QLineEdit* m_pLineEdit;
 };
 
-#endif
+#endif // __preferencesdlg_h__
