@@ -207,7 +207,7 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool clean) {
 				     "application/x-killustrator", "*.kil",
 				     "KIllustrator",
 				     KoTemplateChooseDia::Everything,
-				     "killustrator_template", true);
+				     "killustrator_template");
   if (ret == KoTemplateChooseDia::Template) {
     QFileInfo fileInfo (templ);
     QString fileName (fileInfo.dirPath (true) + "/" +

@@ -21,7 +21,10 @@
 
 /******************************************************************/
 
-#include "koTabChooser.h"
+#include <koTabChooser.h>
+#include <qpainter.h>
+#include <qpopupmenu.h>
+
 #include <klocale.h>
 
 /******************************************************************/
@@ -142,4 +145,4 @@ void KoTabChooser::setupMenu()
     rb_menu->setCheckable( false );
 }
 
-#include "koTabChooser.moc"
+#include <koTabChooser.moc>

@@ -1556,10 +1556,8 @@ void KWordView::extraCreateTemplate()
     QString file = "/tmp/kpt";
     m_pKWordDoc->saveNativeFormat( file );
 
-    KoTemplateCreateDia::createTemplate( this, file, pix,
-					 KWordFactory::global()->
-					 dirs()->resourceDirs( "kword_template" ),
-					 "kwt" );
+    KoTemplateCreateDia::createTemplate( "kword_template", KWordFactory::global(),
+					 file, pix, this );
     system( QString( "rm %1" ).arg( file ).latin1() );
     KWordFactory::global()->dirs()->addResourceType("kword_template",
 						    KStandardDirs::kde_default( "data" ) +

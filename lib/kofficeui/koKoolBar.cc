@@ -17,10 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koKoolBar.h"
+#include <koKoolBar.h>
 
 #include <qpainter.h>
 #include <qcolor.h>
+#include <qscrollbar.h>
 
 static int g_koKoolBarId = 0;
 
@@ -499,5 +500,4 @@ int main( int argc, char **argv )
 }
 */
 
-
-#include "koKoolBar.moc"
+#include <koKoolBar.moc>

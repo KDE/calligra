@@ -16,8 +16,7 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include "kcoloractions.h"
-#include "kcoloractions.moc"
+#include <kcoloractions.h>
 #include <kcolordlg.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
@@ -315,7 +314,7 @@ void KColorBar::paintEvent( QPaintEvent * )
     int y = 5;
     QValueList<QColor>::Iterator it = colors.begin();
     for ( ; it != colors.end(); ++it ) {
-	qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), TRUE );
+	qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), true );
 	p.fillRect( x + 1, y + 1, 10, 10, *it );
 	y += 16;
     }
@@ -379,3 +378,5 @@ int KColorBarAction::plug( QWidget *widget, int index )
 
     return -1;
 }
+
+#include <kcoloractions.moc>

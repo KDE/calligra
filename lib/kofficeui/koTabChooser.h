@@ -21,15 +21,10 @@
 #define koTabChooser_h
 
 #include <qframe.h>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpopupmenu.h>
-#include <qpoint.h>
 
-#include <kapp.h>
+class QMouseEvent;
+class QPainter;
+class QPopupMenu;
 
 /**
  *  class KoTabChooser

@@ -22,13 +22,13 @@
 #define __ko_koolbar_h__
 
 #include <qwidget.h>
-#include <qpixmap.h>
 #include <qpushbutton.h>
-#include <qscrollbar.h>
 #include <qintdict.h>
 
+class QPixmap;
 class KoKoolBar;
 class KoKoolBarGroup;
+
 class KoKoolBarItem : public QObject
 {
 private:

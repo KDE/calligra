@@ -878,13 +878,12 @@ void KPresenterView::extraCreateTemplate()
     m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
     pix = pix.xForm( m );
 
+    // FIXME(Werner)
     QString file = "/tmp/kpt";
     m_pKPresenterDoc->savePage( file, i );
 
-    KoTemplateCreateDia::createTemplate( this, file, pix,
-					 KPresenterFactory::global()->
-					 dirs()->resourceDirs( "kpresenter_template" ),
-					 "kpt" );
+    KoTemplateCreateDia::createTemplate( "kpresenter_template", KPresenterFactory::global(),
+					 file, pix, this);
     system( QString( "rm %1" ).arg( file ).latin1() );
     KPresenterFactory::global()->dirs()->addResourceType("kpresenter_template",
 							 KStandardDirs::kde_default( "data" ) +

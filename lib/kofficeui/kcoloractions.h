@@ -21,7 +21,6 @@
 
 #include <kaction.h>
 #include <qvaluelist.h>
-#include <qcolor.h>
 #include <qwidget.h>
 
 class QMouseEvent;

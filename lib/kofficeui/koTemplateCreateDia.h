@@ -1,6 +1,7 @@
 /*
    This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2000 Werner Trobin <wtrobin@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,14 +23,12 @@
 #define koTemplateCreateDia_h
 
 #include <kdialogbase.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qpixmap.h>
-#include <qpoint.h>
 
-class QListViewItem;
-class QListView;
-class QLineEdit;
+class QString;
+class QPixmap;
+class QWidget;
+class KInstance;
+class KoTemplateCreateDiaPrivate;
 
 /****************************************************************************
  *
@@ -40,35 +39,19 @@ class QLineEdit;
 class KoTemplateCreateDia : public KDialogBase
 {
     Q_OBJECT
-    
-public:
-    KoTemplateCreateDia( QWidget *parent, const QString &file_, const QPixmap &pix,
-			 const QStringList &templateRoots_, const QString extension_ );
 
-    static void createTemplate( QWidget *parent, const QString &file_, const QPixmap &pix,
-				const QStringList &templateRoots_, const QString extension_ );
-    
-private slots:
-    void createFolder( QListViewItem *item, const QPoint &, int );
-    void doubleClicked( QListViewItem *item );
-    void selectionChanged( QListViewItem *item );
-    void nameChanged( const QString &name );
-    void useGeneratedPixmap();
-    void useChosenPixmap();
-    void iconChanged( const QString &name );
-    void ok();
-    void slotOk() {
-	emit okClicked();
-    }
-    
+public:
+    KoTemplateCreateDia( const QString &templateType, KInstance *instance,
+			 const QString &file, const QPixmap &pix, QWidget *parent=0L );
+
+    static void createTemplate( const QString &templateType, KInstance *instance,
+				const QString &file, const QPixmap &pix, QWidget *parent=0L );
+
 private:
-    QPixmap pixmap;
-    QString extension, file;
-    QString currName;
-    QPixmap currPixmap;
-    QListView *folderList;
-    QLineEdit *lined;
-    
+    QString m_templateType;
+    KInstance *m_instance;
+    QString m_file;
+    QPixmap m_pixmap;
+    KoTemplateCreateDiaPrivate *d;
 };
-    
 #endif

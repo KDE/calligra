@@ -22,20 +22,22 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 #include <kicondialog.h>
+
+class KoTemplateTree;
+class KoTemplateGroup;
 
 
 class MyIconCanvas : public KIconCanvas
 {
     Q_OBJECT
-
 public:
-    MyIconCanvas( QWidget *parent = 0, const QString &name = QString::null )
-	: KIconCanvas( parent, name ) {};
+    MyIconCanvas( QWidget *parent = 0, const char *name = 0L )
+	: KIconCanvas( parent, name ) {}
 
     bool isCurrentValid() { return currentItem(); }
-    void loadDir( const QString &dirname );
+    void load(KoTemplateGroup *group);
 
 protected:
     void viewportMousePressEvent( QMouseEvent *e ) {
@@ -51,10 +53,6 @@ protected:
 
 signals:
     void currentChanged( const QString & );
-private slots:
-    void slotLoadDir();
-private:
-    QString m_dirname;
 };
 
 
@@ -70,7 +68,7 @@ class KoTemplateChooseDiaPrivate;
  *  @author Reginald Stadlbauer <reggie@kde.org>
  *  @author Werner Trobin <wtrobin@mandrakesoft.com>
  */
-class KoTemplateChooseDia : public KDialog
+class KoTemplateChooseDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -83,14 +81,14 @@ public:
      * File = The user has choosen a file
      * Empty = The user selected "Empty document"
      */
-    enum ReturnType {Cancel, Template, File, Empty};
+    enum ReturnType { Cancel, Template, File, Empty };
     /**
      * To configure the dialog you have to use this enum.
      * Everything = Show templates and the rest of the dialog
      * OnlyTemplates = Show only the templates
      * NoTemplates = Just guess :)
      */
-    enum DialogType {Everything, OnlyTemplates, NoTemplates};
+    enum DialogType { Everything, OnlyTemplates, NoTemplates };
 
     /**
      * This is the CTOR to create a dialog
@@ -111,8 +109,7 @@ public:
 			const QString &nativePattern=QString::null,
 			const QString &nativeName=QString::null,
 			const DialogType &dialogType=Everything,
-			const QString& templateType=QString::null,
-			bool hasCancel=true);
+			const QString& templateType=QString::null);
     ~KoTemplateChooseDia();
 
     /**
@@ -134,8 +131,7 @@ public:
 			     const QString &nativePattern=QString::null,
 			     const QString &nativeName=QString::null,
 			     const DialogType &dialogType=Everything,
-			     const QString& templateType=QString::null,
-			     bool hasCancel=true);
+			     const QString& templateType=QString::null);
 
     /**
      * Method to get the current template
@@ -157,20 +153,17 @@ public:
 private:
     KoTemplateChooseDiaPrivate *d;
 
-    void getGroups();
-    void setupTabs();
+    void setupDialog();
 
 private slots:
-    void chosen();
-    void currentChanged( const QString & );
+    void chosen(QIconViewItem *);
+    void currentChanged( QIconViewItem * );
+    void ok();
 
     void openTemplate();
     void openFile();
     void openEmpty();
     void chooseFile();
     void tabsChanged( const QString & );
-
-signals:
-    void templateChosen( const QString & );
 };
 #endif

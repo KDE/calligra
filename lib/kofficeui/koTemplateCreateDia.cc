@@ -1,6 +1,7 @@
 /*
    This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2000 Werner Trobin <wtrobin@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,29 +19,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koTemplateCreateDia.h"
-
-#include <klocale.h>
-#include <kicondialog.h>
-#include <klineeditdlg.h>
-#include <kapp.h>
+#include <koTemplateCreateDia.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qlistview.h>
-#include <qdir.h>
-#include <qheader.h>
-#include <qfileinfo.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qcursor.h>
-#include <qlineedit.h>
+#include <qgroupbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <qpushbutton.h>
+#include <qlistview.h>
+#include <qheader.h>
 
-#include <stdlib.h>
+#include <klineedit.h>
+#include <kseparator.h>
+#include <klocale.h>
+
+class KoTemplateCreateDiaPrivate {
+public:
+    KoTemplateCreateDiaPrivate() {}
+    ~KoTemplateCreateDiaPrivate() {}
+
+    KLineEdit *m_name;
+    QRadioButton *m_default, *m_custom;
+    QPushButton *m_select;
+    QLabel *m_preview;
+    QListView *m_groups;
+};
+
 
 /****************************************************************************
  *
@@ -48,277 +52,62 @@
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_, const QPixmap &pix,
-		     const QStringList &templateRoots_, const QString extension_ )
-    : KDialogBase( parent, "", TRUE, i18n( "Create a Template" ),
-		   KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
-      extension( extension_ ), file( file_ )
-{
-    connect( this, SIGNAL( okClicked() ),
-	     this, SLOT( ok() ) );
-    connect( this, SIGNAL( cancelClicked() ),
-	     this, SLOT( reject() ) );
+KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance *instance,
+			 const QString &file, const QPixmap &pix, QWidget *parent ) :
+    KDialogBase( parent, "template create dia", true, i18n( "Create a Template" ),
+		 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+    m_templateType(templateType), m_instance(instance), m_file(file), m_pixmap(pix) {
 
-    QWidget *mainview = new QWidget( this );
+    d=new KoTemplateCreateDiaPrivate();
 
-    QHBoxLayout *layout = new QHBoxLayout( mainview );
-    layout->setSpacing( 5 );
+    QFrame *mainwidget=makeMainWidget();
+    QHBoxLayout *mbox=new QHBoxLayout(mainwidget, KDialogBase::marginHint(),
+				      KDialogBase::spacingHint());
+    QVBoxLayout *leftbox=new QVBoxLayout(mbox);
 
-    QVBoxLayout *left = new QVBoxLayout( layout );
-    left->setSpacing( 5 );
+    QHBoxLayout *namefield=new QHBoxLayout(leftbox);
+    QLabel *label=new QLabel(i18n("Name:"), mainwidget);
+    namefield->addWidget(label);
+    d->m_name=new KLineEdit(mainwidget);
+    namefield->addWidget(d->m_name);
 
-    QLabel *label = new QLabel( i18n( "Choose the Folder for the Template\n"
-				      "(with a rightclick into the list you can create new folders)" ),
-				mainview );
-    left->addWidget( label );
+    QGroupBox *pixbox=new QGroupBox(i18n("Picture:"), mainwidget);
+    leftbox->addWidget(pixbox);
+    QVBoxLayout *pixlayout=new QVBoxLayout(pixbox, KDialogBase::marginHint(),
+					   KDialogBase::spacingHint());
+    pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
+    d->m_default=new QRadioButton(i18n("Default"), pixbox);
+    pixlayout->addWidget(d->m_default);
+    QHBoxLayout *custombox=new QHBoxLayout(pixlayout);
+    d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
+    custombox->addWidget(d->m_custom);
+    d->m_select=new QPushButton(i18n("Select..."), pixbox);
+    custombox->addWidget(d->m_select);
+    label=new QLabel(i18n("Preview:"), pixbox);
+    pixlayout->addWidget(label);
+    d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
+    pixlayout->addWidget(d->m_preview);
 
-    folderList = new QListView( mainview );
-    left->addWidget( folderList );
+    KSeparator *separator=new KSeparator(QFrame::VLine, mainwidget);
+    mbox->addWidget(separator);
 
-    folderList->addColumn( "" );
-    folderList->header()->hide();
-    folderList->setRootIsDecorated( TRUE );
-
-    QStringList::ConstIterator it = templateRoots_.begin();
-    QString privateData = getenv( "HOME" );
-    privateData += "/.kde/share/apps/" + kapp->instanceName() + "/templates/";
-    bool hadPrivateData = FALSE;
-    for ( ; it != templateRoots_.end(); ++it ) {
-	if ( *it == privateData )
-	    hadPrivateData = TRUE;
-	QDir dir( *it );
-	if ( QFileInfo( dir, "." ).isWritable() ) {
-	    QListViewItem *root = new QListViewItem( folderList );
-	    root->setText( 0, *it );
-	    root->setOpen( TRUE );
-	    QFile file( *it + ".templates" );
-	    if ( file.exists() && file.open( IO_ReadOnly ) ) {
-		QTextStream ts( &file );
-		while ( !ts.atEnd() ) {
-		    QString s = ts.readLine();
-		    s = s.simplifyWhiteSpace();
-		    if ( !s.isEmpty() ) {
-			QDir dir( *it + s );
-			QListViewItem *folder = new QListViewItem( root, s );
-			folder->setOpen( TRUE );
-			const QFileInfoList *lst = dir.entryInfoList( "*." + extension );
-			QFileInfoListIterator it( *lst );
-			QFileInfo *fi;
-			while ( ( fi = it.current() ) != 0 ) {
-			    ++it;
-			    (void)new QListViewItem( folder, fi->fileName() );
-			}
-		    }
-		}
-	    }
-	    file.close();
-	}
-    }
-
-    if ( !hadPrivateData ) {
-	(void)new QListViewItem( folderList, privateData );
-	system( QString( "mkdir -p \"%1\"" ).arg( privateData ) );
-    }
-
-    connect( folderList, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
-	     this, SLOT( createFolder( QListViewItem *, const QPoint &, int ) ) );
-    connect( folderList, SIGNAL( doubleClicked( QListViewItem * ) ),
-	     this, SLOT( doubleClicked( QListViewItem * ) ) );
-    connect( folderList, SIGNAL( selectionChanged( QListViewItem * ) ),
-	     this, SLOT( selectionChanged( QListViewItem * ) ) );
-
-    QVBoxLayout *right = new QVBoxLayout( layout );
-
-    QHBoxLayout *tmpLayout = new QHBoxLayout( right );
-
-    label = new QLabel( i18n( "Template Name:" ), mainview );
-    tmpLayout->addWidget( label );
-
-    lined = new QLineEdit( mainview );
-    tmpLayout->addWidget( lined );
-    connect( lined, SIGNAL( textChanged( const QString & ) ),
-	     this, SLOT( nameChanged( const QString & ) ) );
-
-    tmpLayout = new QHBoxLayout( right );
-
-    QButtonGroup *grp = new QButtonGroup( mainview );
-    grp->hide();
-
-    QRadioButton *rb = new QRadioButton( i18n( "&Use generated pixmap" ), mainview );
-    rb->setChecked( TRUE );
-    tmpLayout->addWidget( rb );
-    grp->insert( rb );
-
-    label = new QLabel( mainview );
-    label->setPixmap( pix );
-    tmpLayout->addWidget( label );
-
-    tmpLayout = new QHBoxLayout( right );
-
-    currPixmap = pix;
-
-    rb = new QRadioButton( i18n( "&Choose pixmap" ), mainview );
-    rb->setChecked( FALSE );
-    tmpLayout->addWidget( rb );
-    grp->insert( rb );
-    rb->setEnabled( FALSE );
-
-    KIconButton *ilb = new KIconButton( mainview );
-    tmpLayout->addWidget( ilb );
-    ilb->setEnabled( FALSE );
-
-    setMainWidget( mainview );
-
-    QListViewItemIterator it3( folderList );
-    for ( ; it3.current(); ++it3 ) {
-	if ( it3.current()->parent() ) {
-	    folderList->setSelected( it3.current(), TRUE );
-	    break;
-	}
-    }
-
-    lined->setFocus();
-
-    resize( sizeHint().width(), 300 );
+    QVBoxLayout *rightbox=new QVBoxLayout(mbox);
+    label=new QLabel(i18n("Group:"), mainwidget);
+    rightbox->addWidget(label);
+    d->m_groups=new QListView(mainwidget);
+    rightbox->addWidget(d->m_groups);
+    d->m_groups->addColumn("");
+    d->m_groups->header()->hide();
+    d->m_groups->setRootIsDecorated(true);
+    // ...
 }
 
-void KoTemplateCreateDia::createTemplate( QWidget *parent, const QString &file_, const QPixmap &pix,
-					  const QStringList &templateRoots_, const QString extension_ )
-{
-    KoTemplateCreateDia *dia = new KoTemplateCreateDia( parent, file_, pix, templateRoots_, extension_ );
+void KoTemplateCreateDia::createTemplate( const QString &templateType, KInstance *instance,
+					  const QString &file, const QPixmap &pix, QWidget *parent ) {
+
+    KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, instance, file, pix, parent );
     dia->exec();
     delete dia;
 }
 
-void KoTemplateCreateDia::createFolder( QListViewItem *item, const QPoint &, int )
-{
-    if ( !item )
-	return;
-
-    if ( item->parent() )
-	item = item->parent();
-    if ( item->parent() )
-	item = item->parent();
-
-    QPopupMenu m( this );
-    int i = m.insertItem( i18n( "&Add Folder..." ) );
-    if ( m.exec( QCursor::pos() ) == i ) {
-	QString parent = item->text( 0 );
-    	bool ok;
-	QString name = KLineEditDlg::getText( i18n( "Add Folder to %1\nFolder Name:" ).arg( parent ),
-					     QString::null, &ok, this );
-	if ( !name.isEmpty() && ok ) {
-	    QDir dir( parent );
-	    if ( dir.mkdir( name ) ) {
-		QFile f( parent + "/.templates" );
-		if ( f.open( IO_WriteOnly | IO_Append ) ) {
-		    f.writeBlock( "\n" + name + "\n", name.length() + 2 );
-		    f.close();
-		    QListViewItem *f = new QListViewItem( item, name );
-		    item->setOpen( TRUE );
-		    f->setOpen( TRUE );
-		}
-	    }
-	}
-    }
-}
-
-void KoTemplateCreateDia::selectionChanged( QListViewItem *item )
-{
-    if ( item && ( !item->parent() ||
-	( item->parent() && item->parent()->parent() ) ) ) {
-	bool firstDown = !item->parent();
-	QListViewItemIterator it( item );
-	for ( ; it.current(); firstDown ? ++it : --it ) {
-	    if ( it.current()->parent() &&
-		 !it.current()->parent()->parent() ) {
-		folderList->setSelected( it.current(), TRUE );
-		folderList->setCurrentItem( item );
-		folderList->setSelected( item, FALSE );
-		return;
-	    }
-	}
-	it = QListViewItemIterator( item );
-	for ( ; it.current(); firstDown ? --it : ++it ) {
-	    if ( it.current()->parent() &&
-		 !it.current()->parent()->parent() ) {
-		folderList->setSelected( it.current(), TRUE );
-		folderList->setCurrentItem( item );
-		folderList->setSelected( item, FALSE );
-		return;
-	    }
-	}
-	folderList->setSelected( item, FALSE );
-    }
-}
-
-void KoTemplateCreateDia::doubleClicked( QListViewItem *item )
-{
-    if ( !item )
-	return;
-    if ( item->parent() && item->parent()->parent() )
-	lined->setText( item->text( 0 ) );
-}
-
-void KoTemplateCreateDia::nameChanged( const QString &name )
-{
-    currName = name;
-}
-
-void KoTemplateCreateDia::useGeneratedPixmap()
-{
-}
-
-void KoTemplateCreateDia::useChosenPixmap()
-{
-}
-
-void KoTemplateCreateDia::iconChanged( const QString & )
-{
-}
-
-void KoTemplateCreateDia::ok()
-{
-    QListViewItem *item = 0;
-    QListViewItemIterator it( folderList );
-    for ( ; it.current(); ++it ) {
-	if ( it.current()->isSelected() ) {
-	    item = it.current();
-	    break;
-	}
-    }
-
-    if ( !item ) {
-	QMessageBox::critical( this, i18n( "Create Template" ),
-			       i18n( "Can't create a Template. Please select a Folder in the Folder List!" ) );
-	return;
-    }
-
-    if ( currName.isEmpty() ) {
-	QMessageBox::critical( this, i18n( "Create Template" ),
-			       i18n( "Can't create a Template. Please enter a Name for the Template!" ) );
-	return;
-    }
-
-    QFileInfo fi( currName );
-    if ( fi.extension().isEmpty() || fi.extension() != "kpt" )
-	currName += "." + extension;
-
-    if ( QFile( item->parent()->text( 0 ) +
-		item->text( 0 ) + "/" + currName ).exists() ) {
-	if ( QMessageBox::warning( this, i18n( "Create Template" ),
-				   i18n( "A template with the same name (%1) already exists. Do you want "
-					 "to override it?" ).arg( currName ), i18n( "&Yes" ), i18n( "&No" ) ) == 1 )
-	    return;
-    }
-
-    QString cmd = "cp ";
-    cmd += file + " ";
-    cmd += "\"" + item->parent()->text( 0 ) + item->text( 0 ) +
-	"/" + currName + "\"";
-    system( cmd.latin1() );
-    currName = fi.baseName();
-    currPixmap.save( item->parent()->text( 0 ) + item->text( 0 ) +
-		     "/" + currName + ".png", "PNG" );
-    accept();
-}
+#include <koTemplateCreateDia.moc>

@@ -1327,7 +1327,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
     ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 					"application/x-kpresenter", "*.kpr",
 					"KPresenter", KoTemplateChooseDia::Everything,
-					"kpresenter_template", true );
+					"kpresenter_template" );
 
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
