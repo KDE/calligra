@@ -26,7 +26,7 @@
 #include <kstdaccel.h>
 #include <kdebug.h>
 #include <kinstance.h>
-#include <koDataTool.h>
+#include <kdatatool.h>
 #include <krun.h>
 #include <kmessagebox.h>
 
@@ -784,21 +784,21 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         return QPtrList<KAction>();
 
     // Any tool that works on plain text is relevant
-    QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", instance );
+    QValueList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", instance );
 
     // Add tools that work on a single word if that is the case
     if ( m_singleWord )
-        tools += KoDataToolInfo::query( "QString", "application/x-singleword", instance );
+        tools += KDataToolInfo::query( "QString", "application/x-singleword", instance );
 
     // Maybe one day we'll have tools that use libkotext (or qt3's qrt), to act on formatted text
-    tools += KoDataToolInfo::query( "QTextString", "application/x-qrichtext", instance );
+    tools += KDataToolInfo::query( "QTextString", "application/x-qrichtext", instance );
 
-    return KoDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KoDataToolInfo &, const QString & ) ) );
+    return KDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KDataToolInfo &, const QString & ) ) );
 }
 
-void KoTextView::slotToolActivated( const KoDataToolInfo & info, const QString & command )
+void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & command )
 {
-    KoDataTool* tool = info.createTool( );
+    KDataTool* tool = info.createTool( );
     if ( !tool )
     {
         kdWarning() << "Could not create Tool !" << endl;

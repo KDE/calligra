@@ -35,7 +35,7 @@ class KCommand;
 class QTimer;
 class KAction;
 class KInstance;
-class KoDataToolInfo;
+class KDataToolInfo;
 #include "qrichtext_p.h"
 using namespace Qt3;
 class KoBorder;
@@ -130,7 +130,7 @@ public slots:
 protected slots:
     /** Start a drag */
     virtual void startDrag() = 0;
-    void slotToolActivated( const KoDataToolInfo & info, const QString & command );
+    void slotToolActivated( const KDataToolInfo & info, const QString & command );
 signals:
     void copy();
     void cut();
