@@ -15,6 +15,7 @@ noinst_HEADERS = \
 	vellipsedlg.h \
 	vfilldlg.h \
 	vflattendlg.h \
+	vgradientdlg.h \
 	vinsertknotsdlg.h \
 	vpolygondlg.h \
 	vrectangledlg.h \
@@ -24,7 +25,7 @@ noinst_HEADERS = \
 	vspiraldlg.h \
 	vstardlg.h \
 	vstrokedlg.h \
-	vgradientdlg.h \
+	vtransformdlg.h \
 	vwhirlpinchdlg.h
 
 libkarbondialogs_la_SOURCES = \
@@ -34,6 +35,7 @@ libkarbondialogs_la_SOURCES = \
 	vellipsedlg.cc \
 	vfilldlg.cc \
 	vflattendlg.cc \
+	vgradientdlg.cc \
 	vinsertknotsdlg.cc \
 	vpolygondlg.cc \
 	vrectangledlg.cc \
@@ -43,7 +45,7 @@ libkarbondialogs_la_SOURCES = \
 	vspiraldlg.cc \
 	vstardlg.cc \
 	vstrokedlg.cc \
-	vgradientdlg.cc \
+	vtransformdlg.cc \
 	vwhirlpinchdlg.cc
 
 libkarbondialogs_la_METASOURCES = \
