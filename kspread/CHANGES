@@ -163,3 +163,5 @@ thanks.
 	-setTextColor(int,int,int)
 	-setTextColor(QString)  (ex: setTextColor("#39fd59"))
 see result in  example15.ks
+-Bug fix : when you insert a cell in bottom or right
+now text offset is recalcing.

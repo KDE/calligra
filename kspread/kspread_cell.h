@@ -306,6 +306,11 @@ public:
     QString valueString() const;
     void setValue( double _d );
 
+    /** when you insert a cell at bottom or right
+    * and the size is not the same so text offset
+    * will not good => recalc offset
+    */
+    void offsetAlign(int _col,int _row);
     /* return size of the text*/
     int textWidth() {return m_iOutTextWidth; }
     int textHeight() {return m_iOutTextHeight; }
@@ -548,6 +553,8 @@ protected:
     int m_iOutTextWidth;
     int m_iOutTextHeight;
     int m_iTextX, m_iTextY;
+    int m_fmAscent; // result of "fm.ascent()" in makeLayout
+                    // used in offsetAlign
 
     double m_dValue;
     bool m_bValue;
@@ -670,6 +677,7 @@ protected:
    */
     int m_richWidth;
     int m_richHeight;
+
 };
 
 #endif

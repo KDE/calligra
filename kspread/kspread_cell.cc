@@ -966,6 +966,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
   // Vertical alignment
   m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
+  m_fmAscent=fm.ascent();
 
   // Do we have to occupy additional cells right hand ?
   if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
@@ -1030,7 +1031,36 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	
   m_bLayoutDirtyFlag = FALSE;
 }
+void KSpreadCell::offsetAlign(int _col,int _row)
+{
+int a = m_eAlign;
+RowLayout *rl = m_pTable->rowLayout( _row );
+ColumnLayout *cl = m_pTable->columnLayout( _col );
 
+int w = cl->width();
+int h = rl->height();
+m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+if ( a == KSpreadCell::Undefined )
+  {
+    if ( m_bValue )
+      a = KSpreadCell::Right;
+    else
+      a = KSpreadCell::Left;
+  }
+
+switch( a )
+  {
+  case KSpreadCell::Left:
+    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+    break;
+  case KSpreadCell::Right:
+    m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+    break;
+  case KSpreadCell::Center:
+    m_iTextX = ( w - m_iOutTextWidth ) / 2;
+    break;
+  }
+}
 /*
 bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second )
 {
