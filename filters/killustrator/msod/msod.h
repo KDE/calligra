@@ -50,6 +50,18 @@ public:
         const QString &fileIn,
         const char *delayStream);
 
+    class DrawContext
+    {
+    public:
+        DrawContext();
+        bool m_winding;
+        unsigned m_brushColour;
+        unsigned m_brushStyle;
+        unsigned m_penColour;
+        unsigned m_penStyle;
+        unsigned m_penWidth;
+    };
+
     // Should be protected...
 
     void brushSet(
@@ -63,22 +75,26 @@ public:
 protected:
     // Override to get results of parsing.
 
+    virtual void gotEllipse(
+        const DrawContext &dc,
+        QString type,
+        QPoint topLeft,
+        QSize halfAxes,
+        unsigned startAngle,
+        unsigned stopAngle) = 0;
     virtual void gotPicture(
         unsigned id,
         QString extension,
         unsigned length,
         const char *data) = 0;
     virtual void gotPolygon(
-        unsigned penColour,
-        unsigned penStyle,
-        unsigned penWidth,
-        unsigned brushColour,
-        unsigned brushStyle,
+        const DrawContext &dc,
         const QPointArray &points) = 0;
     virtual void gotPolyline(
-        unsigned penColour,
-        unsigned penStyle,
-        unsigned penWidth,
+        const DrawContext &dc,
+        const QPointArray &points) = 0;
+    virtual void gotRectangle(
+        const DrawContext &dc,
         const QPointArray &points) = 0;
 
 private:
@@ -92,10 +108,17 @@ private:
     typedef unsigned short U16;
     typedef unsigned int U32;
 
+    int m_dpi;
+    DrawContext m_dc;
     unsigned m_dggError;
     unsigned m_requestedShapeId;
     bool m_isRequiredDrawing;
     const char *m_delayStream;
+
+    QPoint normalisePoint(
+        QDataStream &operands);
+    QSize normaliseSize(
+        QDataStream &operands);
 
     // Common Header (MSOBFH)
 
@@ -182,6 +205,7 @@ private:
     void opSplitmenucolors(MSOFBH &op, U32 byteOperands, QDataStream &operands);
     void opTextbox(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
 
+    void shpLine(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
     void shpPictureFrame(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
     void shpRectangle(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
 

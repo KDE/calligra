@@ -51,22 +51,26 @@ public:
 
 protected:
 
+    virtual void gotEllipse(
+        const DrawContext &dc,
+        QString type,
+        QPoint topLeft,
+        QSize halfAxes,
+        unsigned startAngle,
+        unsigned stopAngle);
     virtual void gotPicture(
         unsigned id,
         QString extension,
         unsigned length,
         const char *data);
     virtual void gotPolygon(
-        unsigned penColour,
-        unsigned penStyle,
-        unsigned penWidth,
-        unsigned brushColour,
-        unsigned brushStyle,
+        const DrawContext &dc,
         const QPointArray &points);
     virtual void gotPolyline(
-        unsigned penColour,
-        unsigned penStyle,
-        unsigned penWidth,
+        const DrawContext &dc,
+        const QPointArray &points);
+    virtual void gotRectangle(
+        const DrawContext &dc,
         const QPointArray &points);
 
 private:

@@ -25,13 +25,15 @@ DESCRIPTION
 #include <qfile.h>
 #include <qlist.h>
 #include <qpointarray.h>
+#include <qrect.h>
+#include <qsize.h>
 #include <msod.h>
 #include <zlib.h>
 
 Msod::Msod(
     unsigned dpi)
 {
-//    m_dpi = dpi;
+    m_dpi = dpi;
     m_images.setAutoDelete(true);
 }
 
@@ -138,9 +140,25 @@ void Msod::invokeHandler(
     }
 }
 
-//
-//
-//
+QPoint Msod::normalisePoint(
+    QDataStream &operands)
+{
+    U16 x;
+    U16 y;
+
+    operands >> x >> y;
+    return QPoint(x / m_dpi, y / m_dpi);
+}
+
+QSize Msod::normaliseSize(
+    QDataStream &operands)
+{
+    U16 width;
+    U16 height;
+
+    operands >> width >> height;
+    return QSize(width / m_dpi, height / m_dpi);
+}
 
 bool Msod::parse(
     unsigned shapeId,
@@ -388,14 +406,26 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
 
     // If the Blip is not in this drawing file, process it "manually".
 
-    if (data.cRef && data.foDelay)
+    if (m_delayStream)
     {
-        QByteArray bytes;
-        bytes.setRawData(m_delayStream + data.foDelay, data.size);
-        QDataStream stream(bytes, IO_ReadOnly);
-        stream.setByteOrder(QDataStream::LittleEndian);
-        walk(data.size, stream);
-        bytes.resetRawData(m_delayStream + data.foDelay, data.size);
+        // The m_pib refers to images by number, which includes images
+        // that are no longer here. Thus, we fake these out so that any
+        // references to non-deleted images are still valid (!!!).
+
+        if (data.size && data.cRef)
+        {
+            QByteArray bytes;
+            bytes.setRawData(m_delayStream + data.foDelay, data.size);
+            QDataStream stream(bytes, IO_ReadOnly);
+            stream.setByteOrder(QDataStream::LittleEndian);
+            walk(data.size, stream);
+            bytes.resetRawData(m_delayStream + data.foDelay, data.size);
+        }
+        else
+        {
+            m_images.resize(m_images.size() + 1);
+            m_images.insert(m_images.size() - 1, 0L);
+        }
     }
     skip(byteOperands - sizeof(data), operands);
 }
@@ -606,6 +636,7 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
 
     QList<Option> complexOpts;
     complexOpts.setAutoDelete(true);
+    bool unsupported;
     while (length + complexLength < (int)byteOperands)
     {
         operands >> option.opcode.info >> option.value;
@@ -622,6 +653,7 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
 
         // Now squirrel away the option value.
 
+        unsupported = false;
         switch (option.opcode.fields.pid)
         {
         case 4:
@@ -689,10 +721,14 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
             m_fBackground = (option.value & 0x0001) != 0;
             break;
         default:
+            unsupported = true;
             kdDebug(s_area) << "opOpt: unsupported simple option: " <<
                 option.opcode.fields.pid << endl;
             break;
         }
+        if (!unsupported)
+            kdDebug(s_area) << "opOpt: simple option: " <<
+                option.opcode.fields.pid << endl;
     }
 
     // Now empty the list of complex options.
@@ -703,6 +739,7 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
 
         option = *complexOpts.getFirst();
         complexOpts.removeFirst();
+        unsupported = false;
         switch (option.opcode.fields.pid)
         {
         case 261:
@@ -716,10 +753,14 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
             };
             break;
         default:
+            unsupported = true;
             kdDebug(s_area) << "opOpt: unsupported complex option: " <<
                 option.opcode.fields.pid << endl;
             break;
         }
+        if (!unsupported)
+            kdDebug(s_area) << "opOpt: complex option: " <<
+                option.opcode.fields.pid << endl;
     }
 
     skip(complexLength, operands);
@@ -778,7 +819,7 @@ void Msod::opSp(MSOFBH &op, U32 byteOperands, QDataStream &operands)
         { "BALLOON",                0 /* &Msod::shpBalloon */ },
         { "SEAL",                   0 /* &Msod::shpSeal */ },
         { "ARC",                    0 /* &Msod::shpArc */ },
-        { "LINE",                   0 /* &Msod::shpLine */ },
+        { "LINE",                   &Msod::shpLine },
         { "PLAQUE",                 0 /* &Msod::shpPlaque */ },
         { "CAN",                    0 /* &Msod::shpCan */ },
         { "DONUT",                  0 /* &Msod::shpDonut */ },
@@ -1092,14 +1133,46 @@ void Msod::opTextbox(
     skip(byteOperands, operands);
 }
 
+void Msod::shpLine(MSOFBH &, U32, QDataStream &operands)
+{
+    QPoint lineFrom;
+    QPoint lineTo;
+
+    lineTo = normalisePoint(operands);
+    QPointArray points(2);
+    points.setPoint(0, lineFrom);
+    points.setPoint(1, lineTo);
+        kdDebug(s_area) << "from x " << lineFrom.x()<< endl;
+        kdDebug(s_area) << "from y " << lineFrom.y()<< endl;
+        kdDebug(s_area) << "from x " << lineTo.x()<< endl;
+        kdDebug(s_area) << "from y " << lineTo.y()<< endl;
+    gotPolyline(m_dc, points);
+}
+
 void Msod::shpPictureFrame(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     skip(byteOperands, operands);
 }
 
-void Msod::shpRectangle(MSOFBH &, U32 byteOperands, QDataStream &operands)
+void Msod::shpRectangle(MSOFBH &, U32, QDataStream &operands)
 {
-    skip(byteOperands, operands);
+    QPoint topLeft;
+    QSize size;
+
+    topLeft = normalisePoint(operands);
+    size = normaliseSize(operands);
+    QRect rect(topLeft, size);
+    QPointArray points(4);
+
+        kdDebug(s_area) << "left " << topLeft.x()<< endl;
+        kdDebug(s_area) << "top " << topLeft.y()<< endl;
+        kdDebug(s_area) << "width " << size.width()<< endl;
+        kdDebug(s_area) << "height " << size.height()<< endl;
+    points.setPoint(0, topLeft);
+    points.setPoint(1, rect.topRight());
+    points.setPoint(2, rect.bottomRight());
+    points.setPoint(3, rect.bottomLeft());
+    gotRectangle(m_dc, points);
 }
 
 void Msod::skip(U32 byteOperands, QDataStream &operands)
@@ -1138,4 +1211,14 @@ void Msod::walk(U32 byteOperands, QDataStream &stream)
         invokeHandler(op, op.cbLength, stream);
         length += op.cbLength + 8;
     }
+}
+
+Msod::DrawContext::DrawContext()
+{
+    // TBD: initalise with proper values.
+    m_brushColour = 0x808080;
+    m_brushStyle = 1;
+    m_penColour = 0x808080;
+    m_penStyle = 1;
+    m_penWidth = 1;
 }

@@ -125,16 +125,31 @@ const bool MSODImport::filter1(
     return true;
 }
 
-void MSODImport::pointArray(
-    const QPointArray &points)
+void MSODImport::gotEllipse(
+    const DrawContext &dc,
+    QString type,
+    QPoint topLeft,
+    QSize halfAxes,
+    unsigned startAngle,
+    unsigned stopAngle)
 {
-
-    for (unsigned i = 0; i < points.count(); i++)
-    {
-        m_text += "<point x=\"" + QString::number(points.point(i).x()) +
-                    "\" y=\"" + QString::number(points.point(i).y()) +
-                     "\"/>\n";
-    }
+    m_text += "<ellipse angle1=\"" + QString::number(startAngle) +
+                "\" angle2=\"" + QString::number(stopAngle) +
+                "\" x=\"" + QString::number(topLeft.x()) +
+                "\" y=\"" + QString::number(topLeft.y()) +
+                "\" kind=\"" + type +
+                "\" rx=\"" + QString::number(halfAxes.width()) +
+                "\" ry=\"" + QString::number(halfAxes.height()) +
+                "\">\n";
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
+                "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
+                "\">\n";
+    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
+    m_text += " </gobject>\n";
+    m_text += "</ellipse>\n";
 }
 
 void MSODImport::gotPicture(
@@ -202,13 +217,8 @@ void MSODImport::gotPicture(
     }
 }
 
-//-----------------------------------------------------------------------------
 void MSODImport::gotPolygon(
-    unsigned penColour,
-    unsigned penStyle,
-    unsigned penWidth,
-    unsigned brushColour,
-    unsigned brushStyle,
+    const DrawContext &dc,
     const QPointArray &points)
 {
     QRect bounds = points.boundingRect();
@@ -220,11 +230,11 @@ void MSODImport::gotPolygon(
                 "\" rounding=\"0\">\n";
     m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
     pointArray(points);
-    m_text += " <gobject fillcolor=\"#" + QString::number(brushColour, 16) +
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
                 "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
-                "\" linewidth=\"" + QString::number(penWidth) +
-                "\" strokecolor=\"#" + QString::number(penColour, 16) +
-                "\" strokestyle=\"" + QString::number(penStyle) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
                 "\">\n";
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
     m_text += " </gobject>\n";
@@ -232,21 +242,56 @@ void MSODImport::gotPolygon(
     m_text += "</polygon>\n";
 }
 
-//-----------------------------------------------------------------------------
+
 void MSODImport::gotPolyline(
-    unsigned penColour,
-    unsigned penStyle,
-    unsigned penWidth,
+    const DrawContext &dc,
     const QPointArray &points)
 {
     m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
     pointArray(points);
     m_text += " <gobject fillstyle=\"" + QString::number(1 /*m_winding*/) +
-                "\" linewidth=\"" + QString::number(penWidth) +
-                "\" strokecolor=\"#" + QString::number(penColour, 16) +
-                "\" strokestyle=\"" + QString::number(penStyle) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
                 "\">\n";
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
     m_text += " </gobject>\n";
     m_text += "</polyline>\n";
+}
+
+void MSODImport::gotRectangle(
+    const DrawContext &dc,
+    const QPointArray &points)
+{
+    QRect bounds = points.boundingRect();
+
+    m_text += "<rectangle width=\"" + QString::number(bounds.width()) +
+                "\" x=\"" + QString::number(bounds.x()) +
+                "\" y=\"" + QString::number(bounds.y()) +
+                "\" height=\"" + QString::number(bounds.height()) +
+                "\" rounding=\"0\">\n";
+    m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
+    pointArray(points);
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
+                "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
+                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
+                "\">\n";
+    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
+    m_text += " </gobject>\n";
+    m_text += "</polyline>\n";
+    m_text += "</rectangle>\n";
+}
+
+void MSODImport::pointArray(
+    const QPointArray &points)
+{
+
+    for (unsigned i = 0; i < points.count(); i++)
+    {
+        m_text += "<point x=\"" + QString::number(points.point(i).x()) +
+                    "\" y=\"" + QString::number(points.point(i).y()) +
+                     "\"/>\n";
+    }
 }
