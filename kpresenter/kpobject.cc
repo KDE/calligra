@@ -1306,18 +1306,18 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
     KPObject::loadOasis(element, context, animation);
     KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( "draw:stroke" ))
+    if ( styleStack.hasAttribute( "draw:stroke", QString::null,"graphic" ))
     {
-        if ( styleStack.attribute( "draw:stroke" ) == "none" )
+        if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "none" )
             pen.setStyle(static_cast<Qt::PenStyle>( 0 ) );
-        else if ( styleStack.attribute( "draw:stroke" ) == "solid" )
+        else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "solid" )
             pen.setStyle(static_cast<Qt::PenStyle>( 1 ) );
-        else if ( styleStack.attribute( "draw:stroke" ) == "dash" )
+        else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "dash" )
         {
             //FIXME !!!!!!!!!!!!!!!! we use name from oo which is not good
             //we muse use style defined into office style
 
-            QString style = styleStack.attribute( "draw:stroke-dash" );
+            QString style = styleStack.attribute( "draw:stroke-dash", QString::null,"graphic" );
             if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
                  style == "Fine Dashed (var)" || style == "Dashed (var)" )
                 pen.setStyle(static_cast<Qt::PenStyle>( 2 ) );
@@ -1330,9 +1330,9 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
                 pen.setStyle(static_cast<Qt::PenStyle>( 5 ) );
         }
 
-        if ( styleStack.hasAttribute( "svg:stroke-width" ) )
+        if ( styleStack.hasAttribute( "svg:stroke-width", QString::null,"graphic" ) )
             pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
-        if ( styleStack.hasAttribute( "svg:stroke-color" ) )
+        if ( styleStack.hasAttribute( "svg:stroke-color", QString::null,"graphic" ) )
             pen.setColor( styleStack.attribute( "svg:stroke-color" ) );
     }
     else
