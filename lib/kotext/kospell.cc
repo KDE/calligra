@@ -288,6 +288,7 @@ bool KoSpell::addPersonal(const QString & word)
 		return false;
 
 	w.prepend ("*");
+	w.append( "\n#" ); // save immediately, there's no time on destruction
 
 	return proc->fputs(w);
 }
@@ -515,8 +516,6 @@ void KoSpell::cleanUp ()
   if (m_status == Cleaning) return; // Ignore
   if (m_status == Running)
   {
-//    if (personaldict)
-//       writePersonalDictionary();
     m_status = Cleaning;
   }
   proc->closeStdin();
