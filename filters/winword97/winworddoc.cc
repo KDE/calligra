@@ -11,7 +11,7 @@ const short WinWordDoc::CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
 
 WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
-                       main(mainStream), data(dataStream) {
+                       main(mainStream), data(dataStream), styleSheet(mainStream) {
 
     success=true;
     ready=false;
@@ -56,9 +56,6 @@ const bool WinWordDoc::convert() {
 
     if(!success || ready)
         return false;
-
-    //QString p;
-
     if(!locatePieceTbl())
         return false;
     if(!checkBinTables())

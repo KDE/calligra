@@ -1,21 +1,30 @@
 #include <stylesheet.h>
 
-StyleSheet::StyleSheet(const myFile &m) : main(m) {
+StyleSheet::StyleSheet(const myFile &m) : main(m), lastSti(0xffff) {
 }
 
 StyleSheet::~StyleSheet() {
     _chain.clear();
 }
 
-const QValueList<long> StyleSheet::chain(const long &styleID) {
+const QValueList<STYLE> StyleSheet::chain(const unsigned short &sti) {
+
+    if(lastSti==sti)
+        return _chain;
+
     _chain.clear();
-    chain_rec(styleID);
+    if(chain_rec(sti))
+        lastSti=sti;
+    else
+        _chain.clear();
+
     return _chain;
 }
 
-void StyleSheet::chain_rec(const long &) { //styleID) {
+bool StyleSheet::chain_rec(const unsigned short &) { //sti) {
     // go one level deeper (towards NULL-Style)
-    // add own value to list
+    // calculate STYLE and add it to the list
+    return true;  // everything alright?
 }
 
 void StyleSheet::align2(long &adr) {

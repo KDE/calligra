@@ -1,6 +1,6 @@
 /******************************************************************/
 /* OLEFilter - (c) by Werner Trobin 1999                          */
-/* Version: 0.0.1                                                 */
+/* Version: 0.1                                                   */
 /* Author: Werner Trobin                                          */
 /* E-Mail: wtrobin@carinthia.com                                  */
 /* Homepage: http://members.carinthia.com/wtrobin/                */
@@ -119,7 +119,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         // Let's tell the user that this filter is crappy.
         if(out==OLEFilter::KWord) {
             str+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\" url=\"error.kwd\">\n"
+            "<DOC author=\"WinWord filter\" email=\"wtrobin@carinthia.com\" editor=\"KWord\" mime=\"application/x-kword\">\n"
             " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
             "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"28\" ptTop=\"42\" ptRight=\"28\" ptBottom=\"42\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
             " </PAPER>\n"
@@ -161,8 +161,6 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
             "      <UNDERLINE value=\"0\"/>\n"
             "      <VERTALIGN value=\"0\"/>\n"
             "     </FORMAT> \n"
-            "     <TABULATOR mmpos=\"64.2055\" ptpos=\"182\" inchpos=\"2.52778\" type=\"0\"/>\n"
-            "     <TABULATOR mmpos=\"128.764\" ptpos=\"365\" inchpos=\"5.06944\" type=\"0\"/>\n"
             "    </LAYOUT>\n"
             "   </PARAGRAPH>\n"
             "  </FRAMESET>\n"
@@ -171,7 +169,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         }
         else if(out==OLEFilter::KSpread) {
             str+="<?xml version=\"1.0\"?>\n"
-            "<DOC author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
+            "<DOC author=\"Excel filter\" email=\"percy@linuxfreak.com\" editor=\"KSpread\" mime=\"application/x-kspread\">\n"
             "<PAPER format=\"A4\" orientation=\"Portrait\">\n"
             "<PAPERBORDERS left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
             "<HEAD left=\"\" center=\"\" right=\"\"/>\n"
@@ -187,9 +185,9 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
             "</MAP>\n"
             "</DOC>";
         }
-        else {     // is KPresenter!
+        else {     // this is a KPresenter doc!
             str+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "<DOC author=\"Reginald Stadlbauer\" email=\"reggie@kde.org\" editor=\"KPresenter\" mime=\"application/x-kpresenter\" url=\"/home/koffice/sorry.kpr\">\n"
+            "<DOC author=\"Reginald Stadlbauer\" email=\"reggie@kde.org\" editor=\"KPresenter\" mime=\"application/x-kpresenter\">\n"
             "<PAPER format=\"5\" ptWidth=\"680\" ptHeight=\"510\" mmWidth =\"240\" mmHeight=\"180\" inchWidth =\"9.44882\" inchHeight=\"7.08661\" orientation=\"0\" unit=\"0\">\n"
             "<PAPERBORDERS mmLeft=\"0\" mmTop=\"0\" mmRight=\"0\" mmBottom=\"0\" ptLeft=\"0\" ptTop=\"0\" ptRight=\"0\" ptBottom=\"0\" inchLeft=\"0\" inchTop=\"0\" inchRight=\"0\" inchBottom=\"0\"/>\n"
             "</PAPER>\n"

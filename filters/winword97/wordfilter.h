@@ -1,6 +1,6 @@
 /******************************************************************/
 /* WordFilter - (c) by Werner Trobin 1999                         */
-/* Version: 0.0.1                                                 */
+/* Version: 0.0.2                                                 */
 /* Author: Werner Trobin                                          */
 /* E-Mail: wtrobin@carinthia.com                                  */
 /* Homepage: http://members.carinthia.com/wtrobin/                */

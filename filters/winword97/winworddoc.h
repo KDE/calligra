@@ -4,6 +4,7 @@
 #include <qstring.h>
 #include <qstrlist.h>
 #include <paragraph.h>
+#include <stylesheet.h>
 #include <myfile.h>
 #include <fib.h>
 #include <pcd.h>
@@ -41,6 +42,7 @@ private:
     myFile main, table, data;
     QString _part;
     QStrList mainParas;
+    StyleSheet styleSheet;
 
     // piece table (pt)
     long ptCPBase, ptSize, ptCount, ptPCDBase;
