@@ -165,6 +165,7 @@ public:
 
     static unsigned read(const U8 *in, FIB *out);
     unsigned read(const U8 *in, BTE *out);
+    unsigned read(const U8 *in, FLD *out);
     unsigned read(const U8 *in, FSPA *out);
     unsigned read(const U8 *in, PCD *out);
     unsigned read(const U8 *in, PHE *out);
@@ -291,6 +292,18 @@ protected:
         const PAP styles[],
         TAP &row) = 0;
 
+    // Field types.
+
+    void getField(
+        U32 anchorCp,
+        U8 *fieldType);
+
+    // Embedded object access.
+
+    void getObject(
+        U32 fc,
+        QString &mimeType);
+
     // Office art access by anchor location. If no picture is found,
     // the the length will be set to zero. The returned pictureId is
     // guaranteed to be the same for pictures which appear multiple
@@ -299,6 +312,14 @@ protected:
     void getOfficeArt(
         U32 anchorCp,
         U32 *pictureId,
+        QString &pictureType,
+        U32 *pictureLength,
+        const U8 **pictureData);
+
+    // Picture access.
+
+    void getPicture(
+        U32 fc,
         QString &pictureType,
         U32 *pictureLength,
         const U8 **pictureData);
@@ -346,6 +367,7 @@ private:
     // Decode a paragraph into the various types for which we have callbacks.
 
     void decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style, CHPXarray &chpxs);
+    unsigned m_characterPosition;
 
     // Table variables. We store up the paragraphs in a row,
     // and then return the whole lot in one go.

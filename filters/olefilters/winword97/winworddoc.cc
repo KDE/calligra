@@ -18,6 +18,7 @@
 */
 
 #include <properties.h>
+#include <qfile.h>
 #include <qregexp.h>
 #include <winworddoc.h>
 #include <typeinfo>
@@ -41,6 +42,7 @@ WinWordDoc::WinWordDoc(
     m_success = TRUE;
     m_body = QString("");
     m_pixmaps = QString("");
+    m_embedded = QString("");
     m_cellEdges.setAutoDelete(true);
 }
 
@@ -201,6 +203,13 @@ const bool WinWordDoc::convert()
             newstr.append(
                 "  </PIXMAPS>\n");
         }
+
+        // Do we have any embedded objects?
+
+        if (m_embedded.length())
+        {
+            newstr.append(m_embedded);
+        }
         newstr.append(
             "</DOC>\n");
         m_result = newstr.utf8();
@@ -291,11 +300,15 @@ void WinWordDoc::generateFormats(Attributes &attributes)
 
             ourKey = "image" + QString::number(image->id) + "." + image->type;
             emit signalSavePic(
+                    ourKey,
+                    uid,
                     image->type,
                     image->length,
-                    image->data,
-                    ourKey,
-                    uid);
+                    image->data);
+kdError() << "found picture:" <<
+ ourKey<< " as " <<
+                        uid << endl;
+
             formats.append("<FORMAT id=\"2\" pos=\"");
             formats.append(QString::number(image->start));
             formats.append("\">\n");
@@ -311,6 +324,38 @@ void WinWordDoc::generateFormats(Attributes &attributes)
             m_pixmaps.append("\" name=\"");
             m_pixmaps.append(uid);
             m_pixmaps.append("\"/>\n");
+        }
+        else
+        if (typeid(Object) == typeid(*run))
+        {
+            Object *object = static_cast<Object *>(run);
+
+            // Send the OLE id to the outside world and get back the UID.
+
+            QString uid;
+            QString mimeType;
+
+            emit signalPart(
+                QFile::encodeName("_" + QString::number(object->id)),
+                uid,
+                mimeType);
+
+            // Add an entry to the list of embedded objects too. TBD: fix
+            // RECT and FRAME settings.
+
+            m_embedded.append(
+                "  <EMBEDDED>\n");
+            m_embedded.append("<OBJECT url=\"");
+            m_embedded.append(uid);
+            m_embedded.append("\" mime=\"");
+            m_embedded.append(mimeType);
+            m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
+            m_embedded.append("</OBJECT>\n");
+            m_embedded.append("<SETTINGS>\n");
+            m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
+            m_embedded.append("</SETTINGS>\n");
+            m_embedded.append(
+                "  </EMBEDDED>\n");
         }
         run = attributes.runs.next();
     }

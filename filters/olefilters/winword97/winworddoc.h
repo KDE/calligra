@@ -49,11 +49,16 @@ public:
 signals:
     // See olefilter.h for information
     void signalSavePic(
+        const QString &nameIN,
+        QString &storageId,
         const QString &extension,
         unsigned int length,
-        const char *data,
-        const QString &key,
-        QString &id);
+        const char *data);
+
+    void signalPart(
+        const char *nameIN,
+        QString &storageId,
+        QString &mimeType);
 
 private:
     WinWordDoc(const WinWordDoc &);
@@ -121,6 +126,7 @@ private:
 
     QString m_body;
     QString m_pixmaps;
+    QString m_embedded;
 
     // Page sizes, margins etc. all in points.
 

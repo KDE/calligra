@@ -552,6 +552,51 @@ void MsWord::getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result)
     }
 }
 
+// Get a FLD.
+
+void MsWord::getField(
+    U32 anchorCp,
+    U8 *fieldType)
+{
+    // A field table is a plex of FLDs.
+
+    Plex<FLD, sizeof(FLD)> flds = Plex<FLD, sizeof(FLD)>(this);
+    U32 actualStartCp;
+    U32 actualEndCp;
+    FLD data;
+
+    // Walk the FLDs.
+
+    *fieldType = 0;
+    flds.startIteration(m_tableStream + m_fib.fcPlcffldMom, m_fib.lcbPlcffldMom);
+    while (flds.getNext(&actualStartCp, &actualEndCp, &data))
+    {
+        if (actualStartCp == anchorCp)
+        {
+            *fieldType = data.flt;
+            break;
+        }
+    }
+}
+
+// Embedded object access.
+
+void MsWord::getObject(
+    U32 fc,
+    QString &mimeType)
+{
+    const U8 *in = m_dataStream + fc;
+    OBJHEADER data;
+
+    // Get the OBJHEADER.
+
+    MsWordGenerated::read(in, &data);
+
+    // Skip the complete OBJHEADER, even if it is longer than we exepct.
+
+    in += data.cbHeader;
+}
+
 // Get a piece of Office art by walking the FSPAs.
 
 void MsWord::getOfficeArt(
@@ -614,6 +659,7 @@ void MsWord::getOfficeArt(
                 pictureType = "img";
                 break;
             };
+            break;
         }
     }
 }
@@ -788,9 +834,120 @@ void MsWord::getParagraphsFromPapxs(
                     chpxs[i].startFc += chpxs[i - 1].endFc;
                 }
             }
+
+            // TBD: We only support main body text.
+
+            //if (m_characterPosition < m_fib.ccpText)
             decodeParagraph(text, layout, style, chpxs);
+
+            // Track what kind of text  comes next.
+
+            m_characterPosition += text.length();
+            if (m_characterPosition == m_fib.ccpText)
+            {
+                if (m_fib.ccpFtn)
+                    kdDebug(s_area) << "MsWord::MsWord: start footnotes" << endl;
+            }
+            if (m_characterPosition == m_fib.ccpText + m_fib.ccpFtn)
+            {
+                if (m_fib.ccpHdd)
+                    kdDebug(s_area) << "MsWord::MsWord: start headers" << endl;
+                // TBD: find headers
+                //const U8 *ptr = m_tableStream + m_fib.fcPlcfhdd;
+                //for (unsigned i = 0; i < m_fib.lcbPlcfhdd / sizeof(U32); i++)
+                //{
+                //    U32 cp;
+                //
+                //    ptr += MsWordGenerated::read(ptr, &cp);
+                //    kdDebug(s_area) << "MsWord::MsWord: header:" << i << " " << cp << endl;
+                //}
+            }
+            if (m_characterPosition == m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd)
+            {
+                if (m_fib.ccpAtn)
+                    kdDebug(s_area) << "MsWord::MsWord: start annotations" << endl;
+            }
+            if (m_characterPosition == m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd +
+                                        m_fib.ccpAtn)
+            {
+                if (m_fib.ccpEdn)
+                    kdDebug(s_area) << "MsWord::MsWord: start endnotes" << endl;
+            }
+            if (m_characterPosition == m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd +
+                                        m_fib.ccpAtn + m_fib.ccpEdn)
+            {
+                if (m_fib.ccpTxbx)
+                    kdDebug(s_area) << "MsWord::MsWord: start text boxes" << endl;
+            }
+            if (m_characterPosition == m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd +
+                                        m_fib.ccpAtn + m_fib.ccpEdn + m_fib.ccpTxbx)
+            {
+                if (m_fib.ccpHdrTxbx)
+                    kdDebug(s_area) << "MsWord::MsWord: start header textboxes" << endl;
+            }
+            if (m_characterPosition == m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd +
+                                        m_fib.ccpAtn + m_fib.ccpEdn + m_fib.ccpTxbx +
+                                        m_fib.ccpHdrTxbx)
+            {
+            }
         }
     }
+}
+
+// Picture access.
+
+void MsWord::getPicture(
+    U32 fc,
+    QString &pictureType,
+    U32 *pictureLength,
+    const U8 **pictureData)
+{
+    const U8 *in = m_dataStream + fc;
+    PICF data;
+    unsigned bytes;
+    QString tiffFilename;
+
+    // Get the PICF.
+
+    pictureType = "";
+    *pictureLength = 0;
+    *pictureData = 0L;
+    MsWordGenerated::read(in, &data);
+
+    // Skip the complete PICF, even if it is longer than we exepct.
+
+    in += data.cbHeader;
+    *pictureLength = data.lcb - data.cbHeader;
+    *pictureData = in;
+    switch (data.mfp.mm)
+    {
+    case 98:
+        pictureType = "tiff";
+        bytes = MsWord::read(m_fib.lid, in, &tiffFilename, true);
+        in += bytes;
+        *pictureLength -= bytes;
+        *pictureData += bytes;
+        break;
+    case 0: // TBD: This is not a documented value!
+    case 99:
+        pictureType = "bmp";
+        break;
+    default:
+        kdDebug(s_area) << "MsWord::getPicture: mm: " << data.mfp.mm << endl;
+        pictureType = "wmf";
+        break;
+    };
+    //kdDebug(s_area) << "MsWord::getPicture: dxaGoal: " << data.dxaGoal << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: dyaGoal: " << data.dyaGoal << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: dxaOrigin: " << data.dxaOrigin << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: dyaOrigin: " << data.dyaOrigin << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: mm.x: " << data.mfp.xExt << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: mm.y: " << data.mfp.yExt << endl;
+    //for (int i = 0; i < 8; i += 1)
+    //{
+    //
+    //    kdDebug() <<data.bm_rcWinMF[i] << endl; 
+    //}
 }
 
 // Create a cache of information about lists.
@@ -967,7 +1124,13 @@ MsWord::MsWord(
     }
     kdDebug(s_area) << "MsWord::MsWord: nFib: " << m_fib.nFib << endl;
     kdDebug(s_area) << "MsWord::MsWord: lid: " << m_fib.lid << " lidFE: " << m_fib.lidFE << endl;
-    kdDebug(s_area) << "MsWord::MsWord: fExtChar: " << m_fib.fExtChar << endl;
+    kdDebug(s_area) << "MsWord::MsWord: main text: " << m_fib.ccpText << endl;
+    kdDebug(s_area) << "MsWord::MsWord: footnote text: " << m_fib.ccpFtn << endl;
+    kdDebug(s_area) << "MsWord::MsWord: header text: " << m_fib.ccpHdd << endl;
+    kdDebug(s_area) << "MsWord::MsWord: annotation text: " << m_fib.ccpAtn << endl;
+    kdDebug(s_area) << "MsWord::MsWord: endnote text: " << m_fib.ccpEdn << endl;
+    kdDebug(s_area) << "MsWord::MsWord: textbox text: " << m_fib.ccpTxbx << endl;
+    kdDebug(s_area) << "MsWord::MsWord: header textbox text: " << m_fib.ccpHdrTxbx << endl;
 
     // Store away the streams for future use. Note that we do not
     // copy the contents of the streams, and that we rely on the storage
@@ -1031,6 +1194,7 @@ void MsWord::parse()
     m_wasInTable = false;
     m_partialParagraph.text = "";
     m_partialParagraph.chpxs.resize(0);
+    m_characterPosition = 0;
 
     // Note that we test for the presence of complex structure, rather than
     // m_fib.fComplex. This allows us to treat newer files which always seem
@@ -1125,7 +1289,6 @@ void MsWord::parse()
         bool unicode;
 
         kdDebug(s_area) << "text stream: FCs: " << m_fib.fcMin << ".." << m_fib.fcMac << endl;
-        kdDebug(s_area) << "body text: " << m_fib.ccpText << endl;
         pieceTable->startIteration(piecePtr, pieceCount);
         while (pieceTable->getNext(&actualStartCp, &actualEndCp, &data))
         {
@@ -1567,6 +1730,21 @@ unsigned MsWord::read(const U8 *in, BTE *out)
     }
     return bytes;
 } // BTE
+
+unsigned MsWord::read(const U8 *in, FLD *out)
+{
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
+    unsigned bytes = 0;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    bytes = MsWordGenerated::read(in + bytes, out);
+    return bytes;
+} // FLD
 
 unsigned MsWord::read(const U8 *in, FSPA *out)
 {

@@ -80,7 +80,7 @@ protected:
         Properties *values;
     };
 
-    // Specialisation for embedded images/objects/etc.
+    // Specialisation for embedded images etc.
 
     class Image: public Run
     {
@@ -89,6 +89,14 @@ protected:
         QString type;
         unsigned length;
         const char *data;
+    };
+
+    // Specialisation for embedded objects etc.
+
+    class Object: public Run
+    {
+    public:
+        unsigned id;
     };
 
     typedef struct

@@ -26,13 +26,21 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
 {
     myDoc = new WinWordDoc(m_result, mainStream, table0Stream, table1Stream, dataStream);
 
+    // Hook up the embedded object support.
+
+    connect(
+        myDoc,
+        SIGNAL(signalPart(const char *, QString &, QString &)),
+        this,
+        SIGNAL(signalPart(const char *, QString &, QString &)));
+
     // Hook up the embedded picture support.
 
     connect(
         myDoc,
-        SIGNAL(signalSavePic(const QString &, unsigned int, const char *, const QString &, QString &)),
+        SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)),
         this,
-        SIGNAL(signalSavePic(const QString &, unsigned int, const char *, const QString &, QString &)));
+        SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
 }
 
 WordFilter::~WordFilter()
