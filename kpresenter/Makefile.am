@@ -20,9 +20,8 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	gotopage.cc footer_header.cc \
 	kpresenter_factory.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
-	KPresenterViewIface.skel KPresenterViewIface.cc \
+	KPresenterViewIface.skel KPresenterViewIface.cc\
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
-	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
 	KPresenterPageIface.skel KPresenterPageIface.cc \
 	textdialog.ui sidebar.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
@@ -64,7 +63,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h KPresenterPageIface.h sidebar.h  kpresenter_dlg_config.h \
+		KPresenterPageIface.h sidebar.h  kpresenter_dlg_config.h \
 		kprvariable.h kprdrag.h notebar.h kprtextdocument.h kpfreehandobject.h \
 		kppolylineobject.h kpquadricbeziercurveobject.h kpcubicbeziercurveobject.h \
 		confpolygondia.h kppolygonobject.h

@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <KPresenterBackgroundIface.h>
-
 #include <kpbackground.h>
 #include <kpresenter_doc.h>
 #include <qwmf.h>
@@ -46,7 +44,6 @@ KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientColle
                             KPClipartCollection *_clipartCollection, KPrPage *_page )
     : footerHeight( 0 )
 {
-    dcop = 0;
     backType = BT_COLOR;
     backView = BV_CENTER;
     backColor1 = Qt::white;
@@ -562,14 +559,6 @@ void KPBackGround::removeGradient()
     }
 }
 
-/*=============================================================*/
-DCOPObject* KPBackGround::dcopObject()
-{
-    if ( !dcop )
-        dcop = new KPresenterBackgroundIface( this );
-
-    return dcop;
-}
 
 /*=============================================================*/
 void KPBackGround::setBgSize( QSize _size, bool visible )

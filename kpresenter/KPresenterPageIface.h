@@ -24,7 +24,7 @@
 #include <dcopref.h>
 
 #include <qstring.h>
-
+#include <qcolor.h>
 class KPrPage;
 
 class KPresenterPageIface :  virtual public DCOPObject
@@ -67,6 +67,17 @@ k_dcop:
     virtual int getPageTimer() const;
     virtual int getBackYFactor() const;
     virtual int getBackXFactor() const;
+
+    virtual int getBackType()const ;
+    virtual int getBackView()const;
+    virtual QColor getBackColor1()const;
+    virtual QColor getBackColor2()const ;
+    virtual int getBackColorType()const;
+    virtual QString getBackPixFilename()const;
+    virtual QString getBackClipFilename()const;
+    virtual int getPageEffect()const;
+    virtual bool getBackUnbalanced()const ;
+    virtual QSize getSize()const;
 
 private:
     KPrPage *m_page;

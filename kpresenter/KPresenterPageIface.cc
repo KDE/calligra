@@ -21,7 +21,7 @@
 
 #include "kprpage.h"
 #include "kpresenter_view.h"
-
+#include "kpbackground.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 
@@ -165,4 +165,54 @@ int KPresenterPageIface::getPageTimer(  )const
 bool KPresenterPageIface::getPageSoundEffect( )const
 {
     return m_page->getPageSoundEffect();
+}
+
+int KPresenterPageIface::getBackType()const
+{
+  return (int)m_page->getBackType();
+}
+
+int KPresenterPageIface::getBackView()const
+{
+    return (int)m_page->getBackView();
+}
+
+QColor KPresenterPageIface::getBackColor1()const
+{
+    return m_page->getBackColor1();
+}
+
+QColor KPresenterPageIface::getBackColor2()const
+{
+    return m_page->getBackColor2();
+}
+
+int KPresenterPageIface::getBackColorType()const
+{
+    return  (int)m_page->getBackColorType();
+}
+
+QString KPresenterPageIface::getBackPixFilename()const
+{
+    return m_page->getBackPixKey().filename();
+}
+
+QString KPresenterPageIface::getBackClipFilename()const
+{
+    return m_page->getBackPixKey().filename();
+}
+
+int KPresenterPageIface::getPageEffect()const
+{
+    return (int)m_page->getPageEffect();
+}
+
+bool KPresenterPageIface::getBackUnbalanced()const
+{
+    return (int)m_page->getBackUnbalanced();
+}
+
+QSize KPresenterPageIface::getSize()const
+{
+    return m_page->background()->getSize();
 }
