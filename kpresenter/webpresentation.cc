@@ -134,6 +134,28 @@ static QString EscapeSgmlText(const QTextCodec* codec,
     return strReturn;
 }
 
+// Escape only if the ecoding do not support the character
+// Speical SGML charcaters like < > & are supposed to be already escpaed.
+static QString EscapeEncodingOnly(const QTextCodec* codec, const QString& strIn)
+{
+    QString strReturn;
+    QChar ch;
+
+    for (uint i=0; i<strIn.length(); i++)
+    {
+        ch=strIn[i];
+        if (codec)
+        {
+            if (!codec->canEncode(ch))
+            {
+                strReturn+=QString("&#%1;").arg(ch.unicode());
+                continue;
+            }
+        }
+        strReturn+=ch;
+    }
+    return strReturn;
+}
 
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
@@ -297,11 +319,58 @@ QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& str
 }
 
 /*================================================================*/
+void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml, const QString& subtitle)
+{
+    QString mimeName ( codec->mimeName() );
+    if (xhtml)
+    {   //Write out the XML declaration
+        streamOut << "<?xml version=\"1.0\" encoding=\""
+            << mimeName << "\"?>\n";
+    }
+    // write <!DOCTYPE
+    streamOut << "<!DOCTYPE ";
+    if (xhtml)
+    {
+        streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
+        streamOut << " \"DTD/xhtml1-transitional.dtd\">\n";
+
+    }
+    else
+    {
+        streamOut << "HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"";
+        streamOut << " \"http://www.w3.org/TR/html4/loose.dtd\">\n";
+    }
+    streamOut << "<html";
+    if (xhtml)
+    {
+        // XHTML has an extra attribute defining its namespace (in the <html> opening tag)
+        streamOut << " xmlns=\"http://www.w3.org/1999/xhtml\"";
+    }
+    streamOut << ">\n" << "<head>\n";
+
+    // Declare what charset we are using
+    streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
+    streamOut << mimeName << '"' << (xhtml?" /":"") << ">\n" ;
+
+    // Tell who we are (with the CVS revision number) in case we have a bug in our output!
+    QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
+    streamOut << "<meta name=\"Generator\" content=\"KPresenter's Web Presentation "
+        << strVersion.mid(10).replace("$","")
+        << "\""<< (xhtml?" /":"") // X(HT)ML closes empty elements, HTML not!
+        << ">\n";
+
+    streamOut << "<title>"<< escapeHtmlText( codec, title ) << " - " << escapeHtmlText( codec, subtitle ) << "</title>\n";
+
+    // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
+}
+
+/*================================================================*/
 void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
     QString format ( imageFormat( imgFormat ) );
-    QString mimeName ( codec->mimeName() );
     
     bool xhtml=false; // ### TODO: XHTML 1.0 support in dialog
     
@@ -316,47 +385,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
-        
-        if (xhtml)
-        {   //Write out the XML declaration
-            streamOut << "<?xml version=\"1.0\" encoding=\""
-                << mimeName << "\"?>\n";
-        }
-        // write <!DOCTYPE
-        streamOut << "<!DOCTYPE ";
-        if (xhtml)
-        {
-            streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
-            streamOut << " \"DTD/xhtml1-transitional.dtd\">\n";
-
-        }
-        else
-        {
-            streamOut << "HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"";
-            streamOut << " \"http://www.w3.org/TR/html4/loose.dtd\">\n";
-        }
-        streamOut << "<html";
-        if (xhtml)
-        {
-            // XHTML has an extra attribute defining its namespace (in the <html> opening tag)
-            streamOut << " xmlns=\"http://www.w3.org/1999/xhtml\"";
-        }
-        streamOut << ">\n" << "<head>\n";
-
-        // Declare what charset we are using
-        streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
-        streamOut << mimeName << '"' << (xhtml?" /":"") << ">\n" ;
-
-        // Tell who we are (with the CVS revision number) in case we have a bug in our output!
-        QString strVersion("$Revision$");
-        // Eliminate the dollar signs
-        //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
-        streamOut << "<meta name=\"Generator\" content=\"KPresenter's Web Presentation "
-            << strVersion.mid(10).replace("$","")
-            << "\""<< (xhtml?" /":"") // X(HT)ML closes empty elements, HTML not!
-            << ">\n";
-
-        streamOut << "<title>"<< escapeHtmlText( codec, title ) << " - " << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</title>\n";
+        writeStartOfHeader( streamOut, codec, xhtml, slideInfos[ i ].slideTitle );
 
         // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
@@ -411,12 +440,12 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         streamOut << "<img src=\"../pics/home." << format << "\" border=\"0\" alt=\"Home\" title=\"Home\"" << (xhtml?" /":"") << ">";;
         streamOut << "</a>\n";
 
-        streamOut << " </center>" << brtag << "<HR noshade=\"noshade\"" << (xhtml?" /":"") << ">\n"; // ### TODO: is noshade W3C?
+        streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n"; // ### TODO: is noshade W3C?
 
-        streamOut << "  <center><font color=\"" << escapeHtmlText( codec, titleColor.name() ) << "\">\n";
+        streamOut << "  <center>\n    <font color=\"" << escapeHtmlText( codec, titleColor.name() ) << "\">\n";
         streamOut << "    <b>" << escapeHtmlText( codec, title ) << "</b> - <i>" << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</i>\n";
 
-        streamOut << "    </font></center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << brtag << "\n";
+        streamOut << "    </font>\n  </center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << brtag << "\n";
 
         streamOut << "  <center>\n    ";
 
@@ -442,15 +471,15 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         }
 
         streamOut << "  <center>\n";
-        streamOut << "    <b>" << escapeHtmlText( codec, i18n("Author:") ) << " </b>";
-        if ( !email.isEmpty() )
-            streamOut << "<a href=\"mailto:" << escapeHtmlText( codec, email ) << "\">";
-        streamOut << "<i>" << escapeHtmlText( codec, author ) << "</i>";
-        if ( !email.isEmpty() )
-            streamOut << "</a>";
+        
+        QString htmlAuthor;
+        if (email.isEmpty())
+            htmlAuthor=escapeHtmlText( codec, author );
+        else
+            htmlAuthor=QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
+        streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
+            .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
 
-        streamOut << brtag << "<a href=\"http://www.koffice.org/kpresenter/\">"
-            << escapeHtmlText( codec, i18n("Created with KPresenter" ) ) << "</a>";
         streamOut << "    </center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
         streamOut << "</body>\n</html>\n";
 
@@ -468,50 +497,50 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     QString html;
 
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
-    QString chsetName = codec->mimeName();
 
-    html = QString( "<HTML><HEAD><TITLE>%1 - ").arg( title );
-    html += i18n("Table of Contents");
-    html += "</TITLE>\n";
-    html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
-            .arg( chsetName );
-    html += "</HEAD>\n";
-
-    html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
-
-    html += QString( "<FONT color=\"%1\">\n" ).arg( titleColor.name() );
-    html += QString( "<BR><CENTER><H1>%1</H1></CENTER>\n" ).arg( title );
-    html += "</FONT>\n";
-
-    html += "<BR><BR><CENTER><H3><A HREF=\"html/slide_1.html\">";
-    html += i18n("Click here to start the Slideshow");
-    html += "</A></H3></CENTER><BR>\n";
-
-    html += "<HR noshade><BR><BR>\n";
-
-    if ( email.isEmpty() )
-        html += i18n( "Created on %1 by <I>%2</I>" ).
-	  arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).
-	  arg( author );
-    else
-        html += i18n( "Created on %1 by <I><A HREF=\"mailto:%2\">%3</A></I>" ).
-	  arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).
-	  arg( email ).
-	  arg( author );
-
-    html += "<BR><BR>\n<B>" + i18n("Table of Contents") + "</B><BR>\n";
-    html += "<OL>\n";
-
-    for ( unsigned int i = 0; i < slideInfos.count(); i++ )
-        html += QString( "  <LI><A HREF=\"html/slide_%1.html\">%2</A><BR>\n" ).arg( i + 1 ).arg( slideInfos[ i ].slideTitle );
-
-    html += "</OL></BODY></HTML>\n";
+    bool xhtml=false; // ### TODO: XHTML 1.0 support in dialog
+    
+    const QString brtag ( "<br" + QString(xhtml?" /":"") + ">" );
 
     QFile file( QString( "%1/index.html" ).arg( path ) );
     file.open( IO_WriteOnly );
-    QTextStream t( &file );
-    t.setCodec( codec );
-    t << html;
+    QTextStream streamOut( &file );
+    streamOut.setCodec( codec );
+        
+    writeStartOfHeader( streamOut, codec, xhtml, i18n("Table of Contents") );
+    
+    streamOut << "</head>\n";
+    streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
+
+    streamOut << "<font color=\"" << titleColor.name() << "\">\n";
+    streamOut << brtag << "<center><h1>" << title << "</h1></center>\n";
+    streamOut << "</font>\n";
+
+    streamOut << brtag << brtag << "<center><h3><a href=\"html/slide_1.html\">";
+    streamOut << i18n("Click here to start the Slideshow");
+    streamOut << "</a></h3></center>" << brtag << "\n";
+
+    streamOut << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << "\n";
+
+    streamOut << brtag << brtag << "\n<b>" << i18n("Table of Contents") << "</b>" << brtag << "\n";
+    streamOut << "<ol>\n";
+
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ )
+        streamOut << "  <li><a href=\"html/slide_" << i+1 << ".html\">" << slideInfos[ i ].slideTitle << "</a></li>\n";
+
+    streamOut << "</ol>\n";
+
+    streamOut << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << "\n";
+    
+    QString htmlAuthor;
+    if (email.isEmpty())
+        htmlAuthor=escapeHtmlText( codec, author );
+    else
+        htmlAuthor=QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
+    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
+        .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
+
+    streamOut << "</body>\n</html>\n";
     file.close();
 
     progressBar->setProgress( progressBar->totalSteps() );
