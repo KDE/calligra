@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="108">
+<kpartgui name="kexi" version="109">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -48,6 +48,10 @@
   
   <Menu name="view" noMerge="1">
     <text>&amp;View</text>
+    <Action name="view_data_mode" type="toggle" />
+    <Action name="view_design_mode" type="toggle" />
+    <Action name="view_text_mode" type="toggle" />
+    <Separator/>
     <Action name="view_navigator"/>
     <Action name="view_viewmode"/>
     <Action name="view_next_window"/>
@@ -118,6 +122,13 @@
   <Action name="edit_paste"/>
   <Separator/>
   <Action name="project_relations"/>
+</ToolBar>
+
+<ToolBar name="viewToolBar" fullWidth="false" noMerge="1">
+  <text>View</text>
+  <Action name="view_data_mode" type="toggle" />
+  <Action name="view_design_mode" type="toggle" />
+  <Action name="view_text_mode" type="toggle" />
 </ToolBar>
 
 </kpartgui>
