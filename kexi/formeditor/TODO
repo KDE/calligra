@@ -3,7 +3,7 @@
 * Add support for layouts and special container (HBox, VBox ...) and spacers
 
 * Create an event editor and manage signals/slots (EventBuffer ?)
-	HOWEVER, SIGNAL/SLOT ISSUES:
+	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
 	2. it may be easily simplified to avoid confusing them
 	3. TrollTech would try to get influence on the Kexi Project 
