@@ -130,37 +130,20 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
     KisColor startColor = m_pView->fgColor();
     KisColor endColor   = m_pView->bgColor();
 
-    if( ( startColor.native() == cs_RGB ) &&
-        ( endColor.native() == cs_RGB ) )
+    if(( startColor.native() == cs_RGB ) && ( endColor.native() == cs_RGB ))
     {
-        // draw RGB gradient
-        uint color = 0;
-        
-        // -jwc- need to define getPixel by color in kis_layer.cc        
-        uchar r = img->getCurrentLayer()->pixel(0, x1, y1 );
-        uchar g = img->getCurrentLayer()->pixel(1, x1, y1 );
-        uchar b = img->getCurrentLayer()->pixel(2, x1, y1 );
-        
-        color = (((uint)(r << 16)) + ((uint)(g << 8)) + (uint)(b));        
-        uint mask = color & 0xFF000000;
-
         int rDiff = ( endColor.R() - startColor.R() );
         int gDiff = ( endColor.G() - startColor.G() );
         int bDiff = ( endColor.B() - startColor.B() );
   
-        if( rDiff > 0 ) kdDebug() << "rDiff ist positiv" << endl;
-        if( gDiff > 0 ) kdDebug() << "gDiff ist positiv" << endl;
-        if( bDiff > 0 ) kdDebug() << "bDiff ist positiv" << endl;
-  
-        register int rl = rDiff << 16;
-        register int gl = gDiff << 16;
-        register int bl = bDiff << 16;
-   
-        // avoid divide by zero errors
-        int rcDelta = ( 1<<16 ) / length * (rDiff > 0 ? rDiff : 1);
-        int gcDelta = ( 1<<16 ) / length * (gDiff > 0 ? gDiff : 1);
-        int bcDelta = ( 1<<16 ) / length * (bDiff > 0 ? bDiff : 1);
-    
+        int rl = startColor.R();
+        int gl = startColor.G();
+        int bl = startColor.B();
+ 
+        float rlFloat = (float)rl;
+        float glFloat = (float)gl;
+        float blFloat = (float)bl;
+
         // draw rect - can add a shape mask to this also based
         // on current selection within rectangular area
         
@@ -168,32 +151,19 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
         for( int y = y1 ; y < y2 ; y++ )
         {
             // calc color
-            rl += rcDelta;
-            gl += gcDelta;
-            bl += bcDelta;
-
-            // this mask doesn't do anything because it is
-            // cumulatively added to gradient color
-            // same as ROP_COPY - we need to define different
-            // kis raster ops for these kinds of things! 
-            color = mask |  ( ( rl>>16 ) * 0x010000 ) |
-                            ( ( gl>>16 ) * 0x000100 ) |
-                              ( bl>>16 );
+            float rlFinFloat 
+                = rlFloat + ((float) (y - y1) * (float)rDiff) / (float)length;
+            float glFinFloat 
+                = glFloat + ((float) (y - y1) * (float)gDiff) / (float)length;
+            float blFinFloat 
+                = blFloat + ((float) (y - y1) * (float)bDiff) / (float)length;
 
             // draw uniform horizontal line of color - 
             for( int x = x1 ; x < x2 ; x++ )
             {
-                /* -jwc- We need to define setPixel by color 
-                in kis_layer.cc instead of doing it for each 
-                channel, for each color format, although this
-                inline code is faster */
-                 
-                img->getCurrentLayer()->setPixel(0, x, y, 
-                    (color & 0x00ff0000) >> 16 );
-                img->getCurrentLayer()->setPixel(1, x, y, 
-                    (color & 0x0000ff00) >>  8 );
-                img->getCurrentLayer()->setPixel(2, x, y, 
-                    (color & 0x000000ff) );                
+                img->getCurrentLayer()->setPixel(0, x, y, (int)rlFinFloat);
+                img->getCurrentLayer()->setPixel(1, x, y, (int)glFinFloat);
+                img->getCurrentLayer()->setPixel(2, x, y, (int)blFinFloat);
             }
         }
     

@@ -45,13 +45,14 @@ class FillOptionsDialog : public KDialog
 
 public:
 
-    FillOptionsDialog( int _opacity = 255, bool _pattern = false,
+    FillOptionsDialog( int _opacity = 255, 
+        bool _pattern = false, bool _gradient = false,
         int _redtolerance = 0, int _greentolerance = 0, int _bluetolerance = 0,
         QWidget *parent = 0, const char *name = 0 );
 
     int opacity()           { return mpOpacity->value(); };
     bool usePattern()       { return mpUsePattern->isChecked(); }; 
-    //bool useGradient()    { return mpUseGradient->isChecked(); };         
+    bool useGradient()      { return mpUseGradient->isChecked(); };         
     int ToleranceRed()      { return mpToleranceRed->value(); };
     int ToleranceGreen()    { return mpToleranceGreen->value(); };
     int ToleranceBlue()     { return mpToleranceBlue->value(); };
@@ -65,7 +66,7 @@ private:
     QSpinBox  *mpToleranceBlue;
     
     QCheckBox *mpUsePattern;
-    //QCheckBox *mpUseGradient;
+    QCheckBox *mpUseGradient;
 };
 
 #endif // __filloptionsdialog.h__

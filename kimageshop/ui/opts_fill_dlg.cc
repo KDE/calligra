@@ -30,50 +30,69 @@
 
 #include "opts_fill_dlg.h"
 
-FillOptionsDialog::FillOptionsDialog( int _opacity, bool _pattern,
+FillOptionsDialog::FillOptionsDialog( int _opacity, 
+    bool _pattern, bool _gradient,
     int _redtolerance, int _bluetolerance, int _greentolerance,
     QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Fill Options") );
-
+    
+    // parent, border
     QVBoxLayout* layout = new QVBoxLayout( this, 4 );
-    QGridLayout* grid = new QGridLayout( layout, 2, 5);
+    // parent, cols, rows
+    QGridLayout* grid = new QGridLayout( layout, 2, 6);
 
+    // min, max, incr, parent
     mpOpacity = new QSpinBox( 0, 255, 16, this );
     mpOpacity->setValue( _opacity );
-    QLabel* olabel = new QLabel( mpOpacity, i18n("Opacity"), this );
+    QLabel* opacity_label = new QLabel( mpOpacity, 
+        i18n("Opacity"), this );
 
     mpToleranceRed = new QSpinBox( 0, 255, 1, this );
     mpToleranceRed->setValue( _redtolerance );
-    QLabel* rlabel = new QLabel( mpToleranceRed, i18n("Red Tolerance"), this );
+    QLabel* red_label = new QLabel( mpToleranceRed, 
+        i18n("Red Tolerance"), this );
 
     mpToleranceGreen = new QSpinBox( 0, 255, 1, this );
     mpToleranceGreen->setValue( _greentolerance );
-    QLabel* glabel = new QLabel( mpToleranceGreen, i18n("Green Tolerance"), this );
+    QLabel* green_label = new QLabel( mpToleranceGreen, 
+        i18n("Green Tolerance"), this );
 
     mpToleranceBlue = new QSpinBox( 0, 255, 1, this );
     mpToleranceBlue->setValue( _bluetolerance );
-    QLabel* blabel = new QLabel( mpToleranceBlue, i18n("Blue Tolerance"), this );
+    QLabel* blue_label = new QLabel( mpToleranceBlue, 
+        i18n("Blue Tolerance"), this );
 
     mpUsePattern = new QCheckBox( this );
     mpUsePattern->setChecked( _pattern );
-    QLabel* plabel = new QLabel( mpUsePattern, i18n("Use Current Pattern"), this );
+    QLabel* pattern_label = new QLabel( mpUsePattern, 
+        i18n("Use Current Pattern"), this );
 
-    grid->addWidget( olabel, 0, 0 );
+    mpUseGradient = new QCheckBox( this );
+    mpUseGradient->setChecked( _gradient );
+    QLabel* gradient_label = new QLabel( mpUseGradient, 
+        i18n("Use Current Gradient"), this );
+
+    grid->addWidget( opacity_label, 0, 0 );
     grid->addWidget( mpOpacity, 0, 1 );
 
-    grid->addWidget( rlabel, 1, 0 );
+    grid->addWidget( red_label, 1, 0 );
     grid->addWidget( mpToleranceRed, 1, 1 );
 
-    grid->addWidget( glabel, 2, 0 );
+    grid->addWidget( green_label, 2, 0 );
     grid->addWidget( mpToleranceGreen, 2, 1 );
 
-    grid->addWidget( blabel, 3, 0 );
+    grid->addWidget( blue_label, 3, 0 );
     grid->addWidget( mpToleranceBlue, 3, 1 );
 
-    grid->addWidget( plabel, 4, 0 );
+    grid->addWidget( pattern_label, 4, 0 );
     grid->addWidget( mpUsePattern, 4, 1 );
+
+    grid->addWidget( gradient_label, 5, 0 );
+    grid->addWidget( mpUseGradient, 5, 1 );
+
+    // standard button action group
 
     QHBoxLayout* buttons = new QHBoxLayout( layout, 3 );
     buttons->addStretch( 3 );

@@ -25,10 +25,12 @@
 #include <qimage.h>
 #include <qcolor.h>
 
+#include "kis_gradient.h"
 #include "kis_doc.h"
  
 class KisSelection;
 class KisPattern;
+
 
 class KisFrameBuffer : public QObject 
 {
@@ -66,6 +68,11 @@ public:
     void setPattern(KisPattern *pattern);
     void setPatternToPixel(KisLayer *lay, int x, int y, uint value);
     
+    void setGradientPaint(bool _gradientPaint, 
+        KisColor startColor, KisColor endColor);
+    void setGradientToPixel(KisLayer *lay, int x, int y);
+    KisGradient & gradient( ) { return mGradient; }   
+    
 protected:
 
     QImage srcImage;
@@ -78,11 +85,14 @@ protected:
 private:
 
     KisDoc *pDoc;
-    KisLayer *pScratchLayer;
-    KisSelection *pSelection;
-    KisPattern *pPenPattern;
+    KisLayer        *pScratchLayer;
+    KisSelection    *pSelection;
+    KisPattern      *pPenPattern;
+
+    KisGradient mGradient;
     
     bool mPatternPaint;
+    bool mGradientPaint;
 };
 
 #endif

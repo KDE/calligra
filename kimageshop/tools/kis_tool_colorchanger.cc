@@ -34,6 +34,7 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc, KisView *view)
     
     fillOpacity = 255;
     usePattern  = false;
+    useGradient = false;
     
     toleranceRed = 0;
     toleranceGreen = 0;
@@ -132,7 +133,8 @@ void ColorChangerTool::mousePress(QMouseEvent *e)
 void ColorChangerTool::optionsDialog()
 {
     FillOptionsDialog *pOptsDialog 
-        = new FillOptionsDialog(fillOpacity, usePattern,
+        = new FillOptionsDialog(fillOpacity, 
+            usePattern, useGradient,
             toleranceRed, toleranceGreen, toleranceBlue);
     
     pOptsDialog->exec();
@@ -142,6 +144,7 @@ void ColorChangerTool::optionsDialog()
 
     fillOpacity     = pOptsDialog->opacity();
     usePattern      = pOptsDialog->usePattern();
+    useGradient     = pOptsDialog->useGradient();
     toleranceRed    = pOptsDialog->ToleranceRed();
     toleranceGreen  = pOptsDialog->ToleranceGreen();    
     toleranceBlue   = pOptsDialog->ToleranceBlue();    

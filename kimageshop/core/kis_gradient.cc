@@ -20,30 +20,94 @@
  
 #include "kis_selection.h"
 #include "kis_gradient.h"
+#include "kis_color.h"
 
-KisGradient::KisGradient(KImageEffect::GradientType _type, 
-    KImageEffect::RGBComponent _rgbComponent, 
-    KImageEffect::Lighting _lighting,
-    KImageEffect::ModulationType _modulationType)
+KisGradient::KisGradient()
 {
-    type = _type;
-    rgbComponent = _rgbComponent;
-    lighting = _lighting;
-    modulationType = _modulationType;
+   setNull();
 }
 
 KisGradient::~KisGradient()
 {
 }
 
-
-bool KisGradient::paintGradient(QImage *image)
+void KisGradient::setNull()
 {
-    return true;
+    mGradientWidth  = 0;
+    mGradientHeight = 0;
+    gradArray.resize(0);
 }
 
-bool KisGradient::paintGradient(KisSelection *selection)
+
+void KisGradient::mapVertGradient( QRect gradR, 
+            KisColor startColor, 
+            KisColor endColor )
 {
-    return true;
+    mGradientWidth  = gradR.width();
+    mGradientHeight = gradR.height();
+
+    gradArray.resize(mGradientWidth * mGradientHeight);
+    gradArray.fill(0); 
+
+    uint color = 0;
+    
+    // draw gradient within rectanguar area defined above
+    int length = gradR.height();
+    
+    int rDiff = ( endColor.R() - startColor.R() );
+    int gDiff = ( endColor.G() - startColor.G() );
+    int bDiff = ( endColor.B() - startColor.B() );
+  
+    int rl = startColor.R();
+    int gl = startColor.G();
+    int bl = startColor.B();
+ 
+    float rlFloat = (float)rl;
+    float glFloat = (float)gl;
+    float blFloat = (float)bl;
+
+    int y1 = 0;
+    int y2 = gradR.height();
+    int x1 = 0;
+    int x2 = gradR.width();
+    
+    // gradient defined vertically
+    for( int y = y1 ; y < y2 ; y++ )
+    {
+        // calc color
+        float rlFinFloat 
+            = rlFloat + ((float) (y - y1) * (float)rDiff) / (float)length;
+        float glFinFloat 
+            = glFloat + ((float) (y - y1) * (float)gDiff) / (float)length;
+        float blFinFloat 
+            = blFloat + ((float) (y - y1) * (float)bDiff) / (float)length;
+
+        uint red   = (uint)rlFinFloat;
+        uint green = (uint)glFinFloat;
+        uint blue  = (uint)blFinFloat;
+        
+        color = (0xff000000) | (red << 16) | (green << 8) | (blue); 
+
+        // draw uniform horizontal line of color - 
+        for( int x = x1 ; x < x2 ; x++ )
+        {
+            gradArray[y * (x2 - x1) + (x - x1)] = color;
+        }
+    }
 }
 
+
+void KisGradient::mapHorGradient( QRect gradR, 
+            KisColor startColor, 
+            KisColor endColor )
+{
+    mGradientWidth  = gradR.width();
+    mGradientHeight = gradR.height();
+
+    gradArray.resize(mGradientWidth * mGradientHeight);
+    gradArray.fill(0); 
+
+    // draw gradient within rectanguar area defined above
+    int length = gradR.width();
+    
+}

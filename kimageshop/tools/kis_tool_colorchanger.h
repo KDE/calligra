@@ -33,6 +33,7 @@
 class ColorChangerTool : public KisTool
 {
   public:
+
     ColorChangerTool(KisDoc *doc, KisView *view);
     ~ColorChangerTool();
   
@@ -40,6 +41,7 @@ class ColorChangerTool : public KisTool
     bool changeColors(int startx, int starty);
     
   public slots:
+
     virtual void mousePress(QMouseEvent*); 
     virtual void optionsDialog();
       
@@ -57,8 +59,10 @@ class ColorChangerTool : public KisTool
 
     int fillOpacity;
     bool layerAlpha;
+
     bool usePattern;
-        
+    bool useGradient;
+            
     int toleranceRed;
     int toleranceGreen;    
     int toleranceBlue;

@@ -21,33 +21,35 @@
 #ifndef __kis_gradient_h__
 #define __kis_gradient_h__
 
-
 #include <kimageeffect.h>
+#include "kis_color.h"
 
-class KisSelection;
 
 class KisGradient 
 {
 
 public:
 
-    KisGradient(KImageEffect::GradientType _type, 
-                KImageEffect::RGBComponent _rgbComponent, 
-                KImageEffect::Lighting _lighting,
-                KImageEffect::ModulationType _modulationType);
-    
+    KisGradient();
     ~KisGradient();
-
-    bool paintGradient(QImage *image);
-    bool paintGradient(KisSelection *selection);
+    
+    void setNull();
+    
+    void mapVertGradient(QRect gradR, KisColor startColor, KisColor endColor);
+    void mapHorGradient(QRect gradR, KisColor startColor, KisColor endColor);
+     
+    const int width()  { return mGradientWidth; }
+    const int height() { return mGradientHeight; }
+    
+    uint pixelValue(int x, int y) { return gradArray[y * mGradientWidth + x]; }
     
 private:
-
-    KImageEffect::GradientType type; 
-    KImageEffect::RGBComponent rgbComponent; 
-    KImageEffect::Lighting lighting;
-    KImageEffect::ModulationType modulationType;
-  
+    
+    QArray <uint> gradArray;
+    
+    int mGradientWidth;
+    int mGradientHeight;
+    
 };
 
 #endif

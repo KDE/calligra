@@ -34,7 +34,8 @@ FillTool::FillTool(KisDoc *doc, KisView *view)
     
     fillOpacity = 255;
     usePattern  = false;
-    
+    useGradient = false;
+        
     toleranceRed = 0;
     toleranceGreen = 0;
     toleranceBlue = 0;
@@ -63,17 +64,24 @@ int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 
 void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
+    // fill with pattern
+    if(useGradient)
+    {
+        m_pDoc->frameBuffer()->setGradientToPixel(fLayer, x, y);
+    }
+
+    // fill with pattern
+    else if(usePattern)
+    {
+        m_pDoc->frameBuffer()->setPatternToPixel(fLayer, x, y, 0);
+    }
+
     // fill with color
-    if(!usePattern)
+    else
     {
         fLayer->setPixel(0, x, y, info->r);
         fLayer->setPixel(1, x, y, info->g);   
         fLayer->setPixel(2, x, y, info->b);
-    }
-    // fill with pattern
-    else
-    {
-        m_pDoc->frameBuffer()->setPatternToPixel(fLayer, x, y, 0);
     }
     
     // alpha adjustment with either fill method
@@ -218,6 +226,24 @@ bool FillTool::flood(int startX, int startY)
     kdDebug() << "floodRect.left() " << floodRect.left() 
               << "floodRect.top() "  << floodRect.top() << endl;
 
+    /* set up gradient - if any.  this should only be done when the
+    current layer is changed or when the fgColor or bgColor are changed,
+    or when the gradient is changed with the gradient settings dialog
+    or by selecting a prexisting gradient from the chooser.
+    Otherwise, it can get slow calculating gradients for every fill
+    operation when this calculation is not needed - when the gradient
+    array is already filled with current values */
+    
+    if(useGradient)
+    {
+        KisColor startColor(m_pView->fgColor().R(),
+            m_pView->fgColor().G(), m_pView->fgColor().B());
+        KisColor endColor(m_pView->bgColor().R(),
+            m_pView->bgColor().G(), m_pView->bgColor().B());        
+            
+        m_pDoc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+    }
+
     seed_flood_fill( startx, starty, floodRect);
       
     /* refresh canvas so changes show up */
@@ -248,7 +274,7 @@ void FillTool::mousePress(QMouseEvent *e)
   
     /*  need to fill with foreground color on left click,
     transparent on middle click, and background color on right click,
-    need another paramater or to set color here and pass in */
+    need another paramater or nned to set color here and pass in */
     
     if (e->button() == QMouseEvent::LeftButton)
         flood(pos.x(), pos.y());
@@ -259,7 +285,8 @@ void FillTool::mousePress(QMouseEvent *e)
 void FillTool::optionsDialog()
 {
     FillOptionsDialog *pOptsDialog 
-        = new FillOptionsDialog(fillOpacity, usePattern,
+        = new FillOptionsDialog(fillOpacity, 
+            usePattern, useGradient,
             toleranceRed, toleranceGreen, toleranceBlue);
             
     pOptsDialog->exec();
@@ -268,7 +295,10 @@ void FillTool::optionsDialog()
         return;
 
     fillOpacity     = pOptsDialog->opacity();
+
     usePattern      = pOptsDialog->usePattern();
+    useGradient     = pOptsDialog->useGradient();
+
     toleranceRed    = pOptsDialog->ToleranceRed();
     toleranceGreen  = pOptsDialog->ToleranceGreen();    
     toleranceBlue   = pOptsDialog->ToleranceBlue();    

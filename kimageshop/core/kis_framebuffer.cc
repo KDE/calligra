@@ -53,6 +53,7 @@
 #include "kis_util.h"
 #include "kis_selection.h"
 #include "kis_pattern.h"
+#include "kis_gradient.h"
 #include "kis_framebuffer.h"
 
 
@@ -61,7 +62,8 @@ KisFrameBuffer::KisFrameBuffer(KisDoc *doc)
     pDoc = doc;
     pScratchLayer = 0;
     
-    mPatternPaint = false;
+    mPatternPaint  =  false;
+    mGradientPaint =  false;
 }
 
 
@@ -313,8 +315,9 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 } 
 
 /*
-    Scale area without smoothing colors based on averaging
-    of adjacent colors - a must for indexed mode
+    Scale area without smoothing colors - a must for indexed mode.
+    This can produce jaggies when scaling up and inaccuracies in 
+    scaling down but when scaling down this is not so noticeable
 */
 bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 {    
@@ -465,7 +468,7 @@ bool KisFrameBuffer::rotate270(QRect & )
 } 
     
 
-bool KisFrameBuffer::QImageToLayer(QImage *qimg, QRect & srcR, QRect & destR)
+bool KisFrameBuffer::QImageToLayer(QImage *, QRect & , QRect & )
 {    
     // use current layer only
     // copy from rectangle in QImage to rectangle in current layer
@@ -479,7 +482,7 @@ bool KisFrameBuffer::QImageToLayer(QImage *qimg, QRect & srcR, QRect & destR)
 } 
 
 
-bool KisFrameBuffer::layerToQImage(QImage *qimg, QRect & srcR, QRect & destR)
+bool KisFrameBuffer::layerToQImage(QImage *, QRect &, QRect &)
 {    
     // use current layer only
     // normally src and destination rectangles are same size
@@ -537,7 +540,11 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
             && (oldGreen == lay->pixel(1, x, y))
             && (oldBlue  == lay->pixel(2, x, y)))
             {
-                if(mPatternPaint)
+                if(mGradientPaint)
+                {
+                    setGradientToPixel(lay, x, y);
+                }
+                else if(mPatternPaint)
                 {
                     setPatternToPixel(lay, x, y, 0);
                 }
@@ -605,6 +612,44 @@ void KisFrameBuffer::setPatternToPixel(KisLayer *lay,
     lay->setPixel(1, x, y, qGreen(*p));
     lay->setPixel(2, x, y, qBlue(*p));    
 }
+
+void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
+    KisColor _startColor, KisColor _endColor)
+{
+    KisImage *img = pDoc->current();
+    if (!img) return;
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay) return;
+     
+    // only a vertical gradient for now using 2 colors
+    // we will need to pass in a gradient type structure
+    // from gradient settings for better selection of gradients
+    // switch statement, etc. -  later
+    
+    mGradient.mapVertGradient(QRect(0, 0, 
+        lay->imageExtents().width(), lay->imageExtents().height()),
+        _startColor, _endColor);
+    
+    // set boolean value
+    mGradientPaint = _gradientPaint;    
+}
+
+
+void KisFrameBuffer::setGradientToPixel(KisLayer *lay, 
+    int x, int y)
+{
+    if(mGradient.width() == 0 || mGradient.height() == 0)
+        return;
+
+    // pixel value in gradient array
+    uint u32Color = mGradient.pixelValue(x, y);
+    
+    lay->setPixel(0, x, y, qRed(u32Color));
+    lay->setPixel(1, x, y, qGreen(u32Color));
+    lay->setPixel(2, x, y, qBlue(u32Color));    
+}
+
 
 #include "kis_framebuffer.moc"
 
