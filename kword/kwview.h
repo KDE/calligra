@@ -77,6 +77,7 @@ class KWViewMode;
 class KWFrameStyle;
 class KWTableStyle;
 class KoTextIterator;
+class KWTableFrameSet;
 
 class KOSpell;
 
@@ -252,7 +253,9 @@ public slots:
 
     void tableProperties();
     void tableInsertRow();
+    void tableInsertRow(uint row, KWTableFrameSet *table = 0);
     void tableInsertCol();
+    void tableInsertCol(uint col, KWTableFrameSet *table = 0);
     void tableResizeCol();
     void tableDeleteRow();
     void tableDeleteCol();

@@ -21,6 +21,7 @@
 #include "insdia.h"
 #include "insdia.moc"
 #include "kwtableframeset.h"
+#include "kwview.h"
 #include "kwcommand.h"
 
 #include <klocale.h>
@@ -117,28 +118,13 @@ void KWInsertDia::setupTab1()
 bool KWInsertDia::doInsert()
 {
     unsigned int insert= value->value() - ( rBefore->isChecked() ? 1 : 0 );
+    KWView *view = dynamic_cast<KWView*>(parent());
+    if(!view) return false;		//  correct return in this case ?
+
     if ( type == ROW )
-    {
-         KWInsertRowCommand *cmd = new KWInsertRowCommand( i18n("Insert Row"), table, insert);
-         cmd->execute();
-         doc->addCommand(cmd);
-    }
+        view->tableInsertRow(insert, table);
     else
-    {
-        // we pass as last parameter the maximum offset that the table can use.
-        // this offset is the max right offset of the containing frame in the case of
-        // an inline (floating) table, the size of the page for other tables.
-        double maxRightOffset;
-        if (table->isFloating())
-            // inline table: max offset of containing frame
-            maxRightOffset = table->anchorFrameset()->frame(0)->right();
-        else
-            // non inline table: max offset of the page
-            maxRightOffset = doc->ptPaperWidth() - doc->ptRightBorder();
-        KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert Column"), table, insert,  maxRightOffset);
-        cmd->execute();
-        doc->addCommand(cmd);
-    }
+        view->tableInsertCol(insert, table);
 
     return true;
 }

@@ -186,9 +186,19 @@ void KWordViewIface::tableInsertRow()
     view->tableInsertRow();
 }
 
+void KWordViewIface::tableInsertRow(uint row)
+{
+    view->tableInsertRow(row);
+}
+
 void KWordViewIface::tableInsertCol()
 {
     view->tableInsertCol();
+}
+
+void KWordViewIface::tableInsertCol(uint col)
+{
+    view->tableInsertCol(col);
 }
 
 void KWordViewIface::tableResizeCol()

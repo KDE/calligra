@@ -3901,10 +3901,27 @@ void KWView::tableInsertRow()
     Q_ASSERT(table);
     if (!table)
         return;
-    KWInsertDia dia( this, "", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
+    KWInsertDia dia( this, "insert_row_dialog", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Row" ) );
     dia.exec();
 }
+
+void KWView::tableInsertRow(uint row, KWTableFrameSet *table)
+{
+    if(!table)
+        table = m_gui->canvasWidget()->getCurrentTable();
+
+    if (!m_doc || !table)
+        return;
+
+    if(row > table->getRows())
+        return;
+
+    KWInsertRowCommand *cmd = new KWInsertRowCommand( i18n("Insert Row"), table, row);
+    cmd->execute();
+    m_doc->addCommand(cmd);
+}
+
 
 void KWView::tableInsertCol()
 {
@@ -3931,6 +3948,32 @@ void KWView::tableInsertCol()
     KWInsertDia dia( this, "insert_column_dialog", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Column" ) );
     dia.exec();
+}
+
+void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
+{
+    if(!table)
+        table = m_gui->canvasWidget()->getCurrentTable();
+
+    if (!m_doc || !table)
+        return;
+
+    if(col > table->getCols())
+        return;
+
+    // we pass as last parameter the maximum offset that the table can use.
+    // this offset is the max right offset of the containing frame in the case
+    // of an inline (floating) table, the size of the page for other tables.
+    double maxRightOffset;
+    if (table->isFloating())    // inline table: max offset of containing frame
+         maxRightOffset = table->anchorFrameset()->frame(0)->right();
+    else                        // non inline table: max offset of the page
+         maxRightOffset = m_doc->ptPaperWidth() - m_doc->ptRightBorder();
+
+    KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert Column"),
+        table, col,  maxRightOffset);
+    cmd->execute();
+    m_doc->addCommand(cmd);
 }
 
 void KWView::tableDeleteRow()

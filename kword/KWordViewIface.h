@@ -48,7 +48,9 @@ k_dcop:
 
     virtual void insertTable();
     virtual void tableInsertRow();
+    virtual void tableInsertRow(uint row);
     virtual void tableInsertCol();
+    virtual void tableInsertCol(uint col);
     virtual void tableResizeCol();
     virtual void tableDeleteRow();
     virtual void tableDeleteCol();
