@@ -97,10 +97,12 @@ class KPConfig : public KDialogBase
 {
     Q_OBJECT
 public:
+    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8 };
     KPConfig( KPresenterView* parent );
 public slots:
     void slotApply();
     void slotDefault();
+    void openPage(int flags);
 private:
     configureInterfacePage *_interfacePage;
     configureColorBackground *_colorBackground;

@@ -63,6 +63,18 @@ KPConfig::KPConfig( KPresenterView* parent )
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
+void KPConfig::openPage(int flags)
+{
+    if(flags & KP_INTERFACE)
+        showPage( 0 );
+    else if(flags & KP_COLOR)
+        showPage(1 );
+    else if(flags & KP_KSPELL)
+        showPage(2);
+    else if(flags & KP_MISC)
+        showPage(3 );
+}
+
 void KPConfig::slotApply()
 {
     _interfacePage->apply();
@@ -330,7 +342,7 @@ void ConfigureSpellPage::slotDefault()
 }
 
 ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *name )
- : QObject( box->parent(), name )
+    : QObject( box->parent(), name )
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();

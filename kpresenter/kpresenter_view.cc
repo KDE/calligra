@@ -4210,10 +4210,12 @@ void KPresenterView::spellCheckerFinished()
     KSpell::spellStatus status = m_spell.kspell->status();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+    bool kspellNoConfigured=false;
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                      "Please make sure you have ISpell properly configured and in your PATH.\nUsed settings->configure."));
+                                      "Please make sure you have ISpell properly configured and in your PATH."));
+        kspellNoConfigured=true;
     }
     else if (status == KSpell::Crashed)
     {
@@ -4235,6 +4237,12 @@ void KPresenterView::spellCheckerFinished()
     KPTextView *edit=page->currentTextObjectView();
     if (edit)
         edit->drawCursor( TRUE );
+    if(kspellNoConfigured)
+    {
+            KPConfig configDia( this );
+            configDia.openPage( KPConfig::KP_KSPELL);
+            configDia.exec();
+    }
 }
 
 void KPresenterView::showCounter( KoParagCounter &c )
