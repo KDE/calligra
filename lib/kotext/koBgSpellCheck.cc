@@ -260,7 +260,7 @@ void KoBgSpellCheck::spellCheckerDone()
 #endif
     if(m_bgSpell.currentParag)
         m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
-    if( m_bgSpell.currentTextObj)
+    if( m_bgSpell.currentTextObj && m_bgSpell.currentParag==m_bgSpell.currentTextObj->textDocument()->lastParag())
         m_bgSpell.currentTextObj->setNeedSpellCheck(false);
     // Done checking the current paragraph, schedule the next one
     QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
