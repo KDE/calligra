@@ -22,6 +22,7 @@
 
 #include <qobject.h>
 #include <qdict.h>
+#include <qmap.h>
 
 template<class type> class QPtrList;
 class KActionCollection;
@@ -98,7 +99,9 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 
 		QString  displayName(const QString &classname);
+		QString  checkAlternateName(const QString &classname);
 		QString  icon(const QString &classname);
+		QString  includeFile(const QString &classname);
 
 		void    startEditing(const QString &classname, QWidget *w, Container *container);
 
@@ -114,6 +117,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 	private:
 		// dict which associates a class name with a Widget class
 		Widgets	m_widgets;
+		QMap<QString, QString>  m_alternates;
 };
 
 }

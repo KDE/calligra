@@ -44,7 +44,7 @@
 # include <kinputdialog.h>
 #endif
 
-
+/*
 class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 {
 	public:
@@ -84,7 +84,7 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 
 	private:
 		QGuardedPtr<QObject>   m_container;
-};
+};*/
 
 ///////  Tab related KCommand (to allow tab creation/deletion undoing)
 
@@ -185,6 +185,10 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("KTabWidget");
+	#if !KDE_IS_VERSION(3,1,9) //TMP
+	wTabWidget->setAlternateClassName("QTabWidget");
+	#endif
+	wTabWidget->setInclude("ktabwidget.h");
 	wTabWidget->setName(i18n("Tab Widget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	m_classes.append(wTabWidget);
@@ -243,15 +247,15 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	}
 	else if(c == "KTabWidget")
 	{
-		MyTabWidget *tab = new MyTabWidget(p, n, container);
+		//MyTabWidget *tab = new MyTabWidget(p, n, container);
+		KTabWidget *tab = new KTabWidget(p, n);
 #if KDE_IS_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);
 #endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
+		KFormDesigner::EventEater *eater = new KFormDesigner::EventEater(tab, container);
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
-		        container->form()->manager()->lib()->displayName(c), n, tab));
-		tab->installEventFilter(container);
-		tab->setContainer(container);
+		        container->form()->manager()->lib()->displayName(c), n, tab, eater));
 		m_manager = container->form()->manager();
 
 		if(container->form()->interactiveMode())
@@ -288,9 +292,9 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		QWidgetStack *stack = new QWidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
+		KFormDesigner::EventEater *eater = new KFormDesigner::EventEater(stack, container);
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
-		     container->form()->manager()->lib()->displayName(c), n, stack));
-		stack->installEventFilter(container);
+		     container->form()->manager()->lib()->displayName(c), n, stack, eater));
 
 		if(container->form()->interactiveMode())
 		{

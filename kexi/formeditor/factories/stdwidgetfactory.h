@@ -72,13 +72,16 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
 		virtual QStringList     autoSaveProperties(const QString &classname);
 
+	public slots:
+		void  editText();
+
 	protected:
 		virtual void  changeText(const QString &newText);
-		virtual void  resetEditor();
 
 	private:
 		KFormDesigner::WidgetList		m_classes;
 		KFormDesigner::Container		*m_container;
+		QWidget 				*m_widget;
 };
 
 #endif

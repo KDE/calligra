@@ -790,6 +790,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		}
 		delete list;
 	}
+
+	addIncludeFile(lib->includeFile(item->widget()->className()), domDoc);
 }
 
 void
@@ -811,7 +813,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	if(el.tagName() == "spacer")
 		classname = "Spacer";
 	else
-		classname = el.attribute("class");
+		classname = lib->checkAlternateName(el.attribute("class"));
 
 	if(!parent)
 		w = lib->createWidget(classname, container->widget(), wname.latin1(), container);
@@ -823,7 +825,8 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w);
+		EventEater *eater = new EventEater(w, container);
+		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w, eater);
 		if(parent)
 		{
 			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());
@@ -969,6 +972,35 @@ FormIO::loadLayout(const QDomElement &el, ObjectTreeItem *tree)
 		QGridLayout *layout = new QGridLayout(tree->widget(), nrow, ncol, 10, 2, "grid");
 		tree->container()->m_layout = (QLayout*)layout;
 	}
+}
+
+void
+FormIO::addIncludeFile(const QString &include, QDomDocument &domDoc)
+{
+	if(include.isEmpty())
+		return;
+
+	QDomElement includes;
+	QDomElement uiEl = domDoc.namedItem("UI").toElement();
+	if(uiEl.namedItem("includehints").isNull())
+	{
+		includes = domDoc.createElement("includehints");
+		uiEl.appendChild(includes);
+	}
+	else
+		includes = uiEl.namedItem("includehints").toElement();
+
+	// Check if this include has already been saved, and return if it is the case
+	for(QDomNode n = includes.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if(n.toElement().text() == include)
+			return;
+	}
+
+	QDomElement includeHint = domDoc.createElement("includehint");
+	includes.appendChild(includeHint);
+	QDomText includeText = domDoc.createTextNode(include);
+	includeHint.appendChild(includeText);
 }
 
 QString

@@ -48,177 +48,6 @@
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
-class KFORMEDITOR_EXPORT MyTextEdit : public KTextEdit
-{
-	public:
-		MyTextEdit(const QString &text, QWidget *parent, const char *name, QObject *container)
-		 : KTextEdit(text, QString::null, parent, name)
-		{
-			m_container = container;
-			//setReadOnly(true);
-			setCursor(QCursor(Qt::ArrowCursor));
-		}
-		~MyTextEdit() {;}
-
-		void setContainer(QObject *container)
-		{
-			m_container = container;
-		}
-		virtual bool eventFilter(QObject *o, QEvent *ev)
-		{
-			if(!m_container)
-				return KTextEdit::eventFilter(o, ev);
-			bool ok = m_container->eventFilter(this, ev);
-			if(!ok)
-				return KTextEdit::eventFilter(o, ev);
-			return true;
-		}
-
-	private:
-		QGuardedPtr<QObject>  m_container;
-};
-
-class KFORMEDITOR_EXPORT MySpinBox : public KIntSpinBox
-{
-	public:
-		MySpinBox(QWidget *parent, const char *name, QObject *container)
-		 : KIntSpinBox(parent, name)
-		{
-			m_container = container;
-			setCursor(QCursor(Qt::ArrowCursor));
-			editor()->setCursor(QCursor(Qt::ArrowCursor));
-
-			QObjectList *list = new QObjectList(*children());
-			for(QObject *obj = list->first(); obj; obj = list->next())
-				obj->installEventFilter(this);
-			delete list;
-		}
-		~MySpinBox() {;}
-
-		void setContainer(QObject *container)
-		{
-			m_container = container;
-			editor()->setCursor(QCursor(Qt::ArrowCursor));
-		}
-		virtual bool eventFilter(QObject *o, QEvent *ev)
-		{
-			if(!m_container)
-				return KIntSpinBox::eventFilter(o, ev);
-			bool ok = m_container->eventFilter(this, ev);
-			if(!ok)
-				return KIntSpinBox::eventFilter(o, ev);
-			return true;
-		}
-
-	private:
-		QGuardedPtr<QObject>  m_container;
-};
-
-class KFORMEDITOR_EXPORT MyTimeWidget : public KTimeWidget
-{
-	public:
-		MyTimeWidget(const QTime &time, QWidget *parent, const char *name, QObject *container)
-		 : KTimeWidget(time, parent, name)
-		{
-			m_container = container;
-			setCursor(QCursor(Qt::ArrowCursor));
-
-			QObjectList *list = new QObjectList(*children());
-			for(QObject *obj = list->first(); obj; obj = list->next())
-				KFormDesigner::installRecursiveEventFilter(obj, this);
-
-			delete list;
-		}
-		~MyTimeWidget() {;}
-
-		void setContainer(QObject *container)
-		{
-			m_container = container;
-		}
-		virtual bool eventFilter(QObject *o, QEvent *ev)
-		{
-			if(!m_container)
-				return KTimeWidget::eventFilter(o, ev);
-			bool ok = m_container->eventFilter(this, ev);
-			if(!ok)
-				return KTimeWidget::eventFilter(o, ev);
-			return true;
-		}
-
-	private:
-		QGuardedPtr<QObject>   m_container;
-};
-
-class KFORMEDITOR_EXPORT MyDateWidget : public KDateWidget
-{
-	public:
-		MyDateWidget(const QDate &date, QWidget *parent, const char *name, QObject *container)
-		 : KDateWidget(date, parent, name)
-		{
-			m_container = container;
-			setCursor(QCursor(Qt::ArrowCursor));
-
-			QObjectList *list = new QObjectList(*children());
-			for(QObject *obj = list->first(); obj; obj = list->next())
-				KFormDesigner::installRecursiveEventFilter(obj, this);
-
-			delete list;
-		}
-		~MyDateWidget() {;}
-
-		void setContainer(QObject *container)
-		{
-			m_container = container;
-		}
-		virtual bool eventFilter(QObject *o, QEvent *ev)
-		{
-			if(!m_container)
-				return KDateWidget::eventFilter(o, ev);
-			bool ok = m_container->eventFilter(this, ev);
-			if(!ok)
-				return KDateWidget::eventFilter(o, ev);
-			return true;
-		}
-
-	private:
-		QGuardedPtr<QObject>   m_container;
-};
-
-class KFORMEDITOR_EXPORT MyDateTimeWidget : public KDateTimeWidget
-{
-	public:
-		MyDateTimeWidget(const QDateTime &datetime, QWidget *parent, const char *name, QObject *container)
-		 : KDateTimeWidget(datetime, parent, name)
-		{
-			m_container = container;
-			setCursor(QCursor(Qt::ArrowCursor));
-
-			QObjectList *list = new QObjectList(*children());
-			for(QObject *obj = list->first(); obj; obj = list->next())
-				KFormDesigner::installRecursiveEventFilter(obj, this);
-
-			delete list;
-		}
-		~MyDateTimeWidget() {;}
-
-		void setContainer(QObject *container)
-		{
-			m_container = container;
-		}
-		virtual bool eventFilter(QObject *o, QEvent *ev)
-		{
-			if(!m_container)
-				return KDateTimeWidget::eventFilter(o, ev);
-			bool ok = m_container->eventFilter(this, ev);
-			if(!ok)
-				return KDateTimeWidget::eventFilter(o, ev);
-			return true;
-		}
-
-	private:
-		QGuardedPtr<QObject>   m_container;
-};
-
 MyPicLabel::MyPicLabel(const QPixmap *pix, QWidget *parent, const char *name)
  : QLabel(parent, name)
 {
@@ -286,6 +115,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wLineEdit = new KFormDesigner::Widget(this);
 	wLineEdit->setPixmap("lineedit");
 	wLineEdit->setClassName("KLineEdit");
+	wLineEdit->setAlternateClassName("QLineEdit");
+	wLineEdit->setInclude("klineedit.h");
 	wLineEdit->setName(i18n("Line Edit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
@@ -300,6 +131,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wPushButton = new KFormDesigner::Widget(this);
 	wPushButton->setPixmap("button");
 	wPushButton->setClassName("KPushButton");
+	wPushButton->setAlternateClassName("QPushButton");
+	wPushButton->setInclude("kpushbutton.h");
 	wPushButton->setName(i18n("Push Button"));
 	wPushButton->setDescription(i18n("A simple push button to execute a command"));
 	m_classes.append(wPushButton);
@@ -321,6 +154,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wSpinBox = new KFormDesigner::Widget(this);
 	wSpinBox->setPixmap("spin");
 	wSpinBox->setClassName("KIntSpinBox");
+	wSpinBox->setAlternateClassName("QSpinBox");
+	wSpinBox->setInclude("knuminput.h");
 	wSpinBox->setName(i18n("Spin Box"));
 	wSpinBox->setDescription(i18n("A spin box widget"));
 	m_classes.append(wSpinBox);
@@ -328,6 +163,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wComboBox = new KFormDesigner::Widget(this);
 	wComboBox->setPixmap("combo");
 	wComboBox->setClassName("KComboBox");
+	wComboBox->setAlternateClassName("QComboBox");
+	wComboBox->setInclude("kcombobox.h");
 	wComboBox->setName(i18n("Combo Box"));
 	wComboBox->setDescription(i18n("A combo box widget"));
 	m_classes.append(wComboBox);
@@ -335,6 +172,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wListBox = new KFormDesigner::Widget(this);
 	wListBox->setPixmap("listbox");
 	wListBox->setClassName("KListBox");
+	wListBox->setAlternateClassName("QListBox");
+	wListBox->setInclude("klistbox.h");
 	wListBox->setName(i18n("List Box"));
 	wListBox->setDescription(i18n("A simple list widget"));
 	m_classes.append(wListBox);
@@ -342,6 +181,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wTextEdit = new KFormDesigner::Widget(this);
 	wTextEdit->setPixmap("lineedit");
 	wTextEdit->setClassName("KTextEdit");
+	wTextEdit->setAlternateClassName("QTextEdit");
+	wTextEdit->setInclude("ktextedit.h");
 	wTextEdit->setName(i18n("Text Editor"));
 	wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
 	m_classes.append(wTextEdit);
@@ -349,6 +190,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wListView = new KFormDesigner::Widget(this);
 	wListView->setPixmap("listview");
 	wListView->setClassName("KListView");
+	wListView->setAlternateClassName("QListView");
+	wListView->setInclude("klistview.h");
 	wListView->setName(i18n("List View"));
 	wListView->setDescription(i18n("A list (or tree) widget"));
 	m_classes.append(wListView);
@@ -363,6 +206,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wProgressBar = new KFormDesigner::Widget(this);
 	wProgressBar->setPixmap("progress");
 	wProgressBar->setClassName("KProgress");
+	wProgressBar->setAlternateClassName("QProgressBar");
+	wProgressBar->setInclude("kprogress.h");
 	wProgressBar->setName(i18n("Progress Bar"));
 	wProgressBar->setDescription(i18n("A progress indicator widget"));
 	m_classes.append(wProgressBar);
@@ -377,6 +222,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wDate = new KFormDesigner::Widget(this);
 	wDate->setPixmap("lineedit");
 	wDate->setClassName("KDateWidget");
+	#if !KDE_IS_VERSION(3,1,9) //TMP
+	wDate->setAlternateClassName("QDateEdit");
+	wDate->setInclude("kdatewidget.h");
+	#endif
 	wDate->setName(i18n("Date Widget"));
 	wDate->setDescription(i18n("A widget to input or display a date"));
 	m_classes.append(wDate);
@@ -384,6 +233,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wTime = new KFormDesigner::Widget(this);
 	wTime->setPixmap("lineedit");
 	wTime->setClassName("KTimeWidget");
+	#if !KDE_IS_VERSION(3,1,9) //TMP
+	wTime->setAlternateClassName("QTimeEdit");
+	wTime->setInclude("ktimewidget.h");*
+	#endif
 	wTime->setName(i18n("Time Widget"));
 	wTime->setDescription(i18n("A widget to input or display a time"));
 	m_classes.append(wTime);
@@ -391,6 +244,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wDateTime = new KFormDesigner::Widget(this);
 	wDateTime->setPixmap("lineedit");
 	wDateTime->setClassName("KDateTimeWidget");
+	#if !KDE_IS_VERSION(3,1,9) //TMP
+	wDateTime->setAlternateClassName("QDateTimeEdit");
+	wDateTime->setInclude("kdatetimewidget.h");
+	#endif
 	wDateTime->setName(i18n("Date/Time Widget"));
 	wDateTime->setDescription(i18n("A widget to input or display a time and a date"));
 	m_classes.append(wDateTime);
@@ -435,9 +292,8 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		w = new QCheckBox(i18n("Check Box"), p, n);
 
 	else if(c == "KIntSpinBox")
-	{
-		w = new MySpinBox(p, n, container);
-	}
+		w = new KIntSpinBox(p, n);
+
 	else if(c == "KComboBox")
 		w = new KComboBox(p, n);
 
@@ -445,7 +301,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		w = new KListBox(p, n);
 
 	else if(c == "KTextEdit")
-		w = new MyTextEdit(i18n("Enter your text here"), p, n, container);
+		w = new KTextEdit(i18n("Enter your text here"), QString::null, p, n);
 
 	else if(c == "KListView")
 	{
@@ -459,13 +315,13 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		w = new KProgress(p, n);
 
 	else if(c == "KDateWidget")
-		w = new MyDateWidget(QDate::currentDate(), p, n, container);
+		w = new KDateWidget(QDate::currentDate(), p, n);
 
 	else if(c == "KTimeWidget")
-		w = new MyTimeWidget(QTime::currentTime(), p, n, container);
+		w = new KTimeWidget(QTime::currentTime(), p, n);
 
 	else if(c == "KDateTimeWidget")
-		w = new MyDateTimeWidget(QDateTime::currentDateTime(), p, n, container);
+		w = new KDateTimeWidget(QDateTime::currentDateTime(), p, n);
 
 	else if(c == "Line")
 		w= new Line(Line::Horizontal, p, n);
@@ -474,10 +330,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		w = new Spacer(p, n);
 
 	if(w)
-	{
-		w->installEventFilter(container);
 		return w;
-	}
 	else
 	{
 		kdDebug() << "WARNING :: w == 0 "  << endl;
@@ -489,14 +342,12 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 bool
 StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
 {
-	if(classname == "QLabel")
+	m_widget = w;
+	m_container = container;
+
+	if((classname == "QLabel") || (classname == "KTextEdit"))
 	{
-		menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
-		return true;
-	}
-	else if(classname == "KLineEdit")
-	{
-		menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
+		menu->insertItem(SmallIconSet("edit"), i18n("Edit rich text"), this, SLOT(editText()));
 		return true;
 	}
 
@@ -545,16 +396,6 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 		createEditor(check->text(), check, r, Qt::AlignAuto);
 		return;
 	}
-	else if(classname == "KIntSpinBox")
-	{
-		/*KIntSpinBox *spin = static_cast<KIntSpinBox*>(w);
-		QRect r(spin->geometry());
-		r.setWidth(r.width() - spin->upRect().width());
-		createEditor(spin->text(), spin, r, Qt::AlignRight, true, Qt::PaletteBase);
-		m_editor->setValidator(spin->validator());*/
-		((MySpinBox*)w)->setContainer(this);
-		disableFilter(w, container);
-	}
 	else if((classname == "KComboBox") || (classname == "KListBox"))
 	{
 		QStringList list;
@@ -585,57 +426,18 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 			}
 		}
 	}
-	else if(classname == "KTextEdit")
-	{
-		((MyTextEdit*)w)->setContainer(this);
+	else if((classname == "KTextEdit") || (classname == "KDateTimeWidget") || (classname == "KTimeWidget") ||
+		(classname == "KDateWidget") || (classname == "KIntSpinBox"))
 		disableFilter(w, container);
-	}
-	else if(classname == "KTimeWidget")
-	{
-		((MyTimeWidget*)w)->setContainer(this);
-		disableFilter(w, container);
-	}
-	else if(classname == "KDateWidget")
-	{
-		((MyDateWidget*)w)->setContainer(this);
-		disableFilter(w, container);
-	}
-	else if(classname == "KDateTimeWidget")
-	{
-		((MyDateTimeWidget*)w)->setContainer(this);
-		disableFilter(w, container);
-	}
 
 	return;
 }
 
 void
-StdWidgetFactory::resetEditor()
-{
-	if(m_widget && !m_editor)
-	{
-		QString classname = m_widget->className();
-		QWidget *w = m_widget;
-		if(classname == "KTextEdit")
-			((MyTextEdit*)w)->setContainer(m_container);
-		else if(classname == "KIntSpinBox")
-			((MySpinBox*)w)->setContainer(m_container);
-		else if(classname == "KTimeWidget")
-			((MyTimeWidget*)w)->setContainer(m_container);
-		else if(classname == "KDateWidget")
-			((MyDateWidget*)w)->setContainer(m_container);
-		else if(classname == "KDateTimeWidget")
-			((MyDateTimeWidget*)w)->setContainer(m_container);
-	}
-
-	WidgetFactory::resetEditor();
-}
-
-void
 StdWidgetFactory::changeText(const QString &text)
 {
-	QString n = m_widget->className();
-	QWidget *w = m_widget;
+	QString n = WidgetFactory::m_widget->className();
+	QWidget *w = WidgetFactory::m_widget;
 	if(n == "KIntSpinBox")
 		((KIntSpinBox*)w)->setValue(text.toInt());
 	else
@@ -749,6 +551,23 @@ StdWidgetFactory::autoSaveProperties(const QString &classname)
 	}
 
 	return QStringList();
+}
+
+void
+StdWidgetFactory::editText()
+{
+	QString classname = m_widget->className();
+	QString text;
+	if(classname == "KTextEdit")
+		text = ((KTextEdit*)m_widget)->text();
+	else if(classname == "QLabel")
+		text = ((QLabel*)m_widget)->text();
+
+	if(editRichText(m_widget, text))
+	{
+		changeProperty("textFormat", "RichText", m_container);
+		changeProperty("text", text, m_container);
+	}
 }
 
 StdWidgetFactory::~StdWidgetFactory()

@@ -34,6 +34,7 @@ namespace KFormDesigner {
 
 class ObjectTreeItem;
 class Container;
+class EventEater;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 typedef QDict<ObjectTreeItem> TreeDict;
 typedef QMap<QString, int> Names;
@@ -46,16 +47,17 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 {
 
 	public:
-		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *container=0);
+		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, EventEater *eater, Container *container=0);
 		virtual ~ObjectTreeItem();
 
 		QString		name() const { return m_name; }
 		QString		className() const { return m_className; }
 		QWidget*	widget() const { return m_widget; }
+		EventEater*     eventEater() const { return m_eater; }
 		ObjectTreeItem* parent() const { return m_parent; }
 		ObjectTreeC*	children() { return &m_children; }
 		QMap<QString, QVariant>* modifProp() { return &m_props;}
-		Container*	container() { return m_container;}
+		Container*	container() const { return m_container;}
 
 		void		setWidget(QWidget *w) { m_widget = w; }
 		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
@@ -71,11 +73,11 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		*/
 		void		addModProperty(const QString &property, const QVariant &value);
 
-		int gridRow() { return m_row; }
-		int gridCol() { return m_col; }
-		int gridRowSpan() { return m_rowspan; }
-		int gridColSpan() { return m_colspan; }
-		bool spanMultipleCells() { return m_span; }
+		int gridRow() const { return m_row; }
+		int gridCol() const { return m_col; }
+		int gridRowSpan() const { return m_rowspan; }
+		int gridColSpan() const { return m_colspan; }
+		bool spanMultipleCells() const { return m_span; }
 		void setGridPos(int row, int col, int rowspan, int colspan);
 
 	protected:
@@ -86,6 +88,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QMap<QString, QVariant> m_props;
 		ObjectTreeItem* m_parent;
 		QWidget*	m_widget;
+		EventEater*     m_eater;
 
 		int m_row, m_col, m_rowspan, m_colspan;
 		bool m_span;
@@ -97,7 +100,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0, Container *container=0);
+		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0, EventEater *eater=0, Container *container=0);
 		virtual ~ObjectTree();
 
 		/**

@@ -37,6 +37,22 @@ class WidgetLibrary;
 class ObjectTreeItem;
 class Form;
 
+class KFORMEDITOR_EXPORT EventEater : public QObject
+{
+	Q_OBJECT
+
+	public:
+		EventEater(QWidget *widget, Container *container);
+		~EventEater(){;}
+
+		void  setContainer(QObject *container)  { m_container = container; }
+		bool  eventFilter(QObject *o, QEvent *ev);
+
+	private:
+		QGuardedPtr<QWidget>  m_widget;
+		QGuardedPtr<QObject>  m_container;
+};
+
 /**
  * This class makes a container out of any QWidget. You can then create child widgets, and the background is dotted.
  */

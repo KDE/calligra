@@ -130,6 +130,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
 		static void         loadLayout(const QDomElement &el, ObjectTreeItem *tree);
 		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
+		static void         addIncludeFile(const QString &include, QDomDocument &domDoc);
 };
 
 }

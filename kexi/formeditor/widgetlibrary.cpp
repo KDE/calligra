@@ -48,6 +48,7 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	{
 		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		m_widgets.insert(w->className(), w);
+		m_alternates.insert(w->alternateClassName(), w->className());
 	}
 }
 
@@ -117,14 +118,7 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 
 	return actions;
 }
-/*
-void
-WidgetLibrary::slotPrepareInsert(const QString &c)
-{
-	emit insertRequested(c);
-	kdDebug() << "WidgetLibrary::slotInsertWidget(): preparing: '" << c << "' for insert" << endl;
-}
-*/
+
 QWidget*
 WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name, Container *c)
 {
@@ -165,6 +159,29 @@ WidgetLibrary::displayName(const QString &classname)
 		return m_widgets[classname]->name();
 	else
 		return i18n("Form");
+}
+
+QString
+WidgetLibrary::checkAlternateName(const QString &classname)
+{
+	if(m_widgets.find(classname))
+		return classname;
+	else if(m_alternates.contains(classname))
+	{
+		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << m_alternates[classname] << endl;
+		return m_alternates[classname];
+	}
+	else
+		return classname;
+}
+
+QString
+WidgetLibrary::includeFile(const QString &classname)
+{
+	if(m_widgets.find(classname))
+		return m_widgets[classname]->includeFile();
+	else
+		return QString::null;
 }
 
 QString

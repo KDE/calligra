@@ -21,9 +21,11 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qrect.h>
+#include <qevent.h>
 #include <qcursor.h>
 #include <qvaluevector.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -75,6 +77,55 @@ class VerWidgetList : public WidgetList
 	}
 };
 
+//// Helper class for event filtering on composed widgets
+
+void installRecursiveEventFilter(QObject *object, QObject *container)
+{
+	kdDebug() << "Installing recursive event filter on widget " << object->name() << " of type " << object->className() << endl;
+	object->installEventFilter(container);
+	if(!object->isWidgetType())
+		return;
+	((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
+
+	if(!object->children())
+		return;
+
+	QObjectList list = *(object->children());
+	for(QObject *obj = list.first(); obj; obj = list.next())
+		installRecursiveEventFilter(obj, container);
+}
+
+EventEater::EventEater(QWidget *widget, Container *container)
+ : QObject(container)
+{
+	m_widget = widget;
+	m_container = container;
+
+	installRecursiveEventFilter(widget, this);
+}
+
+bool
+EventEater::eventFilter(QObject *o, QEvent *ev)
+{
+	if(!m_container)
+		return false;
+
+	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent, we need to simulate the Presss event
+	if((m_widget->inherits("QTabWidget")) && (ev->type() == QEvent::MouseButtonRelease))
+	{
+		QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
+		if(mev->button() == LeftButton)
+		{
+			QMouseEvent *myev = new QMouseEvent(QEvent::MouseButtonPress, mev->pos(), mev->button(), mev->state());
+			m_container->eventFilter(m_widget, myev);
+			delete myev;
+			//return true;
+		}
+	}
+
+	return m_container->eventFilter(m_widget, ev);
+}
+
 // Container itself
 
 Container::Container(Container *toplevel, QWidget *container, QObject *parent, const char *name)
@@ -90,15 +141,14 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_layType = NoLayout;
 	m_toplevel = toplevel;
 
-	container->installEventFilter(this);
-
 	if(toplevel)
 	{
 		Container *pc = static_cast<Container *>(parent);
 
 		m_form = toplevel->form();
 
-		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(widget()->className()), widget()->name(), widget(), this);
+		EventEater *eater = new EventEater(container, this);
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(widget()->className()), widget()->name(), widget(), eater, this);
 		setObjectTree(it);
 		if(parent->isWidgetType())
 		{
@@ -165,6 +215,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				return true;
 			}
 
+			if(s->inherits("QTabWidget"))
+				return false;
 			return true;
 		}
 		case QEvent::MouseButtonRelease:
@@ -177,26 +229,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->button() == RightButton)
 			{
-				/*KPopupMenu *parent = m_form->manager()->popupMenu();
-				QWidget *w = (QWidget*)s;
-				QString n = m_form->manager()->lib()->displayName(w->className());
-				KPopupMenu *p = new KPopupMenu();
-
-				int id;
-				bool ok = m_form->manager()->lib()->createMenuActions(w->className(),w,p,this);
-				if(!ok)
-				{
-					id = parent->insertItem(n);
-					parent->setItemEnabled(id, false);
-				}
-				else
-					id = parent->insertItem(n,p);
-
-				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(QCursor::pos()));
-				parent->exec(QCursor::pos());
-				m_form->manager()->setInsertPoint(QPoint());
-
-				parent->removeItem(id);*/
 				bool enable = true;
 				if(((QWidget*)s)->isA("QWidget") || ((!m_toplevel) && (s == m_container)))
 					enable = false;

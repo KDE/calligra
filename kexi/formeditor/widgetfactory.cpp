@@ -19,23 +19,164 @@
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qcursor.h>
-#include <qobjectlist.h>
+//#include <qobjectlist.h>
 
 #include <keditlistbox.h>
 #include <kstdguiitem.h>
 #include <klineedit.h>
 #include <kpushbutton.h>
+#include <ktextedit.h>
+#include <ktoolbar.h>
+#include <kfontcombo.h>
+#include <kcolorcombo.h>
+#include <ktoolbarradiogroup.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "resizehandle.h"
 #include "objpropbuffer.h"
 #include "formmanager.h"
 #include "form.h"
 #include "container.h"
+#include "objecttree.h"
 #include "widgetfactory.h"
 
 
 namespace KFormDesigner {
+
+// A simple dialog to edit rich text
+
+RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
+: KDialogBase(parent, "richtext_dialog", true, i18n("Edit rich text"), Ok|Cancel, Ok, false)
+{
+	QFrame *frame = makeMainWidget();
+	QVBoxLayout *l = new QVBoxLayout(frame);
+	l->setAutoAdd(true);
+
+	m_toolbar = new KToolBar(frame);
+	m_toolbar->setFlat(true);
+	m_toolbar->show();
+
+	m_fcombo = new KFontCombo(m_toolbar);
+	m_toolbar->insertWidget(1, 40, m_fcombo);
+	connect(m_fcombo, SIGNAL(textChanged(const QString&)), this, SLOT(changeFont(const QString &)));
+
+	m_toolbar->insertSeparator();
+
+	m_colCombo = new KColorCombo(m_toolbar);
+	m_toolbar->insertWidget(2, 30, m_colCombo);
+	connect(m_colCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
+
+	m_toolbar->insertButton("text_bold", 3, true, i18n("Bold"));
+	m_toolbar->insertButton("text_italic", 4, true, i18n("Italic"));
+	m_toolbar->insertButton("text_under", 50, true, i18n("Underline"));
+	m_toolbar->setToggle(3, true);
+	m_toolbar->setToggle(4, true);
+	m_toolbar->setToggle(50, true);
+
+	m_toolbar->insertSeparator();
+
+	KToolBarRadioGroup *group = new KToolBarRadioGroup(m_toolbar);
+	m_toolbar->insertButton("text_left", 6, true, i18n("Right Align"));
+	m_toolbar->setToggle(6, true);
+	group->addButton(6);
+	m_toolbar->insertButton("text_center", 7, true, i18n("Left Align"));
+	m_toolbar->setToggle(7, true);
+	group->addButton(7);
+	m_toolbar->insertButton("text_right", 8, true, i18n("Centered"));
+	m_toolbar->setToggle(8, true);
+	group->addButton(8);
+	m_toolbar->insertButton("text_block", 9, true, i18n("Justified"));
+	m_toolbar->setToggle(9, true);
+	group->addButton(9);
+
+	connect(m_toolbar, SIGNAL(toggled(int)), this, SLOT(buttonToggled(int)));
+
+	m_edit = new KTextEdit(text, QString::null, frame, "richtext_edit");
+	m_edit->setTextFormat(RichText);
+	m_edit->setFocus();
+
+	connect(m_edit, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(cursorPositionChanged(int, int)));
+	connect(m_edit, SIGNAL(clicked(int, int)), this, SLOT(cursorPositionChanged(int, int)));
+
+	m_edit->moveCursor(QTextEdit::MoveEnd, false);
+	cursorPositionChanged(0, 0);
+	m_edit->show();
+	frame->show();
+}
+
+QString
+RichTextDialog::text()
+{
+	return m_edit->text();
+}
+
+void
+RichTextDialog::changeFont(const QString &font)
+{
+	m_edit->setFamily(font);
+}
+
+void
+RichTextDialog::changeColor(const QColor &color)
+{
+	m_edit->setColor(color);
+}
+
+void
+RichTextDialog::buttonToggled(int id)
+{
+	bool isOn = m_toolbar->isButtonOn(id);
+
+	switch(id)
+	{
+		case 3: m_edit->setBold(isOn); break;
+		case 4: m_edit->setItalic(isOn); break;
+		case 50: m_edit->setUnderline(isOn); break;
+		case 6: case 7:
+		case 8: case 9:
+		{
+			if(!isOn)  break;
+			switch(id)
+			{
+				case 6:  m_edit->setAlignment(Qt::AlignLeft); break;
+				case 7:  m_edit->setAlignment(Qt::AlignCenter); break;
+				case 8:  m_edit->setAlignment(Qt::AlignRight); break;
+				case 9:  m_edit->setAlignment(Qt::AlignJustify); break;
+				default: break;
+			}
+		}
+		default: break;
+	}
+
+}
+
+void
+RichTextDialog::cursorPositionChanged(int, int)
+{
+//	if (m_edit->hasSelectedText())
+//		return;
+
+	m_fcombo->setCurrentFont(m_edit->currentFont().family());
+	m_colCombo->setColor(m_edit->color());
+	m_toolbar->setButton(3, m_edit->bold());
+	m_toolbar->setButton(4, m_edit->italic());
+	m_toolbar->setButton(50, m_edit->underline());
+
+	int id = 0;
+	switch(m_edit->alignment())
+	{
+		case Qt::AlignLeft:    id = 6; break;
+		case Qt::AlignCenter:  id = 7; break;
+		case Qt::AlignRight:   id = 8; break;
+		case Qt::AlignJustify: id = 9; break;
+		default:  id = 6; break;
+	}
+	m_toolbar->setButton(id, true);
+}
+
+///// Widget Factory //////////////////////////
+
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
@@ -71,8 +212,13 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 void
 WidgetFactory::disableFilter(QWidget *w, Container *container)
 {
-	w->removeEventFilter(container);
-	w->installEventFilter(this);
+//	w->removeEventFilter(container);
+//	w->installEventFilter(this);
+	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
+	if(!tree)
+		return;
+	tree->eventEater()->setContainer(this);
+
 	w->setFocus();
 	m_handles = new ResizeHandleSet(w, true);
 	m_widget = w;
@@ -115,6 +261,19 @@ WidgetFactory::editList(QWidget *w, QStringList &list)
 }
 
 bool
+WidgetFactory::editRichText(QWidget *w, QString &text)
+{
+	RichTextDialog *d = new RichTextDialog(w, text);
+	if( ((QDialog*)d)->exec()== QDialog::Accepted)
+	{
+		text = d->text();
+		return true;
+	}
+	else
+		return false;
+}
+
+bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 {
 	QWidget *w = m_editor ? m_editor : (QWidget *)m_widget;
@@ -145,8 +304,15 @@ WidgetFactory::resetEditor()
 {
 	if(!m_editor && m_widget)
 	{
-		m_widget->removeEventFilter(this);
-		m_widget->installEventFilter(m_container);
+		//m_widget->removeEventFilter(this);
+		//m_widget->installEventFilter(m_container);
+		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(m_widget->name());
+		if(!tree)
+		{
+			kdDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item " << endl;
+			return;
+		}
+		tree->eventEater()->setContainer(m_container);
 	}
 	else if(m_editor)
 	{
@@ -177,7 +343,8 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 	if (!container->form()->manager())
 		return;
 	KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
-	(*buff)[name]->setValue(value, true);
+	if((*buff)[name])
+		(*buff)[name]->setValue(value, true);
 }
 
 void
@@ -194,24 +361,10 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 	buff->addValueDescription(value, desc);
 }
 
-void installRecursiveEventFilter(QObject *object, QObject *container)
-{
-	object->installEventFilter(container);
-	if(!object->isWidgetType())
-		return;
-	((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
-
-	if(!object->children())
-		return;
-
-	QObjectList list = *(object->children());
-	for(QObject *obj = list.first(); obj; obj = list.next())
-		installRecursiveEventFilter(obj, container);
-}
-
 WidgetFactory::~WidgetFactory()
 {
 }
+
 }
 
 #include "widgetfactory.moc"

@@ -224,7 +224,12 @@ InsertWidgetCommand::execute()
 
 	m_container->m_insertRect = m_insertRect;
 	if(!m_container->m_insertRect.isValid())
-		m_container->m_insertRect = QRect(m_point.x(), m_point.y(), w->sizeHint().width(), w->sizeHint().height());
+	{
+		QSize s = w->sizeHint();
+		if(s.isEmpty())
+			s = QSize(20, 20);
+		m_container->m_insertRect = QRect(m_point.x(), m_point.y(), s.width(), s.height());
+	}
 	w->move(m_container->m_insertRect.x(), m_container->m_insertRect.y());
 	w->resize(m_container->m_insertRect.width()-1, m_container->m_insertRect.height()-1);
 	w->show();
@@ -234,7 +239,11 @@ InsertWidgetCommand::execute()
 	m_container->form()->manager()->stopInsert();
 
 	if (!m_container->form()->objectTree()->lookup(m_name))
-		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w));
+	{
+		EventEater *eater = new EventEater(w, m_container);
+		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w, eater));
+	}
+
 
 	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
 	QStringList list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));

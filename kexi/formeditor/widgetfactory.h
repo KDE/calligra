@@ -27,6 +27,8 @@
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 
+#include <kdialogbase.h>
+
 // class QPixmap;
 
 class QWidget;
@@ -34,6 +36,10 @@ class KLineEdit;
 class QDomElement;
 class QDomDocument;
 class QVariant;
+class KToolBar;
+class KTextEdit;
+class KFontCombo;
+class KColorCombo;
 
 namespace KFormDesigner {
 
@@ -42,6 +48,29 @@ class WidgetFactory;
 class Container;
 class ResizeHandleSet;
 class ObjectTreeItem;
+
+class KFORMEDITOR_EXPORT RichTextDialog : KDialogBase
+{
+	Q_OBJECT
+
+	public:
+		RichTextDialog(QWidget *parent, const QString &text);
+		~RichTextDialog(){;}
+
+		QString  text();
+
+	public slots:
+		void  changeFont(const QString &);
+		void  changeColor(const QColor&);
+		void  buttonToggled(int);
+		void  cursorPositionChanged(int, int);
+
+	private:
+		KToolBar  *m_toolbar;
+		KTextEdit  *m_edit;
+		KFontCombo  *m_fcombo;
+		KColorCombo  *m_colCombo;
+};
 
 /**
  * this class holds properties of widgets
@@ -69,10 +98,9 @@ class KFORMEDITOR_EXPORT Widget
 
 		virtual QString description() { return m_desc; }
 
-		/**
-		 * this is executed at doubleclick on the widget
-		 */
-		virtual void	properties() {; }
+		virtual QString  includeFile() { return m_include; }
+
+		virtual QString  alternateClassName() { return m_alternate; }
 
 		virtual WidgetFactory *factory() { return m_factory; }
 
@@ -80,12 +108,16 @@ class KFORMEDITOR_EXPORT Widget
 		void		setClassName(const QString &s) { m_class = s; }
 		void		setName(const QString &n) { m_name = n; }
 		void		setDescription(const QString &desc) { m_desc = desc;}
+		void		setInclude(const QString &include) { m_include = include;}
+		void		setAlternateClassName(const QString &alternate) { m_alternate = alternate; }
 
 	private:
 		QString		m_pixmap;
 		QString		m_class;
 		QString		m_name;
 		QString		m_desc;
+		QString		m_include;
+		QString		m_alternate;
 		WidgetFactory	*m_factory;
 
 };
@@ -154,6 +186,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
 		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
 		virtual void  addValueDescription(Container *container, const char *value, const QString &desc);
+		bool  editRichText(QWidget *w, QString &text);
 
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,

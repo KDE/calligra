@@ -21,7 +21,6 @@
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop
 * Better editor for iconview and listview if they really are necessary
-* Rich text editor (see BasKet source)
 
 ^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
 * Finish sync between Form and ObjectTreeView (2/21/04)
@@ -49,3 +48,4 @@
 * Change tab position by drag'n drop (4/14/04)
 * Icons in ObjectTreeView(in branch) + context menu (4/14/04)
 * Modify Spacer for better compatibility (save orientation and expanding) (4/19/04)
+* Rich text editor (see BasKet source) (4/20/04)
