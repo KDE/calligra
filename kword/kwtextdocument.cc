@@ -17,13 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwtextdocument.h"
-#include "kwtextparag.h"
+#include "kwcommand.h"
 #include "kwdoc.h"
+#include "kwtextdocument.h"
 #include "kwtextframeset.h"
+#include "kwtextparag.h"
+
+#include <kooasiscontext.h>
+
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include "kwcommand.h"
 #include <klocale.h>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
@@ -56,21 +59,61 @@ KoTextParag * KWTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, K
 
 KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
 {
-    //kdDebug()<<" KoTextDocument::deleteTextCommand************\n";
+    //kdDebug(32500)<<" KoTextDocument::deleteTextCommand************\n";
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
 bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context,
-                                  KoTextParag* parag, int pos,
-                                  QString& /*textData*/, KoTextCustomItem* & /*customItem*/ )
+                                  KoTextParag* parag, uint pos,
+                                  QString& textData, KoTextCustomItem* & customItem )
 {
     const QString tagName( tag.tagName() );
     const bool textFoo = tagName.startsWith( "text:" );
-    kdDebug() << k_funcinfo << tagName << endl;
+    kdDebug(32500) << "KWTextDocument::loadSpanTag: " << tagName << endl;
 
     if ( textFoo )
     {
-        // TODO
+        if ( tagName == "text:a" )
+        {
+            QString href( tag.attribute("xlink:href") );
+            if ( href.startsWith("#") )
+            {
+                context.styleStack().save();
+                // We have a reference to a bookmark (### TODO)
+                // As we do not support it now, treat it as a <text:span> without formatting
+                parag->loadOasisSpan( tag, context, pos ); // recurse
+                context.styleStack().restore();
+            }
+            else
+            {
+                // The text is contained in a text:span inside the text:a element. In theory
+                // we could have multiple spans there, but OO ensures that there is always only one,
+                // splitting the hyperlink if necessary (at format changes).
+                // Note that we ignore the formatting of the span.
+                QDomElement spanElem = tag.namedItem( "text:span" ).toElement();
+                QString text;
+                if( spanElem.isNull() )
+                    text = tag.text();
+                else {
+                    // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
+                    // This allows to use the span's format for the variable.
+                    //kdDebug(32500) << "filling stack with " << spanElem.attribute( "text:style-name" ) << endl;
+                    context.fillStyleStack( spanElem, "text:style-name" );
+                    text = spanElem.text();
+                }
+                textData = '#'; // hyperlink placeholder
+                // unused tag.attribute( "office:name" )
+                KoVariableCollection& coll = context.variableCollection();
+                customItem = new KoLinkVariable( this, text, href,
+                                                 coll.formatCollection()->format( "STRING" ),
+                                                 &coll );
+            }
+            return true;
+        }
+        else
+        {
+             // TODO
+        }
     }
     else // non "text:" tags
     {
@@ -97,69 +140,43 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
 #if 0 // TODO Implement loading of following Oasis tags
     if ( textFoo &&
          ( tagName == "text:footnote" || tagName == "text:endnote" ) )
-        {
-            textData = '#'; // anchor placeholder
-            importFootnote( doc, ts, outputFormats, pos, tagName );
-            // do me last, combination of variable and frameset.
-        }
-        else if ( textFoo && tagName == "text:a" )
-        {
-            m_styleStack.save();
-            QString href( ts.attribute("xlink:href") );
-            if ( href.startsWith("#") )
-            {
-                // We have a reference to a bookmark (### TODO)
-                // As we do not support it now, treat it as a <text:span> without formatting
-                parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
-            }
-            else
-            {
-                // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
-                // So we have to fake.
-                QDomElement fakeParagraph, fakeFormats;
-                uint fakePos=0;
-                QString text;
-                parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
-                textData = '#'; // hyperlink placeholder
-                QDomElement linkElement (doc.createElement("LINK"));
-                linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
-                linkElement.setAttribute("linkName",text);
-                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
-            }
-            m_styleStack.restore();
-        }
-        else if ( textFoo && tagName == "text:bookmark" )
-        {
-            // the number of <PARAGRAPH> tags in the frameset element is the parag id
-            // (-1 for starting at 0, +1 since not written yet)
-            Q_ASSERT( !m_currentFrameset.isNull() );
+    {
+        textData = '#'; // anchor placeholder
+        importFootnote( doc, ts, outputFormats, pos, tagName );
+        // do me last, combination of variable and frameset.
+    }
+    else if ( textFoo && tagName == "text:bookmark" )
+    {
+        // the number of <PARAGRAPH> tags in the frameset element is the parag id
+        // (-1 for starting at 0, +1 since not written yet)
+        Q_ASSERT( !m_currentFrameset.isNull() );
+        appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
+                        pos, ts.attribute( "text:name" ) );
+    }
+    else if ( textFoo && tagName == "text:bookmark-start" ) {
+        m_bookmarkStarts.insert( ts.attribute( "text:name" ),
+                                 BookmarkStart( m_currentFrameset.attribute( "name" ),
+                                                numberOfParagraphs( m_currentFrameset ),
+                                                pos ) );
+    }
+    else if ( textFoo && tagName == "text:bookmark-end" ) {
+        QString bkName = ts.attribute( "text:name" );
+        BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
+        if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
+            // insert simple bookmark then
             appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
                             pos, ts.attribute( "text:name" ) );
-        }
-        else if ( textFoo && tagName == "text:bookmark-start" ) {
-            m_bookmarkStarts.insert( ts.attribute( "text:name" ),
-                                     BookmarkStart( m_currentFrameset.attribute( "name" ),
-                                                    numberOfParagraphs( m_currentFrameset ),
-                                                    pos ) );
-        }
-        else if ( textFoo && tagName == "text:bookmark-end" ) {
-            QString bkName = ts.attribute( "text:name" );
-            BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
-            if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
-                // insert simple bookmark then
-                appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                                pos, ts.attribute( "text:name" ) );
+        } else {
+            if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
+                // Oh tell me this never happens...
+                kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
             } else {
-                if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
-                    // Oh tell me this never happens...
-                    kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
-                } else {
-                    appendBookmark( doc, (*it).paragId, (*it).pos,
-                                    numberOfParagraphs( m_currentFrameset ), pos, it.key() );
-                }
-                m_bookmarkStarts.remove( it );
+                appendBookmark( doc, (*it).paragId, (*it).pos,
+                                numberOfParagraphs( m_currentFrameset ), pos, it.key() );
             }
+            m_bookmarkStarts.remove( it );
         }
+    }
 #endif
     return false;
 }

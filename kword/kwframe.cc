@@ -591,7 +591,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
         {
             // OOwriter doesn't support fill patterns (bkStyle).
             // But the file support is more generic, and supports: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
-            // TODO figure out again how to import the brush style, iirc it's possible.
+            // TODO - see OoImpressImport::appendBrush
             m_backgroundColor = QBrush( QColor( color ) /*, TODO */ );
         }
     }
@@ -605,8 +605,6 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
         m_borderBottom.loadFoBorder( styleStack.attribute("fo:border", "bottom") );
     }
     // TODO more refined border spec for double borders (3.11.28)
-
-    // TODO m_bCopy
 
     const QCString frameBehaviorOnNewPage = styleStack.attribute( "style:frame-behavior-on-new-page" ).latin1();
     if ( frameBehaviorOnNewPage == "followup" )
@@ -1628,6 +1626,10 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     if ( hasMinHeight )
         frame->setMinFrameHeight( height );
     frame->setZOrder( tag.attribute( "draw:z-index" ).toInt() );
+    // Copy-frames. OASIS extension requested on 29/03/2004.
+    // We currently ignore the value of the copy-of attribute. It probably needs to
+    // be handled like chain-next-name (kwtextframeset.cc) but for all types of frameset.
+    frame->setCopy( tag.hasAttribute( "draw:copy-of" ) );
     frame->loadCommonOasisProperties( context, this );
 
     addFrame( frame, false );

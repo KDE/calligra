@@ -31,6 +31,7 @@
 #include <kocommand.h>
 #include "kwvariable.h"
 #include <koPoint.h>
+#include <koPictureKey.h>
 
 class KWFrameSet;
 class KWTableStyle;

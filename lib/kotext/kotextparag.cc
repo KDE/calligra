@@ -1665,6 +1665,9 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         QString afterText = tagName.mid( 5 );
         KoTextCustomItem* customItem = 0;
 
+        // allow loadSpanTag to modify the stylestack
+        context.styleStack().save();
+
         // Try to keep the order of the tag names by probability of happening
         if ( node.isText() )
         {
@@ -1722,6 +1725,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
                 if ( !handled )
                 {
                     kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
+                    context.styleStack().restore();
                     continue;
                 }
             }
@@ -1739,6 +1743,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
             pos += length;
         }
+        context.styleStack().restore();
     }
 }
 

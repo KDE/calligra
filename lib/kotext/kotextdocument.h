@@ -334,7 +334,7 @@ protected:
      * @return true (and optionally @p textData and @p customItem) if @p tag was handled.
      */
     virtual bool loadSpanTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
-                              KoTextParag* /*parag*/, int /*pos*/,
+                              KoTextParag* /*parag*/, uint /*pos*/,
                               QString& /*textData*/, KoTextCustomItem* & /*customItem*/ ) {
         return false;
     }

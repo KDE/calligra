@@ -52,7 +52,7 @@ public:
 
     /// Extensions to KoTextParag::loadOasisSpan
     virtual bool loadSpanTag( const QDomElement& tag, KoOasisContext& context,
-                              KoTextParag* parag, int pos,
+                              KoTextParag* parag, uint pos,
                               QString& textData, KoTextCustomItem* & customItem );
 
 protected:

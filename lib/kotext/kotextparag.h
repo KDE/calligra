@@ -149,6 +149,8 @@ public:
     /// Load from XML
     void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
 
+    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
+
     void applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
 
 #ifndef NDEBUG
@@ -192,5 +194,4 @@ protected:
     QMap<int, int> m_tabCache;
 
 private:
-   void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
    KoParagLayout loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle );
