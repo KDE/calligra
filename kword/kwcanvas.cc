@@ -2107,12 +2107,12 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
         switch ( e->type() ) {
             case QEvent::FocusIn:
-		    kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
+		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
                 return TRUE;
             case QEvent::FocusOut:
-		    kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
+		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
                 if ( m_scrollTimer->isActive() )
@@ -2121,8 +2121,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 return TRUE;
             case QEvent::KeyPress:
             {
-		    kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-		    kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+		//  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+		//  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
 #ifndef NDEBUG
                 // Debug keys
