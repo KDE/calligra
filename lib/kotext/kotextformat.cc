@@ -179,11 +179,6 @@ QColor KoTextFormat::defaultTextColor( QPainter * painter )
 float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 {
     int pointSizeLU = font().pointSize();
-    if ( m_attributeFont== ATT_SMALL_CAPS )
-    {
-        QFontMetrics fm( font() );
-        pointSizeLU = (int)( pointSizeLU * ((double)fm.boundingRect("x").height()/(double)fm.height()));
-    }
 
     if ( vAlign() != KoTextFormat::AlignNormal )
         pointSizeLU = (int)( pointSizeLU *relativeTextSize() );
@@ -193,11 +188,6 @@ float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 float KoTextFormat::refPointSize() const
 {
     int pointSizeLU = font().pointSize();
-    if ( m_attributeFont== ATT_SMALL_CAPS )
-    {
-        QFontMetrics fm( font() );
-        pointSizeLU = (int)( pointSizeLU * ((double)fm.boundingRect("x").height()/(double)fm.height()));
-    }
     if ( vAlign() != KoTextFormat::AlignNormal )
         pointSizeLU = (int)( pointSizeLU * relativeTextSize());
     return KoTextZoomHandler::layoutUnitPtToPt( pointSizeLU );
@@ -294,30 +284,44 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
     int r = c->c.row();
     if( r < 0x06 || r > 0x1f )
     {
+        // Small caps -> we can't use the cached font metrics from KoTextFormat
+        if ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.upper() != c->c )
+        {
+            QFont font = applyZoom ? screenFont( zh ) : refFont();
+            QFontMetrics fm = refFontMetrics(); // only used for proportions, so applyZoom doesn't matter
+            double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.ascent());
+            font.setPointSizeFloat( pointSize );
+            pixelww = QFontMetrics( font ).width( displayedChar( c->c ) );
+        }
+        else
         // Use the cached font metrics from KoTextFormat
         if ( applyZoom )
         {
 	    if ( r ) {
-                pixelww = this->screenFontMetrics( zh ).width( displayedChar( c->c) );
+                pixelww = this->screenFontMetrics( zh ).width( displayedChar( c->c ) );
 	    } else {
                 // Use the m_screenWidths[] array when possible, even faster
                 Q_ASSERT( unicode < 256 );
 		pixelww = d->m_screenWidths[ unicode ];
                 // Not in cache yet -> calculate
                 if ( pixelww == 0 ) {
-                    pixelww = this->screenFontMetrics( zh ).width( displayedChar( c->c) );
+                    pixelww = this->screenFontMetrics( zh ).width( displayedChar( c->c ) );
                     Q_ASSERT( pixelww < 65535 );
                     d->m_screenWidths[ unicode ] = pixelww;
                 }
 	    }
         }
         else
-            pixelww = this->refFontMetrics().width( displayedChar( c->c) );
+            pixelww = this->refFontMetrics().width( displayedChar( c->c ) );
     }
     else {
         // Here we have no choice, we need to create the format
         KoTextFormat tmpFormat( *this );  // make a copy
-        tmpFormat.setPointSizeFloat( applyZoom ? screenPointSize( zh ) : refPointSize() );
+        double factor = 1.0;
+        if ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.upper() != c->c )
+            factor = ((double)fm.boundingRect("x").height()/(double)fm.ascent());
+
+        tmpFormat.setPointSizeFloat( factor * ( applyZoom ? screenPointSize( zh ) : refPointSize() ) );
         // complex text. We need some hacks to get the right metric here
         QString str;
         int pos = 0;
@@ -326,7 +330,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         int off = i - pos;
         int end = QMIN( parag->length(), i + 4 );
         while ( pos < end ) {
-            str += displayedChar( parag->at(pos)->c);
+            str += displayedChar( parag->at(pos)->c );
             pos++;
         }
         pixelww = tmpFormat.width( str, off );
@@ -360,16 +364,15 @@ int KoTextFormat::height() const
 
 QString KoTextFormat::displayedString( const QString& str )const
 {
-    if ( m_attributeFont== ATT_NONE)
+    switch ( m_attributeFont ) {
+    case ATT_NONE:
         return str;
-    else if ( m_attributeFont== ATT_UPPER)
+    case ATT_UPPER:
+    case ATT_SMALL_CAPS:
         return str.upper();
-    else if ( m_attributeFont== ATT_LOWER)
+    case ATT_LOWER:
         return str.lower();
-    else if ( m_attributeFont== ATT_SMALL_CAPS)
-        return str.upper();
-    else
-    {
+    default:
         kdDebug()<<" Error in AttributeStyle \n";
         return str;
     }
@@ -377,16 +380,15 @@ QString KoTextFormat::displayedString( const QString& str )const
 
 QChar KoTextFormat::displayedChar( QChar c )const
 {
-    if ( m_attributeFont== ATT_NONE)
+    switch ( m_attributeFont ) {
+    case ATT_NONE:
         return c;
-    else if ( m_attributeFont== ATT_UPPER)
+    case ATT_SMALL_CAPS:
+    case ATT_UPPER:
         return c.upper();
-    else if ( m_attributeFont== ATT_LOWER)
+    case ATT_LOWER:
         return c.lower();
-    else if ( m_attributeFont== ATT_SMALL_CAPS)
-        return c.upper();
-    else
-    {
+    default:
         kdDebug()<<" Error in AttributeStyle \n";
         return c;
     }

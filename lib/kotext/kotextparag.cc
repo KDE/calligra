@@ -352,7 +352,7 @@ int KoTextParag::lineSpacing( int line ) const
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
-        kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
+        //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
 
         if ( m_layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
         {
@@ -530,9 +530,17 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     // 2) Sort out the font
     QFont font( lastFormat->screenFont( zh ) );
+    if ( lastFormat->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && s[start].upper() != s[start] )
+    {
+        QFontMetrics fm( font );
+        double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.ascent());
+        font.setPointSizeFloat( pointSize );
+        //kdDebug() << "drawParagStringInternal: drawing small caps for '" << s << "'" << " with pointSize=" << pointSize << endl;
+    }
+
 #if 0
     QFontInfo fi( font );
-    kdDebug(32500) << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
+    kdDebug(32500) << "KoTextParag::drawParagStringInternal requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
     QFontMetrics fm( font );
     kdDebug(32500) << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
 #endif

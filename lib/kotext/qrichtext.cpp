@@ -4267,25 +4267,14 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 {
     if ( !visible )
 	return;
-    KoTextStringChar *chr = at( 0 );
-    Q_ASSERT( chr );
-    if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", (void*)this, paragId()); return; }
-    int h = 0;
-    int baseLine = 0, lastBaseLine = 0;
-    KoTextFormat *lastFormat = 0;
-    int lastY = -1;
+    //KoTextStringChar *chr = at( 0 );
+    //if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", (void*)this, paragId()); return; }
+
     // This is necessary with the current code, but in theory it shouldn't
     // be necessary, if Xft really gives us fully proportionnal chars....
 #define CHECK_PIXELXADJ
 
-#ifdef CHECK_PIXELXADJ
-    int lastXAdj = 0;
-#endif
-    int startX = 0;
-    int bw = 0;
-    int cy = 0;
     int curx = -1, cury = 0, curh = 0, curline = 0;
-    bool lastDirection = chr->rightToLeft;
 
     QString qstr = str->toString();
 
@@ -4312,54 +4301,53 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     }
 
     int line = -1;
-    int cw;
-    int paintEnd = -1;
-    int lasth = 0;
-    int i = 0;
 
-    // Draw them lines!
-    int startOfLine;
+    // Draw the lines!
     line=m_lineChanged;
     if(line<0) line=0;
 
-    int numLines=lines();
+    int numLines = lines();
     for(;line<numLines;line++)
     {
 	// get the start and length of the line
-	int lineLen;
 	int nextLine;
+        int startOfLine;
     	lineStartOfLine(line, &startOfLine);
 	if(line==(numLines-1))
 		nextLine=length();
 	else
 		lineStartOfLine(line+1, &nextLine);
-	lineLen=(nextLine-startOfLine);
+	int lineLen=(nextLine-startOfLine);
 
 	// init this line
+        int cy, h, baseLine;
 	lineInfo( line, cy, h, baseLine );
-	lasth = h;
+	int lasth = h;
 	if ( clipy != -1 && cy > clipy - r.y() + cliph ) // outside clip area, leave
 	    break;
-	if ( lastBaseLine == 0 )
-	lastBaseLine = baseLine;
+	int lastBaseLine = baseLine;
 
-    	// initialise the line
+        // Vars related to the current "run of text"
 	int paintStart = startOfLine;
-	paintEnd = startOfLine;
-	lastY = cy;
-	chr = at(startOfLine);
-	startX=chr->x;
-	bw=cw=chr->width;
-
-	// only reset lastFormat if it wasn't set before!
-	if(!lastFormat)
-		lastFormat = chr->format();
+	int paintEnd = startOfLine;
+	int lastY = cy;
+	KoTextStringChar* chr = at(startOfLine);
+        bool lastDirection = chr->rightToLeft;
+	int startX = chr->x;
+	int bw = chr->width;
+        KoTextFormat *lastFormat = lastFormat = chr->format();
+#ifdef CHECK_PIXELXADJ
+        int lastXAdj = 0;
+#endif
+        bool lastLowercase = chr->c.upper() != chr->c; // for Small Caps
 
 	// okay, paint the line!
-	for(i=startOfLine;i<nextLine;i++)
+	for(int i=startOfLine;i<nextLine;i++)
 	{
 		chr = at( i );
-	        cw = chr->width;
+                bool isLowercase = chr->c.upper() != chr->c;
+                kdDebug() << "c=" << QString(chr->c) << " isLowercase=" << isLowercase << endl;
+	        int cw = chr->width;
 			// check for cursor mark
 		if ( cursor && this == cursor->parag() && i == cursor->index() ) {
 		    curx = cursor->x();
@@ -4385,13 +4373,14 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 		}
 		//if something (format, etc.) changed, draw what we have so far
 		if ( ( (alignment() & Qt::AlignJustify) == Qt::AlignJustify && paintEnd != -1 &&  at(paintEnd)->c.isSpace() ) ||
-	#ifdef CHECK_PIXELXADJ
+#ifdef CHECK_PIXELXADJ
 	            lastXAdj != chr->pixelxadj ||
-	#endif
+#endif
 		    endOfLine ||
 		    lastDirection != (bool)chr->rightToLeft ||
 		    chr->startOfRun ||
 		    lastY != cy || chr->format() != lastFormat ||
+                    ( lastFormat->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && isLowercase != lastLowercase ) ||
 		    ( paintEnd != -1 && at( paintEnd )->c =='\t' ) || chr->c == '\t' ||
 		    ( paintEnd != -1 && at( paintEnd )->c.unicode() == 0xad ) || chr->c.unicode() == 0xad ||
 		    selectionChange ||
@@ -4445,9 +4434,10 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 		lastBaseLine = baseLine;
 		lasth = h;
 		lastDirection = chr->rightToLeft;
-	#ifdef CHECK_PIXELXADJ
+#ifdef CHECK_PIXELXADJ
 	        lastXAdj = chr->pixelxadj;
-	#endif
+#endif
+                lastLowercase = isLowercase;
 	} // end of charecter loop
     }
 
