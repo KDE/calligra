@@ -50,8 +50,7 @@ METASOURCES = AUTO
 messages: rc.cpp
 	rm -f tips.cpp
 	(cd data && $(PREPARETIPS) > ../tips.cpp)
-	$(EXTRACTRC) data/*.rc >> rc.cpp; \
-	LIST=`find . -name \*.ui`; \
+	LIST="data/*.rc `find . -name \*.ui`"; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \
 	fi; \
