@@ -35,7 +35,7 @@
 
 namespace Kexi
 {
-	bool isIdentifier(const QString& s) {
+	inline bool isIdentifier(const QString& s) {
 		uint i;
 		for (i=0; i<s.length(); i++) {
 			QChar c = s.at(i).lower();

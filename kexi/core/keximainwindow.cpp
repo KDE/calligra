@@ -40,6 +40,8 @@
 #include <kglobalsettings.h>
 #include <kparts/componentfactory.h>
 
+#include <kexidb/connection.h>
+
 #include "kexibrowser.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
@@ -52,6 +54,7 @@
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
+#include "kexicreateitemdlg.h"
 
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
@@ -856,7 +859,7 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	kdDebug() << "KexiMainWindow::activeWindowChanged() to = " << (dlg ? dlg->caption() : "") << endl;
 
-	KXMLGUIClient *client;
+	KXMLGUIClient *client=0;
 
 	if (!dlg)
 		client=0;
@@ -1497,7 +1500,30 @@ bool KexiMainWindow::newObject( KexiPart::Info *info )
 {
 	if (!info)
 		return false;
-	//TODO
+	KexiPart::Part *part = Kexi::partManager().part(info->mime());
+	if(!part)
+		return false;
+
+	KexiCreateItemDlg *dlg = new KexiCreateItemDlg(this, info->objectName(), "citem");
+	if(!dlg->exec())
+		return false;
+
+	if(!project()->dbConnection()->executeQuery(QString("INSERT INTO kexi__objects VALUES(NULL, %1, '%2', '%3', NULL)").arg(info->projectPartID()).arg(dlg->name()).arg(dlg->caption())))
+		return false;
+
+	KexiPart::Item *it = new KexiPart::Item();
+	it->setIdentifier(project()->dbConnection()->lastInsertedAutoIncValue("o_id", "kexi__objects"));
+	it->setMime(info->mime());
+	it->setName(dlg->name());
+	it->setCaption(dlg->caption());
+
+	kdDebug() << "KexiMainWindow::newObject(): id = " << it->identifier() << endl;
+
+	d->nav->addItem(it);
+
+	openObject(it, Kexi::DesignViewMode);
+
+	delete dlg;
 	return true;
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Peter Simonsson <psn@linux.se>
+   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,40 +15,28 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
- */
+*/
 
-#ifndef _KEXICOMBOBOXTABLEEDIT_H_
-#define _KEXICOMBOBOXTABLEEDIT_H_
+#ifndef KEXICREATEITEMDLG_H
+#define KEXICREATEITEMDLG_H
 
-#include <kcombobox.h>
+#include <qlineedit.h>
+#include "createitemui.h"
 
-#include "kexidb/field.h"
-#include "kexitableedit.h"
-
-/**
- * 
- * Peter Simonsson
- **/
-class KexiComboBoxTableEdit : public KexiTableEdit
+class KexiCreateItemDlg : public CreateItemUI
 {
+	Q_OBJECT
+
 	public:
-		KexiComboBoxTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
-			QWidget *parent=0);
-//		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
-//			QWidget *parent=0, const char *name=0);
-		
-		virtual QVariant value(bool &ok);
+		KexiCreateItemDlg(QWidget *parent, const QString &iname, const char *name);
+		~KexiCreateItemDlg();
 
-		virtual void clear();
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
+		QString name() const { return itname->text(); }
+		QString caption() const { return itcaption->text(); }
 
-		virtual bool valueIsNull();
-		virtual bool valueIsEmpty();
-
-	private:
-		//pointer for to reduces casting (typing :)
-		KComboBox *m_combo;
+	protected slots:
+		void textChanged();
 };
 
 #endif
+

@@ -242,15 +242,13 @@ KexiPropertyEditor::slotColumnSizeChanged(int section, int, int newS)
 void
 KexiPropertyEditor::reset(bool editorOnly)
 {
-	if(m_currentEditor)
-	{
-		delete m_currentEditor;
-		m_currentEditor = 0;
-	}
+	delete m_currentEditor;
+	m_currentEditor = 0;
 
 	if(!editorOnly)
 	{
 		clear();
+		m_topItem = 0;
 	}
 }
 

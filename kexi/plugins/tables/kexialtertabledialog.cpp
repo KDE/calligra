@@ -21,8 +21,10 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qsplitter.h>
 
 #include <kiconloader.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -31,6 +33,13 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
 
+#include <kexiproject.h>
+#include <keximainwindow.h>
+
+#include <kexipropertybuffer.h>
+#include <kexiproperty.h>
+#include "kexipropertyeditor.h"
+
 #include "kexitableview.h"
 
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
@@ -38,6 +47,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
  : KexiViewBase(win, parent, name)
 {
 	m_table = &table;
+	m_constraints.resize(101);
+	m_row = 0;
 	init();
 }
 
@@ -51,25 +62,58 @@ void KexiAlterTableDialog::init()
 	data->setInsertingEnabled( false );
 	data->addColumn( new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text) );
 //js TODO: COMBO
-	data->addColumn( new KexiTableViewColumn(i18n("Data type"), KexiDB::Field::Text) );
+	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
+	KexiDB::FieldTypeNames t;
+	f->setEnumHints(t);
+
+	data->addColumn( new KexiTableViewColumn(*f) );
 	data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
 
-	KexiTableItem *item = new KexiTableItem(0);
+/*	KexiTableItem *item = new KexiTableItem(0);
 	item->push_back(QVariant("name"));
 	item->push_back(QVariant("Text"));
 	item->push_back(QVariant(""));
 	data->append(item);
+*/
+	for(unsigned int i=0; i < m_table->fieldCount(); i++)
+	{
+		KexiDB::Field *field = m_table->field(i);
+		KexiTableItem *item = new KexiTableItem(0);
+		item->push_back(QVariant(field->name()));
+		item->push_back(QVariant(field->type()));
+		item->push_back(QVariant(""));
+		data->append(item);
 
-	for (int i=0; i<100; i++) {
-		item = new KexiTableItem(0);
+		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
+		buff->insert("pkey", KexiProperty(i18n("Primary Key"), QVariant(field->isPrimaryKey(), 4)));
+		int len = field->length();
+		if(len == 0)
+			len = field->precision();
+
+		buff->insert("len", KexiProperty(i18n("Length"), QVariant(200)));
+		m_constraints.insert(i, buff);
+	}
+
+	for (int i=m_table->fieldCount(); i<100; i++) {
+		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
+		buff->insert("pkey", KexiProperty(i18n("Primary Key"), QVariant(false, 4)));
+		buff->insert("len", KexiProperty(i18n("Length"), QVariant(200)));
+		m_constraints.insert(i, buff);
+		KexiTableItem *item = new KexiTableItem(3);
 		data->append(item);
 	}
 
-	m_view = new KexiTableView(data, this, "tableview");
+	QSplitter *splitter = new QSplitter(Vertical, this);
+
+	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_constraints.size() << " items" << endl;
+
+	m_view = new KexiTableView(data, splitter, "tableview");
+	m_view->setNavigatorEnabled(false);
 	setFocusProxy(m_view);
-/*
+	
+
 	connect(m_view, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
-	//! before closing - we'are accepting editing
+/*	//! before closing - we'are accepting editing
 	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
 
 	//! updating actions on start/stop editing
@@ -77,9 +121,14 @@ void KexiAlterTableDialog::init()
 	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
 
 */
+	m_properties = new KexiPropertyEditor(splitter);
+	m_properties->setBuffer(m_constraints.at(0));
+
 	QVBoxLayout *box = new QVBoxLayout(this);
-	box->addWidget(m_view);
+	box->addWidget(splitter);
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
+	resize(m_view->sizeHint());
+	m_view->setFocus();
 	resize( preferredSizeHint( m_view->sizeHint() ) );
 	m_view->setFocus();
 	initActions();
@@ -122,12 +171,61 @@ QSize KexiAlterTableDialog::sizeHint() const
 
 // update actions --------------
 
-/*
-void KexiAlterTableDialog::slotCellSelected(int col, int row)
+
+void KexiAlterTableDialog::slotCellSelected(int, int row)
 {
-	slotUpdateRowActions(row);
+	kdDebug() << "KexiAlterTableDialog::slotCellSelected()" << endl;
+	if(row == m_row)
+		return;
+
+	m_properties->setBuffer(m_constraints.at(row));
+	m_row = row;
 }
 
+bool KexiAlterTableDialog::beforeSwitchTo(int)
+{
+	KexiDB::TableSchema *nt = new KexiDB::TableSchema(m_table->name());
+	nt->setCaption(m_table->caption());
+
+	KexiTableViewData *data = m_view->data();
+	int i=0;
+	for(KexiTableItem *it = data->first(); it; it = data->next())
+	{
+		if(!it->at(0).toString().isEmpty())
+		{
+			KexiDB::Field *f = new KexiDB::Field(nt);
+			f->setName(it->at(0).toString());
+			f->setType((KexiDB::Field::Type)it->at(1).toInt());
+			f->setPrimaryKey(m_constraints.at(i)->find("pkey").data().value().toBool());
+
+			nt->addField(f);
+		}
+		i++;
+	}
+
+	KexiDB::TableSchema *s = mainWin()->project()->dbConnection()->tableSchema(m_table->name());
+	if(!s)
+	{
+		KexiDB::TableSchema *ts = mainWin()->project()->dbConnection()->tableSchema("kexi__objects");
+		mainWin()->project()->dbConnection()->dropTable(m_table->name());
+		mainWin()->project()->dbConnection()->createTable(nt);
+	}
+	else
+	{
+		KexiDB::Cursor *cursor = mainWin()->project()->dbConnection()->executeQuery(*s, KexiDB::Cursor::Buffered);
+		mainWin()->project()->dbConnection()->dropTable(m_table->name());
+		mainWin()->project()->dbConnection()->createTable(nt);
+		for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
+		{
+			
+		}
+		mainWin()->project()->dbConnection()->deleteCursor(cursor);
+	}
+
+	return true;
+}
+
+/*
 void KexiAlterTableDialog::slotUpdateRowActions(int row)
 {
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );

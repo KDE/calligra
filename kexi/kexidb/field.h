@@ -37,6 +37,12 @@ class TableSchema;
 class FieldList;
 class Expression;
 
+class FieldTypeNames : public QValueVector<QString>
+{
+	public:
+		FieldTypeNames();
+};
+
 class KEXI_DB_EXPORT Field
 {
 	public:
@@ -64,8 +70,9 @@ class KEXI_DB_EXPORT Field
 			Text = 11,         /*! other name: Varchar; no more than 200 bytes, for efficiency */
 			LongText = 12,     /*! other name: Memo. More than 200 bytes*/
 			BLOB = 13,         /*! large binary object */
+			Enum = 14,	   /*! a integer internal with a string list of hints */
 
-			LastType = 13,     /*! This line should be at the end of the list of types! */
+			LastType = 14,     /*! This line should be at the end of the list of types! */
 			
 			//! special, interanal types:
 			Asterisk = 128     /*! type used in QueryAsterisk subclass objects only,
@@ -299,6 +306,12 @@ class KEXI_DB_EXPORT Field
 		*/
 		void setExpression(KexiDB::Expression *expr);
 
+		/*! Returns the hints for enum fields */
+		QValueVector<QString> enumHints() { return m_hints; }
+
+		/*! sets the hint for enum fields */
+		void setEnumHints(const QValueVector<QString> &l) { m_hints = l; }
+
 	protected:
 		FieldList *m_parent; //!< In most cases this points to a TableSchema 
 		                     //!< object that field is assigned.
@@ -314,18 +327,20 @@ class KEXI_DB_EXPORT Field
 		QString m_caption;
 		QString m_help;
 		uint m_width;
+		QValueVector<QString> m_hints;
 
 		Expression *m_expr;
 
-		class FieldTypeNames;
-		
 		//! real i18n'd type names
 		static FieldTypeNames m_typeNames;
 
 	friend class Connection;
 	friend class TableSchema;
 	friend class QuerySchema;
+
+	public:
 };
+
 
 
 

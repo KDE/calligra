@@ -33,6 +33,7 @@
 
 using namespace KexiDB;
 
+
 Field::Field()
 	:m_parent(0)
 	,m_name("")
@@ -63,6 +64,8 @@ Field::Field(TableSchema *tableSchema)
 {
 	setConstraints(NoConstraints);
 }
+
+FieldTypeNames Field::m_typeNames;
 
 Field::Field(const QString& name, Type ctype,
  uint cconst, uint options, uint length, uint precision,
@@ -126,30 +129,6 @@ Field::~Field() {
 	delete m_expr;
 }
 
-class Field::FieldTypeNames : public QValueVector<QString>
-{
-public:
-	FieldTypeNames() : QValueVector<QString>()
-	{
-		resize(Field::LastType + 1);
-		this->at(Field::Byte) = I18N_NOOP("Byte");
-		this->at(Field::ShortInteger) = I18N_NOOP("Short integer number");
-		this->at(Field::Integer) = I18N_NOOP("Integer number");
-		this->at(Field::BigInteger) = I18N_NOOP("Big integer number");
-//		this->at(Field::AutoIncrement) = I18N_NOOP("Auto increment number");
-		this->at(Field::Boolean) = I18N_NOOP("True/false value");
-		this->at(Field::Date) = I18N_NOOP("Date");
-		this->at(Field::DateTime) = I18N_NOOP("Date with time");
-		this->at(Field::Time) = I18N_NOOP("Time");
-		this->at(Field::Float) = I18N_NOOP("Single precision number");
-		this->at(Field::Double) = I18N_NOOP("Double precision number");
-		this->at(Field::Text) = I18N_NOOP("Text");
-		this->at(Field::LongText) = I18N_NOOP("Long text");
-		this->at(Field::BLOB) = I18N_NOOP("Object");
-	}
-};
-
-Field::FieldTypeNames Field::m_typeNames;
 
 QString Field::typeName(uint type)
 {
@@ -506,4 +485,23 @@ void Field::setExpression(KexiDB::Expression *expr)
 	}
 }
 
+FieldTypeNames::FieldTypeNames()
+ : QValueVector<QString>()
+{
+		resize(Field::LastType + 1);
+		this->at(Field::Byte) = I18N_NOOP("Byte");
+		this->at(Field::ShortInteger) = I18N_NOOP("Short integer number");
+		this->at(Field::Integer) = I18N_NOOP("Integer number");
+		this->at(Field::BigInteger) = I18N_NOOP("Big integer number");
+//		this->at(Field::AutoIncrement) = I18N_NOOP("Auto increment number");
+		this->at(Field::Boolean) = I18N_NOOP("True/false value");
+		this->at(Field::Date) = I18N_NOOP("Date");
+		this->at(Field::DateTime) = I18N_NOOP("Date with time");
+		this->at(Field::Time) = I18N_NOOP("Time");
+		this->at(Field::Float) = I18N_NOOP("Single precision number");
+		this->at(Field::Double) = I18N_NOOP("Double precision number");
+		this->at(Field::Text) = I18N_NOOP("Text");
+		this->at(Field::LongText) = I18N_NOOP("Long text");
+		this->at(Field::BLOB) = I18N_NOOP("Object");
+}
 

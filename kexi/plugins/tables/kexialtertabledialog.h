@@ -20,11 +20,16 @@
 #ifndef KEXIALTERTABLEDIALOG_H
 #define KEXIALTERTABLEDIALOG_H
 
+#include <qptrvector.h>
 #include <kexiviewbase.h>
 
+class KPopupMenu;
 class KexiMainWindow;
 class KexiTableView;
-class KPopupMenu;
+class KexiPropertyEditor;
+class KexiPropertyBuffer;
+
+typedef QPtrVector<KexiPropertyBuffer> Constraints;
 
 namespace KexiDB
 {
@@ -52,13 +57,18 @@ class KexiAlterTableDialog : public KexiViewBase
 		void init();
 		void initActions();
 
+		virtual bool beforeSwitchTo(int mode);
+
 	protected slots:
-//		void slotCellSelected(int col, int row);
+		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
 
 	private:
 		KexiTableView *m_view;
 		KexiDB::TableSchema *m_table;
+		KexiPropertyEditor *m_properties;
+		Constraints m_constraints;
+		int m_row;
 };
 
 #endif

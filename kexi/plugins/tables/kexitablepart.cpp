@@ -64,7 +64,7 @@ KexiTablePart::~KexiTablePart()
 {
 }
 
-void KexiTablePart::initPartActions(KActionCollection *col)
+void KexiTablePart::initPartActions(KActionCollection *)
 {
 //this is automatic? -no
 //create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
@@ -116,7 +116,9 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
 	if(!sch) {
 		//js TODO add error msg
-		return 0;
+		sch = new KexiDB::TableSchema(item.name());
+		sch->setCaption(item.caption());
+		win->project()->dbConnection()->executeQuery(QString("DELETE FROM kexi__objects WHERE o_id = %1").arg(item.identifier()));
 	}
 
 	if (viewMode == Kexi::DesignViewMode) {

@@ -29,7 +29,17 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(
  : KexiTableEdit(value, f, parent,"KexiComboBoxTableEdit")
 {
 	m_view = new KComboBox(this, "tableCombo");
-	static_cast<KComboBox*>(m_view)->clear();
+	m_combo = static_cast<KComboBox*>(m_view);
+	m_combo->clear();
+//	m_combo->insertStringList(f.enumHints());
+	QValueVector<QString> hints = f.enumHints();
+	for(int i=0; i < hints.size(); i++)
+	{
+		if(!hints.at(i).isEmpty())
+			m_combo->insertItem(hints.at(i));
+	}
+	m_combo->setCurrentItem(value.toInt() - 1);
+
 //js:	TODO
 //js	static_cast<KComboBox*>(m_view)->insertStringList(list);
 //js	static_cast<KComboBox*>(m_view)->setCurrentItem(static_cast<int>(t));
@@ -39,7 +49,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(
 QVariant KexiComboBoxTableEdit::value(bool &ok)
 {
 	ok = true;
-	return QVariant(static_cast<KComboBox*>(m_view)->currentItem());
+	return m_combo->currentItem() + 1;
 }
 
 bool KexiComboBoxTableEdit::cursorAtStart()
@@ -56,6 +66,16 @@ bool KexiComboBoxTableEdit::cursorAtEnd()
 
 void KexiComboBoxTableEdit::clear()
 {
-	static_cast<KComboBox*>(m_view)->clear();
+	m_combo->clear();
+}
+
+bool KexiComboBoxTableEdit::valueIsNull()
+{
+	return false;
+}
+
+bool KexiComboBoxTableEdit::valueIsEmpty()
+{
+	return false;
 }
 

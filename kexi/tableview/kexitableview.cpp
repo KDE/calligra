@@ -1077,6 +1077,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //js		p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, f);
 #endif
 	}
+	else if (ctype == KexiDB::Field::Enum)
+	{
+		txt = m_data->column(col)->field->enumHints().at(cell_value.toInt());
+		align |= AlignLeft;
+	}
 	else if (KexiDB::Field::isIntegerType( ctype )) {
 //		case QVariant::UInt:
 //		case QVariant::Int:
@@ -1823,7 +1828,13 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, addText, viewport());
 			d->pEditor->resize(columnWidth(d->curCol)-1, 150);
 			moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-	} 
+	}
+	else if(t == KexiDB::Field::Enum) {
+			d->pEditor = new KexiComboBoxTableEdit(val, *m_data->column(col)->field, addText, viewport());
+			d->pEditor->resize(columnWidth(d->curCol)-1, 150);
+			moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
+	}
+
 #if 0 //todo(js)
 		case QVariant::StringList:
 			d->pEditor = new KexiComboBoxTableEdit(static_cast<KexiDB::Field::Type>(val.toInt()),

@@ -17,37 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDOCUMENT_H
-#define KEXIQUERYDOCUMENT_H
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <klocale.h>
+#include "kexicreateitemdlg.h"
 
-#include <qobject.h>
-
-namespace KexiDB
+KexiCreateItemDlg::KexiCreateItemDlg(QWidget *parent, const QString &iname, const char *name)
+ : CreateItemUI(parent, name)
 {
-	class QuerySchema;
-	class Connection;
+	message->setText(i18n("Create new %1").arg(iname));
+	connect(itname, SIGNAL(textChanged(const QString &)), this, SLOT(textChanged()));
+	connect(itcaption, SIGNAL(textChanged(const QString &)), this, SLOT(textChanged()));
 }
 
-/**
- * this class stores the current data for queries (to be shared between the different views)
- * and can save/load queries
- */
-class KexiQueryDocument
+void
+KexiCreateItemDlg::textChanged()
 {
-	public:
-		KexiQueryDocument(int id, KexiDB::Connection *c, KexiDB::QuerySchema *s);
-		~KexiQueryDocument();
+	if(itname->text().isEmpty() || itcaption->text().isEmpty())
+		ok->setEnabled(false);
+	else
+		ok->setEnabled(true);
+}
 
-		void			setSchema(KexiDB::QuerySchema *s);
-		KexiDB::QuerySchema	*schema() { return m_schema; }
+KexiCreateItemDlg::~KexiCreateItemDlg()
+{
+}
 
-		void			addHistoryItem(const QString &time, const QString &query, const QString &error);
-
-	private:
-		KexiDB::QuerySchema	*m_schema;
-		int			m_id;
-		KexiDB::Connection	*m_connection;
-};
-
-#endif
+#include "kexicreateitemdlg.moc"
 

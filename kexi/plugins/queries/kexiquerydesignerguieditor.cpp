@@ -161,6 +161,8 @@ KexiQueryDesignerGuiEditor::schema()
 	//KexiDB::Connection::selectStatement()
 	m_doc->schema()->setParentTable(m_doc->schema()->tables()->first());
 	m_doc->schema()->setStatement("");
+
+	m_doc->setSchema(m_doc->schema());
 	return m_doc->schema();
 }
 
