@@ -59,7 +59,8 @@ public:
 
     virtual void paint( QPainter* painter, KDChartTableData* data,
                         bool paint2nd,
-                        KDChartDataRegionList* regions = 0 );
+                        KDChartDataRegionList* regions = 0,
+                        const QRect* rect = 0 );
 
 protected:
     KDChartPainter( KDChartParams* );
@@ -71,11 +72,14 @@ protected:
     virtual void paintLegend( QPainter* painter, KDChartTableData* data,
                               const QFont& actLegendFont,
                               const QFont& actLegendTitleFont );
-    virtual void paintHeader( QPainter* painter, KDChartTableData* data );
-    virtual void paintFooter( QPainter* painter, KDChartTableData* data );
+    virtual void paintHeader( QPainter* painter, KDChartTableData* data,
+                              const QRect* rect = 0 );
+    virtual void paintFooter( QPainter* painter, KDChartTableData* data,
+                              const QRect* rect = 0 );
     virtual void setupGeometry ( QPainter* painter, KDChartTableData* data,
                                  QFont& actLegendFont,
-                                 QFont& actLegendTitleFont )
+                                 QFont& actLegendTitleFont, 
+                                 const QRect* rect = 0 )
 #ifdef USE_EXCEPTIONS
     throw( KDChartNotEnoughSpaceException )
 #endif

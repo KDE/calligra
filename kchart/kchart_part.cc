@@ -117,7 +117,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
     // Need to draw only the document rectangle described in the parameter rect.
     //  return;
 
-    KDChart::paint( &painter, _params, &currentData );
+    KDChart::paint( &painter, _params, &currentData, 0, &rect );
 }
 
 
@@ -342,6 +342,10 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 
 /**
  * $Log$
+ * Revision 1.59  2001/07/03 17:04:33  kalle
+ * Fix bug #27990#: Processing instructions at the wrong position in the
+ * XML document
+ *
  * Revision 1.58  2001/06/11 15:56:28  kalle
  * Connected most color stuff (where applicable)
  *

@@ -199,7 +199,8 @@ throw( KDChartUnknownTypeException )
 void KDChartPainter::paint( QPainter* painter,
                             KDChartTableData* data,
                             bool paint2nd,
-                            KDChartDataRegionList* regions )
+                            KDChartDataRegionList* regions,
+                            const QRect* rect )
 {
     // Protect against non-existing data
     if ( data->usedCols() == 0 && data->usedRows() == 0 )
@@ -208,12 +209,12 @@ void KDChartPainter::paint( QPainter* painter,
     QFont actLegendFont;
     QFont actLegendTitleFont;
     setupGeometry
-        ( painter, data, actLegendFont, actLegendTitleFont );
+        ( painter, data, actLegendFont, actLegendTitleFont, rect );
     if ( !paint2nd ) {
         qDebug( "KDChartPainter::paint() 1" );
-        paintHeader( painter, data );
+        paintHeader( painter, data, rect );
         qDebug( "KDChartPainter::paint() 2" );
-        paintFooter( painter, data );
+        paintFooter( painter, data, rect );
         qDebug( "KDChartPainter::paint() 3" );
         paintLegend( painter, data, actLegendFont, actLegendTitleFont );
         qDebug( "KDChartPainter::paint() 4" );
@@ -317,7 +318,8 @@ void KDChartPainter::paintLegend( QPainter* painter,
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* data )
+void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* data,
+                                  const QRect* rect )
 {
     /*
     //
@@ -335,8 +337,15 @@ void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* data )
 
 */
     QPaintDeviceMetrics metrics( painter->device() );
-    double areaWidthP1000 = metrics.width() / 1000.0;
-    double areaHeightP1000 = metrics.height() / 1000.0;
+
+    QRect drawRect;
+    if( rect )
+        drawRect = *rect;
+    else
+        drawRect = QRect( 0, 0, metrics.width(), metrics.height() );
+    
+    double areaWidthP1000 = drawRect.width() / 1000.0;
+    double areaHeightP1000 = drawRect.height() / 1000.0;
     double averageValueP1000 = ( areaWidthP1000 + areaHeightP1000 ) / 2.0;
 
     painter->save();
@@ -377,7 +386,8 @@ void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* data )
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* data )
+void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* data,
+                                  const QRect* rect )
 {
     /*
     //
@@ -395,8 +405,15 @@ void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* data )
 
 */
     QPaintDeviceMetrics metrics( painter->device() );
-    double areaWidthP1000 = metrics.width() / 1000.0;
-    double areaHeightP1000 = metrics.height() / 1000.0;
+
+    QRect drawRect;
+    if( rect )
+        drawRect = *rect;
+    else
+        drawRect = QRect( 0, 0, metrics.width(), metrics.height() );
+    
+    double areaWidthP1000 = drawRect.width() / 1000.0;
+    double areaHeightP1000 = drawRect.height() / 1000.0;
     double averageValueP1000 = ( areaWidthP1000 + areaHeightP1000 ) / 2.0;
 
     painter->save();
@@ -442,20 +459,27 @@ void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* data )
 void KDChartPainter::setupGeometry( QPainter* painter,
                                     KDChartTableData* data,
                                     QFont& actLegendFont,
-                                    QFont& actLegendTitleFont )
+                                    QFont& actLegendTitleFont,
+                                    const QRect* rect )
 #ifdef USE_EXCEPTIONS
 throw( KDChartNotEnoughSpaceException )
 #endif
 {
     QPaintDeviceMetrics metrics( painter->device() );
 
-    uint yposTop = 0;
-    uint xposLeft = 0;
-    uint yposBottom = metrics.height();
-    uint xposRight = metrics.width();
+    QRect drawRect;
+    if( rect )
+        drawRect = *rect;
+    else
+        drawRect = QRect( 0, 0, metrics.width(), metrics.height() );
+    
+    uint yposTop =  drawRect.top();
+    uint xposLeft = drawRect.left();
+    uint yposBottom = drawRect.height();
+    uint xposRight = drawRect.width();
 
-    double areaWidthP1000 = metrics.width() / 1000.0;
-    double areaHeightP1000 = metrics.height() / 1000.0;
+    double areaWidthP1000 = drawRect.width() / 1000.0;
+    double areaHeightP1000 = drawRect.height() / 1000.0;
     double averageValueP1000 = ( areaWidthP1000 + areaHeightP1000 ) / 2.0;
 
     // Calculate header and footer positions: We only need to take the
@@ -518,7 +542,7 @@ throw( KDChartNotEnoughSpaceException )
         //if( !headerLineLeading )
         headerLineLeading = header1Metrics.lineSpacing() / 2;
         yposTop += headerLineLeading;
-        _header1Rect = QRect( 0, yposTop, metrics.width(),
+        _header1Rect = QRect( 0, yposTop, drawRect.width(),
                               header1Metrics.height() );
         yposTop += _header1Rect.height();
     }
@@ -546,7 +570,7 @@ throw( KDChartNotEnoughSpaceException )
         }
         yposTop += headerLineLeading;
         _header2Rect = QRect( 0, yposTop,
-                              metrics.width(),
+                              drawRect.width(),
                               header2Metrics.height() );
         yposTop += _header2Rect.height();
         hasHeader = true;
@@ -570,8 +594,8 @@ throw( KDChartNotEnoughSpaceException )
         QFontMetrics footerMetrics( actFont );
         /* end of new code */
 
-        _footerRect = QRect( 0, metrics.height() - footerMetrics.height(),
-                             metrics.width(),
+        _footerRect = QRect( 0, drawRect.height() - footerMetrics.height(),
+                             drawRect.width(),
                              footerMetrics.height() );
         yposBottom -= _footerRect.height();
     }
@@ -645,14 +669,14 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendTop:
             if ( headerLineLeading )
                 yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( ( metrics.width() - sizeX ) / 2,
+            _legendRect = QRect( ( drawRect.width() - sizeX ) / 2,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             break;
         case KDChartParams::LegendBottom:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( ( metrics.width() - sizeX ) / 2,
+            _legendRect = QRect( ( drawRect.width() - sizeX ) / 2,
                                  yposBottom - sizeY,
                                  sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
@@ -668,7 +692,7 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendRight:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  ( yposBottom - yposTop - sizeY ) / 2 + yposTop,
                                  sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -695,7 +719,7 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendTopRight:
             if ( headerLineLeading )
                 yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -703,14 +727,14 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendTopRightTop:
             if ( headerLineLeading )
                 yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopRightRight:
             if ( headerLineLeading )
                 yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  yposTop, sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
             break;
@@ -736,7 +760,7 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendBottomRight:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  yposBottom - sizeY, sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -744,14 +768,14 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendBottomRightBottom:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  yposBottom - sizeY, sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
             break;
         case KDChartParams::LegendBottomRightRight:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( metrics.width() - sizeX,
+            _legendRect = QRect( drawRect.width() - sizeX,
                                  yposBottom - sizeY, sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
             break;
@@ -765,8 +789,8 @@ throw( KDChartNotEnoughSpaceException )
                        xposRight - xposLeft,
                        yposBottom - yposTop );
 
-    _logicalWidth = metrics.width();
-    _logicalHeight = metrics.height();
+    _logicalWidth = drawRect.width();
+    _logicalHeight = drawRect.height();
 
     int nAxesLeft0 = _axesRect.left();
     int nAxesRight0 = _logicalWidth - _axesRect.right();
@@ -808,7 +832,7 @@ throw( KDChartNotEnoughSpaceException )
                                                          * averageValueP1000 );
                     else {
                         QFontMetrics metrics( para.axisLabelsFont() );
-                        fntHeight = metrics.height();
+                        fntHeight = drawRect.height();
                     }
                     areaMin = QMAX( areaMin, 3 * fntHeight );
                 }

@@ -59,7 +59,8 @@ KDChartParams::ChartType KDChart::cpainterType2 = KDChartParams::NoType;
 */
 void KDChart::paint( QPainter* painter, KDChartParams* params,
                      KDChartTableData* data,
-                     KDChartDataRegionList* regions )
+                     KDChartDataRegionList* regions,
+                     const QRect* rect )
 #ifdef USE_EXCEPTIONS
 throw( KDChartUnknownTypeException )
 #endif
@@ -107,9 +108,9 @@ throw( KDChartUnknownTypeException )
     //
     qDebug( "Before calling painters" );
     if ( cpainter )   // can be 0 if no exceptions are used
-        cpainter->paint( painter, data, false, regions );
+        cpainter->paint( painter, data, false, regions, rect );
     if ( cpainter2 )  // can be 0 if no exceptions are used
-        cpainter2->paint( painter, data, true, regions );
+        cpainter2->paint( painter, data, true, regions, rect );
     qDebug( "After calling painters" );
 }
 

@@ -38,10 +38,11 @@ class KDChart
     friend class KDChartCleanup;
 public:
     static void paint( QPainter*, KDChartParams*, KDChartTableData*,
-                       KDChartDataRegionList* regions = 0 )
-    #ifdef USE_EXCEPTIONS
+                       KDChartDataRegionList* regions = 0,
+                       const QRect* rect = 0 );
+#ifdef USE_EXCEPTIONS
     throw( KDChartUnknownTypeException )
-    #endif
+#endif
     ;
 
 private:
